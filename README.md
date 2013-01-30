@@ -25,7 +25,7 @@ As you can see from the zoomed 400% verisons of these badges above, nobody is (r
 ## Solution
 As you can see below, without increasing the footprint of these badges, I've tried to increase legibility and coherence, removing useless text to decrease the horizontal length in the (likely) scenario that more of these badge thingies crop up on READMEs all acros the land.
 
-![shields](http://f.cl.ly/items/0K0C1T133G163c2P1K1C/Screen%20Shot%202013-01-30%20at%202.39.54%20AM.png)
+![shields](https://raw.github.com/olivierlacan/shields/master/shields.png)
 
 ![travis](http://f.cl.ly/items/202W2m3W3Q40022b3202/Screen%20Shot%202013-01-30%20at%202.59.35%20AM.png)
 
