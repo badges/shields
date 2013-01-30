@@ -2,6 +2,15 @@
 
 A coherent info-badge solution for codebases.
 
+![shields on white](https://raw.github.com/olivierlacan/shields/master/shields_white.png)
+
+Supported services:
+- Travis CI
+- Gemnasium
+- Code Climate
+- RubyGems
+- just submit a pull reques to add more
+
 ## Problem
 An increasing number of GitHub repos sport badges for things like:
 - [Travis CI](https://travis-ci.org/) build status: 
@@ -25,9 +34,11 @@ As you can see from the zoomed 400% verisons of these badges above, nobody is (r
 ## Solution
 As you can see below, without increasing the footprint of these badges, I've tried to increase legibility and coherence, removing useless text to decrease the horizontal length in the (likely) scenario that more of these badge thingies crop up on READMEs all acros the land.
 
-![shields](https://raw.github.com/olivierlacan/shields/master/shields.png)
+![shields on white](https://raw.github.com/olivierlacan/shields/master/shields_white.png)
 
-You can find a Photoshop CS6 PSD file containing the simple shapes and non-destructive styles I applied to create these. 
+![shields on black](https://raw.github.com/olivierlacan/shields/master/shields_black.png)
+
+You can find a Photoshop CS6 PSD file containing the simple vector shapes and non-destructive styles I applied to create these. 
 
 ## Font
 The font used on these badges is the Apache licensed Open Sans Regular availabe from [Google Web Fonts](http://www.google.com/webfonts/specimen/Open+Sans).
