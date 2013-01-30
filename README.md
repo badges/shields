@@ -27,14 +27,6 @@ As you can see below, without increasing the footprint of these badges, I've tri
 
 ![shields](https://raw.github.com/olivierlacan/shields/master/shields.png)
 
-![travis](http://f.cl.ly/items/202W2m3W3Q40022b3202/Screen%20Shot%202013-01-30%20at%202.59.35%20AM.png)
-
-![gemnasium](http://f.cl.ly/items/063N363n0l2D2N1G1E0G/Screen%20Shot%202013-01-30%20at%203.00.08%20AM.png)
-
-![code climate](http://f.cl.ly/items/0Z0a2N0G3q1i2Y1R0m0Q/Screen%20Shot%202013-01-30%20at%203.00.33%20AM.png)
-
-![rubygems](http://f.cl.ly/items/463l3V311j1e0x2J2X1B/Screen%20Shot%202013-01-30%20at%203.00.52%20AM.png)
-
 You can find a Photoshop CS6 PSD file containing the simple shapes and non-destructive styles I applied to create these. 
 
 ## Font
