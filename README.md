@@ -11,6 +11,16 @@ Supported services:
 - RubyGems
 - just submit a pull reques to add more
 
+Transparent PNG 24 versions available:
+- Travis CI
+  - passing
+  - failing
+- Gemnasium
+  - up-to-date
+  - out-of-date
+  - update!
+  - unknown 
+
 ## Problem
 An increasing number of GitHub repos sport badges for things like:
 - [Travis CI](https://travis-ci.org/) build status: 
@@ -32,7 +42,7 @@ An increasing number of GitHub repos sport badges for things like:
 As you can see from the zoomed 400% verisons of these badges above, nobody is (really) using the same badge file and at normal size, they're hardly legible.
 
 ## Solution
-As you can see below, without increasing the footprint of these badges, I've tried to increase legibility and coherence, removing useless text to decrease the horizontal length in the (likely) scenario that more of these badge thingies crop up on READMEs all acros the land.
+As you can see below, without increasing the footprint of these badges, I've tried to increase legibility and coherence, removing useless text to decrease the horizontal length in the (likely) scenario that more of these badge thingies crop up on READMEs all across the land.
 
 ![shields on white](https://raw.github.com/olivierlacan/shields/master/shields_white.png)
 
