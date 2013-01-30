@@ -35,7 +35,13 @@ As you can see below, without increasing the footprint of these badges, I've tri
 
 ![rubygems](http://f.cl.ly/items/463l3V311j1e0x2J2X1B/Screen%20Shot%202013-01-30%20at%203.00.52%20AM.png)
 
-You can find a Photoshop CS6 PSD file containing the simple shapes and non-destructive styles I applied to create these. I spend exactly 5 minutes looking for a more legible font at small size and while I'm absolutely open to suggestions for a better one, settled on Calibri which is owned by Microsoft. It's clearly not an ideal candidate, but I think it works well here, please submit a pull request with a suitable alternative (and a preview of it) if you find one.
+You can find a Photoshop CS6 PSD file containing the simple shapes and non-destructive styles I applied to create these. 
+
+## Font
+The font used on these badges is the Apache licensed Open Sans Regular availabe from [Google Web Fonts](http://www.google.com/webfonts/specimen/Open+Sans).
+
+## Contributions
+Please submit a pull request if you'd like to use Shields badges for a project that isn't yet supported, I'll gladly add them to the repository.
 
 ## License
 See the included file LICENSE.md.
