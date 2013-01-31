@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="83px" height="119.5px" viewBox="0 0 83 119.5" enable-background="new 0 0 83 119.5" xml:space="preserve">
+<g id="Grey">
+	
+		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="823" y1="2584.5" x2="823" y2="2566.5" gradientTransform="matrix(1 0 0 1 -760 -2465)">
+		<stop  offset="0" style="stop-color:#515151"/>
+		<stop  offset="0.1" style="stop-color:#707070"/>
+		<stop  offset="0.96" style="stop-color:#9F9F9F"/>
+		<stop  offset="1" style="stop-color:#D6D6D6"/>
+	</linearGradient>
+	<path fill="url(#SVGID_1_)" d="M43,119.5h37c1.657,0,3-1.343,3-3v-12c0-1.657-1.343-3-3-3H43V119.5z"/>
+	
+		<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="781.5" y1="2584.373" x2="781.5" y2="2566.4941" gradientTransform="matrix(1 0 0 1 -760 -2465)">
+		<stop  offset="0" style="stop-color:#2E2E2E"/>
+		<stop  offset="0.1" style="stop-color:#3F3F3F"/>
+		<stop  offset="0.96" style="stop-color:#5A5A5A"/>
+		<stop  offset="1" style="stop-color:#AAAAAA"/>
+	</linearGradient>
+	<path fill="url(#SVGID_2_)" d="M43,119.5H3c-1.657,0-3-1.343-3-3v-12c0-1.657,1.343-3,3-3h40V119.5z"/>
+	<g>
+		<g opacity="0.3">
+			<text transform="matrix(1 0 0 1 47 114.0693)" font-family="'OpenSans'" font-size="10">status</text>
+		</g>
+		<g>
+			<text transform="matrix(1 0 0 1 47 113.0693)" fill="#FFFFFF" font-family="'OpenSans'" font-size="10">status</text>
+		</g>
+	</g>
+	<g>
+		<g opacity="0.3">
+			<text transform="matrix(1 0 0 1 7 114.0693)" font-family="'OpenSans'" font-size="10">service</text>
+		</g>
+		<g>
+			<text transform="matrix(1 0 0 1 7 113.0693)" fill="#FFFFFF" font-family="'OpenSans'" font-size="10">service</text>
+		</g>
+	</g>
+</g>
+<g id="Red">
+	
+		<linearGradient id="SVGID_3_" gradientUnits="userSpaceOnUse" x1="823" y1="2564.5" x2="823" y2="2546.5" gradientTransform="matrix(1 0 0 1 -760 -2465)">
+		<stop  offset="0" style="stop-color:#722F22"/>
+		<stop  offset="0.1" style="stop-color:#9E4230"/>
+		<stop  offset="0.96" style="stop-color:#E05D44"/>
+		<stop  offset="1" style="stop-color:#FFAC9C"/>
+	</linearGradient>
+	<path fill="url(#SVGID_3_)" d="M43,99.5h37c1.657,0,3-1.343,3-3v-12c0-1.657-1.343-3-3-3H43V99.5z"/>
+	
+		<linearGradient id="SVGID_4_" gradientUnits="userSpaceOnUse" x1="781.5" y1="2564.373" x2="781.5" y2="2546.4941" gradientTransform="matrix(1 0 0 1 -760 -2465)">
+		<stop  offset="0" style="stop-color:#2E2E2E"/>
+		<stop  offset="0.1" style="stop-color:#3F3F3F"/>
+		<stop  offset="0.96" style="stop-color:#5A5A5A"/>
+		<stop  offset="1" style="stop-color:#AAAAAA"/>
+	</linearGradient>
+	<path fill="url(#SVGID_4_)" d="M43,99.5H3c-1.657,0-3-1.343-3-3v-12c0-1.657,1.343-3,3-3h40V99.5z"/>
+	<g>
+		<g opacity="0.3">
+			<text transform="matrix(1 0 0 1 47 94.0693)" font-family="'OpenSans'" font-size="10">status</text>
+		</g>
+		<g>
+			<text transform="matrix(1 0 0 1 47 93.0693)" fill="#FFFFFF" font-family="'OpenSans'" font-size="10">status</text>
+		</g>
+	</g>
+	<g>
+		<g opacity="0.3">
+			<text transform="matrix(1 0 0 1 7 94.0693)" font-family="'OpenSans'" font-size="10">service</text>
+		</g>
+		<g>
+			<text transform="matrix(1 0 0 1 7 93.0693)" fill="#FFFFFF" font-family="'OpenSans'" font-size="10">service</text>
+		</g>
+	</g>
+</g>
+<g id="Orange">
+	
+		<linearGradient id="SVGID_5_" gradientUnits="userSpaceOnUse" x1="823" y1="2544.5" x2="823" y2="2526.5" gradientTransform="matrix(1 0 0 1 -760 -2465)">
+		<stop  offset="0" style="stop-color:#724817"/>
+		<stop  offset="0.1" style="stop-color:#9E6320"/>
+		<stop  offset="0.96" style="stop-color:#E08D2D"/>
+		<stop  offset="1" style="stop-color:#FFCA8D"/>
+	</linearGradient>
+	<path fill="url(#SVGID_5_)" d="M43,79.5h37c1.657,0,3-1.343,3-3v-12c0-1.657-1.343-3-3-3H43V79.5z"/>
+	
+		<linearGradient id="SVGID_6_" gradientUnits="userSpaceOnUse" x1="781.5" y1="2544.373" x2="781.5" y2="2526.4937" gradientTransform="matrix(1 0 0 1 -760 -2465)">
+		<stop  offset="0" style="stop-color:#2E2E2E"/>
+		<stop  offset="0.1" style="stop-color:#3F3F3F"/>
+		<stop  offset="0.96" style="stop-color:#5A5A5A"/>
+		<stop  offset="1" style="stop-color:#AAAAAA"/>
+	</linearGradient>
+	<path fill="url(#SVGID_6_)" d="M43,79.5H3c-1.657,0-3-1.343-3-3v-12c0-1.657,1.343-3,3-3h40V79.5z"/>
+	<g>
+		<g opacity="0.3">
+			<text transform="matrix(1 0 0 1 47 74.0693)" font-family="'OpenSans'" font-size="10">status</text>
+		</g>
+		<g>
+			<text transform="matrix(1 0 0 1 47 73.0693)" fill="#FFFFFF" font-family="'OpenSans'" font-size="10">status</text>
+		</g>
+	</g>
+	<g>
+		<g opacity="0.3">
+			<text transform="matrix(1 0 0 1 7 74.0693)" font-family="'OpenSans'" font-size="10">service</text>
+		</g>
+		<g>
+			<text transform="matrix(1 0 0 1 7 73.0693)" fill="#FFFFFF" font-family="'OpenSans'" font-size="10">service</text>
+		</g>
+	</g>
+</g>
+<g id="Yellow">
+	
+		<linearGradient id="SVGID_7_" gradientUnits="userSpaceOnUse" x1="823" y1="2524.5" x2="823" y2="2506.5" gradientTransform="matrix(1 0 0 1 -760 -2465)">
+		<stop  offset="0" style="stop-color:#725C0C"/>
+		<stop  offset="0.1" style="stop-color:#9E7F10"/>
+		<stop  offset="0.96" style="stop-color:#E0B417"/>
+		<stop  offset="1" style="stop-color:#FFE37F"/>
+	</linearGradient>
+	<path fill="url(#SVGID_7_)" d="M43,59.5h37c1.657,0,3-1.343,3-3v-12c0-1.657-1.343-3-3-3H43V59.5z"/>
+	
+		<linearGradient id="SVGID_8_" gradientUnits="userSpaceOnUse" x1="781.5" y1="2524.375" x2="781.5" y2="2506.4961" gradientTransform="matrix(1 0 0 1 -760 -2465)">
+		<stop  offset="0" style="stop-color:#2E2E2E"/>
+		<stop  offset="0.1" style="stop-color:#3F3F3F"/>
+		<stop  offset="0.96" style="stop-color:#5A5A5A"/>
+		<stop  offset="1" style="stop-color:#AAAAAA"/>
+	</linearGradient>
+	<path fill="url(#SVGID_8_)" d="M43,59.5H3c-1.657,0-3-1.343-3-3v-12c0-1.657,1.343-3,3-3h40V59.5z"/>
+	<g>
+		<g opacity="0.3">
+			<text transform="matrix(1 0 0 1 47 54.0693)" font-family="'OpenSans'" font-size="10">status</text>
+		</g>
+		<g>
+			<text transform="matrix(1 0 0 1 47 53.0693)" fill="#FFFFFF" font-family="'OpenSans'" font-size="10">status</text>
+		</g>
+	</g>
+	<g>
+		<g opacity="0.3">
+			<text transform="matrix(1 0 0 1 7 54.0693)" font-family="'OpenSans'" font-size="10">service</text>
+		</g>
+		<g>
+			<text transform="matrix(1 0 0 1 7 53.0693)" fill="#FFFFFF" font-family="'OpenSans'" font-size="10">service</text>
+		</g>
+	</g>
+</g>
+<g id="Yellow_Green">
+	
+		<linearGradient id="SVGID_9_" gradientUnits="userSpaceOnUse" x1="823" y1="2504.5" x2="823" y2="2486.5" gradientTransform="matrix(1 0 0 1 -760 -2465)">
+		<stop  offset="0" style="stop-color:#4D6700"/>
+		<stop  offset="0.1" style="stop-color:#6B8F00"/>
+		<stop  offset="0.96" style="stop-color:#97CA00"/>
+		<stop  offset="1" style="stop-color:#D1F171"/>
+	</linearGradient>
+	<path fill="url(#SVGID_9_)" d="M43,39.5h37c1.657,0,3-1.343,3-3v-12c0-1.657-1.343-3-3-3H43V39.5z"/>
+	
+		<linearGradient id="SVGID_10_" gradientUnits="userSpaceOnUse" x1="781.5" y1="2504.375" x2="781.5" y2="2486.4961" gradientTransform="matrix(1 0 0 1 -760 -2465)">
+		<stop  offset="0" style="stop-color:#2E2E2E"/>
+		<stop  offset="0.1" style="stop-color:#3F3F3F"/>
+		<stop  offset="0.96" style="stop-color:#5A5A5A"/>
+		<stop  offset="1" style="stop-color:#AAAAAA"/>
+	</linearGradient>
+	<path fill="url(#SVGID_10_)" d="M43,39.5H3c-1.657,0-3-1.343-3-3v-12c0-1.657,1.343-3,3-3h40V39.5z"/>
+	<g>
+		<g opacity="0.3">
+			<text transform="matrix(1 0 0 1 47 34.0693)" font-family="'OpenSans'" font-size="10">status</text>
+		</g>
+		<g>
+			<text transform="matrix(1 0 0 1 47 33.0693)" fill="#FFFFFF" font-family="'OpenSans'" font-size="10">status</text>
+		</g>
+	</g>
+	<g>
+		<g opacity="0.3">
+			<text transform="matrix(1 0 0 1 7 34.0693)" font-family="'OpenSans'" font-size="10">service</text>
+		</g>
+		<g>
+			<text transform="matrix(1 0 0 1 7 33.0693)" fill="#FFFFFF" font-family="'OpenSans'" font-size="10">service</text>
+		</g>
+	</g>
+</g>
+<g id="Green">
+	
+		<linearGradient id="SVGID_11_" gradientUnits="userSpaceOnUse" x1="823" y1="2484.5" x2="823" y2="2466.5" gradientTransform="matrix(1 0 0 1 -760 -2465)">
+		<stop  offset="0" style="stop-color:#23630A"/>
+		<stop  offset="0.1" style="stop-color:#31B70E"/>
+		<stop  offset="0.96" style="stop-color:#4AD115"/>
+		<stop  offset="1" style="stop-color:#9DED7D"/>
+	</linearGradient>
+	<path fill="url(#SVGID_11_)" d="M43,19.5h37c1.657,0,3-1.343,3-3v-12c0-1.657-1.343-3-3-3H43V19.5z"/>
+	
+		<linearGradient id="SVGID_12_" gradientUnits="userSpaceOnUse" x1="781.5" y1="2484.375" x2="781.5" y2="2466.4961" gradientTransform="matrix(1 0 0 1 -760 -2465)">
+		<stop  offset="0" style="stop-color:#2E2E2E"/>
+		<stop  offset="0.1" style="stop-color:#3F3F3F"/>
+		<stop  offset="0.96" style="stop-color:#5A5A5A"/>
+		<stop  offset="1" style="stop-color:#AAAAAA"/>
+	</linearGradient>
+	<path fill="url(#SVGID_12_)" d="M43,19.5H3c-1.657,0-3-1.343-3-3v-12c0-1.657,1.343-3,3-3h40V19.5z"/>
+	<g>
+		<g opacity="0.3">
+			<text transform="matrix(1 0 0 1 47 14.0693)" font-family="'OpenSans'" font-size="10">status</text>
+		</g>
+		<g>
+			<text transform="matrix(1 0 0 1 47 13.0693)" fill="#FFFFFF" font-family="'OpenSans'" font-size="10">status</text>
+		</g>
+	</g>
+	<g>
+		<g opacity="0.3">
+			<text transform="matrix(1 0 0 1 7 14.0693)" font-family="'OpenSans'" font-size="10">service</text>
+		</g>
+		<g>
+			<text transform="matrix(1 0 0 1 7 13.0693)" fill="#FFFFFF" font-family="'OpenSans'" font-size="10">service</text>
+		</g>
+	</g>
+</g>
+</svg>
