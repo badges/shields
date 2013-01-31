@@ -1,6 +1,6 @@
 # Shields
 
-A coherent info-badge solution for codebases.
+A coherent info-badge solution for codebases in either PNG or SVG formats.
 
 ![shields on white](https://raw.github.com/olivierlacan/shields/master/shields_white.png)
 
@@ -9,17 +9,25 @@ Supported services:
 - Gemnasium
 - Code Climate
 - RubyGems
-- just submit a pull reques to add more
+- just submit a pull request to add more
 
 Transparent PNG 24 versions available:
 - Travis CI
   - passing
   - failing
+  - pending
+  - error
 - Gemnasium
   - up-to-date
   - out-of-date
   - update!
   - unknown 
+
+SVG versions available:
+- Travis CI
+- Gemnasium
+- RubyGems
+- Code Climate
 
 ## Problem
 An increasing number of GitHub repos sport badges for things like:
@@ -49,6 +57,8 @@ As you can see below, without increasing the footprint of these badges, I've tri
 ![shields on black](https://raw.github.com/olivierlacan/shields/master/shields_black.png)
 
 You can find a Photoshop CS6 PSD file containing the simple vector shapes and non-destructive styles I applied to create these. 
+
+Thanks to @ackerdev we also have SVG equivalents of all existing badges if you would like your badges to be Retina-ready or dynamically manipulate the text inside of them.
 
 ## Font
 The font used on these badges is the Apache licensed Open Sans Regular availabe from [Google Web Fonts](http://www.google.com/webfonts/specimen/Open+Sans).
