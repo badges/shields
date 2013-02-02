@@ -4,30 +4,11 @@ A coherent info-badge solution for codebases in either PNG or SVG formats.
 
 ![shields on white](https://raw.github.com/olivierlacan/shields/master/shields_white.png)
 
-Supported services:
+Transparent PNG-24 and SVG versions for:
 - Travis CI
 - Gemnasium
 - Code Climate
 - RubyGems
-- just submit a pull request to add more
-
-Transparent PNG 24 versions available:
-- Travis CI
-  - passing
-  - failing
-  - pending
-  - error
-- Gemnasium
-  - up-to-date
-  - out-of-date
-  - update!
-  - unknown 
-
-SVG versions available:
-- Travis CI
-- Gemnasium
-- RubyGems
-- Code Climate
 
 ## Problem
 An increasing number of GitHub repos sport badges for things like:
@@ -47,7 +28,7 @@ An increasing number of GitHub repos sport badges for things like:
 
 ![rubygems badge](http://f.cl.ly/items/443X21151h1V301s2s3a/Screen%20Shot%202013-01-30%20at%202.47.10%20AM.png)
 
-As you can see from the zoomed 400% verisons of these badges above, nobody is (really) using the same badge file and at normal size, they're hardly legible.
+As you can see from the zoomed 400% versions of these badges above, nobody is (really) using the same badge file and at normal size, they're hardly legible.
 
 ## Solution
 As you can see below, without increasing the footprint of these badges, I've tried to increase legibility and coherence, removing useless text to decrease the horizontal length in the (likely) scenario that more of these badge thingies crop up on READMEs all across the land.
@@ -61,7 +42,7 @@ You can find a Photoshop CS6 PSD file containing the simple vector shapes and no
 Thanks to @ackerdev we also have SVG equivalents of all existing badges if you would like your badges to be Retina-ready or dynamically manipulate the text inside of them.
 
 ## Font
-The font used on these badges is the Apache licensed Open Sans Regular availabe from [Google Web Fonts](http://www.google.com/webfonts/specimen/Open+Sans).
+The font used on these badges is the Apache licensed Open Sans Regular available from [Google Web Fonts](http://www.google.com/webfonts/specimen/Open+Sans).
 
 ## Contributions
 Please submit a pull request if you'd like to use Shields badges for a project that isn't yet supported, I'll gladly add them to the repository.
