@@ -48,9 +48,9 @@ The font used on these badges is the Apache licensed Open Sans Regular available
 
 Want to use one of these swanky badges for your own service right now and don't have time to [open an issue](https://github.com/olivierlacan/shields/issues) and wait for us to help you out?
 
-Well here's a hint, if you need to resize the badge yourself in Photoshop or Illustrator, make sure you use the vector points like this:
+Well here's a hint, if you need to resize the badge yourself in Photoshop make sure you use the vector points [like this](http://link.olivierlacan.com/MmlK).
 
-![resizing a shield](http://f.cl.ly/items/2G3V3J0t2e0M2B2M1m1k/shields_resize_process.gif)
+In Illustrator, it's [a little different](http://f.cl.ly/items/071J0Q2m0D38250g2s1F/shields_resize_illustrator.mov) (4.8 MB .mov video).
 
 ## Contributions
 Please submit a pull request if you'd like to use Shields badges for a project that isn't yet supported, I'll gladly add them to the repository.
