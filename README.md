@@ -41,6 +41,23 @@ You can find a Photoshop CS6 PSD file containing the simple vector shapes and no
 
 Thanks to @ackerdev we also have SVG equivalents of all existing badges if you would like your badges to be Retina-ready or dynamically manipulate the text inside of them.
 
+## Retina Ready
+Since one of the major concerns is legibility, it's impossible to ignore how bad shields will look on retina (high DPI) displays.
+
+A suggested by @kneath, Shields displayed with an HTML image tag (instead of the easier Markdown image tag) can be given a fixed height to force an image that is actually double the resolution into a 50% smaller image, which will display properly for both retina and non-retina screens.
+
+Here's an example with the following code: 
+
+```html
+<img src="https://raw.github.com/olivierlacan/shields/master/shields_white@2x.png" height="143" alt="Retina-ready Shields example" />
+```
+
+<img src="https://raw.github.com/olivierlacan/shields/master/shields_white@2x.png" height="143" alt="Retina-ready Shields example" />
+
+All shields aren't yet compatible with this but we're working on updating them soon. Look for image filenames with `@2x` suffixes, those will be the pixel doubled versions. 
+
+Note: They were pixel doubled manually in Photoshop, not after the fact.
+
 ## Font
 The font used on these badges is the Apache licensed Open Sans Regular available from [Google Web Fonts](http://www.google.com/webfonts/specimen/Open+Sans).
 
