@@ -71,7 +71,7 @@ Well here's a hint, if you need to resize the badge yourself in Photoshop make s
 In Illustrator, it's [a little different](http://f.cl.ly/items/071J0Q2m0D38250g2s1F/shields_resize_illustrator.mov) (4.8 MB .mov video).
 
 ## Contributions
-Please submit a pull request if you'd like to use Shields badges for a project that isn't yet supported, I'll gladly add them to the repository.
+See [[CONTRIBUTING.md]].
 
 ## License
-See the included file LICENSE.md.
+See [[LICENSE.md]].
