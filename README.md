@@ -1,14 +1,15 @@
 # Shields
 
-A coherent info-badge solution for codebases in either PNG or SVG formats.
+A legible and elegant info-badge solution for codebase services, available. Soon to be Retina-ready.
 
 ![shields on white](https://raw.github.com/olivierlacan/shields/master/shields_white.png)
 
-Transparent PNG-24 and SVG versions for:
-- Travis CI
-- Gemnasium
-- Code Climate
-- RubyGems
+## Services using Shields
+- [Code Climate](https://codeclimate.com/changelog/510d4fde56b102523a0004bf)
+- [Coveralls](https://coveralls.io/r/kaize/nastachku)
+- [Gemfury/RubyGems](http://badge.fury.io/)
+- [Gemnasium](http://blog.tech-angels.com/post/43141047457/gemnasium-v3-aka-gemnasium)
+- [Travis CI](http://about.travis-ci.org/docs/user/status-images/)
 
 ## Problem
 An increasing number of GitHub repos sport badges for things like:
@@ -39,7 +40,7 @@ As you can see below, without increasing the footprint of these badges, I've tri
 
 You can find a Photoshop CS6 PSD file containing the simple vector shapes and non-destructive styles I applied to create these. 
 
-Thanks to @ackerdev we also have SVG equivalents of all existing badges if you would like your badges to be Retina-ready or dynamically manipulate the text inside of them.
+Thanks to @ackerdev we also have SVG equivalents of all existing badges if you would like your badges to be Retina-ready or dynamically manipulate the text inside of them before you output them to PNG 24 Alpha (transparent background).
 
 ## Retina Ready
 Since one of the major concerns is legibility, it's impossible to ignore how bad shields will look on retina (high DPI) displays.
