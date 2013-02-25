@@ -1,6 +1,6 @@
 # Shields
 
-A legible and elegant info-badge solution for codebase services, available. Soon to be Retina-ready.
+A legible & concise status badge solution for third-party codebase services. Soon to be Retina-ready.
 
 ![shields on white](https://raw.github.com/olivierlacan/shields/master/shields_white.png)
 
