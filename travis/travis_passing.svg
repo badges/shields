@@ -4,15 +4,16 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="77px" height="18px" viewBox="0 1.25 77 18" enable-background="new 0 1.25 77 18" xml:space="preserve">
 <g id="Green">
-	
-		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="890.5" y1="-2429.75" x2="890.5" y2="-2411.75" gradientTransform="matrix(1 0 0 -1 -836 -2410.5)">
-		<stop  offset="0" style="stop-color:#4D6700"/>
-		<stop  offset="0.1" style="stop-color:#6B8F00"/>
-		<stop  offset="0.96" style="stop-color:#97CA00"/>
-		<stop  offset="1" style="stop-color:#D1F171"/>
-	</linearGradient>
+
+    <linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="1072.501" y1="-3022.9995" x2="1072.501" y2="-3005" gradientTransform="matrix(1 0 0 -1 -988 -3003.5)">
+    <stop  offset="0" style="stop-color:#23630A"/>
+    <stop  offset="0.1" style="stop-color:#31B70E"/>
+    <stop  offset="0.96" style="stop-color:#4AD115"/>
+    <stop  offset="1" style="stop-color:#9DED7D"/>
+  </linearGradient>
+
 	<path fill="url(#SVGID_1_)" d="M32,19.25h42c1.657,0,3-1.343,3-3v-12c0-1.657-1.343-3-3-3H32V19.25z"/>
-	
+
 		<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="852" y1="-2429.625" x2="852" y2="-2411.7461" gradientTransform="matrix(1 0 0 -1 -836 -2410.5)">
 		<stop  offset="0" style="stop-color:#2E2E2E"/>
 		<stop  offset="0.1" style="stop-color:#3F3F3F"/>
