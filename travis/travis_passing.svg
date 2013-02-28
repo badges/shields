@@ -23,18 +23,18 @@
 	<path fill="url(#SVGID_2_)" d="M32,19.25H3c-1.657,0-3-1.343-3-3v-12c0-1.657,1.343-3,3-3h29V19.25z"/>
 	<g>
 		<g opacity="0.3">
-			<text transform="matrix(1 0 0 1 35 13.8193)" font-family="'OpenSans'" font-size="10">passing</text>
+			<text transform="matrix(1 0 0 1 35 13.8193)" font-family="OpenSans" font-size="10">passing</text>
 		</g>
 		<g>
-			<text transform="matrix(1 0 0 1 35 12.8193)" fill="#FFFFFF" font-family="'OpenSans'" font-size="10">passing</text>
+			<text transform="matrix(1 0 0 1 35 12.8193)" fill="#FFFFFF" font-family="OpenSans" font-size="10">passing</text>
 		</g>
 	</g>
 	<g>
 		<g opacity="0.3">
-			<text transform="matrix(1 0 0 1 5 13.8193)" font-family="'OpenSans'" font-size="10">build</text>
+			<text transform="matrix(1 0 0 1 5 13.8193)" font-family="OpenSans" font-size="10">build</text>
 		</g>
 		<g>
-			<text transform="matrix(1 0 0 1 5 12.8193)" fill="#FFFFFF" font-family="'OpenSans'" font-size="10">build</text>
+			<text transform="matrix(1 0 0 1 5 12.8193)" fill="#FFFFFF" font-family="OpenSans" font-size="10">build</text>
 		</g>
 	</g>
 </g>
