@@ -28,7 +28,7 @@
       <stop offset="0.96" style="stop-color:#31B70E"/>
       <stop offset="1"    style="stop-color:#23630A"/>
     </linearGradient>
-    <linearGradient id="green" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="18">
+    <linearGradient id="yellowgreen" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="18">
       <stop offset="0"    style="stop-color:#D1F171"/>
       <stop offset="0.1"  style="stop-color:#97CA00"/>
       <stop offset="0.96" style="stop-color:#6B8F00"/>
