@@ -1,4 +1,8 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in shields.gemspec
+group :development do
+  gem 'pry'
+  gem 'pry-debugger'
+end
+
 gemspec

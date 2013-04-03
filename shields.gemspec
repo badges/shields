@@ -6,11 +6,11 @@ require 'shields/version'
 Gem::Specification.new do |spec|
   spec.name          = "shields"
   spec.version       = Shields::VERSION
-  spec.authors       = ["Olivier Lacan"]
-  spec.email         = ["olivier.lacan@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
+  spec.authors       = ["Olivier Lacan", "Nicholas Acker"]
+  spec.email         = ["olivier.lacan@gmail.com", "acker2@me.com"]
+  spec.description   = %q{A Shields badge generator to create PNGs from the source SVG template}
+  spec.summary       = %q{Easily generate Shields badges for your project}
+  spec.homepage      = "http://shields.io"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
@@ -18,6 +18,10 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "mini_magick", "~> 3.5.0"
+  spec.add_dependency "multi_xml", "~> 0.5.3"
+
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
+  spec.add_development_dependency "rspec", "~> 2.13.0"
 end
