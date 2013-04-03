@@ -17,6 +17,11 @@ GEM
     debugger-linecache (1.2.0)
     debugger-ruby_core_source (1.2.0)
     diff-lcs (1.2.2)
+    fakefs (0.4.2)
+    fuubar (1.1.0)
+      rspec (~> 2.0)
+      rspec-instafail (~> 0.2.0)
+      ruby-progressbar (~> 1.0.0)
     method_source (0.8.1)
     mini_magick (3.5.0)
       subexec (~> 0.2.1)
@@ -36,7 +41,9 @@ GEM
     rspec-core (2.13.1)
     rspec-expectations (2.13.0)
       diff-lcs (>= 1.1.3, < 2.0)
+    rspec-instafail (0.2.4)
     rspec-mocks (2.13.0)
+    ruby-progressbar (1.0.2)
     slop (3.4.4)
     subexec (0.2.2)
 
@@ -45,6 +52,8 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.3)
+  fakefs
+  fuubar (~> 1.1.0)
   pry
   pry-debugger
   rake

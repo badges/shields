@@ -5,4 +5,8 @@ group :development do
   gem 'pry-debugger'
 end
 
+group :test do
+  gem "fakefs"
+end
+
 gemspec
