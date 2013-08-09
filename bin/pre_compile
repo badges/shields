@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+indent()
+{ 
+    sed -u 's/^/       /' 
+}
+echo "=========================================="
+echo
+echo "1: $1"
+echo "2: $2"
+echo "cwd: $(pwd)"
+echo
+echo "=========================================="
+
+
+# Install Node.js.
+# ================
+# Adapted from https://github.com/heroku/heroku-buildpack-nodejs.
+
+echo "-----> Installing Node.js, version 0.10.15 ..."
+mkdir -p vendor/node
+cd vendor/node
+NODEBALL=http://heroku-buildpack-nodejs.s3.amazonaws.com/nodejs-0.10.15.tgz 
+curl $NODEBALL | tar zx
+
+
+# Install shielded.
+# =================
+
+echo "-----> Installing shielded ..."
+cd $BUILD_DIR/vendor/shielded/
+../node/bin/npm install | indent
+
+
+# Set up environment variables.
+# =============================
+# This is done with a script in .profile.d/:
+#
+#   https://devcenter.heroku.com/articles/profiled
+
+cd $BUILD_DIR
+mkdir -p .profile.d
+cat << EOF > .profile.d/shields.io-node.sh
+export PATH=/app/vendor/node/bin:$PATH
+EOF
