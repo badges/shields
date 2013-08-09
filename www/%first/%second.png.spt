@@ -1,0 +1,184 @@
+import os
+import subprocess
+import tempfile
+import threading
+import time
+import urlparse
+
+from redis import StrictRedis
+from aspen import log, Response
+from shields_io import services
+from shields_io.colors import LIGHTGRAY, all_colors
+
+
+# Configure.
+# ==========
+
+shielded = os.path.join(website.project_root, "vendor", "shielded", "shielded")
+redis = StrictRedis.from_url(os.environ['REDIS_URL'])
+TRANSFORM_TIMEOUT = int(os.environ['SHIELDS_IO_TRANSFORM_TIMEOUT'])  # seconds
+SEMAPHORE_TIMEOUT = int(os.environ['SHIELDS_IO_SEMAPHORE_TIMEOUT'])  # seconds
+PNG_DATA_TIMEOUT = int(os.environ['SHIELDS_IO_PNG_DATA_TIMEOUT'])    # seconds
+MAX_AGE = int(os.environ['SHIELDS_IO_MAX_AGE'])                      # seconds
+
+def transform_and_cache(transform_key, first, second, color):
+    """This probably does expensive HTTP. Returns a dict.
+    """
+    transform = services.get(first)
+    first, second, color = transform(first, second, color)  # expensive HTTP
+    transformed = {"first": first, "second": second, "color": color}
+    log( transform_key + " transformed to %(first)s|%(second)s|%(color)s"
+       % transformed
+        )
+    redis.hmset(transform_key, transformed)
+    return transformed
+
+
+[---]
+
+# Parse and validate input.
+# =========================
+
+first = path['first'].lower()[:16]
+second = path['second'][:16]
+color = qs.get('color', LIGHTGRAY)
+
+if color not in all_colors:
+    response = Response(400)
+    response.body = "Bad color. Options are: %s." % ", ".join(all_colors)
+    response.headers['Content-Type'] = 'text/plain'
+    raise response
+
+_clear_caches = qs.get('_clear_caches', '').lower()
+_clear_caches = _clear_caches in ('1', 'true', 'yes')
+
+
+# Transform tokens per service.
+# =============================
+
+transform_key = "%s|%s|%s" % (first, second, color)
+transform_freshness = transform_key + "|freshness"
+
+if _clear_caches:
+    log(transform_key + " clearing caches")
+    redis.delete(transform_key)
+    redis.delete(transform_freshness)
+
+transformed = redis.hgetall(transform_key)
+transform_is_stale = redis.get(transform_freshness) is None
+
+
+if not transformed:
+
+    # The first user to request a button always has to wait for the transform.
+
+    log(transform_key + " transforming")
+    transformed = transform_and_cache(transform_key, first, second, color)
+
+elif transform_is_stale:
+
+    # Subsequent users never have to wait for the transform. Rather than make
+    # them wait, we proceed with the last transform we did, no matter how stale
+    # it is. Before we do, however, we'll kick off a new transform in a thread,
+    # so that the *next* user after the thread completes will get a fresh
+    # transform.
+
+    # This means that the average staleness of the buttons we serve will depend
+    # on the frequency with which they're requested. For active projects this
+    # will approach the TRANSFORM_TIMEOUT; for inactive projects, infinity.
+    # This is appropriate: stale buttons for stale projects, fresh buttons for
+    # fresh projects.
+
+    # (We have to pass arguments into the thread target because if we depend on
+    # the outer scope we get the reassigned values.)
+
+    def _(first, second, color):
+
+        log(transform_key + " re-transforming")
+        transform_and_cache(transform_key, first, second, color)
+
+        # In Redis 2.6+, set takes an ex arg. Redis to Go is on 2.4. RedisGreen
+        # is on 2.6, but has no free offering. I expect to pay, and am leaning
+        # towards RedisGreen, but for now ...
+
+        redis.setex(transform_freshness, TRANSFORM_TIMEOUT, "yes")
+        redis.delete(semaphore)
+
+
+    semaphore = transform_key + "|semaphore"
+    if not redis.setnx(semaphore, "blah"):
+
+        # Some other thread (possibly in another process) is purportedly
+        # working on this already. We'll let them.
+
+        pass
+
+    else:
+
+        # We own this task. Let's set a long timeout just in case our process
+        # dies before we finish. We'll serve stale data until the timeout
+        # expires and another process can pick this up.
+
+        redis.expire(semaphore, SEMAPHORE_TIMEOUT)
+
+        thread = threading.Thread(target=_, args=(first, second, color))
+        thread.daemon = True
+        thread.start()
+
+        log(transform_key + " thread started")
+
+
+first = transformed['first']
+second = transformed['second']
+color = transformed['color']
+
+
+# Get PNG data.
+# =============
+# Cache in Redis.
+
+png_key = "%s|%s|%s|PNG" % (first, second, color)
+if _clear_caches:
+    redis.delete(png_key)
+log(transform_key + " getting png_key")
+
+start = time.time()
+png_data = redis.get(png_key)
+if png_data is not None:
+    nbytes = len(png_data)
+    end = time.time()
+    ms = (end - start) / 1000.0
+    log(transform_key + " got %d bytes in %d ms" % (nbytes, ms))
+
+if png_data is None:
+
+    # Draw image.
+    # ===========
+
+    log(transform_key + " calling shielded")
+    with tempfile.NamedTemporaryFile(suffix='.png') as fp:
+        subprocess.call([ shielded
+                        , "--label", first
+                        , "--value", second
+                        , "--color", color
+                        , "--file", fp.name
+                         ])
+        png_data = open(fp.name).read()
+
+    redis.set(png_key, png_data)
+
+
+# Set a timeout on the PNG data cache.
+# ====================================
+# This should be set really long, like a week or a month. This is mostly a
+# protection against bloating our Redis db with the long tail of PNG data.
+# For active projects this will be perpetually postponed.
+
+redis.expire(png_key, PNG_DATA_TIMEOUT)
+
+
+response.headers['Cache-Control'] = 'public; max-age=%d' % MAX_AGE
+response.headers['Vary'] = 'Accept-Encoding'
+response.headers.cookie.clear()
+[---]
+{{ png_data }}
