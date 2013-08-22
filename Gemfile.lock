@@ -1,0 +1,61 @@
+PATH
+  remote: .
+  specs:
+    shields (0.0.1)
+      mini_magick (~> 3.5.0)
+      multi_xml (~> 0.5.3)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    coderay (1.0.9)
+    columnize (0.3.6)
+    debugger (1.5.0)
+      columnize (>= 0.3.1)
+      debugger-linecache (~> 1.2.0)
+      debugger-ruby_core_source (~> 1.2.0)
+    debugger-linecache (1.2.0)
+    debugger-ruby_core_source (1.2.0)
+    diff-lcs (1.2.2)
+    fakefs (0.4.2)
+    fuubar (1.1.0)
+      rspec (~> 2.0)
+      rspec-instafail (~> 0.2.0)
+      ruby-progressbar (~> 1.0.0)
+    method_source (0.8.1)
+    mini_magick (3.5.0)
+      subexec (~> 0.2.1)
+    multi_xml (0.5.3)
+    pry (0.9.12)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.4)
+    pry-debugger (0.2.2)
+      debugger (~> 1.3)
+      pry (~> 0.9.10)
+    rake (10.0.4)
+    rspec (2.13.0)
+      rspec-core (~> 2.13.0)
+      rspec-expectations (~> 2.13.0)
+      rspec-mocks (~> 2.13.0)
+    rspec-core (2.13.1)
+    rspec-expectations (2.13.0)
+      diff-lcs (>= 1.1.3, < 2.0)
+    rspec-instafail (0.2.4)
+    rspec-mocks (2.13.0)
+    ruby-progressbar (1.0.2)
+    slop (3.4.4)
+    subexec (0.2.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (~> 1.3)
+  fakefs
+  fuubar (~> 1.1.0)
+  pry
+  pry-debugger
+  rake
+  rspec (~> 2.13.0)
+  shields!
