@@ -2,7 +2,7 @@
 
 A legible & concise status badge solution for third-party codebase services. Soon to be Retina-ready.
 
-![shields on white](https://raw.github.com/olivierlacan/shields/master/shields_white.png)
+![shields on white](https://raw.github.com/gittip/shields.io/master/static/shields_white.png)
 
 ## Services using Shields
 - [Code Climate](https://codeclimate.com/changelog/510d4fde56b102523a0004bf)
@@ -34,9 +34,9 @@ As you can see from the zoomed 400% versions of these badges above, nobody is (r
 ## Solution
 As you can see below, without increasing the footprint of these badges, I've tried to increase legibility and coherence, removing useless text to decrease the horizontal length in the (likely) scenario that more of these badge thingies crop up on READMEs all across the land.
 
-![shields on white](https://raw.github.com/olivierlacan/shields/master/shields_white.png)
+![shields on white](https://raw.github.com/gittip/shields.io/master/static/shields_white.png)
 
-![shields on black](https://raw.github.com/olivierlacan/shields/master/shields_black.png)
+![shields on black](https://raw.github.com/gittip/shields.io/master/static/shields_black.png)
 
 Thanks to @ackerdev we also have SVG equivalents of all existing badges if you would like your badges to be Retina-ready or dynamically manipulate the text inside of them before you output them to PNG 24 Alpha (transparent background).
 
