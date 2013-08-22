@@ -48,10 +48,10 @@ A suggested by @kneath, Shields displayed with an HTML image tag (instead of the
 Here's an example with the following code: 
 
 ```html
-<img src="https://raw.github.com/olivierlacan/shields/master/shields_white@2x.png" height="143" alt="Retina-ready Shields example" />
+<img src="https://raw.github.com/gittip/shields.io/master/static/shields_white@2x.png" height="143" alt="Retina-ready Shields example" />
 ```
 
-<img src="https://raw.github.com/olivierlacan/shields/master/shields_white@2x.png" height="143" alt="Retina-ready Shields example" />
+<img src="https://raw.github.com/gittip/shields.io/master/static/shields_white@2x.png" height="143" alt="Retina-ready Shields example" />
 
 All shields aren't yet compatible with this but we're working on updating them soon. Look for image filenames with `@2x` suffixes, those will be the pixel doubled versions. 
 
@@ -62,7 +62,7 @@ The font used on these badges is the Apache licensed Open Sans Regular available
 
 ## How to resize a Shield
 
-Want to use one of these swanky badges for your own service right now and don't have time to [open an issue](https://github.com/olivierlacan/shields/issues) and wait for us to help you out?
+Want to use one of these swanky badges for your own service right now and don't have time to [open an issue](https://github.com/gittip/shields.io/issues) and wait for us to help you out?
 
 Well here's a hint, if you need to resize the badge yourself in Photoshop make sure you use the vector points [like this](http://link.olivierlacan.com/MmlK).
 
