@@ -10,6 +10,7 @@ A legible & concise status badge solution for third-party codebase services. Soo
 - [Gemfury/RubyGems](http://badge.fury.io/)
 - [Gemnasium](http://blog.tech-angels.com/post/43141047457/gemnasium-v3-aka-gemnasium)
 - [Travis CI](http://about.travis-ci.org/docs/user/status-images/)
+- [Scrutinizer CI](https://scrutinizer-ci.com/)
 
 ## Problem
 An increasing number of GitHub repos sport badges for things like:
