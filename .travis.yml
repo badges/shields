@@ -6,7 +6,7 @@ before_script:
  - git submodule update
  - make
  - make tests/env
- - make vendor/shielded/shielded
+ - make vendor/shielded/node_modules
  - ./env/bin/pip install pytest
 script: export `cat tests/env` && ./env/bin/py.test tests/
 notifications:
