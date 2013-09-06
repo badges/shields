@@ -2,6 +2,8 @@ import os
 import time
 
 from aspen import log
+from aspen.http import Path
+from shields_io import utils
 
 
 website.renderer_default = "tornado"
@@ -19,6 +21,16 @@ def time_request_outbound(response):
 website.hooks.inbound_early += [time_request_inbound]
 website.hooks.outbound += [time_request_outbound]
 
+
+# Collapse /foo/bar/baz.png into /foo/bar%2Fbaz.png.
+# ==================================================
+# https://github.com/gittip/shields.io/issues/57
+
+def collapse_path_parts(request):
+    collapsed = utils.collapse_path_parts(request.line.uri.path)
+    request.line.uri.path = Path(collapsed)
+
+website.hooks.inbound_early += [collapse_path_parts]
 
 
 # Up the threadpool size.
