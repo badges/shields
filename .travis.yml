@@ -8,7 +8,7 @@ before_script:
  - make tests/env
  - make vendor/shielded/shielded
  - ./env/bin/pip install pytest
-script: foreman run -e tests/env ./env/bin/py.test tests/
+script: export `cat tests/env` ./env/bin/py.test tests/
 notifications:
   email: false
   irc: 
