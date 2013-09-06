@@ -21,5 +21,31 @@ class TestPNGs(TestCase):
         self.client = TestClient(website)
 
     def test_we_can_serve_a_png(self):
-        response = self.client.get('/cheeze/whiz.png')
+        response = self.client.get("/cheeze/whiz.png")
         assert response.body[1:4] == b'PNG'
+
+    def test_extra_slash_gets_collapsed(self):
+        response = self.client.get("/foo/bar/baz.png")
+        assert response.body[1:4] == 'PNG'  # presumably has "bar/baz" as second part
+
+    def test_extra_slash_gets_passed_through_to_context(self):
+        actual = self.client.get("/foo/bar/baz.png").request.context['path']['second']
+        assert actual == 'bar/baz'
+
+    def test_extra_slashes_end_up_as_one_slash(self):
+        # This is actually an Aspen mis-feature, likely to change in the future:
+        #  https://github.com/gittip/aspen-python/issues/170
+        actual = self.client.get("/foo/bar/////baz.png").request.context['path']['second']
+        assert actual == 'bar/baz'
+
+    def test_2F_redirects(self):
+        response = self.client.get("/foo/bar%2Fbaz.png")
+        assert response.code == 302
+
+    def test_2F_redirects_to_extra_slash(self):
+        actual = self.client.get("/foo/bar%2Fbaz.png").headers['Location']
+        assert actual == '/foo/bar/baz.png'
+
+    def test_redirect_handles_multiple_slashes(self):
+        actual = self.client.get("/foo/bar%2F%2Fba%2Fz.pn%2Fg").headers['Location']
+        assert actual == '/foo/bar//ba/z.pn/g'

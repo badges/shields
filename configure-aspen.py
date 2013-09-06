@@ -1,12 +1,14 @@
+from __future__ import unicode_literals
+
 import os
 import time
 
 from aspen import log
-from aspen.http import Path
+from aspen.http.request import Path
 from shields_io import utils
 
 
-website.renderer_default = "tornado"
+website.renderer_default = b"tornado"
 
 
 def time_request_inbound(request):
@@ -26,11 +28,17 @@ website.hooks.outbound += [time_request_outbound]
 # ==================================================
 # https://github.com/gittip/shields.io/issues/57
 
-def collapse_path_parts(request):
-    collapsed = utils.collapse_path_parts(request.line.uri.path)
-    request.line.uri.path = Path(collapsed)
+def redirect_uncollapsed_paths(request):
+    if b'%2F' in request.line.uri.path.raw:
+        request.redirect(request.line.uri.path.raw.replace(b'%2F', b'/'))
 
-website.hooks.inbound_early += [collapse_path_parts]
+def collapse_path_parts(request):
+    collapsed = utils.collapse_path_parts(request.line.uri.path.raw)
+    request.line.uri.path = request.context['path'] = Path(collapsed)
+
+website.hooks.inbound_early += [ redirect_uncollapsed_paths
+                               , collapse_path_parts
+                                ]
 
 
 # Up the threadpool size.
