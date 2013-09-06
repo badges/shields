@@ -1,4 +1,4 @@
-# Shields
+# Shields [![Build Status](http://origin.shields.io/travis-ci/gittip%2Fshields.io.png)](https://travis-ci.org/gittip/shields.io)
 
 A legible & concise status badge solution for third-party codebase services. Soon to be Retina-ready.
 
