@@ -18,6 +18,9 @@ env/bin/aspen:
 local.env:
 	cp default_local.env local.env
 
+tests/env:
+	cp default_tests.env tests/env
+
 clean:
 	rm -rf env
 	find . -name \*.pyc -delete

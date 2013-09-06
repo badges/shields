@@ -2,4 +2,5 @@
 *.pyc
 env
 local.env
+tests/env
 distribute-*

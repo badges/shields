@@ -1,0 +1,22 @@
+language: python 
+services:
+ - redis-server 
+before_script:
+ - git submodule init
+ - git submodule update
+ - make
+ - make tests/env
+ - make vendor/shielded/node_modules
+ - ./env/bin/pip install pytest
+script: export `cat tests/env` && ./env/bin/py.test tests/
+notifications:
+  email: false
+  irc: 
+    channels:
+      - "irc.freenode.org#shields"
+    on_success: change
+    on_failure: always
+    template:
+      - "%{repository} (%{branch}:%{commit} by %{author}): %{message} (%{build_url})"
+    skip_join: true
+
