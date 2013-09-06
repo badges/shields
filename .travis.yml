@@ -1,0 +1,16 @@
+language: python
+before_script:
+ - make
+ - pip install pytest
+script: cd tests && py.test
+notifications:
+  email: false
+  irc: 
+    channels:
+      - "irc.freenode.org#shields"
+    on_success: change
+    on_failure: always
+    template:
+      - "%{repository} (%{branch}:%{commit} by %{author}): %{message} (%{build_url})"
+    skip_join: true
+
