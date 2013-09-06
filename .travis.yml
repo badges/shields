@@ -1,8 +1,8 @@
 language: python
 before_script:
  - make
- - pip install pytest
-script: cd tests && py.test
+ - ./env/bin/pip install pytest
+script: cd tests && ../env/bin/py.test
 notifications:
   email: false
   irc: 
