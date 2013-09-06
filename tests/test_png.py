@@ -3,6 +3,7 @@ from __future__ import division, print_function, unicode_literals
 import os
 from unittest import TestCase
 
+import redis
 from aspen.website import Website
 from aspen.testing.client import TestClient
 
@@ -18,7 +19,12 @@ class TestPNGs(TestCase):
                           , '--project_root', PROJECT_ROOT
                           , '--show_tracebacks', b'yes'
                            ])
+        self.redis = redis.StrictRedis.from_url(os.environ['REDIS_URL'])
+        self.redis.flushdb()
         self.client = TestClient(website)
+
+    def tearDown(self):
+        self.redis.flushdb()
 
     def test_we_can_serve_a_png(self):
         response = self.client.get("/cheeze/whiz.png")
