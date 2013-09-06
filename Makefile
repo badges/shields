@@ -25,8 +25,8 @@ clean:
 	rm -rf env
 	find . -name \*.pyc -delete
 
-vendor/shielded/node_modules:
+vendor/shielded/shielded:
 	cd vendor/shielded && npm install
 
-run: local.env env/bin/aspen vendor/shielded/node_modules
+run: local.env env/bin/aspen vendor/shielded/shielded
 	foreman run -e local.env ./env/bin/aspen --www_root=www --project_root=.

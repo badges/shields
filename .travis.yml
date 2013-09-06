@@ -2,12 +2,13 @@ language: python
 services:
  - redis-server 
 before_script:
- - make
  - git submodule init
  - git submodule update
- - cd vendor/shielded && npm install && cd ../..
+ - make
+ - make tests/env
+ - make vendor/shielded/shielded
  - ./env/bin/pip install pytest
-script: cd tests && ../env/bin/py.test
+script: foreman run -e tests/env ./env/bin/py.test tests/
 notifications:
   email: false
   irc: 
