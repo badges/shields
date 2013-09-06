@@ -26,7 +26,7 @@ class TestPNGs(TestCase):
 
     def test_extra_slash_gets_collapsed(self):
         response = self.client.get("/foo/bar/baz.png")
-        assert response.body[1:4] == 'PNG'  # presumably has "bar/baz" as second part
+        assert response.body[1:4] == 'PNG'
 
     def test_extra_slash_gets_passed_through_to_context(self):
         actual = self.client.get("/foo/bar/baz.png").request.context['path']['second']
