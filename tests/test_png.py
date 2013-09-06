@@ -8,6 +8,7 @@ from aspen.website import Website
 from aspen.testing.client import TestClient
 
 
+redis = redis.StrictRedis.from_url(os.environ['REDIS_URL'])
 PROJECT_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), b'..'))
 WWW_ROOT = os.path.realpath(os.path.join(PROJECT_ROOT, b'www'))
 
@@ -19,12 +20,11 @@ class TestPNGs(TestCase):
                           , '--project_root', PROJECT_ROOT
                           , '--show_tracebacks', b'yes'
                            ])
-        self.redis = redis.StrictRedis.from_url(os.environ['REDIS_URL'])
-        self.redis.flushdb()
+        redis.flushdb()
         self.client = TestClient(website)
 
     def tearDown(self):
-        self.redis.flushdb()
+        redis.flushdb()
 
     def test_we_can_serve_a_png(self):
         response = self.client.get("/cheeze/whiz.png")
