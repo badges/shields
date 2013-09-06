@@ -1,4 +1,6 @@
-language: python
+language: python 
+services:
+ - redis-server 
 before_script:
  - make
  - git submodule init
