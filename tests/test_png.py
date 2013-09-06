@@ -28,11 +28,11 @@ class TestPNGs(TestCase):
 
     def test_we_can_serve_a_png(self):
         response = self.client.get("/cheeze/whiz.png")
-        assert response.body[1:4] == b'PNG'
+        assert response.body[1:4] == b'PNG', response.body
 
     def test_extra_slash_gets_collapsed(self):
         response = self.client.get("/foo/bar/baz.png")
-        assert response.body[1:4] == 'PNG'
+        assert response.body[1:4] == 'PNG', response.body
 
     def test_extra_slash_gets_passed_through_to_context(self):
         actual = self.client.get("/foo/bar/baz.png").request.context['path']['second']
