@@ -20,6 +20,15 @@ website.hooks.inbound_early += [time_request_inbound]
 website.hooks.outbound += [time_request_outbound]
 
 
+# Collapse /foo/bar/baz.png into /foo/bar%2Fbaz.png.
+# ==================================================
+# https://github.com/gittip/shields.io/issues/57
+
+def collapse_path_parts(request):
+    request.line.uri.path
+
+website.hooks.inbound_early += []
+
 
 # Up the threadpool size.
 # =======================
