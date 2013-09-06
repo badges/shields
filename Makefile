@@ -15,6 +15,9 @@ env/bin/aspen:
 	./$(env_bin)/pip install -r requirements.txt
 	./$(env_bin)/pip install -e ./
 
+local.env:
+	cp default_local.env local.env
+
 clean:
 	rm -rf env
 	find . -name \*.pyc -delete
@@ -22,5 +25,5 @@ clean:
 vendor/shielded/node_modules:
 	cd vendor/shielded && npm install
 
-run: env/bin/aspen vendor/shielded/node_modules
+run: local.env env/bin/aspen vendor/shielded/node_modules
 	foreman run -e local.env ./env/bin/aspen --www_root=www --project_root=.
