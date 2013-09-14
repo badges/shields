@@ -1,7 +1,13 @@
 Cheroot==4.0.0beta
 mimeparse==0.1.3
+first==2.0.0
 aspen==0.25.2
+
 tornado==1.2.1
 aspen-tornado==0.2
+
+raven==3.4.1
+aspen-sentry==1.0.0
+
 hiredis==0.1.1
 redis==2.7.6

@@ -3,7 +3,11 @@ from __future__ import unicode_literals
 import os
 import time
 
+import aspen_sentry
 from aspen import log
+
+
+aspen_sentry.install(website)
 
 
 website.renderer_default = b"tornado"
