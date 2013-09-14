@@ -4,8 +4,6 @@ import os
 import time
 
 from aspen import log
-from aspen.http.request import Path
-from shields_io import utils
 
 
 website.renderer_default = b"tornado"
@@ -32,13 +30,7 @@ def redirect_uncollapsed_paths(request):
     if b'%2F' in request.line.uri.path.raw:
         request.redirect(request.line.uri.path.raw.replace(b'%2F', b'/'))
 
-def collapse_path_parts(request):
-    collapsed = utils.collapse_path_parts(request.line.uri.path.raw)
-    request.line.uri.path = request.context['path'] = Path(collapsed)
-
-website.hooks.inbound_early += [ redirect_uncollapsed_paths
-                               , collapse_path_parts
-                                ]
+website.hooks.inbound_early += [redirect_uncollapsed_paths]
 
 
 # Up the threadpool size.
