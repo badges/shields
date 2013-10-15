@@ -1,6 +1,0 @@
-*.egg-info
-*.pyc
-env
-local.env
-tests/env
-distribute-*

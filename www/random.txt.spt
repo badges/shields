@@ -1,6 +1,0 @@
-"""This is a testing helper.
-"""
-import random
-[---]
-[---]
-{{ random.randint(0, 100) }}

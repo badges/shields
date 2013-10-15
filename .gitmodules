@@ -1,3 +1,0 @@
-[submodule "vendor/shielded"]
-	path = vendor/shielded
-	url = https://github.com/cainus/shielded.git
