@@ -70,6 +70,35 @@ Well here's a hint, if you need to resize the badge yourself in Photoshop make s
 
 In Illustrator, it's [a little different](http://f.cl.ly/items/071J0Q2m0D38250g2s1F/shields_resize_illustrator.mov) (4.8 MB .mov video).
 
+Command line usage:
+
+## Installation
+
+Add this line to your application's Gemfile:
+
+    gem 'shields_io'
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install shields_io
+
+## Usage
+
+TODO: Write usage instructions here
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+
+
 ## Contributions
 See [CONTRIBUTING.md](CONTRIBUTING.md).
 
