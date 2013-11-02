@@ -70,9 +70,11 @@ Well here's a hint, if you need to resize the badge yourself in Photoshop make s
 
 In Illustrator, it's [a little different](http://f.cl.ly/items/071J0Q2m0D38250g2s1F/shields_resize_illustrator.mov) (4.8 MB .mov video).
 
-Command line usage:
 
-## Installation
+## Installation (ruby class / command line)
+
+There is a small ruby class / command line tool to generate the images from a template. 
+It can output a parametrized SVG, or any format (gif/png/jpg) etc..
 
 Add this line to your application's Gemfile:
 
@@ -86,9 +88,29 @@ Or install it yourself as:
 
     $ gem install shields_io
 
-## Usage
+## Command line Usage
 
-TODO: Write usage instructions here
+    Usage: ./generate_shield [options]
+      
+        example:
+        ./generate_shield --height=18 --vendor_text=Travis --vendor_width=40 --vendor_color=gray --status_text=Passing --status_color=green --format=png >travis.png
+    
+        -v,                     Print the version
+            --height            Shield height
+            --vendor_text       Vendor text
+            --vendor_width      Vendor width
+            --vendor_color      Vendor Color gray,lightgray,darkgray,green,yellowgreen,yellow,red
+            --status_text       Status Text
+            --status_width      Status Width
+            --status_color      Status Color gray,lightgray,darkgray,green,yellowgreen,yellow,red
+            --format            Format svg, png etc..
+        -h, --help              Display this help message.
+    
+
+## Use in code (ruby)
+    require "shields_io"
+    ShieldsIo::SVG.new(opts).render # will render an svg opts is a hash of options
+    ShieldsIo::SVG.new(opts).render_bitmap "gif" # will render a gif (default bitmap format is png) opts is a hash of options
 
 ## Contributing
 
