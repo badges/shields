@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+require "slop"
+require_relative "../lib/shields_io"
+
+opts = Slop.parse help: true do
+    banner 'Usage: ./generate_shield [options]
+    example: 
+    ./generate_shield --height=18 --vendor_text=Travis --vendor_width=40 --vendor_color=gray --status_text=Passing --status_color=green --format=png >travis.png
+    '
+
+    on '-v', 'Print the version' do
+      puts "Version #{ShieldsIo::VERSION}"
+    end
+
+    on :height=, "Shield height", as: Integer
+    on :vendor_text=, "Vendor text"
+    on :vendor_width=, "Vendor width", as: Integer
+    on :vendor_color=, "Vendor Color #{ShieldsIo::SVG::Colors.join(",")}"
+    on :status_text=, "Status Text"
+    on :status_width=, "Status Width", as: Integer
+    on :status_color=, "Status Color #{ShieldsIo::SVG::Colors.join(",")}"
+    on :format=, "Format svg, png etc.."
+end
+
+opts = ShieldsIo::SVG::Defaults.merge(opts.to_h.delete_if { |k, v| v.nil? })
+
+if opts[:format]=="svg"
+  $stdout.print ShieldsIo::SVG.new(opts).render
+  exit(0) 
+else
+  $stdout.print ShieldsIo::SVG.new(opts).render_bitmap opts[:format] unless opts[:format].nil?  
+  exit(0) 
+end
