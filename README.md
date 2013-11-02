@@ -96,6 +96,7 @@ Or install it yourself as:
         ./generate_shield --height=18 --vendor_text=Travis --vendor_width=40 --vendor_color=gray --status_text=Passing --status_color=green --format=png >travis.png
     
         -v,                     Print the version
+            --font_size         Font size
             --height            Shield height
             --vendor_text       Vendor text
             --vendor_width      Vendor width

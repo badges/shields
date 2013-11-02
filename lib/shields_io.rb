@@ -5,7 +5,9 @@ require "mini_magick"
 module ShieldsIo
   class SVG
     Colors = %w{gray lightgray darkgray green yellowgreen yellow red}
-    Defaults =  {height: 18,
+    Defaults =  {
+        font_size: 10,
+        height: 18,
         vendor_text:  "vendor",
         vendor_width: 50,
         vendor_color: "gray",
@@ -22,6 +24,7 @@ module ShieldsIo
       raise "height not an integer" unless @shield[:height].is_a? Integer
       raise "vendor width not an integer" unless @shield[:vendor_width].is_a? Integer
       raise "status width not an integer" unless @shield[:status_width].is_a? Integer
+      raise "font_size not an integer" unless @shield[:font_size].is_a? Integer
     end
     
     def render

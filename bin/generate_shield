@@ -5,7 +5,7 @@ require_relative "../lib/shields_io"
 opts = Slop.parse help: true do
     banner 'Usage: ./generate_shield [options]
     example: 
-    ./generate_shield --height=18 --vendor_text=Travis --vendor_width=40 --vendor_color=gray --status_text=Passing --status_color=green --format=png >travis.png
+    ./generate_shield --font_size=18 --height=18 --vendor_text=Travis --vendor_width=40 --vendor_color=gray --status_text=Passing --status_color=green --format=png >travis.png
     '
 
     on '-v', 'Print the version' do
@@ -13,6 +13,7 @@ opts = Slop.parse help: true do
     end
 
     on :height=, "Shield height", as: Integer
+    on :font_size=, "Font size", as: Integer
     on :vendor_text=, "Vendor text"
     on :vendor_width=, "Vendor width", as: Integer
     on :vendor_color=, "Vendor Color #{ShieldsIo::SVG::Colors.join(",")}"
