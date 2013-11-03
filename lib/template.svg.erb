@@ -62,16 +62,12 @@
   <g id="vendor">
     <path d="M0,9 v-6 q0,-3,3,-3 v18 q-3,0,-3,-3 Z" fill="url(#<%= vendor_color %>)" />
     <rect x="3" y="0" width="<%= vendor_width %>" height="<%= height%>" fill="url(#<%= vendor_color %>)" />
-    <text x="6" y="12" font-family="Open Sans" font-size="<%= font_size %>" fill="#FFFFFF" style="filter:url(#dropshadow)">
-          <%= vendor_text %>
-    </text>
+    <text x="6" y="12" font-family="Open Sans" font-size="<%= font_size %>" fill="#FFFFFF" style="filter:url(#dropshadow)"><%= vendor_text %></text>
   </g>
 
   <g id="status">
     <rect x="<%= vendor_width%>" y="0" width="<%= status_width %>" height="<%= height %>" fill="url(#<%= status_color %>)" />
     <path fill="url(#<%= status_color %>)" d="M<%=vendor_width + status_width + 3%>,9 v-6 q0,-3,-3,-3 v<%=height%> q3,0,3,-3 Z" />
-    <text x="<%= vendor_width + 4%>" y="12" font-family="Open Sans" font-size="<%= font_size %>" fill="#FFFFFF" style="filter:url(#dropshadow)">
-           <%= status_text%>
-    </text>
+    <text x="<%= vendor_width + 4%>" y="12" font-family="Open Sans" font-size="<%= font_size %>" fill="#FFFFFF" style="filter:url(#dropshadow)"><%= status_text%></text>
   </g>
 </svg>
