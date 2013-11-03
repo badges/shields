@@ -73,6 +73,8 @@ In Illustrator, it's [a little different](http://f.cl.ly/items/071J0Q2m0D38250g2
 
 ## Installation (ruby class / command line)
 
+[![Build Status](https://travis-ci.org/OriPekelman/shields.io.png?branch=gemify)](https://travis-ci.org/OriPekelman/shields.io)
+
 There is a small ruby class / command line tool to generate the images from a template. 
 It can output a parametrized SVG, or any format (gif/png/jpg) etc..
 
