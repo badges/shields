@@ -9,12 +9,12 @@
         padding: 0;
         font-family: Georgia, sans-serif;
       }
-      #body {
+      .wrapper {
         padding: 50px 50px 50px 500px;
         position: relative;
         z-index: 1;
       }
-      #shield {
+      .shield {
         position: fixed;
         bottom: 20px;
         left: 20px;
@@ -39,33 +39,33 @@
         margin: 1em 0;
         padding: 0 0 3pt 0;
       }
-      #services {
+      .services {
         width: 100%;
         overflow: auto;
         white-space: nowrap;
       }
       @media (max-width: 950px) {
-        #body { padding: 50px; }
-        #shield {
+        .wrapper { padding: 50px; }
+        .shield {
           display: block;
           position: static;
           margin: 0 auto;
         }
       }
       @media (max-width: 700px) {
-        #shield { width: 100%; }
+        .shield { width: 100%; }
       }
     </style>
   </head>
   <body>
-    <img src="shield.jpg" id="shield" />
+    <img src="shield.jpg" class="shield" />
 
     <a href="https://github.com/gittip/shields.io"><img style="position: fixed;
       top: 0; right: 0; border: 0; z-index: 2;"
       src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"
       alt="Fork me on GitHub"></a>
 
-    <div id="body">
+    <div class="wrapper">
 
       <h1>Shields.io</h1>
 
@@ -73,7 +73,7 @@
 
       <h2>Supported Vendors</h2>
 
-      <div id="services">
+      <div class="services">
         <p>
             <a href="https://coveralls.io/r/resque/resque" title="Coveralls"><img src="http://img.shields.io/coveralls/resque/resque.png" /></a>
             <code>[![Coveralls](http://img.shields.io/coveralls/resque/resque.png)](https://coveralls.io/r/resque/resque)</code>
