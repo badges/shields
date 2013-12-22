@@ -45,6 +45,13 @@
         overflow: auto;
         white-space: nowrap;
       }
+      .forkme {
+        position: fixed;
+        top: 0;
+        right: 0;
+        border: 0;
+        z-index: 2;
+      }
       @media (max-width: 950px) {
         .wrapper { padding: 50px; }
         .shield {
@@ -61,10 +68,8 @@
   <body>
     <img src="shield.jpg" class="shield" alt="Shield" width="400" height="564">
 
-    <a href="https://github.com/gittip/shields.io"><img style="position: fixed;
-      top: 0; right: 0; border: 0; z-index: 2;"
-      src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"
-      alt="Fork me on GitHub" width="149" height="149">
+    <a href="https://github.com/gittip/shields.io">
+      <img class="forkme" src="static/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" width="149" height="149">
     </a>
 
     <div class="wrapper">
