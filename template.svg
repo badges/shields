@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="{{=it.widths[0]+it.widths[1]}}" height="19">
   <linearGradient id="a" x2="0" y2="100%">
-    <stop offset="0" stop-color="{{=it.colorA[0]||"#aaa"}}"/>
-    <stop offset=".1" stop-color="{{=it.colorA[1]||"#666"}}"/>
-    <stop offset=".9" stop-color="{{=it.colorA[2]||"#444"}}"/>
-    <stop offset="1" stop-color="{{=it.colorA[3]||"#222"}}"/>
+    <stop offset="0" stop-color="{{=it.colorA?it.colorA[0]:"#aaa"}}"/>
+    <stop offset=".1" stop-color="{{=it.colorA?it.colorA[1]:"#666"}}"/>
+    <stop offset=".9" stop-color="{{=it.colorA?it.colorA[2]:"#444"}}"/>
+    <stop offset="1" stop-color="{{=it.colorA?it.colorA[3]:"#222"}}"/>
   </linearGradient>
   <linearGradient id="b" x2="0" y2="100%">
     <stop offset="0" stop-color="{{=it.colorB[0]}}"/>
