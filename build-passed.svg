@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="77" height="19">
   <linearGradient id="ggreen" x2="0" y2="100%">
     <stop offset="0" stop-color="#8f6"/>
-    <stop offset=".1" stop-color="#5d2"/>
+    <stop offset=".1" stop-color="#4c1"/>
     <stop offset=".9" stop-color="#3b0"/>
     <stop offset="1" stop-color="#370"/>
   </linearGradient>
@@ -11,13 +11,20 @@
     <stop offset=".9" stop-color="#444"/>
     <stop offset="1" stop-color="#222"/>
   </linearGradient>
+  <filter id='shadow'>
+    <feOffset dx='0' dy='1' in='SourceAlpha'/>
+    <feColorMatrix type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 .3 0'/>
+    <feMerge>
+      <feMergeNode/>
+      <feMergeNode in='SourceGraphic'/>
+      <feMergeNode in='SourceGraphic'/>
+    </feMerge>
+  </filter>
   <rect rx="4" width="77" height="18" fill="url(#ggrey)"/>
-  <rect rx="4" x="32" width="45" height="18" fill="url(#ggreen)"/>
-  <rect x="32" width="5" height="18" fill="url(#ggreen)"/>
+  <rect rx="4" x="33" width="44" height="18" fill="url(#ggreen)"/>
+  <rect x="33" width="5" height="18" fill="url(#ggreen)"/>
   <g fill="#fff" font-family="Trebuchet MS, sans-serif" font-size="10px">
-    <text x="5" y="12.5" stroke="rgba(0,0,0,.3)">build</text>
-    <text x="5" y="12">build</text>
-    <text x="39" y="12.5" stroke="rgba(0,0,0,.3)">passed</text>
-    <text x="39" y="12">passed</text>
+    <text x="5" y="12" filter='url(#shadow)'>build</text>
+    <text x="39" y="12" filter='url(#shadow)'>passed</text>
   </g>
 </svg>
