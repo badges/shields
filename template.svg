@@ -17,6 +17,7 @@
     <feMerge>
       <feMergeNode/>
       <feMergeNode in="SourceGraphic"/>
+      <feMergeNode in="SourceGraphic"/>
     </feMerge>
   </filter>
   <rect rx="4" width="{{=it.widths[0]+it.widths[1]}}" height="18" fill="url(#a)"/>

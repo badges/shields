@@ -19,6 +19,16 @@
       "text": [ "cheez", "whiz" ],
       "widths": [ 41, 33 ],
       "colorB": [ "#e0b519", "#dbb016", "#a08010", "#725c0c" ]
+    },
+    "tips-per-week": {
+      "text": [ "tips", "$21/week" ],
+      "widths": [ 30, 65 ],
+      "colorB": [ "#98cb03", "#94c600", "#6c9100", "#4d6700" ]
+    },
+    "coverage": {
+      "text": [ "coverage", "73%" ],
+      "widths": [ 58, 34 ],
+      "colorB": [ "#e05f46", "#db5b42", "#a04230", "#722f22" ]
     }
   },
   "colorschemes": {
