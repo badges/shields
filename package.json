@@ -1,7 +1,7 @@
 {
-  "author": "Thaddée Tyl <thaddee.tyl@gmail.com",
+  "author": "Thaddée Tyl <thaddee.tyl@gmail.com>",
   "name": "gh-badges",
-  "description": "Github badges implemented in SVG.",
+  "description": "GitHub badges implemented in SVG.",
   "version": "0.0.1",
   "repository": {
     "type": "git",
