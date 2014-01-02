@@ -1,0 +1,14 @@
+{
+  "author": "Thaddée Tyl <thaddee.tyl@gmail.com",
+  "name": "gh-badges",
+  "description": "Github badges implemented in SVG.",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/espadrine/gh-badges"
+  },
+  "license": "CC0",
+  "dependencies": {
+    "dot": ">=1.0.2"
+  }
+}

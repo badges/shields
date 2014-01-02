@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="{{=it.widths[0]+it.widths[1]}}" height="19">
+  <linearGradient id="a" x2="0" y2="100%">
+    <stop offset="0" stop-color="{{=it.colorA[0]||"#aaa"}}"/>
+    <stop offset=".1" stop-color="{{=it.colorA[1]||"#666"}}"/>
+    <stop offset=".9" stop-color="{{=it.colorA[2]||"#444"}}"/>
+    <stop offset="1" stop-color="{{=it.colorA[3]||"#222"}}"/>
+  </linearGradient>
+  <linearGradient id="b" x2="0" y2="100%">
+    <stop offset="0" stop-color="{{=it.colorB[0]}}"/>
+    <stop offset=".1" stop-color="{{=it.colorB[1]}}"/>
+    <stop offset=".9" stop-color="{{=it.colorB[2]}}"/>
+    <stop offset="1" stop-color="{{=it.colorB[3]}}"/>
+  </linearGradient>
+  <filter id="shadow">
+    <feOffset dx="0" dy="1" in="SourceAlpha"/>
+    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 .3 0"/>
+    <feMerge>
+      <feMergeNode/>
+      <feMergeNode in="SourceGraphic"/>
+    </feMerge>
+  </filter>
+  <rect rx="4" width="{{=it.widths[0]+it.widths[1]}}" height="18" fill="url(#a)"/>
+  <rect rx="4" x="{{=it.widths[0]}}" width="{{=it.widths[1]}}" height="18" fill="url(#b)"/>
+  <rect x="{{=it.widths[0]}}" width="4" height="18" fill="url(#b)"/>
+  <g fill="#fff" text-anchor="middle" font-family="Trebuchet MS, sans-serif" font-size="10">
+    <text x="{{=it.widths[0]/2}}" y="12" filter="url(#shadow)">{{=it.text[0]}}</text>
+    <text x="{{=it.widths[0]+it.widths[1]/2}}" y="12" filter="url(#shadow)">{{=it.text[1]}}</text>
+  </g>
+</svg>
