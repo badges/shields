@@ -1,10 +1,10 @@
 var fs = require('fs');
+var Promise = require('es6-promise').Promise;
 var dot = require('dot');
 var SVGO = require('svgo');
 var badges = require('./badges.json');
 var template = fs.readFileSync('./template.svg');
 var imageTemplate = dot.template(''+template);
-//console.log(imageTemplate.toString())
 
 // Construct the image sheet.
 var imageSheet = './sheet.html';
@@ -15,7 +15,7 @@ function optimize(string, callback) {
   svgo.optimize(string, callback);
 }
 
-function makeImage(name, data) {
+function makeImage(name, data, cb) {
   var result = imageTemplate(data);
   // Run the SVG through SVGO.
   optimize(result, function(object) {
@@ -24,20 +24,26 @@ function makeImage(name, data) {
     resultSheet += result;
     // Write the image individually.
     fs.writeFileSync(name + '.svg', result);
+    cb();
   });
 }
 
+// Return a promise to have all images written out individually.
 function buildImages() {
-  for (var name in badges) {
-    makeImage(name, badges[name]);
-  }
+  return Promise.all(Object.keys(badges).map(function(name) {
+    return new Promise(function(resolve) {
+      makeImage(name, badges[name], resolve);
+    });
+  }));
 }
 
 function main() {
   // Write the images individually.
-  buildImages();
-  // Write the sheet.
-  fs.writeFileSync(imageSheet, resultSheet);
+  buildImages()
+  .then(function() {
+    // Write the sheet.
+    fs.writeFileSync(imageSheet, resultSheet);
+  });
 }
 
 main();
