@@ -2,8 +2,23 @@
   "badges": {
     "build-passed": {
       "text": [ "build", "passed" ],
-      "widths": [ 33, 44 ],
+      "widths": [ 35, 48 ],
       "colorscheme": "green"
+    },
+    "build-passing": {
+      "text": [ "build", "passing" ],
+      "widths": [ 35, 52 ],
+      "colorscheme": "green"
+    },
+    "dependencies-none": {
+      "text": [ "dependencies", "none" ],
+      "widths": [ 85, 37 ],
+      "colorscheme": "green"
+    },
+    "cheez-whiz": {
+      "text": [ "cheez", "whiz" ],
+      "widths": [ 41, 33 ],
+      "colorB": [ "#e0b519", "#dbb016", "#a08010", "#725c0c" ]
     }
   },
   "colorschemes": {
