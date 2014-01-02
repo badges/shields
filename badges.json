@@ -1,8 +1,15 @@
 {
-  "build-passed": {
-    "text": [ "build", "passed" ],
-    "widths": [ 33, 44 ],
-    "colorA": [ "#aaa", "#666", "#444", "#222" ],
-    "colorB": [ "#8f6", "#4c1", "#3b0", "#370" ]
+  "badges": {
+    "build-passed": {
+      "text": [ "build", "passed" ],
+      "widths": [ 33, 44 ],
+      "colorscheme": "green"
+    }
+  },
+  "colorschemes": {
+    "green": {
+      "colorA": [ "#aaa", "#666", "#444", "#222" ],
+      "colorB": [ "#8f6", "#4c1", "#3b0", "#370" ]
+    }
   }
 }
