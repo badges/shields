@@ -1,24 +1,23 @@
-<svg xmlns='http://www.w3.org/2000/svg' width='77px' height='18px'>
-  <style type='text/css'>
-    text {fill:#fff; font-family:'Trebuchet MS',sans-serif; font-size:10px;}
-  </style>
-  <linearGradient id='ggreen' x2='0%' y2='100%'>
-    <stop offset='0' stop-color='#8f6'/>
-    <stop offset='0.1' stop-color='#5d2'/>
-    <stop offset='0.9' stop-color='#3b0'/>
-    <stop offset='1' stop-color='#370'/>
+<svg xmlns="http://www.w3.org/2000/svg" width="77" height="18">
+  <linearGradient id="ggreen" x2="0" y2="100%">
+    <stop offset="0" stop-color="#8f6"/>
+    <stop offset=".1" stop-color="#5d2"/>
+    <stop offset=".9" stop-color="#3b0"/>
+    <stop offset="1" stop-color="#370"/>
   </linearGradient>
-  <linearGradient id='ggrey' x2='0%' y2='100%'>
-    <stop offset='0' stop-color='#aaa'/>
-    <stop offset='0.1' stop-color='#666'/>
-    <stop offset='0.9' stop-color='#444'/>
-    <stop offset='1' stop-color='#222'/>
+  <linearGradient id="ggrey" x2="0" y2="100%">
+    <stop offset="0" stop-color="#aaa"/>
+    <stop offset=".1" stop-color="#666"/>
+    <stop offset=".9" stop-color="#444"/>
+    <stop offset="1" stop-color="#222"/>
   </linearGradient>
-  <rect rx='4px' width='77px' height='18px' style='fill:url(#ggrey)'/>
-  <rect rx='4px' x='32px' width='45px' height='18px' style='fill:url(#ggreen)'/>
-  <rect x='32px' width='5px' height='18px' style='fill:url(#ggreen)'/>
-  <text x='5px' y='12.5px' style='stroke:rgba(0,0,0,0.3)'>build</text>
-  <text x='5px' y='12px'>build</text>
-  <text x='39px' y='12.5px' style='stroke:rgba(0,0,0,0.3)'>passed</text>
-  <text x='39px' y='12px'>passed</text>
+  <rect rx="4" width="77" height="18" fill="url(#ggrey)"/>
+  <rect rx="4" x="32" width="45" height="18" fill="url(#ggreen)"/>
+  <rect x="32" width="5" height="18" fill="url(#ggreen)"/>
+  <g fill="#fff" font-family="Trebuchet MS, sans-serif" font-size="10px">
+    <text x="5" y="12.5" stroke="rgba(0,0,0,.3)">build</text>
+    <text x="5" y="12">build</text>
+    <text x="39" y="12.5" stroke="rgba(0,0,0,.3)">passed</text>
+    <text x="39" y="12">passed</text>
+  </g>
 </svg>
