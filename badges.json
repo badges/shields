@@ -15,6 +15,16 @@
       "widths": [ 35, 54 ],
       "colorscheme": "yellow"
     },
+    "build-failing": {
+      "text": [ "build", "failing" ],
+      "widths": [ 35, 44 ],
+      "colorscheme": "red"
+    },
+    "build-unknown": {
+      "text": [ "build", "unknown" ],
+      "widths": [ 35, 54 ],
+      "colorscheme": "grey"
+    },
     "dependencies-none": {
       "text": [ "dependencies", "none" ],
       "widths": [ 85, 37 ],
@@ -38,7 +48,7 @@
     "coverage": {
       "text": [ "coverage", "73%" ],
       "widths": [ 58, 34 ],
-      "colorB": [ "#e05f46", "#db5b42", "#a04230", "#722f22" ]
+      "colorscheme": "red"
     }
   },
   "colorschemes": {
@@ -49,6 +59,12 @@
     "yellow": {
       "colorA": [ "#aaa", "#666", "#444", "#222" ],
       "colorB": [ "#ffe37f", "#dfb317", "#9f8010", "#8a6f0e" ]
+    },
+    "red": {
+      "colorB": [ "#ffac9c", "#e05d44", "#9e4230", "#722f22" ]
+    },
+    "grey": {
+      "colorB": [ "#d6d6d6", "#9f9f9f", "#707070", "#515151" ]
     }
   }
 }
