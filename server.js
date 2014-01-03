@@ -1,4 +1,6 @@
-var camp = require('camp').start({ port: +process.argv[2]||80 });
+var camp = require('camp').start({
+  port: process.env.PORT||+process.argv[2]||80
+});
 var badge = require('./badge.js');
 
 // Escapes `t` using the format specified in
