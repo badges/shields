@@ -34,8 +34,7 @@ function makeImage(name, data, cb) {
     // Put this image on the sheet.
     resultSheet +=  '<p><img src="' + filename + '">';
     // Write the image individually.
-    fs.writeFileSync(filename, result);
-    cb();
+    fs.writeFile(filename, result, cb);
   });
 }
 
