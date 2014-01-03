@@ -15,10 +15,15 @@
       "widths": [ 85, 37 ],
       "colorscheme": "green"
     },
+    "dependencies-out-of-date": {
+      "text": [ "dependencies", "out of date" ],
+      "widths": [ 85, 65 ],
+      "colorscheme": "yellow"
+    },
     "cheez-whiz": {
       "text": [ "cheez", "whiz" ],
       "widths": [ 41, 33 ],
-      "colorB": [ "#e0b519", "#dbb016", "#a08010", "#725c0c" ]
+      "colorscheme": "yellow"
     },
     "tips-per-week": {
       "text": [ "tips", "$21/week" ],
@@ -35,6 +40,10 @@
     "green": {
       "colorA": [ "#aaa", "#666", "#444", "#222" ],
       "colorB": [ "#8f6", "#4c1", "#3b0", "#370" ]
+    },
+    "yellow": {
+      "colorA": [ "#aaa", "#666", "#444", "#222" ],
+      "colorB": [ "#ffe37f", "#dfb317", "#9f8010", "#8a6f0e" ]
     }
   }
 }
