@@ -50,7 +50,7 @@
     },
     "tips-per-week": {
       "text": [ "tips", "$21/week" ],
-      "colorB": [ "#98cb03", "#94c600", "#6c9100", "#4d6700" ]
+      "colorB": "#94c600"
     },
     "coverage": {
       "text": [ "coverage", "73%" ],
@@ -59,29 +59,29 @@
   },
   "colorschemes": {
     "brightgreen": {
-      "colorA": [ "#aaa", "#666", "#444", "#222" ],
-      "colorB": [ "#8f6", "#4c1", "#3b0", "#370" ]
+      "colorA": "#555",
+      "colorB": "#4c1"
     },
     "green": {
-      "colorB": [ "#D1F171", "#97CA00", "#6B8F00", "#4D6700" ]
+      "colorB": "#97CA00"
     },
     "yellow": {
-      "colorB": [ "#ffe37f", "#dfb317", "#9f8010", "#8a6f0e" ]
+      "colorB": "#dfb317"
     },
     "yellowgreen": {
-      "colorB": [ "#c1c265", "#a4a61d", "#848507", "#787b2d" ]
+      "colorB": "#a4a61d"
     },
     "orange": {
-      "colorB": [ "#d3a676", "#be7d37", "#9b5f1f", "#87623b" ]
+      "colorB": "#be7d37"
     },
     "red": {
-      "colorB": [ "#ffac9c", "#e05d44", "#9e4230", "#722f22" ]
+      "colorB": "#e05d44"
     },
     "lightgrey": {
-      "colorB": [ "#d6d6d6", "#9f9f9f", "#707070", "#515151" ]
+      "colorB": "#9f9f9f"
     },
     "lightgray": {
-      "colorB": [ "#d6d6d6", "#9f9f9f", "#707070", "#515151" ]
+      "colorB": "#9f9f9f"
     }
   }
 }

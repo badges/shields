@@ -14,9 +14,9 @@
       <feMergeNode in="SourceGraphic"/>
     </feMerge>
   </filter>
-  <rect rx="4" width="{{=it.widths[0]+it.widths[1]}}" height="18" fill="#555"/>
-  <rect rx="4" x="{{=it.widths[0]}}" width="{{=it.widths[1]}}" height="18" fill="{{=it.colorB[1]}}"/>
-  <rect x="{{=it.widths[0]}}" width="4" height="18" fill="{{=it.colorB[1]}}"/>
+  <rect rx="4" width="{{=it.widths[0]+it.widths[1]}}" height="18" fill="{{=it.colorA?it.colorA:"#555"}}"/>
+  <rect rx="4" x="{{=it.widths[0]}}" width="{{=it.widths[1]}}" height="18" fill="{{=it.colorB}}"/>
+  <rect x="{{=it.widths[0]}}" width="4" height="18" fill="{{=it.colorB}}"/>
   <rect rx="4" width="{{=it.widths[0]+it.widths[1]}}" height="18" fill="url(#smooth)"/>
   <g fill="#fff" text-anchor="middle" font-family="Verdana, sans-serif" font-size="10">
     <text x="{{=it.widths[0]/2+1}}" y="12" filter="url(#shadow)">{{=it.text[0]}}</text>
