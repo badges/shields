@@ -22,7 +22,12 @@
     },
     "build-unknown": {
       "text": [ "build", "unknown" ],
-      "widths": [ 35, 54 ],
+      "widths": [ 35, 58 ],
+      "colorscheme": "grey"
+    },
+    "build-error": {
+      "text": [ "build", "error" ],
+      "widths": [ 35, 36 ],
       "colorscheme": "grey"
     },
     "dependencies-none": {
