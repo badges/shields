@@ -27,7 +27,7 @@ the boxes.
 "green": {
   /* Gradient of the background color of the second box.
      The main gradient is from index 1 to 2,
-     indices 0 and 4 provide the light and dark outline. */
+     indices 0 and 3 provide the light and dark outline. */
   "colorB": [ "#8f6", "#4c1", "#3b0", "#370" ]
 }
 ```
