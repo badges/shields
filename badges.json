@@ -35,6 +35,11 @@
       "widths": [ 85, 37 ],
       "colorscheme": "green"
     },
+    "dependencies-up-to-date": {
+      "text": [ "dependencies", "up-to-date" ],
+      "widths": [ 85, 77 ],
+      "colorscheme": "green"
+    },
     "dependencies-out-of-date": {
       "text": [ "dependencies", "out of date" ],
       "widths": [ 85, 70 ],
@@ -72,19 +77,15 @@
       "colorB": [ "#8f6", "#4c1", "#3b0", "#370" ]
     },
     "green": {
-      "colorA": [ "#aaa", "#666", "#444", "#222" ],
-      "colorB": [ "#adc75f", "#87ae15", "#688c00", "#687f2a" ]
+      "colorB": [ "#D1F171", "#97CA00", "#6B8F00", "#4D6700" ]
     },
     "yellow": {
-      "colorA": [ "#aaa", "#666", "#444", "#222" ],
       "colorB": [ "#ffe37f", "#dfb317", "#9f8010", "#8a6f0e" ]
     },
     "yellowgreen": {
-      "colorA": [ "#aaa", "#666", "#444", "#222" ],
       "colorB": [ "#c1c265", "#a4a61d", "#848507", "#787b2d" ]
     },
     "orange": {
-      "colorA": [ "#aaa", "#666", "#444", "#222" ],
       "colorB": [ "#d3a676", "#be7d37", "#9b5f1f", "#87623b" ]
     },
     "red": {
