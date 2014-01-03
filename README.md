@@ -13,7 +13,7 @@ The format is the following:
 "build-passed": {
   /* Textual information shown, in order. */
   "text": [ "build", "passed" ],
-  /* Width of the first box, width of the second box. */
+  /* Width of the first box, width of the second box (in pixels). */
   "widths": [ 33, 44 ],
   "colorscheme": "green"
 }
@@ -26,8 +26,8 @@ the boxes.
 ```js
 "green": {
   /* Gradient of the background color of the second box.
-   * The main gradient is from index 1 to 2,
-   * indices 0 and 4 provide the light and dark outline. */
+     The main gradient is from index 1 to 2,
+     indices 0 and 4 provide the light and dark outline. */
   "colorB": [ "#8f6", "#4c1", "#3b0", "#370" ]
 }
 ```
