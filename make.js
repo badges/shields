@@ -3,8 +3,7 @@ var path = require('path');
 var Promise = require('es6-promise').Promise;
 
 // Fetch default badge information.
-var badgeData = require('./default-badges.json');
-var badges = badgeData.badges;
+var badges = require('./default-badges.json');
 var badge = require('./badge.js');
 
 // Construct the image sheet.

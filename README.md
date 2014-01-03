@@ -4,7 +4,7 @@ See <https://github.com/h5bp/lazyweb-requests/issues/150>.
 
 # Contribute
 
-If you want to add a badge, only modify `badges.json`.
+If you want to add a badge, you only need to modify `badges.json`.
 
 The format is the following:
 
@@ -17,7 +17,7 @@ The format is the following:
 }
 ```
 
-Color schemes are located at the bottom of the file. Each scheme has a name and
+Color schemes are located in `colorscheme.json`. Each scheme has a name and
 a [CSS/SVG color](http://www.w3.org/TR/SVG/types.html#DataTypeColor) for the
 color used in the first box (for the first piece of text, field `colorA`) and
 for the one used in the second box (field `colorB`).
@@ -29,8 +29,8 @@ for the one used in the second box (field `colorB`).
 ```
 
 Both `colorA` and `colorB` have default values. Usually, the first box uses the
-same dark grey, so you can rely on that default value by not
-providing a `"colorA"` field (such as above).
+same dark grey, so you can rely on that default value by not providing a
+`"colorA"` field (such as above).
 
 You can also use the `"colorA"` and `"colorB"` fields directly in the badges if
 you don't want to make a color scheme for it. In that case, remove the

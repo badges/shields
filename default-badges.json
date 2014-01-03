@@ -1,87 +1,58 @@
 {
-  "badges": {
-    "build-passed": {
-      "text": [ "build", "passed" ],
-      "colorscheme": "brightgreen"
-    },
-    "build-passing": {
-      "text": [ "build", "passing" ],
-      "colorscheme": "brightgreen"
-    },
-    "build-pending": {
-      "text": [ "build", "pending" ],
-      "colorscheme": "yellow"
-    },
-    "build-failing": {
-      "text": [ "build", "failing" ],
-      "colorscheme": "red"
-    },
-    "build-unknown": {
-      "text": [ "build", "unknown" ],
-      "colorscheme": "lightgrey"
-    },
-    "build-error": {
-      "text": [ "build", "error" ],
-      "colorscheme": "lightgrey"
-    },
-    "dependencies-none": {
-      "text": [ "dependencies", "none" ],
-      "colorscheme": "green"
-    },
-    "dependencies-up-to-date": {
-      "text": [ "dependencies", "up-to-date" ],
-      "colorscheme": "green"
-    },
-    "dependencies-out-of-date": {
-      "text": [ "dependencies", "out of date" ],
-      "colorscheme": "yellow"
-    },
-    "dependencies-update": {
-      "text": [ "dependencies", "update!" ],
-      "colorscheme": "red"
-    },
-    "dependencies-unknown": {
-      "text": [ "dependencies", "unknown" ],
-      "colorscheme": "lightgrey"
-    },
-    "cheez-whiz": {
-      "text": [ "cheez", "whiz" ],
-      "colorscheme": "yellow"
-    },
-    "tips-per-week": {
-      "text": [ "tips", "$21/week" ],
-      "colorB": "#94c600"
-    },
-    "coverage": {
-      "text": [ "coverage", "73%" ],
-      "colorscheme": "red"
-    }
+  "build-passed": {
+    "text": [ "build", "passed" ],
+    "colorscheme": "brightgreen"
   },
-  "colorschemes": {
-    "brightgreen": {
-      "colorA": "#555",
-      "colorB": "#4c1"
-    },
-    "green": {
-      "colorB": "#97CA00"
-    },
-    "yellow": {
-      "colorB": "#dfb317"
-    },
-    "yellowgreen": {
-      "colorB": "#a4a61d"
-    },
-    "orange": {
-      "colorB": "#be7d37"
-    },
-    "red": {
-      "colorB": "#e05d44"
-    },
-    "lightgrey": {
-      "colorB": "#9f9f9f"
-    },
-    "lightgray": {
-      "colorB": "#9f9f9f"
-    }
+  "build-passing": {
+    "text": [ "build", "passing" ],
+    "colorscheme": "brightgreen"
+  },
+  "build-pending": {
+    "text": [ "build", "pending" ],
+    "colorscheme": "yellow"
+  },
+  "build-failing": {
+    "text": [ "build", "failing" ],
+    "colorscheme": "red"
+  },
+  "build-unknown": {
+    "text": [ "build", "unknown" ],
+    "colorscheme": "lightgrey"
+  },
+  "build-error": {
+    "text": [ "build", "error" ],
+    "colorscheme": "lightgrey"
+  },
+  "dependencies-none": {
+    "text": [ "dependencies", "none" ],
+    "colorscheme": "green"
+  },
+  "dependencies-up-to-date": {
+    "text": [ "dependencies", "up-to-date" ],
+    "colorscheme": "green"
+  },
+  "dependencies-out-of-date": {
+    "text": [ "dependencies", "out of date" ],
+    "colorscheme": "yellow"
+  },
+  "dependencies-update": {
+    "text": [ "dependencies", "update!" ],
+    "colorscheme": "red"
+  },
+  "dependencies-unknown": {
+    "text": [ "dependencies", "unknown" ],
+    "colorscheme": "lightgrey"
+  },
+  "cheez-whiz": {
+    "text": [ "cheez", "whiz" ],
+    "colorscheme": "yellow"
+  },
+  "tips-per-week": {
+    "text": [ "tips", "$21/week" ],
+    "colorB": "#94c600"
+  },
+  "coverage": {
+    "text": [ "coverage", "73%" ],
+    "colorscheme": "red"
   }
 }

@@ -9,8 +9,7 @@ canvasContext.font = '10px Verdana';
 
 // Template crafting action below.
 var dot = require('dot');
-var badgeData = require('./default-badges.json');
-var colorscheme = badgeData.colorschemes;
+var colorscheme = require('./colorscheme.json');
 var template = fs.readFileSync('./template.svg');
 var imageTemplate = dot.template(''+template);
 

@@ -1,0 +1,27 @@
+{
+  "brightgreen": {
+    "colorA": "#555",
+    "colorB": "#4c1"
+  },
+  "green": {
+    "colorB": "#97CA00"
+  },
+  "yellow": {
+    "colorB": "#dfb317"
+  },
+  "yellowgreen": {
+    "colorB": "#a4a61d"
+  },
+  "orange": {
+    "colorB": "#be7d37"
+  },
+  "red": {
+    "colorB": "#e05d44"
+  },
+  "lightgrey": {
+    "colorB": "#9f9f9f"
+  },
+  "lightgray": {
+    "colorB": "#9f9f9f"
+  }
+}
