@@ -18,21 +18,19 @@ The format is the following:
 ```
 
 Color schemes are located at the bottom of the file. Each scheme has a name and
-a series of color stops used to compute the gradient of the background color of
-the boxes.
+a [CSS/SVG color](http://www.w3.org/TR/SVG/types.html#DataTypeColor) for the
+color used in the first box (for the first piece of text, field `colorA`) and
+for the one used in the second box (field `colorB`).
 
 ```js
 "green": {
-  /* Gradient of the background color of the second box.
-     The main gradient is from index 1 to 2,
-     indices 0 and 3 provide the light and dark outline. */
-  "colorB": [ "#8f6", "#4c1", "#3b0", "#370" ]
+  "colorB": "#4c1"
 }
 ```
 
-Usually, the first box uses the same dark grey. Rely on this default by not
-providing a `"colorA"` field (such as above). Otherwise, the `"colorA"` field
-works exactly the same way.
+Both `colorA` and `colorB` have default values. Usually, the first box uses the
+same dark grey, so you can rely on that default value by not
+providing a `"colorA"` field (such as above).
 
 You can also use the `"colorA"` and `"colorB"` fields directly in the badges if
 you don't want to make a color scheme for it. In that case, remove the
