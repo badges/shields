@@ -40,6 +40,16 @@
       "widths": [ 85, 70 ],
       "colorscheme": "yellow"
     },
+    "dependencies-update": {
+      "text": [ "dependencies", "update!" ],
+      "widths": [ 85, 54 ],
+      "colorscheme": "red"
+    },
+    "dependencies-unknown": {
+      "text": [ "dependencies", "unknown" ],
+      "widths": [ 85, 58 ],
+      "colorscheme": "lightgrey"
+    },
     "cheez-whiz": {
       "text": [ "cheez", "whiz" ],
       "widths": [ 41, 33 ],
