@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="{{=it.widths[0]+it.widths[1]}}" height="19">
   <linearGradient id="smooth" x2="0" y2="100%">
-    <stop offset="0"  stop-color="rgba(255,255,255,.7)"/>
-    <stop offset=".1" stop-color="rgba(170,170,170,.1)"/>
-    <stop offset=".9" stop-color="rgba(0,0,0,.3)"/>
-    <stop offset="1"  stop-color="rgba(0,0,0,.5)"/>
+    <stop offset="0"  stop-color="#fff" stop-opacity=".7"/>
+    <stop offset=".1" stop-color="#aaa" stop-opacity=".1"/>
+    <stop offset=".9" stop-color="#000" stop-opacity=".3"/>
+    <stop offset="1"  stop-color="#000" stop-opacity=".5"/>
   </linearGradient>
   <filter id="shadow">
     <feOffset dx="0" dy="1" in="SourceAlpha"/>
