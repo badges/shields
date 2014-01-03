@@ -3,12 +3,12 @@
     "build-passed": {
       "text": [ "build", "passed" ],
       "widths": [ 35, 48 ],
-      "colorscheme": "green"
+      "colorscheme": "brightgreen"
     },
     "build-passing": {
       "text": [ "build", "passing" ],
       "widths": [ 35, 52 ],
-      "colorscheme": "green"
+      "colorscheme": "brightgreen"
     },
     "build-pending": {
       "text": [ "build", "pending" ],
@@ -57,13 +57,25 @@
     }
   },
   "colorschemes": {
-    "green": {
+    "brightgreen": {
       "colorA": [ "#aaa", "#666", "#444", "#222" ],
       "colorB": [ "#8f6", "#4c1", "#3b0", "#370" ]
+    },
+    "green": {
+      "colorA": [ "#aaa", "#666", "#444", "#222" ],
+      "colorB": [ "#adc75f", "#87ae15", "#688c00", "#687f2a" ]
     },
     "yellow": {
       "colorA": [ "#aaa", "#666", "#444", "#222" ],
       "colorB": [ "#ffe37f", "#dfb317", "#9f8010", "#8a6f0e" ]
+    },
+    "yellowgreen": {
+      "colorA": [ "#aaa", "#666", "#444", "#222" ],
+      "colorB": [ "#c1c265", "#a4a61d", "#848507", "#787b2d" ]
+    },
+    "orange": {
+      "colorA": [ "#aaa", "#666", "#444", "#222" ],
+      "colorB": [ "#d3a676", "#be7d37", "#9b5f1f", "#87623b" ]
     },
     "red": {
       "colorB": [ "#ffac9c", "#e05d44", "#9e4230", "#722f22" ]
