@@ -1,21 +1,11 @@
 var fs = require('fs');
 var path = require('path');
 var Promise = require('es6-promise').Promise;
-var SVGO = require('svgo');
 
-// Initialize what will be used for automatic text measurement.
-var Canvas = require('canvas');
-var canvasElement = new Canvas(0, 0);   // Width and height are irrelevant.
-var canvasContext = canvasElement.getContext('2d');
-canvasContext.font = '10px Verdana';
-
-// Template crafting action below.
-var dot = require('dot');
-var badgeData = require('./badges.json');
+// Fetch default badge information.
+var badgeData = require('./default-badges.json');
 var badges = badgeData.badges;
-var colorscheme = badgeData.colorschemes;
-var template = fs.readFileSync('./template.svg');
-var imageTemplate = dot.template(''+template);
+var badge = require('./badge.js');
 
 // Construct the image sheet.
 var imageSheet = 'sheet.html';
@@ -24,29 +14,13 @@ var resultSheet = '';
 // Where the images will be put.
 var targetImgDir = 'img';
 
-function optimize(string, callback) {
-  var svgo = new SVGO();
-  svgo.optimize(string, callback);
-}
-
 function makeImage(name, data, cb) {
-  if (data.colorscheme) {
-    data.colorA = colorscheme[data.colorscheme].colorA;
-    data.colorB = colorscheme[data.colorscheme].colorB;
-  }
-  data.widths = [
-    (canvasContext.measureText(data.text[0]).width|0) + 10,
-    (canvasContext.measureText(data.text[1]).width|0) + 10,
-  ];
-  var result = imageTemplate(data);
-  // Run the SVG through SVGO.
-  optimize(result, function(object) {
-    var result = object.data;
+  badge(data, function(svg) {
     var filename = path.join(targetImgDir, name + '.svg');
     // Put this image on the sheet.
     resultSheet +=  '<p><img src="' + filename + '">';
     // Write the image individually.
-    fs.writeFile(filename, result, cb);
+    fs.writeFile(filename, svg, cb);
   });
 }
 
