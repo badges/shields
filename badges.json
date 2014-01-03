@@ -37,7 +37,7 @@
     },
     "dependencies-up-to-date": {
       "text": [ "dependencies", "up-to-date" ],
-      "widths": [ 85, 77 ],
+      "widths": [ 85, 70 ],
       "colorscheme": "green"
     },
     "dependencies-out-of-date": {
