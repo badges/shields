@@ -23,12 +23,12 @@
     "build-unknown": {
       "text": [ "build", "unknown" ],
       "widths": [ 35, 58 ],
-      "colorscheme": "grey"
+      "colorscheme": "lightgrey"
     },
     "build-error": {
       "text": [ "build", "error" ],
       "widths": [ 35, 36 ],
-      "colorscheme": "grey"
+      "colorscheme": "lightgrey"
     },
     "dependencies-none": {
       "text": [ "dependencies", "none" ],
@@ -37,7 +37,7 @@
     },
     "dependencies-out-of-date": {
       "text": [ "dependencies", "out of date" ],
-      "widths": [ 85, 65 ],
+      "widths": [ 85, 70 ],
       "colorscheme": "yellow"
     },
     "cheez-whiz": {
@@ -80,7 +80,10 @@
     "red": {
       "colorB": [ "#ffac9c", "#e05d44", "#9e4230", "#722f22" ]
     },
-    "grey": {
+    "lightgrey": {
+      "colorB": [ "#d6d6d6", "#9f9f9f", "#707070", "#515151" ]
+    },
+    "lightgray": {
       "colorB": [ "#d6d6d6", "#9f9f9f", "#707070", "#515151" ]
     }
   }
