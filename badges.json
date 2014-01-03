@@ -10,6 +10,11 @@
       "widths": [ 35, 52 ],
       "colorscheme": "green"
     },
+    "build-pending": {
+      "text": [ "build", "pending" ],
+      "widths": [ 35, 54 ],
+      "colorscheme": "yellow"
+    },
     "dependencies-none": {
       "text": [ "dependencies", "none" ],
       "widths": [ 85, 37 ],
