@@ -13,8 +13,6 @@ The format is the following:
 "build-passed": {
   /* Textual information shown, in order. */
   "text": [ "build", "passed" ],
-  /* Width of the first box, width of the second box (in pixels). */
-  "widths": [ 33, 44 ],
   "colorscheme": "green"
 }
 ```

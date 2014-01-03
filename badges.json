@@ -2,72 +2,58 @@
   "badges": {
     "build-passed": {
       "text": [ "build", "passed" ],
-      "widths": [ 35, 48 ],
       "colorscheme": "brightgreen"
     },
     "build-passing": {
       "text": [ "build", "passing" ],
-      "widths": [ 35, 52 ],
       "colorscheme": "brightgreen"
     },
     "build-pending": {
       "text": [ "build", "pending" ],
-      "widths": [ 35, 54 ],
       "colorscheme": "yellow"
     },
     "build-failing": {
       "text": [ "build", "failing" ],
-      "widths": [ 35, 44 ],
       "colorscheme": "red"
     },
     "build-unknown": {
       "text": [ "build", "unknown" ],
-      "widths": [ 35, 58 ],
       "colorscheme": "lightgrey"
     },
     "build-error": {
       "text": [ "build", "error" ],
-      "widths": [ 35, 36 ],
       "colorscheme": "lightgrey"
     },
     "dependencies-none": {
       "text": [ "dependencies", "none" ],
-      "widths": [ 85, 37 ],
       "colorscheme": "green"
     },
     "dependencies-up-to-date": {
       "text": [ "dependencies", "up-to-date" ],
-      "widths": [ 85, 70 ],
       "colorscheme": "green"
     },
     "dependencies-out-of-date": {
       "text": [ "dependencies", "out of date" ],
-      "widths": [ 85, 70 ],
       "colorscheme": "yellow"
     },
     "dependencies-update": {
       "text": [ "dependencies", "update!" ],
-      "widths": [ 85, 54 ],
       "colorscheme": "red"
     },
     "dependencies-unknown": {
       "text": [ "dependencies", "unknown" ],
-      "widths": [ 85, 58 ],
       "colorscheme": "lightgrey"
     },
     "cheez-whiz": {
       "text": [ "cheez", "whiz" ],
-      "widths": [ 41, 33 ],
       "colorscheme": "yellow"
     },
     "tips-per-week": {
       "text": [ "tips", "$21/week" ],
-      "widths": [ 30, 65 ],
       "colorB": [ "#98cb03", "#94c600", "#6c9100", "#4d6700" ]
     },
     "coverage": {
       "text": [ "coverage", "73%" ],
-      "widths": [ 58, 34 ],
       "colorscheme": "red"
     }
   },
