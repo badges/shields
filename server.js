@@ -15,6 +15,8 @@ function escapeFormat(t) {
     .replace(/__/g, '_').replace(/--/g, '-');
 }
 
+function sixHex(s) { return /^[0-9a-fA-F]{6}$/.test(s); }
+
 camp.route(/^\/(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+).svg$/,
   function(data, match, end, ask) {
     var subject = escapeFormat(match[1]);
@@ -22,7 +24,13 @@ camp.route(/^\/(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+).svg$/,
     var color = escapeFormat(match[5]);
     ask.res.setHeader('Content-Type', 'image/svg+xml');
     try {
-      badge({text: [subject, status], colorscheme: color}, function(res) {
+      var badgeData = {text: [subject, status]};
+      if (sixHex(color)) {
+        badgeData.colorB = '#' + color;
+      } else {
+        badgeData.colorscheme = color;
+      }
+      badge(badgeData, function(res) {
         end(null, {template: streamFromString(res)});
       });
     } catch(e) {
