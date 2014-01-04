@@ -12,10 +12,10 @@ hr { width: 40%; border-width: 1px 0 0 0; }
 a.photo { text-decoration: none; }
 a.photo>img { padding: 2px; border: 1px solid grey; }
 ul { text-align: left; margin-left: 25%; }
+h2::before { content: '☙ '; }
+h2::after { content: ' ❧'; }
+h2 { font-variant: small-caps; }
 </style>
-
-<img src='/badge-on!-brightgreen.svg'>
-<img src='/license-CC0-red.svg'>
 
 <hr/>
 <form action='javascript:makeImage()' id='imageMaker'>
@@ -24,6 +24,12 @@ ul { text-align: left; margin-left: 25%; }
   <input name='color' placeholder='color'/>
   <button>Go!</button>
 </form>
+<hr/>
+
+<h2>Github Badges</h2>
+
+<img src='/badge-on!-brightgreen.svg'>
+<img src='/license-CC0-red.svg'>
 
 <p>
 Ever wanted to have your own GitHub badges? <br/>
@@ -63,28 +69,35 @@ Use an underscore <code>_</code> if you want a space. Or, you know, use a space.
 <img src='/color-blue-blue.svg'>
 <img src='/color-ff69b4-ff69b4.svg'>
 
-<h2> Like This? </h2>
+<h2>Like This?</h2>
 
 <p>
 Tell your favorite badge service to use it!
 </p>
 
-<h2> Known Issues </h2>
+<h2>Known Issues</h2>
 
 <ul>
   <li> Chrome + Retina screen = Blurry.
   <a href='https://code.google.com/p/chromium/issues/detail?id=331387'>
     Known Blink bug</a>.
+  <li> Greenish aura around the text.
+  <a href='https://bugzilla.mozilla.org/show_bug.cgi?id=812795'>
+    Known Firefox bug</a>.
   <li> The text can be wider than the box (esp. Firefox + Windows).
   <a href='https://github.com/espadrine/gh-badges/pull/6#issuecomment-31558269'>
     Issue with consistency of text measurement</a>.
 </ul>
 
-<h2> Origin </h2>
+<h2>Origin</h2>
 
-<a href='https://github.com/h5bp/lazyweb-requests/issues/150'>This</a>.
+<p>
+<a href='https://github.com/h5bp/lazyweb-requests/issues/150'>This</a>.<br/>
+All the activity and the code sits
+<a href='https://github.com/espadrine/gh-badges'>here</a>.
+</p>
 
-<h2> Contributors </h2>
+<h2>Contributors</h2>
 
 <a class='photo' href='https://github.com/espadrine'>
   <img alt='espadrine' src='https://gravatar.com/avatar/8c3bee0764c781e1b0b8c2e53f0f11fe'>
@@ -96,6 +109,7 @@ Tell your favorite badge service to use it!
   <img alt='alrra' src='https://gravatar.com/avatar/2fc3f42c9411898f83f3af8ede902591'>
 </a>
 
+<p><small>:wq</small></p>
 <script>
 function escapeField(s) {
   return s.replace(/-/g, '--').replace(/_/g, '__');
