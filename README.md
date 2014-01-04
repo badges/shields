@@ -36,6 +36,19 @@ You can also use the `"colorA"` and `"colorB"` fields directly in the badges if
 you don't want to make a color scheme for it. In that case, remove the
 `"colorscheme"` field altogether.
 
+# Making your Heroku badge server
+
+Once you have installed the [Heroku Toolbelt](https://toolbelt.heroku.com/):
+
+```bash
+heroku login
+heroku create your-app-name
+heroku config:set BUILDPACK_URL=https://github.com/mojodna/heroku-buildpack-multi.git#build-env
+cp /path/to/Verdana.ttf .
+make deploy
+heroku open
+```
+
 # License
 
 All work here is licensed CC0.
