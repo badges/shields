@@ -5,6 +5,11 @@ var SVGO = require('svgo');
 var Canvas = require('canvas');
 var canvasElement = new Canvas(0, 0);   // Width and height are irrelevant.
 var canvasContext = canvasElement.getContext('2d');
+var CanvasFont = Canvas.Font;
+try {
+  var opensans = new CanvasFont('Verdana', './Verdana.ttf');
+  canvasContext.addFont(opensans);
+} catch(e) {}
 canvasContext.font = '10px Verdana';
 
 // Template crafting action below.
