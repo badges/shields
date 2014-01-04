@@ -2,6 +2,7 @@ var camp = require('camp').start({
   port: process.env.PORT||+process.argv[2]||80
 });
 var badge = require('./badge.js');
+var serverStartTime = new Date((new Date()).toGMTString());
 
 // Escapes `t` using the format specified in
 // <https://github.com/espadrine/gh-badges/issues/12#issuecomment-31518129>
@@ -23,6 +24,14 @@ camp.route(/^\/(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+).svg$/,
     var status = escapeFormat(match[3]);
     var color = escapeFormat(match[5]);
     ask.res.setHeader('Content-Type', 'image/svg+xml');
+    var cacheDuration = (3600*24*1)|0;  // 1 day.
+    ask.res.setHeader('Cache-Control', 'public, max-age=' + cacheDuration);
+    if (+(new Date(ask.req.headers['if-modified-since'])) >= +serverStartTime) {
+      ask.res.statusCode = 304;
+      ask.res.end();  // not modified.
+      return;
+    }
+    ask.res.setHeader('Last-Modified', serverStartTime.toGMTString());
     try {
       var badgeData = {text: [subject, status]};
       if (sixHex(color)) {
