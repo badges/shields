@@ -6,7 +6,9 @@
 
 <style>
 :root { text-align: center; font-family: 'Linux Libertine O', Vollkorn, serif; }
-code { padding: 0 4px; border: 1px solid grey; background: #eef; border-radius: 4px; }
+code, input { padding: 0 4px; border: 1px solid grey; background: #eef; border-radius: 4px; }
+input { width: 5em; }
+hr { width: 40%; border-width: 1px 0 0 0; }
 a.photo { text-decoration: none; }
 a.photo>img { padding: 2px; border: 1px solid grey; }
 ul { text-align: left; margin-left: 25%; }
@@ -14,6 +16,14 @@ ul { text-align: left; margin-left: 25%; }
 
 <img src='/badge-on!-brightgreen.svg'>
 <img src='/license-CC0-red.svg'>
+
+<hr/>
+<form action='javascript:makeImage()' id='imageMaker'>
+  <input name='subject' placeholder='subject'/>
+  <input name='status' placeholder='status'/>
+  <input name='color' placeholder='color'/>
+  <button>Go!</button>
+</form>
 
 <p>
 Ever wanted to have your own GitHub badges? <br/>
@@ -85,3 +95,17 @@ Tell your favorite badge service to use it!
 <a class='photo' href='https://github.com/alrra'>
   <img alt='alrra' src='https://gravatar.com/avatar/2fc3f42c9411898f83f3af8ede902591'>
 </a>
+
+<script>
+function escapeField(s) {
+  return s.replace(/-/g, '--').replace(/_/g, '__');
+}
+function makeImage() {
+  var url = '/';
+  url += escapeField(imageMaker.subject.value);
+  url += '-' + escapeField(imageMaker.status.value);
+  url += '-' + escapeField(imageMaker.color.value);
+  url += '.svg';
+  document.location = url;
+}
+</script>
