@@ -46,6 +46,44 @@ function(data, match, end, ask) {
   });
 });
 
+// Coveralls integration.
+camp.route(/^\/coveralls\/(.*)\.(svg|png|gif|jpg)$/,
+function(data, match, end, ask) {
+  var userRepo = match[1];  // eg, `jekyll/jekyll`.
+  var format = match[2];
+  var apiUrl = 'https://coveralls.io/repos/' + userRepo + '/badge.png?branch=master';
+  var badgeData = {text:['coverage', 'n/a'], colorscheme:'lightgrey'};
+  https.get(apiUrl, function(res) {
+    // We should get a 302. Look inside the Location header.
+    var buffer = res.headers.location;
+    if (!buffer) {
+      badgeData.text[1] = 'invalid';
+      badge(badgeData, makeSend(format, ask.res, end));
+      return;
+    }
+    try {
+      var score = buffer.split('_')[1].split('.')[0];
+      var percentage = parseInt(score);
+    } catch(e) {
+      badgeData.text[1] = 'malformed';
+      badge(badgeData, makeSend(format, ask.res, end));
+      return;
+    }
+    badgeData.text[1] = score + '%';
+    if (percentage < 80) {
+      badgeData.colorscheme = 'red';
+    } else if (percentage < 90) {
+      badgeData.colorscheme = 'yellow';
+    } else {
+      badgeData.colorscheme = 'green';
+    }
+    badge(badgeData, makeSend(format, ask.res, end));
+  }).on('error', function(e) {
+    badgeData.text[1] = 'inaccessible';
+    badge(badgeData, makeSend(format, ask.res, end));
+  });
+});
+
 // Any badge.
 camp.route(/^\/:(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
