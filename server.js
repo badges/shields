@@ -102,6 +102,12 @@ function(data, match, end, ask) {
     try {
       var score = buffer.split('_')[1].split('.')[0];
       var percentage = parseInt(score);
+      if (percentage !== percentage) {
+        // It is NaN, treat it as unknown.
+        badgeData.text[1] = 'unknown';
+        badge(badgeData, makeSend(format, ask.res, end));
+        return;
+      }
     } catch(e) {
       badgeData.text[1] = 'malformed';
       badge(badgeData, makeSend(format, ask.res, end));
