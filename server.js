@@ -46,6 +46,44 @@ function(data, match, end, ask) {
   });
 });
 
+// Gittip integration.
+camp.route(/^\/gittip\/(.*)\.(svg|png|gif|jpg)$/,
+function(data, match, end, ask) {
+  var user = match[1];  // eg, `JSFiddle`.
+  var format = match[2];
+  var apiUrl = 'https://www.gittip.com/' + user + '/public.json';
+  var badgeData = {text:['tips', 'n/a'], colorscheme:'lightgrey'};
+  https.get(apiUrl, function(res) {
+    var buffer = '';
+    res.on('data', function(chunk) { buffer += ''+chunk; });
+    res.on('end', function(chunk) {
+      if (chunk) { buffer += ''+chunk; }
+      try {
+        var data = JSON.parse(buffer);
+        var money = parseInt(data.receiving);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        badge(badgeData, makeSend(format, ask.res, end));
+        return;
+      }
+      badgeData.text[1] = '$' + money + ' /week';
+      if (money === 0) {
+        badgeData.colorscheme = 'red';
+      } else if (money < 10) {
+        badgeData.colorscheme = 'yellow';
+      } else if (money < 100) {
+        badgeData.colorscheme = 'yellowgreen';
+      } else {
+        badgeData.colorscheme = 'green';
+      }
+      badge(badgeData, makeSend(format, ask.res, end));
+    });
+  }).on('error', function(e) {
+    badgeData.text[1] = 'inaccessible';
+    badge(badgeData, makeSend(format, ask.res, end));
+  });
+});
+
 // Coveralls integration.
 camp.route(/^\/coveralls\/(.*)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
