@@ -1,11 +1,12 @@
 <!doctype html>
 <meta charset=utf-8>
 <title> Badge Service </title>
-<link href='http://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css'>
+<meta name='viewport' content='width=device-width,initial-scale=1'>
+<link href='http://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet'>
 <h1> Badge Service For You! </h1>
 
 <style>
-:root { text-align: center; font-family: 'Linux Libertine O', Vollkorn, serif; }
+:root { text-align: center; font-family: Linux Libertine O, Vollkorn, serif; }
 code, input { padding: 0 4px; border: 1px solid grey; background: #eef; border-radius: 4px; }
 input { width: 5em; }
 hr { width: 40%; border-width: 1px 0 0 0; }
@@ -26,7 +27,7 @@ h2 { font-variant: small-caps; }
 </form>
 <hr/>
 
-<h2>Github Badges</h2>
+<h2>GitHub Badges</h2>
 
 <img src='/badge-on!-brightgreen.svg'>
 <img src='/license-CC0-red.svg'>
@@ -78,9 +79,12 @@ Tell your favorite badge service to use it!
 <h2>Known Issues</h2>
 
 <ul>
-  <li> Chrome + Retina screen = Blurry.
+  <li> Chrome/Opera + retina display = blurry.
   <a href='https://code.google.com/p/chromium/issues/detail?id=331387'>
     Known Blink bug</a>.
+  <li> Safari + retina display = blurry.
+  <a href='https://bugs.webkit.org/show_bug.cgi?id=126398'>Known
+    WebKit bug</a>.
   <li> Greenish aura around the text.
   <a href='https://bugzilla.mozilla.org/show_bug.cgi?id=812795'>
     Known Firefox bug</a>.
