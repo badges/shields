@@ -5,6 +5,13 @@ var phantom = require('phantomjs');
 var childProcess = require('child_process');
 var phantomScript = path.join(__dirname, 'phantomjs-svg2png.js');
 
+// If available, use the font here.
+var fontPath = './Verbana.ttf';
+try {
+  // This happens at startup. Needn't be async.
+  var fontBase64 = fs.readFileSync(fontPath, 'base64');
+} catch(e) {}
+
 module.exports = function (svg, format, out, cb) {
   var tmpFile = path.join(os.tmpdir(),
       "svg2img-" + (Math.random()*2147483648|0) + "." + format);
