@@ -1,6 +1,6 @@
 # GitHub badges in SVG format
 
-See <https://github.com/h5bp/lazyweb-requests/issues/150>.
+Make your own badges! <http://gh-badges.herokuapp.com>
 
 # Contribute
 
@@ -48,6 +48,10 @@ cp /path/to/Verdana.ttf .
 make deploy
 heroku open
 ```
+
+# Origin
+
+See <https://github.com/h5bp/lazyweb-requests/issues/150>.
 
 # License
 
