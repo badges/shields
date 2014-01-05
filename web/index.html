@@ -24,7 +24,17 @@ h2 { font-variant: small-caps; }
 <form action='javascript:makeImage()' id='imageMaker'>
   <input name='subject' placeholder='subject'/>
   <input name='status' placeholder='status'/>
-  <input name='color' placeholder='color'/>
+  <input name='color' list='default-colors' placeholder='color'/>
+  <datalist id='default-colors'>
+    <option value='brightgreen'/>
+    <option value='green'/>
+    <option value='yellowgreen'/>
+    <option value='yellow'/>
+    <option value='orange'/>
+    <option value='red'/>
+    <option value='lightgrey'/>
+    <option value='blue'/>
+  </datalist>
   <button>Go!</button>
 </form>
 <hr/>
