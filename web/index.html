@@ -13,6 +13,8 @@ hr { width: 40%; border-width: 1px 0 0 0; }
 a.photo { text-decoration: none; }
 a.photo>img { padding: 2px; border: 1px solid grey; }
 ul { text-align: left; margin-left: 25%; }
+table { width: 50%; margin: auto; }
+th, td { text-align: left; }
 h2::before { content: '☙ '; }
 h2::after { content: ' ❧'; }
 h2 { font-variant: small-caps; }
@@ -27,7 +29,7 @@ h2 { font-variant: small-caps; }
 </form>
 <hr/>
 
-<h2>GitHub Badges</h2>
+<h2> GitHub Badges </h2>
 
 <img src='/:badge-on!-brightgreen.svg'>
 <img src='/:license-CC0-red.svg'>
@@ -70,13 +72,31 @@ Use an underscore <code>_</code> if you want a space. Or, you know, use a space.
 <img src='/:color-blue-blue.svg'>
 <img src='/:color-ff69b4-ff69b4.svg'>
 
-<h2>Like This?</h2>
+<h2> Supported Services </h2>
+
+<table><tbody>
+  <tr><th> Travis: </th>
+  <td><img src='/travis/joyent/node.svg'></td>
+  <td><code>http://gh-badges.herokuapp.com/travis/joyent/node.svg</code></td>
+  </tr>
+  <tr><th> Coveralls: </th>
+  <td><img src='/coveralls/jekyll/jekyll.svg'></td>
+  <td><code>http://gh-badges.herokuapp.com/coveralls/jekyll/jekyll.svg</code></td>
+  </tr>
+  <tr><th> Gittip: </th>
+  <td><img src='/gittip/JSFiddle.svg'></td>
+  <td><code>http://gh-badges.herokuapp.com/gittip/JSFiddle.svg</code></td>
+  </tr>
+</tbody></table>
+
+<h2> Like This? </h2>
 
 <p>
-Tell your favorite badge service to use it!
+Tell your favorite badge service to use it! <br/>
+And tell us, we might be able to bring it to you anyway!
 </p>
 
-<h2>Known Issues</h2>
+<h2> Known Issues </h2>
 
 <ul>
   <li> Chrome/Opera + retina display = blurry.
@@ -93,7 +113,7 @@ Tell your favorite badge service to use it!
     Issue with consistency of text measurement</a>.
 </ul>
 
-<h2>Origin</h2>
+<h2> Origin </h2>
 
 <p>
 <a href='https://github.com/h5bp/lazyweb-requests/issues/150'>This</a>.<br/>
@@ -101,7 +121,7 @@ All the activity and the code sits
 <a href='https://github.com/espadrine/gh-badges'>here</a>.
 </p>
 
-<h2>Contributors</h2>
+<h2> Contributors </h2>
 
 <a class='photo' href='https://github.com/espadrine'>
   <img alt='espadrine' src='https://gravatar.com/avatar/8c3bee0764c781e1b0b8c2e53f0f11fe'>
