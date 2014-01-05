@@ -19,7 +19,7 @@ function escapeFormat(t) {
 
 function sixHex(s) { return /^[0-9a-fA-F]{6}$/.test(s); }
 
-camp.route(/^\/(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+).(svg|png|gif|jpg|pdf)$/,
+camp.route(/^\/:(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+).(svg|png|gif|jpg|pdf)$/,
   function(data, match, end, ask) {
     var subject = escapeFormat(match[1]);
     var status = escapeFormat(match[3]);
