@@ -5,21 +5,12 @@
     <stop offset=".9" stop-color="#000" stop-opacity=".3"/>
     <stop offset="1"  stop-color="#000" stop-opacity=".5"/>
   </linearGradient>
-  <filter id="shadow">
-    <feOffset dx="0" dy="1" in="SourceAlpha"/>
-    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 .3 0"/>
-    <feMerge>
-      <feMergeNode/>
-      <feMergeNode in="SourceGraphic"/>
-      <feMergeNode in="SourceGraphic"/>
-    </feMerge>
-  </filter>
   <rect rx="4" width="{{=it.widths[0]+it.widths[1]}}" height="18" fill="{{=it.colorA||"#555"}}"/>
   <rect rx="4" x="{{=it.widths[0]}}" width="{{=it.widths[1]}}" height="18" fill="{{=it.colorB||"#4c1"}}"/>
   <rect x="{{=it.widths[0]}}" width="4" height="18" fill="{{=it.colorB||"#4c1"}}"/>
   <rect rx="4" width="{{=it.widths[0]+it.widths[1]}}" height="18" fill="url(#smooth)"/>
   <g fill="#fff" text-anchor="middle" font-family="Verdana,serif" font-size="10">
-    <text x="{{=it.widths[0]/2+1}}" y="12" filter="url(#shadow)">{{=it.text[0]}}</text>
-    <text x="{{=it.widths[0]+it.widths[1]/2-1}}" y="12" filter="url(#shadow)">{{=it.text[1]}}</text>
+    <text x="{{=it.widths[0]/2+1}}" y="12">{{=it.text[0]}}</text>
+    <text x="{{=it.widths[0]+it.widths[1]/2-1}}" y="12">{{=it.text[1]}}</text>
   </g>
 </svg>
