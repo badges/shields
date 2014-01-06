@@ -67,7 +67,7 @@ function(data, match, end, ask) {
         badge(badgeData, makeSend(format, ask.res, end));
         return;
       }
-      badgeData.text[1] = '$' + money + ' /week';
+      badgeData.text[1] = '$' + metric(money) + ' /week';
       if (money === 0) {
         badgeData.colorscheme = 'red';
       } else if (money < 10) {
@@ -105,7 +105,7 @@ function(data, match, end, ask) {
         badge(badgeData, makeSend(format, ask.res, end));
         return;
       }
-      badgeData.text[1] = monthly + ' /month';
+      badgeData.text[1] = metric(monthly) + ' /month';
       if (monthly === 0) {
         badgeData.colorscheme = 'red';
       } else if (monthly < 10) {
@@ -155,7 +155,7 @@ function(data, match, end, ask) {
         badge(badgeData, makeSend(format, ask.res, end));
         return;
       }
-      badgeData.text[1] = monthly + ' /month';
+      badgeData.text[1] = metric(monthly) + ' /month';
       if (monthly === 0) {
         badgeData.colorscheme = 'red';
       } else if (monthly < 10) {
@@ -355,4 +355,15 @@ function streamFromString(str) {
   var newStream = new stream.Readable();
   newStream._read = function() { newStream.push(str); newStream.push(null); };
   return newStream;
+}
+
+// Given a number, string with appropriate unit in the metric system, SI.
+function metric(n) {
+  var limit = 1000;
+  if (n > limit) {
+    n = Math.round(n / 1000);
+    return ''+n + 'k';
+  } else {
+    return ''+n;
+  }
 }
