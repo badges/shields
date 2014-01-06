@@ -67,7 +67,7 @@ function(data, match, end, ask) {
         badge(badgeData, makeSend(format, ask.res, end));
         return;
       }
-      badgeData.text[1] = '$' + metric(money) + ' /week';
+      badgeData.text[1] = '$' + metric(money) + '/week';
       if (money === 0) {
         badgeData.colorscheme = 'red';
       } else if (money < 10) {
@@ -105,7 +105,7 @@ function(data, match, end, ask) {
         badge(badgeData, makeSend(format, ask.res, end));
         return;
       }
-      badgeData.text[1] = metric(monthly) + ' /month';
+      badgeData.text[1] = metric(monthly) + '/month';
       if (monthly === 0) {
         badgeData.colorscheme = 'red';
       } else if (monthly < 10) {
@@ -155,7 +155,7 @@ function(data, match, end, ask) {
         badge(badgeData, makeSend(format, ask.res, end));
         return;
       }
-      badgeData.text[1] = metric(monthly) + ' /month';
+      badgeData.text[1] = metric(monthly) + '/month';
       if (monthly === 0) {
         badgeData.colorscheme = 'red';
       } else if (monthly < 10) {
@@ -193,7 +193,7 @@ function(data, match, end, ask) {
         badge(badgeData, makeSend(format, ask.res, end));
         return;
       }
-      badgeData.text[1] = version;
+      badgeData.text[1] = 'v' + version;
       if (version[0] === '0' || /dev/.test(version)) {
         badgeData.colorscheme = 'orange';
       } else {
@@ -227,7 +227,7 @@ function(data, match, end, ask) {
         badge(badgeData, makeSend(format, ask.res, end));
         return;
       }
-      badgeData.text[1] = version;
+      badgeData.text[1] = 'v' + version;
       if (version[0] === '0' || /dev/.test(version)) {
         badgeData.colorscheme = 'orange';
       } else {
