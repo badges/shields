@@ -194,7 +194,41 @@ function(data, match, end, ask) {
         return;
       }
       badgeData.text[1] = version;
-      if (version.split('.')[0] === 0) {
+      if (version[0] === '0' || /dev/.test(version)) {
+        badgeData.colorscheme = 'orange';
+      } else {
+        badgeData.colorscheme = 'blue';
+      }
+      badge(badgeData, makeSend(format, ask.res, end));
+    });
+  }).on('error', function(e) {
+    badgeData.text[1] = 'inaccessible';
+    badge(badgeData, makeSend(format, ask.res, end));
+  });
+});
+
+// Gem version integration.
+camp.route(/^\/gem\/v\/(.*)\.(svg|png|gif|jpg)$/,
+function(data, match, end, ask) {
+  var repo = match[1];  // eg, `localeval`.
+  var format = match[2];
+  var apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
+  var badgeData = {text:['gem', 'n/a'], colorscheme:'lightgrey'};
+  https.get(apiUrl, function(res) {
+    var buffer = '';
+    res.on('data', function(chunk) { buffer += ''+chunk; });
+    res.on('end', function(chunk) {
+      if (chunk) { buffer += ''+chunk; }
+      try {
+        var data = JSON.parse(buffer);
+        var version = data.version;
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        badge(badgeData, makeSend(format, ask.res, end));
+        return;
+      }
+      badgeData.text[1] = version;
+      if (version[0] === '0' || /dev/.test(version)) {
         badgeData.colorscheme = 'orange';
       } else {
         badgeData.colorscheme = 'blue';
