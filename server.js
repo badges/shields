@@ -84,6 +84,44 @@ function(data, match, end, ask) {
   });
 });
 
+// Packagist integration.
+camp.route(/^\/packagist\/dm\/(.*)\.(svg|png|gif|jpg)$/,
+function(data, match, end, ask) {
+  var userRepo = match[1];  // eg, `doctrine/orm`.
+  var format = match[2];
+  var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
+  var badgeData = {text:['downloads', 'n/a'], colorscheme:'lightgrey'};
+  https.get(apiUrl, function(res) {
+    var buffer = '';
+    res.on('data', function(chunk) { buffer += ''+chunk; });
+    res.on('end', function(chunk) {
+      if (chunk) { buffer += ''+chunk; }
+      try {
+        var data = JSON.parse(buffer);
+        var monthly = parseInt(data.package.downloads.monthly);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        badge(badgeData, makeSend(format, ask.res, end));
+        return;
+      }
+      badgeData.text[1] = monthly + ' /month';
+      if (monthly === 0) {
+        badgeData.colorscheme = 'red';
+      } else if (monthly < 10) {
+        badgeData.colorscheme = 'yellow';
+      } else if (monthly < 100) {
+        badgeData.colorscheme = 'yellowgreen';
+      } else {
+        badgeData.colorscheme = 'green';
+      }
+      badge(badgeData, makeSend(format, ask.res, end));
+    });
+  }).on('error', function(e) {
+    badgeData.text[1] = 'inaccessible';
+    badge(badgeData, makeSend(format, ask.res, end));
+  });
+});
+
 // Coveralls integration.
 camp.route(/^\/coveralls\/(.*)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
