@@ -184,7 +184,7 @@ function makeSend(format, askres, end) {
 }
 
 function sendSVG(res, askres, end) {
-  askres.setHeader('Content-Type', 'image/svg+xml');
+  askres.setHeader('Content-Type', 'image/svg+xml;charset=utf-8');
   end(null, {template: streamFromString(res)});
 }
 
