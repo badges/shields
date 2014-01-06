@@ -173,6 +173,40 @@ function(data, match, end, ask) {
   });
 });
 
+// NPM version integration.
+camp.route(/^\/npm\/v\/(.*)\.(svg|png|gif|jpg)$/,
+function(data, match, end, ask) {
+  var repo = match[1];  // eg, `localeval`.
+  var format = match[2];
+  var apiUrl = 'https://registry.npmjs.org/' + repo + '/latest';
+  var badgeData = {text:['npm', 'n/a'], colorscheme:'lightgrey'};
+  https.get(apiUrl, function(res) {
+    var buffer = '';
+    res.on('data', function(chunk) { buffer += ''+chunk; });
+    res.on('end', function(chunk) {
+      if (chunk) { buffer += ''+chunk; }
+      try {
+        var data = JSON.parse(buffer);
+        var version = data.version;
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        badge(badgeData, makeSend(format, ask.res, end));
+        return;
+      }
+      badgeData.text[1] = version;
+      if (version.split('.')[0] === 0) {
+        badgeData.colorscheme = 'orange';
+      } else {
+        badgeData.colorscheme = 'blue';
+      }
+      badge(badgeData, makeSend(format, ask.res, end));
+    });
+  }).on('error', function(e) {
+    badgeData.text[1] = 'inaccessible';
+    badge(badgeData, makeSend(format, ask.res, end));
+  });
+});
+
 // Coveralls integration.
 camp.route(/^\/coveralls\/(.*)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
