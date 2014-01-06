@@ -2,6 +2,7 @@ var camp = require('camp').start({
   port: process.env.PORT||+process.argv[2]||80
 });
 var https = require('https');
+var http = require('http');
 var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
 var serverStartTime = new Date((new Date()).toGMTString());
@@ -98,7 +99,57 @@ function(data, match, end, ask) {
       if (chunk) { buffer += ''+chunk; }
       try {
         var data = JSON.parse(buffer);
-        var monthly = parseInt(data.package.downloads.monthly);
+        var monthly = data.package.downloads.monthly;
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        badge(badgeData, makeSend(format, ask.res, end));
+        return;
+      }
+      badgeData.text[1] = monthly + ' /month';
+      if (monthly === 0) {
+        badgeData.colorscheme = 'red';
+      } else if (monthly < 10) {
+        badgeData.colorscheme = 'yellow';
+      } else if (monthly < 100) {
+        badgeData.colorscheme = 'yellowgreen';
+      } else {
+        badgeData.colorscheme = 'green';
+      }
+      badge(badgeData, makeSend(format, ask.res, end));
+    });
+  }).on('error', function(e) {
+    badgeData.text[1] = 'inaccessible';
+    badge(badgeData, makeSend(format, ask.res, end));
+  });
+});
+
+// NPM integration.
+camp.route(/^\/npm\/dm\/(.*)\.(svg|png|gif|jpg)$/,
+function(data, match, end, ask) {
+  var user = match[1];  // eg, `localeval`.
+  var format = match[2];
+  var apiUrl = 'http://isaacs.iriscouch.com/downloads/_design/app/_view/pkg?group_level=2&start_key=["' + user + '"]&end_key=["' + user + '",{}]';
+  var badgeData = {text:['downloads', 'n/a'], colorscheme:'lightgrey'};
+  http.get(apiUrl, function(res) {
+    var buffer = '';
+    res.on('data', function(chunk) { buffer += ''+chunk; });
+    res.on('end', function(chunk) {
+      if (chunk) { buffer += ''+chunk; }
+      try {
+        var data = JSON.parse(buffer);
+        var monthly = 0;
+        // getMonth() returns a 0-indexed month, ie, last month.
+        var now = new Date();
+        var lastMonth = now.getMonth();
+        var year = now.getFullYear();
+        if (lastMonth === 0) { lastMonth = 12; year--; }
+        for (var i = 0; i < data.rows.length; i++) {
+          // date contains ['year', 'month', 'day'].
+          var date = data.rows[i].key[1].split('-');
+          if (+date[0] === year && +date[1] === lastMonth) {
+            monthly += data.rows[i].value;
+          }
+        }
       } catch(e) {
         badgeData.text[1] = 'invalid';
         badge(badgeData, makeSend(format, ask.res, end));
