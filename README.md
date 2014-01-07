@@ -1,10 +1,12 @@
+[![NPM version](http://b.adge.me/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges)
+
 # GitHub badges in SVG format
 
 Make your own badges! <http://gh-badges.herokuapp.com>
 
 # Contribute
 
-If you want to add a badge, you only need to modify `badges.json`.
+If you want to add a badge, you only need to modify `default-badges.json`.
 
 The format is the following:
 
@@ -35,6 +37,12 @@ same dark grey, so you can rely on that default value by not providing a
 You can also use the `"colorA"` and `"colorB"` fields directly in the badges if
 you don't want to make a color scheme for it. In that case, remove the
 `"colorscheme"` field altogether.
+
+# Requirements
+
+Because of the usage of the npm module [canvas](https://npmjs.org/package/canvas) *you need* to have **cairo** installed.
+
+For more information check the [wiki](https://github.com/LearnBoost/node-canvas/wiki/_pages) of the canvas project with system-specific installation details.
 
 # Making your Heroku badge server
 
