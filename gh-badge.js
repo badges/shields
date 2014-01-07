@@ -23,8 +23,6 @@ var colorA = process.argv[5];
 
 var badgeData = {text: [subject, status]};
 
-function sixHex(s) { return /^[0-9a-fA-F]{6}$/.test(s); }
-
 if (color[0] === ':') {
   color = color.slice(1);
   if (colorscheme[color] == null) {
