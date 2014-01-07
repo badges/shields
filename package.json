@@ -1,6 +1,6 @@
 {
   "name": "gh-badges",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "GitHub badges implemented in SVG.",
   "keywords": ["GitHub", "badge", "SVG", "image"],
   "homepage": "http://b.adge.me",
@@ -23,5 +23,6 @@
     "es6-promise": "~0.1.1",
     "camp": "~13.11.9"
   },
+  "bin": { "badge": "./gh-badge.js" },
   "engines": { "node": "0.10.x" }
 }
