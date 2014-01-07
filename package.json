@@ -1,13 +1,20 @@
 {
-  "author": "Thaddée Tyl <thaddee.tyl@gmail.com>",
   "name": "gh-badges",
+  "version": "0.1.0",
   "description": "GitHub badges implemented in SVG.",
-  "version": "0.0.1",
+  "keywords": ["GitHub", "badge", "SVG", "image"],
+  "homepage": "http://b.adge.me",
+  "bugs": {
+    "url": "https://github.com/espadrine/gh-badges/issues",
+    "email": "thaddee.tyl@gmail.com"
+  },
+  "license": "CC0",
+  "author": "Thaddée Tyl <thaddee.tyl@gmail.com>",
+  "main": "badge.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/espadrine/gh-badges"
   },
-  "license": "CC0",
   "dependencies": {
     "dot": "~1.0.2",
     "svgo": "~0.4.2",
