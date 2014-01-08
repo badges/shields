@@ -1,6 +1,6 @@
 # GitHub badges in SVG format
 
-[![NPM version](http://b.adge.me/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges)
+[![npm version](http://b.adge.me/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges)
 
 Make your own badges (like this one above)! <http://gh-badges.herokuapp.com>
 
