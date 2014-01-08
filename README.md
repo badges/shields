@@ -2,7 +2,7 @@
 
 [![npm version](http://b.adge.me/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges)
 
-Make your own badges (like this one above)! <http://gh-badges.herokuapp.com>
+Make your own badges (like this one above)! <http://b.adge.me>
 
 # Contribute
 
