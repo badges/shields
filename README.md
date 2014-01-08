@@ -2,7 +2,7 @@
 
 A legible & concise status badge solution for third-party codebase services. Soon to be Retina-ready.
 
-![shields on white](https://raw.github.com/gittip/shields.io/master/static/shields_white.png)
+![shields on white](https://raw.github.com/badges/shields/master/static/shields_white.png)
 
 ## Services using Shields
 - [Code Climate](https://codeclimate.com/changelog/510d4fde56b102523a0004bf)
@@ -36,11 +36,27 @@ As you can see from the zoomed 400% versions of these badges above, nobody is (r
 ## Solution
 As you can see below, without increasing the footprint of these badges, I've tried to increase legibility and coherence, removing useless text to decrease the horizontal length in the (likely) scenario that more of these badge thingies crop up on READMEs all across the land.
 
-![shields on white](https://raw.github.com/gittip/shields.io/master/static/shields_white.png)
+![shields on white](https://raw.github.com/badges/shields/master/static/shields_white.png)
 
-![shields on black](https://raw.github.com/gittip/shields.io/master/static/shields_black.png)
+![shields on black](https://raw.github.com/badges/shields/master/static/shields_black.png)
 
 Thanks to @ackerdev we also have SVG equivalents of all existing badges if you would like your badges to be Retina-ready or dynamically manipulate the text inside of them before you output them to PNG 24 Alpha (transparent background).
+
+## Specification
+
+### Guidelines
+- legible: it should be as easy to read the metadata provided by a badge as it is to read body copy inside of a README file regardless of display resolution
+- semantic: the purpose information provided by a badge should be self-evident
+- non-promotional: badges should not advertise but instead provide value through information
+- concise: one descriptive word on the left (the key), one piece of data on the right (the value)
+- hyperlinked: badges can link to a third-party website providing more information, either related to the metadata provided by the badge or about the project the badge was used for (e.g. an open source library) 
+
+### Aesthetics
+The design of Shields badges has been carefully considered to provide sufficient padding between the container badge and the text within. Badges should never have a fixed width. The letter spacing (or kerning) is deliberate and focused on clarity, so is the use of the Open Sans font face. Contrary to widely available web-safe alternative sans-serif fonts like Arial (a sloppy Helvetica ripoff) and Verdana (a sloppy Futura ripoff), OpenSans remains highly legible at very small sizes which is why it was chosen.
+
+![](https://raw.github.com/badges/shields/master/static/proportions.png)
+
+You can find a copy (including its Apache license) of Open Sans in the `font/` directory of this repository.
 
 ## Retina Ready
 Since one of the major concerns is legibility, it's impossible to ignore how bad shields will look on retina (high DPI) displays.
@@ -50,10 +66,10 @@ A suggested by @kneath, Shields displayed with an HTML image tag (instead of the
 Here's an example with the following code: 
 
 ```html
-<img src="https://raw.github.com/gittip/shields.io/master/static/shields_white@2x.png" height="143" alt="Retina-ready Shields example" />
+<img src="https://raw.github.com/badges/shields/master/static/shields_white@2x.png" height="143" alt="Retina-ready Shields example" />
 ```
 
-<img src="https://raw.github.com/gittip/shields.io/master/static/shields_white@2x.png" height="143" alt="Retina-ready Shields example" />
+<img src="https://raw.github.com/badges/shields/master/static/shields_white@2x.png" height="143" alt="Retina-ready Shields example" />
 
 All shields aren't yet compatible with this but we're working on updating them soon. Look for image filenames with `@2x` suffixes, those will be the pixel doubled versions. 
 
