@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="97px" height="18px" viewBox="0 1.5 97 18" enable-background="new 0 1.5 97 18" xml:space="preserve">
+<g id="Green">
+	
+		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="1072.501" y1="-3022.9995" x2="1072.501" y2="-3005" gradientTransform="matrix(1 0 0 -1 -988 -3003.5)">
+		<stop offset="0" style="stop-color:#4D6700"/>
+		<stop offset="0.1" style="stop-color:#6B8F00"/>
+		<stop offset="0.96" style="stop-color:#97CA00"/>
+		<stop offset="1" style="stop-color:#D1F171"/>
+	</linearGradient>
+	<path fill="url(#SVGID_1_)" d="M72,19.5h22c1.657,0,3-1.343,3-3v-12c0-1.657-1.343-3-3-3H72V19.5z"/>
+	
+		<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="1024" y1="-3022.8745" x2="1024" y2="-3004.9961" gradientTransform="matrix(1 0 0 -1 -988 -3003.5)">
+		<stop offset="0" style="stop-color:#2E2E2E"/>
+		<stop offset="0.1" style="stop-color:#3F3F3F"/>
+		<stop offset="0.96" style="stop-color:#5A5A5A"/>
+		<stop offset="1" style="stop-color:#AAAAAA"/>
+	</linearGradient>
+	<path fill="url(#SVGID_2_)" d="M72,19.5H3c-1.657,0-3-1.343-3-3v-12c0-1.657,1.343-3,3-3h69V19.5z"/>
+	<g>
+		<g opacity="0.3">
+			<text transform="matrix(1 0 0 1 77 14.0693)" font-family="'OpenSans'" font-size="10">3.2</text>
+		</g>
+		<g>
+			<text transform="matrix(1 0 0 1 77 13.0693)" fill="#FFFFFF" font-family="'OpenSans'" font-size="10">3.2</text>
+		</g>
+	</g>
+	<g>
+		<g opacity="0.3">
+			<text transform="matrix(1 0 0 1 6 14.0693)" font-family="'OpenSans'" font-size="10">code climate</text>
+		</g>
+		<g>
+			<text transform="matrix(1 0 0 1 6 13.0693)" fill="#FFFFFF" font-family="'OpenSans'" font-size="10">code climate</text>
+		</g>
+	</g>
+</g>
+</svg>
