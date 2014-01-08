@@ -43,10 +43,6 @@
     "text": [ "dependencies", "unknown" ],
     "colorscheme": "lightgrey"
   },
-  "cheez-whiz": {
-    "text": [ "cheez", "whiz" ],
-    "colorscheme": "yellow"
-  },
   "tips-per-week": {
     "text": [ "tips", "$21/week" ],
     "colorB": "#94c600"
