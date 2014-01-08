@@ -58,6 +58,8 @@ The design of Shields badges has been carefully considered to provide sufficient
 
 You can find a copy (including its Apache license) of Open Sans in the `font/` directory of this repository.
 
+When it comes to color choices, the focus is on clear contrast between the text and the background color on both sides of the badge (key and value). The two sides are also contrasted with each other with the key side always retaining a dark grey color for consistency, and the value side taking on whichever background color better conveys the meaning of the data provided (e.g. green for a successful build, red for a failed build).
+
 ## Retina Ready
 Since one of the major concerns is legibility, it's impossible to ignore how bad shields will look on retina (high DPI) displays.
 
