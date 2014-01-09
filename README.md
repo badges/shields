@@ -121,12 +121,12 @@ What kind of meta data can you convey using Shields badges?
 ## Retina Ready
 
 Since one of the major concerns is legibility, it's impossible to ignore how
-bad shields will look on retina (high DPI) displays.
+bad low-resolution PNG badges will look on retina (high DPI) displays.
 
-A suggested by @kneath, Shields displayed with an HTML image tag (instead of
-the easier Markdown image tag) can be given a fixed height to force an image
-that is actually double the resolution into a 50% smaller image, which will
-display properly for both retina and non-retina screens.
+A suggested by @kneath, Shields badges displayed with an HTML image tag
+(instead of the easier Markdown image tag) can be given a fixed height to force
+an image that is actually double the resolution into a 50% smaller image, which
+will display properly for both retina and non-retina screens.
 
 Here's an example with the following code: 
 
