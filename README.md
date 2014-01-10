@@ -2,7 +2,9 @@
 
 [![npm version](http://b.adge.me/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges)
 
-Make your own badges (like this one above)! <http://b.adge.me>
+Make your own [badges][] (like this one above)!
+
+[badges]: <http://b.adge.me>
 
 # Contribute
 
@@ -20,9 +22,11 @@ The format is the following:
 ```
 
 Color schemes are located in `colorscheme.json`. Each scheme has a name and
-a [CSS/SVG color](http://www.w3.org/TR/SVG/types.html#DataTypeColor) for the
+a [CSS/SVG color][] for the
 color used in the first box (for the first piece of text, field `colorA`) and
 for the one used in the second box (field `colorB`).
+
+[CSS/SVG color]: http://www.w3.org/TR/SVG/types.html#DataTypeColor
 
 ```js
 "green": {
@@ -40,13 +44,18 @@ you don't want to make a color scheme for it. In that case, remove the
 
 # Requirements
 
-Because of the usage of the npm module [canvas](https://npmjs.org/package/canvas) *you need* to have **cairo** installed.
+Because of the usage of the npm module [canvas][canvas-pkg] *you need* to have **cairo** installed.
 
-For more information check the [wiki](https://github.com/LearnBoost/node-canvas/wiki/_pages) of the canvas project with system-specific installation details.
+For more information check the [wiki][canvas-wiki] of the canvas project with system-specific installation details.
+
+[canvas-pkg]: https://npmjs.org/package/canvas
+[canvas-wiki]: https://github.com/LearnBoost/node-canvas/wiki/_pages
 
 # Making your Heroku badge server
 
-Once you have installed the [Heroku Toolbelt](https://toolbelt.heroku.com/):
+Once you have installed the [Heroku Toolbelt][]
+
+[Heroku Toolbelt]: (https://toolbelt.heroku.com/):
 
 ```bash
 heroku login
