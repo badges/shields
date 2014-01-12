@@ -240,11 +240,15 @@ function(data, match, end, ask) {
 });
 
 // Coveralls integration.
-camp.route(/^\/coveralls\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/coveralls\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
   var userRepo = match[1];  // eg, `jekyll/jekyll`.
-  var format = match[2];
-  var apiUrl = 'https://coveralls.io/repos/' + userRepo + '/badge.png?branch=master';
+  var branch = match[2];
+  var format = match[3];
+  var apiUrl = 'https://coveralls.io/repos/' + userRepo + '/badge.png';
+  if (branch) {
+    apiUrl += '?branch=' + branch;
+  }
   var badgeData = {text:['coverage', 'n/a'], colorscheme:'lightgrey'};
   https.get(apiUrl, function(res) {
     // We should get a 302. Look inside the Location header.
