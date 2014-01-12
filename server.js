@@ -32,9 +32,9 @@ function(data, match, end, ask) {
     var state = statusMatch[1];
     badgeData.text[1] = state;
     if (state === 'passing') {
-        badgeData.colorscheme = 'green';
+      badgeData.colorscheme = 'green';
     } else if (state === 'failing') {
-        badgeData.colorscheme = 'red';
+      badgeData.colorscheme = 'red';
     }
     badge(badgeData, makeSend(format, ask.res, end));
   });
