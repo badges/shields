@@ -7,44 +7,42 @@ var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
 var serverStartTime = new Date((new Date()).toGMTString());
 
-// Travis integration.
-camp.route(/^\/travis\/(.*)\.(svg|png|gif|jpg)$/,
+// Travis integration
+camp.route(/^\/travis\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
-  var userRepo = match[1];  // eg, `joyent/node`.
-  var format = match[2];
-  var apiUrl = 'https://api.travis-ci.org/repositories/' + userRepo + '.json';
+  var userRepo = match[1];
+  var branch = match[2];
+  var format = match[3];
+  var options = {
+    method: 'HEAD',
+    hostname: 'api.travis-ci.org',
+    path: '/' + userRepo + '.png'
+  };
+  if (branch) {
+    options.path += '?branch=' + branch;
+  }
   var badgeData = {text:['build', 'n/a'], colorscheme:'lightgrey'};
-  https.get(apiUrl, function(res) {
-    var buffer = '';
-    res.on('data', function(chunk) { buffer += ''+chunk; });
-    res.on('end', function(chunk) {
-      if (chunk) { buffer += ''+chunk; }
-      try {
-        var data = JSON.parse(buffer);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        badge(badgeData, makeSend(format, ask.res, end));
-        return;
-      }
-      if (data.last_build_status === 0) {
-        badgeData.text[1] = 'passing';
-        badgeData.colorscheme = 'green';
-      } else if (data.last_build_status === 1) {
-        badgeData.text[1] = 'failing';
-        badgeData.colorscheme = 'red';
-      } else if (data.last_build_status === null) {
-        badgeData.text[1] = 'pending';
-        badgeData.colorscheme = 'yellow';
-      } else {
-        badgeData.text[1] = 'n/a';
-        badgeData.colorscheme = 'lightgrey';
-      }
+  var req = https.request(options, function(res) {
+    var statusMatch = res.headers['content-disposition'].match(/filename="(.+)\.png"/);
+    if (!statusMatch) {
+      badgeData.text[1] = 'unknown';
       badge(badgeData, makeSend(format, ask.res, end));
-    });
-  }).on('error', function(e) {
+      return;
+    }
+    var state = statusMatch[1];
+    badgeData.text[1] = state;
+    if (state === 'passing') {
+        badgeData.colorscheme = 'green';
+    } else if (state === 'failing') {
+        badgeData.colorscheme = 'red';
+    }
+    badge(badgeData, makeSend(format, ask.res, end));
+  });
+  req.on('error', function(e) {
     badgeData.text[1] = 'inaccessible';
     badge(badgeData, makeSend(format, ask.res, end));
   });
+  req.end();
 });
 
 // Gittip integration.
