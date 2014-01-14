@@ -10,7 +10,7 @@ try {
   var opensans = new CanvasFont('Verdana', './Verdana.ttf');
   canvasContext.addFont(opensans);
 } catch(e) {}
-canvasContext.font = '10px Verdana';
+canvasContext.font = '11px Verdana';
 
 // Template crafting action below.
 var dot = require('dot');
