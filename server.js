@@ -23,7 +23,14 @@ function(data, match, end, ask) {
   }
   var badgeData = {text:['build', 'n/a'], colorscheme:'lightgrey'};
   var req = https.request(options, function(res) {
-    var statusMatch = res.headers['content-disposition'].match(/filename="(.+)\.png"/);
+    try {
+      var statusMatch = res.headers['content-disposition']
+                           .match(/filename="(.+)\.png"/);
+    } catch(e) {
+      badgeData.text[1] = 'not found';
+      badge(badgeData, makeSend(format, ask.res, end));
+      return;
+    }
     if (!statusMatch) {
       badgeData.text[1] = 'unknown';
       badge(badgeData, makeSend(format, ask.res, end));
