@@ -35,7 +35,7 @@ module.exports = function (svg, format, out, cb) {
     });
     // Remove the temporary file after use.
     inStream.on('end', function() {
-      out.end();
+      try { out.end(); } catch(e) {}
       addToCache(cacheIndex, cached);
       fs.unlink(tmpFile, cb);
     });
