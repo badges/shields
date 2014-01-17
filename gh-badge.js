@@ -2,8 +2,8 @@ var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
 var colorscheme = require('./colorscheme.json');
 if (process.argv.length < 4) {
-  console.log('Usage: badge subject status [:colorscheme]');
-  console.log('Or:    badge subject status right-color [left-color]');
+  console.log('Usage: badge subject status [:colorscheme] [.output]');
+  console.log('Or:    badge subject status right-color [left-color] [.output]');
   console.log();
   console.log('  colorscheme: one of '
       + Object.keys(colorscheme).join(', ') + '.');
@@ -11,6 +11,8 @@ if (process.argv.length < 4) {
   console.log('    #xxx (three hex digits)');
   console.log('    #xxxxxx (six hex digits)');
   console.log('    color (CSS color)');
+  console.log('  output:');
+  console.log('    svg, png, jpg, or gif');
   console.log();
   console.log('Eg: badge cactus grown :green');
   console.log();
