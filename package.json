@@ -1,6 +1,6 @@
 {
   "name": "gh-badges",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "description": "GitHub badges implemented in SVG.",
   "keywords": ["GitHub", "badge", "SVG", "image"],
   "homepage": "http://b.adge.me",
@@ -32,5 +32,13 @@
     "test": "mocha -R spec test.js"
   },
   "bin": { "badge": "./gh-badge.js" },
+  "files": [
+    "badge.js",
+    "gh-badge.js",
+    "svg-to-img.js",
+    "colorscheme.json",
+    "phantomjs-svg2png.js",
+    "template.svg"
+  ],
   "engines": { "node": "0.10.x" }
 }
