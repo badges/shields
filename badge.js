@@ -1,4 +1,5 @@
 var fs = require('fs');
+var path = require('path');
 var SVGO = require('svgo');
 
 // Initialize what will be used for automatic text measurement.
@@ -7,15 +8,16 @@ var canvasElement = new Canvas(0, 0);   // Width and height are irrelevant.
 var canvasContext = canvasElement.getContext('2d');
 var CanvasFont = Canvas.Font;
 try {
-  var opensans = new CanvasFont('Verdana', './Verdana.ttf');
+  var opensans = new CanvasFont('Verdana',
+      path.join(__dirname, 'Verdana.ttf'));
   canvasContext.addFont(opensans);
 } catch(e) {}
-canvasContext.font = '11px Verdana';
+canvasContext.font = '11px Verdana, "DejaVu Sans"';
 
 // Template crafting action below.
 var dot = require('dot');
-var colorscheme = require('./colorscheme.json');
-var template = fs.readFileSync('./template.svg');
+var colorscheme = require(path.join(__dirname, 'colorscheme.json'));
+var template = fs.readFileSync(path.join(__dirname, 'template.svg'));
 var imageTemplate = dot.template(''+template);
 
 function optimize(string, callback) {
