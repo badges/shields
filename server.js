@@ -1,5 +1,5 @@
 var camp = require('camp').start({
-  port: process.env.PORT||+process.argv[2]||80
+  port: +process.env.PORT||+process.argv[2]||80
 });
 var https = require('https');
 var http = require('http');
@@ -324,6 +324,34 @@ function(data, match, end, ask) {
   } catch(e) {
     badge({text: ['error', 'bad badge'], colorscheme: 'red'},
       makeSend(format, ask.res, end));
+  }
+});
+
+// Any badge, old version.
+camp.route(/^\/([^\/]+)\/(.+).png$/,
+function(data, match, end, ask) {
+  var subject = match[1];
+  var status = match[2];
+  var color = data.color;
+
+  // Cache management.
+  var cacheDuration = (3600*24*1)|0;  // 1 day.
+  ask.res.setHeader('Cache-Control', 'public, max-age=' + cacheDuration);
+  if (+(new Date(ask.req.headers['if-modified-since'])) >= +serverStartTime) {
+    ask.res.statusCode = 304;
+    ask.res.end();  // not modified.
+    return;
+  }
+  ask.res.setHeader('Last-Modified', serverStartTime.toGMTString());
+
+  // Badge creation.
+  try {
+    var badgeData = {text: [subject, status]};
+    badgeData.colorscheme = color;
+    badge(badgeData, makeSend('png', ask.res, end));
+  } catch(e) {
+    badge({text: ['error', 'bad badge'], colorscheme: 'red'},
+      makeSend('png', ask.res, end));
   }
 });
 

@@ -23,6 +23,14 @@
     "es6-promise": "~0.1.1",
     "camp": "~13.11.9"
   },
+  "devDependencies": {
+    "ass": "~0.0.4",
+    "should": "~3.0.0",
+    "mocha": "~1.14.0"
+  },
+  "scripts": {
+    "test": "mocha -R spec test.js"
+  },
   "bin": { "badge": "./gh-badge.js" },
   "engines": { "node": "0.10.x" }
 }
