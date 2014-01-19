@@ -1,8 +1,9 @@
 # GitHub badges in SVG format
 
 [![npm version](http://b.adge.me/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges)
+![coverage](https://rawgithub.com/badges/gh-badges/master/coverage.svg)
 
-Make your own [badges][] (like this one above)!
+Make your own badges [here][badges]!
 
 [badges]: <http://b.adge.me>
 

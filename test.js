@@ -104,4 +104,27 @@ describe('the ass wrap-up', function() {
       done();
     });
   });
+  it('should write the coverage image', function(done) {
+    ass.report('json', function(err, r) {
+      if (!!err) { return done(err); }
+      var badge = require('./badge.js');
+      var score = +r.percent;
+      var badgeData = {text:['coverage', score + '%']};
+      if (score < 70) {
+        badgeData.colorscheme = 'red';
+      } else if (score < 80) {
+        badgeData.colorscheme = 'yellow';
+      } else if (score < 90) {
+        badgeData.colorscheme = 'yellowgreen';
+      } else if (score < 100) {
+        badgeData.colorscheme = 'green';
+      } else {
+        badgeData.colorscheme = 'brightgreen';
+      }
+      badge(badgeData, function writeBadge(svg) {
+        fs.writeFileSync('./coverage.svg', svg);
+        done();
+      });
+    });
+  });
 });
