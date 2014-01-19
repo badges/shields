@@ -43,11 +43,13 @@ sudo npm start
 The format is the following:
 
 ```js
-/* Unique name of your badge. */
-"build-passed": {
+{
   /* Textual information shown, in order. */
   "text": [ "build", "passed" ],
   "colorscheme": "green"
+  /* … Or… */
+  "colorA": "#555",
+  "colorB": "#4c1"
 }
 ```
 
@@ -79,16 +81,18 @@ you don't want to make a color scheme for it. In that case, remove the
 
 # Requirements
 
-Because of the usage of the npm module [canvas][canvas-pkg] *you need* to have **cairo** installed.
+Because of the usage of the npm module [canvas][canvas-pkg] *you need* to have
+**cairo** installed.
 
-For more information check the [wiki][canvas-wiki] of the canvas project with system-specific installation details.
+For more information check the [wiki][canvas-wiki] of the canvas project with
+system-specific installation details.
 
 [canvas-pkg]: https://npmjs.org/package/canvas
 [canvas-wiki]: https://github.com/LearnBoost/node-canvas/wiki/_pages
 
 # Making your Heroku badge server
 
-Once you have installed the [Heroku Toolbelt][]
+Once you have installed the [Heroku Toolbelt][]:
 
 [Heroku Toolbelt]: (https://toolbelt.heroku.com/):
 
