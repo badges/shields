@@ -7,9 +7,38 @@ Make your own badges [here][badges]!
 
 [badges]: <http://b.adge.me>
 
-# Contribute
+# Install the API
 
-If you want to add a badge, you only need to modify `default-badges.json`.
+```bash
+npm install gh-badges
+```
+
+```js
+var badge = require('gh-badges');
+badge({ text: [ "build", "passed" ], "colorscheme": "green" },
+  function(svg) {
+    // svg is a String… of your badge.
+  });
+```
+
+# Use the CLI
+
+```bash
+npm install -g gh-badges
+badge build passed :green .png > mybadge.png
+# Stored a PNG version of your badge on disk.
+```
+
+# Set the Server
+
+```bash
+git clone git@github.com:badges/gh-badges
+cd gh-badges
+npm install
+sudo npm start
+```
+
+# Format
 
 The format is the following:
 
@@ -22,10 +51,15 @@ The format is the following:
 }
 ```
 
-Color schemes are located in `colorscheme.json`. Each scheme has a name and
-a [CSS/SVG color][] for the
-color used in the first box (for the first piece of text, field `colorA`) and
-for the one used in the second box (field `colorB`).
+# Defaults
+
+If you want to add a default badge, you only need to modify
+`default-badges.json`. The format is the same as that given to the API.
+
+If you want to add a colorscheme, head to `colorscheme.json`. Each scheme has a
+name and a [CSS/SVG color][] for the color used in the first box (for the first
+piece of text, field `colorA`) and for the one used in the second box (field
+`colorB`).
 
 [CSS/SVG color]: http://www.w3.org/TR/SVG/types.html#DataTypeColor
 
