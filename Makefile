@@ -10,4 +10,4 @@ deploy:
 	git push -f heroku HEAD:master
 	git reset HEAD~1
 
-.PHONY: all deploy
+.PHONY: all deploy favicon
