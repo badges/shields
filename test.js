@@ -50,7 +50,6 @@ describe('the CLI', function() {
     child = cproc.spawn('node',
       ['ass-stubs/cli-test.js', 'cactus', 'grown', '.png']);
     child.stdout.on('data', function(chunk) {
-      var buffer = ''+chunk;
       // Check the PNG magic number.
       chunk[0].should.equal(0x89);
       chunk[1].should.equal(0x50);
@@ -67,6 +66,7 @@ describe('the CLI', function() {
 
 describe('the server', function() {
   var port = '1111';
+  var url = 'http://127.0.0.1:' + port + '/';
   var server;
 
   // Start running the server.
@@ -77,7 +77,7 @@ describe('the server', function() {
   });
 
   it('should produce colorscheme badges', function(done) {
-    http.get('http://127.0.0.1:' + port + '/:fruit-apple-green.svg',
+    http.get(url + ':fruit-apple-green.svg',
       function(res) {
         var buffer = '';
         res.on('data', function(chunk) { buffer += ''+chunk; });
@@ -85,6 +85,24 @@ describe('the server', function() {
           buffer.should.startWith('<svg');
           buffer.should.containEql('fruit');
           buffer.should.containEql('apple');
+          done();
+        });
+    });
+  });
+
+  it('should produce colorscheme PNG badges', function(done) {
+    http.get(url + ':fruit-apple-green.png',
+      function(res) {
+        res.on('data', function(chunk) {
+          // Check the PNG magic number.
+          chunk[0].should.equal(0x89);
+          chunk[1].should.equal(0x50);
+          chunk[2].should.equal(0x4e);
+          chunk[3].should.equal(0x47);
+          chunk[4].should.equal(0x0d);
+          chunk[5].should.equal(0x0a);
+          chunk[6].should.equal(0x1a);
+          chunk[7].should.equal(0x0a);
           done();
         });
     });
