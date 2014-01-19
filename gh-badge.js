@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 var path = require('path');
 var badge = require(path.join(__dirname, 'badge.js'));
 var svg2img = require(path.join(__dirname, 'svg-to-img.js'));
