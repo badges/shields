@@ -342,6 +342,59 @@ function(data, match, end, ask) {
   req.end();
 });
 
+// Code Climate integration
+camp.route(/^\/gemnasium\/(.+)\.(svg|png|gif|jpg)$/,
+function(data, match, end, ask) {
+  var userRepo = match[1];  // eg, `jekyll/jekyll`.
+  var format = match[2];
+  var options = {
+    method: 'HEAD',
+    hostname: 'gemnasium.com',
+    path: '/' + userRepo + '.png'
+  };
+  var badgeData = {text:['dependencies', 'n/a'], colorscheme:'lightgrey'};
+  var req = https.request(options, function(res) {
+    try {
+      var statusMatch = res.headers['content-disposition']
+                           .match(/filename="(.+)\.png"/);
+    } catch(e) {
+      badgeData.text[1] = 'not found';
+      badge(badgeData, makeSend(format, ask.res, end));
+      return;
+    }
+    if (!statusMatch) {
+      badgeData.text[1] = 'unknown';
+      badge(badgeData, makeSend(format, ask.res, end));
+      return;
+    }
+    // Either `dev-yellow` or `yellow`.
+    var state = statusMatch[1].split('-');  //
+    var color = state.pop();
+    if (state[0] === 'dev') { badgeData.text[0] = 'devDependencies'; }
+    if (color === 'green') {
+      badgeData.text[1] = 'up-to-date';
+      badgeData.colorscheme = 'brightgreen';
+    } else if (color === 'yellow') {
+      badgeData.text[1] = 'out-of-date';
+      badgeData.colorscheme = 'yellow';
+    } else if (color === 'red') {
+      badgeData.text[1] = 'update!';
+      badgeData.colorscheme = 'red';
+    } else if (color === 'none') {
+      badgeData.text[1] = 'none';
+      badgeData.colorscheme = 'brightgreen';
+    } else {
+      badgeData.text[1] = 'undefined';
+    }
+    badge(badgeData, makeSend(format, ask.res, end));
+  });
+  req.on('error', function(e) {
+    badgeData.text[1] = 'inaccessible';
+    badge(badgeData, makeSend(format, ask.res, end));
+  });
+  req.end();
+});
+
 // Any badge.
 camp.route(/^\/:(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
