@@ -8,11 +8,11 @@ var svg2img = require('./svg-to-img.js');
 var serverStartTime = new Date((new Date()).toGMTString());
 
 // Travis integration
-camp.route(/^\/travis\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg)$/,
+camp.route(/^\/travis(-ci)?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
-  var userRepo = match[1];
-  var branch = match[2];
-  var format = match[3];
+  var userRepo = match[2];
+  var branch = match[3];
+  var format = match[4];
   var options = {
     method: 'HEAD',
     hostname: 'api.travis-ci.org',
