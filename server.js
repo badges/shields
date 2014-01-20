@@ -322,10 +322,12 @@ function(data, match, end, ask) {
     var state = statusMatch[1].replace('-', '.');
     var score = +state;
     badgeData.text[1] = state;
-    if (score > 3) {
+    if (score == 4) {
       badgeData.colorscheme = 'brightgreen';
-    } else if (score > 2) {
+    } else if (score > 3) {
       badgeData.colorscheme = 'green';
+    } else if (score > 2) {
+      badgeData.colorscheme = 'yellowgreen';
     } else if (score > 1) {
       badgeData.colorscheme = 'yellow';
     } else {
