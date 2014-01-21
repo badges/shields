@@ -21,7 +21,8 @@ function(data, match, end, ask) {
   if (branch) {
     options.path += '?branch=' + branch;
   }
-  var badgeData = {text:['build', 'n/a'], colorscheme:'lightgrey'};
+  var label = getLabel('build', data);
+  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
   var req = https.request(options, function(res) {
     try {
       var statusMatch = res.headers['content-disposition']
@@ -58,7 +59,8 @@ function(data, match, end, ask) {
   var user = match[1];  // eg, `JSFiddle`.
   var format = match[2];
   var apiUrl = 'https://www.gittip.com/' + user + '/public.json';
-  var badgeData = {text:['tips', 'n/a'], colorscheme:'lightgrey'};
+  var label = getLabel('tips', data);
+  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
   https.get(apiUrl, function(res) {
     var buffer = '';
     res.on('data', function(chunk) { buffer += ''+chunk; });
@@ -96,7 +98,8 @@ function(data, match, end, ask) {
   var userRepo = match[1];  // eg, `doctrine/orm`.
   var format = match[2];
   var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
-  var badgeData = {text:['downloads', 'n/a'], colorscheme:'lightgrey'};
+  var label = getLabel('downloads', data);
+  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
   https.get(apiUrl, function(res) {
     var buffer = '';
     res.on('data', function(chunk) { buffer += ''+chunk; });
@@ -134,7 +137,8 @@ function(data, match, end, ask) {
   var user = match[1];  // eg, `localeval`.
   var format = match[2];
   var apiUrl = 'http://isaacs.iriscouch.com/downloads/_design/app/_view/pkg?group_level=2&start_key=["' + user + '"]&end_key=["' + user + '",{}]';
-  var badgeData = {text:['downloads', 'n/a'], colorscheme:'lightgrey'};
+  var label = getLabel('downloads', data);
+  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
   http.get(apiUrl, function(res) {
     var buffer = '';
     res.on('data', function(chunk) { buffer += ''+chunk; });
@@ -184,7 +188,8 @@ function(data, match, end, ask) {
   var repo = match[1];  // eg, `localeval`.
   var format = match[2];
   var apiUrl = 'https://registry.npmjs.org/' + repo + '/latest';
-  var badgeData = {text:['npm', 'n/a'], colorscheme:'lightgrey'};
+  var label = getLabel('npm', data);
+  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
   https.get(apiUrl, function(res) {
     var buffer = '';
     res.on('data', function(chunk) { buffer += ''+chunk; });
@@ -218,7 +223,8 @@ function(data, match, end, ask) {
   var repo = match[1];  // eg, `localeval`.
   var format = match[2];
   var apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
-  var badgeData = {text:['gem', 'n/a'], colorscheme:'lightgrey'};
+  var label = getLabel('gem', data);
+  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
   https.get(apiUrl, function(res) {
     var buffer = '';
     res.on('data', function(chunk) { buffer += ''+chunk; });
@@ -256,7 +262,8 @@ function(data, match, end, ask) {
   if (branch) {
     apiUrl += '?branch=' + branch;
   }
-  var badgeData = {text:['coverage', 'n/a'], colorscheme:'lightgrey'};
+  var label = getLabel('coverage', data);
+  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
   https.get(apiUrl, function(res) {
     // We should get a 302. Look inside the Location header.
     var buffer = res.headers.location;
@@ -304,7 +311,8 @@ function(data, match, end, ask) {
     hostname: 'codeclimate.com',
     path: '/' + userRepo + '.png'
   };
-  var badgeData = {text:['code climate', 'n/a'], colorscheme:'lightgrey'};
+  var label = getLabel('code climate', data);
+  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
   var req = https.request(options, function(res) {
     try {
       var statusMatch = res.headers['content-disposition']
@@ -352,7 +360,8 @@ function(data, match, end, ask) {
     hostname: 'gemnasium.com',
     path: '/' + userRepo + '.png'
   };
-  var badgeData = {text:['dependencies', 'n/a'], colorscheme:'lightgrey'};
+  var label = getLabel('dependencies', data);
+  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
   var req = https.request(options, function(res) {
     try {
       var statusMatch = res.headers['content-disposition']
@@ -469,6 +478,13 @@ function escapeFormat(t) {
 }
 
 function sixHex(s) { return /^[0-9a-fA-F]{6}$/.test(s); }
+
+function getLabel(label, data) {
+  if (data.label) {
+    return escapeFormat(data.label);
+  }
+  return label;
+}
 
 function makeSend(format, askres, end) {
   if (format === 'svg') {
