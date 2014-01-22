@@ -40,7 +40,7 @@ function(data, match, end, ask) {
     var state = statusMatch[1];
     badgeData.text[1] = state;
     if (state === 'passing') {
-      badgeData.colorscheme = 'green';
+      badgeData.colorscheme = 'brightgreen';
     } else if (state === 'failing') {
       badgeData.colorscheme = 'red';
     }
