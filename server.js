@@ -120,8 +120,10 @@ function(data, match, end, ask) {
         badgeData.colorscheme = 'yellow';
       } else if (monthly < 100) {
         badgeData.colorscheme = 'yellowgreen';
-      } else {
+      } else if (monthly < 1000) {
         badgeData.colorscheme = 'green';
+      } else {
+        badgeData.colorscheme = 'brightgreen';
       }
       badge(badgeData, makeSend(format, ask.res, end));
     });
@@ -171,8 +173,10 @@ function(data, match, end, ask) {
         badgeData.colorscheme = 'yellow';
       } else if (monthly < 100) {
         badgeData.colorscheme = 'yellowgreen';
-      } else {
+      } else if (monthly < 1000) {
         badgeData.colorscheme = 'green';
+      } else {
+        badgeData.colorscheme = 'brightgreen';
       }
       badge(badgeData, makeSend(format, ask.res, end));
     });
@@ -243,6 +247,47 @@ function(data, match, end, ask) {
         badgeData.colorscheme = 'orange';
       } else {
         badgeData.colorscheme = 'blue';
+      }
+      badge(badgeData, makeSend(format, ask.res, end));
+    });
+  }).on('error', function(e) {
+    badgeData.text[1] = 'inaccessible';
+    badge(badgeData, makeSend(format, ask.res, end));
+  });
+});
+
+// PyPI integration.
+camp.route(/^\/pypi\/dm\/(.*)\.(svg|png|gif|jpg)$/,
+function(data, match, end, ask) {
+  var egg = match[1];  // eg, `gevent`.
+  var format = match[2];
+  var apiUrl = 'https://pypi.python.org/pypi/' + egg + '/json';
+  var label = getLabel('downloads', data);
+  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
+  https.get(apiUrl, function(res) {
+    var buffer = '';
+    res.on('data', function(chunk) { buffer += ''+chunk; });
+    res.on('end', function(chunk) {
+      if (chunk) { buffer += ''+chunk; }
+      try {
+        var data = JSON.parse(buffer);
+        var monthly = data.info.downloads.last_month;
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        badge(badgeData, makeSend(format, ask.res, end));
+        return;
+      }
+      badgeData.text[1] = metric(monthly) + '/month';
+      if (monthly === 0) {
+        badgeData.colorscheme = 'red';
+      } else if (monthly < 10) {
+        badgeData.colorscheme = 'yellow';
+      } else if (monthly < 100) {
+        badgeData.colorscheme = 'yellowgreen';
+      } else if (monthly < 1000) {
+        badgeData.colorscheme = 'green';
+      } else {
+        badgeData.colorscheme = 'brightgreen';
       }
       badge(badgeData, makeSend(format, ask.res, end));
     });
