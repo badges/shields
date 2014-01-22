@@ -278,7 +278,7 @@ function(data, match, end, ask) {
         return;
       }
       if (info === 'dm') {
-        var label = getLabel('downloads', data);
+        badgeData.text[0] = getLabel('downloads', data);
         try {
           var monthly = data.info.downloads.last_month;
         } catch(e) {
