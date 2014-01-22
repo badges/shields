@@ -480,10 +480,7 @@ function escapeFormat(t) {
 function sixHex(s) { return /^[0-9a-fA-F]{6}$/.test(s); }
 
 function getLabel(label, data) {
-  if (data.label) {
-    return escapeFormat(data.label);
-  }
-  return label;
+  return data.label || label;
 }
 
 function makeSend(format, askres, end) {
