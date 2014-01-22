@@ -257,12 +257,13 @@ function(data, match, end, ask) {
 });
 
 // PyPI integration.
-camp.route(/^\/pypi\/dm\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/pypi\/([^\/]+)\/(.*)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
-  var egg = match[1];  // eg, `gevent`.
-  var format = match[2];
+  var info = match[1];
+  var egg = match[2];  // eg, `gevent`.
+  var format = match[3];
   var apiUrl = 'https://pypi.python.org/pypi/' + egg + '/json';
-  var label = getLabel('downloads', data);
+  var label = getLabel('pypi', data);
   var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
   https.get(apiUrl, function(res) {
     var buffer = '';
@@ -271,25 +272,49 @@ function(data, match, end, ask) {
       if (chunk) { buffer += ''+chunk; }
       try {
         var data = JSON.parse(buffer);
-        var monthly = data.info.downloads.last_month;
       } catch(e) {
         badgeData.text[1] = 'invalid';
         badge(badgeData, makeSend(format, ask.res, end));
         return;
       }
-      badgeData.text[1] = metric(monthly) + '/month';
-      if (monthly === 0) {
-        badgeData.colorscheme = 'red';
-      } else if (monthly < 10) {
-        badgeData.colorscheme = 'yellow';
-      } else if (monthly < 100) {
-        badgeData.colorscheme = 'yellowgreen';
-      } else if (monthly < 1000) {
-        badgeData.colorscheme = 'green';
-      } else {
-        badgeData.colorscheme = 'brightgreen';
+      if (info === 'dm') {
+        var label = getLabel('downloads', data);
+        try {
+          var monthly = data.info.downloads.last_month;
+        } catch(e) {
+          badgeData.text[1] = 'invalid';
+          badge(badgeData, makeSend(format, ask.res, end));
+          return;
+        }
+        badgeData.text[1] = metric(monthly) + '/month';
+        if (monthly === 0) {
+          badgeData.colorscheme = 'red';
+        } else if (monthly < 10) {
+          badgeData.colorscheme = 'yellow';
+        } else if (monthly < 100) {
+          badgeData.colorscheme = 'yellowgreen';
+        } else if (monthly < 1000) {
+          badgeData.colorscheme = 'green';
+        } else {
+          badgeData.colorscheme = 'brightgreen';
+        }
+        badge(badgeData, makeSend(format, ask.res, end));
+      } else if (info === 'v') {
+        try {
+          var version = data.info.version;
+        } catch(e) {
+          badgeData.text[1] = 'invalid';
+          badge(badgeData, makeSend(format, ask.res, end));
+          return;
+        }
+        badgeData.text[1] = 'v' + version;
+        if (version[0] === '0' || /dev/.test(version)) {
+          badgeData.colorscheme = 'orange';
+        } else {
+          badgeData.colorscheme = 'blue';
+        }
+        badge(badgeData, makeSend(format, ask.res, end));
       }
-      badge(badgeData, makeSend(format, ask.res, end));
     });
   }).on('error', function(e) {
     badgeData.text[1] = 'inaccessible';
