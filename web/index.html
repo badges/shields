@@ -46,8 +46,8 @@ hr.spacing { border: 0; display: block; height: 3mm; }
 
 <h2> Your Badge Service </h2>
 
-<img src='/:badge-on!-brightgreen.svg' alt='Badge on!'/>
-<img src='/:license-CC0-red.svg' alt='License: CC0'/>
+<img src='/badge/badge-on!-brightgreen.svg' alt='Badge on!'/>
+<img src='/badge/license-CC0-red.svg' alt='License: CC0'/>
 
 <p>
 Ever wanted to have your own GitHub badges? <br/>
@@ -58,7 +58,7 @@ Maybe you simply love SVG. <br/>
 Maybe you fancy a format that uses less than half the bandwidth.
 </p>
 
-<img src='/:happy-hacking%20%E2%98%BA-yellow.svg' alt='Happy hacking!'/>
+<img src='/badge/happy-hacking%20%E2%98%BA-yellow.svg' alt='Happy hacking!'/>
 
 <p>
 As for me, I wanted a format that people can reuse and hack on. <br/>
@@ -66,26 +66,26 @@ I wanted a service for everyone. <br/>
 I made the GitHub Badge Service.
 </p>
 
-<img src='/:download-.8%20kB-blue.svg' alt='Download: .5kB'/>
+<img src='/badge/download-.8%20kB-blue.svg' alt='Download: .5kB'/>
 
 <p>
 Here's how it works. <br/>
-<code>http://b.adge.me/:&lt;SUBJECT&gt;-&lt;STATUS&gt;-&lt;COLOR&gt;.svg</code><br/>
+<code>http://b.adge.me/badge/&lt;SUBJECT&gt;-&lt;STATUS&gt;-&lt;COLOR&gt;.svg</code><br/>
 Use two dashes <code>--</code> to have one dash as text. <br/>
 Use two underscores <code>__</code> to have one underscore as text. <br/>
 Use an underscore <code>_</code> if you want a space. Or, you know, use a space.
 </p>
 
 <p> Colors: </p>
-<img src='/:color-brightgreen-brightgreen.svg' alt='brightgreen'/>
-<img src='/:color-green-green.svg' alt='green'/>
-<img src='/:color-yellowgreen-yellowgreen.svg' alt='yellowgreen'/>
-<img src='/:color-yellow-yellow.svg' alt='yellow'/>
-<img src='/:color-orange-orange.svg' alt='orange'/>
-<img src='/:color-red-red.svg' alt='red'/>
-<img src='/:color-lightgrey-lightgrey.svg' alt='lightgrey'/>
-<img src='/:color-blue-blue.svg' alt='blue'/>
-<img src='/:color-ff69b4-ff69b4.svg' alt='ff69b4'/>
+<img src='/badge/color-brightgreen-brightgreen.svg' alt='brightgreen'/>
+<img src='/badge/color-green-green.svg' alt='green'/>
+<img src='/badge/color-yellowgreen-yellowgreen.svg' alt='yellowgreen'/>
+<img src='/badge/color-yellow-yellow.svg' alt='yellow'/>
+<img src='/badge/color-orange-orange.svg' alt='orange'/>
+<img src='/badge/color-red-red.svg' alt='red'/>
+<img src='/badge/color-lightgrey-lightgrey.svg' alt='lightgrey'/>
+<img src='/badge/color-blue-blue.svg' alt='blue'/>
+<img src='/badge/color-ff69b4-ff69b4.svg' alt='ff69b4'/>
 
 <h2> Supported Services </h2>
 
@@ -200,7 +200,7 @@ function escapeField(s) {
   return s.replace(/-/g, '--').replace(/_/g, '__');
 }
 function makeImage() {
-  var url = '/:';
+  var url = '/badge/';
   url += escapeField(imageMaker.subject.value);
   url += '-' + escapeField(imageMaker.status.value);
   url += '-' + escapeField(imageMaker.color.value);
