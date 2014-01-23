@@ -61,7 +61,13 @@ function(data, match, end, ask) {
   var apiUrl = 'https://www.gittip.com/' + user + '/public.json';
   var label = getLabel('tips', data);
   var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
-  https.get(apiUrl, function(res) {
+  var redirectCount = 0;
+  https.get(apiUrl, function dealWithData(res) {
+    // Is it a redirection?
+    if (res.statusCode === 302 && res.headers.location && redirectCount++ < 1) {
+      https.get('https://www.gittip.com/' + res.headers.location, dealWithData);
+      return;
+    }
     var buffer = '';
     res.on('data', function(chunk) { buffer += ''+chunk; });
     res.on('end', function(chunk) {
