@@ -7,9 +7,36 @@ var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
 var serverStartTime = new Date((new Date()).toGMTString());
 
+// Cache
+
+var cacheTimeout = 60000;   // 1 minute.
+var cacheFromIndex = Object.create(null);
+
+function cache(f) {
+  return function getRequest(data, match, end, ask) {
+    var cacheIndex = match[0] + '?label=' + data.label;
+    // Should we return the data right away?
+    var cached = cacheFromIndex[cacheIndex];
+    if (cached != null) {
+      badge(cached.badgeData, makeSend(cached.format, ask.res, end));
+      return;
+    }
+
+    f(data, match, function sendBadge(format, badgeData) {
+      cacheFromIndex[cacheIndex] = { format: format, badgeData: badgeData };
+      setTimeout(function clearCache() {
+        delete cacheFromIndex[cacheIndex];
+      }, cacheTimeout);
+      badge(badgeData, makeSend(format, ask.res, end));
+    });
+  };
+}
+
+// Vendors.
+
 // Travis integration
 camp.route(/^\/travis(-ci)?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg)$/,
-function(data, match, end, ask) {
+cache(function(data, match, sendBadge) {
   var userRepo = match[2];
   var branch = match[3];
   var format = match[4];
@@ -29,12 +56,12 @@ function(data, match, end, ask) {
                            .match(/filename="(.+)\.png"/);
     } catch(e) {
       badgeData.text[1] = 'not found';
-      badge(badgeData, makeSend(format, ask.res, end));
+      sendBadge(format, badgeData);
       return;
     }
     if (!statusMatch) {
       badgeData.text[1] = 'unknown';
-      badge(badgeData, makeSend(format, ask.res, end));
+      sendBadge(format, badgeData);
       return;
     }
     var state = statusMatch[1];
@@ -44,18 +71,18 @@ function(data, match, end, ask) {
     } else if (state === 'failing') {
       badgeData.colorscheme = 'red';
     }
-    badge(badgeData, makeSend(format, ask.res, end));
+    sendBadge(format, badgeData);
   });
   req.on('error', function(e) {
     badgeData.text[1] = 'inaccessible';
-    badge(badgeData, makeSend(format, ask.res, end));
+    sendBadge(format, badgeData);
   });
   req.end();
-});
+}));
 
 // Gittip integration.
 camp.route(/^\/gittip\/(.*)\.(svg|png|gif|jpg)$/,
-function(data, match, end, ask) {
+cache(function(data, match, sendBadge) {
   var user = match[1];  // eg, `JSFiddle`.
   var format = match[2];
   var apiUrl = 'https://www.gittip.com/' + user + '/public.json';
@@ -77,7 +104,7 @@ function(data, match, end, ask) {
         var money = parseInt(data.receiving);
       } catch(e) {
         badgeData.text[1] = 'invalid';
-        badge(badgeData, makeSend(format, ask.res, end));
+        sendBadge(format, badgeData);
         return;
       }
       badgeData.text[1] = '$' + metric(money) + '/week';
@@ -90,17 +117,17 @@ function(data, match, end, ask) {
       } else {
         badgeData.colorscheme = 'green';
       }
-      badge(badgeData, makeSend(format, ask.res, end));
+      sendBadge(format, badgeData);
     });
   }).on('error', function(e) {
     badgeData.text[1] = 'inaccessible';
-    badge(badgeData, makeSend(format, ask.res, end));
+    sendBadge(format, badgeData);
   });
-});
+}));
 
 // Packagist integration.
 camp.route(/^\/packagist\/dm\/(.*)\.(svg|png|gif|jpg)$/,
-function(data, match, end, ask) {
+cache(function(data, match, sendBadge) {
   var userRepo = match[1];  // eg, `doctrine/orm`.
   var format = match[2];
   var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
@@ -116,7 +143,7 @@ function(data, match, end, ask) {
         var monthly = data.package.downloads.monthly;
       } catch(e) {
         badgeData.text[1] = 'invalid';
-        badge(badgeData, makeSend(format, ask.res, end));
+        sendBadge(format, badgeData);
         return;
       }
       badgeData.text[1] = metric(monthly) + '/month';
@@ -131,17 +158,17 @@ function(data, match, end, ask) {
       } else {
         badgeData.colorscheme = 'brightgreen';
       }
-      badge(badgeData, makeSend(format, ask.res, end));
+      sendBadge(format, badgeData);
     });
   }).on('error', function(e) {
     badgeData.text[1] = 'inaccessible';
-    badge(badgeData, makeSend(format, ask.res, end));
+    sendBadge(format, badgeData);
   });
-});
+}));
 
 // NPM integration.
 camp.route(/^\/npm\/dm\/(.*)\.(svg|png|gif|jpg)$/,
-function(data, match, end, ask) {
+cache(function(data, match, sendBadge) {
   var user = match[1];  // eg, `localeval`.
   var format = match[2];
   var apiUrl = 'http://isaacs.iriscouch.com/downloads/_design/app/_view/pkg?group_level=2&start_key=["' + user + '"]&end_key=["' + user + '",{}]';
@@ -169,7 +196,7 @@ function(data, match, end, ask) {
         }
       } catch(e) {
         badgeData.text[1] = 'invalid';
-        badge(badgeData, makeSend(format, ask.res, end));
+        sendBadge(format, badgeData);
         return;
       }
       badgeData.text[1] = metric(monthly) + '/month';
@@ -184,17 +211,17 @@ function(data, match, end, ask) {
       } else {
         badgeData.colorscheme = 'brightgreen';
       }
-      badge(badgeData, makeSend(format, ask.res, end));
+      sendBadge(format, badgeData);
     });
   }).on('error', function(e) {
     badgeData.text[1] = 'inaccessible';
-    badge(badgeData, makeSend(format, ask.res, end));
+    sendBadge(format, badgeData);
   });
-});
+}));
 
 // NPM version integration.
 camp.route(/^\/npm\/v\/(.*)\.(svg|png|gif|jpg)$/,
-function(data, match, end, ask) {
+cache(function(data, match, sendBadge) {
   var repo = match[1];  // eg, `localeval`.
   var format = match[2];
   var apiUrl = 'https://registry.npmjs.org/' + repo + '/latest';
@@ -210,7 +237,7 @@ function(data, match, end, ask) {
         var version = data.version;
       } catch(e) {
         badgeData.text[1] = 'invalid';
-        badge(badgeData, makeSend(format, ask.res, end));
+        sendBadge(format, badgeData);
         return;
       }
       badgeData.text[1] = 'v' + version;
@@ -219,17 +246,17 @@ function(data, match, end, ask) {
       } else {
         badgeData.colorscheme = 'blue';
       }
-      badge(badgeData, makeSend(format, ask.res, end));
+      sendBadge(format, badgeData);
     });
   }).on('error', function(e) {
     badgeData.text[1] = 'inaccessible';
-    badge(badgeData, makeSend(format, ask.res, end));
+    sendBadge(format, badgeData);
   });
-});
+}));
 
 // Gem version integration.
 camp.route(/^\/gem\/v\/(.*)\.(svg|png|gif|jpg)$/,
-function(data, match, end, ask) {
+cache(function(data, match, sendBadge) {
   var repo = match[1];  // eg, `localeval`.
   var format = match[2];
   var apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
@@ -245,7 +272,7 @@ function(data, match, end, ask) {
         var version = data.version;
       } catch(e) {
         badgeData.text[1] = 'invalid';
-        badge(badgeData, makeSend(format, ask.res, end));
+        sendBadge(format, badgeData);
         return;
       }
       badgeData.text[1] = 'v' + version;
@@ -254,17 +281,17 @@ function(data, match, end, ask) {
       } else {
         badgeData.colorscheme = 'blue';
       }
-      badge(badgeData, makeSend(format, ask.res, end));
+      sendBadge(format, badgeData);
     });
   }).on('error', function(e) {
     badgeData.text[1] = 'inaccessible';
-    badge(badgeData, makeSend(format, ask.res, end));
+    sendBadge(format, badgeData);
   });
-});
+}));
 
 // PyPI integration.
 camp.route(/^\/pypi\/([^\/]+)\/(.*)\.(svg|png|gif|jpg)$/,
-function(data, match, end, ask) {
+cache(function(data, match, sendBadge) {
   var info = match[1];
   var egg = match[2];  // eg, `gevent`.
   var format = match[3];
@@ -280,7 +307,7 @@ function(data, match, end, ask) {
         var data = JSON.parse(buffer);
       } catch(e) {
         badgeData.text[1] = 'invalid';
-        badge(badgeData, makeSend(format, ask.res, end));
+        sendBadge(format, badgeData);
         return;
       }
       if (info === 'dm') {
@@ -289,7 +316,7 @@ function(data, match, end, ask) {
           var monthly = data.info.downloads.last_month;
         } catch(e) {
           badgeData.text[1] = 'invalid';
-          badge(badgeData, makeSend(format, ask.res, end));
+          sendBadge(format, badgeData);
           return;
         }
         badgeData.text[1] = metric(monthly) + '/month';
@@ -304,13 +331,13 @@ function(data, match, end, ask) {
         } else {
           badgeData.colorscheme = 'brightgreen';
         }
-        badge(badgeData, makeSend(format, ask.res, end));
+        sendBadge(format, badgeData);
       } else if (info === 'v') {
         try {
           var version = data.info.version;
         } catch(e) {
           badgeData.text[1] = 'invalid';
-          badge(badgeData, makeSend(format, ask.res, end));
+          sendBadge(format, badgeData);
           return;
         }
         badgeData.text[1] = 'v' + version;
@@ -319,18 +346,18 @@ function(data, match, end, ask) {
         } else {
           badgeData.colorscheme = 'blue';
         }
-        badge(badgeData, makeSend(format, ask.res, end));
+        sendBadge(format, badgeData);
       }
     });
   }).on('error', function(e) {
     badgeData.text[1] = 'inaccessible';
-    badge(badgeData, makeSend(format, ask.res, end));
+    sendBadge(format, badgeData);
   });
-});
+}));
 
 // Coveralls integration.
 camp.route(/^\/coveralls\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg)$/,
-function(data, match, end, ask) {
+cache(function(data, match, sendBadge) {
   var userRepo = match[1];  // eg, `jekyll/jekyll`.
   var branch = match[2];
   var format = match[3];
@@ -345,7 +372,7 @@ function(data, match, end, ask) {
     var buffer = res.headers.location;
     if (!buffer) {
       badgeData.text[1] = 'invalid';
-      badge(badgeData, makeSend(format, ask.res, end));
+      sendBadge(format, badgeData);
       return;
     }
     try {
@@ -354,12 +381,12 @@ function(data, match, end, ask) {
       if (percentage !== percentage) {
         // It is NaN, treat it as unknown.
         badgeData.text[1] = 'unknown';
-        badge(badgeData, makeSend(format, ask.res, end));
+        sendBadge(format, badgeData);
         return;
       }
     } catch(e) {
       badgeData.text[1] = 'malformed';
-      badge(badgeData, makeSend(format, ask.res, end));
+      sendBadge(format, badgeData);
       return;
     }
     badgeData.text[1] = score + '%';
@@ -370,16 +397,16 @@ function(data, match, end, ask) {
     } else {
       badgeData.colorscheme = 'green';
     }
-    badge(badgeData, makeSend(format, ask.res, end));
+    sendBadge(format, badgeData);
   }).on('error', function(e) {
     badgeData.text[1] = 'inaccessible';
-    badge(badgeData, makeSend(format, ask.res, end));
+    sendBadge(format, badgeData);
   });
-});
+}));
 
 // Code Climate integration
 camp.route(/^\/codeclimate\/(.+)\.(svg|png|gif|jpg)$/,
-function(data, match, end, ask) {
+cache(function(data, match, sendBadge) {
   var userRepo = match[1];  // eg, `github/kabisaict/flow`.
   var format = match[2];
   var options = {
@@ -395,12 +422,12 @@ function(data, match, end, ask) {
                            .match(/filename="code_climate-(.+)\.png"/);
     } catch(e) {
       badgeData.text[1] = 'not found';
-      badge(badgeData, makeSend(format, ask.res, end));
+      sendBadge(format, badgeData);
       return;
     }
     if (!statusMatch) {
       badgeData.text[1] = 'unknown';
-      badge(badgeData, makeSend(format, ask.res, end));
+      sendBadge(format, badgeData);
       return;
     }
     var state = statusMatch[1].replace('-', '.');
@@ -417,18 +444,18 @@ function(data, match, end, ask) {
     } else {
       badgeData.colorscheme = 'red';
     }
-    badge(badgeData, makeSend(format, ask.res, end));
+    sendBadge(format, badgeData);
   });
   req.on('error', function(e) {
     badgeData.text[1] = 'inaccessible';
-    badge(badgeData, makeSend(format, ask.res, end));
+    sendBadge(format, badgeData);
   });
   req.end();
-});
+}));
 
 // Code Climate integration
 camp.route(/^\/gemnasium\/(.+)\.(svg|png|gif|jpg)$/,
-function(data, match, end, ask) {
+cache(function(data, match, sendBadge) {
   var userRepo = match[1];  // eg, `jekyll/jekyll`.
   var format = match[2];
   var options = {
@@ -444,12 +471,12 @@ function(data, match, end, ask) {
                            .match(/filename="(.+)\.png"/);
     } catch(e) {
       badgeData.text[1] = 'not found';
-      badge(badgeData, makeSend(format, ask.res, end));
+      sendBadge(format, badgeData);
       return;
     }
     if (!statusMatch) {
       badgeData.text[1] = 'unknown';
-      badge(badgeData, makeSend(format, ask.res, end));
+      sendBadge(format, badgeData);
       return;
     }
     // Either `dev-yellow` or `yellow`.
@@ -471,14 +498,14 @@ function(data, match, end, ask) {
     } else {
       badgeData.text[1] = 'undefined';
     }
-    badge(badgeData, makeSend(format, ask.res, end));
+    sendBadge(format, badgeData);
   });
   req.on('error', function(e) {
     badgeData.text[1] = 'inaccessible';
-    badge(badgeData, makeSend(format, ask.res, end));
+    sendBadge(format, badgeData);
   });
   req.end();
-});
+}));
 
 // Any badge.
 camp.route(/^\/:(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
