@@ -508,12 +508,12 @@ cache(function(data, match, sendBadge) {
 }));
 
 // Any badge.
-camp.route(/^\/:(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
-  var subject = escapeFormat(match[1]);
-  var status = escapeFormat(match[3]);
-  var color = escapeFormat(match[5]);
-  var format = match[7];
+  var subject = escapeFormat(match[2]);
+  var status = escapeFormat(match[4]);
+  var color = escapeFormat(match[6]);
+  var format = match[8];
 
   // Cache management.
   var cacheDuration = (3600*24*1)|0;  // 1 day.
