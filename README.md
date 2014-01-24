@@ -94,7 +94,7 @@ system-specific installation details.
 
 Once you have installed the [Heroku Toolbelt][]:
 
-[Heroku Toolbelt]: (https://toolbelt.heroku.com/):
+[Heroku Toolbelt]: https://toolbelt.heroku.com/
 
 ```bash
 heroku login
