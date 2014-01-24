@@ -113,9 +113,9 @@ cache(function(data, match, sendBadge) {
       } else if (money < 10) {
         badgeData.colorscheme = 'yellow';
       } else if (money < 100) {
-        badgeData.colorscheme = 'yellowgreen';
-      } else {
         badgeData.colorscheme = 'green';
+      } else {
+        badgeData.colorscheme = 'brightgreen';
       }
       sendBadge(format, badgeData);
     });
@@ -394,8 +394,10 @@ cache(function(data, match, sendBadge) {
       badgeData.colorscheme = 'red';
     } else if (percentage < 90) {
       badgeData.colorscheme = 'yellow';
-    } else {
+    } else if (percentage < 95) {
       badgeData.colorscheme = 'green';
+    } else {
+      badgeData.colorscheme = 'brightgreen';
     }
     sendBadge(format, badgeData);
   }).on('error', function(e) {
