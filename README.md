@@ -2,6 +2,7 @@
 
 [![npm version](http://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges)
 ![coverage](https://rawgithub.com/badges/gh-badges/master/coverage.svg)
+[![build status](http://img.shields.io/travis/badges/gh-badges.svg)](https://travis-ci.org/badges/gh-badges)
 
 Make your own badges [here][badges]!
 
