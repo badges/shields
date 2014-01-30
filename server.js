@@ -14,7 +14,7 @@ var cacheFromIndex = Object.create(null);
 
 function cache(f) {
   return function getRequest(data, match, end, ask) {
-    // Cache management - no cache, so it won't be cached by Github's CDN.
+    // Cache management - no cache, so it won't be cached by GitHub's CDN.
     ask.res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 
     var cacheIndex = match[0] + '?label=' + data.label;
@@ -520,7 +520,7 @@ function(data, match, end, ask) {
   var color = escapeFormat(match[6]);
   var format = match[8];
 
-  // Cache management - no cache, so it won't be cached by Github's CDN.
+  // Cache management - the badge is constant.
   var cacheDuration = (3600*24*1)|0;    // 1 day.
   ask.res.setHeader('Cache-Control', 'public, max-age=' + cacheDuration);
   if (+(new Date(ask.req.headers['if-modified-since'])) >= +serverStartTime) {
@@ -552,7 +552,7 @@ function(data, match, end, ask) {
   var status = match[2];
   var color = data.color;
 
-  // Cache management - no cache, so it won't be cached by Github's CDN.
+  // Cache management - the badge is constant.
   var cacheDuration = (3600*24*1)|0;    // 1 day.
   ask.res.setHeader('Cache-Control', 'public, max-age=' + cacheDuration);
   if (+(new Date(ask.req.headers['if-modified-since'])) >= +serverStartTime) {
