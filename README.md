@@ -108,9 +108,14 @@ make deploy
 heroku open
 ```
 
-# Origin
+# Links
 
-See <https://github.com/h5bp/lazyweb-requests/issues/150>.
+See <https://github.com/h5bp/lazyweb-requests/issues/150> for a story of the
+project's inception.
+
+This is also available as a gem `badgerbadgerbadger`, [code here][gem].
+
+[gem]: https://github.com/pikesley/badger
 
 # License
 
