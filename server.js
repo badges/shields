@@ -614,6 +614,13 @@ function(data, match, end, ask) {
   }
 });
 
+// Redirect the root to the website.
+camp.route(/^\/$/, function(data, match, end, ask) {
+  ask.res.statusCode = 302;
+  ask.res.setHeader('Location', 'http://shields.io');
+  ask.res.end();
+});
+
 // Escapes `t` using the format specified in
 // <https://github.com/espadrine/gh-badges/issues/12#issuecomment-31518129>
 function escapeFormat(t) {
