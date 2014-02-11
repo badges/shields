@@ -7,6 +7,40 @@ var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
 var serverStartTime = new Date((new Date()).toGMTString());
 
+// Analytics
+
+var lastDay = (new Date()).getDate();
+function resetMonthlyAnalytics(monthlyAnalytics) {
+  for (var i = 0; i < monthlyAnalytics.length; i++) {
+    monthlyAnalytics[i] = 0;
+  }
+}
+function incrMonthlyAnalytics(monthlyAnalytics) {
+  var currentDay = (new Date()).getDate();
+  // If we changed month, reset empty months.
+  if (currentDay !== lastDay) {
+    // Assumption: at least a hit a month.
+    var afterLastDay = (lastDay+1) % monthlyAnalytics.length;
+    while (afterLastDay !== (currentDay+1)%monthlyAnalytics.length) {
+      monthlyAnalytics[afterLastDay] = 0;
+      afterLastDay = (afterLastDay+1) % monthlyAnalytics.length;
+    }
+    lastDay = currentDay;
+  }
+  monthlyAnalytics[currentDay]++;
+}
+
+// In case something happens on the 36th.
+var vendorMonthlyAnalytics = new Array(36);
+var rawMonthlyAnalytics = new Array(36);
+resetMonthlyAnalytics(vendorMonthlyAnalytics);
+resetMonthlyAnalytics(rawMonthlyAnalytics);
+
+camp.ajax.on('analytics/v1', function(json, end) {
+  end({ vendorMonthly: vendorMonthlyAnalytics,
+        rawMonthly: rawMonthlyAnalytics });
+});
+
 // Cache
 
 var cacheTimeout = 60000;   // 1 minute.
@@ -16,6 +50,7 @@ function cache(f) {
   return function getRequest(data, match, end, ask) {
     // Cache management - no cache, so it won't be cached by GitHub's CDN.
     ask.res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    incrMonthlyAnalytics(vendorMonthlyAnalytics);
 
     var cacheIndex = match[0] + '?label=' + data.label;
     // Should we return the data right away?
@@ -560,6 +595,8 @@ function(data, match, end, ask) {
   var status = escapeFormat(match[4]);
   var color = escapeFormat(match[6]);
   var format = match[8];
+
+  incrMonthlyAnalytics(rawMonthlyAnalytics);
 
   // Cache management - the badge is constant.
   var cacheDuration = (3600*24*1)|0;    // 1 day.
