@@ -41,6 +41,9 @@ npm install
 sudo npm start
 ```
 
+The root gets redirected to <http://shields.io>.
+For testing purposes, you can go to `http://localhost/index.html`.
+
 # Format
 
 The format is the following:
