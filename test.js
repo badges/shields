@@ -118,7 +118,7 @@ describe('the server', function() {
 describe('the ass wrap-up', function() {
   it('should write coverage', function(done) {
     ass.report('html', function(err, r) {
-      fs.writeFileSync('web/coverage.html', r);
+      fs.writeFileSync('coverage.html', r);
       done();
     });
   });
