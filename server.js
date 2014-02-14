@@ -204,6 +204,62 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// Packagist version integration.
+camp.route(/^\/packagist\/v\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var userRepo = match[1];
+  var format = match[2];
+  var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
+  var label = getLabel('packagist', data);
+  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
+  https.get(apiUrl, function(res) {
+    var buffer = '';
+    res.on('data', function(chunk) { buffer += ''+chunk; });
+    res.on('end', function(chunk) {
+      if (chunk) { buffer += ''+chunk; }
+      try {
+        var data = JSON.parse(buffer);
+        var version;
+        var unstable = function(ver) {
+          return /dev/.test(ver);
+        };
+        // Grab the latest stable version, or an unstable
+        for (var v in data.package.versions) {
+          v = data.package.versions[v];
+
+          if (version) {
+            if (/dev/.test(version.version) && !/dev/.test(v.version)) {
+              version = v;
+            } else if (version.version_normalized < v.version_normalized) {
+              version = v;
+            }
+          } else {
+            version = v;
+          }
+        }
+        version = version.version.replace(/^v/, "");
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
+      }
+      badgeData.text[1] = version;
+      if (/^\d/.test(badgeData.text[1])) {
+        badgeData.text[1] = 'v' + version;
+      }
+      if (version[0] === '0' || /dev/.test(version)) {
+        badgeData.colorscheme = 'orange';
+      } else {
+        badgeData.colorscheme = 'blue';
+      }
+      sendBadge(format, badgeData);
+    });
+  }).on('error', function(e) {
+    badgeData.text[1] = 'inaccessible';
+    sendBadge(format, badgeData);
+  });
+}));
+
 // NPM integration.
 camp.route(/^\/npm\/dm\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
