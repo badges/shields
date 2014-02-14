@@ -1,4 +1,5 @@
 var camp = require('camp').start({
+  documentRoot: __dirname,
   port: +process.env.PORT||+process.argv[2]||80
 });
 var https = require('https');
