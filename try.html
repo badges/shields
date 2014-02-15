@@ -1,0 +1,234 @@
+<!doctype html>
+<meta charset=utf-8>
+<title> Badge Service </title>
+<meta name='viewport' content='width=device-width,initial-scale=1'>
+<link rel='icon' type='image/png' href='favicon.png'>
+<link href='//fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet'>
+<style>
+:root { text-align: center; font-family: Linux Libertine O, Vollkorn, serif; }
+code { white-space: pre-wrap; }
+code, input { padding: 0 4px; border: 1px solid grey; background: #eef; border-radius: 4px; }
+input { width: 5em; }
+hr { width: 40%; border-width: 1px 0 0 0; }
+a.photo { text-decoration: none; }
+a.photo>img { padding: 2px; border: 1px solid grey; }
+ul { text-align: left; margin-left: 25%; }
+table { width: 50%; margin: auto; }
+th, td { text-align: left; }
+h2::before { content: '☙ '; }
+h2::after { content: ' ❧'; }
+h2 { font-variant: small-caps; }
+hr.spacing { border: 0; display: block; height: 3mm; }
+</style>
+
+<img alt='GitHub Badges' src='logo.svg'/>
+
+<hr class='spacing'/>
+<hr/>
+<form action='javascript:makeImage()' id='imageMaker'>
+  <input name='subject' placeholder='subject'/>
+  <input name='status' placeholder='status'/>
+  <input name='color' list='default-colors' placeholder='color'/>
+  <datalist id='default-colors'>
+    <option value='brightgreen'>
+    <option value='green'>
+    <option value='yellowgreen'>
+    <option value='yellow'>
+    <option value='orange'>
+    <option value='red'>
+    <option value='lightgrey'>
+    <option value='blue'>
+  </datalist>
+  <button>Go!</button>
+</form>
+<hr/>
+<hr class='spacing'/>
+
+<h2> Your Badge Service </h2>
+
+<p>
+<code>http://img.shields.io/badge/&lt;SUBJECT&gt;-&lt;STATUS&gt;-&lt;COLOR&gt;.svg</code>
+</p><p>
+Dashes <code>--</code> → <code>-</code> Dash <br/>
+Underscores <code>__</code> → <code>_</code> Underscore <br/>
+<code>_</code> or Space <code> </code> → <code> </code> Space
+</p>
+
+<p>
+<img src='/badge/color-brightgreen-brightgreen.svg' alt='brightgreen'/>
+<img src='/badge/color-green-green.svg' alt='green'/>
+<img src='/badge/color-yellowgreen-yellowgreen.svg' alt='yellowgreen'/>
+<img src='/badge/color-yellow-yellow.svg' alt='yellow'/>
+<img src='/badge/color-orange-orange.svg' alt='orange'/>
+<img src='/badge/color-red-red.svg' alt='red'/>
+<img src='/badge/color-lightgrey-lightgrey.svg' alt='lightgrey'/>
+<img src='/badge/color-blue-blue.svg' alt='blue'/>
+<img src='/badge/color-ff69b4-ff69b4.svg' alt='ff69b4'/>
+</p>
+
+<img src='/badge/license-CC0-red.svg' alt='License: CC0'/>
+
+<p>
+Ever wanted to have your own GitHub badges? <br/>
+Maybe you simply wanted visual consistency? <br/>
+Maybe you wanted less blur? <br/>
+Or look good on high-res displays? <br/>
+Maybe you simply love SVG. <br/>
+And you like the smaller download.
+</p>
+
+<img src='/badge/download-.8%20kB-blue.svg' alt='Download: .5kB'/>
+
+<p>
+I wanted a format that people can reuse and hack on. <br/>
+I wanted a service for everyone. <br/>
+I made the GitHub Badge Service.
+</p>
+
+<img src='/badge/badge-on!-brightgreen.svg' alt='Badge on!'/>
+
+<h2> Supported Services </h2>
+
+<table><tbody>
+  <tr><th> Travis: </th>
+  <td><img src='/travis/joyent/node.svg' alt=''/></td>
+  <td><code>http://img.shields.io/travis/joyent/node.svg</code></td>
+  </tr>
+  <tr><th> Travis branch: </th>
+  <td><img src='/travis/joyent/node/v0.6.svg' alt=''/></td>
+  <td><code>http://img.shields.io/travis/joyent/node/v0.6.svg</code></td>
+  </tr>
+  <tr><th> Gittip: </th>
+  <td><img src='/gittip/JSFiddle.svg' alt=''/></td>
+  <td><code>http://img.shields.io/gittip/JSFiddle.svg</code></td>
+  </tr>
+  <tr><th> Coveralls: </th>
+  <td><img src='/coveralls/jekyll/jekyll.svg' alt=''/></td>
+  <td><code>http://img.shields.io/coveralls/jekyll/jekyll.svg</code></td>
+  </tr>
+  <tr><th> Coveralls branch: </th>
+  <td><img src='/coveralls/jekyll/jekyll/master.svg' alt=''/></td>
+  <td><code>http://img.shields.io/coveralls/jekyll/jekyll/master.svg</code></td>
+  </tr>
+  <tr><th> Code Climate: </th>
+  <td><img src='/codeclimate/github/kabisaict/flow.svg' alt=''/></td>
+  <td><code>http://img.shields.io/codeclimate/github/kabisaict/flow.svg</code></td>
+  </tr>
+  <tr><th> Gemnasium: </th>
+  <td><img src='/gemnasium/mathiasbynens/he.svg' alt=''/></td>
+  <td><code>http://img.shields.io/gemnasium/mathiasbynens/he.svg</code></td>
+  </tr>
+  <tr><th> npm: </th>
+  <td><img src='/npm/dm/localeval.svg' alt=''/></td>
+  <td><code>http://img.shields.io/npm/dm/localeval.svg</code></td>
+  </tr>
+  <tr><th> PyPI: </th>
+  <td><img src='/pypi/dm/Django.svg' alt=''/></td>
+  <td><code>http://img.shields.io/pypi/dm/Django.svg</code></td>
+  </tr>
+  <tr><th> Packagist: </th>
+  <td><img src='/packagist/dm/doctrine/orm.svg' alt=''/></td>
+  <td><code>http://img.shields.io/packagist/dm/doctrine/orm.svg</code></td>
+  </tr>
+  <tr><th> npm: </th>
+  <td><img src='/npm/v/npm.svg' alt=''/></td>
+  <td><code>http://img.shields.io/npm/v/npm.svg</code></td>
+  </tr>
+  <tr><th> PyPI: </th>
+  <td><img src='/pypi/v/nine.svg' alt=''/></td>
+  <td><code>http://img.shields.io/pypi/v/nine.svg</code></td>
+  </tr>
+  <tr><th> Gem: </th>
+  <td><img src='/gem/v/formatador.svg' alt=''/></td>
+  <td><code>http://img.shields.io/gem/v/formatador.svg</code></td>
+  <tr><th> Hackage: </th>
+  <td><img src='/hackage/v/lens.svg' alt=''/></td>
+  <td><code>http://img.shields.io/hackage/v/lens.svg</code></td>
+  </tr>
+  <tr><th> Packagist: </th>
+  <td><img src='/packagist/v/symfony/symfony.svg' alt=''/></td>
+  <td><code>http://img.shields.io/packagist/v/symfony/symfony.svg</code></td>
+  </tr>
+</tbody></table>
+
+<h2> Like This? </h2>
+
+<p>
+Tell your favorite badge service to use it! <br/>
+And tell us, we might be able to bring it to you anyway!
+</p>
+
+<h2> Origin </h2>
+
+<p>
+<a href='https://github.com/h5bp/lazyweb-requests/issues/150'>This</a>.<br/>
+All the activity and the code sits
+<a href='https://github.com/badges/gh-badges'>here</a>.
+</p>
+
+<h2> Contributors </h2>
+
+<a class='photo' href='https://github.com/espadrine'>
+  <img alt='espadrine' src='https://gravatar.com/avatar/8c3bee0764c781e1b0b8c2e53f0f11fe'>
+</a>
+<a class='photo' href='https://github.com/mathiasbynens'>
+  <img alt='mathiasbynens' src='https://gravatar.com/avatar/24e08a9ea84deb17ae121074d0f17125'>
+</a>
+<a class='photo' href='https://github.com/stefanjudis'>
+  <img alt='stefanjudis' src='https://gravatar.com/avatar/22725c2d3eb331146549bf0d5d3c050c'>
+</a>
+<a class='photo' href='https://github.com/jmalloc'>
+  <img alt='jmalloc' src='https://gravatar.com/avatar/7a6666c5798fb54d1d4ebde0600567f3'>
+</a>
+<a class='photo' href='https://github.com/alrra'>
+  <img alt='alrra' src='https://gravatar.com/avatar/2fc3f42c9411898f83f3af8ede902591'>
+</a>
+<a class='photo' href='https://github.com/ezzatron'>
+  <img alt='ezzatron' src='https://gravatar.com/avatar/95ce5a53e68fe5287fadde649da8c6c7'>
+</a>
+<br>
+<a class='photo' href='https://github.com/nathany'>
+  <img alt='nathany' src='https://gravatar.com/avatar/7d0978b275a362d11283396a929aee65'>
+</a>
+<a class='photo' href='https://github.com/whit537'>
+  <img alt='whit537' src='https://gravatar.com/avatar/fb054b407a6461e417ee6b6ae084da37'>
+</a>
+<a class='photo' href='https://github.com/olivierlacan'>
+  <img alt='olivierlacan' src='https://gravatar.com/avatar/6e77509d7891c1d2230f3240a5652b6e'>
+</a>
+<a class='photo' href='https://github.com/Mikulas'>
+  <img alt='Mikulas' src='https://gravatar.com/avatar/daa06ea257d7820ff84735a55b931ec8'>
+</a>
+<a class='photo' href='https://github.com/kura'>
+  <img alt='kura' src='https://gravatar.com/avatar/6db32988bd24b2f19231a7e88a74455a'>
+</a>
+<a class='photo' href='https://github.com/cainus'>
+  <img alt='cainus' src='https://gravatar.com/avatar/c8475420ebca73833e55ccf57d8d7500'>
+</a>
+<a class='photo' href='https://github.com/jbowes'>
+  <img alt='jbowes' src='https://gravatar.com/avatar/363ada7cda10d5eae5eeb7704278fb51'>
+</a>
+<a class='photo' href='https://github.com/rafalchmiel'>
+  <img alt='rafalchmiel' src='https://gravatar.com/avatar/6dd56028986d5e6c478e649ec229092b'>
+</a>
+<a class='photo' href='https://github.com/fjcaetano'>
+  <img alt='fjcaetano' src='https://gravatar.com/avatar/3b339db885930633b86d73b97a2ca1c0'>
+</a>
+<a class='photo' href='https://github.com/hughsk'>
+  <img alt='hughsk' src='https://gravatar.com/avatar/133cd05eb39521d55fb7a08c787925e2'>
+</a>
+
+<p><small>:wq</small></p>
+<script>
+function escapeField(s) {
+  return s.replace(/-/g, '--').replace(/_/g, '__');
+}
+function makeImage() {
+  var url = '/badge/';
+  url += escapeField(imageMaker.subject.value);
+  url += '-' + escapeField(imageMaker.status.value);
+  url += '-' + escapeField(imageMaker.color.value);
+  url += '.svg';
+  document.location = url;
+}
+</script>
