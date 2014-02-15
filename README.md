@@ -42,7 +42,9 @@ sudo npm start
 ```
 
 The root gets redirected to <http://shields.io>.
-For testing purposes, you can go to `http://localhost/index.html`.
+For testing purposes, you can go to `http://localhost/try.html`.
+You should modify that file. The "real" root, `http://localhost/index.html`,
+gets generated from the `try.html` file.
 
 # Format
 
