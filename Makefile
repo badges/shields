@@ -1,5 +1,4 @@
-all:
-	node make
+all: website deploy
 
 favicon:
 	node gh-badge.js '' '' '#bada55' .png > web/favicon.png
@@ -11,7 +10,7 @@ website:
 	git push origin gh-pages:gh-pages) || git checkout master
 	git checkout master
 
-deploy: website
+deploy:
 	git add Verdana.ttf
 	git commit -m'MUST NOT BE ON GITHUB'
 	git push -f heroku HEAD:master
