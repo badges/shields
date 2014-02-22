@@ -18,15 +18,11 @@ function resetMonthlyAnalytics(monthlyAnalytics) {
 }
 function incrMonthlyAnalytics(monthlyAnalytics) {
   var currentDay = (new Date()).getDate();
-  // If we changed month, reset empty months.
-  if (currentDay !== lastDay) {
+  // If we changed month, reset empty days.
+  while (lastDay !== currentDay) {
     // Assumption: at least a hit a month.
-    var afterLastDay = (lastDay+1) % monthlyAnalytics.length;
-    while (afterLastDay !== (currentDay+1)%monthlyAnalytics.length) {
-      monthlyAnalytics[afterLastDay] = 0;
-      afterLastDay = (afterLastDay+1) % monthlyAnalytics.length;
-    }
-    lastDay = currentDay;
+    lastDay = (lastDay + 1) % monthlyAnalytics.length;
+    monthlyAnalytics[lastDay] = 0;
   }
   monthlyAnalytics[currentDay]++;
 }
