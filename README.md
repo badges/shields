@@ -120,7 +120,7 @@ project's inception.
 
 This is also available as a gem `badgerbadgerbadger`, [code here][gem].
 
-[gem]: https://github.com/pikesley/badger
+[gem]: https://github.com/badges/badgerbadgerbadger
 
 # License
 
