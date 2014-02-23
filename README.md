@@ -1,127 +1,75 @@
-# GitHub badges in SVG format
+# Shields [![Gittip](http://img.shields.io/gittip/shields.io.png)](https://www.gittip.com/Shields.io/) [![npm version](http://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges) [![build status](http://img.shields.io/travis/badges/gh-badges.svg)](https://travis-ci.org/badges/gh-badges)
 
-[![npm version](http://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges)
-
-![coverage](https://rawgithub.com/badges/gh-badges/master/coverage.svg)
-
-[![build status](http://img.shields.io/travis/badges/gh-badges.svg)](https://travis-ci.org/badges/gh-badges)
+A legible & concise status badge solution for third-party codebase services.
 
 Make your own badges [here][badges]!
 
 [badges]: <http://img.shields.io>
 
-# Install the API
+## Services using the Shields standard
+- [Code Climate](https://codeclimate.com/changelog/510d4fde56b102523a0004bf)
+- [Coveralls](https://coveralls.io/r/kaize/nastachku)
+- [Gemfury/RubyGems](http://badge.fury.io/)
+- [Gemnasium](http://blog.tech-angels.com/post/43141047457/gemnasium-v3-aka-gemnasium)
+- [Travis CI](http://about.travis-ci.org/docs/user/status-images/)
+- [Scrutinizer CI](https://scrutinizer-ci.com/)
+- [Semaphore](https://semaphoreapp.com)
 
-```bash
-npm install gh-badges
-```
+## Problem
+Many GitHub repos sport badges for things like:
+- [Travis CI](https://travis-ci.org/) build status:
 
-```js
-var badge = require('gh-badges');
-badge({ text: [ "build", "passed" ], colorscheme: "green" },
-  function(svg) {
-    // svg is a String… of your badge.
-  });
-```
+![travis badge](http://f.cl.ly/items/2H233M0I0T43313c3h0C/Screen%20Shot%202013-01-30%20at%202.45.30%20AM.png)
 
-# Use the CLI
+- [Gemnasium](https://gemnasium.com/) dependency checks:
 
-```bash
-npm install -g gh-badges
-badge build passed :green .png > mybadge.png
-# Stored a PNG version of your badge on disk.
-```
+![gemnasium badge](http://f.cl.ly/items/2j1D2R0q2C3s1x2y3k09/Screen%20Shot%202013-01-30%20at%202.46.10%20AM.png)
 
-# Set the Server
+- [Code Climate](http://codeclimate.com):
 
-```bash
-git clone git@github.com:badges/gh-badges
-cd gh-badges
-npm install
-sudo npm start
-```
+![code climate badge](http://f.cl.ly/items/0H2O1A3q2b3j1D2i0M3j/Screen%20Shot%202013-01-30%20at%202.46.47%20AM.png)
 
-The root gets redirected to <http://shields.io>.
-For testing purposes, you can go to `http://localhost/try.html`.
-You should modify that file. The "real" root, `http://localhost/index.html`,
-gets generated from the `try.html` file.
+- [RubyGems](http://rubygems.org) released gem version:
 
-# Format
+![rubygems badge](http://f.cl.ly/items/443X21151h1V301s2s3a/Screen%20Shot%202013-01-30%20at%202.47.10%20AM.png)
 
-The format is the following:
+As you can see from the zoomed 400% versions of these badges above, nobody is (really) using the same badge file and at normal size, they're hardly legible. Worst of all, they're completely inconsistent. The information provided isn't of the same kind on each badge. The context is blurry, which doesn't make for å straightforward understanding of how these badges are relevant to the project they're attached to and what information they provide.
 
-```js
-{
-  /* Textual information shown, in order. */
-  "text": [ "build", "passed" ],
-  "colorscheme": "green"
-  /* … Or… */
-  "colorA": "#555",
-  "colorB": "#4c1"
-}
-```
+## Solution
+As you can see below, without increasing the footprint of these badges, I've tried to increase legibility and coherence, removing useless text to decrease the horizontal length in the (likely) scenario that more of these badge thingies crop up on READMEs all across the land.
 
-# Defaults
+![Badge design](spec/proportions.png)
 
-If you want to add a default badge, you only need to modify
-`default-badges.json`. The format is the same as that given to the API.
+We have an effort to produce similar-looking SVGs through a web service at
+<http://img.shields.io>. That ensures that we are retina-ready.
 
-If you want to add a colorscheme, head to `colorscheme.json`. Each scheme has a
-name and a [CSS/SVG color][] for the color used in the first box (for the first
-piece of text, field `colorA`) and for the one used in the second box (field
-`colorB`).
+## Examples
 
-[CSS/SVG color]: http://www.w3.org/TR/SVG/types.html#DataTypeColor
+What kind of meta data can you convey using badges?
 
-```js
-"green": {
-  "colorB": "#4c1"
-}
-```
+- test build status: `build | failing`
+- code coverage percentage: `coverage | 80%`
+- stable release version: `version | 1.2.3`
+- package manager release: `gem | 1.2.3`
+- status of third-party dependencies: `dependencies | out-of-date`
+- static code analysis GPA: `code climate | 3.8`
+- [semver](http://semver.org/) version observance: `semver | 2.0.0`
+- amount of [gittip](http://gittip.com) donations per week: `tips | $2/week`
 
-Both `colorA` and `colorB` have default values. Usually, the first box uses the
-same dark grey, so you can rely on that default value by not providing a
-`"colorA"` field (such as above).
+## Font
+The font chosen in the specification is the Apache licensed Open Sans Regular available from [Google Web Fonts](http://www.google.com/webfonts/specimen/Open+Sans).
 
-You can also use the `"colorA"` and `"colorB"` fields directly in the badges if
-you don't want to make a color scheme for it. In that case, remove the
-`"colorscheme"` field altogether.
+## Specification
+See [SPECIFICATION.md](spec/SPECIFICATION.md).
 
-# Requirements
+## Installation Instructions
+See [INSTALL.md](INSTALL.md).
 
-Because of the usage of the npm module [canvas][canvas-pkg] *you need* to have
-**cairo** installed.
+## Contributions
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-For more information check the [wiki][canvas-wiki] of the canvas project with
-system-specific installation details.
-
-[canvas-pkg]: https://npmjs.org/package/canvas
-[canvas-wiki]: https://github.com/LearnBoost/node-canvas/wiki/_pages
-
-# Making your Heroku badge server
-
-Once you have installed the [Heroku Toolbelt][]:
-
-[Heroku Toolbelt]: https://toolbelt.heroku.com/
-
-```bash
-heroku login
-heroku create your-app-name
-heroku config:set BUILDPACK_URL=https://github.com/mojodna/heroku-buildpack-multi.git#build-env
-cp /path/to/Verdana.ttf .
-make deploy
-heroku open
-```
-
-# Links
-
-See <https://github.com/h5bp/lazyweb-requests/issues/150> for a story of the
-project's inception.
-
-This is also available as a gem `badgerbadgerbadger`, [code here][gem].
+## License
+See [LICENSE.md](LICENSE.md).
 
 [gem]: https://github.com/badges/badgerbadgerbadger
 
-# License
-
-All work here is licensed CC0.
