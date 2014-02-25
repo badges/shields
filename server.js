@@ -4,11 +4,33 @@ var camp = require('camp').start({
 });
 var https = require('https');
 var http = require('http');
+var fs = require('fs');
 var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
 var serverStartTime = new Date((new Date()).toGMTString());
 
 // Analytics
+
+var analytics = {};
+
+var analyticsAutoSaveFileName = './analytics.json';
+var analyticsAutoSavePeriod = 10000;
+setInterval(function analyticsAutoSave() {
+  fs.writeFile(analyticsAutoSaveFileName, JSON.stringify(analytics));
+}, analyticsAutoSavePeriod);
+
+// Auto-load analytics.
+function analyticsAutoLoad() {
+  try {
+    analytics = JSON.parse(fs.readFileSync(analyticsAutoSaveFileName));
+  } catch(e) {
+    // In case something happens on the 36th.
+    analytics.vendorMonthly = new Array(36);
+    analytics.rawMonthly = new Array(36);
+    resetMonthlyAnalytics(analytics.vendorMonthly);
+    resetMonthlyAnalytics(analytics.rawMonthly);
+  }
+}
 
 var lastDay = (new Date()).getDate();
 function resetMonthlyAnalytics(monthlyAnalytics) {
@@ -27,16 +49,8 @@ function incrMonthlyAnalytics(monthlyAnalytics) {
   monthlyAnalytics[currentDay]++;
 }
 
-// In case something happens on the 36th.
-var vendorMonthlyAnalytics = new Array(36);
-var rawMonthlyAnalytics = new Array(36);
-resetMonthlyAnalytics(vendorMonthlyAnalytics);
-resetMonthlyAnalytics(rawMonthlyAnalytics);
-
-camp.ajax.on('analytics/v1', function(json, end) {
-  end({ vendorMonthly: vendorMonthlyAnalytics,
-        rawMonthly: rawMonthlyAnalytics });
-});
+analyticsAutoLoad();
+camp.ajax.on('analytics/v1', function(json, end) { end(analytics); });
 
 // Cache
 
@@ -47,7 +61,7 @@ function cache(f) {
   return function getRequest(data, match, end, ask) {
     // Cache management - no cache, so it won't be cached by GitHub's CDN.
     ask.res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    incrMonthlyAnalytics(vendorMonthlyAnalytics);
+    incrMonthlyAnalytics(analytics.vendorMonthly);
 
     var cacheIndex = match[0] + '?label=' + data.label;
     // Should we return the data right away?
@@ -649,7 +663,7 @@ function(data, match, end, ask) {
   var color = escapeFormat(match[6]);
   var format = match[8];
 
-  incrMonthlyAnalytics(rawMonthlyAnalytics);
+  incrMonthlyAnalytics(analytics.rawMonthly);
 
   // Cache management - the badge is constant.
   var cacheDuration = (3600*24*1)|0;    // 1 day.
