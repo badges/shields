@@ -231,7 +231,7 @@ function escapeField(s) {
   return s.replace(/-/g, '--').replace(/_/g, '__');
 }
 function makeImage() {
-  var url = document.getElementById('imgUrlPrefix').innerText;
+  var url = document.getElementById('imgUrlPrefix').textContent;
   url += escapeField(imageMaker.subject.value);
   url += '-' + escapeField(imageMaker.status.value);
   url += '-' + escapeField(imageMaker.color.value);
