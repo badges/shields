@@ -228,7 +228,7 @@ All the activity and the code sits
 <p><small>:wq</small></p>
 <script>
 function escapeField(s) {
-  return s.replace(/-/g, '--').replace(/_/g, '__');
+  return encodeURIComponent(s.replace(/-/g, '--').replace(/_/g, '__'));
 }
 function makeImage() {
   var url = document.getElementById('imgUrlPrefix').textContent;
