@@ -4,7 +4,8 @@ favicon:
 	node gh-badge.js '' '' '#bada55' .png > web/favicon.png
 
 website:
-	cat try.html | sed "s,<img src='/,<img src='//img.shields.io/," > index.html
+	cat try.html | sed "s,<img src='/,&/img.shields.io/," \
+             | sed "s,<span id='imgUrlPrefix'>,&http://img.shields.io," > index.html
 
 deploy:
 	git add Verdana.ttf
