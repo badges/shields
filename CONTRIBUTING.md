@@ -4,6 +4,17 @@ This is the home of Shields.io, containing the badge design specification and AP
 
 We invite participation through [GitHub Issues][], which we use much like a discussion forum. This repository should only contain non-implementation specific topics: specifications, design, and the web site.
 
+## This implementation
+
+Please see [INSTALL.md][] for information on how to get started.
+
+[INSTALL.md]: ./INSTALL.md
+
+Note that the root gets redirected to <http://shields.io>.
+For testing purposes, you can go to `http://localhost/try.html`.
+You should modify that file. The "real" root, `http://localhost/index.html`,
+gets generated from the `try.html` file.
+
 ## Implementations
 
 Please report **bugs** and discuss implementation specific concerns (performance characteristics, etc.) in the repository for the respective implementation:
