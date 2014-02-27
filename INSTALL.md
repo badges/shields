@@ -35,8 +35,8 @@ badge build passed :green .png > mybadge.png
 # Set the Server
 
 ```bash
-git clone git@github.com:badges/gh-badges
-cd gh-badges
+git clone git@github.com:badges/shields
+cd shields
 npm install
 sudo npm start
 ```
@@ -62,9 +62,6 @@ The format is the following:
 ```
 
 # Defaults
-
-If you want to add a default badge, you only need to modify
-`default-badges.json`. The format is the same as that given to the API.
 
 If you want to add a colorscheme, head to `colorscheme.json`. Each scheme has a
 name and a [CSS/SVG color][] for the color used in the first box (for the first
