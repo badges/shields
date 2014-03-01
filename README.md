@@ -14,6 +14,7 @@ Make your own badges [here][badges]!
 - [Travis CI](http://about.travis-ci.org/docs/user/status-images/)
 - [Scrutinizer CI](https://scrutinizer-ci.com/)
 - [Semaphore](https://semaphoreapp.com)
+- [Read the Docs](https://readthedocs.org/)
 
 ## Problem
 Many GitHub repos sport badges for things like:
