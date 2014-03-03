@@ -98,8 +98,7 @@ cache(function(data, match, sendBadge) {
   if (branch) {
     options.path += '?branch=' + branch;
   }
-  var label = getLabel('build', data);
-  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
+  var badgeData = getBadgeData('build', data);
   var req = https.request(options, function(res) {
     try {
       var statusMatch = res.headers['content-disposition']
@@ -136,8 +135,7 @@ cache(function(data, match, sendBadge) {
   var user = match[1];  // eg, `JSFiddle`.
   var format = match[2];
   var apiUrl = 'https://www.gittip.com/' + user + '/public.json';
-  var label = getLabel('tips', data);
-  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
+  var badgeData = getBadgeData('tips', data);
   request(apiUrl, function dealWithData(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -172,8 +170,7 @@ cache(function(data, match, sendBadge) {
   var userRepo = match[1];  // eg, `doctrine/orm`.
   var format = match[2];
   var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
-  var label = getLabel('downloads', data);
-  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
+  var badgeData = getBadgeData('downloads', data);
   https.get(apiUrl, function(res) {
     var buffer = '';
     res.on('data', function(chunk) { buffer += ''+chunk; });
@@ -213,8 +210,7 @@ cache(function(data, match, sendBadge) {
   var userRepo = match[1];
   var format = match[2];
   var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
-  var label = getLabel('packagist', data);
-  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
+  var badgeData = getBadgeData('packagist', data);
   https.get(apiUrl, function(res) {
     var buffer = '';
     res.on('data', function(chunk) { buffer += ''+chunk; });
@@ -269,8 +265,7 @@ cache(function(data, match, sendBadge) {
   var user = match[1];  // eg, `localeval`.
   var format = match[2];
   var apiUrl = 'http://isaacs.iriscouch.com/downloads/_design/app/_view/pkg?group_level=2&start_key=["' + user + '"]&end_key=["' + user + '",{}]';
-  var label = getLabel('downloads', data);
-  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
+  var badgeData = getBadgeData('downloads', data);
   http.get(apiUrl, function(res) {
     var buffer = '';
     res.on('data', function(chunk) { buffer += ''+chunk; });
@@ -322,8 +317,7 @@ cache(function(data, match, sendBadge) {
   var repo = match[1];  // eg, `localeval`.
   var format = match[2];
   var apiUrl = 'https://registry.npmjs.org/' + repo + '/latest';
-  var label = getLabel('npm', data);
-  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
+  var badgeData = getBadgeData('npm', data);
   https.get(apiUrl, function(res) {
     var buffer = '';
     res.on('data', function(chunk) { buffer += ''+chunk; });
@@ -357,8 +351,7 @@ cache(function(data, match, sendBadge) {
   var repo = match[1];  // eg, `localeval`.
   var format = match[2];
   var apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
-  var label = getLabel('gem', data);
-  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
+  var badgeData = getBadgeData('gem', data);
   https.get(apiUrl, function(res) {
     var buffer = '';
     res.on('data', function(chunk) { buffer += ''+chunk; });
@@ -393,8 +386,7 @@ cache(function(data, match, sendBadge) {
   var egg = match[2];  // eg, `gevent`.
   var format = match[3];
   var apiUrl = 'https://pypi.python.org/pypi/' + egg + '/json';
-  var label = getLabel('pypi', data);
-  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
+  var badgeData = getBadgeData('pypi', data);
   https.get(apiUrl, function(res) {
     var buffer = '';
     res.on('data', function(chunk) { buffer += ''+chunk; });
@@ -462,8 +454,7 @@ cache(function(data, match, sendBadge) {
   if (branch) {
     apiUrl += '?branch=' + branch;
   }
-  var label = getLabel('coverage', data);
-  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
+  var badgeData = getBadgeData('coverage', data);
   https.get(apiUrl, function(res) {
     // We should get a 302. Look inside the Location header.
     var buffer = res.headers.location;
@@ -513,8 +504,7 @@ cache(function(data, match, sendBadge) {
     hostname: 'codeclimate.com',
     path: '/' + userRepo + '.png'
   };
-  var label = getLabel('code climate', data);
-  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
+  var badgeData = getBadgeData('code climate', data);
   var req = https.request(options, function(res) {
     try {
       var statusMatch = res.headers['content-disposition']
@@ -562,8 +552,7 @@ cache(function(data, match, sendBadge) {
     hostname: 'gemnasium.com',
     path: '/' + userRepo + '.png'
   };
-  var label = getLabel('dependencies', data);
-  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
+  var badgeData = getBadgeData('dependencies', data);
   var req = https.request(options, function(res) {
     try {
       var statusMatch = res.headers['content-disposition']
@@ -612,8 +601,7 @@ cache(function(data, match, sendBadge) {
   var repo = match[1];  // eg, `lens`.
   var format = match[2];
   var apiUrl = 'https://hackage.haskell.org/package/' + repo + '/' + repo + '.cabal';
-  var label = getLabel('hackage', data);
-  var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
+  var badgeData = getBadgeData('hackage', data);
   https.get(apiUrl, function(res) {
     var buffer = '';
     res.on('data', function(chunk) { buffer += ''+chunk; });
@@ -733,6 +721,11 @@ function sixHex(s) { return /^[0-9a-fA-F]{6}$/.test(s); }
 
 function getLabel(label, data) {
   return data.label || label;
+}
+
+function getBadgeData(defaultLabel, data) {
+  var label = getLabel(defaultLabel, data);
+  return {text:[label, 'n/a'], colorscheme:'lightgrey'};
 }
 
 function makeSend(format, askres, end) {
