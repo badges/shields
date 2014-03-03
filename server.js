@@ -4,6 +4,7 @@ var camp = require('camp').start({
 });
 var https = require('https');
 var http = require('http');
+var request = require('request');
 var fs = require('fs');
 var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
@@ -137,39 +138,30 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'https://www.gittip.com/' + user + '/public.json';
   var label = getLabel('tips', data);
   var badgeData = {text:[label, 'n/a'], colorscheme:'lightgrey'};
-  var redirectCount = 0;
-  https.get(apiUrl, function dealWithData(res) {
-    // Is it a redirection?
-    if (res.statusCode === 302 && res.headers.location && redirectCount++ < 1) {
-      https.get('https://www.gittip.com/' + res.headers.location, dealWithData);
+  request(apiUrl, function dealWithData(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
       return;
     }
-    var buffer = '';
-    res.on('data', function(chunk) { buffer += ''+chunk; });
-    res.on('end', function(chunk) {
-      if (chunk) { buffer += ''+chunk; }
-      try {
-        var data = JSON.parse(buffer);
-        var money = parseInt(data.receiving);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-        return;
-      }
-      badgeData.text[1] = '$' + metric(money) + '/week';
-      if (money === 0) {
-        badgeData.colorscheme = 'red';
-      } else if (money < 10) {
-        badgeData.colorscheme = 'yellow';
-      } else if (money < 100) {
-        badgeData.colorscheme = 'green';
-      } else {
-        badgeData.colorscheme = 'brightgreen';
-      }
+    try {
+      var data = JSON.parse(buffer);
+      var money = parseInt(data.receiving);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
-    });
-  }).on('error', function(e) {
-    badgeData.text[1] = 'inaccessible';
+      return;
+    }
+    badgeData.text[1] = '$' + metric(money) + '/week';
+    if (money === 0) {
+      badgeData.colorscheme = 'red';
+    } else if (money < 10) {
+      badgeData.colorscheme = 'yellow';
+    } else if (money < 100) {
+      badgeData.colorscheme = 'green';
+    } else {
+      badgeData.colorscheme = 'brightgreen';
+    }
     sendBadge(format, badgeData);
   });
 }));
