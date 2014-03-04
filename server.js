@@ -91,42 +91,46 @@ cache(function(data, match, sendBadge) {
   var branch = match[3];
   var format = match[4];
   var options = {
-    method: 'HEAD',
-    hostname: 'api.travis-ci.org',
-    path: '/' + userRepo + '.png'
+    json: true,
+    uri: 'https://api.travis-ci.org/repositories/' + userRepo
   };
   if (branch) {
-    options.path += '?branch=' + branch;
+    options.uri += '/branches/' + branch;
   }
+  options.uri += '.json';
   var badgeData = getBadgeData('build', data);
-  var req = https.request(options, function(res) {
-    try {
-      var statusMatch = res.headers['content-disposition']
-                           .match(/filename="(.+)\.png"/);
-    } catch(e) {
-      badgeData.text[1] = 'not found';
+  request(options, function(err, res, json) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
-    if (!statusMatch) {
+    // Using last_build_status (eg, not a branch).
+    if (json.last_build_status != null) {
+      json.branch = {state: 'pending'};
+      if (json.last_build_status === 0) {
+        json.branch.state = 'passing';
+      } else if (json.last_build_status === 1) {
+        json.branch.state = 'failing';
+      }
+    }
+    if (!json.branch || !json.branch.state) {
       badgeData.text[1] = 'unknown';
       sendBadge(format, badgeData);
       return;
     }
-    var state = statusMatch[1];
+    var state = json.branch.state;
+    var substate = state.slice(0, 4);
     badgeData.text[1] = state;
-    if (state === 'passing') {
+    if (substate === 'pass') {
       badgeData.colorscheme = 'brightgreen';
-    } else if (state === 'failing') {
+    } else if (substate === 'fail') {
       badgeData.colorscheme = 'red';
+    } else {
+      badgeData.text[1] = 'pending';
     }
     sendBadge(format, badgeData);
   });
-  req.on('error', function(e) {
-    badgeData.text[1] = 'inaccessible';
-    sendBadge(format, badgeData);
-  });
-  req.end();
 }));
 
 // Gittip integration.
