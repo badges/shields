@@ -8,7 +8,7 @@ website:
              | sed "s,<span id='imgUrlPrefix'>,&http://img.shields.io," > index.html
 
 deploy:
-	git add Verdana.ttf
+	git add -f Verdana.ttf
 	git commit -m'MUST NOT BE ON GITHUB'
 	git push -f heroku HEAD:master
 	git reset HEAD~1
