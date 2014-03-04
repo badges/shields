@@ -15,6 +15,11 @@ Make your own badges [here][badges]!
 - [Scrutinizer CI](https://scrutinizer-ci.com/)
 - [Semaphore](https://semaphoreapp.com)
 - [Read the Docs](https://readthedocs.org/)
+- [BadgerBadgerBadger][gem]
+- [badges2svg][]
+
+[gem]: https://github.com/badges/badgerbadgerbadger
+[badges2svg]: https://github.com/bfontaine/badges2svg
 
 ## Problem
 Many GitHub repos sport badges for things like:
@@ -71,6 +76,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 See [LICENSE.md](LICENSE.md).
-
-[gem]: https://github.com/badges/badgerbadgerbadger
 
