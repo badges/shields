@@ -263,59 +263,48 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
-// NPM integration.
+// npm integration.
 camp.route(/^\/npm\/dm\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var user = match[1];  // eg, `localeval`.
   var format = match[2];
-  var apiUrl = 'http://isaacs.iriscouch.com/downloads/_design/app/_view/pkg?group_level=2&start_key=["' + user + '"]&end_key=["' + user + '",{}]';
+  var apiUrl = {
+    // FIXME: remove the strictSSL line when they fix it.
+    strictSSL: false,
+    uri: 'https://api.npmjs.org/downloads/point/last-month/' + user,
+  };
   var badgeData = getBadgeData('downloads', data);
-  http.get(apiUrl, function(res) {
-    var buffer = '';
-    res.on('data', function(chunk) { buffer += ''+chunk; });
-    res.on('end', function(chunk) {
-      if (chunk) { buffer += ''+chunk; }
-      try {
-        var data = JSON.parse(buffer);
-        var monthly = 0;
-        // getMonth() returns a 0-indexed month, ie, last month.
-        var now = new Date();
-        var lastMonth = now.getMonth();
-        var year = now.getFullYear();
-        if (lastMonth === 0) { lastMonth = 12; year--; }
-        for (var i = 0; i < data.rows.length; i++) {
-          // date contains ['year', 'month', 'day'].
-          var date = data.rows[i].key[1].split('-');
-          if (+date[0] === year && +date[1] === lastMonth) {
-            monthly += data.rows[i].value;
-          }
-        }
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-        return;
-      }
-      badgeData.text[1] = metric(monthly) + '/month';
-      if (monthly === 0) {
-        badgeData.colorscheme = 'red';
-      } else if (monthly < 10) {
-        badgeData.colorscheme = 'yellow';
-      } else if (monthly < 100) {
-        badgeData.colorscheme = 'yellowgreen';
-      } else if (monthly < 1000) {
-        badgeData.colorscheme = 'green';
-      } else {
-        badgeData.colorscheme = 'brightgreen';
-      }
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      console.log(err);
+      badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
-    });
-  }).on('error', function(e) {
-    badgeData.text[1] = 'inaccessible';
+      return;
+    }
+    try {
+      var monthly = JSON.parse(buffer).downloads;
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+    badgeData.text[1] = metric(monthly) + '/month';
+    if (monthly === 0) {
+      badgeData.colorscheme = 'red';
+    } else if (monthly < 10) {
+      badgeData.colorscheme = 'yellow';
+    } else if (monthly < 100) {
+      badgeData.colorscheme = 'yellowgreen';
+    } else if (monthly < 1000) {
+      badgeData.colorscheme = 'green';
+    } else {
+      badgeData.colorscheme = 'brightgreen';
+    }
     sendBadge(format, badgeData);
   });
 }));
 
-// NPM version integration.
+// npm version integration.
 camp.route(/^\/npm\/v\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var repo = match[1];  // eg, `localeval`.
