@@ -268,11 +268,7 @@ camp.route(/^\/npm\/dm\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var user = match[1];  // eg, `localeval`.
   var format = match[2];
-  var apiUrl = {
-    // FIXME: remove the strictSSL line when they fix it.
-    strictSSL: false,
-    uri: 'https://api.npmjs.org/downloads/point/last-month/' + user,
-  };
+  var apiUrl = 'https://api.npmjs.org/downloads/point/last-month/' + user;
   var badgeData = getBadgeData('downloads', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
