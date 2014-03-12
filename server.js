@@ -575,6 +575,39 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// CocoaPods version integration.
+camp.route(/^\/cocoapods\/v\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var spec = match[1];
+  var format = match[2];
+  var apiUrl = 'http://search.cocoapods.org/api/v1/pod/' + spec + '.json';
+  var badgeData = getBadgeData('pod', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var version = data.version;
+      version = version.replace(/^v/, "");
+      badgeData.text[1] = version;
+      if (/^\d/.test(badgeData.text[1])) {
+        badgeData.text[1] = 'v' + version;
+      }
+      if (version[0] === '0' || /dev/.test(version)) {
+        badgeData.colorscheme = 'orange';
+      } else {
+        badgeData.colorscheme = 'blue';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
