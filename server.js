@@ -149,22 +149,21 @@ cache(function(data, match, sendBadge) {
     try {
       var data = JSON.parse(buffer);
       var money = parseInt(data.receiving);
+      badgeData.text[1] = '$' + metric(money) + '/week';
+      if (money === 0) {
+        badgeData.colorscheme = 'red';
+      } else if (money < 10) {
+        badgeData.colorscheme = 'yellow';
+      } else if (money < 100) {
+        badgeData.colorscheme = 'green';
+      } else {
+        badgeData.colorscheme = 'brightgreen';
+      }
+      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
-      return;
     }
-    badgeData.text[1] = '$' + metric(money) + '/week';
-    if (money === 0) {
-      badgeData.colorscheme = 'red';
-    } else if (money < 10) {
-      badgeData.colorscheme = 'yellow';
-    } else if (money < 100) {
-      badgeData.colorscheme = 'green';
-    } else {
-      badgeData.colorscheme = 'brightgreen';
-    }
-    sendBadge(format, badgeData);
   });
 }));
 
@@ -175,19 +174,14 @@ cache(function(data, match, sendBadge) {
   var format = match[2];
   var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
   var badgeData = getBadgeData('downloads', data);
-  https.get(apiUrl, function(res) {
-    var buffer = '';
-    res.on('data', function(chunk) { buffer += ''+chunk; });
-    res.on('end', function(chunk) {
-      if (chunk) { buffer += ''+chunk; }
-      try {
-        var data = JSON.parse(buffer);
-        var monthly = data.package.downloads.monthly;
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-        return;
-      }
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var monthly = data.package.downloads.monthly;
       badgeData.text[1] = metric(monthly) + '/month';
       if (monthly === 0) {
         badgeData.colorscheme = 'red';
@@ -201,10 +195,10 @@ cache(function(data, match, sendBadge) {
         badgeData.colorscheme = 'brightgreen';
       }
       sendBadge(format, badgeData);
-    });
-  }).on('error', function(e) {
-    badgeData.text[1] = 'inaccessible';
-    sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
   });
 }));
 
@@ -215,37 +209,32 @@ cache(function(data, match, sendBadge) {
   var format = match[2];
   var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
   var badgeData = getBadgeData('packagist', data);
-  https.get(apiUrl, function(res) {
-    var buffer = '';
-    res.on('data', function(chunk) { buffer += ''+chunk; });
-    res.on('end', function(chunk) {
-      if (chunk) { buffer += ''+chunk; }
-      try {
-        var data = JSON.parse(buffer);
-        var version;
-        var unstable = function(ver) {
-          return /dev/.test(ver);
-        };
-        // Grab the latest stable version, or an unstable
-        for (var v in data.package.versions) {
-          v = data.package.versions[v];
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var version;
+      var unstable = function(ver) {
+        return /dev/.test(ver);
+      };
+      // Grab the latest stable version, or an unstable
+      for (var v in data.package.versions) {
+        v = data.package.versions[v];
 
-          if (version) {
-            if (/dev/.test(version.version) && !/dev/.test(v.version)) {
-              version = v;
-            } else if (version.version_normalized < v.version_normalized) {
-              version = v;
-            }
-          } else {
+        if (version) {
+          if (/dev/.test(version.version) && !/dev/.test(v.version)) {
+            version = v;
+          } else if (version.version_normalized < v.version_normalized) {
             version = v;
           }
+        } else {
+          version = v;
         }
-        version = version.version.replace(/^v/, "");
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-        return;
       }
+      version = version.version.replace(/^v/, "");
       badgeData.text[1] = version;
       if (/^\d/.test(badgeData.text[1])) {
         badgeData.text[1] = 'v' + version;
@@ -256,10 +245,10 @@ cache(function(data, match, sendBadge) {
         badgeData.colorscheme = 'blue';
       }
       sendBadge(format, badgeData);
-    });
-  }).on('error', function(e) {
-    badgeData.text[1] = 'inaccessible';
-    sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
   });
 }));
 
@@ -307,19 +296,14 @@ cache(function(data, match, sendBadge) {
   var format = match[2];
   var apiUrl = 'https://registry.npmjs.org/' + repo + '/latest';
   var badgeData = getBadgeData('npm', data);
-  https.get(apiUrl, function(res) {
-    var buffer = '';
-    res.on('data', function(chunk) { buffer += ''+chunk; });
-    res.on('end', function(chunk) {
-      if (chunk) { buffer += ''+chunk; }
-      try {
-        var data = JSON.parse(buffer);
-        var version = data.version;
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-        return;
-      }
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var version = data.version;
       badgeData.text[1] = 'v' + version;
       if (version[0] === '0' || /dev/.test(version)) {
         badgeData.colorscheme = 'orange';
@@ -327,10 +311,10 @@ cache(function(data, match, sendBadge) {
         badgeData.colorscheme = 'blue';
       }
       sendBadge(format, badgeData);
-    });
-  }).on('error', function(e) {
-    badgeData.text[1] = 'inaccessible';
-    sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
   });
 }));
 
@@ -341,19 +325,14 @@ cache(function(data, match, sendBadge) {
   var format = match[2];
   var apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
   var badgeData = getBadgeData('gem', data);
-  https.get(apiUrl, function(res) {
-    var buffer = '';
-    res.on('data', function(chunk) { buffer += ''+chunk; });
-    res.on('end', function(chunk) {
-      if (chunk) { buffer += ''+chunk; }
-      try {
-        var data = JSON.parse(buffer);
-        var version = data.version;
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-        return;
-      }
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var version = data.version;
       badgeData.text[1] = 'v' + version;
       if (version[0] === '0' || /dev/.test(version)) {
         badgeData.colorscheme = 'orange';
@@ -361,10 +340,10 @@ cache(function(data, match, sendBadge) {
         badgeData.colorscheme = 'blue';
       }
       sendBadge(format, badgeData);
-    });
-  }).on('error', function(e) {
-    badgeData.text[1] = 'inaccessible';
-    sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
   });
 }));
 
@@ -376,27 +355,16 @@ cache(function(data, match, sendBadge) {
   var format = match[3];
   var apiUrl = 'https://pypi.python.org/pypi/' + egg + '/json';
   var badgeData = getBadgeData('pypi', data);
-  https.get(apiUrl, function(res) {
-    var buffer = '';
-    res.on('data', function(chunk) { buffer += ''+chunk; });
-    res.on('end', function(chunk) {
-      if (chunk) { buffer += ''+chunk; }
-      try {
-        var data = JSON.parse(buffer);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-        return;
-      }
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
       if (info === 'dm') {
         badgeData.text[0] = getLabel('downloads', data);
-        try {
-          var monthly = data.info.downloads.last_month;
-        } catch(e) {
-          badgeData.text[1] = 'invalid';
-          sendBadge(format, badgeData);
-          return;
-        }
+        var monthly = data.info.downloads.last_month;
         badgeData.text[1] = metric(monthly) + '/month';
         if (monthly === 0) {
           badgeData.colorscheme = 'red';
@@ -411,13 +379,7 @@ cache(function(data, match, sendBadge) {
         }
         sendBadge(format, badgeData);
       } else if (info === 'v') {
-        try {
-          var version = data.info.version;
-        } catch(e) {
-          badgeData.text[1] = 'invalid';
-          sendBadge(format, badgeData);
-          return;
-        }
+        var version = data.info.version;
         badgeData.text[1] = 'v' + version;
         if (version[0] === '0' || /dev/.test(version)) {
           badgeData.colorscheme = 'orange';
@@ -426,10 +388,10 @@ cache(function(data, match, sendBadge) {
         }
         sendBadge(format, badgeData);
       }
-    });
-  }).on('error', function(e) {
-    badgeData.text[1] = 'inaccessible';
-    sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
   });
 }));
 
@@ -490,45 +452,42 @@ cache(function(data, match, sendBadge) {
   var format = match[2];
   var options = {
     method: 'HEAD',
-    hostname: 'codeclimate.com',
-    path: '/' + userRepo + '.png'
+    uri: 'https://codeclimate.com/' + userRepo + '.png'
   };
   var badgeData = getBadgeData('code climate', data);
-  var req = https.request(options, function(res) {
+  request(options, function(err, res) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
     try {
       var statusMatch = res.headers['content-disposition']
                            .match(/filename="code_climate-(.+)\.png"/);
+      if (!statusMatch) {
+        badgeData.text[1] = 'unknown';
+        sendBadge(format, badgeData);
+        return;
+      }
+      var state = statusMatch[1].replace('-', '.');
+      var score = +state;
+      badgeData.text[1] = state;
+      if (score == 4) {
+        badgeData.colorscheme = 'brightgreen';
+      } else if (score > 3) {
+        badgeData.colorscheme = 'green';
+      } else if (score > 2) {
+        badgeData.colorscheme = 'yellowgreen';
+      } else if (score > 1) {
+        badgeData.colorscheme = 'yellow';
+      } else {
+        badgeData.colorscheme = 'red';
+      }
+      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'not found';
       sendBadge(format, badgeData);
-      return;
     }
-    if (!statusMatch) {
-      badgeData.text[1] = 'unknown';
-      sendBadge(format, badgeData);
-      return;
-    }
-    var state = statusMatch[1].replace('-', '.');
-    var score = +state;
-    badgeData.text[1] = state;
-    if (score == 4) {
-      badgeData.colorscheme = 'brightgreen';
-    } else if (score > 3) {
-      badgeData.colorscheme = 'green';
-    } else if (score > 2) {
-      badgeData.colorscheme = 'yellowgreen';
-    } else if (score > 1) {
-      badgeData.colorscheme = 'yellow';
-    } else {
-      badgeData.colorscheme = 'red';
-    }
-    sendBadge(format, badgeData);
   });
-  req.on('error', function(e) {
-    badgeData.text[1] = 'inaccessible';
-    sendBadge(format, badgeData);
-  });
-  req.end();
 }));
 
 // Code Climate integration
@@ -538,50 +497,47 @@ cache(function(data, match, sendBadge) {
   var format = match[2];
   var options = {
     method: 'HEAD',
-    hostname: 'gemnasium.com',
-    path: '/' + userRepo + '.png'
+    uri: 'https://gemnasium.com/' + userRepo + '.png'
   };
   var badgeData = getBadgeData('dependencies', data);
-  var req = https.request(options, function(res) {
+  request(options, function(err, res) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
     try {
       var statusMatch = res.headers['content-disposition']
                            .match(/filename="(.+)\.png"/);
+      if (!statusMatch) {
+        badgeData.text[1] = 'unknown';
+        sendBadge(format, badgeData);
+      }
+      // Either `dev-yellow` or `yellow`.
+      var state = statusMatch[1].split('-');
+      var color = state.pop();
+      if (state[0] === 'dev') { badgeData.text[0] = 'devDependencies'; }
+      if (color === 'green') {
+        badgeData.text[1] = 'up-to-date';
+        badgeData.colorscheme = 'brightgreen';
+      } else if (color === 'yellow') {
+        badgeData.text[1] = 'out-of-date';
+        badgeData.colorscheme = 'yellow';
+      } else if (color === 'red') {
+        badgeData.text[1] = 'update!';
+        badgeData.colorscheme = 'red';
+      } else if (color === 'none') {
+        badgeData.text[1] = 'none';
+        badgeData.colorscheme = 'brightgreen';
+      } else {
+        badgeData.text[1] = 'undefined';
+      }
+      sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'not found';
+      badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
       return;
     }
-    if (!statusMatch) {
-      badgeData.text[1] = 'unknown';
-      sendBadge(format, badgeData);
-      return;
-    }
-    // Either `dev-yellow` or `yellow`.
-    var state = statusMatch[1].split('-');  //
-    var color = state.pop();
-    if (state[0] === 'dev') { badgeData.text[0] = 'devDependencies'; }
-    if (color === 'green') {
-      badgeData.text[1] = 'up-to-date';
-      badgeData.colorscheme = 'brightgreen';
-    } else if (color === 'yellow') {
-      badgeData.text[1] = 'out-of-date';
-      badgeData.colorscheme = 'yellow';
-    } else if (color === 'red') {
-      badgeData.text[1] = 'update!';
-      badgeData.colorscheme = 'red';
-    } else if (color === 'none') {
-      badgeData.text[1] = 'none';
-      badgeData.colorscheme = 'brightgreen';
-    } else {
-      badgeData.text[1] = 'undefined';
-    }
-    sendBadge(format, badgeData);
   });
-  req.on('error', function(e) {
-    badgeData.text[1] = 'inaccessible';
-    sendBadge(format, badgeData);
-  });
-  req.end();
 }));
 
 // Hackage version integration.
@@ -591,25 +547,20 @@ cache(function(data, match, sendBadge) {
   var format = match[2];
   var apiUrl = 'https://hackage.haskell.org/package/' + repo + '/' + repo + '.cabal';
   var badgeData = getBadgeData('hackage', data);
-  https.get(apiUrl, function(res) {
-    var buffer = '';
-    res.on('data', function(chunk) { buffer += ''+chunk; });
-    res.on('end', function(chunk) {
-      if (chunk) { buffer += ''+chunk; }
-      try {
-        var lines = buffer.split("\n");
-        var versionLines = lines.filter(function(e) {
-          return (/^version:/i).test(e) === true;
-        });
-        // We don't have to check length of versionLines, because if we throw,
-        // we'll render the 'invalid' badge below, which is the correct thing
-        // to do.
-        var version = versionLines[0].replace(/\s+/, '').split(/:/)[1];
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-        return;
-      }
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var lines = buffer.split("\n");
+      var versionLines = lines.filter(function(e) {
+        return (/^version:/i).test(e) === true;
+      });
+      // We don't have to check length of versionLines, because if we throw,
+      // we'll render the 'invalid' badge below, which is the correct thing
+      // to do.
+      var version = versionLines[0].replace(/\s+/, '').split(/:/)[1];
       badgeData.text[1] = 'v' + version;
       if (version[0] === '0') {
         badgeData.colorscheme = 'orange';
@@ -617,10 +568,10 @@ cache(function(data, match, sendBadge) {
         badgeData.colorscheme = 'blue';
       }
       sendBadge(format, badgeData);
-    });
-  }).on('error', function(e) {
-    badgeData.text[1] = 'inaccessible';
-    sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
   });
 }));
 
