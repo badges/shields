@@ -578,7 +578,7 @@ cache(function(data, match, sendBadge) {
 // CocoaPods version integration.
 camp.route(/^\/cocoapods\/v\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var spec = match[1];
+  var spec = match[1];  // eg, AFNetworking
   var format = match[2];
   var apiUrl = 'http://search.cocoapods.org/api/v1/pod/' + spec + '.json';
   var badgeData = getBadgeData('pod', data);
@@ -608,15 +608,17 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
-// Github tag integration.
+// GitHub tag integration.
 camp.route(/^\/github\/tag\/(.*)\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var user = match[1];
+  var user = match[1];  // eg, visionmedia/express
   var repo = match[2];
   var format = match[3];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/tags';
-  var badgeData = getBadgeData('GitHub tag', data);
-  request(apiUrl, { headers: { 'User-Agent': 'request' } }, function(err, res, buffer) {
+  var badgeData = getBadgeData('GitHub', data);
+  // A special User-Agent is required:
+  // http://developer.github.com/v3/#user-agent-required
+  request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -626,6 +628,12 @@ cache(function(data, match, sendBadge) {
       var tag = data[0].name;
       badgeData.text[1] = tag;
       badgeData.colorscheme = 'blue';
+      if (/^[0-9]/.test(tag)) {
+        badgeData.text[1] = 'v' + tag;
+        if (version[0] === '0' || /dev/.test(version)) {
+          badgeData.colorscheme = 'orange';
+        }
+      }
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
