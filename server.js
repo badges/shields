@@ -608,6 +608,32 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// Github tag integration.
+camp.route(/^\/github\/tag\/(.*)\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var user = match[1];
+  var repo = match[2];
+  var format = match[3];
+  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/tags';
+  var badgeData = getBadgeData('GitHub tag', data);
+  request(apiUrl, { headers: { 'User-Agent': 'request' } }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var tag = data[0].name;
+      badgeData.text[1] = tag;
+      badgeData.colorscheme = 'blue';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
