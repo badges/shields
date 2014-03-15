@@ -630,10 +630,44 @@ cache(function(data, match, sendBadge) {
       badgeData.colorscheme = 'blue';
       if (/^[0-9]/.test(tag)) {
         badgeData.text[1] = 'v' + tag;
-        if (version[0] === '0' || /dev/.test(version)) {
+        if (tag[0] === '0' || /dev/.test(tag)) {
           badgeData.colorscheme = 'orange';
         }
       }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// GitHub release integration.
+camp.route(/^\/github\/release\/(.*)\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var user = match[1];  // eg, qubyte/rubidium
+  var repo = match[2];
+  var format = match[3];
+  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/releases';
+  var badgeData = getBadgeData('GitHub', data);
+  // A special User-Agent is required:
+  // http://developer.github.com/v3/#user-agent-required
+  request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var latest = (function () {
+        for (var i = 0, len = data.length; i < len; i++) {
+          if (!data[i].draft) {
+            return data[i];
+          }
+        }
+      })();
+      badgeData.colorscheme = latest.prerelease ? 'orange' : 'blue';
+      badgeData.text[1] = /^[0-9]/.test(latest.tag_name) ? 'v' + latest.tag_name : latest.tag_name;
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
