@@ -614,7 +614,7 @@ cache(function(data, match, sendBadge) {
   var repo = match[2];
   var format = match[3];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/tags';
-  var badgeData = getBadgeData('GitHub', data);
+  var badgeData = getBadgeData('tag', data);
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
   request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
@@ -651,7 +651,7 @@ cache(function(data, match, sendBadge) {
   var repo = match[2];
   var format = match[3];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/releases';
-  var badgeData = getBadgeData('GitHub', data);
+  var badgeData = getBadgeData('release', data);
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
   request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
