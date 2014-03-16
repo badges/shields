@@ -3,7 +3,6 @@ var camp = require('camp').start({
   port: +process.env.PORT||+process.argv[2]||80
 });
 var https = require('https');
-var http = require('http');
 var request = require('request');
 var fs = require('fs');
 var badge = require('./badge.js');
@@ -628,6 +627,9 @@ cache(function(data, match, sendBadge) {
       var tag = data[0].name;
       badgeData.text[1] = tag;
       badgeData.colorscheme = 'blue';
+      if (/^v[0-9]/.test(tag)) {
+        tag = tag.slice(1);
+      }
       if (/^[0-9]/.test(tag)) {
         badgeData.text[1] = 'v' + tag;
         if (tag[0] === '0' || /dev/.test(tag)) {
@@ -666,8 +668,18 @@ cache(function(data, match, sendBadge) {
           }
         }
       })();
+      var tag = latest.tag_name;
+      badgeData.text[1] = tag;
       badgeData.colorscheme = latest.prerelease ? 'orange' : 'blue';
-      badgeData.text[1] = /^[0-9]/.test(latest.tag_name) ? 'v' + latest.tag_name : latest.tag_name;
+      if (/^v[0-9]/.test(tag)) {
+        tag = tag.slice(1);
+      }
+      if (/^[0-9]/.test(tag)) {
+        badgeData.text[1] = 'v' + tag;
+        if (tag[0] === '0' || /dev/.test(tag)) {
+          badgeData.colorscheme = 'orange';
+        }
+      }
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
