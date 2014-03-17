@@ -86,47 +86,41 @@ function cache(f) {
 // Travis integration
 camp.route(/^\/travis(-ci)?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var userRepo = match[2];
+  var userRepo = match[2];  // eg, espadrine/sc
   var branch = match[3];
   var format = match[4];
   var options = {
     json: true,
-    uri: 'https://api.travis-ci.org/repositories/' + userRepo
+    uri: 'https://api.travis-ci.org/repos/' + userRepo + '/builds.json'
   };
-  if (branch) {
-    options.uri += '/branches/' + branch;
-  }
-  options.uri += '.json';
+  branch = branch || 'master';
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res, json) {
-    if (err != null) {
+    if (err != null || (json.length !== undefined && json.length === 0)) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
-    // Using last_build_status (eg, not a branch).
-    if (json.last_build_status != null) {
-      json.branch = {state: 'pending'};
-      if (json.last_build_status === 0) {
-        json.branch.state = 'passing';
-      } else if (json.last_build_status === 1) {
-        json.branch.state = 'failing';
+    // Find the latest push on this branch.
+    var build = null;
+    for (var i = 0; i < json.length; i++) {
+      if (json[i].state === 'finished' && json[i].event_type === 'push'
+      && json[i].branch === branch) {
+        build = json[i];
+        break;
       }
     }
-    if (!json.branch || !json.branch.state) {
-      badgeData.text[1] = 'unknown';
+    badgeData.text[1] = 'pending';
+    if (build === null) {
       sendBadge(format, badgeData);
       return;
     }
-    var state = json.branch.state;
-    var substate = state.slice(0, 4);
-    badgeData.text[1] = state;
-    if (substate === 'pass') {
+    if (build.result === 0) {
       badgeData.colorscheme = 'brightgreen';
-    } else if (substate === 'fail') {
+      badgeData.text[1] = 'passing';
+    } else if (build.result === 1) {
       badgeData.colorscheme = 'red';
-    } else {
-      badgeData.text[1] = 'pending';
+      badgeData.text[1] = 'failing';
     }
     sendBadge(format, badgeData);
   });
@@ -260,7 +254,6 @@ cache(function(data, match, sendBadge) {
   var badgeData = getBadgeData('downloads', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
-      console.log(err);
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
