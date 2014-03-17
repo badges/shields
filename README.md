@@ -17,9 +17,11 @@ Make your own badges [here][badges]!
 - [Read the Docs](https://readthedocs.org/)
 - [BadgerBadgerBadger][gem]
 - [badges2svg][]
+- [reposs][]
 
 [gem]: https://github.com/badges/badgerbadgerbadger
 [badges2svg]: https://github.com/bfontaine/badges2svg
+[reposs]: https://github.com/rexfinn/reposs
 
 ## Problem
 Many GitHub repos sport badges for things like:
