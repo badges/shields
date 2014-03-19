@@ -288,7 +288,9 @@ cache(function(data, match, sendBadge) {
   var format = match[2];
   var apiUrl = 'https://registry.npmjs.org/' + repo + '/latest';
   var badgeData = getBadgeData('npm', data);
-  request(apiUrl, function(err, res, buffer) {
+  // Using the Accept header because of this bug:
+  // <https://github.com/npm/npmjs.org/issues/163>
+  request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
