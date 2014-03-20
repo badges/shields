@@ -7,11 +7,11 @@ Make your own badges [here][badges]!
 [badges]: <http://img.shields.io>
 
 ## Services using the Shields standard
+- [Travis CI](https://github.com/travis-ci/travis-ci/issues/630#issuecomment-38054967)
 - [Code Climate](https://codeclimate.com/changelog/510d4fde56b102523a0004bf)
 - [Coveralls](https://coveralls.io/r/kaize/nastachku)
 - [Gemfury/RubyGems](http://badge.fury.io/)
-- [Gemnasium](http://blog.tech-angels.com/post/43141047457/gemnasium-v3-aka-gemnasium)
-- [Travis CI](http://about.travis-ci.org/docs/user/status-images/)
+- [Gemnasium](http://support.gemnasium.com/forums/236528-general/suggestions/5518400-use-svg-for-badges-so-they-still-look-sharp-on-r)
 - [Scrutinizer CI](https://scrutinizer-ci.com/)
 - [Semaphore](https://semaphoreapp.com)
 - [Read the Docs](https://readthedocs.org/)
