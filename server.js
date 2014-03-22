@@ -163,7 +163,7 @@ cache(function(data, match, sendBadge) {
 // WikiApiary integration.
 camp.route(/^\/wikiapiary-ext\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var extension_name = 'Extension:' + match[1];  // eg, `JSFiddle`.
+  var extension_name = match[1];  // eg, `JSFiddle`.
   var format = match[2];
   // Use the standard SMW Ask interface to get the data. Format is
   // https://wikiapiary.com/w/api.php?action=ask&query=[[Extension:ParserFunctions]]|?Has_website_count&format=json
