@@ -160,7 +160,7 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
-// Allow calls to get data from WikiApiary about MediaWiki skin and extension information.
+// WikiApiary integration.
 camp.route(/^\/wikiapiary\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   // Allow the request to be a combination of the namespace, page and property so this
@@ -172,13 +172,11 @@ cache(function(data, match, sendBadge) {
   var wikiapiary_call = match[1].split(':');
   var wikiapiary_namespace = wikiapiary_call[0]; // eg, 'Extension'
   var wikiapiary_object = wikiapiary_call[1]; // eg, 'Semantic%20MediaWiki'
-  var wikiapiary_property = wikiapiary_call[2]; // eg, 'Has%20website%20count'
-  var wikiapiary_label = wikiapiary_call[3]; // eg, 'wikis'
   var wikiapiary_pagename = wikiapiary_namespace + ':' + wikiapiary_object;
   var format = match[2];
   // Use the standard SMW Ask interface to get the data. Format is
   // https://wikiapiary.com/w/api.php?action=ask&query=[[pagename]]|?property&format=json
-  var apiUrl = 'https://wikiapiary.com/w/api.php?action=ask&query=[[' + wikiapiary_pagename + ']]|?' + wikiapiary_property + '&format=json';
+  var apiUrl = 'https://wikiapiary.com/w/api.php?action=ask&query=[[' + wikiapiary_pagename + ']]|?Has_website_count&format=json';
   var badgeData = getBadgeData('used on', data);
   request(apiUrl, function dealWithData(err, res, buffer) {
     if (err != null) {
@@ -188,8 +186,8 @@ cache(function(data, match, sendBadge) {
     }
     try {
       var data = JSON.parse(buffer);
-      var website_count = parseInt(data.query.results[wikiapiary_pagename].printouts[wikiapiary_property][0]);
-      badgeData.text[1] = metric(website_count) + ' ' + wikiapiary_label;
+      var website_count = parseInt(data.query.results[wikiapiary_pagename].printouts['Has website count'][0]);
+      badgeData.text[1] = metric(website_count) + ' wikis';
       if (website_count === 0) {
         badgeData.colorscheme = 'red';
       } else if (website_count < 10) {
