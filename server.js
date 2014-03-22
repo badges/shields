@@ -165,10 +165,6 @@ camp.route(/^\/wikiapiary\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   // Allow the request to be a combination of the namespace, page and property so this
   // can pull anything that is a single number from WikiApiary.
-  // Extension:Semantic%20MediaWiki:Has%20website%20count:wikis
-  // Skin:Foreground:Has%20website%20count:wikis
-  // Farm:Thingelstad.com:Has%20active%20website%20count:wikis
-  // Farm:Thingelstad.com:Has%20article%20count:articles
   var wikiapiary_call = match[1].split(':');
   var wikiapiary_namespace = wikiapiary_call[0]; // eg, 'Extension'
   var wikiapiary_object = wikiapiary_call[1]; // eg, 'Semantic%20MediaWiki'
