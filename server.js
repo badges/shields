@@ -160,8 +160,8 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
-// WikiApiary integration.
-camp.route(/^\/wikiapiary-ext\/(.*)\.(svg|png|gif|jpg)$/,
+// Allow calls to get data from WikiApiary about MediaWiki skin and extension information.
+camp.route(/^\/wikiapiary\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var extension_name = match[1];  // eg, `JSFiddle`.
   var format = match[2];
