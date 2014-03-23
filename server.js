@@ -484,43 +484,30 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
-// Code Climate integration
+// Gemnasium integration
 camp.route(/^\/gemnasium\/(.+)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var userRepo = match[1];  // eg, `jekyll/jekyll`.
   var format = match[2];
-  var options = {
-    method: 'HEAD',
-    uri: 'https://gemnasium.com/' + userRepo + '.png'
-  };
+  var options = 'https://gemnasium.com/' + userRepo + '.svg';
   var badgeData = getBadgeData('dependencies', data);
-  request(options, function(err, res) {
+  request(options, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
     try {
-      var statusMatch = res.headers['content-disposition']
-                           .match(/filename="(.+)\.png"/);
-      if (!statusMatch) {
-        badgeData.text[1] = 'unknown';
-        sendBadge(format, badgeData);
-      }
-      // Either `dev-yellow` or `yellow`.
-      var state = statusMatch[1].split('-');
-      var color = state.pop();
-      if (state[0] === 'dev') { badgeData.text[0] = 'devDependencies'; }
-      if (color === 'green') {
-        badgeData.text[1] = 'up-to-date';
+      var nameMatch = buffer.match(/(dev)?dependencies/)[0];
+      var statusMatch = buffer.match(/'12'>(.+)<\/text>\n<\/g>/)[1];
+      badgeData.text[0] = nameMatch;
+      badgeData.text[1] = statusMatch;
+      if (statusMatch === 'up-to-date') {
         badgeData.colorscheme = 'brightgreen';
-      } else if (color === 'yellow') {
-        badgeData.text[1] = 'out-of-date';
+      } else if (statusMatch === 'out-of-date') {
         badgeData.colorscheme = 'yellow';
-      } else if (color === 'red') {
-        badgeData.text[1] = 'update!';
+      } else if (statusMatch === 'update!') {
         badgeData.colorscheme = 'red';
-      } else if (color === 'none') {
-        badgeData.text[1] = 'none';
+      } else if (statusMatch === 'none') {
         badgeData.colorscheme = 'brightgreen';
       } else {
         badgeData.text[1] = 'undefined';
