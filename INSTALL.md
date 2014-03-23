@@ -32,13 +32,21 @@ badge build passed :green .png > mybadge.png
 # Stored a PNG version of your badge on disk.
 ```
 
-# Set the Server
+# Start the Server
 
 ```bash
 git clone git@github.com:badges/shields
 cd shields
 npm install
-sudo npm start
+sudo node server
+```
+
+The server uses port 80 by default, which requires `sudo` permissions.
+There are two ways to provide an alternate port:
+
+```bash
+PORT=8080 node server
+node server 8080
 ```
 
 The root gets redirected to <http://shields.io>.
