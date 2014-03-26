@@ -440,6 +440,54 @@ cache(function(data, match, sendBadge) {
 }));
 
 // Code Climate integration
+camp.route(/^\/codeclimate\/coverage\/(.+)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var userRepo = match[1];  // eg, `github/triAGENS/ashikawa-core`.
+  var format = match[2];
+  var options = {
+    method: 'HEAD',
+    uri: 'https://codeclimate.com/' + userRepo + '/coverage.png'
+  };
+  var badgeData = getBadgeData('code climate', data);
+  request(options, function(err, res) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var score = res.headers['content-disposition']
+                     .match(/filename="coverage_(.+)\.png"/)[1];
+      if (!score) {
+        badgeData.text[1] = 'malformed';
+        sendBadge(format, badgeData);
+        return;
+      }
+      var percentage = parseInt(score);
+      if (percentage !== percentage) {
+        // It is NaN, treat it as unknown.
+        badgeData.text[1] = 'unknown';
+        sendBadge(format, badgeData);
+        return;
+      }
+      badgeData.text[1] = score + '%';
+      if (percentage < 80) {
+        badgeData.colorscheme = 'red';
+      } else if (percentage < 90) {
+        badgeData.colorscheme = 'yellow';
+      } else if (percentage < 95) {
+        badgeData.colorscheme = 'green';
+      } else {
+        badgeData.colorscheme = 'brightgreen';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'not found';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// Code Climate integration
 camp.route(/^\/codeclimate\/(.+)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var userRepo = match[1];  // eg, `github/kabisaict/flow`.
