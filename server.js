@@ -479,7 +479,7 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
-// Code Climate integration
+// Code Climate coverage integration
 camp.route(/^\/codeclimate\/coverage\/(.+)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var userRepo = match[1];  // eg, `github/triAGENS/ashikawa-core`.
@@ -488,7 +488,7 @@ cache(function(data, match, sendBadge) {
     method: 'HEAD',
     uri: 'https://codeclimate.com/' + userRepo + '/coverage.png'
   };
-  var badgeData = getBadgeData('code climate', data);
+  var badgeData = getBadgeData('coverage', data);
   request(options, function(err, res) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
