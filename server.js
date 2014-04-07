@@ -11,24 +11,61 @@ var serverStartTime = new Date((new Date()).toGMTString());
 
 // Analytics
 
+var redis;
+// Use Redis by default.
+var useRedis = true;
+if (process.env.REDISTOGO_URL) {
+  var redisToGo = require('url').parse(process.env.REDISTOGO_URL);
+  redis = require('redis').createClient(redisToGo.port, redisToGo.hostname);
+  redis.auth(redisToGo.auth.split(':')[1]);
+} else {
+  redis = require('redis').createClient();
+}
+redis.on('error', function() {
+  useRedis = false;
+});
+
 var analytics = {};
 
 var analyticsAutoSaveFileName = './analytics.json';
 var analyticsAutoSavePeriod = 10000;
 setInterval(function analyticsAutoSave() {
-  fs.writeFile(analyticsAutoSaveFileName, JSON.stringify(analytics));
+  if (useRedis) {
+    redis.set(analyticsAutoSaveFileName, JSON.stringify(analytics));
+  } else {
+    fs.writeFileSync(analyticsAutoSaveFileName, JSON.stringify(analytics));
+  }
 }, analyticsAutoSavePeriod);
 
 // Auto-load analytics.
 function analyticsAutoLoad() {
-  try {
-    analytics = JSON.parse(fs.readFileSync(analyticsAutoSaveFileName));
-  } catch(e) {
-    // In case something happens on the 36th.
-    analytics.vendorMonthly = new Array(36);
-    analytics.rawMonthly = new Array(36);
-    resetMonthlyAnalytics(analytics.vendorMonthly);
-    resetMonthlyAnalytics(analytics.rawMonthly);
+  if (useRedis) {
+    redis.get(analyticsAutoSaveFileName, function(err, value) {
+      if (err == null && value != null) {
+        // if/try/return trick:
+        // if error, then the rest of the function is run.
+        try {
+          analytics = JSON.parse(value);
+          return;
+        } catch(e) {}
+      }
+      // In case something happens on the 36th.
+      analytics.vendorMonthly = new Array(36);
+      analytics.rawMonthly = new Array(36);
+      resetMonthlyAnalytics(analytics.vendorMonthly);
+      resetMonthlyAnalytics(analytics.rawMonthly);
+    });
+  } else {
+    // Not using Redis.
+    try {
+      analytics = JSON.parse(fs.readFileSync(analyticsAutoSaveFileName));
+    } catch(e) {
+      // In case something happens on the 36th.
+      analytics.vendorMonthly = new Array(36);
+      analytics.rawMonthly = new Array(36);
+      resetMonthlyAnalytics(analytics.vendorMonthly);
+      resetMonthlyAnalytics(analytics.rawMonthly);
+    }
   }
 }
 

@@ -17,4 +17,15 @@ deploy:
 	git push origin gh-pages:gh-pages) || git checkout master
 	git checkout master
 
-.PHONY: all favicon website deploy
+setup:
+	curl http://download.redis.io/releases/redis-2.8.8.tar.gz >redis.tar.gz \
+	&& tar xf redis.tar.gz \
+	&& rm redis.tar.gz \
+	&& mv redis-2.8.8 redis \
+	&& cd redis \
+	&& make
+
+redis:
+	./redis/src/redis-server
+
+.PHONY: all favicon website deploy setup redis
