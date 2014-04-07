@@ -2,6 +2,7 @@
 /Verdana.ttf
 /analytics.json
 /coverage.html
+/redis
 
 # Installed npm modules
 node_modules
