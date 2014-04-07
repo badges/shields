@@ -404,17 +404,29 @@ cache(function(data, match, sendBadge) {
     }
     try {
       var data = JSON.parse(buffer);
-      if (info === 'dm') {
+      if (info.charAt(0) === 'd') {
         badgeData.text[0] = getLabel('downloads', data);
-        var monthly = data.info.downloads.last_month;
-        badgeData.text[1] = metric(monthly) + '/month';
-        if (monthly === 0) {
+        switch (info.charAt(1)) {
+          case 'm':
+            var downloads = data.info.downloads.last_month;
+            badgeData.text[1] = metric(downloads) + '/month';
+            break;
+          case 'w':
+            var downloads = data.info.downloads.last_week;
+            badgeData.text[1] = metric(downloads) + '/week';
+            break;
+          case 'd':
+            var downloads = data.info.downloads.last_day;
+            badgeData.text[1] = metric(downloads) + '/day';
+            break;
+        }
+        if (downloads === 0) {
           badgeData.colorscheme = 'red';
-        } else if (monthly < 10) {
+        } else if (downloads < 10) {
           badgeData.colorscheme = 'yellow';
-        } else if (monthly < 100) {
+        } else if (downloads < 100) {
           badgeData.colorscheme = 'yellowgreen';
-        } else if (monthly < 1000) {
+        } else if (downloads < 1000) {
           badgeData.colorscheme = 'green';
         } else {
           badgeData.colorscheme = 'brightgreen';
