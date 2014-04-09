@@ -109,13 +109,16 @@ function cache(f) {
     }
 
     // In case our vendor servers are unresponsive.
+    var serverUnresponsive = false;
     var serverResponsive = setTimeout(function() {
       var badgeData = getBadgeData('vendor', data);
       badgeData.text[1] = 'unresponsive';
+      serverUnresponsive = true;
       badge(badgeData, makeSend('svg', ask.res, end));
     }, 30000);
 
     f(data, match, function sendBadge(format, badgeData) {
+      if (serverUnresponsive) { return; }
       clearTimeout(serverResponsive);
       cacheFromIndex[cacheIndex] = { format: format, badgeData: badgeData };
       setTimeout(function clearCache() {
