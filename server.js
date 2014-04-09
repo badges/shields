@@ -115,7 +115,7 @@ function cache(f) {
       badgeData.text[1] = 'unresponsive';
       serverUnresponsive = true;
       badge(badgeData, makeSend('svg', ask.res, end));
-    }, 30000);
+    }, 25000);
 
     f(data, match, function sendBadge(format, badgeData) {
       if (serverUnresponsive) { return; }
