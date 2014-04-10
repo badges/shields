@@ -818,6 +818,33 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// Chef cookbook integration.
+camp.route(/^\/cookbook\/v\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var cookbook = match[1]; // eg, chef-sugar
+  var format = match[2];
+  var apiUrl = 'https://cookbooks.opscode.com/api/v1/cookbooks/' + cookbook + '/versions/latest';
+  var badgeData = getBadgeData('version', data);
+
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+
+    try {
+      var data = JSON.parse(buffer);
+      var latest = data.version;
+      badgeData.text[1] = latest;
+      badgeData.colorscheme = 'blue';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
