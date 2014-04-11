@@ -834,9 +834,13 @@ cache(function(data, match, sendBadge) {
 
     try {
       var data = JSON.parse(buffer);
-      var latest = data.version;
-      badgeData.text[1] = latest;
-      badgeData.colorscheme = 'blue';
+      var version = data.version;
+      badgeData.text[1] = 'v' + version;
+      if (version[0] === '0' || /dev/.test(version)) {
+        badgeData.colorscheme = 'orange';
+      } else {
+        badgeData.colorscheme = 'blue';
+      }
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
