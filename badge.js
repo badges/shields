@@ -15,12 +15,19 @@ try {
 } catch(e) {}
 canvasContext.font = '11px Verdana, "DejaVu Sans"';
 
+// cache templates
+var templates = {}
+var templateFiles = fs.readdirSync('templates')
+templateFiles.forEach(function(file) {
+  templates[file] = fs.readFileSync(path.join('templates', file)).toString()
+})
+
+var colorscheme = require('./colorscheme.json');
+
 function makeTemplate(colorscheme, template) {
   // Template crafting action below.
-  var colorscheme = require(path.join(__dirname, 'templates', (colorscheme || 'default') + '-colorscheme.json'));
-  var template = fs.readFileSync(path.join(__dirname, 'templates', (template || 'default') + '-template.svg'));
+  var template = templates[(template || 'default') + '-template.svg'];
   var imageTemplate = dot.template(''+template);
-  imageTemplate.colorscheme = colorscheme;
   return imageTemplate;
 }
 
@@ -41,8 +48,8 @@ function makeImage(data, options, cb) {
     template = makeTemplate(options.colorscheme, options.template);
   }
   if (data.colorscheme) {
-    data.colorA = template.colorscheme[data.colorscheme].colorA;
-    data.colorB = template.colorscheme[data.colorscheme].colorB;
+    data.colorA = colorscheme[data.colorscheme].colorA;
+    data.colorB = colorscheme[data.colorscheme].colorB;
   }
   data.widths = [
     (canvasContext.measureText(data.text[0]).width|0) + 10,
