@@ -2,7 +2,7 @@
 var path = require('path');
 var badge = require(path.join(__dirname, 'badge.js'));
 var svg2img = require(path.join(__dirname, 'svg-to-img.js'));
-var colorscheme = require(path.join(__dirname, 'colorscheme.json'));
+var colorscheme = require(path.join(__dirname, 'templates', 'default-colorscheme.json'));
 if (process.argv.length < 4) {
   console.log('Usage: badge subject status [:colorscheme] [.output]');
   console.log('Or:    badge subject status right-color [left-color] [.output]');
