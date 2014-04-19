@@ -42,13 +42,10 @@ var status = process.argv[3];
 var color = process.argv[4] || ':green';
 var colorA = process.argv[5];
 
-var badgeOpts = {}
-
-if (style) {
-  badgeOpts.template = style;
-}
-
 var badgeData = {text: [subject, status]};
+if (style) {
+  badgeData.template = style;
+}
 
 if (color[0] === ':') {
   color = color.slice(1);
@@ -63,7 +60,7 @@ if (color[0] === ':') {
   if (colorA) { badgeData.colorA = colorA; }
 }
 
-badge(badgeData, badgeOpts, function produceOutput(svg) {
+badge(badgeData, function produceOutput(svg) {
   if (format === 'svg') {
     console.log(svg);
   } else if (/png|jpg|gif/.test(format)) {

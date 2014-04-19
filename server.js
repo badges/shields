@@ -5,7 +5,6 @@ var camp = require('camp').start({
 var https = require('https');
 var request = require('request');
 var fs = require('fs');
-var url = require('url');
 var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
 var serverStartTime = new Date((new Date()).toGMTString());
@@ -99,25 +98,15 @@ var cacheFromIndex = Object.create(null);
 
 function cache(f) {
   return function getRequest(data, match, end, ask) {
-    // parse querystring for specifying template
-    var reqURL = url.parse(ask.req.url, true);
-    var badgeOpts = {
-      template: 'default'
-    };
-    var style = reqURL.query.style || 'default';
-    if (style && validTemplates.indexOf(style) > -1) {
-      badgeOpts.template = style;
-    };
-    
     // Cache management - no cache, so it won't be cached by GitHub's CDN.
     ask.res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     incrMonthlyAnalytics(analytics.vendorMonthly);
 
-    var cacheIndex = match[0] + '?label=' + data.label;
+    var cacheIndex = match[0] + '?label=' + data.label + '&style=' + data.style;
     // Should we return the data right away?
     var cached = cacheFromIndex[cacheIndex];
     if (cached != null) {
-      badge(cached.badgeData, badgeOpts, makeSend(cached.format, ask.res, end));
+      badge(cached.badgeData, makeSend(cached.format, ask.res, end));
       return;
     }
 
@@ -127,7 +116,7 @@ function cache(f) {
       var badgeData = getBadgeData('vendor', data);
       badgeData.text[1] = 'unresponsive';
       serverUnresponsive = true;
-      badge(badgeData, badgeOpts, makeSend('svg', ask.res, end));
+      badge(badgeData, makeSend('svg', ask.res, end));
     }, 25000);
 
     f(data, match, function sendBadge(format, badgeData) {
@@ -952,7 +941,12 @@ function getLabel(label, data) {
 
 function getBadgeData(defaultLabel, data) {
   var label = getLabel(defaultLabel, data);
-  return {text:[label, 'n/a'], colorscheme:'lightgrey'};
+  var template = data.style || 'default';
+  if (data.style && validTemplates.indexOf(data.style) > -1) {
+    template = data.style;
+  };
+
+  return {text:[label, 'n/a'], colorscheme:'lightgrey', template:template};
 }
 
 function makeSend(format, askres, end) {
