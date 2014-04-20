@@ -879,6 +879,9 @@ function(data, match, end, ask) {
     } else {
       badgeData.colorscheme = color;
     }
+    if (data.style && validTemplates.indexOf(data.style) > -1) {
+      badgeData.template = data.style;
+    }
     badge(badgeData, makeSend(format, ask.res, end));
   } catch(e) {
     badge({text: ['error', 'bad badge'], colorscheme: 'red'},
