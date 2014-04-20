@@ -18,20 +18,14 @@ canvasContext.font = '11px Verdana, "DejaVu Sans"';
 // cache templates.
 var templates = {};
 var templateFiles = fs.readdirSync('templates');
-templateFiles.forEach(function(file) {
-  templates[file] = fs.readFileSync(
-    path.join(__dirname, 'templates', file)).toString();
+templateFiles.forEach(function(filename) {
+  var templateData = fs.readFileSync(
+    path.join(__dirname, 'templates', filename)).toString();
+  var style = filename.slice(0, -('-template.svg'.length));
+  templates[style] = dot.template(templateData);
 });
 
 var colorscheme = require(path.join(__dirname, 'colorscheme.json'));
-
-function makeTemplate(template) {
-  // Template crafting action below.
-  var template = templates[(template || 'default') + '-template.svg'];
-  return dot.template(template);
-}
-
-var defaultTemplate = makeTemplate();
 
 function optimize(string, callback) {
   var svgo = new SVGO();
@@ -39,10 +33,7 @@ function optimize(string, callback) {
 }
 
 function makeImage(data, cb) {
-  var template = defaultTemplate;
-  if (data.template) {
-    template = makeTemplate(data.template);
-  }
+  var template = templates[data.template || 'default'];
   if (data.colorscheme) {
     data.colorA = colorscheme[data.colorscheme].colorA;
     data.colorB = colorscheme[data.colorscheme].colorB;
