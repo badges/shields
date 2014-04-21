@@ -851,6 +851,35 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// Nuget version integration.
+camp.route(/^\/nuget\/v\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var repo = match[1];  // eg, `localeval`.
+  var format = match[2];
+  var apiUrl = 'https://www.nuget.org/api/v2/Packages()?$filter=Id%20eq%20%27' + repo + '%27%20and%20IsLatestVersion%20eq%20true';
+  var badgeData = getBadgeData('nuget', data);
+  request(apiUrl, { headers: { 'Accept': 'application/atom+json,application/json' } }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var version = data.d.results[0].NormalizedVersion;
+      badgeData.text[1] = 'v' + version;
+      if (version[0] === '0') {
+        badgeData.colorscheme = 'orange';
+      } else {
+        badgeData.colorscheme = 'blue';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
