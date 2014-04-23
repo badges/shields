@@ -883,7 +883,7 @@ cache(function(data, match, sendBadge) {
 // TeamCity CodeBetter version integration.
 camp.route(/^\/teamcity\/codebetter\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var buildType = match[1];  // eg, `localeval`.
+  var buildType = match[1];  // eg, `bt428`.
   var format = match[2];
   var apiUrl = 'http://teamcity.codebetter.com/app/rest/builds/buildType:(id:' + buildType + ')?guest=1';
   var badgeData = getBadgeData('build', data);
