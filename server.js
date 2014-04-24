@@ -851,10 +851,10 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
-// Nuget version integration.
+// NuGet version integration.
 camp.route(/^\/nuget\/v\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var repo = match[1];  // eg, `localeval`.
+  var repo = match[1];  // eg, `Nuget.Core`.
   var format = match[2];
   var apiUrl = 'https://www.nuget.org/api/v2/Packages()?$filter=Id%20eq%20%27' + repo + '%27%20and%20IsLatestVersion%20eq%20true';
   var badgeData = getBadgeData('nuget', data);
