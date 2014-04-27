@@ -2,21 +2,18 @@ var fs = require('fs');
 var os = require('os');
 var path = require('path');
 var phantom = require('phantomjs');
+var LruCache = require('./lru-cache.js');
 var childProcess = require('child_process');
 var phantomScript = path.join(__dirname, 'phantomjs-svg2png.js');
 
-var imgCache = Object.create(null);
-var imgCacheTime = Object.create(null);
-var imgCacheSize = 0;
 // The following is an arbitrary limit (~1.5MB, 1.5kB/image).
-var imgCacheMaxSize = 1000;
+var imgCache = new LruCache(1000);
 
 module.exports = function (svg, format, out, cb) {
   var cacheIndex = format + svg;
-  if (imgCache[cacheIndex] !== undefined) {
+  if (imgCache.has(cacheIndex)) {
     // We own a cache for this svg conversion.
-    (new DataStream(imgCache[cacheIndex])).pipe(out);
-    imgCacheTime[cacheIndex] = +(new Date());
+    (new DataStream(imgCache.get(cacheIndex))).pipe(out);
     return;
   }
   var tmpFile = path.join(os.tmpdir(),
@@ -36,32 +33,11 @@ module.exports = function (svg, format, out, cb) {
     // Remove the temporary file after use.
     inStream.on('end', function() {
       try { out.end(); } catch(e) {}
-      addToCache(cacheIndex, cached);
+      imgCache.set(cacheIndex, cached);
       fs.unlink(tmpFile, cb);
     });
   });
 };
-
-function addToCache(cacheIndex, cached) {
-  imgCache[cacheIndex] = cached;
-  var mostAncient = +(new Date());
-  imgCacheTime[cacheIndex] = mostAncient;
-  if (imgCacheSize >= imgCacheMaxSize) {
-    // Find the most ancient image.
-    var ancientCacheIndex = cacheIndex;
-    for (var currentCacheIndex in imgCacheTime) {
-      if (mostAncient > imgCacheTime[currentCacheIndex]) {
-        mostAncient = imgCacheTime[currentCacheIndex];
-        ancientCacheIndex = currentCacheIndex;
-      }
-    }
-    // Delete that image.
-    delete imgCache[ancientCacheIndex];
-    delete imgCacheTime[ancientCacheIndex];
-  } else {
-    imgCacheSize++;
-  }
-}
 
 // Fake stream from the cache.
 var Readable = require('stream').Readable;
