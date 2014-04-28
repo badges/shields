@@ -4,37 +4,46 @@
 function Cache(size) {
   if (!this instanceof Cache) { return new Cache(size); }
   this.size = size;
+  // `cache` contains {content, index}.
+  // - content: the actual data that is cached.
+  // - index: the position in `order` of the data.
   this.cache = Object.create(null);
-  this.cacheTime = Object.create(null);
-  this.cacheSize = 0;
+  this.order = [];  // list of cache keys from oldest to newest.
 }
 
 Cache.prototype.set =
 function addToCache(cacheIndex, cached) {
-  this.cache[cacheIndex] = cached;
-  var mostAncient = +(new Date());
-  this.cacheTime[cacheIndex] = mostAncient;
-  if (this.cacheSize >= this.size) {
-    // Find the most ancient image.
-    var ancientCacheIndex = cacheIndex;
-    for (var currentCacheIndex in this.cacheTime) {
-      if (mostAncient > this.cacheTime[currentCacheIndex]) {
-        mostAncient = this.cacheTime[currentCacheIndex];
-        ancientCacheIndex = currentCacheIndex;
-      }
-    }
-    // Delete that image.
-    delete this.cache[ancientCacheIndex];
-    delete this.cacheTime[ancientCacheIndex];
+  if (this.cache[cacheIndex] !== undefined) {
+    this.order.splice(this.cache[cacheIndex].index, 1);
+    // Put the new element at the end of `order`.
+    this.cache[cacheIndex].index = this.order.length;
+    this.order.push(cacheIndex);
   } else {
-    this.cacheSize++;
+    // If the cache is full, remove the oldest data
+    // (ie, the data requested longest ago.)
+    if (this.order.length >= this.size) {
+      // Remove `order`'s oldest element, the first.
+      delete this.cache[this.order[0]];
+      this.order.shift();
+    }
+
+    this.cache[cacheIndex] = {
+      index: this.order.length,
+      content: cached
+    }
+    this.order.push(cacheIndex);
   }
 }
 
 Cache.prototype.get =
 function getFromCache(cacheIndex) {
-  this.cacheTime[cacheIndex] = +(new Date());
-  return this.cache[cacheIndex];
+  if (this.cache[cacheIndex] !== undefined) {
+    this.order.splice(this.cache[cacheIndex].index, 1);
+    // Put the new element at the end of `order`.
+    this.cache[cacheIndex].index = this.order.length;
+    this.order.push(cacheIndex);
+    return this.cache[cacheIndex].content;
+  } else { return; }
 }
 
 Cache.prototype.has =
