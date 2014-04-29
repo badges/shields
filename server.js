@@ -647,7 +647,7 @@ cache(function(data, match, sendBadge) {
       sendBadge(format, badgeData);
     }
     try {
-      var nameMatch = buffer.match(/(dev)?dependencies/)[0];
+      var nameMatch = buffer.match(/(devD|d)ependencies/)[0];
       var statusMatch = buffer.match(/'12'>(.+)<\/text>\n<\/g>/)[1];
       badgeData.text[0] = nameMatch;
       badgeData.text[1] = statusMatch;
