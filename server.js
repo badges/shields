@@ -5,6 +5,7 @@ var camp = require('camp').start({
 var https = require('https');
 var request = require('request');
 var fs = require('fs');
+var LruCache = require('./lru-cache.js');
 var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
 var serverStartTime = new Date((new Date()).toGMTString());
@@ -96,6 +97,9 @@ camp.ajax.on('analytics/v1', function(json, end) { end(analytics); });
 var cacheTimeout = 60000;   // 1 minute.
 var cacheFromIndex = Object.create(null);
 
+// Request cache size of size 1_000_000 (~1GB, 1kB/image).
+var requestCache = new LruCache(1000000);
+
 function cache(f) {
   return function getRequest(data, match, end, ask) {
     // Cache management - no cache, so it won't be cached by GitHub's CDN.
@@ -113,6 +117,11 @@ function cache(f) {
     // In case our vendor servers are unresponsive.
     var serverUnresponsive = false;
     var serverResponsive = setTimeout(function() {
+      if (requestCache.has(cacheIndex)) {
+        var cached = requestCache.get(cacheIndex);
+        badge(cached.badgeData, makeSend(cached.format, ask.res, end));
+        return;
+      }
       var badgeData = getBadgeData('vendor', data);
       badgeData.text[1] = 'unresponsive';
       serverUnresponsive = true;
@@ -123,6 +132,7 @@ function cache(f) {
       if (serverUnresponsive) { return; }
       clearTimeout(serverResponsive);
       cacheFromIndex[cacheIndex] = { format: format, badgeData: badgeData };
+      requestCache.set(cacheIndex, { format: format, badgeData: badgeData });
       setTimeout(function clearCache() {
         delete cacheFromIndex[cacheIndex];
       }, cacheTimeout);
