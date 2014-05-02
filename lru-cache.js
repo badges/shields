@@ -17,6 +17,7 @@ function addToCache(cacheIndex, cached) {
     this.order.splice(this.cache[cacheIndex].index, 1);
     // Put the new element at the end of `order`.
     this.cache[cacheIndex].index = this.order.length;
+    this.cache[cacheIndex].content = cached;
     this.order.push(cacheIndex);
   } else {
     // If the cache is full, remove the oldest data

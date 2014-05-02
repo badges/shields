@@ -94,8 +94,18 @@ camp.ajax.on('analytics/v1', function(json, end) { end(analytics); });
 
 // Cache
 
-var cacheTimeout = 60000;   // 1 minute.
-var cacheFromIndex = Object.create(null);
+// We avoid calling the vendor's server for computation of the information in a
+// number of badges.
+var minAccuracy = 0.75;
+
+// The quotient of (vendor) data change frequency by badge request frequency
+// must be lower than this to trigger sending the cached data *before*
+// updating our data from the vendor's server.
+// Indeed, the accuracy of our badges are:
+// A(Δt) = 1 - min(# data change over Δt, # requests over Δt)
+//             / (# requests over Δt)
+//       = 1 - max(1, df) / rf
+var freqRatioMax = 1 - minAccuracy;
 
 // Request cache size of size 1_000_000 (~1GB, 1kB/image).
 var requestCache = new LruCache(1000000);
@@ -108,10 +118,12 @@ function cache(f) {
 
     var cacheIndex = match[0] + '?label=' + data.label + '&style=' + data.style;
     // Should we return the data right away?
-    var cached = cacheFromIndex[cacheIndex];
-    if (cached != null) {
-      badge(cached.badgeData, makeSend(cached.format, ask.res, end));
-      return;
+    var cached = requestCache.get(cacheIndex);
+    var cachedVersionSent = false;
+    if (cached !== undefined
+        && cached.dataChange / cached.reqs <= freqRatioMax) {
+      badge(cached.data.badgeData, makeSend(cached.data.format, ask.res, end));
+      cachedVersionSent = true;
     }
 
     // In case our vendor servers are unresponsive.
@@ -119,24 +131,39 @@ function cache(f) {
     var serverResponsive = setTimeout(function() {
       serverUnresponsive = true;
       if (requestCache.has(cacheIndex)) {
-        var cached = requestCache.get(cacheIndex);
-        badge(cached.badgeData, makeSend(cached.format, ask.res, end));
+        var cached = requestCache.get(cacheIndex).data;
+        if (!cachedVersionSent) {
+          badge(cached.badgeData, makeSend(cached.format, ask.res, end));
+        }
         return;
       }
       var badgeData = getBadgeData('vendor', data);
       badgeData.text[1] = 'unresponsive';
-      badge(badgeData, makeSend('svg', ask.res, end));
+      if (!cachedVersionSent) {
+        badge(badgeData, makeSend('svg', ask.res, end));
+      }
     }, 25000);
 
     f(data, match, function sendBadge(format, badgeData) {
       if (serverUnresponsive) { return; }
       clearTimeout(serverResponsive);
-      cacheFromIndex[cacheIndex] = { format: format, badgeData: badgeData };
-      requestCache.set(cacheIndex, { format: format, badgeData: badgeData });
-      setTimeout(function clearCache() {
-        delete cacheFromIndex[cacheIndex];
-      }, cacheTimeout);
-      badge(badgeData, makeSend(format, ask.res, end));
+      // Check for a change in the data.
+      var dataHasChanged = false;
+      if (cached !== undefined
+        && cached.data.badgeData.text[1] !== badgeData.text[1]) {
+        dataHasChanged = true;
+      }
+      // Update information in the cache.
+      var updatedCache = {
+        reqs: cached? (cached.reqs + 1): 1,
+        dataChange: cached? (cached.dataChange + (dataHasChanged? 1: 0))
+                          : 1,
+        data: { format: format, badgeData: badgeData }
+      };
+      requestCache.set(cacheIndex, updatedCache);
+      if (!cachedVersionSent) {
+        badge(badgeData, makeSend(format, ask.res, end));
+      }
     });
   };
 }
