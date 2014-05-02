@@ -130,18 +130,15 @@ function cache(f) {
     var serverUnresponsive = false;
     var serverResponsive = setTimeout(function() {
       serverUnresponsive = true;
+      if (cachedVersionSent) { return; }
       if (requestCache.has(cacheIndex)) {
         var cached = requestCache.get(cacheIndex).data;
-        if (!cachedVersionSent) {
-          badge(cached.badgeData, makeSend(cached.format, ask.res, end));
-        }
+        badge(cached.badgeData, makeSend(cached.format, ask.res, end));
         return;
       }
       var badgeData = getBadgeData('vendor', data);
       badgeData.text[1] = 'unresponsive';
-      if (!cachedVersionSent) {
-        badge(badgeData, makeSend('svg', ask.res, end));
-      }
+      badge(badgeData, makeSend('svg', ask.res, end));
     }, 25000);
 
     f(data, match, function sendBadge(format, badgeData) {
