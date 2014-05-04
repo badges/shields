@@ -245,10 +245,11 @@ cache(function(data, match, sendBadge) {
 }));
 
 // Packagist integration.
-camp.route(/^\/packagist\/dm\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/packagist\/(dm|dd|dt)\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var userRepo = match[1];  // eg, `doctrine/orm`.
-  var format = match[2];
+  var info = match[1];  // either `dm` or dt`.
+  var userRepo = match[2];  // eg, `doctrine/orm`.
+  var format = match[3];
   var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
   var badgeData = getBadgeData('downloads', data);
   request(apiUrl, function(err, res, buffer) {
@@ -258,15 +259,27 @@ cache(function(data, match, sendBadge) {
     }
     try {
       var data = JSON.parse(buffer);
-      var monthly = data.package.downloads.monthly;
-      badgeData.text[1] = metric(monthly) + '/month';
-      if (monthly === 0) {
+      switch (info.charAt(1)) {
+        case 'm':
+          var downloads = data.package.downloads.monthly;
+          badgeData.text[1] = metric(downloads) + '/month';
+          break;
+        case 'd':
+          var downloads = data.package.downloads.daily;
+          badgeData.text[1] = metric(downloads) + '/day';
+          break;
+        case 't':
+          var downloads = data.package.downloads.total;
+          badgeData.text[1] = metric(downloads) + ' total';
+          break;
+      }
+      if (downloads === 0) {
         badgeData.colorscheme = 'red';
-      } else if (monthly < 10) {
+      } else if (downloads < 10) {
         badgeData.colorscheme = 'yellow';
-      } else if (monthly < 100) {
+      } else if (downloads < 100) {
         badgeData.colorscheme = 'yellowgreen';
-      } else if (monthly < 1000) {
+      } else if (downloads < 1000) {
         badgeData.colorscheme = 'green';
       } else {
         badgeData.colorscheme = 'brightgreen';
