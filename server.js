@@ -841,11 +841,17 @@ cache(function(data, match, sendBadge) {
     try {
       var data = JSON.parse(buffer);
       var latest = (function () {
+        var topTag, tagDate, topDate = null;
         for (var i = 0, len = data.length; i < len; i++) {
           if (!data[i].draft) {
-            return data[i];
+            tagDate = new Date(data[i].created_at);
+            if (topDate === null || tagDate > topDate) {
+              topDate = tagDate;
+              topTag = i;
+            }
           }
         }
+        return data[topTag];
       })();
       var tag = latest.tag_name;
       badgeData.text[1] = tag;
