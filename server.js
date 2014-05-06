@@ -1089,12 +1089,17 @@ function streamFromString(str) {
 }
 
 // Given a number, string with appropriate unit in the metric system, SI.
+// Note: numbers beyond the peta- cannot be represented as integers in JS.
+var metricPrefix = ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'];
+var metricPower = Array.apply(null, Array(metricPrefix.length))
+    .map(function(a, i) { return Math.pow(1000, i + 1); });
 function metric(n) {
-  var limit = 1000;
-  if (n > limit) {
-    n = Math.round(n / 1000);
-    return ''+n + 'k';
-  } else {
-    return ''+n;
+  for (var i = metricPrefix.length - 1; i >= 0; i--) {
+    var limit = metricPower[i];
+    if (n > limit) {
+      n = Math.round(n / limit);
+      return ''+n + metricPrefix[i];
+    }
   }
+  return ''+n;
 }
