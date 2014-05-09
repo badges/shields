@@ -8,6 +8,7 @@ var fs = require('fs');
 var LruCache = require('./lru-cache.js');
 var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
+var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
 
 var validTemplates = ['default', 'flat'];
@@ -955,6 +956,53 @@ cache(function(data, match, sendBadge) {
         badgeData.colorscheme = 'red'; 
       }
       sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// Puppet Forge
+camp.route(/^\/puppetforge\/v\/([^\/]+\/[^\/]+)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var userRepo = match[1];
+  var format = match[2];
+  var options = {
+    json: true,
+    uri: 'https://forge.puppetlabs.com/api/v1/releases.json?module=' + userRepo
+  };
+  var badgeData = getBadgeData('puppetforge', data);
+  request(options, function dealWithData(err, res, json) {
+    if (err != null || (json.length !== undefined && json.length === 0)) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return
+    }
+    try {
+      var unstable = function(ver) { return /-[0-9A-Za-z.-]+(?:\+[0-9A-Za-z.-]+)?$/.test(ver); };
+      var releases = json[userRepo];
+      if (releases.length == 0) {
+        badgeData.text[1] = 'none';
+        badgeData.colorscheme = 'lightgrey';
+        sendBadge(format, badgeData);
+        return;
+      }
+      var version = releases[0].version;
+      for (var i = 0; i < releases.length; i++) {
+        var current = releases[i].version;
+        if (semver.gt(current, version)) {
+          version = current;
+        }
+      }
+      if (unstable(version)) {
+        badgeData.colorscheme = "yellow";
+      } else {
+        badgeData.colorscheme = "blue";
+      }
+      badgeData.text[1] = "v" + version;
+      sendBadge(format, badgeData);
+
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);

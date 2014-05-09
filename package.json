@@ -23,7 +23,8 @@
     "es6-promise": "~0.1.1",
     "request": "~2.34.0",
     "redis": "~0.10.1",
-    "camp": "~13.11.9"
+    "camp": "~13.11.9",
+    "semver": "~2.3.0"
   },
   "devDependencies": {
     "ass": "~0.0.4",
