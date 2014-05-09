@@ -977,10 +977,12 @@ cache(function(data, match, sendBadge) {
     if (err != null || (json.length !== undefined && json.length === 0)) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
-      return
+      return;
     }
     try {
-      var unstable = function(ver) { return /-[0-9A-Za-z.-]+(?:\+[0-9A-Za-z.-]+)?$/.test(ver); };
+      var unstable = function(ver) {
+        return /-[0-9A-Za-z.-]+(?:\+[0-9A-Za-z.-]+)?$/.test(ver);
+      };
       var releases = json[userRepo];
       if (releases.length == 0) {
         badgeData.text[1] = 'none';
