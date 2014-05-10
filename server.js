@@ -1141,7 +1141,7 @@ function streamFromString(str) {
 // Given a number, string with appropriate unit in the metric system, SI.
 // Note: numbers beyond the peta- cannot be represented as integers in JS.
 var metricPrefix = ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'];
-var metricPower = Array.apply(null, Array(metricPrefix.length))
+var metricPower = metricPrefix
     .map(function(a, i) { return Math.pow(1000, i + 1); });
 function metric(n) {
   for (var i = metricPrefix.length - 1; i >= 0; i--) {
