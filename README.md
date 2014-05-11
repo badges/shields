@@ -18,10 +18,12 @@ Make your own badges [here][badges]!
 - [BadgerBadgerBadger][gem]
 - [badges2svg][]
 - [reposs][]
+- [elcodi][]
 
 [gem]: https://github.com/badges/badgerbadgerbadger
 [badges2svg]: https://github.com/bfontaine/badges2svg
 [reposs]: https://github.com/rexfinn/reposs
+[elcodi]: http://github.com/elcodi/elcodi
 
 ## Problem
 Many GitHub repos sport badges for things like:
