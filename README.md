@@ -14,6 +14,7 @@ Make your own badges [here][badges]!
 - [Gemnasium](http://support.gemnasium.com/forums/236528-general/suggestions/5518400-use-svg-for-badges-so-they-still-look-sharp-on-r)
 - [Scrutinizer CI](https://scrutinizer-ci.com/)
 - [Semaphore](https://semaphoreapp.com)
+- [VersionEye][]
 - [Read the Docs](https://readthedocs.org/)
 - [BadgerBadgerBadger][gem]
 - [badges2svg][]
@@ -22,6 +23,7 @@ Make your own badges [here][badges]!
 [gem]: https://github.com/badges/badgerbadgerbadger
 [badges2svg]: https://github.com/bfontaine/badges2svg
 [reposs]: https://github.com/rexfinn/reposs
+[VersionEye]: https://www.versioneye.com/
 
 ## Problem
 Many GitHub repos sport badges for things like:
