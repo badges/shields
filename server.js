@@ -178,6 +178,20 @@ function coveragePercentageColor(percentage) {
   }
 }
 
+function downloadCountColor(downloads) {
+  if (downloads === 0) {
+    return 'red';
+  } else if (downloads < 10) {
+    return 'yellow';
+  } else if (downloads < 100) {
+    return 'yellowgreen';
+  } else if (downloads < 1000) {
+    return 'green';
+  } else {
+    return 'brightgreen';
+  }
+}
+
 // Vendors.
 
 // Travis integration
@@ -286,17 +300,7 @@ cache(function(data, match, sendBadge) {
           badgeData.text[1] = metric(downloads) + ' total';
           break;
       }
-      if (downloads === 0) {
-        badgeData.colorscheme = 'red';
-      } else if (downloads < 10) {
-        badgeData.colorscheme = 'yellow';
-      } else if (downloads < 100) {
-        badgeData.colorscheme = 'yellowgreen';
-      } else if (downloads < 1000) {
-        badgeData.colorscheme = 'green';
-      } else {
-        badgeData.colorscheme = 'brightgreen';
-      }
+      badgeData.colorscheme = downloadCountColor(downloads);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -522,17 +526,7 @@ cache(function(data, match, sendBadge) {
             badgeData.text[1] = metric(downloads) + '/day';
             break;
         }
-        if (downloads === 0) {
-          badgeData.colorscheme = 'red';
-        } else if (downloads < 10) {
-          badgeData.colorscheme = 'yellow';
-        } else if (downloads < 100) {
-          badgeData.colorscheme = 'yellowgreen';
-        } else if (downloads < 1000) {
-          badgeData.colorscheme = 'green';
-        } else {
-          badgeData.colorscheme = 'brightgreen';
-        }
+        badgeData.colorscheme = downloadCountColor(downloads);
         sendBadge(format, badgeData);
       } else if (info === 'v') {
         var version = data.info.version;
@@ -922,6 +916,32 @@ cache(function(data, match, sendBadge) {
       } else {
         badgeData.colorscheme = 'blue';
       }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// NuGet download count integration.
+camp.route(/^\/nuget\/dt\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var repo = match[1];  // eg, `Nuget.Core`.
+  var format = match[2];
+  var filter = 'Id eq \'' + repo + '\' and IsLatestVersion eq true';
+  var apiUrl = 'https://www.nuget.org/api/v2/Packages()?$filter=' + encodeURIComponent(filter);
+  var badgeData = getBadgeData('downloads', data);
+  request(apiUrl, { headers: { 'Accept': 'application/atom+json,application/json' } }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var downloads = data.d.results[0].DownloadCount;
+      badgeData.text[1] = metric(downloads) + ' total';
+      badgeData.colorscheme = downloadCountColor(downloads);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
