@@ -624,7 +624,7 @@ cache(function(data, match, sendBadge) {
         return;
       }
       badgeData.text[1] = score + '%';
-      badgeData.colorscheme = coveragePercentageColour(percentage);
+      badgeData.colorscheme = coveragePercentageColor(percentage);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'not found';
