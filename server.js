@@ -580,7 +580,7 @@ cache(function(data, match, sendBadge) {
   var userRepo = match[1];  // eg, `jekyll/jekyll`.
   var branch = match[2];
   var format = match[3];
-  var apiUrl = 'https://coveralls.io/repos/' + userRepo + '/badge.png';
+  var apiUrl = 'http://badge.coveralls.io/repos/' + userRepo + '/badge.png';
   if (branch) {
     apiUrl += '?branch=' + branch;
   }
