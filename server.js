@@ -1010,13 +1010,10 @@ cache(function(data, match, sendBadge) {
         sendBadge(format, badgeData);
         return;
       }
-      var version = releases[0].version;
-      for (var i = 0; i < releases.length; i++) {
-        var current = releases[i].version;
-        if (semver.gt(current, version)) {
-          version = current;
-        }
-      }
+      var versions = releases.map(function(version) {
+        return version.version;
+      });
+      var version = latestVersion(versions);
       if (unstable(version)) {
         badgeData.colorscheme = "yellow";
       } else {
@@ -1172,4 +1169,16 @@ function metric(n) {
     }
   }
   return ''+n;
+}
+
+// Given a list of versions (as strings), return the latest version.
+function latestVersion(versions) {
+  var version = '';
+  try {
+    version = semver.maxSatisfying(versions, '');
+  } catch(e) {
+    versions = versions.sort();
+    version = versions[versions.length - 1];
+  }
+  return version;
 }
