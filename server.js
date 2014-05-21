@@ -782,12 +782,14 @@ cache(function(data, match, sendBadge) {
 }));
 
 // CocoaPods version integration.
-camp.route(/^\/cocoapods\/v\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/cocoapods\/(v|p|l)\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var spec = match[1];  // eg, AFNetworking
-  var format = match[2];
+  var type = match[1];
+  var spec = match[2];  // eg, AFNetworking
+  var format = match[3];
   var apiUrl = 'http://search.cocoapods.org/api/v1/pod/' + spec + '.json';
   var badgeData = getBadgeData('pod', data);
+  badgeData.colorscheme = null;
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -796,16 +798,25 @@ cache(function(data, match, sendBadge) {
     try {
       var data = JSON.parse(buffer);
       var version = data.version;
+      var license = data.license;
+      var platforms = Object.keys(data.platforms).join(' | ');
       version = version.replace(/^v/, "");
-      badgeData.text[1] = version;
-      if (/^\d/.test(badgeData.text[1])) {
-        badgeData.text[1] = 'v' + version;
+      if (type === 'v') {
+        badgeData.text[1] = version;
+        if (/^\d/.test(badgeData.text[1])) {
+          badgeData.text[1] = 'v' + version;
+        }
+        badgeData.colorB = '#5BA7E9';
+      } else if (type === 'p') {
+        badgeData.text[0] = 'platform';
+        badgeData.text[1] = platforms;
+        badgeData.colorB = '#989898';
+      } else if (type === 'l') {
+        badgeData.text[0] = 'license';
+        badgeData.text[1] = license;
+        badgeData.colorB = '#373737';
       }
-      if (version[0] === '0' || /dev/.test(version)) {
-        badgeData.colorscheme = 'orange';
-      } else {
-        badgeData.colorscheme = 'blue';
-      }
+
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
