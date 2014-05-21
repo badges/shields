@@ -580,12 +580,16 @@ cache(function(data, match, sendBadge) {
   var userRepo = match[1];  // eg, `jekyll/jekyll`.
   var branch = match[2];
   var format = match[3];
-  var apiUrl = 'http://badge.coveralls.io/repos/' + userRepo + '/badge.png';
+  var apiUrl = {
+    url: 'http://badge.coveralls.io/repos/' + userRepo + '/badge.png',
+    followRedirect: false,
+    method: 'HEAD'
+  };
   if (branch) {
-    apiUrl += '?branch=' + branch;
+    apiUrl.url += '?branch=' + branch;
   }
   var badgeData = getBadgeData('coverage', data);
-  https.get(apiUrl, function(res) {
+  request(apiUrl, function(err, res) {
     // We should get a 302. Look inside the Location header.
     var buffer = res.headers.location;
     if (!buffer) {
