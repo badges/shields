@@ -225,6 +225,35 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// TeamCity CodeBetter integration.
+camp.route(/^\/teamcity\/codebetter\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var buildType = match[1];  // eg, `bt428`.
+  var format = match[2];
+  var apiUrl = 'http://teamcity.codebetter.com/app/rest/builds/buildType:(id:' + buildType + ')?guest=1';
+  var badgeData = getBadgeData('build', data);
+  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var status = data.status;
+      badgeData.text[1] = (status || '').toLowerCase();
+      if (status === 'SUCCESS') {
+        badgeData.colorscheme = 'brightgreen';
+      } else {
+        badgeData.colorscheme = 'red';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Gittip integration.
 camp.route(/^\/gittip\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
@@ -946,35 +975,6 @@ cache(function(data, match, sendBadge) {
       var downloads = data.d.results[0].DownloadCount;
       badgeData.text[1] = metric(downloads) + ' total';
       badgeData.colorscheme = downloadCountColor(downloads);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// TeamCity CodeBetter version integration.
-camp.route(/^\/teamcity\/codebetter\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
-  var buildType = match[1];  // eg, `bt428`.
-  var format = match[2];
-  var apiUrl = 'http://teamcity.codebetter.com/app/rest/builds/buildType:(id:' + buildType + ')?guest=1';
-  var badgeData = getBadgeData('build', data);
-  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-    }
-    try {
-      var data = JSON.parse(buffer);
-      var status = data.status;
-      badgeData.text[1] = (status || '').toLowerCase();
-      if (status === 'SUCCESS') {
-        badgeData.colorscheme = 'brightgreen'; 
-      } else {
-        badgeData.colorscheme = 'red'; 
-      }
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
