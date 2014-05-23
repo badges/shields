@@ -875,28 +875,19 @@ cache(function(data, match, sendBadge) {
     }
     try {
       var data = JSON.parse(buffer);
-      var latest = (function () {
-        var topTag, tagDate, topDate = null;
-        for (var i = 0, len = data.length; i < len; i++) {
-          if (!data[i].draft) {
-            tagDate = new Date(data[i].created_at);
-            if (topDate === null || tagDate > topDate) {
-              topDate = tagDate;
-              topTag = i;
-            }
-          }
-        }
-        return data[topTag];
-      })();
-      var tag = latest.tag_name;
-      badgeData.text[1] = tag;
-      badgeData.colorscheme = latest.prerelease ? 'orange' : 'blue';
-      if (/^v[0-9]/.test(tag)) {
-        tag = tag.slice(1);
+      var versions = data.map(function(version) { return version.tag_name; });
+      var version = latestVersion(versions);
+      var prerelease = !!data.filter(function(versionData) {
+        return version === versionData.tag_name;
+      })[0].prerelease;
+      badgeData.text[1] = version;
+      badgeData.colorscheme = prerelease ? 'orange' : 'blue';
+      if (/^v[0-9]/.test(version)) {
+        version = version.slice(1);
       }
-      if (/^[0-9]/.test(tag)) {
-        badgeData.text[1] = 'v' + tag;
-        if (tag[0] === '0' || /dev/.test(tag)) {
+      if (/^[0-9]/.test(version)) {
+        badgeData.text[1] = 'v' + version;
+        if (version[0] === '0' || /dev/.test(version)) {
           badgeData.colorscheme = 'orange';
         }
       }
