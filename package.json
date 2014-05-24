@@ -1,11 +1,11 @@
 {
   "name": "gh-badges",
-  "version": "0.2.3",
+  "version": "1.0.0",
   "description": "GitHub badges implemented in SVG.",
   "keywords": ["GitHub", "badge", "SVG", "image"],
-  "homepage": "http://b.adge.me",
+  "homepage": "http://shields.io",
   "bugs": {
-    "url": "https://github.com/espadrine/gh-badges/issues",
+    "url": "https://github.com/badges/shields/issues",
     "email": "thaddee.tyl@gmail.com"
   },
   "license": "CC0",
@@ -39,7 +39,7 @@
     "badge.js",
     "README.md",
     "gh-badge.js",
-    "template.svg",
+    "templates",
     "svg-to-img.js",
     "colorscheme.json",
     "phantomjs-svg2png.js"
