@@ -355,20 +355,22 @@ cache(function(data, match, sendBadge) {
       var version;
       var unstable = function(ver) { return /dev/.test(ver); };
       // Grab the latest stable version, or an unstable
-      for (var versionName in data.package.versions) {
-        var current = data.package.versions[versionName];
+      var versions = Object.keys(data.package.versions);
+      var version = latestVersion(versions);
+      //for (var versionName in data.package.versions) {
+      //  var current = data.package.versions[versionName];
 
-        if (version !== undefined) {
-          if (unstable(version.version) && !unstable(current.version)) {
-            version = current;
-          } else if (version.version_normalized < current.version_normalized) {
-            version = current;
-          }
-        } else {
-          version = current;
-        }
-      }
-      version = version.version.replace(/^v/, "");
+      //  if (version !== undefined) {
+      //    if (unstable(version.version) && !unstable(current.version)) {
+      //      version = current;
+      //    } else if (version.version_normalized < current.version_normalized) {
+      //      version = current;
+      //    }
+      //  } else {
+      //    version = current;
+      //  }
+      //}
+      //version = version.version.replace(/^v/, "");
       badgeData.text[1] = version;
       if (/^\d/.test(badgeData.text[1])) {
         badgeData.text[1] = 'v' + version;
@@ -1218,6 +1220,9 @@ function metric(n) {
 // Given a list of versions (as strings), return the latest version.
 function latestVersion(versions) {
   var version = '';
+  var versions = versions.filter(function(version) {
+    return (/^v?[0-9]/).test(version);
+  });
   try {
     version = semver.maxSatisfying(versions, '');
   } catch(e) {
