@@ -237,6 +237,49 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// TeamCity CodeBetter code coverage
+camp.route(/^\/teamcity\/coverage\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var buildType = match[1];  // eg, `bt428`.
+  var format = match[2];
+  var apiUrl = 'http://teamcity.codebetter.com/app/rest/builds/buildType:(id:' + buildType + ')/statistics?guest=1';
+  var badgeData = getBadgeData('coverage', data);
+  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var covered;
+      var total;
+
+      data.property.forEach(function(property) {
+        if (property.name === 'CodeCoverageAbsSCovered') {
+          covered = property.value;
+        } else if (property.name === 'CodeCoverageAbsSTotal') {
+          total = property.value;
+        }
+      })
+
+      if (covered === undefined || total === undefined) {
+        badgeData.text[1] = 'malformed';
+        sendBadge(format, badgeData);
+        return;
+      }
+
+      var percentage = covered / total * 100;
+      badgeData.text[1] = percentage.toFixed(0) + '%';
+      badgeData.colorscheme = coveragePercentageColor(percentage);
+      sendBadge(format, badgeData);
+    } catch(e) {
+      console.log(e);
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // TeamCity CodeBetter integration.
 camp.route(/^\/teamcity\/codebetter\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
@@ -979,48 +1022,6 @@ cache(function(data, match, sendBadge) {
       var downloads = data.d.results[0].DownloadCount;
       badgeData.text[1] = metric(downloads) + ' total';
       badgeData.colorscheme = downloadCountColor(downloads);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// TeamCity CodeBetter code coverage
-camp.route(/^\/teamcity\/codebetter\/(.*)\/coverage\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
-  var buildType = match[1];  // eg, `bt428`.
-  var format = match[2];
-  var apiUrl = 'http://teamcity.codebetter.com/app/rest/builds/buildType:(id:' + buildType + ')/statistics?guest=1';
-  var badgeData = getBadgeData('coverage', data);
-  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-    }
-    try {
-      var data = JSON.parse(buffer);
-      var covered;
-      var total;
-
-      data.property.forEach(function(property) {
-        if (property.name === 'CodeCoverageAbsSCovered') {
-          covered = property.value;
-        } else if (property.name === 'CodeCoverageAbsSTotal') {
-          total = property.value;
-        }
-      })
-
-      if (covered === undefined || total === undefined) {
-        badgeData.text[1] = 'malformed';
-        sendBadge(format, badgeData);
-        return;
-      }
-
-      var percentage = covered / total * 100;
-      badgeData.text[1] = percentage.toFixed(0) + '%';
-      badgeData.colorscheme = coveragePercentageColor(percentage);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
