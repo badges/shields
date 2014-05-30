@@ -14,7 +14,7 @@ deploy:
 	git reset HEAD~1
 	(git checkout -B gh-pages && \
 	git merge master && \
-	git push origin gh-pages:gh-pages) || git checkout master
+	git push -f origin gh-pages:gh-pages) || git checkout master
 	git checkout master
 
 setup:
