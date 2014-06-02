@@ -9,6 +9,7 @@ website:
 
 deploy:
 	git add -f Verdana.ttf
+	git add -f secret.json
 	git commit -m'MUST NOT BE ON GITHUB'
 	git push -f heroku HEAD:master
 	git reset HEAD~1

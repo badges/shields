@@ -8,6 +8,12 @@ var fs = require('fs');
 var LruCache = require('./lru-cache.js');
 var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
+var serverSecrets;
+try {
+  // Everything that cannot be checked in but is useful server-side
+  // is stored in this JSON data.
+  serverSecrets = require('secret.json');
+} catch(e) {}
 var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
 
@@ -873,6 +879,12 @@ cache(function(data, match, sendBadge) {
   var repo = match[2];
   var format = match[3];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/tags';
+  // Using our OAuth App secret grants us 5000 req/min
+  // instead of the standard 60 req/min.
+  if (serverSecrets) {
+    apiUrl += '?client_id=' + serverSecrets.gh_client_id
+      + '&client_secret=' + serverSecrets.gh_client_secret;
+  }
   var badgeData = getBadgeData('tag', data);
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
@@ -897,6 +909,8 @@ cache(function(data, match, sendBadge) {
       }
       sendBadge(format, badgeData);
     } catch(e) {
+      console.error(e);
+      console.error('JSON: ' + buffer);
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
@@ -938,6 +952,8 @@ cache(function(data, match, sendBadge) {
       }
       sendBadge(format, badgeData);
     } catch(e) {
+      console.error(e);
+      console.error('JSON: ' + buffer);
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
