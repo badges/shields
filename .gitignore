@@ -3,6 +3,7 @@
 /analytics.json
 /coverage.html
 /redis
+/secret.json
 
 # Installed npm modules
 node_modules
