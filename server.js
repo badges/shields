@@ -279,7 +279,6 @@ cache(function(data, match, sendBadge) {
       badgeData.colorscheme = coveragePercentageColor(percentage);
       sendBadge(format, badgeData);
     } catch(e) {
-      console.log(e);
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
@@ -909,8 +908,6 @@ cache(function(data, match, sendBadge) {
       }
       sendBadge(format, badgeData);
     } catch(e) {
-      console.error(e);
-      console.error('JSON: ' + buffer);
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
@@ -952,8 +949,6 @@ cache(function(data, match, sendBadge) {
       }
       sendBadge(format, badgeData);
     } catch(e) {
-      console.error(e);
-      console.error('JSON: ' + buffer);
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
