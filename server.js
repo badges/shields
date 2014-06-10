@@ -878,8 +878,8 @@ cache(function(data, match, sendBadge) {
   var repo = match[2];
   var format = match[3];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/tags';
-  // Using our OAuth App secret grants us 5000 req/min
-  // instead of the standard 60 req/min.
+  // Using our OAuth App secret grants us 5000 req/hour
+  // instead of the standard 60 req/hour.
   if (serverSecrets) {
     apiUrl += '?client_id=' + serverSecrets.gh_client_id
       + '&client_secret=' + serverSecrets.gh_client_secret;
@@ -924,6 +924,12 @@ cache(function(data, match, sendBadge) {
   var repo = match[2];
   var format = match[3];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/releases';
+  // Using our OAuth App secret grants us 5000 req/hour
+  // instead of the standard 60 req/hour.
+  if (serverSecrets) {
+    apiUrl += '?client_id=' + serverSecrets.gh_client_id
+      + '&client_secret=' + serverSecrets.gh_client_secret;
+  }
   var badgeData = getBadgeData('release', data);
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
@@ -933,6 +939,9 @@ cache(function(data, match, sendBadge) {
       sendBadge(format, badgeData);
     }
     try {
+      if ((+res.headers['x-ratelimit-remaining']) === 0) {
+        return;  // Hope for the best in the cache.
+      }
       var data = JSON.parse(buffer);
       var versions = data.map(function(version) { return version.tag_name; });
       var version = latestVersion(versions);
