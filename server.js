@@ -12,7 +12,7 @@ var serverSecrets;
 try {
   // Everything that cannot be checked in but is useful server-side
   // is stored in this JSON data.
-  serverSecrets = require('secret.json');
+  serverSecrets = require('./secret.json');
 } catch(e) {}
 var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
@@ -893,6 +893,9 @@ cache(function(data, match, sendBadge) {
       sendBadge(format, badgeData);
     }
     try {
+      if ((+res.headers['x-ratelimit-remaining']) === 0) {
+        return;  // Hope for the best in the cache.
+      }
       var data = JSON.parse(buffer);
       var tag = data[0].name;
       badgeData.text[1] = tag;
