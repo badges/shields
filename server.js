@@ -776,12 +776,12 @@ cache(function(data, match, sendBadge) {
       badgeData.colorscheme = 'blue';
       if (score > 9) {
         badgeData.colorscheme = 'brightgreen';
-      } else if (score > 8) {
-        badgeData.colorscheme = 'green';
       } else if (score > 7) {
-        badgeData.colorscheme = 'yellowgreen';
+        badgeData.colorscheme = 'green';
       } else if (score > 5) {
         badgeData.colorscheme = 'yellow';
+      } else if (score > 4) {
+        badgeData.colorscheme = 'orange';
       } else {
         badgeData.colorscheme = 'red';
       }
