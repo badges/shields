@@ -172,31 +172,6 @@ function cache(f) {
   };
 }
 
-function coveragePercentageColor(percentage) {
-  if (percentage < 80) {
-    return 'red';
-  } else if (percentage < 90) {
-    return 'yellow';
-  } else if (percentage < 95) {
-    return 'green';
-  } else {
-    return 'brightgreen';
-  }
-}
-
-function downloadCountColor(downloads) {
-  if (downloads === 0) {
-    return 'red';
-  } else if (downloads < 10) {
-    return 'yellow';
-  } else if (downloads < 100) {
-    return 'yellowgreen';
-  } else if (downloads < 1000) {
-    return 'green';
-  } else {
-    return 'brightgreen';
-  }
-}
 
 // Vendors.
 
@@ -1315,6 +1290,32 @@ function metric(n) {
     }
   }
   return ''+n;
+}
+
+function coveragePercentageColor(percentage) {
+  if (percentage < 80) {
+    return 'red';
+  } else if (percentage < 90) {
+    return 'yellow';
+  } else if (percentage < 95) {
+    return 'green';
+  } else {
+    return 'brightgreen';
+  }
+}
+
+function downloadCountColor(downloads) {
+  if (downloads === 0) {
+    return 'red';
+  } else if (downloads < 10) {
+    return 'yellow';
+  } else if (downloads < 100) {
+    return 'yellowgreen';
+  } else if (downloads < 1000) {
+    return 'green';
+  } else {
+    return 'brightgreen';
+  }
 }
 
 // Given a list of versions (as strings), return the latest version.
