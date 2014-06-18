@@ -733,7 +733,7 @@ cache(function(data, match, sendBadge) {
 // Scrutinizer integration.
 camp.route(/^\/scrutinizer\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var repo = match[1];  // eg, phpmyadmin/phpmyadmin
+  var repo = match[1];  // eg, g/phpmyadmin/phpmyadmin
   var format = match[2];
   var apiUrl = 'https://scrutinizer-ci.com/api/repositories/' + repo;
   var badgeData = getBadgeData('code quality', data);
