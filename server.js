@@ -755,6 +755,45 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// Scrutinizer integration.
+camp.route(/^\/scrutinizer\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var repo = match[1];  // eg, phpmyadmin/phpmyadmin
+  var format = match[2];
+  var apiUrl = 'https://scrutinizer-ci.com/api/repositories/' + repo;
+  var badgeData = getBadgeData('code quality', data);
+  request(apiUrl, {}, function(err, res, buffer) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var score = data.applications[data.default_branch].index._embedded
+        .project.metric_values['scrutinizer.quality'];
+      score = Math.round(score * 100) / 100;
+      badgeData.text[1] = score;
+      badgeData.colorscheme = 'blue';
+      if (score > 9) {
+        badgeData.colorscheme = 'brightgreen';
+      } else if (score > 8) {
+        badgeData.colorscheme = 'green';
+      } else if (score > 7) {
+        badgeData.colorscheme = 'yellowgreen';
+      } else if (score > 5) {
+        badgeData.colorscheme = 'yellow';
+      } else {
+        badgeData.colorscheme = 'red';
+      }
+
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Gemnasium integration
 camp.route(/^\/gemnasium\/(.+)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
