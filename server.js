@@ -236,7 +236,7 @@ cache(function(data, match, sendBadge) {
       badgeData.text[1] = status;
       if (status === 'success') {
         badgeData.colorscheme = 'brightgreen';
-      } else {
+      } else if (status !== 'running') {
         badgeData.colorscheme = 'red';
       }
       sendBadge(format, badgeData);
