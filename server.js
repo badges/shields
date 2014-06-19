@@ -409,20 +409,6 @@ cache(function(data, match, sendBadge) {
       // Grab the latest stable version, or an unstable
       var versions = Object.keys(data.package.versions);
       var version = latestVersion(versions);
-      //for (var versionName in data.package.versions) {
-      //  var current = data.package.versions[versionName];
-
-      //  if (version !== undefined) {
-      //    if (unstable(version.version) && !unstable(current.version)) {
-      //      version = current;
-      //    } else if (version.version_normalized < current.version_normalized) {
-      //      version = current;
-      //    }
-      //  } else {
-      //    version = current;
-      //  }
-      //}
-      //version = version.version.replace(/^v/, "");
       badgeData.text[1] = version;
       if (/^\d/.test(badgeData.text[1])) {
         badgeData.text[1] = 'v' + version;
