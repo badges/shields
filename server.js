@@ -29,11 +29,8 @@ if (process.env.REDISTOGO_URL) {
   redis = require('redis').createClient(redisToGo.port, redisToGo.hostname);
   redis.auth(redisToGo.auth.split(':')[1]);
 } else {
-  redis = require('redis').createClient();
-}
-redis.on('error', function() {
   useRedis = false;
-});
+}
 
 var analytics = {};
 
@@ -47,8 +44,21 @@ setInterval(function analyticsAutoSave() {
   }
 }, analyticsAutoSavePeriod);
 
+function defaultAnalytics() {
+  var analytics = Object.create(null);
+  // In case something happens on the 36th.
+  analytics.vendorMonthly = new Array(36);
+  resetMonthlyAnalytics(analytics.vendorMonthly);
+  analytics.rawMonthly = new Array(36);
+  resetMonthlyAnalytics(analytics.rawMonthly);
+  analytics.rawFlatMonthly = new Array(36);
+  resetMonthlyAnalytics(analytics.rawFlatMonthly);
+  return analytics;
+}
+
 // Auto-load analytics.
 function analyticsAutoLoad() {
+  var defaultAnalyticsObject = defaultAnalytics();
   if (useRedis) {
     redis.get(analyticsAutoSaveFileName, function(err, value) {
       if (err == null && value != null) {
@@ -56,25 +66,34 @@ function analyticsAutoLoad() {
         // if error, then the rest of the function is run.
         try {
           analytics = JSON.parse(value);
+          // Extend analytics with a new value.
+          for (var key in defaultAnalyticsObject) {
+            if (!(key in analytics)) {
+              analytics[key] = defaultAnalyticsObject[key];
+            }
+          }
           return;
-        } catch(e) {}
+        } catch(e) {
+          console.error('Invalid Redis analytics, resetting.');
+          console.error(e);
+        }
       }
-      // In case something happens on the 36th.
-      analytics.vendorMonthly = new Array(36);
-      analytics.rawMonthly = new Array(36);
-      resetMonthlyAnalytics(analytics.vendorMonthly);
-      resetMonthlyAnalytics(analytics.rawMonthly);
+      analytics = defaultAnalyticsObject;
     });
   } else {
     // Not using Redis.
     try {
       analytics = JSON.parse(fs.readFileSync(analyticsAutoSaveFileName));
+      // Extend analytics with a new value.
+      for (var key in defaultAnalyticsObject) {
+        if (!(key in analytics)) {
+          analytics[key] = defaultAnalyticsObject[key];
+        }
+      }
     } catch(e) {
-      // In case something happens on the 36th.
-      analytics.vendorMonthly = new Array(36);
-      analytics.rawMonthly = new Array(36);
-      resetMonthlyAnalytics(analytics.vendorMonthly);
-      resetMonthlyAnalytics(analytics.rawMonthly);
+      console.error('Invalid JSON file for analytics, resetting.');
+      console.error(e);
+      analytics = defaultAnalyticsObject;
     }
   }
 }
@@ -122,6 +141,11 @@ function cache(f) {
     // Cache management - no cache, so it won't be cached by GitHub's CDN.
     ask.res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     incrMonthlyAnalytics(analytics.vendorMonthly);
+    if (data.style === 'flat') {
+      try {
+      incrMonthlyAnalytics(analytics.rawFlatMonthly);
+      }catch(e){}
+    }
 
     var cacheIndex = match[0] + '?label=' + data.label + '&style=' + data.style;
     // Should we return the data right away?
@@ -630,6 +654,11 @@ cache(function(data, match, sendBadge) {
   }
   var badgeData = getBadgeData('coverage', data);
   request(apiUrl, function(err, res) {
+    if (err != null) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
     // We should get a 302. Look inside the Location header.
     var buffer = res.headers.location;
     if (!buffer) {
