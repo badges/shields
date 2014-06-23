@@ -813,6 +813,41 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// David integration
+camp.route(/^\/david\/(.+)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var userRepo = match[1];  // eg, `jekyll/jekyll`.
+  var format = match[2];
+  var options = 'https://david-dm.org/' + userRepo + '/info.json';
+  var badgeData = getBadgeData('dependencies', data);
+  request(options, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var status = data.status;
+      if (status === 'notsouptodate') {
+        badgeData.colorscheme = 'yellow';
+        status = 'up-to-date';
+      } else if (status === 'outofdate') {
+        badgeData.colorscheme = 'red';
+        status = 'out-of-date';
+      } else if (status === 'uptodate') {
+        badgeData.colorscheme = 'brightgreen';
+        status = 'up-to-date';
+      }
+      badgeData.text[1] = status;
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+  });
+}));
+
 // Gemnasium integration
 camp.route(/^\/gemnasium\/(.+)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
