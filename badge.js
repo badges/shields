@@ -33,7 +33,8 @@ function optimize(string, callback) {
 }
 
 function makeImage(data, cb) {
-  var template = templates[data.template || 'default'];
+  var template = templates[data.template];
+  if (template == null) { template = templates['default']; }
   if (data.colorscheme) {
     data.colorA = colorscheme[data.colorscheme].colorA;
     data.colorB = colorscheme[data.colorscheme].colorB;
