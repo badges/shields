@@ -67,7 +67,7 @@ What kind of meta data can you convey using badges?
 - amount of [gittip](http://gittip.com) donations per week: `tips | $2/week`
 
 ## Font
-The font chosen in the specification is [DejaVu Sans](http://dejavu-fonts.org) a font family based on the Vera Fonts under a [Free license](http://dejavu-fonts.org/wiki/License). 
+The font chosen in the specification is [DejaVu Sans](http://dejavu-fonts.org) a font family based on the Vera Fonts under a [Free license](http://dejavu-fonts.org/wiki/License).
 
 ## Specification
 See [SPECIFICATION.md](spec/SPECIFICATION.md).
