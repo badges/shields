@@ -814,12 +814,13 @@ cache(function(data, match, sendBadge) {
 }));
 
 // David integration
-camp.route(/^\/david\/(.+)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/david\/(dev\/)?(.+?)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var userRepo = match[1];  // eg, `jekyll/jekyll`.
-  var format = match[2];
-  var options = 'https://david-dm.org/' + userRepo + '/info.json';
-  var badgeData = getBadgeData('dependencies', data);
+  var dev = match[1];
+  var userRepo = match[2];  // eg, `jekyll/jekyll`.
+  var format = match[3];
+  var options = 'https://david-dm.org/' + userRepo + '/' + (dev ? 'dev-' : '') + 'info.json';
+  var badgeData = getBadgeData( (dev?'devD':'d') + 'ependencies', data);
   request(options, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
