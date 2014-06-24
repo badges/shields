@@ -774,6 +774,32 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// Scrutinizer coverage integration.
+camp.route(/^\/scrutinizer\/coverage\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var repo = match[1];  // eg, g/phpmyadmin/phpmyadmin
+  var format = match[2];
+  var apiUrl = 'https://scrutinizer-ci.com/api/repositories/' + repo;
+  var badgeData = getBadgeData('coverage', data);
+  request(apiUrl, {}, function(err, res, buffer) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var percentage = data.applications[data.default_branch].index._embedded
+        .project.metric_values['scrutinizer.test_coverage'] * 100;
+      badgeData.text[1] = percentage.toFixed(0) + '%';
+      badgeData.colorscheme = coveragePercentageColor(percentage);
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Scrutinizer integration.
 camp.route(/^\/scrutinizer\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
