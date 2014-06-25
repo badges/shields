@@ -1155,13 +1155,15 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
-// NuGet version integration.
-camp.route(/^\/nuget\/v\/(.*)\.(svg|png|gif|jpg)$/,
+// NuGet/chocolatey version integration.
+camp.route(/^\/(nuget|chocolatey)\/v\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var repo = match[1];  // eg, `Nuget.Core`.
-  var format = match[2];
-  var apiUrl = 'https://www.nuget.org/api/v2/Packages()?$filter=Id%20eq%20%27' + repo + '%27%20and%20IsLatestVersion%20eq%20true';
-  var badgeData = getBadgeData('nuget', data);
+  var site = match[1];
+  var repo = match[2];  // eg, `Nuget.Core`.
+  var format = match[3];
+  var filter = 'Id eq \'' + repo + '\' and IsLatestVersion eq true';
+  var apiUrl = 'https://www.' + site + '.org/api/v2/Packages()?$filter=' + encodeURIComponent(filter);
+  var badgeData = getBadgeData(site, data);
   request(apiUrl, { headers: { 'Accept': 'application/atom+json,application/json' } }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -1169,7 +1171,8 @@ cache(function(data, match, sendBadge) {
     }
     try {
       var data = JSON.parse(buffer);
-      var version = data.d.results[0].NormalizedVersion;
+      var result = data.d.results[0];
+      var version = result.NormalizedVersion || result.Version;
       badgeData.text[1] = 'v' + version;
       if (version[0] === '0') {
         badgeData.colorscheme = 'orange';
@@ -1184,13 +1187,14 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
-// NuGet download count integration.
-camp.route(/^\/nuget\/dt\/(.*)\.(svg|png|gif|jpg)$/,
+// NuGet/chocolatey download count integration.
+camp.route(/^\/(nuget|chocolatey)\/dt\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var repo = match[1];  // eg, `Nuget.Core`.
-  var format = match[2];
+  var site = match[1];
+  var repo = match[2];  // eg, `Nuget.Core`.
+  var format = match[3];
   var filter = 'Id eq \'' + repo + '\' and IsLatestVersion eq true';
-  var apiUrl = 'https://www.nuget.org/api/v2/Packages()?$filter=' + encodeURIComponent(filter);
+  var apiUrl = 'https://www.' + site + '.org/api/v2/Packages()?$filter=' + encodeURIComponent(filter);
   var badgeData = getBadgeData('downloads', data);
   request(apiUrl, { headers: { 'Accept': 'application/atom+json,application/json' } }, function(err, res, buffer) {
     if (err != null) {
