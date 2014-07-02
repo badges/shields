@@ -964,7 +964,10 @@ cache(function(data, match, sendBadge) {
     try {
       var data = JSON.parse(buffer);
       var version = data.version;
-      var license = data.license;
+      var license;
+      if (typeof data.license === 'string') {
+        license = data.license;
+      } else { license = data.license.type; }
       var platforms = Object.keys(data.platforms).join(' | ');
       version = version.replace(/^v/, "");
       if (type === 'v') {
