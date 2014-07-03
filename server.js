@@ -968,7 +968,11 @@ cache(function(data, match, sendBadge) {
       if (typeof data.license === 'string') {
         license = data.license;
       } else { license = data.license.type; }
-      var platforms = Object.keys(data.platforms).join(' | ');
+
+      var platforms = Object.keys(data.platforms || {
+        'ios' : '5.0',
+        'osx' : '10.7'
+      }).join(' | ');
       version = version.replace(/^v/, "");
       if (type === 'v') {
         badgeData.text[1] = version;
