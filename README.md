@@ -20,7 +20,7 @@ Make your own badges [here][badges]!
 - [badges2svg][]
 - [reposs][]
 - [ruby-gem-downloads-badge][]
-- 
+
 [gem]: https://github.com/badges/badgerbadgerbadger
 [badges2svg]: https://github.com/bfontaine/badges2svg
 [reposs]: https://github.com/rexfinn/reposs
