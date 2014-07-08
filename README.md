@@ -19,11 +19,13 @@ Make your own badges [here][badges]!
 - [BadgerBadgerBadger][gem]
 - [badges2svg][]
 - [reposs][]
-
+- [ruby-gem-downloads-badge][]
+- 
 [gem]: https://github.com/badges/badgerbadgerbadger
 [badges2svg]: https://github.com/bfontaine/badges2svg
 [reposs]: https://github.com/rexfinn/reposs
 [VersionEye]: https://www.versioneye.com/
+[ruby-gem-downloads-badge]: https://github.com/bogdanRada/ruby-gem-downloads-badge/
 
 ## Problem
 Many GitHub repos sport badges for things like:
