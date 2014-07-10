@@ -605,17 +605,17 @@ cache(function(data, match, sendBadge) {
     try {
       var data = JSON.parse(buffer);
       var downloads  = 0;
-        if (typeof (downloads_type) !== "undefined"  && downloads_type === "total") {
-            downloads = data.downloads;
-        }
-       else{
-         downloads = data.version_downloads;
-       }
+      if (typeof (downloads_type) !== "undefined"  && downloads_type === "total") {
+        downloads = data.downloads;
+      }
+      else{
+        downloads = data.version_downloads;
+      }
       badgeData.text[1] = number_with_delimiter(downloads);
-       if (typeof(downloads_type) !== "undefined" && downloads_type === "total" )
-       {
-           badgeData.text[1] = badgeData.text[1] + ' total';
-       }
+      if (typeof(downloads_type) !== "undefined" && downloads_type === "total" )
+      {
+        badgeData.text[1] = badgeData.text[1] + ' total';
+      }
       badgeData.colorscheme = downloadCountColor(downloads);
       sendBadge(format, badgeData);
     } catch(e) {
