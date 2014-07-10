@@ -588,6 +588,44 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// Gem download count integration.
+camp.route(/^\/gem\/dc\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var site = match[1];
+  var repo = site.split('/')[0];
+  var downloads_type = site.split('/')[1];
+  var format = match[2];
+  var apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
+  var badgeData = getBadgeData('downloads', data);
+  request(apiUrl, { headers: { 'Accept': 'application/atom+json,application/json' } }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var downloads  = 0;
+        if (typeof (downloads_type) !== "undefined"  && downloads_type === "total") {
+            downloads = data.downloads;
+        }
+       else{
+         downloads = data.version_downloads;
+       }
+      badgeData.text[1] = number_with_delimiter(downloads);
+       if (typeof(downloads_type) !== "undefined" && downloads_type === "total" )
+       {
+           badgeData.text[1] = badgeData.text[1] + ' total';
+       }
+      badgeData.colorscheme = downloadCountColor(downloads);
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+
 // PyPI integration.
 camp.route(/^\/pypi\/([^\/]+)\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
@@ -1408,6 +1446,16 @@ function metric(n) {
   }
   return ''+n;
 }
+
+function number_with_delimiter (number, delimiter) {
+    var number = number + '', delimiter = delimiter || ',';
+    var split = number.split('.');
+    split[0] = split[0].replace(
+        /(\d)(?=(\d\d\d)+(?!\d))/g,
+        '$1' + delimiter
+    );
+    return split.join('.');    
+};
 
 function coveragePercentageColor(percentage) {
   if (percentage < 80) {
