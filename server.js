@@ -1268,21 +1268,20 @@ cache(function(data, match, sendBadge) {
 }));
 
 // Jenkins build status integration
-camp.route(/^\/jenkins(-ci)?\/s\/(http(s)?)\/([^\/]+)(\/.+?)?\/([^\/]+)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/jenkins(-ci)?\/s\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var scheme = match[2];  
   var host = match[4];
-  var path = match[5];
-  var job = match[6];
-  var format = match[7];
+  var job = match[5];
+  var format = match[6];
   var options = {
     json: true,
-    uri: scheme + '://' + host + '/' + (path || '') + '/job/' + job + '/api/json?tree=color'
+    uri: scheme + '://' + host + '/job/' + job + '/api/json?tree=color'
   };
   
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res, json) {
-    if (err != null) {
+    if (err !== null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
@@ -1308,16 +1307,15 @@ cache(function(data, match, sendBadge) {
   });
 }));
 // Jenkins tests integration
-camp.route(/^\/jenkins(-ci)?\/t\/(http(s)?)\/([^\/]+)(\/.+?)?\/([^\/]+)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/jenkins(-ci)?\/t\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var scheme = match[2];  
   var host = match[4];
-  var path = match[5];
-  var job = match[6];
-  var format = match[7];
+  var job = match[5];
+  var format = match[6];
   var options = {
     json: true,
-    uri: scheme + '://' + host + '/' + (path || '') + '/job/' + job + '/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]'
+    uri: scheme + '://' + host + '/job/' + job + '/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]'
   };
   
   var badgeData = getBadgeData('tests', data);
