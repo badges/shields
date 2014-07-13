@@ -1270,14 +1270,14 @@ cache(function(data, match, sendBadge) {
 // Jenkins build status integration
 camp.route(/^\/jenkins(-ci)?\/s\/(http(s)?)\/([^\/]+)(\/.+?)?\/([^\/]+)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var scheme = match[2];  // eg, espadrine/sc
+  var scheme = match[2];  
   var host = match[4];
   var path = match[5];
   var job = match[6];
   var format = match[7];
   var options = {
     json: true,
-    uri: scheme + '://' + host + '/' + (path || '') + '/job/' + job + '/lastBuild/api/json?tree=result'
+    uri: scheme + '://' + host + '/' + (path || '') + '/job/' + job + '/api/json?tree=color'
   };
   
   var badgeData = getBadgeData('build', data);
@@ -1289,25 +1289,28 @@ cache(function(data, match, sendBadge) {
     }
     
     console.log(json);
-    badgeData.text[1] = 'unbuilt';
+    badgeData.text[1] = 'building';
     
-    if (json.result === 'SUCCESS') {
+    if (json.color === 'blue') {
       badgeData.colorscheme = 'brightgreen';
       badgeData.text[1] = 'passing';
-    } else if (json.result === 'FAILURE') {
+    } else if (json.color === 'red') {
       badgeData.colorscheme = 'red';
       badgeData.text[1] = 'failing';
-    } else if (json.result === 'UNSTABLE') {
+    } else if (json.color === 'yellow') {
       badgeData.colorscheme = 'yellow';
       badgeData.text[1] = 'unstable';
-    } 
+    } else if (json.color === 'grey' || json.color === 'disabled' || json.color === 'aborted' || json.color === 'notbuilt') {
+      badgeData.colorscheme = 'lightgrey';
+      badgeData.text[1] = 'not built';
+    }
     sendBadge(format, badgeData);
   });
 }));
 // Jenkins tests integration
 camp.route(/^\/jenkins(-ci)?\/t\/(http(s)?)\/([^\/]+)(\/.+?)?\/([^\/]+)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var scheme = match[2];  // eg, espadrine/sc
+  var scheme = match[2];  
   var host = match[4];
   var path = match[5];
   var job = match[6];
@@ -1327,7 +1330,11 @@ cache(function(data, match, sendBadge) {
     var testsObject = json.actions.filter(function (obj) {
       return obj.hasOwnProperty('failCount');
     })[0];
-    
+    if (testsObject === undefined) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
     var successfulTests = testsObject.totalCount - (testsObject.failCount + testsObject.skipCount);
     var percent = successfulTests / testsObject.totalCount;
     badgeData.text[1] = successfulTests + ' / ' + testsObject.totalCount;
