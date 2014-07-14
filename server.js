@@ -591,7 +591,7 @@ cache(function(data, match, sendBadge) {
 // Gem download count for latest version.
 camp.route(/^\/gem\/dtv\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var repo= match[1];
+  var repo = match[1];  // eg, rails.
   var format = match[2];
   var apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
   var badgeData = getBadgeData('downloads', data);
@@ -617,7 +617,7 @@ cache(function(data, match, sendBadge) {
 // Gem total download count
 camp.route(/^\/gem\/dt\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var repo = match[1];
+  var repo = match[1];  // eg, rails.
   var format = match[2];
   var apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
   var badgeData = getBadgeData('downloads', data);
