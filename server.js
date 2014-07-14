@@ -140,8 +140,6 @@ function cache(f) {
   return function getRequest(data, match, end, ask) {
     // Cache management - no cache, so it won't be cached by GitHub's CDN.
     ask.res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    ask.res.setHeader("Pragma", "no-cache"); // HTTP 1.0.
-    ask.res.setHeader("Expires", -1); // Proxies.
     incrMonthlyAnalytics(analytics.vendorMonthly);
     if (data.style === 'flat') {
       try {
