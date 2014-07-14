@@ -603,8 +603,7 @@ cache(function(data, match, sendBadge) {
     try {
       var data = JSON.parse(buffer);
       var downloads  =  data.version_downloads;
-      badgeData.text[1] = metric(downloads);
-       badgeData.text[1] = badgeData.text[1] + ' latest version';
+      badgeData.text[1] = metric(downloads) + ' latest version';
       badgeData.colorscheme = downloadCountColor(downloads);
       sendBadge(format, badgeData);
     } catch(e) {
@@ -630,8 +629,7 @@ cache(function(data, match, sendBadge) {
     try {
       var data = JSON.parse(buffer);
       var downloads  = data.downloads;
-      badgeData.text[1] = metric(downloads);
-      badgeData.text[1] = badgeData.text[1] + ' total';
+      badgeData.text[1] = metric(downloads) + ' total';
       badgeData.colorscheme = downloadCountColor(downloads);
       sendBadge(format, badgeData);
     } catch(e) {
