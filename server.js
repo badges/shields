@@ -140,6 +140,8 @@ function cache(f) {
   return function getRequest(data, match, end, ask) {
     // Cache management - no cache, so it won't be cached by GitHub's CDN.
     ask.res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    ask.res.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+    ask.res.setHeader("Expires", -1); // Proxies.
     incrMonthlyAnalytics(analytics.vendorMonthly);
     if (data.style === 'flat') {
       try {
@@ -588,8 +590,35 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
-// Gem download count integration.
-camp.route(/^\/gem\/dc\/(.*)\.(svg|png|gif|jpg)$/,
+// Gem download count for latest version.
+camp.route(/^\/gem\/dtv\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var repo= match[1];
+  var format = match[2];
+  var apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
+  var badgeData = getBadgeData('downloads', data);
+  request(apiUrl, { headers: { 'Accept': 'application/atom+json,application/json' } }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var downloads  =  data.version_downloads;
+      badgeData.text[1] = metric(downloads);
+       badgeData.text[1] = badgeData.text[1] + ' latest version';
+      badgeData.colorscheme = downloadCountColor(downloads);
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+
+// Gem total download count
+camp.route(/^\/gem\/dt\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var site = match[1];
   var repo = site.split('/')[0];
@@ -604,18 +633,9 @@ cache(function(data, match, sendBadge) {
     }
     try {
       var data = JSON.parse(buffer);
-      var downloads  = 0;
-      if (typeof (downloads_type) !== "undefined"  && downloads_type === "total") {
-        downloads = data.downloads;
-      }
-      else{
-        downloads = data.version_downloads;
-      }
-      badgeData.text[1] = number_with_delimiter(downloads);
-      if (typeof(downloads_type) !== "undefined" && downloads_type === "total" )
-      {
-        badgeData.text[1] = badgeData.text[1] + ' total';
-      }
+      var downloads  = data.downloads;
+      badgeData.text[1] = metric(downloads);
+      badgeData.text[1] = badgeData.text[1] + ' total';
       badgeData.colorscheme = downloadCountColor(downloads);
       sendBadge(format, badgeData);
     } catch(e) {
@@ -1447,15 +1467,6 @@ function metric(n) {
   return ''+n;
 }
 
-function number_with_delimiter (number, delimiter) {
-    var number = number + '', delimiter = delimiter || ',';
-    var split = number.split('.');
-    split[0] = split[0].replace(
-        /(\d)(?=(\d\d\d)+(?!\d))/g,
-        '$1' + delimiter
-    );
-    return split.join('.');    
-};
 
 function coveragePercentageColor(percentage) {
   if (percentage < 80) {
