@@ -618,9 +618,7 @@ cache(function(data, match, sendBadge) {
 // Gem total download count
 camp.route(/^\/gem\/dt\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var site = match[1];
-  var repo = site.split('/')[0];
-  var downloads_type = site.split('/')[1];
+  var repo = match[1];
   var format = match[2];
   var apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
   var badgeData = getBadgeData('downloads', data);
