@@ -588,50 +588,64 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
-// Gem download count for latest version.
-camp.route(/^\/gem\/dtv\/(.*)\.(svg|png|gif|jpg)$/,
+
+// Gem  download count
+camp.route(/^\/gem\/(dt|dtv|dv)\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var repo= match[1];
-  var format = match[2];
-  var apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
+  var info = match[1];
+  var site = match[2];
+  var splited_url = site.split('/');
+  var repo = splited_url[0];
+  var version = (splited_url.length > 1) ? splited_url[splited_url.length - 1] : null;
+  version = (version === "stable") ? version : semver.valid(version);
+  var format = match[3];
   var badgeData = getBadgeData('downloads', data);
+  var  apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
+  if  (info === "dv"){
+      apiUrl = 'https://rubygems.org/api/v1/versions/' + repo + '.json';
+  }
   request(apiUrl, { headers: { 'Accept': 'application/atom+json,application/json' } }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
     try {
-      var data = JSON.parse(buffer);
-      var downloads  =  data.version_downloads;
-      badgeData.text[1] = metric(downloads);
-       badgeData.text[1] = badgeData.text[1] + ' latest version';
-      badgeData.colorscheme = downloadCountColor(downloads);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
+        var data = JSON.parse(buffer);
+        if (info === "dt") {
+          var downloads = metric(data.downloads) + " total";
+        }
+        else if (info === "dtv") {
+          var downloads = metric(data.version_downloads) + " latest version";
+        }
+        else if (info === "dv") {
+          var downloads = "invalid";
 
+          if (version !== null && version === "stable") {
 
-// Gem total download count
-camp.route(/^\/gem\/dt\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
-  var repo = match[1];
-  var format = match[2];
-  var apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
-  var badgeData = getBadgeData('downloads', data);
-  request(apiUrl, { headers: { 'Accept': 'application/atom+json,application/json' } }, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-    }
-    try {
-      var data = JSON.parse(buffer);
-      var downloads  = data.downloads;
-      badgeData.text[1] = metric(downloads);
-      badgeData.text[1] = badgeData.text[1] + ' total';
+            var versions = data.filter(function(ver) {
+              return ver.prerelease === false;
+            }).map(function(ver) {
+              return ver.number;
+            });
+            var stable_version = latestVersion(versions);  // found latest stable version
+            var version_data = data.filter(function(ver) {
+              return ver.number === stable_version;
+            })[0];
+            downloads = metric(version_data.downloads_count) + " stable version";
+          }
+          else if (version !== null) {
+
+            var version_data = data.filter(function(ver) {
+              return ver.number === version;
+            })[0]
+
+            downloads = metric(version_data.downloads_count) + " version " + version;
+          }
+        }
+        else {
+          var downloads = "invalid";
+        }
+      badgeData.text[1] =downloads;
       badgeData.colorscheme = downloadCountColor(downloads);
       sendBadge(format, badgeData);
     } catch(e) {
