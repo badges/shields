@@ -112,7 +112,9 @@ function incrMonthlyAnalytics(monthlyAnalytics) {
     lastDay = (lastDay + 1) % monthlyAnalytics.length;
     monthlyAnalytics[lastDay] = 0;
   }
-  monthlyAnalytics[currentDay]++;
+  try {
+    monthlyAnalytics[currentDay]++;
+  } catch(e) { console.error(e.stack); }
 }
 
 analyticsAutoLoad();
