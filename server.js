@@ -561,6 +561,34 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// npm license integration.
+camp.route(/^\/npm\/l\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var repo = match[1];
+  var format = match[2];
+  var apiUrl = 'http://registry.npmjs.org/' + repo + '/latest';
+  var badgeData = getBadgeData('license', data);
+  request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var license = data.license;
+      if (Array.isArray(license)) {
+        license = license.join(', ');
+      }
+      badgeData.text[1] = license;
+      badgeData.colorscheme = 'red';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Gem version integration.
 camp.route(/^\/gem\/v\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
