@@ -684,6 +684,17 @@ cache(function(data, match, sendBadge) {
           badgeData.colorscheme = 'blue';
         }
         sendBadge(format, badgeData);
+      } else if (info == 'l') {
+        var license = data.info.license;
+        badgeData.text[0] = 'license';
+        if(license == null || license == 'UNKNOWN') {
+          badgeData.text[1] = 'Unknown';
+          badgeData.colorscheme = 'red';
+        } else {
+          badgeData.text[1] = license;
+          badgeData.colorscheme = 'blue';
+        }
+        sendBadge(format, badgeData);
       }
     } catch(e) {
       badgeData.text[1] = 'invalid';
