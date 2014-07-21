@@ -951,13 +951,16 @@ cache(function(data, match, sendBadge) {
 }));
 
 // David integration
-camp.route(/^\/david\/(dev\/)?(.+?)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/david\/(dev\/|peer\/)?(.+?)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var dev = match[1];
-  var userRepo = match[2];  // eg, `jekyll/jekyll`.
+  if (dev != null) { dev = dev.slice(0, -1); }  // 'dev' or 'peer'.
+  // eg, `visionmedia/express`, `webcomponents/generator-element`.
+  var userRepo = match[2];
   var format = match[3];
-  var options = 'https://david-dm.org/' + userRepo + '/' + (dev ? 'dev-' : '') + 'info.json';
-  var badgeData = getBadgeData( (dev?'devD':'d') + 'ependencies', data);
+  var options = 'https://david-dm.org/' + userRepo + '/'
+    + (dev ? (dev + '-') : '') + 'info.json';
+  var badgeData = getBadgeData( (dev? (dev+'D') :'d') + 'ependencies', data);
   request(options, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
