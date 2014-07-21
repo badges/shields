@@ -564,7 +564,7 @@ cache(function(data, match, sendBadge) {
 // Gem version integration.
 camp.route(/^\/gem\/v\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var repo = match[1];  // eg, `localeval`.
+  var repo = match[1];  // eg, `formatador`.
   var format = match[2];
   var apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
   var badgeData = getBadgeData('gem', data);
@@ -593,9 +593,9 @@ cache(function(data, match, sendBadge) {
 // Gem download count
 camp.route(/^\/gem\/(dt|dtv|dv)\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var info = match[1];
-  var site = match[2];
-  var splited_url = site.split('/');
+  var info = match[1];  // either dt, dtv or dv.
+  var repo = match[2];  // eg, "rails"
+  var splited_url = repo.split('/');
   var repo = splited_url[0];
   var version = (splited_url.length > 1)
     ? splited_url[splited_url.length - 1]
