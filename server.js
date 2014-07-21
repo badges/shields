@@ -564,7 +564,7 @@ cache(function(data, match, sendBadge) {
 // npm license integration.
 camp.route(/^\/npm\/l\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var repo = match[1];
+  var repo = match[1];  // eg, "express"
   var format = match[2];
   var apiUrl = 'http://registry.npmjs.org/' + repo + '/latest';
   var badgeData = getBadgeData('license', data);
