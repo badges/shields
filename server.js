@@ -693,7 +693,7 @@ cache(function(data, match, sendBadge) {
 camp.route(/^\/pypi\/([^\/]+)\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var info = match[1];
-  var egg = match[2];  // eg, `gevent`.
+  var egg = match[2];  // eg, `gevent`, `Django`.
   var format = match[3];
   var apiUrl = 'https://pypi.python.org/pypi/' + egg + '/json';
   var badgeData = getBadgeData('pypi', data);
@@ -736,10 +736,9 @@ cache(function(data, match, sendBadge) {
         badgeData.text[0] = 'license';
         if(license == null || license == 'UNKNOWN') {
           badgeData.text[1] = 'Unknown';
-          badgeData.colorscheme = 'red';
         } else {
           badgeData.text[1] = license;
-          badgeData.colorscheme = 'blue';
+          badgeData.colorscheme = 'red';
         }
         sendBadge(format, badgeData);
       }
