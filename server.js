@@ -590,63 +590,68 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
-// Gem  download count
+// Gem download count
 camp.route(/^\/gem\/(dt|dtv|dv)\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var info = match[1];
   var site = match[2];
   var splited_url = site.split('/');
   var repo = splited_url[0];
-  var version = (splited_url.length > 1) ? splited_url[splited_url.length - 1] : null;
+  var version = (splited_url.length > 1)
+    ? splited_url[splited_url.length - 1]
+    : null;
   version = (version === "stable") ? version : semver.valid(version);
   var format = match[3];
   var badgeData = getBadgeData('downloads', data);
-  var  apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
   if  (info === "dv"){
-      apiUrl = 'https://rubygems.org/api/v1/versions/' + repo + '.json';
+    apiUrl = 'https://rubygems.org/api/v1/versions/' + repo + '.json';
+  } else {
+    var  apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
   }
-  request(apiUrl, { headers: { 'Accept': 'application/atom+json,application/json' } }, function(err, res, buffer) {
+  var parameters = {
+    headers: {
+      'Accept': 'application/atom+json,application/json'
+    }
+  };
+  request(apiUrl, parameters, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
     try {
-        var data = JSON.parse(buffer);
-        if (info === "dt") {
-          var downloads = metric(data.downloads) + " total";
-        }
-        else if (info === "dtv") {
-          var downloads = metric(data.version_downloads) + " latest version";
-        }
-        else if (info === "dv") {
-          var downloads = "invalid";
+      var data = JSON.parse(buffer);
+      if (info === "dt") {
+        var downloads = metric(data.downloads) + " total";
+      } else if (info === "dtv") {
+        var downloads = metric(data.version_downloads) + " latest version";
+      } else if (info === "dv") {
+        var downloads = "invalid";
 
-          if (version !== null && version === "stable") {
+        if (version !== null && version === "stable") {
 
-            var versions = data.filter(function(ver) {
-              return ver.prerelease === false;
-            }).map(function(ver) {
-              return ver.number;
-            });
-            var stable_version = latestVersion(versions);  // found latest stable version
-            var version_data = data.filter(function(ver) {
-              return ver.number === stable_version;
-            })[0];
-            downloads = metric(version_data.downloads_count) + " stable version";
-          }
-          else if (version !== null) {
+          var versions = data.filter(function(ver) {
+            return ver.prerelease === false;
+          }).map(function(ver) {
+            return ver.number;
+          });
+          // Found latest stable version.
+          var stable_version = latestVersion(versions);
+          var version_data = data.filter(function(ver) {
+            return ver.number === stable_version;
+          })[0];
+          downloads = metric(version_data.downloads_count) + " stable version";
 
-            var version_data = data.filter(function(ver) {
-              return ver.number === version;
-            })[0]
+        } else if (version !== null) {
 
-            downloads = metric(version_data.downloads_count) + " version " + version;
-          }
+          var version_data = data.filter(function(ver) {
+            return ver.number === version;
+          })[0];
+
+          downloads = metric(version_data.downloads_count)
+            + " version " + version;
         }
-        else {
-          var downloads = "invalid";
-        }
-      badgeData.text[1] =downloads;
+      } else { var downloads = "invalid"; }
+      badgeData.text[1] = downloads;
       badgeData.colorscheme = downloadCountColor(downloads);
       sendBadge(format, badgeData);
     } catch(e) {
