@@ -10,7 +10,7 @@ This document specifies the visual design of Shields badges.
 - **hyperlinked**: badges can link to a third-party website providing more information, either related to the metadata provided by the badge or about the project the badge was used for (e.g. an open source library) 
 
 ## Aesthetics
-The design of our badges has been carefully considered to provide sufficient padding between the container badge and the text within. Badges should never have a fixed width. The letter spacing (or kerning) is deliberate and focused on clarity, so is the use of the Open Sans font face. Contrary to widely available web-safe alternative sans-serif fonts like Arial (a sloppy Helvetica ripoff) and Verdana (a sloppy Futura ripoff), OpenSans remains highly legible at very small sizes which is why it was chosen.
+The design of our badges has been carefully considered to provide sufficient padding between the container badge and the text within. Badges should never have a fixed width. The letter spacing (or kerning) is deliberate and focused on clarity, so is the use of the DejaVu Sans font face. DejaVu Sans remains highly legible at very small sizes which is why it was chosen.
 
 ![](https://raw.github.com/badges/shields/master/spec/proportions.png)
 
