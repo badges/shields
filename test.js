@@ -72,7 +72,10 @@ describe('the server', function() {
   // Start running the server.
   it('should start', function(done) {
     server = cproc.spawn('node', ['ass-stubs/server-test.js', port]);
-    server.stdout.on('data', function(data) { done(); });
+    var isDone = false;
+    server.stdout.on('data', function(data) {
+      if (!isDone) { done(); isDone = true; }
+    });
     server.stderr.on('data', function(data) { console.log(''+data); });
   });
 
