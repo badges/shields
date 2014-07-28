@@ -1,7 +1,9 @@
+var serverPort = +process.env.PORT || +process.argv[2] || 80;
 var camp = require('camp').start({
   documentRoot: __dirname,
-  port: +process.env.PORT||+process.argv[2]||80
+  port: serverPort
 });
+console.log('http://127.1:' + serverPort + '/try.html');
 var https = require('https');
 var request = require('request');
 var fs = require('fs');
