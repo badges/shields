@@ -1386,6 +1386,86 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// Jenkins build status integration
+camp.route(/^\/jenkins(-ci)?\/s\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var scheme = match[2];  
+  var host = match[4];
+  var job = match[5];
+  var format = match[6];
+  var options = {
+    json: true,
+    uri: scheme + '://' + host + '/job/' + job + '/api/json?tree=color'
+  };
+  
+  var badgeData = getBadgeData('build', data);
+  request(options, function(err, res, json) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    
+    console.log(json);
+    badgeData.text[1] = 'building';
+    
+    if (json.color === 'blue') {
+      badgeData.colorscheme = 'brightgreen';
+      badgeData.text[1] = 'passing';
+    } else if (json.color === 'red') {
+      badgeData.colorscheme = 'red';
+      badgeData.text[1] = 'failing';
+    } else if (json.color === 'yellow') {
+      badgeData.colorscheme = 'yellow';
+      badgeData.text[1] = 'unstable';
+    } else if (json.color === 'grey' || json.color === 'disabled' || json.color === 'aborted' || json.color === 'notbuilt') {
+      badgeData.colorscheme = 'lightgrey';
+      badgeData.text[1] = 'not built';
+    }
+    sendBadge(format, badgeData);
+  });
+}));
+// Jenkins tests integration
+camp.route(/^\/jenkins(-ci)?\/t\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var scheme = match[2];  
+  var host = match[4];
+  var job = match[5];
+  var format = match[6];
+  var options = {
+    json: true,
+    uri: scheme + '://' + host + '/job/' + job + '/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]'
+  };
+  
+  var badgeData = getBadgeData('tests', data);
+  request(options, function(err, res, json) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    var testsObject = json.actions.filter(function (obj) {
+      return obj.hasOwnProperty('failCount');
+    })[0];
+    if (testsObject === undefined) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    var successfulTests = testsObject.totalCount - (testsObject.failCount + testsObject.skipCount);
+    var percent = successfulTests / testsObject.totalCount;
+    badgeData.text[1] = successfulTests + ' / ' + testsObject.totalCount;
+    if (percent === 1) {
+      badgeData.colorscheme = 'brightgreen';
+    } else if (percent === 0) {
+      badgeData.colorscheme = 'red';
+    } else {
+      badgeData.colorscheme = 'yellow';
+    }
+    sendBadge(format, badgeData);
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
