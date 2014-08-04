@@ -960,7 +960,7 @@ camp.route(/^\/david\/(dev\/|peer\/)?(.+?)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var dev = match[1];
   if (dev != null) { dev = dev.slice(0, -1); }  // 'dev' or 'peer'.
-  // eg, `visionmedia/express`, `webcomponents/generator-element`.
+  // eg, `strongloop/express`, `webcomponents/generator-element`.
   var userRepo = match[2];
   var format = match[3];
   var options = 'https://david-dm.org/' + userRepo + '/'
@@ -1120,7 +1120,7 @@ cache(function(data, match, sendBadge) {
 // GitHub tag integration.
 camp.route(/^\/github\/tag\/(.*)\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var user = match[1];  // eg, visionmedia/express
+  var user = match[1];  // eg, strongloop/express
   var repo = match[2];
   var format = match[3];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/tags';
