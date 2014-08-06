@@ -754,6 +754,67 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// Hex.pm integration.
+camp.route(/^\/hexpm\/([^\/]+)\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var info = match[1];
+  var repo = match[2];  // eg, `httpotion`.
+  var format = match[3];
+  var apiUrl = 'https://hex.pm/api/packages/' + repo;
+  var badgeData = getBadgeData('hexpm', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      if (info.charAt(0) === 'd') {
+        badgeData.text[0] = getLabel('downloads', data);
+        switch (info.charAt(1)) {
+          case 'w':
+            var downloads = data.downloads.week;
+            badgeData.text[1] = metric(downloads) + '/week';
+            break;
+          case 'd':
+            var downloads = data.downloads.day;
+            badgeData.text[1] = metric(downloads) + '/day';
+            break;
+          case 't':
+            var downloads = data.downloads.all;
+            badgeData.text[1] = metric(downloads) + ' total';
+            break;
+        }
+        badgeData.colorscheme = downloadCountColor(downloads);
+        sendBadge(format, badgeData);
+      } else if (info === 'v') {
+        var version = data.releases[0].version;
+        badgeData.text[1] = 'v' + version;
+        if (version[0] === '0' || /dev/.test(version)) {
+          badgeData.colorscheme = 'orange';
+        } else {
+          badgeData.colorscheme = 'blue';
+        }
+        sendBadge(format, badgeData);
+      } else if (info == 'l') {
+        var license = (data.meta.licenses || []).join(', ');
+        badgeData.text[0] = 'license';
+        if ((data.meta.licenses || []).length > 1) badgeData.text[0] += 's';
+        if(license == '') {
+          badgeData.text[1] = 'Unknown';
+        } else {
+          badgeData.text[1] = license;
+          badgeData.colorscheme = 'red';
+        }
+        sendBadge(format, badgeData);
+      }
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Coveralls integration.
 camp.route(/^\/coveralls\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
