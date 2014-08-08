@@ -761,7 +761,7 @@ cache(function(data, match, sendBadge) {
   var repo = match[2];  // eg, `httpotion`.
   var format = match[3];
   var apiUrl = 'https://hex.pm/api/packages/' + repo;
-  var badgeData = getBadgeData('hex.pm', data);
+  var badgeData = getBadgeData('hex', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
