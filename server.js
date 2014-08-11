@@ -19,7 +19,7 @@ try {
 var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
 
-var validTemplates = ['default', 'flat'];
+var validTemplates = ['default', 'flat', 'flat-square'];
 
 // Analytics
 
