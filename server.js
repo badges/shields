@@ -53,8 +53,14 @@ function defaultAnalytics() {
   resetMonthlyAnalytics(analytics.vendorMonthly);
   analytics.rawMonthly = new Array(36);
   resetMonthlyAnalytics(analytics.rawMonthly);
+  analytics.vendorFlatMonthly = new Array(36);
+  resetMonthlyAnalytics(analytics.vendorFlatMonthly);
   analytics.rawFlatMonthly = new Array(36);
   resetMonthlyAnalytics(analytics.rawFlatMonthly);
+  analytics.vendorFlatSquareMonthly = new Array(36);
+  resetMonthlyAnalytics(analytics.vendorFlatSquareMonthly);
+  analytics.rawFlatSquareMonthly = new Array(36);
+  resetMonthlyAnalytics(analytics.rawFlatSquareMonthly);
   return analytics;
 }
 
@@ -107,14 +113,14 @@ function resetMonthlyAnalytics(monthlyAnalytics) {
   }
 }
 function incrMonthlyAnalytics(monthlyAnalytics) {
-  var currentDay = (new Date()).getDate();
-  // If we changed month, reset empty days.
-  while (lastDay !== currentDay) {
-    // Assumption: at least a hit a month.
-    lastDay = (lastDay + 1) % monthlyAnalytics.length;
-    monthlyAnalytics[lastDay] = 0;
-  }
   try {
+    var currentDay = (new Date()).getDate();
+    // If we changed month, reset empty days.
+    while (lastDay !== currentDay) {
+      // Assumption: at least a hit a month.
+      lastDay = (lastDay + 1) % monthlyAnalytics.length;
+      monthlyAnalytics[lastDay] = 0;
+    }
     monthlyAnalytics[currentDay]++;
   } catch(e) { console.error(e.stack); }
 }
@@ -149,9 +155,9 @@ function cache(f) {
     ask.res.setHeader('Date', date);
     incrMonthlyAnalytics(analytics.vendorMonthly);
     if (data.style === 'flat') {
-      try {
-      incrMonthlyAnalytics(analytics.rawFlatMonthly);
-      }catch(e){}
+      incrMonthlyAnalytics(analytics.vendorFlatMonthly);
+    } else if (data.style === 'flat-square') {
+      incrMonthlyAnalytics(analytics.vendorFlatSquareMonthly);
     }
 
     var cacheIndex = match[0] + '?label=' + data.label + '&style=' + data.style;
@@ -1551,6 +1557,11 @@ function(data, match, end, ask) {
   var format = match[8];
 
   incrMonthlyAnalytics(analytics.rawMonthly);
+  if (data.style === 'flat') {
+    incrMonthlyAnalytics(analytics.rawFlatMonthly);
+  } else if (data.style === 'flat-square') {
+    incrMonthlyAnalytics(analytics.rawFlatSquareMonthly);
+  }
 
   // Cache management - the badge is constant.
   var cacheDuration = (3600*24*1)|0;    // 1 day.
