@@ -1322,7 +1322,7 @@ camp.route(/^\/cookbook\/v\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var cookbook = match[1]; // eg, chef-sugar
   var format = match[2];
-  var apiUrl = 'https://cookbooks.opscode.com/api/v1/cookbooks/' + cookbook + '/versions/latest';
+  var apiUrl = 'https://supermarket.getchef.com/api/v1/cookbooks/' + cookbook + '/versions/latest';
   var badgeData = getBadgeData('cookbook', data);
 
   request(apiUrl, function(err, res, buffer) {
