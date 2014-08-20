@@ -355,6 +355,38 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// Another TeamCity instance
+camp.route(/^\/teamcity\/(http|https)\/(.*)\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var scheme = match[1];
+  var serverUrl = match[2];
+  var buildType = match[3];  // eg, `bt428`.
+  var format = match[4];
+  var apiUrl = scheme + '://' + serverUrl + '/app/rest/builds/buildType:(id:' + buildType + ')?guest=1';
+  var badgeData = getBadgeData('build', data);
+  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var status = data.status;
+      badgeData.text[1] = (data.statusText || data.status || '').toLowerCase();
+      if (status === 'SUCCESS') {
+        badgeData.colorscheme = 'brightgreen';
+      } else {
+        badgeData.colorscheme = 'red';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+
 // Gittip integration.
 camp.route(/^\/gittip\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
