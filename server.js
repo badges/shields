@@ -1348,26 +1348,100 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+function getNugetPackage(apiUrl, id, done) {
+  var filter = 'Id eq \'' + id + '\' and IsLatestVersion eq true';
+  var reqUrl = apiUrl + '/Packages()?$filter=' + encodeURIComponent(filter);
+  request(reqUrl, { headers: { 'Accept': 'application/atom+json,application/json' } }, function(err, res, buffer) {
+    if (err != null) {
+      done(err);
+      return;
+    }
+    
+    try {
+      var data = JSON.parse(buffer);
+      var result = data.d.results[0];
+      if (result == null) {
+        // package was not found, might be pre-release only
+        var filter = 'Id eq \'' + id + '\' and IsAbsoluteLatestVersion eq true';
+        var reqUrl = apiUrl + '/Packages()?$filter=' + encodeURIComponent(filter);
+        request(reqUrl, { headers: { 'Accept': 'application/atom+json,application/json' } }, function(err, res, buffer) {
+          if (err != null) {
+            done(err);
+            return;
+          }
+          
+          try {
+            var data = JSON.parse(buffer);
+            var result = data.d.results[0];
+            if (result == null) {
+              done(null, null);
+            } else {
+              done (null, result);
+            }
+          } catch(e) {
+            done(e);
+          }
+        });
+      } else {
+        done(null, result);
+      }
+    }
+    catch (e) {
+      done(e);
+    }
+  });
+}
+
 // NuGet/chocolatey version integration.
 camp.route(/^\/(nuget|chocolatey)\/v\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var site = match[1];
   var repo = match[2];  // eg, `Nuget.Core`.
   var format = match[3];
-  var filter = 'Id eq \'' + repo + '\' and IsLatestVersion eq true';
-  var apiUrl = 'https://www.' + site + '.org/api/v2/Packages()?$filter=' + encodeURIComponent(filter);
+  var apiUrl = 'https://www.' + site + '.org/api/v2';
   var badgeData = getBadgeData(site, data);
-  request(apiUrl, { headers: { 'Accept': 'application/atom+json,application/json' } }, function(err, res, buffer) {
+  getNugetPackage(apiUrl, repo, function(err, data) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
     try {
-      var data = JSON.parse(buffer);
-      var result = data.d.results[0];
-      var version = result.NormalizedVersion || result.Version;
+      var version = data.NormalizedVersion || data.Version;
       badgeData.text[1] = 'v' + version;
-      if (version[0] === '0') {
+      if (version.indexOf('-') !== -1) {
+        badgeData.colorscheme = 'yellow';
+      } else if (version[0] === '0') {
+        badgeData.colorscheme = 'orange';
+      } else {
+        badgeData.colorscheme = 'blue';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// MyGet version integration.
+camp.route(/^\/myget\/(.*)\/v\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var feed = match[1]; // eg yolodev
+  var repo = match[2]; // eg FSharpSupport
+  var format = match[3]; // eg svg or png
+  var apiUrl = 'https://www.myget.org/F/' + feed + '/api/v2';
+  var badgeData = getBadgeData(feed, data);
+  getNugetPackage(apiUrl, repo, function(err, data) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var version = data.NormalizedVersion || data.Version;
+      badgeData.text[1] = 'v' + version;
+      if (version.indexOf('-') !== -1) {
+        badgeData.colorscheme = 'yellow';
+      } else if (version[0] === '0') {
         badgeData.colorscheme = 'orange';
       } else {
         badgeData.colorscheme = 'blue';
@@ -1386,17 +1460,40 @@ cache(function(data, match, sendBadge) {
   var site = match[1];
   var repo = match[2];  // eg, `Nuget.Core`.
   var format = match[3];
-  var filter = 'Id eq \'' + repo + '\' and IsLatestVersion eq true';
-  var apiUrl = 'https://www.' + site + '.org/api/v2/Packages()?$filter=' + encodeURIComponent(filter);
+  var apiUrl = 'https://www.' + site + '.org/api/v2';
   var badgeData = getBadgeData('downloads', data);
-  request(apiUrl, { headers: { 'Accept': 'application/atom+json,application/json' } }, function(err, res, buffer) {
+  getNugetPackage(apiUrl, repo, function(err, data) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
     try {
-      var data = JSON.parse(buffer);
-      var downloads = data.d.results[0].DownloadCount;
+      var downloads = data.DownloadCount;
+      badgeData.text[1] = metric(downloads) + ' total';
+      badgeData.colorscheme = downloadCountColor(downloads);
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// MyGet download count integration.
+camp.route(/^\/myget\/(.*)\/dt\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var feed = match[1]; // eg yolodev
+  var repo = match[2]; // eg FSharpSupport
+  var format = match[3]; // eg svg or png
+  var apiUrl = 'https://www.myget.org/F/' + feed + '/api/v2';
+  var badgeData = getBadgeData('downloads', data);
+  getNugetPackage(apiUrl, repo, function(err, data) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var downloads = data.DownloadCount;
       badgeData.text[1] = metric(downloads) + ' total';
       badgeData.colorscheme = downloadCountColor(downloads);
       sendBadge(format, badgeData);
