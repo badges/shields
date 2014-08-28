@@ -355,12 +355,12 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
-// Gittip integration.
-camp.route(/^\/gittip\/(.*)\.(svg|png|gif|jpg)$/,
+// Gratipay integration.
+camp.route(/^\/(gittip|gratipay)\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var user = match[1];  // eg, `JSFiddle`.
-  var format = match[2];
-  var apiUrl = 'https://www.gittip.com/' + user + '/public.json';
+  var user = match[2];  // eg, `JSFiddle`.
+  var format = match[3];
+  var apiUrl = 'https://www.gratipay.com/' + user + '/public.json';
   var badgeData = getBadgeData('tips', data);
   request(apiUrl, function dealWithData(err, res, buffer) {
     if (err != null) {
