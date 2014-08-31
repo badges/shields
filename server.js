@@ -324,7 +324,7 @@ camp.route(/^\/teamcity\/(http|https)\/(.*)\/(s|e)\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var scheme = match[1];
   var serverUrl = match[2];
-  var advanced = (match[3] == 's');
+  var advanced = (match[3] == 'e');
   var buildType = match[4];  // eg, `bt428`.
   var format = match[5];
   teamcity_badge(scheme + '://' + serverUrl, buildType, advanced, format, data, sendBadge);
