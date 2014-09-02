@@ -284,12 +284,8 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
-// TeamCity CodeBetter integration.
-camp.route(/^\/teamcity\/codebetter\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
-  var buildType = match[1];  // eg, `bt428`.
-  var format = match[2];
-  var apiUrl = 'http://teamcity.codebetter.com/app/rest/builds/buildType:(id:' + buildType + ')?guest=1';
+function teamcity_badge(url, buildId, advanced, format, data, sendBadge) {
+  var apiUrl = url + '/app/rest/builds/buildType:(id:' + buildId + ')?guest=1';
   var badgeData = getBadgeData('build', data);
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
     if (err != null) {
@@ -298,9 +294,11 @@ cache(function(data, match, sendBadge) {
     }
     try {
       var data = JSON.parse(buffer);
-      var status = data.status;
-      badgeData.text[1] = (status || '').toLowerCase();
-      if (status === 'SUCCESS') {
+      if (advanced)
+        badgeData.text[1] = (data.statusText || data.status || '').toLowerCase();
+      else
+        badgeData.text[1] = (data.status || '').toLowerCase();
+      if (data.status === 'SUCCESS') {
         badgeData.colorscheme = 'brightgreen';
       } else {
         badgeData.colorscheme = 'red';
@@ -311,6 +309,25 @@ cache(function(data, match, sendBadge) {
       sendBadge(format, badgeData);
     }
   });
+}
+
+// Old url for CodeBetter TeamCity instance.
+camp.route(/^\/teamcity\/codebetter\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var buildType = match[1];  // eg, `bt428`.
+  var format = match[2];
+  teamcity_badge('http://teamcity.codebetter.com', buildType, false, format, data, sendBadge);
+}));
+
+// Generic TeamCity instance
+camp.route(/^\/teamcity\/(http|https)\/(.*)\/(s|e)\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var scheme = match[1];
+  var serverUrl = match[2];
+  var advanced = (match[3] == 'e');
+  var buildType = match[4];  // eg, `bt428`.
+  var format = match[5];
+  teamcity_badge(scheme + '://' + serverUrl, buildType, advanced, format, data, sendBadge);
 }));
 
 // TeamCity CodeBetter code coverage
