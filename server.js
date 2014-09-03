@@ -1665,7 +1665,7 @@ cache(function(data, match, sendBadge) {
 // Codeship.io integration
 camp.route(/^\/codeship\/(.+)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var projectId = match[1];  // eg, `github/kabisaict/flow`.
+  var projectId = match[1];  // eg, `ab123456-00c0-0123-42de-6f98765g4h32`.
   var format = match[2];
   var options = {
     method: 'GET',
