@@ -1662,6 +1662,38 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// Maven-Central artifact version integration
+// API documentation: http://search.maven.org/#api
+camp.route(/^\/maven-central\/v\/(.*)\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var groupId = match[1]; // eg, `com.google.inject`
+  var artifactId = match[2]; // eg, `guice`
+  var format = match[3] || "gif"; // eg, `guice`
+  var query = "g:" + encodeURIComponent(groupId) + "+AND+a:" + encodeURIComponent(artifactId);
+  var apiUrl = 'https://search.maven.org/solrsearch/select?rows=1&q='+query;
+  var badgeData = getBadgeData('maven-central', data);
+  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var version = data.response.docs[0].latestVersion;
+      badgeData.text[1] = 'v' + version;
+      if (version === '0' || /SNAPSHOT/.test(version)) {
+        badgeData.colorscheme = 'orange';
+      } else {
+        badgeData.colorscheme = 'blue';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
