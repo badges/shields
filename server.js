@@ -1662,6 +1662,58 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// Codeship.io integration
+camp.route(/^\/codeship\/(.+)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var projectId = match[1];  // eg, `github/kabisaict/flow`.
+  var format = match[2];
+  var options = {
+    method: 'GET',
+    uri: 'https://www.codeship.io/projects/' + projectId + '/status'
+  };
+  var badgeData = getBadgeData('build', data);
+  request(options, function(err, res) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var statusMatch = res.headers['content-disposition']
+                           .match(/filename="status_(.+)\.png"/);
+      if (!statusMatch) {
+        badgeData.text[1] = 'unknown';
+        sendBadge(format, badgeData);
+        return;
+      }
+      
+      switch (statusMatch[1]) {
+        case 'success':
+          badgeData.text[1] = 'passed';
+          badgeData.colorscheme = 'brightgreen';
+          break;
+        case 'projectnotfound':
+          badgeData.text[1] = 'not found';
+          break;
+        case 'testing':
+        case 'waiting':
+          badgeData.text[1] = 'pending';
+          break;
+        case 'error':
+          badgeData.text[1] = 'failing';
+          badgeData.colorscheme = 'red';
+          break;
+        case 'stopped':
+          badgeData.text[1] = 'not built';
+          break;
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'not found';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
