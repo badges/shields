@@ -1,4 +1,4 @@
-# Shields [![Gittip](http://img.shields.io/gittip/shields.svg)](https://www.gittip.com/Shields/) [![npm version](http://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges) [![build status](http://img.shields.io/travis/badges/shields.svg)](https://travis-ci.org/badges/shields)
+# Shields [![Gittip](http://img.shields.io/gittip/shields.svg)](https://www.gittip.com/Shields/) [![npm version](http://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges) [![Codeship Status for nicolindemann/shields](https://www.codeship.io/projects/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1/status)](https://www.codeship.io/projects/33919)
 
 A legible & concise status badge solution for third-party codebase services.
 
