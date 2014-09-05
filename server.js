@@ -1365,161 +1365,147 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
-function getNugetPackage(apiUrl, id, done) {
-  var filter = 'Id eq \'' + id + '\' and IsLatestVersion eq true';
-  var reqUrl = apiUrl + '/Packages()?$filter=' + encodeURIComponent(filter);
-  request(reqUrl, { headers: { 'Accept': 'application/atom+json,application/json' } }, function(err, res, buffer) {
-    if (err != null) {
-      done(err);
-      return;
-    }
-    
-    try {
-      var data = JSON.parse(buffer);
-      var result = data.d.results[0];
-      if (result == null) {
-        // package was not found, might be pre-release only
-        var filter = 'Id eq \'' + id + '\' and IsAbsoluteLatestVersion eq true';
-        var reqUrl = apiUrl + '/Packages()?$filter=' + encodeURIComponent(filter);
-        request(reqUrl, { headers: { 'Accept': 'application/atom+json,application/json' } }, function(err, res, buffer) {
-          if (err != null) {
-            done(err);
-            return;
-          }
-          
-          try {
-            var data = JSON.parse(buffer);
-            var result = data.d.results[0];
-            if (result == null) {
-              done(null, null);
-            } else {
-              done (null, result);
-            }
-          } catch(e) {
-            done(e);
-          }
-        });
-      } else {
-        done(null, result);
+function mapNugetFeed(pattern, offset, getInfo) {
+  var vRegex = new RegExp('^\\/' + pattern + '\\/v\\/(.*)\\.(svg|png|gif|jpg)$');
+  var vPreRegex = new RegExp('^\\/' + pattern + '\\/vpre\\/(.*)\\.(svg|png|gif|jpg)$');
+  var dtRegex = new RegExp('^\\/' + pattern + '\\/dt\\/(.*)\\.(svg|png|gif|jpg)$');
+  
+  function getNugetPackage(apiUrl, id, includePre, done) {
+    var filter = includePre ?
+      'Id eq \'' + id + '\' and IsAbsoluteLatestVersion eq true' :
+      'Id eq \'' + id + '\' and IsLatestVersion eq true';
+    var reqUrl = apiUrl + '/Packages()?$filter=' + encodeURIComponent(filter);
+    console.log('nuget-query(%s, %s, %s): %s', apiUrl, id, includePre, reqUrl);
+    request(reqUrl, { headers: { 'Accept': 'application/atom+json,application/json' } }, function(err, res, buffer) {
+      if (err != null) {
+        done(err);
+        return;
       }
-    }
-    catch (e) {
-      done(e);
-    }
-  });
+      
+      try {
+        var data = JSON.parse(buffer);
+        var result = data.d.results[0];
+        if (result == null) {
+          if (includePre === null) {
+            getNugetPackage(apiUrl, id, true, done);
+          } else {
+            done(new Error('Package not found in feed'));
+          }
+        } else {
+          done(null, result);
+        }
+      }
+      catch (e) {
+        done(e);
+      }
+    });
+  }
+  
+  camp.route(vRegex,
+  cache(function(data, match, sendBadge) {
+    var info = getInfo(match);
+    var site = info.site;  // eg, `Chocolatey`, or `YoloDev`
+    var repo = match[offset + 1];  // eg, `Nuget.Core`.
+    var format = match[offset + 2];
+    var apiUrl = info.feed;
+    var badgeData = getBadgeData(site, data);
+    getNugetPackage(apiUrl, repo, null, function(err, data) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+      }
+      try {
+        var version = data.NormalizedVersion || data.Version;
+        badgeData.text[1] = 'v' + version;
+        if (version.indexOf('-') !== -1) {
+          badgeData.colorscheme = 'yellow';
+        } else if (version[0] === '0') {
+          badgeData.colorscheme = 'orange';
+        } else {
+          badgeData.colorscheme = 'blue';
+        }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }));
+  
+  camp.route(vPreRegex,
+  cache(function(data, match, sendBadge) {
+    var info = getInfo(match);
+    var site = info.site;  // eg, `Chocolatey`, or `YoloDev`
+    var repo = match[offset + 1];  // eg, `Nuget.Core`.
+    var format = match[offset + 2];
+    var apiUrl = info.feed;
+    var badgeData = getBadgeData(site, data);
+    getNugetPackage(apiUrl, repo, true, function(err, data) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+      }
+      try {
+        var version = data.NormalizedVersion || data.Version;
+        badgeData.text[1] = 'v' + version;
+        if (version.indexOf('-') !== -1) {
+          badgeData.colorscheme = 'yellow';
+        } else if (version[0] === '0') {
+          badgeData.colorscheme = 'orange';
+        } else {
+          badgeData.colorscheme = 'blue';
+        }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }));
+  
+  camp.route(dtRegex,
+  cache(function(data, match, sendBadge) {
+    var info = getInfo(match);
+    var site = info.site;  // eg, `Chocolatey`, or `YoloDev`
+    var repo = match[offset+ 1];  // eg, `Nuget.Core`.
+    var format = match[offset + 2];
+    var apiUrl = info.feed;
+    var badgeData = getBadgeData(site, data);
+    getNugetPackage(apiUrl, repo, null, function(err, data) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+      }
+      try {
+        var downloads = data.DownloadCount;
+        badgeData.text[1] = metric(downloads) + ' total';
+        badgeData.colorscheme = downloadCountColor(downloads);
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }));
 }
 
-// NuGet/chocolatey version integration.
-camp.route(/^\/(nuget|chocolatey)\/v\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+// NuGet and Chocolatey
+mapNugetFeed('(nuget|chocolatey)', 1, function(match) {
   var site = match[1];
-  var repo = match[2];  // eg, `Nuget.Core`.
-  var format = match[3];
-  var apiUrl = 'https://www.' + site + '.org/api/v2';
-  var badgeData = getBadgeData(site, data);
-  getNugetPackage(apiUrl, repo, function(err, data) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-    }
-    try {
-      var version = data.NormalizedVersion || data.Version;
-      badgeData.text[1] = 'v' + version;
-      if (version.indexOf('-') !== -1) {
-        badgeData.colorscheme = 'yellow';
-      } else if (version[0] === '0') {
-        badgeData.colorscheme = 'orange';
-      } else {
-        badgeData.colorscheme = 'blue';
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
+  return {
+    site: site,
+    feed: 'https://www.' + site + '.org/api/v2'
+  };
+});
 
-// MyGet version integration.
-camp.route(/^\/myget\/(.*)\/v\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
-  var feed = match[1]; // eg yolodev
-  var repo = match[2]; // eg FSharpSupport
-  var format = match[3]; // eg svg or png
-  var apiUrl = 'https://www.myget.org/F/' + feed + '/api/v2';
-  var badgeData = getBadgeData(feed, data);
-  getNugetPackage(apiUrl, repo, function(err, data) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-    }
-    try {
-      var version = data.NormalizedVersion || data.Version;
-      badgeData.text[1] = 'v' + version;
-      if (version.indexOf('-') !== -1) {
-        badgeData.colorscheme = 'yellow';
-      } else if (version[0] === '0') {
-        badgeData.colorscheme = 'orange';
-      } else {
-        badgeData.colorscheme = 'blue';
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// NuGet/chocolatey download count integration.
-camp.route(/^\/(nuget|chocolatey)\/dt\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
-  var site = match[1];
-  var repo = match[2];  // eg, `Nuget.Core`.
-  var format = match[3];
-  var apiUrl = 'https://www.' + site + '.org/api/v2';
-  var badgeData = getBadgeData('downloads', data);
-  getNugetPackage(apiUrl, repo, function(err, data) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-    }
-    try {
-      var downloads = data.DownloadCount;
-      badgeData.text[1] = metric(downloads) + ' total';
-      badgeData.colorscheme = downloadCountColor(downloads);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// MyGet download count integration.
-camp.route(/^\/myget\/(.*)\/dt\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
-  var feed = match[1]; // eg yolodev
-  var repo = match[2]; // eg FSharpSupport
-  var format = match[3]; // eg svg or png
-  var apiUrl = 'https://www.myget.org/F/' + feed + '/api/v2';
-  var badgeData = getBadgeData('downloads', data);
-  getNugetPackage(apiUrl, repo, function(err, data) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-    }
-    try {
-      var downloads = data.DownloadCount;
-      badgeData.text[1] = metric(downloads) + ' total';
-      badgeData.colorscheme = downloadCountColor(downloads);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
+// MyGet
+mapNugetFeed('myget\\/(.*)', 1, function(match) {
+  var feed = match[1];
+  return {
+    site: feed,
+    feed: 'https://www.myget.org/F/' + feed + '/api/v2'
+  };
+});
 
 // Puppet Forge
 camp.route(/^\/puppetforge\/v\/([^\/]+\/[^\/]+)\.(svg|png|gif|jpg)$/,
