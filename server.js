@@ -99,8 +99,10 @@ function analyticsAutoLoad() {
         }
       }
     } catch(e) {
-      console.error('Invalid JSON file for analytics, resetting.');
-      console.error(e);
+      if (e.code !== 'ENOENT') {
+        console.error('Invalid JSON file for analytics, resetting.');
+        console.error(e);
+      }
       analytics = defaultAnalyticsObject;
     }
   }
