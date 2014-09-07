@@ -981,6 +981,16 @@ camp.route(/^\/scrutinizer\/coverage\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var repo = match[1];  // eg, g/phpmyadmin/phpmyadmin
   var format = match[2];
+  // The repo may contain a branch, which would be unsuitable.
+  var repoParts = repo.split('/');
+  var branch = null;
+  // Normally, there are 2 slashes in `repo` when the branch isn't specified.
+  var slashesInRepo = 2;
+  if (repoParts[0] === 'gp') { slashesInRepo = 1; }
+  if ((repoParts.length - 1) > slashesInRepo) {
+    branch = repoParts[repoParts.length - 1];
+    repo = repoParts.slice(0, -1).join('/');
+  }
   var apiUrl = 'https://scrutinizer-ci.com/api/repositories/' + repo;
   var badgeData = getBadgeData('coverage', data);
   request(apiUrl, {}, function(err, res, buffer) {
@@ -990,12 +1000,15 @@ cache(function(data, match, sendBadge) {
     }
     try {
       var data = JSON.parse(buffer);
-      var percentage = data.applications[data.default_branch].index._embedded
+      // Which branch are we dealing with?
+      if (branch === null) { branch = data.default_branch; }
+      var percentage = data.applications[branch].index._embedded
         .project.metric_values['scrutinizer.test_coverage'] * 100;
       badgeData.text[1] = percentage.toFixed(0) + '%';
       badgeData.colorscheme = coveragePercentageColor(percentage);
       sendBadge(format, badgeData);
     } catch(e) {
+      console.error(e.stack);
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
@@ -1007,6 +1020,16 @@ camp.route(/^\/scrutinizer\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var repo = match[1];  // eg, g/phpmyadmin/phpmyadmin
   var format = match[2];
+  // The repo may contain a branch, which would be unsuitable.
+  var repoParts = repo.split('/');
+  var branch = null;
+  // Normally, there are 2 slashes in `repo` when the branch isn't specified.
+  var slashesInRepo = 2;
+  if (repoParts[0] === 'gp') { slashesInRepo = 1; }
+  if ((repoParts.length - 1) > slashesInRepo) {
+    branch = repoParts[repoParts.length - 1];
+    repo = repoParts.slice(0, -1).join('/');
+  }
   var apiUrl = 'https://scrutinizer-ci.com/api/repositories/' + repo;
   var badgeData = getBadgeData('code quality', data);
   request(apiUrl, {}, function(err, res, buffer) {
@@ -1016,7 +1039,9 @@ cache(function(data, match, sendBadge) {
     }
     try {
       var data = JSON.parse(buffer);
-      var score = data.applications[data.default_branch].index._embedded
+      // Which branch are we dealing with?
+      if (branch === null) { branch = data.default_branch; }
+      var score = data.applications[branch].index._embedded
         .project.metric_values['scrutinizer.quality'];
       score = Math.round(score * 100) / 100;
       badgeData.text[1] = score;
