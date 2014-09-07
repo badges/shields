@@ -1925,7 +1925,7 @@ function downloadCountColor(downloads) {
 // Given a list of versions (as strings), return the latest version.
 function latestVersion(versions) {
   var version = '';
-  var versions = versions.filter(function(version) {
+  versions = versions.filter(function(version) {
     return (/^v?[0-9]/).test(version);
   });
   try {
