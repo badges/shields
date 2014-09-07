@@ -225,7 +225,7 @@ cache(function(data, match, sendBadge) {
     uri: 'https://api.travis-ci.org/repos/' + userRepo + '/builds.json'
   };
   branch = branch || 'master';
-  var badgeData = getBadgeData('build', data);
+  var badgeData = getBadgeData((data.prefix ? data.prefix + ' ' : '') + 'build', data);
   request(options, function(err, res, json) {
     if (err != null || (json.length !== undefined && json.length === 0)) {
       badgeData.text[1] = 'inaccessible';
@@ -263,7 +263,7 @@ cache(function(data, match, sendBadge) {
   var repo = match[1];  // eg, `gruntjs/grunt`.
   var format = match[2];
   var apiUrl = 'https://ci.appveyor.com/api/projects/' + repo;
-  var badgeData = getBadgeData('build', data);
+  var badgeData = getBadgeData((data.prefix ? data.prefix + ' ' : '') + 'build', data);
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -288,7 +288,7 @@ cache(function(data, match, sendBadge) {
 
 function teamcity_badge(url, buildId, advanced, format, data, sendBadge) {
   var apiUrl = url + '/app/rest/builds/buildType:(id:' + buildId + ')?guest=1';
-  var badgeData = getBadgeData('build', data);
+  var badgeData = getBadgeData((data.prefix ? data.prefix + ' ' : '') + 'build', data);
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -1581,7 +1581,7 @@ cache(function(data, match, sendBadge) {
     uri: scheme + '://' + host + '/job/' + job + '/api/json?tree=color'
   };
 
-  var badgeData = getBadgeData('build', data);
+  var badgeData = getBadgeData((data.prefix ? data.prefix + ' ' : '') + 'build', data);
   request(options, function(err, res, json) {
     if (err !== null) {
       badgeData.text[1] = 'inaccessible';
@@ -1673,7 +1673,7 @@ cache(function(data, match, sendBadge) {
     method: 'GET',
     uri: 'https://www.codeship.io/projects/' + projectId + '/status'
   };
-  var badgeData = getBadgeData('build', data);
+  var badgeData = getBadgeData((data.prefix ? data.prefix + ' ' : '') + 'build', data);
   request(options, function(err, res) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
