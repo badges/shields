@@ -1928,6 +1928,13 @@ function latestVersion(versions) {
   versions = versions.filter(function(version) {
     return (/^v?[0-9]/).test(version);
   });
+  versions = versions.map(function(version) {
+    var matches = /^(v?[0-9]+)(\.[0-9]+)?(-.*)?$/.exec(version);
+    if (matches) {
+        version = matches[1] + (matches[2] ? matches[2] : '.0') + '.0' + (matches[3] ? matches[3] : '');
+    }
+    return version;
+  });
   try {
     version = semver.maxSatisfying(versions, '');
   } catch(e) {
