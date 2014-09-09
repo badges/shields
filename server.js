@@ -524,7 +524,7 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
-// npm integration.
+// npm download integration.
 camp.route(/^\/npm\/dm\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var user = match[1];  // eg, `localeval`.
@@ -612,6 +612,57 @@ cache(function(data, match, sendBadge) {
       badgeData.text[1] = license;
       badgeData.colorscheme = 'red';
       sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// npm node version integration.
+camp.route(/^\/node\/v\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var repo = match[1];  // eg, `localeval`.
+  var format = match[2];
+  var apiUrl = 'https://registry.npmjs.org/' + repo + '/latest';
+  var badgeData = getBadgeData('node', data);
+  // Using the Accept header because of this bug:
+  // <https://github.com/npm/npmjs.org/issues/163>
+  request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      if (data.engines && data.engines.node) {
+        var versionRange = data.engines.node;
+        badgeData.text[1] = versionRange;
+        var AGE_OLD = 1, AGE_CURRENT = 2, AGE_BLEEDING = 3;
+        regularUpdate('http://nodejs.org/dist/latest/SHASUMS.txt',
+          (24 * 3600 * 1000),
+          function(shasums) {
+            var firstLine = shasums.slice(0, shasums.indexOf('\n'));
+            var version = firstLine.split('  ')[1].split('-')[1];
+            if (semver.satisfies(version, versionRange)) {
+              return AGE_CURRENT;
+            } else if (semver.gtr(version, versionRange)) {
+              return AGE_OLD;
+            } else { return AGE_BLEEDING; }
+          }, function(err, age) {
+            if (err != null) { sendBadge(format, badgeData); return; }
+            if (age === AGE_CURRENT) {
+              badgeData.colorscheme = 'brightgreen';
+            } else if (age === AGE_OLD) {
+              badgeData.colorscheme = 'yellow';
+            } else if (age === AGE_BLEEDING) {
+              badgeData.colorscheme = 'orange';
+            }
+            sendBadge(format, badgeData);
+        });
+      } else {
+        sendBadge(format, badgeData);
+      }
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
@@ -1902,6 +1953,34 @@ function streamFromString(str) {
   var newStream = new stream.Readable();
   newStream._read = function() { newStream.push(str); newStream.push(null); };
   return newStream;
+}
+
+// Map from URL to { timestamp: last fetch time, interval: in milliseconds,
+// data: data }.
+var regularUpdateCache = Object.create(null);
+// url: a string, scraper: a function that takes string data at that URL.
+// interval: number in milliseconds.
+// cb: a callback function that takes an error and data returned by the scraper.
+function regularUpdate(url, interval, scraper, cb) {
+  var timestamp = Date.now();
+  var cache = regularUpdateCache[url];
+  if (cache != null &&
+      (timestamp - cache.timestamp) < interval) {
+    cb(null, regularUpdateCache[url].data);
+    return;
+  }
+  request(url, function(err, res, buffer) {
+    if (err != null) { cb(err); return; }
+    if (regularUpdateCache[url] == null) {
+      regularUpdateCache[url] = { timestamp: 0, data: 0 };
+    }
+    try {
+      var data = scraper(buffer);
+    } catch(e) { cb(e); return; }
+    regularUpdateCache[url].timestamp = timestamp;
+    regularUpdateCache[url].data = data;
+    cb(null, data);
+  });
 }
 
 // Given a number, string with appropriate unit in the metric system, SI.
