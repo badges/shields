@@ -638,24 +638,19 @@ cache(function(data, match, sendBadge) {
       if (data.engines && data.engines.node) {
         var versionRange = data.engines.node;
         badgeData.text[1] = versionRange;
-        var AGE_OLD = 1, AGE_CURRENT = 2, AGE_BLEEDING = 3;
         regularUpdate('http://nodejs.org/dist/latest/SHASUMS.txt',
           (24 * 3600 * 1000),
           function(shasums) {
             var firstLine = shasums.slice(0, shasums.indexOf('\n'));
             var version = firstLine.split('  ')[1].split('-')[1];
-            if (semver.satisfies(version, versionRange)) {
-              return AGE_CURRENT;
-            } else if (semver.gtr(version, versionRange)) {
-              return AGE_OLD;
-            } else { return AGE_BLEEDING; }
-          }, function(err, age) {
+            return version;
+          }, function(err, version) {
             if (err != null) { sendBadge(format, badgeData); return; }
-            if (age === AGE_CURRENT) {
+            if (semver.satisfies(version, versionRange)) {
               badgeData.colorscheme = 'brightgreen';
-            } else if (age === AGE_OLD) {
+            } else if (semver.gtr(version, versionRange)) {
               badgeData.colorscheme = 'yellow';
-            } else if (age === AGE_BLEEDING) {
+            } else {
               badgeData.colorscheme = 'orange';
             }
             sendBadge(format, badgeData);
