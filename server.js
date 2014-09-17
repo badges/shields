@@ -937,6 +937,43 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// Codecov integration.
+camp.route(/^\/codecov\/([^\/]+\/[^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var userRepo = match[1];  // eg, `github/jekyll/jekyll` or `bitbucket/jekyll/jekyll`.
+  var branch = match[2];
+  var format = match[3];
+  var apiUrl = {
+    url: 'https://codecov.io/' + userRepo + '/coverage.png',
+    followRedirect: false,
+    method: 'HEAD'
+  };
+  if (branch) {
+    apiUrl.url += '?branch=' + branch;
+  }
+  var badgeData = getBadgeData('coverage', data);
+  request(apiUrl, function(err, res) {
+    if (err != null) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+    // X-Coverage header returns: n/a if 404/401 else range(0, 100)
+    var coverage = res.headers['X-Coverage'];
+    if (coverage == 'n/a') {
+      badgeData.text[1] = 'unknown';
+      sendBadge(format, badgeData);
+      return;
+    } 
+    badgeData.text[1] = coverage + '%';
+    badgeData.colorscheme = coveragePercentageColor(percentage);
+    sendBadge(format, badgeData);
+  }).on('error', function(e) {
+    badgeData.text[1] = 'inaccessible';
+    sendBadge(format, badgeData);
+  });
+}));
+
 // Code Climate coverage integration
 camp.route(/^\/codeclimate\/coverage\/(.+)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
