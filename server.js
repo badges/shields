@@ -1819,6 +1819,29 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// Bower version integration.
+camp.route(/^\/bower\/v\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var repo = match[1];  // eg, `bootstrap`.
+  var format = match[2];
+  var badgeData = getBadgeData('bower', data);
+  var bower = require('bower');
+  bower.commands.info(repo, 'version')
+    .on('error', function() {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    })
+    .on('end', function(version) {
+      badgeData.text[1] = 'v' + version;
+      if (version[0] === '0' || /dev/.test(version)) {
+        badgeData.colorscheme = 'orange';
+      } else {
+        badgeData.colorscheme = 'blue';
+      }
+      sendBadge(format, badgeData);
+    });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
