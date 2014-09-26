@@ -895,7 +895,7 @@ cache(function(data, match, sendBadge) {
   var apiUrl = {
     url: 'http://badge.coveralls.io/repos/' + userRepo + '/badge.png',
     followRedirect: false,
-    method: 'HEAD'
+    method: 'HEAD',
   };
   if (branch) {
     apiUrl.url += '?branch=' + branch;
@@ -940,13 +940,13 @@ cache(function(data, match, sendBadge) {
 // Codecov integration.
 camp.route(/^\/codecov\/([^\/]+\/[^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
-  var userRepo = match[1];  // eg, `github/jekyll/jekyll` or `bitbucket/jekyll/jekyll`.
+  var userRepo = match[1];  // eg, `github/codecov/example-python`.
   var branch = match[2];
   var format = match[3];
   var apiUrl = {
     url: 'https://codecov.io/' + userRepo + '/coverage.png',
     followRedirect: false,
-    method: 'HEAD'
+    method: 'HEAD',
   };
   if (branch) {
     apiUrl.url += '?branch=' + branch;
@@ -958,16 +958,24 @@ cache(function(data, match, sendBadge) {
       sendBadge(format, badgeData);
       return;
     }
-    // X-Coverage header returns: n/a if 404/401 else range(0, 100)
-    var coverage = res.headers['X-Coverage'];
-    if (coverage == 'n/a') {
-      badgeData.text[1] = 'unknown';
+    try {
+      // X-Coverage header returns: n/a if 404/401 else range(0, 100).
+      // It can also yield a 302 Found with an "unknown" X-Coverage.
+      var coverage = res.headers['x-coverage'];
+      // Is `coverage` NaN when converted to number?
+      if (+coverage !== +coverage) {
+        badgeData.text[1] = 'unknown';
+        sendBadge(format, badgeData);
+        return;
+      }
+      badgeData.text[1] = coverage + '%';
+      badgeData.colorscheme = coveragePercentageColor(coverage);
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'malformed';
       sendBadge(format, badgeData);
       return;
-    } 
-    badgeData.text[1] = coverage + '%';
-    badgeData.colorscheme = coveragePercentageColor(percentage);
-    sendBadge(format, badgeData);
+    }
   }).on('error', function(e) {
     badgeData.text[1] = 'inaccessible';
     sendBadge(format, badgeData);
@@ -981,7 +989,7 @@ cache(function(data, match, sendBadge) {
   var format = match[2];
   var options = {
     method: 'HEAD',
-    uri: 'https://codeclimate.com/' + userRepo + '/coverage.png'
+    uri: 'https://codeclimate.com/' + userRepo + '/coverage.png',
   };
   var badgeData = getBadgeData('coverage', data);
   request(options, function(err, res) {
@@ -1021,7 +1029,7 @@ cache(function(data, match, sendBadge) {
   var format = match[2];
   var options = {
     method: 'HEAD',
-    uri: 'https://codeclimate.com/' + userRepo + '.png'
+    uri: 'https://codeclimate.com/' + userRepo + '.png',
   };
   var badgeData = getBadgeData('code climate', data);
   request(options, function(err, res) {
@@ -1091,7 +1099,6 @@ cache(function(data, match, sendBadge) {
       badgeData.colorscheme = coveragePercentageColor(percentage);
       sendBadge(format, badgeData);
     } catch(e) {
-      console.error(e.stack);
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
