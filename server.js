@@ -938,7 +938,7 @@ cache(function(data, match, sendBadge) {
 }));
 
 // Codecov integration.
-camp.route(/^\/codecov\/([^\/]+\/[^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg)$/,
+camp.route(/^\/codecov\/c\/([^\/]+\/[^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var userRepo = match[1];  // eg, `github/codecov/example-python`.
   var branch = match[2];
