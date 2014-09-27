@@ -30,4 +30,7 @@ setup:
 redis:
 	./redis/src/redis-server
 
-.PHONY: all favicon website deploy setup redis
+test:
+	npm test
+
+.PHONY: all favicon website deploy setup redis test
