@@ -1281,13 +1281,17 @@ cache(function(data, match, sendBadge) {
       return;
     }
 
-    var outdatedStr = "Outdated dependencies for " + repo + " ";
-    if (buffer.indexOf(outdatedStr) >= 0) {
-      badgeData.text[1] = 'outdated';
-      badgeData.colorscheme = 'orange';
-    } else {
-      badgeData.text[1] = 'up-to-date';
-      badgeData.colorscheme = 'brightgreen';
+    try {
+      var outdatedStr = "Outdated dependencies for " + repo + " ";
+      if (buffer.indexOf(outdatedStr) >= 0) {
+        badgeData.text[1] = 'outdated';
+        badgeData.colorscheme = 'orange';
+      } else {
+        badgeData.text[1] = 'up-to-date';
+        badgeData.colorscheme = 'brightgreen';
+      }
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
     }
     sendBadge(format, badgeData);
   });
