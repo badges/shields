@@ -227,7 +227,8 @@ cache(function(data, match, sendBadge) {
   branch = branch || 'master';
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res, json) {
-    if (err != null || (json.length !== undefined && json.length === 0)) {
+    if (err != null || json == null
+      || (json.length !== undefined && json.length === 0)) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
@@ -923,14 +924,13 @@ cache(function(data, match, sendBadge) {
         sendBadge(format, badgeData);
         return;
       }
+      badgeData.text[1] = score + '%';
+      badgeData.colorscheme = coveragePercentageColor(percentage);
+      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'malformed';
       sendBadge(format, badgeData);
-      return;
     }
-    badgeData.text[1] = score + '%';
-    badgeData.colorscheme = coveragePercentageColor(percentage);
-    sendBadge(format, badgeData);
   }).on('error', function(e) {
     badgeData.text[1] = 'inaccessible';
     sendBadge(format, badgeData);
@@ -974,7 +974,6 @@ cache(function(data, match, sendBadge) {
     } catch(e) {
       badgeData.text[1] = 'malformed';
       sendBadge(format, badgeData);
-      return;
     }
   }).on('error', function(e) {
     badgeData.text[1] = 'inaccessible';
