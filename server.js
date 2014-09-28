@@ -1278,7 +1278,7 @@ cache(function(data, match, sendBadge) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
-      return;/h
+      return;
     }
 
     var outdatedStr = "Outdated dependencies for " + repo + " ";
