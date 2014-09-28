@@ -1267,6 +1267,36 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// Hackage dependencies version integration.
+camp.route(/^\/hackage-deps\/v\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var repo = match[1];  // eg, `lens`.
+  var format = match[2];
+  var apiUrl = 'http://packdeps.haskellers.com/feed/' + repo;
+  var badgeData = getBadgeData('hackage-deps', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    try {
+      var outdatedStr = "Outdated dependencies for " + repo + " ";
+      if (buffer.indexOf(outdatedStr) >= 0) {
+        badgeData.text[1] = 'outdated';
+        badgeData.colorscheme = 'orange';
+      } else {
+        badgeData.text[1] = 'up-to-date';
+        badgeData.colorscheme = 'brightgreen';
+      }
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+    }
+    sendBadge(format, badgeData);
+  });
+}));
+
 // CocoaPods version integration.
 camp.route(/^\/cocoapods\/(v|p|l)\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
