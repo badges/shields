@@ -1,4 +1,5 @@
 var serverPort = +process.env.PORT || +process.argv[2] || 80;
+var infoSite = process.env.INFOSITE || "http://shields.io";
 var camp = require('camp').start({
   documentRoot: __dirname,
   port: serverPort
@@ -1489,7 +1490,7 @@ function getNugetPackage(apiUrl, id, done) {
       done(err);
       return;
     }
-    
+
     try {
       var data = JSON.parse(buffer);
       var result = data.d.results[0];
@@ -1502,7 +1503,7 @@ function getNugetPackage(apiUrl, id, done) {
             done(err);
             return;
           }
-          
+
           try {
             var data = JSON.parse(buffer);
             var result = data.d.results[0];
@@ -1801,7 +1802,7 @@ cache(function(data, match, sendBadge) {
         sendBadge(format, badgeData);
         return;
       }
-      
+
       switch (statusMatch[1]) {
         case 'success':
           badgeData.text[1] = 'passed';
@@ -1936,7 +1937,7 @@ function(data, match, end, ask) {
 // Redirect the root to the website.
 camp.route(/^\/$/, function(data, match, end, ask) {
   ask.res.statusCode = 302;
-  ask.res.setHeader('Location', 'http://shields.io');
+  ask.res.setHeader('Location', infoSite);
   ask.res.end();
 });
 
