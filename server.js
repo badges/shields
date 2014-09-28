@@ -1,4 +1,5 @@
 var serverPort = +process.env.PORT || +process.argv[2] || 80;
+var infoSite = process.env.INFOSITE;
 var camp = require('camp').start({
   documentRoot: __dirname,
   port: serverPort
@@ -1937,7 +1938,7 @@ function(data, match, end, ask) {
 // Redirect the root to the website.
 camp.route(/^\/$/, function(data, match, end, ask) {
   ask.res.statusCode = 302;
-  ask.res.setHeader('Location', 'http://shields.io');
+  ask.res.setHeader('Location', infoSite);
   ask.res.end();
 });
 
