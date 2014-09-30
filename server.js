@@ -1516,19 +1516,20 @@ function mapNugetFeed(pattern, offset, getInfo) {
   var vRegex = new RegExp('^\\/' + pattern + '\\/v\\/(.*)\\.(svg|png|gif|jpg)$');
   var vPreRegex = new RegExp('^\\/' + pattern + '\\/vpre\\/(.*)\\.(svg|png|gif|jpg)$');
   var dtRegex = new RegExp('^\\/' + pattern + '\\/dt\\/(.*)\\.(svg|png|gif|jpg)$');
-  
+
   function getNugetPackage(apiUrl, id, includePre, done) {
     var filter = includePre ?
       'Id eq \'' + id + '\' and IsAbsoluteLatestVersion eq true' :
       'Id eq \'' + id + '\' and IsLatestVersion eq true';
     var reqUrl = apiUrl + '/Packages()?$filter=' + encodeURIComponent(filter);
-    console.log('nuget-query(%s, %s, %s): %s', apiUrl, id, includePre, reqUrl);
-    request(reqUrl, { headers: { 'Accept': 'application/atom+json,application/json' } }, function(err, res, buffer) {
+    request(reqUrl,
+    { headers: { 'Accept': 'application/atom+json,application/json' } },
+    function(err, res, buffer) {
       if (err != null) {
         done(err);
         return;
       }
-      
+
       try {
         var data = JSON.parse(buffer);
         var result = data.d.results[0];
@@ -1547,7 +1548,7 @@ function mapNugetFeed(pattern, offset, getInfo) {
       }
     });
   }
-  
+
   camp.route(vRegex,
   cache(function(data, match, sendBadge) {
     var info = getInfo(match);
@@ -1578,7 +1579,7 @@ function mapNugetFeed(pattern, offset, getInfo) {
       }
     });
   }));
-  
+
   camp.route(vPreRegex,
   cache(function(data, match, sendBadge) {
     var info = getInfo(match);
@@ -1609,7 +1610,7 @@ function mapNugetFeed(pattern, offset, getInfo) {
       }
     });
   }));
-  
+
   camp.route(dtRegex,
   cache(function(data, match, sendBadge) {
     var info = getInfo(match);
