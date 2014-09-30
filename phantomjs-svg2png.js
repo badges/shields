@@ -9,9 +9,9 @@ var fontPath = './Verdana.ttf';
 if (fs.isFile(fontPath)) {
   var fontData = fs.read(fontPath, 'b');
   btoa(fontData, function(fontBase64) {
-    svg = svg.slice(0, svg.indexOf('</svg>')) + '<style><![CDATA['
-      + '@font-face{font-family:"Verdana";src:url(data:font/ttf;base64,'
-      + fontBase64 + ');}]]></style></svg>';
+    svg = svg.slice(0, svg.indexOf('</svg>')) + '<style><![CDATA[' +
+      '@font-face{font-family:"Verdana";src:url(data:font/ttf;base64,' +
+      fontBase64 + ');}]]></style></svg>';
     renderSvg(svg);
   });
 } else { renderSvg(svg); }

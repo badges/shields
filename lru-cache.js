@@ -31,10 +31,10 @@ function addToCache(cacheIndex, cached) {
     this.cache[cacheIndex] = {
       index: this.order.length,
       content: cached
-    }
+    };
     this.order.push(cacheIndex);
   }
-}
+};
 
 Cache.prototype.get =
 function getFromCache(cacheIndex) {
@@ -45,11 +45,11 @@ function getFromCache(cacheIndex) {
     this.order.push(cacheIndex);
     return this.cache[cacheIndex].content;
   } else { return; }
-}
+};
 
 Cache.prototype.has =
 function hasInCache(cacheIndex) {
   return this.cache[cacheIndex] !== undefined;
-}
+};
 
 module.exports = Cache;

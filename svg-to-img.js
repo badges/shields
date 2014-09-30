@@ -23,7 +23,7 @@ module.exports = function (svg, format, out, cb) {
   function(err, stdout, stderr) {
     if (stdout) { console.log(stdout); }
     if (stderr) { console.error(stderr); }
-    if (err != null) { console.error(err.stack); if (cb) { cb(err); } return; }
+    if (!!err) { console.error(err.stack); if (cb) { cb(err); } return; }
     var inStream = fs.createReadStream(tmpFile);
     var cached = [];
     inStream.on('data', function(chunk) {

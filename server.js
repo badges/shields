@@ -70,7 +70,7 @@ function analyticsAutoLoad() {
   var defaultAnalyticsObject = defaultAnalytics();
   if (useRedis) {
     redis.get(analyticsAutoSaveFileName, function(err, value) {
-      if (err == null && value != null) {
+      if (!err && !!value) {
         // if/try/return trick:
         // if error, then the rest of the function is run.
         try {
@@ -167,8 +167,8 @@ function cache(f) {
     // Should we return the data right away?
     var cached = requestCache.get(cacheIndex);
     var cachedVersionSent = false;
-    if (cached !== undefined
-        && cached.dataChange / cached.reqs <= freqRatioMax) {
+    if (cached !== undefined &&
+        cached.dataChange / cached.reqs <= freqRatioMax) {
       badge(cached.data.badgeData, makeSend(cached.data.format, ask.res, end));
       cachedVersionSent = true;
     }
@@ -193,8 +193,8 @@ function cache(f) {
       clearTimeout(serverResponsive);
       // Check for a change in the data.
       var dataHasChanged = false;
-      if (cached !== undefined
-        && cached.data.badgeData.text[1] !== badgeData.text[1]) {
+      if (cached !== undefined &&
+          cached.data.badgeData.text[1] !== badgeData.text[1]) {
         dataHasChanged = true;
       }
       // Update information in the cache.
@@ -228,8 +228,7 @@ cache(function(data, match, sendBadge) {
   branch = branch || 'master';
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res, json) {
-    if (err != null || json == null
-      || (json.length !== undefined && json.length === 0)) {
+    if (!!err || !json || (json.length !== undefined && json.length === 0)) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
@@ -237,8 +236,8 @@ cache(function(data, match, sendBadge) {
     // Find the latest push on this branch.
     var build = null;
     for (var i = 0; i < json.length; i++) {
-      if (json[i].state === 'finished' && json[i].event_type === 'push'
-      && json[i].branch === branch) {
+      if (json[i].state === 'finished' && json[i].event_type === 'push' &&
+          json[i].branch === branch) {
         build = json[i];
         break;
       }
@@ -267,7 +266,7 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'https://ci.appveyor.com/api/projects/' + repo;
   var badgeData = getBadgeData('build', data);
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -292,7 +291,7 @@ function teamcity_badge(url, buildId, advanced, format, data, sendBadge) {
   var apiUrl = url + '/app/rest/builds/buildType:(id:' + buildId + ')?guest=1';
   var badgeData = getBadgeData('build', data);
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -342,7 +341,7 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'http://teamcity.codebetter.com/app/rest/builds/buildType:(id:' + buildType + ')/statistics?guest=1';
   var badgeData = getBadgeData('coverage', data);
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -357,7 +356,7 @@ cache(function(data, match, sendBadge) {
         } else if (property.name === 'CodeCoverageAbsSTotal') {
           total = property.value;
         }
-      })
+      });
 
       if (covered === undefined || total === undefined) {
         badgeData.text[1] = 'malformed';
@@ -384,7 +383,7 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'https://www.gratipay.com/' + user + '/public.json';
   var badgeData = getBadgeData('tips', data);
   request(apiUrl, function dealWithData(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
@@ -419,23 +418,24 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
   var badgeData = getBadgeData('downloads', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
     try {
       var data = JSON.parse(buffer);
+      var downloads;
       switch (info.charAt(1)) {
         case 'm':
-          var downloads = data.package.downloads.monthly;
+          downloads = data.package.downloads.monthly;
           badgeData.text[1] = metric(downloads) + '/month';
           break;
         case 'd':
-          var downloads = data.package.downloads.daily;
+          downloads = data.package.downloads.daily;
           badgeData.text[1] = metric(downloads) + '/day';
           break;
         case 't':
-          var downloads = data.package.downloads.total;
+          downloads = data.package.downloads.total;
           badgeData.text[1] = metric(downloads) + ' total';
           break;
       }
@@ -456,7 +456,7 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
   var badgeData = getBadgeData('packagist', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -466,7 +466,7 @@ cache(function(data, match, sendBadge) {
       var unstable = function(ver) { return /dev/.test(ver); };
       // Grab the latest stable version, or an unstable
       var versions = Object.keys(data.package.versions);
-      var version = latestVersion(versions);
+      version = latestVersion(versions);
       badgeData.text[1] = version;
       if (/^\d/.test(badgeData.text[1])) {
         badgeData.text[1] = 'v' + version;
@@ -492,7 +492,7 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
   var badgeData = getBadgeData('license', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -534,13 +534,14 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'https://api.npmjs.org/downloads/point/last-month/' + user;
   var badgeData = getBadgeData('downloads', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
+    var monthly;
     try {
-      var monthly = JSON.parse(buffer).downloads;
+      monthly = JSON.parse(buffer).downloads;
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
@@ -572,7 +573,7 @@ cache(function(data, match, sendBadge) {
   // Using the Accept header because of this bug:
   // <https://github.com/npm/npmjs.org/issues/163>
   request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -601,7 +602,7 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'http://registry.npmjs.org/' + repo + '/latest';
   var badgeData = getBadgeData('license', data);
   request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -631,7 +632,7 @@ cache(function(data, match, sendBadge) {
   // Using the Accept header because of this bug:
   // <https://github.com/npm/npmjs.org/issues/163>
   request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -647,7 +648,7 @@ cache(function(data, match, sendBadge) {
             var version = firstLine.split('  ')[1].split('-')[1];
             return version;
           }, function(err, version) {
-            if (err != null) { sendBadge(format, badgeData); return; }
+            if (!!err) { sendBadge(format, badgeData); return; }
             if (semver.satisfies(version, versionRange)) {
               badgeData.colorscheme = 'brightgreen';
             } else if (semver.gtr(version, versionRange)) {
@@ -675,7 +676,7 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
   var badgeData = getBadgeData('gem', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -702,17 +703,17 @@ cache(function(data, match, sendBadge) {
   var info = match[1];  // either dt, dtv or dv.
   var repo = match[2];  // eg, "rails"
   var splited_url = repo.split('/');
-  var repo = splited_url[0];
-  var version = (splited_url.length > 1)
-    ? splited_url[splited_url.length - 1]
-    : null;
+  repo = splited_url[0];
+  var version = (splited_url.length > 1) ?
+    splited_url[splited_url.length - 1] : null;
   version = (version === "stable") ? version : semver.valid(version);
   var format = match[3];
   var badgeData = getBadgeData('downloads', data);
+  var apiUrl;
   if  (info === "dv"){
     apiUrl = 'https://rubygems.org/api/v1/versions/' + repo + '.json';
   } else {
-    var  apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
+    apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
   }
   var parameters = {
     headers: {
@@ -720,19 +721,21 @@ cache(function(data, match, sendBadge) {
     }
   };
   request(apiUrl, parameters, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
     try {
       var data = JSON.parse(buffer);
+      var downloads;
       if (info === "dt") {
-        var downloads = metric(data.downloads) + " total";
+        downloads = metric(data.downloads) + " total";
       } else if (info === "dtv") {
-        var downloads = metric(data.version_downloads) + " latest version";
+        downloads = metric(data.version_downloads) + " latest version";
       } else if (info === "dv") {
-        var downloads = "invalid";
+        downloads = "invalid";
 
+        var version_data;
         if (version !== null && version === "stable") {
 
           var versions = data.filter(function(ver) {
@@ -742,21 +745,21 @@ cache(function(data, match, sendBadge) {
           });
           // Found latest stable version.
           var stable_version = latestVersion(versions);
-          var version_data = data.filter(function(ver) {
+          version_data = data.filter(function(ver) {
             return ver.number === stable_version;
           })[0];
           downloads = metric(version_data.downloads_count) + " stable version";
 
         } else if (version !== null) {
 
-          var version_data = data.filter(function(ver) {
+          version_data = data.filter(function(ver) {
             return ver.number === version;
           })[0];
 
-          downloads = metric(version_data.downloads_count)
-            + " version " + version;
+          downloads = metric(version_data.downloads_count) +
+            " version " + version;
         }
-      } else { var downloads = "invalid"; }
+      } else { downloads = "invalid"; }
       badgeData.text[1] = downloads;
       badgeData.colorscheme = downloadCountColor(downloads);
       sendBadge(format, badgeData);
@@ -776,7 +779,7 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'https://pypi.python.org/pypi/' + egg + '/json';
   var badgeData = getBadgeData('pypi', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -784,17 +787,18 @@ cache(function(data, match, sendBadge) {
       var data = JSON.parse(buffer);
       if (info.charAt(0) === 'd') {
         badgeData.text[0] = getLabel('downloads', data);
+        var downloads;
         switch (info.charAt(1)) {
           case 'm':
-            var downloads = data.info.downloads.last_month;
+            downloads = data.info.downloads.last_month;
             badgeData.text[1] = metric(downloads) + '/month';
             break;
           case 'w':
-            var downloads = data.info.downloads.last_week;
+            downloads = data.info.downloads.last_week;
             badgeData.text[1] = metric(downloads) + '/week';
             break;
           case 'd':
-            var downloads = data.info.downloads.last_day;
+            downloads = data.info.downloads.last_day;
             badgeData.text[1] = metric(downloads) + '/day';
             break;
         }
@@ -812,7 +816,7 @@ cache(function(data, match, sendBadge) {
       } else if (info == 'l') {
         var license = data.info.license;
         badgeData.text[0] = 'license';
-        if(license == null || license == 'UNKNOWN') {
+        if(license === null || license == 'UNKNOWN') {
           badgeData.text[1] = 'Unknown';
         } else {
           badgeData.text[1] = license;
@@ -836,7 +840,7 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'https://hex.pm/api/packages/' + repo;
   var badgeData = getBadgeData('hex', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -844,17 +848,18 @@ cache(function(data, match, sendBadge) {
       var data = JSON.parse(buffer);
       if (info.charAt(0) === 'd') {
         badgeData.text[0] = getLabel('downloads', data);
+        var downloads;
         switch (info.charAt(1)) {
           case 'w':
-            var downloads = data.downloads.week;
+            downloads = data.downloads.week;
             badgeData.text[1] = metric(downloads) + '/week';
             break;
           case 'd':
-            var downloads = data.downloads.day;
+            downloads = data.downloads.day;
             badgeData.text[1] = metric(downloads) + '/day';
             break;
           case 't':
-            var downloads = data.downloads.all;
+            downloads = data.downloads.all;
             badgeData.text[1] = metric(downloads) + ' total';
             break;
         }
@@ -873,7 +878,7 @@ cache(function(data, match, sendBadge) {
         var license = (data.meta.licenses || []).join(', ');
         badgeData.text[0] = 'license';
         if ((data.meta.licenses || []).length > 1) badgeData.text[0] += 's';
-        if(license == '') {
+        if(license === '') {
           badgeData.text[1] = 'Unknown';
         } else {
           badgeData.text[1] = license;
@@ -904,7 +909,7 @@ cache(function(data, match, sendBadge) {
   }
   var badgeData = getBadgeData('coverage', data);
   request(apiUrl, function(err, res) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
       return;
@@ -954,7 +959,7 @@ cache(function(data, match, sendBadge) {
   }
   var badgeData = getBadgeData('coverage', data);
   request(apiUrl, function(err, res) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
       return;
@@ -993,7 +998,7 @@ cache(function(data, match, sendBadge) {
   };
   var badgeData = getBadgeData('coverage', data);
   request(options, function(err, res) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -1033,7 +1038,7 @@ cache(function(data, match, sendBadge) {
   };
   var badgeData = getBadgeData('code climate', data);
   request(options, function(err, res) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -1085,7 +1090,7 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'https://scrutinizer-ci.com/api/repositories/' + repo;
   var badgeData = getBadgeData('coverage', data);
   request(apiUrl, {}, function(err, res, buffer) {
-    if (err !== null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -1123,7 +1128,7 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'https://scrutinizer-ci.com/api/repositories/' + repo;
   var badgeData = getBadgeData('code quality', data);
   request(apiUrl, {}, function(err, res, buffer) {
-    if (err !== null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -1160,15 +1165,15 @@ cache(function(data, match, sendBadge) {
 camp.route(/^\/david\/(dev\/|peer\/)?(.+?)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
   var dev = match[1];
-  if (dev != null) { dev = dev.slice(0, -1); }  // 'dev' or 'peer'.
+  if (!!dev) { dev = dev.slice(0, -1); }  // 'dev' or 'peer'.
   // eg, `strongloop/express`, `webcomponents/generator-element`.
   var userRepo = match[2];
   var format = match[3];
-  var options = 'https://david-dm.org/' + userRepo + '/'
-    + (dev ? (dev + '-') : '') + 'info.json';
+  var options = 'https://david-dm.org/' + userRepo + '/' +
+                        (dev ? (dev + '-') : '') + 'info.json';
   var badgeData = getBadgeData( (dev? (dev+'D') :'d') + 'ependencies', data);
   request(options, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -1203,7 +1208,7 @@ cache(function(data, match, sendBadge) {
   var options = 'https://gemnasium.com/' + userRepo + '.svg';
   var badgeData = getBadgeData('dependencies', data);
   request(options, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -1240,7 +1245,7 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'https://hackage.haskell.org/package/' + repo + '/' + repo + '.cabal';
   var badgeData = getBadgeData('hackage', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -1275,7 +1280,7 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'http://packdeps.haskellers.com/feed/' + repo;
   var badgeData = getBadgeData('hackage-deps', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
@@ -1307,7 +1312,7 @@ cache(function(data, match, sendBadge) {
   var badgeData = getBadgeData('pod', data);
   badgeData.colorscheme = null;
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -1358,14 +1363,14 @@ cache(function(data, match, sendBadge) {
   // Using our OAuth App secret grants us 5000 req/hour
   // instead of the standard 60 req/hour.
   if (serverSecrets) {
-    apiUrl += '?client_id=' + serverSecrets.gh_client_id
-      + '&client_secret=' + serverSecrets.gh_client_secret;
+    apiUrl += '?client_id=' + serverSecrets.gh_client_id +
+              '&client_secret=' + serverSecrets.gh_client_secret;
   }
   var badgeData = getBadgeData('tag', data);
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
   request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -1404,14 +1409,14 @@ cache(function(data, match, sendBadge) {
   // Using our OAuth App secret grants us 5000 req/hour
   // instead of the standard 60 req/hour.
   if (serverSecrets) {
-    apiUrl += '?client_id=' + serverSecrets.gh_client_id
-      + '&client_secret=' + serverSecrets.gh_client_secret;
+    apiUrl += '?client_id=' + serverSecrets.gh_client_id +
+             '&client_secret=' + serverSecrets.gh_client_secret;
   }
   var badgeData = getBadgeData('release', data);
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
   request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -1454,14 +1459,14 @@ cache(function(data, match, sendBadge) {
   // Using our OAuth App secret grants us 5000 req/hour
   // instead of the standard 60 req/hour.
   if (serverSecrets) {
-    apiUrl += '?client_id=' + serverSecrets.gh_client_id
-      + '&client_secret=' + serverSecrets.gh_client_secret;
+    apiUrl += '?client_id=' + serverSecrets.gh_client_id +
+         '&client_secret=' + serverSecrets.gh_client_secret;
   }
   var badgeData = getBadgeData('issues', data);
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
   request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -1490,7 +1495,7 @@ cache(function(data, match, sendBadge) {
   var badgeData = getBadgeData('cookbook', data);
 
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -1516,7 +1521,7 @@ function getNugetPackage(apiUrl, id, done) {
   var filter = 'Id eq \'' + id + '\' and IsLatestVersion eq true';
   var reqUrl = apiUrl + '/Packages()?$filter=' + encodeURIComponent(filter);
   request(reqUrl, { headers: { 'Accept': 'application/atom+json,application/json' } }, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       done(err);
       return;
     }
@@ -1524,12 +1529,12 @@ function getNugetPackage(apiUrl, id, done) {
     try {
       var data = JSON.parse(buffer);
       var result = data.d.results[0];
-      if (result == null) {
+      if (result === null) {
         // package was not found, might be pre-release only
         var filter = 'Id eq \'' + id + '\' and IsAbsoluteLatestVersion eq true';
         var reqUrl = apiUrl + '/Packages()?$filter=' + encodeURIComponent(filter);
         request(reqUrl, { headers: { 'Accept': 'application/atom+json,application/json' } }, function(err, res, buffer) {
-          if (err != null) {
+          if (!!err) {
             done(err);
             return;
           }
@@ -1537,7 +1542,7 @@ function getNugetPackage(apiUrl, id, done) {
           try {
             var data = JSON.parse(buffer);
             var result = data.d.results[0];
-            if (result == null) {
+            if (result === null) {
               done(null, null);
             } else {
               done (null, result);
@@ -1565,7 +1570,7 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'https://www.' + site + '.org/api/v2';
   var badgeData = getBadgeData(site, data);
   getNugetPackage(apiUrl, repo, function(err, data) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -1596,7 +1601,7 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'https://www.myget.org/F/' + feed + '/api/v2';
   var badgeData = getBadgeData(feed, data);
   getNugetPackage(apiUrl, repo, function(err, data) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -1627,7 +1632,7 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'https://www.' + site + '.org/api/v2';
   var badgeData = getBadgeData('downloads', data);
   getNugetPackage(apiUrl, repo, function(err, data) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -1652,7 +1657,7 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'https://www.myget.org/F/' + feed + '/api/v2';
   var badgeData = getBadgeData('downloads', data);
   getNugetPackage(apiUrl, repo, function(err, data) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -1679,7 +1684,7 @@ cache(function(data, match, sendBadge) {
   };
   var badgeData = getBadgeData('puppetforge', data);
   request(options, function dealWithData(err, res, json) {
-    if (err != null || (json.length !== undefined && json.length === 0)) {
+    if (!!err || (json.length !== undefined && json.length === 0)) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
@@ -1689,7 +1694,7 @@ cache(function(data, match, sendBadge) {
         return /-[0-9A-Za-z.-]+(?:\+[0-9A-Za-z.-]+)?$/.test(ver);
       };
       var releases = json[userRepo];
-      if (releases.length == 0) {
+      if (releases.length === 0) {
         badgeData.text[1] = 'none';
         badgeData.colorscheme = 'lightgrey';
         sendBadge(format, badgeData);
@@ -1728,7 +1733,7 @@ cache(function(data, match, sendBadge) {
 
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res, json) {
-    if (err !== null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
@@ -1744,8 +1749,8 @@ cache(function(data, match, sendBadge) {
       } else if (json.color === 'yellow') {
         badgeData.colorscheme = 'yellow';
         badgeData.text[1] = 'unstable';
-      } else if (json.color === 'grey' || json.color === 'disabled'
-          || json.color === 'aborted' || json.color === 'notbuilt') {
+      } else if (json.color === 'grey' || json.color === 'disabled' ||
+                 json.color === 'aborted' || json.color === 'notbuilt') {
         badgeData.colorscheme = 'lightgrey';
         badgeData.text[1] = 'not built';
       } else {
@@ -1769,13 +1774,13 @@ cache(function(data, match, sendBadge) {
   var format = match[6];
   var options = {
     json: true,
-    uri: scheme + '://' + host + '/job/' + job
-      + '/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]'
+    uri: scheme + '://' + host + '/job/' + job +
+         '/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]'
   };
 
   var badgeData = getBadgeData('tests', data);
   request(options, function(err, res, json) {
-    if (err !== null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
@@ -1790,8 +1795,8 @@ cache(function(data, match, sendBadge) {
         sendBadge(format, badgeData);
         return;
       }
-      var successfulTests = testsObject.totalCount
-        - (testsObject.failCount + testsObject.skipCount);
+      var successfulTests = testsObject.totalCount -
+               (testsObject.failCount + testsObject.skipCount);
       var percent = successfulTests / testsObject.totalCount;
       badgeData.text[1] = successfulTests + ' / ' + testsObject.totalCount;
       if (percent === 1) {
@@ -1820,7 +1825,7 @@ cache(function(data, match, sendBadge) {
   };
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -1872,7 +1877,7 @@ cache(function(data, match, sendBadge) {
   var apiUrl = 'https://search.maven.org/solrsearch/select?rows=1&q='+query;
   var badgeData = getBadgeData('maven-central', data);
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
-    if (err != null) {
+    if (!!err) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
@@ -2017,7 +2022,7 @@ function getBadgeData(defaultLabel, data) {
   var template = data.style || 'default';
   if (data.style && validTemplates.indexOf(data.style) > -1) {
     template = data.style;
-  };
+  }
 
   return {text:[label, 'n/a'], colorscheme:'lightgrey', template:template};
 }
@@ -2056,19 +2061,23 @@ var regularUpdateCache = Object.create(null);
 function regularUpdate(url, interval, scraper, cb) {
   var timestamp = Date.now();
   var cache = regularUpdateCache[url];
-  if (cache != null &&
+  if (!!cache &&
       (timestamp - cache.timestamp) < interval) {
     cb(null, regularUpdateCache[url].data);
     return;
   }
   request(url, function(err, res, buffer) {
-    if (err != null) { cb(err); return; }
-    if (regularUpdateCache[url] == null) {
+    if (!!err) { cb(err); return; }
+    if (!regularUpdateCache[url]) {
       regularUpdateCache[url] = { timestamp: 0, data: 0 };
     }
+    var data;
     try {
-      var data = scraper(buffer);
-    } catch(e) { cb(e); return; }
+      data = scraper(buffer);
+    } catch(e) {
+      cb(e);
+      return;
+    }
     regularUpdateCache[url].timestamp = timestamp;
     regularUpdateCache[url].data = data;
     cb(null, data);
