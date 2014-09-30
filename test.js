@@ -29,7 +29,7 @@ describe('the CLI', function() {
     });
   });
   it('should produce colorschemed badges', function(done) {
-    child = cproc.spawn('node',
+    var child = cproc.spawn('node',
       ['ass-stubs/cli-test.js', 'cactus', 'grown', ':green']);
     child.stdout.on('data', function(chunk) {
       var buffer = ''+chunk;
@@ -38,7 +38,7 @@ describe('the CLI', function() {
     });
   });
   it('should produce right-color badges', function(done) {
-    child = cproc.spawn('node',
+    var child = cproc.spawn('node',
       ['ass-stubs/cli-test.js', 'cactus', 'grown', '#abcdef']);
     child.stdout.on('data', function(chunk) {
       var buffer = ''+chunk;
@@ -47,7 +47,7 @@ describe('the CLI', function() {
     });
   });
   it('should produce PNG badges', function(done) {
-    child = cproc.spawn('node',
+    var child = cproc.spawn('node',
       ['ass-stubs/cli-test.js', 'cactus', 'grown', '.png']);
     child.stdout.on('data', function(chunk) {
       // Check the PNG magic number.

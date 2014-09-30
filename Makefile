@@ -30,7 +30,11 @@ setup:
 redis:
 	./redis/src/redis-server
 
+lint:
+	./node_modules/.bin/jshint . --verbose
+
 test:
-	npm test
+	make lint
+	./node_modules/.bin/mocha -R spec test.js
 
 .PHONY: all favicon website deploy setup redis test

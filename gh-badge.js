@@ -7,8 +7,8 @@ if (process.argv.length < 4) {
   console.log('Usage: badge subject status [:colorscheme] [.output] [@style]');
   console.log('Or:    badge subject status right-color [left-color] [.output] [@style]');
   console.log();
-  console.log('  colorscheme: one of '
-      + Object.keys(colorscheme).join(', ') + '.');
+  console.log('  colorscheme: one of ' +
+              Object.keys(colorscheme).join(', ') + '.');
   console.log('  left-color, right-color:');
   console.log('    #xxx (three hex digits)');
   console.log('    #xxxxxx (six hex digits)');
@@ -49,7 +49,7 @@ if (style) {
 
 if (color[0] === ':') {
   color = color.slice(1);
-  if (colorscheme[color] == null) {
+  if (!colorscheme[color]) {
     // Colorscheme not found.
     console.error('Invalid color scheme.');
     process.exit(1);
