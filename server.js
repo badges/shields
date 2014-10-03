@@ -391,18 +391,23 @@ cache(function(data, match, sendBadge) {
     }
     try {
       var data = JSON.parse(buffer);
-      var money = parseInt(data.receiving);
-      badgeData.text[1] = '$' + metric(money) + '/week';
-      if (money === 0) {
-        badgeData.colorscheme = 'red';
-      } else if (money < 10) {
-        badgeData.colorscheme = 'yellow';
-      } else if (money < 100) {
-        badgeData.colorscheme = 'green';
+      if (data.receiving) {
+        var money = parseInt(data.receiving);
+        badgeData.text[1] = '$' + metric(money) + '/week';
+        if (money === 0) {
+          badgeData.colorscheme = 'red';
+        } else if (money < 10) {
+          badgeData.colorscheme = 'yellow';
+        } else if (money < 100) {
+          badgeData.colorscheme = 'green';
+        } else {
+          badgeData.colorscheme = 'brightgreen';
+        }
+        sendBadge(format, badgeData);
       } else {
-        badgeData.colorscheme = 'brightgreen';
+        badgeData.text[1] = 'anonymous';
+        sendBadge(format, badgeData);
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
