@@ -832,6 +832,40 @@ cache(function(data, match, sendBadge) {
   });
 }));
 
+// Dart's pub version integration.
+camp.route(/^\/pub\/v\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var userRepo = match[1]; // eg, "box2d"
+  var format = match[2];
+  var apiUrl = 'https://pub.dartlang.org/packages/' + userRepo + '.json';
+  var badgeData = getBadgeData('pub', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      // Grab the latest stable version, or an unstable
+      var versions = data.versions;
+      var version = latestVersion(versions);
+      badgeData.text[1] = version;
+      if (/^\d/.test(badgeData.text[1])) {
+        badgeData.text[1] = 'v' + version;
+      }
+      if (version[0] === '0' || /dev/.test(version)) {
+        badgeData.colorscheme = 'orange';
+      } else {
+        badgeData.colorscheme = 'blue';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Hex.pm integration.
 camp.route(/^\/hexpm\/([^\/]+)\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge) {
