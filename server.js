@@ -1214,7 +1214,10 @@ cache(function(data, match, sendBadge) {
     try {
       var data = JSON.parse(buffer);
       var status = data.status;
-      if (status === 'notsouptodate') {
+      if (status === 'insecure') {
+        badgeData.colorscheme = 'red';
+        status = 'insecure';
+      } else if (status === 'notsouptodate') {
         badgeData.colorscheme = 'yellow';
         status = 'up-to-date';
       } else if (status === 'outofdate') {
