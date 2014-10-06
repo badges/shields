@@ -146,14 +146,15 @@ var minAccuracy = 0.75;
 //       = 1 - max(1, df) / rf
 var freqRatioMax = 1 - minAccuracy;
 
-// Request cache size of size 1_000_000 (~1GB, 1kB/image).
-var requestCache = new LruCache(1000000);
+// Request cache size of size 500_000 (~512MB, 1kB/image).
+var requestCache = new LruCache(500000);
 
 function cache(f) {
   return function getRequest(data, match, end, ask) {
     // Cache management - no cache, so it won't be cached by GitHub's CDN.
     ask.res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    var date = (new Date()).toGMTString();
+    var reqTime = new Date();
+    var date = (reqTime).toGMTString();
     ask.res.setHeader('Expires', date);  // Proxies, GitHub, see #221.
     ask.res.setHeader('Date', date);
     incrMonthlyAnalytics(analytics.vendorMonthly);
@@ -167,10 +168,16 @@ function cache(f) {
     // Should we return the data right away?
     var cached = requestCache.get(cacheIndex);
     var cachedVersionSent = false;
-    if (cached !== undefined
-        && cached.dataChange / cached.reqs <= freqRatioMax) {
-      badge(cached.data.badgeData, makeSend(cached.data.format, ask.res, end));
-      cachedVersionSent = true;
+    if (cached !== undefined) {
+      // A request was made not long ago.
+      var interval = 30000;  // In milliseconds.
+      var tooSoon = (+reqTime - cached.time) < cached.interval;
+      if (tooSoon || (cached.dataChange / cached.reqs <= freqRatioMax)) {
+        badge(cached.data.badgeData, makeSend(cached.data.format, ask.res, end));
+        cachedVersionSent = true;
+        // We do not wish to call the vendor servers.
+        if (tooSoon) { return; }
+      }
     }
 
     // In case our vendor servers are unresponsive.
@@ -188,6 +195,29 @@ function cache(f) {
       badge(badgeData, makeSend('svg', ask.res, end));
     }, 25000);
 
+    // Only call vendor servers when last request is older than…
+    var cacheInterval = 5000;  // milliseconds
+    var cachedRequest = function (uri, options, callback) {
+      if ((typeof options === 'function') && !callback) { callback = options; }
+      if (options && typeof options === 'object') {
+        options.uri = uri;
+      } else if (typeof uri === 'string') {
+        options = {uri:uri};
+      } else {
+        options = uri;
+      }
+      return request(options, function(err, res, json) {
+        var cacheControl = res.headers['cache-control'];
+        if (cacheControl != null) {
+          var age = cacheControl.match(/max-age=([0-9]+)/);
+          if ((age != null) && (+age[1] === +age[1])) {
+            cacheInterval = +age[1] * 1000;
+          }
+        }
+        callback(err, res, json);
+      });
+    };
+
     f(data, match, function sendBadge(format, badgeData) {
       if (serverUnresponsive) { return; }
       clearTimeout(serverResponsive);
@@ -202,22 +232,25 @@ function cache(f) {
         reqs: cached? (cached.reqs + 1): 1,
         dataChange: cached? (cached.dataChange + (dataHasChanged? 1: 0))
                           : 1,
+        time: +reqTime,
+        interval: cacheInterval,
         data: { format: format, badgeData: badgeData }
       };
       requestCache.set(cacheIndex, updatedCache);
       if (!cachedVersionSent) {
         badge(badgeData, makeSend(format, ask.res, end));
       }
-    });
+    }, cachedRequest);
   };
 }
+
 
 
 // Vendors.
 
 // Travis integration
 camp.route(/^\/travis(-ci)?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var userRepo = match[2];  // eg, espadrine/sc
   var branch = match[3];
   var format = match[4];
@@ -261,7 +294,7 @@ cache(function(data, match, sendBadge) {
 
 // AppVeyor CI integration.
 camp.route(/^\/appveyor\/ci\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, `gruntjs/grunt`.
   var format = match[2];
   var apiUrl = 'https://ci.appveyor.com/api/projects/' + repo;
@@ -317,7 +350,7 @@ function teamcity_badge(url, buildId, advanced, format, data, sendBadge) {
 
 // Old url for CodeBetter TeamCity instance.
 camp.route(/^\/teamcity\/codebetter\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var buildType = match[1];  // eg, `bt428`.
   var format = match[2];
   teamcity_badge('http://teamcity.codebetter.com', buildType, false, format, data, sendBadge);
@@ -325,7 +358,7 @@ cache(function(data, match, sendBadge) {
 
 // Generic TeamCity instance
 camp.route(/^\/teamcity\/(http|https)\/(.*)\/(s|e)\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var scheme = match[1];
   var serverUrl = match[2];
   var advanced = (match[3] == 'e');
@@ -336,7 +369,7 @@ cache(function(data, match, sendBadge) {
 
 // TeamCity CodeBetter code coverage
 camp.route(/^\/teamcity\/coverage\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var buildType = match[1];  // eg, `bt428`.
   var format = match[2];
   var apiUrl = 'http://teamcity.codebetter.com/app/rest/builds/buildType:(id:' + buildType + ')/statistics?guest=1';
@@ -378,7 +411,7 @@ cache(function(data, match, sendBadge) {
 
 // Gratipay integration.
 camp.route(/^\/(gittip|gratipay)\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var user = match[2];  // eg, `JSFiddle`.
   var format = match[3];
   var apiUrl = 'https://www.gratipay.com/' + user + '/public.json';
@@ -417,7 +450,7 @@ cache(function(data, match, sendBadge) {
 
 // Packagist integration.
 camp.route(/^\/packagist\/(dm|dd|dt)\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var info = match[1];  // either `dm` or dt`.
   var userRepo = match[2];  // eg, `doctrine/orm`.
   var format = match[3];
@@ -455,7 +488,7 @@ cache(function(data, match, sendBadge) {
 
 // Packagist version integration.
 camp.route(/^\/packagist\/v\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];
   var format = match[2];
   var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
@@ -467,7 +500,6 @@ cache(function(data, match, sendBadge) {
     }
     try {
       var data = JSON.parse(buffer);
-      var version;
       var unstable = function(ver) { return /dev/.test(ver); };
       // Grab the latest stable version, or an unstable
       var versions = Object.keys(data.package.versions);
@@ -491,7 +523,7 @@ cache(function(data, match, sendBadge) {
 
 // Packagist license integration.
 camp.route(/^\/packagist\/l\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];
   var format = match[2];
   var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
@@ -533,7 +565,7 @@ cache(function(data, match, sendBadge) {
 
 // npm download integration.
 camp.route(/^\/npm\/dm\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, `localeval`.
   var format = match[2];
   var apiUrl = 'https://api.npmjs.org/downloads/point/last-month/' + user;
@@ -569,7 +601,7 @@ cache(function(data, match, sendBadge) {
 
 // npm version integration.
 camp.route(/^\/npm\/v\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, `localeval`.
   var format = match[2];
   var apiUrl = 'https://registry.npmjs.org/' + repo + '/latest';
@@ -600,7 +632,7 @@ cache(function(data, match, sendBadge) {
 
 // npm license integration.
 camp.route(/^\/npm\/l\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, "express"
   var format = match[2];
   var apiUrl = 'http://registry.npmjs.org/' + repo + '/latest';
@@ -628,7 +660,7 @@ cache(function(data, match, sendBadge) {
 
 // npm node version integration.
 camp.route(/^\/node\/v\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, `localeval`.
   var format = match[2];
   var apiUrl = 'https://registry.npmjs.org/' + repo + '/latest';
@@ -674,7 +706,7 @@ cache(function(data, match, sendBadge) {
 
 // Gem version integration.
 camp.route(/^\/gem\/v\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, `formatador`.
   var format = match[2];
   var apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
@@ -703,7 +735,7 @@ cache(function(data, match, sendBadge) {
 
 // Gem download count
 camp.route(/^\/gem\/(dt|dtv|dv)\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var info = match[1];  // either dt, dtv or dv.
   var repo = match[2];  // eg, "rails"
   var splited_url = repo.split('/');
@@ -774,7 +806,7 @@ cache(function(data, match, sendBadge) {
 
 // PyPI integration.
 camp.route(/^\/pypi\/([^\/]+)\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var info = match[1];
   var egg = match[2];  // eg, `gevent`, `Django`.
   var format = match[3];
@@ -834,7 +866,7 @@ cache(function(data, match, sendBadge) {
 
 // Dart's pub version integration.
 camp.route(/^\/pub\/v\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var userRepo = match[1]; // eg, "box2d"
   var format = match[2];
   var apiUrl = 'https://pub.dartlang.org/packages/' + userRepo + '.json';
@@ -868,7 +900,7 @@ cache(function(data, match, sendBadge) {
 
 // Hex.pm integration.
 camp.route(/^\/hexpm\/([^\/]+)\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var info = match[1];
   var repo = match[2];  // eg, `httpotion`.
   var format = match[3];
@@ -929,7 +961,7 @@ cache(function(data, match, sendBadge) {
 
 // Coveralls integration.
 camp.route(/^\/coveralls\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `jekyll/jekyll`.
   var branch = match[2];
   var format = match[3];
@@ -979,7 +1011,7 @@ cache(function(data, match, sendBadge) {
 
 // Codecov integration.
 camp.route(/^\/codecov\/c\/([^\/]+\/[^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `github/codecov/example-python`.
   var branch = match[2];
   var format = match[3];
@@ -1023,7 +1055,7 @@ cache(function(data, match, sendBadge) {
 
 // Code Climate coverage integration
 camp.route(/^\/codeclimate\/coverage\/(.+)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `github/triAGENS/ashikawa-core`.
   var format = match[2];
   var options = {
@@ -1063,7 +1095,7 @@ cache(function(data, match, sendBadge) {
 
 // Code Climate integration
 camp.route(/^\/codeclimate\/(.+)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `github/kabisaict/flow`.
   var format = match[2];
   var options = {
@@ -1108,7 +1140,7 @@ cache(function(data, match, sendBadge) {
 
 // Scrutinizer coverage integration.
 camp.route(/^\/scrutinizer\/coverage\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, g/phpmyadmin/phpmyadmin
   var format = match[2];
   // The repo may contain a branch, which would be unsuitable.
@@ -1146,7 +1178,7 @@ cache(function(data, match, sendBadge) {
 
 // Scrutinizer integration.
 camp.route(/^\/scrutinizer\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, g/phpmyadmin/phpmyadmin
   var format = match[2];
   // The repo may contain a branch, which would be unsuitable.
@@ -1197,7 +1229,7 @@ cache(function(data, match, sendBadge) {
 
 // David integration
 camp.route(/^\/david\/(dev\/|peer\/)?(.+?)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var dev = match[1];
   if (dev != null) { dev = dev.slice(0, -1); }  // 'dev' or 'peer'.
   // eg, `strongloop/express`, `webcomponents/generator-element`.
@@ -1236,7 +1268,7 @@ cache(function(data, match, sendBadge) {
 
 // Gemnasium integration
 camp.route(/^\/gemnasium\/(.+)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `jekyll/jekyll`.
   var format = match[2];
   var options = 'https://gemnasium.com/' + userRepo + '.svg';
@@ -1273,7 +1305,7 @@ cache(function(data, match, sendBadge) {
 
 // Hackage version integration.
 camp.route(/^\/hackage\/v\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, `lens`.
   var format = match[2];
   var apiUrl = 'https://hackage.haskell.org/package/' + repo + '/' + repo + '.cabal';
@@ -1308,7 +1340,7 @@ cache(function(data, match, sendBadge) {
 
 // Hackage dependencies version integration.
 camp.route(/^\/hackage-deps\/v\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, `lens`.
   var format = match[2];
   var apiUrl = 'http://packdeps.haskellers.com/feed/' + repo;
@@ -1338,7 +1370,7 @@ cache(function(data, match, sendBadge) {
 
 // CocoaPods version integration.
 camp.route(/^\/cocoapods\/(v|p|l)\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var type = match[1];
   var spec = match[2];  // eg, AFNetworking
   var format = match[3];
@@ -1389,7 +1421,7 @@ cache(function(data, match, sendBadge) {
 
 // GitHub tag integration.
 camp.route(/^\/github\/tag\/(.*)\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, strongloop/express
   var repo = match[2];
   var format = match[3];
@@ -1435,7 +1467,7 @@ cache(function(data, match, sendBadge) {
 
 // GitHub release integration.
 camp.route(/^\/github\/release\/(.*)\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
   var format = match[3];
@@ -1485,7 +1517,7 @@ cache(function(data, match, sendBadge) {
 
 // GitHub release integration.
 camp.route(/^\/github\/issues\/(.*)\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
   var format = match[3];
@@ -1522,7 +1554,7 @@ cache(function(data, match, sendBadge) {
 
 // Chef cookbook integration.
 camp.route(/^\/cookbook\/v\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var cookbook = match[1]; // eg, chef-sugar
   var format = match[2];
   var apiUrl = 'https://supermarket.getchef.com/api/v1/cookbooks/' + cookbook + '/versions/latest';
@@ -1696,7 +1728,7 @@ mapNugetFeed('myget\\/(.*)', 1, function(match) {
 
 // Puppet Forge
 camp.route(/^\/puppetforge\/v\/([^\/]+\/[^\/]+)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];
   var format = match[2];
   var options = {
@@ -1742,7 +1774,7 @@ cache(function(data, match, sendBadge) {
 
 // Jenkins build status integration
 camp.route(/^\/jenkins(-ci)?\/s\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var scheme = match[2];  // http(s)
   var host = match[4];  // jenkins.qa.ubuntu.com
   var job = match[5];  // precise-desktop-amd64_default
@@ -1788,7 +1820,7 @@ cache(function(data, match, sendBadge) {
 
 // Jenkins tests integration
 camp.route(/^\/jenkins(-ci)?\/t\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var scheme = match[2];  // http(s)
   var host = match[4];  // jenkins.qa.ubuntu.com
   var job = match[5];  // precise-desktop-amd64_default
@@ -1837,7 +1869,7 @@ cache(function(data, match, sendBadge) {
 
 // Codeship.io integration
 camp.route(/^\/codeship\/(.+)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var projectId = match[1];  // eg, `ab123456-00c0-0123-42de-6f98765g4h32`.
   var format = match[2];
   var options = {
@@ -1890,7 +1922,7 @@ cache(function(data, match, sendBadge) {
 // Maven-Central artifact version integration
 // API documentation: http://search.maven.org/#api
 camp.route(/^\/maven-central\/v\/(.*)\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var groupId = match[1]; // eg, `com.google.inject`
   var artifactId = match[2]; // eg, `guice`
   var format = match[3] || "gif"; // eg, `guice`
@@ -1921,7 +1953,7 @@ cache(function(data, match, sendBadge) {
 
 // Bower version integration.
 camp.route(/^\/bower\/v\/(.*)\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, `bootstrap`.
   var format = match[2];
   var badgeData = getBadgeData('bower', data);
