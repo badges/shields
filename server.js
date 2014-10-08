@@ -448,6 +448,47 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// HHVM integration.
+camp.route(/^\/hhvm\/([^\/]+\/[^\/]+)(\/.+)?\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  var user = match[1];  // eg, `symfony/symfony`.
+  var branch = match[2];// eg, `/2.4.0.0`.
+  var format = match[3];
+  var apiUrl = 'http://hhvm.h4cc.de/badge/' + user + '.json';
+  if (branch) {
+    // Remove the leading slash.
+    apiUrl += '?branch=' + branch.slice(1);
+  }
+  var badgeData = getBadgeData('hhvm', data);
+  request(apiUrl, function dealWithData(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var status = data.hhvm_status;
+      if (status === 'not_tested') {
+        badgeData.colorscheme = 'red';
+        badgeData.text[1] = 'not tested';
+      } else if (status === 'partial') {
+        badgeData.colorscheme = 'yellow';
+        badgeData.text[1] = 'partially tested';
+      } else if (status === 'tested') {
+        badgeData.colorscheme = 'brightgreen';
+        badgeData.text[1] = 'tested';
+      } else {
+        badgeData.text[1] = 'maybe untested';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Packagist integration.
 camp.route(/^\/packagist\/(dm|dd|dt)\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge, request) {
