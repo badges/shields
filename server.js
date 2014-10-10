@@ -2005,13 +2005,18 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
     })
     .on('end', function(version) {
-      badgeData.text[1] = 'v' + version;
-      if (version[0] === '0' || /dev/.test(version)) {
-        badgeData.colorscheme = 'orange';
-      } else {
-        badgeData.colorscheme = 'blue';
+      try {
+        badgeData.text[1] = 'v' + version;
+        if (version[0] === '0' || /dev/.test(version)) {
+          badgeData.colorscheme = 'orange';
+        } else {
+          badgeData.colorscheme = 'blue';
+        }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'void';
+        sendBadge(format, badgeData);
       }
-      sendBadge(format, badgeData);
     });
 }));
 
