@@ -450,7 +450,7 @@ cache(function(data, match, sendBadge, request) {
 
 // HHVM integration.
 camp.route(/^\/hhvm\/([^\/]+\/[^\/]+)(\/.+)?\.(svg|png|gif|jpg)$/,
-cache(function(data, match, sendBadge) {
+cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, `symfony/symfony`.
   var branch = match[2];// eg, `/2.4.0.0`.
   var format = match[3];
@@ -1629,7 +1629,7 @@ function mapNugetFeed(pattern, offset, getInfo) {
   var vPreRegex = new RegExp('^\\/' + pattern + '\\/vpre\\/(.*)\\.(svg|png|gif|jpg)$');
   var dtRegex = new RegExp('^\\/' + pattern + '\\/dt\\/(.*)\\.(svg|png|gif|jpg)$');
 
-  function getNugetPackage(apiUrl, id, includePre, done) {
+  function getNugetPackage(apiUrl, id, includePre, request, done) {
     var filter = includePre ?
       'Id eq \'' + id + '\' and IsAbsoluteLatestVersion eq true' :
       'Id eq \'' + id + '\' and IsLatestVersion eq true';
@@ -1647,7 +1647,7 @@ function mapNugetFeed(pattern, offset, getInfo) {
         var result = data.d.results[0];
         if (result == null) {
           if (includePre === null) {
-            getNugetPackage(apiUrl, id, true, done);
+            getNugetPackage(apiUrl, id, true, request, done);
           } else {
             done(new Error('Package not found in feed'));
           }
@@ -1662,14 +1662,14 @@ function mapNugetFeed(pattern, offset, getInfo) {
   }
 
   camp.route(vRegex,
-  cache(function(data, match, sendBadge) {
+  cache(function(data, match, sendBadge, request) {
     var info = getInfo(match);
     var site = info.site;  // eg, `Chocolatey`, or `YoloDev`
     var repo = match[offset + 1];  // eg, `Nuget.Core`.
     var format = match[offset + 2];
     var apiUrl = info.feed;
     var badgeData = getBadgeData(site, data);
-    getNugetPackage(apiUrl, repo, null, function(err, data) {
+    getNugetPackage(apiUrl, repo, null, request, function(err, data) {
       if (err != null) {
         badgeData.text[1] = 'inaccessible';
         sendBadge(format, badgeData);
@@ -1693,14 +1693,14 @@ function mapNugetFeed(pattern, offset, getInfo) {
   }));
 
   camp.route(vPreRegex,
-  cache(function(data, match, sendBadge) {
+  cache(function(data, match, sendBadge, request) {
     var info = getInfo(match);
     var site = info.site;  // eg, `Chocolatey`, or `YoloDev`
     var repo = match[offset + 1];  // eg, `Nuget.Core`.
     var format = match[offset + 2];
     var apiUrl = info.feed;
     var badgeData = getBadgeData(site, data);
-    getNugetPackage(apiUrl, repo, true, function(err, data) {
+    getNugetPackage(apiUrl, repo, true, request, function(err, data) {
       if (err != null) {
         badgeData.text[1] = 'inaccessible';
         sendBadge(format, badgeData);
@@ -1724,14 +1724,14 @@ function mapNugetFeed(pattern, offset, getInfo) {
   }));
 
   camp.route(dtRegex,
-  cache(function(data, match, sendBadge) {
+  cache(function(data, match, sendBadge, request) {
     var info = getInfo(match);
     var site = info.site;  // eg, `Chocolatey`, or `YoloDev`
     var repo = match[offset+ 1];  // eg, `Nuget.Core`.
     var format = match[offset + 2];
     var apiUrl = info.feed;
     var badgeData = getBadgeData(site, data);
-    getNugetPackage(apiUrl, repo, null, function(err, data) {
+    getNugetPackage(apiUrl, repo, null, request, function(err, data) {
       if (err != null) {
         badgeData.text[1] = 'inaccessible';
         sendBadge(format, badgeData);
