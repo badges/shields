@@ -262,13 +262,13 @@ function cache(f) {
 camp.route(/^\/travis(-ci)?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[2];  // eg, espadrine/sc
-  var branch = match[3];
+  var branches = match[3];
   var format = match[4];
   var options = {
     json: true,
-    uri: 'https://api.travis-ci.org/repos/' + userRepo + '/builds.json'
+    uri: 'https://api.travis-ci.org/repos/' + userRepo + '/branches.json'
   };
-  branch = branch || 'master';
+  branches = (branches || 'master').split(',');
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res, json) {
     if (err != null || json == null
@@ -277,26 +277,33 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
       return;
     }
-    // Find the latest push on this branch.
-    var build = null;
-    for (var i = 0; i < json.length; i++) {
-      if (json[i].state === 'finished' && json[i].event_type === 'push'
-      && json[i].branch === branch) {
-        build = json[i];
-        break;
+    var commits = json['commits'];
+    var builds = json['branches'];
+    var commitIds = commits.filter(function(commit) {
+      return !!~branches.indexOf(commit['branch']);
+    }).map(function(commit) {
+      return commit['id'];
+    });
+    badgeData.text[1] = builds.filter(function(build) {
+      return !!~commitIds.indexOf(build['commit_id']);
+    }).map(function(build) {
+      return build['state'];
+    }).reduce(function(memo, state, index, array) {
+      if (memo === 'failing') {
+        return memo;
       }
-    }
-    badgeData.text[1] = 'pending';
-    if (build === null) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    if (build.result === 0) {
+      if (state === 'failed') {
+        return 'failing';
+      }
+      if (state === 'passed') {
+        return 'passing';
+      }
+      return memo;
+    }, 'pending');
+    if (badgeData.text[1] === 'passing') {
       badgeData.colorscheme = 'brightgreen';
-      badgeData.text[1] = 'passing';
-    } else if (build.result === 1) {
+    } else if (badgeData.text[1] === 'failing') {
       badgeData.colorscheme = 'red';
-      badgeData.text[1] = 'failing';
     }
     sendBadge(format, badgeData);
   });
