@@ -6,6 +6,7 @@ var camp = require('camp').start({
 });
 console.log('http://127.1:' + serverPort + '/try.html');
 var https = require('https');
+var domain = require('domain');
 var request = require('request');
 var fs = require('fs');
 var LruCache = require('./lru-cache.js');
@@ -149,6 +150,13 @@ var freqRatioMax = 1 - minAccuracy;
 // Request cache size of size 500_000 (~512MB, 1kB/image).
 var requestCache = new LruCache(500000);
 
+// Deep error handling for vendor hooks.
+var vendorDomain = domain.create();
+vendorDomain.on('error', function(err) {
+  console.error('Vendor hook error:', err.stack);
+});
+
+
 function cache(f) {
   return function getRequest(data, match, end, ask) {
     // Cache management - no cache, so it won't be cached by GitHub's CDN.
@@ -218,29 +226,31 @@ function cache(f) {
       });
     };
 
-    f(data, match, function sendBadge(format, badgeData) {
-      if (serverUnresponsive) { return; }
-      clearTimeout(serverResponsive);
-      // Check for a change in the data.
-      var dataHasChanged = false;
-      if (cached !== undefined
-        && cached.data.badgeData.text[1] !== badgeData.text[1]) {
-        dataHasChanged = true;
-      }
-      // Update information in the cache.
-      var updatedCache = {
-        reqs: cached? (cached.reqs + 1): 1,
-        dataChange: cached? (cached.dataChange + (dataHasChanged? 1: 0))
-                          : 1,
-        time: +reqTime,
-        interval: cacheInterval,
-        data: { format: format, badgeData: badgeData }
-      };
-      requestCache.set(cacheIndex, updatedCache);
-      if (!cachedVersionSent) {
-        badge(badgeData, makeSend(format, ask.res, end));
-      }
-    }, cachedRequest);
+    vendorDomain.run(function() {
+      f(data, match, function sendBadge(format, badgeData) {
+        if (serverUnresponsive) { return; }
+        clearTimeout(serverResponsive);
+        // Check for a change in the data.
+        var dataHasChanged = false;
+        if (cached !== undefined
+          && cached.data.badgeData.text[1] !== badgeData.text[1]) {
+          dataHasChanged = true;
+        }
+        // Update information in the cache.
+        var updatedCache = {
+          reqs: cached? (cached.reqs + 1): 1,
+          dataChange: cached? (cached.dataChange + (dataHasChanged? 1: 0))
+                            : 1,
+          time: +reqTime,
+          interval: cacheInterval,
+          data: { format: format, badgeData: badgeData }
+        };
+        requestCache.set(cacheIndex, updatedCache);
+        if (!cachedVersionSent) {
+          badge(badgeData, makeSend(format, ask.res, end));
+        }
+      }, cachedRequest);
+    });
   };
 }
 
