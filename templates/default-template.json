@@ -1,0 +1,4 @@
+{
+  "name": {{=JSON.stringify(it.text[0])}},
+  "value": {{=JSON.stringify(it.text[1])}}
+}

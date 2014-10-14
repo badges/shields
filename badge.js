@@ -21,8 +21,9 @@ var templateFiles = fs.readdirSync(path.join(__dirname, 'templates'));
 templateFiles.forEach(function(filename) {
   var templateData = fs.readFileSync(
     path.join(__dirname, 'templates', filename)).toString();
-  var style = filename.slice(0, -('-template.svg'.length));
-  templates[style] = dot.template(templateData);
+  var extension = filename.split('.').pop();
+  var style = filename.slice(0, -(('-template.' + extension).length));
+  templates[style + '-' + extension] = dot.template(templateData);
 });
 
 var colorscheme = require(path.join(__dirname, 'colorscheme.json'));
@@ -33,8 +34,13 @@ function optimize(string, callback) {
 }
 
 function makeImage(data, cb) {
-  var template = templates[data.template];
-  if (template == null) { template = templates['default']; }
+  if (data.format !== 'json') {
+    data.format = 'svg';
+  }
+  if (!(data.template + '-' + data.format in templates)) {
+    data.template = 'default';
+  }
+  var template = templates[data.template + '-' + data.format];
   if (data.colorscheme) {
     data.colorA = colorscheme[data.colorscheme].colorA;
     data.colorB = colorscheme[data.colorscheme].colorB;
@@ -44,8 +50,12 @@ function makeImage(data, cb) {
     (canvasContext.measureText(data.text[1]).width|0) + 10,
   ];
   var result = template(data);
-  // Run the SVG through SVGO.
-  optimize(result, function(object) { cb(object.data); });
+  if (data.format === 'json') {
+    cb(result);
+  } else {
+    // Run the SVG through SVGO.
+    optimize(result, function(object) { cb(object.data); });
+  }
 }
 
 module.exports = makeImage;

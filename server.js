@@ -200,7 +200,7 @@ function cache(f) {
       }
       var badgeData = getBadgeData('vendor', data);
       badgeData.text[1] = 'unresponsive';
-      badge(badgeData, makeSend('svg', ask.res, end));
+      badge(badgeData, makeSend(match[0].split('.').pop(), ask.res, end));
     }, 25000);
 
     // Only call vendor servers when last request is older than…
@@ -236,6 +236,8 @@ function cache(f) {
           && cached.data.badgeData.text[1] !== badgeData.text[1]) {
           dataHasChanged = true;
         }
+        // Add format to badge data.
+        badgeData.format = format;
         // Update information in the cache.
         var updatedCache = {
           reqs: cached? (cached.reqs + 1): 1,
@@ -259,7 +261,7 @@ function cache(f) {
 // Vendors.
 
 // Travis integration
-camp.route(/^\/travis(-ci)?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg)$/,
+camp.route(/^\/travis(-ci)?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[2];  // eg, espadrine/sc
   var branch = match[3];
@@ -303,7 +305,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // AppVeyor CI integration.
-camp.route(/^\/appveyor\/ci\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/appveyor\/ci\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, `gruntjs/grunt`.
   var format = match[2];
@@ -359,7 +361,7 @@ function teamcity_badge(url, buildId, advanced, format, data, sendBadge) {
 }
 
 // Old url for CodeBetter TeamCity instance.
-camp.route(/^\/teamcity\/codebetter\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/teamcity\/codebetter\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var buildType = match[1];  // eg, `bt428`.
   var format = match[2];
@@ -367,7 +369,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Generic TeamCity instance
-camp.route(/^\/teamcity\/(http|https)\/(.*)\/(s|e)\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/teamcity\/(http|https)\/(.*)\/(s|e)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var scheme = match[1];
   var serverUrl = match[2];
@@ -378,7 +380,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // TeamCity CodeBetter code coverage
-camp.route(/^\/teamcity\/coverage\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/teamcity\/coverage\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var buildType = match[1];  // eg, `bt428`.
   var format = match[2];
@@ -420,7 +422,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Gratipay integration.
-camp.route(/^\/(gittip|gratipay)\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/(gittip|gratipay)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[2];  // eg, `JSFiddle`.
   var format = match[3];
@@ -459,7 +461,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // HHVM integration.
-camp.route(/^\/hhvm\/([^\/]+\/[^\/]+)(\/.+)?\.(svg|png|gif|jpg)$/,
+camp.route(/^\/hhvm\/([^\/]+\/[^\/]+)(\/.+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, `symfony/symfony`.
   var branch = match[2];// eg, `/2.4.0.0`.
@@ -500,7 +502,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Packagist integration.
-camp.route(/^\/packagist\/(dm|dd|dt)\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/packagist\/(dm|dd|dt)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var info = match[1];  // either `dm` or dt`.
   var userRepo = match[2];  // eg, `doctrine/orm`.
@@ -538,7 +540,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Packagist version integration.
-camp.route(/^\/packagist\/v\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/packagist\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];
   var format = match[2];
@@ -573,7 +575,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Packagist license integration.
-camp.route(/^\/packagist\/l\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/packagist\/l\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];
   var format = match[2];
@@ -615,7 +617,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // npm download integration.
-camp.route(/^\/npm\/dm\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/npm\/dm\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, `localeval`.
   var format = match[2];
@@ -651,7 +653,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // npm version integration.
-camp.route(/^\/npm\/v\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/npm\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, `localeval`.
   var format = match[2];
@@ -682,7 +684,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // npm license integration.
-camp.route(/^\/npm\/l\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/npm\/l\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, "express"
   var format = match[2];
@@ -710,7 +712,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // npm node version integration.
-camp.route(/^\/node\/v\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/node\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, `localeval`.
   var format = match[2];
@@ -756,7 +758,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Gem version integration.
-camp.route(/^\/gem\/v\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/gem\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, `formatador`.
   var format = match[2];
@@ -785,7 +787,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Gem download count
-camp.route(/^\/gem\/(dt|dtv|dv)\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/gem\/(dt|dtv|dv)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var info = match[1];  // either dt, dtv or dv.
   var repo = match[2];  // eg, "rails"
@@ -856,7 +858,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // PyPI integration.
-camp.route(/^\/pypi\/([^\/]+)\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/pypi\/([^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var info = match[1];
   var egg = match[2];  // eg, `gevent`, `Django`.
@@ -916,7 +918,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Dart's pub version integration.
-camp.route(/^\/pub\/v\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/pub\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1]; // eg, "box2d"
   var format = match[2];
@@ -950,7 +952,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Hex.pm integration.
-camp.route(/^\/hexpm\/([^\/]+)\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/hexpm\/([^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var info = match[1];
   var repo = match[2];  // eg, `httpotion`.
@@ -1011,7 +1013,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Coveralls integration.
-camp.route(/^\/coveralls\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg)$/,
+camp.route(/^\/coveralls\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `jekyll/jekyll`.
   var branch = match[2];
@@ -1061,7 +1063,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Codecov integration.
-camp.route(/^\/codecov\/c\/([^\/]+\/[^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg)$/,
+camp.route(/^\/codecov\/c\/([^\/]+\/[^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `github/codecov/example-python`.
   var branch = match[2];
@@ -1105,7 +1107,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Code Climate coverage integration
-camp.route(/^\/codeclimate\/coverage\/(.+)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/codeclimate\/coverage\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `github/triAGENS/ashikawa-core`.
   var format = match[2];
@@ -1145,7 +1147,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Code Climate integration
-camp.route(/^\/codeclimate\/(.+)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/codeclimate\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `github/kabisaict/flow`.
   var format = match[2];
@@ -1190,7 +1192,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Scrutinizer coverage integration.
-camp.route(/^\/scrutinizer\/coverage\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/scrutinizer\/coverage\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, g/phpmyadmin/phpmyadmin
   var format = match[2];
@@ -1228,7 +1230,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Scrutinizer integration.
-camp.route(/^\/scrutinizer\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/scrutinizer\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, g/phpmyadmin/phpmyadmin
   var format = match[2];
@@ -1279,7 +1281,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // David integration
-camp.route(/^\/david\/(dev\/|peer\/)?(.+?)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/david\/(dev\/|peer\/)?(.+?)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var dev = match[1];
   if (dev != null) { dev = dev.slice(0, -1); }  // 'dev' or 'peer'.
@@ -1321,7 +1323,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Gemnasium integration
-camp.route(/^\/gemnasium\/(.+)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/gemnasium\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `jekyll/jekyll`.
   var format = match[2];
@@ -1358,7 +1360,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Hackage version integration.
-camp.route(/^\/hackage\/v\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/hackage\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, `lens`.
   var format = match[2];
@@ -1393,7 +1395,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Hackage dependencies version integration.
-camp.route(/^\/hackage-deps\/v\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/hackage-deps\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, `lens`.
   var format = match[2];
@@ -1423,7 +1425,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // CocoaPods version integration.
-camp.route(/^\/cocoapods\/(v|p|l)\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/cocoapods\/(v|p|l)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var type = match[1];
   var spec = match[2];  // eg, AFNetworking
@@ -1474,7 +1476,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub tag integration.
-camp.route(/^\/github\/tag\/(.*)\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/github\/tag\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, strongloop/express
   var repo = match[2];
@@ -1520,7 +1522,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub release integration.
-camp.route(/^\/github\/release\/(.*)\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/github\/release\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
@@ -1570,7 +1572,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub release integration.
-camp.route(/^\/github\/issues\/(.*)\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/github\/issues\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
@@ -1607,7 +1609,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Chef cookbook integration.
-camp.route(/^\/cookbook\/v\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/cookbook\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var cookbook = match[1]; // eg, chef-sugar
   var format = match[2];
@@ -1638,9 +1640,9 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 function mapNugetFeed(pattern, offset, getInfo) {
-  var vRegex = new RegExp('^\\/' + pattern + '\\/v\\/(.*)\\.(svg|png|gif|jpg)$');
-  var vPreRegex = new RegExp('^\\/' + pattern + '\\/vpre\\/(.*)\\.(svg|png|gif|jpg)$');
-  var dtRegex = new RegExp('^\\/' + pattern + '\\/dt\\/(.*)\\.(svg|png|gif|jpg)$');
+  var vRegex = new RegExp('^\\/' + pattern + '\\/v\\/(.*)\\.(svg|png|gif|jpg|json)$');
+  var vPreRegex = new RegExp('^\\/' + pattern + '\\/vpre\\/(.*)\\.(svg|png|gif|jpg|json)$');
+  var dtRegex = new RegExp('^\\/' + pattern + '\\/dt\\/(.*)\\.(svg|png|gif|jpg|json)$');
 
   function getNugetPackage(apiUrl, id, includePre, request, done) {
     var filter = includePre ?
@@ -1781,7 +1783,7 @@ mapNugetFeed('myget\\/(.*)', 1, function(match) {
 });
 
 // Puppet Forge
-camp.route(/^\/puppetforge\/v\/([^\/]+\/[^\/]+)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/puppetforge\/v\/([^\/]+\/[^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];
   var format = match[2];
@@ -1827,7 +1829,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Jenkins build status integration
-camp.route(/^\/jenkins(-ci)?\/s\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/jenkins(-ci)?\/s\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var scheme = match[2];  // http(s)
   var host = match[4];  // jenkins.qa.ubuntu.com
@@ -1873,7 +1875,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Jenkins tests integration
-camp.route(/^\/jenkins(-ci)?\/t\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/jenkins(-ci)?\/t\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var scheme = match[2];  // http(s)
   var host = match[4];  // jenkins.qa.ubuntu.com
@@ -1922,7 +1924,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Codeship.io integration
-camp.route(/^\/codeship\/(.+)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/codeship\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var projectId = match[1];  // eg, `ab123456-00c0-0123-42de-6f98765g4h32`.
   var format = match[2];
@@ -1975,7 +1977,7 @@ cache(function(data, match, sendBadge, request) {
 
 // Maven-Central artifact version integration
 // API documentation: http://search.maven.org/#api
-camp.route(/^\/maven-central\/v\/(.*)\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/maven-central\/v\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var groupId = match[1]; // eg, `com.google.inject`
   var artifactId = match[2]; // eg, `guice`
@@ -2006,7 +2008,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Bower version integration.
-camp.route(/^\/bower\/v\/(.*)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/bower\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, `bootstrap`.
   var format = match[2];
@@ -2142,6 +2144,8 @@ function getBadgeData(defaultLabel, data) {
 function makeSend(format, askres, end) {
   if (format === 'svg') {
     return function(res) { sendSVG(res, askres, end); };
+  } else if (format === 'json') {
+    return function(res) { sendJSON(res, askres, end); };
   } else {
     return function(res) { sendOther(format, res, askres, end); };
   }
@@ -2155,6 +2159,12 @@ function sendSVG(res, askres, end) {
 function sendOther(format, res, askres, end) {
   askres.setHeader('Content-Type', 'image/' + format);
   svg2img(res, format, askres);
+}
+
+function sendJSON(res, askres, end) {
+  askres.setHeader('Content-Type', 'application/json');
+  askres.setHeader('Access-Control-Allow-Origin', '*');
+  end(null, {template: streamFromString(res)});
 }
 
 var stream = require('stream');
