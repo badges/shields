@@ -1513,7 +1513,7 @@ cache(function(data, match, sendBadge, request) {
       }
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'invalid';
+      badgeData.text[1] = 'none';
       sendBadge(format, badgeData);
     }
   });
@@ -1563,13 +1563,13 @@ cache(function(data, match, sendBadge, request) {
       }
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'invalid';
+      badgeData.text[1] = 'none';
       sendBadge(format, badgeData);
     }
   });
 }));
 
-// GitHub release integration.
+// GitHub issues integration.
 camp.route(/^\/github\/issues\/(.*)\/(.*)\.(svg|png|gif|jpg)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
