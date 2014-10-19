@@ -200,7 +200,11 @@ function cache(f) {
       }
       var badgeData = getBadgeData('vendor', data);
       badgeData.text[1] = 'unresponsive';
-      badge(badgeData, makeSend(match[0].split('.').pop(), ask.res, end));
+      var extension;
+      try {
+        extension = match[0].split('.').pop();
+      } catch(e) { extension = 'svg'; }
+      badge(badgeData, makeSend(extension, ask.res, end));
     }, 25000);
 
     // Only call vendor servers when last request is older than…
