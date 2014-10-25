@@ -18,6 +18,7 @@ canvasContext.font = '11px Verdana, "DejaVu Sans"';
 // cache templates.
 var templates = {};
 var templateFiles = fs.readdirSync(path.join(__dirname, 'templates'));
+dot.templateSettings.strip = false;  // Do not strip whitespace.
 templateFiles.forEach(function(filename) {
   var templateData = fs.readFileSync(
     path.join(__dirname, 'templates', filename)).toString();
