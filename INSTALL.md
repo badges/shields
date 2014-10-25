@@ -68,6 +68,7 @@ The format is the following:
 {
   /* Textual information shown, in order. */
   "text": [ "build", "passed" ],
+  "format": "svg",  // Also supports "json".
   "colorscheme": "green"
   /* … Or… */
   "colorA": "#555",
