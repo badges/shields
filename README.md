@@ -1,31 +1,21 @@
 # Shields [![Gittip](http://img.shields.io/gittip/shields.svg)](https://www.gittip.com/Shields/) [![npm version](http://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges) [![build status](http://img.shields.io/travis/badges/shields.svg)](https://travis-ci.org/badges/shields)
 
-A legible & concise status badge solution for third-party codebase services.
+An image server for legible & concise information.
 
-Make your own badges [here][badges]!
+<http://shields.io>
 
-[badges]: <http://img.shields.io>
+**Installation Instructions**:
+[INSTALL.md](INSTALL.md).
 
-## Services using the Shields standard
-- [Travis CI](https://github.com/travis-ci/travis-ci/issues/630#issuecomment-38054967)
-- [Code Climate](https://codeclimate.com/changelog/510d4fde56b102523a0004bf)
-- [Coveralls](https://coveralls.io/r/kaize/nastachku)
-- [Gemfury/RubyGems](http://badge.fury.io/)
-- [Gemnasium](http://support.gemnasium.com/forums/236528-general/suggestions/5518400-use-svg-for-badges-so-they-still-look-sharp-on-r)
-- [Scrutinizer CI](https://scrutinizer-ci.com/)
-- [Semaphore](https://semaphoreapp.com)
-- [VersionEye][]
-- [Read the Docs](https://readthedocs.org/)
-- [BadgerBadgerBadger][gem]
-- [badges2svg][]
-- [reposs][]
-- [ruby-gem-downloads-badge][]
+**Contributions**:
+[CONTRIBUTING.md](CONTRIBUTING.md).
 
-[gem]: https://github.com/badges/badgerbadgerbadger
-[badges2svg]: https://github.com/bfontaine/badges2svg
-[reposs]: https://github.com/rexfinn/reposs
-[VersionEye]: https://www.versioneye.com/
-[ruby-gem-downloads-badge]: https://github.com/bogdanRada/ruby-gem-downloads-badge/
+**Specification**:
+[SPECIFICATION.md](spec/SPECIFICATION.md).
+
+**License**:
+[LICENSE.md](LICENSE.md).
+
 
 ## Problem
 Many GitHub repos sport badges for things like:
@@ -69,15 +59,24 @@ What kind of meta data can you convey using badges?
 - amount of [gittip](http://gittip.com) donations per week: `tips | $2/week`
 
 
-## Specification
-See [SPECIFICATION.md](spec/SPECIFICATION.md).
+## Services using the Shields standard
+- [Travis CI](https://github.com/travis-ci/travis-ci/issues/630#issuecomment-38054967)
+- [Code Climate](https://codeclimate.com/changelog/510d4fde56b102523a0004bf)
+- [Coveralls](https://coveralls.io/r/kaize/nastachku)
+- [Gemfury/RubyGems](http://badge.fury.io/)
+- [Gemnasium](http://support.gemnasium.com/forums/236528-general/suggestions/5518400-use-svg-for-badges-so-they-still-look-sharp-on-r)
+- [Scrutinizer CI](https://scrutinizer-ci.com/)
+- [Semaphore](https://semaphoreapp.com)
+- [VersionEye][]
+- [Read the Docs](https://readthedocs.org/)
+- [BadgerBadgerBadger][gem]
+- [badges2svg][]
+- [reposs][]
+- [ruby-gem-downloads-badge][]
 
-## Installation Instructions
-See [INSTALL.md](INSTALL.md).
-
-## Contributions
-See [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## License
-See [LICENSE.md](LICENSE.md).
+[gem]: https://github.com/badges/badgerbadgerbadger
+[badges2svg]: https://github.com/bfontaine/badges2svg
+[reposs]: https://github.com/rexfinn/reposs
+[VersionEye]: https://www.versioneye.com/
+[ruby-gem-downloads-badge]: https://github.com/bogdanRada/ruby-gem-downloads-badge/
 
