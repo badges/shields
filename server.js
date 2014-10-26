@@ -277,39 +277,44 @@ cache(function(data, match, sendBadge, request) {
   branch = branch || 'master';
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res, json) {
-    if (err != null || json == null
-      || (json.length !== undefined && json.length === 0)) {
+    if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
-    // Find the latest push on this branch.
-    var build = null;
-    for (var i = 0; i < json.length; i++) {
-      if (json[i].state === 'finished' && json[i].event_type === 'push'
-      && json[i].branch === branch) {
-        build = json[i];
-        break;
+    try {
+      // Find the latest push on this branch.
+      var build = null;
+      for (var i = 0; i < json.length; i++) {
+        if (json[i].state === 'finished' && json[i].event_type === 'push'
+        && json[i].branch === branch) {
+          build = json[i];
+          break;
+        }
       }
-    }
-    badgeData.text[1] = 'pending';
-    if (build === null) {
+      badgeData.text[1] = 'pending';
+      if (build === null) {
+        sendBadge(format, badgeData);
+        return;
+      }
+      if (build.result === 0) {
+        badgeData.colorscheme = 'brightgreen';
+        badgeData.text[1] = 'passing';
+      } else if (build.result === 1) {
+        badgeData.colorscheme = 'red';
+        badgeData.text[1] = 'failing';
+      }
       sendBadge(format, badgeData);
-      return;
+
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
     }
-    if (build.result === 0) {
-      badgeData.colorscheme = 'brightgreen';
-      badgeData.text[1] = 'passing';
-    } else if (build.result === 1) {
-      badgeData.colorscheme = 'red';
-      badgeData.text[1] = 'failing';
-    }
-    sendBadge(format, badgeData);
   });
 }));
 
 // Wercker integration
-camp.route(/^\/wercker\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/wercker\/ci\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var projectId = match[1];  // eg, `54330318b4ce963d50020750`
   var format = match[2];
@@ -320,26 +325,31 @@ cache(function(data, match, sendBadge, request) {
   };
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res, json) {
-    if (err != null || json == null
-      || (json.length !== undefined && json.length === 0)) {
+    if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
-    var build = json[0];
+    try {
+      var build = json[0];
 
-    if (build.status === 'finished') {
-      if (build.result === 'passed') {
-        badgeData.colorscheme = 'brightgreen';
-        badgeData.text[1] = build.result;
+      if (build.status === 'finished') {
+        if (build.result === 'passed') {
+          badgeData.colorscheme = 'brightgreen';
+          badgeData.text[1] = build.result;
+        } else {
+          badgeData.colorscheme = 'red';
+          badgeData.text[1] = build.result;
+        }
       } else {
-        badgeData.colorscheme = 'red';
-        badgeData.text[1] = build.result;
+        badgeData.text[1] = build.status;
       }
-    } else {
-      badgeData.text[1] = build.status;
+      sendBadge(format, badgeData);
+
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
     }
-    sendBadge(format, badgeData);
   });
 }));
 
