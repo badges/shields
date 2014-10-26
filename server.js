@@ -2084,6 +2084,36 @@ cache(function(data, match, sendBadge, request) {
     });
 }));
 
+// Wheelmap integration.
+camp.route(/^\/wheelmap\/a\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var nodeId = match[1];  // eg, `2323004600`.
+  var format = match[2];
+  var options = {
+    method: 'GET',
+    json: true,
+    uri: 'http://wheelmap.org/nodes/' + nodeId + '.json'
+  };
+  var badgeData = getBadgeData('wheelmap', data);
+  request(options, function(err, res, json) {
+    try {
+      var accessibility = json.node.wheelchair;
+      badgeData.text[1] = accessibility;
+      if (accessibility === 'yes') {
+        badgeData.colorscheme = 'brightgreen';
+      } else if (accessibility === 'limited') {
+        badgeData.colorscheme = 'yellow';
+      } else if (accessibility === 'no') {
+        badgeData.colorscheme = 'red';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'void';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
