@@ -286,9 +286,9 @@ cache(function(data, match, sendBadge, request) {
       // Find the latest push on this branch.
       var build = null;
       for (var i = 0; i < json.length; i++) {
-        if (json[i].state === 'finished' &&
-            (json[i].event_type === 'push' || json[i].event_type === 'pull_request')
-            && json[i].branch === branch) {
+        if ((json[i].state === 'finished')
+            && (json[i].event_type === 'push')
+            && (json[i].branch === branch)) {
           build = json[i];
           break;
         }
