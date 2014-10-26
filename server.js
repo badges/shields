@@ -326,7 +326,7 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
       return;
     }
-    var build = json.[0];
+    var build = json[0];
 
     if (build.status === 'finished') {
       if (build.result === 'passed') {
