@@ -308,6 +308,41 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Wercker integration
+camp.route(/^\/wercker\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var projectId = match[1];  // eg, `54330318b4ce963d50020750`
+  var format = match[2];
+  var options = {
+    method: 'GET',
+    json: true,
+    uri: 'https://app.wercker.com/getbuilds/' + projectId + '?limit=1'
+  };
+  var badgeData = getBadgeData('build', data);
+  request(options, function(err, res, json) {
+    if (err != null || json == null
+      || (json.length !== undefined && json.length === 0)) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    var build = json[0];
+
+    if (build.status === 'finished') {
+      if (build.result === 'passed') {
+        badgeData.colorscheme = 'brightgreen';
+        badgeData.text[1] = build.result;
+      } else {
+        badgeData.colorscheme = 'red';
+        badgeData.text[1] = build.result;
+      }
+    } else {
+      badgeData.text[1] = build.status;
+    }
+    sendBadge(format, badgeData);
+  });
+}));
+
 // AppVeyor CI integration.
 camp.route(/^\/appveyor\/ci\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
