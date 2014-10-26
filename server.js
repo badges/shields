@@ -270,40 +270,25 @@ cache(function(data, match, sendBadge, request) {
   var userRepo = match[2];  // eg, espadrine/sc
   var branch = match[3];
   var format = match[4];
-  var options = {
-    json: true,
-    uri: 'https://api.travis-ci.org/repos/' + userRepo + '/builds.json'
-  };
-  branch = branch || 'master';
+  var url = 'https://api.travis-ci.org/' + userRepo + '.svg';
+  if (branch != null) {
+    url += '?branch=' + branch;
+  }
   var badgeData = getBadgeData('build', data);
-  request(options, function(err, res, json) {
+  fetchFromSvg(request, url, function(err, res) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
     try {
-      // Find the latest push on this branch.
-      var build = null;
-      for (var i = 0; i < json.length; i++) {
-        if ((json[i].state === 'finished')
-            && (json[i].event_type === 'push')
-            && (json[i].branch === branch)) {
-          build = json[i];
-          break;
-        }
-      }
-      badgeData.text[1] = 'pending';
-      if (build === null) {
-        sendBadge(format, badgeData);
-        return;
-      }
-      if (build.result === 0) {
+      badgeData.text[1] = res;
+      if (res === 'passing') {
         badgeData.colorscheme = 'brightgreen';
-        badgeData.text[1] = 'passing';
-      } else if (build.result === 1) {
+      } else if (res === 'failing') {
         badgeData.colorscheme = 'red';
-        badgeData.text[1] = 'failing';
+      } else {
+        badgeData.text[1] = 'pending';
       }
       sendBadge(format, badgeData);
 
@@ -2298,6 +2283,20 @@ function metric(n) {
   return ''+n;
 }
 
+
+// Get data from a svg-style badge.
+// cb: function(err, string)
+function fetchFromSvg(request, url, cb) {
+  request(url, function(err, res, buffer) {
+    if (err != null) { return cb(err); }
+    try {
+      var match = />([^<>]+)<\/text><\/g>/.exec(buffer);
+      cb(null, match[1]);
+    } catch(e) {
+      cb(e);
+    }
+  });
+}
 
 function coveragePercentageColor(percentage) {
   if (percentage < 80) {
