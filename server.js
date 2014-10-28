@@ -1465,7 +1465,7 @@ cache(function(data, match, sendBadge, request) {
   var type = match[1];
   var spec = match[2];  // eg, AFNetworking
   var format = match[3];
-  var apiUrl = 'http://search.cocoapods.org/api/v1/pod/' + spec + '.json';
+  var apiUrl = 'https://trunk.cocoapods.org/api/v1/pods/' + spec + '/specs/latest';
   var badgeData = getBadgeData('pod', data);
   badgeData.colorscheme = null;
   request(apiUrl, function(err, res, buffer) {
