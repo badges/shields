@@ -1511,7 +1511,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub tag integration.
-camp.route(/^\/github\/tag\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/tag\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, strongloop/express
   var repo = match[2];
@@ -1557,7 +1557,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub release integration.
-camp.route(/^\/github\/release\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/release\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
@@ -1607,7 +1607,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub issues integration.
-camp.route(/^\/github\/issues\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/issues\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
