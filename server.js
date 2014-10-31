@@ -147,8 +147,8 @@ var minAccuracy = 0.75;
 //       = 1 - max(1, df) / rf
 var freqRatioMax = 1 - minAccuracy;
 
-// Request cache size of 500MB heap limit.
-var requestCache = new LruCache(500000000, 'heap');
+// Request cache size of 400MB heap limit.
+var requestCache = new LruCache(400000000, 'heap');
 
 // Deep error handling for vendor hooks.
 var vendorDomain = domain.create();
@@ -219,11 +219,13 @@ function cache(f) {
         options = uri;
       }
       return request(options, function(err, res, json) {
-        var cacheControl = res.headers['cache-control'];
-        if (cacheControl != null) {
-          var age = cacheControl.match(/max-age=([0-9]+)/);
-          if ((age != null) && (+age[1] === +age[1])) {
-            cacheInterval = +age[1] * 1000;
+        if (res != null && res.headers != null) {
+          var cacheControl = res.headers['cache-control'];
+          if (cacheControl != null) {
+            var age = cacheControl.match(/max-age=([0-9]+)/);
+            if ((age != null) && (+age[1] === +age[1])) {
+              cacheInterval = +age[1] * 1000;
+            }
           }
         }
         callback(err, res, json);

@@ -63,8 +63,8 @@ Cache.prototype = {
       return Math.max(0, (this.order.length - this.size));
     } else if (this.type === typeEnum.heap) {
       if (getHeapSize() >= this.size) {
-        // Remove a quarter of them.
-        return (this.order.length >> 2);
+        // Remove half of them.
+        return (this.order.length >> 1);
       } else { return 0; }
     } else {
       console.error("Unknown heuristic for LRU cache.");
