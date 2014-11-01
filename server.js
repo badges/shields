@@ -17,7 +17,7 @@ try {
   // Everything that cannot be checked in but is useful server-side
   // is stored in this JSON data.
   serverSecrets = require('./secret.json');
-} catch(e) {}
+} catch(e) { console.error('No secret data (secret.json, see server.js):', e); }
 var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
 
