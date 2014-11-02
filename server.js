@@ -4,7 +4,7 @@ var camp = require('camp').start({
   documentRoot: __dirname,
   port: serverPort
 });
-console.log('http://127.1:' + serverPort + '/try.html');
+console.log('http://127.0.0.1:' + serverPort + '/try.html');
 var https = require('https');
 var domain = require('domain');
 var request = require('request');
@@ -737,6 +737,8 @@ cache(function(data, match, sendBadge, request) {
       var license = data.license;
       if (Array.isArray(license)) {
         license = license.join(', ');
+      } else if (typeof license == 'object') {
+        license = license.type;
       }
       badgeData.text[1] = license;
       badgeData.colorscheme = 'red';
@@ -939,7 +941,7 @@ cache(function(data, match, sendBadge, request) {
       } else if (info == 'l') {
         var license = data.info.license;
         badgeData.text[0] = 'license';
-        if(license == null || license == 'UNKNOWN') {
+        if (license == null || license == 'UNKNOWN') {
           badgeData.text[1] = 'Unknown';
         } else {
           badgeData.text[1] = license;
@@ -1034,7 +1036,7 @@ cache(function(data, match, sendBadge, request) {
         var license = (data.meta.licenses || []).join(', ');
         badgeData.text[0] = 'license';
         if ((data.meta.licenses || []).length > 1) badgeData.text[0] += 's';
-        if(license == '') {
+        if (license == '') {
           badgeData.text[1] = 'Unknown';
         } else {
           badgeData.text[1] = license;
