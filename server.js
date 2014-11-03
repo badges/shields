@@ -2102,6 +2102,108 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// wordpress plugin version integration.
+camp.route(/^\/wp\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var plugin = match[1];  // eg, `localeval`.
+  var format = match[2];
+  var apiUrl = 'http://api.wordpress.org/plugins/info/1.0/' + plugin + '.json';
+  var badgeData = getBadgeData('plugin', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var version = data.version;
+      badgeData.text[1] = 'v' + version;
+      if (version[0] === '0') {
+        badgeData.colorscheme = 'orange';
+      } else {
+        badgeData.colorscheme = 'blue';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// wordpress plugin downloads integration.
+camp.route(/^\/wp\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var plugin = match[1];  // eg, `localeval`.
+  var format = match[2];
+  var apiUrl = 'http://api.wordpress.org/plugins/info/1.0/' + plugin + '.json';
+  var badgeData = getBadgeData('downloads', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var total = JSON.parse(buffer).downloaded;
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+    badgeData.text[1] = metric(total);
+    if (monthly === 0) {
+      badgeData.colorscheme = 'red';
+    } else if (monthly < 10) {
+      badgeData.colorscheme = 'yellow';
+    } else if (monthly < 100) {
+      badgeData.colorscheme = 'yellowgreen';
+    } else if (monthly < 1000) {
+      badgeData.colorscheme = 'green';
+    } else {
+      badgeData.colorscheme = 'brightgreen';
+    }
+    sendBadge(format, badgeData);
+  });
+}));
+
+// wordpress plugin rating integration.
+camp.route(/^\/wp\/r\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var plugin = match[1];  // eg, `localeval`.
+  var format = match[2];
+  var apiUrl = 'http://api.wordpress.org/plugins/info/1.0/' + plugin + '.json';
+  var badgeData = getBadgeData('rating', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var rating = JSON.parse(buffer).rating;
+      rating = (rating/100)*5;
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+    badgeData.text[1] = metric(rating) + ' stars';
+    if (rating === 0) {
+      badgeData.colorscheme = 'red';
+    } else if (rating < 2) {
+      badgeData.colorscheme = 'yellow';
+    } else if (rating < 3) {
+      badgeData.colorscheme = 'yellowgreen';
+    } else if (rating < 4) {
+      badgeData.colorscheme = 'green';
+    } else {
+      badgeData.colorscheme = 'brightgreen';
+    }
+    sendBadge(format, badgeData);
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
