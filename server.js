@@ -2136,6 +2136,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // wordpress plugin version integration.
+// example: https://img.shields.io/wordpress/plugin/v/akismet.svg for https://wordpress.org/plugins/akismet
 camp.route(/^\/wordpress\/plugin\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var plugin = match[1];  // eg, `localeval`.
@@ -2165,6 +2166,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // wordpress plugin downloads integration.
+// example: https://img.shields.io/wordpress/plugin/dt/akismet.svg for https://wordpress.org/plugins/akismet
 camp.route(/^\/wordpress\/plugin\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var plugin = match[1];  // eg, `localeval`.
@@ -2184,7 +2186,7 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
       return;
     }
-    badgeData.text[1] = metric(total);
+    badgeData.text[1] = metric(total) + ' total';
     if (total === 0) {
       badgeData.colorscheme = 'red';
     } else if (total < 100) {
@@ -2201,6 +2203,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // wordpress plugin rating integration.
+// example: https://img.shields.io/wordpress/plugin/r/akismet.svg for https://wordpress.org/plugins/akismet
 camp.route(/^\/wordpress\/plugin\/r\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var plugin = match[1];  // eg, `localeval`.
@@ -2238,6 +2241,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // wordpress version support integration.
+// example: https://img.shields.io/wordpress/v/akismet.svg for https://wordpress.org/plugins/akismet
 camp.route(/^\/wordpress\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var plugin = match[1];  // eg, `localeval`.
@@ -2254,7 +2258,7 @@ cache(function(data, match, sendBadge, request) {
       var pluginVersion = data.version;
       if (data.tested) {
         var testedVersion = data.tested.replace(/[^0-9.]/g,'');
-        badgeData.text[1] = testedVersion;
+        badgeData.text[1] = testedVersion + ' tested';
         var coreUrl = 'https://api.wordpress.org/core/version-check/1.7/';
         request(coreUrl, function(err, res, response) {
             var versions = JSON.parse(response).offers.map(function(v) {
