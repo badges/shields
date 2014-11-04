@@ -2103,7 +2103,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // wordpress plugin version integration.
-camp.route(/^\/wp\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/wordpress\/plugin\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var plugin = match[1];  // eg, `localeval`.
   var format = match[2];
@@ -2132,7 +2132,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // wordpress plugin downloads integration.
-camp.route(/^\/wp\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/wordpress\/plugin\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var plugin = match[1];  // eg, `localeval`.
   var format = match[2];
@@ -2168,7 +2168,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // wordpress plugin rating integration.
-camp.route(/^\/wp\/r\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/wordpress\/plugin\/r\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var plugin = match[1];  // eg, `localeval`.
   var format = match[2];
@@ -2201,6 +2201,51 @@ cache(function(data, match, sendBadge, request) {
       badgeData.colorscheme = 'brightgreen';
     }
     sendBadge(format, badgeData);
+  });
+}));
+
+// wordpress version support integration.
+camp.route(/^\/wordpress\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var plugin = match[1];  // eg, `localeval`.
+  var format = match[2];
+  var apiUrl = 'http://api.wordpress.org/plugins/info/1.0/' + plugin + '.json';
+  var badgeData = getBadgeData('wordpress', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var pluginVersion = data.version;
+      if (data.tested) {
+        var testedVersion = data.tested;
+        badgeData.text[1] = testedVersion;
+        var coreUrl = 'https://api.wordpress.org/core/version-check/1.7/';
+        request(coreUrl, function(err, res, response) {
+            var versions = JSON.parse(response).offers.map(function(v) {
+              return v.version
+            });
+            if (err != null) { sendBadge(format, badgeData); return; }
+            var svTestedVersion = testedVersion.split('.').length == 2 ? testedVersion += '.0' : testedVersion;
+            var svVersion = versions[0].split('.').length == 2 ? versions[0] += '.0' : versions[0];
+            if (testedVersion == versions[0] || semver.gtr(svTestedVersion, svVersion)) {
+              badgeData.colorscheme = 'brightgreen';
+            } else if (versions.indexOf(testedVersion) != -1) {
+              badgeData.colorscheme = 'orange';
+            } else {
+              badgeData.colorscheme = 'yellow';
+            }
+            sendBadge(format, badgeData);
+        });
+      } else {
+        sendBadge(format, badgeData);
+      }
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
   });
 }));
 
