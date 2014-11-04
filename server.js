@@ -2154,11 +2154,11 @@ cache(function(data, match, sendBadge, request) {
     badgeData.text[1] = metric(total);
     if (total === 0) {
       badgeData.colorscheme = 'red';
-    } else if (total < 10) {
-      badgeData.colorscheme = 'yellow';
     } else if (total < 100) {
-      badgeData.colorscheme = 'yellowgreen';
+      badgeData.colorscheme = 'yellow';
     } else if (total < 1000) {
+      badgeData.colorscheme = 'yellowgreen';
+    } else if (total < 10000) {
       badgeData.colorscheme = 'green';
     } else {
       badgeData.colorscheme = 'brightgreen';
