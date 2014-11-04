@@ -2220,7 +2220,7 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       var pluginVersion = data.version;
       if (data.tested) {
-        var testedVersion = data.tested;
+        var testedVersion = data.tested.replace(/[^0-9.]/g,'');
         badgeData.text[1] = testedVersion;
         var coreUrl = 'https://api.wordpress.org/core/version-check/1.7/';
         request(coreUrl, function(err, res, response) {
