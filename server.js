@@ -2152,13 +2152,13 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     badgeData.text[1] = metric(total);
-    if (monthly === 0) {
+    if (total === 0) {
       badgeData.colorscheme = 'red';
-    } else if (monthly < 10) {
+    } else if (total < 10) {
       badgeData.colorscheme = 'yellow';
-    } else if (monthly < 100) {
+    } else if (total < 100) {
       badgeData.colorscheme = 'yellowgreen';
-    } else if (monthly < 1000) {
+    } else if (total < 1000) {
       badgeData.colorscheme = 'green';
     } else {
       badgeData.colorscheme = 'brightgreen';
