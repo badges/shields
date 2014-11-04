@@ -2188,7 +2188,7 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
       return;
     }
-    badgeData.text[1] = metric(rating) + ' stars';
+    badgeData.text[1] = metric(Math.round(rating * 10) / 10) + ' stars';
     if (rating === 0) {
       badgeData.colorscheme = 'red';
     } else if (rating < 2) {
