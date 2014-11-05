@@ -13,7 +13,7 @@
   "main": "badge.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/espadrine/gh-badges"
+    "url": "https://github.com/badges/shields"
   },
   "dependencies": {
     "dot": "~1.0.2",
