@@ -2288,6 +2288,58 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// SourceForge integration.
+camp.route(/^\/sourceforge\/([^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var info = match[1];
+  var project = match[2];
+  var filepath = '/';
+  var format = match[3];
+  var apiUrl = 'http://sourceforge.net/projects/' + project + '/files' + filepath + '/stats/json';
+  var badgeData = getBadgeData('sourceforge', data);
+  var time_period, start_date, end_date = '';
+  if (info.charAt(0) === 'd') {
+    badgeData.text[0] = getLabel('downloads', data);
+    // get yesterday since today is incomplete
+    end_date = new Date((new Date()).getTime() - 1000*60*60*24);
+    switch (info.charAt(1)) {
+      case 'm':
+        start_date = new Date(end_date.getTime() - 1000*60*60*24*30);
+        time_period = '/month';
+        break;
+      case 'w':
+        start_date = new Date(end_date.getTime() - 1000*60*60*24*6);  // 6, since date range is inclusive
+        time_period = '/week';
+        break;
+      case 'd':
+        start_date = end_date;
+        time_period = '/day';
+        break;
+      case 't':
+        start_date = new Date(99, 0, 1);
+        time_period = '/total';
+        break;
+    }
+  }
+  apiUrl += '?start_date=' + start_date.toISOString().slice(0,10) + '&end_date=' + end_date.toISOString().slice(0,10);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var downloads = data.total;
+      badgeData.text[1] = metric(downloads) + time_period;
+      badgeData.colorscheme = downloadCountColor(downloads);
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid' + e.toString();
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
