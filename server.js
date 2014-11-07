@@ -2139,7 +2139,7 @@ cache(function(data, match, sendBadge, request) {
 // example: https://img.shields.io/wordpress/plugin/v/akismet.svg for https://wordpress.org/plugins/akismet
 camp.route(/^\/wordpress\/plugin\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var plugin = match[1];  // eg, `localeval`.
+  var plugin = match[1];  // eg, `akismet`.
   var format = match[2];
   var apiUrl = 'http://api.wordpress.org/plugins/info/1.0/' + plugin + '.json';
   var badgeData = getBadgeData('plugin', data);
@@ -2169,7 +2169,7 @@ cache(function(data, match, sendBadge, request) {
 // example: https://img.shields.io/wordpress/plugin/dt/akismet.svg for https://wordpress.org/plugins/akismet
 camp.route(/^\/wordpress\/plugin\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var plugin = match[1];  // eg, `localeval`.
+  var plugin = match[1];  // eg, `akismet`.
   var format = match[2];
   var apiUrl = 'http://api.wordpress.org/plugins/info/1.0/' + plugin + '.json';
   var badgeData = getBadgeData('downloads', data);
@@ -2181,24 +2181,23 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var total = JSON.parse(buffer).downloaded;
+      badgeData.text[1] = metric(total) + ' total';
+      if (total === 0) {
+        badgeData.colorscheme = 'red';
+      } else if (total < 100) {
+        badgeData.colorscheme = 'yellow';
+      } else if (total < 1000) {
+        badgeData.colorscheme = 'yellowgreen';
+      } else if (total < 10000) {
+        badgeData.colorscheme = 'green';
+      } else {
+        badgeData.colorscheme = 'brightgreen';
+      }
+      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
-      return;
     }
-    badgeData.text[1] = metric(total) + ' total';
-    if (total === 0) {
-      badgeData.colorscheme = 'red';
-    } else if (total < 100) {
-      badgeData.colorscheme = 'yellow';
-    } else if (total < 1000) {
-      badgeData.colorscheme = 'yellowgreen';
-    } else if (total < 10000) {
-      badgeData.colorscheme = 'green';
-    } else {
-      badgeData.colorscheme = 'brightgreen';
-    }
-    sendBadge(format, badgeData);
   });
 }));
 
@@ -2206,7 +2205,7 @@ cache(function(data, match, sendBadge, request) {
 // example: https://img.shields.io/wordpress/plugin/r/akismet.svg for https://wordpress.org/plugins/akismet
 camp.route(/^\/wordpress\/plugin\/r\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var plugin = match[1];  // eg, `localeval`.
+  var plugin = match[1];  // eg, `akismet`.
   var format = match[2];
   var apiUrl = 'http://api.wordpress.org/plugins/info/1.0/' + plugin + '.json';
   var badgeData = getBadgeData('rating', data);
@@ -2219,24 +2218,23 @@ cache(function(data, match, sendBadge, request) {
     try {
       var rating = JSON.parse(buffer).rating;
       rating = (rating/100)*5;
+      badgeData.text[1] = metric(Math.round(rating * 10) / 10) + ' stars';
+      if (rating === 0) {
+        badgeData.colorscheme = 'red';
+      } else if (rating < 2) {
+        badgeData.colorscheme = 'yellow';
+      } else if (rating < 3) {
+        badgeData.colorscheme = 'yellowgreen';
+      } else if (rating < 4) {
+        badgeData.colorscheme = 'green';
+      } else {
+        badgeData.colorscheme = 'brightgreen';
+      }
+      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
-      return;
     }
-    badgeData.text[1] = metric(Math.round(rating * 10) / 10) + ' stars';
-    if (rating === 0) {
-      badgeData.colorscheme = 'red';
-    } else if (rating < 2) {
-      badgeData.colorscheme = 'yellow';
-    } else if (rating < 3) {
-      badgeData.colorscheme = 'yellowgreen';
-    } else if (rating < 4) {
-      badgeData.colorscheme = 'green';
-    } else {
-      badgeData.colorscheme = 'brightgreen';
-    }
-    sendBadge(format, badgeData);
   });
 }));
 
@@ -2244,7 +2242,7 @@ cache(function(data, match, sendBadge, request) {
 // example: https://img.shields.io/wordpress/v/akismet.svg for https://wordpress.org/plugins/akismet
 camp.route(/^\/wordpress\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var plugin = match[1];  // eg, `localeval`.
+  var plugin = match[1];  // eg, `akismet`.
   var format = match[2];
   var apiUrl = 'http://api.wordpress.org/plugins/info/1.0/' + plugin + '.json';
   var badgeData = getBadgeData('wordpress', data);
