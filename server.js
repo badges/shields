@@ -262,6 +262,10 @@ function cache(f) {
   };
 }
 
+camp.notfound(/.*/, function(query, match, end, request) {
+  end(null, {template: '404.html'});
+});
+
 
 
 // Vendors.
