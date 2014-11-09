@@ -2293,11 +2293,10 @@ camp.route(/^\/sourceforge\/([^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var info = match[1];
   var project = match[2];
-  var filepath = '/';
   var format = match[3];
-  var apiUrl = 'http://sourceforge.net/projects/' + project + '/files' + filepath + '/stats/json';
+  var apiUrl = 'http://sourceforge.net/projects/' + project + '/files/stats/json';
   var badgeData = getBadgeData('sourceforge', data);
-  var time_period, start_date, end_date = '';
+  var time_period, start_date, end_date;
   if (info.charAt(0) === 'd') {
     badgeData.text[0] = getLabel('downloads', data);
     // get yesterday since today is incomplete
