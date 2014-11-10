@@ -2291,8 +2291,8 @@ cache(function(data, match, sendBadge, request) {
 // SourceForge integration.
 camp.route(/^\/sourceforge\/([^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var info = match[1];
-  var project = match[2];
+  var info = match[1];      // eg, 'dm'
+  var project = match[2];   // eg, 'sevenzip`.
   var format = match[3];
   var apiUrl = 'http://sourceforge.net/projects/' + project + '/files/stats/json';
   var badgeData = getBadgeData('sourceforge', data);
