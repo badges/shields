@@ -363,7 +363,7 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = status;
       if (status === 'success') {
         badgeData.colorscheme = 'brightgreen';
-      } else if (status !== 'running') {
+      } else if (status !== 'running' && status !== 'queued') {
         badgeData.colorscheme = 'red';
       }
       sendBadge(format, badgeData);
