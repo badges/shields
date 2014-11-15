@@ -2339,6 +2339,51 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Requires.io status integration
+camp.route(/^\/requires\/([^\/]+\/[^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var userRepo = match[1];  // eg, `github/celery/celery`.
+  var branch = match[2];
+  var format = match[3];
+  var uri = 'https://requires.io/api/v1/status/' + userRepo
+  if (branch != null) {
+    uri += '?branch=' + branch
+  }
+  var options = {
+    method: 'GET',
+    json: true,
+    uri: uri
+  };
+  var badgeData = getBadgeData('requirements', data);
+  request(options, function(err, res, json) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      badgeData.colorscheme = 'red';
+      sendBadge(format, badgeData);
+    }
+    try {
+      if (json.status === 'up-to-date') {
+        badgeData.text[1] = 'up-to-date';
+        badgeData.colorscheme = 'brightgreen';
+      } else if (json.status === 'outdated') {
+        badgeData.text[1] = 'outdated';
+        badgeData.colorscheme = 'yellow';
+      } else if (json.status === 'insecure') {
+        badgeData.text[1] = 'insecure';
+        badgeData.colorscheme = 'red';
+      } else {
+        badgeData.text[1] = 'unknown';
+        badgeData.colorscheme = 'lightgrey';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid' + e.toString();
+      sendBadge(format, badgeData);
+      return;
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
