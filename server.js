@@ -519,10 +519,32 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      if (type === 'activity') {
-        var activity = data.activity_total;
-        badgeData.colorscheme = 'brightgreen';
-        badgeData.text[1] = activity;
+      var activity = null;
+
+      switch (type) {
+        case 'activity':
+          activity = data.activity_total;
+          badgeData.colorscheme = 'brightgreen';
+          badgeData.text[1] = activity;
+          break;
+
+        case 'bounties_posted':
+          activity = data.bounties_posted;
+          badgeData.colorscheme = 'brightgreen';
+          badgeData.text[1] = activity;
+          break;
+
+        case 'bounties_received':
+          activity = data.bounties_received;
+          badgeData.colorscheme = 'brightgreen';
+          badgeData.text[1] = activity;
+          break;
+
+        case 'raised':
+          activity = data.raised;
+          badgeData.colorscheme = 'brightgreen';
+          badgeData.text[1] = activity;
+          break;
       }
       sendBadge(format, badgeData);
     } catch(e) {
