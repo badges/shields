@@ -1433,6 +1433,37 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// VersionEye integration
+camp.route(/^\/versioneye\/d\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var userRepo = match[1];  // eg, `ruby/rails`.
+  var format = match[2];
+  var url = 'https://www.versioneye.com/' + userRepo + '/badge.svg';
+  var badgeData = getBadgeData('dependencies', data);
+  fetchFromSvg(request, url, function(err, res) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      badgeData.text[1] = res;
+      if (res === 'up to date') {
+        badgeData.colorscheme = 'brightgreen';
+      } else if (statusMatch === 'out of date') {
+        badgeData.colorscheme = 'yellow';
+      } else {
+        badgeData.colorscheme = 'red';
+      }
+      sendBadge(format, badgeData);
+
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Hackage version integration.
 camp.route(/^\/hackage\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
