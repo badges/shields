@@ -27,6 +27,17 @@ templateFiles.forEach(function(filename) {
   templates[style + '-' + extension] = dot.template(templateData);
 });
 
+function escapeXml(s) {
+  return s.replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&apos;');
+}
+function addEscapers(data) {
+  data.escapeXml = escapeXml;
+}
+
 var colorscheme = require(path.join(__dirname, 'colorscheme.json'));
 
 function optimize(string, callback) {
@@ -50,7 +61,10 @@ function makeImage(data, cb) {
     (canvasContext.measureText(data.text[0]).width|0) + 10,
     (canvasContext.measureText(data.text[1]).width|0) + 10,
   ];
+
+  addEscapers(data);
   var result = template(data);
+
   if (data.format === 'json') {
     cb(result);
   } else {
