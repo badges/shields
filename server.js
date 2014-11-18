@@ -2364,7 +2364,7 @@ cache(function(data, match, sendBadge, request) {
       badgeData.colorscheme = downloadCountColor(downloads);
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'invalid' + e.toString();
+      badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
   });
