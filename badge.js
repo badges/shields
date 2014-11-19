@@ -52,6 +52,10 @@ function makeImage(data, cb) {
   if (!(data.template + '-' + data.format in templates)) {
     data.template = 'default';
   }
+  // String coercion.
+  data.text[0] = '' + data.text[0];
+  data.text[1] = '' + data.text[1];
+
   var template = templates[data.template + '-' + data.format];
   if (data.colorscheme) {
     data.colorA = colorscheme[data.colorscheme].colorA;
@@ -63,7 +67,12 @@ function makeImage(data, cb) {
   ];
 
   addEscapers(data);
-  var result = template(data);
+  try {
+    var result = template(data);
+  } catch(e) {
+    cb('', e);
+    return;
+  }
 
   if (data.format === 'json') {
     cb(result);

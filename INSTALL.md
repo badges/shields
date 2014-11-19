@@ -19,7 +19,7 @@ npm install gh-badges
 ```js
 var badge = require('gh-badges');
 badge({ text: [ "build", "passed" ], colorscheme: "green" },
-  function(svg) {
+  function(svg, err) {
     // svg is a String… of your badge.
   });
 ```
