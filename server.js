@@ -2453,6 +2453,7 @@ function(data, match, end, ask) {
     }
     badge(badgeData, makeSend(format, ask.res, end));
   } catch(e) {
+    console.error(e.stack);
     badge({text: ['error', 'bad badge'], colorscheme: 'red'},
       makeSend(format, ask.res, end));
   }

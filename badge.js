@@ -52,20 +52,23 @@ function makeImage(data, cb) {
   if (!(data.template + '-' + data.format in templates)) {
     data.template = 'default';
   }
+  if (data.colorscheme) {
+    var pickedColorscheme = colorscheme[data.colorscheme];
+    if (!pickedColorscheme) {
+      pickedColorscheme = colorscheme.red;
+    }
+    data.colorA = pickedColorscheme.colorA;
+    data.colorB = pickedColorscheme.colorB;
+  }
   // String coercion.
   data.text[0] = '' + data.text[0];
   data.text[1] = '' + data.text[1];
-
-  var template = templates[data.template + '-' + data.format];
-  if (data.colorscheme) {
-    data.colorA = colorscheme[data.colorscheme].colorA;
-    data.colorB = colorscheme[data.colorscheme].colorB;
-  }
   data.widths = [
     (canvasContext.measureText(data.text[0]).width|0) + 10,
     (canvasContext.measureText(data.text[1]).width|0) + 10,
   ];
 
+  var template = templates[data.template + '-' + data.format];
   addEscapers(data);
   try {
     var result = template(data);
