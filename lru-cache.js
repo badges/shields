@@ -8,6 +8,7 @@ var typeEnum = {
 
 function Cache(size, type) {
   if (!this instanceof Cache) { return new Cache(size, type); }
+  type = type || 'unit';
   this.size = size;
   this.type = typeEnum[type];
   // `cache` contains {content, index}.
@@ -68,7 +69,7 @@ Cache.prototype = {
         return (this.order.length >> 1);
       } else { return 0; }
     } else {
-      console.error("Unknown heuristic for LRU cache.");
+      console.error("Unknown heuristic '" + this.type + "' for LRU cache.");
       return 1;
     }
   },
