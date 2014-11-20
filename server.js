@@ -2294,6 +2294,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = testedVersion + ' tested';
         var coreUrl = 'https://api.wordpress.org/core/version-check/1.7/';
         request(coreUrl, function(err, res, response) {
+          try {
             var versions = JSON.parse(response).offers.map(function(v) {
               return v.version
             });
@@ -2308,6 +2309,10 @@ cache(function(data, match, sendBadge, request) {
               badgeData.colorscheme = 'yellow';
             }
             sendBadge(format, badgeData);
+          } catch(e) {
+            badgeData.text[1] = 'invalid';
+            sendBadge(format, badgeData);
+          }
         });
       } else {
         sendBadge(format, badgeData);
