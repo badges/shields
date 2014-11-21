@@ -1,7 +1,7 @@
 all: website deploy
 
 favicon:
-	node gh-badge.js '' '' '#bada55' .png > web/favicon.png
+	node gh-badge.js '' '' '#bada55' .png > favicon.png
 
 website:
 	cat try.html | sed "s,<img src='/,&/img.shields.io/," \
