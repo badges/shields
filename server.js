@@ -1464,6 +1464,50 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Codacy integration
+camp.route(/^\/codacy\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var projectId = match[1];
+  var format = match[2];
+  var url = 'https://www.codacy.com/project/badge/' + projectId;
+  var badgeData = getBadgeData('code quality', data);
+  fetchFromSvg(request, url, function(err, res) {
+      console.log(res);
+
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      badgeData.text[1] = res;
+      if (res === 'A') {
+        badgeData.colorscheme = 'brightgreen';
+      } else if (res === 'B') {
+        badgeData.colorscheme = 'green';
+      } else if (res === 'C') {
+        badgeData.colorscheme = 'yellowgreen';
+      } else if (res === 'D') {
+        badgeData.colorscheme = 'yellow';
+      } else if (res === 'E') {
+        badgeData.colorscheme = 'orange';
+      } else if (res === 'F') {
+        badgeData.colorscheme = 'red';
+      } else if (res === 'X') {
+        badgeData.text[1] = 'invalid';
+        badgeData.colorscheme = 'lightgrey';
+      } else {
+        badgeData.colorscheme = 'red';
+      }
+      sendBadge(format, badgeData);
+
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Hackage version integration.
 camp.route(/^\/hackage\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -2029,13 +2073,14 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Codeship.io integration
-camp.route(/^\/codeship\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/codeship\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var projectId = match[1];  // eg, `ab123456-00c0-0123-42de-6f98765g4h32`.
-  var format = match[2];
+  var format = match[3];
+  var branch = match[2];
   var options = {
     method: 'GET',
-    uri: 'https://www.codeship.io/projects/' + projectId + '/status'
+    uri: 'https://www.codeship.io/projects/' + projectId + '/status' + (branch != null ? '?branch=' + branch : '')
   };
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res) {
@@ -2059,6 +2104,9 @@ cache(function(data, match, sendBadge, request) {
           break;
         case 'projectnotfound':
           badgeData.text[1] = 'not found';
+          break;
+        case 'branchnotfound':
+          badgeData.text[1] = 'branch not found';
           break;
         case 'testing':
         case 'waiting':
