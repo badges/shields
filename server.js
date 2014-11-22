@@ -2073,13 +2073,14 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Codeship.io integration
-camp.route(/^\/codeship\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/codeship\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var projectId = match[1];  // eg, `ab123456-00c0-0123-42de-6f98765g4h32`.
-  var format = match[2];
+  var format = match[3];
+  var branch = match[2];
   var options = {
     method: 'GET',
-    uri: 'https://www.codeship.io/projects/' + projectId + '/status'
+    uri: 'https://www.codeship.io/projects/' + projectId + '/status' + (branch != null ? '?branch=' + branch : '')
   };
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res) {
@@ -2103,6 +2104,9 @@ cache(function(data, match, sendBadge, request) {
           break;
         case 'projectnotfound':
           badgeData.text[1] = 'not found';
+          break;
+        case 'branchnotfound':
+          badgeData.text[1] = 'branch not found';
           break;
         case 'testing':
         case 'waiting':
