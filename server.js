@@ -1464,6 +1464,50 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Codacy integration
+camp.route(/^\/codacy\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var projectId = match[1];
+  var format = match[2];
+  var url = 'https://www.codacy.com/project/badge/' + projectId;
+  var badgeData = getBadgeData('code quality', data);
+  fetchFromSvg(request, url, function(err, res) {
+      console.log(res);
+
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      badgeData.text[1] = res;
+      if (res === 'A') {
+        badgeData.colorscheme = 'brightgreen';
+      } else if (res === 'B') {
+        badgeData.colorscheme = 'green';
+      } else if (res === 'C') {
+        badgeData.colorscheme = 'yellowgreen';
+      } else if (res === 'D') {
+        badgeData.colorscheme = 'yellow';
+      } else if (res === 'E') {
+        badgeData.colorscheme = 'orange';
+      } else if (res === 'F') {
+        badgeData.colorscheme = 'red';
+      } else if (res === 'X') {
+        badgeData.text[1] = 'invalid';
+        badgeData.colorscheme = 'lightgrey';
+      } else {
+        badgeData.colorscheme = 'red';
+      }
+      sendBadge(format, badgeData);
+
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Hackage version integration.
 camp.route(/^\/hackage\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
