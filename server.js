@@ -1467,13 +1467,11 @@ cache(function(data, match, sendBadge, request) {
 // Codacy integration
 camp.route(/^\/codacy\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var projectId = match[1];
+  var projectId = match[1];  // eg. e27821fb6289410b8f58338c7e0bc686
   var format = match[2];
   var url = 'https://www.codacy.com/project/badge/' + projectId;
   var badgeData = getBadgeData('code quality', data);
   fetchFromSvg(request, url, function(err, res) {
-      console.log(res);
-
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
