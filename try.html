@@ -8,10 +8,11 @@ purposes.'>
 <link rel='icon' type='image/png' href='favicon.png'>
 <link href='//fonts.googleapis.com/css?family=Lekton' rel='stylesheet'>
 <style>
-html { background-attachment: fixed; }
+html { background-attachment: fixed; transition: background-color 0.5s; }
 :root { text-align: center; font-family: Lekton, sans-serif; color: #534; }
-code { white-space: pre-wrap; }
-code { padding: 0 4px; border: 1px solid grey; background: #eef; border-radius: 4px; }
+code, #copyMarkdown, #copyreStructuredText {
+  white-space: pre-wrap; padding: 0 4px; border: 1px solid grey;
+  background: #eef; border-radius: 4px; }
 input.short { width: 5em; }
 input { text-align: center; border: solid #b9a; color: #534; border-width: 0 0 1px 0;
   width: 40%; background-color: transparent; }
@@ -28,6 +29,13 @@ h2::after { content: ' ❧'; }
 h2 { margin-top: 12mm; font-variant: small-caps; }
 hr.spacing { border: 0; display: block; height: 3mm; }
 .highlights { font-style: italic; }
+#copyDialog { display: none; position: fixed; background: rgba(100, 100, 100, 0.5); }
+#copyForm { background: #fafaff; position: fixed; width: 100%;
+  top: 50%; left: 0; transform: translate(0, -75%);
+  border-top: 15px solid #eaeaff;
+  border-bottom: 15px solid #eaeaff;
+}
+table.badge > tbody > tr > td > img { cursor: pointer; }
 </style>
 
 <img alt='Shields IO' src='logo.svg'/>
@@ -594,8 +602,27 @@ is where the current server got started.
 <a class='photo' href='https://github.com/nitram509'>
   <img alt='nitram509' src='https://www.gravatar.com/avatar/fa01e907fd400c42d481f431c4410954.png'>
 </a>
-
 <p><small>:wq</small></p>
+
+<dialog id='copyDialog'>
+<form id='copyForm'>
+  <p><img id='copyImg'>
+  </p><p><label> Link <input type='url' name='url'/></label>
+  </p><p><label> Image <input type='url' name='img'/></label>
+  </p><p><label> Style
+    <select name='style'>
+      <option value='plastic' selected> plastic
+      <option value='flat'>             flat
+      <option value='flat-square'>      flat-square
+    </select>
+  </label>
+  </p><p> Markdown
+  <output id=copyMarkdown>&nbsp;</output>
+  </p><p> reStructuredText
+  <output id=copyreStructuredText>&nbsp;</output>
+</form>
+</dialog>
+
 <script>
 // Search
 var searchBadgeDb = {index: [], tr: []};
@@ -604,7 +631,7 @@ function searchBadgeDbInit() {
   for (var i = 0; i < trs.length; i++) {
     var tr = trs[i];
     var th = tr.firstElementChild;
-    searchBadgeDb.index.push(th.textContent + th.dataset.keywords);
+    searchBadgeDb.index.push(th.textContent + ' ' + th.dataset.keywords);
     searchBadgeDb.tr.push(tr);
   }
   projectSearch.addEventListener('input', searchBadge);
@@ -622,6 +649,75 @@ function searchBadge(event) {
 }
 
 document.addEventListener('DOMContentLoaded', searchBadgeDbInit);
+
+// Markup copier dialog
+function markupDialogInit() {
+  var trs = document.querySelectorAll('table.badge tr');
+  for (var i = 0; i < trs.length; i++) {
+    var tr = trs[i];
+    var target = tr.querySelector('img');
+    if (target) {
+      target.addEventListener('click', makeMarkupDialogListener(tr));
+    }
+  }
+}
+function makeMarkupDialogListener(tr) {
+  return function(event) { markupDialog(tr); event.stopPropagation(); };
+}
+
+document.addEventListener('DOMContentLoaded', markupDialogInit);
+
+var copyFormUrlEventListener;
+
+function markupDialog(tr) {
+  // Set up the data we have.
+  // Trim the ending colon `:`.
+  var trname = tr.firstElementChild.textContent.trim().slice(0, -1);
+  var trimg = tr.querySelector('img').src;
+  copyForm.img.value = trimg;
+  // Set up the input listeners.
+  copyForm.url.removeEventListener('input', copyFormUrlEventListener);
+  copyForm.img.removeEventListener('input', copyFormUrlEventListener);
+  copyForm.style.removeEventListener('change', copyFormUrlEventListener);
+  copyFormUrlEventListener = function(event) {
+    var url = copyForm.url.value;
+    var img = copyForm.img.value;
+    var style = copyForm.style.value;
+    // Default style doesn't show.
+    if (style !== 'plastic') { img += '?style=' + style; }
+    var md = '[![' + trname + '](' + img + ')](' + url + ')';
+    var rst = '.. image:: ' + img + '   :target: ' + url;
+    copyMarkdown.value = md;
+    copyreStructuredText.value = rst;
+    copyImg.src = img;
+  };
+  copyForm.url.addEventListener('input', copyFormUrlEventListener);
+  copyForm.img.addEventListener('input', copyFormUrlEventListener);
+  copyForm.style.addEventListener('change', copyFormUrlEventListener);
+  // Set up the window position
+  var w = document.documentElement.offsetWidth;
+  var h = document.documentElement.offsetHeight;
+  copyDialog.style.top = '0';
+  copyDialog.style.left = '0';
+  copyDialog.style.width = w + 'px';
+  copyDialog.style.height = h + 'px';
+  // Set up hide listener and show.
+  copyFormUrlEventListener();
+  markupDialogShow();
+}
+function markupDialogShow() {
+  document.documentElement.style.backgroundColor = '#777';
+  document.body.addEventListener('click', markupDialogHide);
+  copyDialog.style.display = 'block';
+}
+function markupDialogHide() {
+  document.documentElement.style.backgroundColor = 'white';
+  document.body.removeEventListener('click', markupDialogHide);
+  copyDialog.style.display = 'none';
+}
+copyForm.addEventListener('click', function(event) {
+  event.stopPropagation();
+});
 
 // Custom badge
 function makeImage() {
