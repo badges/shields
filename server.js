@@ -2891,9 +2891,10 @@ function guessLicense(text) {
   }
   var licenseCodes = Object.keys(licensePhrases);
   var licenseRegex;
+  var spaceMetaRegex = new RegExp(' ', 'g');
   for(var i = 0; i < licenseCodes.length; i++) {
     // Spaces can be any whitespace
-    licenseRegex = licensePhrases[licenseCodes[i]].replace(new RegExp(' ', 'g'), '\\s+');
+    licenseRegex = licensePhrases[licenseCodes[i]].replace(spaceMetaRegex, '\\s+');
     if(text.match(new RegExp(licenseRegex, 'i'))) {
       return licenseCodes[i];
     }
