@@ -1774,7 +1774,6 @@ cache(function(data, match, sendBadge, request) {
     apiUrl += '?client_id=' + serverSecrets.gh_client_id
       + '&client_secret=' + serverSecrets.gh_client_secret;
   }
-  console.log(apiUrl);
   var badgeData = getBadgeData('license', data);
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
@@ -1826,12 +1825,10 @@ cache(function(data, match, sendBadge, request) {
           var treeArray = data.tree;
           var licenseBlob;
           // Crawl each file in the root directory
-          console.log('gh-license crawling tree');
           for(var i = 0; i < treeArray.length; i++) {
             if(treeArray[i].type != 'blob') {
               continue;
             }
-            console.log('gh-license got blob '+treeArray[i].path);
             if(treeArray[i].path.match(/(LICENSE|COPYING|COPYRIGHT).*/i)) {
               licenseBlob = treeArray[i].sha;
               break;
