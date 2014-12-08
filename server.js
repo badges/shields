@@ -1755,6 +1755,132 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Github license integration.
+camp.route(/^\/github\/license\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];  // eg, qubyte/rubidium
+  var repo = match[2];
+  var format = match[3];
+
+  // Step 1: Get the repo's default branch.
+  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '';
+  // Using our OAuth App secret grants us 5000 req/hour
+  // instead of the standard 60 req/hour.
+  if (serverSecrets) {
+    apiUrl += '?client_id=' + serverSecrets.gh_client_id
+      + '&client_secret=' + serverSecrets.gh_client_secret;
+  }
+  console.log(apiUrl);
+  var badgeData = getBadgeData('license', data);
+  // A special User-Agent is required:
+  // http://developer.github.com/v3/#user-agent-required
+  request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      if ((+res.headers['x-ratelimit-remaining']) === 0) {
+        return;  // Hope for the best in the cache.
+      }
+      var data = JSON.parse(buffer);
+      var defaultBranch = data.default_branch;
+      // Step 2: Get the SHA-1 hash of the branch tip.
+      var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/branches/' + defaultBranch;
+      if (serverSecrets) {
+        apiUrl += '?client_id=' + serverSecrets.gh_client_id
+          + '&client_secret=' + serverSecrets.gh_client_secret;
+      }
+      request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
+        if (err != null) {
+          badgeData.text[1] = 'inaccessible';
+          sendBadge(format, badgeData);
+          return;
+        }
+        if ((+res.headers['x-ratelimit-remaining']) === 0) {
+          return;  // Hope for the best in the cache.
+        }
+        var data = JSON.parse(buffer);
+        var branchTip = data.commit.sha;
+        // Step 3: Get the tree at the commit.
+        var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/git/trees/' + branchTip;
+        if (serverSecrets) {
+          apiUrl += '?client_id=' + serverSecrets.gh_client_id
+            + '&client_secret=' + serverSecrets.gh_client_secret;
+        }
+        request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
+          if (err != null) {
+            badgeData.text[1] = 'inaccessible';
+            sendBadge(format, badgeData);
+            return;
+          }
+          if ((+res.headers['x-ratelimit-remaining']) === 0) {
+            return;  // Hope for the best in the cache.
+          }
+          var data = JSON.parse(buffer);
+          var treeArray = data.tree;
+          var licenseBlob;
+          // Crawl each file in the root directory
+          console.log('gh-license crawling tree');
+          for(var i = 0; i < treeArray.length; i++) {
+            if(treeArray[i].type != 'blob') {
+              continue;
+            }
+            console.log('gh-license got blob '+treeArray[i].path);
+            if(treeArray[i].path.match(/(LICENSE|COPYING|COPYRIGHT).*/i)) {
+              licenseBlob = treeArray[i].sha;
+              break;
+            }
+          }
+          // Could not find license file
+          if(!licenseBlob) {
+            badgeData.text[1] = 'unknown';
+            badgeData.colorscheme = 'red';
+            sendBadge(format, badgeData);
+            return;
+          }
+          // Step 4: Get the license blob.
+          var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/git/blobs/' + licenseBlob;
+          if (serverSecrets) {
+            apiUrl += '?client_id=' + serverSecrets.gh_client_id
+              + '&client_secret=' + serverSecrets.gh_client_secret;
+          }
+          // Get the raw blob instead of JSON
+          // https://developer.github.com/v3/media/
+          request(apiUrl, { headers: { 'User-Agent': 'Shields.io', 'Accept': 'appplication/vnd.github.raw' } },
+          function(err, res, buffer) {
+            if (err != null) {
+              badgeData.text[1] = 'inaccessible';
+              sendBadge(format, badgeData);
+              return;
+            }
+            if ((+res.headers['x-ratelimit-remaining']) === 0) {
+              return;  // Hope for the best in the cache.
+            }
+            var license = guessLicense(buffer);
+            badgeData.colorscheme = 'red';
+            if(license) {
+              badgeData.text[1] = license;
+              sendBadge(format, badgeData);
+              return;
+            } else {
+              // Not a recognized license
+              badgeData.text[1] = 'unknown';
+              sendBadge(format, badgeData);
+              return;
+            }
+          });
+        });
+      });
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+  });
+}));
+
 // Chef cookbook integration.
 camp.route(/^\/cookbook\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -2711,4 +2837,48 @@ function latestVersion(versions) {
     version = versions[versions.length - 1];
   }
   return version;
+}
+
+// Try to guess the license based on the text and return an abbreviated name (or null if not recognized).
+function guessLicense(text) {
+  // Key phrases for common licenses
+  var licensePhrases = {
+    'Apache 1.1': 'apache (software)? license,? (version)? 1\\.1',
+    'Apache 2': 'apache (software)? license,? (version)? 2',
+    'Original BSD': 'all advertising materials mentioning features or use of this software must display the following acknowledgement',
+    'New BSD': 'may be used to endorse or promote products derived from this software without specific prior written permission',
+    'BSD': 'redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met',
+    'GPLv2': 'gnu general public license,? version 2',
+    'GPLv3': 'gnu general public license,? version 3',
+    'GPL': 'gnu general public license',
+    'LGPLv2.0': 'gnu library general public license,? version 2',
+    'LGPLv2.1': 'gnu lesser general public license,? version 2\\.1',
+    'LGPLv3': 'gnu lesser general public license,? version 3',
+    'LGPL': 'gnu (library|lesser) general public license',
+    'MIT': 'mit license',
+    'MPL 1.1': 'mozilla public license,? (version |v|v\\.)?1\\.1',
+    'MPL 2': 'mozilla public license,? (version |v|v\\.)?2',
+    'MPL': 'mozilla public license',
+    'CDDL': 'common development and distribution license',
+    'Eclipse': 'eclipse public license',
+    'Artistic': 'artistic license',
+    'zlib': 'the origin of this software must not be misrepresented',
+    'AGPLv1': 'affero general public license,? version 1',
+    'AGPLv3': 'affero general public license,? version 3',
+    'AGPL': 'affero general public license',
+    'ISC': 'permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted',
+    'CC0': 'cc0',
+    'Unlicense': 'this is free and unencumbered software released into the public domain',
+  }
+  var licenseCodes = Object.keys(licensePhrases);
+  var licenseRegex;
+  for(var i = 0; i < licenseCodes.length; i++) {
+    // Spaces can be any whitespace
+    licenseRegex = licensePhrases[licenseCodes[i]].replace(new RegExp(' ', 'g'), '\\s+');
+    if(text.match(new RegExp(licenseRegex, 'i'))) {
+      return licenseCodes[i];
+    }
+  }
+  // Not a recognized license
+  return null;
 }
