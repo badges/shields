@@ -2870,7 +2870,7 @@ function guessLicense(text) {
     'LGPLv2.1': 'gnu lesser general public license,? version 2\\.1',
     'LGPLv3': 'gnu lesser general public license,? version 3',
     'LGPL': 'gnu (library|lesser) general public license',
-    'MIT': 'mit license',
+    'MIT': '\\(?(mit|expat|x11)\\)? license|permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files',
     'MPL 1.1': 'mozilla public license,? (\\(MPL\\) )?(version |v|v\\.)?1\\.1',
     'MPL 2': 'mozilla public license,? (\\(MPL\\) )?(version |v|v\\.)?2',
     'MPL': 'mozilla public license',
