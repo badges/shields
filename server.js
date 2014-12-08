@@ -1797,78 +1797,96 @@ cache(function(data, match, sendBadge, request) {
           sendBadge(format, badgeData);
           return;
         }
-        if ((+res.headers['x-ratelimit-remaining']) === 0) {
-          return;  // Hope for the best in the cache.
-        }
-        var data = JSON.parse(buffer);
-        var branchTip = data.commit.sha;
-        // Step 3: Get the tree at the commit.
-        var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/git/trees/' + branchTip;
-        if (serverSecrets) {
-          apiUrl += '?client_id=' + serverSecrets.gh_client_id
-            + '&client_secret=' + serverSecrets.gh_client_secret;
-        }
-        request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
-          if (err != null) {
-            badgeData.text[1] = 'inaccessible';
-            sendBadge(format, badgeData);
-            return;
-          }
+        try {
           if ((+res.headers['x-ratelimit-remaining']) === 0) {
             return;  // Hope for the best in the cache.
           }
           var data = JSON.parse(buffer);
-          var treeArray = data.tree;
-          var licenseBlob;
-          // Crawl each file in the root directory
-          for(var i = 0; i < treeArray.length; i++) {
-            if(treeArray[i].type != 'blob') {
-              continue;
-            }
-            if(treeArray[i].path.match(/(LICENSE|COPYING|COPYRIGHT).*/i)) {
-              licenseBlob = treeArray[i].sha;
-              break;
-            }
-          }
-          // Could not find license file
-          if(!licenseBlob) {
-            badgeData.text[1] = 'unknown';
-            badgeData.colorscheme = 'red';
-            sendBadge(format, badgeData);
-            return;
-          }
-          // Step 4: Get the license blob.
-          var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/git/blobs/' + licenseBlob;
+          var branchTip = data.commit.sha;
+          // Step 3: Get the tree at the commit.
+          var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/git/trees/' + branchTip;
           if (serverSecrets) {
             apiUrl += '?client_id=' + serverSecrets.gh_client_id
               + '&client_secret=' + serverSecrets.gh_client_secret;
           }
-          // Get the raw blob instead of JSON
-          // https://developer.github.com/v3/media/
-          request(apiUrl, { headers: { 'User-Agent': 'Shields.io', 'Accept': 'appplication/vnd.github.raw' } },
-          function(err, res, buffer) {
+          request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
             if (err != null) {
               badgeData.text[1] = 'inaccessible';
               sendBadge(format, badgeData);
               return;
             }
-            if ((+res.headers['x-ratelimit-remaining']) === 0) {
-              return;  // Hope for the best in the cache.
-            }
-            var license = guessLicense(buffer);
-            badgeData.colorscheme = 'red';
-            if(license) {
-              badgeData.text[1] = license;
-              sendBadge(format, badgeData);
-              return;
-            } else {
-              // Not a recognized license
-              badgeData.text[1] = 'unknown';
+            try {
+              if ((+res.headers['x-ratelimit-remaining']) === 0) {
+                return;  // Hope for the best in the cache.
+              }
+              var data = JSON.parse(buffer);
+              var treeArray = data.tree;
+              var licenseBlob;
+              // Crawl each file in the root directory
+              for(var i = 0; i < treeArray.length; i++) {
+                if(treeArray[i].type != 'blob') {
+                  continue;
+                }
+                if(treeArray[i].path.match(/(LICENSE|COPYING|COPYRIGHT).*/i)) {
+                  licenseBlob = treeArray[i].sha;
+                  break;
+                }
+              }
+              // Could not find license file
+              if(!licenseBlob) {
+                badgeData.text[1] = 'unknown';
+                badgeData.colorscheme = 'red';
+                sendBadge(format, badgeData);
+                return;
+              }
+              // Step 4: Get the license blob.
+              var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/git/blobs/' + licenseBlob;
+              if (serverSecrets) {
+                apiUrl += '?client_id=' + serverSecrets.gh_client_id
+                  + '&client_secret=' + serverSecrets.gh_client_secret;
+              }
+              // Get the raw blob instead of JSON
+              // https://developer.github.com/v3/media/
+              request(apiUrl, { headers: { 'User-Agent': 'Shields.io', 'Accept': 'appplication/vnd.github.raw' } },
+              function(err, res, buffer) {
+                if (err != null) {
+                  badgeData.text[1] = 'inaccessible';
+                   sendBadge(format, badgeData);
+                  return;
+                }
+                try {
+                  if ((+res.headers['x-ratelimit-remaining']) === 0) {
+                    return;  // Hope for the best in the cache.
+                  }
+                  var license = guessLicense(buffer);
+                  badgeData.colorscheme = 'red';
+                  if(license) {
+                    badgeData.text[1] = license;
+                    sendBadge(format, badgeData);
+                    return;
+                  } else {
+                    // Not a recognized license
+                    badgeData.text[1] = 'unknown';
+                    sendBadge(format, badgeData);
+                    return;
+                  }
+                } catch(e) {
+                  badgeData.text[1] = 'invalid';
+                  sendBadge(format, badgeData);
+                  return;
+                }
+              });
+            } catch(e) {
+              badgeData.text[1] = 'invalid';
               sendBadge(format, badgeData);
               return;
             }
           });
-        });
+        } catch(e) {
+          badgeData.text[1] = 'invalid';
+          sendBadge(format, badgeData);
+          return;
+        }
       });
     } catch(e) {
       badgeData.text[1] = 'invalid';
