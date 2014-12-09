@@ -33,8 +33,9 @@ hr.spacing { border: 0; display: block; height: 3mm; }
 .highlights { font-style: italic; }
 #main { transition: filter 1s, -webkit-filter 1s; }
 #main.blur { filter: url(#gaussian-blur); filter: blur(1px); -webkit-filter: blur(1px); }
-#copyDialog { display: none; position: fixed; border: 0; opacity: 0;
-  background-color: rgba(50,50,55,0.7); transition: opacity 0.5s; }
+#copyDialog { display: none; position: fixed; width: 100%; top: 0; left: 0;
+  border: 0; background-color: rgba(50,50,55,0.7);
+  opacity: 0; transition: opacity 0.5s; }
 #copyForm { background: #fafaff; position: fixed; width: 100%;
   top: 50%; left: 0; transform: translate(0, -80%);
   border-top: 15px solid #eaeaff;
@@ -712,11 +713,7 @@ function markupDialog(tr) {
   copyForm.img.addEventListener('input', copyFormUrlEventListener);
   copyForm.style.addEventListener('change', copyFormUrlEventListener);
   // Set up the window position
-  var w = document.documentElement.offsetWidth;
   var h = document.documentElement.offsetHeight;
-  copyDialog.style.top = '0';
-  copyDialog.style.left = '0';
-  copyDialog.style.width = w + 'px';
   copyDialog.style.height = h + 'px';
   // Set up hide listener and show.
   copyFormUrlEventListener();
