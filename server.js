@@ -346,11 +346,15 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // AppVeyor CI integration.
-camp.route(/^\/appveyor\/ci\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/appveyor\/ci\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, `gruntjs/grunt`.
-  var format = match[2];
+  var branch = match[2];
+  var format = match[3];
   var apiUrl = 'https://ci.appveyor.com/api/projects/' + repo;
+  if (branch != null) {
+    apiUrl += '/branch/' + branch;
+  }
   var badgeData = getBadgeData('build', data);
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
     if (err != null) {
