@@ -135,38 +135,38 @@ var githubLicense = function(user, repo, end) {
   });
 };
 
+// Key phrases for common licenses
+var licensePhrases = {
+  'Apache 1.1': 'apache (software)? license,? (version)? 1\\.1',
+  'Apache 2': 'apache (software)? license,? (version)? 2',
+  'Original BSD': 'all advertising materials mentioning features or use of this software must display the following acknowledgement',
+  'New BSD': 'may be used to endorse or promote products derived from this software without specific prior written permission',
+  'BSD': 'redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met',
+  'GPLv2': 'gnu general public license,? version 2',
+  'GPLv3': 'gnu general public license,? version 3',
+  'GPL': 'gnu general public license',
+  'LGPLv2.0': 'gnu library general public license,? version 2',
+  'LGPLv2.1': 'gnu lesser general public license,? version 2\\.1',
+  'LGPLv3': 'gnu lesser general public license,? version 3',
+  'LGPL': 'gnu (library|lesser) general public license',
+  'MIT': '\\(?(mit|expat|x11)\\)? license|permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files',
+  'MPL 1.1': 'mozilla public license,? (\\(MPL\\) )?(version |v|v\\.)?1\\.1',
+  'MPL 2': 'mozilla public license,? (\\(MPL\\) )?(version |v|v\\.)?2',
+  'MPL': 'mozilla public license',
+  'CDDL': 'common development and distribution license',
+  'Eclipse': 'eclipse public license',
+  'Artistic': 'artistic license',
+  'zlib': 'the origin of this software must not be misrepresented',
+  'AGPLv1': 'affero general public license,? version 1',
+  'AGPLv3': 'affero general public license,? version 3',
+  'AGPL': 'affero general public license',
+  'ISC': 'permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted',
+  'CC0': 'cc0',
+  'Unlicense': 'this is free and unencumbered software released into the public domain',
+}
 
 // Try to guess the license based on the text and return an abbreviated name (or null if not recognized).
 var guessLicense = function(text) {
-  // Key phrases for common licenses
-  var licensePhrases = {
-    'Apache 1.1': 'apache (software)? license,? (version)? 1\\.1',
-    'Apache 2': 'apache (software)? license,? (version)? 2',
-    'Original BSD': 'all advertising materials mentioning features or use of this software must display the following acknowledgement',
-    'New BSD': 'may be used to endorse or promote products derived from this software without specific prior written permission',
-    'BSD': 'redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met',
-    'GPLv2': 'gnu general public license,? version 2',
-    'GPLv3': 'gnu general public license,? version 3',
-    'GPL': 'gnu general public license',
-    'LGPLv2.0': 'gnu library general public license,? version 2',
-    'LGPLv2.1': 'gnu lesser general public license,? version 2\\.1',
-    'LGPLv3': 'gnu lesser general public license,? version 3',
-    'LGPL': 'gnu (library|lesser) general public license',
-    'MIT': '\\(?(mit|expat|x11)\\)? license|permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files',
-    'MPL 1.1': 'mozilla public license,? (\\(MPL\\) )?(version |v|v\\.)?1\\.1',
-    'MPL 2': 'mozilla public license,? (\\(MPL\\) )?(version |v|v\\.)?2',
-    'MPL': 'mozilla public license',
-    'CDDL': 'common development and distribution license',
-    'Eclipse': 'eclipse public license',
-    'Artistic': 'artistic license',
-    'zlib': 'the origin of this software must not be misrepresented',
-    'AGPLv1': 'affero general public license,? version 1',
-    'AGPLv3': 'affero general public license,? version 3',
-    'AGPL': 'affero general public license',
-    'ISC': 'permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted',
-    'CC0': 'cc0',
-    'Unlicense': 'this is free and unencumbered software released into the public domain',
-  }
   var licenseCodes = Object.keys(licensePhrases);
   var licenseRegex;
   var spaceMetaRegex = new RegExp(' ', 'g');
