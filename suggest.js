@@ -164,15 +164,19 @@ var licensePhrases = {
   'CC0': 'cc0',
   'Unlicense': 'this is free and unencumbered software released into the public domain',
 }
+var licenseCodes = Object.keys(licensePhrases);
+var spaceMetaRegex = new RegExp(' ', 'g');
+
+// Spaces can be any whitespace
+for (var i = 0; i < licenseCodes.length; i++) {
+  licensePhrases[licenseCodes[i]] = licensePhrases[licenseCodes[i]].replace(spaceMetaRegex, '\\s+');
+}
 
 // Try to guess the license based on the text and return an abbreviated name (or null if not recognized).
 var guessLicense = function(text) {
-  var licenseCodes = Object.keys(licensePhrases);
   var licenseRegex;
-  var spaceMetaRegex = new RegExp(' ', 'g');
   for (var i = 0; i < licenseCodes.length; i++) {
-    // Spaces can be any whitespace
-    licenseRegex = licensePhrases[licenseCodes[i]].replace(spaceMetaRegex, '\\s+');
+    licenseRegex = licensePhrases[licenseCodes[i]];
     if (text.match(new RegExp(licenseRegex, 'i'))) {
       return licenseCodes[i];
     }
