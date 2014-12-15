@@ -620,7 +620,7 @@ cache(function(data, match, sendBadge, request) {
 // Packagist version integration.
 camp.route(/^\/packagist\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];
+  var userRepo = match[1];  // eg, `doctrine/orm`.
   var format = match[2];
   var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
   var badgeData = getBadgeData('packagist', data);
