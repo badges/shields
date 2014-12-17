@@ -2613,6 +2613,86 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// apm download integration.
+camp.route(/^\/apm\/dm\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var repo = match[1];  // eg, `vim-mode`.
+  var format = match[2];
+  var apiUrl = 'https://atom.io/api/packages/' + repo;
+  var badgeData = getBadgeData('downloads', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var dls = JSON.parse(buffer).downloads;
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+    badgeData.text[1] = metric(dls) + ' total';
+    badgeData.colorscheme = 'green';
+    sendBadge(format, badgeData);
+  });
+}));
+
+// apm version integration.
+camp.route(/^\/apm\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var repo = match[1];  // eg, `vim-mode`.
+  var format = match[2];
+  var apiUrl = 'https://atom.io/api/packages/' + repo;
+  var badgeData = getBadgeData('apm', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var releases = JSON.parse(buffer).releases;
+      var version = releases.latest;
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+    badgeData.text[1] = 'v' + version;
+    badgeData.colorscheme = 'green';
+    sendBadge(format, badgeData);
+  });
+}));
+
+// apm license integration.
+camp.route(/^\/apm\/l\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var repo = match[1];  // eg, `vim-mode`.
+  var format = match[2];
+  var apiUrl = 'https://atom.io/api/packages/' + repo;
+  var badgeData = getBadgeData('license', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var metadata = JSON.parse(buffer).metadata;
+      var license = metadata.license;
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+    badgeData.text[1] = license;
+    badgeData.colorscheme = 'red';
+    sendBadge(format, badgeData);
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
