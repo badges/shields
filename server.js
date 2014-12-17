@@ -366,11 +366,14 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var status = data.build.status;
-      badgeData.text[1] = status;
       if (status === 'success') {
+        badgeData.text[1] = 'passing';
         badgeData.colorscheme = 'brightgreen';
       } else if (status !== 'running' && status !== 'queued') {
+        badgeData.text[1] = 'failing';
         badgeData.colorscheme = 'red';
+      } else {
+        badgeData.text[1] = status;
       }
       sendBadge(format, badgeData);
     } catch(e) {
