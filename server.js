@@ -582,6 +582,74 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+camp.route(/^\/sensiolabs\/i\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var projectUuid = match[1];
+  var format = match[2];
+  var options = {
+    method: 'GET',
+    auth: {
+      user: serverSecrets.sl_insight_userUuid,
+      pass: serverSecrets.sl_insight_apiToken
+    },
+    uri: 'https://insight.sensiolabs.com/api/projects/' + projectUuid,
+    headers: {
+      Accept: 'application/vnd.com.sensiolabs.insight+xml'
+    }
+  };
+
+  var badgeData = getBadgeData('check', data);
+
+  request(options, function(err, res, body) {
+    if (err != null || res.statusCode !== 200) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    var matchStatus = body.match(/\<status\>\<\!\[CDATA\[([a-z]+)\]\]\>\<\/status\>/im);
+    var matchGrade = body.match(/\<grade\>\<\!\[CDATA\[([a-z]+)\]\]\>\<\/grade\>/im);
+
+    if (matchStatus === null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    } else if (matchStatus[1] !== 'finished') {
+      badgeData.text[1] = 'pending';
+      sendBadge(format, badgeData);
+      return;
+    } else if (matchGrade === null) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    if (matchGrade[1] === 'platinum') {
+      badgeData.text[1] = 'platinum';
+      badgeData.colorscheme = 'brightgreen';
+    } else if (matchGrade[1] === 'gold') {
+      badgeData.text[1] = 'gold';
+      badgeData.colorscheme = 'yellow';
+    } else if (matchGrade[1] === 'silver') {
+      badgeData.text[1] = 'silver';
+      badgeData.colorscheme = 'lightgrey';
+    } else if (matchGrade[1] === 'bronze') {
+      badgeData.text[1] = 'bronze';
+      badgeData.colorscheme = 'orange';
+    } else if (matchGrade[1] === 'none') {
+      badgeData.text[1] = 'no medal';
+      badgeData.colorscheme = 'red';
+    } else {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    sendBadge(format, badgeData);
+    return;
+  });
+}));
+
 // Packagist integration.
 camp.route(/^\/packagist\/(dm|dd|dt)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
