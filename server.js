@@ -2828,6 +2828,27 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Talk integration
+
+camp.route(/^\/talk\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var roomHash = match[1];
+  var format = match[2];
+  var url = 'https://guest.talk.ai/api/rooms/' + roomHash;
+  var badgeData = getBadgeData('talk', data);
+  request(url, function(err, res, buffer) {
+    try {
+      room = JSON.parse(buffer);
+      badgeData.text[1] = room.topic;
+      badgeData.colorscheme = room.color;
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
