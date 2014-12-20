@@ -510,6 +510,32 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Libscore integration.
+camp.route(/^\/libscore\/s\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var library = match[1];  // eg, `jQuery`.
+  var format = match[2];
+  var apiUrl = 'http://api.libscore.com/v1/libraries/' + library;
+  var badgeData = getBadgeData('libscore', data);
+  request(apiUrl, function dealWithData(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      badgeData.text[1] = data.count;
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+
+
 // Bountysource integration.
 camp.route(/^\/bountysource\/team\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
