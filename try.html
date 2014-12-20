@@ -52,15 +52,14 @@ table.badge > tbody > tr > td > img { cursor: pointer; }
 Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable &nbsp; No tracking
 </p>
 
-<!-- FIXME: search through vendor badges
+<!-- FIXME: search through vendor badges (`/$suggest/v1`, see suggest.js).
 It should detect URLs, call an ajax hook in the server that fetches the project
-data, returns a list of valid badges for the project with copy-and-paste
+data, return a list of valid badges for the project with copy-and-paste
 markdown, html, etc.
 If it isn't a URL, search through available badges for keywords corresponding to
 the search.
 
-When that is implemented, change the placeholder to
-'search / project URL'
+When that is implemented, change the placeholder to 'search / project URL'
 -->
 <form action='javascript:void 0'>
   <input name='projectSearch' id='projectSearch' autofocus placeholder='search'/>
