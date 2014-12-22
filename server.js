@@ -582,6 +582,47 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// WikiApiary integration.
+camp.route(/^\/wikiapiary\/(.*)\.(svg|png|gif|jpg)$/,
+cache(function(data, match, sendBadge) {
+  // Allow the request to be a combination of the namespace, page and property so this
+  // can pull anything that is a single number from WikiApiary.
+  var wikiapiary_call = match[1].split(':');
+  var wikiapiary_namespace = wikiapiary_call[0]; // eg, 'Extension'
+  var wikiapiary_object = wikiapiary_call[1]; // eg, 'Semantic%20MediaWiki'
+  var wikiapiary_pagename = wikiapiary_namespace + ':' + wikiapiary_object;
+  var format = match[2];
+  // Use the standard SMW Ask interface to get the data. Format is
+  // https://wikiapiary.com/w/api.php?action=ask&query=[[pagename]]|?property&format=json
+  var apiUrl = 'https://wikiapiary.com/w/api.php?action=ask&query=[[' + wikiapiary_pagename + ']]|?Has_website_count&format=json';
+  var badgeData = getBadgeData('used on', data);
+  request(apiUrl, function dealWithData(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var website_count = parseInt(data.query.results[wikiapiary_pagename].printouts['Has website count'][0]);
+      badgeData.text[1] = metric(website_count) + ' wikis';
+      if (website_count === 0) {
+        badgeData.colorscheme = 'red';
+      } else if (website_count < 10) {
+        badgeData.colorscheme = 'yellow';
+      } else if (website_count < 25) {
+        badgeData.colorscheme = 'green';
+      } else {
+        badgeData.colorscheme = 'brightgreen';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Packagist integration.
 camp.route(/^\/packagist\/(dm|dd|dt)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
