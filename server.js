@@ -2803,10 +2803,9 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Talk integration
-
-camp.route(/^\/talk\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/talk\/t\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var roomHash = match[1];
+  var roomHash = match[1];  // eg, 9c81ff703b
   var format = match[2];
   var url = 'https://guest.talk.ai/api/rooms/' + roomHash;
   var badgeData = getBadgeData('talk', data);
