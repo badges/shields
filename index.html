@@ -2,7 +2,7 @@
 <title> Image Server </title>
 <meta name='viewport' content='width=device-width,initial-scale=1'>
 <meta name='description' content='We serve fast and scalable informational
-images as badges for GitHub, Travis CI, Jenkins, WordPress and many more
+images as badges for GitHub, Travis CI, Jenkins, Wordpress and many more
 services. Use them to track the state of your projects, or for promotional
 purposes.'>
 <link rel='icon' type='image/png' href='favicon.png'>
@@ -53,15 +53,14 @@ table.badge > tbody > tr > td > img { cursor: pointer; }
 Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable &nbsp; No tracking
 </p>
 
-<!-- FIXME: search through vendor badges
+<!-- FIXME: search through vendor badges (`/$suggest/v1`, see suggest.js).
 It should detect URLs, call an ajax hook in the server that fetches the project
-data, returns a list of valid badges for the project with copy-and-paste
+data, return a list of valid badges for the project with copy-and-paste
 markdown, html, etc.
 If it isn't a URL, search through available badges for keywords corresponding to
 the search.
 
-When that is implemented, change the placeholder to
-'search / project URL'
+When that is implemented, change the placeholder to 'search / project URL'
 -->
 <form action='javascript:void 0'>
   <input name='projectSearch' id='projectSearch' autofocus placeholder='search'/>
@@ -154,6 +153,10 @@ When that is implemented, change the placeholder to
     <td><img src='https://img.shields.io/hhvm/symfony/symfony/2.4.0.0.svg' alt=''/></td>
     <td><code>https://img.shields.io/hhvm/symfony/symfony/2.4.0.0.svg</code></td>
   </tr>
+  <tr><th> SensioLabs Insight: </th>
+      <td><img src='https://img.shields.io/sensiolabs/i/45afb680-d4e6-4e66-93ea-bcfa79eb8a87.svg' alt=''/></td>
+      <td><code>https://img.shields.io/sensiolabs/i/45afb680-d4e6-4e66-93ea-bcfa79eb8a87.svg</code></td>
+  </tr>
 </tbody></table>
 <h3> Downloads </h3>
 <table class='badge'><tbody>
@@ -225,7 +228,7 @@ When that is implemented, change the placeholder to
   <td><img src='https://img.shields.io/hexpm/dt/plug.svg' alt=''/></td>
   <td><code>https://img.shields.io/hexpm/dt/plug.svg</code></td>
   </tr>
-  <tr><th> WordPress: </th>
+  <tr><th> Wordpress: </th>
   <td><img src='https://img.shields.io/wordpress/plugin/dt/akismet.svg' alt=''/></td>
   <td><code>https://img.shields.io/wordpress/plugin/dt/akismet.svg</code></td>
   </tr>
@@ -300,9 +303,9 @@ When that is implemented, change the placeholder to
   <td><img src='https://img.shields.io/github/release/qubyte/rubidium.svg' alt=''/></td>
   <td><code>https://img.shields.io/github/release/qubyte/rubidium.svg</code></td>
   </tr>
-  <tr><th> GitHub license: </th>
-  <td><img src='https://img.shields.io/github/license/qubyte/rubidium.svg' alt=''/></td>
-  <td><code>https://img.shields.io/github/license/qubyte/rubidium.svg</code></td>
+  <tr><th> GitHub forks: </th>
+  <td><img src='https://img.shields.io/github/forks/badges/shields.svg' alt=''/></td>
+  <td><code>https://img.shields.io/github/forks/badges/shields.svg</code></td>
   </tr>
   <tr><th> Chef cookbook: </th>
   <td><img src='https://img.shields.io/cookbook/v/chef-sugar.svg' alt=''/></td>
@@ -336,11 +339,11 @@ When that is implemented, change the placeholder to
   <td><img src='https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg' alt=''/></td>
   <td><code>https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg</code></td>
   </tr>
-  <tr><th> WordPress plugin: </th>
+  <tr><th> Wordpress plugin: </th>
   <td><img src='https://img.shields.io/wordpress/plugin/v/akismet.svg' alt=''/></td>
   <td><code>https://img.shields.io/wordpress/plugin/v/akismet.svg</code></td>
   </tr>
-  <tr><th> WordPress: </th>
+  <tr><th> Wordpress: </th>
   <td><img src='https://img.shields.io/wordpress/v/akismet.svg' alt=''/></td>
   <td><code>https://img.shields.io/wordpress/v/akismet.svg</code></td>
   </tr>
@@ -432,13 +435,17 @@ When that is implemented, change the placeholder to
   <td><img src='https://img.shields.io/github/issues/badges/shields.svg' alt=''/></td>
   <td><code>https://img.shields.io/github/issues/badges/shields.svg</code></td>
   </tr>
-  <tr><th> WordPress rating: </th>
+  <tr><th> Wordpress rating: </th>
   <td><img src='https://img.shields.io/wordpress/plugin/r/akismet.svg' alt=''/></td>
   <td><code>https://img.shields.io/wordpress/plugin/r/akismet.svg</code></td>
   </tr>
   <tr><th> Codacy: </th>
   <td><img src='https://img.shields.io/codacy/e27821fb6289410b8f58338c7e0bc686.svg' alt=''/></td>
   <td><code>https://img.shields.io/codacy/e27821fb6289410b8f58338c7e0bc686.svg</code></td>
+  </tr>
+  <tr><th> Talk.ai: </th>
+  <td><img src='https://img.shields.io/talk/t/9c81ff703b.svg' alt=''/></td>
+  <td><code>https://img.shields.io/talk/t/9c81ff703b.svg</code></td>
   </tr>
 </tbody></table>
 
