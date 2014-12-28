@@ -511,7 +511,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Libscore integration.
-camp.route(/^\/libscore\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/libscore\/c\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var library = match[1];  // eg, `jQuery`.
   var format = match[2];
