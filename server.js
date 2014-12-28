@@ -1741,7 +1741,7 @@ cache(function(data, match, sendBadge, request) {
   var badgeData = getBadgeData('tag', data);
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
-  request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
+  request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -1787,7 +1787,7 @@ cache(function(data, match, sendBadge, request) {
   var badgeData = getBadgeData('release', data);
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
-  request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
+  request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -1827,7 +1827,7 @@ cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
   var format = match[3];
-  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '';
+  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo;
   // Using our OAuth App secret grants us 5000 req/hour
   // instead of the standard 60 req/hour.
   if (serverSecrets) {
@@ -1837,7 +1837,7 @@ cache(function(data, match, sendBadge, request) {
   var badgeData = getBadgeData('issues', data);
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
-  request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
+  request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -1864,7 +1864,7 @@ cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
   var format = match[3];
-  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '';
+  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo;
   // Using our OAuth App secret grants us 5000 req/hour
   // instead of the standard 60 req/hour.
   if (serverSecrets) {
@@ -1874,7 +1874,7 @@ cache(function(data, match, sendBadge, request) {
   var badgeData = getBadgeData('forks', data);
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
-  request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
+  request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -1896,7 +1896,43 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Github license integration.
+// GitHub stars integration.
+camp.route(/^\/github\/stars\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];  // eg, qubyte/rubidium
+  var repo = match[2];
+  var format = match[3];
+  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo;
+  // Using our OAuth App secret grants us 5000 req/hour
+  // instead of the standard 60 req/hour.
+  if (serverSecrets) {
+    apiUrl += '?client_id=' + serverSecrets.gh_client_id
+      + '&client_secret=' + serverSecrets.gh_client_secret;
+  }
+  var badgeData = getBadgeData('stars', data);
+  // A special User-Agent is required:
+  // http://developer.github.com/v3/#user-agent-required
+  request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      if ((+res.headers['x-ratelimit-remaining']) === 0) {
+        return;  // Hope for the best in the cache.
+      }
+      badgeData.text[1] = JSON.parse(buffer).stargazers_count;
+      badgeData.colorscheme = null;
+      badgeData.colorB = '#4183C4';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// GitHub license integration.
 camp.route(/^\/github\/license\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
@@ -1914,7 +1950,7 @@ cache(function(data, match, sendBadge, request) {
   var badgeData = getBadgeData('license', data);
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
-  request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
+  request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -3015,6 +3051,11 @@ function regularUpdate(url, interval, scraper, cb) {
     cb(null, data);
   });
 }
+
+var githubHeaders = {
+  'User-Agent': 'Shields.io',
+  'Accept': 'application/vnd.github.v3+json'
+};
 
 // Given a number, string with appropriate unit in the metric system, SI.
 // Note: numbers beyond the peta- cannot be represented as integers in JS.
