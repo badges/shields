@@ -511,11 +511,11 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Libscore integration.
-camp.route(/^\/libscore\/c\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/libscore\/s\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var library = match[1];  // eg, `jQuery`.
   var format = match[2];
-  var apiUrl = 'http://libscore.com/v1/libraries/' + library;
+  var apiUrl = 'http://api.libscore.com/v1/libraries/' + library;
   var badgeData = getBadgeData('libscore', data);
   request(apiUrl, function dealWithData(err, res, buffer) {
     if (err != null) {
