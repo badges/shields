@@ -471,6 +471,42 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// SonarQube code coverage
+camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/coverage\.(svg|png|gif|jpg|json)$/,
+    cache(function(data, match, sendBadge, request) {
+      var scheme = match[1];
+      var serverUrl = match[2];  // eg, `sonar.qatools.ru`.
+      var buildType = match[3];  // eg, `ru.yandex.qatools.allure:allure-core:master`.
+      var format = match[4];
+      var apiUrl = scheme + '://' + serverUrl + '/api/resources?resource=' + buildType
+          + '&depth=0&metrics=coverage&includetrends=true';
+      var badgeData = getBadgeData('coverage', data);
+      request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
+        if (err != null) {
+          badgeData.text[1] = 'inaccessible';
+          sendBadge(format, badgeData);
+        }
+        try {
+          var data = JSON.parse(buffer);
+
+          var percentage = data[0].msr[0].val;
+
+          if (percentage === undefined) {
+            badgeData.text[1] = 'unknown';
+            sendBadge(format, badgeData);
+            return;
+          }
+
+          badgeData.text[1] = percentage.toFixed(0) + '%';
+          badgeData.colorscheme = coveragePercentageColor(percentage);
+          sendBadge(format, badgeData);
+        } catch(e) {
+          badgeData.text[1] = 'invalid';
+          sendBadge(format, badgeData);
+        }
+      });
+    }));
+
 // Gratipay integration.
 camp.route(/^\/(gittip|gratipay)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
