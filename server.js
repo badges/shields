@@ -2949,10 +2949,10 @@ function fetchFromSvg(request, url, cb) {
 
 function coveragePercentageColor(percentage) {
   if (percentage < 80) {
-    return 'red';
-  } else if (percentage < 90) {
     return 'yellow';
-  } else if (percentage < 95) {
+  } else if (percentage < 90) {
+    return 'yellowgreen';
+  } else if (percentage < 100) {
     return 'green';
   } else {
     return 'brightgreen';
