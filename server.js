@@ -1858,11 +1858,12 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub issues integration.
-camp.route(/^\/github\/issues\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/issues(-raw)?\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, qubyte/rubidium
-  var repo = match[2];
-  var format = match[3];
+  var isRaw = !!match[1];
+  var user = match[2];  // eg, qubyte/rubidium
+  var repo = match[3];
+  var format = match[4];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo;
   // Using our OAuth App secret grants us 5000 req/hour
   // instead of the standard 60 req/hour.
@@ -1884,7 +1885,7 @@ cache(function(data, match, sendBadge, request) {
       }
       var data = JSON.parse(buffer);
       var issues = data.open_issues_count;
-      badgeData.text[1] = issues + ' open';
+      badgeData.text[1] = issues + (isRaw? '': ' open');
       badgeData.colorscheme = issues ? 'yellow' : 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
