@@ -561,7 +561,8 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      badgeData.text[1] = data.count;
+      badgeData.text[1] = metric(+data.count);
+      badgeData.colorscheme = 'blue';
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
