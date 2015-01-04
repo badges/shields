@@ -693,7 +693,8 @@ function searchBadgeDbInit() {
   for (var i = 0; i < trs.length; i++) {
     var tr = trs[i];
     var th = tr.firstElementChild;
-    searchBadgeDb.index.push(th.textContent + ' ' + th.dataset.keywords);
+    var keywords = th.dataset.keywords? th.dataset.keywords: '';
+    searchBadgeDb.index.push(th.textContent + ' ' + keywords);
     searchBadgeDb.tr.push(tr);
   }
   projectSearch.addEventListener('input', searchBadge);
