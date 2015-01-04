@@ -12,6 +12,7 @@ try {
 //  - badges: list of objects of the form:
 //    - link: target as a string URL.
 //    - badge: shields image URL.
+//    - name: string
 var suggest = function(data, end) {
   try {
     var url = nodeUrl.parse(data.url);
@@ -118,6 +119,7 @@ var githubLicense = function(user, repo, end) {
                     end(null, {
                       link: link,
                       badge: shieldsBadge(badgeData),
+                      name: 'GitHub license'
                     });
                     return;
                   } else {
