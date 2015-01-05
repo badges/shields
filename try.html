@@ -53,15 +53,6 @@ table.badge > tbody > tr > td > img { cursor: pointer; }
 Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable &nbsp; No tracking
 </p>
 
-<!-- FIXME: search through vendor badges (`/$suggest/v1`, see suggest.js).
-It should detect URLs, call an ajax hook in the server that fetches the project
-data, return a list of valid badges for the project with copy-and-paste
-markdown, html, etc.
-If it isn't a URL, search through available badges for keywords corresponding to
-the search.
-
-When that is implemented, change the placeholder to 'search / project URL'
--->
 <form id='searchForm' action='javascript:void 0' autocomplete=off>
   <input name='projectSearch' id='projectSearch' autofill=off autofocus placeholder='search / project URL'/>
   <br>
@@ -689,6 +680,7 @@ is where the current server got started.
 // Search
 var searchBadgeDb = {index: [], tr: []};
 function searchBadgeDbInit() {
+  searchBadgeDb = {index: [], tr: []};
   var trs = document.querySelectorAll('table.badge tr');
   for (var i = 0; i < trs.length; i++) {
     var tr = trs[i];
@@ -730,8 +722,8 @@ function showSuggestedBadges(badges) {
   for (var i = 0; i < badges.length; i++) {
     var link = badges[i].link;
     var badge = badges[i].badge;
-    var name = badges[i].name;
-    html += '<tr><th>' + name + '</th>' +
+    var name = badges[i].name + ':';
+    html += '<tr><th data-link="' + link + '">' + name + '</th>' +
       '<td><img src="' + badge + '"></td>' +
       '<td><code>' + badge + '</code></td>' +
       '</tr>';
@@ -747,6 +739,8 @@ function suggestBadges(event) {
       if (err != null) { return; }
       showSuggestedBadges(res.badges);
       suggestButton.disabled = false;
+      searchBadgeDbInit();
+      markupDialogInit();
     });
     suggestButton.disabled = true;
   }
@@ -782,7 +776,10 @@ function markupDialog(tr) {
   // Trim the ending colon `:`.
   var trname = tr.firstElementChild.textContent.trim().slice(0, -1);
   var trimg = tr.querySelector('img').src;
+  var th = tr.firstElementChild;
+  var link = th.dataset.link? th.dataset.link: '';
   copyForm.img.value = trimg;
+  copyForm.url.value = link;
   // Set up the input listeners.
   copyForm.url.removeEventListener('input', copyFormUrlEventListener);
   copyForm.img.removeEventListener('input', copyFormUrlEventListener);
