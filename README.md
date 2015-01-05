@@ -65,6 +65,7 @@ What kind of meta data can you convey using badges?
 - [Coveralls](https://coveralls.io/r/kaize/nastachku)
 - [Gemfury/RubyGems](http://badge.fury.io/)
 - [Gemnasium](http://support.gemnasium.com/forums/236528-general/suggestions/5518400-use-svg-for-badges-so-they-still-look-sharp-on-r)
+- [GoDoc](https://godoc.org/)
 - [Scrutinizer CI](https://scrutinizer-ci.com/)
 - [Semaphore](https://semaphoreapp.com)
 - [VersionEye][]
