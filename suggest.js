@@ -48,7 +48,7 @@ var githubLicense = function(user, repo, end) {
     apiUrl += '?client_id=' + serverSecrets.gh_client_id
       + '&client_secret=' + serverSecrets.gh_client_secret;
   }
-  var badgeData = {text:['license',''], colorscheme:'red'};
+  var badgeData = {text:['license',''], colorscheme:'blue'};
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
   request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {

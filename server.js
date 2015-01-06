@@ -819,7 +819,7 @@ cache(function(data, match, sendBadge, request) {
         }
       }
       badgeData.text[1] = version.license[0];
-      badgeData.colorscheme = 'red';
+      badgeData.colorscheme = 'blue';
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -916,7 +916,7 @@ cache(function(data, match, sendBadge, request) {
         license = license.type;
       }
       badgeData.text[1] = license;
-      badgeData.colorscheme = 'red';
+      badgeData.colorscheme = 'blue';
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -1120,7 +1120,7 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = 'Unknown';
         } else {
           badgeData.text[1] = license;
-          badgeData.colorscheme = 'red';
+          badgeData.colorscheme = 'blue';
         }
         sendBadge(format, badgeData);
       }
@@ -1215,7 +1215,7 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = 'Unknown';
         } else {
           badgeData.text[1] = license;
-          badgeData.colorscheme = 'red';
+          badgeData.colorscheme = 'blue';
         }
         sendBadge(format, badgeData);
       }
@@ -2756,7 +2756,7 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     badgeData.text[1] = license;
-    badgeData.colorscheme = 'red';
+    badgeData.colorscheme = 'blue';
     sendBadge(format, badgeData);
   });
 }));
