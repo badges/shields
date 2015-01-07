@@ -2809,11 +2809,11 @@ cache(function(data, match, sendBadge, request) {
     try {
       // In case the request() implementation doesn't set the request header,
       // we need to remove the first line of the response.
-      if(buffer.indexOf("//") === 0) {
-        buffer = buffer.substring(buffer.indexOf("["));
+      if(res.indexOf("//") < 2) {
+        res = res.substring(res.indexOf("["));
       }
 
-      var data = JSON.parse(buffer);
+      var data = JSON.parse(res);
       var status = data[0].status;
       switch(status) {
       case 'success':
