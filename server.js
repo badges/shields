@@ -2837,7 +2837,7 @@ cache(function(data, match, sendBadge, request) {
 
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'invalid';
+      badgeData.text[1] = "Invalid: " + e.message;//'invalid';
       sendBadge(format, badgeData);
     }
   });
