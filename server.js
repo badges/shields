@@ -2809,11 +2809,11 @@ cache(function(data, match, sendBadge, request) {
     try {
       // In case the request() implementation doesn't set the request header,
       // we need to remove the first line of the response.
-      if(res.indexOf("//") < 2) {
-        res = res.substring(res.indexOf("["));
+      if(buffer.indexOf("//") < 2) {
+        buffer = buffer.substring(buffer.indexOf("["));
       }
 
-      var data = JSON.parse(res);
+      var data = JSON.parse(buffer);
       var status = data[0].status;
       switch(status) {
       case 'success':
@@ -2837,7 +2837,7 @@ cache(function(data, match, sendBadge, request) {
 
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = "Invalid: " + e.message;//'invalid';
+      badgeData.text[1] = "ERROR: Buffer = " + buffer;//'invalid';
       sendBadge(format, badgeData);
     }
   });
