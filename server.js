@@ -2781,6 +2781,44 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// CircleCI build integration.
+// https://circleci.com/api/v1/project/BrightFlair/PHP.Gt?circle-token=0a5143728784b263d9f0238b8d595522689b3af2&limit=1&filter=completed
+camp.route(/^\/circleci\/project\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var userRepo = match[1];  // eg, `doctrine/orm`.
+  var format = match[2];
+  var apiUrl = 'https://circleci.com/api/v1/project/'
+    + userRepo
+    + '?circle-token=0a5143728784b263d9f0238b8d595522689b3af2'
+    + '&limit=1&filter=completed';
+  var badgeData = getBadgeData('CircleCI', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var unstable = function(ver) { return /dev/.test(ver); };
+      // Grab the latest stable version, or an unstable
+      var version = data[0].branch;
+      badgeData.text[1] = version;
+      if (/^\d/.test(badgeData.text[1])) {
+        badgeData.text[1] = 'v' + version;
+      }
+      if (version[0] === '0' || /dev/.test(version)) {
+        badgeData.colorscheme = 'orange';
+      } else {
+        badgeData.colorscheme = 'blue';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
