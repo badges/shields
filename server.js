@@ -2818,11 +2818,7 @@ cache(function(data, match, sendBadge, request) {
       case 'scheduled':
       case 'not_run':
         badgeData.colorscheme = 'yellow';
-        badgeData.text[1] = status.replace('_', ' ');
-        break;
-
       default:
-        badgeData.colorscheme = 'grey';
         badgeData.text[1] = status.replace('_', ' ');
         break;
       }
