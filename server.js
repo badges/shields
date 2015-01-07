@@ -2810,7 +2810,7 @@ cache(function(data, match, sendBadge, request) {
       // In case the request() implementation doesn't set the request header,
       // we need to remove the first line of the response.
       if(buffer.indexOf("//") === 0) {
-        buffer = buffer.substring(buffer.indexOf("\n"));
+        buffer = buffer.substring(buffer.indexOf("["));
       }
 
       var data = JSON.parse(buffer);
