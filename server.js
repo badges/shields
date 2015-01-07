@@ -2783,24 +2783,36 @@ cache(function(data, match, sendBadge, request) {
 
 // CircleCI build integration.
 // https://circleci.com/api/v1/project/BrightFlair/PHP.Gt?circle-token=0a5143728784b263d9f0238b8d595522689b3af2&limit=1&filter=completed
-camp.route(/^\/circleci\/project\/([^\/]+\/[^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/circleci\/project\/([^\/]+\/[^\/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `doctrine/orm`.
   var branch = match[2];
   var format = match[3];
-  var apiUrl = 'https://circleci.com/api/v1/project/'
-    + userRepo
-    + "/tree/"
-    + branch
-    + '?circle-token=0a5143728784b263d9f0238b8d595522689b3af2'
+
+  var apiUrl = 'https://circleci.com/api/v1/project/' + userRepo;
+  if(branch != null) {
+    apiUrl +=
+      "/tree/"
+      + branch;
+  }
+  apiUrl +=
+    '?circle-token=0a5143728784b263d9f0238b8d595522689b3af2'
     + '&limit=1&filter=completed';
+
   var badgeData = getBadgeData('CircleCI', data);
+
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
     try {
+      // In case the request() implementation doesn't set the request header,
+      // we need to remove the first line of the response.
+      if(buffer.indexOf("//") === 0) {
+        buffer = buffer.substring(buffer.indexOf("\n"));
+      }
+
       var data = JSON.parse(buffer);
       var status = data[0].status;
       switch(status) {
