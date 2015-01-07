@@ -2783,12 +2783,15 @@ cache(function(data, match, sendBadge, request) {
 
 // CircleCI build integration.
 // https://circleci.com/api/v1/project/BrightFlair/PHP.Gt?circle-token=0a5143728784b263d9f0238b8d595522689b3af2&limit=1&filter=completed
-camp.route(/^\/circleci\/project\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/circleci\/project\/([^\/]+\/[^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `doctrine/orm`.
-  var format = match[2];
+  var branch = match[2];
+  var format = match[3];
   var apiUrl = 'https://circleci.com/api/v1/project/'
     + userRepo
+    + "/tree/"
+    + branch
     + '?circle-token=0a5143728784b263d9f0238b8d595522689b3af2'
     + '&limit=1&filter=completed';
   var badgeData = getBadgeData('CircleCI', data);
@@ -2799,18 +2802,31 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var unstable = function(ver) { return /dev/.test(ver); };
-      // Grab the latest stable version, or an unstable
-      var version = data[0].branch;
-      badgeData.text[1] = version;
-      if (/^\d/.test(badgeData.text[1])) {
-        badgeData.text[1] = 'v' + version;
+      var status = data[0].status;
+      switch(status) {
+      case 'success':
+        badgeData.colorscheme = 'brightgreen';
+        badgeData.text[1] = 'passing';
+        break;
+
+      case 'failed':
+        badgeData.colorscheme = 'red';
+        badgeData.text[1] = 'failed';
+        break;
+
+      case 'no_tests':
+      case 'scheduled':
+      case 'not_run':
+        badgeData.colorscheme = 'yellow';
+        badgeData.text[1] = status.replace('_', ' ');
+        break;
+
+      default:
+        badgeData.colorscheme = 'grey';
+        badgeData.text[1] = status.replace('_', ' ');
+        break;
       }
-      if (version[0] === '0' || /dev/.test(version)) {
-        badgeData.colorscheme = 'orange';
-      } else {
-        badgeData.colorscheme = 'blue';
-      }
+
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
