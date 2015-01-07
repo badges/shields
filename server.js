@@ -2801,18 +2801,12 @@ cache(function(data, match, sendBadge, request) {
 
   var badgeData = getBadgeData('CircleCI', data);
 
-  request(apiUrl, function(err, res, buffer) {
+  request(apiUrl, {json:true}, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
     }
     try {
-      // In case the request() implementation doesn't set the request header,
-      // we need to remove the first line of the response.
-      if(buffer.indexOf("//") < 2) {
-        buffer = buffer.substring(buffer.indexOf("["));
-      }
-
       var data = JSON.parse(buffer);
       var status = data[0].status;
       switch(status) {
