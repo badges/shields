@@ -862,9 +862,10 @@ function toXhrSend(data) {
   }
   return str;
 }
+var origin = 'https://img.shields.io';
 function ajax(verb, adverbs, cb) {
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", "/$" + verb + '?' + toXhrSend(adverbs), true);
+  xhr.open("GET", origin + "/$" + verb + '?' + toXhrSend(adverbs), true);
   xhr.onload = function (e) {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
