@@ -13,7 +13,8 @@ try {
 //    - link: target as a string URL.
 //    - badge: shields image URL.
 //    - name: string
-var suggest = function(data, end) {
+var suggest = function(data, end, ask) {
+  ask.res.setHeader('Access-Control-Allow-Origin', 'http://shields.io');
   try {
     var url = nodeUrl.parse(data.url);
   } catch(e) { end({err:''+e}); return; }
