@@ -2785,7 +2785,7 @@ cache(function(data, match, sendBadge, request) {
 // https://circleci.com/api/v1/project/BrightFlair/PHP.Gt?circle-token=0a5143728784b263d9f0238b8d595522689b3af2&limit=1&filter=completed
 camp.route(/^\/circleci\/project\/([^\/]+\/[^\/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];  // eg, `doctrine/orm`.
+  var userRepo = match[1];  // eg, `BrightFlair/PHP.Gt`.
   var branch = match[2];
   var format = match[3];
 
