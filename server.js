@@ -2781,6 +2781,61 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// CircleCI build integration.
+// https://circleci.com/api/v1/project/BrightFlair/PHP.Gt?circle-token=0a5143728784b263d9f0238b8d595522689b3af2&limit=1&filter=completed
+camp.route(/^\/circleci\/project\/([^\/]+\/[^\/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var userRepo = match[1];  // eg, `doctrine/orm`.
+  var branch = match[2];
+  var format = match[3];
+
+  var apiUrl = 'https://circleci.com/api/v1/project/' + userRepo;
+  if(branch != null) {
+    apiUrl +=
+      "/tree/"
+      + branch;
+  }
+  apiUrl +=
+    '?circle-token=0a5143728784b263d9f0238b8d595522689b3af2'
+    + '&limit=1&filter=completed';
+
+  var badgeData = getBadgeData('CircleCI', data);
+
+  request(apiUrl, {json:true}, function(err, res, data) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var status = data[0].status;
+      switch(status) {
+      case 'success':
+        badgeData.colorscheme = 'brightgreen';
+        badgeData.text[1] = 'passing';
+        break;
+
+      case 'failed':
+        badgeData.colorscheme = 'red';
+        badgeData.text[1] = 'failed';
+        break;
+
+      case 'no_tests':
+      case 'scheduled':
+      case 'not_run':
+        badgeData.colorscheme = 'yellow';
+      default:
+        badgeData.text[1] = status.replace('_', ' ');
+        break;
+      }
+
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = "ERROR: Buffer = " + buffer;//'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
