@@ -4,11 +4,11 @@
     <stop offset="1" stop-opacity=".1"/>
   </linearGradient>
 
-  <mask id="test">
-    <rect width="{{=it.widths[0]+it.widths[1]}}" height="20" rx="3" fill="#fff" />
+  <mask id="round">
+    <rect width="{{=it.widths[0]+it.widths[1]}}" height="20" rx="3" fill="#fff"/>
   </mask>
 
-  <g mask="url(#test)">
+  <g mask="url(#round)">
     <rect width="{{=it.widths[0]}}" height="20" fill="{{=it.escapeXml(it.colorA||"#555")}}"/>
     <rect x="{{=it.widths[0]}}" width="{{=it.widths[1]}}" height="20" fill="{{=it.escapeXml(it.colorB||"#4c1")}}"/>
     <rect width="{{=it.widths[0]+it.widths[1]}}" height="20" fill="url(#smooth)"/>
