@@ -1,5 +1,6 @@
 var nodeUrl = require('url');
 var request = require('request');
+var Promise = require('promise');
 var serverSecrets;
 try {
   // Everything that cannot be checked in but is useful server-side
@@ -24,117 +25,121 @@ var suggest = function(data, end, ask) {
   }
 };
 
+// url: string
+// cb: function({badges})
 var github = function(url, cb) {
-  var badges = [];
   var userRepo = url.pathname.slice(1).split('/');
   var user = userRepo[0];
   var repo = userRepo[1];
-  githubLicense(user, repo, function(err, badge) {
-    if (err == null) {
-      badges.push(badge);
-    }
+  Promise.all([
+    githubLicense(user, repo),
+  ]).then(function(badges) {
     cb({badges:badges});
+  }).catch(function(err) {
+    cb({badges:badges, err:err});
   });
 };
 
 // user: eg, qubyte
 // repo: eg, rubidium
-// end: function(err, {link, badge})
-var githubLicense = function(user, repo, end) {
-  // Step 1: Get the repo's default branch.
-  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '';
-  // Using our OAuth App secret grants us 5000 req/hour
-  // instead of the standard 60 req/hour.
-  if (serverSecrets) {
-    apiUrl += '?client_id=' + serverSecrets.gh_client_id
-      + '&client_secret=' + serverSecrets.gh_client_secret;
-  }
-  var badgeData = {text:['license',''], colorscheme:'blue'};
-  // A special User-Agent is required:
-  // http://developer.github.com/v3/#user-agent-required
-  request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
-    if (err != null) { end(err); return; }
-    try {
-      if ((+res.headers['x-ratelimit-remaining']) === 0) { end(Error('rate limited')); return; }
-      var data = JSON.parse(buffer);
-      var defaultBranch = data.default_branch;
-      // Step 2: Get the SHA-1 hash of the branch tip.
-      var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/branches/' + defaultBranch;
-      if (serverSecrets) {
-        apiUrl += '?client_id=' + serverSecrets.gh_client_id
-          + '&client_secret=' + serverSecrets.gh_client_secret;
-      }
-      request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
-        if (err != null) { end(err); return; }
-        try {
-          if ((+res.headers['x-ratelimit-remaining']) === 0) { end(Error('rate limited')); return; }
-          var data = JSON.parse(buffer);
-          var branchTip = data.commit.sha;
-          // Step 3: Get the tree at the commit.
-          var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/git/trees/' + branchTip;
-          if (serverSecrets) {
-            apiUrl += '?client_id=' + serverSecrets.gh_client_id
-              + '&client_secret=' + serverSecrets.gh_client_secret;
-          }
-          request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
-            if (err != null) { end(err); return; }
-            try {
-              if ((+res.headers['x-ratelimit-remaining']) === 0) { end(Error('rate limited')); return; }
-              var data = JSON.parse(buffer);
-              var treeArray = data.tree;
-              var licenseBlob;
-              var licenseFilename;
-              // Crawl each file in the root directory
-              for (var i = 0; i < treeArray.length; i++) {
-                if (treeArray[i].type != 'blob') {
-                  continue;
-                }
-                if (treeArray[i].path.match(/(LICENSE|COPYING|COPYRIGHT).*/i)) {
-                  licenseBlob = treeArray[i].sha;
-                  licenseFilename = treeArray[i].path;
-                  break;
-                }
-              }
-              // Could not find license file
-              if (!licenseBlob) { end(Error('no license file')); return; }
-
-              // Step 4: Get the license blob.
-              var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/git/blobs/' + licenseBlob;
-              var link = 'https://raw.githubusercontent.com/' +
-                [user, repo, defaultBranch, licenseFilename].join('/');
-
-              if (serverSecrets) {
-                apiUrl += '?client_id=' + serverSecrets.gh_client_id
-                  + '&client_secret=' + serverSecrets.gh_client_secret;
-              }
-              // Get the raw blob instead of JSON
-              // https://developer.github.com/v3/media/
-              request(apiUrl, { headers: { 'User-Agent': 'Shields.io', 'Accept': 'appplication/vnd.github.raw' } },
-              function(err, res, buffer) {
-                if (err != null) { end(err); return; }
-                try {
-                  if ((+res.headers['x-ratelimit-remaining']) === 0) { end(Error('rate limited')); return; }
-                  var license = guessLicense(buffer);
-                  if (license) {
-                    badgeData.text[1] = license;
-                    end(null, {
-                      link: link,
-                      badge: shieldsBadge(badgeData),
-                      name: 'GitHub license'
-                    });
-                    return;
-                  } else {
-                    // Not a recognized license
-                    end(Error('unknown license'));
-                    return;
+// returns a promise of {link, badge, name}
+var githubLicense = function(user, repo) {
+  return new Promise(function(resolve, reject) {
+    // Step 1: Get the repo's default branch.
+    var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '';
+    // Using our OAuth App secret grants us 5000 req/hour
+    // instead of the standard 60 req/hour.
+    if (serverSecrets) {
+      apiUrl += '?client_id=' + serverSecrets.gh_client_id
+        + '&client_secret=' + serverSecrets.gh_client_secret;
+    }
+    var badgeData = {text:['license',''], colorscheme:'blue'};
+    // A special User-Agent is required:
+    // http://developer.github.com/v3/#user-agent-required
+    request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
+      if (err != null) { reject(err); return; }
+      try {
+        if ((+res.headers['x-ratelimit-remaining']) === 0) { reject(Error('rate limited')); return; }
+        var data = JSON.parse(buffer);
+        var defaultBranch = data.default_branch;
+        // Step 2: Get the SHA-1 hash of the branch tip.
+        var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/branches/' + defaultBranch;
+        if (serverSecrets) {
+          apiUrl += '?client_id=' + serverSecrets.gh_client_id
+            + '&client_secret=' + serverSecrets.gh_client_secret;
+        }
+        request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
+          if (err != null) { reject(err); return; }
+          try {
+            if ((+res.headers['x-ratelimit-remaining']) === 0) { reject(Error('rate limited')); return; }
+            var data = JSON.parse(buffer);
+            var branchTip = data.commit.sha;
+            // Step 3: Get the tree at the commit.
+            var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/git/trees/' + branchTip;
+            if (serverSecrets) {
+              apiUrl += '?client_id=' + serverSecrets.gh_client_id
+                + '&client_secret=' + serverSecrets.gh_client_secret;
+            }
+            request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
+              if (err != null) { reject(err); return; }
+              try {
+                if ((+res.headers['x-ratelimit-remaining']) === 0) { reject(Error('rate limited')); return; }
+                var data = JSON.parse(buffer);
+                var treeArray = data.tree;
+                var licenseBlob;
+                var licenseFilename;
+                // Crawl each file in the root directory
+                for (var i = 0; i < treeArray.length; i++) {
+                  if (treeArray[i].type != 'blob') {
+                    continue;
                   }
-                } catch(e) { end(e); return; }
-              });
-            } catch(e) { end(e); return; }
-          });
-        } catch(e) { end(e); return; }
-      });
-    } catch(e) { end(e); return; }
+                  if (treeArray[i].path.match(/(LICENSE|COPYING|COPYRIGHT).*/i)) {
+                    licenseBlob = treeArray[i].sha;
+                    licenseFilename = treeArray[i].path;
+                    break;
+                  }
+                }
+                // Could not find license file
+                if (!licenseBlob) { reject(Error('no license file')); return; }
+
+                // Step 4: Get the license blob.
+                var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/git/blobs/' + licenseBlob;
+                var link = 'https://raw.githubusercontent.com/' +
+                  [user, repo, defaultBranch, licenseFilename].join('/');
+
+                if (serverSecrets) {
+                  apiUrl += '?client_id=' + serverSecrets.gh_client_id
+                    + '&client_secret=' + serverSecrets.gh_client_secret;
+                }
+                // Get the raw blob instead of JSON
+                // https://developer.github.com/v3/media/
+                request(apiUrl, { headers: { 'User-Agent': 'Shields.io', 'Accept': 'appplication/vnd.github.raw' } },
+                function(err, res, buffer) {
+                  if (err != null) { reject(err); return; }
+                  try {
+                    if ((+res.headers['x-ratelimit-remaining']) === 0) { reject(Error('rate limited')); return; }
+                    var license = guessLicense(buffer);
+                    if (license) {
+                      badgeData.text[1] = license;
+                      resolve({
+                        link: link,
+                        badge: shieldsBadge(badgeData),
+                        name: 'GitHub license'
+                      });
+                      return;
+                    } else {
+                      // Not a recognized license
+                      reject(Error('unknown license'));
+                      return;
+                    }
+                  } catch(e) { reject(e); return; }
+                });
+              } catch(e) { reject(e); return; }
+            });
+          } catch(e) { reject(e); return; }
+        });
+      } catch(e) { reject(e); return; }
+    });
   });
 };
 
