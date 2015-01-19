@@ -32,11 +32,39 @@ var github = function(url, cb) {
   var user = userRepo[0];
   var repo = userRepo[1];
   Promise.all([
+    githubIssues(user, repo),
+    githubForks(user, repo),
+    githubStars(user, repo),
     githubLicense(user, repo),
   ]).then(function(badges) {
     cb({badges:badges});
   }).catch(function(err) {
     cb({badges:badges, err:err});
+  });
+};
+
+var githubIssues = function(user, repo) {
+  var userRepo = user + '/' + repo;
+  return Promise.resolve({
+    name: 'GitHub issues',
+    link: 'https://github.com/' + userRepo + '/issues',
+    badge: 'https://img.shields.io/github/issues/' + userRepo + '.svg',
+  });
+};
+var githubForks = function(user, repo) {
+  var userRepo = user + '/' + repo;
+  return Promise.resolve({
+    name: 'GitHub forks',
+    link: 'https://github.com/' + userRepo + '/network',
+    badge: 'https://img.shields.io/github/forks/' + userRepo + '.svg',
+  });
+};
+var githubStars = function(user, repo) {
+  var userRepo = user + '/' + repo;
+  return Promise.resolve({
+    name: 'GitHub stars',
+    link: 'https://github.com/' + userRepo + '/stargazers',
+    badge: 'https://img.shields.io/github/stars/' + userRepo + '.svg',
   });
 };
 
