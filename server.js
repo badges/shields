@@ -2787,7 +2787,7 @@ cache(function(data, match, sendBadge, request) {
     '?circle-token=0a5143728784b263d9f0238b8d595522689b3af2'
     + '&limit=1&filter=completed';
 
-  var badgeData = getBadgeData('CircleCI', data);
+  var badgeData = getBadgeData('build', data);
 
   request(apiUrl, {json:true}, function(err, res, data) {
     if (err != null) {
