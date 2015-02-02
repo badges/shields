@@ -525,9 +525,13 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
 
 <h2> Styles </h2>
 <p>
-One of those two designs may become the default one. Vote by using them!
+The following styles are available:
 </p>
 <table><tbody>
+  <tr>
+  <td><img src='https://img.shields.io/badge/style-flat-green.svg?style=plastic' alt=''/></td>
+  <td><code>https://img.shields.io/badge/style-flat-green.svg?style=plastic</code></td>
+  </tr>
   <tr>
   <td><img src='https://img.shields.io/badge/style-flat-green.svg?style=flat' alt=''/></td>
   <td><code>https://img.shields.io/badge/style-flat-green.svg?style=flat</code></td>
@@ -674,8 +678,8 @@ is where the current server got started.
   </p><p><label> Image <input type='url' name='img'/></label>
   </p><p><label> Style
     <select name='style'>
-      <option value='plastic' selected> plastic
-      <option value='flat'>             flat
+      <option value='plastic'>          plastic
+      <option value='flat' selected>    flat
       <option value='flat-square'>      flat-square
     </select>
   </label>
@@ -805,7 +809,7 @@ function markupDialog(tr) {
     var img = copyForm.img.value;
     var style = copyForm.style.value;
     // Default style doesn't show.
-    if (style !== 'plastic') { img += '?style=' + style; }
+    if (style !== 'flat') { img += '?style=' + style; }
     var md = '[![' + trname + '](' + img + ')](' + url + ')';
     var rst = '.. image:: ' + img + '   :target: ' + url;
     copyMarkdown.value = md;
