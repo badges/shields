@@ -937,8 +937,11 @@ cache(function(data, match, sendBadge, request) {
         regularUpdate('http://nodejs.org/dist/latest/SHASUMS.txt',
           (24 * 3600 * 1000),
           function(shasums) {
-            var firstLine = shasums.slice(0, shasums.indexOf('\n'));
-            var version = firstLine.split('  ')[1].split('-')[1];
+            // tarball index start, tarball index end
+            var taris = shasums.indexOf('node-v');
+            var tarie = shasums.indexOf('\n', taris);
+            var tarball = shasums.slice(taris, tarie);
+            var version = tarball.split('-')[1];
             return version;
           }, function(err, version) {
             if (err != null) { sendBadge(format, badgeData); return; }
