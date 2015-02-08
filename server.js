@@ -296,7 +296,7 @@ cache(function(data, match, sendBadge, request) {
       } else if (res === 'failing') {
         badgeData.colorscheme = 'red';
       } else {
-        badgeData.text[1] = 'pending';
+        badgeData.text[1] = res;
       }
       sendBadge(format, badgeData);
 
