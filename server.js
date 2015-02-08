@@ -942,13 +942,15 @@ cache(function(data, match, sendBadge, request) {
             return version;
           }, function(err, version) {
             if (err != null) { sendBadge(format, badgeData); return; }
-            if (semver.satisfies(version, versionRange)) {
-              badgeData.colorscheme = 'brightgreen';
-            } else if (semver.gtr(version, versionRange)) {
-              badgeData.colorscheme = 'yellow';
-            } else {
-              badgeData.colorscheme = 'orange';
-            }
+            try {
+              if (semver.satisfies(version, versionRange)) {
+                badgeData.colorscheme = 'brightgreen';
+              } else if (semver.gtr(version, versionRange)) {
+                badgeData.colorscheme = 'yellow';
+              } else {
+                badgeData.colorscheme = 'orange';
+              }
+            } catch(e) { }
             sendBadge(format, badgeData);
         });
       } else {
