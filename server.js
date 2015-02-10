@@ -729,18 +729,18 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       switch (info.charAt(1)) {
-        case 'm':
-          var downloads = data.package.downloads.monthly;
-          badgeData.text[1] = metric(downloads) + '/month';
-          break;
-        case 'd':
-          var downloads = data.package.downloads.daily;
-          badgeData.text[1] = metric(downloads) + '/day';
-          break;
-        case 't':
-          var downloads = data.package.downloads.total;
-          badgeData.text[1] = metric(downloads) + ' total';
-          break;
+      case 'm':
+        var downloads = data.package.downloads.monthly;
+        badgeData.text[1] = metric(downloads) + '/month';
+        break;
+      case 'd':
+        var downloads = data.package.downloads.daily;
+        badgeData.text[1] = metric(downloads) + '/day';
+        break;
+      case 't':
+        var downloads = data.package.downloads.total;
+        badgeData.text[1] = metric(downloads) + ' total';
+        break;
       }
       badgeData.colorscheme = downloadCountColor(downloads);
       sendBadge(format, badgeData);
@@ -775,26 +775,26 @@ cache(function(data, match, sendBadge, request) {
       var badgeColor = null;
 
       switch (info) {
-        case 'v':
-          badgeText = vdata.version;
-          badgeColor = vdata.color;
-          break;
-        case 'vpre':
-          if (versions[0] !== undefined) {
-            var unstableVersion = null;
-            for (var i = 0; i < versions.length; i++) {
-              var version = versions[i];
-              if (version.charAt(0) !== 'v') {
-                if (unstableVersion === null || (unstableVersion !== null && versionCompare(version, unstableVersion) > 0)) {
-                  unstableVersion = version;
-                }
+      case 'v':
+        badgeText = vdata.version;
+        badgeColor = vdata.color;
+        break;
+      case 'vpre':
+        if (versions[0] !== undefined) {
+          var unstableVersion = null;
+          for (var i = 0; i < versions.length; i++) {
+            var version = versions[i];
+            if (version.charAt(0) !== 'v') {
+              if (unstableVersion === null || (unstableVersion !== null && versionCompare(version, unstableVersion) > 0)) {
+                unstableVersion = version;
               }
             }
-            
-            badgeText = unstableVersion;
-            badgeColor = 'orange';
           }
-          break;
+          
+          badgeText = unstableVersion;
+          badgeColor = 'orange';
+        }
+        break;
       }
 
       if (badgeText !== null) {
