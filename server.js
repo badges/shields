@@ -768,19 +768,19 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
 
       var versions = Object.keys(data.package.versions);
-      var stableVersion = latestVersion(versions);
-      var vdata = versionColor(stableVersion);
 
       var badgeText = null;
       var badgeColor = null;
 
       switch (info) {
       case 'v':
+        var stableVersion = latestVersion(versions);
+        var vdata = versionColor(stableVersion);
         badgeText = vdata.version;
         badgeColor = vdata.color;
         break;
       case 'vpre':
-        if (versions[0] !== undefined) {
+        if (versions.length > 0) {
           var unstableVersion = null;
           for (var i = 0; i < versions.length; i++) {
             var version = versions[i];
