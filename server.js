@@ -775,33 +775,31 @@ cache(function(data, match, sendBadge, request) {
       var badgeColor = null;
 
       switch (info) {
-          case 'v':
-              badgeText = vdata.version;
-              badgeColor = vdata.color;
-              break;
-          case 'vpre':
-              if (versions[0] !== undefined) {
-
-                  var unstableVersion = null;
-                  for (var i = 0; i < versions.length; i++) {
-                      var version = versions[i];
-
-                      if (version.charAt(0) !== 'v') {
-                          if (unstableVersion === null || (unstableVersion !== null && versionCompare(version, unstableVersion) > 0)) {
-                              unstableVersion = version;
-                          }
-                      }
-                  }
-
-                  badgeText = unstableVersion;
-                  badgeColor = 'orange';
+        case 'v':
+          badgeText = vdata.version;
+          badgeColor = vdata.color;
+          break;
+        case 'vpre':
+          if (versions[0] !== undefined) {
+            var unstableVersion = null;
+            for (var i = 0; i < versions.length; i++) {
+              var version = versions[i];
+              if (version.charAt(0) !== 'v') {
+                if (unstableVersion === null || (unstableVersion !== null && versionCompare(version, unstableVersion) > 0)) {
+                  unstableVersion = version;
+                }
               }
+            }
+            
+            badgeText = unstableVersion;
+            badgeColor = 'orange';
+          }
           break;
       }
 
       if (badgeText !== null) {
-          badgeData.text[1] = badgeText;
-          badgeData.colorscheme = badgeColor;
+        badgeData.text[1] = badgeText;
+        badgeData.colorscheme = badgeColor;
       }
 
       sendBadge(format, badgeData);
