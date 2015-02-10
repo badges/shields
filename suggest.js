@@ -37,9 +37,9 @@ var github = function(url, cb) {
     githubStars(user, repo),
     githubLicense(user, repo),
   ]).then(function(badges) {
-    cb({badges:badges});
+    cb({badges:badges.filter(function(b) { return b != null; })});
   }).catch(function(err) {
-    cb({badges:badges, err:err});
+    cb({badges:[], err:err});
   });
 };
 
@@ -85,9 +85,9 @@ var githubLicense = function(user, repo) {
     // A special User-Agent is required:
     // http://developer.github.com/v3/#user-agent-required
     request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
-      if (err != null) { reject(err); return; }
+      if (err != null) { resolve(null); return; }
       try {
-        if ((+res.headers['x-ratelimit-remaining']) === 0) { reject(Error('rate limited')); return; }
+        if ((+res.headers['x-ratelimit-remaining']) === 0) { resolve(null); return; }
         var data = JSON.parse(buffer);
         var defaultBranch = data.default_branch;
         // Step 2: Get the SHA-1 hash of the branch tip.
@@ -97,9 +97,9 @@ var githubLicense = function(user, repo) {
             + '&client_secret=' + serverSecrets.gh_client_secret;
         }
         request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
-          if (err != null) { reject(err); return; }
+          if (err != null) { resolve(null); return; }
           try {
-            if ((+res.headers['x-ratelimit-remaining']) === 0) { reject(Error('rate limited')); return; }
+            if ((+res.headers['x-ratelimit-remaining']) === 0) { resolve(null); return; }
             var data = JSON.parse(buffer);
             var branchTip = data.commit.sha;
             // Step 3: Get the tree at the commit.
@@ -109,9 +109,9 @@ var githubLicense = function(user, repo) {
                 + '&client_secret=' + serverSecrets.gh_client_secret;
             }
             request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
-              if (err != null) { reject(err); return; }
+              if (err != null) { resolve(null); return; }
               try {
-                if ((+res.headers['x-ratelimit-remaining']) === 0) { reject(Error('rate limited')); return; }
+                if ((+res.headers['x-ratelimit-remaining']) === 0) { resolve(null); return; }
                 var data = JSON.parse(buffer);
                 var treeArray = data.tree;
                 var licenseBlob;
@@ -128,7 +128,7 @@ var githubLicense = function(user, repo) {
                   }
                 }
                 // Could not find license file
-                if (!licenseBlob) { reject(Error('no license file')); return; }
+                if (!licenseBlob) { resolve(null); return; }
 
                 // Step 4: Get the license blob.
                 var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/git/blobs/' + licenseBlob;
@@ -143,9 +143,9 @@ var githubLicense = function(user, repo) {
                 // https://developer.github.com/v3/media/
                 request(apiUrl, { headers: { 'User-Agent': 'Shields.io', 'Accept': 'appplication/vnd.github.raw' } },
                 function(err, res, buffer) {
-                  if (err != null) { reject(err); return; }
+                  if (err != null) { resolve(null); return; }
                   try {
-                    if ((+res.headers['x-ratelimit-remaining']) === 0) { reject(Error('rate limited')); return; }
+                    if ((+res.headers['x-ratelimit-remaining']) === 0) { resolve(null); return; }
                     var license = guessLicense(buffer);
                     if (license) {
                       badgeData.text[1] = license;
@@ -157,7 +157,7 @@ var githubLicense = function(user, repo) {
                       return;
                     } else {
                       // Not a recognized license
-                      reject(Error('unknown license'));
+                      resolve(null);
                       return;
                     }
                   } catch(e) { reject(e); return; }
