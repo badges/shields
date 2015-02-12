@@ -1312,7 +1312,7 @@ cache(function(data, match, sendBadge, request) {
   var branch = match[2];
   var format = match[3];
   var apiUrl = {
-    url: 'https://codecov.io/' + userRepo + '/coverage.png',
+    url: 'https://codecov.io/' + userRepo + '/coverage.svg',
     followRedirect: false,
     method: 'HEAD',
   };
