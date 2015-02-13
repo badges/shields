@@ -348,17 +348,59 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Rust download and version integration
-camp.route(/^\/crates\/(d|v|dv)\/([A-Za-z0-9_-]+)(?:\/([0-9.]+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/crates\/(d|v|dv|l)\/([A-Za-z0-9_-]+)(?:\/([0-9.]+))?\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
   var mode = match[1];  // d - downloads (total or for version), v - (latest) version, dv - downloads (for latest version)
   var crate = match[2];  // crate name, e.g. rustc-serialize
   var version = match[3];  // crate version in semver format, optional, e.g. 0.1.2
   var format = match[4];
+  var modes = {
+    'd': {
+      name: 'downloads',
+      version: true,
+      process: function (data, badgeData) {
+        downloads = data.crate? data.crate.downloads: data.version.downloads;
+        version = data.version && data.version.num;
+        badgeData.text[1] = metric(downloads) + (version? ' version ' + version: ' total');
+        badgeData.colorscheme = downloadCountColor(downloads);
+      }
+    },
+    'dv': {
+      name: 'downloads',
+      version: true,
+      process: function (data, badgeData) {
+        downloads = data.version? data.version.downloads: data.versions[0].downloads;
+        version = data.version && data.version.num;
+        badgeData.text[1] = metric(downloads) + (version? ' version ' + version: ' latest version');
+        badgeData.colorscheme = downloadCountColor(downloads);
+      }
+    },
+    'v': {
+      name: 'crates.io',
+      version: true,
+      process: function (data, badgeData) {
+        version = data.version? data.version.num: data.crate.max_version;
+        var vdata = versionColor(version);
+        badgeData.text[1] = vdata.version;
+        badgeData.colorscheme = vdata.color;
+      }
+    },
+    'l': {
+      name: 'license',
+      version: false,
+      process: function (data, badgeData) {
+        badgeData.text[1] = data.crate.license;
+        badgeData.colorscheme = 'blue';
+      }
+    }
+  };
+  var behavior = modes[mode];
   var apiUrl = 'https://crates.io/api/v1/crates/' + crate;
-  if (version != null) {
+  if (version != null && behavior.version) {
     apiUrl += '/' + version;
   }
-  var badgeData = getBadgeData(mode == 'v'? 'crates.io': 'downloads', data);
+
+  var badgeData = getBadgeData(behavior.name, data);
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function (err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -366,27 +408,7 @@ cache(function (data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var downloads;
-
-      if (mode == 'd') {
-        downloads = data.crate? data.crate.downloads: data.version.downloads;
-        version = data.version && data.version.num;
-        badgeData.text[1] = metric(downloads) + (version? ' version ' + version: ' total');
-        badgeData.colorscheme = downloadCountColor(downloads);
-
-      } else if (mode == 'dv') {
-        downloads = data.version? data.version.downloads: data.versions[0].downloads;
-        version = data.version && data.version.num;
-        badgeData.text[1] = metric(downloads) + (version? ' version ' + version: ' latest version');
-        badgeData.colorscheme = downloadCountColor(downloads);
-
-      } else if (mode == 'v') {
-        version = data.version? data.version.num: data.crate.max_version;
-        var vdata = versionColor(version);
-        badgeData.text[1] = vdata.version;
-        badgeData.colorscheme = vdata.color;
-      }
-
+      behavior.process(data, badgeData);
       sendBadge(format, badgeData);
 
     } catch (e) {
