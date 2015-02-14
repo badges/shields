@@ -1,945 +1,1049 @@
-<!doctype html><meta charset=utf-8>
-<title> Shields.io: Quality metadata badges for open source projects </title>
-<meta name='viewport' content='width=device-width,initial-scale=1'>
-<meta name='description' content='We serve fast and scalable informational
-images as badges for GitHub, Travis CI, Jenkins, Wordpress and many more
-services. Use them to track the state of your projects, or for promotional
-purposes.'>
-<link rel='icon' type='image/png' href='favicon.png'>
-<link href='//fonts.googleapis.com/css?family=Lekton' rel='stylesheet'>
-<style>
-html { background-attachment: fixed;
-  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDgwIj48ZmlsdGVyIGlkPSJhIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii4wOCIgbnVtT2N0YXZlcz0iOCIgc3RpdGNoVGlsZXM9InN0aXRjaCIgc2VlZD0iMzQ2Ii8+PGZlQ29sb3JNYXRyaXggdmFsdWVzPSIxIDAgMCAwIDAgIDEgMCAwIDAgMCAgMSAwIDAgMCAuOSAgLjAxIDAgMCAwIC4wMSIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNhKSIvPjwvc3ZnPg==);
-}
-:root, dialog { text-align: center; font-family: Lekton, sans-serif; color: #534; }
-code, .code { font-family: Lekton; white-space: pre-wrap; padding: 0 4px;
-  background: #eef; border-radius: 4px; }
-input.short { width: 5em; }
-input { text-align: center; border: solid #b9a; color: #534; border-width: 0 0 1px 0;
-  width: 40%; height: 15px; padding: 0; background-color: transparent; }
-input:focus { outline: 0; }
-hr { width: 40%; border-width: 1px 0 0 0; }
-a.photo { text-decoration: none; }
-a.photo>img { padding: 2px; border: 1px solid grey; }
-ul { text-align: left; margin-left: 25%; }
-table { width: 50%; margin: auto; }
-table.centered > tbody > tr > td:first-child { text-align: right; }
-th, td { text-align: left; }
-h1, h2, h3 { font-style: italic; }
-h2::before { content: '☙ '; }
-h2::after { content: ' ❧'; }
-h2 { margin-top: 12mm; font-variant: small-caps; }
-hr.spacing { border: 0; display: block; height: 3mm; }
-.highlights { font-style: italic; }
-#main { transition: filter 1s, -webkit-filter 1s; }
-#main.blur { filter: url(#gaussian-blur); filter: blur(1px); -webkit-filter: blur(1px); }
-#copyDialog { display: none; position: fixed; width: 100%; top: 0; left: 0;
-  border: 0; background-color: rgba(50,50,55,0.7);
-  opacity: 0; transition: opacity 0.5s; }
-#copyForm { background: #fafaff; position: fixed; width: 100%;
-  top: 50%; left: 0; transform: translate(0, -80%);
-  border-top: 15px solid #eaeaff;
-  border-bottom: 15px solid #eaeaff;
-}
-#suggestButton { display: none; }
-table.badge > tbody > tr > td > img { cursor: pointer; }
-</style>
-
-<main id='main'>
-<img alt='Shields IO' src='logo.svg'/>
-<hr class='spacing'/>
-
-<p class=highlights>
-Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable &nbsp; No tracking
-</p>
-
-<form id='searchForm' action='javascript:void 0' autocomplete=off>
-  <input name='projectSearch' id='projectSearch' autofill=off autofocus placeholder='search / project URL'/>
-  <br>
-  <button id='suggestButton'> Suggest badges </button>
-</form>
-<a href='https://gratipay.com/Shields/' style='text-decoration:none;color:rgba(0,0,0,0.1)'>donate</a>
-
-<section id='suggestedBadges'></section>
-
-<h3> Build </h3>
-<table class='badge'><tbody>
-  <tr><th> Travis: </th>
-    <td><img src='/travis/joyent/node.svg' alt=''/></td>
-    <td><code>https://img.shields.io/travis/joyent/node.svg</code></td>
-  </tr>
-  <tr><th> Travis branch: </th>
-    <td><img src='/travis/joyent/node/v0.6.svg' alt=''/></td>
-    <td><code>https://img.shields.io/travis/joyent/node/v0.6.svg</code></td>
-  </tr>
-  <tr><th> Wercker: </th>
-    <td><img src='/wercker/ci/54330318b4ce963d50020750.svg' alt=''/></td>
-    <td><code>https://img.shields.io/wercker/ci/54330318b4ce963d50020750.svg</code></td>
-  </tr>
-  <tr><th> TeamCity CodeBetter: </th>
-    <td><img src='/teamcity/codebetter/bt428.svg' alt=''/></td>
-    <td><code>https://img.shields.io/teamcity/codebetter/bt428.svg</code></td>
-  </tr>
-  <tr><th> TeamCity (simple build status): </th>
-    <td><img src='/teamcity/http/teamcity.jetbrains.com/s/bt345.svg' alt=''/></td>
-    <td><code>https://img.shields.io/teamcity/http/teamcity.jetbrains.com/s/bt345.svg</code></td>
-  </tr>
-  <tr><th data-keywords='teamcity'> (full build status): </th>
-    <td>&nbsp;</td>
-    <td><code>https://img.shields.io/teamcity/http/teamcity.jetbrains.com/e/bt345.svg</code></td>
-  </tr>
-  <tr><th> AppVeyor: </th>
-    <td><img src='/appveyor/ci/gruntjs/grunt.svg' alt=''/></td>
-    <td><code>https://img.shields.io/appveyor/ci/gruntjs/grunt.svg</code></td>
-  </tr>
-  <tr><th> AppVeyor branch: </th>
-    <td><img src='/appveyor/ci/gruntjs/grunt/master.svg' alt=''/></td>
-    <td><code>https://img.shields.io/appveyor/ci/gruntjs/grunt/master.svg</code></td>
-  </tr>
-  <tr><th> Codeship: </th>
-    <td><img src='/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1.svg' alt=''/></td>
-    <td><code>https://img.shields.io/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1.svg</code></td>
-  </tr>
-  <tr><th> Codeship: </th>
-    <td><img src='/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1/master.svg' alt=''/></td>
-    <td><code>https://img.shields.io/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1/master.svg</code></td>
-  </tr>
-  <tr><th> CircleCI: </th>
-      <td><img src='/circleci/project/BrightFlair/PHP.Gt.svg' alt=''/></td>
-      <td><code>https://img.shields.io/circleci/project/BrightFlair/PHP.Gt.svg</code></td>
-  </tr>
-  <tr><th> CircleCI branch: </th>
-      <td><img src='/circleci/project/BrightFlair/PHP.Gt/master.svg' alt=''/></td>
-      <td><code>https://img.shields.io/circleci/project/BrightFlair/PHP.Gt/master.svg</code></td>
-  </tr>
-  <tr><th> Jenkins: </th>
-    <td><img src='/jenkins/s/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg' alt=''/></td>
-    <td><code>https://img.shields.io/jenkins/s/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg</code></td>
-  </tr>
-  <tr><th> Jenkins tests: </th>
-    <td><img src='/jenkins/t/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg' alt=''/></td>
-    <td><code>https://img.shields.io/jenkins/t/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg</code></td>
-  </tr>
-  <tr><th> Coveralls: </th>
-    <td><img src='/coveralls/jekyll/jekyll.svg' alt=''/></td>
-    <td><code>https://img.shields.io/coveralls/jekyll/jekyll.svg</code></td>
-  </tr>
-  <tr><th> Coveralls branch: </th>
-    <td><img src='/coveralls/jekyll/jekyll/master.svg' alt=''/></td>
-    <td><code>https://img.shields.io/coveralls/jekyll/jekyll/master.svg</code></td>
-  </tr>
-  <tr><th> SonarQube Coverage: </th>
-    <td><img src='/sonar/http/sonar.qatools.ru/ru.yandex.qatools.allure:allure-core:master/coverage.svg' alt=''/></td>
-    <td><code>https://img.shields.io/sonar/http/sonar.qatools.ru/ru.yandex.qatools.allure:allure-core:master/coverage.svg</code></td>
-  </tr>
-  <tr><th> TeamCity CodeBetter Coverage: </th>
-    <td><img src='/teamcity/coverage/bt1242.svg' alt=''/></td>
-    <td><code>https://img.shields.io/teamcity/coverage/bt1242.svg</code></td>
-  </tr>
-  <tr><th> Scrutinizer: </th>
-    <td><img src='/scrutinizer/g/filp/whoops.svg' alt=''/></td>
-    <td><code>https://img.shields.io/scrutinizer/g/filp/whoops.svg</code></td>
-  </tr>
-  <tr><th> Scrutinizer Coverage: </th>
-    <td><img src='/scrutinizer/coverage/g/filp/whoops.svg' alt=''/></td>
-    <td><code>https://img.shields.io/scrutinizer/coverage/g/filp/whoops.svg</code></td>
-  </tr>
-  <tr><th> Scrutinizer branch: </th>
-    <td><img src='/scrutinizer/coverage/g/phpmyadmin/phpmyadmin/master.svg' alt=''/></td>
-    <td><code>https://img.shields.io/scrutinizer/coverage/g/phpmyadmin/phpmyadmin/master.svg</code></td>
-  </tr>
-  <tr><th> Codecov: </th>
-    <td><img src='/codecov/c/github/codecov/example-python.svg' alt=''/></td>
-    <td><code>https://img.shields.io/codecov/c/github/codecov/example-python.svg</code></td>
-  </tr>
-  <tr><th> HHVM: </th>
-    <td><img src='/hhvm/symfony/symfony.svg' alt=''/></td>
-    <td><code>https://img.shields.io/hhvm/symfony/symfony.svg</code></td>
-  </tr>
-  <tr><th> HHVM (branch): </th>
-    <td><img src='/hhvm/symfony/symfony/2.4.0.0.svg' alt=''/></td>
-    <td><code>https://img.shields.io/hhvm/symfony/symfony/2.4.0.0.svg</code></td>
-  </tr>
-  <tr><th> SensioLabs Insight: </th>
-      <td><img src='/sensiolabs/i/45afb680-d4e6-4e66-93ea-bcfa79eb8a87.svg' alt=''/></td>
-      <td><code>https://img.shields.io/sensiolabs/i/45afb680-d4e6-4e66-93ea-bcfa79eb8a87.svg</code></td>
-  </tr>
-</tbody></table>
-<h3> Downloads </h3>
-<table class='badge'><tbody>
-  <tr><th data-keywords='node'> npm: </th>
-  <td><img src='/npm/dm/localeval.svg' alt=''/></td>
-  <td><code>https://img.shields.io/npm/dm/localeval.svg</code></td>
-  </tr>
-  <tr><th data-keywords='ruby'> Gem: </th>
-  <td><img src='/gem/dv/rails/stable.svg' alt=''/></td>
-  <td><code>https://img.shields.io/gem/dv/rails/stable.svg</code></td>
-  </tr>
-  <tr><th data-keywords='ruby'> Gem: </th>
-  <td><img src='/gem/dv/rails/4.1.0.svg' alt=''/></td>
-  <td><code>https://img.shields.io/gem/dv/rails/4.1.0.svg</code></td>
-  </tr>
-  <tr><th data-keywords='ruby'> Gem: </th>
-  <td><img src='/gem/dtv/rails.svg' alt=''/></td>
-  <td><code>https://img.shields.io/gem/dtv/rails.svg</code></td>
-  </tr>
-  <tr><th data-keywords='ruby'> Gem: </th>
-  <td><img src='/gem/dt/rails.svg' alt=''/></td>
-  <td><code>https://img.shields.io/gem/dt/rails.svg</code></td>
-  </tr>
-  <tr><th> NuGet: </th>
-  <td><img src='/nuget/dt/Microsoft.AspNet.Mvc.svg' alt=''/></td>
-  <td><code>https://img.shields.io/nuget/dt/Microsoft.AspNet.Mvc.svg</code></td>
-  </tr>
-  <tr><th> MyGet: </th>
-  <td><img src='/myget/yolodev/dt/FSharpSupport.svg' alt=''/></td>
-  <td><code>https://img.shields.io/myget/yolodev/dt/FSharpSupport.svg</code></td>
-  </tr>
-  <tr><th> Chocolatey: </th>
-  <td><img src='/chocolatey/dt/scriptcs.svg' alt=''/></td>
-  <td><code>https://img.shields.io/chocolatey/dt/scriptcs.svg</code></td>
-  </tr>
-  <tr><th> PyPI: </th>
-  <td><img src='/pypi/dm/Django.svg' alt=''/></td>
-  <td><code>https://img.shields.io/pypi/dm/Django.svg</code></td>
-  </tr>
-  <tr><th> PyPI: </th>
-  <td><img src='/pypi/dw/Django.svg' alt=''/></td>
-  <td><code>https://img.shields.io/pypi/dw/Django.svg</code></td>
-  </tr>
-  <tr><th> PyPI: </th>
-  <td><img src='/pypi/dd/Django.svg' alt=''/></td>
-  <td><code>https://img.shields.io/pypi/dd/Django.svg</code></td>
-  </tr>
-  <tr><th data-keywords='Rust'> Crates.io: </th>
-  <td><img src='/crates/d/rustc-serialize.svg' alt=''/></td>
-  <td><code>https://img.shields.io/crates/d/rustc-serialize.svg</code></td>
-  </tr>
-  <tr><th data-keywords='Rust'> Crates.io: </th>
-  <td><img src='/crates/dv/rustc-serialize.svg' alt=''/></td>
-  <td><code>https://img.shields.io/crates/dv/rustc-serialize.svg</code></td>
-  </tr>
-  <tr><th data-keywords='PHP'> Packagist: </th>
-  <td><img src='/packagist/dm/doctrine/orm.svg' alt=''/></td>
-  <td><code>https://img.shields.io/packagist/dm/doctrine/orm.svg</code></td>
-  </tr>
-  <tr><th data-keywords='PHP'> Packagist: </th>
-  <td><img src='/packagist/dd/doctrine/orm.svg' alt=''/></td>
-  <td><code>https://img.shields.io/packagist/dd/doctrine/orm.svg</code></td>
-  </tr>
-  <tr><th data-keywords='PHP'> Packagist: </th>
-  <td><img src='/packagist/dt/doctrine/orm.svg' alt=''/></td>
-  <td><code>https://img.shields.io/packagist/dt/doctrine/orm.svg</code></td>
-  </tr>
-  <tr><th> Hex.pm: </th>
-  <td><img src='/hexpm/dw/plug.svg' alt=''/></td>
-  <td><code>https://img.shields.io/hexpm/dw/plug.svg</code></td>
-  </tr>
-  <tr><th> Hex.pm: </th>
-  <td><img src='/hexpm/dd/plug.svg' alt=''/></td>
-  <td><code>https://img.shields.io/hexpm/dd/plug.svg</code></td>
-  </tr>
-  <tr><th> Hex.pm: </th>
-  <td><img src='/hexpm/dt/plug.svg' alt=''/></td>
-  <td><code>https://img.shields.io/hexpm/dt/plug.svg</code></td>
-  </tr>
-  <tr><th> Wordpress: </th>
-  <td><img src='/wordpress/plugin/dt/akismet.svg' alt=''/></td>
-  <td><code>https://img.shields.io/wordpress/plugin/dt/akismet.svg</code></td>
-  </tr>
-  <tr><th> SourceForge: </th>
-  <td><img src='/sourceforge/dm/sevenzip.svg' alt=''/></td>
-  <td><code>https://img.shields.io/sourceforge/dm/sevenzip.svg</code></td>
-  </tr>
-  <tr><th> SourceForge: </th>
-  <td><img src='/sourceforge/dw/sevenzip.svg' alt=''/></td>
-  <td><code>https://img.shields.io/sourceforge/dw/sevenzip.svg</code></td>
-  </tr>
-  <tr><th> SourceForge: </th>
-  <td><img src='/sourceforge/dd/sevenzip.svg' alt=''/></td>
-  <td><code>https://img.shields.io/sourceforge/dd/sevenzip.svg</code></td>
-  </tr>
-  <tr><th> SourceForge: </th>
-  <td><img src='/sourceforge/dt/sevenzip.svg' alt=''/></td>
-  <td><code>https://img.shields.io/sourceforge/dt/sevenzip.svg</code></td>
-  </tr>
-  <tr><th data-keywords='atom'> apm: </th>
-  <td><img src='/apm/dm/vim-mode.svg' alt=''/></td>
-  <td><code>https://img.shields.io/apm/dm/vim-mode.svg</code></td>
-  </tr>
-</tbody></table>
-<h3> Version </h3>
-<table class='badge'><tbody>
-  <tr><th data-keywords='node'> npm: </th>
-  <td><img src='/npm/v/npm.svg' alt=''/></td>
-  <td><code>https://img.shields.io/npm/v/npm.svg</code></td>
-  </tr>
-  <tr><th> node: </th>
-  <td><img src='/node/v/gh-badges.svg' alt=''/></td>
-  <td><code>https://img.shields.io/node/v/gh-badges.svg</code></td>
-  </tr>
-  <tr><th> PyPI: </th>
-  <td><img src='/pypi/v/nine.svg' alt=''/></td>
-  <td><code>https://img.shields.io/pypi/v/nine.svg</code></td>
-  </tr>
-  <tr><th data-keywords='ruby'> Gem: </th>
-  <td><img src='/gem/v/formatador.svg' alt=''/></td>
-  <td><code>https://img.shields.io/gem/v/formatador.svg</code></td>
-  </tr>
-  <tr><th> Hackage: </th>
-  <td><img src='/hackage/v/lens.svg' alt=''/></td>
-  <td><code>https://img.shields.io/hackage/v/lens.svg</code></td>
-  </tr>
-  <tr><th data-keywords='Rust'> Crates.io: </th>
-  <td><img src='/crates/v/rustc-serialize.svg' alt=''/></td>
-  <td><code>https://img.shields.io/crates/v/rustc-serialize.svg</code></td>
-  </tr>
-  <tr><th data-keywords='PHP'> Packagist: </th>
-  <td><img src='/packagist/v/symfony/symfony.svg' alt=''/></td>
-  <td><code>https://img.shields.io/packagist/v/symfony/symfony.svg</code></td>
-  </tr>
-  <tr><th data-keywords='PHP'> Packagist Pre Release: </th>
-  <td><img src='/packagist/vpre/symfony/symfony.svg' alt=''/></td>
-  <td><code>https://img.shields.io/packagist/vpre/symfony/symfony.svg</code></td>
-  </tr>
-  <tr><th> CocoaPods: </th>
-  <td><img src='/cocoapods/v/AFNetworking.svg' alt='' /></td>
-  <td><code>https://img.shields.io/cocoapods/v/AFNetworking.svg</code></td>
-  </tr>
-  <tr><th> Bower: </th>
-  <td><img src='/bower/v/bootstrap.svg' alt='' /></td>
-  <td><code>https://img.shields.io/bower/v/bootstrap.svg</code></td>
-  </tr>
-  <tr><th> Pub: </th>
-  <td><img src='/pub/v/box2d.svg' alt=''/></td>
-  <td><code>https://img.shields.io/pub/v/box2d.svg</code></td>
-  </tr>
-  <tr><th> Hex.pm: </th>
-  <td><img src='/hexpm/v/plug.svg' alt=''/></td>
-  <td><code>https://img.shields.io/hexpm/v/plug.svg</code></td>
-  </tr>
-  <tr><th> GitHub tag: </th>
-  <td><img src='/github/tag/strongloop/express.svg' alt=''/></td>
-  <td><code>https://img.shields.io/github/tag/strongloop/express.svg</code></td>
-  </tr>
-  <tr><th> GitHub release: </th>
-  <td><img src='/github/release/qubyte/rubidium.svg' alt=''/></td>
-  <td><code>https://img.shields.io/github/release/qubyte/rubidium.svg</code></td>
-  </tr>
-  <tr><th> Chef cookbook: </th>
-  <td><img src='/cookbook/v/chef-sugar.svg' alt=''/></td>
-  <td><code>https://img.shields.io/cookbook/v/chef-sugar.svg</code></td>
-  </tr>
-  <tr><th> NuGet: </th>
-  <td><img src='/nuget/v/Nuget.Core.svg' alt=''/></td>
-  <td><code>https://img.shields.io/nuget/v/Nuget.Core.svg</code></td>
-  </tr>
-  <tr><th> NuGet Pre Release: </th>
-  <td><img src='/nuget/vpre/Nuget.Core.svg' alt=''/></td>
-  <td><code>https://img.shields.io/nuget/vpre/Nuget.Core.svg</code></td>
-  </tr>
-  <tr><th> MyGet: </th>
-  <td><img src='/myget/yolodev/v/FSharpSupport.svg' alt=''/></td>
-  <td><code>https://img.shields.io/myget/yolodev/v/FSharpSupport.svg</code></td>
-  </tr>
-  <tr><th> MyGet Pre Release: </th>
-  <td><img src='/myget/yolodev/vpre/FSharpSupport.svg' alt=''/></td>
-  <td><code>https://img.shields.io/myget/yolodev/vpre/FSharpSupport.svg</code></td>
-  </tr>
-  <tr><th> Chocolatey: </th>
-  <td><img src='/chocolatey/v/git.svg' alt=''/></td>
-  <td><code>https://img.shields.io/chocolatey/v/git.svg</code></td>
-  </tr>
-  <tr><th> Puppet Forge: </th>
-  <td><img src='/puppetforge/v/vStone/percona.svg' alt=''/></td>
-  <td><code>https://img.shields.io/puppetforge/v/vStone/percona.svg</code></td>
-  </tr>
-  <tr><th> Maven Central: </th>
-  <td><img src='/maven-central/v/org.apache.maven/apache-maven.svg' alt=''/></td>
-  <td><code>https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg</code></td>
-  </tr>
-  <tr><th> Wordpress plugin: </th>
-  <td><img src='/wordpress/plugin/v/akismet.svg' alt=''/></td>
-  <td><code>https://img.shields.io/wordpress/plugin/v/akismet.svg</code></td>
-  </tr>
-  <tr><th> Wordpress: </th>
-  <td><img src='/wordpress/v/akismet.svg' alt=''/></td>
-  <td><code>https://img.shields.io/wordpress/v/akismet.svg</code></td>
-  </tr>
-  <tr><th data-keywords='atom'> apm: </th>
-  <td><img src='/apm/v/vim-mode.svg' alt=''/></td>
-  <td><code>https://img.shields.io/apm/v/vim-mode.svg</code></td>
-  </tr>
-</tbody></table>
-
-<h3> Miscellaneous </h3>
-<table class='badge'><tbody>
-  <tr><th> Gratipay: </th>
-    <td><img src='/gratipay/JSFiddle.svg' alt=''/></td>
-    <td><code>https://img.shields.io/gratipay/JSFiddle.svg</code></td>
-  </tr>
-  <tr><th> Bountysource: </th>
-    <td><img src='/bountysource/team/mozilla-core/activity.svg' alt=''/></td>
-    <td><code>https://img.shields.io/bountysource/team/mozilla-core/activity.svg</code></td>
-  </tr>
-  <tr><th> Code Climate: </th>
-    <td><img src='/codeclimate/github/kabisaict/flow.svg' alt=''/></td>
-    <td><code>https://img.shields.io/codeclimate/github/kabisaict/flow.svg</code></td>
-  </tr>
-  <tr><th> Code Climate: </th>
-    <td><img src='/codeclimate/coverage/github/triAGENS/ashikawa-core.svg' alt=''/></td>
-    <td><code>https://img.shields.io/codeclimate/coverage/github/triAGENS/ashikawa-core.svg</code></td>
-  </tr>
-  <tr><th> Gemnasium: </th>
-    <td><img src='/gemnasium/mathiasbynens/he.svg' alt=''/></td>
-    <td><code>https://img.shields.io/gemnasium/mathiasbynens/he.svg</code></td>
-  </tr>
-  <tr><th> David: </th>
-    <td><img src='/david/strongloop/express.svg' alt=''/></td>
-    <td><code>https://img.shields.io/david/strongloop/express.svg</code></td>
-  </tr>
-  <tr><th> David: </th>
-    <td><img src='/david/dev/strongloop/express.svg' alt=''/></td>
-    <td><code>https://img.shields.io/david/dev/strongloop/express.svg</code></td>
-  </tr>
-  <tr><th> David: </th>
-    <td><img src='/david/peer/webcomponents/generator-element.svg' alt=''/></td>
-    <td><code>https://img.shields.io/david/peer/webcomponents/generator-element.svg</code></td>
-  </tr>
-  <tr><th> Hackage-Deps: </th>
-    <td><img src='/hackage-deps/v/lens.svg' alt=''/></td>
-    <td><code>https://img.shields.io/hackage-deps/v/lens.svg</code></td>
-  </tr>
-  <tr><th> Requires.io: </th>
-    <td><img src='/requires/github/celery/celery.svg' alt=''/></td>
-    <td><code>https://img.shields.io/requires/github/celery/celery.svg</code></td>
-  </tr>
-  <tr><th> VersionEye: </th>
-    <td><img src='/versioneye/d/ruby/rails.svg' alt=''/></td>
-    <td><code>https://img.shields.io/versioneye/d/ruby/rails.svg</code></td>
-  </tr>
-  <tr><th data-keywords='PHP'> Packagist: </th>
-    <td><img src='/packagist/l/doctrine/orm.svg' alt=''/></td>
-    <td><code>https://img.shields.io/packagist/l/doctrine/orm.svg</code></td>
-  </tr>
-  <tr><th data-keywords='node'> npm: </th>
-    <td><img src='/npm/l/express.svg' alt=''/></td>
-    <td><code>https://img.shields.io/npm/l/express.svg</code></td>
-  </tr>
-  <tr><th data-keywords='atom'> apm: </th>
-    <td><img src='/apm/l/vim-mode.svg' alt=''/></td>
-    <td><code>https://img.shields.io/apm/l/vim-mode.svg</code></td>
-  </tr>
-  <tr><th> PyPI: </th>
-    <td><img src='/pypi/l/Django.svg' alt=''/></td>
-    <td><code>https://img.shields.io/pypi/l/Django.svg</code></td>
-  </tr>
-  <tr><th> Hex.pm: </th>
-    <td><img src='/hexpm/l/plug.svg' alt=''/></td>
-    <td><code>https://img.shields.io/hexpm/l/plug.svg</code></td>
-  </tr>
-  <tr><th> CocoaPods: </th>
-    <td><img src='/cocoapods/l/AFNetworking.svg' alt='' /></td>
-    <td><code>https://img.shields.io/cocoapods/l/AFNetworking.svg</code></td>
-  </tr>
-  <tr><th> CocoaPods: </th>
-    <td><img src='/cocoapods/p/AFNetworking.svg' alt='' /></td>
-    <td><code>https://img.shields.io/cocoapods/p/AFNetworking.svg</code></td>
-  </tr>
-  <tr><th> Wheelmap: </th>
-    <td><img src='/wheelmap/a/2323004600.svg' alt='' /></td>
-    <td><code>https://img.shields.io/wheelmap/a/2323004600.svg</code></td>
-  </tr>
-  <tr><th> GitHub issues: </th>
-  <td><img src='/github/issues/badges/shields.svg' alt=''/></td>
-  <td><code>https://img.shields.io/github/issues/badges/shields.svg</code></td>
-  </tr>
-  <tr><th data-keywords='GitHub'></th>
-  <td><img src='/github/issues-raw/badges/shields.svg' alt=''/></td>
-  <td><code>https://img.shields.io/github/issues-raw/badges/shields.svg</code></td>
-  </tr>
-  <tr><th> GitHub forks: </th>
-  <td><img src='/github/forks/badges/shields.svg' alt=''/></td>
-  <td><code>https://img.shields.io/github/forks/badges/shields.svg</code></td>
-  </tr>
-  <tr><th> GitHub stars: </th>
-  <td><img src='/github/stars/badges/shields.svg' alt=''/></td>
-  <td><code>https://img.shields.io/github/stars/badges/shields.svg</code></td>
-  </tr>
-  <tr><th> GitHub followers: </th>
-  <td><img src='/github/followers/espadrine.svg' alt=''/></td>
-  <td><code>https://img.shields.io/github/followers/espadrine.svg</code></td>
-  </tr>
-  <tr><th> Wordpress rating: </th>
-  <td><img src='/wordpress/plugin/r/akismet.svg' alt=''/></td>
-  <td><code>https://img.shields.io/wordpress/plugin/r/akismet.svg</code></td>
-  </tr>
-  <tr><th> Codacy: </th>
-  <td><img src='/codacy/e27821fb6289410b8f58338c7e0bc686.svg' alt=''/></td>
-  <td><code>https://img.shields.io/codacy/e27821fb6289410b8f58338c7e0bc686.svg</code></td>
-  </tr>
-  <tr><th> Libscore: </th>
-  <td><img src='/libscore/s/jQuery.svg' alt=''/></td>
-  <td><code>https://img.shields.io/libscore/s/jQuery.svg</code></td>
-  </tr>
-  <tr><th> Talk.ai: </th>
-  <td><img src='/talk/t/9c81ff703b.svg' alt=''/></td>
-  <td><code>https://img.shields.io/talk/t/9c81ff703b.svg</code></td>
-  </tr>
-</tbody></table>
-
-<h2> Your Badge </h2>
-
-<form action='javascript:makeImage()' id='imageMaker'>
-  <input class='short' name='subject' placeholder='subject'/>
-  <input class='short' name='status' placeholder='status'/>
-  <input class='short' name='color' list='default-colors' placeholder='color'/>
-  <datalist id='default-colors'>
-    <option value='brightgreen'>
-    <option value='green'>
-    <option value='yellowgreen'>
-    <option value='yellow'>
-    <option value='orange'>
-    <option value='red'>
-    <option value='lightgrey'>
-    <option value='blue'>
-  </datalist>
-  <button>Make Badge</button>
-</form>
-<hr class='spacing'/>
-
-<p>
-<code><span id='imgUrlPrefix'>/badge/</span>&lt;SUBJECT&gt;-&lt;STATUS&gt;-&lt;COLOR&gt;.svg</code>
-</p>
-<table class=centered><tbody>
-  <tr><td>   Dashes <code>--</code>
-  </td><td>  →
-  </td><td>  <code>-</code> Dash
-  </td></tr>
-  <tr><td>   Underscores <code>__</code>
-  </td><td>  →
-  </td><td>  <code>_</code> Underscore <br/>
-  </td></tr>
-  <tr><td>   <code>_</code> or Space <code>&nbsp;</code>
-  </td><td>  →
-  </td><td>  <code>&nbsp;</code> Space
-  </td></tr>
-</tbody></table>
-
-<p>
-<img src='/badge/color-brightgreen-brightgreen.svg' alt='brightgreen'/>
-<img src='/badge/color-green-green.svg' alt='green'/>
-<img src='/badge/color-yellowgreen-yellowgreen.svg' alt='yellowgreen'/>
-<img src='/badge/color-yellow-yellow.svg' alt='yellow'/>
-<img src='/badge/color-orange-orange.svg' alt='orange'/>
-<img src='/badge/color-red-red.svg' alt='red'/>
-<img src='/badge/color-lightgrey-lightgrey.svg' alt='lightgrey'/>
-<img src='/badge/color-blue-blue.svg' alt='blue'/>
-<img src='/badge/color-ff69b4-ff69b4.svg' alt='ff69b4'/>
-</p>
-
-<h2> Styles </h2>
-<p>
-The following styles are available (flat is the default as of Feb 1st 2015):
-</p>
-<table><tbody>
-  <tr>
-  <td><img src='/badge/style-plastic-green.svg?style=plastic' alt=''/></td>
-  <td><code>https://img.shields.io/badge/style-plastic-green.svg?style=plastic</code></td>
-  </tr>
-  <tr>
-  <td><img src='/badge/style-flat-green.svg?style=flat' alt=''/></td>
-  <td><code>https://img.shields.io/badge/style-flat-green.svg?style=flat</code></td>
-  </tr>
-  <tr>
-  <td><img src='/badge/style-flat--squared-green.svg?style=flat-square' alt=''/></td>
-  <td><code>https://img.shields.io/badge/style-flat--squared-green.svg?style=flat-square</code></td>
-  </tr>
-</tbody></table>
-
-<p>
-Override the default left-hand-side text with
-<code>?label=wow so healthy</code>.
-</p>
-<p>
-We also support <code>.json</code>, <code>.png</code> and a few others,
-but use them responsibly.
-</p>
-
-<h2> Like This? </h2>
-
-<p>
-Tell your favorite badge service to use it! <br/>
-And tell us, we might be able to bring it to you anyway!
-</p>
-<p>
-<a href="https://twitter.com/Shields_io" class="twitter-follow-button"
-  data-show-count="false">Follow @Shields_io</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-<a href='https://www.gittip.com/Shields/'><img src='/gittip/shields.svg?style=flat' alt='Tip us!'/></a>
-<iframe src="http://ghbtns.com/github-btn.html?user=badges&amp;repo=shields&amp;type=fork&amp;count=true"
-  style="border:0; background-color:transparent"
-  width="95" height="20"></iframe>
-</p>
-<p>
-<a href='https://github.com/h5bp/lazyweb-requests/issues/150'>This</a>
-is where the current server got started.
-</p>
-
-<h2> Contributors </h2>
-
-<a class='photo' href='https://github.com/espadrine'>
-  <img alt='espadrine' src='https://gravatar.com/avatar/8c3bee0764c781e1b0b8c2e53f0f11fe'>
-</a>
-<a class='photo' href='https://github.com/mathiasbynens'>
-  <img alt='mathiasbynens' src='https://gravatar.com/avatar/24e08a9ea84deb17ae121074d0f17125'>
-</a>
-<a class='photo' href='https://github.com/olivierlacan'>
-  <img alt='olivierlacan' src='https://gravatar.com/avatar/6e77509d7891c1d2230f3240a5652b6e'>
-</a>
-<a class='photo' href='https://github.com/nathany'>
-  <img alt='nathany' src='https://gravatar.com/avatar/7d0978b275a362d11283396a929aee65'>
-</a>
-<a class='photo' href='https://github.com/whit537'>
-  <img alt='whit537' src='https://gravatar.com/avatar/fb054b407a6461e417ee6b6ae084da37'>
-</a>
-<a class='photo' href='https://github.com/kura'>
-  <img alt='kura' src='https://gravatar.com/avatar/6db32988bd24b2f19231a7e88a74455a'>
-</a>
-<a class='photo' href='https://github.com/maxogden'>
-  <img alt='maxogden' src='https://avatars1.githubusercontent.com/u/39759?s=80'>
-</a>
-<a class='photo' href='https://github.com/seanlinsley'>
-  <img alt='seanlinsley' src='https://avatars.githubusercontent.com/u/688886?s=80'>
-</a>
-<br>
-<a class='photo' href='https://github.com/alrra'>
-  <img alt='alrra' src='https://avatars.githubusercontent.com/u/1223565?s=80'>
-</a>
-<a class='photo' href='https://github.com/jublo'>
-  <img alt='jublo' src='https://avatars.githubusercontent.com/u/6348321?s=80'>
-</a>
-<a class='photo' href='https://github.com/g105b'>
-  <img alt='g105b' src='https://avatars2.githubusercontent.com/u/358014?s=80'>
-</a>
-<a class='photo' href='https://github.com/sebmck'>
-  <img alt='sebmck' src='https://avatars.githubusercontent.com/u/853712?s=80'>
-</a>
-<a class='photo' href='https://github.com/avanderhoorn'>
-  <img alt='avanderhoorn' src='https://www.gravatar.com/avatar/6af12b64c2fe22af3b27848b8eedd992'>
-</a>
-<a class='photo' href='https://github.com/stefanjudis'>
-  <img alt='stefanjudis' src='https://gravatar.com/avatar/22725c2d3eb331146549bf0d5d3c050c'>
-</a>
-<a class='photo' href='https://github.com/jmalloc'>
-  <img alt='jmalloc' src='https://gravatar.com/avatar/7a6666c5798fb54d1d4ebde0600567f3'>
-</a>
-<a class='photo' href='https://github.com/ezzatron'>
-  <img alt='ezzatron' src='https://gravatar.com/avatar/95ce5a53e68fe5287fadde649da8c6c7'>
-</a>
-<a class='photo' href='https://github.com/brettcannon'>
-  <img alt='brettcannon' src='https://avatars.githubusercontent.com/u/54418?s=80'>
-</a>
-<a class='photo' href='https://github.com/CodeBlock'>
-  <img alt='CodeBlock' src='https://avatars.githubusercontent.com/u/43930?s=80'>
-</a>
-<a class='photo' href='https://github.com/Mikulas'>
-  <img alt='Mikulas' src='https://gravatar.com/avatar/daa06ea257d7820ff84735a55b931ec8'>
-</a>
-<br>
-<a class='photo' href='https://github.com/seggidins'>
-  <img alt='seggidins' src='https://avatars.githubusercontent.com/u/1946610?s=80'>
-</a>
-<a class='photo' href='https://github.com/SonicHedgehog'>
-  <img alt='SonicHedgehog' src='https://avatars.githubusercontent.com/u/652793?s=80'>
-</a>
-<a class='photo' href='https://github.com/akashivskyy'>
-  <img alt='akashivskyy' src='https://avatars.githubusercontent.com/u/565231?s=80'>
-</a>
-<a class='photo' href='https://github.com/rmasters'>
-  <img alt='rmasters' src='https://avatars.githubusercontent.com/u/34284?s=80'>
-</a>
-<a class='photo' href='https://github.com/cainus'>
-  <img alt='cainus' src='https://gravatar.com/avatar/c8475420ebca73833e55ccf57d8d7500'>
-</a>
-<a class='photo' href='https://github.com/jbowes'>
-  <img alt='jbowes' src='https://gravatar.com/avatar/363ada7cda10d5eae5eeb7704278fb51'>
-</a>
-<a class='photo' href='https://github.com/rafalchmiel'>
-  <img alt='rafalchmiel' src='https://gravatar.com/avatar/6dd56028986d5e6c478e649ec229092b'>
-</a>
-<a class='photo' href='https://github.com/fjcaetano'>
-  <img alt='fjcaetano' src='https://gravatar.com/avatar/3b339db885930633b86d73b97a2ca1c0'>
-</a>
-<a class='photo' href='https://github.com/hughsk'>
-  <img alt='hughsk' src='https://gravatar.com/avatar/133cd05eb39521d55fb7a08c787925e2'>
-</a>
-<a class='photo' href='https://github.com/qubyte'>
-  <img alt='qubyte' src='https://gravatar.com/avatar/2b8729c02bc2fb886b32ed23cb7b0a31'>
-</a>
-<a class='photo' href='https://github.com/khellang'>
-  <img alt='khellang' src='https://gravatar.com/avatar/b3616645c168b0b8a65e109a6b1cb010'>
-</a>
-<a class='photo' href='https://github.com/nitram509'>
-  <img alt='nitram509' src='https://www.gravatar.com/avatar/fa01e907fd400c42d481f431c4410954.png'>
-</a>
-<p><small>:wq</small></p>
-</main>
-
-<dialog id='copyDialog'>
-<form id='copyForm'>
-  <p><img id='copyImg'>
-  </p><p><label> Link <input type='url' name='url'/></label>
-  </p><p><label> Image <input type='url' name='img'/></label>
-  </p><p><label> Style
-    <select name='style'>
-      <option value='plastic'>          plastic
-      <option value='flat' selected>    flat
-      <option value='flat-square'>      flat-square
-    </select>
-  </label>
-  </p><p> Markdown
-  <input class=code id=copyMarkdown>
-  </p><p> reStructuredText
-  <input class=code id=copyreStructuredText>
-</form>
-</dialog>
-
-<svg style='height:0'>
-  <filter id='gaussian-blur'>
-    <feGaussianBlur stdDeviation='0.7' />
-  </filter>
-</svg>
-
-<script>
-// Search
-var searchBadgeDb = {index: [], tr: []};
-function searchBadgeDbInit() {
-  searchBadgeDb = {index: [], tr: []};
-  var trs = document.querySelectorAll('table.badge tr');
-  for (var i = 0; i < trs.length; i++) {
-    var tr = trs[i];
-    var th = tr.firstElementChild;
-    var keywords = th.dataset.keywords? th.dataset.keywords: '';
-    searchBadgeDb.index.push(th.textContent + ' ' + keywords);
-    searchBadgeDb.tr.push(tr);
-  }
-  projectSearch.addEventListener('input', searchBadge);
-}
-
-function searchBadge(event) {
-  var query = event.target.value;
-  var regex = new RegExp(query, 'i');  // Case-insensitive
-  for (var i = 0; i < searchBadgeDb.index.length; i++) {
-    if (regex.test(searchBadgeDb.index[i])) {
-      searchBadgeDb.tr[i].removeAttribute('style');
-    } else {
-      searchBadgeDb.tr[i].style.display = 'none';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="We serve fast and scalable informational images as badges for GitHub, Travis CI, Jenkins, Wordpress and many more services. Use them to track the state of your projects, or for promotional purposes.">
+  <title>Shields.io: Quality metadata badges for open source projects</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link href="//fonts.googleapis.com/css?family=Lekton" rel="stylesheet">
+  <style>
+    html { background-attachment: fixed;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDgwIj48ZmlsdGVyIGlkPSJhIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii4wOCIgbnVtT2N0YXZlcz0iOCIgc3RpdGNoVGlsZXM9InN0aXRjaCIgc2VlZD0iMzQ2Ii8+PGZlQ29sb3JNYXRyaXggdmFsdWVzPSIxIDAgMCAwIDAgIDEgMCAwIDAgMCAgMSAwIDAgMCAuOSAgLjAxIDAgMCAwIC4wMSIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNhKSIvPjwvc3ZnPg==');
     }
-  }
-  // If it has the format of a url, show the suggest button.
-  if (isUrl(query)) {
-    showSuggestButton();
-  } else {
-    hideSuggestButton();
-  }
-}
-
-document.addEventListener('DOMContentLoaded', searchBadgeDbInit);
-
-// Suggested badges search
-function isUrl(url) {
-  var http = url.slice(0, 5) === 'http:';
-  var https = url.slice(0, 6) === 'https:';
-  return http || https;
-}
-
-function showSuggestButton() {
-  suggestButton.style.display = 'inline';
-}
-
-function hideSuggestButton() {
-  suggestButton.style.display = 'none';
-}
-
-function showSuggestedBadges(badges) {
-  var html = '<table class="badge"><tbody>';
-  for (var i = 0; i < badges.length; i++) {
-    var link = badges[i].link;
-    var badge = badges[i].badge;
-    var name = badges[i].name + ':';
-    html += '<tr><th data-link="' + link + '">' + name + '</th>' +
-      '<td><img src="' + badge + '"></td>' +
-      '<td><code>' + badge + '</code></td>' +
-      '</tr>';
-  }
-  html += '</tbody></table>';
-  suggestedBadges.innerHTML = html;
-  suggestedBadges.style.display = 'block';
-}
-function suggestBadges(event) {
-  var url = event.target.projectSearch.value;
-  if (isUrl(url)) {
-    ajax('suggest/v1', {url:url}, function(err, res) {
-      if (err != null) { return; }
-      showSuggestedBadges(res.badges);
-      suggestButton.disabled = false;
-      searchBadgeDbInit();
-      markupDialogInit();
-    });
-    suggestButton.disabled = true;
-  }
-}
-
-function suggestBadgeInit() {
-  searchForm.addEventListener('submit', suggestBadges);
-}
-
-document.addEventListener('DOMContentLoaded', suggestBadgeInit);
-
-
-// Markup copier dialog
-function markupDialogInit() {
-  var trs = document.querySelectorAll('table.badge tr');
-  for (var i = 0; i < trs.length; i++) {
-    var tr = trs[i];
-    var target = tr.querySelector('img');
-    if (target) {
-      target.addEventListener('click', makeMarkupDialogListener(tr));
+    :root, dialog { text-align: center; font-family: Lekton, sans-serif; color: #534; }
+    code, .code { font-family: Lekton, menlo, sans-serif; white-space: pre-wrap; padding: 0 4px;
+      background: #eef; border-radius: 4px; }
+    input.short { width: 5em; }
+    input { text-align: center; border: solid #b9a; color: #534; border-width: 0 0 1px 0;
+      width: 40%; height: 15px; padding: 0; background-color: transparent; }
+    input:focus { outline: 0; }
+    hr { width: 40%; border-width: 1px 0 0 0; }
+    a.photo { text-decoration: none; }
+    a.photo>img { padding: 2px; border: 1px solid grey; }
+    ul { text-align: left; margin-left: 25%; }
+    table { width: 50%; margin: auto; }
+    table.centered > tbody > tr > td:first-child { text-align: right; }
+    th, td { text-align: left; }
+    h1, h2, h3 { font-style: italic; }
+    h2::before { content: "☙ "; }
+    h2::after { content: " ❧"; }
+    h2 { margin-top: 12mm; font-variant: small-caps; }
+    hr.spacing { border: 0; display: block; height: 3mm; }
+    .highlights { font-style: italic; }
+    #main { transition: filter 1s, -webkit-filter 1s; }
+    #main.blur { filter: url(#gaussian-blur); filter: blur(1px); -webkit-filter: blur(1px); }
+    #copyDialog { display: none; position: fixed; width: 100%; top: 0; left: 0;
+      border: 0; background-color: rgba(50,50,55,0.7);
+      opacity: 0; transition: opacity 0.5s; }
+    #copyForm { background: #fafaff; position: fixed; width: 100%;
+      top: 50%; left: 0; transform: translate(0, -80%);
+      border-top: 15px solid #eaeaff;
+      border-bottom: 15px solid #eaeaff;
     }
-  }
-}
+    #suggestButton { display: none; }
+    table.badge > tbody > tr > td > img { cursor: pointer; }
+  </style>
+</head>
 
-function makeMarkupDialogListener(tr) {
-  return function(event) { markupDialog(tr); event.stopPropagation(); };
-}
+<body>
+  <main id="main">
+    <img alt="Shields IO" src="logo.svg">
 
-document.addEventListener('DOMContentLoaded', markupDialogInit);
+    <hr class="spacing">
 
-var copyFormUrlEventListener;
+    <p class="highlights">Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable &nbsp; No tracking</p>
 
-function markupDialog(tr) {
-  // Set up the data we have.
-  // Trim the ending colon `:`.
-  var trname = tr.firstElementChild.textContent.trim().slice(0, -1);
-  var trimg = tr.querySelector('img').src;
-  var th = tr.firstElementChild;
-  var link = th.dataset.link? th.dataset.link: '';
-  copyForm.img.value = trimg;
-  copyForm.url.value = link;
-  // Set up the input listeners.
-  copyForm.url.removeEventListener('input', copyFormUrlEventListener);
-  copyForm.img.removeEventListener('input', copyFormUrlEventListener);
-  copyForm.style.removeEventListener('change', copyFormUrlEventListener);
-  copyFormUrlEventListener = function(event) {
-    var url = copyForm.url.value;
-    var img = copyForm.img.value;
-    var style = copyForm.style.value;
-    // Default style doesn't show.
-    if (style !== 'flat') { img += '?style=' + style; }
-    var md = '[![' + trname + '](' + img + ')](' + url + ')';
-    var rst = '.. image:: ' + img + '   :target: ' + url;
-    copyMarkdown.value = md;
-    copyreStructuredText.value = rst;
-    copyImg.src = img;
-  };
-  copyForm.url.addEventListener('input', copyFormUrlEventListener);
-  copyForm.img.addEventListener('input', copyFormUrlEventListener);
-  copyForm.style.addEventListener('change', copyFormUrlEventListener);
-  // Set up the window position
-  var h = document.documentElement.offsetHeight;
-  copyDialog.style.height = h + 'px';
-  // Set up hide listener and show.
-  copyFormUrlEventListener();
-  markupDialogShow();
-}
+    <form id="searchForm" action="javascript:void 0" autocomplete="off">
+      <input name="projectSearch" id="projectSearch" autofill="off" autofocus placeholder="search / project URL"/>
+      <br>
+      <button id="suggestButton">Suggest badges</button>
+    </form>
 
-var isFirefox = /Firefox\/[\.0-9]+$/.test(navigator.userAgent);
+    <a href="https://gratipay.com/Shields/" style="text-decoration:none;color:rgba(0,0,0,0.1)">donate</a>
 
-function markupDialogShow() {
-  document.body.addEventListener('click', markupDialogHide);
-  // We must draw it once displayed before changing the opacity to transition.
-  setTimeout(function() { copyDialog.style.opacity = '1'; }, 20);
-  if (!isFirefox) {
-    main.classList.add('blur');
-  } else {
-    // We must delay blurring to avoid sloppy transition in Firefox.
-    setTimeout(function() { main.classList.add('blur'); }, 500);
-  }
-  copyDialog.style.display = 'block';
-}
+    <section id="suggestedBadges"></section>
 
-function markupDialogHide() {
-  document.body.removeEventListener('click', markupDialogHide);
-  copyDialog.style.opacity = '0';
-  main.classList.remove('blur');
-  setTimeout(function() { copyDialog.style.display = 'none'; }, 500);
-}
+    <h3>Build</h3>
+    <table class="badge">
+      <tr>
+        <th>Travis:</th>
+        <td><img src="/travis/joyent/node.svg" alt=""></td>
+        <td><code>https://img.shields.io/travis/joyent/node.svg</code></td>
+      </tr>
+      <tr>
+        <th>Travis branch:</th>
+        <td><img src="/travis/joyent/node/v0.6.svg" alt=""></td>
+        <td><code>https://img.shields.io/travis/joyent/node/v0.6.svg</code></td>
+      </tr>
+      <tr>
+        <th>Wercker:</th>
+        <td><img src="/wercker/ci/54330318b4ce963d50020750.svg" alt=""></td>
+        <td><code>https://img.shields.io/wercker/ci/54330318b4ce963d50020750.svg</code></td>
+      </tr>
+      <tr>
+        <th>TeamCity CodeBetter:</th>
+        <td><img src="/teamcity/codebetter/bt428.svg" alt=""></td>
+        <td><code>https://img.shields.io/teamcity/codebetter/bt428.svg</code></td>
+      </tr>
+      <tr>
+        <th>TeamCity (simple build status):</th>
+        <td><img src="/teamcity/http/teamcity.jetbrains.com/s/bt345.svg" alt=""></td>
+        <td><code>https://img.shields.io/teamcity/http/teamcity.jetbrains.com/s/bt345.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="teamcity"> (full build status): </th>
+        <td>&nbsp;</td>
+        <td><code>https://img.shields.io/teamcity/http/teamcity.jetbrains.com/e/bt345.svg</code></td>
+      </tr>
+      <tr>
+        <th>AppVeyor:</th>
+        <td><img src="/appveyor/ci/gruntjs/grunt.svg" alt=""></td>
+        <td><code>https://img.shields.io/appveyor/ci/gruntjs/grunt.svg</code></td>
+      </tr>
+      <tr>
+        <th>AppVeyor branch:</th>
+        <td><img src="/appveyor/ci/gruntjs/grunt/master.svg" alt=""></td>
+        <td><code>https://img.shields.io/appveyor/ci/gruntjs/grunt/master.svg</code></td>
+      </tr>
+      <tr>
+        <th>Codeship:</th>
+        <td><img src="/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1.svg" alt=""></td>
+        <td><code>https://img.shields.io/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1.svg</code></td>
+      </tr>
+      <tr>
+        <th>Codeship:</th>
+        <td><img src="/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1/master.svg" alt=""></td>
+        <td><code>https://img.shields.io/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1/master.svg</code></td>
+      </tr>
+      <tr>
+        <th>CircleCI:</th>
+          <td><img src="/circleci/project/BrightFlair/PHP.Gt.svg" alt=""></td>
+          <td><code>https://img.shields.io/circleci/project/BrightFlair/PHP.Gt.svg</code></td>
+      </tr>
+      <tr>
+        <th>CircleCI branch:</th>
+          <td><img src="/circleci/project/BrightFlair/PHP.Gt/master.svg" alt=""></td>
+          <td><code>https://img.shields.io/circleci/project/BrightFlair/PHP.Gt/master.svg</code></td>
+      </tr>
+      <tr>
+        <th>Jenkins:</th>
+        <td><img src="/jenkins/s/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg" alt=""></td>
+        <td><code>https://img.shields.io/jenkins/s/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg</code></td>
+      </tr>
+      <tr>
+        <th>Jenkins tests:</th>
+        <td><img src="/jenkins/t/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg" alt=""></td>
+        <td><code>https://img.shields.io/jenkins/t/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg</code></td>
+      </tr>
+      <tr>
+        <th>Coveralls:</th>
+        <td><img src="/coveralls/jekyll/jekyll.svg" alt=""></td>
+        <td><code>https://img.shields.io/coveralls/jekyll/jekyll.svg</code></td>
+      </tr>
+      <tr>
+        <th>Coveralls branch:</th>
+        <td><img src="/coveralls/jekyll/jekyll/master.svg" alt=""></td>
+        <td><code>https://img.shields.io/coveralls/jekyll/jekyll/master.svg</code></td>
+      </tr>
+      <tr>
+        <th>SonarQube Coverage:</th>
+        <td><img src="/sonar/http/sonar.qatools.ru/ru.yandex.qatools.allure:allure-core:master/coverage.svg" alt=""></td>
+        <td><code>https://img.shields.io/sonar/http/sonar.qatools.ru/ru.yandex.qatools.allure:allure-core:master/coverage.svg</code></td>
+      </tr>
+      <tr>
+        <th>TeamCity CodeBetter Coverage:</th>
+        <td><img src="/teamcity/coverage/bt1242.svg" alt=""></td>
+        <td><code>https://img.shields.io/teamcity/coverage/bt1242.svg</code></td>
+      </tr>
+      <tr>
+        <th>Scrutinizer:</th>
+        <td><img src="/scrutinizer/g/filp/whoops.svg" alt=""></td>
+        <td><code>https://img.shields.io/scrutinizer/g/filp/whoops.svg</code></td>
+      </tr>
+      <tr>
+        <th>Scrutinizer Coverage:</th>
+        <td><img src="/scrutinizer/coverage/g/filp/whoops.svg" alt=""></td>
+        <td><code>https://img.shields.io/scrutinizer/coverage/g/filp/whoops.svg</code></td>
+      </tr>
+      <tr>
+        <th>Scrutinizer branch:</th>
+        <td><img src="/scrutinizer/coverage/g/phpmyadmin/phpmyadmin/master.svg" alt=""></td>
+        <td><code>https://img.shields.io/scrutinizer/coverage/g/phpmyadmin/phpmyadmin/master.svg</code></td>
+      </tr>
+      <tr>
+        <th>Codecov:</th>
+        <td><img src="/codecov/c/github/codecov/example-python.svg" alt=""></td>
+        <td><code>https://img.shields.io/codecov/c/github/codecov/example-python.svg</code></td>
+      </tr>
+      <tr>
+        <th>HHVM:</th>
+        <td><img src="/hhvm/symfony/symfony.svg" alt=""></td>
+        <td><code>https://img.shields.io/hhvm/symfony/symfony.svg</code></td>
+      </tr>
+      <tr>
+        <th>HHVM (branch):</th>
+        <td><img src="/hhvm/symfony/symfony/2.4.0.0.svg" alt=""></td>
+        <td><code>https://img.shields.io/hhvm/symfony/symfony/2.4.0.0.svg</code></td>
+      </tr>
+      <tr>
+        <th>SensioLabs Insight:</th>
+          <td><img src="/sensiolabs/i/45afb680-d4e6-4e66-93ea-bcfa79eb8a87.svg" alt=""></td>
+          <td><code>https://img.shields.io/sensiolabs/i/45afb680-d4e6-4e66-93ea-bcfa79eb8a87.svg</code></td>
+      </tr>
+    </table>
 
-copyForm.addEventListener('click', function(event) {
-  event.stopPropagation();
-});
+    <h3> Downloads </h3>
+    <table class="badge">
+      <tr>
+        <th data-keywords="node"> npm: </th>
+        <td><img src="/npm/dm/localeval.svg" alt=""></td>
+        <td><code>https://img.shields.io/npm/dm/localeval.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="ruby"> Gem: </th>
+        <td><img src="/gem/dv/rails/stable.svg" alt=""></td>
+        <td><code>https://img.shields.io/gem/dv/rails/stable.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="ruby"> Gem: </th>
+        <td><img src="/gem/dv/rails/4.1.0.svg" alt=""></td>
+        <td><code>https://img.shields.io/gem/dv/rails/4.1.0.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="ruby"> Gem: </th>
+        <td><img src="/gem/dtv/rails.svg" alt=""></td>
+        <td><code>https://img.shields.io/gem/dtv/rails.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="ruby"> Gem: </th>
+        <td><img src="/gem/dt/rails.svg" alt=""></td>
+        <td><code>https://img.shields.io/gem/dt/rails.svg</code></td>
+      </tr>
+      <tr>
+        <th>NuGet:</th>
+        <td><img src="/nuget/dt/Microsoft.AspNet.Mvc.svg" alt=""></td>
+        <td><code>https://img.shields.io/nuget/dt/Microsoft.AspNet.Mvc.svg</code></td>
+      </tr>
+      <tr>
+        <th>MyGet:</th>
+        <td><img src="/myget/yolodev/dt/FSharpSupport.svg" alt=""></td>
+        <td><code>https://img.shields.io/myget/yolodev/dt/FSharpSupport.svg</code></td>
+      </tr>
+      <tr>
+        <th>Chocolatey:</th>
+        <td><img src="/chocolatey/dt/scriptcs.svg" alt=""></td>
+        <td><code>https://img.shields.io/chocolatey/dt/scriptcs.svg</code></td>
+      </tr>
+      <tr>
+        <th>PyPI:</th>
+        <td><img src="/pypi/dm/Django.svg" alt=""></td>
+        <td><code>https://img.shields.io/pypi/dm/Django.svg</code></td>
+      </tr>
+      <tr>
+        <th>PyPI:</th>
+        <td><img src="/pypi/dw/Django.svg" alt=""></td>
+        <td><code>https://img.shields.io/pypi/dw/Django.svg</code></td>
+      </tr>
+      <tr>
+        <th>PyPI:</th>
+        <td><img src="/pypi/dd/Django.svg" alt=""></td>
+        <td><code>https://img.shields.io/pypi/dd/Django.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="Rust"> Crates.io: </th>
+        <td><img src="/crates/d/rustc-serialize.svg" alt=""></td>
+        <td><code>https://img.shields.io/crates/d/rustc-serialize.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="Rust"> Crates.io: </th>
+        <td><img src="/crates/dv/rustc-serialize.svg" alt=""></td>
+        <td><code>https://img.shields.io/crates/dv/rustc-serialize.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="PHP"> Packagist: </th>
+        <td><img src="/packagist/dm/doctrine/orm.svg" alt=""></td>
+        <td><code>https://img.shields.io/packagist/dm/doctrine/orm.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="PHP"> Packagist: </th>
+        <td><img src="/packagist/dd/doctrine/orm.svg" alt=""></td>
+        <td><code>https://img.shields.io/packagist/dd/doctrine/orm.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="PHP"> Packagist: </th>
+        <td><img src="/packagist/dt/doctrine/orm.svg" alt=""></td>
+        <td><code>https://img.shields.io/packagist/dt/doctrine/orm.svg</code></td>
+      </tr>
+      <tr>
+        <th>Hex.pm:</th>
+        <td><img src="/hexpm/dw/plug.svg" alt=""></td>
+        <td><code>https://img.shields.io/hexpm/dw/plug.svg</code></td>
+      </tr>
+      <tr>
+        <th>Hex.pm:</th>
+        <td><img src="/hexpm/dd/plug.svg" alt=""></td>
+        <td><code>https://img.shields.io/hexpm/dd/plug.svg</code></td>
+      </tr>
+      <tr>
+        <th>Hex.pm:</th>
+        <td><img src="/hexpm/dt/plug.svg" alt=""></td>
+        <td><code>https://img.shields.io/hexpm/dt/plug.svg</code></td>
+      </tr>
+      <tr>
+        <th>Wordpress:</th>
+        <td><img src="/wordpress/plugin/dt/akismet.svg" alt=""></td>
+        <td><code>https://img.shields.io/wordpress/plugin/dt/akismet.svg</code></td>
+      </tr>
+      <tr>
+        <th>SourceForge:</th>
+        <td><img src="/sourceforge/dm/sevenzip.svg" alt=""></td>
+        <td><code>https://img.shields.io/sourceforge/dm/sevenzip.svg</code></td>
+      </tr>
+      <tr>
+        <th>SourceForge:</th>
+        <td><img src="/sourceforge/dw/sevenzip.svg" alt=""></td>
+        <td><code>https://img.shields.io/sourceforge/dw/sevenzip.svg</code></td>
+      </tr>
+      <tr>
+        <th>SourceForge:</th>
+        <td><img src="/sourceforge/dd/sevenzip.svg" alt=""></td>
+        <td><code>https://img.shields.io/sourceforge/dd/sevenzip.svg</code></td>
+      </tr>
+      <tr>
+        <th>SourceForge:</th>
+        <td><img src="/sourceforge/dt/sevenzip.svg" alt=""></td>
+        <td><code>https://img.shields.io/sourceforge/dt/sevenzip.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="atom"> apm: </th>
+        <td><img src="/apm/dm/vim-mode.svg" alt=""></td>
+        <td><code>https://img.shields.io/apm/dm/vim-mode.svg</code></td>
+      </tr>
+    </table>
 
-// Custom badge
-function makeImage() {
-  var url = document.getElementById('imgUrlPrefix').textContent;
-  url += escapeField(imageMaker.subject.value);
-  url += '-' + escapeField(imageMaker.status.value);
-  url += '-' + escapeField(imageMaker.color.value);
-  url += '.svg';
-  document.location = url;
-}
+    <h3> Version </h3>
+    <table class="badge">
+      <tr>
+        <th data-keywords="node"> npm: </th>
+        <td><img src="/npm/v/npm.svg" alt=""></td>
+        <td><code>https://img.shields.io/npm/v/npm.svg</code></td>
+      </tr>
+      <tr>
+        <th>node:</th>
+        <td><img src="/node/v/gh-badges.svg" alt=""></td>
+        <td><code>https://img.shields.io/node/v/gh-badges.svg</code></td>
+      </tr>
+      <tr>
+        <th>PyPI:</th>
+        <td><img src="/pypi/v/nine.svg" alt=""></td>
+        <td><code>https://img.shields.io/pypi/v/nine.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="ruby"> Gem: </th>
+        <td><img src="/gem/v/formatador.svg" alt=""></td>
+        <td><code>https://img.shields.io/gem/v/formatador.svg</code></td>
+      </tr>
+      <tr>
+        <th>Hackage:</th>
+        <td><img src="/hackage/v/lens.svg" alt=""></td>
+        <td><code>https://img.shields.io/hackage/v/lens.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="Rust"> Crates.io: </th>
+        <td><img src="/crates/v/rustc-serialize.svg" alt=""></td>
+        <td><code>https://img.shields.io/crates/v/rustc-serialize.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="PHP"> Packagist: </th>
+        <td><img src="/packagist/v/symfony/symfony.svg" alt=""></td>
+        <td><code>https://img.shields.io/packagist/v/symfony/symfony.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="PHP"> Packagist Pre Release: </th>
+        <td><img src="/packagist/vpre/symfony/symfony.svg" alt=""></td>
+        <td><code>https://img.shields.io/packagist/vpre/symfony/symfony.svg</code></td>
+      </tr>
+      <tr>
+        <th>CocoaPods:</th>
+        <td><img src="/cocoapods/v/AFNetworking.svg" alt=""></td>
+        <td><code>https://img.shields.io/cocoapods/v/AFNetworking.svg</code></td>
+      </tr>
+      <tr>
+        <th>Bower:</th>
+        <td><img src="/bower/v/bootstrap.svg" alt=""></td>
+        <td><code>https://img.shields.io/bower/v/bootstrap.svg</code></td>
+      </tr>
+      <tr>
+        <th>Pub:</th>
+        <td><img src="/pub/v/box2d.svg" alt=""></td>
+        <td><code>https://img.shields.io/pub/v/box2d.svg</code></td>
+      </tr>
+      <tr>
+        <th>Hex.pm:</th>
+        <td><img src="/hexpm/v/plug.svg" alt=""></td>
+        <td><code>https://img.shields.io/hexpm/v/plug.svg</code></td>
+      </tr>
+      <tr>
+        <th>GitHub tag:</th>
+        <td><img src="/github/tag/strongloop/express.svg" alt=""></td>
+        <td><code>https://img.shields.io/github/tag/strongloop/express.svg</code></td>
+      </tr>
+      <tr>
+        <th>GitHub release:</th>
+        <td><img src="/github/release/qubyte/rubidium.svg" alt=""></td>
+        <td><code>https://img.shields.io/github/release/qubyte/rubidium.svg</code></td>
+      </tr>
+      <tr>
+        <th>Chef cookbo  ok:</th>
+        <td><img src="/cookbook/v/chef-sugar.svg" alt=""></td>
+        <td><code>https://img.shields.io/cookbook/v/chef-sugar.svg</code></td>
+      </tr>
+      <tr>
+        <th>NuGet:</th>
+        <td><img src="/nuget/v/Nuget.Core.svg" alt=""></td>
+        <td><code>https://img.shields.io/nuget/v/Nuget.Core.svg</code></td>
+      </tr>
+      <tr>
+        <th>NuGet Pre Relea  se:</th>
+        <td><img src="/nuget/vpre/Nuget.Core.svg" alt=""></td>
+        <td><code>https://i  mg.shields.io/nuget/vpre/Nuget.Core.svg</code></td>
+      </tr>
+      <tr>
+        <th>MyGet:</th>
+      <td><img src="/myget/yolodev/v/FSharpSupport.svg" alt=""></td>
+        <td><code>https://img.shields.io/myget/yolodev/v/FSharpSuppor  t.svg</code></td>
+      </tr>
+      <tr>
+        <th>MyGet Pre Release:</th>
+        <td><img src="/myget/yolodev/vpre/FSharpSupport.svg" alt=""></td>
+        <td><code>https://img.shields.io/myget/yolodev/vpre/FShar  pSupport.svg</code></td>
+      </tr>
+      <tr>
+        <th>C  hocolatey:</th>
+      <td><img src="/chocolatey/v/git.svg" alt=""></td>
+        <td><code>https://img.shields.io/chocolatey  /v/git.svg</code></td>
+      </tr>
+      <tr>
+        <th>Puppet Forge:</  th>
+      <td><img src="/puppetforge/v/vStone/percona.svg" alt=""></td>
+        <td><code>https://img.shields.io/puppetforge/v/vStone/pe  rcona.svg</code></td>
+      </tr>
+      <tr>
+        <th>Maven Central:</th>
+      <td><im  g src="/maven-central/v/org.apache.maven/apache-maven.svg" alt=""></td>
+        <td><code>https://img.shields.io/maven-central/v/org.apache.maven/apache-mav  en.svg</code></td>
+      </tr>
+      <tr>
+        <th>Wordpress plugin:  </th>
+      <td><img src="/wordpress/plugin/v/akismet.svg" alt=""></td>
+        <td><code>https://img.shields.io/wordpress/plugin/  v/akismet.svg</code></td>
+      </tr>
+      <tr>
+        <th>Wor  dpress:</th>
+      <td><img src="/wordpress/v/akismet.svg" alt=""></td>
+        <td><code>https://img.shields.io/wordpress/v/akism  et.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="  atom"> apm: </th>
+      <td><img src="/apm/v/vim-mode.svg" alt=""></td>
+        <td><code>https://img.shields.io/apm/v/vim-mode.svg</code></td>
+      </tr>
+    </table>
 
-function escapeField(s) {
-  return encodeURIComponent(s.replace(/-/g, '--').replace(/_/g, '__'));
-}
+    <h3> Miscellaneous </h3>
+    <table class="badge">
+      <tr>
+        <th>Gratipay:</th>
+        <td><img src="/gratipay/JSFiddle.svg" alt=""></td>
+        <td><code>https://img.shields.io/gratipay/JSFiddle.svg</code></td>
+      </tr>
+      <tr>
+        <th>Bountysource:</th>
+        <td><img src="/bountysource/team/mozilla-core/activity.svg" alt=""></td>
+        <td><code>https://img.shields.io/bountysource/team/mozilla-core/activity.svg</code></td>
+      </tr>
+      <tr>
+        <th>Code Climate:</th>
+        <td><img src="/codeclimate/github/kabisaict/flow.svg" alt=""></td>
+        <td><code>https://img.shields.io/codeclimate/github/kabisaict/flow.svg</code></td>
+      </tr>
+      <tr>
+        <th>Code Climate:</th>
+        <td><img src="/codeclimate/coverage/github/triAGENS/ashikawa-core.svg" alt=""></td>
+        <td><code>https://img.shields.io/codeclimate/coverage/github/triAGENS/ashikawa-core.svg</code></td>
+      </tr>
+      <tr>
+        <th>Gemnasium:</th>
+        <td><img src="/gemnasium/mathiasbynens/he.svg" alt=""></td>
+        <td><code>https://img.shields.io/gemnasium/mathiasbynens/he.svg</code></td>
+      </tr>
+      <tr>
+        <th>David:</th>
+        <td><img src="/david/strongloop/express.svg" alt=""></td>
+        <td><code>https://img.shields.io/david/strongloop/express.svg</code></td>
+      </tr>
+      <tr>
+        <th>David:</th>
+        <td><img src="/david/dev/strongloop/express.svg" alt=""></td>
+        <td><code>https://img.shields.io/david/dev/strongloop/express.svg</code></td>
+      </tr>
+      <tr>
+        <th>David:</th>
+        <td><img src="/david/peer/webcomponents/generator-element.svg" alt=""></td>
+        <td><code>https://img.shields.io/david/peer/webcomponents/generator-element.svg</code></td>
+      </tr>
+      <tr>
+        <th>Hackage-Deps:</th>
+        <td><img src="/hackage-deps/v/lens.svg" alt=""></td>
+        <td><code>https://img.shields.io/hackage-deps/v/lens.svg</code></td>
+      </tr>
+      <tr>
+        <th>Requires.io:</th>
+        <td><img src="/requires/github/celery/celery.svg" alt=""></td>
+        <td><code>https://img.shields.io/requires/github/celery/celery.svg</code></td>
+      </tr>
+      <tr>
+        <th>VersionEye:</th>
+        <td><img src="/versioneye/d/ruby/rails.svg" alt=""></td>
+        <td><code>https://img.shields.io/versioneye/d/ruby/rails.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="PHP"> Packagist: </th>
+        <td><img src="/packagist/l/doctrine/orm.svg" alt=""></td>
+        <td><code>https://img.shields.io/packagist/l/doctrine/orm.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="node"> npm: </th>
+        <td><img src="/npm/l/express.svg" alt=""></td>
+        <td><code>https://img.shields.io/npm/l/express.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="atom"> apm: </th>
+        <td><img src="/apm/l/vim-mode.svg" alt=""></td>
+        <td><code>https://img.shields.io/apm/l/vim-mode.svg</code></td>
+      </tr>
+      <tr>
+        <th>PyPI:</th>
+        <td><img src="/pypi/l/Django.svg" alt=""></td>
+        <td><code>https://img.shields.io/pypi/l/Django.svg</code></td>
+      </tr>
+      <tr>
+        <th>Hex.pm:</th>
+        <td><img src="/hexpm/l/plug.svg" alt=""></td>
+        <td><code>https://img.shields.io/hexpm/l/plug.svg</code></td>
+      </tr>
+      <tr>
+        <th>CocoaPods:</th>
+        <td><img src="/cocoapods/l/AFNetworking.svg" alt=""></td>
+        <td><code>https://img.shields.io/cocoapods/l/AFNetworking.svg</code></td>
+      </tr>
+      <tr>
+        <th>CocoaPods:</th>
+        <td><img src="/cocoapods/p/AFNetworking.svg" alt=""></td>
+        <td><code>https://img.shields.io/cocoapods/p/AFNetworking.svg</code></td>
+      </tr>
+      <tr>
+        <th>Wheelmap:</th>
+        <td><img src="/wheelmap/a/2323004600.svg" alt=""></td>
+        <td><code>https://img.shields.io/wheelmap/a/23230  04600.svg</code></td>
+      </tr>
+      <tr>
+        <th>GitHub issues:</  th>
+      <td><img src="/github/issues/badges/shields.svg" alt=""></td>
+        <td><code>https://img.shields.io/github/issues/badges/s  hields.svg</code></td>
+      </tr>
+      <tr>
+        <th data-keywords="GitHub"></th>
+        <td><img src="/github/issues-raw/badges/shields.svg" alt=""></td>
+        <td><code>https://img.shields.io/github/issues-raw/badges/s  hields.svg</code></td>
+      </tr>
+      <tr>
+        <th>GitHub forks:<  /th>
+      <td><img src="/github/forks/badges/shields.svg" alt=""></td>
+        <td><code>https://img.shields.io/github/forks/badges/s  hields.svg</code></td>
+      </tr>
+      <tr>
+        <th>GitHub stars:<  /th>
+      <td><img src="/github/stars/badges/shields.svg" alt=""></td>
+        <td><code>https://img.shields.io/github/stars/badges/shiel  ds.svg</code></td>
+      </tr>
+      <tr>
+        <th>GitHub followers:  </th>
+      <td><img src="/github/followers/espadrine.svg" alt=""></td>
+        <td><code>https://img.shields.io/github/followers/espadri  ne.svg</code></td>
+      </tr>
+      <tr>
+        <th>Wordpress rating:  </th>
+      <td><img src="/wordpress/plugin/r/akismet.svg" alt=""></td>
+        <td><code>https://img.shields.io/wordpress/plug  in/r/akismet.svg</code></td>
+      </tr>
+      <tr>
+        <th>Codacy:</th>
+        <td><img src="/codacy/e27821fb6289410b8f58338c7e0bc686.svg" alt=""></td>
+        <td><code>https://img.shields.io/codacy/e27821fb6289410b8f5833  8c7e0bc686.svg</code></td>
+      </tr>
+      <tr>
+        <th>Libscore:</th>
+      <td><img src="/libscore/s/jQuery.svg" alt=""></td>
+        <td><code>https://img.shields.io/libsco  re/s/jQuery.svg</code></td>
+      </tr>
+      <tr>
+        <th>Talk.ai:</th>
+      <td><img src="/talk/t/9c81ff703b.svg" alt=""></td>
+        <td><code>https://img.shields.io/talk/t/9c81ff703b.svg</code></td>
+      </tr>
+    </table>
 
-// Convert object literal to xhr-sendable.
-function toXhrSend(data) {
-  var str = '', start = true;
-  var jsondata = '';
-  for (var key in data) {
-    if (typeof (jsondata = JSON.stringify(data[key])) === 'string') {
-      str += (start? '': '&');
-      if (typeof data[key] === 'string') {
-        str += encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
+    <h2>Your Badge</h2>
+    <form action="javascript:makeImage()" id="imageMaker">
+      <input class="short" name="subject" placeholder="subject">
+      <input class="short" name="status" placeholder="status">
+      <input class="short" name="color" list="default-colors" placeholder="color">
+
+      <datalist id="default-colors">
+        <option value="brightgreen">
+        <option value="green">
+        <option value="yellowgreen">
+        <option value="yellow">
+        <option value="orange">
+        <option value="red">
+        <option value="lightgrey">
+        <option value="blue">
+      </datalist>
+
+      <button>Make Badge</button>
+    </form>
+
+    <hr class="spacing">
+
+    <p>
+      <code><span id="imgUrlPrefix">/badge/</span>&lt;SUBJECT&gt;-&lt;STATUS&gt;-&lt;COLOR&gt;.svg</code>
+    </p>
+
+    <table class="centered">
+      <tr>
+        <td>Dashes <code>--</code></td>
+        <td>→</td>
+        <td><code>-</code> Dash</td>
+      </tr>
+      <tr>
+        <td>Underscores <code>__</code></td>
+        <td>→</td>
+        <td><code>_</code> Underscore<br></td>
+      </tr>
+      <tr>
+        <td><code>_</code> or Space <code>&nbsp;</code></td>
+        <td>→</td>
+        <td><code>&nbsp;</code> Space</td>
+      </tr>
+    </table>
+
+    <p>
+      <img src="/badge/color-brightgreen-brightgreen.svg" alt="brightgreen">
+      <img src="/badge/color-green-green.svg" alt="green">
+      <img src="/badge/color-yellowgreen-yellowgreen.svg" alt="yellowgreen">
+      <img src="/badge/color-yellow-yellow.svg" alt="yellow">
+      <img src="/badge/color-orange-orange.svg" alt="orange">
+      <img src="/badge/color-red-red.svg" alt="red">
+      <img src="/badge/color-lightgrey-lightgrey.svg" alt="lightgrey">
+      <img src="/badge/color-blue-blue.svg" alt="blue">
+      <img src="/badge/color-ff69b4-ff69b4.svg" alt="ff69b4">
+    </p>
+
+    <h2> Styles </h2>
+    <p>The following styles are available (flat is the default as of Feb 1st 2015):</p>
+    <table>
+      <tr>
+        <td><img src="/badge/style-plastic-green.svg?style=plastic" alt=""></td>
+        <td><code>https://img.shields.io/badge/style-plastic-green.svg?style=plastic</code></td>
+      </tr>
+      <tr>
+        <td><img src="/badge/style-flat-green.svg?style=flat" alt=""></td>
+        <td><code>https://img.shields.io/badge/style-flat-green.svg?style=flat</code></td>
+      </tr>
+      <tr>
+        <td><img src  ="/badge/style-flat--squared-green.svg?style=flat-square" alt=""></td>
+        <td><code>https://img.shields.io/badge/style-flat--squared-green.svg?style=flat-square</code></td>
+      </tr>
+    </table>
+
+    <p>Override the default left-hand-side text with <code>?label=wow so healthy</code>.</p>
+    <p> We also support <code>.json</code>, <code>.png</code> and a few others, but use them responsibly.</p>
+
+    <h2>Like This?</h2>
+    <p>
+      Tell your favorite badge service to use it!<br>
+      And tell us, we might be able to bring it to you anyway!
+    </p>
+    <p>
+      <a href="https://twitter.com/Shields_io" class="twitter-follow-button" data-show-count="false">Follow @Shields_io</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document, "script", "twitter-wjs");</script>
+      <a href="https://www.gittip.com/Shields/"><img src="/gittip/shields.svg?style=flat" alt="Tip us!"/></a>
+      <iframe src="http://ghbtns.com/github-btn.html?user=badges&amp;repo=shields&amp;type=fork&amp;count=true" style="border:0; background-color:transparent" width="95" height="20"></iframe>
+    </p>
+    <p>
+      <a href="https://github.com/h5bp/lazyweb-requests/issues/150">This</a> is where the current server got started.
+    </p>
+
+    <h2>Contributors</h2>
+    <a class="photo" href="https://github.com/espadrine">
+      <img alt="espadrine" src="https://gravatar.com/avatar/8c3bee0764c781e1b0b8c2e53f0f11fe">
+    </a>
+    <a class="photo" href="https://github.com/mathiasbynens">
+      <img alt="mathiasbynens" src="https://gravatar.com/avatar/24e08a9ea84deb17ae121074d0f17125">
+    </a>
+    <a class="photo" href="https://github.com/olivierlacan">
+      <img alt="olivierlacan" src="https://gravatar.com/avatar/6e77509d7891c1d2230f3240a5652b6e">
+    </a>
+    <a class="photo" href="https://github.com/nathany">
+      <img alt="nathany" src="https://gravatar.com/avatar/7d0978b275a362d11283396a929aee65">
+    </a>
+    <a class="photo" href="https://github.com/whit537">
+      <img alt="whit537" src="https://gravatar.com/avatar/fb054b407a6461e417ee6b6ae084da37">
+    </a>
+    <a class="photo" href="https://github.com/kura">
+      <img alt="kura" src="https://gravatar.com/avatar/6db32988bd24b2f19231a7e88a74455a">
+    </a>
+    <a class="photo" href="https://github.com/maxogden">
+      <img alt="maxogden" src="https://avatars1.githubusercontent.com/u/39759?s=80">
+    </a>
+    <a class="photo" href="https://github.com/seanlinsley">
+      <img alt="seanlinsley" src="https://avatars.githubusercontent.com/u/688886?s=80">
+    </a>
+
+    <br>
+
+    <a class="photo" href="https://github.com/alrra">
+      <img alt="alrra" src="https://avatars.githubusercontent.com/u/1223565?s=80">
+    </a>
+    <a class="photo" href="https://github.com/jublo">
+      <img alt="jublo" src="https://avatars.githubusercontent.com/u/6348321?s=80">
+    </a>
+    <a class="photo" href="https://github.com/g105b">
+      <img alt="g105b" src="https://avatars2.githubusercontent.com/u/358014?s=80">
+    </a>
+    <a class="photo" href="https://github.com/sebmck">
+      <img alt="sebmck" src="https://avatars.githubusercontent.com/u/853712?s=80">
+    </a>
+    <a class="photo" href="https://github.com/avanderhoorn">
+      <img alt="avanderhoorn" src="https://www.gravatar.com/avatar/6af12b64c2fe22af3b27848b8eedd992">
+    </a>
+    <a class="photo" href="https://github.com/stefanjudis">
+      <img alt="stefanjudis" src="https://gravatar.com/avatar/22725c2d3eb331146549bf0d5d3c050c">
+    </a>
+    <a class="photo" href="https://github.com/jmalloc">
+      <img alt="jmalloc" src="https://gravatar.com/avatar/7a6666c5798fb54d1d4ebde0600567f3">
+    </a>
+    <a class="photo" href="https://github.com/ezzatron">
+      <img alt="ezzatron" src="https://gravatar.com/avatar/95ce5a53e68fe5287fadde649da8c6c7">
+    </a>
+    <a class="photo" href="https://github.com/brettcannon">
+      <img alt="brettcannon" src="https://avatars.githubusercontent.com/u/54418?s=80">
+    </a>
+    <a class="photo" href="https://github.com/CodeBlock">
+      <img alt="CodeBlock" src="https://avatars.githubusercontent.com/u/43930?s=80">
+    </a>
+    <a class="photo" href="https://github.com/Mikulas">
+      <img alt="Mikulas" src="https://gravatar.com/avatar/daa06ea257d7820ff84735a55b931ec8">
+    </a>
+
+    <br>
+
+    <a class="photo" href="https://github.com/seggidins">
+      <img alt="seggidins" src="https://avatars.githubusercontent.com/u/1946610?s=80">
+    </a>
+    <a class="photo" href="https://github.com/SonicHedgehog">
+      <img alt="SonicHedgehog" src="https://avatars.githubusercontent.com/u/652793?s=80">
+    </a>
+    <a class="photo" href="https://github.com/akashivskyy">
+      <img alt="akashivskyy" src="https://avatars.githubusercontent.com/u/565231?s=80">
+    </a>
+    <a class="photo" href="https://github.com/rmasters">
+      <img alt="rmasters" src="https://avatars.githubusercontent.com/u/34284?s=80">
+    </a>
+    <a class="photo" href="https://github.com/cainus">
+      <img alt="cainus" src="https://gravatar.com/avatar/c8475420ebca73833e55ccf57d8d7500">
+    </a>
+    <a class="photo" href="https://github.com/jbowes">
+      <img alt="jbowes" src="https://gravatar.com/avatar/363ada7cda10d5eae5eeb7704278fb51">
+    </a>
+    <a class="photo" href="https://github.com/rafalchmiel">
+      <img alt="rafalchmiel" src="https://gravatar.com/avatar/6dd56028986d5e6c478e649ec229092b">
+    </a>
+    <a class="photo" href="https://github.com/fjcaetano">
+      <img alt="fjcaetano" src="https://gravatar.com/avatar/3b339db885930633b86d73b97a2ca1c0">
+    </a>
+    <a class="photo" href="https://github.com/hughsk">
+      <img alt="hughsk" src="https://gravatar.com/avatar/133cd05eb39521d55fb7a08c787925e2">
+    </a>
+    <a class="photo" href="https://github.com/qubyte">
+      <img alt="qubyte" src="https://gravatar.com/avatar/2b8729c02bc2fb886b32ed23cb7b0a31">
+    </a>
+    <a class="photo" href="https://github.com/khellang">
+      <img alt="khellang" src="https://gravatar.com/avatar/b3616645c168b0b8a65e109a6b1cb010">
+    </a>
+    <a class="photo" href="https://github.com/nitram509">
+      <img alt="nitram509" src="https://www.gravatar.com/avatar/fa01e907fd400c42d481f431c4410954.png">
+    </a>
+    <p><small>:wq</small></p>
+  </main>
+
+  <dialog id='copyDialog'>
+    <form id='copyForm'>
+      <p><img id='copyImg' alt="badge" /></p>
+      <p><label> Link <input type="url" name="url"/></label></p>
+      <p><label> Image <input type="url" name="img"/></label></p>
+      <p>
+        <label> Style
+          <select name="style">
+            <option value="plastic">plastic</option>
+            <option value="flat" selected="selected">flat</option>
+            <option value="flat-square">flat-square</option>
+          </select>
+        </label>
+      </p>
+
+      <p>Markdown <input class=code id="copyMarkdown"></p>
+      <p>reStructuredText <input class=code id="copyreStructuredText"></p>
+    </form>
+  </dialog>
+
+  <svg style="height:0">
+    <filter id="gaussian-blur">
+      <feGaussianBlur stdDeviation="0.7" />
+    </filter>
+  </svg>
+
+  <script>
+    // Search
+    var searchBadgeDb = {index: [], tr: []};
+    function searchBadgeDbInit() {
+      searchBadgeDb = {index: [], tr: []};
+      var trs = document.querySelectorAll('table.badge tr');
+      for (var i = 0; i < trs.length; i++) {
+        var tr = trs[i];
+        var th = tr.firstElementChild;
+        var keywords = th.dataset.keywords? th.dataset.keywords: '';
+        searchBadgeDb.index.push(th.textContent + ' ' + keywords);
+        searchBadgeDb.tr.push(tr);
+      }
+      projectSearch.addEventListener('input', searchBadge);
+    }
+
+    function searchBadge(event) {
+      var query = event.target.value;
+      var regex = new RegExp(query, 'i');  // Case-insensitive
+      for (var i = 0; i < searchBadgeDb.index.length; i++) {
+        if (regex.test(searchBadgeDb.index[i])) {
+          searchBadgeDb.tr[i].removeAttribute('style');
+        } else {
+          searchBadgeDb.tr[i].style.display = 'none';
+        }
+      }
+      // If it has the format of a url, show the suggest button.
+      if (isUrl(query)) {
+        showSuggestButton();
       } else {
-        str += encodeURIComponent(key) + '=' + encodeURIComponent(jsondata);
-      }
-      start = false;
-    }
-  }
-  return str;
-}
-
-var origin = '';
-function ajax(verb, adverbs, cb) {
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", origin + "/$" + verb + '?' + toXhrSend(adverbs), true);
-  xhr.onload = function (e) {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200) {
-        try {
-          cb(null, JSON.parse(xhr.responseText));
-        } catch(e) {cb(e);}
+        hideSuggestButton();
       }
     }
-  };
-  xhr.onerror = function (e) { cb(Error(xhr.statusText)); };
-  xhr.send(null);
-}
+    document.addEventListener('DOMContentLoaded', searchBadgeDbInit);
 
-document.onclick = function(e) {
-  if (e.target.nodeName.toLowerCase() == 'code') {
-    if (document.selection) {
-      var range = document.body.createTextRange();
-      range.moveToElementText(e.target);
-      range.select();
-    } else if (window.getSelection) {
-      var range = document.createRange();
-      range.selectNode(e.target);
-      window.getSelection().addRange(range);
+    // Suggested badges search
+    function isUrl(url) {
+      var http = url.slice(0, 5) === 'http:';
+      var https = url.slice(0, 6) === 'https:';
+      return http || https;
     }
-  }
-};
-</script>
+
+    function showSuggestButton() {
+      suggestButton.style.display = 'inline';
+    }
+
+    function hideSuggestButton() {
+      suggestButton.style.display = 'none';
+    }
+
+    function showSuggestedBadges(badges) {
+      var html = '<table class="badge">';
+      for (var i = 0; i < badges.length; i++) {
+        var link = badges[i].link;
+        var badge = badges[i].badge;
+        var name = badges[i].name + ':';
+        html += '<tr>' +
+          '<th data-link="' + link + '">' + name + '</th>' +
+          '<td><img src="' + badge + '"></td>' +
+          '<td><code>' + badge + '</code></td>' +
+          '</tr>';
+      }
+      html += '</table>';
+      suggestedBadges.innerHTML = html;
+      suggestedBadges.style.display = 'block';
+    }
+
+    function suggestBadges(event) {
+      var url = event.target.projectSearch.value;
+      if (isUrl(url)) {
+        ajax('suggest/v1', {url:url}, function(err, res) {
+          if (err != null) { return; }
+          showSuggestedBadges(res.badges);
+          suggestButton.disabled = false;
+          searchBadgeDbInit();
+          markupDialogInit();
+        });
+        suggestButton.disabled = true;
+      }
+    }
+
+    function suggestBadgeInit() {
+      searchForm.addEventListener('submit', suggestBadges);
+    }
+    document.addEventListener('DOMContentLoaded', suggestBadgeInit);
+
+
+    // Markup copier dialog
+    function markupDialogInit() {
+      var trs = document.querySelectorAll('table.badge tr');
+      for (var i = 0; i < trs.length; i++) {
+        var tr = trs[i];
+        var target = tr.querySelector('img');
+        if (target) {
+          target.addEventListener('click', makeMarkupDialogListener(tr));
+        }
+      }
+    }
+
+    function makeMarkupDialogListener(tr) {
+      return function(event) { markupDialog(tr); event.stopPropagation(); };
+    }
+    document.addEventListener('DOMContentLoaded', markupDialogInit);
+
+    var copyFormUrlEventListener;
+    function markupDialog(tr) {
+      // Set up the data we have.
+      // Trim the ending colon `:`.
+      var trname = tr.firstElementChild.textContent.trim().slice(0, -1);
+      var trimg = tr.querySelector('img').src;
+      var th = tr.firstElementChild;
+      var link = th.dataset.link? th.dataset.link: '';
+      copyForm.img.value = trimg;
+      copyForm.url.value = link;
+      // Set up the input listeners.
+      copyForm.url.removeEventListener('input', copyFormUrlEventListener);
+      copyForm.img.removeEventListener('input', copyFormUrlEventListener);
+      copyForm.style.removeEventListener('change', copyFormUrlEventListener);
+      copyFormUrlEventListener = function(event) {
+        var url = copyForm.url.value;
+        var img = copyForm.img.value;
+        var style = copyForm.style.value;
+        // Default style doesn't show.
+        if (style !== 'flat') { img += '?style=' + style; }
+        var md = '[![' + trname + '](' + img + ')](' + url + ')';
+        var rst = '.. image:: ' + img + '   :target: ' + url;
+        copyMarkdown.value = md;
+        copyreStructuredText.value = rst;
+        copyImg.src = img;
+      };
+      copyForm.url.addEventListener('input', copyFormUrlEventListener);
+      copyForm.img.addEventListener('input', copyFormUrlEventListener);
+      copyForm.style.addEventListener('change', copyFormUrlEventListener);
+      // Set up the window position
+      var h = document.documentElement.offsetHeight;
+      copyDialog.style.height = h + 'px';
+      // Set up hide listener and show.
+      copyFormUrlEventListener();
+      markupDialogShow();
+    }
+
+    var isFirefox = /Firefox\/[\.0-9]+$/.test(navigator.userAgent);
+    function markupDialogShow() {
+      document.body.addEventListener('click', markupDialogHide);
+      // We must draw it once displayed before changing the opacity to transition.
+      setTimeout(function() { copyDialog.style.opacity = '1'; }, 20);
+      if (!isFirefox) {
+        main.classList.add('blur');
+      } else {
+        // We must delay blurring to avoid sloppy transition in Firefox.
+        setTimeout(function() { main.classList.add('blur'); }, 500);
+      }
+      copyDialog.style.display = 'block';
+    }
+
+    function markupDialogHide() {
+      document.body.removeEventListener('click', markupDialogHide);
+      copyDialog.style.opacity = '0';
+      main.classList.remove('blur');
+      setTimeout(function() { copyDialog.style.display = 'none'; }, 500);
+    }
+
+    copyForm.addEventListener('click', function(event) {
+      event.stopPropagation();
+    });
+
+    // Custom badge
+    function makeImage() {
+      var url = document.getElementById('imgUrlPrefix').textContent;
+      url += escapeField(imageMaker.subject.value);
+      url += '-' + escapeField(imageMaker.status.value);
+      url += '-' + escapeField(imageMaker.color.value);
+      url += '.svg';
+      document.location = url;
+    }
+
+    function escapeField(s) {
+      return encodeURIComponent(s.replace(/-/g, '--').replace(/_/g, '__'));
+    }
+
+    // Convert object literal to xhr-sendable.
+    function toXhrSend(data) {
+      var str = '', start = true;
+      var jsondata = '';
+      for (var key in data) {
+        if (typeof (jsondata = JSON.stringify(data[key])) === 'string') {
+          str += (start? '': '&');
+          if (typeof data[key] === 'string') {
+            str += encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
+          } else {
+            str += encodeURIComponent(key) + '=' + encodeURIComponent(jsondata);
+          }
+          start = false;
+        }
+      }
+      return str;
+    }
+
+    var origin = '';
+    function ajax(verb, adverbs, cb) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", origin + "/$" + verb + '?' + toXhrSend(adverbs), true);
+      xhr.onload = function (e) {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            try {
+              cb(null, JSON.parse(xhr.responseText));
+            } catch(e) {cb(e);}
+          }
+        }
+      };
+      xhr.onerror = function (e) { cb(Error(xhr.statusText)); };
+      xhr.send(null);
+    }
+
+    document.onclick = function(e) {
+      if (e.target.nodeName.toLowerCase() == 'code') {
+        var range;
+        if (document.selection) {
+          range = document.body.createTextRange();
+          range.moveToElementText(e.target);
+          range.select();
+        } else if (window.getSelection) {
+          range = document.createRange();
+          range.selectNode(e.target);
+          window.getSelection().addRange(range);
+        }
+      }
+    };
+  </script>
+</body>
+</html>
