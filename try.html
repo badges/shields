@@ -928,4 +928,18 @@ function ajax(verb, adverbs, cb) {
   xhr.onerror = function (e) { cb(Error(xhr.statusText)); };
   xhr.send(null);
 }
+
+document.onclick = function(e) {
+  if (e.target.nodeName.toLowerCase() == 'code') {
+    if (document.selection) {
+      var range = document.body.createTextRange();
+      range.moveToElementText(e.target);
+      range.select();
+    } else if (window.getSelection) {
+      var range = document.createRange();
+      range.selectNode(e.target);
+      window.getSelection().addRange(range);
+    }
+  }
+};
 </script>
