@@ -726,6 +726,7 @@ function searchBadgeDbInit() {
   }
   projectSearch.addEventListener('input', searchBadge);
 }
+
 function searchBadge(event) {
   var query = event.target.value;
   var regex = new RegExp(query, 'i');  // Case-insensitive
@@ -737,8 +738,10 @@ function searchBadge(event) {
     }
   }
   // If it has the format of a url, show the suggest button.
-  if (isUrl(query)) { showSuggestButton();
-  } else { hideSuggestButton();
+  if (isUrl(query)) {
+    showSuggestButton();
+  } else {
+    hideSuggestButton();
   }
 }
 
@@ -750,8 +753,15 @@ function isUrl(url) {
   var https = url.slice(0, 6) === 'https:';
   return http || https;
 }
-function showSuggestButton() { suggestButton.style.display = 'inline'; }
-function hideSuggestButton() { suggestButton.style.display = 'none'; }
+
+function showSuggestButton() {
+  suggestButton.style.display = 'inline';
+}
+
+function hideSuggestButton() {
+  suggestButton.style.display = 'none';
+}
+
 function showSuggestedBadges(badges) {
   var html = '<table class="badge"><tbody>';
   for (var i = 0; i < badges.length; i++) {
@@ -780,6 +790,7 @@ function suggestBadges(event) {
     suggestButton.disabled = true;
   }
 }
+
 function suggestBadgeInit() {
   searchForm.addEventListener('submit', suggestBadges);
 }
@@ -798,6 +809,7 @@ function markupDialogInit() {
     }
   }
 }
+
 function makeMarkupDialogListener(tr) {
   return function(event) { markupDialog(tr); event.stopPropagation(); };
 }
@@ -841,7 +853,9 @@ function markupDialog(tr) {
   copyFormUrlEventListener();
   markupDialogShow();
 }
+
 var isFirefox = /Firefox\/[\.0-9]+$/.test(navigator.userAgent);
+
 function markupDialogShow() {
   document.body.addEventListener('click', markupDialogHide);
   // We must draw it once displayed before changing the opacity to transition.
@@ -854,12 +868,14 @@ function markupDialogShow() {
   }
   copyDialog.style.display = 'block';
 }
+
 function markupDialogHide() {
   document.body.removeEventListener('click', markupDialogHide);
   copyDialog.style.opacity = '0';
   main.classList.remove('blur');
   setTimeout(function() { copyDialog.style.display = 'none'; }, 500);
 }
+
 copyForm.addEventListener('click', function(event) {
   event.stopPropagation();
 });
@@ -878,7 +894,6 @@ function escapeField(s) {
   return encodeURIComponent(s.replace(/-/g, '--').replace(/_/g, '__'));
 }
 
-
 // Convert object literal to xhr-sendable.
 function toXhrSend(data) {
   var str = '', start = true;
@@ -896,6 +911,7 @@ function toXhrSend(data) {
   }
   return str;
 }
+
 var origin = '';
 function ajax(verb, adverbs, cb) {
   var xhr = new XMLHttpRequest();
