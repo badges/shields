@@ -839,8 +839,9 @@ cache(function(data, match, sendBadge, request) {
               }
             }
           }
-          
-          badgeText = unstableVersion;
+
+          var vdata = versionColor(unstableVersion);
+          badgeText = vdata.version;
           badgeColor = 'orange';
         }
         break;
