@@ -3176,6 +3176,8 @@ function latestVersion(versions) {
   return version;
 }
 
+// FIXME: see https://getcomposer.org/doc/04-schema.md#version
+// and https://github.com/badges/shields/issues/319#issuecomment-74411045
 function versionCompare(v1, v2, operator) {
   //       discuss at: http://phpjs.org/functions/version_compare/
   //      original by: Philippe Jausions (http://pear.php.net/user/jausions)
