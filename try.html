@@ -804,8 +804,8 @@
         </label>
       </p>
 
-      <p>Markdown <input class=code id="copyMarkdown"></p>
-      <p>reStructuredText <input class=code id="copyreStructuredText"></p>
+      <p>Markdown <code id="copyMarkdown"></code></p>
+      <p>reStructuredText <code id="copyreStructuredText"></code></p>
     </form>
   </dialog>
 
@@ -901,6 +901,22 @@
     }
     document.addEventListener('DOMContentLoaded', suggestBadgeInit);
 
+    // Select code contents
+    function documentClickedHandler(e) {
+      if (e.target.nodeName.toLowerCase() == 'code') {
+        var range;
+        if (document.selection) {
+          range = document.body.createTextRange();
+          range.moveToElementText(e.target);
+          range.select();
+        } else if (window.getSelection) {
+          range = document.createRange();
+          range.selectNode(e.target);
+          window.getSelection().addRange(range);
+        }
+      }
+    }
+    document.addEventListener('click', documentClickedHandler);
 
     // Markup copier dialog
     function markupDialogInit() {
@@ -930,9 +946,10 @@
       copyForm.img.value = trimg;
       copyForm.url.value = link;
       // Set up the input listeners.
-      copyForm.url.removeEventListener('input', copyFormUrlEventListener);
-      copyForm.img.removeEventListener('input', copyFormUrlEventListener);
+      copyForm.url.removeEventListener('code', copyFormUrlEventListener);
+      copyForm.img.removeEventListener('code', copyFormUrlEventListener);
       copyForm.style.removeEventListener('change', copyFormUrlEventListener);
+      copyForm.removeEventListener('click', documentClickedHandler);
       copyFormUrlEventListener = function(event) {
         var url = copyForm.url.value;
         var img = copyForm.img.value;
@@ -941,12 +958,13 @@
         if (style !== 'flat') { img += '?style=' + style; }
         var md = '[![' + trname + '](' + img + ')](' + url + ')';
         var rst = '.. image:: ' + img + '   :target: ' + url;
-        copyMarkdown.value = md;
-        copyreStructuredText.value = rst;
+        copyMarkdown.innerHTML = md;
+        copyreStructuredText.innerHTML = rst;
         copyImg.src = img;
       };
-      copyForm.url.addEventListener('input', copyFormUrlEventListener);
-      copyForm.img.addEventListener('input', copyFormUrlEventListener);
+      copyForm.addEventListener('click', documentClickedHandler);
+      copyForm.url.addEventListener('code', copyFormUrlEventListener);
+      copyForm.img.addEventListener('code', copyFormUrlEventListener);
       copyForm.style.addEventListener('change', copyFormUrlEventListener);
       // Set up the window position
       var h = document.documentElement.offsetHeight;
@@ -1029,21 +1047,6 @@
       xhr.onerror = function (e) { cb(Error(xhr.statusText)); };
       xhr.send(null);
     }
-
-    document.onclick = function(e) {
-      if (e.target.nodeName.toLowerCase() == 'code') {
-        var range;
-        if (document.selection) {
-          range = document.body.createTextRange();
-          range.moveToElementText(e.target);
-          range.select();
-        } else if (window.getSelection) {
-          range = document.createRange();
-          range.selectNode(e.target);
-          window.getSelection().addRange(range);
-        }
-      }
-    };
   </script>
 </body>
 </html>
