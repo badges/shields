@@ -816,34 +816,47 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
 
-      var versions = Object.keys(data.package.versions);
+      var versionsData = data.package.versions;
+      var versions = Object.keys(versionsData);
+
+      // Map aliases (eg, dev-master).
+      var aliasesMap = {};
+      versions = versions.map(function(version) {
+        var versionData = versionsData[version];
+        if (versionData.extra && versionData.extra['branch-alias'] &&
+            versionData.extra['branch-alias'][version]) {
+          // eg, version is 'dev-master', mapped to '2.0.x-dev'.
+          var validVersion = versionData.extra['branch-alias'][version];
+          aliasesMap[validVersion] = version;
+          return validVersion;
+        } else { return version; }
+      });
 
       var badgeText = null;
       var badgeColor = null;
 
       switch (info) {
       case 'v':
-        var stableVersion = latestVersion(versions);
+        var stableVersions = versions.filter(phpStableVersion);
+        var stableVersion = phpLatestVersion(stableVersions);
+        if (!stableVersion) {
+          stableVersion = phpLatestVersion(versions);
+        }
+        if (!!aliasesMap[stableVersion]) {
+          stableVersion = aliasesMap[stableVersion];
+        }
         var vdata = versionColor(stableVersion);
         badgeText = vdata.version;
         badgeColor = vdata.color;
         break;
       case 'vpre':
-        if (versions.length > 0) {
-          var unstableVersion = null;
-          for (var i = 0; i < versions.length; i++) {
-            var version = versions[i];
-            if (version.charAt(0) !== 'v') {
-              if (unstableVersion === null || (unstableVersion !== null && versionCompare(version, unstableVersion) > 0)) {
-                unstableVersion = version;
-              }
-            }
-          }
-
-          var vdata = versionColor(unstableVersion);
-          badgeText = vdata.version;
-          badgeColor = 'orange';
+        var unstableVersion = phpLatestVersion(versions);
+        if (!!aliasesMap[unstableVersion]) {
+          unstableVersion = aliasesMap[unstableVersion];
         }
+        var vdata = versionColor(unstableVersion);
+        badgeText = vdata.version;
+        badgeColor = 'orange';
         break;
       }
 
@@ -3144,7 +3157,7 @@ function versionColor(version) {
   var first = version[0];
   if (first === 'v') {
     first = version[1];
-  } else {
+  } else if (/^[0-9]/.test(version)) {
     version = 'v' + version;
   }
   if (first === '0' || (version.indexOf('-') !== -1)) {
@@ -3176,121 +3189,161 @@ function latestVersion(versions) {
   return version;
 }
 
-// FIXME: see https://getcomposer.org/doc/04-schema.md#version
-// and https://github.com/badges/shields/issues/319#issuecomment-74411045
-function versionCompare(v1, v2, operator) {
-  //       discuss at: http://phpjs.org/functions/version_compare/
-  //      original by: Philippe Jausions (http://pear.php.net/user/jausions)
-  //      original by: Aidan Lister (http://aidanlister.com/)
-  // reimplemented by: Kankrelune (http://www.webfaktory.info/)
-  //      improved by: Brett Zamir (http://brett-zamir.me)
-  //      improved by: Scott Baker
-  //      improved by: Theriault
-  //        example 1: version_compare('8.2.5rc', '8.2.5a');
-  //        returns 1: 1
-  //        example 2: version_compare('8.2.50', '8.2.52', '<');
-  //        returns 2: true
-  //        example 3: version_compare('5.3.0-dev', '5.3.0');
-  //        returns 3: -1
-  //        example 4: version_compare('4.1.0.52','4.01.0.51');
-  //        returns 4: 1
+// Return a negative value if v1 < v2,
+// zero if v1 = v2, a positive value otherwise.
+function asciiVersionCompare(v1, v2) {
+  if (v1 < v2) {
+    return -1;
+  } else if (v1 > v2) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
 
-  this.php_js = this.php_js || {};
-  this.php_js.ENV = this.php_js.ENV || {};
-  // END REDUNDANT
-  // Important: compare must be initialized at 0.
-  var i = 0,
-    x = 0,
-    compare = 0,
-    // vm maps textual PHP versions to negatives so they're less than 0.
-    // PHP currently defines these as CASE-SENSITIVE. It is important to
-    // leave these as negatives so that they can come before numerical versions
-    // and as if no letters were there to begin with.
-    // (1alpha is < 1 and < 1.1 but > 1dev1)
-    // If a non-numerical value can't be mapped to this table, it receives
-    // -7 as its value.
-    vm = {
-      'dev': -6,
-      'alpha': -5,
-      'a': -5,
-      'beta': -4,
-      'b': -4,
-      'RC': -3,
-      'rc': -3,
-      '#': -2,
-      'p': 1,
-      'pl': 1
-    },
-    // This function will be called to prepare each version argument.
-    // It replaces every _, -, and + with a dot.
-    // It surrounds any nonsequence of numbers/dots with dots.
-    // It replaces sequences of dots with a single dot.
-    //    version_compare('4..0', '4.0') == 0
-    // Important: A string of 0 length needs to be converted into a value
-    // even less than an unexisting value in vm (-7), hence [-8].
-    // It's also important to not strip spaces because of this.
-    //   version_compare('', ' ') == 1
-    prepVersion = function (v) {
-      v = ('' + v)
-        .replace(/[_\-+]/g, '.');
-      v = v.replace(/([^.\d]+)/g, '.$1.')
-        .replace(/\.{2,}/g, '.');
-      return (!v.length ? [-8] : v.split('.'));
+// Remove the starting v in a string.
+function omitv(version) {
+  if (version.charCodeAt(0) === 118) { // v
+    return version.slice(1);
+  } else {
+    return version;
+  }
+}
+
+// Take a version without the starting v.
+// eg, '1.0.x-beta'
+// Return { numbers: '1.0.x', modifier: 2, modifierCount: 1 }
+function phpNumberedVersionData(version) {
+  // A version has a numbered part and a modifier part
+  // (eg, 1.0.0-patch, 2.0.x-dev).
+  var parts = version.split('-');
+  var numbered = parts[0];
+
+  // Aliases that get caught here.
+  if (numbered === 'dev') {
+    return {
+      numbers: parts[1],
+      modifier: 5,
+      modifierCount: 1,
     };
-  // This converts a version component to a number.
-  // Empty component becomes 0.
-  // Non-numerical component becomes a negative number.
-  // Numerical component becomes itself as an integer.
-  numVersion = function (v) {
-    return !v ? 0 : (isNaN(v) ? vm[v] || -7 : parseInt(v, 10));
-  };
-  v1 = prepVersion(v1);
-  v2 = prepVersion(v2);
-  x = Math.max(v1.length, v2.length);
-  for (i = 0; i < x; i++) {
-    if (v1[i] == v2[i]) {
-      continue;
-    }
-    v1[i] = numVersion(v1[i]);
-    v2[i] = numVersion(v2[i]);
-    if (v1[i] < v2[i]) {
-      compare = -1;
-      break;
-    } else if (v1[i] > v2[i]) {
-      compare = 1;
-      break;
-    }
-  }
-  if (!operator) {
-    return compare;
   }
 
-  // Important: operator is CASE-SENSITIVE.
-  // "No operator" seems to be treated as "<."
-  // Any other values seem to make the function return null.
-  switch (operator) {
-  case '>':
-  case 'gt':
-    return (compare > 0);
-  case '>=':
-  case 'ge':
-    return (compare >= 0);
-  case '<=':
-  case 'le':
-    return (compare <= 0);
-  case '==':
-  case '=':
-  case 'eq':
-    return (compare === 0);
-  case '<>':
-  case '!=':
-  case 'ne':
-    return (compare !== 0);
-  case '':
-  case '<':
-  case 'lt':
-    return (compare < 0);
-  default:
-    return null;
+  var modifierLevel = 3;
+  var modifierLevelCount = 0;
+
+  if (parts.length > 1) {
+    var modifier = parts[parts.length - 1];
+    var firstLetter = modifier.charCodeAt(0);
+    var modifierLevelCountString;
+
+    // Modifiers: alpha < beta < RC < normal < patch < dev
+    if (firstLetter === 97) { // a
+      modifierLevel = 0;
+      if (/^alpha/.test(modifier)) {
+        modifierLevelCountString = + (modifier.slice(5));
+      } else {
+        modifierLevelCountString = + (modifier.slice(1));
+      }
+    } else if (firstLetter === 98) { // b
+      modifierLevel = 1;
+      if (/^beta/.test(modifier)) {
+        modifierLevelCountString = + (modifier.slice(4));
+      } else {
+        modifierLevelCountString = + (modifier.slice(1));
+      }
+    } else if (firstLetter === 82) { // R
+      modifierLevel = 2;
+      modifierLevelCountString = + (modifier.slice(2));
+    } else if (firstLetter === 112) { // p
+      modifierLevel = 4;
+      if (/^patch/.test(modifier)) {
+        modifierLevelCountString = + (modifier.slice(5));
+      } else {
+        modifierLevelCountString = + (modifier.slice(1));
+      }
+    } else if (firstLetter === 100) { // d
+      modifierLevel = 5;
+      if (/^dev/.test(modifier)) {
+        modifierLevelCountString = + (modifier.slice(3));
+      } else {
+        modifierLevelCountString = + (modifier.slice(1));
+      }
+    }
+
+    // If we got the empty string, it defaults to a modifier count of 1.
+    if (!modifierLevelCountString) {
+      modifierLevelCount = 1;
+    } else {
+      modifierLevelCount = + modifierLevelCountString;
+    }
   }
+
+  return {
+    numbers: numbered,
+    modifier: modifierLevel,
+    modifierCount: modifierLevelCount,
+  };
+}
+
+// Return a negative value if v1 < v2,
+// zero if v1 = v2,
+// a positive value otherwise.
+//
+// See https://getcomposer.org/doc/04-schema.md#version
+// and https://github.com/badges/shields/issues/319#issuecomment-74411045
+function phpVersionCompare(v1, v2) {
+  // Omit the starting `v`.
+  var rawv1 = omitv(v1);
+  var rawv2 = omitv(v2);
+  try {
+    var v1data = phpNumberedVersionData(rawv1);
+    var v2data = phpNumberedVersionData(rawv2);
+  } catch(e) {
+    return asciiVersionCompare(rawv1, rawv2);
+  }
+
+  // Compare the numbered part (eg, 1.0.0 < 2.0.0).
+  if (v1data.numbers < v2data.numbers) {
+    return -1;
+  } else if (v1data.numbers > v2data.numbers) {
+    return 1;
+  }
+
+  // Compare the modifiers (eg, alpha < beta).
+  if (v1data.modifier < v2data.modifier) {
+    return -1;
+  } else if (v1data.modifier > v2data.modifier) {
+    return 1;
+  }
+
+  // Compare the modifier counts (eg, alpha1 < alpha3).
+  if (v1data.modifierCount < v2data.modifierCount) {
+    return -1;
+  } else if (v1data.modifierCount > v2data.modifierCount) {
+    return 1;
+  }
+
+  return 0;
+}
+
+function phpLatestVersion(versions) {
+  var latest = versions[0];
+  for (var i = 1; i < versions.length; i++) {
+    if (phpVersionCompare(latest, versions[i]) < 0) {
+      latest = versions[i];
+    }
+  }
+  return latest;
+}
+
+// Whether a version is stable.
+function phpStableVersion(version) {
+  var rawVersion = omitv(version);
+  try {
+    var versionData = phpNumberedVersionData(version);
+  } catch(e) {
+    return false;
+  }
+  // normal or patch
+  return (versionData.modifier === 3) || (versionData.modifier === 4);
 }
