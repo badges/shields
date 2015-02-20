@@ -821,15 +821,21 @@ cache(function(data, match, sendBadge, request) {
 
       // Map aliases (eg, dev-master).
       var aliasesMap = {};
-      versions = versions.map(function(version) {
+      versions.forEach(function(version) {
         var versionData = versionsData[version];
         if (versionData.extra && versionData.extra['branch-alias'] &&
             versionData.extra['branch-alias'][version]) {
           // eg, version is 'dev-master', mapped to '2.0.x-dev'.
           var validVersion = versionData.extra['branch-alias'][version];
-          aliasesMap[validVersion] = version;
-          return validVersion;
-        } else { return version; }
+          if (aliasesMap[validVersion] === undefined ||
+              phpVersionCompare(aliasesMap[validVersion], validVersion) < 0) {
+            versions.push(validVersion);
+            aliasesMap[validVersion] = version;
+          }
+        }
+      });
+      versions = versions.filter(function(version) {
+        return !(/^dev-/.test(version));
       });
 
       var badgeText = null;
@@ -842,18 +848,18 @@ cache(function(data, match, sendBadge, request) {
         if (!stableVersion) {
           stableVersion = phpLatestVersion(versions);
         }
-        if (!!aliasesMap[stableVersion]) {
-          stableVersion = aliasesMap[stableVersion];
-        }
+        //if (!!aliasesMap[stableVersion]) {
+        //  stableVersion = aliasesMap[stableVersion];
+        //}
         var vdata = versionColor(stableVersion);
         badgeText = vdata.version;
         badgeColor = vdata.color;
         break;
       case 'vpre':
         var unstableVersion = phpLatestVersion(versions);
-        if (!!aliasesMap[unstableVersion]) {
-          unstableVersion = aliasesMap[unstableVersion];
-        }
+        //if (!!aliasesMap[unstableVersion]) {
+        //  unstableVersion = aliasesMap[unstableVersion];
+        //}
         var vdata = versionColor(unstableVersion);
         badgeText = vdata.version;
         badgeColor = 'orange';
