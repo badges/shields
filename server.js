@@ -2929,6 +2929,32 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// CTAN integration.
+camp.route(/^\/ctan\/v\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var pkg = match[1]; // eg, tex
+  var format = match[2];
+  var url = 'http://www.ctan.org/json/pkg/'+pkg;
+  var badgeData = getBadgeData('ctan', data);
+  request(url, function (err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(badgeData, format);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var version = data.version.number;
+      var vdata = versionColor(version);
+      badgeData.text[1] = vdata.version;
+      badgeData.colorscheme = vdata.color;
+      sendBadge(format, badgeData);
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  })}
+));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
