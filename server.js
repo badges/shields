@@ -2241,13 +2241,14 @@ mapNugetFeed('myget\\/(.*)', 1, function(match) {
 });
 
 // Puppet Forge
-camp.route(/^\/puppetforge\/v\/([^\/]+\/[^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/puppetforge\/v\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];
-  var format = match[2];
+  var user = match[1];
+  var module = match[2];
+  var format = match[3];
   var options = {
     json: true,
-    uri: 'https://forge.puppetlabs.com/api/v1/releases.json?module=' + userRepo
+    uri: 'https://forgeapi.puppetlabs.com/v3/modules/'+user+'-'+module
   };
   var badgeData = getBadgeData('puppetforge', data);
   request(options, function dealWithData(err, res, json) {
@@ -2260,7 +2261,7 @@ cache(function(data, match, sendBadge, request) {
       var unstable = function(ver) {
         return /-[0-9A-Za-z.-]+(?:\+[0-9A-Za-z.-]+)?$/.test(ver);
       };
-      var releases = json[userRepo];
+      var releases = json['releases'];
       if (releases.length == 0) {
         badgeData.text[1] = 'none';
         badgeData.colorscheme = 'lightgrey';
