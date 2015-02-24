@@ -2240,7 +2240,7 @@ mapNugetFeed('myget\\/(.*)', 1, function(match) {
   };
 });
 
-// Puppet Forge
+// Puppet Forge modules
 camp.route(/^\/puppetforge\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var info = match[1]; // either `v`, `dt`, `e` or `f`
@@ -2317,6 +2317,62 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = 'unknown';
           badgeData.colorscheme = 'lightgrey';
         }
+      }
+      sendBadge(format, badgeData);
+
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// Puppet Forge users
+camp.route(/^\/puppetforge\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var info = match[1]; // either `rc` or `mc`
+  var user = match[2];
+  var format = match[3];
+  var options = {
+    json: true,
+    uri: 'https://forgeapi.puppetlabs.com/v3/users/'+user
+  };
+  var badgeData = getBadgeData('puppetforge', data);
+  request(options, function dealWithData(err, res, json) {
+    if (err != null || (json.length !== undefined && json.length === 0)) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      if (info == 'rc') {
+        var releases = json['release_count'];
+        if (releases === 0) {
+          badgeData.colorscheme = 'red';
+        } else if (releases < 10) {
+          badgeData.colorscheme = 'yellow';
+        } else if (releases < 50) {
+          badgeData.colorscheme = 'yellowgreen';
+        } else if (releases < 100) {
+          badgeData.colorscheme = 'green';
+        } else {
+          badgeData.colorscheme = 'brightgreen';
+        }
+        badgeData.text[1] = metric(releases) + ' releases';
+      } else if (info == 'mc') {
+        var modules = json['module_count'];
+        if (modules === 0) {
+          badgeData.colorscheme = 'red';
+        } else if (modules < 5) {
+          badgeData.colorscheme = 'yellow';
+        } else if (modules < 10) {
+          badgeData.colorscheme = 'yellowgreen';
+        } else if (modules < 50) {
+          badgeData.colorscheme = 'green';
+        } else {
+          badgeData.colorscheme = 'brightgreen';
+        }
+        badgeData.text[1] = metric(modules) + ' modules';
       }
       sendBadge(format, badgeData);
 
