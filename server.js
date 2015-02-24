@@ -2241,11 +2241,12 @@ mapNugetFeed('myget\\/(.*)', 1, function(match) {
 });
 
 // Puppet Forge
-camp.route(/^\/puppetforge\/v\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/puppetforge\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];
-  var module = match[2];
-  var format = match[3];
+  var info = match[1]; // either `v`, `dt`, `e` or `f`
+  var user = match[2];
+  var module = match[3];
+  var format = match[4];
   var options = {
     json: true,
     uri: 'https://forgeapi.puppetlabs.com/v3/modules/'+user+'-'+module
@@ -2258,26 +2259,65 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var unstable = function(ver) {
-        return /-[0-9A-Za-z.-]+(?:\+[0-9A-Za-z.-]+)?$/.test(ver);
-      };
-      var releases = json['releases'];
-      if (releases.length == 0) {
-        badgeData.text[1] = 'none';
-        badgeData.colorscheme = 'lightgrey';
-        sendBadge(format, badgeData);
-        return;
+      if (info == 'v') {
+        var unstable = function(ver) {
+          return /-[0-9A-Za-z.-]+(?:\+[0-9A-Za-z.-]+)?$/.test(ver);
+        };
+        var releases = json['releases'];
+        if (releases.length == 0) {
+          badgeData.text[1] = 'none';
+          badgeData.colorscheme = 'lightgrey';
+          sendBadge(format, badgeData);
+          return;
+        }
+        var versions = releases.map(function(version) {
+          return version.version;
+        });
+        var version = latestVersion(versions);
+        if (unstable(version)) {
+          badgeData.colorscheme = "yellow";
+        } else {
+          badgeData.colorscheme = "blue";
+        }
+        badgeData.text[1] = "v" + version;
+      } else if (info == 'dt') {
+        var total = json['downloads'];
+        if (total === 0) {
+          badgeData.colorscheme = 'red';
+        } else if (total < 100) {
+          badgeData.colorscheme = 'yellow';
+        } else if (total < 1000) {
+          badgeData.colorscheme = 'yellowgreen';
+        } else if (total < 10000) {
+          badgeData.colorscheme = 'green';
+        } else {
+          badgeData.colorscheme = 'brightgreen';
+        }
+        badgeData.text[1] = metric(total) + ' total';
+      } else if (info == 'e') {
+        var endorsement = json['endorsement'];
+        if (endorsement == 'approved') {
+          badgeData.colorscheme = 'green';
+        } else if (endorsement == 'supported') {
+          badgeData.colorscheme = 'brightgreen';
+        } else {
+          badgeData.colorscheme = 'red';
+        }
+        if (endorsement != null) {
+          badgeData.text[1] = endorsement;
+        } else {
+          badgeData.text[1] = 'no endorsement';
+        }
+      } else if (info == 'f') {
+        var feedback = json['feedback_score'];
+        if (feedback != null) {
+          badgeData.text[1] = feedback+'%';
+          badgeData.colorscheme = coveragePercentageColor(feedback);
+        } else {
+          badgeData.text[1] = 'unknown';
+          badgeData.colorscheme = 'lightgrey';
+        }
       }
-      var versions = releases.map(function(version) {
-        return version.version;
-      });
-      var version = latestVersion(versions);
-      if (unstable(version)) {
-        badgeData.colorscheme = "yellow";
-      } else {
-        badgeData.colorscheme = "blue";
-      }
-      badgeData.text[1] = "v" + version;
       sendBadge(format, badgeData);
 
     } catch(e) {
