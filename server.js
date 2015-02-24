@@ -2945,12 +2945,12 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
 
-      if (info == 'v') {
+      if (info === 'v') {
         var version = data.version;
         var vdata = versionColor(version);
         badgeData.text[1] = vdata.version;
         badgeData.colorscheme = vdata.color;
-      } else if (info == 'l') {
+      } else if (info === 'l') {
         var license = data.license[0];
         badgeData.text[1] = license;
         badgeData.colorscheme = 'blue';
