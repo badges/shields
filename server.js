@@ -3002,15 +3002,15 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
 
-      if (info == 'v') {
+      if (info === 'v') {
       var version = data.version.number;
         var vdata = versionColor(version);
         badgeData.text[1] = vdata.version;
         badgeData.colorscheme = vdata.color;
         sendBadge(format, badgeData);
-      } else if (info == 'l') {
+      } else if (info === 'l') {
         var license = data.license;
-        if (license == '') {
+        if (license === '') {
           badgeData.text[1] = 'Unknown';
         } else {
           badgeData.text[1] = license;
