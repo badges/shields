@@ -3003,7 +3003,7 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
 
       if (info === 'v') {
-      var version = data.version.number;
+        var version = data.version.number;
         var vdata = versionColor(version);
         badgeData.text[1] = vdata.version;
         badgeData.colorscheme = vdata.color;
