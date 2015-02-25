@@ -816,6 +816,14 @@ function selectNode(e) {
 };
 copyMarkdown.addEventListener('click', selectNode);
 copyreStructuredText.addEventListener('click', selectNode);
+function autoselectCode() {
+  var codes = document.querySelectorAll('table.badge code');
+  for (var i = 0; i < codes.length; i++) {
+    codes[i].addEventListener('click', selectNode);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', autoselectCode);
 
 // Markup copier dialog
 //
