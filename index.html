@@ -299,6 +299,10 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <td><img src='https://img.shields.io/packagist/v/symfony/symfony.svg' alt=''/></td>
   <td><code>https://img.shields.io/packagist/v/symfony/symfony.svg</code></td>
   </tr>
+  <tr><th data-keywords='PHP'> Packagist Pre Release: </th>
+  <td><img src='https://img.shields.io/packagist/vpre/symfony/symfony.svg' alt=''/></td>
+  <td><code>https://img.shields.io/packagist/vpre/symfony/symfony.svg</code></td>
+  </tr>
   <tr><th> CocoaPods: </th>
   <td><img src='https://img.shields.io/cocoapods/v/AFNetworking.svg' alt='' /></td>
   <td><code>https://img.shields.io/cocoapods/v/AFNetworking.svg</code></td>
@@ -367,6 +371,10 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <td><img src='https://img.shields.io/apm/v/vim-mode.svg' alt=''/></td>
   <td><code>https://img.shields.io/apm/v/vim-mode.svg</code></td>
   </tr>
+  <tr><th data-keywords='tex'> CTAN: </th>
+  <td><img src='https://img.shields.io/ctan/v/tex.svg' alt=''/></td>
+  <td><code>https://img.shields.io/ctan/v/tex.svg</code></td>
+  </tr>
 </tbody></table>
 
 <h3> Miscellaneous </h3>
@@ -407,6 +415,10 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><img src='https://img.shields.io/hackage-deps/v/lens.svg' alt=''/></td>
     <td><code>https://img.shields.io/hackage-deps/v/lens.svg</code></td>
   </tr>
+  <tr><th data-keywords='Rust'> Crates.io: </th>
+    <td><img src='https://img.shields.io/crates/l/rustc-serialize.svg' alt=''/></td>
+    <td><code>https://img.shields.io/crates/l/rustc-serialize.svg</code></td>
+  </tr>
   <tr><th> Requires.io: </th>
     <td><img src='https://img.shields.io/requires/github/celery/celery.svg' alt=''/></td>
     <td><code>https://img.shields.io/requires/github/celery/celery.svg</code></td>
@@ -438,6 +450,10 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <tr><th> CocoaPods: </th>
     <td><img src='https://img.shields.io/cocoapods/l/AFNetworking.svg' alt='' /></td>
     <td><code>https://img.shields.io/cocoapods/l/AFNetworking.svg</code></td>
+  </tr>
+  <tr><th data-keywords='tex'> CTAN: </th>
+    <td><img src='https://img.shields.io/ctan/l/tex.svg' alt='' /></td>
+    <td><code>https://img.shields.io/ctan/l/tex.svg</code></td>
   </tr>
   <tr><th> CocoaPods: </th>
     <td><img src='https://img.shields.io/cocoapods/p/AFNetworking.svg' alt='' /></td>
@@ -710,6 +726,8 @@ is where the current server got started.
 
 <script>
 // Search
+//
+
 var searchBadgeDb = {index: [], tr: []};
 function searchBadgeDbInit() {
   searchBadgeDb = {index: [], tr: []};
@@ -742,6 +760,8 @@ function searchBadge(event) {
 document.addEventListener('DOMContentLoaded', searchBadgeDbInit);
 
 // Suggested badges search
+//
+
 function isUrl(url) {
   var http = url.slice(0, 5) === 'http:';
   var https = url.slice(0, 6) === 'https:';
@@ -783,8 +803,40 @@ function suggestBadgeInit() {
 
 document.addEventListener('DOMContentLoaded', suggestBadgeInit);
 
+// Auto-select code snippets
+//
+
+// Select and highlight the node's textual content.
+// Use this as an event listener.
+function selectNode(e) {
+  if (e.target.select) {
+    e.target.select();
+  } else {
+    if (document.selection) {
+      var range = document.body.createTextRange();
+      range.moveToElementText(e.target);
+      range.select();
+    } else if (window.getSelection) {
+      var range = document.createRange();
+      range.selectNode(e.target);
+      window.getSelection().addRange(range);
+    }
+  }
+};
+copyMarkdown.addEventListener('click', selectNode);
+copyreStructuredText.addEventListener('click', selectNode);
+function autoselectCode() {
+  var codes = document.querySelectorAll('table.badge code');
+  for (var i = 0; i < codes.length; i++) {
+    codes[i].addEventListener('click', selectNode);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', autoselectCode);
 
 // Markup copier dialog
+//
+
 function markupDialogInit() {
   var trs = document.querySelectorAll('table.badge tr');
   for (var i = 0; i < trs.length; i++) {
@@ -861,7 +913,10 @@ copyForm.addEventListener('click', function(event) {
   event.stopPropagation();
 });
 
+
 // Custom badge
+//
+
 function makeImage() {
   var url = document.getElementById('imgUrlPrefix').textContent;
   url += escapeField(imageMaker.subject.value);
@@ -877,6 +932,8 @@ function escapeField(s) {
 
 
 // Convert object literal to xhr-sendable.
+//
+
 function toXhrSend(data) {
   var str = '', start = true;
   var jsondata = '';
