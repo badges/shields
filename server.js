@@ -3279,7 +3279,7 @@ function omitv(version) {
 
 // Take a version without the starting v.
 // eg, '1.0.x-beta'
-// Return { numbers: '1.0.x', modifier: 2, modifierCount: 1 }
+// Return { numbers: [1,0,something big], modifier: 2, modifierCount: 1 }
 function phpNumberedVersionData(version) {
   // A version has a numbered part and a modifier part
   // (eg, 1.0.0-patch, 2.0.x-dev).
@@ -3345,11 +3345,38 @@ function phpNumberedVersionData(version) {
     }
   }
 
+  // Try to convert to a list of numbers.
+  var toNum = function(s) {
+    var n = +s;
+    if (n !== n) {  // If n is NaN…
+      n = 0xffffffff;
+    }
+    return n;
+  };
+  var numberList = numbered.split('.').map(toNum);
+
   return {
-    numbers: numbered,
+    numbers: numberList,
     modifier: modifierLevel,
     modifierCount: modifierLevelCount,
   };
+}
+
+function listCompare(a, b) {
+  for (var i = 0; i < a.length; i++) {
+    if (a[i] < b[i]) {
+      return -1;
+    } else if (a[i] > b[i]) {
+      return 1;
+    }
+  }
+  if (a.length < b.length) {
+    return -1;
+  } else if (a.length > b.length) {
+    return 1;
+  } else {
+    return 0;
+  }
 }
 
 // Return a negative value if v1 < v2,
@@ -3370,10 +3397,9 @@ function phpVersionCompare(v1, v2) {
   }
 
   // Compare the numbered part (eg, 1.0.0 < 2.0.0).
-  if (v1data.numbers < v2data.numbers) {
-    return -1;
-  } else if (v1data.numbers > v2data.numbers) {
-    return 1;
+  var numbersCompare = listCompare(v1data.numbers, v2data.numbers);
+  if (numbersCompare !== 0) {
+    return numbersCompare;
   }
 
   // Compare the modifiers (eg, alpha < beta).
