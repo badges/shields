@@ -1908,7 +1908,7 @@ cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
   var format = match[3];
-  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/releases';
+  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/releases/latest';
   // Using our OAuth App secret grants us 5000 req/hour
   // instead of the standard 60 req/hour.
   if (serverSecrets) {
@@ -1928,11 +1928,8 @@ cache(function(data, match, sendBadge, request) {
         return;  // Hope for the best in the cache.
       }
       var data = JSON.parse(buffer);
-      var versions = data.map(function(version) { return version.tag_name; });
-      var version = latestVersion(versions);
-      var prerelease = !!data.filter(function(versionData) {
-        return version === versionData.tag_name;
-      })[0].prerelease;
+      var version = data.tag_name;
+      var prerelease = data.prerelease;
       var vdata = versionColor(version);
       badgeData.text[1] = vdata.version;
       badgeData.colorscheme = prerelease ? 'orange' : 'blue';
