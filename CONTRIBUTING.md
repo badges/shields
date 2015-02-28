@@ -1,12 +1,13 @@
 # Contribution Guidelines
 
-This is the home of Shields.io, containing the badge design specification and API documentation for Badges as a Service. There is also a [gh-pages branch][website] containing the static web site at [shields.io][].
+This is the home of Shields.io, home to the badge design specification, API documentation, and server code for Badges as a Service.
 
 We invite participation through [GitHub Issues][], which we use much like a discussion forum. This repository should only contain non-implementation specific topics: specifications, design, and the web site.
 
 ## This implementation
 
-Please see [INSTALL.md][] for information on how to get started.
+Please see [INSTALL.md][] for information on how to start contributing code to
+shields.io.
 
 [INSTALL.md]: ./INSTALL.md
 
@@ -17,25 +18,22 @@ gets generated from the `try.html` file.
 
 ## Implementations
 
-Please report **bugs** and discuss implementation specific concerns (performance characteristics, etc.) in the repository for the respective implementation:
+The main implementation, available at <http://shields.io>, has its code located in this repository.
 
-| website / AP                  | language   | issues                        |
-| ----------------------------- | ---------- | ----------------------------- |
-| [img.shields.io][] *          | JavaScript | [shields][gh-badges issues]   |
-| shielded                      | JavaScript | [shielded][shielded issues]   |
-| [buckler.repl.ca][]           | Go         | [buckler][buckler issues]     |
-| old img.shields.io *          | Python     | [img.shields.io-old][]        |
+Other systems that produce badges following the same design, hosted elsewhere, are listed below.
 
-\* gh-badges (ex-`b.adge.me`) [has been adopted][primary] as the primary implementation going forward
-\* img.shields.io is being disbanded and replaced with gh-badges
+| website / AP                      | language   | issues                       |
+| --------------------------------- | ---------- | ---------------------------- |
+| shielded                          | JavaScript | [shielded][shielded issues]  |
+| [buckler.repl.ca][]               | Go         | [buckler][buckler issues]    |
+| old img.shields.io (discontinued) | Python     | [img.shields.io-old][]       |
+
+Please report **bugs** and discuss implementation specific concerns (performance characteristics, etc.) in the repository for the respective implementation.
 
 ## Adding support for a service
 
 Please [open an issue][new issue] if you'd like to use Shields badges for a project that isn't yet supported.
 
-## Shields-as-a-Service
-
-Our long term goal is to transform Shields into a service with which widely compatible badges can be generated via a simple API call, any help with this would be much appreciated.
 
 [shields.io]: http://shields.io/
 [website]: https://github.com/badges/shields/tree/gh-pages
@@ -52,4 +50,3 @@ Our long term goal is to transform Shields into a service with which widely comp
 [buckler issues]: https://github.com/badges/buckler/issues
 
 [img.shields.io-old]: https://github.com/badges/img.shields.io-old/issues
-
