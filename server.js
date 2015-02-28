@@ -3237,7 +3237,7 @@ function latestVersion(versions) {
   versions = versions.filter(function(version) {
     return (/^v?[0-9]/).test(version);
   });
-  versions = versions.map(function(version) {
+  semver_versions = versions.map(function(version) {
     var matches = /^(v?[0-9]+)(\.[0-9]+)?(-.*)?$/.exec(version);
     if (matches) {
         version = matches[1] + (matches[2] ? matches[2] : '.0') + '.0' + (matches[3] ? matches[3] : '');
@@ -3245,7 +3245,8 @@ function latestVersion(versions) {
     return version;
   });
   try {
-    version = semver.maxSatisfying(versions, '');
+    version = semver.maxSatisfying(semver_versions, '');
+    version = versions[semver_versions.indexOf(version)];
   } catch(e) {
     versions = versions.sort();
     version = versions[versions.length - 1];
