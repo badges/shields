@@ -2922,6 +2922,7 @@ cache(function(data, match, sendBadge, request) {
       var status = data[0].status;
       switch(status) {
       case 'success':
+      case 'fixed':
         badgeData.colorscheme = 'brightgreen';
         badgeData.text[1] = 'passing';
         break;
