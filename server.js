@@ -3082,6 +3082,68 @@ cache(function(data, match, sendBadge, request) {
   })}
 ));
 
+// example https://img.shields.io/mingle/https/your-company.mingle-api.thoughtworks.com/your-project-name/card-number/your-property-name.svg
+// Mingle card status integration
+camp.route(/^\/mingle\/(.*)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var scheme = 'https'; // only allow https (keep auth private)
+  var host = match[1]; // your-company.mingle-api.thoughtworks.com
+  var project = match[2]; // your-project-name
+  var card = match[3]; // card-number e.g. `428`
+  var property = match[4]; // your-property-name e.g. `status`
+  var format = match[5];
+  var authToken = '';
+
+  var options = {
+    headers: {
+      'Content-Type': 'application/xml'
+    },
+    uri: scheme + '://' + host + '/api/v2/projects/' + project + '/cards/' + card + '.xml'
+  };
+
+  if (serverSecrets) {
+    // basic auth
+    options.headers.Authorization = 'Basic ' + new Buffer(serverSecrets.mingle_user + ':' + serverSecrets.mingle_password).toString('base64');
+  }
+
+  var badgeData = getBadgeData('card #' + card, data);
+
+  request(options, function(err, res, body) {
+    if (err != null || res.statusCode !== 200) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    var xml2js = require('xml2js');
+
+    xml2js.parseString(body, function (err, result) {
+      if (err !== null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+
+      try {
+        var regex = new RegExp('^' + property + '$','i');
+        var matchingProperty = result.card.properties[0].property.filter(function(p) {
+          return regex.test(p.name[0]);
+        })[0];
+
+        if (matchingProperty) {
+          badgeData.colorscheme = 'blue';
+          badgeData.text[1] = matchingProperty.value[0];
+        }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  });
+
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
