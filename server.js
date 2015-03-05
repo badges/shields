@@ -1185,6 +1185,44 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Gem owner stats
+camp.route(/^\/gem\/u\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1]; // eg, "raphink"
+  var format = match[2];
+  var url = 'https://rubygems.org/api/v1/owners/'+user+'/gems.json';
+  var badgeData = getBadgeData('gems', data);
+  request(url, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(badgeData, format);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var count = data.length;
+      if (count === 0) {
+        badgeData.colorscheme = 'red';
+      } else if (count < 10) {
+        badgeData.colorscheme = 'yellow';
+      } else if (count < 50) {
+        badgeData.colorscheme = 'yellowgreen';
+      } else if (count < 100) {
+        badgeData.colorscheme = 'green';
+      } else {
+        badgeData.colorscheme = 'brightgreen';
+      }
+      badgeData.text[1] = count+' gem';
+      if (count > 1) {
+        badgeData.text[1] += 's';
+      }
+      sendBadge(format, badgeData);
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  })
+}));
+
 // PyPI integration.
 camp.route(/^\/pypi\/([^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
