@@ -4524,11 +4524,17 @@ camp.route(/^\/stackexchange\/([^\/]+)\/([^\/])\/([^\/]+)\.(svg|png|gif|jpg|json
 cache(function(data, match, sendBadge, request) {
   var site = match[1]; // eg, stackoverflow
   var info = match[2]; // either `r`
-  var user = match[3]; // eg, 232250
+  var item = match[3]; // eg, 232250
   var format = match[4];
+  var path;
+  if (info === 'r') {
+    path = 'users/'+item;
+  } else if (info === 't') {
+    path = 'tags/'+item+'/info';
+  }
   var options = {
     method: 'GET',
-    uri: 'https://api.stackexchange.com/2.2/users/'+user+'?site='+site,
+    uri: 'https://api.stackexchange.com/2.2/'+path+'?site='+site,
     encoding: null
   }
   var badgeData = getBadgeData(site, data);
@@ -4555,8 +4561,22 @@ cache(function(data, match, sendBadge, request) {
           } else {
             badgeData.colorscheme = 'brightgreen';
           }
-          sendBadge(format, badgeData);
+        } else if (info === 't') {
+          var count = data.items[0].count;
+          badgeData.text[1] = metric(count)+' questions';
+          if (count === 0) {
+            badgeData.colorscheme = 'red';
+          } else if (count < 1000) {
+            badgeData.colorscheme = 'yellow';
+          } else if (count < 10000) {
+            badgeData.colorscheme = 'yellowgreen';
+          } else if (count < 20000) {
+            badgeData.colorscheme = 'green';
+          } else {
+            badgeData.colorscheme = 'brightgreen';
+          }
         }
+        sendBadge(format, badgeData);
       } catch (e) {
         badgeData.text[1] = 'invalid';
         sendBadge(format, badgeData);
