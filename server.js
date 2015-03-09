@@ -14,6 +14,7 @@ console.log('http://[::1]:' + serverPort + '/try.html');
 var domain = require('domain');
 var request = require('request');
 var fs = require('fs');
+var zlib = require('zlib');
 var LruCache = require('./lru-cache.js');
 var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
@@ -4517,6 +4518,52 @@ cache(function(data, match, sendBadge, request) {
   }
   sendBadge(format, badgeData);
 }));
+
+// StackExchange integration.
+camp.route(/^\/stackexchange\/([^\/]+)\/([^\/])\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var site = match[1]; // eg, stackoverflow
+  var info = match[2]; // either `r`
+  var user = match[3]; // eg, 232250
+  var format = match[4];
+  var options = {
+    method: 'GET',
+    uri: 'https://api.stackexchange.com/2.2/users/'+user+'?site='+site,
+    encoding: null
+  }
+  var badgeData = getBadgeData(site, data);
+  request(options, function (err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(badgeData, format);
+    }
+    zlib.gunzip(buffer, function (err, body) {
+      try {
+        var data = JSON.parse(body.toString());
+
+        if (info === 'r') {
+          var reputation = data.items[0].reputation;
+          badgeData.text[1] = metric(reputation);
+          if (reputation === 0) {
+            badgeData.colorscheme = 'red';
+          } else if (reputation < 1000) {
+            badgeData.colorscheme = 'yellow';
+          } else if (reputation < 10000) {
+            badgeData.colorscheme = 'yellowgreen';
+          } else if (reputation < 20000) {
+            badgeData.colorscheme = 'green';
+          } else {
+            badgeData.colorscheme = 'brightgreen';
+          }
+          sendBadge(format, badgeData);
+        }
+      } catch (e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  })}
+));
 
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
