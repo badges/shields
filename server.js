@@ -2272,6 +2272,7 @@ cache(function(data, match, sendBadge, request) {
       } else if (info == 'dt') {
         var total = json.downloads;
         badgeData.colorscheme = downloadCountColor(total);
+        badgeData.text[0] = 'downloads';
         badgeData.text[1] = metric(total) + ' total';
       } else if (info == 'e') {
         var endorsement = json.endorsement;
@@ -2282,13 +2283,15 @@ cache(function(data, match, sendBadge, request) {
         } else {
           badgeData.colorscheme = 'red';
         }
+        badgeData.text[0] = 'endorsement';
         if (endorsement != null) {
           badgeData.text[1] = endorsement;
         } else {
-          badgeData.text[1] = 'no endorsement';
+          badgeData.text[1] = 'none';
         }
       } else if (info == 'f') {
         var feedback = json.feedback_score;
+        badgeData.text[0] = 'score';
         if (feedback != null) {
           badgeData.text[1] = feedback+'%';
           badgeData.colorscheme = coveragePercentageColor(feedback);
@@ -2327,11 +2330,13 @@ cache(function(data, match, sendBadge, request) {
       if (info == 'rc') {
         var releases = json.release_count;
         badgeData.colorscheme = floorCountColor(releases, 10, 50, 100);
-        badgeData.text[1] = metric(releases) + ' releases';
+        badgeData.text[0] = 'releases';
+        badgeData.text[1] = metric(releases);
       } else if (info == 'mc') {
         var modules = json.module_count;
         badgeData.colorscheme = floorCountColor(modules, 5, 10, 50);
-        badgeData.text[1] = metric(modules) + ' modules';
+        badgeData.text[0] = 'modules';
+        badgeData.text[1] = metric(modules);
       }
       sendBadge(format, badgeData);
 
