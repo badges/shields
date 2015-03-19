@@ -2259,7 +2259,7 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      if (info == 'v') {
+      if (info === 'v') {
         if (json.current_release) {
           var vdata = versionColor(json.current_release.version);
           badgeData.text[1] = vdata.version;
@@ -2268,16 +2268,16 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = 'none';
           badgeData.colorscheme = 'lightgrey';
         }
-      } else if (info == 'dt') {
+      } else if (info === 'dt') {
         var total = json.downloads;
         badgeData.colorscheme = downloadCountColor(total);
         badgeData.text[0] = 'downloads';
         badgeData.text[1] = metric(total) + ' total';
-      } else if (info == 'e') {
+      } else if (info === 'e') {
         var endorsement = json.endorsement;
-        if (endorsement == 'approved') {
+        if (endorsement === 'approved') {
           badgeData.colorscheme = 'green';
-        } else if (endorsement == 'supported') {
+        } else if (endorsement === 'supported') {
           badgeData.colorscheme = 'brightgreen';
         } else {
           badgeData.colorscheme = 'red';
@@ -2288,7 +2288,7 @@ cache(function(data, match, sendBadge, request) {
         } else {
           badgeData.text[1] = 'none';
         }
-      } else if (info == 'f') {
+      } else if (info === 'f') {
         var feedback = json.feedback_score;
         badgeData.text[0] = 'score';
         if (feedback != null) {
@@ -2325,12 +2325,12 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      if (info == 'rc') {
+      if (info === 'rc') {
         var releases = json.release_count;
         badgeData.colorscheme = floorCountColor(releases, 10, 50, 100);
         badgeData.text[0] = 'releases';
         badgeData.text[1] = metric(releases);
-      } else if (info == 'mc') {
+      } else if (info === 'mc') {
         var modules = json.module_count;
         badgeData.colorscheme = floorCountColor(modules, 5, 10, 50);
         badgeData.text[0] = 'modules';
