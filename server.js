@@ -3210,25 +3210,21 @@ function fetchFromSvg(request, url, cb) {
 }
 
 function coveragePercentageColor(percentage) {
-  if (percentage < 80) {
-    return 'yellow';
-  } else if (percentage < 90) {
-    return 'yellowgreen';
-  } else if (percentage < 100) {
-    return 'green';
-  } else {
-    return 'brightgreen';
-  }
+  floorCountColor(percentage, 80, 90, 100);
 }
 
 function downloadCountColor(downloads) {
-  if (downloads === 0) {
+  floorCountColor(downloads, 10, 100, 1000);
+}
+
+function floorCountColor(value, yellow, yellowgreen, green) {
+  if (value === 0) {
     return 'red';
-  } else if (downloads < 10) {
+  } else if (value < yellow) {
     return 'yellow';
-  } else if (downloads < 100) {
+  } else if (value < yellowgreen) {
     return 'yellowgreen';
-  } else if (downloads < 1000) {
+  } else if (value < green) {
     return 'green';
   } else {
     return 'brightgreen';
