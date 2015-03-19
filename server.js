@@ -2326,31 +2326,11 @@ cache(function(data, match, sendBadge, request) {
     try {
       if (info == 'rc') {
         var releases = json.release_count;
-        if (releases === 0) {
-          badgeData.colorscheme = 'red';
-        } else if (releases < 10) {
-          badgeData.colorscheme = 'yellow';
-        } else if (releases < 50) {
-          badgeData.colorscheme = 'yellowgreen';
-        } else if (releases < 100) {
-          badgeData.colorscheme = 'green';
-        } else {
-          badgeData.colorscheme = 'brightgreen';
-        }
+        badgeData.colorscheme = floorCountColor(releases, 10, 50, 100);
         badgeData.text[1] = metric(releases) + ' releases';
       } else if (info == 'mc') {
         var modules = json.module_count;
-        if (modules === 0) {
-          badgeData.colorscheme = 'red';
-        } else if (modules < 5) {
-          badgeData.colorscheme = 'yellow';
-        } else if (modules < 10) {
-          badgeData.colorscheme = 'yellowgreen';
-        } else if (modules < 50) {
-          badgeData.colorscheme = 'green';
-        } else {
-          badgeData.colorscheme = 'brightgreen';
-        }
+        badgeData.colorscheme = floorCountColor(modules, 5, 10, 50);
         badgeData.text[1] = metric(modules) + ' modules';
       }
       sendBadge(format, badgeData);
