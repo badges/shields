@@ -2268,7 +2268,6 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = 'none';
           badgeData.colorscheme = 'lightgrey';
         }
-        sendBadge(format, badgeData);
       } else if (info == 'dt') {
         var total = json.downloads;
         badgeData.colorscheme = downloadCountColor(total);
@@ -2301,7 +2300,6 @@ cache(function(data, match, sendBadge, request) {
         }
       }
       sendBadge(format, badgeData);
-
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
