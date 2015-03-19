@@ -2260,8 +2260,8 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       if (info == 'v') {
-        if (json['current_release']) {
-          var vdata = versionColor(json['current_release'].version);
+        if (json.current_release) {
+          var vdata = versionColor(json.current_release.version);
           badgeData.text[1] = vdata.version;
           badgeData.colorscheme = vdata.color;
         } else {
@@ -2270,11 +2270,11 @@ cache(function(data, match, sendBadge, request) {
         }
         sendBadge(format, badgeData);
       } else if (info == 'dt') {
-        var total = json['downloads'];
+        var total = json.downloads;
         badgeData.colorscheme = downloadCountColor(total);
         badgeData.text[1] = metric(total) + ' total';
       } else if (info == 'e') {
-        var endorsement = json['endorsement'];
+        var endorsement = json.endorsement;
         if (endorsement == 'approved') {
           badgeData.colorscheme = 'green';
         } else if (endorsement == 'supported') {
@@ -2288,7 +2288,7 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = 'no endorsement';
         }
       } else if (info == 'f') {
-        var feedback = json['feedback_score'];
+        var feedback = json.feedback_score;
         if (feedback != null) {
           badgeData.text[1] = feedback+'%';
           badgeData.colorscheme = coveragePercentageColor(feedback);
@@ -2325,7 +2325,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       if (info == 'rc') {
-        var releases = json['release_count'];
+        var releases = json.release_count;
         if (releases === 0) {
           badgeData.colorscheme = 'red';
         } else if (releases < 10) {
@@ -2339,7 +2339,7 @@ cache(function(data, match, sendBadge, request) {
         }
         badgeData.text[1] = metric(releases) + ' releases';
       } else if (info == 'mc') {
-        var modules = json['module_count'];
+        var modules = json.module_count;
         if (modules === 0) {
           badgeData.colorscheme = 'red';
         } else if (modules < 5) {
