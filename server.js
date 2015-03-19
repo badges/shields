@@ -2271,17 +2271,7 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
       } else if (info == 'dt') {
         var total = json['downloads'];
-        if (total === 0) {
-          badgeData.colorscheme = 'red';
-        } else if (total < 100) {
-          badgeData.colorscheme = 'yellow';
-        } else if (total < 1000) {
-          badgeData.colorscheme = 'yellowgreen';
-        } else if (total < 10000) {
-          badgeData.colorscheme = 'green';
-        } else {
-          badgeData.colorscheme = 'brightgreen';
-        }
+        badgeData.colorscheme = downloadCountColor(total);
         badgeData.text[1] = metric(total) + ' total';
       } else if (info == 'e') {
         var endorsement = json['endorsement'];
