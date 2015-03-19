@@ -2260,26 +2260,15 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       if (info == 'v') {
-        var unstable = function(ver) {
-          return /-[0-9A-Za-z.-]+(?:\+[0-9A-Za-z.-]+)?$/.test(ver);
-        };
-        var releases = json['releases'];
-        if (releases.length == 0) {
+        if (json['current_release']) {
+          var vdata = versionColor(json['current_release'].version);
+          badgeData.text[1] = vdata.version;
+          badgeData.colorscheme = vdata.color;
+        } else {
           badgeData.text[1] = 'none';
           badgeData.colorscheme = 'lightgrey';
-          sendBadge(format, badgeData);
-          return;
         }
-        var versions = releases.map(function(version) {
-          return version.version;
-        });
-        var version = latestVersion(versions);
-        if (unstable(version)) {
-          badgeData.colorscheme = "yellow";
-        } else {
-          badgeData.colorscheme = "blue";
-        }
-        badgeData.text[1] = "v" + version;
+        sendBadge(format, badgeData);
       } else if (info == 'dt') {
         var total = json['downloads'];
         if (total === 0) {
