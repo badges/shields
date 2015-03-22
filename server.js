@@ -2268,7 +2268,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[4];
   var options = {
     json: true,
-    uri: 'https://forgeapi.puppetlabs.com/v3/modules/'+user+'-'+module
+    uri: 'https://forgeapi.puppetlabs.com/v3/modules/' + user + '-' + module
   };
   var badgeData = getBadgeData('puppetforge', data);
   request(options, function dealWithData(err, res, json) {
@@ -2311,7 +2311,7 @@ cache(function(data, match, sendBadge, request) {
         var feedback = json.feedback_score;
         badgeData.text[0] = 'score';
         if (feedback != null) {
-          badgeData.text[1] = feedback+'%';
+          badgeData.text[1] = feedback + '%';
           badgeData.colorscheme = coveragePercentageColor(feedback);
         } else {
           badgeData.text[1] = 'unknown';
@@ -2334,7 +2334,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[3];
   var options = {
     json: true,
-    uri: 'https://forgeapi.puppetlabs.com/v3/users/'+user
+    uri: 'https://forgeapi.puppetlabs.com/v3/users/' + user
   };
   var badgeData = getBadgeData('puppetforge', data);
   request(options, function dealWithData(err, res, json) {
