@@ -1211,10 +1211,7 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.colorscheme = 'brightgreen';
       }
-      badgeData.text[1] = count+' gem';
-      if (count > 1) {
-        badgeData.text[1] += 's';
-      }
+      badgeData.text[1] = count;
       sendBadge(format, badgeData);
     } catch (e) {
       badgeData.text[1] = 'invalid';
