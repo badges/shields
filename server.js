@@ -4550,31 +4550,11 @@ cache(function(data, match, sendBadge, request) {
         if (info === 'r') {
           var reputation = data.items[0].reputation;
           badgeData.text[1] = metric(reputation);
-          if (reputation === 0) {
-            badgeData.colorscheme = 'red';
-          } else if (reputation < 1000) {
-            badgeData.colorscheme = 'yellow';
-          } else if (reputation < 10000) {
-            badgeData.colorscheme = 'yellowgreen';
-          } else if (reputation < 20000) {
-            badgeData.colorscheme = 'green';
-          } else {
-            badgeData.colorscheme = 'brightgreen';
-          }
+          badgeData.colorscheme = floorCountColor(1000, 10000, 20000);
         } else if (info === 't') {
           var count = data.items[0].count;
           badgeData.text[1] = metric(count)+' questions';
-          if (count === 0) {
-            badgeData.colorscheme = 'red';
-          } else if (count < 1000) {
-            badgeData.colorscheme = 'yellow';
-          } else if (count < 10000) {
-            badgeData.colorscheme = 'yellowgreen';
-          } else if (count < 20000) {
-            badgeData.colorscheme = 'green';
-          } else {
-            badgeData.colorscheme = 'brightgreen';
-          }
+          badgeData.colorscheme = floorCountColor(1000, 10000, 20000);
         }
         sendBadge(format, badgeData);
       } catch (e) {
