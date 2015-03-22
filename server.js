@@ -3082,6 +3082,42 @@ cache(function(data, match, sendBadge, request) {
   })}
 ));
 
+// OpenHub integration
+camp.route(/^\/openhub\/u\/(kr|kp)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var info = match[1]; // either `kr`, `kp`
+  var user = match[2]; // eg, raphink
+  var format = match[3];
+  var url = 'https://www.openhub.net/accounts/'+user+'.json';
+  var badgeData = getBadgeData('openhub', data);
+  request(url, function (err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(badgeData, format);
+    }
+    try {
+      var data = JSON.parse(buffer);
+
+      if (info === 'kr') {
+        var rank = data.account.kudo_score.kudo_rank;
+        badgeData.colorscheme = floorCountColor(rank, 5, 7, 10);
+        badgeData.text[1] = 'Kudo rank: '+rank;
+        sendBadge(format, badgeData);
+      } else if (info === 'kp') {
+        var position = data.account.kudo_score.position;
+        // position 1000 is best, position < 100000 is red
+        var invert_pos = Math.floor(100000/position);
+        badgeData.colorscheme = coveragePercentageColor(invert_pos);
+        badgeData.text[1] = 'Kudo position: '+position;
+        sendBadge(format, badgeData);
+      }
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  })}
+));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
