@@ -1200,17 +1200,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var count = data.length;
-      if (count === 0) {
-        badgeData.colorscheme = 'red';
-      } else if (count < 10) {
-        badgeData.colorscheme = 'yellow';
-      } else if (count < 50) {
-        badgeData.colorscheme = 'yellowgreen';
-      } else if (count < 100) {
-        badgeData.colorscheme = 'green';
-      } else {
-        badgeData.colorscheme = 'brightgreen';
-      }
+      badgeData.colorscheme = floorCountColor(count, 10, 50, 100);
       badgeData.text[1] = count;
       sendBadge(format, badgeData);
     } catch (e) {
