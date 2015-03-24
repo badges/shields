@@ -1190,7 +1190,7 @@ camp.route(/^\/gem\/u\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1]; // eg, "raphink"
   var format = match[2];
-  var url = 'https://rubygems.org/api/v1/owners/'+user+'/gems.json';
+  var url = 'https://rubygems.org/api/v1/owners/' + user + '/gems.json';
   var badgeData = getBadgeData('gems', data);
   request(url, function(err, res, buffer) {
     if (err != null) {
