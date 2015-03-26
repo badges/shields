@@ -3312,11 +3312,11 @@ function fetchFromSvg(request, url, cb) {
 }
 
 function coveragePercentageColor(percentage) {
-  floorCountColor(percentage, 80, 90, 100);
+  return floorCountColor(percentage, 80, 90, 100);
 }
 
 function downloadCountColor(downloads) {
-  floorCountColor(downloads, 10, 100, 1000);
+  return floorCountColor(downloads, 10, 100, 1000);
 }
 
 function floorCountColor(value, yellow, yellowgreen, green) {
