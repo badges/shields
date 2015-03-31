@@ -3107,6 +3107,31 @@ cache(function(data, match, sendBadge, request) {
   })}
 ));
 
+// API Status online/offline integration.
+camp.route(/^\/apistatus\/o\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var targetUrl = new Buffer(match[1], 'base64');
+  var format = match[2];
+  var url = 'http://api.apistatus.org/?url=' + targetUrl;
+  var badgeData = getBadgeData('API', data);
+  request(url, function(err, res, buffer) {
+    try {
+      var status = JSON.parse(buffer);
+      if (status.online) {
+        badgeData.text[1] = "Online";
+        badgeData.colorscheme = "brightgreen";
+      } else {
+        badgeData.text[1] = "Offline";
+        badgeData.colorscheme = "red";
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
