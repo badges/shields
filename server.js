@@ -3169,8 +3169,8 @@ cache(function(data, match, sendBadge, request) {
         }
         
       } else {
-        badgeData.text[1] = "Offline";
-        badgeData.colorscheme = "red";
+        badgeData.text[1] = "n/a";
+        badgeData.colorscheme = "lightgrey";
       }
       sendBadge(format, badgeData);
     } catch(e) {
