@@ -3108,12 +3108,12 @@ cache(function(data, match, sendBadge, request) {
 ));
 
 // API Status online/offline integration.
-camp.route(/^\/apistatus\/o\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/apistatus\/online\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var targetUrl = new Buffer(match[1], 'base64');
   var format = match[2];
   var url = 'http://api.apistatus.org/?url=' + targetUrl;
-  var badgeData = getBadgeData('API', data);
+  var badgeData = getBadgeData('api', data);
   request(url, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -3123,10 +3123,10 @@ cache(function(data, match, sendBadge, request) {
     try {
       var status = JSON.parse(buffer);
       if (status.online) {
-        badgeData.text[1] = "Online";
+        badgeData.text[1] = "online";
         badgeData.colorscheme = "brightgreen";
       } else {
-        badgeData.text[1] = "Offline";
+        badgeData.text[1] = "offline";
         badgeData.colorscheme = "red";
       }
       sendBadge(format, badgeData);
@@ -3137,13 +3137,13 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// API Status type integration.
-camp.route(/^\/apistatus\/t\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+// API Status code integration.
+camp.route(/^\/apistatus\/status\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var targetUrl = new Buffer(match[1], 'base64');
   var format = match[2];
   var url = 'http://api.apistatus.org/?url=' + targetUrl;
-  var badgeData = getBadgeData('API', data);
+  var badgeData = getBadgeData('status', data);
   request(url, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -3154,7 +3154,7 @@ cache(function(data, match, sendBadge, request) {
       var res = JSON.parse(buffer);
       if (res.online) {
         var scode = res.statusCode;
-        var badgeText = scode + ' ' + res.statusType;
+        var badgeText = scode;
         badgeData.text[1] = badgeText;
         if (scode >= 200 && scode < 300) {
           badgeData.colorscheme = "brightgreen";
