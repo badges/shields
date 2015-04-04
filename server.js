@@ -3107,6 +3107,79 @@ cache(function(data, match, sendBadge, request) {
   })}
 ));
 
+// API Status online/offline integration.
+camp.route(/^\/apistatus\/online\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var targetUrl = new Buffer(match[1], 'base64');
+  var format = match[2];
+  var url = 'http://api.apistatus.org/?url=' + targetUrl;
+  var badgeData = getBadgeData('api', data);
+  request(url, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var status = JSON.parse(buffer);
+      if (status.online) {
+        badgeData.text[1] = "online";
+        badgeData.colorscheme = "brightgreen";
+      } else {
+        badgeData.text[1] = "offline";
+        badgeData.colorscheme = "red";
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// API Status code integration.
+camp.route(/^\/apistatus\/status\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var targetUrl = new Buffer(match[1], 'base64');
+  var format = match[2];
+  var url = 'http://api.apistatus.org/?url=' + targetUrl;
+  var badgeData = getBadgeData('status', data);
+  request(url, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var res = JSON.parse(buffer);
+      if (res.online) {
+        var scode = res.statusCode;
+        var badgeText = scode;
+        badgeData.text[1] = badgeText;
+        if (scode >= 200 && scode < 300) {
+          badgeData.colorscheme = "brightgreen";
+        } else if (scode >= 300 && scode < 400) {
+          badgeData.colorscheme = "yellowgreen";
+        } else if (scode >= 400 && scode < 500) {
+          badgeData.colorscheme = "orange";
+        } else if (scode >= 500 && scode < 600) {
+          badgeData.colorscheme = "red";
+        } else {
+          badgeData.colorscheme = "blue";
+        }
+        
+      } else {
+        badgeData.text[1] = "n/a";
+        badgeData.colorscheme = "lightgrey";
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
