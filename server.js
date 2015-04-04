@@ -3115,6 +3115,11 @@ cache(function(data, match, sendBadge, request) {
   var url = 'http://api.apistatus.org/?url=' + targetUrl;
   var badgeData = getBadgeData('API', data);
   request(url, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
     try {
       var status = JSON.parse(buffer);
       if (status.online) {
@@ -3140,6 +3145,11 @@ cache(function(data, match, sendBadge, request) {
   var url = 'http://api.apistatus.org/?url=' + targetUrl;
   var badgeData = getBadgeData('API', data);
   request(url, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
     try {
       var res = JSON.parse(buffer);
       if (res.online) {
