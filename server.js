@@ -652,6 +652,30 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Flattr integration
+camp.route(/^\/flattr\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var thing = match[1]; // eg, `391332`
+  var format = match[2];
+  var apiUrl = 'https://api.flattr.com/rest/v2/things/' + thing;
+  var badgeData = getBadgeData('flattrs', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      badgeData.text[1] = data.flattrs;
+      badgeData.colorscheme = 'brightgreen';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Libscore integration.
 camp.route(/^\/libscore\/s\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
