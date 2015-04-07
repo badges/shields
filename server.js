@@ -578,6 +578,41 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/coverage\.(svg|png|gif|jpg|json)
       });
     }));
 
+// Coverity integration
+camp.route(/^\/coverity\/scan\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var projectId = match[1]; // eg, `3997`
+  var format = match[2];
+  var url = 'https://scan.coverity.com/projects/' + projectId + '/badge.json';
+  var badgeData = getBadgeData('coverity', data);
+  request(url, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      badgeData.text[1] = data.message;
+
+      if (data.message === 'passed') {
+        badgeData.colorscheme = 'brightgreen'
+      } else if (/^passed .* new defects$/.test(data.message)) {
+        badgeData.colorscheme = 'yellow';
+      } else if (data.message === 'pending') {
+        badgeData.colorscheme = 'orange';
+      } else if (data.message === 'failed') {
+        badgeData.colorscheme = 'red';
+      }
+      sendBadge(format, badgeData);
+
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Gratipay integration.
 camp.route(/^\/(gittip|gratipay)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
