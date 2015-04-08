@@ -1570,6 +1570,52 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Scrutinizer build integration.
+camp.route(/^\/scrutinizer\/build\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var repo = match[1];  // eg, g/phpmyadmin/phpmyadmin
+  var format = match[2];
+  // The repo may contain a branch, which would be unsuitable.
+  var repoParts = repo.split('/');
+  var branch = null;
+  // Normally, there are 2 slashes in `repo` when the branch isn't specified.
+  var slashesInRepo = 2;
+  if (repoParts[0] === 'gp') { slashesInRepo = 1; }
+  if ((repoParts.length - 1) > slashesInRepo) {
+    branch = repoParts[repoParts.length - 1];
+    repo = repoParts.slice(0, -1).join('/');
+  }
+  var apiUrl = 'https://scrutinizer-ci.com/api/repositories/' + repo;
+  var badgeData = getBadgeData('build', data);
+  request(apiUrl, {}, function(err, res, buffer) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      // Which branch are we dealing with?
+      if (branch === null) { branch = data.default_branch; }
+      var res = data.applications[branch].build_status.status;
+      badgeData.text[1] = res;
+      if (res === 'passed') {
+        badgeData.colorscheme = 'brightgreen';
+      } else if (res === 'failed' || res === 'error') {
+        badgeData.colorscheme = 'red';
+      } else if (res === 'pending') {
+        badgeData.colorscheme = 'orange';
+      } else if (res === 'unknown') {
+        badgeData.colorscheme = 'gray';
+      }
+      sendBadge(format, badgeData);
+
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Scrutinizer integration.
 camp.route(/^\/scrutinizer\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
