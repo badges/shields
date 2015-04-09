@@ -1652,6 +1652,8 @@ cache(function(data, match, sendBadge, request) {
       } else if (status === 'uptodate') {
         badgeData.colorscheme = 'brightgreen';
         status = 'up-to-date';
+      } else if (status === 'none') {
+        badgeData.colorscheme = 'brightgreen';
       }
       badgeData.text[1] = status;
       sendBadge(format, badgeData);
