@@ -1972,7 +1972,7 @@ cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
   var id = match[3];
-  var asset_name = match[4].toLowerCase();
+  var asset_name = match[4].toLowerCase(); // eg. total, atom-amd64.deb, atom.x86_64.rpm
   var format = match[5];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/releases/' + id;
   // Using our OAuth App secret grants us 5000 req/hour
@@ -1987,7 +1987,7 @@ cache(function(data, match, sendBadge, request) {
   request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
+      return sendBadge(format, badgeData);
     }
     try {
       if ((+res.headers['x-ratelimit-remaining']) === 0) {
@@ -1995,9 +1995,9 @@ cache(function(data, match, sendBadge, request) {
       }
       var data = JSON.parse(buffer);
       var downloads = 0;
-      data.assets.map(function (asset) {
+      data.assets.forEach(function (asset) {
         if (asset_name === 'total' || asset_name === asset.name.toLowerCase()) {
-          downloads += asset.download_count
+          downloads += asset.download_count;
         }
       });
       badgeData.text[1] = metric(downloads) + (asset_name? ' ' + asset_name: ' total');
