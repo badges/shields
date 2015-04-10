@@ -3202,6 +3202,37 @@ cache(function (data, match, sendBadge, request) {
   });
 }));
 
+// Docker Hub stars integration.
+camp.route(/^\/docker\/stars\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];  // eg, _ or mashape
+  var repo = match[2];  // eg, mockbin
+  var format = match[3];
+  // Convert underscore to library for api path
+  user = user === '_' ? 'library' : user;
+  var baseURL = 'https://registry.hub.docker.com/v2/';
+  var path = 'repositories/'+user+'/'+repo+'/stars/count/';
+  var badgeData = getBadgeData('docker', data);
+  request(baseURL+path, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      if (res.statusCode !== 200) {
+        throw new Error("Could not find repo on docker hub");
+      }
+      badgeData.text[1] = buffer + " stars";
+      badgeData.colorscheme = null;
+      badgeData.colorB = '#008bb8';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
