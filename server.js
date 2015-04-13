@@ -1950,7 +1950,8 @@ cache(function(data, match, sendBadge, request) {
         return;  // Hope for the best in the cache.
       }
       var data = JSON.parse(buffer);
-      var tag = data[0].name;
+      var versions = data.map(function(e) { return e.name; });
+      var tag = latestVersion(versions);
       var vdata = versionColor(tag);
       badgeData.text[1] = vdata.version;
       badgeData.colorscheme = vdata.color;
