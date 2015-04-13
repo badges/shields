@@ -1971,10 +1971,11 @@ camp.route(/^\/github\/downloads\/([^\/]+)\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|p
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
-  var id = match[3];
+  var tag = match[3];
   var asset_name = match[4].toLowerCase(); // eg. total, atom-amd64.deb, atom.x86_64.rpm
   var format = match[5];
-  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/releases/' + id;
+  var release_path = tag !== 'latest' ? 'tags/' + match[3] : 'latest';
+  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/releases/' + release_path;
   // Using our OAuth App secret grants us 5000 req/hour
   // instead of the standard 60 req/hour.
   if (serverSecrets) {
@@ -2000,7 +2001,11 @@ cache(function(data, match, sendBadge, request) {
           downloads += asset.download_count;
         }
       });
-      badgeData.text[1] = metric(downloads) + (asset_name? ' ' + asset_name: ' total');
+      var label = tag === 'latest' ? 'latest version' : tag;
+      if (asset_name !== 'total') {
+        label += ' ' + '[' + asset_name + ']';
+      }
+      badgeData.text[1] = metric(downloads) + ' ' + label;
       badgeData.colorscheme = 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
