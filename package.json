@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "dot": "~1.0.2",
-    "svgo": "~0.4.2",
+    "svgo": "~0.5.1",
     "canvas": "~1.1.2",
     "phantomjs": "~1.9.2-6",
     "es6-promise": "~0.1.1",
