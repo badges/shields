@@ -1626,6 +1626,7 @@ cache(function(data, match, sendBadge, request) {
     if (err !== null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
