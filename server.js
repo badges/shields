@@ -2138,12 +2138,15 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       if ((+res.headers['x-ratelimit-remaining']) === 0) {
         return;  // Hope for the best in the cache.
       } else if (res.statusCode === 404) {
-        throw new Error(); // Show invalid badge in this case
+        badgeData.text[1] = 'repo not found';
+        sendBadge(format, badgeData);
+        return;
       }
       var body = JSON.parse(buffer);
       if (body.license != null) {
@@ -2151,7 +2154,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'blue';
         sendBadge(format, badgeData);
       } else {
-        badgeData.text[1] = 'unknown';
+        badgeData.text[1] = 'unknown license';
         sendBadge(format, badgeData);
       }
     } catch(e) {
