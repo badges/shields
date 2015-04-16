@@ -42,8 +42,7 @@ As you can see below, without increasing the footprint of these badges, I've tri
 
 ![Badge design](spec/proportions.png)
 
-We have an effort to produce similar-looking SVGs through a web service at
-<http://img.shields.io>. That ensures that we are retina-ready.
+This badge design corresponds to an old and now deprecated version which has since been replaced by beautiful and scalable SVG versions that can be found on [shields.io](http://shields.io).
 
 ## Examples
 
