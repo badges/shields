@@ -1,4 +1,4 @@
-# Shields [![Gittip](http://img.shields.io/gittip/shields.svg)](https://www.gittip.com/Shields/) [![npm version](http://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges) [![build status](http://img.shields.io/travis/badges/shields.svg)](https://travis-ci.org/badges/shields)
+# Shields [![Gittip](http://img.shields.io/gittip/shields.svg)](https://www.gittip.com/Shields/) [![npm version](http://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges) [![build status](http://img.shields.io/travis/badges/shields.svg)](https://travis-ci.org/badges/shields) [![Dependency Status](https://david-dm.org/badges/shields.svg)](https://david-dm.org/badges/shields)
 
 An image server for legible & concise information.
 
