@@ -2196,6 +2196,57 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// GitHub license integration.
+camp.route(/^\/github\/license\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];  // eg, mashape
+  var repo = match[2];  // eg, apistatus
+  var format = match[3];
+  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo;
+  var badgeData = getBadgeData('license', data);
+  // Using our OAuth App secret grants us 5000 req/hour
+  // instead of the standard 60 req/hour.
+  if (serverSecrets) {
+    apiUrl += '?client_id=' + serverSecrets.gh_client_id
+      + '&client_secret=' + serverSecrets.gh_client_secret;
+  }
+  // Custom user-agent and accept headers are required
+  // http://developer.github.com/v3/#user-agent-required
+  // https://developer.github.com/v3/licenses/
+  var customHeaders = {
+    'User-Agent': 'Shields.io',
+    'Accept': 'application/vnd.github.drax-preview+json'
+  };
+  request(apiUrl, { headers: customHeaders }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      if ((+res.headers['x-ratelimit-remaining']) === 0) {
+        return;  // Hope for the best in the cache.
+      } else if (res.statusCode === 404) {
+        badgeData.text[1] = 'repo not found';
+        sendBadge(format, badgeData);
+        return;
+      }
+      var body = JSON.parse(buffer);
+      if (body.license != null) {
+        badgeData.text[1] = body.license.name;
+        badgeData.colorscheme = 'blue';
+        sendBadge(format, badgeData);
+      } else {
+        badgeData.text[1] = 'unknown license';
+        sendBadge(format, badgeData);
+      }
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Chef cookbook integration.
 camp.route(/^\/cookbook\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
