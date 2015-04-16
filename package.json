@@ -20,7 +20,7 @@
     "svgo": "~0.5.1",
     "canvas": "~1.1.2",
     "phantomjs": "~1.9.2-6",
-    "es6-promise": "~0.1.1",
+    "es6-promise": "~2.1.0",
     "request": "~2.55.0",
     "redis": "~0.12.1",
     "camp": "~13.11.9",
