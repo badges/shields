@@ -1,12 +1,14 @@
-var nodeUrl = require('url');
-var request = require('request');
-var Promise = require('promise');
-var serverSecrets;
+'use strict'
+
+var nodeUrl = require('url')
+var request = require('request')
+var Promise = require('promise')
+var serverSecrets
 try {
   // Everything that cannot be checked in but is useful server-side
   // is stored in this JSON data.
-  serverSecrets = require('./secret.json');
-} catch(e) { console.error('No secret data (secret.json, see server.js):', e); }
+  serverSecrets = require('./secret.json')
+} catch(e) { console.error('No secret data (secret.json, see server.js):', e) }
 
 // data: {url}, JSON-serializable object.
 // end: function(json), with json of the form:
@@ -14,162 +16,162 @@ try {
 //    - link: target as a string URL.
 //    - badge: shields image URL.
 //    - name: string
-var suggest = function(data, end, ask) {
-  ask.res.setHeader('Access-Control-Allow-Origin', 'http://shields.io');
+var suggest = function (data, end, ask) {
+  ask.res.setHeader('Access-Control-Allow-Origin', 'http://shields.io')
   try {
-    var url = nodeUrl.parse(data.url);
-  } catch(e) { end({err:''+e}); return; }
+    var url = nodeUrl.parse(data.url)
+  } catch(e) { end({err: '' + e}); return }
 
   if (url.hostname === 'github.com') {
-    github(url, end);
+    github(url, end)
   }
-};
+}
 
 // url: string
 // cb: function({badges})
-var github = function(url, cb) {
-  var userRepo = url.pathname.slice(1).split('/');
-  var user = userRepo[0];
-  var repo = userRepo[1];
+var github = function (url, cb) {
+  var userRepo = url.pathname.slice(1).split('/')
+  var user = userRepo[0]
+  var repo = userRepo[1]
   Promise.all([
     githubIssues(user, repo),
     githubForks(user, repo),
     githubStars(user, repo),
-    githubLicense(user, repo),
-  ]).then(function(badges) {
-    cb({badges:badges.filter(function(b) { return b != null; })});
-  }).catch(function(err) {
-    cb({badges:[], err:err});
-  });
-};
+    githubLicense(user, repo)
+  ]).then(function (badges) {
+    cb({badges: badges.filter(function (b) { return b != null })})
+  }).catch(function (err) {
+    cb({badges: [], err: err})
+  })
+}
 
-var githubIssues = function(user, repo) {
-  var userRepo = user + '/' + repo;
+var githubIssues = function (user, repo) {
+  var userRepo = user + '/' + repo
   return Promise.resolve({
     name: 'GitHub issues',
     link: 'https://github.com/' + userRepo + '/issues',
-    badge: 'https://img.shields.io/github/issues/' + userRepo + '.svg',
-  });
-};
-var githubForks = function(user, repo) {
-  var userRepo = user + '/' + repo;
+    badge: 'https://img.shields.io/github/issues/' + userRepo + '.svg'
+  })
+}
+var githubForks = function (user, repo) {
+  var userRepo = user + '/' + repo
   return Promise.resolve({
     name: 'GitHub forks',
     link: 'https://github.com/' + userRepo + '/network',
-    badge: 'https://img.shields.io/github/forks/' + userRepo + '.svg',
-  });
-};
-var githubStars = function(user, repo) {
-  var userRepo = user + '/' + repo;
+    badge: 'https://img.shields.io/github/forks/' + userRepo + '.svg'
+  })
+}
+var githubStars = function (user, repo) {
+  var userRepo = user + '/' + repo
   return Promise.resolve({
     name: 'GitHub stars',
     link: 'https://github.com/' + userRepo + '/stargazers',
-    badge: 'https://img.shields.io/github/stars/' + userRepo + '.svg',
-  });
-};
+    badge: 'https://img.shields.io/github/stars/' + userRepo + '.svg'
+  })
+}
 
 // user: eg, qubyte
 // repo: eg, rubidium
 // returns a promise of {link, badge, name}
-var githubLicense = function(user, repo) {
-  return new Promise(function(resolve, reject) {
+var githubLicense = function (user, repo) {
+  return new Promise(function (resolve, reject) {
     // Step 1: Get the repo's default branch.
-    var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '';
+    var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + ''
     // Using our OAuth App secret grants us 5000 req/hour
     // instead of the standard 60 req/hour.
     if (serverSecrets) {
       apiUrl += '?client_id=' + serverSecrets.gh_client_id
-        + '&client_secret=' + serverSecrets.gh_client_secret;
+        + '&client_secret=' + serverSecrets.gh_client_secret
     }
-    var badgeData = {text:['license',''], colorscheme:'blue'};
+    var badgeData = {text: ['license', ''], colorscheme: 'blue'}
     // A special User-Agent is required:
     // http://developer.github.com/v3/#user-agent-required
-    request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
-      if (err != null) { resolve(null); return; }
+    request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function (err, res, buffer) {
+      if (err != null) { resolve(null); return }
       try {
-        if ((+res.headers['x-ratelimit-remaining']) === 0) { resolve(null); return; }
-        var data = JSON.parse(buffer);
-        var defaultBranch = data.default_branch;
+        if ((+res.headers['x-ratelimit-remaining']) === 0) { resolve(null); return }
+        var data = JSON.parse(buffer)
+        var defaultBranch = data.default_branch
         // Step 2: Get the SHA-1 hash of the branch tip.
-        var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/branches/' + defaultBranch;
+        var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/branches/' + defaultBranch
         if (serverSecrets) {
           apiUrl += '?client_id=' + serverSecrets.gh_client_id
-            + '&client_secret=' + serverSecrets.gh_client_secret;
+            + '&client_secret=' + serverSecrets.gh_client_secret
         }
-        request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
-          if (err != null) { resolve(null); return; }
+        request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function (err, res, buffer) {
+          if (err != null) { resolve(null); return }
           try {
-            if ((+res.headers['x-ratelimit-remaining']) === 0) { resolve(null); return; }
-            var data = JSON.parse(buffer);
-            var branchTip = data.commit.sha;
+            if ((+res.headers['x-ratelimit-remaining']) === 0) { resolve(null); return }
+            var data = JSON.parse(buffer)
+            var branchTip = data.commit.sha
             // Step 3: Get the tree at the commit.
-            var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/git/trees/' + branchTip;
+            var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/git/trees/' + branchTip
             if (serverSecrets) {
               apiUrl += '?client_id=' + serverSecrets.gh_client_id
-                + '&client_secret=' + serverSecrets.gh_client_secret;
+                + '&client_secret=' + serverSecrets.gh_client_secret
             }
-            request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function(err, res, buffer) {
-              if (err != null) { resolve(null); return; }
+            request(apiUrl, { headers: { 'User-Agent': 'Shields.io' } }, function (err, res, buffer) {
+              if (err != null) { resolve(null); return }
               try {
-                if ((+res.headers['x-ratelimit-remaining']) === 0) { resolve(null); return; }
-                var data = JSON.parse(buffer);
-                var treeArray = data.tree;
-                var licenseBlob;
-                var licenseFilename;
+                if ((+res.headers['x-ratelimit-remaining']) === 0) { resolve(null); return }
+                var data = JSON.parse(buffer)
+                var treeArray = data.tree
+                var licenseBlob
+                var licenseFilename
                 // Crawl each file in the root directory
                 for (var i = 0; i < treeArray.length; i++) {
-                  if (treeArray[i].type != 'blob') {
-                    continue;
+                  if (treeArray[i].type !== 'blob') {
+                    continue
                   }
                   if (treeArray[i].path.match(/(LICENSE|COPYING|COPYRIGHT).*/i)) {
-                    licenseBlob = treeArray[i].sha;
-                    licenseFilename = treeArray[i].path;
-                    break;
+                    licenseBlob = treeArray[i].sha
+                    licenseFilename = treeArray[i].path
+                    break
                   }
                 }
                 // Could not find license file
-                if (!licenseBlob) { resolve(null); return; }
+                if (!licenseBlob) { resolve(null); return }
 
                 // Step 4: Get the license blob.
-                var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/git/blobs/' + licenseBlob;
+                var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/git/blobs/' + licenseBlob
                 var link = 'https://raw.githubusercontent.com/' +
-                  [user, repo, defaultBranch, licenseFilename].join('/');
+                  [user, repo, defaultBranch, licenseFilename].join('/')
 
                 if (serverSecrets) {
                   apiUrl += '?client_id=' + serverSecrets.gh_client_id
-                    + '&client_secret=' + serverSecrets.gh_client_secret;
+                    + '&client_secret=' + serverSecrets.gh_client_secret
                 }
                 // Get the raw blob instead of JSON
                 // https://developer.github.com/v3/media/
                 request(apiUrl, { headers: { 'User-Agent': 'Shields.io', 'Accept': 'appplication/vnd.github.raw' } },
-                function(err, res, buffer) {
-                  if (err != null) { resolve(null); return; }
-                  try {
-                    if ((+res.headers['x-ratelimit-remaining']) === 0) { resolve(null); return; }
-                    var license = guessLicense(buffer);
-                    if (license) {
-                      badgeData.text[1] = license;
-                      resolve({
-                        link: link,
-                        badge: shieldsBadge(badgeData),
-                        name: 'GitHub license'
-                      });
-                      return;
-                    } else {
-                      // Not a recognized license
-                      resolve(null);
-                      return;
-                    }
-                  } catch(e) { reject(e); return; }
-                });
-              } catch(e) { reject(e); return; }
-            });
-          } catch(e) { reject(e); return; }
-        });
-      } catch(e) { reject(e); return; }
-    });
-  });
-};
+                  function (err, res, buffer) {
+                    if (err != null) { resolve(null); return }
+                    try {
+                      if ((+res.headers['x-ratelimit-remaining']) === 0) { resolve(null); return }
+                      var license = guessLicense(buffer)
+                      if (license) {
+                        badgeData.text[1] = license
+                        resolve({
+                          link: link,
+                          badge: shieldsBadge(badgeData),
+                          name: 'GitHub license'
+                        })
+                        return
+                      } else {
+                        // Not a recognized license
+                        resolve(null)
+                        return
+                      }
+                    } catch(e) { reject(e); return }
+                  })
+              } catch(e) { reject(e); return }
+            })
+          } catch(e) { reject(e); return }
+        })
+      } catch(e) { reject(e); return }
+    })
+  })
+}
 
 // Key phrases for common licenses
 var licensePhrases = {
@@ -198,39 +200,38 @@ var licensePhrases = {
   'AGPL': 'affero general public license',
   'ISC': 'permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted',
   'CC0': 'cc0',
-  'Unlicense': 'this is free and unencumbered software released into the public domain',
+  'Unlicense': 'this is free and unencumbered software released into the public domain'
 }
-var licenseCodes = Object.keys(licensePhrases);
-var spaceMetaRegex = new RegExp(' ', 'g');
+var licenseCodes = Object.keys(licensePhrases)
+var spaceMetaRegex = new RegExp(' ', 'g')
 
 // Spaces can be any whitespace
 for (var i = 0; i < licenseCodes.length; i++) {
-  licensePhrases[licenseCodes[i]] = licensePhrases[licenseCodes[i]].replace(spaceMetaRegex, '\\s+');
+  licensePhrases[licenseCodes[i]] = licensePhrases[licenseCodes[i]].replace(spaceMetaRegex, '\\s+')
 }
 
 // Try to guess the license based on the text and return an abbreviated name (or null if not recognized).
-var guessLicense = function(text) {
-  var licenseRegex;
+var guessLicense = function (text) {
+  var licenseRegex
   for (var i = 0; i < licenseCodes.length; i++) {
-    licenseRegex = licensePhrases[licenseCodes[i]];
+    licenseRegex = licensePhrases[licenseCodes[i]]
     if (text.match(new RegExp(licenseRegex, 'i'))) {
-      return licenseCodes[i];
+      return licenseCodes[i]
     }
   }
   // Not a recognized license
-  return null;
-};
+  return null
+}
 
-
-var shieldsBadge = function(badgeData) {
+var shieldsBadge = function (badgeData) {
   return ('https://img.shields.io/badge/'
     + escapeField(badgeData.text[0])
     + '-' + escapeField(badgeData.text[1])
-    + '-' + badgeData.colorscheme + '.svg');
-};
+    + '-' + badgeData.colorscheme + '.svg')
+}
 
-var escapeField = function(s) {
-  return encodeURIComponent(s.replace(/-/g, '--').replace(/_/g, '__'));
-};
+var escapeField = function (s) {
+  return encodeURIComponent(s.replace(/-/g, '--').replace(/_/g, '__'))
+}
 
-module.exports = suggest;
+module.exports = suggest
