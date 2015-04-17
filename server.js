@@ -578,6 +578,41 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/coverage\.(svg|png|gif|jpg|json)
       });
     }));
 
+// Coverity integration
+camp.route(/^\/coverity\/scan\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var projectId = match[1]; // eg, `3997`
+  var format = match[2];
+  var url = 'https://scan.coverity.com/projects/' + projectId + '/badge.json';
+  var badgeData = getBadgeData('coverity', data);
+  request(url, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      badgeData.text[1] = data.message;
+
+      if (data.message === 'passed') {
+        badgeData.colorscheme = 'brightgreen'
+      } else if (/^passed .* new defects$/.test(data.message)) {
+        badgeData.colorscheme = 'yellow';
+      } else if (data.message === 'pending') {
+        badgeData.colorscheme = 'orange';
+      } else if (data.message === 'failed') {
+        badgeData.colorscheme = 'red';
+      }
+      sendBadge(format, badgeData);
+
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Gratipay integration.
 camp.route(/^\/(gittip|gratipay)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -1570,6 +1605,53 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Scrutinizer build integration.
+camp.route(/^\/scrutinizer\/build\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var repo = match[1];  // eg, g/phpmyadmin/phpmyadmin
+  var format = match[2];
+  // The repo may contain a branch, which would be unsuitable.
+  var repoParts = repo.split('/');
+  var branch = null;
+  // Normally, there are 2 slashes in `repo` when the branch isn't specified.
+  var slashesInRepo = 2;
+  if (repoParts[0] === 'gp') { slashesInRepo = 1; }
+  if ((repoParts.length - 1) > slashesInRepo) {
+    branch = repoParts[repoParts.length - 1];
+    repo = repoParts.slice(0, -1).join('/');
+  }
+  var apiUrl = 'https://scrutinizer-ci.com/api/repositories/' + repo;
+  var badgeData = getBadgeData('build', data);
+  request(apiUrl, {}, function(err, res, buffer) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      // Which branch are we dealing with?
+      if (branch === null) { branch = data.default_branch; }
+      var res = data.applications[branch].build_status.status;
+      badgeData.text[1] = res;
+      if (res === 'passed') {
+        badgeData.colorscheme = 'brightgreen';
+      } else if (res === 'failed' || res === 'error') {
+        badgeData.colorscheme = 'red';
+      } else if (res === 'pending') {
+        badgeData.colorscheme = 'orange';
+      } else if (res === 'unknown') {
+        badgeData.colorscheme = 'gray';
+      }
+      sendBadge(format, badgeData);
+
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Scrutinizer integration.
 camp.route(/^\/scrutinizer\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -1652,6 +1734,8 @@ cache(function(data, match, sendBadge, request) {
       } else if (status === 'uptodate') {
         badgeData.colorscheme = 'brightgreen';
         status = 'up-to-date';
+      } else if (status === 'none') {
+        badgeData.colorscheme = 'brightgreen';
       }
       badgeData.text[1] = status;
       sendBadge(format, badgeData);
@@ -1915,7 +1999,8 @@ cache(function(data, match, sendBadge, request) {
         return;  // Hope for the best in the cache.
       }
       var data = JSON.parse(buffer);
-      var tag = data[0].name;
+      var versions = data.map(function(e) { return e.name; });
+      var tag = latestVersion(versions);
       var vdata = versionColor(tag);
       badgeData.text[1] = vdata.version;
       badgeData.colorscheme = vdata.color;
@@ -2155,6 +2240,57 @@ cache(function(data, match, sendBadge, request) {
       badgeData.colorscheme = null;
       badgeData.colorB = '#4183C4';
       sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// GitHub license integration.
+camp.route(/^\/github\/license\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];  // eg, mashape
+  var repo = match[2];  // eg, apistatus
+  var format = match[3];
+  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo;
+  var badgeData = getBadgeData('license', data);
+  // Using our OAuth App secret grants us 5000 req/hour
+  // instead of the standard 60 req/hour.
+  if (serverSecrets) {
+    apiUrl += '?client_id=' + serverSecrets.gh_client_id
+      + '&client_secret=' + serverSecrets.gh_client_secret;
+  }
+  // Custom user-agent and accept headers are required
+  // http://developer.github.com/v3/#user-agent-required
+  // https://developer.github.com/v3/licenses/
+  var customHeaders = {
+    'User-Agent': 'Shields.io',
+    'Accept': 'application/vnd.github.drax-preview+json'
+  };
+  request(apiUrl, { headers: customHeaders }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      if ((+res.headers['x-ratelimit-remaining']) === 0) {
+        return;  // Hope for the best in the cache.
+      } else if (res.statusCode === 404) {
+        badgeData.text[1] = 'repo not found';
+        sendBadge(format, badgeData);
+        return;
+      }
+      var body = JSON.parse(buffer);
+      if (body.license != null) {
+        badgeData.text[1] = body.license.name;
+        badgeData.colorscheme = 'blue';
+        sendBadge(format, badgeData);
+      } else {
+        badgeData.text[1] = 'unknown license';
+        sendBadge(format, badgeData);
+      }
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
@@ -3155,6 +3291,101 @@ cache(function(data, match, sendBadge, request) {
     }
   })}
 ));
+
+// DUB download integration
+camp.route(/^\/dub\/(dd|dw|dm|dt)\/([^\/]+)(?:\/([^\/]+))?\.(svg|png|gif|jpg|json)$/,
+cache(function (data, match, sendBadge, request) {
+  var info = match[1]; // downloads (dd - daily, dw - weekly, dm - monthly, dt - total)
+  var pkg = match[2]; // package name, e.g. vibe-d
+  var version = match[3]; // version (1.2.3 or latest)
+  var format = match[4];
+  var apiUrl = 'http://code.dlang.org/api/packages/'+pkg;
+  if (version)
+    apiUrl += '/' + version;
+  apiUrl += '/stats';
+  var badgeData = getBadgeData('dub', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      if (info.charAt(0) === 'd') {
+        badgeData.text[0] = getLabel('downloads', data);
+        var downloads;
+        switch (info.charAt(1)) {
+          case 'm':
+            downloads = data.downloads.monthly;
+            badgeData.text[1] = metric(downloads) + '/month';
+            break;
+          case 'w':
+            downloads = data.downloads.weekly;
+            badgeData.text[1] = metric(downloads) + '/week';
+            break;
+          case 'd':
+            downloads = data.downloads.daily;
+            badgeData.text[1] = metric(downloads) + '/day';
+            break;
+          case 't':
+            downloads = data.downloads.total;
+            badgeData.text[1] = metric(downloads);
+            break;
+        }
+        if (version) {
+            badgeData.text[1] += ' ' + versionColor(version).version;
+        }
+        badgeData.colorscheme = downloadCountColor(downloads);
+        sendBadge(format, badgeData);
+      }
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// DUB license and version integration
+camp.route(/^\/dub\/(v|l)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function (data, match, sendBadge, request) {
+  var info = match[1];  // (v - version, l - license)
+  var pkg = match[2];  // package name, e.g. vibe-d
+  var format = match[3];
+  var apiUrl = 'http://code.dlang.org/api/packages/'+pkg;
+  if (info === 'v')
+    apiUrl += '/latest';
+  else if (info === 'l')
+    apiUrl += '/latest/info';
+  var badgeData = getBadgeData('dub', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+        if (info === 'v') {
+          var vdata = versionColor(data);
+          badgeData.text[1] = vdata.version;
+          badgeData.colorscheme = vdata.color;
+          sendBadge(format, badgeData);
+        } else if (info == 'l') {
+          var license = data.info.license;
+          badgeData.text[0] = 'license';
+          if (license == null) {
+            badgeData.text[1] = 'Unknown';
+          } else {
+            badgeData.text[1] = license;
+            badgeData.colorscheme = 'blue';
+          }
+          sendBadge(format, badgeData);
+        }
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
 
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
