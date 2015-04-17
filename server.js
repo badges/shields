@@ -1089,11 +1089,11 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Clojars version integration
-camp.route(/^\/clojars\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/clojars\/v\/(.+)((\/)(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `prismic`.
+  var clojar = match[1];  // eg, `prismic` or `foo/bar`.
   var format = match[2];
-  var apiUrl = 'https://clojars.org/search?q=' + repo + '&format=json';
+  var apiUrl = 'https://clojars.org/' + clojar + '/latest-version.json';
   var badgeData = getBadgeData('clojars', data);
   request(apiUrl, function(err, res, buffer) {
     if (err !== null) {
@@ -1102,8 +1102,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var first = data.results[0];
-      var version = first.version;
+      var version = data.version;
       var vdata = versionColor(version);
       badgeData.text[1] = vdata.version;
       badgeData.colorscheme = vdata.color;
