@@ -2086,7 +2086,7 @@ cache(function(data, match, sendBadge, request) {
           downloads += asset.download_count;
         }
       });
-      var label = tag === 'latest' ? 'latest version' : tag;
+      var label = tag !== 'latest' ?  tag : '';
       if (asset_name !== 'total') {
         label += ' ' + '[' + asset_name + ']';
       }
