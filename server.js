@@ -1102,8 +1102,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var version = data.version;
-      var vdata = versionColor(version);
+      var vdata = versionColor(data.version);
       badgeData.text[1] = vdata.version;
       badgeData.colorscheme = vdata.color;
       sendBadge(format, badgeData);
