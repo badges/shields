@@ -1089,7 +1089,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Clojars version integration
-camp.route(/^\/clojars\/v\/(.+)((\/)(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/clojars\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var clojar = match[1];  // eg, `prismic` or `foo/bar`.
   var format = match[2];
