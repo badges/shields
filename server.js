@@ -1123,6 +1123,31 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Clojars version integration
+camp.route(/^\/clojars\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var clojar = match[1];  // eg, `prismic` or `foo/bar`.
+  var format = match[2];
+  var apiUrl = 'https://clojars.org/' + clojar + '/latest-version.json';
+  var badgeData = getBadgeData('clojars', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var vdata = versionColor(data.version);
+      badgeData.text[1] = vdata.version;
+      badgeData.colorscheme = vdata.color;
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Gem version integration.
 camp.route(/^\/gem\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
