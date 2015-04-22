@@ -20,6 +20,7 @@ var templates = {};
 var templateFiles = fs.readdirSync(path.join(__dirname, 'templates'));
 dot.templateSettings.strip = false;  // Do not strip whitespace.
 templateFiles.forEach(function(filename) {
+  if (filename[0] === '.') { return; }
   var templateData = fs.readFileSync(
     path.join(__dirname, 'templates', filename)).toString();
   var extension = filename.split('.').pop();
