@@ -2076,6 +2076,55 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// GitHub release-download-count integration.
+camp.route(/^\/github\/downloads\/([^\/]+)\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];  // eg, qubyte/rubidium
+  var repo = match[2];
+  var tag = match[3];
+  var asset_name = match[4].toLowerCase(); // eg. total, atom-amd64.deb, atom.x86_64.rpm
+  var format = match[5];
+  var release_path = tag !== 'latest' ? 'tags/' + match[3] : 'latest';
+  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/releases/' + release_path;
+  // Using our OAuth App secret grants us 5000 req/hour
+  // instead of the standard 60 req/hour.
+  if (serverSecrets) {
+    apiUrl += '?client_id=' + serverSecrets.gh_client_id
+      + '&client_secret=' + serverSecrets.gh_client_secret;
+  }
+  var badgeData = getBadgeData('downloads', data);
+  // A special User-Agent is required:
+  // http://developer.github.com/v3/#user-agent-required
+  request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      return sendBadge(format, badgeData);
+    }
+    try {
+      if ((+res.headers['x-ratelimit-remaining']) === 0) {
+        return;  // Hope for the best in the cache.
+      }
+      var data = JSON.parse(buffer);
+      var downloads = 0;
+      data.assets.forEach(function (asset) {
+        if (asset_name === 'total' || asset_name === asset.name.toLowerCase()) {
+          downloads += asset.download_count;
+        }
+      });
+      var label = tag !== 'latest' ?  tag : '';
+      if (asset_name !== 'total') {
+        label += ' ' + '[' + asset_name + ']';
+      }
+      badgeData.text[1] = metric(downloads) + ' ' + label;
+      badgeData.colorscheme = 'brightgreen';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'none';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // GitHub issues integration.
 camp.route(/^\/github\/issues(-raw)?\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
