@@ -3445,7 +3445,10 @@ function(data, match, end, ask) {
 
   // Badge creation.
   try {
-    var badgeData = {text: [subject, status]};
+    var badgeData = getBadgeData(subject, data);
+    badgeData.colorscheme = undefined;
+    if (data.label !== undefined) { badgeData.text[0] = '' + data.label; }
+    badgeData.text[1] = status;
     if (sixHex(color)) {
       badgeData.colorB = '#' + color;
     } else {
