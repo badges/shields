@@ -67,6 +67,9 @@ function makeImage(data, cb) {
   // String coercion.
   data.text[0] = '' + data.text[0];
   data.text[1] = '' + data.text[1];
+  if (data.text[0].length === 0) {
+    data.logoPadding = 0;
+  }
   data.widths = [
     (canvasContext.measureText(data.text[0]).width|0) + 10
       + data.logoWidth + data.logoPadding,
