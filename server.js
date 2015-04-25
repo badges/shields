@@ -174,7 +174,8 @@ function cache(f) {
       incrMonthlyAnalytics(analytics.vendorFlatSquareMonthly);
     }
 
-    var cacheIndex = match[0] + '?label=' + data.label + '&style=' + data.style;
+    var cacheIndex = match[0] + '?label=' + data.label + '&style=' + data.style
+      + '&logo=' + data.logo + '&logoWidth=' + data.logoWidth;
     // Should we return the data right away?
     var cached = requestCache.get(cacheIndex);
     var cachedVersionSent = false;
@@ -3509,6 +3510,7 @@ function getLabel(label, data) {
   return data.label || label;
 }
 
+// data (URL query) can include `label`, `style`, `logo`, `logoWidth`.
 function getBadgeData(defaultLabel, data) {
   var label = getLabel(defaultLabel, data);
   var template = data.style || 'default';
@@ -3516,7 +3518,17 @@ function getBadgeData(defaultLabel, data) {
     template = data.style;
   };
 
-  return {text:[label, 'n/a'], colorscheme:'lightgrey', template:template};
+  if (data.logo !== undefined && !/^data:/.test(data.logo)) {
+    data.logo = 'data:' + data.logo;
+  }
+
+  return {
+    text: [label, 'n/a'],
+    colorscheme: 'lightgrey',
+    template: template,
+    logo: data.logo,
+    logoWidth: +data.logoWidth
+  };
 }
 
 function makeSend(format, askres, end) {

@@ -16,7 +16,7 @@
     "url": "https://github.com/badges/shields"
   },
   "dependencies": {
-    "dot": "~1.0.2",
+    "dot": "~1.0.3",
     "svgo": "~0.4.2",
     "canvas": "~1.1.2",
     "phantomjs": "~1.9.2-6",

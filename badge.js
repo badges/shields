@@ -61,11 +61,15 @@ function makeImage(data, cb) {
     data.colorA = pickedColorscheme.colorA;
     data.colorB = pickedColorscheme.colorB;
   }
+  // Logo.
+  data.logoWidth = +data.logoWidth || (data.logo? 14: 0);
+  data.logoPadding = (data.logo? 3: 0);
   // String coercion.
   data.text[0] = '' + data.text[0];
   data.text[1] = '' + data.text[1];
   data.widths = [
-    (canvasContext.measureText(data.text[0]).width|0) + 10,
+    (canvasContext.measureText(data.text[0]).width|0) + 10
+      + data.logoWidth + data.logoPadding,
     (canvasContext.measureText(data.text[1]).width|0) + 10,
   ];
 
