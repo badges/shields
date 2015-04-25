@@ -3295,6 +3295,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(badgeData, format);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
