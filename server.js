@@ -752,21 +752,25 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// SensioLabs.
 camp.route(/^\/sensiolabs\/i\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var projectUuid = match[1];
   var format = match[2];
   var options = {
     method: 'GET',
-    auth: {
-      user: serverSecrets.sl_insight_userUuid,
-      pass: serverSecrets.sl_insight_apiToken
-    },
     uri: 'https://insight.sensiolabs.com/api/projects/' + projectUuid,
     headers: {
       Accept: 'application/vnd.com.sensiolabs.insight+xml'
     }
   };
+
+  if (!serverSecrets && serverSecrets.sl_insight_userUuid) {
+    options.auth = {
+      user: serverSecrets.sl_insight_userUuid,
+      pass: serverSecrets.sl_insight_apiToken
+    };
+  }
 
   var badgeData = getBadgeData('check', data);
 
