@@ -544,15 +544,16 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // SonarQube code coverage
-camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/coverage\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
     cache(function(data, match, sendBadge, request) {
       var scheme = match[1];
       var serverUrl = match[2];  // eg, `sonar.qatools.ru`.
       var buildType = match[3];  // eg, `ru.yandex.qatools.allure:allure-core:master`.
-      var format = match[4];
+      var metric = match[4];
+      var format = match[5];
       var apiUrl = scheme + '://' + serverUrl + '/api/resources?resource=' + buildType
-          + '&depth=0&metrics=coverage&includetrends=true';
-      var badgeData = getBadgeData('coverage', data);
+          + '&depth=0&metrics=' + encodeURIComponent(metric) + '&includetrends=true';
+      var badgeData = getBadgeData(metric.replace('_', ' '), data);
       request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
         if (err != null) {
           badgeData.text[1] = 'inaccessible';
