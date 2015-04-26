@@ -551,8 +551,9 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
       var buildType = match[3];  // eg, `ru.yandex.qatools.allure:allure-core:master`.
       var metric = match[4];
       var format = match[5];
+      var realMetric = metric === 'tech_debt' ? 'sqale_debt_ratio' : metric
       var apiUrl = scheme + '://' + serverUrl + '/api/resources?resource=' + buildType
-          + '&depth=0&metrics=' + encodeURIComponent(metric) + '&includetrends=true';
+          + '&depth=0&metrics=' + encodeURIComponent(realMetric) + '&includetrends=true';
       var badgeData = getBadgeData(metric.replace('_', ' '), data);
       request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
         if (err != null) {
@@ -570,8 +571,31 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
             return;
           }
 
-          badgeData.text[1] = percentage.toFixed(0) + '%';
-          badgeData.colorscheme = coveragePercentageColor(percentage);
+          if (metric === 'tech_debt') {
+            // colors are based on sonarqube default rating grid and display colors
+            // [0,0.1)   ==> A (green)
+            // [0.1,0.2) ==> B (yellowgreen)
+            // [0.2,0.5) ==> C (yellow)
+            // [0.5,1)   ==> D (orange)
+            // [1,)      ==> E (red)
+            badgeData.text[1] = percentage + '%';
+            if (percentage > 100) {
+              badgeData.colorscheme = 'red';
+            } else if (percentage > 50) {
+              badgeData.colorscheme = 'orange';
+            } else if (percentage > 20) {
+              badgeData.colorscheme = 'yellow';
+            } else if (percentage > 10) {
+              badgeData.colorscheme = 'yellowgreen';
+            } else if (percentage > 0) {
+              badgeData.colorscheme = 'green';
+            } else {
+              badgeData.colorscheme = 'brightgreen';
+            }
+          } else {
+            badgeData.text[1] = percentage.toFixed(0) + '%';
+            badgeData.colorscheme = coveragePercentageColor(percentage);
+          }
           sendBadge(format, badgeData);
         } catch(e) {
           badgeData.text[1] = 'invalid';
