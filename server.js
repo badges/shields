@@ -3636,6 +3636,11 @@ function fetchFromSvg(request, url, cb) {
   });
 }
 
+function ordinalNumber(n) {
+  var s=["ᵗʰ","ˢᵗ","ⁿᵈ","ʳᵈ"], v=n%100;
+  return n+(s[(v-20)%10]||s[v]||s[0]);
+}
+
 function coveragePercentageColor(percentage) {
   return floorCountColor(percentage, 80, 90, 100);
 }
