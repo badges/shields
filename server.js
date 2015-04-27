@@ -1275,6 +1275,44 @@ cache(function(data, match, sendBadge, request) {
   })
 }));
 
+
+// Gem ranking
+camp.route(/^\/gem\/(rt|rd)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var info = match[1]; // either rt or rd
+  var repo = match[2]; // eg, "rspec-puppet-facts"
+  var format = match[3];
+  var url = 'http://bestgems.org/api/v1/gems/' + repo;
+  if (info === 'rt') {
+    url += '/total_ranking.json';
+  } else if (info === 'rd') {
+    url += '/daily_ranking.json';
+  }
+  var badgeData = getBadgeData('rank', data);
+  request(url, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(badgeData, format);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      if (info == 'rt') {
+        var rank = data[0].total_ranking;
+      } else if (info === 'rd') {
+        var rank = data[0].daily_ranking;
+      }
+      var count = Math.floor(100000/rank);
+      badgeData.colorscheme = floorCountColor(count, 10, 50, 100);
+      badgeData.text[1] = ordinalNumber(rank);
+      badgeData.text[1] += (info === 'rt') ? ' total' : ' daily';
+      sendBadge(format, badgeData);
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  })
+}));
+
 // PyPI integration.
 camp.route(/^\/pypi\/([^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
