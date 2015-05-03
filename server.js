@@ -1143,8 +1143,8 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var vdata = versionColor(data.version);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = vdata.color;
+      badgeData.text[1] = "[" + clojar + " \"" + data.version + "\"]";
+      badgeData.colorscheme = 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
