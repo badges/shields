@@ -27,6 +27,7 @@ Other systems that produce badges following the same design, hosted elsewhere, a
 | shielded                          | JavaScript | [shielded][shielded issues]  |
 | [buckler.repl.ca][]               | Go         | [buckler][buckler issues]    |
 | old img.shields.io (discontinued) | Python     | [img.shields.io-old][]       |
+| DotBadge                          | C#         | [DotBadge](https://github.com/rebornix/DotBadge/issues) |
 
 Please report **bugs** and discuss implementation specific concerns (performance characteristics, etc.) in the repository for the respective implementation.
 
