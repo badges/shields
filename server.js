@@ -2048,6 +2048,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       if ((+res.headers['x-ratelimit-remaining']) === 0) {
@@ -3700,13 +3701,15 @@ function versionColor(version) {
 // Given a list of versions (as strings), return the latest version.
 function latestVersion(versions) {
   var version = '';
+  var origVersions = versions;
   versions = versions.filter(function(version) {
     return (/^v?[0-9]/).test(version);
   });
   semver_versions = versions.map(function(version) {
     var matches = /^(v?[0-9]+)(\.[0-9]+)?(-.*)?$/.exec(version);
     if (matches) {
-        version = matches[1] + (matches[2] ? matches[2] : '.0') + '.0' + (matches[3] ? matches[3] : '');
+      version = matches[1] + (matches[2] ? matches[2] : '.0') + '.0' +
+        (matches[3] ? matches[3] : '');
     }
     return version;
   });
@@ -3716,6 +3719,10 @@ function latestVersion(versions) {
   } catch(e) {
     versions = versions.sort();
     version = versions[versions.length - 1];
+  }
+  if (version === undefined) {
+    origVersions = origVersions.sort();
+    version = origVersions[origVersions.length - 1];
   }
   return version;
 }
