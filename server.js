@@ -1011,9 +1011,9 @@ cache(function(data, match, sendBadge, request) {
 // npm download integration.
 camp.route(/^\/npm\/dm\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, `localeval`.
+  var pkg = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
   var format = match[2];
-  var apiUrl = 'https://api.npmjs.org/downloads/point/last-month/' + user;
+  var apiUrl = 'https://api.npmjs.org/downloads/point/last-month/' + pkg;
   var badgeData = getBadgeData('downloads', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
@@ -1047,7 +1047,7 @@ cache(function(data, match, sendBadge, request) {
 // npm version integration.
 camp.route(/^\/npm\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `localeval`.
+  var repo = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
   var format = match[2];
   var apiUrl = 'https://registry.npmjs.org/' + repo + '/latest';
   var badgeData = getBadgeData('npm', data);
@@ -1075,7 +1075,7 @@ cache(function(data, match, sendBadge, request) {
 // npm license integration.
 camp.route(/^\/npm\/l\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, "express"
+  var repo = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
   var format = match[2];
   var apiUrl = 'http://registry.npmjs.org/' + repo + '/latest';
   var badgeData = getBadgeData('license', data);
@@ -1105,7 +1105,7 @@ cache(function(data, match, sendBadge, request) {
 // npm node version integration.
 camp.route(/^\/node\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `localeval`.
+  var repo = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
   var format = match[2];
   var apiUrl = 'https://registry.npmjs.org/' + repo + '/latest';
   var badgeData = getBadgeData('node', data);
