@@ -3443,6 +3443,20 @@ cache(function (data, match, sendBadge, request) {
   });
 }));
 
+// Gitter integration
+camp.route(/^\/gitter\/([^\/]+\/[^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var userRepo  = match[1];
+  var format    = match[2];
+
+  var badgeData = getBadgeData('gitter', data);
+  badgeData.text[1] = 'join chat'; //userRepo;
+  badgeData.colorscheme = 'brightgreen';
+
+  sendBadge(format, badgeData);
+}));
+
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)+)-(([^-]|--)+)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {

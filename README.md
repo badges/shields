@@ -73,6 +73,7 @@ What kind of meta data can you convey using badges?
 - [badges2svg][]
 - [reposs][]
 - [ruby-gem-downloads-badge][]
+- [Gitter](https://gitter.im)
 
 [gem]: https://github.com/badges/badgerbadgerbadger
 [badges2svg]: https://github.com/bfontaine/badges2svg
