@@ -1,4 +1,4 @@
-# Shields [![Gittip](http://img.shields.io/gittip/shields.svg)](https://www.gittip.com/Shields/) [![npm version](http://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges) [![build status](http://img.shields.io/travis/badges/shields.svg)](https://travis-ci.org/badges/shields) [![Dependency Status](https://david-dm.org/badges/shields.svg)](https://david-dm.org/badges/shields)
+# Shields [![Gratipay](http://img.shields.io/gratipay/shields.svg)](https://www.gratipay.com/Shields/) [![npm version](http://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges) [![build status](http://img.shields.io/travis/badges/shields.svg)](https://travis-ci.org/badges/shields) [![Dependency Status](https://david-dm.org/badges/shields.svg)](https://david-dm.org/badges/shields)
 
 An image server for legible & concise information.
 
@@ -55,7 +55,7 @@ What kind of meta data can you convey using badges?
 - status of third-party dependencies: `dependencies | out-of-date`
 - static code analysis GPA: `code climate | 3.8`
 - [semver](http://semver.org/) version observance: `semver | 2.0.0`
-- amount of [gittip](http://gittip.com) donations per week: `tips | $2/week`
+- amount of [gratipay](http://gratipay.com) donations per week: `tips | $2/week`
 
 
 ## Services using the Shields standard
