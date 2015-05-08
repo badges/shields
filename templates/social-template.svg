@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{{=it.widths[0]+it.widths[1]+7}}" height="20">
+  <style type="text/css"><![CDATA[
+    #llink:hover { fill:url(#b); stroke:#ccc; }
+    #rlink:hover { fill:#4183C4; }
+  ]]></style>
+  <linearGradient id="a" x2="0" y2="100%">
+    <stop offset="0" stop-color="#fcfcfc" stop-opacity="0"/>
+    <stop offset="1" stop-opacity=".1"/>
+  </linearGradient>
+  <linearGradient id="b" x2="0" y2="100%">
+    <stop offset="0" stop-color="#ccc" stop-opacity=".1"/>
+    <stop offset="1" stop-opacity=".1"/>
+  </linearGradient>
+  <g stroke="#d5d5d5">
+    <rect stroke="none" fill="#fcfcfc" x="0.5" y="0.5" width="{{=it.widths[0]}}" height="19" rx="2"/>
+    <rect y="0.5" x="57.5" width="{{=it.widths[1]}}" height="19" rx="2" fill="#fafafa"/>
+    <path d="M{{=it.widths[0]+7}} 6.5 l-3 3v1 l3 3" stroke="d5d5d5" fill="#fafafa"/>
+  </g>
+  {{?it.logo}}
+    <image x="5" y="3" width="{{=it.logoWidth}}" height="14" xlink:href="{{=it.logo}}"/>
+  {{?}}
+  <rect x="{{=it.widths[0]+7}}" y="7.5" width="0.5" height="5" stroke="#fafafa"/>
+  <g fill="#333" text-anchor="middle" font-family="Helvetica Neue,Helvetica,Arial,sans-serif" font-weight="700" font-size="11px" line-height="14px">
+    <text x="{{=(it.widths[0]+it.logoWidth+it.logoPadding)/2}}" y="15" fill="#fff">{{=it.escapeXml(it.text[0])}}</text>
+    <text x="{{=(it.widths[0]+it.logoWidth+it.logoPadding)/2}}" y="14">{{=it.escapeXml(it.text[0])}}</text>
+    <text x="{{=it.widths[0]+it.widths[1]/2+6}}" y="15" fill="#fff">{{=it.escapeXml(it.text[1])}}</text>
+    <a xlink:href="{{=it.links[0]}}">
+      <text id="rlink" x="{{=it.widths[0]+it.widths[1]/2+6}}" y="14">{{=it.escapeXml(it.text[1])}}</text>
+    </a>
+  </g>
+  <a xlink:href="{{=it.links[1]}}">
+    <rect id="llink" stroke="#d5d5d5" fill="url(#a)" x="0.5" y="0.5" width="51" height="19" rx="2"/>
+  </a>
+</svg>

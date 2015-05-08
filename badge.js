@@ -75,6 +75,9 @@ function makeImage(data, cb) {
       + data.logoWidth + data.logoPadding,
     (canvasContext.measureText(data.text[1]).width|0) + 10,
   ];
+  if (data.links === undefined) {
+    data.links = ['', ''];
+  }
 
   var template = templates[data.template + '-' + data.format];
   addEscapers(data);
