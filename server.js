@@ -2034,7 +2034,6 @@ cache(function(data, match, sendBadge, request) {
   var format = match[2];
   var apiUrl = 'http://metrics.cocoapods.org/api/v1/pods/' + spec;
   var badgeData = getBadgeData('pod', data);
-  badgeData.colorscheme = null;
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
