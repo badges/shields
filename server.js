@@ -3179,22 +3179,22 @@ cache(function (data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-        if (info === 'v') {
-          var vdata = versionColor(data);
-          badgeData.text[1] = vdata.version;
-          badgeData.colorscheme = vdata.color;
-          sendBadge(format, badgeData);
-        } else if (info == 'l') {
-          var license = data.info.license;
-          badgeData.text[0] = 'license';
-          if (license == null) {
-            badgeData.text[1] = 'Unknown';
-          } else {
-            badgeData.text[1] = license;
-            badgeData.colorscheme = 'blue';
-          }
-          sendBadge(format, badgeData);
+      if (info === 'v') {
+        var vdata = versionColor(data);
+        badgeData.text[1] = vdata.version;
+        badgeData.colorscheme = vdata.color;
+        sendBadge(format, badgeData);
+      } else if (info == 'l') {
+        var license = data.info.license;
+        badgeData.text[0] = 'license';
+        if (license == null) {
+          badgeData.text[1] = 'Unknown';
+        } else {
+          badgeData.text[1] = license;
+          badgeData.colorscheme = 'blue';
         }
+        sendBadge(format, badgeData);
+      }
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
@@ -3209,20 +3209,20 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[2];  // eg, mockbin
   var format = match[3];
   // Convert underscore to library for api path
-  user = user === '_' ? 'library' : user;
-  var baseURL = 'https://registry.hub.docker.com/v2/';
-  var path = 'repositories/'+user+'/'+repo+'/stars/count/';
+  var baseURL = 'http://docker.cloudbrain.io/';
+  var path = user+'/'+repo;
   var badgeData = getBadgeData('docker', data);
   request(baseURL+path, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
-      if (res.statusCode !== 200) {
-        throw new Error("Could not find repo on docker hub");
-      }
-      badgeData.text[1] = buffer + " stars";
+      var data = JSON.parse(buffer);
+      var stars = data.stars;
+      var starSuffix = data.stars === 1 ? " star" : " stars"
+      badgeData.text[1] = metric(stars) + starSuffix;
       badgeData.colorscheme = null;
       badgeData.colorB = '#008bb8';
       sendBadge(format, badgeData);
