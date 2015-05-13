@@ -790,7 +790,7 @@ cache(function(data, match, sendBadge, request) {
     }
   };
 
-  if (!serverSecrets && serverSecrets.sl_insight_userUuid) {
+  if (serverSecrets && serverSecrets.sl_insight_userUuid) {
     options.auth = {
       user: serverSecrets.sl_insight_userUuid,
       pass: serverSecrets.sl_insight_apiToken
