@@ -1308,9 +1308,11 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[2]; // eg, "rspec-puppet-facts"
   var format = match[3];
   var url = 'http://bestgems.org/api/v1/gems/' + repo;
-  if (info === 'rt') {
+  var totalRank = (info === 'rt');
+  var dailyRank = (info === 'rd');
+  if (totalRank) {
     url += '/total_ranking.json';
-  } else if (info === 'rd') {
+  } else if (dailyRank) {
     url += '/daily_ranking.json';
   }
   var badgeData = getBadgeData('rank', data);
@@ -1318,18 +1320,19 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(badgeData, format);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
-      if (info == 'rt') {
+      if (totalRank) {
         var rank = data[0].total_ranking;
-      } else if (info === 'rd') {
+      } else if (dailyRank) {
         var rank = data[0].daily_ranking;
       }
-      var count = Math.floor(100000/rank);
+      var count = Math.floor(100000 / rank);
       badgeData.colorscheme = floorCountColor(count, 10, 50, 100);
       badgeData.text[1] = ordinalNumber(rank);
-      badgeData.text[1] += (info === 'rt') ? ' total' : ' daily';
+      badgeData.text[1] += totalRank? ' total': ' daily';
       sendBadge(format, badgeData);
     } catch (e) {
       badgeData.text[1] = 'invalid';
