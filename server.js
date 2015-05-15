@@ -551,10 +551,16 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
       var buildType = match[3];  // eg, `ru.yandex.qatools.allure:allure-core:master`.
       var metric = match[4];
       var format = match[5];
-      var realMetric = metric === 'tech_debt' ? 'sqale_debt_ratio' : metric
+      var sonarMetric = metric;
+      if (metric === 'tech_debt') {
+        sonarMetric = 'sqale_debt_ratio';
+      } else if (metric === 'lines') {
+        sonarMetric = 'ncloc';
+      }
       var apiUrl = scheme + '://' + serverUrl + '/api/resources?resource=' + buildType
-          + '&depth=0&metrics=' + encodeURIComponent(realMetric) + '&includetrends=true';
+          + '&depth=0&metrics=' + encodeURIComponent(sonarMetric) + '&includetrends=true';
       var badgeData = getBadgeData(metric.replace('_', ' '), data);
+
       request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
         if (err != null) {
           badgeData.text[1] = 'inaccessible';
@@ -563,38 +569,41 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
         try {
           var data = JSON.parse(buffer);
 
-          var percentage = data[0].msr[0].val;
+          var value = data[0].msr[0].val;
 
-          if (percentage === undefined) {
+          if (value === undefined) {
             badgeData.text[1] = 'unknown';
             sendBadge(format, badgeData);
             return;
           }
 
-          if (metric === 'tech_debt') {
+          if (metric === 'lines') {
+            badgeData.text[1] = value;
+            badgeData.colorscheme = 'green';
+          } else if (metric === 'tech_debt') {
             // colors are based on sonarqube default rating grid and display colors
             // [0,0.1)   ==> A (green)
             // [0.1,0.2) ==> B (yellowgreen)
             // [0.2,0.5) ==> C (yellow)
             // [0.5,1)   ==> D (orange)
             // [1,)      ==> E (red)
-            badgeData.text[1] = percentage + '%';
-            if (percentage > 100) {
+            badgeData.text[1] = value + '%';
+            if (value > 100) {
               badgeData.colorscheme = 'red';
-            } else if (percentage > 50) {
+            } else if (value > 50) {
               badgeData.colorscheme = 'orange';
-            } else if (percentage > 20) {
+            } else if (value > 20) {
               badgeData.colorscheme = 'yellow';
-            } else if (percentage > 10) {
+            } else if (value > 10) {
               badgeData.colorscheme = 'yellowgreen';
-            } else if (percentage > 0) {
+            } else if (value > 0) {
               badgeData.colorscheme = 'green';
             } else {
               badgeData.colorscheme = 'brightgreen';
             }
           } else {
-            badgeData.text[1] = percentage.toFixed(0) + '%';
-            badgeData.colorscheme = coveragePercentageColor(percentage);
+            badgeData.text[1] = value.toFixed(0) + '%';
+            badgeData.colorscheme = coveragePercentageColor(value);
           }
           sendBadge(format, badgeData);
         } catch(e) {
