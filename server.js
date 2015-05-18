@@ -3462,22 +3462,82 @@ cache(function (data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-        if (info === 'v') {
-          var vdata = versionColor(data);
-          badgeData.text[1] = vdata.version;
-          badgeData.colorscheme = vdata.color;
-          sendBadge(format, badgeData);
-        } else if (info == 'l') {
-          var license = data.info.license;
-          badgeData.text[0] = 'license';
-          if (license == null) {
-            badgeData.text[1] = 'Unknown';
-          } else {
-            badgeData.text[1] = license;
-            badgeData.colorscheme = 'blue';
-          }
-          sendBadge(format, badgeData);
+      if (info === 'v') {
+        var vdata = versionColor(data);
+        badgeData.text[1] = vdata.version;
+        badgeData.colorscheme = vdata.color;
+        sendBadge(format, badgeData);
+      } else if (info == 'l') {
+        var license = data.info.license;
+        badgeData.text[0] = 'license';
+        if (license == null) {
+          badgeData.text[1] = 'Unknown';
+        } else {
+          badgeData.text[1] = license;
+          badgeData.colorscheme = 'blue';
         }
+        sendBadge(format, badgeData);
+      }
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// Docker Hub stars integration.
+camp.route(/^\/docker\/stars\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];  // eg, mashape
+  var repo = match[2];  // eg, kong
+  var format = match[3];
+  var baseURL = 'http://docker.cloudbrain.io/';
+  var path = user + '/' + repo;
+  var badgeData = getBadgeData('docker', data);
+  request(baseURL + path, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var stars = data.stars;
+      var starSuffix = stars === 1 ? " star" : " stars";
+      badgeData.text[1] = metric(stars) + starSuffix;
+      badgeData.colorscheme = null;
+      badgeData.colorB = '#008bb8';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// Docker Hub pulls integration.
+camp.route(/^\/docker\/pulls\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];  // eg, mashape
+  var repo = match[2];  // eg, kong
+  var format = match[3];
+  var baseURL = 'http://docker.cloudbrain.io/';
+  var path = user + '/' + repo;
+  var badgeData = getBadgeData('docker', data);
+  request(baseURL + path, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var pulls = data.pulls;
+      var pullSuffix = pulls === 1 ? " pull" : " pulls";
+      badgeData.text[1] = metric(pulls) + pullSuffix;
+      badgeData.colorscheme = null;
+      badgeData.colorB = '#008bb8';
+      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
