@@ -1057,6 +1057,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -1083,6 +1084,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -1115,6 +1117,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -1164,6 +1167,7 @@ cache(function(data, match, sendBadge, request) {
     if (err !== null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -1189,6 +1193,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -1231,11 +1236,12 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
       if (info === "dt") {
-        var downloads = metric(data.downloads) + " total";
+        var downloads = metric(data.downloads);
       } else if (info === "dtv") {
         var downloads = metric(data.version_downloads) + " latest version";
       } else if (info === "dv") {
@@ -1286,6 +1292,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(badgeData, format);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -1332,7 +1339,7 @@ cache(function(data, match, sendBadge, request) {
       var count = Math.floor(100000 / rank);
       badgeData.colorscheme = floorCountColor(count, 10, 50, 100);
       badgeData.text[1] = ordinalNumber(rank);
-      badgeData.text[1] += totalRank? ' total': ' daily';
+      badgeData.text[1] += totalRank? '': ' daily';
       sendBadge(format, badgeData);
     } catch (e) {
       badgeData.text[1] = 'invalid';
@@ -1353,6 +1360,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -1409,6 +1417,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -1438,6 +1447,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -1592,6 +1602,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var score = res.headers['content-disposition']
@@ -1632,6 +1643,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var statusMatch = res.headers['content-disposition']
@@ -1684,6 +1696,7 @@ cache(function(data, match, sendBadge, request) {
     if (err !== null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -1769,6 +1782,7 @@ cache(function(data, match, sendBadge, request) {
     if (err !== null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -1814,6 +1828,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -1854,6 +1869,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var nameMatch = buffer.match(/(devD|d)ependencies/)[0];
@@ -1964,6 +1980,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var lines = buffer.split("\n");
@@ -2031,6 +2048,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -2129,6 +2147,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       if ((+res.headers['x-ratelimit-remaining']) === 0) {
@@ -2218,6 +2237,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       if ((+res.headers['x-ratelimit-remaining']) === 0) {
@@ -2255,6 +2275,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       if ((+res.headers['x-ratelimit-remaining']) === 0) {
@@ -2293,6 +2314,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       if ((+res.headers['x-ratelimit-remaining']) === 0) {
@@ -2328,6 +2350,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       if ((+res.headers['x-ratelimit-remaining']) === 0) {
@@ -2407,6 +2430,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
 
     try {
@@ -2472,6 +2496,7 @@ function mapNugetFeed(pattern, offset, getInfo) {
       if (err != null) {
         badgeData.text[1] = 'inaccessible';
         sendBadge(format, badgeData);
+        return;
       }
       try {
         var version = data.NormalizedVersion || data.Version;
@@ -2503,6 +2528,7 @@ function mapNugetFeed(pattern, offset, getInfo) {
       if (err != null) {
         badgeData.text[1] = 'inaccessible';
         sendBadge(format, badgeData);
+        return;
       }
       try {
         var version = data.NormalizedVersion || data.Version;
@@ -2534,6 +2560,7 @@ function mapNugetFeed(pattern, offset, getInfo) {
       if (err != null) {
         badgeData.text[1] = 'inaccessible';
         sendBadge(format, badgeData);
+        return;
       }
       try {
         var downloads = data.DownloadCount;
@@ -2781,6 +2808,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var statusMatch = res.headers['content-disposition']
@@ -2836,6 +2864,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -2921,6 +2950,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -3024,6 +3054,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -3100,6 +3131,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -3135,6 +3167,7 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = 'inaccessible';
       badgeData.colorscheme = 'red';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       if (json.status === 'up-to-date') {
@@ -3269,9 +3302,7 @@ cache(function(data, match, sendBadge, request) {
 
   var apiUrl = 'https://circleci.com/api/v1/project/' + userRepo;
   if(branch != null) {
-    apiUrl +=
-      "/tree/"
-      + branch;
+    apiUrl += "/tree/" + branch;
   }
   apiUrl +=
     '?circle-token=0a5143728784b263d9f0238b8d595522689b3af2'
@@ -3283,6 +3314,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var status = data[0].status;
@@ -3398,14 +3430,16 @@ cache(function (data, match, sendBadge, request) {
   var version = match[3]; // version (1.2.3 or latest)
   var format = match[4];
   var apiUrl = 'http://code.dlang.org/api/packages/'+pkg;
-  if (version)
+  if (version) {
     apiUrl += '/' + version;
+  }
   apiUrl += '/stats';
   var badgeData = getBadgeData('dub', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
