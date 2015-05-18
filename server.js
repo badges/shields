@@ -3356,7 +3356,7 @@ cache(function(data, match, sendBadge, request) {
   var info = match[1]; // either `v` or `l`
   var pkg = match[2]; // eg, tex
   var format = match[3];
-  var url = 'http://www.ctan.org/json/pkg/'+pkg;
+  var url = 'http://www.ctan.org/json/pkg/' + pkg;
   var badgeData = getBadgeData('ctan', data);
   request(url, function (err, res, buffer) {
     if (err != null) {
@@ -3449,16 +3449,18 @@ cache(function (data, match, sendBadge, request) {
   var info = match[1];  // (v - version, l - license)
   var pkg = match[2];  // package name, e.g. vibe-d
   var format = match[3];
-  var apiUrl = 'http://code.dlang.org/api/packages/'+pkg;
-  if (info === 'v')
+  var apiUrl = 'http://code.dlang.org/api/packages/' + pkg;
+  if (info === 'v') {
     apiUrl += '/latest';
-  else if (info === 'l')
+  } else if (info === 'l') {
     apiUrl += '/latest/info';
+  }
   var badgeData = getBadgeData('dub', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -3491,19 +3493,21 @@ cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, mashape
   var repo = match[2];  // eg, kong
   var format = match[3];
-  var baseURL = 'http://docker.cloudbrain.io/';
+  if (user === '_') {
+    user = 'library';
+  }
   var path = user + '/' + repo;
+  var url = 'https://registry.hub.docker.com/v2/repositories/' + path + '/stars/count/';
   var badgeData = getBadgeData('docker', data);
-  request(baseURL + path, function(err, res, buffer) {
+  request(url, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      var stars = data.stars;
-      var starSuffix = stars === 1 ? " star" : " stars";
+      var stars = +("" + buffer);
+      var starSuffix = (stars === 1)? " star": " stars";
       badgeData.text[1] = metric(stars) + starSuffix;
       badgeData.colorscheme = null;
       badgeData.colorB = '#008bb8';
@@ -3521,6 +3525,9 @@ cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, mashape
   var repo = match[2];  // eg, kong
   var format = match[3];
+  // FIXME: this website does HTML scraping. Hopefully one day it won't be
+  // necessary. See this for more information:
+  // https://gist.github.com/montanaflynn/957add5908beb3f676cf
   var baseURL = 'http://docker.cloudbrain.io/';
   var path = user + '/' + repo;
   var badgeData = getBadgeData('docker', data);
@@ -3533,7 +3540,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var pulls = data.pulls;
-      var pullSuffix = pulls === 1 ? " pull" : " pulls";
+      var pullSuffix = (pulls === 1)? " pull": " pulls";
       badgeData.text[1] = metric(pulls) + pullSuffix;
       badgeData.colorscheme = null;
       badgeData.colorB = '#008bb8';
