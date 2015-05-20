@@ -1540,13 +1540,24 @@ cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `github/codecov/example-python`.
   var branch = match[2];
   var format = match[3];
+  var token = data['token'];  // for private repositories (?token=1234)
   var apiUrl = {
     url: 'https://codecov.io/' + userRepo + '/coverage.svg',
     followRedirect: false,
     method: 'HEAD',
   };
+  // Query Params
+  queryParams = [];
   if (branch) {
-    apiUrl.url += '?branch=' + branch;
+    queryParams.push({name: 'branch', value: branch})
+  }
+  if (token) {
+    queryParams.push({name: 'token', value: token})
+  }
+  for (i = 0; i < queryParams.length; i++) {
+    var param = queryParams[i];
+    var sep = (i == 0 ? '?' : '&');
+    apiUrl.url += sep + param.name + '=' + param.value;
   }
   var badgeData = getBadgeData('coverage', data);
   request(apiUrl, function(err, res) {
