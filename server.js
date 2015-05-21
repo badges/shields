@@ -12,6 +12,7 @@ var fs = require('fs');
 var LruCache = require('./lru-cache.js');
 var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
+var querystring = require('querystring');
 var serverSecrets;
 try {
   // Everything that cannot be checked in but is useful server-side
@@ -1547,18 +1548,14 @@ cache(function(data, match, sendBadge, request) {
     method: 'HEAD',
   };
   // Query Params
-  queryParams = [];
+  queryParams = {};
   if (branch) {
-    queryParams.push({name: 'branch', value: branch})
+    queryParams.branch = branch;
   }
   if (token) {
-    queryParams.push({name: 'token', value: token})
+    queryParams.token = token;
   }
-  for (i = 0; i < queryParams.length; i++) {
-    var param = queryParams[i];
-    var sep = (i == 0 ? '?' : '&');
-    apiUrl.url += sep + param.name + '=' + param.value;
-  }
+  apiUrl.url += '?' + querystring.stringify(queryParams);
   var badgeData = getBadgeData('coverage', data);
   request(apiUrl, function(err, res) {
     if (err != null) {
