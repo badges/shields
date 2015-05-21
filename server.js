@@ -549,17 +549,19 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
       var scheme = match[1];
       var serverUrl = match[2];  // eg, `sonar.qatools.ru`.
       var buildType = match[3];  // eg, `ru.yandex.qatools.allure:allure-core:master`.
-      var metric = match[4];
+      var metricName = match[4];
       var format = match[5];
-      var sonarMetric = metric;
-      if (metric === 'tech_debt') {
-        sonarMetric = 'sqale_debt_ratio';
-      } else if (metric === 'lines') {
-        sonarMetric = 'ncloc';
+      var sonarMetricName;
+      if (metricName === 'tech_debt') {
+        sonarMetricName = 'sqale_debt_ratio';
+      } else if (metricName === 'lines') {
+        sonarMetricName = 'ncloc';
+      } else {
+        sonarMetricName = metricName
       }
       var apiUrl = scheme + '://' + serverUrl + '/api/resources?resource=' + buildType
-          + '&depth=0&metrics=' + encodeURIComponent(sonarMetric) + '&includetrends=true';
-      var badgeData = getBadgeData(metric.replace('_', ' '), data);
+          + '&depth=0&metrics=' + encodeURIComponent(sonarMetricName) + '&includetrends=true';
+      var badgeData = getBadgeData(metricName.replace('_', ' '), data);
 
       request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
         if (err != null) {
@@ -577,10 +579,10 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
             return;
           }
 
-          if (metric === 'lines') {
-            badgeData.text[1] = value;
-            badgeData.colorscheme = 'green';
-          } else if (metric === 'tech_debt') {
+          if (metricName.indexOf('coverage') !== -1) {
+            badgeData.text[1] = value.toFixed(0) + '%';
+            badgeData.colorscheme = coveragePercentageColor(value);
+          } else if (metricName === 'tech_debt') {
             // colors are based on sonarqube default rating grid and display colors
             // [0,0.1)   ==> A (green)
             // [0.1,0.2) ==> B (yellowgreen)
@@ -602,8 +604,8 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
               badgeData.colorscheme = 'brightgreen';
             }
           } else {
-            badgeData.text[1] = value.toFixed(0) + '%';
-            badgeData.colorscheme = coveragePercentageColor(value);
+            badgeData.text[1] = metric(value);
+            badgeData.colorscheme = 'green';
           }
           sendBadge(format, badgeData);
         } catch(e) {
