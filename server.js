@@ -1536,7 +1536,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Codecov integration.
-camp.route(/^\/codecov\/c\/(?:t:([A-Za-z1-9]+))?[+\/]?([^\/]+\/[^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/codecov\/c\/(?:token\/(\w+))?[+\/]?([^\/]+\/[^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var token = match[1];
   var userRepo = match[2];  // eg, `github/codecov/example-python`.
