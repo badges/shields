@@ -1814,10 +1814,10 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // David integration
-camp.route(/^\/david\/(dev\/|peer\/)?(.+?)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/david\/(dev\/|optional\/|peer\/)?(.+?)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var dev = match[1];
-  if (dev != null) { dev = dev.slice(0, -1); }  // 'dev' or 'peer'.
+  if (dev != null) { dev = dev.slice(0, -1); }  // 'dev', 'optional' or 'peer'.
   // eg, `strongloop/express`, `webcomponents/generator-element`.
   var userRepo = match[2];
   var format = match[3];
