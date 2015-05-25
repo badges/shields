@@ -12,6 +12,7 @@ var fs = require('fs');
 var LruCache = require('./lru-cache.js');
 var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
+var querystring = require('querystring');
 var serverSecrets;
 try {
   // Everything that cannot be checked in but is useful server-side
@@ -1545,19 +1546,26 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Codecov integration.
-camp.route(/^\/codecov\/c\/([^\/]+\/[^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/codecov\/c\/(?:token\/(\w+))?[+\/]?([^\/]+\/[^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];  // eg, `github/codecov/example-python`.
-  var branch = match[2];
-  var format = match[3];
+  var token = match[1];
+  var userRepo = match[2];  // eg, `github/codecov/example-python`.
+  var branch = match[3];
+  var format = match[4];
   var apiUrl = {
     url: 'https://codecov.io/' + userRepo + '/coverage.svg',
     followRedirect: false,
     method: 'HEAD',
   };
+  // Query Params
+  queryParams = {};
   if (branch) {
-    apiUrl.url += '?branch=' + branch;
+    queryParams.branch = branch;
   }
+  if (token) {
+    queryParams.token = token;
+  }
+  apiUrl.url += '?' + querystring.stringify(queryParams);
   var badgeData = getBadgeData('coverage', data);
   request(apiUrl, function(err, res) {
     if (err != null) {
