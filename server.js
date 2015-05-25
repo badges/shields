@@ -3540,7 +3540,7 @@ cache(function(data, match, sendBadge, request) {
   }
   var path = user + '/' + repo;
   var url = 'https://registry.hub.docker.com/v2/repositories/' + path + '/stars/count/';
-  var badgeData = getBadgeData('docker', data);
+  var badgeData = getBadgeData('docker stars', data);
   request(url, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -3549,8 +3549,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var stars = +("" + buffer);
-      var starSuffix = (stars === 1)? " star": " stars";
-      badgeData.text[1] = metric(stars) + starSuffix;
+      badgeData.text[1] = metric(stars);
       badgeData.colorscheme = null;
       badgeData.colorB = '#008bb8';
       sendBadge(format, badgeData);
@@ -3572,7 +3571,7 @@ cache(function(data, match, sendBadge, request) {
   }
   var path = user + '/' + repo;
   var url = 'https://registry.hub.docker.com/v2/repositories/' + path;
-  var badgeData = getBadgeData('docker', data);
+  var badgeData = getBadgeData('docker pulls', data);
   request(url, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -3582,8 +3581,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var pulls = data.pull_count;
-      var pullSuffix = (pulls === 1)? " pull": " pulls";
-      badgeData.text[1] = metric(pulls) + pullSuffix;
+      badgeData.text[1] = metric(pulls);
       badgeData.colorscheme = null;
       badgeData.colorB = '#008bb8';
       sendBadge(format, badgeData);
