@@ -554,14 +554,14 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
       var sonarMetricName;
       if (metricName === 'tech_debt') {
         sonarMetricName = 'sqale_debt_ratio';
-      } else if (metricName === 'lines') {
+      } else if (metricName === 'loc' || metricName === 'lines_of_code') {
         sonarMetricName = 'ncloc';
       } else {
         sonarMetricName = metricName
       }
       var apiUrl = scheme + '://' + serverUrl + '/api/resources?resource=' + buildType
           + '&depth=0&metrics=' + encodeURIComponent(sonarMetricName) + '&includetrends=true';
-      var badgeData = getBadgeData(metricName.replace('_', ' '), data);
+      var badgeData = getBadgeData(metricName.replace(/_/g, ' '), data);
 
       request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
         if (err != null) {
