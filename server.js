@@ -3302,22 +3302,35 @@ cache(function(data, match, sendBadge, request) {
 
 // CircleCI build integration.
 // https://circleci.com/api/v1/project/BrightFlair/PHP.Gt?circle-token=0a5143728784b263d9f0238b8d595522689b3af2&limit=1&filter=completed
-camp.route(/^\/circleci\/project\/([^\/]+\/[^\/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/circleci\/(?:token\/(\w+))?[+\/]?project\/([^\/]+\/[^\/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];  // eg, `BrightFlair/PHP.Gt`.
-  var branch = match[2];
-  var format = match[3];
+  var token = match[1]
+  var userRepo = match[2];  // eg, `BrightFlair/PHP.Gt`.
+  var branch = match[3];
+  var format = match[4];
 
+  // Base API URL
   var apiUrl = 'https://circleci.com/api/v1/project/' + userRepo;
+
+  // Query Params
+  queryParams = {};
+  queryParams['limit'] = 1;
+  queryParams['filter'] = 'completed';
+
+  // Custom Banch if present
   if(branch != null) {
     apiUrl += "/tree/" + branch;
   }
-  apiUrl +=
-    '?circle-token=0a5143728784b263d9f0238b8d595522689b3af2'
-    + '&limit=1&filter=completed';
+
+  // Append Token to Query Params if present
+  if (token) {
+    queryParams['circle-token'] = token;
+  }
+
+  // Apprend query params to API URL
+  apiUrl += '?' + querystring.stringify(queryParams);
 
   var badgeData = getBadgeData('build', data);
-
   request(apiUrl, {json:true}, function(err, res, data) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
