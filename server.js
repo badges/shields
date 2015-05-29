@@ -551,21 +551,9 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
       var buildType = match[3];  // eg, `ru.yandex.qatools.allure:allure-core:master`.
       var metricName = match[4];
       var format = match[5];
-      var sonarMetricName;
-      if (metricName === 'tech_debt') {
-        sonarMetricName = 'sqale_debt_ratio';
-      } else if (metricName === 'loc' || metricName === 'lines_of_code') {
-        sonarMetricName = 'ncloc';
-      } else if (metricName === 'fortify_rating') {
-        sonarMetricName = 'fortify-security-rating';
-      } else if (['blocker', 'critical', 'major', 'minor', 'info'].indexOf(metricName) !== -1) {
-        sonarMetricName = metricName + '_violations';
-      } else {
-        sonarMetricName = metricName
-      }
       var apiUrl = scheme + '://' + serverUrl + '/api/resources?resource=' + buildType
-          + '&depth=0&metrics=' + encodeURIComponent(sonarMetricName) + '&includetrends=true';
-      console.log('apiurl', apiUrl);
+          + '&depth=0&metrics=' + encodeURIComponent(metricName) + '&includetrends=true';
+
       var badgeData = getBadgeData(metricName.replace(/_/g, ' '), data);
 
       request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
@@ -587,24 +575,24 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
           if (metricName.indexOf('coverage') !== -1) {
             badgeData.text[1] = value.toFixed(0) + '%';
             badgeData.colorscheme = coveragePercentageColor(value);
-          } else if (/^\w+_violations$/.test(sonarMetricName)) {
+          } else if (/^\w+_violations$/.test(metricName)) {
             badgeData.text[1] = value;
             badgeData.colorscheme = 'brightgreen';
             if (value > 0) {
-              if (metricName === 'blocker') {
+              if (metricName === 'blocker_violations') {
                 badgeData.colorscheme = 'red';
-              } else if (metricName === 'critical') {
+              } else if (metricName === 'critical_violations') {
                 badgeData.colorscheme = 'orange';
-              } else if (metricName === 'major') {
+              } else if (metricName === 'major_violations') {
                 badgeData.colorscheme = 'yellow';
-              } else if (metricName === 'minor') {
+              } else if (metricName === 'minor_violations') {
                 badgeData.colorscheme = 'yellowgreen';
-              } else if (metricName === 'info') {
+              } else if (metricName === 'info_violations') {
                 badgeData.colorscheme = 'green';
               }
             }
 
-          } else if (metricName === 'fortify_rating') {
+          } else if (metricName === 'fortify-security-rating') {
             badgeData.text[1] = value + '/5';
             if (value === 0) {
               badgeData.colorscheme = 'red';
@@ -619,7 +607,7 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
             } else {
               badgeData.colorscheme = 'brightgreen';
             }
-          } else if (metricName === 'tech_debt') {
+          } else if (metricName === 'sqale_debt_ratio') {
             // colors are based on sonarqube default rating grid and display colors
             // [0,0.1)   ==> A (green)
             // [0.1,0.2) ==> B (yellowgreen)
@@ -642,7 +630,7 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
             }
           } else {
             badgeData.text[1] = metric(value);
-            badgeData.colorscheme = 'green';
+            badgeData.colorscheme = 'brightgreen';
           }
           sendBadge(format, badgeData);
         } catch(e) {
