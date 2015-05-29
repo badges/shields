@@ -558,11 +558,14 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
         sonarMetricName = 'ncloc';
       } else if (metricName === 'fortify_rating') {
         sonarMetricName = 'fortify-security-rating';
+      } else if (['blocker', 'critical', 'major', 'minor', 'info'].indexOf(metricName) !== -1) {
+        sonarMetricName = metricName + '_violations';
       } else {
         sonarMetricName = metricName
       }
       var apiUrl = scheme + '://' + serverUrl + '/api/resources?resource=' + buildType
           + '&depth=0&metrics=' + encodeURIComponent(sonarMetricName) + '&includetrends=true';
+      console.log('apiurl', apiUrl);
       var badgeData = getBadgeData(metricName.replace(/_/g, ' '), data);
 
       request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
@@ -584,6 +587,23 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
           if (metricName.indexOf('coverage') !== -1) {
             badgeData.text[1] = value.toFixed(0) + '%';
             badgeData.colorscheme = coveragePercentageColor(value);
+          } else if (/^\w+_violations$/.test(sonarMetricName)) {
+            badgeData.text[1] = value;
+            badgeData.colorscheme = 'brightgreen';
+            if (value > 0) {
+              if (metricName === 'blocker') {
+                badgeData.colorscheme = 'red';
+              } else if (metricName === 'critical') {
+                badgeData.colorscheme = 'orange';
+              } else if (metricName === 'major') {
+                badgeData.colorscheme = 'yellow';
+              } else if (metricName === 'minor') {
+                badgeData.colorscheme = 'yellowgreen';
+              } else if (metricName === 'info') {
+                badgeData.colorscheme = 'green';
+              }
+            }
+
           } else if (metricName === 'fortify_rating') {
             badgeData.text[1] = value + '/5';
             if (value === 0) {
@@ -615,7 +635,7 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
               badgeData.colorscheme = 'yellow';
             } else if (value > 10) {
               badgeData.colorscheme = 'yellowgreen';
-            } else if (value > 0) {
+            } else if (value > 1) {
               badgeData.colorscheme = 'green';
             } else {
               badgeData.colorscheme = 'brightgreen';
