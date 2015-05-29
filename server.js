@@ -556,6 +556,8 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
         sonarMetricName = 'sqale_debt_ratio';
       } else if (metricName === 'loc' || metricName === 'lines_of_code') {
         sonarMetricName = 'ncloc';
+      } else if (metricName === 'fortify_rating') {
+        sonarMetricName = 'fortify-security-rating';
       } else {
         sonarMetricName = metricName
       }
@@ -582,6 +584,21 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
           if (metricName.indexOf('coverage') !== -1) {
             badgeData.text[1] = value.toFixed(0) + '%';
             badgeData.colorscheme = coveragePercentageColor(value);
+          } else if (metricName === 'fortify_rating') {
+            badgeData.text[1] = value + '/5';
+            if (value === 0) {
+              badgeData.colorscheme = 'red';
+            } else if (value === 1) {
+              badgeData.colorscheme = 'orange';
+            } else if (value === 2) {
+              badgeData.colorscheme = 'yellow';
+            } else if (value === 3) {
+              badgeData.colorscheme = 'yellowgreen';
+            } else if (value === 4) {
+              badgeData.colorscheme = 'green';
+            } else {
+              badgeData.colorscheme = 'brightgreen';
+            }
           } else if (metricName === 'tech_debt') {
             // colors are based on sonarqube default rating grid and display colors
             // [0,0.1)   ==> A (green)
