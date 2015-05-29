@@ -594,6 +594,7 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
 
           } else if (metricName === 'fortify-security-rating') {
             badgeData.text[1] = value + '/5';
+
             if (value === 0) {
               badgeData.colorscheme = 'red';
             } else if (value === 1) {
@@ -604,8 +605,10 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
               badgeData.colorscheme = 'yellowgreen';
             } else if (value === 4) {
               badgeData.colorscheme = 'green';
-            } else {
+            } else if (value === 5) {
               badgeData.colorscheme = 'brightgreen';
+            } else {
+              badgeData.colorscheme = 'lightgrey';
             }
           } else if (metricName === 'sqale_debt_ratio') {
             // colors are based on sonarqube default rating grid and display colors
@@ -623,10 +626,10 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
               badgeData.colorscheme = 'yellow';
             } else if (value > 10) {
               badgeData.colorscheme = 'yellowgreen';
-            } else if (value > 1) {
-              badgeData.colorscheme = 'green';
-            } else {
+            } else if (value > 0) {
               badgeData.colorscheme = 'brightgreen';
+            } else {
+              badgeData.colorscheme = 'lightgrey';
             }
           } else {
             badgeData.text[1] = metric(value);
