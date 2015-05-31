@@ -12,6 +12,7 @@ var fs = require('fs');
 var LruCache = require('./lru-cache.js');
 var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
+var loadLogos = require('./load-logos.js');
 var querystring = require('querystring');
 var serverSecrets;
 try {
@@ -23,6 +24,7 @@ var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
 
 var validTemplates = ['default', 'plastic', 'flat', 'flat-square', 'social'];
+var logos = loadLogos();
 
 // Analytics
 
@@ -176,7 +178,8 @@ function cache(f) {
     }
 
     var cacheIndex = match[0] + '?label=' + data.label + '&style=' + data.style
-      + '&logo=' + data.logo + '&logoWidth=' + data.logoWidth;
+      + '&logo=' + data.logo + '&logoWidth=' + data.logoWidth
+      + '&link=' + data.link;
     // Should we return the data right away?
     var cached = requestCache.get(cacheIndex);
     var cachedVersionSent = false;
@@ -2109,6 +2112,9 @@ cache(function(data, match, sendBadge, request) {
       + '&client_secret=' + serverSecrets.gh_client_secret;
   }
   var badgeData = getBadgeData('tag', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.github;
+  }
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
   request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
@@ -2149,6 +2155,9 @@ cache(function(data, match, sendBadge, request) {
       + '&client_secret=' + serverSecrets.gh_client_secret;
   }
   var badgeData = getBadgeData('release', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.github;
+  }
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
   request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
@@ -2192,6 +2201,9 @@ cache(function(data, match, sendBadge, request) {
       + '&client_secret=' + serverSecrets.gh_client_secret;
   }
   var badgeData = getBadgeData('downloads', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.github;
+  }
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
   request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
@@ -2239,6 +2251,9 @@ cache(function(data, match, sendBadge, request) {
       + '&client_secret=' + serverSecrets.gh_client_secret;
   }
   var badgeData = getBadgeData('issues', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.github;
+  }
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
   request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
@@ -2277,6 +2292,9 @@ cache(function(data, match, sendBadge, request) {
       + '&client_secret=' + serverSecrets.gh_client_secret;
   }
   var badgeData = getBadgeData('forks', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.github;
+  }
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
   request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
@@ -2316,6 +2334,9 @@ cache(function(data, match, sendBadge, request) {
       + '&client_secret=' + serverSecrets.gh_client_secret;
   }
   var badgeData = getBadgeData('stars', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.github;
+  }
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
   request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
@@ -2352,6 +2373,9 @@ cache(function(data, match, sendBadge, request) {
       + '&client_secret=' + serverSecrets.gh_client_secret;
   }
   var badgeData = getBadgeData('followers', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.github;
+  }
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
   request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
@@ -2383,6 +2407,9 @@ cache(function(data, match, sendBadge, request) {
   var format = match[3];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo;
   var badgeData = getBadgeData('license', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.github;
+  }
   // Using our OAuth App secret grants us 5000 req/hour
   // instead of the standard 60 req/hour.
   if (serverSecrets) {
@@ -3692,7 +3719,7 @@ function getLabel(label, data) {
   return data.label || label;
 }
 
-// data (URL query) can include `label`, `style`, `logo`, `logoWidth`.
+// data (URL query) can include `label`, `style`, `logo`, `logoWidth`, `link`.
 function getBadgeData(defaultLabel, data) {
   var label = getLabel(defaultLabel, data);
   var template = data.style || 'default';
@@ -3709,7 +3736,8 @@ function getBadgeData(defaultLabel, data) {
     colorscheme: 'lightgrey',
     template: template,
     logo: data.logo,
-    logoWidth: +data.logoWidth
+    logoWidth: +data.logoWidth,
+    links: data.link,
   };
 }
 
