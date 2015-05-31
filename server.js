@@ -650,6 +650,9 @@ cache(function(data, match, sendBadge, request) {
   var format = match[3];
   var apiUrl = 'https://www.gratipay.com/' + user + '/public.json';
   var badgeData = getBadgeData('tips', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.gratipay;
+  }
   request(apiUrl, function dealWithData(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
