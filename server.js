@@ -551,8 +551,16 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
       var buildType = match[3];  // eg, `ru.yandex.qatools.allure:allure-core:master`.
       var metricName = match[4];
       var format = match[5];
+
+      var sonarMetricName = metricName;
+
+      if (metricName === 'tech_debt') {
+        //special condition for backwards compatibility
+        sonarMetricName = 'sqale_debt_ratio';
+      }
+
       var apiUrl = scheme + '://' + serverUrl + '/api/resources?resource=' + buildType
-          + '&depth=0&metrics=' + encodeURIComponent(metricName) + '&includetrends=true';
+          + '&depth=0&metrics=' + encodeURIComponent(sonarMetricName) + '&includetrends=true';
 
       var badgeData = getBadgeData(metricName.replace(/_/g, ' '), data);
 
@@ -610,7 +618,7 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
             } else {
               badgeData.colorscheme = 'lightgrey';
             }
-          } else if (metricName === 'sqale_debt_ratio') {
+          } else if (metricName === 'sqale_debt_ratio' || metricName === 'tech_debt') {
             // colors are based on sonarqube default rating grid and display colors
             // [0,0.1)   ==> A (green)
             // [0.1,0.2) ==> B (yellowgreen)
