@@ -313,7 +313,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Wercker integration
-camp.route(/^\/wercker\/ci\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/wercker\/ci\/([a-fA-F0-9]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var projectId = match[1];  // eg, `54330318b4ce963d50020750`
   var format = match[2];
@@ -321,6 +321,47 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     json: true,
     uri: 'https://app.wercker.com/getbuilds/' + projectId + '?limit=1'
+  };
+  var badgeData = getBadgeData('build', data);
+  request(options, function(err, res, json) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var build = json[0];
+
+      if (build.status === 'finished') {
+        if (build.result === 'passed') {
+          badgeData.colorscheme = 'brightgreen';
+          badgeData.text[1] = build.result;
+        } else {
+          badgeData.colorscheme = 'red';
+          badgeData.text[1] = build.result;
+        }
+      } else {
+        badgeData.text[1] = build.status;
+      }
+      sendBadge(format, badgeData);
+
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// Wercker V3 integration
+camp.route(/^\/wercker\/ci\/(.+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var owner = match[1];
+  var application = match[2];
+  var format = match[3];
+  var options = {
+    method: 'GET',
+    json: true,
+    uri: 'https://app.wercker.com/api/v3/applications/' + owner + '/' + application + '/builds?limit=1'
   };
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res, json) {
