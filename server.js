@@ -312,6 +312,41 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Shippable integration
+camp.route(/^\/shippable?\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var project = match[2];  // eg, 54d119db5ab6cc13528ab183
+  var branch = match[3];
+  var format = match[4];
+  var url = 'https://api.shippable.com/projects/' + project + '/badge';
+  if (branch != null) {
+    url += '?branchName=' + branch;
+  }
+  var badgeData = getBadgeData('build', data);
+  fetchFromSvg(request, url, function(err, res) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      badgeData.text[1] = res;
+      if (res === 'shippable') {
+        badgeData.colorscheme = 'brightgreen';
+      } else if (res === 'unshippable') {
+        badgeData.colorscheme = 'red';
+      } else {
+        badgeData.text[1] = res;
+      }
+      sendBadge(format, badgeData);
+
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Wercker integration
 camp.route(/^\/wercker\/ci\/([a-fA-F0-9]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
