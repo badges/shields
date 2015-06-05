@@ -18,10 +18,10 @@
   "dependencies": {
     "dot": "~1.0.3",
     "svgo": "~0.5.1",
-    "canvas": "~1.1.2",
+    "canvas": "~1.2.3",
     "phantomjs": "~1.9.2-6",
     "es6-promise": "~2.1.0",
-    "request": "~2.55.0",
+    "request": "~2.56.0",
     "redis": "~0.12.1",
     "camp": "~14.10.12",
     "semver": "~4.3.3",
