@@ -315,9 +315,9 @@ cache(function(data, match, sendBadge, request) {
 // Shippable integration
 camp.route(/^\/shippable?\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var project = match[2];  // eg, 54d119db5ab6cc13528ab183
-  var branch = match[3];
-  var format = match[4];
+  var project = match[1];  // eg, 54d119db5ab6cc13528ab183
+  var branch = match[2];
+  var format = match[3];
   var url = 'https://api.shippable.com/projects/' + project + '/badge';
   if (branch != null) {
     url += '?branchName=' + branch;
