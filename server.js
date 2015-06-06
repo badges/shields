@@ -225,6 +225,8 @@ function cache(f) {
       } else {
         options = uri;
       }
+      options.headers = options.headers || {};
+      options.headers['User-Agent'] = options.headers['User-Agent'] || 'Shields.io';
       return request(options, function(err, res, json) {
         if (res != null && res.headers != null) {
           var cacheControl = res.headers['cache-control'];
