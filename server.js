@@ -1484,7 +1484,7 @@ cache(function(data, match, sendBadge, request) {
       } else if (info == 'wheel') {
         var releases = data.releases[data.info.version];
         var hasWheel = false;
-        for (var i in releases) {
+        for (var i = 0; i < releases.length; i++) {
           if (releases[i].packagetype == 'wheel' ||
               releases[i].packagetype == 'bdist_wheel') {
             hasWheel = true;
@@ -1498,7 +1498,7 @@ cache(function(data, match, sendBadge, request) {
       } else if (info == 'py_versions') {
         var versions = [];
         var pattern = /^Programming Language \:\: Python \:\: (\d\.\d)$/;
-        for (var i in data.info.classifiers) {
+        for (var i = 0; i < data.info.classifiers.length; i++) {
           var matched = pattern.exec(data.info.classifiers[i]);
           if (matched && matched[1]) {
             versions.push(matched[1]);
@@ -1514,7 +1514,7 @@ cache(function(data, match, sendBadge, request) {
       } else if (info == 'implementation') {
         var implementations = [];
         var pattern = /^Programming Language \:\: Python \:\: Implementation \:\: (\S+)$/;
-        for (var i in data.info.classifiers) {
+        for (var i = 0; i < data.info.classifiers.length; i++) {
           var matched = pattern.exec(data.info.classifiers[i]);
           if (matched && matched[1]) {
             implementations.push(matched[1].toLowerCase());
@@ -1533,7 +1533,7 @@ cache(function(data, match, sendBadge, request) {
             '1': 'red', '2': 'red', '3': 'red', '4': 'yellow',
             '5': 'brightgreen', '6': 'brightgreen', '7': 'red'};
         var statusCode = '1', statusText = 'unknown';
-        for (var i in data.info.classifiers) {
+        for (var i = 0; i < data.info.classifiers.length; i++) {
           var matched = pattern.exec(data.info.classifiers[i]);
           if (matched && matched[1] && matched[2]) {
             statusCode = matched[1];
