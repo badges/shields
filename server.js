@@ -1473,15 +1473,82 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = vdata.version;
         badgeData.colorscheme = vdata.color;
         sendBadge(format, badgeData);
-      } else if (info == 'l') {
+      } else if (info === 'l') {
         var license = data.info.license;
         badgeData.text[0] = 'license';
-        if (license == null || license == 'UNKNOWN') {
+        if (license === null || license === 'UNKNOWN') {
           badgeData.text[1] = 'Unknown';
         } else {
           badgeData.text[1] = license;
           badgeData.colorscheme = 'blue';
         }
+        sendBadge(format, badgeData);
+      } else if (info === 'wheel') {
+        var releases = data.releases[data.info.version];
+        var hasWheel = false;
+        for (var i = 0; i < releases.length; i++) {
+          if (releases[i].packagetype === 'wheel' ||
+              releases[i].packagetype === 'bdist_wheel') {
+            hasWheel = true;
+            break;
+          }
+        }
+        badgeData.text[0] = 'wheel';
+        badgeData.text[1] = hasWheel ? 'yes' : 'no';
+        badgeData.colorscheme = hasWheel ? 'brightgreen' : 'red';
+        sendBadge(format, badgeData);
+      } else if (info === 'pyversions') {
+        var versions = [];
+        var pattern = /^Programming Language \:\: Python \:\: (\d\.\d)$/;
+        for (var i = 0; i < data.info.classifiers.length; i++) {
+          var matched = pattern.exec(data.info.classifiers[i]);
+          if (matched && matched[1]) {
+            versions.push(matched[1]);
+          }
+        }
+        if (!versions.length) {
+          versions.push('not found');
+        }
+        badgeData.text[0] = 'python';
+        badgeData.text[1] = versions.sort().join(', ');
+        badgeData.colorscheme = 'blue';
+        sendBadge(format, badgeData);
+      } else if (info === 'implementation') {
+        var implementations = [];
+        var pattern = /^Programming Language \:\: Python \:\: Implementation \:\: (\S+)$/;
+        for (var i = 0; i < data.info.classifiers.length; i++) {
+          var matched = pattern.exec(data.info.classifiers[i]);
+          if (matched && matched[1]) {
+            implementations.push(matched[1].toLowerCase());
+          }
+        }
+        if (!implementations.length) {
+          implementations.push('cpython');  // assume CPython
+        }
+        badgeData.text[0] = 'implementation';
+        badgeData.text[1] = implementations.sort().join(', ');
+        badgeData.colorscheme = 'blue';
+        sendBadge(format, badgeData);
+      } else if (info === 'status') {
+        var pattern = /^Development Status \:\: ([1-7]) - (\S+)$/;
+        var statusColors = {
+            '1': 'red', '2': 'red', '3': 'red', '4': 'yellow',
+            '5': 'brightgreen', '6': 'brightgreen', '7': 'red'};
+        var statusCode = '1', statusText = 'unknown';
+        for (var i = 0; i < data.info.classifiers.length; i++) {
+          var matched = pattern.exec(data.info.classifiers[i]);
+          if (matched && matched[1] && matched[2]) {
+            statusCode = matched[1];
+            statusText = matched[2].toLowerCase().replace('-', '--');
+            if (statusText == 'production/stable') {
+              statusText = 'stable';
+            }
+            break;
+          }
+        }
+        badgeData.text[0] = 'status';
+        badgeData.text[1] = statusText;
+        badgeData.colorscheme = statusColors[statusCode];
         sendBadge(format, badgeData);
       }
     } catch(e) {
