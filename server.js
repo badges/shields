@@ -1540,7 +1540,7 @@ cache(function(data, match, sendBadge, request) {
           if (matched && matched[1] && matched[2]) {
             statusCode = matched[1];
             statusText = matched[2].toLowerCase().replace('-', '--');
-            if (statusText == 'production/stable') {
+            if (statusText === 'production/stable') {
               statusText = 'stable';
             }
             break;
@@ -1549,6 +1549,10 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[0] = 'status';
         badgeData.text[1] = statusText;
         badgeData.colorscheme = statusColors[statusCode];
+        sendBadge(format, badgeData);
+      } else {
+        // That request is incorrect.
+        badgeData.text[1] = 'request unknown';
         sendBadge(format, badgeData);
       }
     } catch(e) {
