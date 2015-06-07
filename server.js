@@ -1495,7 +1495,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = hasWheel ? 'yes' : 'no';
         badgeData.colorscheme = hasWheel ? 'brightgreen' : 'red';
         sendBadge(format, badgeData);
-      } else if (info == 'py_versions') {
+      } else if (info == 'pyversions') {
         var versions = [];
         var pattern = /^Programming Language \:\: Python \:\: (\d\.\d)$/;
         for (var i = 0; i < data.info.classifiers.length; i++) {
