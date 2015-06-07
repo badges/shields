@@ -1471,22 +1471,22 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = vdata.version;
         badgeData.colorscheme = vdata.color;
         sendBadge(format, badgeData);
-      } else if (info == 'l') {
+      } else if (info === 'l') {
         var license = data.info.license;
         badgeData.text[0] = 'license';
-        if (license == null || license == 'UNKNOWN') {
+        if (license === null || license === 'UNKNOWN') {
           badgeData.text[1] = 'Unknown';
         } else {
           badgeData.text[1] = license;
           badgeData.colorscheme = 'blue';
         }
         sendBadge(format, badgeData);
-      } else if (info == 'wheel') {
+      } else if (info === 'wheel') {
         var releases = data.releases[data.info.version];
         var hasWheel = false;
         for (var i = 0; i < releases.length; i++) {
-          if (releases[i].packagetype == 'wheel' ||
-              releases[i].packagetype == 'bdist_wheel') {
+          if (releases[i].packagetype === 'wheel' ||
+              releases[i].packagetype === 'bdist_wheel') {
             hasWheel = true;
             break;
           }
@@ -1495,7 +1495,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = hasWheel ? 'yes' : 'no';
         badgeData.colorscheme = hasWheel ? 'brightgreen' : 'red';
         sendBadge(format, badgeData);
-      } else if (info == 'pyversions') {
+      } else if (info === 'pyversions') {
         var versions = [];
         var pattern = /^Programming Language \:\: Python \:\: (\d\.\d)$/;
         for (var i = 0; i < data.info.classifiers.length; i++) {
@@ -1511,7 +1511,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = versions.sort().join(', ');
         badgeData.colorscheme = 'blue';
         sendBadge(format, badgeData);
-      } else if (info == 'implementation') {
+      } else if (info === 'implementation') {
         var implementations = [];
         var pattern = /^Programming Language \:\: Python \:\: Implementation \:\: (\S+)$/;
         for (var i = 0; i < data.info.classifiers.length; i++) {
@@ -1527,7 +1527,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = implementations.sort().join(', ');
         badgeData.colorscheme = 'blue';
         sendBadge(format, badgeData);
-      } else if (info == 'status') {
+      } else if (info === 'status') {
         var pattern = /^Development Status \:\: ([1-7]) - (\S+)$/;
         var statusColors = {
             '1': 'red', '2': 'red', '3': 'red', '4': 'yellow',
