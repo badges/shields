@@ -687,13 +687,23 @@ cache(function(data, match, sendBadge, request) {
 // Coverity Code Advisor On Demand integration
 camp.route(/^\/coverity\/ondemand\/(.+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var badgeType = match[1]; // streams or jobs
-  var badgeTypeId = match[2]; // streamId or jobId
+  var badgeType = match[1];     // One of the strings "streams" or "jobs"
+  var badgeTypeId = match[2];   // streamId or jobId
   var format = match[3];
+
+  //
+  // Example URLs for requests sent to Coverity On Demand are:
+  //
+  // https://api.ondemand.coverity.com/streams/44b25sjc9l3ntc2ngfi29tngro/badge
+  // https://api.ondemand.coverity.com/jobs/p4tmm8031t4i971r0im4s7lckk/badge
+  //
+  // Note that jobs expire after 30 days so any working examples included here
+  // will likely be stale. For testing, it would be best to submit a small
+  // project for analysis, e.g. commons-io using the Coverity On Demand maven
+  // plugin.
+  //
+
   var url = 'https://api.ondemand.coverity.com/' + badgeType + '/' + badgeTypeId + '/badge';
-//  var url = 'https://api-stage01.caas.coverity.com/' + badgeType + '/' + badgeTypeId + '/badge';
-//  var url = 'http://localhost:21020/' + badgeType + '/' + badgeTypeId + '/badge';
-  console.log(url)
   var badgeData = getBadgeData('coverity', data);
   request(url, function(err, res, buffer) {
     if (err != null) {
