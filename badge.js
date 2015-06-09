@@ -2,6 +2,9 @@ var fs = require('fs');
 var path = require('path');
 var SVGO = require('svgo');
 var dot = require('dot');
+var LruCache = require('./lru-cache.js');
+
+var measureTextCache = new LruCache(256, 'unit');
 
 // Initialize what will be used for automatic text measurement.
 var Canvas = require('canvas');
@@ -27,6 +30,16 @@ templateFiles.forEach(function(filename) {
   var style = filename.slice(0, -(('-template.' + extension).length));
   templates[style + '-' + extension] = dot.template(templateData);
 });
+
+// Cache for string measurements
+function stringWidth( text ) {
+  var result = measureTextCache.get( text );
+  if( typeof result === 'undefined' ) {
+    result = canvasContext.measureText( text ).width;
+    measureTextCache.set( text, result );
+  }
+  return result;
+}
 
 function escapeXml(s) {
   return s.replace(/&/g, '&amp;')
@@ -71,9 +84,9 @@ function makeImage(data, cb) {
     data.logoPadding = 0;
   }
   data.widths = [
-    (canvasContext.measureText(data.text[0]).width|0) + 10
+    (stringWidth(data.text[0])|0) + 10
       + data.logoWidth + data.logoPadding,
-    (canvasContext.measureText(data.text[1]).width|0) + 10,
+    (stringWidth(data.text[1])|0) + 10,
   ];
   if (data.links === undefined) {
     data.links = ['', ''];
