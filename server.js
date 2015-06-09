@@ -691,34 +691,42 @@ cache(function(data, match, sendBadge, request) {
   var badgeTypeId = match[2];   // streamId or jobId
   var format = match[3];
 
-  //
-  // Example URLs for requests sent to Coverity On Demand are:
-  //
-  // https://api.ondemand.coverity.com/streams/44b25sjc9l3ntc2ngfi29tngro/badge
-  // https://api.ondemand.coverity.com/jobs/p4tmm8031t4i971r0im4s7lckk/badge
-  //
-  // Note that jobs expire after 30 days so any working examples included here
-  // will likely be stale. For testing, it would be best to submit a small
-  // project for analysis, e.g. commons-io using the Coverity On Demand maven
-  // plugin.
-  //
-
-  var url = 'https://api.ondemand.coverity.com/' + badgeType + '/' + badgeTypeId + '/badge';
   var badgeData = getBadgeData('coverity', data);
-  request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      badgeData = JSON.parse(buffer);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
+  if ((badgeType == 'jobs' && badgeTypeId == 'JOB') ||
+      (badgeType == 'streams' && badgeTypeId == 'STREAM')) {
+     // Request is for a static demo badge
+     badgeData.text[1] = 'clean';
+     badgeData.colorscheme = 'green'
+     sendBadge(format, badgeData);
+     return;
+  } else {
+    //
+    // Request is for a real badge; send request to Coverity On Demand API
+    // server to get the badge
+    //
+    // Example URLs for requests sent to Coverity On Demand are:
+    //
+    // https://api.ondemand.coverity.com/streams/44b25sjc9l3ntc2ngfi29tngro/badge
+    // https://api.ondemand.coverity.com/jobs/p4tmm8031t4i971r0im4s7lckk/badge
+    //
+
+    var url = 'https://api.ondemand.coverity.com/' +
+        badgeType + '/' + badgeTypeId + '/badge';
+    request(url, function(err, res, buffer) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        badgeData = JSON.parse(buffer);
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }
 }));
 
 // Gratipay integration.
