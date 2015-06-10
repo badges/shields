@@ -721,6 +721,51 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Coverity Code Advisor On Demand integration
+camp.route(/^\/coverity\/ondemand\/(.+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var badgeType = match[1];     // One of the strings "streams" or "jobs"
+  var badgeTypeId = match[2];   // streamId or jobId
+  var format = match[3];
+
+  var badgeData = getBadgeData('coverity', data);
+  if ((badgeType == 'jobs' && badgeTypeId == 'JOB') ||
+      (badgeType == 'streams' && badgeTypeId == 'STREAM')) {
+     // Request is for a static demo badge
+     badgeData.text[1] = 'clean';
+     badgeData.colorscheme = 'green'
+     sendBadge(format, badgeData);
+     return;
+  } else {
+    //
+    // Request is for a real badge; send request to Coverity On Demand API
+    // server to get the badge
+    //
+    // Example URLs for requests sent to Coverity On Demand are:
+    //
+    // https://api.ondemand.coverity.com/streams/44b25sjc9l3ntc2ngfi29tngro/badge
+    // https://api.ondemand.coverity.com/jobs/p4tmm8031t4i971r0im4s7lckk/badge
+    //
+
+    var url = 'https://api.ondemand.coverity.com/' +
+        badgeType + '/' + badgeTypeId + '/badge';
+    request(url, function(err, res, buffer) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        badgeData = JSON.parse(buffer);
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }
+}));
+
 // Gratipay integration.
 camp.route(/^\/(gittip|gratipay)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
