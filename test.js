@@ -74,7 +74,7 @@ describe('the server', function() {
     server = cproc.spawn('node', ['ass-stubs/server-test.js', port]);
     var isDone = false;
     server.stdout.on('data', function(data) {
-      if (!isDone) { done(); isDone = true; }
+      if (data.toString().indexOf('ready') >= 0 && !isDone) { done(); isDone = true; }
     });
     server.stderr.on('data', function(data) { console.log(''+data); });
   });
