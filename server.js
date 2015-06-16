@@ -1544,6 +1544,33 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = hasWheel ? 'yes' : 'no';
         badgeData.colorscheme = hasWheel ? 'brightgreen' : 'red';
         sendBadge(format, badgeData);
+      } else if (info === 'format') {
+        var releases = data.releases[data.info.version];
+        var hasWheel = false;
+        var hasEgg = false;
+        for (var i = 0; i < releases.length; i++) {
+          if (releases[i].packagetype === 'wheel' ||
+              releases[i].packagetype === 'bdist_wheel') {
+            hasWheel = true;
+            break;
+          }
+          if (releases[i].packagetype === 'egg' ||
+              releases[i].packagetype === 'bdist_egg') {
+            hasEgg = true;
+          }
+        }
+        badgeData.text[0] = 'format';
+        if (hasWheel) {
+          badgeData.text[1] = 'wheel';
+          badgeData.colorscheme = 'brightgreen';
+        } else if (hasEgg) {
+          badgeData.text[1] = 'egg';
+          badgeData.colorscheme = 'red';
+        } else {
+          badgeData.text[1] = 'source';
+          badgeData.colorscheme = 'yellow';
+        }
+        sendBadge(format, badgeData);
       } else if (info === 'pyversions') {
         var versions = [];
         var pattern = /^Programming Language \:\: Python \:\: (\d\.\d)$/;
