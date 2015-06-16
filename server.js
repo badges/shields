@@ -1,5 +1,5 @@
 var serverPort = +process.env.PORT || +process.argv[2] || 80;
-var bindAddress = process.env.BIND_ADDRESS || process.argv[3] || '127.0.0.1';
+var bindAddress = process.env.BIND_ADDRESS || process.argv[3] || '::';
 var infoSite = process.env.INFOSITE || "http://shields.io";
 var camp = require('camp').start({
   documentRoot: __dirname,
