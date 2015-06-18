@@ -3858,6 +3858,35 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Twitter integration.
+camp.route(/^\/twitter\/url\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var scheme = match[1]; // eg, https
+  var path = match[2];   // eg, shields.io
+  var format = match[3];
+  var url = 'http://cdn.api.twitter.com/1/urls/count.json?url=' + scheme + '://' + path;
+  var badgeData = getBadgeData('tweet', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.twitter;
+  }
+  request(url, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      badgeData.text[1] = metric(data.count);
+      badgeData.colorscheme = '55ACEE';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
