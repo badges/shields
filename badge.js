@@ -35,8 +35,12 @@ function escapeXml(s) {
           .replace(/"/g, '&quot;')
           .replace(/'/g, '&apos;');
 }
+function capitalize(s) {
+  return s[0].toUpperCase() + s.slice(1);
+}
 function addEscapers(data) {
   data.escapeXml = escapeXml;
+  data.capitalize = capitalize;
 }
 
 var colorscheme = require(path.join(__dirname, 'colorscheme.json'));
@@ -77,6 +81,10 @@ function makeImage(data, cb) {
   ];
   if (data.links === undefined) {
     data.links = ['', ''];
+  } else {
+    for (var i = 0; i < data.links.length; i++) {
+      data.links[i] = escapeXml(data.links[i]);
+    }
   }
 
   var template = templates[data.template + '-' + data.format];
