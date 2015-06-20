@@ -633,12 +633,21 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
       var scheme = match[1];
       var serverUrl = match[2];  // eg, `sonar.qatools.ru`.
       var buildType = match[3];  // eg, `ru.yandex.qatools.allure:allure-core:master`.
-      var metric = match[4];
+      var metricName = match[4];
       var format = match[5];
-      var realMetric = metric === 'tech_debt' ? 'sqale_debt_ratio' : metric
+
+      var sonarMetricName = metricName;
+
+      if (metricName === 'tech_debt') {
+        //special condition for backwards compatibility
+        sonarMetricName = 'sqale_debt_ratio';
+      }
+
       var apiUrl = scheme + '://' + serverUrl + '/api/resources?resource=' + buildType
-          + '&depth=0&metrics=' + encodeURIComponent(realMetric) + '&includetrends=true';
-      var badgeData = getBadgeData(metric.replace('_', ' '), data);
+          + '&depth=0&metrics=' + encodeURIComponent(sonarMetricName) + '&includetrends=true';
+
+      var badgeData = getBadgeData(metricName.replace(/_/g, ' '), data);
+
       request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
         if (err != null) {
           badgeData.text[1] = 'inaccessible';
@@ -647,38 +656,76 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
         try {
           var data = JSON.parse(buffer);
 
-          var percentage = data[0].msr[0].val;
+          var value = data[0].msr[0].val;
 
-          if (percentage === undefined) {
+          if (value === undefined) {
             badgeData.text[1] = 'unknown';
             sendBadge(format, badgeData);
             return;
           }
 
-          if (metric === 'tech_debt') {
+          if (metricName.indexOf('coverage') !== -1) {
+            badgeData.text[1] = value.toFixed(0) + '%';
+            badgeData.colorscheme = coveragePercentageColor(value);
+          } else if (/^\w+_violations$/.test(metricName)) {
+            badgeData.text[1] = value;
+            badgeData.colorscheme = 'brightgreen';
+            if (value > 0) {
+              if (metricName === 'blocker_violations') {
+                badgeData.colorscheme = 'red';
+              } else if (metricName === 'critical_violations') {
+                badgeData.colorscheme = 'orange';
+              } else if (metricName === 'major_violations') {
+                badgeData.colorscheme = 'yellow';
+              } else if (metricName === 'minor_violations') {
+                badgeData.colorscheme = 'yellowgreen';
+              } else if (metricName === 'info_violations') {
+                badgeData.colorscheme = 'green';
+              }
+            }
+
+          } else if (metricName === 'fortify-security-rating') {
+            badgeData.text[1] = value + '/5';
+
+            if (value === 0) {
+              badgeData.colorscheme = 'red';
+            } else if (value === 1) {
+              badgeData.colorscheme = 'orange';
+            } else if (value === 2) {
+              badgeData.colorscheme = 'yellow';
+            } else if (value === 3) {
+              badgeData.colorscheme = 'yellowgreen';
+            } else if (value === 4) {
+              badgeData.colorscheme = 'green';
+            } else if (value === 5) {
+              badgeData.colorscheme = 'brightgreen';
+            } else {
+              badgeData.colorscheme = 'lightgrey';
+            }
+          } else if (metricName === 'sqale_debt_ratio' || metricName === 'tech_debt') {
             // colors are based on sonarqube default rating grid and display colors
             // [0,0.1)   ==> A (green)
             // [0.1,0.2) ==> B (yellowgreen)
             // [0.2,0.5) ==> C (yellow)
             // [0.5,1)   ==> D (orange)
             // [1,)      ==> E (red)
-            badgeData.text[1] = percentage + '%';
-            if (percentage > 100) {
+            badgeData.text[1] = value + '%';
+            if (value > 100) {
               badgeData.colorscheme = 'red';
-            } else if (percentage > 50) {
+            } else if (value > 50) {
               badgeData.colorscheme = 'orange';
-            } else if (percentage > 20) {
+            } else if (value > 20) {
               badgeData.colorscheme = 'yellow';
-            } else if (percentage > 10) {
+            } else if (value > 10) {
               badgeData.colorscheme = 'yellowgreen';
-            } else if (percentage > 0) {
-              badgeData.colorscheme = 'green';
-            } else {
+            } else if (value > 0) {
               badgeData.colorscheme = 'brightgreen';
+            } else {
+              badgeData.colorscheme = 'lightgrey';
             }
           } else {
-            badgeData.text[1] = percentage.toFixed(0) + '%';
-            badgeData.colorscheme = coveragePercentageColor(percentage);
+            badgeData.text[1] = metric(value);
+            badgeData.colorscheme = 'brightgreen';
           }
           sendBadge(format, badgeData);
         } catch(e) {
