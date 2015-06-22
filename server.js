@@ -3911,10 +3911,15 @@ cache(function(data, match, sendBadge, request) {
   var scheme = match[1]; // eg, https
   var path = match[2];   // eg, shields.io
   var format = match[3];
-  var url = 'http://cdn.api.twitter.com/1/urls/count.json?url=' + scheme + '://' + path;
+  var page = encodeURIComponent(scheme + '://' + path);
+  var url = 'http://cdn.api.twitter.com/1/urls/count.json?url=' + page;
   var badgeData = getBadgeData('tweet', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.twitter;
+    badgeData.links = [
+      'https://twitter.com/intent/tweet?text=Wow:&url=' + page,
+      'https://twitter.com/search?q=' + page,
+     ];
   }
   request(url, function(err, res, buffer) {
     if (err != null) {
