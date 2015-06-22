@@ -1036,6 +1036,10 @@ cache(function(data, match, sendBadge, request) {
   var format = match[3];
   var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
   var badgeData = getBadgeData('downloads', data);
+  if (userRepo.substr(-14) === '/:package_name') {
+    badgeData.text[1] = 'invalid';
+    return sendBadge(format, badgeData);
+  }
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -1074,6 +1078,10 @@ cache(function(data, match, sendBadge, request) {
   var format = match[3];
   var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
   var badgeData = getBadgeData('packagist', data);
+  if (userRepo.substr(-14) === '/:package_name') {
+    badgeData.text[1] = 'invalid';
+    return sendBadge(format, badgeData);
+  }
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -1152,6 +1160,10 @@ cache(function(data, match, sendBadge, request) {
   var format = match[2];
   var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
   var badgeData = getBadgeData('license', data);
+  if (userRepo.substr(-14) === '/:package_name') {
+    badgeData.text[1] = 'invalid';
+    return sendBadge(format, badgeData);
+  }
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
