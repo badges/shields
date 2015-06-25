@@ -22,10 +22,10 @@
 </p>
 <p align="center"><sup><strong>An image server for legible and concise information. Our <a href="http://shields.io/">Homepage</a> | <a href="https://twitter.com/shields_io">Twitter</a></strong></sup></p>
 
-* **[INSTALL.md](INSTALL.md)** – installation instructions.
-* **[CONTRIBUTING.md](CONTRIBUTING.md)** – project contribution guidelines.
-* **[SPECIFICATION.md](spec/SPECIFICATION.md)** – spec for the visual design of Shields badges.
-* **[LICENSE.md](LICENSE.md)** – public domain dedication.
+* **[INSTALL](INSTALL.md)** – installation instructions.
+* **[CONTRIBUTING](CONTRIBUTING.md)** – project contribution guidelines.
+* **[SPECIFICATION](spec/SPECIFICATION.md)** – spec for the visual design of Shields badges.
+* **[LICENSE](LICENSE.md)** – public domain dedication.
 
 ## Solving the problem
 Many GitHub repositories sport badges for things like:
