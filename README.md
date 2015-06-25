@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/Tourorist/TPS/0f34e1e99bcb7689885c4868169f70afcefd5ffc/misc/shields-logo.png"
+    <img src="https://raw.githubusercontent.com/badges/shields/master/logo/rasterized-logo.png"
          height="130">
 </p>
 <p align="center">
