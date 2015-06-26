@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/badges/shields/master/logo/rasterized-logo.png"
+    <img src="https://raw.githubusercontent.com/badges/shields/master/logo/rasterized.png"
          height="130">
 </p>
 <p align="center">
