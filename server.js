@@ -1632,7 +1632,7 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
       } else if (info === 'pyversions') {
         var versions = [];
-        var pattern = /^Programming Language \:\: Python \:\: (\d\.\d)$/;
+        var pattern = /^Programming Language \:\: Python \:\: \d+(\.\d)?$/;
         for (var i = 0; i < data.info.classifiers.length; i++) {
           var matched = pattern.exec(data.info.classifiers[i]);
           if (matched && matched[1]) {
