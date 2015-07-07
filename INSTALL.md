@@ -40,8 +40,10 @@ To run the server you will need the following executables on your Path:
 On an OS X machine, [Homebrew](brew.sh) is a good package manager that will
 allow you to install them.
 
+On Ubuntu / Debian: `sudo apt-get install phantomjs libcairo2-dev libjpeg-turbo8-dev`.
+
 ```bash
-git clone git@github.com:badges/shields
+git clone https://github.com/badges/shields.git
 cd shields
 npm install  # You may need sudo for this.
 sudo node server
