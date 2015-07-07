@@ -20,6 +20,17 @@ deploy:
 	git push -f origin gh-pages:gh-pages) || git checkout master
 	git checkout master
 
+deploy-s:
+	git add -f Verdana.ttf
+	git add -f secret.json
+	git commit -m'MUST NOT BE ON GITHUB'
+	git push -f s0 HEAD:master
+	git reset HEAD~1
+	(git checkout -B gh-pages && \
+	git merge master && \
+	git push -f origin gh-pages:gh-pages) || git checkout master
+	git checkout master
+
 setup:
 	curl http://download.redis.io/releases/redis-2.8.8.tar.gz >redis.tar.gz \
 	&& tar xf redis.tar.gz \
@@ -34,4 +45,4 @@ redis:
 test:
 	npm test
 
-.PHONY: all favicon website deploy setup redis test
+.PHONY: all favicon website deploy deploy-s setup redis test
