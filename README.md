@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/Tourorist/TPS/0f34e1e99bcb7689885c4868169f70afcefd5ffc/misc/shields-logo.png"
+    <img src="https://rawgit.com/badges/shields/master/logo.svg"
          height="130">
 </p>
 <p align="center">
@@ -69,24 +69,18 @@ What kind of metadata can you convey using badges?
 * amount of [Gratipay](http://gratipay.com) donations per week: `tips | $2/week`
 
 ## Services using the Shields standard
-* [Badger][gem]
-* [badges2svg][]
+* [Badger](https://github.com/badges/badgerbadgerbadger)
+* [badges2svg](https://github.com/bfontaine/badges2svg)
 * [Code Climate](https://codeclimate.com/changelog/510d4fde56b102523a0004bf)
 * [Coveralls](https://coveralls.io/)
 * [Gemnasium](http://support.gemnasium.com/forums/236528-general/suggestions/5518400-use-svg-for-badges-so-they-still-look-sharp-on-r)
 * [GoDoc](https://godoc.org/)
 * [PHPPackages](https://phppackages.org)
 * [Read the Docs](https://readthedocs.org/)
-* [reposs][]
-* [ruby-gem-downloads-badge][]
+* [reposs](https://github.com/rexfinn/reposs)
+* [ruby-gem-downloads-badge](https://github.com/bogdanRada/ruby-gem-downloads-badge/)
 * [Scrutinizer](https://scrutinizer-ci.com/)
 * [Semaphore](https://semaphoreapp.com)
 * [Travis CI](https://github.com/travis-ci/travis-ci/issues/630#issuecomment-38054967)
 * [Version Badge](http://badge.fury.io/)
-* [VersionEye]
-
-[gem]: https://github.com/badges/badgerbadgerbadger
-[badges2svg]: https://github.com/bfontaine/badges2svg
-[reposs]: https://github.com/rexfinn/reposs
-[VersionEye]: https://www.versioneye.com/
-[ruby-gem-downloads-badge]: https://github.com/bogdanRada/ruby-gem-downloads-badge/
+* [VersionEye](https://www.versioneye.com/)
