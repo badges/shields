@@ -3228,6 +3228,30 @@ cache(function(data, match, sendBadge, request) {
     });
 }));
 
+// Bower license integration.
+camp.route(/^\/bower\/l\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var repo = match[1];  // eg, `bootstrap`.
+  var format = match[2];
+  var badgeData = getBadgeData('bower', data);
+  var bower = require('bower');
+  bower.commands.info(repo, 'license')
+    .on('error', function() {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    })
+    .on('end', function(license) {
+      try {
+        badgeData.text[1] = license;
+        badgeData.colorscheme = 'blue';
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'void';
+        sendBadge(format, badgeData);
+      }
+    });
+}));
+
 // Wheelmap integration.
 camp.route(/^\/wheelmap\/a\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
