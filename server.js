@@ -4000,15 +4000,14 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
       return;
     }
-    console.log(badgeData.text[1]);
     try {
-      badgeData.text[1] = res;
+      badgeData.text[1] = res.toLowerCase();
       if (res === 'Passed') {
         badgeData.colorscheme = 'brightgreen';
       } else if (res === 'Failed') {
         badgeData.colorscheme = 'red';
       } else {
-        badgeData.text[1] = res;
+        badgeData.text[1] = res.toLowerCase();
       }
       sendBadge(format, badgeData);
 
