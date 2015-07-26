@@ -6,8 +6,7 @@ var camp = require('camp').start({
   port: serverPort,
   hostname: bindAddress
 });
-console.log('http://' + bindAddress + ':' + serverPort + '/try.html');
-var https = require('https');
+console.log('http://[::1]:' + serverPort + '/try.html');
 var domain = require('domain');
 var request = require('request');
 var fs = require('fs');
