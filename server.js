@@ -1,10 +1,12 @@
-var serverPort = +process.env.PORT || +process.argv[2] || 80;
+var secureServer = !!process.env.HTTPS;
+var serverPort = +process.env.PORT || +process.argv[2] || (secureServer? 443: 80);
 var bindAddress = process.env.BIND_ADDRESS || process.argv[3] || '::';
 var infoSite = process.env.INFOSITE || "http://shields.io";
 var camp = require('camp').start({
   documentRoot: __dirname,
   port: serverPort,
-  hostname: bindAddress
+  hostname: bindAddress,
+  secure: secureServer
 });
 console.log('http://[::1]:' + serverPort + '/try.html');
 var domain = require('domain');
