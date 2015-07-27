@@ -1639,6 +1639,15 @@ cache(function(data, match, sendBadge, request) {
             versions.push(matched[1]);
           }
         }
+        ['2', '3'].forEach(function(version) {
+            if (versions.some(function(element, index, array) { return new RegExp('^' + version + '\\.\\d$').exec(element); })) {
+                versions.forEach(function(element, index, array) {
+                    if (element === version) {
+                        array.splice(index, 1);
+                    }
+                });
+            }
+        });
         if (!versions.length) {
           versions.push('not found');
         }
