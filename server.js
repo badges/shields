@@ -4187,7 +4187,8 @@ function fetchFromSvg(request, url, cb) {
   request(url, function(err, res, buffer) {
     if (err != null) { return cb(err); }
     try {
-      var match = />([^<>]+)<\/text><\/g>/.exec(buffer);
+      var badge = buffer.replace(/(?:\r\n\s|\r\s|\n\s)/g, '');
+      var match = />([^<>]+)<\/text><\/g>/.exec(badge);
       cb(null, match[1]);
     } catch(e) {
       cb(e);
