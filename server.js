@@ -1641,11 +1641,13 @@ cache(function(data, match, sendBadge, request) {
         }
         ['2', '3'].forEach(function(version) {
           if (versions.some(function(element, index, array) { return new RegExp('^' + version + '\\.\\d$').exec(element); })) {
+            var filteredVersions = [];
             versions.forEach(function(element, index, array) {
-              if (element === version) {
-                array.splice(index, 1);
+              if (element !== version) {
+                filteredVersions.push(element);
               }
             });
+            versions = filteredVersions;
           }
         });
         if (!versions.length) {
