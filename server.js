@@ -1640,15 +1640,12 @@ cache(function(data, match, sendBadge, request) {
             versions.push(matched[1]);
           }
         }
+        // We only show v2 if eg. v2.4 does not appear.
+        // See https://github.com/badges/shields/pull/489 for more.
         ['2', '3'].forEach(function(version) {
-          if (versions.some(function(element, index, array) { return new RegExp('^' + version + '\\.\\d$').exec(element); })) {
-            var filteredVersions = [];
-            versions.forEach(function(element, index, array) {
-              if (element !== version) {
-                filteredVersions.push(element);
-              }
-            });
-            versions = filteredVersions;
+          var hasSubVersion = function(v) { return v.indexOf(version + '.') === 0; };
+          if (versions.some(hasSubVersion)) {
+            versions = versions.filter(function(v) { return v !== version; });
           }
         });
         if (!versions.length) {
