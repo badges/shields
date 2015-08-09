@@ -26,7 +26,8 @@
     "camp": "~15.5.5",
     "semver": "~4.3.3",
     "bower": "~1.4.1",
-    "promise": "~7.0.0"
+    "promise": "~7.0.0",
+    "chrome-web-store-item-property": "^1.1.0"
   },
   "devDependencies": {
     "ass": "~0.0.6",
