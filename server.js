@@ -3990,7 +3990,7 @@ cache(function(data, match, sendBadge, request) {
   var type = match[1];
   var storeId = match[2];  // eg, nimelepbpejjlbmoobocpfnjhihnpked
   var format = match[3];
-  var badgeData = getBadgeData('chrome-web-store', data);
+  var badgeData = getBadgeData('chrome web store', data);
   var url = 'https://chrome.google.com/webstore/detail/' + storeId + '?hl=en&gl=US';
   var chromeWebStore = require('chrome-web-store-item-property');
   request(url, function(err, res, buffer) {
@@ -4020,7 +4020,7 @@ cache(function(data, match, sendBadge, request) {
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
         } else if (type === 'rating-count') {
           var ratingCount = value.ratingCount;
-          badgeData.text[0] = 'rating-count';
+          badgeData.text[0] = 'rating count';
           badgeData.text[1] = metric(ratingCount) + ' total';
           badgeData.colorscheme = floorCountColor(ratingCount, 5, 50, 500);
         }
