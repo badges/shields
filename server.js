@@ -4006,8 +4006,6 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'brightgreen';
       } else if (res === 'Failed') {
         badgeData.colorscheme = 'red';
-      } else {
-        badgeData.text[1] = res.toLowerCase();
       }
       sendBadge(format, badgeData);
 
