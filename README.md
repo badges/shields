@@ -84,3 +84,11 @@ What kind of metadata can you convey using badges?
 * [Travis CI](https://github.com/travis-ci/travis-ci/issues/630#issuecomment-38054967)
 * [Version Badge](http://badge.fury.io/)
 * [VersionEye](https://www.versioneye.com/)
+
+# Legal
+
+All assets and code are under the [CC0 LICENSE](LICENSE.md) and in the public
+domain unless specified otherwise.
+
+The assets in `logo/` are trademarks of their respective companies and are under
+their terms and license.
