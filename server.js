@@ -2588,6 +2588,10 @@ cache(function(data, match, sendBadge, request) {
   var badgeData = getBadgeData('forks', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
+    badgeData.links = [
+      'https://github.com/' + user + '/' + repo + '/fork',
+      'https://github.com/' + user + '/' + repo + '/network',
+     ];
   }
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
@@ -2630,6 +2634,10 @@ cache(function(data, match, sendBadge, request) {
   var badgeData = getBadgeData('stars', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
+    badgeData.links = [
+      'https://github.com/' + user + '/' + repo,
+      'https://github.com/' + user + '/' + repo + '/stargazers',
+     ];
   }
   // A special User-Agent is required:
   // http://developer.github.com/v3/#user-agent-required
@@ -2644,6 +2652,50 @@ cache(function(data, match, sendBadge, request) {
         return;  // Hope for the best in the cache.
       }
       badgeData.text[1] = JSON.parse(buffer).stargazers_count;
+      badgeData.colorscheme = null;
+      badgeData.colorB = '#4183C4';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// GitHub watchers integration.
+camp.route(/^\/github\/watchers\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];  // eg, qubyte/rubidium
+  var repo = match[2];
+  var format = match[3];
+  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo;
+  // Using our OAuth App secret grants us 5000 req/hour
+  // instead of the standard 60 req/hour.
+  if (serverSecrets) {
+    apiUrl += '?client_id=' + serverSecrets.gh_client_id
+      + '&client_secret=' + serverSecrets.gh_client_secret;
+  }
+  var badgeData = getBadgeData('watchers', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.github;
+    badgeData.links = [
+      'https://github.com/' + user + '/' + repo,
+      'https://github.com/' + user + '/' + repo + '/watchers',
+     ];
+  }
+  // A special User-Agent is required:
+  // http://developer.github.com/v3/#user-agent-required
+  request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      if ((+res.headers['x-ratelimit-remaining']) === 0) {
+        return;  // Hope for the best in the cache.
+      }
+      badgeData.text[1] = JSON.parse(buffer).subscribers_count;
       badgeData.colorscheme = null;
       badgeData.colorB = '#4183C4';
       sendBadge(format, badgeData);
