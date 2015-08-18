@@ -3984,6 +3984,39 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Snap CI build integration.
+// https://snap-ci.com/snap-ci/snap-deploy/branch/master/build_image
+camp.route(/^\/snap(-ci?)\/([^\/]+\/[^\/]+)(?:\/(.+))\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var userRepo = match[2];
+  var branch = match[3];
+  var format = match[4];
+  var url = 'https://snap-ci.com/' + userRepo + '/branch/' + branch + '/build_image.svg';
+
+  var badgeData = getBadgeData('build', data);
+  fetchFromSvg(request, url, function(err, res) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      badgeData.text[1] = res.toLowerCase();
+      if (res === 'Passed') {
+        badgeData.colorscheme = 'brightgreen';
+      } else if (res === 'Failed') {
+        badgeData.colorscheme = 'red';
+      }
+      sendBadge(format, badgeData);
+
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
@@ -4195,7 +4228,7 @@ function fetchFromSvg(request, url, cb) {
   request(url, function(err, res, buffer) {
     if (err != null) { return cb(err); }
     try {
-      var badge = buffer.replace(/(?:\r\n\s|\r\s|\n\s)/g, '');
+      var badge = buffer.replace(/(?:\r\n\s*|\r\s*|\n\s*)/g, '');
       var match = />([^<>]+)<\/text><\/g>/.exec(badge);
       cb(null, match[1]);
     } catch(e) {
