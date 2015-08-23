@@ -2478,6 +2478,47 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// GitHub commits since integration.
+camp.route(/^\/github\/commits-since\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];  // eg, SubtitleEdit
+  var repo = match[2];  // eg, subtitleedit
+  var version = match[3];  // eg, 3.4.7
+  var format = match[4];
+  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/compare/' + version + '...master';
+  // Using our OAuth App secret grants us 5000 req/hour
+  // instead of the standard 60 req/hour.
+  if (serverSecrets) {
+    apiUrl += '?client_id=' + serverSecrets.gh_client_id
+      + '&client_secret=' + serverSecrets.gh_client_secret;
+  }
+  var badgeData = getBadgeData('commits since ' + version, data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.github;
+  }
+  // A special User-Agent is required:
+  // http://developer.github.com/v3/#user-agent-required
+  request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      if ((+res.headers['x-ratelimit-remaining']) === 0) {
+        return;  // Hope for the best in the cache.
+      }
+      var data = JSON.parse(buffer);
+      badgeData.text[1] = data.ahead_by;
+      badgeData.colorscheme = 'blue';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'none';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // GitHub release-download-count integration.
 camp.route(/^\/github\/downloads\/([^\/]+)\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
