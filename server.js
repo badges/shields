@@ -1244,7 +1244,7 @@ cache(function (data, match, sendBadge, request) {
     var apiUrl = 'https://api.npmjs.org/downloads/range/1000-01-01:3000-01-01/' + pkg; // use huge range, will need to fix this in year 3000 :)
     var badgeData = getBadgeData('downloads', data);
     request(apiUrl, function (err, res, buffer) {
-        if (err != null) {
+        if (err) {
             badgeData.text[1] = 'inaccessible';
             sendBadge(format, badgeData);
             return;
