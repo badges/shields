@@ -4125,9 +4125,13 @@ function(data, match, end, ask) {
     incrMonthlyAnalytics(analytics.rawFlatSquareMonthly);
   }
 
-  // Cache management - the badge is constant.
-  var cacheDuration = (3600*24*1)|0;    // 1 day.
-  ask.res.setHeader('Cache-Control', 'public, max-age=' + cacheDuration);
+  if (ask.req.headers['cache-control']) {
+    ask.res.setHeader('Cache-Control', ask.req.headers['cache-control']);
+  } else {
+    // Cache management - the badge is constant.
+    var cacheDuration = (3600*24*1)|0;    // 1 day.
+    ask.res.setHeader('Cache-Control', 'public, max-age=' + cacheDuration);
+  }
   if (+(new Date(ask.req.headers['if-modified-since'])) >= +serverStartTime) {
     ask.res.statusCode = 304;
     ask.res.end();  // not modified.
