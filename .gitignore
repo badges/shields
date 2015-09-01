@@ -4,6 +4,7 @@
 /coverage.html
 /redis
 /secret.json
+/ServerScript
 
 # Installed npm modules
 node_modules
