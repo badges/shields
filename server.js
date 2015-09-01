@@ -1379,7 +1379,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var vdata = versionColor(data.name);
-      badgeData.text[1] = 'v' + data.name;
+      badgeData.text[1] = vdata.version;
       badgeData.colorscheme = 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
