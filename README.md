@@ -73,6 +73,7 @@ What kind of metadata can you convey using badges?
 * [badges2svg](https://github.com/bfontaine/badges2svg)
 * [Code Climate](https://codeclimate.com/changelog/510d4fde56b102523a0004bf)
 * [Coveralls](https://coveralls.io/)
+* [Forkability](http://basicallydan.github.io/forkability/)
 * [Gemnasium](http://support.gemnasium.com/forums/236528-general/suggestions/5518400-use-svg-for-badges-so-they-still-look-sharp-on-r)
 * [GoDoc](https://godoc.org/)
 * [PHPPackages](https://phppackages.org)
