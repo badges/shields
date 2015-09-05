@@ -1239,37 +1239,37 @@ cache(function(data, match, sendBadge, request) {
 // npm total download integration.
 camp.route(/^\/npm\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
-    var pkg = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
-    var format = match[2];
-    var apiUrl = 'https://api.npmjs.org/downloads/range/1000-01-01:3000-01-01/' + pkg; // use huge range, will need to fix this in year 3000 :)
-    var badgeData = getBadgeData('downloads', data);
-    request(apiUrl, function (err, res, buffer) {
-        if (err) {
-            badgeData.text[1] = 'inaccessible';
-            sendBadge(format, badgeData);
-            return;
-        }
+  var pkg = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
+  var format = match[2];
+  var apiUrl = 'https://api.npmjs.org/downloads/range/1000-01-01:3000-01-01/' + pkg; // use huge range, will need to fix this in year 3000 :)
+  var badgeData = getBadgeData('downloads', data);
+  request(apiUrl, function (err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
 
-        var totalDownloads = 0;
-        try {
-            var downloads = JSON.parse(buffer).downloads;
-            var index;
-            for (index = 0; index < downloads.length; index++) {
-                totalDownloads = totalDownloads + downloads[index].downloads;
-            }
-        } catch (e) {
-            badgeData.text[1] = 'invalid';
-            sendBadge(format, badgeData);
-            return;
-        }
-        badgeData.text[1] = metric(totalDownloads) + '/total';
-        if (totalDownloads === 0) {
-            badgeData.colorscheme = 'red';
-        } else {
-            badgeData.colorscheme = 'brightgreen';
-        }
-        sendBadge(format, badgeData);
-    });
+    try {
+      var totalDownloads = 0;
+
+      var downloads = JSON.parse(buffer).downloads;
+      for (var index = 0; index < downloads.length; index++) {
+        totalDownloads = totalDownloads + downloads[index].downloads;
+      }
+
+      badgeData.text[1] = metric(totalDownloads) + ' total';
+      if (totalDownloads === 0) {
+        badgeData.colorscheme = 'red';
+      } else {
+        badgeData.colorscheme = 'brightgreen';
+      }
+      sendBadge(format, badgeData);
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
 }));
 
 // npm version integration.
