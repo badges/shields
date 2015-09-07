@@ -1348,6 +1348,47 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Bintray version integration
+camp.route(/^\/bintray\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var path = match[1]; // :subject/:repo/:package (e.g. asciidoctor/maven/asciidoctorj)
+  var format = match[2];
+
+  var options = {
+    method: 'GET',
+    uri: 'https://bintray.com/api/v1/packages/' + path + '/versions/_latest',
+    headers: {
+      Accept: 'application/json'
+    }
+  };
+
+  if (serverSecrets && serverSecrets.bintray_user) {
+    options.auth = {
+      user: serverSecrets.bintray_user,
+      pass: serverSecrets.bintray_apikey
+    }
+  }
+
+  var badgeData = getBadgeData('bintray', data);
+  request(options, function(err, res, buffer) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var vdata = versionColor(data.name);
+      badgeData.text[1] = vdata.version;
+      badgeData.colorscheme = 'brightgreen';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Clojars version integration
 camp.route(/^\/clojars\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
