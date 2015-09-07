@@ -3292,6 +3292,39 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Ansible integration
+camp.route(/^\/ansible\/(role)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var type = match[1];      // eg role
+  var roleId = match[2];    // eg 3078
+  var format = match[3];
+  var uri = 'https://galaxy.ansible.com/api/v1/roles/' + roleId + '/';
+  var options = {
+    json: true,
+    uri: 'https://galaxy.ansible.com/api/v1/roles/' + roleId + '/',
+  };
+  var badgeData = getBadgeData(type, data);
+  request(options, function(err, res, json) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      if (type === 'role') {
+        badgeData.text[1] = json.summary_fields.owner.username +
+          '.' + json.name;
+        badgeData.colorscheme = 'blue';
+      } else {
+        badgeData.text[1] = 'unknown';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'errored';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
 // Codeship.io integration
 camp.route(/^\/codeship\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
