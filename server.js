@@ -31,20 +31,20 @@ var logos = loadLogos();
 
 // Analytics
 
+// We can either use a process-wide object regularly saved to a JSON file,
+// or a Redis equivalent (for multi-process / when the filesystem is unreliable.
 var redis;
-// Use Redis by default.
-var useRedis = true;
+var useRedis = false;
 if (process.env.REDISTOGO_URL) {
   var redisToGo = require('url').parse(process.env.REDISTOGO_URL);
   redis = require('redis').createClient(redisToGo.port, redisToGo.hostname);
   redis.auth(redisToGo.auth.split(':')[1]);
-} else {
-  useRedis = false;
+  useRedis = true;
 }
 
 var analytics = {};
 
-var analyticsAutoSaveFileName = './analytics.json';
+var analyticsAutoSaveFileName = process.env.SHIELDS_ANALYTICS_FILE || './analytics.json';
 var analyticsAutoSavePeriod = 10000;
 setInterval(function analyticsAutoSave() {
   if (useRedis) {
