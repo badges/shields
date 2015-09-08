@@ -4,20 +4,16 @@
 </p>
 <p align="center">
     <a href="https://www.gratipay.com/Shields/">
-        <img src="http://img.shields.io/gratipay/shields.svg"
+        <img src="https://img.shields.io/gratipay/shields.svg"
              alt="Gratipay">
     </a>
     <a href="https://npmjs.org/package/gh-badges">
-        <img src="http://img.shields.io/npm/v/gh-badges.svg"
+        <img src="https://img.shields.io/npm/v/gh-badges.svg"
              alt="npm version">
     </a>
     <a href="https://travis-ci.org/badges/shields">
-        <img src="http://img.shields.io/travis/badges/shields.svg"
+        <img src="https://img.shields.io/travis/badges/shields.svg"
              alt="build status">
-    </a>
-    <a href="https://david-dm.org/badges/shields">
-        <img src="https://david-dm.org/badges/shields.svg"
-             alt="dependency status">
     </a>
 </p>
 <p align="center"><sup><strong>An image server for legible and concise information. Our <a href="http://shields.io/">Homepage</a> | <a href="https://twitter.com/shields_io">Twitter</a></strong></sup></p>
