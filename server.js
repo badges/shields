@@ -31,20 +31,20 @@ var logos = loadLogos();
 
 // Analytics
 
+// We can either use a process-wide object regularly saved to a JSON file,
+// or a Redis equivalent (for multi-process / when the filesystem is unreliable.
 var redis;
-// Use Redis by default.
-var useRedis = true;
+var useRedis = false;
 if (process.env.REDISTOGO_URL) {
   var redisToGo = require('url').parse(process.env.REDISTOGO_URL);
   redis = require('redis').createClient(redisToGo.port, redisToGo.hostname);
   redis.auth(redisToGo.auth.split(':')[1]);
-} else {
-  useRedis = false;
+  useRedis = true;
 }
 
 var analytics = {};
 
-var analyticsAutoSaveFileName = './analytics.json';
+var analyticsAutoSaveFileName = process.env.SHIELDS_ANALYTICS_FILE || './analytics.json';
 var analyticsAutoSavePeriod = 10000;
 setInterval(function analyticsAutoSave() {
   if (useRedis) {
@@ -1377,6 +1377,47 @@ cache(function(data, match, sendBadge, request) {
       } else {
         sendBadge(format, badgeData);
       }
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// Bintray version integration
+camp.route(/^\/bintray\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var path = match[1]; // :subject/:repo/:package (e.g. asciidoctor/maven/asciidoctorj)
+  var format = match[2];
+
+  var options = {
+    method: 'GET',
+    uri: 'https://bintray.com/api/v1/packages/' + path + '/versions/_latest',
+    headers: {
+      Accept: 'application/json'
+    }
+  };
+
+  if (serverSecrets && serverSecrets.bintray_user) {
+    options.auth = {
+      user: serverSecrets.bintray_user,
+      pass: serverSecrets.bintray_apikey
+    }
+  }
+
+  var badgeData = getBadgeData('bintray', data);
+  request(options, function(err, res, buffer) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var vdata = versionColor(data.name);
+      badgeData.text[1] = vdata.version;
+      badgeData.colorscheme = 'brightgreen';
+      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
@@ -3251,6 +3292,39 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Ansible integration
+camp.route(/^\/ansible\/(role)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var type = match[1];      // eg role
+  var roleId = match[2];    // eg 3078
+  var format = match[3];
+  var uri = 'https://galaxy.ansible.com/api/v1/roles/' + roleId + '/';
+  var options = {
+    json: true,
+    uri: 'https://galaxy.ansible.com/api/v1/roles/' + roleId + '/',
+  };
+  var badgeData = getBadgeData(type, data);
+  request(options, function(err, res, json) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      if (type === 'role') {
+        badgeData.text[1] = json.summary_fields.owner.username +
+          '.' + json.name;
+        badgeData.colorscheme = 'blue';
+      } else {
+        badgeData.text[1] = 'unknown';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'errored';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
 // Codeship.io integration
 camp.route(/^\/codeship\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -4161,9 +4235,13 @@ function(data, match, end, ask) {
     incrMonthlyAnalytics(analytics.rawFlatSquareMonthly);
   }
 
-  // Cache management - the badge is constant.
-  var cacheDuration = (3600*24*1)|0;    // 1 day.
-  ask.res.setHeader('Cache-Control', 'public, max-age=' + cacheDuration);
+  if (ask.req.headers['cache-control']) {
+    ask.res.setHeader('Cache-Control', ask.req.headers['cache-control']);
+  } else {
+    // Cache management - the badge is constant.
+    var cacheDuration = (3600*24*1)|0;    // 1 day.
+    ask.res.setHeader('Cache-Control', 'public, max-age=' + cacheDuration);
+  }
   if (+(new Date(ask.req.headers['if-modified-since'])) >= +serverStartTime) {
     ask.res.statusCode = 304;
     ask.res.end();  // not modified.

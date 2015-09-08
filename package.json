@@ -1,6 +1,6 @@
 {
   "name": "gh-badges",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "GitHub badges implemented in SVG.",
   "keywords": ["GitHub", "badge", "SVG", "image"],
   "homepage": "http://shields.io",
@@ -8,7 +8,7 @@
     "url": "https://github.com/badges/shields/issues",
     "email": "thaddee.tyl@gmail.com"
   },
-  "license": "CC0",
+  "license": "CC0-1.0",
   "author": "Thaddée Tyl <thaddee.tyl@gmail.com>",
   "main": "badge.js",
   "repository": {
@@ -22,7 +22,7 @@
     "phantomjs": "~1.9.2-6",
     "es6-promise": "~2.1.0",
     "request": "~2.55.0",
-    "redis": "~0.12.1",
+    "redis": "~1.0.0",
     "camp": "~15.5.5",
     "semver": "~4.3.3",
     "bower": "~1.4.1",
