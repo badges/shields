@@ -819,11 +819,11 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Gratipay integration.
-camp.route(/^\/(gittip|gratipay)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/(?:gittip|gratipay(?:\/user)?)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[2];  // eg, `JSFiddle`.
-  var format = match[3];
-  var apiUrl = 'https://www.gratipay.com/' + user + '/public.json';
+  var user = match[1];  // eg, `dougwilson`.
+  var format = match[2];
+  var apiUrl = 'https://www.gratipay.com/~' + user + '/public.json';
   var badgeData = getBadgeData('tips', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.gratipay;
@@ -836,8 +836,9 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      if (data.receiving) {
-        var money = parseInt(data.receiving);
+      var receiving = data.receiving || data.taking;
+      if (receiving) {
+        var money = parseInt(receiving);
         badgeData.text[1] = '$' + metric(money) + '/week';
         if (money === 0) {
           badgeData.colorscheme = 'red';
