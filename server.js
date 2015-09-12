@@ -9,7 +9,7 @@ var camp = Camp.start({
   hostname: bindAddress,
   secure: secureServer
 });
-Camp.log.unpipe ( 'warn', 'stderr' );
+Camp.log.unpipe('warn', 'stderr');
 console.log('http://[::1]:' + serverPort + '/try.html');
 var domain = require('domain');
 var request = require('request');
