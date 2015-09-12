@@ -1354,7 +1354,7 @@ cache(function(data, match, sendBadge, request) {
       if (data.engines && data.engines.node) {
         var versionRange = data.engines.node;
         badgeData.text[1] = versionRange;
-        regularUpdate('http://nodejs.org/dist/latest/SHASUMS.txt',
+        regularUpdate('http://nodejs.org/dist/latest/SHASUMS256.txt',
           (24 * 3600 * 1000),
           function(shasums) {
             // tarball index start, tarball index end
