@@ -2649,9 +2649,9 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub all releases download count integration.
-camp.route(/^\/github\/dt\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/downloads\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, qubyte/rubidium
+  var user = match[1];  // eg, atom/atom
   var repo = match[2];
   var format = match[3];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/releases';
