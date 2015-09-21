@@ -11,6 +11,7 @@ function Cache(size, type) {
   type = type || 'unit';
   this.size = size;
   this.type = typeEnum[type];
+  if (this.type === typeEnum.unit) { this.size -= 1; }
   // `cache` contains {content, index}.
   // - content: the actual data that is cached.
   // - index: the position in `order` of the data.
@@ -30,6 +31,7 @@ Cache.prototype = {
       // If the cache is full, remove the oldest data
       // (ie, the data requested longest ago.)
       var numberToRemove = this.limitReached();
+      if (numberToRemove > this.order.length) { numberToRemove = this.order.length; }
       for (var i = 0; i < numberToRemove; i++) {
         // Remove `order`'s oldest element, the first.
         delete this.cache[this.order[0]];
@@ -39,7 +41,7 @@ Cache.prototype = {
       this.cache[cacheIndex] = {
         index: this.order.length,
         content: cached,
-      }
+      };
       this.order.push(cacheIndex);
     }
   },
@@ -58,9 +60,10 @@ Cache.prototype = {
     return this.cache[cacheIndex] !== undefined;
   },
 
-  // Returns true if we're past the limit.
+  // Returns the number of elements to remove if we're past the limit.
   limitReached: function heuristic() {
     if (this.type === typeEnum.unit) {
+      // Remove the excess.
       return Math.max(0, (this.order.length - this.size));
     } else if (this.type === typeEnum.heap) {
       if (getHeapSize() >= this.size) {
