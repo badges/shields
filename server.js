@@ -4286,6 +4286,49 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// ImageLayers.io integration.
+camp.route(/^\/imagelayers\/(image\-size|layers)\/([^\/]+)\/([^\/]+)\/([^\/]*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var type = match[1];
+  var user = match[2];
+  var repo = match[3];
+  var tag = match[4]
+  var format = match[5];
+  if (user === '_') {
+    user = 'library';
+  }
+  var path = user + '/' + repo;
+  var badgeData = getBadgeData(type, data);
+  var options = {
+    method: 'POST',
+    json: true,
+    body: {
+      "repos": [{"name": path, "tag": tag}]
+    },
+    uri: 'https://imagelayers.io:8888/registry/analyze'
+  };
+  request(options, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      if (type == 'image-size') {
+        size = metric(buffer[0].repo.size) + "B";
+        badgeData.text[1] = size;
+      } else if (type == 'layers') {
+        badgeData.text[1] = buffer[0].repo.count;
+      }
+      badgeData.colorscheme = null;
+      badgeData.colorB = '#007ec6';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
 
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
