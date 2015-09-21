@@ -290,18 +290,23 @@ cache(function(data, match, sendBadge, request) {
   var userRepo = match[2];  // eg, espadrine/sc
   var branch = match[3];
   var format = match[4];
-  var url = 'https://api.travis-ci.org/' + userRepo + '.svg';
+  var options = {
+    method: 'HEAD',
+    uri: 'https://api.travis-ci.org/' + userRepo + '.svg',
+  };
   if (branch != null) {
-    url += '?branch=' + branch;
+    options.path += '?branch=' + branch;
   }
   var badgeData = getBadgeData('build', data);
-  fetchFromSvg(request, url, function(err, res) {
+  request(options, function(err, res) {
     if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+      badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
       return;
     }
     try {
+      var res = res.headers['content-disposition']
+                     .match(/filename="(.+)\.svg"/)[1];
       badgeData.text[1] = res;
       if (res === 'passing') {
         badgeData.colorscheme = 'brightgreen';
