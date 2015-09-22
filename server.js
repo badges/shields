@@ -158,7 +158,7 @@ var minAccuracy = 0.75;
 var freqRatioMax = 1 - minAccuracy;
 
 // Request cache size of 50MB (~5000 bytes/image).
-var requestCache = new LruCache(10000);
+var requestCache = new LruCache(0); // 10000
 
 // Deep error handling for vendor hooks.
 var vendorDomain = domain.create();
@@ -300,13 +300,15 @@ cache(function(data, match, sendBadge, request) {
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res) {
     if (err != null) {
+      console.error('Travis error: ' + err.stack);
+      if (res) { console.error(''+res); }
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
       return;
     }
     try {
       var res = res.headers['content-disposition']
-                     .match(/filename="(.+)\.svg"/)[1];
+                   .match(/filename="(.+)\.svg"/)[1];
       badgeData.text[1] = res;
       if (res === 'passing') {
         badgeData.colorscheme = 'brightgreen';
