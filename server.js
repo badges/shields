@@ -4445,6 +4445,7 @@ function fetchFromSvg(request, url, cb) {
     try {
       var badge = buffer.replace(/(?:\r\n\s*|\r\s*|\n\s*)/g, '');
       var match = />([^<>]+)<\/text><\/g>/.exec(badge);
+      if (!match) { return cb(Error('Cannot fetch from SVG:\n' + buffer)); }
       cb(null, match[1]);
     } catch(e) {
       cb(e);
