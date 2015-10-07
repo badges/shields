@@ -127,6 +127,32 @@ make deploy
 heroku open
 ```
 
+# Docker
+
+You can build and run the server locally using Docker. First build an image:
+
+```console
+$ build -t shields ./
+Sending build context to Docker daemon 3.923 MB
+Step 0 : FROM node:0.12.7-onbuild
+…
+Removing intermediate container c4678889953f
+Successfully built 4471b442c220
+```
+
+Then run the container:
+
+```console
+$ docker run --rm -p 8080:80 shields
+
+> gh-badges@1.1.2 start /usr/src/app
+> node server.js
+
+http://[::1]:80/try.html
+```
+
+Assuming Docker is running locally, you should be able to get to the application at http://localhost:8080/try.html. If you run Docker in a virtual machine (such as boot2docker or Docker Machine) then you will need to replace `localhost` with the actual IP address of that virtual machine.
+
 # Links
 
 See <https://github.com/h5bp/lazyweb-requests/issues/150> for a story of the
