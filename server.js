@@ -2479,6 +2479,32 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+camp.route(/^\/cocoapods\/metrics\/doc-percent\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var spec = match[1];  // eg, AFNetworking
+  var format = match[2];
+  var apiUrl = 'http://metrics.cocoapods.org/api/v1/pods/' + spec;
+  var badgeData = getBadgeData('pod', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var percentage = data.cocoadocs.doc_percent;
+      badgeData.colorscheme = coveragePercentageColor(percentage);
+      badgeData.text[0] = 'docs';
+      badgeData.text[1] = percentage + '%'
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // GitHub tag integration.
 camp.route(/^\/github\/tag\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
