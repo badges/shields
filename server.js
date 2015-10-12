@@ -2600,18 +2600,30 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub release-download-count integration.
-camp.route(/^\/github\/downloads\/([^\/]+)\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/downloads\/([^\/]+)\/([^\/]+)\/([^\/]+)(\/[^\/]+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
-  var tag = match[3];
-  var asset_name = match[4].toLowerCase(); // eg. total, atom-amd64.deb, atom.x86_64.rpm
-  var format = match[5];
-  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/releases';
+
+  var tag;
+  var asset_name;
+  var format;
   var total = true;
-  if (tag !== 'total') {
-    total = false;
-    var release_path = tag !== 'latest' ? 'tags/' + match[3] : 'latest';
+  if (match.length >= 6) {
+    tag = match[3];
+    asset_name = match[4]; // eg. total, atom-amd64.deb, atom.x86_64.rpm
+    format = match[5];
+
+    var total = false;
+  } else {
+    asset_name = match[3]; // eg. total, atom-amd64.deb, atom.x86_64.rpm
+    format = match[4];
+  }
+  asset_name = asset_name.toLowerCase();
+
+  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/releases';
+  if (!total) {
+    var release_path = tag !== 'latest' ? 'tags/' + tag : 'latest';
     apiUrl = apiUrl + '/' + release_path;
   }
   // Using our OAuth App secret grants us 5000 req/hour
