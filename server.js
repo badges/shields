@@ -295,7 +295,7 @@ cache(function(data, match, sendBadge, request) {
     uri: 'https://api.travis-ci.org/' + userRepo + '.svg',
   };
   if (branch != null) {
-    options.path += '?branch=' + branch;
+    options.uri += '?branch=' + branch;
   }
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res) {
