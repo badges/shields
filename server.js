@@ -2600,26 +2600,18 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub release-download-count integration.
-camp.route(/^\/github\/downloads\/([^\/]+)\/([^\/]+)\/([^\/]+)(\/[^\/]+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/downloads\/([^\/]+)\/([^\/]+)(\/[^\/]+)?\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
 
-  var tag;
-  var asset_name;
-  var format;
+  var tag = match[3]; //null for all releases
+  var asset_name = match[4].toLowerCase(); // eg. total, atom-amd64.deb, atom.x86_64.rpm
+  var format = match[5];
   var total = true;
-  if (match.length >= 6) {
-    tag = match[3];
-    asset_name = match[4]; // eg. total, atom-amd64.deb, atom.x86_64.rpm
-    format = match[5];
-
-    var total = false;
-  } else {
-    asset_name = match[3]; // eg. total, atom-amd64.deb, atom.x86_64.rpm
-    format = match[4];
+  if (tag) {
+    total = false;
   }
-  asset_name = asset_name.toLowerCase();
 
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/releases';
   if (!total) {
