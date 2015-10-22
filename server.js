@@ -2608,6 +2608,11 @@ cache(function(data, match, sendBadge, request) {
   var tag = match[3]; //null for all releases
   var asset_name = match[4].toLowerCase(); // eg. total, atom-amd64.deb, atom.x86_64.rpm
   var format = match[5];
+
+  if (tag && (tag.indexOf('/') !== -1)) {
+    tag = tag.split('/').join('');
+  }
+
   var total = true;
   if (tag) {
     total = false;
