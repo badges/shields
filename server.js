@@ -2633,15 +2633,29 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub release-download-count integration.
-camp.route(/^\/github\/downloads\/([^\/]+)\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/downloads\/([^\/]+)\/([^\/]+)(\/[^\/]+)?\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
-  var tag = match[3];
+
+  var tag = match[3]; //null for all releases
   var asset_name = match[4].toLowerCase(); // eg. total, atom-amd64.deb, atom.x86_64.rpm
   var format = match[5];
-  var release_path = tag !== 'latest' ? 'tags/' + match[3] : 'latest';
-  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/releases/' + release_path;
+
+  if (tag && (tag.indexOf('/') !== -1)) {
+    tag = tag.split('/').join('');
+  }
+
+  var total = true;
+  if (tag) {
+    total = false;
+  }
+
+  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/releases';
+  if (!total) {
+    var release_path = tag !== 'latest' ? 'tags/' + tag : 'latest';
+    apiUrl = apiUrl + '/' + release_path;
+  }
   // Using our OAuth App secret grants us 5000 req/hour
   // instead of the standard 60 req/hour.
   if (serverSecrets) {
@@ -2665,14 +2679,32 @@ cache(function(data, match, sendBadge, request) {
       }
       var data = JSON.parse(buffer);
       var downloads = 0;
-      data.assets.forEach(function (asset) {
-        if (asset_name === 'total' || asset_name === asset.name.toLowerCase()) {
-          downloads += asset.download_count;
+
+      var label;
+      if (total) {
+        data.forEach(function (tagData) {
+          tagData.assets.forEach(function (asset) {
+            if (asset_name === 'total' || asset_name === asset.name.toLowerCase()) {
+              downloads += asset.download_count;
+            }
+          });
+        });
+
+        label = 'total';
+        if (asset_name !== 'total') {
+          label += ' ' + '[' + asset_name + ']';
         }
-      });
-      var label = tag !== 'latest' ?  tag : '';
-      if (asset_name !== 'total') {
-        label += ' ' + '[' + asset_name + ']';
+      } else {
+        data.assets.forEach(function (asset) {
+          if (asset_name === 'total' || asset_name === asset.name.toLowerCase()) {
+            downloads += asset.download_count;
+          }
+        });
+
+        label = tag !== 'latest' ?  tag : '';
+        if (asset_name !== 'total') {
+          label += ' ' + '[' + asset_name + ']';
+        }
       }
       badgeData.text[1] = metric(downloads) + ' ' + label;
       badgeData.colorscheme = 'brightgreen';
