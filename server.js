@@ -212,6 +212,7 @@ function cache(f) {
       }
       var badgeData = getBadgeData('vendor', data);
       badgeData.text[1] = 'unresponsive';
+      ask.res.statusCode = 504;  // Gateway Timeout
       var extension;
       try {
         extension = match[0].split('.').pop();
