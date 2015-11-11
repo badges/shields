@@ -4316,6 +4316,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       if (type == 'image-size') {
         size = metric(buffer[0].repo.size) + "B";
+        badgeData.text[0] = 'image size';
         badgeData.text[1] = size;
       } else if (type == 'layers') {
         badgeData.text[1] = buffer[0].repo.count;
