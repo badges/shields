@@ -4332,6 +4332,7 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Gitter room integration.
 camp.route(/^\/gitter\/room\/([^\/]+\/[^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];
@@ -4342,6 +4343,7 @@ cache(function(data, match, sendBadge, request) {
   badgeData.colorscheme = 'brightgreen';
   if (darkBackgroundTemplates.some(function(t) { return t === badgeData.template; })) {
     badgeData.logo = badgeData.logo || logos['gitter-white'];
+    badgeData.logoWidth = 7;
   }
   sendBadge(format, badgeData);
 }));
