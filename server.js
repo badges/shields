@@ -29,6 +29,7 @@ var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
 
 var validTemplates = ['default', 'plastic', 'flat', 'flat-square', 'social'];
+var darkBackgroundTemplates = ['default', 'flat', 'flat-square'];
 var logos = loadLogos();
 
 // Analytics
@@ -4329,6 +4330,20 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
     }
   });
+}));
+
+camp.route(/^\/gitter\/room\/([^\/]+\/[^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var userRepo = match[1];
+  var format = match[2];
+
+  var badgeData = getBadgeData('chat', data);
+  badgeData.text[1] = 'on gitter';
+  badgeData.colorscheme = 'brightgreen';
+  if (darkBackgroundTemplates.some(function(t) { return t === badgeData.template; })) {
+    badgeData.logo = badgeData.logo || logos['gitter-white'];
+  }
+  sendBadge(format, badgeData);
 }));
 
 // Any badge.
