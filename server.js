@@ -158,8 +158,8 @@ var minAccuracy = 0.75;
 //       = 1 - max(1, df) / rf
 var freqRatioMax = 1 - minAccuracy;
 
-// Request cache size of 50MB (~5000 bytes/image).
-var requestCache = new LruCache(0); // 10000
+// Request cache size of 5MB (~5000 bytes/image).
+var requestCache = new LruCache(1000);
 
 // Deep error handling for vendor hooks.
 var vendorDomain = domain.create();
