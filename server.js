@@ -1999,7 +1999,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var score = res.headers['content-disposition']
-                     .match(/filename="coverage_(.+)\.png"/)[1];
+                     .match(/filename=".*coverage_(.+)\.png"/)[1];
       if (!score) {
         badgeData.text[1] = 'malformed';
         sendBadge(format, badgeData);
@@ -2040,7 +2040,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var statusMatch = res.headers['content-disposition']
-                           .match(/filename="code_climate-(.+)\.png"/);
+                           .match(/filename=".*code_climate-(.+)\.png"/);
       if (!statusMatch) {
         badgeData.text[1] = 'unknown';
         sendBadge(format, badgeData);
