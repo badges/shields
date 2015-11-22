@@ -2306,7 +2306,9 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = res;
       if (res === 'up to date') {
         badgeData.colorscheme = 'brightgreen';
-      } else if (statusMatch === 'out of date') {
+      } else if (res === 'none') {
+        badgeData.colorscheme = 'green';
+      } else if (res === 'out of date') {
         badgeData.colorscheme = 'yellow';
       } else {
         badgeData.colorscheme = 'red';
