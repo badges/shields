@@ -884,7 +884,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      badgeData.text[1] = metric(+data.count);
+      badgeData.text[1] = metric(+data.count[data.count.length-1]);
       badgeData.colorscheme = 'blue';
       sendBadge(format, badgeData);
     } catch(e) {
