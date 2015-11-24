@@ -29,6 +29,7 @@ var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
 
 var validTemplates = ['default', 'plastic', 'flat', 'flat-square', 'social'];
+var darkBackgroundTemplates = ['default', 'flat', 'flat-square'];
 var logos = loadLogos();
 
 // Analytics
@@ -157,8 +158,8 @@ var minAccuracy = 0.75;
 //       = 1 - max(1, df) / rf
 var freqRatioMax = 1 - minAccuracy;
 
-// Request cache size of 50MB (~5000 bytes/image).
-var requestCache = new LruCache(0); // 10000
+// Request cache size of 5MB (~5000 bytes/image).
+var requestCache = new LruCache(1000);
 
 // Deep error handling for vendor hooks.
 var vendorDomain = domain.create();
@@ -212,7 +213,6 @@ function cache(f) {
       }
       var badgeData = getBadgeData('vendor', data);
       badgeData.text[1] = 'unresponsive';
-      ask.res.statusCode = 504;  // Gateway Timeout
       var extension;
       try {
         extension = match[0].split('.').pop();
@@ -884,7 +884,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      badgeData.text[1] = metric(+data.count);
+      badgeData.text[1] = metric(+data.count[data.count.length-1]);
       badgeData.colorscheme = 'blue';
       sendBadge(format, badgeData);
     } catch(e) {
@@ -1999,7 +1999,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var score = res.headers['content-disposition']
-                     .match(/filename="coverage_(.+)\.png"/)[1];
+                     .match(/filename=".*coverage_(.+)\.png"/)[1];
       if (!score) {
         badgeData.text[1] = 'malformed';
         sendBadge(format, badgeData);
@@ -2040,7 +2040,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var statusMatch = res.headers['content-disposition']
-                           .match(/filename="code_climate-(.+)\.png"/);
+                           .match(/filename=".*code_climate-(.+)\.png"/);
       if (!statusMatch) {
         badgeData.text[1] = 'unknown';
         sendBadge(format, badgeData);
@@ -2306,7 +2306,9 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = res;
       if (res === 'up to date') {
         badgeData.colorscheme = 'brightgreen';
-      } else if (statusMatch === 'out of date') {
+      } else if (res === 'none') {
+        badgeData.colorscheme = 'green';
+      } else if (res === 'out of date') {
         badgeData.colorscheme = 'yellow';
       } else {
         badgeData.colorscheme = 'red';
@@ -4329,6 +4331,22 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
     }
   });
+}));
+
+// Gitter room integration.
+camp.route(/^\/gitter\/room\/([^\/]+\/[^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var userRepo = match[1];
+  var format = match[2];
+
+  var badgeData = getBadgeData('chat', data);
+  badgeData.text[1] = 'on gitter';
+  badgeData.colorscheme = 'brightgreen';
+  if (darkBackgroundTemplates.some(function(t) { return t === badgeData.template; })) {
+    badgeData.logo = badgeData.logo || logos['gitter-white'];
+    badgeData.logoWidth = 7;
+  }
+  sendBadge(format, badgeData);
 }));
 
 // Any badge.
