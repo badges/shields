@@ -16,6 +16,14 @@ For testing purposes, you can go to `http://localhost/try.html`.
 You should modify that file. The "real" root, `http://localhost/index.html`,
 gets generated from the `try.html` file.
 
+## Ground rules
+
+- The left-hand side of a badge should not advertize. It should be a noun
+  describing succinctly the meaning of the right-hand-side data.
+- New query parameters (such as `?label=` or `?style=`) should apply to any
+  requested badge. They must be registered in the cache (see `LruCache` in
+  `server.js`).
+
 ## Implementations
 
 The main implementation, available at <http://shields.io>, has its code located in this repository.
