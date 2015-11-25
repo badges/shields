@@ -191,7 +191,6 @@ function cache(f) {
     var cachedVersionSent = false;
     if (cached !== undefined) {
       // A request was made not long ago.
-      var interval = 30000;  // In milliseconds.
       var tooSoon = (+reqTime - cached.time) < cached.interval;
       if (tooSoon || (cached.dataChange / cached.reqs <= freqRatioMax)) {
         badge(cached.data.badgeData, makeSend(cached.data.format, ask.res, end));
@@ -308,15 +307,15 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var res = res.headers['content-disposition']
-                   .match(/filename="(.+)\.svg"/)[1];
-      badgeData.text[1] = res;
-      if (res === 'passing') {
+      var state = res.headers['content-disposition']
+                     .match(/filename="(.+)\.svg"/)[1];
+      badgeData.text[1] = state;
+      if (state === 'passing') {
         badgeData.colorscheme = 'brightgreen';
-      } else if (res === 'failing') {
+      } else if (state === 'failing') {
         badgeData.colorscheme = 'red';
       } else {
-        badgeData.text[1] = res;
+        badgeData.text[1] = state;
       }
       sendBadge(format, badgeData);
 
