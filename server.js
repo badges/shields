@@ -2149,6 +2149,46 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Code Climate issues integration
+camp.route(/^\/codeclimate\/issues\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var userRepo = match[1];  // eg, `github/me-and/mdf`.
+  var format = match[2];
+  var options = 'https://codeclimate.com/' + userRepo + '/badges/issue_count.svg'
+  var badgeData = getBadgeData('issues', data);
+  request(options, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var count = buffer.match(/>([0-9]+) issues?/)[1];
+      if (!count) {
+        badgeData.text[1] = 'malformed';
+        sendBadge(format, badgeData);
+        return;
+      }
+      badgeData.text[1] = count;
+      if (count == 0) {
+        badgeData.colorscheme = 'brightgreen';
+      } else if (count < 5) {
+        badgeData.colorscheme = 'green';
+      } else if (count < 10) {
+        badgeData.colorscheme = 'yellowgreen';
+      } else if (count < 20) {
+        badgeData.colorscheme = 'yellow';
+      } else {
+        badgeData.colorscheme = 'red';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Code Climate integration
 camp.route(/^\/codeclimate\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
