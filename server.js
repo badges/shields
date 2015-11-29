@@ -1231,7 +1231,6 @@ cache(function(data, match, sendBadge, request) {
 
       var downloads = data.package.installs.total;
       badgeData.text[1] = metric(downloads) + ' total';
-      break;
         
       badgeData.colorscheme = downloadCountColor(downloads);
       sendBadge(format, badgeData);
