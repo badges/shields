@@ -3360,6 +3360,59 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Jenkins coverage integration
+camp.route(/^\/jenkins(-ci)?\/c\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var scheme = match[2];  // http(s)
+  var host = match[4];  // jenkins.qa.ubuntu.com
+  var job = match[5];  // precise-desktop-amd64_default
+  var format = match[6];
+  var options = {
+    json: true,
+    uri: scheme + '://' + host + '/job/' + job
+      + '/lastBuild/cobertura/api/json?tree=results[elements[name,denominator,numerator,ratio]]'
+  };
+
+  if (serverSecrets && serverSecrets.jenkins_user) {
+    options.auth = {
+      user: serverSecrets.jenkins_user,
+      pass: serverSecrets.jenkins_pass
+    };
+  }
+
+  var badgeData = getBadgeData('coverage', data);
+  request(options, function(err, res, json) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    try {
+      var coverageObject = json.results.elements.filter(function (obj) {
+        return obj.name === 'Lines';
+      })[0];
+      if (coverageObject === undefined) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      var coverage = coverageObject.ratio;
+      if (+coverage !== +coverage) {
+        badgeData.text[1] = 'unknown';
+        sendBadge(format, badgeData);
+        return;
+      }
+      badgeData.text[1] = coverage.toFixed(0) + '%';
+      badgeData.colorscheme = coveragePercentageColor(coverage);
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Ansible integration
 camp.route(/^\/ansible\/(role)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
