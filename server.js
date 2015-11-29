@@ -1210,6 +1210,38 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Package Control integration.
+camp.route(/^\/packagecontrol\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var userRepo = match[1];  // eg, `Package%20Control`.
+  var format = match[2];
+  var apiUrl = 'https://packagecontrol.io/packages/' + userRepo + '.json';
+  var badgeData = getBadgeData('downloads', data);
+  if (userRepo.substr(-14) === '/:package_name') {
+    badgeData.text[1] = 'invalid';
+    return sendBadge(format, badgeData);
+  }
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+
+      var downloads = data.package.installs.total;
+      badgeData.text[1] = metric(downloads) + ' total';
+      break;
+        
+      badgeData.colorscheme = downloadCountColor(downloads);
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // npm download integration.
 camp.route(/^\/npm\/dm\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
