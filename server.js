@@ -3277,6 +3277,13 @@ cache(function(data, match, sendBadge, request) {
     uri: scheme + '://' + host + '/job/' + job + '/api/json?tree=color'
   };
 
+  if (serverSecrets && serverSecrets.jenkins_user) {
+    options.auth = {
+      user: serverSecrets.jenkins_user,
+      pass: serverSecrets.jenkins_pass
+    };
+  }
+
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res, json) {
     if (err !== null) {
@@ -3323,6 +3330,13 @@ cache(function(data, match, sendBadge, request) {
     uri: scheme + '://' + host + '/job/' + job
       + '/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]'
   };
+
+  if (serverSecrets && serverSecrets.jenkins_user) {
+    options.auth = {
+      user: serverSecrets.jenkins_user,
+      pass: serverSecrets.jenkins_pass
+    };
+  }
 
   var badgeData = getBadgeData('tests', data);
   request(options, function(err, res, json) {
