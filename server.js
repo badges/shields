@@ -4210,39 +4210,30 @@ cache(function(data, match, sendBadge, request) {
   badgeData.colorscheme = '55ACEE';
   badgeData.logo = badgeData.logo || logos.twitter;
   badgeData.links = [
-    'https://twitter.com/intent/follow?screen_name=' + user
+    'https://twitter.com/intent/follow?screen_name=' + user,
+    'https://twitter.com/' + user + '/followers'
   ];
-  if (data.nobubble) {
-    badgeData.nobubble = data.nobubble;
-    sendBadge(format, badgeData);
-    return;
-  }
-  if (badgeData.template === 'social') {
-    badgeData.links[1] = 'https://twitter.com/' + user + '/followers';
-    badgeData.text[1] = '';
-    request(options, function(err, res, buffer) {
-      if (err != null) {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
-      }
-      try {
-        var data = JSON.parse(buffer);
-        // the data is formatted as an array
-        data = data[0];
-        // data.followers_count could be zero...don't just check if falsey
-        if(!data.hasOwnProperty('followers_count')){
-          badgeData.text[1] = 'invalid';
-        } else {
-          badgeData.text[1] = metric(data.followers_count);
-        }
-      } catch(e) {
-        console.error(e);
-        badgeData.text[1] = 'invalid';
-      }
+  badgeData.text[1] = '';
+  request(options, function(err, res, buffer) {
+    if (err != null) {
       sendBadge(format, badgeData);
-    });
-  }
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      // the data is formatted as an array
+      data = data[0];
+      // data.followers_count could be zero...don't just check if falsey
+      if(!data.hasOwnProperty('followers_count')){
+        badgeData.text[1] = '';
+      } else {
+        badgeData.text[1] = metric(data.followers_count);
+      }
+    } catch(e) {
+      console.error(e);
+    }
+    sendBadge(format, badgeData);
+  });
 }));
 
 // Snap CI build integration.
