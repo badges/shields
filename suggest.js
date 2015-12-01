@@ -185,8 +185,8 @@ var githubLicense = function(user, repo) {
 
 // Key phrases for common licenses
 var licensePhrases = {
-  'Apache 1.1': 'apache (software)? license,? (version)? 1\\.1',
-  'Apache 2': 'apache (software)? license,? (version)? 2',
+  'Apache 1.1': 'apache (software )?license,? (version)? 1\\.1',
+  'Apache 2': 'apache (software )?license,? (version)? 2',
   'Original BSD': 'all advertising materials mentioning features or use of this software must display the following acknowledgement',
   'New BSD': 'may be used to endorse or promote products derived from this software without specific prior written permission',
   'BSD': 'redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met',
