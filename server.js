@@ -3594,6 +3594,53 @@ cache(function(data, match, sendBadge, request) {
     }
   });
 }));
+// Magnum CI integration
+camp.route(/^\/magnumci\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var projectId = match[1];
+  var format = match[3];
+  var branch = match[2];
+  var options = {
+    method: 'GET',
+    uri: 'https://magnum-ci.com/status/' + projectId + '.png'
+  };
+  if (branch != null) {
+    options.uri += '?branch=' + branch;
+  }
+  var badgeData = getBadgeData('build', data);
+  request(options, function(err, res) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var statusMatch = res.headers['content-disposition']
+                           .match(/filename="(.+)\.png"/);
+      if (!statusMatch) {
+        badgeData.text[1] = 'unknown';
+        sendBadge(format, badgeData);
+        return;
+      }
+
+      switch (statusMatch[1]) {
+        case 'pass':
+          badgeData.text[1] = 'passing';
+          badgeData.colorscheme = 'brightgreen';
+          break;
+          break;
+        case 'fail':
+          badgeData.text[1] = 'failing';
+          badgeData.colorscheme = 'red';
+          break;
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'not found';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
 
 // Maven-Central artifact version integration
 // API documentation: http://search.maven.org/#api
