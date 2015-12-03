@@ -4255,6 +4255,45 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Twitter follow badge.
+camp.route(/^\/twitter\/follow\/@?([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1]; // eg, shields_io
+  var format = match[2];
+  var options = {
+    url: 'http://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=' + user
+  };
+  var badgeData = getBadgeData('Follow', data);
+  badgeData.text[0] = 'Follow ' + user;
+  badgeData.colorscheme = '55ACEE';
+  badgeData.logo = badgeData.logo || logos.twitter;
+  badgeData.links = [
+    'https://twitter.com/intent/follow?screen_name=' + user,
+    'https://twitter.com/' + user + '/followers'
+  ];
+  badgeData.text[1] = '';
+  request(options, function(err, res, buffer) {
+    if (err != null) {
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      // the data is formatted as an array
+      data = data[0];
+      // data.followers_count could be zero...don't just check if falsey
+      if(!data.hasOwnProperty('followers_count')){
+        badgeData.text[1] = '';
+      } else {
+        badgeData.text[1] = metric(data.followers_count);
+      }
+    } catch(e) {
+      console.error(e);
+    }
+    sendBadge(format, badgeData);
+  });
+}));
+
 // Snap CI build integration.
 // https://snap-ci.com/snap-ci/snap-deploy/branch/master/build_image
 camp.route(/^\/snap(-ci?)\/([^\/]+\/[^\/]+)(?:\/(.+))\.(svg|png|gif|jpg|json)$/,
@@ -4826,4 +4865,43 @@ function phpStableVersion(version) {
   }
   // normal or patch
   return (versionData.modifier === 3) || (versionData.modifier === 4);
+}
+
+// This searches the serverSecrets for a twitter consumer key
+// and secret, and exchanges them for a bearer token to use for all requests.
+function fetchTwitterToken() {
+  if(serverSecrets.twitter_consumer_key && serverSecrets.twitter_consumer_secret){
+    // fetch a bearer token good for this app session
+    // construct this bearer request with a base64 encoding of key:secret
+    // docs for this are here: https://dev.twitter.com/oauth/application-only
+    var twitter_bearer_credentials = escape(serverSecrets.twitter_consumer_key) + ':' + escape(serverSecrets.twitter_consumer_secret);
+    var options = {
+      url: 'https://api.twitter.com/oauth2/token',
+      headers: {
+        // is this the best way to base 64 encode a string?
+        Authorization: 'Basic '+(new Buffer(twitter_bearer_credentials)).toString('base64'),
+        'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      form: 'grant_type=client_credentials',
+      method: 'POST'
+    };
+    console.log('Fetching twitter bearer token...');
+    request(options,function(err,res,buffer){
+      if(err){
+        console.error('Error fetching twitter bearer token, error: ', err);
+        return;
+      }
+      try{
+        var data = JSON.parse(buffer);
+        if(data.token_type === 'bearer'){
+          serverSecrets.twitter_bearer_token = data.access_token;
+          console.log('Fetched twitter bearer token');
+          return;
+        }
+        console.error('Error fetching twitter bearer token, data: %j', data);
+      } catch(e) {
+        console.error('Error fetching twitter bearer token, buffer: %s, ', buffer, e);
+      }
+    });
+  }
 }
