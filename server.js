@@ -4228,7 +4228,8 @@ cache(function(data, match, sendBadge, request) {
   var path = match[2];   // eg, shields.io
   var format = match[3];
   var page = encodeURIComponent(scheme + '://' + path);
-  var url = 'http://cdn.api.twitter.com/1/urls/count.json?url=' + page;
+  // The URL API died: #568.
+  //var url = 'http://cdn.api.twitter.com/1/urls/count.json?url=' + page;
   var badgeData = getBadgeData('tweet', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.twitter;
@@ -4237,22 +4238,9 @@ cache(function(data, match, sendBadge, request) {
       'https://twitter.com/search?q=' + page,
      ];
   }
-  request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      badgeData.text[1] = metric(data.count);
-      badgeData.colorscheme = '55ACEE';
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
+  badgeData.text[1] = '';
+  badgeData.colorscheme = '55ACEE';
+  sendBadge(format, badgeData);
 }));
 
 // Twitter follow badge.
