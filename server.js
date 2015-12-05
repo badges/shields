@@ -4266,13 +4266,10 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      // the data is formatted as an array
-      data = data[0];
-      // data.followers_count could be zero...don't just check if falsey
-      if(!data.hasOwnProperty('followers_count')){
-        badgeData.text[1] = '';
-      } else {
+      // The data is formatted as an array.
+      var data = JSON.parse(buffer)[0];
+      // data.followers_count could be zero… don't just check if falsey.
+      if (data.followers_count != null){
         badgeData.text[1] = metric(data.followers_count);
       }
     } catch(e) {
