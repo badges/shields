@@ -4254,7 +4254,9 @@ cache(function(data, match, sendBadge, request) {
   var badgeData = getBadgeData('Follow', data);
   badgeData.text[0] = 'Follow ' + user;
   badgeData.colorscheme = '55ACEE';
-  badgeData.logo = badgeData.logo || logos.twitter;
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.twitter;
+  }
   badgeData.links = [
     'https://twitter.com/intent/follow?screen_name=' + user,
     'https://twitter.com/' + user + '/followers'
