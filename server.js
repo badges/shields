@@ -347,6 +347,7 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = res;
       if (res === 'shippable') {
         badgeData.colorscheme = 'brightgreen';
+        badgeData.text[1] = 'passing';
       } else if (res === 'unshippable') {
         badgeData.colorscheme = 'red';
       } else {
@@ -384,7 +385,7 @@ cache(function(data, match, sendBadge, request) {
       if (build.status === 'finished') {
         if (build.result === 'passed') {
           badgeData.colorscheme = 'brightgreen';
-          badgeData.text[1] = build.result;
+          badgeData.text[1] = 'passing';
         } else {
           badgeData.colorscheme = 'red';
           badgeData.text[1] = build.result;
@@ -425,7 +426,7 @@ cache(function(data, match, sendBadge, request) {
       if (build.status === 'finished') {
         if (build.result === 'passed') {
           badgeData.colorscheme = 'brightgreen';
-          badgeData.text[1] = build.result;
+          badgeData.text[1] = 'passing';
         } else {
           badgeData.colorscheme = 'red';
           badgeData.text[1] = build.result;
@@ -565,6 +566,7 @@ function teamcity_badge(url, buildId, advanced, format, data, sendBadge) {
         badgeData.text[1] = (data.status || '').toLowerCase();
       if (data.status === 'SUCCESS') {
         badgeData.colorscheme = 'brightgreen';
+        badgeData.text[1] = 'passing';
       } else {
         badgeData.colorscheme = 'red';
       }
@@ -2137,6 +2139,7 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = res;
       if (res === 'passed') {
         badgeData.colorscheme = 'brightgreen';
+        badgeData.text[1] = 'passing';
       } else if (res === 'failed' || res === 'error') {
         badgeData.colorscheme = 'red';
       } else if (res === 'pending') {
@@ -3421,7 +3424,7 @@ cache(function(data, match, sendBadge, request) {
 
       switch (statusMatch[1]) {
         case 'success':
-          badgeData.text[1] = 'passed';
+          badgeData.text[1] = 'passing';
           badgeData.colorscheme = 'brightgreen';
           break;
         case 'projectnotfound':
@@ -4301,6 +4304,7 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = res.toLowerCase();
       if (res === 'Passed') {
         badgeData.colorscheme = 'brightgreen';
+        badgeData.text[1] = 'passing';
       } else if (res === 'Failed') {
         badgeData.colorscheme = 'red';
       }
