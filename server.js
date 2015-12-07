@@ -4579,7 +4579,7 @@ function metric(n) {
   for (var i = metricPrefix.length - 1; i >= 0; i--) {
     var limit = metricPower[i];
     if (n > limit) {
-      n = Math.round(n / limit);
+      n = Math.round(n / limit * 100) / 100;
       return ''+n + metricPrefix[i];
     }
   }
