@@ -4359,11 +4359,11 @@ cache(function(data, match, sendBadge, request) {
   var uri;
   switch (resource) {
     case 'github':
-      uri = 'https://libraries.io/api/github/' + project + '/dependencies'
+      uri = 'https://libraries.io/api/github/' + project + '/dependencies';
       break;
     case 'release':
       var v = version || 'latest';
-      uri = 'https://libraries.io/api/' + project + '/' + v + '/dependencies'
+      uri = 'https://libraries.io/api/' + project + '/' + v + '/dependencies';
       break;
   }
 
@@ -4386,14 +4386,14 @@ cache(function(data, match, sendBadge, request) {
     });
 
     // Deprecated dependencies are really bad
-    if (deprecated.length) {
+    if (deprecated.length > 0) {
       badgeData.colorscheme = 'red';
       badgeData.text[1] = deprecated.length + ' deprecated';
       return sendBadge(format, badgeData);
     }
 
     // Out of date dependencies are pretty bad
-    if (outofdate.length) {
+    if (outofdate.length > 0) {
       badgeData.colorscheme = 'orange';
       badgeData.text[1] = outofdate.length + ' out of date';
       return sendBadge(format, badgeData);
