@@ -766,6 +766,7 @@ cache(function(data, match, sendBadge, request) {
 
       if (data.message === 'passed') {
         badgeData.colorscheme = 'brightgreen'
+        badgeData.text[1] = 'passing';
       } else if (/^passed .* new defects$/.test(data.message)) {
         badgeData.colorscheme = 'yellow';
       } else if (data.message === 'pending') {
