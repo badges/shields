@@ -4565,6 +4565,38 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Visual Studio Online build integration.
+camp.route(/^\/vso\/build\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var name = match[1];    // User name
+  var project = match[2]; // Project ID, e.g. 953a34b9-5966-4923-a48a-c41874cfb5f5
+  var build = match[3];   // Build definition ID, e.g. 1
+  var format = match[4];
+  var url = 'https://' + name + '.visualstudio.com/DefaultCollection/_apis/public/build/definitions/' + project + '/' + build + '/badge';
+  var badgeData = getBadgeData('build', data);
+  fetchFromSvg(request, url, function(err, res) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      badgeData.text[1] = res.toLowerCase();
+      if (res === 'succeeded') {
+        badgeData.colorscheme = 'brightgreen';
+        badgeData.text[1] = 'passing';
+      } else if (res === 'failed') {
+        badgeData.colorscheme = 'red';
+        badgeData.text[1] = 'failing';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // ImageLayers.io integration.
 camp.route(/^\/imagelayers\/(image\-size|layers)\/([^\/]+)\/([^\/]+)\/([^\/]*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
