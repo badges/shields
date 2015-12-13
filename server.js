@@ -1211,16 +1211,13 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Package Control integration.
-camp.route(/^\/packagecontrol\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/packagecontrol\/(dm|dw|dd|dt)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];  // eg, `Package%20Control`.
-  var format = match[2];
+  var info = match[1];  // either `dm`, `dw`, `dd` or dt`.
+  var userRepo = match[2];  // eg, `Package%20Control`.
+  var format = match[3];
   var apiUrl = 'https://packagecontrol.io/packages/' + userRepo + '.json';
   var badgeData = getBadgeData('downloads', data);
-  if (userRepo.substr(-14) === '/:package_name') {
-    badgeData.text[1] = 'invalid';
-    return sendBadge(format, badgeData);
-  }
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -1228,10 +1225,47 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-
-      var downloads = data.package.installs.total;
-      badgeData.text[1] = metric(downloads) + ' total';
-        
+      var downloads = 0;
+      switch (info.charAt(1)) {
+      case 'm':
+        // daily downloads are separated by Operating System
+        var platforms = data.installs.daily.data;
+        platforms.forEach(function(platform) {
+          // loop through the first 30 days or 1 month
+          for (var i = 0; i < 30; i++) {
+            // add the downloads for that day for that platform
+            downloads += platform.totals[i];
+          }
+        });
+        badgeData.text[1] = metric(downloads) + '/month';
+        break;
+      case 'w':
+        // daily downloads are separated by Operating System
+        var platforms = data.installs.daily.data;
+        platforms.forEach(function(platform) {
+          // loop through the first 7 days or 1 week
+          for (var i = 0; i < 7; i++) {
+            // add the downloads for that day for that platform
+            downloads += platform.totals[i];
+          }
+        });
+        badgeData.text[1] = metric(downloads) + '/week';
+        break;
+      case 'd':
+        // daily downloads are separated by Operating System
+        var platforms = data.installs.daily.data;
+        platforms.forEach(function(platform) {
+          // use the downloads from yesterday
+          downloads += platform.totals[1];
+        });
+        badgeData.text[1] = metric(downloads) + '/day';
+        break;
+      case 't':
+        // all-time downloads are already compiled
+        downloads = data.installs.total;
+        badgeData.text[1] = metric(downloads) + ' total';
+        break;
+      }
       badgeData.colorscheme = downloadCountColor(downloads);
       sendBadge(format, badgeData);
     } catch(e) {
