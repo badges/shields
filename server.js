@@ -2268,7 +2268,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var nameMatch = buffer.match(/(devD|d)ependencies/)[0];
-      var statusMatch = buffer.match(/'14'>(.+)<\/text>\n<\/g>/)[1];
+      var statusMatch = buffer.match(/'14'>(.+)<\/text>\n *<\/g>/)[1];
       badgeData.text[0] = nameMatch;
       badgeData.text[1] = statusMatch;
       if (statusMatch === 'up-to-date') {
