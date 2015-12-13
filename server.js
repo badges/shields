@@ -1263,7 +1263,7 @@ cache(function(data, match, sendBadge, request) {
       case 't':
         // all-time downloads are already compiled
         downloads = data.installs.total;
-        badgeData.text[1] = metric(downloads) + ' total';
+        badgeData.text[1] = metric(downloads);
         break;
       }
       badgeData.colorscheme = downloadCountColor(downloads);
