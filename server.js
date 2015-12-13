@@ -2275,7 +2275,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'brightgreen';
       } else if (statusMatch === 'out-of-date') {
         badgeData.colorscheme = 'yellow';
-      } else if (statusMatch === 'update!') {
+      } else if (statusMatch === 'up-to-date') {
         badgeData.colorscheme = 'red';
       } else if (statusMatch === 'none') {
         badgeData.colorscheme = 'brightgreen';
