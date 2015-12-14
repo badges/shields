@@ -3594,12 +3594,13 @@ cache(function(data, match, sendBadge, request) {
     }
   });
 }));
+
 // Magnum CI integration
-camp.route(/^\/magnumci\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/magnumci\/ci\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var projectId = match[1];
+  var projectId = match[1]; // E.g. 96ffb83fa700f069024921b0702e76ff
+  var branch = match[2];    // E.g. master
   var format = match[3];
-  var branch = match[2];
   var options = {
     method: 'GET',
     uri: 'https://magnum-ci.com/status/' + projectId + '.png'
