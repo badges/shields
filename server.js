@@ -2234,8 +2234,8 @@ cache(function(data, match, sendBadge, request) {
   var slashesInRepo = 2;
   if (repoParts[0] === 'gp') { slashesInRepo = 1; }
   if ((repoParts.length - 1) > slashesInRepo) {
-    branch = repoParts[repoParts.length - 1];
-    repo = repoParts.slice(0, -1).join('/');
+    branch = repoParts.slice(slashesInRepo + 1).join('/');
+    repo = repoParts.slice(0, slashesInRepo + 1).join('/');
   }
   var apiUrl = 'https://scrutinizer-ci.com/api/repositories/' + repo;
   var badgeData = getBadgeData('code quality', data);
