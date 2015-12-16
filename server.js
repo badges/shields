@@ -14,7 +14,6 @@ console.log('http://[::1]:' + serverPort + '/try.html');
 var domain = require('domain');
 var request = require('request');
 var fs = require('fs');
-var zlib = require('zlib');
 var LruCache = require('./lru-cache.js');
 var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
@@ -4535,33 +4534,32 @@ cache(function(data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     uri: 'https://api.stackexchange.com/2.2/'+path+'?site='+site,
-    encoding: null
+    gzip: true
   }
   var badgeData = getBadgeData(site, data);
   request(options, function (err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(badgeData, format);
+      return;
     }
-    zlib.gunzip(buffer, function (err, body) {
-      try {
-        var data = JSON.parse(body.toString());
+    try {
+      var data = JSON.parse(buffer.toString());
 
-        if (info === 'r') {
-          var reputation = data.items[0].reputation;
-          badgeData.text[1] = metric(reputation);
-          badgeData.colorscheme = floorCountColor(1000, 10000, 20000);
-        } else if (info === 't') {
-          var count = data.items[0].count;
-          badgeData.text[1] = metric(count)+' questions';
-          badgeData.colorscheme = floorCountColor(1000, 10000, 20000);
-        }
-        sendBadge(format, badgeData);
-      } catch (e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
+      if (info === 'r') {
+        var reputation = data.items[0].reputation;
+        badgeData.text[1] = metric(reputation);
+        badgeData.colorscheme = floorCountColor(1000, 10000, 20000);
+      } else if (info === 't') {
+        var count = data.items[0].count;
+        badgeData.text[1] = metric(count)+' questions';
+        badgeData.colorscheme = floorCountColor(1000, 10000, 20000);
       }
-    });
+      sendBadge(format, badgeData);
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
   })}
 ));
 
