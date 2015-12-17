@@ -2401,8 +2401,8 @@ cache(function(data, match, sendBadge, request) {
   if (branch) {
     queryParams.branch = branch;
   }
-  var url = 'https://www.codacy.com/project/badge/' + projectId;
-  url += '?' + querystring.stringify(queryParams);
+  var query = querystring.stringify(queryParams);
+  var url = 'https://www.codacy.com/project/badge/' + projectId + '?' + query;
   var badgeData = getBadgeData('code quality', data);
   fetchFromSvg(request, url, function(err, res) {
     if (err != null) {
