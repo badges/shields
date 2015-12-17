@@ -1,4 +1,6 @@
-before_install: sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
+before_install:
+  - sudo apt-get update -myqq
+  - sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
 language: node_js
 node_js:
   - 0.10
