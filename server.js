@@ -4673,6 +4673,35 @@ cache(function(data, match, sendBadge, request) {
   })}
 ));
 
+// bitHound integration
+camp.route(/^\/bithound\/(code\/|dependencies\/|devDependencies\/)?(.+?)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var type = match[1];
+  var userRepo = match[2];  // eg, `github/rexxars/sse-channel`.
+  var format = match[3];
+  var url = 'https://www.bithound.io/api/' + userRepo + '/badge/' + type;
+  var badgeData = getBadgeData(type === 'devDependencies' ? 'dev dependencies' : type, data);
+
+  request(url, function(err, res) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      badgeData.text[1] = res.label;
+      badgeData.logo = logos['bithound'];
+      badgeData.logoWidth = 15;
+      badgeData.colorscheme = res.color;
+      sendBadge(format, badgeData);
+
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
