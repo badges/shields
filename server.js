@@ -4676,23 +4676,20 @@ cache(function(data, match, sendBadge, request) {
 // bitHound integration
 camp.route(/^\/bithound\/(code\/|dependencies\/|devDependencies\/)?(.+?)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var type = match[1];
+  var type = match[1].slice(0, -1);
   var userRepo = match[2];  // eg, `github/rexxars/sse-channel`.
   var format = match[3];
-  var url = 'https://www.bithound.io/api/' + userRepo + '/badge/' + type;
+  var apiUrl = 'https://www.bithound.io/api/' + userRepo + '/badge/' + type;
   var badgeData = getBadgeData(type === 'devDependencies' ? 'dev dependencies' : type, data);
 
-  request(url, function(err, res) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
+  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
     try {
-      badgeData.text[1] = res.label;
+      var data = JSON.parse(buffer);
+      badgeData.text[1] = data.label;
       badgeData.logo = logos['bithound'];
       badgeData.logoWidth = 15;
-      badgeData.colorscheme = res.color;
+      badgeData.colorscheme = null;
+      badgeData.colorB = '#' + data.color;
       sendBadge(format, badgeData);
 
     } catch(e) {
