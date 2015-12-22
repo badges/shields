@@ -4,7 +4,7 @@
 </p>
 <p align="center">
     <a href="https://www.gratipay.com/Shields/">
-        <img src="https://img.shields.io/gratipay/shields.svg"
+        <img src="https://img.shields.io/gratipay/team/shields.svg"
              alt="Gratipay">
     </a>
     <a href="https://npmjs.org/package/gh-badges">
