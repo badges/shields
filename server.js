@@ -829,11 +829,14 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Gratipay integration.
-camp.route(/^\/(?:gittip|gratipay(?:\/user)?)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/(?:gittip|gratipay(\/user|\/team)?)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, `dougwilson`.
-  var format = match[2];
-  var apiUrl = 'https://www.gratipay.com/~' + user + '/public.json';
+  var type = match[1];  // eg, `user`.
+  var user = match[2];  // eg, `dougwilson`.
+  var format = match[3];
+  if (type === '') { type = '/user'; }
+  if (type === '/user') { user = '~' + user; }
+  var apiUrl = 'https://gratipay.com/' + user + '/public.json';
   var badgeData = getBadgeData('tips', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.gratipay;
@@ -848,13 +851,12 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       var receiving = data.receiving || data.taking;
       if (receiving) {
-        var money = parseInt(receiving);
-        badgeData.text[1] = '$' + metric(money) + '/week';
-        if (money === 0) {
+        badgeData.text[1] = '$' + metric(receiving) + '/week';
+        if (receiving === 0) {
           badgeData.colorscheme = 'red';
-        } else if (money < 10) {
+        } else if (receiving < 10) {
           badgeData.colorscheme = 'yellow';
-        } else if (money < 100) {
+        } else if (receiving < 100) {
           badgeData.colorscheme = 'green';
         } else {
           badgeData.colorscheme = 'brightgreen';
