@@ -48,5 +48,7 @@
     "lru-cache.js",
     "logo"
   ],
-  "engines": { "node": "0.10.x" }
+  "engines": {
+    "node": ">=0.10.0"
+  }
 }
