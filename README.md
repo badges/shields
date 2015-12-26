@@ -15,8 +15,20 @@
         <img src="https://img.shields.io/travis/badges/shields.svg"
              alt="build status">
     </a>
+    <a href="https://coveralls.io/github/badges/shields?branch=master">
+        <img src="https://coveralls.io/repos/badges/shields/badge.svg?branch=master&service=github"
+             alt="cover status">
+             </a>
+    <a href="https://david-dm.org/badges/shields">
+        <img src="https://david-dm.org/badges/shields.svg"
+             alt="dependancy status">
+    </a>
+    <a href="https://gitter.im/badges/shields">
+        <img src="https://badges.gitter.im/badges/shields.svg"
+             alt="gitter room">
+    </a>
 </p>
-<p align="center"><sup><strong>An image server for legible and concise information. Our <a href="http://shields.io/">Homepage</a> | <a href="https://twitter.com/shields_io">Twitter</a></strong></sup></p>
+<p align="center"><strong>An image server for legible and concise information. Our <a href="http://shields.io/">Homepage</a> | <a href="https://twitter.com/shields_io">Twitter</a></strong></p>
 
 * **[INSTALL](INSTALL.md)** – installation instructions.
 * **[CONTRIBUTING](CONTRIBUTING.md)** – project contribution guidelines.
