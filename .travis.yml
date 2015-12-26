@@ -36,6 +36,7 @@ addons:
       - build-essential
 
 before_install:
+  - npm -g install npm@latest-2
   - npm explore npm -g -- npm install node-gyp@latest
 
 env: CXX=g++-4.8
