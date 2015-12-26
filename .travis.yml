@@ -20,13 +20,17 @@ notifications:
 
 addons:
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
+      - g++-4.8
       - libcairo2-dev
       - libjpeg8-dev
       - libpango1.0-dev
       - libgif-dev
       - build-essential
-      - g++
+
+env: CXX=g++-4.8
 
 git:
   depth: 10
