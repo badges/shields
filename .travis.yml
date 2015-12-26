@@ -6,6 +6,13 @@ node_js:
   - '4'
   - '5'
 
+cache:
+  directories:
+    node_modules
+
+after_script:
+  npm run coverage
+
 notifications:
   email:
     - thaddee.tyl@gmail.com
