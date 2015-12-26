@@ -1,19 +1,31 @@
-before_install:
-  - sudo apt-get update -myqq
-  - sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
 language: node_js
+sudo: false
+
 node_js:
   - '0.10'
   - '4'
   - '5'
-branches:
-  only:
-    - master
 
 notifications:
   email:
     - thaddee.tyl@gmail.com
   irc: "irc.freenode.org#shields"
 
+addons:
+  apt:
+    packages:
+      - libcairo2-dev
+      - libjpeg8-dev
+      - libpango1.0-dev
+      - libgif-dev
+      - build-essential
+      - g++
+
 git:
   depth: 10
+
+branches:
+  except:
+    - old-master
+    - gh-responsibly
+    - gh-pages
