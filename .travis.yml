@@ -23,6 +23,7 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
+      - g++
       - g++-4.8
       - libcairo2-dev
       - libjpeg8-dev
