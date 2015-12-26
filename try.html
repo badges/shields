@@ -52,9 +52,20 @@ table.badge > tbody > tr > td > code { cursor: pointer; }
 	height: 20px;
 	vertical-align: middle;
 }
+#markup-tooltip {
+  display:none;
+  position:fixed;
+  overflow:hidden;
+
+  background-color: #fff;
+  border: #aaa solid 1px;
+  padding: 2px;
+}
 </style>
 
 <main id='main'>
+<span id='markup-tooltip'>View markup code</span>
+
 <img alt='Shields IO' src='logo.svg'/>
 <hr class='spacing'/>
 
@@ -1380,6 +1391,18 @@ copyreStructuredText.addEventListener('click', selectNode);
 // Markup copier dialog
 //
 
+// On hover tooltip (http://stackoverflow.com/a/15703312/239247)
+
+var markupTooltip = document.getElementById('markup-tooltip');
+
+function updateTooltipPos(e) {
+    var x = e.clientX,
+        y = e.clientY;
+    markupTooltip.style.top = (y + 20) + 'px';
+    markupTooltip.style.left = (x + 20) + 'px';
+    markupTooltip.style.display = 'block';
+};
+
 function markupDialogInit() {
   var trs = document.querySelectorAll('table.badge tr');
   for (var i = 0; i < trs.length; i++) {
@@ -1389,7 +1412,13 @@ function markupDialogInit() {
     var code = tr.querySelector('code');
     // Markup dialog listener.
     var mdl = makeMarkupDialogListener(tr);
-    if (title != null) { title.addEventListener('click', mdl); }
+    if (title != null) {
+      title.addEventListener('click', mdl);
+      title.addEventListener('mousemove', updateTooltipPos);
+      title.addEventListener('mouseout', function(e) {
+          markupTooltip.style.display = '';
+      });
+    }
     if (target != null) { target.addEventListener('click', mdl); }
     if (code != null) { code.addEventListener('click', mdl); }
   }
