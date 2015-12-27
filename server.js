@@ -4520,6 +4520,51 @@ cache(function(data, match, sendBadge, request) {
   sendBadge(format, badgeData);
 }));
 
+// StackExchange integration.
+camp.route(/^\/stackexchange\/([^\/]+)\/([^\/])\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var site = match[1]; // eg, stackoverflow
+  var info = match[2]; // either `r`
+  var item = match[3]; // eg, 232250
+  var format = match[4];
+  var path;
+  if (info === 'r') {
+    path = 'users/'+item;
+  } else if (info === 't') {
+    path = 'tags/'+item+'/info';
+  }
+  var options = {
+    method: 'GET',
+    uri: 'https://api.stackexchange.com/2.2/'+path+'?site='+site,
+    gzip: true
+  }
+  var badgeData = getBadgeData(site, data);
+  request(options, function (err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(badgeData, format);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer.toString());
+
+      if (info === 'r') {
+        var reputation = data.items[0].reputation;
+        badgeData.text[1] = metric(reputation);
+        badgeData.colorscheme = floorCountColor(1000, 10000, 20000);
+      } else if (info === 't') {
+        var count = data.items[0].count;
+        badgeData.text[1] = metric(count)+' questions';
+        badgeData.colorscheme = floorCountColor(1000, 10000, 20000);
+      }
+      sendBadge(format, badgeData);
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  })}
+));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
