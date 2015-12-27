@@ -4529,13 +4529,13 @@ cache(function(data, match, sendBadge, request) {
   var format = match[4];
   var path;
   if (info === 'r') {
-    path = 'users/'+item;
+    path = 'users/' + item;
   } else if (info === 't') {
-    path = 'tags/'+item+'/info';
+    path = 'tags/' + item + '/info';
   }
   var options = {
     method: 'GET',
-    uri: 'https://api.stackexchange.com/2.2/'+path+'?site='+site,
+    uri: 'https://api.stackexchange.com/2.2/' + path + '?site=' + site,
     gzip: true
   }
   var badgeData = getBadgeData(site, data);
@@ -4550,15 +4550,17 @@ cache(function(data, match, sendBadge, request) {
 
       if (info === 'r') {
         var reputation = data.items[0].reputation;
+        badgeData.text[0] = site + ' reputation';
         badgeData.text[1] = metric(reputation);
         badgeData.colorscheme = floorCountColor(1000, 10000, 20000);
       } else if (info === 't') {
         var count = data.items[0].count;
-        badgeData.text[1] = metric(count)+' questions';
+        badgeData.text[0] = site + ' ' + item + ' questions';
+        badgeData.text[1] = metric(count);
         badgeData.colorscheme = floorCountColor(1000, 10000, 20000);
       }
       sendBadge(format, badgeData);
-    } catch (e) {
+    } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
