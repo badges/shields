@@ -284,6 +284,63 @@ camp.notfound(/.*/, function(query, match, end, request) {
 
 // Vendors.
 
+// JIRA issue integration
+camp.route(/^\/jira\/issue\/(http(?:s)?)\/(.+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function (data, match, sendBadge, request) {
+  var protocol = match[1];
+  var host = match[2];
+  var issueKey = match[3];
+  var format = match[4];
+
+  var options = {
+    method: 'GET',
+    json: true,
+    uri: protocol + '://' + host + '/rest/api/2/issue/' + issueKey
+  };
+  if (serverSecrets && serverSecrets.jira_username) {
+    options.auth = {
+      user: serverSecrets.jira_username,
+      pass: serverSecrets.jira_password
+    };
+  }
+
+  // map JIRA color names to closest shields color schemes
+  var colorMap = {
+    'medium-gray': 'lightgrey',
+    'green': 'green',
+    'yellow': 'yellow',
+    'brown': 'orange',
+    'warm-red': 'red',
+    'blue-gray': 'blue'
+  };
+
+  var badgeData = getBadgeData(issueKey, data);
+  request(options, function (err, res, json) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var jiraIssue = json;
+      if (jiraIssue.fields && jiraIssue.fields.status) {
+        if (jiraIssue.fields.status.name) {
+          badgeData.text[1] = jiraIssue.fields.status.name; // e.g. "In Development"
+        }
+        if (jiraIssue.fields.status.statusCategory) {
+          badgeData.colorscheme = colorMap[jiraIssue.fields.status.statusCategory.colorName] || 'lightgrey';
+        }
+      } else {
+        badgeData.text[1] = 'invalid';
+      }
+      sendBadge(format, badgeData);
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Travis integration
 camp.route(/^\/travis(-ci)?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
