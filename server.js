@@ -287,15 +287,16 @@ camp.notfound(/.*/, function(query, match, end, request) {
 // JIRA issue integration
 camp.route(/^\/jira\/issue\/(http(?:s)?)\/(.+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
-  var protocol = match[1];
-  var host = match[2];
-  var issueKey = match[3];
+  var protocol = match[1];  // eg, https
+  var host = match[2];      // eg, issues.apache.org/jira
+  var issueKey = match[3];  // eg, KAFKA-2896
   var format = match[4];
 
   var options = {
     method: 'GET',
     json: true,
-    uri: protocol + '://' + host + '/rest/api/2/issue/' + issueKey
+    uri: protocol + '://' + host + '/rest/api/2/issue/' +
+      encodeURIComponent(issueKey)
   };
   if (serverSecrets && serverSecrets.jira_username) {
     options.auth = {
