@@ -3371,7 +3371,7 @@ cache(function(data, match, sendBadge, request) {
     }
 
     try {
-      if (json.color === 'blue') {
+      if (json.color === 'blue' || json.color === 'green') {
         badgeData.colorscheme = 'brightgreen';
         badgeData.text[1] = 'passing';
       } else if (json.color === 'red') {
