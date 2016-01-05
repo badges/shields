@@ -508,6 +508,7 @@ cache(function (data, match, sendBadge, request) {
   var crate = match[2];  // crate name, e.g. rustc-serialize
   var version = match[3];  // crate version in semver format, optional, e.g. 0.1.2
   var format = match[4];
+  var prefix = data.prefix;
   var modes = {
     'd': {
       name: 'downloads',
@@ -534,7 +535,7 @@ cache(function (data, match, sendBadge, request) {
       version: true,
       process: function (data, badgeData) {
         version = data.version? data.version.num: data.crate.max_version;
-        var vdata = versionColor(version);
+        var vdata = versionColor(version, prefix);
         badgeData.text[1] = vdata.version;
         badgeData.colorscheme = vdata.color;
       }
@@ -1152,6 +1153,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[3];
   var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
   var badgeData = getBadgeData('packagist', data);
+  var prefix = data.prefix;
   if (userRepo.substr(-14) === '/:package_name') {
     badgeData.text[1] = 'invalid';
     return sendBadge(format, badgeData);
@@ -1199,7 +1201,7 @@ cache(function(data, match, sendBadge, request) {
         //if (!!aliasesMap[stableVersion]) {
         //  stableVersion = aliasesMap[stableVersion];
         //}
-        var vdata = versionColor(stableVersion);
+        var vdata = versionColor(stableVersion, prefix);
         badgeText = vdata.version;
         badgeColor = vdata.color;
         break;
@@ -1208,7 +1210,7 @@ cache(function(data, match, sendBadge, request) {
         //if (!!aliasesMap[unstableVersion]) {
         //  unstableVersion = aliasesMap[unstableVersion];
         //}
-        var vdata = versionColor(unstableVersion);
+        var vdata = versionColor(unstableVersion, prefix);
         badgeText = vdata.version;
         badgeColor = 'orange';
         break;
@@ -1417,6 +1419,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[2];
   var apiUrl = 'https://registry.npmjs.org/' + repo + '/latest';
   var badgeData = getBadgeData('npm', data);
+  var prefix = data.prefix;
   // Using the Accept header because of this bug:
   // <https://github.com/npm/npmjs.org/issues/163>
   request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
@@ -1428,7 +1431,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var version = data.version;
-      var vdata = versionColor(version);
+      var vdata = versionColor(version, prefix);
       badgeData.text[1] = vdata.version;
       badgeData.colorscheme = vdata.color;
       sendBadge(format, badgeData);
@@ -1527,6 +1530,7 @@ camp.route(/^\/bintray\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var path = match[1]; // :subject/:repo/:package (e.g. asciidoctor/maven/asciidoctorj)
   var format = match[2];
+  var prefix = data.prefix;
 
   var options = {
     method: 'GET',
@@ -1552,7 +1556,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var vdata = versionColor(data.name);
+      var vdata = versionColor(data.name, prefix);
       badgeData.text[1] = vdata.version;
       badgeData.colorscheme = 'brightgreen';
       sendBadge(format, badgeData);
@@ -1570,6 +1574,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[2];
   var apiUrl = 'https://clojars.org/' + clojar + '/latest-version.json';
   var badgeData = getBadgeData('clojars', data);
+  var prefix = data.prefix;
   request(apiUrl, function(err, res, buffer) {
     if (err !== null) {
       badgeData.text[1] = 'inaccessible';
@@ -1578,7 +1583,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var vdata = versionColor(data.version);
+      var vdata = versionColor(data.version, prefix);
       badgeData.text[1] = "[" + clojar + " \"" + data.version + "\"]";
       badgeData.colorscheme = 'brightgreen';
       sendBadge(format, badgeData);
@@ -1596,6 +1601,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[2];
   var apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
   var badgeData = getBadgeData('gem', data);
+  var prefix = data.prefix;
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -1605,7 +1611,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var version = data.version;
-      var vdata = versionColor(version);
+      var vdata = versionColor(version, prefix);
       badgeData.text[1] = vdata.version;
       badgeData.colorscheme = vdata.color;
       sendBadge(format, badgeData);
@@ -1763,6 +1769,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[3];
   var apiUrl = 'https://pypi.python.org/pypi/' + egg + '/json';
   var badgeData = getBadgeData('pypi', data);
+  var prefix = data.prefix;
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -1791,7 +1798,7 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
       } else if (info === 'v') {
         var version = data.info.version;
-        var vdata = versionColor(version);
+        var vdata = versionColor(version, prefix);
         badgeData.text[1] = vdata.version;
         badgeData.colorscheme = vdata.color;
         sendBadge(format, badgeData);
@@ -1926,6 +1933,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[2];
   var apiUrl = 'https://pub.dartlang.org/packages/' + userRepo + '.json';
   var badgeData = getBadgeData('pub', data);
+  var prefix = data.prefix;
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -1937,7 +1945,7 @@ cache(function(data, match, sendBadge, request) {
       // Grab the latest stable version, or an unstable
       var versions = data.versions;
       var version = latestVersion(versions);
-      var vdata = versionColor(version);
+      var vdata = versionColor(version, prefix);
       badgeData.text[1] = vdata.version;
       badgeData.colorscheme = vdata.color;
       sendBadge(format, badgeData);
@@ -1956,6 +1964,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[3];
   var apiUrl = 'https://hex.pm/api/packages/' + repo;
   var badgeData = getBadgeData('hex', data);
+  var prefix = data.prefix;
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -1984,7 +1993,7 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
       } else if (info === 'v') {
         var version = data.releases[0].version;
-        var vdata = versionColor(version);
+        var vdata = versionColor(version, prefix);
         badgeData.text[1] = vdata.version;
         badgeData.colorscheme = vdata.color;
         sendBadge(format, badgeData);
@@ -2506,6 +2515,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[2];
   var apiUrl = 'https://hackage.haskell.org/package/' + repo + '/' + repo + '.cabal';
   var badgeData = getBadgeData('hackage', data);
+  var prefix = data.prefix;
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -2521,7 +2531,8 @@ cache(function(data, match, sendBadge, request) {
       // we'll render the 'invalid' badge below, which is the correct thing
       // to do.
       var version = versionLines[0].replace(/\s+/, '').split(/:/)[1];
-      badgeData.text[1] = 'v' + version;
+      var vdata = versionColor(version, prefix);
+      badgeData.text[1] = vdata.version;
       if (version[0] === '0') {
         badgeData.colorscheme = 'orange';
       } else {
@@ -2573,6 +2584,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[3];
   var apiUrl = 'https://trunk.cocoapods.org/api/v1/pods/' + spec + '/specs/latest';
   var badgeData = getBadgeData('pod', data);
+  var prefix = data.prefix;
   badgeData.colorscheme = null;
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
@@ -2594,10 +2606,8 @@ cache(function(data, match, sendBadge, request) {
       }).join(' | ');
       version = version.replace(/^v/, "");
       if (type === 'v') {
-        badgeData.text[1] = version;
-        if (/^\d/.test(badgeData.text[1])) {
-          badgeData.text[1] = 'v' + version;
-        }
+        var vdata = versionColor(version, prefix);
+        badgeData.text[1] = vdata.version;
         badgeData.colorB = '#5BA7E9';
       } else if (type === 'p') {
         badgeData.text[0] = 'platform';
@@ -2650,6 +2660,7 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[2];
   var format = match[3];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/tags';
+  var prefix = data.prefix;
   // Using our OAuth App secret grants us 5000 req/hour
   // instead of the standard 60 req/hour.
   if (serverSecrets) {
@@ -2675,7 +2686,7 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       var versions = data.map(function(e) { return e.name; });
       var tag = latestVersion(versions);
-      var vdata = versionColor(tag);
+      var vdata = versionColor(tag, prefix);
       badgeData.text[1] = vdata.version;
       badgeData.colorscheme = vdata.color;
       sendBadge(format, badgeData);
@@ -2693,6 +2704,7 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[2];
   var format = match[3];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/releases/latest';
+  var prefix = data.prefix;
   // Using our OAuth App secret grants us 5000 req/hour
   // instead of the standard 60 req/hour.
   if (serverSecrets) {
@@ -2718,7 +2730,7 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       var version = data.tag_name;
       var prerelease = data.prerelease;
-      var vdata = versionColor(version);
+      var vdata = versionColor(version, prefix);
       badgeData.text[1] = vdata.version;
       badgeData.colorscheme = prerelease ? 'orange' : 'blue';
       sendBadge(format, badgeData);
@@ -3128,6 +3140,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[2];
   var apiUrl = 'https://supermarket.getchef.com/api/v1/cookbooks/' + cookbook + '/versions/latest';
   var badgeData = getBadgeData('cookbook', data);
+  var prefix = data.prefix;
 
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
@@ -3139,7 +3152,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var version = data.version;
-      var vdata = versionColor(version);
+      var vdata = versionColor(version, prefix);
       badgeData.text[1] = vdata.version;
       badgeData.colorscheme = vdata.color;
       sendBadge(format, badgeData);
@@ -3195,6 +3208,7 @@ function mapNugetFeed(pattern, offset, getInfo) {
     var format = match[offset + 2];
     var apiUrl = info.feed;
     var badgeData = getBadgeData(site, data);
+    var prefix = data.prefix;
     getNugetPackage(apiUrl, repo, null, request, function(err, data) {
       if (err != null) {
         badgeData.text[1] = 'inaccessible';
@@ -3203,7 +3217,8 @@ function mapNugetFeed(pattern, offset, getInfo) {
       }
       try {
         var version = data.NormalizedVersion || data.Version;
-        badgeData.text[1] = 'v' + version;
+        var vdata = versionColor(version, prefix);
+        badgeData.text[1] = vdata.version;
         if (version.indexOf('-') !== -1) {
           badgeData.colorscheme = 'yellow';
         } else if (version[0] === '0') {
@@ -3227,6 +3242,7 @@ function mapNugetFeed(pattern, offset, getInfo) {
     var format = match[offset + 2];
     var apiUrl = info.feed;
     var badgeData = getBadgeData(site, data);
+    var prefix = data.prefix;
     getNugetPackage(apiUrl, repo, true, request, function(err, data) {
       if (err != null) {
         badgeData.text[1] = 'inaccessible';
@@ -3235,7 +3251,8 @@ function mapNugetFeed(pattern, offset, getInfo) {
       }
       try {
         var version = data.NormalizedVersion || data.Version;
-        badgeData.text[1] = 'v' + version;
+        var vdata = versionColor(version, prefix);
+        badgeData.text[1] = vdata.version;
         if (version.indexOf('-') !== -1) {
           badgeData.colorscheme = 'yellow';
         } else if (version[0] === '0') {
@@ -3308,6 +3325,7 @@ cache(function(data, match, sendBadge, request) {
     uri: 'https://forgeapi.puppetlabs.com/v3/modules/' + user + '-' + module
   };
   var badgeData = getBadgeData('puppetforge', data);
+  var prefix = data.prefix;
   request(options, function dealWithData(err, res, json) {
     if (err != null || (json.length !== undefined && json.length === 0)) {
       badgeData.text[1] = 'inaccessible';
@@ -3317,7 +3335,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       if (info === 'v') {
         if (json.current_release) {
-          var vdata = versionColor(json.current_release.version);
+          var vdata = versionColor(json.current_release.version, prefix);
           badgeData.text[1] = vdata.version;
           badgeData.colorscheme = vdata.color;
         } else {
@@ -3711,6 +3729,7 @@ cache(function(data, match, sendBadge, request) {
   var query = "g:" + encodeURIComponent(groupId) + "+AND+a:" + encodeURIComponent(artifactId);
   var apiUrl = 'https://search.maven.org/solrsearch/select?rows=1&q='+query;
   var badgeData = getBadgeData('maven-central', data);
+  var prefix = data.prefix;
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -3720,7 +3739,8 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var version = data.response.docs[0].latestVersion;
-      badgeData.text[1] = 'v' + version;
+      var vdata = versionColor(version, prefix);
+      badgeData.text[1] = vdata.version;
       if (version === '0' || /SNAPSHOT/.test(version)) {
         badgeData.colorscheme = 'orange';
       } else {
@@ -3741,6 +3761,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[2];
   var badgeData = getBadgeData('bower', data);
   var bower = require('bower');
+  var prefix = data.prefix;
   bower.commands.info(repo, 'version')
     .on('error', function() {
       badgeData.text[1] = 'inaccessible';
@@ -3748,7 +3769,7 @@ cache(function(data, match, sendBadge, request) {
     })
     .on('end', function(version) {
       try {
-        var vdata = versionColor(version);
+        var vdata = versionColor(version, prefix);
         badgeData.text[1] = vdata.version;
         badgeData.colorscheme = vdata.color;
         sendBadge(format, badgeData);
@@ -3821,6 +3842,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[2];
   var apiUrl = 'http://api.wordpress.org/plugins/info/1.0/' + plugin + '.json';
   var badgeData = getBadgeData('plugin', data);
+  var prefix = data.prefix;
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -3830,7 +3852,8 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var version = data.version;
-      badgeData.text[1] = 'v' + version;
+      var vdata = versionColor(version, prefix);
+      badgeData.text[1] = vdata.version;
       if (version[0] === '0') {
         badgeData.colorscheme = 'orange';
       } else {
@@ -4100,6 +4123,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[2];
   var apiUrl = 'https://atom.io/api/packages/' + repo;
   var badgeData = getBadgeData('apm', data);
+  var prefix = data.prefix;
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -4114,7 +4138,8 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
       return;
     }
-    badgeData.text[1] = 'v' + version;
+    var vdata = versionColor(version, prefix);
+    badgeData.text[1] = vdata.version;
     badgeData.colorscheme = 'green';
     sendBadge(format, badgeData);
   });
@@ -4243,6 +4268,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[3];
   var badgeData = getBadgeData('cpan', data);
   var url = 'https://api.metacpan.org/v0/release/'+pkg;
+  var prefix = data.prefix;
   request(url, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -4254,7 +4280,7 @@ cache(function(data, match, sendBadge, request) {
 
       if (info === 'v') {
         var version = data.version;
-        var vdata = versionColor(version);
+        var vdata = versionColor(version, prefix);
         badgeData.text[1] = vdata.version;
         badgeData.colorscheme = vdata.color;
       } else if (info === 'l') {
@@ -4278,6 +4304,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[3];
   var url = 'http://www.ctan.org/json/pkg/' + pkg;
   var badgeData = getBadgeData('ctan', data);
+  var prefix = data.prefix;
   request(url, function (err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -4289,7 +4316,7 @@ cache(function(data, match, sendBadge, request) {
 
       if (info === 'v') {
         var version = data.version.number;
-        var vdata = versionColor(version);
+        var vdata = versionColor(version, prefix);
         badgeData.text[1] = vdata.version;
         badgeData.colorscheme = vdata.color;
         sendBadge(format, badgeData);
@@ -4318,6 +4345,7 @@ cache(function (data, match, sendBadge, request) {
   var version = match[3]; // version (1.2.3 or latest)
   var format = match[4];
   var apiUrl = 'http://code.dlang.org/api/packages/'+pkg;
+  var prefix = data.prefix;
   if (version) {
     apiUrl += '/' + version;
   }
@@ -4353,7 +4381,7 @@ cache(function (data, match, sendBadge, request) {
             break;
         }
         if (version) {
-            badgeData.text[1] += ' ' + versionColor(version).version;
+            badgeData.text[1] += ' ' + versionColor(version, prefix).version;
         }
         badgeData.colorscheme = downloadCountColor(downloads);
         sendBadge(format, badgeData);
@@ -4372,6 +4400,7 @@ cache(function (data, match, sendBadge, request) {
   var pkg = match[2];  // package name, e.g. vibe-d
   var format = match[3];
   var apiUrl = 'http://code.dlang.org/api/packages/' + pkg;
+  var prefix = data.prefix;
   if (info === 'v') {
     apiUrl += '/latest';
   } else if (info === 'l') {
@@ -4387,7 +4416,7 @@ cache(function (data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       if (info === 'v') {
-        var vdata = versionColor(data);
+        var vdata = versionColor(data, prefix);
         badgeData.text[1] = vdata.version;
         badgeData.colorscheme = vdata.color;
         sendBadge(format, badgeData);
@@ -4925,12 +4954,16 @@ function floorCountColor(value, yellow, yellowgreen, green) {
   }
 }
 
-function versionColor(version) {
+function versionColor(version, prefix) {
   var first = version[0];
+  if (undefined === prefix) {
+    prefix = ''
+  }
   if (first === 'v') {
     first = version[1];
+    version = prefix + version.substring(1);
   } else if (/^[0-9]/.test(version)) {
-    version = 'v' + version;
+    version = prefix + version;
   }
   if (first === '0' || (version.indexOf('-') !== -1)) {
     return { version: version, color: 'orange' };
