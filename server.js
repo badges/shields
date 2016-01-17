@@ -4898,6 +4898,11 @@ var githubHeaders = {
   'Accept': 'application/vnd.github.v3+json'
 };
 
+// You can manage your personal github token at https://github.com/settings/tokens
+if (serverSecrets && serverSecrets.gh_token) {
+  githubHeaders['Authorization'] = 'token ' + serverSecrets.gh_token;
+}
+
 // Given a number, string with appropriate unit in the metric system, SI.
 // Note: numbers beyond the peta- cannot be represented as integers in JS.
 var metricPrefix = ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'];
