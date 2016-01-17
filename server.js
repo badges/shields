@@ -4898,7 +4898,9 @@ var githubHeaders = {
   'Accept': 'application/vnd.github.v3+json'
 };
 
-// You can manage your personal github token at https://github.com/settings/tokens
+// Personal tokens allow access to GitHub private repositories.
+// You can manage your personal GitHub token at
+// <https://github.com/settings/tokens>.
 if (serverSecrets && serverSecrets.gh_token) {
   githubHeaders['Authorization'] = 'token ' + serverSecrets.gh_token;
 }
