@@ -4699,6 +4699,7 @@ cache(function(data, match, sendBadge, request) {
       }
       sendBadge(format, badgeData);
     } catch(e) {
+      console.error('Stack Exchange badge error: ' + e.stack);
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
