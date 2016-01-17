@@ -37,7 +37,9 @@ hr.spacing { border: 0; display: block; height: 3mm; }
   border: 0; background-color: rgba(50,50,55,0.7);
   opacity: 0; transition: opacity 0.5s; }
 #copyForm { background: #fafaff; position: fixed; width: 100%;
-  top: 50%; left: 0; transform: translate(0, -80%);
+  top: 17%; left: 0;
+  overflow: auto;
+  max-height: 56%;
   border-top: 15px solid #eaeaff;
   border-bottom: 15px solid #eaeaff;
 }
@@ -124,7 +126,7 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
       <td><img src='/circleci/project/BrightFlair/PHP.Gt/master.svg' alt=''/></td>
       <td><code>https://img.shields.io/circleci/token/YOURTOKEN/project/BrightFlair/PHP.Gt/master.svg</code></td>
   </tr>
-  <tr><th> Visual Studio Online: </th>
+  <tr><th data-doc='visualStudioOnline'> Visual Studio Online: </th>
       <td><img src='/vso/build/larsbrinkhoff/953a34b9-5966-4923-a48a-c41874cfb5f5/1.svg' alt=''/></td>
       <td><code>https://img.shields.io/vso/build/larsbrinkhoff/953a34b9-5966-4923-a48a-c41874cfb5f5/1.svg</code></td>
   </tr>
@@ -1020,8 +1022,32 @@ is where the current server got started.
   <input class=code id=copyMarkdown>
   </p><p> reStructuredText
   <input class=code id=copyreStructuredText>
+  </p><div id=copyDoc></div>
 </form>
 </dialog>
+
+<div id=documentation style='display:none'>
+  <div id=visualStudioOnline>
+    <p>To obtain your own badge, you will first need to enable badges for your
+    project:
+    </p>
+    <img
+      src='https://cloud.githubusercontent.com/assets/6189336/11894616/be744ab4-a578-11e5-9e44-0c32a7836b3b.png'
+      alt='Go to your builds, click General, then check Badge enabled.'>
+    <p>Then, click “Show url…” to reveal the URL of the default badge. In that
+    URL, you will need to extract three pieces of information:
+    <code>TEAM_NAME</code>, <code>PROJECT_ID</code> and
+    <code>BUILD_DEFINITION_ID</code>.
+    </p>
+    <img
+      src='https://cloud.githubusercontent.com/assets/6189336/11629345/f4eb0d78-9cf7-11e5-8d83-ca9fd895fcea.png'
+      alt='TEAM_NAME is just after the https:// part, PROJECT_ID is after
+      definitions/, BUILD_DEFINITION_ID is after that.'>
+    <p>Your badge will then have the form
+      <code>https://img.shields.io/vso/build/TEAM_NAME/PROJECT_ID/BUILD_DEFINITION_ID</code>.
+    </p>
+  </div>
+</div>
 
 <svg style='height:0'>
   <filter id='gaussian-blur'>
@@ -1169,6 +1195,14 @@ function markupDialog(tr) {
   var link = th.dataset.link? th.dataset.link: '';
   copyForm.img.value = trimg;
   copyForm.url.value = link;
+  // Insert documentation.
+  var doc = th.dataset.doc? th.dataset.doc: '';
+  var docelt = document.getElementById(doc);
+  if (docelt != null) {
+    copyDoc.innerHTML = '<h4>Documentation</h4>' + docelt.innerHTML;
+  } else {
+    copyDoc.innerHTML = '';
+  }
   // Set up the input listeners.
   copyForm.url.removeEventListener('input', copyFormUrlEventListener);
   copyForm.img.removeEventListener('input', copyFormUrlEventListener);
