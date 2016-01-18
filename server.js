@@ -1415,7 +1415,7 @@ camp.route(/^\/npm\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var repo = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
   var format = match[2];
-  var apiUrl = 'https://registry.npmjs.org/' + repo + '/latest';
+  var apiUrl = 'https://registry.npmjs.org/-/package/' + repo + '/dist-tags';
   var badgeData = getBadgeData('npm', data);
   // Using the Accept header because of this bug:
   // <https://github.com/npm/npmjs.org/issues/163>
@@ -1427,7 +1427,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var version = data.version;
+      var version = data.latest;
       var vdata = versionColor(version);
       badgeData.text[1] = vdata.version;
       badgeData.colorscheme = vdata.color;
