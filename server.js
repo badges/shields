@@ -4817,6 +4817,13 @@ function getBadgeData(defaultLabel, data) {
   if (data.style && validTemplates.indexOf(data.style) > -1) {
     template = data.style;
   };
+  if (!(Object(data.link) instanceof Array)) {
+    if (data.link === undefined) {
+      data.link = [];
+    } else {
+      data.link = [data.link];
+    }
+  }
 
   if (data.logo !== undefined && !/^data:/.test(data.logo)) {
     data.logo = 'data:' + data.logo;
