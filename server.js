@@ -4706,6 +4706,35 @@ cache(function(data, match, sendBadge, request) {
   })}
 ));
 
+// Maintenance integration.
+camp.route(/^\/maintenance\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var status = match[1];  // eg, yes
+  var year = +match[2];  // eg, 2016
+  var format = match[3];
+  var badgeData = getBadgeData('maintained?', data);
+  try {
+    var now = new Date();
+    var cy = now.getUTCFullYear();  // current year.
+    var m = now.getUTCMonth();  // month.
+    if (cy <= year) {
+      badgeData.text[1] = status;
+      badgeData.colorscheme = 'brightgreen';
+    } else if ((cy === year + 1) && (m < 3)) {
+      badgeData.text[1] = 'stale (as of ' + cy + ')';
+    } else {
+      badgeData.text[1] = 'no!';
+      badgeData.colorscheme = 'red';
+    }
+    sendBadge(format, badgeData);
+  } catch(e) {
+    console.error(e.stack);
+    badgeData.text[1] = 'invalid';
+    sendBadge(format, badgeData);
+  }
+}));
+
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
