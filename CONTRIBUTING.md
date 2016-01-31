@@ -23,6 +23,10 @@ gets generated from the `try.html` file.
 - New query parameters (such as `?label=` or `?style=`) should apply to any
   requested badge. They must be registered in the cache (see `LruCache` in
   `server.js`).
+- The format of new badges should be of the form
+  `/VENDOR/SUBVENDOR-BADGE-SPECIFIC/PARAMETERS.format`. For instance,
+  `https://img.shields.io/gitter/room/nwjs/nw.js.svg`. The vendor is gitter, the
+  badge is for rooms, the parameter is nwjs/nw.js, and the format is svg.
 
 ## Implementations
 
