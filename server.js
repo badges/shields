@@ -4490,7 +4490,8 @@ cache(function(data, match, sendBadge, request) {
      ];
   }
   badgeData.text[1] = '';
-  badgeData.colorscheme = '55ACEE';
+  badgeData.colorscheme = null;
+  badgeData.colorB = '#55ACEE';
   sendBadge(format, badgeData);
 }));
 
@@ -4504,7 +4505,9 @@ cache(function(data, match, sendBadge, request) {
   };
   var badgeData = getBadgeData('Follow', data);
   badgeData.text[0] = 'Follow ' + user;
-  badgeData.colorscheme = '55ACEE';
+
+  badgeData.colorscheme = null;
+  badgeData.colorB = '#55ACEE';
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.twitter;
   }
