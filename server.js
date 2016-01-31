@@ -4503,8 +4503,7 @@ cache(function(data, match, sendBadge, request) {
   var options = {
     url: 'http://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=' + user
   };
-  var badgeData = getBadgeData('Follow', data);
-  badgeData.text[0] = 'Follow ' + user;
+  var badgeData = getBadgeData('Follow ' + user, data);
 
   badgeData.colorscheme = null;
   badgeData.colorB = '#55ACEE';
