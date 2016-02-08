@@ -153,6 +153,14 @@ http://[::1]:80/try.html
 
 Assuming Docker is running locally, you should be able to get to the application at http://localhost:8080/try.html. If you run Docker in a virtual machine (such as boot2docker or Docker Machine) then you will need to replace `localhost` with the actual IP address of that virtual machine.
 
+# Main Server Sysadmin
+
+- DNS round-robin between https://vps197850.ovh.net/try.html and https://vps244529.ovh.net/try.html.
+- Self-signed TLS certificates, but `img.shields.io` is behind CloudFlare, which provides signed certificates.
+- Using node v0.12.7 because later versions, combined with node-canvas, give inaccurate badge measurements.
+
+See https://github.com/badges/ServerScript for helper admin scripts.
+
 # Links
 
 See <https://github.com/h5bp/lazyweb-requests/issues/150> for a story of the
