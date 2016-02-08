@@ -158,6 +158,7 @@ Assuming Docker is running locally, you should be able to get to the application
 - DNS round-robin between https://vps197850.ovh.net/try.html and https://vps244529.ovh.net/try.html.
 - Self-signed TLS certificates, but `img.shields.io` is behind CloudFlare, which provides signed certificates.
 - Using node v0.12.7 because later versions, combined with node-canvas, give inaccurate badge measurements.
+- Using forever (the node monitor) to automatically restart the server when it crashes.
 
 See https://github.com/badges/ServerScript for helper admin scripts.
 
