@@ -4419,7 +4419,7 @@ cache(function(data, match, sendBadge, request) {
     user = 'library';
   }
   var path = user + '/' + repo;
-  var url = 'https://registry.hub.docker.com/v2/repositories/' + path + '/stars/count/';
+  var url = 'https://hub.docker.com/v2/repositories/' + path + '/stars/count/';
   var badgeData = getBadgeData('docker stars', data);
   request(url, function(err, res, buffer) {
     if (err != null) {
@@ -4450,7 +4450,7 @@ cache(function(data, match, sendBadge, request) {
     user = 'library';
   }
   var path = user + '/' + repo;
-  var url = 'https://registry.hub.docker.com/v2/repositories/' + path;
+  var url = 'https://hub.docker.com/v2/repositories/' + path;
   var badgeData = getBadgeData('docker pulls', data);
   request(url, function(err, res, buffer) {
     if (err != null) {
