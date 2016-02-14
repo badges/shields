@@ -1352,25 +1352,24 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var monthly = JSON.parse(buffer).downloads;
+      var monthly = JSON.parse(buffer).downloads || 0;
+      badgeData.text[1] = metric(monthly) + '/month';
+      if (monthly === 0) {
+        badgeData.colorscheme = 'red';
+      } else if (monthly < 10) {
+        badgeData.colorscheme = 'yellow';
+      } else if (monthly < 100) {
+        badgeData.colorscheme = 'yellowgreen';
+      } else if (monthly < 1000) {
+        badgeData.colorscheme = 'green';
+      } else {
+        badgeData.colorscheme = 'brightgreen';
+      }
+      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
-      return;
     }
-    badgeData.text[1] = metric(monthly) + '/month';
-    if (monthly === 0) {
-      badgeData.colorscheme = 'red';
-    } else if (monthly < 10) {
-      badgeData.colorscheme = 'yellow';
-    } else if (monthly < 100) {
-      badgeData.colorscheme = 'yellowgreen';
-    } else if (monthly < 1000) {
-      badgeData.colorscheme = 'green';
-    } else {
-      badgeData.colorscheme = 'brightgreen';
-    }
-    sendBadge(format, badgeData);
   });
 }));
 
@@ -1391,7 +1390,7 @@ cache(function (data, match, sendBadge, request) {
     try {
       var totalDownloads = 0;
 
-      var downloads = JSON.parse(buffer).downloads;
+      var downloads = JSON.parse(buffer).downloads || 0;
       for (var index = 0; index < downloads.length; index++) {
         totalDownloads = totalDownloads + downloads[index].downloads;
       }
