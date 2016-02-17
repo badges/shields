@@ -4687,6 +4687,11 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer.toString());
 
+      // IP rate limiting
+      if (data.error_name === 'throttle_violation') {
+        return;  // Hope for the best in the cache.
+      }
+
       if (info === 'r') {
         var reputation = data.items[0].reputation;
         badgeData.text[0] = site + ' reputation';
@@ -4700,7 +4705,6 @@ cache(function(data, match, sendBadge, request) {
       }
       sendBadge(format, badgeData);
     } catch(e) {
-      console.error('Stack Exchange badge error: ' + e.stack);
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
