@@ -4523,7 +4523,7 @@ cache(function(data, match, sendBadge, request) {
       // The data is formatted as an array.
       var data = JSON.parse(buffer)[0];
       // data.followers_count could be zero… don't just check if falsey.
-      if (data.followers_count != null){
+      if (data !== undefined && data.followers_count != null){
         badgeData.text[1] = metric(data.followers_count);
       }
     } catch(e) {
