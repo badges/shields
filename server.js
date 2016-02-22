@@ -876,8 +876,8 @@ cache(function(data, match, sendBadge, request) {
         return;
       }
       try {
-        badgeData = JSON.parse(buffer);
-        sendBadge(format, badgeData);
+        var data = JSON.parse(buffer);
+        sendBadge(format, data);
       } catch(e) {
         badgeData.text[1] = 'invalid';
         sendBadge(format, badgeData);
