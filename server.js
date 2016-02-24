@@ -4566,7 +4566,7 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Visual Studio Online build integration.
+// Visual Studio Team Services build integration.
 camp.route(/^\/vso\/build\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var name = match[1];    // User name
