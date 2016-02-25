@@ -4711,6 +4711,35 @@ cache(function(data, match, sendBadge, request) {
   })}
 ));
 
+// beerpay.io integration.
+camp.route(/^\/beerpay\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1],
+      project = match[2],
+      format = match[3];
+
+  var apiUrl = 'https://beerpay.io/api/v1/' + user + '/projects/' + project;
+  var badgeData = getBadgeData('beerpay', data);
+
+  request(apiUrl, function (err, res, buffer) {
+    if (err) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(badgeData, format);
+      return;
+    }
+
+    try {
+      var data = JSON.parse(buffer);
+      badgeData.text[1] = '$' + (data.total_amount || 0);
+      badgeData.colorscheme = 'red';
+      sendBadge(format, badgeData);
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Maintenance integration.
 camp.route(/^\/maintenance\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
