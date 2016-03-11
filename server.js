@@ -2498,6 +2498,37 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+camp.route(/^\/codacy\/coverage\/(?!grade\/)([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var projectId = match[1];  // eg. e27821fb6289410b8f58338c7e0bc686
+  var branch = match[2];
+  var format = match[3];
+
+  queryParams = {};
+  if (branch) {
+    queryParams.branch = branch;
+  }
+  var query = querystring.stringify(queryParams);
+  var url = 'https://www.codacy.com/project/badge/coverage/' + projectId + '?' + query;
+  var badgeData = getBadgeData('coverage', data);
+  fetchFromSvg(request, url, function(err, res) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      badgeData.text[1] = res;
+      badgeData.colorscheme = coveragePercentageColor(parseInt(res));
+      sendBadge(format, badgeData);
+
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Hackage version integration.
 camp.route(/^\/hackage\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
