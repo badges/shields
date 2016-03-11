@@ -2450,7 +2450,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Codacy integration
-camp.route(/^\/codacy?\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/codacy\/(?:grade\/)?(?!coverage\/)([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var projectId = match[1];  // eg. e27821fb6289410b8f58338c7e0bc686
   var branch = match[2];
