@@ -3782,6 +3782,45 @@ cache(function(data, match, sendBadge, request) {
     });
 }));
 
+// Bower total downloads
+camp.route(/^\/bower\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var repo = match[1];  // eg, `bootstrap`.
+  var format = match[2];
+  var badgeData = getBadgeData('downloads', data);
+  var options = {
+    method: 'GET',
+    json: true,
+    uri: 'https://bower.herokuapp.com/packages/' + repo
+  };
+  request(options, function(err, res, json) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var total = json.hits;
+      badgeData.text[1] = metric(total);
+      if (total === 0) {
+        badgeData.colorscheme = 'red';
+      } else if (total < 100) {
+        badgeData.colorscheme = 'yellow';
+      } else if (total < 1000) {
+        badgeData.colorscheme = 'yellowgreen';
+      } else if (total < 10000) {
+        badgeData.colorscheme = 'green';
+      } else {
+        badgeData.colorscheme = 'brightgreen';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Wheelmap integration.
 camp.route(/^\/wheelmap\/a\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
