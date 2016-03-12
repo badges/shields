@@ -24,7 +24,7 @@
 * **[LICENSE](LICENSE.md)** – public domain dedication.
 
 ## Solving the problem
-Many GitHub repositories sport badges for things like:
+Many GitHub repositories support badges for things like:
 <table>
   <tr>
     <td><a href="https://travis-ci.org/"><strong>Travis CI</strong></a><p><sup>(build status)</sup></p></td>
