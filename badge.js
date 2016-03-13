@@ -63,10 +63,15 @@ function makeImage(data, cb) {
   if (data.text[0].length === 0) {
     data.logoPadding = 0;
   }
+
+  var textWidth1 = (measureTextWidth(data.text[0])|0);
+  var textWidth2 = (measureTextWidth(data.text[1])|0);
+  // Increase chances of pixel grid alignment.
+  if (textWidth1 % 2 === 0) { textWidth1++; }
+  if (textWidth2 % 2 === 0) { textWidth2++; }
   data.widths = [
-    (measureTextWidth(data.text[0])|0) + 10
-      + data.logoWidth + data.logoPadding,
-    (measureTextWidth(data.text[1])|0) + 10,
+    textWidth1 + 10 + data.logoWidth + data.logoPadding,
+    textWidth2 + 10,
   ];
   if (data.links === undefined) {
     data.links = ['', ''];
