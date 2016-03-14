@@ -3149,7 +3149,7 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-function mapNugetFeed(pattern, offset, getInfo) {
+function mapNugetFeedv2(pattern, offset, getInfo) {
   var vRegex = new RegExp('^\\/' + pattern + '\\/v\\/(.*)\\.(svg|png|gif|jpg|json)$');
   var vPreRegex = new RegExp('^\\/' + pattern + '\\/vpre\\/(.*)\\.(svg|png|gif|jpg|json)$');
   var dtRegex = new RegExp('^\\/' + pattern + '\\/dt\\/(.*)\\.(svg|png|gif|jpg|json)$');
@@ -3277,17 +3277,117 @@ function mapNugetFeed(pattern, offset, getInfo) {
   }));
 }
 
-// NuGet and Chocolatey
-mapNugetFeed('(nuget|chocolatey)', 1, function(match) {
-  var site = match[1];
+function mapNugetFeed(pattern, offset, getInfo) {
+  var vRegex = new RegExp('^\\/' + pattern + '\\/v\\/(.*)\\.(svg|png|gif|jpg|json)$');
+  var vPreRegex = new RegExp('^\\/' + pattern + '\\/vpre\\/(.*)\\.(svg|png|gif|jpg|json)$');
+
+  function getNugetVersion(apiUrl, id, includePre, request, done) {
+    var reqUrl = apiUrl + '/flatcontainer/' + id.toLowerCase() + '/index.json';
+    request(reqUrl, function(err, res, buffer) {
+      if (err != null) {
+        done(err);
+        return;
+      }
+
+      try {
+        var data = JSON.parse(buffer);
+        var versions = data.versions;
+        if (!includePre) {
+          // Remove prerelease versions.
+          filteredVersions = versions.filter(function(version) {
+            return !/-/.test(version);
+          });
+          if (filteredVersions.length > 0) {
+            versions = filteredVersions;
+          }
+        }
+        var lastVersion = versions[versions.length - 1];
+        done(null, lastVersion);
+      } catch (e) { done(e); }
+    });
+  }
+
+  camp.route(vRegex,
+  cache(function(data, match, sendBadge, request) {
+    var info = getInfo(match);
+    var site = info.site;  // eg, `Chocolatey`, or `YoloDev`
+    var repo = match[offset + 1];  // eg, `Nuget.Core`.
+    var format = match[offset + 2];
+    var apiUrl = info.feed;
+    var badgeData = getBadgeData(site, data);
+    getNugetVersion(apiUrl, repo, false, request, function(err, version) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        badgeData.text[1] = 'v' + version;
+        if (version.indexOf('-') !== -1) {
+          badgeData.colorscheme = 'yellow';
+        } else if (version[0] === '0') {
+          badgeData.colorscheme = 'orange';
+        } else {
+          badgeData.colorscheme = 'blue';
+        }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }));
+
+  camp.route(vPreRegex,
+  cache(function(data, match, sendBadge, request) {
+    var info = getInfo(match);
+    var site = info.site;  // eg, `Chocolatey`, or `YoloDev`
+    var repo = match[offset + 1];  // eg, `Nuget.Core`.
+    var format = match[offset + 2];
+    var apiUrl = info.feed;
+    var badgeData = getBadgeData(site, data);
+    getNugetVersion(apiUrl, repo, true, request, function(err, version) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        badgeData.text[1] = 'v' + version;
+        if (version.indexOf('-') !== -1) {
+          badgeData.colorscheme = 'yellow';
+        } else if (version[0] === '0') {
+          badgeData.colorscheme = 'orange';
+        } else {
+          badgeData.colorscheme = 'blue';
+        }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }));
+}
+
+// Chocolatey
+mapNugetFeedv2('chocolatey', 0, function(match) {
   return {
-    site: site,
-    feed: 'https://www.' + site + '.org/api/v2'
+    site: 'chocolatey',
+    feed: 'https://www.chocolatey.org/api/v2'
+  };
+});
+
+// NuGet
+mapNugetFeed('nuget', 0, function(match) {
+  return {
+    site: 'nuget',
+    feed: 'https://api.nuget.org/v3'
   };
 });
 
 // MyGet
-mapNugetFeed('myget\\/(.*)', 1, function(match) {
+mapNugetFeedv2('myget\\/(.*)', 1, function(match) {
   var feed = match[1];
   return {
     site: feed,
