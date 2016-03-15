@@ -3387,11 +3387,11 @@ mapNugetFeed('nuget', 0, function(match) {
 });
 
 // MyGet
-mapNugetFeedv2('myget\\/(.*)', 1, function(match) {
+mapNugetFeed('myget\\/(.*)', 1, function(match) {
   var feed = match[1];
   return {
     site: feed,
-    feed: 'https://www.myget.org/F/' + feed + '/api/v2'
+    feed: 'https://www.myget.org/F/' + feed + '/api/v3'
   };
 });
 
