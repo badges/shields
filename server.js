@@ -4069,12 +4069,13 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // SourceForge integration.
-camp.route(/^\/sourceforge\/([^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/sourceforge\/([^\/]+)\/([^/]*)\/?(.*).(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var info = match[1];      // eg, 'dm'
   var project = match[2];   // eg, 'sevenzip`.
-  var format = match[3];
-  var apiUrl = 'http://sourceforge.net/projects/' + project + '/files/stats/json';
+  var folder = match[3];
+  var format = match[4];
+  var apiUrl = 'http://sourceforge.net/projects/' + project + '/files/' + folder + '/stats/json';
   var badgeData = getBadgeData('sourceforge', data);
   var time_period, start_date, end_date;
   if (info.charAt(0) === 'd') {
