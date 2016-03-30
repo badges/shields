@@ -4483,7 +4483,7 @@ cache(function(data, match, sendBadge, request) {
   }
   var path = user + '/' + repo;
   var url = 'https://registry.hub.docker.com/v2/repositories/' + path;
-  var badgeData = getBadgeData('automated build', data);
+  var badgeData = getBadgeData('docker build', data);
   request(url, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -4492,11 +4492,12 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var automated = data.is_automated;
-      badgeData.text[1] = automated;
-      if (automated) {
+      var is_automated = data.is_automated;
+      if (is_automated) {
+        badgeData.text[1] = 'automated';
         badgeData.colorscheme = 'blue';
       } else {
+        badgeData.text[1] = 'manual';
         badgeData.colorscheme = 'yellow';
       }
       badgeData.colorB = '#008bb8';
