@@ -4712,11 +4712,13 @@ cache(function(data, match, sendBadge, request) {
 ));
 
 // beerpay.io integration.
+// e.g. JSON response: https://beerpay.io/api/v1/beerpay/projects/beerpay.io
+// e.g. SVG badge: https://beerpay.io/beerpay/beerpay.io/badge.svg?style=flat-square
 camp.route(/^\/beerpay\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1],
-      project = match[2],
-      format = match[3];
+  var user = match[1];
+  var project = match[2];
+  var format = match[3];
 
   var apiUrl = 'https://beerpay.io/api/v1/' + user + '/projects/' + project;
   var badgeData = getBadgeData('beerpay', data);
