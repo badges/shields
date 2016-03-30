@@ -3479,11 +3479,12 @@ mapNugetFeed('nuget', 0, function(match) {
 });
 
 // MyGet
-mapNugetFeed('myget\\/(.*)', 1, function(match) {
-  var feed = match[1];
+mapNugetFeed('(.+\\.)?myget\\/(.*)', 2, function(match) {
+  var tenant = match[1] || 'www.';  // eg. dotnet
+  var feed = match[2];
   return {
     site: feed,
-    feed: 'https://www.myget.org/F/' + feed + '/api/v3'
+    feed: 'https://' + tenant + 'myget.org/F/' + feed + '/api/v3'
   };
 });
 
