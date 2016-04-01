@@ -4907,7 +4907,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Waffle.io integration
-camp.route(/^\/waffle\/cards\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/waffle\/label\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, evancohen
   var repo = match[2];  // eg, smart-mirror
@@ -4926,21 +4926,19 @@ cache(function(data, match, sendBadge, request) {
       }
       var count = 0;
       var color;
-      var name;
       for (var i = 0; i < cards.length; i++) {
         var cardMetadata = cards[i].githubMetadata;
-        if(cardMetadata.labels && cardMetadata.labels.length > 0){
-            for(var j = 0; j < cardMetadata.labels.length; j++){
+        if (cardMetadata.labels && cardMetadata.labels.length > 0) {
+            for (var j = 0; j < cardMetadata.labels.length; j++) {
                 var label = cardMetadata.labels[j];
-                if(label.name == ghLabel){
+                if (label.name === ghLabel) {
                     count++;
                     color = label.color;
-                    name = label.name;
                 }
             }
         }
       }
-      badgeData.text[0] = data.label || name || ghLabel;
+      badgeData.text[0] = data.label || ghLabel;
       badgeData.text[1] = '' + count;
       badgeData.colorscheme = null;
       badgeData.colorB = '#' + (color || '78bdf2');
