@@ -4940,10 +4940,10 @@ cache(function(data, match, sendBadge, request) {
             }
         }
       }
-      badgeData.text[0] = data.label || name;
+      badgeData.text[0] = data.label || name || ghLabel;
       badgeData.text[1] = '' + count;
       badgeData.colorscheme = null;
-      badgeData.colorB = '#' + color;
+      badgeData.colorB = '#' + (color || '78bdf2');
       sendBadge(format, badgeData);
 
     } catch(e) {
