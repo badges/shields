@@ -3722,8 +3722,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       if (type === 'role') {
-        badgeData.text[1] = json.summary_fields.owner.username +
-          '.' + json.name;
+        badgeData.text[1] = json.namespace + '.' + json.name;
         badgeData.colorscheme = 'blue';
       } else {
         badgeData.text[1] = 'unknown';
