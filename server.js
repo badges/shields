@@ -2892,19 +2892,29 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub issues integration.
-camp.route(/^\/github\/issues(-raw)?\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/issues(-raw)?\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var isRaw = !!match[1];
-  var user = match[2];  // eg, qubyte/rubidium
-  var repo = match[3];
-  var format = match[4];
+  var user = match[2];  // eg, badges
+  var repo = match[3];  // eg, shields
+  var ghLabel = match[4];  // eg, website
+  var format = match[5];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo;
+  var issuesApi = false;  // Are we using the issues API instead of the repo one?
+  var query = {};
+  if (ghLabel !== undefined) {
+    apiUrl += '/issues';
+    query.labels = ghLabel;
+    issuesApi = true;
+  }
   // Using our OAuth App secret grants us 5000 req/hour
   // instead of the standard 60 req/hour.
   if (serverSecrets) {
-    apiUrl += '?client_id=' + serverSecrets.gh_client_id
-      + '&client_secret=' + serverSecrets.gh_client_secret;
+    query.client_id = serverSecrets.gh_client_id;
+    query.client_secret = serverSecrets.gh_client_secret;
   }
+  apiUrl += '?' + querystring.stringify(query);
+
   var badgeData = getBadgeData('issues', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
@@ -2922,7 +2932,11 @@ cache(function(data, match, sendBadge, request) {
         return;  // Hope for the best in the cache.
       }
       var data = JSON.parse(buffer);
-      var issues = data.open_issues_count;
+      if (issuesApi) {
+        var issues = data.length;
+      } else {
+        var issues = data.open_issues_count;
+      }
       badgeData.text[1] = issues + (isRaw? '': ' open');
       badgeData.colorscheme = issues ? 'yellow' : 'brightgreen';
       sendBadge(format, badgeData);
