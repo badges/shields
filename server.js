@@ -4921,36 +4921,41 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Waffle.io integration
-camp.route(/^\/waffle\/column\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/waffle\/label\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, potherca
-  var repo = match[2];  // eg, GraphvizWebEditor
-  var ghLabel = match[3] || 'ready';  // eg, waffle:%20ready%20for%20development
+  var user = match[1];  // eg, evancohen
+  var repo = match[2];  // eg, smart-mirror
+  var ghLabel = match[3] || 'ready';  // eg, in%20progress
   var format = match[4];
-  var apiUrl = 'https://api.waffle.io/' + user + '/' + repo + '/columns';
+  var apiUrl = 'https://api.waffle.io/' + user + '/' + repo + '/cards';
   var badgeData = getBadgeData('issues', data);
 
   request(apiUrl, function(err, res, buffer) {
     try {
-      var list = JSON.parse(buffer);
-      if (list.length === 0) {
+      var cards = JSON.parse(buffer);
+      if (cards.length === 0) {
         badgeData.text[1] = 'absent';
         sendBadge(format, badgeData);
         return;
       }
-      var column;
-      for (var i = 0; i < list.length; i++) {
-        var column = list[i];
-        var name = column.label? column.label.name: column.displayName;
-        var color = column.label? column.label.color: '78bdf2';
-        if (name === ghLabel) {
-          break;
+      var count = 0;
+      var color;
+      for (var i = 0; i < cards.length; i++) {
+        var cardMetadata = cards[i].githubMetadata;
+        if (cardMetadata.labels && cardMetadata.labels.length > 0) {
+            for (var j = 0; j < cardMetadata.labels.length; j++) {
+                var label = cardMetadata.labels[j];
+                if (label.name === ghLabel) {
+                    count++;
+                    color = label.color;
+                }
+            }
         }
       }
-      badgeData.text[0] = data.label || column.displayName || name;
-      badgeData.text[1] = '' + column.issues.length;
+      badgeData.text[0] = data.label || ghLabel;
+      badgeData.text[1] = '' + count;
       badgeData.colorscheme = null;
-      badgeData.colorB = '#' + color;
+      badgeData.colorB = '#' + (color || '78bdf2');
       sendBadge(format, badgeData);
 
     } catch(e) {
