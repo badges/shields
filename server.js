@@ -4965,6 +4965,54 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Chrome web store integration
+camp.route(/^\/chrome-web-store\/(v|d|price|rating|rating-count)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var type = match[1];
+  var storeId = match[2];  // eg, nimelepbpejjlbmoobocpfnjhihnpked
+  var format = match[3];
+  var badgeData = getBadgeData('chrome web store', data);
+  var url = 'https://chrome.google.com/webstore/detail/' + storeId + '?hl=en&gl=US';
+  var chromeWebStore = require('chrome-web-store-item-property');
+  request(url, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    chromeWebStore.convert(buffer)
+      .then(function (value) {
+        if (type === 'v') {
+          var vdata = versionColor(value.version);
+          badgeData.text[1] = vdata.version;
+          badgeData.colorscheme = vdata.color;
+        } else if (type === 'd') {
+          var downloads = value.interactionCount.UserDownloads;
+          badgeData.text[0] = 'downloads';
+          badgeData.text[1] = metric(downloads) + ' total';
+          badgeData.colorscheme = downloadCountColor(downloads);
+        } else if (type === 'price') {
+          badgeData.text[1] = value.price;
+          badgeData.colorscheme = 'brightgreen';
+        } else if (type === 'rating') {
+          var rating = Math.round(value.ratingValue * 100) / 100;
+          badgeData.text[0] = 'rating';
+          badgeData.text[1] = rating;
+          badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
+        } else if (type === 'rating-count') {
+          var ratingCount = value.ratingCount;
+          badgeData.text[0] = 'rating count';
+          badgeData.text[1] = metric(ratingCount) + ' total';
+          badgeData.colorscheme = floorCountColor(ratingCount, 5, 50, 500);
+        }
+        sendBadge(format, badgeData);
+      }).catch(function (err) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      });
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
