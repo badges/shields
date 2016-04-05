@@ -4957,7 +4957,49 @@ cache(function(data, match, sendBadge, request) {
       badgeData.colorscheme = null;
       badgeData.colorB = '#' + (color || '78bdf2');
       sendBadge(format, badgeData);
+    } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+    }
+  });
+}));
 
+// Arch user repository (AUR) integration.
+camp.route(/^\/aur\/(version|votes|license)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var info = match[1];
+  var pkg = match[2];
+  var format = match[3];
+  var apiUrl = 'https://aur.archlinux.org/rpc.php?type=info&arg=' + pkg;
+  var badgeData = getBadgeData('AUR', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer).results;
+      if (info === 'version') {
+        var vdata = versionColor(data.Version);
+        badgeData.text[1] = vdata.version;
+        if (data.OutOfDate === null) {
+          badgeData.colorscheme = 'blue';
+        } else {
+          badgeData.colorscheme = 'orange';
+        }
+      } else if (info === 'votes') {
+        var votes = data.NumVotes;
+        badgeData.text[0] = "votes";
+        badgeData.text[1] = votes;
+        badgeData.colorscheme = floorCountColor(votes, 2, 20, 60);
+      } else if (info === 'license') {
+        var license = data.License;
+        badgeData.text[0] = "license";
+        badgeData.text[1] = license;
+        badgeData.colorscheme = 'blue';
+      }
+      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
