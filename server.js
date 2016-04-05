@@ -4943,13 +4943,13 @@ cache(function(data, match, sendBadge, request) {
       for (var i = 0; i < cards.length; i++) {
         var cardMetadata = cards[i].githubMetadata;
         if (cardMetadata.labels && cardMetadata.labels.length > 0) {
-            for (var j = 0; j < cardMetadata.labels.length; j++) {
-                var label = cardMetadata.labels[j];
-                if (label.name === ghLabel) {
-                    count++;
-                    color = label.color;
-                }
+          for (var j = 0; j < cardMetadata.labels.length; j++) {
+            var label = cardMetadata.labels[j];
+            if (label.name === ghLabel) {
+              count++;
+              color = label.color;
             }
+          }
         }
       }
       badgeData.text[0] = data.label || ghLabel;
@@ -4958,8 +4958,8 @@ cache(function(data, match, sendBadge, request) {
       badgeData.colorB = '#' + (color || '78bdf2');
       sendBadge(format, badgeData);
     } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
     }
   });
 }));
