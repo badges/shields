@@ -23,6 +23,10 @@
 * **[SPECIFICATION](spec/SPECIFICATION.md)** – spec for the visual design of Shields badges.
 * **[LICENSE](LICENSE.md)** – public domain dedication.
 
+Make your own badges [here][badges]! (Quick guide: `https://img.shields.io/badge/left-right-f39f37.svg`.)
+
+[badges]: <http://shields.io/#your-badge>
+
 ## Solving the problem
 Many GitHub repositories sport badges for things like:
 <table>

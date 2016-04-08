@@ -6,9 +6,9 @@
 
 [![build status](http://img.shields.io/travis/badges/gh-badges.svg)](https://travis-ci.org/badges/gh-badges)
 
-Make your own badges [here][badges]!
+Make your own badges [here][badges]! (Quick guide: `https://img.shields.io/badge/left-right-f39f37.svg`.)
 
-[badges]: <http://img.shields.io>
+[badges]: <http://shields.io/#your-badge>
 
 # Install the API
 
