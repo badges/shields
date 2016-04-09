@@ -170,8 +170,12 @@ vendorDomain.on('error', function(err) {
 
 function cache(f) {
   return function getRequest(data, match, end, ask) {
-    // Cache management - no cache, so it won't be cached by GitHub's CDN.
-    ask.res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    if (data.maxAge !== undefined && /^[0-9]+$/.test(data.maxAge)) {
+      var maxAge = +data.maxAge;
+    } else {
+      // Cache management - no cache, so it won't be cached by GitHub's CDN.
+      ask.res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    }
     var reqTime = new Date();
     var date = (reqTime).toGMTString();
     ask.res.setHeader('Expires', date);  // Proxies, GitHub, see #221.
@@ -269,6 +273,10 @@ function cache(f) {
         };
         requestCache.set(cacheIndex, updatedCache);
         if (!cachedVersionSent) {
+          // Set the cache interval if specified.
+          if (maxAge !== undefined) {
+            ask.res.setHeader('Cache-Control', 'max-age=' + maxAge);
+          }
           badge(badgeData, makeSend(format, ask.res, end));
         }
       }, cachedRequest);
@@ -5070,13 +5078,9 @@ function(data, match, end, ask) {
     incrMonthlyAnalytics(analytics.rawFlatSquareMonthly);
   }
 
-  if (ask.req.headers['cache-control']) {
-    ask.res.setHeader('Cache-Control', ask.req.headers['cache-control']);
-  } else {
-    // Cache management - the badge is constant.
-    var cacheDuration = (3600*24*1)|0;    // 1 day.
-    ask.res.setHeader('Cache-Control', 'public, max-age=' + cacheDuration);
-  }
+  // Cache management - the badge is constant.
+  var cacheDuration = (3600*24*1)|0;    // 1 day.
+  ask.res.setHeader('Cache-Control', 'max-age=' + cacheDuration);
   if (+(new Date(ask.req.headers['if-modified-since'])) >= +serverStartTime) {
     ask.res.statusCode = 304;
     ask.res.end();  // not modified.
@@ -5115,7 +5119,7 @@ function(data, match, end, ask) {
 
   // Cache management - the badge is constant.
   var cacheDuration = (3600*24*1)|0;    // 1 day.
-  ask.res.setHeader('Cache-Control', 'public, max-age=' + cacheDuration);
+  ask.res.setHeader('Cache-Control', 'max-age=' + cacheDuration);
   if (+(new Date(ask.req.headers['if-modified-since'])) >= +serverStartTime) {
     ask.res.statusCode = 304;
     ask.res.end();  // not modified.
@@ -5160,6 +5164,7 @@ function getLabel(label, data) {
 }
 
 // data (URL query) can include `label`, `style`, `logo`, `logoWidth`, `link`.
+// It can also include `maxAge`.
 function getBadgeData(defaultLabel, data) {
   var label = getLabel(defaultLabel, data);
   var template = data.style || 'default';
