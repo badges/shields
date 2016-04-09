@@ -1,3 +1,3 @@
-FROM node:0.12-onbuild
+FROM node:5
 ENV INFOSITE http://shields.io
 EXPOSE 80
