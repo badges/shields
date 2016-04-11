@@ -3182,6 +3182,36 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Bitbucket issues integration.
+camp.route(/^\/bitbucket\/issues(-raw)?\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var isRaw = !!match[1];
+  var user = match[2];  // eg, atlassian
+  var repo = match[3];  // eg, python-bitbucket
+  var format = match[4];
+  var apiUrl = 'https://bitbucket.org/api/1.0/repositories/' + user + '/' + repo
+    + '/issues/?limit=0&status=new&status=open';
+
+  var badgeData = getBadgeData('issues', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var issues = data.count;
+      badgeData.text[1] = issues + (isRaw? '': ' open');
+      badgeData.colorscheme = issues ? 'yellow' : 'brightgreen';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Chef cookbook integration.
 camp.route(/^\/cookbook\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
