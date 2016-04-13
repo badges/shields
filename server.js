@@ -189,6 +189,7 @@ function cache(f) {
 
     var cacheIndex = match[0] + '?label=' + data.label + '&style=' + data.style
       + '&logo=' + data.logo + '&logoWidth=' + data.logoWidth
+      + '&rightPad=' + data.rightPad
       + '&link=' + data.link;
     // Should we return the data right away?
     var cached = requestCache.get(cacheIndex);
@@ -5193,7 +5194,7 @@ function getLabel(label, data) {
   return data.label || label;
 }
 
-// data (URL query) can include `label`, `style`, `logo`, `logoWidth`, `link`.
+// data (URL query) can include `label`, `style`, `logo`, `logoWidth`, `rightPad`, `link`.
 // It can also include `maxAge`.
 function getBadgeData(defaultLabel, data) {
   var label = getLabel(defaultLabel, data);
@@ -5213,12 +5214,17 @@ function getBadgeData(defaultLabel, data) {
     data.logo = 'data:' + data.logo;
   }
 
+  if (data.rightPad !== undefined && !/^[0-9]+$/.test(data.rightPad)) {
+    data.rightPad = 0;
+  }
+
   return {
     text: [label, 'n/a'],
     colorscheme: 'lightgrey',
     template: template,
     logo: data.logo,
     logoWidth: +data.logoWidth,
+    rightPad: data.rightPad,
     links: data.link,
   };
 }
