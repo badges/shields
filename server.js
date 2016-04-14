@@ -4852,6 +4852,36 @@ cache(function(data, match, sendBadge, request) {
   sendBadge(format, badgeData);
 }));
 
+// homebrew integration
+// Example: /homebrew/v/cake.svg
+camp.route(/^\/homebrew\/v\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var package = match[1];
+  var format = match[2];
+  var apiUrl = 'http://braumeister.org/formula/' + package + '/version';
+
+  var badgeData = getBadgeData('homebrew', data);
+  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var version = data.stable;
+
+      var vdata = versionColor(version);
+      badgeData.text[1] = vdata.version;
+      badgeData.colorscheme = vdata.color;
+
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // StackExchange integration.
 camp.route(/^\/stackexchange\/([^\/]+)\/([^\/])\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
