@@ -4853,12 +4853,11 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // homebrew integration
-// Example: /homebrew/v/cake.svg
 camp.route(/^\/homebrew\/v\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var package = match[1];
+  var pkg = match[1];  // eg. cake
   var format = match[2];
-  var apiUrl = 'http://braumeister.org/formula/' + package + '/version';
+  var apiUrl = 'http://braumeister.org/formula/' + pkg + '/version';
 
   var badgeData = getBadgeData('homebrew', data);
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
