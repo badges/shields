@@ -4939,8 +4939,8 @@ cache(function(data, match, sendBadge, request) {
 // e.g. SVG badge: https://beerpay.io/beerpay/beerpay.io/badge.svg?style=flat-square
 camp.route(/^\/beerpay\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];
-  var project = match[2];
+  var user = match[1];     // eg, beerpay
+  var project = match[2];  // eg, beerpay.io
   var format = match[3];
 
   var apiUrl = 'https://beerpay.io/api/v1/' + user + '/projects/' + project;
