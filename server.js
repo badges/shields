@@ -5365,7 +5365,7 @@ var metricPower = metricPrefix
 function metric(n) {
   for (var i = metricPrefix.length - 1; i >= 0; i--) {
     var limit = metricPower[i];
-    if (n > limit) {
+    if (n >= limit) {
       n = Math.round(n / limit);
       return ''+n + metricPrefix[i];
     }
