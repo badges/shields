@@ -5186,6 +5186,8 @@ function(data, match, end, ask) {
     badgeData.text[1] = status;
     if (sixHex(color)) {
       badgeData.colorB = '#' + color;
+    } else if (percentage(color)) {
+      badgeData.colorscheme = percentageColor(color.replace(/%$/, ''));
     } else {
       badgeData.colorscheme = color;
     }
@@ -5249,11 +5251,13 @@ function escapeFormat(t) {
 
 function sixHex(s) { return /^[0-9a-fA-F]{6}$/.test(s); }
 
+function percentage(s) { return /^[0-9]{1,3}\.?[0-9]*%$/.test(s); }
+
 function getLabel(label, data) {
   return data.label || label;
 }
 
-// data (URL query) can include `label`, `style`, `logo`, `logoWidth`, `link`.
+// data (URL query) can include `label`, `style`, `logo`, `logoWidth`, `link`, `percentageColorType`.
 // It can also include `maxAge`.
 function getBadgeData(defaultLabel, data) {
   var label = getLabel(defaultLabel, data);
@@ -5280,6 +5284,7 @@ function getBadgeData(defaultLabel, data) {
     logo: data.logo,
     logoWidth: +data.logoWidth,
     links: data.link,
+    percentageColorType: data.percentageColorType,
   };
 }
 
@@ -5392,6 +5397,19 @@ function fetchFromSvg(request, url, cb) {
 function ordinalNumber(n) {
   var s=["ᵗʰ","ˢᵗ","ⁿᵈ","ʳᵈ"], v=n%100;
   return n+(s[(v-20)%10]||s[v]||s[0]);
+}
+
+function percentageColor(type, percentage) {
+  switch(type) {
+  case 'coverage':
+    return coveragePercentageColor(percentage);
+  default:
+    return genericPercentageColor(percentage);
+  }
+}
+
+function genericPercentageColor(percentage) {
+  return floorCountColor(percentage, 50, 75, 100);
 }
 
 function coveragePercentageColor(percentage) {
