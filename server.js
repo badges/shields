@@ -4847,7 +4847,7 @@ cache(function(data, match, sendBadge, request) {
   badgeData.colorscheme = 'brightgreen';
   if (darkBackgroundTemplates.some(function(t) { return t === badgeData.template; })) {
     badgeData.logo = badgeData.logo || logos['gitter-white'];
-    badgeData.logoWidth = 7;
+    badgeData.logoWidth = 9;
   }
   sendBadge(format, badgeData);
 }));
