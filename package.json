@@ -16,23 +16,21 @@
     "url": "https://github.com/badges/shields"
   },
   "dependencies": {
-    "dot": "~1.0.3",
-    "svgo": "~0.5.1",
-    "pdfkit": "~0.7.1",
-    "phantomjs": "~1.9.2-6",
-    "es6-promise": "~2.1.0",
-    "request": "~2.55.0",
-    "redis": "~1.0.0",
-    "camp": "~16.0.0",
-    "semver": "~4.3.3",
-    "bower": "~1.4.1",
-    "promise": "~7.0.0",
+    "dot": "^1.0.3",
+    "svgo": "^0.6.4",
+    "pdfkit": "~0.7.2",
+    "phantomjs": "^2.1.7",
+    "request": "^2.70.0",
+    "redis": "^2.6.0-1",
+    "camp": "^16.1.1",
+    "semver": "^5.1.0",
+    "bower": "^1.7.9",
     "chrome-web-store-item-property": "^1.1.2"
   },
   "devDependencies": {
-    "ass": "~0.0.6",
-    "should": "~3.0.0",
-    "mocha": "~1.14.0"
+    "ass": "^0.0.6",
+    "should": "^8.3.0",
+    "mocha": "^2.4.5"
   },
   "scripts": {
     "test": "mocha -R spec test.js"
@@ -48,6 +46,5 @@
     "phantomjs-svg2png.js",
     "lru-cache.js",
     "logo"
-  ],
-  "engines": { "node": "0.10.x" }
+  ]
 }
