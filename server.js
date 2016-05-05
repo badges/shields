@@ -4810,7 +4810,7 @@ cache(function(data, match, sendBadge, request) {
     body: {
       "repos": [{"name": path, "tag": tag}]
     },
-    uri: 'https://imagelayers.io:8888/registry/analyze'
+    uri: 'https://imagelayers.io/registry/analyze'
   };
   request(options, function(err, res, buffer) {
     if (err != null) {
