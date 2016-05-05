@@ -19,7 +19,7 @@
     "dot": "~1.0.3",
     "svgo": "~0.5.1",
     "pdfkit": "~0.7.1",
-    "phantomjs": "~1.9.2-6",
+    "phantomjs-prebuilt": "~2.1.7",
     "es6-promise": "~2.1.0",
     "request": "~2.55.0",
     "redis": "~1.0.0",
