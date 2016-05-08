@@ -171,7 +171,7 @@ vendorDomain.on('error', function(err) {
 function cache(f) {
   return function getRequest(data, match, end, ask) {
     if (data.maxAge !== undefined && /^[0-9]+$/.test(data.maxAge)) {
-      var maxAge = +data.maxAge;
+      ask.res.setHeader('Cache-Control', 'max-age=' + data.maxAge);
     } else {
       // Cache management - no cache, so it won't be cached by GitHub's CDN.
       ask.res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -214,6 +214,7 @@ function cache(f) {
         badge(cached.badgeData, makeSend(cached.format, ask.res, end));
         return;
       }
+      ask.res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
       var badgeData = getBadgeData('vendor', data);
       badgeData.text[1] = 'unresponsive';
       var extension;
@@ -273,10 +274,6 @@ function cache(f) {
         };
         requestCache.set(cacheIndex, updatedCache);
         if (!cachedVersionSent) {
-          // Set the cache interval if specified.
-          if (maxAge !== undefined) {
-            ask.res.setHeader('Cache-Control', 'max-age=' + maxAge);
-          }
           badge(badgeData, makeSend(format, ask.res, end));
         }
       }, cachedRequest);
