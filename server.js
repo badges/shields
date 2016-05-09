@@ -2937,12 +2937,15 @@ cache(function(data, match, sendBadge, request) {
         return;  // Hope for the best in the cache.
       }
       var data = JSON.parse(buffer);
+      var modifier = '';
       if (issuesApi) {
         var issues = data.length;
+        if (res.headers['link'] &&
+            res.headers['link'].indexOf('rel="last"') >= 0) { modifier = '+'; }
       } else {
         var issues = data.open_issues_count;
       }
-      badgeData.text[1] = issues + (isRaw? '': ' open');
+      badgeData.text[1] = issues + modifier + (isRaw? '': ' open');
       badgeData.colorscheme = issues ? 'yellow' : 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
