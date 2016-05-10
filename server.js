@@ -391,35 +391,94 @@ cache(function(data, match, sendBadge, request) {
 
 // Shippable integration
 camp.route(/^\/shippable\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
+cache(function (data, match, sendBadge, request) {
+  var defaultOpts = {
+    colorA: '#555555',
+    successLabel: 'passing',
+    successColor: '#44CC11',
+    failLabel: 'failing',
+    failColor: '#DC5F59',
+    cancelledLabel: 'cancelled',
+    cancelledColor: '#6BAFBD',
+    unstableLabel: 'unstable',
+    unstableColor: '#CEA61B',
+    pendingLabel: 'pending',
+    pendingColor: '#5183A0',
+    skippedLabel: 'skipped',
+    skippedColor: '#F8A97D',
+    noBuildLabel: 'none',
+    noBuildColor: '#A1ABAB',
+    inaccessibleLabel: 'inaccessible',
+    inaccessibleColor: '#A1ABAB'
+  };
+
+  var badgeData = getBadgeData('build', data);
+  delete badgeData.colorscheme;
+
+  // overwrite the default options if present in query parameters
+  Object.keys(defaultOpts).forEach(
+    function (key) {
+      defaultOpts[key] = data[key] || defaultOpts[key];
+    }
+  );
+
+  badgeData.colorA = defaultOpts.colorA;
+  badgeData.colorB = defaultOpts.noBuildColor;
+
   var project = match[1];  // eg, 54d119db5ab6cc13528ab183
   var branch = match[2];
   var format = match[3];
   var url = 'https://api.shippable.com/projects/' + project + '/badge';
+
   if (branch != null) {
-    url += '?branchName=' + branch;
+    url += '?branch=' + branch;
   }
-  var badgeData = getBadgeData('build', data);
-  fetchFromSvg(request, url, function(err, res) {
+
+  fetchFromSvg(request, url, function (err, res) {
     if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+      badgeData.text[1] = defaultOpts.inaccessibleLabel;
       sendBadge(format, badgeData);
       return;
     }
+
     try {
-      badgeData.text[1] = res;
-      if (res === 'shippable') {
-        badgeData.colorscheme = 'brightgreen';
-        badgeData.text[1] = 'passing';
-      } else if (res === 'unshippable') {
-        badgeData.colorscheme = 'red';
-      } else {
-        badgeData.text[1] = res;
+      switch (res) {
+        case 'none':
+          badgeData.text[1] = defaultOpts.noBuildLabel;
+          badgeData.colorB = defaultOpts.noBuildColor;
+          break;
+        case 'shippable':
+          badgeData.text[1] = defaultOpts.successLabel;
+          badgeData.colorB = defaultOpts.successColor;
+          break;
+        case 'failed':
+          badgeData.text[1] = defaultOpts.failLabel;
+          badgeData.colorB = defaultOpts.failColor;
+          break;
+        case 'cancelled':
+          badgeData.text[1] = defaultOpts.cancelledLabel;
+          badgeData.colorB = defaultOpts.cancelledColor;
+          break;
+        case 'pending':
+          badgeData.text[1] = defaultOpts.pendingLabel;
+          badgeData.colorB = defaultOpts.pendingColor;
+          break;
+        case 'skipped':
+          badgeData.text[1] = defaultOpts.skippedLabel;
+          badgeData.colorB = defaultOpts.skippedColor;
+          break;
+        case 'unstable':
+          badgeData.text[1] = defaultOpts.unstableLabel;
+          badgeData.colorB = defaultOpts.unstableColor;
+          break;
+        default:
+          badgeData.text[1] = 'invalid';
+          badgeData.colorB = defaultOpts.noBuildColor;
       }
       sendBadge(format, badgeData);
-
-    } catch(e) {
+    } catch (e) {
       badgeData.text[1] = 'invalid';
+      badgeData.colorB = defaultOpts.noBuildColor;
       sendBadge(format, badgeData);
     }
   });
