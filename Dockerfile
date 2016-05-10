@@ -1,3 +1,3 @@
 FROM node:0.12-onbuild
-ENV INFOSITE http://shields.io
+ENV INFOSITE hiptest-badges.scalingo.io
 EXPOSE 80
