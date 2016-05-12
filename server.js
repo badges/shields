@@ -2760,6 +2760,43 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// CocoaPods Apps Integration
+camp.route(/^\/cocoapods\/(aw|at)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var info = match[1]; // One of these: "aw", "at"
+  var spec = match[2];  // eg, AFNetworking
+  var format = match[3];
+  var apiUrl = 'http://metrics.cocoapods.org/api/v1/pods/' + spec;
+  var badgeData = getBadgeData('pod', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      badgeData.text[0] = getLabel('apps', data);
+      var apps = 0
+      switch (info.charAt(1)) {
+        case 'w':
+          var apps = data.stats.app_week;
+          badgeData.text[1] = metric(apps) + '/week';
+          break;
+        case 't':
+          var apps = data.stats.app_total;
+          badgeData.text[1] = metric(apps);
+          break;
+      }
+      badgeData.colorscheme = downloadCountColor(apps);
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // GitHub tag integration.
 camp.route(/^\/github\/tag\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
