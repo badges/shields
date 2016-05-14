@@ -276,7 +276,7 @@ function cache(f) {
         if (!cachedVersionSent) {
           badge(badgeData, makeSend(format, ask.res, end));
         }
-      }, cachedRequest, ask); // ask is here for debugging reasons for CloudFlare. See gitter badge.
+      }, cachedRequest);
     });
   };
 }
@@ -4838,7 +4838,7 @@ cache(function(data, match, sendBadge, request) {
 
 // Gitter room integration.
 camp.route(/^\/gitter\/room\/([^\/]+\/[^\/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request, ask) {
+cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];
   var format = match[2];
 
