@@ -4850,6 +4850,9 @@ cache(function(data, match, sendBadge, request, ask) {
     badgeData.logoWidth = 9;
   }
   ask.res.setHeader('Cache-Control', 'max-age=50');
+  var reqTime = new Date();
+  var date = (new Date(+reqTime + 50 * 1000)).toGMTString();
+  ask.res.setHeader('Expires', date);  // CloudFlare test.
   sendBadge(format, badgeData);
 }));
 
