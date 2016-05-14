@@ -4849,10 +4849,6 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = badgeData.logo || logos['gitter-white'];
     badgeData.logoWidth = 9;
   }
-  ask.res.setHeader('Cache-Control', 'max-age=50');
-  var reqTime = new Date();
-  var date = (new Date(+reqTime + 50 * 1000)).toGMTString();
-  ask.res.setHeader('Expires', date);  // CloudFlare test.
   sendBadge(format, badgeData);
 }));
 
@@ -5202,6 +5198,21 @@ function(data, match, end, ask) {
     badge({text: ['error', 'bad badge'], colorscheme: 'red'},
       makeSend(format, ask.res, end));
   }
+});
+
+// Production cache debugging.
+var bitFlip = false;
+camp.route(/^\/flip\.svg$/, function(data, match, end, ask) {
+  var cacheSecs = 60;
+  ask.res.setHeader('Cache-Control', 'max-age=' + cacheSecs);
+  var reqTime = new Date();
+  var date = (new Date(+reqTime + cacheSecs * 1000)).toGMTString();
+  ask.res.setHeader('Expires', date);
+  var badgeData = getBadgeData('flip', data);
+  bitFlip = !bitFlip;
+  badgeData.text[1] = bitFlip? 'on': 'off';
+  badgeData.colorscheme = bitFlip? 'brightgreen': 'red';
+  badge(badgeData, makeSend('svg', ask.res, end));
 });
 
 // Any badge, old version.
