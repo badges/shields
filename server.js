@@ -3909,7 +3909,6 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = 'passing';
           badgeData.colorscheme = 'brightgreen';
           break;
-          break;
         case 'fail':
           badgeData.text[1] = 'failing';
           badgeData.colorscheme = 'red';
