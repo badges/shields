@@ -24,8 +24,8 @@
     <image x="5" y="3" width="{{=it.logoWidth}}" height="14" xlink:href="{{=it.logo}}"/>
   {{?}}
   <g fill="#333" text-anchor="middle" font-family="Helvetica Neue,Helvetica,Arial,sans-serif" font-weight="700" font-size="11px" line-height="14px">
-    <text x="{{=(it.widths[0]+it.logoWidth+it.logoPadding)/2}}" y="15" fill="#fff">{{=it.escapeXml(it.capitalize(it.text[0]))}}</text>
-    <text x="{{=(it.widths[0]+it.logoWidth+it.logoPadding)/2}}" y="14">{{=it.escapeXml(it.capitalize(it.text[0]))}}</text>
+    <text x="{{=(it.widths[0]+it.logoWidth+it.logoPadding-it.rightPad)/2}}" y="15" fill="#fff">{{=it.escapeXml(it.capitalize(it.text[0]))}}</text>
+    <text x="{{=(it.widths[0]+it.logoWidth+it.logoPadding-it.rightPad)/2}}" y="14">{{=it.escapeXml(it.capitalize(it.text[0]))}}</text>
     {{?(it.text[1] && it.text[1].length)}}
     <text x="{{=it.widths[0]+it.widths[1]/2+6}}" y="15" fill="#fff">{{=it.escapeXml(it.text[1])}}</text>
     <a xlink:href="{{=it.links[1]}}">

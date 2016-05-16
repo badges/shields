@@ -56,6 +56,7 @@ function makeImage(data, cb) {
   }
   // Logo.
   data.logoWidth = +data.logoWidth || (data.logo? 14: 0);
+  data.rightPad = +data.rightPad || 0
   data.logoPadding = (data.logo? 3: 0);
   // String coercion.
   data.text[0] = '' + data.text[0];
@@ -70,7 +71,7 @@ function makeImage(data, cb) {
   if (textWidth1 % 2 === 0) { textWidth1++; }
   if (textWidth2 % 2 === 0) { textWidth2++; }
   data.widths = [
-    textWidth1 + 10 + data.logoWidth + data.logoPadding,
+    textWidth1 + 10 + data.logoWidth + data.logoPadding + data.rightPad,
     textWidth2 + 10,
   ];
   if (data.links === undefined) {
