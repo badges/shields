@@ -5183,6 +5183,52 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Test if a webpage is online
+camp.route(/^\/website(-(([^-]|--)*?)-(([^-]|--)*)(-(([^-]|--)+)-(([^-]|--)+))?)?\/(.+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var onlineMessage = escapeFormat(match[2] != null ? match[2] : "online");
+  var offlineMessage = escapeFormat(match[4] != null ? match[4] : "offline");
+  var onlineColor = escapeFormat(match[7] != null ? match[7] : "brightgreen");
+  var offlineColor = escapeFormat(match[9] != null ? match[9] : "red");
+  var userProtocol = match[11];
+  var userURI = match[12];
+  var format = match[13];
+  var withProtocolURI = userProtocol + "://" + userURI;
+  var options = {
+    method: 'HEAD',
+    uri: withProtocolURI,
+  };
+  var badgeData = getBadgeData('website', data);
+  badgeData.colorscheme = undefined;
+  request(options, function(err, res) {
+    try {
+      // We consider all HTTP status codes below 310 as success.
+      if (err != null || res.statusCode >= 310) {
+        badgeData.text[1] = offlineMessage;
+        if (sixHex(offlineColor)) {
+          badgeData.colorB = '#' + offlineColor;
+        } else {
+          badgeData.colorscheme = offlineColor;
+        }
+        sendBadge(format, badgeData);
+        return;
+      } else {
+        badgeData.text[1] = onlineMessage;
+        if (sixHex(onlineColor)) {
+          badgeData.colorB = '#' + onlineColor;
+        } else {
+          badgeData.colorscheme = onlineColor;
+        }
+        sendBadge(format, badgeData);
+        return;
+      }
+    } catch(e) {
+      badge({text: ['error', 'bad badge'], colorscheme: 'red'},
+        makeSend(format, ask.res, end));
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {

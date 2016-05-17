@@ -387,6 +387,10 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><img src='/chrome-web-store/d/nimelepbpejjlbmoobocpfnjhihnpked.svg' alt=''/></td>
     <td><code>https://img.shields.io/chrome-web-store/d/nimelepbpejjlbmoobocpfnjhihnpked.svg</code></td>
   </tr>
+  <tr><th data-keywords='website' data-doc='websiteDoc'> Website: </th>
+  <td><img src='https://img.shields.io/website-up-down-green-red/http/shields.io.svg' alt=''/></td>
+  <td><code>https://img.shields.io/website-up-down-green-red/http/shields.io.svg</code></td>
+  </tr>
 </tbody></table>
 <h3 id="version"> Version </h3>
 <table class='badge'><tbody>
@@ -1018,6 +1022,48 @@ is where the current server got started.
       definitions/, BUILD_DEFINITION_ID is after that.'>
     <p>Your badge will then have the form
       <code>https://img.shields.io/vso/build/TEAM_NAME/PROJECT_ID/BUILD_DEFINITION_ID</code>.
+    </p>
+  </div>
+  <div id="websiteDoc">
+    <p>The badge is of the form <code>https://img.shields.io/website[OPTIONS]/PROTOCOL/URLREST.svg</code>,
+       the simplest case being <code>https://img.shields.io/website/http/www.website.com.svg</code>.
+       More options are described below.
+    </p>
+    <p>The whole URL is obtained by concatenating the <code>PROTOCOL</code> (<code>http</code> or <code>https</code>, for example)
+       with the <code>URLREST</code> (separating them with <code>://</code>).
+    </p>
+    <p>
+       The existance of a specific path on the server can be checked by appending a path after the domain name, e.g.
+       <code>https://img.shields.io/website/http/www.website.com/path/to/page.html.svg</code>.
+    </p>
+    <p>The URLREST should be URLEncoded:
+       <input type="text" id="websiteDocUrlField" placeholder="Paste your URL (without the protocol) here" />
+       <input type="button" onclick="(function(el) { el.value = encodeURIComponent(el.value); })(document.getElementById('websiteDocUrlField'))" value="Encode" />
+       <input type="button" onclick="(function(el) { el.value = decodeURIComponent(el.value); })(document.getElementById('websiteDocUrlField'))" value="Decode" />
+    </p>
+    <p><code>[OPTIONS]</code> can be:
+       <ul>
+         <li>Nothing:
+             <code>…/website/…</code></li>
+         <li>Online and offline text:
+             <code>…/website-up-down/…</code></li>
+         <li>Online and offline text, then online and offline colors:
+             <code>…/website-up-down-green-orange/…</code></li>
+       </ul>
+       <table class=centered><tbody>
+           <tr><td>   Dashes <code>--</code>
+             </td><td>  →
+             </td><td>  <code>-</code> Dash
+           </td></tr>
+           <tr><td>   Underscores <code>__</code>
+             </td><td>  →
+             </td><td>  <code>_</code> Underscore <br/>
+           </td></tr>
+           <tr><td>   <code>_</code> or Space <code>&nbsp;</code>
+             </td><td>  →
+             </td><td>  <code>&nbsp;</code> Space
+           </td></tr>
+       </tbody></table>
     </p>
   </div>
 </div>
