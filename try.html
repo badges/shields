@@ -388,7 +388,7 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><code>https://img.shields.io/chrome-web-store/d/nimelepbpejjlbmoobocpfnjhihnpked.svg</code></td>
   </tr>
   <tr><th data-keywords='website' data-doc='websiteDoc'> Website: </th>
-  <td><img src='https://img.shields.io/website-up-down-green-red/http/shields.io.svg' alt=''/></td>
+  <td><img src='/website-up-down-green-red/http/shields.io.svg' alt=''/></td>
   <td><code>https://img.shields.io/website-up-down-green-red/http/shields.io.svg</code></td>
   </tr>
 </tbody></table>
@@ -1026,18 +1026,18 @@ is where the current server got started.
   </div>
   <div id="websiteDoc">
     <p>The badge is of the form <code>https://img.shields.io/website[OPTIONS]/PROTOCOL/URLREST.svg</code>,
-       the simplest case being <code>https://img.shields.io/website/http/www.website.com.svg</code>.
+       the simplest case being <code>https://img.shields.io/website/http/example.com.svg</code>.
        More options are described below.
     </p>
     <p>The whole URL is obtained by concatenating the <code>PROTOCOL</code> (<code>http</code> or <code>https</code>, for example)
        with the <code>URLREST</code> (separating them with <code>://</code>).
     </p>
     <p>
-       The existance of a specific path on the server can be checked by appending a path after the domain name, e.g.
+       The existence of a specific path on the server can be checked by appending a path after the domain name, e.g.
        <code>https://img.shields.io/website/http/www.website.com/path/to/page.html.svg</code>.
     </p>
-    <p>The URLREST should be URLEncoded:
-       <input type="text" id="websiteDocUrlField" placeholder="Paste your URL (without the protocol) here" />
+    <p>The URLREST should be URLEncoded:<br>
+       <input type="text" id="websiteDocUrlField" placeholder="Paste your URL (without the protocol) here" /><br>
        <input type="button" onclick="(function(el) { el.value = encodeURIComponent(el.value); })(document.getElementById('websiteDocUrlField'))" value="Encode" />
        <input type="button" onclick="(function(el) { el.value = decodeURIComponent(el.value); })(document.getElementById('websiteDocUrlField'))" value="Decode" />
     </p>
