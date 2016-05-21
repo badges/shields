@@ -18,6 +18,7 @@ var LruCache = require('./lru-cache.js');
 var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
 var loadLogos = require('./load-logos.js');
+var githubAuth = require('./lib/github-auth.js');
 var querystring = require('querystring');
 var serverSecrets;
 try {
@@ -5439,6 +5440,9 @@ var githubHeaders = {
   'User-Agent': 'Shields.io',
   'Accept': 'application/vnd.github.v3+json'
 };
+if (serverSecrets && serverSecrets.gh_client_id) {
+  githubAuth.setRoutes(camp);
+}
 
 // Personal tokens allow access to GitHub private repositories.
 // You can manage your personal GitHub token at
