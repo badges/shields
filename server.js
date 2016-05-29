@@ -5183,6 +5183,68 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Mozilla addons integration
+camp.route(/^\/amo\/(v|d|rating|users)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var xml2js = require('xml2js');
+
+  var type = match[1];
+  var addonId = match[2];
+  var format = match[3];
+  var badgeData = getBadgeData('mozilla addons', data);
+  var url = 'https://services.addons.mozilla.org/api/1.5/addon/' + addonId;
+
+  request(url, function(err, res, buffer) {
+    if (err) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    xml2js.parseString(buffer.toString(), function (err, data) {
+      if (err) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
+      }
+
+      try {
+        switch (type) {
+        case 'v':
+          var version = data.addon.version[0];
+          var vdata = versionColor(version);
+          badgeData.text[1] = vdata.version;
+          badgeData.colorscheme = vdata.color;
+          break;
+        case 'd':
+          var downloads = parseInt(data.addon.total_downloads[0], 10);
+          badgeData.text[0] = 'downloads';
+          badgeData.text[1] = metric(downloads);
+          badgeData.colorscheme = downloadCountColor(downloads);
+          break;
+        case 'rating':
+          var rating = parseInt(data.addon.rating, 10);
+          badgeData.text[0] = 'rating';
+          badgeData.text[1] = rating + ' stars';
+          badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
+          break;
+        case 'users':
+          var dailyUsers = parseInt(data.addon.daily_users[0], 10);
+          badgeData.text[0] = 'users';
+          badgeData.text[1] = metric(dailyUsers);
+          badgeData.colorscheme = 'brightgreen';
+          break;
+        }
+
+        sendBadge(format, badgeData);
+      } catch (err) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  });
+}));
+
 // Test if a webpage is online
 camp.route(/^\/website(-(([^-]|--)*?)-(([^-]|--)*)(-(([^-]|--)+)-(([^-]|--)+))?)?\/(.+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {

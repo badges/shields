@@ -27,7 +27,8 @@
     "semver": "~4.3.3",
     "bower": "~1.4.1",
     "promise": "~7.0.0",
-    "chrome-web-store-item-property": "^1.1.2"
+    "chrome-web-store-item-property": "^1.1.2",
+    "xml2js": "^0.4.16"
   },
   "devDependencies": {
     "ass": "~0.0.6",
