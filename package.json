@@ -28,7 +28,7 @@
     "bower": "~1.4.1",
     "promise": "~7.0.0",
     "chrome-web-store-item-property": "^1.1.2",
-    "json-autosave": "~1.1.0"
+    "json-autosave": "~1.1.1"
   },
   "devDependencies": {
     "ass": "~0.0.6",
