@@ -19,6 +19,7 @@ var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
 var loadLogos = require('./load-logos.js');
 var querystring = require('querystring');
+var xml2js = require('xml2js');
 var serverSecrets;
 try {
   // Everything that cannot be checked in but is useful server-side
@@ -5186,8 +5187,6 @@ cache(function(data, match, sendBadge, request) {
 // Mozilla addons integration
 camp.route(/^\/amo\/(v|d|rating|users)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var xml2js = require('xml2js');
-
   var type = match[1];
   var addonId = match[2];
   var format = match[3];
