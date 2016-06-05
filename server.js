@@ -777,7 +777,7 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
             } else {
               badgeData.colorscheme = 'lightgrey';
             }
-          } else if (metricName === 'sqale_debt_ratio' || metricName === 'tech_debt') {
+          } else if (metricName === 'sqale_debt_ratio' || metricName === 'tech_debt' || metricName === 'public_documented_api_density') {
             // colors are based on sonarqube default rating grid and display colors
             // [0,0.1)   ==> A (green)
             // [0.1,0.2) ==> B (yellowgreen)
