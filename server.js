@@ -2693,6 +2693,7 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// CocoaPods metrics
 camp.route(/^\/cocoapods\/metrics\/doc-percent\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var spec = match[1];  // eg, AFNetworking
@@ -2726,7 +2727,7 @@ cache(function(data, match, sendBadge, request) {
   var spec = match[2];  // eg, AFNetworking
   var format = match[3];
   var apiUrl = 'http://metrics.cocoapods.org/api/v1/pods/' + spec;
-  var badgeData = getBadgeData('pod', data);
+  var badgeData = getBadgeData('downloads', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -2736,7 +2737,6 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var downloads = 0;
-      badgeData.text[0] = getLabel('downloads', data);
       switch (info.charAt(1)) {
         case 'm':
           downloads = data.stats.download_month;
@@ -2767,7 +2767,7 @@ cache(function(data, match, sendBadge, request) {
   var spec = match[2];  // eg, AFNetworking
   var format = match[3];
   var apiUrl = 'http://metrics.cocoapods.org/api/v1/pods/' + spec;
-  var badgeData = getBadgeData('pod', data);
+  var badgeData = getBadgeData('apps', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -2776,15 +2776,14 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      badgeData.text[0] = getLabel('apps', data);
-      var apps = 0
+      var apps = 0;
       switch (info.charAt(1)) {
         case 'w':
-          var apps = data.stats.app_week;
+          apps = data.stats.app_week;
           badgeData.text[1] = metric(apps) + '/week';
           break;
         case 't':
-          var apps = data.stats.app_total;
+          apps = data.stats.app_total;
           badgeData.text[1] = metric(apps);
           break;
       }
