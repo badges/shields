@@ -1,1 +1,1 @@
-require('ass'); require('../gh-badge.js');
+require('../gh-badge.js');

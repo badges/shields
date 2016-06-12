@@ -1,151 +1,145 @@
-var ass = require('ass').enable();
-var should = require('should');
-
+var assertion = require('assert');
 var http = require('http');
 var cproc = require('child_process');
 var fs = require('fs');
 
-describe('the CLI', function() {
-  it('should provide a help message', function(done) {
+function test(target, tests) {
+  var wrappedTests = tests.map(function(test) {
+    return function() {
+      var desc = test[0];
+      var f = test[1];
+      return new Promise(function(resolve, reject) {
+        var assert = function(pred, msg) { assert.ok(pred, msg); };
+        ['ok', 'equal', 'deepEqual', 'strictEqual', 'deepStrictEqual',
+        'notEqual', 'notDeepEqual', 'notStrictEqual', 'notDeepStrictEqual',
+        'fail', 'doesNotThrow', 'throws',
+        ].forEach(function(k) {
+          assert[k] = function(...args) {
+            try {
+              assertion[k].apply(null, args);
+            } catch(e) { reject(e); }
+          };
+        });
+        f(resolve, assert);
+      }).catch(function(e) {
+        console.error('Failed:', target + ' ' + desc + '\n', e.stack);
+      });
+    };
+  });
+  var prom = wrappedTests[0]();
+  for (var i = 1; i < wrappedTests.length; i++) {
+    prom = prom.then(wrappedTests[i]);
+  }
+  return prom;
+}
+
+// Test parameters
+var port = '1111';
+var url = 'http://127.0.0.1:' + port + '/';
+var server;
+
+test('The CLI', [
+  ['should provide a help message', function(done, assert) {
     var child = cproc.spawn('node', ['ass-stubs/cli-test.js']);
     var buffer = '';
     child.stdout.on('data', function(chunk) {
       buffer += ''+chunk;
     });
     child.stdout.on('end', function() {
-      buffer.should.startWith('Usage');
+      assert(buffer.startsWith('Usage'));
       done();
     });
-  });
-  it('should produce default badges', function(done) {
+  }],
+  ['should produce default badges', function(done, assert) {
     var child = cproc.spawn('node',
       ['ass-stubs/cli-test.js', 'cactus', 'grown']);
     child.stdout.on('data', function(chunk) {
       var buffer = ''+chunk;
-      buffer.should.startWith('<svg');
-      buffer.should.containEql('cactus');
-      buffer.should.containEql('grown');
+      assert(buffer.startsWith('<svg'), '<svg');
+      assert(buffer.includes('cactus'), 'cactus');
+      assert(buffer.includes('grown'), 'grown');
       done();
     });
-  });
-  it('should produce colorschemed badges', function(done) {
+  }],
+  ['should produce colorschemed badges', function(done, assert) {
     child = cproc.spawn('node',
       ['ass-stubs/cli-test.js', 'cactus', 'grown', ':green']);
     child.stdout.on('data', function(chunk) {
       var buffer = ''+chunk;
-      buffer.should.startWith('<svg');
+      assert(buffer.startsWith('<svg'), '<svg');
       done();
     });
-  });
-  it('should produce right-color badges', function(done) {
+  }],
+  ['should produce right-color badges', function(done, assert) {
     child = cproc.spawn('node',
       ['ass-stubs/cli-test.js', 'cactus', 'grown', '#abcdef']);
     child.stdout.on('data', function(chunk) {
       var buffer = ''+chunk;
-      buffer.should.containEql('#abcdef');
+      assert(buffer.includes('#abcdef'), '#abcdef')
       done();
     });
-  });
-  it('should produce PNG badges', function(done) {
+  }],
+  ['should produce PNG badges', function(done, assert) {
     child = cproc.spawn('node',
       ['ass-stubs/cli-test.js', 'cactus', 'grown', '.png']);
     child.stdout.on('data', function(chunk) {
       // Check the PNG magic number.
-      chunk[0].should.equal(0x89);
-      chunk[1].should.equal(0x50);
-      chunk[2].should.equal(0x4e);
-      chunk[3].should.equal(0x47);
-      chunk[4].should.equal(0x0d);
-      chunk[5].should.equal(0x0a);
-      chunk[6].should.equal(0x1a);
-      chunk[7].should.equal(0x0a);
+      assert.equal(chunk[0], 0x89);
+      assert.equal(chunk[1], 0x50);
+      assert.equal(chunk[2], 0x4e);
+      assert.equal(chunk[3], 0x47);
+      assert.equal(chunk[4], 0x0d);
+      assert.equal(chunk[5], 0x0a);
+      assert.equal(chunk[6], 0x1a);
+      assert.equal(chunk[7], 0x0a);
       done();
     });
-  });
-});
+  }],
+])
 
-describe('the server', function() {
-  var port = '1111';
-  var url = 'http://127.0.0.1:' + port + '/';
-  var server;
-
+.then(function() {
+test('The server', [
   // Start running the server.
-  it('should start', function(done) {
+  ['should start', function(done, assert) {
     server = cproc.spawn('node', ['ass-stubs/server-test.js', port]);
     var isDone = false;
     server.stdout.on('data', function(data) {
       if (data.toString().indexOf('ready') >= 0 && !isDone) { done(); isDone = true; }
     });
     server.stderr.on('data', function(data) { console.log(''+data); });
-  });
-
-  it('should produce colorscheme badges', function(done) {
+  }],
+  ['should produce colorscheme badges', function(done, assert) {
     http.get(url + ':fruit-apple-green.svg',
       function(res) {
         var buffer = '';
         res.on('data', function(chunk) { buffer += ''+chunk; });
         res.on('end', function() {
-          buffer.should.startWith('<svg');
-          buffer.should.containEql('fruit');
-          buffer.should.containEql('apple');
+          assert(buffer.startsWith('<svg'), '<svg');
+          assert(buffer.includes('fruit'), 'fruit');
+          assert(buffer.includes('apple'), 'apple');
           done();
         });
     });
-  });
-
-  it('should produce colorscheme PNG badges', function(done) {
+  }],
+  ['should produce colorscheme PNG badges', function(done, assert) {
     http.get(url + ':fruit-apple-green.png',
       function(res) {
         res.on('data', function(chunk) {
           // Check the PNG magic number.
-          chunk[0].should.equal(0x89);
-          chunk[1].should.equal(0x50);
-          chunk[2].should.equal(0x4e);
-          chunk[3].should.equal(0x47);
-          chunk[4].should.equal(0x0d);
-          chunk[5].should.equal(0x0a);
-          chunk[6].should.equal(0x1a);
-          chunk[7].should.equal(0x0a);
+          assert.equal(chunk[0], 0x89);
+          assert.equal(chunk[1], 0x50);
+          assert.equal(chunk[2], 0x4e);
+          assert.equal(chunk[3], 0x47);
+          assert.equal(chunk[4], 0x0d);
+          assert.equal(chunk[5], 0x0a);
+          assert.equal(chunk[6], 0x1a);
+          assert.equal(chunk[7], 0x0a);
           done();
         });
     });
-  });
-
-  it('should shut down', function(done) {
+  }],
+  ['should shut down', function(done, assert) {
     server.kill();
     server.on('exit', function() { done(); });
-  });
-
-});
-
-describe('the ass wrap-up', function() {
-  it('should write coverage', function(done) {
-    ass.report('html', function(err, r) {
-      fs.writeFileSync('coverage.html', r);
-      done();
-    });
-  });
-  it('should write the coverage image', function(done) {
-    ass.report('json', function(err, r) {
-      if (!!err) { return done(err); }
-      var badge = require('./badge.js');
-      var score = +r.percent;
-      var badgeData = {text:['coverage', score + '%']};
-      if (score < 70) {
-        badgeData.colorscheme = 'red';
-      } else if (score < 80) {
-        badgeData.colorscheme = 'yellow';
-      } else if (score < 90) {
-        badgeData.colorscheme = 'yellowgreen';
-      } else if (score < 100) {
-        badgeData.colorscheme = 'green';
-      } else {
-        badgeData.colorscheme = 'brightgreen';
-      }
-      badge(badgeData, function writeBadge(svg) {
-        fs.writeFileSync('./coverage.svg', svg);
-        done();
-      });
-    });
-  });
-});
+  }],
+])});
