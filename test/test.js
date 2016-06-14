@@ -40,7 +40,7 @@ var server;
 
 test('The CLI', [
   ['should provide a help message', function(done, assert) {
-    var child = cproc.spawn('node', ['ass-stubs/cli-test.js']);
+    var child = cproc.spawn('node', ['test/cli-test.js']);
     var buffer = '';
     child.stdout.on('data', function(chunk) {
       buffer += ''+chunk;
@@ -52,7 +52,7 @@ test('The CLI', [
   }],
   ['should produce default badges', function(done, assert) {
     var child = cproc.spawn('node',
-      ['ass-stubs/cli-test.js', 'cactus', 'grown']);
+      ['test/cli-test.js', 'cactus', 'grown']);
     child.stdout.on('data', function(chunk) {
       var buffer = ''+chunk;
       assert(buffer.startsWith('<svg'), '<svg');
@@ -63,7 +63,7 @@ test('The CLI', [
   }],
   ['should produce colorschemed badges', function(done, assert) {
     child = cproc.spawn('node',
-      ['ass-stubs/cli-test.js', 'cactus', 'grown', ':green']);
+      ['test/cli-test.js', 'cactus', 'grown', ':green']);
     child.stdout.on('data', function(chunk) {
       var buffer = ''+chunk;
       assert(buffer.startsWith('<svg'), '<svg');
@@ -72,7 +72,7 @@ test('The CLI', [
   }],
   ['should produce right-color badges', function(done, assert) {
     child = cproc.spawn('node',
-      ['ass-stubs/cli-test.js', 'cactus', 'grown', '#abcdef']);
+      ['test/cli-test.js', 'cactus', 'grown', '#abcdef']);
     child.stdout.on('data', function(chunk) {
       var buffer = ''+chunk;
       assert(buffer.includes('#abcdef'), '#abcdef')
@@ -81,7 +81,7 @@ test('The CLI', [
   }],
   ['should produce PNG badges', function(done, assert) {
     child = cproc.spawn('node',
-      ['ass-stubs/cli-test.js', 'cactus', 'grown', '.png']);
+      ['test/cli-test.js', 'cactus', 'grown', '.png']);
     child.stdout.on('data', function(chunk) {
       // Check the PNG magic number.
       assert.equal(chunk[0], 0x89);
@@ -101,7 +101,7 @@ test('The CLI', [
 test('The server', [
   // Start running the server.
   ['should start', function(done, assert) {
-    server = cproc.spawn('node', ['ass-stubs/server-test.js', port]);
+    server = cproc.spawn('node', ['test/server-test.js', port]);
     var isDone = false;
     server.stdout.on('data', function(data) {
       if (data.toString().indexOf('ready') >= 0 && !isDone) { done(); isDone = true; }

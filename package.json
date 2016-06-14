@@ -34,7 +34,7 @@
     "mocha": "~1.14.0"
   },
   "scripts": {
-    "test": "node test.js"
+    "test": "node test/test.js"
   },
   "bin": { "badge": "./gh-badge.js" },
   "files": [
