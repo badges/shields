@@ -3,8 +3,9 @@
 /analytics.json
 /coverage.html
 /redis
-/secret.json
 /ServerScript
+/secret.json
+/.github-user-tokens.json
 
 # Installed npm modules
 node_modules

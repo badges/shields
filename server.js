@@ -18,6 +18,7 @@ var LruCache = require('./lru-cache.js');
 var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
 var loadLogos = require('./load-logos.js');
+var githubAuth = require('./lib/github-auth.js');
 var querystring = require('querystring');
 var xml2js = require('xml2js');
 var serverSecrets;
@@ -2693,6 +2694,7 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// CocoaPods metrics
 camp.route(/^\/cocoapods\/metrics\/doc-percent\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var spec = match[1];  // eg, AFNetworking
@@ -2711,6 +2713,82 @@ cache(function(data, match, sendBadge, request) {
       badgeData.colorscheme = coveragePercentageColor(percentage);
       badgeData.text[0] = 'docs';
       badgeData.text[1] = percentage + '%'
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// Cocoapods Downloads integration.
+camp.route(/^\/cocoapods\/(dm|dw|dt)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var info = match[1]; // One of these: "dm", "dw", "dt"
+  var spec = match[2];  // eg, AFNetworking
+  var format = match[3];
+  var apiUrl = 'http://metrics.cocoapods.org/api/v1/pods/' + spec;
+  var badgeData = getBadgeData('downloads', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var downloads = 0;
+      switch (info.charAt(1)) {
+        case 'm':
+          downloads = data.stats.download_month;
+          badgeData.text[1] = metric(downloads) + '/month';
+          break;
+        case 'w':
+          downloads = data.stats.download_week;
+          badgeData.text[1] = metric(downloads) + '/week';
+          break;
+        case 't':
+          downloads = data.stats.download_total;
+          badgeData.text[1] = metric(downloads);
+          break;
+      }
+      badgeData.colorscheme = downloadCountColor(downloads);
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// CocoaPods Apps Integration
+camp.route(/^\/cocoapods\/(aw|at)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var info = match[1]; // One of these: "aw", "at"
+  var spec = match[2];  // eg, AFNetworking
+  var format = match[3];
+  var apiUrl = 'http://metrics.cocoapods.org/api/v1/pods/' + spec;
+  var badgeData = getBadgeData('apps', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var apps = 0;
+      switch (info.charAt(1)) {
+        case 'w':
+          apps = data.stats.app_week;
+          badgeData.text[1] = metric(apps) + '/week';
+          break;
+        case 't':
+          apps = data.stats.app_total;
+          badgeData.text[1] = metric(apps);
+          break;
+      }
+      badgeData.colorscheme = downloadCountColor(apps);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -5500,6 +5578,9 @@ var githubHeaders = {
   'User-Agent': 'Shields.io',
   'Accept': 'application/vnd.github.v3+json'
 };
+if (serverSecrets && serverSecrets.gh_client_id) {
+  githubAuth.setRoutes(camp);
+}
 
 // Personal tokens allow access to GitHub private repositories.
 // You can manage your personal GitHub token at

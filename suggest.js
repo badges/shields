@@ -1,6 +1,5 @@
 var nodeUrl = require('url');
 var request = require('request');
-var Promise = require('promise');
 var serverSecrets;
 try {
   // Everything that cannot be checked in but is useful server-side
