@@ -6,6 +6,7 @@
 /ServerScript
 /secret.json
 /.github-user-tokens.json
+build
 
 # Installed npm modules
 node_modules
@@ -13,6 +14,7 @@ node_modules
 # Folder view configuration files
 .DS_Store
 Desktop.ini
+.idea
 
 # Thumbnail cache files
 ._*
