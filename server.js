@@ -26,6 +26,10 @@ try {
   // is stored in this JSON data.
   serverSecrets = require('./secret.json');
 } catch(e) { console.error('No secret data (secret.json, see server.js):', e); }
+if (serverSecrets && serverSecrets.gh_client_id) {
+  githubAuth.setRoutes(camp);
+}
+
 var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
 
@@ -2803,19 +2807,11 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[2];
   var format = match[3];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/tags';
-  // Using our OAuth App secret grants us 5000 req/hour
-  // instead of the standard 60 req/hour.
-  if (serverSecrets) {
-    apiUrl += '?client_id=' + serverSecrets.gh_client_id
-      + '&client_secret=' + serverSecrets.gh_client_secret;
-  }
   var badgeData = getBadgeData('tag', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
   }
-  // A special User-Agent is required:
-  // http://developer.github.com/v3/#user-agent-required
-  request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -2846,19 +2842,11 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[2];
   var format = match[3];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/releases/latest';
-  // Using our OAuth App secret grants us 5000 req/hour
-  // instead of the standard 60 req/hour.
-  if (serverSecrets) {
-    apiUrl += '?client_id=' + serverSecrets.gh_client_id
-      + '&client_secret=' + serverSecrets.gh_client_secret;
-  }
   var badgeData = getBadgeData('release', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
   }
-  // A special User-Agent is required:
-  // http://developer.github.com/v3/#user-agent-required
-  request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -2890,19 +2878,11 @@ cache(function(data, match, sendBadge, request) {
   var version = match[3];  // eg, 3.4.7
   var format = match[4];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/compare/' + version + '...master';
-  // Using our OAuth App secret grants us 5000 req/hour
-  // instead of the standard 60 req/hour.
-  if (serverSecrets) {
-    apiUrl += '?client_id=' + serverSecrets.gh_client_id
-      + '&client_secret=' + serverSecrets.gh_client_secret;
-  }
   var badgeData = getBadgeData('commits since ' + version, data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
   }
-  // A special User-Agent is required:
-  // http://developer.github.com/v3/#user-agent-required
-  request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -2945,19 +2925,11 @@ cache(function(data, match, sendBadge, request) {
     var release_path = tag !== 'latest' ? 'tags/' + tag : 'latest';
     apiUrl = apiUrl + '/' + release_path;
   }
-  // Using our OAuth App secret grants us 5000 req/hour
-  // instead of the standard 60 req/hour.
-  if (serverSecrets) {
-    apiUrl += '?client_id=' + serverSecrets.gh_client_id
-      + '&client_secret=' + serverSecrets.gh_client_secret;
-  }
   var badgeData = getBadgeData('downloads', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
   }
-  // A special User-Agent is required:
-  // http://developer.github.com/v3/#user-agent-required
-  request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       return sendBadge(format, badgeData);
@@ -3021,21 +2993,12 @@ cache(function(data, match, sendBadge, request) {
     query.labels = ghLabel;
     issuesApi = true;
   }
-  // Using our OAuth App secret grants us 5000 req/hour
-  // instead of the standard 60 req/hour.
-  if (serverSecrets) {
-    query.client_id = serverSecrets.gh_client_id;
-    query.client_secret = serverSecrets.gh_client_secret;
-  }
-  apiUrl += '?' + querystring.stringify(query);
 
   var badgeData = getBadgeData('issues', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
   }
-  // A special User-Agent is required:
-  // http://developer.github.com/v3/#user-agent-required
-  request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
+  githubAuth.request(request, apiUrl, query, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -3071,12 +3034,6 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[2];
   var format = match[3];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo;
-  // Using our OAuth App secret grants us 5000 req/hour
-  // instead of the standard 60 req/hour.
-  if (serverSecrets) {
-    apiUrl += '?client_id=' + serverSecrets.gh_client_id
-      + '&client_secret=' + serverSecrets.gh_client_secret;
-  }
   var badgeData = getBadgeData('forks', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
@@ -3085,9 +3042,7 @@ cache(function(data, match, sendBadge, request) {
       'https://github.com/' + user + '/' + repo + '/network',
      ];
   }
-  // A special User-Agent is required:
-  // http://developer.github.com/v3/#user-agent-required
-  request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -3117,12 +3072,6 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[2];
   var format = match[3];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo;
-  // Using our OAuth App secret grants us 5000 req/hour
-  // instead of the standard 60 req/hour.
-  if (serverSecrets) {
-    apiUrl += '?client_id=' + serverSecrets.gh_client_id
-      + '&client_secret=' + serverSecrets.gh_client_secret;
-  }
   var badgeData = getBadgeData('stars', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
@@ -3131,9 +3080,7 @@ cache(function(data, match, sendBadge, request) {
       'https://github.com/' + user + '/' + repo + '/stargazers',
      ];
   }
-  // A special User-Agent is required:
-  // http://developer.github.com/v3/#user-agent-required
-  request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -3161,12 +3108,6 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[2];
   var format = match[3];
   var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo;
-  // Using our OAuth App secret grants us 5000 req/hour
-  // instead of the standard 60 req/hour.
-  if (serverSecrets) {
-    apiUrl += '?client_id=' + serverSecrets.gh_client_id
-      + '&client_secret=' + serverSecrets.gh_client_secret;
-  }
   var badgeData = getBadgeData('watchers', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
@@ -3175,9 +3116,7 @@ cache(function(data, match, sendBadge, request) {
       'https://github.com/' + user + '/' + repo + '/watchers',
      ];
   }
-  // A special User-Agent is required:
-  // http://developer.github.com/v3/#user-agent-required
-  request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -3204,19 +3143,11 @@ cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte
   var format = match[2];
   var apiUrl = 'https://api.github.com/users/' + user;
-  // Using our OAuth App secret grants us 5000 req/hour
-  // instead of the standard 60 req/hour.
-  if (serverSecrets) {
-    apiUrl += '?client_id=' + serverSecrets.gh_client_id
-      + '&client_secret=' + serverSecrets.gh_client_secret;
-  }
   var badgeData = getBadgeData('followers', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
   }
-  // A special User-Agent is required:
-  // http://developer.github.com/v3/#user-agent-required
-  request(apiUrl, { headers: githubHeaders }, function(err, res, buffer) {
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -5511,21 +5442,6 @@ function regularUpdate(url, interval, scraper, cb) {
     regularUpdateCache[url].data = data;
     cb(null, data);
   });
-}
-
-var githubHeaders = {
-  'User-Agent': 'Shields.io',
-  'Accept': 'application/vnd.github.v3+json'
-};
-if (serverSecrets && serverSecrets.gh_client_id) {
-  githubAuth.setRoutes(camp);
-}
-
-// Personal tokens allow access to GitHub private repositories.
-// You can manage your personal GitHub token at
-// <https://github.com/settings/tokens>.
-if (serverSecrets && serverSecrets.gh_token) {
-  githubHeaders['Authorization'] = 'token ' + serverSecrets.gh_token;
 }
 
 // Given a number, string with appropriate unit in the metric system, SI.
