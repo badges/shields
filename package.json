@@ -1,6 +1,6 @@
 {
   "name": "gh-badges",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "GitHub badges implemented in SVG.",
   "keywords": ["GitHub", "badge", "SVG", "image"],
   "homepage": "http://shields.io",
@@ -22,7 +22,7 @@
     "phantomjs-prebuilt": "~2.1.7",
     "request": "~2.55.0",
     "redis": "~1.0.0",
-    "camp": "~16.2.0",
+    "camp": "~16.2.1",
     "semver": "~4.3.3",
     "bower": "~1.4.1",
     "chrome-web-store-item-property": "^1.1.2",
