@@ -2818,9 +2818,6 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      if ((+res.headers['x-ratelimit-remaining']) === 0) {
-        return;  // Hope for the best in the cache.
-      }
       var data = JSON.parse(buffer);
       var versions = data.map(function(e) { return e.name; });
       var tag = latestVersion(versions);
@@ -2853,9 +2850,6 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      if ((+res.headers['x-ratelimit-remaining']) === 0) {
-        return;  // Hope for the best in the cache.
-      }
       var data = JSON.parse(buffer);
       var version = data.tag_name;
       var prerelease = data.prerelease;
@@ -2889,9 +2883,6 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      if ((+res.headers['x-ratelimit-remaining']) === 0) {
-        return;  // Hope for the best in the cache.
-      }
       var data = JSON.parse(buffer);
       badgeData.text[1] = data.ahead_by;
       badgeData.colorscheme = 'blue';
@@ -2935,9 +2926,6 @@ cache(function(data, match, sendBadge, request) {
       return sendBadge(format, badgeData);
     }
     try {
-      if ((+res.headers['x-ratelimit-remaining']) === 0) {
-        return;  // Hope for the best in the cache.
-      }
       var data = JSON.parse(buffer);
       var downloads = 0;
 
@@ -3005,9 +2993,6 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      if ((+res.headers['x-ratelimit-remaining']) === 0) {
-        return;  // Hope for the best in the cache.
-      }
       var data = JSON.parse(buffer);
       var modifier = '';
       if (issuesApi) {
@@ -3049,9 +3034,6 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      if ((+res.headers['x-ratelimit-remaining']) === 0) {
-        return;  // Hope for the best in the cache.
-      }
       var data = JSON.parse(buffer);
       var forks = data.forks_count;
       badgeData.text[1] = forks;
@@ -3087,9 +3069,6 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      if ((+res.headers['x-ratelimit-remaining']) === 0) {
-        return;  // Hope for the best in the cache.
-      }
       badgeData.text[1] = JSON.parse(buffer).stargazers_count;
       badgeData.colorscheme = null;
       badgeData.colorB = '#4183C4';
@@ -3123,9 +3102,6 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      if ((+res.headers['x-ratelimit-remaining']) === 0) {
-        return;  // Hope for the best in the cache.
-      }
       badgeData.text[1] = JSON.parse(buffer).subscribers_count;
       badgeData.colorscheme = null;
       badgeData.colorB = '#4183C4';
@@ -3154,9 +3130,6 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      if ((+res.headers['x-ratelimit-remaining']) === 0) {
-        return;  // Hope for the best in the cache.
-      }
       badgeData.text[1] = JSON.parse(buffer).followers;
       badgeData.colorscheme = null;
       badgeData.colorB = '#4183C4';
@@ -3199,9 +3172,7 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      if ((+res.headers['x-ratelimit-remaining']) === 0) {
-        return;  // Hope for the best in the cache.
-      } else if (res.statusCode === 404) {
+      if (res.statusCode === 404) {
         badgeData.text[1] = 'repo not found';
         sendBadge(format, badgeData);
         return;
