@@ -2832,6 +2832,35 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// GitHub contributors integration.
+camp.route(/^\/github\/contributors(-anon)?\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var isAnon = match[1];
+  var user = match[2];  // eg, qubyte/rubidium
+  var repo = match[3];
+  var format = match[4];
+  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/contributors?page=1&per_page=1&anon=' + (0+isAnon);
+  var badgeData = getBadgeData('contributors', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.github;
+  }
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      badgeData.text[1] = metric(data[0].contributions);
+      badgeData.colorscheme = 'blue';
+    } catch(e) {
+      badgeData.text[1] = 'inaccessible';
+    }
+    sendBadge(format, badgeData);
+  });
+}));
+
 // GitHub release integration.
 camp.route(/^\/github\/release\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
