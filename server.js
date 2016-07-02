@@ -2995,24 +2995,26 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub issues integration.
-camp.route(/^\/github\/issues(-pr)?(-raw)?\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/issues(-pr)?(-closed)?(-raw)?\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var isPR = !!match[1];
-  var isRaw = !!match[2];
-  var user = match[3];  // eg, badges
-  var repo = match[4];  // eg, shields
-  var ghLabel = match[5];  // eg, website
-  var format = match[6];
-  var apiUrl = 'https://api.github.com/' + (isPR ? 'search/issues?q=is:pr+is:open+' : 'repos/') + user + '/' + repo;
+  var isClosed = !!match[2];
+  var isRaw = !!match[3];
+  var user = match[4];  // eg, badges
+  var repo = match[5];  // eg, shields
+  var ghLabel = match[6];  // eg, website
+  var format = match[7];
+  var apiUrl = 'https://api.github.com/' + (isPR ? 'search/issues?q=is:pr+is:' + (isClosed ? 'closed' : 'open') + '+' : 'repos/') + user + '/' + repo;
   var issuesApi = false;  // Are we using the issues API instead of the repo one?
   var query = {};
   if (!isPR && ghLabel !== undefined) {
     apiUrl += '/issues';
+    apiUrl += (isClosed ? '?state=closed' : '');
     query.labels = ghLabel;
     issuesApi = true;
   }
 
-  var badgeData = getBadgeData( (isPR ? 'pull requests' : 'issues'), data);
+  var badgeData = getBadgeData( (isClosed ? 'closed ' : '' ) + (isPR ? 'pull requests' : 'issues'), data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
   }
@@ -3036,7 +3038,7 @@ cache(function(data, match, sendBadge, request) {
           var issues = data.open_issues_count;
         }
       }
-      badgeData.text[1] = issues + modifier + (isRaw? '': ' open');
+      badgeData.text[1] = issues + modifier + (isRaw? '': (isClosed ? ' closed' : ' open'));
       badgeData.colorscheme = issues ? 'yellow' : 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
