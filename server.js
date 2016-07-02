@@ -2966,23 +2966,24 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub issues integration.
-camp.route(/^\/github\/issues(-raw)?\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/issues(-pr)?(-raw)?\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var isRaw = !!match[1];
-  var user = match[2];  // eg, badges
-  var repo = match[3];  // eg, shields
-  var ghLabel = match[4];  // eg, website
-  var format = match[5];
-  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo;
+  var isPR = !!match[1];
+  var isRaw = !!match[2];
+  var user = match[3];  // eg, badges
+  var repo = match[4];  // eg, shields
+  var ghLabel = match[5];  // eg, website
+  var format = match[6];
+  var apiUrl = 'https://api.github.com/' + (isPR ? 'search/issues?q=is:pr+is:open+' : 'repos/') + user + '/' + repo;
   var issuesApi = false;  // Are we using the issues API instead of the repo one?
   var query = {};
-  if (ghLabel !== undefined) {
+  if (!isPR && ghLabel !== undefined) {
     apiUrl += '/issues';
     query.labels = ghLabel;
     issuesApi = true;
   }
 
-  var badgeData = getBadgeData('issues', data);
+  var badgeData = getBadgeData( (isPR ? 'pull requests' : 'issues'), data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
   }
@@ -2995,12 +2996,16 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var modifier = '';
-      if (issuesApi) {
-        var issues = data.length;
-        if (res.headers['link'] &&
-            res.headers['link'].indexOf('rel="last"') >= 0) { modifier = '+'; }
+      if (isPR) {
+        issues = data.total_count;
       } else {
-        var issues = data.open_issues_count;
+        if (issuesApi) {
+          var issues = data.length;
+          if (res.headers['link'] &&
+              res.headers['link'].indexOf('rel="last"') >= 0) { modifier = '+'; }
+        } else {
+          var issues = data.open_issues_count;
+        }
       }
       badgeData.text[1] = issues + modifier + (isRaw? '': ' open');
       badgeData.colorscheme = issues ? 'yellow' : 'brightgreen';
