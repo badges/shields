@@ -71,10 +71,13 @@ The format is the following:
   /* Textual information shown, in order. */
   "text": [ "build", "passed" ],
   "format": "svg",  // Also supports "json".
-  "colorscheme": "green"
+  "colorscheme": "green",
   /* … Or… */
   "colorA": "#555",
-  "colorB": "#4c1"
+  "colorB": "#4c1",
+  /* See template/ for a list of available templates.
+     Each offers a different visual design. */
+  "template": "flat"
 }
 ```
 
