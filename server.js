@@ -2900,7 +2900,7 @@ cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
 
-  var tag = match[3]; //null for all releases
+  var tag = match[3];  // eg, v0.190.0, latest, null if querying all releases
   var asset_name = match[4].toLowerCase(); // eg. total, atom-amd64.deb, atom.x86_64.rpm
   var format = match[5];
 
