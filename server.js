@@ -3004,17 +3004,28 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[5];  // eg, shields
   var ghLabel = match[6];  // eg, website
   var format = match[7];
-  var apiUrl = 'https://api.github.com/' + (isPR ? 'search/issues?q=is:pr+is:' + (isClosed ? 'closed' : 'open') + '+' : 'repos/') + user + '/' + repo;
-  var issuesApi = false;  // Are we using the issues API instead of the repo one?
+  var apiUrl = 'https://api.github.com/';
   var query = {};
-  if (!isPR && ghLabel !== undefined) {
-    apiUrl += '/issues';
-    apiUrl += (isClosed ? '?state=closed' : '');
-    query.labels = ghLabel;
-    issuesApi = true;
+  var issuesApi = false;  // Are we using the issues API instead of the repo one?
+  if (isPR) {
+    apiUrl += 'search/issues';
+    query.q = 'is:pr is:' + (isClosed? 'closed': 'open') +
+      ' repo:' + user + '/' + repo;
+  } else {
+    apiUrl += 'repos/' + user + '/' + repo;
+    if (ghLabel !== undefined) {
+      apiUrl += '/issues';
+      if (isClosed) {
+        query.state = 'closed';
+      }
+      query.labels = ghLabel;
+      issuesApi = true;
+    }
   }
 
-  var badgeData = getBadgeData( (isClosed ? 'closed ' : '' ) + (isPR ? 'pull requests' : 'issues'), data);
+  var closedText = isClosed? 'closed ': '';
+  var targetText = isPR? 'pull requests': 'issues';
+  var badgeData = getBadgeData(closedText + targetText, data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
   }
@@ -3033,13 +3044,16 @@ cache(function(data, match, sendBadge, request) {
         if (issuesApi) {
           var issues = data.length;
           if (res.headers['link'] &&
-              res.headers['link'].indexOf('rel="last"') >= 0) { modifier = '+'; }
+              res.headers['link'].indexOf('rel="last"') >= 0) {
+            modifier = '+';
+          }
         } else {
           var issues = data.open_issues_count;
         }
       }
-      badgeData.text[1] = metric(issues + modifier + (isRaw? '': (isClosed ? ' closed' : ' open')));
-      badgeData.colorscheme = issues ? 'yellow' : 'brightgreen';
+      var rightText = isRaw? '': (isClosed? ' closed': ' open');
+      badgeData.text[1] = metric(issues) + modifier + rightText;
+      badgeData.colorscheme = (issues > 0)? 'yellow': 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
