@@ -3038,7 +3038,7 @@ cache(function(data, match, sendBadge, request) {
           var issues = data.open_issues_count;
         }
       }
-      badgeData.text[1] = issues + modifier + (isRaw? '': (isClosed ? ' closed' : ' open'));
+      badgeData.text[1] = metric(issues + modifier + (isRaw? '': (isClosed ? ' closed' : ' open')));
       badgeData.colorscheme = issues ? 'yellow' : 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
