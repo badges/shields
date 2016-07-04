@@ -132,7 +132,7 @@ heroku open
 You can build and run the server locally using Docker. First build an image:
 
 ```console
-$ build -t shields ./
+$ docker build -t shields ./
 Sending build context to Docker daemon 3.923 MB
 Step 0 : FROM node:0.12.7-onbuild
 …
@@ -143,7 +143,7 @@ Successfully built 4471b442c220
 Then run the container:
 
 ```console
-$ docker run --rm -p 8080:80 shields
+$ docker run -ti --rm -p 8080:80 shields
 
 > gh-badges@1.1.2 start /usr/src/app
 > node server.js
