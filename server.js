@@ -2972,7 +2972,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      badgeData.text[1] = data.ahead_by;
+      badgeData.text[1] = metric(data.ahead_by);
       badgeData.colorscheme = 'blue';
       sendBadge(format, badgeData);
     } catch(e) {
@@ -3178,7 +3178,7 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      badgeData.text[1] = JSON.parse(buffer).stargazers_count;
+      badgeData.text[1] = metric(JSON.parse(buffer).stargazers_count);
       badgeData.colorscheme = null;
       badgeData.colorB = '#4183C4';
       sendBadge(format, badgeData);
