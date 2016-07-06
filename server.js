@@ -2898,7 +2898,7 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[2];
   var format = match[3];
   var apiUrl = 'https://raw.githubusercontent.com/' + user + '/' + repo + '/master/package.json';
-  var badgeData = getBadgeData('Github Dev Version', data);
+  var badgeData = getBadgeData('development', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
   }
@@ -2929,7 +2929,7 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[2];
   var format = match[3];
   var apiUrl = 'https://raw.githubusercontent.com/' + user + '/' + repo + '/master/manifest.json';
-  var badgeData = getBadgeData('Github Dev Version', data);
+  var badgeData = getBadgeData('development', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
   }
