@@ -25,6 +25,7 @@
     "camp": "~16.2.2",
     "semver": "~4.3.3",
     "bower": "~1.4.1",
+    "pretty-bytes": "^3.0.1",
     "chrome-web-store-item-property": "^1.1.2",
     "json-autosave": "~1.1.1"
   },

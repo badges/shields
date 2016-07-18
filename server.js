@@ -20,6 +20,7 @@ var svg2img = require('./svg-to-img.js');
 var loadLogos = require('./load-logos.js');
 var githubAuth = require('./lib/github-auth.js');
 var querystring = require('querystring');
+var prettyBytes = require('pretty-bytes');
 var serverSecrets;
 try {
   // Everything that cannot be checked in but is useful server-side
@@ -3293,6 +3294,60 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
       } else {
         badgeData.text[1] = 'unknown license';
+        sendBadge(format, badgeData);
+      }
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// GitHub file size.
+camp.route(/^\/github\/size\/([^\/]+)\/([^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];  // eg, mashape
+  var repo = match[2];  // eg, apistatus
+  var path = match[3];
+  var format = match[4];
+
+  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/contents/' + path;
+  var badgeData = getBadgeData('size', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.github;
+  }
+  // Using our OAuth App secret grants us 5000 req/hour
+  // instead of the standard 60 req/hour.
+  if (serverSecrets) {
+    apiUrl += '?client_id=' + serverSecrets.gh_client_id
+      + '&client_secret=' + serverSecrets.gh_client_secret;
+  }
+  // Custom user-agent and accept headers are required
+  // http://developer.github.com/v3/#user-agent-required
+  // https://developer.github.com/v3/licenses/
+  var customHeaders = {
+    'User-Agent': 'Shields.io',
+    'Accept': 'application/vnd.github.drax-preview+json'
+  };
+  request(apiUrl, { headers: customHeaders }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      if (res.statusCode === 404) {
+        badgeData.text[1] = 'repo or file not found';
+        sendBadge(format, badgeData);
+        return;
+      }
+      var body = JSON.parse(buffer);
+      if (body.size != null) {
+        badgeData.text[1] = prettyBytes(body.size);
+        badgeData.colorscheme = 'green';
+        sendBadge(format, badgeData);
+      } else {
+        badgeData.text[1] = 'unknown file';
         sendBadge(format, badgeData);
       }
     } catch(e) {
