@@ -5318,6 +5318,71 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Issue Stats integration.
+camp.route(/^\/issuestats\/([^\/]+)(\/concise)?\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var type = match[1];      // e.g. `i` for Issue or `p` for PR
+  var options = match[2];   // `concise`
+  var host = match[3];      // e.g. `github`
+  var userRepo = match[4];  // e.g. `ruby/rails`
+  var format = match[5];
+
+  var badgeData = getBadgeData('Issue Stats', data);
+
+  // Maps type name from URL to JSON property name prefix for badge data
+  var typeToPropPrefix = {
+    i: 'issue',
+    p: 'pr'
+  };
+  var typePropPrefix = typeToPropPrefix[type];
+  if (typePropPrefix === undefined) {
+    badgeData.text[1] = 'invalid';
+    sendBadge(format, badgeData);
+    return;
+  }
+
+  var url = 'http://issuestats.com/' + host + '/' + userRepo;
+  var qs = {format: 'json'};
+  if (options === '/concise') {
+    qs.concise = true;
+  }
+  var options = {
+    method: 'GET',
+    url: url,
+    qs: qs,
+    gzip: true,
+    json: true
+  };
+  request(options, function(err, res, json) {
+    if (err != null || res.statusCode >= 500) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    if (res.statusCode >= 400 || !json || typeof json !== 'object') {
+      badgeData.text[1] = 'not found';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    try {
+      var label = json[typePropPrefix + '_badge_preamble'];
+      var value = json[typePropPrefix + '_badge_words'];
+      var color = json[typePropPrefix + '_badge_color'];
+
+      if (label != null) badgeData.text[0] = label;
+      badgeData.text[1] = value || 'invalid';
+      if (color != null) badgeData.colorscheme = color;
+
+      sendBadge(format, badgeData);
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
