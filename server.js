@@ -5319,10 +5319,10 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Issue Stats integration.
-camp.route(/^\/issuestats\/([^\/]+)(\/concise)?\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/issuestats\/([^\/]+)(\/long)?\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var type = match[1];      // e.g. `i` for Issue or `p` for PR
-  var options = match[2];   // `concise`
+  var longForm = !!match[2];
   var host = match[3];      // e.g. `github`
   var userRepo = match[4];  // e.g. `ruby/rails`
   var format = match[5];
@@ -5343,7 +5343,7 @@ cache(function(data, match, sendBadge, request) {
 
   var url = 'http://issuestats.com/' + host + '/' + userRepo;
   var qs = {format: 'json'};
-  if (options === '/concise') {
+  if (!longForm) {
     qs.concise = true;
   }
   var options = {
