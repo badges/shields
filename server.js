@@ -4325,6 +4325,36 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// wordpress plugin active installs integration.
+// example: https://img.shields.io/wordpress/plugin/ai/akismet.svg for https://wordpress.org/plugins/akismet
+camp.route(/^\/wordpress\/plugin\/ai\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var plugin = match[1];  // eg, `akismet`.
+  var format = match[2];
+  var apiUrl = 'http://api.wordpress.org/plugins/info/1.0/' + plugin + '.json?fields=active_installs';
+  var badgeData = getBadgeData('active installs', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var total = JSON.parse(buffer).active_installs;
+      badgeData.text[1] = metric(total) + '+';
+      if (total === 0) {
+        badgeData.colorscheme = 'red';
+      } else {
+        badgeData.colorscheme = floorCountColor(total, 10, 100, 1000);
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // wordpress plugin rating integration.
 // example: https://img.shields.io/wordpress/plugin/r/akismet.svg for https://wordpress.org/plugins/akismet
 camp.route(/^\/wordpress\/plugin\/r\/(.*)\.(svg|png|gif|jpg|json)$/,
