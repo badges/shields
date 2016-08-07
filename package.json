@@ -36,6 +36,7 @@
     "badge.js",
     "README.md",
     "gh-badge.js",
+    "measure-text.js",
     "templates",
     "svg-to-img.js",
     "colorscheme.json",
