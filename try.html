@@ -1285,7 +1285,7 @@ function markupDialog(tr) {
   var th = tr.firstElementChild;
   var link = th.dataset.link? th.dataset.link: '';
   // Remove the ?maxAge parameter from the query string.
-  link.replace(/[\?&]maxAge=\d+$|maxAge=\d+&/, '');
+  trimg.replace(/[\?&]maxAge=\d+$|maxAge=\d+&/, '');
   copyForm.img.value = trimg;
   copyForm.url.value = link;
   // Insert documentation.
