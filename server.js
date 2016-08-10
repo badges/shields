@@ -3072,12 +3072,10 @@ cache(function(data, match, sendBadge, request) {
       ' repo:' + user + '/' + repo;
   } else {
     apiUrl += 'repos/' + user + '/' + repo;
-    if (ghLabel !== undefined) {
+    if (isClosed || ghLabel !== undefined) {
       apiUrl += '/issues';
-      if (isClosed) {
-        query.state = 'closed';
-      }
-      query.labels = ghLabel;
+      if (isClosed) { query.state = 'closed'; }
+      if (ghLabel !== undefined) { query.labels = ghLabel; }
       issuesApi = true;
     }
   }
