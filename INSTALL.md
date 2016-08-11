@@ -146,7 +146,7 @@ Successfully built 4471b442c220
 Then run the container:
 
 ```console
-$ docker run --rm -p 8080:80 shields
+$ docker run -ti --rm -p 8080:80 shields
 
 > gh-badges@1.1.2 start /usr/src/app
 > node server.js

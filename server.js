@@ -2704,6 +2704,63 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Hackage matrix
+camp.route(/^\/hackage-matrix\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var repo = match[1];  // eg, `lens`.
+  var format = match[2];
+  var apiUrl = 'http://matrix.hackage.haskell.org/api/v1.0.0/package/name/' + repo + '/report/latest';
+  var badgeData = getBadgeData('hackage-matrix', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      console.log(err);
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    try {
+	    var json = JSON.parse(buffer); 
+
+      var ok = 0;
+      var noIp = 0;
+      var backjump = 0;
+      var fail = 0;
+      var failDeps = 0;
+
+      json.results.forEach(function (ghcResult) {
+        ghcResult.ghcResult.forEach(function (r) {
+          var result = r.result;
+
+          if (result.ok          !== undefined) { ok += 1; }
+          if (result.noIp        !== undefined) { noIp += 1; }
+          if (result.noIpBjLimit !== undefined) { backjump += 1; }
+          if (result.fail        !== undefined) { fail += 1; }
+          if (result.failDeps    !== undefined) { failDeps += 1; }
+
+          if (fail > 0) {
+            badgeData.text[1] = "failing: " + fail;
+            badgeData.colorscheme = "red";
+          } else if (failDeps > 0) {
+            badgeData.text[1] = "failing deps: " + failDeps;
+            badgeData.colorscheme = "red";
+          } else if (backjump) {
+            badgeData.text[1] = "backjump limit:" + backjump;
+            badgeData.colorscheme = "orange";
+          } else {
+            badgeData.text[1] = "builds: " + ok + "/" + (ok + noIp);
+            badgeData.colorscheme = 'brightgreen';
+          }
+        });
+      });
+    } catch (e) {
+      console.log(e);
+      badgeData.text[1] = 'invalid';
+    }
+    sendBadge(format, badgeData);
+  });
+}));
+
 // CocoaPods version integration.
 camp.route(/^\/cocoapods\/(v|p|l)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
