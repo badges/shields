@@ -71,6 +71,7 @@ What kind of metadata can you convey using badges?
 ## Services using the Shields standard
 * [Badger](https://github.com/badges/badgerbadgerbadger)
 * [badges2svg](https://github.com/bfontaine/badges2svg)
+* [CII Best Practices](https://bestpractices.coreinfrastructure.org/)
 * [Codacy](https://www.codacy.com)
 * [Code Climate](https://codeclimate.com/changelog/510d4fde56b102523a0004bf)
 * [Coveralls](https://coveralls.io/)
