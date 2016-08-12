@@ -4,7 +4,7 @@
 </p>
 <p align="center">
     <a href="https://www.gratipay.com/Shields/">
-        <img src="https://img.shields.io/gratipay/shields.svg"
+        <img src="https://img.shields.io/gratipay/team/shields.svg"
              alt="Gratipay">
     </a>
     <a href="https://npmjs.org/package/gh-badges">
@@ -22,6 +22,10 @@
 * **[CONTRIBUTING](CONTRIBUTING.md)** – project contribution guidelines.
 * **[SPECIFICATION](spec/SPECIFICATION.md)** – spec for the visual design of Shields badges.
 * **[LICENSE](LICENSE.md)** – public domain dedication.
+
+Make your own badges [here][badges]! (Quick guide: `https://img.shields.io/badge/left-right-f39f37.svg`.)
+
+[badges]: <http://shields.io/#your-badge>
 
 ## Solving the problem
 Many GitHub repositories sport badges for things like:
@@ -67,6 +71,7 @@ What kind of metadata can you convey using badges?
 ## Services using the Shields standard
 * [Badger](https://github.com/badges/badgerbadgerbadger)
 * [badges2svg](https://github.com/bfontaine/badges2svg)
+* [Codacy](https://www.codacy.com)
 * [Code Climate](https://codeclimate.com/changelog/510d4fde56b102523a0004bf)
 * [Coveralls](https://coveralls.io/)
 * [Forkability](http://basicallydan.github.io/forkability/)

@@ -6,9 +6,9 @@
 
 [![build status](http://img.shields.io/travis/badges/gh-badges.svg)](https://travis-ci.org/badges/gh-badges)
 
-Make your own badges [here][badges]!
+Make your own badges [here][badges]! (Quick guide: `https://img.shields.io/badge/left-right-f39f37.svg`.)
 
-[badges]: <http://img.shields.io>
+[badges]: <http://shields.io/#your-badge>
 
 # Install the API
 
@@ -71,10 +71,13 @@ The format is the following:
   /* Textual information shown, in order. */
   "text": [ "build", "passed" ],
   "format": "svg",  // Also supports "json".
-  "colorscheme": "green"
+  "colorscheme": "green",
   /* … Or… */
   "colorA": "#555",
-  "colorB": "#4c1"
+  "colorB": "#4c1",
+  /* See template/ for a list of available templates.
+     Each offers a different visual design. */
+  "template": "flat"
 }
 ```
 
@@ -132,7 +135,7 @@ heroku open
 You can build and run the server locally using Docker. First build an image:
 
 ```console
-$ build -t shields ./
+$ docker build -t shields ./
 Sending build context to Docker daemon 3.923 MB
 Step 0 : FROM node:0.12.7-onbuild
 …
@@ -152,6 +155,15 @@ http://[::1]:80/try.html
 ```
 
 Assuming Docker is running locally, you should be able to get to the application at http://localhost:8080/try.html. If you run Docker in a virtual machine (such as boot2docker or Docker Machine) then you will need to replace `localhost` with the actual IP address of that virtual machine.
+
+# Main Server Sysadmin
+
+- DNS round-robin between https://vps197850.ovh.net/try.html and https://vps244529.ovh.net/try.html.
+- Self-signed TLS certificates, but `img.shields.io` is behind CloudFlare, which provides signed certificates.
+- Using node v0.12.7 because later versions, combined with node-canvas, give inaccurate badge measurements.
+- Using forever (the node monitor) to automatically restart the server when it crashes.
+
+See https://github.com/badges/ServerScript for helper admin scripts.
 
 # Links
 

@@ -37,12 +37,16 @@ hr.spacing { border: 0; display: block; height: 3mm; }
   border: 0; background-color: rgba(50,50,55,0.7);
   opacity: 0; transition: opacity 0.5s; }
 #copyForm { background: #fafaff; position: fixed; width: 100%;
-  top: 50%; left: 0; transform: translate(0, -80%);
+  top: 17%; left: 0;
+  overflow: auto;
+  max-height: 56%;
   border-top: 15px solid #eaeaff;
   border-bottom: 15px solid #eaeaff;
 }
 #suggestButton { display: none; }
-table.badge > tbody > tr > td > img { cursor: pointer; }
+table.badge > tbody > tr > th,
+table.badge > tbody > tr > td > img,
+table.badge > tbody > tr > td > code { cursor: pointer; }
 </style>
 
 <main id='main'>
@@ -104,6 +108,14 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><img src='/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1/master.svg' alt=''/></td>
     <td><code>https://img.shields.io/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1/master.svg</code></td>
   </tr>
+  <tr><th> Magnum CI: </th>
+    <td><img src='/magnumci/ci/96ffb83fa700f069024921b0702e76ff.svg' alt=''/></td>
+    <td><code>https://img.shields.io/magnumci/ci/96ffb83fa700f069024921b0702e76ff.svg</code></td>
+  </tr>
+  <tr><th> Magnum CI: </th>
+    <td><img src='/magnumci/ci/96ffb83fa700f069024921b0702e76ff/new-meta.svg' alt=''/></td>
+    <td><code>https://img.shields.io/magnumci/ci/96ffb83fa700f069024921b0702e76ff/new-meta.svg</code></td>
+  </tr>
   <tr><th> CircleCI: </th>
       <td><img src='/circleci/project/BrightFlair/PHP.Gt.svg' alt=''/></td>
       <td><code>https://img.shields.io/circleci/project/BrightFlair/PHP.Gt.svg</code></td>
@@ -116,13 +128,17 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
       <td><img src='/circleci/project/BrightFlair/PHP.Gt/master.svg' alt=''/></td>
       <td><code>https://img.shields.io/circleci/token/YOURTOKEN/project/BrightFlair/PHP.Gt/master.svg</code></td>
   </tr>
+  <tr><th data-doc='visualStudioTeamServices'> Visual Studio Team services: </th>
+      <td><img src='/vso/build/larsbrinkhoff/953a34b9-5966-4923-a48a-c41874cfb5f5/1.svg' alt=''/></td>
+      <td><code>https://img.shields.io/vso/build/larsbrinkhoff/953a34b9-5966-4923-a48a-c41874cfb5f5/1.svg</code></td>
+  </tr>
   <tr><th> Shippable: </th>
-      <td><img src='/shippable/54d119db5ab6cc13528ab183.svg' alt=''/></td>
-      <td><code>https://img.shields.io/shippable/54d119db5ab6cc13528ab183.svg</code></td>
+      <td><img src='/shippable/5444c5ecb904a4b21567b0ff.svg' alt=''/></td>
+      <td><code>https://img.shields.io/shippable/5444c5ecb904a4b21567b0ff.svg</code></td>
   </tr>
   <tr><th> Shippable branch: </th>
-      <td><img src='/shippable/54d119db5ab6cc13528ab183/master.svg' alt=''/></td>
-      <td><code>https://img.shields.io/shippable/54d119db5ab6cc13528ab183/master.svg</code></td>
+      <td><img src='/shippable/5444c5ecb904a4b21567b0ff/master.svg' alt=''/></td>
+      <td><code>https://img.shields.io/shippable/5444c5ecb904a4b21567b0ff/master.svg</code></td>
   </tr>
   <tr><th> Snap CI branch: </th>
       <td><img src='/snap-ci/ThoughtWorksStudios/eb_deployer/master.svg' alt=''/></td>
@@ -135,6 +151,10 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <tr><th> Jenkins tests: </th>
     <td><img src='/jenkins/t/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg' alt=''/></td>
     <td><code>https://img.shields.io/jenkins/t/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg</code></td>
+  </tr>
+  <tr><th> Jenkins coverage: </th>
+    <td><img src='/jenkins/c/https/jenkins.qa.ubuntu.com/address-book-service-utopic-i386-ci.svg' alt=''/></td>
+    <td><code>https://img.shields.io/jenkins/c/https/jenkins.qa.ubuntu.com/address-book-service-utopic-i386-ci.svg</code></td>
   </tr>
   <tr><th> Coveralls: </th>
     <td><img src='/coveralls/jekyll/jekyll.svg' alt=''/></td>
@@ -211,19 +231,19 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
 </tbody></table>
 <h3 id="downloads"> Downloads </h3>
 <table class='badge'><tbody>
-  <tr><th data-keywords='github'> Github All Releases: </th>
+  <tr><th data-keywords='github' data-doc='githubDoc'> Github All Releases: </th>
   <td><img src='/github/downloads/atom/atom/total.svg' alt=''/></td>
   <td><code>https://img.shields.io/github/downloads/atom/atom/total.svg</code></td>
   </tr>
-  <tr><th data-keywords='github'> Github Releases: </th>
+  <tr><th data-keywords='github' data-doc='githubDoc'> Github Releases: </th>
   <td><img src='/github/downloads/atom/atom/latest/total.svg' alt=''/></td>
   <td><code>https://img.shields.io/github/downloads/atom/atom/latest/total.svg</code></td>
   </tr>
-  <tr><th data-keywords='github'> Github Releases (by Release): </th>
+  <tr><th data-keywords='github' data-doc='githubDoc'> Github Releases (by Release): </th>
   <td><img src='/github/downloads/atom/atom/v0.190.0/total.svg' alt=''/></td>
   <td><code>https://img.shields.io/github/downloads/atom/atom/v0.190.0/total.svg</code></td>
   </tr>
-  <tr><th data-keywords='github'> Github Releases (by Asset): </th>
+  <tr><th data-keywords='github' data-doc='githubDoc'> Github Releases (by Asset): </th>
   <td><img src='/github/downloads/atom/atom/latest/atom-amd64.deb.svg' alt=''/></td>
   <td><code>https://img.shields.io/github/downloads/atom/atom/latest/atom-amd64.deb.svg</code></td>
   </tr>
@@ -250,14 +270,6 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <tr><th data-keywords='ruby'> Gem: </th>
   <td><img src='/gem/dt/rails.svg' alt=''/></td>
   <td><code>https://img.shields.io/gem/dt/rails.svg</code></td>
-  </tr>
-  <tr><th> NuGet: </th>
-  <td><img src='/nuget/dt/Microsoft.AspNet.Mvc.svg' alt=''/></td>
-  <td><code>https://img.shields.io/nuget/dt/Microsoft.AspNet.Mvc.svg</code></td>
-  </tr>
-  <tr><th> MyGet: </th>
-  <td><img src='/myget/yolodev/dt/FSharpSupport.svg' alt=''/></td>
-  <td><code>https://img.shields.io/myget/yolodev/dt/FSharpSupport.svg</code></td>
   </tr>
   <tr><th> Chocolatey: </th>
   <td><img src='/chocolatey/dt/scriptcs.svg' alt=''/></td>
@@ -327,6 +339,10 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <td><img src='/sourceforge/dt/sevenzip.svg' alt=''/></td>
   <td><code>https://img.shields.io/sourceforge/dt/sevenzip.svg</code></td>
   </tr>
+  <tr><th> SourceForge: </th>
+  <td><img src='/sourceforge/dt/arianne/stendhal.svg' alt=''/></td>
+  <td><code>https://img.shields.io/sourceforge/dt/arianne/stendhal.svg</code></td>
+  </tr>
   <tr><th data-keywords='atom'> apm: </th>
   <td><img src='/apm/dm/vim-mode.svg' alt=''/></td>
   <td><code>https://img.shields.io/apm/dm/vim-mode.svg</code></td>
@@ -351,12 +367,52 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <td><img src='/dub/dt/vibe-d/0.7.23.svg' alt=''/></td>
   <td><code>https://img.shields.io/dub/dt/vibe-d/0.7.23.svg</code></td>
   </tr>
+  <tr><th data-keywords='sublime'> Package Control: </th>
+  <td><img src='/packagecontrol/dm/Package%20Control.svg' alt=''/></td>
+  <td><code>https://img.shields.io/packagecontrol/dm/Package%20Control.svg</code></td>
+  </tr>
+  <tr><th data-keywords='sublime'> Package Control: </th>
+  <td><img src='/packagecontrol/dw/Package%20Control.svg' alt=''/></td>
+  <td><code>https://img.shields.io/packagecontrol/dw/Package%20Control.svg</code></td>
+  </tr>
+  <tr><th data-keywords='sublime'> Package Control: </th>
+  <td><img src='/packagecontrol/dd/Package%20Control.svg' alt=''/></td>
+  <td><code>https://img.shields.io/packagecontrol/dd/Package%20Control.svg</code></td>
+  </tr>
+  <tr><th data-keywords='sublime'> Package Control: </th>
+  <td><img src='/packagecontrol/dt/Package%20Control.svg' alt=''/></td>
+  <td><code>https://img.shields.io/packagecontrol/dt/Package%20Control.svg</code></td>
+  </tr>
+  <tr><th data-keywords='chrome'> Chrome Web Store: </th>
+    <td><img src='/chrome-web-store/d/nimelepbpejjlbmoobocpfnjhihnpked.svg' alt=''/></td>
+    <td><code>https://img.shields.io/chrome-web-store/d/nimelepbpejjlbmoobocpfnjhihnpked.svg</code></td>
+  </tr>
+  <tr><th data-keywords='website' data-doc='websiteDoc'> Website: </th>
+  <td><img src='/website-up-down-green-red/http/shields.io.svg' alt=''/></td>
+  <td><code>https://img.shields.io/website-up-down-green-red/http/shields.io.svg</code></td>
+  </tr>
+  <tr><th data-keywords='cocoapods'> CocoaPods: </th>
+    <td><img src='/cocoapods/dt/AFNetworking.svg' alt='' /></td>
+    <td><code>https://img.shields.io/cocoapods/dt/AFNetworking.svg</code></td>
+  </tr>
+  <tr><th data-keywords='cocoapods'> CocoaPods: </th>
+    <td><img src='/cocoapods/dm/AFNetworking.svg' alt='' /></td>
+    <td><code>https://img.shields.io/cocoapods/dm/AFNetworking.svg</code></td>
+  </tr>
+  <tr><th data-keywords='cocoapods'> CocoaPods: </th>
+    <td><img src='/cocoapods/dw/AFNetworking.svg' alt='' /></td>
+    <td><code>https://img.shields.io/cocoapods/dw/AFNetworking.svg</code></td>
+  </tr>
 </tbody></table>
 <h3 id="version"> Version </h3>
 <table class='badge'><tbody>
   <tr><th data-keywords='node'> npm: </th>
   <td><img src='/npm/v/npm.svg' alt=''/></td>
   <td><code>https://img.shields.io/npm/v/npm.svg</code></td>
+  </tr>
+  <tr><th data-keywords='node'> npm (scoped): </th>
+  <td><img src='/npm/v/@cycle/core.svg' alt=''/></td>
+  <td><code>https://img.shields.io/npm/v/@cycle/core.svg</code></td>
   </tr>
   <tr><th> node: </th>
   <td><img src='/node/v/gh-badges.svg' alt=''/></td>
@@ -410,15 +466,15 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <td><img src='/hexpm/v/plug.svg' alt=''/></td>
   <td><code>https://img.shields.io/hexpm/v/plug.svg</code></td>
   </tr>
-  <tr><th> GitHub tag: </th>
+  <tr><th data-doc='githubDoc'> GitHub tag: </th>
   <td><img src='/github/tag/strongloop/express.svg' alt=''/></td>
   <td><code>https://img.shields.io/github/tag/strongloop/express.svg</code></td>
   </tr>
-  <tr><th> GitHub release: </th>
+  <tr><th data-doc='githubDoc'> GitHub release: </th>
   <td><img src='/github/release/qubyte/rubidium.svg' alt=''/></td>
   <td><code>https://img.shields.io/github/release/qubyte/rubidium.svg</code></td>
   </tr>
-  <tr><th> GitHub commits: </th>
+  <tr><th data-doc='githubDoc'> GitHub commits: </th>
   <td><img src='/github/commits-since/SubtitleEdit/subtitleedit/3.4.7.svg' alt=''/></td>
   <td><code>https://img.shields.io/github/commits-since/SubtitleEdit/subtitleedit/3.4.7.svg</code></td>
   </tr>
@@ -431,16 +487,20 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <td><code>https://img.shields.io/nuget/v/Nuget.Core.svg</code></td>
   </tr>
   <tr><th> NuGet Pre Release: </th>
-  <td><img src='/nuget/vpre/Nuget.Core.svg' alt=''/></td>
-  <td><code>https://img.shields.io/nuget/vpre/Nuget.Core.svg</code></td>
+  <td><img src='/nuget/vpre/Microsoft.AspNet.Mvc.svg' alt=''/></td>
+  <td><code>https://img.shields.io/nuget/vpre/Microsoft.AspNet.Mvc.svg</code></td>
   </tr>
   <tr><th> MyGet: </th>
-  <td><img src='/myget/yolodev/v/FSharpSupport.svg' alt=''/></td>
-  <td><code>https://img.shields.io/myget/yolodev/v/FSharpSupport.svg</code></td>
+  <td><img src='/myget/mongodb/v/MongoDB.Driver.Core.svg' alt=''/></td>
+  <td><code>https://img.shields.io/myget/mongodb/v/MongoDB.Driver.Core.svg</code></td>
   </tr>
   <tr><th> MyGet Pre Release: </th>
-  <td><img src='/myget/yolodev/vpre/FSharpSupport.svg' alt=''/></td>
-  <td><code>https://img.shields.io/myget/yolodev/vpre/FSharpSupport.svg</code></td>
+  <td><img src='/myget/yolodev/vpre/YoloDev.Dnx.FSharp.svg' alt=''/></td>
+  <td><code>https://img.shields.io/myget/yolodev/vpre/YoloDev.Dnx.FSharp.svg</code></td>
+  </tr>
+  <tr><th> MyGet tenant: </th>
+  <td><img src='/dotnet.myget/dotnet-coreclr/v/Microsoft.DotNet.CoreCLR.svg' alt=''/></td>
+  <td><code>https://img.shields.io/dotnet.myget/dotnet-coreclr/v/Microsoft.DotNet.CoreCLR.svg</code></td>
   </tr>
   <tr><th> Chocolatey: </th>
   <td><img src='/chocolatey/v/git.svg' alt=''/></td>
@@ -478,23 +538,35 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <td><img src='/dub/v/vibe-d.svg' alt=''/></td>
   <td><code>https://img.shields.io/dub/v/vibe-d.svg</code></td>
   </tr>
+  <tr><th data-keywords='aur'> AUR: </th>
+  <td><img src='/aur/version/yaourt.svg' alt=''/></td>
+  <td><code>https://img.shields.io/aur/version/yaourt.svg</code></td>
+  </tr>
+  <tr><th data-keywords='chrome'> Chrome Web Store: </th>
+  <td><img src='/chrome-web-store/v/nimelepbpejjlbmoobocpfnjhihnpked.svg' alt=''/></td>
+  <td><code>https://img.shields.io/chrome-web-store/v/nimelepbpejjlbmoobocpfnjhihnpked.svg</code></td>
+  </tr>
+  <tr><th> homebrew: </th>
+  <td><img src='/homebrew/v/cake.svg' alt=''/></td>
+  <td><code>https://img.shields.io/homebrew/v/cake.svg</code></td>
+  </tr>
 </tbody></table>
 
 <h3 id="social"> Social </h3>
 <table class='badge'><tbody>
-  <tr><th> GitHub forks: </th>
+  <tr><th data-doc='githubDoc'> GitHub forks: </th>
   <td><img src='/github/forks/badges/shields.svg?style=social&label=Fork' alt=''/></td>
   <td><code>https://img.shields.io/github/forks/badges/shields.svg?style=social&amp;label=Fork</code></td>
   </tr>
-  <tr><th> GitHub stars: </th>
+  <tr><th data-doc='githubDoc'> GitHub stars: </th>
   <td><img src='/github/stars/badges/shields.svg?style=social&label=Star' alt=''/></td>
   <td><code>https://img.shields.io/github/stars/badges/shields.svg?style=social&amp;label=Star</code></td>
   </tr>
-  <tr><th> GitHub watchers: </th>
+  <tr><th data-doc='githubDoc'> GitHub watchers: </th>
   <td><img src='/github/watchers/badges/shields.svg?style=social&label=Watch' alt=''/></td>
   <td><code>https://img.shields.io/github/watchers/badges/shields.svg?style=social&amp;label=Watch</code></td>
   </tr>
-  <tr><th> GitHub followers: </th>
+  <tr><th data-doc='githubDoc'> GitHub followers: </th>
   <td><img src='/github/followers/espadrine.svg?style=social&label=Follow' alt=''/></td>
   <td><code>https://img.shields.io/github/followers/espadrine.svg?style=social&amp;label=Follow</code></td>
   </tr>
@@ -502,17 +574,29 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <td><img src='/twitter/url/http/shields.io.svg?style=social' alt=''/></td>
   <td><code>https://img.shields.io/twitter/url/http/shields.io.svg?style=social</code></td>
   </tr>
+  <tr><th> Twitter Follow: </th>
+  <td><img src='/twitter/follow/shields_io.svg?style=social&label=Follow' alt=''/></td>
+  <td><code>https://img.shields.io/twitter/follow/shields_io.svg?style=social&amp;label=Follow</code></td>
+  </tr>
 </tbody></table>
 
 <h3 id="miscellaneous"> Miscellaneous </h3>
 <table class='badge'><tbody>
-  <tr><th> Gratipay: </th>
-    <td><img src='/gratipay/JSFiddle.svg' alt=''/></td>
-    <td><code>https://img.shields.io/gratipay/JSFiddle.svg</code></td>
+  <tr><th> Gratipay User: </th>
+    <td><img src='/gratipay/user/dougwilson.svg' alt=''/></td>
+    <td><code>https://img.shields.io/gratipay/user/dougwilson.svg</code></td>
+  </tr>
+  <tr><th> Gratipay Team: </th>
+    <td><img src='/gratipay/team/shields.svg' alt=''/></td>
+    <td><code>https://img.shields.io/gratipay/team/shields.svg</code></td>
   </tr>
   <tr><th> Bountysource: </th>
     <td><img src='/bountysource/team/mozilla-core/activity.svg' alt=''/></td>
     <td><code>https://img.shields.io/bountysource/team/mozilla-core/activity.svg</code></td>
+  </tr>
+  <tr><th> Beerpay: </th>
+    <td><img src='/beerpay/hashdog/scrapfy-chrome-extension.svg' alt=''/></td>
+    <td><code>https://img.shields.io/beerpay/hashdog/scrapfy-chrome-extension.svg</code></td>
   </tr>
   <tr><th> Code Climate: </th>
     <td><img src='/codeclimate/github/kabisaict/flow.svg' alt=''/></td>
@@ -521,6 +605,14 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <tr><th> Code Climate: </th>
     <td><img src='/codeclimate/coverage/github/triAGENS/ashikawa-core.svg' alt=''/></td>
     <td><code>https://img.shields.io/codeclimate/coverage/github/triAGENS/ashikawa-core.svg</code></td>
+  </tr>
+  <tr><th> Code Climate: </th>
+    <td><img src='/codeclimate/issues/github/me-and/mdf.svg' alt=''/></td>
+    <td><code>https://img.shields.io/codeclimate/issues/github/me-and/mdf.svg</code></td>
+  </tr>
+  <tr><th> bitHound: </th>
+    <td><img src='/bithound/code/github/rexxars/sse-channel.svg' alt=''/></td>
+    <td><code>https://img.shields.io/bithound/code/github/rexxars/sse-channel.svg</code></td>
   </tr>
   <tr><th> Gemnasium: </th>
     <td><img src='/gemnasium/mathiasbynens/he.svg' alt=''/></td>
@@ -602,25 +694,77 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><img src='/wheelmap/a/2323004600.svg' alt='' /></td>
     <td><code>https://img.shields.io/wheelmap/a/2323004600.svg</code></td>
   </tr>
-  <tr><th> GitHub issues: </th>
+  <tr><th data-keywords='GitHub issue' data-doc='githubDoc'> GitHub issues: </th>
     <td><img src='/github/issues/badges/shields.svg' alt=''/></td>
     <td><code>https://img.shields.io/github/issues/badges/shields.svg</code></td>
   </tr>
-  <tr><th data-keywords='GitHub'></th>
+  <tr><th data-keywords='GitHub issue' data-doc='githubDoc'></th>
     <td><img src='/github/issues-raw/badges/shields.svg' alt=''/></td>
     <td><code>https://img.shields.io/github/issues-raw/badges/shields.svg</code></td>
   </tr>
-  <tr><th data-keywords='github license'> GitHub license: </th>
+  <tr><th data-keywords='GitHub issue' data-doc='githubDoc'> GitHub closed issues: </th>
+    <td><img src='/github/issues-closed/badges/shields.svg' alt=''/></td>
+    <td><code>https://img.shields.io/github/issues-closed/badges/shields.svg</code></td>
+  </tr>
+  <tr><th data-keywords='GitHub issue' data-doc='githubDoc'></th>
+    <td><img src='/github/issues-closed-raw/badges/shields.svg' alt=''/></td>
+    <td><code>https://img.shields.io/github/issues-closed-raw/badges/shields.svg</code></td>
+  </tr>
+  <tr><th data-keywords='GitHub issue label' data-doc='githubDoc'> label:</th>
+    <td><img src='/github/issues-raw/badges/shields/website.svg' alt=''/></td>
+    <td><code>https://img.shields.io/github/issues-raw/badges/shields/website.svg</code></td>
+  </tr>
+  <tr><th data-keywords='GitHub pullrequest pr' data-doc='githubDoc'> GitHub pull requests: </th>
+    <td><img src='/github/issues-pr/cdnjs/cdnjs.svg' alt=''/></td>
+    <td><code>https://img.shields.io/github/issues-pr/cdnjs/cdnjs.svg</code></td>
+  </tr>
+  <tr><th data-keywords='GitHub pullrequest pr' data-doc='githubDoc'></th>
+    <td><img src='/github/issues-pr-raw/cdnjs/cdnjs.svg' alt=''/></td>
+    <td><code>https://img.shields.io/github/issues-pr-raw/cdnjs/cdnjs.svg</code></td>
+  </tr>
+  <tr><th data-keywords='GitHub pullrequest pr' data-doc='githubDoc'> GitHub closed pull requests: </th>
+    <td><img src='/github/issues-pr-closed/cdnjs/cdnjs.svg' alt=''/></td>
+    <td><code>https://img.shields.io/github/issues-pr-closed/cdnjs/cdnjs.svg</code></td>
+  </tr>
+  <tr><th data-keywords='GitHub pullrequest pr' data-doc='githubDoc'></th>
+    <td><img src='/github/issues-pr-closed-raw/cdnjs/cdnjs.svg' alt=''/></td>
+    <td><code>https://img.shields.io/github/issues-pr-closed-raw/cdnjs/cdnjs.svg</code></td>
+  </tr>
+  <tr><th data-keywords='GitHub contributor' data-doc='githubDoc'> GitHub contributors: </th>
+    <td><img src='/github/contributors/cdnjs/cdnjs.svg' alt=''/></td>
+    <td><code>https://img.shields.io/github/contributors/cdnjs/cdnjs.svg</code></td>
+  </tr>
+  <tr><th data-keywords='GitHub license' data-doc='githubDoc'> license: </th>
     <td><img src='/github/license/mashape/apistatus.svg' alt=''/></td>
     <td><code>https://img.shields.io/github/license/mashape/apistatus.svg</code></td>
+  </tr>
+  <tr><th> Bitbucket issues: </th>
+    <td><img src='/bitbucket/issues/atlassian/python-bitbucket.svg' alt=''/></td>
+    <td><code>https://img.shields.io/bitbucket/issues/atlassian/python-bitbucket.svg</code></td>
+  </tr>
+  <tr><th data-keywords='Bitbucket'></th>
+    <td><img src='/bitbucket/issues-raw/atlassian/python-bitbucket.svg' alt=''/></td>
+    <td><code>https://img.shields.io/bitbucket/issues-raw/atlassian/python-bitbucket.svg</code></td>
   </tr>
   <tr><th> WordPress rating: </th>
     <td><img src='/wordpress/plugin/r/akismet.svg' alt=''/></td>
     <td><code>https://img.shields.io/wordpress/plugin/r/akismet.svg</code></td>
   </tr>
-  <tr><th> Codacy: </th>
-    <td><img src='/codacy/e27821fb6289410b8f58338c7e0bc686.svg' alt=''/></td>
-    <td><code>https://img.shields.io/codacy/e27821fb6289410b8f58338c7e0bc686.svg</code></td>
+  <tr><th> Codacy grade: </th>
+    <td><img src='/codacy/grade/e27821fb6289410b8f58338c7e0bc686.svg' alt=''/></td>
+    <td><code>https://img.shields.io/codacy/grade/e27821fb6289410b8f58338c7e0bc686.svg</code></td>
+  </tr>
+  <tr><th> Codacy branch grade: </th>
+    <td><img src='/codacy/grade/e27821fb6289410b8f58338c7e0bc686/master.svg' alt=''/></td>
+    <td><code>https://img.shields.io/codacy/grade/e27821fb6289410b8f58338c7e0bc686/master.svg</code></td>
+  </tr>
+  <tr><th> Codacy coverage: </th>
+    <td><img src='/codacy/coverage/c44df2d9c89a4809896914fd1a40bedd.svg' alt=''/></td>
+    <td><code>https://img.shields.io/codacy/coverage/c44df2d9c89a4809896914fd1a40bedd.svg</code></td>
+  </tr>
+  <tr><th> Codacy branch coverage: </th>
+    <td><img src='/codacy/coverage/c44df2d9c89a4809896914fd1a40bedd/master.svg' alt=''/></td>
+    <td><code>https://img.shields.io/codacy/coverage/c44df2d9c89a4809896914fd1a40bedd/master.svg</code></td>
   </tr>
   <tr><th> Libscore: </th>
     <td><img src='/libscore/s/jQuery.svg' alt=''/></td>
@@ -670,6 +814,10 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><img src='/docker/pulls/mashape/kong.svg' alt=''/></td>
     <td><code>https://img.shields.io/docker/pulls/mashape/kong.svg</code></td>
   </tr>
+  <tr><th data-keywords='docker automated build'> Docker Automated build </th>
+    <td><img src='/docker/automated/jrottenberg/ffmpeg.svg' alt=''/></td>
+    <td><code>https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg</code></td>
+  </tr>
   <tr><th data-keywords='imagelayers'> ImageLayers Size: </th>
     <td><img src='/imagelayers/image-size/_/ubuntu/latest.svg' alt=''/></td>
     <td><code>https://img.shields.io/imagelayers/image-size/_/ubuntu/latest.svg</code></td>
@@ -681,6 +829,37 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <tr><th> Gitter: </th>
     <td><img src='/gitter/room/nwjs/nw.js.svg' alt=''/></td>
     <td><code>https://img.shields.io/gitter/room/nwjs/nw.js.svg</code></td>
+  </tr>
+  <tr><th> JIRA issue: </th>
+    <td><img src='/jira/issue/https/issues.apache.org/jira/KAFKA-2896.svg' alt=''/></td>
+    <td><code>https://img.shields.io/jira/issue/https/issues.apache.org/jira/KAFKA-2896.svg</code></td>
+  </tr>
+  <tr><th> Maintenance: </th>
+    <td><img src='/maintenance/yes/2016.svg' alt=''/></td>
+    <td><code>https://img.shields.io/maintenance/yes/2016.svg</code></td>
+  <tr><th data-keywords='aur'> AUR: </th>
+    <td><img src='/aur/license/yaourt.svg' alt=''/></td>
+    <td><code>https://img.shields.io/aur/license/yaourt.svg</code></td>
+  </tr>
+  <tr><th> Waffle.io: </th>
+    <td><img src='/waffle/label/evancohen/smart-mirror/in%20progress.svg' alt=''/></td>
+    <td><code>https://img.shields.io/waffle/label/evancohen/smart-mirror/in%20progress.svg</code></td>
+  </tr>
+  <tr><th data-keywords='chrome'> Chrome Web Store: </th>
+    <td><img src='/chrome-web-store/price/nimelepbpejjlbmoobocpfnjhihnpked.svg' alt=''/></td>
+    <td><code>https://img.shields.io/chrome-web-store/price/nimelepbpejjlbmoobocpfnjhihnpked.svg</code></td>
+  </tr>
+  <tr><th data-keywords='chrome'> Chrome Web Store: </th>
+    <td><img src='/chrome-web-store/rating/nimelepbpejjlbmoobocpfnjhihnpked.svg' alt=''/></td>
+    <td><code>https://img.shields.io/chrome-web-store/rating/nimelepbpejjlbmoobocpfnjhihnpked.svg</code></td>
+  </tr>
+  <tr><th data-keywords='chrome'> Chrome Web Store: </th>
+    <td><img src='/chrome-web-store/rating-count/nimelepbpejjlbmoobocpfnjhihnpked.svg' alt=''/></td>
+    <td><code>https://img.shields.io/chrome-web-store/rating-count/nimelepbpejjlbmoobocpfnjhihnpked.svg</code></td>
+  </tr>
+  <tr><th data-keywords='aur'> AUR: </th>
+    <td><img src='/aur/votes/yaourt.svg' alt=''/></td>
+    <td><code>https://img.shields.io/aur/votes/yaourt.svg</code></td>
   </tr>
 </tbody></table>
 
@@ -702,6 +881,22 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><img src='/david/peer/webcomponents/generator-element.svg' alt=''/></td>
     <td><code>https://img.shields.io/david/peer/webcomponents/generator-element.svg</code></td>
   </tr>
+  <tr><th> bitHound: </th>
+    <td><img src='/bithound/dependencies/github/rexxars/sse-channel.svg' alt=''/></td>
+    <td><code>https://img.shields.io/bithound/dependencies/github/rexxars/sse-channel.svg</code></td>
+  </tr>
+  <tr><th> bitHound: </th>
+    <td><img src='/bithound/devDependencies/github/rexxars/sse-channel.svg' alt=''/></td>
+    <td><code>https://img.shields.io/bithound/devDependencies/github/rexxars/sse-channel.svg</code></td>
+  </tr>
+  <tr><th> CocoaPods: </th>
+    <td><img src='/cocoapods/at/AFNetworking.svg' alt='' /></td>
+    <td><code>https://img.shields.io/cocoapods/at/AFNetworking.svg</code></td>
+  </tr>
+  <tr><th> CocoaPods: </th>
+    <td><img src='/cocoapods/aw/AFNetworking.svg' alt='' /></td>
+    <td><code>https://img.shields.io/cocoapods/aw/AFNetworking.svg</code></td>
+  </tr>
   <tr><th> CocoaPods: </th>
     <td><img src='/cocoapods/p/AFNetworking.svg' alt='' /></td>
     <td><code>https://img.shields.io/cocoapods/p/AFNetworking.svg</code></td>
@@ -713,6 +908,29 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <tr><th> Ansible Role: </th>
     <td><img src='/ansible/role/3078.svg' alt=''/></td>
     <td><code>https://img.shields.io/ansible/role/3078.svg</code></td>
+  </tr>
+  <tr><th> StackExchange: </th>
+    <td><img src='/stackexchange/tex/r/951.svg' alt=''/></td>
+    <td><code>https://img.shields.io/stackexchange/tex/r/951.svg</code></td>
+  </tr>
+  <tr><th> StackExchange: </th>
+  <td><img src='/stackexchange/stackoverflow/t/augeas.svg' alt=''/></td>
+  <td><code>https://img.shields.io/stackexchange/stackoverflow/t/augeas.svg</code></td>
+  </tr>
+  <tr><th> Issue Stats: </th>
+  <td><img src='/issuestats/i/github/strongloop/express.svg' alt=''/></td>
+  <td><code>https://img.shields.io/issuestats/i/github/strongloop/express.svg</code></td>
+  </tr>
+  <tr><th> (long form): </th>
+  <td>&nbsp;</td>
+  <td><code>https://img.shields.io/issuestats/i/long/github/strongloop/express.svg</code></td>
+  </tr>
+  <tr><th> Issue Stats: </th>
+  <td><img src='/issuestats/p/github/strongloop/express.svg' alt=''/></td>
+  <td><code>https://img.shields.io/issuestats/p/github/strongloop/express.svg</code></td>
+  <tr><th> (long form): </th>
+  <td>&nbsp;</td>
+  <td><code>https://img.shields.io/issuestats/p/long/github/strongloop/express.svg</code></td>
   </tr>
   <tr><th> Libraries.io for releases: </th>
     <td><img src='https://img.shields.io/librariesio/release/hex/phoenix/1.0.3.svg' alt=''/></td>
@@ -810,6 +1028,8 @@ Here are a few other parameters you can use:
   <tr><td><code>?link=http://abc.xyz&amp;link=http://shields.io</code></td>
     <td>Specify what clicking on the left/right of a badge should do (esp. for
       social badge style)</td></tr>
+  <tr><td><code>?maxAge=3600</code></td>
+    <td>Set the HTTP cache lifetime in secs</td></tr>
 </tbody></table>
 
 <p>
@@ -824,11 +1044,9 @@ Tell your favorite badge service to use it! <br/>
 And tell us, we might be able to bring it to you anyway!
 </p>
 <p>
-<a href="https://twitter.com/Shields_io" class="twitter-follow-button"
-  data-show-count="false">Follow @Shields_io</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<a href='https://twitter.com/Shields_io'><img src='/twitter/follow/shields_io.svg?style=social&label=Follow' alt='Follow @shields_io'></a>
 <a href='https://www.gratipay.com/Shields/'><img src='/gratipay/Shields.svg?style=social&label=Donate' alt='Donate to us!'/></a>
-<iframe src="http://ghbtns.com/github-btn.html?user=badges&amp;repo=shields&amp;type=fork&amp;count=true"
+<iframe src="https://ghbtns.com/github-btn.html?user=badges&amp;repo=shields&amp;type=fork&amp;count=true"
   style="border:0; background-color:transparent"
   width="95" height="20"></iframe>
 </p>
@@ -837,127 +1055,11 @@ And tell us, we might be able to bring it to you anyway!
 is where the current server got started.
 </p>
 
-<h2 id="contributors"> Contributors </h2>
-
-<a class='photo' href='https://github.com/espadrine'>
-  <img alt='espadrine' src='https://gravatar.com/avatar/8c3bee0764c781e1b0b8c2e53f0f11fe'>
-</a>
-<a class='photo' href='https://github.com/mathiasbynens'>
-  <img alt='mathiasbynens' src='https://gravatar.com/avatar/24e08a9ea84deb17ae121074d0f17125'>
-</a>
-<a class='photo' href='https://github.com/olivierlacan'>
-  <img alt='olivierlacan' src='https://gravatar.com/avatar/6e77509d7891c1d2230f3240a5652b6e'>
-</a>
-<a class='photo' href='https://github.com/nathany'>
-  <img alt='nathany' src='https://gravatar.com/avatar/7d0978b275a362d11283396a929aee65'>
-</a>
-<a class='photo' href='https://github.com/whit537'>
-  <img alt='whit537' src='https://gravatar.com/avatar/fb054b407a6461e417ee6b6ae084da37'>
-</a>
-<a class='photo' href='https://github.com/kura'>
-  <img alt='kura' src='https://gravatar.com/avatar/6db32988bd24b2f19231a7e88a74455a'>
-</a>
-<a class='photo' href='https://github.com/maxogden'>
-  <img alt='maxogden' src='https://avatars1.githubusercontent.com/u/39759?s=80'>
-</a>
-<a class='photo' href='https://github.com/seanlinsley'>
-  <img alt='seanlinsley' src='https://avatars.githubusercontent.com/u/688886?s=80'>
-</a>
-<a class='photo' href='https://github.com/alrra'>
-  <img alt='alrra' src='https://avatars.githubusercontent.com/u/1223565?s=80'>
-</a>
-<a class='photo' href='https://github.com/jublo'>
-  <img alt='jublo' src='https://avatars.githubusercontent.com/u/6348321?s=80'>
-</a>
-<a class='photo' href='https://github.com/g105b'>
-  <img alt='g105b' src='https://avatars2.githubusercontent.com/u/358014?s=80'>
-</a>
-<a class='photo' href='http://dan.cx/'>
-  <img alt='Daniel15' src='https://www.gravatar.com/avatar/872578c4e56897b913fd03ed88daef51?s=80'>
-</a>
-<br>
-<a class='photo' href='https://github.com/sebmck'>
-  <img alt='sebmck' src='https://avatars.githubusercontent.com/u/853712?s=80'>
-</a>
-<a class='photo' href='https://github.com/avanderhoorn'>
-  <img alt='avanderhoorn' src='https://www.gravatar.com/avatar/6af12b64c2fe22af3b27848b8eedd992'>
-</a>
-<a class='photo' href='https://github.com/stefanjudis'>
-  <img alt='stefanjudis' src='https://gravatar.com/avatar/22725c2d3eb331146549bf0d5d3c050c'>
-</a>
-<a class='photo' href='https://github.com/jmalloc'>
-  <img alt='jmalloc' src='https://gravatar.com/avatar/7a6666c5798fb54d1d4ebde0600567f3'>
-</a>
-<a class='photo' href='https://github.com/ezzatron'>
-  <img alt='ezzatron' src='https://gravatar.com/avatar/95ce5a53e68fe5287fadde649da8c6c7'>
-</a>
-<a class='photo' href='https://github.com/brettcannon'>
-  <img alt='brettcannon' src='https://avatars.githubusercontent.com/u/54418?s=80'>
-</a>
-<a class='photo' href='https://github.com/CodeBlock'>
-  <img alt='CodeBlock' src='https://avatars.githubusercontent.com/u/43930?s=80'>
-</a>
-<a class='photo' href='https://github.com/Mikulas'>
-  <img alt='Mikulas' src='https://gravatar.com/avatar/daa06ea257d7820ff84735a55b931ec8'>
-</a>
-<a class='photo' href='https://github.com/segiddins'>
-  <img alt='segiddins' src='https://avatars.githubusercontent.com/u/1946610?s=80'>
-</a>
-<a class='photo' href='https://github.com/SonicHedgehog'>
-  <img alt='SonicHedgehog' src='https://avatars.githubusercontent.com/u/652793?s=80'>
-</a>
-<a class='photo' href='https://github.com/akashivskyy'>
-  <img alt='akashivskyy' src='https://avatars.githubusercontent.com/u/565231?s=80'>
-</a>
-<a class='photo' href='https://github.com/jbarrus'>
-  <img alt='akashivskyy' src='https://avatars2.githubusercontent.com/u/1044815?s=80'>
-</a>
-<br>
-<a class='photo' href='https://github.com/rmasters'>
-  <img alt='rmasters' src='https://avatars.githubusercontent.com/u/34284?s=80'>
-</a>
-<a class='photo' href='https://github.com/cainus'>
-  <img alt='cainus' src='https://gravatar.com/avatar/c8475420ebca73833e55ccf57d8d7500'>
-</a>
-<a class='photo' href='https://github.com/jbowes'>
-  <img alt='jbowes' src='https://gravatar.com/avatar/363ada7cda10d5eae5eeb7704278fb51'>
-</a>
-<a class='photo' href='https://github.com/rafalchmiel'>
-  <img alt='rafalchmiel' src='https://gravatar.com/avatar/6dd56028986d5e6c478e649ec229092b'>
-</a>
-<a class='photo' href='https://github.com/fjcaetano'>
-  <img alt='fjcaetano' src='https://gravatar.com/avatar/3b339db885930633b86d73b97a2ca1c0'>
-</a>
-<a class='photo' href='https://github.com/hughsk'>
-  <img alt='hughsk' src='https://gravatar.com/avatar/133cd05eb39521d55fb7a08c787925e2'>
-</a>
-<a class='photo' href='https://github.com/qubyte'>
-  <img alt='qubyte' src='https://gravatar.com/avatar/2b8729c02bc2fb886b32ed23cb7b0a31'>
-</a>
-<a class='photo' href='https://github.com/khellang'>
-  <img alt='khellang' src='https://gravatar.com/avatar/b3616645c168b0b8a65e109a6b1cb010'>
-</a>
-<a class='photo' href='https://github.com/nitram509'>
-  <img alt='nitram509' src='https://www.gravatar.com/avatar/fa01e907fd400c42d481f431c4410954.png'>
-</a>
-<a class='photo' href='https://github.com/raphink'>
-  <img alt='raphink' src='https://avatars.githubusercontent.com/u/650430?s=80'>
-</a>
-<a class='photo' href='https://github.com/montanaflynn'>
-  <img alt='montanaflynn' src='https://avatars.githubusercontent.com/u/24260?s=80'>
-</a>
-<a class='photo' href='https://github.com/PeterDaveHello'>
-  <img alt='PeterDaveHello' src='https://avatars3.githubusercontent.com/u/3691490?s=80'>
-</a>
-<br>
-<a class='photo' href='https://github.com/sagiegurari'>
-  <img alt='sagiegurari' src='https://avatars.githubusercontent.com/u/8112599?s=80'>
-</a>
 <p><small>:wq</small></p>
 </main>
 
 <dialog id='copyDialog'>
-<form id='copyForm'>
+<form id='copyForm' action='javascript:void 0'>
   <p><img id='copyImg'>
   </p><p><label> Link <input type='url' name='url'/></label>
   </p><p><label> Image <input type='url' name='img'/></label>
@@ -972,8 +1074,82 @@ is where the current server got started.
   <input class=code id=copyMarkdown>
   </p><p> reStructuredText
   <input class=code id=copyreStructuredText>
+  </p><div id=copyDoc></div>
 </form>
 </dialog>
+
+<div id=documentation style='display:none'>
+  <div id=visualStudioTeamServices>
+    <p>To obtain your own badge, you will first need to enable badges for your
+    project:
+    </p>
+    <img
+      src='https://cloud.githubusercontent.com/assets/6189336/11894616/be744ab4-a578-11e5-9e44-0c32a7836b3b.png'
+      alt='Go to your builds, click General, then check Badge enabled.'>
+    <p>Then, click “Show url…” to reveal the URL of the default badge. In that
+    URL, you will need to extract three pieces of information:
+    <code>TEAM_NAME</code>, <code>PROJECT_ID</code> and
+    <code>BUILD_DEFINITION_ID</code>.
+    </p>
+    <img
+      src='https://cloud.githubusercontent.com/assets/6189336/11629345/f4eb0d78-9cf7-11e5-8d83-ca9fd895fcea.png'
+      alt='TEAM_NAME is just after the https:// part, PROJECT_ID is after
+      definitions/, BUILD_DEFINITION_ID is after that.'>
+    <p>Your badge will then have the form
+      <code>https://img.shields.io/vso/build/TEAM_NAME/PROJECT_ID/BUILD_DEFINITION_ID</code>.
+    </p>
+  </div>
+  <div id="websiteDoc">
+    <p>The badge is of the form <code>https://img.shields.io/website[OPTIONS]/PROTOCOL/URLREST.svg</code>,
+       the simplest case being <code>https://img.shields.io/website/http/example.com.svg</code>.
+       More options are described below.
+    </p>
+    <p>The whole URL is obtained by concatenating the <code>PROTOCOL</code> (<code>http</code> or <code>https</code>, for example)
+       with the <code>URLREST</code> (separating them with <code>://</code>).
+    </p>
+    <p>
+       The existence of a specific path on the server can be checked by appending a path after the domain name, e.g.
+       <code>https://img.shields.io/website/http/www.website.com/path/to/page.html.svg</code>.
+    </p>
+    <p>The URLREST should be URLEncoded:<br>
+      <input type="text" id="websiteDocUrlField" placeholder="Paste your URL (without the protocol) here" /><br>
+      <button onclick="(function(el) { el.value = encodeURIComponent(el.value); })(document.getElementById('websiteDocUrlField'))">Encode</button>
+      <button onclick="(function(el) { el.value = decodeURIComponent(el.value); })(document.getElementById('websiteDocUrlField'))">Decode</button>
+    </p>
+    <p><code>[OPTIONS]</code> can be:
+      <ul>
+        <li>Nothing:
+            <code>…/website/…</code></li>
+        <li>Online and offline text:
+            <code>…/website-up-down/…</code></li>
+        <li>Online and offline text, then online and offline colors:
+            <code>…/website-up-down-green-orange/…</code></li>
+      </ul>
+      <table class=centered><tbody>
+          <tr><td>   Dashes <code>--</code>
+            </td><td>  →
+            </td><td>  <code>-</code> Dash
+          </td></tr>
+          <tr><td>   Underscores <code>__</code>
+            </td><td>  →
+            </td><td>  <code>_</code> Underscore <br/>
+          </td></tr>
+          <tr><td>   <code>_</code> or Space <code>&nbsp;</code>
+            </td><td>  →
+            </td><td>  <code>&nbsp;</code> Space
+          </td></tr>
+      </tbody></table>
+    </p>
+  </div>
+  <div id="githubDoc">
+    <p>If your GitHub badge errors, it might be because you hit GitHub's rate
+    limits.<br>
+    You can increase Shield.io's rate limit by
+    <a href="https://img.shields.io/github-auth">going to this page</a>
+    to add Shields as a GitHub application on your GitHub account.
+    </p>
+  </div>
+</div>
 
 <svg style='height:0'>
   <filter id='gaussian-blur'>
@@ -1082,14 +1258,6 @@ function selectNode(e) {
 };
 copyMarkdown.addEventListener('click', selectNode);
 copyreStructuredText.addEventListener('click', selectNode);
-function autoselectCode() {
-  var codes = document.querySelectorAll('table.badge code');
-  for (var i = 0; i < codes.length; i++) {
-    codes[i].addEventListener('click', selectNode);
-  }
-}
-
-document.addEventListener('DOMContentLoaded', autoselectCode);
 
 // Markup copier dialog
 //
@@ -1098,10 +1266,14 @@ function markupDialogInit() {
   var trs = document.querySelectorAll('table.badge tr');
   for (var i = 0; i < trs.length; i++) {
     var tr = trs[i];
+    var title = tr.querySelector('th');
     var target = tr.querySelector('img');
-    if (target) {
-      target.addEventListener('click', makeMarkupDialogListener(tr));
-    }
+    var code = tr.querySelector('code');
+    // Markup dialog listener.
+    var mdl = makeMarkupDialogListener(tr);
+    if (title != null) { title.addEventListener('click', mdl); }
+    if (target != null) { target.addEventListener('click', mdl); }
+    if (code != null) { code.addEventListener('click', mdl); }
   }
 }
 function makeMarkupDialogListener(tr) {
@@ -1119,8 +1291,18 @@ function markupDialog(tr) {
   var trimg = tr.querySelector('img').src;
   var th = tr.firstElementChild;
   var link = th.dataset.link? th.dataset.link: '';
+  // Remove the ?maxAge parameter from the query string.
+  trimg.replace(/[\?&]maxAge=\d+$|maxAge=\d+&/, '');
   copyForm.img.value = trimg;
   copyForm.url.value = link;
+  // Insert documentation.
+  var doc = th.dataset.doc? th.dataset.doc: '';
+  var docelt = document.getElementById(doc);
+  if (docelt != null) {
+    copyDoc.innerHTML = '<h4>Documentation</h4>' + docelt.innerHTML;
+  } else {
+    copyDoc.innerHTML = '';
+  }
   // Set up the input listeners.
   copyForm.url.removeEventListener('input', copyFormUrlEventListener);
   copyForm.img.removeEventListener('input', copyFormUrlEventListener);

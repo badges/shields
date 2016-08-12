@@ -14,7 +14,19 @@ shields.io.
 Note that the root gets redirected to <http://shields.io>.
 For testing purposes, you can go to `http://localhost/try.html`.
 You should modify that file. The "real" root, `http://localhost/index.html`,
-gets generated from the `try.html` file.
+gets generated from the `try.html` file with a `make website`.
+
+## Ground rules
+
+- The left-hand side of a badge should not advertize. It should be a noun
+  describing succinctly the meaning of the right-hand-side data.
+- New query parameters (such as `?label=` or `?style=`) should apply to any
+  requested badge. They must be registered in the cache (see `LruCache` in
+  `server.js`).
+- The format of new badges should be of the form
+  `/VENDOR/SUBVENDOR-BADGE-SPECIFIC/PARAMETERS.format`. For instance,
+  `https://img.shields.io/gitter/room/nwjs/nw.js.svg`. The vendor is gitter, the
+  badge is for rooms, the parameter is nwjs/nw.js, and the format is svg.
 
 ## Implementations
 

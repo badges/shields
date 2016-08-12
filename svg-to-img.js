@@ -1,7 +1,7 @@
 var fs = require('fs');
 var os = require('os');
 var path = require('path');
-var phantom = require('phantomjs');
+var phantom = require('phantomjs-prebuilt');
 var LruCache = require('./lru-cache.js');
 var childProcess = require('child_process');
 var phantomScript = path.join(__dirname, 'phantomjs-svg2png.js');

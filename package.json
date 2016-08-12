@@ -1,6 +1,6 @@
 {
   "name": "gh-badges",
-  "version": "1.1.2",
+  "version": "1.2.2",
   "description": "GitHub badges implemented in SVG.",
   "keywords": ["GitHub", "badge", "SVG", "image"],
   "homepage": "http://shields.io",
@@ -18,35 +18,30 @@
   "dependencies": {
     "dot": "~1.0.3",
     "svgo": "~0.5.1",
-    "canvas": "~1.1.2",
-    "phantomjs": "~1.9.2-6",
-    "es6-promise": "~2.1.0",
+    "pdfkit": "~0.7.1",
+    "phantomjs-prebuilt": "~2.1.7",
     "request": "~2.55.0",
     "redis": "~1.0.0",
-    "camp": "~15.5.5",
+    "camp": "~16.2.2",
     "semver": "~4.3.3",
     "bower": "~1.4.1",
-    "promise": "~7.0.0"
-  },
-  "devDependencies": {
-    "ass": "~0.0.6",
-    "should": "~3.0.0",
-    "mocha": "~1.14.0"
+    "chrome-web-store-item-property": "^1.1.2",
+    "json-autosave": "~1.1.1"
   },
   "scripts": {
-    "test": "mocha -R spec test.js"
+    "test": "node test/test.js"
   },
   "bin": { "badge": "./gh-badge.js" },
   "files": [
     "badge.js",
     "README.md",
     "gh-badge.js",
+    "measure-text.js",
     "templates",
     "svg-to-img.js",
     "colorscheme.json",
     "phantomjs-svg2png.js",
     "lru-cache.js",
     "logo"
-  ],
-  "engines": { "node": "0.10.x" }
+  ]
 }

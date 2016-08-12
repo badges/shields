@@ -14,9 +14,11 @@
   </linearGradient>
   <g stroke="#d5d5d5">
     <rect stroke="none" fill="#fcfcfc" x="0.5" y="0.5" width="{{=it.widths[0]}}" height="19" rx="2"/>
+    {{?(it.text[1] && it.text[1].length)}}
     <rect y="0.5" x="{{=it.widths[0]+6.5}}" width="{{=it.widths[1]}}" height="19" rx="2" fill="#fafafa"/>
     <rect x="{{=it.widths[0]+6}}" y="7.5" width="0.5" height="5" stroke="#fafafa"/>
     <path d="M{{=it.widths[0]+6.5}} 6.5 l-3 3v1 l3 3" stroke="d5d5d5" fill="#fafafa"/>
+    {{?}}
   </g>
   {{?it.logo}}
     <image x="5" y="3" width="{{=it.logoWidth}}" height="14" xlink:href="{{=it.logo}}"/>
@@ -24,10 +26,12 @@
   <g fill="#333" text-anchor="middle" font-family="Helvetica Neue,Helvetica,Arial,sans-serif" font-weight="700" font-size="11px" line-height="14px">
     <text x="{{=(it.widths[0]+it.logoWidth+it.logoPadding)/2}}" y="15" fill="#fff">{{=it.escapeXml(it.capitalize(it.text[0]))}}</text>
     <text x="{{=(it.widths[0]+it.logoWidth+it.logoPadding)/2}}" y="14">{{=it.escapeXml(it.capitalize(it.text[0]))}}</text>
+    {{?(it.text[1] && it.text[1].length)}}
     <text x="{{=it.widths[0]+it.widths[1]/2+6}}" y="15" fill="#fff">{{=it.escapeXml(it.text[1])}}</text>
     <a xlink:href="{{=it.links[1]}}">
       <text id="rlink" x="{{=it.widths[0]+it.widths[1]/2+6}}" y="14">{{=it.escapeXml(it.text[1])}}</text>
     </a>
+    {{?}}
   </g>
   <a xlink:href="{{=it.links[0]}}">
     <rect id="llink" stroke="#d5d5d5" fill="url(#a)" x="0.5" y="0.5" width="{{=it.widths[0]}}" height="19" rx="2"/>
