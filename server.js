@@ -2014,6 +2014,95 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// LuaRocks version integration.
+camp.route(/^\/luarocks\/v\/([^/]+)\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];   // eg, `leafo`.
+  var module_name = match[2];   // eg, `lapis`.
+  var version = match[3];   // you can explicitly specify a version
+  var format = match[4];
+  var apiUrl = 'https://luarocks.org/manifests/' + user + '/manifest.json';
+  var badgeData = getBadgeData('luarocks', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var module_info = JSON.parse(buffer).repository[module_name];
+      var versions = Object.keys(module_info);
+      if (version && versions.indexOf(version) === -1) {
+        throw new Error('unknown version');
+      }
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+    if (!version) {
+      if (versions.length === 1) {
+        version = versions[0];
+      } else {
+        var latestVersion = {};
+        versions.forEach(function(versionString) {
+          versionString = omitv(versionString);   // remove leading 'v'
+          var v = versionString.toLowerCase();
+          v = v.replace('-', '.');   // make revision part of version
+          var versionList = [];
+          v.split('.').forEach(function(versionPart) {
+            var parsedPart = /(\d*)([a-z]*)(\d*)/.exec(versionPart);
+            if (parsedPart[1]) {
+              versionList.push(parseInt(parsedPart[1]));
+            }
+            if (parsedPart[2]) {
+              var weight;
+              // calculate weight as a negative number
+              // 'rc' > 'pre' > 'beta' > 'alpha' > any other value
+              switch (parsedPart[2]) {
+                case 'alpha':
+                case 'beta':
+                case 'pre':
+                case 'rc':
+                  weight = (parsedPart[2].charCodeAt(0) - 128) * 100;
+                  break;
+                default:
+                  weight = -10000;
+              }
+              // add positive number, i.e. 'beta5' > 'beta2'
+              weight += parseInt(parsedPart[3]) || 0;
+              versionList.push(weight);
+            }
+          });
+          if (
+            !latestVersion.list ||   // first iteration
+            luarocksVersionCompare(versionList, latestVersion.list) > 0
+          ) {
+            latestVersion.string = versionString;
+            latestVersion.list = versionList;
+          }
+        });
+        version = latestVersion.string;
+      }
+    }
+    var color;
+    switch (version.slice(0, 3).toLowerCase()) {
+      case 'dev':
+        color = 'yellow';
+        break;
+      case 'scm':
+      case 'cvs':
+        color = 'orange';
+        break;
+      default:
+        color = 'brightgreen';
+    }
+    badgeData.text[1] = omitv(version);
+    badgeData.colorscheme = color;
+    sendBadge(format, badgeData);
+  });
+}));
+
 // Dart's pub version integration.
 camp.route(/^\/pub\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -5962,6 +6051,24 @@ function listCompare(a, b) {
     }
   }
   return alen - blen;
+}
+
+// Compare two arrays containing splitted and transformed to
+// positive/negative numbers parts of version strings,
+// respecting negative/missing values.
+// Return a negative value if v1 < v2,
+// zero if v1 = v2,
+// a positive value otherwise.
+function luarocksVersionCompare(v1, v2) {
+  var maxLength = Math.max(v1.length, v2.length);
+  var p1, p2;
+  for (var i = 0; i < maxLength; i++) {
+    p1 = v1[i] || 0;
+    p2 = v2[i] || 0;
+    if (p1 > p2) return 1;
+    if (p1 < p2) return -1;
+  }
+  return 0;
 }
 
 // Return a negative value if v1 < v2,
