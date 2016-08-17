@@ -3492,29 +3492,52 @@ function mapNugetFeed(pattern, offset, getInfo) {
   var vPreRegex = new RegExp('^\\/' + pattern + '\\/vpre\\/(.*)\\.(svg|png|gif|jpg|json)$');
 
   function getNugetVersion(apiUrl, id, includePre, request, done) {
-    var reqUrl = apiUrl + '/flatcontainer/' + id.toLowerCase() + '/index.json';
-    request(reqUrl, function(err, res, buffer) {
-      if (err != null) {
-        done(err);
-        return;
-      }
-
-      try {
+    // get service index document
+    regularUpdate(apiUrl + '/index.json',
+      (3600 * 1000 * 24), // 1 day - can theoretically change often but in practice it doesn't
+      function(buffer) {
         var data = JSON.parse(buffer);
-        var versions = data.versions;
-        if (!includePre) {
-          // Remove prerelease versions.
-          filteredVersions = versions.filter(function(version) {
-            return !/-/.test(version);
-          });
-          if (filteredVersions.length > 0) {
-            versions = filteredVersions;
+
+        var autocompleteResources = data.resources.filter(function(resource) {
+          return resource['@type'] === 'SearchAutocompleteService';
+        });
+
+        return autocompleteResources;
+      },
+      function(err, autocompleteResources) {
+        if (err != null) { done(err); return; }
+
+        // query autocomplete service
+        var randomEndpointIdx = Math.floor(Math.random() * autocompleteResources.length);
+        var reqUrl = autocompleteResources[randomEndpointIdx]['@id']
+          + '?id=' + encodeURIComponent(id.toLowerCase())   // NuGet package id (lowercase)
+          + '&prerelease=true'                              // Include prerelease versions?
+          + '&skip=0'                                       // Start at first package found
+          + '&take=5000';                                   // Max. number of results
+
+        request(reqUrl, function(err, res, buffer) {
+          if (err != null) {
+            done(err);
+            return;
           }
-        }
-        var lastVersion = versions[versions.length - 1];
-        done(null, lastVersion);
-      } catch (e) { done(e); }
-    });
+
+          try {
+            var data = JSON.parse(buffer);
+            var versions = data.data;
+            if (!includePre) {
+              // Remove prerelease versions.
+              filteredVersions = versions.filter(function(version) {
+                return !/-/.test(version);
+              });
+              if (filteredVersions.length > 0) {
+                versions = filteredVersions;
+              }
+            }
+            var lastVersion = versions[versions.length - 1];
+            done(null, lastVersion);
+          } catch (e) { done(e); }
+        });
+      });
   }
 
   camp.route(vRegex,
