@@ -1,4 +1,4 @@
-var secureServer = !!process.env.HTTPS;
+﻿var secureServer = !!process.env.HTTPS;
 var serverPort = +process.env.PORT || +process.argv[2] || (secureServer? 443: 80);
 var bindAddress = process.env.BIND_ADDRESS || process.argv[3] || '::';
 var infoSite = process.env.INFOSITE || "http://shields.io";
@@ -3492,8 +3492,9 @@ function mapNugetFeed(pattern, offset, getInfo) {
   var vPreRegex = new RegExp('^\\/' + pattern + '\\/vpre\\/(.*)\\.(svg|png|gif|jpg|json)$');
 
   function getNugetVersion(apiUrl, id, includePre, request, done) {
-    var reqUrl = apiUrl + '/flatcontainer/' + id.toLowerCase() + '/index.json';
-    request(reqUrl, function(err, res, buffer) {
+	// get service index document
+	var serviceIndexUrl = apiUrl + '/index.json';	
+	request(serviceIndexUrl, function(err, res, buffer) {
       if (err != null) {
         done(err);
         return;
@@ -3501,18 +3502,39 @@ function mapNugetFeed(pattern, offset, getInfo) {
 
       try {
         var data = JSON.parse(buffer);
-        var versions = data.versions;
-        if (!includePre) {
-          // Remove prerelease versions.
-          filteredVersions = versions.filter(function(version) {
-            return !/-/.test(version);
-          });
-          if (filteredVersions.length > 0) {
-            versions = filteredVersions;
+		var autocompleteResources = data.resources.filter(function(resource) {
+          return resource['@type'] == 'SearchAutocompleteService';
+        });
+		
+		// query autocomplete service
+		var reqUrl = autocompleteResources[0]['@id']
+          + '?id=' + id.toLowerCase()
+		  + '&prerelease=' + includePre
+		  + '&skip=0'
+		  + '&take=10000';
+
+        request(reqUrl, function(err, res, buffer) {
+          if (err != null) {
+            done(err);
+            return;
           }
-        }
-        var lastVersion = versions[versions.length - 1];
-        done(null, lastVersion);
+
+          try {
+            var data = JSON.parse(buffer);
+            var versions = data.data;
+            if (!includePre) {
+              // Remove prerelease versions.
+              filteredVersions = versions.filter(function(version) {
+                return !/-/.test(version);
+              });
+              if (filteredVersions.length > 0) {
+                versions = filteredVersions;
+              }
+            }
+            var lastVersion = versions[versions.length - 1];
+            done(null, lastVersion);
+          } catch (e) { done(e); }
+        });
       } catch (e) { done(e); }
     });
   }
