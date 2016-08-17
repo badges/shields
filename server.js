@@ -352,6 +352,62 @@ cache(function (data, match, sendBadge, request) {
   });
 }));
 
+// JIRA agile sprint completion integration
+camp.route(/^\/jira\/sprint\/(http(?:s)?)\/(.+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function (data, match, sendBadge, request) {
+  var protocol  = match[1]; // eg, https
+  var host      = match[2]; // eg, jira.spring.io
+  var sprintId  = match[3]; // eg, 94
+  var format    = match[4]; // eg, png
+
+  var options = {
+    method: 'GET',
+    json: true,
+    uri: protocol + '://' + host + '/rest/api/2/search?jql=sprint='+sprintId+'%20AND%20type%20IN%20(Bug,Improvement,Story,"Technical%20task")&fields=resolution&maxResults=500'
+  };
+  if (serverSecrets && serverSecrets.jira_username) {
+    options.auth = {
+      user: serverSecrets.jira_username,
+      pass: serverSecrets.jira_password
+    };
+  }
+
+  var badgeData = getBadgeData('completion', data);
+  request(options, function (err, res, json) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      if (json && json.total >= 0) {
+        var issuesDone = json.issues.filter(function (el) {
+          if (el.fields.resolution != null) {
+            return el.fields.resolution.name !== "Unresolved";
+          }
+        }).length;
+        badgeData.text[1] = Math.round(issuesDone * 100 / json.total) + "%";
+        switch(issuesDone) {
+          case 0:
+            badgeData.colorscheme = 'red';
+            break;
+          case json.total:
+            badgeData.colorscheme = 'brightgreen';
+            break;
+          default:
+            badgeData.colorscheme = 'orange';
+        }
+      } else {
+        badgeData.text[1] = 'invalid';
+      }
+      sendBadge(format, badgeData);
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Travis integration
 camp.route(/^\/travis(-ci)?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
