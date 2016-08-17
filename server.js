@@ -352,6 +352,64 @@ cache(function (data, match, sendBadge, request) {
   });
 }));
 
+// JIRA agile sprint completion integration
+camp.route(/^\/jira\/sprint\/(http(?:s)?)\/(.+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function (data, match, sendBadge, request) {
+  var protocol  = match[1]; // eg, https
+  var host      = match[2]; // eg, issues.apache.org/jira
+  var sprintId  = match[3]; // eg, 430
+  var format    = match[4]; // eg, png
+
+  var options = {
+    method: 'GET',
+    json: true,
+    uri: protocol + '://' + host + '/rest/api/2/search?jql=Sprint%20=%20'+sprintId+'%20&fields=resolution&maxResults=200'
+  };
+  if (serverSecrets && serverSecrets.jira_username) {
+    options.auth = {
+      user: serverSecrets.jira_username,
+      pass: serverSecrets.jira_password
+    };
+  }
+
+  var badgeData = getBadgeData('completion', data);
+  request(options, function (err, res, json) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      if (json && json.total) {
+        issues_done = json.issues.filter(function (el) {
+          if (el.fields.resolution != null) {
+            return el.fields.resolution.name <= "Fixed";
+          }
+        }).length;
+        badgeData.text[1] = Math.round(issues_done*100/json.total)+"%";
+        switch(issues_done) {
+          case 0:
+            badgeData.colorscheme = 'red';
+            break;
+          case json.total:
+            badgeData.colorscheme = 'brightgreen';
+            break;
+          default:
+            badgeData.colorscheme = 'orange';
+        }
+      } else {
+        badgeData.text[1] = 'invalid';
+      }
+      sendBadge(format, badgeData);
+    } catch (e) {
+      console.log(e);
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+
 // Travis integration
 camp.route(/^\/travis(-ci)?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
