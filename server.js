@@ -357,13 +357,13 @@ camp.route(/^\/jira\/sprint\/(http(?:s)?)\/(.+)\/([^\/]+)\.(svg|png|gif|jpg|json
 cache(function (data, match, sendBadge, request) {
   var protocol  = match[1]; // eg, https
   var host      = match[2]; // eg, issues.apache.org/jira
-  var sprintId  = match[3]; // eg, 430
+  var sprintId  = match[3]; // eg, 247
   var format    = match[4]; // eg, png
 
   var options = {
     method: 'GET',
     json: true,
-    uri: protocol + '://' + host + '/rest/api/2/search?jql=Sprint%20=%20'+sprintId+'%20&fields=resolution&maxResults=200'
+    uri: protocol + '://' + host + '/rest/api/2/search?jql=sprint='+sprintId+'&fields=resolution&maxResults=500'
   };
   if (serverSecrets && serverSecrets.jira_username) {
     options.auth = {
@@ -383,7 +383,7 @@ cache(function (data, match, sendBadge, request) {
       if (json && json.total) {
         issues_done = json.issues.filter(function (el) {
           if (el.fields.resolution != null) {
-            return el.fields.resolution.name <= "Fixed";
+            return el.fields.resolution.name != "Unresolved";
           }
         }).length;
         badgeData.text[1] = Math.round(issues_done*100/json.total)+"%";
