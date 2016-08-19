@@ -363,7 +363,7 @@ cache(function (data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     json: true,
-    uri: protocol + '://' + host + '/rest/api/2/search?jql=sprint='+sprintId+'&fields=resolution&maxResults=500'
+    uri: protocol + '://' + host + '/rest/api/2/search?jql=sprint='+sprintId+'%20AND%20type!="Bug%20Sub-task"&fields=resolution&maxResults=500'
   };
   if (serverSecrets && serverSecrets.jira_username) {
     options.auth = {
