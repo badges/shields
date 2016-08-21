@@ -2867,6 +2867,8 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[2];
   var context = match[3];
   var format = match[4];
+  var useDescription = false;
+
   var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo +'/commits/master/status';
   var badgeData = getBadgeData(context, data);
   if (badgeData.template === 'social') {
@@ -2897,7 +2899,6 @@ cache(function(data, match, sendBadge, request) {
       {
         state=data.state;
       }
-      badgeData.text[1] = state;
       if (state === 'success') {
         badgeData.colorscheme = 'brightgreen';
       } else if (state === 'failed') {
