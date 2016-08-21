@@ -2869,6 +2869,11 @@ cache(function(data, match, sendBadge, request) {
   var format = match[4];
   var useDescription = false;
 
+  if (context.slice(-12) ==='.description'){
+    useDescription = true;
+    context=context.slice(0, context.length-12);
+  }
+
   var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo +'/commits/master/status';
   var badgeData = getBadgeData(context, data);
   if (badgeData.template === 'social') {
@@ -2894,11 +2899,20 @@ cache(function(data, match, sendBadge, request) {
           return;
         }
         state = statuses[0].state;
+        if (useDescription) {
+          badgeData.text[1] = statuses[0].description;
+        }
+        else
+        {
+          badgeData.text[1] = state;
+        }
       }
       else
       {
         state=data.state;
+        badgeData.text[1] = state;
       }
+      
       if (state === 'success') {
         badgeData.colorscheme = 'brightgreen';
       } else if (state === 'failed') {
