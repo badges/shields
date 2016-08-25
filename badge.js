@@ -1,3 +1,4 @@
+var domain = require('domain');
 var fs = require('fs');
 var path = require('path');
 var SVGO = require('svgo');
@@ -98,4 +99,13 @@ function makeImage(data, cb) {
   }
 }
 
-module.exports = makeImage;
+function encapsulatingMakeImage(data, cb) {
+  var makeImageDomain = domain.create();
+  makeImageDomain.on('error', function(err) {
+    console.error('Badge generator error:', err.stack);
+    cb('', err);
+  });
+  makeImageDomain.bind(makeImage).apply(this, arguments);
+}
+
+module.exports = encapsulatingMakeImage;
