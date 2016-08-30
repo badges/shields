@@ -1311,8 +1311,10 @@ function markupDialog(tr) {
     var url = copyForm.url.value;
     var img = copyForm.img.value;
     var style = copyForm.style.value;
-    // Default style doesn't show.
-    if (style !== 'flat') { img += '?style=' + style; }
+    // Default style doesn't need value
+    if (style !== 'flat') {
+      img += (img.indexOf('?') != -1 ? '&style=' : '?style=') + style;
+    }
     var md = '[![' + trname + '](' + img + ')](' + url + ')';
     var rst = '.. image:: ' + img + '   :target: ' + url;
     copyMarkdown.value = md;
