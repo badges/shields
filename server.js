@@ -4044,17 +4044,19 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // standalone sonatype nexus installation
-camp.route(/^\/nexus\/v\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/nexus\/v(\/(.*))?\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var scheme = match[1]; // http(s)
-  var host = match[3]; // nexus.example.com
-  var repository = match[4];
-  var groupId = match[5]; // eg, `com.google.inject`
-  var artifactId = match[6]; // eg, `guice`
-  var format = match[7] || "gif";
 
-  var query = "r=" + encodeURIComponent(repository) + "&g=" + encodeURIComponent(groupId) + "&a=" +
-  	encodeURIComponent(artifactId) + "&v=LATEST";
+  var pkg = match[2] || 'jar'; // packaging
+  var scheme = match[3]; // http(s)
+  var host = match[5]; // nexus.example.com
+  var repository = match[6];
+  var groupId = match[7]; // eg, `com.google.inject`
+  var artifactId = match[8]; // eg, `guice`
+  var format = match[9] || "gif";
+
+  var query = 'r=' + encodeURIComponent(repository) + '&g=' + encodeURIComponent(groupId) +
+    '&a=' + encodeURIComponent(artifactId) + '&p=' + encodeURIComponent(pkg) + '&v=LATEST';
   var apiUrl = scheme + '://' + host + '/service/local/artifact/maven/resolve?' + query;
 
   var badgeData = getBadgeData('nexus', data);
@@ -4066,13 +4068,13 @@ cache(function(data, match, sendBadge, request) {
 	}
 	try {
 	  var parsed = JSON.parse(buffer);
-	  var version = parsed.data.version;
 
-	  badgeData.text[1] = 'v' + version;
-	  if (version === '0' || /SNAPSHOT/.test(version)) {
+	  if (parsed.data.snapshot) {
 		badgeData.colorscheme = 'orange';
+		badgeData.text[1] = 'v' + parsed.data.baseVersion;
 	  } else {
 		badgeData.colorscheme = 'blue';
+		badgeData.text[1] = 'v' + parsed.data.version;
 	  }
 	  sendBadge(format, badgeData);
 	} catch(e) {
