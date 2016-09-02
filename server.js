@@ -4043,6 +4043,45 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// standalone sonatype nexus installation
+camp.route(/^\/nexus\/v\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var scheme = match[1]; // http(s)
+  var host = match[3]; // nexus.example.com
+  var repository = match[4];
+  var groupId = match[5]; // eg, `com.google.inject`
+  var artifactId = match[6]; // eg, `guice`
+  var format = match[7] || "gif";
+
+  var query = "r=" + encodeURIComponent(repository) + "&g=" + encodeURIComponent(groupId) + "&a=" +
+  	encodeURIComponent(artifactId) + "&v=LATEST";
+  var apiUrl = scheme + '://' + host + '/service/local/artifact/maven/resolve?' + query;
+
+  var badgeData = getBadgeData('nexus', data);
+  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
+    if (err != null) {
+	  badgeData.text[1] = 'inaccessible';
+	  sendBadge(format, badgeData);
+	  return;
+	}
+	try {
+	  var parsed = JSON.parse(buffer);
+	  var version = parsed.data.version;
+
+	  badgeData.text[1] = 'v' + version;
+	  if (version === '0' || /SNAPSHOT/.test(version)) {
+		badgeData.colorscheme = 'orange';
+	  } else {
+		badgeData.colorscheme = 'blue';
+	  }
+	  sendBadge(format, badgeData);
+	} catch(e) {
+	  badgeData.text[1] = 'invalid';
+	  sendBadge(format, badgeData);
+	}
+  });
+}));
+
 // Bower version integration.
 camp.route(/^\/bower\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
