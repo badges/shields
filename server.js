@@ -3712,165 +3712,127 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Jenkins build status integration
-camp.route(/^\/jenkins(-ci)?\/s\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
+function jenkinsRequest(data, match, sendBadge, request, badgeName, urlSuffix, dataCallback, badgeCallback) {
   var scheme = match[2];  // http(s)
   var host = match[4];  // jenkins.qa.ubuntu.com
   var job = match[5];  // precise-desktop-amd64_default
   var format = match[6];
   var options = {
-    json: true,
-    uri: scheme + '://' + host + '/job/' + job + '/api/json?tree=color'
+     json: true,
+     uri: scheme + '://' + host + '/job/' + job + urlSuffix
   };
 
   if (serverSecrets && serverSecrets.jenkins_user) {
-    options.auth = {
-      user: serverSecrets.jenkins_user,
-      pass: serverSecrets.jenkins_pass
-    };
+	 options.auth = {
+	   user: serverSecrets.jenkins_user,
+	   pass: serverSecrets.jenkins_pass
+	 };
   }
 
-  var badgeData = getBadgeData('build', data);
+  var badgeData = getBadgeData(badgeName, data);
   request(options, function(err, res, json) {
-    if (err !== null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
+	if (err !== null) {
+	  badgeData.text[1] = 'inaccessible';
+	  sendBadge(format, badgeData);
+	  return;
+	}
 
-    try {
-      if (json.color === 'blue' || json.color === 'green') {
-        badgeData.colorscheme = 'brightgreen';
-        badgeData.text[1] = 'passing';
-      } else if (json.color === 'red') {
-        badgeData.colorscheme = 'red';
-        badgeData.text[1] = 'failing';
-      } else if (json.color === 'yellow') {
-        badgeData.colorscheme = 'yellow';
-        badgeData.text[1] = 'unstable';
-      } else if (json.color === 'grey' || json.color === 'disabled'
-          || json.color === 'aborted' || json.color === 'notbuilt') {
-        badgeData.colorscheme = 'lightgrey';
-        badgeData.text[1] = 'not built';
-      } else {
-        badgeData.colorscheme = 'lightgrey';
-        badgeData.text[1] = 'building';
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
+	try {
+	   var dataObject = dataCallback(json);
+       if (dataObject === undefined) {
+	      badgeData.text[1] = 'inaccessible';
+	      sendBadge(format, badgeData);
+	      return;
+	   }
+
+	   badgeCallback(dataObject, badgeData);
+	   sendBadge(format, badgeData);
+	} catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
+  });
+}
+
+// Jenkins build status integration
+camp.route(/^\/jenkins(-ci)?\/s\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var urlSuffix = '/api/json?tree=color';
+  jenkinsRequest(data, match, sendBadge, request, 'build', urlSuffix, function(json) {
+     return json;
+  }, function(json, badgeData) {
+	 if (json.color === 'blue' || json.color === 'green') {
+		badgeData.colorscheme = 'brightgreen';
+		badgeData.text[1] = 'passing';
+	 } else if (json.color === 'red') {
+		badgeData.colorscheme = 'red';
+		badgeData.text[1] = 'failing';
+	 } else if (json.color === 'yellow') {
+		badgeData.colorscheme = 'yellow';
+		badgeData.text[1] = 'unstable';
+	 } else if (json.color === 'grey' || json.color === 'disabled'
+		 || json.color === 'aborted' || json.color === 'notbuilt') {
+		badgeData.colorscheme = 'lightgrey';
+		badgeData.text[1] = 'not built';
+	 } else {
+		badgeData.colorscheme = 'lightgrey';
+		badgeData.text[1] = 'building';
+	 }
   });
 }));
 
 // Jenkins tests integration
 camp.route(/^\/jenkins(-ci)?\/t\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var scheme = match[2];  // http(s)
-  var host = match[4];  // jenkins.qa.ubuntu.com
-  var job = match[5];  // precise-desktop-amd64_default
-  var format = match[6];
-  var options = {
-    json: true,
-    uri: scheme + '://' + host + '/job/' + job
-      + '/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]'
-  };
-
-  if (serverSecrets && serverSecrets.jenkins_user) {
-    options.auth = {
-      user: serverSecrets.jenkins_user,
-      pass: serverSecrets.jenkins_pass
-    };
-  }
-
-  var badgeData = getBadgeData('tests', data);
-  request(options, function(err, res, json) {
-    if (err !== null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-
-    try {
-      var testsObject = json.actions.filter(function (obj) {
-        return obj.hasOwnProperty('failCount');
-      })[0];
-      if (testsObject === undefined) {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
-      }
-      var successfulTests = testsObject.totalCount
-        - (testsObject.failCount + testsObject.skipCount);
-      var percent = successfulTests / testsObject.totalCount;
-      badgeData.text[1] = successfulTests + ' / ' + testsObject.totalCount;
-      if (percent === 1) {
-        badgeData.colorscheme = 'brightgreen';
-      } else if (percent === 0) {
-        badgeData.colorscheme = 'red';
-      } else {
-        badgeData.colorscheme = 'yellow';
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
+  var urlSuffix = '/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]';
+  jenkinsRequest(data, match, sendBadge, request, 'tests', urlSuffix, function(json) {
+     return json.actions.filter(function (obj) {
+ 	    return obj.hasOwnProperty('failCount');
+ 	 })[0];
+  }, function(testsObject, badgeData) {
+	 var successfulTests = testsObject.totalCount - (testsObject.failCount + testsObject.skipCount);
+	 var percent = successfulTests / testsObject.totalCount;
+	 badgeData.text[1] = successfulTests + ' / ' + testsObject.totalCount;
+	 if (percent === 1) {
+	    badgeData.colorscheme = 'brightgreen';
+	 } else if (percent === 0) {
+	    badgeData.colorscheme = 'red';
+	 } else {
+	    badgeData.colorscheme = 'yellow';
+	 }
   });
 }));
 
-// Jenkins coverage integration
+// Jenkins cobertura coverage integration
 camp.route(/^\/jenkins(-ci)?\/c\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var scheme = match[2];  // http(s)
-  var host = match[4];  // jenkins.qa.ubuntu.com
-  var job = match[5];  // precise-desktop-amd64_default
-  var format = match[6];
-  var options = {
-    json: true,
-    uri: scheme + '://' + host + '/job/' + job
-      + '/lastBuild/cobertura/api/json?tree=results[elements[name,denominator,numerator,ratio]]'
-  };
-
-  if (serverSecrets && serverSecrets.jenkins_user) {
-    options.auth = {
-      user: serverSecrets.jenkins_user,
-      pass: serverSecrets.jenkins_pass
-    };
-  }
-
-  var badgeData = getBadgeData('coverage', data);
-  request(options, function(err, res, json) {
-    if (err !== null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-
-    try {
-      var coverageObject = json.results.elements.filter(function (obj) {
-        return obj.name === 'Lines';
-      })[0];
-      if (coverageObject === undefined) {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
-      }
-      var coverage = coverageObject.ratio;
-      if (+coverage !== +coverage) {
+  var urlSuffix = '/lastBuild/cobertura/api/json?tree=results[elements[name,denominator,numerator,ratio]]';
+  jenkinsRequest(data, match, sendBadge, request, 'coverage', urlSuffix, function(json) {
+	 return json.results.elements.filter(function (obj) {
+	    return obj.name === 'Lines';
+	 })[0];
+  }, function(coverageObject, badgeData) {
+     var coverage = coverageObject.ratio;
+     if (+coverage !== +coverage) {
         badgeData.text[1] = 'unknown';
         sendBadge(format, badgeData);
         return;
-      }
-      badgeData.text[1] = coverage.toFixed(0) + '%';
-      badgeData.colorscheme = coveragePercentageColor(coverage);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
+     }
+     badgeData.text[1] = coverage.toFixed(0) + '%';
+     badgeData.colorscheme = coveragePercentageColor(coverage);
+  });
+}));
+
+//Jenkins jacoco coverage integration
+camp.route(/^\/jenkins(-ci)?\/j\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var urlSuffix = '/lastBuild/jacoco/api/json';
+  jenkinsRequest(data, match, sendBadge, request, 'coverage', urlSuffix, function(json) {
+	 return json.hasOwnProperty('lineCoverage') ? json : undefined;
+  }, function(coverageObject, badgeData) {
+	 var coverage = coverageObject.lineCoverage.percentage;
+     badgeData.text[1] = coverage + '%';
+     badgeData.colorscheme = coveragePercentageColor(coverage);
   });
 }));
 
