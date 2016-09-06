@@ -5284,7 +5284,7 @@ cache(function(data, match, sendBadge, request) {
           badgeData.colorscheme = vdata.color;
         } else if (type === 'd') {
           var downloads = value.interactionCount.UserDownloads;
-          badgeData.text[0] = 'downloads';
+          badgeData.text[0] = data.label || 'downloads';
           badgeData.text[1] = metric(downloads) + ' total';
           badgeData.colorscheme = downloadCountColor(downloads);
         } else if (type === 'price') {
@@ -5292,12 +5292,12 @@ cache(function(data, match, sendBadge, request) {
           badgeData.colorscheme = 'brightgreen';
         } else if (type === 'rating') {
           var rating = Math.round(value.ratingValue * 100) / 100;
-          badgeData.text[0] = 'rating';
+          badgeData.text[0] = data.label || 'rating';
           badgeData.text[1] = rating;
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
         } else if (type === 'rating-count') {
           var ratingCount = value.ratingCount;
-          badgeData.text[0] = 'rating count';
+          badgeData.text[0] = data.label || 'rating count';
           badgeData.text[1] = metric(ratingCount) + ' total';
           badgeData.colorscheme = floorCountColor(ratingCount, 5, 50, 500);
         }
