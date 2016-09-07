@@ -18,10 +18,13 @@ npm install gh-badges
 
 ```js
 var badge = require('gh-badges');
-badge({ text: [ "build", "passed" ], colorscheme: "green" },
-  function(svg, err) {
-    // svg is a String… of your badge.
-  });
+// Optional step, to have accurate text width computation.
+badge.loadFont('/path/to/Verdana.ttf', function(err) {
+  badge({ text: ["build", "passed"], colorscheme: "green", template: "flat" },
+    function(svg, err) {
+      // svg is a String of your badge.
+    });
+});
 ```
 
 # Use the CLI
@@ -35,12 +38,11 @@ badge build passed :green .png > mybadge.png
 # Start the Server
 To run the server you will need the following executables on your Path:
 - [PhantomJS](http://www.phantomjs.org/)
-- [Cairo](http://cairographics.org/) (runtime dependency for Canvas)
 
 On an OS X machine, [Homebrew](brew.sh) is a good package manager that will
-allow you to install them.
+allow you to install that.
 
-On Ubuntu / Debian: `sudo apt-get install phantomjs libcairo2-dev libjpeg-turbo8-dev`.
+On Ubuntu / Debian: `sudo apt-get install phantomjs`.
 
 ```bash
 git clone https://github.com/badges/shields.git
@@ -103,17 +105,6 @@ same dark grey, so you can rely on that default value by not providing a
 You can also use the `"colorA"` and `"colorB"` fields directly in the badges if
 you don't want to make a color scheme for it. In that case, remove the
 `"colorscheme"` field altogether.
-
-# Requirements
-
-Because of the usage of the npm module [canvas][canvas-pkg] *you need* to have
-**cairo** installed.
-
-For more information check the [wiki][canvas-wiki] of the canvas project with
-system-specific installation details.
-
-[canvas-pkg]: https://npmjs.org/package/canvas
-[canvas-wiki]: https://github.com/LearnBoost/node-canvas/wiki/_pages
 
 # Making your Heroku badge server
 

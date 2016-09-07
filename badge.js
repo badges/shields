@@ -99,3 +99,4 @@ function makeImage(data, cb) {
 }
 
 module.exports = makeImage;
+module.exports.loadFont = measureTextWidth.loadFont;
