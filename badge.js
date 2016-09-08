@@ -44,7 +44,7 @@ function makeImage(data, cb) {
     data.format = 'svg';
   }
   if (!(data.template + '-' + data.format in templates)) {
-    data.template = 'default';
+    data.template = 'flat';
   }
   if (data.colorscheme) {
     var pickedColorscheme = colorscheme[data.colorscheme];
