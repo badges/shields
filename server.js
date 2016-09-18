@@ -4947,7 +4947,16 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// ImageLayers.io integration.
+
+// TOKEN=$(curl 'https://auth.docker.io/token?service=registry.docker.io&scope=repository:jrottenberg/ffmpeg:pull' | jq -r .token)
+// curl --header 'Accept: application/vnd.docker.distribution.manifest.v2+json' \
+//      --header "Authorization: Bearer ${TOKEN}" \
+//      https://registry.hub.docker.com/v2/jrottenberg/ffmpeg/manifests/latest | jq .  > manifest.json
+// cat manifest.json | jq '.layers | length'
+// cat manifest.json | jq '.layers[].size'
+
+
+// Image Layers integration.
 camp.route(/^\/imagelayers\/(image\-size|layers)\/([^\/]+)\/([^\/]+)\/([^\/]*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var type = match[1];
