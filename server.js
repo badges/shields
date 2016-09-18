@@ -4820,6 +4820,79 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+
+
+
+
+// docker hub image layer & size integration.
+// NOTE :
+// - size are for the compressed layers - https://github.com/docker/hub-feedback/issues/331 https://github.com/docker/hub-feedback/issues/242
+// - layers are for the actual image, regardless of the parent (ignoring the layers comming from the FROM)
+camp.route(/^\/(imagelayers|docker\/image)\/(image\-size|size|layers)\/([^\/]+)\/([^\/]+)\/([^\/]*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var integration = match[1];
+  var type = match[2];
+  var user = match[3];
+  var repo = match[4];
+  var tag = match[5]
+  var format = match[6];
+  if (user === '_') {
+    user = 'library';
+  }
+  var path = user + '/' + repo;
+  var badgeData = getBadgeData(type, data);
+  var token_url = 'https://auth.docker.io/token?service=registry.docker.io&scope=repository:' + path + ':pull';
+  request(token_url, function(err, res, token_buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var token = JSON.parse(token_buffer)['token']
+      var options = {
+        method: 'GET',
+        headers: {
+          Accept: 'application/vnd.docker.distribution.manifest.v2+json',
+          Authorization: 'Bearer ' + token
+        },
+        url: 'https://registry.hub.docker.com/v2/' + path + '/manifests/' + tag
+      };
+      request(options, function(err, res, buffer) {
+        if (err != null) {
+          badgeData.text[1] = 'inaccessible';
+          sendBadge(format, badgeData);
+          return;
+        }
+        try {
+          var data = JSON.parse(buffer)
+          if (type == 'layers') {
+            badgeData.text[1] = data.layers.length;
+          }
+          else {
+            var size = 0;
+            data.layers.forEach(function(layer){
+              size += layer.size
+            });
+            badgeData.text[0] = 'image size';
+            badgeData.text[1] = metric(size) + 'B';
+          }
+          badgeData.colorscheme = null;
+          badgeData.colorB = '#007ec6';
+          sendBadge(format, badgeData);
+        } catch(e) {
+          badgeData.text[1] = 'invalid';
+          sendBadge(format, badgeData);
+        }
+      });
+    } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+    }
+  });
+}));
+
+
 // Twitter integration.
 camp.route(/^\/twitter\/url\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -4947,59 +5020,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-
-// TOKEN=$(curl 'https://auth.docker.io/token?service=registry.docker.io&scope=repository:jrottenberg/ffmpeg:pull' | jq -r .token)
-// curl --header 'Accept: application/vnd.docker.distribution.manifest.v2+json' \
-//      --header "Authorization: Bearer ${TOKEN}" \
-//      https://registry.hub.docker.com/v2/jrottenberg/ffmpeg/manifests/latest | jq .  > manifest.json
-// cat manifest.json | jq '.layers | length'
-// cat manifest.json | jq '.layers[].size'
-
-
-// Image Layers integration.
-camp.route(/^\/imagelayers\/(image\-size|layers)\/([^\/]+)\/([^\/]+)\/([^\/]*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var type = match[1];
-  var user = match[2];
-  var repo = match[3];
-  var tag = match[4]
-  var format = match[5];
-  if (user === '_') {
-    user = 'library';
-  }
-  var path = user + '/' + repo;
-  var badgeData = getBadgeData(type, data);
-  var options = {
-    method: 'POST',
-    json: true,
-    body: {
-      "repos": [{"name": path, "tag": tag}]
-    },
-    uri: 'https://imagelayers.io:8888/registry/analyze'
-  };
-  request(options, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      if (type == 'image-size') {
-        size = metric(buffer[0].repo.size) + "B";
-        badgeData.text[0] = 'image size';
-        badgeData.text[1] = size;
-      } else if (type == 'layers') {
-        badgeData.text[1] = buffer[0].repo.count;
-      }
-      badgeData.colorscheme = null;
-      badgeData.colorB = '#007ec6';
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
 
 // Gitter room integration.
 camp.route(/^\/gitter\/room\/([^\/]+\/[^\/]+)\.(svg|png|gif|jpg|json)$/,
