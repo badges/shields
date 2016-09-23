@@ -1513,7 +1513,7 @@ camp.route(/^\/npm\/l\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var repo = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
   var format = match[2];
-  var apiUrl = 'http://registry.npmjs.org/' + repo + '/latest';
+  var apiUrl = 'https://registry.npmjs.org/' + repo;
   var badgeData = getBadgeData('license', data);
   request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
     if (err != null) {
