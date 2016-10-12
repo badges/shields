@@ -26,7 +26,8 @@
     "semver": "~4.3.3",
     "bower": "~1.4.1",
     "chrome-web-store-item-property": "^1.1.2",
-    "json-autosave": "~1.1.1"
+    "json-autosave": "~1.1.1",
+    "rc": "^1.1.6"
   },
   "scripts": {
     "test": "node test/test.js"

@@ -26,7 +26,12 @@ try {
   // Everything that cannot be checked in but is useful server-side
   // is stored in this JSON data.
   serverSecrets = require('./secret.json');
-} catch(e) { console.error('No secret data (secret.json, see server.js):', e); }
+} catch(e) {
+  console.error('No secret data (secret.json, see server.js):', e);
+  serverSecrets = {};
+}
+require('rc')('shields', serverSecrets);
+
 if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);
 }

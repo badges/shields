@@ -147,6 +147,22 @@ http://[::1]:80/try.html
 
 Assuming Docker is running locally, you should be able to get to the application at http://localhost:8080/try.html. If you run Docker in a virtual machine (such as boot2docker or Docker Machine) then you will need to replace `localhost` with the actual IP address of that virtual machine.
 
+## Passing secrets as docker environment variables
+Thanks to [rc](https://www.npmjs.com/package/rc), you can pass your shields secrets as env vars. This may be useful for CI purpose for example as credentials are often stored as env vars.
+```console
+# Assuming you have an env var $GITHUB_CLIENT_ID containing the client id (required for OAUTH authentication)
+docker run --rm -p 80:80 -e shields_gh_client_id=$GITHUB_CLIENT_ID shields
+```
+
+If you have several env vars, you may prefer using a temp env file
+```console
+# All env vars starting with shields_ will be passed to the docker container
+SHIELDS_ENV=`mktemp -t shieldsenvXXXXX`
+env | grep 'shields_' > $SHIELDS_ENV
+
+docker run --rm -p 80:80 --env-file=$SHIELDS_ENV shields
+```
+
 # Main Server Sysadmin
 
 - DNS round-robin between https://vps197850.ovh.net/try.html and https://vps244529.ovh.net/try.html.
