@@ -2911,8 +2911,15 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      badgeData.text[1] = metric(data[0].contributions);
+      var contributors;
+
+      if (res.headers['link'] && res.headers['link'].indexOf('rel="last"') !== -1) {
+        contributors = res.headers['link'].match(/[?&]page=(\d+)[^>]+>; rel="last"/)[1];
+      } else {
+        contributors = JSON.parse(buffer).length;
+      }
+
+      badgeData.text[1] = contributors;
       badgeData.colorscheme = 'blue';
     } catch(e) {
       badgeData.text[1] = 'inaccessible';
