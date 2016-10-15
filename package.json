@@ -20,7 +20,7 @@
     "svgo": "~0.5.1",
     "pdfkit": "~0.7.1",
     "phantomjs-prebuilt": "~2.1.7",
-    "request": "~2.55.0",
+    "request": "~2.74.0",
     "redis": "~1.0.0",
     "camp": "~16.2.2",
     "semver": "~4.3.3",
