@@ -2919,7 +2919,7 @@ cache(function(data, match, sendBadge, request) {
         contributors = JSON.parse(buffer).length;
       }
 
-      badgeData.text[1] = contributors;
+      badgeData.text[1] = metric(+contributors);
       badgeData.colorscheme = 'blue';
     } catch(e) {
       badgeData.text[1] = 'inaccessible';
