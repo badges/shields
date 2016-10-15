@@ -576,8 +576,8 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <td><code>https://img.shields.io/twitter/url/http/shields.io.svg?style=social</code></td>
   </tr>
   <tr><th> Twitter Follow: </th>
-  <td><img src='https://img.shields.io/twitter/follow/shields_io.svg?style=social&label=Follow&maxAge=2592000' alt=''/></td>
-  <td><code>https://img.shields.io/twitter/follow/shields_io.svg?style=social&amp;label=Follow</code></td>
+  <td><img src='https://img.shields.io/twitter/follow/espadrine.svg?style=social&label=Follow&maxAge=2592000' alt=''/></td>
+  <td><code>https://img.shields.io/twitter/follow/espadrine.svg?style=social&amp;label=Follow</code></td>
   </tr>
 </tbody></table>
 
@@ -1045,7 +1045,7 @@ Tell your favorite badge service to use it! <br/>
 And tell us, we might be able to bring it to you anyway!
 </p>
 <p>
-<a href='https://twitter.com/Shields_io'><img src='https://img.shields.io/twitter/follow/shields_io.svg?style=social&label=Follow&maxAge=2592000' alt='Follow @shields_io'></a>
+<a href='https://twitter.com/espadrine'><img src='https://img.shields.io/twitter/follow/espadrine.svg?style=social&label=Follow&maxAge=2592000' alt='Follow @espadrine'></a>
 <a href='https://www.gratipay.com/Shields/'><img src='https://img.shields.io/gratipay/Shields.svg?style=social&label=Donate&maxAge=2592000' alt='Donate to us!'/></a>
 <iframe src="https://ghbtns.com/github-btn.html?user=badges&amp;repo=shields&amp;type=fork&amp;count=true"
   style="border:0; background-color:transparent"
@@ -1293,7 +1293,7 @@ function markupDialog(tr) {
   var th = tr.firstElementChild;
   var link = th.dataset.link? th.dataset.link: '';
   // Remove the ?maxAge parameter from the query string.
-  trimg.replace(/[\?&]maxAge=\d+$|maxAge=\d+&/, '');
+  trimg = trimg.replace(/[\?&]maxAge=\d+$|maxAge=\d+&/, '');
   copyForm.img.value = trimg;
   copyForm.url.value = link;
   // Insert documentation.
@@ -1312,8 +1312,10 @@ function markupDialog(tr) {
     var url = copyForm.url.value;
     var img = copyForm.img.value;
     var style = copyForm.style.value;
-    // Default style doesn't show.
-    if (style !== 'flat') { img += '?style=' + style; }
+    // Default style doesn't need value
+    if (style !== 'flat') {
+      img += (img.indexOf('?') != -1 ? '&style=' : '?style=') + style;
+    }
     var md = '[![' + trname + '](' + img + ')](' + url + ')';
     var rst = '.. image:: ' + img + '   :target: ' + url;
     copyMarkdown.value = md;
