@@ -356,14 +356,14 @@ cache(function (data, match, sendBadge, request) {
 camp.route(/^\/jira\/sprint\/(http(?:s)?)\/(.+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
   var protocol  = match[1]; // eg, https
-  var host      = match[2]; // eg, issues.apache.org/jira
-  var sprintId  = match[3]; // eg, 247
+  var host      = match[2]; // eg, jira.spring.io
+  var sprintId  = match[3]; // eg, 94
   var format    = match[4]; // eg, png
 
   var options = {
     method: 'GET',
     json: true,
-    uri: protocol + '://' + host + '/rest/api/2/search?jql=sprint='+sprintId+'%20AND%20type!="Bug%20Sub-task"&fields=resolution&maxResults=500'
+    uri: protocol + '://' + host + '/rest/api/2/search?jql=sprint='+sprintId+'%20AND%20type%20IN%20(Bug,Improvement,Story,"Technical%20task")&fields=resolution&maxResults=500'
   };
   if (serverSecrets && serverSecrets.jira_username) {
     options.auth = {
@@ -381,13 +381,13 @@ cache(function (data, match, sendBadge, request) {
     }
     try {
       if (json && json.total) {
-        issues_done = json.issues.filter(function (el) {
+        issuesDone = json.issues.filter(function (el) {
           if (el.fields.resolution != null) {
-            return el.fields.resolution.name != "Unresolved";
+            return el.fields.resolution.name !== "Unresolved";
           }
         }).length;
-        badgeData.text[1] = Math.round(issues_done*100/json.total)+"%";
-        switch(issues_done) {
+        badgeData.text[1] = Math.round(issuesDone * 100 / json.total)+"%";
+        switch(issuesDone) {
           case 0:
             badgeData.colorscheme = 'red';
             break;
