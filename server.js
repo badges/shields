@@ -2018,7 +2018,7 @@ cache(function(data, match, sendBadge, request) {
 camp.route(/^\/luarocks\/v\/([^/]+)\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];   // eg, `leafo`.
-  var module_name = match[2];   // eg, `lapis`.
+  var moduleName = match[2];   // eg, `lapis`.
   var version = match[3];   // you can explicitly specify a version
   var format = match[4];
   var apiUrl = 'https://luarocks.org/manifests/' + user + '/manifest.json';
@@ -2030,7 +2030,7 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var module_info = JSON.parse(buffer).repository[module_name];
+      var module_info = JSON.parse(buffer).repository[moduleName];
       var versions = Object.keys(module_info);
       if (version && versions.indexOf(version) === -1) {
         throw new Error('unknown version');
@@ -2097,7 +2097,7 @@ cache(function(data, match, sendBadge, request) {
       default:
         color = 'brightgreen';
     }
-    badgeData.text[1] = omitv(version);
+    badgeData.text[1] = 'v' + version;
     badgeData.colorscheme = color;
     sendBadge(format, badgeData);
   });
@@ -6053,24 +6053,6 @@ function listCompare(a, b) {
   return alen - blen;
 }
 
-// Compare two arrays containing splitted and transformed to
-// positive/negative numbers parts of version strings,
-// respecting negative/missing values.
-// Return a negative value if v1 < v2,
-// zero if v1 = v2,
-// a positive value otherwise.
-function luarocksVersionCompare(v1, v2) {
-  var maxLength = Math.max(v1.length, v2.length);
-  var p1, p2;
-  for (var i = 0; i < maxLength; i++) {
-    p1 = v1[i] || 0;
-    p2 = v2[i] || 0;
-    if (p1 > p2) return 1;
-    if (p1 < p2) return -1;
-  }
-  return 0;
-}
-
 // Return a negative value if v1 < v2,
 // zero if v1 = v2,
 // a positive value otherwise.
@@ -6131,6 +6113,24 @@ function phpStableVersion(version) {
   }
   // normal or patch
   return (versionData.modifier === 3) || (versionData.modifier === 4);
+}
+
+// Compare two arrays containing splitted and transformed to
+// positive/negative numbers parts of version strings,
+// respecting negative/missing values.
+// Return a negative value if v1 < v2,
+// zero if v1 = v2,
+// a positive value otherwise.
+function luarocksVersionCompare(v1, v2) {
+  var maxLength = Math.max(v1.length, v2.length);
+  var p1, p2;
+  for (var i = 0; i < maxLength; i++) {
+    p1 = v1[i] || 0;
+    p2 = v2[i] || 0;
+    if (p1 > p2) return 1;
+    if (p1 < p2) return -1;
+  }
+  return 0;
 }
 
 // This searches the serverSecrets for a twitter consumer key
