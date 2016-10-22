@@ -2494,13 +2494,13 @@ cache(function(data, match, sendBadge, request) {
         status = 'insecure';
       } else if (status === 'notsouptodate') {
         badgeData.colorscheme = 'yellow';
-        status = 'up-to-date';
+        status = 'up to date';
       } else if (status === 'outofdate') {
         badgeData.colorscheme = 'red';
-        status = 'out-of-date';
+        status = 'out of date';
       } else if (status === 'uptodate') {
         badgeData.colorscheme = 'brightgreen';
-        status = 'up-to-date';
+        status = 'up to date';
       } else if (status === 'none') {
         badgeData.colorscheme = 'brightgreen';
       }
@@ -2533,8 +2533,10 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[0] = data.label || nameMatch;
       badgeData.text[1] = statusMatch;
       if (statusMatch === 'up-to-date') {
+      	badgeData.text[1] = 'up to date';
         badgeData.colorscheme = 'brightgreen';
       } else if (statusMatch === 'out-of-date') {
+      	badgeData.text[1] = 'out of date';
         badgeData.colorscheme = 'yellow';
       } else if (statusMatch === 'update!') {
         badgeData.colorscheme = 'red';
@@ -2721,7 +2723,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = 'outdated';
         badgeData.colorscheme = 'orange';
       } else {
-        badgeData.text[1] = 'up-to-date';
+        badgeData.text[1] = 'up to date';
         badgeData.colorscheme = 'brightgreen';
       }
     } catch(e) {
@@ -4389,7 +4391,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       if (json.status === 'up-to-date') {
-        badgeData.text[1] = 'up-to-date';
+        badgeData.text[1] = 'up to date';
         badgeData.colorscheme = 'brightgreen';
       } else if (json.status === 'outdated') {
         badgeData.text[1] = 'outdated';
