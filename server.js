@@ -4512,15 +4512,16 @@ cache(function(data, match, sendBadge, request) {
 
 // CircleCI build integration.
 // https://circleci.com/api/v1/project/BrightFlair/PHP.Gt?circle-token=0a5143728784b263d9f0238b8d595522689b3af2&limit=1&filter=completed
-camp.route(/^\/circleci\/(?:token\/(\w+))?[+\/]?project\/([^\/]+\/[^\/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/circleci\/(?:token\/(\w+))?[+\/]?project\/(github|bitbucket)?[+\/]?([^\/]+\/[^\/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var token = match[1]
-  var userRepo = match[2];  // eg, `BrightFlair/PHP.Gt`.
-  var branch = match[3];
-  var format = match[4];
+  var token = match[1];
+  var type = match[2] || 'github'; // github OR bitbucket
+  var userRepo = match[3];  // eg, `RedSparr0w/node-csgo-parser`.
+  var branch = match[4]
+  var format = match[5];
 
   // Base API URL
-  var apiUrl = 'https://circleci.com/api/v1/project/' + userRepo;
+  var apiUrl = 'https://circleci.com/api/v1.1/project/' + type + '/' + userRepo;
 
   // Query Params
   queryParams = {};
