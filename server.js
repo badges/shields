@@ -4512,7 +4512,7 @@ cache(function(data, match, sendBadge, request) {
 
 // CircleCI build integration.
 // https://circleci.com/api/v1/project/BrightFlair/PHP.Gt?circle-token=0a5143728784b263d9f0238b8d595522689b3af2&limit=1&filter=completed
-camp.route(/^\/circleci\/(?:token\/(\w+))?[+\/]?project\/(github|bitbucket)?[+\/]?([^\/]+\/[^\/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/circleci\/(?:token\/(\w+))?[+\/]?project\/(?:(github|bitbucket)\/)?([^\/]+\/[^\/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var token = match[1];
   var type = match[2] || 'github'; // github OR bitbucket
