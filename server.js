@@ -5544,10 +5544,12 @@ function(data, match, end, ask) {
     badgeData.colorscheme = undefined;
     if (data.label !== undefined) { badgeData.text[0] = '' + data.label; }
     badgeData.text[1] = status;
-    if (sixHex(color)) {
-      badgeData.colorB = '#' + color;
-    } else {
-      badgeData.colorscheme = color;
+    if (badgeData.colorB == undefined) {
+      if (sixHex(color)) {
+        badgeData.colorB = '#' + color;
+      } else if (badgeData.colorA === undefined) {
+        badgeData.colorscheme = color;
+      }
     }
     if (data.style && validTemplates.indexOf(data.style) > -1) {
       badgeData.template = data.style;
@@ -5628,7 +5630,10 @@ function getLabel(label, data) {
   return data.label || label;
 }
 
-// data (URL query) can include `label`, `style`, `logo`, `logoWidth`, `link`.
+function colorParam(color) { return (sixHex(color) ? '#' : '') + color }
+
+// data (URL query) can include `label`, `style`, `logo`, `logoWidth`, `link`,
+// `colorA`, `colorB`.
 // It can also include `maxAge`.
 function getBadgeData(defaultLabel, data) {
   var label = getLabel(defaultLabel, data);
@@ -5648,6 +5653,13 @@ function getBadgeData(defaultLabel, data) {
     data.logo = 'data:' + data.logo;
   }
 
+  if (data.colorA !== undefined) {
+    data.colorA = colorParam(data.colorA);
+  }
+  if (data.colorB !== undefined) {
+    data.colorB = colorParam(data.colorB);
+  }
+
   return {
     text: [label, 'n/a'],
     colorscheme: 'lightgrey',
@@ -5655,6 +5667,8 @@ function getBadgeData(defaultLabel, data) {
     logo: data.logo,
     logoWidth: +data.logoWidth,
     links: data.link,
+    colorA: data.colorA,
+    colorB: data.colorB
   };
 }
 
