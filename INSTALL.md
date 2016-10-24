@@ -128,7 +128,7 @@ You can build and run the server locally using Docker. First build an image:
 ```console
 $ docker build -t shields ./
 Sending build context to Docker daemon 3.923 MB
-Step 0 : FROM node:0.12.7-onbuild
+Step 0 : FROM node:6.4.0-onbuild
 …
 Removing intermediate container c4678889953f
 Successfully built 4471b442c220
@@ -137,7 +137,7 @@ Successfully built 4471b442c220
 Then run the container:
 
 ```console
-$ docker run --rm -p 8080:80 shields
+$ docker run --rm -p 8080:80 -v "$(pwd)/secret.json":/usr/src/app/secret.json --name shields shields
 
 > gh-badges@1.1.2 start /usr/src/app
 > node server.js

@@ -1408,6 +1408,32 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// CDNJS version integration
+camp.route(/^\/cdnjs\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var library = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
+  var format = match[2];
+  var apiUrl = 'https://api.cdnjs.com/libraries/' + library + '?fields=version';
+  var badgeData = getBadgeData('cdnjs', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var version = JSON.parse(buffer).version || 0;
+      var vdata = versionColor(version);
+      badgeData.text[1] = vdata.version;
+      badgeData.colorscheme = vdata.color;
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'not found';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // npm download integration.
 camp.route(/^\/npm\/dm\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -2899,7 +2925,7 @@ cache(function(data, match, sendBadge, request) {
   var user = match[2];  // eg, qubyte/rubidium
   var repo = match[3];
   var format = match[4];
-  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/contributors?page=1&per_page=1&anon=' + (0+isAnon);
+  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/contributors?page=1&per_page=1&anon=' + (!!isAnon);
   var badgeData = getBadgeData('contributors', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
@@ -2911,8 +2937,15 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      badgeData.text[1] = metric(data[0].contributions);
+      var contributors;
+
+      if (res.headers['link'] && res.headers['link'].indexOf('rel="last"') !== -1) {
+        contributors = res.headers['link'].match(/[?&]page=(\d+)[^>]+>; rel="last"/)[1];
+      } else {
+        contributors = JSON.parse(buffer).length;
+      }
+
+      badgeData.text[1] = metric(+contributors);
       badgeData.colorscheme = 'blue';
     } catch(e) {
       badgeData.text[1] = 'inaccessible';
@@ -4479,7 +4512,7 @@ cache(function(data, match, sendBadge, request) {
 
 // CircleCI build integration.
 // https://circleci.com/api/v1/project/BrightFlair/PHP.Gt?circle-token=0a5143728784b263d9f0238b8d595522689b3af2&limit=1&filter=completed
-camp.route(/^\/circleci\/(?:token\/(\w+))?[+\/]?project\/(github|bitbucket)?[+\/]?([^\/]+\/[^\/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/circleci\/(?:token\/(\w+))?[+\/]?project\/(?:(github|bitbucket)\/)?([^\/]+\/[^\/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var token = match[1];
   var type = match[2] || 'github'; // github OR bitbucket
@@ -5285,7 +5318,7 @@ cache(function(data, match, sendBadge, request) {
           badgeData.colorscheme = vdata.color;
         } else if (type === 'd') {
           var downloads = value.interactionCount.UserDownloads;
-          badgeData.text[0] = 'downloads';
+          badgeData.text[0] = data.label || 'downloads';
           badgeData.text[1] = metric(downloads) + ' total';
           badgeData.colorscheme = downloadCountColor(downloads);
         } else if (type === 'price') {
@@ -5293,12 +5326,12 @@ cache(function(data, match, sendBadge, request) {
           badgeData.colorscheme = 'brightgreen';
         } else if (type === 'rating') {
           var rating = Math.round(value.ratingValue * 100) / 100;
-          badgeData.text[0] = 'rating';
+          badgeData.text[0] = data.label || 'rating';
           badgeData.text[1] = rating;
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
         } else if (type === 'rating-count') {
           var ratingCount = value.ratingCount;
-          badgeData.text[0] = 'rating count';
+          badgeData.text[0] = data.label || 'rating count';
           badgeData.text[1] = metric(ratingCount) + ' total';
           badgeData.colorscheme = floorCountColor(ratingCount, 5, 50, 500);
         }
