@@ -4549,28 +4549,31 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var status = data[0].status;
-      switch(status) {
-      case 'success':
-      case 'fixed':
-        badgeData.colorscheme = 'brightgreen';
-        badgeData.text[1] = 'passing';
-        break;
+      try {
+        var status = data[0].status;
+        switch(status) {
+        case 'success':
+        case 'fixed':
+          badgeData.colorscheme = 'brightgreen';
+          badgeData.text[1] = 'passing';
+          break;
 
-      case 'failed':
-        badgeData.colorscheme = 'red';
-        badgeData.text[1] = 'failed';
-        break;
+        case 'failed':
+          badgeData.colorscheme = 'red';
+          badgeData.text[1] = 'failed';
+          break;
 
-      case 'no_tests':
-      case 'scheduled':
-      case 'not_run':
-        badgeData.colorscheme = 'yellow';
-      default:
-        badgeData.text[1] = status.replace('_', ' ');
+        case 'no_tests':
+        case 'scheduled':
+        case 'not_run':
+          badgeData.colorscheme = 'yellow';
+        default:
+          badgeData.text[1] = status.replace('_', ' ');
         break;
+        }
+      } catch(e) {
+        badgeData.text[1] = data.message;
       }
-
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
