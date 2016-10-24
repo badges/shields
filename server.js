@@ -4548,31 +4548,32 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
       return;
     }
+    if (data.message !== undefined){
+      badgeData.text[1] = data.message;
+      sendBadge(format, badgeData);
+      return;
+    }
     try {
-      try {
-        var status = data[0].status;
-        switch(status) {
-        case 'success':
-        case 'fixed':
-          badgeData.colorscheme = 'brightgreen';
-          badgeData.text[1] = 'passing';
-          break;
-
-        case 'failed':
-          badgeData.colorscheme = 'red';
-          badgeData.text[1] = 'failed';
-          break;
-
-        case 'no_tests':
-        case 'scheduled':
-        case 'not_run':
-          badgeData.colorscheme = 'yellow';
-        default:
-          badgeData.text[1] = status.replace('_', ' ');
+      var status = data[0].status;
+      switch(status) {
+      case 'success':
+      case 'fixed':
+        badgeData.colorscheme = 'brightgreen';
+        badgeData.text[1] = 'passing';
         break;
-        }
-      } catch(e) {
-        badgeData.text[1] = data.message;
+
+      case 'failed':
+        badgeData.colorscheme = 'red';
+        badgeData.text[1] = 'failed';
+        break;
+
+      case 'no_tests':
+      case 'scheduled':
+      case 'not_run':
+        badgeData.colorscheme = 'yellow';
+      default:
+        badgeData.text[1] = status.replace('_', ' ');
+      break;
       }
       sendBadge(format, badgeData);
     } catch(e) {
