@@ -4548,6 +4548,11 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
       return;
     }
+    if (data.message !== undefined){
+      badgeData.text[1] = data.message;
+      sendBadge(format, badgeData);
+      return;
+    }
     try {
       var status = data[0].status;
       switch(status) {
@@ -4568,9 +4573,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'yellow';
       default:
         badgeData.text[1] = status.replace('_', ' ');
-        break;
       }
-
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
