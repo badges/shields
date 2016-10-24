@@ -2891,44 +2891,14 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// GitHub package version integration.
-camp.route(/^\/github\/package\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+// GitHub package and manifest version integration.
+camp.route(/^\/github\/(package|manifest)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];
-  var repo = match[2];
-  var format = match[3];
-  var apiUrl = 'https://raw.githubusercontent.com/' + user + '/' + repo + '/master/package.json';
-  var badgeData = getBadgeData('development', data);
-  if (badgeData.template === 'social') {
-    badgeData.logo = badgeData.logo || logos.github;
-  }
-  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      var version = data.version;
-      var vdata = versionColor(version);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = vdata.color;
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'none';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// GitHub manifest version integration.
-camp.route(/^\/github\/manifest\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var user = match[1];
-  var repo = match[2];
-  var format = match[3];
-  var apiUrl = 'https://raw.githubusercontent.com/' + user + '/' + repo + '/master/manifest.json';
+  var type = match[1];
+  var user = match[2];
+  var repo = match[3];
+  var format = match[4];
+  var apiUrl = 'https://raw.githubusercontent.com/' + user + '/' + repo + '/master/' + type + '.json';
   var badgeData = getBadgeData('development', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
