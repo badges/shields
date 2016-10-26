@@ -948,6 +948,8 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
 
 <h2 id="your-badge"> Your Badge </h2>
 
+<h3 id="your-badge"> Static </h3>
+
 <form action='javascript:makeImage()' id='imageMaker'>
   <input class='short' name='subject' placeholder='subject'/>
   <input class='short' name='status' placeholder='status'/>
@@ -964,11 +966,43 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   </datalist>
   <button>Make Badge</button>
 </form>
-<hr class='spacing'/>
-
 <p>
 <code><span id='imgUrlPrefix'>/badge/</span>&lt;SUBJECT&gt;-&lt;STATUS&gt;-&lt;COLOR&gt;.svg</code>
 </p>
+<hr class='spacing'/>
+
+
+<h3 id="your-badge"> Dynamic </h3>
+
+<form action='javascript:generateDynamicImage()' id='dynamicImageMaker'>
+  <input class='short' name='type' list='dynamic-type' placeholder='type'/>
+  <datalist id='dynamic-type'>
+    <option value='json'>
+    <option value='xml'>
+  </datalist>
+  <input class='short' name='subject' placeholder='subject'/>
+  <input class='short' name='color' list='dynamic-default-colors' placeholder='color'/>
+  <datalist id='dynamic-default-colors'>
+    <option value='brightgreen'>
+    <option value='green'>
+    <option value='yellowgreen'>
+    <option value='yellow'>
+    <option value='orange'>
+    <option value='red'>
+    <option value='lightgrey'>
+    <option value='blue'>
+  </datalist>
+  <input class='short' name='prefix' placeholder='prefix'/>
+  <input class='short' name='suffix' placeholder='suffix'/>
+  <input class='short' name='data' placeholder='data=>subdata'/>
+  <input class='short' name='url' placeholder='url'/>
+  <button>Generate</button>
+</form>
+<p>
+<code>/&lt;TYPE&gt;/&lt;SUBJECT&gt;-&lt;COLOR&gt;-&lt;PREFIX&gt;-&lt;SUFFIX&gt;/&lt;DATA=&gt;SUBDATA&gt;/&lt;URL&gt;.svg</code>
+</p>
+<hr class='spacing'/>
+
 <table class=centered><tbody>
   <tr><td>   Dashes <code>--</code>
   </td><td>  →
@@ -1367,6 +1401,18 @@ function makeImage() {
   url += escapeField(imageMaker.subject.value);
   url += '-' + escapeField(imageMaker.status.value);
   url += '-' + escapeField(imageMaker.color.value);
+  url += '.svg';
+  document.location = url;
+}
+
+function generateDynamicImage() {
+  var url = '/' + escapeField(dynamicImageMaker.type.value);
+  url += '/' + escapeField(dynamicImageMaker.subject.value);
+  url += '-' + escapeField(dynamicImageMaker.color.value);
+  url += '-' + escapeField(dynamicImageMaker.prefix.value);
+  url += '-' + escapeField(dynamicImageMaker.suffix.value);
+  url += '/' + dynamicImageMaker.data.value;
+  url += '/' + dynamicImageMaker.url.value;
   url += '.svg';
   document.location = url;
 }

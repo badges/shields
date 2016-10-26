@@ -21,6 +21,7 @@ var svg2img = require('./svg-to-img.js');
 var loadLogos = require('./load-logos.js');
 var githubAuth = require('./lib/github-auth.js');
 var querystring = require('querystring');
+var xml2js = require('xml2js');
 var serverSecrets;
 try {
   // Everything that cannot be checked in but is useful server-side
@@ -5513,6 +5514,60 @@ cache(function(data, match, sendBadge, request) {
     badgeData.colorscheme = 'brightgreen';
     badgeData.text[1] = 'up to date';
     return sendBadge(format, badgeData);
+  });
+}));
+
+// User defined sources - JSON or XML response
+camp.route(/^\/(json|xml)\/([^/]+)\/([^/]+)\/(https?\:\/\/.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(query, match, sendBadge, request) {
+  var type = match[1];
+  var vars = match[2].replace(/--/g,'%2D').split('-');
+  var label = vars[0];
+  var color = vars[1] || 'brightgreen';
+  var prefix = vars[2] || '';
+  var suffix = vars[3] || '';
+  var items = decodeURI(match[3]).split('=>');
+  var userURI = match[4];
+  var format = match[5];
+
+  // API URL
+  var apiUrl = encodeURI(userURI);
+
+  var badgeData = getBadgeData(decodeURI(label), query);
+  request(apiUrl, {json:true}, function(err, res, data) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+        
+      if (type === 'xml'){
+        xml2js.parseString(data.toString(), function (err, json) {
+          if (err) throw (err);
+          data = json;
+        });
+      }else{
+        data = (typeof data == 'object' || typeof data == 'array' ? data : JSON.parse(data));
+      }
+
+      items.forEach(function(item){
+        data = data[decodeURI(item)];
+      });
+	  
+      badgeData.text[1] = (prefix || "") + (typeof data == 'object' || typeof data == 'array' ? JSON.stringify(data) : data) + (suffix || "");
+	  
+      if (sixHex(color)) {
+        badgeData.colorB = '#' + color;
+      } else {
+        badgeData.colorscheme = color;
+      }
+	  
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = e;
+      sendBadge(format, badgeData);
+    }
   });
 }));
 
