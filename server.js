@@ -5353,7 +5353,7 @@ cache(function(data, match, sendBadge, request) {
   var type = match[1];
   var addonId = match[2];
   var format = match[3];
-  var badgeData = getBadgeData('mozilla addons', data);
+  var badgeData = getBadgeData('mozilla add-on', data);
   var url = 'https://services.addons.mozilla.org/api/1.5/addon/' + addonId;
 
   request(url, function(err, res, buffer) {
@@ -5387,7 +5387,7 @@ cache(function(data, match, sendBadge, request) {
         case 'rating':
           var rating = parseInt(data.addon.rating, 10);
           badgeData.text[0] = 'rating';
-          badgeData.text[1] = rating + ' stars';
+          badgeData.text[1] = rating + '/5';
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
           break;
         case 'users':
