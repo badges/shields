@@ -5347,6 +5347,66 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Mozilla addons integration
+camp.route(/^\/amo\/(v|d|rating|users)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var type = match[1];
+  var addonId = match[2];
+  var format = match[3];
+  var badgeData = getBadgeData('mozilla add-on', data);
+  var url = 'https://services.addons.mozilla.org/api/1.5/addon/' + addonId;
+
+  request(url, function(err, res, buffer) {
+    if (err) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    xml2js.parseString(buffer.toString(), function (err, data) {
+      if (err) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
+      }
+
+      try {
+        switch (type) {
+        case 'v':
+          var version = data.addon.version[0];
+          var vdata = versionColor(version);
+          badgeData.text[1] = vdata.version;
+          badgeData.colorscheme = vdata.color;
+          break;
+        case 'd':
+          var downloads = parseInt(data.addon.total_downloads[0], 10);
+          badgeData.text[0] = 'downloads';
+          badgeData.text[1] = metric(downloads);
+          badgeData.colorscheme = downloadCountColor(downloads);
+          break;
+        case 'rating':
+          var rating = parseInt(data.addon.rating, 10);
+          badgeData.text[0] = 'rating';
+          badgeData.text[1] = rating + '/5';
+          badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
+          break;
+        case 'users':
+          var dailyUsers = parseInt(data.addon.daily_users[0], 10);
+          badgeData.text[0] = 'users';
+          badgeData.text[1] = metric(dailyUsers);
+          badgeData.colorscheme = 'brightgreen';
+          break;
+        }
+
+        sendBadge(format, badgeData);
+      } catch (err) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  });
+}));
+
 // Test if a webpage is online
 camp.route(/^\/website(-(([^-]|--)*?)-(([^-]|--)*)(-(([^-]|--)+)-(([^-]|--)+))?)?\/(.+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -5602,10 +5662,12 @@ function(data, match, end, ask) {
     badgeData.colorscheme = undefined;
     if (data.label !== undefined) { badgeData.text[0] = '' + data.label; }
     badgeData.text[1] = status;
-    if (sixHex(color)) {
-      badgeData.colorB = '#' + color;
-    } else {
-      badgeData.colorscheme = color;
+    if (badgeData.colorB === undefined) {
+      if (sixHex(color)) {
+        badgeData.colorB = '#' + color;
+      } else if (badgeData.colorA === undefined) {
+        badgeData.colorscheme = color;
+      }
     }
     if (data.style && validTemplates.indexOf(data.style) > -1) {
       badgeData.template = data.style;
@@ -5686,7 +5748,10 @@ function getLabel(label, data) {
   return data.label || label;
 }
 
-// data (URL query) can include `label`, `style`, `logo`, `logoWidth`, `link`.
+function colorParam(color) { return (sixHex(color) ? '#' : '') + color }
+
+// data (URL query) can include `label`, `style`, `logo`, `logoWidth`, `link`,
+// `colorA`, `colorB`.
 // It can also include `maxAge`.
 function getBadgeData(defaultLabel, data) {
   var label = getLabel(defaultLabel, data);
@@ -5706,6 +5771,13 @@ function getBadgeData(defaultLabel, data) {
     data.logo = 'data:' + data.logo;
   }
 
+  if (data.colorA !== undefined) {
+    data.colorA = colorParam(data.colorA);
+  }
+  if (data.colorB !== undefined) {
+    data.colorB = colorParam(data.colorB);
+  }
+
   return {
     text: [label, 'n/a'],
     colorscheme: 'lightgrey',
@@ -5713,6 +5785,8 @@ function getBadgeData(defaultLabel, data) {
     logo: data.logo,
     logoWidth: +data.logoWidth,
     links: data.link,
+    colorA: data.colorA,
+    colorB: data.colorB
   };
 }
 

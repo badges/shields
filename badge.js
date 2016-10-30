@@ -39,6 +39,8 @@ function optimize(string, callback) {
   svgo.optimize(string, callback);
 }
 
+var cssColor = /^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/;
+
 function makeImage(data, cb) {
   if (data.format !== 'json') {
     data.format = 'svg';
@@ -51,9 +53,12 @@ function makeImage(data, cb) {
     if (!pickedColorscheme) {
       pickedColorscheme = colorscheme.red;
     }
-    data.colorA = pickedColorscheme.colorA;
-    data.colorB = pickedColorscheme.colorB;
+    data.colorA = pickedColorscheme.colorA || data.colorA;
+    data.colorB = pickedColorscheme.colorB || data.colorB;
   }
+  // Colors.
+  if (!cssColor.test(data.colorA)) { data.colorA = undefined; }
+  if (!cssColor.test(data.colorB)) { data.colorB = undefined; }
   // Logo.
   data.logoWidth = +data.logoWidth || (data.logo? 14: 0);
   data.logoPadding = (data.logo? 3: 0);
