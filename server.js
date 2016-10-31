@@ -374,19 +374,19 @@ cache(function (data, match, sendBadge, request) {
 
   var badgeData = getBadgeData('completion', data);
   request(options, function (err, res, json) {
-    if (err !== null) {
+    if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
     try {
-      if (json && json.total) {
-        issuesDone = json.issues.filter(function (el) {
+      if (json && json.total >= 0) {
+        var issuesDone = json.issues.filter(function (el) {
           if (el.fields.resolution != null) {
             return el.fields.resolution.name !== "Unresolved";
           }
         }).length;
-        badgeData.text[1] = Math.round(issuesDone * 100 / json.total)+"%";
+        badgeData.text[1] = Math.round(issuesDone * 100 / json.total) + "%";
         switch(issuesDone) {
           case 0:
             badgeData.colorscheme = 'red';
@@ -402,13 +402,11 @@ cache(function (data, match, sendBadge, request) {
       }
       sendBadge(format, badgeData);
     } catch (e) {
-      console.log(e);
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
   });
 }));
-
 
 // Travis integration
 camp.route(/^\/travis(-ci)?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
