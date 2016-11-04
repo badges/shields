@@ -2989,6 +2989,31 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+camp.route(/^\/sourcegraph\/rrc\/([\s\S]+)\.(svg|png|gif|jpg|json)$/,
+cache(function (data, match, sendBadge, request) {
+  var repo = match[1];
+  var format = match[2];
+  var apiUrl = "https://sourcegraph.com/.api/repos/" + repo + "/-/shield";
+  var badgeData = getBadgeData('used by', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      badgeData.colorscheme = 'brightgreen';
+      badgeData.logo = logos.sourcegraph;
+      var data = JSON.parse(buffer);
+      badgeData.text[1] = data.value;
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // GitHub tag integration.
 camp.route(/^\/github\/tag\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
