@@ -5300,7 +5300,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Chrome web store integration
-camp.route(/^\/chrome-web-store\/(v|d|price|rating|rating-count)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/chrome-web-store\/(v|d|price|rating|stars|rating-count)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var type = match[1];
   var storeId = match[2];  // eg, nimelepbpejjlbmoobocpfnjhihnpked
@@ -5333,6 +5333,17 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[0] = data.label || 'rating';
           badgeData.text[1] = rating;
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
+        } else if (type === 'stars') {
+          var rating = Math.round(value.ratingValue);
+          badgeData.text[0] = data.label || 'rating';
+          badgeData.text[1] = '';
+          while (badgeData.text[1].length < rating) {
+            badgeData.text[1] += '★';
+          }
+          while (badgeData.text[1].length < 5) {
+            badgeData.text[1] += '☆';
+          }
+          badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
         } else if (type === 'rating-count') {
           var ratingCount = value.ratingCount;
           badgeData.text[0] = data.label || 'rating count';
@@ -5348,7 +5359,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Mozilla addons integration
-camp.route(/^\/amo\/(v|d|rating|users)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/amo\/(v|d|rating|stars|users)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var type = match[1];
   var addonId = match[2];
@@ -5388,6 +5399,18 @@ cache(function(data, match, sendBadge, request) {
           var rating = parseInt(data.addon.rating, 10);
           badgeData.text[0] = 'rating';
           badgeData.text[1] = rating + '/5';
+          badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
+          break;
+        case 'stars':
+          var rating = parseInt(data.addon.rating, 10);
+          badgeData.text[0] = 'rating';
+          badgeData.text[1] = '';
+          while (badgeData.text[1].length < rating) {
+            badgeData.text[1] += '★';
+          }
+          while (badgeData.text[1].length < 5) {
+            badgeData.text[1] += '☆';
+          }
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
           break;
         case 'users':
