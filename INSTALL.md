@@ -147,9 +147,27 @@ http://[::1]:80/try.html
 
 Assuming Docker is running locally, you should be able to get to the application at http://localhost:8080/try.html. If you run Docker in a virtual machine (such as boot2docker or Docker Machine) then you will need to replace `localhost` with the actual IP address of that virtual machine.
 
+# Secret.json
+
+Some services require the use of secret tokens or passwords. Those are stored in a file called `secret.json` that is not checked into the repository, to avoid impersonation. Here is how it currently looks like:
+
+```
+bintray_apikey
+bintray_user
+gh_client_id
+gh_client_secret
+gitter_dev_secret
+shieldsIps
+shieldsSecret
+sl_insight_apiToken
+sl_insight_userUuid
+```
+
+(Gathered from `cat secret.json | jq keys | grep -o '".*"' | sed 's/"//g'`.)
+
 # Main Server Sysadmin
 
-- DNS round-robin between https://vps197850.ovh.net/try.html and https://vps244529.ovh.net/try.html.
+- DNS round-robin between https://vps244529.ovh.net/try.html and https://vps71670.vps.ovh.ca/try.html.
 - Self-signed TLS certificates, but `img.shields.io` is behind CloudFlare, which provides signed certificates.
 - Using node v0.12.7 because later versions, combined with node-canvas, give inaccurate badge measurements.
 - Using forever (the node monitor) to automatically restart the server when it crashes.
