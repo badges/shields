@@ -5336,13 +5336,7 @@ cache(function(data, match, sendBadge, request) {
         } else if (type === 'stars') {
           var rating = Math.round(value.ratingValue);
           badgeData.text[0] = data.label || 'rating';
-          badgeData.text[1] = '';
-          while (badgeData.text[1].length < rating) {
-            badgeData.text[1] += '★';
-          }
-          while (badgeData.text[1].length < 5) {
-            badgeData.text[1] += '☆';
-          }
+          badgeData.text[1] = starRating(rating);
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
         } else if (type === 'rating-count') {
           var ratingCount = value.ratingCount;
@@ -5404,13 +5398,7 @@ cache(function(data, match, sendBadge, request) {
         case 'stars':
           var rating = parseInt(data.addon.rating, 10);
           badgeData.text[0] = 'rating';
-          badgeData.text[1] = '';
-          while (badgeData.text[1].length < rating) {
-            badgeData.text[1] += '★';
-          }
-          while (badgeData.text[1].length < 5) {
-            badgeData.text[1] += '☆';
-          }
+          badgeData.text[1] = starRating(rating);
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
           break;
         case 'users':
@@ -5856,6 +5844,13 @@ function fetchFromSvg(request, url, cb) {
 function ordinalNumber(n) {
   var s=["ᵗʰ","ˢᵗ","ⁿᵈ","ʳᵈ"], v=n%100;
   return n+(s[(v-20)%10]||s[v]||s[0]);
+}
+
+function starRating(rating) {
+  var stars = '';
+  while (stars.length < rating) { stars += '★'; }
+  while (stars.length < 5) { stars += '☆'; }
+  return stars;
 }
 
 function coveragePercentageColor(percentage) {
