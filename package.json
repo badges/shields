@@ -29,11 +29,6 @@
     "json-autosave": "~1.1.1",
     "xml2js": "~0.4.16"
   },
-  "devDependencies": {
-    "ass": "~0.0.6",
-    "should": "~3.0.0",
-    "mocha": "~1.14.0"
-  },
   "scripts": {
     "test": "node test/test.js"
   },
