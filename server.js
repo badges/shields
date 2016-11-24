@@ -5326,12 +5326,14 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = metric(downloads) + ' total';
           badgeData.colorscheme = downloadCountColor(downloads);
         } else if (type === 'price') {
-          badgeData.text[1] = value.price;
+          badgeData.text[0] = data.label || 'price';
+          badgeData.text[1] = currencyFromCode(value.priceCurrency) +
+            value.price;
           badgeData.colorscheme = 'brightgreen';
         } else if (type === 'rating') {
           var rating = Math.round(value.ratingValue * 100) / 100;
           badgeData.text[0] = data.label || 'rating';
-          badgeData.text[1] = rating;
+          badgeData.text[1] = rating + '/5';
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
         } else if (type === 'stars') {
           var rating = Math.round(value.ratingValue);
@@ -5844,6 +5846,16 @@ function fetchFromSvg(request, url, cb) {
 function ordinalNumber(n) {
   var s=["ᵗʰ","ˢᵗ","ⁿᵈ","ʳᵈ"], v=n%100;
   return n+(s[(v-20)%10]||s[v]||s[0]);
+}
+
+// Convert ISO 4217 code to unicode string.
+function currencyFromCode(code) {
+  return ({
+    CNY: '¥',
+    EUR: '€',
+    GBP: '₤',
+    USD: '$',
+  })[code] || code;
 }
 
 function starRating(rating) {
