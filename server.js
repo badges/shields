@@ -196,7 +196,7 @@ function cache(f) {
 
     var cacheIndex = match[0] + '?label=' + data.label + '&style=' + data.style
       + '&logo=' + data.logo + '&logoWidth=' + data.logoWidth
-      + '&link=' + data.link;
+      + '&link=' + data.link + '&status=' + data.status;
     // Should we return the data right away?
     var cached = requestCache.get(cacheIndex);
     var cachedVersionSent = false;
@@ -5620,7 +5620,8 @@ function(data, match, end, ask) {
     var badgeData = getBadgeData(subject, data);
     badgeData.colorscheme = undefined;
     if (data.label !== undefined) { badgeData.text[0] = '' + data.label; }
-    badgeData.text[1] = status;
+    if (data.status !== undefined) { badgeData.text[1] = '' + data.status }
+    else { badgeData.text[1] = status }
     if (badgeData.colorB === undefined) {
       if (sixHex(color)) {
         badgeData.colorB = '#' + color;
