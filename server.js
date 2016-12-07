@@ -4801,6 +4801,47 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// CRAN/METACRAN integration.
+camp.route(/^\/cran\/([^\/])\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var info = match[1]; // either `v` or `l`
+  var pkg = match[2]; // eg, devtools
+  var format = match[3];
+  var url = 'http://crandb.r-pkg.org//' + pkg;
+  var badgeData = getBadgeData('cran', data);
+  request(url, function (err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(badgeData, format);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+
+      if (info === 'v') {
+        var version = data.version.number;
+        var vdata = versionColor(version);
+        badgeData.text[1] = vdata.version;
+        badgeData.colorscheme = vdata.color;
+        sendBadge(format, badgeData);
+      } else if (info === 'l') {
+        var license = data.license;
+        if (license === '') {
+          badgeData.text[1] = 'Unknown';
+        } else {
+          badgeData.text[1] = license;
+          badgeData.colorscheme = 'blue';
+        }
+        sendBadge(format, badgeData);
+      }
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  })}
+));
+
+
 // CTAN integration.
 camp.route(/^\/ctan\/([^\/])\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
