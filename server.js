@@ -1,4 +1,6 @@
 var secureServer = !!process.env.HTTPS;
+var secureServerKey = process.env.HTTPS_KEY || 'https.key';
+var secureServerCert = process.env.HTTPS_CRT || 'https.crt';
 var serverPort = +process.env.PORT || +process.argv[2] || (secureServer? 443: 80);
 var bindAddress = process.env.BIND_ADDRESS || process.argv[3] || '::';
 var infoSite = process.env.INFOSITE || "http://shields.io";
@@ -8,8 +10,10 @@ var camp = Camp.start({
   documentRoot: __dirname,
   port: serverPort,
   hostname: bindAddress,
-  secure: secureServer
-});
+  secure: secureServer,
+  cert: secureServerCert,
+  key: secureServerKey
+})
 Camp.log.unpipe('warn', 'stderr');
 console.log('http://[::1]:' + serverPort + '/try.html');
 var domain = require('domain');
