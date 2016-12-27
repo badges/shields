@@ -14,4 +14,4 @@ git:
   depth: 10
 
 script: 
-  - deploy.sh
+  - ./deploy.sh
