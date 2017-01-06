@@ -126,11 +126,14 @@ heroku open
 You can build and run the server locally using Docker. First build an image:
 
 ```console
-$ docker build -t shields ./
+$ docker build -t shields .
 Sending build context to Docker daemon 3.923 MB
 …
 Successfully built 4471b442c220
 ```
+
+Optionally, create a file called `secret.env` that contains the needed configuration. See
+`secret.example.env` for an example.
 
 Then run the container:
 
