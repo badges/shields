@@ -53,8 +53,8 @@ function makeImage(data, cb) {
     if (!pickedColorscheme) {
       pickedColorscheme = colorscheme.red;
     }
-    data.colorA = pickedColorscheme.colorA || data.colorA;
-    data.colorB = pickedColorscheme.colorB || data.colorB;
+    data.colorA = data.colorA || pickedColorscheme.colorA;
+    data.colorB = data.colorB || pickedColorscheme.colorB;
   }
   // Colors.
   if (!cssColor.test(data.colorA)) { data.colorA = undefined; }
