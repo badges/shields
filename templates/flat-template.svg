@@ -1,4 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{{=it.widths[0]+it.widths[1]}}" height="20">
+    <style type="text/css"><![CDATA[
+        a #rlink { fill:#fff; }
+    ]]></style>
     <linearGradient id="smooth" x2="0" y2="100%">
         <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
         <stop offset="1" stop-opacity=".1"/>
@@ -26,10 +29,10 @@
         <text x="{{=(it.widths[0]+it.logoWidth+it.logoPadding)/2}}" y="14">{{=it.escapeXml(it.text[0])}}</text>
         {{?it.links[1]}}
         <a xlink:href="{{=it.links[1]}}">
-            {{?}}
+        {{?}}
             <text x="{{=it.widths[0]+it.widths[1]/2-1}}" y="15" fill="#010101" fill-opacity=".3">{{=it.escapeXml(it.text[1])}}</text>
-            <text x="{{=it.widths[0]+it.widths[1]/2-1}}" y="14">{{=it.escapeXml(it.text[1])}}</text>
-            {{?it.links[1]}}
+            <text x="{{=it.widths[0]+it.widths[1]/2-1}}" y="14" id="rlink">{{=it.escapeXml(it.text[1])}}</text>
+        {{?it.links[1]}}
         </a>
         {{?}}
     </g>
