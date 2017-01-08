@@ -14,7 +14,14 @@ try {
 //    - badge: shields image URL.
 //    - name: string
 var suggest = function(data, end, ask) {
-  ask.res.setHeader('Access-Control-Allow-Origin', 'http://shields.io');
+  var origin = ask.req.headers['origin'];
+  if (/^https?:\/\/shields\.io$/.test(origin)) {
+    ask.res.setHeader('Access-Control-Allow-Origin', origin);
+  } else {
+    ask.res.setHeader('Access-Control-Allow-Origin', 'null');
+    end({err:'Disallowed'});
+    return;
+  }
   try {
     var url = nodeUrl.parse(data.url);
   } catch(e) { end({err:''+e}); return; }
