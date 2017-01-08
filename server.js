@@ -196,7 +196,8 @@ function cache(f) {
 
     var cacheIndex = match[0] + '?label=' + data.label + '&style=' + data.style
       + '&logo=' + data.logo + '&logoWidth=' + data.logoWidth
-      + '&link=' + data.link;
+      + '&link=' + JSON.stringify(data.link) + '&colorA=' + data.colorA
+      + '&colorB=' + data.colorB;
     // Should we return the data right away?
     var cached = requestCache.get(cacheIndex);
     var cachedVersionSent = false;
