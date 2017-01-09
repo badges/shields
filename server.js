@@ -5598,9 +5598,8 @@ camp.route(/^\/github\/standards\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
     var issue = match[2];
     var format = match[3];
     var apiUrl = githubApiUrl + '/repos/standards/' + standard + '/issues/' + issue;
-    var badgeData = getBadgeData('Standards', data);
-    badgeData.template = 'flat-linkable';
-    badgeData.logo = logos['github-white'];
+    var badgeData = getBadgeData('standards', data);
+    badgeData.template = 'flat';
     badgeData.links = [
       'https://github.com/standards/' + standard,
       'https://github.com/standards/'+ standard +'/issues/' + issue
