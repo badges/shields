@@ -6676,6 +6676,32 @@ cache((data, match, sendBadge, request) => {
   });
 }));
 
+// Maven metadata versioning integration.
+camp.route(/^\/maven\/(v)\/((?:https?:\/\/.+\/)maven-metadata\.xml)\.(svg|png|gif|jpg|json)$/,
+  cache(function (data, match, sendBadge, request) {
+    request(match[2], function (error, response, body) {
+      var badge = getBadgeData('maven', data);
+      if (!error && response.statusCode >= 200 && response.statusCode < 300) {
+        xml2js.parseString(body, function (err, result) {
+          if (!err) {
+            var version = result.metadata.versioning[0].versions[0].version || '';
+            badge.text[1] = version[version.length - 1];
+            badge.colorscheme = /^.*-SNAPSHOT$/.test(badge.text[1]) ? 'green' : 'brightgreen';
+            sendBadge(match[3], badge);
+          } else {
+            badge.text[1] = 'error';
+            badge.colorscheme = 'red';
+            sendBadge(match[3], badge);
+          }
+        });
+      } else {
+        badge.text[1] = 'error';
+        badge.colorscheme = 'red';
+        sendBadge(match[3], badge);
+      }
+    })
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
