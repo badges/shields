@@ -453,6 +453,51 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// NetflixOSS metadata integration
+camp.route(/^\/osslifecycle?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+  cache(function(data, match, sendBadge, request) {
+    var orgOrUserAndRepo = match[1];
+    var branch = match[2];
+    var format = match[3];
+    var url = 'https://raw.githubusercontent.com/' + orgOrUserAndRepo;
+    if (branch != null) {
+      url += "/" + branch + "/OSSMETADATA"
+    }
+    else {
+      url += "/master/OSSMETADATA";
+    }
+    var options = {
+      method: 'GET',
+      uri: url
+    };
+    var badgeData = getBadgeData('OSS Lifecycle', data);
+    request(options, function(err, res, body) {
+      if (err != null) {
+        console.error('NetflixOSS error: ' + err.stack);
+        if (res) { console.error(''+res); }
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        var matchStatus = body.match(/osslifecycle\=([a-z]+)/im);
+        if (matchStatus === null) {
+          badgeData.text[1] = 'inaccessible';
+          sendBadge(format, badgeData);
+          return;
+        } else {
+          badgeData.text[1] = matchStatus[1];
+          sendBadge(format, badgeData);
+          return;
+        }
+      } catch(e) {
+        console.log(e);
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+      }
+    });
+}));
+
 // Shippable integration
 camp.route(/^\/shippable\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
