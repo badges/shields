@@ -834,7 +834,18 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
       var metricName = match[4];
       var format = match[5];
 
-      var sonarMetricName = metricName;
+      var options = {
+        headers: {
+          Accept: 'application/json'
+        }
+      };
+      if (serverSecrets && serverSecrets.sonarqube_token) {
+        options.auth = {
+          user: serverSecrets.sonarqube_token
+        };
+      }
+
+      var sonarMetricName = metricName;      
 
       if (metricName === 'tech_debt') {
         //special condition for backwards compatibility
@@ -846,7 +857,7 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
 
       var badgeData = getBadgeData(metricName.replace(/_/g, ' '), data);
 
-      request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
+      request(apiUrl, options, function(err, res, buffer) {
         if (err != null) {
           badgeData.text[1] = 'inaccessible';
           sendBadge(format, badgeData);
