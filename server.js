@@ -854,7 +854,7 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
         try {
           var data = JSON.parse(buffer);
 
-          var value = data[0].msr[0].val;
+          var value = data[0].msr[0].val || data[0].msr[0].data;
 
           if (value === undefined) {
             badgeData.text[1] = 'unknown';
@@ -919,6 +919,20 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
             } else if (value > 0) {
               badgeData.colorscheme = 'brightgreen';
             } else {
+              badgeData.colorscheme = 'lightgrey';
+            }
+          } else if (metricName == 'alert_status') {
+            if (value === 'OK') {
+              badgeData.text[1] = "passing";
+              badgeData.colorscheme = 'brightgreen';
+            } else if (value === 'WARN') {
+              badgeData.text[1] = "warning";
+              badgeData.colorscheme = 'orange';
+            } else if (value === 'ERROR') {
+              badgeData.text[1] = "failing";
+              badgeData.colorscheme = 'red';
+            } else {
+              badgeData.text[1] = 'unknown';
               badgeData.colorscheme = 'lightgrey';
             }
           } else {
