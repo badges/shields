@@ -132,13 +132,13 @@ Sending build context to Docker daemon 3.923 MB
 Successfully built 4471b442c220
 ```
 
-Optionally, create a file called `secret.env` that contains the needed configuration. See
+Optionally, create a file called `shields.env` that contains the needed configuration. See
 `secret.example.env` for an example.
 
 Then run the container:
 
 ```console
-$ docker run --rm -p 8080:80 --env-file secret.env --name shields shields
+$ docker run --rm -p 8080:80 --env-file shields.env --name shields shields
 
 > gh-badges@1.1.2 start /usr/src/app
 > node server.js
@@ -157,6 +157,8 @@ bintray_apikey
 bintray_user
 gh_client_id
 gh_client_secret
+gh_token
+gitter_dev_secret
 shieldsIps
 shieldsSecret
 sl_insight_apiToken
