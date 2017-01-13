@@ -21,5 +21,5 @@ Thumbs.db
 .Spotlight-V100
 .Trashes
 
-# Docker env file containing secrets
-secret.env
+# Docker env configuration file
+shields.env
