@@ -4982,10 +4982,10 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       var latest_status = data.results[0].status;
       if ( latest_status == 10 ) {
-        badgeData.text[1] = 'passed';
+        badgeData.text[1] = 'passing';
         badgeData.colorscheme = 'brightgreen';
       } else if ( latest_status < 0 ) {
-        badgeData.text[1] = 'failed';
+        badgeData.text[1] = 'failing';
         badgeData.colorscheme = 'red';
       } else {
         badgeData.text[1] = 'building..';
