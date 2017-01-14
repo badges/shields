@@ -4960,6 +4960,45 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Docker Hub automated integration, latest status (passed, pending, failed)
+camp.route(/^\/docker\/status\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];  // eg, jrottenberg
+  var repo = match[2];  // eg, ffmpeg
+  var format = match[3];
+  if (user === '_') {
+    user = 'library';
+  }
+  var path = user + '/' + repo;
+  var url = 'https://registry.hub.docker.com/v2/repositories/' + path + '/buildhistory';
+  var badgeData = getBadgeData('docker status', data);
+  request(url, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var latest_status = data.results[0].status;
+      if ( latest_status == 10 ) {
+        badgeData.text[1] = 'passed';
+        badgeData.colorscheme = 'brightgreen';
+      } else if ( latest_status < 0 ) {
+        badgeData.text[1] = 'failed';
+        badgeData.colorscheme = 'red';
+      } else {
+        badgeData.text[1] = 'building..';
+        badgeData.colorB = '#008bb8';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Twitter integration.
 camp.route(/^\/twitter\/url\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
