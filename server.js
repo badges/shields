@@ -289,6 +289,15 @@ function cache(f) {
   };
 }
 
+camp.notfound(/\.(svg|png|gif|jpg|json)/, 
+  cache(function(data, match, sendBadge, request) {
+    var format = match[1]; 
+    var badgeData = getBadgeData("404", data);
+    badgeData.text[1] = 'badge not found';
+    badgeData.colorscheme = 'red';
+    return sendBadge(format, badgeData);
+}));
+
 camp.notfound(/.*/, function(query, match, end, request) {
   end(null, {template: '404.html'});
 });
