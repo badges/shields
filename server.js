@@ -3849,12 +3849,12 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Jenkins build status integration
-camp.route(/^\/jenkins(-ci)?\/s\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/jenkins(?:-ci)?\/s\/(http(?:s)?)\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var scheme = match[2];  // http(s)
-  var host = match[4];  // jenkins.qa.ubuntu.com
-  var job = match[5];  // precise-desktop-amd64_default
-  var format = match[6];
+  var scheme = match[1];  // http(s)
+  var host = match[2];  // example.org:8080
+  var job = match[3];  // folder/job
+  var format = match[4];
   var options = {
     json: true,
     uri: scheme + '://' + host + '/job/' + job + '/api/json?tree=color'
@@ -3902,12 +3902,12 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Jenkins tests integration
-camp.route(/^\/jenkins(-ci)?\/t\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/jenkins(?:-ci)?\/t\/(http(?:s)?)\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var scheme = match[2];  // http(s)
-  var host = match[4];  // jenkins.qa.ubuntu.com
-  var job = match[5];  // precise-desktop-amd64_default
-  var format = match[6];
+  var scheme = match[1];  // http(s)
+  var host = match[2];  // example.org:8080
+  var job = match[3];  // folder/job
+  var format = match[4];
   var options = {
     json: true,
     uri: scheme + '://' + host + '/job/' + job
@@ -3958,12 +3958,12 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Jenkins coverage integration
-camp.route(/^\/jenkins(-ci)?\/c\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/jenkins(?:-ci)?\/c\/(http(?:s)?)\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var scheme = match[2];  // http(s)
-  var host = match[4];  // jenkins.qa.ubuntu.com
-  var job = match[5];  // precise-desktop-amd64_default
-  var format = match[6];
+  var scheme = match[1];  // http(s)
+  var host = match[2];  // example.org:8080
+  var job = match[3];  // folder/job
+  var format = match[4];
   var options = {
     json: true,
     uri: scheme + '://' + host + '/job/' + job
