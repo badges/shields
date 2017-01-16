@@ -3859,6 +3859,9 @@ cache(function(data, match, sendBadge, request) {
     json: true,
     uri: scheme + '://' + host + '/job/' + job + '/api/json?tree=color'
   };
+  if( job.indexOf('/') > -1 ) {
+    options.uri = scheme + '://' + host + '/' + job + '/api/json?tree=color';
+  }
 
   if (serverSecrets && serverSecrets.jenkins_user) {
     options.auth = {
@@ -3913,6 +3916,10 @@ cache(function(data, match, sendBadge, request) {
     uri: scheme + '://' + host + '/job/' + job
       + '/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]'
   };
+  if( job.indexOf('/') > -1 ) {
+    options.uri = scheme + '://' + host + '/' + job
+      + '/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]';
+  }
 
   if (serverSecrets && serverSecrets.jenkins_user) {
     options.auth = {
@@ -3969,6 +3976,10 @@ cache(function(data, match, sendBadge, request) {
     uri: scheme + '://' + host + '/job/' + job
       + '/lastBuild/cobertura/api/json?tree=results[elements[name,denominator,numerator,ratio]]'
   };
+  if( job.indexOf('/') > -1 ) {
+    options.uri = scheme + '://' + host + '/' + job
+      + '/lastBuild/cobertura/api/json?tree=results[elements[name,denominator,numerator,ratio]]';
+  }
 
   if (serverSecrets && serverSecrets.jenkins_user) {
     options.auth = {
