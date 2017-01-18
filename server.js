@@ -4960,6 +4960,27 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Facebook integration.
+camp.route(/^\/facebook\/share\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var scheme = match[1]; // eg, https
+  var path = match[2];   // eg, shields.io
+  var format = match[3];
+  var page = encodeURIComponent(scheme + '://' + path);
+  var badgeData = getBadgeData('Share', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.facebook;
+    badgeData.links = [
+      'https://www.facebook.com/sharer/sharer.php?u=' + page,
+      'https://www.facebook.com/search?q=' + page,
+     ];
+  }
+  badgeData.text[1] = '';
+  badgeData.colorscheme = null;
+  badgeData.colorB = '#55ACEE';
+  sendBadge(format, badgeData);
+}));
+
 // Twitter integration.
 camp.route(/^\/twitter\/url\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
