@@ -4967,7 +4967,7 @@ cache(function(data, match, sendBadge, request) {
   var path = match[2];   // eg, shields.io
   var format = match[3];
   var page = encodeURIComponent(scheme + '://' + path);
-  var badgeData = getBadgeData('Share', data);
+  var badgeData = getBadgeData('share', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.facebook;
     badgeData.links = [
@@ -4977,7 +4977,7 @@ cache(function(data, match, sendBadge, request) {
   }
   badgeData.text[1] = '';
   badgeData.colorscheme = null;
-  badgeData.colorB = '#55ACEE';
+  badgeData.colorB = data.colorB || '#55ACEE';
   sendBadge(format, badgeData);
 }));
 
