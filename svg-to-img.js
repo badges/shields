@@ -1,10 +1,8 @@
-var Rsvg = require('librsvg-prebuilt').Rsvg;
 var gm = require('gm');
 var fs = require('fs');
 var LruCache = require('./lru-cache.js');
-var str = require('string-to-stream');
 
-imageMagick = gm.subClass({ imageMagick: true });
+var imageMagick = gm.subClass({ imageMagick: true });
 
 // The following is an arbitrary limit (~1.5MB, 1.5kB/image).
 var imgCache = new LruCache(1000);
@@ -18,8 +16,9 @@ module.exports = function (svg, format, out, cb) {
   }
 
   var buf = new Buffer('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' + svg);
-  var stream = imageMagick(buf, 'svg.svg').stream('png', function (err, stdout, stderr) {
-    //out.write(stdout);
+  var stream = imageMagick(buf, 'image.' + format)
+  .stream(format, function (err, stdout, stderr) {
+    if (err) { console.error(err); }
     stdout.pipe(out);
   });
   stream.on('end', function () {
