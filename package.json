@@ -49,7 +49,6 @@
     "templates",
     "svg-to-img.js",
     "colorscheme.json",
-    "phantomjs-svg2png.js",
     "lru-cache.js",
     "logo"
   ]
