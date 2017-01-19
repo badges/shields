@@ -1,2 +1,4 @@
 node_modules/
 shields.env
+.git/
+.gitignore
