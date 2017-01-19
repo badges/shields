@@ -11,11 +11,6 @@ COPY package.json /usr/src/app/
 RUN npm install
 COPY . /usr/src/app
 
-ENV GH_CLIENT_ID=null \
-    GH_CLIENT_SECRET=null \
-    SHIELDS_IP=null \
-    INFOSITE="http://shields.io"
-
 CMD envsubst < secret.tpl.json > secret.json && npm start
 
 EXPOSE 80
