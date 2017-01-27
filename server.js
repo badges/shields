@@ -4979,7 +4979,7 @@ cache(function(data, match, sendBadge, request) {
   }
   badgeData.text[1] = '';
   badgeData.colorscheme = null;
-  badgeData.colorB = '#55ACEE';
+  badgeData.colorB = data.colorB || '#55ACEE';
   sendBadge(format, badgeData);
 }));
 
