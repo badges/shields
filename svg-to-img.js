@@ -1,10 +1,8 @@
+var gm = require('gm');
 var fs = require('fs');
-var os = require('os');
-var path = require('path');
-var phantom = require('phantomjs-prebuilt');
 var LruCache = require('./lru-cache.js');
-var childProcess = require('child_process');
-var phantomScript = path.join(__dirname, 'phantomjs-svg2png.js');
+
+var imageMagick = gm.subClass({ imageMagick: true });
 
 // The following is an arbitrary limit (~1.5MB, 1.5kB/image).
 var imgCache = new LruCache(1000);
@@ -16,28 +14,21 @@ module.exports = function (svg, format, out, cb) {
     (new DataStream(imgCache.get(cacheIndex))).pipe(out);
     return;
   }
-  var tmpFile = path.join(os.tmpdir(),
-      "svg2img-" + (Math.random()*2147483648|0) + "." + format);
-  // Conversion to PNG happens in the phantom script.
-  childProcess.execFile(phantom.path, [phantomScript, svg, tmpFile],
-  function(err, stdout, stderr) {
-    if (stdout) { console.log(stdout); }
-    if (stderr) { console.error(stderr); }
-    if (err != null) { console.error(err.stack); if (cb) { cb(err); } return; }
-    var inStream = fs.createReadStream(tmpFile);
-    var cached = [];
-    inStream.on('data', function(chunk) {
-      cached.push(chunk);
-      out.write(chunk);
-    });
-    // Remove the temporary file after use.
-    inStream.on('end', function() {
-      try { out.end(); } catch(e) {}
-      imgCache.set(cacheIndex, cached);
-      fs.unlink(tmpFile, cb);
-    });
+
+  var buf = new Buffer('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' + svg);
+  var stream = imageMagick(buf, 'image.' + format)
+  .background(format === 'jpg' ? '#FFFFFF' : 'none')
+  .flatten()
+  .stream(format, function (err, stdout, stderr) {
+    if (err) { console.error(err); }
+    stdout.pipe(out);
   });
-};
+  stream.on('end', function () {
+    stdout.end();
+    imgCache.set(cacheIndex, [stdout]);
+    cb && cb();
+  });
+}
 
 // Fake stream from the cache.
 var Readable = require('stream').Readable;
