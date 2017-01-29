@@ -3492,26 +3492,28 @@ function mapNugetFeed(pattern, offset, getInfo) {
   var vPreRegex = new RegExp('^\\/' + pattern + '\\/vpre\\/(.*)\\.(svg|png|gif|jpg|json)$');
 
   function getNugetVersion(apiUrl, id, includePre, request, done) {
-	// get service index document
-	var serviceIndexUrl = apiUrl + '/index.json';	
-	request(serviceIndexUrl, function(err, res, buffer) {
-      if (err != null) {
-        done(err);
-        return;
-      }
-
-      try {
+    // get service index document
+    regularUpdate(apiUrl + '/index.json',
+      (3600 * 1000),
+      function(buffer) {
         var data = JSON.parse(buffer);
-		var autocompleteResources = data.resources.filter(function(resource) {
-          return resource['@type'] == 'SearchAutocompleteService';
+
+        var autocompleteResources = data.resources.filter(function(resource) {
+          return resource['@type'] === 'SearchAutocompleteService';
         });
-		
-		// query autocomplete service
-		var reqUrl = autocompleteResources[0]['@id']
-          + '?id=' + id.toLowerCase()
-		  + '&prerelease=' + includePre
-		  + '&skip=0'
-		  + '&take=10000';
+
+        return autocompleteResources;
+      },
+      function(err, autocompleteResources) {
+        if (err != null) { done(err); return; }
+
+        // query autocomplete service
+        var randomEndpointIdx = Math.floor(Math.random() * autocompleteResources.length);
+        var reqUrl = autocompleteResources[randomEndpointIdx]['@id']
+          + '?id=' + id.toLowerCase()    // NuGet package id (lowercase)
+          + '&prerelease=' + includePre  // Include prerelease versions?
+          + '&skip=0'                    // Start at first package found
+          + '&take=5000';                // Max. number of results
 
         request(reqUrl, function(err, res, buffer) {
           if (err != null) {
@@ -3535,8 +3537,7 @@ function mapNugetFeed(pattern, offset, getInfo) {
             done(null, lastVersion);
           } catch (e) { done(e); }
         });
-      } catch (e) { done(e); }
-    });
+      });
   }
 
   camp.route(vRegex,
