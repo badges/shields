@@ -17,6 +17,7 @@ module.exports = function (svg, format, out, cb) {
 
   var buf = new Buffer('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' + svg);
   var stream = imageMagick(buf, 'image.' + format)
+  .density(90)
   .background(format === 'jpg' ? '#FFFFFF' : 'none')
   .flatten()
   .stream(format, function (err, stdout, stderr) {
