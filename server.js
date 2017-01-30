@@ -3859,7 +3859,7 @@ cache(function(data, match, sendBadge, request) {
     json: true,
     uri: scheme + '://' + host + '/job/' + job + '/api/json?tree=color'
   };
-  if( job.indexOf('/') > -1 ) {
+  if (job.indexOf('/') > -1 ) {
     options.uri = scheme + '://' + host + '/' + job + '/api/json?tree=color';
   }
 
@@ -3916,7 +3916,7 @@ cache(function(data, match, sendBadge, request) {
     uri: scheme + '://' + host + '/job/' + job
       + '/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]'
   };
-  if( job.indexOf('/') > -1 ) {
+  if (job.indexOf('/') > -1 ) {
     options.uri = scheme + '://' + host + '/' + job
       + '/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]';
   }
@@ -3976,7 +3976,7 @@ cache(function(data, match, sendBadge, request) {
     uri: scheme + '://' + host + '/job/' + job
       + '/lastBuild/cobertura/api/json?tree=results[elements[name,denominator,numerator,ratio]]'
   };
-  if( job.indexOf('/') > -1 ) {
+  if (job.indexOf('/') > -1 ) {
     options.uri = scheme + '://' + host + '/' + job
       + '/lastBuild/cobertura/api/json?tree=results[elements[name,denominator,numerator,ratio]]';
   }
@@ -4643,7 +4643,7 @@ cache(function(data, match, sendBadge, request) {
   queryParams['filter'] = 'completed';
 
   // Custom Banch if present
-  if(branch != null) {
+  if (branch != null) {
     apiUrl += "/tree/" + branch;
   }
 
@@ -6251,7 +6251,7 @@ function phpStableVersion(version) {
 // This searches the serverSecrets for a twitter consumer key
 // and secret, and exchanges them for a bearer token to use for all requests.
 function fetchTwitterToken() {
-  if(serverSecrets.twitter_consumer_key && serverSecrets.twitter_consumer_secret){
+  if (serverSecrets.twitter_consumer_key && serverSecrets.twitter_consumer_secret){
     // fetch a bearer token good for this app session
     // construct this bearer request with a base64 encoding of key:secret
     // docs for this are here: https://dev.twitter.com/oauth/application-only
@@ -6268,13 +6268,13 @@ function fetchTwitterToken() {
     };
     console.log('Fetching twitter bearer token...');
     request(options,function(err,res,buffer){
-      if(err){
+      if (err) {
         console.error('Error fetching twitter bearer token, error: ', err);
         return;
       }
-      try{
+      try {
         var data = JSON.parse(buffer);
-        if(data.token_type === 'bearer'){
+        if (data.token_type === 'bearer') {
           serverSecrets.twitter_bearer_token = data.access_token;
           console.log('Fetched twitter bearer token');
           return;
