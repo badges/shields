@@ -1,4 +1,4 @@
-﻿var secureServer = !!process.env.HTTPS;
+var secureServer = !!process.env.HTTPS;
 var serverPort = +process.env.PORT || +process.argv[2] || (secureServer? 443: 80);
 var bindAddress = process.env.BIND_ADDRESS || process.argv[3] || '::';
 var infoSite = process.env.INFOSITE || "http://shields.io";
@@ -3510,10 +3510,10 @@ function mapNugetFeed(pattern, offset, getInfo) {
         // query autocomplete service
         var randomEndpointIdx = Math.floor(Math.random() * autocompleteResources.length);
         var reqUrl = autocompleteResources[randomEndpointIdx]['@id']
-          + '?id=' + id.toLowerCase()    // NuGet package id (lowercase)
-          + '&prerelease=' + includePre  // Include prerelease versions?
-          + '&skip=0'                    // Start at first package found
-          + '&take=5000';                // Max. number of results
+          + '?id=' + encodeURIComponent(id.toLowerCase())   // NuGet package id (lowercase)
+          + '&prerelease=' + encodeURIComponentincludePre)  // Include prerelease versions?
+          + '&skip=0'                                       // Start at first package found
+          + '&take=5000';                                   // Max. number of results
 
         request(reqUrl, function(err, res, buffer) {
           if (err != null) {
