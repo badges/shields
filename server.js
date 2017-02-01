@@ -3494,7 +3494,15 @@ function mapNugetFeed(pattern, offset, getInfo) {
   function getNugetVersion(apiUrl, id, includePre, request, done) {
     // get service index document
     regularUpdate(apiUrl + '/index.json',
-      (3600 * 1000 * 24), // 1 day - can theoretically change often but in practice it doesn't
+      // The endpoint changes once per year (ie, a period of n = 1 year).
+      // We minimize the users' waiting time for information.
+      // With l = latency to fetch the endpoint and x = endpoint update period
+      // both in years, the yearly number of queries for the endpoint are 1/x,
+      // and when the endpoint changes, we wait for up to x years to get the
+      // right endpoint.
+      // So the waiting time within n years is n*l/x + x years, for which a
+      // derivation yields an optimum at x = sqrt(n*l), roughly 42 minutes.
+      (42 * 60 * 1000),
       function(buffer) {
         var data = JSON.parse(buffer);
 
