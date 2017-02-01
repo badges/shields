@@ -3494,7 +3494,7 @@ function mapNugetFeed(pattern, offset, getInfo) {
   function getNugetVersion(apiUrl, id, includePre, request, done) {
     // get service index document
     regularUpdate(apiUrl + '/index.json',
-      (3600 * 1000),
+      (3600 * 1000 * 24), // 1 day - can theoretically change often but in practice it doesn't
       function(buffer) {
         var data = JSON.parse(buffer);
 
@@ -3511,7 +3511,7 @@ function mapNugetFeed(pattern, offset, getInfo) {
         var randomEndpointIdx = Math.floor(Math.random() * autocompleteResources.length);
         var reqUrl = autocompleteResources[randomEndpointIdx]['@id']
           + '?id=' + encodeURIComponent(id.toLowerCase())   // NuGet package id (lowercase)
-          + '&prerelease=' + encodeURIComponentincludePre)  // Include prerelease versions?
+          + '&prerelease=' + encodeURIComponent(includePre) // Include prerelease versions?
           + '&skip=0'                                       // Start at first package found
           + '&take=5000';                                   // Max. number of results
 
