@@ -3511,7 +3511,7 @@ function mapNugetFeed(pattern, offset, getInfo) {
         var randomEndpointIdx = Math.floor(Math.random() * autocompleteResources.length);
         var reqUrl = autocompleteResources[randomEndpointIdx]['@id']
           + '?id=' + encodeURIComponent(id.toLowerCase())   // NuGet package id (lowercase)
-          + '&prerelease=' + encodeURIComponent(includePre) // Include prerelease versions?
+          + '&prerelease=true'                              // Include prerelease versions?
           + '&skip=0'                                       // Start at first package found
           + '&take=5000';                                   // Max. number of results
 
