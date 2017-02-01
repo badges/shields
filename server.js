@@ -3629,29 +3629,60 @@ function mapNugetFeed(pattern, offset, getInfo) {
   var vPreRegex = new RegExp('^\\/' + pattern + '\\/vpre\\/(.*)\\.(svg|png|gif|jpg|json)$');
 
   function getNugetVersion(apiUrl, id, includePre, request, done) {
-    var reqUrl = apiUrl + '/flatcontainer/' + id.toLowerCase() + '/index.json';
-    request(reqUrl, function(err, res, buffer) {
-      if (err != null) {
-        done(err);
-        return;
-      }
-
-      try {
+    // get service index document
+    regularUpdate(apiUrl + '/index.json',
+      // The endpoint changes once per year (ie, a period of n = 1 year).
+      // We minimize the users' waiting time for information.
+      // With l = latency to fetch the endpoint and x = endpoint update period
+      // both in years, the yearly number of queries for the endpoint are 1/x,
+      // and when the endpoint changes, we wait for up to x years to get the
+      // right endpoint.
+      // So the waiting time within n years is n*l/x + x years, for which a
+      // derivation yields an optimum at x = sqrt(n*l), roughly 42 minutes.
+      (42 * 60 * 1000),
+      function(buffer) {
         var data = JSON.parse(buffer);
-        var versions = data.versions;
-        if (!includePre) {
-          // Remove prerelease versions.
-          filteredVersions = versions.filter(function(version) {
-            return !/-/.test(version);
-          });
-          if (filteredVersions.length > 0) {
-            versions = filteredVersions;
+
+        var autocompleteResources = data.resources.filter(function(resource) {
+          return resource['@type'] === 'SearchAutocompleteService';
+        });
+
+        return autocompleteResources;
+      },
+      function(err, autocompleteResources) {
+        if (err != null) { done(err); return; }
+
+        // query autocomplete service
+        var randomEndpointIdx = Math.floor(Math.random() * autocompleteResources.length);
+        var reqUrl = autocompleteResources[randomEndpointIdx]['@id']
+          + '?id=' + encodeURIComponent(id.toLowerCase())   // NuGet package id (lowercase)
+          + '&prerelease=true'                              // Include prerelease versions?
+          + '&skip=0'                                       // Start at first package found
+          + '&take=5000';                                   // Max. number of results
+
+        request(reqUrl, function(err, res, buffer) {
+          if (err != null) {
+            done(err);
+            return;
           }
-        }
-        var lastVersion = versions[versions.length - 1];
-        done(null, lastVersion);
-      } catch (e) { done(e); }
-    });
+
+          try {
+            var data = JSON.parse(buffer);
+            var versions = data.data;
+            if (!includePre) {
+              // Remove prerelease versions.
+              filteredVersions = versions.filter(function(version) {
+                return !/-/.test(version);
+              });
+              if (filteredVersions.length > 0) {
+                versions = filteredVersions;
+              }
+            }
+            var lastVersion = versions[versions.length - 1];
+            done(null, lastVersion);
+          } catch (e) { done(e); }
+        });
+      });
   }
 
   camp.route(vRegex,
