@@ -1,7 +1,7 @@
 var secureServer = !!process.env.HTTPS;
 var serverPort = +process.env.PORT || +process.argv[2] || (secureServer? 443: 80);
 var bindAddress = process.env.BIND_ADDRESS || process.argv[3] || '::';
-var infoSite = process.env.INFOSITE || "http://shields.io";
+var infoSite = process.env.INFOSITE || "https://shields.io";
 var githubApiUrl = process.env.GITHUB_URL || 'https://api.github.com';
 var Camp = require('camp');
 var camp = Camp.start({
@@ -3015,6 +3015,7 @@ cache(function(data, match, sendBadge, request) {
       badgeData.colorscheme = vdata.color;
       sendBadge(format, badgeData);
     } catch(e) {
+      console.error('GitHub error: ' + e);
       badgeData.text[1] = 'none';
       sendBadge(format, badgeData);
     }
@@ -4088,8 +4089,8 @@ cache(function(data, match, sendBadge, request) {
 camp.route(/^\/codeship\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var projectId = match[1];  // eg, `ab123456-00c0-0123-42de-6f98765g4h32`.
-  var format = match[3];
-  var branch = match[2];
+  var format = match[3]; 
+  var branch = match[2]; // eg, `ab123456-00c0-0123-42de-6f98765g4h32/master`.
   var options = {
     method: 'GET',
     uri: 'https://codeship.com/projects/' + projectId + '/status' + (branch != null ? '?branch=' + branch : '')
@@ -6035,6 +6036,8 @@ function versionColor(version) {
   var first = version[0];
   if (first === 'v') {
     first = version[1];
+  } else if (/^version\/[0-9]/.test(version)) {
+    version = 'v' + version.substring(8);
   } else if (/^[0-9]/.test(version)) {
     version = 'v' + version;
   }
@@ -6085,7 +6088,7 @@ function latestVersion(versions) {
   var version = '';
   var origVersions = versions;
   versions = versions.filter(function(version) {
-    return (/^v?[0-9]/).test(version);
+    return (/^(v|version\/)?[0-9]/).test(version);
   });
   try {
     version = semver.maxSatisfying(versions, '');
