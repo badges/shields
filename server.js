@@ -3,6 +3,7 @@ var serverPort = +process.env.PORT || +process.argv[2] || (secureServer? 443: 80
 var bindAddress = process.env.BIND_ADDRESS || process.argv[3] || '::';
 var infoSite = process.env.INFOSITE || "http://shields.io";
 var githubApiUrl = process.env.GITHUB_URL || 'https://api.github.com';
+var gitlabApiUrl = process.env.GITLAB_URL || 'https://gitlab.com/api/v3';
 var Camp = require('camp');
 var camp = Camp.start({
   documentRoot: __dirname,
@@ -20,6 +21,7 @@ var badge = require('./badge.js');
 var svg2img = require('./svg-to-img.js');
 var loadLogos = require('./load-logos.js');
 var githubAuth = require('./lib/github-auth.js');
+var gitlabAuth = require('./lib/gitlab-auth.js');
 var querystring = require('querystring');
 var xml2js = require('xml2js');
 var serverSecrets;
@@ -672,6 +674,111 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
     }
   });
+}));
+
+camp.route(/^\/gitlab\/ci\/([sc])\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var dataKind = match[1];
+  var userRepo = match[2];  // namespace/project
+  var branch = match[3];
+  var format = match[4];
+  var apiUrl = gitlabApiUrl + '/projects/' + encodeURIComponent(userRepo) + '/pipelines';
+  console.log(apiUrl);
+  var badgeData = getBadgeData({'s':'build', 'c': 'coverage'}[dataKind], data);
+  var callback = function(branch, page){
+    var qs = {
+      page: page,
+      per_page: 100,
+    };
+    gitlabAuth.request(request, apiUrl, qs, function(err, res, buffer) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        var data = JSON.parse(buffer);
+        var done = false;
+        // Assume sorted by time
+        if(page >= 10 || data.length == 0) throw 'No match';
+        for(var i = 0; i < data.length; ++i) {
+          if(data[i].ref === branch && ['success', 'failed'].indexOf(data[i].status) != -1) {
+            switch(dataKind) {
+              case 's':
+              var state = data[i].status;
+              badgeData.text[1] = state;
+              if (state === 'success') {
+                badgeData.colorscheme = 'brightgreen';
+              } else if (state === 'failed') {
+                badgeData.colorscheme = 'red';
+              }
+              sendBadge(format, badgeData);
+              break;
+              case 'c':
+              var buildApiUrl = gitlabApiUrl + '/projects/' + encodeURIComponent(userRepo) +
+              '/repository/commits/' + data[i].sha + '/builds';
+              gitlabAuth.request(request, buildApiUrl, {per_page: 100}, function(err, res, buffer) {
+                if (err != null) {
+                  badgeData.text[1] = 'inaccessible';
+                  sendBadge(format, badgeData);
+                  return;
+                }
+                try {
+                  var data = JSON.parse(buffer);
+                  var done = false;
+                  for(var i = 0; i < data.length; ++i) {
+                    if(data[i].coverage != null) {
+                      console.log(data[i].coverage)
+                      var percentage = parseFloat(data[i].coverage);
+                      if(percentage === NaN) throw 'NaN';
+                      badgeData.text[1] = percentage.toFixed(0) + '%';
+                      badgeData.colorscheme = coveragePercentageColor(percentage);
+                      done = true;
+                    }
+                  }
+                  if(!done) throw 'No coverage match'
+                } catch(e) {
+                  badgeData.text[1] = 'unknown';
+                }
+                sendBadge(format, badgeData);
+              });
+              break;
+            }
+            done = true;
+            break;
+          }
+        }
+        if(!done) {
+          callback(branch, page+1);
+        }
+      } catch(e) {
+        badgeData.text[1] = 'unknown';
+        sendBadge(format, badgeData);
+      }
+    });
+  }
+  if(branch == null) {
+    var projectApiUrl = gitlabApiUrl + '/projects/' + encodeURIComponent(userRepo);
+    gitlabAuth.request(request, projectApiUrl, {}, function(err, res, buffer) {
+      if(err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        var data = JSON.parse(buffer);
+        branch = data.default_branch;
+      } catch(e) {}
+      if(branch == null || branch === undefined) {
+        badgeData.text[1] = 'unknown';
+        sendBadge(format, badgeData);
+        return;
+      }
+      callback(branch, 1);
+    });
+  } else {
+    callback(branch, 1);
+  }
 }));
 
 // Rust download and version integration
