@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://rawgit.com/badges/shields/master/logo.svg"
+    <img src="https://rawgit.com/badges/shields/master/public/logo.svg"
          height="130">
 </p>
 <p align="center">

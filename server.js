@@ -3,9 +3,10 @@ var serverPort = +process.env.PORT || +process.argv[2] || (secureServer? 443: 80
 var bindAddress = process.env.BIND_ADDRESS || process.argv[3] || '::';
 var infoSite = process.env.INFOSITE || "http://shields.io";
 var githubApiUrl = process.env.GITHUB_URL || 'https://api.github.com';
+var path = require('path');
 var Camp = require('camp');
 var camp = Camp.start({
-  documentRoot: __dirname,
+  documentRoot: path.join(__dirname, 'public'),
   port: serverPort,
   hostname: bindAddress,
   secure: secureServer
