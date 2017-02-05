@@ -137,7 +137,7 @@ Successfully built 4471b442c220
 Then run the container:
 
 ```console
-$ docker run --rm -p 8080:80 -v "$(pwd)/secret.json":/usr/src/app/secret.json --name shields shields
+$ docker run --rm -p 8080:80 -v "$(pwd)/private/secret.json":/usr/src/app/secret.json --name shields shields
 
 > gh-badges@1.1.2 start /usr/src/app
 > node server.js
@@ -149,21 +149,20 @@ Assuming Docker is running locally, you should be able to get to the application
 
 # Secret.json
 
-Some services require the use of secret tokens or passwords. Those are stored in a file called `secret.json` that is not checked into the repository, to avoid impersonation. Here is how it currently looks like:
+Some services require the use of secret tokens or passwords. Those are stored in `private/secret.json` which is not checked into the repository, to avoid impersonation. Here is how it currently looks like:
 
 ```
 bintray_apikey
 bintray_user
 gh_client_id
 gh_client_secret
-gitter_dev_secret
 shieldsIps
 shieldsSecret
 sl_insight_apiToken
 sl_insight_userUuid
 ```
 
-(Gathered from `cat secret.json | jq keys | grep -o '".*"' | sed 's/"//g'`.)
+(Gathered from `cat private/secret.json | jq keys | grep -o '".*"' | sed 's/"//g'`.)
 
 # Main Server Sysadmin
 

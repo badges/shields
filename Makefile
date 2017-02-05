@@ -24,7 +24,7 @@ deploy: deploy-s0 deploy-s1 deploy-gh-pages
 
 deploy-s0:
 	git add -f Verdana.ttf
-	git add -f secret.json
+	git add -f private/secret.json
 	git commit -m'MUST NOT BE ON GITHUB'
 	git push -f s0 HEAD:master
 	git reset HEAD~1
@@ -32,7 +32,7 @@ deploy-s0:
 
 deploy-s1:
 	git add -f Verdana.ttf
-	git add -f secret.json
+	git add -f private/secret.json
 	git commit -m'MUST NOT BE ON GITHUB'
 	git push -f s1 HEAD:master
 	git reset HEAD~1
@@ -46,7 +46,7 @@ deploy-gh-pages:
 
 deploy-heroku:
 	git add -f Verdana.ttf
-	git add -f secret.json
+	git add -f private/secret.json
 	git commit -m'MUST NOT BE ON GITHUB'
 	git push -f heroku HEAD:master
 	git reset HEAD~1
