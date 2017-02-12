@@ -166,10 +166,12 @@ sl_insight_userUuid
 
 # Main Server Sysadmin
 
-- DNS round-robin between https://vps244529.ovh.net/try.html and https://vps71670.vps.ovh.ca/try.html.
+- Servers in DNS round-robin:
+  - s0: 192.99.59.72 (vps71670.vps.ovh.ca)
+  - s1: 51.254.114.150 (vps244529.ovh.net)
+  - s2: 149.56.96.133 (vps117870.vps.ovh.ca)
 - Self-signed TLS certificates, but `img.shields.io` is behind CloudFlare, which provides signed certificates.
-- Using node v0.12.7 because later versions, combined with node-canvas, give inaccurate badge measurements.
-- Using forever (the node monitor) to automatically restart the server when it crashes.
+- Using systemd to automatically restart the server when it crashes.
 
 See https://github.com/badges/ServerScript for helper admin scripts.
 
