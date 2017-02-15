@@ -956,15 +956,15 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
             // [0.5,1)   ==> D (orange)
             // [1,)      ==> E (red)
             badgeData.text[1] = value + '%';
-            if (value > 100) {
+            if (value >= 100) {
               badgeData.colorscheme = 'red';
-            } else if (value > 50) {
+            } else if (value >= 50) {
               badgeData.colorscheme = 'orange';
-            } else if (value > 20) {
+            } else if (value >= 20) {
               badgeData.colorscheme = 'yellow';
-            } else if (value > 10) {
+            } else if (value >= 10) {
               badgeData.colorscheme = 'yellowgreen';
-            } else if (value > 0) {
+            } else if (value >= 0) {
               badgeData.colorscheme = 'brightgreen';
             } else {
               badgeData.colorscheme = 'lightgrey';
