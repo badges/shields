@@ -734,7 +734,7 @@ cache(function (data, match, sendBadge, request) {
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function (err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
-      sendBadge(badgeData, format);
+      sendBadge(format, badgeData);
     }
     try {
       var data = JSON.parse(buffer);
@@ -1899,7 +1899,7 @@ cache(function(data, match, sendBadge, request) {
   request(url, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
-      sendBadge(badgeData, format);
+      sendBadge(format, badgeData);
       return;
     }
     try {
@@ -1934,7 +1934,7 @@ cache(function(data, match, sendBadge, request) {
   request(url, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
-      sendBadge(badgeData, format);
+      sendBadge(format, badgeData);
       return;
     }
     try {
@@ -4807,7 +4807,7 @@ cache(function(data, match, sendBadge, request) {
   request(url, function (err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
-      sendBadge(badgeData, format);
+      sendBadge(format, badgeData);
       return;
     }
     try {
@@ -5275,7 +5275,7 @@ cache(function(data, match, sendBadge, request) {
   request(options, function (err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
-      sendBadge(badgeData, format);
+      sendBadge(format, badgeData);
       return;
     }
     try {
@@ -5320,7 +5320,7 @@ cache(function(data, match, sendBadge, request) {
   request(apiUrl, function (err, res, buffer) {
     if (err) {
       badgeData.text[1] = 'inaccessible';
-      sendBadge(badgeData, format);
+      sendBadge(format, badgeData);
       return;
     }
 
