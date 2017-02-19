@@ -12,7 +12,7 @@ templateFiles.forEach(function(filename) {
   if (filename[0] === '.') { return; }
   var templateData = fs.readFileSync(
     path.join(__dirname, 'templates', filename)).toString();
-  var extension = filename.split('.').pop();
+  var extension = path.extname(filename).slice(1);
   var style = filename.slice(0, -(('-template.' + extension).length));
   templates[style + '-' + extension] = dot.template(templateData);
 });
