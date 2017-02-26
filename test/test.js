@@ -1,5 +1,6 @@
 var assertion = require('assert');
 var http = require('http');
+var https = require('https');
 var cproc = require('child_process');
 var fs = require('fs');
 
@@ -21,6 +22,8 @@ function test(target, tests) {
           };
         });
         f(resolve, assert);
+        //console.log(target + ' ' + desc);
+
       }).catch(function(e) {
         console.error('Failed:', target + ' ' + desc + '\n', e.stack);
       });
@@ -36,7 +39,10 @@ function test(target, tests) {
 // Test parameters
 var port = '1111';
 var url = 'http://127.0.0.1:' + port + '/';
+var httpsPort = '2222';
+var httpsUrl = 'https://127.0.0.1:' + httpsPort + '/';
 var server;
+var httpsServer;
 
 test('The CLI', [
   ['should provide a help message', function(done, assert) {
@@ -142,4 +148,56 @@ test('The server', [
     server.kill();
     server.on('exit', function() { done(); });
   }],
+])})
+
+.then(function() {
+test('The secureServer', [
+  // Start running the server.
+  ['should start', function(done, assert) {
+    httpServer = cproc.spawn('node', ['test/secure_server-test.js', httpsPort]);
+    var isDone = false;
+    httpServer.stdout.on('data', function(data) {
+      if (data.toString().indexOf('ready') >= 0 && !isDone) { done(); isDone = true; }
+    });
+    httpServer.stderr.on('data', function(data) { console.log(''+data); });
+  }],
+  ['should produce colorscheme badges', function(done, assert) {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+    https.get(httpsUrl + ':fruit-apple-green.svg',
+      function(res) {
+        var buffer = '';
+        res.on('data', function(chunk) { buffer += ''+chunk; });
+        res.on('end', function() {
+          assert(buffer.startsWith('<svg'), '<svg');
+          assert(buffer.includes('fruit'), 'fruit');
+          assert(buffer.includes('apple'), 'apple');
+          done();
+        });
+    });
+  }],
+  ['should produce colorscheme PNG badges', function(done, assert) {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+    https.get(httpsUrl + ':fruit-apple-green.png',
+      function(res) {
+        res.on('data', function(chunk) {
+          // Check the PNG magic number.
+          assert.equal(chunk[0], 0x89);
+          assert.equal(chunk[1], 0x50);
+          assert.equal(chunk[2], 0x4e);
+          assert.equal(chunk[3], 0x47);
+          assert.equal(chunk[4], 0x0d);
+          assert.equal(chunk[5], 0x0a);
+          assert.equal(chunk[6], 0x1a);
+          assert.equal(chunk[7], 0x0a);
+          done();
+        });
+    });
+  }],
+  ['should shut down', function(done, assert) {
+    httpServer.kill();
+    httpServer.on('exit', function() { done(); });
+  }],
 ])});
+
