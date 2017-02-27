@@ -16,10 +16,10 @@ console.log('http://[::1]:' + serverPort + '/try.html');
 var domain = require('domain');
 var request = require('request');
 var fs = require('fs');
-var LruCache = require('./lru-cache.js');
-var badge = require('./badge.js');
-var svg2img = require('./svg-to-img.js');
-var loadLogos = require('./load-logos.js');
+var LruCache = require('./lib/lru-cache.js');
+var badge = require('./lib/badge.js');
+var svg2img = require('./lib/svg-to-img.js');
+var loadLogos = require('./lib/load-logos.js');
 var githubAuth = require('./lib/github-auth.js');
 var querystring = require('querystring');
 var xml2js = require('xml2js');
@@ -149,7 +149,7 @@ function incrMonthlyAnalytics(monthlyAnalytics) {
 }
 
 analyticsAutoLoad();
-var suggest = require('./suggest.js');
+var suggest = require('./lib/suggest.js');
 camp.ajax.on('analytics/v1', function(json, end) { end(analytics); });
 camp.ajax.on('suggest/v1', suggest);
 
