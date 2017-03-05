@@ -4,8 +4,7 @@
 /coverage.html
 /redis
 /ServerScript
-/secret.json
-/.github-user-tokens.json
+/private
 
 # Installed npm modules
 node_modules

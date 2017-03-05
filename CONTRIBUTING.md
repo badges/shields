@@ -28,6 +28,12 @@ gets generated from the `try.html` file with a `make website`.
   `https://img.shields.io/gitter/room/nwjs/nw.js.svg`. The vendor is gitter, the
   badge is for rooms, the parameter is nwjs/nw.js, and the format is svg.
 
+Please minimize `.svg` files (eg. in logo/) through [SVGO][] (eg. by using
+[svgomg][]).
+
+[SVGO]: https://github.com/svg/svgo
+[svgomg]: https://jakearchibald.github.io/svgomg/
+
 ## Implementations
 
 The main implementation, available at <http://shields.io>, has its code located in this repository.

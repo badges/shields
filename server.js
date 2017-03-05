@@ -3,9 +3,10 @@ var serverPort = +process.env.PORT || +process.argv[2] || (secureServer? 443: 80
 var bindAddress = process.env.BIND_ADDRESS || process.argv[3] || '::';
 var infoSite = process.env.INFOSITE || "http://shields.io";
 var githubApiUrl = process.env.GITHUB_URL || 'https://api.github.com';
+var path = require('path');
 var Camp = require('camp');
 var camp = Camp.start({
-  documentRoot: __dirname,
+  documentRoot: path.join(__dirname, 'public'),
   port: serverPort,
   hostname: bindAddress,
   secure: secureServer
@@ -26,8 +27,10 @@ var serverSecrets;
 try {
   // Everything that cannot be checked in but is useful server-side
   // is stored in this JSON data.
-  serverSecrets = require('./secret.json');
-} catch(e) { console.error('No secret data (secret.json, see server.js):', e); }
+  serverSecrets = require('./private/secret.json');
+} catch(e) {
+  console.error('No secret data (private/secret.json, see server.js):', e);
+}
 if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);
 }
@@ -453,6 +456,51 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// NetflixOSS metadata integration
+camp.route(/^\/osslifecycle?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+  cache(function(data, match, sendBadge, request) {
+    var orgOrUserAndRepo = match[1];
+    var branch = match[2];
+    var format = match[3];
+    var url = 'https://raw.githubusercontent.com/' + orgOrUserAndRepo;
+    if (branch != null) {
+      url += "/" + branch + "/OSSMETADATA"
+    }
+    else {
+      url += "/master/OSSMETADATA";
+    }
+    var options = {
+      method: 'GET',
+      uri: url
+    };
+    var badgeData = getBadgeData('OSS Lifecycle', data);
+    request(options, function(err, res, body) {
+      if (err != null) {
+        console.error('NetflixOSS error: ' + err.stack);
+        if (res) { console.error(''+res); }
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        var matchStatus = body.match(/osslifecycle\=([a-z]+)/im);
+        if (matchStatus === null) {
+          badgeData.text[1] = 'inaccessible';
+          sendBadge(format, badgeData);
+          return;
+        } else {
+          badgeData.text[1] = matchStatus[1];
+          sendBadge(format, badgeData);
+          return;
+        }
+      } catch(e) {
+        console.log(e);
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+      }
+    });
+}));
+
 // Shippable integration
 camp.route(/^\/shippable\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
@@ -686,7 +734,7 @@ cache(function (data, match, sendBadge, request) {
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function (err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
-      sendBadge(badgeData, format);
+      sendBadge(format, badgeData);
     }
     try {
       var data = JSON.parse(buffer);
@@ -1851,7 +1899,7 @@ cache(function(data, match, sendBadge, request) {
   request(url, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
-      sendBadge(badgeData, format);
+      sendBadge(format, badgeData);
       return;
     }
     try {
@@ -1886,7 +1934,7 @@ cache(function(data, match, sendBadge, request) {
   request(url, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
-      sendBadge(badgeData, format);
+      sendBadge(format, badgeData);
       return;
     }
     try {
@@ -3422,6 +3470,37 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Bitbucket pull requests integration.
+camp.route(/^\/bitbucket\/pr(-raw)?\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var isRaw = !!match[1];
+  var user = match[2];  // eg, atlassian
+  var repo = match[3];  // eg, python-bitbucket
+  var format = match[4];
+  var apiUrl = 'https://bitbucket.org/api/2.0/repositories/'
+    + encodeURI(user) + '/' + encodeURI(repo)
+    + '/pullrequests/?limit=0&state=OPEN';
+
+  var badgeData = getBadgeData('pull requests', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var pullrequests = data.size;
+      badgeData.text[1] = metric(pullrequests) + (isRaw? '': ' open');
+      badgeData.colorscheme = (pullrequests > 0)? 'yellow': 'brightgreen';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Chef cookbook integration.
 camp.route(/^\/cookbook\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -3584,29 +3663,60 @@ function mapNugetFeed(pattern, offset, getInfo) {
   var vPreRegex = new RegExp('^\\/' + pattern + '\\/vpre\\/(.*)\\.(svg|png|gif|jpg|json)$');
 
   function getNugetVersion(apiUrl, id, includePre, request, done) {
-    var reqUrl = apiUrl + '/flatcontainer/' + id.toLowerCase() + '/index.json';
-    request(reqUrl, function(err, res, buffer) {
-      if (err != null) {
-        done(err);
-        return;
-      }
-
-      try {
+    // get service index document
+    regularUpdate(apiUrl + '/index.json',
+      // The endpoint changes once per year (ie, a period of n = 1 year).
+      // We minimize the users' waiting time for information.
+      // With l = latency to fetch the endpoint and x = endpoint update period
+      // both in years, the yearly number of queries for the endpoint are 1/x,
+      // and when the endpoint changes, we wait for up to x years to get the
+      // right endpoint.
+      // So the waiting time within n years is n*l/x + x years, for which a
+      // derivation yields an optimum at x = sqrt(n*l), roughly 42 minutes.
+      (42 * 60 * 1000),
+      function(buffer) {
         var data = JSON.parse(buffer);
-        var versions = data.versions;
-        if (!includePre) {
-          // Remove prerelease versions.
-          filteredVersions = versions.filter(function(version) {
-            return !/-/.test(version);
-          });
-          if (filteredVersions.length > 0) {
-            versions = filteredVersions;
+
+        var autocompleteResources = data.resources.filter(function(resource) {
+          return resource['@type'] === 'SearchAutocompleteService';
+        });
+
+        return autocompleteResources;
+      },
+      function(err, autocompleteResources) {
+        if (err != null) { done(err); return; }
+
+        // query autocomplete service
+        var randomEndpointIdx = Math.floor(Math.random() * autocompleteResources.length);
+        var reqUrl = autocompleteResources[randomEndpointIdx]['@id']
+          + '?id=' + encodeURIComponent(id.toLowerCase())   // NuGet package id (lowercase)
+          + '&prerelease=true'                              // Include prerelease versions?
+          + '&skip=0'                                       // Start at first package found
+          + '&take=5000';                                   // Max. number of results
+
+        request(reqUrl, function(err, res, buffer) {
+          if (err != null) {
+            done(err);
+            return;
           }
-        }
-        var lastVersion = versions[versions.length - 1];
-        done(null, lastVersion);
-      } catch (e) { done(e); }
-    });
+
+          try {
+            var data = JSON.parse(buffer);
+            var versions = data.data;
+            if (!includePre) {
+              // Remove prerelease versions.
+              filteredVersions = versions.filter(function(version) {
+                return !/-/.test(version);
+              });
+              if (filteredVersions.length > 0) {
+                versions = filteredVersions;
+              }
+            }
+            var lastVersion = versions[versions.length - 1];
+            done(null, lastVersion);
+          } catch (e) { done(e); }
+        });
+      });
   }
 
   camp.route(vRegex,
@@ -3804,16 +3914,19 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Jenkins build status integration
-camp.route(/^\/jenkins(-ci)?\/s\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/jenkins(?:-ci)?\/s\/(http(?:s)?)\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var scheme = match[2];  // http(s)
-  var host = match[4];  // jenkins.qa.ubuntu.com
-  var job = match[5];  // precise-desktop-amd64_default
-  var format = match[6];
+  var scheme = match[1];  // http(s)
+  var host = match[2];  // example.org:8080
+  var job = match[3];  // folder/job
+  var format = match[4];
   var options = {
     json: true,
     uri: scheme + '://' + host + '/job/' + job + '/api/json?tree=color'
   };
+  if (job.indexOf('/') > -1 ) {
+    options.uri = scheme + '://' + host + '/' + job + '/api/json?tree=color';
+  }
 
   if (serverSecrets && serverSecrets.jenkins_user) {
     options.auth = {
@@ -3857,17 +3970,21 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Jenkins tests integration
-camp.route(/^\/jenkins(-ci)?\/t\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/jenkins(?:-ci)?\/t\/(http(?:s)?)\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var scheme = match[2];  // http(s)
-  var host = match[4];  // jenkins.qa.ubuntu.com
-  var job = match[5];  // precise-desktop-amd64_default
-  var format = match[6];
+  var scheme = match[1];  // http(s)
+  var host = match[2];  // example.org:8080
+  var job = match[3];  // folder/job
+  var format = match[4];
   var options = {
     json: true,
     uri: scheme + '://' + host + '/job/' + job
       + '/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]'
   };
+  if (job.indexOf('/') > -1 ) {
+    options.uri = scheme + '://' + host + '/' + job
+      + '/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]';
+  }
 
   if (serverSecrets && serverSecrets.jenkins_user) {
     options.auth = {
@@ -3913,17 +4030,21 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Jenkins coverage integration
-camp.route(/^\/jenkins(-ci)?\/c\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/jenkins(?:-ci)?\/c\/(http(?:s)?)\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var scheme = match[2];  // http(s)
-  var host = match[4];  // jenkins.qa.ubuntu.com
-  var job = match[5];  // precise-desktop-amd64_default
-  var format = match[6];
+  var scheme = match[1];  // http(s)
+  var host = match[2];  // example.org:8080
+  var job = match[3];  // folder/job
+  var format = match[4];
   var options = {
     json: true,
     uri: scheme + '://' + host + '/job/' + job
       + '/lastBuild/cobertura/api/json?tree=results[elements[name,denominator,numerator,ratio]]'
   };
+  if (job.indexOf('/') > -1 ) {
+    options.uri = scheme + '://' + host + '/' + job
+      + '/lastBuild/cobertura/api/json?tree=results[elements[name,denominator,numerator,ratio]]';
+  }
 
   if (serverSecrets && serverSecrets.jenkins_user) {
     options.auth = {
@@ -4587,7 +4708,7 @@ cache(function(data, match, sendBadge, request) {
   queryParams['filter'] = 'completed';
 
   // Custom Banch if present
-  if(branch != null) {
+  if (branch != null) {
     apiUrl += "/tree/" + branch;
   }
 
@@ -4686,7 +4807,7 @@ cache(function(data, match, sendBadge, request) {
   request(url, function (err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
-      sendBadge(badgeData, format);
+      sendBadge(format, badgeData);
       return;
     }
     try {
@@ -4934,7 +5055,7 @@ cache(function(data, match, sendBadge, request) {
   }
   badgeData.text[1] = '';
   badgeData.colorscheme = null;
-  badgeData.colorB = '#55ACEE';
+  badgeData.colorB = data.colorB || '#55ACEE';
   sendBadge(format, badgeData);
 }));
 
@@ -5154,7 +5275,7 @@ cache(function(data, match, sendBadge, request) {
   request(options, function (err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
-      sendBadge(badgeData, format);
+      sendBadge(format, badgeData);
       return;
     }
     try {
@@ -5199,7 +5320,7 @@ cache(function(data, match, sendBadge, request) {
   request(apiUrl, function (err, res, buffer) {
     if (err) {
       badgeData.text[1] = 'inaccessible';
-      sendBadge(badgeData, format);
+      sendBadge(format, badgeData);
       return;
     }
 
@@ -6253,7 +6374,7 @@ function phpStableVersion(version) {
 // This searches the serverSecrets for a twitter consumer key
 // and secret, and exchanges them for a bearer token to use for all requests.
 function fetchTwitterToken() {
-  if(serverSecrets.twitter_consumer_key && serverSecrets.twitter_consumer_secret){
+  if (serverSecrets.twitter_consumer_key && serverSecrets.twitter_consumer_secret){
     // fetch a bearer token good for this app session
     // construct this bearer request with a base64 encoding of key:secret
     // docs for this are here: https://dev.twitter.com/oauth/application-only
@@ -6270,13 +6391,13 @@ function fetchTwitterToken() {
     };
     console.log('Fetching twitter bearer token...');
     request(options,function(err,res,buffer){
-      if(err){
+      if (err) {
         console.error('Error fetching twitter bearer token, error: ', err);
         return;
       }
-      try{
+      try {
         var data = JSON.parse(buffer);
-        if(data.token_type === 'bearer'){
+        if (data.token_type === 'bearer') {
           serverSecrets.twitter_bearer_token = data.access_token;
           console.log('Fetched twitter bearer token');
           return;

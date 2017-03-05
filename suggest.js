@@ -4,8 +4,10 @@ var serverSecrets;
 try {
   // Everything that cannot be checked in but is useful server-side
   // is stored in this JSON data.
-  serverSecrets = require('./secret.json');
-} catch(e) { console.error('No secret data (secret.json, see server.js):', e); }
+  serverSecrets = require('./private/secret.json');
+} catch(e) {
+  console.error('No secret data (private/secret.json, see server.js):', e);
+}
 
 // data: {url}, JSON-serializable object.
 // end: function(json), with json of the form:
