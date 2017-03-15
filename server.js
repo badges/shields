@@ -4491,8 +4491,8 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Typo3 TER extension downloads integration
-// example: https://img.shields.io/typo3/extension/d/sh_scoutnet_kalender.svg for https://typo3.org/extensions/repository/view/sh_scoutnet_kalender
-camp.route(/^\/typo3\/extension\/d\/(.*)\.(svg|png|gif|jpg|json)$/,
+// example: https://img.shields.io/typo3/extension/dt/sh_scoutnet_kalender.svg for https://typo3.org/extensions/repository/view/sh_scoutnet_kalender
+camp.route(/^\/typo3\/extension\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var extension = match[1];  // eg, `sh_scoutnet_kalender`.
   var format = match[2];
