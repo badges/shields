@@ -4490,6 +4490,49 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Typo3 TER extension downloads integration
+// example: https://img.shields.io/typo3/extension/d/sh_scoutnet_kalender.svg for https://typo3.org/extensions/repository/view/sh_scoutnet_kalender
+camp.route(/^\/typo3\/extension\/d\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var extension = match[1];  // eg, `sh_scoutnet_kalender`.
+  var format = match[2];
+
+  var badgeData = getBadgeData('downloads', data);
+
+  var jsdom = require("jsdom");
+  jsdom.env(
+    "https://typo3.org/extensions/repository/view/"+extension,
+    ["http://code.jquery.com/jquery.js"],
+    function (err, window) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        var total = window.$(".ter-ext-single-info table tr:contains('Downloads')").children('td').text().replace(',','');
+        badgeData.text[1] = metric(total);
+        if (total === 0) {
+          badgeData.colorscheme = 'red';
+        } else if (total < 100) {
+          badgeData.colorscheme = 'yellow';
+        } else if (total < 1000) {
+          badgeData.colorscheme = 'yellowgreen';
+        } else if (total < 10000) {
+          badgeData.colorscheme = 'green';
+        } else {
+          badgeData.colorscheme = 'brightgreen';
+        }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    }
+  );
+}));
+
+
 // SourceForge integration.
 camp.route(/^\/sourceforge\/([^\/]+)\/([^/]*)\/?(.*).(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
