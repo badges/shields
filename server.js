@@ -5075,9 +5075,9 @@ cache(function(data, match, sendBadge, request) {
           return;
         }
       }
-      if (results.next) {
+      if (data.next) {
         // we can search more to find the tag
-        request(url, apiRequest);
+        request(data.next, apiRequest);
       } else {
         // tag not found
         badgeData.text[1] = 'no tag ' + tag;
