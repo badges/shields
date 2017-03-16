@@ -77,11 +77,16 @@ The format is the following:
   /* … Or… */
   "colorA": "#555",
   "colorB": "#4c1",
-  /* See template/ for a list of available templates.
+  /* See templates/ for a list of available templates.
      Each offers a different visual design. */
   "template": "flat"
 }
 ```
+
+See also
+
+- [colorscheme.json](colorscheme.json) for the `colorscheme` option
+- [templates/](templates) for the `template` option
 
 # Defaults
 
