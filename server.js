@@ -5036,6 +5036,63 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Docker Hub automated build integration.
+camp.route(/^\/docker\/build\/([^\/]+)\/([^\/:]+?)(:([^\/]+?))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];
+  var repo = match[2];
+  var format = match[5];
+  var tag = match[4] || "latest";
+  var path = user + '/' + repo;
+  var url = 'https://hub.docker.com/v2/repositories/' + path + '/buildhistory/?page_size=100'
+  var badgeData = getBadgeData('docker build', data);
+  function apiRequest(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var results = data.results;
+      if (!results) {
+        // repository does not exist
+        badgeData.text[1] = path + ' not found';
+        sendBadge(format, badgeData);
+        return;
+      }
+      for (var i = 0; i < results.length; i += 1) {
+        var build = results[i];
+        if (build.dockertag_name == tag) {
+          if (build.status < 0) {
+            badgeData.text[1] = 'Error';
+            badgeData.colorB = '#ff992e'; // dockerhub color
+          } else {
+            badgeData.text[1] = 'Success';
+            badgeData.colorB = '#86d800'; // dockerhub color
+          }
+          sendBadge(format, badgeData);
+          return;
+        }
+      }
+      if (results.next) {
+        // we can search more to find the tag
+        request(url, apiRequest);
+      } else {
+        // tag not found
+        badgeData.text[1] = 'no tag ' + tag;
+        sendBadge(format, badgeData);
+        return;
+      }
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+  }
+  request(url, apiRequest);
+}));
+
 // Twitter integration.
 camp.route(/^\/twitter\/url\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
