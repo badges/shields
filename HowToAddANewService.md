@@ -95,7 +95,7 @@ To try out this custom badge do the following:
    `node server.js 8080`
 4. Visit the badge at [http://[::1]:8080/test/asd/fgh.svg](http://[::1]:8080/test/asd/fgh.svg).
 
-### Querying an API
+### (4.1) Querying an API
 
 The test badge above is quite simple and static.
 You can change the behavior by asking your API.
@@ -104,7 +104,7 @@ There are various examples on how to answer with a customized badge:
 - [docker automated builds](https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L5014)
 - [the famous travis badge](https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L431)
 
-### Add Badges to Front Page
+### (4.2) Add Badges to Front Page
 
 Once you are done implementing you badge, you can add it to the collection on [shields.io](http://shields.io/).
 
@@ -126,7 +126,7 @@ If this is fine, you can generate the website:
 
 This changes the index.html file automatically.
 
-## Create a Pull Request
+## (5) Create a Pull Request
 
 You have implemented changes in `server.js`, `try.html` and `index.html`.
 These changes shall go onto shields.io.
