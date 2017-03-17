@@ -9,8 +9,8 @@ You will need to learn to use JavaScript, git and Github.
 
 You should read the following:
 
-- [CONTRIBUTING.md]
-- [INSTALL.md]
+- [CONTRIBUTING.md](CONTRIBUTING.md)
+- [INSTALL.md](INSTALL.md)
 
 You can read
 
@@ -39,7 +39,7 @@ If you do not, install it and learn about the [Github workflow](http://try.githu
 7. Run the server  
    `node server.js 8080`
 8. Visit the website to check the badges get loaded slowly:  
-   [http://[::1]:8080/try.html][http://[::1]/try.html]
+   [http://[::1]:8080/try.html](http://[::1]/try.html)
 
 (3) Open an Issue
 -----------------
