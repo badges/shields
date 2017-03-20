@@ -1297,17 +1297,18 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
+      var downloads;
       switch (info.charAt(1)) {
       case 'm':
-        var downloads = data.package.downloads.monthly;
+        downloads = data.package.downloads.monthly;
         badgeData.text[1] = metric(downloads) + '/month';
         break;
       case 'd':
-        var downloads = data.package.downloads.daily;
+        downloads = data.package.downloads.daily;
         badgeData.text[1] = metric(downloads) + '/day';
         break;
       case 't':
-        var downloads = data.package.downloads.total;
+        downloads = data.package.downloads.total;
         badgeData.text[1] = metric(downloads);
         break;
       }
@@ -1365,6 +1366,7 @@ cache(function(data, match, sendBadge, request) {
       var badgeText = null;
       var badgeColor = null;
 
+      var vdata;
       switch (info) {
       case 'v':
         var stableVersions = versions.filter(phpStableVersion);
@@ -1375,7 +1377,7 @@ cache(function(data, match, sendBadge, request) {
         //if (!!aliasesMap[stableVersion]) {
         //  stableVersion = aliasesMap[stableVersion];
         //}
-        var vdata = versionColor(stableVersion);
+        vdata = versionColor(stableVersion);
         badgeText = vdata.version;
         badgeColor = vdata.color;
         break;
@@ -1384,7 +1386,7 @@ cache(function(data, match, sendBadge, request) {
         //if (!!aliasesMap[unstableVersion]) {
         //  unstableVersion = aliasesMap[unstableVersion];
         //}
-        var vdata = versionColor(unstableVersion);
+        vdata = versionColor(unstableVersion);
         badgeText = vdata.version;
         badgeColor = 'orange';
         break;
@@ -1465,10 +1467,11 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var downloads = 0;
+      var platforms;
       switch (info.charAt(1)) {
       case 'm':
         // daily downloads are separated by Operating System
-        var platforms = data.installs.daily.data;
+        platforms = data.installs.daily.data;
         platforms.forEach(function(platform) {
           // loop through the first 30 days or 1 month
           for (var i = 0; i < 30; i++) {
@@ -1480,7 +1483,7 @@ cache(function(data, match, sendBadge, request) {
         break;
       case 'w':
         // daily downloads are separated by Operating System
-        var platforms = data.installs.daily.data;
+        platforms = data.installs.daily.data;
         platforms.forEach(function(platform) {
           // loop through the first 7 days or 1 week
           for (var i = 0; i < 7; i++) {
@@ -1492,7 +1495,7 @@ cache(function(data, match, sendBadge, request) {
         break;
       case 'd':
         // daily downloads are separated by Operating System
-        var platforms = data.installs.daily.data;
+        platforms = data.installs.daily.data;
         platforms.forEach(function(platform) {
           // use the downloads from yesterday
           downloads += platform.totals[1];
@@ -1823,7 +1826,7 @@ cache(function(data, match, sendBadge, request) {
   var info = match[1];  // either dt, dtv or dv.
   var repo = match[2];  // eg, "rails"
   var splited_url = repo.split('/');
-  var repo = splited_url[0];
+  repo = splited_url[0];
   var version = (splited_url.length > 1)
     ? splited_url[splited_url.length - 1]
     : null;
@@ -1848,13 +1851,15 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
+      var downloads;
       if (info === "dt") {
-        var downloads = metric(data.downloads);
+        downloads = metric(data.downloads);
       } else if (info === "dtv") {
-        var downloads = metric(data.version_downloads) + " latest version";
+        downloads = metric(data.version_downloads) + " latest version";
       } else if (info === "dv") {
-        var downloads = "invalid";
+        downloads = "invalid";
 
+        var version_data;
         if (version !== null && version === "stable") {
 
           var versions = data.filter(function(ver) {
@@ -1864,21 +1869,21 @@ cache(function(data, match, sendBadge, request) {
           });
           // Found latest stable version.
           var stable_version = latestVersion(versions);
-          var version_data = data.filter(function(ver) {
+          version_data = data.filter(function(ver) {
             return ver.number === stable_version;
           })[0];
           downloads = metric(version_data.downloads_count) + " stable version";
 
         } else if (version !== null) {
 
-          var version_data = data.filter(function(ver) {
+          version_data = data.filter(function(ver) {
             return ver.number === version;
           })[0];
 
           downloads = metric(version_data.downloads_count)
             + " version " + version;
         }
-      } else { var downloads = "invalid"; }
+      } else { downloads = "invalid"; }
       badgeData.text[1] = downloads;
       badgeData.colorscheme = downloadCountColor(downloads);
       sendBadge(format, badgeData);
@@ -1939,10 +1944,11 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
+      var rank;
       if (totalRank) {
-        var rank = data[0].total_ranking;
+        rank = data[0].total_ranking;
       } else if (dailyRank) {
-        var rank = data[0].daily_ranking;
+        rank = data[0].daily_ranking;
       }
       var count = Math.floor(100000 / rank);
       badgeData.colorscheme = floorCountColor(count, 10, 50, 100);
@@ -1974,17 +1980,18 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       if (info.charAt(0) === 'd') {
         badgeData.text[0] = getLabel('downloads', data);
+        var downloads;
         switch (info.charAt(1)) {
           case 'm':
-            var downloads = data.info.downloads.last_month;
+            downloads = data.info.downloads.last_month;
             badgeData.text[1] = metric(downloads) + '/month';
             break;
           case 'w':
-            var downloads = data.info.downloads.last_week;
+            downloads = data.info.downloads.last_week;
             badgeData.text[1] = metric(downloads) + '/week';
             break;
           case 'd':
-            var downloads = data.info.downloads.last_day;
+            downloads = data.info.downloads.last_day;
             badgeData.text[1] = metric(downloads) + '/day';
             break;
         }
@@ -2007,9 +2014,9 @@ cache(function(data, match, sendBadge, request) {
         }
         sendBadge(format, badgeData);
       } else if (info === 'wheel') {
-        var releases = data.releases[data.info.version];
-        var hasWheel = false;
-        for (var i = 0; i < releases.length; i++) {
+        let releases = data.releases[data.info.version];
+        let hasWheel = false;
+        for (let i = 0; i < releases.length; i++) {
           if (releases[i].packagetype === 'wheel' ||
               releases[i].packagetype === 'bdist_wheel') {
             hasWheel = true;
@@ -2021,8 +2028,8 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = hasWheel ? 'brightgreen' : 'red';
         sendBadge(format, badgeData);
       } else if (info === 'format') {
-        var releases = data.releases[data.info.version];
-        var hasWheel = false;
+        let releases = data.releases[data.info.version];
+        let hasWheel = false;
         var hasEgg = false;
         for (var i = 0; i < releases.length; i++) {
           if (releases[i].packagetype === 'wheel' ||
@@ -2049,8 +2056,8 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
       } else if (info === 'pyversions') {
         var versions = [];
-        var pattern = /^Programming Language \:\: Python \:\: ([\d\.]+)$/;
-        for (var i = 0; i < data.info.classifiers.length; i++) {
+        let pattern = /^Programming Language \:\: Python \:\: ([\d\.]+)$/;
+        for (let i = 0; i < data.info.classifiers.length; i++) {
           var matched = pattern.exec(data.info.classifiers[i]);
           if (matched && matched[1]) {
             versions.push(matched[1]);
@@ -2073,9 +2080,9 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
       } else if (info === 'implementation') {
         var implementations = [];
-        var pattern = /^Programming Language \:\: Python \:\: Implementation \:\: (\S+)$/;
-        for (var i = 0; i < data.info.classifiers.length; i++) {
-          var matched = pattern.exec(data.info.classifiers[i]);
+        let pattern = /^Programming Language \:\: Python \:\: Implementation \:\: (\S+)$/;
+        for (let i = 0; i < data.info.classifiers.length; i++) {
+          let matched = pattern.exec(data.info.classifiers[i]);
           if (matched && matched[1]) {
             implementations.push(matched[1].toLowerCase());
           }
@@ -2088,13 +2095,13 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'blue';
         sendBadge(format, badgeData);
       } else if (info === 'status') {
-        var pattern = /^Development Status \:\: ([1-7]) - (\S+)$/;
+        let pattern = /^Development Status \:\: ([1-7]) - (\S+)$/;
         var statusColors = {
             '1': 'red', '2': 'red', '3': 'red', '4': 'yellow',
             '5': 'brightgreen', '6': 'brightgreen', '7': 'red'};
         var statusCode = '1', statusText = 'unknown';
-        for (var i = 0; i < data.info.classifiers.length; i++) {
-          var matched = pattern.exec(data.info.classifiers[i]);
+        for (let i = 0; i < data.info.classifiers.length; i++) {
+          let matched = pattern.exec(data.info.classifiers[i]);
           if (matched && matched[1] && matched[2]) {
             statusCode = matched[1];
             statusText = matched[2].toLowerCase().replace('-', '--');
@@ -2167,17 +2174,18 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       if (info.charAt(0) === 'd') {
         badgeData.text[0] = getLabel('downloads', data);
+        var downloads;
         switch (info.charAt(1)) {
           case 'w':
-            var downloads = data.downloads.week;
+            downloads = data.downloads.week;
             badgeData.text[1] = metric(downloads) + '/week';
             break;
           case 'd':
-            var downloads = data.downloads.day;
+            downloads = data.downloads.day;
             badgeData.text[1] = metric(downloads) + '/day';
             break;
           case 't':
-            var downloads = data.downloads.all;
+            downloads = data.downloads.all;
             badgeData.text[1] = metric(downloads);
             break;
         }
@@ -2502,16 +2510,16 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       // Which branch are we dealing with?
       if (branch === null) { branch = data.default_branch; }
-      var res = data.applications[branch].build_status.status;
-      badgeData.text[1] = res;
-      if (res === 'passed') {
+      var status = data.applications[branch].build_status.status;
+      badgeData.text[1] = status;
+      if (status === 'passed') {
         badgeData.colorscheme = 'brightgreen';
         badgeData.text[1] = 'passing';
-      } else if (res === 'failed' || res === 'error') {
+      } else if (status === 'failed' || status === 'error') {
         badgeData.colorscheme = 'red';
-      } else if (res === 'pending') {
+      } else if (status === 'pending') {
         badgeData.colorscheme = 'orange';
-      } else if (res === 'unknown') {
+      } else if (status === 'unknown') {
         badgeData.colorscheme = 'gray';
       }
       sendBadge(format, badgeData);
@@ -3235,17 +3243,18 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var modifier = '';
+      var issues;
       if (isPR) {
         issues = data.total_count;
       } else {
         if (issuesApi) {
-          var issues = data.length;
+          issues = data.length;
           if (res.headers['link'] &&
               res.headers['link'].indexOf('rel="last"') >= 0) {
             modifier = '+';
           }
         } else {
-          var issues = data.open_issues_count;
+          issues = data.open_issues_count;
         }
       }
       var rightText = isRaw? '': (isClosed? ' closed': ' open');
@@ -5509,12 +5518,12 @@ cache(function(data, match, sendBadge, request) {
             value.price;
           badgeData.colorscheme = 'brightgreen';
         } else if (type === 'rating') {
-          var rating = Math.round(value.ratingValue * 100) / 100;
+          let rating = Math.round(value.ratingValue * 100) / 100;
           badgeData.text[0] = data.label || 'rating';
           badgeData.text[1] = rating + '/5';
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
         } else if (type === 'stars') {
-          var rating = Math.round(value.ratingValue);
+          let rating = Math.round(value.ratingValue);
           badgeData.text[0] = data.label || 'rating';
           badgeData.text[1] = starRating(rating);
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
@@ -5556,6 +5565,7 @@ cache(function(data, match, sendBadge, request) {
       }
 
       try {
+        var rating;
         switch (type) {
         case 'v':
           var version = data.addon.version[0];
@@ -5570,13 +5580,13 @@ cache(function(data, match, sendBadge, request) {
           badgeData.colorscheme = downloadCountColor(downloads);
           break;
         case 'rating':
-          var rating = parseInt(data.addon.rating, 10);
+          rating = parseInt(data.addon.rating, 10);
           badgeData.text[0] = 'rating';
           badgeData.text[1] = rating + '/5';
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
           break;
         case 'stars':
-          var rating = parseInt(data.addon.rating, 10);
+          rating = parseInt(data.addon.rating, 10);
           badgeData.text[0] = 'rating';
           badgeData.text[1] = starRating(rating);
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);

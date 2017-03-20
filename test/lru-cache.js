@@ -61,12 +61,14 @@ module.exports = [
   }],
   ["should make sure that getting a key in cache makes it newest",
   function(done, assert) {
+    var slot1, slot2, slot3;
+
     // When the key is oldest.
     var cache = new LRU(2);
     cache.set('key1', 'value1');
     cache.set('key2', 'value2');
-    var slot1 = cache.cache.get('key1');
-    var slot2 = cache.cache.get('key2');
+    slot1 = cache.cache.get('key1');
+    slot2 = cache.cache.get('key2');
     assert.equal(cache.oldest, slot1);
     assert.equal(cache.newest, slot2);
     assert.equal(slot1.older, null);
@@ -76,8 +78,8 @@ module.exports = [
 
     assert.equal(cache.get('key1'), 'value1');
 
-    var slot1 = cache.cache.get('key1');
-    var slot2 = cache.cache.get('key2');
+    slot1 = cache.cache.get('key1');
+    slot2 = cache.cache.get('key2');
     assert.equal(cache.oldest, slot2);
     assert.equal(cache.newest, slot1);
     assert.equal(slot2.older, null);
@@ -93,8 +95,8 @@ module.exports = [
 
     assert.equal(cache.get('key2'), 'value2');
 
-    var slot1 = cache.cache.get('key1');
-    var slot2 = cache.cache.get('key2');
+    slot1 = cache.cache.get('key1');
+    slot2 = cache.cache.get('key2');
     assert.equal(cache.oldest, slot1);
     assert.equal(cache.newest, slot2);
     assert.equal(slot1.older, null);
@@ -107,9 +109,9 @@ module.exports = [
     cache.set('key1', 'value1');
     cache.set('key2', 'value2');
     cache.set('key3', 'value3');
-    var slot1 = cache.cache.get('key1');
-    var slot2 = cache.cache.get('key2');
-    var slot3 = cache.cache.get('key3');
+    slot1 = cache.cache.get('key1');
+    slot2 = cache.cache.get('key2');
+    slot3 = cache.cache.get('key3');
     assert.equal(cache.oldest, slot1);
     assert.equal(cache.newest, slot3);
     assert.equal(slot1.older, null);
@@ -121,9 +123,9 @@ module.exports = [
 
     assert.equal(cache.get('key2'), 'value2');
 
-    var slot1 = cache.cache.get('key1');
-    var slot2 = cache.cache.get('key2');
-    var slot3 = cache.cache.get('key3');
+    slot1 = cache.cache.get('key1');
+    slot2 = cache.cache.get('key2');
+    slot3 = cache.cache.get('key3');
     assert.equal(cache.oldest, slot1);
     assert.equal(cache.newest, slot2);
     assert.equal(slot1.older, null);
