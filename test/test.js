@@ -75,7 +75,7 @@ test('The CLI', [
       ['test/cli-test.js', 'cactus', 'grown', '#abcdef']);
     child.stdout.on('data', function(chunk) {
       var buffer = ''+chunk;
-      assert(buffer.includes('#abcdef'), '#abcdef')
+      assert(buffer.includes('#abcdef'), '#abcdef');
       done();
     });
   }],
@@ -142,4 +142,4 @@ test('The server', [
     server.kill();
     server.on('exit', function() { done(); });
   }],
-])});
+]);});

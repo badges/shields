@@ -36,7 +36,9 @@
     "xml2js": "~0.4.16"
   },
   "scripts": {
-    "test": "node test/test.js"
+    "lint": "eslint '**/*.js'",
+    "test:js": "node test/test.js",
+    "test": "npm run lint && npm run test:js"
   },
   "bin": {
     "badge": "./gh-badge.js"
@@ -51,5 +53,8 @@
     "colorscheme.json",
     "lru-cache.js",
     "logo"
-  ]
+  ],
+  "devDependencies": {
+    "eslint": "^3.18.0"
+  }
 }

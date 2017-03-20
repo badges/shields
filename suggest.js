@@ -219,7 +219,7 @@ var licensePhrases = {
   'ISC': 'permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted',
   'CC0': 'cc0',
   'Unlicense': 'this is free and unencumbered software released into the public domain',
-}
+};
 var licenseCodes = Object.keys(licensePhrases);
 var spaceMetaRegex = new RegExp(' ', 'g');
 

@@ -29,7 +29,7 @@ module.exports = function (svg, format, out, cb) {
     imgCache.set(cacheIndex, [stdout]);
     cb && cb();
   });
-}
+};
 
 // Fake stream from the cache.
 var Readable = require('stream').Readable;

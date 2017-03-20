@@ -464,7 +464,7 @@ camp.route(/^\/osslifecycle?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json
     var format = match[3];
     var url = 'https://raw.githubusercontent.com/' + orgOrUserAndRepo;
     if (branch != null) {
-      url += "/" + branch + "/OSSMETADATA"
+      url += "/" + branch + "/OSSMETADATA";
     }
     else {
       url += "/master/OSSMETADATA";
@@ -854,7 +854,7 @@ cache(function(data, match, sendBadge, request) {
         } else if (property.name === 'CodeCoverageAbsSTotal') {
           total = property.value;
         }
-      })
+      });
 
       if (covered === undefined || total === undefined) {
         badgeData.text[1] = 'malformed';
@@ -999,7 +999,7 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = data.message;
 
       if (data.message === 'passed') {
-        badgeData.colorscheme = 'brightgreen'
+        badgeData.colorscheme = 'brightgreen';
         badgeData.text[1] = 'passing';
       } else if (/^passed .* new defects$/.test(data.message)) {
         badgeData.colorscheme = 'yellow';
@@ -1029,7 +1029,7 @@ cache(function(data, match, sendBadge, request) {
       (badgeType == 'streams' && badgeTypeId == 'STREAM')) {
      // Request is for a static demo badge
      badgeData.text[1] = 'clean';
-     badgeData.colorscheme = 'green'
+     badgeData.colorscheme = 'green';
      sendBadge(format, badgeData);
      return;
   } else {
@@ -1741,7 +1741,7 @@ cache(function(data, match, sendBadge, request) {
     options.auth = {
       user: serverSecrets.bintray_user,
       pass: serverSecrets.bintray_apikey
-    }
+    };
   }
 
   var badgeData = getBadgeData('bintray', data);
@@ -1912,7 +1912,7 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
-  })
+  });
 }));
 
 
@@ -1953,7 +1953,7 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
-  })
+  });
 }));
 
 // PyPI integration.
@@ -2355,7 +2355,7 @@ camp.route(/^\/codeclimate\/issues\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `github/me-and/mdf`.
   var format = match[2];
-  var options = 'https://codeclimate.com/' + userRepo + '/badges/issue_count.svg'
+  var options = 'https://codeclimate.com/' + userRepo + '/badges/issue_count.svg';
   var badgeData = getBadgeData('issues', data);
   request(options, function(err, res, buffer) {
     if (err != null) {
@@ -2907,7 +2907,7 @@ cache(function(data, match, sendBadge, request) {
       var percentage = data.cocoadocs.doc_percent;
       badgeData.colorscheme = coveragePercentageColor(percentage);
       badgeData.text[0] = 'docs';
-      badgeData.text[1] = percentage + '%'
+      badgeData.text[1] = percentage + '%';
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -4462,7 +4462,7 @@ cache(function(data, match, sendBadge, request) {
         request(coreUrl, function(err, res, response) {
           try {
             var versions = JSON.parse(response).offers.map(function(v) {
-              return v.version
+              return v.version;
             });
             if (err != null) { sendBadge(format, badgeData); return; }
             var svTestedVersion = testedVersion.split('.').length == 2 ? testedVersion += '.0' : testedVersion;
@@ -4549,9 +4549,9 @@ cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `github/celery/celery`.
   var branch = match[2];
   var format = match[3];
-  var uri = 'https://requires.io/api/v1/status/' + userRepo
+  var uri = 'https://requires.io/api/v1/status/' + userRepo;
   if (branch != null) {
-    uri += '?branch=' + branch
+    uri += '?branch=' + branch;
   }
   var options = {
     method: 'GET',
@@ -4696,7 +4696,7 @@ cache(function(data, match, sendBadge, request) {
   var token = match[1];
   var type = match[2] || 'github'; // github OR bitbucket
   var userRepo = match[3];  // eg, `RedSparr0w/node-csgo-parser`.
-  var branch = match[4]
+  var branch = match[4];
   var format = match[5];
 
   // Base API URL
@@ -4833,7 +4833,7 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
-  })}
+  });}
 ));
 
 // DUB download integration
@@ -5169,7 +5169,7 @@ cache(function(data, match, sendBadge, request) {
   var type = match[1];
   var user = match[2];
   var repo = match[3];
-  var tag = match[4]
+  var tag = match[4];
   var format = match[5];
   if (user === '_') {
     user = 'library';
@@ -5270,7 +5270,7 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     uri: 'https://api.stackexchange.com/2.2/' + path + '?site=' + site,
     gzip: true
-  }
+  };
   var badgeData = getBadgeData(site, data);
   request(options, function (err, res, buffer) {
     if (err != null) {
@@ -5302,7 +5302,7 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
-  })}
+  });}
 ));
 
 // beerpay.io integration.
@@ -5885,7 +5885,7 @@ function getLabel(label, data) {
   return data.label || label;
 }
 
-function colorParam(color) { return (sixHex(color) ? '#' : '') + color }
+function colorParam(color) { return (sixHex(color) ? '#' : '') + color; }
 
 // data (URL query) can include `label`, `style`, `logo`, `logoWidth`, `link`,
 // `colorA`, `colorB`.
@@ -5895,7 +5895,7 @@ function getBadgeData(defaultLabel, data) {
   var template = data.style || 'default';
   if (data.style && validTemplates.indexOf(data.style) > -1) {
     template = data.style;
-  };
+  }
   if (!(Object(data.link) instanceof Array)) {
     if (data.link === undefined) {
       data.link = [];
