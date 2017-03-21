@@ -292,14 +292,13 @@ function cache(f) {
   };
 }
 
-camp.notfound(/\.(svg|png|gif|jpg|json)/, 
-  cache(function(data, match, sendBadge, request) {
+camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
     var format = match[1]; 
-    var badgeData = getBadgeData("404", data);
+    var badgeData = getBadgeData("404", query);
     badgeData.text[1] = 'badge not found';
     badgeData.colorscheme = 'red';
-    return sendBadge(format, badgeData);
-}));
+    badge(badgeData, makeSend(format, request.res, end));
+});
 
 camp.notfound(/.*/, function(query, match, end, request) {
   end(null, {template: '404.html'});
