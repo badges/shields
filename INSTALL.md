@@ -126,7 +126,7 @@ heroku open
 You can build and run the server locally using Docker. First build an image:
 
 ```console
-$ docker build -t shields ./
+$ docker build -t shields .
 Sending build context to Docker daemon 3.923 MB
 Step 0 : FROM node:6.4.0-onbuild
 …
@@ -137,7 +137,7 @@ Successfully built 4471b442c220
 Then run the container:
 
 ```console
-$ docker run --rm -p 8080:80 -v "$(pwd)/secret.json":/usr/src/app/secret.json --name shields shields
+$ docker run --rm -p 8080:80 -v "$(pwd)/private/secret.json":/usr/src/app/secret.json --name shields shields
 
 > gh-badges@1.1.2 start /usr/src/app
 > node server.js
@@ -147,12 +147,31 @@ http://[::1]:80/try.html
 
 Assuming Docker is running locally, you should be able to get to the application at http://localhost:8080/try.html. If you run Docker in a virtual machine (such as boot2docker or Docker Machine) then you will need to replace `localhost` with the actual IP address of that virtual machine.
 
+# Secret.json
+
+Some services require the use of secret tokens or passwords. Those are stored in `private/secret.json` which is not checked into the repository, to avoid impersonation. Here is how it currently looks like:
+
+```
+bintray_apikey
+bintray_user
+gh_client_id
+gh_client_secret
+shieldsIps
+shieldsSecret
+sl_insight_apiToken
+sl_insight_userUuid
+```
+
+(Gathered from `cat private/secret.json | jq keys | grep -o '".*"' | sed 's/"//g'`.)
+
 # Main Server Sysadmin
 
-- DNS round-robin between https://vps197850.ovh.net/try.html and https://vps244529.ovh.net/try.html.
+- Servers in DNS round-robin:
+  - s0: 192.99.59.72 (vps71670.vps.ovh.ca)
+  - s1: 51.254.114.150 (vps244529.ovh.net)
+  - s2: 149.56.96.133 (vps117870.vps.ovh.ca)
 - Self-signed TLS certificates, but `img.shields.io` is behind CloudFlare, which provides signed certificates.
-- Using node v0.12.7 because later versions, combined with node-canvas, give inaccurate badge measurements.
-- Using forever (the node monitor) to automatically restart the server when it crashes.
+- Using systemd to automatically restart the server when it crashes.
 
 See https://github.com/badges/ServerScript for helper admin scripts.
 

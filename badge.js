@@ -12,9 +12,53 @@ templateFiles.forEach(function(filename) {
   if (filename[0] === '.') { return; }
   var templateData = fs.readFileSync(
     path.join(__dirname, 'templates', filename)).toString();
-  var extension = filename.split('.').pop();
+  var extension = path.extname(filename).slice(1);
   var style = filename.slice(0, -(('-template.' + extension).length));
+  // Compile the template. Necessary to always have a working template.
   templates[style + '-' + extension] = dot.template(templateData);
+  if (extension === 'svg') {
+    // Substitute dot code.
+    var mapping = new Map();
+    var mappingIndex = 1;
+    var untemplatedSvg = templateData.replace(/{{.*?}}/g, function(match) {
+      // Weird substitution that currently works for all templates.
+      var mapKey = '99999990' + mappingIndex + '.1';
+      mappingIndex++;
+      mapping.set(mapKey, match);
+      return mapKey;
+    });
+    compressSvg(untemplatedSvg, function(object) {
+      if (object.error !== undefined) {
+        console.error('Template ' + filename + ': ' + object.error + '\n' +
+          '  Generated untemplated SVG:\n' +
+          '---\n' + untemplatedSvg + '---\n');
+        return;
+      }
+      // Substitute dot code back.
+      var svg = object.data;
+      var unmappedKeys = [];
+      mapping.forEach(function(value, key) {
+        var keySubstituted = false;
+        svg = svg.replace(RegExp(key, 'g'), function() {
+          keySubstituted = true;
+          return value;
+        });
+        if (!keySubstituted) {
+          unmappedKeys.push(key);
+        }
+      });
+      if (unmappedKeys.length > 0) {
+        console.error('Template ' + filename + ' has unmapped keys ' +
+          unmappedKeys.join(', ') + '.\n' +
+          '  Generated untemplated SVG:\n' +
+          '---\n' + untemplatedSvg + '\n---\n' +
+          '  Generated template:\n' +
+          '---\n' + svg + '\n---\n');
+        return;
+      }
+      templates[style + '-' + extension] = dot.template(svg);
+    });
+  }
 });
 
 function escapeXml(s) {
@@ -34,7 +78,7 @@ function addEscapers(data) {
 
 var colorscheme = require(path.join(__dirname, 'colorscheme.json'));
 
-function optimize(string, callback) {
+function compressSvg(string, callback) {
   var svgo = new SVGO();
   svgo.optimize(string, callback);
 }
@@ -53,8 +97,8 @@ function makeImage(data, cb) {
     if (!pickedColorscheme) {
       pickedColorscheme = colorscheme.red;
     }
-    data.colorA = pickedColorscheme.colorA || data.colorA;
-    data.colorB = pickedColorscheme.colorB || data.colorB;
+    data.colorA = data.colorA || pickedColorscheme.colorA;
+    data.colorB = data.colorB || pickedColorscheme.colorB;
   }
   // Colors.
   if (!cssColor.test(data.colorA)) { data.colorA = undefined; }
@@ -95,12 +139,7 @@ function makeImage(data, cb) {
     return;
   }
 
-  if (data.format === 'json') {
-    cb(result);
-  } else {
-    // Run the SVG through SVGO.
-    optimize(result, function(object) { cb(object.data); });
-  }
+  cb(result);
 }
 
 module.exports = makeImage;
