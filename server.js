@@ -703,7 +703,7 @@ cache(function (data, match, sendBadge, request) {
       name: 'downloads',
       version: true,
       process: function (data, badgeData) {
-        downloads = data.crate? data.crate.downloads: data.version.downloads;
+        var downloads = data.crate? data.crate.downloads: data.version.downloads;
         version = data.version && data.version.num;
         badgeData.text[1] = metric(downloads) + (version? ' version ' + version: '');
         badgeData.colorscheme = downloadCountColor(downloads);
@@ -713,7 +713,7 @@ cache(function (data, match, sendBadge, request) {
       name: 'downloads',
       version: true,
       process: function (data, badgeData) {
-        downloads = data.version? data.version.downloads: data.versions[0].downloads;
+        var downloads = data.version? data.version.downloads: data.versions[0].downloads;
         version = data.version && data.version.num;
         badgeData.text[1] = metric(downloads) + (version? ' version ' + version: ' latest version');
         badgeData.colorscheme = downloadCountColor(downloads);
@@ -2293,7 +2293,7 @@ cache(function(data, match, sendBadge, request) {
     method: 'HEAD',
   };
   // Query Params
-  queryParams = {};
+  var queryParams = {};
   if (branch) {
     queryParams.branch = branch;
   }
@@ -2720,7 +2720,7 @@ cache(function(data, match, sendBadge, request) {
   var branch = match[2];
   var format = match[3];
 
-  queryParams = {};
+  var queryParams = {};
   if (branch) {
     queryParams.branch = branch;
   }
@@ -2768,7 +2768,7 @@ cache(function(data, match, sendBadge, request) {
   var branch = match[2];
   var format = match[3];
 
-  queryParams = {};
+  var queryParams = {};
   if (branch) {
     queryParams.branch = branch;
   }
@@ -3728,7 +3728,7 @@ function mapNugetFeed(pattern, offset, getInfo) {
             var versions = data.data;
             if (!includePre) {
               // Remove prerelease versions.
-              filteredVersions = versions.filter(function(version) {
+              var filteredVersions = versions.filter(function(version) {
                 return !/-/.test(version);
               });
               if (filteredVersions.length > 0) {
@@ -4701,7 +4701,7 @@ cache(function(data, match, sendBadge, request) {
   var badgeData = getBadgeData('talk', data);
   request(url, function(err, res, buffer) {
     try {
-      room = JSON.parse(buffer);
+      var room = JSON.parse(buffer);
       badgeData.text[1] = room.topic;
       badgeData.colorscheme = room.color;
       sendBadge(format, badgeData);
@@ -4726,7 +4726,7 @@ cache(function(data, match, sendBadge, request) {
   var apiUrl = 'https://circleci.com/api/v1.1/project/' + type + '/' + userRepo;
 
   // Query Params
-  queryParams = {};
+  var queryParams = {};
   queryParams['limit'] = 1;
   queryParams['filter'] = 'completed';
 
@@ -5215,7 +5215,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       if (type == 'image-size') {
-        size = metric(buffer[0].repo.size) + "B";
+        var size = metric(buffer[0].repo.size) + "B";
         badgeData.text[0] = 'image size';
         badgeData.text[1] = size;
       } else if (type == 'layers') {
@@ -5640,30 +5640,25 @@ cache(function(data, match, sendBadge, request) {
   var badgeData = getBadgeData('website', data);
   badgeData.colorscheme = undefined;
   request(options, function(err, res) {
-    try {
-      // We consider all HTTP status codes below 310 as success.
-      if (err != null || res.statusCode >= 310) {
-        badgeData.text[1] = offlineMessage;
-        if (sixHex(offlineColor)) {
-          badgeData.colorB = '#' + offlineColor;
-        } else {
-          badgeData.colorscheme = offlineColor;
-        }
-        sendBadge(format, badgeData);
-        return;
+    // We consider all HTTP status codes below 310 as success.
+    if (err != null || res.statusCode >= 310) {
+      badgeData.text[1] = offlineMessage;
+      if (sixHex(offlineColor)) {
+        badgeData.colorB = '#' + offlineColor;
       } else {
-        badgeData.text[1] = onlineMessage;
-        if (sixHex(onlineColor)) {
-          badgeData.colorB = '#' + onlineColor;
-        } else {
-          badgeData.colorscheme = onlineColor;
-        }
-        sendBadge(format, badgeData);
-        return;
+        badgeData.colorscheme = offlineColor;
       }
-    } catch(e) {
-      badge({text: ['error', 'bad badge'], colorscheme: 'red'},
-        makeSend(format, ask.res, end));
+      sendBadge(format, badgeData);
+      return;
+    } else {
+      badgeData.text[1] = onlineMessage;
+      if (sixHex(onlineColor)) {
+        badgeData.colorB = '#' + onlineColor;
+      } else {
+        badgeData.colorscheme = onlineColor;
+      }
+      sendBadge(format, badgeData);
+      return;
     }
   });
 }));
