@@ -142,4 +142,6 @@ test('The server', [
     server.kill();
     server.on('exit', function() { done(); });
   }],
-]);});
+]);})
+
+.then(function() { test('The LRU cache', require('./lru-cache.js')); });
