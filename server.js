@@ -6324,7 +6324,8 @@ function fetchTwitterToken() {
       url: 'https://api.twitter.com/oauth2/token',
       headers: {
         // is this the best way to base 64 encode a string?
-        Authorization: 'Basic '+(new Buffer(twitter_bearer_credentials)).toString('base64'),
+        Authorization: 'Basic ' +
+          Buffer.from(twitter_bearer_credentials).toString('base64'),
         'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
       },
       form: 'grant_type=client_credentials',
