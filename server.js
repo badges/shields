@@ -4686,26 +4686,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Talk integration
-camp.route(/^\/talk\/t\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var roomHash = match[1];  // eg, 9c81ff703b
-  var format = match[2];
-  var url = 'https://guest.talk.ai/api/rooms/' + roomHash;
-  var badgeData = getBadgeData('talk', data);
-  request(url, function(err, res, buffer) {
-    try {
-      room = JSON.parse(buffer);
-      badgeData.text[1] = room.topic;
-      badgeData.colorscheme = room.color;
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // CircleCI build integration.
 // https://circleci.com/api/v1/project/BrightFlair/PHP.Gt?circle-token=0a5143728784b263d9f0238b8d595522689b3af2&limit=1&filter=completed
 camp.route(/^\/circleci\/(?:token\/(\w+))?[+\/]?project\/(?:(github|bitbucket)\/)?([^\/]+\/[^\/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
