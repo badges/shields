@@ -1,17 +1,21 @@
+var assert = require('assert');
+
 var LRU = require('../lib/lru-cache.js');
-module.exports = [
-  ["should support being called without new", function(done, assert) {
+
+describe('The LRU cache', function () {
+
+  it("should support being called without new", function() {
     var cache = LRU(1);
     assert(cache instanceof LRU);
-    done();
-  }],
-  ["should support a zero capacity", function(done, assert) {
+  });
+
+  it("should support a zero capacity", function() {
     var cache = new LRU(0);
     cache.set('key', 'value');
     assert.equal(cache.cache.size, 0);
-    done();
-  }],
-  ["should support a one capacity", function(done, assert) {
+  });
+
+  it("should support a one capacity", function() {
     var cache = new LRU(1);
     cache.set('key1', 'value1');
     assert.equal(cache.cache.size, 1);
@@ -23,10 +27,9 @@ module.exports = [
     assert.equal(cache.oldest, cache.cache.get('key2'));
     assert.equal(cache.get('key1'), undefined);
     assert.equal(cache.get('key2'), 'value2');
-    done();
-  }],
-  ["should remove the oldest element when reaching capacity",
-  function(done, assert) {
+  });
+
+  it("should remove the oldest element when reaching capacity", function() {
     var cache = new LRU(2);
     cache.set('key1', 'value1');
     cache.set('key2', 'value2');
@@ -45,10 +48,9 @@ module.exports = [
     assert.equal(cache.get('key1'), undefined);
     assert.equal(cache.get('key2'), 'value2');
     assert.equal(cache.get('key3'), 'value3');
-    done();
-  }],
-  ["should make sure that resetting a key in cache makes it newest",
-  function(done, assert) {
+  });
+
+  it("should make sure that resetting a key in cache makes it newest", function() {
     var cache = new LRU(2);
     cache.set('key', 'value');
     cache.set('key2', 'value2');
@@ -57,10 +59,9 @@ module.exports = [
     cache.set('key', 'value');
     assert.equal(cache.oldest, cache.cache.get('key2'));
     assert.equal(cache.newest, cache.cache.get('key'));
-    done();
-  }],
-  ["should make sure that getting a key in cache makes it newest",
-  function(done, assert) {
+  });
+
+  it("should make sure that getting a key in cache makes it newest", function() {
     var slot1, slot2, slot3;
 
     // When the key is oldest.
@@ -134,6 +135,6 @@ module.exports = [
     assert.equal(slot3.newer, slot2);
     assert.equal(slot2.older, slot3);
     assert.equal(slot2.newer, null);
-    done();
-  }],
-];
+  });
+
+});

@@ -37,7 +37,7 @@
   },
   "scripts": {
     "lint": "eslint '**/*.js'",
-    "test:js": "node test/test.js",
+    "test:js": "mocha test/test.js test/lru-cache.js",
     "test": "npm run lint && npm run test:js"
   },
   "bin": {
@@ -55,6 +55,7 @@
     "logo"
   ],
   "devDependencies": {
-    "eslint": "^3.18.0"
+    "eslint": "^3.18.0",
+    "mocha": "^3.2.0"
   }
 }
