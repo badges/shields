@@ -12,7 +12,13 @@ var camp = Camp.start({
   secure: secureServer
 });
 Camp.log.unpipe('warn', 'stderr');
-console.log('http://[::1]:' + serverPort + '/try.html');
+var tryUrl = require('url').format({
+  protocol: secureServer ? 'https' : 'http',
+  hostname: bindAddress,
+  port: serverPort,
+  pathname: 'try.html',
+});
+console.log(tryUrl);
 var domain = require('domain');
 var request = require('request');
 var fs = require('fs');
