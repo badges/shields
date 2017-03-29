@@ -1813,7 +1813,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       badgeData.text[1] = "[" + clojar + " \"" + data.version + "\"]";
-      badgeData.colorscheme = 'brightgreen';
+      badgeData.colorscheme = versionColor(data.version).color;
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
