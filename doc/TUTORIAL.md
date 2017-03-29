@@ -129,20 +129,8 @@ This changes the index.html file automatically.
 
 You have implemented changes in `server.js`, `try.html` and `index.html`.
 These changes shall go onto shields.io.
-To do that, do the following:
-
-1. Change to an other branch  
-   `git checkout -b add-badge`
-2. Commit the changes with a better description than "badge from tutorial"  
-   `git add server.js try.html index.html`  
-   `git commit -m"badge from tutorial"`
-3. Push your changes  
-   `git push origin add-badge`
-4. Create a pull request describing your changes.
-   For that go to https://github.com/YOURGITHUBUSERNAME/shields/compare.
-5. On that page, create a pull request.
-
-Now, your changes are made public to the shields team.
+To do that, [create a pull-request](https://help.github.com/articles/creating-a-pull-request/).
+By doing this, your changes are made public to the shields team.
 You can respond to their questions and the badge may soon be merged.
 
 Further Reading
