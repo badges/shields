@@ -58,18 +58,18 @@ If there is already a related badge, you may want to place your code next to it.
 Here you can see code for a badge at route for `/test/<first>/<second><ending>`.
 Lines with `// (1)` and alike are commented below.
 
-```
+```js
 // Test integration.
-camp.route(/^\/test\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/, // (1)
+camp.route(/^\/test\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,  // (1)
 cache(function(data, match, sendBadge, request) {
-  var first = match[1];     // (2)
-  var second = match[2];    // (2)
-  var format = match[3];    // (2)
-  var badgeData = getBadgeData('X' + first + 'X', data); // (3)
-  badgeData.text[1] = second;     // (4)
-  badgeData.colorscheme = 'blue'; // (4)
-  badgeData.colorB = '#008bb8';   // (4)
-  sendBadge(format, badgeData);   // (5)
+  var first = match[1];                                             // (2)
+  var second = match[2];                                            // (2)
+  var format = match[3];                                            // (2)
+  var badgeData = getBadgeData('X' + first + 'X', data);            // (3)
+  badgeData.text[1] = second;                                       // (4)
+  badgeData.colorscheme = 'blue';                                   // (4)
+  badgeData.colorB = '#008bb8';                                     // (4)
+  sendBadge(format, badgeData);                                     // (5)
 }));
 ```
 
