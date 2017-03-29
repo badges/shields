@@ -25,7 +25,7 @@ describe('The CLI', function () {
   it('should produce default badges', function(done) {
     var child = cproc.spawn('node',
       ['test/cli-test.js', 'cactus', 'grown']);
-    child.stdout.on('data', function(chunk) {
+    child.stdout.once('data', function(chunk) {
       var buffer = ''+chunk;
       assert(buffer.startsWith('<svg'), '<svg');
       assert(buffer.includes('cactus'), 'cactus');
@@ -37,7 +37,7 @@ describe('The CLI', function () {
   it('should produce colorschemed badges', function(done) {
     var child = cproc.spawn('node',
       ['test/cli-test.js', 'cactus', 'grown', ':green']);
-    child.stdout.on('data', function(chunk) {
+    child.stdout.once('data', function(chunk) {
       var buffer = ''+chunk;
       assert(buffer.startsWith('<svg'), '<svg');
       done();
@@ -47,7 +47,7 @@ describe('The CLI', function () {
   it('should produce right-color badges', function(done) {
     var child = cproc.spawn('node',
       ['test/cli-test.js', 'cactus', 'grown', '#abcdef']);
-    child.stdout.on('data', function(chunk) {
+    child.stdout.once('data', function(chunk) {
       var buffer = ''+chunk;
       assert(buffer.includes('#abcdef'), '#abcdef');
       done();
@@ -57,7 +57,7 @@ describe('The CLI', function () {
   it('should produce PNG badges', function(done) {
     var child = cproc.spawn('node',
       ['test/cli-test.js', 'cactus', 'grown', '.png']);
-    child.stdout.on('data', function(chunk) {
+    child.stdout.once('data', function(chunk) {
       // Check the PNG magic number.
       assert.equal(chunk[0], 0x89);
       assert.equal(chunk[1], 0x50);
@@ -101,7 +101,7 @@ describe('The server', function () {
   it('should produce colorscheme PNG badges', function(done) {
     http.get(url + ':fruit-apple-green.png',
       function(res) {
-        res.on('data', function(chunk) {
+        res.once('data', function(chunk) {
           // Check the PNG magic number.
           assert.equal(chunk[0], 0x89);
           assert.equal(chunk[1], 0x50);
