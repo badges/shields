@@ -2,6 +2,7 @@ env:
   node: true
   # We use Promise, Map, and occasional ES6 syntax.
   es6: true
+  mocha: true
 
 rules:
   # We use semicolons.
