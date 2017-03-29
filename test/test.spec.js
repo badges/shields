@@ -11,7 +11,6 @@ var svg2img = require('../lib/svg-to-img');
 // Test parameters
 var port = '1111';
 var url = 'http://127.0.0.1:' + port + '/';
-var server;
 
 describe('The CLI', function () {
 

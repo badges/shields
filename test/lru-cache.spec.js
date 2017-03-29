@@ -34,7 +34,7 @@ describe('The LRU cache', function () {
     cache.set('key1', 'value1');
     cache.set('key2', 'value2');
     cache.set('key3', 'value3');
-    var slot1 = cache.cache.get('key1');
+    cache.cache.get('key1');
     var slot2 = cache.cache.get('key2');
     var slot3 = cache.cache.get('key3');
     assert.equal(cache.cache.size, 2);
