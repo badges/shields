@@ -10,7 +10,6 @@ You will need to learn to use JavaScript, git and Github.
 You should read the following:
 
 - [CONTRIBUTING.md](CONTRIBUTING.md)
-- [INSTALL.md](INSTALL.md)
 
 You can read
 
@@ -145,6 +144,13 @@ To do that, do the following:
 
 Now, your changes are made public to the shields team.
 You can respond to their questions and the badge may soon be merged.
+
+Further Reading
+---------------
+
+These files can also be of help for creating your own badge.
+
+- [INSTALL.md](../INSTALL.md)
 
 
 [mergedpr]: https://github.com/badges/shields/pulls?utf8=%E2%9C%93&q=is%3Apr%20is%3Amerged
