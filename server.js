@@ -29,14 +29,7 @@ var loadLogos = require('./lib/load-logos.js');
 var githubAuth = require('./lib/github-auth.js');
 var querystring = require('querystring');
 var xml2js = require('xml2js');
-var serverSecrets;
-try {
-  // Everything that cannot be checked in but is useful server-side
-  // is stored in this JSON data.
-  serverSecrets = require('./private/secret.json');
-} catch(e) {
-  console.error('No secret data (private/secret.json, see server.js):', e);
-}
+var serverSecrets = require('./lib/server-secrets');
 if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);
 }
