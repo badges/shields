@@ -9,14 +9,14 @@ You will need to learn to use JavaScript, git and Github.
 
 You should read the following:
 
-- [CONTRIBUTING.md](CONTRIBUTING.md)
+- [CONTRIBUTING.md](../CONTRIBUTING.md)
 
 You can read
 
 - previous successful pull-requests to see how other people implemented their badges.
   You can as [merged pull-requests][mergedpr].
   Usally they start with "add".
-- [implementations and their commits][blame] in the  the [server.js] file.
+- [implementations and their commits][blame] in the  the [server.js][server] file.
 
 
 (2) Setup
@@ -87,7 +87,7 @@ Description of the code:
 
 To try out this custom badge do the following:
 
-1. Copy and paste these lines into [server.js].
+1. Copy and paste these lines into [server.js][server].
    I did this at about line 5000.
 2. Quit the running server with `Control+C`.
 3. Start the server again.  
@@ -108,7 +108,7 @@ There are various examples on how to answer with a customized badge:
 Once you are done implementing you badge, you can add it to the collection on [shields.io](http://shields.io/).
 
 First, we amke it visible on [http://[::1]:8080/try.html][try].
-Edit [try.html](try.html) in the right section (Build, Downloads, ...) and add your badge:
+Edit [try.html][tryhtml] in the right section (Build, Downloads, ...) and add your badge:
 
 ```
   <tr><th data-keywords='test badge keyword for google'>Test Badge from the tutorial</th>
@@ -161,3 +161,5 @@ These files can also be of help for creating your own badge.
 [fork]: https://github.com/badges/shields/fork
 [format]: INSTALL.md#format
 [try]: http://[::1]:8080/try.html
+[server]: ../server.js
+[tryhtml]: ../try.html
