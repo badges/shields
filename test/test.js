@@ -14,9 +14,9 @@ function test(target, tests) {
         'notEqual', 'notDeepEqual', 'notStrictEqual', 'notDeepStrictEqual',
         'fail', 'doesNotThrow', 'throws',
         ].forEach(function(k) {
-          assert[k] = function(...args) {
+          assert[k] = function() {
             try {
-              assertion[k].apply(null, args);
+              assertion[k].apply(null, arguments);
             } catch(e) { reject(e); }
           };
         });
