@@ -31,7 +31,7 @@ If you do not, install it and learn about the [Github workflow](http://try.githu
    `git clone git@github.com:YOURGITHUBUSERNAME/shields.git`
 3. `cd shields`
 4. Install npm  
-   `sudo apt-get install npm nodejs-legacy curl`
+   `sudo apt-get install npm nodejs-legacy curl imagemagick`
 5. Install all packages  
    `npm install`
 6. Setup  
