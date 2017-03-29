@@ -37,7 +37,7 @@
   },
   "scripts": {
     "lint": "eslint '**/*.js'",
-    "test:js": "mocha test/test.js test/lru-cache.js",
+    "test:js": "mocha 'test/**/*.spec.js'",
     "test": "npm run lint && npm run test:js"
   },
   "bin": {
