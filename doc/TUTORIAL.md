@@ -90,7 +90,8 @@ To try out this custom badge do the following:
 2. Quit the running server with `Control+C`.
 3. Start the server again.  
    `node server.js 8080`
-4. Visit the badge at [http://[::1]:8080/test/asd/fgh.svg](http://[::1]:8080/test/asd/fgh.svg).
+4. Visit the badge at <http://[::1]:8080/test/subject/STATUS.svg>.
+   It should look like this: ![](https://img.shields.io/badge/subject-STATUS-blue.svg)
 
 ### (4.1) Querying an API
 
