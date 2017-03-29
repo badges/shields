@@ -45,7 +45,7 @@ describe('The CLI', function () {
   });
 
   it('should produce right-color badges', function(done) {
-    child = cproc.spawn('node',
+    var child = cproc.spawn('node',
       ['test/cli-test.js', 'cactus', 'grown', '#abcdef']);
     child.stdout.on('data', function(chunk) {
       var buffer = ''+chunk;

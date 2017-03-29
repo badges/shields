@@ -1,4 +1,5 @@
 env:
+  node: true
   # We use Promise, Map, and occasional ES6 syntax.
   es6: true
   mocha: true
@@ -14,3 +15,4 @@ rules:
 
   # Prevent some likely errors.
   no-redeclare: "error"
+  no-undef: "error"
