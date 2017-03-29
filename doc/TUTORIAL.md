@@ -76,7 +76,7 @@ cache(function(data, match, sendBadge, request) {
 
 Description of the code:
 
-1. This is the route specified as regular expression.
+1. This is the route specified as [regular expression](https://www.w3schools.com/jsref/jsref_obj_regexp.asp).
 2. These lines parse the route given in (1).
 3. This requests a default configuration for the badge.
 4. These lines customize the design of the badge.
