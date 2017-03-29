@@ -151,6 +151,7 @@ Further Reading
 These files can also be of help for creating your own badge.
 
 - [INSTALL.md](../INSTALL.md)
+- [a list of pull-requests with new badges](https://github.com/badges/shields/pulls?utf8=%E2%9C%93&q=is%3Apr%20label%3Anew-badge%20)
 
 
 [mergedpr]: https://github.com/badges/shields/pulls?utf8=%E2%9C%93&q=is%3Apr%20is%3Amerged
