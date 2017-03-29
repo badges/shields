@@ -53,9 +53,6 @@ This infomration allows other humans to help and build on your work.
 (4) Implementing
 ----------------
 
-Make sure, you can get the data somehow, best as JSON.
-There might be an API for your service delivering the data.
-
 If there is already a related badge, you may want to place your code next to it.
 
 Here you can see code for a badge at route for `/test/<first>/<second><ending>`.
@@ -95,6 +92,9 @@ To try out this custom badge do the following:
 4. Visit the badge at [http://[::1]:8080/test/asd/fgh.svg](http://[::1]:8080/test/asd/fgh.svg).
 
 ### (4.1) Querying an API
+
+Make sure, you can get the data somehow, best as JSON.
+There might be an API for your service delivering the data.
 
 The test badge above is quite simple and static.
 You can change the behavior by asking your API.
