@@ -15,10 +15,10 @@ You should read the following:
 You can read
 
 - previous successful pull-requests to see how other people implemented their badges.
-  You can as [merged pull-requests][mergedpr].
-  Usally they start with "add".
+  Usally they start with "[add][add-pr]".
+- later [pull-requests tagged with `new-badge`][new-badge].
 - [implementations and their commits][blame] in the  the [server.js][server] file.
-
+- [merged pull-requests][mergedpr].
 
 (2) Setup
 ---------
@@ -155,3 +155,5 @@ These files can also be of help for creating your own badge.
 [server]: ../server.js
 [tryhtml]: ../try.html
 [edit]: https://github.com/badges/shields/edit/master/doc/TUTORIAL.md
+[add-pr]: https://github.com/badges/shields/issues?utf8=%E2%9C%93&q=is%3Aissue%20in%3Atitle%20add%20
+[new-badge]: https://github.com/badges/shields/pulls?q=is%3Apr+label%3Anew-badge
