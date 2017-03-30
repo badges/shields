@@ -194,7 +194,12 @@ Those can be of additional help when implementing your badge.
 
 ### (4.2) Querying an API with Authentication
 
-TODO
+TODO  
+This has something to do with [private/secret.json](https://github.com/badges/shields/search?utf8=%E2%9C%93&q=private%2Fsecret.json&type=).
+- Credentials should be stored there.
+- You do not need to create this file, the server works without.
+- Somewhere the format (JSON? Keys?) should be documented.
+  - How to get the keys?
 
 ### (4.3) Add Badges to Front Page
 
