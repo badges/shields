@@ -30,7 +30,7 @@ If you do not, install it and learn about the [Github workflow](http://try.githu
 2. Clone the fork  
    `git clone git@github.com:YOURGITHUBUSERNAME/shields.git`
 3. `cd shields`
-4. Install npm  
+4. Install npm and other required packages (Ubuntu 16.10)  
    `sudo apt-get install npm nodejs-legacy curl imagemagick`
 5. Install all packages  
    `npm install`
@@ -44,12 +44,12 @@ If you do not, install it and learn about the [Github workflow](http://try.githu
 (3) Open an Issue
 -----------------
 
-Before you want to implement you service, you may want to [open an issue][openissue] and describe what you have in mind:
-- What is the badge for
-- Which API do you want to use
+Before you want to implement your service, you may want to [open an issue][openissue] and describe what you have in mind:
+- What is the badge for?
+- Which API do you want to use?
 
-You may additionally process to say what you want to work on.
-This infomration allows other humans to help and build on your work.
+You may additionally proceed to say what you want to work on.
+This information allows other humans to help and build on your work.
 
 (4) Implementing
 ----------------
@@ -162,7 +162,7 @@ The following numbering explains what happens in the corresponding lines.
                           The name of the repository
                           e.g. "jrottenberg/ffmpeg"                       
      \/docker\/automated\/
-     "/docker/automated/" is the start of the url.
+     "/docker/automated/" is the start of the url. "/" must be escaped to "\/".
    ```
    Example: <https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg>  
    All parts are enclosed by brackets `()` are passed though to the function as
@@ -178,8 +178,8 @@ The following numbering explains what happens in the corresponding lines.
    The function is called once the data is retrieved from the API.
 7. We want to always see a badge regardless the input. 
    In some cases the API may return an error e.g. if the query was invalid.
-   The error is handled and a badge with the the status "invalid" is returned.  
-   ![](https://img.shields.io/badge/docker%20build-invalid-lightgrey.svg)
+   The error is handled and a badge with the the status "inaccessible" is returned.  
+   ![](https://img.shields.io/badge/docker%20build-inaccessible-lightgrey.svg)
 8. The data returned by the API as JSON is parsed.
 9. Based on the result, the text and the color of the badge are altered.  
    ![](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg)
@@ -198,7 +198,7 @@ TODO
 
 ### (4.3) Add Badges to Front Page
 
-Once you are done implementing you badge, you can add it to the collection on [shields.io](http://shields.io/).
+Once you are done implementing your badge, you can add it to the collection on [shields.io](http://shields.io/).
 
 First, we make it visible on [http://[::1]:8080/try.html][try].
 Edit [try.html][tryhtml] in the right section (Build, Downloads, ...) and add your badge:
@@ -214,14 +214,14 @@ Save, restart and you can see it [locally][try].
 
 If this is fine, you can generate the website:
 
-   make website
+    make website
 
 This changes the index.html file automatically.
 
 ## (5) Create a Pull Request
 
 You have implemented changes in `server.js`, `try.html` and `index.html`.
-These changes shall go onto shields.io.
+These changes shall go live on shields.io.
 To do that, [create a pull-request](https://help.github.com/articles/creating-a-pull-request/).
 By doing this, your changes are made public to the shields team.
 You can respond to their questions and the badge may soon be merged.
@@ -248,6 +248,6 @@ These files can also be of help for creating your own badge.
 [edit]: https://github.com/badges/shields/edit/master/doc/TUTORIAL.md
 [add-pr]: https://github.com/badges/shields/issues?utf8=%E2%9C%93&q=is%3Aissue%20in%3Atitle%20add%20
 [new-badge]: https://github.com/badges/shields/pulls?q=is%3Apr+label%3Anew-badge
-[docker-examle]: https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L5014
-[travis-examle]: https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L431
+[docker-example]: https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L5014
+[travis-example]: https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L431
 [regex]: https://www.w3schools.com/jsref/jsref_obj_regexp.asp
