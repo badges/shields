@@ -76,7 +76,7 @@ cache(function(data, match, sendBadge, request) {
 
 Description of the code:
 
-1. This is the route specified as [regular expression](https://www.w3schools.com/jsref/jsref_obj_regexp.asp).
+1. This is the route specified as [regular expression][regex].
 2. These lines parse the route given in (1).
 3. This requests a default configuration for the badge.
 4. These lines customize the design of the badge.
@@ -102,10 +102,101 @@ The test badge above is quite simple and static.
 You can change the behavior by asking your API.
 There are various examples on how to answer with a customized badge:
 
-- [docker automated builds](https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L5014)
-- [the famous travis badge](https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L431)
+- [Docker Hub automated integration][docker-example]
+- [the famous travis badge][travis-example]
 
-### (4.2) Add Badges to Front Page
+This example is the for the Docker Hub automated integration. ([Source][docker-example])
+
+```js
+// Docker Hub automated integration.                                             // (1)
+camp.route(/^\/docker\/automated\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,  // (2)
+cache(function(data, match, sendBadge, request) {                                // (2)
+  var user = match[1];  // eg, jrottenberg                                       // (3)
+  var repo = match[2];  // eg, ffmpeg                                            // (3)
+  var format = match[3];                                                         // (3)
+  if (user === '_') {                                                            // (4)
+    user = 'library';                                                            // (4)
+  }                                                                              // (4)
+  var path = user + '/' + repo;                                                  // (4)
+  var url = 'https://registry.hub.docker.com/v2/repositories/' + path;           // (4)
+  var badgeData = getBadgeData('docker build', data);                            // (5)
+  request(url, function(err, res, buffer) {                                      // (6)
+    if (err != null) {                                                           // (7)
+      badgeData.text[1] = 'inaccessible';                                        // (7)
+      sendBadge(format, badgeData);                                              // (7)
+      return;                                                                    // (7)
+    }
+    try {
+      var data = JSON.parse(buffer);                                             // (8)
+      var is_automated = data.is_automated;                                      // (8)
+      if (is_automated) {
+        badgeData.text[1] = 'automated';                                         // (9)
+        badgeData.colorscheme = 'blue';                                          // (9)
+      } else {
+        badgeData.text[1] = 'manual';                                            // (9)
+        badgeData.colorscheme = 'yellow';                                        // (9)
+      }
+      badgeData.colorB = '#008bb8';                                              // (9)
+      sendBadge(format, badgeData);                                              // (9)
+    } catch(e) {                                                                 // (10)
+      badgeData.text[1] = 'invalid';                                             // (10)
+      sendBadge(format, badgeData);                                              // (10)
+    }
+  });
+}));
+```
+
+The source code is annotated with `// (1)` and alike on the right side.
+The following numbering explains what happens in the corresponding lines.
+
+1. All badges are preceded by a comment.
+   This allows other developers to find the badge regardless of implementation.
+   Usally, badges with an similar topic have their implementation close to each other's.
+2. The [regular expression][regex] matches the path behind the host name in the URL, e.g. `img.shields.io`.
+   ```
+   /^\/docker\/automated\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/
+                                            \.(svg|png|gif|jpg|json)
+                                            The supported endings
+                                            e.g. ".svg"
+                          ([^\/]+)\/([^\/]+)
+                          The name of the repository
+                          e.g. "jrottenberg/ffmpeg"                       
+     \/docker\/automated\/
+     "/docker/automated/" is the start of the url.
+   ```
+   Example: <https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg>  
+   All parts are enclosed by brackets `()` are passed though to the function as
+   the parameter `match`.
+3. The parts of the match are named.
+4. Based on the input parameters, we construct our query to the API.
+   Here, `"_"` is a special case.
+   The `url` is created to query the API.
+5. Create the basic badge to use.
+   You can read about the [different formats available][format].
+   It contains the format for all responses, regarless of the API's response.
+6. We request the `url` and pass a call back function to the request.
+   The function is called once the data is retrieved from the API.
+7. We want to always see a badge regardless the input. 
+   In some cases the API may return an error e.g. if the query was invalid.
+   The error is handled and a badge with the the status "invalid" is returned.  
+   ![](https://img.shields.io/badge/docker%20build-invalid-lightgrey.svg)
+8. The data returned by the API as JSON is parsed.
+9. Based on the result, the text and the color of the badge are altered.  
+   ![](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg)
+   ![](https://img.shields.io/docker/automated/codersos/ubuntu-remix.svg)
+10. In case of an error, an "invalid" badge is constructed.  
+    ![](https://img.shields.io/docker/automated/,/ubuntu-remix.svg)
+
+The pattern described can be found in may other badges.
+When you look at the [server.js][server], you find many other badges.
+Some of them may query the same API.
+Those can be of additional help when implementing your badge.
+
+### (4.2) Querying an API with Authentication
+
+TODO
+
+### (4.3) Add Badges to Front Page
 
 Once you are done implementing you badge, you can add it to the collection on [shields.io](http://shields.io/).
 
@@ -157,3 +248,6 @@ These files can also be of help for creating your own badge.
 [edit]: https://github.com/badges/shields/edit/master/doc/TUTORIAL.md
 [add-pr]: https://github.com/badges/shields/issues?utf8=%E2%9C%93&q=is%3Aissue%20in%3Atitle%20add%20
 [new-badge]: https://github.com/badges/shields/pulls?q=is%3Apr+label%3Anew-badge
+[docker-examle]: https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L5014
+[travis-examle]: https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L431
+[regex]: https://www.w3schools.com/jsref/jsref_obj_regexp.asp
