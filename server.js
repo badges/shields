@@ -4838,7 +4838,7 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
-  })}
+  });}
 ));
 
 
