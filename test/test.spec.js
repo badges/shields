@@ -1,45 +1,16 @@
-var assertion = require('assert');
+var assert = require('assert');
 var http = require('http');
 var cproc = require('child_process');
 var fs = require('fs');
-
-function test(target, tests) {
-  var wrappedTests = tests.map(function(test) {
-    return function() {
-      var desc = test[0];
-      var f = test[1];
-      return new Promise(function(resolve, reject) {
-        var assert = function(pred, msg) { assert.ok(pred, msg); };
-        ['ok', 'equal', 'deepEqual', 'strictEqual', 'deepStrictEqual',
-        'notEqual', 'notDeepEqual', 'notStrictEqual', 'notDeepStrictEqual',
-        'fail', 'doesNotThrow', 'throws',
-        ].forEach(function(k) {
-          assert[k] = function(...args) {
-            try {
-              assertion[k].apply(null, args);
-            } catch(e) { reject(e); }
-          };
-        });
-        f(resolve, assert);
-      }).catch(function(e) {
-        console.error('Failed:', target + ' ' + desc + '\n', e.stack);
-      });
-    };
-  });
-  var prom = wrappedTests[0]();
-  for (var i = 1; i < wrappedTests.length; i++) {
-    prom = prom.then(wrappedTests[i]);
-  }
-  return prom;
-}
 
 // Test parameters
 var port = '1111';
 var url = 'http://127.0.0.1:' + port + '/';
 var server;
 
-test('The CLI', [
-  ['should provide a help message', function(done, assert) {
+describe('The CLI', function () {
+
+  it('should provide a help message', function(done) {
     var child = cproc.spawn('node', ['test/cli-test.js']);
     var buffer = '';
     child.stdout.on('data', function(chunk) {
@@ -49,40 +20,44 @@ test('The CLI', [
       assert(buffer.startsWith('Usage'));
       done();
     });
-  }],
-  ['should produce default badges', function(done, assert) {
+  });
+
+  it('should produce default badges', function(done) {
     var child = cproc.spawn('node',
       ['test/cli-test.js', 'cactus', 'grown']);
-    child.stdout.on('data', function(chunk) {
+    child.stdout.once('data', function(chunk) {
       var buffer = ''+chunk;
       assert(buffer.startsWith('<svg'), '<svg');
       assert(buffer.includes('cactus'), 'cactus');
       assert(buffer.includes('grown'), 'grown');
       done();
     });
-  }],
-  ['should produce colorschemed badges', function(done, assert) {
-    child = cproc.spawn('node',
+  });
+
+  it('should produce colorschemed badges', function(done) {
+    var child = cproc.spawn('node',
       ['test/cli-test.js', 'cactus', 'grown', ':green']);
-    child.stdout.on('data', function(chunk) {
+    child.stdout.once('data', function(chunk) {
       var buffer = ''+chunk;
       assert(buffer.startsWith('<svg'), '<svg');
       done();
     });
-  }],
-  ['should produce right-color badges', function(done, assert) {
+  });
+
+  it('should produce right-color badges', function(done) {
     child = cproc.spawn('node',
       ['test/cli-test.js', 'cactus', 'grown', '#abcdef']);
-    child.stdout.on('data', function(chunk) {
+    child.stdout.once('data', function(chunk) {
       var buffer = ''+chunk;
-      assert(buffer.includes('#abcdef'), '#abcdef')
+      assert(buffer.includes('#abcdef'), '#abcdef');
       done();
     });
-  }],
-  ['should produce PNG badges', function(done, assert) {
-    child = cproc.spawn('node',
+  });
+
+  it('should produce PNG badges', function(done) {
+    var child = cproc.spawn('node',
       ['test/cli-test.js', 'cactus', 'grown', '.png']);
-    child.stdout.on('data', function(chunk) {
+    child.stdout.once('data', function(chunk) {
       // Check the PNG magic number.
       assert.equal(chunk[0], 0x89);
       assert.equal(chunk[1], 0x50);
@@ -94,21 +69,22 @@ test('The CLI', [
       assert.equal(chunk[7], 0x0a);
       done();
     });
-  }],
-])
+  });
 
-.then(function() {
-test('The server', [
-  // Start running the server.
-  ['should start', function(done, assert) {
+});
+
+describe('The server', function () {
+
+  before('Start running the server', function(done) {
     server = cproc.spawn('node', ['test/server-test.js', port]);
     var isDone = false;
     server.stdout.on('data', function(data) {
       if (data.toString().indexOf('ready') >= 0 && !isDone) { done(); isDone = true; }
     });
     server.stderr.on('data', function(data) { console.log(''+data); });
-  }],
-  ['should produce colorscheme badges', function(done, assert) {
+  });
+
+  it('should produce colorscheme badges', function(done) {
     http.get(url + ':fruit-apple-green.svg',
       function(res) {
         var buffer = '';
@@ -120,11 +96,12 @@ test('The server', [
           done();
         });
     });
-  }],
-  ['should produce colorscheme PNG badges', function(done, assert) {
+  });
+
+  it('should produce colorscheme PNG badges', function(done) {
     http.get(url + ':fruit-apple-green.png',
       function(res) {
-        res.on('data', function(chunk) {
+        res.once('data', function(chunk) {
           // Check the PNG magic number.
           assert.equal(chunk[0], 0x89);
           assert.equal(chunk[1], 0x50);
@@ -137,9 +114,11 @@ test('The server', [
           done();
         });
     });
-  }],
-  ['should shut down', function(done, assert) {
+  });
+
+  after('Shut down the server', function(done) {
     server.kill();
     server.on('exit', function() { done(); });
-  }],
-])});
+  });
+
+});

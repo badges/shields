@@ -22,7 +22,7 @@ hr { width: 40%; border-width: 1px 0 0 0; }
 a.photo { text-decoration: none; }
 a.photo>img { padding: 2px; border: 1px solid grey; }
 ul { text-align: left; margin-left: 25%; }
-table { width: 50%; margin: auto; }
+table { min-width: 50%; margin: auto; }
 table.centered > tbody > tr > td:first-child { text-align: right; }
 th, td { text-align: left; }
 h1, h2, h3 { font-style: italic; }
@@ -47,6 +47,11 @@ hr.spacing { border: 0; display: block; height: 3mm; }
 table.badge > tbody > tr > th,
 table.badge > tbody > tr > td > img,
 table.badge > tbody > tr > td > code { cursor: pointer; }
+#copyImg,
+.badge-img img {
+	height: 20px;
+	vertical-align: middle;
+}
 </style>
 
 <main id='main'>
@@ -67,7 +72,7 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
 <section id='suggestedBadges'></section>
 
 <h3 id="build"> Build </h3>
-<table class='badge'><tbody>
+<table class='badge badge-img'><tbody>
   <tr><th> Travis: </th>
     <td><img src='/travis/rust-lang/rust.svg' alt=''/></td>
     <td><code>https://img.shields.io/travis/USER/REPO.svg</code></td>
@@ -414,7 +419,7 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
 </tbody></table>
 <h3 id="version"> Version </h3>
 <table class='badge'><tbody>
-  <tr><th data-keywords='cdn cdnjs'> CDNJS: </th>
+  <tr><th data-keywords='cdn cdnjs' data-link='https://cdnjs.com/libraries/jquery'> CDNJS: </th>
   <td><img src='/cdnjs/v/jquery.svg' alt=''/></td>
   <td><code>https://img.shields.io/cdnjs/v/jquery.svg</code></td>
   </tr>
@@ -794,10 +799,6 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><img src='/libscore/s/jQuery.svg' alt=''/></td>
     <td><code>https://img.shields.io/libscore/s/jQuery.svg</code></td>
   </tr>
-  <tr><th> Talk.ai: </th>
-    <td><img src='/talk/t/9c81ff703b.svg' alt=''/></td>
-    <td><code>https://img.shields.io/talk/t/9c81ff703b.svg</code></td>
-  </tr>
   <tr><th> Puppet Forge: </th>
     <td><img src='/puppetforge/e/camptocamp/openssl.svg' alt=''/></td>
     <td><code>https://img.shields.io/puppetforge/e/camptocamp/openssl.svg</code></td>
@@ -904,6 +905,10 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <tr><th data-keywords='amo firefox'> Mozilla Add-on: </th>
     <td><img src='/amo/stars/dustman.svg' alt=''/></td>
     <td><code>https://img.shields.io/amo/stars/dustman.svg</code></td>
+  </tr>
+  <tr><th> Swagger Validator: </th>
+    <td><img src='/swagger/valid/2.0/https/bitbucket.org/api/swagger.json.svg' alt=''/></td>
+    <td><code>https://img.shields.io/swagger/valid/2.0/https/bitbucket.org/api/swagger.json.svg</code></td>
   </tr>
 </tbody></table>
 
@@ -1028,7 +1033,7 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   </td></tr>
 </tbody></table>
 
-<p>
+<p class='badge-img'>
 <img src='/badge/color-brightgreen-brightgreen.svg' alt='brightgreen'/>
 <img src='/badge/color-green-green.svg' alt='green'/>
 <img src='/badge/color-yellowgreen-yellowgreen.svg' alt='yellowgreen'/>
@@ -1044,7 +1049,7 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
 <p>
 The following styles are available (flat is the default as of Feb 1st 2015):
 </p>
-<table><tbody>
+<table class='badge-img'><tbody>
   <tr>
   <td><img src='/badge/style-plastic-green.svg?style=plastic' alt=''/></td>
   <td><code>https://img.shields.io/badge/style-plastic-green.svg?style=plastic</code></td>

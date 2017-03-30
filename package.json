@@ -16,7 +16,7 @@
   },
   "license": "CC0-1.0",
   "author": "Thaddée Tyl <thaddee.tyl@gmail.com>",
-  "main": "badge.js",
+  "main": "lib/badge.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/badges/shields"
@@ -36,20 +36,26 @@
     "xml2js": "~0.4.16"
   },
   "scripts": {
-    "test": "node test/test.js"
+    "lint": "eslint '**/*.js'",
+    "test:js": "mocha 'test/**/*.spec.js'",
+    "test": "npm run lint && npm run test:js"
   },
   "bin": {
     "badge": "./gh-badge.js"
   },
   "files": [
-    "badge.js",
     "README.md",
     "gh-badge.js",
-    "measure-text.js",
+    "lib/badge.js",
+    "lib/colorscheme.json",
+    "lib/lru-cache.js",
+    "lib/measure-text.js",
+    "lib/svg-to-img.js",
     "templates",
-    "svg-to-img.js",
-    "colorscheme.json",
-    "lru-cache.js",
     "logo"
-  ]
+  ],
+  "devDependencies": {
+    "eslint": "^3.18.0",
+    "mocha": "^3.2.0"
+  }
 }
