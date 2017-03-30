@@ -200,13 +200,13 @@ TODO
 
 Once you are done implementing you badge, you can add it to the collection on [shields.io](http://shields.io/).
 
-First, we amke it visible on [http://[::1]:8080/try.html][try].
+First, we make it visible on [http://[::1]:8080/try.html][try].
 Edit [try.html][tryhtml] in the right section (Build, Downloads, ...) and add your badge:
 
 ```
-  <tr><th data-keywords='test badge keyword for google'>Test Badge from the tutorial</th>
-    <td><img src='/test/first/second.svg' alt=''/></td>
-    <td><code>https://img.shields.io/test/first/second.svg</code></td>
+  <tr><th data-keywords='test badge keywords for google'>Test Badge from the tutorial</th>
+    <td><img src='/test/subject/STATUS.svg' alt=''/></td>
+    <td><code>https://img.shields.io/test/subject/STATUS.svg</code></td>
   </tr>
 ```
 
