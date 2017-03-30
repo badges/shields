@@ -8,6 +8,7 @@ We invite participation through [GitHub Issues][], which we use much like a disc
 
 Please see [INSTALL.md][] for information on how to start contributing code to
 shields.io.
+You can read a [Tutorial on how to add a badge](doc/TUTORIAL.md).
 
 [INSTALL.md]: ./INSTALL.md
 
