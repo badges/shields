@@ -5769,6 +5769,64 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// GitHub Standards integration.
+camp.route(/^\/github\/standards\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+  cache(function(data, match, sendBadge, request) {
+    var standard = match[1];  // eg, meta/4
+    var issue = match[2];
+    var format = match[3];
+    var apiUrl = githubApiUrl + '/repos/standards/' + standard + '/issues/' + issue;
+    var badgeData = getBadgeData('standards', data);
+    badgeData.template = 'flat';
+    badgeData.links = [
+      'https://github.com/standards/' + standard,
+      'https://github.com/standards/'+ standard +'/issues/' + issue
+    ];
+    githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        var issueData = JSON.parse(buffer);
+        var validated = issueData.labels.filter(function(label) {
+          return label.name == "validated";
+        });
+        if(validated.length) {
+          var title = issueData.title.split(' ');
+          var version = title[title.length - 1];
+          if(version[0] !== 'v') {
+            badgeData.text[1] = "invalid version";
+          }
+          badgeData.text[1] = standard + ' ' + version;
+          var releaseApiUrl = issueData.repository_url + '/releases/latest';
+          githubAuth.request(request, releaseApiUrl, {}, function(err2, res2, buffer2) {
+            if(err2 != null) {
+              badgeData.text[1] = 'inaccessible';
+              sendBadge(format, badgeData);
+              return;
+            }
+            var releaseData = JSON.parse(buffer2);
+            if(semver.eq(version, releaseData.tag_name)) {
+              badgeData.colorscheme = 'brightgreen';
+            } else if(semver.lt(version, releaseData.tag_name)) {
+              badgeData.colorscheme = 'red';
+            } else {
+              badgeData.text[1] = "invalid version";
+            }
+            sendBadge(format, badgeData);
+          });
+        } else {
+          badgeData.text[1] = "unvalidated";
+        }
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
