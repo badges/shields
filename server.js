@@ -5769,6 +5769,50 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// (nsp) node security project integration
+camp.route(/^\/nsp\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function (data, match, sendBadge, request) {
+
+  var pkg = match[1];
+  var format = match[2];
+
+  var deps = {};
+  deps[pkg] = '*';
+  var options = {
+    method: 'POST',
+    uri: 'https://api.nodesecurity.io/check',
+    json: {
+      package: {
+        // fake npm package
+        name: 'shields',
+        version: '0.0.0',
+        // by putting the target package in deps, it's deps will be recursively processed
+        // otherwise we'd need to fetch all the npm deps ourselves
+        dependencies: deps
+      }
+    }
+  };
+
+  var badgeData = getBadgeData('nsp', data);
+  request(options, function(err, res, json) {
+
+    if (err || res.statusCode !== 200 || !Array.isArray(json)) {
+      badgeData.text[1] = 'not available';
+      return sendBadge(format, badgeData);
+    }
+
+    if (!json.length) {
+      badgeData.colorscheme = 'brightgreen';
+      badgeData.text[1] = 'no known vulns';
+    } else {
+      badgeData.colorscheme = 'red';
+      badgeData.text[1] = json.length + ' advisories';
+    }
+
+    return sendBadge(format, badgeData);
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
