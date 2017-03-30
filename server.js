@@ -5780,31 +5780,32 @@ cache(function(data, match, sendBadge, request) {
   request(url, function(err, res, buffer) {
     if (err) {
       badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
+      return sendBadge(format, badgeData);
     }
 
     xml2js.parseString(buffer.toString(), function (err, data) {
       if (err) {
         badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-        return;
+        return sendBadge(format, badgeData);
       }
 
       try {
         switch (type) {
         case 'd':
+          var plugin = data["plugin-repository"].category;
+          if (!plugin) {
+            badgeData.text[1] = 'not found';
+            return sendBadge(format, badgeData);
+          }
           var downloads = parseInt(data["plugin-repository"].category[0]["idea-plugin"][0]["$"].downloads, 10);
           badgeData.text[0] = 'downloads';
           badgeData.text[1] = metric(downloads);
           badgeData.colorscheme = downloadCountColor(downloads);
-          break;
+          return sendBadge(format, badgeData);
         }
-
-        sendBadge(format, badgeData);
       } catch (err) {
         badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
+        return sendBadge(format, badgeData);
       }
     });
   });
