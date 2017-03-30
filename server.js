@@ -4807,7 +4807,7 @@ cache(function(data, match, sendBadge, request) {
   var info = match[1]; // either `v` or `l`
   var pkg = match[2]; // eg, devtools
   var format = match[3];
-  var url = 'http://crandb.r-pkg.org//' + pkg;
+  var url = 'http://crandb.r-pkg.org/' + pkg;
   var badgeData = getBadgeData('cran', data);
   request(url, function (err, res, buffer) {
     if (err != null) {
