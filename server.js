@@ -20,7 +20,6 @@ var tryUrl = require('url').format({
 });
 console.log(tryUrl);
 var domain = require('domain');
-var request = require('request');
 var fs = require('fs');
 var LruCache = require('./lib/lru-cache.js');
 var badge = require('./lib/badge.js');
@@ -184,7 +183,7 @@ vendorDomain.on('error', function(err) {
 });
 
 
-function cache(f) {
+function cache(wrappedFn) {
   return function getRequest(data, match, end, ask) {
     if (data.maxAge !== undefined && /^[0-9]+$/.test(data.maxAge)) {
       ask.res.setHeader('Cache-Control', 'max-age=' + data.maxAge);
@@ -243,7 +242,8 @@ function cache(f) {
 
     // Only call vendor servers when last request is older than…
     var cacheInterval = 5000;  // milliseconds
-    var cachedRequest = function (uri, options, callback) {
+    var cachingRequest = function (uri, options, callback) {
+      var request = require('request');
       if ((typeof options === 'function') && !callback) { callback = options; }
       if (options && typeof options === 'object') {
         options.uri = uri;
@@ -254,7 +254,7 @@ function cache(f) {
       }
       options.headers = options.headers || {};
       options.headers['User-Agent'] = options.headers['User-Agent'] || 'Shields.io';
-      return request(options, function(err, res, json) {
+      return request(options, function(err, res, body) {
         if (res != null && res.headers != null) {
           var cacheControl = res.headers['cache-control'];
           if (cacheControl != null) {
@@ -264,12 +264,12 @@ function cache(f) {
             }
           }
         }
-        callback(err, res, json);
+        callback(err, res, body);
       });
     };
 
     vendorDomain.run(function() {
-      f(data, match, function sendBadge(format, badgeData) {
+      wrappedFn(data, match, function sendBadge(format, badgeData) {
         if (serverUnresponsive) { return; }
         clearTimeout(serverResponsive);
         // Check for a change in the data.
@@ -293,7 +293,7 @@ function cache(f) {
         if (!cachedVersionSent) {
           badge(badgeData, makeSend(format, ask.res, end));
         }
-      }, cachedRequest);
+      }, cachingRequest);
     });
   };
 }
@@ -798,7 +798,7 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-function teamcity_badge(url, buildId, advanced, format, data, sendBadge) {
+function teamcity_badge(url, buildId, advanced, format, data, sendBadge, request) {
   var apiUrl = url + '/app/rest/builds/buildType:(id:' + buildId + ')?guest=1';
   var badgeData = getBadgeData('build', data);
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
@@ -831,7 +831,7 @@ camp.route(/^\/teamcity\/codebetter\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var buildType = match[1];  // eg, `bt428`.
   var format = match[2];
-  teamcity_badge('http://teamcity.codebetter.com', buildType, false, format, data, sendBadge);
+  teamcity_badge('http://teamcity.codebetter.com', buildType, false, format, data, sendBadge, request);
 }));
 
 // Generic TeamCity instance
@@ -842,7 +842,7 @@ cache(function(data, match, sendBadge, request) {
   var advanced = (match[3] == 'e');
   var buildType = match[4];  // eg, `bt428`.
   var format = match[5];
-  teamcity_badge(scheme + '://' + serverUrl, buildType, advanced, format, data, sendBadge);
+  teamcity_badge(scheme + '://' + serverUrl, buildType, advanced, format, data, sendBadge, request);
 }));
 
 // TeamCity CodeBetter code coverage
@@ -6019,6 +6019,7 @@ var regularUpdateCache = Object.create(null);
 // interval: number in milliseconds.
 // cb: a callback function that takes an error and data returned by the scraper.
 function regularUpdate(url, interval, scraper, cb) {
+  var request = require('request');
   var timestamp = Date.now();
   var cache = regularUpdateCache[url];
   if (cache != null &&
@@ -6368,6 +6369,7 @@ function phpStableVersion(version) {
 // This searches the serverSecrets for a twitter consumer key
 // and secret, and exchanges them for a bearer token to use for all requests.
 function fetchTwitterToken() {
+  var request = require('request');
   if (serverSecrets.twitter_consumer_key && serverSecrets.twitter_consumer_secret){
     // fetch a bearer token good for this app session
     // construct this bearer request with a base64 encoding of key:secret
