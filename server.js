@@ -303,6 +303,8 @@ camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
     var badgeData = getBadgeData("404", query);
     badgeData.text[1] = 'badge not found';
     badgeData.colorscheme = 'red';
+    // Add format to badge data.
+    badgeData.format = format;
     badge(badgeData, makeSend(format, request.res, end));
 });
 
@@ -4802,7 +4804,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // CTAN integration.
-camp.route(/^\/ctan\/([^\/])\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/ctan\/([vl])\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var info = match[1]; // either `v` or `l`
   var pkg = match[2]; // eg, tex
@@ -4812,6 +4814,11 @@ cache(function(data, match, sendBadge, request) {
   request(url, function (err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    if (res.statusCode === 404) {
+      badgeData.text[1] = 'not found';
       sendBadge(format, badgeData);
       return;
     }
@@ -4826,13 +4833,16 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
       } else if (info === 'l') {
         var license = data.license;
-        if (license === '') {
-          badgeData.text[1] = 'Unknown';
-        } else {
-          badgeData.text[1] = license;
+        if (license) {
+          // API returns licenses inconsistently ordered, so fix the order.
+          badgeData.text[1] = license.sort().join(',');
           badgeData.colorscheme = 'blue';
+        } else {
+          badgeData.text[1] = 'unknown';
         }
         sendBadge(format, badgeData);
+      } else {
+        throw Error('Unreachable due to regex');
       }
     } catch (e) {
       badgeData.text[1] = 'invalid';
