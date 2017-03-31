@@ -1634,16 +1634,18 @@ cache(function(data, match, sendBadge, request) {
   var scope = match[1];   // "@user"
   var repo = match[2];    // "express"
   var tag = match[3];     // "next"
-  var format = match[4];  // ".svg"
+  var format = match[4];  // "svg"
   var pkg = encodeURIComponent(scope
     ? scope + '/' + repo
     : repo);
-
-  if (!tag) {
+  var name = 'npm';
+  if (tag) {
+    name += '@' + tag;
+  } else {
     tag = 'latest';
   }
   var apiUrl = 'https://registry.npmjs.org/-/package/' + pkg + '/dist-tags';
-  var badgeData = getBadgeData('npm', data);
+  var badgeData = getBadgeData(name, data);
   // Using the Accept header because of this bug:
   // <https://github.com/npm/npmjs.org/issues/163>
   request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
