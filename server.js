@@ -4802,7 +4802,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // CRAN/METACRAN integration.
-camp.route(/^\/cran\/([^\/])\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/cran\/([vl])\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var info = match[1]; // either `v` or `l`
   var pkg = match[2]; // eg, devtools
@@ -4812,34 +4812,42 @@ cache(function(data, match, sendBadge, request) {
   request(url, function (err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
-      sendBadge(badgeData, format);
+      sendBadge(format, badgeData);
+      return;
+    }
+    if (res.statusCode === 404) {
+      badgeData.text[1] = 'not found';
+      sendBadge(format, badgeData);
       return;
     }
     try {
       var data = JSON.parse(buffer);
 
       if (info === 'v') {
-        var version = data.version.number;
+        var version = data.Version;
         var vdata = versionColor(version);
         badgeData.text[1] = vdata.version;
         badgeData.colorscheme = vdata.color;
         sendBadge(format, badgeData);
       } else if (info === 'l') {
-        var license = data.license;
-        if (license === '') {
-          badgeData.text[1] = 'Unknown';
-        } else {
+        badgeData.text[0] = 'license';
+        var license = data.License;
+        if (license) {
           badgeData.text[1] = license;
           badgeData.colorscheme = 'blue';
+        } else {
+          badgeData.text[1] = 'unknown';
         }
         sendBadge(format, badgeData);
+      } else {
+        throw Error('Unreachable due to regex');
       }
     } catch (e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
-  });}
-));
+  });
+}));
 
 
 // CTAN integration.
