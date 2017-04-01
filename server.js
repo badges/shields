@@ -3440,6 +3440,85 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// GitHub statistics integration.
+camp.route(/^\/github\/stats\/([^\/]+)\/([^\/]+)\/(week|month|year)\.(svg|png|gif|jpg|json)$/,
+  cache(function(data, match, sendBadge, request) {
+    var user = match[1];  // eg, mashape
+    var repo = match[2];  // eg, apistatus
+    var type = match[3];
+    var format = match[4];
+    var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/stats/commit_activity';
+    var badgeData = getBadgeData('commits', data);
+    if (badgeData.template === 'social') {
+      badgeData.logo = badgeData.logo || logos.github;
+      badgeData.links = [
+        'https://github.com/' + user + '/' + repo
+      ];
+    }
+    githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
+      if (err !== null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        var parse = JSON.parse(buffer);
+        if (type === 'week') {
+          badgeData.text[1] = metric(parse[51].total) + '/week';
+        } else if (type === 'month') {
+          badgeData.text[1] = metric(parse.slice(48, 52).map(function(a) {
+            return a.total;
+          }).reduce(function(a, b) { return a + b; })) + '/month';
+        } else if (type === 'year') {
+          badgeData.text[1] = metric(parse.map(function(a) {
+            return a.total;
+          }).reduce(function(a, b) { return a + b; })) + '/year';
+        }
+        badgeData.colorscheme = 'blue';
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }));
+
+// GitHub commits integration.
+camp.route(/^\/github\/commits\/([^\/]+)\/([^\/]+)(?:\/(.+))?\/last\.(svg|png|gif|jpg|json)$/,
+  cache(function(data, match, sendBadge, request) {
+    var user = match[1];  // eg, mashape
+    var repo = match[2];  // eg, apistatus
+    var branch = match[3];
+    var format = match[4];
+    var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/commits';
+    if (branch) {
+      apiUrl += '?sha=' + branch;
+    }
+    var badgeData = getBadgeData('last commit ', data);
+    if (badgeData.template === 'social') {
+      badgeData.logo = badgeData.logo || logos.github;
+      badgeData.links = [
+        'https://github.com/' + user + '/' + repo
+      ];
+    }
+    githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
+      if (err !== null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        var dateString = JSON.parse(buffer)[0].commit.author.date;
+        badgeData.text[1] = '  ' + dateString.slice(0, 10);
+        badgeData.colorscheme = 'blue';
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }));
+
 // Bitbucket issues integration.
 camp.route(/^\/bitbucket\/issues(-raw)?\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
