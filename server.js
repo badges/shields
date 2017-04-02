@@ -1629,12 +1629,23 @@ cache(function (data, match, sendBadge, request) {
 }));
 
 // npm version integration.
-camp.route(/^\/npm\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/npm\/v\/(@[^\/]*)?\/?([^\/]*)\/?([^\/]*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var repo = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
-  var format = match[2];
-  var apiUrl = 'https://registry.npmjs.org/-/package/' + repo + '/dist-tags';
-  var badgeData = getBadgeData('npm', data);
+  var scope = match[1];   // "@user"
+  var repo = match[2];    // "express"
+  var tag = match[3];     // "next"
+  var format = match[4];  // "svg"
+  var pkg = encodeURIComponent(scope
+    ? scope + '/' + repo
+    : repo);
+  var name = 'npm';
+  if (tag) {
+    name += '@' + tag;
+  } else {
+    tag = 'latest';
+  }
+  var apiUrl = 'https://registry.npmjs.org/-/package/' + pkg + '/dist-tags';
+  var badgeData = getBadgeData(name, data);
   // Using the Accept header because of this bug:
   // <https://github.com/npm/npmjs.org/issues/163>
   request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
@@ -1645,7 +1656,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var version = data.latest;
+      var version = data[tag];
       var vdata = versionColor(version);
       badgeData.text[1] = vdata.version;
       badgeData.colorscheme = vdata.color;
