@@ -905,10 +905,11 @@ camp.route(/^\/sonar(.*)\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)
       }
 
       // Sonarqube API change: https://sonarqube.com/web_api/api/resources (deprecated since 5.4)
+      var apiUrl;
       if (version === '' || parseFloat(version) < 5.4) {
-          var apiUrl = scheme + '://' + serverUrl + '/api/resources?resource=' + buildType + '&depth=0&metrics=' + encodeURIComponent(sonarMetricName) + '&includetrends=true';
+          apiUrl = scheme + '://' + serverUrl + '/api/resources?resource=' + buildType + '&depth=0&metrics=' + encodeURIComponent(sonarMetricName) + '&includetrends=true';
       } else {
-          var apiUrl = scheme + '://' + serverUrl + '/api/measures/component?componentKey=' + buildType + '&metricKeys=' + encodeURIComponent(sonarMetricName);
+          apiUrl = scheme + '://' + serverUrl + '/api/measures/component?componentKey=' + buildType + '&metricKeys=' + encodeURIComponent(sonarMetricName);
       }
 
       var badgeData = getBadgeData(metricName.replace(/_/g, ' '), data);
@@ -922,10 +923,11 @@ camp.route(/^\/sonar(.*)\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)
           var data = JSON.parse(buffer);
 
           // Sonarqube API change: https://sonarqube.com/web_api/api/resources (deprecated since 5.4)
+          var value;
           if (version === '' || parseFloat(version) < 5.4) {
-              var value = data[0].msr[0].val;
+              value = data[0].msr[0].val;
           } else {
-              var value = parseInt(data.component.measures[0].value);
+              value = parseInt(data.component.measures[0].value);
           }
 
           if (value === undefined) {
