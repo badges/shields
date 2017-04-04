@@ -22,6 +22,8 @@ var svg2img = require('./svg-to-img.js');
 var loadLogos = require('./load-logos.js');
 var githubAuth = require('./lib/github-auth.js');
 var querystring = require('querystring');
+var moment = require('moment');
+moment().format();
 var xml2js = require('xml2js');
 var serverSecrets;
 try {
@@ -3508,8 +3510,8 @@ camp.route(/^\/github\/commits\/([^\/]+)\/([^\/]+)(?:\/(.+))?\/last\.(svg|png|gi
         return;
       }
       try {
-        var dateString = JSON.parse(buffer)[0].commit.author.date;
-        badgeData.text[1] = '  ' + dateString.slice(0, 10);
+        var data = JSON.parse(buffer);
+        badgeData.text[1] = parseDate(data[0].commit.author.date);
         badgeData.colorscheme = 'blue';
         sendBadge(format, badgeData);
       } catch(e) {
@@ -6083,6 +6085,20 @@ function metric(n) {
   return ''+n;
 }
 
+// Parse date to Today, Yesterday, last ddd and so on
+function parseDate(d) {
+  var date = moment(d);
+  var dateString = date.calendar(null, {
+    lastDay: ' [Yesterday]',
+    sameDay: ' [Today]',
+    lastWeek: '[last] dddd',
+    sameElse: ' D MMM YYYY '
+  });
+  // Trim current year from date string
+  var currentYear = moment().year();
+  return dateString.replace(' ' + currentYear, '');
+}
+
 
 // Get data from a svg-style badge.
 // cb: function(err, string)
@@ -6247,7 +6263,7 @@ function phpNumberedVersionData(version) {
     return {
       numbers: parts[1],
       modifier: 5,
-      modifierCount: 1,
+      modifierCount: 1
     };
   }
 
