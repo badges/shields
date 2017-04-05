@@ -3510,9 +3510,9 @@ camp.route(/^\/github\/commits\/([^\/]+)\/([^\/]+)(?:\/(.+))?\/last\.(svg|png|gi
         return;
       }
       try {
-        var data = JSON.parse(buffer);
-        badgeData.text[1] = parseDate(data[0].commit.author.date);
-        badgeData.colorscheme = 'blue';
+        var data = JSON.parse(buffer)[0].commit.author.date;
+        badgeData.text[1] = parseDate(data);
+        badgeData.colorscheme = colorDate(Date.parse(data));
         sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'invalid';
@@ -5976,7 +5976,7 @@ function getBadgeData(defaultLabel, data) {
   var template = data.style || 'default';
   if (data.style && validTemplates.indexOf(data.style) > -1) {
     template = data.style;
-  };
+  }
   if (!(Object(data.link) instanceof Array)) {
     if (data.link === undefined) {
       data.link = [];
@@ -6085,6 +6085,17 @@ function metric(n) {
   return ''+n;
 }
 
+function colorDate(date) {
+  var diff = 365 - moment().diff(moment(date), 'days');
+  return floorCountColor(diff,
+    [ {v: -365, c: 'red'},
+      {v: 0,    c: 'orange'},
+      {v: 185,  c: 'yellow'},
+      {v: 335,  c: 'yellowgreen'},
+      {v: 358,  c: 'green'}
+    ], 'brightgreen');
+}
+
 // Parse date to Today, Yesterday, last ddd and so on
 function parseDate(d) {
   var date = moment(d);
@@ -6127,7 +6138,7 @@ function currencyFromCode(code) {
     CNY: '¥',
     EUR: '€',
     GBP: '₤',
-    USD: '$',
+    USD: '$'
   })[code] || code;
 }
 
@@ -6139,25 +6150,33 @@ function starRating(rating) {
 }
 
 function coveragePercentageColor(percentage) {
-  return floorCountColor(percentage, 80, 90, 100);
+  return floorCountColor(percentage, [
+    {v: 0,   c: 'red'},
+    {v: 80,  c: 'yellow'},
+    {v: 90,  c: 'yellowgreen'},
+    {v: 100, c: 'green'}
+  ], 'brightgreen');
 }
 
 function downloadCountColor(downloads) {
-  return floorCountColor(downloads, 10, 100, 1000);
+  return floorCountColor(downloads, [
+    {v: 0,    c: 'red'},
+    {v: 10,   c: 'yellow'},
+    {v: 100,  c: 'yellowgreen'},
+    {v: 1000, c: 'green'}
+  ], 'brightgreen');
 }
 
-function floorCountColor(value, yellow, yellowgreen, green) {
-  if (value === 0) {
-    return 'red';
-  } else if (value < yellow) {
-    return 'yellow';
-  } else if (value < yellowgreen) {
-    return 'yellowgreen';
-  } else if (value < green) {
-    return 'green';
-  } else {
-    return 'brightgreen';
+function floorCountColor(value, configList, lastColor) {
+  var result = configList[0].c;
+  for (var i = 0; i < configList.length; i++) {
+    if (value < configList[i].v) {
+      return result;
+    } else {
+      result = configList[i].c;
+    }
   }
+  return lastColor;
 }
 
 function versionColor(version) {
