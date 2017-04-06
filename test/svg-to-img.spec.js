@@ -12,7 +12,8 @@ describe('The rasterizer', function () {
 
   it('should produce PNG', function(done) {
     badge({ text: ['cactus', 'grown'], format: 'svg' }, svg => {
-      svg2img(svg, 'png', data => {
+      svg2img(svg, 'png', (err, data) => {
+        assert.equal(err, null);
         assert.ok(isPng(data));
         done();
       });
@@ -21,12 +22,14 @@ describe('The rasterizer', function () {
 
   it('should cache its results', function(done) {
     badge({ text: ['will-this', 'be-cached?'], format: 'svg' }, svg => {
-      svg2img(svg, 'png', data1 => {
-        assert.ok(isPng(data1));
+      svg2img(svg, 'png', (err, data) => {
+        assert.equal(err, null);
+        assert.ok(isPng(data));
         assert.equal(cacheGet.called, false);
 
-        svg2img(svg, 'png', data2 => {
-          assert.ok(isPng(data2));
+        svg2img(svg, 'png', (err, data) => {
+          assert.equal(err, null);
+          assert.ok(isPng(data));
           assert.ok(cacheGet.calledOnce);
 
           done();
