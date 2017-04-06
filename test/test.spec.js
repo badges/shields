@@ -2,6 +2,8 @@ var assert = require('assert');
 var http = require('http');
 var cproc = require('child_process');
 var fs = require('fs');
+var isPng = require('is-png');
+var isSvg = require('is-svg');
 
 // Test parameters
 var port = '1111';
@@ -27,7 +29,7 @@ describe('The CLI', function () {
       ['test/cli-test.js', 'cactus', 'grown']);
     child.stdout.once('data', function(chunk) {
       var buffer = ''+chunk;
-      assert(buffer.startsWith('<svg'), '<svg');
+      assert.ok(isSvg(buffer));
       assert(buffer.includes('cactus'), 'cactus');
       assert(buffer.includes('grown'), 'grown');
       done();
@@ -39,7 +41,7 @@ describe('The CLI', function () {
       ['test/cli-test.js', 'cactus', 'grown', ':green']);
     child.stdout.once('data', function(chunk) {
       var buffer = ''+chunk;
-      assert(buffer.startsWith('<svg'), '<svg');
+      assert.ok(isSvg(buffer));
       done();
     });
   });
@@ -58,15 +60,7 @@ describe('The CLI', function () {
     var child = cproc.spawn('node',
       ['test/cli-test.js', 'cactus', 'grown', '.png']);
     child.stdout.once('data', function(chunk) {
-      // Check the PNG magic number.
-      assert.equal(chunk[0], 0x89);
-      assert.equal(chunk[1], 0x50);
-      assert.equal(chunk[2], 0x4e);
-      assert.equal(chunk[3], 0x47);
-      assert.equal(chunk[4], 0x0d);
-      assert.equal(chunk[5], 0x0a);
-      assert.equal(chunk[6], 0x1a);
-      assert.equal(chunk[7], 0x0a);
+      assert.ok(isPng(chunk));
       done();
     });
   });
@@ -90,7 +84,7 @@ describe('The server', function () {
         var buffer = '';
         res.on('data', function(chunk) { buffer += ''+chunk; });
         res.on('end', function() {
-          assert(buffer.startsWith('<svg'), '<svg');
+          assert.ok(isSvg(buffer));
           assert(buffer.includes('fruit'), 'fruit');
           assert(buffer.includes('apple'), 'apple');
           done();
@@ -102,15 +96,7 @@ describe('The server', function () {
     http.get(url + ':fruit-apple-green.png',
       function(res) {
         res.once('data', function(chunk) {
-          // Check the PNG magic number.
-          assert.equal(chunk[0], 0x89);
-          assert.equal(chunk[1], 0x50);
-          assert.equal(chunk[2], 0x4e);
-          assert.equal(chunk[3], 0x47);
-          assert.equal(chunk[4], 0x0d);
-          assert.equal(chunk[5], 0x0a);
-          assert.equal(chunk[6], 0x1a);
-          assert.equal(chunk[7], 0x0a);
+          assert.ok(isPng(chunk));
           done();
         });
     });

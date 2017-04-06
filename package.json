@@ -56,6 +56,8 @@
   ],
   "devDependencies": {
     "eslint": "^3.18.0",
+    "is-png": "^1.0.0",
+    "is-svg": "^2.1.0",
     "mocha": "^3.2.0"
   }
 }
