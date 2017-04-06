@@ -5120,6 +5120,11 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
+      if (res.statusCode == 404) {
+        badgeData.text[1] = path + ' not found';
+        sendBadge(format, badgeData);
+        return;
+      }
       var data = JSON.parse(buffer);
       var latest_status = data.results[0].status;
       if (latest_status == 10) {
