@@ -23,7 +23,7 @@ hr { width: 40%; border-width: 1px 0 0 0; }
 a.photo { text-decoration: none; }
 a.photo>img { padding: 2px; border: 1px solid grey; }
 ul { text-align: left; margin-left: 25%; }
-table { width: 50%; margin: auto; }
+table { min-width: 50%; margin: auto; }
 table.centered > tbody > tr > td:first-child { text-align: right; }
 th, td { text-align: left; }
 h1, h2, h3 { font-style: italic; }
@@ -48,6 +48,11 @@ hr.spacing { border: 0; display: block; height: 3mm; }
 table.badge > tbody > tr > th,
 table.badge > tbody > tr > td > img,
 table.badge > tbody > tr > td > code { cursor: pointer; }
+#copyImg,
+.badge-img img {
+	height: 20px;
+	vertical-align: middle;
+}
 </style>
 
 <main id='main'>
@@ -68,7 +73,7 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
 <section id='suggestedBadges'></section>
 
 <h3 id="build"> Build </h3>
-<table class='badge'><tbody>
+<table class='badge badge-img'><tbody>
   <tr><th> Travis: </th>
     <td><img src='https://img.shields.io/travis/rust-lang/rust.svg?maxAge=2592000' alt=''/></td>
     <td><code>https://img.shields.io/travis/USER/REPO.svg</code></td>
@@ -146,16 +151,16 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
       <td><code>https://img.shields.io/snap-ci/ThoughtWorksStudios/eb_deployer/master.svg</code></td>
   </tr>
   <tr><th> Jenkins: </th>
-    <td><img src='https://img.shields.io/jenkins/s/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg?maxAge=2592000' alt=''/></td>
-    <td><code>https://img.shields.io/jenkins/s/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg</code></td>
+    <td><img src='https://img.shields.io/jenkins/s/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.svg?maxAge=2592000' alt=''/></td>
+    <td><code>https://img.shields.io/jenkins/s/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.svg</code></td>
   </tr>
   <tr><th> Jenkins tests: </th>
-    <td><img src='https://img.shields.io/jenkins/t/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg?maxAge=2592000' alt=''/></td>
-    <td><code>https://img.shields.io/jenkins/t/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg</code></td>
+    <td><img src='https://img.shields.io/jenkins/t/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.svg?maxAge=2592000' alt=''/></td>
+    <td><code>https://img.shields.io/jenkins/t/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.svg</code></td>
   </tr>
   <tr><th> Jenkins coverage: </th>
-    <td><img src='https://img.shields.io/jenkins/c/https/jenkins.qa.ubuntu.com/address-book-service-utopic-i386-ci.svg?maxAge=2592000' alt=''/></td>
-    <td><code>https://img.shields.io/jenkins/c/https/jenkins.qa.ubuntu.com/address-book-service-utopic-i386-ci.svg</code></td>
+    <td><img src='https://img.shields.io/jenkins/c/https/jenkins.qa.ubuntu.com/view/Utopic/view/All/job/address-book-service-utopic-i386-ci.svg?maxAge=2592000' alt=''/></td>
+    <td><code>https://img.shields.io/jenkins/c/https/jenkins.qa.ubuntu.com/view/Utopic/view/All/job/address-book-service-utopic-i386-ci.svg</code></td>
   </tr>
   <tr><th> Coveralls: </th>
     <td><img src='https://img.shields.io/coveralls/jekyll/jekyll.svg?maxAge=2592000' alt=''/></td>
@@ -411,7 +416,7 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
 </tbody></table>
 <h3 id="version"> Version </h3>
 <table class='badge'><tbody>
-  <tr><th data-keywords='cdn cdnjs'> CDNJS: </th>
+  <tr><th data-keywords='cdn cdnjs' data-link='https://cdnjs.com/libraries/jquery'> CDNJS: </th>
   <td><img src='https://img.shields.io/cdnjs/v/jquery.svg?maxAge=2592000' alt=''/></td>
   <td><code>https://img.shields.io/cdnjs/v/jquery.svg</code></td>
   </tr>
@@ -759,6 +764,14 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><img src='https://img.shields.io/bitbucket/issues-raw/atlassian/python-bitbucket.svg?maxAge=2592000' alt=''/></td>
     <td><code>https://img.shields.io/bitbucket/issues-raw/atlassian/python-bitbucket.svg</code></td>
   </tr>
+  <tr><th> Bitbucket open pull requests: </th>
+    <td><img src='https://img.shields.io/bitbucket/pr/osrf/gazebo.svg?maxAge=2592000' alt=''/></td>
+    <td><code>https://img.shields.io/bitbucket/pr/osrf/gazebo.svg</code></td>
+  </tr>
+  <tr><th data-keywords='Bitbucket'></th>
+    <td><img src='https://img.shields.io/bitbucket/pr-raw/osrf/gazebo.svg?maxAge=2592000' alt=''/></td>
+    <td><code>https://img.shields.io/bitbucket/pr-raw/osrf/gazebo.svg</code></td>
+  </tr>
   <tr><th> WordPress rating: </th>
     <td><img src='https://img.shields.io/wordpress/plugin/r/akismet.svg?maxAge=2592000' alt=''/></td>
     <td><code>https://img.shields.io/wordpress/plugin/r/akismet.svg</code></td>
@@ -782,10 +795,6 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <tr><th> Libscore: </th>
     <td><img src='https://img.shields.io/libscore/s/jQuery.svg?maxAge=2592000' alt=''/></td>
     <td><code>https://img.shields.io/libscore/s/jQuery.svg</code></td>
-  </tr>
-  <tr><th> Talk.ai: </th>
-    <td><img src='https://img.shields.io/talk/t/9c81ff703b.svg?maxAge=2592000' alt=''/></td>
-    <td><code>https://img.shields.io/talk/t/9c81ff703b.svg</code></td>
   </tr>
   <tr><th> Puppet Forge: </th>
     <td><img src='https://img.shields.io/puppetforge/e/camptocamp/openssl.svg?maxAge=2592000' alt=''/></td>
@@ -852,8 +861,8 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><code>https://img.shields.io/jira/sprint/https/jira.spring.io/94.svg</code></td>
   </tr>
   <tr><th> Maintenance: </th>
-    <td><img src='https://img.shields.io/maintenance/yes/2016.svg?maxAge=2592000' alt=''/></td>
-    <td><code>https://img.shields.io/maintenance/yes/2016.svg</code></td>
+    <td><img src='https://img.shields.io/maintenance/yes/2017.svg?maxAge=2592000' alt=''/></td>
+    <td><code>https://img.shields.io/maintenance/yes/2017.svg</code></td>
   <tr><th data-keywords='aur'> AUR: </th>
     <td><img src='https://img.shields.io/aur/license/yaourt.svg?maxAge=2592000' alt=''/></td>
     <td><code>https://img.shields.io/aur/license/yaourt.svg</code></td>
@@ -893,6 +902,10 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <tr><th data-keywords='amo firefox'> Mozilla Add-on: </th>
     <td><img src='https://img.shields.io/amo/stars/dustman.svg?maxAge=2592000' alt=''/></td>
     <td><code>https://img.shields.io/amo/stars/dustman.svg</code></td>
+  </tr>
+  <tr><th> Swagger Validator: </th>
+    <td><img src='https://img.shields.io/swagger/valid/2.0/https/bitbucket.org/api/swagger.json.svg?maxAge=2592000' alt=''/></td>
+    <td><code>https://img.shields.io/swagger/valid/2.0/https/bitbucket.org/api/swagger.json.svg</code></td>
   </tr>
 </tbody></table>
 
@@ -1017,7 +1030,7 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   </td></tr>
 </tbody></table>
 
-<p>
+<p class='badge-img'>
 <img src='https://img.shields.io/badge/color-brightgreen-brightgreen.svg?maxAge=2592000' alt='brightgreen'/>
 <img src='https://img.shields.io/badge/color-green-green.svg?maxAge=2592000' alt='green'/>
 <img src='https://img.shields.io/badge/color-yellowgreen-yellowgreen.svg?maxAge=2592000' alt='yellowgreen'/>
@@ -1033,7 +1046,7 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
 <p>
 The following styles are available (flat is the default as of Feb 1st 2015):
 </p>
-<table><tbody>
+<table class='badge-img'><tbody>
   <tr>
   <td><img src='https://img.shields.io/badge/style-plastic-green.svg?style=plastic&maxAge=2592000' alt=''/></td>
   <td><code>https://img.shields.io/badge/style-plastic-green.svg?style=plastic</code></td>
@@ -1185,7 +1198,7 @@ is where the current server got started.
   <div id="githubDoc">
     <p>If your GitHub badge errors, it might be because you hit GitHub's rate
     limits.<br>
-    You can increase Shield.io's rate limit by
+    You can increase Shields.io's rate limit by
     <a href="https://img.shields.io/github-auth">going to this page</a>
     to add Shields as a GitHub application on your GitHub account.
     </p>

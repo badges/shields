@@ -1,0 +1,18 @@
+env:
+  node: true
+  # We use Promise, Map, and occasional ES6 syntax.
+  es6: true
+  mocha: true
+
+rules:
+  # We use semicolons.
+  semi: ["error", "always"]
+  no-extra-semi: "error"
+
+  # We keep whitespace cleaned up.
+  no-trailing-spaces: "error"
+  eol-last: "error"
+
+  # Prevent some likely errors.
+  no-redeclare: "error"
+  no-undef: "error"

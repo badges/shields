@@ -77,18 +77,23 @@ The format is the following:
   /* … Or… */
   "colorA": "#555",
   "colorB": "#4c1",
-  /* See template/ for a list of available templates.
+  /* See templates/ for a list of available templates.
      Each offers a different visual design. */
   "template": "flat"
 }
 ```
 
+See also
+
+- [colorscheme.json](colorscheme.json) for the `colorscheme` option
+- [templates/](templates) for the `template` option
+
 # Defaults
 
-If you want to add a colorscheme, head to `colorscheme.json`. Each scheme has a
-name and a [CSS/SVG color][] for the color used in the first box (for the first
-piece of text, field `colorA`) and for the one used in the second box (field
-`colorB`).
+If you want to add a colorscheme, head to `lib/colorscheme.json`. Each scheme
+has a name and a [CSS/SVG color][] for the color used in the first box (for the
+first piece of text, field `colorA`) and for the one used in the second box
+(field `colorB`).
 
 [CSS/SVG color]: http://www.w3.org/TR/SVG/types.html#DataTypeColor
 
@@ -137,7 +142,7 @@ Successfully built 4471b442c220
 Then run the container:
 
 ```console
-$ docker run --rm -p 8080:80 -v "$(pwd)/secret.json":/usr/src/app/secret.json --name shields shields
+$ docker run --rm -p 8080:80 -v "$(pwd)/private/secret.json":/usr/src/app/secret.json --name shields shields
 
 > gh-badges@1.1.2 start /usr/src/app
 > node server.js
@@ -149,28 +154,29 @@ Assuming Docker is running locally, you should be able to get to the application
 
 # Secret.json
 
-Some services require the use of secret tokens or passwords. Those are stored in a file called `secret.json` that is not checked into the repository, to avoid impersonation. Here is how it currently looks like:
+Some services require the use of secret tokens or passwords. Those are stored in `private/secret.json` which is not checked into the repository, to avoid impersonation. Here is how it currently looks like:
 
 ```
 bintray_apikey
 bintray_user
 gh_client_id
 gh_client_secret
-gitter_dev_secret
 shieldsIps
 shieldsSecret
 sl_insight_apiToken
 sl_insight_userUuid
 ```
 
-(Gathered from `cat secret.json | jq keys | grep -o '".*"' | sed 's/"//g'`.)
+(Gathered from `cat private/secret.json | jq keys | grep -o '".*"' | sed 's/"//g'`.)
 
 # Main Server Sysadmin
 
-- DNS round-robin between https://vps244529.ovh.net/try.html and https://vps71670.vps.ovh.ca/try.html.
+- Servers in DNS round-robin:
+  - s0: 192.99.59.72 (vps71670.vps.ovh.ca)
+  - s1: 51.254.114.150 (vps244529.ovh.net)
+  - s2: 149.56.96.133 (vps117870.vps.ovh.ca)
 - Self-signed TLS certificates, but `img.shields.io` is behind CloudFlare, which provides signed certificates.
-- Using node v0.12.7 because later versions, combined with node-canvas, give inaccurate badge measurements.
-- Using forever (the node monitor) to automatically restart the server when it crashes.
+- Using systemd to automatically restart the server when it crashes.
 
 See https://github.com/badges/ServerScript for helper admin scripts.
 
