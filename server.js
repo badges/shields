@@ -6127,7 +6127,9 @@ function sendSVG(res, askres, end) {
 
 function sendOther(format, res, askres, end) {
   askres.setHeader('Content-Type', 'image/' + format);
-  svg2img(res, format, askres);
+  svg2img(res, format, function (data) {
+    end(null, {template: streamFromString(data)});
+  });
 }
 
 function sendJSON(res, askres, end) {
