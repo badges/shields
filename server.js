@@ -5121,7 +5121,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       if (res.statusCode == 404) {
-        badgeData.text[1] = path + ' not found';
+        badgeData.text[1] = 'repo not found';
         sendBadge(format, badgeData);
         return;
       }
