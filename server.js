@@ -4961,7 +4961,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Docker Hub automated integration, latest status (passed, pending, failed)
-camp.route(/^\/docker\/status\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/docker\/build\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, jrottenberg
   var repo = match[2];  // eg, ffmpeg
@@ -4971,7 +4971,7 @@ cache(function(data, match, sendBadge, request) {
   }
   var path = user + '/' + repo;
   var url = 'https://registry.hub.docker.com/v2/repositories/' + path + '/buildhistory';
-  var badgeData = getBadgeData('docker status', data);
+  var badgeData = getBadgeData('docker build', data);
   request(url, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -4981,14 +4981,14 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var latest_status = data.results[0].status;
-      if ( latest_status == 10 ) {
+      if (latest_status == 10) {
         badgeData.text[1] = 'passing';
         badgeData.colorscheme = 'brightgreen';
-      } else if ( latest_status < 0 ) {
+      } else if (latest_status < 0) {
         badgeData.text[1] = 'failing';
         badgeData.colorscheme = 'red';
       } else {
-        badgeData.text[1] = 'building..';
+        badgeData.text[1] = 'building';
         badgeData.colorB = '#008bb8';
       }
       sendBadge(format, badgeData);
