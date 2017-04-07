@@ -11,7 +11,6 @@ var camp = Camp.start({
   hostname: bindAddress,
   secure: secureServer
 });
-module.exports = camp;
 Camp.log.unpipe('warn', 'stderr');
 var tryUrl = require('url').format({
   protocol: secureServer ? 'https' : 'http',
@@ -298,6 +297,11 @@ function cache(f) {
     });
   };
 }
+
+module.exports = {
+  camp,
+  requestCache
+};
 
 camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
     var format = match[1];

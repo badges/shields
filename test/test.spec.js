@@ -79,7 +79,7 @@ describe('The server', function () {
     server = require('../server');
   });
   after('Shut down the server', function(done) {
-    server.close(function () { done(); });
+    server.camp.close(function () { done(); });
   });
 
   it('should produce colorscheme badges', function(done) {
