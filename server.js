@@ -11,6 +11,7 @@ var camp = Camp.start({
   hostname: bindAddress,
   secure: secureServer
 });
+module.exports = camp;
 Camp.log.unpipe('warn', 'stderr');
 var tryUrl = require('url').format({
   protocol: secureServer ? 'https' : 'http',
@@ -6129,6 +6130,7 @@ function sendOther(format, res, askres, end) {
   askres.setHeader('Content-Type', 'image/' + format);
   svg2img(res, format, function (err, data) {
     if (err) {
+      // This emits status code 200, though 500 would be preferable.
       console.error('svg2img error', err);
       end(null, {template: '500.html'});
     } else {

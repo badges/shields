@@ -1,9 +1,12 @@
 var assert = require('assert');
+var sinon = require('sinon');
 var http = require('http');
 var cproc = require('child_process');
 var fs = require('fs');
+var path = require('path');
 var isPng = require('is-png');
 var isSvg = require('is-svg');
+var svg2img = require('../lib/svg-to-img');
 
 // Test parameters
 var port = '1111';
@@ -68,14 +71,15 @@ describe('The CLI', function () {
 });
 
 describe('The server', function () {
-
-  before('Start running the server', function(done) {
-    server = cproc.spawn('node', ['test/server-test.js', port]);
-    var isDone = false;
-    server.stdout.on('data', function(data) {
-      if (data.toString().indexOf('ready') >= 0 && !isDone) { done(); isDone = true; }
-    });
-    server.stderr.on('data', function(data) { console.log(''+data); });
+  var server;
+  before('Start running the server', function() {
+    this.timeout(5000);
+    // This is a bit gross, but it works.
+    process.argv = ['', '', port, 'localhost'];
+    server = require('../server');
+  });
+  after('Shut down the server', function(done) {
+    server.close(function () { done(); });
   });
 
   it('should produce colorscheme badges', function(done) {
@@ -102,9 +106,29 @@ describe('The server', function () {
     });
   });
 
-  after('Shut down the server', function(done) {
-    server.kill();
-    server.on('exit', function() { done(); });
-  });
+  context('with svg2img error', function () {
+    var expectedError = fs.readFileSync(path.resolve(__dirname, '..', 'public', '500.html'));
 
+    var toBufferStub;
+    beforeEach(function () {
+      toBufferStub = sinon.stub(svg2img._imageMagick.prototype, 'toBuffer')
+        .callsArgWith(1, Error('whoops'));
+    });
+    afterEach(function () { toBufferStub.restore(); });
+
+    it('should emit the 500 message', function (done) {
+      http.get(url + ':some_new-badge-green.png',
+        function(res) {
+          // This emits status code 200, though 500 would be preferable.
+          assert.equal(res.statusCode, 200);
+
+          var buffer = '';
+          res.on('data', function(chunk) { buffer += ''+chunk; });
+          res.on('end', function() {
+            assert.equal(buffer, expectedError);
+            done();
+          });
+      });
+    });
+  });
 });
