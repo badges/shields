@@ -5101,7 +5101,7 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Docker Hub automated integration, latest status (passed, pending, failed)
+// Docker Hub automated integration, most recent build's status (passed, pending, failed)
 camp.route(/^\/docker\/build\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, jrottenberg
@@ -5126,11 +5126,11 @@ cache(function(data, match, sendBadge, request) {
         return;
       }
       var data = JSON.parse(buffer);
-      var latest_status = data.results[0].status;
-      if (latest_status == 10) {
+      var most_recent_status = data.results[0].status;
+      if (most_recent_status == 10) {
         badgeData.text[1] = 'passing';
         badgeData.colorscheme = 'brightgreen';
-      } else if (latest_status < 0) {
+      } else if (most_recent_status < 0) {
         badgeData.text[1] = 'failing';
         badgeData.colorscheme = 'red';
       } else {
