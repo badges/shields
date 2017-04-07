@@ -5101,6 +5101,50 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Docker Hub automated integration, most recent build's status (passed, pending, failed)
+camp.route(/^\/docker\/build\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];  // eg, jrottenberg
+  var repo = match[2];  // eg, ffmpeg
+  var format = match[3];
+  if (user === '_') {
+    user = 'library';
+  }
+  var path = user + '/' + repo;
+  var url = 'https://registry.hub.docker.com/v2/repositories/' + path + '/buildhistory';
+  var badgeData = getBadgeData('docker build', data);
+  request(url, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      if (res.statusCode == 404) {
+        badgeData.text[1] = 'repo not found';
+        sendBadge(format, badgeData);
+        return;
+      }
+      var data = JSON.parse(buffer);
+      var most_recent_status = data.results[0].status;
+      if (most_recent_status == 10) {
+        badgeData.text[1] = 'passing';
+        badgeData.colorscheme = 'brightgreen';
+      } else if (most_recent_status < 0) {
+        badgeData.text[1] = 'failing';
+        badgeData.colorscheme = 'red';
+      } else {
+        badgeData.text[1] = 'building';
+        badgeData.colorB = '#008bb8';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Twitter integration.
 camp.route(/^\/twitter\/url\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
