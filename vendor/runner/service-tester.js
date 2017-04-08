@@ -17,7 +17,8 @@ class ServiceTester {
   // Create a new spec. The hard work is delegated to IcedFrisby.
   // https://github.com/MarkHerhold/IcedFrisby/#show-me-some-code
   //
-  // Note: Do not invoke toss().
+  // Note: The caller should not invoke toss() on the Frisby chain. Just call
+  // toss() on the _tester_, which tosses all tests.
   //
   // @param msg The name of the test
   create (msg) {

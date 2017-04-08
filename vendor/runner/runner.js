@@ -6,9 +6,10 @@ const minimist = require('minimist');
 const uniq = require('lodash.uniq');
 
 let server;
-before('Start running the server', function () {
+before('Start the server', function () {
   this.timeout(5000);
-  // This is a bit gross, but it works.
+  // Modifying argv is a bit dirty, but it works, and avoids making bigger
+  // changes to server.js.
   process.argv = ['', '', config.port, 'localhost'];
   server = require('../../server');
 });
@@ -18,14 +19,17 @@ after('Shut down the server', function (done) {
 
 const testers = glob.sync(`${__dirname}/../*.js`).map(specPath => {
   const tester = require(specPath);
+
+  // The server's request cache causes side effects between tests.
   tester.beforeEach = () => { server.requestCache.clear(); };
+
   return tester;
 });
 
 const testerWithName = name =>
   testers.find(t => t.name.toLowerCase() === name.toLowerCase());
 
-// mocha runner.js --only=vendor1,vendor2,vendor3
+// e.g. mocha runner.js --only=vendor1,vendor2,vendor3
 const vendorOption = minimist(process.argv.slice(2)).only;
 if (vendorOption !== undefined) {
   const vendors = uniq(vendorOption.split(','));

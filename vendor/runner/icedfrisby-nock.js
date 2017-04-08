@@ -40,8 +40,10 @@ function IcedFrisbyNock (superClassIsh) {
   // `nock`, and returns an interceptor. The function is invoked before the
   // test, and the returned interceptor is cleaned up afterward.
   //
-  // By default, disables remote network connections (other than localhost).
-  // To override this, chain on a call to `.enableNetConnect()`.
+  // In the future: By default, disables remote network connections (other
+  // than localhost). To override this, chain on a call to `.enableNetConnect()`.
+  // This is currently disabled because there isn't a reliable way to clean it
+  // up.
   //
   // You can only call this once per test.
   //
@@ -50,7 +52,7 @@ function IcedFrisbyNock (superClassIsh) {
     let interceptor;
 
     // Work around a limitation in IcedFrisby that prevents reliably
-    // clean up in `after` callbacks.
+    // cleaning up in `after` callbacks.
     this.before(function () {
       nock.cleanAll();
     });
