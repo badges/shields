@@ -298,6 +298,11 @@ function cache(f) {
   };
 }
 
+module.exports = {
+  camp,
+  requestCache
+};
+
 camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
     var format = match[1];
     var badgeData = getBadgeData("404", query);
