@@ -8,6 +8,7 @@ class ServiceTester {
     Object.assign(this, { name, pathPrefix });
 
     this.specs = [];
+    this.only = false;
   }
 
   // Stub which can be overridden on instances.
@@ -29,11 +30,18 @@ class ServiceTester {
     return spec;
   }
 
+  // Run only this tester.
+  // See https://mochajs.org/#exclusive-tests
+  only () {
+    this.only = true;
+  }
+
   // Queue up the tests.
   toss () {
     const specs = this.specs;
 
-    describe(this.name, function () {
+    const fn = this.only ? describe.only : describe;
+    fn(this.name, function () {
       specs.forEach(spec => { spec.toss(); });
     });
   }
