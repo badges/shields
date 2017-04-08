@@ -38,6 +38,7 @@
   "scripts": {
     "lint": "eslint '**/*.js'",
     "test:js": "mocha 'test/**/*.spec.js'",
+    "test:vendor": "mocha vendor/runner/runner.js",
     "test": "npm run lint && npm run test:js"
   },
   "bin": {
@@ -56,6 +57,10 @@
   ],
   "devDependencies": {
     "eslint": "^3.18.0",
-    "mocha": "^3.2.0"
+    "glob": "^7.1.1",
+    "icedfrisby": "git+https://github.com/paulmelnikow/IcedFrisby.git#80e13f78a68fd0e7ea853a4439a4bba14533a7cb",
+    "mocha": "^3.2.0",
+    "nock": "^9.0.11",
+    "sinon": "^2.1.0"
   }
 }
