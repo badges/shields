@@ -14,6 +14,11 @@ const nock = require('nock');
 //   .enableNetConnect()
 //   .expectJSON(...)
 //
+// Note: This is designed to be shipped as an independent npm module. There
+// is an issue open to support plugins, which will allow for a cleaner
+// implementation.
+// https://github.com/MarkHerhold/IcedFrisby/issues/27
+//
 function IcedFrisbyNock (superClassIsh) {
   let superClass, statics;
   if ((typeof superClassIsh) !== 'function') {
