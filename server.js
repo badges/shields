@@ -1833,7 +1833,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var version = data.results[0].version
+      var version = data.results[0].version;
       var vdata = versionColor(version);
       badgeData.text[1] = 'v' + version;
       badgeData.colorscheme = vdata.color;
