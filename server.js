@@ -1818,6 +1818,33 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// iTunes App Store version
+camp.route(/^\/itunes\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var bundleId = match[1];  // eg, `324684580`
+  var format = match[2];
+  var apiUrl = 'https://itunes.apple.com/lookup?id=' + bundleId;
+  var badgeData = getBadgeData('itunes app store', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var version = data.results[0].version;
+      var vdata = versionColor(version);
+      badgeData.text[1] = 'v' + version;
+      badgeData.colorscheme = vdata.color;
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Gem version integration.
 camp.route(/^\/gem\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
