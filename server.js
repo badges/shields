@@ -1685,13 +1685,13 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Apple Store version
-camp.route(/^\/applestore\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
+// iTunes App Store version
+camp.route(/^\/itunes\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var bundleId = match[1];  // eg, `324684580`
   var format = match[2];
   var apiUrl = 'https://itunes.apple.com/lookup?id=' + bundleId;
-  var badgeData = getBadgeData('AppleStore', data);
+  var badgeData = getBadgeData('itunes app store', data);
   request(apiUrl, function(err, res, buffer) {
     if (err !== null) {
       badgeData.text[1] = 'inaccessible';
