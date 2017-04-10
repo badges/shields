@@ -1807,7 +1807,6 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var vdata = versionColor(data.version);
       badgeData.text[1] = "[" + clojar + " \"" + data.version + "\"]";
       badgeData.colorscheme = 'brightgreen';
       sendBadge(format, badgeData);
@@ -2699,10 +2698,10 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[0] = data.label || nameMatch;
       badgeData.text[1] = statusMatch;
       if (statusMatch === 'up-to-date') {
-      	badgeData.text[1] = 'up to date';
+        badgeData.text[1] = 'up to date';
         badgeData.colorscheme = 'brightgreen';
       } else if (statusMatch === 'out-of-date') {
-      	badgeData.text[1] = 'out of date';
+        badgeData.text[1] = 'out of date';
         badgeData.colorscheme = 'yellow';
       } else if (statusMatch === 'update!') {
         badgeData.colorscheme = 'red';
@@ -4155,7 +4154,6 @@ cache(function(data, match, sendBadge, request) {
   var type = match[1];      // eg role
   var roleId = match[2];    // eg 3078
   var format = match[3];
-  var uri = 'https://galaxy.ansible.com/api/v1/roles/' + roleId + '/';
   var options = {
     json: true,
     uri: 'https://galaxy.ansible.com/api/v1/roles/' + roleId + '/',
@@ -4517,7 +4515,6 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var pluginVersion = data.version;
       if (data.tested) {
         var testedVersion = data.tested.replace(/[^0-9.]/g,'');
         badgeData.text[1] = testedVersion + ' tested';
@@ -4793,6 +4790,9 @@ cache(function(data, match, sendBadge, request) {
       case 'scheduled':
       case 'not_run':
         badgeData.colorscheme = 'yellow';
+        badgeData.text[1] = status.replace('_', ' ');
+        break;
+
       default:
         badgeData.text[1] = status.replace('_', ' ');
       }
@@ -5347,7 +5347,7 @@ cache(function(data, match, sendBadge, request) {
 // Gitter room integration.
 camp.route(/^\/gitter\/room\/([^\/]+\/[^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];
+  // match[1] is the repo, which is not used.
   var format = match[2];
 
   var badgeData = getBadgeData('chat', data);
@@ -5903,10 +5903,10 @@ cache(function(data, match, sendBadge, request) {
 // Swagger Validator integration.
 camp.route(/^\/swagger\/(valid)\/(2\.0)\/(https?)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var type = match[1];        // e.g. `valid` for validate
-  var specVer = match[2];     // e.g. `2.0` for OpenAPI 2.0
-  var scheme = match[3];      // e.g. `https`
-  var swaggerUrl = match[4];  // e.g. `api.example.com/swagger.yaml`
+  // match[1] is not used                 // e.g. `valid` for validate
+  // match[2] is reserved for future use  // e.g. `2.0` for OpenAPI 2.0
+  var scheme = match[3];                  // e.g. `https`
+  var swaggerUrl = match[4];              // e.g. `api.example.com/swagger.yaml`
   var format = match[5];
 
   var badgeData = getBadgeData('swagger', data);
@@ -6488,50 +6488,10 @@ function phpLatestVersion(versions) {
 function phpStableVersion(version) {
   var rawVersion = omitv(version);
   try {
-    var versionData = phpNumberedVersionData(version);
+    var versionData = phpNumberedVersionData(rawVersion);
   } catch(e) {
     return false;
   }
   // normal or patch
   return (versionData.modifier === 3) || (versionData.modifier === 4);
-}
-
-// This searches the serverSecrets for a twitter consumer key
-// and secret, and exchanges them for a bearer token to use for all requests.
-function fetchTwitterToken() {
-  if (serverSecrets.twitter_consumer_key && serverSecrets.twitter_consumer_secret){
-    // fetch a bearer token good for this app session
-    // construct this bearer request with a base64 encoding of key:secret
-    // docs for this are here: https://dev.twitter.com/oauth/application-only
-    var twitter_bearer_credentials = escape(serverSecrets.twitter_consumer_key) + ':' + escape(serverSecrets.twitter_consumer_secret);
-    var options = {
-      url: 'https://api.twitter.com/oauth2/token',
-      headers: {
-        // is this the best way to base 64 encode a string?
-        Authorization: 'Basic ' +
-          Buffer.from(twitter_bearer_credentials).toString('base64'),
-        'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
-      },
-      form: 'grant_type=client_credentials',
-      method: 'POST'
-    };
-    console.log('Fetching twitter bearer token...');
-    request(options,function(err,res,buffer){
-      if (err) {
-        console.error('Error fetching twitter bearer token, error: ', err);
-        return;
-      }
-      try {
-        var data = JSON.parse(buffer);
-        if (data.token_type === 'bearer') {
-          serverSecrets.twitter_bearer_token = data.access_token;
-          console.log('Fetched twitter bearer token');
-          return;
-        }
-        console.error('Error fetching twitter bearer token, data: %j', data);
-      } catch(e) {
-        console.error('Error fetching twitter bearer token, buffer: %s, ', buffer, e);
-      }
-    });
-  }
 }

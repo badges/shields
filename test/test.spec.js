@@ -1,7 +1,6 @@
 var assert = require('assert');
 var http = require('http');
 var cproc = require('child_process');
-var fs = require('fs');
 
 // Test parameters
 var port = '1111';
