@@ -59,9 +59,10 @@
     "eslint": "^3.18.0",
     "glob": "^7.1.1",
     "icedfrisby": "git+https://github.com/paulmelnikow/IcedFrisby.git#80e13f78a68fd0e7ea853a4439a4bba14533a7cb",
+    "icedfrisby-nock": "^0.1.0",
     "lodash.uniq": "^4.5.0",
     "mocha": "^3.2.0",
-    "nock": "^9.0.11",
+    "nock": "^9.0.13",
     "sinon": "^2.1.0"
   }
 }

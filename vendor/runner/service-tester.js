@@ -1,6 +1,6 @@
 'use strict';
 
-const frisby = require('./icedfrisby-nock')(require('icedfrisby'));
+const frisby = require('icedfrisby-nock')(require('icedfrisby'));
 const config = require('./config');
 
 class ServiceTester {
