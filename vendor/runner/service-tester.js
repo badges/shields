@@ -5,10 +5,12 @@ const config = require('./config');
 
 class ServiceTester {
   constructor (name, pathPrefix) {
-    Object.assign(this, { name, pathPrefix });
-
-    this.specs = [];
-    this.only = false;
+    Object.assign(this, {
+      name,
+      pathPrefix,
+      specs: [],
+      _only: false
+    });
   }
 
   // Stub which can be overridden on instances.
@@ -34,14 +36,14 @@ class ServiceTester {
   // Run only this tester.
   // See https://mochajs.org/#exclusive-tests
   only () {
-    this.only = true;
+    this._only = true;
   }
 
   // Queue up the tests.
   toss () {
     const specs = this.specs;
 
-    const fn = this.only ? describe.only : describe;
+    const fn = this._only ? describe.only : describe;
     fn(this.name, function () {
       specs.forEach(spec => { spec.toss(); });
     });

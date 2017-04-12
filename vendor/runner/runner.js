@@ -26,13 +26,12 @@ const testers = glob.sync(`${__dirname}/../*.js`).map(specPath => {
   return tester;
 });
 
-const testerWithName = name =>
-  testers.find(t => t.name.toLowerCase() === name.toLowerCase());
+const testerWithName = name => testers.find(t => t.name.toLowerCase() === name);
 
 // e.g. mocha runner.js --only=vendor1,vendor2,vendor3
 const vendorOption = minimist(process.argv.slice(2)).only;
 if (vendorOption !== undefined) {
-  const vendors = uniq(vendorOption.split(','));
+  const vendors = uniq(vendorOption.split(',')).map(v => v.toLowerCase());
 
   const missingVendors = [];
   vendors.forEach(vendor => {
@@ -46,8 +45,10 @@ if (vendorOption !== undefined) {
     process.exit(-1);
   }
 
+  // Make a second pass through the testers to make sure we've gotten them
+  // all.
   testers.forEach(tester => {
-    if (vendors.includes(tester.name)) {
+    if (vendors.includes(tester.name.toLowerCase())) {
       tester.only();
     }
   });
