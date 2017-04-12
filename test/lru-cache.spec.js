@@ -137,4 +137,22 @@ describe('The LRU cache', function () {
     assert.equal(slot2.newer, null);
   });
 
+  it('should clear', function () {
+    // Set up.
+    const cache = new LRU(2);
+    cache.set('key1', 'value1');
+    cache.set('key2', 'value2');
+
+    // Confidence check.
+    assert.equal(cache.get('key1'), 'value1');
+    assert.equal(cache.get('key2'), 'value2');
+
+    // Run.
+    cache.clear();
+
+    // Test.
+    assert.equal(cache.get('key1'), null);
+    assert.equal(cache.get('key2'), null);
+    assert.equal(cache.cache.size, 0);
+  });
 });

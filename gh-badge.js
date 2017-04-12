@@ -62,7 +62,14 @@ if (color[0] === ':') {
 
 badge(badgeData, function produceOutput(svg) {
   if (/png|jpg|gif/.test(format)) {
-    svg2img(svg, format, process.stdout);
+    svg2img(svg, format, function (err, data) {
+      if (err) {
+        console.error(err);
+        process.exit(1);
+      } else {
+        process.stdout.write(data);
+      }
+    });
   } else {
     console.log(svg);
   }
