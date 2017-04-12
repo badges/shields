@@ -28,14 +28,7 @@ var loadLogos = require('./lib/load-logos.js');
 var githubAuth = require('./lib/github-auth.js');
 var querystring = require('querystring');
 var xml2js = require('xml2js');
-var serverSecrets;
-try {
-  // Everything that cannot be checked in but is useful server-side
-  // is stored in this JSON data.
-  serverSecrets = require('./private/secret.json');
-} catch(e) {
-  console.error('No secret data (private/secret.json, see server.js):', e);
-}
+var serverSecrets = require('./lib/server-secrets');
 if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);
 }
@@ -297,6 +290,11 @@ function cache(wrappedFn) {
     });
   };
 }
+
+module.exports = {
+  camp,
+  requestCache
+};
 
 camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
     var format = match[1];
@@ -1629,12 +1627,23 @@ cache(function (data, match, sendBadge, request) {
 }));
 
 // npm version integration.
-camp.route(/^\/npm\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/npm\/v\/(@[^\/]*)?\/?([^\/]*)\/?([^\/]*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var repo = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
-  var format = match[2];
-  var apiUrl = 'https://registry.npmjs.org/-/package/' + repo + '/dist-tags';
-  var badgeData = getBadgeData('npm', data);
+  var scope = match[1];   // "@user"
+  var repo = match[2];    // "express"
+  var tag = match[3];     // "next"
+  var format = match[4];  // "svg"
+  var pkg = encodeURIComponent(scope
+    ? scope + '/' + repo
+    : repo);
+  var name = 'npm';
+  if (tag) {
+    name += '@' + tag;
+  } else {
+    tag = 'latest';
+  }
+  var apiUrl = 'https://registry.npmjs.org/-/package/' + pkg + '/dist-tags';
+  var badgeData = getBadgeData(name, data);
   // Using the Accept header because of this bug:
   // <https://github.com/npm/npmjs.org/issues/163>
   request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
@@ -1645,7 +1654,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var version = data.latest;
+      var version = data[tag];
       var vdata = versionColor(version);
       badgeData.text[1] = vdata.version;
       badgeData.colorscheme = vdata.color;
@@ -1796,9 +1805,35 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var vdata = versionColor(data.version);
       badgeData.text[1] = "[" + clojar + " \"" + data.version + "\"]";
-      badgeData.colorscheme = 'brightgreen';
+      badgeData.colorscheme = versionColor(data.version).color;
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// iTunes App Store version
+camp.route(/^\/itunes\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var bundleId = match[1];  // eg, `324684580`
+  var format = match[2];
+  var apiUrl = 'https://itunes.apple.com/lookup?id=' + bundleId;
+  var badgeData = getBadgeData('itunes app store', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var version = data.results[0].version;
+      var vdata = versionColor(version);
+      badgeData.text[1] = 'v' + version;
+      badgeData.colorscheme = vdata.color;
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -2661,10 +2696,10 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[0] = data.label || nameMatch;
       badgeData.text[1] = statusMatch;
       if (statusMatch === 'up-to-date') {
-      	badgeData.text[1] = 'up to date';
+        badgeData.text[1] = 'up to date';
         badgeData.colorscheme = 'brightgreen';
       } else if (statusMatch === 'out-of-date') {
-      	badgeData.text[1] = 'out of date';
+        badgeData.text[1] = 'out of date';
         badgeData.colorscheme = 'yellow';
       } else if (statusMatch === 'update!') {
         badgeData.colorscheme = 'red';
@@ -4117,7 +4152,6 @@ cache(function(data, match, sendBadge, request) {
   var type = match[1];      // eg role
   var roleId = match[2];    // eg 3078
   var format = match[3];
-  var uri = 'https://galaxy.ansible.com/api/v1/roles/' + roleId + '/';
   var options = {
     json: true,
     uri: 'https://galaxy.ansible.com/api/v1/roles/' + roleId + '/',
@@ -4479,7 +4513,6 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var pluginVersion = data.version;
       if (data.tested) {
         var testedVersion = data.tested.replace(/[^0-9.]/g,'');
         badgeData.text[1] = testedVersion + ' tested';
@@ -4755,6 +4788,9 @@ cache(function(data, match, sendBadge, request) {
       case 'scheduled':
       case 'not_run':
         badgeData.colorscheme = 'yellow';
+        badgeData.text[1] = status.replace('_', ' ');
+        break;
+
       default:
         badgeData.text[1] = status.replace('_', ' ');
       }
@@ -4800,6 +4836,55 @@ cache(function(data, match, sendBadge, request) {
     }
   });
 }));
+
+// CRAN/METACRAN integration.
+camp.route(/^\/cran\/([vl])\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var info = match[1]; // either `v` or `l`
+  var pkg = match[2]; // eg, devtools
+  var format = match[3];
+  var url = 'http://crandb.r-pkg.org/' + pkg;
+  var badgeData = getBadgeData('cran', data);
+  request(url, function (err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    if (res.statusCode === 404) {
+      badgeData.text[1] = 'not found';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+
+      if (info === 'v') {
+        var version = data.Version;
+        var vdata = versionColor(version);
+        badgeData.text[1] = vdata.version;
+        badgeData.colorscheme = vdata.color;
+        sendBadge(format, badgeData);
+      } else if (info === 'l') {
+        badgeData.text[0] = 'license';
+        var license = data.License;
+        if (license) {
+          badgeData.text[1] = license;
+          badgeData.colorscheme = 'blue';
+        } else {
+          badgeData.text[1] = 'unknown';
+        }
+        sendBadge(format, badgeData);
+      } else {
+        throw Error('Unreachable due to regex');
+      }
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 
 // CTAN integration.
 camp.route(/^\/ctan\/([^\/])\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
@@ -5041,6 +5126,50 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Docker Hub automated integration, most recent build's status (passed, pending, failed)
+camp.route(/^\/docker\/build\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];  // eg, jrottenberg
+  var repo = match[2];  // eg, ffmpeg
+  var format = match[3];
+  if (user === '_') {
+    user = 'library';
+  }
+  var path = user + '/' + repo;
+  var url = 'https://registry.hub.docker.com/v2/repositories/' + path + '/buildhistory';
+  var badgeData = getBadgeData('docker build', data);
+  request(url, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      if (res.statusCode == 404) {
+        badgeData.text[1] = 'repo not found';
+        sendBadge(format, badgeData);
+        return;
+      }
+      var data = JSON.parse(buffer);
+      var most_recent_status = data.results[0].status;
+      if (most_recent_status == 10) {
+        badgeData.text[1] = 'passing';
+        badgeData.colorscheme = 'brightgreen';
+      } else if (most_recent_status < 0) {
+        badgeData.text[1] = 'failing';
+        badgeData.colorscheme = 'red';
+      } else {
+        badgeData.text[1] = 'building';
+        badgeData.colorB = '#008bb8';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Twitter integration.
 camp.route(/^\/twitter\/url\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -5216,7 +5345,7 @@ cache(function(data, match, sendBadge, request) {
 // Gitter room integration.
 camp.route(/^\/gitter\/room\/([^\/]+\/[^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];
+  // match[1] is the repo, which is not used.
   var format = match[2];
 
   var badgeData = getBadgeData('chat', data);
@@ -5772,10 +5901,10 @@ cache(function(data, match, sendBadge, request) {
 // Swagger Validator integration.
 camp.route(/^\/swagger\/(valid)\/(2\.0)\/(https?)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var type = match[1];        // e.g. `valid` for validate
-  var specVer = match[2];     // e.g. `2.0` for OpenAPI 2.0
-  var scheme = match[3];      // e.g. `https`
-  var swaggerUrl = match[4];  // e.g. `api.example.com/swagger.yaml`
+  // match[1] is not used                 // e.g. `valid` for validate
+  // match[2] is reserved for future use  // e.g. `2.0` for OpenAPI 2.0
+  var scheme = match[3];                  // e.g. `https`
+  var swaggerUrl = match[4];              // e.g. `api.example.com/swagger.yaml`
   var format = match[5];
 
   var badgeData = getBadgeData('swagger', data);
@@ -5996,7 +6125,15 @@ function sendSVG(res, askres, end) {
 
 function sendOther(format, res, askres, end) {
   askres.setHeader('Content-Type', 'image/' + format);
-  svg2img(res, format, askres);
+  svg2img(res, format, function (err, data) {
+    if (err) {
+      // This emits status code 200, though 500 would be preferable.
+      console.error('svg2img error', err);
+      end(null, {template: '500.html'});
+    } else {
+      end(null, {template: streamFromString(data)});
+    }
+  });
 }
 
 function sendJSON(res, askres, end) {
@@ -6358,51 +6495,10 @@ function phpLatestVersion(versions) {
 function phpStableVersion(version) {
   var rawVersion = omitv(version);
   try {
-    var versionData = phpNumberedVersionData(version);
+    var versionData = phpNumberedVersionData(rawVersion);
   } catch(e) {
     return false;
   }
   // normal or patch
   return (versionData.modifier === 3) || (versionData.modifier === 4);
-}
-
-// This searches the serverSecrets for a twitter consumer key
-// and secret, and exchanges them for a bearer token to use for all requests.
-function fetchTwitterToken() {
-  var request = require('request');
-  if (serverSecrets.twitter_consumer_key && serverSecrets.twitter_consumer_secret){
-    // fetch a bearer token good for this app session
-    // construct this bearer request with a base64 encoding of key:secret
-    // docs for this are here: https://dev.twitter.com/oauth/application-only
-    var twitter_bearer_credentials = escape(serverSecrets.twitter_consumer_key) + ':' + escape(serverSecrets.twitter_consumer_secret);
-    var options = {
-      url: 'https://api.twitter.com/oauth2/token',
-      headers: {
-        // is this the best way to base 64 encode a string?
-        Authorization: 'Basic ' +
-          Buffer.from(twitter_bearer_credentials).toString('base64'),
-        'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
-      },
-      form: 'grant_type=client_credentials',
-      method: 'POST'
-    };
-    console.log('Fetching twitter bearer token...');
-    request(options,function(err,res,buffer){
-      if (err) {
-        console.error('Error fetching twitter bearer token, error: ', err);
-        return;
-      }
-      try {
-        var data = JSON.parse(buffer);
-        if (data.token_type === 'bearer') {
-          serverSecrets.twitter_bearer_token = data.access_token;
-          console.log('Fetched twitter bearer token');
-          return;
-        }
-        console.error('Error fetching twitter bearer token, data: %j', data);
-      } catch(e) {
-        console.error('Error fetching twitter bearer token, buffer: %s, ', buffer, e);
-      }
-    });
-  }
 }
