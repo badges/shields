@@ -4917,8 +4917,9 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = vdata.color;
         sendBadge(format, badgeData);
       } else if (info === 'l') {
+        badgeData.text[0] = 'license';
         var license = data.license;
-        if (license) {
+        if (Array.isArray(license) && license.length > 0) {
           // API returns licenses inconsistently ordered, so fix the order.
           badgeData.text[1] = license.sort().join(',');
           badgeData.colorscheme = 'blue';
