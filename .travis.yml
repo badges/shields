@@ -2,6 +2,10 @@ language: node_js
 node_js:
   - 6
 
+script:
+  - npm run lint
+  - npm run test:js
+
 branches:
   only:
     - master
