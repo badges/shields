@@ -21,11 +21,10 @@ t.create('unknown package')
   .get('/l/some-bogus-package.json')
   .expectJSON({ name: 'cran', value: 'not found' });
 
-// Needs https://github.com/badges/shields/pull/922
-// tester.create('unknown info')
-//   .get('/z/devtools.json')
-//   .expectStatus(404)
-//   .expectJSON({ name: 'badge', value: 'not found' });
+t.create('unknown info')
+  .get('/z/devtools.json')
+  .expectStatus(404)
+  .expectJSON({ name: '404', value: 'badge not found' });
 
 t.create('malformed response')
   .get('/v/foobar.json')
