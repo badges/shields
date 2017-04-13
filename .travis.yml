@@ -7,8 +7,8 @@ script:
   - npm run test:js
 
 branches:
-  only:
-    - master
+  except:
+    - gh-pages
 
 notifications:
   email:
