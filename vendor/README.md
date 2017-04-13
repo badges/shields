@@ -26,7 +26,7 @@ and ideally, all code branches:
 Tutorial
 --------
 
-This tutorial will show tests for the Travis badge:
+In this tutorial, we'll write tests for the Travis badge:
 
 ```js
 camp.route(/^\/travis(-ci)?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
@@ -264,15 +264,6 @@ there's already an issue open for the badge you're working on, you can post a
 comment there instead.
 
 
-Further reading
----------------
-
-- [IcedFrisby API][]
-- [Joi API][]
-- [icedfrisby-nock][]
-- [Nock API](https://github.com/node-nock/nock#use)
-
-
 Complete example
 ----------------
 
@@ -317,3 +308,12 @@ t.create('connection error')
     .replyWithError({ code: 'ECONNRESET' }))
   .expectJSON({ name: 'build', value: 'invalid' });
 ```
+
+
+Further reading
+---------------
+
+- [IcedFrisby API][]
+- [Joi API][]
+- [icedfrisby-nock][]
+- [Nock API](https://github.com/node-nock/nock#use)
