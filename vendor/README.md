@@ -271,3 +271,49 @@ Further reading
 - [Joi API][]
 - [icedfrisby-nock][]
 - [Nock API](https://github.com/node-nock/nock#use)
+
+
+Complete example
+----------------
+
+```js
+'use strict';
+
+const Joi = require('joi');
+const ServiceTester = require('./runner/service-tester');
+
+const t = new ServiceTester('Travis', '/travis');
+module.exports = t;
+
+t.create('build status on default branch')
+  .get('/rust-lang/rust.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('build'),
+    value: Joi.equal('failing', 'passing', 'unknown')
+  }));
+
+t.create('build status on named branch')
+  .get('/rust-lang/rust/stable.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('build'),
+    value: Joi.equal('failing', 'passing', 'unknown')
+  }));
+
+t.create('unknown repo')
+  .get('/this-repo/does-not-exist.json')
+  .expectJSON({ name: 'build', value: 'unknown' });
+
+t.create('missing content-disposition header')
+  .get('/foo/bar.json')
+  .intercept(nock => nock('https://api.travis-ci.org')
+    .head('/foo/bar.svg')
+    .reply(200))
+  .expectJSON({ name: 'build', value: 'invalid' });
+
+t.create('connection error')
+  .get('/foo/bar.json')
+  .intercept(nock => nock('https://api.travis-ci.org')
+    .head('/foo/bar.svg')
+    .replyWithError({ code: 'ECONNRESET' }))
+  .expectJSON({ name: 'build', value: 'invalid' });
+```
