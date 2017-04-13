@@ -36,6 +36,9 @@
     "xml2js": "~0.4.16"
   },
   "scripts": {
+    "coverage:js": "istanbul cover _mocha 'test/**/*.spec.js' --dir coverage/js",
+    "coverage:vendor": "istanbul cover _mocha vendor/runner/runner.js --dir coverage/vendor",
+    "coverage": "npm run coverage:js && npm run coverage:vendor && istanbul report",
     "lint": "eslint '**/*.js'",
     "test:js": "mocha 'test/**/*.spec.js'",
     "test:vendor": "mocha vendor/runner/runner.js",
@@ -62,6 +65,7 @@
     "icedfrisby-nock": "^0.1.0",
     "is-png": "^1.0.0",
     "is-svg": "^2.1.0",
+    "istanbul": "^0.4.5",
     "lodash.uniq": "^4.5.0",
     "mocha": "^3.2.0",
     "nock": "^9.0.13",
