@@ -13,7 +13,8 @@ should be included. They serve three purposes:
 3. They speed up future contributors when they are debugging or improving a
    badge.
 
-Contributors should take care to cover all parts of a badge's functionaliy:
+Contributors should take care to cover each part of a badge's functionality,
+and ideally, all code branches:
 
 - Typical case
 - Customized cases
@@ -21,15 +22,11 @@ Contributors should take care to cover all parts of a badge's functionaliy:
 - Not found errors
 - Parse errors
 
-Tests should cover all the code branches within in a badge.
-
 
 Tutorial
 --------
 
 This tutorial will show tests for the Travis badge:
-
-[![](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 
 ```js
 camp.route(/^\/travis(-ci)?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
@@ -74,7 +71,8 @@ cache(function(data, match, sendBadge, request) {
 }));
 ```
 
-If you haven't already, install the project dependencies:
+Before getting started, install the project dependencies if you haven't
+already:
 
 ```
 npm i
@@ -100,13 +98,11 @@ which saves copying and pasting.
 
 Next we'll add a test for the typical case.
 
-[/travis/rust-lang/rust.svg](https://img.shields.io/travis/rust-lang/rust.svg)
-
 [![](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 
 The JSON format for this badge is `{ name: 'build', value: 'passing' }`.
 
-Here's the test:
+Here's what our first test looks like:
 
 ```js
 t.create('build status on default branch')
@@ -117,34 +113,39 @@ t.create('build status on default branch')
   }));
 ```
 
-The `create()` method is used to give the tester a new test. The other methods
-come from [IcedFrisby][], on which the tester is based. Here's a
-[longer example][] and the complete [API guide][].
+The `create()` method gives the tester a new test. The chained-on calls come
+from the API testing framework [IcedFrisby][]. Here's a [longer example][] and
+the complete [API guide][IcedFrisby API].
+
+`expectJSONTypes()` is an IcedFrisby method which accepts a [Joi][] schema.
+Joi is a validation library that is build into IcedFrisby which you can use to
+match based on a set of allowed strings, regexes, or specific values. You can
+refer to their [API reference][Joi API].
 
 Notice we don't have to specify `/travis` again, or even `localhost`. The test
 runner handles that for us.
 
-`expectJSONTypes()` is an IcedFrisby method which accepts a [Joi][] schema. Joi
-is a validation library that is build into IcedFrisby which you can use to match
-based on a set of allowed strings, regexes, or specific values.
-
-Typically when defining an IcedFrisby test, you would invoke the `toss()`
-method at the end, to register the test. However, this is not necessary here.
-The test runner handles that as well.
+When defining an IcedFrisby test, typically you would invoke the `toss()`
+method, to register the test. However, this is not necessary when using
+ServiceTester.
 
 [IcedFrisby]: https://github.com/MarkHerhold/IcedFrisby
 [longer example]: https://github.com/MarkHerhold/IcedFrisby/#show-me-some-code
-[API guide]: https://github.com/MarkHerhold/IcedFrisby/blob/master/API.md
+[IcedFrisby API]: https://github.com/MarkHerhold/IcedFrisby/blob/master/API.md
+[Joi]: https://github.com/hapijs/joi
+[Joi API]: https://github.com/hapijs/joi/blob/master/API.md
 
-Run the new test:
+Run the test:
 
 ```
 npm run test:vendor -- --only=travis
 ```
 
-The `--` tells the NPM CLI to pass the remaining arguments through to the
-program being invoked. The `--only=` option tells the test runner which
-services you want to test. You can provide a comma-separated list of services.
+The `--only=` option indicates which service or services you want to test. You
+can provide a comma-separated list.
+
+The `--` tells the NPM CLI to pass the remaining arguments through to the test
+runner.
 
 Here's the output:
 
@@ -159,9 +160,9 @@ http://localhost:1111/try.html
   1 passing (1s)
 ```
 
-Looking good!
+That's looking good!
 
-Next we'll add a second test, for a branch build.
+Next we'll add a second test for a branch build.
 
 ```js
 t.create('build status on named branch')
@@ -196,18 +197,19 @@ t.create('unknown repo')
   .expectJSON({ name: 'build', value: 'unknown' });
 ```
 
-Since we know exactly what values should be returned, we can use IcedFrisby's
-terser `expectJSON()` method.
+Since in this case we know the exact badge which should be returned, we can
+use the more concise `expectJSON()` in place of `expectJSONTypes()`.
 
-Next, we want to enter the `catch` block. To do this, we need to trigger an
-exception in the `try` block. After studying the code, we realize this would
-happen on a request without a Content-Disposition header.
+Next, we want to cover the code in the `catch` block. To do this, we need to
+trigger an exception. After studying the code, we realize this could happen on
+a request without a Content-Disposition header.
 
-Since we don't have an easy way to get the server to return a real request
-like this, we will intercept the request and return a mock response. To do
-this, we use the `intercept()` method provided by the [icedfrisby-nock
-plugin][]. This method takes a setup function, which exposes the full range
-of the HTTP mocking library [Nock][].
+Since we don't have an easy way to get the server to return a real repository
+request without a Content-Disposition header, we will intercept the request
+and provide our own mock response. We use the `intercept()` method provided by
+the [icedfrisby-nock plugin][icedfrisby-nock]. It takes a setup function,
+which returns an interceptor, and exposes the full API of the HTTP mocking
+library [Nock][].
 
 ```js
 t.create('missing content-disposition header')
@@ -218,9 +220,9 @@ t.create('missing content-disposition header')
   .expectJSON({ name: 'build', value: 'invalid' });
 ```
 
-Note that all parts of a request must match for the mock to take effect,
-including the method (in this case HEAD), scheme (https), host, and path. Nock
-has no sense of humor.
+Nock is fussy. All parts of a request must match perfectly for the mock to
+take effect, including the method (in this case HEAD), scheme (https), host,
+and path.
 
 [icedfrisby-nock]: https://github.com/paulmelnikow/icedfrisby-nock#usage
 [Nock]: https://github.com/node-nock/nock
@@ -229,20 +231,19 @@ has no sense of humor.
 Code coverage
 -------------
 
-Code coverage testing is helpful for making sure you've covered all your
-bases.
+By checking code coverage, we can make sure we've covered all our bases.
 
-Generate a coverage report and open it:
+We can generate a coverage report and open it:
 
 ```
 npm run coverage:test:vendor -- -- --only=travis
 npm run coverage:report:open
 ```
 
-Note, the two sets of double dashes.
+Note the two sets of double dashes.
 
-After searching for the Travis code, we see that we've miss a big block, which
-is the error branch in the request callback. To test that, we mock a
+After searching `server.js` for the Travis code, we see that we've missed a
+big block: the error branch in the request callback. To test that, we mock a
 connection error.
 
 ```js
@@ -261,3 +262,12 @@ Getting help
 If you have questions about how to write your tests, please open an issue. If
 there's already an issue open for the badge you're working on, you can post a
 comment there instead.
+
+
+Further reading
+---------------
+
+- [IcedFrisby API][]
+- [Joi API][]
+- [icedfrisby-nock][]
+- [Nock API](https://github.com/node-nock/nock#use)
