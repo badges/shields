@@ -26,7 +26,8 @@ and ideally, all code branches:
 Tutorial
 --------
 
-In this tutorial, we'll write tests for the Travis badge:
+In this tutorial, we'll write tests for the Travis badge.
+Here, you can see the [source code][travis-example]:
 
 ```js
 camp.route(/^\/travis(-ci)?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
@@ -84,17 +85,21 @@ boilerplate:
 ```js
 'use strict';
 
-const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const Joi = require('joi');                                // 1
+const ServiceTester = require('./runner/service-tester');  // 2
 
-const t = new ServiceTester('Travis', '/travis');
-module.exports = t;
+const t = new ServiceTester('Travis', '/travis');          // 3
+module.exports = t;                                        // 4
 ```
 
-We'll add all our tests to this ServiceTester object, which gets exported from
-the module. The two arguments to the constructor are the name of the service
+1. ??
+
+We'll add all our tests to this ServiceTester object (2), which gets exported from
+the module (4). The two arguments to the constructor (3) are the name of the service
 and its URI prefix. The tester will prepend it to the URIs you provide later,
 which saves copying and pasting.
+
+?? (3) What is the name for?
 
 Next we'll add a test for the typical case.
 
@@ -317,3 +322,5 @@ Further reading
 - [Joi API][]
 - [icedfrisby-nock][]
 - [Nock API](https://github.com/node-nock/nock#use)
+
+[travis-example]: https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L431
