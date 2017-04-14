@@ -223,6 +223,24 @@ If this is fine, you can generate the website:
 
 This changes the index.html file automatically.
 
+## (4.4) Write Tests
+
+When creating a badge for a new service or changing a badge's behavior, tests
+should be included. They serve several purposes:
+
+1. They speed up future contributors when they are debugging or improving a
+   badge.
+2. If a contributors like to change your badge, chances are, they forget
+   edge cases and break your code.
+   Tests may give hints in such cases.
+3. The contributor and reviewer can easily verify the code works as
+   intended.
+4. When a badge stops working on the live server, maintainers can find out
+   right away.
+
+There is a dedicated [tutorial for tests in the vendor folder][tests-tutorial].
+Please follow it to include tests on your pull-request.
+
 ## (5) Create a Pull Request
 
 You have implemented changes in `server.js`, `try.html` and `index.html`.
@@ -256,3 +274,4 @@ These files can also be of help for creating your own badge.
 [docker-example]: https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L5014
 [travis-example]: https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L431
 [regex]: https://www.w3schools.com/jsref/jsref_obj_regexp.asp
+[tests-tutorial]: ../vendor/#readme
