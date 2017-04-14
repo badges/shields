@@ -4,7 +4,7 @@ Vendor tests
 When creating a badge for a new service or changing a badge's behavior, tests
 should be included. They serve three purposes:
 
-1. The contributor and revewer can easily verify the code works as
+1. The contributor and reviewer can easily verify the code works as
    intended.
 
 2. When a badge stops working on the live server, maintainers can find out
@@ -16,12 +16,17 @@ should be included. They serve three purposes:
 Contributors should take care to cover each part of a badge's functionality,
 and ideally, all code branches:
 
-- Typical case
-- Customized cases
-- Server errors
-- Not found errors
+- Typical case like
+  - file is present/absent
+  - build fails/succeeds
+- Customized cases like
+  - nondefault parameters like tags/branches
+- Return codes != 200
+  - server errors like 500 and higher
+  - not found errors
 - Parse errors
-
+  - invalid JSON response
+  - absent attributes
 
 Tutorial
 --------
