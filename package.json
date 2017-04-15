@@ -64,8 +64,8 @@
   "devDependencies": {
     "eslint": "^3.18.0",
     "glob": "^7.1.1",
-    "icedfrisby": "git+https://github.com/paulmelnikow/IcedFrisby.git#80e13f78a68fd0e7ea853a4439a4bba14533a7cb",
-    "icedfrisby-nock": "^0.1.0",
+    "icedfrisby": "^1.0.0",
+    "icedfrisby-nock": "^0.2.0",
     "is-png": "^1.0.0",
     "is-svg": "^2.1.0",
     "istanbul": "^0.4.5",
