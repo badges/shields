@@ -1681,6 +1681,8 @@ cache(function(data, match, sendBadge, request) {
   let apiUrl;
   if (scope === undefined) {
     // e.g. https://registry.npmjs.org/express/latest
+    // Use this endpoint as an optimization. It covers the vast majority of
+    // these badges, and the response is smaller.
     apiUrl = `https://registry.npmjs.org/${repo}/latest`;
   } else {
     // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
