@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 var path = require('path');
-var badge = require(path.join(__dirname, 'badge.js'));
-var svg2img = require(path.join(__dirname, 'svg-to-img.js'));
-var colorscheme = require(path.join(__dirname, 'colorscheme.json'));
+var badge = require(path.join(__dirname, 'lib', 'badge.js'));
+var svg2img = require(path.join(__dirname, 'lib', 'svg-to-img.js'));
+var colorscheme = require(path.join(__dirname, 'lib', 'colorscheme.json'));
 if (process.argv.length < 4) {
   console.log('Usage: badge subject status [:colorscheme] [.output] [@style]');
   console.log('Or:    badge subject status right-color [left-color] [.output] [@style]');
@@ -62,7 +62,14 @@ if (color[0] === ':') {
 
 badge(badgeData, function produceOutput(svg) {
   if (/png|jpg|gif/.test(format)) {
-    svg2img(svg, format, process.stdout);
+    svg2img(svg, format, function (err, data) {
+      if (err) {
+        console.error(err);
+        process.exit(1);
+      } else {
+        process.stdout.write(data);
+      }
+    });
   } else {
     console.log(svg);
   }
