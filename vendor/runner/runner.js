@@ -3,14 +3,19 @@
 const glob = require('glob');
 const uniq = require('lodash.uniq');
 
+/**
+ * Load a collection of ServiceTester objects and register them with Mocha.
+ */
 class Runner {
-  constructor () {
-    this.testers = null;
-  }
-
-  // Stub which can be overridden on instances.
+  /**
+   * Function to invoke before each test. This is a stub which can be
+   * overridden on instances.
+   */
   beforeEach () {}
 
+  /**
+   * Prepare the runner by loading up all the ServiceTester objects.
+   */
   prepare () {
     this.testers = glob.sync(`${__dirname}/../*.js`).map(require);
     this.testers.forEach(tester => {
@@ -22,6 +27,11 @@ class Runner {
     return this.testers.filter(t => t.name.toLowerCase() === vendor);
   }
 
+  /**
+   * Limit the test run to the specified vendors.
+   *
+   * @param vendors An array of vendor names to run
+   */
   only (vendors) {
     const normalizedVendors = uniq(vendors.map(v => v.toLowerCase()));
 
@@ -42,7 +52,10 @@ class Runner {
     }
   }
 
-  toss() {
+  /**
+   * Register the tests with Mocha.
+   */
+  toss () {
     this.testers.forEach(tester => { tester.toss(); });
   }
 }
