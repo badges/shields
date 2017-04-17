@@ -74,7 +74,7 @@ if (prOption !== undefined) {
   }
   console.info(`PR: ${repoSlug}#${pullRequest}`);
 
-  return getTitle(repoSlug, pullRequest)
+  getTitle(repoSlug, pullRequest)
     .then(title => {
       console.info(`Title: ${title}`);
       const vendors = vendorsForTitle(title);
