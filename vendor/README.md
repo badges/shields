@@ -131,8 +131,8 @@ Notice we don't have to specify `/travis` again, or even `localhost`. The test
 runner handles that for us.
 
 When defining an IcedFrisby test, typically you would invoke the `toss()`
-method, to register the test. However, this is not necessary when using
-ServiceTester.
+method, to register the test. This is not necessary, because the Shields test
+harness will call it for you.
 
 [IcedFrisby]: https://github.com/MarkHerhold/IcedFrisby
 [longer example]: https://github.com/MarkHerhold/IcedFrisby/#show-me-some-code
