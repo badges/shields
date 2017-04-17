@@ -16,17 +16,20 @@ should be included. They serve three purposes:
 Contributors should take care to cover each part of a badge's functionality,
 and ideally, all code branches:
 
-- Typical case like
-  - file is present/absent
-  - build fails/succeeds
-- Customized cases like
-  - nondefault parameters like tags/branches
-- Return codes != 200
-  - server errors like 500 and higher
-  - not found errors
-- Parse errors
-  - invalid JSON response
-  - absent attributes
+1. Typical case
+  - File is present
+  - Build fails/succeeds
+2. Expected resource not found
+  - Vendor may provide 200 error code with different response format
+  - Vendor may return a 404 or other >= 400 status code
+3. Customization
+  - Non-default parameters like tags and branches
+4. Server errors and other malformed responses
+  - Vendor may return status code 500 and higher
+  - Invalid JSON
+  - Attributes missing or have incorrect types
+  - Headers missing
+5. Connection errors
 
 Tutorial
 --------
@@ -45,12 +48,12 @@ cache(function(data, match, sendBadge, request) {
     uri: 'https://api.travis-ci.org/' + userRepo + '.svg',
   };
   if (branch != null) {
-    options.uri += '?branch=' + branch;
+    options.uri += '?branch=' + branch;                         // (3)
   }
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res) {
     if (err != null) {
-      console.error('Travis error: ' + err.stack);
+      console.error('Travis error: ' + err.stack);              // (5)
       if (res) { console.error(''+res); }
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
@@ -61,21 +64,24 @@ cache(function(data, match, sendBadge, request) {
                      .match(/filename="(.+)\.svg"/)[1];
       badgeData.text[1] = state;
       if (state === 'passing') {
-        badgeData.colorscheme = 'brightgreen';
+        badgeData.colorscheme = 'brightgreen';                  // (1)
       } else if (state === 'failing') {
-        badgeData.colorscheme = 'red';
+        badgeData.colorscheme = 'red';                          // (1)
       } else {
-        badgeData.text[1] = state;
+        badgeData.text[1] = state;                              // (1) (2) (3)
       }
       sendBadge(format, badgeData);
 
     } catch(e) {
-      badgeData.text[1] = 'invalid';
+      badgeData.text[1] = 'invalid';                            // (4)
       sendBadge(format, badgeData);
     }
   });
 }));
 ```
+
+It handles the typical cases (1), resource not found (2), customization (3),
+malformed responses (4), and connection errors (5).
 
 Before getting started, install the project dependencies if you haven't
 already:
