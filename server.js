@@ -5681,6 +5681,72 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Cauditor integration
+camp.route(/^\/cauditor\/(mi|ccn|npath|hi|i|ca|ce|dit)\/([^\/]+)\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var labels = {
+    'mi': 'maintainability',
+    'ccn': 'cyclomatic complexity',
+    'npath': 'npath complexity',
+    'hi': 'intelligent content',
+    'i': 'instability',
+    'ca': 'afferent coupling',
+    'ce': 'efferent coupling',
+    'dit': 'depth of inheritance'
+  };
+  // values for color ranges (left = green, right = red)
+  var colors = {
+    'mi': [70, 55, 45, 35],
+    'ccn': [2, 4, 7, 11],
+    'npath': [2, 25, 60, 200],
+    'hi': [2, 20, 45, 80],
+    'i': [.2, .5, .75, .8],
+    'ca': [2, 4, 7, 10],
+    'ce': [2, 7, 13, 20],
+    'dit': [2, 3, 4, 5]
+  };
+  var metric = match[1];
+  var user = match[2];
+  var repo = match[3];
+  var branch = match[4];
+  var format = match[5];
+  var badgeData = getBadgeData(labels[metric], data);
+  var url = 'https://www.cauditor.org/api/v1/' + user + '/' + repo + '/' + branch + '/HEAD';
+  request(url, function(err, res, buffer) {
+    if (err != null || res.statusCode !== 200) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    var data = JSON.parse(buffer);
+    var value = data.metrics.weighed[metric];
+    var range = colors[metric];
+
+    badgeData.text[1] = Math.round(value);
+    if (metric === 'mi') {
+      badgeData.text[1] += '%';
+    }
+
+    // calculate colors: anything in the given range is green to yellow
+    if (value >= Math.min(range[0], range[1]) && value < Math.max(range[0], range[1])) {
+      badgeData.colorscheme = 'green';
+    } else if (value >= Math.min(range[1], range[2]) && value < Math.max(range[1], range[2])) {
+      badgeData.colorscheme = 'yellowgreen';
+    } else if (value >= Math.min(range[2], range[3]) && value < Math.max(range[2], range[3])) {
+      badgeData.colorscheme = 'yellow';
+    // anything higher than (or lower, in case of 'mi') first value is green
+    } else if ((value < range[0] && range[0] < range[1]) || (value > range[0] && range[0] > range[1])) {
+      badgeData.colorscheme = 'brightgreen';
+    // anything not yet matched is bad!
+    } else {
+      badgeData.colorscheme = 'red';
+    }
+
+    sendBadge(format, badgeData);
+  });
+}));
+
 // Mozilla addons integration
 camp.route(/^\/amo\/(v|d|rating|stars|users)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
