@@ -3,7 +3,16 @@
 const frisby = require('icedfrisby-nock')(require('icedfrisby'));
 const config = require('../../test/config');
 
+/**
+ * Encapsulate a suite of tests. Create new tests using create() and register
+ * them with Mocha using toss().
+ */
 class ServiceTester {
+  /**
+   * @param name The name of the service being tested.
+   * @param pathPrefix The path prefix of the service, which is automatically
+   *   prepended to each tested URI.
+   */
   constructor (name, pathPrefix) {
     Object.assign(this, {
       name,
@@ -13,16 +22,20 @@ class ServiceTester {
     });
   }
 
-  // Stub which can be overridden on instances.
+  /**
+   * Invoked before each test. This is a stub which can be overridden on
+   * instances.
+   */
   beforeEach () {}
 
-  // Create a new spec. The hard work is delegated to IcedFrisby.
-  // https://github.com/MarkHerhold/IcedFrisby/#show-me-some-code
-  //
-  // Note: The caller should not invoke toss() on the Frisby chain. Just call
-  // toss() on the _tester_, which tosses all tests.
-  //
-  // @param msg The name of the test
+  /**
+   * Create a new test. The hard work is delegated to IcedFrisby.
+   * https://github.com/MarkHerhold/IcedFrisby/#show-me-some-code
+   *
+   * Note: The caller should not invoke toss() on the Frisby chain, as it's
+   * invoked automatically by the tester.
+   * @param msg The name of the test
+   */
   create (msg) {
     const spec = frisby.create(msg)
       .baseUri(`http://localhost:${config.port}${this.pathPrefix}`)
@@ -33,13 +46,17 @@ class ServiceTester {
     return spec;
   }
 
-  // Run only this tester.
-  // See https://mochajs.org/#exclusive-tests
+  /**
+   * Run only this tester. This can be invoked using the --only argument to
+   * the CLI, or directly on the tester.
+   */
   only () {
     this._only = true;
   }
 
-  // Queue up the tests.
+  /**
+   * Register the tests with Mocha.
+   */
   toss () {
     const specs = this.specs;
 

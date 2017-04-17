@@ -63,10 +63,6 @@ runner.beforeEach = () => { serverHelpers.reset(server); };
 const prOption = minimist(process.argv.slice(3)).pr;
 const vendorOption = minimist(process.argv.slice(3)).only;
 
-if (vendorOption !== undefined) {
-  runner.only(vendorOption);
-}
-
 if (prOption !== undefined) {
   const repoSlug = process.env.TRAVIS_PULL_REQUEST_SLUG;
   const pullRequest = process.env.TRAVIS_PULL_REQUEST;
@@ -93,6 +89,10 @@ if (prOption !== undefined) {
       process.exit(1);
     });
 } else {
+  if (vendorOption !== undefined) {
+    runner.only(vendorOption);
+  }
+
   runner.toss();
   // Invoke run() asynchronously, beacuse Mocha will not start otherwise.
   process.nextTick(run);
