@@ -19,7 +19,7 @@ class Runner {
   }
 
   _testersWithVendor (vendor) {
-    return vendor => this.testers.filter(t => t.name.toLowerCase() === vendor);
+    return this.testers.filter(t => t.name.toLowerCase() === vendor);
   }
 
   only (vendors) {

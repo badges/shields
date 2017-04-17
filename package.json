@@ -44,7 +44,7 @@
     "coverage:report:open": "npm run coverage:report && npm run coverage:report:reopen",
     "lint": "eslint '**/*.js'",
     "test:js": "mocha 'test/**/*.spec.js'",
-    "test:vendor": "mocha vendor/runner/cli.js",
+    "test:vendor": "mocha --delay vendor/runner/cli.js",
     "test": "npm run lint && npm run test:js"
   },
   "bin": {
@@ -69,6 +69,7 @@
     "is-png": "^1.1.0",
     "is-svg": "^2.1.0",
     "istanbul": "^0.4.5",
+    "lodash.difference": "^4.5.0",
     "lodash.uniq": "^4.5.0",
     "mocha": "^3.2.0",
     "nock": "^9.0.13",

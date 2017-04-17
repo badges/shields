@@ -261,6 +261,19 @@ t.create('connection error')
 ```
 
 
+Pull requests
+-------------
+
+The affected vendors should be included in brackets in the pull request title.
+That way, Travis will run those vendor tests.
+
+For example:
+
+- [travis] Fix timeout issues
+- [travis sonar] Support user token authentication
+- [cran cpan ctan] Add test coverage
+
+
 Getting help
 ------------
 
