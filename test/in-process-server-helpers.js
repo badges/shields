@@ -2,6 +2,7 @@
 //
 // let server;
 // before('Start running the server', function () {
+//   this.timeout(5000);
 //   server = serverHelpers.start();
 // });
 // after('Shut down the server', function () { serverHelpers.stop(server); });
@@ -25,7 +26,7 @@ const start = function () {
   // Modifying argv during import is a bit dirty, but it works, and avoids
   // making bigger changes to server.js.
   process.argv = ['', '', config.port, 'localhost'];
-  const server = require('../../server');
+  const server = require('../server');
 
   process.argv = originalArgv;
   return server;

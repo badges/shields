@@ -1,7 +1,7 @@
 'use strict';
 
 const frisby = require('icedfrisby-nock')(require('icedfrisby'));
-const config = require('./config');
+const config = require('../../test/config');
 
 class ServiceTester {
   constructor (name, pathPrefix) {

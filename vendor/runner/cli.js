@@ -1,11 +1,12 @@
 'use strict';
 
 const minimist = require('minimist');
-const serverHelpers = require('./in-process-server-helpers');
+const serverHelpers = require('../../test/in-process-server-helpers');
 const Runner = require('./runner');
 
 let server;
 before('Start running the server', function () {
+  this.timeout(5000);
   server = serverHelpers.start();
 });
 after('Shut down the server', function () { serverHelpers.stop(server); });
