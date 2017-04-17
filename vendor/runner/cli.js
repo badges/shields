@@ -29,10 +29,12 @@ const getTitle = (repoSlug, pullRequest) => new Promise((resolve, reject) => {
     headers: { 'User-Agent': 'badges/shields' },
   };
   request(options, (err, res, json) => {
-    if (err === null) {
-      resolve(json.title);
-    } else {
+    if (err !== null) {
       reject(err);
+    } else if (res.statusCode !== 200) {
+      reject(Error(`Status code ${res.statusCode}`));
+    } else {
+      resolve(json.title);
     }
   });
 });
