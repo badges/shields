@@ -44,7 +44,7 @@
     "coverage:report:open": "npm run coverage:report && npm run coverage:report:reopen",
     "lint": "eslint '**/*.js'",
     "test:js": "mocha 'test/**/*.spec.js'",
-    "test:vendor": "mocha vendor/runner/runner.js",
+    "test:vendor": "mocha vendor/runner/cli.js",
     "test": "npm run lint && npm run test:js"
   },
   "bin": {

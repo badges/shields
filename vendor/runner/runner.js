@@ -1,59 +1,49 @@
 'use strict';
 
 const glob = require('glob');
-const config = require('./config');
-const minimist = require('minimist');
 const uniq = require('lodash.uniq');
 
-let server;
-before('Start the server', function () {
-  this.timeout(5000);
-  // Modifying argv is a bit dirty, but it works, and avoids making bigger
-  // changes to server.js.
-  process.argv = ['', '', config.port, 'localhost'];
-  server = require('../../server');
-});
-after('Shut down the server', function (done) {
-  server.camp.close(function () { done(); });
-});
-
-const testers = glob.sync(`${__dirname}/../*.js`).map(specPath => {
-  const tester = require(specPath);
-
-  // The server's request cache causes side effects between tests.
-  tester.beforeEach = () => { server.requestCache.clear(); };
-
-  return tester;
-});
-
-const testerWithName = name => testers.find(t => t.name.toLowerCase() === name);
-
-// e.g. mocha runner.js --only=vendor1,vendor2,vendor3
-const vendorOption = minimist(process.argv.slice(2)).only;
-if (vendorOption !== undefined) {
-  const vendors = uniq(vendorOption.split(',')).map(v => v.toLowerCase());
-
-  const missingVendors = [];
-  vendors.forEach(vendor => {
-    if (!testerWithName(vendor)) {
-      missingVendors.push(vendor);
-    }
-  });
-
-  if (missingVendors.length) {
-    console.error('Unknown vendors:', missingVendors.join(', '));
-    process.exit(-1);
+class Runner {
+  constructor () {
+    this.testers = null;
   }
 
-  // Make a second pass through the testers to make sure we've gotten them
-  // all.
-  testers.forEach(tester => {
-    if (vendors.includes(tester.name.toLowerCase())) {
-      tester.only();
-    }
-  });
-}
+  // Stub which can be overridden on instances.
+  beforeEach () {}
 
-testers.forEach(tester => {
-  tester.toss();
-});
+  prepare () {
+    this.testers = glob.sync(`${__dirname}/../*.js`).map(require);
+    this.testers.forEach(tester => {
+      tester.beforeEach = () => { this.beforeEach(); };
+    });
+  }
+
+  _testersWithVendor (vendor) {
+    return vendor => this.testers.filter(t => t.name.toLowerCase() === vendor);
+  }
+
+  only (vendors) {
+    const normalizedVendors = uniq(vendors.map(v => v.toLowerCase()));
+
+    const missingVendors = [];
+    normalizedVendors.forEach(vendor => {
+      const testers = this._testersWithVendor(vendor);
+
+      if (testers.length === 0) {
+        missingVendors.push(vendor);
+      }
+
+      testers.forEach(tester => { tester.only(); });
+    });
+
+    // Throw at the end, to provide a better error message.
+    if (missingVendors.length > 0) {
+      throw Error('Unknown vendors: ' + missingVendors.join(', '));
+    }
+  }
+
+  toss() {
+    this.testers.forEach(tester => { tester.toss(); });
+  }
+}
+module.exports = Runner;
