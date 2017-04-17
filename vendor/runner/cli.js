@@ -64,10 +64,10 @@ const prOption = minimist(process.argv.slice(3)).pr;
 const vendorOption = minimist(process.argv.slice(3)).only;
 
 if (prOption !== undefined) {
-  const repoSlug = process.env.TRAVIS_PULL_REQUEST_SLUG;
+  const repoSlug = process.env.TRAVIS_REPO_SLUG;
   const pullRequest = process.env.TRAVIS_PULL_REQUEST;
   if (repoSlug === undefined || pullRequest === undefined) {
-    console.error('Please set TRAVIS_PULL_REQUEST_SLUG and TRAVIS_PULL_REQUEST.');
+    console.error('Please set TRAVIS_REPO_SLUG and TRAVIS_PULL_REQUEST.');
     process.exit(-1);
   }
   console.info(`PR: ${repoSlug}#${pullRequest}`);
