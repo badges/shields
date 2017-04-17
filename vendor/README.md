@@ -118,6 +118,9 @@ t.create('build status on default branch')
   }));
 ```
 
+We're using `rust` for our test, though we could have chosen any stable
+project.
+
 The `create()` method gives the tester a new test. The chained-on calls come
 from the API testing framework [IcedFrisby][]. Here's a [longer example][] and
 the complete [API guide][IcedFrisby API].
