@@ -3057,6 +3057,34 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+camp.route(/^\/cocoapods\/metrics\/quality-estimate\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var spec = match[1];  // eg, AFNetworking
+  var format = match[2];
+  var apiUrl = 'http://metrics.cocoapods.org/api/v1/pods/' + spec;
+  var badgeData = getBadgeData('pod', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var estimate = data.cocoadocs.quality_estimate;
+      // CocoaPods official quality estimate visualization, as a 5-point grading scale:
+      // input >= 100 ? "5" : (input / 20) + 1
+      badgeData.colorscheme = floorCountColor(estimate, 60, 80, 100);
+      badgeData.text[0] = 'quality';
+      badgeData.text[1] = estimate;
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // GitHub tag integration.
 camp.route(/^\/github\/tag\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
