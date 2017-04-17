@@ -92,12 +92,11 @@ const t = new ServiceTester('Travis', '/travis');          // 3
 module.exports = t;                                        // 4
 ```
 
-1. ??
-
-We'll add all our tests to this ServiceTester object (2), which gets exported from
-the module (4). The two arguments to the constructor (3) are the name of the service
-and its URI prefix. The tester will prepend it to the URIs you provide later,
-which saves copying and pasting.
+We'll import [Joi][] (1) which will help with our assertions. We'll add all
+our tests to this ServiceTester object (2), which gets exported from the
+module (4). The two arguments to the constructor (3) are the name of the
+service and its URI prefix. The tester will prepend it to the URIs you provide
+later, which saves copying and pasting.
 
 ?? (3) What is the name for?
 
