@@ -130,6 +130,9 @@ Joi is a validation library that is build into IcedFrisby which you can use to
 match based on a set of allowed strings, regexes, or specific values. You can
 refer to their [API reference][Joi API].
 
+Since we don't know whether rust will be passing or not at the time the test
+runs, we use `Joi.equal()`, which accepts any of the values passed in.
+
 Notice we don't have to specify `/travis` again, or even `localhost`. The test
 runner handles that for us.
 
