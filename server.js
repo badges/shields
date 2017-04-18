@@ -6030,6 +6030,91 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Uptime Robot status integration.
+camp.route(/^\/uptimerobot\/status\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var monitorApiKey = match[1];  // eg, u956-afus321g565fghr519
+  var format = match[2];
+  var badgeData = getBadgeData('status', data);
+  var options = {
+    method: 'POST',
+    json: true,
+    body: {
+      "api_key": monitorApiKey,
+      "format": "json"
+    },
+    uri: 'https://api.uptimerobot.com/v2/getMonitors'
+  };
+  request(options, function(err, res, json) {
+    if (err !== null || res.statusCode >= 500 || typeof json !== 'object') {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var status = json.monitors[0].status;
+      if (status === 0) {
+        badgeData.text[1] = 'paused';
+        badgeData.colorscheme = 'yellow';
+      } else if (status === 1) {
+        badgeData.text[1] = 'not checked yet';
+        badgeData.colorscheme = 'yellowgreen';
+      } else if (status === 2) {
+        badgeData.text[1] = 'up';
+        badgeData.colorscheme = 'brightgreen';
+      } else if (status === 8) {
+        badgeData.text[1] = 'seems down';
+        badgeData.colorscheme = 'orange';
+      } else if (status === 9) {
+        badgeData.text[1] = 'down';
+        badgeData.colorscheme = 'red';
+      } else {
+        badgeData.text[1] = 'invalid';
+        badgeData.colorscheme = 'lightgrey';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// Uptime Robot ratio integration.
+camp.route(/^\/uptimerobot\/ratio\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var monitorApiKey = match[1];  // eg, u956-afus321g565fghr519
+  var numberOfDays = match[2];  // eg, 30
+  var format = match[3];
+  var badgeData = getBadgeData('uptime', data);
+  var options = {
+    method: 'POST',
+    json: true,
+    body: {
+      "api_key": monitorApiKey,
+      "custom_uptime_ratios": numberOfDays,
+      "format": "json"
+    },
+    uri: 'https://api.uptimerobot.com/v2/getMonitors'
+  };
+  request(options, function(err, res, buffer) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var percent = parseFloat(buffer.monitors[0].custom_uptime_ratio);
+      badgeData.text[1] = percent + "%";
+      badgeData.colorscheme = floorCountColor(percent, 25, 50, 75);
+      sendBadge(format, badgeData);
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
