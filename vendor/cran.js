@@ -30,20 +30,17 @@ t.create('malformed response')
   .get('/v/foobar.json')
   .intercept(nock => nock('http://crandb.r-pkg.org')
     .get('/foobar')
-    .reply(200))
+    .reply(200))  // JSON without Version.
   .expectJSON({ name: 'cran', value: 'invalid' });
 
 t.create('connection error')
   .get('/v/foobar.json')
-  .intercept(nock => nock('http://crandb.r-pkg.org')
-    .get('/foobar')
-    .replyWithError({ code: 'ECONNRESET' }))
+  .networkOff()
   .expectJSON({ name: 'cran', value: 'inaccessible' });
 
 t.create('unspecified license')
   .get('/l/foobar.json')
-  // JSON without License.
   .intercept(nock => nock('http://crandb.r-pkg.org')
     .get('/foobar')
-    .reply(200, {}))
+    .reply(200, {}))  // JSON without License.
   .expectJSON({ name: 'license', value: 'unknown' });

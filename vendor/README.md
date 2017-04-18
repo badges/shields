@@ -264,15 +264,13 @@ npm run coverage:report:open
 Note the two sets of double dashes.
 
 After searching `server.js` for the Travis code, we see that we've missed a
-big block: the error branch in the request callback. To test that, we mock a
-connection error.
+big block: the error branch in the request callback. To test that, we simulate
+network connection errors on any unmocked requests.
 
 ```js
 t.create('connection error')
   .get('/foo/bar.json')
-  .intercept(nock => nock('https://api.travis-ci.org')
-    .head('/foo/bar.svg')
-    .replyWithError({ code: 'ECONNRESET' }))
+  .networkOff()
   .expectJSON({ name: 'build', value: 'invalid' });
 ```
 
@@ -337,9 +335,7 @@ t.create('missing content-disposition header')
 
 t.create('connection error')
   .get('/foo/bar.json')
-  .intercept(nock => nock('https://api.travis-ci.org')
-    .head('/foo/bar.svg')
-    .replyWithError({ code: 'ECONNRESET' }))
+  .networkOff()
   .expectJSON({ name: 'build', value: 'invalid' });
 ```
 
