@@ -37,7 +37,7 @@
   },
   "scripts": {
     "coverage:test:js": "istanbul cover _mocha 'test/**/*.spec.js' --dir coverage/js",
-    "coverage:test:vendor": "istanbul cover _mocha vendor/runner/runner.js --dir coverage/vendor",
+    "coverage:test:vendor": "istanbul cover _mocha --delay vendor/runner/cli.js --dir coverage/vendor",
     "coverage:test": "npm run coverage:test:js && npm run coverage:test:vendor",
     "coverage:report": "istanbul report",
     "coverage:report:reopen": "opn coverage/lcov-report/index.html",
