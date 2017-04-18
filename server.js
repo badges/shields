@@ -1673,22 +1673,22 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // npm license integration.
-camp.route(/^\/npm\/l\/(@[^\/]*)?\/?([^\/]*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/npm\/l\/(?:@([^\/]+)\/)?([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  const scope = match[1];   // "@user"
-  const repo = match[2];    // "express"
-  const format = match[3];  // "svg"
+  const scope = match[1];        // "user" (when a scope "@user" is supplied)
+  const packageName = match[2];  // "express"
+  const format = match[3];       // "svg"
   let apiUrl;
   if (scope === undefined) {
     // e.g. https://registry.npmjs.org/express/latest
     // Use this endpoint as an optimization. It covers the vast majority of
     // these badges, and the response is smaller.
-    apiUrl = `https://registry.npmjs.org/${repo}/latest`;
+    apiUrl = `https://registry.npmjs.org/${packageName}/latest`;
   } else {
     // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
     // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
-    const pkg = encodeURIComponent('/' + repo);
-    apiUrl = `https://registry.npmjs.org/${scope}${pkg}`;
+    const path = encodeURIComponent(`${scope}/${packageName}`);
+    apiUrl = `https://registry.npmjs.org/@${path}`;
   }
   const badgeData = getBadgeData('license', data);
   request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
