@@ -3727,8 +3727,9 @@ function mapNugetFeedv2(pattern, offset, getInfo) {
 function mapNugetFeed(pattern, offset, getInfo) {
   var vRegex = new RegExp('^\\/' + pattern + '\\/v\\/(.*)\\.(svg|png|gif|jpg|json)$');
   var vPreRegex = new RegExp('^\\/' + pattern + '\\/vpre\\/(.*)\\.(svg|png|gif|jpg|json)$');
+  var dtRegex = new RegExp('^\\/' + pattern + '\\/dt\\/(.*)\\.(svg|png|gif|jpg|json)$');
 
-  function getNugetVersion(apiUrl, id, includePre, request, done) {
+  function getNugetData(apiUrl, id, request, done) {
     // get service index document
     regularUpdate(apiUrl + '/index.json',
       // The endpoint changes once per year (ie, a period of n = 1 year).
@@ -3743,22 +3744,20 @@ function mapNugetFeed(pattern, offset, getInfo) {
       function(buffer) {
         var data = JSON.parse(buffer);
 
-        var autocompleteResources = data.resources.filter(function(resource) {
-          return resource['@type'] === 'SearchAutocompleteService';
+        var searchQueryResources = data.resources.filter(function(resource) {
+          return resource['@type'] === 'SearchQueryService';
         });
 
-        return autocompleteResources;
+        return searchQueryResources;
       },
-      function(err, autocompleteResources) {
+      function(err, searchQueryResources) {
         if (err != null) { done(err); return; }
 
         // query autocomplete service
-        var randomEndpointIdx = Math.floor(Math.random() * autocompleteResources.length);
-        var reqUrl = autocompleteResources[randomEndpointIdx]['@id']
-          + '?id=' + encodeURIComponent(id.toLowerCase())   // NuGet package id (lowercase)
-          + '&prerelease=true'                              // Include prerelease versions?
-          + '&skip=0'                                       // Start at first package found
-          + '&take=5000';                                   // Max. number of results
+        var randomEndpointIdx = Math.floor(Math.random() * searchQueryResources.length);
+        var reqUrl = searchQueryResources[randomEndpointIdx]['@id']
+          + '?q=packageid:' + encodeURIComponent(id.toLowerCase()) // NuGet package id (lowercase)
+          + '&prerelease=true';                                    // Include prerelease versions?
 
         request(reqUrl, function(err, res, buffer) {
           if (err != null) {
@@ -3768,21 +3767,36 @@ function mapNugetFeed(pattern, offset, getInfo) {
 
           try {
             var data = JSON.parse(buffer);
-            var versions = data.data;
-            if (!includePre) {
-              // Remove prerelease versions.
-              var filteredVersions = versions.filter(function(version) {
-                return !/-/.test(version);
-              });
-              if (filteredVersions.length > 0) {
-                versions = filteredVersions;
-              }
+            data = data.data && data.data[0];
+            if (data) {
+              done(null, data);
+            } else {
+              done(new Error('Package not found in feed'));
             }
-            var lastVersion = versions[versions.length - 1];
-            done(null, lastVersion);
           } catch (e) { done(e); }
         });
       });
+  }
+
+  function getNugetVersion(apiUrl, id, includePre, request, done) {
+    getNugetData(apiUrl, id, request, function(err, data) {
+      if (err) {
+        done(err);
+        return;
+      }
+      var versions = data.versions || [];
+      if (!includePre) {
+        // Remove prerelease versions.
+        var filteredVersions = versions.filter(function(version) {
+          return !/-/.test(version.version);
+        });
+        if (filteredVersions.length > 0) {
+          versions = filteredVersions;
+        }
+      }
+      var lastVersion = versions[versions.length - 1];
+      done(null, lastVersion.version);
+    });
   }
 
   camp.route(vRegex,
@@ -3839,6 +3853,35 @@ function mapNugetFeed(pattern, offset, getInfo) {
         } else {
           badgeData.colorscheme = 'blue';
         }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }));
+
+
+  camp.route(dtRegex,
+  cache(function(data, match, sendBadge, request) {
+    var info = getInfo(match);
+    var site = info.site;  // eg, `Chocolatey`, or `YoloDev`
+    var repo = match[offset + 1];  // eg, `Nuget.Core`.
+    var format = match[offset + 2];
+    var apiUrl = info.feed;
+    var badgeData = getBadgeData(site, data);
+    getNugetData(apiUrl, repo, request, function(err, nugetData) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        // Official NuGet server uses "totalDownloads" whereas MyGet uses
+        // "totaldownloads" (lowercase D). Ugh.
+        var downloads = nugetData.totalDownloads || nugetData.totaldownloads;
+        badgeData.text[1] = metric(downloads);
+        badgeData.colorscheme = downloadCountColor(downloads);
         sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'invalid';
