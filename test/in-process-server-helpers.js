@@ -1,12 +1,17 @@
-// Usage:
-//
-// let server;
-// before('Start running the server', function () {
-//   this.timeout(5000);
-//   server = serverHelpers.start();
-// });
-// after('Shut down the server', function () { serverHelpers.stop(server); });
-//
+/**
+ * Helpers to run a Shields server in process.
+ *
+ * Because of the way Shields works, you can only use these once per node
+ * process. Once you call stop(), the game is over.
+ *
+ * Usage:
+ * let server;
+ * before('Start running the server', function () {
+ *   this.timeout(5000);
+ *   server = serverHelpers.start();
+ * });
+ * after('Shut down the server', function () { serverHelpers.stop(server); });
+ */
 
 'use strict';
 
@@ -15,13 +20,10 @@ const config = require('./config');
 /**
  * Start the server.
  *
- * Note: Because of the way Shields works, you can only call this once per
- * node process. Once you call stop(), the game is over.
- *
  * @param {Number} port number (optional)
- * @return {Promise<Object>} The scoutcamp instance
+ * @return {Object} The scoutcamp instance
  */
-const start = function () {
+const start = () => {
   const originalArgv = process.argv;
   // Modifying argv during import is a bit dirty, but it works, and avoids
   // making bigger changes to server.js.
@@ -37,16 +39,14 @@ const start = function () {
  *
  * @param {Object} server instance
  */
-const reset = (server) => {
-  server.requestCache.clear();
-};
+const reset = server => { server.requestCache.clear(); };
 
 /**
  * Stop the server.
  *
  * @param {Object} server instance
  */
-const stop = (server) => {
+const stop = server => {
   if (server) {
     server.camp.close();
   }
