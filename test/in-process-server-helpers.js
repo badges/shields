@@ -23,7 +23,7 @@ const config = require('./config');
  * @param {Number} port number (optional)
  * @return {Object} The scoutcamp instance
  */
-const start = () => {
+function start () {
   const originalArgv = process.argv;
   // Modifying argv during import is a bit dirty, but it works, and avoids
   // making bigger changes to server.js.
@@ -32,25 +32,27 @@ const start = () => {
 
   process.argv = originalArgv;
   return server;
-};
+}
 
 /**
  * Reset the server, to avoid or reduce side effects between tests.
  *
  * @param {Object} server instance
  */
-const reset = server => { server.requestCache.clear(); };
+function reset (server) {
+  server.requestCache.clear();
+}
 
 /**
  * Stop the server.
  *
  * @param {Object} server instance
  */
-const stop = server => {
+function stop (server) {
   if (server) {
     server.camp.close();
   }
-};
+}
 
 module.exports = {
   start,
