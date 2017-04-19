@@ -1,18 +1,18 @@
 // Usage:
 //
-// Run all vendors:
-//   npm run test:vendor
+// Run all services:
+//   npm run test:services
 //
-// Run some vendors:
-//   npm run test:vendor -- --only=vendor1,vendor2,vendor3
+// Run some services:
+//   npm run test:services -- --only=service1,service2,service3
 //
 // Infer the current PR from the Travis environment, and look for bracketed,
-// space-separated vendor names in the pull request title. If none are found,
+// space-separated service names in the pull request title. If none are found,
 // do not run any tests. For example:
 // Pull request title: [travis sonar] Support user token authentication
-//   npm run test:vendor -- --pr
+//   npm run test:services -- --pr
 // is equivalent to
-//   npm run test:vendor -- --only=travis,sonar
+//   npm run test:services -- --only=travis,sonar
 
 'use strict';
 
@@ -39,15 +39,15 @@ const getTitle = (repoSlug, pullRequest) => new Promise((resolve, reject) => {
   });
 });
 
-const vendorsForTitle = title => {
+const servicesForTitle = title => {
   const matches = title.match(/\[([\w ]+)\]/);
   if (matches === null) {
     return [];
   }
 
-  const vendors = matches[1].toLowerCase().split(' ');
+  const services = matches[1].toLowerCase().split(' ');
   const blacklist = ['wip'];
-  return difference(vendors, blacklist);
+  return difference(services, blacklist);
 };
 
 let server;
@@ -63,7 +63,7 @@ runner.prepare();
 runner.beforeEach = () => { serverHelpers.reset(server); };
 
 const prOption = minimist(process.argv.slice(3)).pr;
-const vendorOption = minimist(process.argv.slice(3)).only;
+const serviceOption = minimist(process.argv.slice(3)).only;
 
 if (prOption !== undefined) {
   const repoSlug = process.env.TRAVIS_REPO_SLUG;
@@ -77,12 +77,12 @@ if (prOption !== undefined) {
   getTitle(repoSlug, pullRequest)
     .then(title => {
       console.info(`Title: ${title}`);
-      const vendors = vendorsForTitle(title);
-      if (vendors.length === 0) {
-        console.info('No vendors found. Nothing to do.');
+      const services = servicesForTitle(title);
+      if (services.length === 0) {
+        console.info('No services found. Nothing to do.');
       } else {
-        console.info(`Vendors: (${vendors.length} found) ${vendors.join(', ')}\n`);
-        runner.only(vendors);
+        console.info(`Services: (${services.length} found) ${services.join(', ')}\n`);
+        runner.only(services);
         runner.toss();
         run();
       }
@@ -91,8 +91,8 @@ if (prOption !== undefined) {
       process.exit(1);
     });
 } else {
-  if (vendorOption !== undefined) {
-    runner.only(vendorOption.split(','));
+  if (serviceOption !== undefined) {
+    runner.only(serviceOption.split(','));
   }
 
   runner.toss();

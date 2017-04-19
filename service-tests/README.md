@@ -1,8 +1,8 @@
-Vendor tests
-============
+Service tests
+=============
 
-When creating a badge for a new service or changing a badge's behavior, tests
-should be included. They serve three purposes:
+When creating a badge for a new service or changing a badge's behavior,
+automated tests should be included. They serve three purposes:
 
 1. The contributor and reviewer can easily verify the code works as
    intended.
@@ -20,12 +20,12 @@ and ideally, all code branches:
   - File is present
   - Build fails/succeeds
 2. Expected resource not found
-  - Vendor may provide 200 error code with different response format
-  - Vendor may return a 404 or other >= 400 status code
+  - Service may provide 200 error code with different response format
+  - Service may return a 404 or other >= 400 status code
 3. Customization
   - Non-default parameters like tags and branches
 4. Server errors and other malformed responses
-  - Vendor may return status code 500 and higher
+  - Service may return status code 500 and higher
   - Invalid JSON
   - Attributes missing or have incorrect types
   - Headers missing
@@ -90,7 +90,7 @@ already:
 npm i
 ```
 
-We'll start by creating a new module, `vendor/travis.js`, using this
+We'll start by creating a new module, `service-tests/travis.js`, using this
 boilerplate:
 
 ```js
@@ -161,7 +161,7 @@ harness will call it for you.
 Run the test:
 
 ```
-npm run test:vendor -- --only=travis
+npm run test:services -- --only=travis
 ```
 
 The `--only=` option indicates which service or services you want to test. You
@@ -259,7 +259,7 @@ By checking code coverage, we can make sure we've covered all our bases.
 We can generate a coverage report and open it:
 
 ```
-npm run coverage:test:vendor -- -- --only=travis
+npm run coverage:test:services -- -- --only=travis
 npm run coverage:report:open
 ```
 
@@ -280,9 +280,9 @@ t.create('connection error')
 Pull requests
 -------------
 
-The affected vendor ids should be included in brackets in the pull request
-title. That way, Travis will run those vendor tests. When a pull request
-affects multiple vendors, they should be separated with spaces. The test
+The affected service ids should be included in brackets in the pull request
+title. That way, Travis will run those service tests. When a pull request
+affects multiple services, they should be separated with spaces. The test
 runner is case-insensitive, so they should be capitalized for readability.
 
 For example:

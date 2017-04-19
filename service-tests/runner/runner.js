@@ -23,32 +23,32 @@ class Runner {
     });
   }
 
-  _testersWithVendor (vendor) {
-    return this.testers.filter(t => t.id.toLowerCase() === vendor);
+  _testersForService (service) {
+    return this.testers.filter(t => t.id.toLowerCase() === service);
   }
 
   /**
-   * Limit the test run to the specified vendors.
+   * Limit the test run to the specified services.
    *
-   * @param vendors An array of vendor names to run
+   * @param services An array of service ids to run
    */
-  only (vendors) {
-    const normalizedVendors = uniq(vendors.map(v => v.toLowerCase()));
+  only (services) {
+    const normalizedServices = uniq(services.map(v => v.toLowerCase()));
 
-    const missingVendors = [];
-    normalizedVendors.forEach(vendor => {
-      const testers = this._testersWithVendor(vendor);
+    const missingServices = [];
+    normalizedServices.forEach(service => {
+      const testers = this._testersForService(service);
 
       if (testers.length === 0) {
-        missingVendors.push(vendor);
+        missingServices.push(service);
       }
 
       testers.forEach(tester => { tester.only(); });
     });
 
     // Throw at the end, to provide a better error message.
-    if (missingVendors.length > 0) {
-      throw Error('Unknown vendors: ' + missingVendors.join(', '));
+    if (missingServices.length > 0) {
+      throw Error('Unknown services: ' + missingServices.join(', '));
     }
   }
 

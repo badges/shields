@@ -37,14 +37,14 @@
   },
   "scripts": {
     "coverage:test:js": "istanbul cover _mocha 'test/**/*.spec.js' --dir coverage/js",
-    "coverage:test:vendor": "istanbul cover _mocha --delay vendor/runner/cli.js --dir coverage/vendor",
-    "coverage:test": "npm run coverage:test:js && npm run coverage:test:vendor",
+    "coverage:test:services": "istanbul cover _mocha --delay service-tests/runner/cli.js --dir coverage/services",
+    "coverage:test": "npm run coverage:test:js && npm run coverage:test:services",
     "coverage:report": "istanbul report",
     "coverage:report:reopen": "opn coverage/lcov-report/index.html",
     "coverage:report:open": "npm run coverage:report && npm run coverage:report:reopen",
     "lint": "eslint '**/*.js'",
     "test:js": "mocha 'test/**/*.spec.js'",
-    "test:vendor": "mocha --delay vendor/runner/cli.js",
+    "test:services": "mocha --delay service-tests/runner/cli.js",
     "test": "npm run lint && npm run test:js"
   },
   "bin": {
