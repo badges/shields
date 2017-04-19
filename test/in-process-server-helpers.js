@@ -1,9 +1,6 @@
 /**
  * Helpers to run a Shields server in process.
  *
- * Because of the way Shields works, you can only use these once per node
- * process. Once you call stop(), the game is over.
- *
  * Usage:
  * let server;
  * before('Start running the server', function () {
@@ -17,6 +14,8 @@
 
 const config = require('./config');
 
+let startCalled = false;
+
 /**
  * Start the server.
  *
@@ -24,6 +23,12 @@ const config = require('./config');
  * @return {Object} The scoutcamp instance
  */
 function start () {
+  if (startCalled) {
+    throw Error('Because of the way Shields works, you can only use this ' +
+      'once per node process. Once you call stop(), the game is over.');
+  }
+  startCalled = true;
+
   const originalArgv = process.argv;
   // Modifying argv during import is a bit dirty, but it works, and avoids
   // making bigger changes to server.js.
