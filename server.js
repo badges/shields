@@ -6048,7 +6048,7 @@ cache(function(data, match, sendBadge, request) {
   };
   // A monitor API key must start with "m"
   if (monitorApiKey.substring(0, "m".length) !== "m") {
-    badgeData.text[1] = 'api_key invalid';
+    badgeData.text[1] = 'must use a monitor key';
     sendBadge(format, badgeData);
     return;
   }
@@ -6116,7 +6116,7 @@ cache(function(data, match, sendBadge, request) {
   };
   // A monitor API key must start with "m"
   if (monitorApiKey.substring(0, "m".length) !== "m") {
-    badgeData.text[1] = 'api_key invalid';
+    badgeData.text[1] = 'must use a monitor key';
     sendBadge(format, badgeData);
     return;
   }
