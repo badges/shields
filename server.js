@@ -5833,7 +5833,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Test if a webpage is online
-camp.route(/^\/website(-(([^-]|--)*?)-(([^-]|--)*)(-(([^-]|--)+)-(([^-]|--)+))?)?\/(.+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/website(-(([^-]|--)*?)-(([^-]|--)*)(-(([^-]|--)+)-(([^-]|--)+))?)?\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var onlineMessage = escapeFormat(match[2] != null ? match[2] : "online");
   var offlineMessage = escapeFormat(match[4] != null ? match[4] : "offline");
