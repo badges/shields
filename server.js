@@ -6060,8 +6060,8 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       if (json.stat === 'fail') {
-        badgeData.text[1] = 'unknown error';
-        if (json.error) {
+        badgeData.text[1] = 'vendor error';
+        if (json.error && typeof json.error.message === 'string') {
           badgeData.text[1] = json.error.message;
         }
         badgeData.colorscheme = 'lightgrey';
@@ -6128,8 +6128,8 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       if (json.stat === 'fail') {
-        badgeData.text[1] = 'unknown error';
-        if (json.error) {
+        badgeData.text[1] = 'vendor error';
+        if (json.error && typeof json.error.message === 'string') {
           badgeData.text[1] = json.error.message;
         }
         badgeData.colorscheme = 'lightgrey';
