@@ -67,8 +67,9 @@ runner.prepare();
 // The server's request cache causes side effects between tests.
 runner.beforeEach = () => { serverHelpers.reset(server); };
 
-const prOption = minimist(process.argv.slice(3)).pr;
-const serviceOption = minimist(process.argv.slice(3)).only;
+const args = minimist(process.argv.slice(3));
+const prOption = args.pr;
+const serviceOption = args.only;
 
 if (prOption !== undefined) {
   const repoSlug = process.env.TRAVIS_REPO_SLUG;
