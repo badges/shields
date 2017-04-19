@@ -17,7 +17,7 @@ class Runner {
    * Prepare the runner by loading up all the ServiceTester objects.
    */
   prepare () {
-    this.testers = glob.sync(`${__dirname}/../*.js`).map(require);
+    this.testers = glob.sync(`${__dirname}/../*.js`).map(name => require(name));
     this.testers.forEach(tester => {
       tester.beforeEach = () => { this.beforeEach(); };
     });
