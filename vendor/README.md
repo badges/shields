@@ -128,8 +128,9 @@ t.create('build status on default branch')
   }));
 ```
 
-We're using `rust` for our test, though we could have chosen any stable
-project.
+We need a real project to use for our tests. We'll use the programming
+language [Rust][], though we could have chosen any stable project with a
+Travis build.
 
 The `create()` method gives the tester a new test. The chained-on calls come
 from the API testing framework [IcedFrisby][]. Here's a [longer example][] and
@@ -150,6 +151,7 @@ When defining an IcedFrisby test, typically you would invoke the `toss()`
 method, to register the test. This is not necessary, because the Shields test
 harness will call it for you.
 
+[Rust]: https://www.rust-lang.org/en-US/
 [IcedFrisby]: https://github.com/MarkHerhold/IcedFrisby
 [longer example]: https://github.com/MarkHerhold/IcedFrisby/#show-me-some-code
 [IcedFrisby API]: https://github.com/MarkHerhold/IcedFrisby/blob/master/API.md
