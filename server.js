@@ -6034,7 +6034,7 @@ cache(function(data, match, sendBadge, request) {
 // API documentation : https://uptimerobot.com/api
 camp.route(/^\/uptimerobot\/status\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var monitorApiKey = match[1];  // eg, u956-afus321g565fghr519
+  var monitorApiKey = match[1];  // eg, m778918918-3e92c097147760ee39d02d36
   var format = match[2];
   var badgeData = getBadgeData('status', data);
   var options = {
@@ -6100,8 +6100,8 @@ cache(function(data, match, sendBadge, request) {
 // API documentation : https://uptimerobot.com/api
 camp.route(/^\/uptimerobot\/ratio\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var monitorApiKey = match[1];  // eg, u956-afus321g565fghr519
-  var numberOfDays = match[2];  // eg, 30
+  var numberOfDays = match[1];  // eg, 30
+  var monitorApiKey = match[2];  // eg, m778918918-3e92c097147760ee39d02d36
   var format = match[3];
   var badgeData = getBadgeData('uptime', data);
   var options = {
