@@ -3767,12 +3767,11 @@ function mapNugetFeed(pattern, offset, getInfo) {
 
           try {
             var data = JSON.parse(buffer);
-            data = data.data && data.data[0];
-            if (data) {
-              done(null, data);
-            } else {
+            if (!Array.isArray(data.data) || data.data.length !== 1) {
               done(new Error('Package not found in feed'));
+              return;
             }
+            done(null, data.data[0]);
           } catch (e) { done(e); }
         });
       });
@@ -3879,7 +3878,7 @@ function mapNugetFeed(pattern, offset, getInfo) {
       try {
         // Official NuGet server uses "totalDownloads" whereas MyGet uses
         // "totaldownloads" (lowercase D). Ugh.
-        var downloads = nugetData.totalDownloads || nugetData.totaldownloads;
+        var downloads = nugetData.totalDownloads || nugetData.totaldownloads || 0;
         badgeData.text[1] = metric(downloads);
         badgeData.colorscheme = downloadCountColor(downloads);
         sendBadge(format, badgeData);
