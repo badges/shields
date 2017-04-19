@@ -22,24 +22,26 @@ const request = require('request');
 const Runner = require('./runner');
 const serverHelpers = require('../../test/in-process-server-helpers');
 
-const getTitle = (repoSlug, pullRequest) => new Promise((resolve, reject) => {
-  const options = {
-    uri: `https://api.github.com/repos/${repoSlug}/pulls/${pullRequest}`,
-    json: true,
-    headers: { 'User-Agent': 'badges/shields' },
-  };
-  request(options, (err, res, json) => {
-    if (err !== null) {
-      reject(err);
-    } else if (res.statusCode !== 200) {
-      reject(Error(`Status code ${res.statusCode}`));
-    } else {
-      resolve(json.title);
-    }
+function getTitle (repoSlug, pullRequest) {
+  return new Promise((resolve, reject) => {
+    const options = {
+      uri: `https://api.github.com/repos/${repoSlug}/pulls/${pullRequest}`,
+      json: true,
+      headers: { 'User-Agent': 'badges/shields' },
+    };
+    request(options, (err, res, json) => {
+      if (err !== null) {
+        reject(err);
+      } else if (res.statusCode !== 200) {
+        reject(Error(`Status code ${res.statusCode}`));
+      } else {
+        resolve(json.title);
+      }
+    });
   });
-});
+}
 
-const servicesForTitle = title => {
+function servicesForTitle (title) {
   const matches = title.match(/\[([\w ]+)\]/);
   if (matches === null) {
     return [];
@@ -48,7 +50,7 @@ const servicesForTitle = title => {
   const services = matches[1].toLowerCase().split(' ');
   const blacklist = ['wip'];
   return difference(services, blacklist);
-};
+}
 
 let server;
 before('Start running the server', function () {
