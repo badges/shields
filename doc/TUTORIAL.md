@@ -238,7 +238,7 @@ should be included. They serve several purposes:
 4. When a badge stops working on the live server, maintainers can find out
    right away.
 
-There is a dedicated [tutorial for tests in the vendor folder][tests-tutorial].
+There is a dedicated [tutorial for tests in the service-tests folder][tests-tutorial].
 Please follow it to include tests on your pull-request.
 
 ## (5) Create a Pull Request
@@ -274,4 +274,4 @@ These files can also be of help for creating your own badge.
 [docker-example]: https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L5014
 [travis-example]: https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L431
 [regex]: https://www.w3schools.com/jsref/jsref_obj_regexp.asp
-[tests-tutorial]: ../vendor/#readme
+[tests-tutorial]: ../service-tests/#readme
