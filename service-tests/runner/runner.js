@@ -1,7 +1,6 @@
 'use strict';
 
 const glob = require('glob');
-const uniq = require('lodash.uniq');
 
 /**
  * Load a collection of ServiceTester objects and register them with Mocha.
@@ -33,7 +32,7 @@ class Runner {
    * @param services An array of service ids to run
    */
   only (services) {
-    const normalizedServices = uniq(services.map(v => v.toLowerCase()));
+    const normalizedServices = new Set(services.map(v => v.toLowerCase()));
 
     const missingServices = [];
     normalizedServices.forEach(service => {
