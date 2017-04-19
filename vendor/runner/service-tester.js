@@ -9,14 +9,18 @@ const config = require('../../test/config');
  */
 class ServiceTester {
   /**
-   * @param name The name of the service being tested.
-   * @param pathPrefix The path prefix of the service, which is automatically
-   *   prepended to each tested URI.
+   * @param attrs { id, title, pathPrefix } The `id` is used to specify which
+   *   tests to run from the CLI or pull requests. The `title` prints in the
+   *   Mocha output. The `path` is the path prefix which is automatically
+   *   prepended to each tested URI. The default is `/${attrs.id}`.
    */
-  constructor (name, pathPrefix) {
+  constructor (attrs) {
     Object.assign(this, {
-      name,
-      pathPrefix,
+      id: attrs.id,
+      title: attrs.title,
+      pathPrefix: attrs.pathPrefix === undefined
+        ? `/${attrs.id}`
+        : attrs.pathPrefix,
       specs: [],
       _only: false
     });
@@ -61,7 +65,7 @@ class ServiceTester {
     const specs = this.specs;
 
     const fn = this._only ? describe.only : describe;
-    fn(this.name, function () {
+    fn(this.title, function () {
       specs.forEach(spec => { spec.toss(); });
     });
   }

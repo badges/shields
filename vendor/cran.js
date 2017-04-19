@@ -3,7 +3,7 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
-const t = new ServiceTester('CRAN', '/cran');
+const t = new ServiceTester({ id: 'cran', title: 'CRAN/METACRAN' });
 module.exports = t;
 
 t.create('version')

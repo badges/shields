@@ -92,7 +92,7 @@ if (prOption !== undefined) {
     });
 } else {
   if (vendorOption !== undefined) {
-    runner.only(vendorOption);
+    runner.only(vendorOption.split(','));
   }
 
   runner.toss();

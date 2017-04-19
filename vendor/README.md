@@ -53,7 +53,7 @@ cache(function(data, match, sendBadge, request) {
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res) {
     if (err != null) {
-      console.error('Travis error: ' + err.stack);              // (5)
+      console.error('Travis error: ' + err.stack);              // 5
       if (res) { console.error(''+res); }
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
@@ -64,16 +64,16 @@ cache(function(data, match, sendBadge, request) {
                      .match(/filename="(.+)\.svg"/)[1];
       badgeData.text[1] = state;
       if (state === 'passing') {
-        badgeData.colorscheme = 'brightgreen';                  // (1)
+        badgeData.colorscheme = 'brightgreen';                  // 1
       } else if (state === 'failing') {
-        badgeData.colorscheme = 'red';                          // (1)
+        badgeData.colorscheme = 'red';                          // 1
       } else {
-        badgeData.text[1] = state;                              // (1) (2) (3)
+        badgeData.text[1] = state;                              // 1, 2, 3
       }
       sendBadge(format, badgeData);
 
     } catch(e) {
-      badgeData.text[1] = 'invalid';                            // (4)
+      badgeData.text[1] = 'invalid';                            // 4
       sendBadge(format, badgeData);
     }
   });
@@ -96,20 +96,20 @@ boilerplate:
 ```js
 'use strict';
 
-const Joi = require('joi');                                // 1
-const ServiceTester = require('./runner/service-tester');  // 2
+const Joi = require('joi');                                        // 1
+const ServiceTester = require('./runner/service-tester');          // 2
 
-const t = new ServiceTester('Travis', '/travis');          // 3
-module.exports = t;                                        // 4
+const t = new ServiceTester({ id: 'travis', title: 'Travis CI' })  // 3
+module.exports = t;                                                // 4
 ```
 
 We'll import [Joi][] (1) which will help with our assertions. We'll add all
 our tests to this ServiceTester object (2), which gets exported from the
-module (4). The two arguments to the constructor (3) are the name of the
-service and its URI prefix. The tester will prepend it to the URIs you provide
-later, which saves copying and pasting.
-
-?? (3) What is the name for?
+module (4). The first attribute passed to the constructor (3) is the id of
+a service, which is used to identify it on the command line or in a pull
+request. The tester will prepend the id to the URIs you provide later, which
+saves copying and pasting. The second attribute is the human-readable title
+of the service, which prints when you run the tests.
 
 Next we'll add a test for the typical case.
 
@@ -163,7 +163,7 @@ npm run test:vendor -- --only=travis
 ```
 
 The `--only=` option indicates which service or services you want to test. You
-can provide a comma-separated list.
+can provide a comma-separated list of ids.
 
 The `--` tells the NPM CLI to pass the remaining arguments through to the test
 runner.
@@ -172,7 +172,7 @@ Here's the output:
 
 ```
 http://localhost:1111/try.html
-  Travis
+  Travis CI
     build status on default branch
       ✓
   [ GET http://localhost:1111/travis/rust-lang/rust.json ] (265ms)
@@ -196,7 +196,7 @@ t.create('build status on named branch')
 
 ```
 http://localhost:1111/try.html
-  Travis
+  Travis CI
     build status on default branch
       ✓
   [ GET http://localhost:1111/travis/rust-lang/rust.json ] (220ms)
@@ -278,14 +278,16 @@ t.create('connection error')
 Pull requests
 -------------
 
-The affected vendors should be included in brackets in the pull request title.
-That way, Travis will run those vendor tests.
+The affected vendor ids should be included in brackets in the pull request
+title. That way, Travis will run those vendor tests. When a pull request
+affects multiple vendors, they should be separated with spaces. The test
+runner is case-insensitive, so they should be capitalized for readability.
 
 For example:
 
-- [travis] Fix timeout issues
-- [travis sonar] Support user token authentication
-- [cran cpan ctan] Add test coverage
+- [Travis] Fix timeout issues
+- [Travis Sonar] Support user token authentication
+- [CRAN CPAN CTAN] Add test coverage
 
 
 Getting help
