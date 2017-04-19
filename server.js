@@ -6031,6 +6031,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Uptime Robot status integration.
+// API documentation : https://uptimerobot.com/api
 camp.route(/^\/uptimerobot\/status\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var monitorApiKey = match[1];  // eg, u956-afus321g565fghr519
@@ -6052,6 +6053,15 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
+      if (json.stat === 'fail') {
+        badgeData.text[1] = 'unknown error';
+        if (json.error) {
+          badgeData.text[1] = json.error.message;
+        }
+        badgeData.colorscheme = 'lightgrey';
+        sendBadge(format, badgeData);
+        return;
+      }
       var status = json.monitors[0].status;
       if (status === 0) {
         badgeData.text[1] = 'paused';
@@ -6081,6 +6091,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Uptime Robot ratio integration.
+// API documentation : https://uptimerobot.com/api
 camp.route(/^\/uptimerobot\/ratio\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var monitorApiKey = match[1];  // eg, u956-afus321g565fghr519
@@ -6097,16 +6108,35 @@ cache(function(data, match, sendBadge, request) {
     },
     uri: 'https://api.uptimerobot.com/v2/getMonitors'
   };
-  request(options, function(err, res, buffer) {
+  request(options, function(err, res, json) {
     if (err !== null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
     try {
-      var percent = parseFloat(buffer.monitors[0].custom_uptime_ratio);
-      badgeData.text[1] = percent + "%";
-      badgeData.colorscheme = floorCountColor(percent, 25, 50, 75);
+      if (json.stat === 'fail') {
+        badgeData.text[1] = 'unknown error';
+        if (json.error) {
+          badgeData.text[1] = json.error.message;
+        }
+        badgeData.colorscheme = 'lightgrey';
+        sendBadge(format, badgeData);
+        return;
+      }
+      var percent = parseFloat(json.monitors[0].custom_uptime_ratio);
+      badgeData.text[1] = percent + '%';
+      if (percent <= 10) {
+        badgeData.colorscheme = 'red';
+      } else if (percent <= 30) {
+        badgeData.colorscheme = 'yellow';
+      } else if (percent <= 50) {
+        badgeData.colorscheme = 'yellowgreen';
+      } else if (percent <= 70) {
+        badgeData.colorscheme = 'green';
+      } else {
+        badgeData.colorscheme = 'brightgreen';
+      }
       sendBadge(format, badgeData);
     } catch (e) {
       badgeData.text[1] = 'invalid';
