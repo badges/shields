@@ -16,11 +16,11 @@
 
 'use strict';
 
-const request = require('request');
-const minimist = require('minimist');
 const difference = require('lodash.difference');
-const serverHelpers = require('../../test/in-process-server-helpers');
+const minimist = require('minimist');
+const request = require('request');
 const Runner = require('./runner');
+const serverHelpers = require('../../test/in-process-server-helpers');
 
 const getTitle = (repoSlug, pullRequest) => new Promise((resolve, reject) => {
   const options = {
