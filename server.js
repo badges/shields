@@ -6046,6 +6046,12 @@ cache(function(data, match, sendBadge, request) {
     },
     uri: 'https://api.uptimerobot.com/v2/getMonitors'
   };
+  // A monitor API key must start with "m"
+  if (monitorApiKey.substring(0, "m".length) !== "m") {
+    badgeData.text[1] = 'api_key invalid';
+    sendBadge(format, badgeData);
+    return;
+  }
   request(options, function(err, res, json) {
     if (err !== null || res.statusCode >= 500 || typeof json !== 'object') {
       badgeData.text[1] = 'inaccessible';
@@ -6108,6 +6114,12 @@ cache(function(data, match, sendBadge, request) {
     },
     uri: 'https://api.uptimerobot.com/v2/getMonitors'
   };
+  // A monitor API key must start with "m"
+  if (monitorApiKey.substring(0, "m".length) !== "m") {
+    badgeData.text[1] = 'api_key invalid';
+    sendBadge(format, badgeData);
+    return;
+  }
   request(options, function(err, res, json) {
     if (err !== null) {
       badgeData.text[1] = 'inaccessible';
