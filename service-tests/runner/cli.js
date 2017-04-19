@@ -41,6 +41,9 @@ function getTitle (repoSlug, pullRequest) {
   });
 }
 
+// [Travis] Fix timeout issues => ['travis']
+// [Travis Sonar] Support user token authentication -> ['travis', 'sonar']
+// [CRAN CPAN CTAN] Add test coverage => ['cran', 'cpan', 'ctan']
 function servicesForTitle (title) {
   const matches = title.match(/\[([\w ]+)\]/);
   if (matches === null) {
