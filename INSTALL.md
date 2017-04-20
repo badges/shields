@@ -66,8 +66,6 @@ node server 8080
 
 The root gets redirected to <http://shields.io>.
 For testing purposes, you can go to `http://localhost/try.html`.
-You should modify that file. The "real" root, `http://localhost/index.html`,
-gets generated from the `try.html` file.
 
 # Format
 
@@ -156,6 +154,14 @@ http://[::1]:80/try.html
 ```
 
 Assuming Docker is running locally, you should be able to get to the application at http://localhost:8080/try.html. If you run Docker in a virtual machine (such as boot2docker or Docker Machine) then you will need to replace `localhost` with the actual IP address of that virtual machine.
+
+# Build the index
+
+Build the "real" index page:
+
+```bash
+make website
+```
 
 # Secret.json
 

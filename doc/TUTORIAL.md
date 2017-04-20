@@ -217,12 +217,6 @@ Edit [try.html][tryhtml] in the right section (Build, Downloads, ...) and add yo
 
 Save, restart and you can see it [locally][try].
 
-If this is fine, you can generate the website:
-
-    make website
-
-This changes the index.html file automatically.
-
 ## (5) Create a Pull Request
 
 You have implemented changes in `server.js`, `try.html` and `index.html`.
