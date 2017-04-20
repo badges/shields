@@ -14,8 +14,6 @@ You can read a [Tutorial on how to add a badge](doc/TUTORIAL.md).
 
 Note that the root gets redirected to <http://shields.io>.
 For testing purposes, you can go to `http://localhost/try.html`.
-You should modify that file. The "real" root, `http://localhost/index.html`,
-gets generated from the `try.html` file with a `make website`.
 
 ## Ground rules
 
