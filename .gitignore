@@ -18,6 +18,9 @@ Thumbs.db
 .Spotlight-V100
 .Trashes
 
+# Jetbrains
+/.idea
+
 # Created by https://www.gitignore.io/api/node
 
 ### Node ###
