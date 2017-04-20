@@ -6098,12 +6098,17 @@ cache(function(data, match, sendBadge, request) {
 
 // Uptime Robot ratio integration.
 // API documentation : https://uptimerobot.com/api
-camp.route(/^\/uptimerobot\/ratio\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/uptimerobot\/ratio(\/[^\/]+)?\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var numberOfDays = match[1];  // eg, 30
+  var numberOfDays = match[1];  // eg, 7, null if querying 30
   var monitorApiKey = match[2];  // eg, m778918918-3e92c097147760ee39d02d36
   var format = match[3];
   var badgeData = getBadgeData('uptime', data);
+  if (numberOfDays) {
+    numberOfDays = numberOfDays.slice(1);
+  } else {
+    numberOfDays = '30';
+  }
   var options = {
     method: 'POST',
     json: true,
