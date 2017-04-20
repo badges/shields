@@ -3864,11 +3864,10 @@ function mapNugetFeed(pattern, offset, getInfo) {
   camp.route(dtRegex,
   cache(function(data, match, sendBadge, request) {
     var info = getInfo(match);
-    var site = info.site;  // eg, `Chocolatey`, or `YoloDev`
     var repo = match[offset + 1];  // eg, `Nuget.Core`.
     var format = match[offset + 2];
     var apiUrl = info.feed;
-    var badgeData = getBadgeData(site, data);
+    var badgeData = getBadgeData('downloads', data);
     getNugetData(apiUrl, repo, request, function(err, nugetData) {
       if (err != null) {
         badgeData.text[1] = 'inaccessible';
