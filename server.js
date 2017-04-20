@@ -892,13 +892,14 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // SonarQube code coverage
-camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/sonar(.*)\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
     cache(function(data, match, sendBadge, request) {
-      var scheme = match[1];
-      var serverUrl = match[2];  // eg, `sonar.qatools.ru`.
-      var buildType = match[3];  // eg, `ru.yandex.qatools.allure:allure-core:master`.
-      var metricName = match[4];
-      var format = match[5];
+      var version = match[1];
+      var scheme = match[2];
+      var serverUrl = match[3];  // eg, `sonar.qatools.ru`.
+      var buildType = match[4];  // eg, `ru.yandex.qatools.allure:allure-core:master`.
+      var metricName = match[5];
+      var format = match[6];
 
       var sonarMetricName = metricName;
 
@@ -907,8 +908,13 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
         sonarMetricName = 'sqale_debt_ratio';
       }
 
-      var apiUrl = scheme + '://' + serverUrl + '/api/resources?resource=' + buildType
-          + '&depth=0&metrics=' + encodeURIComponent(sonarMetricName) + '&includetrends=true';
+      // Sonarqube API change: https://sonarqube.com/web_api/api/resources (deprecated since 5.4)
+      var apiUrl;
+      if (version === '' || parseFloat(version) < 5.4) {
+          apiUrl = scheme + '://' + serverUrl + '/api/resources?resource=' + buildType + '&depth=0&metrics=' + encodeURIComponent(sonarMetricName) + '&includetrends=true';
+      } else {
+          apiUrl = scheme + '://' + serverUrl + '/api/measures/component?componentKey=' + buildType + '&metricKeys=' + encodeURIComponent(sonarMetricName);
+      }
 
       var badgeData = getBadgeData(metricName.replace(/_/g, ' '), data);
 
@@ -920,7 +926,13 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
         try {
           var data = JSON.parse(buffer);
 
-          var value = data[0].msr[0].val;
+          // Sonarqube API change: https://sonarqube.com/web_api/api/resources (deprecated since 5.4)
+          var value;
+          if (version === '' || parseFloat(version) < 5.4) {
+              value = data[0].msr[0].val;
+          } else {
+              value = parseInt(data.component.measures[0].value);
+          }
 
           if (value === undefined) {
             badgeData.text[1] = 'unknown';
