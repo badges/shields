@@ -38,15 +38,24 @@ if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);
 }
 
-const {
-  color: versionColor,
-  latest: latestVersion,
-} = require('./lib/version.js');
+const {latest: latestVersion} = require('./lib/version.js');
 const {
   compare: phpVersionCompare,
   latest: phpLatestVersion,
   isStable: phpStableVersion,
 } = require('./lib/php-version.js');
+const {
+  currencyFromCode,
+  metric,
+  ordinalNumber,
+  starRating,
+} = require('./lib/text-formatters.js');
+const {
+  coveragePercentage: coveragePercentageColor,
+  downloadCount: downloadCountColor,
+  floorCount: floorCountColor,
+  version: versionColor,
+} = require('./lib/color-formatters.js');
 
 var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
@@ -6286,23 +6295,6 @@ function regularUpdate(url, interval, scraper, cb) {
   });
 }
 
-// Given a number, string with appropriate unit in the metric system, SI.
-// Note: numbers beyond the peta- cannot be represented as integers in JS.
-var metricPrefix = ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'];
-var metricPower = metricPrefix
-    .map(function(a, i) { return Math.pow(1000, i + 1); });
-function metric(n) {
-  for (var i = metricPrefix.length - 1; i >= 0; i--) {
-    var limit = metricPower[i];
-    if (n >= limit) {
-      n = Math.round(n / limit);
-      return ''+n + metricPrefix[i];
-    }
-  }
-  return ''+n;
-}
-
-
 // Get data from a svg-style badge.
 // cb: function(err, string)
 function fetchFromSvg(request, url, cb) {
@@ -6317,48 +6309,4 @@ function fetchFromSvg(request, url, cb) {
       cb(e);
     }
   });
-}
-
-function ordinalNumber(n) {
-  var s=["ᵗʰ","ˢᵗ","ⁿᵈ","ʳᵈ"], v=n%100;
-  return n+(s[(v-20)%10]||s[v]||s[0]);
-}
-
-// Convert ISO 4217 code to unicode string.
-function currencyFromCode(code) {
-  return ({
-    CNY: '¥',
-    EUR: '€',
-    GBP: '₤',
-    USD: '$',
-  })[code] || code;
-}
-
-function starRating(rating) {
-  var stars = '';
-  while (stars.length < rating) { stars += '★'; }
-  while (stars.length < 5) { stars += '☆'; }
-  return stars;
-}
-
-function coveragePercentageColor(percentage) {
-  return floorCountColor(percentage, 80, 90, 100);
-}
-
-function downloadCountColor(downloads) {
-  return floorCountColor(downloads, 10, 100, 1000);
-}
-
-function floorCountColor(value, yellow, yellowgreen, green) {
-  if (value === 0) {
-    return 'red';
-  } else if (value < yellow) {
-    return 'yellow';
-  } else if (value < yellowgreen) {
-    return 'yellowgreen';
-  } else if (value < green) {
-    return 'green';
-  } else {
-    return 'brightgreen';
-  }
 }
