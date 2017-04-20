@@ -48,7 +48,7 @@ deploy-s2:
 
 deploy-gh-pages:
 	(git checkout -B gh-pages master && \
-	git add index.html && \
+	git add -f index.html && \
 	git commit -m 'Build index.html for gh-pages deploy' && \
 	git push -f origin gh-pages:gh-pages) || git checkout master
 	git checkout master
