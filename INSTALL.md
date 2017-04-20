@@ -44,6 +44,11 @@ allow you to install that.
 
 On Ubuntu / Debian: `sudo apt-get install phantomjs`.
 
+You will also need version 6 of Node.js.
+The [Node.js documentation](https://nodejs.org/en/download/package-manager/) explains
+how to install it on various systems.
+On Ubuntu / Debian: `curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -; sudo apt-get install -y nodejs`.
+
 ```bash
 git clone https://github.com/badges/shields.git
 cd shields
