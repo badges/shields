@@ -191,4 +191,4 @@ This is also available as a gem `badgerbadgerbadger`, [code here][gem].
 
 # License
 
-All work here is licensed CC0.
+All work here is licensed [CC0](LICENSE.md).
