@@ -8,6 +8,7 @@ We invite participation through [GitHub Issues][], which we use much like a disc
 
 Please see [INSTALL.md][] for information on how to start contributing code to
 shields.io.
+You can read a [Tutorial on how to add a badge](doc/TUTORIAL.md).
 
 [INSTALL.md]: ./INSTALL.md
 
@@ -27,6 +28,12 @@ gets generated from the `try.html` file with a `make website`.
   `/VENDOR/SUBVENDOR-BADGE-SPECIFIC/PARAMETERS.format`. For instance,
   `https://img.shields.io/gitter/room/nwjs/nw.js.svg`. The vendor is gitter, the
   badge is for rooms, the parameter is nwjs/nw.js, and the format is svg.
+
+Please minimize `.svg` files (eg. in logo/) through [SVGO][] (eg. by using
+[svgomg][]).
+
+[SVGO]: https://github.com/svg/svgo
+[svgomg]: https://jakearchibald.github.io/svgomg/
 
 ## Implementations
 
