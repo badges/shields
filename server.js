@@ -32,6 +32,8 @@ var svg2img = require('./lib/svg-to-img.js');
 var loadLogos = require('./lib/load-logos.js');
 var githubAuth = require('./lib/github-auth.js');
 var querystring = require('querystring');
+var moment = require('moment');
+moment().format();
 var xml2js = require('xml2js');
 var serverSecrets = require('./lib/server-secrets');
 if (serverSecrets && serverSecrets.gh_client_id) {
@@ -3533,6 +3535,85 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// GitHub statistics integration.
+camp.route(/^\/github\/stats\/([^\/]+)\/([^\/]+)\/(week|month|year)\.(svg|png|gif|jpg|json)$/,
+  cache(function(data, match, sendBadge, request) {
+    var user = match[1];  // eg, mashape
+    var repo = match[2];  // eg, apistatus
+    var type = match[3];
+    var format = match[4];
+    var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/stats/commit_activity';
+    var badgeData = getBadgeData('commits', data);
+    if (badgeData.template === 'social') {
+      badgeData.logo = badgeData.logo || logos.github;
+      badgeData.links = [
+        'https://github.com/' + user + '/' + repo
+      ];
+    }
+    githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
+      if (err !== null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        var parse = JSON.parse(buffer);
+        if (type === 'week') {
+          badgeData.text[1] = metric(parse[51].total) + '/week';
+        } else if (type === 'month') {
+          badgeData.text[1] = metric(parse.slice(48, 52).map(function(a) {
+            return a.total;
+          }).reduce(function(a, b) { return a + b; })) + '/month';
+        } else if (type === 'year') {
+          badgeData.text[1] = metric(parse.map(function(a) {
+            return a.total;
+          }).reduce(function(a, b) { return a + b; })) + '/year';
+        }
+        badgeData.colorscheme = 'blue';
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }));
+
+// GitHub commits integration.
+camp.route(/^\/github\/commits\/([^\/]+)\/([^\/]+)(?:\/(.+))?\/last\.(svg|png|gif|jpg|json)$/,
+  cache(function(data, match, sendBadge, request) {
+    var user = match[1];  // eg, mashape
+    var repo = match[2];  // eg, apistatus
+    var branch = match[3];
+    var format = match[4];
+    var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/commits';
+    if (branch) {
+      apiUrl += '?sha=' + branch;
+    }
+    var badgeData = getBadgeData('last commit ', data);
+    if (badgeData.template === 'social') {
+      badgeData.logo = badgeData.logo || logos.github;
+      badgeData.links = [
+        'https://github.com/' + user + '/' + repo
+      ];
+    }
+    githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
+      if (err !== null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        var data = JSON.parse(buffer)[0].commit.author.date;
+        badgeData.text[1] = parseDate(data);
+        badgeData.colorscheme = colorDate(Date.parse(data));
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }));
+
 // Bitbucket issues integration.
 camp.route(/^\/bitbucket\/issues(-raw)?\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -6482,6 +6563,31 @@ function metric(n) {
   return ''+n;
 }
 
+function colorDate(date) {
+  var diff = 365 - moment().diff(moment(date), 'days');
+  return floorCountColor(diff,
+    [ {v: -365, c: 'red'},
+      {v: 0,    c: 'orange'},
+      {v: 185,  c: 'yellow'},
+      {v: 335,  c: 'yellowgreen'},
+      {v: 358,  c: 'green'}
+    ], 'brightgreen');
+}
+
+// Parse date to Today, Yesterday, last ddd and so on
+function parseDate(d) {
+  var date = moment(d);
+  var dateString = date.calendar(null, {
+    lastDay: ' [Yesterday]',
+    sameDay: ' [Today]',
+    lastWeek: '[last] dddd',
+    sameElse: ' D MMM YYYY '
+  });
+  // Trim current year from date string
+  var currentYear = moment().year();
+  return dateString.replace(' ' + currentYear, '');
+}
+
 
 // Get data from a svg-style badge.
 // cb: function(err, string)
@@ -6510,7 +6616,7 @@ function currencyFromCode(code) {
     CNY: '¥',
     EUR: '€',
     GBP: '₤',
-    USD: '$',
+    USD: '$'
   })[code] || code;
 }
 
@@ -6522,25 +6628,33 @@ function starRating(rating) {
 }
 
 function coveragePercentageColor(percentage) {
-  return floorCountColor(percentage, 80, 90, 100);
+  return floorCountColor(percentage, [
+    {v: 0,   c: 'red'},
+    {v: 80,  c: 'yellow'},
+    {v: 90,  c: 'yellowgreen'},
+    {v: 100, c: 'green'}
+  ], 'brightgreen');
 }
 
 function downloadCountColor(downloads) {
-  return floorCountColor(downloads, 10, 100, 1000);
+  return floorCountColor(downloads, [
+    {v: 0,    c: 'red'},
+    {v: 10,   c: 'yellow'},
+    {v: 100,  c: 'yellowgreen'},
+    {v: 1000, c: 'green'}
+  ], 'brightgreen');
 }
 
-function floorCountColor(value, yellow, yellowgreen, green) {
-  if (value === 0) {
-    return 'red';
-  } else if (value < yellow) {
-    return 'yellow';
-  } else if (value < yellowgreen) {
-    return 'yellowgreen';
-  } else if (value < green) {
-    return 'green';
-  } else {
-    return 'brightgreen';
+function floorCountColor(value, configList, lastColor) {
+  var result = configList[0].c;
+  for (var i = 0; i < configList.length; i++) {
+    if (value < configList[i].v) {
+      return result;
+    } else {
+      result = configList[i].c;
+    }
   }
+  return lastColor;
 }
 
 function versionColor(version) {
@@ -6646,7 +6760,7 @@ function phpNumberedVersionData(version) {
     return {
       numbers: parts[1],
       modifier: 5,
-      modifierCount: 1,
+      modifierCount: 1
     };
   }
 
