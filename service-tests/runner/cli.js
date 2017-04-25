@@ -19,7 +19,6 @@
 const difference = require('lodash.difference');
 const fetch = require('node-fetch');
 const minimist = require('minimist');
-const request = require('request');
 const Runner = require('./runner');
 const serverHelpers = require('../../test/in-process-server-helpers');
 
