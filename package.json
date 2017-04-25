@@ -72,6 +72,7 @@
     "lodash.difference": "^4.5.0",
     "mocha": "^3.2.0",
     "nock": "^9.0.13",
+    "node-fetch": "^1.6.3",
     "opn-cli": "^3.1.0",
     "sinon": "^2.1.0"
   }

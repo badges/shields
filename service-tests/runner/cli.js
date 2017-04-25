@@ -17,28 +17,24 @@
 'use strict';
 
 const difference = require('lodash.difference');
+const fetch = require('node-fetch');
 const minimist = require('minimist');
 const request = require('request');
 const Runner = require('./runner');
 const serverHelpers = require('../../test/in-process-server-helpers');
 
 function getTitle (repoSlug, pullRequest) {
-  return new Promise((resolve, reject) => {
-    const options = {
-      uri: `https://api.github.com/repos/${repoSlug}/pulls/${pullRequest}`,
-      json: true,
-      headers: { 'User-Agent': 'badges/shields' },
-    };
-    request(options, (err, res, json) => {
-      if (err !== null) {
-        reject(err);
-      } else if (res.statusCode !== 200) {
-        reject(Error(`Status code ${res.statusCode}`));
-      } else {
-        resolve(json.title);
+  const uri = `https://api.github.com/repos/${repoSlug}/pulls/${pullRequest}`;
+  const options = { headers: { 'User-Agent': 'badges/shields' } };
+  return fetch(uri, options)
+    .then(res => {
+      if (! res.ok) {
+        throw Error(`${res.status} ${res.statusText}`);
       }
-    });
-  });
+
+      return res.json();
+    })
+    .then(json => json.title);
 }
 
 // [Travis] Fix timeout issues => ['travis']
