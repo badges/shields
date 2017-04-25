@@ -3171,14 +3171,17 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// GitHub release integration.
-camp.route(/^\/github\/release\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+// GitHub release integration
+camp.route(/^\/github\/release\/([^\/]+\/[^\/]+)(?:\/(all))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, qubyte/rubidium
-  var repo = match[2];
+  var userRepo = match[1];  // eg, qubyte/rubidium
+  var allReleases = match[2];
   var format = match[3];
-  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/releases/latest';
+  var apiUrl = githubApiUrl + '/repos/' + userRepo + '/releases';
   var badgeData = getBadgeData('release', data);
+  if (allReleases === undefined) {
+    apiUrl = apiUrl + '/latest';
+  }
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
   }
@@ -3190,6 +3193,9 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
+      if (allReleases === 'all') {
+        data = data[0];
+      }
       var version = data.tag_name;
       var prerelease = data.prerelease;
       var vdata = versionColor(version);
