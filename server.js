@@ -5908,22 +5908,21 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Test if a webpage is online
-camp.route(/^\/website(-(([^-/]|--|\/\/)+)-(([^-/]|--|\/\/)+)(-(([^-/]|--|\/\/)+)-(([^-/]|--|\/\/)+))?)?(-(([^-/]|--|\/\/)+))?\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/website(-(([^-/]|--|\/\/)+)-(([^-/]|--|\/\/)+)(-(([^-/]|--|\/\/)+)-(([^-/]|--|\/\/)+))?)?\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var onlineMessage = escapeFormatSlashes(match[2] != null ? match[2] : "online");
   var offlineMessage = escapeFormatSlashes(match[4] != null ? match[4] : "offline");
   var onlineColor = escapeFormatSlashes(match[7] != null ? match[7] : "brightgreen");
   var offlineColor = escapeFormatSlashes(match[9] != null ? match[9] : "red");
-  var label = escapeFormatSlashes(match[12] != null ? match[12] : "website");
-  var userProtocol = match[14];
-  var userURI = match[15];
-  var format = match[16];
+  var userProtocol = match[11];
+  var userURI = match[12];
+  var format = match[13];
   var withProtocolURI = userProtocol + "://" + userURI;
   var options = {
     method: 'HEAD',
     uri: withProtocolURI,
   };
-  var badgeData = getBadgeData(label, data);
+  var badgeData = getBadgeData("website", data);
   badgeData.colorscheme = undefined;
   request(options, function(err, res) {
     // We consider all HTTP status codes below 310 as success.
