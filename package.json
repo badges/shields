@@ -35,6 +35,9 @@
     "svgo": "~0.7.1",
     "xml2js": "~0.4.16"
   },
+  "engines" : {
+    "node" : ">=5.10"
+  },
   "scripts": {
     "lint": "eslint '**/*.js'",
     "test:js": "mocha 'test/**/*.spec.js'",
