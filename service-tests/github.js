@@ -26,3 +26,35 @@ t.create('File size for "not a regular file"')
     name: Joi.equal('size'),
     value: Joi.string().regex(/^not a regular file$/),
   }));
+
+t.create('downloads for release without slash')
+  .get('/downloads/atom/atom/v0.190.0/total.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('downloads'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? v0\.190\.0$/)
+  }));
+
+t.create('downloads for specific asset without slash')
+  .get('/downloads/atom/atom/v0.190.0/atom-amd64.deb.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('downloads'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? v0\.190\.0 \[atom-amd64\.deb\]$/)
+  }));
+
+t.create('downloads for release with slash')
+  .get('/downloads/NHellFire/dban/stable/v2.2.8/total.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('downloads'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? stable\/v2\.2\.8$/)
+  }));
+
+t.create('downloads for specific asset with slash')
+  .get('/downloads/NHellFire/dban/stable/v2.2.8/dban-2.2.8_i586.iso.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('downloads'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? stable\/v2\.2\.8 \[dban-2\.2\.8_i586\.iso\]$/)
+  }));
+
+t.create('downloads for unknown release')
+  .get('/downloads/atom/atom/does-not-exist/total.json')
+  .expectJSON({ name: 'downloads', value: 'none' });
