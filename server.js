@@ -901,7 +901,7 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
             // [0.2,0.5) ==> C (yellow)
             // [0.5,1)   ==> D (orange)
             // [1,)      ==> E (red)
-            colorValue = value;
+            var colorValue = value;
             if (metricName === 'public_documented_api_density'){
               //Some metrics higher % is better
               colorValue = 100 - value  
