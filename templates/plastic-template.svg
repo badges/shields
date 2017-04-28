@@ -6,11 +6,11 @@
     <stop offset="1"  stop-color="#000" stop-opacity=".5"/>
   </linearGradient>
 
-  <mask id="round">
+  <clipPath id="round">
     <rect width="{{=it.widths[0]+it.widths[1]}}" height="18" rx="4" fill="#fff"/>
-  </mask>
+  </clipPath>
 
-  <g mask="url(#round)">
+  <g clip-path="url(#round)">
     <rect width="{{=it.widths[0]}}" height="18" fill="{{=it.escapeXml(it.colorA||"#555")}}"/>
     <rect x="{{=it.widths[0]}}" width="{{=it.widths[1]}}" height="18" fill="{{=it.escapeXml(it.colorB||"#4c1")}}"/>
     <rect width="{{=it.widths[0]+it.widths[1]}}" height="18" fill="url(#smooth)"/>

@@ -1,0 +1,25 @@
+env:
+  node: true
+  # We use Promise, Map, and occasional ES6 syntax.
+  es6: true
+  mocha: true
+
+extends:
+  # Enable a set of unopinionated, style-agnostic rules which cover many
+  # likely errors.
+  - "eslint:recommended"
+
+rules:
+  # Disable some rules from eslint:recommended.
+  no-console: "off"
+  no-empty: ["error", { "allowEmptyCatch": true }]
+  # Allow unused parameters. In callbacks, removing them seems to obscure
+  # what the functions are doing.
+  no-unused-vars: ["error", {"args": "none"}]
+
+  # We use semicolons.
+  semi: ["error", "always"]
+
+  # We keep whitespace cleaned up.
+  no-trailing-spaces: "error"
+  eol-last: "error"
