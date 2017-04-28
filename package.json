@@ -43,7 +43,7 @@
     "coverage:report:reopen": "opn coverage/lcov-report/index.html",
     "coverage:report:open": "npm run coverage:report && npm run coverage:report:reopen",
     "lint": "eslint '**/*.js'",
-    "test:js": "mocha 'test/**/*.spec.js'",
+    "test:js": "mocha lib '*.spec.js'",
     "test:services": "mocha --delay service-tests/runner/cli.js",
     "test": "npm run lint && npm run test:js"
   },
