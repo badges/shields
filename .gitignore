@@ -5,6 +5,7 @@
 /redis
 /ServerScript
 /private
+/index.html
 
 # Folder view configuration files
 .DS_Store
@@ -17,6 +18,9 @@ Thumbs.db
 # Files that might appear on external disks
 .Spotlight-V100
 .Trashes
+
+# Jetbrains
+/.idea
 
 # Created by https://www.gitignore.io/api/node
 

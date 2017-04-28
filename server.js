@@ -3,7 +3,7 @@ var secureServerKey = process.env.HTTPS_KEY;
 var secureServerCert = process.env.HTTPS_CRT;
 var serverPort = +process.env.PORT || +process.argv[2] || (secureServer? 443: 80);
 var bindAddress = process.env.BIND_ADDRESS || process.argv[3] || '::';
-var infoSite = process.env.INFOSITE || "http://shields.io";
+var infoSite = process.env.INFOSITE || "https://shields.io";
 var githubApiUrl = process.env.GITHUB_URL || 'https://api.github.com';
 var path = require('path');
 var Camp = require('camp');
@@ -37,6 +37,25 @@ var serverSecrets = require('./lib/server-secrets');
 if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);
 }
+
+const {latest: latestVersion} = require('./lib/version.js');
+const {
+  compare: phpVersionCompare,
+  latest: phpLatestVersion,
+  isStable: phpStableVersion,
+} = require('./lib/php-version.js');
+const {
+  currencyFromCode,
+  metric,
+  ordinalNumber,
+  starRating,
+} = require('./lib/text-formatters.js');
+const {
+  coveragePercentage: coveragePercentageColor,
+  downloadCount: downloadCountColor,
+  floorCount: floorCountColor,
+  version: versionColor,
+} = require('./lib/color-formatters.js');
 
 var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
@@ -901,18 +920,27 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
       var format = match[5];
 
       var sonarMetricName = metricName;
-
       if (metricName === 'tech_debt') {
         //special condition for backwards compatibility
         sonarMetricName = 'sqale_debt_ratio';
       }
 
-      var apiUrl = scheme + '://' + serverUrl + '/api/resources?resource=' + buildType
-          + '&depth=0&metrics=' + encodeURIComponent(sonarMetricName) + '&includetrends=true';
+      var options = {
+        uri: scheme + '://' + serverUrl + '/api/resources?resource=' + buildType
+          + '&depth=0&metrics=' + encodeURIComponent(sonarMetricName) + '&includetrends=true',
+        headers: {
+          Accept: 'application/json'
+        }
+      };
+      if (serverSecrets && serverSecrets.sonarqube_token) {
+        options.auth = {
+          user: serverSecrets.sonarqube_token
+        };
+      }
 
       var badgeData = getBadgeData(metricName.replace(/_/g, ' '), data);
 
-      request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
+      request(options, function(err, res, buffer) {
         if (err != null) {
           badgeData.text[1] = 'inaccessible';
           sendBadge(format, badgeData);
@@ -1673,12 +1701,24 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // npm license integration.
-camp.route(/^\/npm\/l\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/npm\/l\/(?:@([^\/]+)\/)?([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var repo = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
-  var format = match[2];
-  var apiUrl = 'http://registry.npmjs.org/' + repo + '/latest';
-  var badgeData = getBadgeData('license', data);
+  const scope = match[1];        // "user" (when a scope "@user" is supplied)
+  const packageName = match[2];  // "express"
+  const format = match[3];       // "svg"
+  let apiUrl;
+  if (scope === undefined) {
+    // e.g. https://registry.npmjs.org/express/latest
+    // Use this endpoint as an optimization. It covers the vast majority of
+    // these badges, and the response is smaller.
+    apiUrl = `https://registry.npmjs.org/${packageName}/latest`;
+  } else {
+    // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
+    // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
+    const path = encodeURIComponent(`${scope}/${packageName}`);
+    apiUrl = `https://registry.npmjs.org/@${path}`;
+  }
+  const badgeData = getBadgeData('license', data);
   request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -1686,8 +1726,14 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      var license = data.license;
+      const data = JSON.parse(buffer);
+      let license;
+      if (scope === undefined) {
+        license = data.license;
+      } else {
+        const latestVersion = data['dist-tags'].latest;
+        license = data.versions[latestVersion].license;
+      }
       if (Array.isArray(license)) {
         license = license.join(', ');
       } else if (typeof license == 'object') {
@@ -3125,14 +3171,17 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// GitHub release integration.
-camp.route(/^\/github\/release\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+// GitHub release integration
+camp.route(/^\/github\/release\/([^\/]+\/[^\/]+)(?:\/(all))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, qubyte/rubidium
-  var repo = match[2];
+  var userRepo = match[1];  // eg, qubyte/rubidium
+  var allReleases = match[2];
   var format = match[3];
-  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/releases/latest';
+  var apiUrl = githubApiUrl + '/repos/' + userRepo + '/releases';
   var badgeData = getBadgeData('release', data);
+  if (allReleases === undefined) {
+    apiUrl = apiUrl + '/latest';
+  }
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
   }
@@ -3144,6 +3193,9 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
+      if (allReleases === 'all') {
+        data = data[0];
+      }
       var version = data.tag_name;
       var prerelease = data.prerelease;
       var vdata = versionColor(version);
@@ -3727,8 +3779,9 @@ function mapNugetFeedv2(pattern, offset, getInfo) {
 function mapNugetFeed(pattern, offset, getInfo) {
   var vRegex = new RegExp('^\\/' + pattern + '\\/v\\/(.*)\\.(svg|png|gif|jpg|json)$');
   var vPreRegex = new RegExp('^\\/' + pattern + '\\/vpre\\/(.*)\\.(svg|png|gif|jpg|json)$');
+  var dtRegex = new RegExp('^\\/' + pattern + '\\/dt\\/(.*)\\.(svg|png|gif|jpg|json)$');
 
-  function getNugetVersion(apiUrl, id, includePre, request, done) {
+  function getNugetData(apiUrl, id, request, done) {
     // get service index document
     regularUpdate(apiUrl + '/index.json',
       // The endpoint changes once per year (ie, a period of n = 1 year).
@@ -3743,22 +3796,20 @@ function mapNugetFeed(pattern, offset, getInfo) {
       function(buffer) {
         var data = JSON.parse(buffer);
 
-        var autocompleteResources = data.resources.filter(function(resource) {
-          return resource['@type'] === 'SearchAutocompleteService';
+        var searchQueryResources = data.resources.filter(function(resource) {
+          return resource['@type'] === 'SearchQueryService';
         });
 
-        return autocompleteResources;
+        return searchQueryResources;
       },
-      function(err, autocompleteResources) {
+      function(err, searchQueryResources) {
         if (err != null) { done(err); return; }
 
         // query autocomplete service
-        var randomEndpointIdx = Math.floor(Math.random() * autocompleteResources.length);
-        var reqUrl = autocompleteResources[randomEndpointIdx]['@id']
-          + '?id=' + encodeURIComponent(id.toLowerCase())   // NuGet package id (lowercase)
-          + '&prerelease=true'                              // Include prerelease versions?
-          + '&skip=0'                                       // Start at first package found
-          + '&take=5000';                                   // Max. number of results
+        var randomEndpointIdx = Math.floor(Math.random() * searchQueryResources.length);
+        var reqUrl = searchQueryResources[randomEndpointIdx]['@id']
+          + '?q=packageid:' + encodeURIComponent(id.toLowerCase()) // NuGet package id (lowercase)
+          + '&prerelease=true';                                    // Include prerelease versions?
 
         request(reqUrl, function(err, res, buffer) {
           if (err != null) {
@@ -3768,21 +3819,35 @@ function mapNugetFeed(pattern, offset, getInfo) {
 
           try {
             var data = JSON.parse(buffer);
-            var versions = data.data;
-            if (!includePre) {
-              // Remove prerelease versions.
-              var filteredVersions = versions.filter(function(version) {
-                return !/-/.test(version);
-              });
-              if (filteredVersions.length > 0) {
-                versions = filteredVersions;
-              }
+            if (!Array.isArray(data.data) || data.data.length !== 1) {
+              done(new Error('Package not found in feed'));
+              return;
             }
-            var lastVersion = versions[versions.length - 1];
-            done(null, lastVersion);
+            done(null, data.data[0]);
           } catch (e) { done(e); }
         });
       });
+  }
+
+  function getNugetVersion(apiUrl, id, includePre, request, done) {
+    getNugetData(apiUrl, id, request, function(err, data) {
+      if (err) {
+        done(err);
+        return;
+      }
+      var versions = data.versions || [];
+      if (!includePre) {
+        // Remove prerelease versions.
+        var filteredVersions = versions.filter(function(version) {
+          return !/-/.test(version.version);
+        });
+        if (filteredVersions.length > 0) {
+          versions = filteredVersions;
+        }
+      }
+      var lastVersion = versions[versions.length - 1];
+      done(null, lastVersion.version);
+    });
   }
 
   camp.route(vRegex,
@@ -3839,6 +3904,34 @@ function mapNugetFeed(pattern, offset, getInfo) {
         } else {
           badgeData.colorscheme = 'blue';
         }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }));
+
+
+  camp.route(dtRegex,
+  cache(function(data, match, sendBadge, request) {
+    var info = getInfo(match);
+    var repo = match[offset + 1];  // eg, `Nuget.Core`.
+    var format = match[offset + 2];
+    var apiUrl = info.feed;
+    var badgeData = getBadgeData('downloads', data);
+    getNugetData(apiUrl, repo, request, function(err, nugetData) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        // Official NuGet server uses "totalDownloads" whereas MyGet uses
+        // "totaldownloads" (lowercase D). Ugh.
+        var downloads = nugetData.totalDownloads || nugetData.totaldownloads || 0;
+        badgeData.text[1] = metric(downloads);
+        badgeData.colorscheme = downloadCountColor(downloads);
         sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'invalid';
@@ -5491,7 +5584,7 @@ cache(function(data, match, sendBadge, request) {
   var status = match[1];  // eg, yes
   var year = +match[2];  // eg, 2016
   var format = match[3];
-  var badgeData = getBadgeData('maintained?', data);
+  var badgeData = getBadgeData('maintained', data);
   try {
     var now = new Date();
     var cy = now.getUTCFullYear();  // current year.
@@ -5815,12 +5908,12 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Test if a webpage is online
-camp.route(/^\/website(-(([^-]|--)*?)-(([^-]|--)*)(-(([^-]|--)+)-(([^-]|--)+))?)?\/(.+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/website(-(([^-/]|--|\/\/)+)-(([^-/]|--|\/\/)+)(-(([^-/]|--|\/\/)+)-(([^-/]|--|\/\/)+))?)?\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var onlineMessage = escapeFormat(match[2] != null ? match[2] : "online");
-  var offlineMessage = escapeFormat(match[4] != null ? match[4] : "offline");
-  var onlineColor = escapeFormat(match[7] != null ? match[7] : "brightgreen");
-  var offlineColor = escapeFormat(match[9] != null ? match[9] : "red");
+  var onlineMessage = escapeFormatSlashes(match[2] != null ? match[2] : "online");
+  var offlineMessage = escapeFormatSlashes(match[4] != null ? match[4] : "offline");
+  var onlineColor = escapeFormatSlashes(match[7] != null ? match[7] : "brightgreen");
+  var offlineColor = escapeFormatSlashes(match[9] != null ? match[9] : "red");
   var userProtocol = match[11];
   var userURI = match[12];
   var format = match[13];
@@ -5829,7 +5922,7 @@ cache(function(data, match, sendBadge, request) {
     method: 'HEAD',
     uri: withProtocolURI,
   };
-  var badgeData = getBadgeData('website', data);
+  var badgeData = getBadgeData("website", data);
   badgeData.colorscheme = undefined;
   request(options, function(err, res) {
     // We consider all HTTP status codes below 310 as success.
@@ -6030,6 +6123,138 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Uptime Robot status integration.
+// API documentation : https://uptimerobot.com/api
+camp.route(/^\/uptimerobot\/status\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var monitorApiKey = match[1];  // eg, m778918918-3e92c097147760ee39d02d36
+  var format = match[2];
+  var badgeData = getBadgeData('status', data);
+  var options = {
+    method: 'POST',
+    json: true,
+    body: {
+      "api_key": monitorApiKey,
+      "format": "json"
+    },
+    uri: 'https://api.uptimerobot.com/v2/getMonitors'
+  };
+  // A monitor API key must start with "m"
+  if (monitorApiKey.substring(0, "m".length) !== "m") {
+    badgeData.text[1] = 'must use a monitor key';
+    sendBadge(format, badgeData);
+    return;
+  }
+  request(options, function(err, res, json) {
+    if (err !== null || res.statusCode >= 500 || typeof json !== 'object') {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      if (json.stat === 'fail') {
+        badgeData.text[1] = 'vendor error';
+        if (json.error && typeof json.error.message === 'string') {
+          badgeData.text[1] = json.error.message;
+        }
+        badgeData.colorscheme = 'lightgrey';
+        sendBadge(format, badgeData);
+        return;
+      }
+      var status = json.monitors[0].status;
+      if (status === 0) {
+        badgeData.text[1] = 'paused';
+        badgeData.colorscheme = 'yellow';
+      } else if (status === 1) {
+        badgeData.text[1] = 'not checked yet';
+        badgeData.colorscheme = 'yellowgreen';
+      } else if (status === 2) {
+        badgeData.text[1] = 'up';
+        badgeData.colorscheme = 'brightgreen';
+      } else if (status === 8) {
+        badgeData.text[1] = 'seems down';
+        badgeData.colorscheme = 'orange';
+      } else if (status === 9) {
+        badgeData.text[1] = 'down';
+        badgeData.colorscheme = 'red';
+      } else {
+        badgeData.text[1] = 'invalid';
+        badgeData.colorscheme = 'lightgrey';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// Uptime Robot ratio integration.
+// API documentation : https://uptimerobot.com/api
+camp.route(/^\/uptimerobot\/ratio(\/[^\/]+)?\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var numberOfDays = match[1];  // eg, 7, null if querying 30
+  var monitorApiKey = match[2];  // eg, m778918918-3e92c097147760ee39d02d36
+  var format = match[3];
+  var badgeData = getBadgeData('uptime', data);
+  if (numberOfDays) {
+    numberOfDays = numberOfDays.slice(1);
+  } else {
+    numberOfDays = '30';
+  }
+  var options = {
+    method: 'POST',
+    json: true,
+    body: {
+      "api_key": monitorApiKey,
+      "custom_uptime_ratios": numberOfDays,
+      "format": "json"
+    },
+    uri: 'https://api.uptimerobot.com/v2/getMonitors'
+  };
+  // A monitor API key must start with "m"
+  if (monitorApiKey.substring(0, "m".length) !== "m") {
+    badgeData.text[1] = 'must use a monitor key';
+    sendBadge(format, badgeData);
+    return;
+  }
+  request(options, function(err, res, json) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      if (json.stat === 'fail') {
+        badgeData.text[1] = 'vendor error';
+        if (json.error && typeof json.error.message === 'string') {
+          badgeData.text[1] = json.error.message;
+        }
+        badgeData.colorscheme = 'lightgrey';
+        sendBadge(format, badgeData);
+        return;
+      }
+      var percent = parseFloat(json.monitors[0].custom_uptime_ratio);
+      badgeData.text[1] = percent + '%';
+      if (percent <= 10) {
+        badgeData.colorscheme = 'red';
+      } else if (percent <= 30) {
+        badgeData.colorscheme = 'yellow';
+      } else if (percent <= 50) {
+        badgeData.colorscheme = 'yellowgreen';
+      } else if (percent <= 70) {
+        badgeData.colorscheme = 'green';
+      } else {
+        badgeData.colorscheme = 'brightgreen';
+      }
+      sendBadge(format, badgeData);
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
@@ -6140,6 +6365,13 @@ function escapeFormat(t) {
     // Double underscore and double dash.
     .replace(/__/g, '_').replace(/--/g, '-');
 }
+
+function escapeFormatSlashes(t) {
+  return escapeFormat(t)
+    // Double slash
+    .replace(/\/\//g, '/');
+}
+
 
 function sixHex(s) { return /^[0-9a-fA-F]{6}$/.test(s); }
 
@@ -6258,23 +6490,6 @@ function regularUpdate(url, interval, scraper, cb) {
   });
 }
 
-// Given a number, string with appropriate unit in the metric system, SI.
-// Note: numbers beyond the peta- cannot be represented as integers in JS.
-var metricPrefix = ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'];
-var metricPower = metricPrefix
-    .map(function(a, i) { return Math.pow(1000, i + 1); });
-function metric(n) {
-  for (var i = metricPrefix.length - 1; i >= 0; i--) {
-    var limit = metricPower[i];
-    if (n >= limit) {
-      n = Math.round(n / limit);
-      return ''+n + metricPrefix[i];
-    }
-  }
-  return ''+n;
-}
-
-
 // Get data from a svg-style badge.
 // cb: function(err, string)
 function fetchFromSvg(request, url, cb) {
@@ -6289,296 +6504,4 @@ function fetchFromSvg(request, url, cb) {
       cb(e);
     }
   });
-}
-
-function ordinalNumber(n) {
-  var s=["ᵗʰ","ˢᵗ","ⁿᵈ","ʳᵈ"], v=n%100;
-  return n+(s[(v-20)%10]||s[v]||s[0]);
-}
-
-// Convert ISO 4217 code to unicode string.
-function currencyFromCode(code) {
-  return ({
-    CNY: '¥',
-    EUR: '€',
-    GBP: '₤',
-    USD: '$',
-  })[code] || code;
-}
-
-function starRating(rating) {
-  var stars = '';
-  while (stars.length < rating) { stars += '★'; }
-  while (stars.length < 5) { stars += '☆'; }
-  return stars;
-}
-
-function coveragePercentageColor(percentage) {
-  return floorCountColor(percentage, 80, 90, 100);
-}
-
-function downloadCountColor(downloads) {
-  return floorCountColor(downloads, 10, 100, 1000);
-}
-
-function floorCountColor(value, yellow, yellowgreen, green) {
-  if (value === 0) {
-    return 'red';
-  } else if (value < yellow) {
-    return 'yellow';
-  } else if (value < yellowgreen) {
-    return 'yellowgreen';
-  } else if (value < green) {
-    return 'green';
-  } else {
-    return 'brightgreen';
-  }
-}
-
-function versionColor(version) {
-  var first = version[0];
-  if (first === 'v') {
-    first = version[1];
-  } else if (/^[0-9]/.test(version)) {
-    version = 'v' + version;
-  }
-  if (first === '0' || (version.indexOf('-') !== -1)) {
-    return { version: version, color: 'orange' };
-  } else {
-    return { version: version, color: 'blue' };
-  }
-}
-
-// Take string versions.
-// -1 if v1 < v2, 1 if v1 > v2, 0 otherwise.
-function compareDottedVersion(v1, v2) {
-  var parts1 = /([0-9\.]+)(.*)$/.exec(v1);
-  var parts2 = /([0-9\.]+)(.*)$/.exec(v2);
-  if (parts1 != null && parts2 != null) {
-    var numbers1 = parts1[1];
-    var numbers2 = parts2[1];
-    var distinguisher1 = parts1[2];
-    var distinguisher2 = parts2[2];
-    var numlist1 = numbers1.split('.').map(function(e) { return +e; });
-    var numlist2 = numbers2.split('.').map(function(e) { return +e; });
-    var cmp = listCompare(numlist1, numlist2);
-    if (cmp !== 0) { return cmp; }
-    else { return distinguisher1 < distinguisher2? -1:
-                  distinguisher1 > distinguisher2? 1: 0; }
-  }
-  return v1 < v2? -1: v1 > v2? 1: 0;
-}
-
-// Take a list of string versions.
-// Return the latest, or undefined, if there are none.
-function latestDottedVersion(versions) {
-  var len = versions.length;
-  if (len === 0) { return; }
-  var version = versions[0];
-  for (var i = 1; i < len; i++) {
-    if (compareDottedVersion(version, versions[i]) < 0) {
-      version = versions[i];
-    }
-  }
-  return version;
-}
-
-// Given a list of versions (as strings), return the latest version.
-// Return undefined if no version could be found.
-function latestVersion(versions) {
-  var version = '';
-  var origVersions = versions;
-  versions = versions.filter(function(version) {
-    return (/^v?[0-9]/).test(version);
-  });
-  try {
-    version = semver.maxSatisfying(versions, '');
-  } catch(e) {
-    version = latestDottedVersion(versions);
-  }
-  if (version === undefined) {
-    origVersions = origVersions.sort();
-    version = origVersions[origVersions.length - 1];
-  }
-  return version;
-}
-
-// Return a negative value if v1 < v2,
-// zero if v1 = v2, a positive value otherwise.
-function asciiVersionCompare(v1, v2) {
-  if (v1 < v2) {
-    return -1;
-  } else if (v1 > v2) {
-    return 1;
-  } else {
-    return 0;
-  }
-}
-
-// Remove the starting v in a string.
-function omitv(version) {
-  if (version.charCodeAt(0) === 118) { // v
-    return version.slice(1);
-  } else {
-    return version;
-  }
-}
-
-// Take a version without the starting v.
-// eg, '1.0.x-beta'
-// Return { numbers: [1,0,something big], modifier: 2, modifierCount: 1 }
-function phpNumberedVersionData(version) {
-  // A version has a numbered part and a modifier part
-  // (eg, 1.0.0-patch, 2.0.x-dev).
-  var parts = version.split('-');
-  var numbered = parts[0];
-
-  // Aliases that get caught here.
-  if (numbered === 'dev') {
-    return {
-      numbers: parts[1],
-      modifier: 5,
-      modifierCount: 1,
-    };
-  }
-
-  var modifierLevel = 3;
-  var modifierLevelCount = 0;
-
-  if (parts.length > 1) {
-    var modifier = parts[parts.length - 1];
-    var firstLetter = modifier.charCodeAt(0);
-    var modifierLevelCountString;
-
-    // Modifiers: alpha < beta < RC < normal < patch < dev
-    if (firstLetter === 97) { // a
-      modifierLevel = 0;
-      if (/^alpha/.test(modifier)) {
-        modifierLevelCountString = + (modifier.slice(5));
-      } else {
-        modifierLevelCountString = + (modifier.slice(1));
-      }
-    } else if (firstLetter === 98) { // b
-      modifierLevel = 1;
-      if (/^beta/.test(modifier)) {
-        modifierLevelCountString = + (modifier.slice(4));
-      } else {
-        modifierLevelCountString = + (modifier.slice(1));
-      }
-    } else if (firstLetter === 82) { // R
-      modifierLevel = 2;
-      modifierLevelCountString = + (modifier.slice(2));
-    } else if (firstLetter === 112) { // p
-      modifierLevel = 4;
-      if (/^patch/.test(modifier)) {
-        modifierLevelCountString = + (modifier.slice(5));
-      } else {
-        modifierLevelCountString = + (modifier.slice(1));
-      }
-    } else if (firstLetter === 100) { // d
-      modifierLevel = 5;
-      if (/^dev/.test(modifier)) {
-        modifierLevelCountString = + (modifier.slice(3));
-      } else {
-        modifierLevelCountString = + (modifier.slice(1));
-      }
-    }
-
-    // If we got the empty string, it defaults to a modifier count of 1.
-    if (!modifierLevelCountString) {
-      modifierLevelCount = 1;
-    } else {
-      modifierLevelCount = + modifierLevelCountString;
-    }
-  }
-
-  // Try to convert to a list of numbers.
-  var toNum = function(s) {
-    var n = +s;
-    if (n !== n) {  // If n is NaN…
-      n = 0xffffffff;
-    }
-    return n;
-  };
-  var numberList = numbered.split('.').map(toNum);
-
-  return {
-    numbers: numberList,
-    modifier: modifierLevel,
-    modifierCount: modifierLevelCount,
-  };
-}
-
-function listCompare(a, b) {
-  var alen = a.length, blen = b.length;
-  for (var i = 0; i < alen; i++) {
-    if (a[i] < b[i]) {
-      return -1;
-    } else if (a[i] > b[i]) {
-      return 1;
-    }
-  }
-  return alen - blen;
-}
-
-// Return a negative value if v1 < v2,
-// zero if v1 = v2,
-// a positive value otherwise.
-//
-// See https://getcomposer.org/doc/04-schema.md#version
-// and https://github.com/badges/shields/issues/319#issuecomment-74411045
-function phpVersionCompare(v1, v2) {
-  // Omit the starting `v`.
-  var rawv1 = omitv(v1);
-  var rawv2 = omitv(v2);
-  try {
-    var v1data = phpNumberedVersionData(rawv1);
-    var v2data = phpNumberedVersionData(rawv2);
-  } catch(e) {
-    return asciiVersionCompare(rawv1, rawv2);
-  }
-
-  // Compare the numbered part (eg, 1.0.0 < 2.0.0).
-  var numbersCompare = listCompare(v1data.numbers, v2data.numbers);
-  if (numbersCompare !== 0) {
-    return numbersCompare;
-  }
-
-  // Compare the modifiers (eg, alpha < beta).
-  if (v1data.modifier < v2data.modifier) {
-    return -1;
-  } else if (v1data.modifier > v2data.modifier) {
-    return 1;
-  }
-
-  // Compare the modifier counts (eg, alpha1 < alpha3).
-  if (v1data.modifierCount < v2data.modifierCount) {
-    return -1;
-  } else if (v1data.modifierCount > v2data.modifierCount) {
-    return 1;
-  }
-
-  return 0;
-}
-
-function phpLatestVersion(versions) {
-  var latest = versions[0];
-  for (var i = 1; i < versions.length; i++) {
-    if (phpVersionCompare(latest, versions[i]) < 0) {
-      latest = versions[i];
-    }
-  }
-  return latest;
-}
-
-// Whether a version is stable.
-function phpStableVersion(version) {
-  var rawVersion = omitv(version);
-  try {
-    var versionData = phpNumberedVersionData(rawVersion);
-  } catch(e) {
-    return false;
-  }
-  // normal or patch
-  return (versionData.modifier === 3) || (versionData.modifier === 4);
 }

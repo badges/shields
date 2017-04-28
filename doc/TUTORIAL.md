@@ -217,12 +217,6 @@ Edit [try.html][tryhtml] in the right section (Build, Downloads, ...) and add yo
 
 Save, restart and you can see it [locally][try].
 
-If this is fine, you can generate the website:
-
-    make website
-
-This changes the index.html file automatically.
-
 ## (4.4) Write Tests
 
 When creating a badge for a new service or changing a badge's behavior, tests

@@ -16,7 +16,7 @@ var url = 'http://127.0.0.1:' + port + '/';
 describe('The CLI', function () {
 
   it('should provide a help message', function(done) {
-    var child = cproc.spawn('node', ['test/cli-test.js']);
+    var child = cproc.spawn('node', ['gh-badge.js']);
     var buffer = '';
     child.stdout.on('data', function(chunk) {
       buffer += ''+chunk;
@@ -29,7 +29,7 @@ describe('The CLI', function () {
 
   it('should produce default badges', function(done) {
     var child = cproc.spawn('node',
-      ['test/cli-test.js', 'cactus', 'grown']);
+      ['gh-badge.js', 'cactus', 'grown']);
     child.stdout.once('data', function(chunk) {
       var buffer = ''+chunk;
       assert.ok(isSvg(buffer));
@@ -41,7 +41,7 @@ describe('The CLI', function () {
 
   it('should produce colorschemed badges', function(done) {
     var child = cproc.spawn('node',
-      ['test/cli-test.js', 'cactus', 'grown', ':green']);
+      ['gh-badge.js', 'cactus', 'grown', ':green']);
     child.stdout.once('data', function(chunk) {
       var buffer = ''+chunk;
       assert.ok(isSvg(buffer));
@@ -51,7 +51,7 @@ describe('The CLI', function () {
 
   it('should produce right-color badges', function(done) {
     var child = cproc.spawn('node',
-      ['test/cli-test.js', 'cactus', 'grown', '#abcdef']);
+      ['gh-badge.js', 'cactus', 'grown', '#abcdef']);
     child.stdout.once('data', function(chunk) {
       var buffer = ''+chunk;
       assert(buffer.includes('#abcdef'), '#abcdef');
@@ -61,7 +61,7 @@ describe('The CLI', function () {
 
   it('should produce PNG badges', function(done) {
     var child = cproc.spawn('node',
-      ['test/cli-test.js', 'cactus', 'grown', '.png']);
+      ['gh-badge.js', 'cactus', 'grown', '.png']);
     child.stdout.once('data', function(chunk) {
       assert.ok(isPng(chunk));
       done();
