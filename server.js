@@ -695,6 +695,7 @@ cache(function(data, match, sendBadge, request) {
     apiUrl += '/branch/' + branch;
   }
   var badgeData = getBadgeData('build', data);
+  badgeData.logo = badgeData.logo || logos['appveyor'];
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
