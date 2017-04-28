@@ -904,7 +904,7 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
             var colorValue = value;
             if (metricName === 'public_documented_api_density'){
               //Some metrics higher % is better
-              colorValue = 100 - value  
+              colorValue = 100 - value;
             }
             badgeData.text[1] = value + '%';
             if (colorValue >= 100) {
