@@ -1,7 +1,7 @@
 'use strict';
 
 const frisby = require('icedfrisby-nock')(require('icedfrisby'));
-const config = require('../../test/config');
+const config = require('../../lib/test-config');
 
 /**
  * Encapsulate a suite of tests. Create new tests using create() and register

@@ -20,7 +20,7 @@ const difference = require('lodash.difference');
 const fetch = require('node-fetch');
 const minimist = require('minimist');
 const Runner = require('./runner');
-const serverHelpers = require('../../test/in-process-server-helpers');
+const serverHelpers = require('../../lib/in-process-server-test-helpers');
 
 function getTitle (repoSlug, pullRequest) {
   const uri = `https://api.github.com/repos/${repoSlug}/pulls/${pullRequest}`;

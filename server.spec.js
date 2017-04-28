@@ -6,7 +6,7 @@ var path = require('path');
 var isPng = require('is-png');
 var isSvg = require('is-svg');
 var svg2img = require('./lib/svg-to-img');
-const serverHelpers = require('./in-process-server-helpers');
+const serverHelpers = require('./lib/in-process-server-test-helpers');
 
 var port = '1111';
 var url = 'http://127.0.0.1:' + port + '/';
