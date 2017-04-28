@@ -1589,40 +1589,14 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// npm download integration.
-camp.route(/^\/npm\/dm\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var pkg = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
-  var format = match[2];
-  var apiUrl = 'https://api.npmjs.org/downloads/point/last-month/' + pkg;
-  var badgeData = getBadgeData('downloads', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var monthly = JSON.parse(buffer).downloads || 0;
-      badgeData.text[1] = metric(monthly) + '/month';
-      if (monthly === 0) {
-        badgeData.colorscheme = 'red';
-      } else if (monthly < 10) {
-        badgeData.colorscheme = 'yellow';
-      } else if (monthly < 100) {
-        badgeData.colorscheme = 'yellowgreen';
-      } else if (monthly < 1000) {
-        badgeData.colorscheme = 'green';
-      } else {
-        badgeData.colorscheme = 'brightgreen';
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
+// npm weekly download integration.
+mapNpmDownloads('dw', 'last-week');
+
+// npm monthly download integration.
+mapNpmDownloads('dm', 'last-month');
+
+// npm yearly download integration
+mapNpmDownloads('dy', 'last-year');
 
 // npm total download integration.
 camp.route(/^\/npm\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
@@ -1637,7 +1611,6 @@ cache(function (data, match, sendBadge, request) {
       sendBadge(format, badgeData);
       return;
     }
-
     try {
       var totalDownloads = 0;
 
@@ -6504,4 +6477,36 @@ function fetchFromSvg(request, url, cb) {
       cb(e);
     }
   });
+}
+
+// npm downloads count
+function mapNpmDownloads(urlComponent, apiUriComponent) {
+  camp.route(new RegExp('^\/npm\/' + urlComponent + '\/(.*)\.(svg|png|gif|jpg|json)$'),
+  cache(function(data, match, sendBadge, request) {
+    var pkg = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
+    var format = match[2];
+    var apiUrl = 'https://api.npmjs.org/downloads/point/' + apiUriComponent + '/' + pkg;
+    var badgeData = getBadgeData('downloads', data);
+    request(apiUrl, function(err, res, buffer) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        var totalDownloads = JSON.parse(buffer).downloads || 0;
+        var badgeSuffix = apiUriComponent.replace('last-', '/');
+        badgeData.text[1] = metric(totalDownloads) + badgeSuffix;
+        if (totalDownloads === 0) {
+          badgeData.colorscheme = 'red';
+        } else {
+          badgeData.colorscheme = 'brightgreen';
+        }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }));
 }
