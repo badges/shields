@@ -5,6 +5,7 @@ var fs = require('fs');
 var path = require('path');
 var isPng = require('is-png');
 var isSvg = require('is-svg');
+const fetch = require('node-fetch');
 var svg2img = require('./lib/svg-to-img');
 
 var port = '1111';
@@ -69,6 +70,32 @@ describe('The server', function () {
             done();
           });
       });
+    });
+  });
+
+  describe('analytics endpoint', function () {
+    it('should return analytics in the expected format', function () {
+      return fetch(`${url}$analytics/v1`)
+        .then(res => {
+          assert(res.ok);
+          return res.json();
+        }).then(json => {
+          const keys = Object.keys(json);
+          const expectedKeys = [
+            'vendorMonthly',
+            'rawMonthly',
+            'vendorFlatMonthly',
+            'rawFlatMonthly',
+            'vendorFlatSquareMonthly',
+            'rawFlatSquareMonthly',
+          ];
+          assert.deepEqual(keys.sort(), expectedKeys.sort());
+
+          keys.forEach(k => {
+            assert.ok(Array.isArray(json[k]));
+            assert.equal(json[k].length, 36);
+          });
+        });
     });
   });
 });
