@@ -6,21 +6,18 @@ var path = require('path');
 var isPng = require('is-png');
 var isSvg = require('is-svg');
 var svg2img = require('./lib/svg-to-img');
+const serverHelpers = require('./in-process-server-helpers');
 
 var port = '1111';
 var url = 'http://127.0.0.1:' + port + '/';
 
 describe('The server', function () {
-  var server;
-  before('Start running the server', function() {
+  let server;
+  before('Start running the server', function () {
     this.timeout(5000);
-    // This is a bit gross, but it works.
-    process.argv = ['', '', port, 'localhost'];
-    server = require('./server');
+    server = serverHelpers.start();
   });
-  after('Shut down the server', function(done) {
-    server.camp.close(function () { done(); });
-  });
+  after('Shut down the server', function () { serverHelpers.stop(server); });
 
   it('should produce colorscheme badges', function(done) {
     http.get(url + ':fruit-apple-green.svg',
