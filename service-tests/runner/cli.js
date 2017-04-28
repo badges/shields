@@ -97,6 +97,6 @@ if (prOption !== undefined) {
   }
 
   runner.toss();
-  // Invoke run() asynchronously, beacuse Mocha will not start otherwise.
+  // Invoke run() asynchronously, because Mocha will not start otherwise.
   process.nextTick(run);
 }
