@@ -3445,12 +3445,6 @@ cache(function(data, match, sendBadge, request) {
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
   }
-  // Using our OAuth App secret grants us 5000 req/hour
-  // instead of the standard 60 req/hour.
-  if (serverSecrets) {
-    apiUrl += '?client_id=' + serverSecrets.gh_client_id
-      + '&client_secret=' + serverSecrets.gh_client_secret;
-  }
 
   githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (err != null) {
@@ -3465,7 +3459,7 @@ cache(function(data, match, sendBadge, request) {
         return;
       }
       var body = JSON.parse(buffer);
-      if (body.size != null) {
+      if (body && Number.isInteger(body.size)) {
         badgeData.text[1] = prettyBytes(body.size);
         badgeData.colorscheme = 'green';
         sendBadge(format, badgeData);
