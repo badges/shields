@@ -4272,7 +4272,7 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var versionRegExp = /\<release\>(.*)\<\/release\>/g;
+      var versionRegExp = /\<latest\>(.*)\<\/latest\>/g;
       var version = versionRegExp.exec(buffer)[1];
       badgeData.text[1] = 'v' + version;
       if (version === '0' || /SNAPSHOT/.test(version)) {
