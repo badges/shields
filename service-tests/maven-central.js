@@ -3,7 +3,7 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
-const t = new ServiceTester({ id: 'maven-central', title: 'Maven Central' })
+const t = new ServiceTester({ id: 'maven-central', title: 'Maven Central' });
 module.exports = t;
 
 t.create('latest version')
