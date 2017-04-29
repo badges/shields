@@ -17,7 +17,7 @@ t.create('Contributors')
   .get('/contributors/cdnjs/cdnjs.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('contributors'),
-    value: Joi.number().integer().positive()
+    value: Joi.string().regex(/^\w+$/)
   }));
 
 t.create('GitHub closed pull request')
@@ -48,14 +48,14 @@ t.create('GitHub pull request raw')
     value: Joi.string().regex(/^\w+?$/)
   }));
 
-t.create('GitHub pull request')
+t.create('GitHub closed issues')
   .get('/issues-closed/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('closed issues'),
     value: Joi.string().regex(/^\w+\+?\sclosed$/)
   }));
 
-t.create('GitHub pull request raw')
+t.create('GitHub closed issues raw')
   .get('/issues-closed-raw/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('closed issues'),
