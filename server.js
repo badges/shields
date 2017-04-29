@@ -2976,6 +2976,59 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// GitHub status integration.
+camp.route(/^\/github\/status\/([^\/]+)\/([^\/]+)\/([^\/]+).(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];  // eg, strongloop/express
+  var repo = match[2];
+  var context = match[3];
+  var format = match[4];
+  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo +'/commits/master/status';
+  var badgeData = getBadgeData(context, data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.github;
+  }
+
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var state;
+      if(context!=='status')
+      {
+        var statuses = data.statuses.filter(function(e) {return e.context===context;});
+        if(!statuses.length)
+        {
+          badgeData.text[1] = 'none';
+          sendBadge(format, badgeData);
+          return;
+        }
+        state = statuses[0].state;
+      }
+      else
+      {
+        state=data.state;
+      }
+      badgeData.text[1] = state;
+      if (state === 'success') {
+        badgeData.colorscheme = 'brightgreen';
+      } else if (state === 'failed') {
+        badgeData.colorscheme = 'red';
+      } else {
+        badgeData.colorscheme = 'lightgrey';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'none';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // GitHub tag integration.
 camp.route(/^\/github\/tag\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
