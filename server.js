@@ -3179,7 +3179,7 @@ cache(function(data, match, sendBadge, request) {
           label += ' ' + '[' + asset_name + ']';
         }
       }
-      badgeData.text[1] = metric(downloads) + ' ' + label;
+      badgeData.text[1] = metric(downloads) + (label ? ' ' + label : '');
       badgeData.colorscheme = 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
