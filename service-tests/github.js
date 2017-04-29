@@ -13,6 +13,13 @@ t.create('License')
     value: Joi.string()
   }));
 
+t.create('Contributors')
+  .get('/contributors/cdnjs/cdnjs.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('contributors'),
+    value: Joi.number().integer().positive()
+  }));
+
 t.create('File size')
   .get('/size/webcaetano/craft/build/craft.min.js.json')
   .expectJSONTypes(Joi.object().keys({
