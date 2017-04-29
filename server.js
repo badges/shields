@@ -4271,20 +4271,26 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
       return;
     }
-    try {
-      var versionRegExp = /\<latest\>(.*)\<\/latest\>/g;
-      var version = versionRegExp.exec(buffer)[1];
-      badgeData.text[1] = 'v' + version;
-      if (version === '0' || /SNAPSHOT/.test(version)) {
-        badgeData.colorscheme = 'orange';
-      } else {
-        badgeData.colorscheme = 'blue';
+    xml2js.parseString(buffer.toString(), function (err, data) {
+      if (err != null) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
       }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
+      try {
+        var version = data.metadata.versioning[0].latest[0];
+        badgeData.text[1] = 'v' + version;
+        if (version === '0' || /SNAPSHOT/.test(version)) {
+          badgeData.colorscheme = 'orange';
+        } else {
+          badgeData.colorscheme = 'blue';
+        }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
   });
 }));
 
