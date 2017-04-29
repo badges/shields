@@ -259,11 +259,9 @@ By checking code coverage, we can make sure we've covered all our bases.
 We can generate a coverage report and open it:
 
 ```
-npm run coverage:test:services -- -- --only=travis
+npm run coverage:test:services -- --only=travis
 npm run coverage:report:open
 ```
-
-Note the two sets of double dashes.
 
 After searching `server.js` for the Travis code, we see that we've missed a
 big block: the error branch in the request callback. To test that, we simulate
