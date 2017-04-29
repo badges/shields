@@ -3439,8 +3439,8 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[2];  // eg, apistatus
   var path = match[3];
   var format = match[4];
+  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/contents/' + path;
 
-  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/contents/' + path;
   var badgeData = getBadgeData('size', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
@@ -3451,14 +3451,8 @@ cache(function(data, match, sendBadge, request) {
     apiUrl += '?client_id=' + serverSecrets.gh_client_id
       + '&client_secret=' + serverSecrets.gh_client_secret;
   }
-  // Custom user-agent and accept headers are required
-  // http://developer.github.com/v3/#user-agent-required
-  // https://developer.github.com/v3/licenses/
-  var customHeaders = {
-    'User-Agent': 'Shields.io',
-    'Accept': 'application/vnd.github.drax-preview+json'
-  };
-  request(apiUrl, { headers: customHeaders }, function(err, res, buffer) {
+
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
