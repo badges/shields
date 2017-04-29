@@ -47,10 +47,9 @@ hr.spacing { border: 0; display: block; height: 3mm; }
 table.badge > tbody > tr > th,
 table.badge > tbody > tr > td > img,
 table.badge > tbody > tr > td > code { cursor: pointer; }
-#copyImg,
-.badge-img img {
-	height: 20px;
-	vertical-align: middle;
+table.badge > tbody > tr > td > img, .badge-img img, #copyImg {
+  height: 20px;
+  vertical-align: middle;
 }
 </style>
 
@@ -72,7 +71,7 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
 <section id='suggestedBadges'></section>
 
 <h3 id="build"> Build </h3>
-<table class='badge badge-img'><tbody>
+<table class='badge'><tbody>
   <tr><th> Travis: </th>
     <td><img src='/travis/rust-lang/rust.svg' alt=''/></td>
     <td><code>https://img.shields.io/travis/USER/REPO.svg</code></td>
@@ -253,8 +252,16 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <td><code>https://img.shields.io/github/downloads/atom/atom/latest/atom-amd64.deb.svg</code></td>
   </tr>
   <tr><th data-keywords='node'> npm: </th>
+  <td><img src='/npm/dw/localeval.svg' alt=''/></td>
+  <td><code>https://img.shields.io/npm/dw/localeval.svg</code></td>
+  </tr>
+  <tr><th data-keywords='node'> npm: </th>
   <td><img src='/npm/dm/localeval.svg' alt=''/></td>
   <td><code>https://img.shields.io/npm/dm/localeval.svg</code></td>
+  </tr>
+  <tr><th data-keywords='node'> npm: </th>
+  <td><img src='/npm/dy/localeval.svg' alt=''/></td>
+  <td><code>https://img.shields.io/npm/dy/localeval.svg</code></td>
   </tr>
   <tr><th data-keywords='node'> npm: </th>
   <td><img src='/npm/dt/express.svg' alt=''/></td>
@@ -405,8 +412,8 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><code>https://img.shields.io/chrome-web-store/d/nimelepbpejjlbmoobocpfnjhihnpked.svg</code></td>
   </tr>
   <tr><th data-keywords='website' data-doc='websiteDoc'> Website: </th>
-    <td><img src='/website-up-down-green-red-my--website/http/shields.io.svg' alt=''/></td>
-    <td><code>https://img.shields.io/website-up-down-green-red-my--website/http/shields.io.svg</code></td>
+    <td><img src='/website-up-down-green-red/http/shields.io.svg?label=my-website' alt=''/></td>
+    <td><code>https://img.shields.io/website-up-down-green-red/http/shields.io.svg?label=my-website</code></td>
   </tr>
   <tr><th data-keywords='cocoapods'> CocoaPods: </th>
     <td><img src='/cocoapods/dt/AFNetworking.svg' alt='' /></td>
@@ -506,6 +513,10 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <tr><th data-doc='githubDoc'> GitHub release: </th>
   <td><img src='/github/release/qubyte/rubidium.svg' alt=''/></td>
   <td><code>https://img.shields.io/github/release/qubyte/rubidium.svg</code></td>
+  </tr>
+  <tr><th data-doc='githubDoc'> GitHub (pre-)release: </th>
+  <td><img src='/github/release/qubyte/rubidium/all.svg' alt=''/></td>
+  <td><code>https://img.shields.io/github/release/qubyte/rubidium/all.svg</code></td>
   </tr>
   <tr><th data-doc='githubDoc'> GitHub commits: </th>
   <td><img src='/github/commits-since/SubtitleEdit/subtitleedit/3.4.7.svg' alt=''/></td>
@@ -1225,16 +1236,10 @@ is where the current server got started.
       <ul>
         <li>Nothing:
             <code>…/website/…</code></li>
-        <li>Badge label (displayed in the left part of the badge):
-            <code>…/website-label/…</code></li>
         <li>Online and offline text:
             <code>…/website-up-down/…</code></li>
-        <li>Online and offline text, then badge label:
-            <code>…/website-up-down-label/…</code></li>
         <li>Online and offline text, then online and offline colors:
             <code>…/website-up-down-green-orange/…</code></li>
-        <li>Online and offline text, then online and offline colors, then badge label:
-            <code>…/website-up-down-green-orange-label/…</code></li>
       </ul>
       <table class=centered><tbody>
           <tr><td>   Dashes <code>--</code>

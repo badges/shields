@@ -3,7 +3,7 @@ var secureServerKey = process.env.HTTPS_KEY;
 var secureServerCert = process.env.HTTPS_CRT;
 var serverPort = +process.env.PORT || +process.argv[2] || (secureServer? 443: 80);
 var bindAddress = process.env.BIND_ADDRESS || process.argv[3] || '::';
-var infoSite = process.env.INFOSITE || "http://shields.io";
+var infoSite = process.env.INFOSITE || "https://shields.io";
 var githubApiUrl = process.env.GITHUB_URL || 'https://api.github.com';
 var path = require('path');
 var Camp = require('camp');
@@ -25,7 +25,6 @@ var tryUrl = require('url').format({
 console.log(tryUrl);
 var domain = require('domain');
 var request = require('request');
-var fs = require('fs');
 var LruCache = require('./lib/lru-cache.js');
 var badge = require('./lib/badge.js');
 var svg2img = require('./lib/svg-to-img.js');
@@ -38,6 +37,30 @@ if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);
 }
 
+const {latest: latestVersion} = require('./lib/version.js');
+const {
+  compare: phpVersionCompare,
+  latest: phpLatestVersion,
+  isStable: phpStableVersion,
+} = require('./lib/php-version.js');
+const {
+  currencyFromCode,
+  metric,
+  ordinalNumber,
+  starRating,
+} = require('./lib/text-formatters.js');
+const {
+  coveragePercentage: coveragePercentageColor,
+  downloadCount: downloadCountColor,
+  floorCount: floorCountColor,
+  version: versionColor,
+} = require('./lib/color-formatters.js');
+const {
+  analyticsAutoLoad,
+  incrMonthlyAnalytics,
+  getAnalytics
+} = require('./lib/analytics');
+
 var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
 
@@ -45,115 +68,10 @@ var validTemplates = ['default', 'plastic', 'flat', 'flat-square', 'social'];
 var darkBackgroundTemplates = ['default', 'flat', 'flat-square'];
 var logos = loadLogos();
 
-// Analytics
-
-// We can either use a process-wide object regularly saved to a JSON file,
-// or a Redis equivalent (for multi-process / when the filesystem is unreliable.
-var redis;
-var useRedis = false;
-if (process.env.REDISTOGO_URL) {
-  var redisToGo = require('url').parse(process.env.REDISTOGO_URL);
-  redis = require('redis').createClient(redisToGo.port, redisToGo.hostname);
-  redis.auth(redisToGo.auth.split(':')[1]);
-  useRedis = true;
-}
-
-var analytics = {};
-
-var analyticsAutoSaveFileName = process.env.SHIELDS_ANALYTICS_FILE || './analytics.json';
-var analyticsAutoSavePeriod = 10000;
-setInterval(function analyticsAutoSave() {
-  if (useRedis) {
-    redis.set(analyticsAutoSaveFileName, JSON.stringify(analytics));
-  } else {
-    fs.writeFileSync(analyticsAutoSaveFileName, JSON.stringify(analytics));
-  }
-}, analyticsAutoSavePeriod);
-
-function defaultAnalytics() {
-  var analytics = Object.create(null);
-  // In case something happens on the 36th.
-  analytics.vendorMonthly = new Array(36);
-  resetMonthlyAnalytics(analytics.vendorMonthly);
-  analytics.rawMonthly = new Array(36);
-  resetMonthlyAnalytics(analytics.rawMonthly);
-  analytics.vendorFlatMonthly = new Array(36);
-  resetMonthlyAnalytics(analytics.vendorFlatMonthly);
-  analytics.rawFlatMonthly = new Array(36);
-  resetMonthlyAnalytics(analytics.rawFlatMonthly);
-  analytics.vendorFlatSquareMonthly = new Array(36);
-  resetMonthlyAnalytics(analytics.vendorFlatSquareMonthly);
-  analytics.rawFlatSquareMonthly = new Array(36);
-  resetMonthlyAnalytics(analytics.rawFlatSquareMonthly);
-  return analytics;
-}
-
-// Auto-load analytics.
-function analyticsAutoLoad() {
-  var defaultAnalyticsObject = defaultAnalytics();
-  if (useRedis) {
-    redis.get(analyticsAutoSaveFileName, function(err, value) {
-      if (err == null && value != null) {
-        // if/try/return trick:
-        // if error, then the rest of the function is run.
-        try {
-          analytics = JSON.parse(value);
-          // Extend analytics with a new value.
-          for (var key in defaultAnalyticsObject) {
-            if (!(key in analytics)) {
-              analytics[key] = defaultAnalyticsObject[key];
-            }
-          }
-          return;
-        } catch(e) {
-          console.error('Invalid Redis analytics, resetting.');
-          console.error(e);
-        }
-      }
-      analytics = defaultAnalyticsObject;
-    });
-  } else {
-    // Not using Redis.
-    try {
-      analytics = JSON.parse(fs.readFileSync(analyticsAutoSaveFileName));
-      // Extend analytics with a new value.
-      for (var key in defaultAnalyticsObject) {
-        if (!(key in analytics)) {
-          analytics[key] = defaultAnalyticsObject[key];
-        }
-      }
-    } catch(e) {
-      if (e.code !== 'ENOENT') {
-        console.error('Invalid JSON file for analytics, resetting.');
-        console.error(e);
-      }
-      analytics = defaultAnalyticsObject;
-    }
-  }
-}
-
-var lastDay = (new Date()).getDate();
-function resetMonthlyAnalytics(monthlyAnalytics) {
-  for (var i = 0; i < monthlyAnalytics.length; i++) {
-    monthlyAnalytics[i] = 0;
-  }
-}
-function incrMonthlyAnalytics(monthlyAnalytics) {
-  try {
-    var currentDay = (new Date()).getDate();
-    // If we changed month, reset empty days.
-    while (lastDay !== currentDay) {
-      // Assumption: at least a hit a month.
-      lastDay = (lastDay + 1) % monthlyAnalytics.length;
-      monthlyAnalytics[lastDay] = 0;
-    }
-    monthlyAnalytics[currentDay]++;
-  } catch(e) { console.error(e.stack); }
-}
-
 analyticsAutoLoad();
+camp.ajax.on('analytics/v1', function(json, end) { end(getAnalytics()); });
+
 var suggest = require('./lib/suggest.js');
-camp.ajax.on('analytics/v1', function(json, end) { end(analytics); });
 camp.ajax.on('suggest/v1', suggest);
 
 // Cache
@@ -193,11 +111,11 @@ function cache(f) {
     var date = (reqTime).toGMTString();
     ask.res.setHeader('Expires', date);  // Proxies, GitHub, see #221.
     ask.res.setHeader('Date', date);
-    incrMonthlyAnalytics(analytics.vendorMonthly);
+    incrMonthlyAnalytics(getAnalytics().vendorMonthly);
     if (data.style === 'flat') {
-      incrMonthlyAnalytics(analytics.vendorFlatMonthly);
+      incrMonthlyAnalytics(getAnalytics().vendorFlatMonthly);
     } else if (data.style === 'flat-square') {
-      incrMonthlyAnalytics(analytics.vendorFlatSquareMonthly);
+      incrMonthlyAnalytics(getAnalytics().vendorFlatSquareMonthly);
     }
 
     var cacheIndex = match[0] + '?label=' + data.label + '&style=' + data.style
@@ -777,6 +695,7 @@ cache(function(data, match, sendBadge, request) {
     apiUrl += '/branch/' + branch;
   }
   var badgeData = getBadgeData('build', data);
+  badgeData.logo = badgeData.logo || logos['appveyor'];
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -901,18 +820,27 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
       var format = match[5];
 
       var sonarMetricName = metricName;
-
       if (metricName === 'tech_debt') {
         //special condition for backwards compatibility
         sonarMetricName = 'sqale_debt_ratio';
       }
 
-      var apiUrl = scheme + '://' + serverUrl + '/api/resources?resource=' + buildType
-          + '&depth=0&metrics=' + encodeURIComponent(sonarMetricName) + '&includetrends=true';
+      var options = {
+        uri: scheme + '://' + serverUrl + '/api/resources?resource=' + buildType
+          + '&depth=0&metrics=' + encodeURIComponent(sonarMetricName) + '&includetrends=true',
+        headers: {
+          Accept: 'application/json'
+        }
+      };
+      if (serverSecrets && serverSecrets.sonarqube_token) {
+        options.auth = {
+          user: serverSecrets.sonarqube_token
+        };
+      }
 
       var badgeData = getBadgeData(metricName.replace(/_/g, ' '), data);
 
-      request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
+      request(options, function(err, res, buffer) {
         if (err != null) {
           badgeData.text[1] = 'inaccessible';
           sendBadge(format, badgeData);
@@ -966,7 +894,7 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
             } else {
               badgeData.colorscheme = 'lightgrey';
             }
-          } else if (metricName === 'sqale_debt_ratio' || metricName === 'tech_debt') {
+          } else if (metricName === 'sqale_debt_ratio' || metricName === 'tech_debt' || metricName === 'public_documented_api_density') {
             // colors are based on sonarqube default rating grid and display colors
             // [0,0.1)   ==> A (green)
             // [0.1,0.2) ==> B (yellowgreen)
@@ -1561,40 +1489,14 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// npm download integration.
-camp.route(/^\/npm\/dm\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var pkg = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
-  var format = match[2];
-  var apiUrl = 'https://api.npmjs.org/downloads/point/last-month/' + pkg;
-  var badgeData = getBadgeData('downloads', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var monthly = JSON.parse(buffer).downloads || 0;
-      badgeData.text[1] = metric(monthly) + '/month';
-      if (monthly === 0) {
-        badgeData.colorscheme = 'red';
-      } else if (monthly < 10) {
-        badgeData.colorscheme = 'yellow';
-      } else if (monthly < 100) {
-        badgeData.colorscheme = 'yellowgreen';
-      } else if (monthly < 1000) {
-        badgeData.colorscheme = 'green';
-      } else {
-        badgeData.colorscheme = 'brightgreen';
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
+// npm weekly download integration.
+mapNpmDownloads('dw', 'last-week');
+
+// npm monthly download integration.
+mapNpmDownloads('dm', 'last-month');
+
+// npm yearly download integration
+mapNpmDownloads('dy', 'last-year');
 
 // npm total download integration.
 camp.route(/^\/npm\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
@@ -1609,7 +1511,6 @@ cache(function (data, match, sendBadge, request) {
       sendBadge(format, badgeData);
       return;
     }
-
     try {
       var totalDownloads = 0;
 
@@ -3143,14 +3044,17 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// GitHub release integration.
-camp.route(/^\/github\/release\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+// GitHub release integration
+camp.route(/^\/github\/release\/([^\/]+\/[^\/]+)(?:\/(all))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, qubyte/rubidium
-  var repo = match[2];
+  var userRepo = match[1];  // eg, qubyte/rubidium
+  var allReleases = match[2];
   var format = match[3];
-  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/releases/latest';
+  var apiUrl = githubApiUrl + '/repos/' + userRepo + '/releases';
   var badgeData = getBadgeData('release', data);
+  if (allReleases === undefined) {
+    apiUrl = apiUrl + '/latest';
+  }
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
   }
@@ -3162,6 +3066,9 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
+      if (allReleases === 'all') {
+        data = data[0];
+      }
       var version = data.tag_name;
       var prerelease = data.prerelease;
       var vdata = versionColor(version);
@@ -5876,22 +5783,21 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Test if a webpage is online
-camp.route(/^\/website(-(([^-/]|--|\/\/)+)-(([^-/]|--|\/\/)+)(-(([^-/]|--|\/\/)+)-(([^-/]|--|\/\/)+))?)?(-(([^-/]|--|\/\/)+))?\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/website(-(([^-/]|--|\/\/)+)-(([^-/]|--|\/\/)+)(-(([^-/]|--|\/\/)+)-(([^-/]|--|\/\/)+))?)?\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var onlineMessage = escapeFormatSlashes(match[2] != null ? match[2] : "online");
   var offlineMessage = escapeFormatSlashes(match[4] != null ? match[4] : "offline");
   var onlineColor = escapeFormatSlashes(match[7] != null ? match[7] : "brightgreen");
   var offlineColor = escapeFormatSlashes(match[9] != null ? match[9] : "red");
-  var label = escapeFormatSlashes(match[12] != null ? match[12] : "website");
-  var userProtocol = match[14];
-  var userURI = match[15];
-  var format = match[16];
+  var userProtocol = match[11];
+  var userURI = match[12];
+  var format = match[13];
   var withProtocolURI = userProtocol + "://" + userURI;
   var options = {
     method: 'HEAD',
     uri: withProtocolURI,
   };
-  var badgeData = getBadgeData(label, data);
+  var badgeData = getBadgeData("website", data);
   badgeData.colorscheme = undefined;
   request(options, function(err, res) {
     // We consider all HTTP status codes below 310 as success.
@@ -6232,11 +6138,11 @@ function(data, match, end, ask) {
   var color = escapeFormat(match[6]);
   var format = match[8];
 
-  incrMonthlyAnalytics(analytics.rawMonthly);
+  incrMonthlyAnalytics(getAnalytics().rawMonthly);
   if (data.style === 'flat') {
-    incrMonthlyAnalytics(analytics.rawFlatMonthly);
+    incrMonthlyAnalytics(getAnalytics().rawFlatMonthly);
   } else if (data.style === 'flat-square') {
-    incrMonthlyAnalytics(analytics.rawFlatSquareMonthly);
+    incrMonthlyAnalytics(getAnalytics().rawFlatSquareMonthly);
   }
 
   // Cache management - the badge is constant.
@@ -6459,23 +6365,6 @@ function regularUpdate(url, interval, scraper, cb) {
   });
 }
 
-// Given a number, string with appropriate unit in the metric system, SI.
-// Note: numbers beyond the peta- cannot be represented as integers in JS.
-var metricPrefix = ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'];
-var metricPower = metricPrefix
-    .map(function(a, i) { return Math.pow(1000, i + 1); });
-function metric(n) {
-  for (var i = metricPrefix.length - 1; i >= 0; i--) {
-    var limit = metricPower[i];
-    if (n >= limit) {
-      n = Math.round(n / limit);
-      return ''+n + metricPrefix[i];
-    }
-  }
-  return ''+n;
-}
-
-
 // Get data from a svg-style badge.
 // cb: function(err, string)
 function fetchFromSvg(request, url, cb) {
@@ -6492,294 +6381,34 @@ function fetchFromSvg(request, url, cb) {
   });
 }
 
-function ordinalNumber(n) {
-  var s=["ᵗʰ","ˢᵗ","ⁿᵈ","ʳᵈ"], v=n%100;
-  return n+(s[(v-20)%10]||s[v]||s[0]);
-}
-
-// Convert ISO 4217 code to unicode string.
-function currencyFromCode(code) {
-  return ({
-    CNY: '¥',
-    EUR: '€',
-    GBP: '₤',
-    USD: '$',
-  })[code] || code;
-}
-
-function starRating(rating) {
-  var stars = '';
-  while (stars.length < rating) { stars += '★'; }
-  while (stars.length < 5) { stars += '☆'; }
-  return stars;
-}
-
-function coveragePercentageColor(percentage) {
-  return floorCountColor(percentage, 80, 90, 100);
-}
-
-function downloadCountColor(downloads) {
-  return floorCountColor(downloads, 10, 100, 1000);
-}
-
-function floorCountColor(value, yellow, yellowgreen, green) {
-  if (value === 0) {
-    return 'red';
-  } else if (value < yellow) {
-    return 'yellow';
-  } else if (value < yellowgreen) {
-    return 'yellowgreen';
-  } else if (value < green) {
-    return 'green';
-  } else {
-    return 'brightgreen';
-  }
-}
-
-function versionColor(version) {
-  var first = version[0];
-  if (first === 'v') {
-    first = version[1];
-  } else if (/^[0-9]/.test(version)) {
-    version = 'v' + version;
-  }
-  if (first === '0' || (version.indexOf('-') !== -1)) {
-    return { version: version, color: 'orange' };
-  } else {
-    return { version: version, color: 'blue' };
-  }
-}
-
-// Take string versions.
-// -1 if v1 < v2, 1 if v1 > v2, 0 otherwise.
-function compareDottedVersion(v1, v2) {
-  var parts1 = /([0-9\.]+)(.*)$/.exec(v1);
-  var parts2 = /([0-9\.]+)(.*)$/.exec(v2);
-  if (parts1 != null && parts2 != null) {
-    var numbers1 = parts1[1];
-    var numbers2 = parts2[1];
-    var distinguisher1 = parts1[2];
-    var distinguisher2 = parts2[2];
-    var numlist1 = numbers1.split('.').map(function(e) { return +e; });
-    var numlist2 = numbers2.split('.').map(function(e) { return +e; });
-    var cmp = listCompare(numlist1, numlist2);
-    if (cmp !== 0) { return cmp; }
-    else { return distinguisher1 < distinguisher2? -1:
-                  distinguisher1 > distinguisher2? 1: 0; }
-  }
-  return v1 < v2? -1: v1 > v2? 1: 0;
-}
-
-// Take a list of string versions.
-// Return the latest, or undefined, if there are none.
-function latestDottedVersion(versions) {
-  var len = versions.length;
-  if (len === 0) { return; }
-  var version = versions[0];
-  for (var i = 1; i < len; i++) {
-    if (compareDottedVersion(version, versions[i]) < 0) {
-      version = versions[i];
-    }
-  }
-  return version;
-}
-
-// Given a list of versions (as strings), return the latest version.
-// Return undefined if no version could be found.
-function latestVersion(versions) {
-  var version = '';
-  var origVersions = versions;
-  versions = versions.filter(function(version) {
-    return (/^v?[0-9]/).test(version);
-  });
-  try {
-    version = semver.maxSatisfying(versions, '');
-  } catch(e) {
-    version = latestDottedVersion(versions);
-  }
-  if (version === undefined) {
-    origVersions = origVersions.sort();
-    version = origVersions[origVersions.length - 1];
-  }
-  return version;
-}
-
-// Return a negative value if v1 < v2,
-// zero if v1 = v2, a positive value otherwise.
-function asciiVersionCompare(v1, v2) {
-  if (v1 < v2) {
-    return -1;
-  } else if (v1 > v2) {
-    return 1;
-  } else {
-    return 0;
-  }
-}
-
-// Remove the starting v in a string.
-function omitv(version) {
-  if (version.charCodeAt(0) === 118) { // v
-    return version.slice(1);
-  } else {
-    return version;
-  }
-}
-
-// Take a version without the starting v.
-// eg, '1.0.x-beta'
-// Return { numbers: [1,0,something big], modifier: 2, modifierCount: 1 }
-function phpNumberedVersionData(version) {
-  // A version has a numbered part and a modifier part
-  // (eg, 1.0.0-patch, 2.0.x-dev).
-  var parts = version.split('-');
-  var numbered = parts[0];
-
-  // Aliases that get caught here.
-  if (numbered === 'dev') {
-    return {
-      numbers: parts[1],
-      modifier: 5,
-      modifierCount: 1,
-    };
-  }
-
-  var modifierLevel = 3;
-  var modifierLevelCount = 0;
-
-  if (parts.length > 1) {
-    var modifier = parts[parts.length - 1];
-    var firstLetter = modifier.charCodeAt(0);
-    var modifierLevelCountString;
-
-    // Modifiers: alpha < beta < RC < normal < patch < dev
-    if (firstLetter === 97) { // a
-      modifierLevel = 0;
-      if (/^alpha/.test(modifier)) {
-        modifierLevelCountString = + (modifier.slice(5));
-      } else {
-        modifierLevelCountString = + (modifier.slice(1));
+// npm downloads count
+function mapNpmDownloads(urlComponent, apiUriComponent) {
+  camp.route(new RegExp('^\/npm\/' + urlComponent + '\/(.*)\.(svg|png|gif|jpg|json)$'),
+  cache(function(data, match, sendBadge, request) {
+    var pkg = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
+    var format = match[2];
+    var apiUrl = 'https://api.npmjs.org/downloads/point/' + apiUriComponent + '/' + pkg;
+    var badgeData = getBadgeData('downloads', data);
+    request(apiUrl, function(err, res, buffer) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
       }
-    } else if (firstLetter === 98) { // b
-      modifierLevel = 1;
-      if (/^beta/.test(modifier)) {
-        modifierLevelCountString = + (modifier.slice(4));
-      } else {
-        modifierLevelCountString = + (modifier.slice(1));
+      try {
+        var totalDownloads = JSON.parse(buffer).downloads || 0;
+        var badgeSuffix = apiUriComponent.replace('last-', '/');
+        badgeData.text[1] = metric(totalDownloads) + badgeSuffix;
+        if (totalDownloads === 0) {
+          badgeData.colorscheme = 'red';
+        } else {
+          badgeData.colorscheme = 'brightgreen';
+        }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
       }
-    } else if (firstLetter === 82) { // R
-      modifierLevel = 2;
-      modifierLevelCountString = + (modifier.slice(2));
-    } else if (firstLetter === 112) { // p
-      modifierLevel = 4;
-      if (/^patch/.test(modifier)) {
-        modifierLevelCountString = + (modifier.slice(5));
-      } else {
-        modifierLevelCountString = + (modifier.slice(1));
-      }
-    } else if (firstLetter === 100) { // d
-      modifierLevel = 5;
-      if (/^dev/.test(modifier)) {
-        modifierLevelCountString = + (modifier.slice(3));
-      } else {
-        modifierLevelCountString = + (modifier.slice(1));
-      }
-    }
-
-    // If we got the empty string, it defaults to a modifier count of 1.
-    if (!modifierLevelCountString) {
-      modifierLevelCount = 1;
-    } else {
-      modifierLevelCount = + modifierLevelCountString;
-    }
-  }
-
-  // Try to convert to a list of numbers.
-  var toNum = function(s) {
-    var n = +s;
-    if (n !== n) {  // If n is NaN…
-      n = 0xffffffff;
-    }
-    return n;
-  };
-  var numberList = numbered.split('.').map(toNum);
-
-  return {
-    numbers: numberList,
-    modifier: modifierLevel,
-    modifierCount: modifierLevelCount,
-  };
-}
-
-function listCompare(a, b) {
-  var alen = a.length, blen = b.length;
-  for (var i = 0; i < alen; i++) {
-    if (a[i] < b[i]) {
-      return -1;
-    } else if (a[i] > b[i]) {
-      return 1;
-    }
-  }
-  return alen - blen;
-}
-
-// Return a negative value if v1 < v2,
-// zero if v1 = v2,
-// a positive value otherwise.
-//
-// See https://getcomposer.org/doc/04-schema.md#version
-// and https://github.com/badges/shields/issues/319#issuecomment-74411045
-function phpVersionCompare(v1, v2) {
-  // Omit the starting `v`.
-  var rawv1 = omitv(v1);
-  var rawv2 = omitv(v2);
-  try {
-    var v1data = phpNumberedVersionData(rawv1);
-    var v2data = phpNumberedVersionData(rawv2);
-  } catch(e) {
-    return asciiVersionCompare(rawv1, rawv2);
-  }
-
-  // Compare the numbered part (eg, 1.0.0 < 2.0.0).
-  var numbersCompare = listCompare(v1data.numbers, v2data.numbers);
-  if (numbersCompare !== 0) {
-    return numbersCompare;
-  }
-
-  // Compare the modifiers (eg, alpha < beta).
-  if (v1data.modifier < v2data.modifier) {
-    return -1;
-  } else if (v1data.modifier > v2data.modifier) {
-    return 1;
-  }
-
-  // Compare the modifier counts (eg, alpha1 < alpha3).
-  if (v1data.modifierCount < v2data.modifierCount) {
-    return -1;
-  } else if (v1data.modifierCount > v2data.modifierCount) {
-    return 1;
-  }
-
-  return 0;
-}
-
-function phpLatestVersion(versions) {
-  var latest = versions[0];
-  for (var i = 1; i < versions.length; i++) {
-    if (phpVersionCompare(latest, versions[i]) < 0) {
-      latest = versions[i];
-    }
-  }
-  return latest;
-}
-
-// Whether a version is stable.
-function phpStableVersion(version) {
-  var rawVersion = omitv(version);
-  try {
-    var versionData = phpNumberedVersionData(rawVersion);
-  } catch(e) {
-    return false;
-  }
-  // normal or patch
-  return (versionData.modifier === 3) || (versionData.modifier === 4);
+    });
+  }));
 }
