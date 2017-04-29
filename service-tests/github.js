@@ -48,6 +48,21 @@ t.create('GitHub pull request')
     value: Joi.string().regex(/^\w+\sopen$/)
   }));
 
+t.create('GitHub pull request')
+  .get('/issues-closed/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('closed issues'),
+    value: Joi.string().regex(/^\w+\+?\sclosed$/)
+  }));
+
+t.create('GitHub pull request raw')
+  .get('/issues-closed-raw/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('closed issues'),
+    value: Joi.string().regex(/^\w+\+?$/)
+  }));
+
+
 t.create('File size')
   .get('/size/webcaetano/craft/build/craft.min.js.json')
   .expectJSONTypes(Joi.object().keys({
