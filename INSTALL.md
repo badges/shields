@@ -1,9 +1,7 @@
 # GitHub badges in SVG format
 
 [![npm version](http://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges)
-
 ![coverage](https://rawgithub.com/badges/shields/master/coverage.svg)
-
 [![build status](http://img.shields.io/travis/badges/gh-badges.svg)](https://travis-ci.org/badges/gh-badges)
 
 Make your own badges [here][badges]! (Quick guide: `https://img.shields.io/badge/left-right-f39f37.svg`.)
