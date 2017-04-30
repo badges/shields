@@ -1,53 +1,49 @@
 const assert = require('assert');
 const isPng = require('is-png');
 const isSvg = require('is-svg');
-const {spawn} = require('child_process');
+const {spawn} = require('child-process-promise');
+
+function runCli (...args) {
+  return spawn('node', ['gh-badge.js', ...args], { capture: ['stdout'] })
+    .then(result => result.stdout);
+}
 
 describe('The CLI', function () {
-  it('should provide a help message', function (done) {
-    const child = spawn('node', ['gh-badge.js']);
-    let buffer = '';
-    child.stdout.on('data', chunk => { buffer += ''+chunk; });
-    child.stdout.on('end', () => {
-      assert(buffer.startsWith('Usage'));
-      done();
+  it('should provide a help message', function () {
+    return runCli().then(stdout => {
+      assert(stdout.startsWith('Usage'));
     });
   });
 
-  it('should produce default badges', function (done) {
-    const child = spawn('node', ['gh-badge.js', 'cactus', 'grown']);
-    child.stdout.once('data', chunk => {
-      const buffer = ''+chunk;
-      assert.ok(isSvg(buffer));
-      assert.ok(buffer.includes('cactus'), 'cactus');
-      assert.ok(buffer.includes('grown'), 'grown');
-      done();
+  it('should produce default badges', function () {
+    return runCli('cactus', 'grown').then(stdout => {
+      assert.ok(isSvg(stdout));
+      assert.ok(stdout.includes('cactus'), 'cactus');
+      assert.ok(stdout.includes('grown'), 'grown');
     });
   });
 
-  it('should produce colorschemed badges', function (done) {
-    const child = spawn('node', ['gh-badge.js', 'cactus', 'grown', ':green']);
-    child.stdout.once('data', chunk => {
-      const buffer = ''+chunk;
-      assert.ok(isSvg(buffer));
-      done();
+  it('should produce colorschemed badges', function () {
+    return runCli('cactus', 'grown', ':green').then(stdout => {
+      assert.ok(isSvg(stdout));
     });
   });
 
-  it('should produce right-color badges', function (done) {
-    const child = spawn('node', ['gh-badge.js', 'cactus', 'grown', '#abcdef']);
-    child.stdout.once('data', chunk => {
-      const buffer = ''+chunk;
-      assert.ok(buffer.includes('#abcdef'), '#abcdef');
-      done();
+  it('should produce right-color badges', function () {
+    return runCli('cactus', 'grown', '#abcdef').then(stdout => {
+      assert.ok(isSvg(stdout));
+      assert.ok(stdout.includes('#abcdef'), '#abcdef');
     });
   });
 
-  it('should produce PNG badges', function(done) {
-    const child = spawn('node', ['gh-badge.js', 'cactus', 'grown', '.png']);
-    child.stdout.once('data', chunk => {
-      assert.ok(isPng(chunk));
-      done();
-    });
+  it('should produce PNG badges', function () {
+    const child = runCli('cactus', 'grown', '.png');
+
+    // The buffering done by `child-process-promise` doesn't seem correctly to
+    // handle binary data.
+    let chunk;
+    child.childProcess.stdout.once('data', data => { chunk = data; });
+
+    return child.then(() => { assert.ok(isPng(chunk)); });
   });
 });
