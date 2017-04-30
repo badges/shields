@@ -111,6 +111,20 @@ t.create('Commits since')
     value: Joi.string().regex(/^\w+$/)
   }));
 
+t.create('Release')
+  .get('/release/photonstorm/phaser.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('release'),
+    value: Joi.string()
+  }));
+
+t.create('(pre-)Release')
+  .get('/release/photonstorm/phaser/all.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('release'),
+    value: Joi.string()
+  }));
+
 t.create('File size')
   .get('/size/webcaetano/craft/build/craft.min.js.json')
   .expectJSONTypes(Joi.object().keys({
