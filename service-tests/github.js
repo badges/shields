@@ -6,6 +6,13 @@ const ServiceTester = require('./runner/service-tester');
 const t = new ServiceTester({ id: 'github', title: 'Github' });
 module.exports = t;
 
+t.create('License')
+  .get('/license/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('license'),
+    value: Joi.string()
+  }));
+
 t.create('File size')
   .get('/size/webcaetano/craft/build/craft.min.js.json')
   .expectJSONTypes(Joi.object().keys({
