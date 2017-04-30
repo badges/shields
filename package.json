@@ -62,6 +62,7 @@
     "logo"
   ],
   "devDependencies": {
+    "child-process-promise": "^2.2.1",
     "eslint": "^3.18.0",
     "glob": "^7.1.1",
     "icedfrisby": "^1.1.0",
