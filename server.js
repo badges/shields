@@ -4259,35 +4259,43 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Maven-Central artifact version integration
-// API documentation: http://search.maven.org/#api
+// (based on repo1.maven.org rather than search.maven.org because of #846)
 camp.route(/^\/maven-central\/v\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var groupId = match[1]; // eg, `com.google.inject`
   var artifactId = match[2]; // eg, `guice`
   var format = match[3] || "gif"; // eg, `guice`
-  var query = "g:" + encodeURIComponent(groupId) + "+AND+a:" + encodeURIComponent(artifactId);
-  var apiUrl = 'https://search.maven.org/solrsearch/select?rows=1&q='+query;
+  var metadataUrl = 'http://repo1.maven.org/maven2'
+    + '/' + encodeURIComponent(groupId).replace(/\./g, '/')
+    + '/' + encodeURIComponent(artifactId)
+    + '/maven-metadata.xml';
   var badgeData = getBadgeData('maven-central', data);
-  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
+  request(metadataUrl, { headers: { 'Accept': 'text/xml' } }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
-    try {
-      var data = JSON.parse(buffer);
-      var version = data.response.docs[0].latestVersion;
-      badgeData.text[1] = 'v' + version;
-      if (version === '0' || /SNAPSHOT/.test(version)) {
-        badgeData.colorscheme = 'orange';
-      } else {
-        badgeData.colorscheme = 'blue';
+    xml2js.parseString(buffer.toString(), function (err, data) {
+      if (err != null) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
       }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
+      try {
+        var version = data.metadata.versioning[0].latest[0];
+        badgeData.text[1] = 'v' + version;
+        if (version === '0' || /SNAPSHOT/.test(version)) {
+          badgeData.colorscheme = 'orange';
+        } else {
+          badgeData.colorscheme = 'blue';
+        }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
   });
 }));
 
