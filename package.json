@@ -36,8 +36,8 @@
     "xml2js": "~0.4.16"
   },
   "scripts": {
-    "coverage:test:js": "istanbul cover _mocha 'test/**/*.spec.js' --dir coverage/js",
-    "coverage:test:services": "istanbul cover _mocha --delay service-tests/runner/cli.js --dir coverage/services",
+    "coverage:test:js": "istanbul cover _mocha '*.spec.js' 'lib/*.spec.js' --dir coverage/js",
+    "coverage:test:services": "istanbul cover _mocha service-tests/runner/cli.js --dir coverage/services -- --delay",
     "coverage:test": "npm run coverage:test:js && npm run coverage:test:services",
     "coverage:report": "istanbul report",
     "coverage:report:reopen": "opn coverage/lcov-report/index.html",
@@ -75,5 +75,8 @@
     "node-fetch": "^1.6.3",
     "opn-cli": "^3.1.0",
     "sinon": "^2.1.0"
+  },
+  "engines": {
+    "node": ">= 6"
   }
 }

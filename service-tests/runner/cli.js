@@ -40,7 +40,7 @@ function getTitle (repoSlug, pullRequest) {
 // [Travis Sonar] Support user token authentication -> ['travis', 'sonar']
 // [CRAN CPAN CTAN] Add test coverage => ['cran', 'cpan', 'ctan']
 function servicesForTitle (title) {
-  const matches = title.match(/\[([\w ]+)\]/);
+  const matches = title.match(/\[(.+)\]/);
   if (matches === null) {
     return [];
   }
@@ -97,6 +97,6 @@ if (prOption !== undefined) {
   }
 
   runner.toss();
-  // Invoke run() asynchronously, beacuse Mocha will not start otherwise.
+  // Invoke run() asynchronously, because Mocha will not start otherwise.
   process.nextTick(run);
 }
