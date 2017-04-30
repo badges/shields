@@ -6142,7 +6142,12 @@ cache((data, match, sendBadge, request) => {
 
   request(apiUrl, (err, res, buffer) => {
     const badgeData = getBadgeData('chat', data);
-    if (err != null || res.statusCode !== 200) {
+    if (res && res.statusCode === 404) {
+      badgeData.text[1] = 'invalid server';
+      sendBadge(format, badgeData);
+      return;
+    }
+    if (err != null || !res || res.statusCode !== 200) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;

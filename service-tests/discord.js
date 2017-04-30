@@ -15,6 +15,14 @@ t.create('gets status for Reactiflux')
 
 t.create('invalid server ID')
   .get('/12345.json')
+  .expectJSON({ name: 'chat', value: 'invalid server' });
+
+t.create('server error')
+  .get('/12345.json')
+  .intercept(nock => nock('https://discordapp.com/')
+    .get('/api/guilds/12345/widget.json')
+    .reply(500, 'Something broke')
+  )
   .expectJSON({ name: 'chat', value: 'inaccessible' });
 
 t.create('connection error')
