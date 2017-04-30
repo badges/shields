@@ -10,7 +10,21 @@ t.create('File size')
   .get('/size/webcaetano/craft/build/craft.min.js.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('size'),
-    value: Joi.string().regex(/^[0-9]*[.]?[0-9]+\s(B|kB|MB|GB|TB|PB|EB|ZB|YB)$/)
+    value: Joi.string().regex(/^[0-9]*[.]?[0-9]+\s(B|kB|MB|GB|TB|PB|EB|ZB|YB)$/),
+  }));
+
+t.create('File size 404')
+  .get('/size/webcaetano/craft/build/does-not-exist.min.js.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('size'),
+    value: Joi.string().regex(/^repo or file not found$/),
+  }));
+
+t.create('File size unknown')
+  .get('/size/webcaetano/craft/build.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('size'),
+    value: Joi.string().regex(/^unknown file$/),
   }));
 
 t.create('downloads for release without slash')
