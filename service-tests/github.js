@@ -83,6 +83,13 @@ t.create('File size')
     value: Joi.string().regex(/^[0-9]*[.]?[0-9]+\s(B|kB|MB|GB|TB|PB|EB|ZB|YB)$/),
   }));
 
+t.create('Followers')
+  .get('/followers/webcaetano.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('followers'),
+    value: Joi.string().regex(/^\w+$/)
+  }));
+
 t.create('File size 404')
   .get('/size/webcaetano/craft/build/does-not-exist.min.js.json')
   .expectJSONTypes(Joi.object().keys({
