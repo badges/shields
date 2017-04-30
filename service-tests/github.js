@@ -125,6 +125,13 @@ t.create('(pre-)Release')
     value: Joi.string()
   }));
 
+t.create('Tag')
+  .get('/tag/photonstorm/phaser.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('tag'),
+    value: Joi.string()
+  }));
+
 t.create('File size')
   .get('/size/webcaetano/craft/build/craft.min.js.json')
   .expectJSONTypes(Joi.object().keys({
