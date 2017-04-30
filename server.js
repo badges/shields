@@ -6133,6 +6133,33 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Discord integration
+camp.route(/^\/discord\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache((data, match, sendBadge, request) => {
+  const serverID = match[1];
+  const format = match[2];
+  const apiUrl = `https://discordapp.com/api/guilds/${serverID}/widget.json`;
+
+  request(apiUrl, (err, res, buffer) => {
+    const badgeData = getBadgeData('chat', data);
+    if (err != null || res.statusCode !== 200) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      const data = JSON.parse(buffer);
+      const members = Array.isArray(data.members) ? data.members : [];
+      badgeData.text[1] = members.length + ' online';
+      badgeData.colorscheme = 'brightgreen';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
