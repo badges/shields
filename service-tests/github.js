@@ -104,6 +104,13 @@ t.create('Forks')
     value: Joi.number().integer().positive()
   }));
 
+t.create('Commits since')
+  .get('/commits-since/badges/shields/a0663d8da53fb712472c02665e6ff7547ba945b7.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.string().regex(/^(commits since){1}[\s\S]+$/),
+    value: Joi.string().regex(/^\w+$/)
+  }));
+
 t.create('File size')
   .get('/size/webcaetano/craft/build/craft.min.js.json')
   .expectJSONTypes(Joi.object().keys({
