@@ -97,6 +97,13 @@ t.create('Stars')
     value: Joi.string().regex(/^\w+$/)
   }));
 
+t.create('Forks')
+  .get('/forks/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('forks'),
+    value: Joi.number().integer().positive()
+  }));
+
 t.create('File size')
   .get('/size/webcaetano/craft/build/craft.min.js.json')
   .expectJSONTypes(Joi.object().keys({
