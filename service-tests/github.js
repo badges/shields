@@ -76,18 +76,25 @@ t.create('GitHub issues raw')
     value: Joi.string().regex(/^\w+$/)
   }));
 
-t.create('File size')
-  .get('/size/webcaetano/craft/build/craft.min.js.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('size'),
-    value: Joi.string().regex(/^[0-9]*[.]?[0-9]+\s(B|kB|MB|GB|TB|PB|EB|ZB|YB)$/),
-  }));
-
 t.create('Followers')
   .get('/followers/webcaetano.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('followers'),
     value: Joi.string().regex(/^\w+$/)
+  }));
+
+t.create('Watchers')
+  .get('/watchers/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('watchers'),
+    value: Joi.number().integer().positive()
+  }));
+
+t.create('File size')
+  .get('/size/webcaetano/craft/build/craft.min.js.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('size'),
+    value: Joi.string().regex(/^[0-9]*[.]?[0-9]+\s(B|kB|MB|GB|TB|PB|EB|ZB|YB)$/),
   }));
 
 t.create('File size 404')
