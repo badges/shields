@@ -20,7 +20,7 @@ t.create('File size 404')
     value: Joi.string().regex(/^repo or file not found$/),
   }));
 
-t.create('File size for not a regular file')
+t.create('File size for unknown file')
   .get('/size/webcaetano/craft/build.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('size'),
