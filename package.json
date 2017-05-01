@@ -26,6 +26,7 @@
     "camp": "~16.2.3",
     "chrome-web-store-item-property": "~1.1.2",
     "dot": "~1.0.3",
+    "pretty-bytes": "^3.0.1",
     "gm": "^1.23.0",
     "json-autosave": "~1.1.2",
     "pdfkit": "~0.8.0",

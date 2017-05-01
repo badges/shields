@@ -31,6 +31,7 @@ var svg2img = require('./lib/svg-to-img.js');
 var loadLogos = require('./lib/load-logos.js');
 var githubAuth = require('./lib/github-auth.js');
 var querystring = require('querystring');
+var prettyBytes = require('pretty-bytes');
 var xml2js = require('xml2js');
 var serverSecrets = require('./lib/server-secrets');
 if (serverSecrets && serverSecrets.gh_client_id) {
@@ -3427,6 +3428,48 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
       } else {
         badgeData.text[1] = 'unknown license';
+        sendBadge(format, badgeData);
+      }
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// GitHub file size.
+camp.route(/^\/github\/size\/([^\/]+)\/([^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];  // eg, mashape
+  var repo = match[2];  // eg, apistatus
+  var path = match[3];
+  var format = match[4];
+  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/contents/' + path;
+
+  var badgeData = getBadgeData('size', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.github;
+  }
+
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      if (res.statusCode === 404) {
+        badgeData.text[1] = 'repo or file not found';
+        sendBadge(format, badgeData);
+        return;
+      }
+      var body = JSON.parse(buffer);
+      if (body && Number.isInteger(body.size)) {
+        badgeData.text[1] = prettyBytes(body.size);
+        badgeData.colorscheme = 'green';
+        sendBadge(format, badgeData);
+      } else {
+        badgeData.text[1] = 'not a regular file';
         sendBadge(format, badgeData);
       }
     } catch(e) {
