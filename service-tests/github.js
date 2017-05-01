@@ -3,7 +3,7 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
-const t = new ServiceTester({ id: 'github', title: 'GitHub' });
+const t = new ServiceTester({ id: 'github', title: 'Github' });
 module.exports = t;
 
 t.create('File size')
@@ -20,9 +20,9 @@ t.create('File size 404')
     value: Joi.string().regex(/^repo or file not found$/),
   }));
 
-t.create('File size for unknown file')
+t.create('File size for "not a regular file"')
   .get('/size/webcaetano/craft/build.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('size'),
-    value: Joi.string().regex(/^unknown file$/),
+    value: Joi.string().regex(/^not a regular file$/),
   }));

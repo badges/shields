@@ -3464,7 +3464,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'green';
         sendBadge(format, badgeData);
       } else {
-        badgeData.text[1] = 'unknown file';
+        badgeData.text[1] = 'not a regular file';
         sendBadge(format, badgeData);
       }
     } catch(e) {
