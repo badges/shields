@@ -152,3 +152,32 @@ t.create('File size for "not a regular file"')
     name: Joi.equal('size'),
     value: Joi.string().regex(/^not a regular file$/),
   }));
+
+t.create('Downloads all releases')
+  .get('/downloads/photonstorm/phaser/total.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('downloads'),
+    value: Joi.string().regex(/^\w+\s+total$/)
+  }));
+
+t.create('Downloads latest release')
+  .get('/downloads/photonstorm/phaser/latest/total.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('downloads'),
+    value: Joi.string().regex(/^\w+$/)
+  }));
+
+t.create('Downloads by specific release')
+  .get('/downloads/photonstorm/phaser/v.2.4.4/total.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('downloads'),
+    value: [Joi.string().regex(/^none$/),Joi.string().regex(/^\w+\s+[\s\S]+$/)]
+  }));
+
+t.create('Downloads by specific asset')
+  .get('/downloads/photonstorm/phaser/latest/phaser.js.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('downloads'),
+    value: [Joi.string().regex(/^none$/),Joi.string().regex(/^\w+\s+\[[\s\S]+]$/)]
+}));
+
