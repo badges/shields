@@ -17,23 +17,24 @@
 'use strict';
 
 const difference = require('lodash.difference');
-const fetch = require('node-fetch');
+const request = require('request');
 const minimist = require('minimist');
 const Runner = require('./runner');
+const githubAuth = require('./../../lib/github-auth.js');
 const serverHelpers = require('../../lib/in-process-server-test-helpers');
 
-function getTitle (repoSlug, pullRequest) {
+function getTitle (repoSlug, pullRequest, callback) {
   const uri = `https://api.github.com/repos/${repoSlug}/pulls/${pullRequest}`;
-  const options = { headers: { 'User-Agent': 'badges/shields' } };
-  return fetch(uri, options)
-    .then(res => {
-      if (! res.ok) {
-        throw Error(`${res.status} ${res.statusText}`);
-      }
 
-      return res.json();
-    })
-    .then(json => json.title);
+  githubAuth.request(request, uri, {}, function(err, res, buffer) {
+    if(res.statusCode==404){
+      throw Error(`PR Not Found`);
+    }
+
+    var data = JSON.parse(buffer);
+
+    callback(err,data.title);
+  });
 }
 
 // [Travis] Fix timeout issues => ['travis']
@@ -75,22 +76,24 @@ if (prOption !== undefined) {
   }
   console.info(`PR: ${repoSlug}#${pullRequest}`);
 
-  getTitle(repoSlug, pullRequest)
-    .then(title => {
-      console.info(`Title: ${title}`);
-      const services = servicesForTitle(title);
-      if (services.length === 0) {
-        console.info('No services found. Nothing to do.');
-      } else {
-        console.info(`Services: (${services.length} found) ${services.join(', ')}\n`);
-        runner.only(services);
-        runner.toss();
-        run();
-      }
-    }).catch(err => {
+  getTitle(repoSlug, pullRequest,function(err,title){
+    if(err){
       console.error(err);
       process.exit(1);
-    });
+    }
+
+    console.info(`Title: ${title}`);
+    const services = servicesForTitle(title);
+    if (services.length === 0) {
+      console.info('No services found. Nothing to do.');
+      process.exit(0);
+    } else {
+      console.info(`Services: (${services.length} found) ${services.join(', ')}\n`);
+      runner.only(services);
+      runner.toss();
+      run();
+    }
+  });
 } else {
   if (serviceOption !== undefined) {
     runner.only(serviceOption.split(','));
