@@ -6,6 +6,7 @@
 /ServerScript
 /private
 /index.html
+/shields.env
 
 # Folder view configuration files
 .DS_Store

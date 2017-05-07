@@ -136,16 +136,17 @@ You can build and run the server locally using Docker. First build an image:
 ```console
 $ docker build -t shields .
 Sending build context to Docker daemon 3.923 MB
-Step 0 : FROM node:6.4.0-onbuild
 …
-Removing intermediate container c4678889953f
 Successfully built 4471b442c220
 ```
+
+Optionally, create a file called `shields.env` that contains the needed configuration. See
+`secret.example.env` for an example.
 
 Then run the container:
 
 ```console
-$ docker run --rm -p 8080:80 -v "$(pwd)/private/secret.json":/usr/src/app/secret.json --name shields shields
+$ docker run --rm -p 8080:80 --env-file shields.env --name shields shields
 
 > gh-badges@1.1.2 start /usr/src/app
 > node server.js
@@ -172,6 +173,8 @@ bintray_apikey
 bintray_user
 gh_client_id
 gh_client_secret
+gh_token
+gitter_dev_secret
 shieldsIps
 shieldsSecret
 sl_insight_apiToken
@@ -179,6 +182,9 @@ sl_insight_userUuid
 ```
 
 (Gathered from `cat private/secret.json | jq keys | grep -o '".*"' | sed 's/"//g'`.)
+
+The `secret.tpl.json` is a template file used by the Docker container to set the secrets based on
+environment variables.
 
 # Main Server Sysadmin
 
