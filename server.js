@@ -5738,39 +5738,39 @@ cache(function(data, match, sendBadge, request) {
   const url = 'https://addons.opera.com/en/extensions/details/' + name;
   request(url, function(err, res, buffer) {
     if (!err) {
-      try { 
+      try {
         const soup = require('html-soup');
         const dom = soup.parse(buffer);
         const version = Array.from(soup.select(dom, 'section.about > dl > dd'))[2].child.text;
         const downloads = parseInt(Array.from(soup.select(dom, 'section.about > dl > dd'))[0].child.text.replace(/,/g, ''));
         const ratingValue = parseFloat(Array.from(soup.select(dom, 'meta[itemprop="ratingValue"]'))[0].attributes['content']);
         const reviewCount = parseInt(Array.from(soup.select(dom, 'span[itemprop="reviewCount"]'))[0].child.text.replace(/,/g, ''));
+        const vdata = versionColor(version);
         switch (type) {
         case 'v':
-            const vdata = versionColor(version);
-            badgeData.text[1] = vdata.version;
-            badgeData.colorscheme = vdata.color;
-            break;
+          badgeData.text[1] = vdata.version;
+          badgeData.colorscheme = vdata.color;
+          break;
         case 'd':
-            badgeData.text[0] = data.label || 'downloads';
-            badgeData.text[1] = metric(downloads) + ' total';
-            badgeData.colorscheme = downloadCountColor(downloads);
-            break;
+          badgeData.text[0] = data.label || 'downloads';
+          badgeData.text[1] = metric(downloads) + ' total';
+          badgeData.colorscheme = downloadCountColor(downloads);
+          break;
         case 'rating':
-            badgeData.text[0] = data.label || 'rating';
-            badgeData.text[1] = ratingValue.toFixed(2) + '/5';
-            badgeData.colorscheme = floorCountColor(ratingValue.toFixed(2), 2, 3, 4);
-            break;
+          badgeData.text[0] = data.label || 'rating';
+          badgeData.text[1] = ratingValue.toFixed(2) + '/5';
+          badgeData.colorscheme = floorCountColor(ratingValue.toFixed(2), 2, 3, 4);
+          break;
         case 'stars':
-            badgeData.text[0] = data.label || 'rating';
-            badgeData.text[1] = starRating(Math.round(ratingValue));
-            badgeData.colorscheme = floorCountColor(Math.round(ratingValue), 2, 3, 4);
-            break;
+          badgeData.text[0] = data.label || 'rating';
+          badgeData.text[1] = starRating(Math.round(ratingValue));
+          badgeData.colorscheme = floorCountColor(Math.round(ratingValue), 2, 3, 4);
+          break;
         case 'rating-count':
-            badgeData.text[0] = data.label || 'rating-count';
-            badgeData.text[1] = metric(reviewCount) + ' total';
-            badgeData.colorscheme = floorCountColor(reviewCount, 5, 50, 500);
-            break;
+          badgeData.text[0] = data.label || 'rating-count';
+          badgeData.text[1] = metric(reviewCount) + ' total';
+          badgeData.colorscheme = floorCountColor(reviewCount, 5, 50, 500);
+          break;
         }
         sendBadge(format, badgeData);
       } catch (err) {
