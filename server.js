@@ -5774,7 +5774,6 @@ cache(function(data, match, sendBadge, request) {
         }
         sendBadge(format, badgeData);
       } catch (err) {
-        console.log(err);
         badgeData.text[1] = 'invalid';
         sendBadge(format, badgeData);
       }
