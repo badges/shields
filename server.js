@@ -5739,12 +5739,12 @@ cache(function(data, match, sendBadge, request) {
   request(url, function(err, res, buffer) {
     if (!err) {
       try {
-        const soup = require('html-soup');
-        const dom = soup.parse(buffer);
-        const version = Array.from(soup.select(dom, 'section.about > dl > dd'))[2].child.text;
-        const downloads = parseInt(Array.from(soup.select(dom, 'section.about > dl > dd'))[0].child.text.replace(/,/g, ''));
-        const ratingValue = parseFloat(Array.from(soup.select(dom, 'meta[itemprop="ratingValue"]'))[0].attributes['content']);
-        const reviewCount = parseInt(Array.from(soup.select(dom, 'span[itemprop="reviewCount"]'))[0].child.text.replace(/,/g, ''));
+        const cheerio = require('cheerio');
+        const $ = cheerio.load(buffer);
+        const version = $('section.about > dl > dd').eq(2).text();
+        const downloads = parseInt($('section.about > dl > dd').eq(0).text().replace(/,/g, ''));
+        const ratingValue = parseFloat($('meta[itemprop="ratingValue"]').eq(0).attr('content'));
+        const reviewCount = parseInt($('span[itemprop="reviewCount"]').eq(0).text().replace(/,/g, ''));
         const vdata = versionColor(version);
         switch (type) {
         case 'v':
@@ -5774,6 +5774,7 @@ cache(function(data, match, sendBadge, request) {
         }
         sendBadge(format, badgeData);
       } catch (err) {
+        console.log(err);
         badgeData.text[1] = 'invalid';
         sendBadge(format, badgeData);
       }

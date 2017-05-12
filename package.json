@@ -24,6 +24,7 @@
   "dependencies": {
     "bower": "~1.7.9",
     "camp": "~16.2.3",
+    "cheerio": "~0.22.0",
     "chrome-web-store-item-property": "~1.1.2",
     "dot": "~1.0.3",
     "pretty-bytes": "^3.0.1",
@@ -66,7 +67,6 @@
     "child-process-promise": "^2.2.1",
     "eslint": "^3.18.0",
     "glob": "^7.1.1",
-    "html-soup": "^1.1.1",
     "icedfrisby": "^1.2.0",
     "icedfrisby-nock": "^1.0.0",
     "is-png": "^1.1.0",
