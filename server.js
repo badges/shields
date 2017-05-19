@@ -3913,6 +3913,16 @@ mapNugetFeed('(.+\\.)?myget\\/(.*)', 2, function(match) {
   };
 });
 
+// MyGet (custom tenant, e.g. dotnet.myget.org)
+mapNugetFeed('(.*)\.myget\\/(.*)', 1, function(match) {
+  var tenant = match[1];
+  var feed = match[2];
+  return {
+    site: feed,
+    feed: 'https://' + tenant + '.myget.org/F/' + feed + '/api/v3'
+  };
+});
+
 // Puppet Forge modules
 camp.route(/^\/puppetforge\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
