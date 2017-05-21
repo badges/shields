@@ -5759,12 +5759,12 @@ cache(function(data, match, sendBadge, request) {
         case 'rating':
           badgeData.text[0] = data.label || 'rating';
           badgeData.text[1] = ratingValue.toFixed(2) + '/5';
-          badgeData.colorscheme = floorCountColor(ratingValue.toFixed(2), 2, 3, 4);
+          badgeData.colorscheme = floorCountColor(ratingValue, 2, 3, 4);
           break;
         case 'stars':
           badgeData.text[0] = data.label || 'rating';
           badgeData.text[1] = starRating(Math.round(ratingValue));
-          badgeData.colorscheme = floorCountColor(Math.round(ratingValue), 2, 3, 4);
+          badgeData.colorscheme = floorCountColor(ratingValue, 2, 3, 4);
           break;
         case 'rating-count':
           badgeData.text[0] = data.label || 'rating-count';
