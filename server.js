@@ -1693,48 +1693,45 @@ cache(function(data, match, sendBadge, request) {
 // Anaconda Cloud / conda package manager integration
 camp.route(/^\/conda\/([dvp]n?)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var mode = match[1];
-  var channel = match[2];
-  var pkgname = match[3];
-  var format = match[4];
-  var url = 'https://api.anaconda.org/package/' + channel + '/' + pkgname;
-  var modes = {
+  const mode = match[1];
+  const channel = match[2];
+  const pkgname = match[3];
+  const format = match[4];
+  const url = 'https://api.anaconda.org/package/' + channel + '/' + pkgname;
+  const modes = {
     // downloads - 'd'
     'd': function(data, badgeData) {
-      var downloads = 0;
-      data.files.forEach(function(file) {
-	downloads += file.ndownloads;
-      });
-      badgeData.text[0] = data.label || "downloads";
+      const downloads = data.files.reduce((total, file) => total + file.ndownloads, 0);
+      badgeData.text[0] = data.label || 'downloads';
       badgeData.text[1] = metric(downloads);
       badgeData.colorscheme = downloadCountColor(downloads);
     },
     // latest version 'v'
     'v': function(data, badgeData) {
-      var version = data.latest_version;
-      var color = versionColor(version).color;
-      badgeData.text[1] = "v"+version;
+      const version = data.latest_version;
+      const color = versionColor(version).color;
+      badgeData.text[1] = 'v'+version;
       badgeData.colorscheme = color;
     },
     // platform 'p'
     'p': function(data, badgeData) {
-      var platforms = data.conda_platforms.join(" | ");
-      badgeData.text[0] = data.label || "platform";
+      const platforms = data.conda_platforms.join(' | ');
+      badgeData.text[0] = data.label || 'platform';
       badgeData.text[1] = platforms;
     }
   };
-  var variants = {
+  const variants = {
     // default use `conda|{channelname}` as label
     '': function(data, badgeData) {
-      badgeData.text[0] = "conda|" + badgeData.text[0];
+      badgeData.text[0] = 'conda|' + badgeData.text[0];
     },
     // skip `conda|` prefix
     'n': function(data, badgeData) {
     }
   };
 
-  var update = modes[mode.charAt(0)];
-  var variant = variants[mode.charAt(1)];
+  const update = modes[mode.charAt(0)];
+  const variant = variants[mode.charAt(1)];
 
   var badgeData = getBadgeData(channel, data);
   request(url, function(err, res, buffer) {
