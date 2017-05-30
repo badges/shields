@@ -1688,11 +1688,15 @@ cache(function(data, match, sendBadge, request) {
   const pkgname = match[3];
   const format = match[4];
   const url = 'https://api.anaconda.org/package/' + channel + '/' + pkgname;
+  const labels = {
+    'd': 'downloads',
+    'p': 'platform',
+    'v': channel
+  };
   const modes = {
     // downloads - 'd'
     'd': function(data, badgeData) {
       const downloads = data.files.reduce((total, file) => total + file.ndownloads, 0);
-      badgeData.text[0] = data.label || 'downloads';
       badgeData.text[1] = metric(downloads);
       badgeData.colorscheme = downloadCountColor(downloads);
     },
@@ -1706,14 +1710,13 @@ cache(function(data, match, sendBadge, request) {
     // platform 'p'
     'p': function(data, badgeData) {
       const platforms = data.conda_platforms.join(' | ');
-      badgeData.text[0] = data.label || 'platform';
       badgeData.text[1] = platforms;
     }
   };
   const variants = {
     // default use `conda|{channelname}` as label
     '': function(data, badgeData) {
-      badgeData.text[0] = 'conda|' + badgeData.text[0];
+      badgeData.text[0] = (data && data.label) || 'conda|' + badgeData.text[0];
     },
     // skip `conda|` prefix
     'n': function(data, badgeData) {
@@ -1723,10 +1726,11 @@ cache(function(data, match, sendBadge, request) {
   const update = modes[mode.charAt(0)];
   const variant = variants[mode.charAt(1)];
 
-  var badgeData = getBadgeData(channel, data);
+  var badgeData = getBadgeData(labels[mode.charAt(0)], data);
   request(url, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
+      variant(data, badgeData);
       sendBadge(format, badgeData);
       return;
     }
@@ -1737,6 +1741,7 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+      variant(data, badgeData);
       sendBadge(format, badgeData);
     }
   });
