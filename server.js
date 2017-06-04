@@ -1040,8 +1040,9 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var receiving = data.receiving || data.taking;
-      if (receiving) {
+      // Avoid falsey checks because amounts may be 0
+      var receiving = isNaN(data.receiving) ? data.taking : data.receiving;
+      if (!isNaN(receiving)) {
         badgeData.text[1] = '$' + metric(receiving) + '/week';
         if (receiving === 0) {
           badgeData.colorscheme = 'red';
