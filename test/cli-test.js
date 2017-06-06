@@ -1,1 +1,0 @@
-require('../gh-badge.js');
