@@ -2991,7 +2991,38 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-<<<<<<< HEAD
+// GitHub tag integration.
+camp.route(/^\/github\/tag\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];  // eg, expressjs/express
+  var repo = match[2];
+  var format = match[3];
+  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/tags';
+  var badgeData = getBadgeData('tag', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.github;
+  }
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var versions = data.map(function(e) { return e.name; });
+      var tag = latestVersion(versions);
+      var vdata = versionColor(tag);
+      badgeData.text[1] = vdata.version;
+      badgeData.colorscheme = vdata.color;
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'none';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // GitHub status integration.
 camp.route(/^\/github\/status\/([^\/]+)\/([^\/]+)\/((?:[^\/]+)(?:\/.+?)?)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -3013,22 +3044,12 @@ cache(function(data, match, sendBadge, request) {
   }
 
   githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
-=======
-camp.route(/^\/sourcegraph\/rrc\/([\s\S]+)\.(svg|png|gif|jpg|json)$/,
-cache(function (data, match, sendBadge, request) {
-  var repo = match[1];
-  var format = match[2];
-  var apiUrl = "https://sourcegraph.com/.api/repos/" + repo + "/-/shield";
-  var badgeData = getBadgeData('used by', data);
-  request(apiUrl, function(err, res, buffer) {
->>>>>>> badges/master
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
     try {
-<<<<<<< HEAD
       var data = JSON.parse(buffer);
       var state;
       if(context!=='status')
@@ -3065,15 +3086,6 @@ cache(function (data, match, sendBadge, request) {
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'none';
-=======
-      badgeData.colorscheme = 'brightgreen';
-      badgeData.logo = logos.sourcegraph;
-      var data = JSON.parse(buffer);
-      badgeData.text[1] = data.value;
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
->>>>>>> badges/master
       sendBadge(format, badgeData);
     }
   });
