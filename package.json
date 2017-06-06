@@ -36,6 +36,9 @@
     "svgo": "~0.7.1",
     "xml2js": "~0.4.16"
   },
+  "engines" : {
+    "node" : ">=5.10"
+  },
   "scripts": {
     "coverage:test:js": "istanbul cover _mocha '*.spec.js' 'lib/*.spec.js' --dir coverage/js",
     "coverage:test:services": "istanbul cover _mocha service-tests/runner/cli.js --dir coverage/services -- --delay",
