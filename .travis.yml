@@ -3,6 +3,7 @@ node_js:
   - 6
 
 script:
+  - env
   - npm run lint
   - npm run test:js
   - if [ "$TRAVIS_EVENT_TYPE" == cron ]; then npm run test:services; fi
