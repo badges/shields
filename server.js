@@ -4871,7 +4871,7 @@ cache(function(data, match, sendBadge, request) {
   var pkg = match[2]; // eg, Config-Augeas
   var format = match[3];
   var badgeData = getBadgeData('cpan', data);
-  var url = 'https://api.metacpan.org/v0/release/'+pkg;
+  var url = 'https://fastapi.metacpan.org/v1/release/'+pkg;
   request(url, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
