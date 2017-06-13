@@ -3229,7 +3229,7 @@ cache(function(data, match, sendBadge, request) {
   var isPR = !!match[1];
   var isClosed = !!match[2];
   var isRaw = !!match[3];
-  var isState = !!match[4]
+  var isState = !!match[4];
   var user = match[5];  // eg, badges
   var repo = match[6];  // eg, shields
   var ghLabel = match[7];  // eg, website
@@ -3243,7 +3243,7 @@ cache(function(data, match, sendBadge, request) {
       ' repo:' + user + '/' + repo;
   } else if (isState && ghLabel != undefined) {
     apiUrl += '/repos/' + user + '/' + repo + '/issues/' + ghLabel;
-    issuesApi = true; 
+    issuesApi = true;
   } else {
     apiUrl += '/repos/' + user + '/' + repo;
     if (isClosed || ghLabel !== undefined) {
@@ -3271,13 +3271,13 @@ cache(function(data, match, sendBadge, request) {
       var modifier = '';
       var issues;
       if (isState && issuesApi) {
-        var state = data.state
-        var id = data.number
+        var state = data.state;
+        var id = data.number;
         badgeData.text[0] = id;
         badgeData.text[1] = state;
-        badgeData.colorscheme = (state == 'closed')? 'red': 'brightgreen'
+        badgeData.colorscheme = (state == 'closed')? 'red': 'brightgreen';
         sendBadge(format, badgeData);
-      } else { 
+      } else {
         if (isPR) {
           issues = data.total_count;
         } else {
