@@ -3224,12 +3224,12 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub issues integration.
-camp.route(/^\/github\/issues(-pr)?(-closed)?(-raw)?(-state)?\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/issues(-pr)?(-closed)?(-state)?(-raw)?\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var isPR = !!match[1];
   var isClosed = !!match[2];
-  var isRaw = !!match[3];
-  var isState = !!match[4];
+  var isState = !!match[3];
+  var isRaw = !!match[4];
   var user = match[5];  // eg, badges
   var repo = match[6];  // eg, shields
   var ghLabel = match[7];  // eg, website
@@ -3271,11 +3271,19 @@ cache(function(data, match, sendBadge, request) {
       var modifier = '';
       var issues;
       if (isState && issuesApi) {
-        var state = data.state;
-        var id = data.number;
-        badgeData.text[0] = id;
-        badgeData.text[1] = state;
-        badgeData.colorscheme = (state == 'closed')? 'red': 'brightgreen';
+        var rightSide = isRaw ? data.state : '  '.repeat(2) + data.title + '  '.repeat(2);
+        var leftSide = ' '.repeat(2) +'#' + ghLabel + ' '.repeat(2);
+        if (data.state !== 'undefined') {
+          console.log("data.state !== 'undefined'", true)
+          badgeData.link = [ data.html_url ]
+          badgeData.colorscheme = (data.state == 'closed') ? 'red': 'brightgreen';
+        } else {
+          console.log("data.state !== 'undefined'", false)
+          rightSide = 'Not Found'
+          badgeData.colorscheme = 'lightgrey'
+        }
+        badgeData.text[0] = leftSide;
+        badgeData.text[1] = rightSide;
         sendBadge(format, badgeData);
       } else {
         if (isPR) {
