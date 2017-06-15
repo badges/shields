@@ -3273,14 +3273,11 @@ cache(function(data, match, sendBadge, request) {
       if (isState && issuesApi) {
         var rightSide = isRaw ? data.state : '  '.repeat(2) + data.title + '  '.repeat(2);
         var leftSide = ' '.repeat(2) +'#' + ghLabel + ' '.repeat(2);
-        if (data.state !== 'undefined') {
-          console.log("data.state !== 'undefined'", true)
-          badgeData.link = [ data.html_url ]
+        if (!data.message) {
           badgeData.colorscheme = (data.state == 'closed') ? 'red': 'brightgreen';
         } else {
-          console.log("data.state !== 'undefined'", false)
-          rightSide = 'Not Found'
-          badgeData.colorscheme = 'lightgrey'
+          rightSide = data.message;
+          badgeData.colorscheme = 'lightgrey';
         }
         badgeData.text[0] = leftSide;
         badgeData.text[1] = rightSide;
