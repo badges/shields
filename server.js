@@ -3272,6 +3272,7 @@ cache(function(data, match, sendBadge, request) {
       var issues;
       if (isState && issuesApi) {
         var rightSide = isRaw ? data.state : data.title;
+        rightSide = rightSide.length > 25 ? rightSide.substr(0,21)+'...' : rightSide
         var leftSide = '#' + ghLabel;
         if (!data.message) {
           badgeData.colorscheme = (data.state == 'closed') ? 'red': 'brightgreen';
