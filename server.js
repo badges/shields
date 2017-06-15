@@ -3271,8 +3271,8 @@ cache(function(data, match, sendBadge, request) {
       var modifier = '';
       var issues;
       if (isState && issuesApi) {
-        var rightSide = isRaw ? data.state : '  '.repeat(2) + data.title + '  '.repeat(2);
-        var leftSide = ' '.repeat(2) +'#' + ghLabel + ' '.repeat(2);
+        var rightSide = isRaw ? data.state : data.title;
+        var leftSide = '#' + ghLabel;
         if (!data.message) {
           badgeData.colorscheme = (data.state == 'closed') ? 'red': 'brightgreen';
         } else {
