@@ -13,6 +13,13 @@ t.create('latest version')
     value: Joi.string().regex(/^v(.*)$/)
 }));
 
+t.create('latest 0.8 version')
+  .get('/v/com.github.fabriziocucci/yacl4j/0.8.json') // http://repo1.maven.org/maven2/com/github/fabriziocucci/yacl4j/
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('maven-central'),
+    value: Joi.string().regex(/^v0\.8(.*)$/)
+  }));
+
 t.create('inexistent artifact')
   .get('/v/inexistent-group-id/inexistent-artifact-id.json')
   .expectJSON({ name: 'maven-central', value: 'invalid' });

@@ -4337,11 +4337,12 @@ cache(function(data, match, sendBadge, request) {
 
 // Maven-Central artifact version integration
 // (based on repo1.maven.org rather than search.maven.org because of #846)
-camp.route(/^\/maven-central\/v\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/maven-central\/v\/([^\/]*)\/([^\/]*)(?:\/([^\/]*))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var groupId = match[1]; // eg, `com.google.inject`
   var artifactId = match[2]; // eg, `guice`
-  var format = match[3] || "gif"; // eg, `guice`
+  var versionPrefix = match[3] || ''; // eg, `1.`
+  var format = match[4] || 'gif'; // eg, `svg`
   var metadataUrl = 'http://repo1.maven.org/maven2'
     + '/' + encodeURIComponent(groupId).replace(/\./g, '/')
     + '/' + encodeURIComponent(artifactId)
@@ -4360,7 +4361,11 @@ cache(function(data, match, sendBadge, request) {
         return;
       }
       try {
-        var version = data.metadata.versioning[0].latest[0];
+        var versions = data.metadata.versioning[0].versions[0].version.reverse();
+        var version = versions.find(function(version){
+          return version.indexOf(versionPrefix) === 0;
+        });
+
         badgeData.text[1] = 'v' + version;
         if (version === '0' || /SNAPSHOT/.test(version)) {
           badgeData.colorscheme = 'orange';
