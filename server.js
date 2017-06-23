@@ -4417,19 +4417,19 @@ cache(function(data, match, sendBadge, request) {
           version = parsed.data[0].latestRelease;
           break;
         case 's':
-	  // only want to match 1.2.3-SNAPSHOT style versions, which may not always be in
-	  // 'latestSnapshot' so check 'version' as well before continuing to next entry
-	  parsed.data.every(function(artifact) {
-	     if (isNexusSnapshotVersion(artifact.latestSnapshot)) {
-	        version = artifact.latestSnapshot;
-	        return;
-	     }
-	     if (isNexusSnapshotVersion(artifact.version)) {
-	        version = artifact.version;
-	        return;
-	     }
-	     return true;
-	  });
+          // only want to match 1.2.3-SNAPSHOT style versions, which may not always be in
+          // 'latestSnapshot' so check 'version' as well before continuing to next entry
+          parsed.data.every(function(artifact) {
+             if (isNexusSnapshotVersion(artifact.latestSnapshot)) {
+                version = artifact.latestSnapshot;
+                return;
+             }
+             if (isNexusSnapshotVersion(artifact.version)) {
+                version = artifact.version;
+                return;
+             }
+             return true;
+          });
           break;
         default:
           version = parsed.data.baseVersion || parsed.data.version;
