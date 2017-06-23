@@ -4376,78 +4376,82 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-function nexusRequest(data, match, sendBadge, request, urlCallback, dataCallback) {
-  var scheme = match[1]; // http(s)
-  var host = match[3]; // nexus.example.com
-  var groupId = match[4]; // eg, `com.google.inject`
-  var artifactId = match[5]; // eg, `guice`
-  var format = match[6] || "gif";
-  var apiUrl = scheme + '://' + host + urlCallback(encodeURIComponent(groupId), encodeURIComponent(artifactId));
-  var badgeData = getBadgeData('nexus', data);
-  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
-	 if (err != null) {
-	   badgeData.text[1] = 'inaccessible';
-	   sendBadge(format, badgeData);
-	   return;
-	 }
-	 try {
-	   var parsed = JSON.parse(buffer);
-	   var version = dataCallback(parsed);
-
-	   if (version === '0' || /SNAPSHOT/.test(version)) {
-		 badgeData.colorscheme = 'orange';
-		 if (version !== '0') {
-		    badgeData.text[1] = version;
-		 } else {
-	        badgeData.text[1] = 'undefined';
-		 }
-	   } else {
-		 badgeData.colorscheme = 'blue';
-		 badgeData.text[1] = version;
-	   }
-	   sendBadge(format, badgeData);
-	 } catch(e) {
-	   badgeData.text[1] = 'invalid';
-	   sendBadge(format, badgeData);
-	 }
-  });
-}
-
-function isSnapshotVersion(version) {
+function isNexusSnapshotVersion(version) {
   var pattern = /(\d+\.)*\d\-SNAPSHOT/;
   return version.match(pattern);
 }
 
 // standalone sonatype nexus installation
-camp.route(/^\/nexus\/r\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+// API pattern:
+//   /nexus/(r|s|<repo-name>)/(http|https)/<nexus.host>[:port][/<entry-path>]/<group>/<artifact>[:k1=v1[:k2=v2[...]]].<format>
+// for /nexus/[rs]/... pattern, use the search api of the nexus server, and
+// for /nexus/<repo-name>/... pattern, use the resolve api of the nexus server.
+camp.route(/^\/nexus\/(r|s|[^\/]+)\/(https?)\/((?:[^\/]+)(?:\/[^\/]+)?)\/([^\/]+)\/([^\/:]+)(:.+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  nexusRequest(data, match, sendBadge, request, function(groupId, artifactId) {
-      return '/service/local/lucene/search?g=' + groupId + '&a=' + artifactId;
-  }, function(parsed) {
-      return parsed.data[0].latestRelease;
-  });
-}));
+  var repo = match[1];                           // r | s | repo-name
+  var scheme = match[2];                         // http | https
+  var host = match[3];                           // eg, `nexus.example.com`
+  var groupId = encodeURIComponent(match[4]);    // eg, `com.google.inject`
+  var artifactId = encodeURIComponent(match[5]); // eg, `guice`
+  var queryOpt = (match[6] || '').replace(':', '&');     // eg, `&p=pom&c=doc`
+  var format = match[7] || "gif";
 
-camp.route(/^\/nexus\/s\/(http(s)?)\/((?:[^\/]+)(?:\/.+?)?)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  nexusRequest(data, match, sendBadge, request, function(groupId, artifactId) {
-      return '/service/local/lucene/search?g=' + groupId + '&a=' + artifactId;
-  }, function(parsed) {
-	  var latest = '0';
+  var badgeData = getBadgeData('nexus', data);
+
+  var apiUrl = scheme + '://' + host
+               + ((repo ==  'r' || repo == 's')
+                 ? ('/service/local/lucene/search?g=' + groupId + '&a=' + artifactId + queryOpt)
+                 : ('/service/local/artifact/maven/resolve?r=' + repo + '&g=' + groupId + '&a=' + artifactId + '&v=LATEST' + queryOpt));
+
+  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var parsed = JSON.parse(buffer);
+      var version = '0';
+      switch (repo) {
+        case 'r':
+          version = parsed.data[0].latestRelease;
+          break;
+        case 's':
 	  // only want to match 1.2.3-SNAPSHOT style versions, which may not always be in
 	  // 'latestSnapshot' so check 'version' as well before continuing to next entry
 	  parsed.data.every(function(artifact) {
-	     if (isSnapshotVersion(artifact.latestSnapshot)) {
-	        latest = artifact.latestSnapshot;
+	     if (isNexusSnapshotVersion(artifact.latestSnapshot)) {
+	        version = artifact.latestSnapshot;
 	        return;
 	     }
-	     if (isSnapshotVersion(artifact.version)) {
-	        latest = artifact.version;
+	     if (isNexusSnapshotVersion(artifact.version)) {
+	        version = artifact.version;
 	        return;
 	     }
 	     return true;
 	  });
-      return latest;
+          break;
+        default:
+          version = parsed.data.baseVersion || parsed.data.version;
+          break;
+      }
+
+      if (version === '0' || /SNAPSHOT/.test(version)) {
+        badgeData.colorscheme = 'orange';
+        if (version !== '0') {
+          badgeData.text[1] = version;
+        } else {
+          badgeData.text[1] = 'undefined';
+        }
+      } else {
+         badgeData.colorscheme = 'blue';
+         badgeData.text[1] = version;
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
   });
 }));
 
