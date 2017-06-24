@@ -4393,7 +4393,7 @@ cache(function(data, match, sendBadge, request) {
   var host = match[3];                           // eg, `nexus.example.com`
   var groupId = encodeURIComponent(match[4]);    // eg, `com.google.inject`
   var artifactId = encodeURIComponent(match[5]); // eg, `guice`
-  var queryOpt = (match[6] || '').replace(':', '&');     // eg, `&p=pom&c=doc`
+  var queryOpt = (match[6] || '').replace(/:/g, '&'); // eg, `&p=pom&c=doc`
   var format = match[7] || "gif";
 
   var badgeData = getBadgeData('nexus', data);
