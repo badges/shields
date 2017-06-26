@@ -217,11 +217,23 @@ Edit [try.html][tryhtml] in the right section (Build, Downloads, ...) and add yo
 
 Save, restart and you can see it [locally][try].
 
-If this is fine, you can generate the website:
+## (4.4) Write Tests
 
-    make website
+When creating a badge for a new service or changing a badge's behavior, tests
+should be included. They serve several purposes:
 
-This changes the index.html file automatically.
+1. They speed up future contributors when they are debugging or improving a
+   badge.
+2. If a contributors like to change your badge, chances are, they forget
+   edge cases and break your code.
+   Tests may give hints in such cases.
+3. The contributor and reviewer can easily verify the code works as
+   intended.
+4. When a badge stops working on the live server, maintainers can find out
+   right away.
+
+There is a dedicated [tutorial for tests in the service-tests folder][tests-tutorial].
+Please follow it to include tests on your pull-request.
 
 ## (5) Create a Pull Request
 
@@ -256,3 +268,4 @@ These files can also be of help for creating your own badge.
 [docker-example]: https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L5014
 [travis-example]: https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L431
 [regex]: https://www.w3schools.com/jsref/jsref_obj_regexp.asp
+[tests-tutorial]: ../service-tests/#readme
