@@ -3361,22 +3361,14 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[5];  // eg, shields
   var ghLabel = match[6];  // eg, website
   var format = match[7];
-  var apiUrl = githubApiUrl;
+  var apiUrl = githubApiUrl + '/search/issues';
   var query = {};
-  var issuesApi = false;  // Are we using the issues API instead of the repo one?
-  if (isPR) {
-    apiUrl += '/search/issues';
-    query.q = 'is:pr is:' + (isClosed? 'closed': 'open') +
-      ' repo:' + user + '/' + repo;
-  } else {
-    apiUrl += '/repos/' + user + '/' + repo;
-    if (isClosed || ghLabel !== undefined) {
-      apiUrl += '/issues';
-      if (isClosed) { query.state = 'closed'; }
-      if (ghLabel !== undefined) { query.labels = ghLabel; }
-      issuesApi = true;
-    }
-  }
+  var hasLabel = (ghLabel !== undefined);
+
+  query.q = 'repo:' + user + '/' + repo +
+    (isPR? ' is:pr': ' is:issue') +
+    (isClosed? ' is:closed': ' is:open') +
+    (hasLabel? ' label:' + ghLabel: '');
 
   var closedText = isClosed? 'closed ': '';
   var targetText = isPR? 'pull requests': 'issues';
@@ -3392,23 +3384,9 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var modifier = '';
-      var issues;
-      if (isPR) {
-        issues = data.total_count;
-      } else {
-        if (issuesApi) {
-          issues = data.length;
-          if (res.headers['link'] &&
-              res.headers['link'].indexOf('rel="last"') >= 0) {
-            modifier = '+';
-          }
-        } else {
-          issues = data.open_issues_count;
-        }
-      }
+      var issues = data.total_count;
       var rightText = isRaw? '': (isClosed? ' closed': ' open');
-      badgeData.text[1] = metric(issues) + modifier + rightText;
+      badgeData.text[1] = metric(issues) + rightText;
       badgeData.colorscheme = (issues > 0)? 'yellow': 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
