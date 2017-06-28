@@ -3241,13 +3241,16 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub release integration
-camp.route(/^\/github\/release\/([^\/]+\/[^\/]+)(?:\/(all))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/release(-name)?\/([^\/]+)\/([^\/]+)(?:\/(all))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];  // eg, qubyte/rubidium
-  var allReleases = match[2];
-  var format = match[3];
-  var apiUrl = githubApiUrl + '/repos/' + userRepo + '/releases';
-  var badgeData = getBadgeData('release', data);
+  var showName = !!match[1];
+  var user = match[2];  // eg, qubyte
+  var repo = match[3];  // eg, rubidium
+  var allReleases = match[4];
+  var format = match[5];
+  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/releases';
+  var labelText = showName? repo + ' release': 'release'
+  var badgeData = getBadgeData(labelText, data);
   if (allReleases === undefined) {
     apiUrl = apiUrl + '/latest';
   }
