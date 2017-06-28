@@ -3371,8 +3371,9 @@ cache(function(data, match, sendBadge, request) {
     (hasLabel? ' label:' + ghLabel: '');
 
   var closedText = isClosed? 'closed ': '';
+  var labelText = isRaw? '': (hasLabel? ghLabel + ' ': '');
   var targetText = isPR? 'pull requests': 'issues';
-  var badgeData = getBadgeData(closedText + targetText, data);
+  var badgeData = getBadgeData(closedText + labelText + targetText, data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
   }

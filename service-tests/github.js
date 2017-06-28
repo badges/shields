@@ -205,3 +205,87 @@ t.create('hit counter for nonexistent repo')
     name: Joi.equal('goto counter'),
     value: Joi.string().regex(/^repo not found$/),
   }));
+
+t.create('open issues')
+  .get('/issues/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('issues'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
+  }));
+
+t.create('open issues (raw)')
+  .get('/issues-raw/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('issues'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?$/)
+  }));
+
+t.create('open pull requests')
+  .get('/issues-pr/cdnjs/cdnjs.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('pull requests'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
+  }));
+
+t.create('open pull requests (raw)')
+  .get('/issues-pr-raw/cdnjs/cdnjs.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('pull requests'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?$/)
+  }));
+
+t.create('closed issues')
+  .get('/issues-closed/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('closed issues'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? closed$/)
+  }));
+
+t.create('closed issues (raw)')
+  .get('/issues-closed-raw/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('closed issues'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?$/)
+  }));
+
+t.create('closed pull requests')
+  .get('/issues-pr-closed/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('closed pull requests'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? closed$/)
+  }));
+
+t.create('closed pull requests (raw)')
+  .get('/issues-pr-closed-raw/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('closed pull requests'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?$/)
+  }));
+
+t.create('open issues by label')
+  .get('/issues/badges/shields/vendor-badge.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('vendor-badge issues'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
+  }));
+
+t.create('open issues by label (raw)')
+  .get('/issues-raw/badges/shields/vendor-badge.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('issues'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?$/)
+  }));
+
+t.create('open pull requests by label')
+  .get('/issues-pr/badges/shields/vendor-badge.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('vendor-badge pull requests'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
+  }));
+
+t.create('open pull requests by label (raw)')
+  .get('/issues-pr-raw/badges/shields/vendor-badge.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('pull requests'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?$/)
+  }));
