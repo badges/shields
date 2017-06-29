@@ -4806,7 +4806,7 @@ cache(function(data, match, sendBadge, request) {
     working:  '#FCBC41',
     pending:  '#CFD0D7',
     rejected: '#CFD0D7'
-  }
+  };
 
   request(apiUrl, {json: true}, function(err, res, data) {
     try {
