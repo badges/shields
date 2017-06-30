@@ -307,7 +307,7 @@ Complete example
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
-const t = new ServiceTester('Travis', '/travis');
+const t = new ServiceTester({ id: 'travis', title: 'Travis CI' });
 module.exports = t;
 
 t.create('build status on default branch')
