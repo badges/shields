@@ -13,3 +13,11 @@ t.create('Receiving')
     value: Joi.string().regex(/^\$[0-9]+(\.[0-9]{2})?\/week/)
   }));
 
+
+t.create('Empty')
+  .get('/Gratipay.json')
+  .intercept(nock => nock('https://gratipay.com')
+    .get('/Gratipay/public.json')
+    .reply(200, { receiving : 0.00 })
+  )
+  .expectJSON({ name: 'tips', value: '$0/week'});
