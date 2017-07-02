@@ -3904,6 +3904,14 @@ mapNugetFeedv2('chocolatey', 0, function(match) {
   };
 });
 
+// PowerShell Gallery
+mapNugetFeedv2('powershellgallery', 0, function(match) {
+  return {
+    site: 'powershellgallery',
+    feed: 'https://www.powershellgallery.com/api/v2'
+  };
+});
+
 // NuGet
 mapNugetFeed('nuget', 0, function(match) {
   return {
