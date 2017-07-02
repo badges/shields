@@ -4812,14 +4812,14 @@ cache(function(data, match, sendBadge, request) {
     try {
       badgeData.logo = logos['dockbit'];
 
-      if (err !== null) {
-        badgeData.text[1] = 'inaccessible';
+      if (res && (res.statusCode === 404 || data.state === null)) {
+        badgeData.text[1] = 'not found';
         sendBadge(format, badgeData);
         return;
       }
 
-      if (res.statusCode === 404 || data.state === null) {
-        badgeData.text[1] = 'not found';
+      if (!res || err !== null || res.statusCode !== 200) {
+        badgeData.text[1] = 'inaccessible';
         sendBadge(format, badgeData);
         return;
       }
