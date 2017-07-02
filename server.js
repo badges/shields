@@ -4791,13 +4791,13 @@ cache(function(data, match, sendBadge, request) {
 
 camp.route(/^\/dockbit\/([A-Za-z0-9-_]+)\/([A-Za-z0-9-_]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var org      = match[1];
-  var pipeline = match[2];
-  var format   = match[3];
+  const org      = match[1];
+  const pipeline = match[2];
+  const format   = match[3];
 
-  var token     = data.token;
-  var badgeData = getBadgeData('deploy', data);
-  var apiUrl    = 'https://dockbit.com/' + org + '/' + pipeline + '/status/' + token;
+  const token     = data.token;
+  const badgeData = getBadgeData('deploy', data);
+  const apiUrl    = `https://dockbit.com/${org}/${pipeline}/status/${token}`;
 
   var dockbitStates = {
     success:  '#72BC37',
