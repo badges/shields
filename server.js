@@ -6036,17 +6036,17 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Jetbrains Plugins repository integration
-camp.route(/^\/jetbrainsplugins\/([^\/]+)\/(d)\.(svg|png|gif|jpg|json)$/,
+// JetBrains Plugins repository integration
+camp.route(/^\/jetbrains\/plugin\/(d)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var pluginId = match[1];
-  var type = match[2];
+  var pluginId = match[2];
+  var type = match[1];
   var format = match[3];
-  var badgeData = getBadgeData('jetbrains plugin', data);
+  var badgeData = getBadgeData('downloads', data);
   var url = 'https://plugins.jetbrains.com/plugins/list?pluginId=' + pluginId;
 
   request(url, function(err, res, buffer) {
-    if (err) {
+    if (err || res.statusCode !== 200) {
       badgeData.text[1] = 'inaccessible';
       return sendBadge(format, badgeData);
     }
@@ -6066,7 +6066,10 @@ cache(function(data, match, sendBadge, request) {
             return sendBadge(format, badgeData);
           }
           var downloads = parseInt(data["plugin-repository"].category[0]["idea-plugin"][0]["$"].downloads, 10);
-          badgeData.text[0] = 'downloads';
+          if (isNaN(downloads)) {
+            badgeData.text[1] = 'invalid';
+            return sendBadge(format, badgeData);
+          }
           badgeData.text[1] = metric(downloads);
           badgeData.colorscheme = downloadCountColor(downloads);
           return sendBadge(format, badgeData);
