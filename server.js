@@ -26,6 +26,7 @@ console.log(tryUrl);
 var cheerio = require('cheerio');
 var domain = require('domain');
 var request = require('request');
+var rp = require('request-promise');
 var LruCache = require('./lib/lru-cache.js');
 var badge = require('./lib/badge.js');
 var svg2img = require('./lib/svg-to-img.js');
@@ -5656,51 +5657,44 @@ cache(function(data, match, sendBadge, request) {
 
 // Chrome web store integration
 camp.route(/^\/chrome-web-store\/(v|d|rating|stars|rating-count)\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, [_, type, identifier, format], sendBadge, request) {
+cache((data, [_, type, identifier, format], sendBadge, request) => {
   const url = 'https://chrome.google.com/webstore/detail/' + identifier;
   const defaultLabel = defaultLabels[type] || 'chrome web store';
   const badgeData = getBadgeData(defaultLabel, data);
-  request(url, function(err, res, buffer) {
-    if (!err) {
-      try {
-        const $ = cheerio.load(buffer);
-        const version = $('meta[itemprop="version"]').attr('content');
-        const downloads = parseInt($('meta[itemprop="interactionCount"]').attr('content').replace(/[^0-9]/g, ''));
-        const ratingValue = parseFloat($('meta[itemprop="ratingValue"]').attr('content'));
-        const reviewCount = parseInt($('meta[itemprop="ratingCount"]').attr('content').replace(/[^0-9]/g, ''));
-        switch (type) {
-        case 'v':
-          badgeData.text[1] = versionString(version);
-          badgeData.colorscheme = versionColor(version);
-          break;
-        case 'd':
-          badgeData.text[1] = metric(downloads) + ' total';
-          badgeData.colorscheme = downloadCountColor(downloads);
-          break;
-        case 'rating':
-          badgeData.text[1] = fractionRating(ratingValue);
-          badgeData.colorscheme = floorCountColor(ratingValue, 2, 3, 4);
-          break;
-        case 'stars':
-          badgeData.text[1] = starRating(ratingValue);
-          badgeData.colorscheme = floorCountColor(ratingValue, 2, 3, 4);
-          break;
-        case 'rating-count':
-          badgeData.text[1] = metric(reviewCount) + ' total';
-          badgeData.colorscheme = reviewCountColor(reviewCount);
-          break;
-        }
-        sendBadge(format, badgeData);
-      } catch (err) {
-        console.log(err);
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
+  rp({url: url, transform: cheerio.load})
+    .then($ => {
+      const version = $('meta[itemprop="version"]').attr('content');
+      const downloads = parseInt($('meta[itemprop="interactionCount"]').attr('content').replace(/[^0-9]/g, ''));
+      const ratingValue = parseFloat($('meta[itemprop="ratingValue"]').attr('content'));
+      const reviewCount = parseInt($('meta[itemprop="ratingCount"]').attr('content').replace(/[^0-9]/g, ''));
+      switch (type) {
+      case 'v':
+        badgeData.text[1] = versionString(version);
+        badgeData.colorscheme = versionColor(version);
+        break;
+      case 'd':
+        badgeData.text[1] = metric(downloads) + ' total';
+        badgeData.colorscheme = downloadCountColor(downloads);
+        break;
+      case 'rating':
+        badgeData.text[1] = fractionRating(ratingValue);
+        badgeData.colorscheme = floorCountColor(ratingValue, 2, 3, 4);
+        break;
+      case 'stars':
+        badgeData.text[1] = starRating(ratingValue);
+        badgeData.colorscheme = floorCountColor(ratingValue, 2, 3, 4);
+        break;
+      case 'rating-count':
+        badgeData.text[1] = metric(reviewCount) + ' total';
+        badgeData.colorscheme = reviewCountColor(reviewCount);
+        break;
       }
-    } else {
-      badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
-    }
-  });
+    })
+    .catch(e => {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    });
 }));
 
 // Opera add-ons integration
@@ -5709,46 +5703,40 @@ cache(function(data, [_, type, identifier, format], sendBadge, request) {
   const defaultLabel = defaultLabels[type] || 'opera add-ons';
   const badgeData = getBadgeData(defaultLabel, data);
   const url = 'https://addons.opera.com/en/extensions/details/' + identifier;
-  request(url, function(err, res, buffer) {
-    if (!err) {
-      try {
-        const $ = cheerio.load(buffer);
-        const version = $('section.about > dl > dd').eq(2).text();
-        const downloads = parseInt($('section.about > dl > dd').eq(0).text().replace(/[^0-9]/g, ''));
-        const ratingValue = parseFloat($('meta[itemprop="ratingValue"]').eq(0).attr('content'));
-        const reviewCount = parseInt($('span[itemprop="reviewCount"]').eq(0).text().replace(/[^0-9]/g, ''));
-        switch (type) {
-        case 'v':
-          badgeData.text[1] = versionString(version);
-          badgeData.colorscheme = versionColor(version);
-          break;
-        case 'd':
-          badgeData.text[1] = metric(downloads) + ' total';
-          badgeData.colorscheme = downloadCountColor(downloads);
-          break;
-        case 'rating':
-          badgeData.text[1] = fractionRating(ratingValue);
-          badgeData.colorscheme = floorCountColor(ratingValue, 2, 3, 4);
-          break;
-        case 'stars':
-          badgeData.text[1] = starRating(ratingValue);
-          badgeData.colorscheme = floorCountColor(ratingValue, 2, 3, 4);
-          break;
-        case 'rating-count':
-          badgeData.text[1] = metric(reviewCount) + ' total';
-          badgeData.colorscheme = reviewCountColor(reviewCount);
-          break;
-        }
-        sendBadge(format, badgeData);
-      } catch (err) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
+  rp({url: url, transform: cheerio.load})
+    .then($ => {
+      const version = $('section.about > dl > dd').eq(2).text();
+      const downloads = parseInt($('section.about > dl > dd').eq(0).text().replace(/[^0-9]/g, ''));
+      const ratingValue = parseFloat($('meta[itemprop="ratingValue"]').eq(0).attr('content'));
+      const reviewCount = parseInt($('span[itemprop="reviewCount"]').eq(0).text().replace(/[^0-9]/g, ''));
+      switch (type) {
+      case 'v':
+        badgeData.text[1] = versionString(version);
+        badgeData.colorscheme = versionColor(version);
+        break;
+      case 'd':
+        badgeData.text[1] = metric(downloads) + ' total';
+        badgeData.colorscheme = downloadCountColor(downloads);
+        break;
+      case 'rating':
+        badgeData.text[1] = fractionRating(ratingValue);
+        badgeData.colorscheme = floorCountColor(ratingValue, 2, 3, 4);
+        break;
+      case 'stars':
+        badgeData.text[1] = starRating(ratingValue);
+        badgeData.colorscheme = floorCountColor(ratingValue, 2, 3, 4);
+        break;
+      case 'rating-count':
+        badgeData.text[1] = metric(reviewCount) + ' total';
+        badgeData.colorscheme = reviewCountColor(reviewCount);
+        break;
       }
-    } else {
-      badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
-    }
-  });
+    })
+    .catch(e => {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    });
 }));
 
 // Cauditor integration
