@@ -2618,6 +2618,47 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// dotnet-status integration.
+camp.route(/^\/dotnetstatus\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var csproj = match[1];
+  var format = match[2];
+  var url = 'http://dotnet-status.com/api/status/' + csproj + '/';
+  var badgeData = getBadgeData('dotnetstatus', data);
+  request(url, function (err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    if (res.statusCode === 404) {
+      console.log(404);
+      badgeData.text[1] = 'not found';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+
+      badgeData.text[0] = 'up-to-date';
+      var upToDate = data.upToDate;
+      if (upToDate) {
+        badgeData.text[1] = 'true';
+        badgeData.colorscheme = 'blue';
+      } else {
+        badgeData.text[1] = 'false';
+        badgeData.colorscheme = 'red';
+      }
+      sendBadge(format, badgeData);
+    }
+    catch (e) {
+      console.log(badgeData);
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Gemnasium integration
 camp.route(/^\/gemnasium\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
