@@ -237,7 +237,7 @@ Please follow it to include tests on your pull-request.
 
 ## (5) Create a Pull Request
 
-You have implemented changes in `server.js`, `try.html` and `index.html`.
+You have implemented changes in `server.js` and `try.html`.
 These changes shall go live on shields.io.
 To do that, [create a pull-request](https://help.github.com/articles/creating-a-pull-request/).
 By doing this, your changes are made public to the shields team.
