@@ -2264,30 +2264,26 @@ cache(function(data, match, sendBadge, request) {
   var branch = match[3];
   var format = match[4];
   var apiUrl = {
-    url: 'https://codecov.io/' + userRepo + '/coverage.svg',
+    url: 'https://codecov.io/' + userRepo + '/branch/' + match[3] + '/graphs/badge.txt',
     followRedirect: false,
-    method: 'HEAD',
+    method: 'GET',
   };
   // Query Params
   var queryParams = {};
-  if (branch) {
-    queryParams.branch = branch;
-  }
   if (token) {
     queryParams.token = token;
   }
   apiUrl.url += '?' + querystring.stringify(queryParams);
   var badgeData = getBadgeData('coverage', data);
-  request(apiUrl, function(err, res) {
+  request(apiUrl, function(err, res, body) {
     if (err != null) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
       return;
     }
     try {
-      // X-Coverage header returns: n/a if 404/401 else range(0, 100).
-      // It can also yield a 302 Found with an "unknown" X-Coverage.
-      var coverage = res.headers['x-coverage'];
+      // Body: range(0, 100) or "unknown"
+      var coverage = body;
       // Is `coverage` NaN when converted to number?
       if (+coverage !== +coverage) {
         badgeData.text[1] = 'unknown';
