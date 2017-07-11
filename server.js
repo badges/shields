@@ -3575,6 +3575,73 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// FogCreek's Kiln code review integration.
+// Requires fogcreek_kiln_domain and fogcreek_kiln_token server secrets
+camp.route(/^\/fogcreek\/kiln\/review\/([kK][0-9]+|[0-9]+)\.(svg|png|gif|jpg|json)$/,
+  cache(function(data, match, sendBadge, request) {
+    var reviewId = match[1]; // eg, K12345
+    var format = match[2]; //eg, svg
+    var badgeData = getBadgeData('review', data);
+
+    // API documentation: https://developers.fogbugz.com/default.asp?W209
+    // Auth documentation: https://developers.fogbugz.com/default.asp?W161
+    var apiUrl = `https://${serverSecrets.fogcreek_kiln_domain}/Api/2.0/Review/${reviewId}`
+      + `?token=${serverSecrets.fogcreek_kiln_token}`;
+
+    if (!serverSecrets
+      || !serverSecrets.fogcreek_kiln_domain
+      || !serverSecrets.fogcreek_kiln_token) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        var data = JSON.parse(buffer);
+        if (data.sError == "Resource not found."
+          || data.codeError == "GenericNotFound"
+          || !data.sStatus) {
+          badgeData.text[1] = 'not found';
+          sendBadge(format, badgeData);
+          return;
+        }
+
+        badgeData.text[1] = data.sStatus.toLowerCase();
+        switch(badgeData.text[1]) {
+          case 'approved':
+            badgeData.colorscheme = 'brightgreen';
+            break;
+          case 'active':
+            badgeData.colorscheme = 'yellowgreen';
+            break;
+          case 'needswork':
+            badgeData.colorscheme = 'yellow';
+            badgeData.text[1] = 'needs work';
+            break;
+          case 'abandoned':
+            badgeData.colorscheme = 'orange';
+            break;
+          case 'rejected':
+            badgeData.colorscheme = 'red';
+            break;
+          default:
+            badgeData.text[1] = 'malformed';
+        }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  })
+);
+
 // Chef cookbook integration.
 camp.route(/^\/cookbook\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
