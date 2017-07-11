@@ -2223,7 +2223,7 @@ cache(function(data, match, sendBadge, request) {
       try {
         var data = JSON.parse(buffer);
         if (info == 'e') {  // supported erlang versions
-          var versions = data.erlang
+          var versions = data.erlang;
           if (!versions.length || versions == 'not found') {
             badgeData.text[1] = 'unknown';
             badgeData.colorscheme = 'lightgrey';
@@ -2234,7 +2234,7 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[0] = 'erlang';
           sendBadge(format, badgeData);
         } else if (info == 'b') {
-          var build_system = data.build_system
+          var build_system = data.build_system;
           if (build_system == 'coon' || build_system == 'rebar' || build_system == 'erlang.mk') {
              badgeData.text[0] = 'build';
              badgeData.text[1] = build_system;
