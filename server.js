@@ -15,16 +15,15 @@ var camp = Camp.start({
   cert: secureServerCert,
   key: secureServerKey
 });
-Camp.log.unpipe('warn', 'stderr');
 var tryUrl = require('url').format({
   protocol: secureServer ? 'https' : 'http',
   hostname: bindAddress,
   port: serverPort,
   pathname: 'try.html',
 });
-console.log(tryUrl);
 var domain = require('domain');
 var request = require('request');
+var log = require('./lib/log.js');
 var LruCache = require('./lib/lru-cache.js');
 var badge = require('./lib/badge.js');
 var svg2img = require('./lib/svg-to-img.js');
@@ -37,6 +36,7 @@ var serverSecrets = require('./lib/server-secrets');
 if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);
 }
+log(tryUrl);
 
 const {latest: latestVersion} = require('./lib/version.js');
 const {
@@ -96,7 +96,7 @@ var requestCache = new LruCache(1000);
 // Deep error handling for vendor hooks.
 var vendorDomain = domain.create();
 vendorDomain.on('error', function(err) {
-  console.error('Vendor hook error:', err.stack);
+  log.error('Vendor hook error:', err.stack);
 });
 
 
@@ -367,8 +367,8 @@ cache(function(data, match, sendBadge, request) {
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res) {
     if (err != null) {
-      console.error('Travis error: ' + err.stack);
-      if (res) { console.error(''+res); }
+      log.error('Travis error: ' + err.stack);
+      if (res) { log.error(''+res); }
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
       return;
@@ -413,8 +413,8 @@ camp.route(/^\/osslifecycle?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json
     var badgeData = getBadgeData('OSS Lifecycle', data);
     request(options, function(err, res, body) {
       if (err != null) {
-        console.error('NetflixOSS error: ' + err.stack);
-        if (res) { console.error(''+res); }
+        log.error('NetflixOSS error: ' + err.stack);
+        if (res) { log.error(''+res); }
         badgeData.text[1] = 'invalid';
         sendBadge(format, badgeData);
         return;
@@ -431,7 +431,7 @@ camp.route(/^\/osslifecycle?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json
           return;
         }
       } catch(e) {
-        console.log(e);
+        log(e);
         badgeData.text[1] = 'inaccessible';
         sendBadge(format, badgeData);
       }
@@ -5420,7 +5420,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = metric(data.followers_count);
       }
     } catch(e) {
-      console.error(e);
+      log.error(e);
     }
     sendBadge(format, badgeData);
   });
@@ -5687,7 +5687,7 @@ cache(function(data, match, sendBadge, request) {
     }
     sendBadge(format, badgeData);
   } catch(e) {
-    console.error(e.stack);
+    log.error(e.stack);
     badgeData.text[1] = 'invalid';
     sendBadge(format, badgeData);
   }
@@ -6417,7 +6417,7 @@ function(data, match, end, ask) {
     }
     badge(badgeData, makeSend(format, ask.res, end));
   } catch(e) {
-    console.error(e.stack);
+    log.error(e.stack);
     badge({text: ['error', 'bad badge'], colorscheme: 'red'},
       makeSend(format, ask.res, end));
   }
@@ -6560,7 +6560,7 @@ function sendOther(format, res, askres, end) {
   svg2img(res, format, function (err, data) {
     if (err) {
       // This emits status code 200, though 500 would be preferable.
-      console.error('svg2img error', err);
+      log.error('svg2img error', err);
       end(null, {template: '500.html'});
     } else {
       end(null, {template: streamFromString(data)});
