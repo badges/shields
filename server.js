@@ -5598,6 +5598,35 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// codesponsor.io integration
+camp.route(/^\/codesponsor\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var username = match[1];  // eg, hopsoft
+  var name = match[2];      // eg, bg
+  var format = match[3];
+
+  var apiUrl = 'https://app.codesponsor.io/shield/' + username + '/' + name;
+  var badgeData = getBadgeData('sponsor', data);
+
+  request(apiUrl, function (err, res, buffer) {
+    if (err) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    try {
+      var data = JSON.parse(buffer.toString());
+      badgeData.text[1] = (data.bitcoin || 0)  + ' BTC';
+      badgeData.colorscheme = 'brightgreen';
+      sendBadge(format, badgeData);
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Maintenance integration.
 camp.route(/^\/maintenance\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
