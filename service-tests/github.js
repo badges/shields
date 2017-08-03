@@ -58,3 +58,17 @@ t.create('downloads for specific asset with slash')
 t.create('downloads for unknown release')
   .get('/downloads/atom/atom/does-not-exist/total.json')
   .expectJSON({ name: 'downloads', value: 'none' });
+
+t.create('hit counter')
+  .get('/search/torvalds/linux/goto.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('goto counter'),
+    value: Joi.string().regex(/^[0-9]*(k|M|G|T|P|E|Z|Y)$/),
+  }));
+
+t.create('hit counter for nonexistent repo')
+  .get('/search/torvalds/not-linux/goto.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('goto counter'),
+    value: Joi.string().regex(/^repo not found$/),
+  }));
