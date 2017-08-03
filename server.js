@@ -3641,6 +3641,38 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// GitHub search hit counter.
+camp.route(/^\/github\/search\/([^\/]+)\/([^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];
+  var repo = match[2];
+  var search = match[3];
+  var format = match[4];
+  var query = {q: search + ' repo:' + user + '/' + repo};
+  var badgeData = getBadgeData(search + ' counter', data);
+  githubAuth.request(request, githubApiUrl + '/search/code', query, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var body = JSON.parse(buffer);
+      if (body.message === 'Validation Failed') {
+        badgeData.text[1] = 'repo not found';
+        sendBadge(format, badgeData);
+        return;
+      }
+      badgeData.text[1] = metric(body.total_count);
+      badgeData.colorscheme = 'blue';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Bitbucket issues integration.
 camp.route(/^\/bitbucket\/issues(-raw)?\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
