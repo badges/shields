@@ -1,16 +1,19 @@
-FROM node:6.10.0-alpine
+FROM node:6.9.2-alpine
 
-RUN apk add --no-cache imagemagick librsvg ttf-dejavu
+RUN apk add --update gettext
 
 RUN mkdir -p /usr/src/app
+RUN mkdir /usr/src/app/private
 WORKDIR /usr/src/app
+
+ARG NODE_ENV
+ENV NODE_ENV $NODE_ENV
 COPY package.json /usr/src/app/
-RUN npm install && \
-    rm -rf /tmp/npm-* /root/.npm
+RUN npm install
 COPY . /usr/src/app
 
-RUN mkdir private && echo '{}' > private/secret.json
+CMD envsubst < secret.tpl.json > ./private/secret.json && npm start
+
 ENV BIND_ADDRESS 0.0.0.0
 ENV INFOSITE http://shields.io
 EXPOSE 80
-CMD ["npm", "start"]

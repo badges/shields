@@ -15,6 +15,10 @@
         <img src="https://img.shields.io/travis/badges/shields.svg"
              alt="build status">
     </a>
+    <a href="https://discord.gg/HjJCwm5">
+        <img src="https://img.shields.io/discord/308323056592486420.svg"
+             alt="chat on Discord">
+    </a>
 </p>
 <p align="center"><sup><strong>An image server for legible and concise information. Our <a href="http://shields.io/">Homepage</a> | <a href="https://twitter.com/shields_io">Twitter</a></strong></sup></p>
 
@@ -75,6 +79,7 @@ What kind of metadata can you convey using badges?
 * [Codacy](https://www.codacy.com)
 * [Code Climate](https://codeclimate.com/changelog/510d4fde56b102523a0004bf)
 * [Coveralls](https://coveralls.io/)
+* [docs.rs](https://docs.rs/)
 * [Forkability](http://basicallydan.github.io/forkability/)
 * [Gemnasium](http://support.gemnasium.com/forums/236528-general/suggestions/5518400-use-svg-for-badges-so-they-still-look-sharp-on-r)
 * [GoDoc](https://godoc.org/)
