@@ -17,5 +17,5 @@ COPY . /usr/src/app
 CMD envsubst < secret.tpl.json > ./private/secret.json && npm start
 
 ENV BIND_ADDRESS 0.0.0.0
-ENV INFOSITE http://shields.io
+ENV INFOSITE hiptest-badges.scalingo.io
 EXPOSE 80
