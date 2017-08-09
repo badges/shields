@@ -1028,7 +1028,7 @@ cache(function(data, match, sendBadge, request) {
   if (type === '') { type = '/user'; }
   if (type === '/user') { user = '~' + user; }
   var apiUrl = 'https://gratipay.com/' + user + '/public.json';
-  var badgeData = getBadgeData('tips', data);
+  var badgeData = getBadgeData('receives', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.gratipay;
   }
