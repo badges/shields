@@ -3,7 +3,7 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
-const t = new ServiceTester({ id: 'continuousphp', title: 'continuousphp' })
+const t = new ServiceTester({ id: 'continuousphp', title: 'continuousphp' });
 module.exports = t;
 
 t.create('build status on default branch')
