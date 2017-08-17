@@ -3120,10 +3120,10 @@ cache(function(data, match, sendBadge, request) {
 camp.route(/^\/github\/contributors(-anon)?\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var isAnon = match[1];
-  var user = match[2];  // eg, qubyte/rubidium
+  var user = match[2];
   var repo = match[3];
   var format = match[4];
-  var apiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/contributors?page=1&per_page=1&anon=' + (!!isAnon);
+  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/contributors?page=1&per_page=1&anon=' + (!!isAnon);
   var badgeData = getBadgeData('contributors', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
