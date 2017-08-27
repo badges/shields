@@ -716,7 +716,7 @@ cache(function (data, match, sendBadge, request) {
       name: 'license',
       version: false,
       process: function (data, badgeData) {
-        badgeData.text[1] = data.crate.license;
+        badgeData.text[1] = data.versions[0].license;
         badgeData.colorscheme = 'blue';
       }
     }
