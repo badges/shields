@@ -1020,7 +1020,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Gratipay integration.
-camp.route(/^\/(?:gittip|gratipay(\/user|\/team)?)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/(?:gittip|gratipay(\/user|\/team|\/project)?)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var type = match[1];  // eg, `user`.
   var user = match[2];  // eg, `dougwilson`.
@@ -1028,7 +1028,7 @@ cache(function(data, match, sendBadge, request) {
   if (type === '') { type = '/user'; }
   if (type === '/user') { user = '~' + user; }
   var apiUrl = 'https://gratipay.com/' + user + '/public.json';
-  var badgeData = getBadgeData('tips', data);
+  var badgeData = getBadgeData('receives', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.gratipay;
   }
