@@ -743,9 +743,9 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var testsTotal = data.build.jobs.reduce(function(currentValue, job) { return currentValue + job.testsCount }, 0);
-      var testsPassed = data.build.jobs.reduce(function(currentValue, job) { return currentValue + job.passedTestsCount }, 0);
-      var testsFailed = data.build.jobs.reduce(function(currentValue, job) { return currentValue + job.failedTestsCount }, 0);
+      var testsTotal = data.build.jobs.reduce(function(currentValue, job) { return currentValue + job.testsCount; }, 0);
+      var testsPassed = data.build.jobs.reduce(function(currentValue, job) { return currentValue + job.passedTestsCount; }, 0);
+      var testsFailed = data.build.jobs.reduce(function(currentValue, job) { return currentValue + job.failedTestsCount; }, 0);
 
       if (testsPassed == testsTotal) {
         badgeData.colorscheme = 'brightgreen';
