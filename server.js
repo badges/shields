@@ -1090,6 +1090,36 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Codetally integration.
+camp.route(/^\/codetally\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var owner = match[1];  // eg, triggerman722.
+  var repo = match[2];   // eg, colorstrap
+  var format = match[3];
+  var apiUrl = 'http://www.codetally.com/formattedshield/' + owner + '/' + repo;
+  var badgeData = getBadgeData('codetally', data);
+  request(apiUrl, function dealWithData(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      badgeData.text[1] = " " + data.currency_sign + " " + data.amount + " " + data.multiplier;
+      badgeData.colorscheme = null;
+      badgeData.colorB = '#2E8B57';
+      if (darkBackgroundTemplates.some(function(t) { return t === badgeData.template; })) {
+        badgeData.logo = badgeData.logo || logos['codetally-white'];
+        badgeData.logoWidth = 9;
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
 
 
 // Bountysource integration.
