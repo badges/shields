@@ -4,7 +4,7 @@
 <head>
   <meta charset=utf-8>
   <title> Shields.io: Quality metadata badges for open source projects </title>
-  <meta name="viewport" content="width=device-width;initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="We serve fast and scalable informational images as badges for GitHub, Travis CI, Jenkins, WordPress and many more services. Use them to track the state of your projects, or for promotional purposes.">
   <link rel="icon" type="image/png" href="favicon.png">
   <link href="https://fonts.googleapis.com/css?family=Lekton" rel="stylesheet">
@@ -12,12 +12,6 @@
   <style>
     body {
       background-color: #f7f7fb;
-    }
-
-    dialog {
-      text-align: center;
-      font-family: Lekton, sans-serif;
-      color: #534;
     }
 
     input.short,
@@ -46,40 +40,6 @@
     th,
     td {
       text-align: left;
-    }
-
-    #main {
-      transition: filter 1s, -webkit-filter 1s;
-    }
-
-    #main.blur {
-      filter: url(#gaussian-blur);
-      filter: blur(1px);
-      -webkit-filter: blur(1px);
-    }
-
-    #copyDialog {
-      display: none;
-      position: fixed;
-      width: 100%;
-      top: 0;
-      left: 0;
-      border: 0;
-      background-color: rgba(50, 50, 55, 0.7);
-      opacity: 0;
-      transition: opacity 0.5s;
-    }
-
-    #copyForm {
-      background: #fafaff;
-      position: fixed;
-      width: 100%;
-      top: 17%;
-      left: 0;
-      overflow: auto;
-      max-height: 56%;
-      border-top: 15px solid #eaeaff;
-      border-bottom: 15px solid #eaeaff;
     }
 
     #suggestButton {
@@ -118,6 +78,26 @@
 
     .badge-container code {
       font-size: 75%;
+    }
+
+    .badge-container .list-group-item {
+      overflow-x: auto;
+      flex-wrap: wrap;
+    }
+
+    .badge-container .list-group-item div.mr-3 {
+      margin: 0 auto 4px !important;
+    }
+
+    @media (min-width: 768px) {
+      .badge-container .list-group-item div.mr-3 {
+        margin: 0 8px 0 0 !important;
+      }
+    }
+
+    footer {
+      background-color: #252527;
+      color: #fff;
     }
   </style>
 </head>
@@ -159,1345 +139,2317 @@
             <div class="mr-3">
               <img src="/travis/rust-lang/rust.svg">
             </div>
-            <div class="">
+            <div>
               <h5>Travis</h5>
               <code>https://img.shields.io/travis/USER/REPO.svg</code>
             </div>
           </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/travis/rust-lang/rust/master.svg" />
+            </div>
+            <div>
+              <h5>Travis branch</h5>
+              <code>https://img.shields.io/travis/USER/REPO/BRANCH.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/wercker/ci/wercker/docs.svg" />
+            </div>
+            <div>
+              <h5>Wercker</h5>
+              <code>https://img.shields.io/wercker/ci/wercker/docs.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/teamcity/codebetter/bt428.svg" />
+            </div>
+            <div>
+              <h5>TeamCity CodeBetter</h5>
+              <code>https://img.shields.io/teamcity/codebetter/bt428.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/teamcity/http/teamcity.jetbrains.com/s/bt345.svg">
+            </div>
+            <div>
+              <h5>TeamCity (simple build status)</h5>
+              <code>https://img.shields.io/teamcity/http/teamcity.jetbrains.com/s/bt345.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="teamcity">
+            <div class="mr-3">
+              <img src="/teamcity/http/teamcity.jetbrains.com/e/bt345.svg">
+            </div>
+            <div>
+              <h5>TeamCity (full build status)</h5>
+              <code>https://img.shields.io/teamcity/http/teamcity.jetbrains.com/e/bt345.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/appveyor/ci/gruntjs/grunt.svg">
+            </div>
+            <div>
+              <h5>AppVeyor</h5>
+              <code>https://img.shields.io/appveyor/ci/gruntjs/grunt.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/appveyor/ci/gruntjs/grunt/master.svg">
+            </div>
+            <div>
+              <h5>AppVeyor branch</h5>
+              <code>https://img.shields.io/appveyor/ci/gruntjs/grunt/master.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1.svg">
+            </div>
+            <div>
+              <h5>Codeship</h5>
+              <code>https://img.shields.io/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1/master.svg">
+            </div>
+            <div>
+              <h5>Codeship</h5>
+              <code>https://img.shields.io/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1/master.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/magnumci/ci/96ffb83fa700f069024921b0702e76ff.svg">
+            </div>
+            <div>
+              <h5>Magnum CI</h5>
+              <code>https://img.shields.io/magnumci/ci/96ffb83fa700f069024921b0702e76ff.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/magnumci/ci/96ffb83fa700f069024921b0702e76ff/new-meta.svg">
+            </div>
+            <div>
+              <h5>Magnum CI</h5>
+              <code>https://img.shields.io/magnumci/ci/96ffb83fa700f069024921b0702e76ff/new-meta.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/circleci/project/github/RedSparr0w/node-csgo-parser.svg">
+            </div>
+            <div>
+              <h5>CircleCI</h5>
+              <code>https://img.shields.io/circleci/project/github/RedSparr0w/node-csgo-parser.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/circleci/project/github/RedSparr0w/node-csgo-parser/master.svg">
+            </div>
+            <div>
+              <h5>CircleCI branch</h5>
+              <code>https://img.shields.io/circleci/project/github/RedSparr0w/node-csgo-parser/master.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/circleci/project/github/RedSparr0w/node-csgo-parser/master.svg">
+            </div>
+            <div>
+              <h5>CircleCI token</h5>
+              <code>https://img.shields.io/circleci/token/YOURTOKEN/project/github/RedSparr0w/node-csgo-parser/master.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-doc="visualStudioTeamServices">
+            <div class="mr-3">
+              <img src="/vso/build/larsbrinkhoff/953a34b9-5966-4923-a48a-c41874cfb5f5/1.svg">
+            </div>
+            <div>
+              <h5>Visual Studio Team services</h5>
+              <code>https://img.shields.io/vso/build/larsbrinkhoff/953a34b9-5966-4923-a48a-c41874cfb5f5/1.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/shippable/5444c5ecb904a4b21567b0ff.svg">
+            </div>
+            <div>
+              <h5>Shippable</h5>
+              <code>https://img.shields.io/shippable/5444c5ecb904a4b21567b0ff.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/shippable/5444c5ecb904a4b21567b0ff/master.svg">
+            </div>
+            <div>
+              <h5>Shippable branch</h5>
+              <code>https://img.shields.io/shippable/5444c5ecb904a4b21567b0ff/master.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/snap-ci/ThoughtWorksStudios/eb_deployer/master.svg">
+            </div>
+            <div>
+              <h5>Snap CI branch</h5>
+              <code>https://img.shields.io/snap-ci/ThoughtWorksStudios/eb_deployer/master.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/jenkins/s/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.svg">
+            </div>
+            <div>
+              <h5>Jenkins</h5>
+              <code>https://img.shields.io/jenkins/s/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/jenkins/t/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.svg">
+            </div>
+            <div>
+              <h5>Jenkins tests</h5>
+              <code>https://img.shields.io/jenkins/t/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/jenkins/c/https/jenkins.qa.ubuntu.com/view/Utopic/view/All/job/address-book-service-utopic-i386-ci.svg">
+            </div>
+            <div>
+              <h5>Jenkins coverage</h5>
+              <code>https://img.shields.io/jenkins/c/https/jenkins.qa.ubuntu.com/view/Utopic/view/All/job/address-book-service-utopic-i386-ci.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/coveralls/jekyll/jekyll.svg">
+            </div>
+            <div>
+              <h5>Coveralls</h5>
+              <code>https://img.shields.io/coveralls/jekyll/jekyll.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/coveralls/jekyll/jekyll/master.svg">
+            </div>
+            <div>
+              <h5>Coveralls branch</h5>
+              <code>https://img.shields.io/coveralls/jekyll/jekyll/master.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/sonar/http/sonar.qatools.ru/ru.yandex.qatools.allure:allure-core/coverage.svg">
+            </div>
+            <div>
+              <h5>SonarQube Coverage</h5>
+              <code>https://img.shields.io/sonar/http/sonar.qatools.ru/ru.yandex.qatools.allure:allure-core/coverage.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/sonar/http/sonar.qatools.ru/ru.yandex.qatools.allure:allure-core/tech_debt.svg">
+            </div>
+            <div>
+              <h5>SonarQube Tech Debt</h5>
+              <code>https://img.shields.io/sonar/http/sonar.qatools.ru/ru.yandex.qatools.allure:allure-core/tech_debt.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/teamcity/coverage/bt1242.svg">
+            </div>
+            <div>
+              <h5>TeamCity CodeBetter Coverage</h5>
+              <code>https://img.shields.io/teamcity/coverage/bt1242.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/scrutinizer/g/filp/whoops.svg">
+            </div>
+            <div>
+              <h5>Scrutinizer</h5>
+              <code>https://img.shields.io/scrutinizer/g/filp/whoops.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/scrutinizer/coverage/g/filp/whoops.svg">
+            </div>
+            <div>
+              <h5>Scrutinizer Coverage</h5>
+              <code>https://img.shields.io/scrutinizer/coverage/g/filp/whoops.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/scrutinizer/coverage/g/phpmyadmin/phpmyadmin/master.svg">
+            </div>
+            <div>
+              <h5>Scrutinizer branch</h5>
+              <code>https://img.shields.io/scrutinizer/coverage/g/phpmyadmin/phpmyadmin/master.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/scrutinizer/build/g/filp/whoops.svg">
+            </div>
+            <div>
+              <h5>Scrutinizer Build</h5>
+              <code>https://img.shields.io/scrutinizer/build/g/filp/whoops.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/codecov/c/github/codecov/example-python.svg">
+            </div>
+            <div>
+              <h5>Codecov</h5>
+              <code>https://img.shields.io/codecov/c/github/codecov/example-python.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/codecov/c/github/codecov/example-python/master.svg">
+            </div>
+            <div>
+              <h5>Codecov branch</h5>
+              <code>https://img.shields.io/codecov/c/github/codecov/example-python/master.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/codecov/c/github/codecov/example-python.svg">
+            </div>
+            <div>
+              <h5>Codecov private</h5>
+              <code>https://img.shields.io/codecov/c/token/YOURTOKEN/github/codecov/example-python.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/coverity/scan/3997.svg">
+            </div>
+            <div>
+              <h5>Coverity Scan</h5>
+              <code>https://img.shields.io/coverity/scan/3997.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/coverity/ondemand/streams/STREAM.svg">
+            </div>
+            <div>
+              <h5>Coverity Code Advisor On Demand Stream Badge</h5>
+              <code>https://img.shields.io/coverity/ondemand/streams/STREAM.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/coverity/ondemand/jobs/JOB.svg">
+            </div>
+            <div>
+              <h5>Coverity Code Advisor On Demand Job Badge</h5>
+              <code>https://img.shields.io/coverity/ondemand/jobs/JOB.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/hhvm/symfony/symfony.svg">
+            </div>
+            <div>
+              <h5>HHVM</h5>
+              <code>https://img.shields.io/hhvm/symfony/symfony.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/hhvm/symfony/symfony/master.svg">
+            </div>
+            <div>
+              <h5>HHVM (branch)</h5>
+              <code>https://img.shields.io/hhvm/symfony/symfony/master.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/sensiolabs/i/45afb680-d4e6-4e66-93ea-bcfa79eb8a87.svg">
+            </div>
+            <div>
+              <h5>SensioLabs Insight</h5>
+              <code>https://img.shields.io/sensiolabs/i/45afb680-d4e6-4e66-93ea-bcfa79eb8a87.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/dockbit/DockbitStatus/health.svg?token=TvavttxFHJ4qhnKstDxrvBXM">
+            </div>
+            <div>
+              <h5>Dockbit</h5>
+              <code>https://img.shields.io/dockbit/ORGANIZATION_NAME/PIPELINE_NAME.svg?token=PIPELINE_TOKEN</code>
+            </div>
+          </a>
         </ul>
-        <div class="card-body">
-          <table class="badge-tb">
-            <tbody>
-              <tr>
-                <th> Travis: </th>
-                <td><img src="/travis/rust-lang/rust.svg"></td>
-                <td><code>https://img.shields.io/travis/USER/REPO.svg</code></td>
-              </tr>
-              <tr>
-                <th> Travis branch: </th>
-                <td><img src="/travis/rust-lang/rust/master.svg" /></td>
-                <td><code>https://img.shields.io/travis/USER/REPO/BRANCH.svg</code></td>
-              </tr>
-              <tr>
-                <th> Wercker: </th>
-                <td><img src="/wercker/ci/wercker/docs.svg" /></td>
-                <td><code>https://img.shields.io/wercker/ci/wercker/docs.svg</code></td>
-              </tr>
-              <tr>
-                <th> TeamCity CodeBetter: </th>
-                <td><img src="/teamcity/codebetter/bt428.svg" /></td>
-                <td><code>https://img.shields.io/teamcity/codebetter/bt428.svg</code></td>
-              </tr>
-              <tr>
-                <th> TeamCity (simple build status): </th>
-                <td><img src="/teamcity/http/teamcity.jetbrains.com/s/bt345.svg"></td>
-                <td><code>https://img.shields.io/teamcity/http/teamcity.jetbrains.com/s/bt345.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="teamcity"> (full build status): </th>
-                <td>&nbsp;</td>
-                <td><code>https://img.shields.io/teamcity/http/teamcity.jetbrains.com/e/bt345.svg</code></td>
-              </tr>
-              <tr>
-                <th> AppVeyor: </th>
-                <td><img src="/appveyor/ci/gruntjs/grunt.svg"></td>
-                <td><code>https://img.shields.io/appveyor/ci/gruntjs/grunt.svg</code></td>
-              </tr>
-              <tr>
-                <th> AppVeyor branch: </th>
-                <td><img src="/appveyor/ci/gruntjs/grunt/master.svg"></td>
-                <td><code>https://img.shields.io/appveyor/ci/gruntjs/grunt/master.svg</code></td>
-              </tr>
-              <tr>
-                <th> Codeship: </th>
-                <td><img src="/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1.svg"></td>
-                <td><code>https://img.shields.io/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1.svg</code></td>
-              </tr>
-              <tr>
-                <th> Codeship: </th>
-                <td><img src="/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1/master.svg"></td>
-                <td><code>https://img.shields.io/codeship/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1/master.svg</code></td>
-              </tr>
-              <tr>
-                <th> Magnum CI: </th>
-                <td><img src="/magnumci/ci/96ffb83fa700f069024921b0702e76ff.svg"></td>
-                <td><code>https://img.shields.io/magnumci/ci/96ffb83fa700f069024921b0702e76ff.svg</code></td>
-              </tr>
-              <tr>
-                <th> Magnum CI: </th>
-                <td><img src="/magnumci/ci/96ffb83fa700f069024921b0702e76ff/new-meta.svg"></td>
-                <td><code>https://img.shields.io/magnumci/ci/96ffb83fa700f069024921b0702e76ff/new-meta.svg</code></td>
-              </tr>
-              <tr>
-                <th> CircleCI: </th>
-                <td><img src="/circleci/project/github/RedSparr0w/node-csgo-parser.svg"></td>
-                <td><code>https://img.shields.io/circleci/project/github/RedSparr0w/node-csgo-parser.svg</code></td>
-              </tr>
-              <tr>
-                <th> CircleCI branch: </th>
-                <td><img src="/circleci/project/github/RedSparr0w/node-csgo-parser/master.svg"></td>
-                <td><code>https://img.shields.io/circleci/project/github/RedSparr0w/node-csgo-parser/master.svg</code></td>
-              </tr>
-              <tr>
-                <th> CircleCI token: </th>
-                <td><img src="/circleci/project/github/RedSparr0w/node-csgo-parser/master.svg"></td>
-                <td><code>https://img.shields.io/circleci/token/YOURTOKEN/project/github/RedSparr0w/node-csgo-parser/master.svg</code></td>
-              </tr>
-              <tr>
-                <th data-doc="visualStudioTeamServices"> Visual Studio Team services: </th>
-                <td><img src="/vso/build/larsbrinkhoff/953a34b9-5966-4923-a48a-c41874cfb5f5/1.svg"></td>
-                <td><code>https://img.shields.io/vso/build/larsbrinkhoff/953a34b9-5966-4923-a48a-c41874cfb5f5/1.svg</code></td>
-              </tr>
-              <tr>
-                <th> Shippable: </th>
-                <td><img src="/shippable/5444c5ecb904a4b21567b0ff.svg"></td>
-                <td><code>https://img.shields.io/shippable/5444c5ecb904a4b21567b0ff.svg</code></td>
-              </tr>
-              <tr>
-                <th> Shippable branch: </th>
-                <td><img src="/shippable/5444c5ecb904a4b21567b0ff/master.svg"></td>
-                <td><code>https://img.shields.io/shippable/5444c5ecb904a4b21567b0ff/master.svg</code></td>
-              </tr>
-              <tr>
-                <th> Snap CI branch: </th>
-                <td><img src="/snap-ci/ThoughtWorksStudios/eb_deployer/master.svg"></td>
-                <td><code>https://img.shields.io/snap-ci/ThoughtWorksStudios/eb_deployer/master.svg</code></td>
-              </tr>
-              <tr>
-                <th> Jenkins: </th>
-                <td><img src="/jenkins/s/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.svg"></td>
-                <td><code>https://img.shields.io/jenkins/s/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.svg</code></td>
-              </tr>
-              <tr>
-                <th> Jenkins tests: </th>
-                <td><img src="/jenkins/t/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.svg"></td>
-                <td><code>https://img.shields.io/jenkins/t/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.svg</code></td>
-              </tr>
-              <tr>
-                <th> Jenkins coverage: </th>
-                <td><img src="/jenkins/c/https/jenkins.qa.ubuntu.com/view/Utopic/view/All/job/address-book-service-utopic-i386-ci.svg"></td>
-                <td><code>https://img.shields.io/jenkins/c/https/jenkins.qa.ubuntu.com/view/Utopic/view/All/job/address-book-service-utopic-i386-ci.svg</code></td>
-              </tr>
-              <tr>
-                <th> Coveralls: </th>
-                <td><img src="/coveralls/jekyll/jekyll.svg"></td>
-                <td><code>https://img.shields.io/coveralls/jekyll/jekyll.svg</code></td>
-              </tr>
-              <tr>
-                <th> Coveralls branch: </th>
-                <td><img src="/coveralls/jekyll/jekyll/master.svg"></td>
-                <td><code>https://img.shields.io/coveralls/jekyll/jekyll/master.svg</code></td>
-              </tr>
-              <tr>
-                <th> SonarQube Coverage: </th>
-                <td><img src="/sonar/http/sonar.qatools.ru/ru.yandex.qatools.allure:allure-core/coverage.svg"></td>
-                <td><code>https://img.shields.io/sonar/http/sonar.qatools.ru/ru.yandex.qatools.allure:allure-core/coverage.svg</code></td>
-              </tr>
-              <tr>
-                <th> SonarQube Tech Debt: </th>
-                <td><img src="/sonar/http/sonar.qatools.ru/ru.yandex.qatools.allure:allure-core/tech_debt.svg"></td>
-                <td><code>https://img.shields.io/sonar/http/sonar.qatools.ru/ru.yandex.qatools.allure:allure-core/tech_debt.svg</code></td>
-              </tr>
-              <tr>
-                <th> TeamCity CodeBetter Coverage: </th>
-                <td><img src="/teamcity/coverage/bt1242.svg"></td>
-                <td><code>https://img.shields.io/teamcity/coverage/bt1242.svg</code></td>
-              </tr>
-              <tr>
-                <th> Scrutinizer: </th>
-                <td><img src="/scrutinizer/g/filp/whoops.svg"></td>
-                <td><code>https://img.shields.io/scrutinizer/g/filp/whoops.svg</code></td>
-              </tr>
-              <tr>
-                <th> Scrutinizer Coverage: </th>
-                <td><img src="/scrutinizer/coverage/g/filp/whoops.svg"></td>
-                <td><code>https://img.shields.io/scrutinizer/coverage/g/filp/whoops.svg</code></td>
-              </tr>
-              <tr>
-                <th> Scrutinizer branch: </th>
-                <td><img src="/scrutinizer/coverage/g/phpmyadmin/phpmyadmin/master.svg"></td>
-                <td><code>https://img.shields.io/scrutinizer/coverage/g/phpmyadmin/phpmyadmin/master.svg</code></td>
-              </tr>
-              <tr>
-                <th> Scrutinizer Build: </th>
-                <td><img src="/scrutinizer/build/g/filp/whoops.svg"></td>
-                <td><code>https://img.shields.io/scrutinizer/build/g/filp/whoops.svg</code></td>
-              </tr>
-              <tr>
-                <th> Codecov: </th>
-                <td><img src="/codecov/c/github/codecov/example-python.svg"></td>
-                <td><code>https://img.shields.io/codecov/c/github/codecov/example-python.svg</code></td>
-              </tr>
-              <tr>
-                <th> Codecov branch: </th>
-                <td><img src="/codecov/c/github/codecov/example-python/master.svg"></td>
-                <td><code>https://img.shields.io/codecov/c/github/codecov/example-python/master.svg</code></td>
-              </tr>
-              <tr>
-                <th> Codecov private: </th>
-                <td><img src="/codecov/c/github/codecov/example-python.svg"></td>
-                <td><code>https://img.shields.io/codecov/c/token/YOURTOKEN/github/codecov/example-python.svg</code></td>
-              </tr>
-              <tr>
-                <th> Coverity Scan: </th>
-                <td><img src="/coverity/scan/3997.svg"></td>
-                <td><code>https://img.shields.io/coverity/scan/3997.svg</code></td>
-              </tr>
-              <tr>
-                <th> Coverity Code Advisor On Demand Stream Badge: </th>
-                <td><img src="/coverity/ondemand/streams/STREAM.svg"></td>
-                <td><code>https://img.shields.io/coverity/ondemand/streams/STREAM.svg</code></td>
-              </tr>
-              <tr>
-                <th> Coverity Code Advisor On Demand Job Badge: </th>
-                <td><img src="/coverity/ondemand/jobs/JOB.svg"></td>
-                <td><code>https://img.shields.io/coverity/ondemand/jobs/JOB.svg</code></td>
-              </tr>
-              <tr>
-                <th> HHVM: </th>
-                <td><img src="/hhvm/symfony/symfony.svg"></td>
-                <td><code>https://img.shields.io/hhvm/symfony/symfony.svg</code></td>
-              </tr>
-              <tr>
-                <th> HHVM (branch): </th>
-                <td><img src="/hhvm/symfony/symfony/master.svg"></td>
-                <td><code>https://img.shields.io/hhvm/symfony/symfony/master.svg</code></td>
-              </tr>
-              <tr>
-                <th> SensioLabs Insight: </th>
-                <td><img src="/sensiolabs/i/45afb680-d4e6-4e66-93ea-bcfa79eb8a87.svg"></td>
-                <td><code>https://img.shields.io/sensiolabs/i/45afb680-d4e6-4e66-93ea-bcfa79eb8a87.svg</code></td>
-              </tr>
-              <tr>
-                <th> Dockbit: </th>
-                <td><img src="/dockbit/DockbitStatus/health.svg?token=TvavttxFHJ4qhnKstDxrvBXM"></td>
-                <td><code>https://img.shields.io/dockbit/ORGANIZATION_NAME/PIPELINE_NAME.svg?token=PIPELINE_TOKEN</code></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
       <div class="card my-4">
         <div class="card-body">
           <h3 class="card-title" id="downloads">Downloads</h3>
         </div>
-        <div class="card-body">
-          <table class="badge-tb">
-            <tbody>
-              <tr>
-                <th data-keywords="github" data-doc="githubDoc"> Github All Releases: </th>
-                <td><img src="/github/downloads/atom/atom/total.svg"></td>
-                <td><code>https://img.shields.io/github/downloads/atom/atom/total.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="github" data-doc="githubDoc"> Github Releases: </th>
-                <td><img src="/github/downloads/atom/atom/latest/total.svg"></td>
-                <td><code>https://img.shields.io/github/downloads/atom/atom/latest/total.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="github" data-doc="githubDoc"> Github Releases (by Release): </th>
-                <td><img src="/github/downloads/atom/atom/v0.190.0/total.svg"></td>
-                <td><code>https://img.shields.io/github/downloads/atom/atom/v0.190.0/total.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="github" data-doc="githubDoc"> Github Releases (by Asset): </th>
-                <td><img src="/github/downloads/atom/atom/latest/atom-amd64.deb.svg"></td>
-                <td><code>https://img.shields.io/github/downloads/atom/atom/latest/atom-amd64.deb.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="node"> npm: </th>
-                <td><img src="/npm/dw/localeval.svg"></td>
-                <td><code>https://img.shields.io/npm/dw/localeval.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="node"> npm: </th>
-                <td><img src="/npm/dm/localeval.svg"></td>
-                <td><code>https://img.shields.io/npm/dm/localeval.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="node"> npm: </th>
-                <td><img src="/npm/dy/localeval.svg"></td>
-                <td><code>https://img.shields.io/npm/dy/localeval.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="node"> npm: </th>
-                <td><img src="/npm/dt/express.svg"></td>
-                <td><code>https://img.shields.io/npm/dt/express.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="ruby"> Gem: </th>
-                <td><img src="/gem/dv/rails/stable.svg"></td>
-                <td><code>https://img.shields.io/gem/dv/rails/stable.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="ruby"> Gem: </th>
-                <td><img src="/gem/dv/rails/4.1.0.svg"></td>
-                <td><code>https://img.shields.io/gem/dv/rails/4.1.0.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="ruby"> Gem: </th>
-                <td><img src="/gem/dtv/rails.svg"></td>
-                <td><code>https://img.shields.io/gem/dtv/rails.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="ruby"> Gem: </th>
-                <td><img src="/gem/dt/rails.svg"></td>
-                <td><code>https://img.shields.io/gem/dt/rails.svg</code></td>
-              </tr>
-              <tr>
-                <th> Chocolatey: </th>
-                <td><img src="/chocolatey/dt/scriptcs.svg"></td>
-                <td><code>https://img.shields.io/chocolatey/dt/scriptcs.svg</code></td>
-              </tr>
-              <tr>
-                <th> NuGet: </th>
-                <td><img src="/nuget/dt/Microsoft.AspNetCore.Mvc.svg"></td>
-                <td><code>https://img.shields.io/nuget/dt/Microsoft.AspNetCore.Mvc.svg</code></td>
-              </tr>
-              <tr>
-                <th> MyGet: </th>
-                <td><img src="/myget/mongodb/dt/MongoDB.Driver.Core.svg"></td>
-                <td><code>https://img.shields.io/myget/mongodb/dt/MongoDB.Driver.Core.svg</code></td>
-              </tr>
-              <tr>
-                <th> MyGet tenant: </th>
-                <td><img src="/dotnet.myget/dotnet-coreclr/dt/Microsoft.DotNet.CoreCLR.svg"></td>
-                <td><code>https://img.shields.io/dotnet.myget/dotnet-coreclr/dt/Microsoft.DotNet.CoreCLR.svg</code></td>
-              </tr>
-              <tr>
-                <th> PowerShell Gallery: </th>
-                <td><img src="/powershellgallery/dt/ACMESharp.svg"></td>
-                <td><code>https://img.shields.io/powershellgallery/dt/ACMESharp.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="python"> PyPI: </th>
-                <td><img src="/pypi/dm/Django.svg"></td>
-                <td><code>https://img.shields.io/pypi/dm/Django.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="python"> PyPI: </th>
-                <td><img src="/pypi/dw/Django.svg"></td>
-                <td><code>https://img.shields.io/pypi/dw/Django.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="python"> PyPI: </th>
-                <td><img src="/pypi/dd/Django.svg"></td>
-                <td><code>https://img.shields.io/pypi/dd/Django.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="conda"> Conda: </th>
-                <td><img src="/conda/dn/conda-forge/python.svg"></td>
-                <td><code>https://img.shields.io/conda/dn/conda-forge/python.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="Rust"> Crates.io: </th>
-                <td><img src="/crates/d/rustc-serialize.svg"></td>
-                <td><code>https://img.shields.io/crates/d/rustc-serialize.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="Rust"> Crates.io: </th>
-                <td><img src="/crates/dv/rustc-serialize.svg"></td>
-                <td><code>https://img.shields.io/crates/dv/rustc-serialize.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="PHP"> Packagist: </th>
-                <td><img src="/packagist/dm/doctrine/orm.svg"></td>
-                <td><code>https://img.shields.io/packagist/dm/doctrine/orm.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="PHP"> Packagist: </th>
-                <td><img src="/packagist/dd/doctrine/orm.svg"></td>
-                <td><code>https://img.shields.io/packagist/dd/doctrine/orm.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="PHP"> Packagist: </th>
-                <td><img src="/packagist/dt/doctrine/orm.svg"></td>
-                <td><code>https://img.shields.io/packagist/dt/doctrine/orm.svg</code></td>
-              </tr>
-              <tr>
-                <th> Hex.pm: </th>
-                <td><img src="/hexpm/dw/plug.svg"></td>
-                <td><code>https://img.shields.io/hexpm/dw/plug.svg</code></td>
-              </tr>
-              <tr>
-                <th> Hex.pm: </th>
-                <td><img src="/hexpm/dd/plug.svg"></td>
-                <td><code>https://img.shields.io/hexpm/dd/plug.svg</code></td>
-              </tr>
-              <tr>
-                <th> Hex.pm: </th>
-                <td><img src="/hexpm/dt/plug.svg"></td>
-                <td><code>https://img.shields.io/hexpm/dt/plug.svg</code></td>
-              </tr>
-              <tr>
-                <th> WordPress: </th>
-                <td><img src="/wordpress/plugin/dt/akismet.svg"></td>
-                <td><code>https://img.shields.io/wordpress/plugin/dt/akismet.svg</code></td>
-              </tr>
-              <tr>
-                <th> SourceForge: </th>
-                <td><img src="/sourceforge/dm/sevenzip.svg"></td>
-                <td><code>https://img.shields.io/sourceforge/dm/sevenzip.svg</code></td>
-              </tr>
-              <tr>
-                <th> SourceForge: </th>
-                <td><img src="/sourceforge/dw/sevenzip.svg"></td>
-                <td><code>https://img.shields.io/sourceforge/dw/sevenzip.svg</code></td>
-              </tr>
-              <tr>
-                <th> SourceForge: </th>
-                <td><img src="/sourceforge/dd/sevenzip.svg"></td>
-                <td><code>https://img.shields.io/sourceforge/dd/sevenzip.svg</code></td>
-              </tr>
-              <tr>
-                <th> SourceForge: </th>
-                <td><img src="/sourceforge/dt/sevenzip.svg"></td>
-                <td><code>https://img.shields.io/sourceforge/dt/sevenzip.svg</code></td>
-              </tr>
-              <tr>
-                <th> SourceForge: </th>
-                <td><img src="/sourceforge/dt/arianne/stendhal.svg"></td>
-                <td><code>https://img.shields.io/sourceforge/dt/arianne/stendhal.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="atom"> apm: </th>
-                <td><img src="/apm/dm/vim-mode.svg"></td>
-                <td><code>https://img.shields.io/apm/dm/vim-mode.svg</code></td>
-              </tr>
-              <tr>
-                <th> Puppet Forge: </th>
-                <td><img src="/puppetforge/dt/camptocamp/openldap.svg"></td>
-                <td><code>https://img.shields.io/puppetforge/dt/camptocamp/openldap.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="dub"> DUB: </th>
-                <td><img src="/dub/dd/vibe-d.svg"></td>
-                <td><code>https://img.shields.io/dub/dd/vibe-d.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="dub"> DUB: </th>
-                <td><img src="/dub/dw/vibe-d.svg"></td>
-                <td><code>https://img.shields.io/dub/dw/vibe-d.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="dub"> DUB: </th>
-                <td><img src="/dub/dm/vibe-d/latest.svg"></td>
-                <td><code>https://img.shields.io/dub/dm/vibe-d/latest.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="dub"> DUB: </th>
-                <td><img src="/dub/dt/vibe-d/0.7.23.svg"></td>
-                <td><code>https://img.shields.io/dub/dt/vibe-d/0.7.23.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="sublime"> Package Control: </th>
-                <td><img src="/packagecontrol/dm/GitGutter.svg"></td>
-                <td><code>https://img.shields.io/packagecontrol/dm/GitGutter.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="sublime"> Package Control: </th>
-                <td><img src="/packagecontrol/dw/GitGutter.svg"></td>
-                <td><code>https://img.shields.io/packagecontrol/dw/GitGutter.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="sublime"> Package Control: </th>
-                <td><img src="/packagecontrol/dd/GitGutter.svg"></td>
-                <td><code>https://img.shields.io/packagecontrol/dd/GitGutter.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="sublime"> Package Control: </th>
-                <td><img src="/packagecontrol/dt/GitGutter.svg"></td>
-                <td><code>https://img.shields.io/packagecontrol/dt/GitGutter.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="chrome"> Chrome Web Store: </th>
-                <td><img src="/chrome-web-store/d/nimelepbpejjlbmoobocpfnjhihnpked.svg"></td>
-                <td><code>https://img.shields.io/chrome-web-store/d/nimelepbpejjlbmoobocpfnjhihnpked.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="website" data-doc="websiteDoc"> Website: </th>
-                <td><img src="/website-up-down-green-red/http/shields.io.svg?label=my-website"></td>
-                <td><code>https://img.shields.io/website-up-down-green-red/http/shields.io.svg?label=my-website</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="cocoapods"> CocoaPods: </th>
-                <td><img src="/cocoapods/dt/AFNetworking.svg"></td>
-                <td><code>https://img.shields.io/cocoapods/dt/AFNetworking.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="cocoapods"> CocoaPods: </th>
-                <td><img src="/cocoapods/dm/AFNetworking.svg"></td>
-                <td><code>https://img.shields.io/cocoapods/dm/AFNetworking.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="cocoapods"> CocoaPods: </th>
-                <td><img src="/cocoapods/dw/AFNetworking.svg"></td>
-                <td><code>https://img.shields.io/cocoapods/dw/AFNetworking.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="amo firefox"> Mozilla Add-on: </th>
-                <td><img src="/amo/d/dustman.svg"></td>
-                <td><code>https://img.shields.io/amo/d/dustman.svg</code></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <ul class="list-group list-group-flush">
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="github" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/downloads/atom/atom/total.svg">
+            </div>
+            <div>
+              <h5>Github All Releases</h5>
+              <code>https://img.shields.io/github/downloads/atom/atom/total.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="github" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/downloads/atom/atom/latest/total.svg">
+            </div>
+            <div>
+              <h5>Github Releases</h5>
+              <code>https://img.shields.io/github/downloads/atom/atom/latest/total.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="github" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/downloads/atom/atom/v0.190.0/total.svg">
+            </div>
+            <div>
+              <h5>Github Releases (by Release)</h5>
+              <code>https://img.shields.io/github/downloads/atom/atom/v0.190.0/total.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="github" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/downloads/atom/atom/latest/atom-amd64.deb.svg">
+            </div>
+            <div>
+              <h5>Github Releases (by Asset)</h5>
+              <code>https://img.shields.io/github/downloads/atom/atom/latest/atom-amd64.deb.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="node">
+            <div class="mr-3">
+              <img src="/npm/dw/localeval.svg">
+            </div>
+            <div>
+              <h5>npm</h5>
+              <code>https://img.shields.io/npm/dw/localeval.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="node">
+            <div class="mr-3">
+              <img src="/npm/dm/localeval.svg">
+            </div>
+            <div>
+              <h5>npm</h5>
+              <code>https://img.shields.io/npm/dm/localeval.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="node">
+            <div class="mr-3">
+              <img src="/npm/dy/localeval.svg">
+            </div>
+            <div>
+              <h5>npm</h5>
+              <code>https://img.shields.io/npm/dy/localeval.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="node">
+            <div class="mr-3">
+              <img src="/npm/dt/express.svg">
+            </div>
+            <div>
+              <h5>npm</h5>
+              <code>https://img.shields.io/npm/dt/express.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="ruby">
+            <div class="mr-3">
+              <img src="/gem/dv/rails/stable.svg">
+            </div>
+            <div>
+              <h5>Gem</h5>
+              <code>https://img.shields.io/gem/dv/rails/stable.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="ruby">
+            <div class="mr-3">
+              <img src="/gem/dv/rails/4.1.0.svg">
+            </div>
+            <div>
+              <h5>Gem</h5>
+              <code>https://img.shields.io/gem/dv/rails/4.1.0.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="ruby">
+            <div class="mr-3">
+              <img src="/gem/dtv/rails.svg">
+            </div>
+            <div>
+              <h5>Gem</h5>
+              <code>https://img.shields.io/gem/dtv/rails.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="ruby">
+            <div class="mr-3">
+              <img src="/gem/dt/rails.svg">
+            </div>
+            <div>
+              <h5>Gem</h5>
+              <code>https://img.shields.io/gem/dt/rails.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/chocolatey/dt/scriptcs.svg">
+            </div>
+            <div>
+              <h5>Chocolatey</h5>
+              <code>https://img.shields.io/chocolatey/dt/scriptcs.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/nuget/dt/Microsoft.AspNetCore.Mvc.svg">
+            </div>
+            <div>
+              <h5>NuGet</h5>
+              <code>https://img.shields.io/nuget/dt/Microsoft.AspNetCore.Mvc.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/myget/mongodb/dt/MongoDB.Driver.Core.svg">
+            </div>
+            <div>
+              <h5>MyGet</h5>
+              <code>https://img.shields.io/myget/mongodb/dt/MongoDB.Driver.Core.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/dotnet.myget/dotnet-coreclr/dt/Microsoft.DotNet.CoreCLR.svg">
+            </div>
+            <div>
+              <h5>MyGet tenant</h5>
+              <code>https://img.shields.io/dotnet.myget/dotnet-coreclr/dt/Microsoft.DotNet.CoreCLR.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/powershellgallery/dt/ACMESharp.svg">
+            </div>
+            <div>
+              <h5>PowerShell Gallery</h5>
+              <code>https://img.shields.io/powershellgallery/dt/ACMESharp.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="python">
+            <div class="mr-3">
+              <img src="/pypi/dm/Django.svg">
+            </div>
+            <div>
+              <h5>PyPI</h5>
+              <code>https://img.shields.io/pypi/dm/Django.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="python">
+            <div class="mr-3">
+              <img src="/pypi/dw/Django.svg">
+            </div>
+            <div>
+              <h5>PyPI</h5>
+              <code>https://img.shields.io/pypi/dw/Django.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="python">
+            <div class="mr-3">
+              <img src="/pypi/dd/Django.svg">
+            </div>
+            <div>
+              <h5>PyPI</h5>
+              <code>https://img.shields.io/pypi/dd/Django.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="conda">
+            <div class="mr-3">
+              <img src="/conda/dn/conda-forge/python.svg">
+            </div>
+            <div>
+              <h5>Conda</h5>
+              <code>https://img.shields.io/conda/dn/conda-forge/python.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="Rust">
+            <div class="mr-3">
+              <img src="/crates/d/rustc-serialize.svg">
+            </div>
+            <div>
+              <h5>Crates.io</h5>
+              <code>https://img.shields.io/crates/d/rustc-serialize.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="Rust">
+            <div class="mr-3">
+              <img src="/crates/dv/rustc-serialize.svg">
+            </div>
+            <div>
+              <h5>Crates.io</h5>
+              <code>https://img.shields.io/crates/dv/rustc-serialize.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="PHP">
+            <div class="mr-3">
+              <img src="/packagist/dm/doctrine/orm.svg">
+            </div>
+            <div>
+              <h5>Packagist</h5>
+              <code>https://img.shields.io/packagist/dm/doctrine/orm.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="PHP">
+            <div class="mr-3">
+              <img src="/packagist/dd/doctrine/orm.svg">
+            </div>
+            <div>
+              <h5>Packagist</h5>
+              <code>https://img.shields.io/packagist/dd/doctrine/orm.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="PHP">
+            <div class="mr-3">
+              <img src="/packagist/dt/doctrine/orm.svg">
+            </div>
+            <div>
+              <h5>Packagist</h5>
+              <code>https://img.shields.io/packagist/dt/doctrine/orm.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/hexpm/dw/plug.svg">
+            </div>
+            <div>
+              <h5>Hex.pm</h5>
+              <code>https://img.shields.io/hexpm/dw/plug.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/hexpm/dd/plug.svg">
+            </div>
+            <div>
+              <h5>Hex.pm</h5>
+              <code>https://img.shields.io/hexpm/dd/plug.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/hexpm/dt/plug.svg">
+            </div>
+            <div>
+              <h5>Hex.pm</h5>
+              <code>https://img.shields.io/hexpm/dt/plug.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/wordpress/plugin/dt/akismet.svg">
+            </div>
+            <div>
+              <h5>WordPress</h5>
+              <code>https://img.shields.io/wordpress/plugin/dt/akismet.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/sourceforge/dm/sevenzip.svg">
+            </div>
+            <div>
+              <h5>SourceForge</h5>
+              <code>https://img.shields.io/sourceforge/dm/sevenzip.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/sourceforge/dw/sevenzip.svg">
+            </div>
+            <div>
+              <h5>SourceForge</h5>
+              <code>https://img.shields.io/sourceforge/dw/sevenzip.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/sourceforge/dd/sevenzip.svg">
+            </div>
+            <div>
+              <h5>SourceForge</h5>
+              <code>https://img.shields.io/sourceforge/dd/sevenzip.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/sourceforge/dt/sevenzip.svg">
+            </div>
+            <div>
+              <h5>SourceForge</h5>
+              <code>https://img.shields.io/sourceforge/dt/sevenzip.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/sourceforge/dt/arianne/stendhal.svg">
+            </div>
+            <div>
+              <h5>SourceForge</h5>
+              <code>https://img.shields.io/sourceforge/dt/arianne/stendhal.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="atom">
+            <div class="mr-3">
+              <img src="/apm/dm/vim-mode.svg">
+            </div>
+            <div>
+              <h5>apm</h5>
+              <code>https://img.shields.io/apm/dm/vim-mode.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/puppetforge/dt/camptocamp/openldap.svg">
+            </div>
+            <div>
+              <h5>Puppet Forge</h5>
+              <code>https://img.shields.io/puppetforge/dt/camptocamp/openldap.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="dub">
+            <div class="mr-3">
+              <img src="/dub/dd/vibe-d.svg">
+            </div>
+            <div>
+              <h5>DUB</h5>
+              <code>https://img.shields.io/dub/dd/vibe-d.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="dub">
+            <div class="mr-3">
+              <img src="/dub/dw/vibe-d.svg">
+            </div>
+            <div>
+              <h5>DUB</h5>
+              <code>https://img.shields.io/dub/dw/vibe-d.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="dub">
+            <div class="mr-3">
+              <img src="/dub/dm/vibe-d/latest.svg">
+            </div>
+            <div>
+              <h5>DUB</h5>
+              <code>https://img.shields.io/dub/dm/vibe-d/latest.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="dub">
+            <div class="mr-3">
+              <img src="/dub/dt/vibe-d/0.7.23.svg">
+            </div>
+            <div>
+              <h5>DUB</h5>
+              <code>https://img.shields.io/dub/dt/vibe-d/0.7.23.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="sublime">
+            <div class="mr-3">
+              <img src="/packagecontrol/dm/GitGutter.svg">
+            </div>
+            <div>
+              <h5>Package Control</h5>
+              <code>https://img.shields.io/packagecontrol/dm/GitGutter.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="sublime">
+            <div class="mr-3">
+              <img src="/packagecontrol/dw/GitGutter.svg">
+            </div>
+            <div>
+              <h5>Package Control</h5>
+              <code>https://img.shields.io/packagecontrol/dw/GitGutter.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="sublime">
+            <div class="mr-3">
+              <img src="/packagecontrol/dd/GitGutter.svg">
+            </div>
+            <div>
+              <h5>Package Control</h5>
+              <code>https://img.shields.io/packagecontrol/dd/GitGutter.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="sublime">
+            <div class="mr-3">
+              <img src="/packagecontrol/dt/GitGutter.svg">
+            </div>
+            <div>
+              <h5>Package Control</h5>
+              <code>https://img.shields.io/packagecontrol/dt/GitGutter.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="chrome">
+            <div class="mr-3">
+              <img src="/chrome-web-store/d/nimelepbpejjlbmoobocpfnjhihnpked.svg">
+            </div>
+            <div>
+              <h5>Chrome Web Store</h5>
+              <code>https://img.shields.io/chrome-web-store/d/nimelepbpejjlbmoobocpfnjhihnpked.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="website" data-doc="websiteDoc">
+            <div class="mr-3">
+              <img src="/website-up-down-green-red/http/shields.io.svg?label=my-website">
+            </div>
+            <div>
+              <h5>Website</h5>
+              <code>https://img.shields.io/website-up-down-green-red/http/shields.io.svg?label=my-website</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="cocoapods">
+            <div class="mr-3">
+              <img src="/cocoapods/dt/AFNetworking.svg">
+            </div>
+            <div>
+              <h5>CocoaPods</h5>
+              <code>https://img.shields.io/cocoapods/dt/AFNetworking.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="cocoapods">
+            <div class="mr-3">
+              <img src="/cocoapods/dm/AFNetworking.svg">
+            </div>
+            <div>
+              <h5>CocoaPods</h5>
+              <code>https://img.shields.io/cocoapods/dm/AFNetworking.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="cocoapods">
+            <div class="mr-3">
+              <img src="/cocoapods/dw/AFNetworking.svg">
+            </div>
+            <div>
+              <h5>CocoaPods</h5>
+              <code>https://img.shields.io/cocoapods/dw/AFNetworking.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="amo firefox">
+            <div class="mr-3">
+              <img src="/amo/d/dustman.svg">
+            </div>
+            <div>
+              <h5>Mozilla Add-on</h5>
+              <code>https://img.shields.io/amo/d/dustman.svg</code>
+            </div>
+          </a>
+        </ul>
       </div>
 
       <div class="card my-4">
         <div class="card-body">
           <h3 class="card-title" id="version">Version</h3>
         </div>
-        <div class="card-body">
-          <table class="badge-tb">
-            <tbody>
-              <tr>
-                <th data-keywords="cdn cdnjs" data-link="https://cdnjs.com/libraries/jquery"> CDNJS: </th>
-                <td><img src="/cdnjs/v/jquery.svg"></td>
-                <td><code>https://img.shields.io/cdnjs/v/jquery.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="node"> npm: </th>
-                <td><img src="/npm/v/npm.svg"></td>
-                <td><code>https://img.shields.io/npm/v/npm.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="node"> npm (scoped): </th>
-                <td><img src="/npm/v/@cycle/core.svg"></td>
-                <td><code>https://img.shields.io/npm/v/@cycle/core.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="node"> npm (tag): </th>
-                <td><img src="/npm/v/npm/next.svg"></td>
-                <td><code>https://img.shields.io/npm/v/npm/next.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="node"> npm (scoped with tag): </th>
-                <td><img src="/npm/v/@cycle/core/canary.svg"></td>
-                <td><code>https://img.shields.io/npm/v/@cycle/core/canary.svg</code></td>
-              </tr>
-              <tr>
-                <th> node: </th>
-                <td><img src="/node/v/gh-badges.svg"></td>
-                <td><code>https://img.shields.io/node/v/gh-badges.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="python"> PyPI: </th>
-                <td><img src="/pypi/v/nine.svg"></td>
-                <td><code>https://img.shields.io/pypi/v/nine.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="conda"> Conda: </th>
-                <td><img src="/conda/v/conda-forge/python.svg"></td>
-                <td><code>https://img.shields.io/conda/v/conda-forge/python.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="conda"> Conda (channel only): </th>
-                <td><img src="/conda/vn/conda-forge/python.svg"></td>
-                <td><code>https://img.shields.io/conda/vn/conda-forge/python.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="ruby"> Gem: </th>
-                <td><img src="/gem/v/formatador.svg"></td>
-                <td><code>https://img.shields.io/gem/v/formatador.svg</code></td>
-              </tr>
-              <tr>
-                <th> Hackage: </th>
-                <td><img src="/hackage/v/lens.svg"></td>
-                <td><code>https://img.shields.io/hackage/v/lens.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="Rust"> Crates.io: </th>
-                <td><img src="/crates/v/rustc-serialize.svg"></td>
-                <td><code>https://img.shields.io/crates/v/rustc-serialize.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="PHP"> Packagist: </th>
-                <td><img src="/packagist/v/symfony/symfony.svg"></td>
-                <td><code>https://img.shields.io/packagist/v/symfony/symfony.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="PHP"> Packagist Pre Release: </th>
-                <td><img src="/packagist/vpre/symfony/symfony.svg"></td>
-                <td><code>https://img.shields.io/packagist/vpre/symfony/symfony.svg</code></td>
-              </tr>
-              <tr>
-                <th> Bintray: </th>
-                <td><img src="/bintray/v/asciidoctor/maven/asciidoctorj.svg"></td>
-                <td><code>https://img.shields.io/bintray/v/asciidoctor/maven/asciidoctorj.svg</code></td>
-              </tr>
-              <tr>
-                <th> Clojars: </th>
-                <td><img src="/clojars/v/prismic.svg"></td>
-                <td><code>https://img.shields.io/clojars/v/prismic.svg</code></td>
-              </tr>
-              <tr>
-                <th> CocoaPods: </th>
-                <td><img src="/cocoapods/v/AFNetworking.svg"></td>
-                <td><code>https://img.shields.io/cocoapods/v/AFNetworking.svg</code></td>
-              </tr>
-              <tr>
-                <th> Bower: </th>
-                <td><img src="/bower/v/bootstrap.svg"></td>
-                <td><code>https://img.shields.io/bower/v/bootstrap.svg</code></td>
-              </tr>
-              <tr>
-                <th> Pub: </th>
-                <td><img src="/pub/v/box2d.svg"></td>
-                <td><code>https://img.shields.io/pub/v/box2d.svg</code></td>
-              </tr>
-              <tr>
-                <th> Hex.pm: </th>
-                <td><img src="/hexpm/v/plug.svg"></td>
-                <td><code>https://img.shields.io/hexpm/v/plug.svg</code></td>
-              </tr>
-              <tr>
-                <th data-doc="githubDoc"> GitHub tag: </th>
-                <td><img src="/github/tag/expressjs/express.svg"></td>
-                <td><code>https://img.shields.io/github/tag/expressjs/express.svg</code></td>
-              </tr>
-              <tr>
-                <th data-doc="githubDoc"> GitHub release: </th>
-                <td><img src="/github/release/qubyte/rubidium.svg"></td>
-                <td><code>https://img.shields.io/github/release/qubyte/rubidium.svg</code></td>
-              </tr>
-              <tr>
-                <th data-doc="githubDoc"> GitHub (pre-)release: </th>
-                <td><img src="/github/release/qubyte/rubidium/all.svg"></td>
-                <td><code>https://img.shields.io/github/release/qubyte/rubidium/all.svg</code></td>
-              </tr>
-              <tr>
-                <th data-doc="githubDoc"> GitHub commits: </th>
-                <td><img src="/github/commits-since/SubtitleEdit/subtitleedit/3.4.7.svg"></td>
-                <td><code>https://img.shields.io/github/commits-since/SubtitleEdit/subtitleedit/3.4.7.svg</code></td>
-              </tr>
-              <tr>
-                <th> Chef cookbook: </th>
-                <td><img src="/cookbook/v/chef-sugar.svg"></td>
-                <td><code>https://img.shields.io/cookbook/v/chef-sugar.svg</code></td>
-              </tr>
-              <tr>
-                <th> NuGet: </th>
-                <td><img src="/nuget/v/Nuget.Core.svg"></td>
-                <td><code>https://img.shields.io/nuget/v/Nuget.Core.svg</code></td>
-              </tr>
-              <tr>
-                <th> NuGet Pre Release: </th>
-                <td><img src="/nuget/vpre/Microsoft.AspNet.Mvc.svg"></td>
-                <td><code>https://img.shields.io/nuget/vpre/Microsoft.AspNet.Mvc.svg</code></td>
-              </tr>
-              <tr>
-                <th> MyGet: </th>
-                <td><img src="/myget/mongodb/v/MongoDB.Driver.Core.svg"></td>
-                <td><code>https://img.shields.io/myget/mongodb/v/MongoDB.Driver.Core.svg</code></td>
-              </tr>
-              <tr>
-                <th> MyGet Pre Release: </th>
-                <td><img src="/myget/yolodev/vpre/YoloDev.Dnx.FSharp.svg"></td>
-                <td><code>https://img.shields.io/myget/yolodev/vpre/YoloDev.Dnx.FSharp.svg</code></td>
-              </tr>
-              <tr>
-                <th> MyGet tenant: </th>
-                <td><img src="/dotnet.myget/dotnet-coreclr/v/Microsoft.DotNet.CoreCLR.svg"></td>
-                <td><code>https://img.shields.io/dotnet.myget/dotnet-coreclr/v/Microsoft.DotNet.CoreCLR.svg</code></td>
-              </tr>
-              <tr>
-                <th> Chocolatey: </th>
-                <td><img src="/chocolatey/v/git.svg"></td>
-                <td><code>https://img.shields.io/chocolatey/v/git.svg</code></td>
-              </tr>
-              <tr>
-                <th> PowerShell Gallery: </th>
-                <td><img src="/powershellgallery/v/Zyborg.Vault.svg"></td>
-                <td><code>https://img.shields.io/powershellgallery/v/Zyborg.Vault.svg</code></td>
-              </tr>
-              <tr>
-                <th> Puppet Forge: </th>
-                <td><img src="/puppetforge/v/vStone/percona.svg"></td>
-                <td><code>https://img.shields.io/puppetforge/v/vStone/percona.svg</code></td>
-              </tr>
-              <tr>
-                <th> Maven Central: </th>
-                <td><img src="/maven-central/v/org.apache.maven/apache-maven.svg"></td>
-                <td><code>https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg</code></td>
-              </tr>
-              <tr>
-                <th> WordPress plugin: </th>
-                <td><img src="/wordpress/plugin/v/akismet.svg"></td>
-                <td><code>https://img.shields.io/wordpress/plugin/v/akismet.svg</code></td>
-              </tr>
-              <tr>
-                <th> WordPress: </th>
-                <td><img src="/wordpress/v/akismet.svg"></td>
-                <td><code>https://img.shields.io/wordpress/v/akismet.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="atom"> apm: </th>
-                <td><img src="/apm/v/vim-mode.svg"></td>
-                <td><code>https://img.shields.io/apm/v/vim-mode.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="perl"> CPAN: </th>
-                <td><img src="/cpan/v/Config-Augeas.svg"></td>
-                <td><code>https://img.shields.io/cpan/v/Config-Augeas.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="R"> CRAN: </th>
-                <td><img src="/cran/v/devtools.svg"></td>
-                <td><code>https://img.shields.io/cran/v/devtools.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="R"> CRAN: </th>
-                <td><img src="/cran/l/devtools.svg"></td>
-                <td><code>https://img.shields.io/cran/l/devtools.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="tex"> CTAN: </th>
-                <td><img src="/ctan/v/tex.svg"></td>
-                <td><code>https://img.shields.io/ctan/v/tex.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="dub"> DUB: </th>
-                <td><img src="/dub/v/vibe-d.svg"></td>
-                <td><code>https://img.shields.io/dub/v/vibe-d.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="aur"> AUR: </th>
-                <td><img src="/aur/version/yaourt.svg"></td>
-                <td><code>https://img.shields.io/aur/version/yaourt.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="chrome"> Chrome Web Store: </th>
-                <td><img src="/chrome-web-store/v/nimelepbpejjlbmoobocpfnjhihnpked.svg"></td>
-                <td><code>https://img.shields.io/chrome-web-store/v/nimelepbpejjlbmoobocpfnjhihnpked.svg</code></td>
-              </tr>
-              <tr>
-                <th> homebrew: </th>
-                <td><img src="/homebrew/v/cake.svg"></td>
-                <td><code>https://img.shields.io/homebrew/v/cake.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="amo firefox"> Mozilla Add-on: </th>
-                <td><img src="/amo/v/dustman.svg"></td>
-                <td><code>https://img.shields.io/amo/v/dustman.svg</code></td>
-              </tr>
-              <tr>
-                <th> Itunes App Store: </th>
-                <td><img src="/itunes/v/803453959.svg"></td>
-                <td><code>https://img.shields.io/itunes/v/BUNDLE_ID.svg</code></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <ul class="list-group list-group-flush">
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="cdn cdnjs" data-link="https://cdnjs.com/libraries/jquery">
+            <div class="mr-3">
+              <img src="/cdnjs/v/jquery.svg">
+            </div>
+            <div>
+              <h5>CDNJS</h5>
+              <code>https://img.shields.io/cdnjs/v/jquery.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="node">
+            <div class="mr-3">
+              <img src="/npm/v/npm.svg">
+            </div>
+            <div>
+              <h5>npm</h5>
+              <code>https://img.shields.io/npm/v/npm.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="node">
+            <div class="mr-3">
+              <img src="/npm/v/@cycle/core.svg">
+            </div>
+            <div>
+              <h5>npm (scoped)</h5>
+              <code>https://img.shields.io/npm/v/@cycle/core.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="node">
+            <div class="mr-3">
+              <img src="/npm/v/npm/next.svg">
+            </div>
+            <div>
+              <h5>npm (tag)</h5>
+              <code>https://img.shields.io/npm/v/npm/next.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="node">
+            <div class="mr-3">
+              <img src="/npm/v/@cycle/core/canary.svg">
+            </div>
+            <div>
+              <h5>npm (scoped with tag)</h5>
+              <code>https://img.shields.io/npm/v/@cycle/core/canary.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/node/v/gh-badges.svg">
+            </div>
+            <div>
+              <h5>node</h5>
+              <code>https://img.shields.io/node/v/gh-badges.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="python">
+            <div class="mr-3">
+              <img src="/pypi/v/nine.svg">
+            </div>
+            <div>
+              <h5>PyPI</h5>
+              <code>https://img.shields.io/pypi/v/nine.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="conda">
+            <div class="mr-3">
+              <img src="/conda/v/conda-forge/python.svg">
+            </div>
+            <div>
+              <h5>Conda</h5>
+              <code>https://img.shields.io/conda/v/conda-forge/python.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="conda">
+            <div class="mr-3">
+              <img src="/conda/vn/conda-forge/python.svg">
+            </div>
+            <div>
+              <h5>Conda (channel only)</h5>
+              <code>https://img.shields.io/conda/vn/conda-forge/python.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="ruby">
+            <div class="mr-3">
+              <img src="/gem/v/formatador.svg">
+            </div>
+            <div>
+              <h5>Gem</h5>
+              <code>https://img.shields.io/gem/v/formatador.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/hackage/v/lens.svg">
+            </div>
+            <div>
+              <h5>Hackage</h5>
+              <code>https://img.shields.io/hackage/v/lens.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="Rust">
+            <div class="mr-3">
+              <img src="/crates/v/rustc-serialize.svg">
+            </div>
+            <div>
+              <h5>Crates.io</h5>
+              <code>https://img.shields.io/crates/v/rustc-serialize.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="PHP">
+            <div class="mr-3">
+              <img src="/packagist/v/symfony/symfony.svg">
+            </div>
+            <div>
+              <h5>Packagist</h5>
+              <code>https://img.shields.io/packagist/v/symfony/symfony.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="PHP">
+            <div class="mr-3">
+              <img src="/packagist/vpre/symfony/symfony.svg">
+            </div>
+            <div>
+              <h5>Packagist Pre Release</h5>
+              <code>https://img.shields.io/packagist/vpre/symfony/symfony.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/bintray/v/asciidoctor/maven/asciidoctorj.svg">
+            </div>
+            <div>
+              <h5>Bintray</h5>
+              <code>https://img.shields.io/bintray/v/asciidoctor/maven/asciidoctorj.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/clojars/v/prismic.svg">
+            </div>
+            <div>
+              <h5>Clojars</h5>
+              <code>https://img.shields.io/clojars/v/prismic.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/cocoapods/v/AFNetworking.svg">
+            </div>
+            <div>
+              <h5>CocoaPods</h5>
+              <code>https://img.shields.io/cocoapods/v/AFNetworking.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/bower/v/bootstrap.svg">
+            </div>
+            <div>
+              <h5>Bower</h5>
+              <code>https://img.shields.io/bower/v/bootstrap.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/pub/v/box2d.svg">
+            </div>
+            <div>
+              <h5>Pub</h5>
+              <code>https://img.shields.io/pub/v/box2d.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/hexpm/v/plug.svg">
+            </div>
+            <div>
+              <h5>Hex.pm</h5>
+              <code>https://img.shields.io/hexpm/v/plug.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/tag/expressjs/express.svg">
+            </div>
+            <div>
+              <h5>GitHub tag</h5>
+              <code>https://img.shields.io/github/tag/expressjs/express.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/release/qubyte/rubidium.svg">
+            </div>
+            <div>
+              <h5>GitHub release</h5>
+              <code>https://img.shields.io/github/release/qubyte/rubidium.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/release/qubyte/rubidium/all.svg">
+            </div>
+            <div>
+              <h5>GitHub (pre-)release</h5>
+              <code>https://img.shields.io/github/release/qubyte/rubidium/all.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/commits-since/SubtitleEdit/subtitleedit/3.4.7.svg">
+            </div>
+            <div>
+              <h5>GitHub commits</h5>
+              <code>https://img.shields.io/github/commits-since/SubtitleEdit/subtitleedit/3.4.7.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/cookbook/v/chef-sugar.svg">
+            </div>
+            <div>
+              <h5>Chef cookbook</h5>
+              <code>https://img.shields.io/cookbook/v/chef-sugar.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/nuget/v/Nuget.Core.svg">
+            </div>
+            <div>
+              <h5>NuGet</h5>
+              <code>https://img.shields.io/nuget/v/Nuget.Core.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/nuget/vpre/Microsoft.AspNet.Mvc.svg">
+            </div>
+            <div>
+              <h5>NuGet Pre Release</h5>
+              <code>https://img.shields.io/nuget/vpre/Microsoft.AspNet.Mvc.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/myget/mongodb/v/MongoDB.Driver.Core.svg">
+            </div>
+            <div>
+              <h5>MyGet</h5>
+              <code>https://img.shields.io/myget/mongodb/v/MongoDB.Driver.Core.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/myget/yolodev/vpre/YoloDev.Dnx.FSharp.svg">
+            </div>
+            <div>
+              <h5>MyGet Pre Release</h5>
+              <code>https://img.shields.io/myget/yolodev/vpre/YoloDev.Dnx.FSharp.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/dotnet.myget/dotnet-coreclr/v/Microsoft.DotNet.CoreCLR.svg">
+            </div>
+            <div>
+              <h5>MyGet tenant</h5>
+              <code>https://img.shields.io/dotnet.myget/dotnet-coreclr/v/Microsoft.DotNet.CoreCLR.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/chocolatey/v/git.svg">
+            </div>
+            <div>
+              <h5>Chocolatey</h5>
+              <code>https://img.shields.io/chocolatey/v/git.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/powershellgallery/v/Zyborg.Vault.svg">
+            </div>
+            <div>
+              <h5>PowerShell Gallery</h5>
+              <code>https://img.shields.io/powershellgallery/v/Zyborg.Vault.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/puppetforge/v/vStone/percona.svg">
+            </div>
+            <div>
+              <h5>Puppet Forge</h5>
+              <code>https://img.shields.io/puppetforge/v/vStone/percona.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/maven-central/v/org.apache.maven/apache-maven.svg">
+            </div>
+            <div>
+              <h5>Maven Central</h5>
+              <code>https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/wordpress/plugin/v/akismet.svg">
+            </div>
+            <div>
+              <h5>WordPress plugin</h5>
+              <code>https://img.shields.io/wordpress/plugin/v/akismet.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/wordpress/v/akismet.svg">
+            </div>
+            <div>
+              <h5>WordPress</h5>
+              <code>https://img.shields.io/wordpress/v/akismet.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="atom">
+            <div class="mr-3">
+              <img src="/apm/v/vim-mode.svg">
+            </div>
+            <div>
+              <h5>apm</h5>
+              <code>https://img.shields.io/apm/v/vim-mode.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="perl">
+            <div class="mr-3">
+              <img src="/cpan/v/Config-Augeas.svg">
+            </div>
+            <div>
+              <h5>CPAN</h5>
+              <code>https://img.shields.io/cpan/v/Config-Augeas.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="R">
+            <div class="mr-3">
+              <img src="/cran/v/devtools.svg">
+            </div>
+            <div>
+              <h5>CRAN</h5>
+              <code>https://img.shields.io/cran/v/devtools.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="R">
+            <div class="mr-3">
+              <img src="/cran/l/devtools.svg">
+            </div>
+            <div>
+              <h5>CRAN</h5>
+              <code>https://img.shields.io/cran/l/devtools.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="tex">
+            <div class="mr-3">
+              <img src="/ctan/v/tex.svg">
+            </div>
+            <div>
+              <h5>CTAN</h5>
+              <code>https://img.shields.io/ctan/v/tex.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="dub">
+            <div class="mr-3">
+              <img src="/dub/v/vibe-d.svg">
+            </div>
+            <div>
+              <h5>DUB</h5>
+              <code>https://img.shields.io/dub/v/vibe-d.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="aur">
+            <div class="mr-3">
+              <img src="/aur/version/yaourt.svg">
+            </div>
+            <div>
+              <h5>AUR</h5>
+              <code>https://img.shields.io/aur/version/yaourt.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="chrome">
+            <div class="mr-3">
+              <img src="/chrome-web-store/v/nimelepbpejjlbmoobocpfnjhihnpked.svg">
+            </div>
+            <div>
+              <h5>Chrome Web Store</h5>
+              <code>https://img.shields.io/chrome-web-store/v/nimelepbpejjlbmoobocpfnjhihnpked.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/homebrew/v/cake.svg">
+            </div>
+            <div>
+              <h5>homebrew</h5>
+              <code>https://img.shields.io/homebrew/v/cake.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="amo firefox">
+            <div class="mr-3">
+              <img src="/amo/v/dustman.svg">
+            </div>
+            <div>
+              <h5>Mozilla Add-on</h5>
+              <code>https://img.shields.io/amo/v/dustman.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/itunes/v/803453959.svg">
+            </div>
+            <div>
+              <h5>Itunes App Store</h5>
+              <code>https://img.shields.io/itunes/v/BUNDLE_ID.svg</code>
+            </div>
+          </a>
+        </ul>
       </div>
 
       <div class="card my-4">
         <div class="card-body">
           <h3 class="card-title" id="social">Social</h3>
         </div>
-        <div class="card-body">
-          <table class="badge-tb">
-            <tbody>
-              <tr>
-                <th data-doc="githubDoc"> GitHub forks: </th>
-                <td><img src="/github/forks/badges/shields.svg?style=social&label=Fork"></td>
-                <td><code>https://img.shields.io/github/forks/badges/shields.svg?style=social&amp;label=Fork</code></td>
-              </tr>
-              <tr>
-                <th data-doc="githubDoc"> GitHub stars: </th>
-                <td><img src="/github/stars/badges/shields.svg?style=social&label=Star"></td>
-                <td><code>https://img.shields.io/github/stars/badges/shields.svg?style=social&amp;label=Star</code></td>
-              </tr>
-              <tr>
-                <th data-doc="githubDoc"> GitHub watchers: </th>
-                <td><img src="/github/watchers/badges/shields.svg?style=social&label=Watch"></td>
-                <td><code>https://img.shields.io/github/watchers/badges/shields.svg?style=social&amp;label=Watch</code></td>
-              </tr>
-              <tr>
-                <th data-doc="githubDoc"> GitHub followers: </th>
-                <td><img src="/github/followers/espadrine.svg?style=social&label=Follow"></td>
-                <td><code>https://img.shields.io/github/followers/espadrine.svg?style=social&amp;label=Follow</code></td>
-              </tr>
-              <tr>
-                <th> Twitter URL: </th>
-                <td><img src="/twitter/url/http/shields.io.svg?style=social"></td>
-                <td><code>https://img.shields.io/twitter/url/http/shields.io.svg?style=social</code></td>
-              </tr>
-              <tr>
-                <th> Twitter Follow: </th>
-                <td><img src="/twitter/follow/espadrine.svg?style=social&label=Follow"></td>
-                <td><code>https://img.shields.io/twitter/follow/espadrine.svg?style=social&amp;label=Follow</code></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <ul class="list-group list-group-flush">
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/forks/badges/shields.svg?style=social&label=Fork">
+            </div>
+            <div>
+              <h5>GitHub forks</h5>
+              <code>https://img.shields.io/github/forks/badges/shields.svg?style=social&amp;label=Fork</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/stars/badges/shields.svg?style=social&label=Star">
+            </div>
+            <div>
+              <h5>GitHub stars</h5>
+              <code>https://img.shields.io/github/stars/badges/shields.svg?style=social&amp;label=Star</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/watchers/badges/shields.svg?style=social&label=Watch">
+            </div>
+            <div>
+              <h5>GitHub watchers</h5>
+              <code>https://img.shields.io/github/watchers/badges/shields.svg?style=social&amp;label=Watch</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/followers/espadrine.svg?style=social&label=Follow">
+            </div>
+            <div>
+              <h5>GitHub followers</h5>
+              <code>https://img.shields.io/github/followers/espadrine.svg?style=social&amp;label=Follow</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/twitter/url/http/shields.io.svg?style=social">
+            </div>
+            <div>
+              <h5>Twitter URL</h5>
+              <code>https://img.shields.io/twitter/url/http/shields.io.svg?style=social</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/twitter/follow/espadrine.svg?style=social&label=Follow">
+            </div>
+            <div>
+              <h5>Twitter Follow</h5>
+              <code>https://img.shields.io/twitter/follow/espadrine.svg?style=social&amp;label=Follow</code>
+            </div>
+          </a>
+        </ul>
       </div>
+
+
       <div class="card my-4">
         <div class="card-body">
           <h3 class="card-title" id="miscellaneous">Miscellaneous</h3>
         </div>
-        <div class="card-body">
-          <table class="badge-tb">
-            <tbody>
-              <tr>
-                <th> Gratipay: </th>
-                <td><img src="/gratipay/project/shields.svg"></td>
-                <td><code>https://img.shields.io/gratipay/project/shields.svg</code></td>
-              </tr>
-              <tr>
-                <th> Bountysource: </th>
-                <td><img src="/bountysource/team/mozilla-core/activity.svg"></td>
-                <td><code>https://img.shields.io/bountysource/team/mozilla-core/activity.svg</code></td>
-              </tr>
-              <tr>
-                <th> Beerpay: </th>
-                <td><img src="/beerpay/hashdog/scrapfy-chrome-extension.svg"></td>
-                <td><code>https://img.shields.io/beerpay/hashdog/scrapfy-chrome-extension.svg</code></td>
-              </tr>
-              <tr>
-                <th> Code Climate: </th>
-                <td><img src="/codeclimate/github/kabisaict/flow.svg"></td>
-                <td><code>https://img.shields.io/codeclimate/github/kabisaict/flow.svg</code></td>
-              </tr>
-              <tr>
-                <th> Code Climate: </th>
-                <td><img src="/codeclimate/coverage/github/triAGENS/ashikawa-core.svg"></td>
-                <td><code>https://img.shields.io/codeclimate/coverage/github/triAGENS/ashikawa-core.svg</code></td>
-              </tr>
-              <tr>
-                <th> Code Climate: </th>
-                <td><img src="/codeclimate/issues/github/me-and/mdf.svg"></td>
-                <td><code>https://img.shields.io/codeclimate/issues/github/me-and/mdf.svg</code></td>
-              </tr>
-              <tr>
-                <th> bitHound: </th>
-                <td><img src="/bithound/code/github/rexxars/sse-channel.svg"></td>
-                <td><code>https://img.shields.io/bithound/code/github/rexxars/sse-channel.svg</code></td>
-              </tr>
-              <tr>
-                <th> Gemnasium: </th>
-                <td><img src="/gemnasium/mathiasbynens/he.svg"></td>
-                <td><code>https://img.shields.io/gemnasium/mathiasbynens/he.svg</code></td>
-              </tr>
-              <tr>
-                <th> Hackage-Deps: </th>
-                <td><img src="/hackage-deps/v/lens.svg"></td>
-                <td><code>https://img.shields.io/hackage-deps/v/lens.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="Rust"> Crates.io: </th>
-                <td><img src="/crates/l/rustc-serialize.svg"></td>
-                <td><code>https://img.shields.io/crates/l/rustc-serialize.svg</code></td>
-              </tr>
-              <tr>
-                <th> Requires.io: </th>
-                <td><img src="/requires/github/celery/celery.svg"></td>
-                <td><code>https://img.shields.io/requires/github/celery/celery.svg</code></td>
-              </tr>
-              <tr>
-                <th> VersionEye: </th>
-                <td><img src="/versioneye/d/ruby/rails.svg"></td>
-                <td><code>https://img.shields.io/versioneye/d/ruby/rails.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="PHP"> Packagist: </th>
-                <td><img src="/packagist/l/doctrine/orm.svg"></td>
-                <td><code>https://img.shields.io/packagist/l/doctrine/orm.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="node"> npm: </th>
-                <td><img src="/npm/l/express.svg"></td>
-                <td><code>https://img.shields.io/npm/l/express.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="atom"> apm: </th>
-                <td><img src="/apm/l/vim-mode.svg"></td>
-                <td><code>https://img.shields.io/apm/l/vim-mode.svg</code></td>
-              </tr>
-              <tr>
-                <th> Bower: </th>
-                <td><img src="/bower/l/bootstrap.svg"></td>
-                <td><code>https://img.shields.io/bower/l/bootstrap.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="python"> PyPI: </th>
-                <td><img src="/pypi/l/Django.svg"></td>
-                <td><code>https://img.shields.io/pypi/l/Django.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="python"> PyPI: </th>
-                <td><img src="/pypi/wheel/Django.svg"></td>
-                <td><code>https://img.shields.io/pypi/wheel/Django.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="python"> PyPI: </th>
-                <td><img src="/pypi/format/Django.svg"></td>
-                <td><code>https://img.shields.io/pypi/format/Django.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="python"> PyPI: </th>
-                <td><img src="/pypi/pyversions/Django.svg"></td>
-                <td><code>https://img.shields.io/pypi/pyversions/Django.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="python"> PyPI: </th>
-                <td><img src="/pypi/implementation/Django.svg"></td>
-                <td><code>https://img.shields.io/pypi/implementation/Django.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="python"> PyPI: </th>
-                <td><img src="/pypi/status/Django.svg"></td>
-                <td><code>https://img.shields.io/pypi/status/Django.svg</code></td>
-              </tr>
-              <tr>
-                <th> Hex.pm: </th>
-                <td><img src="/hexpm/l/plug.svg"></td>
-                <td><code>https://img.shields.io/hexpm/l/plug.svg</code></td>
-              </tr>
-              <tr>
-                <th> CocoaPods: </th>
-                <td><img src="/cocoapods/l/AFNetworking.svg"></td>
-                <td><code>https://img.shields.io/cocoapods/l/AFNetworking.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="perl"> CPAN: </th>
-                <td><img src="/cpan/l/Config-Augeas.svg"></td>
-                <td><code>https://img.shields.io/cpan/l/Config-Augeas.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="tex"> CTAN: </th>
-                <td><img src="/ctan/l/novel.svg"></td>
-                <td><code>https://img.shields.io/ctan/l/novel.svg</code></td>
-              </tr>
-              <tr>
-                <th> Wheelmap: </th>
-                <td><img src="/wheelmap/a/2323004600.svg"></td>
-                <td><code>https://img.shields.io/wheelmap/a/2323004600.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="GitHub issue" data-doc="githubDoc"> GitHub issues: </th>
-                <td><img src="/github/issues/badges/shields.svg"></td>
-                <td><code>https://img.shields.io/github/issues/badges/shields.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="GitHub issue" data-doc="githubDoc"></th>
-                <td><img src="/github/issues-raw/badges/shields.svg"></td>
-                <td><code>https://img.shields.io/github/issues-raw/badges/shields.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="GitHub issue" data-doc="githubDoc"> GitHub closed issues: </th>
-                <td><img src="/github/issues-closed/badges/shields.svg"></td>
-                <td><code>https://img.shields.io/github/issues-closed/badges/shields.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="GitHub issue" data-doc="githubDoc"></th>
-                <td><img src="/github/issues-closed-raw/badges/shields.svg"></td>
-                <td><code>https://img.shields.io/github/issues-closed-raw/badges/shields.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="GitHub issue label" data-doc="githubDoc"> label:</th>
-                <td><img src="/github/issues-raw/badges/shields/website.svg"></td>
-                <td><code>https://img.shields.io/github/issues-raw/badges/shields/website.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="GitHub pullrequest pr" data-doc="githubDoc"> GitHub pull requests: </th>
-                <td><img src="/github/issues-pr/cdnjs/cdnjs.svg"></td>
-                <td><code>https://img.shields.io/github/issues-pr/cdnjs/cdnjs.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="GitHub pullrequest pr" data-doc="githubDoc"></th>
-                <td><img src="/github/issues-pr-raw/cdnjs/cdnjs.svg"></td>
-                <td><code>https://img.shields.io/github/issues-pr-raw/cdnjs/cdnjs.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="GitHub pullrequest pr" data-doc="githubDoc"> GitHub closed pull requests: </th>
-                <td><img src="/github/issues-pr-closed/cdnjs/cdnjs.svg"></td>
-                <td><code>https://img.shields.io/github/issues-pr-closed/cdnjs/cdnjs.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="GitHub pullrequest pr" data-doc="githubDoc"></th>
-                <td><img src="/github/issues-pr-closed-raw/cdnjs/cdnjs.svg"></td>
-                <td><code>https://img.shields.io/github/issues-pr-closed-raw/cdnjs/cdnjs.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="GitHub contributor" data-doc="githubDoc"> GitHub contributors: </th>
-                <td><img src="/github/contributors/cdnjs/cdnjs.svg"></td>
-                <td><code>https://img.shields.io/github/contributors/cdnjs/cdnjs.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="GitHub license" data-doc="githubDoc"> license: </th>
-                <td><img src="/github/license/mashape/apistatus.svg"></td>
-                <td><code>https://img.shields.io/github/license/mashape/apistatus.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="GitHub file size" data-doc="githubDoc"> Github file size: </th>
-                <td><img src="/github/size/webcaetano/craft/build/craft.min.js.svg"></td>
-                <td><code>https://img.shields.io/github/size/webcaetano/craft/build/craft.min.js.svg</code></td>
-              </tr>
-              <tr>
-                <th> Bitbucket issues: </th>
-                <td><img src="/bitbucket/issues/atlassian/python-bitbucket.svg"></td>
-                <td><code>https://img.shields.io/bitbucket/issues/atlassian/python-bitbucket.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="Bitbucket"></th>
-                <td><img src="/bitbucket/issues-raw/atlassian/python-bitbucket.svg"></td>
-                <td><code>https://img.shields.io/bitbucket/issues-raw/atlassian/python-bitbucket.svg</code></td>
-              </tr>
-              <tr>
-                <th> Bitbucket open pull requests: </th>
-                <td><img src="/bitbucket/pr/osrf/gazebo.svg"></td>
-                <td><code>https://img.shields.io/bitbucket/pr/osrf/gazebo.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="Bitbucket"></th>
-                <td><img src="/bitbucket/pr-raw/osrf/gazebo.svg"></td>
-                <td><code>https://img.shields.io/bitbucket/pr-raw/osrf/gazebo.svg</code></td>
-              </tr>
-              <tr>
-                <th> WordPress rating: </th>
-                <td><img src="/wordpress/plugin/r/akismet.svg"></td>
-                <td><code>https://img.shields.io/wordpress/plugin/r/akismet.svg</code></td>
-              </tr>
-              <tr>
-                <th> Codacy grade: </th>
-                <td><img src="/codacy/grade/e27821fb6289410b8f58338c7e0bc686.svg"></td>
-                <td><code>https://img.shields.io/codacy/grade/e27821fb6289410b8f58338c7e0bc686.svg</code></td>
-              </tr>
-              <tr>
-                <th> Codacy branch grade: </th>
-                <td><img src="/codacy/grade/e27821fb6289410b8f58338c7e0bc686/master.svg"></td>
-                <td><code>https://img.shields.io/codacy/grade/e27821fb6289410b8f58338c7e0bc686/master.svg</code></td>
-              </tr>
-              <tr>
-                <th> Codacy coverage: </th>
-                <td><img src="/codacy/coverage/c44df2d9c89a4809896914fd1a40bedd.svg"></td>
-                <td><code>https://img.shields.io/codacy/coverage/c44df2d9c89a4809896914fd1a40bedd.svg</code></td>
-              </tr>
-              <tr>
-                <th> Codacy branch coverage: </th>
-                <td><img src="/codacy/coverage/c44df2d9c89a4809896914fd1a40bedd/master.svg"></td>
-                <td><code>https://img.shields.io/codacy/coverage/c44df2d9c89a4809896914fd1a40bedd/master.svg</code></td>
-              </tr>
-              <tr>
-                <th> Cauditor: </th>
-                <td><img src="/cauditor/mi/matthiasmullie/scrapbook/master.svg"></td>
-                <td><code>https://img.shields.io/cauditor/mi/matthiasmullie/scrapbook/master.svg</code></td>
-              </tr>
-              <tr>
-                <th> Libscore: </th>
-                <td><img src="/libscore/s/jQuery.svg"></td>
-                <td><code>https://img.shields.io/libscore/s/jQuery.svg</code></td>
-              </tr>
-              <tr>
-                <th> Puppet Forge: </th>
-                <td><img src="/puppetforge/e/camptocamp/openssl.svg"></td>
-                <td><code>https://img.shields.io/puppetforge/e/camptocamp/openssl.svg</code></td>
-              </tr>
-              <tr>
-                <th> Puppet Forge: </th>
-                <td><img src="/puppetforge/f/camptocamp/openssl.svg"></td>
-                <td><code>https://img.shields.io/puppetforge/f/camptocamp/openssl.svg</code></td>
-              </tr>
-              <tr>
-                <th> Puppet Forge: </th>
-                <td><img src="/puppetforge/rc/camptocamp.svg"></td>
-                <td><code>https://img.shields.io/puppetforge/rc/camptocamp.svg</code></td>
-              </tr>
-              <tr>
-                <th> Puppet Forge: </th>
-                <td><img src="/puppetforge/mc/camptocamp.svg"></td>
-                <td><code>https://img.shields.io/puppetforge/mc/camptocamp.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="ruby"> Gems: </th>
-                <td><img src="/gem/u/raphink.svg"></td>
-                <td><code>https://img.shields.io/gem/u/raphink.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="ruby"> Gems: </th>
-                <td><img src="/gem/rt/puppet.svg"></td>
-                <td><code>https://img.shields.io/gem/rt/puppet.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="ruby"> Gems: </th>
-                <td><img src="/gem/rd/facter.svg"></td>
-                <td><code>https://img.shields.io/gem/rd/facter.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="dub"> DUB: </th>
-                <td><img src="/dub/l/vibe-d.svg"></td>
-                <td><code>https://img.shields.io/dub/l/vibe-d.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="docker stars"> Docker Stars: </th>
-                <td><img src="/docker/stars/_/ubuntu.svg"></td>
-                <td><code>https://img.shields.io/docker/stars/_/ubuntu.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="docker pulls"> Docker Pulls: </th>
-                <td><img src="/docker/pulls/mashape/kong.svg"></td>
-                <td><code>https://img.shields.io/docker/pulls/mashape/kong.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="docker automated build"> Docker Automated build </th>
-                <td><img src="/docker/automated/jrottenberg/ffmpeg.svg"></td>
-                <td><code>https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="docker build status"> Docker Build Status </th>
-                <td><img src="/docker/build/jrottenberg/ffmpeg.svg"></td>
-                <td><code>https://img.shields.io/docker/build/jrottenberg/ffmpeg.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="imagelayers"> ImageLayers Size: </th>
-                <td><img src="/imagelayers/image-size/_/ubuntu/latest.svg"></td>
-                <td><code>https://img.shields.io/imagelayers/image-size/_/ubuntu/latest.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="imagelayers"> ImageLayers Layers: </th>
-                <td><img src="/imagelayers/layers/_/ubuntu/latest.svg"></td>
-                <td><code>https://img.shields.io/imagelayers/layers/_/ubuntu/latest.svg</code></td>
-              </tr>
-              <tr>
-                <th> Gitter: </th>
-                <td><img src="/gitter/room/nwjs/nw.js.svg"></td>
-                <td><code>https://img.shields.io/gitter/room/nwjs/nw.js.svg</code></td>
-              </tr>
-              <tr>
-                <th> JIRA issue: </th>
-                <td><img src="/jira/issue/https/issues.apache.org/jira/KAFKA-2896.svg"></td>
-                <td><code>https://img.shields.io/jira/issue/https/issues.apache.org/jira/KAFKA-2896.svg</code></td>
-              </tr>
-              <tr>
-                <th data-doc="jira-sprint-completion"> JIRA sprint completion: </th>
-                <td><img src="/jira/sprint/https/jira.spring.io/94.svg"></td>
-                <td><code>https://img.shields.io/jira/sprint/https/jira.spring.io/94.svg</code></td>
-              </tr>
-              <tr>
-                <th> Maintenance: </th>
-                <td><img src="/maintenance/yes/2017.svg"></td>
-                <td><code>https://img.shields.io/maintenance/yes/2017.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="aur"> AUR: </th>
-                <td><img src="/aur/license/yaourt.svg"></td>
-                <td><code>https://img.shields.io/aur/license/yaourt.svg</code></td>
-              </tr>
-              <tr>
-                <th> Waffle.io: </th>
-                <td><img src="/waffle/label/evancohen/smart-mirror/in%20progress.svg"></td>
-                <td><code>https://img.shields.io/waffle/label/evancohen/smart-mirror/in%20progress.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="chrome"> Chrome Web Store: </th>
-                <td><img src="/chrome-web-store/price/nimelepbpejjlbmoobocpfnjhihnpked.svg"></td>
-                <td><code>https://img.shields.io/chrome-web-store/price/nimelepbpejjlbmoobocpfnjhihnpked.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="chrome"> Chrome Web Store: </th>
-                <td><img src="/chrome-web-store/rating/nimelepbpejjlbmoobocpfnjhihnpked.svg"></td>
-                <td><code>https://img.shields.io/chrome-web-store/rating/nimelepbpejjlbmoobocpfnjhihnpked.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="chrome"> Chrome Web Store: </th>
-                <td><img src="/chrome-web-store/stars/nimelepbpejjlbmoobocpfnjhihnpked.svg"></td>
-                <td><code>https://img.shields.io/chrome-web-store/stars/nimelepbpejjlbmoobocpfnjhihnpked.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="chrome"> Chrome Web Store: </th>
-                <td><img src="/chrome-web-store/rating-count/nimelepbpejjlbmoobocpfnjhihnpked.svg"></td>
-                <td><code>https://img.shields.io/chrome-web-store/rating-count/nimelepbpejjlbmoobocpfnjhihnpked.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="aur"> AUR: </th>
-                <td><img src="/aur/votes/yaourt.svg"></td>
-                <td><code>https://img.shields.io/aur/votes/yaourt.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="amo firefox"> Mozilla Add-on: </th>
-                <td><img src="/amo/users/dustman.svg"></td>
-                <td><code>https://img.shields.io/amo/users/dustman.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="amo firefox"> Mozilla Add-on: </th>
-                <td><img src="/amo/rating/dustman.svg"></td>
-                <td><code>https://img.shields.io/amo/rating/dustman.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="amo firefox"> Mozilla Add-on: </th>
-                <td><img src="/amo/stars/dustman.svg"></td>
-                <td><code>https://img.shields.io/amo/stars/dustman.svg</code></td>
-              </tr>
-              <tr>
-                <th> Swagger Validator: </th>
-                <td><img src="/swagger/valid/2.0/https/bitbucket.org/api/swagger.json.svg"></td>
-                <td><code>https://img.shields.io/swagger/valid/2.0/https/bitbucket.org/api/swagger.json.svg</code></td>
-              </tr>
-              <tr>
-                <th> Uptime Robot status: </th>
-                <td><img src="/uptimerobot/status/m778918918-3e92c097147760ee39d02d36.svg"></td>
-                <td><code>https://img.shields.io/uptimerobot/status/m778918918-3e92c097147760ee39d02d36.svg</code></td>
-              </tr>
-              <tr>
-                <th> Uptime Robot ratio: </th>
-                <td><img src="/uptimerobot/ratio/m778918918-3e92c097147760ee39d02d36.svg"></td>
-                <td><code>https://img.shields.io/uptimerobot/ratio/m778918918-3e92c097147760ee39d02d36.svg</code></td>
-              </tr>
-              <tr>
-                <th> Uptime Robot ratio (7 days): </th>
-                <td><img src="/uptimerobot/ratio/7/m778918918-3e92c097147760ee39d02d36.svg"></td>
-                <td><code>https://img.shields.io/uptimerobot/ratio/7/m778918918-3e92c097147760ee39d02d36.svg</code></td>
-              </tr>
-              <tr>
-                <th> Discord: </th>
-                <td><img src="/discord/102860784329052160.svg"></td>
-                <td><code>https://img.shields.io/discord/102860784329052160.svg</code></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <ul class="list-group list-group-flush">
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/gratipay/project/shields.svg">
+            </div>
+            <div>
+              <h5>Gratipay</h5>
+              <code>https://img.shields.io/gratipay/project/shields.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/bountysource/team/mozilla-core/activity.svg">
+            </div>
+            <div>
+              <h5>Bountysource</h5>
+              <code>https://img.shields.io/bountysource/team/mozilla-core/activity.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/beerpay/hashdog/scrapfy-chrome-extension.svg">
+            </div>
+            <div>
+              <h5>Beerpay</h5>
+              <code>https://img.shields.io/beerpay/hashdog/scrapfy-chrome-extension.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/codeclimate/github/kabisaict/flow.svg">
+            </div>
+            <div>
+              <h5>Code Climate</h5>
+              <code>https://img.shields.io/codeclimate/github/kabisaict/flow.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/codeclimate/coverage/github/triAGENS/ashikawa-core.svg">
+            </div>
+            <div>
+              <h5>Code Climate</h5>
+              <code>https://img.shields.io/codeclimate/coverage/github/triAGENS/ashikawa-core.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/codeclimate/issues/github/me-and/mdf.svg">
+            </div>
+            <div>
+              <h5>Code Climate</h5>
+              <code>https://img.shields.io/codeclimate/issues/github/me-and/mdf.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/bithound/code/github/rexxars/sse-channel.svg">
+            </div>
+            <div>
+              <h5>bitHound</h5>
+              <code>https://img.shields.io/bithound/code/github/rexxars/sse-channel.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/gemnasium/mathiasbynens/he.svg">
+            </div>
+            <div>
+              <h5>Gemnasium</h5>
+              <code>https://img.shields.io/gemnasium/mathiasbynens/he.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/hackage-deps/v/lens.svg">
+            </div>
+            <div>
+              <h5>Hackage-Deps</h5>
+              <code>https://img.shields.io/hackage-deps/v/lens.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="Rust">
+            <div class="mr-3">
+              <img src="/crates/l/rustc-serialize.svg">
+            </div>
+            <div>
+              <h5>Crates.io</h5>
+              <code>https://img.shields.io/crates/l/rustc-serialize.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/requires/github/celery/celery.svg">
+            </div>
+            <div>
+              <h5>Requires.io</h5>
+              <code>https://img.shields.io/requires/github/celery/celery.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/versioneye/d/ruby/rails.svg">
+            </div>
+            <div>
+              <h5>VersionEye</h5>
+              <code>https://img.shields.io/versioneye/d/ruby/rails.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="PHP">
+            <div class="mr-3">
+              <img src="/packagist/l/doctrine/orm.svg">
+            </div>
+            <div>
+              <h5>Packagist</h5>
+              <code>https://img.shields.io/packagist/l/doctrine/orm.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="node">
+            <div class="mr-3">
+              <img src="/npm/l/express.svg">
+            </div>
+            <div>
+              <h5>npm</h5>
+              <code>https://img.shields.io/npm/l/express.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="atom">
+            <div class="mr-3">
+              <img src="/apm/l/vim-mode.svg">
+            </div>
+            <div>
+              <h5>apm</h5>
+              <code>https://img.shields.io/apm/l/vim-mode.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/bower/l/bootstrap.svg">
+            </div>
+            <div>
+              <h5>Bower</h5>
+              <code>https://img.shields.io/bower/l/bootstrap.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="python">
+            <div class="mr-3">
+              <img src="/pypi/l/Django.svg">
+            </div>
+            <div>
+              <h5>PyPI</h5>
+              <code>https://img.shields.io/pypi/l/Django.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="python">
+            <div class="mr-3">
+              <img src="/pypi/wheel/Django.svg">
+            </div>
+            <div>
+              <h5>PyPI</h5>
+              <code>https://img.shields.io/pypi/wheel/Django.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="python">
+            <div class="mr-3">
+              <img src="/pypi/format/Django.svg">
+            </div>
+            <div>
+              <h5>PyPI</h5>
+              <code>https://img.shields.io/pypi/format/Django.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="python">
+            <div class="mr-3">
+              <img src="/pypi/pyversions/Django.svg">
+            </div>
+            <div>
+              <h5>PyPI</h5>
+              <code>https://img.shields.io/pypi/pyversions/Django.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="python">
+            <div class="mr-3">
+              <img src="/pypi/implementation/Django.svg">
+            </div>
+            <div>
+              <h5>PyPI</h5>
+              <code>https://img.shields.io/pypi/implementation/Django.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="python">
+            <div class="mr-3">
+              <img src="/pypi/status/Django.svg">
+            </div>
+            <div>
+              <h5>PyPI</h5>
+              <code>https://img.shields.io/pypi/status/Django.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/hexpm/l/plug.svg">
+            </div>
+            <div>
+              <h5>Hex.pm</h5>
+              <code>https://img.shields.io/hexpm/l/plug.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/cocoapods/l/AFNetworking.svg">
+            </div>
+            <div>
+              <h5>CocoaPods</h5>
+              <code>https://img.shields.io/cocoapods/l/AFNetworking.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="perl">
+            <div class="mr-3">
+              <img src="/cpan/l/Config-Augeas.svg">
+            </div>
+            <div>
+              <h5>CPAN</h5>
+              <code>https://img.shields.io/cpan/l/Config-Augeas.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="tex">
+            <div class="mr-3">
+              <img src="/ctan/l/novel.svg">
+            </div>
+            <div>
+              <h5>CTAN</h5>
+              <code>https://img.shields.io/ctan/l/novel.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/wheelmap/a/2323004600.svg">
+            </div>
+            <div>
+              <h5>Wheelmap</h5>
+              <code>https://img.shields.io/wheelmap/a/2323004600.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="GitHub issue" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/issues/badges/shields.svg">
+            </div>
+            <div>
+              <h5>GitHub issues</h5>
+              <code>https://img.shields.io/github/issues/badges/shields.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="GitHub issue" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/issues-raw/badges/shields.svg">
+            </div>
+            <div>
+              <h5></h5>
+              <code>https://img.shields.io/github/issues-raw/badges/shields.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="GitHub issue" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/issues-closed/badges/shields.svg">
+            </div>
+            <div>
+              <h5>GitHub closed issues</h5>
+              <code>https://img.shields.io/github/issues-closed/badges/shields.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="GitHub issue" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/issues-closed-raw/badges/shields.svg">
+            </div>
+            <div>
+              <h5></h5>
+              <code>https://img.shields.io/github/issues-closed-raw/badges/shields.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="GitHub issue label" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/issues-raw/badges/shields/website.svg">
+            </div>
+            <div>
+              <h5> label:</h5>
+              <code>https://img.shields.io/github/issues-raw/badges/shields/website.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="GitHub pullrequest pr" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/issues-pr/cdnjs/cdnjs.svg">
+            </div>
+            <div>
+              <h5>GitHub pull requests</h5>
+              <code>https://img.shields.io/github/issues-pr/cdnjs/cdnjs.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="GitHub pullrequest pr" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/issues-pr-raw/cdnjs/cdnjs.svg">
+            </div>
+            <div>
+              <h5></h5>
+              <code>https://img.shields.io/github/issues-pr-raw/cdnjs/cdnjs.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="GitHub pullrequest pr" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/issues-pr-closed/cdnjs/cdnjs.svg">
+            </div>
+            <div>
+              <h5>GitHub closed pull requests</h5>
+              <code>https://img.shields.io/github/issues-pr-closed/cdnjs/cdnjs.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="GitHub pullrequest pr" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/issues-pr-closed-raw/cdnjs/cdnjs.svg">
+            </div>
+            <div>
+              <h5></h5>
+              <code>https://img.shields.io/github/issues-pr-closed-raw/cdnjs/cdnjs.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="GitHub contributor" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/contributors/cdnjs/cdnjs.svg">
+            </div>
+            <div>
+              <h5>GitHub contributors</h5>
+              <code>https://img.shields.io/github/contributors/cdnjs/cdnjs.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="GitHub license" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/license/mashape/apistatus.svg">
+            </div>
+            <div>
+              <h5>license</h5>
+              <code>https://img.shields.io/github/license/mashape/apistatus.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="GitHub file size" data-doc="githubDoc">
+            <div class="mr-3">
+              <img src="/github/size/badges/shields/try.html.svg">
+            </div>
+            <div>
+              <h5>Github file size</h5>
+              <code>https://img.shields.io/github/size/badges/shields/try.html.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/bitbucket/issues/atlassian/python-bitbucket.svg">
+            </div>
+            <div>
+              <h5>Bitbucket issues</h5>
+              <code>https://img.shields.io/bitbucket/issues/atlassian/python-bitbucket.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="Bitbucket">
+            <div class="mr-3">
+              <img src="/bitbucket/issues-raw/atlassian/python-bitbucket.svg">
+            </div>
+            <div>
+              <h5></h5>
+              <code>https://img.shields.io/bitbucket/issues-raw/atlassian/python-bitbucket.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/bitbucket/pr/osrf/gazebo.svg">
+            </div>
+            <div>
+              <h5>Bitbucket open pull requests</h5>
+              <code>https://img.shields.io/bitbucket/pr/osrf/gazebo.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="Bitbucket">
+            <div class="mr-3">
+              <img src="/bitbucket/pr-raw/osrf/gazebo.svg">
+            </div>
+            <div>
+              <h5></h5>
+              <code>https://img.shields.io/bitbucket/pr-raw/osrf/gazebo.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/wordpress/plugin/r/akismet.svg">
+            </div>
+            <div>
+              <h5>WordPress rating</h5>
+              <code>https://img.shields.io/wordpress/plugin/r/akismet.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/codacy/grade/e27821fb6289410b8f58338c7e0bc686.svg">
+            </div>
+            <div>
+              <h5>Codacy grade</h5>
+              <code>https://img.shields.io/codacy/grade/e27821fb6289410b8f58338c7e0bc686.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/codacy/grade/e27821fb6289410b8f58338c7e0bc686/master.svg">
+            </div>
+            <div>
+              <h5>Codacy branch grade</h5>
+              <code>https://img.shields.io/codacy/grade/e27821fb6289410b8f58338c7e0bc686/master.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/codacy/coverage/c44df2d9c89a4809896914fd1a40bedd.svg">
+            </div>
+            <div>
+              <h5>Codacy coverage</h5>
+              <code>https://img.shields.io/codacy/coverage/c44df2d9c89a4809896914fd1a40bedd.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/codacy/coverage/c44df2d9c89a4809896914fd1a40bedd/master.svg">
+            </div>
+            <div>
+              <h5>Codacy branch coverage</h5>
+              <code>https://img.shields.io/codacy/coverage/c44df2d9c89a4809896914fd1a40bedd/master.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/cauditor/mi/matthiasmullie/scrapbook/master.svg">
+            </div>
+            <div>
+              <h5>Cauditor</h5>
+              <code>https://img.shields.io/cauditor/mi/matthiasmullie/scrapbook/master.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/libscore/s/jQuery.svg">
+            </div>
+            <div>
+              <h5>Libscore</h5>
+              <code>https://img.shields.io/libscore/s/jQuery.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/puppetforge/e/camptocamp/openssl.svg">
+            </div>
+            <div>
+              <h5>Puppet Forge</h5>
+              <code>https://img.shields.io/puppetforge/e/camptocamp/openssl.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/puppetforge/f/camptocamp/openssl.svg">
+            </div>
+            <div>
+              <h5>Puppet Forge</h5>
+              <code>https://img.shields.io/puppetforge/f/camptocamp/openssl.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/puppetforge/rc/camptocamp.svg">
+            </div>
+            <div>
+              <h5>Puppet Forge</h5>
+              <code>https://img.shields.io/puppetforge/rc/camptocamp.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/puppetforge/mc/camptocamp.svg">
+            </div>
+            <div>
+              <h5>Puppet Forge</h5>
+              <code>https://img.shields.io/puppetforge/mc/camptocamp.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="ruby">
+            <div class="mr-3">
+              <img src="/gem/u/raphink.svg">
+            </div>
+            <div>
+              <h5>Gems</h5>
+              <code>https://img.shields.io/gem/u/raphink.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="ruby">
+            <div class="mr-3">
+              <img src="/gem/rt/puppet.svg">
+            </div>
+            <div>
+              <h5>Gems</h5>
+              <code>https://img.shields.io/gem/rt/puppet.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="ruby">
+            <div class="mr-3">
+              <img src="/gem/rd/facter.svg">
+            </div>
+            <div>
+              <h5>Gems</h5>
+              <code>https://img.shields.io/gem/rd/facter.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="dub">
+            <div class="mr-3">
+              <img src="/dub/l/vibe-d.svg">
+            </div>
+            <div>
+              <h5>DUB</h5>
+              <code>https://img.shields.io/dub/l/vibe-d.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="docker stars">
+            <div class="mr-3">
+              <img src="/docker/stars/_/ubuntu.svg">
+            </div>
+            <div>
+              <h5>Docker Stars</h5>
+              <code>https://img.shields.io/docker/stars/_/ubuntu.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="docker pulls">
+            <div class="mr-3">
+              <img src="/docker/pulls/mashape/kong.svg">
+            </div>
+            <div>
+              <h5>Docker Pulls</h5>
+              <code>https://img.shields.io/docker/pulls/mashape/kong.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="docker automated build">
+            <div class="mr-3">
+              <img src="/docker/automated/jrottenberg/ffmpeg.svg">
+            </div>
+            <div>
+              <h5> Docker Automated build </h5>
+              <code>https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="docker build status">
+            <div class="mr-3">
+              <img src="/docker/build/jrottenberg/ffmpeg.svg">
+            </div>
+            <div>
+              <h5> Docker Build Status </h5>
+              <code>https://img.shields.io/docker/build/jrottenberg/ffmpeg.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="imagelayers">
+            <div class="mr-3">
+              <img src="/imagelayers/image-size/_/ubuntu/latest.svg">
+            </div>
+            <div>
+              <h5>ImageLayers Size</h5>
+              <code>https://img.shields.io/imagelayers/image-size/_/ubuntu/latest.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="imagelayers">
+            <div class="mr-3">
+              <img src="/imagelayers/layers/_/ubuntu/latest.svg">
+            </div>
+            <div>
+              <h5>ImageLayers Layers</h5>
+              <code>https://img.shields.io/imagelayers/layers/_/ubuntu/latest.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/gitter/room/nwjs/nw.js.svg">
+            </div>
+            <div>
+              <h5>Gitter</h5>
+              <code>https://img.shields.io/gitter/room/nwjs/nw.js.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/jira/issue/https/issues.apache.org/jira/KAFKA-2896.svg">
+            </div>
+            <div>
+              <h5>JIRA issue</h5>
+              <code>https://img.shields.io/jira/issue/https/issues.apache.org/jira/KAFKA-2896.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-doc="jira-sprint-completion">
+            <div class="mr-3">
+              <img src="/jira/sprint/https/jira.spring.io/94.svg">
+            </div>
+            <div>
+              <h5>JIRA sprint completion</h5>
+              <code>https://img.shields.io/jira/sprint/https/jira.spring.io/94.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/maintenance/yes/2017.svg">
+            </div>
+            <div>
+              <h5>Maintenance</h5>
+              <code>https://img.shields.io/maintenance/yes/2017.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="aur">
+            <div class="mr-3">
+              <img src="/aur/license/yaourt.svg">
+            </div>
+            <div>
+              <h5>AUR</h5>
+              <code>https://img.shields.io/aur/license/yaourt.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/waffle/label/evancohen/smart-mirror/in%20progress.svg">
+            </div>
+            <div>
+              <h5>Waffle.io</h5>
+              <code>https://img.shields.io/waffle/label/evancohen/smart-mirror/in%20progress.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="chrome">
+            <div class="mr-3">
+              <img src="/chrome-web-store/price/nimelepbpejjlbmoobocpfnjhihnpked.svg">
+            </div>
+            <div>
+              <h5>Chrome Web Store</h5>
+              <code>https://img.shields.io/chrome-web-store/price/nimelepbpejjlbmoobocpfnjhihnpked.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="chrome">
+            <div class="mr-3">
+              <img src="/chrome-web-store/rating/nimelepbpejjlbmoobocpfnjhihnpked.svg">
+            </div>
+            <div>
+              <h5>Chrome Web Store</h5>
+              <code>https://img.shields.io/chrome-web-store/rating/nimelepbpejjlbmoobocpfnjhihnpked.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="chrome">
+            <div class="mr-3">
+              <img src="/chrome-web-store/stars/nimelepbpejjlbmoobocpfnjhihnpked.svg">
+            </div>
+            <div>
+              <h5>Chrome Web Store</h5>
+              <code>https://img.shields.io/chrome-web-store/stars/nimelepbpejjlbmoobocpfnjhihnpked.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="chrome">
+            <div class="mr-3">
+              <img src="/chrome-web-store/rating-count/nimelepbpejjlbmoobocpfnjhihnpked.svg">
+            </div>
+            <div>
+              <h5>Chrome Web Store</h5>
+              <code>https://img.shields.io/chrome-web-store/rating-count/nimelepbpejjlbmoobocpfnjhihnpked.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="aur">
+            <div class="mr-3">
+              <img src="/aur/votes/yaourt.svg">
+            </div>
+            <div>
+              <h5>AUR</h5>
+              <code>https://img.shields.io/aur/votes/yaourt.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="amo firefox">
+            <div class="mr-3">
+              <img src="/amo/users/dustman.svg">
+            </div>
+            <div>
+              <h5>Mozilla Add-on</h5>
+              <code>https://img.shields.io/amo/users/dustman.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="amo firefox">
+            <div class="mr-3">
+              <img src="/amo/rating/dustman.svg">
+            </div>
+            <div>
+              <h5>Mozilla Add-on</h5>
+              <code>https://img.shields.io/amo/rating/dustman.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="amo firefox">
+            <div class="mr-3">
+              <img src="/amo/stars/dustman.svg">
+            </div>
+            <div>
+              <h5>Mozilla Add-on</h5>
+              <code>https://img.shields.io/amo/stars/dustman.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/swagger/valid/2.0/https/bitbucket.org/api/swagger.json.svg">
+            </div>
+            <div>
+              <h5>Swagger Validator</h5>
+              <code>https://img.shields.io/swagger/valid/2.0/https/bitbucket.org/api/swagger.json.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/uptimerobot/status/m778918918-3e92c097147760ee39d02d36.svg">
+            </div>
+            <div>
+              <h5>Uptime Robot status</h5>
+              <code>https://img.shields.io/uptimerobot/status/m778918918-3e92c097147760ee39d02d36.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/uptimerobot/ratio/m778918918-3e92c097147760ee39d02d36.svg">
+            </div>
+            <div>
+              <h5>Uptime Robot ratio</h5>
+              <code>https://img.shields.io/uptimerobot/ratio/m778918918-3e92c097147760ee39d02d36.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/uptimerobot/ratio/7/m778918918-3e92c097147760ee39d02d36.svg">
+            </div>
+            <div>
+              <h5>Uptime Robot ratio (7 days)</h5>
+              <code>https://img.shields.io/uptimerobot/ratio/7/m778918918-3e92c097147760ee39d02d36.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/discord/102860784329052160.svg">
+            </div>
+            <div>
+              <h5>Discord</h5>
+              <code>https://img.shields.io/discord/102860784329052160.svg</code>
+            </div>
+          </a>
+        </ul>
       </div>
+
+
+
       <div class="card my-4">
         <div class="card-body">
           <h3 class="card-title" id="miscellaneous">Longer Miscellaneous</h3>
         </div>
-        <div class="card-body">
-          <table class="badge-tb">
-            <tbody>
-              <tr>
-                <th> David: </th>
-                <td><img src="/david/expressjs/express.svg"></td>
-                <td><code>https://img.shields.io/david/expressjs/express.svg</code></td>
-              </tr>
-              <tr>
-                <th> David: </th>
-                <td><img src="/david/dev/expressjs/express.svg"></td>
-                <td><code>https://img.shields.io/david/dev/expressjs/express.svg</code></td>
-              </tr>
-              <tr>
-                <th> David: </th>
-                <td><img src="/david/optional/elnounch/byebye.svg"></td>
-                <td><code>https://img.shields.io/david/optional/elnounch/byebye.svg</code></td>
-              </tr>
-              <tr>
-                <th> David: </th>
-                <td><img src="/david/peer/webcomponents/generator-element.svg"></td>
-                <td><code>https://img.shields.io/david/peer/webcomponents/generator-element.svg</code></td>
-              </tr>
-              <tr>
-                <th> bitHound: </th>
-                <td><img src="/bithound/dependencies/github/rexxars/sse-channel.svg"></td>
-                <td><code>https://img.shields.io/bithound/dependencies/github/rexxars/sse-channel.svg</code></td>
-              </tr>
-              <tr>
-                <th> bitHound: </th>
-                <td><img src="/bithound/devDependencies/github/rexxars/sse-channel.svg"></td>
-                <td><code>https://img.shields.io/bithound/devDependencies/github/rexxars/sse-channel.svg</code></td>
-              </tr>
-              <tr>
-                <th> CocoaPods: </th>
-                <td><img src="/cocoapods/at/AFNetworking.svg"></td>
-                <td><code>https://img.shields.io/cocoapods/at/AFNetworking.svg</code></td>
-              </tr>
-              <tr>
-                <th> CocoaPods: </th>
-                <td><img src="/cocoapods/aw/AFNetworking.svg"></td>
-                <td><code>https://img.shields.io/cocoapods/aw/AFNetworking.svg</code></td>
-              </tr>
-              <tr>
-                <th> CocoaPods: </th>
-                <td><img src="/cocoapods/p/AFNetworking.svg"></td>
-                <td><code>https://img.shields.io/cocoapods/p/AFNetworking.svg</code></td>
-              </tr>
-              <tr>
-                <th> CocoaPods: </th>
-                <td><img src="/cocoapods/metrics/doc-percent/AFNetworking.svg"></td>
-                <td><code>https://img.shields.io/cocoapods/metrics/doc-percent/AFNetworking.svg</code></td>
-              </tr>
-              <tr>
-                <th data-keywords="conda"> Conda: </th>
-                <td><img src="/conda/pn/conda-forge/python.svg"></td>
-                <td><code>https://img.shields.io/conda/pn/conda-forge/python.svg</code></td>
-              </tr>
-              <tr>
-                <th> Ansible Role: </th>
-                <td><img src="/ansible/role/3078.svg"></td>
-                <td><code>https://img.shields.io/ansible/role/3078.svg</code></td>
-              </tr>
-              <tr>
-                <th> StackExchange: </th>
-                <td><img src="/stackexchange/tex/r/951.svg"></td>
-                <td><code>https://img.shields.io/stackexchange/tex/r/951.svg</code></td>
-              </tr>
-              <tr>
-                <th> StackExchange: </th>
-                <td><img src="/stackexchange/stackoverflow/t/augeas.svg"></td>
-                <td><code>https://img.shields.io/stackexchange/stackoverflow/t/augeas.svg</code></td>
-              </tr>
-              <tr>
-                <th> Issue Stats: </th>
-                <td><img src="/issuestats/i/github/expressjs/express.svg"></td>
-                <td><code>https://img.shields.io/issuestats/i/github/expressjs/express.svg</code></td>
-              </tr>
-              <tr>
-                <th> (long form): </th>
-                <td>&nbsp;</td>
-                <td><code>https://img.shields.io/issuestats/i/long/github/expressjs/express.svg</code></td>
-              </tr>
-              <tr>
-                <th> Issue Stats: </th>
-                <td><img src="/issuestats/p/github/expressjs/express.svg"></td>
-                <td><code>https://img.shields.io/issuestats/p/github/expressjs/express.svg</code></td>
-              </tr>
-              <tr>
-                <th> (long form): </th>
-                <td>&nbsp;</td>
-                <td><code>https://img.shields.io/issuestats/p/long/github/expressjs/express.svg</code></td>
-              </tr>
-              <tr>
-                <th> Libraries.io for releases: </th>
-                <td><img src="/librariesio/release/hex/phoenix/1.0.3.svg"></td>
-                <td><code>https://img.shields.io/librariesio/release/hex/phoenix/1.0.3.svg</code></td>
-              </tr>
-              <tr>
-                <th> Libraries.io for GitHub: </th>
-                <td><img src="/librariesio/github/phoenixframework/phoenix.svg"></td>
-                <td><code>https://img.shields.io/librariesio/github/phoenixframework/phoenix.svg</code></td>
-              </tr>
-              <tr>
-                <th> NetflixOSS Lifecycle: </th>
-                <td><img src="/osslifecycle/Netflix/osstracker.svg"></td>
-                <td><code>https://img.shields.io/osslifecycle/Netflix/osstracker.svg</code></td>
-              </tr>
-              <tr>
-                <th> Sourcegraph for Repo Reference Count: </th>
-                <td><img src="https://img.shields.io/sourcegraph/rrc//github.com/gorilla/mux.svg"></td>
-                <td><code>https://img.shields.io/sourcegraph/rrc/github.com/gorilla/mux.svg</code></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <ul class="list-group list-group-flush">
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/david/expressjs/express.svg">
+            </div>
+            <div>
+              <h5>David</h5>
+              <code>https://img.shields.io/david/expressjs/express.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/david/dev/expressjs/express.svg">
+            </div>
+            <div>
+              <h5>David</h5>
+              <code>https://img.shields.io/david/dev/expressjs/express.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/david/optional/elnounch/byebye.svg">
+            </div>
+            <div>
+              <h5>David</h5>
+              <code>https://img.shields.io/david/optional/elnounch/byebye.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/david/peer/webcomponents/generator-element.svg">
+            </div>
+            <div>
+              <h5>David</h5>
+              <code>https://img.shields.io/david/peer/webcomponents/generator-element.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/bithound/dependencies/github/rexxars/sse-channel.svg">
+            </div>
+            <div>
+              <h5>bitHound</h5>
+              <code>https://img.shields.io/bithound/dependencies/github/rexxars/sse-channel.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/bithound/devDependencies/github/rexxars/sse-channel.svg">
+            </div>
+            <div>
+              <h5>bitHound</h5>
+              <code>https://img.shields.io/bithound/devDependencies/github/rexxars/sse-channel.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/cocoapods/at/AFNetworking.svg">
+            </div>
+            <div>
+              <h5>CocoaPods</h5>
+              <code>https://img.shields.io/cocoapods/at/AFNetworking.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/cocoapods/aw/AFNetworking.svg">
+            </div>
+            <div>
+              <h5>CocoaPods</h5>
+              <code>https://img.shields.io/cocoapods/aw/AFNetworking.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/cocoapods/p/AFNetworking.svg">
+            </div>
+            <div>
+              <h5>CocoaPods</h5>
+              <code>https://img.shields.io/cocoapods/p/AFNetworking.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/cocoapods/metrics/doc-percent/AFNetworking.svg">
+            </div>
+            <div>
+              <h5>CocoaPods</h5>
+              <code>https://img.shields.io/cocoapods/metrics/doc-percent/AFNetworking.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start" data-keywords="conda">
+            <div class="mr-3">
+              <img src="/conda/pn/conda-forge/python.svg">
+            </div>
+            <div>
+              <h5>Conda</h5>
+              <code>https://img.shields.io/conda/pn/conda-forge/python.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/ansible/role/3078.svg">
+            </div>
+            <div>
+              <h5>Ansible Role</h5>
+              <code>https://img.shields.io/ansible/role/3078.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/stackexchange/tex/r/951.svg">
+            </div>
+            <div>
+              <h5>StackExchange</h5>
+              <code>https://img.shields.io/stackexchange/tex/r/951.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/stackexchange/stackoverflow/t/augeas.svg">
+            </div>
+            <div>
+              <h5>StackExchange</h5>
+              <code>https://img.shields.io/stackexchange/stackoverflow/t/augeas.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/issuestats/i/github/expressjs/express.svg">
+            </div>
+            <div>
+              <h5>Issue Stats</h5>
+              <code>https://img.shields.io/issuestats/i/github/expressjs/express.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              &nbsp;
+            </div>
+            <div>
+              <h5>(long form)</h5>
+              <code>https://img.shields.io/issuestats/i/long/github/expressjs/express.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/issuestats/p/github/expressjs/express.svg">
+            </div>
+            <div>
+              <h5>Issue Stats</h5>
+              <code>https://img.shields.io/issuestats/p/github/expressjs/express.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              &nbsp;
+            </div>
+            <div>
+              <h5>(long form)</h5>
+              <code>https://img.shields.io/issuestats/p/long/github/expressjs/express.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/librariesio/release/hex/phoenix/1.0.3.svg">
+            </div>
+            <div>
+              <h5>Libraries.io for releases</h5>
+              <code>https://img.shields.io/librariesio/release/hex/phoenix/1.0.3.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/librariesio/github/phoenixframework/phoenix.svg">
+            </div>
+            <div>
+              <h5>Libraries.io for GitHub</h5>
+              <code>https://img.shields.io/librariesio/github/phoenixframework/phoenix.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="/osslifecycle/Netflix/osstracker.svg">
+            </div>
+            <div>
+              <h5>NetflixOSS Lifecycle</h5>
+              <code>https://img.shields.io/osslifecycle/Netflix/osstracker.svg</code>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-start">
+            <div class="mr-3">
+              <img src="https://img.shields.io/sourcegraph/rrc//github.com/gorilla/mux.svg">
+            </div>
+            <div>
+              <h5>Sourcegraph for Repo Reference Count</h5>
+              <code>https://img.shields.io/sourcegraph/rrc/github.com/gorilla/mux.svg</code>
+            </div>
+          </a>
+        </ul>
       </div>
     </div>
+
+
     <div class="container">
       <div class="card">
         <div class="card-body">
           <h2 class="card-title" id="your-badge">Create your own badge</h2>
 
           <form class="form-inline" action="javascript:makeImage()" id="imageMaker">
-            <input class="form-control short" name="subject" placeholder="subject" />
-            <input class="form-control short" name="status" placeholder="status" />
-            <select class="form-control short" id="default-colors" name="color">
-          <option value="brightgreen">
-          <option value="green">
-          <option value="yellowgreen">
-          <option value="yellow">
-          <option value="orange">
-          <option value="red">
-          <option value="lightgrey">
-          <option value="blue">
-        </select>
+            <input class="form-control" name="subject" placeholder="subject" />
+            <input class="form-control" name="status" placeholder="status" />
+            <select class="form-control" id="default-colors" name="color">
+              <option>brightgreen</option>
+              <option>green</option>
+              <option>yellowgreen</option>
+              <option>yellow</option>
+              <option>orange</option>
+              <option>red</option>
+              <option>lightgrey</option>
+              <option>blue</option>
+            </select>
             <button class="btn btn-success" type="submit">Make Badge</button>
           </form>
           <p>
@@ -1506,33 +2458,24 @@
           <table class=centered>
             <tbody>
               <tr>
-                <td> Dashes <kbd>--</kbd>
-                </td>
-                <td> →
-                </td>
-                <td> <kbd>-</kbd> Dash
-                </td>
+                <td>Dashes <kbd>--</kbd></td>
+                <td>→</td>
+                <td><kbd>-</kbd> Dash</td>
               </tr>
               <tr>
-                <td> Underscores <kbd>__</kbd>
-                </td>
-                <td> →
-                </td>
-                <td> <kbd>_</kbd> Underscore <br/>
-                </td>
+                <td>Underscores <kbd>__</kbd></td>
+                <td>→</td>
+                <td><kbd>_</kbd> Underscore</td>
               </tr>
               <tr>
-                <td> <kbd>_</kbd> or Space <kbd>&nbsp;</kbd>
-                </td>
-                <td> →
-                </td>
-                <td> <kbd>&nbsp;</kbd> Space
-                </td>
+                <td><kbd>_</kbd> or Space <kbd>&nbsp;</kbd></td>
+                <td>→</td>
+                <td><kbd>&nbsp;</kbd> Space</td>
               </tr>
             </tbody>
           </table>
 
-          <p class="badge-img">
+          <p class="badge-img text-center">
             <img src="/badge/color-brightgreen-brightgreen.svg" alt="brightgreen" />
             <img src="/badge/color-green-green.svg" alt="green" />
             <img src="/badge/color-yellowgreen-yellowgreen.svg" alt="yellowgreen" />
@@ -1544,11 +2487,11 @@
             <img src="/badge/color-ff69b4-ff69b4.svg" alt="ff69b4" />
           </p>
 
-          <h2 id="styles"> Styles </h2>
+          <h2 id="styles">Styles</h2>
           <p>
             The following styles are available (flat is the default as of Feb 1st 2015):
           </p>
-          <table class="badge-img">
+          <table class="badge-img centered">
             <tbody>
               <tr>
                 <td><img src="/badge/style-plastic-green.svg?style=plastic"></td>
@@ -1572,7 +2515,7 @@
           <p>
             Here are a few other parameters you can use:
           </p>
-          <table>
+          <table class="centered">
             <tbody>
               <tr>
                 <td><code>?label=healthinesses</code></td>
@@ -1610,49 +2553,63 @@
         </div>
       </div>
     </div>
-
-    <h2 id="like-this"> Like This? </h2>
-
-    <p>
-      Tell your favorite badge service to use it! <br/> And tell us, we might be able to bring it to you anyway!
-    </p>
-    <p>
-      <a href="https://twitter.com/espadrine"><img src="/twitter/follow/espadrine.svg?style=social&label=Follow" alt="Follow @espadrine"></a>
-      <a href="https://www.gratipay.com/Shields/"><img src="/gratipay/Shields.svg?style=social&label=Donate" alt="Donate to us!"/></a>
-      <iframe src="https://ghbtns.com/github-btn.html?user=badges&amp;repo=shields&amp;type=fork&amp;count=true" style="border:0; background-color:transparent" width="95" height="20"></iframe>
-    </p>
-    <p>
-      <a href="https://github.com/h5bp/lazyweb-requests/issues/150">This</a> is where the current server got started.
-    </p>
-
-    <p><small>:wq</small></p>
   </main>
+  <footer class="mt-5 py-5">
+    <div class="container">
+      <h2 id="like-this">Like This?</h2>
 
-  <dialog id="copyDialog">
-    <form id="copyForm" action="javascript:void 0">
-      <p><img id="copyImg">
+      <p>
+        Tell your favorite badge service to use it! <br/> And tell us, we might be able to bring it to you anyway!
       </p>
-      <p><label> Link <input type="url" name="url"/></label>
+      <p>
+        <a href="https://twitter.com/espadrine"><img src="/twitter/follow/espadrine.svg?style=social&label=Follow" alt="Follow @espadrine"></a>
+        <a href="https://www.gratipay.com/Shields/"><img src="/gratipay/Shields.svg?style=social&label=Donate" alt="Donate to us!"/></a>
+        <iframe src="https://ghbtns.com/github-btn.html?user=badges&amp;repo=shields&amp;type=fork&amp;count=true" style="border:0; background-color:transparent" width="95" height="20"></iframe>
       </p>
-      <p><label> Image <input type="url" name="img"/></label>
+      <p>
+        <a href="https://github.com/h5bp/lazyweb-requests/issues/150">This</a> is where the current server got started.
       </p>
-      <p><label> Style
-    <select name="style">
-      <option value="plastic">          plastic
-      <option value="flat" selected>    flat
-      <option value="flat-square">      flat-square
-    </select>
-  </label>
-      </p>
-      <p> Markdown
-        <input class=code id=copyMarkdown>
-      </p>
-      <p> reStructuredText
-        <input class=code id=copyreStructuredText>
-      </p>
-      <div id=copyDoc></div>
-    </form>
-  </dialog>
+
+      <p><small>:wq</small></p>
+    </div>
+  </footer>
+
+  <div class="modal" id="copyDialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="copyModalTitle"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+          <form id="copyForm" action="javascript:void 0">
+            <p><img id="copyImg"></p>
+            <p>Link <input class="form-control" type="url" name="url"/></label></p>
+            <p>Image <input class="form-control" type="url" name="img"/></label></p>
+            <p>
+              Style
+              <select class="form-control" name="style">
+                <option>plastic</option>
+                <option selected>flat</option>
+                <option>flat-square</option>
+              </select>
+            </p>
+            <p>
+              Markdown
+              <input class="form-control" id="copyMarkdown">
+            </p>
+            <p>
+              reStructuredText
+              <input class="form-control" id="copyreStructuredText">
+            </p>
+            <div id="copyDoc"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div id=documentation style="display:none">
     <div id=visualStudioTeamServices>
@@ -1747,6 +2704,9 @@
   </filter>
 </svg>
 
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
   <script>
     // Search
     //
@@ -1761,10 +2721,10 @@
         index: [],
         tr: []
       };
-      var trs = document.querySelectorAll('table.badge-tb tr');
+      var trs = document.querySelectorAll('.badge-container a.list-group-item');
       for (var i = 0; i < trs.length; i++) {
         var tr = trs[i];
-        var th = tr.firstElementChild;
+        var th = tr.lastElementChild.firstElementChild;
         var keywords = th.dataset.keywords ? th.dataset.keywords : '';
         searchBadgeDb.index.push(th.textContent + ' ' + keywords);
         searchBadgeDb.tr.push(tr);
@@ -1779,7 +2739,7 @@
         if (regex.test(searchBadgeDb.index[i])) {
           searchBadgeDb.tr[i].removeAttribute('style');
         } else {
-          searchBadgeDb.tr[i].style.display = 'none';
+          searchBadgeDb.tr[i].style.setProperty("display", "none", "important");
         }
       }
       // If it has the format of a url, show the suggest button.
@@ -1876,10 +2836,10 @@
     //
 
     function markupDialogInit() {
-      var trs = document.querySelectorAll('table.badge-tb tr');
+      var trs = document.querySelectorAll('.badge-container a.list-group-item');
       for (var i = 0; i < trs.length; i++) {
         var tr = trs[i];
-        var title = tr.querySelector('th');
+        var title = tr.querySelector('h5');
         var target = tr.querySelector('img');
         var code = tr.querySelector('code');
         // Markup dialog listener.
@@ -1910,14 +2870,15 @@
     function markupDialog(tr) {
       // Set up the data we have.
       // Trim the ending colon `:`.
-      var trname = tr.firstElementChild.textContent.trim().slice(0, -1);
+      var trname = tr.querySelector('h5').textContent;
       var trimg = tr.querySelector('img').src;
-      var th = tr.firstElementChild;
+      var th = tr;
       var link = th.dataset.link ? th.dataset.link : '';
       // Remove the ?maxAge parameter from the query string.
       trimg = trimg.replace(/[\?&]maxAge=\d+$|maxAge=\d+&/, '');
       copyForm.img.value = trimg;
       copyForm.url.value = link;
+      $('#copyModalTitle').html(trname);
       // Insert documentation.
       var doc = th.dataset.doc ? th.dataset.doc : '';
       var docelt = document.getElementById(doc);
@@ -1957,7 +2918,8 @@
     var isFirefox = /Firefox\/[\.0-9]+$/.test(navigator.userAgent);
 
     function markupDialogShow() {
-      document.body.addEventListener('click', markupDialogHide);
+      $('#copyDialog').modal('show');
+      /*document.body.addEventListener('click', markupDialogHide);
       // We must draw it once displayed before changing the opacity to transition.
       setTimeout(function() {
         copyDialog.style.opacity = '1';
@@ -1970,16 +2932,17 @@
           main.classList.add('blur');
         }, 500);
       }
-      copyDialog.style.display = 'block';
+      copyDialog.style.display = 'block';*/
     }
 
     function markupDialogHide() {
-      document.body.removeEventListener('click', markupDialogHide);
+      $('#copyDialog').modal('hide');
+      /*document.body.removeEventListener('click', markupDialogHide);
       copyDialog.style.opacity = '0';
       main.classList.remove('blur');
       setTimeout(function() {
         copyDialog.style.display = 'none';
-      }, 500);
+      }, 500);*/
     }
     copyForm.addEventListener('click', function(event) {
       event.stopPropagation();
