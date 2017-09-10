@@ -5599,14 +5599,15 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // codesponsor.io integration
-camp.route(/^\/codesponsor\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/codesponsor\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var username = match[1];  // eg, hopsoft
-  var name = match[2];      // eg, bg
-  var format = match[3];
+  var token = match[1];     // eg, QMSjMHrtPhvfmCnk5Hbikhhr
+  var username = match[2];  // eg, hopsoft
+  var name = match[3];      // eg, bg
+  var format = match[4];
 
-  var apiUrl = 'https://app.codesponsor.io/shield/' + username + '/' + name;
-  var badgeData = getBadgeData('sponsor', data);
+  var apiUrl = 'https://cavneb.ngrok.io/shield/' + token + '/' + username + '/' + name;
+  var badgeData = getBadgeData('', data);
 
   request(apiUrl, function (err, res, buffer) {
     if (err) {
@@ -5617,7 +5618,9 @@ cache(function(data, match, sendBadge, request) {
 
     try {
       var data = JSON.parse(buffer.toString());
-      badgeData.text[1] = (data.bitcoin || 0)  + ' BTC';
+      var dollars = data.distribution_cents / 100;
+      badgeData.logo = logos['codesponsor'];
+      badgeData.text[1] = ' ' + dollars.toLocaleString("en-US", { style: "currency", currency: "USD" }) + ' ';
       badgeData.colorscheme = 'brightgreen';
       sendBadge(format, badgeData);
     } catch (e) {
