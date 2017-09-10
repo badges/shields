@@ -4865,22 +4865,22 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-//vscode downloads
-camp.route(/^\/vscode\/downloads\/(.*)\.(svg|png|gif|jpg|json)$/,
+//vscode installs
+camp.route(/^\/vscode\/installs\/(.*)\.(svg|png|gif|jpg|json)$/,
   cache(function (data, match, sendBadge, request) {
     var repo = match[1];  // eg, `ritwickdey.LiveServer`.
     var format = match[2];
-    console.log(repo);
+   // console.log(repo);
     var apiUrl = 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery/';
-    var badgeData = getBadgeData('downloads', data);
+    var badgeData = getBadgeData('Installs', data);
 
     var options = {
       method: 'POST',
       url: 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery/',
       headers:
       {
-        accept: 'application/json;api-version=3.0-preview.1',
-        'content-type': 'application/json'
+        'accept':'application/json;api-version=3.0-preview.1',
+        'content-type':'application/json'
       },
       body:
       {
@@ -4919,9 +4919,8 @@ camp.route(/^\/vscode\/rating\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
   var repo = match[1];  // eg, `ritwickdey.LiveServer`.
   var format = match[2];
-  console.log(repo);
   var apiUrl = 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery/';
-  var badgeData = getBadgeData('downloads', data);
+  var badgeData = getBadgeData('rating', data);
 
   var options = {
     method: 'POST',
@@ -4951,13 +4950,16 @@ cache(function (data, match, sendBadge, request) {
     }
   //  console.log(JSON.stringify(buffer, null, 4));
     try {
-      var dls = buffer.results[0].extensions[0].statistics[1].value.toFixed(2);
+      var extension = buffer.results[0].extensions[0];
+      var rate = extension.statistics[1].value.toFixed(1);
+      var totalrate = extension.statistics[2].value;
+      var dls = rate + '/5(' + totalrate +')';
     } catch (e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
       return;
     }
-    badgeData.text[1] = metric(dls);
+    badgeData.text[1] = dls;
     badgeData.colorscheme = 'green';
     sendBadge(format, badgeData);
   });
