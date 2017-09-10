@@ -4964,6 +4964,53 @@ camp.route(/^\/vscode\/rating\/(.*)\.(svg|png|gif|jpg|json)$/,
     });
   }));
 
+//vscode version integration
+camp.route(/^\/vscode\/version\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function (data, match, sendBadge, request) {
+  var repo = match[1];  // eg, `ritwickdey.LiveServer`.
+  var format = match[2];
+  var apiUrl = 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery/';
+  var badgeData = getBadgeData('Visual Studio Marketplace', data);
+
+  var options = {
+    method: 'POST',
+    url: 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery/',
+    headers:
+    {
+      accept: 'application/json;api-version=3.0-preview.1',
+      'content-type': 'application/json'
+    },
+    body:
+    {
+      filters: [{
+        criteria: [
+          { filterType: 7, value: repo },
+          { filterType: 12, value: '4096' }]
+      }],
+      flags: 914
+    },
+    json: true
+  };
+
+  request(options, function (err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var dls = 'v'+ buffer.results[0].extensions[0].versions[0].version;
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+    badgeData.text[1] = dls;
+    badgeData.colorscheme = 'green';
+    sendBadge(format, badgeData);
+  });
+}));
+
 
 camp.route(/^\/dockbit\/([A-Za-z0-9-_]+)\/([A-Za-z0-9-_]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
