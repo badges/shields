@@ -5606,7 +5606,7 @@ cache(function(data, match, sendBadge, request) {
   var name = match[3];      // eg, bg
   var format = match[4];
 
-  var apiUrl = 'https://cavneb.ngrok.io/shield/' + token + '/' + username + '/' + name;
+  var apiUrl = 'https://app.codesponsor.io/shield/' + token + '/' + username + '/' + name;
   var badgeData = getBadgeData('', data);
 
   request(apiUrl, function (err, res, buffer) {
