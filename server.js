@@ -4865,12 +4865,11 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-//vscode installs
+//vscode installs integration
 camp.route(/^\/vscode\/installs\/(.*)\.(svg|png|gif|jpg|json)$/,
   cache(function (data, match, sendBadge, request) {
     var repo = match[1];  // eg, `ritwickdey.LiveServer`.
     var format = match[2];
-   // console.log(repo);
     var apiUrl = 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery/';
     var badgeData = getBadgeData('Installs', data);
 
@@ -4900,7 +4899,6 @@ camp.route(/^\/vscode\/installs\/(.*)\.(svg|png|gif|jpg|json)$/,
         sendBadge(format, badgeData);
         return;
       }
-      console.log(JSON.stringify(buffer, null, 4));
       try {
         var dls = buffer.results[0].extensions[0].statistics[0].value;
       } catch (e) {
@@ -4914,7 +4912,7 @@ camp.route(/^\/vscode\/installs\/(.*)\.(svg|png|gif|jpg|json)$/,
     });
   }));
 
-//vscode rating
+//vscode rating integration
 camp.route(/^\/vscode\/rating\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
   var repo = match[1];  // eg, `ritwickdey.LiveServer`.
@@ -4948,7 +4946,6 @@ cache(function (data, match, sendBadge, request) {
       sendBadge(format, badgeData);
       return;
     }
-  //  console.log(JSON.stringify(buffer, null, 4));
     try {
       var extension = buffer.results[0].extensions[0];
       var rate = extension.statistics[1].value.toFixed(1);
