@@ -4870,7 +4870,6 @@ camp.route(/^\/vscode\/installs\/(.*)\.(svg|png|gif|jpg|json)$/,
   cache(function (data, match, sendBadge, request) {
     var repo = match[1];  // eg, `ritwickdey.LiveServer`.
     var format = match[2];
-    var apiUrl = 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery/';
     var badgeData = getBadgeData('Installs', data);
 
     var options = {
@@ -4919,7 +4918,6 @@ camp.route(/^\/vscode\/rating\/(.*)\.(svg|png|gif|jpg|json)$/,
   cache(function (data, match, sendBadge, request) {
     var repo = match[1];  // eg, `ritwickdey.LiveServer`.
     var format = match[2];
-    var apiUrl = 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery/';
     var badgeData = getBadgeData('rating', data);
 
     var options = {
@@ -4969,7 +4967,6 @@ camp.route(/^\/vscode\/version\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
   var repo = match[1];  // eg, `ritwickdey.LiveServer`.
   var format = match[2];
-  var apiUrl = 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery/';
   var badgeData = getBadgeData('Visual Studio Marketplace', data);
 
   var options = {
