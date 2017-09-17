@@ -4454,51 +4454,74 @@ cache(function(data, match, sendBadge, request) {
 
 // Bower version integration.
 camp.route(/^\/bower\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `bootstrap`.
-  var format = match[2];
-  var badgeData = getBadgeData('bower', data);
-  var bower = require('bower');
-  bower.commands.info(repo, 'version')
-    .on('error', function() {
+cache((data, match, sendBadge, request) => {
+  const repo = match[1];  // eg, `bootstrap`.
+  const format = match[2];
+  const badgeData = getBadgeData('bower', data);
+
+  // API doc: https://libraries.io/api#project
+  const options = {
+    method: 'GET',
+    json: true,
+    uri: `https://libraries.io/api/bower/${repo}`,
+  };
+  if (serverSecrets && serverSecrets.libraries_io_api_key) {
+    options.qs = {
+      api_key: serverSecrets.libraries_io_api_key,
+    };
+  }
+  request(options, (err, res, data) => {
+    if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
-    })
-    .on('end', function(version) {
-      try {
-        var vdata = versionColor(version);
-        badgeData.text[1] = vdata.version;
-        badgeData.colorscheme = vdata.color;
-        sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'void';
-        sendBadge(format, badgeData);
-      }
-    });
+      return;
+    }
+    try {
+      const version = data.latest_stable_release.name;
+      const vdata = versionColor(version);
+      badgeData.text[1] = vdata.version;
+      badgeData.colorscheme = vdata.color;
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'void';
+      sendBadge(format, badgeData);
+    }
+  });
 }));
 
 // Bower license integration.
 camp.route(/^\/bower\/l\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `bootstrap`.
-  var format = match[2];
-  var badgeData = getBadgeData('bower', data);
-  var bower = require('bower');
-  bower.commands.info(repo, 'license')
-    .on('error', function() {
+cache((data, match, sendBadge, request) => {
+  const repo = match[1];  // eg, `bootstrap`.
+  const format = match[2];
+  const badgeData = getBadgeData('bower', data);
+  // API doc: https://libraries.io/api#project
+  const options = {
+    method: 'GET',
+    json: true,
+    uri: `https://libraries.io/api/bower/${repo}`,
+  };
+  if (serverSecrets && serverSecrets.libraries_io_api_key) {
+    options.qs = {
+      api_key: serverSecrets.libraries_io_api_key,
+    };
+  }
+  request(options, (err, res, data) => {
+    if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
-    })
-    .on('end', function(license) {
-      try {
-        badgeData.text[1] = license;
-        badgeData.colorscheme = 'blue';
-        sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'void';
-        sendBadge(format, badgeData);
-      }
-    });
+      return;
+    }
+    try {
+      const license = data.normalized_licenses[0];
+      badgeData.text[1] = license;
+      badgeData.colorscheme = 'blue';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'void';
+      sendBadge(format, badgeData);
+    }
+  });
 }));
 
 // Wheelmap integration.
