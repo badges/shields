@@ -784,6 +784,40 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// AppVeyor test status integration.
+camp.route(/^\/appveyor\/tests\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var repo = match[1];  // eg, `gruntjs/grunt`.
+  var branch = match[2];
+  var format = match[3];
+  var apiUrl = 'https://ci.appveyor.com/api/projects/' + repo;
+  if (branch != null) {
+    apiUrl += '/branch/' + branch;
+  }
+  var badgeData = getBadgeData('tests', data);
+  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var testsPassed = data.build.jobs.every(function(job) { return job.passedTestsCount === job.testsCount });
+      if (testsPassed) {
+        badgeData.text[1] = 'passing';
+        badgeData.colorscheme = 'brightgreen';
+      } else {
+        badgeData.text[1] = 'failing';
+        badgeData.colorscheme = 'red';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 function teamcity_badge(url, buildId, advanced, format, data, sendBadge) {
   var apiUrl = url + '/app/rest/builds/buildType:(id:' + buildId + ')?guest=1';
   var badgeData = getBadgeData('build', data);
