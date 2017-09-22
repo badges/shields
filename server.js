@@ -393,6 +393,66 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// continuousphp integration
+camp.route(/^\/continuousphp\/([^\/]+)\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var provider = match[1];
+  var userRepo = match[2];
+  var branch   = match[3];
+  var format   = match[4];
+
+  var options = {
+    method: 'GET',
+    uri: 'https://status.continuousphp.com/' + provider + '/' + userRepo + '/status-info',
+    headers: {
+      'Accept': 'application/json'
+    }
+  };
+
+  if (branch != null) {
+    options.uri += '?branch=' + branch;
+  }
+
+  var badgeData = getBadgeData('build', data);
+  request(options, function(err, res) {
+    if (err != null) {
+      console.error('continuousphp error: ' + err.stack);
+      if (res) {
+        console.error('' + res);
+      }
+
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    try {
+      var status = JSON.parse(res['body']).status;
+
+      badgeData.text[1] = status;
+
+      if (status === 'passing') {
+        badgeData.colorscheme = 'brightgreen';
+      } else if (status === 'failing') {
+        badgeData.colorscheme = 'red';
+      } else if (status === 'unstable') {
+        badgeData.colorscheme = 'yellow';
+      } else if (status === 'running') {
+        badgeData.colorscheme = 'blue';
+      } else if (status === 'unknown') {
+        badgeData.colorscheme = 'lightgrey';
+      } else {
+        badgeData.text[1] = status;
+      }
+
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // NetflixOSS metadata integration
 camp.route(/^\/osslifecycle?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
   cache(function(data, match, sendBadge, request) {
