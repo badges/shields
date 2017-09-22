@@ -1699,12 +1699,21 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // npm node version integration.
-camp.route(/^\/node\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/node\/v\/(@[^\/]*)?\/?([^\/]*)\/?([^\/]*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var repo = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
-  var format = match[2];
-  var apiUrl = 'https://registry.npmjs.org/' + repo + '/latest';
-  var badgeData = getBadgeData('node', data);
+  var scope = match[1];  // "@stdlib"
+  var repo = match[2];   // "stdlib"
+  var tag = match[3];    // "next"
+  var format = match[4]; // "svg"
+  var pkg = encodeURIComponent(scope ? scope + '/' + repo : repo); // %40stdlib%2Fstdlib
+  var name = 'node';
+  if (tag) {
+    name += '@' + tag;   // "node@next"
+  } else {
+    tag = 'latest';
+  }
+  var apiUrl = 'https://registry.npmjs.org/' + pkg;
+  var badgeData = getBadgeData(name, data);
   // Using the Accept header because of this bug:
   // <https://github.com/npm/npmjs.org/issues/163>
   request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
@@ -1715,6 +1724,8 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
+      var version = data['dist-tags'][tag];
+      data = data.versions[version];
       if (data.engines && data.engines.node) {
         var versionRange = data.engines.node;
         badgeData.text[1] = versionRange;
