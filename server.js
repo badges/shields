@@ -22,7 +22,6 @@ var tryUrl = require('url').format({
   pathname: 'try.html',
 });
 var domain = require('domain');
-var fs = require('fs');
 var log = require('./lib/log.js');
 var LruCache = require('./lib/lru-cache.js');
 var badge = require('./lib/badge.js');
