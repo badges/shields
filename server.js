@@ -100,7 +100,7 @@ vendorDomain.on('error', function(err) {
 });
 
 
-function cache(wrappedFn) {
+function cache (vendorRequestHandler) {
   return function getRequest(data, match, end, ask) {
     if (data.maxAge !== undefined && /^[0-9]+$/.test(data.maxAge)) {
       ask.res.setHeader('Cache-Control', 'max-age=' + data.maxAge);
@@ -186,7 +186,7 @@ function cache(wrappedFn) {
     };
 
     vendorDomain.run(function() {
-      wrappedFn(data, match, function sendBadge(format, badgeData) {
+      vendorRequestHandler(data, match, function sendBadge(format, badgeData) {
         if (serverUnresponsive) { return; }
         clearTimeout(serverResponsive);
         // Check for a change in the data.
