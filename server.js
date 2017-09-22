@@ -6397,6 +6397,40 @@ cache((data, match, sendBadge, request) => {
   });
 }));
 
+// Sqreen integration
+camp.route(/^\/sqreen\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache((data, match, sendBadge, request) => {
+  const uri = match[1];
+  const format = match[2];
+  const apiUrl = `https://sqreen-badge.now.sh/api/v1/site/${uri}`;
+
+  request(apiUrl, (err, res, buffer) => {
+    const badgeData = getBadgeData('sqreen', data);
+    badgeData.logo = badgeData.logo || logos.sqreen;
+
+    if (res && res.statusCode === 404) {
+      badgeData.text[1] = 'invalid domain';
+      sendBadge(format, badgeData);
+      return;
+    }
+    if (err != null || !res || res.statusCode !== 200) {
+      badgeData.text[1] = 'error';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      const data = JSON.parse(buffer);
+      const sqreened = data.sqreened;
+      badgeData.text[1] = sqreened ? 'protected' : 'unprotected';
+      badgeData.colorscheme = sqreened ? 'blue' : 'red';
+      sendBadge(format, badgeData);
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
