@@ -3358,6 +3358,43 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Github pull request review state (pending, approved, need changes...) integration.
+camp.route(/^\/github\/pr-review\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function (data, match, sendBadge, request) {
+  var user = match[1];  // e.g. badges
+  var repo = match[2];  // e.g. shields
+  var issue = match[3];  // e.g. 123
+  var format = match[4];
+
+  var getPrReviewBadgeData = require('./lib/github-helpers.js').getPrReviewBadgeData;
+
+  getPrReviewBadgeData(user, repo, issue, request, function (badgePartialData) {
+    var badgeData = getBadgeData('pull request review', data);
+    badgeData.text[1] = badgePartialData.text;
+    badgeData.colorscheme = badgePartialData.colorscheme;
+    sendBadge(format, badgeData);
+  });
+}));
+
+// Github pull request state (open/close + mergeability) integration.
+camp.route(/^\/github\/pr-state\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function (data, match, sendBadge, request) {
+  var user = match[1];  // e.g. badges
+  var repo = match[2];  // e.g. shields
+  var issue = match[3];  // e.g. 123
+  var format = match[4];
+
+  var getPrStateBadgeData = require('./lib/github-helpers.js').getPrStateBadgeData;
+
+  getPrStateBadgeData(user, repo, issue, request, function (badgePartialData) {
+    var badgeData = getBadgeData('pull request state', data);
+    badgeData.text[1] = badgePartialData.text;
+    badgeData.colorscheme = badgePartialData.colorscheme;
+    badgeData.colorB = badgePartialData.colorB;
+    sendBadge(format, badgeData);
+  });
+}));
+
 // GitHub forks integration.
 camp.route(/^\/github\/forks\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
