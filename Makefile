@@ -46,9 +46,10 @@ deploy-s2:
 	git reset HEAD~1
 	git checkout master
 
-deploy-gh-pages:
-	(git checkout -B gh-pages && \
-	git merge master && \
+deploy-gh-pages: website
+	(git checkout -B gh-pages master && \
+	git add -f index.html && \
+	git commit -m '[DEPLOY] Build index.html' && \
 	git push -f origin gh-pages:gh-pages) || git checkout master
 	git checkout master
 

@@ -44,6 +44,11 @@ allow you to install that.
 
 On Ubuntu / Debian: `sudo apt-get install phantomjs`.
 
+You will also need version 6 of Node.js.
+The [Node.js documentation](https://nodejs.org/en/download/package-manager/) explains
+how to install it on various systems.
+On Ubuntu / Debian: `curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -; sudo apt-get install -y nodejs`.
+
 ```bash
 git clone https://github.com/badges/shields.git
 cd shields
@@ -61,8 +66,6 @@ node server 8080
 
 The root gets redirected to <http://shields.io>.
 For testing purposes, you can go to `http://localhost/try.html`.
-You should modify that file. The "real" root, `http://localhost/index.html`,
-gets generated from the `try.html` file.
 
 # Format
 
@@ -133,16 +136,17 @@ You can build and run the server locally using Docker. First build an image:
 ```console
 $ docker build -t shields .
 Sending build context to Docker daemon 3.923 MB
-Step 0 : FROM node:6.4.0-onbuild
 …
-Removing intermediate container c4678889953f
 Successfully built 4471b442c220
 ```
+
+Optionally, create a file called `shields.env` that contains the needed configuration. See
+`shields.example.env` for an example.
 
 Then run the container:
 
 ```console
-$ docker run --rm -p 8080:80 -v "$(pwd)/private/secret.json":/usr/src/app/secret.json --name shields shields
+$ docker run --rm -p 8080:80 --env-file shields.env --name shields shields
 
 > gh-badges@1.1.2 start /usr/src/app
 > node server.js
@@ -151,6 +155,14 @@ http://[::1]:80/try.html
 ```
 
 Assuming Docker is running locally, you should be able to get to the application at http://localhost:8080/try.html. If you run Docker in a virtual machine (such as boot2docker or Docker Machine) then you will need to replace `localhost` with the actual IP address of that virtual machine.
+
+# Build the index
+
+Build the "real" index page:
+
+```bash
+make website
+```
 
 # Secret.json
 
@@ -161,6 +173,8 @@ bintray_apikey
 bintray_user
 gh_client_id
 gh_client_secret
+gh_token
+gitter_dev_secret
 shieldsIps
 shieldsSecret
 sl_insight_apiToken
@@ -168,6 +182,9 @@ sl_insight_userUuid
 ```
 
 (Gathered from `cat private/secret.json | jq keys | grep -o '".*"' | sed 's/"//g'`.)
+
+The `secret.tpl.json` is a template file used by the Docker container to set the secrets based on
+environment variables.
 
 # Main Server Sysadmin
 
@@ -191,4 +208,4 @@ This is also available as a gem `badgerbadgerbadger`, [code here][gem].
 
 # License
 
-All work here is licensed CC0.
+All work here is licensed [CC0](LICENSE.md).

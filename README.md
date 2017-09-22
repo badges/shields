@@ -15,6 +15,10 @@
         <img src="https://img.shields.io/travis/badges/shields.svg"
              alt="build status">
     </a>
+    <a href="https://discord.gg/HjJCwm5">
+        <img src="https://img.shields.io/discord/308323056592486420.svg"
+             alt="chat on Discord">
+    </a>
 </p>
 <p align="center"><sup><strong>An image server for legible and concise information. Our <a href="http://shields.io/">Homepage</a> | <a href="https://twitter.com/shields_io">Twitter</a></strong></sup></p>
 
@@ -84,7 +88,7 @@ What kind of metadata can you convey using badges?
 * [reposs](https://github.com/rexfinn/reposs)
 * [ruby-gem-downloads-badge](https://github.com/bogdanRada/ruby-gem-downloads-badge/)
 * [Scrutinizer](https://scrutinizer-ci.com/)
-* [Semaphore](https://semaphoreapp.com)
+* [Semaphore](https://semaphoreci.com)
 * [Travis CI](https://github.com/travis-ci/travis-ci/issues/630#issuecomment-38054967)
 * [Version Badge](http://badge.fury.io/)
 * [VersionEye](https://www.versioneye.com/)
