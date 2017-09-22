@@ -22,7 +22,7 @@ hr { width: 40%; border-width: 1px 0 0 0; }
 a.photo { text-decoration: none; }
 a.photo>img { padding: 2px; border: 1px solid grey; }
 ul { text-align: left; margin-left: 25%; }
-table { width: 50%; margin: auto; }
+table { min-width: 50%; margin: auto; }
 table.centered > tbody > tr > td:first-child { text-align: right; }
 th, td { text-align: left; }
 h1, h2, h3 { font-style: italic; }
@@ -47,6 +47,10 @@ hr.spacing { border: 0; display: block; height: 3mm; }
 table.badge > tbody > tr > th,
 table.badge > tbody > tr > td > img,
 table.badge > tbody > tr > td > code { cursor: pointer; }
+table.badge > tbody > tr > td > img, .badge-img img, #copyImg {
+  height: 20px;
+  vertical-align: middle;
+}
 </style>
 
 <main id='main'>
@@ -145,16 +149,16 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
       <td><code>https://img.shields.io/snap-ci/ThoughtWorksStudios/eb_deployer/master.svg</code></td>
   </tr>
   <tr><th> Jenkins: </th>
-    <td><img src='/jenkins/s/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg' alt=''/></td>
-    <td><code>https://img.shields.io/jenkins/s/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg</code></td>
+    <td><img src='/jenkins/s/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.svg' alt=''/></td>
+    <td><code>https://img.shields.io/jenkins/s/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.svg</code></td>
   </tr>
   <tr><th> Jenkins tests: </th>
-    <td><img src='/jenkins/t/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg' alt=''/></td>
-    <td><code>https://img.shields.io/jenkins/t/https/jenkins.qa.ubuntu.com/precise-desktop-amd64_default.svg</code></td>
+    <td><img src='/jenkins/t/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.svg' alt=''/></td>
+    <td><code>https://img.shields.io/jenkins/t/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.svg</code></td>
   </tr>
   <tr><th> Jenkins coverage: </th>
-    <td><img src='/jenkins/c/https/jenkins.qa.ubuntu.com/address-book-service-utopic-i386-ci.svg' alt=''/></td>
-    <td><code>https://img.shields.io/jenkins/c/https/jenkins.qa.ubuntu.com/address-book-service-utopic-i386-ci.svg</code></td>
+    <td><img src='/jenkins/c/https/jenkins.qa.ubuntu.com/view/Utopic/view/All/job/address-book-service-utopic-i386-ci.svg' alt=''/></td>
+    <td><code>https://img.shields.io/jenkins/c/https/jenkins.qa.ubuntu.com/view/Utopic/view/All/job/address-book-service-utopic-i386-ci.svg</code></td>
   </tr>
   <tr><th> Coveralls: </th>
     <td><img src='/coveralls/jekyll/jekyll.svg' alt=''/></td>
@@ -228,6 +232,14 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><img src='/sensiolabs/i/45afb680-d4e6-4e66-93ea-bcfa79eb8a87.svg' alt=''/></td>
     <td><code>https://img.shields.io/sensiolabs/i/45afb680-d4e6-4e66-93ea-bcfa79eb8a87.svg</code></td>
   </tr>
+  <tr><th> Dockbit: </th>
+      <td><img src='/dockbit/DockbitStatus/health.svg?token=TvavttxFHJ4qhnKstDxrvBXM' alt=''/></td>
+      <td><code>https://img.shields.io/dockbit/ORGANIZATION_NAME/PIPELINE_NAME.svg?token=PIPELINE_TOKEN</code></td>
+  </tr>
+  <tr><th> continuousphp: </th>
+    <td><img src='/continuousphp/git-hub/doctrine/dbal/master.svg' alt=''/></td>
+    <td><code>https://img.shields.io/continuousphp/doctrine/dbal/master.svg</code></td>
+  </tr>
 </tbody></table>
 <h3 id="downloads"> Downloads </h3>
 <table class='badge'><tbody>
@@ -248,8 +260,16 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <td><code>https://img.shields.io/github/downloads/atom/atom/latest/atom-amd64.deb.svg</code></td>
   </tr>
   <tr><th data-keywords='node'> npm: </th>
+  <td><img src='/npm/dw/localeval.svg' alt=''/></td>
+  <td><code>https://img.shields.io/npm/dw/localeval.svg</code></td>
+  </tr>
+  <tr><th data-keywords='node'> npm: </th>
   <td><img src='/npm/dm/localeval.svg' alt=''/></td>
   <td><code>https://img.shields.io/npm/dm/localeval.svg</code></td>
+  </tr>
+  <tr><th data-keywords='node'> npm: </th>
+  <td><img src='/npm/dy/localeval.svg' alt=''/></td>
+  <td><code>https://img.shields.io/npm/dy/localeval.svg</code></td>
   </tr>
   <tr><th data-keywords='node'> npm: </th>
   <td><img src='/npm/dt/express.svg' alt=''/></td>
@@ -275,6 +295,22 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <td><img src='/chocolatey/dt/scriptcs.svg' alt=''/></td>
   <td><code>https://img.shields.io/chocolatey/dt/scriptcs.svg</code></td>
   </tr>
+  <tr><th> NuGet: </th>
+  <td><img src='/nuget/dt/Microsoft.AspNetCore.Mvc.svg' alt=''/></td>
+  <td><code>https://img.shields.io/nuget/dt/Microsoft.AspNetCore.Mvc.svg</code></td>
+  </tr>
+  <tr><th> MyGet: </th>
+  <td><img src='/myget/mongodb/dt/MongoDB.Driver.Core.svg' alt=''/></td>
+  <td><code>https://img.shields.io/myget/mongodb/dt/MongoDB.Driver.Core.svg</code></td>
+  </tr>
+  <tr><th> MyGet tenant: </th>
+  <td><img src='/dotnet.myget/dotnet-coreclr/dt/Microsoft.DotNet.CoreCLR.svg' alt=''/></td>
+  <td><code>https://img.shields.io/dotnet.myget/dotnet-coreclr/dt/Microsoft.DotNet.CoreCLR.svg</code></td>
+  </tr>
+  <tr><th> PowerShell Gallery: </th>
+  <td><img src='/powershellgallery/dt/ACMESharp.svg' alt=''/></td>
+  <td><code>https://img.shields.io/powershellgallery/dt/ACMESharp.svg</code></td>
+  </tr>
   <tr><th data-keywords='python'> PyPI: </th>
   <td><img src='/pypi/dm/Django.svg' alt=''/></td>
   <td><code>https://img.shields.io/pypi/dm/Django.svg</code></td>
@@ -286,6 +322,10 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <tr><th data-keywords='python'> PyPI: </th>
   <td><img src='/pypi/dd/Django.svg' alt=''/></td>
   <td><code>https://img.shields.io/pypi/dd/Django.svg</code></td>
+  </tr>
+  <tr><th data-keywords='conda'> Conda: </th>
+  <td><img src='/conda/dn/conda-forge/python.svg' alt=''/></td>
+  <td><code>https://img.shields.io/conda/dn/conda-forge/python.svg</code></td>
   </tr>
   <tr><th data-keywords='Rust'> Crates.io: </th>
   <td><img src='/crates/d/rustc-serialize.svg' alt=''/></td>
@@ -368,28 +408,28 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <td><code>https://img.shields.io/dub/dt/vibe-d/0.7.23.svg</code></td>
   </tr>
   <tr><th data-keywords='sublime'> Package Control: </th>
-  <td><img src='/packagecontrol/dm/Package%20Control.svg' alt=''/></td>
-  <td><code>https://img.shields.io/packagecontrol/dm/Package%20Control.svg</code></td>
+  <td><img src='/packagecontrol/dm/GitGutter.svg' alt=''/></td>
+  <td><code>https://img.shields.io/packagecontrol/dm/GitGutter.svg</code></td>
   </tr>
   <tr><th data-keywords='sublime'> Package Control: </th>
-  <td><img src='/packagecontrol/dw/Package%20Control.svg' alt=''/></td>
-  <td><code>https://img.shields.io/packagecontrol/dw/Package%20Control.svg</code></td>
+  <td><img src='/packagecontrol/dw/GitGutter.svg' alt=''/></td>
+  <td><code>https://img.shields.io/packagecontrol/dw/GitGutter.svg</code></td>
   </tr>
   <tr><th data-keywords='sublime'> Package Control: </th>
-  <td><img src='/packagecontrol/dd/Package%20Control.svg' alt=''/></td>
-  <td><code>https://img.shields.io/packagecontrol/dd/Package%20Control.svg</code></td>
+  <td><img src='/packagecontrol/dd/GitGutter.svg' alt=''/></td>
+  <td><code>https://img.shields.io/packagecontrol/dd/GitGutter.svg</code></td>
   </tr>
   <tr><th data-keywords='sublime'> Package Control: </th>
-  <td><img src='/packagecontrol/dt/Package%20Control.svg' alt=''/></td>
-  <td><code>https://img.shields.io/packagecontrol/dt/Package%20Control.svg</code></td>
+  <td><img src='/packagecontrol/dt/GitGutter.svg' alt=''/></td>
+  <td><code>https://img.shields.io/packagecontrol/dt/GitGutter.svg</code></td>
   </tr>
   <tr><th data-keywords='chrome'> Chrome Web Store: </th>
     <td><img src='/chrome-web-store/d/nimelepbpejjlbmoobocpfnjhihnpked.svg' alt=''/></td>
     <td><code>https://img.shields.io/chrome-web-store/d/nimelepbpejjlbmoobocpfnjhihnpked.svg</code></td>
   </tr>
   <tr><th data-keywords='website' data-doc='websiteDoc'> Website: </th>
-    <td><img src='/website-up-down-green-red/http/shields.io.svg' alt=''/></td>
-    <td><code>https://img.shields.io/website-up-down-green-red/http/shields.io.svg</code></td>
+    <td><img src='/website-up-down-green-red/http/shields.io.svg?label=my-website' alt=''/></td>
+    <td><code>https://img.shields.io/website-up-down-green-red/http/shields.io.svg?label=my-website</code></td>
   </tr>
   <tr><th data-keywords='cocoapods'> CocoaPods: </th>
     <td><img src='/cocoapods/dt/AFNetworking.svg' alt='' /></td>
@@ -410,7 +450,7 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
 </tbody></table>
 <h3 id="version"> Version </h3>
 <table class='badge'><tbody>
-  <tr><th data-keywords='cdn cdnjs'> CDNJS: </th>
+  <tr><th data-keywords='cdn cdnjs' data-link='https://cdnjs.com/libraries/jquery'> CDNJS: </th>
   <td><img src='/cdnjs/v/jquery.svg' alt=''/></td>
   <td><code>https://img.shields.io/cdnjs/v/jquery.svg</code></td>
   </tr>
@@ -422,6 +462,14 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <td><img src='/npm/v/@cycle/core.svg' alt=''/></td>
   <td><code>https://img.shields.io/npm/v/@cycle/core.svg</code></td>
   </tr>
+  <tr><th data-keywords='node'> npm (tag): </th>
+  <td><img src='/npm/v/npm/next.svg' alt=''/></td>
+  <td><code>https://img.shields.io/npm/v/npm/next.svg</code></td>
+  </tr>
+  <tr><th data-keywords='node'> npm (scoped with tag): </th>
+  <td><img src='/npm/v/@cycle/core/canary.svg' alt=''/></td>
+  <td><code>https://img.shields.io/npm/v/@cycle/core/canary.svg</code></td>
+  </tr>
   <tr><th> node: </th>
   <td><img src='/node/v/gh-badges.svg' alt=''/></td>
   <td><code>https://img.shields.io/node/v/gh-badges.svg</code></td>
@@ -429,6 +477,14 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <tr><th data-keywords='python'> PyPI: </th>
   <td><img src='/pypi/v/nine.svg' alt=''/></td>
   <td><code>https://img.shields.io/pypi/v/nine.svg</code></td>
+  </tr>
+  <tr><th data-keywords='conda'> Conda: </th>
+  <td><img src='/conda/v/conda-forge/python.svg' alt=''/></td>
+  <td><code>https://img.shields.io/conda/v/conda-forge/python.svg</code></td>
+  </tr>
+  <tr><th data-keywords='conda'> Conda (channel only): </th>
+  <td><img src='/conda/vn/conda-forge/python.svg' alt=''/></td>
+  <td><code>https://img.shields.io/conda/vn/conda-forge/python.svg</code></td>
   </tr>
   <tr><th data-keywords='ruby'> Gem: </th>
   <td><img src='/gem/v/formatador.svg' alt=''/></td>
@@ -475,12 +531,16 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <td><code>https://img.shields.io/hexpm/v/plug.svg</code></td>
   </tr>
   <tr><th data-doc='githubDoc'> GitHub tag: </th>
-  <td><img src='/github/tag/strongloop/express.svg' alt=''/></td>
-  <td><code>https://img.shields.io/github/tag/strongloop/express.svg</code></td>
+  <td><img src='/github/tag/expressjs/express.svg' alt=''/></td>
+  <td><code>https://img.shields.io/github/tag/expressjs/express.svg</code></td>
   </tr>
   <tr><th data-doc='githubDoc'> GitHub release: </th>
   <td><img src='/github/release/qubyte/rubidium.svg' alt=''/></td>
   <td><code>https://img.shields.io/github/release/qubyte/rubidium.svg</code></td>
+  </tr>
+  <tr><th data-doc='githubDoc'> GitHub (pre-)release: </th>
+  <td><img src='/github/release/qubyte/rubidium/all.svg' alt=''/></td>
+  <td><code>https://img.shields.io/github/release/qubyte/rubidium/all.svg</code></td>
   </tr>
   <tr><th data-doc='githubDoc'> GitHub commits: </th>
   <td><img src='/github/commits-since/SubtitleEdit/subtitleedit/3.4.7.svg' alt=''/></td>
@@ -514,6 +574,10 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <td><img src='/chocolatey/v/git.svg' alt=''/></td>
   <td><code>https://img.shields.io/chocolatey/v/git.svg</code></td>
   </tr>
+  <tr><th> PowerShell Gallery: </th>
+  <td><img src='/powershellgallery/v/Zyborg.Vault.svg' alt=''/></td>
+  <td><code>https://img.shields.io/powershellgallery/v/Zyborg.Vault.svg</code></td>
+  </tr>
   <tr><th> Puppet Forge: </th>
   <td><img src='/puppetforge/v/vStone/percona.svg' alt=''/></td>
   <td><code>https://img.shields.io/puppetforge/v/vStone/percona.svg</code></td>
@@ -521,6 +585,10 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <tr><th> Maven Central: </th>
   <td><img src='/maven-central/v/org.apache.maven/apache-maven.svg' alt=''/></td>
   <td><code>https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg</code></td>
+  </tr>
+  <tr><th> Maven Central with version prefix filter: </th>
+  <td><img src='/maven-central/v/org.apache.maven/apache-maven/2.svg' alt=''/></td>
+  <td><code>https://img.shields.io/maven-central/v/org.apache.maven/apache-maven/2.svg</code></td>
   </tr>
   <tr><th> WordPress plugin: </th>
   <td><img src='/wordpress/plugin/v/akismet.svg' alt=''/></td>
@@ -537,6 +605,14 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <tr><th data-keywords='perl'> CPAN: </th>
   <td><img src='/cpan/v/Config-Augeas.svg' alt=''/></td>
   <td><code>https://img.shields.io/cpan/v/Config-Augeas.svg</code></td>
+  </tr>
+  <tr><th data-keywords='R'> CRAN: </th>
+  <td><img src='/cran/v/devtools.svg' alt=''/></td>
+  <td><code>https://img.shields.io/cran/v/devtools.svg</code></td>
+  </tr>
+  <tr><th data-keywords='R'> CRAN: </th>
+  <td><img src='/cran/l/devtools.svg' alt=''/></td>
+  <td><code>https://img.shields.io/cran/l/devtools.svg</code></td>
   </tr>
   <tr><th data-keywords='tex'> CTAN: </th>
   <td><img src='/ctan/v/tex.svg' alt=''/></td>
@@ -562,6 +638,14 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <td><img src='/amo/v/dustman.svg' alt=''/></td>
   <td><code>https://img.shields.io/amo/v/dustman.svg</code></td>
   </tr>
+  <tr><th> Itunes App Store: </th>
+    <td><img src='/itunes/v/803453959.svg' alt=''/></td>
+    <td><code>https://img.shields.io/itunes/v/BUNDLE_ID.svg</code></td>
+  </tr>
+  <tr><th data-keywords='jitpack java maven'> JitPack: </th>
+    <td><img src='/jitpack/v/jitpack/maven-simple.svg' alt=''/></td>
+    <td><code>https://img.shields.io/jitpack/v/jitpack/maven-simple.svg</code></td>
+  </tr>
 </tbody></table>
 
 <h3 id="social"> Social </h3>
@@ -571,8 +655,8 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <td><code>https://img.shields.io/github/forks/badges/shields.svg?style=social&amp;label=Fork</code></td>
   </tr>
   <tr><th data-doc='githubDoc'> GitHub stars: </th>
-  <td><img src='/github/stars/badges/shields.svg?style=social&label=Star' alt=''/></td>
-  <td><code>https://img.shields.io/github/stars/badges/shields.svg?style=social&amp;label=Star</code></td>
+  <td><img src='/github/stars/badges/shields.svg?style=social&label=Stars' alt=''/></td>
+  <td><code>https://img.shields.io/github/stars/badges/shields.svg?style=social&amp;label=Stars</code></td>
   </tr>
   <tr><th data-doc='githubDoc'> GitHub watchers: </th>
   <td><img src='/github/watchers/badges/shields.svg?style=social&label=Watch' alt=''/></td>
@@ -594,13 +678,9 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
 
 <h3 id="miscellaneous"> Miscellaneous </h3>
 <table class='badge'><tbody>
-  <tr><th> Gratipay User: </th>
-    <td><img src='/gratipay/user/dougwilson.svg' alt=''/></td>
-    <td><code>https://img.shields.io/gratipay/user/dougwilson.svg</code></td>
-  </tr>
-  <tr><th> Gratipay Team: </th>
-    <td><img src='/gratipay/team/shields.svg' alt=''/></td>
-    <td><code>https://img.shields.io/gratipay/team/shields.svg</code></td>
+  <tr><th> Gratipay: </th>
+    <td><img src='/gratipay/project/shields.svg' alt=''/></td>
+    <td><code>https://img.shields.io/gratipay/project/shields.svg</code></td>
   </tr>
   <tr><th> Bountysource: </th>
     <td><img src='/bountysource/team/mozilla-core/activity.svg' alt=''/></td>
@@ -699,8 +779,8 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><code>https://img.shields.io/cpan/l/Config-Augeas.svg</code></td>
   </tr>
   <tr><th data-keywords='tex'> CTAN: </th>
-    <td><img src='/ctan/l/tex.svg' alt='' /></td>
-    <td><code>https://img.shields.io/ctan/l/tex.svg</code></td>
+    <td><img src='/ctan/l/novel.svg' alt='' /></td>
+    <td><code>https://img.shields.io/ctan/l/novel.svg</code></td>
   </tr>
   <tr><th> Wheelmap: </th>
     <td><img src='/wheelmap/a/2323004600.svg' alt='' /></td>
@@ -750,6 +830,14 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><img src='/github/license/mashape/apistatus.svg' alt=''/></td>
     <td><code>https://img.shields.io/github/license/mashape/apistatus.svg</code></td>
   </tr>
+  <tr><th data-keywords='GitHub file size' data-doc='githubDoc'> Github file size: </th>
+    <td><img src='/github/size/webcaetano/craft/build/phaser-craft.min.js.svg' alt=''/></td>
+    <td><code>https://img.shields.io/github/size/webcaetano/craft/build/phaser-craft.min.js.svg</code></td>
+  </tr>
+  <tr><th data-keywords='GitHub search hit counter' data-doc='githubDoc'> Github search hit counter: </th>
+    <td><img src='/github/search/torvalds/linux/goto.svg' alt=''/></td>
+    <td><code>https://img.shields.io/github/search/torvalds/linux/goto.svg</code></td>
+  </tr>
   <tr><th> Bitbucket issues: </th>
     <td><img src='/bitbucket/issues/atlassian/python-bitbucket.svg' alt=''/></td>
     <td><code>https://img.shields.io/bitbucket/issues/atlassian/python-bitbucket.svg</code></td>
@@ -757,6 +845,14 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <tr><th data-keywords='Bitbucket'></th>
     <td><img src='/bitbucket/issues-raw/atlassian/python-bitbucket.svg' alt=''/></td>
     <td><code>https://img.shields.io/bitbucket/issues-raw/atlassian/python-bitbucket.svg</code></td>
+  </tr>
+  <tr><th> Bitbucket open pull requests: </th>
+    <td><img src='/bitbucket/pr/osrf/gazebo.svg' alt=''/></td>
+    <td><code>https://img.shields.io/bitbucket/pr/osrf/gazebo.svg</code></td>
+  </tr>
+  <tr><th data-keywords='Bitbucket'></th>
+    <td><img src='/bitbucket/pr-raw/osrf/gazebo.svg' alt=''/></td>
+    <td><code>https://img.shields.io/bitbucket/pr-raw/osrf/gazebo.svg</code></td>
   </tr>
   <tr><th> WordPress rating: </th>
     <td><img src='/wordpress/plugin/r/akismet.svg' alt=''/></td>
@@ -778,13 +874,13 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><img src='/codacy/coverage/c44df2d9c89a4809896914fd1a40bedd/master.svg' alt=''/></td>
     <td><code>https://img.shields.io/codacy/coverage/c44df2d9c89a4809896914fd1a40bedd/master.svg</code></td>
   </tr>
+  <tr><th> Cauditor: </th>
+    <td><img src='/cauditor/mi/matthiasmullie/scrapbook/master.svg' alt=''/></td>
+    <td><code>https://img.shields.io/cauditor/mi/matthiasmullie/scrapbook/master.svg</code></td>
+  </tr>
   <tr><th> Libscore: </th>
     <td><img src='/libscore/s/jQuery.svg' alt=''/></td>
     <td><code>https://img.shields.io/libscore/s/jQuery.svg</code></td>
-  </tr>
-  <tr><th> Talk.ai: </th>
-    <td><img src='/talk/t/9c81ff703b.svg' alt=''/></td>
-    <td><code>https://img.shields.io/talk/t/9c81ff703b.svg</code></td>
   </tr>
   <tr><th> Puppet Forge: </th>
     <td><img src='/puppetforge/e/camptocamp/openssl.svg' alt=''/></td>
@@ -830,6 +926,10 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><img src='/docker/automated/jrottenberg/ffmpeg.svg' alt=''/></td>
     <td><code>https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg</code></td>
   </tr>
+  <tr><th data-keywords='docker build status'> Docker Build Status </th>
+    <td><img src='/docker/build/jrottenberg/ffmpeg.svg' alt=''/></td>
+    <td><code>https://img.shields.io/docker/build/jrottenberg/ffmpeg.svg</code></td>
+  </tr>
   <tr><th data-keywords='imagelayers'> ImageLayers Size: </th>
     <td><img src='/imagelayers/image-size/_/ubuntu/latest.svg' alt=''/></td>
     <td><code>https://img.shields.io/imagelayers/image-size/_/ubuntu/latest.svg</code></td>
@@ -846,9 +946,13 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><img src='/jira/issue/https/issues.apache.org/jira/KAFKA-2896.svg' alt=''/></td>
     <td><code>https://img.shields.io/jira/issue/https/issues.apache.org/jira/KAFKA-2896.svg</code></td>
   </tr>
+  <tr><th data-doc='jira-sprint-completion'> JIRA sprint completion: </th>
+    <td><img src='/jira/sprint/https/jira.spring.io/94.svg' alt=''/></td>
+    <td><code>https://img.shields.io/jira/sprint/https/jira.spring.io/94.svg</code></td>
+  </tr>
   <tr><th> Maintenance: </th>
-    <td><img src='/maintenance/yes/2016.svg' alt=''/></td>
-    <td><code>https://img.shields.io/maintenance/yes/2016.svg</code></td>
+    <td><img src='/maintenance/yes/2017.svg' alt=''/></td>
+    <td><code>https://img.shields.io/maintenance/yes/2017.svg</code></td>
   <tr><th data-keywords='aur'> AUR: </th>
     <td><img src='/aur/license/yaourt.svg' alt=''/></td>
     <td><code>https://img.shields.io/aur/license/yaourt.svg</code></td>
@@ -866,6 +970,10 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><code>https://img.shields.io/chrome-web-store/rating/nimelepbpejjlbmoobocpfnjhihnpked.svg</code></td>
   </tr>
   <tr><th data-keywords='chrome'> Chrome Web Store: </th>
+    <td><img src='/chrome-web-store/stars/nimelepbpejjlbmoobocpfnjhihnpked.svg' alt=''/></td>
+    <td><code>https://img.shields.io/chrome-web-store/stars/nimelepbpejjlbmoobocpfnjhihnpked.svg</code></td>
+  </tr>
+  <tr><th data-keywords='chrome'> Chrome Web Store: </th>
     <td><img src='/chrome-web-store/rating-count/nimelepbpejjlbmoobocpfnjhihnpked.svg' alt=''/></td>
     <td><code>https://img.shields.io/chrome-web-store/rating-count/nimelepbpejjlbmoobocpfnjhihnpked.svg</code></td>
   </tr>
@@ -881,17 +989,41 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><img src='/amo/rating/dustman.svg' alt=''/></td>
     <td><code>https://img.shields.io/amo/rating/dustman.svg</code></td>
   </tr>
+  <tr><th data-keywords='amo firefox'> Mozilla Add-on: </th>
+    <td><img src='/amo/stars/dustman.svg' alt=''/></td>
+    <td><code>https://img.shields.io/amo/stars/dustman.svg</code></td>
+  </tr>
+  <tr><th> Swagger Validator: </th>
+    <td><img src='/swagger/valid/2.0/https/bitbucket.org/api/swagger.json.svg' alt=''/></td>
+    <td><code>https://img.shields.io/swagger/valid/2.0/https/bitbucket.org/api/swagger.json.svg</code></td>
+  </tr>
+  <tr><th> Uptime Robot status: </th>
+    <td><img src='/uptimerobot/status/m778918918-3e92c097147760ee39d02d36.svg' alt=''/></td>
+    <td><code>https://img.shields.io/uptimerobot/status/m778918918-3e92c097147760ee39d02d36.svg</code></td>
+  </tr>
+  <tr><th> Uptime Robot ratio: </th>
+    <td><img src='/uptimerobot/ratio/m778918918-3e92c097147760ee39d02d36.svg' alt=''/></td>
+    <td><code>https://img.shields.io/uptimerobot/ratio/m778918918-3e92c097147760ee39d02d36.svg</code></td>
+  </tr>
+  <tr><th> Uptime Robot ratio (7 days): </th>
+    <td><img src='/uptimerobot/ratio/7/m778918918-3e92c097147760ee39d02d36.svg' alt=''/></td>
+    <td><code>https://img.shields.io/uptimerobot/ratio/7/m778918918-3e92c097147760ee39d02d36.svg</code></td>
+  </tr>
+  <tr><th> Discord: </th>
+    <td><img src='/discord/102860784329052160.svg' alt=''/></td>
+    <td><code>https://img.shields.io/discord/102860784329052160.svg</code></td>
+  </tr>
 </tbody></table>
 
 <h3 id="miscellaneous"> Longer Miscellaneous </h3>
 <table class='badge'><tbody>
   <tr><th> David: </th>
-    <td><img src='/david/strongloop/express.svg' alt=''/></td>
-    <td><code>https://img.shields.io/david/strongloop/express.svg</code></td>
+    <td><img src='/david/expressjs/express.svg' alt=''/></td>
+    <td><code>https://img.shields.io/david/expressjs/express.svg</code></td>
   </tr>
   <tr><th> David: </th>
-    <td><img src='/david/dev/strongloop/express.svg' alt=''/></td>
-    <td><code>https://img.shields.io/david/dev/strongloop/express.svg</code></td>
+    <td><img src='/david/dev/expressjs/express.svg' alt=''/></td>
+    <td><code>https://img.shields.io/david/dev/expressjs/express.svg</code></td>
   </tr>
   <tr><th> David: </th>
     <td><img src='/david/optional/elnounch/byebye.svg' alt=''/></td>
@@ -925,6 +1057,10 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
     <td><img src='/cocoapods/metrics/doc-percent/AFNetworking.svg' alt='' /></td>
     <td><code>https://img.shields.io/cocoapods/metrics/doc-percent/AFNetworking.svg</code></td>
   </tr>
+  <tr><th data-keywords='conda'> Conda: </th>
+    <td><img src='/conda/pn/conda-forge/python.svg' alt=''/></td>
+    <td><code>https://img.shields.io/conda/pn/conda-forge/python.svg</code></td>
+  </tr>
   <tr><th> Ansible Role: </th>
     <td><img src='/ansible/role/3078.svg' alt=''/></td>
     <td><code>https://img.shields.io/ansible/role/3078.svg</code></td>
@@ -938,19 +1074,19 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <td><code>https://img.shields.io/stackexchange/stackoverflow/t/augeas.svg</code></td>
   </tr>
   <tr><th> Issue Stats: </th>
-  <td><img src='/issuestats/i/github/strongloop/express.svg' alt=''/></td>
-  <td><code>https://img.shields.io/issuestats/i/github/strongloop/express.svg</code></td>
+  <td><img src='/issuestats/i/github/expressjs/express.svg' alt=''/></td>
+  <td><code>https://img.shields.io/issuestats/i/github/expressjs/express.svg</code></td>
   </tr>
   <tr><th> (long form): </th>
   <td>&nbsp;</td>
-  <td><code>https://img.shields.io/issuestats/i/long/github/strongloop/express.svg</code></td>
+  <td><code>https://img.shields.io/issuestats/i/long/github/expressjs/express.svg</code></td>
   </tr>
   <tr><th> Issue Stats: </th>
-  <td><img src='/issuestats/p/github/strongloop/express.svg' alt=''/></td>
-  <td><code>https://img.shields.io/issuestats/p/github/strongloop/express.svg</code></td>
+  <td><img src='/issuestats/p/github/expressjs/express.svg' alt=''/></td>
+  <td><code>https://img.shields.io/issuestats/p/github/expressjs/express.svg</code></td>
   <tr><th> (long form): </th>
   <td>&nbsp;</td>
-  <td><code>https://img.shields.io/issuestats/p/long/github/strongloop/express.svg</code></td>
+  <td><code>https://img.shields.io/issuestats/p/long/github/expressjs/express.svg</code></td>
   </tr>
   <tr><th> Libraries.io for releases: </th>
     <td><img src='/librariesio/release/hex/phoenix/1.0.3.svg' alt=''/></td>
@@ -959,6 +1095,14 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   <tr><th> Libraries.io for GitHub: </th>
     <td><img src='/librariesio/github/phoenixframework/phoenix.svg' alt=''/></td>
     <td><code>https://img.shields.io/librariesio/github/phoenixframework/phoenix.svg</code></td>
+  </tr>
+  <tr><th> NetflixOSS Lifecycle: </th>
+    <td><img src='/osslifecycle/Netflix/osstracker.svg' alt=''/></td>
+    <td><code>https://img.shields.io/osslifecycle/Netflix/osstracker.svg</code></td>
+  </tr>
+  <tr><th> Sourcegraph for Repo Reference Count: </th>
+    <td><img src='https://img.shields.io/sourcegraph/rrc//github.com/gorilla/mux.svg' alt=''/></td>
+    <td><code>https://img.shields.io/sourcegraph/rrc/github.com/gorilla/mux.svg</code></td>
   </tr>
 </tbody></table>
 
@@ -1034,7 +1178,7 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
   </td></tr>
 </tbody></table>
 
-<p>
+<p class='badge-img'>
 <img src='/badge/color-brightgreen-brightgreen.svg' alt='brightgreen'/>
 <img src='/badge/color-green-green.svg' alt='green'/>
 <img src='/badge/color-yellowgreen-yellowgreen.svg' alt='yellowgreen'/>
@@ -1050,7 +1194,7 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
 <p>
 The following styles are available (flat is the default as of Feb 1st 2015):
 </p>
-<table><tbody>
+<table class='badge-img'><tbody>
   <tr>
   <td><img src='/badge/style-plastic-green.svg?style=plastic' alt=''/></td>
   <td><code>https://img.shields.io/badge/style-plastic-green.svg?style=plastic</code></td>
@@ -1079,13 +1223,13 @@ Here are a few other parameters you can use:
     <td>Insert logo image (≥ 14px high)</td></tr>
   <tr><td><code>?logoWidth=40</code></td>
     <td>Set the horizontal space to give to the logo</td></tr>
-  <tr><td><code>?link=http://abc.xyz&amp;link=http://shields.io</code></td>
+  <tr><td><code>?link=http://left&amp;link=http://right</code></td>
     <td>Specify what clicking on the left/right of a badge should do (esp. for
       social badge style)</td></tr>
   <tr><td><code>?colorA=abcdef</code></td>
-    <td>Set background of the left part</td></tr>
+    <td>Set background of the left part (hex color only)</td></tr>
   <tr><td><code>?colorB=fedcba</code></td>
-    <td>Set background of the right part</td></tr>
+    <td>Set background of the right part (hex color only)</td></tr>
   <tr><td><code>?maxAge=3600</code></td>
     <td>Set the HTTP cache lifetime in secs</td></tr>
 </tbody></table>
@@ -1192,6 +1336,10 @@ is where the current server got started.
             </td><td>  →
             </td><td>  <code>_</code> Underscore <br/>
           </td></tr>
+          <tr><td>   Slashes <code>//</code>
+            </td><td>  →
+            </td><td>  <code>/</code> Slash <br/>
+          </td></tr>
           <tr><td>   <code>_</code> or Space <code>&nbsp;</code>
             </td><td>  →
             </td><td>  <code>&nbsp;</code> Space
@@ -1202,10 +1350,13 @@ is where the current server got started.
   <div id="githubDoc">
     <p>If your GitHub badge errors, it might be because you hit GitHub's rate
     limits.<br>
-    You can increase Shield.io's rate limit by
+    You can increase Shields.io's rate limit by
     <a href="https://img.shields.io/github-auth">going to this page</a>
     to add Shields as a GitHub application on your GitHub account.
     </p>
+  </div>
+  <div id="jira-sprint-completion">
+    <p>To get the <code>Sprint ID</code>, go to your Backlog view in your project, right click on your sprint name and get the value of <code>data-sprint-id</code>.</p>
   </div>
 </div>
 
