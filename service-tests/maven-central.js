@@ -11,7 +11,7 @@ t.create('latest version')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('maven-central'),
     value: Joi.string().regex(/^v(.*)$/)
-}));
+  }));
 
 t.create('inexistent artifact')
   .get('/v/inexistent-group-id/inexistent-artifact-id.json')
@@ -26,5 +26,5 @@ t.create('xml parsing error')
   .get('/v/com.github.fabriziocucci/yacl4j.json')
   .intercept(nock => nock('http://repo1.maven.org/maven2')
     .get('/com/github/fabriziocucci/yacl4j/maven-metadata.xml')
-    .reply(200, "this should be a valid xml"))
+    .reply(200, 'this should be a valid xml'))
   .expectJSON({ name: 'maven-central', value: 'invalid' });
