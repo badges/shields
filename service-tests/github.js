@@ -132,6 +132,20 @@ t.create('Tag')
     value: Joi.string()
   }));
 
+t.create('Package version')
+  .get('/package/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('development'),
+    value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?$/)
+  }));
+
+t.create('Manifest version')
+  .get('/manifest/RedSparr0w/IndieGala-Helper.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('development'),
+    value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?$/)
+  }));
+
 t.create('File size')
   .get('/size/webcaetano/craft/build/phaser-craft.min.js.json')
   .expectJSONTypes(Joi.object().keys({
