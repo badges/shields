@@ -1106,13 +1106,9 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      badgeData.text[1] = " " + data.currency_sign + " " + data.amount + " " + data.multiplier;
+      badgeData.text[1] = " " + data.currency_sign + data.amount + " " + data.multiplier;
       badgeData.colorscheme = null;
       badgeData.colorB = '#2E8B57';
-      if (darkBackgroundTemplates.some(function(t) { return t === badgeData.template; })) {
-        badgeData.logo = badgeData.logo || logos['codetally-white'];
-        badgeData.logoWidth = 9;
-      }
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
