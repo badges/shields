@@ -6561,28 +6561,28 @@ cache(function(query, match, sendBadge, request) {
       return;
     }
     try {
-        
-      if (type === 'xml'){
+
+      if (type === 'xml') {
         xml2js.parseString(data.toString(), function (err, json) {
           if (err) throw (err);
           data = json;
         });
-      }else{
-        data = (typeof data == 'object' || typeof data == 'array' ? data : JSON.parse(data));
+      } else {
+        data = (typeof data == 'object' ? data : JSON.parse(data));
       }
 
       items.forEach(function(item){
         data = data[decodeURI(item)];
       });
-	  
-      badgeData.text[1] = (prefix || "") + (typeof data == 'object' || typeof data == 'array' ? JSON.stringify(data) : data) + (suffix || "");
-	  
+
+      badgeData.text[1] = (prefix || "") + (typeof data == 'object' ? JSON.stringify(data) : data) + (suffix || "");
+
       if (sixHex(color)) {
         badgeData.colorB = '#' + color;
       } else {
         badgeData.colorscheme = color;
       }
-	  
+
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = e;
