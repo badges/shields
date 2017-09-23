@@ -3177,13 +3177,14 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub package and manifest version integration.
-camp.route(/^\/github\/(package|manifest)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/(package|manifest)\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var type = match[1];
   var user = match[2];
   var repo = match[3];
-  var format = match[4];
-  var apiUrl = 'https://raw.githubusercontent.com/' + user + '/' + repo + '/master/' + type + '.json';
+  var branch = match[4] || 'master';
+  var format = match[5];
+  var apiUrl = 'https://raw.githubusercontent.com/' + user + '/' + repo + '/' + branch + '/' + type + '.json';
   var badgeData = getBadgeData('development', data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
