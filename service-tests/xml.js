@@ -15,9 +15,23 @@ t.create('XML from url')
   .get('/Extension Name/addon=>name=>0/https://services.addons.mozilla.org/api/1.5/addon/indiegala-helper.json')
   .expectJSON({ name: 'Extension Name', value: 'IndieGala Helper'});
 
-t.create('XML from url w/prefix')
-  .get('/IndieGala Helper-blue-v/addon=>version=>0/https://services.addons.mozilla.org/api/1.5/addon/indiegala-helper.json')
+t.create('XML from url | w/prefix & suffix')
+  .get('/IndieGala Helper-3498db-v- Final/addon=>version=>0/https://services.addons.mozilla.org/api/1.5/addon/indiegala-helper.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('IndieGala Helper'),
-    value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?$/)
+    value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?\sFinal$/)
+  }));
+
+t.create('XML from url | object doesnt exist')
+  .get('/IndieGala Helper-3498db-v- Final/this=>doesnt=>exist/https://services.addons.mozilla.org/api/1.5/addon/indiegala-helper.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('IndieGala Helper'),
+    value: Joi.string().regex(/TypeError: Cannot read property.+$/)
+  }));
+
+t.create('XML from url | invalid address')
+  .get('/IndieGala Helper-3498db-v- Final/addon=>version=>0/https://services.addons.mozilla.org/api/1.5/addon/indiegala-helpers.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('IndieGala Helper'),
+    value: Joi.equal('invalid server')
   }));

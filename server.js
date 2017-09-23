@@ -6555,7 +6555,12 @@ cache(function(query, match, sendBadge, request) {
 
   var badgeData = getBadgeData(decodeURI(label), query);
   request(apiUrl, {json:true}, function(err, res, data) {
-    if (err != null) {
+    if (res && res.statusCode === 404) {
+      badgeData.text[1] = 'invalid server';
+      sendBadge(format, badgeData);
+      return;
+    }
+    if (err != null || !res || res.statusCode !== 200) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
