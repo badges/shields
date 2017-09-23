@@ -18,10 +18,13 @@ npm install gh-badges
 
 ```js
 var badge = require('gh-badges');
-badge({ text: [ "build", "passed" ], colorscheme: "green" },
-  function(svg, err) {
-    // svg is a String… of your badge.
-  });
+// Optional step, to have accurate text width computation.
+badge.loadFont('/path/to/Verdana.ttf', function(err) {
+  badge({ text: ["build", "passed"], colorscheme: "green", template: "flat" },
+    function(svg, err) {
+      // svg is a String of your badge.
+    });
+});
 ```
 
 # Use the CLI
@@ -35,12 +38,16 @@ badge build passed :green .png > mybadge.png
 # Start the Server
 To run the server you will need the following executables on your Path:
 - [PhantomJS](http://www.phantomjs.org/)
-- [Cairo](http://cairographics.org/) (runtime dependency for Canvas)
 
 On an OS X machine, [Homebrew](brew.sh) is a good package manager that will
-allow you to install them.
+allow you to install that.
 
-On Ubuntu / Debian: `sudo apt-get install phantomjs libcairo2-dev libjpeg-turbo8-dev`.
+On Ubuntu / Debian: `sudo apt-get install phantomjs`.
+
+You will also need version 6 of Node.js.
+The [Node.js documentation](https://nodejs.org/en/download/package-manager/) explains
+how to install it on various systems.
+On Ubuntu / Debian: `curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -; sudo apt-get install -y nodejs`.
 
 ```bash
 git clone https://github.com/badges/shields.git
@@ -59,8 +66,6 @@ node server 8080
 
 The root gets redirected to <http://shields.io>.
 For testing purposes, you can go to `http://localhost/try.html`.
-You should modify that file. The "real" root, `http://localhost/index.html`,
-gets generated from the `try.html` file.
 
 # Format
 
@@ -75,18 +80,23 @@ The format is the following:
   /* … Or… */
   "colorA": "#555",
   "colorB": "#4c1",
-  /* See template/ for a list of available templates.
+  /* See templates/ for a list of available templates.
      Each offers a different visual design. */
   "template": "flat"
 }
 ```
 
+See also
+
+- [colorscheme.json](colorscheme.json) for the `colorscheme` option
+- [templates/](templates) for the `template` option
+
 # Defaults
 
-If you want to add a colorscheme, head to `colorscheme.json`. Each scheme has a
-name and a [CSS/SVG color][] for the color used in the first box (for the first
-piece of text, field `colorA`) and for the one used in the second box (field
-`colorB`).
+If you want to add a colorscheme, head to `lib/colorscheme.json`. Each scheme
+has a name and a [CSS/SVG color][] for the color used in the first box (for the
+first piece of text, field `colorA`) and for the one used in the second box
+(field `colorB`).
 
 [CSS/SVG color]: http://www.w3.org/TR/SVG/types.html#DataTypeColor
 
@@ -103,17 +113,6 @@ same dark grey, so you can rely on that default value by not providing a
 You can also use the `"colorA"` and `"colorB"` fields directly in the badges if
 you don't want to make a color scheme for it. In that case, remove the
 `"colorscheme"` field altogether.
-
-# Requirements
-
-Because of the usage of the npm module [canvas][canvas-pkg] *you need* to have
-**cairo** installed.
-
-For more information check the [wiki][canvas-wiki] of the canvas project with
-system-specific installation details.
-
-[canvas-pkg]: https://npmjs.org/package/canvas
-[canvas-wiki]: https://github.com/LearnBoost/node-canvas/wiki/_pages
 
 # Making your Heroku badge server
 
@@ -135,18 +134,19 @@ heroku open
 You can build and run the server locally using Docker. First build an image:
 
 ```console
-$ build -t shields ./
+$ docker build -t shields .
 Sending build context to Docker daemon 3.923 MB
-Step 0 : FROM node:0.12.7-onbuild
 …
-Removing intermediate container c4678889953f
 Successfully built 4471b442c220
 ```
+
+Optionally, create a file called `shields.env` that contains the needed configuration. See
+`shields.example.env` for an example.
 
 Then run the container:
 
 ```console
-$ docker run --rm -p 8080:80 shields
+$ docker run --rm -p 8080:80 --env-file shields.env --name shields shields
 
 > gh-badges@1.1.2 start /usr/src/app
 > node server.js
@@ -156,12 +156,44 @@ http://[::1]:80/try.html
 
 Assuming Docker is running locally, you should be able to get to the application at http://localhost:8080/try.html. If you run Docker in a virtual machine (such as boot2docker or Docker Machine) then you will need to replace `localhost` with the actual IP address of that virtual machine.
 
+# Build the index
+
+Build the "real" index page:
+
+```bash
+make website
+```
+
+# Secret.json
+
+Some services require the use of secret tokens or passwords. Those are stored in `private/secret.json` which is not checked into the repository, to avoid impersonation. Here is how it currently looks like:
+
+```
+bintray_apikey
+bintray_user
+gh_client_id
+gh_client_secret
+gh_token
+gitter_dev_secret
+shieldsIps
+shieldsSecret
+sl_insight_apiToken
+sl_insight_userUuid
+```
+
+(Gathered from `cat private/secret.json | jq keys | grep -o '".*"' | sed 's/"//g'`.)
+
+The `secret.tpl.json` is a template file used by the Docker container to set the secrets based on
+environment variables.
+
 # Main Server Sysadmin
 
-- DNS round-robin between https://vps197850.ovh.net/try.html and https://vps244529.ovh.net/try.html.
+- Servers in DNS round-robin:
+  - s0: 192.99.59.72 (vps71670.vps.ovh.ca)
+  - s1: 51.254.114.150 (vps244529.ovh.net)
+  - s2: 149.56.96.133 (vps117870.vps.ovh.ca)
 - Self-signed TLS certificates, but `img.shields.io` is behind CloudFlare, which provides signed certificates.
-- Using node v0.12.7 because later versions, combined with node-canvas, give inaccurate badge measurements.
-- Using forever (the node monitor) to automatically restart the server when it crashes.
+- Using systemd to automatically restart the server when it crashes.
 
 See https://github.com/badges/ServerScript for helper admin scripts.
 
@@ -176,4 +208,4 @@ This is also available as a gem `badgerbadgerbadger`, [code here][gem].
 
 # License
 
-All work here is licensed CC0.
+All work here is licensed [CC0](LICENSE.md).

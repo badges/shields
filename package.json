@@ -1,8 +1,14 @@
 {
   "name": "gh-badges",
-  "version": "1.2.2",
-  "description": "GitHub badges implemented in SVG.",
-  "keywords": ["GitHub", "badge", "SVG", "image"],
+  "version": "1.3.0",
+  "description": "Official Shields.io badge library.",
+  "keywords": [
+    "GitHub",
+    "badge",
+    "SVG",
+    "image",
+    "shields.io"
+  ],
   "homepage": "http://shields.io",
   "bugs": {
     "url": "https://github.com/badges/shields/issues",
@@ -10,37 +16,68 @@
   },
   "license": "CC0-1.0",
   "author": "Thaddée Tyl <thaddee.tyl@gmail.com>",
-  "main": "badge.js",
+  "main": "lib/badge.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/badges/shields"
   },
   "dependencies": {
+    "camp": "~16.2.3",
+    "chrome-web-store-item-property": "~1.1.2",
     "dot": "~1.0.3",
-    "svgo": "~0.5.1",
-    "pdfkit": "~0.7.1",
-    "phantomjs-prebuilt": "~2.1.7",
-    "request": "~2.55.0",
-    "redis": "~1.0.0",
-    "camp": "~16.2.2",
-    "semver": "~4.3.3",
-    "bower": "~1.4.1",
-    "chrome-web-store-item-property": "^1.1.2",
-    "json-autosave": "~1.1.1"
+    "pretty-bytes": "^3.0.1",
+    "gm": "^1.23.0",
+    "json-autosave": "~1.1.2",
+    "pdfkit": "~0.8.0",
+    "redis": "~2.6.2",
+    "request": "~2.81.0",
+    "semver": "~5.3.0",
+    "svgo": "~0.7.1",
+    "xml2js": "~0.4.16"
   },
   "scripts": {
-    "test": "node test/test.js"
+    "coverage:test:js": "istanbul cover _mocha '*.spec.js' 'lib/*.spec.js' --dir coverage/js",
+    "coverage:test:services": "istanbul cover _mocha service-tests/runner/cli.js --dir coverage/services -- --delay",
+    "coverage:test": "npm run coverage:test:js && npm run coverage:test:services",
+    "coverage:report": "istanbul report",
+    "coverage:report:reopen": "opn coverage/lcov-report/index.html",
+    "coverage:report:open": "npm run coverage:report && npm run coverage:report:reopen",
+    "lint": "eslint '**/*.js'",
+    "test:js": "mocha lib '*.spec.js'",
+    "test:services": "mocha --delay service-tests/runner/cli.js",
+    "test": "npm run lint && npm run test:js"
   },
-  "bin": { "badge": "./gh-badge.js" },
+  "bin": {
+    "badge": "./gh-badge.js"
+  },
   "files": [
-    "badge.js",
     "README.md",
     "gh-badge.js",
+    "lib/badge.js",
+    "lib/colorscheme.json",
+    "lib/lru-cache.js",
+    "lib/measure-text.js",
+    "lib/svg-to-img.js",
     "templates",
-    "svg-to-img.js",
-    "colorscheme.json",
-    "phantomjs-svg2png.js",
-    "lru-cache.js",
     "logo"
-  ]
+  ],
+  "devDependencies": {
+    "child-process-promise": "^2.2.1",
+    "eslint": "^3.18.0",
+    "glob": "^7.1.1",
+    "icedfrisby": "^1.2.0",
+    "icedfrisby-nock": "^1.0.0",
+    "is-png": "^1.1.0",
+    "is-svg": "^2.1.0",
+    "istanbul": "^0.4.5",
+    "lodash.difference": "^4.5.0",
+    "mocha": "^3.2.0",
+    "nock": "^9.0.13",
+    "node-fetch": "^1.6.3",
+    "opn-cli": "^3.1.0",
+    "sinon": "^2.1.0"
+  },
+  "engines": {
+    "node": ">= 6"
+  }
 }
