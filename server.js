@@ -2122,23 +2122,25 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       if (info.charAt(0) === 'd') {
+        // See #716 for the details of the loss of service.
         badgeData.text[0] = getLabel('downloads', data);
-        var downloads;
-        switch (info.charAt(1)) {
-          case 'm':
-            downloads = data.info.downloads.last_month;
-            badgeData.text[1] = metric(downloads) + '/month';
-            break;
-          case 'w':
-            downloads = data.info.downloads.last_week;
-            badgeData.text[1] = metric(downloads) + '/week';
-            break;
-          case 'd':
-            downloads = data.info.downloads.last_day;
-            badgeData.text[1] = metric(downloads) + '/day';
-            break;
-        }
-        badgeData.colorscheme = downloadCountColor(downloads);
+        badgeData.text[1] = 'no longer available';
+        //var downloads;
+        //switch (info.charAt(1)) {
+        //  case 'm':
+        //    downloads = data.info.downloads.last_month;
+        //    badgeData.text[1] = metric(downloads) + '/month';
+        //    break;
+        //  case 'w':
+        //    downloads = data.info.downloads.last_week;
+        //    badgeData.text[1] = metric(downloads) + '/week';
+        //    break;
+        //  case 'd':
+        //    downloads = data.info.downloads.last_day;
+        //    badgeData.text[1] = metric(downloads) + '/day';
+        //    break;
+        //}
+        //badgeData.colorscheme = downloadCountColor(downloads);
         sendBadge(format, badgeData);
       } else if (info === 'v') {
         var version = data.info.version;
