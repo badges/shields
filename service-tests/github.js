@@ -237,29 +237,15 @@ t.create('open pull requests (raw)')
 t.create('closed issues')
   .get('/issues-closed/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('closed issues'),
+    name: Joi.equal('issues'),
     value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? closed$/)
-  }));
-
-t.create('closed issues (raw)')
-  .get('/issues-closed-raw/badges/shields.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('closed issues'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?$/)
   }));
 
 t.create('closed pull requests')
   .get('/issues-pr-closed/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('closed pull requests'),
+    name: Joi.equal('pull requests'),
     value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? closed$/)
-  }));
-
-t.create('closed pull requests (raw)')
-  .get('/issues-pr-closed-raw/badges/shields.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('closed pull requests'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?$/)
   }));
 
 t.create('open issues by label')
