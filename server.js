@@ -2124,20 +2124,24 @@ cache(function(data, match, sendBadge, request) {
       if (info.charAt(0) === 'd') {
         badgeData.text[0] = getLabel('downloads', data);
         var downloads;
-        switch (info.charAt(1)) {
-          case 'm':
-            downloads = data.info.downloads.last_month;
-            badgeData.text[1] = metric(downloads) + '/month';
-            break;
-          case 'w':
-            downloads = data.info.downloads.last_week;
-            badgeData.text[1] = metric(downloads) + '/week';
-            break;
-          case 'd':
-            downloads = data.info.downloads.last_day;
-            badgeData.text[1] = metric(downloads) + '/day';
-            break;
-        }
+        // currently defunct on pypi (they return download counts 0), see https://github.com/badges/shields/issues/716
+        //switch (info.charAt(1)) {
+        //  case 'm':
+        //    downloads = data.info.downloads.last_month;
+        //    badgeData.text[1] = metric(downloads) + '/month';
+        //    break;
+        //  case 'w':
+        //    downloads = data.info.downloads.last_week;
+        //    badgeData.text[1] = metric(downloads) + '/week';
+        //    break;
+        //  case 'd':
+        //    downloads = data.info.downloads.last_day;
+        //    badgeData.text[1] = metric(downloads) + '/day';
+        //   break;
+        //}
+        downloads = 'unknown';
+        badgeData.text[1] = 'unknown';
+
         badgeData.colorscheme = downloadCountColor(downloads);
         sendBadge(format, badgeData);
       } else if (info === 'v') {
