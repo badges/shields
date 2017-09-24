@@ -4866,7 +4866,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 
-//To generate API request Options for VS Code
+//To generate API request Options for VS Code marketplace
 function getVscodeApiReqOptions(package) {
   return {
     method: 'POST',
@@ -4888,7 +4888,7 @@ function getVscodeApiReqOptions(package) {
   };
 }
 
-//To extract Statistics (Install/Rating/RatingCount) from respose object for vscode
+//To extract Statistics (Install/Rating/RatingCount) from respose object for vscode marketplace
 function getVscodeStatistic(data, statisticName) {
   let statistics = data.results[0].extensions[0].statistics;
   try {
@@ -4899,14 +4899,15 @@ function getVscodeStatistic(data, statisticName) {
   }
 }
 
-//vscode-marketplace downloads integration
-camp.route(/^\/vscode-marketplace\/d\/(.*)\.(svg|png|gif|jpg|json)$/,
+//vscode-marketplace download/version/rating integration
+camp.route(/^\/vscode-marketplace\/(d|v|r)\/(.*)\.(svg|png|gif|jpg|json)$/,
   cache(function (data, match, sendBadge, request) {
-    var repo = match[1];  // eg, `ritwickdey.LiveServer`.
-    var format = match[2];
-    var badgeData = getBadgeData('Downloads', data);
+    let reqType = match[1]; // eg, d/v/r
+    let repo = match[2];  // eg, `ritwickdey.LiveServer`.
+    let format = match[3];
 
-    var options = getVscodeApiReqOptions(repo);
+    let badgeData = getBadgeData('vscode-marketplace', data); //temporary name
+    let options = getVscodeApiReqOptions(repo);
 
     request(options, function (err, res, buffer) {
       if (err != null) {
@@ -4914,78 +4915,37 @@ camp.route(/^\/vscode-marketplace\/d\/(.*)\.(svg|png|gif|jpg|json)$/,
         sendBadge(format, badgeData);
         return;
       }
+
       try {
-        var dls = getVscodeStatistic(buffer,'install');
+        switch (reqType) {
+          case 'd':
+            badgeData.text[0] = getLabel('downloads', data);
+            let count = getVscodeStatistic(buffer, 'install');
+            badgeData.text[1] = metric(count);
+            break;
+          case 'r':
+            badgeData.text[0] = getLabel('rating', data);
+            let rate = getVscodeStatistic(buffer, 'averagerating').toFixed(2);
+            let totalrate = getVscodeStatistic(buffer, 'ratingcount');
+            badgeData.text[1] = rate + '/5 (' + totalrate + ')';
+            break;
+          case 'v':
+            badgeData.text[0] = getLabel('Visual Studio Marketplace', data);
+            badgeData.text[1] = 'v' + buffer.results[0].extensions[0].versions[0].version;
+            break;
+        }
+
       } catch (e) {
         badgeData.text[1] = 'invalid';
         sendBadge(format, badgeData);
         return;
       }
-      badgeData.text[1] = metric(dls);
+
       badgeData.colorscheme = 'brightgreen';
       sendBadge(format, badgeData);
     });
-  }));
-
-
-
-//vscode-marketplace rating integration.eg: `rating : 4.65/5 (150)`
-camp.route(/^\/vscode-marketplace\/r\/(.*)\.(svg|png|gif|jpg|json)$/,
-  cache(function (data, match, sendBadge, request) {
-    var repo = match[1];  // eg, `ritwickdey.LiveServer`.
-    var format = match[2];
-    var badgeData = getBadgeData('rating', data);
-
-    var options = getVscodeApiReqOptions(repo);
-
-    request(options, function (err, res, buffer) {
-      if (err != null) {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
-      }
-      try {
-        var rate = getVscodeStatistic(buffer,'averagerating').toFixed(2);
-        var totalrate =  getVscodeStatistic(buffer,'ratingcount');
-        var dls = rate + '/5 (' + totalrate + ')';
-      } catch (e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-        return;
-      }
-      badgeData.text[1] = dls;
-      badgeData.colorscheme = 'brightgreen';
-      sendBadge(format, badgeData);
-    });
-  }));
-
-//vscode-marketplace version integration
-camp.route(/^\/vscode-marketplace\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function (data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `ritwickdey.LiveServer`.
-  var format = match[2];
-  var badgeData = getBadgeData('Visual Studio Marketplace', data);
-
-  var options = getVscodeApiReqOptions(repo);
-
-  request(options, function (err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var dls = 'v'+ buffer.results[0].extensions[0].versions[0].version;
-    } catch (e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
-    }
-    badgeData.text[1] = dls;
-    badgeData.colorscheme = 'brightgreen';
-    sendBadge(format, badgeData);
-  });
-}));
+  })
+);
 
 
 camp.route(/^\/dockbit\/([A-Za-z0-9-_]+)\/([A-Za-z0-9-_]+)\.(svg|png|gif|jpg|json)$/,
