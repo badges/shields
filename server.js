@@ -3378,21 +3378,26 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub issues integration.
-camp.route(/^\/github\/issues(-pr)?(-closed)?(-raw)?\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/issues(-pr)?(-nonpr)?(-closed)?(-raw)?\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var isPR = !!match[1];
-  var isClosed = !!match[2];
-  var isRaw = !!match[3];
-  var user = match[4];  // eg, badges
-  var repo = match[5];  // eg, shields
-  var ghLabel = match[6];  // eg, website
-  var format = match[7];
+  var isNonPR = !!match[2];
+  var isClosed = !!match[3];
+  var isRaw = !!match[4];
+  var user = match[5];  // eg, badges
+  var repo = match[6];  // eg, shields
+  var ghLabel = match[7];  // eg, website
+  var format = match[8];
   var apiUrl = githubApiUrl;
   var query = {};
   var issuesApi = false;  // Are we using the issues API instead of the repo one?
   if (isPR) {
     apiUrl += '/search/issues';
     query.q = 'is:pr is:' + (isClosed? 'closed': 'open') +
+      ' repo:' + user + '/' + repo;
+  } else if (isNonPR) {
+    apiUrl += '/search/issues';
+    query.q = 'is:issue is:' + (isClosed? 'closed': 'open') +
       ' repo:' + user + '/' + repo;
   } else {
     apiUrl += '/repos/' + user + '/' + repo;
@@ -3420,7 +3425,7 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       var modifier = '';
       var issues;
-      if (isPR) {
+      if (isPR || isNonPR) {
         issues = data.total_count;
       } else {
         if (issuesApi) {
