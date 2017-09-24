@@ -141,7 +141,7 @@ Successfully built 4471b442c220
 ```
 
 Optionally, create a file called `shields.env` that contains the needed configuration. See
-`secret.example.env` for an example.
+`shields.example.env` for an example.
 
 Then run the container:
 
