@@ -60,12 +60,17 @@ const {
   incrMonthlyAnalytics,
   getAnalytics
 } = require('./lib/analytics');
+const {
+  isValidStyle,
+  isDarkBackgroundStyle,
+  isSixHex: sixHex,
+  makeLabel: getLabel,
+  makeBadgeData: getBadgeData,
+} = require('./lib/badge-data');
 
 var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
 
-var validTemplates = ['default', 'plastic', 'flat', 'flat-square', 'social'];
-var darkBackgroundTemplates = ['default', 'flat', 'flat-square'];
 var logos = loadLogos();
 
 analyticsAutoLoad();
@@ -5691,7 +5696,7 @@ cache(function(data, match, sendBadge, request) {
   var badgeData = getBadgeData('chat', data);
   badgeData.text[1] = 'on gitter';
   badgeData.colorscheme = 'brightgreen';
-  if (darkBackgroundTemplates.some(function(t) { return t === badgeData.template; })) {
+  if (isDarkBackgroundStyle(badgeData.template)) {
     badgeData.logo = badgeData.logo || logos['gitter-white'];
     badgeData.logoWidth = 9;
   }
@@ -6601,7 +6606,7 @@ function(data, match, end, ask) {
         badgeData.colorscheme = color;
       }
     }
-    if (data.style && validTemplates.indexOf(data.style) > -1) {
+    if (isValidStyle(data.style)) {
       badgeData.template = data.style;
     }
     badge(badgeData, makeSend(format, ask.res, end));
@@ -6681,53 +6686,6 @@ function escapeFormatSlashes(t) {
 }
 
 
-function sixHex(s) { return /^[0-9a-fA-F]{6}$/.test(s); }
-
-function getLabel(label, data) {
-  return data.label || label;
-}
-
-function colorParam(color) { return (sixHex(color) ? '#' : '') + color; }
-
-// data (URL query) can include `label`, `style`, `logo`, `logoWidth`, `link`,
-// `colorA`, `colorB`.
-// It can also include `maxAge`.
-function getBadgeData(defaultLabel, data) {
-  var label = getLabel(defaultLabel, data);
-  var template = data.style || 'default';
-  if (data.style && validTemplates.indexOf(data.style) > -1) {
-    template = data.style;
-  }
-  if (!(Object(data.link) instanceof Array)) {
-    if (data.link === undefined) {
-      data.link = [];
-    } else {
-      data.link = [data.link];
-    }
-  }
-
-  if (data.logo !== undefined && !/^data:/.test(data.logo)) {
-    data.logo = 'data:' + data.logo;
-  }
-
-  if (data.colorA !== undefined) {
-    data.colorA = colorParam(data.colorA);
-  }
-  if (data.colorB !== undefined) {
-    data.colorB = colorParam(data.colorB);
-  }
-
-  return {
-    text: [label, 'n/a'],
-    colorscheme: 'lightgrey',
-    template: template,
-    logo: data.logo,
-    logoWidth: +data.logoWidth,
-    links: data.link,
-    colorA: data.colorA,
-    colorB: data.colorB
-  };
-}
 
 function makeSend(format, askres, end) {
   if (format === 'svg') {
