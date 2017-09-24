@@ -3378,15 +3378,16 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub issues integration.
-camp.route(/^\/github\/issues(-pr)?(-closed)?(-raw)?\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/issues(-pr)?(-closed)?(-state)?(-raw)?\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var isPR = !!match[1];
   var isClosed = !!match[2];
-  var isRaw = !!match[3];
-  var user = match[4];  // eg, badges
-  var repo = match[5];  // eg, shields
-  var ghLabel = match[6];  // eg, website
-  var format = match[7];
+  var isState = !!match[3];
+  var isRaw = !!match[4];
+  var user = match[5];  // eg, badges
+  var repo = match[6];  // eg, shields
+  var ghLabel = match[7];  // eg, website
+  var format = match[8];
   var apiUrl = githubApiUrl;
   var query = {};
   var issuesApi = false;  // Are we using the issues API instead of the repo one?
@@ -3394,6 +3395,9 @@ cache(function(data, match, sendBadge, request) {
     apiUrl += '/search/issues';
     query.q = 'is:pr is:' + (isClosed? 'closed': 'open') +
       ' repo:' + user + '/' + repo;
+  } else if (isState && ghLabel != undefined) {
+    apiUrl += '/repos/' + user + '/' + repo + '/issues/' + ghLabel;
+    issuesApi = true;
   } else {
     apiUrl += '/repos/' + user + '/' + repo;
     if (isClosed || ghLabel !== undefined) {
@@ -3420,23 +3424,38 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       var modifier = '';
       var issues;
-      if (isPR) {
-        issues = data.total_count;
-      } else {
-        if (issuesApi) {
-          issues = data.length;
-          if (res.headers['link'] &&
-              res.headers['link'].indexOf('rel="last"') >= 0) {
-            modifier = '+';
-          }
+      if (isState && issuesApi) {
+        var rightSide = isRaw ? data.state : data.title;
+        rightSide = rightSide.length > 25 ? rightSide.substr(0,21)+'...' : rightSide
+        var leftSide = '#' + ghLabel;
+        if (!data.message) {
+          badgeData.colorscheme = (data.state == 'closed') ? 'red': 'brightgreen';
         } else {
-          issues = data.open_issues_count;
+          rightSide = data.message;
+          badgeData.colorscheme = 'lightgrey';
         }
+        badgeData.text[0] = leftSide;
+        badgeData.text[1] = rightSide;
+        sendBadge(format, badgeData);
+      } else {
+        if (isPR) {
+          issues = data.total_count;
+        } else {
+          if (issuesApi) {
+            issues = data.length;
+            if (res.headers['link'] &&
+                res.headers['link'].indexOf('rel="last"') >= 0) {
+              modifier = '+';
+            }
+          } else {
+            issues = data.open_issues_count;
+          }
+        }
+        var rightText = isRaw? '': (isClosed? ' closed': ' open');
+        badgeData.text[1] = metric(issues) + modifier + rightText;
+        badgeData.colorscheme = (issues > 0)? 'yellow': 'brightgreen';
+        sendBadge(format, badgeData);
       }
-      var rightText = isRaw? '': (isClosed? ' closed': ' open');
-      badgeData.text[1] = metric(issues) + modifier + rightText;
-      badgeData.colorscheme = (issues > 0)? 'yellow': 'brightgreen';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
