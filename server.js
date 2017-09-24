@@ -4918,21 +4918,24 @@ camp.route(/^\/vscode-marketplace\/(d|v|r)\/(.*)\.(svg|png|gif|jpg|json)$/,
 
       try {
         switch (reqType) {
-          case 'd':
+          case 'd': {
             badgeData.text[0] = getLabel('downloads', data);
             let count = getVscodeStatistic(buffer, 'install');
             badgeData.text[1] = metric(count);
             break;
-          case 'r':
+          }
+          case 'r': {
             badgeData.text[0] = getLabel('rating', data);
             let rate = getVscodeStatistic(buffer, 'averagerating').toFixed(2);
             let totalrate = getVscodeStatistic(buffer, 'ratingcount');
             badgeData.text[1] = rate + '/5 (' + totalrate + ')';
             break;
-          case 'v':
+          }
+          case 'v': {
             badgeData.text[0] = getLabel('Visual Studio Marketplace', data);
             badgeData.text[1] = 'v' + buffer.results[0].extensions[0].versions[0].version;
             break;
+          }
         }
 
       } catch (e) {
