@@ -3370,9 +3370,10 @@ cache(function(data, match, sendBadge, request) {
     (isClosed? ' is:closed': ' is:open') +
     (hasLabel? ' label:' + ghLabel: '');
 
+  var closedText = (isClosed && isRaw)? 'closed ': '';
   var labelText = isRaw? '': (hasLabel? ghLabel + ' ': '');
   var targetText = isPR? 'pull requests': 'issues';
-  var badgeData = getBadgeData(labelText + targetText, data);
+  var badgeData = getBadgeData(closedText + labelText + targetText, data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
   }
@@ -3385,7 +3386,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var issues = data.total_count;
-      var rightText = isClosed? ' closed': (isRaw? '': ' open');
+      var rightText = isRaw? '': (isClosed? ' closed': ' open');
       badgeData.text[1] = metric(issues) + rightText;
       badgeData.colorscheme = (issues > 0)? 'yellow': 'brightgreen';
       sendBadge(format, badgeData);
