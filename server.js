@@ -4899,12 +4899,12 @@ function getVscodeStatistic(data, statisticName) {
   }
 }
 
-//vscode installs integration
-camp.route(/^\/vscode\/installs\/(.*)\.(svg|png|gif|jpg|json)$/,
+//vscode-marketplace downloads integration
+camp.route(/^\/vscode-marketplace\/d\/(.*)\.(svg|png|gif|jpg|json)$/,
   cache(function (data, match, sendBadge, request) {
     var repo = match[1];  // eg, `ritwickdey.LiveServer`.
     var format = match[2];
-    var badgeData = getBadgeData('Installs', data);
+    var badgeData = getBadgeData('Downloads', data);
 
     var options = getVscodeApiReqOptions(repo);
 
@@ -4929,8 +4929,8 @@ camp.route(/^\/vscode\/installs\/(.*)\.(svg|png|gif|jpg|json)$/,
 
 
 
-//vscode rating integration.eg: `rating : 4.65/5 (150)`
-camp.route(/^\/vscode\/rating\/(.*)\.(svg|png|gif|jpg|json)$/,
+//vscode-marketplace rating integration.eg: `rating : 4.65/5 (150)`
+camp.route(/^\/vscode-marketplace\/r\/(.*)\.(svg|png|gif|jpg|json)$/,
   cache(function (data, match, sendBadge, request) {
     var repo = match[1];  // eg, `ritwickdey.LiveServer`.
     var format = match[2];
@@ -4959,8 +4959,8 @@ camp.route(/^\/vscode\/rating\/(.*)\.(svg|png|gif|jpg|json)$/,
     });
   }));
 
-//vscode version integration
-camp.route(/^\/vscode\/version\/(.*)\.(svg|png|gif|jpg|json)$/,
+//vscode-marketplace version integration
+camp.route(/^\/vscode-marketplace\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
   var repo = match[1];  // eg, `ritwickdey.LiveServer`.
   var format = match[2];
