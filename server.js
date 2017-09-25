@@ -3177,19 +3177,20 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub package and manifest version integration.
-camp.route(/^\/github\/(package|manifest)\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/(package|manifest)-json\/([^\/]+)\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var type = match[1];
-  var user = match[2];
-  var repo = match[3];
-  var branch = match[4] || 'master';
-  var format = match[5];
+  var info = match[2];
+  var user = match[3];
+  var repo = match[4];
+  var branch = match[5] || 'master';
+  var format = match[6];
   var apiUrl = 'https://raw.githubusercontent.com/' + user + '/' + repo + '/' + branch + '/' + type + '.json';
-  var badgeData = getBadgeData('development', data);
+  var badgeData = getBadgeData(type, data);
   if (badgeData.template === 'social') {
     badgeData.logo = badgeData.logo || logos.github;
   }
-  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
+  request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -3197,13 +3198,26 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var version = data.version;
-      var vdata = versionColor(version);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = vdata.color;
+      switch(info) {
+        case 'v':
+        case 'version':
+          var version = data.version;
+          var vdata = versionColor(version);
+          badgeData.text[1] = vdata.version;
+          badgeData.colorscheme = vdata.color;
+          break;
+        case 'n':
+          info = 'name';
+        default:
+          var value = typeof data[info] != 'undefined' && typeof data[info] != 'object' ? data[info] : 'invalid data';
+          badgeData.text[0] = type + " " + info;
+          badgeData.text[1] = value;
+          badgeData.colorscheme = 'blue';
+          break;
+      }
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'none';
+      badgeData.text[1] = 'invalid data';
       sendBadge(format, badgeData);
     }
   });
