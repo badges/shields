@@ -5804,13 +5804,16 @@ cache(function(data, match, sendBadge, request) {
     var now = new Date();
     var cy = now.getUTCFullYear();  // current year.
     var m = now.getUTCMonth();  // month.
-    if (cy <= year) {
+    if (status == 'no'){
+      badgeData.text[1] = 'no! (as of ' + year + ')';
+      badgeData.colorscheme = 'red';
+    } else if (cy <= year) {
       badgeData.text[1] = status;
       badgeData.colorscheme = 'brightgreen';
     } else if ((cy === year + 1) && (m < 3)) {
       badgeData.text[1] = 'stale (as of ' + cy + ')';
     } else {
-      badgeData.text[1] = 'no!';
+      badgeData.text[1] = 'no! (as of ' + year + ')';
       badgeData.colorscheme = 'red';
     }
     sendBadge(format, badgeData);
