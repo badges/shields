@@ -3187,9 +3187,6 @@ cache(function(data, match, sendBadge, request) {
   var format = match[6];
   var apiUrl = 'https://raw.githubusercontent.com/' + user + '/' + repo + '/' + branch + '/' + type + '.json';
   var badgeData = getBadgeData(type, data);
-  if (badgeData.template === 'social') {
-    badgeData.logo = badgeData.logo || logos.github;
-  }
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';

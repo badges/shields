@@ -133,17 +133,60 @@ t.create('Tag')
   }));
 
 t.create('Package version')
-  .get('/package/badges/shields.json')
+  .get('/package-json/v/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('development'),
+    name: Joi.equal('package'),
     value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?$/)
   }));
 
-t.create('Manifest version')
-  .get('/manifest/RedSparr0w/IndieGala-Helper.json')
+t.create('Package name')
+  .get('/package-json/n/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('development'),
+    name: Joi.equal('package name'),
+    value: Joi.equal('gh-badges')
+  }));
+
+t.create('Package object/invalid')
+  .get('/package-json/keywords/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('package keywords'),
+    value: Joi.equal('invalid data')
+  }));
+
+t.create('Manifest version')
+  .get('/manifest-json/v/RedSparr0w/IndieGala-Helper.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('manifest'),
     value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?$/)
+  }));
+
+t.create('Manifest name')
+  .get('/manifest-json/n/RedSparr0w/IndieGala-Helper.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('manifest name'),
+    value: Joi.equal('IndieGala Helper')
+  }));
+
+t.create('Manifest object/invalid')
+  .get('/manifest-json/permissions/RedSparr0w/IndieGala-Helper.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('manifest permissions'),
+    value: Joi.equal('invalid data')
+  }));
+
+t.create('Manifest invalid json response')
+  .get('/manifest-json/v/RedSparr0w/not-a-real-project.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('manifest'),
+    value: Joi.equal('invalid data')
+  }));
+
+t.create('Manifest no network connection')
+  .get('/manifest-json/v/RedSparr0w/IndieGala-Helper.json')
+  .networkOff()
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('manifest'),
+    value: Joi.equal('inaccessible')
   }));
 
 t.create('File size')
