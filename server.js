@@ -4585,6 +4585,10 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
+    } else if (res && (res.statusCode === 404)) {
+      badgeData.text[1] = 'no-artifact';
+      sendBadge(format, badgeData);
+      return;
     }
     try {
       var parsed = JSON.parse(buffer);

@@ -54,6 +54,10 @@ t.create('resolve version with query')
     value: Joi.string().regex(/^7(\.\d+)+-SNAPSHOT$/)
 }));
 
+t.create('resolve version of an inexistent artifact')
+  .get('/developer/https/repository.jboss.org/nexus/jboss/inexistent-artifact-id.json')
+  .expectJSON({ name: 'nexus', value: 'no-artifact' });
+
 t.create('connection error')
   .get('/r/https/repository.jboss.org/nexus/jboss/jboss-client.json')
   .networkOff()
