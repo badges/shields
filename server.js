@@ -3250,7 +3250,7 @@ cache(function(data, match, sendBadge, request) {
   var allReleases = match[5];
   var format = match[6];
   var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/releases';
-  var labelText = showName? repo + (isRaw? '': ' release'): 'release'
+  var labelText = showName? repo + (isRaw? '': ' release'): 'release';
   var badgeData = getBadgeData(labelText, data);
   if (allReleases === undefined) {
     apiUrl = apiUrl + '/latest';

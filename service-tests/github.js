@@ -146,10 +146,38 @@ t.create('Release')
     value: Joi.string()
   }));
 
-t.create('(pre-)Release')
+t.create('Release + name')
+  .get('/release-name/photonstorm/phaser.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('phaser release'),
+    value: Joi.string()
+  }));
+
+t.create('Release + name + raw')
+  .get('/release-name-raw/photonstorm/phaser.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('phaser'),
+    value: Joi.string()
+  }));
+
+t.create('(Pre-)Release')
   .get('/release/photonstorm/phaser/all.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('release'),
+    value: Joi.string()
+  }));
+
+t.create('(Pre-)Release + name')
+  .get('/release-name/photonstorm/phaser/all.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('phaser release'),
+    value: Joi.string()
+  }));
+
+t.create('(Pre-)Release + name + raw')
+  .get('/release-name-raw/photonstorm/phaser/all.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('phaser'),
     value: Joi.string()
   }));
 
