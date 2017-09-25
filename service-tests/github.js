@@ -146,6 +146,13 @@ t.create('Package name')
     value: Joi.equal('gh-badges')
   }));
 
+t.create('Package name - Custom label')
+  .get('/package-json/name/badges/shields.json?label=Dev Name')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('Dev Name'),
+    value: Joi.equal('gh-badges')
+  }));
+
 t.create('Package object/invalid')
   .get('/package-json/keywords/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
