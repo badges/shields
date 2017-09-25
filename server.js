@@ -4551,7 +4551,11 @@ cache(function(data, match, sendBadge, request) {
 
 function isNexusSnapshotVersion(version) {
   var pattern = /(\d+\.)*\d\-SNAPSHOT/;
-  return version.match(pattern);
+  if (version) {
+    return version.match(pattern);
+  } else {
+    return false;
+  }
 }
 
 // standalone sonatype nexus installation
@@ -4567,7 +4571,7 @@ cache(function(data, match, sendBadge, request) {
   var groupId = encodeURIComponent(match[4]);    // eg, `com.google.inject`
   var artifactId = encodeURIComponent(match[5]); // eg, `guice`
   var queryOpt = (match[6] || '').replace(/:/g, '&'); // eg, `&p=pom&c=doc`
-  var format = match[7] || "gif";
+  var format = match[7];
 
   var badgeData = getBadgeData('nexus', data);
 
@@ -4587,9 +4591,19 @@ cache(function(data, match, sendBadge, request) {
       var version = '0';
       switch (repo) {
         case 'r':
+          if (parsed.data.length === 0) {
+            badgeData.text[1] = 'no-artifact';
+            sendBadge(format, badgeData);
+            return;
+          }
           version = parsed.data[0].latestRelease;
           break;
         case 's':
+          if (parsed.data.length === 0) {
+            badgeData.text[1] = 'no-artifact';
+            sendBadge(format, badgeData);
+            return;
+          }
           // only want to match 1.2.3-SNAPSHOT style versions, which may not always be in
           // 'latestSnapshot' so check 'version' as well before continuing to next entry
           parsed.data.every(function(artifact) {
