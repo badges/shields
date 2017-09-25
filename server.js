@@ -3212,7 +3212,7 @@ cache(function(data, match, sendBadge, request) {
           var value = typeof data[info] != 'undefined' && typeof data[info] != 'object' ? data[info] : 'invalid data';
           badgeData.text[0] = type + " " + info;
           badgeData.text[1] = value;
-          badgeData.colorscheme = 'blue';
+          badgeData.colorscheme = value != 'invalid data' ? 'blue' : 'lightgrey';
           break;
       }
       sendBadge(format, badgeData);
