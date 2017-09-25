@@ -2,6 +2,9 @@ language: node_js
 node_js:
   - 6
 
+before_script:
+  - echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
+
 script:
   - npm run lint
   - npm run test:js
