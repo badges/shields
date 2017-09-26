@@ -6109,6 +6109,7 @@ cache(function(data, match, sendBadge, request) {
     }
     chromeWebStore.convert(buffer)
       .then(function (value) {
+        var rating;
         switch (type) {
           case 'v':
             var vdata = versionColor(value.version);
@@ -6128,13 +6129,13 @@ cache(function(data, match, sendBadge, request) {
             badgeData.colorscheme = 'brightgreen';
             break;
           case 'rating':
-            var rating = Math.round(value.ratingValue * 100) / 100;
+            rating = Math.round(value.ratingValue * 100) / 100;
             badgeData.text[0] = data.label || 'rating';
             badgeData.text[1] = rating + '/5';
             badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
             break;
           case 'stars':
-            var rating = Math.round(value.ratingValue);
+            rating = Math.round(value.ratingValue);
             badgeData.text[0] = data.label || 'rating';
             badgeData.text[1] = starRating(rating);
             badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
