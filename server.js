@@ -6129,11 +6129,11 @@ cache(function(data, match, sendBadge, request) {
 
 // Mozilla addons integration
 camp.route(/^\/amo\/(v|d|rating|stars|users)\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
+cache(function(query_data, match, sendBadge, request) {
   var type = match[1];
   var addonId = match[2];
   var format = match[3];
-  var badgeData = getBadgeData('mozilla add-on', data);
+  var badgeData = getBadgeData('mozilla add-on', query_data);
   var url = 'https://services.addons.mozilla.org/api/1.5/addon/' + addonId;
 
   request(url, function(err, res, buffer) {
@@ -6161,25 +6161,25 @@ cache(function(data, match, sendBadge, request) {
           break;
         case 'd':
           var downloads = parseInt(data.addon.total_downloads[0], 10);
-          badgeData.text[0] = 'downloads';
+          badgeData.text[0] = query_data.label || 'downloads';
           badgeData.text[1] = metric(downloads);
           badgeData.colorscheme = downloadCountColor(downloads);
           break;
         case 'rating':
           rating = parseInt(data.addon.rating, 10);
-          badgeData.text[0] = 'rating';
+          badgeData.text[0] = query_data.label || 'rating';
           badgeData.text[1] = rating + '/5';
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
           break;
         case 'stars':
           rating = parseInt(data.addon.rating, 10);
-          badgeData.text[0] = 'rating';
+          badgeData.text[0] = query_data.label || 'rating';
           badgeData.text[1] = starRating(rating);
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
           break;
         case 'users':
           var dailyUsers = parseInt(data.addon.daily_users[0], 10);
-          badgeData.text[0] = 'users';
+          badgeData.text[0] = query_data.label || 'users';
           badgeData.text[1] = metric(dailyUsers);
           badgeData.colorscheme = 'brightgreen';
           break;
