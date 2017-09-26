@@ -28,16 +28,16 @@ t.create('rating should be formatted. eg. rating|4.25/5(30)')
 }));
 
 t.create('rating label should be changed to custom label. eg. My custom rating label|4.25/5(30)')
-.get('/r/ritwickdey.LiveServer.json?label=" My custom rating label"')
+.get('/r/ritwickdey.LiveServer.json?label="My custom rating label"')
 .expectJSONTypes(Joi.object().keys({
-  name: Joi.equal(' My custom rating label'),
+  name: Joi.equal('My custom rating label'),
   value: Joi.string().regex(/[0-5].[0-9]{2}\/5?\s*\([0-9]*\)$/)
 }));
 
 t.create('version should be formatted. eg. Visual Studio Marketplace|v7.2.5')
 .get('/v/ritwickdey.LiveServer.json')
 .expectJSONTypes(Joi.object().keys({
-  name: Joi.equal('Visual Studio Marketplace'),
+  name: Joi.equal('visual studio marketplace'),
   value: Joi.string().regex(/^v[0-9]*.[0-9]*.[0-9]*$/)
 }));
 

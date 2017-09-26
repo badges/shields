@@ -4932,7 +4932,7 @@ camp.route(/^\/vscode-marketplace\/(d|v|r)\/(.*)\.(svg|png|gif|jpg|json)$/,
             break;
           }
           case 'v': {
-            badgeData.text[0] = getLabel('Visual Studio Marketplace', data);
+            badgeData.text[0] = getLabel('visual studio marketplace', data);
             badgeData.text[1] = 'v' + buffer.results[0].extensions[0].versions[0].version;
             break;
           }
