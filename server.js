@@ -5062,6 +5062,92 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+
+//To generate API request Options for VS Code marketplace
+function getVscodeApiReqOptions(package) {
+  return {
+    method: 'POST',
+    url: 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery/',
+    headers:
+    {
+      'accept': 'application/json;api-version=3.0-preview.1',
+      'content-type': 'application/json'
+    },
+    body:
+    {
+      filters: [{
+        criteria: [
+          { filterType: 7, value: package }]
+      }],
+      flags: 914
+    },
+    json: true
+  };
+}
+
+//To extract Statistics (Install/Rating/RatingCount) from respose object for vscode marketplace
+function getVscodeStatistic(data, statisticName) {
+  let statistics = data.results[0].extensions[0].statistics;
+  try {
+    let statistic = statistics.find(x => x.statisticName.toLowerCase() === statisticName.toLowerCase());
+    return statistic.value;
+  } catch (err) {
+    return 0; //In case required statistic is not found means ZERO.
+  }
+}
+
+//vscode-marketplace download/version/rating integration
+camp.route(/^\/vscode-marketplace\/(d|v|r)\/(.*)\.(svg|png|gif|jpg|json)$/,
+  cache(function (data, match, sendBadge, request) {
+    let reqType = match[1]; // eg, d/v/r
+    let repo = match[2];  // eg, `ritwickdey.LiveServer`.
+    let format = match[3];
+
+    let badgeData = getBadgeData('vscode-marketplace', data); //temporary name
+    let options = getVscodeApiReqOptions(repo);
+
+    request(options, function (err, res, buffer) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+
+      try {
+        switch (reqType) {
+          case 'd': {
+            badgeData.text[0] = getLabel('downloads', data);
+            let count = getVscodeStatistic(buffer, 'install');
+            badgeData.text[1] = metric(count);
+            break;
+          }
+          case 'r': {
+            badgeData.text[0] = getLabel('rating', data);
+            let rate = getVscodeStatistic(buffer, 'averagerating').toFixed(2);
+            let totalrate = getVscodeStatistic(buffer, 'ratingcount');
+            badgeData.text[1] = rate + '/5 (' + totalrate + ')';
+            break;
+          }
+          case 'v': {
+            badgeData.text[0] = getLabel('visual studio marketplace', data);
+            badgeData.text[1] = 'v' + buffer.results[0].extensions[0].versions[0].version;
+            break;
+          }
+        }
+
+      } catch (e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
+      }
+
+      badgeData.colorscheme = 'brightgreen';
+      sendBadge(format, badgeData);
+    });
+  })
+);
+
+
 camp.route(/^\/dockbit\/([A-Za-z0-9-_]+)\/([A-Za-z0-9-_]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const org      = match[1];
