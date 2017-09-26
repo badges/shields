@@ -14,7 +14,7 @@ t.create('Downloads (now users)')
   }));
 
 t.create('Users')
-  .get('/u/alhjnofcnnpeaphgeakdhkebafjcpeae.json')
+  .get('/users/alhjnofcnnpeaphgeakdhkebafjcpeae.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('users'),
     value: Joi.string().regex(/^\d+k?$/)

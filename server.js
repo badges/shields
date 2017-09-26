@@ -6093,7 +6093,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Chrome web store integration
-camp.route(/^\/chrome-web-store\/(v|d|u|price|rating|stars|rating-count)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/chrome-web-store\/(v|d|users|price|rating|stars|rating-count)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var type = match[1];
   var storeId = match[2];  // eg, nimelepbpejjlbmoobocpfnjhihnpked
@@ -6117,7 +6117,7 @@ cache(function(data, match, sendBadge, request) {
             badgeData.colorscheme = vdata.color;
             break;
           case 'd':
-          case 'u':
+          case 'users':
             var downloads = value.interactionCount.UserDownloads;
             badgeData.text[0] = data.label || 'users';
             badgeData.text[1] = metric(downloads);
