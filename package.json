@@ -63,6 +63,7 @@
   ],
   "devDependencies": {
     "child-process-promise": "^2.2.1",
+    "dejavu-fonts-ttf": "^2.37.3",
     "eslint": "^3.18.0",
     "glob": "^7.1.1",
     "icedfrisby": "^1.2.0",
