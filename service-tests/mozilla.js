@@ -45,7 +45,7 @@ t.create('Stars')
   .get('/stars/IndieGala-Helper.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('rating'),
-    value: Joi.string()
+    value: Joi.string().regex(/^[\u2605\u2606]{5}$/)
   }));
 
 t.create('Invalid addon')
