@@ -59,7 +59,7 @@ const {
   downloadCount: downloadCountColor,
   floorCount: floorCountColor,
   version: versionColor,
-  dateColor
+  date: dateColor
 } = require('./lib/color-formatters.js');
 const {
   analyticsAutoLoad,
