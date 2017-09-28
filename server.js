@@ -1785,7 +1785,7 @@ cache(function(data, match, sendBadge, request) {
 
 // Anaconda Cloud / conda package manager integration
 camp.route(/^\/conda\/([dvp]n?)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
+cache(function(queryData, match, sendBadge, request) {
   const mode = match[1];
   const channel = match[2];
   const pkgname = match[3];
@@ -1818,29 +1818,29 @@ cache(function(data, match, sendBadge, request) {
   };
   const variants = {
     // default use `conda|{channelname}` as label
-    '': function(data, badgeData) {
-      badgeData.text[0] = (data && data.label) || 'conda|' + badgeData.text[0];
+    '': function(queryData, badgeData) {
+      badgeData.text[0] = (queryData && queryData.label) || 'conda|' + badgeData.text[0];
     },
     // skip `conda|` prefix
-    'n': function(data, badgeData) {
+    'n': function(queryData, badgeData) {
     }
   };
 
   const update = modes[mode.charAt(0)];
   const variant = variants[mode.charAt(1)];
 
-  var badgeData = getBadgeData(labels[mode.charAt(0)], data);
+  var badgeData = getBadgeData(labels[mode.charAt(0)], queryData);
   request(url, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
-      variant(data, badgeData);
+      variant(queryData, badgeData);
       sendBadge(format, badgeData);
       return;
     }
     try {
       var data = JSON.parse(buffer);
       update(data, badgeData);
-      variant(data, badgeData);
+      variant(queryData, badgeData);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
