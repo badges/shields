@@ -28,8 +28,6 @@ var badge = require('./lib/badge.js');
 var svg2img = require('./lib/svg-to-img.js');
 var githubAuth = require('./lib/github-auth.js');
 var querystring = require('querystring');
-var moment = require('moment');
-moment().format();
 var prettyBytes = require('pretty-bytes');
 var xml2js = require('xml2js');
 var serverSecrets = require('./lib/server-secrets');
@@ -54,12 +52,14 @@ const {
   ordinalNumber,
   starRating,
   omitv,
+  formatDate
 } = require('./lib/text-formatters.js');
 const {
   coveragePercentage: coveragePercentageColor,
   downloadCount: downloadCountColor,
   floorCount: floorCountColor,
   version: versionColor,
+  dateColor
 } = require('./lib/color-formatters.js');
 const {
   analyticsAutoLoad,
@@ -3762,7 +3762,7 @@ camp.route(/^\/github\/stats\/([^\/]+)\/([^\/]+)\/(week|month|year)\.(svg|png|gi
     var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/stats/commit_activity';
     var badgeData = getBadgeData('commits', data);
     if (badgeData.template === 'social') {
-      badgeData.logo = badgeData.logo || logos.github;
+      badgeData.logo = getLogo('github', data);
       badgeData.links = [
         'https://github.com/' + user + '/' + repo
       ];
@@ -3808,7 +3808,7 @@ camp.route(/^\/github\/commits\/([^\/]+)\/([^\/]+)(?:\/(.+))?\/last\.(svg|png|gi
     }
     var badgeData = getBadgeData('last commit ', data);
     if (badgeData.template === 'social') {
-      badgeData.logo = badgeData.logo || logos.github;
+      badgeData.logo = getLogo('github', data);
       badgeData.links = [
         'https://github.com/' + user + '/' + repo
       ];
@@ -3821,8 +3821,8 @@ camp.route(/^\/github\/commits\/([^\/]+)\/([^\/]+)(?:\/(.+))?\/last\.(svg|png|gi
       }
       try {
         var data = JSON.parse(buffer)[0].commit.author.date;
-        badgeData.text[1] = parseDate(data);
-        badgeData.colorscheme = colorDate(Date.parse(data));
+        badgeData.text[1] = formatDate(data);
+        badgeData.colorscheme = dateColor(Date.parse(data));
         sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'invalid';
@@ -7113,49 +7113,6 @@ function regularUpdate(url, interval, scraper, cb) {
     cb(null, data);
   });
 }
-
-<<<<<<< HEAD
-// Given a number, string with appropriate unit in the metric system, SI.
-// Note: numbers beyond the peta- cannot be represented as integers in JS.
-var metricPrefix = ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'];
-var metricPower = metricPrefix
-    .map(function(a, i) { return Math.pow(1000, i + 1); });
-function metric(n) {
-  for (var i = metricPrefix.length - 1; i >= 0; i--) {
-    var limit = metricPower[i];
-    if (n >= limit) {
-      n = Math.round(n / limit);
-      return ''+n + metricPrefix[i];
-    }
-  }
-  return ''+n;
-}
-
-function colorDate(date) {
-  var diff = 365 - moment().diff(moment(date), 'days');
-  return floorCountColor(diff,
-    [ {v: -365, c: 'red'},
-      {v: 0,    c: 'orange'},
-      {v: 185,  c: 'yellow'},
-      {v: 335,  c: 'yellowgreen'},
-      {v: 358,  c: 'green'}
-    ], 'brightgreen');
-}
-
-// Parse date to Today, Yesterday, last ddd and so on
-function parseDate(d) {
-  var date = moment(d);
-  var dateString = date.calendar(null, {
-    lastDay: ' [Yesterday]',
-    sameDay: ' [Today]',
-    lastWeek: '[last] dddd',
-    sameElse: ' D MMM YYYY '
-  });
-  // Trim current year from date string
-  var currentYear = moment().year();
-  return dateString.replace(' ' + currentYear, '');
-}
-
 
 // Get data from a svg-style badge.
 // cb: function(err, string)
