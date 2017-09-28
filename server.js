@@ -3205,6 +3205,7 @@ cache(function(query_data, match, sendBadge, request) {
           break;
         case 'n':
           info = 'name';
+          // falls through
         default:
           var value = typeof json_data[info] != 'undefined' && typeof json_data[info] != 'object' ? json_data[info] : 'invalid data';
           badgeData.text[0] = query_data.label || type + " " + info;
