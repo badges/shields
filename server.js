@@ -6093,7 +6093,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Chrome web store integration
-camp.route(/^\/chrome-web-store\/(v|d|price|rating|stars|rating-count)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/chrome-web-store\/(v|d|users|price|rating|stars|rating-count)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var type = match[1];
   var storeId = match[2];  // eg, nimelepbpejjlbmoobocpfnjhihnpked
@@ -6109,35 +6109,43 @@ cache(function(data, match, sendBadge, request) {
     }
     chromeWebStore.convert(buffer)
       .then(function (value) {
-        if (type === 'v') {
-          var vdata = versionColor(value.version);
-          badgeData.text[1] = vdata.version;
-          badgeData.colorscheme = vdata.color;
-        } else if (type === 'd') {
-          var downloads = value.interactionCount.UserDownloads;
-          badgeData.text[0] = data.label || 'downloads';
-          badgeData.text[1] = metric(downloads) + ' total';
-          badgeData.colorscheme = downloadCountColor(downloads);
-        } else if (type === 'price') {
-          badgeData.text[0] = data.label || 'price';
-          badgeData.text[1] = currencyFromCode(value.priceCurrency) +
-            value.price;
-          badgeData.colorscheme = 'brightgreen';
-        } else if (type === 'rating') {
-          let rating = Math.round(value.ratingValue * 100) / 100;
-          badgeData.text[0] = data.label || 'rating';
-          badgeData.text[1] = rating + '/5';
-          badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
-        } else if (type === 'stars') {
-          let rating = Math.round(value.ratingValue);
-          badgeData.text[0] = data.label || 'rating';
-          badgeData.text[1] = starRating(rating);
-          badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
-        } else if (type === 'rating-count') {
-          var ratingCount = value.ratingCount;
-          badgeData.text[0] = data.label || 'rating count';
-          badgeData.text[1] = metric(ratingCount) + ' total';
-          badgeData.colorscheme = floorCountColor(ratingCount, 5, 50, 500);
+        var rating;
+        switch (type) {
+          case 'v':
+            var vdata = versionColor(value.version);
+            badgeData.text[1] = vdata.version;
+            badgeData.colorscheme = vdata.color;
+            break;
+          case 'd':
+          case 'users':
+            var downloads = value.interactionCount.UserDownloads;
+            badgeData.text[0] = data.label || 'users';
+            badgeData.text[1] = metric(downloads);
+            badgeData.colorscheme = downloadCountColor(downloads);
+            break;
+          case 'price':
+            badgeData.text[0] = data.label || 'price';
+            badgeData.text[1] = currencyFromCode(value.priceCurrency) + value.price;
+            badgeData.colorscheme = 'brightgreen';
+            break;
+          case 'rating':
+            rating = Math.round(value.ratingValue * 100) / 100;
+            badgeData.text[0] = data.label || 'rating';
+            badgeData.text[1] = rating + '/5';
+            badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
+            break;
+          case 'stars':
+            rating = Math.round(value.ratingValue);
+            badgeData.text[0] = data.label || 'rating';
+            badgeData.text[1] = starRating(rating);
+            badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
+            break;
+          case 'rating-count':
+            var ratingCount = value.ratingCount;
+            badgeData.text[0] = data.label || 'rating count';
+            badgeData.text[1] = metric(ratingCount) + ' total';
+            badgeData.colorscheme = floorCountColor(ratingCount, 5, 50, 500);
+            break;
         }
         sendBadge(format, badgeData);
       }).catch(function (err) {
