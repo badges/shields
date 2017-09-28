@@ -4626,6 +4626,103 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+function isNexusSnapshotVersion(version) {
+  var pattern = /(\d+\.)*\d\-SNAPSHOT/;
+  if (version) {
+    return version.match(pattern);
+  } else {
+    return false;
+  }
+}
+
+// standalone sonatype nexus installation
+// API pattern:
+//   /nexus/(r|s|<repo-name>)/(http|https)/<nexus.host>[:port][/<entry-path>]/<group>/<artifact>[:k1=v1[:k2=v2[...]]].<format>
+// for /nexus/[rs]/... pattern, use the search api of the nexus server, and
+// for /nexus/<repo-name>/... pattern, use the resolve api of the nexus server.
+camp.route(/^\/nexus\/(r|s|[^\/]+)\/(https?)\/((?:[^\/]+)(?:\/[^\/]+)?)\/([^\/]+)\/([^\/:]+)(:.+)?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var repo = match[1];                           // r | s | repo-name
+  var scheme = match[2];                         // http | https
+  var host = match[3];                           // eg, `nexus.example.com`
+  var groupId = encodeURIComponent(match[4]);    // eg, `com.google.inject`
+  var artifactId = encodeURIComponent(match[5]); // eg, `guice`
+  var queryOpt = (match[6] || '').replace(/:/g, '&'); // eg, `&p=pom&c=doc`
+  var format = match[7];
+
+  var badgeData = getBadgeData('nexus', data);
+
+  var apiUrl = scheme + '://' + host
+               + ((repo ==  'r' || repo == 's')
+                 ? ('/service/local/lucene/search?g=' + groupId + '&a=' + artifactId + queryOpt)
+                 : ('/service/local/artifact/maven/resolve?r=' + repo + '&g=' + groupId + '&a=' + artifactId + '&v=LATEST' + queryOpt));
+
+  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    } else if (res && (res.statusCode === 404)) {
+      badgeData.text[1] = 'no-artifact';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var parsed = JSON.parse(buffer);
+      var version = '0';
+      switch (repo) {
+        case 'r':
+          if (parsed.data.length === 0) {
+            badgeData.text[1] = 'no-artifact';
+            sendBadge(format, badgeData);
+            return;
+          }
+          version = parsed.data[0].latestRelease;
+          break;
+        case 's':
+          if (parsed.data.length === 0) {
+            badgeData.text[1] = 'no-artifact';
+            sendBadge(format, badgeData);
+            return;
+          }
+          // only want to match 1.2.3-SNAPSHOT style versions, which may not always be in
+          // 'latestSnapshot' so check 'version' as well before continuing to next entry
+          parsed.data.every(function(artifact) {
+             if (isNexusSnapshotVersion(artifact.latestSnapshot)) {
+                version = artifact.latestSnapshot;
+                return;
+             }
+             if (isNexusSnapshotVersion(artifact.version)) {
+                version = artifact.version;
+                return;
+             }
+             return true;
+          });
+          break;
+        default:
+          version = parsed.data.baseVersion || parsed.data.version;
+          break;
+      }
+
+      if (version === '0' || /SNAPSHOT/.test(version)) {
+        badgeData.colorscheme = 'orange';
+        if (version !== '0') {
+          badgeData.text[1] = version;
+        } else {
+          badgeData.text[1] = 'undefined';
+        }
+      } else {
+         badgeData.colorscheme = 'blue';
+         badgeData.text[1] = version;
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Bower version integration.
 camp.route(/^\/bower\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache((data, match, sendBadge, request) => {
