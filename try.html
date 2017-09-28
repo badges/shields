@@ -1275,6 +1275,8 @@ is where the current server got started.
   <input class=code id=copyMarkdown>
   </p><p> reStructuredText
   <input class=code id=copyreStructuredText>
+  </p><p> AsciiDoc
+  <input class=code id=copyAsciiDoc>
   </p><div id=copyDoc></div>
 </form>
 </dialog>
@@ -1466,6 +1468,7 @@ function selectNode(e) {
 };
 copyMarkdown.addEventListener('click', selectNode);
 copyreStructuredText.addEventListener('click', selectNode);
+copyAsciiDoc.addEventListener('click', selectNode);
 
 // Markup copier dialog
 //
@@ -1525,8 +1528,10 @@ function markupDialog(tr) {
     }
     var md = '[![' + trname + '](' + img + ')](' + url + ')';
     var rst = '.. image:: ' + img + '   :target: ' + url;
+    var adoc = 'image:' + img + '[' + trname + ']';
     copyMarkdown.value = md;
     copyreStructuredText.value = rst;
+    copyAsciiDoc.value = adoc;
     copyImg.src = img;
   };
   copyForm.url.addEventListener('input', copyFormUrlEventListener);
