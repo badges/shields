@@ -46,7 +46,6 @@
 'use strict';
 
 const minimist = require('minimist');
-const readlineSync = require('readline-sync');
 const readAllStdinSync = require('read-all-stdin-sync');
 const Runner = require('./runner');
 const serverHelpers = require('../../lib/in-process-server-test-helpers');
