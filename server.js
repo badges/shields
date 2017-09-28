@@ -4651,6 +4651,11 @@ cache((data, match, sendBadge, request) => {
       sendBadge(format, badgeData);
       return;
     }
+    if(res.statusCode !== 200) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
     try {
       //if reqType is `v`, then stable release number, if `vpre` then latest release
       const version = reqType == 'v' ? data.latest_stable_release.name : data.latest_release_number;
@@ -4659,7 +4664,7 @@ cache((data, match, sendBadge, request) => {
       badgeData.colorscheme = vdata.color;
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'void';
+      badgeData.text[1] = 'no releases';
       sendBadge(format, badgeData);
     }
   });
@@ -4694,7 +4699,7 @@ cache((data, match, sendBadge, request) => {
       badgeData.colorscheme = 'blue';
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'void';
+      badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
   });
