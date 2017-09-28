@@ -27,6 +27,7 @@ function getTitle (repoSlug, pullRequest) {
   const uri = `https://api.github.com/repos/${repoSlug}/pulls/${pullRequest}`;
   const options = { headers: { 'User-Agent': 'badges/shields' }};
   if (process.env.GITHUB_TOKEN) {
+    console.error('Authenticating with token.');
     options.headers.Authorization = makeBasicAuthHeader('', process.env.GITHUB_TOKEN);
   }
   return fetch(uri, options)
