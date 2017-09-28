@@ -6,56 +6,17 @@
 // Run some services:
 //   npm run test:services -- --only=service1,service2,service3
 //
-// Infer the current PR from the Travis environment, and look for bracketed,
-// space-separated service names in the pull request title. If none are found,
-// do not run any tests. For example:
-// Pull request title: [travis sonar] Support user token authentication
-//   npm run test:services -- --pr
-// is equivalent to
-//   npm run test:services -- --only=travis,sonar
+// Alternatively, pass a newline-separated list of services to stdin.
+//   echo "service1\nservice2\nservice3" | npm run test:services -- --stdin
+//
 
 'use strict';
 
-const difference = require('lodash.difference');
-const fetch = require('node-fetch');
 const minimist = require('minimist');
+const readlineSync = require('readline-sync');
+const readAllStdinSync = require('read-all-stdin-sync');
 const Runner = require('./runner');
 const serverHelpers = require('../../lib/in-process-server-test-helpers');
-
-function makeBasicAuthHeader(username, password) {
-  return 'Basic ' + new Buffer(`${username}:${password}`).toString('base64');
-}
-
-function getTitle (repoSlug, pullRequest) {
-  const uri = `https://api.github.com/repos/${repoSlug}/pulls/${pullRequest}`;
-  const options = { headers: { 'User-Agent': 'badges/shields' }};
-  if (process.env.GITHUB_TOKEN) {
-    options.headers.Authorization = makeBasicAuthHeader('', process.env.GITHUB_TOKEN);
-  }
-  return fetch(uri, options)
-    .then(res => {
-      if (! res.ok) {
-        throw Error(`${res.status} ${res.statusText}`);
-      }
-
-      return res.json();
-    })
-    .then(json => json.title);
-}
-
-// [Travis] Fix timeout issues => ['travis']
-// [Travis Sonar] Support user token authentication -> ['travis', 'sonar']
-// [CRAN CPAN CTAN] Add test coverage => ['cran', 'cpan', 'ctan']
-function servicesForTitle (title) {
-  const matches = title.match(/\[(.+)\]/);
-  if (matches === null) {
-    return [];
-  }
-
-  const services = matches[1].toLowerCase().split(' ');
-  const blacklist = ['wip'];
-  return difference(services, blacklist);
-}
 
 let server;
 before('Start running the server', function () {
@@ -70,40 +31,30 @@ runner.prepare();
 runner.beforeEach = () => { serverHelpers.reset(server); };
 
 const args = minimist(process.argv.slice(3));
-const prOption = args.pr;
-const serviceOption = args.only;
+const stdinOption = args.stdin;
+const onlyOption = args.only;
 
-if (prOption !== undefined) {
-  const repoSlug = process.env.TRAVIS_REPO_SLUG;
-  const pullRequest = process.env.TRAVIS_PULL_REQUEST;
-  if (repoSlug === undefined || pullRequest === undefined) {
-    console.error('Please set TRAVIS_REPO_SLUG and TRAVIS_PULL_REQUEST.');
-    process.exit(-1);
-  }
-  console.info(`PR: ${repoSlug}#${pullRequest}`);
+let onlyServices;
 
-  getTitle(repoSlug, pullRequest)
-    .then(title => {
-      console.info(`Title: ${title}`);
-      const services = servicesForTitle(title);
-      if (services.length === 0) {
-        console.info('No services found. Nothing to do.');
-      } else {
-        console.info(`Services: (${services.length} found) ${services.join(', ')}\n`);
-        runner.only(services);
-        runner.toss();
-        run();
-      }
-    }).catch(err => {
-      console.error(err);
-      process.exit(1);
-    });
-} else {
-  if (serviceOption !== undefined) {
-    runner.only(serviceOption.split(','));
-  }
-
-  runner.toss();
-  // Invoke run() asynchronously, because Mocha will not start otherwise.
-  process.nextTick(run);
+if (stdinOption && onlyOption) {
+  console.error('Do not use --only with --stdin');
+} else if (stdinOption) {
+  const allStdin = readAllStdinSync().trim();
+  onlyServices = allStdin ? allStdin.split('\n') : [];
+} else if (onlyOption) {
+  onlyServices = onlyOption.split(',');
 }
+
+if (typeof onlyServices === 'undefined') {
+  console.info('Running all service tests.');
+} else if (onlyServices.length === 0) {
+  console.info('No service tests to run. Exiting.');
+  process.exit(0);
+} else {
+  console.info(`Running tests for ${onlyServices.length} services: ${onlyServices.join(', ')}.\n`);
+  runner.only(onlyServices);
+}
+
+runner.toss();
+// Invoke run() asynchronously, because Mocha will not start otherwise.
+process.nextTick(run);
