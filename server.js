@@ -3216,26 +3216,101 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-camp.route(/^\/sourcegraph\/rrc\/([\s\S]+)\.(svg|png|gif|jpg|json)$/,
-cache(function (data, match, sendBadge, request) {
-  var repo = match[1];
-  var format = match[2];
-  var apiUrl = "https://sourcegraph.com/.api/repos/" + repo + "/-/shield";
-  var badgeData = getBadgeData('used by', data);
-  request(apiUrl, function(err, res, buffer) {
+// GitHub tag integration.
+camp.route(/^\/github\/tag\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];  // eg, expressjs/express
+  var repo = match[2];
+  var format = match[3];
+  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/tags';
+  var badgeData = getBadgeData('tag', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.github;
+  }
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
     try {
-      badgeData.colorscheme = 'brightgreen';
-      badgeData.logo = logos.sourcegraph;
       var data = JSON.parse(buffer);
-      badgeData.text[1] = data.value;
+      var versions = data.map(function(e) { return e.name; });
+      var tag = latestVersion(versions);
+      var vdata = versionColor(tag);
+      badgeData.text[1] = vdata.version;
+      badgeData.colorscheme = vdata.color;
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'invalid';
+      badgeData.text[1] = 'none';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// GitHub status integration.
+camp.route(/^\/github\/status\/([^\/]+)\/([^\/]+)\/((?:[^\/]+)(?:\/.+?)?)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];  // eg, strongloop/express
+  var repo = match[2];
+  var context = match[3];
+  var format = match[4];
+  var useDescription = false;
+
+  if (context.slice(-12) ==='.description'){
+    useDescription = true;
+    context=context.slice(0, context.length-12);
+  }
+
+  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo +'/commits/master/status';
+  var badgeData = getBadgeData(context, data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = badgeData.logo || logos.github;
+  }
+
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var state;
+      if(context!=='status')
+      {
+        var statuses = data.statuses.filter(function(e) {return e.context===context;});
+        if(!statuses.length)
+        {
+          badgeData.text[1] = 'none';
+          sendBadge(format, badgeData);
+          return;
+        }
+        state = statuses[0].state;
+        if (useDescription) {
+          badgeData.text[1] = statuses[0].description;
+        }
+        else
+        {
+          badgeData.text[1] = state;
+        }
+      }
+      else
+      {
+        state=data.state;
+        badgeData.text[1] = state;
+      }
+      
+      if (state === 'success') {
+        badgeData.colorscheme = 'brightgreen';
+      } else if (state === 'failed') {
+        badgeData.colorscheme = 'red';
+      } else {
+        badgeData.colorscheme = 'lightgrey';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'none';
       sendBadge(format, badgeData);
     }
   });
