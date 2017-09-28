@@ -35,7 +35,7 @@ const fakeData = [
             ]
         }
     },
-]
+];
 
 t.create('label should be `bug` & value should be exactly 5 as supplied in `fakeData`.  e.g: bug|5')
     .get('/label/userName/repoName/bug.json')
