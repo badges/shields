@@ -26,7 +26,6 @@ var log = require('./lib/log.js');
 var LruCache = require('./lib/lru-cache.js');
 var badge = require('./lib/badge.js');
 var svg2img = require('./lib/svg-to-img.js');
-var loadLogos = require('./lib/load-logos.js');
 var githubAuth = require('./lib/github-auth.js');
 var querystring = require('querystring');
 var prettyBytes = require('pretty-bytes');
@@ -65,13 +64,16 @@ const {
   incrMonthlyAnalytics,
   getAnalytics
 } = require('./lib/analytics');
+const {
+  isValidStyle,
+  isSixHex: sixHex,
+  makeLabel: getLabel,
+  makeLogo: getLogo,
+  makeBadgeData: getBadgeData,
+} = require('./lib/badge-data');
 
 var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
-
-var validTemplates = ['default', 'plastic', 'flat', 'flat-square', 'social'];
-var darkBackgroundTemplates = ['default', 'flat', 'flat-square'];
-var logos = loadLogos();
 
 analyticsAutoLoad();
 camp.ajax.on('analytics/v1', function(json, end) { end(getAnalytics()); });
@@ -762,7 +764,6 @@ cache(function(data, match, sendBadge, request) {
     apiUrl += '/branch/' + branch;
   }
   var badgeData = getBadgeData('build', data);
-  badgeData.logo = badgeData.logo || logos['appveyor'];
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -1095,7 +1096,7 @@ cache(function(data, match, sendBadge, request) {
   var apiUrl = 'https://gratipay.com/' + user + '/public.json';
   var badgeData = getBadgeData('receives', data);
   if (badgeData.template === 'social') {
-    badgeData.logo = badgeData.logo || logos.gratipay;
+    badgeData.logo = getLogo('gratipay', data);
   }
   request(apiUrl, function dealWithData(err, res, buffer) {
     if (err != null) {
@@ -3230,7 +3231,6 @@ cache(function (data, match, sendBadge, request) {
     }
     try {
       badgeData.colorscheme = 'brightgreen';
-      badgeData.logo = logos.sourcegraph;
       var data = JSON.parse(buffer);
       badgeData.text[1] = data.value;
       sendBadge(format, badgeData);
@@ -3250,7 +3250,7 @@ cache(function(data, match, sendBadge, request) {
   var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/tags';
   var badgeData = getBadgeData('tag', data);
   if (badgeData.template === 'social') {
-    badgeData.logo = badgeData.logo || logos.github;
+    badgeData.logo = getLogo('github', data);
   }
   githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (err != null) {
@@ -3283,7 +3283,7 @@ cache(function(data, match, sendBadge, request) {
   var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/contributors?page=1&per_page=1&anon=' + (!!isAnon);
   var badgeData = getBadgeData('contributors', data);
   if (badgeData.template === 'social') {
-    badgeData.logo = badgeData.logo || logos.github;
+    badgeData.logo = getLogo('github', data);
   }
   githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (err != null) {
@@ -3321,7 +3321,7 @@ cache(function(data, match, sendBadge, request) {
     apiUrl = apiUrl + '/latest';
   }
   if (badgeData.template === 'social') {
-    badgeData.logo = badgeData.logo || logos.github;
+    badgeData.logo = getLogo('github', data);
   }
   githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (err != null) {
@@ -3357,7 +3357,7 @@ cache(function(data, match, sendBadge, request) {
   var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/compare/' + version + '...master';
   var badgeData = getBadgeData('commits since ' + version, data);
   if (badgeData.template === 'social') {
-    badgeData.logo = badgeData.logo || logos.github;
+    badgeData.logo = getLogo('github', data);
   }
   githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (err != null) {
@@ -3401,7 +3401,7 @@ cache(function(data, match, sendBadge, request) {
   }
   var badgeData = getBadgeData('downloads', data);
   if (badgeData.template === 'social') {
-    badgeData.logo = badgeData.logo || logos.github;
+    badgeData.logo = getLogo('github', data);
   }
   githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (err != null) {
@@ -3474,7 +3474,7 @@ cache(function(data, match, sendBadge, request) {
   var targetText = isPR? 'pull requests': 'issues';
   var badgeData = getBadgeData(leftClassText + labelText + targetText, data);
   if (badgeData.template === 'social') {
-    badgeData.logo = badgeData.logo || logos.github;
+    badgeData.logo = getLogo('github', data);
   }
   githubAuth.request(request, apiUrl, query, function(err, res, buffer) {
     if (err != null) {
@@ -3504,7 +3504,7 @@ cache(function(data, match, sendBadge, request) {
   var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo;
   var badgeData = getBadgeData('forks', data);
   if (badgeData.template === 'social') {
-    badgeData.logo = badgeData.logo || logos.github;
+    badgeData.logo = getLogo('github', data);
     badgeData.links = [
       'https://github.com/' + user + '/' + repo + '/fork',
       'https://github.com/' + user + '/' + repo + '/network',
@@ -3539,7 +3539,7 @@ cache(function(data, match, sendBadge, request) {
   var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo;
   var badgeData = getBadgeData('stars', data);
   if (badgeData.template === 'social') {
-    badgeData.logo = badgeData.logo || logos.github;
+    badgeData.logo = getLogo('github', data);
     badgeData.links = [
       'https://github.com/' + user + '/' + repo,
       'https://github.com/' + user + '/' + repo + '/stargazers',
@@ -3572,7 +3572,7 @@ cache(function(data, match, sendBadge, request) {
   var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo;
   var badgeData = getBadgeData('watchers', data);
   if (badgeData.template === 'social') {
-    badgeData.logo = badgeData.logo || logos.github;
+    badgeData.logo = getLogo('github', data);
     badgeData.links = [
       'https://github.com/' + user + '/' + repo,
       'https://github.com/' + user + '/' + repo + '/watchers',
@@ -3604,7 +3604,7 @@ cache(function(data, match, sendBadge, request) {
   var apiUrl = githubApiUrl + '/users/' + user;
   var badgeData = getBadgeData('followers', data);
   if (badgeData.template === 'social') {
-    badgeData.logo = badgeData.logo || logos.github;
+    badgeData.logo = getLogo('github', data);
   }
   githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (err != null) {
@@ -3633,7 +3633,7 @@ cache(function(data, match, sendBadge, request) {
   var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo;
   var badgeData = getBadgeData('license', data);
   if (badgeData.template === 'social') {
-    badgeData.logo = badgeData.logo || logos.github;
+    badgeData.logo = getLogo('github', data);
   }
   // Using our OAuth App secret grants us 5000 req/hour
   // instead of the standard 60 req/hour.
@@ -3687,7 +3687,7 @@ cache(function(data, match, sendBadge, request) {
 
   var badgeData = getBadgeData('size', data);
   if (badgeData.template === 'social') {
-    badgeData.logo = badgeData.logo || logos.github;
+    badgeData.logo = getLogo('github', data);
   }
 
   githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
@@ -5266,8 +5266,6 @@ cache(function(data, match, sendBadge, request) {
 
   request(apiUrl, {json: true}, function(err, res, data) {
     try {
-      badgeData.logo = logos['dockbit'];
-
       if (res && (res.statusCode === 404 || data.state === null)) {
         badgeData.text[1] = 'not found';
         sendBadge(format, badgeData);
@@ -5755,7 +5753,7 @@ cache(function(data, match, sendBadge, request) {
   //var url = 'http://cdn.api.twitter.com/1/urls/count.json?url=' + page;
   var badgeData = getBadgeData('tweet', data);
   if (badgeData.template === 'social') {
-    badgeData.logo = badgeData.logo || logos.twitter;
+    badgeData.logo = getLogo('twitter', data);
     badgeData.links = [
       'https://twitter.com/intent/tweet?text=Wow:&url=' + page,
       'https://twitter.com/search?q=' + page,
@@ -5780,7 +5778,7 @@ cache(function(data, match, sendBadge, request) {
   badgeData.colorscheme = null;
   badgeData.colorB = '#55ACEE';
   if (badgeData.template === 'social') {
-    badgeData.logo = badgeData.logo || logos.twitter;
+    badgeData.logo = getLogo('twitter', data);
   }
   badgeData.links = [
     'https://twitter.com/intent/follow?screen_name=' + user,
@@ -5925,10 +5923,6 @@ cache(function(data, match, sendBadge, request) {
   var badgeData = getBadgeData('chat', data);
   badgeData.text[1] = 'on gitter';
   badgeData.colorscheme = 'brightgreen';
-  if (darkBackgroundTemplates.some(function(t) { return t === badgeData.template; })) {
-    badgeData.logo = badgeData.logo || logos['gitter-white'];
-    badgeData.logoWidth = 9;
-  }
   sendBadge(format, badgeData);
 }));
 
@@ -6089,8 +6083,6 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       badgeData.text[1] = data.label;
-      badgeData.logo = logos['bithound'];
-      badgeData.logoWidth = 15;
       badgeData.colorscheme = null;
       badgeData.colorB = '#' + data.color;
       sendBadge(format, badgeData);
@@ -6892,7 +6884,7 @@ function(data, match, end, ask) {
         badgeData.colorscheme = color;
       }
     }
-    if (data.style && validTemplates.indexOf(data.style) > -1) {
+    if (isValidStyle(data.style)) {
       badgeData.template = data.style;
     }
     badge(badgeData, makeSend(format, ask.res, end));
@@ -6972,53 +6964,6 @@ function escapeFormatSlashes(t) {
 }
 
 
-function sixHex(s) { return /^[0-9a-fA-F]{6}$/.test(s); }
-
-function getLabel(label, data) {
-  return data.label || label;
-}
-
-function colorParam(color) { return (sixHex(color) ? '#' : '') + color; }
-
-// data (URL query) can include `label`, `style`, `logo`, `logoWidth`, `link`,
-// `colorA`, `colorB`.
-// It can also include `maxAge`.
-function getBadgeData(defaultLabel, data) {
-  var label = getLabel(defaultLabel, data);
-  var template = data.style || 'default';
-  if (data.style && validTemplates.indexOf(data.style) > -1) {
-    template = data.style;
-  }
-  if (!(Object(data.link) instanceof Array)) {
-    if (data.link === undefined) {
-      data.link = [];
-    } else {
-      data.link = [data.link];
-    }
-  }
-
-  if (data.logo !== undefined && !/^data:/.test(data.logo)) {
-    data.logo = 'data:' + data.logo;
-  }
-
-  if (data.colorA !== undefined) {
-    data.colorA = colorParam(data.colorA);
-  }
-  if (data.colorB !== undefined) {
-    data.colorB = colorParam(data.colorB);
-  }
-
-  return {
-    text: [label, 'n/a'],
-    colorscheme: 'lightgrey',
-    template: template,
-    logo: data.logo,
-    logoWidth: +data.logoWidth,
-    links: data.link,
-    colorA: data.colorA,
-    colorB: data.colorB
-  };
-}
 
 function makeSend(format, askres, end) {
   if (format === 'svg') {
