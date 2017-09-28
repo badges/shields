@@ -6129,7 +6129,7 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[0] = data.label || ghLabel;
       badgeData.text[1] = '' + count;
       badgeData.colorscheme = null;
-      badgeData.colorB = '#' + (color || '78bdf2');
+      badgeData.colorB =  '#' + (data.colorB || color || '78bdf2');
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
