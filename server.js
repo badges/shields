@@ -21,12 +21,9 @@ var tryUrl = require('url').format({
   port: serverPort,
   pathname: 'try.html',
 });
-var domain = require('domain');
 var log = require('./lib/log.js');
-var LruCache = require('./lib/lru-cache.js');
 var badge = require('./lib/badge.js');
-var svg2img = require('./lib/svg-to-img.js');
-var githubAuth = require('./lib/github-auth.js');
+var githubAuth = require('./lib/github-auth');
 var querystring = require('querystring');
 var prettyBytes = require('pretty-bytes');
 var xml2js = require('xml2js');
@@ -36,29 +33,29 @@ if (serverSecrets && serverSecrets.gh_client_id) {
 }
 log(tryUrl);
 
-const {latest: latestVersion} = require('./lib/version.js');
+const {latest: latestVersion} = require('./lib/version');
 const {
   compare: phpVersionCompare,
   latest: phpLatestVersion,
   isStable: phpStableVersion,
-} = require('./lib/php-version.js');
+} = require('./lib/php-version');
 const {
   parseVersion: luarocksParseVersion,
   compareVersionLists: luarocksCompareVersionLists,
-} = require('./lib/luarocks-version.js');
+} = require('./lib/luarocks-version');
 const {
   currencyFromCode,
   metric,
   ordinalNumber,
   starRating,
   omitv,
-} = require('./lib/text-formatters.js');
+} = require('./lib/text-formatters');
 const {
   coveragePercentage: coveragePercentageColor,
   downloadCount: downloadCountColor,
   floorCount: floorCountColor,
   version: versionColor,
-} = require('./lib/color-formatters.js');
+} = require('./lib/color-formatters');
 const {
   analyticsAutoLoad,
   incrMonthlyAnalytics,
@@ -71,6 +68,24 @@ const {
   makeLogo: getLogo,
   makeBadgeData: getBadgeData,
 } = require('./lib/badge-data');
+const {
+  handleRequest: cache,
+  clearRequestCache
+} = require('./lib/request-handler');
+const {
+  regularUpdate,
+  clearRegularUpdateCache
+} = require('./lib/regular-update');
+const {
+  makeSend
+} = require('./lib/result-sender');
+const {
+  fetchFromSvg
+} = require('./lib/svg-badge-parser');
+const {
+  escapeFormat,
+  escapeFormatSlashes
+} = require('./lib/path-helpers');
 
 var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
@@ -81,149 +96,14 @@ camp.ajax.on('analytics/v1', function(json, end) { end(getAnalytics()); });
 var suggest = require('./lib/suggest.js');
 camp.ajax.on('suggest/v1', suggest);
 
-// Cache
-
-// We avoid calling the vendor's server for computation of the information in a
-// number of badges.
-var minAccuracy = 0.75;
-
-// The quotient of (vendor) data change frequency by badge request frequency
-// must be lower than this to trigger sending the cached data *before*
-// updating our data from the vendor's server.
-// Indeed, the accuracy of our badges are:
-// A(Δt) = 1 - min(# data change over Δt, # requests over Δt)
-//             / (# requests over Δt)
-//       = 1 - max(1, df) / rf
-var freqRatioMax = 1 - minAccuracy;
-
-// Request cache size of 5MB (~5000 bytes/image).
-var requestCache = new LruCache(1000);
-
-// Deep error handling for vendor hooks.
-var vendorDomain = domain.create();
-vendorDomain.on('error', function(err) {
-  log.error('Vendor hook error:', err.stack);
-});
-
-
-function cache (vendorRequestHandler) {
-  return function getRequest(data, match, end, ask) {
-    if (data.maxAge !== undefined && /^[0-9]+$/.test(data.maxAge)) {
-      ask.res.setHeader('Cache-Control', 'max-age=' + data.maxAge);
-    } else {
-      // Cache management - no cache, so it won't be cached by GitHub's CDN.
-      ask.res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    }
-    var reqTime = new Date();
-    var date = (reqTime).toGMTString();
-    ask.res.setHeader('Expires', date);  // Proxies, GitHub, see #221.
-    ask.res.setHeader('Date', date);
-    incrMonthlyAnalytics(getAnalytics().vendorMonthly);
-    if (data.style === 'flat') {
-      incrMonthlyAnalytics(getAnalytics().vendorFlatMonthly);
-    } else if (data.style === 'flat-square') {
-      incrMonthlyAnalytics(getAnalytics().vendorFlatSquareMonthly);
-    }
-
-    var cacheIndex = match[0] + '?label=' + data.label + '&style=' + data.style
-      + '&logo=' + data.logo + '&logoWidth=' + data.logoWidth
-      + '&link=' + JSON.stringify(data.link) + '&colorA=' + data.colorA
-      + '&colorB=' + data.colorB;
-    // Should we return the data right away?
-    var cached = requestCache.get(cacheIndex);
-    var cachedVersionSent = false;
-    if (cached !== undefined) {
-      // A request was made not long ago.
-      var tooSoon = (+reqTime - cached.time) < cached.interval;
-      if (tooSoon || (cached.dataChange / cached.reqs <= freqRatioMax)) {
-        badge(cached.data.badgeData, makeSend(cached.data.format, ask.res, end));
-        cachedVersionSent = true;
-        // We do not wish to call the vendor servers.
-        if (tooSoon) { return; }
-      }
-    }
-
-    // In case our vendor servers are unresponsive.
-    var serverUnresponsive = false;
-    var serverResponsive = setTimeout(function() {
-      serverUnresponsive = true;
-      if (cachedVersionSent) { return; }
-      if (requestCache.has(cacheIndex)) {
-        var cached = requestCache.get(cacheIndex).data;
-        badge(cached.badgeData, makeSend(cached.format, ask.res, end));
-        return;
-      }
-      ask.res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-      var badgeData = getBadgeData('vendor', data);
-      badgeData.text[1] = 'unresponsive';
-      var extension;
-      try {
-        extension = match[0].split('.').pop();
-      } catch(e) { extension = 'svg'; }
-      badge(badgeData, makeSend(extension, ask.res, end));
-    }, 25000);
-
-    // Only call vendor servers when last request is older than…
-    var cacheInterval = 5000;  // milliseconds
-    var cachingRequest = function (uri, options, callback) {
-      var request = require('request');
-      if ((typeof options === 'function') && !callback) { callback = options; }
-      if (options && typeof options === 'object') {
-        options.uri = uri;
-      } else if (typeof uri === 'string') {
-        options = {uri:uri};
-      } else {
-        options = uri;
-      }
-      options.headers = options.headers || {};
-      options.headers['User-Agent'] = options.headers['User-Agent'] || 'Shields.io';
-      return request(options, function(err, res, body) {
-        if (res != null && res.headers != null) {
-          var cacheControl = res.headers['cache-control'];
-          if (cacheControl != null) {
-            var age = cacheControl.match(/max-age=([0-9]+)/);
-            if ((age != null) && (+age[1] === +age[1])) {
-              cacheInterval = +age[1] * 1000;
-            }
-          }
-        }
-        callback(err, res, body);
-      });
-    };
-
-    vendorDomain.run(function() {
-      vendorRequestHandler(data, match, function sendBadge(format, badgeData) {
-        if (serverUnresponsive) { return; }
-        clearTimeout(serverResponsive);
-        // Check for a change in the data.
-        var dataHasChanged = false;
-        if (cached !== undefined
-          && cached.data.badgeData.text[1] !== badgeData.text[1]) {
-          dataHasChanged = true;
-        }
-        // Add format to badge data.
-        badgeData.format = format;
-        // Update information in the cache.
-        var updatedCache = {
-          reqs: cached? (cached.reqs + 1): 1,
-          dataChange: cached? (cached.dataChange + (dataHasChanged? 1: 0))
-                            : 1,
-          time: +reqTime,
-          interval: cacheInterval,
-          data: { format: format, badgeData: badgeData }
-        };
-        requestCache.set(cacheIndex, updatedCache);
-        if (!cachedVersionSent) {
-          badge(badgeData, makeSend(format, ask.res, end));
-        }
-      }, cachingRequest);
-    });
-  };
+function reset() {
+  clearRequestCache();
+  clearRegularUpdateCache();
 }
 
 module.exports = {
   camp,
-  requestCache
+  reset
 };
 
 camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
@@ -239,8 +119,6 @@ camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
 camp.notfound(/.*/, function(query, match, end, request) {
   end(null, {template: '404.html'});
 });
-
-
 
 // Vendors.
 
@@ -6944,112 +6822,6 @@ camp.route(/^\/$/, function(data, match, end, ask) {
   ask.res.setHeader('Location', infoSite);
   ask.res.end();
 });
-
-// Escapes `t` using the format specified in
-// <https://github.com/espadrine/gh-badges/issues/12#issuecomment-31518129>
-function escapeFormat(t) {
-  return t
-    // Inline single underscore.
-    .replace(/([^_])_([^_])/g, '$1 $2')
-    // Leading or trailing underscore.
-    .replace(/([^_])_$/, '$1 ').replace(/^_([^_])/, ' $1')
-    // Double underscore and double dash.
-    .replace(/__/g, '_').replace(/--/g, '-');
-}
-
-function escapeFormatSlashes(t) {
-  return escapeFormat(t)
-    // Double slash
-    .replace(/\/\//g, '/');
-}
-
-
-
-function makeSend(format, askres, end) {
-  if (format === 'svg') {
-    return function(res) { sendSVG(res, askres, end); };
-  } else if (format === 'json') {
-    return function(res) { sendJSON(res, askres, end); };
-  } else {
-    return function(res) { sendOther(format, res, askres, end); };
-  }
-}
-
-function sendSVG(res, askres, end) {
-  askres.setHeader('Content-Type', 'image/svg+xml;charset=utf-8');
-  end(null, {template: streamFromString(res)});
-}
-
-function sendOther(format, res, askres, end) {
-  askres.setHeader('Content-Type', 'image/' + format);
-  svg2img(res, format, function (err, data) {
-    if (err) {
-      // This emits status code 200, though 500 would be preferable.
-      log.error('svg2img error', err);
-      end(null, {template: '500.html'});
-    } else {
-      end(null, {template: streamFromString(data)});
-    }
-  });
-}
-
-function sendJSON(res, askres, end) {
-  askres.setHeader('Content-Type', 'application/json');
-  askres.setHeader('Access-Control-Allow-Origin', '*');
-  end(null, {template: streamFromString(res)});
-}
-
-var stream = require('stream');
-function streamFromString(str) {
-  var newStream = new stream.Readable();
-  newStream._read = function() { newStream.push(str); newStream.push(null); };
-  return newStream;
-}
-
-// Map from URL to { timestamp: last fetch time, interval: in milliseconds,
-// data: data }.
-var regularUpdateCache = Object.create(null);
-// url: a string, scraper: a function that takes string data at that URL.
-// interval: number in milliseconds.
-// cb: a callback function that takes an error and data returned by the scraper.
-function regularUpdate(url, interval, scraper, cb) {
-  var request = require('request');
-  var timestamp = Date.now();
-  var cache = regularUpdateCache[url];
-  if (cache != null &&
-      (timestamp - cache.timestamp) < interval) {
-    cb(null, regularUpdateCache[url].data);
-    return;
-  }
-  request(url, function(err, res, buffer) {
-    if (err != null) { cb(err); return; }
-    if (regularUpdateCache[url] == null) {
-      regularUpdateCache[url] = { timestamp: 0, data: 0 };
-    }
-    try {
-      var data = scraper(buffer);
-    } catch(e) { cb(e); return; }
-    regularUpdateCache[url].timestamp = timestamp;
-    regularUpdateCache[url].data = data;
-    cb(null, data);
-  });
-}
-
-// Get data from a svg-style badge.
-// cb: function(err, string)
-function fetchFromSvg(request, url, cb) {
-  request(url, function(err, res, buffer) {
-    if (err != null) { return cb(err); }
-    try {
-      var badge = buffer.replace(/(?:\r\n\s*|\r\s*|\n\s*)/g, '');
-      var match = />([^<>]+)<\/text><\/g>/.exec(badge);
-      if (!match) { return cb(Error('Cannot fetch from SVG:\n' + buffer)); }
-      cb(null, match[1]);
-    } catch(e) {
-      cb(e);
-    }
-  });
-}
 
 // npm downloads count
 function mapNpmDownloads(urlComponent, apiUriComponent) {
