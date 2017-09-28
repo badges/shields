@@ -9,6 +9,39 @@
 // Alternatively, pass a newline-separated list of services to stdin.
 //   echo "service1\nservice2\nservice3" | npm run test:services -- --stdin
 //
+// Service tests are run in CI in two cases: scheduled builds and pull
+// requests. The scheduled builds run _all_ the service tests, whereas the
+// pull requests run service tests designated in the PR title. In this way,
+// affected services can be proven working during code review without needing
+// to run all the slow (and likely flaky) service tests.
+//
+// Example pull request titles:
+//
+// - [Travis] Fix timeout issues
+// - [Travis Sonar] Support user token authentication
+// - [CRAN CPAN CTAN] Add test coverage
+//
+// The pull request script test:services:pr is split into two parts. First the
+// :prepare script infers the pull request context, fetches the PR title, and
+// writes the list of affected services to a file. Then the :run script reads
+// the list of affected services and runs the appropriate tests.
+//
+// There are three reasons to separate these two steps into separate processes
+// and build stages:
+//
+// 1. Generating the list of services to test is necessarily asynchronous, and
+//    in Mocha, exclusive tests (`it.only` and `describe.only`) can only be
+//    applied synchronously. In other words, if you try to add exclusive tests
+//    in an asynchronous callback, all the tests will run. This is true even
+//    when using `_mocha --delay`, as we are. Undoubtedly this could be fixed,
+//    though it's not worth it. The problem is obscure and therefore low
+//    for Mocha, which is quite backlogged. There is an easy workaround, which
+//    is to generate the list of services to test in a separate process.
+// 2. Executing these two steps of the test runner separately makes the process
+//    easier to reason about and much easier to debug on a dev machine.
+// 3. Getting "pipefail" to work cross platform with an npm script seems tricky.
+//    Relying on npm scripts is safer. Using "pre" makes it impossible to run
+//    the second step without the first.
 
 'use strict';
 
