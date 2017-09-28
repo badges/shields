@@ -59,7 +59,7 @@ const {
   downloadCount: downloadCountColor,
   floorCount: floorCountColor,
   version: versionColor,
-  date: dateColor
+  age: ageColor
 } = require('./lib/color-formatters.js');
 const {
   analyticsAutoLoad,
@@ -3822,7 +3822,7 @@ camp.route(/^\/github\/commits\/([^\/]+)\/([^\/]+)(?:\/(.+))?\/last\.(svg|png|gi
       try {
         var data = JSON.parse(buffer)[0].commit.author.date;
         badgeData.text[1] = formatDate(data);
-        badgeData.colorscheme = dateColor(Date.parse(data));
+        badgeData.colorscheme = ageColor(Date.parse(data));
         sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'invalid';
