@@ -277,11 +277,11 @@ t.create('github issue age')
   .get('/issues/detail/age/badges/shields/979.json')
   .expectJSONTypes(Joi.object().keys({ name: 'created', value: validDateString }));
 
-t.create('github issue updated')
+t.create('github issue update')
   .get('/issues/detail/last-update/badges/shields/979.json')
   .expectJSONTypes(Joi.object().keys({ name: 'updated', value: validDateString }));
 
-t.create('github pull request check status')
+t.create('github pull request check state')
   .get('/pulls/checks/s/badges/shields/1110.json')
   .expectJSONTypes(Joi.object().keys({ name: 'checks', value: 'failure' }));
 
