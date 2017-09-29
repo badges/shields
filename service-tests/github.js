@@ -233,3 +233,59 @@ t.create('hit counter for nonexistent repo')
     name: Joi.equal('goto counter'),
     value: Joi.string().regex(/^repo not found$/),
   }));
+
+t.create('github issue state')
+  .get('/issues/detail/s/badges/shields/979.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('issue 979'),
+    value: Joi.equal('open'),
+  }));
+
+t.create('github issue title')
+  .get('/issues/detail/title/badges/shields/979.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('issue 979'),
+    value: Joi.equal('Github rate limits cause transient service test failures in CI'),
+  }));
+
+t.create('github issue author')
+  .get('/issues/detail/u/badges/shields/979.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('author'),
+    value: Joi.equal('paulmelnikow'),
+  }));
+
+t.create('github issue label')
+  .get('/issues/detail/label/badges/shields/979.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('label'),
+    value: Joi.equal('bug | developer-experience', 'developer-experience | bug'),
+  }));
+
+t.create('github issue comments')
+  .get('/issues/detail/comments/badges/shields/979.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('comments'),
+    value: Joi.number().greater(15),
+  }));
+
+// FIXME w/f https://github.com/badges/shields/pull/1112
+// const validDate = Joi.alternatives().try(
+//   Joi.equal('today', 'yesterday'),
+//   Joi.string().regex(/^last (sun|mon|tues|wednes|thurs|fri|satur)day$/),
+//   Joi.string().regex(/^(january|february|march|april|may|june|july|august|september|october|november|december)( \d{4}?)$/))
+const validDateString = Joi.string().isoDate();
+
+t.create('github issue age')
+  .get('/issues/detail/age/badges/shields/979.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('created'),
+    value: validDateString,
+  }));
+
+t.create('github issue updated')
+  .get('/issues/detail/last-update/badges/shields/979.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('updated'),
+    value: validDateString,
+  }));

@@ -3498,7 +3498,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub issue detail integration.
-camp.route(/^\/github\/issues|pulls\/detail\/(s|title|u|labels|comments|age|last-update)\/([^\/]+)\/([^\/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/(?:issues|pulls)\/detail\/(s|title|u|label|comments|age|last-update)\/([^\/]+)\/([^\/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
 cache((queryParams, match, sendBadge, request) => {
   const stateColor = s => ({ open: '2cbe4e', closed: 'cb2431', merged: '6f42c1' }[s]);
   // FIXME w/f https://github.com/badges/shields/pull/1112
@@ -3526,7 +3526,8 @@ cache((queryParams, match, sendBadge, request) => {
       switch (which) {
         case 's': {
           const state = badgeData.text[1] = parsedData.state;
-          badgeData.color[1] = makeColorB(stateColor(state), queryParams);
+          badgeData.colorscheme = null;
+          badgeData.colorB = makeColorB(stateColor(state), queryParams);
           break;
         }
         case 'title':
@@ -3536,22 +3537,26 @@ cache((queryParams, match, sendBadge, request) => {
           badgeData.text[0] = getLabel('author', queryParams);
           badgeData.text[1] = parsedData.user.login;
           break;
-        case 'labels':
+        case 'label':
           badgeData.text[0] = getLabel('label', queryParams);
           badgeData.text[1] = parsedData.labels.map(i => i.name).join(' | ');
           if (parsedData.labels.length === 1) {
-            badgeData.color[1] = makeColorB(parsedData.labels[0].color, queryParams);
+            badgeData.colorscheme = null;
+            badgeData.colorB = makeColorB(parsedData.labels[0].color, queryParams);
           }
           break;
         case 'comments': {
           badgeData.text[0] = getLabel('comments', queryParams);
           const comments = badgeData.text[1] = parsedData.comments;
-          badgeData.color[1] = makeColorB(commentsColor(comments), queryParams);
+          badgeData.colorscheme = null;
+          badgeData.colorB = makeColorB(commentsColor(comments), queryParams);
           break;
         }
         case 'age':
         case 'last-update': {
+          const label = which === 'age' ? 'created' : 'updated';
           const date = which === 'age' ? parsedData.created_at : parsedData.updated_at;
+          badgeData.text[0] = getLabel(label, queryParams);
           // FIXME w/f https://github.com/badges/shields/pull/1112
           // badgeData.text[1] = formatDate(date);
           badgeData.text[1] = date;
@@ -3563,6 +3568,7 @@ cache((queryParams, match, sendBadge, request) => {
       }
       sendBadge(format, badgeData);
     } catch(e) {
+      console.log(e)
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
