@@ -65,13 +65,14 @@ const {
   getAnalytics
 } = require('./lib/analytics');
 const {
-  makeColor,
+  makeColorB,
   isValidStyle,
   isSixHex: sixHex,
   makeLabel: getLabel,
   makeLogo: getLogo,
   makeBadgeData: getBadgeData,
 } = require('./lib/badge-data');
+const countBy = require('lodash.countby');
 
 var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
@@ -3496,6 +3497,127 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// GitHub issue detail integration.
+camp.route(/^\/github\/issues|pulls\/detail\/(s|title|u|labels|comments|age|last-update)\/([^\/]+)\/([^\/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
+cache((queryParams, match, sendBadge, request) => {
+  const stateColor = s => ({ open: '2cbe4e', closed: 'cb2431', merged: '6f42c1' }[s]);
+  // FIXME w/f https://github.com/badges/shields/pull/1112
+  // const commentsColor = colorScale([1, 3, 10, 25], undefined, true);
+  const commentsColor = c => undefined;
+  const ageColor = c => undefined;
+
+  const [, which, owner, repo, number, format] = match;
+  const uri = `${githubApiUrl}/repos/${owner}/${repo}/issues/${number}`;
+  const badgeData = getBadgeData('', queryParams);
+  if (badgeData.template === 'social') {
+    badgeData.logo = getLogo('github', queryParams);
+  }
+  githubAuth.request(request, uri, {}, (err, res, buffer) => {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      const parsedData = JSON.parse(buffer);
+      const isPR = 'pull_request' in parsedData;
+      const noun = isPR ? 'pull request' : 'issue';
+      badgeData.text[0] = getLabel(`${noun} ${parsedData.number}`, queryParams);
+      switch (which) {
+        case 's': {
+          const state = badgeData.text[1] = parsedData.state;
+          badgeData.color[1] = makeColorB(stateColor(state), queryParams);
+          break;
+        }
+        case 'title':
+          badgeData.text[1] = parsedData.title;
+          break;
+        case 'u':
+          badgeData.text[0] = getLabel('author', queryParams);
+          badgeData.text[1] = parsedData.user.login;
+          break;
+        case 'labels':
+          badgeData.text[0] = getLabel('label', queryParams);
+          badgeData.text[1] = parsedData.labels.map(i => i.name).join(' | ');
+          if (parsedData.labels.length === 1) {
+            badgeData.color[1] = makeColorB(parsedData.labels[0].color, queryParams);
+          }
+          break;
+        case 'comments': {
+          badgeData.text[0] = getLabel('comments', queryParams);
+          const comments = badgeData.text[1] = parsedData.comments;
+          badgeData.color[1] = makeColorB(commentsColor(comments), queryParams);
+          break;
+        }
+        case 'age':
+        case 'last-update': {
+          const date = which === 'age' ? parsedData.created_at : parsedData.updated_at;
+          // FIXME w/f https://github.com/badges/shields/pull/1112
+          // badgeData.text[1] = formatDate(date);
+          badgeData.text[1] = date;
+          badgeData.colorscheme = ageColor(Date.parse(date));
+          break;
+        }
+        default:
+          throw Error('Unreachable due to regex');
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// GitHub pull request build status integration.
+camp.route(/^\/github\/pulls\/detail\/checks\/\(s|contexts\)\/([^\/]+)\/([^\/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
+cache((queryParams, match, sendBadge, request) => {
+  const checkStateColor = s => ({ pending: 'dbab09', success: '2cbe4e', failure: 'cb2431', error: 'cb2431' }[s]);
+  const [, which, owner, repo, number, format] = match;
+  const issueUri = `${githubApiUrl}/repos/${owner}/${repo}/issues/${number}`;
+  const badgeData = getBadgeData('checks', queryParams);
+  if (badgeData.template === 'social') {
+    badgeData.logo = getLogo('github', queryParams);
+  }
+  githubAuth.request(request, issueUri, {}, (err, res, buffer) => {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      const parsedData = JSON.parse(buffer);
+      const ref = parsedData.head.sha;
+      const statusUri = `${githubApiUrl}/repos/${owner}/${repo}/commits/${ref}/status`;
+      githubAuth.request(request, statusUri, {}, (err, res, buffer) => {
+        try {
+          const parsedData = JSON.parse(buffer);
+          const state = badgeData.text[1] = parsedData.state;
+          badgeData.color[1] = makeColorB(checkStateColor(state), queryParams);
+          switch(which) {
+            case 's':
+              badgeData.text[1] = state;
+              break;
+            case 'contexts': {
+              const counts = countBy(parsedData.statuses, 'state');
+              badgeData.text[1] = Object.keys(counts).map(k => `${counts[k]} ${k}`).join(', ');
+              break;
+            }
+            default:
+              throw Error('Unreachable due to regex');
+          }
+        } catch(e) {
+          badgeData.text[1] = 'invalid';
+          sendBadge(format, badgeData);
+        }
+      });
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // GitHub forks integration.
 camp.route(/^\/github\/forks\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -6114,7 +6236,7 @@ cache(function(data, match, sendBadge, request) {
         return;
       }
       var count = 0;
-      var color;
+      var color = '78bdf2';
       for (var i = 0; i < cards.length; i++) {
         var cardMetadata = cards[i].githubMetadata;
         if (cardMetadata.labels && cardMetadata.labels.length > 0) {
@@ -6127,10 +6249,10 @@ cache(function(data, match, sendBadge, request) {
           }
         }
       }
-      badgeData.text[0] = data.label || ghLabel;
+      badgeData.text[0] = getLabel(ghLabel, data);
       badgeData.text[1] = '' + count;
       badgeData.colorscheme = null;
-      badgeData.colorB =  makeColor(data.colorB || color || '78bdf2');
+      badgeData.colorB = makeColorB(color, data);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
