@@ -254,3 +254,24 @@ t.create('commit activity (1 week)')
     name: Joi.equal('commit activity'),
     value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?\/week$/),
   }));
+
+t.create('last commit (recent)')
+  .get('/last-commit/eslint/eslint.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('last commit'),
+    value: Joi.string().regex(/^today|yesterday|last [a-z]day/),
+  }));
+
+t.create('last commit (ancient)')
+  .get('/last-commit/badges/badgr.co.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('last commit'),
+    value: Joi.equal('january 2014'),
+  }));
+
+t.create('last commit (on branch)')
+  .get('/last-commit/badges/badgr.co/shielded.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('last commit'),
+    value: Joi.equal('july 2013'),
+  }));

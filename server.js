@@ -3801,23 +3801,21 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// GitHub commits integration.
+// GitHub last commit integration.
 camp.route(/^\/github\/last-commit\/([^\/]+)\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
   cache(function(data, match, sendBadge, request) {
-    var user = match[1];  // eg, mashape
-    var repo = match[2];  // eg, apistatus
-    var branch = match[3];
-    var format = match[4];
-    var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/commits';
+    const user = match[1];  // eg, mashape
+    const repo = match[2];  // eg, apistatus
+    const branch = match[3];
+    const format = match[4];
+    let apiUrl = `${githubApiUrl}/repos/${user}/${repo}/commits`;
     if (branch) {
-      apiUrl += '?sha=' + branch;
+      apiUrl += `?sha=${branch}`
     }
-    var badgeData = getBadgeData('last commit ', data);
+    const badgeData = getBadgeData('last commit', data);
     if (badgeData.template === 'social') {
       badgeData.logo = getLogo('github', data);
-      badgeData.links = [
-        'https://github.com/' + user + '/' + repo
-      ];
+      badgeData.links = [`https://github.com/${user}/${repo}`];
     }
     githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
       if (err !== null) {
@@ -3826,9 +3824,10 @@ camp.route(/^\/github\/last-commit\/([^\/]+)\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|
         return;
       }
       try {
-        var data = JSON.parse(buffer)[0].commit.author.date;
-        badgeData.text[1] = formatDate(data);
-        badgeData.colorscheme = ageColor(Date.parse(data));
+        const parsedData = JSON.parse(buffer);
+        const commitDate = parsedData[0].commit.author.date;
+        badgeData.text[1] = formatDate(commitDate);
+        badgeData.colorscheme = ageColor(Date.parse(commitDate));
         sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'invalid';
