@@ -5,9 +5,6 @@ const t = new ServiceTester({ id: 'waffle', title: 'Waffle.io' });
 module.exports = t;
 
 
-/*
-ALL test against fake data (`fakeData`).
-*/
 const fakeData = [
     {
         githubMetadata: {
@@ -47,12 +44,9 @@ t.create('label should be `bug` & value should be exactly 5 as supplied in `fake
         value: Joi.equal('5')
     }));
 
-t.create('label should be `Myfeature` & value should be formated.  e.g: Myfeature|25')
-    .get('/label/userName/repoName/feature.json?label=Myfeature')
-    .intercept(nock => nock('https://api.waffle.io/')
-        .get('/userName/repoName/cards')
-        .reply(200, fakeData))
+t.create('label should be `Mybug` & value should be formated.  e.g: Mybug|25')
+    .get('/label/ritwickdey/vscode-live-server/bug.json?label=Mybug')
     .expectJSONTypes(Joi.object().keys({
-        name: Joi.equal('Myfeature'),
+        name: Joi.equal('Mybug'),
         value: Joi.string().regex(/^\d+$/)
     }));
