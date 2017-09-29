@@ -3568,7 +3568,6 @@ cache((queryParams, match, sendBadge, request) => {
       }
       sendBadge(format, badgeData);
     } catch(e) {
-      console.log(e)
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
@@ -3576,11 +3575,11 @@ cache((queryParams, match, sendBadge, request) => {
 }));
 
 // GitHub pull request build status integration.
-camp.route(/^\/github\/pulls\/detail\/checks\/\(s|contexts\)\/([^\/]+)\/([^\/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/pulls\/checks\/(s|contexts)\/([^\/]+)\/([^\/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
 cache((queryParams, match, sendBadge, request) => {
   const checkStateColor = s => ({ pending: 'dbab09', success: '2cbe4e', failure: 'cb2431', error: 'cb2431' }[s]);
   const [, which, owner, repo, number, format] = match;
-  const issueUri = `${githubApiUrl}/repos/${owner}/${repo}/issues/${number}`;
+  const issueUri = `${githubApiUrl}/repos/${owner}/${repo}/pulls/${number}`;
   const badgeData = getBadgeData('checks', queryParams);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', queryParams);
@@ -3599,7 +3598,8 @@ cache((queryParams, match, sendBadge, request) => {
         try {
           const parsedData = JSON.parse(buffer);
           const state = badgeData.text[1] = parsedData.state;
-          badgeData.color[1] = makeColorB(checkStateColor(state), queryParams);
+          badgeData.colorscheme = null;
+          badgeData.colorB = makeColorB(checkStateColor(state), queryParams);
           switch(which) {
             case 's':
               badgeData.text[1] = state;
@@ -3612,6 +3612,7 @@ cache((queryParams, match, sendBadge, request) => {
             default:
               throw Error('Unreachable due to regex');
           }
+          sendBadge(format, badgeData);
         } catch(e) {
           badgeData.text[1] = 'invalid';
           sendBadge(format, badgeData);

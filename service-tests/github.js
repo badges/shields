@@ -237,35 +237,32 @@ t.create('hit counter for nonexistent repo')
 t.create('github issue state')
   .get('/issues/detail/s/badges/shields/979.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('issue 979'),
-    value: Joi.equal('open'),
+    name: 'issue 979',
+    value: Joi.equal('open', 'closed'),
   }));
 
 t.create('github issue title')
   .get('/issues/detail/title/badges/shields/979.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('issue 979'),
-    value: Joi.equal('Github rate limits cause transient service test failures in CI'),
+    name: 'issue 979',
+    value: 'Github rate limits cause transient service test failures in CI',
   }));
 
 t.create('github issue author')
   .get('/issues/detail/u/badges/shields/979.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('author'),
-    value: Joi.equal('paulmelnikow'),
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'author', value: 'paulmelnikow' }));
 
 t.create('github issue label')
   .get('/issues/detail/label/badges/shields/979.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('label'),
+    name: 'label',
     value: Joi.equal('bug | developer-experience', 'developer-experience | bug'),
   }));
 
 t.create('github issue comments')
   .get('/issues/detail/comments/badges/shields/979.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('comments'),
+    name: 'comments',
     value: Joi.number().greater(15),
   }));
 
@@ -278,14 +275,16 @@ const validDateString = Joi.string().isoDate();
 
 t.create('github issue age')
   .get('/issues/detail/age/badges/shields/979.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('created'),
-    value: validDateString,
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'created', value: validDateString }));
 
 t.create('github issue updated')
   .get('/issues/detail/last-update/badges/shields/979.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('updated'),
-    value: validDateString,
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'updated', value: validDateString }));
+
+t.create('github pull request check status')
+  .get('/pulls/checks/s/badges/shields/1110.json')
+  .expectJSONTypes(Joi.object().keys({ name: 'checks', value: 'failure' }));
+
+t.create('github pull request check contexts')
+  .get('/pulls/checks/contexts/badges/shields/1110.json')
+  .expectJSONTypes(Joi.object().keys({ name: 'checks', value: '1 failure' }));
