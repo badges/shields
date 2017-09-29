@@ -3752,51 +3752,57 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// GitHub statistics integration.
-camp.route(/^\/github\/stats\/([^\/]+)\/([^\/]+)\/(week|month|year)\.(svg|png|gif|jpg|json)$/,
-  cache(function(data, match, sendBadge, request) {
-    var user = match[1];  // eg, mashape
-    var repo = match[2];  // eg, apistatus
-    var type = match[3];
-    var format = match[4];
-    var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/stats/commit_activity';
-    var badgeData = getBadgeData('commits', data);
-    if (badgeData.template === 'social') {
-      badgeData.logo = getLogo('github', data);
-      badgeData.links = [
-        'https://github.com/' + user + '/' + repo
-      ];
+// GitHub commit statistics integration.
+camp.route(/^\/github\/commit-activity\/(y|4w|w)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const interval = match[1];
+  const user = match[2];
+  const repo = match[3];
+  const format = match[4];
+  const apiUrl = `${githubApiUrl}/repos/${user}/${repo}/stats/commit_activity`;
+  const badgeData = getBadgeData('commit activity', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = getLogo('github', data);
+    badgeData.links = [`https://github.com/${user}/${repo}`];
+  }
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
     }
-    githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
-      if (err !== null) {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
+    try {
+      const parsedData = JSON.parse(buffer);
+      let value;
+      let intervalLabel;
+      switch (interval) {
+        case 'y':
+          value = parsedData.reduce((sum, weekInfo) => sum + weekInfo.total, 0);
+          intervalLabel = '/year';
+          break;
+        case '4w':
+          value = parsedData.slice(-4).reduce((sum, weekInfo) => sum + weekInfo.total, 0);
+          intervalLabel = '/4 weeks';
+          break;
+        case 'w':
+          value = parsedData.slice(-1)[0].total;
+          intervalLabel = '/week';
+          break;
+        default:
+          throw Error('Unhandled case');
       }
-      try {
-        var parse = JSON.parse(buffer);
-        if (type === 'week') {
-          badgeData.text[1] = metric(parse[51].total) + '/week';
-        } else if (type === 'month') {
-          badgeData.text[1] = metric(parse.slice(48, 52).map(function(a) {
-            return a.total;
-          }).reduce(function(a, b) { return a + b; })) + '/month';
-        } else if (type === 'year') {
-          badgeData.text[1] = metric(parse.map(function(a) {
-            return a.total;
-          }).reduce(function(a, b) { return a + b; })) + '/year';
-        }
-        badgeData.colorscheme = 'blue';
-        sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  }));
+      badgeData.text[1] = `${metric(value)}${intervalLabel}`;
+      badgeData.colorscheme = 'blue';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
 
 // GitHub commits integration.
-camp.route(/^\/github\/commits\/([^\/]+)\/([^\/]+)(?:\/(.+))?\/last\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/last-commit\/([^\/]+)\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
   cache(function(data, match, sendBadge, request) {
     var user = match[1];  // eg, mashape
     var repo = match[2];  // eg, apistatus

@@ -233,3 +233,24 @@ t.create('hit counter for nonexistent repo')
     name: Joi.equal('goto counter'),
     value: Joi.string().regex(/^repo not found$/),
   }));
+
+t.create('commit activity (1 year)')
+  .get('/commit-activity/y/eslint/eslint.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('commit activity'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?\/year$/),
+  }));
+
+t.create('commit activity (4 weeks)')
+  .get('/commit-activity/4w/eslint/eslint.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('commit activity'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?\/4 weeks$/),
+  }));
+
+t.create('commit activity (1 week)')
+  .get('/commit-activity/w/eslint/eslint.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('commit activity'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?\/week$/),
+  }));
