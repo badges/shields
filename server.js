@@ -4369,7 +4369,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Ansible integration
-camp.route(/^\/ansible\/(role)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/ansible\/(role|role-downloads)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var type = match[1];      // eg role
   var roleId = match[2];    // eg 3078
@@ -4380,8 +4380,8 @@ cache(function(data, match, sendBadge, request) {
   };
   var badgeData = getBadgeData(type, data);
   request(options, function(err, res, json) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (res && (res.statusCode === 404 || data.state === null)) {
+      badgeData.text[1] = 'not found';
       sendBadge(format, badgeData);
       return;
     }
@@ -4389,8 +4389,10 @@ cache(function(data, match, sendBadge, request) {
       if (type === 'role') {
         badgeData.text[1] = json.namespace + '.' + json.name;
         badgeData.colorscheme = 'blue';
-      } else {
-        badgeData.text[1] = 'unknown';
+      } else if (type === 'role-downloads') {
+        badgeData.text[0] = 'role downloads';
+        badgeData.text[1] = metric(json.download_count);
+        badgeData.colorscheme = 'blue';
       }
       sendBadge(format, badgeData);
     } catch(e) {
