@@ -705,6 +705,11 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
+      if (res.statusCode === 404) {
+        badgeData.text[1] = 'project not found or access denied';
+        sendBadge(format, badgeData);
+        return;
+      }
       var data = JSON.parse(buffer);
       var status = data.build.status;
       if (status === 'success') {
@@ -742,6 +747,11 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
     }
     try {
+      if (res.statusCode === 404) {
+        badgeData.text[1] = 'project not found or access denied';
+        sendBadge(format, badgeData);
+        return;
+      }
       var data = JSON.parse(buffer);
       var testsTotal = data.build.jobs.reduce((currentValue, job) => currentValue + job.testsCount, 0);
       var testsPassed = data.build.jobs.reduce((currentValue, job) => currentValue + job.passedTestsCount, 0);
