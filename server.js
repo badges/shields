@@ -724,7 +724,7 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// AppVeyor test status integration.
+// AppVeyor test status integration. 
 camp.route(/^\/appveyor\/tests\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, `gruntjs/grunt`.
@@ -743,9 +743,10 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var testsTotal = data.build.jobs.reduce(function(currentValue, job) { return currentValue + job.testsCount; }, 0);
-      var testsPassed = data.build.jobs.reduce(function(currentValue, job) { return currentValue + job.passedTestsCount; }, 0);
-      var testsFailed = data.build.jobs.reduce(function(currentValue, job) { return currentValue + job.failedTestsCount; }, 0);
+      var testsTotal = data.build.jobs.reduce((currentValue, job) => currentValue + job.testsCount, 0);
+      var testsPassed = data.build.jobs.reduce((currentValue, job) => currentValue + job.passedTestsCount, 0);
+      var testsFailed = data.build.jobs.reduce((currentValue, job) => currentValue + job.failedTestsCount, 0);
+      var testsSkipped = testsTotal - testsPassed - testsFailed;
 
       if (testsPassed == testsTotal) {
         badgeData.colorscheme = 'brightgreen';
@@ -757,7 +758,11 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'orange';
       }
 
-      badgeData.text[1] = '  ' + testsPassed + ' / ' + testsFailed + ' / ' + testsTotal + '  ';
+      badgeData.text[1] = testsPassed + ' passed'; 
+      if (testsFailed > 0)
+        badgeData.text[1] += ', ' + testsFailed + ' failed';
+      if (testsSkipped > 0)
+        badgeData.text[1] += ', ' + testsSkipped + ' skipped';
 
       sendBadge(format, badgeData);
     } catch(e) {
