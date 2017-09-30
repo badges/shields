@@ -807,7 +807,6 @@ cache(function(data, match, sendBadge, request) {
     apiUrl += '/branch/' + branch;
   }
   var badgeData = getBadgeData('tests', data);
-  badgeData.logo = badgeData.logo || logos['appveyor'];
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -835,7 +834,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'orange';
       }
 
-      badgeData.text[1] = testsPassed + ' passed'; 
+      badgeData.text[1] = testsPassed + ' passed';
       if (testsFailed > 0)
         badgeData.text[1] += ', ' + testsFailed + ' failed';
       if (testsSkipped > 0)
