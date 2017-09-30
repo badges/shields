@@ -14,7 +14,7 @@ t.create('CI build status')
     value: Joi.equal('failing', 'passing', 'running', 'queued')
   }));
 
-// Test AppVeyor branch build status badge 
+// Test AppVeyor branch build status badge
 t.create('CI build status on master branch')
   .get('/ci/gruntjs/grunt/master.json')
   .expectJSONTypes(Joi.object().keys({
