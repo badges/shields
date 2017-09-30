@@ -14,7 +14,7 @@ t.create('ansible role name')
  }));
 
 t.create('ansible role download counts')
- .get('/role-downloads/14542.json')
+ .get('/role/d/14542.json')
  .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('role downloads'),
     value: Joi.string().regex(/^[0-9]+[kMG]?$/)
