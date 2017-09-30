@@ -1,17 +1,1 @@
-# Keep lib/.eslintrc.yml and service-tests/.eslintrc.yml in sync. For Windows
-# compatibility, the files are duplicated instead of symlinked.
-
-rules:
-  # From eslint-config-standard.
-  arrow-spacing: ["error", { "before": true, "after": true }]
-  brace-style: ["error", "1tbs", { "allowSingleLine": true }]
-  func-style: ["error", "declaration", { "allowArrowFunctions": true }]
-  indent: ["error", 2, { "SwitchCase": 1 }]
-  key-spacing: ["error", { "beforeColon": false, "afterColon": true }]
-  no-trailing-spaces: "error"
-  quotes: ["error", "single", { "avoidEscape": true, "allowTemplateLiterals": true }]
-
-  # Shields additions.
-  no-var: "error"
-  prefer-const: "error"
-  strict: "error"
+extends: '../.eslintrc-preferred.yml'
