@@ -772,6 +772,11 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
+      if (res.statusCode === 404) {
+        badgeData.text[1] = 'project not found or access denied';
+        sendBadge(format, badgeData);
+        return;
+      }
       var data = JSON.parse(buffer);
       var status = data.build.status;
       if (status === 'success') {
@@ -790,6 +795,60 @@ cache(function(data, match, sendBadge, request) {
     }
   });
 }));
+
+// AppVeyor test status integration.
+camp.route(/^\/appveyor\/tests\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var repo = match[1];  // eg, `gruntjs/grunt`.
+  var branch = match[2];
+  var format = match[3];
+  var apiUrl = 'https://ci.appveyor.com/api/projects/' + repo;
+  if (branch != null) {
+    apiUrl += '/branch/' + branch;
+  }
+  var badgeData = getBadgeData('tests', data);
+  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      if (res.statusCode === 404) {
+        badgeData.text[1] = 'project not found or access denied';
+        sendBadge(format, badgeData);
+        return;
+      }
+      var data = JSON.parse(buffer);
+      var testsTotal = data.build.jobs.reduce((currentValue, job) => currentValue + job.testsCount, 0);
+      var testsPassed = data.build.jobs.reduce((currentValue, job) => currentValue + job.passedTestsCount, 0);
+      var testsFailed = data.build.jobs.reduce((currentValue, job) => currentValue + job.failedTestsCount, 0);
+      var testsSkipped = testsTotal - testsPassed - testsFailed;
+
+      if (testsPassed == testsTotal) {
+        badgeData.colorscheme = 'brightgreen';
+      } else if (testsFailed == 0 ) {
+        badgeData.colorscheme = 'green';
+      } else if (testsPassed == 0 ) {
+        badgeData.colorscheme = 'red';
+      } else{
+        badgeData.colorscheme = 'orange';
+      }
+
+      badgeData.text[1] = testsPassed + ' passed';
+      if (testsFailed > 0)
+        badgeData.text[1] += ', ' + testsFailed + ' failed';
+      if (testsSkipped > 0)
+        badgeData.text[1] += ', ' + testsSkipped + ' skipped';
+
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 
 function teamcity_badge(url, buildId, advanced, format, data, sendBadge, request) {
   var apiUrl = url + '/app/rest/builds/buildType:(id:' + buildId + ')?guest=1';
@@ -4725,10 +4784,11 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Bower version integration.
-camp.route(/^\/bower\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/bower\/(v|vpre)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache((data, match, sendBadge, request) => {
-  const repo = match[1];  // eg, `bootstrap`.
-  const format = match[2];
+  const reqType = match[1];
+  const repo = match[2];  // eg, `bootstrap`.
+  const format = match[3];
   const badgeData = getBadgeData('bower', data);
 
   // API doc: https://libraries.io/api#project
@@ -4748,14 +4808,20 @@ cache((data, match, sendBadge, request) => {
       sendBadge(format, badgeData);
       return;
     }
+    if(res.statusCode !== 200) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
     try {
-      const version = data.latest_stable_release.name;
+      //if reqType is `v`, then stable release number, if `vpre` then latest release
+      const version = reqType == 'v' ? data.latest_stable_release.name : data.latest_release_number;
       const vdata = versionColor(version);
       badgeData.text[1] = vdata.version;
       badgeData.colorscheme = vdata.color;
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'void';
+      badgeData.text[1] = 'no releases';
       sendBadge(format, badgeData);
     }
   });
@@ -4790,7 +4856,7 @@ cache((data, match, sendBadge, request) => {
       badgeData.colorscheme = 'blue';
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'void';
+      badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
   });
