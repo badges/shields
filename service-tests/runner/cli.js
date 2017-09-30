@@ -22,9 +22,16 @@ const minimist = require('minimist');
 const Runner = require('./runner');
 const serverHelpers = require('../../lib/in-process-server-test-helpers');
 
+function makeBasicAuthHeader(username, password) {
+  return 'Basic ' + new Buffer(`${username}:${password}`).toString('base64');
+}
+
 function getTitle (repoSlug, pullRequest) {
   const uri = `https://api.github.com/repos/${repoSlug}/pulls/${pullRequest}`;
-  const options = { headers: { 'User-Agent': 'badges/shields' } };
+  const options = { headers: { 'User-Agent': 'badges/shields' }};
+  if (process.env.GITHUB_TOKEN) {
+    options.headers.Authorization = makeBasicAuthHeader('', process.env.GITHUB_TOKEN);
+  }
   return fetch(uri, options)
     .then(res => {
       if (! res.ok) {
