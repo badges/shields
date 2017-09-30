@@ -71,8 +71,8 @@ t.create('missing required XML element')
                      <!-- no required idea-plugin element here -->
                    </category>
                  </plugin-repository>`), {
-          'Content-Type': 'text/xml;charset=UTF-8'
-        })
+                   'Content-Type': 'text/xml;charset=UTF-8'
+                 })
   .expectJSON({ name: 'downloads', value: 'invalid' });
 
 t.create('missing required XML attribute')
@@ -97,8 +97,8 @@ t.create('missing required XML attribute')
                      </idea-plugin>
                    </category>
                  </plugin-repository>`), {
-          'Content-Type': 'text/xml;charset=UTF-8'
-        })
+                   'Content-Type': 'text/xml;charset=UTF-8'
+                 })
   .expectJSON({ name: 'downloads', value: 'invalid' });
 
 t.create('empty XML')
@@ -106,8 +106,8 @@ t.create('empty XML')
   .intercept(nock => nock('https://plugins.jetbrains.com')
     .get('/plugins/list?pluginId=9435')
     .reply(200, '<?xml version="1.0" encoding="UTF-8"?>'), {
-          'Content-Type': 'text/xml;charset=UTF-8'
-        })
+      'Content-Type': 'text/xml;charset=UTF-8'
+    })
   .expectJSON({ name: 'downloads', value: 'invalid' });
 
 t.create('404 status code')
