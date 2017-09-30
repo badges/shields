@@ -86,6 +86,23 @@ const {
   escapeFormat,
   escapeFormatSlashes
 } = require('./lib/path-helpers');
+const {
+  isNexusSnapshotVersion
+} = require('./lib/nexus-snapshot-version');
+const {
+  mapNpmDownloads
+} = require('./lib/npm-badge-helpers');
+const {
+  teamcityBadge
+} = require('./lib/teamcity-badge-helpers');
+const {
+  mapNugetFeedv2,
+  mapNugetFeed
+} = require('./lib/nuget-badge-helpers');
+const {
+  getVscodeApiReqOptions,
+  getVscodeStatistic
+} = require('./lib/vscode-badge-helpers');
 
 var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
@@ -668,41 +685,12 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-function teamcity_badge(url, buildId, advanced, format, data, sendBadge, request) {
-  var apiUrl = url + '/app/rest/builds/buildType:(id:' + buildId + ')?guest=1';
-  var badgeData = getBadgeData('build', data);
-  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      if (advanced)
-        badgeData.text[1] = (data.statusText || data.status || '').toLowerCase();
-      else
-        badgeData.text[1] = (data.status || '').toLowerCase();
-      if (data.status === 'SUCCESS') {
-        badgeData.colorscheme = 'brightgreen';
-        badgeData.text[1] = 'passing';
-      } else {
-        badgeData.colorscheme = 'red';
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}
-
 // Old url for CodeBetter TeamCity instance.
 camp.route(/^\/teamcity\/codebetter\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var buildType = match[1];  // eg, `bt428`.
   var format = match[2];
-  teamcity_badge('http://teamcity.codebetter.com', buildType, false, format, data, sendBadge, request);
+  teamcityBadge('http://teamcity.codebetter.com', buildType, false, format, data, sendBadge, request);
 }));
 
 // Generic TeamCity instance
@@ -713,7 +701,7 @@ cache(function(data, match, sendBadge, request) {
   var advanced = (match[3] == 'e');
   var buildType = match[4];  // eg, `bt428`.
   var format = match[5];
-  teamcity_badge(scheme + '://' + serverUrl, buildType, advanced, format, data, sendBadge, request);
+  teamcityBadge(scheme + '://' + serverUrl, buildType, advanced, format, data, sendBadge, request);
 }));
 
 // TeamCity CodeBetter code coverage
@@ -1476,13 +1464,13 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // npm weekly download integration.
-mapNpmDownloads('dw', 'last-week');
+mapNpmDownloads(camp, 'dw', 'last-week');
 
 // npm monthly download integration.
-mapNpmDownloads('dm', 'last-month');
+mapNpmDownloads(camp, 'dm', 'last-month');
 
 // npm yearly download integration
-mapNpmDownloads('dy', 'last-year');
+mapNpmDownloads(camp, 'dy', 'last-year');
 
 // npm total download integration.
 camp.route(/^\/npm\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
@@ -3718,301 +3706,8 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-function mapNugetFeedv2(pattern, offset, getInfo) {
-  var vRegex = new RegExp('^\\/' + pattern + '\\/v\\/(.*)\\.(svg|png|gif|jpg|json)$');
-  var vPreRegex = new RegExp('^\\/' + pattern + '\\/vpre\\/(.*)\\.(svg|png|gif|jpg|json)$');
-  var dtRegex = new RegExp('^\\/' + pattern + '\\/dt\\/(.*)\\.(svg|png|gif|jpg|json)$');
-
-  function getNugetPackage(apiUrl, id, includePre, request, done) {
-    var filter = includePre ?
-      'Id eq \'' + id + '\' and IsAbsoluteLatestVersion eq true' :
-      'Id eq \'' + id + '\' and IsLatestVersion eq true';
-    var reqUrl = apiUrl + '/Packages()?$filter=' + encodeURIComponent(filter);
-    request(reqUrl,
-    { headers: { 'Accept': 'application/atom+json,application/json' } },
-    function(err, res, buffer) {
-      if (err != null) {
-        done(err);
-        return;
-      }
-
-      try {
-        var data = JSON.parse(buffer);
-        var result = data.d.results[0];
-        if (result == null) {
-          if (includePre === null) {
-            getNugetPackage(apiUrl, id, true, request, done);
-          } else {
-            done(new Error('Package not found in feed'));
-          }
-        } else {
-          done(null, result);
-        }
-      }
-      catch (e) {
-        done(e);
-      }
-    });
-  }
-
-  camp.route(vRegex,
-  cache(function(data, match, sendBadge, request) {
-    var info = getInfo(match);
-    var site = info.site;  // eg, `Chocolatey`, or `YoloDev`
-    var repo = match[offset + 1];  // eg, `Nuget.Core`.
-    var format = match[offset + 2];
-    var apiUrl = info.feed;
-    var badgeData = getBadgeData(site, data);
-    getNugetPackage(apiUrl, repo, null, request, function(err, data) {
-      if (err != null) {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
-      }
-      try {
-        var version = data.NormalizedVersion || data.Version;
-        badgeData.text[1] = 'v' + version;
-        if (version.indexOf('-') !== -1) {
-          badgeData.colorscheme = 'yellow';
-        } else if (version[0] === '0') {
-          badgeData.colorscheme = 'orange';
-        } else {
-          badgeData.colorscheme = 'blue';
-        }
-        sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  }));
-
-  camp.route(vPreRegex,
-  cache(function(data, match, sendBadge, request) {
-    var info = getInfo(match);
-    var site = info.site;  // eg, `Chocolatey`, or `YoloDev`
-    var repo = match[offset + 1];  // eg, `Nuget.Core`.
-    var format = match[offset + 2];
-    var apiUrl = info.feed;
-    var badgeData = getBadgeData(site, data);
-    getNugetPackage(apiUrl, repo, true, request, function(err, data) {
-      if (err != null) {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
-      }
-      try {
-        var version = data.NormalizedVersion || data.Version;
-        badgeData.text[1] = 'v' + version;
-        if (version.indexOf('-') !== -1) {
-          badgeData.colorscheme = 'yellow';
-        } else if (version[0] === '0') {
-          badgeData.colorscheme = 'orange';
-        } else {
-          badgeData.colorscheme = 'blue';
-        }
-        sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  }));
-
-  camp.route(dtRegex,
-  cache(function(data, match, sendBadge, request) {
-    var info = getInfo(match);
-    var site = info.site;  // eg, `Chocolatey`, or `YoloDev`
-    var repo = match[offset+ 1];  // eg, `Nuget.Core`.
-    var format = match[offset + 2];
-    var apiUrl = info.feed;
-    var badgeData = getBadgeData(site, data);
-    getNugetPackage(apiUrl, repo, null, request, function(err, data) {
-      if (err != null) {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
-      }
-      try {
-        var downloads = data.DownloadCount;
-        badgeData.text[1] = metric(downloads);
-        badgeData.colorscheme = downloadCountColor(downloads);
-        sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  }));
-}
-
-function mapNugetFeed(pattern, offset, getInfo) {
-  var vRegex = new RegExp('^\\/' + pattern + '\\/v\\/(.*)\\.(svg|png|gif|jpg|json)$');
-  var vPreRegex = new RegExp('^\\/' + pattern + '\\/vpre\\/(.*)\\.(svg|png|gif|jpg|json)$');
-  var dtRegex = new RegExp('^\\/' + pattern + '\\/dt\\/(.*)\\.(svg|png|gif|jpg|json)$');
-
-  function getNugetData(apiUrl, id, request, done) {
-    // get service index document
-    regularUpdate(apiUrl + '/index.json',
-      // The endpoint changes once per year (ie, a period of n = 1 year).
-      // We minimize the users' waiting time for information.
-      // With l = latency to fetch the endpoint and x = endpoint update period
-      // both in years, the yearly number of queries for the endpoint are 1/x,
-      // and when the endpoint changes, we wait for up to x years to get the
-      // right endpoint.
-      // So the waiting time within n years is n*l/x + x years, for which a
-      // derivation yields an optimum at x = sqrt(n*l), roughly 42 minutes.
-      (42 * 60 * 1000),
-      function(buffer) {
-        var data = JSON.parse(buffer);
-
-        var searchQueryResources = data.resources.filter(function(resource) {
-          return resource['@type'] === 'SearchQueryService';
-        });
-
-        return searchQueryResources;
-      },
-      function(err, searchQueryResources) {
-        if (err != null) { done(err); return; }
-
-        // query autocomplete service
-        var randomEndpointIdx = Math.floor(Math.random() * searchQueryResources.length);
-        var reqUrl = searchQueryResources[randomEndpointIdx]['@id']
-          + '?q=packageid:' + encodeURIComponent(id.toLowerCase()) // NuGet package id (lowercase)
-          + '&prerelease=true';                                    // Include prerelease versions?
-
-        request(reqUrl, function(err, res, buffer) {
-          if (err != null) {
-            done(err);
-            return;
-          }
-
-          try {
-            var data = JSON.parse(buffer);
-            if (!Array.isArray(data.data) || data.data.length !== 1) {
-              done(new Error('Package not found in feed'));
-              return;
-            }
-            done(null, data.data[0]);
-          } catch (e) { done(e); }
-        });
-      });
-  }
-
-  function getNugetVersion(apiUrl, id, includePre, request, done) {
-    getNugetData(apiUrl, id, request, function(err, data) {
-      if (err) {
-        done(err);
-        return;
-      }
-      var versions = data.versions || [];
-      if (!includePre) {
-        // Remove prerelease versions.
-        var filteredVersions = versions.filter(function(version) {
-          return !/-/.test(version.version);
-        });
-        if (filteredVersions.length > 0) {
-          versions = filteredVersions;
-        }
-      }
-      var lastVersion = versions[versions.length - 1];
-      done(null, lastVersion.version);
-    });
-  }
-
-  camp.route(vRegex,
-  cache(function(data, match, sendBadge, request) {
-    var info = getInfo(match);
-    var site = info.site;  // eg, `Chocolatey`, or `YoloDev`
-    var repo = match[offset + 1];  // eg, `Nuget.Core`.
-    var format = match[offset + 2];
-    var apiUrl = info.feed;
-    var badgeData = getBadgeData(site, data);
-    getNugetVersion(apiUrl, repo, false, request, function(err, version) {
-      if (err != null) {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
-      }
-      try {
-        badgeData.text[1] = 'v' + version;
-        if (version.indexOf('-') !== -1) {
-          badgeData.colorscheme = 'yellow';
-        } else if (version[0] === '0') {
-          badgeData.colorscheme = 'orange';
-        } else {
-          badgeData.colorscheme = 'blue';
-        }
-        sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  }));
-
-  camp.route(vPreRegex,
-  cache(function(data, match, sendBadge, request) {
-    var info = getInfo(match);
-    var site = info.site;  // eg, `Chocolatey`, or `YoloDev`
-    var repo = match[offset + 1];  // eg, `Nuget.Core`.
-    var format = match[offset + 2];
-    var apiUrl = info.feed;
-    var badgeData = getBadgeData(site, data);
-    getNugetVersion(apiUrl, repo, true, request, function(err, version) {
-      if (err != null) {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
-      }
-      try {
-        badgeData.text[1] = 'v' + version;
-        if (version.indexOf('-') !== -1) {
-          badgeData.colorscheme = 'yellow';
-        } else if (version[0] === '0') {
-          badgeData.colorscheme = 'orange';
-        } else {
-          badgeData.colorscheme = 'blue';
-        }
-        sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  }));
-
-
-  camp.route(dtRegex,
-  cache(function(data, match, sendBadge, request) {
-    var info = getInfo(match);
-    var repo = match[offset + 1];  // eg, `Nuget.Core`.
-    var format = match[offset + 2];
-    var apiUrl = info.feed;
-    var badgeData = getBadgeData('downloads', data);
-    getNugetData(apiUrl, repo, request, function(err, nugetData) {
-      if (err != null) {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
-      }
-      try {
-        // Official NuGet server uses "totalDownloads" whereas MyGet uses
-        // "totaldownloads" (lowercase D). Ugh.
-        var downloads = nugetData.totalDownloads || nugetData.totaldownloads || 0;
-        badgeData.text[1] = metric(downloads);
-        badgeData.colorscheme = downloadCountColor(downloads);
-        sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  }));
-}
-
 // Chocolatey
-mapNugetFeedv2('chocolatey', 0, function(match) {
+mapNugetFeedv2(camp, 'chocolatey', 0, function(match) {
   return {
     site: 'chocolatey',
     feed: 'https://www.chocolatey.org/api/v2'
@@ -4020,7 +3715,7 @@ mapNugetFeedv2('chocolatey', 0, function(match) {
 });
 
 // PowerShell Gallery
-mapNugetFeedv2('powershellgallery', 0, function(match) {
+mapNugetFeedv2(camp, 'powershellgallery', 0, function(match) {
   return {
     site: 'powershellgallery',
     feed: 'https://www.powershellgallery.com/api/v2'
@@ -4028,7 +3723,7 @@ mapNugetFeedv2('powershellgallery', 0, function(match) {
 });
 
 // NuGet
-mapNugetFeed('nuget', 0, function(match) {
+mapNugetFeed(camp, 'nuget', 0, function(match) {
   return {
     site: 'nuget',
     feed: 'https://api.nuget.org/v3'
@@ -4036,7 +3731,7 @@ mapNugetFeed('nuget', 0, function(match) {
 });
 
 // MyGet
-mapNugetFeed('(.+\\.)?myget\\/(.*)', 2, function(match) {
+mapNugetFeed(camp, '(.+\\.)?myget\\/(.*)', 2, function(match) {
   var tenant = match[1] || 'www.';  // eg. dotnet
   var feed = match[2];
   return {
@@ -4503,15 +4198,6 @@ cache(function(data, match, sendBadge, request) {
     });
   });
 }));
-
-function isNexusSnapshotVersion(version) {
-  var pattern = /(\d+\.)*\d\-SNAPSHOT/;
-  if (version) {
-    return version.match(pattern);
-  } else {
-    return false;
-  }
-}
 
 // standalone sonatype nexus installation
 // API pattern:
@@ -5036,40 +4722,6 @@ cache(function(data, match, sendBadge, request) {
     sendBadge(format, badgeData);
   });
 }));
-
-
-//To generate API request Options for VS Code marketplace
-function getVscodeApiReqOptions(package) {
-  return {
-    method: 'POST',
-    url: 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery/',
-    headers:
-    {
-      'accept': 'application/json;api-version=3.0-preview.1',
-      'content-type': 'application/json'
-    },
-    body:
-    {
-      filters: [{
-        criteria: [
-          { filterType: 7, value: package }]
-      }],
-      flags: 914
-    },
-    json: true
-  };
-}
-
-//To extract Statistics (Install/Rating/RatingCount) from respose object for vscode marketplace
-function getVscodeStatistic(data, statisticName) {
-  let statistics = data.results[0].extensions[0].statistics;
-  try {
-    let statistic = statistics.find(x => x.statisticName.toLowerCase() === statisticName.toLowerCase());
-    return statistic.value;
-  } catch (err) {
-    return 0; //In case required statistic is not found means ZERO.
-  }
-}
 
 //vscode-marketplace download/version/rating integration
 camp.route(/^\/vscode-marketplace\/(d|v|r)\/(.*)\.(svg|png|gif|jpg|json)$/,
@@ -6822,36 +6474,3 @@ camp.route(/^\/$/, function(data, match, end, ask) {
   ask.res.setHeader('Location', infoSite);
   ask.res.end();
 });
-
-// npm downloads count
-function mapNpmDownloads(urlComponent, apiUriComponent) {
-  camp.route(new RegExp('^\/npm\/' + urlComponent + '\/(.*)\.(svg|png|gif|jpg|json)$'),
-  cache(function(data, match, sendBadge, request) {
-    var pkg = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
-    var format = match[2];
-    var apiUrl = 'https://api.npmjs.org/downloads/point/' + apiUriComponent + '/' + pkg;
-    var badgeData = getBadgeData('downloads', data);
-    request(apiUrl, function(err, res, buffer) {
-      if (err != null) {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
-      }
-      try {
-        var totalDownloads = JSON.parse(buffer).downloads || 0;
-        var badgeSuffix = apiUriComponent.replace('last-', '/');
-        badgeData.text[1] = metric(totalDownloads) + badgeSuffix;
-        if (totalDownloads === 0) {
-          badgeData.colorscheme = 'red';
-        } else {
-          badgeData.colorscheme = 'brightgreen';
-        }
-        sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  }));
-
-}
