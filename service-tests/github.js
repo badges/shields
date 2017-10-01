@@ -160,6 +160,13 @@ t.create('Package array')
     value: Joi.string().regex(/.*?,/)
   }));
 
+t.create('Package object')
+  .get('/package-json/dependencies/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('package dependencies'),
+    value: Joi.equal('invalid data')
+  }));
+
 t.create('Manifest version')
   .get('/manifest-json/v/RedSparr0w/IndieGala-Helper.json')
   .expectJSONTypes(Joi.object().keys({
@@ -179,6 +186,13 @@ t.create('Manifest array')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('manifest permissions'),
     value: Joi.string().regex(/.*?,/)
+  }));
+
+t.create('Manifest object')
+  .get('/manifest-json/background/RedSparr0w/IndieGala-Helper.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('manifest background'),
+    value: Joi.equal('invalid data')
   }));
 
 t.create('Manifest invalid json response')
