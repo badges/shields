@@ -3414,10 +3414,10 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[2];  // eg, subtitleedit
   var version = match[3];  // eg, 3.4.7
   var format = match[4];
+  var badgeData = getBadgeData('commits since ' + version, data);
 
   function setCommitsSinceBadge(user, repo, version) {
     var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/compare/' + version + '...master';
-    var badgeData = getBadgeData('commits since ' + version, data);
     if (badgeData.template === 'social') {
       badgeData.logo = getLogo('github', data);
     }
@@ -3431,6 +3431,7 @@ cache(function(data, match, sendBadge, request) {
         var data = JSON.parse(buffer);
         badgeData.text[1] = metric(data.ahead_by);
         badgeData.colorscheme = 'blue';
+        badgeData.text[0] = getLabel('commits since ' + version, data);
         sendBadge(format, badgeData);
       } catch (e) {
         badgeData.text[1] = 'none';
@@ -3440,7 +3441,7 @@ cache(function(data, match, sendBadge, request) {
   }
 
   if(version.toLowerCase() === 'latest') {
-    let url = `https://api.github.com/repos/${user}/${repo}/releases/latest`
+    let url = `https://api.github.com/repos/${user}/${repo}/releases/latest`;
     githubAuth.request(request, url, {}, (err, res, buffer) => {
       if (err != null) {
         badgeData.text[1] = 'inaccessible';
@@ -3459,9 +3460,9 @@ cache(function(data, match, sendBadge, request) {
     });
   }
   else {
-    setCommitsSinceBadge(user, repo, version)
+    setCommitsSinceBadge(user, repo, version);
   }
- 
+
 }));
 
 // GitHub release-download-count integration.
