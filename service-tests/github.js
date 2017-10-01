@@ -153,11 +153,11 @@ t.create('Package name - Custom label')
     value: Joi.equal('gh-badges')
   }));
 
-t.create('Package object/invalid')
+t.create('Package array')
   .get('/package-json/keywords/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('package keywords'),
-    value: Joi.equal('invalid data')
+    value: Joi.string().regex(/.*?,/)
   }));
 
 t.create('Manifest version')
@@ -174,11 +174,11 @@ t.create('Manifest name')
     value: Joi.equal('IndieGala Helper')
   }));
 
-t.create('Manifest object/invalid')
+t.create('Manifest array')
   .get('/manifest-json/permissions/RedSparr0w/IndieGala-Helper.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('manifest permissions'),
-    value: Joi.equal('invalid data')
+    value: Joi.string().regex(/.*?,/)
   }));
 
 t.create('Manifest invalid json response')

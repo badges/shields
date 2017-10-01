@@ -3207,7 +3207,7 @@ cache(function(query_data, match, sendBadge, request) {
           info = 'name';
           // falls through
         default:
-          var value = typeof json_data[info] != 'undefined' && typeof json_data[info] != 'object' ? json_data[info] : 'invalid data';
+          var value = typeof json_data[info] != 'undefined' && typeof json_data[info] != 'object' ? json_data[info] : Array.isArray(json_data[info]) ? json_data[info].join(", ") : 'invalid data';
           badgeData.text[0] = query_data.label || type + " " + info;
           badgeData.text[1] = value;
           badgeData.colorscheme = value != 'invalid data' ? 'blue' : 'lightgrey';
