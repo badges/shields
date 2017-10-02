@@ -337,7 +337,7 @@ t.create('last commit (recent)')
   .get('/last-commit/eslint/eslint.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('last commit'),
-    value: Joi.string().regex(/^today|yesterday|last [a-z]day/),
+    value: Joi.string().regex(/^today|yesterday|last (?:sun|mon|tues|wednes|thurs|fri|satur)day/),
   }));
 
 t.create('last commit (ancient)')
