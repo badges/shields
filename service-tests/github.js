@@ -167,6 +167,84 @@ t.create('Tag')
     value: Joi.string()
   }));
 
+t.create('Package version')
+  .get('/package-json/v/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('package'),
+    value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?$/)
+  }));
+
+t.create('Package name')
+  .get('/package-json/n/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('package name'),
+    value: Joi.equal('gh-badges')
+  }));
+
+t.create('Package name - Custom label')
+  .get('/package-json/name/badges/shields.json?label=Dev Name')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('Dev Name'),
+    value: Joi.equal('gh-badges')
+  }));
+
+t.create('Package array')
+  .get('/package-json/keywords/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('package keywords'),
+    value: Joi.string().regex(/.*?,/)
+  }));
+
+t.create('Package object')
+  .get('/package-json/dependencies/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('package dependencies'),
+    value: Joi.equal('invalid data')
+  }));
+
+t.create('Manifest version')
+  .get('/manifest-json/v/RedSparr0w/IndieGala-Helper.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('manifest'),
+    value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?$/)
+  }));
+
+t.create('Manifest name')
+  .get('/manifest-json/n/RedSparr0w/IndieGala-Helper.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('manifest name'),
+    value: Joi.equal('IndieGala Helper')
+  }));
+
+t.create('Manifest array')
+  .get('/manifest-json/permissions/RedSparr0w/IndieGala-Helper.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('manifest permissions'),
+    value: Joi.string().regex(/.*?,/)
+  }));
+
+t.create('Manifest object')
+  .get('/manifest-json/background/RedSparr0w/IndieGala-Helper.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('manifest background'),
+    value: Joi.equal('invalid data')
+  }));
+
+t.create('Manifest invalid json response')
+  .get('/manifest-json/v/RedSparr0w/not-a-real-project.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('manifest'),
+    value: Joi.equal('invalid data')
+  }));
+
+t.create('Manifest no network connection')
+  .get('/manifest-json/v/RedSparr0w/IndieGala-Helper.json')
+  .networkOff()
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('manifest'),
+    value: Joi.equal('inaccessible')
+  }));
+
 t.create('File size')
   .get('/size/webcaetano/craft/build/phaser-craft.min.js.json')
   .expectJSONTypes(Joi.object().keys({
@@ -239,4 +317,46 @@ t.create('hit counter for nonexistent repo')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('goto counter'),
     value: Joi.string().regex(/^repo not found$/),
+  }));
+
+t.create('commit activity (1 year)')
+  .get('/commit-activity/y/eslint/eslint.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('commit activity'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?\/year$/),
+  }));
+
+t.create('commit activity (4 weeks)')
+  .get('/commit-activity/4w/eslint/eslint.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('commit activity'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?\/4 weeks$/),
+  }));
+
+t.create('commit activity (1 week)')
+  .get('/commit-activity/w/eslint/eslint.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('commit activity'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?\/week$/),
+  }));
+
+t.create('last commit (recent)')
+  .get('/last-commit/eslint/eslint.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('last commit'),
+    value: Joi.string().regex(/^today|yesterday|last (?:sun|mon|tues|wednes|thurs|fri|satur)day/),
+  }));
+
+t.create('last commit (ancient)')
+  .get('/last-commit/badges/badgr.co.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('last commit'),
+    value: Joi.equal('january 2014'),
+  }));
+
+t.create('last commit (on branch)')
+  .get('/last-commit/badges/badgr.co/shielded.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('last commit'),
+    value: Joi.equal('july 2013'),
   }));
