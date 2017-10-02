@@ -9,7 +9,7 @@ module.exports = t;
 const validDateString = Joi.alternatives().try(
   Joi.equal('today', 'yesterday'),
   Joi.string().regex(/^last (sun|mon|tues|wednes|thurs|fri|satur)day$/),
-  Joi.string().regex(/^(january|february|march|april|may|june|july|august|september|october|november|december)( \d{4}?)$/))
+  Joi.string().regex(/^(january|february|march|april|may|june|july|august|september|october|november|december)( \d{4}?)$/));
 
 t.create('License')
   .get('/license/badges/shields.json')
