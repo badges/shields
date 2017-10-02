@@ -397,9 +397,9 @@ t.create('github issue update')
   .expectJSONTypes(Joi.object().keys({ name: 'updated', value: validDateString }));
 
 t.create('github pull request check state')
-  .get('/pulls/checks/s/badges/shields/1110.json')
+  .get('/status/s/pulls/badges/shields/1110.json')
   .expectJSONTypes(Joi.object().keys({ name: 'checks', value: 'failure' }));
 
 t.create('github pull request check contexts')
-  .get('/pulls/checks/contexts/badges/shields/1110.json')
+  .get('/status/contexts/pulls/badges/shields/1110.json')
   .expectJSONTypes(Joi.object().keys({ name: 'checks', value: '1 failure' }));

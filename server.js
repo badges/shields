@@ -3537,7 +3537,7 @@ cache((queryParams, match, sendBadge, request) => {
 }));
 
 // GitHub pull request build status integration.
-camp.route(/^\/github\/pulls\/checks\/(s|contexts)\/([^\/]+)\/([^\/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/status\/(s|contexts)\/pulls\/([^\/]+)\/([^\/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
 cache((queryParams, match, sendBadge, request) => {
   const [, which, owner, repo, number, format] = match;
   const issueUri = `${githubApiUrl}/repos/${owner}/${repo}/pulls/${number}`;
