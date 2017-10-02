@@ -2621,10 +2621,10 @@ cache(function(data, match, sendBadge, request) {
 // dotnet-status integration.
 camp.route(/^\/dotnetstatus\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var csproj = match[1];
+  var projectUri = match[1]; // gh/{USER}/{REPO}/{PROJECT}
   var format = match[2];
-  var url = 'http://dotnet-status.com/api/status/' + csproj + '/';
-  var badgeData = getBadgeData('dotnetstatus', data);
+  var url = 'http://dotnet-status.com/api/status/' + projectUri + '/';
+  var badgeData = getBadgeData('dependencies', data);
   request(url, function (err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -2632,27 +2632,32 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     if (res.statusCode === 404) {
-      console.log(404);
       badgeData.text[1] = 'not found';
+      sendBadge(format, badgeData);
+      return;
+    }
+    if (res.statusCode === 202) {
+      badgeData.text[1] = 'processing';
       sendBadge(format, badgeData);
       return;
     }
     try {
       var data = JSON.parse(buffer);
-
-      badgeData.text[0] = 'up-to-date';
-      var upToDate = data.upToDate;
-      if (upToDate) {
-        badgeData.text[1] = 'true';
-        badgeData.colorscheme = 'blue';
-      } else {
-        badgeData.text[1] = 'false';
-        badgeData.colorscheme = 'red';
+      if(data.projectResults.length === 1) {
+        if (data.projectResults[0].outOfDate) {
+          badgeData.text[1] = 'out of date';
+          badgeData.colorscheme = 'red';
+        } else {
+          badgeData.text[1] = 'up to date';
+          badgeData.colorscheme = 'blue';
+        }
+      }
+      else {
+        badgeData.text[1] = 'project not found';
       }
       sendBadge(format, badgeData);
     }
     catch (e) {
-      console.log(badgeData);
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
