@@ -52,6 +52,7 @@ const {
   ordinalNumber,
   starRating,
   omitv,
+  maybePluralize
 } = require('./lib/text-formatters.js');
 const {
   coveragePercentage: coveragePercentageColor,
@@ -1844,7 +1845,7 @@ cache(function(data, match, sendBadge, request) {
 
 // Anaconda Cloud / conda package manager integration
 camp.route(/^\/conda\/([dvp]n?)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
+cache(function(queryData, match, sendBadge, request) {
   const mode = match[1];
   const channel = match[2];
   const pkgname = match[3];
@@ -1877,29 +1878,29 @@ cache(function(data, match, sendBadge, request) {
   };
   const variants = {
     // default use `conda|{channelname}` as label
-    '': function(data, badgeData) {
-      badgeData.text[0] = (data && data.label) || 'conda|' + badgeData.text[0];
+    '': function(queryData, badgeData) {
+      badgeData.text[0] = (queryData && queryData.label) || 'conda|' + badgeData.text[0];
     },
     // skip `conda|` prefix
-    'n': function(data, badgeData) {
+    'n': function(queryData, badgeData) {
     }
   };
 
   const update = modes[mode.charAt(0)];
   const variant = variants[mode.charAt(1)];
 
-  var badgeData = getBadgeData(labels[mode.charAt(0)], data);
+  var badgeData = getBadgeData(labels[mode.charAt(0)], queryData);
   request(url, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
-      variant(data, badgeData);
+      variant(queryData, badgeData);
       sendBadge(format, badgeData);
       return;
     }
     try {
       var data = JSON.parse(buffer);
       update(data, badgeData);
-      variant(data, badgeData);
+      variant(queryData, badgeData);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -2433,12 +2434,12 @@ cache(function(data, match, sendBadge, request) {
 
 // Hex.pm integration.
 camp.route(/^\/hexpm\/([^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var info = match[1];
-  var repo = match[2];  // eg, `httpotion`.
-  var format = match[3];
-  var apiUrl = 'https://hex.pm/api/packages/' + repo;
-  var badgeData = getBadgeData('hex', data);
+cache(function(queryParams, match, sendBadge, request) {
+  const info = match[1];
+  const repo = match[2];  // eg, `httpotion`.
+  const format = match[3];
+  const apiUrl = 'https://hex.pm/api/packages/' + repo;
+  const badgeData = getBadgeData('hex', queryParams);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -2446,9 +2447,9 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
+      const data = JSON.parse(buffer);
       if (info.charAt(0) === 'd') {
-        badgeData.text[0] = getLabel('downloads', data);
+        badgeData.text[0] = getLabel('downloads', queryParams);
         var downloads;
         switch (info.charAt(1)) {
           case 'w':
@@ -2467,15 +2468,14 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = downloadCountColor(downloads);
         sendBadge(format, badgeData);
       } else if (info === 'v') {
-        var version = data.releases[0].version;
-        var vdata = versionColor(version);
+        const version = data.releases[0].version;
+        const vdata = versionColor(version);
         badgeData.text[1] = vdata.version;
         badgeData.colorscheme = vdata.color;
         sendBadge(format, badgeData);
       } else if (info == 'l') {
-        var license = (data.meta.licenses || []).join(', ');
-        badgeData.text[0] = 'license';
-        if ((data.meta.licenses || []).length > 1) badgeData.text[0] += 's';
+        const license = (data.meta.licenses || []).join(', ');
+        badgeData.text[0] = getLabel(maybePluralize('license', data.meta.licenses), queryParams);
         if (license == '') {
           badgeData.text[1] = 'Unknown';
         } else {
@@ -5511,12 +5511,12 @@ cache(function(data, match, sendBadge, request) {
 
 // CRAN/METACRAN integration.
 camp.route(/^\/cran\/([vl])\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
+cache(function(queryParams, match, sendBadge, request) {
   var info = match[1]; // either `v` or `l`
   var pkg = match[2]; // eg, devtools
   var format = match[3];
   var url = 'http://crandb.r-pkg.org/' + pkg;
-  var badgeData = getBadgeData('cran', data);
+  var badgeData = getBadgeData('cran', queryParams);
   request(url, function (err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -5538,7 +5538,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = vdata.color;
         sendBadge(format, badgeData);
       } else if (info === 'l') {
-        badgeData.text[0] = 'license';
+        badgeData.text[0] = getLabel('license', queryParams);
         var license = data.License;
         if (license) {
           badgeData.text[1] = license;
@@ -6453,25 +6453,25 @@ cache(function(query_data, match, sendBadge, request) {
           break;
         case 'd':
           var downloads = parseInt(data.addon.total_downloads[0], 10);
-          badgeData.text[0] = query_data.label || 'downloads';
+          badgeData.text[0] = getLabel('downloads', query_data);
           badgeData.text[1] = metric(downloads);
           badgeData.colorscheme = downloadCountColor(downloads);
           break;
         case 'rating':
           rating = parseInt(data.addon.rating, 10);
-          badgeData.text[0] = query_data.label || 'rating';
+          badgeData.text[0] = getLabel('downloads', query_data);
           badgeData.text[1] = rating + '/5';
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
           break;
         case 'stars':
           rating = parseInt(data.addon.rating, 10);
-          badgeData.text[0] = query_data.label || 'rating';
+          badgeData.text[0] = getLabel('downloads', query_data);
           badgeData.text[1] = starRating(rating);
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
           break;
         case 'users':
           var dailyUsers = parseInt(data.addon.daily_users[0], 10);
-          badgeData.text[0] = query_data.label || 'users';
+          badgeData.text[0] = getLabel('downloads', query_data);
           badgeData.text[1] = metric(dailyUsers);
           badgeData.colorscheme = 'brightgreen';
           break;

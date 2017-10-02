@@ -13,6 +13,13 @@ t.create('version')
     value: Joi.string().regex(/^v\d+\.\d+\.\d+$/)
   }));
 
+t.create('version (relabel)')
+  .get('/v/conda-forge/zlib.json?label=123')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('123'),
+    value: Joi.string().regex(/^v\d+\.\d+\.\d+$/)
+  }));
+
 t.create('version (skip prefix)')
   .get('/vn/conda-forge/zlib.json')
   .expectJSONTypes(Joi.object().keys({
