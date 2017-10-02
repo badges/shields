@@ -3774,7 +3774,7 @@ cache(function(data, match, sendBadge, request) {
   const format = match[4];
   let apiUrl = `${githubApiUrl}/repos/${user}/${repo}/commits`;
   if (branch) {
-    apiUrl += `?sha=${branch}`
+    apiUrl += `?sha=${branch}`;
   }
   const badgeData = getBadgeData('last commit', data);
   if (badgeData.template === 'social') {
