@@ -9,7 +9,7 @@ script:
   - npm run lint
   - npm run test:js
   - if [ "$TRAVIS_EVENT_TYPE" == cron ]; then npm run test:services; fi
-  - if [ "$TRAVIS_EVENT_TYPE" == pull_request ]; then npm run test:services -- --pr; fi
+  - if [ "$TRAVIS_EVENT_TYPE" == pull_request ]; then npm run test:services:pr; fi
 
 branches:
   except:
