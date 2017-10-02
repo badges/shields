@@ -3318,7 +3318,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub commits since integration.
-mapGithubCommitsSince(camp);
+mapGithubCommitsSince(camp, githubApiUrl ,githubAuth);
 
 // GitHub release-download-count integration.
 camp.route(/^\/github\/downloads\/([^\/]+)\/([^\/]+)(\/.+)?\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
