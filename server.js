@@ -49,13 +49,15 @@ const {
   ordinalNumber,
   starRating,
   omitv,
-  maybePluralize
+  maybePluralize,
+  formatDate
 } = require('./lib/text-formatters');
 const {
   coveragePercentage: coveragePercentageColor,
   downloadCount: downloadCountColor,
   floorCount: floorCountColor,
   version: versionColor,
+  age: ageColor
 } = require('./lib/color-formatters');
 const {
   analyticsAutoLoad,
@@ -3706,6 +3708,90 @@ cache(function(data, match, sendBadge, request) {
       }
       badgeData.text[1] = metric(body.total_count);
       badgeData.colorscheme = 'blue';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// GitHub commit statistics integration.
+camp.route(/^\/github\/commit-activity\/(y|4w|w)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const interval = match[1];
+  const user = match[2];
+  const repo = match[3];
+  const format = match[4];
+  const apiUrl = `${githubApiUrl}/repos/${user}/${repo}/stats/commit_activity`;
+  const badgeData = getBadgeData('commit activity', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = getLogo('github', data);
+    badgeData.links = [`https://github.com/${user}/${repo}`];
+  }
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      const parsedData = JSON.parse(buffer);
+      let value;
+      let intervalLabel;
+      switch (interval) {
+        case 'y':
+          value = parsedData.reduce((sum, weekInfo) => sum + weekInfo.total, 0);
+          intervalLabel = '/year';
+          break;
+        case '4w':
+          value = parsedData.slice(-4).reduce((sum, weekInfo) => sum + weekInfo.total, 0);
+          intervalLabel = '/4 weeks';
+          break;
+        case 'w':
+          value = parsedData.slice(-1)[0].total;
+          intervalLabel = '/week';
+          break;
+        default:
+          throw Error('Unhandled case');
+      }
+      badgeData.text[1] = `${metric(value)}${intervalLabel}`;
+      badgeData.colorscheme = 'blue';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// GitHub last commit integration.
+camp.route(/^\/github\/last-commit\/([^\/]+)\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const user = match[1];  // eg, mashape
+  const repo = match[2];  // eg, apistatus
+  const branch = match[3];
+  const format = match[4];
+  let apiUrl = `${githubApiUrl}/repos/${user}/${repo}/commits`;
+  if (branch) {
+    apiUrl += `?sha=${branch}`;
+  }
+  const badgeData = getBadgeData('last commit', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = getLogo('github', data);
+    badgeData.links = [`https://github.com/${user}/${repo}`];
+  }
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      const parsedData = JSON.parse(buffer);
+      const commitDate = parsedData[0].commit.author.date;
+      badgeData.text[1] = formatDate(commitDate);
+      badgeData.colorscheme = ageColor(Date.parse(commitDate));
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';

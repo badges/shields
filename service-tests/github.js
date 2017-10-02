@@ -311,3 +311,45 @@ t.create('hit counter for nonexistent repo')
     name: Joi.equal('goto counter'),
     value: Joi.string().regex(/^repo not found$/),
   }));
+
+t.create('commit activity (1 year)')
+  .get('/commit-activity/y/eslint/eslint.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('commit activity'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?\/year$/),
+  }));
+
+t.create('commit activity (4 weeks)')
+  .get('/commit-activity/4w/eslint/eslint.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('commit activity'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?\/4 weeks$/),
+  }));
+
+t.create('commit activity (1 week)')
+  .get('/commit-activity/w/eslint/eslint.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('commit activity'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?\/week$/),
+  }));
+
+t.create('last commit (recent)')
+  .get('/last-commit/eslint/eslint.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('last commit'),
+    value: Joi.string().regex(/^today|yesterday|last (?:sun|mon|tues|wednes|thurs|fri|satur)day/),
+  }));
+
+t.create('last commit (ancient)')
+  .get('/last-commit/badges/badgr.co.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('last commit'),
+    value: Joi.equal('january 2014'),
+  }));
+
+t.create('last commit (on branch)')
+  .get('/last-commit/badges/badgr.co/shielded.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('last commit'),
+    value: Joi.equal('july 2013'),
+  }));
