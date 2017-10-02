@@ -89,8 +89,8 @@ const {
   escapeFormatSlashes
 } = require('./lib/path-helpers');
 const {
-  isNexusSnapshotVersion
-} = require('./lib/nexus-snapshot-version');
+  isSnapshotVersion: isNexusSnapshotVersion
+} = require('./lib/nexus-version');
 const {
   mapNpmDownloads
 } = require('./lib/npm-badge-helpers');
