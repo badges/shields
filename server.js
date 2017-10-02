@@ -52,6 +52,7 @@ const {
   ordinalNumber,
   starRating,
   omitv,
+  maybePluralize
 } = require('./lib/text-formatters.js');
 const {
   coveragePercentage: coveragePercentageColor,
@@ -1844,7 +1845,7 @@ cache(function(data, match, sendBadge, request) {
 
 // Anaconda Cloud / conda package manager integration
 camp.route(/^\/conda\/([dvp]n?)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
+cache(function(queryData, match, sendBadge, request) {
   const mode = match[1];
   const channel = match[2];
   const pkgname = match[3];
@@ -1877,29 +1878,29 @@ cache(function(data, match, sendBadge, request) {
   };
   const variants = {
     // default use `conda|{channelname}` as label
-    '': function(data, badgeData) {
-      badgeData.text[0] = (data && data.label) || 'conda|' + badgeData.text[0];
+    '': function(queryData, badgeData) {
+      badgeData.text[0] = (queryData && queryData.label) || 'conda|' + badgeData.text[0];
     },
     // skip `conda|` prefix
-    'n': function(data, badgeData) {
+    'n': function(queryData, badgeData) {
     }
   };
 
   const update = modes[mode.charAt(0)];
   const variant = variants[mode.charAt(1)];
 
-  var badgeData = getBadgeData(labels[mode.charAt(0)], data);
+  var badgeData = getBadgeData(labels[mode.charAt(0)], queryData);
   request(url, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
-      variant(data, badgeData);
+      variant(queryData, badgeData);
       sendBadge(format, badgeData);
       return;
     }
     try {
       var data = JSON.parse(buffer);
       update(data, badgeData);
-      variant(data, badgeData);
+      variant(queryData, badgeData);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -2433,12 +2434,12 @@ cache(function(data, match, sendBadge, request) {
 
 // Hex.pm integration.
 camp.route(/^\/hexpm\/([^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var info = match[1];
-  var repo = match[2];  // eg, `httpotion`.
-  var format = match[3];
-  var apiUrl = 'https://hex.pm/api/packages/' + repo;
-  var badgeData = getBadgeData('hex', data);
+cache(function(queryParams, match, sendBadge, request) {
+  const info = match[1];
+  const repo = match[2];  // eg, `httpotion`.
+  const format = match[3];
+  const apiUrl = 'https://hex.pm/api/packages/' + repo;
+  const badgeData = getBadgeData('hex', queryParams);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -2446,9 +2447,9 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
+      const data = JSON.parse(buffer);
       if (info.charAt(0) === 'd') {
-        badgeData.text[0] = getLabel('downloads', data);
+        badgeData.text[0] = getLabel('downloads', queryParams);
         var downloads;
         switch (info.charAt(1)) {
           case 'w':
@@ -2467,15 +2468,14 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = downloadCountColor(downloads);
         sendBadge(format, badgeData);
       } else if (info === 'v') {
-        var version = data.releases[0].version;
-        var vdata = versionColor(version);
+        const version = data.releases[0].version;
+        const vdata = versionColor(version);
         badgeData.text[1] = vdata.version;
         badgeData.colorscheme = vdata.color;
         sendBadge(format, badgeData);
       } else if (info == 'l') {
-        var license = (data.meta.licenses || []).join(', ');
-        badgeData.text[0] = 'license';
-        if ((data.meta.licenses || []).length > 1) badgeData.text[0] += 's';
+        const license = (data.meta.licenses || []).join(', ');
+        badgeData.text[0] = getLabel(maybePluralize('license', data.meta.licenses), queryParams);
         if (license == '') {
           badgeData.text[1] = 'Unknown';
         } else {
@@ -2548,31 +2548,25 @@ cache(function(data, match, sendBadge, request) {
   var userRepo = match[2];  // eg, `github/codecov/example-python`.
   var branch = match[3];
   var format = match[4];
-  var apiUrl = {
-    url: 'https://codecov.io/' + userRepo + '/coverage.svg',
-    followRedirect: false,
-    method: 'HEAD',
-  };
-  // Query Params
-  var queryParams = {};
+  let apiUrl;
   if (branch) {
-    queryParams.branch = branch;
+    apiUrl = `https://codecov.io/${userRepo}/branch/${branch}/graphs/badge.txt`;
+  } else {
+    apiUrl = `https://codecov.io/${userRepo}/graphs/badge.txt`;
   }
   if (token) {
-    queryParams.token = token;
+    apiUrl += '?' + querystring.stringify({ token });
   }
-  apiUrl.url += '?' + querystring.stringify(queryParams);
   var badgeData = getBadgeData('coverage', data);
-  request(apiUrl, function(err, res) {
+  request(apiUrl, function(err, res, body) {
     if (err != null) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
       return;
     }
     try {
-      // X-Coverage header returns: n/a if 404/401 else range(0, 100).
-      // It can also yield a 302 Found with an "unknown" X-Coverage.
-      var coverage = res.headers['x-coverage'];
+      // Body: range(0, 100) or "unknown"
+      var coverage = body.trim();
       // Is `coverage` NaN when converted to number?
       if (+coverage !== +coverage) {
         badgeData.text[1] = 'unknown';
@@ -3328,6 +3322,51 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'none';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// GitHub package and manifest version integration.
+camp.route(/^\/github\/(package|manifest)-json\/([^\/]+)\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
+cache(function(query_data, match, sendBadge, request) {
+  var type = match[1];
+  var info = match[2];
+  var user = match[3];
+  var repo = match[4];
+  var branch = match[5] || 'master';
+  var format = match[6];
+  var apiUrl = 'https://raw.githubusercontent.com/' + user + '/' + repo + '/' + branch + '/' + type + '.json';
+  var badgeData = getBadgeData(type, query_data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var json_data = JSON.parse(buffer);
+      switch(info) {
+        case 'v':
+        case 'version':
+          var version = json_data.version;
+          var vdata = versionColor(version);
+          badgeData.text[1] = vdata.version;
+          badgeData.colorscheme = vdata.color;
+          break;
+        case 'n':
+          info = 'name';
+          // falls through
+        default:
+          var value = typeof json_data[info] != 'undefined' && typeof json_data[info] != 'object' ? json_data[info] : Array.isArray(json_data[info]) ? json_data[info].join(", ") : 'invalid data';
+          badgeData.text[0] = query_data.label || type + " " + info;
+          badgeData.text[1] = value;
+          badgeData.colorscheme = value != 'invalid data' ? 'blue' : 'lightgrey';
+          break;
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid data';
       sendBadge(format, badgeData);
     }
   });
@@ -4506,28 +4545,30 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Ansible integration
-camp.route(/^\/ansible\/(role)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/ansible\/role\/(?:(d)\/)?(\d+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var type = match[1];      // eg role
+  var type = match[1];      // eg d or nothing
   var roleId = match[2];    // eg 3078
   var format = match[3];
   var options = {
     json: true,
     uri: 'https://galaxy.ansible.com/api/v1/roles/' + roleId + '/',
   };
-  var badgeData = getBadgeData(type, data);
+  var badgeData = getBadgeData('role', data);
   request(options, function(err, res, json) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (res && (res.statusCode === 404 || data.state === null)) {
+      badgeData.text[1] = 'not found';
       sendBadge(format, badgeData);
       return;
     }
     try {
-      if (type === 'role') {
-        badgeData.text[1] = json.namespace + '.' + json.name;
+      if (type === 'd') {
+        badgeData.text[0] = 'role downloads';
+        badgeData.text[1] = metric(json.download_count);
         badgeData.colorscheme = 'blue';
       } else {
-        badgeData.text[1] = 'unknown';
+        badgeData.text[1] = json.namespace + '.' + json.name;
+        badgeData.colorscheme = 'blue';
       }
       sendBadge(format, badgeData);
     } catch(e) {
@@ -4536,6 +4577,7 @@ cache(function(data, match, sendBadge, request) {
     }
   });
 }));
+
 // Codeship.io integration
 camp.route(/^\/codeship\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -5469,12 +5511,12 @@ cache(function(data, match, sendBadge, request) {
 
 // CRAN/METACRAN integration.
 camp.route(/^\/cran\/([vl])\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
+cache(function(queryParams, match, sendBadge, request) {
   var info = match[1]; // either `v` or `l`
   var pkg = match[2]; // eg, devtools
   var format = match[3];
   var url = 'http://crandb.r-pkg.org/' + pkg;
-  var badgeData = getBadgeData('cran', data);
+  var badgeData = getBadgeData('cran', queryParams);
   request(url, function (err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -5496,7 +5538,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = vdata.color;
         sendBadge(format, badgeData);
       } else if (info === 'l') {
-        badgeData.text[0] = 'license';
+        badgeData.text[0] = getLabel('license', queryParams);
         var license = data.License;
         if (license) {
           badgeData.text[1] = license;
@@ -6411,25 +6453,25 @@ cache(function(query_data, match, sendBadge, request) {
           break;
         case 'd':
           var downloads = parseInt(data.addon.total_downloads[0], 10);
-          badgeData.text[0] = query_data.label || 'downloads';
+          badgeData.text[0] = getLabel('downloads', query_data);
           badgeData.text[1] = metric(downloads);
           badgeData.colorscheme = downloadCountColor(downloads);
           break;
         case 'rating':
           rating = parseInt(data.addon.rating, 10);
-          badgeData.text[0] = query_data.label || 'rating';
+          badgeData.text[0] = getLabel('downloads', query_data);
           badgeData.text[1] = rating + '/5';
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
           break;
         case 'stars':
           rating = parseInt(data.addon.rating, 10);
-          badgeData.text[0] = query_data.label || 'rating';
+          badgeData.text[0] = getLabel('downloads', query_data);
           badgeData.text[1] = starRating(rating);
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
           break;
         case 'users':
           var dailyUsers = parseInt(data.addon.daily_users[0], 10);
-          badgeData.text[0] = query_data.label || 'users';
+          badgeData.text[0] = getLabel('downloads', query_data);
           badgeData.text[1] = metric(dailyUsers);
           badgeData.colorscheme = 'brightgreen';
           break;
