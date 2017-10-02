@@ -93,14 +93,14 @@ const {
 } = require('./lib/nexus-version');
 const {
   mapNpmDownloads
-} = require('./lib/npm-badge-helpers');
+} = require('./lib/npm-provider');
 const {
   teamcityBadge
 } = require('./lib/teamcity-badge-helpers');
 const {
   mapNugetFeedv2,
   mapNugetFeed
-} = require('./lib/nuget-badge-helpers');
+} = require('./lib/nuget-provider');
 const {
   getVscodeApiReqOptions,
   getVscodeStatistic
