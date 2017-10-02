@@ -6,6 +6,11 @@ const ServiceTester = require('./runner/service-tester');
 const t = new ServiceTester({ id: 'github', title: 'Github' });
 module.exports = t;
 
+const validDateString = Joi.alternatives().try(
+  Joi.equal('today', 'yesterday'),
+  Joi.string().regex(/^last (sun|mon|tues|wednes|thurs|fri|satur)day$/),
+  Joi.string().regex(/^(january|february|march|april|may|june|july|august|september|october|november|december)( \d{4})?$/));
+
 t.create('License')
   .get('/license/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
@@ -335,10 +340,7 @@ t.create('commit activity (1 week)')
 
 t.create('last commit (recent)')
   .get('/last-commit/eslint/eslint.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('last commit'),
-    value: Joi.string().regex(/^today|yesterday|last (?:sun|mon|tues|wednes|thurs|fri|satur)day/),
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'last commit', value: validDateString }));
 
 t.create('last commit (ancient)')
   .get('/last-commit/badges/badgr.co.json')
@@ -353,3 +355,51 @@ t.create('last commit (on branch)')
     name: Joi.equal('last commit'),
     value: Joi.equal('july 2013'),
   }));
+
+t.create('github issue state')
+  .get('/issues/detail/s/badges/shields/979.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'issue 979',
+    value: Joi.equal('open', 'closed'),
+  }));
+
+t.create('github issue title')
+  .get('/issues/detail/title/badges/shields/979.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'issue 979',
+    value: 'Github rate limits cause transient service test failures in CI',
+  }));
+
+t.create('github issue author')
+  .get('/issues/detail/u/badges/shields/979.json')
+  .expectJSONTypes(Joi.object().keys({ name: 'author', value: 'paulmelnikow' }));
+
+t.create('github issue label')
+  .get('/issues/detail/label/badges/shields/979.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'label',
+    value: Joi.equal('bug | developer-experience', 'developer-experience | bug'),
+  }));
+
+t.create('github issue comments')
+  .get('/issues/detail/comments/badges/shields/979.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'comments',
+    value: Joi.number().greater(15),
+  }));
+
+t.create('github issue age')
+  .get('/issues/detail/age/badges/shields/979.json')
+  .expectJSONTypes(Joi.object().keys({ name: 'created', value: validDateString }));
+
+t.create('github issue update')
+  .get('/issues/detail/last-update/badges/shields/979.json')
+  .expectJSONTypes(Joi.object().keys({ name: 'updated', value: validDateString }));
+
+t.create('github pull request check state')
+  .get('/status/s/pulls/badges/shields/1110.json')
+  .expectJSONTypes(Joi.object().keys({ name: 'checks', value: 'failure' }));
+
+t.create('github pull request check contexts')
+  .get('/status/contexts/pulls/badges/shields/1110.json')
+  .expectJSONTypes(Joi.object().keys({ name: 'checks', value: '1 failure' }));
