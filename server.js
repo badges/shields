@@ -106,6 +106,11 @@ const {
   getVscodeApiReqOptions,
   getVscodeStatistic
 } = require('./lib/vscode-badge-helpers');
+const {
+  stateColor: githubStateColor,
+  checkStaetColor: githubCheckStateColor,
+  commentsColor: githubCommentsColor
+} = require('./lib/github-helpers');
 
 var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
@@ -3463,10 +3468,7 @@ cache(function(data, match, sendBadge, request) {
 // GitHub issue detail integration.
 camp.route(/^\/github\/(?:issues|pulls)\/detail\/(s|title|u|label|comments|age|last-update)\/([^\/]+)\/([^\/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
 cache((queryParams, match, sendBadge, request) => {
-  const stateColor = s => ({ open: '2cbe4e', closed: 'cb2431', merged: '6f42c1' }[s]);
   // FIXME w/f https://github.com/badges/shields/pull/1112
-  // const commentsColor = colorScale([1, 3, 10, 25], undefined, true);
-  const commentsColor = c => undefined;
   const ageColor = c => undefined;
 
   const [, which, owner, repo, number, format] = match;
@@ -3490,7 +3492,7 @@ cache((queryParams, match, sendBadge, request) => {
         case 's': {
           const state = badgeData.text[1] = parsedData.state;
           badgeData.colorscheme = null;
-          badgeData.colorB = makeColorB(stateColor(state), queryParams);
+          badgeData.colorB = makeColorB(githubStateColor(state), queryParams);
           break;
         }
         case 'title':
@@ -3512,7 +3514,7 @@ cache((queryParams, match, sendBadge, request) => {
           badgeData.text[0] = getLabel('comments', queryParams);
           const comments = badgeData.text[1] = parsedData.comments;
           badgeData.colorscheme = null;
-          badgeData.colorB = makeColorB(commentsColor(comments), queryParams);
+          badgeData.colorB = makeColorB(githubCommentsColor(comments), queryParams);
           break;
         }
         case 'age':
@@ -3540,7 +3542,6 @@ cache((queryParams, match, sendBadge, request) => {
 // GitHub pull request build status integration.
 camp.route(/^\/github\/pulls\/checks\/(s|contexts)\/([^\/]+)\/([^\/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
 cache((queryParams, match, sendBadge, request) => {
-  const checkStateColor = s => ({ pending: 'dbab09', success: '2cbe4e', failure: 'cb2431', error: 'cb2431' }[s]);
   const [, which, owner, repo, number, format] = match;
   const issueUri = `${githubApiUrl}/repos/${owner}/${repo}/pulls/${number}`;
   const badgeData = getBadgeData('checks', queryParams);
@@ -3562,7 +3563,7 @@ cache((queryParams, match, sendBadge, request) => {
           const parsedData = JSON.parse(buffer);
           const state = badgeData.text[1] = parsedData.state;
           badgeData.colorscheme = null;
-          badgeData.colorB = makeColorB(checkStateColor(state), queryParams);
+          badgeData.colorB = makeColorB(githubCheckStateColor(state), queryParams);
           switch(which) {
             case 's':
               badgeData.text[1] = state;
