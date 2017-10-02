@@ -110,7 +110,7 @@ const {
 } = require('./lib/vscode-badge-helpers');
 const {
   stateColor: githubStateColor,
-  checkStaetColor: githubCheckStateColor,
+  checkStateColor: githubCheckStateColor,
   commentsColor: githubCommentsColor
 } = require('./lib/github-helpers');
 
@@ -3470,9 +3470,6 @@ cache(function(data, match, sendBadge, request) {
 // GitHub issue detail integration.
 camp.route(/^\/github\/(?:issues|pulls)\/detail\/(s|title|u|label|comments|age|last-update)\/([^\/]+)\/([^\/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
 cache((queryParams, match, sendBadge, request) => {
-  // FIXME w/f https://github.com/badges/shields/pull/1112
-  const ageColor = c => undefined;
-
   const [, which, owner, repo, number, format] = match;
   const uri = `${githubApiUrl}/repos/${owner}/${repo}/issues/${number}`;
   const badgeData = getBadgeData('', queryParams);
@@ -3524,9 +3521,7 @@ cache((queryParams, match, sendBadge, request) => {
           const label = which === 'age' ? 'created' : 'updated';
           const date = which === 'age' ? parsedData.created_at : parsedData.updated_at;
           badgeData.text[0] = getLabel(label, queryParams);
-          // FIXME w/f https://github.com/badges/shields/pull/1112
-          // badgeData.text[1] = formatDate(date);
-          badgeData.text[1] = date;
+          badgeData.text[1] = formatDate(date);
           badgeData.colorscheme = ageColor(Date.parse(date));
           break;
         }
