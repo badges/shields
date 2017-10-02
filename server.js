@@ -114,6 +114,10 @@ const {
   commentsColor: githubCommentsColor
 } = require('./lib/github-helpers');
 
+const {
+  mapGithubCommitsSince
+} = require("./lib/github-provider");
+
 var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
 
@@ -3320,34 +3324,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub commits since integration.
-camp.route(/^\/github\/commits-since\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, SubtitleEdit
-  var repo = match[2];  // eg, subtitleedit
-  var version = match[3];  // eg, 3.4.7
-  var format = match[4];
-  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/compare/' + version + '...master';
-  var badgeData = getBadgeData('commits since ' + version, data);
-  if (badgeData.template === 'social') {
-    badgeData.logo = getLogo('github', data);
-  }
-  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      badgeData.text[1] = metric(data.ahead_by);
-      badgeData.colorscheme = 'blue';
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'none';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
+mapGithubCommitsSince(camp, githubApiUrl ,githubAuth);
 
 // GitHub release-download-count integration.
 camp.route(/^\/github\/downloads\/([^\/]+)\/([^\/]+)(\/.+)?\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
