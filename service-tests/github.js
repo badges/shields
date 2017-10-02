@@ -143,7 +143,7 @@ t.create('Commits since by latest release')
   .get('/commits-since/microsoft/typescript/latest.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.string().regex(/^(commits since){1}[\s\S]+$/),
-    value: Joi.string().regex(/^^\d+\w?$/)
+    value: Joi.string().regex(/^\d+\w?$/)
   }));
 
 t.create('Release')
