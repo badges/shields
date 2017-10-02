@@ -75,8 +75,8 @@ t.create('Version label should be `no releases` if no offical version. eg. bower
   .get('/v/bootstrap.json')
   .intercept(nock => nock('https://libraries.io')
     .get('/api/bower/bootstrap')
-    .reply(200, { latest_stable_release : { name: null } })) //or just `{}`
+    .reply(200, { latest_stable_release: { name: null } })) //or just `{}`
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('bower'),
     value: Joi.equal('no releases')
-}));
+  }));

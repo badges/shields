@@ -11,7 +11,7 @@ t.create('search release version')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('nexus'),
     value: Joi.string().regex(/^4(\.\d+)+$/)
-}));
+  }));
 
 t.create('search release version of an inexistent artifact')
   .get('/r/https/repository.jboss.org/nexus/jboss/inexistent-artifact-id.json')
@@ -22,7 +22,7 @@ t.create('search snapshot version')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('nexus'),
     value: Joi.string().regex(/-SNAPSHOT$/)
-}));
+  }));
 
 t.create('search snapshot version not in latestSnapshot')
   .get('/s/https/repository.jboss.org/nexus/com.progress.fuse/fusehq.json')
@@ -45,14 +45,14 @@ t.create('resolve version')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('nexus'),
     value: Joi.string().regex(/^3(\.\d+)+$/)
-}));
+  }));
 
 t.create('resolve version with query')
   .get('/fs-public-snapshots/https/repository.jboss.org/nexus/com.progress.fuse/fusehq:c=agent-apple-osx:p=tar.gz.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('nexus'),
     value: Joi.string().regex(/^7(\.\d+)+-SNAPSHOT$/)
-}));
+  }));
 
 t.create('resolve version of an inexistent artifact')
   .get('/developer/https/repository.jboss.org/nexus/jboss/inexistent-artifact-id.json')
@@ -68,5 +68,5 @@ t.create('json parsing error')
   .intercept(nock => nock('https://repository.jboss.org')
     .get('/nexus/service/local/lucene/search')
     .query({g: 'jboss', a: 'jboss-client'})
-    .reply(200, "this should be a valid json"))
+    .reply(200, 'this should be a valid json'))
   .expectJSON({ name: 'nexus', value: 'invalid' });

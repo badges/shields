@@ -3,7 +3,7 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
-const t = new ServiceTester({ id : 'gratipay', title: 'Gratipay' });
+const t = new ServiceTester({ id: 'gratipay', title: 'Gratipay' });
 module.exports = t;
 
 t.create('Receiving')
@@ -18,6 +18,6 @@ t.create('Empty')
   .get('/Gratipay.json')
   .intercept(nock => nock('https://gratipay.com')
     .get('/Gratipay/public.json')
-    .reply(200, { receiving : 0.00 })
+    .reply(200, { receiving: 0.00 })
   )
   .expectJSON({ name: 'receives', value: '$0/week'});
