@@ -1,9 +1,9 @@
-'use-strict';
+'use strict';
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
-const t = new ServiceTester({id:'conda', title:'Conda'});
+const t = new ServiceTester({id: 'conda', title: 'Conda'});
 module.exports = t;
 
 t.create('version')
