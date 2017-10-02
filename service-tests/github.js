@@ -6,6 +6,11 @@ const ServiceTester = require('./runner/service-tester');
 const t = new ServiceTester({ id: 'github', title: 'Github' });
 module.exports = t;
 
+const validDateString = Joi.alternatives().try(
+  Joi.equal('today', 'yesterday'),
+  Joi.string().regex(/^last (sun|mon|tues|wednes|thurs|fri|satur)day$/),
+  Joi.string().regex(/^(january|february|march|april|may|june|july|august|september|october|november|december)( \d{4}?)$/))
+
 t.create('License')
   .get('/license/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
@@ -312,6 +317,45 @@ t.create('hit counter for nonexistent repo')
     value: Joi.string().regex(/^repo not found$/),
   }));
 
+t.create('commit activity (1 year)')
+  .get('/commit-activity/y/eslint/eslint.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('commit activity'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?\/year$/),
+  }));
+
+t.create('commit activity (4 weeks)')
+  .get('/commit-activity/4w/eslint/eslint.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('commit activity'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?\/4 weeks$/),
+  }));
+
+t.create('commit activity (1 week)')
+  .get('/commit-activity/w/eslint/eslint.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('commit activity'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?\/week$/),
+  }));
+
+t.create('last commit (recent)')
+  .get('/last-commit/eslint/eslint.json')
+  .expectJSONTypes(Joi.object().keys({ name: 'last commit', value: validDateString }));
+
+t.create('last commit (ancient)')
+  .get('/last-commit/badges/badgr.co.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('last commit'),
+    value: Joi.equal('january 2014'),
+  }));
+
+t.create('last commit (on branch)')
+  .get('/last-commit/badges/badgr.co/shielded.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('last commit'),
+    value: Joi.equal('july 2013'),
+  }));
+
 t.create('github issue state')
   .get('/issues/detail/s/badges/shields/979.json')
   .expectJSONTypes(Joi.object().keys({
@@ -343,13 +387,6 @@ t.create('github issue comments')
     name: 'comments',
     value: Joi.number().greater(15),
   }));
-
-// FIXME w/f https://github.com/badges/shields/pull/1112
-// const validDate = Joi.alternatives().try(
-//   Joi.equal('today', 'yesterday'),
-//   Joi.string().regex(/^last (sun|mon|tues|wednes|thurs|fri|satur)day$/),
-//   Joi.string().regex(/^(january|february|march|april|may|june|july|august|september|october|november|december)( \d{4}?)$/))
-const validDateString = Joi.string().isoDate();
 
 t.create('github issue age')
   .get('/issues/detail/age/badges/shields/979.json')

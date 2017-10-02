@@ -28,6 +28,7 @@
     "gm": "^1.23.0",
     "json-autosave": "~1.1.2",
     "lodash.countby": "^4.6.0",
+    "moment": "^2.18.1",
     "pdfkit": "~0.8.0",
     "pretty-bytes": "^3.0.1",
     "redis": "~2.6.2",
