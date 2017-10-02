@@ -3334,7 +3334,7 @@ cache(function(data, match, sendBadge, request) {
   var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/releases/latest';
   var badgeData = getBadgeData('release date', data);
   if (badgeData.template === 'social') {
-    badgeData.logo = badgeData.logo || logos.github;
+    badgeData.logo = getLogo('github', data);
   }
   githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (err != null) {
