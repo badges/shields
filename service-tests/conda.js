@@ -1,15 +1,22 @@
-'use-strict';
+'use strict';
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
-const t = new ServiceTester({id:'conda', title:'Conda'});
+const t = new ServiceTester({id: 'conda', title: 'Conda'});
 module.exports = t;
 
 t.create('version')
   .get('/v/conda-forge/zlib.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('conda|conda-forge'),
+    value: Joi.string().regex(/^v\d+\.\d+\.\d+$/)
+  }));
+
+t.create('version (relabel)')
+  .get('/v/conda-forge/zlib.json?label=123')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('123'),
     value: Joi.string().regex(/^v\d+\.\d+\.\d+$/)
   }));
 
