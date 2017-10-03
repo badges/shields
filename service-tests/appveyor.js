@@ -3,7 +3,7 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
-const isAppveyorState = Joi.equal('failing', 'passing', 'running', 'queued');
+const isAppveyorBuildState = Joi.equal('failing', 'passing', 'running', 'queued');
 const isAppveyorTestTotals =
   Joi.string().regex(/^(?:[0-9]+ (?:passed|skipped|failed)(?:, )?)+$/);
 
@@ -13,12 +13,12 @@ module.exports = t;
 // Test AppVeyor build status badge
 t.create('CI build status')
   .get('/ci/gruntjs/grunt.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'build', value: isAppveyorState }));
+  .expectJSONTypes(Joi.object().keys({ name: 'build', value: isAppveyorBuildState }));
 
 // Test AppVeyor branch build status badge
 t.create('CI build status on master branch')
   .get('/ci/gruntjs/grunt/master.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'build', value: isAppveyorState }));
+  .expectJSONTypes(Joi.object().keys({ name: 'build', value: isAppveyorBuildState }));
 
 // Test AppVeyor build status badge on a non-existing project
 t.create('CI 404')

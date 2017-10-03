@@ -34,14 +34,14 @@ t.create('custom label for version. eg. my verison|v0.2.5')
 t.create('pre version. eg. bower|v0.2.5-alpha-rc-pre')
   .get('/vpre/bootstrap.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('bower'),
+    name: 'bower',
     value: isBowerPrereleaseVersion
   }));
 
 t.create('custom label for pre version. eg. pre verison|v0.2.5-alpha-rc-pre')
   .get('/vpre/bootstrap.json?label="pre verison"')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('pre verison'),
+    name: 'pre verison',
     value: isBowerPrereleaseVersion
   }));
 

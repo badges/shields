@@ -5,7 +5,7 @@ const ServiceTester = require('./runner/service-tester');
 const {
   isMetric,
   isStarRating,
-  isVPlusTripleDottedVersion,
+  isVPlusDottedVersionAtLeastOne,
 } = require('./helpers/validators');
 
 const t = new ServiceTester({ id: 'amo', title: 'Mozilla Addons' });
@@ -19,14 +19,14 @@ t.create('Version')
   .get('/v/IndieGala-Helper.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'mozilla add-on',
-    value: isVPlusTripleDottedVersion
+    value: isVPlusDottedVersionAtLeastOne
   }));
 
 t.create('Version - Custom label')
   .get('/v/IndieGala-Helper.json?label=IndieGala Helper')
   .expectJSONTypes(Joi.object().keys({
     name: 'IndieGala Helper',
-    value: isVPlusTripleDottedVersion
+    value: isVPlusDottedVersionAtLeastOne
   }));
 
 t.create('Users')
