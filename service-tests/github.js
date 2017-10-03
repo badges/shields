@@ -165,6 +165,20 @@ t.create('(pre-)Release')
     value: Joi.string()
   }));
 
+t.create('Release Date. e.g release date|today')
+.get('/release-date/microsoft/vscode.json')
+.expectJSONTypes(Joi.object().keys({
+  name: Joi.equal('release date'),
+  value: validDateString
+}));
+
+t.create('Release Date - Custom Label. e.g myRelease|today')
+.get('/release-date/microsoft/vscode.json?label=myRelease')
+.expectJSONTypes(Joi.object().keys({
+  name: Joi.equal('myRelease'),
+  value: validDateString
+}));
+
 t.create('Tag')
   .get('/tag/photonstorm/phaser.json')
   .expectJSONTypes(Joi.object().keys({
