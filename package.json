@@ -33,7 +33,8 @@
     "request": "~2.81.0",
     "semver": "~5.3.0",
     "svgo": "~0.7.1",
-    "xml2js": "~0.4.16"
+    "xml2js": "~0.4.16",
+    "jsonpath": "^0.2.12"
   },
   "scripts": {
     "coverage:test:js": "istanbul cover _mocha '*.spec.js' 'lib/*.spec.js' --dir coverage/js",

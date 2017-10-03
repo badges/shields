@@ -31,6 +31,7 @@ var githubAuth = require('./lib/github-auth.js');
 var querystring = require('querystring');
 var prettyBytes = require('pretty-bytes');
 var xml2js = require('xml2js');
+var jp = require('jsonpath');
 var serverSecrets = require('./lib/server-secrets');
 if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);
@@ -6546,7 +6547,7 @@ cache(function(query, match, sendBadge, request) {
   var color = vars[1] || 'brightgreen';
   var prefix = vars[2] || '';
   var suffix = vars[3] || '';
-  var items = decodeURI(match[3]).split('=>');
+  var pathExpression = decodeURI(match[3]);
   var userURI = match[4];
   var format = match[5];
 
@@ -6576,11 +6577,7 @@ cache(function(query, match, sendBadge, request) {
         data = (typeof data == 'object' ? data : JSON.parse(data));
       }
 
-      items.forEach(function(item){
-        data = data[decodeURI(item)];
-      });
-
-      badgeData.text[1] = (prefix || "") + (typeof data == 'object' ? JSON.stringify(data) : data) + (suffix || "");
+      badgeData.text[1] = jp.query(data, pathExpression).join(", ");
 
       if (sixHex(color)) {
         badgeData.colorB = '#' + color;
