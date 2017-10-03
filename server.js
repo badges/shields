@@ -6577,7 +6577,7 @@ cache(function(query, match, sendBadge, request) {
         data = (typeof data == 'object' ? data : JSON.parse(data));
       }
 
-      badgeData.text[1] = jp.query(data, pathExpression).join(", ");
+      badgeData.text[1] = (prefix || "") + jp.query(data, pathExpression).join(", ") + (suffix || "");
 
       if (sixHex(color)) {
         badgeData.colorB = '#' + color;
