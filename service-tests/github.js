@@ -179,11 +179,11 @@ t.create('Release Date - Custom Label. e.g myRelease|today')
   value: validDateString
 }));
 
-t.create('Release Date - Should return not found for invalid repo')
+t.create('Release Date - Should return `no releases or repo not found` for invalid repo')
 .get('/release-date/not-valid-name/not-valid-repo.json')
 .expectJSONTypes(Joi.object().keys({
   name: Joi.equal('release date'),
-  value: 'not found'
+  value: 'no releases or repo not found'
 }));
 
 
