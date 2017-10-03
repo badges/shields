@@ -3325,7 +3325,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub release date integration.
-mapGithubReleaseDate(camp, githubApiUrl, githubAuth)
+mapGithubReleaseDate(camp, githubApiUrl, githubAuth);
 
 // GitHub commits since integration.
 mapGithubCommitsSince(camp, githubApiUrl ,githubAuth);
