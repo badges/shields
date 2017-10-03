@@ -6,11 +6,13 @@ const ServiceTester = require('./runner/service-tester');
 const t = new ServiceTester({ id: 'luarocks', title: 'LuaRocks' });
 module.exports = t;
 
+const isLuaVersion = Joi.string().regex(/^v\d+\.\d+\.\d+-\d+$/);
+
 t.create('version')
   .get('/v/mpeterv/luacheck.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('luarocks'),
-    value: Joi.string().regex(/^v\d+\.\d+\.\d+-\d+$/)
+    name: 'luarocks',
+    value: isLuaVersion
   }));
 
 t.create('unknown package')

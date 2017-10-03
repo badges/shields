@@ -123,7 +123,7 @@ Here's what our first test looks like:
 t.create('build status on default branch')
   .get('/rust-lang/rust.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('build'),
+    name: 'build',
     value: Joi.equal('failing', 'passing', 'unknown')
   }));
 ```
