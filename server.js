@@ -6673,8 +6673,8 @@ cache((data, match, sendBadge, request) => {
   });
 }));
 
-// User defined sources - JSON or XML response
-camp.route(/^\/badge\/dynamic\/(json|xml)\.(svg|png|gif|jpg|json)$/,
+// User defined sources - JSON response
+camp.route(/^\/badge\/dynamic\/(json)\.(svg|png|gif|jpg|json)$/,
 cache(function(query, match, sendBadge, request) {
   var type = match[1];
   var format = match[2];
@@ -6685,34 +6685,25 @@ cache(function(query, match, sendBadge, request) {
   // API URL
   var url = encodeURI(query.url);
 
-  var badgeData = getBadgeData("custom badge", query);
+  var badgeData = getBadgeData('custom badge', query);
   request(url, {json:true}, function(err, res, data) {
-    if (res && res.statusCode === 404) {
-      badgeData.text[1] = 'invalid server';
-      sendBadge(format, badgeData);
-      return;
-    }
-    if (err != null || !res || res.statusCode !== 200) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
     try {
-
-      if (type === 'xml') {
-        xml2js.parseString(data.toString(), function (err, json) {
-          if (err) throw (err);
-          data = json;
-        });
-      } else {
-        data = (typeof data == 'object' ? data : JSON.parse(data));
+      if (res && res.statusCode === 404)
+        throw 'invalid resource';
+      
+      if (err != null || !res || res.statusCode !== 200)
+        throw 'inaccessible';
+      
+      switch (type){
+        case 'json':
+          data = (typeof data == 'object' ? data : JSON.parse(data));
+          badgeData.text[1] = (prefix || '') + jp.query(data, pathExpression).join(', ') + (suffix || '');
+          break;
       }
-
-      badgeData.text[1] = (prefix || "") + jp.query(data, pathExpression).join(", ") + (suffix || "");
-
-      sendBadge(format, badgeData);
     } catch(e) {
+      badgeData.colorB = 'lightgrey';
       badgeData.text[1] = e;
+    } finally {
       sendBadge(format, badgeData);
     }
   });
