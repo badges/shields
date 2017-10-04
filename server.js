@@ -6690,10 +6690,10 @@ cache(function(query, match, sendBadge, request) {
     try {
       if (res && res.statusCode === 404)
         throw 'invalid resource';
-      
+
       if (err != null || !res || res.statusCode !== 200)
         throw 'inaccessible';
-      
+
       switch (type){
         case 'json':
           data = (typeof data == 'object' ? data : JSON.parse(data));
