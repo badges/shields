@@ -2,19 +2,20 @@ language: node_js
 node_js:
   - 6
 
+before_script:
+  - mkdir private && echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
+
 script:
   - npm run lint
   - npm run test:js
   - if [ "$TRAVIS_EVENT_TYPE" == cron ]; then npm run test:services; fi
-  - if [ "$TRAVIS_EVENT_TYPE" == pull_request ]; then npm run test:services -- --pr; fi
+  - if [ "$TRAVIS_EVENT_TYPE" == pull_request ]; then npm run test:services:pr; fi
 
 branches:
   except:
     - gh-pages
 
 notifications:
-  email:
-    - thaddee.tyl@gmail.com
   irc: "irc.freenode.org#shields"
   slack:
     rooms:
