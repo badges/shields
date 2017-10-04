@@ -165,6 +165,25 @@ t.create('(pre-)Release')
     value: Joi.string()
   }));
 
+t.create('Release Date. e.g release date|today')
+.get('/release-date/microsoft/vscode.json')
+.expectJSONTypes(Joi.object().keys({
+  name: 'release date',
+  value: validDateString
+}));
+
+t.create('Release Date - Custom Label. e.g myRelease|today')
+.get('/release-date/microsoft/vscode.json?label=myRelease')
+.expectJSONTypes(Joi.object().keys({
+  name: 'myRelease',
+  value: validDateString
+}));
+
+t.create('Release Date - Should return `no releases or repo not found` for invalid repo')
+.get('/release-date/not-valid-name/not-valid-repo.json')
+.expectJSON({ name: 'release date', value: 'no releases or repo not found' });
+
+
 t.create('Tag')
   .get('/tag/photonstorm/phaser.json')
   .expectJSONTypes(Joi.object().keys({
