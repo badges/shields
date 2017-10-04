@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://rawgit.com/badges/shields/master/logo.svg"
+    <img src="https://raw.githubusercontent.com/badges/shields/master/logo.svg"
          height="130">
 </p>
 <p align="center">
@@ -20,50 +20,25 @@
              alt="chat on Discord">
     </a>
 </p>
-<p align="center"><sup><strong>An image server for legible and concise information. Our <a href="http://shields.io/">Homepage</a> | <a href="https://twitter.com/shields_io">Twitter</a></strong></sup></p>
 
-* **[INSTALL](INSTALL.md)** – installation instructions.
-* **[CONTRIBUTING](CONTRIBUTING.md)** – project contribution guidelines.
-* **[SPECIFICATION](spec/SPECIFICATION.md)** – spec for the visual design of Shields badges.
-* **[LICENSE](LICENSE.md)** – public domain dedication.
+[![Twitter](https://img.shields.io/twitter/follow/shields_io.svg?style=social)]()
 
-Make your own badges [here][badges]! (Quick guide: `https://img.shields.io/badge/left-right-f39f37.svg`.)
+This is home to [Shields.io][shields.io], a service for concise, consistent,
+and legible badges in SVG and raster format, which can easily be included in
+GitHub readmes or any other web page. The service supports dozens of
+continuous integration services, package registries, distributions, app
+stores, social networks, code coverage services, and code analysis services.
+Every month it serves over 470 million images.
 
-[badges]: <http://shields.io/#your-badge>
+In addition to hosting the shields.io home page and server code, this monorepo
+hosts an [NPM library for generating badges][gh-badges], and the badge design
+specification.
 
-## Solving the problem
-Many GitHub repositories sport badges for things like:
-<table>
-  <tr>
-    <td><a href="https://travis-ci.org/"><strong>Travis CI</strong></a><p><sup>(build status)</sup></p></td>
-    <td><img src="http://f.cl.ly/items/2H233M0I0T43313c3h0C/Screen%20Shot%202013-01-30%20at%202.45.30%20AM.png" alt="Travis CI badge"></td>
-  </tr>
-  <tr>
-    <td><a href="https://gemnasium.com/"><strong>Gemnasium</strong></a><p><sup>(dependency checks)</sup></p></td>
-    <td><img src="http://f.cl.ly/items/2j1D2R0q2C3s1x2y3k09/Screen%20Shot%202013-01-30%20at%202.46.10%20AM.png" alt="Gemnasium badge"></td>
-  </tr>
-  <tr>
-    <td><a href="http://codeclimate.com"><strong>Code Climate</strong></a><p><sup>(static analysis)</sup></p></td>
-    <td><img src="http://f.cl.ly/items/0H2O1A3q2b3j1D2i0M3j/Screen%20Shot%202013-01-30%20at%202.46.47%20AM.png" alt="Code Climate badge"></td>
-  </tr>
-  <tr>
-    <td><a href="http://rubygems.org"><strong>RubyGems</strong></a><p><sup>(released gem version)</sup></p></td>
-    <td><img src="http://f.cl.ly/items/443X21151h1V301s2s3a/Screen%20Shot%202013-01-30%20at%202.47.10%20AM.png" alt="RubyGems badge"></td>
-  </tr>
-</table>
 
-As you can see from the zoomed 400% versions of these badges above, nobody is (really) using the same badge file and at normal size, they're hardly legible. Worst of all, they're completely inconsistent. The information provided isn't of the same kind on each badge. The context is blurry, which doesn't make for a straightforward understanding of how these badges are relevant to the project they're attached to and what information they provide.
+Examples
+--------
 
-## The Shields solution
-As you can see below, without increasing the footprint of these badges, I've tried to increase legibility and coherence, removing useless text to decrease the horizontal length in the (likely) scenario that more of these badge thingies crop up on READMEs all across the land.
-
-![Badge design](spec/proportions.png)
-
-This badge design corresponds to an old and now deprecated version which has since been replaced by beautiful and scalable SVG versions that can be found on [shields.io](http://shields.io).
-
-## Examples
-What kind of metadata can you convey using badges?
-* test build status: `build | failing`
+* build status: `build | failing`
 * code coverage percentage: `coverage | 80%`
 * stable release version: `version | 1.2.3`
 * package manager release: `gem | 1.2.3`
@@ -72,31 +47,136 @@ What kind of metadata can you convey using badges?
 * [SemVer](http://semver.org/) version observance: `semver | 2.0.0`
 * amount of [Gratipay](http://gratipay.com) donations per week: `tips | $2/week`
 
-## Services using the Shields standard
-* [Badger](https://github.com/badges/badgerbadgerbadger)
-* [badges2svg](https://github.com/bfontaine/badges2svg)
-* [CII Best Practices](https://bestpractices.coreinfrastructure.org/)
-* [Codacy](https://www.codacy.com)
-* [Code Climate](https://codeclimate.com/changelog/510d4fde56b102523a0004bf)
-* [Coveralls](https://coveralls.io/)
-* [docs.rs](https://docs.rs/)
-* [Forkability](http://basicallydan.github.io/forkability/)
-* [Gemnasium](http://support.gemnasium.com/forums/236528-general/suggestions/5518400-use-svg-for-badges-so-they-still-look-sharp-on-r)
-* [GoDoc](https://godoc.org/)
-* [PHPPackages](https://phppackages.org)
-* [Read the Docs](https://readthedocs.org/)
-* [reposs](https://github.com/rexfinn/reposs)
-* [ruby-gem-downloads-badge](https://github.com/bogdanRada/ruby-gem-downloads-badge/)
-* [Scrutinizer](https://scrutinizer-ci.com/)
-* [Semaphore](https://semaphoreci.com)
-* [Travis CI](https://github.com/travis-ci/travis-ci/issues/630#issuecomment-38054967)
-* [Version Badge](http://badge.fury.io/)
-* [VersionEye](https://www.versioneye.com/)
+[Make your own badges][custom badges]!
+(Quick guide: `https://img.shields.io/badge/left-right-f39f37.svg`.)
 
-# Legal
+Browse a [complete list of badges][shields.io].
+
+[custom badges]: http://shields.io/#your-badge
+
+
+Contributing
+------------
+
+Shields is a community project! We invite your participation through issues
+and pull requests.
+
+When adding or changing a service please add [tests][service-tests].
+
+This project has quite a backlog of suggestions! If you're new to the project,
+maybe you'd like to opan a pull request to address one of them:
+
+[![GitHub issues by-label](https://img.shields.io/github/issues/badges/shields/beginner-friendly.svg)]()
+
+Or you can adopt one of these pull requests:
+
+[![GitHub issues by-label](https://img.shields.io/github/issues-pr/badges/shields/beginner-friendly.svg)]()
+
+You can read a [tutorial on how to add a badge][tutorial].
+
+You can peruse the [contributing guidelines][contributing].
+
+[service-tests]: https://github.com/badges/shields/blob/master/service-tests/README.md
+[tutorial]: doc/TUTORIAL.md
+[contributing]: CONTRIBUTING.md
+
+
+Using the badge library
+-----------------------
+
+[![npm version](http://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges)
+
+```sh
+npm install -g gh-badges
+badge build passed :green .png > mybadge.png
+```
+
+```js
+const badge = require('gh-badges')
+
+// Optional step, to have accurate text width computation.
+const format = {
+  text: ['build', 'passed'],
+  colorscheme: 'green',
+  template: 'flat',
+}
+
+badge.loadFont('/path/to/Verdana.ttf', err => {
+  badge(format, (svg, err) => {
+    // svg is a string containing your badge
+  })})
+```
+
+View the [documentation for gh-badges][gh-badges doc].
+
+**Note:** The badge library was last released in 2016.
+
+[gh-badges doc]: doc/gh-badges.md
+
+
+Development
+-----------
+
+1. Install Node 6 or later. You can use the [package manager][] of your choice.
+2. Clone this repository.
+3. Run `npm install` to install the dependencies.
+4. Run `node server 1111 localhost` to start the server.
+5. Open `http://localhost:1111/try.html` to view the home page.
+
+[package manager]: https://nodejs.org/en/download/package-manager/
+
+
+Hosting your own server
+-----------------------
+
+There is documentation about [hosting your own server][self-hosting].
+
+[self-hosting]: doc/self-hosting.md
+
+
+History
+-------
+
+The badge specification was developed in 2013 by [espadrine][] as part of a
+library called [gh-badges][old-gh-badges], which then merged with shields.io,
+badgr.co, and b.adge.me to form this project. You can read more about
+[the project's inception][thread],
+[the motivation of the SVG badge specification][motivation], and
+[the specification itself][spec].
+
+[espadrine]: https://github.com/espadrine
+[old-gh-badges]: https://github.com/badges/gh-badges
+[motivation]: spec/motivation.md
+[spec]: spec/SPECIFICATION.md
+[thread]: https://github.com/h5bp/lazyweb-requests/issues/150
+
+
+Project leaders
+---------------
+
+[espadrine](https://github.com/espadrine) is the sysadmin.
+
+These contributors donate time on a consistent basis to help guide and
+maintain the project:
+
+* [Daniel15](https://github.com/Daniel15)
+* [espadrine](https://github.com/espadrine)
+* [paulmelnikow](https://github.com/paulmelnikow)
+
+
+Related projects
+----------------
+
+- [badgerbadgerbadger gem][gem]
+
+[gem]: https://github.com/badges/badgerbadgerbadger
+
+
+License
+-------
 
 All assets and code are under the [CC0 LICENSE](LICENSE.md) and in the public
 domain unless specified otherwise.
 
-The assets in `logo/` are trademarks of their respective companies and are under
-their terms and license.
+The assets in `logo/` are trademarks of their respective companies and are
+under their terms and license.
