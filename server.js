@@ -6539,23 +6539,19 @@ cache((data, match, sendBadge, request) => {
 }));
 
 // User defined sources - JSON or XML response
-camp.route(/^\/(json|xml)\/([^/]+)\/([^/]+)\/(https?\:\/\/.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/badge\/dynamic\/(json|xml)\.(svg|png|gif|jpg|json)$/,
 cache(function(query, match, sendBadge, request) {
   var type = match[1];
-  var vars = match[2].replace(/--/g,'%2D').split('-');
-  var label = vars[0];
-  var color = vars[1] || 'brightgreen';
-  var prefix = vars[2] || '';
-  var suffix = vars[3] || '';
-  var pathExpression = decodeURI(match[3]);
-  var userURI = match[4];
-  var format = match[5];
+  var format = match[2];
+  var prefix = query.prefix || '';
+  var suffix = query.suffix || '';
+  var pathExpression = query.query;
 
   // API URL
-  var apiUrl = encodeURI(userURI);
+  var url = encodeURI(query.url);
 
-  var badgeData = getBadgeData(decodeURI(label), query);
-  request(apiUrl, {json:true}, function(err, res, data) {
+  var badgeData = getBadgeData("custom badge", query);
+  request(url, {json:true}, function(err, res, data) {
     if (res && res.statusCode === 404) {
       badgeData.text[1] = 'invalid server';
       sendBadge(format, badgeData);
@@ -6578,12 +6574,6 @@ cache(function(query, match, sendBadge, request) {
       }
 
       badgeData.text[1] = (prefix || "") + jp.query(data, pathExpression).join(", ") + (suffix || "");
-
-      if (sixHex(color)) {
-        badgeData.colorB = '#' + color;
-      } else {
-        badgeData.colorscheme = color;
-      }
 
       sendBadge(format, badgeData);
     } catch(e) {
