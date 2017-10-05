@@ -81,11 +81,19 @@ t.create('GitHub open issues raw')
     value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?$/)
   }));
 
-t.create('GitHub open issues by label')
+t.create('GitHub open issues by label is > zero')
   .get('/issues/badges/shields/vendor-badge.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('vendor-badge issues'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
+    value: Joi.string().regex(/^[1-9][0-9]?[kMGTPEZY]? open$/)
+  }));
+
+t.create('GitHub open issues by label is > zero')
+  .get('/issues/Cockatrice/Cockatrice/Easy%20Change.json')
+  .inspectJSON()
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('Easy Change issues'),
+    value: Joi.string().regex(/^[1-9][0-9]?[kMGTPEZY]? open$/)
   }));
 
 t.create('GitHub open issues by label (raw)')

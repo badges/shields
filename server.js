@@ -3418,7 +3418,7 @@ cache(function(data, match, sendBadge, request) {
   query.q = 'repo:' + user + '/' + repo +
     (isPR? ' is:pr': ' is:issue') +
     (isClosed? ' is:closed': ' is:open') +
-    (hasLabel? ' label:' + ghLabel: '');
+    (hasLabel? ` label:"${ghLabel}"` : '');
 
   var classText = isClosed? 'closed': 'open';
   var leftClassText = isRaw? classText + ' ': '';
