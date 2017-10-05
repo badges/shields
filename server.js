@@ -6677,7 +6677,7 @@ cache((data, match, sendBadge, request) => {
 }));
 
 // Maven metadata versioning integration.
-camp.route(/^\/maven\/(v)\/((?:https?:\/\/.+\/)maven-metadata\.xml)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/maven-metadata\/(v)\/((?:https?:\/\/.+\/)maven-metadata\.xml)\.(svg|png|gif|jpg|json)$/,
   cache(function (data, match, sendBadge, request) {
     request(match[2], function (error, response, body) {
       var badge = getBadgeData('maven', data);
