@@ -88,7 +88,7 @@ The format is the following:
 
 See also
 
-- [colorscheme.json](colorscheme.json) for the `colorscheme` option
+- [colorscheme.json](lib/colorscheme.json) for the `colorscheme` option
 - [templates/](templates) for the `template` option
 
 # Defaults
