@@ -184,21 +184,21 @@ t.create('Release Date - Should return `no releases or repo not found` for inval
 .expectJSON({ name: 'release date', value: 'no releases or repo not found' });
 
 t.create('(Pre-)Release Date. e.g release date|today')
-.get('/release-date/microsoft/vscode/all.json')
+.get('/release-date-pre/microsoft/vscode.json')
 .expectJSONTypes(Joi.object().keys({
   name: 'release date',
   value: validDateString
 }));
 
 t.create('(Pre-)Release Date - Custom Label. e.g myRelease|today')
-.get('/release-date/microsoft/vscode/all.json?label=myRelease')
+.get('/release-date-pre/microsoft/vscode.json?label=myRelease')
 .expectJSONTypes(Joi.object().keys({
   name: 'myRelease',
   value: validDateString
 }));
 
 t.create('(Pre-)Release Date - Should return `no releases or repo not found` for invalid repo')
-.get('/release-date/not-valid-name/not-valid-repo/all.json')
+.get('/release-date-pre/not-valid-name/not-valid-repo.json')
 .expectJSON({ name: 'release date', value: 'no releases or repo not found' });
 
 
