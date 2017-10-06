@@ -38,14 +38,14 @@ t.create('pre version. eg. bower|v0.2.5-alpha-rc-pre')
 .get('/vpre/bootstrap.json')
 .expectJSONTypes(Joi.object().keys({
   name: Joi.equal('bower'),
-  value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?(\-?\w)+?$/)
+  value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?(-?\w)+?$/)
 }));
 
 t.create('custom label for pre version. eg. pre verison|v0.2.5-alpha-rc-pre')
 .get('/vpre/bootstrap.json?label="pre verison"')
 .expectJSONTypes(Joi.object().keys({
   name: Joi.equal('pre verison'),
-  value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?(\-?\w)+?$/)
+  value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?(-?\w)+?$/)
 }));
 
 
