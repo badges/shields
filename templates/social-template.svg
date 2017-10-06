@@ -24,12 +24,12 @@
     <image x="5" y="3" width="{{=it.logoWidth}}" height="14" xlink:href="{{=it.logo}}"/>
   {{?}}
   <g fill="#333" text-anchor="middle" font-family="Helvetica Neue,Helvetica,Arial,sans-serif" font-weight="700" font-size="110px" line-height="14px">
-    <text x="{{=((it.widths[0]+it.logoWidth+it.logoPadding)/2)*10}}" y="150" fill="#fff" transform="scale(0.1)">{{=it.escapeXml(it.capitalize(it.text[0]))}}</text>
-    <text x="{{=((it.widths[0]+it.logoWidth+it.logoPadding)/2)*10}}" y="140" transform="scale(0.1)">{{=it.escapeXml(it.capitalize(it.text[0]))}}</text>
+    <text x="{{=((it.widths[0]+it.logoWidth+it.logoPadding)/2)*10}}" y="150" fill="#fff" transform="scale(0.1)" textLength="{{=(it.widths[0]-8)*10}}" lengthAdjust="spacing">{{=it.escapeXml(it.capitalize(it.text[0]))}}</text>
+    <text x="{{=((it.widths[0]+it.logoWidth+it.logoPadding)/2)*10}}" y="140" transform="scale(0.1)" textLength="{{=(it.widths[0]-8)*10}}" lengthAdjust="spacing">{{=it.escapeXml(it.capitalize(it.text[0]))}}</text>
     {{?(it.text[1] && it.text[1].length)}}
-    <text x="{{=(it.widths[0]+it.widths[1]/2+6)*10}}" y="150" fill="#fff" transform="scale(0.1)">{{=it.escapeXml(it.text[1])}}</text>
+    <text x="{{=(it.widths[0]+it.widths[1]/2+6)*10}}" y="150" fill="#fff" transform="scale(0.1)" textLength="{{=(it.widths[1]-8)*10}}" lengthAdjust="spacing">{{=it.escapeXml(it.text[1])}}</text>
     <a xlink:href="{{=it.links[1]}}">
-      <text id="rlink" x="{{=(it.widths[0]+it.widths[1]/2+6)*10}}" y="140" transform="scale(0.1)">{{=it.escapeXml(it.text[1])}}</text>
+      <text id="rlink" x="{{=(it.widths[0]+it.widths[1]/2+6)*10}}" y="140" transform="scale(0.1)" textLength="{{=(it.widths[1]-8)*10}}" lengthAdjust="spacing">{{=it.escapeXml(it.text[1])}}</text>
     </a>
     {{?}}
   </g>
