@@ -4860,7 +4860,6 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
       var rating = JSON.parse(buffer).rating;
       rating = (rating/100)*5;
       // round to the nearest half-star
@@ -4899,7 +4898,6 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
       var downloads = JSON.parse(buffer).downloaded;
       badgeData.text[1] = metric(downloads);
       badgeData.colorscheme = downloadCountColor(downloads);
