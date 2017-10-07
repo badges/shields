@@ -10,26 +10,17 @@
 // sonar
 //
 // Example:
-//   TRAVIS_REPO_SLUG=badges/shields TRAVIS_PULL_REQUEST=1108 npm run test:pr:services:prepare
-// With authentication:
-//   GITHUB_TOKEN=... TRAVIS_REPO_SLUG=badges/shields TRAVIS_PULL_REQUEST=1108 npm run test:pr:services:prepare
+//
+// TRAVIS_REPO_SLUG=badges/shields TRAVIS_PULL_REQUEST=1108 npm run test:services:pr:prepare
 
 'use strict';
 
 const difference = require('lodash.difference');
 const fetch = require('node-fetch');
 
-function makeBasicAuthHeader(username, password) {
-  return 'Basic ' + new Buffer(`${username}:${password}`).toString('base64');
-}
-
 function getTitle (repoSlug, pullRequest) {
-  const uri = `https://api.github.com/repos/${repoSlug}/pulls/${pullRequest}`;
+  const uri = `https://img.shields.io/github/pulls/detail/title/${repoSlug}/${pullRequest}.json`;
   const options = { headers: { 'User-Agent': 'badges/shields' }};
-  if (process.env.GITHUB_TOKEN) {
-    console.error('Authenticating with token.');
-    options.headers.Authorization = makeBasicAuthHeader('', process.env.GITHUB_TOKEN);
-  }
   return fetch(uri, options)
     .then(res => {
       if (! res.ok) {
@@ -38,7 +29,7 @@ function getTitle (repoSlug, pullRequest) {
 
       return res.json();
     })
-    .then(json => json.title);
+    .then(json => json.value);
 }
 
 // [Travis] Fix timeout issues => ['travis']

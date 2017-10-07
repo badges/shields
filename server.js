@@ -3324,7 +3324,7 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// GitHub release date integration.
+// GitHub release & pre-release date integration.
 mapGithubReleaseDate(camp, githubApiUrl, githubAuth);
 
 // GitHub commits since integration.
