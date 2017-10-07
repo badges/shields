@@ -4773,7 +4773,8 @@ cache(function(data, match, sendBadge, request) {
     try {
       var rating = JSON.parse(buffer).rating;
       rating = (rating/100)*5;
-      badgeData.text[1] = metric(Math.round(rating * 10) / 10) + ' stars';
+      // round to the nearest half-star
+      badgeData.text[1] = metric(Math.round(rating * 2) / 2) + ' stars';
       if (rating === 0) {
         badgeData.colorscheme = 'red';
       } else if (rating < 2) {
@@ -4837,6 +4838,72 @@ cache(function(data, match, sendBadge, request) {
       } else {
         sendBadge(format, badgeData);
       }
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// wordpress theme rating integration.
+// example: https://img.shields.io/wordpress/theme/r/hestia.svg for https://wordpress.org/themes/hestia
+camp.route(/^\/wordpress\/theme\/r\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var theme = match[1];  // eg, `hestia`.
+  var format = match[2];
+  var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?action=theme_information&request[slug]=' + theme;
+  var badgeData = getBadgeData('rating', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var rating = JSON.parse(buffer).rating;
+      rating = (rating/100)*5;
+      // round to the nearest half-star
+      badgeData.text[1] = metric(Math.round(rating * 2) / 2) + ' stars';
+      if (rating === 0) {
+        badgeData.colorscheme = 'red';
+      } else if (rating < 2) {
+        badgeData.colorscheme = 'yellow';
+      } else if (rating < 3) {
+        badgeData.colorscheme = 'yellowgreen';
+      } else if (rating < 4) {
+        badgeData.colorscheme = 'green';
+      } else {
+        badgeData.colorscheme = 'brightgreen';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// wordpress theme download integration.
+// example: https://img.shields.io/wordpress/theme/dt/hestia.svg for https://wordpress.org/themes/hestia
+camp.route(/^\/wordpress\/theme\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var theme = match[1];  // eg, `hestia`.
+  var format = match[2];
+  var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?action=theme_information&request[slug]=' + theme;
+  var badgeData = getBadgeData('downloads', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var downloads = JSON.parse(buffer).downloaded;
+      badgeData.text[1] = metric(downloads);
+      badgeData.colorscheme = downloadCountColor(downloads);
+      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
