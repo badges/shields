@@ -315,6 +315,13 @@ t.create('Downloads all releases')
     value: Joi.string().regex(/^\w+\s+total$/)
   }));
 
+t.create('downloads for latest release')
+  .get('/downloads/photonstorm/phaser/latest/total.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('downloads'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?$/)
+  }));
+
 t.create('downloads for release without slash')
   .get('/downloads/atom/atom/v0.190.0/total.json')
   .expectJSONTypes(Joi.object().keys({

@@ -3391,7 +3391,10 @@ cache(function(data, match, sendBadge, request) {
           label += ' ' + '[' + asset_name + ']';
         }
       }
-      badgeData.text[1] = metric(downloads) + ' ' + label;
+      badgeData.text[1] = metric(downloads);
+      if (label) {
+        badgeData.text[1] += ' ' + label;
+      }
       badgeData.colorscheme = 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
