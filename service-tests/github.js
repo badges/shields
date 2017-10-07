@@ -336,6 +336,13 @@ t.create('downloads for specific asset without slash')
     value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? v0\.190\.0 \[atom-amd64\.deb\]$/)
   }));
 
+t.create('downloads for specific asset from latest release')
+  .get('/downloads/atom/atom/latest/atom-amd64.deb.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('downloads'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? \[atom-amd64\.deb\]$/)
+  }));
+
 t.create('downloads for release with slash')
   .get('/downloads/NHellFire/dban/stable/v2.2.8/total.json')
   .expectJSONTypes(Joi.object().keys({

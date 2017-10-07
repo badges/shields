@@ -3388,7 +3388,10 @@ cache(function(data, match, sendBadge, request) {
 
         label = tag !== 'latest' ?  tag : '';
         if (asset_name !== 'total') {
-          label += ' ' + '[' + asset_name + ']';
+          if (label) {
+            label += ' ';
+          }
+          label += '[' + asset_name + ']';
         }
       }
       badgeData.text[1] = metric(downloads);
