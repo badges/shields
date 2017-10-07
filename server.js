@@ -115,7 +115,8 @@ const {
 } = require('./lib/github-helpers');
 
 const {
-  mapGithubCommitsSince
+  mapGithubCommitsSince,
+  mapGithubReleaseDate
 } = require("./lib/github-provider");
 
 var semver = require('semver');
@@ -3322,6 +3323,9 @@ cache(function(data, match, sendBadge, request) {
     }
   });
 }));
+
+// GitHub release & pre-release date integration.
+mapGithubReleaseDate(camp, githubApiUrl, githubAuth);
 
 // GitHub commits since integration.
 mapGithubCommitsSince(camp, githubApiUrl ,githubAuth);
