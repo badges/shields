@@ -3331,14 +3331,15 @@ mapGithubReleaseDate(camp, githubApiUrl, githubAuth);
 mapGithubCommitsSince(camp, githubApiUrl ,githubAuth);
 
 // GitHub release-download-count integration.
-camp.route(/^\/github\/downloads\/([^\/]+)\/([^\/]+)(\/.+)?\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/(downloads|downloads-pre)\/([^\/]+)\/([^\/]+)(\/.+)?\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, qubyte/rubidium
-  var repo = match[2];
+  const type = match[1]; // downloads or downloads-pre
+  var user = match[2];  // eg, qubyte/rubidium
+  var repo = match[3];
 
-  var tag = match[3];  // eg, v0.190.0, latest, null if querying all releases
-  var asset_name = match[4].toLowerCase(); // eg. total, atom-amd64.deb, atom.x86_64.rpm
-  var format = match[5];
+  var tag = match[4];  // eg, v0.190.0, latest, null if querying all releases
+  var asset_name = match[5].toLowerCase(); // eg. total, atom-amd64.deb, atom.x86_64.rpm
+  var format = match[6];
 
   if (tag) { tag = tag.slice(1); }
 
@@ -3349,8 +3350,10 @@ cache(function(data, match, sendBadge, request) {
 
   var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/releases';
   if (!total) {
-    var release_path = tag !== 'latest' ? 'tags/' + tag : 'latest';
-    apiUrl = apiUrl + '/' + release_path;
+    var release_path = tag === 'latest' ? (type === 'downloads' ? 'latest' : '') : 'tags/' + tag;
+    if (release_path) {
+      apiUrl = apiUrl + '/' + release_path;
+    }
   }
   var badgeData = getBadgeData('downloads', data);
   if (badgeData.template === 'social') {
@@ -3363,6 +3366,9 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
+      if (type === 'downloads-pre' && tag === 'latest') {
+        data = data[0];
+      }
       var downloads = 0;
 
       var label;
