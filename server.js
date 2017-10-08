@@ -3330,7 +3330,7 @@ mapGithubReleaseDate(camp, githubApiUrl, githubAuth);
 // GitHub commits since integration.
 mapGithubCommitsSince(camp, githubApiUrl ,githubAuth);
 
-// GitHub release-download-count integration.
+// GitHub release-download-count and pre-release-download-count integration.
 camp.route(/^\/github\/(downloads|downloads-pre)\/([^\/]+)\/([^\/]+)(\/.+)?\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const type = match[1]; // downloads or downloads-pre
