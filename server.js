@@ -6192,19 +6192,19 @@ cache(function(query_data, match, sendBadge, request) {
           break;
         case 'rating':
           rating = parseInt(data.addon.rating, 10);
-          badgeData.text[0] = getLabel('downloads', query_data);
+          badgeData.text[0] = getLabel('rating', query_data);
           badgeData.text[1] = rating + '/5';
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
           break;
         case 'stars':
           rating = parseInt(data.addon.rating, 10);
-          badgeData.text[0] = getLabel('downloads', query_data);
+          badgeData.text[0] = getLabel('stars', query_data);
           badgeData.text[1] = starRating(rating);
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
           break;
         case 'users':
           var dailyUsers = parseInt(data.addon.daily_users[0], 10);
-          badgeData.text[0] = getLabel('downloads', query_data);
+          badgeData.text[0] = getLabel('users', query_data);
           badgeData.text[1] = metric(dailyUsers);
           badgeData.colorscheme = 'brightgreen';
           break;

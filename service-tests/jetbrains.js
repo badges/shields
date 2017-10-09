@@ -2,30 +2,22 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
+const { isMetric } = require('./helpers/validators');
 
 const t = new ServiceTester({ id: 'jetbrains', title: 'JetBrains plugin' });
 module.exports = t;
 
 t.create('downloads (number as a plugin id)')
   .get('/plugin/d/7495.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('downloads'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]$/)
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }));
 
 t.create('downloads (plugin id from plugin.xml)')
   .get('/plugin/d/org.intellij.scala.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('downloads'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]$/)
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }));
 
 t.create('downloads (user friendly plugin id)')
   .get('/plugin/d/1347-scala.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('downloads'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]$/)
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }));
 
 t.create('unknown plugin')
   .get('/plugin/d/unknown-plugin.json')
