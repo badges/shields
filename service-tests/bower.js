@@ -4,7 +4,7 @@ const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 const { isVPlusDottedVersionAtLeastOne } = require('./helpers/validators');
 
-const isBowerPrereleaseVersion = Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?(\-?\w)+?$/);
+const isBowerPrereleaseVersion = Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?(-?\w)+?$/);
 
 const t = new ServiceTester({ id: 'bower', title: 'Bower' });
 module.exports = t;
