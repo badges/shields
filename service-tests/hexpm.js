@@ -2,6 +2,9 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
+const { isMetric } = require('./helpers/validators');
+
+const isHexpmVersion = Joi.string().regex(/^v\d+.\d+.?\d?$/);
 
 const t = new ServiceTester({ id: 'hexpm', title: 'Hex.pm' });
 module.exports = t;
@@ -9,35 +12,29 @@ module.exports = t;
 t.create('downloads per week')
   .get('/dw/cowboy.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('downloads'),
+    name: 'downloads',
     value: Joi.string().regex(/^\d+[a-z]?\/week$/)
   }));
 
 t.create('downloads per day')
   .get('/dd/cowboy.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('downloads'),
+    name: 'downloads',
     value: Joi.string().regex(/^\d+[a-z]?\/day$/)
   }));
 
 t.create('downloads in total')
   .get('/dt/cowboy.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('downloads'),
-    value: Joi.string().regex(/^\d+[kMGTPEZY]?$/)
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }));
 
 t.create('version')
   .get('/v/cowboy.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('hex'),
-    value: Joi.string().regex(/^v\d+.\d+.?\d?$/)
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'hex', value: isHexpmVersion }));
 
 t.create('license')
   .get('/l/cowboy.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('license'),
+    name: 'license',
     value: Joi.string().required()
   }));
 

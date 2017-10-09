@@ -2,51 +2,50 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
+const {
+  isMetric,
+  isStarRating,
+  isVPlusDottedVersionAtLeastOne,
+} = require('./helpers/validators');
 
 const t = new ServiceTester({ id: 'amo', title: 'Mozilla Addons' });
 module.exports = t;
 
 t.create('Downloads')
   .get('/d/IndieGala-Helper.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('downloads'),
-    value: Joi.string().regex(/^\d+k$/)
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }));
 
 t.create('Version')
   .get('/v/IndieGala-Helper.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('mozilla add-on'),
-    value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?$/)
+    name: 'mozilla add-on',
+    value: isVPlusDottedVersionAtLeastOne
   }));
 
 t.create('Version - Custom label')
   .get('/v/IndieGala-Helper.json?label=IndieGala Helper')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('IndieGala Helper'),
-    value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?$/)
+    name: 'IndieGala Helper',
+    value: isVPlusDottedVersionAtLeastOne
   }));
 
 t.create('Users')
   .get('/users/IndieGala-Helper.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('users'),
+    name: 'users',
     value: Joi.string().regex(/^\d+$/)
   }));
 
 t.create('Rating')
   .get('/rating/IndieGala-Helper.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('rating'),
+    name: 'rating',
     value: Joi.string().regex(/^\d\/\d$/)
   }));
 
 t.create('Stars')
   .get('/stars/IndieGala-Helper.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('rating'),
-    value: Joi.string().regex(/^[\u2605\u2606]{5}$/)
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'stars', value: isStarRating }));
 
 t.create('Invalid addon')
   .get('/d/invalid-name-of-addon.json')
