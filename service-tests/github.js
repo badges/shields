@@ -25,48 +25,6 @@ t.create('Contributors')
     value: Joi.string().regex(/^\w+$/)
   }));
 
-t.create('GitHub closed pull requests')
-  .get('/issues-pr-closed/badges/shields.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('pull requests'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? closed$/)
-  }));
-
-t.create('GitHub closed pull requests raw')
-  .get('/issues-pr-closed-raw/badges/shields.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('closed pull requests'),
-    value: Joi.string().regex(/^\w+?$/)
-  }));
-
-t.create('GitHub pull requests')
-  .get('/issues-pr/badges/shields.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('pull requests'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
-  }));
-
-t.create('GitHub pull requests raw')
-  .get('/issues-pr-raw/badges/shields.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('open pull requests'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?$/)
-  }));
-
-t.create('GitHub closed issues')
-  .get('/issues-closed/badges/shields.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('issues'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? closed$/)
-  }));
-
-t.create('GitHub closed issues raw')
-  .get('/issues-closed-raw/badges/shields.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('closed issues'),
-    value: Joi.string().regex(/^\w+\+?$/)
-  }));
-
 t.create('GitHub open issues')
   .get('/issues/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
@@ -77,36 +35,64 @@ t.create('GitHub open issues')
 t.create('GitHub open issues raw')
   .get('/issues-raw/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('open issues'),
+    name: Joi.equal('issues'),
     value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?$/)
   }));
 
-t.create('GitHub open issues by label')
-  .get('/issues/badges/shields/vendor-badge.json')
+t.create('GitHub closed issues')
+  .get('/issues-closed/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('vendor-badge issues'),
+    name: Joi.equal('issues'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? closed$/)
+  }));
+
+t.create('GitHub open issues by label')
+  .get('/issues/badges/shields/service-badge.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('service-badge issues'),
     value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
   }));
 
-t.create('GitHub open issues by label (raw)')
-  .get('/issues-raw/badges/shields/vendor-badge.json')
+t.create('GitHub open issues raw by label')
+  .get('/issues-raw/badges/shields/service-badge.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('open vendor-badge issues'),
+    name: Joi.equal('issues'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?$/)
+  }));
+
+t.create('GitHub open pull request')
+  .get('/issues-pr/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('pull requests'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
+  }));
+
+t.create('GitHub open pull request raw')
+  .get('/issues-pr-raw/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('pull requests'),
     value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?$/)
   }));
 
 t.create('GitHub open pull requests by label')
-  .get('/issues-pr/badges/shields/vendor-badge.json')
+  .get('/issues-pr/badges/shields/service-badge.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('vendor-badge pull requests'),
+    name: Joi.equal('service-badge pull requests'),
     value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
   }));
 
-t.create('GitHub open pull requests by label (raw)')
-  .get('/issues-pr-raw/badges/shields/vendor-badge.json')
+t.create('GitHub open pull requests raw by label')
+  .get('/issues-pr-raw/badges/shields/service-badge.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('open vendor-badge pull requests'),
+    name: Joi.equal('pull requests'),
     value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?$/)
+  }));
+
+t.create('GitHub closed pull request')
+  .get('/issues-pr-closed/badges/shields.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: Joi.equal('pull requests'),
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? closed$/)
   }));
 
 t.create('Followers')
