@@ -77,10 +77,10 @@ t.create('GitHub open issues raw')
   .expectJSONTypes(Joi.object().keys({ name: 'open issues', value: isMetric }));
 
 t.create('GitHub open issues by label is > zero')
-  .get('/issues/badges/shields/vendor-badge.json')
+  .get('/issues/badges/shields/service-badge.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('vendor-badge issues'),
-    value: Joi.string().regex(/^[1-9][0-9]?[kMGTPEZY]? open$/)
+    name: Joi.equal('service-badge issues'),
+    value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? open$/)
   }));
 
 t.create('GitHub open issues by label is > zero')
@@ -88,13 +88,13 @@ t.create('GitHub open issues by label is > zero')
   .inspectJSON()
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('Easy Change issues'),
-    value: Joi.string().regex(/^[1-9][0-9]?[kMGTPEZY]? open$/)
+    value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? open$/)
   }));
 
 t.create('GitHub open issues by label (raw)')
-  .get('/issues-raw/badges/shields/vendor-badge.json')
+  .get('/issues-raw/badges/shields/service-badge.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('open vendor-badge issues'),
+    name: Joi.equal('open service-badge issues'),
     value: isMetric
   }));
 
