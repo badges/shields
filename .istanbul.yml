@@ -1,2 +1,2 @@
 instrumentation:
-  excludes: ['lib/suggest.js', 'vendor/**/*.js']
+  excludes: ['**/*.spec.js', 'service-tests/']
