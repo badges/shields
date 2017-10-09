@@ -3371,7 +3371,7 @@ cache(function(data, match, sendBadge, request) {
       }
       var downloads = 0;
 
-      var label;
+      const labelWords = [metric(downloads)];
       if (total) {
         data.forEach(function (tagData) {
           tagData.assets.forEach(function (asset) {
@@ -3381,9 +3381,9 @@ cache(function(data, match, sendBadge, request) {
           });
         });
 
-        label = 'total';
+        labelWords.push('total');
         if (asset_name !== 'total') {
-          label += ' ' + '[' + asset_name + ']';
+          labelWords.push(`[${asset_name}]`);
         }
       } else {
         data.assets.forEach(function (asset) {
@@ -3392,18 +3392,14 @@ cache(function(data, match, sendBadge, request) {
           }
         });
 
-        label = tag !== 'latest' ?  tag : '';
+        if (tag !== 'latest') {
+          labelWords.push(tag);
+        }
         if (asset_name !== 'total') {
-          if (label) {
-            label += ' ';
-          }
-          label += '[' + asset_name + ']';
+          labelWords.push(`[${asset_name}]`);
         }
       }
-      badgeData.text[1] = metric(downloads);
-      if (label) {
-        badgeData.text[1] += ' ' + label;
-      }
+      badgeData.text[1] = labelWords.join(' ');
       badgeData.colorscheme = 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
