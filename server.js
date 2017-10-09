@@ -1581,35 +1581,26 @@ cache(function (data, match, sendBadge, request) {
 }));
 
 // npm version integration.
-camp.route(/^\/npm\/v\/(@[^\/]*)?\/?([^\/]*)\/?([^\/]*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/npm\/v\/(?:@([^\/]+))?\/?([^\/]*)\/?([^\/]*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var scope = match[1];   // "@user"
-  var repo = match[2];    // "express"
-  var tag = match[3];     // "next"
-  var format = match[4];  // "svg"
-  var pkg = encodeURIComponent(scope
-    ? scope + '/' + repo
-    : repo);
-  var name = 'npm';
-  if (tag) {
-    name += '@' + tag;
-  } else {
-    tag = 'latest';
-  }
-  var apiUrl = 'https://registry.npmjs.org/-/package/' + pkg + '/dist-tags';
-  var badgeData = getBadgeData(name, data);
+  // e.g. cycle, core, next, svg
+  const [, scope, packageName, tag, format] = match;
+  const pkg = encodeURIComponent(scope ? `@${scope}/${packageName}` : packageName);
+  const apiUrl = `https://registry.npmjs.org/-/package/${pkg}/dist-tags`;
+  const name = tag ? `npm@${tag}` : 'npm';
+  const badgeData = getBadgeData(name, data);
   // Using the Accept header because of this bug:
   // <https://github.com/npm/npmjs.org/issues/163>
-  request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
+  request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      var version = data[tag];
-      var vdata = versionColor(version);
+      const data = JSON.parse(buffer);
+      const version = data[tag || 'latest'];
+      const vdata = versionColor(version);
       badgeData.text[1] = vdata.version;
       badgeData.colorscheme = vdata.color;
       sendBadge(format, badgeData);
@@ -1670,50 +1661,80 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // npm node version integration.
-camp.route(/^\/node\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/node\/v\/(?:@([^\/]+))?\/?([^\/]*)\/?([^\/]*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var repo = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
-  var format = match[2];
-  var apiUrl = 'https://registry.npmjs.org/' + repo + '/latest';
-  var badgeData = getBadgeData('node', data);
+  // e.g. @stdlib, stdlib, next, svg
+  const [, scope, packageName, tag, format] = match;
+  let apiUrl;
+  if (scope === undefined) {
+      // e.g. https://registry.npmjs.org/express/latest
+      // Use this endpoint as an optimization. It covers the vast majority of
+      // these badges, and the response is smaller.
+      apiUrl = `https://registry.npmjs.org/${packageName}/${tag || 'latest'}`;
+      // apiUrl = `https://registry.npmjs.org/${packageName}/latest`;
+  } else {
+    // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
+    // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
+    const path = encodeURIComponent(`${scope}/${packageName}`);
+    apiUrl = `https://registry.npmjs.org/@${path}`;
+  }
+  const name = tag ? `node@${tag}` : 'node';
+  const badgeData = getBadgeData(name, data);
   // Using the Accept header because of this bug:
   // <https://github.com/npm/npmjs.org/issues/163>
-  request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
+  request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      if (data.engines && data.engines.node) {
-        var versionRange = data.engines.node;
-        badgeData.text[1] = versionRange;
-        regularUpdate('http://nodejs.org/dist/latest/SHASUMS256.txt',
-          (24 * 3600 * 1000),
-          function(shasums) {
-            // tarball index start, tarball index end
-            var taris = shasums.indexOf('node-v');
-            var tarie = shasums.indexOf('\n', taris);
-            var tarball = shasums.slice(taris, tarie);
-            var version = tarball.split('-')[1];
-            return version;
-          }, function(err, version) {
-            if (err != null) { sendBadge(format, badgeData); return; }
-            try {
-              if (semver.satisfies(version, versionRange)) {
-                badgeData.colorscheme = 'brightgreen';
-              } else if (semver.gtr(version, versionRange)) {
-                badgeData.colorscheme = 'yellow';
-              } else {
-                badgeData.colorscheme = 'orange';
-              }
-            } catch(e) { }
-            sendBadge(format, badgeData);
-        });
-      } else {
+      const data = JSON.parse(buffer);
+      if (data.error === 'not_found') {
+        badgeData.text[1] = 'package not found';
         sendBadge(format, badgeData);
+        return;
       }
+      let releaseData;
+      if (scope === undefined) {
+        releaseData = data;
+      } else {
+        const version = data['dist-tags'][tag || 'latest'];
+        releaseData = data.versions[version];
+      }
+      const versionRange = (releaseData.engines || {}).node;
+      if (! versionRange) {
+        badgeData.text[1] = 'not specified';
+        sendBadge(format, badgeData);
+        return;
+      }
+      badgeData.text[1] = versionRange;
+      regularUpdate('http://nodejs.org/dist/latest/SHASUMS256.txt',
+        (24 * 3600 * 1000),
+        shasums => {
+          // tarball index start, tarball index end
+          const taris = shasums.indexOf('node-v');
+          const tarie = shasums.indexOf('\n', taris);
+          const tarball = shasums.slice(taris, tarie);
+          const version = tarball.split('-')[1];
+          return version;
+        }, (err, version) => {
+          if (err != null) {
+            badgeData.text[1] = 'invalid';
+            sendBadge(format, badgeData);
+            return;
+          }
+          try {
+            if (semver.satisfies(version, versionRange)) {
+              badgeData.colorscheme = 'brightgreen';
+            } else if (semver.gtr(version, versionRange)) {
+              badgeData.colorscheme = 'yellow';
+            } else {
+              badgeData.colorscheme = 'orange';
+            }
+          } catch(e) { }
+          sendBadge(format, badgeData);
+      });
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
