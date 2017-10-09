@@ -12,7 +12,7 @@ const isStarRating = withRegex(/^[\u2605\u2606]{5}$/);
 
 const isMetric = withRegex(/^[0-9]+[kMGTPEZY]?$/);
 
-const isPercentage = withRegex(/^[0-9]+\%$/);
+const isPercentage = withRegex(/^[0-9]+%$/);
 
 const isFileSize = withRegex(/^[0-9]*[.]?[0-9]+\s(B|kB|MB|GB|TB|PB|EB|ZB|YB)$/);
 
