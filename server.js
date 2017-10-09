@@ -61,8 +61,8 @@ const {
 } = require('./lib/color-formatters');
 const {
   analyticsAutoLoad,
-  incrMonthlyAnalytics,
-  getAnalytics
+  recordAnalytics,
+  setRoutes: setAnalyticsRoutes
 } = require('./lib/analytics');
 const {
   makeColorB,
@@ -123,7 +123,7 @@ var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
 
 analyticsAutoLoad();
-camp.ajax.on('analytics/v1', function(json, end) { end(getAnalytics()); });
+setAnalyticsRoutes(camp);
 
 var suggest = require('./lib/suggest.js');
 camp.ajax.on('suggest/v1', suggest);
@@ -6692,12 +6692,7 @@ function(data, match, end, ask) {
   var color = escapeFormat(match[6]);
   var format = match[8];
 
-  incrMonthlyAnalytics(getAnalytics().rawMonthly);
-  if (data.style === 'flat') {
-    incrMonthlyAnalytics(getAnalytics().rawFlatMonthly);
-  } else if (data.style === 'flat-square') {
-    incrMonthlyAnalytics(getAnalytics().rawFlatSquareMonthly);
-  }
+  recordAnalytics(data, match);
 
   // Cache management - the badge is constant.
   var cacheDuration = (3600*24*1)|0;    // 1 day.
