@@ -11,13 +11,13 @@ Ways you can help
 ### Contributing code
 
 This project has quite a backlog of suggestions! If you're new to the project,
-maybe you'd like to opan a pull request to address one of them:
+maybe you'd like to open a pull request to address one of them:
 
-[![GitHub issues by-label](https://img.shields.io/github/issues/badges/shields/beginner-friendly.svg)]()
+[![GitHub issues by-label](https://img.shields.io/github/issues/badges/shields/beginner-friendly.svg)](https://github.com/badges/shields/issues?q=is%3Aissue+is%3Aopen+label%3Abeginner-friendly)
 
 Or you can adopt one of these pull requests:
 
-[![GitHub issues by-label](https://img.shields.io/github/issues-pr/badges/shields/beginner-friendly.svg)]()
+[![GitHub issues by-label](https://img.shields.io/github/issues-pr/badges/shields/beginner-friendly.svg)](https://github.com/badges/shields/pulls?q=is%3Apr+is%3Aopen+label%3Abeginner-friendly)
 
 ### Contributing documentation
 
