@@ -3,15 +3,15 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
+// Github allows versions with chars, etc.
+const isAnyV = Joi.string().regex(/^v.+$/);
+
 const t = new ServiceTester({ id: 'jitpack', title: 'JitPack' });
 module.exports = t;
 
 t.create('version')
   .get('/v/jitpack/maven-simple.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('JitPack'),
-    value: Joi.string().regex(/^v.+$/)//Github allows versions with chars, etc.
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'JitPack', value: isAnyV }));
 
 t.create('unknown package')
   .get('/v/some-bogus-user/project.json')

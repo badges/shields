@@ -9,14 +9,14 @@ module.exports = t;
 t.create('build status on default branch')
   .get('/git-hub/doctrine/dbal.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('build'),
+    name: 'build',
     value: Joi.equal('failing', 'passing', 'unknown', 'unstable')
   }));
 
 t.create('build status on named branch')
   .get('/git-hub/doctrine/dbal/develop.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('build'),
+    name: 'build',
     value: Joi.equal('failing', 'passing', 'unknown')
   }));
 
