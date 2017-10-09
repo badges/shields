@@ -273,17 +273,11 @@ t.create('Downloads all releases')
 
 t.create('downloads for latest release')
   .get('/downloads/photonstorm/phaser/latest/total.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('downloads'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?$/)
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }));
 
 t.create('downloads-pre for latest release')
   .get('/downloads-pre/photonstorm/phaser/latest/total.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('downloads'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?$/)
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }));
 
 t.create('downloads for release without slash')
   .get('/downloads/atom/atom/v0.190.0/total.json')
@@ -302,14 +296,14 @@ t.create('downloads for specific asset without slash')
 t.create('downloads for specific asset from latest release')
   .get('/downloads/atom/atom/latest/atom-amd64.deb.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('downloads'),
+    name: 'downloads',
     value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? \[atom-amd64\.deb\]$/)
   }));
 
 t.create('downloads-pre for specific asset from latest release')
   .get('/downloads-pre/atom/atom/latest/atom-amd64.deb.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('downloads'),
+    name: 'downloads',
     value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? \[atom-amd64\.deb\]$/)
   }));
 
