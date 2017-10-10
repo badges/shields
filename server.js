@@ -4852,7 +4852,7 @@ cache(function(data, match, sendBadge, request) {
   var queryParams = {
     'action': 'theme_information',
     'request[slug]': match[1]  // eg, `hestia`.
-  }
+  };
   var format = match[2];
   var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?' + querystring.stringify(queryParams);
   var badgeData = getBadgeData('rating', data);
