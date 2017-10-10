@@ -2898,7 +2898,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // ReadTheDocs build
-camp.route(/^\/readthedocs\/([^\/]+)(?:\/(.+))?.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/readthedocs\/([^/]+)(?:\/(.+))?.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var project = match[1];
   var version = match[2];
