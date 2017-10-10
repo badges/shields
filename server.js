@@ -6668,6 +6668,15 @@ cache((data, match, sendBadge, request) => {
     }
     if (err != null || !res || res.statusCode !== 200) {
       badgeData.text[1] = 'inaccessible';
+      if (res && res.headers['content-type'] === 'application/json') {
+        try {
+          const data = JSON.parse(buffer);
+          if (data && typeof data.message === 'string') {
+            badgeData.text[1] = data.message.toLowerCase();
+          }
+        } catch(e) {
+        }
+      }
       sendBadge(format, badgeData);
       return;
     }
