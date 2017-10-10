@@ -69,7 +69,7 @@
   "devDependencies": {
     "child-process-promise": "^2.2.1",
     "dejavu-fonts-ttf": "^2.37.3",
-    "eslint": "^3.18.0",
+    "eslint": "^4.8.0",
     "eslint-config-prettier": "^2.6.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.7.0",
@@ -88,10 +88,10 @@
     "nock": "^9.0.13",
     "node-fetch": "^1.6.3",
     "opn-cli": "^3.1.0",
-    "prettier": "1.7.3",
+    "prettier": "1.7.4",
     "read-all-stdin-sync": "^1.0.5",
     "semver-regex": "^1.0.0",
-    "sinon": "^2.1.0"
+    "sinon": "^4.0.1"
   },
   "engines": {
     "node": ">= 6"
