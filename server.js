@@ -2369,6 +2369,62 @@ cache(function(queryParams, match, sendBadge, request) {
   });
 }));
 
+// Coon package integration
+camp.route(/^\/coon\/([^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var info = match[1];
+  var userRepo = match[2];  // namespace/package
+  var format = match[3];
+  var apiUrl = 'http://coon.justtech.blog/badge/' + userRepo;
+  var badgeData = getBadgeData('coon', data);
+  request(apiUrl, function(err, res, buffer) {
+      if (err != null) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        var data = JSON.parse(buffer);
+        if (info == 'e') {  // supported erlang versions
+          var versions = data.erlang;
+          if (!versions.length || versions == 'not found') {
+            badgeData.text[1] = 'unknown';
+            badgeData.colorscheme = 'lightgrey';
+          } else {
+            badgeData.text[1] = versions.sort().join(', ');
+            badgeData.colorscheme = 'blue';
+          }
+          badgeData.text[0] = 'erlang';
+          sendBadge(format, badgeData);
+        } else if (info == 'b') {
+          var build_system = data.build_system;
+          if (build_system == 'coon' || build_system == 'rebar' || build_system == 'erlang.mk') {
+             badgeData.text[0] = 'build';
+             badgeData.text[1] = build_system;
+             badgeData.colorscheme = 'blue';
+             sendBadge(format, badgeData);
+          } else {
+            badgeData.text[0] = 'build';
+            badgeData.text[1] = 'unknown';
+            badgeData.colorscheme = 'lightgrey';
+            sendBadge(format, badgeData);
+          }
+        } else if (info == 'v') {
+          var vdata = versionColor(data.version);
+          badgeData.text[1] = vdata.version;
+          badgeData.colorscheme = vdata.color;
+          sendBadge(format, badgeData);
+        }
+      } catch(e) {
+        badgeData.text[1] = 'malformed';
+        sendBadge(format, badgeData);
+      }
+    }).on('error', function(e) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    });
+}));
+
 // Coveralls integration.
 camp.route(/^\/coveralls\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
