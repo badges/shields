@@ -2897,6 +2897,43 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// ReadTheDocs build
+camp.route(/^\/readthedocs\/([^\/]+)(?:\/(.+))?.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var project = match[1];
+  var version = match[2];
+  var format = match[3];
+  var badgeData = getBadgeData('docs', data);
+  var url = 'https://readthedocs.org/projects/' + encodeURIComponent(project) + '/badge/';
+  if (version != null) {
+    url += '?version=' + encodeURIComponent(version);
+  }
+  fetchFromSvg(request, url, function(err, res) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      badgeData.text[1] = res;
+      if (res === 'passing') {
+        badgeData.colorscheme = 'brightgreen';
+      } else if (res === 'failing') {
+        badgeData.colorscheme = 'red';
+      } else if (res === 'unknown') {
+        badgeData.colorscheme = 'yellow';
+      } else {
+        badgeData.colorscheme = 'red';
+      }
+      sendBadge(format, badgeData);
+
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 camp.route(/^\/codacy\/coverage\/(?!grade\/)([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var projectId = match[1];  // eg. e27821fb6289410b8f58338c7e0bc686
