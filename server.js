@@ -4849,9 +4849,12 @@ cache(function(data, match, sendBadge, request) {
 // example: https://img.shields.io/wordpress/theme/r/hestia.svg for https://wordpress.org/themes/hestia
 camp.route(/^\/wordpress\/theme\/r\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var theme = match[1];  // eg, `hestia`.
+  var queryParams = {
+    'action': 'theme_information',
+    'request[slug]': match[1]  // eg, `hestia`.
+  }
   var format = match[2];
-  var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?action=theme_information&request[slug]=' + theme;
+  var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?' + querystring.stringify(queryParams);
   var badgeData = getBadgeData('rating', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
@@ -4887,9 +4890,12 @@ cache(function(data, match, sendBadge, request) {
 // example: https://img.shields.io/wordpress/theme/dt/hestia.svg for https://wordpress.org/themes/hestia
 camp.route(/^\/wordpress\/theme\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var theme = match[1];  // eg, `hestia`.
+  var queryParams = {
+    'action': 'theme_information',
+    'request[slug]': match[1] // eg, `hestia`.
+  };
   var format = match[2];
-  var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?action=theme_information&request[slug]=' + theme;
+  var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?' + querystring.stringify(queryParams);
   var badgeData = getBadgeData('downloads', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
