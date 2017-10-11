@@ -2,19 +2,14 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
-const frisby = require('icedfrisby-nock')(require('icedfrisby'));
 
-frisby.globalSetup({
-  request: {
-    headers: { 'origin': 'https://shields.io' }
-  }
-});
 const t = new ServiceTester({ id: 'suggest', title: 'suggest', pathPrefix: '/$suggest' });
 module.exports = t;
 
 
 t.create('issues')
   .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
+  .addHeader('origin', 'https://shields.io')
   .expectJSONTypes('badges.?', Joi.object().keys({
     name: 'GitHub issues',
     link: 'https://github.com/atom/atom/issues',
@@ -23,6 +18,7 @@ t.create('issues')
 
 t.create('forks')
   .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
+  .addHeader('origin', 'https://shields.io')
   .expectJSONTypes('badges.?', Joi.object().keys({
     name: 'GitHub forks',
     link: 'https://github.com/atom/atom/network',
@@ -31,6 +27,7 @@ t.create('forks')
 
 t.create('stars')
   .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
+  .addHeader('origin', 'https://shields.io')
   .expectJSONTypes('badges.?', Joi.object().keys({
     name: 'GitHub stars',
     link: 'https://github.com/atom/atom/stargazers',
@@ -39,6 +36,7 @@ t.create('stars')
 
 t.create('twitter')
   .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
+  .addHeader('origin', 'https://shields.io')
   .expectJSONTypes('badges.?', Joi.object().keys({
     name: 'Twitter',
     link: 'https://twitter.com/intent/tweet?text=Wow:&url=%5Bobject%20Object%5D',
@@ -47,6 +45,7 @@ t.create('twitter')
 
 t.create('license')
   .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
+  .addHeader('origin', 'https://shields.io')
   .expectJSONTypes('badges.?', Joi.object().keys({
     name: 'GitHub license',
     link: 'https://github.com/atom/atom/blob/master/LICENSE.md',
