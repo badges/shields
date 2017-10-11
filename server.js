@@ -3906,6 +3906,71 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// GitHub languages integration.
+camp.route(/^\/github\/languages\/(top|count|bytes)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var type = match[1];
+  var user = match[2];
+  var repo = match[3];
+  var format = match[4];
+  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/languages';
+  var badgeData = getBadgeData('', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = getLogo('github', data);
+  }
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      const parsedData = JSON.parse(buffer);
+      var sumBytes = 0;
+      switch(type) {
+        case 'top':
+          var topLanguage = 'language';
+          var maxBytes = 0;
+          for (const language of Object.keys(parsedData)) {
+            const bytes = parseInt(parsedData[language]);
+            if (bytes >= maxBytes) {
+              maxBytes = bytes;
+              topLanguage = language;
+            }
+            sumBytes += bytes;
+          }
+          badgeData.text[0] = topLanguage;
+          if (sumBytes === 0) { // eg, empty repo, only .md files, etc.
+            badgeData.text[1] = 'none';
+            badgeData.colorscheme = 'blue';
+          } else {
+            badgeData.text[1] = (maxBytes / sumBytes * 100).toFixed(1) + '%'; // eg, 9.1%
+          }
+          break;
+        case 'count':
+          badgeData.text[0] = 'languages';
+          badgeData.text[1] = Object.keys(parsedData).length;
+          badgeData.colorscheme = 'blue';
+          break;
+        case 'bytes':
+          for (const language of Object.keys(parsedData)) {
+            sumBytes += parseInt(parsedData[language]);
+          }
+          badgeData.text[0] = 'code size';
+          badgeData.text[1] = metric(sumBytes) + 'B';
+          badgeData.colorscheme = 'blue';
+          break;
+        default:
+          throw Error('Unreachable due to regex');
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Bitbucket issues integration.
 camp.route(/^\/bitbucket\/issues(-raw)?\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
