@@ -1,87 +1,85 @@
-'use-strict';
+'use strict';
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
+const {
+  isVPlusTripleDottedVersion,
+  isMetric
+} = require('./helpers/validators');
 
-const t = new ServiceTester({id:'conda', title:'Conda'});
+const isCondaPlatform = Joi.string().regex(/^\w+-\d+( \| \w+-\d+)*$/);
+
+const t = new ServiceTester({id: 'conda', title: 'Conda'});
 module.exports = t;
 
 t.create('version')
   .get('/v/conda-forge/zlib.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('conda|conda-forge'),
-    value: Joi.string().regex(/^v\d+\.\d+\.\d+$/)
+    name: 'conda|conda-forge',
+    value: isVPlusTripleDottedVersion
+  }));
+
+t.create('version (relabel)')
+  .get('/v/conda-forge/zlib.json?label=123')
+  .expectJSONTypes(Joi.object().keys({
+    name: '123',
+    value: isVPlusTripleDottedVersion
   }));
 
 t.create('version (skip prefix)')
   .get('/vn/conda-forge/zlib.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('conda-forge'),
-    value: Joi.string().regex(/^v\d+\.\d+\.\d+$/)
+    name: 'conda-forge',
+    value: isVPlusTripleDottedVersion
   }));
 
 t.create('version (skip prefix, relabel)')
   .get('/vn/conda-forge/zlib.json?label=123')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('123'),
-    value: Joi.string().regex(/^v\d+\.\d+\.\d+$/)
+    name: '123',
+    value: isVPlusTripleDottedVersion
   }));
 
 t.create('platform')
   .get('/p/conda-forge/zlib.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('conda|platform'),
-    value: Joi.string().regex(/^\w+-\d+( \| \w+-\d+)*$/)
+    name: 'conda|platform',
+    value: isCondaPlatform
   }));
 
 t.create('platform (skip prefix)')
   .get('/pn/conda-forge/zlib.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('platform'),
-    value: Joi.string().regex(/^\w+-\d+( \| \w+-\d+)*$/)
+    name: 'platform',
+    value: isCondaPlatform
   }));
 
 t.create('platform (skip prefix,relabel)')
   .get('/pn/conda-forge/zlib.json?label=123')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('123'),
-    value: Joi.string().regex(/^\w+-\d+( \| \w+-\d+)*$/)
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: '123', value: isCondaPlatform }));
 
 t.create('downloads')
   .get('/d/conda-forge/zlib.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('conda|downloads'),
-    value: Joi.string().regex(/^[0-9]+[kMG]?$/)
+    name: 'conda|downloads',
+    value: isMetric
   }));
 
 t.create('downloads (skip prefix)')
   .get('/dn/conda-forge/zlib.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('downloads'),
-    value: Joi.string().regex(/^[0-9]+[kMG]?$/)
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }));
 
 t.create('downloads (skip prefix, relabel)')
   .get('/dn/conda-forge/zlib.json?label=123')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('123'),
-    value: Joi.string().regex(/^[0-9]+[kMG]?$/)
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: '123', value: isMetric }));
 
 t.create('unknown package')
   .get('/d/conda-forge/some-bogus-package-that-never-exists.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('conda|downloads'),
-    value: Joi.equal('invalid')
-  }));
+  .expectJSON({ name: 'conda|downloads', value: 'invalid' });
 
 t.create('unknown channel')
   .get('/d/some-bogus-channel-that-never-exists/zlib.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('conda|downloads'),
-    value: Joi.equal('invalid')
-  }));
+  .expectJSON({ name: 'conda|downloads', value: 'invalid' });
 
 t.create('unknown info')
   .get('/x/conda-forge/zlib.json')

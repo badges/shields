@@ -2,30 +2,22 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
+const { isMetric } = require('./helpers/validators');
 
 const t = new ServiceTester({ id: 'jetbrains', title: 'JetBrains plugin' });
 module.exports = t;
 
 t.create('downloads (number as a plugin id)')
   .get('/plugin/d/7495.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('downloads'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]$/)
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }));
 
 t.create('downloads (plugin id from plugin.xml)')
   .get('/plugin/d/org.intellij.scala.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('downloads'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]$/)
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }));
 
 t.create('downloads (user friendly plugin id)')
   .get('/plugin/d/1347-scala.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('downloads'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]$/)
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }));
 
 t.create('unknown plugin')
   .get('/plugin/d/unknown-plugin.json')
@@ -71,8 +63,8 @@ t.create('missing required XML element')
                      <!-- no required idea-plugin element here -->
                    </category>
                  </plugin-repository>`), {
-          'Content-Type': 'text/xml;charset=UTF-8'
-        })
+                   'Content-Type': 'text/xml;charset=UTF-8'
+                 })
   .expectJSON({ name: 'downloads', value: 'invalid' });
 
 t.create('missing required XML attribute')
@@ -97,8 +89,8 @@ t.create('missing required XML attribute')
                      </idea-plugin>
                    </category>
                  </plugin-repository>`), {
-          'Content-Type': 'text/xml;charset=UTF-8'
-        })
+                   'Content-Type': 'text/xml;charset=UTF-8'
+                 })
   .expectJSON({ name: 'downloads', value: 'invalid' });
 
 t.create('empty XML')
@@ -106,8 +98,8 @@ t.create('empty XML')
   .intercept(nock => nock('https://plugins.jetbrains.com')
     .get('/plugins/list?pluginId=9435')
     .reply(200, '<?xml version="1.0" encoding="UTF-8"?>'), {
-          'Content-Type': 'text/xml;charset=UTF-8'
-        })
+      'Content-Type': 'text/xml;charset=UTF-8'
+    })
   .expectJSON({ name: 'downloads', value: 'invalid' });
 
 t.create('404 status code')

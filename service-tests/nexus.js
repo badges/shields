@@ -9,9 +9,9 @@ module.exports = t;
 t.create('search release version')
   .get('/r/https/repository.jboss.org/nexus/jboss/jboss-client.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('nexus'),
+    name: 'nexus',
     value: Joi.string().regex(/^4(\.\d+)+$/)
-}));
+  }));
 
 t.create('search release version of an inexistent artifact')
   .get('/r/https/repository.jboss.org/nexus/jboss/inexistent-artifact-id.json')
@@ -20,9 +20,9 @@ t.create('search release version of an inexistent artifact')
 t.create('search snapshot version')
   .get('/s/https/repository.jboss.org/nexus/com.progress.fuse/fusehq.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('nexus'),
+    name: 'nexus',
     value: Joi.string().regex(/-SNAPSHOT$/)
-}));
+  }));
 
 t.create('search snapshot version not in latestSnapshot')
   .get('/s/https/repository.jboss.org/nexus/com.progress.fuse/fusehq.json')
@@ -43,16 +43,16 @@ t.create('search snapshot version of an inexistent artifact')
 t.create('resolve version')
   .get('/developer/https/repository.jboss.org/nexus/ai.h2o/h2o-automl.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('nexus'),
+    name: 'nexus',
     value: Joi.string().regex(/^3(\.\d+)+$/)
-}));
+  }));
 
 t.create('resolve version with query')
   .get('/fs-public-snapshots/https/repository.jboss.org/nexus/com.progress.fuse/fusehq:c=agent-apple-osx:p=tar.gz.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('nexus'),
+    name: 'nexus',
     value: Joi.string().regex(/^7(\.\d+)+-SNAPSHOT$/)
-}));
+  }));
 
 t.create('resolve version of an inexistent artifact')
   .get('/developer/https/repository.jboss.org/nexus/jboss/inexistent-artifact-id.json')
@@ -68,5 +68,5 @@ t.create('json parsing error')
   .intercept(nock => nock('https://repository.jboss.org')
     .get('/nexus/service/local/lucene/search')
     .query({g: 'jboss', a: 'jboss-client'})
-    .reply(200, "this should be a valid json"))
+    .reply(200, 'this should be a valid json'))
   .expectJSON({ name: 'nexus', value: 'invalid' });

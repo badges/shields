@@ -2,6 +2,7 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
+const { isVPlusTripleDottedVersion } = require('./helpers/validators');
 
 const t = new ServiceTester({ id: 'cran', title: 'CRAN/METACRAN' });
 module.exports = t;
@@ -9,8 +10,8 @@ module.exports = t;
 t.create('version')
   .get('/v/devtools.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('cran'),
-    value: Joi.string().regex(/^v\d+\.\d+\.\d+$/)
+    name: 'cran',
+    value: isVPlusTripleDottedVersion
   }));
 
 t.create('specified license')
