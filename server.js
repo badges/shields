@@ -6803,39 +6803,39 @@ cache((data, match, sendBadge, request) => {
 
 // nsp for npm packages
 camp.route(/^\/nsp\/npm\/([^\/]+)\.(svg|png|gif|jpg|json)$/, cache((data, match, sendBadge, request) => {
-  const package = match[2]
-  const format = match[3]
-  let badgeData = getBadgeData('nsp', data)
+  const package = match[2];
+  const format = match[3];
+  let badgeData = getBadgeData('nsp', data);
 
   request(`https://api.nodesecurity.io/check/${package}`, (error, response, body) => {
-    let available = false
-    let vulnerabilities = 0
+    let available = false;
+    let vulnerabilities = 0;
 
     if (error === null && body !== null) {
       try {
-        const results = JSON.parse(body)
+        const results = JSON.parse(body);
 
         if (Number.isSafeInteger(results.length) === true) {
-          available = true
-          vulnerabilities = results.length
+          available = true;
+          vulnerabilities = results.length;
         }
       } catch (e) {}
     }
 
     if (available === false) {
-      badgeData.text[1] = 'not available'
-      badgeData.colorscheme = 'grey'
+      badgeData.text[1] = 'not available';
+      badgeData.colorscheme = 'grey';
     } else if (vulnerabilities !== 0) {
-      badgeData.text[1] = `${vulnernabilities} vulnernabilities`
-      badgeData.colorscheme = 'red'
+      badgeData.text[1] = `${vulnerabilities} vulnerabilities`;
+      badgeData.colorscheme = 'red';
     } else {
-      badgeData.text[1] = 'no known vulnernabilities'
-      badgeData.colorscheme = 'brightgreen'
+      badgeData.text[1] = 'no known vulnerabilities';
+      badgeData.colorscheme = 'brightgreen';
     }
 
-    sendBadge(format, badgeData)
-  })
-}))
+    sendBadge(format, badgeData);
+  });
+}));
 
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
