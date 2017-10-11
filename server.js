@@ -4353,6 +4353,39 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Jenkins Plugins version integration
+camp.route(/^\/jenkins\/plugin\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var pluginId = match[1];  // e.g. blueocean
+  var format = match[2];
+  var options = {
+    method: 'GET',
+    json: true,
+    uri: 'https://updates.jenkins-ci.org/current/update-center.actual.json'
+  };
+  var badgeData = getBadgeData('plugin', data);
+  request(options, function(err, res, json) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var version = json.plugins[pluginId].version;
+      badgeData.text[1] = 'v' + version;
+      if (version === '0') {
+        badgeData.colorscheme = 'orange';
+      } else {
+        badgeData.colorscheme = 'blue';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'not found';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Ansible integration
 camp.route(/^\/ansible\/role\/(?:(d)\/)?(\d+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
