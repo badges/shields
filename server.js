@@ -6808,24 +6808,21 @@ camp.route(/^\/nsp\/npm\/([^\/]+)\.(svg|png|gif|jpg|json)$/, cache((data, match,
   let badgeData = getBadgeData('nsp', data);
 
   request(`https://api.nodesecurity.io/check/${package}`, (error, response, body) => {
-    let available = false;
-    let vulnerabilities = 0;
+    let jsonResults;
 
-    if (error === null && body !== null) {
+    if (body !== null) {
       try {
-        const results = JSON.parse(body);
-
-        if (Number.isSafeInteger(results.length) === true) {
-          available = true;
-          vulnerabilities = results.length;
-        }
+        jsonResults = JSON.parse(body);
       } catch (e) {}
     }
 
-    if (available === false) {
-      badgeData.colorscheme = 'grey';
-    } else if (vulnerabilities !== 0) {
-      badgeData.text[1] = `${vulnerabilities} vulnerabilities`;
+    if (response !== null && response.statusCode === 404) {
+      badgeData.text[1] = 'invalid';
+    } else if (error !== null || jsonResults === undefined) {
+      badgeData.text[1] = 'error';
+      badgeData.colorscheme = 'red';
+    } else if (jsonResults.length !== 0) {
+      badgeData.text[1] = `${jsonResults.length} vulnerabilities`;
       badgeData.colorscheme = 'red';
     } else {
       badgeData.text[1] = 'no known vulnerabilities';
