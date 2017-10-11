@@ -6803,8 +6803,8 @@ cache((data, match, sendBadge, request) => {
 
 // nsp for npm packages
 camp.route(/^\/nsp\/npm\/([^\/]+)\.(svg|png|gif|jpg|json)$/, cache((data, match, sendBadge, request) => {
-  const package = match[2];
-  const format = match[3];
+  const package = match[1];
+  const format = match[2];
   let badgeData = getBadgeData('nsp', data);
 
   request(`https://api.nodesecurity.io/check/${package}`, (error, response, body) => {
@@ -6823,7 +6823,6 @@ camp.route(/^\/nsp\/npm\/([^\/]+)\.(svg|png|gif|jpg|json)$/, cache((data, match,
     }
 
     if (available === false) {
-      badgeData.text[1] = 'not available';
       badgeData.colorscheme = 'grey';
     } else if (vulnerabilities !== 0) {
       badgeData.text[1] = `${vulnerabilities} vulnerabilities`;

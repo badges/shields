@@ -11,10 +11,10 @@ t.create('get a package without vulnerabilities')
 
 t.create('get a package with vulnerabilities')
   .get('/npm/nodeaaaaa.json')
-  .expectJSONTypes(Joi.object().keys({name: 'nsp', value: `1 vulnerabilities`}))
+  .expectJSONTypes(Joi.object().keys({name: 'nsp', value: Joi.string().regex(/^[0-9]+ vulnerabilities$/)}))
 
 t.create('get a package that does not exist')
   .get('/npm/some-unknown-package.json')
-  .expectJSONTypes(Joi.object().keys({name: 'nsp', value: `not available`}))
+  .expectJSONTypes(Joi.object().keys({name: 'nsp', value: 'n/a'}))
 
 module.exports = t
