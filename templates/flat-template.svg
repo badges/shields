@@ -18,9 +18,9 @@
     {{?it.logo}}
       <image x="5" y="3" width="{{=it.logoWidth}}" height="14" xlink:href="{{=it.logo}}"/>
     {{?}}
-    <text x="{{=((it.widths[0]+it.logoWidth+it.logoPadding)/2)*10}}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{=(it.widths[0]-8)*10}}" lengthAdjust="spacing">{{=it.escapeXml(it.text[0])}}</text>
-    <text x="{{=((it.widths[0]+it.logoWidth+it.logoPadding)/2)*10}}" y="140" transform="scale(0.1)" textLength="{{=(it.widths[0]-8)*10}}" lengthAdjust="spacing">{{=it.escapeXml(it.text[0])}}</text>
-    <text x="{{=(it.widths[0]+it.widths[1]/2-1)*10}}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{=(it.widths[1]-8)*10}}" lengthAdjust="spacing">{{=it.escapeXml(it.text[1])}}</text>
-    <text x="{{=(it.widths[0]+it.widths[1]/2-1)*10}}" y="140" transform="scale(0.1)" textLength="{{=(it.widths[1]-8)*10}}" lengthAdjust="spacing">{{=it.escapeXml(it.text[1])}}</text>
+    <text x="{{=(((it.widths[0]+it.logoWidth+it.logoPadding)/2)+1)*10}}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{=(it.widths[0]-(10+it.logoWidth+it.logoPadding))*10}}" lengthAdjust="spacing">{{=it.escapeXml(it.text[0])}}</text>
+    <text x="{{=(((it.widths[0]+it.logoWidth+it.logoPadding)/2)+1)*10}}" y="140" transform="scale(0.1)" textLength="{{=(it.widths[0]-(10+it.logoWidth+it.logoPadding))*10}}" lengthAdjust="spacing">{{=it.escapeXml(it.text[0])}}</text>
+    <text x="{{=(it.widths[0]+it.widths[1]/2-1)*10}}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{=(it.widths[1]-10)*10}}" lengthAdjust="spacing">{{=it.escapeXml(it.text[1])}}</text>
+    <text x="{{=(it.widths[0]+it.widths[1]/2-1)*10}}" y="140" transform="scale(0.1)" textLength="{{=(it.widths[1]-10)*10}}" lengthAdjust="spacing">{{=it.escapeXml(it.text[1])}}</text>
   </g>
 </svg>
