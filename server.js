@@ -2625,22 +2625,23 @@ cache(function(data, match, sendBadge, request) {
   var format = match[2];
   var url = 'http://dotnet-status.com/api/status/' + projectUri + '/';
   var badgeData = getBadgeData('dependencies', data);
+  var sendErrorBadge = function() {
+    badgeData.text[1] = 'inconclusive';
+    sendBadge(format, badgeData);
+  };
+
   request(url, function (err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
+    if (err != null || res.statusCode === 404) {
+      sendErrorBadge();
       return;
     }
-    if (res.statusCode === 404) {
-      badgeData.text[1] = 'not found';
-      sendBadge(format, badgeData);
-      return;
-    }
+
     if (res.statusCode === 202) {
       badgeData.text[1] = 'processing';
       sendBadge(format, badgeData);
       return;
     }
+
     try {
       var data = JSON.parse(buffer);
       if(data.projectResults.length === 1) {
@@ -2658,8 +2659,7 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
     }
     catch (e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
+      sendErrorBadge();
     }
   });
 }));
