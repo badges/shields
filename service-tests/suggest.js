@@ -10,47 +10,47 @@ module.exports = t;
 t.create('issues')
   .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
   .addHeader('origin', 'https://shields.io')
-  .expectJSONTypes('badges.?', Joi.object().keys({
+  .expectJSON('badges.?', {
     name: 'GitHub issues',
     link: 'https://github.com/atom/atom/issues',
     badge: 'https://img.shields.io/github/issues/atom/atom.svg'
-  }));
+  });
 
 t.create('forks')
   .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
   .addHeader('origin', 'https://shields.io')
-  .expectJSONTypes('badges.?', Joi.object().keys({
+  .expectJSON('badges.?', {
     name: 'GitHub forks',
     link: 'https://github.com/atom/atom/network',
     badge: 'https://img.shields.io/github/forks/atom/atom.svg'
-  }));
+  });
 
 t.create('stars')
   .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
   .addHeader('origin', 'https://shields.io')
-  .expectJSONTypes('badges.?', Joi.object().keys({
+  .expectJSON('badges.?', {
     name: 'GitHub stars',
     link: 'https://github.com/atom/atom/stargazers',
     badge: 'https://img.shields.io/github/stars/atom/atom.svg'
-  }));
+  });
 
 t.create('twitter')
   .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
   .addHeader('origin', 'https://shields.io')
-  .expectJSONTypes('badges.?', Joi.object().keys({
+  .expectJSON('badges.?', {
     name: 'Twitter',
     link: 'https://twitter.com/intent/tweet?text=Wow:&url=%5Bobject%20Object%5D',
     badge: 'https://img.shields.io/twitter/url/https/github.com/atom/atom.svg?style=social'
-  }));
+  });
 
 t.create('license')
   .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
   .addHeader('origin', 'https://shields.io')
-  .expectJSONTypes('badges.?', Joi.object().keys({
+  .expectJSON('badges.?', {
     name: 'GitHub license',
     link: 'https://github.com/atom/atom/blob/master/LICENSE.md',
     badge: 'https://img.shields.io/github/license/atom/atom.svg'
-  }));
+  });
 
 t.create('no license for non-existing project')
   .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
