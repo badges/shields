@@ -12,7 +12,7 @@ t.create('downloads (number as a plugin id)')
   .get('/plugin/d/7495.json')
   .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }));
 
-t.create('jetbrains plugin (number as a plugin id)(v)')
+t.create('version (number as a plugin id)')
   .get('/plugin/v/7495.json')
   .expectJSONTypes(Joi.object().keys({ name: 'jetbrains plugin', value: isSemver }));
 
@@ -20,7 +20,7 @@ t.create('downloads (plugin id from plugin.xml)')
   .get('/plugin/d/org.intellij.scala.json')
   .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }));
 
-t.create('downloads (plugin id from plugin.xml)(v)')
+t.create('version (plugin id from plugin.xml)')
   .get('/plugin/v/org.intellij.scala.json')
   .expectJSONTypes(Joi.object().keys({ name: 'jetbrains plugin', value: isSemver }));
 
@@ -28,7 +28,7 @@ t.create('downloads (user friendly plugin id)')
   .get('/plugin/d/1347-scala.json')
   .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }));
 
-t.create('downloads (user friendly plugin id)(v)')
+t.create('version (user friendly plugin id)')
   .get('/plugin/v/1347-scala.json')
   .expectJSONTypes(Joi.object().keys({ name: 'jetbrains plugin', value: isSemver }));
 
@@ -36,7 +36,7 @@ t.create('unknown plugin')
   .get('/plugin/d/unknown-plugin.json')
   .expectJSON({ name: 'downloads', value: 'not found' });
 
-t.create('unknown plugin(v)')
+t.create('version for unknown plugin')
   .get('/plugin/v/unknown-plugin.json')
   .expectJSON({ name: 'jetbrains plugin', value: 'not found' });
 
