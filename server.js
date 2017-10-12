@@ -6600,7 +6600,7 @@ cache(function(data, match, sendBadge, request) {
 
       try {
         switch (type) {
-        case 'd':
+        case 'v':
           var plugin = data["plugin-repository"].category;
           if (!plugin) {
             badgeData.text[1] = 'not found';
