@@ -11,16 +11,21 @@ module.exports = t;
 
 t
   .create("get nuget package status")
-  .get("/gh/json-api-dotnet/JsonApiDotNetCore/JsonApiDotNetCore.json")
+  .get("/gh/jaredcnance/dotnet-status/API.json")
   .expectJSONTypes(
     Joi.object().keys({
       name: Joi.equal("dependencies"),
-      value: Joi.equal(
-        "up to date",
-        "out of date",
-        "processing",
-        "project not found"
-      )
+      value: Joi.equal("up to date", "out of date", "processing")
+    })
+  );
+
+t
+  .create("get nuget package status")
+  .get("/gh/jaredcnance/dotnet-status/invalid-project.json")
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: Joi.equal("dependencies"),
+      value: Joi.equal("project not found")
     })
   );
 

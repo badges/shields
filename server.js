@@ -2644,7 +2644,7 @@ cache(function(data, match, sendBadge, request) {
 
     try {
       var data = JSON.parse(buffer);
-      if(data.projectResults.length === 1) {
+      if(data.projectResults.length === 1 && data.projectResults[0] !== null) {
         if (data.projectResults[0].outOfDate) {
           badgeData.text[1] = 'out of date';
           badgeData.colorscheme = 'red';
