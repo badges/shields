@@ -6607,7 +6607,7 @@ cache(function(data, match, sendBadge, request) {
             return sendBadge(format, badgeData);
           }
           var version = data['plugin-repository'].category[0]["idea-plugin"][0].version[0];
-          badgeData.text[1] = metric(downloads);
+          badgeData.text[1] = version;
           badgeData.colorscheme = 'orange';
           return sendBadge(format, badgeData);
         }
