@@ -6618,12 +6618,17 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // JetBrains Plugins repository integration
+<<<<<<< HEAD
 camp.route(/^\/jetbrains\/plugin\/(d)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+=======
+camp.route(/^\/jetbrains\/plugin\/(d|v)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+>>>>>>> badges/master
 cache(function(data, match, sendBadge, request) {
   var pluginId = match[2];
   var type = match[1];
   var format = match[3];
-  var badgeData = getBadgeData('downloads', data);
+  var leftText = type === 'v' ? 'jetbrains plugin' : 'downloads';
+  var badgeData = getBadgeData(leftText, data);
   var url = 'https://plugins.jetbrains.com/plugins/list?pluginId=' + pluginId;
 
   request(url, function(err, res, buffer) {
@@ -6639,13 +6644,13 @@ cache(function(data, match, sendBadge, request) {
       }
 
       try {
+        var plugin = data["plugin-repository"].category;
+        if (!plugin) {
+          badgeData.text[1] = 'not found';
+          return sendBadge(format, badgeData);
+        }
         switch (type) {
         case 'd':
-          var plugin = data["plugin-repository"].category;
-          if (!plugin) {
-            badgeData.text[1] = 'not found';
-            return sendBadge(format, badgeData);
-          }
           var downloads = parseInt(data["plugin-repository"].category[0]["idea-plugin"][0]["$"].downloads, 10);
           if (isNaN(downloads)) {
             badgeData.text[1] = 'invalid';
@@ -6654,7 +6659,11 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = metric(downloads);
           badgeData.colorscheme = downloadCountColor(downloads);
           return sendBadge(format, badgeData);
-        }
+        case 'v':
+          var version = data['plugin-repository'].category[0]["idea-plugin"][0].version[0];
+          badgeData.text[1] = version;
+          badgeData.colorscheme = 'orange';
+          return sendBadge(format, badgeData);        }
       } catch (err) {
         badgeData.text[1] = 'invalid';
         return sendBadge(format, badgeData);
