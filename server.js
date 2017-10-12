@@ -6893,7 +6893,7 @@ cache((data, match, sendBadge, request) => {
 }));
 
 // nsp for npm packages
-camp.route(/^\/nsp\/npm\/(@([^\/]+)\/)?[^\/]+(\/[^\/]+)?\.(svg|png|gif|jpg|json)$/, cache((data, match, sendBadge, request) => {
+camp.route(/^\/nsp\/npm\/(@([^/]+)\/)?[^/]+(\/[^/]+)?\.(svg|png|gif|jpg|json)$/, cache((data, match, sendBadge, request) => {
   // A: /nsp/npm/:package.:format
   // B: /nsp/npm/:package/:version.:format
   // C: /nsp/npm/@:scope/:package.:format
