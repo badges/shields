@@ -6618,7 +6618,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // JetBrains Plugins repository downloads integration
-camp.route(/^\/jetbrains\/plugin\/(d)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/jetbrains\/plugin\/(d)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var pluginId = match[2];
   var type = match[1];
@@ -6664,7 +6664,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // JetBrains Plugins repository version integration
-camp.route(/^\/jetbrains\/plugin\/(v)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/jetbrains\/plugin\/(v)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var pluginId = match[2];
   var type = match[1];
