@@ -154,32 +154,6 @@ t.create('missing required XML attribute')
                  })
   .expectJSON({ name: 'downloads', value: 'invalid' });
 
-t.create('missing required XML attribute(v)')
-  .get('/plugin/v/9435.json')
-  .intercept(nock => nock('https://plugins.jetbrains.com')
-    .get('/plugins/list?pluginId=9435')
-    .reply(200, `<?xml version="1.0" encoding="UTF-8"?>
-                 <plugin-repository>
-                   <ff>"Code editing"</ff>
-                   <category name="Code editing">
-                     <idea-plugin NO-REQUIRED-DOWNLOADS-ATTRIBUTE-HERE="2" size="13159" date="1485601807000" url="">
-                       <name>Harply</name>
-                       <id>io.harply.plugin</id>
-                       <description><![CDATA[This plugin converts xml layouts and java classes into a compatible format to enable harply integration
-                 <br>
-                 <em>Any nested layout with include tag is currently not supported</em>]]></description>
-                       <version>1.0</version>
-                       <vendor email="support@harply.io" url="">Harply</vendor>
-                       <idea-version min="n/a" max="n/a" since-build="141.0"/>
-                       <change-notes><![CDATA[Bug fixes]]></change-notes>
-                       <rating>00</rating>
-                     </idea-plugin>
-                   </category>
-                 </plugin-repository>`), {
-                   'Content-Type': 'text/xml;charset=UTF-8'
-                 })
-  .expectJSON({ name: 'jetbrains plugin', value: 'invalid' });
-
 t.create('empty XML')
   .get('/plugin/d/9435.json')
   .intercept(nock => nock('https://plugins.jetbrains.com')
