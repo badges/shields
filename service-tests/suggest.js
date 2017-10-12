@@ -1,6 +1,5 @@
 'use strict';
 
-const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
 const t = new ServiceTester({ id: 'suggest', title: 'suggest', pathPrefix: '/$suggest' });
@@ -41,19 +40,19 @@ t.create('license')
     badge: 'https://img.shields.io/github/license/atom/atom.svg'
   });
 
-t.create('no license for non-existing project')
+t.create('license for non-existing project')
   .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
   .addHeader('origin', 'https://shields.io')
   .intercept(nock => nock('https://api.github.com')
     .get(/\/repos\/atom\/atom\/license/)
     .reply(404))
-  .expectJSONTypes('badges.*', Joi.object().keys({
-    name: Joi.not('GitHub license'),
-    badge: Joi.allow(),
-    link: Joi.allow()
-  }));
+  .expectJSON('badges.?', {
+    name: 'GitHub license',
+    link: 'https://github.com/atom/atom',
+    badge: 'https://img.shields.io/github/license/atom/atom.svg'
+  });
 
-t.create('no license when json response is invalid')
+t.create('license when json response is invalid')
   .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
   .addHeader('origin', 'https://shields.io')
   .intercept(nock => nock('https://api.github.com')
@@ -61,13 +60,13 @@ t.create('no license when json response is invalid')
     .reply(200, 'invalid json'), {
     'Content-Type': 'application/json;charset=UTF-8'
   })
-  .expectJSONTypes('badges.*', Joi.object().keys({
-    name: Joi.not('GitHub license'),
-    badge: Joi.allow(),
-    link: Joi.allow()
-  }));
+  .expectJSON('badges.?', {
+    name: 'GitHub license',
+    link: 'https://github.com/atom/atom',
+    badge: 'https://img.shields.io/github/license/atom/atom.svg'
+  });
 
-t.create('no license when html_url not found in GitHub api response')
+t.create('license when html_url not found in GitHub api response')
   .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
   .addHeader('origin', 'https://shields.io')
   .intercept(nock => nock('https://api.github.com')
@@ -75,9 +74,9 @@ t.create('no license when html_url not found in GitHub api response')
     .reply(200, {
       license: 'MIT'
     }))
-  .expectJSONTypes('badges.*', Joi.object().keys({
-    name: Joi.not('GitHub license'),
-    badge: Joi.allow(),
-    link: Joi.allow()
-  }));
+  .expectJSON('badges.?', {
+    name: 'GitHub license',
+    link: 'https://github.com/atom/atom',
+    badge: 'https://img.shields.io/github/license/atom/atom.svg'
+  });
 
