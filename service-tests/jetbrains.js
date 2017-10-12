@@ -2,9 +2,9 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
-const { isMetric } = require('./helpers/validators');
+const { isMetric, isSemver } = require('./helpers/validators');
 
-const t = new ServiceTester({ id: 'jetbrains', title: 'JetBrains plugin' });
+const t = new ServiceTester({ id: 'jetbrains', title: 'JetBrains' });
 module.exports = t;
 
 t.create('downloads (number as a plugin id)')
@@ -109,3 +109,80 @@ t.create('404 status code')
     .reply(404)
   )
   .expectJSON({ name: 'downloads', value: 'inaccessible' });
+
+t.create('empty XML(v)')
+  .get('/plugin/v/9435.json')
+  .intercept(nock => nock('https://plugins.jetbrains.com')
+    .get('/plugins/list?pluginId=9435')
+    .reply(200, '<?xml version="1.0" encoding="UTF-8"?>'), {
+      'Content-Type': 'text/xml;charset=UTF-8'
+    })
+  .expectJSON({ name: 'jetbrains plugin', value: 'invalid' });
+
+t.create('404 status code(v)')
+  .get('/plugin/v/7495.json')
+  .intercept(nock => nock('https://plugins.jetbrains.com')
+    .get('/plugins/list?pluginId=7495')
+    .reply(404)
+  )
+  .expectJSON({ name: 'jetbrains plugin', value: 'inaccessible' });
+
+t.create('missing required XML element(v)')
+  .get('/plugin/v/9435.json')
+  .intercept(nock => nock('https://plugins.jetbrains.com')
+    .get('/plugins/list?pluginId=9435')
+    .reply(200, `<?xml version="1.0" encoding="UTF-8"?>
+                 <plugin-repository>
+                   <ff>"Code editing"</ff>
+                   <category name="Code editing">
+                     <!-- no required idea-plugin element here -->
+                   </category>
+                 </plugin-repository>`), {
+                   'Content-Type': 'text/xml;charset=UTF-8'
+                 })
+  .expectJSON({ name: 'jetbrains plugin', value: 'invalid' });
+
+t.create('incorrect response format (JSON instead of XML)(v)')
+  .get('/plugin/v/7495.json')
+  .intercept(nock => nock('https://plugins.jetbrains.com')
+    .get('/plugins/list?pluginId=7495')
+    .reply(200, { version: 2.0 })
+  )
+  .expectJSON({ name: 'jetbrains plugin', value: 'invalid' });
+
+t.create('empty response(v)')
+  .get('/plugin/v/7495.json')
+  .intercept(nock => nock('https://plugins.jetbrains.com')
+    .get('/plugins/list?pluginId=7495')
+    .reply(200, '')
+  )
+  .expectJSON({ name: 'jetbrains plugin', value: 'invalid' });
+
+t.create('server error(v)')
+  .get('/plugin/v/7495.json')
+  .intercept(nock => nock('https://plugins.jetbrains.com')
+    .get('/plugins/list?pluginId=7495')
+    .reply(500)
+  )
+  .expectJSON({ name: 'jetbrains plugin', value: 'inaccessible' });
+
+t.create('connection error(v)')
+  .get('/plugin/v/7495.json')
+  .networkOff()
+  .expectJSON({ name: 'jetbrains plugin', value: 'inaccessible' });
+
+t.create('version for unknown plugin')
+  .get('/plugin/v/unknown-plugin.json')
+  .expectJSON({ name: 'jetbrains plugin', value: 'not found' });
+
+t.create('version (user friendly plugin id)')
+  .get('/plugin/v/1347-scala.json')
+  .expectJSONTypes(Joi.object().keys({ name: 'jetbrains plugin', value: isSemver }));
+
+t.create('version (plugin id from plugin.xml)')
+  .get('/plugin/v/org.intellij.scala.json')
+  .expectJSONTypes(Joi.object().keys({ name: 'jetbrains plugin', value: isSemver }));
+
+t.create('version (number as a plugin id)')
+  .get('/plugin/v/7495.json')
+  .expectJSONTypes(Joi.object().keys({ name: 'jetbrains plugin', value: isSemver }));
