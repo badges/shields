@@ -1,5 +1,5 @@
-# plugins:
-#   - "prettier"
+plugins:
+  - "prettier"
 
 extends:
   - "standard"
@@ -11,7 +11,7 @@ parserOptions:
   sourceType: "script"
 
 rules:
-  # prettier/prettier: "error"
+  prettier/prettier: "error"
 
   # These are not disabled by eslint-config-prettier
   spaced-comment: "off"
