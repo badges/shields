@@ -1661,7 +1661,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // npm node version integration.
-camp.route(/^\/node\/v\/(?:@([^\/]+))?\/?([^\/]*)\/?([^\/]*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/node\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   // e.g. @stdlib, stdlib, next, svg
   const [, scope, packageName, tag, format] = match;
@@ -3973,7 +3973,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub languages integration.
-camp.route(/^\/github\/languages\/(top|count|code-size)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/languages\/(top|count|code-size)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var type = match[1];
   var user = match[2];
