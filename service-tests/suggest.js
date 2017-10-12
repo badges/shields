@@ -9,6 +9,7 @@ module.exports = t;
 
 t.create('issues')
   .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
+  // suggest resource requires this header value
   .addHeader('origin', 'https://shields.io')
   .expectJSON('badges.?', {
     name: 'GitHub issues',
