@@ -457,21 +457,18 @@ t.create('top language')
 
 t.create('top language with empty repository')
 .get('/languages/top/pyvesb/emptyrepo.json')
-.expectJSONTypes(Joi.object().keys({
-  name: Joi.equal('language'),
-  value: Joi.equal('none'),
-}));
+.expectJSON({ name: 'language', value: 'none' });
 
 t.create('language count')
 .get('/languages/count/badges/shields.json')
 .expectJSONTypes(Joi.object().keys({
   name: Joi.equal('languages'),
-  value: Joi.string().regex(/^[0-9]*$/),
+  value: Joi.number().integer().positive(),
 }));
 
 t.create('code size in bytes for all languages')
 .get('/languages/bytes/badges/shields.json')
 .expectJSONTypes(Joi.object().keys({
   name: Joi.equal('code size'),
-  value: Joi.string().regex(/^[0-9]*(k|M|G|T|P|E|Z|Y)B$/),
+  value: isFileSize,
 }));
