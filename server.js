@@ -1665,13 +1665,13 @@ camp.route(/^\/node\/v\/(?:@([^\/]+))?\/?([^\/]*)\/?([^\/]*)\.(svg|png|gif|jpg|j
 cache(function(data, match, sendBadge, request) {
   // e.g. @stdlib, stdlib, next, svg
   const [, scope, packageName, tag, format] = match;
+  const registryTag = tag || 'latest';
   let apiUrl;
   if (scope === undefined) {
       // e.g. https://registry.npmjs.org/express/latest
       // Use this endpoint as an optimization. It covers the vast majority of
       // these badges, and the response is smaller.
-      apiUrl = `https://registry.npmjs.org/${packageName}/${tag || 'latest'}`;
-      // apiUrl = `https://registry.npmjs.org/${packageName}/latest`;
+      apiUrl = `https://registry.npmjs.org/${packageName}/${registryTag}`;
   } else {
     // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
     // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
@@ -1699,7 +1699,7 @@ cache(function(data, match, sendBadge, request) {
       if (scope === undefined) {
         releaseData = data;
       } else {
-        const version = data['dist-tags'][tag || 'latest'];
+        const version = data['dist-tags'][registryTag];
         releaseData = data.versions[version];
       }
       const versionRange = (releaseData.engines || {}).node;
