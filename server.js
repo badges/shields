@@ -6617,13 +6617,14 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// JetBrains Plugins repository downloads integration
-camp.route(/^\/jetbrains\/plugin\/(d)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+// JetBrains Plugins repository integration
+camp.route(/^\/jetbrains\/plugin\/(d|v)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var pluginId = match[2];
   var type = match[1];
   var format = match[3];
-  var badgeData = getBadgeData('downloads', data);
+  var leftText = type === 'v' ? 'jetbrains plugin' : 'downloads';
+  var badgeData = getBadgeData(leftText, data);
   var url = 'https://plugins.jetbrains.com/plugins/list?pluginId=' + pluginId;
 
   request(url, function(err, res, buffer) {
@@ -6639,13 +6640,13 @@ cache(function(data, match, sendBadge, request) {
       }
 
       try {
+        var plugin = data["plugin-repository"].category;
+        if (!plugin) {
+          badgeData.text[1] = 'not found';
+          return sendBadge(format, badgeData);
+        }
         switch (type) {
         case 'd':
-          var plugin = data["plugin-repository"].category;
-          if (!plugin) {
-            badgeData.text[1] = 'not found';
-            return sendBadge(format, badgeData);
-          }
           var downloads = parseInt(data["plugin-repository"].category[0]["idea-plugin"][0]["$"].downloads, 10);
           if (isNaN(downloads)) {
             badgeData.text[1] = 'invalid';
@@ -6654,49 +6655,11 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = metric(downloads);
           badgeData.colorscheme = downloadCountColor(downloads);
           return sendBadge(format, badgeData);
-        }
-      } catch (err) {
-        badgeData.text[1] = 'invalid';
-        return sendBadge(format, badgeData);
-      }
-    });
-  });
-}));
-
-// JetBrains Plugins repository version integration
-camp.route(/^\/jetbrains\/plugin\/(v)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var pluginId = match[2];
-  var type = match[1];
-  var format = match[3];
-  var badgeData = getBadgeData('jetbrains plugin', data);
-  var url = 'https://plugins.jetbrains.com/plugins/list?pluginId=' + pluginId;
-
-  request(url, function(err, res, buffer) {
-    if (err || res.statusCode !== 200) {
-      badgeData.text[1] = 'inaccessible';
-      return sendBadge(format, badgeData);
-    }
-
-    xml2js.parseString(buffer.toString(), function (err, data) {
-      if (err) {
-        badgeData.text[1] = 'invalid';
-        return sendBadge(format, badgeData);
-      }
-
-      try {
-        switch (type) {
         case 'v':
-          var plugin = data["plugin-repository"].category;
-          if (!plugin) {
-            badgeData.text[1] = 'not found';
-            return sendBadge(format, badgeData);
-          }
           var version = data['plugin-repository'].category[0]["idea-plugin"][0].version[0];
           badgeData.text[1] = version;
           badgeData.colorscheme = 'orange';
-          return sendBadge(format, badgeData);
-        }
+          return sendBadge(format, badgeData);        }
       } catch (err) {
         badgeData.text[1] = 'invalid';
         return sendBadge(format, badgeData);
