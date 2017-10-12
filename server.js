@@ -6802,35 +6802,116 @@ cache((data, match, sendBadge, request) => {
 }));
 
 // nsp for npm packages
-camp.route(/^\/nsp\/npm\/([^\/]+)\.(svg|png|gif|jpg|json)$/, cache((data, match, sendBadge, request) => {
-  const package = match[1];
-  const format = match[2];
+camp.route(/^\/nsp\/npm\/(@([^\/]+)\/)?[^\/]+(\/[^\/]+)?\.(svg|png|gif|jpg|json)$/, cache((data, match, sendBadge, request) => {
+  // A: /nsp/npm/:package.:format
+  // B: /nsp/npm/:package/:version.:format
+  // C: /nsp/npm/@:scope/:package.:format
+  // D: /nsp/npm/@:scope/:package/:version.:format
+  const pieces = match.input.split('/');
   let badgeData = getBadgeData('nsp', data);
+  let format = '';
+  let nspRequestOptions = {
+    method: 'POST',
+    body: {
+      package: {}
+    },
+    json: true
+  };
 
-  request(`https://api.nodesecurity.io/check/${package}`, (error, response, body) => {
-    let jsonResults;
+  function getNspResults () {
+    request('https://api.nodesecurity.io/check', nspRequestOptions, (error, response, body) => {
+      if (error !== null || typeof body !== 'object' || body === null) {
+        badgeData.text[1] = 'invalid';
+        badgeData.colorscheme = 'red';
+      } else if (body.length !== 0) {
+        badgeData.text[1] = `${body.length} vulnerabilities`;
+        badgeData.colorscheme = 'red';
+      } else {
+        badgeData.text[1] = 'no known vulnerabilities';
+        badgeData.colorscheme = 'brightgreen';
+      }
 
-    if (body !== null) {
-      try {
-        jsonResults = JSON.parse(body);
-      } catch (e) {}
-    }
+      sendBadge(format, badgeData);
+    });
+  }
 
-    if (response !== null && response.statusCode === 404) {
+  function getNpmVersionThenNspResults (packageName = '') {
+    // nsp doesn't properly detect the package version in POST requests so this function gets it for us
+    // https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md#getpackageversion
+    let npmURL;
+    const npmRequestOptions = {
+      headers: {
+        Accept: '*/*'
+      },
+      json: true
+    };
+
+    try {
+      if (packageName[0] === '@') {
+        // Using 'latest' would save bandwidth, but it is currently not supported for scoped packages
+        npmURL = `http://registry.npmjs.org/@${encodeURIComponent(packageName.slice(1))}`;
+      } else {
+        npmURL = `http://registry.npmjs.org/${encodeURIComponent(packageName)}/latest`;
+      }
+    } catch (e) {
       badgeData.text[1] = 'invalid';
-    } else if (error !== null || jsonResults === undefined) {
-      badgeData.text[1] = 'error';
       badgeData.colorscheme = 'red';
-    } else if (jsonResults.length !== 0) {
-      badgeData.text[1] = `${jsonResults.length} vulnerabilities`;
-      badgeData.colorscheme = 'red';
-    } else {
-      badgeData.text[1] = 'no known vulnerabilities';
-      badgeData.colorscheme = 'brightgreen';
+
+      sendBadge(format, badgeData);
+      return;
     }
 
-    sendBadge(format, badgeData);
-  });
+    request(npmURL, npmRequestOptions, (error, response, body) => {
+      if (response !== null && response.statusCode === 404) {
+        // NOTE: in POST requests nsp does not distinguish between 'package not found' and 'no known vulnerabilities'. To keep consistency in the use case where a version is provided (which skips `getNpmVersionThenNspResults()` altogether) we'll say 'no known vulnerabilities' since it is technically true in both cases
+        badgeData.text[1] = 'no known vulnerabilities';
+
+        sendBadge(format, badgeData);
+      } else if (error !== null || typeof body !== 'object' || body === null) {
+        badgeData.text[1] = 'invalid';
+        badgeData.colorscheme = 'red';
+
+        sendBadge(format, badgeData);
+      } else {
+        nspRequestOptions.body.package.version = body.version;
+
+        getNspResults();
+      }
+    });
+  }
+
+  function separateAndSetFormat (str = '') {
+    const splitString = str.split('.');
+    format = splitString.pop();
+
+    return splitString.join('.');
+  }
+
+  if (pieces.length === 4) {
+    // must be A: /nsp/npm/:package.:format
+
+    nspRequestOptions.body.package.name = separateAndSetFormat(pieces[3]);
+  } else if (pieces.length === 5 && pieces[3][0] !== '@') {
+    // must be B: /nsp/npm/:package/:version.:format
+
+    nspRequestOptions.body.package.name = pieces[3];
+    nspRequestOptions.body.package.version = separateAndSetFormat(pieces[4]);
+  } else if (pieces.length === 5) {
+    // must be C: /nsp/npm/@:scope/:package.:format
+
+    nspRequestOptions.body.package.name = `${pieces[3]}/${separateAndSetFormat(pieces[4])}`;
+  } else {
+    // must be D: /nsp/npm/@:scope/:package/:version.:format
+
+    nspRequestOptions.body.package.name = `${pieces[3]}/${pieces[4]}`;
+    nspRequestOptions.body.package.version = separateAndSetFormat(pieces[5]);
+  }
+
+  if (typeof nspRequestOptions.body.package.version === 'string') {
+    getNspResults();
+  } else {
+    getNpmVersionThenNspResults(nspRequestOptions.body.package.name);
+  }
 }));
 
 // Any badge.
