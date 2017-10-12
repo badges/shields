@@ -3907,7 +3907,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub languages integration.
-camp.route(/^\/github\/languages\/(top|count|bytes)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/languages\/(top|count|code-size)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var type = match[1];
   var user = match[2];
@@ -3952,7 +3952,7 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = Object.keys(parsedData).length;
           badgeData.colorscheme = 'blue';
           break;
-        case 'bytes':
+        case 'code-size':
           for (const language of Object.keys(parsedData)) {
             sumBytes += parseInt(parsedData[language]);
           }

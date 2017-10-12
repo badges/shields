@@ -467,7 +467,7 @@ t.create('language count')
 }));
 
 t.create('code size in bytes for all languages')
-.get('/languages/bytes/badges/shields.json')
+.get('/languages/code-size/badges/shields.json')
 .expectJSONTypes(Joi.object().keys({
   name: Joi.equal('code size'),
   value: isFileSize,
