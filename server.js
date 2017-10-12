@@ -6618,11 +6618,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // JetBrains Plugins repository integration
-<<<<<<< HEAD
-camp.route(/^\/jetbrains\/plugin\/(d)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-=======
 camp.route(/^\/jetbrains\/plugin\/(d|v)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
->>>>>>> badges/master
 cache(function(data, match, sendBadge, request) {
   var pluginId = match[2];
   var type = match[1];
