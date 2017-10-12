@@ -4090,7 +4090,7 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[2];
   var format = match[3];
   var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo;
-  var badgeData = getBadgeData('', data);
+  var badgeData = getBadgeData('repo size', data);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
@@ -4102,8 +4102,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       const parsedData = JSON.parse(buffer);
-      badgeData.text[0] = 'code size';
-      badgeData.text[1] = prettyBytes(parseInt(parsedData.size) * 1000);
+      badgeData.text[1] = prettyBytes(parseInt(parsedData.size) * 1024);
       badgeData.colorscheme = 'blue';
       sendBadge(format, badgeData);
     } catch(e) {
