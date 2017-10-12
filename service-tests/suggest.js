@@ -7,7 +7,7 @@ const t = new ServiceTester({ id: 'suggest', title: 'suggest', pathPrefix: '/$su
 module.exports = t;
 
 
-t.create('issues')
+t.create('issues, forks, stars and twitter')
   .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
   // suggest resource requires this header value
   .addHeader('origin', 'https://shields.io')
@@ -15,29 +15,17 @@ t.create('issues')
     name: 'GitHub issues',
     link: 'https://github.com/atom/atom/issues',
     badge: 'https://img.shields.io/github/issues/atom/atom.svg'
-  });
-
-t.create('forks')
-  .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
-  .addHeader('origin', 'https://shields.io')
+  })
   .expectJSON('badges.?', {
     name: 'GitHub forks',
     link: 'https://github.com/atom/atom/network',
     badge: 'https://img.shields.io/github/forks/atom/atom.svg'
-  });
-
-t.create('stars')
-  .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
-  .addHeader('origin', 'https://shields.io')
+  })
   .expectJSON('badges.?', {
     name: 'GitHub stars',
     link: 'https://github.com/atom/atom/stargazers',
     badge: 'https://img.shields.io/github/stars/atom/atom.svg'
-  });
-
-t.create('twitter')
-  .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
-  .addHeader('origin', 'https://shields.io')
+  })
   .expectJSON('badges.?', {
     name: 'Twitter',
     link: 'https://twitter.com/intent/tweet?text=Wow:&url=%5Bobject%20Object%5D',
