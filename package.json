@@ -67,15 +67,21 @@
     "logo"
   ],
   "devDependencies": {
+    "babel-cli": "^6.11.4",
+    "babel-core": "^6.13.2",
+    "babel-preset-es2015": "^6.13.2",
+    "babel-preset-react": "^6.11.1",
     "child-process-promise": "^2.2.1",
     "dejavu-fonts-ttf": "^2.37.3",
     "eslint": "^3.18.0",
     "eslint-config-prettier": "^2.6.0",
     "eslint-config-standard": "^10.2.1",
+    "eslint-config-standard-jsx": "^4.0.2",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-node": "^5.2.0",
     "eslint-plugin-prettier": "^2.3.1",
     "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-react": "^7.4.0",
     "eslint-plugin-standard": "^3.0.1",
     "glob": "^7.1.1",
     "icedfrisby": "^1.4.0",
@@ -90,6 +96,9 @@
     "nyc": "^11.2.1",
     "opn-cli": "^3.1.0",
     "prettier": "1.7.3",
+    "pretty": "^2.0.0",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
     "read-all-stdin-sync": "^1.0.5",
     "rimraf": "^2.6.2",
     "semver-regex": "^1.0.0",
@@ -97,5 +106,8 @@
   },
   "engines": {
     "node": ">= 6"
+  },
+  "babel": {
+    "presets": ["react", "es2015"]
   }
 }
