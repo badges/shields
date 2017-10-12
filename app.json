@@ -1,0 +1,20 @@
+{
+  "name": "Shields",
+  "description": "Concise, consistent, and legible badges in SVG and raster format.",
+  "keywords": [
+    "badge",
+    "github",
+    "svg",
+    "status"
+  ],
+  "website": "https://shields.io/",
+  "repository": "https://github.com/badges/shields",
+  "logo": "http://shields.io/favicon.png",
+  "success_url": "/try.html",
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  }
+}
