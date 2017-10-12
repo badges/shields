@@ -3957,7 +3957,7 @@ cache(function(data, match, sendBadge, request) {
             sumBytes += parseInt(parsedData[language]);
           }
           badgeData.text[0] = 'code size';
-          badgeData.text[1] = metric(sumBytes) + 'B';
+          badgeData.text[1] = prettyBytes(sumBytes);
           badgeData.colorscheme = 'blue';
           break;
         default:
