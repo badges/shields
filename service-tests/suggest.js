@@ -28,7 +28,7 @@ t.create('issues, forks, stars and twitter')
   })
   .expectJSON('badges.?', {
     name: 'Twitter',
-    link: 'https://twitter.com/intent/tweet?text=Wow:&url=%5Bobject%20Object%5D',
+    link: 'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fatom%2Fatom',
     badge: 'https://img.shields.io/twitter/url/https/github.com/atom/atom.svg?style=social'
   });
 
