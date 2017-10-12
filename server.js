@@ -6894,17 +6894,19 @@ camp.route(/^\/nsp\/npm\/(@([^\/]+)\/)?[^\/]+(\/[^\/]+)?\.(svg|png|gif|jpg|json)
   // C: /nsp/npm/@:scope/:package.:format
   // D: /nsp/npm/@:scope/:package/:version.:format
   const pieces = match.input.split('/');
-  let badgeData = getBadgeData('nsp', data);
-  let format = '';
-  let nspRequestOptions = {
+  const badgeData = getBadgeData('nsp', data);
+  const nspRequestOptions = {
     method: 'POST',
     body: {
       package: {}
     },
     json: true
   };
+  let format = '';
 
-  function getNspResults () {
+  function getNspResults (packageVersion = '') {
+    nspRequestOptions.body.package.version = packageVersion;
+
     request('https://api.nodesecurity.io/check', nspRequestOptions, (error, response, body) => {
       if (error !== null || typeof body !== 'object' || body === null) {
         badgeData.text[1] = 'invalid';
@@ -6958,10 +6960,15 @@ camp.route(/^\/nsp\/npm\/(@([^\/]+)\/)?[^\/]+(\/[^\/]+)?\.(svg|png|gif|jpg|json)
         badgeData.colorscheme = 'red';
 
         sendBadge(format, badgeData);
+      } else if (typeof body.version === 'string') {
+        getNspResults(body.version);
+      } else if (typeof body['dist-tags'] === 'object') {
+        getNspResults(body['dist-tags'].latest);
       } else {
-        nspRequestOptions.body.package.version = body.version;
+        badgeData.text[1] = 'invalid';
+        badgeData.colorscheme = 'red';
 
-        getNspResults();
+        sendBadge(format, badgeData);
       }
     });
   }
@@ -6994,7 +7001,7 @@ camp.route(/^\/nsp\/npm\/(@([^\/]+)\/)?[^\/]+(\/[^\/]+)?\.(svg|png|gif|jpg|json)
   }
 
   if (typeof nspRequestOptions.body.package.version === 'string') {
-    getNspResults();
+    getNspResults(nspRequestOptions.body.package.version);
   } else {
     getNpmVersionThenNspResults(nspRequestOptions.body.package.name);
   }

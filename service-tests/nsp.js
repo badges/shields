@@ -31,10 +31,7 @@ const withVulnerabilities = {
   B: '/npm/express/1.0.0.json'
 }
 
-const formatsKeys = Object.keys(formats)
-
-for (let i = 0, len = formatsKeys.length; i < len; i++) {
-  const format = formatsKeys[i]
+Object.keys(formats).forEach(format => {
   const noExist = noExistPackages[format]
   const withVulnerability = withVulnerabilities[format]
   const withoutVulnerability = withoutVulnerabilities[format]
@@ -56,6 +53,6 @@ for (let i = 0, len = formatsKeys.length; i < len; i++) {
       .get(withoutVulnerability)
       .expectJSON({name: 'nsp', value: 'no known vulnerabilities'})
   }
-}
+})
 
 module.exports = t
