@@ -6893,24 +6893,34 @@ cache((data, match, sendBadge, request) => {
 }));
 
 // nsp for npm packages
-camp.route(/^\/nsp\/npm\/(@([^/]+)\/)?[^/]+(\/[^/]+)?\.(svg|png|gif|jpg|json)$/, cache((data, match, sendBadge, request) => {
+camp.route(/^\/nsp\/npm\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|jpg|json)?$/, cache((data, match, sendBadge, request) => {
   // A: /nsp/npm/:package.:format
   // B: /nsp/npm/:package/:version.:format
   // C: /nsp/npm/@:scope/:package.:format
   // D: /nsp/npm/@:scope/:package/:version.:format
-  const pieces = match.input.split('/');
   const badgeData = getBadgeData('nsp', data);
-  const nspRequestOptions = {
-    method: 'POST',
-    body: {
-      package: {}
-    },
-    json: true
-  };
-  let format = '';
+  const capturedScopeWithoutAtSign = match[1];
+  const capturedPackageName = match[2];
+  const capturedVersion = match[3];
+  const capturedFormat= match[4];
 
-  function getNspResults (packageVersion = '') {
-    nspRequestOptions.body.package.version = packageVersion;
+  function getNspResults (scopeWithoutAtSign = null, packageName = '', packageVersion = '') {
+    const nspRequestOptions = {
+      method: 'POST',
+      body: {
+        package: {
+          name: null,
+          version: packageVersion
+        }
+      },
+      json: true
+    };
+
+    if (typeof scopeWithoutAtSign === 'string') {
+      nspRequestOptions.body.package.name = `@${scopeWithoutAtSign}/${packageName}`;
+    } else {
+      nspRequestOptions.body.package.name = packageName;
+    }
 
     request('https://api.nodesecurity.io/check', nspRequestOptions, (error, response, body) => {
       if (error !== null || typeof body !== 'object' || body === null) {
@@ -6924,91 +6934,60 @@ camp.route(/^\/nsp\/npm\/(@([^/]+)\/)?[^/]+(\/[^/]+)?\.(svg|png|gif|jpg|json)$/,
         badgeData.colorscheme = 'brightgreen';
       }
 
-      sendBadge(format, badgeData);
+      sendBadge(capturedFormat, badgeData);
     });
   }
 
-  function getNpmVersionThenNspResults (packageName = '') {
+  function getNpmVersionThenNspResults (scopeWithoutAtSign = null, packageName = '') {
     // nsp doesn't properly detect the package version in POST requests so this function gets it for us
     // https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md#getpackageversion
-    let npmURL;
     const npmRequestOptions = {
       headers: {
         Accept: '*/*'
       },
       json: true
     };
+    let npmURL = null;
 
-    try {
-      if (packageName[0] === '@') {
-        // Using 'latest' would save bandwidth, but it is currently not supported for scoped packages
-        npmURL = `http://registry.npmjs.org/@${encodeURIComponent(packageName.slice(1))}`;
-      } else {
-        npmURL = `http://registry.npmjs.org/${encodeURIComponent(packageName)}/latest`;
-      }
-    } catch (e) {
-      badgeData.text[1] = 'invalid';
-      badgeData.colorscheme = 'red';
-
-      sendBadge(format, badgeData);
-      return;
+    if (typeof scopeWithoutAtSign === 'string') {
+      // Using 'latest' would save bandwidth, but it is currently not supported for scoped packages
+      npmURL = `http://registry.npmjs.org/@${scopeWithoutAtSign}%2F${packageName}`;
+    } else {
+      npmURL = `http://registry.npmjs.org/${packageName}/latest`;
     }
 
     request(npmURL, npmRequestOptions, (error, response, body) => {
       if (response !== null && response.statusCode === 404) {
-        // NOTE: in POST requests nsp does not distinguish between 'package not found' and 'no known vulnerabilities'. To keep consistency in the use case where a version is provided (which skips `getNpmVersionThenNspResults()` altogether) we'll say 'no known vulnerabilities' since it is technically true in both cases
+        // NOTE: in POST requests nsp does not distinguish between
+        // 'package not found' and 'no known vulnerabilities'.
+        // To keep consistency in the use case where a version is provided
+        // (which skips `getNpmVersionThenNspResults()` altogether) we'll say
+        // 'no known vulnerabilities' since it is technically true in both cases
         badgeData.text[1] = 'no known vulnerabilities';
 
-        sendBadge(format, badgeData);
+        sendBadge(capturedFormat, badgeData);
       } else if (error !== null || typeof body !== 'object' || body === null) {
         badgeData.text[1] = 'invalid';
         badgeData.colorscheme = 'red';
 
-        sendBadge(format, badgeData);
+        sendBadge(capturedFormat, badgeData);
       } else if (typeof body.version === 'string') {
-        getNspResults(body.version);
+        getNspResults(scopeWithoutAtSign, packageName, body.version);
       } else if (typeof body['dist-tags'] === 'object') {
-        getNspResults(body['dist-tags'].latest);
+        getNspResults(scopeWithoutAtSign, packageName, body['dist-tags'].latest);
       } else {
         badgeData.text[1] = 'invalid';
         badgeData.colorscheme = 'red';
 
-        sendBadge(format, badgeData);
+        sendBadge(capturedFormat, badgeData);
       }
     });
   }
 
-  function separateAndSetFormat (str = '') {
-    const splitString = str.split('.');
-    format = splitString.pop();
-
-    return splitString.join('.');
-  }
-
-  if (pieces.length === 4) {
-    // must be A: /nsp/npm/:package.:format
-
-    nspRequestOptions.body.package.name = separateAndSetFormat(pieces[3]);
-  } else if (pieces.length === 5 && pieces[3][0] !== '@') {
-    // must be B: /nsp/npm/:package/:version.:format
-
-    nspRequestOptions.body.package.name = pieces[3];
-    nspRequestOptions.body.package.version = separateAndSetFormat(pieces[4]);
-  } else if (pieces.length === 5) {
-    // must be C: /nsp/npm/@:scope/:package.:format
-
-    nspRequestOptions.body.package.name = `${pieces[3]}/${separateAndSetFormat(pieces[4])}`;
+  if (typeof capturedVersion === 'string') {
+    getNspResults(capturedScopeWithoutAtSign, capturedPackageName, capturedVersion);
   } else {
-    // must be D: /nsp/npm/@:scope/:package/:version.:format
-
-    nspRequestOptions.body.package.name = `${pieces[3]}/${pieces[4]}`;
-    nspRequestOptions.body.package.version = separateAndSetFormat(pieces[5]);
-  }
-
-  if (typeof nspRequestOptions.body.package.version === 'string') {
-    getNspResults(nspRequestOptions.body.package.version);
-  } else {
-    getNpmVersionThenNspResults(nspRequestOptions.body.package.name);
+    getNpmVersionThenNspResults(capturedScopeWithoutAtSign, capturedPackageName);
   }
 }));
 
