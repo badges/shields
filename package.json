@@ -24,7 +24,7 @@
   "dependencies": {
     "camp": "~16.2.3",
     "chrome-web-store-item-property": "~1.1.2",
-    "dot": "~1.0.3",
+    "dot": "~1.1.2",
     "gm": "^1.23.0",
     "json-autosave": "~1.1.2",
     "lodash.countby": "^4.6.0",
