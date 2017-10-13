@@ -15,6 +15,10 @@
         <img src="https://img.shields.io/travis/badges/shields.svg"
              alt="build status">
     </a>
+    <a href="https://github.com/badges/shields/commits/gh-pages">
+        <img src="https://img.shields.io/github/last-commit/badges/shields/gh-pages.svg?label=last%20deployed"
+             alt="last deployed">
+    </a>
     <a href="https://discord.gg/HjJCwm5">
         <img src="https://img.shields.io/discord/308323056592486420.svg"
              alt="chat on Discord">
