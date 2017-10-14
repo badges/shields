@@ -421,3 +421,35 @@ t.create('github pull request check state')
 t.create('github pull request check contexts')
   .get('/status/contexts/pulls/badges/shields/1110.json')
   .expectJSONTypes(Joi.object().keys({ name: 'checks', value: '1 failure' }));
+
+t.create('top language')
+.get('/languages/top/badges/shields.json')
+.expectJSONTypes(Joi.object().keys({
+  name: Joi.equal('JavaScript'),
+  value: Joi.string().regex(/^([1-9]?[0-9]\.[0-9]|100\.0)%$/),
+}));
+
+t.create('top language with empty repository')
+.get('/languages/top/pyvesb/emptyrepo.json')
+.expectJSON({ name: 'language', value: 'none' });
+
+t.create('language count')
+.get('/languages/count/badges/shields.json')
+.expectJSONTypes(Joi.object().keys({
+  name: Joi.equal('languages'),
+  value: Joi.number().integer().positive(),
+}));
+
+t.create('code size in bytes for all languages')
+.get('/languages/code-size/badges/shields.json')
+.expectJSONTypes(Joi.object().keys({
+  name: Joi.equal('code size'),
+  value: isFileSize,
+}));
+
+t.create('repository size')
+.get('/repo-size/badges/shields.json')
+.expectJSONTypes(Joi.object().keys({
+  name: Joi.equal('repo size'),
+  value: isFileSize,
+}));
