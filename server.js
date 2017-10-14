@@ -5323,7 +5323,7 @@ camp.route(/^\/vscode-marketplace\/(d|v|r)\/(.*)\.(svg|png|gif|jpg|json)$/,
 );
 
 // Eclipse Marketplace integration.
-camp.route(/^\/eclipse-marketplace\/(dt|dm|v|favorited)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/eclipse-marketplace\/(dt|dm|v|favorites)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var type = match[1];
   var project = match[2];
@@ -5362,8 +5362,8 @@ cache(function(data, match, sendBadge, request) {
             badgeData.text[1] = vdata.version;
             badgeData.colorscheme = vdata.color;
             break;
-          case 'favorited':
-            badgeData.text[0] = 'favorited';
+          case 'favorites':
+            badgeData.text[0] = 'favorites';
             badgeData.text[1] = parseInt(projectNode.favorited[0]);
             badgeData.colorscheme = 'brightgreen';
             break;

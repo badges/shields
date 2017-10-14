@@ -32,9 +32,9 @@ t.create('marketplace version')
     value: isVPlusDottedVersionAtLeastOne,
   }));
 
-t.create('favorited count')
-  .get('/favorited/notepad4e.json')
+t.create('favorites count')
+  .get('/favorites/notepad4e.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('favorited'),
+    name: Joi.equal('favorites'),
     value: Joi.number().integer().positive(),
   }));
