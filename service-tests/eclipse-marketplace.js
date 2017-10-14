@@ -4,7 +4,7 @@ const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 const {
 	  isMetric,
-	  isMetricOverPeriod,
+	  isMetricOverTimePeriod,
 	  isVPlusDottedVersionAtLeastOne
 } = require('./helpers/validators');
 
@@ -14,27 +14,27 @@ module.exports = t;
 t.create('total marketplace downloads')
   .get('/dt/notepad4e.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('downloads'),
+    name: 'downloads',
     value: isMetric,
   }));
 
 t.create('monthly marketplace downloads')
   .get('/dm/notepad4e.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('downloads'),
-    value: isMetricOverPeriod,
+    name: 'downloads',
+    value: isMetricOverTimePeriod,
   }));
 
 t.create('marketplace version')
   .get('/v/notepad4e.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('eclipse marketplace'),
+    name: 'eclipse marketplace',
     value: isVPlusDottedVersionAtLeastOne,
   }));
 
 t.create('favorites count')
   .get('/favorites/notepad4e.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('favorites'),
+    name: 'favorites',
     value: Joi.number().integer().positive(),
   }));

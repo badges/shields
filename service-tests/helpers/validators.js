@@ -15,7 +15,7 @@ const isStarRating = withRegex(/^[\u2605\u2606]{5}$/);
 
 const isMetric = withRegex(/^[0-9]+[kMGTPEZY]?$/);
 
-const isMetricOverPeriod = withRegex(/^[0-9]+[kMGTPEZY]?\/.+$/);
+const isMetricOverTimePeriod = withRegex(/^[0-9]+[kMGTPEZY]?\/(year|month|week|day)$/);
 
 const isPercentage = withRegex(/^[0-9]+%$/);
 
@@ -32,7 +32,7 @@ module.exports = {
   isVPlusDottedVersionAtLeastOne,
   isStarRating,
   isMetric,
-  isMetricOverPeriod,
+  isMetricOverTimePeriod,
   isPercentage,
   isFileSize,
   isFormattedDate
