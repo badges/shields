@@ -7,10 +7,6 @@
         <img src="https://img.shields.io/gratipay/team/shields.svg"
             alt="Gratipay">
     </a>
-    <a href="https://npmjs.org/package/gh-badges">
-        <img src="https://img.shields.io/npm/v/gh-badges.svg"
-            alt="npm version">
-    </a>
     <a href="https://travis-ci.org/badges/shields">
         <img src="https://img.shields.io/travis/badges/shields.svg"
             alt="build status">
