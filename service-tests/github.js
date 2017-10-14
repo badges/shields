@@ -446,3 +446,10 @@ t.create('code size in bytes for all languages')
   name: Joi.equal('code size'),
   value: isFileSize,
 }));
+
+t.create('repository size')
+.get('/repo-size/badges/shields.json')
+.expectJSONTypes(Joi.object().keys({
+  name: Joi.equal('repo size'),
+  value: isFileSize,
+}));

@@ -4083,6 +4083,35 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+//GitHub repository size integration.
+camp.route(/^\/github\/repo-size\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];
+  var repo = match[2];
+  var format = match[3];
+  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo;
+  var badgeData = getBadgeData('repo size', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = getLogo('github', data);
+  }
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      const parsedData = JSON.parse(buffer);
+      badgeData.text[1] = prettyBytes(parseInt(parsedData.size) * 1024);
+      badgeData.colorscheme = 'blue';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Bitbucket issues integration.
 camp.route(/^\/bitbucket\/issues(-raw)?\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
