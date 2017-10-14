@@ -1,31 +1,33 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/badges/shields/master/logo.svg"
-         height="130">
+    <img src="https://rawgit.com/badges/shields/master/logo.svg"
+        height="130">
 </p>
 <p align="center">
     <a href="https://www.gratipay.com/Shields/">
         <img src="https://img.shields.io/gratipay/team/shields.svg"
-             alt="Gratipay">
+            alt="Gratipay">
     </a>
     <a href="https://npmjs.org/package/gh-badges">
         <img src="https://img.shields.io/npm/v/gh-badges.svg"
-             alt="npm version">
+            alt="npm version">
     </a>
     <a href="https://travis-ci.org/badges/shields">
         <img src="https://img.shields.io/travis/badges/shields.svg"
-             alt="build status">
+            alt="build status">
     </a>
     <a href="https://github.com/badges/shields/commits/gh-pages">
         <img src="https://img.shields.io/github/last-commit/badges/shields/gh-pages.svg?label=last%20deployed"
-             alt="last deployed">
+            alt="last deployed">
     </a>
     <a href="https://discord.gg/HjJCwm5">
         <img src="https://img.shields.io/discord/308323056592486420.svg"
-             alt="chat on Discord">
+            alt="chat on Discord">
+    </a>
+    <a href="https://twitter.com/intent/follow?screen_name=shields_io">
+        <img src="https://img.shields.io/twitter/follow/shields_io.svg?style=social"
+            alt="follow on Twitter">
     </a>
 </p>
-
-[![Twitter](https://img.shields.io/twitter/follow/shields_io.svg?style=social)]()
 
 This is home to [Shields.io][shields.io], a service for concise, consistent,
 and legible badges in SVG and raster format, which can easily be included in
@@ -37,6 +39,9 @@ Every month it serves over 470 million images.
 In addition to hosting the shields.io home page and server code, this monorepo
 hosts an [NPM library for generating badges][gh-badges], and the badge design
 specification.
+
+[shields.io]: https://shields.io/
+[gh-badges]: https://www.npmjs.com/package/gh-badges
 
 
 Examples
@@ -65,7 +70,7 @@ Contributing
 Shields is a community project! We invite your participation through issues
 and pull requests.
 
-When adding or changing a service please add [tests][service-tests].
+When adding or changing a service [please add tests][service-tests].
 
 This project has quite a backlog of suggestions! If you're new to the project,
 maybe you'd like to opan a pull request to address one of them:
@@ -87,8 +92,6 @@ You can peruse the [contributing guidelines][contributing].
 
 Using the badge library
 -----------------------
-
-[![npm version](http://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges)
 
 ```sh
 npm install -g gh-badges
@@ -114,6 +117,8 @@ badge.loadFont('/path/to/Verdana.ttf', err => {
 View the [documentation for gh-badges][gh-badges doc].
 
 **Note:** The badge library was last released in 2016.
+
+[![npm version](http://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges)
 
 [gh-badges doc]: doc/gh-badges.md
 

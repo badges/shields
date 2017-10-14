@@ -1,8 +1,8 @@
 Contributing to Shields
 =======================
 
-Shields is a community project! We invite your participation through issues
-and pull requests.
+Shields is a community project. We invite your participation through issues
+and pull requests!
 
 
 Ways you can help
@@ -25,8 +25,8 @@ You can help by improving the project's usage and developer instructions.
 
 ### Helping others
 
-You can monitor [issues][] and the [chat room][] and help other people who
-have questions about how to use Shields, or work on it.
+You can monitor [issues][] and the [chat room][], and help other people who
+have questions about contributing to Shields, or using it for their projects.
 
 [issues]: https://github.com/badges/shields/issues
 [chat room]: https://discordapp.com/invite/HjJCwm5
@@ -59,12 +59,28 @@ There are three places to get help:
 [tutorial]: doc/TUTORIAL.md
 
 
+Badge guidelines
+----------------
+
+- The left-hand side of a badge should not advertize. It should be a noun
+  describing succinctly the meaning of the right-hand-side data.
+- New query parameters (such as `?label=` or `?style=`) should apply to any
+  requested badge. They must be registered in the cache (see `LruCache` in
+  `server.js`).
+- The format of new badges should be of the form
+  `/VENDOR/SUBVENDOR-BADGE-SPECIFIC/PARAMETERS.format`. For instance,
+  `https://img.shields.io/gitter/room/nwjs/nw.js.svg`. The vendor is gitter, the
+  badge is for rooms, the parameter is nwjs/nw.js, and the format is svg.
+- Except for badges using the `social` style, logos should be turned off by
+  default.
+
+
 Coding guidelines
 -----------------
 
 ### Tests
 
-When adding or changing a service please write [tests][service-tests].
+When adding or changing a service [please write tests][service-tests].
 
 When opening a pull request, include your service name in brackets in the pull
 request title. That way, those service tests will run in CI.
@@ -83,23 +99,7 @@ Function declarations are placed in `lib/`, not directly in `server.js`.
 Logos
 -----
 
-Please minimize checked-in `.svg` files through [SVGO][]. You can use [svgomg][].
+Please minimize checked-in SVG files through [SVGO][]. You can use [svgomg][].
 
 [SVGO]: https://github.com/svg/svgo
 [svgomg]: https://jakearchibald.github.io/svgomg/
-
-
-Badge guidelines
-----------------
-
-- The left-hand side of a badge should not advertize. It should be a noun
-  describing succinctly the meaning of the right-hand-side data.
-- New query parameters (such as `?label=` or `?style=`) should apply to any
-  requested badge. They must be registered in the cache (see `LruCache` in
-  `server.js`).
-- The format of new badges should be of the form
-  `/VENDOR/SUBVENDOR-BADGE-SPECIFIC/PARAMETERS.format`. For instance,
-  `https://img.shields.io/gitter/room/nwjs/nw.js.svg`. The vendor is gitter, the
-  badge is for rooms, the parameter is nwjs/nw.js, and the format is svg.
-- Except for badges using the `social` style, logos should be turned off by
-  default.
