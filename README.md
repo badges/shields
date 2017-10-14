@@ -64,7 +64,7 @@ and pull requests! You can peruse the [contributing guidelines][contributing].
 When adding or changing a service [please add tests][service-tests].
 
 This project has quite a backlog of suggestions! If you're new to the project,
-maybe you'd like to opan a pull request to address one of them:
+maybe you'd like to open a pull request to address one of them:
 
 [![GitHub issues by-label](https://img.shields.io/github/issues/badges/shields/good%20first%20issue.svg)](https://github.com/badges/shields/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
