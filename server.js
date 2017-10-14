@@ -5329,7 +5329,7 @@ cache(function(data, match, sendBadge, request) {
   var project = match[2];
   var format = match[3];
   var apiUrl = 'https://marketplace.eclipse.org/content/' + project + '/api/p';
-  var badgeData = getBadgeData('', data);
+  var badgeData = getBadgeData('eclipse marketplace', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -5358,7 +5358,6 @@ cache(function(data, match, sendBadge, request) {
             badgeData.colorscheme = downloadCountColor(monthlydownloads);
             break;
           case 'v':
-            badgeData.text[0] = 'eclipse marketplace';
             var vdata = versionColor(projectNode.version[0]);
             badgeData.text[1] = vdata.version;
             badgeData.colorscheme = vdata.color;
