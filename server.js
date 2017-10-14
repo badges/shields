@@ -5322,6 +5322,63 @@ camp.route(/^\/vscode-marketplace\/(d|v|r)\/(.*)\.(svg|png|gif|jpg|json)$/,
   })
 );
 
+// Eclipse Marketplace integration.
+camp.route(/^\/eclipse-marketplace\/(d|dm|v|favorited)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var type = match[1];
+  var project = match[2]; 
+  var format = match[3];
+  var apiUrl = 'https://marketplace.eclipse.org/content/' + project + '/api/p';
+  var badgeData = getBadgeData('', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    xml2js.parseString(buffer.toString(), function (parseErr, parsedData) {
+      if (parseErr != null) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        const projectNode = parsedData.marketplace.node[0];
+        switch (type) {
+          case 'd':
+            badgeData.text[0] = 'downloads';
+            const downloads = parseInt(projectNode.installstotal[0]);
+            badgeData.text[1] = metric(downloads);
+            badgeData.colorscheme = downloadCountColor(downloads);
+            break;
+          case 'dm':
+            badgeData.text[0] = 'downloads';
+            const monthlydownloads = parseInt(projectNode.installsrecent[0]);
+            badgeData.text[1] = metric(monthlydownloads) + '/month';
+            badgeData.colorscheme = downloadCountColor(monthlydownloads);
+            break;
+          case 'v':
+            badgeData.text[0] = 'eclipse marketplace';
+            const vdata = versionColor(projectNode.version[0]);
+            badgeData.text[1] = vdata.version;
+            badgeData.colorscheme = vdata.color;
+            break;
+          case 'favorited':
+            badgeData.text[0] = 'favorited';
+            badgeData.text[1] = parseInt(projectNode.favorited[0]);
+            badgeData.colorscheme = 'brightgreen';
+            break;
+          default:
+            throw Error('Unreachable due to regex');
+        }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  });
+}));
 
 camp.route(/^\/dockbit\/([A-Za-z0-9-_]+)\/([A-Za-z0-9-_]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
