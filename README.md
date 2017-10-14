@@ -47,8 +47,8 @@ Examples
 * [SemVer](http://semver.org/) version observance: `semver | 2.0.0`
 * amount of [Gratipay](http://gratipay.com) donations per week: `tips | $2/week`
 
-[Make your own badges][custom badges]!
-(Quick guide: `https://img.shields.io/badge/left-right-f39f37.svg`.)
+[Make your own badges!][custom badges]
+(Quick example: `https://img.shields.io/badge/left-right-f39f37.svg`)
 
 Browse a [complete list of badges][shields.io].
 
@@ -58,8 +58,8 @@ Browse a [complete list of badges][shields.io].
 Contributing
 ------------
 
-Shields is a community project! We invite your participation through issues
-and pull requests.
+Shields is a community project. We invite your participation through issues
+and pull requests! You can peruse the [contributing guidelines][contributing].
 
 When adding or changing a service [please add tests][service-tests].
 
@@ -73,8 +73,6 @@ Or you can adopt one of these pull requests:
 [![GitHub issues by-label](https://img.shields.io/github/issues-pr/badges/shields/good%20first%20issue.svg)](https://github.com/badges/shields/pulls?q=is%3Apr+is%3Aopen+label%3A%22good+first+issue%22)
 
 You can read a [tutorial on how to add a badge][tutorial].
-
-You can peruse the [contributing guidelines][contributing].
 
 [service-tests]: https://github.com/badges/shields/blob/master/service-tests/README.md
 [tutorial]: doc/TUTORIAL.md
