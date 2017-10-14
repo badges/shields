@@ -5,24 +5,19 @@
 <p align="center">
     <a href="https://www.gratipay.com/Shields/">
         <img src="https://img.shields.io/gratipay/team/shields.svg"
-            alt="Gratipay">
-    </a>
+            alt="Gratipay"></a>
     <a href="https://travis-ci.org/badges/shields">
         <img src="https://img.shields.io/travis/badges/shields.svg"
-            alt="build status">
-    </a>
+            alt="build status"></a>
     <a href="https://github.com/badges/shields/commits/gh-pages">
         <img src="https://img.shields.io/github/last-commit/badges/shields/gh-pages.svg?label=last%20deployed"
-            alt="last deployed">
-    </a>
+            alt="last deployed"></a>
     <a href="https://discord.gg/HjJCwm5">
         <img src="https://img.shields.io/discord/308323056592486420.svg"
-            alt="chat on Discord">
-    </a>
+            alt="chat on Discord"></a>
     <a href="https://twitter.com/intent/follow?screen_name=shields_io">
         <img src="https://img.shields.io/twitter/follow/shields_io.svg?style=social"
-            alt="follow on Twitter">
-    </a>
+            alt="follow on Twitter"></a>
 </p>
 
 This is home to [Shields.io][shields.io], a service for concise, consistent,
