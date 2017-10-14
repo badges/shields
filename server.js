@@ -4084,7 +4084,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 //GitHub repository size integration.
-camp.route(/^\/github\/repo-size\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/repo-size\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];
   var repo = match[2];
