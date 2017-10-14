@@ -5323,7 +5323,7 @@ camp.route(/^\/vscode-marketplace\/(d|v|r)\/(.*)\.(svg|png|gif|jpg|json)$/,
 );
 
 // Eclipse Marketplace integration.
-camp.route(/^\/eclipse-marketplace\/(d|dm|v|favorited)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/eclipse-marketplace\/(dt|dm|v|favorited)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var type = match[1];
   var project = match[2];
@@ -5345,7 +5345,7 @@ cache(function(data, match, sendBadge, request) {
       try {
         const projectNode = parsedData.marketplace.node[0];
         switch (type) {
-          case 'd':
+          case 'dt':
             badgeData.text[0] = 'downloads';
             var downloads = parseInt(projectNode.installstotal[0]);
             badgeData.text[1] = metric(downloads);

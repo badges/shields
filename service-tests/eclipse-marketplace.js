@@ -12,7 +12,7 @@ const t = new ServiceTester({ id: 'eclipse-marketplace', title: 'Eclipse' });
 module.exports = t;
 
 t.create('total marketplace downloads')
-  .get('/d/notepad4e.json')
+  .get('/dt/notepad4e.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('downloads'),
     value: isMetric,
