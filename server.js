@@ -4977,10 +4977,9 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var rating = JSON.parse(buffer).rating;
-      rating = (rating/100)*5;
-      // round to the nearest half-star
-      badgeData.text[1] = metric(Math.round(rating * 2) / 2) + ' stars';
+      var rating = parseInt(JSON.parse(buffer).rating);
+      rating = rating / 100 * 5;
+      badgeData.text[1] = starRating(rating);
       if (rating === 0) {
         badgeData.colorscheme = 'red';
       } else if (rating < 2) {
@@ -5069,10 +5068,9 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var rating = JSON.parse(buffer).rating;
-      rating = (rating/100)*5;
-      // round to the nearest half-star
-      badgeData.text[1] = metric(Math.round(rating * 2) / 2) + ' stars';
+      var rating = parseInt(JSON.parse(buffer).rating);
+      rating = rating / 100 * 5;
+      badgeData.text[1] = starRating(rating);
       if (rating === 0) {
         badgeData.colorscheme = 'red';
       } else if (rating < 2) {
