@@ -22,14 +22,14 @@ t.create('plugin version')
 }));
 
 t.create('plugin rating')
-.get('/plugin/r/hestia.json')
+.get('/plugin/r/akismet.json')
 .expectJSONTypes(Joi.object().keys({
   name: Joi.equal('rating'),
   value: Joi.string()
 }));
 
 t.create('plugin downloads')
-.get('/plugin/dt/hestia.json')
+.get('/plugin/dt/akismet.json')
 .expectJSONTypes(Joi.object().keys({
   name: Joi.equal('downloads'),
   value: isMetric
