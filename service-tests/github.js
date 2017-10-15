@@ -4,6 +4,7 @@ const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 const {
   isMetric,
+  isMetricOverTimePeriod,
   isFileSize,
   isFormattedDate,
   isVPlusDottedVersionAtLeastOne
@@ -345,21 +346,21 @@ t.create('commit activity (1 year)')
   .get('/commit-activity/y/eslint/eslint.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('commit activity'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?\/year$/),
+    value: isMetricOverTimePeriod,
   }));
 
 t.create('commit activity (4 weeks)')
   .get('/commit-activity/4w/eslint/eslint.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('commit activity'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?\/4 weeks$/),
+    value: isMetricOverTimePeriod,
   }));
 
 t.create('commit activity (1 week)')
   .get('/commit-activity/w/eslint/eslint.json')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('commit activity'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?\/week$/),
+    value: isMetricOverTimePeriod,
   }));
 
 t.create('last commit (recent)')

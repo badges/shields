@@ -2,6 +2,7 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
+const { isMetric } = require('./helpers/validators');
 
 const t = new ServiceTester({ id: 'wordpress', title: 'Wordpress' });
 module.exports = t;
@@ -31,7 +32,7 @@ t.create('plugin downloads')
 .get('/plugin/dt/hestia.json')
 .expectJSONTypes(Joi.object().keys({
   name: Joi.equal('downloads'),
-  value: Joi.string()
+  value: isMetric
 }));
 
 t.create('theme rating')
@@ -45,5 +46,5 @@ t.create('theme downloads')
 .get('/theme/dt/hestia.json')
 .expectJSONTypes(Joi.object().keys({
   name: Joi.equal('downloads'),
-  value: Joi.string()
+  value: isMetric
 }));
