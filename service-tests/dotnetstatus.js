@@ -14,7 +14,7 @@ t
   .get("/gh/jaredcnance/dotnet-status/API.json")
   .expectJSONTypes(
     Joi.object().keys({
-      name: Joi.equal("dependencies"),
+      name: "dependencies",
       value: Joi.equal("up to date", "out of date", "processing")
     })
   );

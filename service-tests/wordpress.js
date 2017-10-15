@@ -10,41 +10,41 @@ module.exports = t;
 t.create('supported version')
 .get('/v/akismet.json')
 .expectJSONTypes(Joi.object().keys({
-  name: Joi.equal('wordpress'),
+  name: 'wordpress',
   value: Joi.string()
 }));
 
 t.create('plugin version')
 .get('/plugin/v/akismet.json')
 .expectJSONTypes(Joi.object().keys({
-  name: Joi.equal('plugin'),
+  name: 'plugin',
   value: Joi.string()
 }));
 
 t.create('plugin rating')
 .get('/plugin/r/akismet.json')
 .expectJSONTypes(Joi.object().keys({
-  name: Joi.equal('rating'),
+  name: 'rating',
   value: Joi.string()
 }));
 
 t.create('plugin downloads')
 .get('/plugin/dt/akismet.json')
 .expectJSONTypes(Joi.object().keys({
-  name: Joi.equal('downloads'),
+  name: 'downloads',
   value: isMetric
 }));
 
 t.create('theme rating')
 .get('/theme/r/hestia.json')
 .expectJSONTypes(Joi.object().keys({
-  name: Joi.equal('rating'),
+  name: 'rating',
   value: Joi.string()
 }));
 
 t.create('theme downloads')
 .get('/theme/dt/hestia.json')
 .expectJSONTypes(Joi.object().keys({
-  name: Joi.equal('downloads'),
+  name: 'downloads',
   value: isMetric
 }));
