@@ -2,6 +2,11 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
+const {
+  isMetric,
+  isStarRating,
+  isVPlusDottedVersionAtLeastOne
+} = require('./helpers/validators');
 
 const t = new ServiceTester({ id: 'wordpress', title: 'Wordpress' });
 module.exports = t;
@@ -9,41 +14,41 @@ module.exports = t;
 t.create('supported version')
 .get('/v/akismet.json')
 .expectJSONTypes(Joi.object().keys({
-  name: Joi.equal('wordpress'),
-  value: Joi.string()
+  name: 'wordpress',
+  value: Joi.string().regex(/^\d+(\.\d+)?(\.\d+)? tested$/)
 }));
 
 t.create('plugin version')
 .get('/plugin/v/akismet.json')
 .expectJSONTypes(Joi.object().keys({
-  name: Joi.equal('plugin'),
-  value: Joi.string()
+  name: 'plugin',
+  value: isVPlusDottedVersionAtLeastOne
 }));
 
 t.create('plugin rating')
-.get('/plugin/r/hestia.json')
+.get('/plugin/r/akismet.json')
 .expectJSONTypes(Joi.object().keys({
-  name: Joi.equal('rating'),
-  value: Joi.string()
+  name: 'rating',
+  value: isStarRating
 }));
 
 t.create('plugin downloads')
-.get('/plugin/dt/hestia.json')
+.get('/plugin/dt/akismet.json')
 .expectJSONTypes(Joi.object().keys({
-  name: Joi.equal('downloads'),
-  value: Joi.string()
+  name: 'downloads',
+  value: isMetric
 }));
 
 t.create('theme rating')
 .get('/theme/r/hestia.json')
 .expectJSONTypes(Joi.object().keys({
-  name: Joi.equal('rating'),
-  value: Joi.string()
+  name: 'rating',
+  value: isStarRating
 }));
 
 t.create('theme downloads')
 .get('/theme/dt/hestia.json')
 .expectJSONTypes(Joi.object().keys({
-  name: Joi.equal('downloads'),
-  value: Joi.string()
+  name: 'downloads',
+  value: isMetric
 }));

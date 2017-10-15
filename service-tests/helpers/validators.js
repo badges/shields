@@ -15,7 +15,7 @@ const isStarRating = withRegex(/^[\u2605\u2606]{5}$/);
 
 const isMetric = withRegex(/^[0-9]+[kMGTPEZY]?$/);
 
-const isMetricOverTimePeriod = withRegex(/^[0-9]+[kMGTPEZY]?\/(year|month|week|day)$/);
+const isMetricOverTimePeriod = withRegex(/^[0-9]+[kMGTPEZY]?\/(year|month|4 weeks|week|day)$/);
 
 const isPercentage = withRegex(/^[0-9]+%$/);
 

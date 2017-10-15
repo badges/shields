@@ -9,7 +9,7 @@ module.exports = t;
 t.create('Receiving')
   .get('/Gratipay.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('receives'),
+    name: 'receives',
     value: Joi.string().regex(/^\$[0-9]+(\.[0-9]{2})?\/week/)
   }));
 
