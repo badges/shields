@@ -86,7 +86,6 @@ t.create('GitHub open issues by label is > zero')
 
 t.create('GitHub open issues by label is > zero')
   .get('/issues/Cockatrice/Cockatrice/Easy%20Change.json')
-  .inspectJSON()
   .expectJSONTypes(Joi.object().keys({
     name: 'Easy Change issues',
     value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? open$/)
