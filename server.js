@@ -6385,7 +6385,7 @@ cache(function(data, match, sendBadge, request) {
             badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
             break;
           case 'stars':
-            rating = Math.round(value.ratingValue);
+            rating = parseFloat(value.ratingValue);
             badgeData.text[0] = data.label || 'rating';
             badgeData.text[1] = starRating(rating);
             badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
