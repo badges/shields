@@ -3535,7 +3535,8 @@ cache(function(data, match, sendBadge, request) {
   var classText = isClosed? 'closed': 'open';
   var leftClassText = isRaw? classText + ' ': '';
   var rightClassText = !isRaw? ' ' + classText: '';
-  var labelText = hasLabel? ghLabel + ' ': '';
+  const isGhLabelMultiWord = hasLabel && ghLabel.includes(' ');
+  var labelText = hasLabel? (isGhLabelMultiWord? `"${ghLabel}"`: ghLabel) + ' ': '';
   var targetText = isPR? 'pull requests': 'issues';
   var badgeData = getBadgeData(leftClassText + labelText + targetText, data);
   if (badgeData.template === 'social') {

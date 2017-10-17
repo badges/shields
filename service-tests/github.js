@@ -84,10 +84,10 @@ t.create('GitHub open issues by label is > zero')
     value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? open$/)
   }));
 
-t.create('GitHub open issues by label is > zero')
-  .get('/issues/Cockatrice/Cockatrice/Easy%20Change.json')
+t.create('GitHub open issues by multi-word label is > zero')
+  .get('/issues/Cockatrice/Cockatrice/App%20-%20Cockatrice.json')
   .expectJSONTypes(Joi.object().keys({
-    name: 'Easy Change issues',
+    name: '"App - Cockatrice" issues',
     value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? open$/)
   }));
 
