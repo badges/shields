@@ -116,7 +116,8 @@ const {
 } = require('./lib/github-helpers');
 
 const {
-  mapGithubCommitsSince
+  mapGithubCommitsSince,
+  mapGithubReleaseDate
 } = require("./lib/github-provider");
 
 var semver = require('semver');
@@ -155,7 +156,7 @@ camp.notfound(/.*/, function(query, match, end, request) {
 // Vendors.
 
 // JIRA issue integration
-camp.route(/^\/jira\/issue\/(http(?:s)?)\/(.+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/jira\/issue\/(http(?:s)?)\/(.+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
   var protocol = match[1];  // eg, https
   var host = match[2];      // eg, issues.apache.org/jira
@@ -213,7 +214,7 @@ cache(function (data, match, sendBadge, request) {
 }));
 
 // JIRA agile sprint completion integration
-camp.route(/^\/jira\/sprint\/(http(?:s)?)\/(.+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/jira\/sprint\/(http(?:s)?)\/(.+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
   var protocol  = match[1]; // eg, https
   var host      = match[2]; // eg, jira.spring.io
@@ -269,7 +270,7 @@ cache(function (data, match, sendBadge, request) {
 }));
 
 // Travis integration
-camp.route(/^\/travis(-ci)?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/travis(-ci)?\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[2];  // eg, espadrine/sc
   var branch = match[3];
@@ -311,7 +312,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // continuousphp integration
-camp.route(/^\/continuousphp\/([^\/]+)\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/continuousphp\/([^/]+)\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var provider = match[1];
   var userRepo = match[2];
@@ -371,7 +372,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // NetflixOSS metadata integration
-camp.route(/^\/osslifecycle?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/osslifecycle?\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
   cache(function(data, match, sendBadge, request) {
     var orgOrUserAndRepo = match[1];
     var branch = match[2];
@@ -397,7 +398,7 @@ camp.route(/^\/osslifecycle?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json
         return;
       }
       try {
-        var matchStatus = body.match(/osslifecycle\=([a-z]+)/im);
+        var matchStatus = body.match(/osslifecycle=([a-z]+)/im);
         if (matchStatus === null) {
           badgeData.text[1] = 'inaccessible';
           sendBadge(format, badgeData);
@@ -416,7 +417,7 @@ camp.route(/^\/osslifecycle?\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json
 }));
 
 // Shippable integration
-camp.route(/^\/shippable\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/shippable\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
   var defaultOpts = {
     colorA: '#555555',
@@ -664,7 +665,7 @@ cache(function (data, match, sendBadge, request) {
 }));
 
 // AppVeyor CI integration.
-camp.route(/^\/appveyor\/ci\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/appveyor\/ci\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, `gruntjs/grunt`.
   var branch = match[2];
@@ -706,7 +707,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // AppVeyor test status integration.
-camp.route(/^\/appveyor\/tests\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/appveyor\/tests\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, `gruntjs/grunt`.
   var branch = match[2];
@@ -1124,7 +1125,7 @@ cache(function(data, match, sendBadge, request) {
 
 
 // Bountysource integration.
-camp.route(/^\/bountysource\/team\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/bountysource\/team\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var team = match[1];  // eg, `mozilla-core`.
   var type = match[2];  // eg, `activity`.
@@ -1155,7 +1156,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // HHVM integration.
-camp.route(/^\/hhvm\/([^\/]+\/[^\/]+)(\/.+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/hhvm\/([^/]+\/[^/]+)(\/.+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, `symfony/symfony`.
   var branch = match[2];// eg, `/2.4.0.0`.
@@ -1196,7 +1197,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // SensioLabs.
-camp.route(/^\/sensiolabs\/i\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/sensiolabs\/i\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var projectUuid = match[1];
   var format = match[2];
@@ -1224,8 +1225,8 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
 
-    var matchStatus = body.match(/\<status\>\<\!\[CDATA\[([a-z]+)\]\]\>\<\/status\>/im);
-    var matchGrade = body.match(/\<grade\>\<\!\[CDATA\[([a-z]+)\]\]\>\<\/grade\>/im);
+    var matchStatus = body.match(/<status><!\[CDATA\[([a-z]+)\]\]><\/status>/im);
+    var matchGrade = body.match(/<grade><!\[CDATA\[([a-z]+)\]\]><\/grade>/im);
 
     if (matchStatus === null) {
       badgeData.text[1] = 'inaccessible';
@@ -1581,35 +1582,26 @@ cache(function (data, match, sendBadge, request) {
 }));
 
 // npm version integration.
-camp.route(/^\/npm\/v\/(@[^\/]*)?\/?([^\/]*)\/?([^\/]*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/npm\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var scope = match[1];   // "@user"
-  var repo = match[2];    // "express"
-  var tag = match[3];     // "next"
-  var format = match[4];  // "svg"
-  var pkg = encodeURIComponent(scope
-    ? scope + '/' + repo
-    : repo);
-  var name = 'npm';
-  if (tag) {
-    name += '@' + tag;
-  } else {
-    tag = 'latest';
-  }
-  var apiUrl = 'https://registry.npmjs.org/-/package/' + pkg + '/dist-tags';
-  var badgeData = getBadgeData(name, data);
+  // e.g. cycle, core, next, svg
+  const [, scope, packageName, tag, format] = match;
+  const pkg = encodeURIComponent(scope ? `@${scope}/${packageName}` : packageName);
+  const apiUrl = `https://registry.npmjs.org/-/package/${pkg}/dist-tags`;
+  const name = tag ? `npm@${tag}` : 'npm';
+  const badgeData = getBadgeData(name, data);
   // Using the Accept header because of this bug:
   // <https://github.com/npm/npmjs.org/issues/163>
-  request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
+  request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      var version = data[tag];
-      var vdata = versionColor(version);
+      const data = JSON.parse(buffer);
+      const version = data[tag || 'latest'];
+      const vdata = versionColor(version);
       badgeData.text[1] = vdata.version;
       badgeData.colorscheme = vdata.color;
       sendBadge(format, badgeData);
@@ -1621,7 +1613,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // npm license integration.
-camp.route(/^\/npm\/l\/(?:@([^\/]+)\/)?([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/npm\/l\/(?:@([^/]+)\/)?([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const scope = match[1];        // "user" (when a scope "@user" is supplied)
   const packageName = match[2];  // "express"
@@ -1670,50 +1662,80 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // npm node version integration.
-camp.route(/^\/node\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/node\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var repo = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
-  var format = match[2];
-  var apiUrl = 'https://registry.npmjs.org/' + repo + '/latest';
-  var badgeData = getBadgeData('node', data);
+  // e.g. @stdlib, stdlib, next, svg
+  const [, scope, packageName, tag, format] = match;
+  const registryTag = tag || 'latest';
+  let apiUrl;
+  if (scope === undefined) {
+      // e.g. https://registry.npmjs.org/express/latest
+      // Use this endpoint as an optimization. It covers the vast majority of
+      // these badges, and the response is smaller.
+      apiUrl = `https://registry.npmjs.org/${packageName}/${registryTag}`;
+  } else {
+    // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
+    // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
+    const path = encodeURIComponent(`${scope}/${packageName}`);
+    apiUrl = `https://registry.npmjs.org/@${path}`;
+  }
+  const name = tag ? `node@${tag}` : 'node';
+  const badgeData = getBadgeData(name, data);
   // Using the Accept header because of this bug:
   // <https://github.com/npm/npmjs.org/issues/163>
-  request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
+  request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      if (data.engines && data.engines.node) {
-        var versionRange = data.engines.node;
-        badgeData.text[1] = versionRange;
-        regularUpdate('http://nodejs.org/dist/latest/SHASUMS256.txt',
-          (24 * 3600 * 1000),
-          function(shasums) {
-            // tarball index start, tarball index end
-            var taris = shasums.indexOf('node-v');
-            var tarie = shasums.indexOf('\n', taris);
-            var tarball = shasums.slice(taris, tarie);
-            var version = tarball.split('-')[1];
-            return version;
-          }, function(err, version) {
-            if (err != null) { sendBadge(format, badgeData); return; }
-            try {
-              if (semver.satisfies(version, versionRange)) {
-                badgeData.colorscheme = 'brightgreen';
-              } else if (semver.gtr(version, versionRange)) {
-                badgeData.colorscheme = 'yellow';
-              } else {
-                badgeData.colorscheme = 'orange';
-              }
-            } catch(e) { }
-            sendBadge(format, badgeData);
-        });
-      } else {
+      const data = JSON.parse(buffer);
+      if (data.error === 'not_found') {
+        badgeData.text[1] = 'package not found';
         sendBadge(format, badgeData);
+        return;
       }
+      let releaseData;
+      if (scope === undefined) {
+        releaseData = data;
+      } else {
+        const version = data['dist-tags'][registryTag];
+        releaseData = data.versions[version];
+      }
+      const versionRange = (releaseData.engines || {}).node;
+      if (! versionRange) {
+        badgeData.text[1] = 'not specified';
+        sendBadge(format, badgeData);
+        return;
+      }
+      badgeData.text[1] = versionRange;
+      regularUpdate('http://nodejs.org/dist/latest/SHASUMS256.txt',
+        (24 * 3600 * 1000),
+        shasums => {
+          // tarball index start, tarball index end
+          const taris = shasums.indexOf('node-v');
+          const tarie = shasums.indexOf('\n', taris);
+          const tarball = shasums.slice(taris, tarie);
+          const version = tarball.split('-')[1];
+          return version;
+        }, (err, version) => {
+          if (err != null) {
+            badgeData.text[1] = 'invalid';
+            sendBadge(format, badgeData);
+            return;
+          }
+          try {
+            if (semver.satisfies(version, versionRange)) {
+              badgeData.colorscheme = 'brightgreen';
+            } else if (semver.gtr(version, versionRange)) {
+              badgeData.colorscheme = 'yellow';
+            } else {
+              badgeData.colorscheme = 'orange';
+            }
+          } catch(e) { }
+          sendBadge(format, badgeData);
+      });
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
@@ -1722,7 +1744,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Anaconda Cloud / conda package manager integration
-camp.route(/^\/conda\/([dvp]n?)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/conda\/([dvp]n?)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(queryData, match, sendBadge, request) {
   const mode = match[1];
   const channel = match[2];
@@ -2051,7 +2073,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // PyPI integration.
-camp.route(/^\/pypi\/([^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/pypi\/([^/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var info = match[1];
   var egg = match[2];  // eg, `gevent`, `Django`.
@@ -2146,7 +2168,7 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
       } else if (info === 'pyversions') {
         var versions = [];
-        let pattern = /^Programming Language \:\: Python \:\: ([\d\.]+)$/;
+        let pattern = /^Programming Language :: Python :: ([\d.]+)$/;
         for (let i = 0; i < data.info.classifiers.length; i++) {
           var matched = pattern.exec(data.info.classifiers[i]);
           if (matched && matched[1]) {
@@ -2170,7 +2192,7 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
       } else if (info === 'implementation') {
         var implementations = [];
-        let pattern = /^Programming Language \:\: Python \:\: Implementation \:\: (\S+)$/;
+        let pattern = /^Programming Language :: Python :: Implementation :: (\S+)$/;
         for (let i = 0; i < data.info.classifiers.length; i++) {
           let matched = pattern.exec(data.info.classifiers[i]);
           if (matched && matched[1]) {
@@ -2185,7 +2207,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'blue';
         sendBadge(format, badgeData);
       } else if (info === 'status') {
-        let pattern = /^Development Status \:\: ([1-7]) - (\S+)$/;
+        let pattern = /^Development Status :: ([1-7]) - (\S+)$/;
         var statusColors = {
             '1': 'red', '2': 'red', '3': 'red', '4': 'yellow',
             '5': 'brightgreen', '6': 'brightgreen', '7': 'red'};
@@ -2311,7 +2333,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Hex.pm integration.
-camp.route(/^\/hexpm\/([^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/hexpm\/([^/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(queryParams, match, sendBadge, request) {
   const info = match[1];
   const repo = match[2];  // eg, `httpotion`.
@@ -2370,7 +2392,7 @@ cache(function(queryParams, match, sendBadge, request) {
 }));
 
 // Coveralls integration.
-camp.route(/^\/coveralls\/([^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/coveralls\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `jekyll/jekyll`.
   var branch = match[2];
@@ -2420,7 +2442,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Codecov integration.
-camp.route(/^\/codecov\/c\/(?:token\/(\w+))?[+\/]?([^\/]+\/[^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/codecov\/c\/(?:token\/(\w+))?[+/]?([^/]+\/[^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var token = match[1];
   var userRepo = match[2];  // eg, `github/codecov/example-python`.
@@ -2775,6 +2797,52 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// dotnet-status integration.
+camp.route(/^\/dotnetstatus\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var projectUri = match[1]; // gh/{USER}/{REPO}/{PROJECT}
+  var format = match[2];
+  var url = 'http://dotnet-status.com/api/status/' + projectUri + '/';
+  var badgeData = getBadgeData('dependencies', data);
+  var sendErrorBadge = function() {
+    badgeData.text[1] = 'inconclusive';
+    sendBadge(format, badgeData);
+  };
+
+  request(url, function (err, res, buffer) {
+    if (err != null || res.statusCode === 404) {
+      sendErrorBadge();
+      return;
+    }
+
+    if (res.statusCode === 202) {
+      badgeData.text[1] = 'processing';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    try {
+      var data = JSON.parse(buffer);
+      if(data.projectResults.length === 1 && data.projectResults[0] !== null) {
+        if (data.projectResults[0].outOfDate) {
+          badgeData.text[1] = 'out of date';
+          badgeData.colorscheme = 'red';
+        } else {
+          badgeData.text[1] = 'up to date';
+          badgeData.colorscheme = 'blue';
+        }
+      }
+      else {
+        badgeData.text[1] = 'project not found';
+      }
+      sendBadge(format, badgeData);
+    }
+    catch (e) {
+      sendErrorBadge();
+    }
+  });
+}));
+
 // Gemnasium integration
 camp.route(/^\/gemnasium\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -2849,7 +2917,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Codacy integration
-camp.route(/^\/codacy\/(?:grade\/)?(?!coverage\/)([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/codacy\/(?:grade\/)?(?!coverage\/)([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var projectId = match[1];  // eg. e27821fb6289410b8f58338c7e0bc686
   var branch = match[2];
@@ -2897,7 +2965,44 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-camp.route(/^\/codacy\/coverage\/(?!grade\/)([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+// ReadTheDocs build
+camp.route(/^\/readthedocs\/([^/]+)(?:\/(.+))?.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var project = match[1];
+  var version = match[2];
+  var format = match[3];
+  var badgeData = getBadgeData('docs', data);
+  var url = 'https://readthedocs.org/projects/' + encodeURIComponent(project) + '/badge/';
+  if (version != null) {
+    url += '?version=' + encodeURIComponent(version);
+  }
+  fetchFromSvg(request, url, function(err, res) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      badgeData.text[1] = res;
+      if (res === 'passing') {
+        badgeData.colorscheme = 'brightgreen';
+      } else if (res === 'failing') {
+        badgeData.colorscheme = 'red';
+      } else if (res === 'unknown') {
+        badgeData.colorscheme = 'yellow';
+      } else {
+        badgeData.colorscheme = 'red';
+      }
+      sendBadge(format, badgeData);
+
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+camp.route(/^\/codacy\/coverage\/(?!grade\/)([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var projectId = match[1];  // eg. e27821fb6289410b8f58338c7e0bc686
   var branch = match[2];
@@ -3174,7 +3279,7 @@ cache(function (data, match, sendBadge, request) {
 }));
 
 // GitHub tag integration.
-camp.route(/^\/github\/tag\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/tag\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, expressjs/express
   var repo = match[2];
@@ -3206,7 +3311,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub package and manifest version integration.
-camp.route(/^\/github\/(package|manifest)-json\/([^\/]+)\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/(package|manifest)-json\/([^/]+)\/([^/]+)\/([^/]+)\/?([^/]+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(query_data, match, sendBadge, request) {
   var type = match[1];
   var info = match[2];
@@ -3251,7 +3356,7 @@ cache(function(query_data, match, sendBadge, request) {
 }));
 
 // GitHub contributors integration.
-camp.route(/^\/github\/contributors(-anon)?\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/contributors(-anon)?\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var isAnon = match[1];
   var user = match[2];
@@ -3287,7 +3392,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub release integration
-camp.route(/^\/github\/release\/([^\/]+\/[^\/]+)(?:\/(all))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/release\/([^/]+\/[^/]+)(?:\/(all))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, qubyte/rubidium
   var allReleases = match[2];
@@ -3324,18 +3429,22 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// GitHub release & pre-release date integration.
+mapGithubReleaseDate(camp, githubApiUrl, githubAuth);
+
 // GitHub commits since integration.
 mapGithubCommitsSince(camp, githubApiUrl ,githubAuth);
 
-// GitHub release-download-count integration.
-camp.route(/^\/github\/downloads\/([^\/]+)\/([^\/]+)(\/.+)?\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+// GitHub release-download-count and pre-release-download-count integration.
+camp.route(/^\/github\/(downloads|downloads-pre)\/([^/]+)\/([^/]+)(\/.+)?\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, qubyte/rubidium
-  var repo = match[2];
+  const type = match[1]; // downloads or downloads-pre
+  var user = match[2];  // eg, qubyte/rubidium
+  var repo = match[3];
 
-  var tag = match[3];  // eg, v0.190.0, latest, null if querying all releases
-  var asset_name = match[4].toLowerCase(); // eg. total, atom-amd64.deb, atom.x86_64.rpm
-  var format = match[5];
+  var tag = match[4];  // eg, v0.190.0, latest, null if querying all releases
+  var asset_name = match[5].toLowerCase(); // eg. total, atom-amd64.deb, atom.x86_64.rpm
+  var format = match[6];
 
   if (tag) { tag = tag.slice(1); }
 
@@ -3346,8 +3455,10 @@ cache(function(data, match, sendBadge, request) {
 
   var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/releases';
   if (!total) {
-    var release_path = tag !== 'latest' ? 'tags/' + tag : 'latest';
-    apiUrl = apiUrl + '/' + release_path;
+    var release_path = tag === 'latest' ? (type === 'downloads' ? 'latest' : '') : 'tags/' + tag;
+    if (release_path) {
+      apiUrl = apiUrl + '/' + release_path;
+    }
   }
   var badgeData = getBadgeData('downloads', data);
   if (badgeData.template === 'social') {
@@ -3360,9 +3471,12 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
+      if (type === 'downloads-pre' && tag === 'latest') {
+        data = data[0];
+      }
       var downloads = 0;
 
-      var label;
+      const labelWords = [metric(downloads)];
       if (total) {
         data.forEach(function (tagData) {
           tagData.assets.forEach(function (asset) {
@@ -3372,9 +3486,9 @@ cache(function(data, match, sendBadge, request) {
           });
         });
 
-        label = 'total';
+        labelWords.push('total');
         if (asset_name !== 'total') {
-          label += ' ' + '[' + asset_name + ']';
+          labelWords.push(`[${asset_name}]`);
         }
       } else {
         data.assets.forEach(function (asset) {
@@ -3383,12 +3497,14 @@ cache(function(data, match, sendBadge, request) {
           }
         });
 
-        label = tag !== 'latest' ?  tag : '';
+        if (tag !== 'latest') {
+          labelWords.push(tag);
+        }
         if (asset_name !== 'total') {
-          label += ' ' + '[' + asset_name + ']';
+          labelWords.push(`[${asset_name}]`);
         }
       }
-      badgeData.text[1] = metric(downloads) + ' ' + label;
+      badgeData.text[1] = labelWords.join(' ');
       badgeData.colorscheme = 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
@@ -3399,7 +3515,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub issues integration.
-camp.route(/^\/github\/issues(-pr)?(-closed)?(-raw)?\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/issues(-pr)?(-closed)?(-raw)?\/([^/]+)\/([^/]+)\/?([^/]+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var isPR = !!match[1];
   var isClosed = !!match[2];
@@ -3415,7 +3531,7 @@ cache(function(data, match, sendBadge, request) {
   query.q = 'repo:' + user + '/' + repo +
     (isPR? ' is:pr': ' is:issue') +
     (isClosed? ' is:closed': ' is:open') +
-    (hasLabel? ' label:' + ghLabel: '');
+    (hasLabel? ` label:"${ghLabel}"` : '');
 
   var classText = isClosed? 'closed': 'open';
   var leftClassText = isRaw? classText + ' ': '';
@@ -3446,7 +3562,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub issue detail integration.
-camp.route(/^\/github\/(?:issues|pulls)\/detail\/(s|title|u|label|comments|age|last-update)\/([^\/]+)\/([^\/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/(?:issues|pulls)\/detail\/(s|title|u|label|comments|age|last-update)\/([^/]+)\/([^/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
 cache((queryParams, match, sendBadge, request) => {
   const [, which, owner, repo, number, format] = match;
   const uri = `${githubApiUrl}/repos/${owner}/${repo}/issues/${number}`;
@@ -3515,7 +3631,7 @@ cache((queryParams, match, sendBadge, request) => {
 }));
 
 // GitHub pull request build status integration.
-camp.route(/^\/github\/status\/(s|contexts)\/pulls\/([^\/]+)\/([^\/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/status\/(s|contexts)\/pulls\/([^/]+)\/([^/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
 cache((queryParams, match, sendBadge, request) => {
   const [, which, owner, repo, number, format] = match;
   const issueUri = `${githubApiUrl}/repos/${owner}/${repo}/pulls/${number}`;
@@ -3565,7 +3681,7 @@ cache((queryParams, match, sendBadge, request) => {
 }));
 
 // GitHub forks integration.
-camp.route(/^\/github\/forks\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/forks\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
@@ -3600,7 +3716,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub stars integration.
-camp.route(/^\/github\/stars\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/stars\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
@@ -3633,7 +3749,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub watchers integration.
-camp.route(/^\/github\/watchers\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/watchers\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
@@ -3666,7 +3782,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub user followers integration.
-camp.route(/^\/github\/followers\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/followers\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte
   var format = match[2];
@@ -3694,7 +3810,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub license integration.
-camp.route(/^\/github\/license\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/license\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, mashape
   var repo = match[2];  // eg, apistatus
@@ -3746,7 +3862,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub file size.
-camp.route(/^\/github\/size\/([^\/]+)\/([^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/size\/([^/]+)\/([^/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, mashape
   var repo = match[2];  // eg, apistatus
@@ -3788,7 +3904,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub search hit counter.
-camp.route(/^\/github\/search\/([^\/]+)\/([^\/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/search\/([^/]+)\/([^/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];
   var repo = match[2];
@@ -3820,7 +3936,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub commit statistics integration.
-camp.route(/^\/github\/commit-activity\/(y|4w|w)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/commit-activity\/(y|4w|w)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const interval = match[1];
   const user = match[2];
@@ -3869,7 +3985,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub last commit integration.
-camp.route(/^\/github\/last-commit\/([^\/]+)\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/last-commit\/([^/]+)\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const user = match[1];  // eg, mashape
   const repo = match[2];  // eg, apistatus
@@ -3903,8 +4019,102 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// GitHub languages integration.
+camp.route(/^\/github\/languages\/(top|count|code-size)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var type = match[1];
+  var user = match[2];
+  var repo = match[3];
+  var format = match[4];
+  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/languages';
+  var badgeData = getBadgeData('', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = getLogo('github', data);
+  }
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      const parsedData = JSON.parse(buffer);
+      var sumBytes = 0;
+      switch(type) {
+        case 'top':
+          var topLanguage = 'language';
+          var maxBytes = 0;
+          for (const language of Object.keys(parsedData)) {
+            const bytes = parseInt(parsedData[language]);
+            if (bytes >= maxBytes) {
+              maxBytes = bytes;
+              topLanguage = language;
+            }
+            sumBytes += bytes;
+          }
+          badgeData.text[0] = topLanguage;
+          if (sumBytes === 0) { // eg, empty repo, only .md files, etc.
+            badgeData.text[1] = 'none';
+            badgeData.colorscheme = 'blue';
+          } else {
+            badgeData.text[1] = (maxBytes / sumBytes * 100).toFixed(1) + '%'; // eg, 9.1%
+          }
+          break;
+        case 'count':
+          badgeData.text[0] = 'languages';
+          badgeData.text[1] = Object.keys(parsedData).length;
+          badgeData.colorscheme = 'blue';
+          break;
+        case 'code-size':
+          for (const language of Object.keys(parsedData)) {
+            sumBytes += parseInt(parsedData[language]);
+          }
+          badgeData.text[0] = 'code size';
+          badgeData.text[1] = prettyBytes(sumBytes);
+          badgeData.colorscheme = 'blue';
+          break;
+        default:
+          throw Error('Unreachable due to regex');
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+//GitHub repository size integration.
+camp.route(/^\/github\/repo-size\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var user = match[1];
+  var repo = match[2];
+  var format = match[3];
+  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo;
+  var badgeData = getBadgeData('repo size', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = getLogo('github', data);
+  }
+  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      const parsedData = JSON.parse(buffer);
+      badgeData.text[1] = prettyBytes(parseInt(parsedData.size) * 1024);
+      badgeData.colorscheme = 'blue';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Bitbucket issues integration.
-camp.route(/^\/bitbucket\/issues(-raw)?\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/bitbucket\/issues(-raw)?\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var isRaw = !!match[1];
   var user = match[2];  // eg, atlassian
@@ -3934,7 +4144,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Bitbucket pull requests integration.
-camp.route(/^\/bitbucket\/pr(-raw)?\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/bitbucket\/pr(-raw)?\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var isRaw = !!match[1];
   var user = match[2];  // eg, atlassian
@@ -4028,7 +4238,7 @@ mapNugetFeed(camp, '(.+\\.)?myget\\/(.*)', 2, function(match) {
 });
 
 // Puppet Forge modules
-camp.route(/^\/puppetforge\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/puppetforge\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var info = match[1]; // either `v`, `dt`, `e` or `f`
   var user = match[2];
@@ -4095,7 +4305,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Puppet Forge users
-camp.route(/^\/puppetforge\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/puppetforge\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var info = match[1]; // either `rc` or `mc`
   var user = match[2];
@@ -4133,7 +4343,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Jenkins build status integration
-camp.route(/^\/jenkins(?:-ci)?\/s\/(http(?:s)?)\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/jenkins(?:-ci)?\/s\/(http(?:s)?)\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var scheme = match[1];  // http(s)
   var host = match[2];  // example.org:8080
@@ -4189,7 +4399,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Jenkins tests integration
-camp.route(/^\/jenkins(?:-ci)?\/t\/(http(?:s)?)\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/jenkins(?:-ci)?\/t\/(http(?:s)?)\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var scheme = match[1];  // http(s)
   var host = match[2];  // example.org:8080
@@ -4249,7 +4459,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Jenkins coverage integration
-camp.route(/^\/jenkins(?:-ci)?\/c\/(http(?:s)?)\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/jenkins(?:-ci)?\/c\/(http(?:s)?)\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var scheme = match[1];  // http(s)
   var host = match[2];  // example.org:8080
@@ -4340,7 +4550,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Codeship.io integration
-camp.route(/^\/codeship\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/codeship\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var projectId = match[1];  // eg, `ab123456-00c0-0123-42de-6f98765g4h32`.
   var format = match[3];
@@ -4397,7 +4607,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Magnum CI integration
-camp.route(/^\/magnumci\/ci\/([^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/magnumci\/ci\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var projectId = match[1]; // E.g. 96ffb83fa700f069024921b0702e76ff
   var branch = match[2];    // E.g. master
@@ -4445,7 +4655,7 @@ cache(function(data, match, sendBadge, request) {
 
 // Maven-Central artifact version integration
 // (based on repo1.maven.org rather than search.maven.org because of #846)
-camp.route(/^\/maven-central\/v\/([^\/]*)\/([^\/]*)(?:\/([^\/]*))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/maven-central\/v\/([^/]*)\/([^/]*)(?:\/([^/]*))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var groupId = match[1]; // eg, `com.google.inject`
   var artifactId = match[2]; // eg, `guice`
@@ -4494,7 +4704,7 @@ cache(function(data, match, sendBadge, request) {
 //   /nexus/(r|s|<repo-name>)/(http|https)/<nexus.host>[:port][/<entry-path>]/<group>/<artifact>[:k1=v1[:k2=v2[...]]].<format>
 // for /nexus/[rs]/... pattern, use the search api of the nexus server, and
 // for /nexus/<repo-name>/... pattern, use the resolve api of the nexus server.
-camp.route(/^\/nexus\/(r|s|[^\/]+)\/(https?)\/((?:[^\/]+)(?:\/[^\/]+)?)\/([^\/]+)\/([^\/:]+)(:.+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/nexus\/(r|s|[^/]+)\/(https?)\/((?:[^/]+)(?:\/[^/]+)?)\/([^/]+)\/([^/:]+)(:.+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var repo = match[1];                           // r | s | repo-name
   var scheme = match[2];                         // http | https
@@ -4768,9 +4978,9 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var rating = JSON.parse(buffer).rating;
-      rating = (rating/100)*5;
-      badgeData.text[1] = metric(Math.round(rating * 10) / 10) + ' stars';
+      var rating = parseInt(JSON.parse(buffer).rating);
+      rating = rating / 100 * 5;
+      badgeData.text[1] = starRating(rating);
       if (rating === 0) {
         badgeData.colorscheme = 'red';
       } else if (rating < 2) {
@@ -4841,8 +5051,77 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// wordpress theme rating integration.
+// example: https://img.shields.io/wordpress/theme/r/hestia.svg for https://wordpress.org/themes/hestia
+camp.route(/^\/wordpress\/theme\/r\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var queryParams = {
+    'action': 'theme_information',
+    'request[slug]': match[1]  // eg, `hestia`.
+  };
+  var format = match[2];
+  var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?' + querystring.stringify(queryParams);
+  var badgeData = getBadgeData('rating', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var rating = parseInt(JSON.parse(buffer).rating);
+      rating = rating / 100 * 5;
+      badgeData.text[1] = starRating(rating);
+      if (rating === 0) {
+        badgeData.colorscheme = 'red';
+      } else if (rating < 2) {
+        badgeData.colorscheme = 'yellow';
+      } else if (rating < 3) {
+        badgeData.colorscheme = 'yellowgreen';
+      } else if (rating < 4) {
+        badgeData.colorscheme = 'green';
+      } else {
+        badgeData.colorscheme = 'brightgreen';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// wordpress theme download integration.
+// example: https://img.shields.io/wordpress/theme/dt/hestia.svg for https://wordpress.org/themes/hestia
+camp.route(/^\/wordpress\/theme\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var queryParams = {
+    'action': 'theme_information',
+    'request[slug]': match[1] // eg, `hestia`.
+  };
+  var format = match[2];
+  var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?' + querystring.stringify(queryParams);
+  var badgeData = getBadgeData('downloads', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var downloads = JSON.parse(buffer).downloaded;
+      badgeData.text[1] = metric(downloads);
+      badgeData.colorscheme = downloadCountColor(downloads);
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // SourceForge integration.
-camp.route(/^\/sourceforge\/([^\/]+)\/([^/]*)\/?(.*).(svg|png|gif|jpg|json)$/,
+camp.route(/^\/sourceforge\/([^/]+)\/([^/]*)\/?(.*).(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var info = match[1];      // eg, 'dm'
   var project = match[2];   // eg, 'sevenzip`.
@@ -4895,7 +5174,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Requires.io status integration
-camp.route(/^\/requires\/([^\/]+\/[^\/]+\/[^\/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/requires\/([^/]+\/[^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `github/celery/celery`.
   var branch = match[2];
@@ -5071,6 +5350,62 @@ camp.route(/^\/vscode-marketplace\/(d|v|r)\/(.*)\.(svg|png|gif|jpg|json)$/,
   })
 );
 
+// Eclipse Marketplace integration.
+camp.route(/^\/eclipse-marketplace\/(dt|dm|v|favorites)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var type = match[1];
+  var project = match[2];
+  var format = match[3];
+  var apiUrl = 'https://marketplace.eclipse.org/content/' + project + '/api/p';
+  var badgeData = getBadgeData('eclipse marketplace', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    xml2js.parseString(buffer.toString(), function (parseErr, parsedData) {
+      if (parseErr != null) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        const projectNode = parsedData.marketplace.node[0];
+        switch (type) {
+          case 'dt':
+            badgeData.text[0] = 'downloads';
+            var downloads = parseInt(projectNode.installstotal[0]);
+            badgeData.text[1] = metric(downloads);
+            badgeData.colorscheme = downloadCountColor(downloads);
+            break;
+          case 'dm':
+            badgeData.text[0] = 'downloads';
+            var monthlydownloads = parseInt(projectNode.installsrecent[0]);
+            badgeData.text[1] = metric(monthlydownloads) + '/month';
+            badgeData.colorscheme = downloadCountColor(monthlydownloads);
+            break;
+          case 'v':
+            var vdata = versionColor(projectNode.version[0]);
+            badgeData.text[1] = vdata.version;
+            badgeData.colorscheme = vdata.color;
+            break;
+          case 'favorites':
+            badgeData.text[0] = 'favorites';
+            badgeData.text[1] = parseInt(projectNode.favorited[0]);
+            badgeData.colorscheme = 'brightgreen';
+            break;
+          default:
+            throw Error('Unreachable due to regex');
+        }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  });
+}));
 
 camp.route(/^\/dockbit\/([A-Za-z0-9-_]+)\/([A-Za-z0-9-_]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -5119,7 +5454,7 @@ cache(function(data, match, sendBadge, request) {
 
 // CircleCI build integration.
 // https://circleci.com/api/v1/project/BrightFlair/PHP.Gt?circle-token=0a5143728784b263d9f0238b8d595522689b3af2&limit=1&filter=completed
-camp.route(/^\/circleci\/(?:token\/(\w+))?[+\/]?project\/(?:(github|bitbucket)\/)?([^\/]+\/[^\/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/circleci\/(?:token\/(\w+))?[+/]?project\/(?:(github|bitbucket)\/)?([^/]+\/[^/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var token = match[1];
   var type = match[2] || 'github'; // github OR bitbucket
@@ -5193,7 +5528,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // CPAN integration.
-camp.route(/^\/cpan\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/cpan\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var info = match[1]; // either `v` or `l`
   var pkg = match[2]; // eg, Config-Augeas
@@ -5228,7 +5563,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // CRAN/METACRAN integration.
-camp.route(/^\/cran\/([vl])\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/cran\/([vl])\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(queryParams, match, sendBadge, request) {
   var info = match[1]; // either `v` or `l`
   var pkg = match[2]; // eg, devtools
@@ -5277,7 +5612,7 @@ cache(function(queryParams, match, sendBadge, request) {
 
 
 // CTAN integration.
-camp.route(/^\/ctan\/([vl])\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/ctan\/([vl])\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var info = match[1]; // either `v` or `l`
   var pkg = match[2]; // eg, tex
@@ -5326,7 +5661,7 @@ cache(function(data, match, sendBadge, request) {
 ));
 
 // DUB download integration
-camp.route(/^\/dub\/(dd|dw|dm|dt)\/([^\/]+)(?:\/([^\/]+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/dub\/(dd|dw|dm|dt)\/([^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
   var info = match[1]; // downloads (dd - daily, dw - weekly, dm - monthly, dt - total)
   var pkg = match[2]; // package name, e.g. vibe-d
@@ -5381,7 +5716,7 @@ cache(function (data, match, sendBadge, request) {
 }));
 
 // DUB license and version integration
-camp.route(/^\/dub\/(v|l)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/dub\/(v|l)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
   var info = match[1];  // (v - version, l - license)
   var pkg = match[2];  // package name, e.g. vibe-d
@@ -5425,7 +5760,7 @@ cache(function (data, match, sendBadge, request) {
 }));
 
 // Docker Hub stars integration.
-camp.route(/^\/docker\/stars\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/docker\/stars\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, mashape
   var repo = match[2];  // eg, kong
@@ -5456,7 +5791,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Docker Hub pulls integration.
-camp.route(/^\/docker\/pulls\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/docker\/pulls\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, mashape
   var repo = match[2];  // eg, kong
@@ -5489,7 +5824,7 @@ cache(function(data, match, sendBadge, request) {
 
 
 // Docker Hub automated integration.
-camp.route(/^\/docker\/automated\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/docker\/automated\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, jrottenberg
   var repo = match[2];  // eg, ffmpeg
@@ -5526,7 +5861,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Docker Hub automated integration, most recent build's status (passed, pending, failed)
-camp.route(/^\/docker\/build\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/docker\/build\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, jrottenberg
   var repo = match[2];  // eg, ffmpeg
@@ -5570,7 +5905,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Twitter integration.
-camp.route(/^\/twitter\/url\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/twitter\/url\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var scheme = match[1]; // eg, https
   var path = match[2];   // eg, shields.io
@@ -5593,7 +5928,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Twitter follow badge.
-camp.route(/^\/twitter\/follow\/@?([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/twitter\/follow\/@?([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1]; // eg, shields_io
   var format = match[2];
@@ -5633,7 +5968,7 @@ cache(function(data, match, sendBadge, request) {
 
 // Snap CI build integration.
 // https://snap-ci.com/snap-ci/snap-deploy/branch/master/build_image
-camp.route(/^\/snap(-ci?)\/([^\/]+\/[^\/]+)(?:\/(.+))\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/snap(-ci?)\/([^/]+\/[^/]+)(?:\/(.+))\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[2];
   var branch = match[3];
@@ -5665,7 +6000,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Visual Studio Team Services build integration.
-camp.route(/^\/vso\/build\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/vso\/build\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var name = match[1];    // User name
   var project = match[2]; // Project ID, e.g. 953a34b9-5966-4923-a48a-c41874cfb5f5
@@ -5697,7 +6032,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // ImageLayers.io integration.
-camp.route(/^\/imagelayers\/(image\-size|layers)\/([^\/]+)\/([^\/]+)\/([^\/]*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/imagelayers\/(image-size|layers)\/([^/]+)\/([^/]+)\/([^/]*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var type = match[1];
   var user = match[2];
@@ -5742,7 +6077,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Gitter room integration.
-camp.route(/^\/gitter\/room\/([^\/]+\/[^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/gitter\/room\/([^/]+\/[^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   // match[1] is the repo, which is not used.
   var format = match[2];
@@ -5754,7 +6089,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // homebrew integration
-camp.route(/^\/homebrew\/v\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/homebrew\/v\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var pkg = match[1];  // eg. cake
   var format = match[2];
@@ -5784,7 +6119,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // StackExchange integration.
-camp.route(/^\/stackexchange\/([^\/]+)\/([^\/])\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/stackexchange\/([^/]+)\/([^/])\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var site = match[1]; // eg, stackoverflow
   var info = match[2]; // either `r`
@@ -5867,7 +6202,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Maintenance integration.
-camp.route(/^\/maintenance\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/maintenance\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var status = match[1];  // eg, yes
   var year = +match[2];  // eg, 2016
@@ -5922,7 +6257,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Waffle.io integration
-camp.route(/^\/waffle\/label\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/waffle\/label\/([^/]+)\/([^/]+)\/?([^/]+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, evancohen
   var repo = match[2];  // eg, smart-mirror
@@ -6051,7 +6386,7 @@ cache(function(data, match, sendBadge, request) {
             badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
             break;
           case 'stars':
-            rating = Math.round(value.ratingValue);
+            rating = parseFloat(value.ratingValue);
             badgeData.text[0] = data.label || 'rating';
             badgeData.text[1] = starRating(rating);
             badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
@@ -6072,7 +6407,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Cauditor integration
-camp.route(/^\/cauditor\/(mi|ccn|npath|hi|i|ca|ce|dit)\/([^\/]+)\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/cauditor\/(mi|ccn|npath|hi|i|ca|ce|dit)\/([^/]+)\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var labels = {
     'mi': 'maintainability',
@@ -6177,19 +6512,19 @@ cache(function(query_data, match, sendBadge, request) {
           break;
         case 'rating':
           rating = parseInt(data.addon.rating, 10);
-          badgeData.text[0] = getLabel('downloads', query_data);
+          badgeData.text[0] = getLabel('rating', query_data);
           badgeData.text[1] = rating + '/5';
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
           break;
         case 'stars':
           rating = parseInt(data.addon.rating, 10);
-          badgeData.text[0] = getLabel('downloads', query_data);
+          badgeData.text[0] = getLabel('stars', query_data);
           badgeData.text[1] = starRating(rating);
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
           break;
         case 'users':
           var dailyUsers = parseInt(data.addon.daily_users[0], 10);
-          badgeData.text[0] = getLabel('downloads', query_data);
+          badgeData.text[0] = getLabel('users', query_data);
           badgeData.text[1] = metric(dailyUsers);
           badgeData.colorscheme = 'brightgreen';
           break;
@@ -6205,7 +6540,7 @@ cache(function(query_data, match, sendBadge, request) {
 }));
 
 // jitPack version integration.
-camp.route(/^\/jitpack\/v\/([^\/]*)\/([^\/]*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/jitpack\/v\/([^/]*)\/([^/]*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var groupId = 'com.github.' + match[1];   // github user
   var artifactId = match[2];    // the project's name
@@ -6289,7 +6624,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Issue Stats integration.
-camp.route(/^\/issuestats\/([^\/]+)(\/long)?\/([^\/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/issuestats\/([^/]+)(\/long)?\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var type = match[1];      // e.g. `i` for Issue or `p` for PR
   var longForm = !!match[2];
@@ -6354,7 +6689,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Libraries.io integration.
-camp.route(/^\/librariesio\/(github|release)\/([\w\-\_]+\/[\w\-\_]+)\/?([\w\-\_\.]+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/librariesio\/(github|release)\/([\w\-_]+\/[\w\-_]+)\/?([\w\-_.]+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
 
   var resource  = match[1];
@@ -6413,12 +6748,13 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // JetBrains Plugins repository integration
-camp.route(/^\/jetbrains\/plugin\/(d)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/jetbrains\/plugin\/(d|v)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var pluginId = match[2];
   var type = match[1];
   var format = match[3];
-  var badgeData = getBadgeData('downloads', data);
+  var leftText = type === 'v' ? 'jetbrains plugin' : 'downloads';
+  var badgeData = getBadgeData(leftText, data);
   var url = 'https://plugins.jetbrains.com/plugins/list?pluginId=' + pluginId;
 
   request(url, function(err, res, buffer) {
@@ -6434,13 +6770,13 @@ cache(function(data, match, sendBadge, request) {
       }
 
       try {
+        var plugin = data["plugin-repository"].category;
+        if (!plugin) {
+          badgeData.text[1] = 'not found';
+          return sendBadge(format, badgeData);
+        }
         switch (type) {
         case 'd':
-          var plugin = data["plugin-repository"].category;
-          if (!plugin) {
-            badgeData.text[1] = 'not found';
-            return sendBadge(format, badgeData);
-          }
           var downloads = parseInt(data["plugin-repository"].category[0]["idea-plugin"][0]["$"].downloads, 10);
           if (isNaN(downloads)) {
             badgeData.text[1] = 'invalid';
@@ -6449,7 +6785,11 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = metric(downloads);
           badgeData.colorscheme = downloadCountColor(downloads);
           return sendBadge(format, badgeData);
-        }
+        case 'v':
+          var version = data['plugin-repository'].category[0]["idea-plugin"][0].version[0];
+          badgeData.text[1] = version;
+          badgeData.colorscheme = 'orange';
+          return sendBadge(format, badgeData);        }
       } catch (err) {
         badgeData.text[1] = 'invalid';
         return sendBadge(format, badgeData);
@@ -6577,7 +6917,7 @@ cache(function(data, match, sendBadge, request) {
 
 // Uptime Robot ratio integration.
 // API documentation : https://uptimerobot.com/api
-camp.route(/^\/uptimerobot\/ratio(\/[^\/]+)?\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/uptimerobot\/ratio(\/[^/]+)?\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var numberOfDays = match[1];  // eg, 7, null if querying 30
   var monitorApiKey = match[2];  // eg, m778918918-3e92c097147760ee39d02d36
@@ -6642,7 +6982,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Discord integration
-camp.route(/^\/discord\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/discord\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache((data, match, sendBadge, request) => {
   const serverID = match[1];
   const format = match[2];
@@ -6657,6 +6997,15 @@ cache((data, match, sendBadge, request) => {
     }
     if (err != null || !res || res.statusCode !== 200) {
       badgeData.text[1] = 'inaccessible';
+      if (res && res.headers['content-type'] === 'application/json') {
+        try {
+          const data = JSON.parse(buffer);
+          if (data && typeof data.message === 'string') {
+            badgeData.text[1] = data.message.toLowerCase();
+          }
+        } catch(e) {
+        }
+      }
       sendBadge(format, badgeData);
       return;
     }
@@ -6707,6 +7056,105 @@ cache(function(query, match, sendBadge, request) {
       sendBadge(format, badgeData);
     }
   });
+}));
+
+// nsp for npm packages
+camp.route(/^\/nsp\/npm\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|jpg|json)?$/, cache((data, match, sendBadge, request) => {
+  // A: /nsp/npm/:package.:format
+  // B: /nsp/npm/:package/:version.:format
+  // C: /nsp/npm/@:scope/:package.:format
+  // D: /nsp/npm/@:scope/:package/:version.:format
+  const badgeData = getBadgeData('nsp', data);
+  const capturedScopeWithoutAtSign = match[1];
+  const capturedPackageName = match[2];
+  const capturedVersion = match[3];
+  const capturedFormat= match[4];
+
+  function getNspResults (scopeWithoutAtSign = null, packageName = '', packageVersion = '') {
+    const nspRequestOptions = {
+      method: 'POST',
+      body: {
+        package: {
+          name: null,
+          version: packageVersion
+        }
+      },
+      json: true
+    };
+
+    if (typeof scopeWithoutAtSign === 'string') {
+      nspRequestOptions.body.package.name = `@${scopeWithoutAtSign}/${packageName}`;
+    } else {
+      nspRequestOptions.body.package.name = packageName;
+    }
+
+    request('https://api.nodesecurity.io/check', nspRequestOptions, (error, response, body) => {
+      if (error !== null || typeof body !== 'object' || body === null) {
+        badgeData.text[1] = 'invalid';
+        badgeData.colorscheme = 'red';
+      } else if (body.length !== 0) {
+        badgeData.text[1] = `${body.length} vulnerabilities`;
+        badgeData.colorscheme = 'red';
+      } else {
+        badgeData.text[1] = 'no known vulnerabilities';
+        badgeData.colorscheme = 'brightgreen';
+      }
+
+      sendBadge(capturedFormat, badgeData);
+    });
+  }
+
+  function getNpmVersionThenNspResults (scopeWithoutAtSign = null, packageName = '') {
+    // nsp doesn't properly detect the package version in POST requests so this function gets it for us
+    // https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md#getpackageversion
+    const npmRequestOptions = {
+      headers: {
+        Accept: '*/*'
+      },
+      json: true
+    };
+    let npmURL = null;
+
+    if (typeof scopeWithoutAtSign === 'string') {
+      // Using 'latest' would save bandwidth, but it is currently not supported for scoped packages
+      npmURL = `http://registry.npmjs.org/@${scopeWithoutAtSign}%2F${packageName}`;
+    } else {
+      npmURL = `http://registry.npmjs.org/${packageName}/latest`;
+    }
+
+    request(npmURL, npmRequestOptions, (error, response, body) => {
+      if (response !== null && response.statusCode === 404) {
+        // NOTE: in POST requests nsp does not distinguish between
+        // 'package not found' and 'no known vulnerabilities'.
+        // To keep consistency in the use case where a version is provided
+        // (which skips `getNpmVersionThenNspResults()` altogether) we'll say
+        // 'no known vulnerabilities' since it is technically true in both cases
+        badgeData.text[1] = 'no known vulnerabilities';
+
+        sendBadge(capturedFormat, badgeData);
+      } else if (error !== null || typeof body !== 'object' || body === null) {
+        badgeData.text[1] = 'invalid';
+        badgeData.colorscheme = 'red';
+
+        sendBadge(capturedFormat, badgeData);
+      } else if (typeof body.version === 'string') {
+        getNspResults(scopeWithoutAtSign, packageName, body.version);
+      } else if (typeof body['dist-tags'] === 'object') {
+        getNspResults(scopeWithoutAtSign, packageName, body['dist-tags'].latest);
+      } else {
+        badgeData.text[1] = 'invalid';
+        badgeData.colorscheme = 'red';
+
+        sendBadge(capturedFormat, badgeData);
+      }
+    });
+  }
+
+  if (typeof capturedVersion === 'string') {
+    getNspResults(capturedScopeWithoutAtSign, capturedPackageName, capturedVersion);
+  } else {
+    getNpmVersionThenNspResults(capturedScopeWithoutAtSign, capturedPackageName);
+  }
 }));
 
 // Any badge.
@@ -6774,7 +7222,7 @@ camp.route(/^\/flip\.svg$/, function(data, match, end, ask) {
 });
 
 // Any badge, old version.
-camp.route(/^\/([^\/]+)\/(.+).png$/,
+camp.route(/^\/([^/]+)\/(.+).png$/,
 function(data, match, end, ask) {
   var subject = match[1];
   var status = match[2];

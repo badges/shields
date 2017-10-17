@@ -123,7 +123,7 @@ Here's what our first test looks like:
 t.create('build status on default branch')
   .get('/rust-lang/rust.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('build'),
+    name: 'build',
     value: Joi.equal('failing', 'passing', 'unknown')
   }));
 ```
@@ -191,7 +191,7 @@ Next we'll add a second test for a branch build.
 t.create('build status on named branch')
   .get('/rust-lang/rust/stable.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('build'),
+    name: 'build',
     value: Joi.equal('failing', 'passing', 'unknown')
   }));
 ```
@@ -313,14 +313,14 @@ module.exports = t;
 t.create('build status on default branch')
   .get('/rust-lang/rust.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('build'),
+    name: 'build',
     value: Joi.equal('failing', 'passing', 'unknown')
   }));
 
 t.create('build status on named branch')
   .get('/rust-lang/rust/stable.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('build'),
+    name: 'build',
     value: Joi.equal('failing', 'passing', 'unknown')
   }));
 

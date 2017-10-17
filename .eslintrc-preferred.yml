@@ -1,13 +1,22 @@
+# plugins:
+#   - "prettier"
+
+extends:
+  - "standard"
+  - "prettier"
+
+parserOptions:
+  # Override eslint-config-standard, which incorrectly sets this to "module",
+  # though that setting is only for ES6 modules, not CommonJS modules.
+  sourceType: "script"
+
 rules:
-  # From eslint-config-standard.
-  arrow-spacing: ["error", { "before": true, "after": true }]
-  brace-style: ["error", "1tbs", { "allowSingleLine": true }]
-  camelcase: ["error", { "properties": "never" }]
-  func-style: ["error", "declaration", { "allowArrowFunctions": true }]
-  indent: ["error", 2, { "SwitchCase": 1 }]
-  key-spacing: ["error", { "beforeColon": false, "afterColon": true }]
-  no-trailing-spaces: "error"
-  quotes: ["error", "single", { "avoidEscape": true, "allowTemplateLiterals": true }]
+  # prettier/prettier: "error"
+
+  # These are not disabled by eslint-config-prettier
+  spaced-comment: "off"
+  standard/object-curly-even-spacing: "off"
+  one-var: "off"
 
   # Shields additions.
   no-var: "error"
