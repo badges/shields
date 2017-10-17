@@ -50,7 +50,8 @@
     "test:services:pr:prepare": "node service-tests/runner/pull-request-services-cli.js > pull-request-services.log",
     "test:services:pr:run": "mocha --delay service-tests/runner/cli.js --stdin < pull-request-services.log",
     "test:services:pr": "npm run test:services:pr:prepare && npm run test:services:pr:run",
-    "test": "npm run lint && npm run test:js"
+    "test": "npm run lint && npm run test:js",
+    "start": "node server 8080 ::"
   },
   "bin": {
     "badge": "./gh-badge.js"
