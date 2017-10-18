@@ -135,13 +135,25 @@ There is documentation about [hosting your own server][self-hosting].
 History
 -------
 
-The badge specification was developed in 2013 by [espadrine][] as part of a
-library called [gh-badges][old-gh-badges], which then merged with shields.io,
-badgr.co, and b.adge.me to form this project. You can read more about
-[the project's inception][thread],
+b.adge.me was the original website for this service. Heroku back then had a
+thing which made it hard to use a toplevel domain with it, hence the odd
+domain. It used code developed in 2013 from a library called
+[gh-badges][old-gh-badges], both developed by [Thaddée Tyl][espadrine].
+The project merged with shields.io by making it use the b.adge.me code
+and closed b.adge.me.
+
+The original badge specification was developed in 2013 by
+[Olivier Lacan][olivierlacan]. It was inspired by the Travis CI and similar
+badges (there were a lot fewer, back then). In 2014 Thaddée Tyl redesigned
+it with help from a Travis CI employee and convinced everyone to switch to
+it. The old design is what today is called the plastic style; the new one
+is the flat style.
+
+You can read more about [the project's inception][thread],
 [the motivation of the SVG badge specification][motivation], and
 [the specification itself][spec].
 
+[olivierlacan]: https://github.com/olivierlacan
 [espadrine]: https://github.com/espadrine
 [old-gh-badges]: https://github.com/badges/gh-badges
 [motivation]: spec/motivation.md
@@ -160,6 +172,7 @@ maintain the project:
 * [Daniel15](https://github.com/Daniel15)
 * [espadrine](https://github.com/espadrine)
 * [paulmelnikow](https://github.com/paulmelnikow)
+* [RedSparr0w](https://github.com/RedSparr0w)
 
 
 Related projects
