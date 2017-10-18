@@ -2440,9 +2440,6 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = 'malformed';
       sendBadge(format, badgeData);
     }
-  }).on('error', function(e) {
-    badgeData.text[1] = 'inaccessible';
-    sendBadge(format, badgeData);
   });
 }));
 
@@ -2485,9 +2482,6 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = 'malformed';
       sendBadge(format, badgeData);
     }
-  }).on('error', function(e) {
-    badgeData.text[1] = 'inaccessible';
-    sendBadge(format, badgeData);
   });
 }));
 
