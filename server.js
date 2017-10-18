@@ -115,7 +115,7 @@ const {
 var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
 
-analytics.analyticsAutoLoad();
+analytics.load();
 analytics.scheduleAutosaving();
 analytics.setRoutes(camp);
 
