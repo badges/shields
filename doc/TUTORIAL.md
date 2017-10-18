@@ -34,11 +34,9 @@ If you do not, install it and learn about the [Github workflow](http://try.githu
    `sudo apt-get install npm nodejs-legacy curl imagemagick`
 5. Install all packages  
    `npm install`
-6. Setup  
-   `make setup`
-7. Run the server  
-   `node server.js 8080`
-8. Visit the website to check the badges get loaded slowly:  
+6. Run the server  
+   `npm start`
+7. Visit the website to check the badges get loaded slowly:  
    [http://[::1]:8080/try.html](http://[::1]/try.html)
 
 (3) Open an Issue
@@ -88,9 +86,9 @@ To try out this custom badge do the following:
 1. Copy and paste these lines into [server.js][server].
    I did this at about line 5000.
 2. Quit the running server with `Control+C`.
-3. Start the server again.  
-   `node server.js 8080`
-4. Visit the badge at <http://[::1]:8080/test/subject/STATUS.svg>.
+3. Start the server again.
+   `npm start`
+4. Visit the badge at <http://[::]:8080/test/subject/STATUS.svg>.
    It should look like this: ![](https://img.shields.io/badge/subject-STATUS-blue.svg)
 
 ### (4.1) Querying an API

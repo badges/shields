@@ -1,0 +1,13 @@
+{
+ "reporter": [
+    "lcov"
+  ],
+  "all": true,
+  "exclude": [
+    "**/*.spec.js",
+    "service-tests",
+    "coverage"
+  ],
+  "silent": true,
+  "clean": false
+}
