@@ -29,9 +29,6 @@ var prettyBytes = require('pretty-bytes');
 var xml2js = require('xml2js');
 var jp = require('jsonpath');
 var serverSecrets = require('./lib/server-secrets');
-if (serverSecrets && serverSecrets.gh_client_id) {
-  githubAuth.setRoutes(camp);
-}
 log(tryUrl);
 
 const {latest: latestVersion} = require('./lib/version');
@@ -60,11 +57,7 @@ const {
   version: versionColor,
   age: ageColor
 } = require('./lib/color-formatters');
-const {
-  analyticsAutoLoad,
-  incrMonthlyAnalytics,
-  getAnalytics
-} = require('./lib/analytics');
+const analytics = require('./lib/analytics');
 const {
   makeColorB,
   isValidStyle,
@@ -123,8 +116,14 @@ const {
 var semver = require('semver');
 var serverStartTime = new Date((new Date()).toGMTString());
 
-analyticsAutoLoad();
-camp.ajax.on('analytics/v1', function(json, end) { end(getAnalytics()); });
+analytics.load();
+analytics.scheduleAutosaving();
+analytics.setRoutes(camp);
+
+githubAuth.scheduleAutosaving();
+if (serverSecrets && serverSecrets.gh_client_id) {
+  githubAuth.setRoutes(camp);
+}
 
 var suggest = require('./lib/suggest.js');
 camp.ajax.on('suggest/v1', suggest);
@@ -134,9 +133,16 @@ function reset() {
   clearRegularUpdateCache();
 }
 
+function stop(callback) {
+  githubAuth.cancelAutosaving();
+  analytics.cancelAutosaving();
+  camp.close(callback);
+}
+
 module.exports = {
   camp,
-  reset
+  reset,
+  stop
 };
 
 camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
@@ -2435,9 +2441,6 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = 'malformed';
       sendBadge(format, badgeData);
     }
-  }).on('error', function(e) {
-    badgeData.text[1] = 'inaccessible';
-    sendBadge(format, badgeData);
   });
 }));
 
@@ -2480,9 +2483,6 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = 'malformed';
       sendBadge(format, badgeData);
     }
-  }).on('error', function(e) {
-    badgeData.text[1] = 'inaccessible';
-    sendBadge(format, badgeData);
   });
 }));
 
@@ -3536,7 +3536,8 @@ cache(function(data, match, sendBadge, request) {
   var classText = isClosed? 'closed': 'open';
   var leftClassText = isRaw? classText + ' ': '';
   var rightClassText = !isRaw? ' ' + classText: '';
-  var labelText = hasLabel? ghLabel + ' ': '';
+  const isGhLabelMultiWord = hasLabel && ghLabel.includes(' ');
+  var labelText = hasLabel? (isGhLabelMultiWord? `"${ghLabel}"`: ghLabel) + ' ': '';
   var targetText = isPR? 'pull requests': 'issues';
   var badgeData = getBadgeData(leftClassText + labelText + targetText, data);
   if (badgeData.template === 'social') {
@@ -7165,12 +7166,7 @@ function(data, match, end, ask) {
   var color = escapeFormat(match[6]);
   var format = match[8];
 
-  incrMonthlyAnalytics(getAnalytics().rawMonthly);
-  if (data.style === 'flat') {
-    incrMonthlyAnalytics(getAnalytics().rawFlatMonthly);
-  } else if (data.style === 'flat-square') {
-    incrMonthlyAnalytics(getAnalytics().rawFlatSquareMonthly);
-  }
+  analytics.noteRequest(data, match);
 
   // Cache management - the badge is constant.
   var cacheDuration = (3600*24*1)|0;    // 1 day.

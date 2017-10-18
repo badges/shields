@@ -86,7 +86,7 @@
     "is-svg": "^2.1.0",
     "lodash.difference": "^4.5.0",
     "minimist": "^1.2.0",
-    "mocha": "^3.2.0",
+    "mocha": "^4.0.1",
     "nock": "^9.0.13",
     "node-fetch": "^1.6.3",
     "nyc": "^11.2.1",

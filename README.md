@@ -70,7 +70,7 @@ maybe you'd like to open a pull request to address one of them:
 
 Or you can adopt one of these pull requests:
 
-[![GitHub issues by-label](https://img.shields.io/github/issues-pr/badges/shields/good%20first%20issue.svg)](https://github.com/badges/shields/pulls?q=is%3Apr+is%3Aopen+label%3A%22good+first+issue%22)
+[![GitHub pull requests by-label](https://img.shields.io/github/issues-pr/badges/shields/good%20first%20issue.svg)](https://github.com/badges/shields/pulls?q=is%3Apr+is%3Aopen+label%3A%22good+first+issue%22)
 
 You can read a [tutorial on how to add a badge][tutorial].
 
