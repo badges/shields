@@ -4360,7 +4360,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[2];
   var badgeData = getBadgeData('plugin', data);
   regularUpdate('https://updates.jenkins-ci.org/current/update-center.actual.json',
-    (3600 * 1000),
+    (4 * 3600 * 1000),
     function(json) {
       json = JSON.parse(json);
       return Object.keys(json.plugins).reduce(function(previous, current) {
