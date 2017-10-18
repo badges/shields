@@ -24,24 +24,24 @@
   "dependencies": {
     "camp": "~16.2.3",
     "chrome-web-store-item-property": "~1.1.2",
-    "dot": "~1.0.3",
+    "dot": "~1.1.2",
     "gm": "^1.23.0",
     "json-autosave": "~1.1.2",
     "lodash.countby": "^4.6.0",
     "moment": "^2.18.1",
     "pdfkit": "~0.8.0",
-    "pretty-bytes": "^3.0.1",
+    "pretty-bytes": "^4.0.2",
     "redis": "~2.6.2",
-    "request": "~2.81.0",
-    "semver": "~5.3.0",
+    "request": "~2.83.0",
+    "semver": "~5.4.1",
     "svgo": "~0.7.1",
     "xml2js": "~0.4.16"
   },
   "scripts": {
-    "coverage:test:js": "istanbul cover node_modules/mocha/bin/_mocha '*.spec.js' 'lib/*.spec.js' --dir coverage/js",
-    "coverage:test:services": "istanbul cover node_modules/mocha/bin/_mocha service-tests/runner/cli.js --dir coverage/services -- --delay",
-    "coverage:test": "npm run coverage:test:js && npm run coverage:test:services",
-    "coverage:report": "istanbul report",
+    "coverage:test:js": "nyc node_modules/mocha/bin/_mocha '*.spec.js' 'lib/*.spec.js'",
+    "coverage:test:services": "nyc node_modules/mocha/bin/_mocha --delay service-tests/runner/cli.js",
+    "coverage:test": "rimraf .nyc_output coverage; npm run coverage:test:js; npm run coverage:test:services",
+    "coverage:report": "nyc report",
     "coverage:report:reopen": "opn coverage/lcov-report/index.html",
     "coverage:report:open": "npm run coverage:report && npm run coverage:report:reopen",
     "lint": "eslint '**/*.js'",
@@ -50,7 +50,8 @@
     "test:services:pr:prepare": "node service-tests/runner/pull-request-services-cli.js > pull-request-services.log",
     "test:services:pr:run": "mocha --delay service-tests/runner/cli.js --stdin < pull-request-services.log",
     "test:services:pr": "npm run test:services:pr:prepare && npm run test:services:pr:run",
-    "test": "npm run lint && npm run test:js"
+    "test": "npm run lint && npm run test:js",
+    "start": "node server 8080 ::"
   },
   "bin": {
     "badge": "./gh-badge.js"
@@ -69,7 +70,7 @@
   "devDependencies": {
     "child-process-promise": "^2.2.1",
     "dejavu-fonts-ttf": "^2.37.3",
-    "eslint": "^3.18.0",
+    "eslint": "^4.8.0",
     "eslint-config-prettier": "^2.6.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.7.0",
@@ -78,20 +79,22 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
     "glob": "^7.1.1",
-    "icedfrisby": "^1.2.0",
+    "icedfrisby": "^1.4.0",
     "icedfrisby-nock": "^1.0.0",
     "is-png": "^1.1.0",
     "is-svg": "^2.1.0",
-    "istanbul": "^0.4.5",
     "lodash.difference": "^4.5.0",
-    "mocha": "^3.2.0",
+    "minimist": "^1.2.0",
+    "mocha": "^4.0.1",
     "nock": "^9.0.13",
     "node-fetch": "^1.6.3",
+    "nyc": "^11.2.1",
     "opn-cli": "^3.1.0",
-    "prettier": "1.7.3",
+    "prettier": "1.7.4",
     "read-all-stdin-sync": "^1.0.5",
+    "rimraf": "^2.6.2",
     "semver-regex": "^1.0.0",
-    "sinon": "^2.1.0"
+    "sinon": "^4.0.1"
   },
   "engines": {
     "node": ">= 6"

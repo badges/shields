@@ -4,6 +4,7 @@ const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 const {
   isMetric,
+  isMetricOverTimePeriod,
   isFileSize,
   isFormattedDate,
   isVPlusDottedVersionAtLeastOne
@@ -54,21 +55,21 @@ t.create('GitHub pull requests raw')
 t.create('GitHub closed issues')
   .get('/issues-closed/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('issues'),
+    name: 'issues',
     value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? closed$/)
   }));
 
 t.create('GitHub closed issues raw')
   .get('/issues-closed-raw/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('closed issues'),
+    name: 'closed issues',
     value: Joi.string().regex(/^\w+\+?$/)
   }));
 
 t.create('GitHub open issues')
   .get('/issues/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('issues'),
+    name: 'issues',
     value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
   }));
 
@@ -76,24 +77,31 @@ t.create('GitHub open issues raw')
   .get('/issues-raw/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({ name: 'open issues', value: isMetric }));
 
-t.create('GitHub open issues by label')
-  .get('/issues/badges/shields/vendor-badge.json')
+t.create('GitHub open issues by label is > zero')
+  .get('/issues/badges/shields/service-badge.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('vendor-badge issues'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
+    name: 'service-badge issues',
+    value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? open$/)
+  }));
+
+t.create('GitHub open issues by multi-word label is > zero')
+  .get('/issues/Cockatrice/Cockatrice/App%20-%20Cockatrice.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: '"App - Cockatrice" issues',
+    value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? open$/)
   }));
 
 t.create('GitHub open issues by label (raw)')
-  .get('/issues-raw/badges/shields/vendor-badge.json')
+  .get('/issues-raw/badges/shields/service-badge.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('open vendor-badge issues'),
+    name: 'open service-badge issues',
     value: isMetric
   }));
 
 t.create('GitHub open pull requests by label')
   .get('/issues-pr/badges/shields/vendor-badge.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('vendor-badge pull requests'),
+    name: 'vendor-badge pull requests',
     value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
   }));
 
@@ -213,7 +221,7 @@ t.create('Package name - Custom label')
 t.create('Package array')
   .get('/package-json/keywords/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('package keywords'),
+    name: 'package keywords',
     value: Joi.string().regex(/.*?,/)
   }));
 
@@ -271,6 +279,14 @@ t.create('Downloads all releases')
     value: Joi.string().regex(/^\w+\s+total$/)
   }));
 
+t.create('downloads for latest release')
+  .get('/downloads/photonstorm/phaser/latest/total.json')
+  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }));
+
+t.create('downloads-pre for latest release')
+  .get('/downloads-pre/photonstorm/phaser/latest/total.json')
+  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }));
+
 t.create('downloads for release without slash')
   .get('/downloads/atom/atom/v0.190.0/total.json')
   .expectJSONTypes(Joi.object().keys({
@@ -283,6 +299,20 @@ t.create('downloads for specific asset without slash')
   .expectJSONTypes(Joi.object().keys({
     name: 'downloads',
     value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? v0\.190\.0 \[atom-amd64\.deb\]$/)
+  }));
+
+t.create('downloads for specific asset from latest release')
+  .get('/downloads/atom/atom/latest/atom-amd64.deb.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'downloads',
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? \[atom-amd64\.deb\]$/)
+  }));
+
+t.create('downloads-pre for specific asset from latest release')
+  .get('/downloads-pre/atom/atom/latest/atom-amd64.deb.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'downloads',
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? \[atom-amd64\.deb\]$/)
   }));
 
 t.create('downloads for release with slash')
@@ -314,22 +344,22 @@ t.create('hit counter for nonexistent repo')
 t.create('commit activity (1 year)')
   .get('/commit-activity/y/eslint/eslint.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('commit activity'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?\/year$/),
+    name: 'commit activity',
+    value: isMetricOverTimePeriod,
   }));
 
 t.create('commit activity (4 weeks)')
   .get('/commit-activity/4w/eslint/eslint.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('commit activity'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?\/4 weeks$/),
+    name: 'commit activity',
+    value: isMetricOverTimePeriod,
   }));
 
 t.create('commit activity (1 week)')
   .get('/commit-activity/w/eslint/eslint.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('commit activity'),
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]?\/week$/),
+    name: 'commit activity',
+    value: isMetricOverTimePeriod,
   }));
 
 t.create('last commit (recent)')
@@ -391,3 +421,35 @@ t.create('github pull request check state')
 t.create('github pull request check contexts')
   .get('/status/contexts/pulls/badges/shields/1110.json')
   .expectJSONTypes(Joi.object().keys({ name: 'checks', value: '1 failure' }));
+
+t.create('top language')
+.get('/languages/top/badges/shields.json')
+.expectJSONTypes(Joi.object().keys({
+  name: 'JavaScript',
+  value: Joi.string().regex(/^([1-9]?[0-9]\.[0-9]|100\.0)%$/),
+}));
+
+t.create('top language with empty repository')
+.get('/languages/top/pyvesb/emptyrepo.json')
+.expectJSON({ name: 'language', value: 'none' });
+
+t.create('language count')
+.get('/languages/count/badges/shields.json')
+.expectJSONTypes(Joi.object().keys({
+  name: 'languages',
+  value: Joi.number().integer().positive(),
+}));
+
+t.create('code size in bytes for all languages')
+.get('/languages/code-size/badges/shields.json')
+.expectJSONTypes(Joi.object().keys({
+  name: 'code size',
+  value: isFileSize,
+}));
+
+t.create('repository size')
+.get('/repo-size/badges/shields.json')
+.expectJSONTypes(Joi.object().keys({
+  name: 'repo size',
+  value: isFileSize,
+}));

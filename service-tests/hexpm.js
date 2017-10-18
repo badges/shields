@@ -2,7 +2,10 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
-const { isMetric } = require('./helpers/validators');
+const {
+  isMetric,
+  isMetricOverTimePeriod
+} = require('./helpers/validators');
 
 const isHexpmVersion = Joi.string().regex(/^v\d+.\d+.?\d?$/);
 
@@ -11,17 +14,11 @@ module.exports = t;
 
 t.create('downloads per week')
   .get('/dw/cowboy.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'downloads',
-    value: Joi.string().regex(/^\d+[a-z]?\/week$/)
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetricOverTimePeriod }));
 
 t.create('downloads per day')
   .get('/dd/cowboy.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'downloads',
-    value: Joi.string().regex(/^\d+[a-z]?\/day$/)
-  }));
+  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetricOverTimePeriod }));
 
 t.create('downloads in total')
   .get('/dt/cowboy.json')
