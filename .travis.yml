@@ -3,6 +3,7 @@ node_js:
   - 6
 
 before_script:
+  - npm install -g npm@5
   - mkdir private && echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
 
 jobs:
