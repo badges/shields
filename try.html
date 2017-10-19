@@ -1330,38 +1330,6 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
 </p>
 <hr class='spacing'/>
 
-
-<h3 id="your-badge"> Dynamic </h3>
-
-<form action='javascript:generateDynamicImage()' id='dynamicImageMaker'>
-  <input class='short' name='type' list='dynamic-type' placeholder='type'/>
-  <datalist id='dynamic-type'>
-    <option value='json'>
-    <option value='xml'>
-  </datalist>
-  <input class='short' name='subject' placeholder='subject'/>
-  <input class='short' name='color' list='dynamic-default-colors' placeholder='color'/>
-  <datalist id='dynamic-default-colors'>
-    <option value='brightgreen'>
-    <option value='green'>
-    <option value='yellowgreen'>
-    <option value='yellow'>
-    <option value='orange'>
-    <option value='red'>
-    <option value='lightgrey'>
-    <option value='blue'>
-  </datalist>
-  <input class='short' name='prefix' placeholder='prefix'/>
-  <input class='short' name='suffix' placeholder='suffix'/>
-  <input class='short' name='data' placeholder='$.data.subdata'/>
-  <input class='short' name='url' placeholder='url'/>
-  <button>Generate</button>
-</form>
-<p>
-<code>/&lt;TYPE&gt;/&lt;SUBJECT&gt;-&lt;COLOR&gt;-&lt;PREFIX&gt;-&lt;SUFFIX&gt;/&lt;<a href="https://www.npmjs.com/package/jsonpath" target="_BLANK" title="JSONdata syntax">$.DATA.SUBDATA</a>&gt;/&lt;URL&gt;.svg</code>
-</p>
-<hr class='spacing'/>
-
 <table class=centered><tbody>
   <tr><td>   Dashes <code>--</code>
   </td><td>  →
@@ -1389,6 +1357,26 @@ Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp; Hackable 
 <img src='/badge/color-ff69b4-ff69b4.svg' alt='ff69b4'/>
 </p>
 
+<h3 id="your-badge"> Dynamic </h3>
+
+<form action='javascript:generateDynamicImage()' id='dynamicImageMaker'>
+  <input class='short' name='type' list='dynamic-type' placeholder='type'/>
+  <datalist id='dynamic-type'>
+    <option value='json'>
+  </datalist>
+  <input class='short' name='label' placeholder='label'/>
+  <input class='short' name='url' placeholder='url'/>
+  <input class='short' name='query' placeholder='$.data.subdata'/>
+  <input class='short' name='color' placeholder='hex color'/>
+  <input class='short' name='prefix' placeholder='prefix'/>
+  <input class='short' name='suffix' placeholder='suffix'/>
+  <button>Generate</button>
+</form>
+
+<p>
+<code>/badge/dynamic/&lt;TYPE&gt;.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;<a href="https://www.npmjs.com/package/jsonpath" target="_BLANK" title="JSONdata syntax">$.DATA.SUBDATA</a>&gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;</code>
+</p>
+<hr class='spacing'/>
 <h2 id="styles"> Styles </h2>
 <p>
 The following styles are available (flat is the default as of Feb 1st 2015):
@@ -1789,14 +1777,13 @@ function makeImage() {
 }
 
 function generateDynamicImage() {
-  var url = '/' + escapeField(dynamicImageMaker.type.value);
-  url += '/' + escapeField(dynamicImageMaker.subject.value);
-  url += '-' + escapeField(dynamicImageMaker.color.value);
-  url += '-' + escapeField(dynamicImageMaker.prefix.value);
-  url += '-' + escapeField(dynamicImageMaker.suffix.value);
-  url += '/' + dynamicImageMaker.data.value;
-  url += '/' + dynamicImageMaker.url.value;
-  url += '.svg';
+  var url = '/badge/dynamic/' + escapeField(dynamicImageMaker.type.value);
+  url += '.svg?label=' + escapeField(dynamicImageMaker.label.value);
+  url += '&colorB=' + escapeField(dynamicImageMaker.color.value);
+  url += '&prefix=' + escapeField(dynamicImageMaker.prefix.value);
+  url += '&suffix=' + escapeField(dynamicImageMaker.suffix.value);
+  url += '&query=' + dynamicImageMaker.query.value;
+  url += '&url=' + dynamicImageMaker.url.value;
   document.location = url;
 }
 
