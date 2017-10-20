@@ -51,6 +51,7 @@
     "test:services:pr:run": "mocha --delay service-tests/runner/cli.js --stdin < pull-request-services.log",
     "test:services:pr": "npm run test:services:pr:prepare && npm run test:services:pr:run",
     "test": "npm run lint && npm run test:js",
+    "build": "make website",
     "start": "node server 8080 ::"
   },
   "bin": {
@@ -70,7 +71,7 @@
   "devDependencies": {
     "babel-cli": "^6.11.4",
     "babel-core": "^6.13.2",
-    "babel-preset-es2015": "^6.13.2",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.11.1",
     "child-process-promise": "^2.2.1",
     "dejavu-fonts-ttf": "^2.37.3",
@@ -109,6 +110,9 @@
     "node": ">= 6"
   },
   "babel": {
-    "presets": ["react", "es2015"]
+    "presets": [
+      "react",
+      "env"
+    ]
   }
 }

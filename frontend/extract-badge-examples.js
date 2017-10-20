@@ -15,24 +15,35 @@ const sectionHeaders = $('h3');
 const sections = [];
 
 $('table.badge').each((i, table) => {
-  const sectionName = sectionHeaders.eq(i).text().trim();
-  const sectionId = sectionHeaders.eq(i).attr('id');
-  const badges = [];
+  const category = {
+    id: sectionHeaders.eq(i).attr('id'),
+    name: sectionHeaders.eq(i).text().trim(),
+  };
+
+  const examples = [];
 
   $(table).find('tr').each((i, row) => {
     const th = $(row).find('th');
     const keywordsAttr = th.attr('data-keywords');
+
+    const previewUri = $(row).find('img').attr('src');
+    const exampleUri = $(row).find('code').text().replace(/^https:\/\/img\.shields\.io/, '');
+
     const rowData = {
       title: th.text().trim().replace(/:$/, ''),
-      previewBadgeUri: $(row).find('img').attr('src'),
-      exampleBadgeUri: $(row).find('code').text(),
+      previewUri,
       keywords: keywordsAttr ? keywordsAttr.split(' ') : undefined,
       documentation: th.attr('data-doc'),
     };
-    badges.push(rowData);
+
+    if (exampleUri !== previewUri) {
+      rowData.exampleUri = exampleUri;
+    }
+
+    examples.push(rowData);
   })
 
-  sections.push({ sectionId, sectionName, badges });
+  sections.push({ category, examples });
 })
 
 const outputPath = path.join(__dirname, '..', 'all-badges.json');
