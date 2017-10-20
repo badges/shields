@@ -24,7 +24,7 @@ var tryUrl = require('url').format({
 var log = require('./lib/log.js');
 var badge = require('./lib/badge.js');
 var githubAuth = require('./lib/github-auth');
-var querystring = require('querystring');
+var queryString = require('query-string');
 var prettyBytes = require('pretty-bytes');
 var xml2js = require('xml2js');
 var serverSecrets = require('./lib/server-secrets');
@@ -2457,7 +2457,7 @@ cache(function(data, match, sendBadge, request) {
     apiUrl = `https://codecov.io/${userRepo}/graphs/badge.txt`;
   }
   if (token) {
-    apiUrl += '?' + querystring.stringify({ token });
+    apiUrl += '?' + queryString.stringify({ token });
   }
   var badgeData = getBadgeData('coverage', data);
   request(apiUrl, function(err, res, body) {
@@ -2926,7 +2926,7 @@ cache(function(data, match, sendBadge, request) {
   if (branch) {
     queryParams.branch = branch;
   }
-  var query = querystring.stringify(queryParams);
+  var query = queryString.stringify(queryParams);
   var url = 'https://www.codacy.com/project/badge/grade/' + projectId + '?' + query;
   var badgeData = getBadgeData('code quality', data);
   fetchFromSvg(request, url, function(err, res) {
@@ -3011,7 +3011,7 @@ cache(function(data, match, sendBadge, request) {
   if (branch) {
     queryParams.branch = branch;
   }
-  var query = querystring.stringify(queryParams);
+  var query = queryString.stringify(queryParams);
   var url = 'https://www.codacy.com/project/badge/coverage/' + projectId + '?' + query;
   var badgeData = getBadgeData('coverage', data);
   fetchFromSvg(request, url, function(err, res) {
@@ -5099,7 +5099,7 @@ cache(function(data, match, sendBadge, request) {
     'request[slug]': match[1]  // eg, `hestia`.
   };
   var format = match[2];
-  var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?' + querystring.stringify(queryParams);
+  var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?' + queryString.stringify(queryParams);
   var badgeData = getBadgeData('rating', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
@@ -5139,7 +5139,7 @@ cache(function(data, match, sendBadge, request) {
     'request[slug]': match[1] // eg, `hestia`.
   };
   var format = match[2];
-  var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?' + querystring.stringify(queryParams);
+  var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?' + queryString.stringify(queryParams);
   var badgeData = getBadgeData('downloads', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
@@ -5520,7 +5520,7 @@ cache(function(data, match, sendBadge, request) {
   }
 
   // Apprend query params to API URL
-  apiUrl += '?' + querystring.stringify(queryParams);
+  apiUrl += '?' + queryString.stringify(queryParams);
 
   var badgeData = getBadgeData('build', data);
   request(apiUrl, {json:true}, function(err, res, data) {
