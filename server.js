@@ -2397,14 +2397,14 @@ cache(function(queryParams, match, sendBadge, request) {
 }));
 
 // Coveralls integration.
-camp.route(/^\/coveralls\/(?:(bitbucket)\/)?([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/coveralls\/(?:(bitbucket|github)\/)?([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var repoService = match[1] ? match[1] : 'github';
   var userRepo = match[2];  // eg, `jekyll/jekyll`.
   var branch = match[3];
   var format = match[4];
   var apiUrl = {
-    url: 'https://coveralls.io/repos/' + repoService + '/'+ userRepo + '/badge.svg',
+    url: `https://coveralls.io/repos/${repoService}/${userRepo}/badge.svg`,
     followRedirect: false,
     method: 'HEAD',
   };

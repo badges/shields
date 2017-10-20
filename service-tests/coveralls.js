@@ -8,7 +8,7 @@ const t = new ServiceTester({ id: 'coveralls', title: 'Coveralls.io' });
 module.exports = t;
 
 t.create('error status code - location header is missing')
-  .get('/not/existed.json')
+  .get('/github/not/existed.json')
   .intercept(nock => nock('https://coveralls.io')
     .head('/repos/github/not/existed/badge.svg')
     .reply(404)
@@ -16,7 +16,7 @@ t.create('error status code - location header is missing')
   .expectJSON({ name: 'coverage', value: 'invalid' });
 
 t.create('malformed location')
-  .get('/user/repository.json')
+  .get('/github/user/repository.json')
   .intercept(nock => nock('https://coveralls.io')
     .head('/repos/github/user/repository/badge.svg')
     .reply(302, {}, {
@@ -26,7 +26,7 @@ t.create('malformed location')
   .expectJSON({ name: 'coverage', value: 'malformed' });
 
 t.create('NaN percentage in location')
-  .get('/user/repository.json')
+  .get('/github/user/repository.json')
   .intercept(nock => nock('https://coveralls.io')
     .head('/repos/github/user/repository/badge.svg')
     .reply(302, {}, {
@@ -36,12 +36,12 @@ t.create('NaN percentage in location')
   .expectJSON({ name: 'coverage', value: 'unknown' });
 
 t.create('connection error')
-  .get('/not/existed.json')
+  .get('/github/user/repository.json')
   .networkOff()
   .expectJSON({ name: 'coverage', value: 'invalid' });
 
 t.create('show coverage')
-  .get('/user/repository.json')
+  .get('/github/user/repository.json')
   .intercept(nock => nock('https://coveralls.io')
     .head('/repos/github/user/repository/badge.svg')
     .reply(302, {}, {
@@ -51,7 +51,7 @@ t.create('show coverage')
   .expectJSON({ name: 'coverage', value: '50%' });
 
 t.create('show coverage for branch')
-  .get('/user/repository/branch.json')
+  .get('/github/user/repository/branch.json')
   .intercept(nock => nock('https://coveralls.io')
     .head('/repos/github/user/repository/badge.svg?branch=branch')
     .reply(302, {}, {
@@ -81,7 +81,7 @@ t.create('show coverage for bitbucket with branch')
   .expectJSON({ name: 'coverage', value: '50%' });
 
 t.create('github coverage')
-  .get('/jekyll/jekyll.json')
+  .get('/github/jekyll/jekyll.json')
   .expectJSONTypes(Joi.object().keys({ name: 'coverage', value: isPercentage }));
 
 t.create('bitbucket coverage')
