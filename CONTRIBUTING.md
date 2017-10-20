@@ -64,7 +64,8 @@ Badge guidelines
 
 - The left-hand side of a badge should not advertize. It should be a noun
   describing succinctly the meaning of the right-hand-side data.
-- New query parameters must be declared by the badge. See `request-handler.js`.
+- New query parameters must be declared by the service. See
+  `request-handler.js`.
 - The format of new badges should be of the form
   `/VENDOR/SUBVENDOR-BADGE-SPECIFIC/PARAMETERS.format`. For instance,
   `https://img.shields.io/gitter/room/nwjs/nw.js.svg`. The vendor is gitter, the
