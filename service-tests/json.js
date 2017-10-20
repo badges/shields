@@ -7,37 +7,37 @@ const t = new ServiceTester({ id: 'badge/dynamic/json', title: 'User Defined JSO
 module.exports = t;
 
 t.create('Connection error')
-  .get('.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.name&label=Package Name')
+  .get('.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.name&label=Package Name')
   .networkOff()
   .expectJSON({ name: 'Package Name', value: 'inaccessible' });
 
-t.create('JSON from url')
-  .get('.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.name')
+t.create('JSON from uri')
+  .get('.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.name')
   .expectJSON({ name: 'custom badge', value: 'gh-badges'});
 
-t.create('JSON from url | caching with new query params')
-  .get('.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.version')
+t.create('JSON from uri | caching with new query params')
+  .get('.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.version')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('custom badge'),
     value: Joi.string().regex(/^\d+(\.\d+)?(\.\d+)?$/)
   }));
 
-t.create('JSON from url | with prefix & suffix & label')
-  .get('.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.version&prefix=v&suffix= dev&label=Shields')
+t.create('JSON from uri | with prefix & suffix & label')
+  .get('.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.version&prefix=v&suffix= dev&label=Shields')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('Shields'),
     value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?\sdev$/)
   }));
 
-t.create('JSON from url | object doesnt exist')
-  .get('.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.does_not_exist')
+t.create('JSON from uri | object doesnt exist')
+  .get('.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.does_not_exist')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('custom badge'),
     value: Joi.equal('')
   }));
 
-t.create('JSON from url | invalid url')
-  .get('.json?url=https://github.com/badges/shields/raw/master/notafile.json&query=$.version')
+t.create('JSON from uri | invalid uri')
+  .get('.json?uri=https://github.com/badges/shields/raw/master/notafile.json&query=$.version')
   .expectJSONTypes(Joi.object().keys({
     name: Joi.equal('custom badge'),
     value: Joi.equal('invalid resource')

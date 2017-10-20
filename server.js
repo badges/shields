@@ -7032,11 +7032,11 @@ cache(function(query, match, sendBadge, request) {
   var suffix = query.suffix || '';
   var pathExpression = query.query;
 
-  // API URL
-  var url = encodeURI(query.url);
+  // API URI
+  var uri = encodeURI(decodeURIComponent(query.uri));
 
   var badgeData = getBadgeData('custom badge', query);
-  request(url, {json:true}, function(err, res, data) {
+  request(uri, {json:true}, function(err, res, data) {
     try {
       if (res && res.statusCode === 404)
         throw 'invalid resource';
