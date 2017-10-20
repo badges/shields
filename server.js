@@ -1881,6 +1881,32 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Clojars downloads count
+camp.route(/^\/clojars\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var clojar = match[1];  // eg, `prismic` or `foo/bar`.
+  var format = match[2];
+  var apiUrl = 'https://clojars.org/api/artifacts/' + clojar;
+  var badgeData = getBadgeData('clojars', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var downloads = metric(data.downloads);
+      badgeData.text[1] = downloads;
+      badgeData.colorscheme = downloadCountColor(downloads);
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // iTunes App Store version
 camp.route(/^\/itunes\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
