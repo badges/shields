@@ -14,6 +14,9 @@ favicon:
 	node gh-badge.js '' '' '#bada55' .png > favicon.png
 
 website:
+	@mkdir -p build && \
+	node_modules/.bin/babel-node frontend/render-badge-examples && \
+	cat frontend/fragments/try-header.html build/badge-examples-fragment.html frontend/fragments/try-footer.html > try.html && \
 	cat try.html | $(SED) "s,(<img src=')(/[^'\?]+)',\1https://img.shields.io\2?maxAge=2592000'," \
 		| $(SED) "s,(<img src=')(/[^'\?]+\?[^']+)',\1https://img.shields.io\2\&maxAge=2592000'," \
 		| $(SED) "s,<span id='imgUrlPrefix'>,&https://img.shields.io," \
