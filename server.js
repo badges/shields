@@ -30,6 +30,7 @@ var xml2js = require('xml2js');
 var serverSecrets = require('./lib/server-secrets');
 log(tryUrl);
 
+const licenseToColor = require('./lib/licenses');
 const {latest: latestVersion} = require('./lib/version');
 const {
   compare: phpVersionCompare,
@@ -3846,9 +3847,10 @@ cache(function(data, match, sendBadge, request) {
         return;
       }
       var body = JSON.parse(buffer);
-      if (body.license != null) {
-        badgeData.text[1] = body.license.name;
-        badgeData.colorscheme = 'blue';
+      const license = body.license;
+      if (license != null) {
+        badgeData.text[1] = license.name;
+        badgeData.colorscheme = licenseToColor[license.spdx_id] || 'orange';
         sendBadge(format, badgeData);
       } else {
         badgeData.text[1] = 'unknown license';
