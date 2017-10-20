@@ -84,6 +84,6 @@ t.create('github coverage')
   .get('/jekyll/jekyll.json')
   .expectJSONTypes(Joi.object().keys({ name: 'coverage', value: isPercentage }));
 
-t.create('github coverage')
+t.create('bitbucket coverage')
   .get('/bitbucket/pyKLIP/pyklip.json')
   .expectJSONTypes(Joi.object().keys({ name: 'coverage', value: isPercentage }));
