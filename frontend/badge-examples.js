@@ -13,7 +13,7 @@ const Badge = (props) => {
   const previewImage = props.previewUri
     ? (<img src={props.previewUri} alt="" />)
     : '\u00a0'; // non-breaking space
-  const exampleUri = props.exampleUri || `https://img.shields.io${props.previewUri}`
+  const exampleUri = `https://img.shields.io${props.exampleUri || props.previewUri}`;
 
   return (
     <tr><th {... attrs}>{ props.title }:</th>
