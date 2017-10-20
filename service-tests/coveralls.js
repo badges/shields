@@ -50,6 +50,16 @@ t.create('show coverage')
   )
   .expectJSON({ name: 'coverage', value: '50%' });
 
+t.create('show coverage for legacy github link')
+  .get('/user/repository.json')
+  .intercept(nock => nock('https://coveralls.io')
+    .head('/repos/github/user/repository/badge.svg')
+    .reply(302, {}, {
+      'Location': 'https://s3.amazonaws.com/assets.coveralls.io/badges/coveralls_50.svg'
+    })
+  )
+  .expectJSON({ name: 'coverage', value: '50%' });
+
 t.create('show coverage for branch')
   .get('/github/user/repository/branch.json')
   .intercept(nock => nock('https://coveralls.io')
@@ -82,6 +92,10 @@ t.create('show coverage for bitbucket with branch')
 
 t.create('github coverage')
   .get('/github/jekyll/jekyll.json')
+  .expectJSONTypes(Joi.object().keys({ name: 'coverage', value: isPercentage }));
+
+t.create('github coverage for legacy link')
+  .get('/jekyll/jekyll.json')
   .expectJSONTypes(Joi.object().keys({ name: 'coverage', value: isPercentage }));
 
 t.create('bitbucket coverage')
