@@ -52,7 +52,7 @@
     "test:services:pr": "npm run test:services:pr:prepare && npm run test:services:pr:run",
     "test": "npm run lint && npm run test:js",
     "build": "make website",
-    "start": "node server 8080 ::"
+    "start": "INFOSITE=/ node server 8080 ::"
   },
   "bin": {
     "badge": "./gh-badge.js"

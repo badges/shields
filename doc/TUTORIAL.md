@@ -27,17 +27,19 @@ I suppose you have [git](https://git-scm.com/) installed.
 If you do not, install it and learn about the [Github workflow](http://try.github.io/).
 
 1. [Fork][fork] this repository.
-2. Clone the fork  
+2. Clone the fork
    `git clone git@github.com:YOURGITHUBUSERNAME/shields.git`
 3. `cd shields`
-4. Install npm and other required packages (Ubuntu 16.10)  
+4. Install npm and other required packages (Ubuntu 16.10)
    `sudo apt-get install npm nodejs-legacy curl imagemagick`
-5. Install all packages  
+5. Install all packages
    `npm install`
-6. Run the server  
+6. Build the frontend
+   `npm run build`
+6. Run the server
    `npm start`
-7. Visit the website to check the badges get loaded slowly:  
-   [http://[::1]:8080/try.html](http://[::1]/try.html)
+7. Visit the website to check the badges get loaded slowly:
+   [http://[::1]:8080/](http://[::1]/)
 
 (3) Open an Issue
 -----------------
@@ -203,17 +205,21 @@ This has something to do with [private/secret.json](https://github.com/badges/sh
 
 Once you are done implementing your badge, you can add it to the collection on [shields.io](http://shields.io/).
 
-First, we make it visible on [http://[::1]:8080/try.html][try].
-Edit [try.html][tryhtml] in the right section (Build, Downloads, ...) and add your badge:
+First, we make it visible locally at [http://[::1]:8080/][home]. Edit
+[lib/all-badge-examples.js][allbadges] in the right category (Build,
+Downloads, ...) and add your badge:
 
-```
-  <tr><th data-keywords='test badge keywords for google'>Test Badge from the tutorial</th>
-    <td><img src='/test/subject/STATUS.svg' alt=''/></td>
-    <td><code>https://img.shields.io/test/subject/STATUS.svg</code></td>
-  </tr>
+```js
+{
+  title: 'Test Badge from the tutorial',
+  keywords: [
+    'some-search-keyword'
+  ],
+  previewUri: '/test/subject/STATUS.svg',
+},
 ```
 
-Save, restart and you can see it [locally][try].
+Save, run `npm run build`, and you can see it [locally][home].
 
 ## (4.4) Write Tests
 
@@ -235,7 +241,7 @@ Please follow it to include tests on your pull-request.
 
 ## (5) Create a Pull Request
 
-You have implemented changes in `server.js` and `try.html`.
+You have implemented changes in `server.js` and `lib/all-badge-examples.js`.
 These changes shall go live on shields.io.
 To do that, [create a pull-request](https://help.github.com/articles/creating-a-pull-request/).
 By doing this, your changes are made public to the shields team.
@@ -257,9 +263,9 @@ These files can also be of help for creating your own badge.
 [example-issue]: https://github.com/badges/shields/issues/886
 [fork]: https://github.com/badges/shields/fork
 [format]: INSTALL.md#format
-[try]: http://[::1]:8080/try.html
+[home]: http://[::1]:8080/
 [server]: ../server.js
-[tryhtml]: ../try.html
+[allbadges]: ../lib/all-badge-examples.js
 [edit]: https://github.com/badges/shields/edit/master/doc/TUTORIAL.md
 [add-pr]: https://github.com/badges/shields/issues?utf8=%E2%9C%93&q=is%3Aissue%20in%3Atitle%20add%20
 [new-badge]: https://github.com/badges/shields/pulls?q=is%3Apr+label%3Anew-badge

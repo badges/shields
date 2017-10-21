@@ -22,13 +22,11 @@ npm install  # You may need sudo for this.
 [package manager]: https://nodejs.org/en/download/package-manager/
 
 
-Build the index
----------------
-
-Build the "real" index page:
+Build the frontend
+------------------
 
 ```sh
-make website
+npm run build
 ```
 
 
@@ -50,7 +48,7 @@ node server 8080
 
 The root gets redirected to https://shields.io.
 
-For testing purposes, you can go to `http://localhost/try.html`.
+For testing purposes, you can go to `http://localhost/`.
 
 
 Heroku
@@ -93,11 +91,11 @@ $ docker run --rm -p 8080:80 --env-file shields.env --name shields shields
 > gh-badges@1.1.2 start /usr/src/app
 > node server.js
 
-http://[::1]:80/try.html
+http://[::1]/
 ```
 
 Assuming Docker is running locally, you should be able to get to the
-application at http://localhost:8080/try.html.
+application at http://localhost:8080/.
 
 If you run Docker in a virtual machine (such as boot2docker or Docker Machine)
 then you will need to replace `localhost` with the IP address of that virtual

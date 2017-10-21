@@ -10,7 +10,12 @@
   "website": "https://shields.io/",
   "repository": "https://github.com/badges/shields",
   "logo": "http://shields.io/favicon.png",
-  "success_url": "/try.html",
+  "env": {
+    "INFOSITE": {
+      "description": "The home page.",
+      "value": "/"
+    }
+  },
   "formation": {
     "web": {
       "quantity": 1,
