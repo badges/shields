@@ -2397,13 +2397,14 @@ cache(function(queryParams, match, sendBadge, request) {
 }));
 
 // Coveralls integration.
-camp.route(/^\/coveralls\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/coveralls\/(?:(bitbucket|github)\/)?([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];  // eg, `jekyll/jekyll`.
-  var branch = match[2];
-  var format = match[3];
+  var repoService = match[1] ? match[1] : 'github';
+  var userRepo = match[2];  // eg, `jekyll/jekyll`.
+  var branch = match[3];
+  var format = match[4];
   var apiUrl = {
-    url: 'http://badge.coveralls.io/repos/' + userRepo + '/badge.png',
+    url: `https://coveralls.io/repos/${repoService}/${userRepo}/badge.svg`,
     followRedirect: false,
     method: 'HEAD',
   };
@@ -4512,6 +4513,45 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
+  });
+}));
+
+// Jenkins Plugins version integration
+camp.route(/^\/jenkins\/plugin\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var pluginId = match[1];  // e.g. blueocean
+  var format = match[2];
+  var badgeData = getBadgeData('plugin', data);
+  regularUpdate('https://updates.jenkins-ci.org/current/update-center.actual.json',
+    (4 * 3600 * 1000),
+    function(json) {
+      json = JSON.parse(json);
+      return Object.keys(json.plugins).reduce(function(previous, current) {
+        previous[current] = json.plugins[current].version;
+        return previous;
+      }, {});
+    }, function(err, versions) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        var version = versions[pluginId];
+        if (version === undefined) {
+          throw Error('Plugin not found!');
+        }
+        badgeData.text[1] = 'v' + version;
+        if (version === '0' || /alpha|beta/.test(version.toLowerCase())) {
+          badgeData.colorscheme = 'orange';
+        } else {
+          badgeData.colorscheme = 'blue';
+        }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'not found';
+        sendBadge(format, badgeData);
+      }
   });
 }));
 

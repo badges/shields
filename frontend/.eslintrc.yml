@@ -1,0 +1,7 @@
+extends:
+  - 'standard-jsx'
+  - '../.eslintrc-preferred.yml'
+
+parserOptions:
+  ecmaFeatures:
+    jsx: true
