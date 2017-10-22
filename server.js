@@ -3476,7 +3476,7 @@ cache(function(data, match, sendBadge, request) {
       }
       var downloads = 0;
 
-      const labelWords = [metric(downloads)];
+      const labelWords = [];
       if (total) {
         data.forEach(function (tagData) {
           tagData.assets.forEach(function (asset) {
@@ -3504,6 +3504,7 @@ cache(function(data, match, sendBadge, request) {
           labelWords.push(`[${asset_name}]`);
         }
       }
+      labelWords.unshift(metric(downloads));
       badgeData.text[1] = labelWords.join(' ');
       badgeData.colorscheme = 'brightgreen';
       sendBadge(format, badgeData);
@@ -3969,7 +3970,7 @@ cache(function(data, match, sendBadge, request) {
           intervalLabel = '/4 weeks';
           break;
         case 'w':
-          value = parsedData.slice(-1)[0].total;
+          value = parsedData.slice(-2)[0].total;
           intervalLabel = '/week';
           break;
         default:
