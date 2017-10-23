@@ -5,7 +5,8 @@ const ServiceTester = require('./runner/service-tester');
 const {
 	  isMetric,
 	  isMetricOverTimePeriod,
-	  isVPlusDottedVersionAtLeastOne
+	  isVPlusDottedVersionAtLeastOne,
+	  isFormattedDate
 } = require('./helpers/validators');
 
 const t = new ServiceTester({ id: 'eclipse-marketplace', title: 'Eclipse' });
@@ -37,4 +38,11 @@ t.create('favorites count')
   .expectJSONTypes(Joi.object().keys({
     name: 'favorites',
     value: Joi.number().integer().positive(),
+  }));
+
+t.create('last updated date')
+  .get('/updated/notepad4e.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'updated',
+    value: isFormattedDate,
   }));
