@@ -3,10 +3,10 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 const {
+    isFormattedDate,
 	  isMetric,
 	  isMetricOverTimePeriod,
-	  isVPlusDottedVersionAtLeastOne,
-	  isFormattedDate
+	  isVPlusDottedVersionAtLeastOne
 } = require('./helpers/validators');
 
 const t = new ServiceTester({ id: 'eclipse-marketplace', title: 'Eclipse' });
