@@ -24,7 +24,7 @@ var tryUrl = require('url').format({
 var log = require('./lib/log.js');
 var badge = require('./lib/badge.js');
 var githubAuth = require('./lib/github-auth');
-var querystring = require('querystring');
+var queryString = require('query-string');
 var prettyBytes = require('pretty-bytes');
 var xml2js = require('xml2js');
 var serverSecrets = require('./lib/server-secrets');
@@ -2458,7 +2458,7 @@ cache(function(data, match, sendBadge, request) {
     apiUrl = `https://codecov.io/${userRepo}/graphs/badge.txt`;
   }
   if (token) {
-    apiUrl += '?' + querystring.stringify({ token });
+    apiUrl += '?' + queryString.stringify({ token });
   }
   var badgeData = getBadgeData('coverage', data);
   request(apiUrl, function(err, res, body) {
@@ -2927,7 +2927,7 @@ cache(function(data, match, sendBadge, request) {
   if (branch) {
     queryParams.branch = branch;
   }
-  var query = querystring.stringify(queryParams);
+  var query = queryString.stringify(queryParams);
   var url = 'https://www.codacy.com/project/badge/grade/' + projectId + '?' + query;
   var badgeData = getBadgeData('code quality', data);
   fetchFromSvg(request, url, function(err, res) {
@@ -3012,7 +3012,7 @@ cache(function(data, match, sendBadge, request) {
   if (branch) {
     queryParams.branch = branch;
   }
-  var query = querystring.stringify(queryParams);
+  var query = queryString.stringify(queryParams);
   var url = 'https://www.codacy.com/project/badge/coverage/' + projectId + '?' + query;
   var badgeData = getBadgeData('coverage', data);
   fetchFromSvg(request, url, function(err, res) {
@@ -3476,7 +3476,7 @@ cache(function(data, match, sendBadge, request) {
       }
       var downloads = 0;
 
-      const labelWords = [metric(downloads)];
+      const labelWords = [];
       if (total) {
         data.forEach(function (tagData) {
           tagData.assets.forEach(function (asset) {
@@ -3504,6 +3504,7 @@ cache(function(data, match, sendBadge, request) {
           labelWords.push(`[${asset_name}]`);
         }
       }
+      labelWords.unshift(metric(downloads));
       badgeData.text[1] = labelWords.join(' ');
       badgeData.colorscheme = 'brightgreen';
       sendBadge(format, badgeData);
@@ -3969,7 +3970,7 @@ cache(function(data, match, sendBadge, request) {
           intervalLabel = '/4 weeks';
           break;
         case 'w':
-          value = parsedData.slice(-1)[0].total;
+          value = parsedData.slice(-2)[0].total;
           intervalLabel = '/week';
           break;
         default:
@@ -4567,7 +4568,7 @@ cache(function(data, match, sendBadge, request) {
   };
   var badgeData = getBadgeData('role', data);
   request(options, function(err, res, json) {
-    if (res && (res.statusCode === 404 || data.state === null)) {
+    if (res && (res.statusCode === 404 || json.state === null)) {
       badgeData.text[1] = 'not found';
       sendBadge(format, badgeData);
       return;
@@ -5100,7 +5101,7 @@ cache(function(data, match, sendBadge, request) {
     'request[slug]': match[1]  // eg, `hestia`.
   };
   var format = match[2];
-  var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?' + querystring.stringify(queryParams);
+  var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?' + queryString.stringify(queryParams);
   var badgeData = getBadgeData('rating', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
@@ -5140,7 +5141,7 @@ cache(function(data, match, sendBadge, request) {
     'request[slug]': match[1] // eg, `hestia`.
   };
   var format = match[2];
-  var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?' + querystring.stringify(queryParams);
+  var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?' + queryString.stringify(queryParams);
   var badgeData = getBadgeData('downloads', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
@@ -5448,48 +5449,51 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 camp.route(/^\/dockbit\/([A-Za-z0-9-_]+)\/([A-Za-z0-9-_]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  const org      = match[1];
-  const pipeline = match[2];
-  const format   = match[3];
+cache({
+  queryParams: ['token'],
+  handler: (data, match, sendBadge, request) => {
+    const org      = match[1];
+    const pipeline = match[2];
+    const format   = match[3];
 
-  const token     = data.token;
-  const badgeData = getBadgeData('deploy', data);
-  const apiUrl    = `https://dockbit.com/${org}/${pipeline}/status/${token}`;
+    const token     = data.token;
+    const badgeData = getBadgeData('deploy', data);
+    const apiUrl    = `https://dockbit.com/${org}/${pipeline}/status/${token}`;
 
-  var dockbitStates = {
-    success:  '#72BC37',
-    failure:  '#F55C51',
-    error:    '#F55C51',
-    working:  '#FCBC41',
-    pending:  '#CFD0D7',
-    rejected: '#CFD0D7'
-  };
+    var dockbitStates = {
+      success:  '#72BC37',
+      failure:  '#F55C51',
+      error:    '#F55C51',
+      working:  '#FCBC41',
+      pending:  '#CFD0D7',
+      rejected: '#CFD0D7'
+    };
 
-  request(apiUrl, {json: true}, function(err, res, data) {
-    try {
-      if (res && (res.statusCode === 404 || data.state === null)) {
-        badgeData.text[1] = 'not found';
+    request(apiUrl, {json: true}, function(err, res, data) {
+      try {
+        if (res && (res.statusCode === 404 || data.state === null)) {
+          badgeData.text[1] = 'not found';
+          sendBadge(format, badgeData);
+          return;
+        }
+
+        if (!res || err !== null || res.statusCode !== 200) {
+          badgeData.text[1] = 'inaccessible';
+          sendBadge(format, badgeData);
+          return;
+        }
+
+        badgeData.text[1] = data.state;
+        badgeData.colorB = dockbitStates[data.state];
+
         sendBadge(format, badgeData);
-        return;
       }
-
-      if (!res || err !== null || res.statusCode !== 200) {
-        badgeData.text[1] = 'inaccessible';
+      catch(e) {
+        badgeData.text[1] = 'invalid';
         sendBadge(format, badgeData);
-        return;
       }
-
-      badgeData.text[1] = data.state;
-      badgeData.colorB = dockbitStates[data.state];
-
-      sendBadge(format, badgeData);
-    }
-    catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
+    });
+  },
 }));
 
 // CircleCI build integration.
@@ -5521,7 +5525,7 @@ cache(function(data, match, sendBadge, request) {
   }
 
   // Apprend query params to API URL
-  apiUrl += '?' + querystring.stringify(queryParams);
+  apiUrl += '?' + queryString.stringify(queryParams);
 
   var badgeData = getBadgeData('build', data);
   request(apiUrl, {json:true}, function(err, res, data) {
@@ -6274,26 +6278,29 @@ cache(function(data, match, sendBadge, request) {
 
 // bitHound integration
 camp.route(/^\/bithound\/(code\/|dependencies\/|devDependencies\/)?(.+?)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var type = match[1].slice(0, -1);
-  var userRepo = match[2];  // eg, `github/rexxars/sse-channel`.
-  var format = match[3];
-  var apiUrl = 'https://www.bithound.io/api/' + userRepo + '/badge/' + type;
-  var badgeData = getBadgeData(type === 'devDependencies' ? 'dev dependencies' : type, data);
+cache({
+  queryParams: ['color'], // argh.
+  handler: (data, match, sendBadge, request) => {
+    var type = match[1].slice(0, -1);
+    var userRepo = match[2];  // eg, `github/rexxars/sse-channel`.
+    var format = match[3];
+    var apiUrl = 'https://www.bithound.io/api/' + userRepo + '/badge/' + type;
+    var badgeData = getBadgeData(type === 'devDependencies' ? 'dev dependencies' : type, data);
 
-  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
-    try {
-      var data = JSON.parse(buffer);
-      badgeData.text[1] = data.label;
-      badgeData.colorscheme = null;
-      badgeData.colorB = '#' + data.color;
-      sendBadge(format, badgeData);
+    request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
+      try {
+        var data = JSON.parse(buffer);
+        badgeData.text[1] = data.label;
+        badgeData.colorscheme = null;
+        badgeData.colorB = '#' + data.color;
+        sendBadge(format, badgeData);
 
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  },
 }));
 
 // Waffle.io integration

@@ -13,9 +13,10 @@ const isVPlusDottedVersionAtLeastOne = withRegex(/^v\d+(\.\d+)?(\.\d+)?$/);
 
 const isStarRating = withRegex(/^(?=.{5}$)(\u2605{0,5}[\u00BC\u00BD\u00BE]?\u2606{0,5})$/);
 
-const isMetric = withRegex(/^[0-9]+[kMGTPEZY]?$/);
+// Required to be > 0, beacuse accepting zero masks many problems.
+const isMetric = withRegex(/^[1-9][0-9]*[kMGTPEZY]?$/);
 
-const isMetricOverTimePeriod = withRegex(/^[0-9]+[kMGTPEZY]?\/(year|month|4 weeks|week|day)$/);
+const isMetricOverTimePeriod = withRegex(/^[1-9][0-9]*[kMGTPEZY]?\/(year|month|4 weeks|week|day)$/);
 
 const isPercentage = withRegex(/^[0-9]+%$/);
 
