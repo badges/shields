@@ -22,7 +22,6 @@
     "url": "https://github.com/badges/shields"
   },
   "dependencies": {
-    "betterset": "^1.0.2",
     "camp": "~16.2.3",
     "chrome-web-store-item-property": "~1.1.2",
     "dot": "~1.1.2",
