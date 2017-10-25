@@ -40,8 +40,8 @@ t.create('favorites count')
     value: Joi.number().integer().positive(),
   }));
 
-t.create('last updated date')
-  .get('/updated/notepad4e.json')
+t.create('last update date')
+  .get('/last-update/notepad4e.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'updated',
     value: isFormattedDate,
