@@ -14,7 +14,7 @@ before_install:
 before_script:
   - mkdir private && echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
 
-- script:
+script:
   - npm run lint
   - npm run test:js
 
