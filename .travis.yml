@@ -9,7 +9,7 @@ cache:
     - $HOME/.npm
 
 before_install:
-  - npm install -g "npm@$(jq -r '.engines.npm' package.json)"
+  - npm --version | grep -E '^5.' > /dev/null || npm install -g "npm@5"
 
 before_script:
   - mkdir private && echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
