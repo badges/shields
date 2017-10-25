@@ -20,9 +20,11 @@ script:
 
 jobs:
   include:
-    - node_js:
-      - 8
-      - 6
+    - node_js: 8
+    - script:
+      - if [ "$TRAVIS_EVENT_TYPE" == cron ]; then npm run test:services; fi
+      - if [ "$TRAVIS_EVENT_TYPE" == pull_request ]; then npm run test:services:pr; fi
+    - node_js: 6
     - script:
       - if [ "$TRAVIS_EVENT_TYPE" == cron ]; then npm run test:services; fi
       - if [ "$TRAVIS_EVENT_TYPE" == pull_request ]; then npm run test:services:pr; fi
