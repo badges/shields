@@ -7,8 +7,10 @@ cache:
   directories:
     - $HOME/.npm
 
-before_script:
+before_install:
   - npm install -g "npm@$(jq -r '.engines.npm' package.json)"
+
+before_script:
   - mkdir private && echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
 
 jobs:
