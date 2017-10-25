@@ -1,0 +1,17 @@
+#!/bin/bash
+
+rm ../lib/all-badge-examples.js
+cat >../lib/all-badge-examples.js <<HERE
+'use strict';
+
+const allBadgeExamples =
+HERE
+
+cat ../all-badges.json >> ../lib/all-badge-examples.js
+sed -Ei '' -e 's/\"([a-zA-Z]+)\":/\1:/' ../lib/all-badge-examples.js
+sed -Ei '' -e "s/\"/\'/g" ../lib/all-badge-examples.js
+
+cat >>../lib/all-badge-examples.js <<HERE
+
+module.exports = allBadgeExamples;
+HERE
