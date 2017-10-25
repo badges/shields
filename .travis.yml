@@ -1,17 +1,31 @@
 language: node_js
+
 node_js:
   - 8
   - 6
 
+cache:
+  directories:
+    - $HOME/.npm
+
+before_install:
+  - npm --version | grep -E '^5.' > /dev/null || npm install -g "npm@5"
+
 before_script:
   - mkdir private && echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
 
+script:
+  - npm run lint
+  - npm run test:js
+
 jobs:
   include:
-    - script:
-      - npm run lint
-      - npm run test:js
-    - script:
+    - node_js: 8
+      script:
+      - if [ "$TRAVIS_EVENT_TYPE" == cron ]; then npm run test:services; fi
+      - if [ "$TRAVIS_EVENT_TYPE" == pull_request ]; then npm run test:services:pr; fi
+    - node_js: 6
+      script:
       - if [ "$TRAVIS_EVENT_TYPE" == cron ]; then npm run test:services; fi
       - if [ "$TRAVIS_EVENT_TYPE" == pull_request ]; then npm run test:services:pr; fi
 

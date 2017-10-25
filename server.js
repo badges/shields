@@ -2397,13 +2397,14 @@ cache(function(queryParams, match, sendBadge, request) {
 }));
 
 // Coveralls integration.
-camp.route(/^\/coveralls\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/coveralls\/(?:(bitbucket|github)\/)?([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];  // eg, `jekyll/jekyll`.
-  var branch = match[2];
-  var format = match[3];
+  var repoService = match[1] ? match[1] : 'github';
+  var userRepo = match[2];  // eg, `jekyll/jekyll`.
+  var branch = match[3];
+  var format = match[4];
   var apiUrl = {
-    url: 'http://badge.coveralls.io/repos/' + userRepo + '/badge.png',
+    url: `https://coveralls.io/repos/${repoService}/${userRepo}/badge.svg`,
     followRedirect: false,
     method: 'HEAD',
   };
@@ -3475,7 +3476,7 @@ cache(function(data, match, sendBadge, request) {
       }
       var downloads = 0;
 
-      const labelWords = [metric(downloads)];
+      const labelWords = [];
       if (total) {
         data.forEach(function (tagData) {
           tagData.assets.forEach(function (asset) {
@@ -3503,6 +3504,7 @@ cache(function(data, match, sendBadge, request) {
           labelWords.push(`[${asset_name}]`);
         }
       }
+      labelWords.unshift(metric(downloads));
       badgeData.text[1] = labelWords.join(' ');
       badgeData.colorscheme = 'brightgreen';
       sendBadge(format, badgeData);
@@ -3968,7 +3970,7 @@ cache(function(data, match, sendBadge, request) {
           intervalLabel = '/4 weeks';
           break;
         case 'w':
-          value = parsedData.slice(-1)[0].total;
+          value = parsedData.slice(-2)[0].total;
           intervalLabel = '/week';
           break;
         default:
