@@ -3,6 +3,7 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 const {
+    isFormattedDate,
 	  isMetric,
 	  isMetricOverTimePeriod,
 	  isVPlusDottedVersionAtLeastOne
@@ -37,4 +38,11 @@ t.create('favorites count')
   .expectJSONTypes(Joi.object().keys({
     name: 'favorites',
     value: Joi.number().integer().positive(),
+  }));
+
+t.create('last update date')
+  .get('/last-update/notepad4e.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'updated',
+    value: isFormattedDate,
   }));
