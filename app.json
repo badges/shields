@@ -14,6 +14,10 @@
     "INFOSITE": {
       "description": "The home page.",
       "value": "/"
+    },
+    "NPM_CONFIG_PRODUCTION": {
+      "description": "Configure whether devDependencies are installed (they are needed for the build).",
+      "value": true
     }
   },
   "formation": {
