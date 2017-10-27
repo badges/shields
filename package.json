@@ -58,6 +58,7 @@
     "build": "npm run build:examples && npm run build:concat && cp build/concat.html index.html",
     "build:production:transform": "sed -e \"s,<span id='imgUrlPrefix'>,&https://img.shields.io,\" -e \"s,var origin = '';,var origin = 'https://img.shields.io';,\" build/concat.html > index.html",
     "build:production": "PRODUCTION_BUILD=true npm run build:examples && npm run build:concat && npm run build:production:transform",
+    "heroku-postbuild": "npm run build",
     "start": "INFOSITE=/ node server 8080 ::"
   },
   "bin": {
