@@ -52,7 +52,7 @@
     "test:services:pr:run": "mocha --delay service-tests/runner/cli.js --stdin < pull-request-services.log",
     "test:services:pr": "npm run test:services:pr:prepare && npm run test:services:pr:run",
     "test": "npm run lint && npm run test:js",
-    "prebuild": "mkdirp build",
+    "prebuild:examples": "mkdirp build",
     "build:examples": "node_modules/.bin/babel-node frontend/render-badge-examples",
     "build:copy-fragments": "cp frontend/fragments/try-header.html frontend/fragments/try-footer.html build/",
     "build:concat": "cat build/try-header.html build/badge-examples-fragment.html build/try-footer.html > index.html",
