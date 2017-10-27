@@ -52,7 +52,12 @@
     "test:services:pr:run": "mocha --delay service-tests/runner/cli.js --stdin < pull-request-services.log",
     "test:services:pr": "npm run test:services:pr:prepare && npm run test:services:pr:run",
     "test": "npm run lint && npm run test:js",
-    "build": "make website",
+    "prebuild": "mkdirp build",
+    "build:examples": "node_modules/.bin/babel-node frontend/render-badge-examples",
+    "build:concat": "cat frontend/fragments/try-header.html build/badge-examples-fragment.html frontend/fragments/try-footer.html > build/concat.html",
+    "build": "npm run build:examples && npm run build:concat && cp build/concat.html index.html",
+    "build:production:transform": "sed -e \"s,<span id='imgUrlPrefix'>,&https://img.shields.io,\" -e \"s,var origin = '';,var origin = 'https://img.shields.io';,\" build/concat.html > index.html",
+    "build:production": "PRODUCTION_BUILD=true npm run build:examples && npm run build:concat && npm run build:production:transform",
     "start": "INFOSITE=/ node server 8080 ::"
   },
   "bin": {
@@ -93,8 +98,10 @@
     "is-svg": "^2.1.0",
     "lodash.difference": "^4.5.0",
     "minimist": "^1.2.0",
+    "mkdirp": "^0.5.1",
     "mocha": "^4.0.1",
     "nock": "^9.0.13",
+    "node-env-flag": "^0.1.0",
     "node-fetch": "^1.6.3",
     "nyc": "^11.2.1",
     "opn-cli": "^3.1.0",
@@ -105,7 +112,8 @@
     "read-all-stdin-sync": "^1.0.5",
     "rimraf": "^2.6.2",
     "semver-regex": "^1.0.0",
-    "sinon": "^4.0.1"
+    "sinon": "^4.0.1",
+    "whatwg-url": "^6.3.0"
   },
   "engines": {
     "node": ">= 6",

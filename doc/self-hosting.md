@@ -26,7 +26,7 @@ Build the frontend
 ------------------
 
 ```sh
-npm run build
+BASE_URL=https://your-server.example.com npm run build:production
 ```
 
 
