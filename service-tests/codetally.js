@@ -16,7 +16,7 @@ module.exports = t;
 t.create('Codetally')
   .get('/triggerman722/colorstrap.json')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('codetally'),
+    name: 'codetally',
     value: Joi.string().regex(/\b\d+(?:.\d+)?/)
   }));
 

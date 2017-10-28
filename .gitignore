@@ -85,3 +85,6 @@ typings/
 
 # dotenv environment variables file
 .env
+
+# Temporary build artifacts.
+/build
