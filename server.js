@@ -7098,7 +7098,7 @@ camp.route(/^\/maven-metadata\/(v)\/((?:https?:\/\/.+\/)maven-metadata\.xml)\.(s
         badge.colorscheme = 'red';
         sendBadge(match[3], badge);
       }
-    })
+    });
 }));
 
 // nsp for npm packages
