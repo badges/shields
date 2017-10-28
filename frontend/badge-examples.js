@@ -15,42 +15,39 @@ function resolvePreviewUri (uri, baseUri, isProductionBuild) {
   }
 }
 
-const Badge = (props) => {
-  const attrs = {};
-  if (props.documentation) {
-    attrs['data-doc'] = props.documentation;
-  }
-  if (props.keywords) {
-    attrs['data-keywords'] = props.keywords.join(' ');
-  }
-  const previewImage = props.previewUri
-    ? (<img src={resolvePreviewUri(props.previewUri, props.baseUri, props.isProductionBuild)} alt="" />)
+const Badge = ({ title, previewUri, exampleUri, documentation, keywords, baseUri, isProductionBuild }) => {
+  const attrs = {
+    'data-doc': documentation,
+    'data-keywords': keywords ? keywords.join(' ') : undefined,
+  };
+  const previewImage = previewUri
+    ? (<img src={resolvePreviewUri(previewUri, baseUri, isProductionBuild)} alt="" />)
     : '\u00a0'; // non-breaking space
-  const exampleUri = url.resolve(props.baseUri, props.exampleUri || props.previewUri);
+  const resolvedExampleUri = url.resolve(baseUri, exampleUri || previewUri);
 
   return (
-    <tr><th {... attrs}>{ props.title }:</th>
+    <tr><th {... attrs}>{ title }:</th>
       <td>{ previewImage }</td>
-      <td><code>{ exampleUri }</code></td>
+      <td><code>{ resolvedExampleUri }</code></td>
     </tr>
   )
 }
 
-const Category = (props) => (
+const Category = ({ category, examples, baseUri, isProductionBuild }) => (
   <div>
-    <h3 id={props.category.id}>{ props.category.name }</h3>
+    <h3 id={category.id}>{ category.name }</h3>
     <table className='badge'><tbody>
       {
-        props.examples.map((badgeData, i) => (<Badge key={i} {...badgeData} baseUri={props.baseUri} isProductionBuild={props.isProductionBuild} />))
+        examples.map((badgeData, i) => (<Badge key={i} {...badgeData} baseUri={baseUri} isProductionBuild={isProductionBuild} />))
       }
     </tbody></table>
   </div>
 )
 
-const BadgeExamples = (props) => (
+const BadgeExamples = ({ examples, baseUri, isProductionBuild }) => (
   <div>
     {
-      props.examples.map((categoryData, i) => (<Category key={i} {...categoryData} baseUri={props.baseUri} isProductionBuild={props.isProductionBuild} />))
+      examples.map((categoryData, i) => (<Category key={i} {...categoryData} baseUri={baseUri} isProductionBuild={isProductionBuild} />))
     }
   </div>
 );
