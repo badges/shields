@@ -109,7 +109,8 @@ const {
 
 const {
   mapGithubCommitsSince,
-  mapGithubReleaseDate
+  mapGithubReleaseDate,
+  mapGithubPRState
 } = require("./lib/github-provider");
 
 var semver = require('semver');
@@ -3433,7 +3434,10 @@ cache(function(data, match, sendBadge, request) {
 mapGithubReleaseDate(camp, githubApiUrl, githubAuth);
 
 // GitHub commits since integration.
-mapGithubCommitsSince(camp, githubApiUrl ,githubAuth);
+mapGithubCommitsSince(camp, githubApiUrl, githubAuth);
+
+// GitHub pull request state
+mapGithubPRState(camp, githubApiUrl, githubAuth);
 
 // GitHub release-download-count and pre-release-download-count integration.
 camp.route(/^\/github\/(downloads|downloads-pre)\/([^/]+)\/([^/]+)(\/.+)?\/([^/]+)\.(svg|png|gif|jpg|json)$/,
