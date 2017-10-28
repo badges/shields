@@ -117,8 +117,8 @@
     "whatwg-url": "^6.3.0"
   },
   "engines": {
-    "node": ">= 6",
-    "npm": ">= 5"
+    "node": "6.x",
+    "npm": "5.x"
   },
   "babel": {
     "presets": [
