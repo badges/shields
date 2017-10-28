@@ -27,7 +27,7 @@ continuous integration services, package registries, distributions, app
 stores, social networks, code coverage services, and code analysis services.
 Every month it serves over 470 million images.
 
-In addition to hosting the shields.io home page and server code, this monorepo
+In addition to hosting the shields.io frontend and server code, this monorepo
 hosts an [NPM library for generating badges][gh-badges], and the badge design
 specification.
 
@@ -118,8 +118,9 @@ Development
 1. Install Node 6 or later. You can use the [package manager][] of your choice.
 2. Clone this repository.
 3. Run `npm install` to install the dependencies.
-4. Run `node server 1111 localhost` to start the server.
-5. Open `http://localhost:1111/try.html` to view the home page.
+4. Run `npm run build` to build the frontend.
+5. Run `npm start` to start the server.
+6. Open `http://[::]:8080/` to view the home page.
 
 [package manager]: https://nodejs.org/en/download/package-manager/
 

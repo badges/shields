@@ -19,7 +19,7 @@ var tryUrl = require('url').format({
   protocol: secureServer ? 'https' : 'http',
   hostname: bindAddress,
   port: serverPort,
-  pathname: 'try.html',
+  pathname: '/',
 });
 var log = require('./lib/log.js');
 var badge = require('./lib/badge.js');
@@ -7261,9 +7261,11 @@ function(data, match, end, ask) {
   }
 });
 
-// Redirect the root to the website.
-camp.route(/^\/$/, function(data, match, end, ask) {
-  ask.res.statusCode = 302;
-  ask.res.setHeader('Location', infoSite);
-  ask.res.end();
-});
+if (infoSite !== '/') {
+  // Redirect the root to the website.
+  camp.route(/^\/$/, function(data, match, end, ask) {
+    ask.res.statusCode = 302;
+    ask.res.setHeader('Location', infoSite);
+    ask.res.end();
+  });
+}

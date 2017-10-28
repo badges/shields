@@ -17,6 +17,7 @@ before_script:
 script:
   - npm run lint
   - npm run test:js
+  - npm run build:production
 
 jobs:
   include:
