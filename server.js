@@ -7076,27 +7076,34 @@ cache((data, match, sendBadge, request) => {
 }));
 
 // Maven metadata versioning integration.
-camp.route(/^\/maven-metadata\/(v)\/((?:https?:\/\/.+\/)maven-metadata\.xml)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/maven-metadata\/v\/((?:https?:\/\/.+\/)maven-metadata\.xml)\.(svg|png|gif|jpg|json)$/,
   cache(function (data, match, sendBadge, request) {
-    request(match[2], function (error, response, body) {
-      var badge = getBadgeData('maven', data);
+    const [, metadataUri, format] = match;
+    request(metadataUri, (error, response, body) => {
+      const badge = getBadgeData('maven', data);
       if (!error && response.statusCode >= 200 && response.statusCode < 300) {
-        xml2js.parseString(body, function (err, result) {
-          if (!err) {
-            var version = result.metadata.versioning[0].versions[0].version || '';
-            badge.text[1] = version[version.length - 1];
-            badge.colorscheme = /^.*-SNAPSHOT$/.test(badge.text[1]) ? 'green' : 'brightgreen';
-            sendBadge(match[3], badge);
-          } else {
-            badge.text[1] = 'error';
-            badge.colorscheme = 'red';
-            sendBadge(match[3], badge);
-          }
-        });
+        try {
+          xml2js.parseString(body, function (err, result) {
+            if (!err) {
+              const version = result.metadata.versioning[0].versions[0].version || '';
+              badge.text[1] = 'v' + version[version.length - 1];
+              badge.colorscheme = /^.*-SNAPSHOT$/.test(badge.text[1]) ? 'green' : 'brightgreen';
+              sendBadge(format, badge);
+            } else {
+              badge.text[1] = 'error';
+              badge.colorscheme = 'red';
+              sendBadge(format, badge);
+            }
+          });
+        } catch (e) {
+          badge.text[1] = 'error';
+          badge.colorscheme = 'red';
+          sendBadge(format, badge);
+        }
       } else {
         badge.text[1] = 'error';
         badge.colorscheme = 'red';
-        sendBadge(match[3], badge);
+        sendBadge(format, badge);
       }
     });
 }));
