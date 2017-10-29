@@ -1784,7 +1784,7 @@ cache(function(queryData, match, sendBadge, request) {
   const variants = {
     // default use `conda|{channelname}` as label
     '': function(queryData, badgeData) {
-      badgeData.text[0] = (queryData && queryData.label) || 'conda|' + badgeData.text[0];
+      badgeData.text[0] = getLabel('conda|' + badgeData.text[0], queryData);
     },
     // skip `conda|` prefix
     'n': function(queryData, badgeData) {
@@ -2092,7 +2092,7 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
+      var parsedData = JSON.parse(buffer);
       if (info.charAt(0) === 'd') {
         // See #716 for the details of the loss of service.
         badgeData.text[0] = getLabel('downloads', data);
@@ -2104,25 +2104,25 @@ cache(function(data, match, sendBadge, request) {
         //    badgeData.text[1] = metric(downloads) + '/month';
         //    break;
         //  case 'w':
-        //    downloads = data.info.downloads.last_week;
+        //    downloads = parsedData.info.downloads.last_week;
         //    badgeData.text[1] = metric(downloads) + '/week';
         //    break;
         //  case 'd':
-        //    downloads = data.info.downloads.last_day;
+        //    downloads = parsedData.info.downloads.last_day;
         //    badgeData.text[1] = metric(downloads) + '/day';
         //    break;
         //}
         //badgeData.colorscheme = downloadCountColor(downloads);
         sendBadge(format, badgeData);
       } else if (info === 'v') {
-        var version = data.info.version;
+        var version = parsedData.info.version;
         var vdata = versionColor(version);
         badgeData.text[1] = vdata.version;
         badgeData.colorscheme = vdata.color;
         sendBadge(format, badgeData);
       } else if (info === 'l') {
-        var license = data.info.license;
-        badgeData.text[0] = 'license';
+        var license = parsedData.info.license;
+        badgeData.text[0] = getLabel('license', data);
         if (license === null || license === 'UNKNOWN') {
           badgeData.text[1] = 'Unknown';
         } else {
@@ -2131,7 +2131,7 @@ cache(function(data, match, sendBadge, request) {
         }
         sendBadge(format, badgeData);
       } else if (info === 'wheel') {
-        let releases = data.releases[data.info.version];
+        let releases = parsedData.releases[parsedData.info.version];
         let hasWheel = false;
         for (let i = 0; i < releases.length; i++) {
           if (releases[i].packagetype === 'wheel' ||
@@ -2140,12 +2140,12 @@ cache(function(data, match, sendBadge, request) {
             break;
           }
         }
-        badgeData.text[0] = 'wheel';
+        badgeData.text[0] = getLabel('wheel', data);
         badgeData.text[1] = hasWheel ? 'yes' : 'no';
         badgeData.colorscheme = hasWheel ? 'brightgreen' : 'red';
         sendBadge(format, badgeData);
       } else if (info === 'format') {
-        let releases = data.releases[data.info.version];
+        let releases = parsedData.releases[parsedData.info.version];
         let hasWheel = false;
         var hasEgg = false;
         for (var i = 0; i < releases.length; i++) {
@@ -2159,7 +2159,7 @@ cache(function(data, match, sendBadge, request) {
             hasEgg = true;
           }
         }
-        badgeData.text[0] = 'format';
+        badgeData.text[0] = getLabel('format', data);
         if (hasWheel) {
           badgeData.text[1] = 'wheel';
           badgeData.colorscheme = 'brightgreen';
@@ -2174,8 +2174,8 @@ cache(function(data, match, sendBadge, request) {
       } else if (info === 'pyversions') {
         var versions = [];
         let pattern = /^Programming Language :: Python :: ([\d.]+)$/;
-        for (let i = 0; i < data.info.classifiers.length; i++) {
-          var matched = pattern.exec(data.info.classifiers[i]);
+        for (let i = 0; i < parsedData.info.classifiers.length; i++) {
+          var matched = pattern.exec(parsedData.info.classifiers[i]);
           if (matched && matched[1]) {
             versions.push(matched[1]);
           }
@@ -2191,15 +2191,15 @@ cache(function(data, match, sendBadge, request) {
         if (!versions.length) {
           versions.push('not found');
         }
-        badgeData.text[0] = 'python';
+        badgeData.text[0] = getLabel('python', data);
         badgeData.text[1] = versions.sort().join(', ');
         badgeData.colorscheme = 'blue';
         sendBadge(format, badgeData);
       } else if (info === 'implementation') {
         var implementations = [];
         let pattern = /^Programming Language :: Python :: Implementation :: (\S+)$/;
-        for (let i = 0; i < data.info.classifiers.length; i++) {
-          let matched = pattern.exec(data.info.classifiers[i]);
+        for (let i = 0; i < parsedData.info.classifiers.length; i++) {
+          let matched = pattern.exec(parsedData.info.classifiers[i]);
           if (matched && matched[1]) {
             implementations.push(matched[1].toLowerCase());
           }
@@ -2207,7 +2207,7 @@ cache(function(data, match, sendBadge, request) {
         if (!implementations.length) {
           implementations.push('cpython');  // assume CPython
         }
-        badgeData.text[0] = 'implementation';
+        badgeData.text[0] = getLabel('implementation', data);
         badgeData.text[1] = implementations.sort().join(', ');
         badgeData.colorscheme = 'blue';
         sendBadge(format, badgeData);
@@ -2217,8 +2217,8 @@ cache(function(data, match, sendBadge, request) {
             '1': 'red', '2': 'red', '3': 'red', '4': 'yellow',
             '5': 'brightgreen', '6': 'brightgreen', '7': 'red'};
         var statusCode = '1', statusText = 'unknown';
-        for (let i = 0; i < data.info.classifiers.length; i++) {
-          let matched = pattern.exec(data.info.classifiers[i]);
+        for (let i = 0; i < parsedData.info.classifiers.length; i++) {
+          let matched = pattern.exec(parsedData.info.classifiers[i]);
           if (matched && matched[1] && matched[2]) {
             statusCode = matched[1];
             statusText = matched[2].toLowerCase().replace('-', '--');
@@ -2228,7 +2228,7 @@ cache(function(data, match, sendBadge, request) {
             break;
           }
         }
-        badgeData.text[0] = 'status';
+        badgeData.text[0] = getLabel('status', data);
         badgeData.text[1] = statusText;
         badgeData.colorscheme = statusColors[statusCode];
         sendBadge(format, badgeData);
@@ -2859,7 +2859,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       var nameMatch = buffer.match(/(devD|d)ependencies/)[0];
       var statusMatch = buffer.match(/'14'>(.+)<\/text>\s*<\/g>/)[1];
-      badgeData.text[0] = data.label || nameMatch;
+      badgeData.text[0] = getLabel(nameMatch, data);
       badgeData.text[1] = statusMatch;
       if (statusMatch === 'up-to-date') {
         badgeData.text[1] = 'up to date';
@@ -3115,14 +3115,14 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      var version = data.version;
+      var parsedData = JSON.parse(buffer);
+      var version = parsedData.version;
       var license;
-      if (typeof data.license === 'string') {
-        license = data.license;
-      } else { license = data.license.type; }
+      if (typeof parsedData.license === 'string') {
+        license = parsedData.license;
+      } else { license = parsedData.license.type; }
 
-      var platforms = Object.keys(data.platforms || {
+      var platforms = Object.keys(parsedData.platforms || {
         'ios' : '5.0',
         'osx' : '10.7'
       }).join(' | ');
@@ -3134,11 +3134,11 @@ cache(function(data, match, sendBadge, request) {
         }
         badgeData.colorB = '#5BA7E9';
       } else if (type === 'p') {
-        badgeData.text[0] = 'platform';
+        badgeData.text[0] = getLabel('platform', data);
         badgeData.text[1] = platforms;
         badgeData.colorB = '#989898';
       } else if (type === 'l') {
-        badgeData.text[0] = 'license';
+        badgeData.text[0] = getLabel('license', data);
         badgeData.text[1] = license;
         badgeData.colorB = '#373737';
       }
@@ -3165,10 +3165,10 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      var percentage = data.cocoadocs.doc_percent;
+      var parsedData = JSON.parse(buffer);
+      var percentage = parsedData.cocoadocs.doc_percent;
       badgeData.colorscheme = coveragePercentageColor(percentage);
-      badgeData.text[0] = 'docs';
+      badgeData.text[0] = getLabel('docs', data);
       badgeData.text[1] = percentage + '%';
       sendBadge(format, badgeData);
     } catch(e) {
@@ -3342,7 +3342,7 @@ cache(function(query_data, match, sendBadge, request) {
           // falls through
         default:
           var value = typeof json_data[info] != 'undefined' && typeof json_data[info] != 'object' ? json_data[info] : Array.isArray(json_data[info]) ? json_data[info].join(", ") : 'invalid data';
-          badgeData.text[0] = query_data.label || type + " " + info;
+          badgeData.text[0] = getLabel(type + " " + info, data);
           badgeData.text[1] = value;
           badgeData.colorscheme = value != 'invalid data' ? 'blue' : 'lightgrey';
           break;
@@ -4054,7 +4054,7 @@ cache(function(data, match, sendBadge, request) {
             }
             sumBytes += bytes;
           }
-          badgeData.text[0] = topLanguage;
+          badgeData.text[0] = getLabel(topLanguage, data);
           if (sumBytes === 0) { // eg, empty repo, only .md files, etc.
             badgeData.text[1] = 'none';
             badgeData.colorscheme = 'blue';
@@ -4063,7 +4063,7 @@ cache(function(data, match, sendBadge, request) {
           }
           break;
         case 'count':
-          badgeData.text[0] = 'languages';
+          badgeData.text[0] = getLabel('languages', data);
           badgeData.text[1] = Object.keys(parsedData).length;
           badgeData.colorscheme = 'blue';
           break;
@@ -4071,7 +4071,7 @@ cache(function(data, match, sendBadge, request) {
           for (const language of Object.keys(parsedData)) {
             sumBytes += parseInt(parsedData[language]);
           }
-          badgeData.text[0] = 'code size';
+          badgeData.text[0] = getLabel('code size', data);
           badgeData.text[1] = prettyBytes(sumBytes);
           badgeData.colorscheme = 'blue';
           break;
@@ -4270,7 +4270,7 @@ cache(function(data, match, sendBadge, request) {
       } else if (info === 'dt') {
         var total = json.downloads;
         badgeData.colorscheme = downloadCountColor(total);
-        badgeData.text[0] = 'downloads';
+        badgeData.text[0] = getLabel('downloads', data);
         badgeData.text[1] = metric(total);
       } else if (info === 'e') {
         var endorsement = json.endorsement;
@@ -4281,7 +4281,7 @@ cache(function(data, match, sendBadge, request) {
         } else {
           badgeData.colorscheme = 'red';
         }
-        badgeData.text[0] = 'endorsement';
+        badgeData.text[0] = getLabel('endorsement', data);
         if (endorsement != null) {
           badgeData.text[1] = endorsement;
         } else {
@@ -4289,7 +4289,7 @@ cache(function(data, match, sendBadge, request) {
         }
       } else if (info === 'f') {
         var feedback = json.feedback_score;
-        badgeData.text[0] = 'score';
+        badgeData.text[0] = getLabel('score', data);
         if (feedback != null) {
           badgeData.text[1] = feedback + '%';
           badgeData.colorscheme = coveragePercentageColor(feedback);
@@ -4327,12 +4327,12 @@ cache(function(data, match, sendBadge, request) {
       if (info === 'rc') {
         var releases = json.release_count;
         badgeData.colorscheme = floorCountColor(releases, 10, 50, 100);
-        badgeData.text[0] = 'releases';
+        badgeData.text[0] = getLabel('releases', data);
         badgeData.text[1] = metric(releases);
       } else if (info === 'mc') {
         var modules = json.module_count;
         badgeData.colorscheme = floorCountColor(modules, 5, 10, 50);
-        badgeData.text[0] = 'modules';
+        badgeData.text[0] = getLabel('modules', data);
         badgeData.text[1] = metric(modules);
       }
       sendBadge(format, badgeData);
@@ -4575,7 +4575,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       if (type === 'd') {
-        badgeData.text[0] = 'role downloads';
+        badgeData.text[0] = getLabel('role downloads', data);
         badgeData.text[1] = metric(json.download_count);
         badgeData.colorscheme = 'blue';
       } else {
@@ -5415,13 +5415,13 @@ cache(function(data, match, sendBadge, request) {
         const projectNode = parsedData.marketplace.node[0];
         switch (type) {
           case 'dt':
-            badgeData.text[0] = 'downloads';
+            badgeData.text[0] = getLabel('downloads', data);
             var downloads = parseInt(projectNode.installstotal[0]);
             badgeData.text[1] = metric(downloads);
             badgeData.colorscheme = downloadCountColor(downloads);
             break;
           case 'dm':
-            badgeData.text[0] = 'downloads';
+            badgeData.text[0] = getLabel('downloads', data);
             var monthlydownloads = parseInt(projectNode.installsrecent[0]);
             badgeData.text[1] = metric(monthlydownloads) + '/month';
             badgeData.colorscheme = downloadCountColor(monthlydownloads);
@@ -5432,13 +5432,13 @@ cache(function(data, match, sendBadge, request) {
             badgeData.colorscheme = vdata.color;
             break;
           case 'favorites':
-            badgeData.text[0] = 'favorites';
+            badgeData.text[0] = getLabel('favorites', data);
             badgeData.text[1] = parseInt(projectNode.favorited[0]);
             badgeData.colorscheme = 'brightgreen';
             break;
           case 'last-update':
             var date = 1000 * parseInt(projectNode.changed[0]);
-            badgeData.text[0] = 'updated';
+            badgeData.text[0] = getLabel('updated', data);
             badgeData.text[1] = formatDate(date);
             badgeData.colorscheme = ageColor(Date.parse(date));
             break;
@@ -5681,17 +5681,17 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
+      var parsedData = JSON.parse(buffer);
 
       if (info === 'v') {
-        var version = data.version.number;
+        var version = parsedData.version.number;
         var vdata = versionColor(version);
         badgeData.text[1] = vdata.version;
         badgeData.colorscheme = vdata.color;
         sendBadge(format, badgeData);
       } else if (info === 'l') {
-        badgeData.text[0] = 'license';
-        var license = data.license;
+        badgeData.text[0] = getLabel('license', data);
+        var license = parsedData.license;
         if (Array.isArray(license) && license.length > 0) {
           // API returns licenses inconsistently ordered, so fix the order.
           badgeData.text[1] = license.sort().join(',');
@@ -5730,25 +5730,25 @@ cache(function (data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
+      var parsedData = JSON.parse(buffer);
       if (info.charAt(0) === 'd') {
         badgeData.text[0] = getLabel('downloads', data);
         var downloads;
         switch (info.charAt(1)) {
           case 'm':
-            downloads = data.downloads.monthly;
+            downloads = parsedData.downloads.monthly;
             badgeData.text[1] = metric(downloads) + '/month';
             break;
           case 'w':
-            downloads = data.downloads.weekly;
+            downloads = parsedData.downloads.weekly;
             badgeData.text[1] = metric(downloads) + '/week';
             break;
           case 'd':
-            downloads = data.downloads.daily;
+            downloads = parsedData.downloads.daily;
             badgeData.text[1] = metric(downloads) + '/day';
             break;
           case 't':
-            downloads = data.downloads.total;
+            downloads = parsedData.downloads.total;
             badgeData.text[1] = metric(downloads);
             break;
         }
@@ -5785,15 +5785,15 @@ cache(function (data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
+      var parsedData = JSON.parse(buffer);
       if (info === 'v') {
-        var vdata = versionColor(data);
+        var vdata = versionColor(parsedData);
         badgeData.text[1] = vdata.version;
         badgeData.colorscheme = vdata.color;
         sendBadge(format, badgeData);
       } else if (info == 'l') {
-        var license = data.info.license;
-        badgeData.text[0] = 'license';
+        var license = parsedData.info.license;
+        badgeData.text[0] = getLabel('license', data);
         if (license == null) {
           badgeData.text[1] = 'Unknown';
         } else {
@@ -6111,7 +6111,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       if (type == 'image-size') {
         var size = metric(buffer[0].repo.size) + "B";
-        badgeData.text[0] = 'image size';
+        badgeData.text[0] = getLabel('image size', data);
         badgeData.text[1] = size;
       } else if (type == 'layers') {
         badgeData.text[1] = buffer[0].repo.count;
@@ -6194,21 +6194,21 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer.toString());
+      var parsedData = JSON.parse(buffer.toString());
 
       // IP rate limiting
-      if (data.error_name === 'throttle_violation') {
+      if (parsedData.error_name === 'throttle_violation') {
         return;  // Hope for the best in the cache.
       }
 
       if (info === 'r') {
-        var reputation = data.items[0].reputation;
-        badgeData.text[0] = site + ' reputation';
+        var reputation = parsedData.items[0].reputation;
+        badgeData.text[0] = getLabel(site + ' reputation', data);
         badgeData.text[1] = metric(reputation);
         badgeData.colorscheme = floorCountColor(1000, 10000, 20000);
       } else if (info === 't') {
-        var count = data.items[0].count;
-        badgeData.text[0] = site + ' ' + item + ' questions';
+        var count = parsedData.items[0].count;
+        badgeData.text[0] = getLabel(site + ' ' + item + ' questions', data);
         badgeData.text[1] = metric(count);
         badgeData.colorscheme = floorCountColor(1000, 10000, 20000);
       }
@@ -6368,23 +6368,23 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer).results;
+      var parsedData = JSON.parse(buffer).results;
       if (info === 'version') {
-        var vdata = versionColor(data.Version);
+        var vdata = versionColor(parsedData.Version);
         badgeData.text[1] = vdata.version;
-        if (data.OutOfDate === null) {
+        if (parsedData.OutOfDate === null) {
           badgeData.colorscheme = 'blue';
         } else {
           badgeData.colorscheme = 'orange';
         }
       } else if (info === 'votes') {
-        var votes = data.NumVotes;
-        badgeData.text[0] = "votes";
+        var votes = parsedData.NumVotes;
+        badgeData.text[0] = getLabel('votes', data);
         badgeData.text[1] = votes;
         badgeData.colorscheme = floorCountColor(votes, 2, 20, 60);
       } else if (info === 'license') {
-        var license = data.License;
-        badgeData.text[0] = "license";
+        var license = parsedData.License;
+        badgeData.text[0] = getLabel('license', data);
         badgeData.text[1] = license;
         badgeData.colorscheme = 'blue';
       }
@@ -6423,30 +6423,30 @@ cache(function(data, match, sendBadge, request) {
           case 'd':
           case 'users':
             var downloads = value.interactionCount.UserDownloads;
-            badgeData.text[0] = data.label || 'users';
+            badgeData.text[0] = getLabel('users', data);
             badgeData.text[1] = metric(downloads);
             badgeData.colorscheme = downloadCountColor(downloads);
             break;
           case 'price':
-            badgeData.text[0] = data.label || 'price';
+            badgeData.text[0] = getLabel('price', data);
             badgeData.text[1] = currencyFromCode(value.priceCurrency) + value.price;
             badgeData.colorscheme = 'brightgreen';
             break;
           case 'rating':
             rating = Math.round(value.ratingValue * 100) / 100;
-            badgeData.text[0] = data.label || 'rating';
+            badgeData.text[0] = getLabel('rating', data);
             badgeData.text[1] = rating + '/5';
             badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
             break;
           case 'stars':
             rating = parseFloat(value.ratingValue);
-            badgeData.text[0] = data.label || 'rating';
+            badgeData.text[0] = getLabel('rating', data);
             badgeData.text[1] = starRating(rating);
             badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
             break;
           case 'rating-count':
             var ratingCount = value.ratingCount;
-            badgeData.text[0] = data.label || 'rating count';
+            badgeData.text[0] = getLabel('rating count', data);
             badgeData.text[1] = metric(ratingCount) + ' total';
             badgeData.colorscheme = floorCountColor(ratingCount, 5, 50, 500);
             break;
@@ -6729,7 +6729,7 @@ cache(function(data, match, sendBadge, request) {
       var value = json[typePropPrefix + '_badge_words'];
       var color = json[typePropPrefix + '_badge_color'];
 
-      if (label != null) badgeData.text[0] = label;
+      if (label != null) badgeData.text[0] = getLabel(label, data);
       badgeData.text[1] = value || 'invalid';
       if (color != null) badgeData.colorscheme = color;
 
