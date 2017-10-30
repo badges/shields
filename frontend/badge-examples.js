@@ -24,7 +24,7 @@ const Badge = ({ title, previewUri, exampleUri, documentation, keywords, baseUri
   const previewImage = previewUri
     ? (<img src={resolveUri(previewUri, baseUri, isProductionBuild)} alt="" />)
     : '\u00a0'; // non-breaking space
-  const resolvedExampleUri = resolveUri(exampleUri || previewUri, baseUri, false);
+  const resolvedExampleUri = resolveUri(exampleUri || previewUri, baseUri || 'https://img.shields.io/', false);
 
   return (
     <tr><th {... attrs}>{ title }:</th>
