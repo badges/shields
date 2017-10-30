@@ -3,7 +3,8 @@
 const url = require('url');
 const React = require('react');
 
-function resolveUri (uri, baseUri, longCache) {
+function resolveUri (uri, baseUri, options) {
+  const { longCache } = options || {};
   const resolved = baseUri ? url.resolve(baseUri, uri) : uri;
   if (longCache) {
     const parsed = url.parse(resolved, true);
@@ -22,9 +23,9 @@ const Badge = ({ title, previewUri, exampleUri, documentation, keywords, baseUri
     'data-keywords': keywords ? keywords.join(' ') : undefined,
   };
   const previewImage = previewUri
-    ? (<img src={resolveUri(previewUri, baseUri, isProductionBuild)} alt="" />)
+    ? (<img src={resolveUri(previewUri, baseUri, { longCache: isProductionBuild } )} alt="" />)
     : '\u00a0'; // non-breaking space
-  const resolvedExampleUri = resolveUri(exampleUri || previewUri, baseUri || 'https://img.shields.io/', false);
+  const resolvedExampleUri = resolveUri(exampleUri || previewUri, baseUri || 'https://img.shields.io/', { longCache: false });
 
   return (
     <tr><th {... attrs}>{ title }:</th>
