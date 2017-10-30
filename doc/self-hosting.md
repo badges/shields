@@ -102,3 +102,11 @@ then you will need to replace `localhost` with the IP address of that virtual
 machine.
 
 [shields.example.env]: ../shields.example.env
+
+
+Server secrets
+--------------
+
+You can add your own server secrets in `private/secret.json`. If you specify a
+`gh_token` for Github, it will be used in place of the Shields token rotation
+logic.
