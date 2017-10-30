@@ -15,7 +15,7 @@ module.exports = t;
 
 t.create('License')
   .get('/license/badges/shields.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'license', value: Joi.string() }));
+  .expectJSON({ name: 'license', value: 'Creative Commons Zero v1.0 Universal' });
 
 t.create('License for repo without a license')
   .get('/license/badges/badger.json')
