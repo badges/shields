@@ -173,7 +173,7 @@ runner.
 Here's the output:
 
 ```
-http://localhost:1111/try.html
+http://localhost:1111/
   Travis CI
     build status on default branch
       ✓
@@ -197,7 +197,7 @@ t.create('build status on named branch')
 ```
 
 ```
-http://localhost:1111/try.html
+http://localhost:1111/
   Travis CI
     build status on default branch
       ✓
