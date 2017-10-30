@@ -17,6 +17,14 @@ t.create('License')
   .get('/license/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({ name: 'license', value: Joi.string() }));
 
+t.create('License for repo without a license')
+  .get('/license/badges/badger.json')
+  .expectJSON({ name: 'license', value: 'missing' });
+
+t.create('License for repo with an unrecognized license')
+  .get('/license/philokev/sopel-noblerealms.json')
+  .expectJSON({ name: 'license', value: 'other' });
+
 t.create('Contributors')
   .get('/contributors/cdnjs/cdnjs.json')
   .expectJSONTypes(Joi.object().keys({

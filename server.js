@@ -3849,11 +3849,16 @@ cache(function(data, match, sendBadge, request) {
       var body = JSON.parse(buffer);
       const license = body.license;
       if (license != null) {
-        badgeData.text[1] = license.name;
+        if (license.spdx_id) {
+          badgeData.text[1] = license.name;
+        } else {
+          // only 'Other' does not have SPDX id, rename it to 'other'
+          badgeData.text[1] = license.name.toLowerCase();
+        }
         badgeData.colorscheme = licenseToColor(license.spdx_id);
         sendBadge(format, badgeData);
       } else {
-        badgeData.text[1] = 'unknown license';
+        badgeData.text[1] = 'missing';
         sendBadge(format, badgeData);
       }
     } catch(e) {
