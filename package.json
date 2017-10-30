@@ -31,6 +31,7 @@
     "moment": "^2.18.1",
     "pdfkit": "~0.8.0",
     "pretty-bytes": "^4.0.2",
+    "query-string": "^5.0.0",
     "redis": "~2.6.2",
     "request": "~2.83.0",
     "semver": "~5.4.1",
@@ -51,8 +52,14 @@
     "test:services:pr:run": "mocha --delay service-tests/runner/cli.js --stdin < pull-request-services.log",
     "test:services:pr": "npm run test:services:pr:prepare && npm run test:services:pr:run",
     "test": "npm run lint && npm run test:js",
-    "build": "make website",
-    "start": "node server 8080 ::"
+    "prebuild:examples": "mkdirp build",
+    "build:examples": "node_modules/.bin/babel-node frontend/render-badge-examples",
+    "build:copy-fragments": "cp frontend/fragments/try-header.html frontend/fragments/try-footer.html build/",
+    "build:concat": "cat build/try-header.html build/badge-examples-fragment.html build/try-footer.html > index.html",
+    "build": "npm run build:examples && npm run build:copy-fragments && npm run build:concat",
+    "build:production": "PRODUCTION_BUILD=true npm run build:examples && npm run build:copy-fragments && make footer-production-transform && npm run build:concat",
+    "heroku-postbuild": "npm run build",
+    "start": "INFOSITE=/ node server 8080 ::"
   },
   "bin": {
     "badge": "./gh-badge.js"
@@ -92,8 +99,10 @@
     "is-svg": "^2.1.0",
     "lodash.difference": "^4.5.0",
     "minimist": "^1.2.0",
+    "mkdirp": "^0.5.1",
     "mocha": "^4.0.1",
     "nock": "^9.0.13",
+    "node-env-flag": "^0.1.0",
     "node-fetch": "^1.6.3",
     "nyc": "^11.2.1",
     "opn-cli": "^3.1.0",
@@ -104,10 +113,12 @@
     "read-all-stdin-sync": "^1.0.5",
     "rimraf": "^2.6.2",
     "semver-regex": "^1.0.0",
-    "sinon": "^4.0.1"
+    "sinon": "^4.0.1",
+    "whatwg-url": "^6.3.0"
   },
   "engines": {
-    "node": ">= 6"
+    "node": "6.x",
+    "npm": "5.x"
   },
   "babel": {
     "presets": [
