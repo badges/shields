@@ -11,6 +11,10 @@ t.create('Connection error')
   .networkOff()
   .expectJSON({ name: 'Package Name', value: 'inaccessible' });
 
+t.create('No URI specified')
+  .get('.json?query=$.name&label=Package Name')
+  .expectJSON({ name: 'Package Name', value: 'no uri specified' });
+
 t.create('JSON from uri')
   .get('.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.name')
   .expectJSON({ name: 'custom badge', value: 'gh-badges'});

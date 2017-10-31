@@ -7124,6 +7124,7 @@ cache(function(query, match, sendBadge, request) {
   if (!query.uri){
     badgeData.text[1] = 'no uri specified';
     sendBadge(format, badgeData);
+    return;
   }
   var uri = encodeURI(decodeURIComponent(query.uri));
 
