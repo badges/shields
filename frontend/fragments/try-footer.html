@@ -472,13 +472,14 @@ function makeImage() {
 }
 
 function generateDynamicImage() {
-  var url = '/badge/dynamic/' + escapeField(dynamicImageMaker.type.value);
+  var url = document.getElementById('imgUrlPrefix').textContent;
+  url += 'dynamic/' + escapeField(dynamicImageMaker.type.value);
   url += '.svg?label=' + escapeField(dynamicImageMaker.label.value);
   url += '&colorB=' + escapeField(dynamicImageMaker.color.value);
   url += '&prefix=' + escapeField(dynamicImageMaker.prefix.value);
   url += '&suffix=' + escapeField(dynamicImageMaker.suffix.value);
   url += '&query=' + dynamicImageMaker.query.value;
-  url += '&uri=' + dynamicImageMaker.uri.value;
+  url += '&uri=' + escapeField(dynamicImageMaker.uri.value);
   document.location = url;
 }
 
