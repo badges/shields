@@ -7119,11 +7119,16 @@ cache(function(query, match, sendBadge, request) {
   var suffix = query.suffix || '';
   var pathExpression = query.query;
 
-  // API URI
-  var uri = encodeURI(decodeURIComponent(query.uri));
-
+  
   var badgeData = getBadgeData('custom badge', query);
-  request(uri, {json:true}, function(err, res, data) {
+  
+  if (!query.uri){
+    badgeData.text[1] = 'no uri specified';
+    sendBadge(format, badgeData);
+  }
+  var uri = encodeURI(decodeURIComponent(query.uri));
+      
+  request(uri, (err, res, data) => {
     try {
       if (res && res.statusCode === 404)
         throw 'invalid resource';
