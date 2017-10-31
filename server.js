@@ -1784,7 +1784,7 @@ cache(function(queryData, match, sendBadge, request) {
   const variants = {
     // default use `conda|{channelname}` as label
     '': function(queryData, badgeData) {
-      badgeData.text[0] = getLabel('conda|' + badgeData.text[0], queryData);
+      badgeData.text[0] = getLabel(`conda|${badgeData.text[0]}`, queryData);
     },
     // skip `conda|` prefix
     'n': function(queryData, badgeData) {
@@ -3342,7 +3342,7 @@ cache(function(query_data, match, sendBadge, request) {
           // falls through
         default:
           var value = typeof json_data[info] != 'undefined' && typeof json_data[info] != 'object' ? json_data[info] : Array.isArray(json_data[info]) ? json_data[info].join(", ") : 'invalid data';
-          badgeData.text[0] = getLabel(type + " " + info, query_data);
+          badgeData.text[0] = getLabel(`${type} ${info}`, query_data);
           badgeData.text[1] = value;
           badgeData.colorscheme = value != 'invalid data' ? 'blue' : 'lightgrey';
           break;
@@ -6208,7 +6208,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = floorCountColor(1000, 10000, 20000);
       } else if (info === 't') {
         var count = parsedData.items[0].count;
-        badgeData.text[0] = getLabel(site + ' ' + item + ' questions', data);
+        badgeData.text[0] = getLabel(`${site} ${item} questions`, data);
         badgeData.text[1] = metric(count);
         badgeData.colorscheme = floorCountColor(1000, 10000, 20000);
       }
