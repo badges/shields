@@ -151,7 +151,8 @@ camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
     badgeData.colorscheme = 'red';
     // Add format to badge data.
     badgeData.format = format;
-    makeBadge(badgeData, makeSend(format, request.res, end));
+    const svg = makeBadge(badgeData);
+    makeSend(format, request.res, end)(svg);
 });
 
 camp.notfound(/.*/, function(query, match, end, request) {
@@ -7244,11 +7245,12 @@ function(data, match, end, ask) {
     if (isValidStyle(data.style)) {
       badgeData.template = data.style;
     }
-    makeBadge(badgeData, makeSend(format, ask.res, end));
+    const svg = makeBadge(badgeData);
+    makeSend(format, ask.res, end)(svg);
   } catch(e) {
     log.error(e.stack);
-    makeBadge({text: ['error', 'bad badge'], colorscheme: 'red'},
-      makeSend(format, ask.res, end));
+    const svg = makeBadge({text: ['error', 'bad badge'], colorscheme: 'red'});
+    makeSend(format, ask.res, end)(svg);
   }
 });
 
@@ -7264,7 +7266,8 @@ camp.route(/^\/flip\.svg$/, function(data, match, end, ask) {
   bitFlip = !bitFlip;
   badgeData.text[1] = bitFlip? 'on': 'off';
   badgeData.colorscheme = bitFlip? 'brightgreen': 'red';
-  makeBadge(badgeData, makeSend('svg', ask.res, end));
+  const svg = makeBadge(badgeData);
+  makeSend('svg', ask.res, end)(svg);
 });
 
 // Any badge, old version.
@@ -7288,10 +7291,11 @@ function(data, match, end, ask) {
   try {
     var badgeData = {text: [subject, status]};
     badgeData.colorscheme = color;
-    makeBadge(badgeData, makeSend('png', ask.res, end));
+    const svg = makeBadge(badgeData);
+    makeSend('png', ask.res, end)(svg);
   } catch(e) {
-    makeBadge({text: ['error', 'bad badge'], colorscheme: 'red'},
-      makeSend('png', ask.res, end));
+    const svg = makeBadge({text: ['error', 'bad badge'], colorscheme: 'red'});
+    makeSend('png', ask.res, end)(svg);
   }
 });
 
