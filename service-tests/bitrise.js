@@ -13,7 +13,7 @@ t.create('deploy status')
     value: Joi.equal(
       'success',
       'error',
-      'unknown',
+      'unknown'
     )
   }));
 
@@ -24,7 +24,7 @@ t.create('deploy status without branch')
     value: Joi.equal(
       'success',
       'error',
-      'unknown',
+      'unknown'
     )
   }));
 
