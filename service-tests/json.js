@@ -22,27 +22,21 @@ t.create('JSON from uri')
 t.create('JSON from uri | caching with new query params')
   .get('.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.version')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('custom badge'),
+    name: 'custom badge',
     value: Joi.string().regex(/^\d+(\.\d+)?(\.\d+)?$/)
   }));
 
 t.create('JSON from uri | with prefix & suffix & label')
   .get('.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.version&prefix=v&suffix= dev&label=Shields')
   .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('Shields'),
+    name: 'Shields',
     value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?\sdev$/)
   }));
 
 t.create('JSON from uri | object doesnt exist')
   .get('.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.does_not_exist')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('custom badge'),
-    value: Joi.equal('')
-  }));
+  .expectJSON({ name: 'custom badge', value: '' });
 
 t.create('JSON from uri | invalid uri')
   .get('.json?uri=https://github.com/badges/shields/raw/master/notafile.json&query=$.version')
-  .expectJSONTypes(Joi.object().keys({
-    name: Joi.equal('custom badge'),
-    value: Joi.equal('invalid resource')
-  }));
+  .expectJSON({ name: 'custom badge', value: 'invalid resource' });
