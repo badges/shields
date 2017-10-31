@@ -5491,6 +5491,47 @@ cache({
   },
 }));
 
+camp.route(/^\/bitrise\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+cache({
+  queryParams: ['token'],
+  handler: (data, match, sendBadge, request) => {
+    const appId = match[1];
+    const branch = match[2];
+    const format = match[3];
+    const token = data.token;
+    const badgeData = getBadgeData('bitrise', data);
+    let apiUrl = 'https://www.bitrise.io/app/' + appId + '/status.json?token=' + token;
+    if (typeof branch !== 'undefined') {
+      apiUrl += '&branch=' + branch;
+    }
+
+    const statusColorScheme = {
+      success: 'brightgreen',
+      error: 'red',
+      unknown: 'lightgrey'
+    };
+
+    request(apiUrl, {json: true}, function(err, res, data) {
+      try {
+        if (!res || err !== null || res.statusCode !== 200) {
+          badgeData.text[1] = 'inaccessible';
+          sendBadge(format, badgeData);
+          return;
+        }
+
+        badgeData.text[1] = data.status;
+        badgeData.colorscheme = statusColorScheme[data.status];
+
+        sendBadge(format, badgeData);
+      }
+      catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  },
+}));
+
 // CircleCI build integration.
 // https://circleci.com/api/v1/project/BrightFlair/PHP.Gt?circle-token=0a5143728784b263d9f0238b8d595522689b3af2&limit=1&filter=completed
 camp.route(/^\/circleci\/(?:token\/(\w+))?[+/]?project\/(?:(github|bitbucket)\/)?([^/]+\/[^/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
