@@ -17,6 +17,17 @@ t.create('deploy status')
     )
   }));
 
+t.create('deploy status without branch')
+  .get('/cde737473028420d.json?token=GCIdEzacE4GW32jLVrZb7A')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'bitrise',
+    value: Joi.equal(
+      'success',
+      'error',
+      'unknown',
+    )
+  }));
+
 t.create('unknown branch')
   .get('/cde737473028420d/unknown.json?token=GCIdEzacE4GW32jLVrZb7A')
   .expectJSON({ name: 'bitrise', value: 'unknown' });
