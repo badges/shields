@@ -7119,15 +7119,14 @@ cache(function(query, match, sendBadge, request) {
   var suffix = query.suffix || '';
   var pathExpression = query.query;
 
-  
   var badgeData = getBadgeData('custom badge', query);
-  
+
   if (!query.uri){
     badgeData.text[1] = 'no uri specified';
     sendBadge(format, badgeData);
   }
   var uri = encodeURI(decodeURIComponent(query.uri));
-      
+
   request(uri, (err, res, data) => {
     try {
       if (res && res.statusCode === 404)
