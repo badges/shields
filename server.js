@@ -2568,7 +2568,146 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Code Climate integration
+// Code Climate coverage (new)
+camp.route(/^\/codeclimate\/tc\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var userRepo = match[1];  // eg, `kabisaict/flow`.
+  var format = match[2];
+  request({
+      method: 'GET',
+      uri: 'http://api.codeclimate.com/v1/repos?github_slug=' + userRepo,
+      json: true
+  }, function (err, res, body) {
+    var badgeData = getBadgeData('coverage', data);
+
+    if (err != null) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    if (!body.data || body.data.length == 0 || !body.data.hasOwnProperty('attributes')) {
+      badgeData.text[1] = 'unknown';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    var options = {
+      method: 'HEAD',
+      uri: 'https://api.codeclimate.com/v1/badges/' + body.data[0].attributes.badge_token + '/test_coverage',
+    };
+
+    request(options, function(err, res) {
+      if (err != null) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
+      }
+
+      try {
+        var statusMatch = res.headers['content-disposition']
+                             .match(/filename=".*test_coverage-(.+)\.svg"/);
+        if (!statusMatch) {
+          badgeData.text[1] = 'unknown';
+          sendBadge(format, badgeData);
+          return;
+        }
+
+        var score = statusMatch[1].replace('-', '.');
+        badgeData.text[1] = score;
+
+        if (score == 'A') {
+          badgeData.colorscheme = 'brightgreen';
+        } else if (score == 'B') {
+          badgeData.colorscheme = 'green';
+        } else if (score == 'C') {
+          badgeData.colorscheme = 'yellow';
+        } else if (score == 'D') {
+          badgeData.colorscheme = 'orange';
+        } else {
+          badgeData.colorscheme = 'red';
+        }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'not found';
+        sendBadge(format, badgeData);
+      }
+    });
+
+  });
+}));
+
+
+// Code Climate maintainability
+camp.route(/^\/codeclimate\/maintainability\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var userRepo = match[1];  // eg, `kabisaict/flow`.
+  var format = match[2];
+  request({
+      method: 'GET',
+      uri: 'http://api.codeclimate.com/v1/repos?github_slug=' + userRepo,
+      json: true
+  }, function (err, res, body) {
+    var badgeData = getBadgeData('maintainability', data);
+
+    if (err != null) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    if (!body.data || body.data.length == 0 || !body.data.hasOwnProperty('attributes')) {
+      badgeData.text[1] = 'unknown';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    var options = {
+      method: 'HEAD',
+      uri: 'https://api.codeclimate.com/v1/badges/' + body.data[0].attributes.badge_token + '/maintainability',
+    };
+
+    request(options, function(err, res) {
+      if (err != null) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
+      }
+
+      try {
+        var statusMatch = res.headers['content-disposition']
+                             .match(/filename=".*maintainability-(.+)\.svg"/);
+        if (!statusMatch) {
+          badgeData.text[1] = 'unknown';
+          sendBadge(format, badgeData);
+          return;
+        }
+
+        var score = statusMatch[1].replace('-', '.');
+        badgeData.text[1] = score;
+
+        if (score == 'A') {
+          badgeData.colorscheme = 'brightgreen';
+        } else if (score == 'B') {
+          badgeData.colorscheme = 'green';
+        } else if (score == 'C') {
+          badgeData.colorscheme = 'yellowgreen';
+        } else if (score == 'D') {
+          badgeData.colorscheme = 'yellow';
+        } else {
+          badgeData.colorscheme = 'red';
+        }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'not found';
+        sendBadge(format, badgeData);
+      }
+    });
+
+  });
+}));
+
+// // Code Climate integration
 camp.route(/^\/codeclimate\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `github/kabisaict/flow`.
@@ -2600,9 +2739,9 @@ cache(function(data, match, sendBadge, request) {
       } else if (score > 3) {
         badgeData.colorscheme = 'green';
       } else if (score > 2) {
-        badgeData.colorscheme = 'yellowgreen';
-      } else if (score > 1) {
         badgeData.colorscheme = 'yellow';
+      } else if (score > 1) {
+        badgeData.colorscheme = 'orange';
       } else {
         badgeData.colorscheme = 'red';
       }
