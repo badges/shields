@@ -11,7 +11,7 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 favicon:
-	node gh-badge.js '' '' '#bada55' .png > favicon.png
+	node lib/badge-cli.js '' '' '#bada55' .png > favicon.png
 
 footer-production-transform:
 	@$(SED) "s,(<img src=\")(/[^\"\?]+)\",\1https://img.shields.io\2?maxAge=2592000\"," \
