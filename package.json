@@ -46,7 +46,7 @@
     "coverage:report:reopen": "opn coverage/lcov-report/index.html",
     "coverage:report:open": "npm run coverage:report && npm run coverage:report:reopen",
     "lint": "eslint '**/*.js'",
-    "test:js": "mocha lib '*.spec.js'",
+    "test:js": "mocha '*.spec.js' 'lib/**/*.spec.js'",
     "test:services": "mocha --delay service-tests/runner/cli.js",
     "test:services:pr:prepare": "node service-tests/runner/pull-request-services-cli.js > pull-request-services.log",
     "test:services:pr:run": "mocha --delay service-tests/runner/cli.js --stdin < pull-request-services.log",
@@ -62,11 +62,11 @@
     "start": "INFOSITE=/ node server 8080 ::"
   },
   "bin": {
-    "badge": "./gh-badge.js"
+    "badge": "lib/badge-cli.js"
   },
   "files": [
     "README.md",
-    "gh-badge.js",
+    "lib/badge-cli.js",
     "lib/badge.js",
     "lib/colorscheme.json",
     "lib/lru-cache.js",
