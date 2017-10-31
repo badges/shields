@@ -1,36 +1,20 @@
-var secureServer = !!process.env.HTTPS;
-var secureServerKey = process.env.HTTPS_KEY;
-var secureServerCert = process.env.HTTPS_CRT;
-var serverPort = +process.env.PORT || +process.argv[2] || (secureServer? 443: 80);
-var bindAddress = process.env.BIND_ADDRESS || process.argv[3] || '::';
-var infoSite = process.env.INFOSITE || "https://shields.io";
-var githubApiUrl = process.env.GITHUB_URL || 'https://api.github.com';
-var path = require('path');
-var Camp = require('camp');
-var camp = Camp.start({
-  documentRoot: path.join(__dirname, 'public'),
-  port: serverPort,
-  hostname: bindAddress,
-  secure: secureServer,
-  cert: secureServerCert,
-  key: secureServerKey
-});
-var tryUrl = require('url').format({
-  protocol: secureServer ? 'https' : 'http',
-  hostname: bindAddress,
-  port: serverPort,
-  pathname: '/',
-});
-var log = require('./lib/log.js');
-const makeBadge = require('./lib/make-badge');
-var githubAuth = require('./lib/github-auth');
-var queryString = require('query-string');
-var prettyBytes = require('pretty-bytes');
-var xml2js = require('xml2js');
-var serverSecrets = require('./lib/server-secrets');
-log(tryUrl);
+'use strict';
 
-const {latest: latestVersion} = require('./lib/version');
+const countBy = require('lodash.countby');
+const path = require('path');
+const prettyBytes = require('pretty-bytes');
+const queryString = require('query-string');
+const semver = require('semver');
+const xml2js = require('xml2js');
+
+const analytics = require('./lib/analytics');
+const config = require('./lib/server-config');
+const githubAuth = require('./lib/github-auth');
+const log = require('./lib/log');
+const makeBadge = require('./lib/make-badge');
+const serverSecrets = require('./lib/server-secrets');
+const suggest = require('./lib/suggest');
+const { latest: latestVersion } = require('./lib/version');
 const {
   compare: phpVersionCompare,
   latest: phpLatestVersion,
@@ -56,7 +40,6 @@ const {
   version: versionColor,
   age: ageColor
 } = require('./lib/color-formatters');
-const analytics = require('./lib/analytics');
 const {
   makeColorB,
   isValidStyle,
@@ -65,7 +48,6 @@ const {
   makeLogo: getLogo,
   makeBadgeData: getBadgeData,
 } = require('./lib/badge-data');
-const countBy = require('lodash.countby');
 const {
   handleRequest: cache,
   clearRequestCache
@@ -74,12 +56,8 @@ const {
   regularUpdate,
   clearRegularUpdateCache
 } = require('./lib/regular-update');
-const {
-  makeSend
-} = require('./lib/result-sender');
-const {
-  fetchFromSvg
-} = require('./lib/svg-badge-parser');
+const { makeSend } = require('./lib/result-sender');
+const { fetchFromSvg } = require('./lib/svg-badge-parser');
 const {
   escapeFormat,
   escapeFormatSlashes
@@ -106,26 +84,22 @@ const {
   checkStateColor: githubCheckStateColor,
   commentsColor: githubCommentsColor
 } = require('./lib/github-helpers');
-
 const {
   mapGithubCommitsSince,
   mapGithubReleaseDate
-} = require("./lib/github-provider");
+} = require('./lib/github-provider');
 
-var semver = require('semver');
-var serverStartTime = new Date((new Date()).toGMTString());
+const serverStartTime = new Date((new Date()).toGMTString());
+const { githubApiUrl } = config;
 
-analytics.load();
-analytics.scheduleAutosaving();
-analytics.setRoutes(camp);
-
-githubAuth.scheduleAutosaving();
-if (serverSecrets && serverSecrets.gh_client_id) {
-  githubAuth.setRoutes(camp);
-}
-
-var suggest = require('./lib/suggest.js');
-camp.ajax.on('suggest/v1', suggest);
+const camp = require('camp').start({
+  documentRoot: path.join(__dirname, 'public'),
+  port: config.serverPort,
+  hostname: config.bindAddress,
+  secure: config.secureServer,
+  cert: config.secureServerCert,
+  key: config.secureServerKey,
+});
 
 function reset() {
   clearRequestCache();
@@ -143,6 +117,20 @@ module.exports = {
   reset,
   stop
 };
+
+log('Server is starting up');
+log(config.frontendUri);
+
+analytics.load();
+analytics.scheduleAutosaving();
+analytics.setRoutes(camp);
+
+githubAuth.scheduleAutosaving();
+if (serverSecrets && serverSecrets.gh_client_id) {
+  githubAuth.setRoutes(camp);
+}
+
+suggest.setRoutes(camp);
 
 camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
     var format = match[1];
@@ -7253,7 +7241,7 @@ function(data, match, end, ask) {
 });
 
 // Production cache debugging.
-var bitFlip = false;
+let bitFlip = false;
 camp.route(/^\/flip\.svg$/, function(data, match, end, ask) {
   var cacheSecs = 60;
   ask.res.setHeader('Cache-Control', 'max-age=' + cacheSecs);
@@ -7295,11 +7283,11 @@ function(data, match, end, ask) {
   }
 });
 
-if (infoSite !== '/') {
+if (config.infoSite !== '/') {
   // Redirect the root to the website.
   camp.route(/^\/$/, function(data, match, end, ask) {
     ask.res.statusCode = 302;
-    ask.res.setHeader('Location', infoSite);
+    ask.res.setHeader('Location', config.infoSite);
     ask.res.end();
   });
 }
