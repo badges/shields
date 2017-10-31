@@ -22,7 +22,7 @@ var tryUrl = require('url').format({
   pathname: '/',
 });
 var log = require('./lib/log.js');
-var badge = require('./lib/badge.js');
+const makeBadge = require('./lib/make-badge');
 var githubAuth = require('./lib/github-auth');
 var queryString = require('query-string');
 var prettyBytes = require('pretty-bytes');
@@ -151,7 +151,7 @@ camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
     badgeData.colorscheme = 'red';
     // Add format to badge data.
     badgeData.format = format;
-    badge(badgeData, makeSend(format, request.res, end));
+    makeBadge(badgeData, makeSend(format, request.res, end));
 });
 
 camp.notfound(/.*/, function(query, match, end, request) {
@@ -7244,10 +7244,10 @@ function(data, match, end, ask) {
     if (isValidStyle(data.style)) {
       badgeData.template = data.style;
     }
-    badge(badgeData, makeSend(format, ask.res, end));
+    makeBadge(badgeData, makeSend(format, ask.res, end));
   } catch(e) {
     log.error(e.stack);
-    badge({text: ['error', 'bad badge'], colorscheme: 'red'},
+    makeBadge({text: ['error', 'bad badge'], colorscheme: 'red'},
       makeSend(format, ask.res, end));
   }
 });
@@ -7264,7 +7264,7 @@ camp.route(/^\/flip\.svg$/, function(data, match, end, ask) {
   bitFlip = !bitFlip;
   badgeData.text[1] = bitFlip? 'on': 'off';
   badgeData.colorscheme = bitFlip? 'brightgreen': 'red';
-  badge(badgeData, makeSend('svg', ask.res, end));
+  makeBadge(badgeData, makeSend('svg', ask.res, end));
 });
 
 // Any badge, old version.
@@ -7288,9 +7288,9 @@ function(data, match, end, ask) {
   try {
     var badgeData = {text: [subject, status]};
     badgeData.colorscheme = color;
-    badge(badgeData, makeSend('png', ask.res, end));
+    makeBadge(badgeData, makeSend('png', ask.res, end));
   } catch(e) {
-    badge({text: ['error', 'bad badge'], colorscheme: 'red'},
+    makeBadge({text: ['error', 'bad badge'], colorscheme: 'red'},
       makeSend('png', ask.res, end));
   }
 });
