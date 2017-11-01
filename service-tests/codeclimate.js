@@ -12,25 +12,25 @@ t.create('maintainability score')
     value: Joi.equal('A', 'B', 'C', 'D', 'F', 'unknown')
   }));
 
-t.create('maintainability score for unknown repo')
+t.create('maintainability score for non-existent repo')
   .get('/maintainability/unknown/unknown.json')
   .expectJSON({
     name: 'maintainability',
-    value: 'unknown'
+    value: 'not found'
   });
 
 t.create('test coverage score')
-  .get('/tc/Nickersoft/dql.json')
+  .get('/c/Nickersoft/dql.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'coverage',
     value: Joi.equal('A', 'B', 'C', 'D', 'F', 'unknown')
   }));
 
-t.create('test coverage score for unknown repo')
-  .get('/tc/unknown/unknown.json')
+t.create('test coverage score for non-existent repo')
+  .get('/c/unknown/unknown.json')
   .expectJSON({
     name: 'coverage',
-    value: 'unknown'
+    value: 'not found'
   });
 
 
