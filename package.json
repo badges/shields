@@ -114,8 +114,7 @@
     "read-all-stdin-sync": "^1.0.5",
     "rimraf": "^2.6.2",
     "semver-regex": "^1.0.0",
-    "sinon": "^4.0.1",
-    "whatwg-url": "^6.3.0"
+    "sinon": "^4.0.1"
   },
   "engines": {
     "node": "6.x",
