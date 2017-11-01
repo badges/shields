@@ -22,13 +22,11 @@ npm install  # You may need sudo for this.
 [package manager]: https://nodejs.org/en/download/package-manager/
 
 
-Build the index
----------------
-
-Build the "real" index page:
+Build the frontend
+------------------
 
 ```sh
-make website
+BASE_URL=https://your-server.example.com npm run build:production
 ```
 
 
@@ -50,7 +48,7 @@ node server 8080
 
 The root gets redirected to https://shields.io.
 
-For testing purposes, you can go to `http://localhost/try.html`.
+For testing purposes, you can go to `http://localhost/`.
 
 
 Heroku
@@ -93,14 +91,42 @@ $ docker run --rm -p 8080:80 --env-file shields.env --name shields shields
 > gh-badges@1.1.2 start /usr/src/app
 > node server.js
 
-http://[::1]:80/try.html
+http://[::1]/
 ```
 
 Assuming Docker is running locally, you should be able to get to the
-application at http://localhost:8080/try.html.
+application at http://localhost:8080/.
 
 If you run Docker in a virtual machine (such as boot2docker or Docker Machine)
 then you will need to replace `localhost` with the IP address of that virtual
 machine.
 
 [shields.example.env]: ../shields.example.env
+
+
+Server secrets
+--------------
+
+You can add your own server secrets in `private/secret.json`.
+
+Because of Github rate limits, you will need to provide a token, or else badges
+will stop working once you hit 60 requests per hour, the
+[unauthenticated rate limit][github rate limit].
+
+You can [create a personal access token][personal access tokens] through the
+Github website. When you create the token, you can choose to give read access
+to your repositories. If you do that, your self-hosted Shields installation
+will have access to your private repositories.
+
+```
+{
+  "gh_token": "..."
+}
+```
+
+When a `gh_token` is specified, it is used in place of the Shields token
+rotation logic.
+
+
+[github rate limit]: https://developer.github.com/v3/#rate-limiting
+[personal access tokens]: https://github.com/settings/tokens

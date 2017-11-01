@@ -109,16 +109,16 @@ t.create('GitHub open issues by label (raw)')
   }));
 
 t.create('GitHub open pull requests by label')
-  .get('/issues-pr/badges/shields/vendor-badge.json')
+  .get('/issues-pr/badges/shields/service-badge.json')
   .expectJSONTypes(Joi.object().keys({
-    name: 'vendor-badge pull requests',
+    name: 'service-badge pull requests',
     value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
   }));
 
 t.create('GitHub open pull requests by label (raw)')
-  .get('/issues-pr-raw/badges/shields/vendor-badge.json')
+  .get('/issues-pr-raw/badges/shields/service-badge.json')
   .expectJSONTypes(Joi.object().keys({
-    name: 'open vendor-badge pull requests',
+    name: 'open service-badge pull requests',
     value: isMetric
   }));
 
