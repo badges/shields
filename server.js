@@ -15,7 +15,6 @@ const makeBadge = require('./lib/make-badge');
 const serverSecrets = require('./lib/server-secrets');
 const suggest = require('./lib/suggest');
 const { latest: latestVersion } = require('./lib/version');
-
 const {
   compare: phpVersionCompare,
   latest: phpLatestVersion,
