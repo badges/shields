@@ -19,6 +19,13 @@ t.create('maintainability score for non-existent repo')
     value: 'not found'
   });
 
+t.create('maintainability score without content-disposition')
+  .get('/maintainability/Nickersoft/dql.json')
+  .intercept(nock => nock('https://api.codeclimate.com/v1/badges')
+    .head('/78ac0fa85c83fea5213a/maintainability')
+    .reply(200))
+  .expectJSON({ name: 'maintainability', value: 'invalid' });
+
 t.create('test coverage score')
   .get('/c/Nickersoft/dql.json')
   .expectJSONTypes(Joi.object().keys({
@@ -32,6 +39,13 @@ t.create('test coverage score for non-existent repo')
     name: 'coverage',
     value: 'not found'
   });
+
+t.create('test coverage score without content-disposition')
+  .get('/c/Nickersoft/dql.json')
+  .intercept(nock => nock('https://api.codeclimate.com/v1/badges')
+    .head('/78ac0fa85c83fea5213a/test_coverage')
+    .reply(200))
+  .expectJSON({ name: 'coverage', value: 'invalid' });
 
 
 module.exports = t;
