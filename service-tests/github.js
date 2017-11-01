@@ -25,7 +25,7 @@ t.create('License for repo without a license')
 
 t.create('License for repo with an unrecognized license')
   .get('/license/philokev/sopel-noblerealms.json?style=extended')
-  .expectJSON({ name: 'license', value: 'other', colorB: colorsB.orange });
+  .expectJSON({ name: 'license', value: 'unknown', colorB: colorsB.orange });
 
 t.create('Contributors')
   .get('/contributors/cdnjs/cdnjs.json')

@@ -3844,8 +3844,7 @@ cache(function(data, match, sendBadge, request) {
         if (license.spdx_id) {
           badgeData.text[1] = license.name;
         } else {
-          // only 'Other' does not have SPDX id, rename it to 'other'
-          badgeData.text[1] = license.name.toLowerCase();
+          badgeData.text[1] = 'unknown';
         }
         badgeData.colorscheme = licenseToColor(license.spdx_id);
         sendBadge(format, badgeData);
