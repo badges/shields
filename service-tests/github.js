@@ -21,11 +21,11 @@ t.create('License')
 
 t.create('License for repo without a license')
   .get('/license/badges/badger.json?style=extended')
-  .expectJSON({ name: 'license', value: 'missing', colorB: colorsB.lightgrey });
+  .expectJSON({ name: 'license', value: 'missing', colorB: colorsB.red });
 
 t.create('License for repo with an unrecognized license')
   .get('/license/philokev/sopel-noblerealms.json?style=extended')
-  .expectJSON({ name: 'license', value: 'unknown', colorB: colorsB.orange });
+  .expectJSON({ name: 'license', value: 'unknown', colorB: colorsB.lightgrey });
 
 t.create('Contributors')
   .get('/contributors/cdnjs/cdnjs.json')

@@ -3850,6 +3850,7 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
       } else {
         badgeData.text[1] = 'missing';
+        badgeData.colorscheme = 'red';
         sendBadge(format, badgeData);
       }
     } catch(e) {
