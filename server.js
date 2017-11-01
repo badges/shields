@@ -90,7 +90,7 @@ const {
 } = require('./lib/github-provider');
 
 const serverStartTime = new Date((new Date()).toGMTString());
-const githubProvider = githubAuth.githubProvider;
+const githubProvider = githubAuth.defaultProvider;
 
 const camp = require('camp').start({
   documentRoot: path.join(__dirname, 'public'),
