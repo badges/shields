@@ -9,21 +9,23 @@ const {
   isFormattedDate,
   isVPlusDottedVersionAtLeastOne
 } = require('./helpers/validators');
+const colorscheme = require('../lib/colorscheme.json');
 
 const t = new ServiceTester({ id: 'github', title: 'Github' });
 module.exports = t;
+const colorsB = Object.assign({}, ...Object.keys(colorscheme).map(color => ({ [color]: colorscheme[color].colorB })));
 
 t.create('License')
-  .get('/license/badges/shields.json')
-  .expectJSON({ name: 'license', value: 'Creative Commons Zero v1.0 Universal' });
+  .get('/license/badges/shields.json?style=extended')
+  .expectJSON({ name: 'license', value: 'Creative Commons Zero v1.0 Universal', colorB: colorsB.brightgreen });
 
 t.create('License for repo without a license')
-  .get('/license/badges/badger.json')
-  .expectJSON({ name: 'license', value: 'missing' });
+  .get('/license/badges/badger.json?style=extended')
+  .expectJSON({ name: 'license', value: 'missing', colorB: colorsB.lightgrey });
 
 t.create('License for repo with an unrecognized license')
-  .get('/license/philokev/sopel-noblerealms.json')
-  .expectJSON({ name: 'license', value: 'other' });
+  .get('/license/philokev/sopel-noblerealms.json?style=extended')
+  .expectJSON({ name: 'license', value: 'other', colorB: colorsB.orange });
 
 t.create('Contributors')
   .get('/contributors/cdnjs/cdnjs.json')
