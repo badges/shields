@@ -3512,7 +3512,7 @@ cache(function(data, match, sendBadge, request) {
   var isRaw = !!match[3];
   var user = match[4];  // eg, badges
   var repo = match[5];  // eg, shields
-  var ghLabel = decodeURI(match[6]);  // eg, website
+  var ghLabel = match[6];  // eg, website
   var format = match[7];
   var apiUrl = githubApiUrl + '/search/issues';
   var query = {};
