@@ -27,6 +27,7 @@
     "dot": "~1.1.2",
     "gm": "^1.23.0",
     "json-autosave": "~1.1.2",
+    "jsonpath": "~0.2.12",
     "lodash.countby": "^4.6.0",
     "moment": "^2.18.1",
     "pdfkit": "~0.8.0",
