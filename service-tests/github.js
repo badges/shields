@@ -17,15 +17,15 @@ const colorsB = Object.assign({}, ...Object.keys(colorscheme).map(color => ({ [c
 
 t.create('Public domain License')
   .get('/license/badges/shields.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'Creative Commons Zero v1.0 Universal', colorB: '#7cd958' });
+  .expectJSON({ name: 'license', value: 'CC0-1.0', colorB: '#7cd958' });
 
 t.create('Copyleft license')
   .get('/license/ansible/ansible.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'GNU General Public License v3.0', colorB: colorsB.orange });
+  .expectJSON({ name: 'license', value: 'GPL-3.0', colorB: colorsB.orange });
 
 t.create('Permissive license')
   .get('/license/atom/atom.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'MIT License', colorB: colorsB.green });
+  .expectJSON({ name: 'license', value: 'MIT', colorB: colorsB.green });
 
 t.create('License for repo without a license')
   .get('/license/badges/badger.json?style=_shields_test')

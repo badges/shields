@@ -3842,7 +3842,7 @@ cache(function(data, match, sendBadge, request) {
       const license = body.license;
       if (license != null) {
         if (license.spdx_id) {
-          badgeData.text[1] = license.name;
+          badgeData.text[1] = license.spdx_id;
         } else {
           badgeData.text[1] = 'unknown';
         }
