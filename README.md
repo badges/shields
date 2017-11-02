@@ -122,6 +122,9 @@ Development
 5. Run `npm start` to start the server.
 6. Open `http://[::]:8080/` to view the home page.
 
+To generate the frontend using production cache settings &ndash; that is,
+badge preview URIs with `maxAge` &ndash; run `npm run build:production`.
+
 [package manager]: https://nodejs.org/en/download/package-manager/
 
 

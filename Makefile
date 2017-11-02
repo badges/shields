@@ -22,44 +22,50 @@ footer-production-transform:
 		> build/try-footer.html
 
 website:
-	npm run build:production
+	BASE_URL=https://img.shields.io npm run build:production
 
 deploy: deploy-s0 deploy-s1 deploy-s2 deploy-gh-pages
 
 deploy-s0:
-	git add -f Verdana.ttf
-	git add -f private/secret.json
+	# index.html on each server gets a dev build.
+	# https://github.com/badges/shields/issues/1220
+	npm run build
+	git add -f Verdana.ttf private/secret.json index.html
 	git commit -m'MUST NOT BE ON GITHUB'
 	git push -f s0 HEAD:master
 	git reset HEAD~1
 	git checkout master
 
 deploy-s1:
-	git add -f Verdana.ttf
-	git add -f private/secret.json
+	# index.html on each server gets a dev build.
+	# https://github.com/badges/shields/issues/1220
+	npm run build
+	git add -f Verdana.ttf private/secret.json index.html
 	git commit -m'MUST NOT BE ON GITHUB'
 	git push -f s1 HEAD:master
 	git reset HEAD~1
 	git checkout master
 
 deploy-s2:
-	git add -f Verdana.ttf
-	git add -f private/secret.json
+	# index.html on each server gets a dev build.
+	# https://github.com/badges/shields/issues/1220
+	npm run build
+	git add -f Verdana.ttf private/secret.json index.html
 	git commit -m'MUST NOT BE ON GITHUB'
 	git push -f s2 HEAD:master
 	git reset HEAD~1
 	git checkout master
 
-deploy-gh-pages: website
-	(git checkout -B gh-pages master && \
+deploy-gh-pages:
+	(BASE_URL=https://img.shields.io npm run build:production && \
+	git checkout -B gh-pages master && \
 	git add -f index.html && \
 	git commit -m '[DEPLOY] Build index.html' && \
 	git push -f origin gh-pages:gh-pages) || git checkout master
 	git checkout master
 
 deploy-heroku:
-	git add -f Verdana.ttf
-	git add -f private/secret.json
+	git add -f Verdana.ttf private/secret.json index.html
 	git commit -m'MUST NOT BE ON GITHUB'
 	git push -f heroku HEAD:master
 	git reset HEAD~1

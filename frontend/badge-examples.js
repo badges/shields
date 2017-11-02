@@ -1,17 +1,19 @@
 'use strict';
 
 const url = require('url');
-// const URL = url.URL; // Requires Node 7+.
-const { URL } = require('whatwg-url');
 const React = require('react');
 
-function resolvePreviewUri (uri, baseUri, isProductionBuild) {
-  if (isProductionBuild) {
-    const parsed = new URL(uri, baseUri);
-    parsed.searchParams.set('maxAge', 2592000);
-    return parsed.toString();
+function resolveUri (uri, baseUri, options) {
+  const { longCache } = options || {};
+  const resolved = baseUri ? url.resolve(baseUri, uri) : uri;
+  if (longCache) {
+    const parsed = url.parse(resolved, true);
+    parsed.query.maxAge = '2592000';
+    // url.format will re-format `query`, but only When `search` is deleted.
+    delete parsed.search;
+    return url.format(parsed);
   } else {
-    return uri;
+    return resolved;
   }
 }
 
@@ -21,9 +23,9 @@ const Badge = ({ title, previewUri, exampleUri, documentation, keywords, baseUri
     'data-keywords': keywords ? keywords.join(' ') : undefined,
   };
   const previewImage = previewUri
-    ? (<img src={resolvePreviewUri(previewUri, baseUri, isProductionBuild)} alt="" />)
+    ? (<img src={resolveUri(previewUri, baseUri, { longCache: isProductionBuild } )} alt="" />)
     : '\u00a0'; // non-breaking space
-  const resolvedExampleUri = url.resolve(baseUri, exampleUri || previewUri);
+  const resolvedExampleUri = resolveUri(exampleUri || previewUri, baseUri || 'https://img.shields.io/', { longCache: false });
 
   return (
     <tr><th {... attrs}>{ title }:</th>

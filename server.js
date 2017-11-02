@@ -1,6 +1,7 @@
 'use strict';
 
 const countBy = require('lodash.countby');
+const jp = require('jsonpath');
 const path = require('path');
 const prettyBytes = require('pretty-bytes');
 const queryString = require('query-string');
@@ -7130,6 +7131,50 @@ camp.route(/^\/maven-metadata\/v\/(https?)\/(.+\.xml)\.(svg|png|gif|jpg|json)$/,
         sendBadge(format, badge);
       }
     });
+}));
+
+// User defined sources - JSON response
+camp.route(/^\/badge\/dynamic\/(json)\.(svg|png|gif|jpg|json)$/,
+cache({
+  queryParams: ['uri', 'query', 'prefix', 'suffix'],
+  handler: function(query, match, sendBadge, request) {
+    var type = match[1];
+    var format = match[2];
+    var prefix = query.prefix || '';
+    var suffix = query.suffix || '';
+    var pathExpression = query.query;
+
+    var badgeData = getBadgeData('custom badge', query);
+
+    if (!query.uri){
+      badgeData.text[1] = 'no uri specified';
+      sendBadge(format, badgeData);
+      return;
+    }
+    var uri = encodeURI(decodeURIComponent(query.uri));
+
+    request(uri, (err, res, data) => {
+      try {
+        if (res && res.statusCode === 404)
+          throw 'invalid resource';
+
+        if (err != null || !res || res.statusCode !== 200)
+          throw 'inaccessible';
+
+        switch (type){
+          case 'json':
+            data = (typeof data == 'object' ? data : JSON.parse(data));
+            badgeData.text[1] = (prefix || '') + jp.query(data, pathExpression).join(', ') + (suffix || '');
+            break;
+        }
+      } catch(e) {
+        badgeData.colorB = 'lightgrey';
+        badgeData.text[1] = e;
+      } finally {
+        sendBadge(format, badgeData);
+      }
+    });
+  }
 }));
 
 // nsp for npm packages
