@@ -16,23 +16,23 @@ module.exports = t;
 const colorsB = Object.assign({}, ...Object.keys(colorscheme).map(color => ({ [color]: colorscheme[color].colorB })));
 
 t.create('Public domain License')
-  .get('/license/badges/shields.json?style=extended')
+  .get('/license/badges/shields.json?style=_shields_test')
   .expectJSON({ name: 'license', value: 'Creative Commons Zero v1.0 Universal', colorB: '#7cd958' });
 
 t.create('Copyleft license')
-  .get('/license/ansible/ansible.json?style=extended')
+  .get('/license/ansible/ansible.json?style=_shields_test')
   .expectJSON({ name: 'license', value: 'GNU General Public License v3.0', colorB: colorsB.orange });
 
 t.create('Permissive license')
-  .get('/license/atom/atom.json?style=extended')
+  .get('/license/atom/atom.json?style=_shields_test')
   .expectJSON({ name: 'license', value: 'MIT License', colorB: colorsB.green });
 
 t.create('License for repo without a license')
-  .get('/license/badges/badger.json?style=extended')
+  .get('/license/badges/badger.json?style=_shields_test')
   .expectJSON({ name: 'license', value: 'missing', colorB: colorsB.red });
 
 t.create('License for repo with an unrecognized license')
-  .get('/license/philokev/sopel-noblerealms.json?style=extended')
+  .get('/license/philokev/sopel-noblerealms.json?style=_shields_test')
   .expectJSON({ name: 'license', value: 'unknown', colorB: colorsB.lightgrey });
 
 t.create('Contributors')
