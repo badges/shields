@@ -1,6 +1,8 @@
 
 <h2 id="your-badge"> Your Badge </h2>
 
+<h3 id="static-badge"> Static </h3>
+
 <form action='javascript:makeImage()' id='imageMaker'>
   <input class='short' name='subject' placeholder='subject'/>
   <input class='short' name='status' placeholder='status'/>
@@ -48,6 +50,27 @@
 <img src="/badge/color-blue-blue.svg" alt='blue'/>
 <img src="/badge/color-ff69b4-ff69b4.svg" alt='ff69b4'/>
 </p>
+
+<h3 id="dynamic-badge"> Dynamic </h3>
+
+<form action='javascript:generateDynamicImage()' id='dynamicImageMaker'>
+  <input class='short' name='type' list='dynamic-type' placeholder='type'/>
+  <datalist id='dynamic-type'>
+    <option value='json'>
+  </datalist>
+  <input class='short' name='label' placeholder='label'/>
+  <input class='short' name='uri' placeholder='uri'/>
+  <input class='short' name='query' placeholder='$.data.subdata'/>
+  <input class='short' name='color' placeholder='hex color'/>
+  <input class='short' name='prefix' placeholder='prefix'/>
+  <input class='short' name='suffix' placeholder='suffix'/>
+  <button>Generate</button>
+</form>
+
+<p>
+<code>/badge/dynamic/&lt;TYPE&gt;.svg?uri=&lt;URI&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;<a href="https://www.npmjs.com/package/jsonpath" target="_BLANK" title="JSONdata syntax">$.DATA.SUBDATA</a>&gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;</code>
+</p>
+<hr class='spacing'/>
 
 <h2 id="styles"> Styles </h2>
 <p>
@@ -445,6 +468,18 @@ function makeImage() {
   url += '-' + escapeField(imageMaker.status.value);
   url += '-' + escapeField(imageMaker.color.value);
   url += '.svg';
+  document.location = url;
+}
+
+function generateDynamicImage() {
+  var url = document.getElementById('imgUrlPrefix').textContent;
+  url += 'dynamic/' + escapeField(dynamicImageMaker.type.value);
+  url += '.svg?label=' + escapeField(dynamicImageMaker.label.value);
+  url += '&colorB=' + escapeField(dynamicImageMaker.color.value);
+  url += '&prefix=' + escapeField(dynamicImageMaker.prefix.value);
+  url += '&suffix=' + escapeField(dynamicImageMaker.suffix.value);
+  url += '&query=' + dynamicImageMaker.query.value;
+  url += '&uri=' + escapeField(dynamicImageMaker.uri.value);
   document.location = url;
 }
 

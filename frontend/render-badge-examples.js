@@ -12,7 +12,7 @@ const BadgeExamples = require('./badge-examples');
 // const badgeExampleData = JSON.parse(fs.readFileSync(inputPath));
 const badgeExampleData = require('../lib/all-badge-examples');
 
-const baseUri = process.env.BASE_URL || 'https://img.shields.io';
+const baseUri = process.env.BASE_URL;
 const isProductionBuild = envFlag(process.env.PRODUCTION_BUILD, false);
 
 const fragment = ReactDOMServer.renderToStaticMarkup(
