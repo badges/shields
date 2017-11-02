@@ -3846,7 +3846,12 @@ cache(function(data, match, sendBadge, request) {
         } else {
           badgeData.text[1] = 'unknown';
         }
-        badgeData.colorscheme = licenseToColor(license.spdx_id);
+        const color = licenseToColor(license.spdx_id);
+        if (sixHex(color)) {
+          badgeData.colorB = '#' + color;
+        } else {
+          badgeData.colorscheme = color;
+        }
         sendBadge(format, badgeData);
       } else {
         badgeData.text[1] = 'missing';

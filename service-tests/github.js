@@ -15,9 +15,17 @@ const t = new ServiceTester({ id: 'github', title: 'Github' });
 module.exports = t;
 const colorsB = Object.assign({}, ...Object.keys(colorscheme).map(color => ({ [color]: colorscheme[color].colorB })));
 
-t.create('License')
+t.create('Public domain License')
   .get('/license/badges/shields.json?style=extended')
-  .expectJSON({ name: 'license', value: 'Creative Commons Zero v1.0 Universal', colorB: colorsB.brightgreen });
+  .expectJSON({ name: 'license', value: 'Creative Commons Zero v1.0 Universal', colorB: '#7cd958' });
+
+t.create('Copyleft license')
+  .get('/license/ansible/ansible.json?style=extended')
+  .expectJSON({ name: 'license', value: 'GNU General Public License v3.0', colorB: colorsB.orange });
+
+t.create('Permissive license')
+  .get('/license/atom/atom.json?style=extended')
+  .expectJSON({ name: 'license', value: 'MIT License', colorB: colorsB.green });
 
 t.create('License for repo without a license')
   .get('/license/badges/badger.json?style=extended')
