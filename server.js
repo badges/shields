@@ -128,7 +128,10 @@ analytics.scheduleAutosaving();
 analytics.setRoutes(camp);
 
 if (githubAuth.persistence) {
-  githubAuth.persistence.initialize();
+  githubAuth.persistence.initialize().catch(e => {
+    console.error(e);
+    process.exit(1);
+  });
 }
 if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);

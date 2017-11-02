@@ -94,6 +94,7 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^7.4.0",
     "eslint-plugin-standard": "^3.0.1",
+    "fs-readfile-promise": "^3.0.0",
     "glob": "^7.1.1",
     "icedfrisby": "^1.4.0",
     "icedfrisby-nock": "^1.0.0",
@@ -118,6 +119,8 @@
     "rimraf": "^2.6.2",
     "semver-regex": "^1.0.0",
     "sinon": "^4.0.1",
+    "tmp": "0.0.33",
+    "wait-promise": "^0.4.1",
     "whatwg-url": "^6.3.0"
   },
   "engines": {
