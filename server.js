@@ -31,6 +31,7 @@ const {
   ordinalNumber,
   starRating,
   omitv,
+  addv: versionText,
   maybePluralize,
   formatDate
 } = require('./lib/text-formatters');
@@ -620,9 +621,8 @@ cache(function (data, match, sendBadge, request) {
       version: true,
       process: function (data, badgeData) {
         version = data.version? data.version.num: data.crate.max_version;
-        var vdata = versionColor(version);
-        badgeData.text[1] = vdata.version;
-        badgeData.colorscheme = vdata.color;
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
       }
     },
     'l': {
@@ -1353,7 +1353,6 @@ cache(function(data, match, sendBadge, request) {
       var badgeText = null;
       var badgeColor = null;
 
-      var vdata;
       switch (info) {
       case 'v':
         var stableVersions = versions.filter(phpStableVersion);
@@ -1364,17 +1363,15 @@ cache(function(data, match, sendBadge, request) {
         //if (!!aliasesMap[stableVersion]) {
         //  stableVersion = aliasesMap[stableVersion];
         //}
-        vdata = versionColor(stableVersion);
-        badgeText = vdata.version;
-        badgeColor = vdata.color;
+        badgeText = versionText(stableVersion);
+        badgeColor = versionColor(stableVersion);
         break;
       case 'vpre':
         var unstableVersion = phpLatestVersion(versions);
         //if (!!aliasesMap[unstableVersion]) {
         //  unstableVersion = aliasesMap[unstableVersion];
         //}
-        vdata = versionColor(unstableVersion);
-        badgeText = vdata.version;
+        badgeText = versionText(unstableVersion);
         badgeColor = 'orange';
         break;
       }
@@ -1521,9 +1518,8 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var version = JSON.parse(buffer).version || 0;
-      var vdata = versionColor(version);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = vdata.color;
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'not found';
@@ -1596,9 +1592,8 @@ cache(function(data, match, sendBadge, request) {
     try {
       const data = JSON.parse(buffer);
       const version = data[tag || 'latest'];
-      const vdata = versionColor(version);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = vdata.color;
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -1761,9 +1756,8 @@ cache(function(queryData, match, sendBadge, request) {
     // latest version 'v'
     'v': function(data, badgeData) {
       const version = data.latest_version;
-      const color = versionColor(version).color;
-      badgeData.text[1] = 'v'+version;
-      badgeData.colorscheme = color;
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
     },
     // platform 'p'
     'p': function(data, badgeData) {
@@ -1835,9 +1829,8 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var vdata = versionColor(data.name);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = 'brightgreen';
+      badgeData.text[1] = versionText(data.name);
+      badgeData.colorscheme = versionColor(data.name);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -1862,7 +1855,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       badgeData.text[1] = "[" + clojar + " \"" + data.version + "\"]";
-      badgeData.colorscheme = versionColor(data.version).color;
+      badgeData.colorscheme = versionColor(data.version);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -1887,9 +1880,8 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var version = data.results[0].version;
-      var vdata = versionColor(version);
-      badgeData.text[1] = 'v' + version;
-      badgeData.colorscheme = vdata.color;
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -1914,9 +1906,8 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var version = data.version;
-      var vdata = versionColor(version);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = vdata.color;
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -2106,9 +2097,8 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
       } else if (info === 'v') {
         var version = parsedData.info.version;
-        var vdata = versionColor(version);
-        badgeData.text[1] = vdata.version;
-        badgeData.colorscheme = vdata.color;
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
         sendBadge(format, badgeData);
       } else if (info === 'l') {
         var license = parsedData.info.license;
@@ -2292,7 +2282,7 @@ cache(function(data, match, sendBadge, request) {
       default:
         color = 'brightgreen';
     }
-    badgeData.text[1] = 'v' + version;
+    badgeData.text[1] = versionText(version);
     badgeData.colorscheme = color;
     sendBadge(format, badgeData);
   });
@@ -2316,9 +2306,8 @@ cache(function(data, match, sendBadge, request) {
       // Grab the latest stable version, or an unstable
       var versions = data.versions;
       var version = latestVersion(versions);
-      var vdata = versionColor(version);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = vdata.color;
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -2364,9 +2353,8 @@ cache(function(queryParams, match, sendBadge, request) {
         sendBadge(format, badgeData);
       } else if (info === 'v') {
         const version = data.releases[0].version;
-        const vdata = versionColor(version);
-        badgeData.text[1] = vdata.version;
-        badgeData.colorscheme = vdata.color;
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
         sendBadge(format, badgeData);
       } else if (info == 'l') {
         const license = (data.meta.licenses || []).join(', ');
@@ -3045,12 +3033,8 @@ cache(function(data, match, sendBadge, request) {
       // we'll render the 'invalid' badge below, which is the correct thing
       // to do.
       var version = versionLines[0].replace(/\s+/, '').split(/:/)[1];
-      badgeData.text[1] = 'v' + version;
-      if (version[0] === '0') {
-        badgeData.colorscheme = 'orange';
-      } else {
-        badgeData.colorscheme = 'blue';
-      }
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -3116,13 +3100,9 @@ cache(function(data, match, sendBadge, request) {
         'ios' : '5.0',
         'osx' : '10.7'
       }).join(' | ');
-      version = version.replace(/^v/, "");
       if (type === 'v') {
-        badgeData.text[1] = version;
-        if (/^\d/.test(badgeData.text[1])) {
-          badgeData.text[1] = 'v' + version;
-        }
-        badgeData.colorB = '#5BA7E9';
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
       } else if (type === 'p') {
         badgeData.text[0] = getLabel('platform', data);
         badgeData.text[1] = platforms;
@@ -3289,9 +3269,8 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       var versions = data.map(function(e) { return e.name; });
       var tag = latestVersion(versions);
-      var vdata = versionColor(tag);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = vdata.color;
+      badgeData.text[1] = versionText(tag);
+      badgeData.colorscheme = versionColor(tag);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'none';
@@ -3323,9 +3302,8 @@ cache(function(query_data, match, sendBadge, request) {
         case 'v':
         case 'version':
           var version = json_data.version;
-          var vdata = versionColor(version);
-          badgeData.text[1] = vdata.version;
-          badgeData.colorscheme = vdata.color;
+          badgeData.text[1] = versionText(version);
+          badgeData.colorscheme = versionColor(version);
           break;
         case 'n':
           info = 'name';
@@ -3408,8 +3386,7 @@ cache(function(data, match, sendBadge, request) {
       }
       var version = data.tag_name;
       var prerelease = data.prerelease;
-      var vdata = versionColor(version);
-      badgeData.text[1] = vdata.version;
+      badgeData.text[1] = versionText(version);
       badgeData.colorscheme = prerelease ? 'orange' : 'blue';
       sendBadge(format, badgeData);
     } catch(e) {
@@ -4184,9 +4161,8 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var version = data.version;
-      var vdata = versionColor(version);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = vdata.color;
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -4250,9 +4226,9 @@ cache(function(data, match, sendBadge, request) {
     try {
       if (info === 'v') {
         if (json.current_release) {
-          var vdata = versionColor(json.current_release.version);
-          badgeData.text[1] = vdata.version;
-          badgeData.colorscheme = vdata.color;
+          var version = json.current_release.version;
+          badgeData.text[1] = versionText(version);
+          badgeData.colorscheme = versionColor(version);
         } else {
           badgeData.text[1] = 'none';
           badgeData.colorscheme = 'lightgrey';
@@ -4532,12 +4508,8 @@ cache(function(data, match, sendBadge, request) {
         if (version === undefined) {
           throw Error('Plugin not found!');
         }
-        badgeData.text[1] = 'v' + version;
-        if (version === '0' || /alpha|beta/.test(version.toLowerCase())) {
-          badgeData.colorscheme = 'orange';
-        } else {
-          badgeData.colorscheme = 'blue';
-        }
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
         sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'not found';
@@ -4714,13 +4686,8 @@ cache(function(data, match, sendBadge, request) {
         var version = versions.find(function(version){
           return version.indexOf(versionPrefix) === 0;
         });
-
-        badgeData.text[1] = 'v' + version;
-        if (version === '0' || /SNAPSHOT/.test(version)) {
-          badgeData.colorscheme = 'orange';
-        } else {
-          badgeData.colorscheme = 'blue';
-        }
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
         sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'invalid';
@@ -4798,17 +4765,12 @@ cache(function(data, match, sendBadge, request) {
           version = parsed.data.baseVersion || parsed.data.version;
           break;
       }
-
-      if (version === '0' || /SNAPSHOT/.test(version)) {
-        badgeData.colorscheme = 'orange';
-        if (version !== '0') {
-          badgeData.text[1] = version;
-        } else {
-          badgeData.text[1] = 'undefined';
-        }
+      if (version !== '0') {
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
       } else {
-         badgeData.colorscheme = 'blue';
-         badgeData.text[1] = version;
+        badgeData.text[1] = 'undefined';
+        badgeData.colorscheme = 'orange';
       }
       sendBadge(format, badgeData);
     } catch(e) {
@@ -4851,9 +4813,8 @@ cache((data, match, sendBadge, request) => {
     try {
       //if reqType is `v`, then stable release number, if `vpre` then latest release
       const version = reqType == 'v' ? data.latest_stable_release.name : data.latest_release_number;
-      const vdata = versionColor(version);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = vdata.color;
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'no releases';
@@ -4944,12 +4905,8 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var version = data.version;
-      badgeData.text[1] = 'v' + version;
-      if (version[0] === '0') {
-        badgeData.colorscheme = 'orange';
-      } else {
-        badgeData.colorscheme = 'blue';
-      }
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -5297,8 +5254,8 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
       return;
     }
-    badgeData.text[1] = 'v' + version;
-    badgeData.colorscheme = 'green';
+    badgeData.text[1] = versionText(version);
+    badgeData.colorscheme = versionColor(version);
     sendBadge(format, badgeData);
   });
 }));
@@ -5364,7 +5321,9 @@ camp.route(/^\/vscode-marketplace\/(d|v|r)\/(.*)\.(svg|png|gif|jpg|json)$/,
           }
           case 'v': {
             badgeData.text[0] = getLabel('visual studio marketplace', data);
-            badgeData.text[1] = 'v' + buffer.results[0].extensions[0].versions[0].version;
+            var version = buffer.results[0].extensions[0].versions[0].version;
+            badgeData.text[1] = versionText(version);
+            badgeData.colorscheme = versionColor(version);
             break;
           }
         }
@@ -5417,9 +5376,8 @@ cache(function(data, match, sendBadge, request) {
             badgeData.colorscheme = downloadCountColor(monthlydownloads);
             break;
           case 'v':
-            var vdata = versionColor(projectNode.version[0]);
-            badgeData.text[1] = vdata.version;
-            badgeData.colorscheme = vdata.color;
+            badgeData.text[1] = versionText(projectNode.version[0]);
+            badgeData.colorscheme = versionColor(projectNode.version[0]);
             break;
           case 'favorites':
             badgeData.text[0] = getLabel('favorites', data);
@@ -5627,9 +5585,8 @@ cache(function(data, match, sendBadge, request) {
 
       if (info === 'v') {
         var version = data.version;
-        var vdata = versionColor(version);
-        badgeData.text[1] = vdata.version;
-        badgeData.colorscheme = vdata.color;
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
       } else if (info === 'l') {
         var license = data.license[0];
         badgeData.text[1] = license;
@@ -5667,9 +5624,8 @@ cache(function(queryParams, match, sendBadge, request) {
 
       if (info === 'v') {
         var version = data.Version;
-        var vdata = versionColor(version);
-        badgeData.text[1] = vdata.version;
-        badgeData.colorscheme = vdata.color;
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
         sendBadge(format, badgeData);
       } else if (info === 'l') {
         badgeData.text[0] = getLabel('license', queryParams);
@@ -5716,9 +5672,8 @@ cache(function(data, match, sendBadge, request) {
 
       if (info === 'v') {
         var version = parsedData.version.number;
-        var vdata = versionColor(version);
-        badgeData.text[1] = vdata.version;
-        badgeData.colorscheme = vdata.color;
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
         sendBadge(format, badgeData);
       } else if (info === 'l') {
         badgeData.text[0] = getLabel('license', data);
@@ -5784,7 +5739,7 @@ cache(function (data, match, sendBadge, request) {
             break;
         }
         if (version) {
-            badgeData.text[1] += ' ' + versionColor(version).version;
+            badgeData.text[1] += ' ' + versionText(version);
         }
         badgeData.colorscheme = downloadCountColor(downloads);
         sendBadge(format, badgeData);
@@ -5818,9 +5773,8 @@ cache(function (data, match, sendBadge, request) {
     try {
       var parsedData = JSON.parse(buffer);
       if (info === 'v') {
-        var vdata = versionColor(parsedData);
-        badgeData.text[1] = vdata.version;
-        badgeData.colorscheme = vdata.color;
+        badgeData.text[1] = versionText(parsedData);
+        badgeData.colorscheme = versionColor(parsedData);
         sendBadge(format, badgeData);
       } else if (info == 'l') {
         var license = parsedData.info.license;
@@ -6187,9 +6141,8 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       var version = data.stable;
 
-      var vdata = versionColor(version);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = vdata.color;
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
 
       sendBadge(format, badgeData);
     } catch(e) {
@@ -6401,8 +6354,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       var parsedData = JSON.parse(buffer).results;
       if (info === 'version') {
-        var vdata = versionColor(parsedData.Version);
-        badgeData.text[1] = vdata.version;
+        badgeData.text[1] = versionText(parsedData.Version);
         if (parsedData.OutOfDate === null) {
           badgeData.colorscheme = 'blue';
         } else {
@@ -6447,9 +6399,8 @@ cache(function(data, match, sendBadge, request) {
         var rating;
         switch (type) {
           case 'v':
-            var vdata = versionColor(value.version);
-            badgeData.text[1] = vdata.version;
-            badgeData.colorscheme = vdata.color;
+            badgeData.text[1] = versionText(value.version);
+            badgeData.colorscheme = versionColor(value.version);
             break;
           case 'd':
           case 'users':
@@ -6584,9 +6535,8 @@ cache(function(query_data, match, sendBadge, request) {
         switch (type) {
         case 'v':
           var version = data.addon.version[0];
-          var vdata = versionColor(version);
-          badgeData.text[1] = vdata.version;
-          badgeData.colorscheme = vdata.color;
+          badgeData.text[1] = versionText(version);
+          badgeData.colorscheme = versionColor(version);
           break;
         case 'd':
           var downloads = parseInt(data.addon.total_downloads[0], 10);
@@ -6649,9 +6599,9 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var version = 'v' + data['version'];
       var status = data['status'];
-      var color = 'brightgreen';
+      var color = versionColor(data['version']);
+      var version = versionText(data['version']);
       if(status !== 'ok'){
         color = 'red';
         version = 'unknown';
@@ -6871,9 +6821,10 @@ cache(function(data, match, sendBadge, request) {
           return sendBadge(format, badgeData);
         case 'v':
           var version = data['plugin-repository'].category[0]["idea-plugin"][0].version[0];
-          badgeData.text[1] = version;
-          badgeData.colorscheme = 'orange';
-          return sendBadge(format, badgeData);        }
+          badgeData.text[1] = versionText(version);
+          badgeData.colorscheme = versionColor(version);
+          return sendBadge(format, badgeData);
+        }
       } catch (err) {
         badgeData.text[1] = 'invalid';
         return sendBadge(format, badgeData);
@@ -7122,8 +7073,8 @@ camp.route(/^\/maven-metadata\/v\/(https?)\/(.+\.xml)\.(svg|png|gif|jpg|json)$/,
               sendBadge(format, badge);
             } else {
               const version = result.metadata.versioning[0].versions[0].version.slice(-1)[0];
-              badge.text[1] = `v${version}`;
-              badge.colorscheme = /^.*-SNAPSHOT$/.test(version) ? 'green' : 'brightgreen';
+              badge.text[1] = versionText(version);
+              badge.colorscheme = versionColor(version);
               sendBadge(format, badge);
             }
           });
