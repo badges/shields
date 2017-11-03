@@ -35,6 +35,25 @@ t.create('License for repo with an unrecognized license')
   .get('/license/philokev/sopel-noblerealms.json?style=_shields_test')
   .expectJSON({ name: 'license', value: 'unknown', colorB: colorsB.lightgrey });
 
+t.create('License with SPDX id not appearing in configuration')
+  .get('/license/user1/project-with-EFL-license.json?style=_shields_test')
+  .intercept(nock => nock('https://api.github.com')
+    .get(/\/repos\/user1\/project-with-EFL-license/)
+    // GitHub API currently returns "other" as a key for repo with EFL license
+    .reply(200, `
+      {
+        "license": {
+          "key": "efl-1.0",
+          "name": "Eiffel Forum License v1.0",
+          "spdx_id": "EFL-1.0",
+          "url": "https://api.github.com/licenses/efl-1.0",
+          "featured": true
+        }
+      }`), {
+      'Content-Type': 'application/json; charset=utf-8'
+  })
+  .expectJSON({ name: 'license', value: 'EFL-1.0', colorB: colorsB.lightgrey });
+
 t.create('Contributors')
   .get('/contributors/cdnjs/cdnjs.json')
   .expectJSONTypes(Joi.object().keys({
