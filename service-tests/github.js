@@ -15,7 +15,7 @@ const t = new ServiceTester({ id: 'github', title: 'Github' });
 module.exports = t;
 const colorsB = Object.assign({}, ...Object.keys(colorscheme).map(color => ({ [color]: colorscheme[color].colorB })));
 
-t.create('Public domain License')
+t.create('Public domain license')
   .get('/license/badges/shields.json?style=_shields_test')
   .expectJSON({ name: 'license', value: 'CC0-1.0', colorB: '#7cd958' });
 
