@@ -41,6 +41,6 @@ t.create('permissive license')
   .get('/l/express.json?style=_shields_test')
   .expectJSON({ name: 'license', value: 'MIT', colorB: colorsB.blue });
 
-t.create('permissive and copyleft licenses (SPDX license expression syntax version 2.0 string)')
+t.create('permissive and copyleft licenses (SPDX license expression syntax version 2.0)')
   .get('/l/rho-cc-promise.json?style=_shields_test')
   .expectJSON({ name: 'license', value: '(MPL-2.0 OR MIT)', colorB: colorsB.blue });
