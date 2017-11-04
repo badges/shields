@@ -44,3 +44,15 @@ t.create('permissive license')
 t.create('permissive and copyleft licenses (SPDX license expression syntax version 2.0)')
   .get('/l/rho-cc-promise.json?style=_shields_test')
   .expectJSON({ name: 'license', value: '(MPL-2.0 OR MIT)', colorB: colorsB.blue });
+
+t.create('package without a scope and without a license property')
+  .get('/l/package1.json?style=_shields_test')
+  .intercept(nock => nock('https://registry.npmjs.org')
+    .get('/package1/latest')
+    .reply(200, `
+      {
+        "name": "package1",
+      }`), {
+    'Content-Type': 'application/json'
+  })
+  .expectJSON({ name: 'license', value: 'invalid', colorB: colorsB.lightgrey });
