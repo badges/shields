@@ -10,10 +10,11 @@ const {
   isVPlusDottedVersionAtLeastOne
 } = require('./helpers/validators');
 const colorscheme = require('../lib/colorscheme.json');
+const mapValues = require('lodash.mapvalues');
 
 const t = new ServiceTester({ id: 'github', title: 'Github' });
 module.exports = t;
-const colorsB = Object.assign({}, ...Object.keys(colorscheme).map(color => ({ [color]: colorscheme[color].colorB })));
+const colorsB = mapValues(colorscheme, 'colorB');
 
 t.create('Public domain license')
   .get('/license/badges/shields.json?style=_shields_test')
