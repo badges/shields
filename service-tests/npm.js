@@ -45,14 +45,39 @@ t.create('permissive and copyleft licenses (SPDX license expression syntax versi
   .get('/l/rho-cc-promise.json?style=_shields_test')
   .expectJSON({ name: 'license', value: '(MPL-2.0 OR MIT)', colorB: colorsB.blue });
 
-t.create('package without a scope and without a license property')
-  .get('/l/package1.json?style=_shields_test')
+t.create('license for package without a license property')
+  .get('/l/package-without-license.json?style=_shields_test')
   .intercept(nock => nock('https://registry.npmjs.org')
-    .get('/package1/latest')
+    .get('/package-without-license/latest')
     .reply(200, `
       {
-        "name": "package1",
+        "name": "package-without-license",
       }`), {
     'Content-Type': 'application/json'
   })
   .expectJSON({ name: 'license', value: 'invalid', colorB: colorsB.lightgrey });
+
+t.create('license for package with a license object')
+  .get('/l/package-license-object.json?style=_shields_test')
+  .intercept(nock => nock('https://registry.npmjs.org')
+    .get('/package-license-object/latest')
+    .reply(200, `
+      {
+        "name": "package-license-object",
+        "license": {
+          "type": "MIT",
+          "url": "https://www.opensource.org/licenses/mit-license.php"
+        }
+      }`), {
+    'Content-Type': 'application/json'
+  })
+  .expectJSON({ name: 'license', value: 'MIT', colorB: colorsB.blue });
+
+t.create('license for unknown package')
+  .get('/l/npm-registry-does-not-have-this-package.json?style=_shields_test')
+  .expectJSON({ name: 'license', value: 'undefined', colorB: colorsB.blue });
+
+t.create('license when network is off')
+  .get('/l/pakage-network-off.json?style=_shields_test')
+  .networkOff()
+  .expectJSON({ name: 'license', value: 'inaccessible', colorB: colorsB.lightgrey });
