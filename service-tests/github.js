@@ -41,18 +41,15 @@ t.create('License with SPDX id not appearing in configuration')
     .get('/repos/user1/project-with-EFL-license')
     .query(true)
     // GitHub API currently returns "other" as a key for repo with EFL license
-    .reply(200, `
-      {
-        "license": {
-          "key": "efl-1.0",
-          "name": "Eiffel Forum License v1.0",
-          "spdx_id": "EFL-1.0",
-          "url": "https://api.github.com/licenses/efl-1.0",
-          "featured": true
-        }
-      }`), {
-      'Content-Type': 'application/json; charset=utf-8'
-  })
+    .reply(200, {
+      license: {
+        key: 'efl-1.0',
+        name: 'Eiffel Forum License v1.0',
+        spdx_id: 'EFL-1.0',
+        url: 'https://api.github.com/licenses/efl-1.0',
+        featured: true
+      }
+    }))
   .expectJSON({ name: 'license', value: 'EFL-1.0', colorB: colorsB.lightgrey });
 
 t.create('Contributors')
