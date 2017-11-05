@@ -7309,13 +7309,13 @@ cache(function(data, match, sendBadge, request) {
 
         switch (type) {
           case 'rating':
-            badgeData.text[1] = rating + '/5.0';;
+            badgeData.text[1] = rating + '/5.0';
             break;
           case 'stars':
             badgeData.text[1] = starRating(Math.round(rating));
             break;
         }
-        
+
         sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'invalid';
