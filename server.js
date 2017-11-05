@@ -3841,11 +3841,7 @@ cache(function(data, match, sendBadge, request) {
       var body = JSON.parse(buffer);
       const license = body.license;
       if (license != null) {
-        if (license.spdx_id) {
-          badgeData.text[1] = license.spdx_id;
-        } else {
-          badgeData.text[1] = 'unknown';
-        }
+        badgeData.text[1] = license.spdx_id || 'unknown';
         const color = licenseToColor(license.spdx_id);
         if (sixHex(color)) {
           badgeData.colorB = '#' + color;
