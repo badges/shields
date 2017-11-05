@@ -11,7 +11,7 @@ module.exports = t;
 
 t.create('plugin rating')
   .get('/plugins/redmine_xlsx_format_issue_exporter/rating.json')
-  .intercept(nock => nock('http://www.redmine.org')
+  .intercept(nock => nock('https://www.redmine.org')
     .get('/plugins/redmine_xlsx_format_issue_exporter.xml')
     .reply(200,
         '<redmine-plugin>' + 
@@ -26,7 +26,7 @@ t.create('plugin rating')
 
 t.create('plugin stars')
 .get('/plugins/redmine_xlsx_format_issue_exporter/stars.json')
-.intercept(nock => nock('http://www.redmine.org')
+.intercept(nock => nock('https://www.redmine.org')
   .get('/plugins/redmine_xlsx_format_issue_exporter.xml')
   .reply(200,
       '<redmine-plugin>' + 
@@ -41,7 +41,7 @@ t.create('plugin stars')
 
 t.create('plugin not found')
   .get('/plugins/plugin_not_found/rating.json')
-  .intercept(nock => nock('http://www.redmine.org')
+  .intercept(nock => nock('https://www.redmine.org')
     .get('/plugins/plugin_not_found.xml')
     .reply(404, '')
   )

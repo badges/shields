@@ -7291,7 +7291,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[3];
   var options = {
     method: 'GET',
-    uri: 'http://www.redmine.org/plugins/' + plugin + '.xml',
+    uri: 'https://www.redmine.org/plugins/' + plugin + '.xml',
   };
 
   var badgeData = getBadgeData(type, data);
