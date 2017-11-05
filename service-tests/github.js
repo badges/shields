@@ -38,7 +38,8 @@ t.create('License for repo with an unrecognized license')
 t.create('License with SPDX id not appearing in configuration')
   .get('/license/user1/project-with-EFL-license.json?style=_shields_test')
   .intercept(nock => nock('https://api.github.com')
-    .get(/\/repos\/user1\/project-with-EFL-license/)
+    .get('/repos/user1/project-with-EFL-license')
+    .query(true)
     // GitHub API currently returns "other" as a key for repo with EFL license
     .reply(200, `
       {
