@@ -10,7 +10,7 @@ const t = new ServiceTester({ id: 'redmine', title: 'Redmine' });
 module.exports = t;
 
 t.create('plugin rating')
-  .get('/plugins/redmine_xlsx_format_issue_exporter/rating.json')
+  .get('/plugin/rating/redmine_xlsx_format_issue_exporter.json')
   .intercept(nock => nock('https://www.redmine.org')
     .get('/plugins/redmine_xlsx_format_issue_exporter.xml')
     .reply(200,
@@ -25,7 +25,7 @@ t.create('plugin rating')
   }));
 
 t.create('plugin stars')
-.get('/plugins/redmine_xlsx_format_issue_exporter/stars.json')
+.get('/plugin/stars/redmine_xlsx_format_issue_exporter.json')
 .intercept(nock => nock('https://www.redmine.org')
   .get('/plugins/redmine_xlsx_format_issue_exporter.xml')
   .reply(200,
@@ -40,7 +40,7 @@ t.create('plugin stars')
 }));
 
 t.create('plugin not found')
-  .get('/plugins/plugin_not_found/rating.json')
+  .get('/plugin/rating/plugin_not_found.json')
   .intercept(nock => nock('https://www.redmine.org')
     .get('/plugins/plugin_not_found.xml')
     .reply(404, '')
@@ -51,7 +51,7 @@ t.create('plugin not found')
   }));
 
 t.create('connection error')
-  .get('/plugins/redmine_xlsx_format_issue_exporter/rating.json')
+  .get('/plugin/rating/redmine_xlsx_format_issue_exporter.json')
   .networkOff()
   .expectJSON({
       name: 'rating',

@@ -7284,10 +7284,10 @@ camp.route(/^\/nsp\/npm\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|j
 }));
 
 // Redmine plugin rating.
-camp.route(/^\/redmine\/plugins\/(.*)\/(rating|stars)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/redmine\/plugin\/(rating|stars)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var plugin = match[1];
-  var type = match[2];
+  var type = match[1];
+  var plugin = match[2];
   var format = match[3];
   var options = {
     method: 'GET',
