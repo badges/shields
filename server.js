@@ -2576,7 +2576,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[3];
   request({
       method: 'GET',
-      uri: 'http://api.codeclimate.com/v1/repos?github_slug=' + userRepo,
+      uri: 'https://api.codeclimate.com/v1/repos?github_slug=' + userRepo,
       json: true
   }, function (err, res, body) {
     var badgeData = getBadgeData(match[1] === 'c' ? 'coverage' : 'maintainability', data);
