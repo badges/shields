@@ -30,6 +30,7 @@
     "jsonpath": "~0.2.12",
     "lodash.countby": "^4.6.0",
     "moment": "^2.18.1",
+    "opencollective": "^1.0.3",
     "pdfkit": "~0.8.0",
     "pretty-bytes": "^4.0.2",
     "query-string": "^5.0.0",
@@ -60,7 +61,8 @@
     "build": "npm run build:examples && npm run build:copy-fragments && npm run build:concat",
     "build:production": "PRODUCTION_BUILD=true npm run build:examples && npm run build:copy-fragments && make footer-production-transform && npm run build:concat",
     "heroku-postbuild": "npm run build",
-    "start": "INFOSITE=/ node server 8080 ::"
+    "start": "INFOSITE=/ node server 8080 ::",
+    "postinstall": "opencollective postinstall"
   },
   "bin": {
     "badge": "lib/badge-cli.js"
@@ -126,5 +128,10 @@
       "react",
       "env"
     ]
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/shields",
+    "logo": "https://opencollective.com/opencollective/logo.txt"
   }
 }
