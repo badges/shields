@@ -11,6 +11,7 @@ const xml2js = require('xml2js');
 const analytics = require('./lib/analytics');
 const config = require('./lib/server-config');
 const githubAuth = require('./lib/github-auth');
+const sysMonitor = require('./lib/sys/monitor');
 const log = require('./lib/log');
 const makeBadge = require('./lib/make-badge');
 const serverSecrets = require('./lib/server-secrets');
@@ -129,6 +130,9 @@ analytics.setRoutes(camp);
 githubAuth.scheduleAutosaving();
 if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);
+}
+if (serverSecrets && serverSecrets.shieldsSecret) {
+  sysMonitor.setRoutes(camp);
 }
 
 suggest.setRoutes(camp);
