@@ -4,10 +4,11 @@ const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 const { isSemver } = require('./helpers/validators');
 const colorscheme = require('../lib/colorscheme.json');
+const mapValues = require('lodash.mapvalues');
 
 const t = new ServiceTester({ id: 'npm', title: 'NPM' });
 module.exports = t;
-const colorsB = Object.assign({}, ...Object.keys(colorscheme).map(color => ({ [color]: colorscheme[color].colorB })));
+const colorsB = mapValues(colorscheme, 'colorB');
 
 t.create('gets the package version of left-pad')
   .get('/v/left-pad.json')
@@ -49,28 +50,22 @@ t.create('license for package without a license property')
   .get('/l/package-without-license.json?style=_shields_test')
   .intercept(nock => nock('https://registry.npmjs.org')
     .get('/package-without-license/latest')
-    .reply(200, `
-      {
-        "name": "package-without-license",
-      }`), {
-    'Content-Type': 'application/json'
-  })
-  .expectJSON({ name: 'license', value: 'invalid', colorB: colorsB.lightgrey });
+    .reply(200, {
+      name: 'package-without-license'
+    }))
+  .expectJSON({ name: 'license', value: 'undefined', colorB: colorsB.blue });
 
 t.create('license for package with a license object')
   .get('/l/package-license-object.json?style=_shields_test')
   .intercept(nock => nock('https://registry.npmjs.org')
     .get('/package-license-object/latest')
-    .reply(200, `
-      {
-        "name": "package-license-object",
-        "license": {
-          "type": "MIT",
-          "url": "https://www.opensource.org/licenses/mit-license.php"
-        }
-      }`), {
-    'Content-Type': 'application/json'
-  })
+    .reply(200, {
+      name: 'package-license-object',
+      license: {
+        type: 'MIT',
+        url: 'https://www.opensource.org/licenses/mit-license.php'
+      }
+    }))
   .expectJSON({ name: 'license', value: 'MIT', colorB: colorsB.blue });
 
 t.create('license for unknown package')
