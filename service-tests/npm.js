@@ -42,6 +42,10 @@ t.create('permissive license')
   .get('/l/express.json?style=_shields_test')
   .expectJSON({ name: 'license', value: 'MIT', colorB: colorsB.blue });
 
+t.create('permissive license for scoped package')
+  .get('/l/@cycle%2Fcore.json?style=_shields_test')
+  .expectJSON({ name: 'license', value: 'MIT', colorB: colorsB.blue });
+
 t.create('permissive and copyleft licenses (SPDX license expression syntax version 2.0)')
   .get('/l/rho-cc-promise.json?style=_shields_test')
   .expectJSON({ name: 'license', value: '(MPL-2.0 OR MIT)', colorB: colorsB.blue });
@@ -67,6 +71,16 @@ t.create('license for package with a license object')
       }
     }))
   .expectJSON({ name: 'license', value: 'MIT', colorB: colorsB.blue });
+
+t.create('license for package with a license array')
+  .get('/l/package-license-array.json?style=_shields_test')
+  .intercept(nock => nock('https://registry.npmjs.org')
+    .get('/package-license-array/latest')
+    .reply(200, {
+      name: 'package-license-object',
+      license: ['MPL-2.0', 'MIT']
+    }))
+  .expectJSON({ name: 'license', value: 'MPL-2.0, MIT', colorB: colorsB.blue });
 
 t.create('license for unknown package')
   .get('/l/npm-registry-does-not-have-this-package.json?style=_shields_test')
