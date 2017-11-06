@@ -49,6 +49,7 @@ const {
   makeLabel: getLabel,
   makeLogo: getLogo,
   makeBadgeData: getBadgeData,
+  setBadgeColor
 } = require('./lib/badge-data');
 const {
   handleRequest: cache,
@@ -3842,12 +3843,7 @@ cache(function(data, match, sendBadge, request) {
       const license = body.license;
       if (license != null) {
         badgeData.text[1] = license.spdx_id || 'unknown';
-        const color = licenseToColor(license.spdx_id);
-        if (sixHex(color)) {
-          badgeData.colorB = '#' + color;
-        } else {
-          badgeData.colorscheme = color;
-        }
+        setBadgeColor(badgeData, licenseToColor(license.spdx_id));
         sendBadge(format, badgeData);
       } else {
         badgeData.text[1] = 'missing';
@@ -6695,20 +6691,12 @@ cache(function(data, match, sendBadge, request) {
     // We consider all HTTP status codes below 310 as success.
     if (err != null || res.statusCode >= 310) {
       badgeData.text[1] = offlineMessage;
-      if (sixHex(offlineColor)) {
-        badgeData.colorB = '#' + offlineColor;
-      } else {
-        badgeData.colorscheme = offlineColor;
-      }
+      setBadgeColor(badgeData, offlineColor);
       sendBadge(format, badgeData);
       return;
     } else {
       badgeData.text[1] = onlineMessage;
-      if (sixHex(onlineColor)) {
-        badgeData.colorB = '#' + onlineColor;
-      } else {
-        badgeData.colorscheme = onlineColor;
-      }
+      setBadgeColor(badgeData, onlineColor);
       sendBadge(format, badgeData);
       return;
     }
