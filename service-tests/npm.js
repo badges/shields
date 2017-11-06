@@ -86,6 +86,15 @@ t.create('license for unknown package')
   .get('/l/npm-registry-does-not-have-this-package.json?style=_shields_test')
   .expectJSON({ name: 'license', value: 'undefined', colorB: colorsB.blue });
 
+t.create('license when registry returns an invalid JSON')
+  .get('/l/invalid-json.json?style=_shields_test')
+  .intercept(nock => nock('https://registry.npmjs.org')
+    .get('/invalid-json/latest')
+    .reply(200, 'invalid json'), {
+      'Content-Type': 'application/json'
+    })
+  .expectJSON({ name: 'license', value: 'invalid', colorB: colorsB.lightgrey });
+
 t.create('license when network is off')
   .get('/l/pakage-network-off.json?style=_shields_test')
   .networkOff()
