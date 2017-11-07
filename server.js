@@ -1103,7 +1103,7 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
       }
     } catch(e) {
-      badgeData.text[1] = apiUrl;
+      badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
   });
