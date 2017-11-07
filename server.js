@@ -1067,12 +1067,17 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Liberapay integration.
-camp.route(/^\/liberapay\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/liberapay\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var entity = match[1];  // eg, 'Changaco'
-  var format = match[2];
+  var type = match[2]
+  var format = match[3];
   var apiUrl = 'https://liberapay.com/' + entity + '/public.json';
-  var badgeData = getBadgeData('receives', data);
+  if (type == 'gives') {
+    var badgeData = getBadgeData('gives', data);
+    } else {
+    var badgeData = getBadgeData('receives', data);
+    }
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('liberapay', data);
   }
