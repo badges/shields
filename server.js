@@ -1090,14 +1090,18 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       // Avoid falsey checks because amounts may be 0
-      var receiving = data.receiving.amount;
-      if (!isNaN(receiving)) {
-        badgeData.text[1] = '$' + metric(receiving) + '/week';
-        if (receiving === 0) {
+      if (type == 'gives') {
+        var value = data.giving.amount;
+        } else {
+        var value = data.receiving.amount;
+        }
+      if (!isNaN(value)) {
+        badgeData.text[1] = '$' + metric(value) + '/week';
+        if (value === 0) {
           badgeData.colorscheme = 'red';
-        } else if (receiving < 10) {
+        } else if (value < 10) {
           badgeData.colorscheme = 'yellow';
-        } else if (receiving < 100) {
+        } else if (value < 100) {
           badgeData.colorscheme = 'green';
         } else {
           badgeData.colorscheme = 'brightgreen';
