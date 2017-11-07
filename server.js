@@ -1095,7 +1095,7 @@ cache(function(data, match, sendBadge, request) {
         } else {
         var value = data.receiving.amount;
         }
-      if (!isNaN(value)) {
+      if (value != null) {
         badgeData.text[1] = '$' + metric(value) + '/week';
         if (value === 0) {
           badgeData.colorscheme = 'red';
