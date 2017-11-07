@@ -1066,6 +1066,49 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Liberapay integration.
+camp.route(/^\/liberapay\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var entity = match[1];  // eg, 'Changaco'
+  var format = match[2];
+  var apiUrl = 'https://liberapay.com/' + entity + '/public.json';
+  var badgeData = getBadgeData('receives', data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = getLogo('liberapay', data);
+  }
+  request(apiUrl, function dealWithData(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      // Avoid falsey checks because amounts may be 0
+      var receiving = data.receiving.amount;
+      if (!isNaN(receiving)) {
+        badgeData.text[1] = '$' + metric(receiving) + '/week';
+        if (receiving === 0) {
+          badgeData.colorscheme = 'red';
+        } else if (receiving < 10) {
+          badgeData.colorscheme = 'yellow';
+        } else if (receiving < 100) {
+          badgeData.colorscheme = 'green';
+        } else {
+          badgeData.colorscheme = 'brightgreen';
+        }
+        sendBadge(format, badgeData);
+      } else {
+        badgeData.text[1] = 'anonymous';
+        sendBadge(format, badgeData);
+      }
+    } catch(e) {
+      badgeData.text[1] = apiUrl;
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Libscore integration.
 camp.route(/^\/libscore\/s\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
