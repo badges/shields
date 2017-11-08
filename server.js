@@ -1073,11 +1073,6 @@ cache(function(data, match, sendBadge, request) {
   var type = match[2]
   var format = match[3];
   var apiUrl = 'https://liberapay.com/' + entity + '/public.json';
-  if (type == 'gives') {
-    var badgeData = getBadgeData('gives', data);
-    } else {
-    var badgeData = getBadgeData('receives', data);
-    }
   switch(type) {
       case 'gives':
           var badgeData = getBadgeData('gives', data);
@@ -1106,7 +1101,7 @@ cache(function(data, match, sendBadge, request) {
         case 'gives':
             var value = data.giving.amount;
             var currency = data.giving.currency;
-            badgeData.text[1] = metric(value) + ' ' + currency + '/week';
+            badgeData.text[1] = metric(value) + ' ' + currency + '\/week';
             break;
         case 'patrons':
             var value = data.npatrons;
