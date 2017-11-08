@@ -7436,6 +7436,31 @@ cache(function(data, match, sendBadge, request) {
           return v === array2[i];
         });
       };
+      var readVersion = function(job_id) {
+        var options = {
+          method: 'GET',
+          uri: 'https://api.travis-ci.org/jobs/' + job_id,
+        };
+        request(options, function(err, res, buffer) {
+          if (err != null) {
+            log.error('Travis error: ' + err.stack);
+            if (res) {
+              log.error('' + res);
+            }
+            handleVersion(false);
+            return;
+          }
+          try {
+            var data = JSON.parse(buffer);
+            if (data.state == 'finished' && data.result == 0) {
+              handleVersion(data.config.php);
+              return;
+            }
+          } catch(e) {} // is not a critical error
+
+          handleVersion(false);
+        });
+      };
       var handleVersion = function(version) {
         jobs.push(version);
 
@@ -7533,31 +7558,6 @@ cache(function(data, match, sendBadge, request) {
         }
 
         sendBadge(format, badgeData);
-      };
-      var readVersion = function(job_id) {
-        var options = {
-          method: 'GET',
-          uri: 'https://api.travis-ci.org/jobs/' + job_id,
-        };
-        request(options, function(err, res, buffer) {
-          if (err != null) {
-            log.error('Travis error: ' + err.stack);
-            if (res) {
-              log.error('' + res);
-            }
-            handleVersion(false);
-            return;
-          }
-          try {
-            var data = JSON.parse(buffer);
-            if (data.state == 'finished' && data.result == 0) {
-              handleVersion(data.config.php);
-              return;
-            }
-          } catch(e) {} // is not a critical error
-
-          handleVersion(false);
-        });
       };
 
       // read version from all build jobs
