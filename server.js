@@ -1070,7 +1070,7 @@ cache(function(data, match, sendBadge, request) {
 camp.route(/^\/liberapay\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var entity = match[1];  // eg, 'Changaco'
-  var type = match[2]
+  var type = match[2];
   var format = match[3];
   var apiUrl = 'https://liberapay.com/' + entity + '/public.json';
   switch(type) {
@@ -1101,7 +1101,7 @@ cache(function(data, match, sendBadge, request) {
         case 'gives':
             var value = data.giving.amount;
             var currency = data.giving.currency;
-            badgeData.text[1] = metric(value) + ' ' + currency + '\/week';
+            badgeData.text[1] = metric(value) + ' ' + currency + '/week';
             break;
         case 'patrons':
             var value = data.npatrons;
