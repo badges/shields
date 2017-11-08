@@ -1114,7 +1114,7 @@ cache(function(data, match, sendBadge, request) {
         case 'goal':
             value = Math.round(data.receiving.amount/data.goal.amount*100);
             badgeData.text[1] = metric(value) + '%';
-            break; 
+            break;
         }
       if (value != null) {
         if (value === 0) {
