@@ -7395,6 +7395,39 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// PHP version from Packagist
+camp.route(/^\/php\/v\/packagist?\/([^/]+\/[^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var userRepo = match[1];  // eg, espadrine/sc
+  var version = match[2];
+  var format = match[3];
+  var options = {
+    method: 'GET',
+    uri: 'https://packagist.org/p/' + userRepo + '.json',
+  };
+  var badgeData = getBadgeData('PHP', data);
+  request(options, function(err, res, buffer) {
+    if (err != null) {
+      log.error('Travis composer: ' + err.stack);
+      if (res) {
+        log.error('' + res);
+      }
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    try {
+      var data = JSON.parse(buffer);
+      badgeData.text[1] = data.packages[userRepo][version].require.php;
+      badgeData.colorB = '#8892BF';
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+    }
+    sendBadge(format, badgeData);
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
