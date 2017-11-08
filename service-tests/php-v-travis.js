@@ -8,7 +8,7 @@ module.exports = t;
 
 t.create('gets the package version of symfony')
     .get('/v/travis/symfony/symfony.json')
-    .expectJSONTypes(Joi.object().keys({ name: 'PHP', value: '7.1, 7.2' }));
+    .expectJSONTypes(Joi.object().keys({ name: 'PHP', value: '>= 7.1' }));
 
 t.create('gets the package version of symfony 2.8')
     .get('/v/travis/symfony/symfony/2.8.json')

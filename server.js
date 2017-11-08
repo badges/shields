@@ -7495,27 +7495,21 @@ cache(function(data, match, sendBadge, request) {
         if ('5' in versions) {
           var php5_first = versions['5'][0];
           var php5_last = versions['5'][versions['5'].length - 1];
-          var php5_slice = php_releases['5'].slice(
-              php_releases['5'].indexOf(php5_first),
-              php_releases['5'].indexOf(php5_last) + 1
-          );
         }
 
         if ('7' in versions) {
           var php7_first = versions['7'][0];
           var php7_last = versions['7'][versions['7'].length - 1];
-          var php7_slice = php_releases['7'].slice(
-              php_releases['7'].indexOf(php7_first),
-              php_releases['7'].indexOf(php7_last) + 1
-          );
         }
 
         badgeData.text[1] = '';
         // build text from versions
         if ('5' in versions && '7' in versions) {
-          if (isEqual(php5_slice, versions['5']) && isEqual(versions['7'], php_releases['7'])) { // test in all
+          var php5_offset = php_releases['5'].slice(php_releases['5'].indexOf(php5_first));
+          var php7_limit = php_releases['7'].slice(0, php_releases['7'].indexOf(php7_last) + 1);
+          if (isEqual(php5_offset, versions['5']) && isEqual(versions['7'], php_releases['7'])) { // test in all
             badgeData.text[1] = '>= 5.' + php5_first;
-          } else if (isEqual(php5_slice, versions['5']) && isEqual(php7_slice, versions['7'])) {
+          } else if (isEqual(php5_offset, versions['5']) && isEqual(php7_limit, versions['7'])) {
             badgeData.text[1] = '5.' + php5_first + ' - 7.' + php7_last;
           } else {
             badgeData.text[1] = versions['5'].map(function(number) {
@@ -7525,7 +7519,11 @@ cache(function(data, match, sendBadge, request) {
             })).join(', ');
           }
         } else if ('5' in versions) {
-          if (isEqual(versions['5'], php5_slice) && versions['5'].length > 1) {
+          var php5_slice = php_releases['5'].slice(
+              php_releases['5'].indexOf(php5_first),
+              php_releases['5'].indexOf(php5_last) + 1
+          );
+          if (versions['5'].length > 1 && isEqual(versions['5'], php5_slice)) {
             badgeData.text[1] = '5.' + php5_first + ' - 5.' + php5_last;
           } else {
             badgeData.text[1] = versions['5'].map(function(number) {
@@ -7533,9 +7531,10 @@ cache(function(data, match, sendBadge, request) {
             }).join(', ');
           }
         } else if ('7' in versions) {
+          var php7_offset = php_releases['7'].slice(php_releases['7'].indexOf(php7_first));
           if (isEqual(versions['7'], php_releases['7'])) { // test in all
             badgeData.text[1] = '>= 7';
-          } else if (isEqual(php7_slice, php_releases['7'])) {
+          } else if (isEqual(versions['7'], php7_offset)) {
             badgeData.text[1] = '>= 7.' + php7_first;
           } else {
             badgeData.text[1] = versions['7'].map(function(number) {
