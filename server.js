@@ -7395,6 +7395,179 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// PHP version from Travis CI
+camp.route(/^\/php\/v\/travis(?:-ci)?\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var userRepo = match[1];  // eg, espadrine/sc
+  var branch = match[2];
+  var format = match[3];
+  if (!branch) {
+    branch = 'master';
+  }
+  var php_releases = {
+    '5': [2, 3, 4, 5, 6],
+    '7': [0, 1, 2],
+  };
+  var options = {
+      method: 'GET',
+      uri: 'https://api.travis-ci.org/repos/' + userRepo + '/branches/' + branch,
+  };
+  var badgeData = getBadgeData('PHP', data);
+  request(options, function(err, res, buffer) {
+    if (err != null) {
+      log.error('Travis error: ' + err.stack);
+      if (res) { log.error(''+res); }
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    try {
+      var data = JSON.parse(buffer);
+      if (!data.branch.job_ids.length) {
+        log.error('No builds on Travis CI');
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
+      }
+      var jobs = [];
+      var isEqual = function (array1, array2) {
+        return array1.length == array2.length && array1.every(function(v, i) {
+          return v === array2[i];
+        });
+      };
+      var handleVersion = function(version) {
+        jobs.push(version);
+
+        // not all jobs is ready
+        if (jobs.length != data.branch.job_ids.length) {
+          return;
+        }
+
+        var has_hhvm = false;
+        var versions = {};
+        // build versions map
+        for (var i in jobs) {
+          if (jobs[i] && jobs[i].toString().indexOf('hhvm') === 0) {
+              has_hhvm = true;
+          } else if (jobs[i]) {
+            var numbers = jobs[i].toString().split('.');
+            if (!(numbers[0] in versions)) {
+              versions[numbers[0]] = [];
+            }
+            if (typeof numbers[1] !== 'undefined') {
+              numbers[1] = parseInt(numbers[1]);
+            } else {
+              numbers[1] = 0;
+            }
+            if (versions[numbers[0]].indexOf(numbers[1]) == -1) {
+              versions[numbers[0]].push(numbers[1]);
+              versions[numbers[0]].sort();
+            }
+          }
+        }
+
+        badgeData.text[1] = '';
+        // build text from versions
+        if ('5' in versions && '7' in versions) {
+          var first_php5 = versions['5'][0];
+          var last_php7 = versions['7'][versions['7'].length - 1];
+          var slice5 = php_releases['5'].slice(php_releases['5'].indexOf(first_php5));
+          var slice7 = php_releases['7'].slice(0, php_releases['7'].indexOf(last_php7) + 1);
+
+          if (isEqual(slice5, versions['5']) && isEqual(versions['7'], php_releases['7'])) { // test in all
+            badgeData.text[1] = '>= 5.' + first_php5;
+          } else if (isEqual(slice5, versions['5']) && isEqual(slice7, versions['7'])) {
+            badgeData.text[1] = '5.' + first_php5 + ' - 7.' + last_php7;
+          } else {
+            badgeData.text[1] = versions['5'].map(function(number) {
+              return '5.' + number;
+            }).concat(versions['7'].map(function(number) {
+              return '7.' + number;
+            })).join(', ');
+          }
+        } else if ('5' in versions) {
+          var first_php5 = versions['5'][0];
+          var last_php5 = versions['5'][versions['5'].length - 1];
+          var slice5 = php_releases['5'].slice(
+            php_releases['5'].indexOf(first_php5),
+            php_releases['5'].indexOf(last_php5) + 1
+          );
+
+          if (isEqual(versions['5'], slice5) && versions['5'].length > 1) {
+            badgeData.text[1] = '5.' + versions['5'][0] + ' - 5.' + versions['5'][versions['5'].length - 1];
+          } else {
+            badgeData.text[1] = versions['5'].map(function(number) {
+              return '5.' + number;
+            }).join(', ');
+          }
+        } else if ('7' in versions) {
+          var first_php7 = versions['7'][0];
+          var slice7 = php_releases['7'].slice(php_releases['7'].indexOf(first_php7));
+
+          if (isEqual(versions['7'], php_releases['7'])) { // test in all
+            badgeData.text[1] = '>= 7';
+          } else if (isEqual(slice7, php_releases['7'])) {
+            badgeData.text[1] = '>= 7.' + first_php7;
+          } else {
+            badgeData.text[1] = versions['7'].map(function(number) {
+              return '7.' + number;
+            }).join(', ');
+          }
+        }
+
+        if (has_hhvm) {
+          badgeData.colorB = '#8892BF';
+          if (badgeData.text[1] == '') {
+            badgeData.text[1] = 'HHVM';
+          } else {
+            badgeData.text[1] += ', HHVM';
+          }
+        } else if (badgeData.text[1] == '') {
+          badgeData.text[1] = 'invalid';
+        } else {
+          badgeData.colorB = '#8892BF';
+        }
+
+        sendBadge(format, badgeData);
+      };
+      var readVersion = function(job_id) {
+        var options = {
+          method: 'GET',
+          uri: 'https://api.travis-ci.org/jobs/' + job_id,
+        };
+        request(options, function(err, res, buffer) {
+          if (err != null) {
+            log.error('Travis error: ' + err.stack);
+            if (res) {
+              log.error('' + res);
+            }
+            handleVersion(false);
+            return;
+          }
+          try {
+            var data = JSON.parse(buffer);
+            if (data.state == 'finished' && data.result == 0) {
+              handleVersion(data.config.php);
+              return;
+            }
+          } catch(e) {} // is not a critical error
+
+          handleVersion(false);
+        });
+      };
+
+      // read version from all build jobs
+      for (var index in data.branch.job_ids) {
+        readVersion(data.branch.job_ids[index]);
+      }
+    } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
