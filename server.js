@@ -7408,7 +7408,7 @@ cache(function(data, match, sendBadge, request) {
   var badgeData = getBadgeData('PHP', data);
   request(options, function(err, res, buffer) {
     if (err != null) {
-      log.error('Travis composer: ' + err.stack);
+      log.error('Packagist error: ' + err.stack);
       if (res) {
         log.error('' + res);
       }
