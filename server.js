@@ -1073,18 +1073,18 @@ cache(function(data, match, sendBadge, request) {
   var type = match[2];
   var format = match[3];
   var apiUrl = 'https://liberapay.com/' + entity + '/public.json';
+  // Establish default
+  var badgeData = getBadgeData('receives', data);
   switch(type) {
       case 'gives':
-          var badgeData = getBadgeData('gives', data);
+          badgeData = getBadgeData('gives', data);
           break;
       case 'patrons':
-          var badgeData = getBadgeData('patrons', data);
+          badgeData = getBadgeData('patrons', data);
           break;
       case 'goal':
-          var badgeData = getBadgeData('goal progress', data);
+          badgeData = getBadgeData('goal progress', data);
           break;
-      default:
-          var badgeData = getBadgeData('receives', data);
       }
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('liberapay', data);
@@ -1097,24 +1097,24 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
+      // Establish defaults
+      var value = data.receiving.amount;
+      var currency = data.receiving.currency;
+      badgeData.text[1] = metric(value) + ' ' + currency + '/week';
       switch(type) {
         case 'gives':
-            var value = data.giving.amount;
-            var currency = data.giving.currency;
+            value = data.giving.amount;
+            currency = data.giving.currency;
             badgeData.text[1] = metric(value) + ' ' + currency + '/week';
             break;
         case 'patrons':
-            var value = data.npatrons;
+            value = data.npatrons;
             badgeData.text[1] = metric(value);
             break;
         case 'goal':
-            var value = Math.round(data.receiving.amount/data.goal.amount*100);
+            value = Math.round(data.receiving.amount/data.goal.amount*100);
             badgeData.text[1] = metric(value) + '%';
-            break;
-        default:
-            var value = data.receiving.amount;
-            var currency = data.receiving.currency;
-            badgeData.text[1] = metric(value) + ' ' + currency + '/week';
+            break; 
         }
       if (value != null) {
         if (value === 0) {
