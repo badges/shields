@@ -7422,7 +7422,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       const data = JSON.parse(buffer);
       let hasHhvm = false;
-      var versions = [];
+      let versions = [];
 
       // from php
       if (typeof data.branch.config.php !== 'undefined') {
