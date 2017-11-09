@@ -10,28 +10,28 @@ t.create('Tech Debt')
   .get('/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/tech_debt.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'tech debt',
-    value: Joi.string().regex(/^\d+\%$/)
+    value: Joi.string().regex(/^\d+%$/)
   }));
 
 t.create('Coverage')
   .get('/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/coverage.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'coverage',
-    value: Joi.string().regex(/^\d+\%$/)
+    value: Joi.string().regex(/^\d+%$/)
   }));
 
 t.create('Tech Debt (old API supported)')
   .get('/4.2/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/tech_debt.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'tech debt',
-    value: Joi.string().regex(/^\d+\%$/)
+    value: Joi.string().regex(/^\d+%$/)
   }));
 
 t.create('Coverage (old API supported)')
   .get('/4.2/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/coverage.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'coverage',
-    value: Joi.string().regex(/^\d+\%$/)
+    value: Joi.string().regex(/^\d+%$/)
   }));
 
 t.create('Tech Debt (old API unsupported)')
