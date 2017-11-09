@@ -1126,15 +1126,8 @@ cache(function(data, match, sendBadge, request) {
             break;
         }
       if (value != null) {
-        if (value === 0) {
-          badgeData.colorscheme = 'red';
-        } else if (value < 10) {
-          badgeData.colorscheme = 'yellow';
-        } else if (value < 100) {
-          badgeData.colorscheme = 'green';
-        } else {
-          badgeData.colorscheme = 'brightgreen';
-        }
+        const {colorScale} = require('./lib/color-formatters');
+        badgeData.colorscheme = colorScale([0, 10, 100])(value);
         sendBadge(format, badgeData);
       } else {
         badgeData.text[1] = 'anonymous';
