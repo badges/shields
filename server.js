@@ -39,7 +39,8 @@ const {
   downloadCount: downloadCountColor,
   floorCount: floorCountColor,
   version: versionColor,
-  age: ageColor
+  age: ageColor,
+  colorScale
 } = require('./lib/color-formatters');
 const {
   makeColorB,
@@ -1069,8 +1070,8 @@ cache(function(data, match, sendBadge, request) {
 // Liberapay integration.
 camp.route(/^\/liberapay\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var entity = match[1];  // eg, 'Changaco'
-  var type = match[2];
+  var type = match[1];  // e.g., 'gives'
+  var entity = match[2]; // e.g., 'Changaco'
   var format = match[3];
   var apiUrl = 'https://liberapay.com/' + entity + '/public.json';
   // Establish default
@@ -1104,14 +1105,14 @@ cache(function(data, match, sendBadge, request) {
             if (data.receiving) {
                 value = data.receiving.amount;
                 currency = data.receiving.currency;
-                badgeData.text[1] = metric(value) + ' ' + currency + '/week';
+                badgeData.text[1] = `${metric(value)} ${currency}/week`;
                 }
             break;
         case 'gives':
             if (data.giving) {
                 value = data.giving.amount;
                 currency = data.giving.currency;
-                badgeData.text[1] = metric(value) + ' ' + currency + '/week';
+                badgeData.text[1] = `${metric(value)} ${currency}/week`;
                 }
             break;
         case 'patrons':
@@ -1121,12 +1122,11 @@ cache(function(data, match, sendBadge, request) {
         case 'goal':
             if (data.goal) {
                 value = Math.round(data.receiving.amount/data.goal.amount*100);
-                badgeData.text[1] = metric(value) + '%';
+                badgeData.text[1] = `${value}%`;
                 }
             break;
         }
       if (value != null) {
-        const {colorScale} = require('./lib/color-formatters');
         badgeData.colorscheme = colorScale([0, 10, 100])(value);
         sendBadge(format, badgeData);
       } else {
