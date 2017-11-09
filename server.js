@@ -7396,7 +7396,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // PHP version from Packagist
-camp.route(/^\/php\/v\/packagist?\/([^/]+\/[^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/packagist\/php-v\/([^/]+\/[^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, espadrine/sc
   var version = match[2];
