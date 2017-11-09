@@ -7396,11 +7396,14 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // PHP version from Packagist
-camp.route(/^\/packagist\/php-v\/([^/]+\/[^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/packagist\/php-v\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, espadrine/sc
   var version = match[2];
   var format = match[3];
+  if (!version) {
+    version = 'dev-master';
+  }
   var options = {
     method: 'GET',
     uri: 'https://packagist.org/p/' + userRepo + '.json',
