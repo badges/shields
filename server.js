@@ -291,50 +291,46 @@ cache(function(data, match, sendBadge, request) {
     try {
       const data = JSON.parse(buffer);
       let hasHhvm = false;
+      let travisVersions = [];
       let versions = [];
 
       // from php
       if (typeof data.branch.config.php !== 'undefined') {
         for (const index in data.branch.config.php) {
-          const version = data.branch.config.php[index].toString();
-
-          if (version === 'nightly') {
-            // ignore nightly builds
-          } else if (phpHhvmVersion(version)) {
-            hasHhvm = true;
-          } else if (versions.indexOf(version) === -1) {
-            versions.push(version);
-          }
+          travisVersions.push(data.branch.config.php[index].toString());
         }
       }
       // from matrix
       if (typeof data.branch.config.matrix.include !== 'undefined') {
         for (const index in data.branch.config.matrix.include) {
-          const version = data.branch.config.matrix.include[index].php.toString();
-
-          if (version === 'nightly') {
-              // ignore nightly builds
-          } else if (phpHhvmVersion(version)) {
-              hasHhvm = true;
-          } else if (versions.indexOf(version) === -1) {
-              versions.push(version);
-          }
+          travisVersions.push(data.branch.config.matrix.include[index].php.toString());
         }
       }
 
-      badgeData.text[1] = phpVersionReduction(versions);
+      for (const index in travisVersions) {
+        if (travisVersions[index] === 'nightly') {
+          // ignore nightly builds
+        } else if (phpHhvmVersion(travisVersions[index])) {
+          hasHhvm = true;
+        } else if (versions.indexOf(travisVersions[index]) === -1) {
+          versions.push(travisVersions[index]);
+        }
+      }
+
+      const reduction = phpVersionReduction(versions);
 
       if (hasHhvm) {
         badgeData.colorscheme = 'blue';
-        if (badgeData.text[1] == '') {
+        if (reduction === '') {
           badgeData.text[1] = 'HHVM';
         } else {
-          badgeData.text[1] += ', HHVM';
+          badgeData.text[1] = reduction + ', HHVM';
         }
-      } else if (badgeData.text[1] == '') {
+      } else if (reduction === '') {
         badgeData.text[1] = 'invalid';
       } else {
         badgeData.colorscheme = 'blue';
+        badgeData.text[1] = reduction;
       }
     } catch(e) {
       badgeData.text[1] = 'invalid';
