@@ -31,7 +31,7 @@ t.create('Goal Progress')
   .get('/Liberapay/goal.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'goal progress',
-    value: Joi.string().regex(/^[0-9]+\%/)
+    value: Joi.string().regex(/^[0-9]+%/)
   }));
 
 t.create('No Goal')

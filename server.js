@@ -1097,11 +1097,14 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      // Establish defaults
-      var value = data.receiving.amount;
-      var currency = data.receiving.currency;
-      badgeData.text[1] = metric(value) + ' ' + currency + '/week';
+      var value;
+      var currency;
       switch(type) {
+        case 'receives':
+            value = data.receiving.amount;
+            currency = data.receiving.currency;
+            badgeData.text[1] = metric(value) + ' ' + currency + '/week';
+            break;
         case 'gives':
             value = data.giving.amount;
             currency = data.giving.currency;
