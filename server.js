@@ -7456,7 +7456,7 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = phpVersionReduction(versions);
 
       if (hasHhvm) {
-        badgeData.colorB = '#8892BF';
+        badgeData.colorscheme = 'blue';
         if (badgeData.text[1] == '') {
           badgeData.text[1] = 'HHVM';
         } else {
@@ -7465,7 +7465,7 @@ cache(function(data, match, sendBadge, request) {
       } else if (badgeData.text[1] == '') {
         badgeData.text[1] = 'invalid';
       } else {
-        badgeData.colorB = '#8892BF';
+        badgeData.colorscheme = 'blue';
       }
     } catch(e) {
       badgeData.text[1] = 'invalid';
