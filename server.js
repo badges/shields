@@ -6239,6 +6239,22 @@ cache(function(data, match, sendBadge, request) {
   sendBadge(format, badgeData);
 }));
 
+// Spectrum room integration
+camp.route(/^\/spectrum\/room\/([^/]+\/[^/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  // match[1] is the repo, which is not used.
+  var format = match[2];
+
+  if (data.logo === undefined) {
+    data.logo = 'spectrum-chat';
+  }
+
+  var badgeData = getBadgeData('chat', data);
+  badgeData.text[1] = 'on spectrum';
+  badgeData.colorB = '#7B16FF';
+  sendBadge(format, badgeData);
+}));
+
 // homebrew integration
 camp.route(/^\/homebrew\/v\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
