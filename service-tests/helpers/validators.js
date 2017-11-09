@@ -11,7 +11,7 @@ const isVPlusTripleDottedVersion = withRegex(/^v[0-9]+.[0-9]+.[0-9]+$/);
 
 const isVPlusDottedVersionAtLeastOne = withRegex(/^v\d+(\.\d+)?(\.\d+)?$/);
 
-const isRequireVersion = withRegex(/^((>=)|\^|~)\d+(\.\d+)?(\.\d+)?$/);
+const isRequireVersion = withRegex(/^\s*(([<>!]=?)|\^|~)\d+(\.\d+)?(\.\d+)?((\s*\|\|)?\s*(([<>!]=?)|\^|~)\d+(\.\d+)?(\.\d+)?)?\s*$/);
 
 const isStarRating = withRegex(/^(?=.{5}$)(\u2605{0,5}[\u00BC\u00BD\u00BE]?\u2606{0,5})$/);
 
