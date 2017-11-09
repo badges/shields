@@ -7395,6 +7395,148 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// PHP version from .travis.yml
+camp.route(/^\/travis-yml\/php-v\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var userRepo = match[1];  // eg, espadrine/sc
+  var version = match[2];
+  var format = match[3];
+  if (!version) {
+    version = 'master';
+  }
+  var php_releases = {
+    '5': [2, 3, 4, 5, 6],
+    '7': [0, 1, 2],
+  };
+  var options = {
+    method: 'GET',
+    uri: 'https://api.travis-ci.org/repos/' + userRepo + '/branches/' + version,
+  };
+  var badgeData = getBadgeData('PHP', data);
+  request(options, function(err, res, buffer) {
+    if (err != null) {
+      log.error('Travis CI error: ' + err.stack);
+      if (res) {
+        log.error('' + res);
+      }
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    try {
+      var data = JSON.parse(buffer);
+      var has_hhvm = false;
+      var versions = {};
+      var isEqual = function (array1, array2) {
+        return array1.length === array2.length && array1.every(function(v, i) {
+          return v === array2[i];
+        });
+      };
+      var parseVersion = function (version) {
+        if (version === 'nightly') {
+          // ignore nightly builds
+        } else if (version.indexOf('hhvm') === 0) {
+          has_hhvm = true;
+        } else {
+          var numbers = version.split('.');
+          if (!(numbers[0] in versions)) {
+            versions[numbers[0]] = [];
+          }
+          if (typeof numbers[1] !== 'undefined') {
+            numbers[1] = parseInt(numbers[1]);
+          } else {
+            numbers[1] = 0;
+          }
+          if (versions[numbers[0]].indexOf(numbers[1]) === -1) {
+            versions[numbers[0]].push(numbers[1]);
+            versions[numbers[0]].sort();
+          }
+        }
+      };
+
+      // build versions map
+      if (typeof data.branch.config.php !== 'undefined') {
+        for (var php_index in data.branch.config.php) {
+          parseVersion(data.branch.config.php[php_index].toString());
+        }
+      }
+      if (typeof data.branch.config.matrix.include !== 'undefined') {
+        for (var matrix_index in data.branch.config.matrix.include) {
+          parseVersion(data.branch.config.matrix.include[matrix_index].php.toString());
+        }
+      }
+
+      if ('5' in versions) {
+        var php5_first = versions['5'][0];
+        var php5_last = versions['5'][versions['5'].length - 1];
+      }
+
+      if ('7' in versions) {
+        var php7_first = versions['7'][0];
+        var php7_last = versions['7'][versions['7'].length - 1];
+      }
+
+      badgeData.text[1] = '';
+      // build text from versions
+      if ('5' in versions && '7' in versions) {
+        var php5_offset = php_releases['5'].slice(php_releases['5'].indexOf(php5_first));
+        var php7_limit = php_releases['7'].slice(0, php_releases['7'].indexOf(php7_last) + 1);
+        if (isEqual(php5_offset, versions['5']) && isEqual(versions['7'], php_releases['7'])) { // test in all
+          badgeData.text[1] = '>= 5.' + php5_first;
+        } else if (isEqual(php5_offset, versions['5']) && isEqual(php7_limit, versions['7'])) {
+          badgeData.text[1] = '5.' + php5_first + ' - 7.' + php7_last;
+        } else {
+          badgeData.text[1] = versions['5'].map(function(number) {
+            return '5.' + number;
+          }).concat(versions['7'].map(function(number) {
+            return '7.' + number;
+          })).join(', ');
+        }
+      } else if ('5' in versions) {
+        var php5_slice = php_releases['5'].slice(
+          php_releases['5'].indexOf(php5_first),
+          php_releases['5'].indexOf(php5_last) + 1
+        );
+        if (versions['5'].length > 1 && isEqual(versions['5'], php5_slice)) {
+          badgeData.text[1] = '5.' + php5_first + ' - 5.' + php5_last;
+        } else {
+          badgeData.text[1] = versions['5'].map(function(number) {
+            return '5.' + number;
+          }).join(', ');
+        }
+      } else if ('7' in versions) {
+        var php7_offset = php_releases['7'].slice(php_releases['7'].indexOf(php7_first));
+        if (isEqual(versions['7'], php_releases['7'])) { // test in all
+          badgeData.text[1] = '>= 7';
+        } else if (isEqual(versions['7'], php7_offset)) {
+          badgeData.text[1] = '>= 7.' + php7_first;
+        } else {
+          badgeData.text[1] = versions['7'].map(function(number) {
+            return '7.' + number;
+          }).join(', ');
+        }
+      }
+
+      if (has_hhvm) {
+        badgeData.colorB = '#8892BF';
+        if (badgeData.text[1] == '') {
+          badgeData.text[1] = 'HHVM';
+        } else {
+          badgeData.text[1] += ', HHVM';
+        }
+      } else if (badgeData.text[1] == '') {
+        badgeData.text[1] = 'invalid';
+      } else {
+        badgeData.colorB = '#8892BF';
+      }
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+    }
+    sendBadge(format, badgeData);
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
