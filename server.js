@@ -1101,22 +1101,28 @@ cache(function(data, match, sendBadge, request) {
       var currency;
       switch(type) {
         case 'receives':
-            value = data.receiving.amount;
-            currency = data.receiving.currency;
-            badgeData.text[1] = metric(value) + ' ' + currency + '/week';
+            if (data.receiving) {
+                value = data.receiving.amount;
+                currency = data.receiving.currency;
+                badgeData.text[1] = metric(value) + ' ' + currency + '/week';
+                }
             break;
         case 'gives':
-            value = data.giving.amount;
-            currency = data.giving.currency;
-            badgeData.text[1] = metric(value) + ' ' + currency + '/week';
+            if (data.giving) {
+                value = data.giving.amount;
+                currency = data.giving.currency;
+                badgeData.text[1] = metric(value) + ' ' + currency + '/week';
+                }
             break;
         case 'patrons':
             value = data.npatrons;
             badgeData.text[1] = metric(value);
             break;
         case 'goal':
-            value = Math.round(data.receiving.amount/data.goal.amount*100);
-            badgeData.text[1] = metric(value) + '%';
+            if (data.goal) {
+                value = Math.round(data.receiving.amount/data.goal.amount*100);
+                badgeData.text[1] = metric(value) + '%';
+                }
             break;
         }
       if (value != null) {
@@ -1132,6 +1138,7 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
       } else {
         badgeData.text[1] = 'anonymous';
+        badgeData.colorscheme = 'blue';
         sendBadge(format, badgeData);
       }
     } catch(e) {
