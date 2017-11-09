@@ -40,7 +40,7 @@ t.create('No Goal')
     .get('/Liberapay/public.json')
     .reply(200, { goal: null })
   )
-  .expectJSON({ name: 'goal progress', value: 'invalid'});
+  .expectJSON({ name: 'goal progress', value: 'anonymous'});
 
 t.create('Empty')
   .get('/Liberapay/receives.json')
