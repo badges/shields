@@ -869,7 +869,7 @@ camp.route(/^\/sonar\/?(.*)?\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|j
         try {
           var data = JSON.parse(buffer);
 
-          var value =  (!!version && version < 5.4) ? data[0].msr[0].val : parseInt(data.component.measures[0].value);
+          var value =  parseInt((!!version && version < 5.4) ? data[0].msr[0].val : data.component.measures[0].value);
 
           if (value === undefined) {
             badgeData.text[1] = 'unknown';
