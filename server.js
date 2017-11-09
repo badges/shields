@@ -7423,7 +7423,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       badgeData.text[1] = data.packages[userRepo][version].require.php;
-      badgeData.colorB = '#8892BF';
+      badgeData.colorscheme = 'blue';
     } catch(e) {
       badgeData.text[1] = 'invalid';
     }
