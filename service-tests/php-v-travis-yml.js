@@ -3,7 +3,7 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
-const t = new ServiceTester({ id: 'travis-yml', title: 'PHP version from .travis.yml' });
+const t = new ServiceTester({ id: 'travis', title: 'PHP version from .travis.yml' });
 module.exports = t;
 
 t.create('gets the package version of symfony')

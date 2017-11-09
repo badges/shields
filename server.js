@@ -266,6 +266,83 @@ cache(function (data, match, sendBadge, request) {
   });
 }));
 
+// PHP version from .travis.yml
+camp.route(/^\/travis(?:-ci)?\/php-v\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const userRepo = match[1];  // eg, espadrine/sc
+  const version = match[2] ? match[2] : 'master';
+  const format = match[3];
+  const options = {
+    method: 'GET',
+    uri: 'https://api.travis-ci.org/repos/' + userRepo + '/branches/' + version,
+  };
+  const badgeData = getBadgeData('PHP', data);
+  request(options, function(err, res, buffer) {
+    if (err !== null) {
+      log.error('Travis CI error: ' + err.stack);
+      if (res) {
+        log.error('' + res);
+      }
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    try {
+      const data = JSON.parse(buffer);
+      let hasHhvm = false;
+      let versions = [];
+
+      // from php
+      if (typeof data.branch.config.php !== 'undefined') {
+        for (const index in data.branch.config.php) {
+          const version = data.branch.config.php[index].toString();
+
+          if (version === 'nightly') {
+            // ignore nightly builds
+          } else if (phpHhvmVersion(version)) {
+            hasHhvm = true;
+          } else if (versions.indexOf(version) === -1) {
+            versions.push(version);
+          }
+        }
+      }
+      // from matrix
+      if (typeof data.branch.config.matrix.include !== 'undefined') {
+        for (const index in data.branch.config.matrix.include) {
+          const version = data.branch.config.matrix.include[index].php.toString();
+
+          if (version === 'nightly') {
+              // ignore nightly builds
+          } else if (phpHhvmVersion(version)) {
+              hasHhvm = true;
+          } else if (versions.indexOf(version) === -1) {
+              versions.push(version);
+          }
+        }
+      }
+
+      badgeData.text[1] = phpVersionReduction(versions);
+
+      if (hasHhvm) {
+        badgeData.colorscheme = 'blue';
+        if (badgeData.text[1] == '') {
+          badgeData.text[1] = 'HHVM';
+        } else {
+          badgeData.text[1] += ', HHVM';
+        }
+      } else if (badgeData.text[1] == '') {
+        badgeData.text[1] = 'invalid';
+      } else {
+        badgeData.colorscheme = 'blue';
+      }
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+    }
+    sendBadge(format, badgeData);
+  });
+}));
+
 // Travis integration
 camp.route(/^\/travis(-ci)?\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -7394,83 +7471,6 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
       }
     });
-  });
-}));
-
-// PHP version from .travis.yml
-camp.route(/^\/travis-yml\/php-v\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  const userRepo = match[1];  // eg, espadrine/sc
-  const version = match[2] ? match[2] : 'master';
-  const format = match[3];
-  const options = {
-    method: 'GET',
-    uri: 'https://api.travis-ci.org/repos/' + userRepo + '/branches/' + version,
-  };
-  const badgeData = getBadgeData('PHP', data);
-  request(options, function(err, res, buffer) {
-    if (err !== null) {
-      log.error('Travis CI error: ' + err.stack);
-      if (res) {
-        log.error('' + res);
-      }
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
-    }
-
-    try {
-      const data = JSON.parse(buffer);
-      let hasHhvm = false;
-      let versions = [];
-
-      // from php
-      if (typeof data.branch.config.php !== 'undefined') {
-        for (const index in data.branch.config.php) {
-          const version = data.branch.config.php[index].toString();
-
-          if (version === 'nightly') {
-            // ignore nightly builds
-          } else if (phpHhvmVersion(version)) {
-            hasHhvm = true;
-          } else if (versions.indexOf(version) === -1) {
-            versions.push(version);
-          }
-        }
-      }
-      // from matrix
-      if (typeof data.branch.config.matrix.include !== 'undefined') {
-        for (const index in data.branch.config.matrix.include) {
-          const version = data.branch.config.matrix.include[index].php.toString();
-
-          if (version === 'nightly') {
-              // ignore nightly builds
-          } else if (phpHhvmVersion(version)) {
-              hasHhvm = true;
-          } else if (versions.indexOf(version) === -1) {
-              versions.push(version);
-          }
-        }
-      }
-
-      badgeData.text[1] = phpVersionReduction(versions);
-
-      if (hasHhvm) {
-        badgeData.colorscheme = 'blue';
-        if (badgeData.text[1] == '') {
-          badgeData.text[1] = 'HHVM';
-        } else {
-          badgeData.text[1] += ', HHVM';
-        }
-      } else if (badgeData.text[1] == '') {
-        badgeData.text[1] = 'invalid';
-      } else {
-        badgeData.colorscheme = 'blue';
-      }
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-    }
-    sendBadge(format, badgeData);
   });
 }));
 
