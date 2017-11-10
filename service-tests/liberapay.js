@@ -8,35 +8,35 @@ const t = new ServiceTester({ id: 'liberapay', title: 'Liberapay' });
 module.exports = t;
 
 t.create('Receiving')
-  .get('/Liberapay/receives.json')
+  .get('/receives/Liberapay.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'receives',
     value: isLiberapayTestValues
   }));
 
 t.create('Giving')
-  .get('/Liberapay/gives.json')
+  .get('/gives/Liberapay.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'gives',
     value: isLiberapayTestValues
   }));
 
 t.create('Patrons')
-  .get('/Liberapay/patrons.json')
+  .get('/patrons/Liberapay.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'patrons',
     value: Joi.string().regex(/^[0-9]+/)
   }));
 
 t.create('Goal Progress')
-  .get('/Liberapay/goal.json')
+  .get('/goal/Liberapay.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'goal progress',
     value: Joi.string().regex(/^[0-9]+%/)
   }));
 
 t.create('No Goal')
-  .get('/Liberapay/goal.json')
+  .get('/goal/Liberapay.json')
   .intercept(nock => nock('https://liberapay.com')
     .get('/Liberapay/public.json')
     .reply(200, { goal: null })
@@ -44,7 +44,7 @@ t.create('No Goal')
   .expectJSON({ name: 'goal progress', value: 'anonymous'});
 
 t.create('Empty')
-  .get('/Liberapay/receives.json')
+  .get('/receives/Liberapay.json')
   .intercept(nock => nock('https://liberapay.com')
     .get('/Liberapay/public.json')
     .reply(200, { receiving: 0.00 })
