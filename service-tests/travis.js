@@ -19,5 +19,5 @@ t.create('gets the package version of yii')
     .expectJSONTypes(Joi.object().keys({ name: 'PHP', value: '5.3 - 7.1, HHVM' }));
 
 t.create('invalid package name')
-    .get('/php-v/frodo-is-not-a-package.json')
+    .get('/php-v/frodo/is-not-a-package.json')
     .expectJSON({ name: 'PHP', value: 'invalid' });
