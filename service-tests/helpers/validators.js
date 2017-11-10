@@ -23,7 +23,7 @@ const isVPlusDottedVersionAtLeastOne = withRegex(/^v\d+(\.\d+)?(\.\d+)?$/);
 // This regex not support branches, minimum-stability, ref and any (*)
 // https://getcomposer.org/doc/04-schema.md#package-links
 // https://getcomposer.org/doc/04-schema.md#minimum-stability
-const isRequireVersion = withRegex(/^\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?((\s*\|\|)?\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?)*\s*$/);
+const isComposerVersion = withRegex(/^\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?((\s*\|\|)?\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?)*\s*$/);
 
 const isStarRating = withRegex(/^(?=.{5}$)(\u2605{0,5}[\u00BC\u00BD\u00BE]?\u2606{0,5})$/);
 
@@ -45,7 +45,7 @@ module.exports = {
   isSemver,
   isVPlusTripleDottedVersion,
   isVPlusDottedVersionAtLeastOne,
-  isRequireVersion,
+  isComposerVersion,
   isStarRating,
   isMetric,
   isMetricOverTimePeriod,
