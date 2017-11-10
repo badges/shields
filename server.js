@@ -21,6 +21,7 @@ const {
   latest: phpLatestVersion,
   isStable: phpStableVersion,
   isHhvm: phpHhvmVersion,
+  minorVersion: phpMinorVersion,
   versionReduction: phpVersionReduction,
 } = require('./lib/php-version');
 const {
@@ -294,14 +295,13 @@ cache(function(data, match, sendBadge, request) {
 
       // from php
       if (typeof data.branch.config.php !== 'undefined') {
-        travisVersions = travisVersions.concat(data.branch.config.php.map((v) => (v === 7 ? '7.0' : v.toString())));
+        travisVersions = travisVersions.concat(data.branch.config.php.map((v) => v.toString()));
       }
       // from matrix
       if (typeof data.branch.config.matrix.include !== 'undefined') {
-        travisVersions = travisVersions.concat(
-            data.branch.config.matrix.include.map((v) => (v.php === 7 ? '7.0' : v.php.toString()))
-        );
+        travisVersions = travisVersions.concat(data.branch.config.matrix.include.map((v) => v.php.toString()));
       }
+      travisVersions = travisVersions.map((v) => phpMinorVersion(v));
 
       const hasHhvm = travisVersions.find((v) => phpHhvmVersion(v));
       const versions = travisVersions.filter((v) => v.indexOf('.') !== -1);
