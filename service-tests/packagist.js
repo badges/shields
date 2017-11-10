@@ -16,5 +16,5 @@ t.create('gets the package version of symfony 2.8')
   .expectJSONTypes(Joi.object().keys({ name: 'PHP', value: isRequireVersion }));
 
 t.create('invalid package name')
-  .get('/php-v/frodo-is-not-a-package.json')
+  .get('/php-v/frodo/is-not-a-package.json')
   .expectJSON({ name: 'PHP', value: 'invalid' });
