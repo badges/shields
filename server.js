@@ -20,7 +20,6 @@ const {
   compare: phpVersionCompare,
   latest: phpLatestVersion,
   isStable: phpStableVersion,
-  isHhvm: phpHhvmVersion,
   minorVersion: phpMinorVersion,
   versionReduction: phpVersionReduction,
 } = require('./lib/php-version');
@@ -303,7 +302,7 @@ cache(function(data, match, sendBadge, request) {
       }
       travisVersions = travisVersions.map((v) => phpMinorVersion(v));
 
-      const hasHhvm = travisVersions.find((v) => phpHhvmVersion(v));
+      const hasHhvm = travisVersions.find((v) => v.startsWith('hhvm'));
       const versions = travisVersions.filter((v) => v.indexOf('.') !== -1);
       let reduction = phpVersionReduction(versions);
 
