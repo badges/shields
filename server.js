@@ -290,33 +290,21 @@ cache(function(data, match, sendBadge, request) {
 
     try {
       const data = JSON.parse(buffer);
-      let hasHhvm = false;
       let travisVersions = [];
-      let versions = [];
 
       // from php
       if (typeof data.branch.config.php !== 'undefined') {
-        for (const index in data.branch.config.php) {
-          travisVersions.push(data.branch.config.php[index].toString());
-        }
+        travisVersions = travisVersions.concat(data.branch.config.php.map((v) => (v === 7 ? '7.0' : v.toString())));
       }
       // from matrix
       if (typeof data.branch.config.matrix.include !== 'undefined') {
-        for (const index in data.branch.config.matrix.include) {
-          travisVersions.push(data.branch.config.matrix.include[index].php.toString());
-        }
+        travisVersions = travisVersions.concat(
+            data.branch.config.matrix.include.map((v) => (v.php === 7 ? '7.0' : v.php.toString()))
+        );
       }
 
-      for (const index in travisVersions) {
-        if (travisVersions[index] === 'nightly') {
-          // ignore nightly builds
-        } else if (phpHhvmVersion(travisVersions[index])) {
-          hasHhvm = true;
-        } else if (versions.indexOf(travisVersions[index]) === -1) {
-          versions.push(travisVersions[index]);
-        }
-      }
-
+      const hasHhvm = travisVersions.find((v) => phpHhvmVersion(v));
+      const versions = travisVersions.filter((v) => v.indexOf('.') !== -1);
       let reduction = phpVersionReduction(versions);
 
       if (hasHhvm) {
