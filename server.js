@@ -317,20 +317,18 @@ cache(function(data, match, sendBadge, request) {
         }
       }
 
-      const reduction = phpVersionReduction(versions);
+      let reduction = phpVersionReduction(versions);
 
       if (hasHhvm) {
-        badgeData.colorscheme = 'blue';
-        if (reduction === '') {
-          badgeData.text[1] = 'HHVM';
-        } else {
-          badgeData.text[1] = reduction + ', HHVM';
-        }
-      } else if (reduction === '') {
-        badgeData.text[1] = 'invalid';
-      } else {
+        reduction += reduction ? ', ' : '';
+        reduction += 'HHVM';
+      }
+
+      if (reduction) {
         badgeData.colorscheme = 'blue';
         badgeData.text[1] = reduction;
+      } else {
+        badgeData.text[1] = 'invalid';
       }
     } catch(e) {
       badgeData.text[1] = 'invalid';
