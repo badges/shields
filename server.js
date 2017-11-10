@@ -109,6 +109,10 @@ function reset() {
 
 function stop(callback) {
   githubAuth.cancelAutosaving();
+  if (githubDebugInterval) {
+    clearInterval(githubDebugInterval);
+    githubDebugInterval = null;
+  }
   analytics.cancelAutosaving();
   camp.close(callback);
 }
@@ -129,6 +133,13 @@ analytics.setRoutes(camp);
 githubAuth.scheduleAutosaving();
 if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);
+}
+
+let githubDebugInterval;
+if (config.debug.github.enabled) {
+  githubDebugInterval = setInterval(() => {
+    log(githubAuth.getTokenDebugInfo());
+  }, 1000 * config.debug.github.intervalSeconds);
 }
 
 suggest.setRoutes(camp);
