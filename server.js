@@ -7398,19 +7398,16 @@ cache(function(data, match, sendBadge, request) {
 // PHP version from Packagist
 camp.route(/^\/packagist\/php-v\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];  // eg, espadrine/sc
-  var version = match[2];
-  var format = match[3];
-  if (!version) {
-    version = 'dev-master';
-  }
-  var options = {
+  const userRepo = match[1];  // eg, espadrine/sc
+  const version = match[2] ? match[2] : 'dev-master';
+  const format = match[3];
+  const options = {
     method: 'GET',
     uri: 'https://packagist.org/p/' + userRepo + '.json',
   };
-  var badgeData = getBadgeData('PHP', data);
+  const badgeData = getBadgeData('PHP', data);
   request(options, function(err, res, buffer) {
-    if (err != null) {
+    if (err !== null) {
       log.error('Packagist error: ' + err.stack);
       if (res) {
         log.error('' + res);
@@ -7421,7 +7418,7 @@ cache(function(data, match, sendBadge, request) {
     }
 
     try {
-      var data = JSON.parse(buffer);
+      const data = JSON.parse(buffer);
       badgeData.text[1] = data.packages[userRepo][version].require.php;
       badgeData.colorscheme = 'blue';
     } catch(e) {
