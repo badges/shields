@@ -817,13 +817,14 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // SonarQube code coverage
-camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/sonar\/?([0-9.]+)?\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
     cache(function(data, match, sendBadge, request) {
-      var scheme = match[1];
-      var serverUrl = match[2];  // eg, `sonar.qatools.ru`.
-      var buildType = match[3];  // eg, `ru.yandex.qatools.allure:allure-core:master`.
-      var metricName = match[4];
-      var format = match[5];
+      var version = parseFloat(match[1]);
+      var scheme = match[2];
+      var serverUrl = match[3];
+      var buildType = match[4];
+      var metricName = match[5];
+      var format = match[6];
 
       var sonarMetricName = metricName;
       if (metricName === 'tech_debt') {
@@ -831,9 +832,14 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
         sonarMetricName = 'sqale_debt_ratio';
       }
 
+      const useLegacyApi = !!version && version < 5.4;
+
+      var uri = useLegacyApi ?
+          scheme + '://' + serverUrl + '/api/resources?resource=' + buildType + '&depth=0&metrics=' + encodeURIComponent(sonarMetricName) + '&includetrends=true':
+          scheme + '://' + serverUrl + '/api/measures/component?componentKey=' + buildType + '&metricKeys=' + encodeURIComponent(sonarMetricName);
+
       var options = {
-        uri: scheme + '://' + serverUrl + '/api/resources?resource=' + buildType
-          + '&depth=0&metrics=' + encodeURIComponent(sonarMetricName) + '&includetrends=true',
+        uri,
         headers: {
           Accept: 'application/json'
         }
@@ -855,7 +861,7 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
         try {
           var data = JSON.parse(buffer);
 
-          var value = data[0].msr[0].val;
+          var value =  parseInt(useLegacyApi ? data[0].msr[0].val : data.component.measures[0].value);
 
           if (value === undefined) {
             badgeData.text[1] = 'unknown';
