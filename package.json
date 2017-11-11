@@ -60,7 +60,7 @@
     "build": "npm run build:examples && npm run build:copy-fragments && npm run build:concat",
     "build:production": "PRODUCTION_BUILD=true npm run build:examples && npm run build:copy-fragments && make footer-production-transform && npm run build:concat",
     "heroku-postbuild": "npm run build",
-    "start": "INFOSITE=/ node server 8080 ::"
+    "start": "node server 8080 ::"
   },
   "bin": {
     "badge": "lib/badge-cli.js"
