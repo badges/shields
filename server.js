@@ -827,7 +827,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // SonarQube code coverage
-camp.route(/^\/sonar\/?(.*)?\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/sonar\/?([0-9.]+)?\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
     cache(function(data, match, sendBadge, request) {
       var version = parseFloat(match[1]);
       var scheme = match[2];
@@ -842,7 +842,9 @@ camp.route(/^\/sonar\/?(.*)?\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|j
         sonarMetricName = 'sqale_debt_ratio';
       }
 
-      var uri = (!!version && version < 5.4) ?
+      const useLegacyApi = !!version && version < 5.4;
+
+      var uri = useLegacyApi ?
           scheme + '://' + serverUrl + '/api/resources?resource=' + buildType + '&depth=0&metrics=' + encodeURIComponent(sonarMetricName) + '&includetrends=true':
           scheme + '://' + serverUrl + '/api/measures/component?componentKey=' + buildType + '&metricKeys=' + encodeURIComponent(sonarMetricName);
 
@@ -869,7 +871,7 @@ camp.route(/^\/sonar\/?(.*)?\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|j
         try {
           var data = JSON.parse(buffer);
 
-          var value =  parseInt((!!version && version < 5.4) ? data[0].msr[0].val : data.component.measures[0].value);
+          var value =  parseInt(useLegacyApi ? data[0].msr[0].val : data.component.measures[0].value);
 
           if (value === undefined) {
             badgeData.text[1] = 'unknown';
