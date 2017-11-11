@@ -3159,6 +3159,34 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Elm package version integration.
+camp.route(/^\/elm-package\/v\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const urlPrefix = 'http://package.elm-lang.org/packages';
+  const [, user, repo, format] = match;
+  const apiUrl = `${urlPrefix}/${user}/${repo}/latest/elm-package.json`;
+  const badgeData = getBadgeData('elm-package', data);
+  request(apiUrl, (err, res, buffer) => {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      const data = JSON.parse(buffer);
+      if (data && typeof data.version === 'string') {
+        badgeData.text[1] = 'v' + data.version;
+        badgeData.colorscheme = 'blue';
+      }
+      sendBadge(format, badgeData);
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+})
+);
+
 // CocoaPods version integration.
 camp.route(/^\/cocoapods\/(v|p|l)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
