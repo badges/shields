@@ -3165,8 +3165,8 @@ cache(function(data, match, sendBadge, request) {
     try {
       const data = JSON.parse(buffer);
       if (data && typeof data.version === 'string') {
-        badgeData.text[1] = 'v' + data.version;
-        badgeData.colorscheme = 'blue';
+        badgeData.text[1] = versionText(data.version);
+        badgeData.colorscheme = versionColor(data.version);
       }
       sendBadge(format, badgeData);
     } catch (e) {
