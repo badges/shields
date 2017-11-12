@@ -4,6 +4,7 @@ const countBy = require('lodash.countby');
 const jp = require('jsonpath');
 const path = require('path');
 const prettyBytes = require('pretty-bytes');
+const glob = require('glob');
 const queryString = require('query-string');
 const semver = require('semver');
 const xml2js = require('xml2js');
@@ -171,6 +172,66 @@ camp.notfound(/.*/, function(query, match, end, request) {
 });
 
 // Vendors.
+
+/**
+ * Registers a new service in the shields.io system. `serviceClass` must be a
+ * class that extends `BaseService`.
+ */
+function registerService(serviceClass) {
+  // Regular expressions treat "/" specially, so we need to escape them
+  const escapedPath = serviceClass.uri.format.replace(/\//g, '\\/');
+  const fullRegex = '^' + escapedPath + '.(svg|png|gif|jpg|json)$';
+
+  camp.route(new RegExp(fullRegex),
+  cache(async (data, match, sendBadge, request) => {
+    // Assumes the final capture group is the extension
+    const format = match.pop();
+    const badgeData = getBadgeData(
+      serviceClass.category,
+      Object.assign({}, serviceClass.defaultBadgeData, data)
+    );
+
+    try {
+      const namedParams = {};
+      if (serviceClass.uri.capture.length !== match.length - 1) {
+        throw new Error(
+          `Incorrect number of capture groups (expected `+
+          `${serviceClass.uri.capture.length}, got ${match.length - 1})`
+        );
+      }
+
+      serviceClass.uri.capture.forEach((name, index) => {
+        // The first capture group is the entire match, so every index is + 1 here
+        namedParams[name] = match[index + 1];
+      });
+
+      const serviceInstance = new serviceClass({
+        sendAndCacheRequest: request.asPromise,
+      });
+      const serviceData = await serviceInstance.handle(namedParams);
+      const text = badgeData.text;
+      if (serviceData.text) {
+        text[1] = serviceData.text;
+      }
+      Object.assign(badgeData, serviceData);
+      badgeData.text = text;
+      sendBadge(format, badgeData);
+
+    } catch (error) {
+      console.log(error);
+      const text = badgeData.text;
+      text[1] = 'error';
+      badgeData.text = text;
+      sendBadge(format, badgeData);
+    }
+  }));
+}
+
+// New-style services
+glob.sync(`${__dirname}/services/*.js`)
+  .filter(path => !path.endsWith('BaseService.js'))
+  .map(path => require(path))
+  .forEach(registerService);
 
 // JIRA issue integration
 camp.route(/^\/jira\/issue\/(http(?:s)?)\/(.+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -674,48 +735,6 @@ cache(function (data, match, sendBadge, request) {
       sendBadge(format, badgeData);
 
     } catch (e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// AppVeyor CI integration.
-camp.route(/^\/appveyor\/ci\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `gruntjs/grunt`.
-  var branch = match[2];
-  var format = match[3];
-  var apiUrl = 'https://ci.appveyor.com/api/projects/' + repo;
-  if (branch != null) {
-    apiUrl += '/branch/' + branch;
-  }
-  var badgeData = getBadgeData('build', data);
-  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      if (res.statusCode === 404) {
-        badgeData.text[1] = 'project not found or access denied';
-        sendBadge(format, badgeData);
-        return;
-      }
-      var data = JSON.parse(buffer);
-      var status = data.build.status;
-      if (status === 'success') {
-        badgeData.text[1] = 'passing';
-        badgeData.colorscheme = 'brightgreen';
-      } else if (status !== 'running' && status !== 'queued') {
-        badgeData.text[1] = 'failing';
-        badgeData.colorscheme = 'red';
-      } else {
-        badgeData.text[1] = status;
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
