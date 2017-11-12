@@ -2,7 +2,7 @@ language: node_js
 
 node_js:
   - 8
-  - 6
+  # - 9
 
 cache:
   directories:
@@ -17,8 +17,8 @@ before_script:
 script:
   - npm run lint
   - npm run test:js:server
-  - if node_modules/.bin/check-node-version --node '< 8.0' > /dev/null; then echo "Skipping frontend tests."; else npm run test:js:frontend; fi
-  - if node_modules/.bin/check-node-version --node '< 8.0' > /dev/null; then echo "Skipping build."; else npm run build; fi
+  - npm run test:js:frontend
+  - npm run build
 
 jobs:
   include:
@@ -26,10 +26,10 @@ jobs:
       script:
       - if [ "$TRAVIS_EVENT_TYPE" == cron ]; then npm run test:services; fi
       - if [ "$TRAVIS_EVENT_TYPE" == pull_request ]; then npm run test:services:pr; fi
-    - node_js: 6
-      script:
-      - if [ "$TRAVIS_EVENT_TYPE" == cron ]; then npm run test:services; fi
-      - if [ "$TRAVIS_EVENT_TYPE" == pull_request ]; then npm run test:services:pr; fi
+    # - node_js: 9
+    #   script:
+    #   - if [ "$TRAVIS_EVENT_TYPE" == cron ]; then npm run test:services; fi
+    #   - if [ "$TRAVIS_EVENT_TYPE" == pull_request ]; then npm run test:services:pr; fi
 
 branches:
   except:
