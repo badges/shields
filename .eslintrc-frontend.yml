@@ -1,0 +1,11 @@
+env:
+  browser: true
+
+parserOptions:
+  sourceType: "module"
+
+extends:
+  - "standard-jsx"
+  - "standard-react"
+  - "./.eslintrc-preferred.yml"
+
