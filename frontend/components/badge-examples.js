@@ -20,14 +20,23 @@ const Badge = ({ title, previewUri, exampleUri, documentation, baseUri, isProduc
   const handleClick = () => onClick({ title, previewUri, exampleUri, documentation });
 
   const previewImage = previewUri
-    ? (<img onClick={handleClick} src={resolveUri(previewUri, baseUri, { longCache: isProductionBuild } )} alt="" />)
-    : '\u00a0'; // non-breaking space
-  const resolvedExampleUri = resolveUri(exampleUri || previewUri, baseUri || 'https://img.shields.io/', { longCache: false });
+    ? (<img
+      onClick={handleClick}
+      src={resolveUri(previewUri, baseUri, { longCache: isProductionBuild } )}
+      alt="" />
+    ) : '\u00a0'; // non-breaking space
+  const resolvedExampleUri = resolveUri(
+    exampleUri || previewUri,
+    baseUri || 'https://img.shields.io/',
+    { longCache: false });
 
   return (
-    <tr><th onClick={handleClick}>{ title }:</th>
+    <tr>
+      <th onClick={handleClick}>{ title }:</th>
       <td>{ previewImage }</td>
-      <td><code onClick={handleClick}>{ resolvedExampleUri }</code></td>
+      <td>
+        <code onClick={handleClick}>{ resolvedExampleUri }</code>
+      </td>
     </tr>
   );
 };
@@ -44,11 +53,20 @@ Badge.propTypes = {
 const Category = ({ category, examples, baseUri, isProductionBuild, onClick }) => (
   <div>
     <h3 id={category.id}>{ category.name }</h3>
-    <table className='badge'><tbody>
-      {
-        examples.map((badgeData, i) => (<Badge key={i} {...badgeData} baseUri={baseUri} isProductionBuild={isProductionBuild} onClick={onClick} />))
-      }
-    </tbody></table>
+    <table className="badge">
+      <tbody>
+        {
+          examples.map((badgeData, i) => (
+            <Badge
+              key={i}
+              {...badgeData}
+              baseUri={baseUri}
+              isProductionBuild={isProductionBuild}
+              onClick={onClick} />
+          ))
+        }
+      </tbody>
+    </table>
   </div>
 );
 Category.propTypes = {
@@ -70,7 +88,14 @@ Category.propTypes = {
 const BadgeExamples = ({ examples, baseUri, isProductionBuild, onClick }) => (
   <div>
     {
-      examples.map((categoryData, i) => (<Category key={i} {...categoryData} baseUri={baseUri} isProductionBuild={isProductionBuild} onClick={onClick} />))
+      examples.map((categoryData, i) => (
+        <Category
+          key={i}
+          {...categoryData}
+          baseUri={baseUri}
+          isProductionBuild={isProductionBuild}
+          onClick={onClick} />
+      ))
     }
   </div>
 );
