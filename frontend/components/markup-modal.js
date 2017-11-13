@@ -5,15 +5,24 @@ import ClickToSelect from '@mapbox/react-click-to-select';
 import { resolveUri } from './badge-examples';
 
 export default class MarkupModal extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      isOpen: false,
-      badgeUri: null,
-      link: null,
-      style: 'flat',
-    };
-  }
+  propTypes = {
+    example: PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      previewUri: PropTypes.string,
+      exampleUri: PropTypes.string,
+      documentation: PropTypes.string,
+      link: PropTypes.string,
+    }),
+    baseUri: PropTypes.string.isRequired,
+    onRequestClose: PropTypes.func.isRequired,
+  };
+
+  state = {
+    isOpen: false,
+    badgeUri: null,
+    link: null,
+    style: 'flat',
+  };
 
   componentWillReceiveProps(nextProps) {
     const { example } = nextProps;
@@ -128,14 +137,3 @@ export default class MarkupModal extends React.Component {
     );
   }
 }
-MarkupModal.propTypes = {
-  example: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    previewUri: PropTypes.string,
-    exampleUri: PropTypes.string,
-    documentation: PropTypes.string,
-    link: PropTypes.string,
-  }),
-  baseUri: PropTypes.string.isRequired,
-  onRequestClose: PropTypes.func.isRequired,
-};

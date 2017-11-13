@@ -1,6 +1,8 @@
 env:
   browser: true
 
+parser: "babel-eslint"
+
 parserOptions:
   sourceType: "module"
 
@@ -8,4 +10,3 @@ extends:
   - "standard-jsx"
   - "standard-react"
   - "./.eslintrc-preferred.yml"
-

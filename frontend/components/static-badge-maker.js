@@ -2,15 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export default class StaticBadgeMaker extends React.Component {
-  constructor (props) {
-    super(props);
+  propTypes = {
+    baseUri: PropTypes.string.isRequired,
+  };
 
-    this.state = {
-      subject: null,
-      status: null,
-      color: null,
-    };
-  }
+  state = {
+    subject: null,
+    status: null,
+    color: null,
+  };
 
   static escapeField(s) {
     return encodeURIComponent(s.replace(/-/g, '--').replace(/_/g, '__'));
@@ -63,6 +63,3 @@ export default class StaticBadgeMaker extends React.Component {
     );
   }
 }
-StaticBadgeMaker.propTypes = {
-  baseUri: PropTypes.string.isRequired,
-};

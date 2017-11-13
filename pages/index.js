@@ -14,10 +14,7 @@ const baseUri = process.env.BASE_URL || 'http://localhost:8080';
 const isProductionBuild = envFlag(process.env.PRODUCTION_BUILD, false);
 
 export default class IndexPage extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = { query: null, example: null };
-  }
+  state = { query: null, example: null };
 
   render() {
     // This approach is the slightest bit slow. Since all the badges are on

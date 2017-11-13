@@ -2,19 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export default class DynamicBadgeMaker extends React.Component {
-  constructor (props) {
-    super(props);
+  propTypes = {
+    baseUri: PropTypes.string.isRequired,
+  };
 
-    this.state = {
-      type: 'json',
-      label: null,
-      uri: null,
-      colorB: null,
-      prefix: null,
-      suffix: null,
-      query: null,
-    };
-  }
+  state = {
+    type: 'json',
+    label: null,
+    uri: null,
+    colorB: null,
+    prefix: null,
+    suffix: null,
+    query: null,
+  };
 
   makeBadgeUri () {
     const result = new URL(`/dynamic/${this.state.type}.svg`, this.props.baseUri);
@@ -76,6 +76,3 @@ export default class DynamicBadgeMaker extends React.Component {
     );
   }
 }
-DynamicBadgeMaker.propTypes = {
-  baseUri: PropTypes.string.isRequired,
-};

@@ -39,17 +39,24 @@ function ajax(baseUri, verb, adverbs, cb) {
 }
 
 export default class SuggestionAndSearch extends React.Component {
+  propTypes = {
+    queryChanged: PropTypes.func.isRequired,
+    onBadgeClick: PropTypes.func.isRequired,
+    baseUri: PropTypes.string.isRequired,
+    isProductionBuild: PropTypes.bool.isRequired,
+  };
+
   constructor(props) {
     super(props);
-    this.state = {
-      isUrl: false,
-      inProgress: false,
-      projectUrl: null,
-      suggestions: [],
-    };
-
     this.queryChangedDebounced = debounce(props.queryChanged, 500, { leading: true });
   }
+
+  state = {
+    isUrl: false,
+    inProgress: false,
+    projectUrl: null,
+    suggestions: [],
+  };
 
   queryChanged(query) {
     const isUri = query.startsWith('https://') || query.startsWith('http://');
@@ -126,9 +133,3 @@ export default class SuggestionAndSearch extends React.Component {
     );
   }
 }
-SuggestionAndSearch.propTypes = {
-  queryChanged: PropTypes.func.isRequired,
-  onBadgeClick: PropTypes.func.isRequired,
-  baseUri: PropTypes.string.isRequired,
-  isProductionBuild: PropTypes.bool.isRequired,
-};
