@@ -1,21 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function escapeField(s) {
-  return encodeURIComponent(s.replace(/-/g, '--').replace(/_/g, '__'));
-}
-
 export default class DynamicBadgeMaker extends React.Component {
+  constructor (props) {
+    super(props);
+
+    this.state = {
+      type: 'json',
+      label: null,
+      uri: null,
+      colorB: null,
+      prefix: null,
+      suffix: null,
+      query: null,
+    };
+  }
+
   makeBadgeUri () {
-    let url = this.props.baseUri;
-    url += '/dynamic/' + escapeField(this.typeInput.value);
-    url += '.svg?label=' + escapeField(this.labelInput.value);
-    url += '&colorB=' + escapeField(this.colorInput.value);
-    url += '&prefix=' + escapeField(this.prefixInput.value);
-    url += '&suffix=' + escapeField(this.suffixInput.value);
-    url += '&query=' + this.queryInput.value;
-    url += '&uri=' + escapeField(this.uriInput.value);
-    return url;
+    const result = new URL(`/dynamic/${this.state.type}.svg`, this.props.baseUri);
+    const keys = Object.keys(this.state).filter(k => k !== 'type');
+    for (const k in keys) {
+      result.searchParams.set(k, this.state[k]);
+    }
+    return result;
   }
 
   handleSubmit (e) {
@@ -28,42 +35,41 @@ export default class DynamicBadgeMaker extends React.Component {
       <form onSubmit={e => this.handleSubmit(e)}>
         <input
           className="short"
-          ref={input => { this.typeInput = input; }}
-          name="type"
-          list="dynamic-type"
-          placeholder="type" />
+          value={this.state.type}
+          readOnly
+          list="dynamic-type" />
         <datalist id="dynamic-type">
           <option value="json" />
         </datalist>
         <input
           className="short"
-          ref={input => { this.labelInput = input; }}
-          name="label"
+          value={this.state.label}
+          onChange={event => this.setState({ label: event.target.value })}
           placeholder="label" />
         <input
           className="short"
-          ref={input => { this.uriInput = input; }}
-          name="uri"
+          value={this.state.uri}
+          onChange={event => this.setState({ uri: event.target.value })}
           placeholder="uri" />
         <input
           className="short"
-          ref={input => { this.queryInput = input; }}
-          name="query"
+          value={this.state.query}
+          onChange={event => this.setState({ query: event.target.value })}
           placeholder="$.data.subdata" />
         <input
           className="short"
-          ref={input => { this.colorInput = input; }}
-          name="color"
+          value={this.state.color}
+          onChange={event => this.setState({ color: event.target.value })}
           placeholder="hex color" />
         <input
           className="short"
-          ref={input => { this.prefixInput = input; }}
-          name="prefix"
+          value={this.state.prefix}
+          onChange={event => this.setState({ prefix: event.target.value })}
           placeholder="prefix" />
         <input
           className="short"
-          ref={input => { this.suffixInput = input; }}
-          name="suffix"
+          value={this.state.suffix}
+          onChange={event => this.setState({ suffix: event.target.value })}
           placeholder="suffix" />
         <button>Make Badge</button>
       </form>

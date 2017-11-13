@@ -1,18 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function escapeField(s) {
-  return encodeURIComponent(s.replace(/-/g, '--').replace(/_/g, '__'));
-}
-
 export default class StaticBadgeMaker extends React.Component {
+  constructor (props) {
+    super(props);
+
+    this.state = {
+      subject: null,
+      status: null,
+      color: null,
+    };
+  }
+
+  static escapeField(s) {
+    return encodeURIComponent(s.replace(/-/g, '--').replace(/_/g, '__'));
+  }
+
   makeBadgeUri () {
-    let url = `${this.props.baseUri}/badge/`;
-    url += escapeField(this.subjectInput.value);
-    url += '-' + escapeField(this.statusInput.value);
-    url += '-' + escapeField(this.colorInput.value);
-    url += '.svg';
-    return url;
+    const { subject, status, color } = this.state;
+    const path = [subject, status, color]
+      .map(this.constructor.escapeField)
+      .join('-');
+    return `${this.props.baseUri}/badge/${path}.svg`;
   }
 
   handleSubmit (e) {
@@ -25,18 +34,18 @@ export default class StaticBadgeMaker extends React.Component {
       <form onSubmit={e => this.handleSubmit(e)}>
         <input
           className="short"
-          ref={input => { this.subjectInput = input; }}
-          name="subject"
+          value={this.state.subject}
+          onChange={event => this.setState({ subject: event.target.value })}
           placeholder="subject" />
         <input
           className="short"
-          ref={input => { this.statusInput = input; }}
-          name="status"
+          value={this.state.status}
+          onChange={event => this.setState({ status: event.target.value })}
           placeholder="status" />
         <input
           className="short"
-          ref={input => { this.colorInput = input; }}
-          name="color"
+          value={this.state.color}
+          onChange={event => this.setState({ color: event.target.value })}
           list="default-colors"
           placeholder="color" />
         <datalist id="default-colors">
