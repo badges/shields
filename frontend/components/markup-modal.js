@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import ClickToSelect from '@mapbox/react-click-to-select';
 import { resolveUri } from './badge-examples';
+import generateAllMarkup from '../lib/generate-image-markup';
 
 export default class MarkupModal extends React.Component {
   propTypes = {
@@ -18,51 +19,53 @@ export default class MarkupModal extends React.Component {
   };
 
   state = {
-    isOpen: false,
     badgeUri: null,
     link: null,
     style: 'flat',
   };
 
+  get isOpen() {
+    return this.props.example !== null;
+  }
+
   componentWillReceiveProps(nextProps) {
-    const { example } = nextProps;
-    if (example === null) {
-      this.setState({
-        isOpen: false,
-        badgeUri: null,
-      });
-    } else {
-      this.setState({
-        isOpen: true,
-        badgeUri: resolveUri(example.exampleUri || example.previewUri, nextProps.baseUri),
-        link: example.link,
-      });
+    const { example, baseUri } = nextProps;
+
+    if (! example) {
+      return;
     }
+
+    // Transfer `badgeUri` and `link` into state so they can be edited by the
+    // user.
+    const { exampleUri, previewUri, link } = example;
+    this.setState({
+      badgeUri: resolveUri(exampleUri || previewUri, baseUri),
+      link,
+    });
   }
 
   generateMarkup() {
-    if (this.props.example === null) {
+    if (! this.isOpen) {
       return {};
     }
 
     const { title } = this.props.example;
-    const { link, style } = this.state;
+    const { badgeUri, link, style } = this.state;
 
-    let badgeUri = this.state.badgeUri;
+    const withStyle = new URL(badgeUri);
     if (style !== 'flat') { // Default style doesn't need to be specified.
-      badgeUri += badgeUri.includes('?') ? `&style=${style}` : `?style=${style}`;
+      withStyle.searchParams.set('style', style);
     }
 
-    return {
-      markdown: `[![${title}](${badgeUri})](${link})`,
-      reStructuredText: `.. image:: ${badgeUri}   :target: ${link}`,
-      asciiDoc: `image:${badgeUri}[${title}]`,
-    };
+    return generateAllMarkup(withStyle.href, link, title);
   }
 
   renderDocumentation() {
-    const { documentation } = this.props.example || {};
+    if (! this.isOpen) {
+      return null;
+    }
 
+    const { documentation } = this.props.example;
     return documentation ? (
       <div>
         <h4>Documentation</h4>
@@ -76,7 +79,7 @@ export default class MarkupModal extends React.Component {
 
     return (
       <Modal
-        isOpen={this.state.isOpen}
+        isOpen={this.isOpen}
         onRequestClose={this.props.onRequestClose}
         contentLabel="Example Modal">
         <form action="">
