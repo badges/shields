@@ -6,7 +6,7 @@ import { resolveUri } from './badge-examples';
 import generateAllMarkup from '../lib/generate-image-markup';
 
 export default class MarkupModal extends React.Component {
-  propTypes = {
+  static propTypes = {
     example: PropTypes.shape({
       title: PropTypes.string.isRequired,
       previewUri: PropTypes.string,

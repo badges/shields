@@ -39,7 +39,7 @@ function ajax(baseUri, verb, adverbs, cb) {
 }
 
 export default class SuggestionAndSearch extends React.Component {
-  propTypes = {
+  static propTypes = {
     queryChanged: PropTypes.func.isRequired,
     onBadgeClick: PropTypes.func.isRequired,
     baseUri: PropTypes.string.isRequired,
