@@ -84,7 +84,8 @@ export default class MarkupModal extends React.Component {
             <img src={this.state.badgeUri} style={{ minHeight: '20px' }} />
           </p>
           <p>
-            <label>Link&nbsp;
+            <label>
+              Link&nbsp;
               <input
                 type="url"
                 value={this.state.link}
@@ -92,7 +93,8 @@ export default class MarkupModal extends React.Component {
             </label>
           </p>
           <p>
-            <label>Image&nbsp;
+            <label>
+              Image&nbsp;
               <input
                 type="url"
                 value={this.state.badgeUri}
@@ -114,19 +116,19 @@ export default class MarkupModal extends React.Component {
           <p>
             Markdown&nbsp;
             <ClickToSelect>
-              <input className="code" readOnly value={markdown} id="copyMarkdown" />
+              <input className="code" readOnly value={markdown} />
             </ClickToSelect>
           </p>
           <p>
             reStructuredText&nbsp;
             <ClickToSelect>
-              <input className="code" readOnly value={reStructuredText} id="copyreStructuredText" />
+              <input className="code" readOnly value={reStructuredText} />
             </ClickToSelect>
           </p>
           <p>
             AsciiDoc&nbsp;
             <ClickToSelect>
-              <input className="code" readOnly value={asciiDoc} id="copyAsciiDoc" />
+              <input className="code" readOnly value={asciiDoc} />
             </ClickToSelect>
           </p>
           {
