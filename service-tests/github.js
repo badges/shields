@@ -53,6 +53,10 @@ t.create('License with SPDX id not appearing in configuration')
     }))
   .expectJSON({ name: 'license', value: 'EFL-1.0', colorB: colorsB.lightgrey });
 
+t.create('License for unknown repo')
+  .get('/license/user1/github-does-not-have-this-repo.json?style=_shields_test')
+  .expectJSON({ name: 'license', value: 'repo not found', colorB: colorsB.lightgrey });
+
 t.create('Contributors')
   .get('/contributors/cdnjs/cdnjs.json')
   .expectJSONTypes(Joi.object().keys({
