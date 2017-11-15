@@ -1653,8 +1653,13 @@ cache(function(data, match, sendBadge, request) {
       } else if (typeof license == 'object') {
         license = license.type;
       }
-      badgeData.text[1] = license || 'missing';
-      badgeData.colorscheme = 'blue';
+      if (license === undefined) {
+        badgeData.text[1] = 'missing';
+        badgeData.colorscheme = 'red';
+      } else {
+        badgeData.text[1] = license;
+        setBadgeColor(badgeData, licenseToColor(license));
+      }
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';

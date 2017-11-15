@@ -32,23 +32,23 @@ t.create('invalid package name')
 
 t.create('public domain license')
   .get('/l/redux-auth.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'WTFPL', colorB: colorsB.blue });
+  .expectJSON({ name: 'license', value: 'WTFPL', colorB: '#7cd958' });
 
 t.create('copyleft license')
   .get('/l/trianglify.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'GPL-3.0', colorB: colorsB.blue });
+  .expectJSON({ name: 'license', value: 'GPL-3.0', colorB: colorsB.orange });
 
 t.create('permissive license')
   .get('/l/express.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'MIT', colorB: colorsB.blue });
+  .expectJSON({ name: 'license', value: 'MIT', colorB: colorsB.green });
 
 t.create('permissive license for scoped package')
   .get('/l/@cycle%2Fcore.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'MIT', colorB: colorsB.blue });
+  .expectJSON({ name: 'license', value: 'MIT', colorB: colorsB.green });
 
 t.create('permissive and copyleft licenses (SPDX license expression syntax version 2.0)')
   .get('/l/rho-cc-promise.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: '(MPL-2.0 OR MIT)', colorB: colorsB.blue });
+  .expectJSON({ name: 'license', value: '(MPL-2.0 OR MIT)', colorB: colorsB.lightgrey });
 
 t.create('license for package without a license property')
   .get('/l/package-without-license.json?style=_shields_test')
@@ -57,7 +57,7 @@ t.create('license for package without a license property')
     .reply(200, {
       name: 'package-without-license'
     }))
-  .expectJSON({ name: 'license', value: 'missing', colorB: colorsB.blue });
+  .expectJSON({ name: 'license', value: 'missing', colorB: colorsB.red });
 
 t.create('license for package with a license object')
   .get('/l/package-license-object.json?style=_shields_test')
@@ -70,7 +70,7 @@ t.create('license for package with a license object')
         url: 'https://www.opensource.org/licenses/mit-license.php'
       }
     }))
-  .expectJSON({ name: 'license', value: 'MIT', colorB: colorsB.blue });
+  .expectJSON({ name: 'license', value: 'MIT', colorB: colorsB.green });
 
 t.create('license for package with a license array')
   .get('/l/package-license-array.json?style=_shields_test')
@@ -80,7 +80,7 @@ t.create('license for package with a license array')
       name: 'package-license-object',
       license: ['MPL-2.0', 'MIT']
     }))
-  .expectJSON({ name: 'license', value: 'MPL-2.0, MIT', colorB: colorsB.blue });
+  .expectJSON({ name: 'license', value: 'MPL-2.0, MIT', colorB: colorsB.lightgrey });
 
 t.create('license for unknown package')
   .get('/l/npm-registry-does-not-have-this-package.json?style=_shields_test')
