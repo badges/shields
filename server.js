@@ -1634,6 +1634,11 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
       return;
     }
+    if (res.statusCode === 404) {
+      badgeData.text[1] = 'package not found';
+      sendBadge(format, badgeData);
+      return;
+    }
     try {
       const data = JSON.parse(buffer);
       let license;
@@ -1648,7 +1653,7 @@ cache(function(data, match, sendBadge, request) {
       } else if (typeof license == 'object') {
         license = license.type;
       }
-      badgeData.text[1] = license;
+      badgeData.text[1] = license || 'missing';
       badgeData.colorscheme = 'blue';
       sendBadge(format, badgeData);
     } catch(e) {

@@ -57,7 +57,7 @@ t.create('license for package without a license property')
     .reply(200, {
       name: 'package-without-license'
     }))
-  .expectJSON({ name: 'license', value: 'undefined', colorB: colorsB.blue });
+  .expectJSON({ name: 'license', value: 'missing', colorB: colorsB.blue });
 
 t.create('license for package with a license object')
   .get('/l/package-license-object.json?style=_shields_test')
@@ -84,7 +84,7 @@ t.create('license for package with a license array')
 
 t.create('license for unknown package')
   .get('/l/npm-registry-does-not-have-this-package.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'undefined', colorB: colorsB.blue });
+  .expectJSON({ name: 'license', value: 'package not found', colorB: colorsB.lightgrey });
 
 t.create('license when registry returns an invalid JSON')
   .get('/l/invalid-json.json?style=_shields_test')
