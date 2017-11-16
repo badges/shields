@@ -83,8 +83,6 @@ export default class SuggestionAndSearch extends React.Component {
   }
 
   render() {
-    const showSuggestButton = this.state.isUri && ! this.state.inProgress;
-
     return (
       <section>
         <form action="javascript:void 0" autoComplete="off">
@@ -95,7 +93,8 @@ export default class SuggestionAndSearch extends React.Component {
           <br />
           <button
             onClick={event => this.getSuggestions(event.target.value)}
-            hidden={! showSuggestButton}>
+            disabled={this.state.inProgress}
+            hidden={! this.state.isUri}>
             Suggest badges
           </button>
         </form>
