@@ -1,42 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import fetchPonyfill from 'fetch-ponyfill';
 import debounce from 'lodash.debounce';
 import { Badge } from './badge-examples';
-
-function toXhrSend(data) {
-  let str = '', start = true;
-  let jsondata = '';
-  for (const key in data) {
-    if (typeof (jsondata = JSON.stringify(data[key])) === 'string') {
-      str += start ? '' : '&';
-      if (typeof data[key] === 'string') {
-        str += encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
-      } else {
-        str += encodeURIComponent(key) + '=' + encodeURIComponent(jsondata);
-      }
-      start = false;
-    }
-  }
-  return str;
-}
-
-function ajax(baseUri, verb, adverbs, cb) {
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', baseUri + "/$" + verb + '?' + toXhrSend(adverbs), true);
-  xhr.onload = e => {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200) {
-        try {
-          cb(null, JSON.parse(xhr.responseText));
-        } catch(e) {
-          cb(e);
-        }
-      }
-    }
-  };
-  xhr.onerror = e => { cb(Error(xhr.statusText)); };
-  xhr.send(null);
-}
 
 export default class SuggestionAndSearch extends React.Component {
   static propTypes = {
@@ -70,15 +36,20 @@ export default class SuggestionAndSearch extends React.Component {
 
   getSuggestions() {
     this.setState({ inProgress: true }, () => {
-      ajax(
-        this.props.baseUri,
-        'suggest/v1',
-        { url: this.state.projectUri },
-        (err, res) => {
-          this.setState({
-            inProgress: false,
-            suggestions: err ? [] : res.badges,
-          });
+      const { baseUri } = this.props;
+      const { projectUri } = this.state;
+
+      const url = new URL('/$suggest/v1', baseUri);
+      url.searchParams.set('url', projectUri);
+
+      const fetch = window.fetch || fetchPonyfill;
+      fetch(url)
+        .then(res => res.json())
+        .then(json => {
+          this.setState({ inProgress: false, suggestions: json.badges });
+        })
+        .catch(() => {
+          this.setState({ inProgress: false, suggestions: [] });
         });
     });
   }
