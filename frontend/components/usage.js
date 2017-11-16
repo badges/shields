@@ -59,23 +59,23 @@ const Usage = ({ baseUri }) => (
     </p>
     <table className="badge-img"><tbody>
       <tr>
-        <td><img src={baseUri + "/badge/style-plastic-green.svg?style=plastic"} alt="" /></td>
+        <td><img src={baseUri + '/badge/style-plastic-green.svg?style=plastic'} alt="" /></td>
         <td><code>https://img.shields.io/badge/style-plastic-green.svg?style=plastic</code></td>
       </tr>
       <tr>
-        <td><img src={baseUri + "/badge/style-flat-green.svg?style=flat"} alt="" /></td>
+        <td><img src={baseUri + '/badge/style-flat-green.svg?style=flat'} alt="" /></td>
         <td><code>https://img.shields.io/badge/style-flat-green.svg?style=flat</code></td>
       </tr>
       <tr>
-        <td><img src={baseUri + "/badge/style-flat--square-green.svg?style=flat-square"} alt="" /></td>
+        <td><img src={baseUri + '/badge/style-flat--square-green.svg?style=flat-square'} alt="" /></td>
         <td><code>https://img.shields.io/badge/style-flat--square-green.svg?style=flat-square</code></td>
       </tr>
       <tr>
-        <td><img src={baseUri + "/badge/style-for--the--badge-green.svg?style=for-the-badge"} alt="" /></td>
+        <td><img src={baseUri + '/badge/style-for--the--badge-green.svg?style=for-the-badge'} alt="" /></td>
         <td><code>https://img.shields.io/badge/style-for--the--badge-green.svg?style=for-the-badge</code></td>
       </tr>
       <tr>
-        <td><img src={baseUri + "/badge/style-social-green.svg?style=social"} alt="" /></td>
+        <td><img src={baseUri + '/badge/style-social-green.svg?style=social'} alt="" /></td>
         <td><code>https://img.shields.io/badge/style-social-green.svg?style=social</code></td>
       </tr>
     </tbody></table>
