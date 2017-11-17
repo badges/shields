@@ -139,8 +139,8 @@ If you want to host the frontend on a separate server, such as cloud storage
 or a CDN, you can do that. Just copy the built `index.html` there.
 
 To help out users, you can make the Shields server redirect the server root.
-Set the `FRONTEND_REDIRECT_URI` environment variable:
+Set the `FRONTEND_REDIRECT_URL` environment variable:
 
 ```sh
-FRONTEND_REDIRECT_URI=http://my-custom-shields.s3.amazonaws.com/
+FRONTEND_REDIRECT_URL=http://my-custom-shields.s3.amazonaws.com/
 ```
