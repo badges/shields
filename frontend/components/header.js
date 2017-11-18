@@ -14,5 +14,11 @@ export default () => (
       Hackable &nbsp;
       No tracking
     </p>
+
+    <style jsx>{`
+      .highlights {
+        font-style: italic;
+      }
+    `}</style>
   </section>
 );

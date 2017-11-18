@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import staticBadgeUri from '../lib/static-badge-uri';
 
 export default class StaticBadgeMaker extends React.Component {
   static propTypes = {
@@ -7,26 +8,19 @@ export default class StaticBadgeMaker extends React.Component {
   };
 
   state = {
-    subject: null,
-    status: null,
-    color: null,
+    subject: '',
+    status: '',
+    color: '',
   };
-
-  static escapeField(s) {
-    return encodeURIComponent(s.replace(/-/g, '--').replace(/_/g, '__'));
-  }
-
-  makeBadgeUri () {
-    const { subject, status, color } = this.state;
-    const path = [subject, status, color]
-      .map(this.constructor.escapeField)
-      .join('-');
-    return `${this.props.baseUri}/badge/${path}.svg`;
-  }
 
   handleSubmit (e) {
     e.preventDefault();
-    document.location = this.makeBadgeUri();
+
+    const { baseUri } = this.props;
+    const { subject, status, color } = this.state;
+    const badgeUri = staticBadgeUri(baseUri, subject, status, color);
+
+    document.location = badgeUri;
   }
 
   render() {

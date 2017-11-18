@@ -1,6 +1,7 @@
 import url from 'url';
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 function resolveUri (uri, baseUri, options) {
   const { longCache } = options || {};
@@ -17,10 +18,13 @@ function resolveUri (uri, baseUri, options) {
 }
 
 const Badge = ({ title, previewUri, exampleUri, documentation, baseUri, isProductionBuild, onClick }) => {
-  const handleClick = () => onClick({ title, previewUri, exampleUri, documentation });
+  const handleClick = onClick ?
+    () => onClick({ title, previewUri, exampleUri, documentation })
+    : undefined;
 
   const previewImage = previewUri
     ? (<img
+      className={classNames('badge-img', { clickable: onClick })}
       onClick={handleClick}
       src={resolveUri(previewUri, baseUri, { longCache: isProductionBuild } )}
       alt="" />
@@ -32,10 +36,14 @@ const Badge = ({ title, previewUri, exampleUri, documentation, baseUri, isProduc
 
   return (
     <tr>
-      <th onClick={handleClick}>{ title }:</th>
+      <th className={classNames({ clickable: onClick })} onClick={handleClick}>
+        { title }:
+      </th>
       <td>{ previewImage }</td>
       <td>
-        <code onClick={handleClick}>{ resolvedExampleUri }</code>
+        <code className={classNames({ clickable: onClick })} onClick={handleClick}>
+          { resolvedExampleUri }
+        </code>
       </td>
     </tr>
   );

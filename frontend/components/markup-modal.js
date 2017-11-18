@@ -84,7 +84,7 @@ export default class MarkupModal extends React.Component {
         contentLabel="Example Modal">
         <form action="">
           <p>
-            <img src={this.state.badgeUri} style={{ minHeight: '20px' }} />
+            <img className="badge-img" src={this.state.badgeUri} />
           </p>
           <p>
             <label>
@@ -119,19 +119,19 @@ export default class MarkupModal extends React.Component {
           <p>
             Markdown&nbsp;
             <ClickToSelect>
-              <input className="code" readOnly value={markdown} />
+              <input className="code clickable" readOnly value={markdown} />
             </ClickToSelect>
           </p>
           <p>
             reStructuredText&nbsp;
             <ClickToSelect>
-              <input className="code" readOnly value={reStructuredText} />
+              <input className="code clickable" readOnly value={reStructuredText} />
             </ClickToSelect>
           </p>
           <p>
             AsciiDoc&nbsp;
             <ClickToSelect>
-              <input className="code" readOnly value={asciiDoc} />
+              <input className="code clickable" readOnly value={asciiDoc} />
             </ClickToSelect>
           </p>
           {

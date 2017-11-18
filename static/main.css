@@ -62,7 +62,6 @@ td {
   text-align: left;
 }
 
-h1,
 h2,
 h3 {
   font-style: italic;
@@ -87,19 +86,11 @@ hr.spacing {
   height: 3mm;
 }
 
-.highlights {
-  font-style: italic;
-}
-
-table.badge > tbody > tr > th,
-table.badge > tbody > tr > td > img,
-table.badge > tbody > tr > td > code {
+.clickable {
   cursor: pointer;
 }
 
-table.badge > tbody > tr > td > img,
-.badge-img img,
-#copyImg {
+.badge-img {
   min-height: 20px;
   vertical-align: middle;
 }

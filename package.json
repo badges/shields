@@ -78,9 +78,10 @@
     "logo"
   ],
   "devDependencies": {
-    "@mapbox/react-click-to-select": "git+https://github.com/paulmelnikow/react-click-to-select.git#eda55f0164aeed99b83c4d621b0789b03c7b0f42",
+    "@mapbox/react-click-to-select": "^2.0.1",
     "babel-eslint": "^8.0.2",
     "child-process-promise": "^2.2.1",
+    "classnames": "^2.2.5",
     "dejavu-fonts-ttf": "^2.37.3",
     "eslint": "^4.8.0",
     "eslint-config-prettier": "^2.6.0",
@@ -121,7 +122,8 @@
     "rimraf": "^2.6.2",
     "sazerac": "^0.4.1",
     "semver-regex": "^1.0.0",
-    "sinon": "^4.0.1"
+    "sinon": "^4.0.1",
+    "universal-url": "^1.0.0"
   },
   "engines": {
     "node": "6.x",

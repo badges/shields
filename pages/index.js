@@ -39,8 +39,8 @@ export default class IndexPage extends React.Component {
             baseUri={baseUri}
             isProductionBuild={isProductionBuild} />
           <a
-            href="https://gratipay.com/Shields/"
-            style={{ textDecoration: 'none', color: 'rgba(0,0,0,0.1)' }}>
+            className="donate"
+            href="https://gratipay.com/Shields/">
             donate
           </a>
         </section>
@@ -51,6 +51,12 @@ export default class IndexPage extends React.Component {
           isProductionBuild={isProductionBuild} />
         <Usage baseUri={baseUri} />
         <Footer baseUri={baseUri} />
+        <style jsx>{`
+          .donate {
+            text-decoration: none;
+            color: rgba(0,0,0,0.1);
+          }
+        `}</style>
       </div>
     );
   }
