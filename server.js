@@ -68,7 +68,8 @@ const {
   isSnapshotVersion: isNexusSnapshotVersion
 } = require('./lib/nexus-version');
 const {
-  mapNpmDownloads
+  mapNpmDownloads,
+  getNpmRegistryUrl
 } = require('./lib/npm-provider');
 const {
   teamcityBadge
@@ -1579,12 +1580,14 @@ cache(function (data, match, sendBadge, request) {
 }));
 
 // npm version integration.
-camp.route(/^\/npm\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/npm(?:\/(http(?:s)?)\/([^/]+))?\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  // e.g. cycle, core, next, svg
-  const [, scope, packageName, tag, format] = match;
+  // e.g. https, registry.npmjs.org, cycle, core, next, svg
+  const [, protocol, host, scope, packageName, tag, format ] = match;
+  const registryUrl = getNpmRegistryUrl(protocol, host);
   const pkg = encodeURIComponent(scope ? `@${scope}/${packageName}` : packageName);
-  const apiUrl = `https://registry.npmjs.org/-/package/${pkg}/dist-tags`;
+  const apiUrl = `${registryUrl}/-/package/${pkg}/dist-tags`;
+
   const name = tag ? `npm@${tag}` : 'npm';
   const badgeData = getBadgeData(name, data);
   // Using the Accept header because of this bug:
@@ -1609,22 +1612,22 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // npm license integration.
-camp.route(/^\/npm\/l\/(?:@([^/]+)\/)?([^/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/npm(?:\/(http(?:s)?)\/([^/]+))?\/l\/(?:@([^/]+)\/)?([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  const scope = match[1];        // "user" (when a scope "@user" is supplied)
-  const packageName = match[2];  // "express"
-  const format = match[3];       // "svg"
+  // e.g. https, registry.npmjs.org, cycle, core, svg
+  const [, protocol, host, scope, packageName, format ] = match;
+  const registryUrl = getNpmRegistryUrl(protocol, host);
   let apiUrl;
   if (scope === undefined) {
     // e.g. https://registry.npmjs.org/express/latest
     // Use this endpoint as an optimization. It covers the vast majority of
     // these badges, and the response is smaller.
-    apiUrl = `https://registry.npmjs.org/${packageName}/latest`;
+    apiUrl = `${registryUrl}/${packageName}/latest`;
   } else {
     // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
     // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
     const path = encodeURIComponent(`${scope}/${packageName}`);
-    apiUrl = `https://registry.npmjs.org/@${path}`;
+    apiUrl = `${registryUrl}/@${path}`;
   }
   const badgeData = getBadgeData('license', data);
   request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
@@ -1658,22 +1661,23 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // npm node version integration.
-camp.route(/^\/node\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/node(?:\/(http(?:s)?)\/([^/]+))?\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  // e.g. @stdlib, stdlib, next, svg
-  const [, scope, packageName, tag, format] = match;
+  // e.g. https, registry.npmjs.org, @stdlib, stdlib, next, svg
+  const [, protocol, host, scope, packageName, tag, format] = match;
+  const registryUrl = getNpmRegistryUrl(protocol, host);
   const registryTag = tag || 'latest';
   let apiUrl;
   if (scope === undefined) {
       // e.g. https://registry.npmjs.org/express/latest
       // Use this endpoint as an optimization. It covers the vast majority of
       // these badges, and the response is smaller.
-      apiUrl = `https://registry.npmjs.org/${packageName}/${registryTag}`;
+      apiUrl = `${registryUrl}/${packageName}/${registryTag}`;
   } else {
     // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
     // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
     const path = encodeURIComponent(`${scope}/${packageName}`);
-    apiUrl = `https://registry.npmjs.org/@${path}`;
+    apiUrl = `${registryUrl}/@${path}`;
   }
   const name = tag ? `node@${tag}` : 'node';
   const badgeData = getBadgeData(name, data);
