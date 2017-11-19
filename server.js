@@ -71,7 +71,7 @@ const {
   mapNpmDownloads
 } = require('./lib/npm-provider');
 const {
-  getNpmRegistryUrl
+  defaultNpmRegistryUri
 } = require('./lib/npm-badge-helpers');
 const {
   teamcityBadge
@@ -1582,167 +1582,176 @@ cache(function (data, match, sendBadge, request) {
 }));
 
 // npm version integration.
-camp.route(/^\/npm(?:\/(http(?:s)?)\/([^/]+))?\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  // e.g. https, registry.npmjs.org, cycle, core, next, svg
-  const [, protocol, host, scope, packageName, tag, format ] = match;
-  const registryUrl = getNpmRegistryUrl(protocol, host);
-  const pkg = encodeURIComponent(scope ? `@${scope}/${packageName}` : packageName);
-  const apiUrl = `${registryUrl}/-/package/${pkg}/dist-tags`;
+camp.route(/^\/npm\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
+cache({
+  queryParams: ['registry_uri'],
+  handler: function(queryParams, match, sendBadge, request) {
+    // e.g. cycle, core, next, svg
+    const [, scope, packageName, tag, format] = match;
+    const registryUri = queryParams.registry_uri || defaultNpmRegistryUri;
+    const pkg = encodeURIComponent(scope ? `@${scope}/${packageName}` : packageName);
+    const apiUrl = `${registryUri}/-/package/${pkg}/dist-tags`;
 
-  const name = tag ? `npm@${tag}` : 'npm';
-  const badgeData = getBadgeData(name, data);
-  // Using the Accept header because of this bug:
-  // <https://github.com/npm/npmjs.org/issues/163>
-  request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      const data = JSON.parse(buffer);
-      const version = data[tag || 'latest'];
-      badgeData.text[1] = versionText(version);
-      badgeData.colorscheme = versionColor(version);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
+    const name = tag ? `npm@${tag}` : 'npm';
+    const badgeData = getBadgeData(name, queryParams);
+    // Using the Accept header because of this bug:
+    // <https://github.com/npm/npmjs.org/issues/163>
+    request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        const data = JSON.parse(buffer);
+        const version = data[tag || 'latest'];
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }
 }));
 
 // npm license integration.
-camp.route(/^\/npm(?:\/(http(?:s)?)\/([^/]+))?\/l\/(?:@([^/]+)\/)?([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  // e.g. https, registry.npmjs.org, cycle, core, svg
-  const [, protocol, host, scope, packageName, format ] = match;
-  const registryUrl = getNpmRegistryUrl(protocol, host);
-  let apiUrl;
-  if (scope === undefined) {
-    // e.g. https://registry.npmjs.org/express/latest
-    // Use this endpoint as an optimization. It covers the vast majority of
-    // these badges, and the response is smaller.
-    apiUrl = `${registryUrl}/${packageName}/latest`;
-  } else {
-    // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
-    // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
-    const path = encodeURIComponent(`${scope}/${packageName}`);
-    apiUrl = `${registryUrl}/@${path}`;
-  }
-  const badgeData = getBadgeData('license', data);
-  request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      const data = JSON.parse(buffer);
-      let license;
-      if (scope === undefined) {
-        license = data.license;
-      } else {
-        const latestVersion = data['dist-tags'].latest;
-        license = data.versions[latestVersion].license;
-      }
-      if (Array.isArray(license)) {
-        license = license.join(', ');
-      } else if (typeof license == 'object') {
-        license = license.type;
-      }
-      badgeData.text[1] = license;
-      badgeData.colorscheme = 'blue';
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// npm node version integration.
-camp.route(/^\/node(?:\/(http(?:s)?)\/([^/]+))?\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  // e.g. https, registry.npmjs.org, @stdlib, stdlib, next, svg
-  const [, protocol, host, scope, packageName, tag, format] = match;
-  const registryUrl = getNpmRegistryUrl(protocol, host);
-  const registryTag = tag || 'latest';
-  let apiUrl;
-  if (scope === undefined) {
+camp.route(/^\/npm\/l\/(?:@([^/]+)\/)?([^/]+)\.(svg|png|gif|jpg|json)$/,
+cache({
+  queryParams: ['registry_uri'],
+  handler: function(queryParams, match, sendBadge, request) {
+    // e.g. cycle, core, svg
+    const [, scope, packageName, format ] = match;
+    const registryUri = queryParams.registry_uri || defaultNpmRegistryUri;
+    let apiUrl;
+    if (scope === undefined) {
       // e.g. https://registry.npmjs.org/express/latest
       // Use this endpoint as an optimization. It covers the vast majority of
       // these badges, and the response is smaller.
-      apiUrl = `${registryUrl}/${packageName}/${registryTag}`;
-  } else {
-    // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
-    // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
-    const path = encodeURIComponent(`${scope}/${packageName}`);
-    apiUrl = `${registryUrl}/@${path}`;
+      apiUrl = `${registryUri}/${packageName}/latest`;
+    } else {
+      // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
+      // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
+      const path = encodeURIComponent(`${scope}/${packageName}`);
+      apiUrl = `${registryUri}/@${path}`;
+    }
+    const badgeData = getBadgeData('license', queryParams);
+    request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        const data = JSON.parse(buffer);
+        let license;
+        if (scope === undefined) {
+          license = data.license;
+        } else {
+          const latestVersion = data['dist-tags'].latest;
+          license = data.versions[latestVersion].license;
+        }
+        if (Array.isArray(license)) {
+          license = license.join(', ');
+        } else if (typeof license == 'object') {
+          license = license.type;
+        }
+        badgeData.text[1] = license;
+        badgeData.colorscheme = 'blue';
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
   }
-  const name = tag ? `node@${tag}` : 'node';
-  const badgeData = getBadgeData(name, data);
-  // Using the Accept header because of this bug:
-  // <https://github.com/npm/npmjs.org/issues/163>
-  request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
+}));
+
+// npm node version integration.
+camp.route(/^\/node\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
+cache({
+  queryParams: ['registry_uri'],
+  handler: function(queryParams, match, sendBadge, request) {
+    // e.g. @stdlib, stdlib, next, svg
+    const [, scope, packageName, tag, format] = match;
+    const registryUri = queryParams.registry_uri || defaultNpmRegistryUri;
+    const registryTag = tag || 'latest';
+    let apiUrl;
+    if (scope === undefined) {
+        // e.g. https://registry.npmjs.org/express/latest
+        // Use this endpoint as an optimization. It covers the vast majority of
+        // these badges, and the response is smaller.
+        apiUrl = `${registryUri}/${packageName}/${registryTag}`;
+    } else {
+      // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
+      // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
+      const path = encodeURIComponent(`${scope}/${packageName}`);
+      apiUrl = `${registryUri}/@${path}`;
     }
-    try {
-      const data = JSON.parse(buffer);
-      if (data.error === 'not_found') {
-        badgeData.text[1] = 'package not found';
+    const name = tag ? `node@${tag}` : 'node';
+    const badgeData = getBadgeData(name, queryParams);
+    // Using the Accept header because of this bug:
+    // <https://github.com/npm/npmjs.org/issues/163>
+    request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
         sendBadge(format, badgeData);
         return;
       }
-      let releaseData;
-      if (scope === undefined) {
-        releaseData = data;
-      } else {
-        const version = data['dist-tags'][registryTag];
-        releaseData = data.versions[version];
-      }
-      const versionRange = (releaseData.engines || {}).node;
-      if (! versionRange) {
-        badgeData.text[1] = 'not specified';
-        sendBadge(format, badgeData);
-        return;
-      }
-      badgeData.text[1] = versionRange;
-      regularUpdate('http://nodejs.org/dist/latest/SHASUMS256.txt',
-        (24 * 3600 * 1000),
-        shasums => {
-          // tarball index start, tarball index end
-          const taris = shasums.indexOf('node-v');
-          const tarie = shasums.indexOf('\n', taris);
-          const tarball = shasums.slice(taris, tarie);
-          const version = tarball.split('-')[1];
-          return version;
-        }, (err, version) => {
-          if (err != null) {
-            badgeData.text[1] = 'invalid';
-            sendBadge(format, badgeData);
-            return;
-          }
-          try {
-            if (semver.satisfies(version, versionRange)) {
-              badgeData.colorscheme = 'brightgreen';
-            } else if (semver.gtr(version, versionRange)) {
-              badgeData.colorscheme = 'yellow';
-            } else {
-              badgeData.colorscheme = 'orange';
-            }
-          } catch(e) { }
+      try {
+        const data = JSON.parse(buffer);
+        if (data.error === 'not_found') {
+          badgeData.text[1] = 'package not found';
           sendBadge(format, badgeData);
-      });
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
+          return;
+        }
+        let releaseData;
+        if (scope === undefined) {
+          releaseData = data;
+        } else {
+          const version = data['dist-tags'][registryTag];
+          releaseData = data.versions[version];
+        }
+        const versionRange = (releaseData.engines || {}).node;
+        if (! versionRange) {
+          badgeData.text[1] = 'not specified';
+          sendBadge(format, badgeData);
+          return;
+        }
+        badgeData.text[1] = versionRange;
+        regularUpdate('http://nodejs.org/dist/latest/SHASUMS256.txt',
+          (24 * 3600 * 1000),
+          shasums => {
+            // tarball index start, tarball index end
+            const taris = shasums.indexOf('node-v');
+            const tarie = shasums.indexOf('\n', taris);
+            const tarball = shasums.slice(taris, tarie);
+            const version = tarball.split('-')[1];
+            return version;
+          }, (err, version) => {
+            if (err != null) {
+              badgeData.text[1] = 'invalid';
+              sendBadge(format, badgeData);
+              return;
+            }
+            try {
+              if (semver.satisfies(version, versionRange)) {
+                badgeData.colorscheme = 'brightgreen';
+              } else if (semver.gtr(version, versionRange)) {
+                badgeData.colorscheme = 'yellow';
+              } else {
+                badgeData.colorscheme = 'orange';
+              }
+            } catch(e) { }
+            sendBadge(format, badgeData);
+        });
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }
 }));
 
 // Anaconda Cloud / conda package manager integration
