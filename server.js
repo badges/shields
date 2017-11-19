@@ -68,9 +68,11 @@ const {
   isSnapshotVersion: isNexusSnapshotVersion
 } = require('./lib/nexus-version');
 const {
-  mapNpmDownloads,
-  getNpmRegistryUrl
+  mapNpmDownloads
 } = require('./lib/npm-provider');
+const {
+  getNpmRegistryUrl
+} = require('./lib/npm-badge-helpers');
 const {
   teamcityBadge
 } = require('./lib/teamcity-badge-helpers');
