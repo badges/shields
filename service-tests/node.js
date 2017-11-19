@@ -31,7 +31,7 @@ t.create("gets the tagged release's node version version of ionic")
   .afterJSON(json => { assertIsSemverRange(json.value); });
 
 t.create('gets the node version of passport from a custom registry')
-  .get('/v/passport.json?registry_uri=https://registry.npm.taobao.org')
+  .get('/v/passport.json?registry_uri=https://registry.npmjs.com')
   .expectJSONTypes(Joi.object({ name: 'node' }).unknown())
   .afterJSON(json => { assertIsSemverRange(json.value); });
 

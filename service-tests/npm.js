@@ -20,7 +20,7 @@ t.create('gets the tagged package version of npm')
   .expectJSONTypes(Joi.object().keys({ name: 'npm@next', value: isSemver }));
 
 t.create('gets the package version of left-pad from a custom registry')
-  .get('/v/left-pad.json?registry_uri=https://registry.npm.taobao.org')
+  .get('/v/left-pad.json?registry_uri=https://registry.npmjs.com')
   .expectJSONTypes(Joi.object().keys({ name: 'npm', value: isSemver }));
 
 t.create('gets the tagged package version of @cycle/core')
@@ -28,7 +28,7 @@ t.create('gets the tagged package version of @cycle/core')
   .expectJSONTypes(Joi.object().keys({ name: 'npm@canary', value: isSemver }));
 
 t.create('gets the tagged package version of @cycle/core from a custom registry')
-  .get('/v/@cycle/core/canary.json?registry_uri=https://registry.npm.taobao.org')
+  .get('/v/@cycle/core/canary.json?registry_uri=https://registry.npmjs.com')
   .expectJSONTypes(Joi.object().keys({ name: 'npm@canary', value: isSemver }));
 
 t.create('invalid package name')
