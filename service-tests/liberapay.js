@@ -8,7 +8,7 @@ const t = new ServiceTester({ id: 'liberapay', title: 'Liberapay' });
 module.exports = t;
 
 t.create('Receiving')
-  .get('/receives/mattbk.json')
+  .get('/receives/Liberapay.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'receives',
     value: isLiberapayTestValues
@@ -22,7 +22,7 @@ t.create('Giving')
   }));
 
 t.create('Patrons')
-  .get('/patrons/mattbk.json')
+  .get('/patrons/Liberapay.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'patrons',
     value: Joi.string().regex(/^[1-9]+/)
