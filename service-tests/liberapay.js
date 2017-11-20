@@ -3,12 +3,12 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 const isLiberapayTestValues =
-  Joi.string().regex(/^[0-9]*[1-9][0-9]*(\.[0-9]{2})?[ A-Za-z]{4}\/week/); //values must be greater than zero
+  Joi.string().regex(/^([0-9]*[1-9][0-9]*(\.[0-9]+)?|[0]+\.[0-9]*[1-9][0-9]*)[ A-Za-z]{4}\/week/); //values must be greater than zero
 const t = new ServiceTester({ id: 'liberapay', title: 'Liberapay' });
 module.exports = t;
 
 t.create('Receiving')
-  .get('/receives/Liberapay.json')
+  .get('/receives/mattbk.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'receives',
     value: isLiberapayTestValues
@@ -22,7 +22,7 @@ t.create('Giving')
   }));
 
 t.create('Patrons')
-  .get('/patrons/Liberapay.json')
+  .get('/patrons/mattbk.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'patrons',
     value: Joi.string().regex(/^[1-9]+/)
