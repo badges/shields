@@ -10,7 +10,7 @@ import Footer from '../frontend/components/footer';
 import badgeExampleData from '../lib/all-badge-examples';
 import filterExamples from '../frontend/lib/filter-examples';
 
-const baseUri = process.env.BASE_URL || 'http://localhost:8080';
+const baseUri = process.env.BASE_URL;
 const isProductionBuild = envFlag(process.env.PRODUCTION_BUILD, false);
 
 export default class IndexPage extends React.Component {

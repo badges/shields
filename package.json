@@ -60,8 +60,7 @@
     "build": "npm run build:examples && npm run build:copy-fragments && npm run build:concat",
     "build:production": "PRODUCTION_BUILD=true npm run build:examples && npm run build:copy-fragments && make footer-production-transform && npm run build:concat",
     "heroku-postbuild": "npm run build",
-    "start:frontend": "next dev",
-    "start": "cross-env ALLOWED_ORIGIN=http://localhost:3000 node server 8080 ::"
+    "start": "concurrently --names server,frontend \"ALLOWED_ORIGIN=http://localhost:3000 node server 8080 ::\" \"BASE_URL=http://[::]:8080 next dev\""
   },
   "bin": {
     "badge": "lib/badge-cli.js"
@@ -82,7 +81,7 @@
     "babel-eslint": "^8.0.2",
     "child-process-promise": "^2.2.1",
     "classnames": "^2.2.5",
-    "cross-env": "^5.1.1",
+    "concurrently": "^3.5.1",
     "dejavu-fonts-ttf": "^2.37.3",
     "eslint": "^4.8.0",
     "eslint-config-prettier": "^2.6.0",
