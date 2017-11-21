@@ -92,15 +92,15 @@ const {
 } = require('./lib/github-provider');
 
 const serverStartTime = new Date((new Date()).toGMTString());
-const { githubApiUrl } = config;
+const githubApiUrl = config.services.github.baseUri;
 
 const camp = require('camp').start({
   documentRoot: path.join(__dirname, 'public'),
-  port: config.serverPort,
-  hostname: config.bindAddress,
-  secure: config.secureServer,
-  cert: config.secureServerCert,
-  key: config.secureServerKey,
+  port: config.bind.port,
+  hostname: config.bind.address,
+  secure: config.ssl.isSecure,
+  cert: config.ssl.cert,
+  key: config.ssl.key,
 });
 
 function reset() {
@@ -120,8 +120,7 @@ module.exports = {
   stop
 };
 
-log('Server is starting up');
-log(config.frontendUri);
+log(`Server is starting up: ${config.baseUri}`);
 
 analytics.load();
 analytics.scheduleAutosaving();
@@ -132,7 +131,7 @@ if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);
 }
 
-suggest.setRoutes(camp);
+suggest.setRoutes(config.cors.allowedOrigin, camp);
 
 camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
     var format = match[1];
@@ -7503,10 +7502,10 @@ function(data, match, end, ask) {
   }
 });
 
-if (config.frontendRedirectUrl) {
+if (config.redirectUri) {
   camp.route(/^\/$/, (data, match, end, ask) => {
     ask.res.statusCode = 302;
-    ask.res.setHeader('Location', config.frontendRedirectUrl);
+    ask.res.setHeader('Location', config.redirectUri);
     ask.res.end();
   });
 }
