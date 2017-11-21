@@ -7503,11 +7503,10 @@ function(data, match, end, ask) {
   }
 });
 
-if (config.infoSite !== '/') {
-  // Redirect the root to the website.
-  camp.route(/^\/$/, function(data, match, end, ask) {
+if (config.frontendRedirectUrl) {
+  camp.route(/^\/$/, (data, match, end, ask) => {
     ask.res.statusCode = 302;
-    ask.res.setHeader('Location', config.infoSite);
+    ask.res.setHeader('Location', config.frontendRedirectUrl);
     ask.res.end();
   });
 }
