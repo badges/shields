@@ -130,3 +130,17 @@ rotation logic.
 
 [github rate limit]: https://developer.github.com/v3/#rate-limiting
 [personal access tokens]: https://github.com/settings/tokens
+
+
+Separate frontend hosting
+-------------------------
+
+If you want to host the frontend on a separate server, such as cloud storage
+or a CDN, you can do that. Just copy the built `index.html` there.
+
+To help out users, you can make the Shields server redirect the server root.
+Set the `FRONTEND_REDIRECT_URL` environment variable:
+
+```sh
+FRONTEND_REDIRECT_URL=http://my-custom-shields.s3.amazonaws.com/
+```
