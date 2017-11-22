@@ -419,7 +419,7 @@ cache(function(data, match, sendBadge, request) {
         }
 
         if (has_hhvm) {
-          badgeData.colorB = '#8892BF';
+          badgeData.colorscheme = 'green';
           if (badgeData.text[1] == '') {
             badgeData.text[1] = 'HHVM';
           } else {
@@ -428,7 +428,7 @@ cache(function(data, match, sendBadge, request) {
         } else if (badgeData.text[1] == '') {
           badgeData.text[1] = 'invalid';
         } else {
-          badgeData.colorB = '#8892BF';
+          badgeData.colorscheme = 'green';
         }
 
         sendBadge(format, badgeData);
