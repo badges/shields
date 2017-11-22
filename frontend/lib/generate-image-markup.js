@@ -1,5 +1,3 @@
-import mapValues from 'lodash.mapvalues';
-
 export function markdown(badgeUri, link, title) {
   const withoutLink = `![${title || ''}](${badgeUri})`;
   if (link) {
@@ -29,6 +27,15 @@ function quoteAsciiDocAttribute(attr) {
   } else {
     return attr;
   }
+}
+
+// lodash.mapvalues is huge!
+function mapValues(obj, iteratee) {
+  const result = {};
+  for (const k in obj) {
+    result[k] = iteratee(obj[k]);
+  }
+  return result;
 }
 
 export function renderAsciiDocAttributes(positional, named) {

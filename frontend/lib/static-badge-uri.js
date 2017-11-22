@@ -1,4 +1,4 @@
-import { URL } from 'universal-url';
+import { URL } from './url-api';
 
 export function encodeField(s) {
   return encodeURIComponent(s.replace(/-/g, '--').replace(/_/g, '__'));

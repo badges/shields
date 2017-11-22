@@ -1,20 +1,15 @@
-import url from 'url';
+import { URL } from '../lib/url-api';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 function resolveUri (uri, baseUri, options) {
   const { longCache } = options || {};
-  const resolved = baseUri ? url.resolve(baseUri, uri) : uri;
+  const result = new URL(uri, baseUri);
   if (longCache) {
-    const parsed = url.parse(resolved, true);
-    parsed.query.maxAge = '2592000';
-    // url.format will re-format `query`, but only When `search` is deleted.
-    delete parsed.search;
-    return url.format(parsed);
-  } else {
-    return resolved;
+    result.searchParams.maxAge = '2592000';
   }
+  return result.href;
 }
 
 const Badge = ({ title, previewUri, exampleUri, documentation, baseUri, isProductionBuild, onClick }) => {
