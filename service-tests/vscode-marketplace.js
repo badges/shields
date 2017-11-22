@@ -12,42 +12,42 @@ const isVscodeRating = Joi.string().regex(/[0-5].[0-9]{2}\/5?\s*\([0-9]*\)$/);
 const t = new ServiceTester({ id: 'vscode-marketplace', title: 'VS Code Marketplace' });
 module.exports = t;
 
-t.create('downloads should be formatted. eg. downloads|72M')
+t.create('Downloads')
   .get('/d/ritwickdey.LiveServer.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'downloads',
     value: isMetric
   }));
 
-t.create('downloads label should be changed to custom label. eg. Total Installs|72M')
+t.create('Downloads | User specified label')
   .get('/d/ritwickdey.LiveServer.json?label=Total Installs')
   .expectJSONTypes(Joi.object().keys({
     name: 'Total Installs',
     value: isMetric
   }));
 
-t.create('rating should be formatted. eg. rating|4.25/5(30)')
+t.create('Rating')
   .get('/r/ritwickdey.LiveServer.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'rating',
     value: isVscodeRating
   }));
 
-t.create('rating label should be changed to custom label. eg. My custom rating label|4.25/5(30)')
+t.create('Rating | User specified label')
   .get('/r/ritwickdey.LiveServer.json?label=My custom rating label')
   .expectJSONTypes(Joi.object().keys({
     name: 'My custom rating label',
     value: isVscodeRating
   }));
 
-t.create('version should be formatted. eg. Visual Studio Marketplace|v7.2.5')
+t.create('Version')
   .get('/v/ritwickdey.LiveServer.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'visual studio marketplace',
     value: isVPlusTripleDottedVersion
   }));
 
-t.create('version label should be changed to custom label. eg. VSM|v7.2.5')
+t.create('Version | User specified label')
   .get('/v/ritwickdey.LiveServer.json?label=VSM')
   .expectJSONTypes(Joi.object().keys({
     name: 'VSM',
