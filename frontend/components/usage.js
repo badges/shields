@@ -146,7 +146,7 @@ export default class Usage extends React.PureComponent {
                 <a href="https://developer.mozilla.org/en-US/docs/Glossary/percent-encoding">
                   URL-Encoding
                 </a>
-                needed for spaces or special characters!)
+                {} needed for spaces or special characters!)
               </td>
             </tr>
             <tr>

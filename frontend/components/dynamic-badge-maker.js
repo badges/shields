@@ -8,26 +8,38 @@ export default class DynamicBadgeMaker extends React.Component {
 
   state = {
     type: 'json',
-    label: null,
-    uri: null,
-    colorB: null,
-    prefix: null,
-    suffix: null,
-    query: null,
+    label: '',
+    uri: '',
+    colorB: '',
+    prefix: '',
+    suffix: '',
+    query: '',
   };
 
   makeBadgeUri () {
     const result = new URL(`/dynamic/${this.state.type}.svg`, this.props.baseUri);
-    const keys = Object.keys(this.state).filter(k => k !== 'type');
-    for (const k in keys) {
+    const searchParams = [
+      'label',
+      'uri',
+      'colorB',
+      'prefix',
+      'suffix',
+      'query',
+    ];
+    searchParams.forEach(k => {
       result.searchParams.set(k, this.state[k]);
-    }
-    return result;
+    });
+    return result.href;
   }
 
-  handleSubmit (e) {
+  handleSubmit(e) {
     e.preventDefault();
     document.location = this.makeBadgeUri();
+  }
+
+  get isValid() {
+    const { label, uri, query } = this.state;
+    return label && uri && query;
   }
 
   render() {
@@ -71,7 +83,7 @@ export default class DynamicBadgeMaker extends React.Component {
           value={this.state.suffix}
           onChange={event => this.setState({ suffix: event.target.value })}
           placeholder="suffix" />
-        <button>Make Badge</button>
+        <button disabled={! this.isValid}>Make Badge</button>
       </form>
     );
   }
