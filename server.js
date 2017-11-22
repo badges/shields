@@ -5429,6 +5429,7 @@ camp.route(/^\/vscode-marketplace\/(d|v|r)\/(.*)\.(svg|png|gif|jpg|json)$/,
             badgeData.text[0] = getLabel('downloads', data);
             let count = getVscodeStatistic(buffer, 'install');
             badgeData.text[1] = metric(count);
+            badgeData.colorscheme = downloadCountColor(count);
             break;
           }
           case 'r': {
@@ -5436,6 +5437,7 @@ camp.route(/^\/vscode-marketplace\/(d|v|r)\/(.*)\.(svg|png|gif|jpg|json)$/,
             let rate = getVscodeStatistic(buffer, 'averagerating').toFixed(2);
             let totalrate = getVscodeStatistic(buffer, 'ratingcount');
             badgeData.text[1] = rate + '/5 (' + totalrate + ')';
+            badgeData.colorscheme = floorCountColor(rate, 2, 3, 4);
             break;
           }
           case 'v': {
@@ -5449,12 +5451,10 @@ camp.route(/^\/vscode-marketplace\/(d|v|r)\/(.*)\.(svg|png|gif|jpg|json)$/,
 
       } catch (e) {
         badgeData.text[1] = 'invalid';
+      } finally {
         sendBadge(format, badgeData);
-        return;
       }
 
-      badgeData.colorscheme = 'brightgreen';
-      sendBadge(format, badgeData);
     });
   })
 );
