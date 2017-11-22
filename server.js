@@ -285,7 +285,7 @@ cache(function(data, match, sendBadge, request) {
       method: 'GET',
       uri: 'https://api.travis-ci.org/repos/' + userRepo + '/branches/' + branch,
   };
-  var badgeData = getBadgeData('PHP', data);
+  var badgeData = getBadgeData('Tested', data);
   request(options, function(err, res, buffer) {
     if (err != null) {
       log.error('Travis error: ' + err.stack);
