@@ -10,7 +10,7 @@ t.create('search release version')
   .get('/r/https/repository.jboss.org/nexus/jboss/jboss-client.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'nexus',
-    value: Joi.string().regex(/^4(\.\d+)+$/)
+    value: Joi.string().regex(/^v4(\.\d+)+$/)
   }));
 
 t.create('search release version of an inexistent artifact')
@@ -30,7 +30,7 @@ t.create('search snapshot version not in latestSnapshot')
     .get('/nexus/service/local/lucene/search')
     .query({g: 'com.progress.fuse', a: 'fusehq'})
     .reply(200, '{ "data": [ { "version": "7.0.1-SNAPSHOT" } ] }'))
-  .expectJSON({ name: 'nexus', value: '7.0.1-SNAPSHOT' });
+  .expectJSON({ name: 'nexus', value: 'v7.0.1-SNAPSHOT' });
 
 t.create('search snapshot version of a release artifact')
   .get('/s/https/repository.jboss.org/nexus/jboss/jboss-client.json')
@@ -44,14 +44,14 @@ t.create('resolve version')
   .get('/developer/https/repository.jboss.org/nexus/ai.h2o/h2o-automl.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'nexus',
-    value: Joi.string().regex(/^3(\.\d+)+$/)
+    value: Joi.string().regex(/^v3(\.\d+)+$/)
   }));
 
 t.create('resolve version with query')
   .get('/fs-public-snapshots/https/repository.jboss.org/nexus/com.progress.fuse/fusehq:c=agent-apple-osx:p=tar.gz.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'nexus',
-    value: Joi.string().regex(/^7(\.\d+)+-SNAPSHOT$/)
+    value: Joi.string().regex(/^v7(\.\d+)+-SNAPSHOT$/)
   }));
 
 t.create('resolve version of an inexistent artifact')
