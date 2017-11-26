@@ -22,7 +22,7 @@ function quoteAsciiDocAttribute(attr) {
   if (typeof attr === 'string') {
     const withQuotesEscaped = attr.replace('"', '\\"');
     return `"${withQuotesEscaped}"`;
-  } else if (typeof attr === 'undefined' || typeof attr === 'null') {
+  } else if (attr == null) {
     return 'None';
   } else {
     return attr;

@@ -83,33 +83,33 @@ export default class Usage extends React.PureComponent {
         </p>
         <table className="centered">
           <tbody>
-              <tr>
-                <td>
-                  Dashes <code>--</code>
-                </td>
-                <td>→</td>
-                <td>
-                  <code>-</code> Dash
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Underscores <code>__</code>
-                </td>
-                <td>→</td>
-                <td>
-                  <code>_</code> Underscore
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <code>_</code> or Space <code>&nbsp;</code>
-                </td>
-                <td>→</td>
-                <td>
-                  <code>&nbsp;</code> Space
-                </td>
-              </tr>
+            <tr>
+              <td>
+                Dashes <code>--</code>
+              </td>
+              <td>→</td>
+              <td>
+                <code>-</code> Dash
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Underscores <code>__</code>
+              </td>
+              <td>→</td>
+              <td>
+                <code>_</code> Underscore
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <code>_</code> or Space <code>&nbsp;</code>
+              </td>
+              <td>→</td>
+              <td>
+                <code>&nbsp;</code> Space
+              </td>
+            </tr>
           </tbody>
         </table>
 
