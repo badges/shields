@@ -1,15 +1,5 @@
 all: website favicon test
 
-UNAME_S := $(shell uname -s)
-ifeq ($(UNAME_S),Linux)
-	SED=sed -r
-	NEWLINE=$\n
-endif
-ifeq ($(UNAME_S),Darwin)
-	SED=sed -E
-	NEWLINE=$$'\n'
-endif
-
 favicon:
 	node lib/badge-cli.js '' '' '#bada55' .png > favicon.png
 
