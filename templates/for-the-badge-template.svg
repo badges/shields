@@ -7,8 +7,8 @@
     {{?it.logo}}
       <image x="9" y="7" width="{{=it.logoWidth}}" height="14" xlink:href="{{=it.logo}}"/>
     {{?}}
-    <text x="{{=((it.widths[0]+it.logoWidth+it.logoPadding)/2)*10}}" y="175" transform="scale(0.1)" textLength="{{=(it.widths[0]-(24+it.logoWidth+it.logoPadding))*10}}" lengthAdjust="spacing">{{=it.escapeXml(it.text[0].toUpperCase())}}</text>
-    <text x="{{=(it.widths[0]+it.widths[1]/2)*10}}" y="175" font-weight="bold" transform="scale(0.1)" textLength="{{=(it.widths[1]-24)*10}}" lengthAdjust="spacing">{{=it.escapeXml(it.text[1].toUpperCase())}}</text>
+    <text x="{{=((it.widths[0]+it.logoWidth+it.logoPadding)/2)*10}}" y="175" transform="scale(0.1)" textLength="{{=(it.widths[0]-(24+it.logoWidth+it.logoPadding))*10}}" lengthAdjust="spacing">{{=it.escapeXml(it.text[0])}}</text>
+    <text x="{{=(it.widths[0]+it.widths[1]/2)*10}}" y="175" font-weight="bold" transform="scale(0.1)" textLength="{{=(it.widths[1]-24)*10}}" lengthAdjust="spacing">{{=it.escapeXml(it.text[1])}}</text>
   </g>
   {{?(it.links[0] && it.links[0].length)}}
     <a xlink:href="{{=it.links[0]}}">
