@@ -71,6 +71,9 @@ const {
   mapNpmDownloads
 } = require('./lib/npm-provider');
 const {
+  defaultNpmRegistryUri
+} = require('./lib/npm-badge-helpers');
+const {
   teamcityBadge
 } = require('./lib/teamcity-badge-helpers');
 const {
@@ -92,15 +95,15 @@ const {
 } = require('./lib/github-provider');
 
 const serverStartTime = new Date((new Date()).toGMTString());
-const { githubApiUrl } = config;
+const githubApiUrl = config.services.github.baseUri;
 
 const camp = require('camp').start({
   documentRoot: path.join(__dirname, 'public'),
-  port: config.serverPort,
-  hostname: config.bindAddress,
-  secure: config.secureServer,
-  cert: config.secureServerCert,
-  key: config.secureServerKey,
+  port: config.bind.port,
+  hostname: config.bind.address,
+  secure: config.ssl.isSecure,
+  cert: config.ssl.cert,
+  key: config.ssl.key,
 });
 
 function reset() {
@@ -120,8 +123,7 @@ module.exports = {
   stop
 };
 
-log('Server is starting up');
-log(config.frontendUri);
+log(`Server is starting up: ${config.baseUri}`);
 
 analytics.load();
 analytics.scheduleAutosaving();
@@ -132,7 +134,7 @@ if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);
 }
 
-suggest.setRoutes(camp);
+suggest.setRoutes(config.cors.allowedOrigin, camp);
 
 camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
     var format = match[1];
@@ -1580,163 +1582,175 @@ cache(function (data, match, sendBadge, request) {
 
 // npm version integration.
 camp.route(/^\/npm\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  // e.g. cycle, core, next, svg
-  const [, scope, packageName, tag, format] = match;
-  const pkg = encodeURIComponent(scope ? `@${scope}/${packageName}` : packageName);
-  const apiUrl = `https://registry.npmjs.org/-/package/${pkg}/dist-tags`;
-  const name = tag ? `npm@${tag}` : 'npm';
-  const badgeData = getBadgeData(name, data);
-  // Using the Accept header because of this bug:
-  // <https://github.com/npm/npmjs.org/issues/163>
-  request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      const data = JSON.parse(buffer);
-      const version = data[tag || 'latest'];
-      badgeData.text[1] = versionText(version);
-      badgeData.colorscheme = versionColor(version);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
+cache({
+  queryParams: ['registry_uri'],
+  handler: function(queryParams, match, sendBadge, request) {
+    // e.g. cycle, core, next, svg
+    const [, scope, packageName, tag, format] = match;
+    const registryUri = queryParams.registry_uri || defaultNpmRegistryUri;
+    const pkg = encodeURIComponent(scope ? `@${scope}/${packageName}` : packageName);
+    const apiUrl = `${registryUri}/-/package/${pkg}/dist-tags`;
+
+    const name = tag ? `npm@${tag}` : 'npm';
+    const badgeData = getBadgeData(name, queryParams);
+    // Using the Accept header because of this bug:
+    // <https://github.com/npm/npmjs.org/issues/163>
+    request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        const data = JSON.parse(buffer);
+        const version = data[tag || 'latest'];
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }
 }));
 
 // npm license integration.
 camp.route(/^\/npm\/l\/(?:@([^/]+)\/)?([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  const scope = match[1];        // "user" (when a scope "@user" is supplied)
-  const packageName = match[2];  // "express"
-  const format = match[3];       // "svg"
-  let apiUrl;
-  if (scope === undefined) {
-    // e.g. https://registry.npmjs.org/express/latest
-    // Use this endpoint as an optimization. It covers the vast majority of
-    // these badges, and the response is smaller.
-    apiUrl = `https://registry.npmjs.org/${packageName}/latest`;
-  } else {
-    // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
-    // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
-    const path = encodeURIComponent(`${scope}/${packageName}`);
-    apiUrl = `https://registry.npmjs.org/@${path}`;
+cache({
+  queryParams: ['registry_uri'],
+  handler: function(queryParams, match, sendBadge, request) {
+    // e.g. cycle, core, svg
+    const [, scope, packageName, format ] = match;
+    const registryUri = queryParams.registry_uri || defaultNpmRegistryUri;
+    let apiUrl;
+    if (scope === undefined) {
+      // e.g. https://registry.npmjs.org/express/latest
+      // Use this endpoint as an optimization. It covers the vast majority of
+      // these badges, and the response is smaller.
+      apiUrl = `${registryUri}/${packageName}/latest`;
+    } else {
+      // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
+      // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
+      const path = encodeURIComponent(`${scope}/${packageName}`);
+      apiUrl = `${registryUri}/@${path}`;
+    }
+    const badgeData = getBadgeData('license', queryParams);
+    request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        const data = JSON.parse(buffer);
+        let license;
+        if (scope === undefined) {
+          license = data.license;
+        } else {
+          const latestVersion = data['dist-tags'].latest;
+          license = data.versions[latestVersion].license;
+        }
+        if (Array.isArray(license)) {
+          license = license.join(', ');
+        } else if (typeof license == 'object') {
+          license = license.type;
+        }
+        badgeData.text[1] = license;
+        badgeData.colorscheme = 'blue';
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
   }
-  const badgeData = getBadgeData('license', data);
-  request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      const data = JSON.parse(buffer);
-      let license;
-      if (scope === undefined) {
-        license = data.license;
-      } else {
-        const latestVersion = data['dist-tags'].latest;
-        license = data.versions[latestVersion].license;
-      }
-      if (Array.isArray(license)) {
-        license = license.join(', ');
-      } else if (typeof license == 'object') {
-        license = license.type;
-      }
-      badgeData.text[1] = license;
-      badgeData.colorscheme = 'blue';
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
 }));
 
 // npm node version integration.
 camp.route(/^\/node\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  // e.g. @stdlib, stdlib, next, svg
-  const [, scope, packageName, tag, format] = match;
-  const registryTag = tag || 'latest';
-  let apiUrl;
-  if (scope === undefined) {
-      // e.g. https://registry.npmjs.org/express/latest
-      // Use this endpoint as an optimization. It covers the vast majority of
-      // these badges, and the response is smaller.
-      apiUrl = `https://registry.npmjs.org/${packageName}/${registryTag}`;
-  } else {
-    // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
-    // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
-    const path = encodeURIComponent(`${scope}/${packageName}`);
-    apiUrl = `https://registry.npmjs.org/@${path}`;
-  }
-  const name = tag ? `node@${tag}` : 'node';
-  const badgeData = getBadgeData(name, data);
-  // Using the Accept header because of this bug:
-  // <https://github.com/npm/npmjs.org/issues/163>
-  request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
+cache({
+  queryParams: ['registry_uri'],
+  handler: function(queryParams, match, sendBadge, request) {
+    // e.g. @stdlib, stdlib, next, svg
+    const [, scope, packageName, tag, format] = match;
+    const registryUri = queryParams.registry_uri || defaultNpmRegistryUri;
+    const registryTag = tag || 'latest';
+    let apiUrl;
+    if (scope === undefined) {
+        // e.g. https://registry.npmjs.org/express/latest
+        // Use this endpoint as an optimization. It covers the vast majority of
+        // these badges, and the response is smaller.
+        apiUrl = `${registryUri}/${packageName}/${registryTag}`;
+    } else {
+      // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
+      // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
+      const path = encodeURIComponent(`${scope}/${packageName}`);
+      apiUrl = `${registryUri}/@${path}`;
     }
-    try {
-      const data = JSON.parse(buffer);
-      if (data.error === 'not_found') {
-        badgeData.text[1] = 'package not found';
+    const name = tag ? `node@${tag}` : 'node';
+    const badgeData = getBadgeData(name, queryParams);
+    // Using the Accept header because of this bug:
+    // <https://github.com/npm/npmjs.org/issues/163>
+    request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
         sendBadge(format, badgeData);
         return;
       }
-      let releaseData;
-      if (scope === undefined) {
-        releaseData = data;
-      } else {
-        const version = data['dist-tags'][registryTag];
-        releaseData = data.versions[version];
-      }
-      const versionRange = (releaseData.engines || {}).node;
-      if (! versionRange) {
-        badgeData.text[1] = 'not specified';
-        sendBadge(format, badgeData);
-        return;
-      }
-      badgeData.text[1] = versionRange;
-      regularUpdate('http://nodejs.org/dist/latest/SHASUMS256.txt',
-        (24 * 3600 * 1000),
-        shasums => {
-          // tarball index start, tarball index end
-          const taris = shasums.indexOf('node-v');
-          const tarie = shasums.indexOf('\n', taris);
-          const tarball = shasums.slice(taris, tarie);
-          const version = tarball.split('-')[1];
-          return version;
-        }, (err, version) => {
-          if (err != null) {
-            badgeData.text[1] = 'invalid';
-            sendBadge(format, badgeData);
-            return;
-          }
-          try {
-            if (semver.satisfies(version, versionRange)) {
-              badgeData.colorscheme = 'brightgreen';
-            } else if (semver.gtr(version, versionRange)) {
-              badgeData.colorscheme = 'yellow';
-            } else {
-              badgeData.colorscheme = 'orange';
-            }
-          } catch(e) { }
+      try {
+        const data = JSON.parse(buffer);
+        if (data.error === 'not_found') {
+          badgeData.text[1] = 'package not found';
           sendBadge(format, badgeData);
-      });
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
+          return;
+        }
+        let releaseData;
+        if (scope === undefined) {
+          releaseData = data;
+        } else {
+          const version = data['dist-tags'][registryTag];
+          releaseData = data.versions[version];
+        }
+        const versionRange = (releaseData.engines || {}).node;
+        if (! versionRange) {
+          badgeData.text[1] = 'not specified';
+          sendBadge(format, badgeData);
+          return;
+        }
+        badgeData.text[1] = versionRange;
+        regularUpdate('http://nodejs.org/dist/latest/SHASUMS256.txt',
+          (24 * 3600 * 1000),
+          shasums => {
+            // tarball index start, tarball index end
+            const taris = shasums.indexOf('node-v');
+            const tarie = shasums.indexOf('\n', taris);
+            const tarball = shasums.slice(taris, tarie);
+            const version = tarball.split('-')[1];
+            return version;
+          }, (err, version) => {
+            if (err != null) {
+              badgeData.text[1] = 'invalid';
+              sendBadge(format, badgeData);
+              return;
+            }
+            try {
+              if (semver.satisfies(version, versionRange)) {
+                badgeData.colorscheme = 'brightgreen';
+              } else if (semver.gtr(version, versionRange)) {
+                badgeData.colorscheme = 'yellow';
+              } else {
+                badgeData.colorscheme = 'orange';
+              }
+            } catch(e) { }
+            sendBadge(format, badgeData);
+        });
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }
 }));
 
 // Anaconda Cloud / conda package manager integration
@@ -7503,10 +7517,10 @@ function(data, match, end, ask) {
   }
 });
 
-if (config.frontendRedirectUrl) {
+if (config.redirectUri) {
   camp.route(/^\/$/, (data, match, end, ask) => {
     ask.res.statusCode = 302;
-    ask.res.setHeader('Location', config.frontendRedirectUrl);
+    ask.res.setHeader('Location', config.redirectUri);
     ask.res.end();
   });
 }
