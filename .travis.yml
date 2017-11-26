@@ -17,7 +17,8 @@ before_script:
 script:
   - npm run lint
   - npm run test:js
-  - if [ "$TRAVIS_NODE_VERSION" == "6*" ]; then echo "Skipping build on Node 6."; else npm run build; fi
+  - echo $TRAVIS_NODE_VERSION
+  - if [ "$TRAVIS_NODE_VERSION" == "6*" ]; then echo "Skipping build on Node 6."; else make website; fi
 
 jobs:
   include:
