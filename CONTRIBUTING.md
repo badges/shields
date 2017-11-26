@@ -32,13 +32,13 @@ Be welcoming, appreciative, and helpful. Also please review
 [these impeccable guidelines][code review guidelines].
 
 You can perform first reviews of simple changes, like badge additions. You can
-also review @paulmelnikow's changes, most of which are otherwise self-
-reviewed.
+also review @paulmelnikow's changes, most of which are otherwise
+self-reviewed.
 
 You can monitor [issues][] and the [chat room][], and help other people who
 have questions about contributing to Shields, or using it for their projects.
 
-Feel free to reach out to @paulmelnikow if you'd need help "plugging in."
+Feel free to reach out to @paulmelnikow if you'd need help "plugging in".
 
 [code review guidelines]: http://amyciavolino.com/assets/MindfulCommunicationInCodeReviews.pdf
 [issues]: https://github.com/badges/shields/issues
