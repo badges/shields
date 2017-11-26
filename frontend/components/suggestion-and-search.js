@@ -9,7 +9,7 @@ export default class SuggestionAndSearch extends React.Component {
     queryChanged: PropTypes.func.isRequired,
     onBadgeClick: PropTypes.func.isRequired,
     baseUri: PropTypes.string.isRequired,
-    isProductionBuild: PropTypes.bool.isRequired,
+    longCache: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -55,7 +55,7 @@ export default class SuggestionAndSearch extends React.Component {
   }
 
   renderSuggestions() {
-    const { baseUri, isProductionBuild } = this.props;
+    const { baseUri, longCache } = this.props;
     const { suggestions } = this.state;
 
     if (suggestions.length === 0) {
@@ -76,7 +76,7 @@ export default class SuggestionAndSearch extends React.Component {
               link,
             })}
             baseUri={baseUri}
-            isProductionBuild={isProductionBuild} />
+            longCache={longCache} />
         ))}
       </tbody></table>
     );

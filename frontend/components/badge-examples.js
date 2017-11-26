@@ -12,7 +12,7 @@ function resolveUri (uri, baseUri, options) {
   return result.href;
 }
 
-const Badge = ({ title, previewUri, exampleUri, documentation, baseUri, isProductionBuild, onClick }) => {
+const Badge = ({ title, previewUri, exampleUri, documentation, baseUri, longCache, onClick }) => {
   const handleClick = onClick ?
     () => onClick({ title, previewUri, exampleUri, documentation })
     : undefined;
@@ -21,7 +21,7 @@ const Badge = ({ title, previewUri, exampleUri, documentation, baseUri, isProduc
     ? (<img
       className={classNames('badge-img', { clickable: onClick })}
       onClick={handleClick}
-      src={resolveUri(previewUri, baseUri, { longCache: isProductionBuild } )}
+      src={resolveUri(previewUri, baseUri, { longCache } )}
       alt="" />
     ) : '\u00a0'; // non-breaking space
   const resolvedExampleUri = resolveUri(
@@ -49,11 +49,11 @@ Badge.propTypes = {
   exampleUri: PropTypes.string,
   documentation: PropTypes.string,
   baseUri: PropTypes.string.isRequired,
-  isProductionBuild: PropTypes.bool.isRequired,
+  longCache: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 
-const Category = ({ category, examples, baseUri, isProductionBuild, onClick }) => (
+const Category = ({ category, examples, baseUri, longCache, onClick }) => (
   <div>
     <h3 id={category.id}>{ category.name }</h3>
     <table className="badge">
@@ -64,7 +64,7 @@ const Category = ({ category, examples, baseUri, isProductionBuild, onClick }) =
               key={i}
               {...badgeData}
               baseUri={baseUri}
-              isProductionBuild={isProductionBuild}
+              longCache={longCache}
               onClick={onClick} />
           ))
         }
@@ -84,11 +84,11 @@ Category.propTypes = {
     documentation: PropTypes.string,
   })).isRequired,
   baseUri: PropTypes.string.isRequired,
-  isProductionBuild: PropTypes.bool.isRequired,
+  longCache: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 
-const BadgeExamples = ({ examples, baseUri, isProductionBuild, onClick }) => (
+const BadgeExamples = ({ examples, baseUri, longCache, onClick }) => (
   <div>
     {
       examples.map((categoryData, i) => (
@@ -96,7 +96,7 @@ const BadgeExamples = ({ examples, baseUri, isProductionBuild, onClick }) => (
           key={i}
           {...categoryData}
           baseUri={baseUri}
-          isProductionBuild={isProductionBuild}
+          longCache={longCache}
           onClick={onClick} />
       ))
     }
@@ -108,7 +108,7 @@ BadgeExamples.propTypes = {
     examples: Category.propTypes.examples,
   })),
   baseUri: PropTypes.string.isRequired,
-  isProductionBuild: PropTypes.bool.isRequired,
+  longCache: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 

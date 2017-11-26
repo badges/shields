@@ -11,7 +11,7 @@ import badgeExampleData from '../lib/all-badge-examples';
 import filterExamples from '../frontend/lib/filter-examples';
 
 const baseUri = process.env.BASE_URL;
-const isProductionBuild = envFlag(process.env.PRODUCTION_BUILD, false);
+const longCache = envFlag(process.env.LONG_CACHE, false);
 
 export default class IndexPage extends React.Component {
   state = { query: null, example: null };
@@ -37,7 +37,7 @@ export default class IndexPage extends React.Component {
             queryChanged={query => { this.setState({ query }); }}
             onBadgeClick={example => { this.setState({ example }); }}
             baseUri={baseUri}
-            isProductionBuild={isProductionBuild} />
+            longCache={longCache} />
           <a
             className="donate"
             href="https://gratipay.com/Shields/">
@@ -48,7 +48,7 @@ export default class IndexPage extends React.Component {
           examples={filteredExamples}
           onClick={example => { this.setState({ example }); }}
           baseUri={baseUri}
-          isProductionBuild={isProductionBuild} />
+          longCache={longCache} />
         <Usage baseUri={baseUri} />
         <Footer baseUri={baseUri} />
         <style jsx>{`

@@ -5,7 +5,7 @@ const shouldAnalyze = envFlag(process.env.ANALYZE);
 module.exports = {
   webpack: config => {
     config.plugins.push(new webpack.EnvironmentPlugin(['BASE_URL']));
-    config.plugins.push(new webpack.EnvironmentPlugin({ PRODUCTION_BUILD: null }));
+    config.plugins.push(new webpack.EnvironmentPlugin({ LONG_CACHE: null }));
 
     if (shouldAnalyze) {
       // We don't include webpack-bundle-analyzer in devDependencies, so  load
