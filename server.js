@@ -2094,7 +2094,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var parsedData = JSON.parse(buffer);
-      if (info.charAt(0) === 'd') {
+      if ((info === 'dm') || (info === 'dw') || (info ==='dd')) {
         // See #716 for the details of the loss of service.
         badgeData.text[0] = getLabel('downloads', data);
         badgeData.text[1] = 'no longer available';
@@ -2172,10 +2172,10 @@ cache(function(data, match, sendBadge, request) {
         }
         sendBadge(format, badgeData);
       } else if (info === 'pyversions') {
-        var versions = [];
+        let versions = [];
         let pattern = /^Programming Language :: Python :: ([\d.]+)$/;
         for (let i = 0; i < parsedData.info.classifiers.length; i++) {
-          var matched = pattern.exec(parsedData.info.classifiers[i]);
+          let matched = pattern.exec(parsedData.info.classifiers[i]);
           if (matched && matched[1]) {
             versions.push(matched[1]);
           }
@@ -2193,6 +2193,49 @@ cache(function(data, match, sendBadge, request) {
         }
         badgeData.text[0] = getLabel('python', data);
         badgeData.text[1] = versions.sort().join(', ');
+        badgeData.colorscheme = 'blue';
+        sendBadge(format, badgeData);
+      } else if (info === 'djversions') {
+        let versions = [];
+        let pattern = /^Framework :: Django :: ([\d.]+)$/;
+        for (let i = 0; i < parsedData.info.classifiers.length; i++) {
+          let matched = pattern.exec(parsedData.info.classifiers[i]);
+          if (matched && matched[1]) {
+            versions.push(matched[1]);
+          }
+        }
+        if (!versions.length) {
+          versions.push('not found');
+        }
+
+        /*
+          note: django versions will be specified in the form major.minor
+          trying to sort with `semver.compare` will throw e.g:
+          TypeError: Invalid Version: 1.11
+          because no patch release is specified, so we will define
+          our own function to sort django versions
+        */
+        const parseVersionString = function(str) {
+          if (typeof(str) != 'string') { return false; }
+          const x = str.split('.');
+          const maj = parseInt(x[0]) || 0;
+          const min = parseInt(x[1]) || 0;
+          return {
+              major: maj,
+              minor: min
+          };
+        };
+        // sort low to high
+        versions = versions.sort(function(a, b) {
+          if (parseVersionString(a).major === parseVersionString(b).major) {
+            return parseVersionString(a).minor - parseVersionString(b).minor;
+          } else {
+            return parseVersionString(a).major - parseVersionString(b).major;
+          }
+        });
+
+        badgeData.text[0] = getLabel('django versions', data);
+        badgeData.text[1] = versions.join(', ');
         badgeData.colorscheme = 'blue';
         sendBadge(format, badgeData);
       } else if (info === 'implementation') {
