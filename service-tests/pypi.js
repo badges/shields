@@ -1,0 +1,222 @@
+'use strict';
+
+const Joi = require('joi');
+const ServiceTester = require('./runner/service-tester');
+const {
+  isCommaSeperatedPythonVersions,
+  isSemver,
+} = require('./helpers/validators');
+
+const t = new ServiceTester({ id: 'pypi', title: 'PyPi badges' });
+module.exports = t;
+
+
+/*
+  Note:
+  Download statistics are no longer available from pypi
+  it is exptected that the download badges all show
+  'no longer available'
+*/
+t.create('daily downloads (expected failure)')
+  .get('/dd/djangorestframework.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'downloads',
+    value: 'no longer available'
+  }));
+
+t.create('weekly downloads (expected failure)')
+  .get('/dw/djangorestframework.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'downloads',
+    value: 'no longer available'
+  }));
+
+t.create('monthly downloads (expected failure)')
+  .get('/dm/djangorestframework.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'downloads',
+    value: 'no longer available'
+  }));
+
+t.create('daily downloads (invalid)')
+  .get('/dd/not-a-package.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'pypi',
+    value: 'invalid'
+  }));
+
+t.create('weekly downloads (invalid)')
+  .get('/dw/not-a-package.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'pypi',
+    value: 'invalid'
+  }));
+
+t.create('monthly downloads (invalid)')
+  .get('/dm/not-a-package.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'pypi',
+    value: 'invalid'
+  }));
+
+/*
+  Note:
+  Not all project on PyPi follow SemVer
+
+  Versions strings like
+  - 2.7.3.2
+  - 2.0rc1
+  - 0.1.30b10
+  are prefectly legal.
+
+  We'll run this test againt a project that follows SemVer...
+*/
+t.create('version (semver)')
+  .get('/v/requests.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'pypi',
+    value: isSemver
+  }));
+
+/*
+  ..whereas this project uses version numbers that
+  should just be validated as an arbitary string
+*/
+t.create('version (not semver)')
+  .get('/v/psycopg2.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'pypi',
+    value: Joi.string()
+  }));
+
+t.create('version (invalid)')
+  .get('/v/not-a-package.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'pypi',
+    value: 'invalid'
+  }));
+
+t.create('licence (valid)')
+  .get('/l/requests/2.18.4.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'license',
+    value: 'Apache 2.0'
+  }));
+
+t.create('license (invalid)')
+  .get('/l/not-a-package.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'pypi',
+    value: 'invalid'
+  }));
+
+t.create('wheel (has wheel)')
+  .get('/wheel/requests/2.18.4.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'wheel',
+    value: 'yes'
+  }));
+
+t.create('wheel (no wheel)')
+  .get('/wheel/chai/1.1.2.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'wheel',
+    value: 'no'
+  }));
+
+t.create('wheel (invalid)')
+  .get('/wheel/not-a-package.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'pypi',
+    value: 'invalid'
+  }));
+
+t.create('format (wheel)')
+  .get('/format/requests/2.18.4.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'format',
+    value: 'wheel'
+  }));
+
+t.create('format (source)')
+  .get('/format/chai/1.1.2.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'format',
+    value: 'source'
+  }));
+
+/*
+  TODO: add a test case for egg format
+  It is quite hard to find a project on PyPi
+  which distributes an egg but not a whl
+*/
+
+t.create('format (invalid)')
+  .get('/format/not-a-package.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'pypi',
+    value: 'invalid'
+  }));
+
+t.create('python versions (valid)')
+  .get('/pyversions/requests/2.18.4.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'python',
+    value: isCommaSeperatedPythonVersions
+  }));
+
+t.create('python versions (no versions specified)')
+  .get('/pyversions/pyshp/1.2.12.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'python',
+    value: 'not found'
+  }));
+
+t.create('python versions (invalid)')
+  .get('/pyversions/not-a-package.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'pypi',
+    value: 'invalid'
+  }));
+
+t.create('implementation (valid)')
+  .get('/implementation/beehive/1.0.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'implementation',
+    value: 'cpython, jython, pypy'
+  }));
+
+t.create('implementation (not specified)')
+  .get('/implementation/chai/1.1.2.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'implementation',
+    value: 'cpython'
+  }));
+
+t.create('implementation (invalid)')
+  .get('/implementation/not-a-package.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'pypi',
+    value: 'invalid'
+  }));
+
+t.create('status (valid, stable)')
+  .get('/status/django/1.11.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'status',
+    value: 'stable'
+  }));
+
+t.create('status (valid, beta)')
+  .get('/status/django/2.0rc1.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'status',
+    value: 'beta'
+  }));
+
+t.create('status (invalid)')
+  .get('/status/not-a-package.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'pypi',
+    value: 'invalid'
+  }));

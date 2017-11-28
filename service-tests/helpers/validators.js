@@ -11,6 +11,8 @@ const isVPlusTripleDottedVersion = withRegex(/^v[0-9]+.[0-9]+.[0-9]+$/);
 
 const isVPlusDottedVersionAtLeastOne = withRegex(/^v\d+(\.\d+)?(\.\d+)?$/);
 
+const isCommaSeperatedPythonVersions = withRegex(/^([0-9]+.[0-9]+[,]?[ ]?)+$/);
+
 // Simple regex for test Composer versions rule
 // https://getcomposer.org/doc/articles/versions.md
 // Examples:
@@ -45,6 +47,7 @@ module.exports = {
   isSemver,
   isVPlusTripleDottedVersion,
   isVPlusDottedVersionAtLeastOne,
+  isCommaSeperatedPythonVersions,
   isComposerVersion,
   isStarRating,
   isMetric,
