@@ -88,3 +88,4 @@ typings/
 
 # Temporary build artifacts.
 /build
+.next
