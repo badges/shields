@@ -29,7 +29,7 @@
     "json-autosave": "~1.1.2",
     "jsonpath": "~0.2.12",
     "lodash.countby": "^4.6.0",
-    "moment": "^2.18.1",
+    "moment": "^2.19.3",
     "pdfkit": "~0.8.0",
     "pretty-bytes": "^4.0.2",
     "query-string": "^5.0.0",
@@ -127,10 +127,11 @@
     "rimraf": "^2.6.2",
     "sazerac": "^0.4.2",
     "semver-regex": "^1.0.0",
-    "sinon": "^4.0.1"
+    "sinon": "^4.0.1",
+    "url-path": "^0.1.1"
   },
   "engines": {
-    "node": "6.x",
+    "node": "8.x",
     "npm": "5.x"
   },
   "babel": {
