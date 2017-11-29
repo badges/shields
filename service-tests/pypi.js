@@ -2,10 +2,8 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
-const {
-  isCommaSeperatedPythonVersions,
-  isSemver,
-} = require('./helpers/validators');
+const { isSemver } = require('./helpers/validators');
+const isCommaSeperatedPythonVersions = Joi.string().regex(/^([0-9]+.[0-9]+[,]?[ ]?)+$/);
 
 const t = new ServiceTester({ id: 'pypi', title: 'PyPi badges' });
 module.exports = t;
