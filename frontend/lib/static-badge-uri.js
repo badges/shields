@@ -1,4 +1,4 @@
-import { URL } from './url-api';
+import URLPath from 'url-path';
 
 export function encodeField(s) {
   return encodeURIComponent(s.replace(/-/g, '--').replace(/_/g, '__'));
@@ -6,7 +6,7 @@ export function encodeField(s) {
 
 export default function staticBadgeUri(baseUri, subject, status, color, options) {
   const path = [subject, status, color].map(encodeField).join('-');
-  const uri = new URL(`/badge/${path}.svg`, baseUri);
+  const uri = new URLPath(`/badge/${path}.svg`, baseUri);
   Object.keys(options || {}).forEach(k => {
     uri.searchParams.set(k, options[k]);
   })

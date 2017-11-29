@@ -1,13 +1,13 @@
-import { URL } from '../lib/url-api';
+import URLPath from 'url-path';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 function resolveUri (uri, baseUri, options) {
   const { longCache } = options || {};
-  const result = new URL(uri, baseUri);
+  const result = new URLPath(uri, baseUri);
   if (longCache) {
-    result.searchParams.maxAge = '2592000';
+    result.searchParams.set('maxAge', '2592000');
   }
   return result.href;
 }
