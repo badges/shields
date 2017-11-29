@@ -4,6 +4,7 @@ const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 const { isSemver } = require('./helpers/validators');
 const isCommaSeperatedPythonVersions = Joi.string().regex(/^([0-9]+.[0-9]+[,]?[ ]?)+$/);
+const isPsycopg2Version = Joi.string().regex(/^v([0-9][.]?)+$/);
 
 const t = new ServiceTester({ id: 'pypi', title: 'PyPi badges' });
 module.exports = t;
@@ -63,15 +64,12 @@ t.create('version (semver)')
     value: isSemver
   }));
 
-/*
-  ..whereas this project uses version numbers that
-  should just be validated as an arbitary string
-*/
+// ..whereas this project does not folow SemVer
 t.create('version (not semver)')
   .get('/v/psycopg2.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'pypi',
-    value: Joi.string()
+    value: isPsycopg2Version
   }));
 
 t.create('version (invalid)')
