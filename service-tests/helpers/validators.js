@@ -1,5 +1,12 @@
 'use strict';
 
+/*
+  Note:
+  Validators defined in this file are used by more than one service.
+  Validators which are only used by one service
+  should be declared in that service's test file.
+*/
+
 const Joi = require('joi');
 const semverRegex = require('semver-regex')();
 
