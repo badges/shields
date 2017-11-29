@@ -4,6 +4,7 @@ const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 const { isSemver } = require('./helpers/validators');
 const isCommaSeperatedPythonVersions = Joi.string().regex(/^([0-9]+.[0-9]+[,]?[ ]?)+$/);
+const isCommaSeperatedDjangoVersions = Joi.string().regex(/^([0-9]+.[0-9]+[,]?[ ]?)+$/);
 const isPsycopg2Version = Joi.string().regex(/^v([0-9][.]?)+$/);
 
 const t = new ServiceTester({ id: 'pypi', title: 'PyPi badges' });
@@ -156,6 +157,31 @@ t.create('python versions (no versions specified)')
 
 t.create('python versions (invalid)')
   .get('/pyversions/not-a-package.json')
+  .expectJSON({ name: 'pypi', value: 'invalid' });
+
+
+// tests for django versions endpoint
+
+t.create('supported django versions (valid, package version in request)')
+  .get('/djversions/djangorestframework/3.7.3.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'django versions',
+    value: isCommaSeperatedDjangoVersions
+  }));
+
+t.create('supported django versions (valid, no package version specified)')
+  .get('/djversions/djangorestframework.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'django versions',
+    value: isCommaSeperatedDjangoVersions
+  }));
+
+t.create('supported django versions (no versions specified)')
+  .get('/djversions/django/1.11.json')
+  .expectJSON({ name: 'django versions', value: 'not found' });
+
+t.create('supported django versions (invalid)')
+  .get('/djversions/not-a-package.json')
   .expectJSON({ name: 'pypi', value: 'invalid' });
 
 
