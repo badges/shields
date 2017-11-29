@@ -54,7 +54,7 @@
     "test:services:pr": "npm run test:services:pr:prepare && npm run test:services:pr:run",
     "test": "npm run lint && npm run test:js",
     "frontend-depcheck": "check-node-version --node '>= 8.0'",
-    "server-depcheck": "check-node-version --node '>= 6.0'",
+    "server-depcheck": "check-node-version --node '>= 6.0 < 9.0'",
     "postinstall": "npm run server-depcheck",
     "prebuild": "npm run frontend-depcheck",
     "build": "next build && next export -o build/",
@@ -81,7 +81,7 @@
   "devDependencies": {
     "@mapbox/react-click-to-select": "^2.0.1",
     "babel-eslint": "^8.0.2",
-    "check-node-version": "^2.1.0",
+    "check-node-version": "^3.1.0",
     "child-process-promise": "^2.2.1",
     "classnames": "^2.2.5",
     "concurrently": "^3.5.1",
