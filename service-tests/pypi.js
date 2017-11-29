@@ -81,13 +81,13 @@ t.create('version (invalid)')
   .expectJSONTypes({ name: 'pypi', value: 'invalid' });
 
 
-// tests for licence endpoint
+// tests for license endpoint
 
-t.create('licence (valid, package version in request)')
+t.create('license (valid, package version in request)')
   .get('/l/requests/2.18.4.json')
   .expectJSONTypes({ name: 'license', value: 'Apache 2.0' });
 
-t.create('licence (valid, no package version specified)')
+t.create('license (valid, no package version specified)')
   .get('/l/requests.json')
   .expectJSONTypes({ name: 'license', value: 'Apache 2.0' });
 
