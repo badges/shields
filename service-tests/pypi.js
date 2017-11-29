@@ -19,45 +19,27 @@ module.exports = t;
 */
 t.create('daily downloads (expected failure)')
   .get('/dd/djangorestframework.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'downloads',
-    value: 'no longer available'
-  }));
+  .expectJSONTypes({ name: 'downloads', value: 'no longer available' });
 
 t.create('weekly downloads (expected failure)')
   .get('/dw/djangorestframework.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'downloads',
-    value: 'no longer available'
-  }));
+  .expectJSONTypes({ name: 'downloads', value: 'no longer available' });
 
 t.create('monthly downloads (expected failure)')
   .get('/dm/djangorestframework.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'downloads',
-    value: 'no longer available'
-  }));
+  .expectJSONTypes({ name: 'downloads', value: 'no longer available' });
 
 t.create('daily downloads (invalid)')
   .get('/dd/not-a-package.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'pypi',
-    value: 'invalid'
-  }));
+  .expectJSONTypes({ name: 'pypi', value: 'invalid' });
 
 t.create('weekly downloads (invalid)')
   .get('/dw/not-a-package.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'pypi',
-    value: 'invalid'
-  }));
+  .expectJSONTypes({ name: 'pypi', value: 'invalid' });
 
 t.create('monthly downloads (invalid)')
   .get('/dm/not-a-package.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'pypi',
-    value: 'invalid'
-  }));
+  .expectJSONTypes({ name: 'pypi', value: 'invalid' });
 
 /*
   Note:
@@ -91,59 +73,35 @@ t.create('version (not semver)')
 
 t.create('version (invalid)')
   .get('/v/not-a-package.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'pypi',
-    value: 'invalid'
-  }));
+  .expectJSONTypes({ name: 'pypi', value: 'invalid' });
 
 t.create('licence (valid)')
   .get('/l/requests/2.18.4.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'license',
-    value: 'Apache 2.0'
-  }));
+  .expectJSONTypes({ name: 'license', value: 'Apache 2.0' });
 
 t.create('license (invalid)')
   .get('/l/not-a-package.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'pypi',
-    value: 'invalid'
-  }));
+  .expectJSONTypes({ name: 'pypi', value: 'invalid' });
 
 t.create('wheel (has wheel)')
   .get('/wheel/requests/2.18.4.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'wheel',
-    value: 'yes'
-  }));
+  .expectJSONTypes({ name: 'wheel', value: 'yes' });
 
 t.create('wheel (no wheel)')
   .get('/wheel/chai/1.1.2.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'wheel',
-    value: 'no'
-  }));
+  .expectJSONTypes({ name: 'wheel', value: 'no' });
 
 t.create('wheel (invalid)')
   .get('/wheel/not-a-package.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'pypi',
-    value: 'invalid'
-  }));
+  .expectJSONTypes({ name: 'pypi', value: 'invalid' });
 
 t.create('format (wheel)')
   .get('/format/requests/2.18.4.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'format',
-    value: 'wheel'
-  }));
+  .expectJSONTypes({ name: 'format', value: 'wheel' });
 
 t.create('format (source)')
   .get('/format/chai/1.1.2.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'format',
-    value: 'source'
-  }));
+  .expectJSONTypes({ name: 'format', value: 'source' });
 
 /*
   TODO: add a test case for egg format
@@ -153,10 +111,7 @@ t.create('format (source)')
 
 t.create('format (invalid)')
   .get('/format/not-a-package.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'pypi',
-    value: 'invalid'
-  }));
+  .expectJSONTypes({ name: 'pypi', value: 'invalid' });
 
 t.create('python versions (valid)')
   .get('/pyversions/requests/2.18.4.json')
@@ -167,56 +122,32 @@ t.create('python versions (valid)')
 
 t.create('python versions (no versions specified)')
   .get('/pyversions/pyshp/1.2.12.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'python',
-    value: 'not found'
-  }));
+  .expectJSONTypes({ name: 'python', value: 'not found' });
 
 t.create('python versions (invalid)')
   .get('/pyversions/not-a-package.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'pypi',
-    value: 'invalid'
-  }));
+  .expectJSONTypes({ name: 'pypi', value: 'invalid' });
 
 t.create('implementation (valid)')
   .get('/implementation/beehive/1.0.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'implementation',
-    value: 'cpython, jython, pypy'
-  }));
+  .expectJSONTypes({ name: 'implementation', value: 'cpython, jython, pypy' });
 
 t.create('implementation (not specified)')
   .get('/implementation/chai/1.1.2.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'implementation',
-    value: 'cpython'
-  }));
+  .expectJSONTypes({ name: 'implementation', value: 'cpython' });
 
 t.create('implementation (invalid)')
   .get('/implementation/not-a-package.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'pypi',
-    value: 'invalid'
-  }));
+  .expectJSONTypes({ name: 'pypi', value: 'invalid' });
 
 t.create('status (valid, stable)')
   .get('/status/django/1.11.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'status',
-    value: 'stable'
-  }));
+  .expectJSONTypes({name: 'status', value: 'stable' });
 
 t.create('status (valid, beta)')
   .get('/status/django/2.0rc1.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'status',
-    value: 'beta'
-  }));
+  .expectJSONTypes({ name: 'status', value: 'beta' });
 
 t.create('status (invalid)')
   .get('/status/not-a-package.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'pypi',
-    value: 'invalid'
-  }));
+  .expectJSONTypes({ name: 'pypi', value: 'invalid' });
