@@ -29,7 +29,7 @@
     "json-autosave": "~1.1.2",
     "jsonpath": "~0.2.12",
     "lodash.countby": "^4.6.0",
-    "moment": "^2.18.1",
+    "moment": "^2.19.3",
     "pdfkit": "~0.8.0",
     "pretty-bytes": "^4.0.2",
     "query-string": "^5.0.0",
