@@ -137,6 +137,9 @@
     "presets": [
       "next/babel",
       "env"
+    ],
+    "plugins": [
+      "transform-class-properties"
     ]
   }
 }
