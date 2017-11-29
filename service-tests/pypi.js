@@ -12,6 +12,8 @@ module.exports = t;
 
 
 /*
+  tests for downloads endpoints
+
   Note:
   Download statistics are no longer available from pypi
   it is exptected that the download badges all show
@@ -41,7 +43,10 @@ t.create('monthly downloads (invalid)')
   .get('/dm/not-a-package.json')
   .expectJSONTypes({ name: 'pypi', value: 'invalid' });
 
+
 /*
+  tests for version endpoint
+
   Note:
   Not all project on PyPi follow SemVer
 
@@ -75,6 +80,9 @@ t.create('version (invalid)')
   .get('/v/not-a-package.json')
   .expectJSONTypes({ name: 'pypi', value: 'invalid' });
 
+
+// tests for licence endpoint
+
 t.create('licence (valid, package version in request)')
   .get('/l/requests/2.18.4.json')
   .expectJSONTypes({ name: 'license', value: 'Apache 2.0' });
@@ -86,6 +94,9 @@ t.create('licence (valid, no package version specified)')
 t.create('license (invalid)')
   .get('/l/not-a-package.json')
   .expectJSONTypes({ name: 'pypi', value: 'invalid' });
+
+
+// tests for wheel endpoint
 
 t.create('wheel (has wheel, package version in request)')
   .get('/wheel/requests/2.18.4.json')
@@ -102,6 +113,9 @@ t.create('wheel (no wheel)')
 t.create('wheel (invalid)')
   .get('/wheel/not-a-package.json')
   .expectJSONTypes({ name: 'pypi', value: 'invalid' });
+
+
+// tests for format endpoint
 
 t.create('format (wheel, package version in request)')
   .get('/format/requests/2.18.4.json')
@@ -122,6 +136,9 @@ t.create('format (egg)')
 t.create('format (invalid)')
   .get('/format/not-a-package.json')
   .expectJSONTypes({ name: 'pypi', value: 'invalid' });
+
+
+// tests for pyversions endpoint
 
 t.create('python versions (valid, package version in request)')
   .get('/pyversions/requests/2.18.4.json')
@@ -145,6 +162,9 @@ t.create('python versions (invalid)')
   .get('/pyversions/not-a-package.json')
   .expectJSONTypes({ name: 'pypi', value: 'invalid' });
 
+
+// tests for implementation endpoint
+
 t.create('implementation (valid, package version in request)')
   .get('/implementation/beehive/1.0.json')
   .expectJSONTypes({ name: 'implementation', value: 'cpython, jython, pypy' });
@@ -160,6 +180,9 @@ t.create('implementation (not specified)')
 t.create('implementation (invalid)')
   .get('/implementation/not-a-package.json')
   .expectJSONTypes({ name: 'pypi', value: 'invalid' });
+
+
+// tests for status endpoint
 
 t.create('status (valid, stable, package version in request)')
   .get('/status/django/1.11.json')
