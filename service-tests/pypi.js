@@ -103,11 +103,9 @@ t.create('format (source)')
   .get('/format/chai/1.1.2.json')
   .expectJSONTypes({ name: 'format', value: 'source' });
 
-/*
-  TODO: add a test case for egg format
-  It is quite hard to find a project on PyPi
-  which distributes an egg but not a whl
-*/
+t.create('format (egg)')
+  .get('/format/virtualenv/0.8.2.json')
+  .expectJSONTypes({ name: 'format', value: 'egg' });
 
 t.create('format (invalid)')
   .get('/format/not-a-package.json')
