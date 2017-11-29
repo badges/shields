@@ -82,8 +82,6 @@
   "devDependencies": {
     "@mapbox/react-click-to-select": "^2.0.1",
     "babel-eslint": "^8.0.2",
-    "babel-plugin-transform-builtin-classes": "^0.4.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "check-node-version": "^3.1.0",
@@ -137,11 +135,8 @@
   },
   "babel": {
     "presets": [
+      "next/babel",
       "env"
-    ],
-    "plugins": [
-      "transform-class-properties",
-      "transform-builtin-classes"
     ]
   }
 }
