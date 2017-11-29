@@ -47,12 +47,13 @@
     "coverage:report:reopen": "opn coverage/lcov-report/index.html",
     "coverage:report:open": "npm run coverage:report && npm run coverage:report:reopen",
     "lint": "eslint '**/*.js'",
-    "test:js": "mocha '*.spec.js' 'lib/**/*.spec.js'",
+    "test:js:frontend": "mocha --require babel-polyfill --require babel-register 'frontend/**/*.spec.js'",
+    "test:js:server": "mocha '*.spec.js' 'lib/**/*.spec.js'",
     "test:services": "mocha --delay service-tests/runner/cli.js",
     "test:services:pr:prepare": "node service-tests/runner/pull-request-services-cli.js > pull-request-services.log",
     "test:services:pr:run": "mocha --delay service-tests/runner/cli.js --stdin < pull-request-services.log",
     "test:services:pr": "npm run test:services:pr:prepare && npm run test:services:pr:run",
-    "test": "npm run lint && npm run test:js",
+    "test": "npm run lint && npm run test:js:frontend && npm run test:js:server",
     "frontend-depcheck": "check-node-version --node '>= 8.0'",
     "server-depcheck": "check-node-version --node '>= 6.0 < 9.0'",
     "postinstall": "npm run server-depcheck",
@@ -81,6 +82,10 @@
   "devDependencies": {
     "@mapbox/react-click-to-select": "^2.0.1",
     "babel-eslint": "^8.0.2",
+    "babel-plugin-transform-builtin-classes": "^0.4.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "check-node-version": "^3.1.0",
     "child-process-promise": "^2.2.1",
     "classnames": "^2.2.5",
@@ -129,5 +134,14 @@
   "engines": {
     "node": "6.x",
     "npm": "5.x"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ],
+    "plugins": [
+      "transform-class-properties",
+      "transform-builtin-classes"
+    ]
   }
 }
