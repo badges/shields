@@ -11,21 +11,21 @@ deploy: website deploy-s0 deploy-s1 deploy-s2 deploy-gh-pages
 deploy-s0:
 	# Ship a copy of the front end to each server for debugging.
 	# https://github.com/badges/shields/issues/1220
-	git add -f Verdana.ttf private/secret.json index.html
+	git add -f Verdana.ttf private/secret.json build/
 	git commit -m'MUST NOT BE ON GITHUB'
 	git push -f s0 HEAD:master
 	git reset HEAD~1
 	git checkout master
 
 deploy-s1:
-	git add -f Verdana.ttf private/secret.json index.html
+	git add -f Verdana.ttf private/secret.json build/
 	git commit -m'MUST NOT BE ON GITHUB'
 	git push -f s1 HEAD:master
 	git reset HEAD~1
 	git checkout master
 
 deploy-s2:
-	git add -f Verdana.ttf private/secret.json index.html
+	git add -f Verdana.ttf private/secret.json build/
 	git commit -m'MUST NOT BE ON GITHUB'
 	git push -f s2 HEAD:master
 	git reset HEAD~1
@@ -40,7 +40,7 @@ deploy-gh-pages:
 	git checkout master
 
 deploy-heroku:
-	git add -f Verdana.ttf private/secret.json index.html
+	git add -f Verdana.ttf private/secret.json build/
 	git commit -m'MUST NOT BE ON GITHUB'
 	git push -f heroku HEAD:master
 	git reset HEAD~1
