@@ -75,16 +75,24 @@ t.create('version (invalid)')
   .get('/v/not-a-package.json')
   .expectJSONTypes({ name: 'pypi', value: 'invalid' });
 
-t.create('licence (valid)')
+t.create('licence (valid, package version in request)')
   .get('/l/requests/2.18.4.json')
+  .expectJSONTypes({ name: 'license', value: 'Apache 2.0' });
+
+t.create('licence (valid, no package version specified)')
+  .get('/l/requests.json')
   .expectJSONTypes({ name: 'license', value: 'Apache 2.0' });
 
 t.create('license (invalid)')
   .get('/l/not-a-package.json')
   .expectJSONTypes({ name: 'pypi', value: 'invalid' });
 
-t.create('wheel (has wheel)')
+t.create('wheel (has wheel, package version in request)')
   .get('/wheel/requests/2.18.4.json')
+  .expectJSONTypes({ name: 'wheel', value: 'yes' });
+
+t.create('wheel (has wheel, no package version specified)')
+  .get('/wheel/requests.json')
   .expectJSONTypes({ name: 'wheel', value: 'yes' });
 
 t.create('wheel (no wheel)')
@@ -95,8 +103,12 @@ t.create('wheel (invalid)')
   .get('/wheel/not-a-package.json')
   .expectJSONTypes({ name: 'pypi', value: 'invalid' });
 
-t.create('format (wheel)')
+t.create('format (wheel, package version in request)')
   .get('/format/requests/2.18.4.json')
+  .expectJSONTypes({ name: 'format', value: 'wheel' });
+
+t.create('format (wheel, no package version specified)')
+  .get('/format/requests.json')
   .expectJSONTypes({ name: 'format', value: 'wheel' });
 
 t.create('format (source)')
@@ -111,8 +123,15 @@ t.create('format (invalid)')
   .get('/format/not-a-package.json')
   .expectJSONTypes({ name: 'pypi', value: 'invalid' });
 
-t.create('python versions (valid)')
+t.create('python versions (valid, package version in request)')
   .get('/pyversions/requests/2.18.4.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'python',
+    value: isCommaSeperatedPythonVersions
+  }));
+
+t.create('python versions (valid, no package version specified)')
+  .get('/pyversions/requests.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'python',
     value: isCommaSeperatedPythonVersions
@@ -126,9 +145,13 @@ t.create('python versions (invalid)')
   .get('/pyversions/not-a-package.json')
   .expectJSONTypes({ name: 'pypi', value: 'invalid' });
 
-t.create('implementation (valid)')
+t.create('implementation (valid, package version in request)')
   .get('/implementation/beehive/1.0.json')
   .expectJSONTypes({ name: 'implementation', value: 'cpython, jython, pypy' });
+
+t.create('implementation (valid, no package version specified)')
+  .get('/implementation/numpy.json')
+  .expectJSONTypes({ name: 'implementation', value: 'cpython' });
 
 t.create('implementation (not specified)')
   .get('/implementation/chai/1.1.2.json')
@@ -138,8 +161,12 @@ t.create('implementation (invalid)')
   .get('/implementation/not-a-package.json')
   .expectJSONTypes({ name: 'pypi', value: 'invalid' });
 
-t.create('status (valid, stable)')
+t.create('status (valid, stable, package version in request)')
   .get('/status/django/1.11.json')
+  .expectJSONTypes({name: 'status', value: 'stable' });
+
+t.create('status (valid, no package version specified)')
+  .get('/status/typing.json')
   .expectJSONTypes({name: 'status', value: 'stable' });
 
 t.create('status (valid, beta)')
