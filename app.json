@@ -11,13 +11,13 @@
   "repository": "https://github.com/badges/shields",
   "logo": "http://shields.io/favicon.png",
   "env": {
-    "INFOSITE": {
-      "description": "The home page.",
-      "value": "/"
-    },
     "NPM_CONFIG_PRODUCTION": {
       "description": "Configure whether devDependencies are installed (they are needed for the build).",
       "value": "false"
+    },
+    "BASE_URL": {
+      "description": "The base URL to use in the frontend build",
+      "value": "/"
     }
   },
   "formation": {

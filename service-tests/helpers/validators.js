@@ -1,5 +1,12 @@
 'use strict';
 
+/*
+  Note:
+  Validators defined in this file are used by more than one service.
+  Validators which are only used by one service
+  should be declared in that service's test file.
+*/
+
 const Joi = require('joi');
 const semverRegex = require('semver-regex')();
 
@@ -10,6 +17,20 @@ const isSemver = withRegex(semverRegex);
 const isVPlusTripleDottedVersion = withRegex(/^v[0-9]+.[0-9]+.[0-9]+$/);
 
 const isVPlusDottedVersionAtLeastOne = withRegex(/^v\d+(\.\d+)?(\.\d+)?$/);
+
+// Simple regex for test Composer versions rule
+// https://getcomposer.org/doc/articles/versions.md
+// Examples:
+// 7.1
+// >=5.6
+// >1.0 <2.0
+// !=1.0 <1.1 || >=1.2
+// 7.1.*
+// 7.* || 5.6.*
+// This regex not support branches, minimum-stability, ref and any (*)
+// https://getcomposer.org/doc/04-schema.md#package-links
+// https://getcomposer.org/doc/04-schema.md#minimum-stability
+const isComposerVersion = withRegex(/^\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?((\s*\|\|)?\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?)*\s*$/);
 
 const isStarRating = withRegex(/^(?=.{5}$)(\u2605{0,5}[\u00BC\u00BD\u00BE]?\u2606{0,5})$/);
 
@@ -31,6 +52,7 @@ module.exports = {
   isSemver,
   isVPlusTripleDottedVersion,
   isVPlusDottedVersionAtLeastOne,
+  isComposerVersion,
   isStarRating,
   isMetric,
   isMetricOverTimePeriod,

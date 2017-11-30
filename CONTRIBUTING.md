@@ -1,12 +1,20 @@
 Contributing to Shields
 =======================
 
-Shields is a community project. We invite your participation through issues
-and pull requests!
+Shields is a community project. We invite your participation through
+financial contributions, issues, and pull requests!
 
 
 Ways you can help
 -----------------
+
+### Financial contributions
+
+We welcome financial contributions in full transparency on our
+[open collective](https://opencollective.com/shields). Anyone can file an
+expense. If the expense makes sense for the development of the community, it
+will be "merged" into the ledger of our open collective by the core
+contributors and the person who filed the expense will be reimbursed.
 
 ### Contributing code
 
@@ -25,9 +33,22 @@ You can help by improving the project's usage and developer instructions.
 
 ### Helping others
 
+You can help with code review, which reduces bugs, and over time has a
+wonderful side effect of making the code more readable and therefore more
+approachable. It's also a great way to teach and learn. Feel free to jump in!
+Be welcoming, appreciative, and helpful. Also please review
+[these impeccable guidelines][code review guidelines].
+
+You can perform first reviews of simple changes, like badge additions. You can
+also review @paulmelnikow's changes, most of which are otherwise
+self-reviewed.
+
 You can monitor [issues][] and the [chat room][], and help other people who
 have questions about contributing to Shields, or using it for their projects.
 
+Feel free to reach out to @paulmelnikow if you'd need help "plugging in".
+
+[code review guidelines]: http://amyciavolino.com/assets/MindfulCommunicationInCodeReviews.pdf
 [issues]: https://github.com/badges/shields/issues
 [chat room]: https://discordapp.com/invite/HjJCwm5
 
