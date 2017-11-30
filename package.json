@@ -143,5 +143,10 @@
     "plugins": [
       "transform-class-properties"
     ]
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/shields",
+    "logo": "https://opencollective.com/opencollective/logo.txt"
   }
 }

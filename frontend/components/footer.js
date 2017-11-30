@@ -13,9 +13,12 @@ const Footer = ({ baseUri }) => (
       <object
         data={baseUri + "/twitter/follow/shields_io.svg?style=social&label=Follow"}
         alt="Follow @shields_io" />
-      <object
-        data={baseUri + "/gratipay/Shields.svg?style=social&label=Donate&link=https://www.gratipay.com/Shields/"}
-        alt="Donate to us!" />
+      <a href="https://opencollective.com/shields" alt="Donate to us!">
+        <img src="https://opencollective.com/shields/backers/badge.svg" />
+      </a>
+      <a href="https://opencollective.com/shields" alt="Donate to us!">
+        <img src="https://opencollective.com/shields/sponsors/badge.svg" />
+      </a>
       <object
         data={baseUri + "/github/forks/badges/shields.svg?style=social&label=Fork"}
         alt="Fork on GitHub" />

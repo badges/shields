@@ -40,7 +40,7 @@ export default class IndexPage extends React.Component {
             longCache={longCache} />
           <a
             className="donate"
-            href="https://gratipay.com/Shields/">
+            href="https://opencollective.com/shields">
             donate
           </a>
         </section>
