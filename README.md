@@ -115,7 +115,10 @@ View the [documentation for gh-badges][gh-badges doc].
 Development
 -----------
 
-1. Install Node 6 or later. You can use the [package manager][] of your choice.
+1. Install Node 8 or later. You can use the [package manager][] of your choice.
+   Node 8 is required for building or developing the front end. Node 6 or 8 will
+   work to run the server, and we'll transition to Node 8 everywhere once the
+   production server is upgraded. Server tests need to pass in both.
 2. Clone this repository.
 3. Run `npm install` to install the dependencies.
 4. Run `npm run build` to build the frontend.
@@ -124,6 +127,9 @@ Development
 
 To generate the frontend using production cache settings &ndash; that is,
 badge preview URIs with `maxAge` &ndash; run `npm run build:production`.
+
+To analyze the frontend bundle, run `npm install webpack-bundle-analyzer` and
+then `ANALYZE=true npm start`.
 
 [package manager]: https://nodejs.org/en/download/package-manager/
 
