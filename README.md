@@ -3,9 +3,10 @@
         height="130">
 </p>
 <p align="center">
-    <a href="https://www.gratipay.com/Shields/">
-        <a href="#backers" alt="sponsors on Open Collective"><img src="https://opencollective.com/shields/backers/badge.svg" /></a> <a href="#sponsors" alt="Sponsors on Open Collective"><img src="https://opencollective.com/shields/sponsors/badge.svg" /></a> <img src="https://img.shields.io/gratipay/team/shields.svg"
-            alt="Gratipay"></a>
+    <a href="#backers" alt="Backers on Open Collective">
+        <img src="https://opencollective.com/shields/backers/badge.svg" /></a>
+    <a href="#sponsors" alt="Sponsors on Open Collective">
+        <img src="https://opencollective.com/shields/sponsors/badge.svg" /></a>
     <a href="https://travis-ci.org/badges/shields">
         <img src="https://img.shields.io/travis/badges/shields.svg"
             alt="build status"></a>
