@@ -139,10 +139,10 @@ if (serverSecrets && serverSecrets.gh_client_id) {
 }
 
 let githubDebugInterval;
-if (config.debug.github.enabled) {
+if (config.services.github.debug.enabled) {
   githubDebugInterval = setInterval(() => {
     log(githubAuth.getTokenDebugInfo());
-  }, 1000 * config.debug.github.intervalSeconds);
+  }, 1000 * config.services.github.debug.intervalSeconds);
 }
 
 suggest.setRoutes(config.cors.allowedOrigin, camp);
