@@ -93,6 +93,7 @@ const {
   mapGithubCommitsSince,
   mapGithubReleaseDate
 } = require('./lib/github-provider');
+const { sortDjangoVersions } = require('./lib/pypi-helpers.js');
 
 const serverStartTime = new Date((new Date()).toGMTString());
 const githubApiUrl = config.services.github.baseUri;
@@ -2208,31 +2209,8 @@ cache(function(data, match, sendBadge, request) {
           versions.push('not found');
         }
 
-        /*
-          note: django versions will be specified in the form major.minor
-          trying to sort with `semver.compare` will throw e.g:
-          TypeError: Invalid Version: 1.11
-          because no patch release is specified, so we will define
-          our own function to sort django versions
-        */
-        const parseVersionString = function(str) {
-          if (typeof(str) != 'string') { return false; }
-          const x = str.split('.');
-          const maj = parseInt(x[0]) || 0;
-          const min = parseInt(x[1]) || 0;
-          return {
-              major: maj,
-              minor: min
-          };
-        };
         // sort low to high
-        versions = versions.sort(function(a, b) {
-          if (parseVersionString(a).major === parseVersionString(b).major) {
-            return parseVersionString(a).minor - parseVersionString(b).minor;
-          } else {
-            return parseVersionString(a).major - parseVersionString(b).major;
-          }
-        });
+        versions = sortDjangoVersions(versions);
 
         badgeData.text[0] = getLabel('django versions', data);
         badgeData.text[1] = versions.join(', ');
