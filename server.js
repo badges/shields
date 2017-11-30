@@ -113,6 +113,10 @@ function reset() {
 
 function stop(callback) {
   githubAuth.cancelAutosaving();
+  if (githubDebugInterval) {
+    clearInterval(githubDebugInterval);
+    githubDebugInterval = null;
+  }
   analytics.cancelAutosaving();
   camp.close(callback);
 }
@@ -132,6 +136,13 @@ analytics.setRoutes(camp);
 githubAuth.scheduleAutosaving();
 if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);
+}
+
+let githubDebugInterval;
+if (config.services.github.debug.enabled) {
+  githubDebugInterval = setInterval(() => {
+    log(githubAuth.getTokenDebugInfo());
+  }, 1000 * config.services.github.debug.intervalSeconds);
 }
 
 suggest.setRoutes(config.cors.allowedOrigin, camp);
