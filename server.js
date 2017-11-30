@@ -2094,7 +2094,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var parsedData = JSON.parse(buffer);
-      if ((info === 'dm') || (info === 'dw') || (info ==='dd')) {
+      if (info === 'dm' || info === 'dw' || info ==='dd') {
         // See #716 for the details of the loss of service.
         badgeData.text[0] = getLabel('downloads', data);
         badgeData.text[1] = 'no longer available';
