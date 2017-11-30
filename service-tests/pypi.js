@@ -3,9 +3,12 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 const { isSemver } = require('./helpers/validators');
+
+const isPsycopg2Version = Joi.string().regex(/^v([0-9][.]?)+$/);
+
+// These regexes are the same, but defined separately for clarity.
 const isCommaSeperatedPythonVersions = Joi.string().regex(/^([0-9]+.[0-9]+[,]?[ ]?)+$/);
 const isCommaSeperatedDjangoVersions = Joi.string().regex(/^([0-9]+.[0-9]+[,]?[ ]?)+$/);
-const isPsycopg2Version = Joi.string().regex(/^v([0-9][.]?)+$/);
 
 const t = new ServiceTester({ id: 'pypi', title: 'PyPi badges' });
 module.exports = t;
