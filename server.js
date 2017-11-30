@@ -93,7 +93,10 @@ const {
   mapGithubCommitsSince,
   mapGithubReleaseDate
 } = require('./lib/github-provider');
-const { sortDjangoVersions } = require('./lib/pypi-helpers.js');
+const {
+  sortDjangoVersions,
+  parseClassifiers
+} = require('./lib/pypi-helpers.js');
 
 const serverStartTime = new Date((new Date()).toGMTString());
 const githubApiUrl = config.services.github.baseUri;
@@ -2173,14 +2176,11 @@ cache(function(data, match, sendBadge, request) {
         }
         sendBadge(format, badgeData);
       } else if (info === 'pyversions') {
-        let versions = [];
-        let pattern = /^Programming Language :: Python :: ([\d.]+)$/;
-        for (let i = 0; i < parsedData.info.classifiers.length; i++) {
-          let matched = pattern.exec(parsedData.info.classifiers[i]);
-          if (matched && matched[1]) {
-            versions.push(matched[1]);
-          }
-        }
+        let versions = parseClassifiers(
+          parsedData,
+          /^Programming Language :: Python :: ([\d.]+)$/
+        );
+
         // We only show v2 if eg. v2.4 does not appear.
         // See https://github.com/badges/shields/pull/489 for more.
         ['2', '3'].forEach(function(version) {
@@ -2197,14 +2197,11 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'blue';
         sendBadge(format, badgeData);
       } else if (info === 'djversions') {
-        let versions = [];
-        let pattern = /^Framework :: Django :: ([\d.]+)$/;
-        for (let i = 0; i < parsedData.info.classifiers.length; i++) {
-          let matched = pattern.exec(parsedData.info.classifiers[i]);
-          if (matched && matched[1]) {
-            versions.push(matched[1]);
-          }
-        }
+        let versions = parseClassifiers(
+          parsedData,
+          /^Framework :: Django :: ([\d.]+)$/
+        );
+
         if (!versions.length) {
           versions.push('not found');
         }
@@ -2217,14 +2214,11 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'blue';
         sendBadge(format, badgeData);
       } else if (info === 'implementation') {
-        var implementations = [];
-        let pattern = /^Programming Language :: Python :: Implementation :: (\S+)$/;
-        for (let i = 0; i < parsedData.info.classifiers.length; i++) {
-          let matched = pattern.exec(parsedData.info.classifiers[i]);
-          if (matched && matched[1]) {
-            implementations.push(matched[1].toLowerCase());
-          }
-        }
+        let implementations = parseClassifiers(
+          parsedData,
+          /^Programming Language :: Python :: Implementation :: (\S+)$/
+        );
+
         if (!implementations.length) {
           implementations.push('cpython');  // assume CPython
         }
