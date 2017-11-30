@@ -2,7 +2,7 @@ Contributing to Shields
 =======================
 
 Shields is a community project. We invite your participation through
-donations, issues, and pull requests!
+financial contributions, issues, and pull requests!
 
 
 Ways you can help
