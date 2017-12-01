@@ -19,7 +19,6 @@ const Badge = ({ title, previewUri, exampleUri, documentation, baseUri, longCach
     exampleUri || previewUri,
     baseUri,
     { longCache: false });
-  console.log(resolvedExampleUri)
 
   return (
     <tr>
