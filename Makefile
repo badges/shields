@@ -4,7 +4,7 @@ favicon:
 	node lib/badge-cli.js '' '' '#bada55' .png > favicon.png
 
 website:
-	LONG_CACHE=false BASE_URL=/ npm run build
+	LONG_CACHE=false npm run build
 
 deploy: website deploy-s0 deploy-s1 deploy-s2 deploy-gh-pages
 

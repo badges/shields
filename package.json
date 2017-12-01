@@ -129,7 +129,7 @@
     "sazerac": "^0.4.2",
     "semver-regex": "^1.0.0",
     "sinon": "^4.0.1",
-    "url-path": "^0.1.1"
+    "url-path": "^0.2.0"
   },
   "engines": {
     "node": "8.x",

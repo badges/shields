@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 export default class DynamicBadgeMaker extends React.Component {
   static propTypes = {
-    baseUri: PropTypes.string.isRequired,
+    baseUri: PropTypes.string,
   };
 
   state = {
@@ -17,7 +17,10 @@ export default class DynamicBadgeMaker extends React.Component {
   };
 
   makeBadgeUri () {
-    const result = new URL(`/dynamic/${this.state.type}.svg`, this.props.baseUri);
+    const result = new URL(
+      `/dynamic/${this.state.type}.svg`,
+      this.props.baseUri || document.location.href);
+
     const searchParams = [
       'label',
       'uri',

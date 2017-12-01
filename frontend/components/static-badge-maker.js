@@ -4,7 +4,7 @@ import staticBadgeUri from '../lib/static-badge-uri';
 
 export default class StaticBadgeMaker extends React.Component {
   static propTypes = {
-    baseUri: PropTypes.string.isRequired,
+    baseUri: PropTypes.string,
   };
 
   state = {
@@ -18,7 +18,7 @@ export default class StaticBadgeMaker extends React.Component {
 
     const { baseUri } = this.props;
     const { subject, status, color } = this.state;
-    const badgeUri = staticBadgeUri(baseUri, subject, status, color);
+    const badgeUri = staticBadgeUri(baseUri || window.location.href, subject, status, color);
 
     document.location = badgeUri;
   }
