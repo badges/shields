@@ -382,10 +382,10 @@ t.create('github issue state')
   }));
 
 t.create('github issue title')
-  .get('/issues/detail/title/badges/shields/979.json')
+  .get('/issues/detail/title/badges/shields/1290.json')
   .expectJSONTypes(Joi.object().keys({
-    name: 'issue 979',
-    value: 'Github rate limits cause transient service test failures in CI',
+    name: 'issue 1290',
+    value: 'Node 9 support',
   }));
 
 t.create('github issue author')
