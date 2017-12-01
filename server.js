@@ -271,7 +271,7 @@ cache(function (data, match, sendBadge, request) {
 camp.route(/^\/travis(?:-ci)?\/php-v\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const userRepo = match[1];  // eg, espadrine/sc
-  const version = match[2] ? match[2] : 'master';
+  const version = match[2] || 'master';
   const format = match[3];
   const options = {
     method: 'GET',
