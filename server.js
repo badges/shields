@@ -282,8 +282,7 @@ cache(function(data, match, sendBadge, request) {
   // http://developer.github.com/v3/#user-agent-required
   // https://developer.github.com/v3/licenses/
   const customHeaders = {
-      'User-Agent': 'Shields.io',
-      'Accept': 'application/vnd.github.drax-preview+json'
+      'User-Agent': 'Shields.io'
   };
   // require PHP releases
   regularUpdate(
