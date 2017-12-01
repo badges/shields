@@ -1080,19 +1080,14 @@ cache(function(data, match, sendBadge, request) {
   var entity = match[2]; // e.g., 'Changaco'
   var format = match[3];
   var apiUrl = 'https://liberapay.com/' + entity + '/public.json';
-  // Establish default
-  var badgeData = getBadgeData('receives', data);
-  switch(type) {
-      case 'gives':
-          badgeData = getBadgeData('gives', data);
-          break;
-      case 'patrons':
-          badgeData = getBadgeData('patrons', data);
-          break;
-      case 'goal':
-          badgeData = getBadgeData('goal progress', data);
-          break;
-      }
+  // Lock down type
+  const label = {
+      'receives': 'receives',
+      'gives': 'gives',
+      'patrons': 'patrons',
+      'goal': 'goal progress',
+      }[type];
+  const badgeData = getBadgeData(label, data);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('liberapay', data);
   }
