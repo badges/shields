@@ -1,16 +1,7 @@
-import URLPath from 'url-path';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-
-function resolveUri (uri, baseUri, options) {
-  const { longCache } = options || {};
-  const result = new URLPath(uri, baseUri);
-  if (longCache) {
-    result.searchParams.set('maxAge', '2592000');
-  }
-  return result.href;
-}
+import resolveUri from '../lib/resolve-uri';
 
 const Badge = ({ title, previewUri, exampleUri, documentation, baseUri, longCache, onClick }) => {
   const handleClick = onClick ?
@@ -26,7 +17,7 @@ const Badge = ({ title, previewUri, exampleUri, documentation, baseUri, longCach
     ) : '\u00a0'; // non-breaking space
   const resolvedExampleUri = resolveUri(
     exampleUri || previewUri,
-    baseUri || 'https://img.shields.io/',
+    baseUri,
     { longCache: false });
 
   return (
@@ -48,7 +39,7 @@ Badge.propTypes = {
   previewUri: PropTypes.string,
   exampleUri: PropTypes.string,
   documentation: PropTypes.string,
-  baseUri: PropTypes.string.isRequired,
+  baseUri: PropTypes.string,
   longCache: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
 };
@@ -83,7 +74,7 @@ Category.propTypes = {
     exampleUri: PropTypes.string,
     documentation: PropTypes.string,
   })).isRequired,
-  baseUri: PropTypes.string.isRequired,
+  baseUri: PropTypes.string,
   longCache: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
 };
@@ -107,7 +98,7 @@ BadgeExamples.propTypes = {
     category: Category.propTypes.category,
     examples: Category.propTypes.examples,
   })),
-  baseUri: PropTypes.string.isRequired,
+  baseUri: PropTypes.string,
   longCache: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
 };

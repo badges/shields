@@ -18,7 +18,7 @@ script:
   - npm run lint
   - npm run test:js:server
   - if node_modules/.bin/check-node-version --node '< 8.0' > /dev/null; then echo "Skipping frontend tests."; else npm run test:js:frontend; fi
-  - if node_modules/.bin/check-node-version --node '< 8.0' > /dev/null; then echo "Skipping build."; else BASE_URL=/ npm run build; fi
+  - if node_modules/.bin/check-node-version --node '< 8.0' > /dev/null; then echo "Skipping build."; else npm run build; fi
 
 jobs:
   include:
