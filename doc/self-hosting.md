@@ -104,6 +104,17 @@ machine.
 [shields.example.env]: ../shields.example.env
 
 
+Zeit Now
+--------
+
+To deploy using Zeit Now:
+
+```console
+npm run build  # Not sure why, but this needs to be run before deploying.
+now
+```
+
+
 Server secrets
 --------------
 
