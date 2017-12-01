@@ -39,7 +39,7 @@ export default class MarkupModal extends React.Component {
     // user.
     const { exampleUri, previewUri, link } = example;
     this.setState({
-      badgeUri: resolveUri(exampleUri || previewUri, baseUri),
+      badgeUri: resolveUri(exampleUri || previewUri, baseUri || window.location.href),
       link,
     });
   }
@@ -49,10 +49,11 @@ export default class MarkupModal extends React.Component {
       return {};
     }
 
+    const { baseUri } = this.props;
     const { title } = this.props.example;
     const { badgeUri, link, style } = this.state;
 
-    const withStyle = new URL(badgeUri);
+    const withStyle = new URL(badgeUri, baseUri || window.location.href);
     if (style !== 'flat') { // Default style doesn't need to be specified.
       withStyle.searchParams.set('style', style);
     }
