@@ -7,7 +7,7 @@ const prettyBytes = require('pretty-bytes');
 const queryString = require('query-string');
 const semver = require('semver');
 const xml2js = require('xml2js');
-const lodash = require('lodash');
+const uniq = require('lodash.uniq');
 
 const analytics = require('./lib/analytics');
 const config = require('./lib/server-config');
@@ -290,7 +290,7 @@ cache(function(data, match, sendBadge, request) {
     'https://api.github.com/repos/php/php-src/git/refs/tags',
     (24 * 3600 * 1000), // 1 day
     tags => {
-      return lodash.uniq(
+      return uniq(
         JSON.parse(tags).
         // only releases
         filter((tag) => tag.ref.match(/^refs\/tags\/php-\d+\.\d+\.\d+$/) != null).
