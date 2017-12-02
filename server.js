@@ -7518,7 +7518,7 @@ function(data, match, end, ask) {
 });
 
 // Distelli integration
-camp.route(/^\/distelli\/([^/]+)\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/, cache({
+camp.route(/^\/distelli\/(?:(build|deploy)\/)([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/, cache({
   queryParams: ['token'],
   handler: (data, match, sendBadge, request) => {
     const type = match[1]; // build or deploy
@@ -7547,20 +7547,21 @@ camp.route(/^\/distelli\/([^/]+)\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/, 
           return;
         }
 
-        const apiStatus = type === 'build' ? data.builds[0] : data.deployments[0].servers;
         let status = 'unknown';
 
         switch (type) {
           case 'build':
-            status = apiStatus.status.toLowerCase();
+            status = data.builds[0].status.toLowerCase();
             break;
           case 'deploy':
-            var hasErrors = apiStatus.failed > 0 ? true : false;
+            var serverStatus = data.deployments[0].servers;
+            var hasErrors = serverStatus.failed > 0 ? true : false;
+            console.log(serverStatus);
             if (hasErrors) {
               status = 'failed';
-            } else if (apiStatus.in_progress > 0 || apiStatus.pending > 0 || apiStatus.waiting > 0) {
+            } else if (serverStatus.in_progress > 0 || serverStatus.pending > 0 || serverStatus.waiting > 0) {
               status = 'running';
-            } else if (apiStatus.done > 0) {
+            } else if (serverStatus.done > 0) {
               status = 'success';
             }
             break;
@@ -7568,8 +7569,7 @@ camp.route(/^\/distelli\/([^/]+)\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/, 
             break;
         }
 
-        const message = status;
-        badgeData.text[1] = message;
+        badgeData.text[1] = status;
         badgeData.colorscheme = statusColorScheme[status];
         sendBadge(format, badgeData);
       }
