@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import resolveUri from '../lib/resolve-uri';
 
 const Footer = ({ baseUri }) => (
   <section>
@@ -11,16 +12,19 @@ const Footer = ({ baseUri }) => (
     </p>
     <p>
       <object
-        data={baseUri + "/twitter/follow/shields_io.svg?style=social&label=Follow"}
+        data={resolveUri('/twitter/follow/shields_io.svg?style=social&label=Follow', baseUri)}
         alt="Follow @shields_io" />
+      <a href="https://opencollective.com/shields" alt="Donate to us!">
+        <img src="https://opencollective.com/shields/backers/badge.svg" />
+      </a>
+      <a href="https://opencollective.com/shields" alt="Donate to us!">
+        <img src="https://opencollective.com/shields/sponsors/badge.svg" />
+      </a>
       <object
-        data={baseUri + "/gratipay/Shields.svg?style=social&label=Donate&link=https://www.gratipay.com/Shields/"}
-        alt="Donate to us!" />
-      <object
-        data={baseUri + "/github/forks/badges/shields.svg?style=social&label=Fork"}
+        data={resolveUri('/github/forks/badges/shields.svg?style=social&label=Fork', baseUri)}
         alt="Fork on GitHub" />
       <object
-        data={baseUri + "/discord/308323056592486420.svg?style=social&label=Chat&link=https://discord.gg/HjJCwm5"}
+        data={resolveUri('/discord/308323056592486420.svg?style=social&label=Chat&link=https://discord.gg/HjJCwm5', baseUri)}
         alt="chat on Discord" />
     </p>
     <p>

@@ -95,6 +95,10 @@ const {
   mapGithubCommitsSince,
   mapGithubReleaseDate
 } = require('./lib/github-provider');
+const {
+  sortDjangoVersions,
+  parseClassifiers
+} = require('./lib/pypi-helpers.js');
 
 const serverStartTime = new Date((new Date()).toGMTString());
 const githubApiUrl = config.services.github.baseUri;
@@ -115,6 +119,10 @@ function reset() {
 
 function stop(callback) {
   githubAuth.cancelAutosaving();
+  if (githubDebugInterval) {
+    clearInterval(githubDebugInterval);
+    githubDebugInterval = null;
+  }
   analytics.cancelAutosaving();
   camp.close(callback);
 }
@@ -134,6 +142,13 @@ analytics.setRoutes(camp);
 githubAuth.scheduleAutosaving();
 if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);
+}
+
+let githubDebugInterval;
+if (config.services.github.debug.enabled) {
+  githubDebugInterval = setInterval(() => {
+    log(githubAuth.getTokenDebugInfo());
+  }, 1000 * config.services.github.debug.intervalSeconds);
 }
 
 suggest.setRoutes(config.cors.allowedOrigin, camp);
@@ -2106,7 +2121,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var parsedData = JSON.parse(buffer);
-      if (info.charAt(0) === 'd') {
+      if (info === 'dm' || info === 'dw' || info ==='dd') {
         // See #716 for the details of the loss of service.
         badgeData.text[0] = getLabel('downloads', data);
         badgeData.text[1] = 'no longer available';
@@ -2184,14 +2199,11 @@ cache(function(data, match, sendBadge, request) {
         }
         sendBadge(format, badgeData);
       } else if (info === 'pyversions') {
-        var versions = [];
-        let pattern = /^Programming Language :: Python :: ([\d.]+)$/;
-        for (let i = 0; i < parsedData.info.classifiers.length; i++) {
-          var matched = pattern.exec(parsedData.info.classifiers[i]);
-          if (matched && matched[1]) {
-            versions.push(matched[1]);
-          }
-        }
+        let versions = parseClassifiers(
+          parsedData,
+          /^Programming Language :: Python :: ([\d.]+)$/
+        );
+
         // We only show v2 if eg. v2.4 does not appear.
         // See https://github.com/badges/shields/pull/489 for more.
         ['2', '3'].forEach(function(version) {
@@ -2207,15 +2219,29 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = versions.sort().join(', ');
         badgeData.colorscheme = 'blue';
         sendBadge(format, badgeData);
-      } else if (info === 'implementation') {
-        var implementations = [];
-        let pattern = /^Programming Language :: Python :: Implementation :: (\S+)$/;
-        for (let i = 0; i < parsedData.info.classifiers.length; i++) {
-          let matched = pattern.exec(parsedData.info.classifiers[i]);
-          if (matched && matched[1]) {
-            implementations.push(matched[1].toLowerCase());
-          }
+      } else if (info === 'djversions') {
+        let versions = parseClassifiers(
+          parsedData,
+          /^Framework :: Django :: ([\d.]+)$/
+        );
+
+        if (!versions.length) {
+          versions.push('not found');
         }
+
+        // sort low to high
+        versions = sortDjangoVersions(versions);
+
+        badgeData.text[0] = getLabel('django versions', data);
+        badgeData.text[1] = versions.join(', ');
+        badgeData.colorscheme = 'blue';
+        sendBadge(format, badgeData);
+      } else if (info === 'implementation') {
+        let implementations = parseClassifiers(
+          parsedData,
+          /^Programming Language :: Python :: Implementation :: (\S+)$/
+        );
+
         if (!implementations.length) {
           implementations.push('cpython');  // assume CPython
         }
