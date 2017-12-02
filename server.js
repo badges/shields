@@ -7547,21 +7547,30 @@ camp.route(/^\/distelli\/([^/]+)\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/, 
           return;
         }
 
-        let status = "unknown";
-        let message = "unknown";
+        const apiStatus = type === 'build' ? data.builds[0] : data.deployments[0].servers;
+        let status = 'unknown';
 
         switch (type) {
           case 'build':
-            status = data.builds[0].status.toLowerCase();
-            message = status;
+            status = apiStatus.status.toLowerCase();
+            break;
+          case 'deploy':
+            var hasErrors = apiStatus.failed > 0 ? true : false;
+            if (hasErrors) {
+              status = 'failed';
+            } else if (apiStatus.in_progress > 0 || apiStatus.pending > 0 || apiStatus.waiting > 0) {
+              status = 'running';
+            } else if (apiStatus.done > 0) {
+              status = 'success';
+            }
             break;
           default:
             break;
         }
 
+        const message = status;
         badgeData.text[1] = message;
         badgeData.colorscheme = statusColorScheme[status];
-
         sendBadge(format, badgeData);
       }
       catch(e) {
