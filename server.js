@@ -7556,7 +7556,6 @@ camp.route(/^\/distelli\/(?:(build|deploy)\/)([^/]+)(?:\/(.+))?\.(svg|png|gif|jp
           case 'deploy':
             var serverStatus = data.deployments[0].servers;
             var hasErrors = serverStatus.failed > 0 ? true : false;
-            console.log(serverStatus);
             if (hasErrors) {
               status = 'failed';
             } else if (serverStatus.in_progress > 0 || serverStatus.pending > 0 || serverStatus.waiting > 0) {
