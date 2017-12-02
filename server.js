@@ -7517,6 +7517,61 @@ function(data, match, end, ask) {
   }
 });
 
+// Distelli integration
+camp.route(/^\/distelli\/([^/]+)\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/, cache({
+  queryParams: ['token'],
+  handler: (data, match, sendBadge, request) => {
+    const type = match[1]; // build or deploy
+    const org = match[2];
+    const app = match[3];
+    const format = match[4];
+    const token = data.token;
+    const badgeData = getBadgeData(type, data);
+    const apiType = type === 'build' ? 'builds' : 'deployments';
+    const apiUrl = 'https://api.distelli.com/' + org + '/apps/' + app + '/' + apiType + '?order=desc&max_results=1&apiToken=' + token;
+
+    const statusColorScheme = {
+      unknown: 'lightgrey',
+      waiting: 'lightgrey',
+      queued: 'lightgrey',
+      running: 'lightgrey',
+      success: 'brightgreen',
+      failed: 'red'
+    };
+
+    request(apiUrl, {json: true}, function(err, res, data) {
+      try {
+        if (!res || err !== null || res.statusCode !== 200) {
+          badgeData.text[1] = 'inaccessible';
+          sendBadge(format, badgeData);
+          return;
+        }
+
+        let status = "unknown";
+        let message = "unknown";
+
+        switch (type) {
+          case 'build':
+            status = data.builds[0].status.toLowerCase();
+            message = status;
+            break;
+          default:
+            break;
+        }
+
+        badgeData.text[1] = message;
+        badgeData.colorscheme = statusColorScheme[status];
+
+        sendBadge(format, badgeData);
+      }
+      catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  },
+}));
+
 if (config.redirectUri) {
   camp.route(/^\/$/, (data, match, end, ask) => {
     ask.res.statusCode = 302;
