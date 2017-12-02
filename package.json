@@ -22,7 +22,7 @@
     "url": "https://github.com/badges/shields"
   },
   "dependencies": {
-    "camp": "~16.2.3",
+    "camp": "^17.2.0",
     "chrome-web-store-item-property": "~1.1.2",
     "dot": "~1.1.2",
     "gm": "^1.23.0",
@@ -53,14 +53,16 @@
     "test:services:pr:run": "mocha --delay service-tests/runner/cli.js --stdin < pull-request-services.log",
     "test:services:pr": "npm run test:services:pr:prepare && npm run test:services:pr:run",
     "test": "npm run lint && npm run test:js",
-    "prebuild:examples": "mkdirp build",
-    "build:examples": "node_modules/.bin/babel-node frontend/render-badge-examples",
-    "build:copy-fragments": "cp frontend/fragments/try-header.html frontend/fragments/try-footer.html build/",
-    "build:concat": "cat build/try-header.html build/badge-examples-fragment.html build/try-footer.html > index.html",
-    "build": "npm run build:examples && npm run build:copy-fragments && npm run build:concat",
-    "build:production": "PRODUCTION_BUILD=true npm run build:examples && npm run build:copy-fragments && make footer-production-transform && npm run build:concat",
+    "frontend-depcheck": "check-node-version --node '>= 8.0'",
+    "server-depcheck": "check-node-version --node '>= 6.0 < 9.0'",
+    "postinstall": "npm run server-depcheck",
+    "prebuild": "npm run frontend-depcheck",
+    "build": "next build && next export -o build/",
     "heroku-postbuild": "npm run build",
-    "start": "INFOSITE=/ node server 8080 ::"
+    "analyze": "ANALYZE=true LONG_CACHE=false BASE_URL=https://img.shields.io npm run build",
+    "start:server": "node server 8080 ::",
+    "prestart": "npm run frontend-depcheck",
+    "start": "concurrently --names server,frontend \"ALLOWED_ORIGIN=http://localhost:3000 npm run start:server\" \"BASE_URL=http://[::]:8080 next dev\""
   },
   "bin": {
     "badge": "lib/badge-cli.js"
@@ -77,32 +79,37 @@
     "logo"
   ],
   "devDependencies": {
-    "babel-cli": "^6.11.4",
-    "babel-core": "^6.13.2",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.11.1",
+    "@mapbox/react-click-to-select": "^2.0.1",
+    "babel-eslint": "^8.0.2",
+    "check-node-version": "^3.1.0",
     "child-process-promise": "^2.2.1",
+    "classnames": "^2.2.5",
+    "concurrently": "^3.5.1",
     "dejavu-fonts-ttf": "^2.37.3",
     "eslint": "^4.8.0",
     "eslint-config-prettier": "^2.6.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-config-standard-jsx": "^4.0.2",
+    "eslint-config-standard-react": "^5.0.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-node": "^5.2.0",
     "eslint-plugin-prettier": "^2.3.1",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^7.4.0",
     "eslint-plugin-standard": "^3.0.1",
+    "fetch-ponyfill": "^4.1.0",
     "glob": "^7.1.1",
     "icedfrisby": "^1.4.0",
     "icedfrisby-nock": "^1.0.0",
     "is-png": "^1.1.0",
     "is-svg": "^2.1.0",
+    "lodash.debounce": "^4.0.8",
     "lodash.difference": "^4.5.0",
     "lodash.mapvalues": "^4.6.0",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "mocha": "^4.0.1",
+    "next": "^4.1.4",
     "nock": "^9.0.13",
     "node-env-flag": "^0.1.0",
     "node-fetch": "^1.6.3",
@@ -110,22 +117,18 @@
     "opn-cli": "^3.1.0",
     "prettier": "1.7.4",
     "pretty": "^2.0.0",
+    "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "react-modal": "^3.1.2",
     "read-all-stdin-sync": "^1.0.5",
     "rimraf": "^2.6.2",
-    "sazerac": "^0.4.1",
+    "sazerac": "^0.4.2",
     "semver-regex": "^1.0.0",
     "sinon": "^4.0.1"
   },
   "engines": {
     "node": "6.x",
     "npm": "5.x"
-  },
-  "babel": {
-    "presets": [
-      "react",
-      "env"
-    ]
   }
 }
