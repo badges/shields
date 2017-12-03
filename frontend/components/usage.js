@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment, default as React } from 'react';
 import PropTypes from 'prop-types';
 import StaticBadgeMaker from './static-badge-maker';
 import DynamicBadgeMaker from './dynamic-badge-maker';
@@ -25,11 +25,12 @@ export default class Usage extends React.PureComponent {
     return (
       <p>
         { colors.map((color, i) => (
-          <img
-            key={i}
-            className="badge-img"
-            src={staticBadgeUri(baseUri, 'color', color, color)}
-            alt={color} />
+          <Fragment key={i}>
+            <img
+              className="badge-img"
+              src={staticBadgeUri(baseUri, 'color', color, color)}
+              alt={color} /> {}
+          </Fragment>
         ))}
       </p>
     );

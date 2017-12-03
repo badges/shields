@@ -30,18 +30,18 @@ export default class StaticBadgeMaker extends React.Component {
           className="short"
           value={this.state.subject}
           onChange={event => this.setState({ subject: event.target.value })}
-          placeholder="subject" />
+          placeholder="subject" /> {}
         <input
           className="short"
           value={this.state.status}
           onChange={event => this.setState({ status: event.target.value })}
-          placeholder="status" />
+          placeholder="status" /> {}
         <input
           className="short"
           value={this.state.color}
           onChange={event => this.setState({ color: event.target.value })}
           list="default-colors"
-          placeholder="color" />
+          placeholder="color" /> {}
         <datalist id="default-colors">
           <option value="brightgreen" />
           <option value="green" />
@@ -51,7 +51,7 @@ export default class StaticBadgeMaker extends React.Component {
           <option value="red" />
           <option value="lightgrey" />
           <option value="blue" />
-        </datalist>
+        </datalist> {}
         <button>Make Badge</button>
       </form>
     );
