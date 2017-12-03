@@ -14,7 +14,7 @@ t.create('issues-raw (valid)')
   .get('/issues-raw/atlassian/python-bitbucket.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'issues',
-    value: Joi.number().integer()
+    value: isMetric
   }));
 
 t.create('issues-raw (invalid)')
@@ -30,7 +30,7 @@ t.create('issues (valid)')
   .get('/issues/atlassian/python-bitbucket.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'issues',
-    value: Joi.string().regex(/^\d+ open?$/)
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
   }));
 
 t.create('issues (invalid)')
@@ -65,7 +65,7 @@ t.create('pr-raw (connection error)')
   .get('/pr/atlassian/python-bitbucket.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'pull requests',
-    value:  Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
   }));
 
 t.create('pr (invalid)')
