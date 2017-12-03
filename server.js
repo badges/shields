@@ -173,65 +173,11 @@ camp.notfound(/.*/, function(query, match, end, request) {
 
 // Vendors.
 
-/**
- * Registers a new service in the shields.io system. `serviceClass` must be a
- * class that extends `BaseService`.
- */
-function registerService(serviceClass) {
-  // Regular expressions treat "/" specially, so we need to escape them
-  const escapedPath = serviceClass.uri.format.replace(/\//g, '\\/');
-  const fullRegex = '^' + escapedPath + '.(svg|png|gif|jpg|json)$';
-
-  camp.route(new RegExp(fullRegex),
-  cache(async (data, match, sendBadge, request) => {
-    // Assumes the final capture group is the extension
-    const format = match.pop();
-    const badgeData = getBadgeData(
-      serviceClass.category,
-      Object.assign({}, serviceClass.defaultBadgeData, data)
-    );
-
-    try {
-      const namedParams = {};
-      if (serviceClass.uri.capture.length !== match.length - 1) {
-        throw new Error(
-          `Incorrect number of capture groups (expected `+
-          `${serviceClass.uri.capture.length}, got ${match.length - 1})`
-        );
-      }
-
-      serviceClass.uri.capture.forEach((name, index) => {
-        // The first capture group is the entire match, so every index is + 1 here
-        namedParams[name] = match[index + 1];
-      });
-
-      const serviceInstance = new serviceClass({
-        sendAndCacheRequest: request.asPromise,
-      });
-      const serviceData = await serviceInstance.handle(namedParams);
-      const text = badgeData.text;
-      if (serviceData.text) {
-        text[1] = serviceData.text;
-      }
-      Object.assign(badgeData, serviceData);
-      badgeData.text = text;
-      sendBadge(format, badgeData);
-
-    } catch (error) {
-      console.log(error);
-      const text = badgeData.text;
-      text[1] = 'error';
-      badgeData.text = text;
-      sendBadge(format, badgeData);
-    }
-  }));
-}
-
 // New-style services
 glob.sync(`${__dirname}/services/*.js`)
-  .filter(path => !path.endsWith('BaseService.js'))
+  .filter(path => !path.endsWith('base.js') && !path.endsWith('.spec.js'))
   .map(path => require(path))
-  .forEach(registerService);
+  .forEach(serviceClass => serviceClass.register(camp, cache));
 
 // JIRA issue integration
 camp.route(/^\/jira\/issue\/(http(?:s)?)\/(.+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,

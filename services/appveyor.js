@@ -1,6 +1,6 @@
 'use strict';
 
-const BaseService = require('./BaseService');
+const BaseService = require('./base');
 const loadLogos = require('../lib/load-logos');
 
 /**
@@ -40,12 +40,6 @@ module.exports = class AppVeyor extends BaseService {
     return {
       format: '/appveyor/ci/([^/]+/[^/]+)(?:/(.+))?',
       capture: ['repo', 'branch']
-    };
-  }
-
-  static get defaultBadgeData() {
-    return {
-      logo: loadLogos().appveyor,
     };
   }
 
