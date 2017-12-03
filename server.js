@@ -4246,6 +4246,9 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var issues = data.count;
+      if (typeof issues === 'undefined') {
+        throw Error('Failed to count issues.');
+      }
       badgeData.text[1] = metric(issues) + (isRaw? '': ' open');
       badgeData.colorscheme = issues ? 'yellow' : 'brightgreen';
       sendBadge(format, badgeData);
@@ -4277,6 +4280,9 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var pullrequests = data.size;
+      if (typeof pullrequests === 'undefined') {
+        throw Error('Failed to count pull requests.');
+      }
       badgeData.text[1] = metric(pullrequests) + (isRaw? '': ' open');
       badgeData.colorscheme = (pullrequests > 0)? 'yellow': 'brightgreen';
       sendBadge(format, badgeData);

@@ -22,7 +22,7 @@ t.create('issues-raw (valid)')
 
 t.create('issues-raw (invalid)')
   .get('/issues-raw/atlassian/not-a-repo.json')
-  .expectJSON({ name: 'issues', value: 'undefined' });
+  .expectJSON({ name: 'issues', value: 'invalid' });
 
 t.create('issues-raw (connection error)')
   .get('/issues-raw/atlassian/python-bitbucket.json')
@@ -38,7 +38,7 @@ t.create('issues (valid)')
 
 t.create('issues (invalid)')
   .get('/issues/atlassian/not-a-repo.json')
-  .expectJSON({ name: 'issues', value: 'undefined open' });
+  .expectJSON({ name: 'issues', value: 'invalid' });
 
 t.create('issues (connection error)')
   .get('/issues/atlassian/python-bitbucket.json')
@@ -57,7 +57,7 @@ t.create('pr-raw (valid)')
 
 t.create('pr-raw (invalid)')
   .get('/pr-raw/atlassian/not-a-repo.json')
-  .expectJSON({ name: 'pull requests', value: 'undefined' });
+  .expectJSON({ name: 'pull requests', value: 'invalid' });
 
 t.create('pr-raw (connection error)')
   .get('/pr-raw/atlassian/python-bitbucket.json')
@@ -73,7 +73,7 @@ t.create('pr-raw (connection error)')
 
 t.create('pr (invalid)')
   .get('/pr/atlassian/not-a-repo.json')
-  .expectJSON({ name: 'pull requests', value: 'undefined open' });
+  .expectJSON({ name: 'pull requests', value: 'invalid' });
 
 t.create('pr (connection error)')
   .get('/pr/atlassian/python-bitbucket.json')
