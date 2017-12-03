@@ -4,6 +4,7 @@ const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 const {
   isMetric,
+  isMetricOpenIssues,
   isMetricOverTimePeriod,
   isFileSize,
   isFormattedDate,
@@ -42,7 +43,7 @@ t.create('GitHub pull requests')
   .get('/issues-pr/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'pull requests',
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
+    value: isMetricOpenIssues
   }));
 
 t.create('GitHub pull requests raw')
@@ -70,7 +71,7 @@ t.create('GitHub open issues')
   .get('/issues/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'issues',
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
+    value: isMetricOpenIssues
   }));
 
 t.create('GitHub open issues raw')
@@ -102,7 +103,7 @@ t.create('GitHub open pull requests by label')
   .get('/issues-pr/badges/shields/service-badge.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'service-badge pull requests',
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
+    value: isMetricOpenIssues
   }));
 
 t.create('GitHub open pull requests by label (raw)')

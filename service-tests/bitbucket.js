@@ -2,7 +2,10 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
-const { isMetric } = require('./helpers/validators.js');
+const {
+  isMetric,
+  isMetricOpenIssues
+} = require('./helpers/validators.js');
 
 const t = new ServiceTester({ id: 'bitbucket', title: 'BitBucket badges' });
 module.exports = t;
@@ -30,7 +33,7 @@ t.create('issues (valid)')
   .get('/issues/atlassian/python-bitbucket.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'issues',
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
+    value: isMetricOpenIssues
   }));
 
 t.create('issues (invalid)')
@@ -65,7 +68,7 @@ t.create('pr-raw (connection error)')
   .get('/pr/atlassian/python-bitbucket.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'pull requests',
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
+    value: isMetricOpenIssues
   }));
 
 t.create('pr (invalid)')
