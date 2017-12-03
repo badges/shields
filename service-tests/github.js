@@ -10,23 +10,29 @@ const {
   isVPlusDottedVersionAtLeastOne
 } = require('./helpers/validators');
 const colorscheme = require('../lib/colorscheme.json');
+const {licenseToColor} = require('../lib/licenses');
+const {makeColor} = require('../lib/badge-data');
 const mapValues = require('lodash.mapvalues');
 
 const t = new ServiceTester({ id: 'github', title: 'Github' });
 module.exports = t;
 const colorsB = mapValues(colorscheme, 'colorB');
+const publicDomainLicenseColor = makeColor(licenseToColor('CC0-1.0'));
+const permissiveLicenseColor = colorsB[licenseToColor('MIT')];
+const copyleftLicenseColor = colorsB[licenseToColor('GPL-3.0')];
+const unknownLicenseColor = colorsB[licenseToColor()];
 
 t.create('Public domain license')
   .get('/license/badges/shields.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'CC0-1.0', colorB: '#7cd958' });
+  .expectJSON({ name: 'license', value: 'CC0-1.0', colorB: publicDomainLicenseColor });
 
 t.create('Copyleft license')
   .get('/license/ansible/ansible.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'GPL-3.0', colorB: colorsB.orange });
+  .expectJSON({ name: 'license', value: 'GPL-3.0', colorB: copyleftLicenseColor });
 
 t.create('Permissive license')
   .get('/license/atom/atom.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'MIT', colorB: colorsB.green });
+  .expectJSON({ name: 'license', value: 'MIT', colorB: permissiveLicenseColor });
 
 t.create('License for repo without a license')
   .get('/license/badges/badger.json?style=_shields_test')
@@ -34,7 +40,7 @@ t.create('License for repo without a license')
 
 t.create('License for repo with an unrecognized license')
   .get('/license/philokev/sopel-noblerealms.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'unknown', colorB: colorsB.lightgrey });
+  .expectJSON({ name: 'license', value: 'unknown', colorB: unknownLicenseColor });
 
 t.create('License with SPDX id not appearing in configuration')
   .get('/license/user1/project-with-EFL-license.json?style=_shields_test')
@@ -51,7 +57,7 @@ t.create('License with SPDX id not appearing in configuration')
         featured: true
       }
     }))
-  .expectJSON({ name: 'license', value: 'EFL-1.0', colorB: colorsB.lightgrey });
+  .expectJSON({ name: 'license', value: 'EFL-1.0', colorB: unknownLicenseColor });
 
 t.create('License for unknown repo')
   .get('/license/user1/github-does-not-have-this-repo.json?style=_shields_test')
