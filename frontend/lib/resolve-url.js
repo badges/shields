@@ -7,8 +7,8 @@ import { resolve, parse, format } from 'url';
 // baseUrl and queryParams are optional.
 export default function resolveUrl (url, baseUrl, queryParams) {
   const resolved = baseUrl ? resolve(baseUrl, url) : url;
-  const parsed = parse(resolved);
-  parsed.query = queryParams;
+  const parsed = parse(resolved, /* parseQueryString */ true);
+  parsed.query = Object.assign({}, parsed.query, queryParams);
   delete parsed.search;
   return format(parsed);
 }

@@ -22,5 +22,8 @@ describe('URL resolver', function() {
 
     given('/foo/bar', '/baz', { baz: 'bazinga' })
       .expect('/foo/bar?baz=bazinga');
+
+    given('/foo/bar?thing=1', undefined, { other: '2' })
+      .expect('/foo/bar?thing=1&other=2');
   })
 });
