@@ -733,7 +733,6 @@ cache({
   var passed = data.passed  || 'passed';
   var failed = data.failed || 'failed';
   var skipped = data.skipped || 'skipped';
-  console.log(data);
   var apiUrl = 'https://ci.appveyor.com/api/projects/' + repo;
   if (branch != null) {
     apiUrl += '/branch/' + branch;
