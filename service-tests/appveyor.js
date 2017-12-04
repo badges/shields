@@ -6,6 +6,10 @@ const ServiceTester = require('./runner/service-tester');
 const isAppveyorBuildState = Joi.equal('failing', 'passing', 'running', 'queued');
 const isAppveyorTestTotals =
   Joi.string().regex(/^(?:[0-9]+ (?:passed|skipped|failed)(?:, )?)+$/);
+const isCustomAppveyorTestTotals =
+  Joi.string().regex(/^(?:[0-9]+ (?:good|bad|n\/a)(?:, )?)+$/);
+const isEmojiAppveyorTestTotals =
+  Joi.string().regex(/^(?:[0-9]+ (?:✔|❌|❗)(?:, )?)+$/);
 
 const t = new ServiceTester({ id: 'appveyor', title: 'AppVeyor' });
 module.exports = t;
@@ -34,6 +38,16 @@ t.create('tests status')
 t.create('tests status on master branch')
   .get('/tests/NZSmartie/coap-net-iu0to/master.json')
   .expectJSONTypes(Joi.object().keys({ name: 'tests', value: isAppveyorTestTotals }));
+
+// Test AppVeyor tests status badge with custom label
+t.create('tests status with custom labels')
+.get('/tests/NZSmartie/coap-net-iu0to.json?passed=good&failed=bad&skipped=n/a')
+.expectJSONTypes(Joi.object().keys({ name: 'tests', value: isCustomAppveyorTestTotals }));
+
+// Test AppVeyor tests status badge with emoji
+t.create('tests status with emoji labels')
+.get('/tests/NZSmartie/coap-net-iu0to.json?passed=%E2%9C%94&failed=%E2%9D%8C&skipped=%E2%9D%97')
+.expectJSONTypes(Joi.object().keys({ name: 'tests', value: isEmojiAppveyorTestTotals }));
 
 // Test AppVeyor tests status badge for a non-existing project
 t.create('tests 404')
