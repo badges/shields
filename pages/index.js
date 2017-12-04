@@ -49,7 +49,9 @@ export default class IndexPage extends React.Component {
           onClick={example => { this.setState({ example }); }}
           baseUri={baseUri}
           longCache={longCache} />
-        <Usage baseUri={baseUri} />
+        <Usage
+          baseUri={baseUri}
+          longCache={longCache} />
         <Footer baseUri={baseUri} />
         <style jsx>{`
           .donate {

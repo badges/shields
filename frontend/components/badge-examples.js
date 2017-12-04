@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import resolveUri from '../lib/resolve-uri';
+import resolveBadgeUrl from '../lib/badge-url';
 
 const Badge = ({ title, previewUri, exampleUri, documentation, baseUri, longCache, onClick }) => {
   const handleClick = onClick ?
@@ -12,10 +12,10 @@ const Badge = ({ title, previewUri, exampleUri, documentation, baseUri, longCach
     ? (<img
       className={classNames('badge-img', { clickable: onClick })}
       onClick={handleClick}
-      src={resolveUri(previewUri, baseUri, { longCache } )}
+      src={resolveBadgeUrl(previewUri, baseUri, { longCache } )}
       alt="" />
     ) : '\u00a0'; // non-breaking space
-  const resolvedExampleUri = resolveUri(
+  const resolvedExampleUri = resolveBadgeUrl(
     exampleUri || previewUri,
     baseUri,
     { longCache: false });
@@ -106,5 +106,4 @@ BadgeExamples.propTypes = {
 module.exports = {
   Badge,
   BadgeExamples,
-  resolveUri,
 };
