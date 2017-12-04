@@ -42,7 +42,7 @@ function servicesForTitle (title) {
   }
 
   const services = matches[1].toLowerCase().split(' ');
-  const blacklist = ['wip'];
+  const blacklist = ['wip', 'rfc'];
   return difference(services, blacklist);
 }
 
