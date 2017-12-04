@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import ClickToSelect from '@mapbox/react-click-to-select';
-import { resolveUri } from './badge-examples';
+import resolveBadgeUrl from '../lib/badge-url';
 import generateAllMarkup from '../lib/generate-image-markup';
 
 export default class MarkupModal extends React.Component {
@@ -39,7 +39,7 @@ export default class MarkupModal extends React.Component {
     // user.
     const { exampleUri, previewUri, link } = example;
     this.setState({
-      badgeUri: resolveUri(exampleUri || previewUri, baseUri || window.location.href),
+      badgeUri: resolveBadgeUrl(exampleUri || previewUri, baseUri || window.location.href),
       link,
     });
   }
@@ -53,10 +53,11 @@ export default class MarkupModal extends React.Component {
     const { title } = this.props.example;
     const { badgeUri, link, style } = this.state;
 
-    const withStyle = new URL(badgeUri, baseUri || window.location.href);
-    if (style !== 'flat') { // Default style doesn't need to be specified.
-      withStyle.searchParams.set('style', style);
-    }
+    const withStyle = resolveBadgeUrl(
+      badgeUri,
+      baseUri || window.location.href,
+      // Default style doesn't need to be specified.
+      style === 'flat' ? undefined : { style });
 
     return generateAllMarkup(withStyle.href, link, title);
   }
