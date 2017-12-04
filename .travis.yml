@@ -16,7 +16,7 @@ before_script:
 
 script:
   - npm run lint
-  - npm run test:js:server
+  - if node_modules/.bin/check-node-version --node '>= 9.0' > /dev/null; then echo "Skipping server tests."; else npm run test:js:server; fi
   - npm run test:js:frontend
   - npm run build
 
