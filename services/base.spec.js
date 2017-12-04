@@ -17,11 +17,11 @@ class DummyService extends BaseService {
     return {
       format: '/foo/([^/]+)',
       capture: ['someArg']
-    }
+    };
   }
 }
 
-const expectedRouteRegex = /^\/foo\/([^\/]+).(svg|png|gif|jpg|json)$/;
+const expectedRouteRegex = /^\/foo\/([^/]+).(svg|png|gif|jpg|json)$/;
 
 describe('BaseService', () => {
   let mockCamp;

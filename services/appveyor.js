@@ -1,7 +1,6 @@
 'use strict';
 
 const BaseService = require('./base');
-const loadLogos = require('../lib/load-logos');
 
 /**
  * AppVeyor CI integration.
@@ -54,4 +53,4 @@ module.exports = class AppVeyor extends BaseService {
       },
     ];
   }
-}
+};
