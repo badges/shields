@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import resolveBadgeUrl from '../lib/badge-url';
 
 export default class DynamicBadgeMaker extends React.Component {
   static propTypes = {
@@ -10,29 +11,30 @@ export default class DynamicBadgeMaker extends React.Component {
     type: 'json',
     label: '',
     uri: '',
-    colorB: '',
+    color: '',
     prefix: '',
     suffix: '',
     query: '',
   };
 
   makeBadgeUri () {
-    const result = new URL(
+    const { label, uri, color, query, prefix, suffix } = this.state;
+    const queryParams = {
+      label,
+      uri,
+      colorB: color,
+      query,
+    }
+    if (prefix) {
+      queryParams.prefix = prefix;
+    }
+    if (suffix) {
+      queryParams.suffix = suffix;
+    }
+    return resolveBadgeUrl(
       `/dynamic/${this.state.type}.svg`,
-      this.props.baseUri || document.location.href);
-
-    const searchParams = [
-      'label',
-      'uri',
-      'colorB',
-      'prefix',
-      'suffix',
-      'query',
-    ];
-    searchParams.forEach(k => {
-      result.searchParams.set(k, this.state[k]);
-    });
-    return result.href;
+      this.props.baseUri || document.location.href,
+      { queryParams });
   }
 
   handleSubmit(e) {
