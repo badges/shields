@@ -39,8 +39,6 @@ specification.
 Examples
 --------
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/badges/shields.svg)](https://greenkeeper.io/)
-
 * build status: `build | failing`
 * code coverage percentage: `coverage | 80%`
 * stable release version: `version | 1.2.3`
