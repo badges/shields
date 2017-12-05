@@ -3064,12 +3064,13 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Discourse integration
-camp.route(/^\/discourse\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/discourse\/(http(?:s)?)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  const host   = match[1]; // eg, meta.discourse.org
-  const stat   = match[2]; // eg, user_count
-  const format = match[3];
-  const url    = 'https://' + host + '/site/statistics.json';
+  const scheme = match[1]; // eg, https
+  const host   = match[2]; // eg, meta.discourse.org
+  const stat   = match[3]; // eg, user_count
+  const format = match[4];
+  const url    = scheme + '://' + host + '/site/statistics.json';
 
   const options = {
     method: 'GET',
@@ -3086,13 +3087,13 @@ cache(function(data, match, sendBadge, request) {
         console.error('' + res);
       }
 
-      badgeData.text[1] = 'invalid';
+      badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
 
     if (res.statusCode !== 200) {
-      badgeData.text[1] = 'offline';
+      badgeData.text[1] = 'inaccessible';
       badgeData.colorscheme = 'red';
       sendBadge(format, badgeData);
       return;
@@ -3122,7 +3123,6 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = metric(statCount) + ' likes';
           break;
         case 'status':
-          statCount = data.like_count;
           badgeData.text[1] = 'online';
           break;
         default:

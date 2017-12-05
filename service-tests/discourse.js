@@ -1,5 +1,6 @@
 'use strict';
 
+const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
 const t = new ServiceTester({ id: 'discourse', title: 'Discourse' });
@@ -23,7 +24,7 @@ const data = {
 };
 
 t.create('Topics')
-  .get('/meta.discourse.org/topics.json')
+  .get('/https/meta.discourse.org/topics.json')
   .intercept(nock => nock('https://meta.discourse.org')
     .get('/site/statistics.json')
     .reply(200, data)
@@ -31,7 +32,7 @@ t.create('Topics')
   .expectJSON({ name: 'discourse', value: '23k topics' });
 
 t.create('Posts')
-  .get('/meta.discourse.org/posts.json')
+  .get('/https/meta.discourse.org/posts.json')
   .intercept(nock => nock('https://meta.discourse.org')
     .get('/site/statistics.json')
     .reply(200, data)
@@ -39,7 +40,7 @@ t.create('Posts')
   .expectJSON({ name: 'discourse', value: '338k posts' });
 
 t.create('Users')
-  .get('/meta.discourse.org/users.json')
+  .get('/https/meta.discourse.org/users.json')
   .intercept(nock => nock('https://meta.discourse.org')
     .get('/site/statistics.json')
     .reply(200, data)
@@ -47,7 +48,7 @@ t.create('Users')
   .expectJSON({ name: 'discourse', value: '31k users' });
 
 t.create('Likes')
-  .get('/meta.discourse.org/likes.json')
+  .get('/https/meta.discourse.org/likes.json')
   .intercept(nock => nock('https://meta.discourse.org')
     .get('/site/statistics.json')
     .reply(200, data)
@@ -55,23 +56,31 @@ t.create('Likes')
   .expectJSON({ name: 'discourse', value: '309k likes' });
 
 t.create('Status')
-  .get('/meta.discourse.org/status.json')
+  .get('/https/meta.discourse.org/status.json')
   .intercept(nock => nock('https://meta.discourse.org')
     .get('/site/statistics.json')
     .reply(200, data)
   )
   .expectJSON({ name: 'discourse', value: 'online' });
 
+  t.create('Status with http (not https)')
+  .get('/http/meta.discourse.org/status.json')
+  .intercept(nock => nock('http://meta.discourse.org')
+    .get('/site/statistics.json')
+    .reply(200, data)
+  )
+  .expectJSON({ name: 'discourse', value: 'online' });
+
 t.create('Invalid Host')
-  .get('/some.host/status.json')
+  .get('/https/some.host/status.json')
   .intercept(nock => nock('https://some.host')
     .get('/site/statistics.json')
     .reply(404, "<h1>Not Found</h1>")
   )
-  .expectJSON({ name: 'discourse', value: 'offline' });
+  .expectJSON({ name: 'discourse', value: 'inaccessible' });
 
 t.create('Invalid Stat')
-  .get('/meta.discourse.org/unknown.json')
+  .get('/https/meta.discourse.org/unknown.json')
   .intercept(nock => nock('https://meta.discourse.org')
     .get('/site/statistics.json')
     .reply(200, data)
@@ -79,6 +88,38 @@ t.create('Invalid Stat')
   .expectJSON({ name: 'discourse', value: 'invalid' });
 
 t.create('Connection Error')
-  .get('/meta.discourse.org/status.json')
+  .get('/https/meta.discourse.org/status.json')
   .networkOff()
-  .expectJSON({ name: 'discourse', value: 'invalid' });
+  .expectJSON({ name: 'discourse', value: 'inaccessible' });
+
+t.create('Topics (live)')
+  .get('/https/meta.discourse.org/topics.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'discourse',
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? topics$/)
+  }));
+
+t.create('Posts (live)')
+  .get('/https/meta.discourse.org/posts.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'discourse',
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? posts$/)
+  }));
+
+t.create('Users (live)')
+  .get('/https/meta.discourse.org/users.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'discourse',
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? users$/)
+  }));
+
+t.create('Likes (live)')
+  .get('/https/meta.discourse.org/likes.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'discourse',
+    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? likes$/)
+  }));
+
+t.create('Status (live)')
+  .get('/https/meta.discourse.org/status.json')
+  .expectJSON({ name: 'discourse', value: 'online' });
