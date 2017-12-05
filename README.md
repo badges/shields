@@ -127,7 +127,7 @@ Development
 6. Open `http://[::]:8080/` to view the home page.
 
 To generate the frontend using production cache settings &ndash; that is,
-badge preview URIs with `maxAge` &ndash; run `npm run build:production`.
+badge preview URIs with `maxAge` &ndash; run `LONG_CACHE=true npm run build`.
 
 To analyze the frontend bundle, run `npm install webpack-bundle-analyzer` and
 then `ANALYZE=true npm start`.
