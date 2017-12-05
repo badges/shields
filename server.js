@@ -4253,7 +4253,11 @@ cache(function(data, match, sendBadge, request) {
       badgeData.colorscheme = issues ? 'yellow' : 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'invalid';
+      if (res.statusCode === 404) {
+        badgeData.text[1] = 'not found';
+      } else {
+        badgeData.text[1] = 'invalid';
+      }
       sendBadge(format, badgeData);
     }
   });
@@ -4287,7 +4291,11 @@ cache(function(data, match, sendBadge, request) {
       badgeData.colorscheme = (pullrequests > 0)? 'yellow': 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'invalid';
+      if (res.statusCode === 404) {
+        badgeData.text[1] = 'not found';
+      } else {
+        badgeData.text[1] = 'invalid';
+      }
       sendBadge(format, badgeData);
     }
   });

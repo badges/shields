@@ -20,8 +20,12 @@ t.create('issues-raw (valid)')
     value: isMetric
   }));
 
-t.create('issues-raw (invalid)')
+t.create('issues-raw (not found)')
   .get('/issues-raw/atlassian/not-a-repo.json')
+  .expectJSON({ name: 'issues', value: 'not found' });
+
+t.create('issues-raw (invalid)')
+  .get('/issues-raw/chris48s/example-private-repo.json')
   .expectJSON({ name: 'issues', value: 'invalid' });
 
 t.create('issues-raw (connection error)')
@@ -36,8 +40,12 @@ t.create('issues (valid)')
     value: isMetricOpenIssues
   }));
 
-t.create('issues (invalid)')
+t.create('issues (not found)')
   .get('/issues/atlassian/not-a-repo.json')
+  .expectJSON({ name: 'issues', value: 'not found' });
+
+t.create('issues (invalid)')
+  .get('/issues/chris48s/example-private-repo.json')
   .expectJSON({ name: 'issues', value: 'invalid' });
 
 t.create('issues (connection error)')
@@ -55,8 +63,12 @@ t.create('pr-raw (valid)')
     value: isMetric
   }));
 
-t.create('pr-raw (invalid)')
+t.create('pr-raw (not found)')
   .get('/pr-raw/atlassian/not-a-repo.json')
+  .expectJSON({ name: 'pull requests', value: 'not found' });
+
+t.create('pr-raw (invalid)')
+  .get('/pr-raw/chris48s/example-private-repo.json')
   .expectJSON({ name: 'pull requests', value: 'invalid' });
 
 t.create('pr-raw (connection error)')
@@ -71,8 +83,12 @@ t.create('pr-raw (connection error)')
     value: isMetricOpenIssues
   }));
 
-t.create('pr (invalid)')
+t.create('pr (not found)')
   .get('/pr/atlassian/not-a-repo.json')
+  .expectJSON({ name: 'pull requests', value: 'not found' });
+
+t.create('pr (invalid)')
+  .get('/pr/chris48s/example-private-repo.json')
   .expectJSON({ name: 'pull requests', value: 'invalid' });
 
 t.create('pr (connection error)')
