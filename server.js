@@ -16,6 +16,7 @@ const log = require('./lib/log');
 const makeBadge = require('./lib/make-badge');
 const serverSecrets = require('./lib/server-secrets');
 const suggest = require('./lib/suggest');
+const {licenseToColor} = require('./lib/licenses');
 const { latest: latestVersion } = require('./lib/version');
 const {
   compare: phpVersionCompare,
@@ -50,6 +51,7 @@ const {
   makeLabel: getLabel,
   makeLogo: getLogo,
   makeBadgeData: getBadgeData,
+  setBadgeColor
 } = require('./lib/badge-data');
 const {
   handleRequest: cache,
@@ -1661,6 +1663,11 @@ cache({
         sendBadge(format, badgeData);
         return;
       }
+      if (res.statusCode === 404) {
+        badgeData.text[1] = 'package not found';
+        sendBadge(format, badgeData);
+        return;
+      }
       try {
         const data = JSON.parse(buffer);
         let license;
@@ -1675,8 +1682,13 @@ cache({
         } else if (typeof license == 'object') {
           license = license.type;
         }
-        badgeData.text[1] = license;
-        badgeData.colorscheme = 'blue';
+        if (license === undefined) {
+          badgeData.text[1] = 'missing';
+          badgeData.colorscheme = 'red';
+        } else {
+          badgeData.text[1] = license;
+          setBadgeColor(badgeData, licenseToColor(license));
+        }
         sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'invalid';
@@ -3951,24 +3963,26 @@ cache(function(data, match, sendBadge, request) {
     'Accept': 'application/vnd.github.drax-preview+json'
   };
   request(apiUrl, { headers: customHeaders }, function(err, res, buffer) {
-    if (err != null) {
+    if (res && res.statusCode === 404) {
+      badgeData.text[1] = 'repo not found';
+      sendBadge(format, badgeData);
+      return;
+    }
+    if (err != null || res.statusCode !== 200) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
     try {
-      if (res.statusCode === 404) {
-        badgeData.text[1] = 'repo not found';
-        sendBadge(format, badgeData);
-        return;
-      }
       var body = JSON.parse(buffer);
-      if (body.license != null) {
-        badgeData.text[1] = body.license.name;
-        badgeData.colorscheme = 'blue';
+      const license = body.license;
+      if (license != null) {
+        badgeData.text[1] = license.spdx_id || 'unknown';
+        setBadgeColor(badgeData, licenseToColor(license.spdx_id));
         sendBadge(format, badgeData);
       } else {
-        badgeData.text[1] = 'unknown license';
+        badgeData.text[1] = 'missing';
+        badgeData.colorscheme = 'red';
         sendBadge(format, badgeData);
       }
     } catch(e) {
@@ -6799,20 +6813,12 @@ cache(function(data, match, sendBadge, request) {
     // We consider all HTTP status codes below 310 as success.
     if (err != null || res.statusCode >= 310) {
       badgeData.text[1] = offlineMessage;
-      if (sixHex(offlineColor)) {
-        badgeData.colorB = '#' + offlineColor;
-      } else {
-        badgeData.colorscheme = offlineColor;
-      }
+      setBadgeColor(badgeData, offlineColor);
       sendBadge(format, badgeData);
       return;
     } else {
       badgeData.text[1] = onlineMessage;
-      if (sixHex(onlineColor)) {
-        badgeData.colorB = '#' + onlineColor;
-      } else {
-        badgeData.colorscheme = onlineColor;
-      }
+      setBadgeColor(badgeData, onlineColor);
       sendBadge(format, badgeData);
       return;
     }
