@@ -111,6 +111,7 @@
     "is-svg": "^2.1.0",
     "lodash.debounce": "^4.0.8",
     "lodash.difference": "^4.5.0",
+    "lodash.mapvalues": "^4.6.0",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "mocha": "^4.0.1",

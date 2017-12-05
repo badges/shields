@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 import ClickToSelect from '@mapbox/react-click-to-select';
 import resolveBadgeUrl from '../lib/badge-url';
 import generateAllMarkup from '../lib/generate-image-markup';
-import { supportedStyles } from '../../lib/supported-features';
+import { advertisedStyles } from '../../lib/supported-features';
 
 export default class MarkupModal extends React.Component {
   static propTypes = {
@@ -120,7 +120,7 @@ export default class MarkupModal extends React.Component {
                 value={this.state.style}
                 onChange={event => { this.setState({ style: event.target.value }); }}>
                 {
-                  supportedStyles.map(style => (
+                  advertisedStyles.map(style => (
                     <option key={style} value={style}>{style}</option>
                   ))
                 }

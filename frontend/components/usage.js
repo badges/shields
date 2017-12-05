@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import StaticBadgeMaker from './static-badge-maker';
 import DynamicBadgeMaker from './dynamic-badge-maker';
 import { staticBadgeUrl } from '../lib/badge-url';
-import { supportedStyles } from '../../lib/supported-features';
+import { advertisedStyles } from '../../lib/supported-features';
 
 export default class Usage extends React.PureComponent {
   static propTypes = {
@@ -43,7 +43,7 @@ export default class Usage extends React.PureComponent {
     return (
       <table className="badge-img">
         <tbody>
-          { supportedStyles.map((style, i) => {
+          { advertisedStyles.map((style, i) => {
             const badgeUri = staticBadgeUrl(
               baseUri,
               'style',
