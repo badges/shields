@@ -4250,11 +4250,18 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var issues = data.count;
-      badgeData.text[1] = issues + (isRaw? '': ' open');
+      if (res.statusCode !== 200) {
+        throw Error('Failed to count issues.');
+      }
+      badgeData.text[1] = metric(issues) + (isRaw? '': ' open');
       badgeData.colorscheme = issues ? 'yellow' : 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'invalid';
+      if (res.statusCode === 404) {
+        badgeData.text[1] = 'not found';
+      } else {
+        badgeData.text[1] = 'invalid';
+      }
       sendBadge(format, badgeData);
     }
   });
@@ -4281,11 +4288,18 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var pullrequests = data.size;
+      if (res.statusCode !== 200) {
+        throw Error('Failed to count pull requests.');
+      }
       badgeData.text[1] = metric(pullrequests) + (isRaw? '': ' open');
       badgeData.colorscheme = (pullrequests > 0)? 'yellow': 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'invalid';
+      if (res.statusCode === 404) {
+        badgeData.text[1] = 'not found';
+      } else {
+        badgeData.text[1] = 'invalid';
+      }
       sendBadge(format, badgeData);
     }
   });
