@@ -63,6 +63,17 @@ t.create('License for unknown repo')
   .get('/license/user1/github-does-not-have-this-repo.json?style=_shields_test')
   .expectJSON({ name: 'license', value: 'repo not found', colorB: colorsB.lightgrey });
 
+t.create('License - API rate limit exceeded')
+  .get('/license/user1/repo1.json?style=_shields_test')
+  .intercept(nock => nock('https://api.github.com')
+    .get('/repos/user1/repo1')
+    .query(true)
+    .reply(403, {
+      message: "API rate limit exceeded for 123.123.123.123. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)",
+      documentation_url: "https://developer.github.com/v3/#rate-limiting"
+  }))
+  .expectJSON({ name: 'license', value: 'inaccessible', colorB: colorsB.lightgrey });
+
 t.create('Contributors')
   .get('/contributors/cdnjs/cdnjs.json')
   .expectJSONTypes(Joi.object().keys({

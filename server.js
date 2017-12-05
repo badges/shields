@@ -3959,17 +3959,17 @@ cache(function(data, match, sendBadge, request) {
     'Accept': 'application/vnd.github.drax-preview+json'
   };
   request(apiUrl, { headers: customHeaders }, function(err, res, buffer) {
-    if (err != null) {
+    if (res && res.statusCode === 404) {
+      badgeData.text[1] = 'repo not found';
+      sendBadge(format, badgeData);
+      return;
+    }
+    if (err != null || res.statusCode !== 200) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
     try {
-      if (res.statusCode === 404) {
-        badgeData.text[1] = 'repo not found';
-        sendBadge(format, badgeData);
-        return;
-      }
       var body = JSON.parse(buffer);
       const license = body.license;
       if (license != null) {
