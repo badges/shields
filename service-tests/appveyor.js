@@ -9,7 +9,7 @@ const isAppveyorTestTotals =
 const isCustomAppveyorTestTotals =
   Joi.string().regex(/^(?:[0-9]* ?(?:good|bad|n\/a) ?[0-9]*(?:,? )?)+$/);
 const isEmojiAppveyorTestTotals =
-  Joi.string().regex(/^(?:[0-9]* ?(?:✔|✘|ℹ|\?) ?[0-9]*(?:,? )?)+$/);
+  Joi.string().regex(/^(?:[0-9]* ?(?:✔|✘|●) ?[0-9]*(?:,? )?)+$/);
 
 const t = new ServiceTester({ id: 'appveyor', title: 'AppVeyor' });
 module.exports = t;
@@ -46,7 +46,7 @@ t.create('tests status with custom labels')
 
 // Test AppVeyor tests status badge with emoji
 t.create('tests status with emoji labels')
-.get('/tests/NZSmartie/coap-net-iu0to.json?passed=%E2%9C%94&failed=%E2%9C%98&skipped=%E2%84%B9')
+.get('/tests/NZSmartie/coap-net-iu0to.json?passed=%E2%9C%94&failed=%E2%9C%98&skipped=%E2%97%8F')
 .expectJSONTypes(Joi.object().keys({ name: 'tests', value: isEmojiAppveyorTestTotals }));
 
 // Test AppVeyor tests status badge with compact value
