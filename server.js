@@ -733,7 +733,7 @@ cache({
   var compact = data.compactValue !== undefined;
   var passed = data.passed || (compact ? '✔' : 'passed');
   var failed = data.failed || (compact ? '✘' : 'failed');
-  var skipped = data.skipped || (compact ? 'ℹ' : 'skipped');
+  var skipped = data.skipped || (compact ? '?' : 'skipped');
   var apiUrl = 'https://ci.appveyor.com/api/projects/' + repo;
   if (branch != null) {
     apiUrl += '/branch/' + branch;
