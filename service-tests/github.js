@@ -82,14 +82,14 @@ t.create('GitHub open issues by label is > zero')
   .get('/issues/badges/shields/service-badge.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'service-badge issues',
-    value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? open$/)
+    value: isMetricOpenIssues
   }));
 
 t.create('GitHub open issues by multi-word label is > zero')
   .get('/issues/Cockatrice/Cockatrice/App%20-%20Cockatrice.json')
   .expectJSONTypes(Joi.object().keys({
     name: '"App - Cockatrice" issues',
-    value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? open$/)
+    value: isMetricOpenIssues
   }));
 
 t.create('GitHub open issues by label (raw)')
