@@ -84,7 +84,7 @@
     "logo"
   ],
   "devDependencies": {
-    "@mapbox/react-click-to-select": "^2.0.1",
+    "@mapbox/react-click-to-select": "^2.1.0",
     "babel-eslint": "^8.0.2",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
