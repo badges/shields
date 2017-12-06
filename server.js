@@ -42,7 +42,8 @@ const {
   downloadCount: downloadCountColor,
   floorCount: floorCountColor,
   version: versionColor,
-  age: ageColor
+  age: ageColor,
+  colorScale
 } = require('./lib/color-formatters');
 const {
   makeColorB,
@@ -1086,6 +1087,75 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
       } else {
         badgeData.text[1] = 'anonymous';
+        sendBadge(format, badgeData);
+      }
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// Liberapay integration.
+camp.route(/^\/liberapay\/(receives|gives|patrons|goal)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var type = match[1];  // e.g., 'gives'
+  var entity = match[2]; // e.g., 'Changaco'
+  var format = match[3];
+  var apiUrl = 'https://liberapay.com/' + entity + '/public.json';
+  // Lock down type
+  const label = {
+      'receives': 'receives',
+      'gives': 'gives',
+      'patrons': 'patrons',
+      'goal': 'goal progress',
+      }[type];
+  const badgeData = getBadgeData(label, data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = getLogo('liberapay', data);
+  }
+  request(apiUrl, function dealWithData(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var value;
+      var currency;
+      switch(type) {
+        case 'receives':
+            if (data.receiving) {
+                value = data.receiving.amount;
+                currency = data.receiving.currency;
+                badgeData.text[1] = `${metric(value)} ${currency}/week`;
+                }
+            break;
+        case 'gives':
+            if (data.giving) {
+                value = data.giving.amount;
+                currency = data.giving.currency;
+                badgeData.text[1] = `${metric(value)} ${currency}/week`;
+                }
+            break;
+        case 'patrons':
+            value = data.npatrons;
+            badgeData.text[1] = metric(value);
+            break;
+        case 'goal':
+            if (data.goal) {
+                value = Math.round(data.receiving.amount/data.goal.amount*100);
+                badgeData.text[1] = `${value}%`;
+                }
+            break;
+        }
+      if (value != null) {
+        badgeData.colorscheme = colorScale([0, 10, 100])(value);
+        sendBadge(format, badgeData);
+      } else {
+        badgeData.text[1] = 'anonymous';
+        badgeData.colorscheme = 'blue';
         sendBadge(format, badgeData);
       }
     } catch(e) {
