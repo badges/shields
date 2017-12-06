@@ -18,6 +18,23 @@
 const difference = require('lodash.difference');
 const fetch = require('node-fetch');
 
+function inferPullRequest() {
+  if (process.env.TRAVIS) {
+    return {
+      repoSlug: process.env.TRAVIS_REPO_SLUG,
+      pullRequest: process.env.TRAVIS_PULL_REQUEST,
+    };
+  } else if (process.env.CIRCLECI) {
+    return {
+      repoSlug: `${process.env.CIRCLE_PROJECT_USERNAME}/${process.env.CIRCLE_PROJECT_REPONAME}`,
+      // This variable contains the URL.
+      pullRequest: (process.env.CI_PULL_REQUEST || '').split('/').slice(-1)[0],
+    };
+  } else {
+    return {};
+  }
+}
+
 function getTitle (repoSlug, pullRequest) {
   const uri = `https://img.shields.io/github/pulls/detail/title/${repoSlug}/${pullRequest}.json`;
   const options = { headers: { 'User-Agent': 'badges/shields' }};
@@ -46,10 +63,9 @@ function servicesForTitle (title) {
   return difference(services, blacklist);
 }
 
-const repoSlug = process.env.TRAVIS_REPO_SLUG;
-const pullRequest = process.env.TRAVIS_PULL_REQUEST;
+const { repoSlug, pullRequest } = inferPullRequest();
 if (repoSlug === undefined || pullRequest === undefined) {
-  console.error('Please set TRAVIS_REPO_SLUG and TRAVIS_PULL_REQUEST.');
+  console.error('Unable to infer pull request from the environment.');
   process.exit(-1);
 }
 console.error(`PR: ${repoSlug}#${pullRequest}`);
