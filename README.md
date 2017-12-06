@@ -7,8 +7,8 @@
         <img src="https://opencollective.com/shields/backers/badge.svg" /></a>
     <a href="#sponsors" alt="Sponsors on Open Collective">
         <img src="https://opencollective.com/shields/sponsors/badge.svg" /></a>
-    <a href="https://travis-ci.org/badges/shields">
-        <img src="https://img.shields.io/travis/badges/shields.svg"
+    <a href="https://circleci.com/gh/badges/shields/tree/master">
+        <img src="https://img.shields.io/circleci/project/github/badges/shields.svg"
             alt="build status"></a>
     <a href="https://github.com/badges/shields/commits/gh-pages">
         <img src="https://img.shields.io/github/last-commit/badges/shields/gh-pages.svg?label=last%20deployed"
