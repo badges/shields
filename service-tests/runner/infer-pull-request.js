@@ -14,7 +14,7 @@ function parseGithubPullRequestUrl(url, options = {}) {
   if (components[2] !== 'pull' || components.length !== 4) {
     throw Error(`Invalid GitHub pull request URL: ${url}`);
   }
-  const [owner, repo, _, pullRequest] = components;
+  const [owner, repo, , pullRequest] = components;
 
   delete parsed.pathname;
   const baseUrl = urlFormat(parsed, { auth: false, fragment: false, search: false });
