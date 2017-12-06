@@ -20,3 +20,28 @@ export function staticBadgeUrl(baseUrl, subject, status, color, options) {
   const path = [subject, status, color].map(encodeField).join('-');
   return resolveUrl(`/badge/${path}.svg`, baseUrl, options);
 }
+
+// Options can include: { prefix, suffix, color, longCache, style, queryParams }
+export function dynamicJsonBadgeUrl(baseUrl, label, jsonUrl, query, options = {}) {
+  const { prefix, suffix, color, queryParams = {}, ...rest } = options;
+
+  Object.assign(queryParams, {
+    label,
+    uri: jsonUrl,
+    query,
+  });
+
+  if (color) {
+    queryParams.colorB = color;
+  }
+  if (prefix) {
+    queryParams.prefix = prefix;
+  }
+  if (suffix) {
+    queryParams.suffix = suffix;
+  }
+
+  const outOptions = Object.assign({ queryParams }, rest);
+
+  return resolveBadgeUrl('/badge/dynamic/json.svg', baseUrl, outOptions);
+}

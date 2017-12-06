@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import resolveBadgeUrl from '../lib/badge-url';
+import { dynamicJsonBadgeUrl } from '../lib/badge-url';
 
 export default class DynamicBadgeMaker extends React.Component {
   static propTypes = {
@@ -8,33 +8,18 @@ export default class DynamicBadgeMaker extends React.Component {
   };
 
   state = {
-    type: 'json',
     label: '',
-    uri: '',
+    url: '',
+    query: '',
     color: '',
     prefix: '',
     suffix: '',
-    query: '',
   };
 
   makeBadgeUri () {
-    const { label, uri, color, query, prefix, suffix } = this.state;
-    const queryParams = {
-      label,
-      uri,
-      colorB: color,
-      query,
-    }
-    if (prefix) {
-      queryParams.prefix = prefix;
-    }
-    if (suffix) {
-      queryParams.suffix = suffix;
-    }
-    return resolveBadgeUrl(
-      `/dynamic/${this.state.type}.svg`,
-      this.props.baseUri || document.location.href,
-      { queryParams });
+    const { label, url, query, color, prefix, suffix } = this.state;
+    const { baseUri: baseUrl = document.location.href } = this.props;
+    return dynamicJsonBadgeUrl(baseUrl, label, url, query, { color, prefix, suffix });
   }
 
   handleSubmit(e) {
@@ -43,8 +28,8 @@ export default class DynamicBadgeMaker extends React.Component {
   }
 
   get isValid() {
-    const { label, uri, query } = this.state;
-    return label && uri && query;
+    const { label, url, query } = this.state;
+    return label && url && query;
   }
 
   render() {
@@ -52,22 +37,14 @@ export default class DynamicBadgeMaker extends React.Component {
       <form onSubmit={e => this.handleSubmit(e)}>
         <input
           className="short"
-          value={this.state.type}
-          readOnly
-          list="dynamic-type" /> {}
-        <datalist id="dynamic-type">
-          <option value="json" />
-        </datalist>
-        <input
-          className="short"
           value={this.state.label}
           onChange={event => this.setState({ label: event.target.value })}
           placeholder="label" /> {}
         <input
           className="short"
-          value={this.state.uri}
-          onChange={event => this.setState({ uri: event.target.value })}
-          placeholder="url" /> {}
+          value={this.state.url}
+          onChange={event => this.setState({ url: event.target.value })}
+          placeholder="json url" /> {}
         <input
           className="short"
           value={this.state.query}
