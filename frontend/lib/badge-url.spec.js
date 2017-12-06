@@ -1,5 +1,10 @@
 import { test, given } from 'sazerac';
-import { default as resolveBadgeUrl, encodeField, staticBadgeUrl } from './badge-url';
+import {
+  default as resolveBadgeUrl,
+  encodeField,
+  staticBadgeUrl,
+  dynamicJsonBadgeUrl,
+} from './badge-url';
 
 const resolveBadgeUrlWithLongCache = (url, baseUrl) =>
   resolveBadgeUrl(url, baseUrl, { longCache: true })
@@ -30,5 +35,26 @@ describe('Badge URL functions', function() {
   test(staticBadgeUrl, () => {
     given('http://img.example.com', 'foo', 'bar', 'blue', { style: 'plastic'})
       .expect('http://img.example.com/badge/foo-bar-blue.svg?style=plastic');
+  });
+
+  test(dynamicJsonBadgeUrl, () => {
+    const jsonUrl = 'http://example.com/foo.json';
+    const query = '$.bar';
+    const prefix = 'value: ';
+
+    given(
+      'http://img.example.com',
+      'foo',
+      jsonUrl,
+      query,
+      { prefix, style: 'plastic' }
+    ).expect([
+      'http://img.example.com/badge/dynamic/json.svg',
+      '?label=foo',
+      `&uri=${encodeURIComponent(jsonUrl)}`,
+      `&query=${encodeURIComponent(query)}`,
+      `&prefix=${encodeURIComponent(prefix)}`,
+      '&style=plastic',
+    ].join(''))
   });
 });

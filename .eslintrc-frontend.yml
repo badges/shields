@@ -10,3 +10,6 @@ extends:
   - "standard-jsx"
   - "standard-react"
   - "./.eslintrc-preferred.yml"
+
+rules:
+  no-console: "error"
