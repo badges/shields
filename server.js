@@ -1074,7 +1074,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Liberapay integration.
-camp.route(/^\/liberapay\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/liberapay\/(receives|gives|patrons|goal)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var type = match[1];  // e.g., 'gives'
   var entity = match[2]; // e.g., 'Changaco'
