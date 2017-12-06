@@ -4501,11 +4501,11 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      var issues = data.count;
       if (res.statusCode !== 200) {
         throw Error('Failed to count issues.');
       }
+      var data = JSON.parse(buffer);
+      var issues = data.count;
       badgeData.text[1] = metric(issues) + (isRaw? '': ' open');
       badgeData.colorscheme = issues ? 'yellow' : 'brightgreen';
       sendBadge(format, badgeData);
@@ -4539,11 +4539,11 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      var pullrequests = data.size;
       if (res.statusCode !== 200) {
         throw Error('Failed to count pull requests.');
       }
+      var data = JSON.parse(buffer);
+      var pullrequests = data.size;
       badgeData.text[1] = metric(pullrequests) + (isRaw? '': ' open');
       badgeData.colorscheme = (pullrequests > 0)? 'yellow': 'brightgreen';
       sendBadge(format, badgeData);
