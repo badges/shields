@@ -43,7 +43,7 @@
     "lodash.uniq": "~4.5.0"
   },
   "scripts": {
-    "coverage:test:js": "nyc node_modules/mocha/bin/_mocha '*.spec.js' 'lib/*.spec.js'",
+    "coverage:test:js": "nyc node_modules/mocha/bin/_mocha '*.spec.js' 'lib/**/*.spec.js' 'service-tests/**/*.spec.js'",
     "coverage:test:services": "nyc node_modules/mocha/bin/_mocha --delay service-tests/runner/cli.js",
     "coverage:test": "rimraf .nyc_output coverage; npm run coverage:test:js; npm run coverage:test:services",
     "coverage:report": "nyc report",
@@ -51,7 +51,7 @@
     "coverage:report:open": "npm run coverage:report && npm run coverage:report:reopen",
     "lint": "eslint '**/*.js'",
     "test:js:frontend": "mocha --require babel-polyfill --require babel-register 'frontend/**/*.spec.js'",
-    "test:js:server": "mocha '*.spec.js' 'lib/**/*.spec.js'",
+    "test:js:server": "mocha '*.spec.js' 'lib/**/*.spec.js' 'service-tests/**/*.spec.js'",
     "test:services": "mocha --delay service-tests/runner/cli.js",
     "test:services:pr:prepare": "node service-tests/runner/pull-request-services-cli.js > pull-request-services.log",
     "test:services:pr:run": "mocha --delay service-tests/runner/cli.js --stdin < pull-request-services.log",

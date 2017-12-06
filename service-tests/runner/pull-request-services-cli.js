@@ -17,26 +17,10 @@
 
 const difference = require('lodash.difference');
 const fetch = require('node-fetch');
+const { inferPullRequest } = require('./infer-pull-request');
 
-function inferPullRequest() {
-  if (process.env.TRAVIS) {
-    return {
-      repoSlug: process.env.TRAVIS_REPO_SLUG,
-      pullRequest: process.env.TRAVIS_PULL_REQUEST,
-    };
-  } else if (process.env.CIRCLECI) {
-    const prUrl = process.env.CI_PULL_REQUEST || '';
-    return {
-      repoSlug: prUrl.split('/').slice(-4, -2).join('/'),
-      pullRequest: prUrl.split('/').slice(-1)[0],
-    };
-  } else {
-    return {};
-  }
-}
-
-function getTitle (repoSlug, pullRequest) {
-  const uri = `https://img.shields.io/github/pulls/detail/title/${repoSlug}/${pullRequest}.json`;
+function getTitle (owner, repo, pullRequest) {
+  const uri = `https://img.shields.io/github/pulls/detail/title/${owner}/${repo}/${pullRequest}.json`;
   const options = { headers: { 'User-Agent': 'badges/shields' }};
   return fetch(uri, options)
     .then(res => {
@@ -63,16 +47,12 @@ function servicesForTitle (title) {
   return difference(services, blacklist);
 }
 
-const { repoSlug, pullRequest } = inferPullRequest();
-if (repoSlug === undefined || pullRequest === undefined) {
-  console.error('Unable to infer pull request from the environment.');
-  process.exit(-1);
-}
-console.error(`PR: ${repoSlug}#${pullRequest}`);
+const { owner, repo, pullRequest, slug } = inferPullRequest();
+console.error(`PR: ${slug}`);
 
-getTitle(repoSlug, pullRequest)
+getTitle(owner, repo, pullRequest)
   .then(title => {
-    console.error(`Title: ${title}`);
+    console.error(`Title: ${title}\n`);
     const services = servicesForTitle(title);
     if (services.length === 0) {
       console.error('No services found. Nothing to do.');
