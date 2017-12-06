@@ -52,7 +52,7 @@ jobs:
           name: Upload Greenkeeper lockfile
           command: greenkeeper-lockfile-upload
 
-  main-node-6:
+  main@node-6:
     docker:
       - image: shieldsio/shields-node-6:0.0.1
     working_directory: ~/repo
@@ -130,7 +130,7 @@ jobs:
               echo 'This is not a pull request. Skipping.'
             fi
 
-  services-pr-node-6:
+  services-pr@node-6:
     docker:
       - image: shieldsio/shields-node-6:0.0.1
     working_directory: ~/repo
@@ -191,7 +191,7 @@ workflows:
       - main:
           requires:
             - npm-install
-      - main-node-6:
+      - main@node-6:
           requires:
             - npm-install
       - frontend:
@@ -200,7 +200,7 @@ workflows:
       - services-pr:
           requires:
             - npm-install
-      - services-pr-node-6:
+      - services-pr@node-6:
           requires:
             - npm-install
 
