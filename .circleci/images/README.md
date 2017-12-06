@@ -17,15 +17,9 @@ Updating the images
 Note: Increment the patch version on the tag in each change.
 
 ```console
-docker build -t shieldsio/shields-node-8:<version> .circleci/images/node-8
+IMAGE_TAG=<version> npm run circle-images:build
 docker login
-docker push shieldsio/shields-node-8:<version>
-```
-
-```console
-docker build -t shieldsio/shields-node-6:<version> .circleci/images/node-6
-docker login
-docker push shieldsio/shields-node-6:<version>
+IMAGE_TAG=<version> npm run circle-images:push
 ```
 
 After pushing the images, bump the tag in `.circleci/config.yml`.

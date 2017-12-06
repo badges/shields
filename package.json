@@ -56,6 +56,8 @@
     "test:services:pr:run": "mocha --delay service-tests/runner/cli.js --stdin < pull-request-services.log",
     "test:services:pr": "npm run test:services:pr:prepare && npm run test:services:pr:run",
     "test": "npm run lint && npm run test:js:frontend && npm run test:js:server",
+    "circle-images:build": "docker build -t shieldsio/shields-node-8:${IMAGE_TAG} -f .circleci/images/node-8/Dockerfile . && docker build -t shieldsio/shields-node-6:${IMAGE_TAG} -f .circleci/images/node-6/Dockerfile .",
+    "circle-images:push": "docker push shieldsio/shields-node-8:${IMAGE_TAG} && docker push shieldsio/shields-node-6:${IMAGE_TAG}",
     "frontend-depcheck": "check-node-version --node \">= 8.0\"",
     "server-depcheck": "check-node-version --node \">= 6.0 < 9.0\"",
     "postinstall": "npm run server-depcheck",

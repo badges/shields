@@ -1,3 +1,4 @@
 FROM node:6
-RUN apt-get install fonts-dejavu-core
-RUN npm install -g greenkeeper-lockfile@1
+ADD .circleci/images/prepare-container.sh /root/prepare-container.sh
+RUN /root/prepare-container.sh
+RUN rm /root/prepare-container.sh
