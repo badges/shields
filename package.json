@@ -39,7 +39,8 @@
     "request": "~2.83.0",
     "semver": "~5.4.1",
     "svgo": "~0.7.1",
-    "xml2js": "~0.4.16"
+    "xml2js": "~0.4.16",
+    "lodash.uniq": "~4.5.0"
   },
   "scripts": {
     "coverage:test:js": "nyc node_modules/mocha/bin/_mocha '*.spec.js' 'lib/*.spec.js'",
