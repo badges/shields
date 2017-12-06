@@ -25,10 +25,10 @@ function inferPullRequest() {
       pullRequest: process.env.TRAVIS_PULL_REQUEST,
     };
   } else if (process.env.CIRCLECI) {
+    const prUrl = process.env.CI_PULL_REQUEST || '';
     return {
-      repoSlug: `${process.env.CIRCLE_PROJECT_USERNAME}/${process.env.CIRCLE_PROJECT_REPONAME}`,
-      // This variable contains the URL.
-      pullRequest: (process.env.CI_PULL_REQUEST || '').split('/').slice(-1)[0],
+      repoSlug: prUrl.split('/').slice(-4, -2).join('/'),
+      pullRequest: prUrl.split('/').slice(-1)[0],
     };
   } else {
     return {};
