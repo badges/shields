@@ -67,7 +67,7 @@ export default class DynamicBadgeMaker extends React.Component {
           className="short"
           value={this.state.uri}
           onChange={event => this.setState({ uri: event.target.value })}
-          placeholder="uri" /> {}
+          placeholder="url" /> {}
         <input
           className="short"
           value={this.state.query}
