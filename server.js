@@ -327,10 +327,9 @@ cache(function(data, match, sendBadge, request) {
           if (typeof data.branch.config.matrix.include !== 'undefined') {
             travisVersions = travisVersions.concat(data.branch.config.matrix.include.map((v) => v.php.toString()));
           }
-          travisVersions = travisVersions.map((v) => phpMinorVersion(v));
 
           const hasHhvm = travisVersions.find((v) => v.startsWith('hhvm'));
-          const versions = travisVersions.filter((v) => v.indexOf('.') !== -1);
+          const versions = travisVersions.map((v) => phpMinorVersion(v)).filter((v) => v.indexOf('.') !== -1);
           let reduction = phpVersionReduction(versions, phpReleases);
 
           if (hasHhvm) {
