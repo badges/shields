@@ -187,7 +187,7 @@ workflows:
           filters:
             branches:
               # ignore: gh-pages
-              only: circle
+              only: circle-2
       - main:
           requires:
             - npm-install
@@ -210,8 +210,7 @@ workflows:
           cron: "0 17 * * *"
           filters:
             branches:
-              only: circle
-              only: master
+              # only: master
+              only: circle-2
     jobs:
       - services-daily
-
