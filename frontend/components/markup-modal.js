@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import ClickToSelect from '@mapbox/react-click-to-select';
-import { resolveUri } from './badge-examples';
+import resolveBadgeUrl from '../lib/badge-url';
 import generateAllMarkup from '../lib/generate-image-markup';
+import { advertisedStyles } from '../../lib/supported-features';
 
 export default class MarkupModal extends React.Component {
   static propTypes = {
@@ -39,9 +40,20 @@ export default class MarkupModal extends React.Component {
     // user.
     const { exampleUri, previewUri, link } = example;
     this.setState({
-      badgeUri: resolveUri(exampleUri || previewUri, baseUri || window.location.href),
+      badgeUri: resolveBadgeUrl(exampleUri || previewUri, baseUri || window.location.href),
       link,
     });
+  }
+
+  generateCompleteBadgeUrl() {
+    const { baseUri } = this.props;
+    const { badgeUri, style } = this.state;
+
+    return resolveBadgeUrl(
+      badgeUri,
+      baseUri || window.location.href,
+      // Default style doesn't need to be specified.
+      style === 'flat' ? undefined : { style });
   }
 
   generateMarkup() {
@@ -49,16 +61,10 @@ export default class MarkupModal extends React.Component {
       return {};
     }
 
-    const { baseUri } = this.props;
     const { title } = this.props.example;
-    const { badgeUri, link, style } = this.state;
-
-    const withStyle = new URL(badgeUri, baseUri || window.location.href);
-    if (style !== 'flat') { // Default style doesn't need to be specified.
-      withStyle.searchParams.set('style', style);
-    }
-
-    return generateAllMarkup(withStyle.href, link, title);
+    const { link } = this.state;
+    const completeBadgeUrl = this.generateCompleteBadgeUrl();
+    return generateAllMarkup(completeBadgeUrl, link, title);
   }
 
   renderDocumentation() {
@@ -78,6 +84,8 @@ export default class MarkupModal extends React.Component {
   render() {
     const { markdown, reStructuredText, asciiDoc } = this.generateMarkup();
 
+    const completeBadgeUrl = this.isOpen ? this.generateCompleteBadgeUrl() : undefined;
+
     return (
       <Modal
         isOpen={this.isOpen}
@@ -85,7 +93,7 @@ export default class MarkupModal extends React.Component {
         contentLabel="Example Modal">
         <form action="">
           <p>
-            <img className="badge-img" src={this.state.badgeUri} />
+            <img className="badge-img" src={completeBadgeUrl} />
           </p>
           <p>
             <label>
@@ -111,9 +119,11 @@ export default class MarkupModal extends React.Component {
               <select
                 value={this.state.style}
                 onChange={event => { this.setState({ style: event.target.value }); }}>
-                <option value="plastic">plastic</option>
-                <option value="flat">flat</option>
-                <option value="flat-square">flat-square</option>
+                {
+                  advertisedStyles.map(style => (
+                    <option key={style} value={style}>{style}</option>
+                  ))
+                }
               </select>
             </label>
           </p>

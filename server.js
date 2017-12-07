@@ -7,6 +7,7 @@ const prettyBytes = require('pretty-bytes');
 const queryString = require('query-string');
 const semver = require('semver');
 const xml2js = require('xml2js');
+const uniq = require('lodash.uniq');
 
 const analytics = require('./lib/analytics');
 const config = require('./lib/server-config');
@@ -16,11 +17,14 @@ const log = require('./lib/log');
 const makeBadge = require('./lib/make-badge');
 const serverSecrets = require('./lib/server-secrets');
 const suggest = require('./lib/suggest');
+const {licenseToColor} = require('./lib/licenses');
 const { latest: latestVersion } = require('./lib/version');
 const {
   compare: phpVersionCompare,
   latest: phpLatestVersion,
   isStable: phpStableVersion,
+  minorVersion: phpMinorVersion,
+  versionReduction: phpVersionReduction,
 } = require('./lib/php-version');
 const {
   parseVersion: luarocksParseVersion,
@@ -41,7 +45,8 @@ const {
   downloadCount: downloadCountColor,
   floorCount: floorCountColor,
   version: versionColor,
-  age: ageColor
+  age: ageColor,
+  colorScale
 } = require('./lib/color-formatters');
 const {
   makeColorB,
@@ -50,6 +55,7 @@ const {
   makeLabel: getLabel,
   makeLogo: getLogo,
   makeBadgeData: getBadgeData,
+  setBadgeColor
 } = require('./lib/badge-data');
 const {
   handleRequest: cache,
@@ -138,7 +144,7 @@ analytics.load();
 analytics.scheduleAutosaving();
 analytics.setRoutes(camp);
 
-githubAuth.scheduleAutosaving();
+githubAuth.scheduleAutosaving({ dir: config.persistence.dir });
 if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);
 }
@@ -284,6 +290,93 @@ cache(function (data, match, sendBadge, request) {
       sendBadge(format, badgeData);
     }
   });
+}));
+
+// PHP version from .travis.yml
+camp.route(/^\/travis(?:-ci)?\/php-v\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const userRepo = match[1];  // eg, espadrine/sc
+  const version = match[2] || 'master';
+  const format = match[3];
+  const options = {
+    method: 'GET',
+    uri: 'https://api.travis-ci.org/repos/' + userRepo + '/branches/' + version,
+  };
+  const badgeData = getBadgeData('PHP', data);
+  // Custom user-agent and accept headers are required
+  // http://developer.github.com/v3/#user-agent-required
+  // https://developer.github.com/v3/licenses/
+  const customHeaders = {
+      'User-Agent': 'Shields.io'
+  };
+  // require PHP releases
+  regularUpdate(
+    'https://api.github.com/repos/php/php-src/git/refs/tags',
+    (24 * 3600 * 1000), // 1 day
+    tags => {
+      return uniq(
+        JSON.parse(tags).
+        // only releases
+        filter((tag) => tag.ref.match(/^refs\/tags\/php-\d+\.\d+\.\d+$/) != null).
+        // get minor version of release
+        map((tag) => tag.ref.match(/^refs\/tags\/php-(\d+\.\d+)\.\d+$/)[1])
+      );
+    },
+    (err, phpReleases) => {
+      if (err != null) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
+      }
+      request(options, function(err, res, buffer) {
+        if (err !== null) {
+          log.error('Travis CI error: ' + err.stack);
+          if (res) {
+            log.error('' + res);
+          }
+          badgeData.text[1] = 'invalid';
+          sendBadge(format, badgeData);
+          return;
+        }
+
+        try {
+          const data = JSON.parse(buffer);
+          let travisVersions = [];
+
+          // from php
+          if (typeof data.branch.config.php !== 'undefined') {
+            travisVersions = travisVersions.concat(data.branch.config.php.map((v) => v.toString()));
+          }
+          // from matrix
+          if (typeof data.branch.config.matrix.include !== 'undefined') {
+            travisVersions = travisVersions.concat(data.branch.config.matrix.include.map((v) => v.php.toString()));
+          }
+
+          const hasHhvm = travisVersions.find((v) => v.startsWith('hhvm'));
+          const versions = travisVersions.map((v) => phpMinorVersion(v)).filter((v) => v.indexOf('.') !== -1);
+          let reduction = phpVersionReduction(versions, phpReleases);
+
+          if (hasHhvm) {
+            reduction += reduction ? ', ' : '';
+            reduction += 'HHVM';
+          }
+
+          if (reduction) {
+            badgeData.colorscheme = 'blue';
+            badgeData.text[1] = reduction;
+          } else {
+            badgeData.text[1] = 'invalid';
+          }
+        } catch(e) {
+          badgeData.text[1] = 'invalid';
+        }
+        sendBadge(format, badgeData);
+      });
+    },
+    {
+      headers: customHeaders
+    }
+  );
 }));
 
 // Travis integration
@@ -1099,6 +1192,75 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Liberapay integration.
+camp.route(/^\/liberapay\/(receives|gives|patrons|goal)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var type = match[1];  // e.g., 'gives'
+  var entity = match[2]; // e.g., 'Changaco'
+  var format = match[3];
+  var apiUrl = 'https://liberapay.com/' + entity + '/public.json';
+  // Lock down type
+  const label = {
+      'receives': 'receives',
+      'gives': 'gives',
+      'patrons': 'patrons',
+      'goal': 'goal progress',
+      }[type];
+  const badgeData = getBadgeData(label, data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = getLogo('liberapay', data);
+  }
+  request(apiUrl, function dealWithData(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var value;
+      var currency;
+      switch(type) {
+        case 'receives':
+            if (data.receiving) {
+                value = data.receiving.amount;
+                currency = data.receiving.currency;
+                badgeData.text[1] = `${metric(value)} ${currency}/week`;
+                }
+            break;
+        case 'gives':
+            if (data.giving) {
+                value = data.giving.amount;
+                currency = data.giving.currency;
+                badgeData.text[1] = `${metric(value)} ${currency}/week`;
+                }
+            break;
+        case 'patrons':
+            value = data.npatrons;
+            badgeData.text[1] = metric(value);
+            break;
+        case 'goal':
+            if (data.goal) {
+                value = Math.round(data.receiving.amount/data.goal.amount*100);
+                badgeData.text[1] = `${value}%`;
+                }
+            break;
+        }
+      if (value != null) {
+        badgeData.colorscheme = colorScale([0, 10, 100])(value);
+        sendBadge(format, badgeData);
+      } else {
+        badgeData.text[1] = 'anonymous';
+        badgeData.colorscheme = 'blue';
+        sendBadge(format, badgeData);
+      }
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Libscore integration.
 camp.route(/^\/libscore\/s\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -1667,6 +1829,11 @@ cache({
         sendBadge(format, badgeData);
         return;
       }
+      if (res.statusCode === 404) {
+        badgeData.text[1] = 'package not found';
+        sendBadge(format, badgeData);
+        return;
+      }
       try {
         const data = JSON.parse(buffer);
         let license;
@@ -1681,8 +1848,13 @@ cache({
         } else if (typeof license == 'object') {
           license = license.type;
         }
-        badgeData.text[1] = license;
-        badgeData.colorscheme = 'blue';
+        if (license === undefined) {
+          badgeData.text[1] = 'missing';
+          badgeData.colorscheme = 'red';
+        } else {
+          badgeData.text[1] = license;
+          setBadgeColor(badgeData, licenseToColor(license));
+        }
         sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'invalid';
@@ -3069,6 +3241,85 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Discourse integration
+camp.route(/^\/discourse\/(http(?:s)?)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const scheme = match[1]; // eg, https
+  const host   = match[2]; // eg, meta.discourse.org
+  const stat   = match[3]; // eg, user_count
+  const format = match[4];
+  const url    = scheme + '://' + host + '/site/statistics.json';
+
+  const options = {
+    method: 'GET',
+    uri: url,
+    headers: {
+      'Accept': 'application/json'
+    }
+  };
+
+  var badgeData = getBadgeData('discourse', data);
+  request(options, function(err, res) {
+    if (err != null) {
+      if (res) {
+        console.error('' + res);
+      }
+
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    if (res.statusCode !== 200) {
+      badgeData.text[1] = 'inaccessible';
+      badgeData.colorscheme = 'red';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    badgeData.colorscheme = 'brightgreen';
+
+    try {
+      var data = JSON.parse(res['body']);
+      let statCount;
+
+      switch (stat) {
+        case 'topics':
+          statCount = data.topic_count;
+          badgeData.text[1] = metric(statCount) + ' topics';
+          break;
+        case 'posts':
+          statCount = data.post_count;
+          badgeData.text[1] = metric(statCount) + ' posts';
+          break;
+        case 'users':
+          statCount = data.user_count;
+          badgeData.text[1] = metric(statCount) + ' users';
+          break;
+        case 'likes':
+          statCount = data.like_count;
+          badgeData.text[1] = metric(statCount) + ' likes';
+          break;
+        case 'status':
+          badgeData.text[1] = 'online';
+          break;
+        default:
+          badgeData.text[1] = 'invalid';
+          badgeData.colorscheme = 'yellow';
+          break;
+      }
+
+      sendBadge(format, badgeData);
+    } catch(e) {
+      console.error('' + e.stack);
+      badgeData.colorscheme = 'yellow';
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+
+}));
+
 // ReadTheDocs build
 camp.route(/^\/readthedocs\/([^/]+)(?:\/(.+))?.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -3957,24 +4208,26 @@ cache(function(data, match, sendBadge, request) {
     'Accept': 'application/vnd.github.drax-preview+json'
   };
   request(apiUrl, { headers: customHeaders }, function(err, res, buffer) {
-    if (err != null) {
+    if (res && res.statusCode === 404) {
+      badgeData.text[1] = 'repo not found';
+      sendBadge(format, badgeData);
+      return;
+    }
+    if (err != null || res.statusCode !== 200) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
     try {
-      if (res.statusCode === 404) {
-        badgeData.text[1] = 'repo not found';
-        sendBadge(format, badgeData);
-        return;
-      }
       var body = JSON.parse(buffer);
-      if (body.license != null) {
-        badgeData.text[1] = body.license.name;
-        badgeData.colorscheme = 'blue';
+      const license = body.license;
+      if (license != null) {
+        badgeData.text[1] = license.spdx_id || 'unknown';
+        setBadgeColor(badgeData, licenseToColor(license.spdx_id));
         sendBadge(format, badgeData);
       } else {
-        badgeData.text[1] = 'unknown license';
+        badgeData.text[1] = 'missing';
+        badgeData.colorscheme = 'red';
         sendBadge(format, badgeData);
       }
     } catch(e) {
@@ -4254,13 +4507,20 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
+      if (res.statusCode !== 200) {
+        throw Error('Failed to count issues.');
+      }
       var data = JSON.parse(buffer);
       var issues = data.count;
-      badgeData.text[1] = issues + (isRaw? '': ' open');
+      badgeData.text[1] = metric(issues) + (isRaw? '': ' open');
       badgeData.colorscheme = issues ? 'yellow' : 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'invalid';
+      if (res.statusCode === 404) {
+        badgeData.text[1] = 'not found';
+      } else {
+        badgeData.text[1] = 'invalid';
+      }
       sendBadge(format, badgeData);
     }
   });
@@ -4285,13 +4545,20 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
+      if (res.statusCode !== 200) {
+        throw Error('Failed to count pull requests.');
+      }
       var data = JSON.parse(buffer);
       var pullrequests = data.size;
       badgeData.text[1] = metric(pullrequests) + (isRaw? '': ' open');
       badgeData.colorscheme = (pullrequests > 0)? 'yellow': 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'invalid';
+      if (res.statusCode === 404) {
+        badgeData.text[1] = 'not found';
+      } else {
+        badgeData.text[1] = 'invalid';
+      }
       sendBadge(format, badgeData);
     }
   });
@@ -6791,20 +7058,12 @@ cache(function(data, match, sendBadge, request) {
     // We consider all HTTP status codes below 310 as success.
     if (err != null || res.statusCode >= 310) {
       badgeData.text[1] = offlineMessage;
-      if (sixHex(offlineColor)) {
-        badgeData.colorB = '#' + offlineColor;
-      } else {
-        badgeData.colorscheme = offlineColor;
-      }
+      setBadgeColor(badgeData, offlineColor);
       sendBadge(format, badgeData);
       return;
     } else {
       badgeData.text[1] = onlineMessage;
-      if (sixHex(onlineColor)) {
-        badgeData.colorB = '#' + onlineColor;
-      } else {
-        badgeData.colorscheme = onlineColor;
-      }
+      setBadgeColor(badgeData, onlineColor);
       sendBadge(format, badgeData);
       return;
     }

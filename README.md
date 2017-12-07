@@ -7,8 +7,8 @@
         <img src="https://opencollective.com/shields/backers/badge.svg" /></a>
     <a href="#sponsors" alt="Sponsors on Open Collective">
         <img src="https://opencollective.com/shields/sponsors/badge.svg" /></a>
-    <a href="https://travis-ci.org/badges/shields">
-        <img src="https://img.shields.io/travis/badges/shields.svg"
+    <a href="https://circleci.com/gh/badges/shields/tree/master">
+        <img src="https://img.shields.io/circleci/project/github/badges/shields.svg"
             alt="build status"></a>
     <a href="https://github.com/badges/shields/commits/gh-pages">
         <img src="https://img.shields.io/github/last-commit/badges/shields/gh-pages.svg?label=last%20deployed"
@@ -127,7 +127,7 @@ Development
 6. Open `http://[::]:8080/` to view the home page.
 
 To generate the frontend using production cache settings &ndash; that is,
-badge preview URIs with `maxAge` &ndash; run `npm run build:production`.
+badge preview URIs with `maxAge` &ndash; run `LONG_CACHE=true npm run build`.
 
 To analyze the frontend bundle, run `npm install webpack-bundle-analyzer` and
 then `ANALYZE=true npm start`.
