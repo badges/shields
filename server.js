@@ -1325,6 +1325,9 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
+      if (res.statusCode !== 200) {
+        throw Error('Bad response.');
+      }
       var data = JSON.parse(buffer);
       if (type === 'activity') {
         var activity = data.activity_total;
@@ -1333,7 +1336,11 @@ cache(function(data, match, sendBadge, request) {
       }
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'invalid';
+      if (res.statusCode === 404) {
+        badgeData.text[1] = 'not found';
+      } else {
+        badgeData.text[1] = 'invalid';
+      }
       sendBadge(format, badgeData);
     }
   });

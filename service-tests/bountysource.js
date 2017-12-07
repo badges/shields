@@ -18,7 +18,7 @@ t.create('bounties (invalid team)')
   .get('/team/not-a-real-team/activity.json')
   .expectJSON({
     name: 'bounties',
-    value: 'undefined' // FIXME!
+    value: 'not found'
   });
 
 t.create('bounties (invalid type)')
@@ -46,5 +46,5 @@ t.create('bounties (unexpected response)')
   )
   .expectJSON({
     name: 'bounties',
-    value: 'undefined' // FIXME!
+    value: 'invalid'
   });
