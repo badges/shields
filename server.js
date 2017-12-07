@@ -7425,8 +7425,8 @@ cache((data, match, sendBadge, request) => {
   const apiUrl = `https://discordapp.com/api/guilds/${serverID}/widget.json`;
 
   request(apiUrl, (err, res, buffer) => {
+    const badgeData = getBadgeData('chat', data);
     try {
-      const badgeData = getBadgeData('chat', data);
       if (res && res.statusCode === 404) {
         badgeData.text[1] = 'invalid server';
         return;
@@ -7459,28 +7459,26 @@ camp.route(/^\/maven-metadata\/v\/(https?)\/(.+\.xml)\.(svg|png|gif|jpg|json)$/,
     const [, scheme, hostAndPath, format] = match;
     const metadataUri = `${scheme}://${hostAndPath}`;
     request(metadataUri, (error, response, body) => {
-      const badge = getBadgeData('maven', data);
+      const badgeData = getBadgeData('maven', data);
       try {
         if (!error && response.statusCode >= 200 && response.statusCode < 300) {
           xml2js.parseString(body, (err, result) => {
             if (err) {
-              badge.text[1] = 'error';
-              badge.colorscheme = 'red';
-              sendBadge(format, badge);
+              badgeData.text[1] = 'error';
+              badgeData.colorscheme = 'red';
             } else {
               const version = result.metadata.versioning[0].versions[0].version.slice(-1)[0];
-              badge.text[1] = versionText(version);
-              badge.colorscheme = versionColor(version);
-              sendBadge(format, badge);
+              badgeData.text[1] = versionText(version);
+              badgeData.colorscheme = versionColor(version);
             }
           });
         } else {
-          badge.text[1] = 'error';
-          badge.colorscheme = 'red';
+          badgeData.text[1] = 'error';
+          badgeData.colorscheme = 'red';
         }
       } catch (e) {
-        badge.text[1] = 'error';
-        badge.colorscheme = 'red';
+        badgeData.text[1] = 'error';
+        badgeData.colorscheme = 'red';
       } finally {
         sendBadge(format, badgeData);
       }
