@@ -104,9 +104,6 @@ const {
   sortDjangoVersions,
   parseClassifiers
 } = require('./lib/pypi-helpers.js');
-const {
-  findVersionByTag: microbadgerFindVersionByTag
-} = require('./lib/microbadger-helpers.js');
 
 const serverStartTime = new Date((new Date()).toGMTString());
 const githubApiUrl = config.services.github.baseUri;
@@ -6572,15 +6569,14 @@ cache(function(data, match, sendBadge, request) {
       let image;
 
       if (tag) {
-        image = microbadgerFindVersionByTag(parsedData, tag);
+        image = parsedData.Versions && parsedData.Versions.find(v => v.Tags.some(t => t.tag === tag));
+        if (!image) {
+          badgeData.text[1] = 'not found';
+          sendBadge(format, badgeData);
+          return;
+        }
       } else {
         image = parsedData;
-      }
-
-      if (tag && !image) {
-        badgeData.text[1] = 'not found';
-        sendBadge(format, badgeData);
-        return;
       }
 
       if (type === 'image-size') {
