@@ -5703,7 +5703,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 //vscode-marketplace download/version/rating integration
-camp.route(/^\/vscode-marketplace\/(d|v|r)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/vscode-marketplace\/(d|v|r|stars)\/(.*)\.(svg|png|gif|jpg|json)$/,
   cache(function (data, match, sendBadge, request) {
     let reqType = match[1]; // eg, d/v/r
     let repo = match[2];  // eg, `ritwickdey.LiveServer`.
@@ -5721,36 +5721,38 @@ camp.route(/^\/vscode-marketplace\/(d|v|r)\/(.*)\.(svg|png|gif|jpg|json)$/,
 
       try {
         switch (reqType) {
-          case 'd': {
+          case 'd':
             badgeData.text[0] = getLabel('downloads', data);
-            let count = getVscodeStatistic(buffer, 'install');
+            var count = getVscodeStatistic(buffer, 'install');
             badgeData.text[1] = metric(count);
+            badgeData.colorscheme = downloadCountColor(count);
             break;
-          }
-          case 'r': {
+          case 'r':
             badgeData.text[0] = getLabel('rating', data);
-            let rate = getVscodeStatistic(buffer, 'averagerating').toFixed(2);
-            let totalrate = getVscodeStatistic(buffer, 'ratingcount');
+            var rate = getVscodeStatistic(buffer, 'averagerating').toFixed(2);
+            var totalrate = getVscodeStatistic(buffer, 'ratingcount');
             badgeData.text[1] = rate + '/5 (' + totalrate + ')';
+            badgeData.colorscheme = floorCountColor(rate, 2, 3, 4);
             break;
-          }
-          case 'v': {
+          case 'stars':
+            badgeData.text[0] = getLabel('rating', data);
+            var rating = getVscodeStatistic(buffer, 'averagerating').toFixed(2);
+            badgeData.text[1] = starRating(rating);
+            badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
+            break;
+          case 'v':
             badgeData.text[0] = getLabel('visual studio marketplace', data);
             var version = buffer.results[0].extensions[0].versions[0].version;
             badgeData.text[1] = versionText(version);
             badgeData.colorscheme = versionColor(version);
             break;
-          }
         }
-
+        sendBadge(format, badgeData);
       } catch (e) {
         badgeData.text[1] = 'invalid';
         sendBadge(format, badgeData);
-        return;
       }
 
-      badgeData.colorscheme = 'brightgreen';
-      sendBadge(format, badgeData);
     });
   })
 );
