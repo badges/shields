@@ -4,7 +4,8 @@ const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 const {
   isVPlusTripleDottedVersion,
-  isMetric
+  isMetric,
+  isStarRating
 } = require('./helpers/validators');
 
 const isVscodeRating = Joi.string().regex(/[0-5].[0-9]{2}\/5?\s*\([0-9]*\)$/);
@@ -38,6 +39,20 @@ t.create('Rating | User specified label')
   .expectJSONTypes(Joi.object().keys({
     name: 'My custom rating label',
     value: isVscodeRating
+  }));
+
+t.create('Star Rating')
+  .get('/stars/ritwickdey.LiveServer.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'rating',
+    value: isStarRating
+  }));
+
+t.create('Star Rating | User specified label')
+  .get('/stars/ritwickdey.LiveServer.json?label=My custom rating label')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'My custom rating label',
+    value: isStarRating
   }));
 
 t.create('Version')
