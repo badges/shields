@@ -9,7 +9,7 @@ const isAppveyorTestTotals =
 const isCustomAppveyorTestTotals =
   Joi.string().regex(/^(?:[0-9]* ?(?:good|bad|n\/a) ?[0-9]*(?:,? )?)+$/);
 const isEmojiAppveyorTestTotals =
-  Joi.string().regex(/^(?:[0-9]* ?(?:✔|✘|●) ?[0-9]*(?:,? )?)+$/);
+  Joi.string().regex(/^(?:[0-9]* ?(?:✔|✘|●) ?[0-9]*(?:, | \| )?)+$/);
 
 const t = new ServiceTester({ id: 'appveyor', title: 'AppVeyor' });
 module.exports = t;

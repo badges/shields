@@ -769,9 +769,9 @@ cache({
 
       badgeData.text[1] = compact ? (passed + ' ' + testsPassed) : (testsPassed + ' ' + passed);
       if (testsFailed > 0)
-        badgeData.text[1] += compact ? (' ' + failed + ' ' + testsFailed) : (', ' + testsFailed + ' ' + failed);
+        badgeData.text[1] += compact ? (' | ' + failed + ' ' + testsFailed) : (', ' + testsFailed + ' ' + failed);
       if (testsSkipped > 0)
-        badgeData.text[1] += compact ? (' ' + skipped + ' ' + testsSkipped) : (', ' + testsSkipped + ' ' + skipped);
+        badgeData.text[1] += compact ? (' | ' + skipped + ' ' + testsSkipped) : (', ' + testsSkipped + ' ' + skipped);
 
       sendBadge(format, badgeData);
     } catch(e) {
