@@ -5703,7 +5703,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 //vscode-marketplace download/version/rating integration
-camp.route(/^\/vscode-marketplace\/(d|v|r)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/vscode-marketplace\/(d|v|r|stars)\/(.*)\.(svg|png|gif|jpg|json)$/,
   cache(function (data, match, sendBadge, request) {
     let reqType = match[1]; // eg, d/v/r
     let repo = match[2];  // eg, `ritwickdey.LiveServer`.
@@ -5733,6 +5733,12 @@ camp.route(/^\/vscode-marketplace\/(d|v|r)\/(.*)\.(svg|png|gif|jpg|json)$/,
             var totalrate = getVscodeStatistic(buffer, 'ratingcount');
             badgeData.text[1] = rate + '/5 (' + totalrate + ')';
             badgeData.colorscheme = floorCountColor(rate, 2, 3, 4);
+            break;
+          case 'stars':
+            badgeData.text[0] = getLabel('rating', data);
+            var rating = getVscodeStatistic(buffer, 'averagerating').toFixed(2);
+            badgeData.text[1] = starRating(rating);
+            badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
             break;
           case 'v':
             badgeData.text[0] = getLabel('visual studio marketplace', data);
