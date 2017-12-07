@@ -5747,9 +5747,9 @@ camp.route(/^\/vscode-marketplace\/(d|v|r|stars)\/(.*)\.(svg|png|gif|jpg|json)$/
             badgeData.colorscheme = versionColor(version);
             break;
         }
+        sendBadge(format, badgeData);
       } catch (e) {
         badgeData.text[1] = 'invalid';
-      } finally {
         sendBadge(format, badgeData);
       }
 
