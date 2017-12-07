@@ -10,14 +10,21 @@ cache:
 
 before_install:
   - npm --version | grep -E '^5.' > /dev/null || npm install -g "npm@5"
+  - npm install -g greenkeeper-lockfile@1
 
 before_script:
+  - greenkeeper-lockfile-update
   - mkdir private && echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
 
 script:
   - npm run lint
-  - npm run test:js
-  - npm run build:production
+  - npm run test:js:server
+  - if node_modules/.bin/check-node-version --node '< 8.0' > /dev/null; then echo "Skipping frontend tests."; else npm run test:js:frontend; fi
+  - if node_modules/.bin/check-node-version --node '< 8.0' > /dev/null; then echo "Skipping build."; else npm run build; fi
+
+after_script:
+  # Only the first Node version listed will upload the lock file.
+  - greenkeeper-lockfile-upload
 
 jobs:
   include:
