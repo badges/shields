@@ -49,6 +49,11 @@ jobs:
           command: npm run test:js:server
 
       - run:
+          name: Danger
+          when: always
+          command: npm run danger
+
+      - run:
           name: Upload Greenkeeper lockfile
           command: greenkeeper-lockfile-upload
 
