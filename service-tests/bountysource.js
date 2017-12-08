@@ -21,10 +21,6 @@ t.create('bounties (invalid team)')
     value: 'not found'
   });
 
-t.create('bounties (invalid type)')
-  .get('/team/mozilla-core/not-a-real-type.json')
-  .expectJSON({name: 'bounties', value: 'n/a'});
-
 t.create('bounties (connection error)')
   .get('/team/mozilla-core/activity.json')
   .networkOff()

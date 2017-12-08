@@ -1309,11 +1309,10 @@ cache(function(data, match, sendBadge, request) {
 
 
 // Bountysource integration.
-camp.route(/^\/bountysource\/team\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/bountysource\/team\/([^/]+)\/activity\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const team = match[1];  // eg, `mozilla-core`.
-  const type = match[2];  // eg, `activity`.
-  const format = match[3];
+  const format = match[2];
   const url = 'https://api.bountysource.com/teams/' + team;
   const options = {
     headers: { 'Accept': 'application/vnd.bountysource+json; version=2' } };
@@ -1329,11 +1328,9 @@ cache(function(data, match, sendBadge, request) {
         throw Error('Bad response.');
       }
       const parsedData = JSON.parse(buffer);
-      if (type === 'activity') {
-        const activity = parsedData.activity_total;
-        badgeData.colorscheme = 'brightgreen';
-        badgeData.text[1] = activity;
-      }
+      const activity = parsedData.activity_total;
+      badgeData.colorscheme = 'brightgreen';
+      badgeData.text[1] = activity;
       sendBadge(format, badgeData);
     } catch(e) {
       if (res.statusCode === 404) {
