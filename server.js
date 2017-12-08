@@ -228,9 +228,9 @@ cache(function (data, match, sendBadge, request) {
       } else {
         badgeData.text[1] = 'invalid';
       }
-      sendBadge(format, badgeData);
     } catch (e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -284,9 +284,9 @@ cache(function (data, match, sendBadge, request) {
       } else {
         badgeData.text[1] = 'invalid';
       }
-      sendBadge(format, badgeData);
     } catch (e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -369,8 +369,9 @@ cache(function(data, match, sendBadge, request) {
           }
         } catch(e) {
           badgeData.text[1] = 'invalid';
+        } finally {
+          sendBadge(format, badgeData);
         }
-        sendBadge(format, badgeData);
       });
     },
     {
@@ -412,10 +413,9 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.text[1] = state;
       }
-      sendBadge(format, badgeData);
-
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -472,10 +472,9 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.text[1] = status;
       }
-
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -511,16 +510,14 @@ camp.route(/^\/osslifecycle?\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$
         var matchStatus = body.match(/osslifecycle=([a-z]+)/im);
         if (matchStatus === null) {
           badgeData.text[1] = 'inaccessible';
-          sendBadge(format, badgeData);
           return;
         } else {
           badgeData.text[1] = matchStatus[1];
-          sendBadge(format, badgeData);
           return;
         }
       } catch(e) {
-        log(e);
         badgeData.text[1] = 'inaccessible';
+      } finally {
         sendBadge(format, badgeData);
       }
     });
@@ -612,10 +609,10 @@ cache(function (data, match, sendBadge, request) {
           badgeData.text[1] = 'invalid';
           badgeData.colorB = defaultOpts.noBuildColor;
       }
-      sendBadge(format, badgeData);
     } catch (e) {
       badgeData.text[1] = 'invalid';
       badgeData.colorB = defaultOpts.noBuildColor;
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -652,10 +649,9 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.text[1] = build.status;
       }
-      sendBadge(format, badgeData);
-
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -693,10 +689,9 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.text[1] = build.status;
       }
-      sendBadge(format, badgeData);
-
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -764,10 +759,9 @@ cache(function (data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       behavior.process(data, badgeData);
-      sendBadge(format, badgeData);
-
     } catch (e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -807,9 +801,9 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.text[1] = status;
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -835,7 +829,6 @@ cache(function(data, match, sendBadge, request) {
     try {
       if (res.statusCode === 404) {
         badgeData.text[1] = 'project not found or access denied';
-        sendBadge(format, badgeData);
         return;
       }
       var data = JSON.parse(buffer);
@@ -859,10 +852,9 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] += ', ' + testsFailed + ' failed';
       if (testsSkipped > 0)
         badgeData.text[1] += ', ' + testsSkipped + ' skipped';
-
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -915,16 +907,15 @@ cache(function(data, match, sendBadge, request) {
 
       if (covered === undefined || total === undefined) {
         badgeData.text[1] = 'malformed';
-        sendBadge(format, badgeData);
         return;
       }
 
       var percentage = covered / total * 100;
       badgeData.text[1] = percentage.toFixed(0) + '%';
       badgeData.colorscheme = coveragePercentageColor(percentage);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -979,7 +970,6 @@ camp.route(/^\/sonar\/?([0-9.]+)?\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|
 
           if (value === undefined) {
             badgeData.text[1] = 'unknown';
-            sendBadge(format, badgeData);
             return;
           }
 
@@ -1051,9 +1041,9 @@ camp.route(/^\/sonar\/?([0-9.]+)?\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|
             badgeData.text[1] = metric(value);
             badgeData.colorscheme = 'brightgreen';
           }
-          sendBadge(format, badgeData);
         } catch(e) {
           badgeData.text[1] = 'invalid';
+        } finally {
           sendBadge(format, badgeData);
         }
       });
@@ -1086,10 +1076,9 @@ cache(function(data, match, sendBadge, request) {
       } else if (data.message === 'failed') {
         badgeData.colorscheme = 'red';
       }
-      sendBadge(format, badgeData);
-
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -1174,13 +1163,12 @@ cache(function(data, match, sendBadge, request) {
         } else {
           badgeData.colorscheme = 'brightgreen';
         }
-        sendBadge(format, badgeData);
       } else {
         badgeData.text[1] = 'anonymous';
-        sendBadge(format, badgeData);
       }
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -1242,14 +1230,13 @@ cache(function(data, match, sendBadge, request) {
         }
       if (value != null) {
         badgeData.colorscheme = colorScale([0, 10, 100])(value);
-        sendBadge(format, badgeData);
       } else {
         badgeData.text[1] = 'anonymous';
         badgeData.colorscheme = 'blue';
-        sendBadge(format, badgeData);
       }
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -1272,9 +1259,9 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       badgeData.text[1] = metric(+data.count[data.count.length-1]);
       badgeData.colorscheme = 'blue';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -1299,9 +1286,9 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = " " + data.currency_sign + data.amount + " " + data.multiplier;
       badgeData.colorscheme = null;
       badgeData.colorB = '#2E8B57';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -1331,9 +1318,9 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'brightgreen';
         badgeData.text[1] = activity;
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -1372,9 +1359,9 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.text[1] = 'maybe untested';
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -1488,9 +1475,9 @@ cache(function(data, match, sendBadge, request) {
         break;
       }
       badgeData.colorscheme = downloadCountColor(downloads);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -1569,10 +1556,9 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = badgeText;
         badgeData.colorscheme = badgeColor;
       }
-
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -1617,9 +1603,9 @@ cache(function(data, match, sendBadge, request) {
       }
       badgeData.text[1] = version.license[0];
       badgeData.colorscheme = 'blue';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -1684,9 +1670,9 @@ cache(function(data, match, sendBadge, request) {
         break;
       }
       badgeData.colorscheme = downloadCountColor(downloads);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -1709,9 +1695,9 @@ cache(function(data, match, sendBadge, request) {
       var version = JSON.parse(buffer).version || 0;
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'not found';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -1753,9 +1739,9 @@ cache(function (data, match, sendBadge, request) {
       } else {
         badgeData.colorscheme = 'brightgreen';
       }
-      sendBadge(format, badgeData);
     } catch (e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -1787,9 +1773,9 @@ cache({
         const version = data[tag || 'latest'];
         badgeData.text[1] = versionText(version);
         badgeData.colorscheme = versionColor(version);
-        sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'invalid';
+      } finally {
         sendBadge(format, badgeData);
       }
     });
@@ -1849,9 +1835,9 @@ cache({
           badgeData.text[1] = license;
           setBadgeColor(badgeData, licenseToColor(license));
         }
-        sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'invalid';
+      } finally {
         sendBadge(format, badgeData);
       }
     });
@@ -1893,7 +1879,6 @@ cache({
         const data = JSON.parse(buffer);
         if (data.error === 'not_found') {
           badgeData.text[1] = 'package not found';
-          sendBadge(format, badgeData);
           return;
         }
         let releaseData;
@@ -1906,7 +1891,6 @@ cache({
         const versionRange = (releaseData.engines || {}).node;
         if (! versionRange) {
           badgeData.text[1] = 'not specified';
-          sendBadge(format, badgeData);
           return;
         }
         badgeData.text[1] = versionRange;
@@ -1922,7 +1906,6 @@ cache({
           }, (err, version) => {
             if (err != null) {
               badgeData.text[1] = 'invalid';
-              sendBadge(format, badgeData);
               return;
             }
             try {
@@ -1934,10 +1917,10 @@ cache({
                 badgeData.colorscheme = 'orange';
               }
             } catch(e) { }
-            sendBadge(format, badgeData);
         });
       } catch(e) {
         badgeData.text[1] = 'invalid';
+      } finally {
         sendBadge(format, badgeData);
       }
     });
@@ -2001,10 +1984,10 @@ cache(function(queryData, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       update(data, badgeData);
       variant(queryData, badgeData);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
       variant(data, badgeData);
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -2042,9 +2025,9 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       badgeData.text[1] = versionText(data.name);
       badgeData.colorscheme = versionColor(data.name);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -2067,9 +2050,9 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       badgeData.text[1] = "[" + clojar + " \"" + data.version + "\"]";
       badgeData.colorscheme = versionColor(data.version);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -2093,9 +2076,9 @@ cache(function(data, match, sendBadge, request) {
       var version = data.results[0].version;
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -2119,9 +2102,9 @@ cache(function(data, match, sendBadge, request) {
       var version = data.version;
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -2193,9 +2176,9 @@ cache(function(data, match, sendBadge, request) {
       } else { downloads = "invalid"; }
       badgeData.text[1] = downloads;
       badgeData.colorscheme = downloadCountColor(downloads);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -2219,9 +2202,9 @@ cache(function(data, match, sendBadge, request) {
       var count = data.length;
       badgeData.colorscheme = floorCountColor(count, 10, 50, 100);
       badgeData.text[1] = count;
-      sendBadge(format, badgeData);
     } catch (e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -2261,9 +2244,9 @@ cache(function(data, match, sendBadge, request) {
       badgeData.colorscheme = floorCountColor(count, 10, 50, 100);
       badgeData.text[1] = ordinalNumber(rank);
       badgeData.text[1] += totalRank? '': ' daily';
-      sendBadge(format, badgeData);
     } catch (e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -2305,12 +2288,10 @@ cache(function(data, match, sendBadge, request) {
         //    break;
         //}
         //badgeData.colorscheme = downloadCountColor(downloads);
-        sendBadge(format, badgeData);
       } else if (info === 'v') {
         var version = parsedData.info.version;
         badgeData.text[1] = versionText(version);
         badgeData.colorscheme = versionColor(version);
-        sendBadge(format, badgeData);
       } else if (info === 'l') {
         var license = parsedData.info.license;
         badgeData.text[0] = getLabel('license', data);
@@ -2320,7 +2301,6 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = license;
           badgeData.colorscheme = 'blue';
         }
-        sendBadge(format, badgeData);
       } else if (info === 'wheel') {
         let releases = parsedData.releases[parsedData.info.version];
         let hasWheel = false;
@@ -2334,7 +2314,6 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[0] = getLabel('wheel', data);
         badgeData.text[1] = hasWheel ? 'yes' : 'no';
         badgeData.colorscheme = hasWheel ? 'brightgreen' : 'red';
-        sendBadge(format, badgeData);
       } else if (info === 'format') {
         let releases = parsedData.releases[parsedData.info.version];
         let hasWheel = false;
@@ -2361,7 +2340,6 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = 'source';
           badgeData.colorscheme = 'yellow';
         }
-        sendBadge(format, badgeData);
       } else if (info === 'pyversions') {
         let versions = parseClassifiers(
           parsedData,
@@ -2382,7 +2360,6 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[0] = getLabel('python', data);
         badgeData.text[1] = versions.sort().join(', ');
         badgeData.colorscheme = 'blue';
-        sendBadge(format, badgeData);
       } else if (info === 'djversions') {
         let versions = parseClassifiers(
           parsedData,
@@ -2399,7 +2376,6 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[0] = getLabel('django versions', data);
         badgeData.text[1] = versions.join(', ');
         badgeData.colorscheme = 'blue';
-        sendBadge(format, badgeData);
       } else if (info === 'implementation') {
         let implementations = parseClassifiers(
           parsedData,
@@ -2412,7 +2388,6 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[0] = getLabel('implementation', data);
         badgeData.text[1] = implementations.sort().join(', ');
         badgeData.colorscheme = 'blue';
-        sendBadge(format, badgeData);
       } else if (info === 'status') {
         let pattern = /^Development Status :: ([1-7]) - (\S+)$/;
         var statusColors = {
@@ -2433,14 +2408,13 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[0] = getLabel('status', data);
         badgeData.text[1] = statusText;
         badgeData.colorscheme = statusColors[statusCode];
-        sendBadge(format, badgeData);
       } else {
         // That request is incorrect.
         badgeData.text[1] = 'request unknown';
-        sendBadge(format, badgeData);
       }
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -2468,45 +2442,44 @@ cache(function(data, match, sendBadge, request) {
       if (version && versions.indexOf(version) === -1) {
         throw new Error('unknown version');
       }
+      if (!version) {
+        if (versions.length === 1) {
+          version = omitv(versions[0]);
+        } else {
+          let latestVersionString, latestVersionList;
+          versions.forEach(function(versionString) {
+            versionString = omitv(versionString);   // remove leading 'v'
+            let versionList = luarocksParseVersion(versionString);
+            if (
+              !latestVersionList ||   // first iteration
+              luarocksCompareVersionLists(versionList, latestVersionList) > 0
+            ) {
+              latestVersionString = versionString;
+              latestVersionList = versionList;
+            }
+          });
+          version = latestVersionString;
+        }
+      }
+      let color;
+      switch (version.slice(0, 3).toLowerCase()) {
+        case 'dev':
+          color = 'yellow';
+          break;
+        case 'scm':
+        case 'cvs':
+          color = 'orange';
+          break;
+        default:
+          color = 'brightgreen';
+      }
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = color;
     } catch (e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
-      return;
     }
-    if (!version) {
-      if (versions.length === 1) {
-        version = omitv(versions[0]);
-      } else {
-        let latestVersionString, latestVersionList;
-        versions.forEach(function(versionString) {
-          versionString = omitv(versionString);   // remove leading 'v'
-          let versionList = luarocksParseVersion(versionString);
-          if (
-            !latestVersionList ||   // first iteration
-            luarocksCompareVersionLists(versionList, latestVersionList) > 0
-          ) {
-            latestVersionString = versionString;
-            latestVersionList = versionList;
-          }
-        });
-        version = latestVersionString;
-      }
-    }
-    let color;
-    switch (version.slice(0, 3).toLowerCase()) {
-      case 'dev':
-        color = 'yellow';
-        break;
-      case 'scm':
-      case 'cvs':
-        color = 'orange';
-        break;
-      default:
-        color = 'brightgreen';
-    }
-    badgeData.text[1] = versionText(version);
-    badgeData.colorscheme = color;
-    sendBadge(format, badgeData);
   });
 }));
 
@@ -2530,9 +2503,9 @@ cache(function(data, match, sendBadge, request) {
       var version = latestVersion(versions);
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -2572,12 +2545,10 @@ cache(function(queryParams, match, sendBadge, request) {
             break;
         }
         badgeData.colorscheme = downloadCountColor(downloads);
-        sendBadge(format, badgeData);
       } else if (info === 'v') {
         const version = data.releases[0].version;
         badgeData.text[1] = versionText(version);
         badgeData.colorscheme = versionColor(version);
-        sendBadge(format, badgeData);
       } else if (info == 'l') {
         const license = (data.meta.licenses || []).join(', ');
         badgeData.text[0] = getLabel(maybePluralize('license', data.meta.licenses), queryParams);
@@ -2587,10 +2558,10 @@ cache(function(queryParams, match, sendBadge, request) {
           badgeData.text[1] = license;
           badgeData.colorscheme = 'blue';
         }
-        sendBadge(format, badgeData);
       }
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -2631,14 +2602,13 @@ cache(function(data, match, sendBadge, request) {
       if (percentage !== percentage) {
         // It is NaN, treat it as unknown.
         badgeData.text[1] = 'unknown';
-        sendBadge(format, badgeData);
         return;
       }
       badgeData.text[1] = score + '%';
       badgeData.colorscheme = coveragePercentageColor(percentage);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'malformed';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -2673,14 +2643,13 @@ cache(function(data, match, sendBadge, request) {
       // Is `coverage` NaN when converted to number?
       if (+coverage !== +coverage) {
         badgeData.text[1] = 'unknown';
-        sendBadge(format, badgeData);
         return;
       }
       badgeData.text[1] = coverage + '%';
       badgeData.colorscheme = coveragePercentageColor(coverage);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'malformed';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -2707,21 +2676,19 @@ cache(function(data, match, sendBadge, request) {
                      .match(/filename=".*coverage_(.+)\.png"/)[1];
       if (!score) {
         badgeData.text[1] = 'malformed';
-        sendBadge(format, badgeData);
         return;
       }
       var percentage = parseInt(score);
       if (percentage !== percentage) {
         // It is NaN, treat it as unknown.
         badgeData.text[1] = 'unknown';
-        sendBadge(format, badgeData);
         return;
       }
       badgeData.text[1] = score + '%';
       badgeData.colorscheme = coveragePercentageColor(percentage);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'not found';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -2744,7 +2711,6 @@ cache(function(data, match, sendBadge, request) {
       var count = buffer.match(/>([0-9]+) issues?/)[1];
       if (!count) {
         badgeData.text[1] = 'malformed';
-        sendBadge(format, badgeData);
         return;
       }
       badgeData.text[1] = count;
@@ -2759,9 +2725,9 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.colorscheme = 'red';
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -2809,7 +2775,6 @@ cache(function(data, match, sendBadge, request) {
                              .match(/filename=".*(?:maintainability|test_coverage)-(.+)\.svg"/);
         if (!statusMatch) {
           badgeData.text[1] = 'unknown';
-          sendBadge(format, badgeData);
           return;
         }
 
@@ -2827,9 +2792,9 @@ cache(function(data, match, sendBadge, request) {
         } else {
           badgeData.colorscheme = 'red';
         }
-        sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'invalid';
+      } finally {
         sendBadge(format, badgeData);
       }
     });
@@ -2858,7 +2823,6 @@ cache(function(data, match, sendBadge, request) {
                            .match(/filename=".*code_climate-(.+)\.png"/);
       if (!statusMatch) {
         badgeData.text[1] = 'unknown';
-        sendBadge(format, badgeData);
         return;
       }
       var state = statusMatch[1].replace('-', '.');
@@ -2875,9 +2839,9 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.colorscheme = 'red';
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'not found';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -2914,9 +2878,9 @@ cache(function(data, match, sendBadge, request) {
         .project.metric_values['scrutinizer.test_coverage'] * 100;
       badgeData.text[1] = percentage.toFixed(0) + '%';
       badgeData.colorscheme = coveragePercentageColor(percentage);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -2961,10 +2925,9 @@ cache(function(data, match, sendBadge, request) {
       } else if (status === 'unknown') {
         badgeData.colorscheme = 'gray';
       }
-      sendBadge(format, badgeData);
-
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -3013,10 +2976,9 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.colorscheme = 'red';
       }
-
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -3058,11 +3020,10 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'brightgreen';
       }
       badgeData.text[1] = status;
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
-      return;
     }
   });
 }));
@@ -3074,24 +3035,19 @@ cache(function(data, match, sendBadge, request) {
   var format = match[2];
   var url = 'http://dotnet-status.com/api/status/' + projectUri + '/';
   var badgeData = getBadgeData('dependencies', data);
-  var sendErrorBadge = function() {
-    badgeData.text[1] = 'inconclusive';
-    sendBadge(format, badgeData);
-  };
 
   request(url, function (err, res, buffer) {
-    if (err != null || res.statusCode === 404) {
-      sendErrorBadge();
-      return;
-    }
-
-    if (res.statusCode === 202) {
-      badgeData.text[1] = 'processing';
-      sendBadge(format, badgeData);
-      return;
-    }
-
     try {
+      if (err != null || res.statusCode === 404) {
+        badgeData.text[1] = 'inconclusive';
+        return;
+      }
+
+      if (res.statusCode === 202) {
+        badgeData.text[1] = 'processing';
+        return;
+      }
+
       var data = JSON.parse(buffer);
       if(data.projectResults.length === 1 && data.projectResults[0] !== null) {
         if (data.projectResults[0].outOfDate) {
@@ -3105,10 +3061,11 @@ cache(function(data, match, sendBadge, request) {
       else {
         badgeData.text[1] = 'project not found';
       }
-      sendBadge(format, badgeData);
     }
     catch (e) {
-      sendErrorBadge();
+      badgeData.text[1] = 'inconclusive';
+    } finally {
+      sendBadge(format, badgeData);
     }
   });
 }));
@@ -3144,11 +3101,10 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.text[1] = 'undefined';
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
-      return;
     }
   });
 }));
@@ -3177,10 +3133,9 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.colorscheme = 'red';
       }
-      sendBadge(format, badgeData);
-
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -3226,10 +3181,9 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.colorscheme = 'red';
       }
-      sendBadge(format, badgeData);
-
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -3302,12 +3256,11 @@ cache(function(data, match, sendBadge, request) {
           badgeData.colorscheme = 'yellow';
           break;
       }
-
-      sendBadge(format, badgeData);
     } catch(e) {
       console.error('' + e.stack);
       badgeData.colorscheme = 'yellow';
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -3342,10 +3295,9 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.colorscheme = 'red';
       }
-      sendBadge(format, badgeData);
-
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -3373,10 +3325,9 @@ cache(function(data, match, sendBadge, request) {
     try {
       badgeData.text[1] = res;
       badgeData.colorscheme = coveragePercentageColor(parseInt(res));
-      sendBadge(format, badgeData);
-
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -3406,9 +3357,9 @@ cache(function(data, match, sendBadge, request) {
       var version = versionLines[0].replace(/\s+/, '').split(/:/)[1];
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -3439,8 +3390,9 @@ cache(function(data, match, sendBadge, request) {
       }
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
+      sendBadge(format, badgeData);
     }
-    sendBadge(format, badgeData);
   });
 }));
 
@@ -3463,9 +3415,9 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = versionText(data.version);
         badgeData.colorscheme = versionColor(data.version);
       }
-      sendBadge(format, badgeData);
     } catch (e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -3511,10 +3463,9 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = license;
         badgeData.colorB = '#373737';
       }
-
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -3539,9 +3490,9 @@ cache(function(data, match, sendBadge, request) {
       badgeData.colorscheme = coveragePercentageColor(percentage);
       badgeData.text[0] = getLabel('docs', data);
       badgeData.text[1] = percentage + '%';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -3579,9 +3530,9 @@ cache(function(data, match, sendBadge, request) {
           break;
       }
       badgeData.colorscheme = downloadCountColor(downloads);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -3615,9 +3566,9 @@ cache(function(data, match, sendBadge, request) {
           break;
       }
       badgeData.colorscheme = downloadCountColor(apps);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -3639,9 +3590,9 @@ cache(function (data, match, sendBadge, request) {
       badgeData.colorscheme = 'brightgreen';
       var data = JSON.parse(buffer);
       badgeData.text[1] = data.value;
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -3670,9 +3621,9 @@ cache(function(data, match, sendBadge, request) {
       var tag = latestVersion(versions);
       badgeData.text[1] = versionText(tag);
       badgeData.colorscheme = versionColor(tag);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'none';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -3714,9 +3665,9 @@ cache(function(query_data, match, sendBadge, request) {
           badgeData.colorscheme = value != 'invalid data' ? 'blue' : 'lightgrey';
           break;
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid data';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -3753,8 +3704,9 @@ cache(function(data, match, sendBadge, request) {
       badgeData.colorscheme = 'blue';
     } catch(e) {
       badgeData.text[1] = 'inaccessible';
+    } finally {
+      sendBadge(format, badgeData);
     }
-    sendBadge(format, badgeData);
   });
 }));
 
@@ -3787,9 +3739,9 @@ cache(function(data, match, sendBadge, request) {
       var prerelease = data.prerelease;
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = prerelease ? 'orange' : 'blue';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'none';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -3873,9 +3825,9 @@ cache(function(data, match, sendBadge, request) {
       labelWords.unshift(metric(downloads));
       badgeData.text[1] = labelWords.join(' ');
       badgeData.colorscheme = 'brightgreen';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'none';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -3921,9 +3873,9 @@ cache(function(data, match, sendBadge, request) {
       var issues = data.total_count;
       badgeData.text[1] = metric(issues) + rightClassText;
       badgeData.colorscheme = (issues > 0)? 'yellow': 'brightgreen';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -3990,9 +3942,9 @@ cache((queryParams, match, sendBadge, request) => {
         default:
           throw Error('Unreachable due to regex');
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4035,14 +3987,13 @@ cache((queryParams, match, sendBadge, request) => {
             default:
               throw Error('Unreachable due to regex');
           }
-          sendBadge(format, badgeData);
         } catch(e) {
           badgeData.text[1] = 'invalid';
-          sendBadge(format, badgeData);
         }
       });
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4075,9 +4026,9 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = forks;
       badgeData.colorscheme = null;
       badgeData.colorB = '#4183C4';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4108,9 +4059,9 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = metric(JSON.parse(buffer).stargazers_count);
       badgeData.colorscheme = null;
       badgeData.colorB = '#4183C4';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4141,9 +4092,9 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = JSON.parse(buffer).subscribers_count;
       badgeData.colorscheme = null;
       badgeData.colorB = '#4183C4';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4169,9 +4120,9 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = JSON.parse(buffer).followers;
       badgeData.colorscheme = null;
       badgeData.colorB = '#4183C4';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4218,14 +4169,13 @@ cache(function(data, match, sendBadge, request) {
       if (license != null) {
         badgeData.text[1] = license.spdx_id || 'unknown';
         setBadgeColor(badgeData, licenseToColor(license.spdx_id));
-        sendBadge(format, badgeData);
       } else {
         badgeData.text[1] = 'missing';
         badgeData.colorscheme = 'red';
-        sendBadge(format, badgeData);
       }
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4261,13 +4211,12 @@ cache(function(data, match, sendBadge, request) {
       if (body && Number.isInteger(body.size)) {
         badgeData.text[1] = prettyBytes(body.size);
         badgeData.colorscheme = 'green';
-        sendBadge(format, badgeData);
       } else {
         badgeData.text[1] = 'not a regular file';
-        sendBadge(format, badgeData);
       }
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4292,14 +4241,13 @@ cache(function(data, match, sendBadge, request) {
       var body = JSON.parse(buffer);
       if (body.message === 'Validation Failed') {
         badgeData.text[1] = 'repo not found';
-        sendBadge(format, badgeData);
         return;
       }
       badgeData.text[1] = metric(body.total_count);
       badgeData.colorscheme = 'blue';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4346,9 +4294,9 @@ cache(function(data, match, sendBadge, request) {
       }
       badgeData.text[1] = `${metric(value)}${intervalLabel}`;
       badgeData.colorscheme = 'blue';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4381,9 +4329,9 @@ cache(function(data, match, sendBadge, request) {
       const commitDate = parsedData[0].commit.author.date;
       badgeData.text[1] = formatDate(commitDate);
       badgeData.colorscheme = ageColor(Date.parse(commitDate));
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4446,9 +4394,9 @@ cache(function(data, match, sendBadge, request) {
         default:
           throw Error('Unreachable due to regex');
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4475,9 +4423,9 @@ cache(function(data, match, sendBadge, request) {
       const parsedData = JSON.parse(buffer);
       badgeData.text[1] = prettyBytes(parseInt(parsedData.size) * 1024);
       badgeData.colorscheme = 'blue';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4508,13 +4456,13 @@ cache(function(data, match, sendBadge, request) {
       var issues = data.count;
       badgeData.text[1] = metric(issues) + (isRaw? '': ' open');
       badgeData.colorscheme = issues ? 'yellow' : 'brightgreen';
-      sendBadge(format, badgeData);
     } catch(e) {
       if (res.statusCode === 404) {
         badgeData.text[1] = 'not found';
       } else {
         badgeData.text[1] = 'invalid';
       }
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4546,13 +4494,13 @@ cache(function(data, match, sendBadge, request) {
       var pullrequests = data.size;
       badgeData.text[1] = metric(pullrequests) + (isRaw? '': ' open');
       badgeData.colorscheme = (pullrequests > 0)? 'yellow': 'brightgreen';
-      sendBadge(format, badgeData);
     } catch(e) {
       if (res.statusCode === 404) {
         badgeData.text[1] = 'not found';
       } else {
         badgeData.text[1] = 'invalid';
       }
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4578,9 +4526,9 @@ cache(function(data, match, sendBadge, request) {
       var version = data.version;
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4679,9 +4627,9 @@ cache(function(data, match, sendBadge, request) {
           badgeData.colorscheme = 'lightgrey';
         }
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4716,10 +4664,9 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[0] = getLabel('modules', data);
         badgeData.text[1] = metric(modules);
       }
-      sendBadge(format, badgeData);
-
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4773,9 +4720,9 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'lightgrey';
         badgeData.text[1] = 'building';
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4833,9 +4780,9 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.colorscheme = 'yellow';
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4879,20 +4826,18 @@ cache(function(data, match, sendBadge, request) {
       })[0];
       if (coverageObject === undefined) {
         badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
         return;
       }
       var coverage = coverageObject.ratio;
       if (+coverage !== +coverage) {
         badgeData.text[1] = 'unknown';
-        sendBadge(format, badgeData);
         return;
       }
       badgeData.text[1] = coverage.toFixed(0) + '%';
       badgeData.colorscheme = coveragePercentageColor(coverage);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -4925,9 +4870,9 @@ cache(function(data, match, sendBadge, request) {
         }
         badgeData.text[1] = versionText(version);
         badgeData.colorscheme = versionColor(version);
-        sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'not found';
+      } finally {
         sendBadge(format, badgeData);
       }
   });
@@ -4959,9 +4904,9 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = json.namespace + '.' + json.name;
         badgeData.colorscheme = 'blue';
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'errored';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -5016,9 +4961,9 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = 'not built';
           break;
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'not found';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -5063,9 +5008,9 @@ cache(function(data, match, sendBadge, request) {
           badgeData.colorscheme = 'red';
           break;
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'not found';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -5103,9 +5048,9 @@ cache(function(data, match, sendBadge, request) {
         });
         badgeData.text[1] = versionText(version);
         badgeData.colorscheme = versionColor(version);
-        sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'invalid';
+      } finally {
         sendBadge(format, badgeData);
       }
     });
@@ -5187,9 +5132,9 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = 'undefined';
         badgeData.colorscheme = 'orange';
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -5230,9 +5175,9 @@ cache((data, match, sendBadge, request) => {
       const version = reqType == 'v' ? data.latest_stable_release.name : data.latest_release_number;
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'no releases';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -5265,9 +5210,9 @@ cache((data, match, sendBadge, request) => {
       const license = data.normalized_licenses[0];
       badgeData.text[1] = license;
       badgeData.colorscheme = 'blue';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -5295,9 +5240,9 @@ cache(function(data, match, sendBadge, request) {
       } else if (accessibility === 'no') {
         badgeData.colorscheme = 'red';
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'void';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -5322,9 +5267,9 @@ cache(function(data, match, sendBadge, request) {
       var version = data.version;
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -5358,9 +5303,9 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.colorscheme = 'brightgreen';
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -5395,9 +5340,9 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.colorscheme = 'brightgreen';
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -5428,7 +5373,7 @@ cache(function(data, match, sendBadge, request) {
             var versions = JSON.parse(response).offers.map(function(v) {
               return v.version;
             });
-            if (err != null) { sendBadge(format, badgeData); return; }
+            if (err != null) { return; }
             var svTestedVersion = testedVersion.split('.').length == 2 ? testedVersion += '.0' : testedVersion;
             var svVersion = versions[0].split('.').length == 2 ? versions[0] += '.0' : versions[0];
             if (testedVersion == versions[0] || semver.gtr(svTestedVersion, svVersion)) {
@@ -5438,17 +5383,14 @@ cache(function(data, match, sendBadge, request) {
             } else {
               badgeData.colorscheme = 'yellow';
             }
-            sendBadge(format, badgeData);
           } catch(e) {
             badgeData.text[1] = 'invalid';
-            sendBadge(format, badgeData);
           }
         });
-      } else {
-        sendBadge(format, badgeData);
       }
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -5486,9 +5428,9 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.colorscheme = 'brightgreen';
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -5515,9 +5457,9 @@ cache(function(data, match, sendBadge, request) {
       var downloads = JSON.parse(buffer).downloaded;
       badgeData.text[1] = metric(downloads);
       badgeData.colorscheme = downloadCountColor(downloads);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -5568,9 +5510,9 @@ cache(function(data, match, sendBadge, request) {
       var downloads = data.total;
       badgeData.text[1] = metric(downloads) + time_period;
       badgeData.colorscheme = downloadCountColor(downloads);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -5613,11 +5555,10 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = 'unknown';
         badgeData.colorscheme = 'lightgrey';
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid' + e.toString();
+    } finally {
       sendBadge(format, badgeData);
-      return;
     }
   });
 }));
@@ -5637,14 +5578,14 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var dls = JSON.parse(buffer).downloads;
+      badgeData.text[1] = metric(dls);
+      badgeData.colorscheme = 'green';
+      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
-      return;
     }
-    badgeData.text[1] = metric(dls);
-    badgeData.colorscheme = 'green';
-    sendBadge(format, badgeData);
   });
 }));
 
@@ -5664,14 +5605,13 @@ cache(function(data, match, sendBadge, request) {
     try {
       var releases = JSON.parse(buffer).releases;
       var version = releases.latest;
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
-      return;
     }
-    badgeData.text[1] = versionText(version);
-    badgeData.colorscheme = versionColor(version);
-    sendBadge(format, badgeData);
   });
 }));
 
@@ -5691,14 +5631,13 @@ cache(function(data, match, sendBadge, request) {
     try {
       var metadata = JSON.parse(buffer).metadata;
       var license = metadata.license;
+      badgeData.text[1] = license;
+      badgeData.colorscheme = 'blue';
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
-      return;
     }
-    badgeData.text[1] = license;
-    badgeData.colorscheme = 'blue';
-    sendBadge(format, badgeData);
   });
 }));
 
@@ -5747,9 +5686,9 @@ camp.route(/^\/vscode-marketplace\/(d|v|r|stars)\/(.*)\.(svg|png|gif|jpg|json)$/
             badgeData.colorscheme = versionColor(version);
             break;
         }
-        sendBadge(format, badgeData);
       } catch (e) {
         badgeData.text[1] = 'invalid';
+      } finally {
         sendBadge(format, badgeData);
       }
 
@@ -5810,9 +5749,9 @@ cache(function(data, match, sendBadge, request) {
           default:
             throw Error('Unreachable due to regex');
         }
-        sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'invalid';
+      } finally {
         sendBadge(format, badgeData);
       }
     });
@@ -5844,23 +5783,19 @@ cache({
       try {
         if (res && (res.statusCode === 404 || data.state === null)) {
           badgeData.text[1] = 'not found';
-          sendBadge(format, badgeData);
           return;
         }
 
         if (!res || err !== null || res.statusCode !== 200) {
           badgeData.text[1] = 'inaccessible';
-          sendBadge(format, badgeData);
           return;
         }
 
         badgeData.text[1] = data.state;
         badgeData.colorB = dockbitStates[data.state];
-
-        sendBadge(format, badgeData);
-      }
-      catch(e) {
+      } catch(e) {
         badgeData.text[1] = 'invalid';
+      } finally {
         sendBadge(format, badgeData);
       }
     });
@@ -5891,17 +5826,14 @@ cache({
       try {
         if (!res || err !== null || res.statusCode !== 200) {
           badgeData.text[1] = 'inaccessible';
-          sendBadge(format, badgeData);
           return;
         }
 
         badgeData.text[1] = data.status;
         badgeData.colorscheme = statusColorScheme[data.status];
-
-        sendBadge(format, badgeData);
-      }
-      catch(e) {
+      } catch(e) {
         badgeData.text[1] = 'invalid';
+      } finally {
         sendBadge(format, badgeData);
       }
     });
@@ -5975,9 +5907,9 @@ cache(function(data, match, sendBadge, request) {
       default:
         badgeData.text[1] = status.replace('_', ' ');
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -6009,9 +5941,9 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = license;
         badgeData.colorscheme = 'blue';
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -6043,7 +5975,7 @@ cache(function(queryParams, match, sendBadge, request) {
         var version = data.Version;
         badgeData.text[1] = versionText(version);
         badgeData.colorscheme = versionColor(version);
-        sendBadge(format, badgeData);
+        return;
       } else if (info === 'l') {
         badgeData.text[0] = getLabel('license', queryParams);
         var license = data.License;
@@ -6053,12 +5985,13 @@ cache(function(queryParams, match, sendBadge, request) {
         } else {
           badgeData.text[1] = 'unknown';
         }
-        sendBadge(format, badgeData);
+        return;
       } else {
         throw Error('Unreachable due to regex');
       }
     } catch (e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -6091,7 +6024,7 @@ cache(function(data, match, sendBadge, request) {
         var version = parsedData.version.number;
         badgeData.text[1] = versionText(version);
         badgeData.colorscheme = versionColor(version);
-        sendBadge(format, badgeData);
+        return;
       } else if (info === 'l') {
         badgeData.text[0] = getLabel('license', data);
         var license = parsedData.license;
@@ -6102,12 +6035,13 @@ cache(function(data, match, sendBadge, request) {
         } else {
           badgeData.text[1] = 'unknown';
         }
-        sendBadge(format, badgeData);
+        return;
       } else {
         throw Error('Unreachable due to regex');
       }
     } catch (e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });}
@@ -6134,35 +6068,33 @@ cache(function (data, match, sendBadge, request) {
     }
     try {
       var parsedData = JSON.parse(buffer);
-      if (info.charAt(0) === 'd') {
-        badgeData.text[0] = getLabel('downloads', data);
-        var downloads;
-        switch (info.charAt(1)) {
-          case 'm':
-            downloads = parsedData.downloads.monthly;
-            badgeData.text[1] = metric(downloads) + '/month';
-            break;
-          case 'w':
-            downloads = parsedData.downloads.weekly;
-            badgeData.text[1] = metric(downloads) + '/week';
-            break;
-          case 'd':
-            downloads = parsedData.downloads.daily;
-            badgeData.text[1] = metric(downloads) + '/day';
-            break;
-          case 't':
-            downloads = parsedData.downloads.total;
-            badgeData.text[1] = metric(downloads);
-            break;
-        }
-        if (version) {
-            badgeData.text[1] += ' ' + versionText(version);
-        }
-        badgeData.colorscheme = downloadCountColor(downloads);
-        sendBadge(format, badgeData);
+      badgeData.text[0] = getLabel('downloads', data);
+      var downloads;
+      switch (info.charAt(1)) {
+        case 'm':
+          downloads = parsedData.downloads.monthly;
+          badgeData.text[1] = metric(downloads) + '/month';
+          break;
+        case 'w':
+          downloads = parsedData.downloads.weekly;
+          badgeData.text[1] = metric(downloads) + '/week';
+          break;
+        case 'd':
+          downloads = parsedData.downloads.daily;
+          badgeData.text[1] = metric(downloads) + '/day';
+          break;
+        case 't':
+          downloads = parsedData.downloads.total;
+          badgeData.text[1] = metric(downloads);
+          break;
       }
+      if (version) {
+          badgeData.text[1] += ' ' + versionText(version);
+      }
+      badgeData.colorscheme = downloadCountColor(downloads);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -6192,7 +6124,6 @@ cache(function (data, match, sendBadge, request) {
       if (info === 'v') {
         badgeData.text[1] = versionText(parsedData);
         badgeData.colorscheme = versionColor(parsedData);
-        sendBadge(format, badgeData);
       } else if (info == 'l') {
         var license = parsedData.info.license;
         badgeData.text[0] = getLabel('license', data);
@@ -6202,10 +6133,10 @@ cache(function (data, match, sendBadge, request) {
           badgeData.text[1] = license;
           badgeData.colorscheme = 'blue';
         }
-        sendBadge(format, badgeData);
       }
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -6234,9 +6165,9 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = metric(stars);
       badgeData.colorscheme = null;
       badgeData.colorB = data.colorB || '#008bb8';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -6266,9 +6197,9 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = metric(pulls);
       badgeData.colorscheme = null;
       badgeData.colorB = data.colorB || '#008bb8';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -6304,9 +6235,9 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'yellow';
       }
       badgeData.colorB = data.colorB || '#008bb8';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -6348,9 +6279,9 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = 'building';
         badgeData.colorB = data.colorB || '#008bb8';
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -6398,7 +6329,6 @@ cache(function(data, match, sendBadge, request) {
     'https://twitter.com/intent/follow?screen_name=' + user,
     'https://twitter.com/' + user + '/followers'
   ];
-  badgeData.text[1] = '';
   request(options, function(err, res, buffer) {
     if (err != null) {
       sendBadge(format, badgeData);
@@ -6412,9 +6342,10 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = metric(data.followers_count);
       }
     } catch(e) {
-      log.error(e);
+      badgeData.text[1] = 'invalid';
+    } finally {
+      sendBadge(format, badgeData);
     }
-    sendBadge(format, badgeData);
   });
 }));
 
@@ -6442,10 +6373,9 @@ cache(function(data, match, sendBadge, request) {
       } else if (res === 'Failed') {
         badgeData.colorscheme = 'red';
       }
-      sendBadge(format, badgeData);
-
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -6475,9 +6405,9 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'red';
         badgeData.text[1] = 'failing';
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -6520,9 +6450,9 @@ cache(function(data, match, sendBadge, request) {
       }
       badgeData.colorscheme = null;
       badgeData.colorB = '#007ec6';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -6630,10 +6560,9 @@ cache(function(data, match, sendBadge, request) {
 
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
-
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -6683,9 +6612,9 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = metric(count);
         badgeData.colorscheme = floorCountColor(1000, 10000, 20000);
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });}
@@ -6714,9 +6643,9 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       badgeData.text[1] = '$' + (data.total_amount || 0);
       badgeData.colorscheme = 'red';
-      sendBadge(format, badgeData);
     } catch (e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -6770,10 +6699,9 @@ cache({
         badgeData.text[1] = data.label;
         badgeData.colorscheme = null;
         badgeData.colorB = '#' + data.color;
-        sendBadge(format, badgeData);
-
       } catch(e) {
         badgeData.text[1] = 'invalid';
+      } finally {
         sendBadge(format, badgeData);
       }
     });
@@ -6816,9 +6744,9 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = '' + count;
       badgeData.colorscheme = null;
       badgeData.colorB = makeColorB(color, data);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -6858,9 +6786,9 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = license;
         badgeData.colorscheme = 'blue';
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -7020,40 +6948,39 @@ cache(function(query_data, match, sendBadge, request) {
       try {
         var rating;
         switch (type) {
-        case 'v':
-          var version = data.addon.version[0];
-          badgeData.text[1] = versionText(version);
-          badgeData.colorscheme = versionColor(version);
-          break;
-        case 'd':
-          var downloads = parseInt(data.addon.total_downloads[0], 10);
-          badgeData.text[0] = getLabel('downloads', query_data);
-          badgeData.text[1] = metric(downloads);
-          badgeData.colorscheme = downloadCountColor(downloads);
-          break;
-        case 'rating':
-          rating = parseInt(data.addon.rating, 10);
-          badgeData.text[0] = getLabel('rating', query_data);
-          badgeData.text[1] = rating + '/5';
-          badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
-          break;
-        case 'stars':
-          rating = parseInt(data.addon.rating, 10);
-          badgeData.text[0] = getLabel('stars', query_data);
-          badgeData.text[1] = starRating(rating);
-          badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
-          break;
-        case 'users':
-          var dailyUsers = parseInt(data.addon.daily_users[0], 10);
-          badgeData.text[0] = getLabel('users', query_data);
-          badgeData.text[1] = metric(dailyUsers);
-          badgeData.colorscheme = 'brightgreen';
-          break;
+          case 'v':
+            var version = data.addon.version[0];
+            badgeData.text[1] = versionText(version);
+            badgeData.colorscheme = versionColor(version);
+            break;
+          case 'd':
+            var downloads = parseInt(data.addon.total_downloads[0], 10);
+            badgeData.text[0] = getLabel('downloads', query_data);
+            badgeData.text[1] = metric(downloads);
+            badgeData.colorscheme = downloadCountColor(downloads);
+            break;
+          case 'rating':
+            rating = parseInt(data.addon.rating, 10);
+            badgeData.text[0] = getLabel('rating', query_data);
+            badgeData.text[1] = rating + '/5';
+            badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
+            break;
+          case 'stars':
+            rating = parseInt(data.addon.rating, 10);
+            badgeData.text[0] = getLabel('stars', query_data);
+            badgeData.text[1] = starRating(rating);
+            badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
+            break;
+          case 'users':
+            var dailyUsers = parseInt(data.addon.daily_users[0], 10);
+            badgeData.text[0] = getLabel('users', query_data);
+            badgeData.text[1] = metric(dailyUsers);
+            badgeData.colorscheme = 'brightgreen';
+            break;
         }
-
-        sendBadge(format, badgeData);
       } catch (err) {
         badgeData.text[1] = 'invalid';
+      } finally {
         sendBadge(format, badgeData);
       }
     });
@@ -7095,9 +7022,9 @@ cache(function(data, match, sendBadge, request) {
       }
       badgeData.text[1] = version;
       badgeData.colorscheme = color;
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -7192,10 +7119,9 @@ cache(function(data, match, sendBadge, request) {
       if (label != null) badgeData.text[0] = getLabel(label, data);
       badgeData.text[1] = value || 'invalid';
       if (color != null) badgeData.colorscheme = color;
-
-      sendBadge(format, badgeData);
     } catch (e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -7286,27 +7212,26 @@ cache(function(data, match, sendBadge, request) {
         var plugin = data["plugin-repository"].category;
         if (!plugin) {
           badgeData.text[1] = 'not found';
-          return sendBadge(format, badgeData);
+          return;
         }
         switch (type) {
-        case 'd':
-          var downloads = parseInt(data["plugin-repository"].category[0]["idea-plugin"][0]["$"].downloads, 10);
-          if (isNaN(downloads)) {
-            badgeData.text[1] = 'invalid';
-            return sendBadge(format, badgeData);
-          }
-          badgeData.text[1] = metric(downloads);
-          badgeData.colorscheme = downloadCountColor(downloads);
-          return sendBadge(format, badgeData);
-        case 'v':
-          var version = data['plugin-repository'].category[0]["idea-plugin"][0].version[0];
-          badgeData.text[1] = versionText(version);
-          badgeData.colorscheme = versionColor(version);
-          return sendBadge(format, badgeData);
+          case 'd':
+            var downloads = parseInt(data["plugin-repository"].category[0]["idea-plugin"][0]["$"].downloads, 10);
+            if (isNaN(downloads)) {
+              badgeData.text[1] = 'invalid';
+              return;
+            }
+            badgeData.text[1] = metric(downloads);
+            badgeData.colorscheme = downloadCountColor(downloads);
+          case 'v':
+            var version = data['plugin-repository'].category[0]["idea-plugin"][0].version[0];
+            badgeData.text[1] = versionText(version);
+            badgeData.colorscheme = versionColor(version);
         }
       } catch (err) {
         badgeData.text[1] = 'invalid';
-        return sendBadge(format, badgeData);
+      } finally {
+        sendBadge(format, badgeData);
       }
     });
   });
@@ -7335,7 +7260,6 @@ cache(function(data, match, sendBadge, request) {
     try {
       if (err != null || res.statusCode >= 500 || typeof json !== 'object') {
         badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
         return;
       }
 
@@ -7355,9 +7279,9 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = 'invalid';
         }
       }
-      sendBadge(format, badgeData);
     } catch (e) {
       badgeData.text[1] = 'inaccessible';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -7398,7 +7322,6 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = json.error.message;
         }
         badgeData.colorscheme = 'lightgrey';
-        sendBadge(format, badgeData);
         return;
       }
       var status = json.monitors[0].status;
@@ -7421,9 +7344,9 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = 'invalid';
         badgeData.colorscheme = 'lightgrey';
       }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -7471,7 +7394,6 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = json.error.message;
         }
         badgeData.colorscheme = 'lightgrey';
-        sendBadge(format, badgeData);
         return;
       }
       var percent = parseFloat(json.monitors[0].custom_uptime_ratio);
@@ -7487,9 +7409,9 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.colorscheme = 'brightgreen';
       }
-      sendBadge(format, badgeData);
     } catch (e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -7504,33 +7426,28 @@ cache((data, match, sendBadge, request) => {
 
   request(apiUrl, (err, res, buffer) => {
     const badgeData = getBadgeData('chat', data);
-    if (res && res.statusCode === 404) {
-      badgeData.text[1] = 'invalid server';
-      sendBadge(format, badgeData);
-      return;
-    }
-    if (err != null || !res || res.statusCode !== 200) {
-      badgeData.text[1] = 'inaccessible';
-      if (res && res.headers['content-type'] === 'application/json') {
-        try {
+    try {
+      if (res && res.statusCode === 404) {
+        badgeData.text[1] = 'invalid server';
+        return;
+      }
+      if (err != null || !res || res.statusCode !== 200) {
+        badgeData.text[1] = 'inaccessible';
+        if (res && res.headers['content-type'] === 'application/json') {
           const data = JSON.parse(buffer);
           if (data && typeof data.message === 'string') {
             badgeData.text[1] = data.message.toLowerCase();
           }
-        } catch(e) {
         }
+        return;
       }
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
       const data = JSON.parse(buffer);
       const members = Array.isArray(data.members) ? data.members : [];
       badgeData.text[1] = members.length + ' online';
       badgeData.colorscheme = 'brightgreen';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
       sendBadge(format, badgeData);
     }
   });
@@ -7542,30 +7459,28 @@ camp.route(/^\/maven-metadata\/v\/(https?)\/(.+\.xml)\.(svg|png|gif|jpg|json)$/,
     const [, scheme, hostAndPath, format] = match;
     const metadataUri = `${scheme}://${hostAndPath}`;
     request(metadataUri, (error, response, body) => {
-      const badge = getBadgeData('maven', data);
-      if (!error && response.statusCode >= 200 && response.statusCode < 300) {
-        try {
+      const badgeData = getBadgeData('maven', data);
+      try {
+        if (!error && response.statusCode >= 200 && response.statusCode < 300) {
           xml2js.parseString(body, (err, result) => {
             if (err) {
-              badge.text[1] = 'error';
-              badge.colorscheme = 'red';
-              sendBadge(format, badge);
+              badgeData.text[1] = 'error';
+              badgeData.colorscheme = 'red';
             } else {
               const version = result.metadata.versioning[0].versions[0].version.slice(-1)[0];
-              badge.text[1] = versionText(version);
-              badge.colorscheme = versionColor(version);
-              sendBadge(format, badge);
+              badgeData.text[1] = versionText(version);
+              badgeData.colorscheme = versionColor(version);
             }
           });
-        } catch (e) {
-          badge.text[1] = 'error';
-          badge.colorscheme = 'red';
-          sendBadge(format, badge);
+        } else {
+          badgeData.text[1] = 'error';
+          badgeData.colorscheme = 'red';
         }
-      } else {
-        badge.text[1] = 'error';
-        badge.colorscheme = 'red';
-        sendBadge(format, badge);
+      } catch (e) {
+        badgeData.text[1] = 'error';
+        badgeData.colorscheme = 'red';
+      } finally {
+        sendBadge(format, badgeData);
       }
     });
 }));
@@ -7745,10 +7660,9 @@ cache(function(data, match, sendBadge, request) {
             badgeData.text[1] = starRating(Math.round(rating));
             break;
         }
-
-        sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'invalid';
+      } finally {
         sendBadge(format, badgeData);
       }
     });
@@ -7783,8 +7697,9 @@ cache(function(data, match, sendBadge, request) {
       badgeData.colorscheme = 'blue';
     } catch(e) {
       badgeData.text[1] = 'invalid';
+    } finally {
+      sendBadge(format, badgeData);
     }
-    sendBadge(format, badgeData);
   });
 }));
 
@@ -7825,10 +7740,10 @@ function(data, match, end, ask) {
       badgeData.template = data.style;
     }
     const svg = makeBadge(badgeData);
-    makeSend(format, ask.res, end)(svg);
   } catch(e) {
     log.error(e.stack);
     const svg = makeBadge({text: ['error', 'bad badge'], colorscheme: 'red'});
+  } finally {
     makeSend(format, ask.res, end)(svg);
   }
 });
@@ -7871,9 +7786,9 @@ function(data, match, end, ask) {
     var badgeData = {text: [subject, status]};
     badgeData.colorscheme = color;
     const svg = makeBadge(badgeData);
-    makeSend('png', ask.res, end)(svg);
   } catch(e) {
     const svg = makeBadge({text: ['error', 'bad badge'], colorscheme: 'red'});
+  } finally {
     makeSend('png', ask.res, end)(svg);
   }
 });
