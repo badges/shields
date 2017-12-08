@@ -3,7 +3,7 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
-const t = new ServiceTester({ id: 'bountysource', title: 'Bountysource badges' });
+const t = new ServiceTester({ id: 'bountysource', title: 'Bountysource' });
 module.exports = t;
 
 
@@ -38,7 +38,7 @@ t.create('bounties (unexpected response)')
   )
   .expectJSON({name: 'bounties', value: 'invalid'});
 
-t.create('bounties (unexpected response)')
+t.create('bounties (error response)')
   .get('/team/mozilla-core/activity.json')
   .intercept(nock => nock('https://api.bountysource.com')
     .get('/teams/mozilla-core')
