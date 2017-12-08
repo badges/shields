@@ -1309,15 +1309,14 @@ cache(function(data, match, sendBadge, request) {
 
 
 // Bountysource integration.
-camp.route(/^\/bountysource\/team\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/bountysource\/team\/([^/]+)\/activity\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var team = match[1];  // eg, `mozilla-core`.
-  var type = match[2];  // eg, `activity`.
-  var format = match[3];
-  var url = 'https://api.bountysource.com/teams/' + team;
-  var options = {
+  const team = match[1];  // eg, `mozilla-core`.
+  const format = match[2];
+  const url = 'https://api.bountysource.com/teams/' + team;
+  const options = {
     headers: { 'Accept': 'application/vnd.bountysource+json; version=2' } };
-  var badgeData = getBadgeData('bounties', data);
+  let badgeData = getBadgeData('bounties', data);
   request(url, options, function dealWithData(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -1325,15 +1324,20 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      if (type === 'activity') {
-        var activity = data.activity_total;
-        badgeData.colorscheme = 'brightgreen';
-        badgeData.text[1] = activity;
+      if (res.statusCode !== 200) {
+        throw Error('Bad response.');
       }
+      const parsedData = JSON.parse(buffer);
+      const activity = parsedData.activity_total;
+      badgeData.colorscheme = 'brightgreen';
+      badgeData.text[1] = activity;
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'invalid';
+      if (res.statusCode === 404) {
+        badgeData.text[1] = 'not found';
+      } else {
+        badgeData.text[1] = 'invalid';
+      }
       sendBadge(format, badgeData);
     }
   });
