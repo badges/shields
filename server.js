@@ -1328,9 +1328,9 @@ cache(function(data, match, sendBadge, request) {
       if (res.statusCode !== 200) {
         throw Error('Bad response.');
       }
-      const data = JSON.parse(buffer);
+      const parsedData = JSON.parse(buffer);
       if (type === 'activity') {
-        const activity = data.activity_total;
+        const activity = parsedData.activity_total;
         badgeData.colorscheme = 'brightgreen';
         badgeData.text[1] = activity;
       }
