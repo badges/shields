@@ -25,7 +25,7 @@ t.create('build status (valid, with branch)')
 
 t.create('build status (not found)')
   .get('/not-a-build.json')
-  .expectJSON({name: 'build', value: 'inaccessible'}); // FIXME!
+  .expectJSON({name: 'build', value: 'not found'});
 
 t.create('build status (connection error)')
   .get('/5444c5ecb904a4b21567b0ff.json')
@@ -38,4 +38,4 @@ t.create('build status (unexpected response)')
     .get('/projects/5444c5ecb904a4b21567b0ff/badge')
     .reply(200, "{{{{{invalid json}}")
   )
-  .expectJSON({name: 'build', value: 'inaccessible'}); // FIXME!
+  .expectJSON({name: 'build', value: 'invalid'});

@@ -68,7 +68,7 @@ const {
   clearRegularUpdateCache
 } = require('./lib/regular-update');
 const { makeSend } = require('./lib/result-sender');
-const { fetchFromSvg } = require('./lib/svg-badge-parser');
+const { valueFromSvgBadge, fetchFromSvg } = require('./lib/svg-badge-parser');
 const {
   escapeFormat,
   escapeFormatSlashes
@@ -518,7 +518,7 @@ camp.route(/^\/osslifecycle?\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$
 // Shippable integration
 camp.route(/^\/shippable\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
-  var defaultOpts = {
+  const defaultOpts = {
     colorA: '#555555',
     successLabel: 'passing',
     successColor: '#44CC11',
@@ -538,7 +538,7 @@ cache(function (data, match, sendBadge, request) {
     inaccessibleColor: '#A1ABAB'
   };
 
-  var badgeData = getBadgeData('build', data);
+  const badgeData = getBadgeData('build', data);
   delete badgeData.colorscheme;
 
   // overwrite the default options if present in query parameters
@@ -551,23 +551,25 @@ cache(function (data, match, sendBadge, request) {
   badgeData.colorA = defaultOpts.colorA;
   badgeData.colorB = defaultOpts.noBuildColor;
 
-  var project = match[1];  // eg, 54d119db5ab6cc13528ab183
-  var branch = match[2];
-  var format = match[3];
-  var url = 'https://api.shippable.com/projects/' + project + '/badge';
-
+  const project = match[1];  // eg, 54d119db5ab6cc13528ab183
+  const branch = match[2];
+  const format = match[3];
+  let url = 'https://api.shippable.com/projects/' + project + '/badge';
   if (branch != null) {
     url += '?branch=' + branch;
   }
+  const options = {
+    method: 'GET',
+    uri: url
+  };
 
-  fetchFromSvg(request, url, function (err, res) {
-    if (err != null) {
-      badgeData.text[1] = defaultOpts.inaccessibleLabel;
+  request(options, function(err, res, buffer) {
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
-
     try {
+      const res = valueFromSvgBadge(buffer);
       switch (res) {
         case 'none':
           badgeData.text[1] = defaultOpts.noBuildLabel;
@@ -602,7 +604,7 @@ cache(function (data, match, sendBadge, request) {
           badgeData.colorB = defaultOpts.noBuildColor;
       }
       sendBadge(format, badgeData);
-    } catch (e) {
+    } catch(e) {
       badgeData.text[1] = 'invalid';
       badgeData.colorB = defaultOpts.noBuildColor;
       sendBadge(format, badgeData);
