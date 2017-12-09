@@ -86,7 +86,7 @@ Badge guidelines
 ----------------
 
 - The left-hand side of a badge should not advertize. It should be a *noun*
-  succinctly describing the meaning of the right-hand-side data.
+  succinctly describing the meaning of the right-hand side.
 - Query parameters must be *declared by the service*. See `request-handler.js`.
 - Except for badges using the `social` style, logos should be *turned off by
   default*.
