@@ -16,7 +16,7 @@ export default () => (
     </p>
     
     <p>
-      <a className="link" href="https://github.com/pravdomil/shields">GitHub</a> &nbsp;
+      <a className="link" href="https://github.com/badges/shields">GitHub</a> &nbsp;
       <a className="link" href="https://opencollective.com/shields">donate</a>
     </p>
 
