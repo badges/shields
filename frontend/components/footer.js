@@ -8,7 +8,7 @@ const Footer = ({ baseUri }) => (
 
     <p>
       What is your favorite badge service to use?<br />
-      <a href="https://github.com/badges/shields/issues/new">Tell us</a> and we might bring it to you!
+      <a href="https://github.com/badges/shields/blob/master/CONTRIBUTING.md">Tell us</a> and we might bring it to you!
     </p>
     <p>
       <object
