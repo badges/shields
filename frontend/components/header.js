@@ -14,10 +14,18 @@ export default () => (
       Hackable &nbsp;
       No tracking
     </p>
+    
+    <p>
+      <a className="link" href="https://opencollective.com/shields">donate</a>
+    </p>
 
     <style jsx>{`
       .highlights {
         font-style: italic;
+      }
+      .link {
+        text-decoration: none;
+        color: rgba(0,0,0,0.5);
       }
     `}</style>
   </section>
