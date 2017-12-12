@@ -2774,15 +2774,15 @@ cache(function(data, match, sendBadge, request) {
 // New Code Climate scores (coverage + maintainability)
 camp.route(/^\/codeclimate\/(c|maintainability)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var type = match[1] === 'c' ? 'test_coverage' : 'maintainability';
-  var userRepo = match[2];  // eg, `kabisaict/flow`.
-  var format = match[3];
+  const isCoverage = match[1] === 'c';
+  const userRepo = match[2];  // eg, `kabisaict/flow`.
+  const format = match[3];
   request({
       method: 'GET',
-      uri: 'https://api.codeclimate.com/v1/repos?github_slug=' + userRepo,
+      uri: `https://api.codeclimate.com/v1/repos?github_slug=${userRepo}`,
       json: true
   }, function (err, res, body) {
-    var badgeData = getBadgeData(match[1] === 'c' ? 'coverage' : 'maintainability', data);
+    const badgeData = getBadgeData(isCoverage ? 'coverage' : 'maintainability', data);
 
     if (err != null) {
       badgeData.text[1] = 'invalid';
@@ -2790,54 +2790,52 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
 
-    if (!body.data || body.data.length == 0 || !body.data[0].hasOwnProperty('attributes')) {
-      badgeData.text[1] = 'not found';
-      sendBadge(format, badgeData);
-      return;
-    }
-
-    var options = {
-      method: 'HEAD',
-      uri: 'https://api.codeclimate.com/v1/badges/' + body.data[0].attributes.badge_token + '/' + type,
-    };
-
-    request(options, function(err, res) {
-      if (err != null) {
-        badgeData.text[1] = 'invalid';
+    try {
+      if (!body.data || body.data.length === 0) {
+        badgeData.text[1] = 'not found';
+        sendBadge(format, badgeData);
+        return;
+      } else if (isCoverage && body.data[0].relationships.latest_default_branch_test_report.data == null
+          || !isCoverage && body.data[0].relationships.latest_default_branch_snapshot.data == null) {
+        badgeData.text[1] = 'unknown';
         sendBadge(format, badgeData);
         return;
       }
 
-      try {
-        var statusMatch = res.headers['content-disposition']
-                             .match(/filename=".*(?:maintainability|test_coverage)-(.+)\.svg"/);
-        if (!statusMatch) {
-          badgeData.text[1] = 'unknown';
+      let apiUrl = `https://api.codeclimate.com/v1/repos/${body.data[0].id}/`;
+      if (isCoverage) {
+        apiUrl += `test_reports/${body.data[0].relationships.latest_default_branch_test_report.data.id}`;
+      } else {
+        apiUrl += `snapshots/${body.data[0].relationships.latest_default_branch_snapshot.data.id}`;
+      }
+      request(apiUrl, function(err, res, buffer) {
+        if (err != null) {
+          badgeData.text[1] = 'invalid';
           sendBadge(format, badgeData);
           return;
         }
 
-        var score = statusMatch[1].replace('-', '.');
+        const parsedData = JSON.parse(buffer);
+        const score = isCoverage ? parsedData.data.attributes.rating.letter : parsedData.data.attributes.ratings[0].letter;
         badgeData.text[1] = score;
 
-        if (score == 'A') {
+        if (score === 'A') {
           badgeData.colorscheme = 'brightgreen';
-        } else if (score == 'B') {
+        } else if (score === 'B') {
           badgeData.colorscheme = 'green';
-        } else if (score == 'C') {
+        } else if (score === 'C') {
           badgeData.colorscheme = 'yellow';
-        } else if (score == 'D') {
+        } else if (score === 'D') {
           badgeData.colorscheme = 'orange';
         } else {
           badgeData.colorscheme = 'red';
         }
         sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-
+      });
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
   });
 }));
 
