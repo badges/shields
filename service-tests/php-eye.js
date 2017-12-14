@@ -7,15 +7,15 @@ module.exports = t;
 
 t.create('gets the package version of symfony')
     .get('/php-v/symfony/symfony.json')
-    .expectJSON({ name: 'Tested', value: '5.2 - 7.0, HHVM' });
+    .expectJSON({ name: 'Tested', value: '7.1' });
 
 t.create('gets the package version of symfony 2.8')
     .get('/php-v/symfony/symfony/v2.8.0.json')
-    .expectJSON({ name: 'Tested', value: '5.2, 7.1, HHVM' });
+    .expectJSON({ name: 'Tested', value: '5.3 - 7.0, HHVM' });
 
 t.create('gets the package version of yii')
     .get('/php-v/yiisoft/yii.json')
-    .expectJSON({ name: 'Tested', value: '5.2' });
+    .expectJSON({ name: 'Tested', value: '5.3 - 7.1' });
 
 t.create('invalid package name')
     .get('/php-v/frodo/is-not-a-package.json')

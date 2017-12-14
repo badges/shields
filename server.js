@@ -7852,14 +7852,14 @@ cache(function(data, match, sendBadge, request) {
 
           let versions = [];
           for (const index in travis.runtime_status) {
-            if (travis.runtime_status[index] === 1 && index.match(/^php\d\d$/) !== null) {
+            if (travis.runtime_status[index] === 3 && index.match(/^php\d\d$/) !== null) {
               versions.push(index.replace(/^php(\d)(\d)$/, '$1.$2'));
             }
           }
 
           let reduction = phpVersionReduction(versions, phpReleases);
 
-          if (travis.runtime_status.hhvm === 1) {
+          if (travis.runtime_status.hhvm === 3) {
             reduction += reduction ? ', ' : '';
             reduction += 'HHVM';
           }
