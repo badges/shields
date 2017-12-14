@@ -7792,6 +7792,96 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// PHP version from PHP-Eye
+camp.route(/^\/php-eye\/php-v\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const userRepo = match[1];  // eg, espadrine/sc
+  const version = match[2] || 'dev-master';
+  const format = match[3];
+  const options = {
+    method: 'GET',
+    uri: 'https://php-eye.com/api/v1/package/' + userRepo + '.json',
+  };
+  const badgeData = getBadgeData('Tested', data);
+  // Custom user-agent and accept headers are required
+  // http://developer.github.com/v3/#user-agent-required
+  // https://developer.github.com/v3/licenses/
+  const customHeaders = {
+      'User-Agent': 'Shields.io'
+  };
+  // require PHP releases
+  regularUpdate(
+    'https://api.github.com/repos/php/php-src/git/refs/tags',
+    (24 * 3600 * 1000), // 1 day
+    tags => {
+      return uniq(
+        JSON.parse(tags).
+        // only releases
+        filter((tag) => tag.ref.match(/^refs\/tags\/php-\d+\.\d+\.\d+$/) != null).
+        // get minor version of release
+        map((tag) => tag.ref.match(/^refs\/tags\/php-(\d+\.\d+)\.\d+$/)[1])
+      );
+    },
+    (err, phpReleases) => {
+      if (err != null) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
+      }
+      request(options, function(err, res, buffer) {
+        if (err !== null) {
+          log.error('PHP-Eye error: ' + err.stack);
+          if (res) {
+            log.error('' + res);
+          }
+          badgeData.text[1] = 'invalid';
+          sendBadge(format, badgeData);
+          return;
+        }
+
+        try {
+          const data = JSON.parse(buffer);
+          const travis = data.versions.filter((release) => release.name === version)[0].travis;
+
+          if (!travis.config_exists) {
+            badgeData.colorscheme = 'red';
+            badgeData.text[1] = 'not tested';
+            sendBadge(format, badgeData);
+            return;
+          }
+
+          let versions = [];
+          for (const index in travis.runtime_status) {
+            if (travis.runtime_status[index] === 1 && index.match(/^php\d\d$/) !== null) {
+              versions.push(index.replace(/^php(\d)(\d)$/, '$1.$2'));
+            }
+          }
+
+          let reduction = phpVersionReduction(versions, phpReleases);
+
+          if (travis.runtime_status.hhvm === 1) {
+            reduction += reduction ? ', ' : '';
+            reduction += 'HHVM';
+          }
+
+          if (reduction) {
+            badgeData.colorscheme = 'brightgreen';
+            badgeData.text[1] = reduction;
+          } else {
+            badgeData.text[1] = 'invalid';
+          }
+        } catch(e) {
+          badgeData.text[1] = 'invalid';
+        }
+        sendBadge(format, badgeData);
+      });
+    },
+    {
+      headers: customHeaders
+    }
+  );
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
