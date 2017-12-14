@@ -1,12 +1,20 @@
 Contributing to Shields
 =======================
 
-Shields is a community project. We invite your participation through issues
-and pull requests!
+Shields is a community project. We invite your participation through
+financial contributions, issues, and pull requests!
 
 
 Ways you can help
 -----------------
+
+### Financial contributions
+
+We welcome financial contributions in full transparency on our
+[open collective](https://opencollective.com/shields). Anyone can file an
+expense. If the expense makes sense for the development of the community, it
+will be "merged" into the ledger of our open collective by the core
+contributors and the person who filed the expense will be reimbursed.
 
 ### Contributing code
 
@@ -25,9 +33,23 @@ You can help by improving the project's usage and developer instructions.
 
 ### Helping others
 
+You can help with code review, which reduces bugs, and over time has a
+wonderful side effect of making the code more readable and therefore more
+approachable. It's also a great way to teach and learn. Feel free to jump in!
+Be welcoming, appreciative, and helpful.
+
+Please review [these impeccable guidelines][code review guidelines].
+
+You can perform first reviews of simple changes, like badge additions. You can
+also review @paulmelnikow's changes, most of which are otherwise
+self-reviewed.
+
 You can monitor [issues][] and the [chat room][], and help other people who
 have questions about contributing to Shields, or using it for their projects.
 
+Feel free to reach out to @paulmelnikow if you'd need help getting started.
+
+[code review guidelines]: http://amyciavolino.com/assets/MindfulCommunicationInCodeReviews.pdf
 [issues]: https://github.com/badges/shields/issues
 [chat room]: https://discordapp.com/invite/HjJCwm5
 
@@ -40,8 +62,8 @@ pick them up.
 There is no need to post a new comment. Just add a :thumbsup: or :heart: to
 the top post.
 
-If you have a suggestion of your own, [search the open issues][issues] and if
-you don't see it, feel free to [open a new issue][open an issue].
+If you have a suggestion of your own, [search the open issues][issues]. If you
+don't see it, feel free to [open a new issue][open an issue].
 
 [open an issue]: https://github.com/badges/shields/issues/new
 
@@ -52,8 +74,9 @@ Getting help
 There are three places to get help:
 
 1. If you're new to the project, a good place to start is the [tutorial][].
-2. If you need help getting started or implementing a change, feel free to
-   [open an issue][] with your question.
+2. If you need help getting started or implementing a change, [open an issue][]
+   with your question. We promise it's okay to do that. If there is already an
+   issue open for the feature you're working on, you can post there.
 3. You can also join the [chat room][] and ask your question there.
 
 [tutorial]: doc/TUTORIAL.md
@@ -62,16 +85,23 @@ There are three places to get help:
 Badge guidelines
 ----------------
 
-- The left-hand side of a badge should not advertize. It should be a noun
-  describing succinctly the meaning of the right-hand-side data.
-- New query parameters must be declared by the service. See
-  `request-handler.js`.
+- The left-hand side of a badge should not advertize. It should be a *noun*
+  succinctly describing the meaning of the right-hand side.
+- Query parameters must be *declared by the service*. See `request-handler.js`.
+- Except for badges using the `social` style, logos should be *turned off by
+  default*.
+
+
+Badge URLs
+----------
+
 - The format of new badges should be of the form
-  `/VENDOR/SUBVENDOR-BADGE-SPECIFIC/PARAMETERS.format`. For instance,
-  `https://img.shields.io/gitter/room/nwjs/nw.js.svg`. The vendor is gitter, the
+  `/SERVICE/NOUN/PARAMETERS/QUALIFIERS.format`. For instance,
+  `/gitter/room/nwjs/nw.js.svg`. The vendor is gitter, the
   badge is for rooms, the parameter is nwjs/nw.js, and the format is svg.
-- Except for badges using the `social` style, logos should be turned off by
-  default.
+- For services which require a hostname, the badge should be of the form
+  `/SERVICE/SCHEME/HOST/NOUN/PARAMETERS/QUALIFIERS.format`. For instance,
+  `/discourse/https/discourse.example.com/topics.svg`.
 
 
 Coding guidelines

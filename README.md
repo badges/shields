@@ -1,13 +1,14 @@
 <p align="center">
-    <img src="https://rawgit.com/badges/shields/master/logo.svg"
+    <img src="https://rawgit.com/badges/shields/master/static/logo.svg"
         height="130">
 </p>
 <p align="center">
-    <a href="https://www.gratipay.com/Shields/">
-        <img src="https://img.shields.io/gratipay/team/shields.svg"
-            alt="Gratipay"></a>
-    <a href="https://travis-ci.org/badges/shields">
-        <img src="https://img.shields.io/travis/badges/shields.svg"
+    <a href="#backers" alt="Backers on Open Collective">
+        <img src="https://opencollective.com/shields/backers/badge.svg" /></a>
+    <a href="#sponsors" alt="Sponsors on Open Collective">
+        <img src="https://opencollective.com/shields/sponsors/badge.svg" /></a>
+    <a href="https://circleci.com/gh/badges/shields/tree/master">
+        <img src="https://img.shields.io/circleci/project/github/badges/shields.svg"
             alt="build status"></a>
     <a href="https://github.com/badges/shields/commits/gh-pages">
         <img src="https://img.shields.io/github/last-commit/badges/shields/gh-pages.svg?label=last%20deployed"
@@ -115,7 +116,10 @@ View the [documentation for gh-badges][gh-badges doc].
 Development
 -----------
 
-1. Install Node 6 or later. You can use the [package manager][] of your choice.
+1. Install Node 8 or later. You can use the [package manager][] of your choice.
+   Node 8 is required for building or developing the front end. Node 6 or 8 will
+   work to run the server, and we'll transition to Node 8 everywhere once the
+   production server is upgraded. Server tests need to pass in both.
 2. Clone this repository.
 3. Run `npm install` to install the dependencies.
 4. Run `npm run build` to build the frontend.
@@ -123,7 +127,10 @@ Development
 6. Open `http://[::]:8080/` to view the home page.
 
 To generate the frontend using production cache settings &ndash; that is,
-badge preview URIs with `maxAge` &ndash; run `npm run build:production`.
+badge preview URIs with `maxAge` &ndash; run `LONG_CACHE=true npm run build`.
+
+To analyze the frontend bundle, run `npm install webpack-bundle-analyzer` and
+then `ANALYZE=true npm start`.
 
 [package manager]: https://nodejs.org/en/download/package-manager/
 
@@ -195,3 +202,33 @@ domain unless specified otherwise.
 
 The assets in `logo/` are trademarks of their respective companies and are
 under their terms and license.
+
+## Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/badges/shields/graphs/contributors"><img src="https://opencollective.com/shields/contributors.svg?width=890" /></a>
+
+
+## Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/shields#backer)]
+
+<a href="https://opencollective.com/shields#backers" target="_blank"><img src="https://opencollective.com/shields/backers.svg?width=890"></a>
+
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/shields#sponsor)]
+
+<a href="https://opencollective.com/shields/sponsor/0/website" target="_blank"><img src="https://opencollective.com/shields/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/shields/sponsor/1/website" target="_blank"><img src="https://opencollective.com/shields/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/shields/sponsor/2/website" target="_blank"><img src="https://opencollective.com/shields/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/shields/sponsor/3/website" target="_blank"><img src="https://opencollective.com/shields/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/shields/sponsor/4/website" target="_blank"><img src="https://opencollective.com/shields/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/shields/sponsor/5/website" target="_blank"><img src="https://opencollective.com/shields/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/shields/sponsor/6/website" target="_blank"><img src="https://opencollective.com/shields/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/shields/sponsor/7/website" target="_blank"><img src="https://opencollective.com/shields/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/shields/sponsor/8/website" target="_blank"><img src="https://opencollective.com/shields/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/shields/sponsor/9/website" target="_blank"><img src="https://opencollective.com/shields/sponsor/9/avatar.svg"></a>
+
+

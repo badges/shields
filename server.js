@@ -7,19 +7,24 @@ const prettyBytes = require('pretty-bytes');
 const queryString = require('query-string');
 const semver = require('semver');
 const xml2js = require('xml2js');
+const uniq = require('lodash.uniq');
 
 const analytics = require('./lib/analytics');
 const config = require('./lib/server-config');
 const githubAuth = require('./lib/github-auth');
+const sysMonitor = require('./lib/sys/monitor');
 const log = require('./lib/log');
 const makeBadge = require('./lib/make-badge');
 const serverSecrets = require('./lib/server-secrets');
 const suggest = require('./lib/suggest');
+const {licenseToColor} = require('./lib/licenses');
 const { latest: latestVersion } = require('./lib/version');
 const {
   compare: phpVersionCompare,
   latest: phpLatestVersion,
   isStable: phpStableVersion,
+  minorVersion: phpMinorVersion,
+  versionReduction: phpVersionReduction,
 } = require('./lib/php-version');
 const {
   parseVersion: luarocksParseVersion,
@@ -31,6 +36,7 @@ const {
   ordinalNumber,
   starRating,
   omitv,
+  addv: versionText,
   maybePluralize,
   formatDate
 } = require('./lib/text-formatters');
@@ -39,7 +45,8 @@ const {
   downloadCount: downloadCountColor,
   floorCount: floorCountColor,
   version: versionColor,
-  age: ageColor
+  age: ageColor,
+  colorScale
 } = require('./lib/color-formatters');
 const {
   makeColorB,
@@ -48,6 +55,7 @@ const {
   makeLabel: getLabel,
   makeLogo: getLogo,
   makeBadgeData: getBadgeData,
+  setBadgeColor
 } = require('./lib/badge-data');
 const {
   handleRequest: cache,
@@ -70,6 +78,9 @@ const {
   mapNpmDownloads
 } = require('./lib/npm-provider');
 const {
+  defaultNpmRegistryUri
+} = require('./lib/npm-badge-helpers');
+const {
   teamcityBadge
 } = require('./lib/teamcity-badge-helpers');
 const {
@@ -89,17 +100,21 @@ const {
   mapGithubCommitsSince,
   mapGithubReleaseDate
 } = require('./lib/github-provider');
+const {
+  sortDjangoVersions,
+  parseClassifiers
+} = require('./lib/pypi-helpers.js');
 
 const serverStartTime = new Date((new Date()).toGMTString());
-const { githubApiUrl } = config;
+const githubApiUrl = config.services.github.baseUri;
 
 const camp = require('camp').start({
   documentRoot: path.join(__dirname, 'public'),
-  port: config.serverPort,
-  hostname: config.bindAddress,
-  secure: config.secureServer,
-  cert: config.secureServerCert,
-  key: config.secureServerKey,
+  port: config.bind.port,
+  hostname: config.bind.address,
+  secure: config.ssl.isSecure,
+  cert: config.ssl.cert,
+  key: config.ssl.key,
 });
 
 function reset() {
@@ -109,6 +124,10 @@ function reset() {
 
 function stop(callback) {
   githubAuth.cancelAutosaving();
+  if (githubDebugInterval) {
+    clearInterval(githubDebugInterval);
+    githubDebugInterval = null;
+  }
   analytics.cancelAutosaving();
   camp.close(callback);
 }
@@ -119,19 +138,28 @@ module.exports = {
   stop
 };
 
-log('Server is starting up');
-log(config.frontendUri);
+log(`Server is starting up: ${config.baseUri}`);
 
 analytics.load();
 analytics.scheduleAutosaving();
 analytics.setRoutes(camp);
 
-githubAuth.scheduleAutosaving();
+githubAuth.scheduleAutosaving({ dir: config.persistence.dir });
 if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);
 }
+if (serverSecrets && serverSecrets.shieldsSecret) {
+  sysMonitor.setRoutes(camp);
+}
 
-suggest.setRoutes(camp);
+let githubDebugInterval;
+if (config.services.github.debug.enabled) {
+  githubDebugInterval = setInterval(() => {
+    log(githubAuth.getTokenDebugInfo());
+  }, 1000 * config.services.github.debug.intervalSeconds);
+}
+
+suggest.setRoutes(config.cors.allowedOrigin, camp);
 
 camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
     var format = match[1];
@@ -262,6 +290,93 @@ cache(function (data, match, sendBadge, request) {
       sendBadge(format, badgeData);
     }
   });
+}));
+
+// PHP version from .travis.yml
+camp.route(/^\/travis(?:-ci)?\/php-v\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const userRepo = match[1];  // eg, espadrine/sc
+  const version = match[2] || 'master';
+  const format = match[3];
+  const options = {
+    method: 'GET',
+    uri: 'https://api.travis-ci.org/repos/' + userRepo + '/branches/' + version,
+  };
+  const badgeData = getBadgeData('PHP', data);
+  // Custom user-agent and accept headers are required
+  // http://developer.github.com/v3/#user-agent-required
+  // https://developer.github.com/v3/licenses/
+  const customHeaders = {
+      'User-Agent': 'Shields.io'
+  };
+  // require PHP releases
+  regularUpdate(
+    'https://api.github.com/repos/php/php-src/git/refs/tags',
+    (24 * 3600 * 1000), // 1 day
+    tags => {
+      return uniq(
+        JSON.parse(tags).
+        // only releases
+        filter((tag) => tag.ref.match(/^refs\/tags\/php-\d+\.\d+\.\d+$/) != null).
+        // get minor version of release
+        map((tag) => tag.ref.match(/^refs\/tags\/php-(\d+\.\d+)\.\d+$/)[1])
+      );
+    },
+    (err, phpReleases) => {
+      if (err != null) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
+      }
+      request(options, function(err, res, buffer) {
+        if (err !== null) {
+          log.error('Travis CI error: ' + err.stack);
+          if (res) {
+            log.error('' + res);
+          }
+          badgeData.text[1] = 'invalid';
+          sendBadge(format, badgeData);
+          return;
+        }
+
+        try {
+          const data = JSON.parse(buffer);
+          let travisVersions = [];
+
+          // from php
+          if (typeof data.branch.config.php !== 'undefined') {
+            travisVersions = travisVersions.concat(data.branch.config.php.map((v) => v.toString()));
+          }
+          // from matrix
+          if (typeof data.branch.config.matrix.include !== 'undefined') {
+            travisVersions = travisVersions.concat(data.branch.config.matrix.include.map((v) => v.php.toString()));
+          }
+
+          const hasHhvm = travisVersions.find((v) => v.startsWith('hhvm'));
+          const versions = travisVersions.map((v) => phpMinorVersion(v)).filter((v) => v.indexOf('.') !== -1);
+          let reduction = phpVersionReduction(versions, phpReleases);
+
+          if (hasHhvm) {
+            reduction += reduction ? ', ' : '';
+            reduction += 'HHVM';
+          }
+
+          if (reduction) {
+            badgeData.colorscheme = 'blue';
+            badgeData.text[1] = reduction;
+          } else {
+            badgeData.text[1] = 'invalid';
+          }
+        } catch(e) {
+          badgeData.text[1] = 'invalid';
+        }
+        sendBadge(format, badgeData);
+      });
+    },
+    {
+      headers: customHeaders
+    }
+  );
 }));
 
 // Travis integration
@@ -620,9 +735,8 @@ cache(function (data, match, sendBadge, request) {
       version: true,
       process: function (data, badgeData) {
         version = data.version? data.version.num: data.crate.max_version;
-        var vdata = versionColor(version);
-        badgeData.text[1] = vdata.version;
-        badgeData.colorscheme = vdata.color;
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
       }
     },
     'l': {
@@ -817,13 +931,14 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // SonarQube code coverage
-camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/sonar\/?([0-9.]+)?\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
     cache(function(data, match, sendBadge, request) {
-      var scheme = match[1];
-      var serverUrl = match[2];  // eg, `sonar.qatools.ru`.
-      var buildType = match[3];  // eg, `ru.yandex.qatools.allure:allure-core:master`.
-      var metricName = match[4];
-      var format = match[5];
+      var version = parseFloat(match[1]);
+      var scheme = match[2];
+      var serverUrl = match[3];
+      var buildType = match[4];
+      var metricName = match[5];
+      var format = match[6];
 
       var sonarMetricName = metricName;
       if (metricName === 'tech_debt') {
@@ -831,9 +946,14 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
         sonarMetricName = 'sqale_debt_ratio';
       }
 
+      const useLegacyApi = !!version && version < 5.4;
+
+      var uri = useLegacyApi ?
+          scheme + '://' + serverUrl + '/api/resources?resource=' + buildType + '&depth=0&metrics=' + encodeURIComponent(sonarMetricName) + '&includetrends=true':
+          scheme + '://' + serverUrl + '/api/measures/component?componentKey=' + buildType + '&metricKeys=' + encodeURIComponent(sonarMetricName);
+
       var options = {
-        uri: scheme + '://' + serverUrl + '/api/resources?resource=' + buildType
-          + '&depth=0&metrics=' + encodeURIComponent(sonarMetricName) + '&includetrends=true',
+        uri,
         headers: {
           Accept: 'application/json'
         }
@@ -855,7 +975,7 @@ camp.route(/^\/sonar\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
         try {
           var data = JSON.parse(buffer);
 
-          var value = data[0].msr[0].val;
+          var value =  parseInt(useLegacyApi ? data[0].msr[0].val : data.component.measures[0].value);
 
           if (value === undefined) {
             badgeData.text[1] = 'unknown';
@@ -1066,6 +1186,75 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Liberapay integration.
+camp.route(/^\/liberapay\/(receives|gives|patrons|goal)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var type = match[1];  // e.g., 'gives'
+  var entity = match[2]; // e.g., 'Changaco'
+  var format = match[3];
+  var apiUrl = 'https://liberapay.com/' + entity + '/public.json';
+  // Lock down type
+  const label = {
+      'receives': 'receives',
+      'gives': 'gives',
+      'patrons': 'patrons',
+      'goal': 'goal progress',
+      }[type];
+  const badgeData = getBadgeData(label, data);
+  if (badgeData.template === 'social') {
+    badgeData.logo = getLogo('liberapay', data);
+  }
+  request(apiUrl, function dealWithData(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      var value;
+      var currency;
+      switch(type) {
+        case 'receives':
+            if (data.receiving) {
+                value = data.receiving.amount;
+                currency = data.receiving.currency;
+                badgeData.text[1] = `${metric(value)} ${currency}/week`;
+                }
+            break;
+        case 'gives':
+            if (data.giving) {
+                value = data.giving.amount;
+                currency = data.giving.currency;
+                badgeData.text[1] = `${metric(value)} ${currency}/week`;
+                }
+            break;
+        case 'patrons':
+            value = data.npatrons;
+            badgeData.text[1] = metric(value);
+            break;
+        case 'goal':
+            if (data.goal) {
+                value = Math.round(data.receiving.amount/data.goal.amount*100);
+                badgeData.text[1] = `${value}%`;
+                }
+            break;
+        }
+      if (value != null) {
+        badgeData.colorscheme = colorScale([0, 10, 100])(value);
+        sendBadge(format, badgeData);
+      } else {
+        badgeData.text[1] = 'anonymous';
+        badgeData.colorscheme = 'blue';
+        sendBadge(format, badgeData);
+      }
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Libscore integration.
 camp.route(/^\/libscore\/s\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -1120,15 +1309,14 @@ cache(function(data, match, sendBadge, request) {
 
 
 // Bountysource integration.
-camp.route(/^\/bountysource\/team\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/bountysource\/team\/([^/]+)\/activity\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var team = match[1];  // eg, `mozilla-core`.
-  var type = match[2];  // eg, `activity`.
-  var format = match[3];
-  var url = 'https://api.bountysource.com/teams/' + team;
-  var options = {
+  const team = match[1];  // eg, `mozilla-core`.
+  const format = match[2];
+  const url = 'https://api.bountysource.com/teams/' + team;
+  const options = {
     headers: { 'Accept': 'application/vnd.bountysource+json; version=2' } };
-  var badgeData = getBadgeData('bounties', data);
+  let badgeData = getBadgeData('bounties', data);
   request(url, options, function dealWithData(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -1136,15 +1324,20 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      if (type === 'activity') {
-        var activity = data.activity_total;
-        badgeData.colorscheme = 'brightgreen';
-        badgeData.text[1] = activity;
+      if (res.statusCode !== 200) {
+        throw Error('Bad response.');
       }
+      const parsedData = JSON.parse(buffer);
+      const activity = parsedData.activity_total;
+      badgeData.colorscheme = 'brightgreen';
+      badgeData.text[1] = activity;
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'invalid';
+      if (res.statusCode === 404) {
+        badgeData.text[1] = 'not found';
+      } else {
+        badgeData.text[1] = 'invalid';
+      }
       sendBadge(format, badgeData);
     }
   });
@@ -1353,7 +1546,6 @@ cache(function(data, match, sendBadge, request) {
       var badgeText = null;
       var badgeColor = null;
 
-      var vdata;
       switch (info) {
       case 'v':
         var stableVersions = versions.filter(phpStableVersion);
@@ -1364,17 +1556,15 @@ cache(function(data, match, sendBadge, request) {
         //if (!!aliasesMap[stableVersion]) {
         //  stableVersion = aliasesMap[stableVersion];
         //}
-        vdata = versionColor(stableVersion);
-        badgeText = vdata.version;
-        badgeColor = vdata.color;
+        badgeText = versionText(stableVersion);
+        badgeColor = versionColor(stableVersion);
         break;
       case 'vpre':
         var unstableVersion = phpLatestVersion(versions);
         //if (!!aliasesMap[unstableVersion]) {
         //  unstableVersion = aliasesMap[unstableVersion];
         //}
-        vdata = versionColor(unstableVersion);
-        badgeText = vdata.version;
+        badgeText = versionText(unstableVersion);
         badgeColor = 'orange';
         break;
       }
@@ -1521,9 +1711,8 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var version = JSON.parse(buffer).version || 0;
-      var vdata = versionColor(version);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = vdata.color;
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'not found';
@@ -1578,164 +1767,185 @@ cache(function (data, match, sendBadge, request) {
 
 // npm version integration.
 camp.route(/^\/npm\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  // e.g. cycle, core, next, svg
-  const [, scope, packageName, tag, format] = match;
-  const pkg = encodeURIComponent(scope ? `@${scope}/${packageName}` : packageName);
-  const apiUrl = `https://registry.npmjs.org/-/package/${pkg}/dist-tags`;
-  const name = tag ? `npm@${tag}` : 'npm';
-  const badgeData = getBadgeData(name, data);
-  // Using the Accept header because of this bug:
-  // <https://github.com/npm/npmjs.org/issues/163>
-  request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      const data = JSON.parse(buffer);
-      const version = data[tag || 'latest'];
-      const vdata = versionColor(version);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = vdata.color;
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
+cache({
+  queryParams: ['registry_uri'],
+  handler: function(queryParams, match, sendBadge, request) {
+    // e.g. cycle, core, next, svg
+    const [, scope, packageName, tag, format] = match;
+    const registryUri = queryParams.registry_uri || defaultNpmRegistryUri;
+    const pkg = encodeURIComponent(scope ? `@${scope}/${packageName}` : packageName);
+    const apiUrl = `${registryUri}/-/package/${pkg}/dist-tags`;
+
+    const name = tag ? `npm@${tag}` : 'npm';
+    const badgeData = getBadgeData(name, queryParams);
+    // Using the Accept header because of this bug:
+    // <https://github.com/npm/npmjs.org/issues/163>
+    request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        const data = JSON.parse(buffer);
+        const version = data[tag || 'latest'];
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }
 }));
 
 // npm license integration.
 camp.route(/^\/npm\/l\/(?:@([^/]+)\/)?([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  const scope = match[1];        // "user" (when a scope "@user" is supplied)
-  const packageName = match[2];  // "express"
-  const format = match[3];       // "svg"
-  let apiUrl;
-  if (scope === undefined) {
-    // e.g. https://registry.npmjs.org/express/latest
-    // Use this endpoint as an optimization. It covers the vast majority of
-    // these badges, and the response is smaller.
-    apiUrl = `https://registry.npmjs.org/${packageName}/latest`;
-  } else {
-    // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
-    // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
-    const path = encodeURIComponent(`${scope}/${packageName}`);
-    apiUrl = `https://registry.npmjs.org/@${path}`;
-  }
-  const badgeData = getBadgeData('license', data);
-  request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      const data = JSON.parse(buffer);
-      let license;
-      if (scope === undefined) {
-        license = data.license;
-      } else {
-        const latestVersion = data['dist-tags'].latest;
-        license = data.versions[latestVersion].license;
-      }
-      if (Array.isArray(license)) {
-        license = license.join(', ');
-      } else if (typeof license == 'object') {
-        license = license.type;
-      }
-      badgeData.text[1] = license;
-      badgeData.colorscheme = 'blue';
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// npm node version integration.
-camp.route(/^\/node\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  // e.g. @stdlib, stdlib, next, svg
-  const [, scope, packageName, tag, format] = match;
-  const registryTag = tag || 'latest';
-  let apiUrl;
-  if (scope === undefined) {
+cache({
+  queryParams: ['registry_uri'],
+  handler: function(queryParams, match, sendBadge, request) {
+    // e.g. cycle, core, svg
+    const [, scope, packageName, format ] = match;
+    const registryUri = queryParams.registry_uri || defaultNpmRegistryUri;
+    let apiUrl;
+    if (scope === undefined) {
       // e.g. https://registry.npmjs.org/express/latest
       // Use this endpoint as an optimization. It covers the vast majority of
       // these badges, and the response is smaller.
-      apiUrl = `https://registry.npmjs.org/${packageName}/${registryTag}`;
-  } else {
-    // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
-    // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
-    const path = encodeURIComponent(`${scope}/${packageName}`);
-    apiUrl = `https://registry.npmjs.org/@${path}`;
-  }
-  const name = tag ? `node@${tag}` : 'node';
-  const badgeData = getBadgeData(name, data);
-  // Using the Accept header because of this bug:
-  // <https://github.com/npm/npmjs.org/issues/163>
-  request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
+      apiUrl = `${registryUri}/${packageName}/latest`;
+    } else {
+      // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
+      // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
+      const path = encodeURIComponent(`${scope}/${packageName}`);
+      apiUrl = `${registryUri}/@${path}`;
     }
-    try {
-      const data = JSON.parse(buffer);
-      if (data.error === 'not_found') {
+    const badgeData = getBadgeData('license', queryParams);
+    request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      if (res.statusCode === 404) {
         badgeData.text[1] = 'package not found';
         sendBadge(format, badgeData);
         return;
       }
-      let releaseData;
-      if (scope === undefined) {
-        releaseData = data;
-      } else {
-        const version = data['dist-tags'][registryTag];
-        releaseData = data.versions[version];
+      try {
+        const data = JSON.parse(buffer);
+        let license;
+        if (scope === undefined) {
+          license = data.license;
+        } else {
+          const latestVersion = data['dist-tags'].latest;
+          license = data.versions[latestVersion].license;
+        }
+        if (Array.isArray(license)) {
+          license = license.join(', ');
+        } else if (typeof license == 'object') {
+          license = license.type;
+        }
+        if (license === undefined) {
+          badgeData.text[1] = 'missing';
+          badgeData.colorscheme = 'red';
+        } else {
+          badgeData.text[1] = license;
+          setBadgeColor(badgeData, licenseToColor(license));
+        }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
       }
-      const versionRange = (releaseData.engines || {}).node;
-      if (! versionRange) {
-        badgeData.text[1] = 'not specified';
+    });
+  }
+}));
+
+// npm node version integration.
+camp.route(/^\/node\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
+cache({
+  queryParams: ['registry_uri'],
+  handler: function(queryParams, match, sendBadge, request) {
+    // e.g. @stdlib, stdlib, next, svg
+    const [, scope, packageName, tag, format] = match;
+    const registryUri = queryParams.registry_uri || defaultNpmRegistryUri;
+    const registryTag = tag || 'latest';
+    let apiUrl;
+    if (scope === undefined) {
+        // e.g. https://registry.npmjs.org/express/latest
+        // Use this endpoint as an optimization. It covers the vast majority of
+        // these badges, and the response is smaller.
+        apiUrl = `${registryUri}/${packageName}/${registryTag}`;
+    } else {
+      // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
+      // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
+      const path = encodeURIComponent(`${scope}/${packageName}`);
+      apiUrl = `${registryUri}/@${path}`;
+    }
+    const name = tag ? `node@${tag}` : 'node';
+    const badgeData = getBadgeData(name, queryParams);
+    // Using the Accept header because of this bug:
+    // <https://github.com/npm/npmjs.org/issues/163>
+    request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
         sendBadge(format, badgeData);
         return;
       }
-      badgeData.text[1] = versionRange;
-      regularUpdate('http://nodejs.org/dist/latest/SHASUMS256.txt',
-        (24 * 3600 * 1000),
-        shasums => {
-          // tarball index start, tarball index end
-          const taris = shasums.indexOf('node-v');
-          const tarie = shasums.indexOf('\n', taris);
-          const tarball = shasums.slice(taris, tarie);
-          const version = tarball.split('-')[1];
-          return version;
-        }, (err, version) => {
-          if (err != null) {
-            badgeData.text[1] = 'invalid';
-            sendBadge(format, badgeData);
-            return;
-          }
-          try {
-            if (semver.satisfies(version, versionRange)) {
-              badgeData.colorscheme = 'brightgreen';
-            } else if (semver.gtr(version, versionRange)) {
-              badgeData.colorscheme = 'yellow';
-            } else {
-              badgeData.colorscheme = 'orange';
-            }
-          } catch(e) { }
+      try {
+        const data = JSON.parse(buffer);
+        if (data.error === 'not_found') {
+          badgeData.text[1] = 'package not found';
           sendBadge(format, badgeData);
-      });
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
+          return;
+        }
+        let releaseData;
+        if (scope === undefined) {
+          releaseData = data;
+        } else {
+          const version = data['dist-tags'][registryTag];
+          releaseData = data.versions[version];
+        }
+        const versionRange = (releaseData.engines || {}).node;
+        if (! versionRange) {
+          badgeData.text[1] = 'not specified';
+          sendBadge(format, badgeData);
+          return;
+        }
+        badgeData.text[1] = versionRange;
+        regularUpdate('http://nodejs.org/dist/latest/SHASUMS256.txt',
+          (24 * 3600 * 1000),
+          shasums => {
+            // tarball index start, tarball index end
+            const taris = shasums.indexOf('node-v');
+            const tarie = shasums.indexOf('\n', taris);
+            const tarball = shasums.slice(taris, tarie);
+            const version = tarball.split('-')[1];
+            return version;
+          }, (err, version) => {
+            if (err != null) {
+              badgeData.text[1] = 'invalid';
+              sendBadge(format, badgeData);
+              return;
+            }
+            try {
+              if (semver.satisfies(version, versionRange)) {
+                badgeData.colorscheme = 'brightgreen';
+              } else if (semver.gtr(version, versionRange)) {
+                badgeData.colorscheme = 'yellow';
+              } else {
+                badgeData.colorscheme = 'orange';
+              }
+            } catch(e) { }
+            sendBadge(format, badgeData);
+        });
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }
 }));
 
 // Anaconda Cloud / conda package manager integration
@@ -1761,9 +1971,8 @@ cache(function(queryData, match, sendBadge, request) {
     // latest version 'v'
     'v': function(data, badgeData) {
       const version = data.latest_version;
-      const color = versionColor(version).color;
-      badgeData.text[1] = 'v'+version;
-      badgeData.colorscheme = color;
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
     },
     // platform 'p'
     'p': function(data, badgeData) {
@@ -1835,9 +2044,8 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var vdata = versionColor(data.name);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = 'brightgreen';
+      badgeData.text[1] = versionText(data.name);
+      badgeData.colorscheme = versionColor(data.name);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -1862,7 +2070,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       badgeData.text[1] = "[" + clojar + " \"" + data.version + "\"]";
-      badgeData.colorscheme = versionColor(data.version).color;
+      badgeData.colorscheme = versionColor(data.version);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -1887,9 +2095,8 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var version = data.results[0].version;
-      var vdata = versionColor(version);
-      badgeData.text[1] = 'v' + version;
-      badgeData.colorscheme = vdata.color;
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -1914,9 +2121,8 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var version = data.version;
-      var vdata = versionColor(version);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = vdata.color;
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -2083,7 +2289,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var parsedData = JSON.parse(buffer);
-      if (info.charAt(0) === 'd') {
+      if (info === 'dm' || info === 'dw' || info ==='dd') {
         // See #716 for the details of the loss of service.
         badgeData.text[0] = getLabel('downloads', data);
         badgeData.text[1] = 'no longer available';
@@ -2106,9 +2312,8 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
       } else if (info === 'v') {
         var version = parsedData.info.version;
-        var vdata = versionColor(version);
-        badgeData.text[1] = vdata.version;
-        badgeData.colorscheme = vdata.color;
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
         sendBadge(format, badgeData);
       } else if (info === 'l') {
         var license = parsedData.info.license;
@@ -2162,14 +2367,11 @@ cache(function(data, match, sendBadge, request) {
         }
         sendBadge(format, badgeData);
       } else if (info === 'pyversions') {
-        var versions = [];
-        let pattern = /^Programming Language :: Python :: ([\d.]+)$/;
-        for (let i = 0; i < parsedData.info.classifiers.length; i++) {
-          var matched = pattern.exec(parsedData.info.classifiers[i]);
-          if (matched && matched[1]) {
-            versions.push(matched[1]);
-          }
-        }
+        let versions = parseClassifiers(
+          parsedData,
+          /^Programming Language :: Python :: ([\d.]+)$/
+        );
+
         // We only show v2 if eg. v2.4 does not appear.
         // See https://github.com/badges/shields/pull/489 for more.
         ['2', '3'].forEach(function(version) {
@@ -2185,15 +2387,29 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = versions.sort().join(', ');
         badgeData.colorscheme = 'blue';
         sendBadge(format, badgeData);
-      } else if (info === 'implementation') {
-        var implementations = [];
-        let pattern = /^Programming Language :: Python :: Implementation :: (\S+)$/;
-        for (let i = 0; i < parsedData.info.classifiers.length; i++) {
-          let matched = pattern.exec(parsedData.info.classifiers[i]);
-          if (matched && matched[1]) {
-            implementations.push(matched[1].toLowerCase());
-          }
+      } else if (info === 'djversions') {
+        let versions = parseClassifiers(
+          parsedData,
+          /^Framework :: Django :: ([\d.]+)$/
+        );
+
+        if (!versions.length) {
+          versions.push('not found');
         }
+
+        // sort low to high
+        versions = sortDjangoVersions(versions);
+
+        badgeData.text[0] = getLabel('django versions', data);
+        badgeData.text[1] = versions.join(', ');
+        badgeData.colorscheme = 'blue';
+        sendBadge(format, badgeData);
+      } else if (info === 'implementation') {
+        let implementations = parseClassifiers(
+          parsedData,
+          /^Programming Language :: Python :: Implementation :: (\S+)$/
+        );
+
         if (!implementations.length) {
           implementations.push('cpython');  // assume CPython
         }
@@ -2292,7 +2508,7 @@ cache(function(data, match, sendBadge, request) {
       default:
         color = 'brightgreen';
     }
-    badgeData.text[1] = 'v' + version;
+    badgeData.text[1] = versionText(version);
     badgeData.colorscheme = color;
     sendBadge(format, badgeData);
   });
@@ -2316,9 +2532,8 @@ cache(function(data, match, sendBadge, request) {
       // Grab the latest stable version, or an unstable
       var versions = data.versions;
       var version = latestVersion(versions);
-      var vdata = versionColor(version);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = vdata.color;
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -2364,9 +2579,8 @@ cache(function(queryParams, match, sendBadge, request) {
         sendBadge(format, badgeData);
       } else if (info === 'v') {
         const version = data.releases[0].version;
-        const vdata = versionColor(version);
-        badgeData.text[1] = vdata.version;
-        badgeData.colorscheme = vdata.color;
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
         sendBadge(format, badgeData);
       } else if (info == 'l') {
         const license = (data.meta.licenses || []).join(', ');
@@ -3025,6 +3239,85 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Discourse integration
+camp.route(/^\/discourse\/(http(?:s)?)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const scheme = match[1]; // eg, https
+  const host   = match[2]; // eg, meta.discourse.org
+  const stat   = match[3]; // eg, user_count
+  const format = match[4];
+  const url    = scheme + '://' + host + '/site/statistics.json';
+
+  const options = {
+    method: 'GET',
+    uri: url,
+    headers: {
+      'Accept': 'application/json'
+    }
+  };
+
+  var badgeData = getBadgeData('discourse', data);
+  request(options, function(err, res) {
+    if (err != null) {
+      if (res) {
+        console.error('' + res);
+      }
+
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    if (res.statusCode !== 200) {
+      badgeData.text[1] = 'inaccessible';
+      badgeData.colorscheme = 'red';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    badgeData.colorscheme = 'brightgreen';
+
+    try {
+      var data = JSON.parse(res['body']);
+      let statCount;
+
+      switch (stat) {
+        case 'topics':
+          statCount = data.topic_count;
+          badgeData.text[1] = metric(statCount) + ' topics';
+          break;
+        case 'posts':
+          statCount = data.post_count;
+          badgeData.text[1] = metric(statCount) + ' posts';
+          break;
+        case 'users':
+          statCount = data.user_count;
+          badgeData.text[1] = metric(statCount) + ' users';
+          break;
+        case 'likes':
+          statCount = data.like_count;
+          badgeData.text[1] = metric(statCount) + ' likes';
+          break;
+        case 'status':
+          badgeData.text[1] = 'online';
+          break;
+        default:
+          badgeData.text[1] = 'invalid';
+          badgeData.colorscheme = 'yellow';
+          break;
+      }
+
+      sendBadge(format, badgeData);
+    } catch(e) {
+      console.error('' + e.stack);
+      badgeData.colorscheme = 'yellow';
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+
+}));
+
 // ReadTheDocs build
 camp.route(/^\/readthedocs\/([^/]+)(?:\/(.+))?.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -3115,12 +3408,8 @@ cache(function(data, match, sendBadge, request) {
       // we'll render the 'invalid' badge below, which is the correct thing
       // to do.
       var version = versionLines[0].replace(/\s+/, '').split(/:/)[1];
-      badgeData.text[1] = 'v' + version;
-      if (version[0] === '0') {
-        badgeData.colorscheme = 'orange';
-      } else {
-        badgeData.colorscheme = 'blue';
-      }
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -3159,6 +3448,34 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Elm package version integration.
+camp.route(/^\/elm-package\/v\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const urlPrefix = 'http://package.elm-lang.org/packages';
+  const [, user, repo, format] = match;
+  const apiUrl = `${urlPrefix}/${user}/${repo}/latest/elm-package.json`;
+  const badgeData = getBadgeData('elm-package', data);
+  request(apiUrl, (err, res, buffer) => {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      const data = JSON.parse(buffer);
+      if (data && typeof data.version === 'string') {
+        badgeData.text[1] = versionText(data.version);
+        badgeData.colorscheme = versionColor(data.version);
+      }
+      sendBadge(format, badgeData);
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+})
+);
+
 // CocoaPods version integration.
 camp.route(/^\/cocoapods\/(v|p|l)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -3186,13 +3503,9 @@ cache(function(data, match, sendBadge, request) {
         'ios' : '5.0',
         'osx' : '10.7'
       }).join(' | ');
-      version = version.replace(/^v/, "");
       if (type === 'v') {
-        badgeData.text[1] = version;
-        if (/^\d/.test(badgeData.text[1])) {
-          badgeData.text[1] = 'v' + version;
-        }
-        badgeData.colorB = '#5BA7E9';
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
       } else if (type === 'p') {
         badgeData.text[0] = getLabel('platform', data);
         badgeData.text[1] = platforms;
@@ -3359,9 +3672,8 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       var versions = data.map(function(e) { return e.name; });
       var tag = latestVersion(versions);
-      var vdata = versionColor(tag);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = vdata.color;
+      badgeData.text[1] = versionText(tag);
+      badgeData.colorscheme = versionColor(tag);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'none';
@@ -3393,9 +3705,8 @@ cache(function(query_data, match, sendBadge, request) {
         case 'v':
         case 'version':
           var version = json_data.version;
-          var vdata = versionColor(version);
-          badgeData.text[1] = vdata.version;
-          badgeData.colorscheme = vdata.color;
+          badgeData.text[1] = versionText(version);
+          badgeData.colorscheme = versionColor(version);
           break;
         case 'n':
           info = 'name';
@@ -3478,8 +3789,7 @@ cache(function(data, match, sendBadge, request) {
       }
       var version = data.tag_name;
       var prerelease = data.prerelease;
-      var vdata = versionColor(version);
-      badgeData.text[1] = vdata.version;
+      badgeData.text[1] = versionText(version);
       badgeData.colorscheme = prerelease ? 'orange' : 'blue';
       sendBadge(format, badgeData);
     } catch(e) {
@@ -3896,24 +4206,26 @@ cache(function(data, match, sendBadge, request) {
     'Accept': 'application/vnd.github.drax-preview+json'
   };
   request(apiUrl, { headers: customHeaders }, function(err, res, buffer) {
-    if (err != null) {
+    if (res && res.statusCode === 404) {
+      badgeData.text[1] = 'repo not found';
+      sendBadge(format, badgeData);
+      return;
+    }
+    if (err != null || res.statusCode !== 200) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
     try {
-      if (res.statusCode === 404) {
-        badgeData.text[1] = 'repo not found';
-        sendBadge(format, badgeData);
-        return;
-      }
       var body = JSON.parse(buffer);
-      if (body.license != null) {
-        badgeData.text[1] = body.license.name;
-        badgeData.colorscheme = 'blue';
+      const license = body.license;
+      if (license != null) {
+        badgeData.text[1] = license.spdx_id || 'unknown';
+        setBadgeColor(badgeData, licenseToColor(license.spdx_id));
         sendBadge(format, badgeData);
       } else {
-        badgeData.text[1] = 'unknown license';
+        badgeData.text[1] = 'missing';
+        badgeData.colorscheme = 'red';
         sendBadge(format, badgeData);
       }
     } catch(e) {
@@ -4193,13 +4505,20 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
+      if (res.statusCode !== 200) {
+        throw Error('Failed to count issues.');
+      }
       var data = JSON.parse(buffer);
       var issues = data.count;
-      badgeData.text[1] = issues + (isRaw? '': ' open');
+      badgeData.text[1] = metric(issues) + (isRaw? '': ' open');
       badgeData.colorscheme = issues ? 'yellow' : 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'invalid';
+      if (res.statusCode === 404) {
+        badgeData.text[1] = 'not found';
+      } else {
+        badgeData.text[1] = 'invalid';
+      }
       sendBadge(format, badgeData);
     }
   });
@@ -4224,13 +4543,20 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
+      if (res.statusCode !== 200) {
+        throw Error('Failed to count pull requests.');
+      }
       var data = JSON.parse(buffer);
       var pullrequests = data.size;
       badgeData.text[1] = metric(pullrequests) + (isRaw? '': ' open');
       badgeData.colorscheme = (pullrequests > 0)? 'yellow': 'brightgreen';
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'invalid';
+      if (res.statusCode === 404) {
+        badgeData.text[1] = 'not found';
+      } else {
+        badgeData.text[1] = 'invalid';
+      }
       sendBadge(format, badgeData);
     }
   });
@@ -4254,9 +4580,8 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var version = data.version;
-      var vdata = versionColor(version);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = vdata.color;
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -4320,9 +4645,9 @@ cache(function(data, match, sendBadge, request) {
     try {
       if (info === 'v') {
         if (json.current_release) {
-          var vdata = versionColor(json.current_release.version);
-          badgeData.text[1] = vdata.version;
-          badgeData.colorscheme = vdata.color;
+          var version = json.current_release.version;
+          badgeData.text[1] = versionText(version);
+          badgeData.colorscheme = versionColor(version);
         } else {
           badgeData.text[1] = 'none';
           badgeData.colorscheme = 'lightgrey';
@@ -4602,12 +4927,8 @@ cache(function(data, match, sendBadge, request) {
         if (version === undefined) {
           throw Error('Plugin not found!');
         }
-        badgeData.text[1] = 'v' + version;
-        if (version === '0' || /alpha|beta/.test(version.toLowerCase())) {
-          badgeData.colorscheme = 'orange';
-        } else {
-          badgeData.colorscheme = 'blue';
-        }
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
         sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'not found';
@@ -4784,13 +5105,8 @@ cache(function(data, match, sendBadge, request) {
         var version = versions.find(function(version){
           return version.indexOf(versionPrefix) === 0;
         });
-
-        badgeData.text[1] = 'v' + version;
-        if (version === '0' || /SNAPSHOT/.test(version)) {
-          badgeData.colorscheme = 'orange';
-        } else {
-          badgeData.colorscheme = 'blue';
-        }
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
         sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'invalid';
@@ -4868,17 +5184,12 @@ cache(function(data, match, sendBadge, request) {
           version = parsed.data.baseVersion || parsed.data.version;
           break;
       }
-
-      if (version === '0' || /SNAPSHOT/.test(version)) {
-        badgeData.colorscheme = 'orange';
-        if (version !== '0') {
-          badgeData.text[1] = version;
-        } else {
-          badgeData.text[1] = 'undefined';
-        }
+      if (version !== '0') {
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
       } else {
-         badgeData.colorscheme = 'blue';
-         badgeData.text[1] = version;
+        badgeData.text[1] = 'undefined';
+        badgeData.colorscheme = 'orange';
       }
       sendBadge(format, badgeData);
     } catch(e) {
@@ -4921,9 +5232,8 @@ cache((data, match, sendBadge, request) => {
     try {
       //if reqType is `v`, then stable release number, if `vpre` then latest release
       const version = reqType == 'v' ? data.latest_stable_release.name : data.latest_release_number;
-      const vdata = versionColor(version);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = vdata.color;
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'no releases';
@@ -5014,12 +5324,8 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var version = data.version;
-      badgeData.text[1] = 'v' + version;
-      if (version[0] === '0') {
-        badgeData.colorscheme = 'orange';
-      } else {
-        badgeData.colorscheme = 'blue';
-      }
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -5367,8 +5673,8 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
       return;
     }
-    badgeData.text[1] = 'v' + version;
-    badgeData.colorscheme = 'green';
+    badgeData.text[1] = versionText(version);
+    badgeData.colorscheme = versionColor(version);
     sendBadge(format, badgeData);
   });
 }));
@@ -5401,7 +5707,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 //vscode-marketplace download/version/rating integration
-camp.route(/^\/vscode-marketplace\/(d|v|r)\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/vscode-marketplace\/(d|v|r|stars)\/(.*)\.(svg|png|gif|jpg|json)$/,
   cache(function (data, match, sendBadge, request) {
     let reqType = match[1]; // eg, d/v/r
     let repo = match[2];  // eg, `ritwickdey.LiveServer`.
@@ -5419,34 +5725,38 @@ camp.route(/^\/vscode-marketplace\/(d|v|r)\/(.*)\.(svg|png|gif|jpg|json)$/,
 
       try {
         switch (reqType) {
-          case 'd': {
+          case 'd':
             badgeData.text[0] = getLabel('downloads', data);
-            let count = getVscodeStatistic(buffer, 'install');
+            var count = getVscodeStatistic(buffer, 'install');
             badgeData.text[1] = metric(count);
+            badgeData.colorscheme = downloadCountColor(count);
             break;
-          }
-          case 'r': {
+          case 'r':
             badgeData.text[0] = getLabel('rating', data);
-            let rate = getVscodeStatistic(buffer, 'averagerating').toFixed(2);
-            let totalrate = getVscodeStatistic(buffer, 'ratingcount');
+            var rate = getVscodeStatistic(buffer, 'averagerating').toFixed(2);
+            var totalrate = getVscodeStatistic(buffer, 'ratingcount');
             badgeData.text[1] = rate + '/5 (' + totalrate + ')';
+            badgeData.colorscheme = floorCountColor(rate, 2, 3, 4);
             break;
-          }
-          case 'v': {
+          case 'stars':
+            badgeData.text[0] = getLabel('rating', data);
+            var rating = getVscodeStatistic(buffer, 'averagerating').toFixed(2);
+            badgeData.text[1] = starRating(rating);
+            badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
+            break;
+          case 'v':
             badgeData.text[0] = getLabel('visual studio marketplace', data);
-            badgeData.text[1] = 'v' + buffer.results[0].extensions[0].versions[0].version;
+            var version = buffer.results[0].extensions[0].versions[0].version;
+            badgeData.text[1] = versionText(version);
+            badgeData.colorscheme = versionColor(version);
             break;
-          }
         }
-
+        sendBadge(format, badgeData);
       } catch (e) {
         badgeData.text[1] = 'invalid';
         sendBadge(format, badgeData);
-        return;
       }
 
-      badgeData.colorscheme = 'brightgreen';
-      sendBadge(format, badgeData);
     });
   })
 );
@@ -5487,9 +5797,8 @@ cache(function(data, match, sendBadge, request) {
             badgeData.colorscheme = downloadCountColor(monthlydownloads);
             break;
           case 'v':
-            var vdata = versionColor(projectNode.version[0]);
-            badgeData.text[1] = vdata.version;
-            badgeData.colorscheme = vdata.color;
+            badgeData.text[1] = versionText(projectNode.version[0]);
+            badgeData.colorscheme = versionColor(projectNode.version[0]);
             break;
           case 'favorites':
             badgeData.text[0] = getLabel('favorites', data);
@@ -5697,9 +6006,8 @@ cache(function(data, match, sendBadge, request) {
 
       if (info === 'v') {
         var version = data.version;
-        var vdata = versionColor(version);
-        badgeData.text[1] = vdata.version;
-        badgeData.colorscheme = vdata.color;
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
       } else if (info === 'l') {
         var license = data.license[0];
         badgeData.text[1] = license;
@@ -5737,9 +6045,8 @@ cache(function(queryParams, match, sendBadge, request) {
 
       if (info === 'v') {
         var version = data.Version;
-        var vdata = versionColor(version);
-        badgeData.text[1] = vdata.version;
-        badgeData.colorscheme = vdata.color;
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
         sendBadge(format, badgeData);
       } else if (info === 'l') {
         badgeData.text[0] = getLabel('license', queryParams);
@@ -5786,9 +6093,8 @@ cache(function(data, match, sendBadge, request) {
 
       if (info === 'v') {
         var version = parsedData.version.number;
-        var vdata = versionColor(version);
-        badgeData.text[1] = vdata.version;
-        badgeData.colorscheme = vdata.color;
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
         sendBadge(format, badgeData);
       } else if (info === 'l') {
         badgeData.text[0] = getLabel('license', data);
@@ -5854,7 +6160,7 @@ cache(function (data, match, sendBadge, request) {
             break;
         }
         if (version) {
-            badgeData.text[1] += ' ' + versionColor(version).version;
+            badgeData.text[1] += ' ' + versionText(version);
         }
         badgeData.colorscheme = downloadCountColor(downloads);
         sendBadge(format, badgeData);
@@ -5888,9 +6194,8 @@ cache(function (data, match, sendBadge, request) {
     try {
       var parsedData = JSON.parse(buffer);
       if (info === 'v') {
-        var vdata = versionColor(parsedData);
-        badgeData.text[1] = vdata.version;
-        badgeData.colorscheme = vdata.color;
+        badgeData.text[1] = versionText(parsedData);
+        badgeData.colorscheme = versionColor(parsedData);
         sendBadge(format, badgeData);
       } else if (info == 'l') {
         var license = parsedData.info.license;
@@ -6227,6 +6532,76 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// MicroBadger integration.
+camp.route(/^\/microbadger\/(image-size|layers)\/([^/]+)\/([^/]+)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const type = match[1];
+  let user = match[2];
+  const repo = match[3];
+  const tag = match[4];
+  const format = match[5];
+  if (user === '_') {
+    user = 'library';
+  }
+  const url = `https://api.microbadger.com/v1/images/${user}/${repo}`;
+
+  let badgeData = getBadgeData(type, data);
+  if (type === 'image-size') {
+    badgeData.text[0] = getLabel('image size', data);
+  }
+
+  const options = {
+    method: 'GET',
+    uri: url,
+    headers: {
+      'Accept': 'application/json'
+    }
+  };
+  request(options, function(err, res, buffer) {
+    if (res && res.statusCode === 404) {
+      badgeData.text[1] = 'not found';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    if (err != null || !res || res.statusCode !== 200) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    try {
+      const parsedData = JSON.parse(buffer);
+      let image;
+
+      if (tag) {
+        image = parsedData.Versions && parsedData.Versions.find(v => v.Tags.some(t => t.tag === tag));
+        if (!image) {
+          badgeData.text[1] = 'not found';
+          sendBadge(format, badgeData);
+          return;
+        }
+      } else {
+        image = parsedData;
+      }
+
+      if (type === 'image-size') {
+        const size = prettyBytes(parseInt(image.DownloadSize));
+        badgeData.text[1] = size;
+      } else if (type === 'layers') {
+        badgeData.text[1] = image.LayerCount;
+      }
+      badgeData.colorscheme = null;
+      badgeData.colorB = '#007ec6';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.colorscheme = 'red';
+      badgeData.text[1] = 'error';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Gitter room integration.
 camp.route(/^\/gitter\/room\/([^/]+\/[^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -6257,9 +6632,8 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       var version = data.stable;
 
-      var vdata = versionColor(version);
-      badgeData.text[1] = vdata.version;
-      badgeData.colorscheme = vdata.color;
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
 
       sendBadge(format, badgeData);
     } catch(e) {
@@ -6471,8 +6845,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       var parsedData = JSON.parse(buffer).results;
       if (info === 'version') {
-        var vdata = versionColor(parsedData.Version);
-        badgeData.text[1] = vdata.version;
+        badgeData.text[1] = versionText(parsedData.Version);
         if (parsedData.OutOfDate === null) {
           badgeData.colorscheme = 'blue';
         } else {
@@ -6517,9 +6890,8 @@ cache(function(data, match, sendBadge, request) {
         var rating;
         switch (type) {
           case 'v':
-            var vdata = versionColor(value.version);
-            badgeData.text[1] = vdata.version;
-            badgeData.colorscheme = vdata.color;
+            badgeData.text[1] = versionText(value.version);
+            badgeData.colorscheme = versionColor(value.version);
             break;
           case 'd':
           case 'users':
@@ -6654,9 +7026,8 @@ cache(function(query_data, match, sendBadge, request) {
         switch (type) {
         case 'v':
           var version = data.addon.version[0];
-          var vdata = versionColor(version);
-          badgeData.text[1] = vdata.version;
-          badgeData.colorscheme = vdata.color;
+          badgeData.text[1] = versionText(version);
+          badgeData.colorscheme = versionColor(version);
           break;
         case 'd':
           var downloads = parseInt(data.addon.total_downloads[0], 10);
@@ -6719,9 +7090,9 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var version = 'v' + data['version'];
       var status = data['status'];
-      var color = 'brightgreen';
+      var color = versionColor(data['version']);
+      var version = versionText(data['version']);
       if(status !== 'ok'){
         color = 'red';
         version = 'unknown';
@@ -6757,20 +7128,12 @@ cache(function(data, match, sendBadge, request) {
     // We consider all HTTP status codes below 310 as success.
     if (err != null || res.statusCode >= 310) {
       badgeData.text[1] = offlineMessage;
-      if (sixHex(offlineColor)) {
-        badgeData.colorB = '#' + offlineColor;
-      } else {
-        badgeData.colorscheme = offlineColor;
-      }
+      setBadgeColor(badgeData, offlineColor);
       sendBadge(format, badgeData);
       return;
     } else {
       badgeData.text[1] = onlineMessage;
-      if (sixHex(onlineColor)) {
-        badgeData.colorB = '#' + onlineColor;
-      } else {
-        badgeData.colorscheme = onlineColor;
-      }
+      setBadgeColor(badgeData, onlineColor);
       sendBadge(format, badgeData);
       return;
     }
@@ -6941,9 +7304,10 @@ cache(function(data, match, sendBadge, request) {
           return sendBadge(format, badgeData);
         case 'v':
           var version = data['plugin-repository'].category[0]["idea-plugin"][0].version[0];
-          badgeData.text[1] = version;
-          badgeData.colorscheme = 'orange';
-          return sendBadge(format, badgeData);        }
+          badgeData.text[1] = versionText(version);
+          badgeData.colorscheme = versionColor(version);
+          return sendBadge(format, badgeData);
+        }
       } catch (err) {
         badgeData.text[1] = 'invalid';
         return sendBadge(format, badgeData);
@@ -7192,8 +7556,8 @@ camp.route(/^\/maven-metadata\/v\/(https?)\/(.+\.xml)\.(svg|png|gif|jpg|json)$/,
               sendBadge(format, badge);
             } else {
               const version = result.metadata.versioning[0].versions[0].version.slice(-1)[0];
-              badge.text[1] = `v${version}`;
-              badge.colorscheme = /^.*-SNAPSHOT$/.test(version) ? 'green' : 'brightgreen';
+              badge.text[1] = versionText(version);
+              badge.colorscheme = versionColor(version);
               sendBadge(format, badge);
             }
           });
@@ -7395,6 +7759,39 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// PHP version from Packagist
+camp.route(/^\/packagist\/php-v\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const userRepo = match[1];  // eg, espadrine/sc
+  const version = match[2] ? match[2] : 'dev-master';
+  const format = match[3];
+  const options = {
+    method: 'GET',
+    uri: 'https://packagist.org/p/' + userRepo + '.json',
+  };
+  const badgeData = getBadgeData('PHP', data);
+  request(options, function(err, res, buffer) {
+    if (err !== null) {
+      log.error('Packagist error: ' + err.stack);
+      if (res) {
+        log.error('' + res);
+      }
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    try {
+      const data = JSON.parse(buffer);
+      badgeData.text[1] = data.packages[userRepo][version].require.php;
+      badgeData.colorscheme = 'blue';
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+    }
+    sendBadge(format, badgeData);
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
@@ -7485,11 +7882,10 @@ function(data, match, end, ask) {
   }
 });
 
-if (config.infoSite !== '/') {
-  // Redirect the root to the website.
-  camp.route(/^\/$/, function(data, match, end, ask) {
+if (config.redirectUri) {
+  camp.route(/^\/$/, (data, match, end, ask) => {
     ask.res.statusCode = 302;
-    ask.res.setHeader('Location', config.infoSite);
+    ask.res.setHeader('Location', config.redirectUri);
     ask.res.end();
   });
 }

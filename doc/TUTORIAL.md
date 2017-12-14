@@ -15,9 +15,9 @@ You should read the following:
 You can read
 
 - previous successful pull-requests to see how other people implemented their badges.
-  Usally they start with "[add][add-pr]".
+  Usually they start with "[add][add-pr]".
 - later [pull-requests tagged with `new-badge`][new-badge].
-- [implementations and their commits][blame] in the  the [server.js][server] file.
+- [implementations and their commits][blame] in the [server.js][server] file.
 - [merged pull-requests][mergedpr].
 
 (2) Setup
