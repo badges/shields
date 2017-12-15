@@ -25,20 +25,20 @@ t.create('invalid package name')
 // PHP tested on Travis
 t.create('gets the package version of symfony')
   .get('/php-tested/symfony/symfony/4.0.json')
-  .expectJSON({ name: 'PHP', value: '>= 7.1' });
+  .expectJSON({ name: 'Tested', value: '>= 7.1' });
 
 t.create('gets the package version of symfony 2.8')
   .get('/php-tested/symfony/symfony/2.8.json')
-  .expectJSON({ name: 'PHP', value: '>= 5.4, HHVM' });
+  .expectJSON({ name: 'Tested', value: '>= 5.4, HHVM' });
 
 t.create('gets the package version of yii')
   .get('/php-tested/yiisoft/yii.json')
-  .expectJSON({ name: 'PHP', value: '5.3 - 7.1' });
+  .expectJSON({ name: 'Tested', value: '5.3 - 7.1' });
 
 t.create('invalid package name')
   .get('/php-tested/frodo/is-not-a-package.json')
-  .expectJSON({ name: 'PHP', value: 'invalid' });
+  .expectJSON({ name: 'Tested', value: 'invalid' });
 
 t.create('invalid package name')
   .get('/php-tested/angular/angular.js.json')
-  .expectJSON({ name: 'PHP', value: 'not tested' });
+  .expectJSON({ name: 'Tested', value: 'not tested' });
