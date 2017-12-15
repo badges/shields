@@ -7867,6 +7867,9 @@ cache(function(data, match, sendBadge, request) {
           if (reduction) {
             badgeData.colorscheme = 'brightgreen';
             badgeData.text[1] = reduction;
+          } else if (!versions.length) {
+            badgeData.colorscheme = 'red';
+            badgeData.text[1] = 'not tested';
           } else {
             badgeData.text[1] = 'invalid';
           }

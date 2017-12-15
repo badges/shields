@@ -20,3 +20,7 @@ t.create('gets the package version of yii')
 t.create('invalid package name')
     .get('/frodo/is-not-a-package.json')
     .expectJSON({ name: 'Tested', value: 'invalid' });
+
+t.create('invalid package name')
+  .get('/angular/angular.js.json')
+  .expectJSON({ name: 'Tested', value: 'not tested' });
