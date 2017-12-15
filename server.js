@@ -292,6 +292,131 @@ cache(function (data, match, sendBadge, request) {
   });
 }));
 
+
+// PHP tested on Travis
+camp.route(/^\/travis(?:-ci)?\/php-tested\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const userRepo = match[1];  // eg, espadrine/sc
+  const version = match[2] || 'master';
+  const format = match[3];
+  const options = {
+    method: 'GET',
+    uri: 'https://api.travis-ci.org/repos/' + userRepo + '/branches/' + version,
+  };
+  const badgeData = getBadgeData('Tested', data);
+  // Custom user-agent and accept headers are required
+  // http://developer.github.com/v3/#user-agent-required
+  // https://developer.github.com/v3/licenses/
+  const customHeaders = {
+      'User-Agent': 'Shields.io'
+  };
+  // require PHP releases
+  regularUpdate(
+    'https://api.github.com/repos/php/php-src/git/refs/tags',
+    (24 * 3600 * 1000), // 1 day
+    tags => {
+      return uniq(
+        JSON.parse(tags).
+        // only releases
+        filter((tag) => tag.ref.match(/^refs\/tags\/php-\d+\.\d+\.\d+$/) != null).
+        // get minor version of release
+        map((tag) => tag.ref.match(/^refs\/tags\/php-(\d+\.\d+)\.\d+$/)[1])
+      );
+    },
+    (err, phpReleases) => {
+      if (err != null) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
+      }
+
+      request(options, function(err, res, buffer) {
+        if (err !== null) {
+          log.error('Travis CI error: ' + err.stack);
+          if (res) {
+            log.error('' + res);
+          }
+          badgeData.text[1] = 'invalid';
+          sendBadge(format, badgeData);
+          return;
+        }
+
+        try {
+          const data = JSON.parse(buffer);
+
+          if (!data.branch.job_ids.length) {
+            badgeData.colorscheme = 'red';
+            badgeData.text[1] = 'not tested';
+            sendBadge(format, badgeData);
+            return;
+          }
+
+          let jobs = [];
+          // read version from all build jobs
+          data.branch.job_ids.forEach((job_id) => {
+            const options = {
+              method: 'GET',
+              uri: 'https://api.travis-ci.org/jobs/' + job_id,
+            };
+
+            request(options, function(err, res, buffer) {
+              if (err != null) {
+                log.error('Travis error: ' + err.stack);
+                if (res) {
+                  log.error('' + res);
+                }
+                jobs.push(false);
+                return;
+              }
+
+              const job_data = JSON.parse(buffer);
+
+              if (job_data.state === 'finished' && job_data.result === 0) {
+                jobs.push(job_data.config.php);
+
+                // all jobs is ready
+                if (jobs.length === data.branch.job_ids.length) {
+                  jobs = jobs.filter((v) => v !== false).map((v) => ''+v);
+
+                  const hasHhvm = jobs.find((v) => v.startsWith('hhvm'));
+                  const versions = jobs.map((v) => phpMinorVersion(v)).filter((v) => v.indexOf('.') !== -1);
+                  let reduction = phpVersionReduction(versions, phpReleases);
+
+                  if (hasHhvm) {
+                    reduction += reduction ? ', ' : '';
+                    reduction += 'HHVM';
+                  }
+
+                  if (reduction) {
+                    badgeData.colorscheme = 'brightgreen';
+                    badgeData.text[1] = reduction;
+                  } else if (!versions.length) {
+                    badgeData.colorscheme = 'red';
+                    badgeData.text[1] = 'not tested';
+                  } else {
+                    badgeData.text[1] = 'invalid';
+                  }
+                  sendBadge(format, badgeData);
+                }
+
+                return;
+              }
+
+              jobs.push(false);
+            });
+          });
+        } catch(e) {
+          badgeData.text[1] = 'invalid';
+          sendBadge(format, badgeData);
+        }
+      });
+    },
+    {
+      headers: customHeaders
+    }
+  );
+}));
+
 // PHP version from .travis.yml
 camp.route(/^\/travis(?:-ci)?\/php-v\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
