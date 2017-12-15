@@ -417,7 +417,6 @@ cache(function(data, match, sendBadge, request) {
   );
 }));
 
-
 // PHP version from .travis.yml
 camp.route(/^\/travis(?:-ci)?\/php-v\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
