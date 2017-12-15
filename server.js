@@ -7793,7 +7793,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // PHP version from PHP-Eye
-camp.route(/^\/php-eye\/php-v\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/php-eye\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const userRepo = match[1];  // eg, espadrine/sc
   const version = match[2] || 'dev-master';
