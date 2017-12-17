@@ -8,7 +8,9 @@ const queryString = require('query-string');
 const semver = require('semver');
 const xml2js = require('xml2js');
 const uniq = require('lodash.uniq');
+const Raven = require('raven');
 
+Raven.config().install();
 const analytics = require('./lib/analytics');
 const config = require('./lib/server-config');
 const githubAuth = require('./lib/github-auth');
