@@ -18,7 +18,11 @@ const documentation = fileMatch(
 );
 const server = fileMatch('server.js');
 const serviceTests = fileMatch('service-tests/*.js');
-const helpers = fileMatch('lib/**/*.js', '!**/*.spec.js');
+const helpers = fileMatch(
+  'lib/**/*.js',
+  '!**/*.spec.js',
+  '!lib/all-badge-examples.js'
+);
 const helperTests = fileMatch('lib/**/*.spec.js');
 const packageJson = fileMatch('package.json');
 const packageLock = fileMatch('package-lock.json');
@@ -31,7 +35,10 @@ message([
 ].join(''));
 
 if (documentation.createdOrModified) {
-  message('We :heart: our [documentarians](http://www.writethedocs.org/)!');
+  message([
+    'Thanks for contributing to our documentation. ',
+    'We :heart: our [documentarians](http://www.writethedocs.org/)!'
+  ].join(''));
 }
 
 if (packageJson.modified && !packageLock.modified) {
