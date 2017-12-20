@@ -56,12 +56,12 @@ if (server.modified && !serviceTests.createdOrModified) {
 
 if (helpers.created && !helperTests.created) {
   warn([
-    'This PR added helper modules in lib/ but not accompanying tests. ',
+    'This PR added helper modules in `lib/` but not accompanying tests. ',
     'Generally helper modules should have their own tests.',
   ].join(''));
 } else if (helpers.createdOrModified && !helperTests.createdOrModified) {
   warn([
-    'This PR modified helper functions in lib/ but not accompanying tests. ',
+    'This PR modified helper functions in `lib/` but not accompanying tests. ',
     "That's okay so long as it's refactoring existing code.",
   ].join(''));
 }
