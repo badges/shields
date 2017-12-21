@@ -7,8 +7,8 @@ const Footer = ({ baseUri }) => (
     <h2 id="like-this">Like This?</h2>
 
     <p>
-      Tell your favorite badge service to use it! <br />
-      And tell us, we might be able to bring it to you anyway!
+      What is your favorite badge service to use?<br />
+      <a href="https://github.com/badges/shields/blob/master/CONTRIBUTING.md">Tell us</a> and we might bring it to you!
     </p>
     <p>
       <object
