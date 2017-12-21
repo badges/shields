@@ -18,7 +18,11 @@ const documentation = fileMatch(
 );
 const server = fileMatch('server.js');
 const serviceTests = fileMatch('service-tests/*.js');
-const helpers = fileMatch('lib/**/*.js', '!**/*.spec.js');
+const helpers = fileMatch(
+  'lib/**/*.js',
+  '!**/*.spec.js',
+  '!lib/all-badge-examples.js'
+);
 const helperTests = fileMatch('lib/**/*.spec.js');
 const packageJson = fileMatch('package.json');
 const packageLock = fileMatch('package-lock.json');
@@ -31,7 +35,10 @@ message([
 ].join(''));
 
 if (documentation.createdOrModified) {
-  message('We :heart: our [documentarians](http://www.writethedocs.org/)!');
+  message([
+    'Thanks for contributing to our documentation. ',
+    'We :heart: our [documentarians](http://www.writethedocs.org/)!'
+  ].join(''));
 }
 
 if (packageJson.modified && !packageLock.modified) {
@@ -49,12 +56,12 @@ if (server.modified && !serviceTests.createdOrModified) {
 
 if (helpers.created && !helperTests.created) {
   warn([
-    'This PR added helper modules in lib/ but not accompanying tests. ',
+    'This PR added helper modules in `lib/` but not accompanying tests. ',
     'Generally helper modules should have their own tests.',
   ].join(''));
 } else if (helpers.createdOrModified && !helperTests.createdOrModified) {
   warn([
-    'This PR modified helper functions in lib/ but not accompanying tests. ',
+    'This PR modified helper functions in `lib/` but not accompanying tests. ',
     "That's okay so long as it's refactoring existing code.",
   ].join(''));
 }
