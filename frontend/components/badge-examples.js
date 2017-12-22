@@ -3,7 +3,16 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import resolveBadgeUrl from '../lib/badge-url';
 
-const Badge = ({ title, previewUri, exampleUri, documentation, baseUri, longCache, onClick }) => {
+const Badge = ({
+  title,
+  previewUri,
+  exampleUri,
+  documentation,
+  baseUri,
+  longCache,
+  shouldDisplay = () => true,
+  onClick,
+}) => {
   const handleClick = onClick ?
     () => onClick({ title, previewUri, exampleUri, documentation })
     : undefined;
@@ -21,7 +30,7 @@ const Badge = ({ title, previewUri, exampleUri, documentation, baseUri, longCach
     { longCache: false });
 
   return (
-    <tr>
+    <tr className={classNames({ excluded: !shouldDisplay() })}>
       <th className={classNames({ clickable: onClick })} onClick={handleClick}>
         { title }:
       </th>
@@ -41,6 +50,7 @@ Badge.propTypes = {
   documentation: PropTypes.string,
   baseUri: PropTypes.string,
   longCache: PropTypes.bool.isRequired,
+  shouldDisplay: PropTypes.func,
   onClick: PropTypes.func.isRequired,
 };
 
@@ -79,10 +89,10 @@ Category.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-const BadgeExamples = ({ examples, baseUri, longCache, onClick }) => (
+const BadgeExamples = ({ categories, baseUri, longCache, onClick }) => (
   <div>
     {
-      examples.map((categoryData, i) => (
+      categories.map((categoryData, i) => (
         <Category
           key={i}
           {...categoryData}
@@ -94,7 +104,7 @@ const BadgeExamples = ({ examples, baseUri, longCache, onClick }) => (
   </div>
 );
 BadgeExamples.propTypes = {
-  examples: PropTypes.arrayOf(PropTypes.shape({
+  categories: PropTypes.arrayOf(PropTypes.shape({
     category: Category.propTypes.category,
     examples: Category.propTypes.examples,
   })),
