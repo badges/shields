@@ -7716,35 +7716,27 @@ camp.route(/^\/nsp\/npm\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|j
 }));
 
 // bundle size for npm packages
-camp.route(/^\/bundlephobia\/(min|gzip)\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|jpg|json)?$/, cache((
-  data,
-  match,
-  sendBadge,
-  request,
-) => {
+camp.route(/^\/bundlephobia\/(min|gzip)\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|jpg|json)?$/,
+  cache((data, match, sendBadge, request) => {
   // A: /bundlephobia/(min|gzip)/:package.:format
   // B: /bundlephobia/(min|gzip)/:package/:version.:format
   // C: /bundlephobia/(min|gzip)/@:scope/:package.:format
   // D: /bundlephobia/(min|gzip)/@:scope/:package/:version.:format
-  const capturedResultType = match[1]
+  const capturedResultType = match[1];
   const capturedScopeWithoutAtSign = match[2];
   const capturedPackageName = match[3];
   const capturedVersion = match[4];
   const capturedFormat = match[5];
-  const showMin = capturedResultType === 'min'
+  const showMin = capturedResultType === 'min';
 
   const badgeData = getBadgeData(showMin ? 'minified size' : 'gzip size', data);
 
-  function getBundlephobiaResults(
-    scopeWithoutAtSign = null,
-    packageName = '',
-    packageVersion = '',
-  ) {
+  function getBundlephobiaResults(scopeWithoutAtSign = null, packageName = '', packageVersion = '') {
     let packageString = typeof scopeWithoutAtSign === 'string' ?
-      `@${scopeWithoutAtSign}/${packageName}` : packageName
+      `@${scopeWithoutAtSign}/${packageName}` : packageName;
 
     if(packageVersion) {
-      packageString += `@${packageVersion}`
+      packageString += `@${packageVersion}`;
     }
 
     const requestOptions = {
