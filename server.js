@@ -7715,6 +7715,61 @@ camp.route(/^\/nsp\/npm\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|j
   }
 }));
 
+// bundle size for npm packages
+camp.route(/^\/bundlephobia\/(min|gzip)\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|jpg|json)?$/, cache((
+  data,
+  match,
+  sendBadge,
+  request,
+) => {
+  // A: /bundlephobia/(min|gzip)/:package.:format
+  // B: /bundlephobia/(min|gzip)/:package/:version.:format
+  // C: /bundlephobia/(min|gzip)/@:scope/:package.:format
+  // D: /bundlephobia/(min|gzip)/@:scope/:package/:version.:format
+  const capturedResultType = match[1]
+  const capturedScopeWithoutAtSign = match[2];
+  const capturedPackageName = match[3];
+  const capturedVersion = match[4];
+  const capturedFormat = match[5];
+  const showMin = capturedResultType === 'min'
+
+  const badgeData = getBadgeData(showMin ? 'minified size' : 'gzip size', data);
+
+  function getBundlephobiaResults(
+    scopeWithoutAtSign = null,
+    packageName = '',
+    packageVersion = '',
+  ) {
+    let packageString = typeof scopeWithoutAtSign === 'string' ?
+      `@${scopeWithoutAtSign}/${packageName}` : packageName
+
+    if(packageVersion) {
+      packageString += `@${packageVersion}`
+    }
+
+    const requestOptions = {
+      url: 'https://bundlephobia.com/api/size',
+      qs: {
+        package: packageString,
+      },
+      json: true,
+    };
+
+    request(requestOptions, (error, response, body) => {
+      if (error !== null || typeof body !== 'object' || body === null || body.error) {
+        badgeData.text[1] = body.error.code || 'error';
+        badgeData.colorscheme = 'red';
+      } else {
+        badgeData.text[1] = prettyBytes(showMin ? body.size : body.gzip);
+        badgeData.colorscheme = 'blue';
+      }
+      sendBadge(capturedFormat, badgeData);
+    });
+  }
+
+  getBundlephobiaResults(capturedScopeWithoutAtSign, capturedPackageName, capturedVersion);
+}));
+
 // Redmine plugin rating.
 camp.route(/^\/redmine\/plugin\/(rating|stars)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
