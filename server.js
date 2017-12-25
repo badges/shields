@@ -7840,7 +7840,9 @@ function(data, match, end, ask) {
     if (isValidStyle(data.style)) {
       badgeData.template = data.style;
     }
+    console.time('makeBadge total');
     const svg = makeBadge(badgeData);
+    console.timeEnd('makeBadge total');
     makeSend(format, ask.res, end)(svg);
   } catch(e) {
     log.error(e.stack);
