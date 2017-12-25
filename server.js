@@ -14,7 +14,8 @@ const config = require('./lib/server-config');
 const githubAuth = require('./lib/github-auth');
 const sysMonitor = require('./lib/sys/monitor');
 const log = require('./lib/log');
-const makeBadge = require('./lib/make-badge');
+const { makeMakeBadgeFn } = require('./lib/make-badge');
+const { QuickTextMeasurer } = require('./lib/measure-text');
 const serverSecrets = require('./lib/server-secrets');
 const suggest = require('./lib/suggest');
 const {licenseToColor} = require('./lib/licenses');
@@ -137,6 +138,19 @@ module.exports = {
   reset,
   stop
 };
+
+let makeBadge;
+QuickTextMeasurer.create(config.font.path, config.font.fallbackPath)
+  .then(measurer => {
+    makeBadge = makeMakeBadgeFn(measurer);
+  })
+  .catch(err => {
+    console.log(`Unable to load fallback font. Using Helvetica-Bold instead.`);
+    QuickTextMeasurer.create('Helvetica-Bold')
+      .then(measurer => {
+        makeBadge = makeMakeBadgeFn(measurer);
+      });
+  });
 
 log(`Server is starting up: ${config.baseUri}`);
 
