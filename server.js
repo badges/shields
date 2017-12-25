@@ -7803,7 +7803,7 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     uri: 'https://php-eye.com/api/v1/package/' + userRepo + '.json',
   };
-  const badgeData = getBadgeData('Tested', data);
+  const badgeData = getBadgeData('PHP tested', data);
   // Custom user-agent and accept headers are required
   // http://developer.github.com/v3/#user-agent-required
   // https://developer.github.com/v3/licenses/
