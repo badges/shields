@@ -146,7 +146,7 @@ try {
   measurer = new QuickTextMeasurer(config.font.path, config.font.fallbackPath);
 } catch (e) {
   console.log(`Unable to load fallback font. Using Helvetica-Bold instead.`);
-  measurer = new QuickTextMeasurer('Helvetica-Bold');
+  measurer = new QuickTextMeasurer('Helvetica');
 }
 const makeBadge = makeMakeBadgeFn(measurer);
 const cache = makeHandleRequestFn(makeBadge);
