@@ -35,3 +35,7 @@ t.create('No connection')
   .get('/follow/shields_io.json?label=Follow')
   .networkOff()
   .expectJSON({ name: 'Follow', value: 'inaccessible' });
+
+t.create('URL')
+  .get('/url/https/shields.io.json')
+  .expectJSON({ name: 'tweet', value: '' });
