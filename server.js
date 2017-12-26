@@ -2692,11 +2692,12 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Code Climate test reports integration
-camp.route(/^\/codeclimate\/(c|coverage)\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/codeclimate\/(c|coverage)(\/percentage)?\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  const isPercentage = match[1] === 'coverage';
-  const userRepo = match[2];  // eg, `Nickersoft/dql`.
-  const format = match[3];
+  // match[1] ignored. c and coverage are both equivalent, see #1387.
+  const isPercentage = match[2];
+  const userRepo = match[3];  // eg, `Nickersoft/dql`.
+  const format = match[4];
   request({
       method: 'GET',
       uri: `https://api.codeclimate.com/v1/repos?github_slug=${userRepo}`,
@@ -2750,10 +2751,11 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-//Code Climate snapshots integration
-camp.route(/^\/codeclimate(\/(maintainability|issues))?\/(.+)\.(svg|png|gif|jpg|json)$/,
+// Code Climate snapshots integration
+camp.route(/^\/codeclimate\/(maintainability|issues)(\/percentage)?\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  const type = match[2] ? match[2] : 'technical debt';
+  const type = match[1];
+  const isPercentage = match[2];
   const userRepo = match[3];  // eg, `Nickersoft/dql`.
   const format = match[4];
   request({
@@ -2795,14 +2797,14 @@ cache(function(data, match, sendBadge, request) {
           const count = parsedData.data.meta.issues_count;
           badgeData.text[1] = count;
           badgeData.colorscheme = colorScale([1, 5, 10, 20], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(count);
-        } else if (type === 'maintainability') {
-          const score = parsedData.data.attributes.ratings[0].letter;
-          badgeData.text[1] = score;
-          badgeData.colorscheme = letterScoreColor(score);
-        } else {
+        } else if (isPercentage) {
           const percentage = parseFloat(parsedData.data.meta.measures.technical_debt_ratio.value);
           badgeData.text[1] = percentage.toFixed(0) + '%';
           badgeData.colorscheme = colorScale([5, 10, 20, 50], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(percentage);
+        } else {
+          const score = parsedData.data.attributes.ratings[0].letter;
+          badgeData.text[1] = score;
+          badgeData.colorscheme = letterScoreColor(score);
         }
         sendBadge(format, badgeData);
       });
