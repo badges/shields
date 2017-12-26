@@ -81,7 +81,7 @@
     "lib/make-badge.js",
     "lib/colorscheme.json",
     "lib/lru-cache.js",
-    "lib/measure-text.js",
+    "lib/text-measurer.js",
     "lib/svg-to-img.js",
     "templates",
     "logo"
