@@ -8,10 +8,11 @@ import MarkupModal from '../frontend/components/markup-modal';
 import Usage from '../frontend/components/usage';
 import Footer from '../frontend/components/footer';
 import badgeExampleData from '../lib/all-badge-examples';
-import filterExamples from '../frontend/lib/filter-examples';
+import { prepareExamples, filterExamples } from '../frontend/lib/filter-examples';
 
 const baseUri = process.env.BASE_URL;
 const longCache = envFlag(process.env.LONG_CACHE, false);
+const preparedExamples = prepareExamples(badgeExampleData);
 
 export default class IndexPage extends React.Component {
   state = { query: null, example: null };
@@ -22,7 +23,7 @@ export default class IndexPage extends React.Component {
     // adjusting visibility of the elements rather than removing them from the
     // DOM and recreating them, as this does now. That's what the original
     // code did.
-    const filteredExamples = filterExamples(badgeExampleData, this.state.query);
+    const filteredExamples = filterExamples(preparedExamples, this.state.query);
 
     return (
       <div>

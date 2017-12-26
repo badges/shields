@@ -50,9 +50,9 @@ const Category = ({ category, examples, baseUri, longCache, onClick }) => (
     <table className="badge">
       <tbody>
         {
-          examples.map((badgeData, i) => (
+          examples.map(badgeData => (
             <Badge
-              key={i}
+              key={badgeData.key}
               {...badgeData}
               baseUri={baseUri}
               longCache={longCache}
