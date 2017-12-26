@@ -20,6 +20,8 @@ describe('The server', function () {
   after('Shut down the server', function () { serverHelpers.stop(server); });
 
   it('should produce colorscheme badges', function () {
+    // This is the first server test to run, and often times out.
+    this.timeout(5000);
     return fetch(`${baseUri}/:fruit-apple-green.svg`)
       .then(res => {
         assert.ok(res.ok);
