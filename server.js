@@ -7572,6 +7572,25 @@ camp.route(/^\/maven-metadata\/v\/(https?)\/(.+\.xml)\.(svg|png|gif|jpg|json)$/,
     });
 }));
 
+// User defined badge - Static
+camp.route(/^\/badge\/static\.(svg|png|gif|jpg|json)$/,
+cache({
+  queryParams: ['value', 'colorscheme'],
+  handler: function(query, match, sendBadge, request) {
+    const format = match[1];
+
+    var badgeData = getBadgeData(query.label, query);
+
+    try{
+      badgeData.text[1] = query.value || '';
+      badgeData.colorscheme = query.colorscheme || 'blue';
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+    }
+    sendBadge(format, badgeData);
+  }
+}));
+
 // User defined sources - JSON response
 camp.route(/^\/badge\/dynamic\/(json)\.(svg|png|gif|jpg|json)$/,
 cache({
