@@ -379,7 +379,7 @@ cache(function(data, match, sendBadge, request) {
             badgeData.text[1] = 'invalid 3';
           }
         } catch(e) {
-          badgeData.text[1] = 'invalid 4';
+          badgeData.text[1] = 'invalid';
         }
         sendBadge(format, badgeData);
       });
