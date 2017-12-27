@@ -10,14 +10,14 @@ const t = new ServiceTester({ id: 'codeclimate', title: 'Code Climate' })
 
 // Tests based on Code Climate's test reports endpoint.
 t.create('test coverage percentage')
-  .get('/coverage/Nickersoft/dql.json')
+  .get('/c/Nickersoft/dql.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'coverage',
     value: isPercentage
   }));
 
-t.create('test coverage percentage alternative URL')
-  .get('/c/Nickersoft/dql.json')
+t.create('test coverage percentage alternative coverage URL')
+  .get('/coverage/Nickersoft/dql.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'coverage',
     value: isPercentage
@@ -31,21 +31,21 @@ t.create('test coverage percentage alternative top-level URL')
   }));
 
 t.create('test coverage letter')
-  .get('/coverage-letter/Nickersoft/dql.json')
+  .get('/c-letter/Nickersoft/dql.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'coverage',
     value: Joi.equal('A', 'B', 'C', 'D', 'E', 'F')
   }));
 
 t.create('test coverage percentage for non-existent repo')
-  .get('/coverage/unknown/unknown.json')
+  .get('/c/unknown/unknown.json')
   .expectJSON({
     name: 'coverage',
     value: 'not found'
   });
 
 t.create('test coverage percentage for repo without test reports')
-  .get('/coverage/kabisaict/flow.json')
+  .get('/c/kabisaict/flow.json')
   .expectJSON({
     name: 'coverage',
     value: 'unknown'

@@ -2691,10 +2691,10 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Code Climate test reports integration
+// Code Climate integration.
 camp.route(/^\/codeclimate(\/(c|coverage|maintainability|issues)(-letter)?)?\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  // c and coverage are both equivalent. Top-level URL still supported for backwards compatibility. See #1387. 
+  // Top-level and /coverage URLs equivalent to /c, still supported for backwards compatibility. See #1387. 
   const type = match[2] === 'c' || !match[2] ? 'coverage' : match[2];
   const isLetter = match[3];
   const userRepo = match[4];  // eg, `Nickersoft/dql`.
@@ -2718,12 +2718,9 @@ cache(function(data, match, sendBadge, request) {
         return;
       }
 
-      let branchData;
-      if (type === 'coverage') {
-        branchData = body.data[0].relationships.latest_default_branch_test_report.data;
-      } else {
-        branchData = body.data[0].relationships.latest_default_branch_snapshot.data;
-      }
+      const branchData = type === 'coverage'
+        ? body.data[0].relationships.latest_default_branch_test_report.data
+        : body.data[0].relationships.latest_default_branch_snapshot.data;
       if (branchData == null) {
         badgeData.text[1] = 'unknown';
         sendBadge(format, badgeData);
@@ -2756,7 +2753,7 @@ cache(function(data, match, sendBadge, request) {
           badgeData.text[1] = score;
           badgeData.colorscheme = letterScoreColor(score);
         } else if (type === 'maintainability') {
-          const percentage = parseFloat(parsedData.data.meta.measures.technical_debt_ratio.value);
+          const percentage = parseFloat(parsedData.data.attributes.ratings[0].measure.value);
           badgeData.text[1] = percentage.toFixed(0) + '%';
           badgeData.colorscheme = colorScale([5, 10, 20, 50], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(percentage);
         }
