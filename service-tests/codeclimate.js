@@ -24,7 +24,7 @@ t.create('test coverage score alternative URL')
   }));
 
 t.create('test coverage percentage')
-  .get('/coverage/percentage/Nickersoft/dql.json')
+  .get('/coverage-percentage/Nickersoft/dql.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'coverage',
     value: isPercentage
@@ -60,7 +60,7 @@ t.create('maintainability score')
   }));
 
 t.create('maintainability percentage')
-  .get('/maintainability/percentage/Nickersoft/dql.json')
+  .get('/maintainability-percentage/Nickersoft/dql.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'maintainability',
     value: isPercentage

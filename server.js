@@ -2692,7 +2692,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Code Climate test reports integration
-camp.route(/^\/codeclimate\/(c|coverage|maintainability|issues)(\/percentage)?\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/codeclimate\/(c|coverage|maintainability|issues)(-percentage)?\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   // c and coverage are both equivalent, see #1387.
   const type = match[1] === 'c' ? 'coverage' : match[1];
