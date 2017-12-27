@@ -2754,6 +2754,7 @@ cache(function(data, match, sendBadge, request) {
           badgeData.colorscheme = letterScoreColor(score);
         } else if (type === 'maintainability') {
           const percentage = parseFloat(parsedData.data.attributes.ratings[0].measure.value);
+          badgeData.text[0] = getLabel('technical debt', data);
           badgeData.text[1] = percentage.toFixed(0) + '%';
           badgeData.colorscheme = colorScale([5, 10, 20, 50], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(percentage);
         }

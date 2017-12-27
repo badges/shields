@@ -59,10 +59,10 @@ t.create('issues count')
     value: Joi.number().integer().positive()
   }));
 
-t.create('maintainability percentage')
+t.create('maintainability percentage (technical debt)')
   .get('/maintainability/Nickersoft/dql.json')
   .expectJSONTypes(Joi.object().keys({
-    name: 'maintainability',
+    name: 'technical debt',
     value: isPercentage
   }));
 
