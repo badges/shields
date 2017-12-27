@@ -23,8 +23,11 @@ export function mapExamples(categories, iteratee) {
     .filter(({ category, examples }) => examples.length > 0);
 }
 
-export function extendExamplesWithFilter(categories, predicateProvider) {
-  return mapExamples(categories, examples => examples.map(example => Object.assign(example, {
+export function prepareExamples(categories, predicateProvider) {
+  let nextKey = 0;
+  return mapExamples(categories, examples => examples.map(example => Object.assign({
     shouldDisplay: () => predicateProvider()(example),
-  })));
+    // Assign each example a unique ID.
+    key: nextKey++,
+  }, example)));
 }

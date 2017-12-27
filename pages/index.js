@@ -8,11 +8,10 @@ import MarkupModal from '../frontend/components/markup-modal';
 import Usage from '../frontend/components/usage';
 import Footer from '../frontend/components/footer';
 import badgeExampleData from '../lib/all-badge-examples';
-import { extendExamplesWithFilter, predicateFromQuery } from '../frontend/lib/filter-examples';
+import { prepareExamples, predicateFromQuery } from '../frontend/lib/prepare-examples';
 
 const baseUri = process.env.BASE_URL;
 const longCache = envFlag(process.env.LONG_CACHE, false);
-
 
 export default class IndexPage extends React.Component {
   state = {
@@ -22,7 +21,7 @@ export default class IndexPage extends React.Component {
 
   constructor(props) {
     super(props);
-    this.extendedExamples = extendExamplesWithFilter(
+    this.preparedExamples = prepareExamples(
       badgeExampleData,
       () => predicateFromQuery(this.state.query));
   }
@@ -49,7 +48,7 @@ export default class IndexPage extends React.Component {
           </a>
         </section>
         <BadgeExamples
-          categories={this.extendedExamples}
+          categories={this.preparedExamples}
           onClick={example => { this.setState({ example }); }}
           baseUri={baseUri}
           longCache={longCache} />
