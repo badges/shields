@@ -9,42 +9,42 @@ const {
 const t = new ServiceTester({ id: 'codeclimate', title: 'Code Climate' })
 
 // Tests based on Code Climate's test reports endpoint.
-t.create('test coverage score')
-  .get('/coverage/Nickersoft/dql.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'coverage',
-    value: Joi.equal('A', 'B', 'C', 'D', 'E', 'F')
-  }));
-
-t.create('test coverage score alternative URL')
-  .get('/c/Nickersoft/dql.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'coverage',
-    value: Joi.equal('A', 'B', 'C', 'D', 'E', 'F')
-  }));
-
-t.create('test coverage score alternative top-level URL')
-  .get('/Nickersoft/dql.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'coverage',
-    value: Joi.equal('A', 'B', 'C', 'D', 'E', 'F')
-  }));
-
 t.create('test coverage percentage')
-  .get('/coverage-percentage/Nickersoft/dql.json')
+  .get('/coverage/Nickersoft/dql.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'coverage',
     value: isPercentage
   }));
 
-t.create('test coverage score for non-existent repo')
+t.create('test coverage percentage alternative URL')
+  .get('/c/Nickersoft/dql.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'coverage',
+    value: isPercentage
+  }));
+
+t.create('test coverage percentage alternative top-level URL')
+  .get('/Nickersoft/dql.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'coverage',
+    value: isPercentage
+  }));
+
+t.create('test coverage letter')
+  .get('/coverage-letter/Nickersoft/dql.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'coverage',
+    value: Joi.equal('A', 'B', 'C', 'D', 'E', 'F')
+  }));
+
+t.create('test coverage percentage for non-existent repo')
   .get('/coverage/unknown/unknown.json')
   .expectJSON({
     name: 'coverage',
     value: 'not found'
   });
 
-t.create('test coverage score for repo without test reports')
+t.create('test coverage percentage for repo without test reports')
   .get('/coverage/kabisaict/flow.json')
   .expectJSON({
     name: 'coverage',
@@ -59,28 +59,28 @@ t.create('issues count')
     value: Joi.number().integer().positive()
   }));
 
-t.create('maintainability score')
-  .get('/maintainability/Nickersoft/dql.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'maintainability',
-    value: Joi.equal('A', 'B', 'C', 'D', 'E', 'F')
-  }));
-
 t.create('maintainability percentage')
-  .get('/maintainability-percentage/Nickersoft/dql.json')
+  .get('/maintainability/Nickersoft/dql.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'maintainability',
     value: isPercentage
   }));
 
-t.create('maintainability score for non-existent repo')
+t.create('maintainability letter')
+  .get('/maintainability-letter/Nickersoft/dql.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'maintainability',
+    value: Joi.equal('A', 'B', 'C', 'D', 'E', 'F')
+  }));
+
+t.create('maintainability percentage for non-existent repo')
   .get('/maintainability/unknown/unknown.json')
   .expectJSON({
     name: 'maintainability',
     value: 'not found'
   });
 
-t.create('maintainability score for repo without snapshots')
+t.create('maintainability percentage for repo without snapshots')
   .get('/maintainability/kabisaict/flow.json')
   .expectJSON({
     name: 'maintainability',
