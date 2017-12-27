@@ -2692,13 +2692,13 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Code Climate test reports integration
-camp.route(/^\/codeclimate\/(c|coverage|maintainability|issues)(-percentage)?\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/codeclimate(\/(c|coverage|maintainability|issues)(-percentage)?)?\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  // c and coverage are both equivalent, see #1387.
-  const type = match[1] === 'c' ? 'coverage' : match[1];
-  const isPercentage = match[2];
-  const userRepo = match[3];  // eg, `Nickersoft/dql`.
-  const format = match[4];
+  // c and coverage are both equivalent. Top-level URL still supported for backwards compatibility. See #1387. 
+  const type = match[2] === 'c' || !match[2] ? 'coverage' : match[2];
+  const isPercentage = match[3];
+  const userRepo = match[4];  // eg, `Nickersoft/dql`.
+  const format = match[5];
   request({
       method: 'GET',
       uri: `https://api.codeclimate.com/v1/repos?github_slug=${userRepo}`,

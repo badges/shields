@@ -23,6 +23,13 @@ t.create('test coverage score alternative URL')
     value: Joi.equal('A', 'B', 'C', 'D', 'E', 'F')
   }));
 
+t.create('test coverage score alternative top-level URL')
+  .get('/Nickersoft/dql.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'coverage',
+    value: Joi.equal('A', 'B', 'C', 'D', 'E', 'F')
+  }));
+
 t.create('test coverage percentage')
   .get('/coverage-percentage/Nickersoft/dql.json')
   .expectJSONTypes(Joi.object().keys({
