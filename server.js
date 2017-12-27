@@ -2717,7 +2717,7 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
         return;
       }
-      
+
       let branchData;
       if (type === 'coverage') {
         branchData = body.data[0].relationships.latest_default_branch_test_report.data;
