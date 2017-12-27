@@ -14,7 +14,8 @@ const config = require('./lib/server-config');
 const githubAuth = require('./lib/github-auth');
 const sysMonitor = require('./lib/sys/monitor');
 const log = require('./lib/log');
-const makeBadge = require('./lib/make-badge');
+const { makeMakeBadgeFn } = require('./lib/make-badge');
+const { QuickTextMeasurer } = require('./lib/text-measurer');
 const serverSecrets = require('./lib/server-secrets');
 const suggest = require('./lib/suggest');
 const {licenseToColor} = require('./lib/licenses');
@@ -58,7 +59,7 @@ const {
   setBadgeColor
 } = require('./lib/badge-data');
 const {
-  handleRequest: cache,
+  makeHandleRequestFn,
   clearRequestCache
 } = require('./lib/request-handler');
 const {
@@ -139,6 +140,16 @@ module.exports = {
 };
 
 log(`Server is starting up: ${config.baseUri}`);
+
+let measurer;
+try {
+  measurer = new QuickTextMeasurer(config.font.path, config.font.fallbackPath);
+} catch (e) {
+  console.log(`Unable to load fallback font. Using Helvetica-Bold instead.`);
+  measurer = new QuickTextMeasurer('Helvetica');
+}
+const makeBadge = makeMakeBadgeFn(measurer);
+const cache = makeHandleRequestFn(makeBadge);
 
 analytics.load();
 analytics.scheduleAutosaving();
@@ -1722,13 +1733,13 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // npm weekly download integration.
-mapNpmDownloads(camp, 'dw', 'last-week');
+mapNpmDownloads({ camp, cache }, 'dw', 'last-week');
 
 // npm monthly download integration.
-mapNpmDownloads(camp, 'dm', 'last-month');
+mapNpmDownloads({ camp, cache }, 'dm', 'last-month');
 
 // npm yearly download integration
-mapNpmDownloads(camp, 'dy', 'last-year');
+mapNpmDownloads({ camp, cache }, 'dy', 'last-year');
 
 // npm total download integration.
 camp.route(/^\/npm\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
@@ -3798,10 +3809,10 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub release & pre-release date integration.
-mapGithubReleaseDate(camp, githubApiUrl, githubAuth);
+mapGithubReleaseDate({ camp, cache }, githubApiUrl, githubAuth);
 
 // GitHub commits since integration.
-mapGithubCommitsSince(camp, githubApiUrl ,githubAuth);
+mapGithubCommitsSince({ camp, cache }, githubApiUrl ,githubAuth);
 
 // GitHub release-download-count and pre-release-download-count integration.
 camp.route(/^\/github\/(downloads|downloads-pre)\/([^/]+)\/([^/]+)(\/.+)?\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -4589,7 +4600,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Chocolatey
-mapNugetFeedv2(camp, 'chocolatey', 0, function(match) {
+mapNugetFeedv2({ camp, cache }, 'chocolatey', 0, function(match) {
   return {
     site: 'chocolatey',
     feed: 'https://www.chocolatey.org/api/v2'
@@ -4597,7 +4608,7 @@ mapNugetFeedv2(camp, 'chocolatey', 0, function(match) {
 });
 
 // PowerShell Gallery
-mapNugetFeedv2(camp, 'powershellgallery', 0, function(match) {
+mapNugetFeedv2({ camp, cache }, 'powershellgallery', 0, function(match) {
   return {
     site: 'powershellgallery',
     feed: 'https://www.powershellgallery.com/api/v2'
@@ -4605,7 +4616,7 @@ mapNugetFeedv2(camp, 'powershellgallery', 0, function(match) {
 });
 
 // NuGet
-mapNugetFeed(camp, 'nuget', 0, function(match) {
+mapNugetFeed({ camp, cache }, 'nuget', 0, function(match) {
   return {
     site: 'nuget',
     feed: 'https://api.nuget.org/v3'
@@ -4613,7 +4624,7 @@ mapNugetFeed(camp, 'nuget', 0, function(match) {
 });
 
 // MyGet
-mapNugetFeed(camp, '(.+\\.)?myget\\/(.*)', 2, function(match) {
+mapNugetFeed({ camp, cache }, '(.+\\.)?myget\\/(.*)', 2, function(match) {
   var tenant = match[1] || 'www.';  // eg. dotnet
   var feed = match[2];
   return {
@@ -7826,7 +7837,13 @@ function(data, match, end, ask) {
     if (isValidStyle(data.style)) {
       badgeData.template = data.style;
     }
+    if (config.profiling.makeBadge) {
+      console.time('makeBadge total');
+    }
     const svg = makeBadge(badgeData);
+    if (config.profiling.makeBadge) {
+      console.timeEnd('makeBadge total');
+    }
     makeSend(format, ask.res, end)(svg);
   } catch(e) {
     log.error(e.stack);
