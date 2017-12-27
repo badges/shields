@@ -335,7 +335,7 @@ cache(function(data, match, sendBadge, request) {
     },
     (err, phpReleases) => {
       if (err != null) {
-        badgeData.text[1] = 'invalid';
+        badgeData.text[1] = 'invalid 1';
         sendBadge(format, badgeData);
         return;
       }
@@ -345,7 +345,7 @@ cache(function(data, match, sendBadge, request) {
           if (res) {
             log.error('' + res);
           }
-          badgeData.text[1] = 'invalid';
+          badgeData.text[1] = 'invalid 2';
           sendBadge(format, badgeData);
           return;
         }
@@ -376,7 +376,7 @@ cache(function(data, match, sendBadge, request) {
             badgeData.colorscheme = 'blue';
             badgeData.text[1] = reduction;
           } else {
-            badgeData.text[1] = 'invalid';
+            badgeData.text[1] = 'invalid 3';
           }
         } catch(e) {
           badgeData.text[1] = 'invalid';
