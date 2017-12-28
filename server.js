@@ -7,7 +7,6 @@ const prettyBytes = require('pretty-bytes');
 const queryString = require('query-string');
 const semver = require('semver');
 const xml2js = require('xml2js');
-const uniq = require('lodash.uniq');
 
 const analytics = require('./lib/analytics');
 const config = require('./lib/server-config');
