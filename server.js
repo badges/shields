@@ -26,6 +26,7 @@ const {
   isStable: phpStableVersion,
   minorVersion: phpMinorVersion,
   versionReduction: phpVersionReduction,
+  getPhpReleases,
 } = require('./lib/php-version');
 const {
   parseVersion: luarocksParseVersion,
@@ -314,80 +315,57 @@ cache(function(data, match, sendBadge, request) {
     uri: 'https://api.travis-ci.org/repos/' + userRepo + '/branches/' + version,
   };
   const badgeData = getBadgeData('PHP', data);
-  // Custom user-agent and accept headers are required
-  // http://developer.github.com/v3/#user-agent-required
-  // https://developer.github.com/v3/licenses/
-  const customHeaders = {
-      'User-Agent': 'Shields.io'
-  };
-  // require PHP releases
-  regularUpdate(
-    'https://api.github.com/repos/php/php-src/git/refs/tags',
-    (24 * 3600 * 1000), // 1 day
-    tags => {
-      return uniq(
-        JSON.parse(tags).
-        // only releases
-        filter((tag) => tag.ref.match(/^refs\/tags\/php-\d+\.\d+\.\d+$/) != null).
-        // get minor version of release
-        map((tag) => tag.ref.match(/^refs\/tags\/php-(\d+\.\d+)\.\d+$/)[1])
-      );
-    },
-    (err, phpReleases) => {
-      if (err != null) {
+  getPhpReleases(githubAuth.request, (err, phpReleases) => {
+    if (err != null) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+    request(options, (err, res, buffer) => {
+      if (err !== null) {
+        log.error('Travis CI error: ' + err.stack);
+        if (res) {
+          log.error('' + res);
+        }
         badgeData.text[1] = 'invalid';
         sendBadge(format, badgeData);
         return;
       }
-      request(options, function(err, res, buffer) {
-        if (err !== null) {
-          log.error('Travis CI error: ' + err.stack);
-          if (res) {
-            log.error('' + res);
-          }
-          badgeData.text[1] = 'invalid';
-          sendBadge(format, badgeData);
-          return;
+
+      try {
+        const data = JSON.parse(buffer);
+        let travisVersions = [];
+
+        // from php
+        if (typeof data.branch.config.php !== 'undefined') {
+          travisVersions = travisVersions.concat(data.branch.config.php.map((v) => v.toString()));
+        }
+        // from matrix
+        if (typeof data.branch.config.matrix.include !== 'undefined') {
+          travisVersions = travisVersions.concat(data.branch.config.matrix.include.map((v) => v.php.toString()));
         }
 
-        try {
-          const data = JSON.parse(buffer);
-          let travisVersions = [];
+        const hasHhvm = travisVersions.find((v) => v.startsWith('hhvm'));
+        const versions = travisVersions.map((v) => phpMinorVersion(v)).filter((v) => v.indexOf('.') !== -1);
+        let reduction = phpVersionReduction(versions, phpReleases);
 
-          // from php
-          if (typeof data.branch.config.php !== 'undefined') {
-            travisVersions = travisVersions.concat(data.branch.config.php.map((v) => v.toString()));
-          }
-          // from matrix
-          if (typeof data.branch.config.matrix.include !== 'undefined') {
-            travisVersions = travisVersions.concat(data.branch.config.matrix.include.map((v) => v.php.toString()));
-          }
+        if (hasHhvm) {
+          reduction += reduction ? ', ' : '';
+          reduction += 'HHVM';
+        }
 
-          const hasHhvm = travisVersions.find((v) => v.startsWith('hhvm'));
-          const versions = travisVersions.map((v) => phpMinorVersion(v)).filter((v) => v.indexOf('.') !== -1);
-          let reduction = phpVersionReduction(versions, phpReleases);
-
-          if (hasHhvm) {
-            reduction += reduction ? ', ' : '';
-            reduction += 'HHVM';
-          }
-
-          if (reduction) {
-            badgeData.colorscheme = 'blue';
-            badgeData.text[1] = reduction;
-          } else {
-            badgeData.text[1] = 'invalid';
-          }
-        } catch(e) {
+        if (reduction) {
+          badgeData.colorscheme = 'blue';
+          badgeData.text[1] = reduction;
+        } else {
           badgeData.text[1] = 'invalid';
         }
-        sendBadge(format, badgeData);
-      });
-    },
-    {
-      headers: customHeaders
-    }
-  );
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+      }
+      sendBadge(format, badgeData);
+    });
+  });
 }));
 
 // Travis integration
@@ -1925,16 +1903,19 @@ cache({
           return;
         }
         badgeData.text[1] = versionRange;
-        regularUpdate('http://nodejs.org/dist/latest/SHASUMS256.txt',
-          (24 * 3600 * 1000),
-          shasums => {
+        regularUpdate({
+          url: 'http://nodejs.org/dist/latest/SHASUMS256.txt',
+          intervalMillis: 24 * 3600 * 1000,
+          json: false,
+          scraper: shasums => {
             // tarball index start, tarball index end
             const taris = shasums.indexOf('node-v');
             const tarie = shasums.indexOf('\n', taris);
             const tarball = shasums.slice(taris, tarie);
             const version = tarball.split('-')[1];
             return version;
-          }, (err, version) => {
+          },
+        }, (err, version) => {
             if (err != null) {
               badgeData.text[1] = 'invalid';
               sendBadge(format, badgeData);
@@ -4917,15 +4898,14 @@ cache(function(data, match, sendBadge, request) {
   var pluginId = match[1];  // e.g. blueocean
   var format = match[2];
   var badgeData = getBadgeData('plugin', data);
-  regularUpdate('https://updates.jenkins-ci.org/current/update-center.actual.json',
-    (4 * 3600 * 1000),
-    function(json) {
-      json = JSON.parse(json);
-      return Object.keys(json.plugins).reduce(function(previous, current) {
-        previous[current] = json.plugins[current].version;
-        return previous;
-      }, {});
-    }, function(err, versions) {
+  regularUpdate({
+    url: 'https://updates.jenkins-ci.org/current/update-center.actual.json',
+    intervalMillis: 4 * 3600 * 1000,
+    scraper: json => Object.keys(json.plugins).reduce((previous, current) => {
+      previous[current] = json.plugins[current].version;
+      return previous;
+    }, {}),
+  }, (err, versions) => {
       if (err != null) {
         badgeData.text[1] = 'inaccessible';
         sendBadge(format, badgeData);
@@ -4943,7 +4923,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = 'not found';
         sendBadge(format, badgeData);
       }
-  });
+    });
 }));
 
 // Ansible integration
@@ -7813,86 +7793,63 @@ cache(function(data, match, sendBadge, request) {
     uri: 'https://php-eye.com/api/v1/package/' + userRepo + '.json',
   };
   const badgeData = getBadgeData('PHP tested', data);
-  // Custom user-agent and accept headers are required
-  // http://developer.github.com/v3/#user-agent-required
-  // https://developer.github.com/v3/licenses/
-  const customHeaders = {
-      'User-Agent': 'Shields.io'
-  };
-  // require PHP releases
-  regularUpdate(
-    'https://api.github.com/repos/php/php-src/git/refs/tags',
-    (24 * 3600 * 1000), // 1 day
-    tags => {
-      return uniq(
-        JSON.parse(tags).
-        // only releases
-        filter((tag) => tag.ref.match(/^refs\/tags\/php-\d+\.\d+\.\d+$/) != null).
-        // get minor version of release
-        map((tag) => tag.ref.match(/^refs\/tags\/php-(\d+\.\d+)\.\d+$/)[1])
-      );
-    },
-    (err, phpReleases) => {
-      if (err != null) {
+  getPhpReleases(githubAuth.request, (err, phpReleases) => {
+    if (err != null) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+      return;
+    }
+    request(options, function(err, res, buffer) {
+      if (err !== null) {
+        log.error('PHP-Eye error: ' + err.stack);
+        if (res) {
+          log.error('' + res);
+        }
         badgeData.text[1] = 'invalid';
         sendBadge(format, badgeData);
         return;
       }
-      request(options, function(err, res, buffer) {
-        if (err !== null) {
-          log.error('PHP-Eye error: ' + err.stack);
-          if (res) {
-            log.error('' + res);
-          }
-          badgeData.text[1] = 'invalid';
+
+      try {
+        const data = JSON.parse(buffer);
+        const travis = data.versions.filter((release) => release.name === version)[0].travis;
+
+        if (!travis.config_exists) {
+          badgeData.colorscheme = 'red';
+          badgeData.text[1] = 'not tested';
           sendBadge(format, badgeData);
           return;
         }
 
-        try {
-          const data = JSON.parse(buffer);
-          const travis = data.versions.filter((release) => release.name === version)[0].travis;
-
-          if (!travis.config_exists) {
-            badgeData.colorscheme = 'red';
-            badgeData.text[1] = 'not tested';
-            sendBadge(format, badgeData);
-            return;
+        let versions = [];
+        for (const index in travis.runtime_status) {
+          if (travis.runtime_status[index] === 3 && index.match(/^php\d\d$/) !== null) {
+            versions.push(index.replace(/^php(\d)(\d)$/, '$1.$2'));
           }
+        }
 
-          let versions = [];
-          for (const index in travis.runtime_status) {
-            if (travis.runtime_status[index] === 3 && index.match(/^php\d\d$/) !== null) {
-              versions.push(index.replace(/^php(\d)(\d)$/, '$1.$2'));
-            }
-          }
+        let reduction = phpVersionReduction(versions, phpReleases);
 
-          let reduction = phpVersionReduction(versions, phpReleases);
+        if (travis.runtime_status.hhvm === 3) {
+          reduction += reduction ? ', ' : '';
+          reduction += 'HHVM';
+        }
 
-          if (travis.runtime_status.hhvm === 3) {
-            reduction += reduction ? ', ' : '';
-            reduction += 'HHVM';
-          }
-
-          if (reduction) {
-            badgeData.colorscheme = 'brightgreen';
-            badgeData.text[1] = reduction;
-          } else if (!versions.length) {
-            badgeData.colorscheme = 'red';
-            badgeData.text[1] = 'not tested';
-          } else {
-            badgeData.text[1] = 'invalid';
-          }
-        } catch(e) {
+        if (reduction) {
+          badgeData.colorscheme = 'brightgreen';
+          badgeData.text[1] = reduction;
+        } else if (!versions.length) {
+          badgeData.colorscheme = 'red';
+          badgeData.text[1] = 'not tested';
+        } else {
           badgeData.text[1] = 'invalid';
         }
-        sendBadge(format, badgeData);
-      });
-    },
-    {
-      headers: customHeaders
-    }
-  );
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+      }
+      sendBadge(format, badgeData);
+    });
+  });
 }));
 
 // Any badge.
