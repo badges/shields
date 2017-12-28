@@ -9,6 +9,7 @@ const semver = require('semver');
 const xml2js = require('xml2js');
 const uniq = require('lodash.uniq');
 
+const { getStandardErrorResponse } = require('./lib/error-helper');
 const analytics = require('./lib/analytics');
 const config = require('./lib/server-config');
 const githubAuth = require('./lib/github-auth');
@@ -5606,9 +5607,10 @@ cache(function(data, match, sendBadge, request) {
   };
   var badgeData = getBadgeData('requirements', data);
   request(options, function(err, res, json) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      badgeData.colorscheme = 'red';
+    const error = getStandardErrorResponse(err, res);
+    if (error != null) {
+      badgeData.text[1] = error.text;
+      badgeData.colorscheme = error.colorscheme;
       sendBadge(format, badgeData);
       return;
     }

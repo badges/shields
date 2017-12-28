@@ -25,7 +25,7 @@ t.create('requirements (valid, with branch)')
 
 t.create('requirements (not found)')
   .get('/github/PyvesB/EmptyRepo.json')
-  .expectJSON({name: 'requirements', value: 'unknown'});
+  .expectJSON({name: 'requirements', value: 'not found'});
 
 t.create('requirements (connection error)')
   .get('/github/celery/celery.json')
