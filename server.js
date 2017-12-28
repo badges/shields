@@ -6414,18 +6414,20 @@ cache(function(data, match, sendBadge, request) {
   badgeData.text[1] = '';
   request(options, function(err, res, buffer) {
     if (err != null) {
+      badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
     try {
       // The data is formatted as an array.
       var data = JSON.parse(buffer)[0];
-      // data.followers_count could be zero… don't just check if falsey.
-      if (data !== undefined && data.followers_count != null){
+      if (data === undefined){
+        badgeData.text[1] = 'invalid user';
+      } else if (data.followers_count != null){// data.followers_count could be zero… don't just check if falsey.
         badgeData.text[1] = metric(data.followers_count);
       }
     } catch(e) {
-      log.error(e);
+      badgeData.text[1] = 'invalid';
     }
     sendBadge(format, badgeData);
   });
