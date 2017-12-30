@@ -5602,11 +5602,10 @@ cache(function(data, match, sendBadge, request) {
   }
   var options = {
     method: 'GET',
-    json: true,
     uri: uri
   };
   var badgeData = getBadgeData('requirements', data);
-  request(options, function(err, res, json) {
+  request(options, function(err, res, buffer) {
     const error = getStandardErrorResponse(err, res);
     if (error != null) {
       badgeData.text[1] = error.text;
@@ -5615,6 +5614,7 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
+      const json = JSON.parse(buffer);
       if (json.status === 'up-to-date') {
         badgeData.text[1] = 'up to date';
         badgeData.colorscheme = 'brightgreen';
@@ -5630,7 +5630,7 @@ cache(function(data, match, sendBadge, request) {
       }
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'invalid' + e.toString();
+      badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
       return;
     }

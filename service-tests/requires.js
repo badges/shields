@@ -3,7 +3,7 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
-const isRequireStatus = Joi.string().regex(/^(up to date|outdated|insecure)$/);
+const isRequireStatus = Joi.string().regex(/^(up to date|outdated|insecure|unknown)$/);
 
 const t = new ServiceTester({ id: 'requires', title: 'Requires.io' });
 module.exports = t;
@@ -38,4 +38,4 @@ t.create('requirements (unexpected response)')
     .get('/api/v1/status/github/celery/celery')
     .reply(200, "{{{{{invalid json}}")
   )
-  .expectJSON({name: 'requirements', value: 'unknown'});
+  .expectJSON({name: 'requirements', value: 'invalid'});
