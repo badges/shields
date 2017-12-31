@@ -1698,12 +1698,20 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var version = JSON.parse(buffer).version || 0;
+      const json = JSON.parse(buffer);
+      if (Object.keys(json).length === 0) {
+        /* Note the 'not found' response from cdnjs is:
+           status code = 200, body = {} */
+        badgeData.text[1] = 'not found';
+        sendBadge(format, badgeData);
+        return;
+      }
+      const version = json.version || 0;
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'not found';
+      badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
   });
