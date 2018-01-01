@@ -1687,10 +1687,10 @@ cache(function(data, match, sendBadge, request) {
 // CDNJS version integration
 camp.route(/^\/cdnjs\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var library = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
-  var format = match[2];
-  var apiUrl = 'https://api.cdnjs.com/libraries/' + library + '?fields=version';
-  var badgeData = getBadgeData('cdnjs', data);
+  const library = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
+  const format = match[2];
+  const apiUrl = 'https://api.cdnjs.com/libraries/' + library + '?fields=version';
+  const badgeData = getBadgeData('cdnjs', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -1698,12 +1698,20 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var version = JSON.parse(buffer).version || 0;
+      const json = JSON.parse(buffer);
+      if (Object.keys(json).length === 0) {
+        /* Note the 'not found' response from cdnjs is:
+           status code = 200, body = {} */
+        badgeData.text[1] = 'not found';
+        sendBadge(format, badgeData);
+        return;
+      }
+      const version = json.version || 0;
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'not found';
+      badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
   });
