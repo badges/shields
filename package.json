@@ -82,13 +82,14 @@
     "lib/make-badge.js",
     "lib/colorscheme.json",
     "lib/lru-cache.js",
-    "lib/measure-text.js",
+    "lib/text-measurer.js",
     "lib/svg-to-img.js",
     "templates",
     "logo"
   ],
   "devDependencies": {
     "@mapbox/react-click-to-select": "^2.1.0",
+    "almost-equal": "^1.1.0",
     "babel-eslint": "^8.0.2",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
