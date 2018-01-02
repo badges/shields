@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{{=it.widths[0]+1 + (it.text[1] && it.text[1].length > 0 ? it.widths[1]+2 : 0)}}" height="20">
   {{it.widths[1]-=4;}}
   <style type="text/css"><![CDATA[
-    a #llink:hover { fill:url(#b); stroke:#ccc; }
-    a #rlink:hover { fill:#4183C4; }
+    a #llink:hover { fill:url(#b); stroke:#ccc; cursor: pointer; }
+    a #rlink:hover { fill:#4183C4; cursor: pointer; }
   ]]></style>
   <linearGradient id="a" x2="0" y2="100%">
     <stop offset="0" stop-color="#fcfcfc" stop-opacity="0"/>
