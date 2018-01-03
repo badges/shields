@@ -10,6 +10,7 @@ const xml2js = require('xml2js');
 const Raven = require('raven');
 
 Raven.config().install();
+const { checkErrorResponse } = require('./lib/error-helper');
 const analytics = require('./lib/analytics');
 const config = require('./lib/server-config');
 const githubAuth = require('./lib/github-auth');
@@ -5597,18 +5598,16 @@ cache(function(data, match, sendBadge, request) {
   }
   var options = {
     method: 'GET',
-    json: true,
     uri: uri
   };
   var badgeData = getBadgeData('requirements', data);
-  request(options, function(err, res, json) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      badgeData.colorscheme = 'red';
+  request(options, function(err, res, buffer) {
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
     try {
+      const json = JSON.parse(buffer);
       if (json.status === 'up-to-date') {
         badgeData.text[1] = 'up to date';
         badgeData.colorscheme = 'brightgreen';
@@ -5624,7 +5623,7 @@ cache(function(data, match, sendBadge, request) {
       }
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'invalid' + e.toString();
+      badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
       return;
     }
