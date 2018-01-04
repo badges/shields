@@ -17,9 +17,10 @@
 
 const difference = require('lodash.difference');
 const fetch = require('node-fetch');
+const { inferPullRequest } = require('./infer-pull-request');
 
-function getTitle (repoSlug, pullRequest) {
-  const uri = `https://img.shields.io/github/pulls/detail/title/${repoSlug}/${pullRequest}.json`;
+function getTitle (owner, repo, pullRequest) {
+  const uri = `https://img.shields.io/github/pulls/detail/title/${owner}/${repo}/${pullRequest}.json`;
   const options = { headers: { 'User-Agent': 'badges/shields' }};
   return fetch(uri, options)
     .then(res => {
@@ -46,17 +47,12 @@ function servicesForTitle (title) {
   return difference(services, blacklist);
 }
 
-const repoSlug = process.env.TRAVIS_REPO_SLUG;
-const pullRequest = process.env.TRAVIS_PULL_REQUEST;
-if (repoSlug === undefined || pullRequest === undefined) {
-  console.error('Please set TRAVIS_REPO_SLUG and TRAVIS_PULL_REQUEST.');
-  process.exit(-1);
-}
-console.error(`PR: ${repoSlug}#${pullRequest}`);
+const { owner, repo, pullRequest, slug } = inferPullRequest();
+console.error(`PR: ${slug}`);
 
-getTitle(repoSlug, pullRequest)
+getTitle(owner, repo, pullRequest)
   .then(title => {
-    console.error(`Title: ${title}`);
+    console.error(`Title: ${title}\n`);
     const services = servicesForTitle(title);
     if (services.length === 0) {
       console.error('No services found. Nothing to do.');

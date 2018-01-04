@@ -14,7 +14,7 @@ t.create('licence')
   .expectJSON({ name: 'bower', value: 'MIT' });
 
 t.create('custom label for licence')
-  .get('/l/bootstrap.json?label="my licence"')
+  .get('/l/bootstrap.json?label=my licence')
   .expectJSON({ name: 'my licence', value: 'MIT' });
 
 t.create('version')
@@ -25,7 +25,7 @@ t.create('version')
   }));
 
 t.create('custom label for version')
-  .get('/v/bootstrap.json?label="my version"')
+  .get('/v/bootstrap.json?label=my version')
   .expectJSONTypes(Joi.object().keys({
     name: 'my version',
     value: isVPlusDottedVersionAtLeastOne
@@ -39,7 +39,7 @@ t.create('pre version') // e.g. bower|v0.2.5-alpha-rc-pre
   }));
 
 t.create('custom label for pre version') // e.g. pre version|v0.2.5-alpha-rc-pre
-  .get('/vpre/bootstrap.json?label="pre version"')
+  .get('/vpre/bootstrap.json?label=pre version')
   .expectJSONTypes(Joi.object().keys({
     name: 'pre version',
     value: isBowerPrereleaseVersion

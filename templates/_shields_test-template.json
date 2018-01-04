@@ -1,0 +1,10 @@
+{
+{{?it.colorA}}
+  "colorA": {{=JSON.stringify(it.colorA)}},
+{{?}}
+{{?it.colorB}}
+  "colorB": {{=JSON.stringify(it.colorB)}},
+{{?}}
+  "name": {{=JSON.stringify(it.text[0])}},
+  "value": {{=JSON.stringify(it.text[1])}}
+}
