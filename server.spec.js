@@ -29,9 +29,10 @@ describe('The server', function () {
         expect(res.ok).to.equal(true);
         return res.text();
       }).then(text => {
-        expect(text).to.satisfy(isSvg);
-        expect(text).to.contain('fruit');
-        expect(text).to.contain('apple');
+        expect(text)
+          .to.satisfy(isSvg)
+          .and.to.contain('fruit')
+          .and.to.contain('apple');
       });
   });
 
