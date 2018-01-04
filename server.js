@@ -7722,44 +7722,43 @@ camp.route(/^\/bundlephobia\/(min|gzip)\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?
   // B: /bundlephobia/(min|gzip)/:package/:version.:format
   // C: /bundlephobia/(min|gzip)/@:scope/:package.:format
   // D: /bundlephobia/(min|gzip)/@:scope/:package/:version.:format
-  const capturedResultType = match[1];
-  const capturedScopeWithoutAtSign = match[2];
-  const capturedPackageName = match[3];
-  const capturedVersion = match[4];
-  const capturedFormat = match[5];
-  const showMin = capturedResultType === 'min';
+  const resultType = match[1];
+  const scope = match[2];
+  const packageName = match[3];
+  const packageVersion = match[4];
+  const format = match[5];
+  const showMin = resultType === 'min';
 
   const badgeData = getBadgeData(showMin ? 'minified size' : 'gzip size', data);
 
-  function getBundlephobiaResults(scopeWithoutAtSign = null, packageName = '', packageVersion = '') {
-    let packageString = typeof scopeWithoutAtSign === 'string' ?
-      `@${scopeWithoutAtSign}/${packageName}` : packageName;
+  let packageString = typeof scope === 'string' ?
+    `@${scope}/${packageName}` : packageName;
 
-    if(packageVersion) {
-      packageString += `@${packageVersion}`;
-    }
-
-    const requestOptions = {
-      url: 'https://bundlephobia.com/api/size',
-      qs: {
-        package: packageString,
-      },
-      json: true,
-    };
-
-    request(requestOptions, (error, response, body) => {
-      if (error !== null || typeof body !== 'object' || body === null || body.error) {
-        badgeData.text[1] = body.error.code || 'error';
-        badgeData.colorscheme = 'red';
-      } else {
-        badgeData.text[1] = prettyBytes(showMin ? body.size : body.gzip);
-        badgeData.colorscheme = 'blue';
-      }
-      sendBadge(capturedFormat, badgeData);
-    });
+  if(packageVersion) {
+    packageString += `@${packageVersion}`;
   }
 
-  getBundlephobiaResults(capturedScopeWithoutAtSign, capturedPackageName, capturedVersion);
+  const requestOptions = {
+    url: 'https://bundlephobia.com/api/size',
+    qs: {
+      package: packageString,
+    },
+    json: true,
+  };
+
+  request(requestOptions, (error, response, body) => {
+    if(typeof body !== 'object' || body === null) {
+      badgeData.text[1] = 'error';
+      badgeData.colorscheme = 'red';
+    } else if (error !== null || body.error) {
+      badgeData.text[1] = body.error.code || 'error';
+      badgeData.colorscheme = 'red';
+    } else {
+      badgeData.text[1] = prettyBytes(showMin ? body.size : body.gzip);
+      badgeData.colorscheme = 'blue';
+    }
+    sendBadge(format, badgeData);
+  });
 }));
 
 // Redmine plugin rating.
