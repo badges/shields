@@ -2,6 +2,7 @@
 
 const Joi = require('joi')
 const ServiceTester = require('./runner/service-tester')
+const { isFileSize } = require('./helpers/validators')
 
 const t = new ServiceTester({
   id: 'bundlephobia', title: 'NPM package bundle size',
@@ -29,16 +30,16 @@ const withoutErrorsGzip = {
 }
 
 const withoutErrorSizesMin = {
-  A: Joi.string().regex(/^\d+[.]?\d+ kB$/),
+  A: isFileSize,
   B: '8.94 kB',
-  C: Joi.string().regex(/^\d+[.]?\d+ kB$/),
+  C: isFileSize,
   D: '3.51 kB',
 }
 
 const withoutErrorSizesGzip = {
-  A: Joi.string().regex(/^\d+[.]?\d+ kB$/),
+  A: isFileSize,
   B: '3.58 kB',
-  C: Joi.string().regex(/^\d+[.]?\d+ kB$/),
+  C: isFileSize,
   D: '1.23 kB',
 }
 
