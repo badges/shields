@@ -85,8 +85,12 @@ describe('The server', function () {
           ];
           expect(json).to.have.all.keys(...expectedKeys);
 
-          Object.values(json).forEach(stats => {
-            expect(stats).to.be.an('array').with.length(36);
+          // TODO Switch this when we upgrade to Node 8.
+          // Object.values(json).forEach(stats => {
+          //   expect(stats).to.be.an('array').with.length(36);
+          // });
+          Object.keys(json).forEach(k => {
+            expect(json[k]).to.be.an('array').with.length(36);
           });
         });
     });
