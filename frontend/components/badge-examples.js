@@ -1,9 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import resolveUri from '../lib/resolve-uri';
+import resolveBadgeUrl from '../lib/badge-url';
 
-const Badge = ({ title, previewUri, exampleUri, documentation, baseUri, longCache, onClick }) => {
+const Badge = ({
+  title,
+  previewUri,
+  exampleUri,
+  documentation,
+  baseUri,
+  longCache,
+  shouldDisplay = () => true,
+  onClick,
+}) => {
   const handleClick = onClick ?
     () => onClick({ title, previewUri, exampleUri, documentation })
     : undefined;
@@ -12,16 +21,16 @@ const Badge = ({ title, previewUri, exampleUri, documentation, baseUri, longCach
     ? (<img
       className={classNames('badge-img', { clickable: onClick })}
       onClick={handleClick}
-      src={resolveUri(previewUri, baseUri, { longCache } )}
+      src={resolveBadgeUrl(previewUri, baseUri, { longCache } )}
       alt="" />
     ) : '\u00a0'; // non-breaking space
-  const resolvedExampleUri = resolveUri(
+  const resolvedExampleUri = resolveBadgeUrl(
     exampleUri || previewUri,
     baseUri,
     { longCache: false });
 
   return (
-    <tr>
+    <tr className={classNames({ excluded: !shouldDisplay() })}>
       <th className={classNames({ clickable: onClick })} onClick={handleClick}>
         { title }:
       </th>
@@ -41,6 +50,7 @@ Badge.propTypes = {
   documentation: PropTypes.string,
   baseUri: PropTypes.string,
   longCache: PropTypes.bool.isRequired,
+  shouldDisplay: PropTypes.func,
   onClick: PropTypes.func.isRequired,
 };
 
@@ -50,9 +60,9 @@ const Category = ({ category, examples, baseUri, longCache, onClick }) => (
     <table className="badge">
       <tbody>
         {
-          examples.map((badgeData, i) => (
+          examples.map(badgeData => (
             <Badge
-              key={i}
+              key={badgeData.key}
               {...badgeData}
               baseUri={baseUri}
               longCache={longCache}
@@ -79,10 +89,10 @@ Category.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-const BadgeExamples = ({ examples, baseUri, longCache, onClick }) => (
+const BadgeExamples = ({ categories, baseUri, longCache, onClick }) => (
   <div>
     {
-      examples.map((categoryData, i) => (
+      categories.map((categoryData, i) => (
         <Category
           key={i}
           {...categoryData}
@@ -94,7 +104,7 @@ const BadgeExamples = ({ examples, baseUri, longCache, onClick }) => (
   </div>
 );
 BadgeExamples.propTypes = {
-  examples: PropTypes.arrayOf(PropTypes.shape({
+  categories: PropTypes.arrayOf(PropTypes.shape({
     category: Category.propTypes.category,
     examples: Category.propTypes.examples,
   })),
@@ -106,5 +116,4 @@ BadgeExamples.propTypes = {
 module.exports = {
   Badge,
   BadgeExamples,
-  resolveUri,
 };

@@ -90,6 +90,10 @@ hr.spacing {
   cursor: pointer;
 }
 
+.excluded {
+  display: none;
+}
+
 .badge-img {
   min-height: 20px;
   vertical-align: middle;

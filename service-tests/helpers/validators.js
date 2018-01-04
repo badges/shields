@@ -32,10 +32,19 @@ const isVPlusDottedVersionAtLeastOne = withRegex(/^v\d+(\.\d+)?(\.\d+)?$/);
 // https://getcomposer.org/doc/04-schema.md#minimum-stability
 const isComposerVersion = withRegex(/^\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?((\s*\|\|)?\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?)*\s*$/);
 
+// Regex for validate php-version.versionReduction()
+// >= 7
+// >= 7.1
+// 5.4, 5.6, 7.2
+// 5.4 - 7.1, HHVM
+const isPhpVersionReduction = withRegex(/^((>= \d+(\.\d+)?)|(\d+\.\d+(, \d+\.\d+)*)|(\d+\.\d+ \\- \d+\.\d+))(, HHVM)?$/);
+
 const isStarRating = withRegex(/^(?=.{5}$)(\u2605{0,5}[\u00BC\u00BD\u00BE]?\u2606{0,5})$/);
 
 // Required to be > 0, beacuse accepting zero masks many problems.
 const isMetric = withRegex(/^[1-9][0-9]*[kMGTPEZY]?$/);
+
+const isMetricOpenIssues = withRegex(/^[1-9][0-9]*[kMGTPEZY]? open$/);
 
 const isMetricOverTimePeriod = withRegex(/^[1-9][0-9]*[kMGTPEZY]?\/(year|month|4 weeks|week|day)$/);
 
@@ -53,8 +62,10 @@ module.exports = {
   isVPlusTripleDottedVersion,
   isVPlusDottedVersionAtLeastOne,
   isComposerVersion,
+  isPhpVersionReduction,
   isStarRating,
   isMetric,
+  isMetricOpenIssues,
   isMetricOverTimePeriod,
   isPercentage,
   isFileSize,

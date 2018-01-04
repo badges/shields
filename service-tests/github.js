@@ -4,18 +4,76 @@ const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 const {
   isMetric,
+  isMetricOpenIssues,
   isMetricOverTimePeriod,
   isFileSize,
   isFormattedDate,
   isVPlusDottedVersionAtLeastOne
 } = require('./helpers/validators');
+const colorscheme = require('../lib/colorscheme.json');
+const {licenseToColor} = require('../lib/licenses');
+const {makeColor} = require('../lib/badge-data');
+const mapValues = require('lodash.mapvalues');
 
 const t = new ServiceTester({ id: 'github', title: 'Github' });
 module.exports = t;
+const colorsB = mapValues(colorscheme, 'colorB');
+const publicDomainLicenseColor = makeColor(licenseToColor('CC0-1.0'));
+const permissiveLicenseColor = colorsB[licenseToColor('MIT')];
+const copyleftLicenseColor = colorsB[licenseToColor('GPL-3.0')];
+const unknownLicenseColor = colorsB[licenseToColor()];
 
-t.create('License')
-  .get('/license/badges/shields.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'license', value: Joi.string() }));
+t.create('Public domain license')
+  .get('/license/badges/shields.json?style=_shields_test')
+  .expectJSON({ name: 'license', value: 'CC0-1.0', colorB: publicDomainLicenseColor });
+
+t.create('Copyleft license')
+  .get('/license/ansible/ansible.json?style=_shields_test')
+  .expectJSON({ name: 'license', value: 'GPL-3.0', colorB: copyleftLicenseColor });
+
+t.create('Permissive license')
+  .get('/license/atom/atom.json?style=_shields_test')
+  .expectJSON({ name: 'license', value: 'MIT', colorB: permissiveLicenseColor });
+
+t.create('License for repo without a license')
+  .get('/license/badges/badger.json?style=_shields_test')
+  .expectJSON({ name: 'license', value: 'missing', colorB: colorsB.red });
+
+t.create('License for repo with an unrecognized license')
+  .get('/license/philokev/sopel-noblerealms.json?style=_shields_test')
+  .expectJSON({ name: 'license', value: 'unknown', colorB: unknownLicenseColor });
+
+t.create('License with SPDX id not appearing in configuration')
+  .get('/license/user1/project-with-EFL-license.json?style=_shields_test')
+  .intercept(nock => nock('https://api.github.com')
+    .get('/repos/user1/project-with-EFL-license')
+    .query(true)
+    // GitHub API currently returns "other" as a key for repo with EFL license
+    .reply(200, {
+      license: {
+        key: 'efl-1.0',
+        name: 'Eiffel Forum License v1.0',
+        spdx_id: 'EFL-1.0',
+        url: 'https://api.github.com/licenses/efl-1.0',
+        featured: true
+      }
+    }))
+  .expectJSON({ name: 'license', value: 'EFL-1.0', colorB: unknownLicenseColor });
+
+t.create('License for unknown repo')
+  .get('/license/user1/github-does-not-have-this-repo.json?style=_shields_test')
+  .expectJSON({ name: 'license', value: 'repo not found', colorB: colorsB.lightgrey });
+
+t.create('License - API rate limit exceeded')
+  .get('/license/user1/repo1.json?style=_shields_test')
+  .intercept(nock => nock('https://api.github.com')
+    .get('/repos/user1/repo1')
+    .query(true)
+    .reply(403, {
+      message: "API rate limit exceeded for 123.123.123.123. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)",
+      documentation_url: "https://developer.github.com/v3/#rate-limiting"
+  }))
+  .expectJSON({ name: 'license', value: 'inaccessible', colorB: colorsB.lightgrey });
 
 t.create('Contributors')
   .get('/contributors/cdnjs/cdnjs.json')
@@ -42,7 +100,7 @@ t.create('GitHub pull requests')
   .get('/issues-pr/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'pull requests',
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
+    value: isMetricOpenIssues
   }));
 
 t.create('GitHub pull requests raw')
@@ -70,7 +128,7 @@ t.create('GitHub open issues')
   .get('/issues/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'issues',
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
+    value: isMetricOpenIssues
   }));
 
 t.create('GitHub open issues raw')
@@ -81,14 +139,14 @@ t.create('GitHub open issues by label is > zero')
   .get('/issues/badges/shields/service-badge.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'service-badge issues',
-    value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? open$/)
+    value: isMetricOpenIssues
   }));
 
 t.create('GitHub open issues by multi-word label is > zero')
   .get('/issues/Cockatrice/Cockatrice/App%20-%20Cockatrice.json')
   .expectJSONTypes(Joi.object().keys({
     name: '"App - Cockatrice" issues',
-    value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? open$/)
+    value: isMetricOpenIssues
   }));
 
 t.create('GitHub open issues by label (raw)')
@@ -102,7 +160,7 @@ t.create('GitHub open pull requests by label')
   .get('/issues-pr/badges/shields/service-badge.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'service-badge pull requests',
-    value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? open$/)
+    value: isMetricOpenIssues
   }));
 
 t.create('GitHub open pull requests by label (raw)')

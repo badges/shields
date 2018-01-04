@@ -2,15 +2,17 @@ import { Fragment, default as React } from 'react';
 import PropTypes from 'prop-types';
 import StaticBadgeMaker from './static-badge-maker';
 import DynamicBadgeMaker from './dynamic-badge-maker';
-import staticBadgeUri from '../lib/static-badge-uri';
+import { staticBadgeUrl } from '../lib/badge-url';
+import { advertisedStyles } from '../../lib/supported-features';
 
 export default class Usage extends React.PureComponent {
   static propTypes = {
     baseUri: PropTypes.string.isRequired,
+    longCache: PropTypes.bool.isRequired,
   };
 
   renderColorExamples () {
-    const { baseUri } = this.props;
+    const { baseUri, longCache } = this.props;
     const colors = [
       'brightgreen',
       'green',
@@ -28,7 +30,7 @@ export default class Usage extends React.PureComponent {
           <Fragment key={i}>
             <img
               className="badge-img"
-              src={staticBadgeUri(baseUri, 'color', color, color)}
+              src={staticBadgeUrl(baseUri, 'color', color, color, { longCache })}
               alt={color} /> {}
           </Fragment>
         ))}
@@ -37,19 +39,17 @@ export default class Usage extends React.PureComponent {
   }
 
   renderStyleExamples () {
-    const { baseUri } = this.props;
-    const styles = [
-      'plastic',
-      'flat',
-      'flat-square',
-      'for-the-badge',
-      'social',
-    ];
+    const { baseUri, longCache } = this.props;
     return (
       <table className="badge-img">
         <tbody>
-          { styles.map((style, i) => {
-            const badgeUri = staticBadgeUri(baseUri, 'style', style, 'green', { style });
+          { advertisedStyles.map((style, i) => {
+            const badgeUri = staticBadgeUrl(
+              baseUri,
+              'style',
+              style,
+              'green',
+              { longCache, style });
             return (
               <tr key={i}>
                 <td>

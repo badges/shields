@@ -1,0 +1,219 @@
+version: 2
+
+jobs:
+  npm-install:
+    docker:
+      - image: shieldsio/shields-node-8:0.0.1
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Update Greenkeeper lockfile
+          command: |
+            greenkeeper-lockfile-update
+
+  main:
+    docker:
+      - image: shieldsio/shields-node-8:0.0.1
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Linter
+          when: always
+          command: npm run lint
+
+      - run:
+          name: Server unit tests
+          when: always
+          command: npm run test:js:server
+
+      - run:
+          name: Danger
+          when: always
+          command: npm run danger
+
+      - run:
+          name: Upload Greenkeeper lockfile
+          command: greenkeeper-lockfile-upload
+
+  main@node-6:
+    docker:
+      - image: shieldsio/shields-node-6:0.0.1
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Linter
+          when: always
+          command: npm run lint
+
+      - run:
+          name: Server unit tests
+          when: always
+          command: npm run test:js:server
+
+      - run:
+          name: Upload Greenkeeper lockfile
+          command: greenkeeper-lockfile-upload
+
+  frontend:
+    docker:
+      - image: shieldsio/shields-node-8:0.0.1
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Frontend unit tests
+          when: always
+          command: npm run test:js:frontend
+
+      - run:
+          name: Frontend build completes successfully
+          when: always
+          command: npm run build
+
+  services-pr:
+    docker:
+      - image: shieldsio/shields-node-8:0.0.1
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      - run:
+          name: Prepare service tests
+          command: |
+            mkdir private
+            echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
+
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Identify services tagged in the PR title
+          command: |
+            if [[ ! -z $CI_PULL_REQUEST ]]; then
+              npm run test:services:pr:prepare
+            else
+              echo 'This is not a pull request. Skipping.'
+            fi
+
+      - run:
+          name: Run tests for tagged services
+          command: |
+            if [[ ! -z $CI_PULL_REQUEST ]]; then
+              npm run test:services:pr:run
+            else
+              echo 'This is not a pull request. Skipping.'
+            fi
+
+  services-pr@node-6:
+    docker:
+      - image: shieldsio/shields-node-6:0.0.1
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      - run:
+          name: Prepare service tests
+          command: |
+            mkdir private
+            echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
+
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Identify services tagged in the PR title
+          command: |
+            if [[ ! -z $CI_PULL_REQUEST ]]; then
+              npm run test:services:pr:prepare
+            else
+              echo 'This is not a pull request. Skipping.'
+            fi
+
+      - run:
+          name: Run tests for tagged services
+          command: |
+            if [[ ! -z $CI_PULL_REQUEST ]]; then
+              npm run test:services:pr:run
+            else
+              echo 'This is not a pull request. Skipping.'
+            fi
+
+  services-daily:
+    docker:
+      - image: shieldsio/shields-node-8:0.0.1
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Run all service tests
+          command: npm run test:services
+
+workflows:
+  version: 2
+
+  on-commit:
+    jobs:
+      - npm-install:
+          filters:
+            branches:
+              ignore: gh-pages
+      - main:
+          requires:
+            - npm-install
+      - main@node-6:
+          requires:
+            - npm-install
+      - frontend:
+          requires:
+            - npm-install
+      - services-pr:
+          requires:
+            - npm-install
+      - services-pr@node-6:
+          requires:
+            - npm-install
+
+  daily:
+    triggers:
+      - schedule:
+          cron: "0 17 * * *"
+          filters:
+            branches:
+              only: master
+    jobs:
+      - services-daily
