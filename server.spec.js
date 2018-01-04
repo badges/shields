@@ -31,8 +31,8 @@ describe('The server', function () {
       }).then(text => {
         expect(text)
           .to.satisfy(isSvg)
-          .and.to.contain('fruit')
-          .and.to.contain('apple');
+          .and.to.include('fruit')
+          .and.to.include('apple');
       });
   });
 
@@ -63,7 +63,7 @@ describe('The server', function () {
           expect(res.status).to.equal(200);
           return res.text();
         }).then(text => {
-          expect(text).to.contain(expectedError);
+          expect(text).to.include(expectedError);
         });
     });
   });
