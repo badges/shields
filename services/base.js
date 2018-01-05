@@ -58,43 +58,54 @@ module.exports = class BaseService {
     return [];
   }
 
+  static get _regex() {
+    // Regular expressions treat "/" specially, so we need to escape them
+    const escapedPath = this.uri.format.replace(/\//g, '\\/');
+    const fullRegex = '^' + escapedPath + '.(svg|png|gif|jpg|json)$';
+    return new RegExp(fullRegex);
+  }
+
+  static _namedParamsForMatch(match) {
+    // Assume the last match is the format, and drop match[0], which is the
+    // entire match.
+    const captures = match.slice(1, -1);
+
+    if (this.uri.capture.length !== captures.length) {
+      throw new Error(
+        `Service ${this.constructor.name} declares incorrect number of capture groups `+
+        `(expected ${this.uri.capture.length}, got ${captures.length})`
+      );
+    }
+
+    const result = {};
+    this.uri.capture.forEach((name, index) => {
+      result[name] = captures[index];
+    });
+    return result;
+  }
+
   static register(camp, handleRequest) {
     const serviceClass = this; // In a static context, "this" is the class.
 
-    // Regular expressions treat "/" specially, so we need to escape them
-    const escapedPath = serviceClass.uri.format.replace(/\//g, '\\/');
-    const fullRegex = '^' + escapedPath + '.(svg|png|gif|jpg|json)$';
-
-    camp.route(new RegExp(fullRegex),
-    handleRequest(async (data, match, sendBadge, request) => {
+    camp.route(this._regex,
+    handleRequest(async (queryParams, match, sendBadge, request) => {
       // Assumes the final capture group is the extension
-      const format = match.pop();
+      const format = match.slice(-1)[0];
+
       const badgeData = getBadgeData(
         serviceClass.category,
-        Object.assign({}, serviceClass.defaultBadgeData, data)
+        Object.assign({}, serviceClass.defaultBadgeData, queryParams)
       );
 
       try {
-        const namedParams = {};
-        if (serviceClass.uri.capture.length !== match.length - 1) {
-          throw new Error(
-            `Incorrect number of capture groups (expected `+
-            `${serviceClass.uri.capture.length}, got ${match.length - 1})`
-          );
-        }
-
-        serviceClass.uri.capture.forEach((name, index) => {
-          // The first capture group is the entire match, so every index is + 1 here
-          namedParams[name] = match[index + 1];
-        });
-
+        const namedParams = this._namedParamsForMatch(match);
         const serviceInstance = new serviceClass({
           sendAndCacheRequest: request.asPromise,
         });
         const serviceData = await serviceInstance.handle(namedParams);
         const text = badgeData.text;
-        if (serviceData.text) {
-          text[1] = serviceData.text;
+        if (serviceData.message) {
+          text[1] = serviceData.message;
         }
         Object.assign(badgeData, serviceData);
         badgeData.text = text;
