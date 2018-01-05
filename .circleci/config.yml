@@ -195,18 +195,18 @@ workflows:
       - main:
           requires:
             - npm-install
-      - main@node-6:
-          requires:
-            - npm-install
+      # - main@node-6:
+      #     requires:
+      #       - npm-install
       - frontend:
           requires:
             - npm-install
       - services-pr:
           requires:
             - npm-install
-      - services-pr@node-6:
-          requires:
-            - npm-install
+      # - services-pr@node-6:
+      #     requires:
+      #       - npm-install
 
   daily:
     triggers:
