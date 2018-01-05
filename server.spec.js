@@ -50,12 +50,13 @@ describe('The server', function () {
   it('should not crash with a numeric logo', function () {
     return fetch(`${baseUri}/:fruit-apple-green.svg?logo=1`)
       .then(res => {
-        assert.ok(res.ok);
-        return res.buffer();
+        expect(res.ok).to.be.true;
+        return res.text();
       }).then(text => {
-        assert.ok(isSvg(text));
-        assert(text.includes('fruit'), 'fruit');
-        assert(text.includes('apple'), 'apple');
+        expect(text)
+          .to.satisfy(isSvg)
+          .and.to.include('fruit')
+          .and.to.include('apple');
       });
   });
 
