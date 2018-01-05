@@ -26,7 +26,7 @@ describe('The server', function () {
     this.timeout(5000);
     return fetch(`${baseUri}/:fruit-apple-green.svg`)
       .then(res => {
-        expect(res.ok).to.equal(true);
+        expect(res.ok).to.be.true;
         return res.text();
       }).then(text => {
         expect(text)
@@ -39,7 +39,7 @@ describe('The server', function () {
   it('should produce colorscheme PNG badges', function () {
     return fetch(`${baseUri}/:fruit-apple-green.png`)
       .then(res => {
-        expect(res.ok).to.equal(true);
+        expect(res.ok).to.be.true;
         return res.buffer();
       }).then(data => {
         expect(data).to.satisfy(isPng);
@@ -85,7 +85,7 @@ describe('The server', function () {
     it('should return analytics in the expected format', function () {
       return fetch(`${baseUri}/$analytics/v1`)
         .then(res => {
-          expect(res.ok).to.equal(true);
+          expect(res.ok).to.be.true;
           return res.json();
         }).then(json => {
           const expectedKeys = [
