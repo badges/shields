@@ -7467,7 +7467,7 @@ cache(function(data, match, sendBadge, request) {
     return;
   }
   request(options, function(err, res, json) {
-    if (err !== null) {
+    if (err !== null || res.statusCode >= 500 || typeof json !== 'object') {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
