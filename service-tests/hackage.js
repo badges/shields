@@ -19,7 +19,7 @@ t.create('hackage version (valid)')
 t.create('hackage deps (valid)')
   .get('-deps/v/lens.json')
   .expectJSONTypes(Joi.object().keys({
-    name: 'hackage-deps',
+    name: 'dependencies',
     value: Joi.string().regex(/^(up to date|outdated)$/),
   }));
 
@@ -29,7 +29,7 @@ t.create('hackage version (not found)')
 
 t.create('hackage version (not found)')
   .get('-deps/v/not-a-package.json')
-  .expectJSON({name: 'hackage-deps', value: 'not found'});
+  .expectJSON({name: 'dependencies', value: 'not found'});
 
 t.create('hackage version (connection error)')
   .get('/v/lens.json')
@@ -39,7 +39,7 @@ t.create('hackage version (connection error)')
 t.create('hackage deps (connection error)')
   .get('-deps/v/lens.json')
   .networkOff()
-  .expectJSON({name: 'hackage-deps', value: 'inaccessible'});
+  .expectJSON({name: 'dependencies', value: 'inaccessible'});
 
 t.create('hackage version (unexpected response)')
   .get('/v/lens.json')

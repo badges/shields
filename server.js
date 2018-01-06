@@ -3430,7 +3430,7 @@ cache(function(data, match, sendBadge, request) {
   const format = match[2];
   const reverseUrl = 'http://packdeps.haskellers.com/reverse/' + repo;
   const feedUrl = 'http://packdeps.haskellers.com/feed/' + repo;
-  const badgeData = getBadgeData('hackage-deps', data);
+  const badgeData = getBadgeData('dependencies', data);
 
   // first call /reverse to check if the package exists
   // this will throw a 404 if it doesn't
