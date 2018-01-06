@@ -43,6 +43,19 @@ describe('The server', function () {
       });
   });
 
+  // https://github.com/badges/shields/pull/1319
+  it('should not crash with a numeric logo', function () {
+    return fetch(`${baseUri}/:fruit-apple-green.svg?logo=1`)
+      .then(res => {
+        assert.ok(res.ok);
+        return res.buffer();
+      }).then(text => {
+        assert.ok(isSvg(text));
+        assert(text.includes('fruit'), 'fruit');
+        assert(text.includes('apple'), 'apple');
+      });
+  });
+
   context('with svg2img error', function () {
     const expectedError = fs.readFileSync(path.resolve(__dirname, 'public', '500.html'));
 
