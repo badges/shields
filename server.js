@@ -3426,11 +3426,11 @@ cache(function(data, match, sendBadge, request) {
 // Hackage dependencies version integration.
 camp.route(/^\/hackage-deps\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `lens`.
-  var format = match[2];
+  const repo = match[1];  // eg, `lens`.
+  const format = match[2];
   const reverseUrl = 'http://packdeps.haskellers.com/reverse/' + repo;
   const feedUrl = 'http://packdeps.haskellers.com/feed/' + repo;
-  var badgeData = getBadgeData('hackage-deps', data);
+  const badgeData = getBadgeData('hackage-deps', data);
 
   // first call /reverse to check if the package exists
   // this will throw a 404 if it doesn't
@@ -3449,7 +3449,7 @@ cache(function(data, match, sendBadge, request) {
       }
 
       try {
-        var outdatedStr = "Outdated dependencies for " + repo + " ";
+        const outdatedStr = "Outdated dependencies for " + repo + " ";
         if (buffer.indexOf(outdatedStr) >= 0) {
           badgeData.text[1] = 'outdated';
           badgeData.colorscheme = 'orange';
