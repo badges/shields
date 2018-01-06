@@ -27,6 +27,10 @@ t.create('hackage version (not found)')
   .get('/v/not-a-package.json')
   .expectJSON({name: 'hackage', value: 'not found'});
 
+t.create('hackage version (not found)')
+  .get('-deps/v/not-a-package.json')
+  .expectJSON({name: 'hackage-deps', value: 'not found'});
+
 t.create('hackage version (connection error)')
   .get('/v/lens.json')
   .networkOff()
