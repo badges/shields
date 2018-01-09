@@ -4,7 +4,7 @@ const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
 const { isMetric } = require('./helpers/validators.js');
-const isAutomatedBuildStatus = Joi.string().regex(/^(automated|manual)$/);
+const isAutomatedBuildStatus = Joi.string().valid('automated', 'manual');
 const isBuildStatus = Joi.string().regex(/^(passing|failing|building)$/);
 
 const t = new ServiceTester({ id: 'docker', title: 'Docker Hub' });
