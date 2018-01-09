@@ -147,6 +147,7 @@
   },
   "greenkeeper": {
     "ignore": [
+      "joi",
       "redis"
     ]
   },
