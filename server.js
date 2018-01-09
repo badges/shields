@@ -6244,7 +6244,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://hub.docker.com/v2/repositories/' + path + '/stars/count/';
   var badgeData = getBadgeData('docker stars', data);
   request(url, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res)) {
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -6277,7 +6277,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://hub.docker.com/v2/repositories/' + path;
   var badgeData = getBadgeData('docker pulls', data);
   request(url, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res)) {
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -6309,7 +6309,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://registry.hub.docker.com/v2/repositories/' + path;
   var badgeData = getBadgeData('docker build', data);
   request(url, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res)) {
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -6345,7 +6345,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://registry.hub.docker.com/v2/repositories/' + path + '/buildhistory';
   var badgeData = getBadgeData('docker build', data);
   request(url, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res)) {
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }

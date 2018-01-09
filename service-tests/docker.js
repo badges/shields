@@ -29,7 +29,7 @@ t.create('docker stars (valid, user)')
 
 t.create('docker stars (not found)')
   .get('/stars/_/not-a-real-repo.json')
-  .expectJSON({name: 'docker stars', value: 'not found'});
+  .expectJSON({name: 'docker stars', value: 'repo not found'});
 
 t.create('docker stars (connection error)')
   .get('/stars/_/ubuntu.json')
@@ -63,7 +63,7 @@ t.create('docker pulls (valid, user)')
 
 t.create('docker pulls (not found)')
   .get('/pulls/_/not-a-real-repo.json')
-  .expectJSON({name: 'docker pulls', value: 'not found'});
+  .expectJSON({name: 'docker pulls', value: 'repo not found'});
 
 t.create('docker pulls (connection error)')
   .get('/pulls/_/ubuntu.json')
@@ -97,7 +97,7 @@ t.create('docker automated build (valid, user)')
 
 t.create('docker automated build (not found)')
   .get('/automated/_/not-a-real-repo.json')
-  .expectJSON({name: 'docker build', value: 'not found'});
+  .expectJSON({name: 'docker build', value: 'repo not found'});
 
 t.create('docker automated build (connection error)')
   .get('/automated/_/ubuntu.json')
@@ -124,7 +124,7 @@ t.create('docker build status (valid, user)')
 
 t.create('docker build status (not found)')
   .get('/build/_/not-a-real-repo.json')
-  .expectJSON({name: 'docker build', value: 'not found'});
+  .expectJSON({name: 'docker build', value: 'repo not found'});
 
 t.create('docker build status (connection error)')
   .get('/build/_/ubuntu.json')
