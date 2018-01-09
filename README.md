@@ -132,8 +132,11 @@ badge preview URIs with `maxAge` &ndash; run `LONG_CACHE=true npm run build`.
 To analyze the frontend bundle, run `npm install webpack-bundle-analyzer` and
 then `ANALYZE=true npm start`.
 
-[package manager]: https://nodejs.org/en/download/package-manager/
+The server can be [configured][sentry configuration] to use [Sentry][sentry].
 
+[package manager]: https://nodejs.org/en/download/package-manager/
+[sentry configuration]: doc/self-hosting.md#sentry
+[Sentry]: https://sentry.io/
 
 Hosting your own server
 -----------------------
