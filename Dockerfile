@@ -16,4 +16,4 @@ COPY . /usr/src/app
 
 CMD envsubst < secret.tpl.json > ./private/secret.json && npm start
 
-EXPOSE 80
+EXPOSE 3000
