@@ -86,7 +86,9 @@ configuration. See [shields.example.env][shields.example.env] for an example.
 Then run the container:
 
 ```console
-$ docker run --rm -p 8080:80 --env-file shields.env --name shields shields
+$ docker run --rm -p 8080:3000 --name shields shields
+# or if you have shields.env file, run the following instead
+$ docker run --rm -p 8080:3000 --env-file shields.env --name shields shields
 
 > gh-badges@1.1.2 start /usr/src/app
 > node server.js
