@@ -15,6 +15,14 @@ t.create('homebrew (valid)')
     value: isVPlusTripleDottedVersion,
   }));
 
+t.create('homebrew (valid, mocked response)')
+  .get('/v/cake.json')
+  .intercept(nock => nock('http://formulae.brew.sh')
+    .get('/formula/cake/version')
+    .reply(200, {stable: '0.23.0', devel: null, head: null})
+  )
+  .expectJSON({name: 'homebrew', value: 'v0.23.0'});
+
 t.create('homebrew (invalid)')
   .get('/v/not-a-package.json')
   .expectJSON({name: 'homebrew', value: 'not found'});
