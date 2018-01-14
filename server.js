@@ -2120,8 +2120,7 @@ cache(function(data, match, sendBadge, request) {
   var apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
   var badgeData = getBadgeData('gem', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
