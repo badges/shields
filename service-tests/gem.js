@@ -9,6 +9,8 @@ const t = new ServiceTester({ id: 'gem', title: 'Ruby Gems' });
 module.exports = t;
 
 
+// version endpoint
+
 t.create('version (valid)')
   .get('/v/formatador.json')
   .expectJSONTypes(Joi.object().keys({
@@ -32,3 +34,30 @@ t.create('version (unexpected response)')
     .reply(200, "{{{{{invalid json}}")
   )
   .expectJSON({name: 'gem', value: 'invalid'});
+
+
+// users endpoint
+
+t.create('version (valid)')
+  .get('/u/raphink.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'gems',
+    value: Joi.string().regex(/^[0-9]+$/)
+  }));
+
+t.create('users (not found)')
+  .get('/u/not-a-package.json')
+  .expectJSON({name: 'gems', value: 'not found'});
+
+t.create('users (connection error)')
+  .get('/u/raphink.json')
+  .networkOff()
+  .expectJSON({name: 'gems', value: 'inaccessible'});
+
+t.create('users (unexpected response)')
+.get('/u/raphink.json')
+  .intercept(nock => nock('https://rubygems.org')
+    .get('/api/v1/owners/raphink/gems.json')
+    .reply(200, "{{{{{invalid json}}")
+  )
+  .expectJSON({name: 'gems', value: 'invalid'});
