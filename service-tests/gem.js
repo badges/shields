@@ -3,7 +3,10 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
-const { isVPlusDottedVersionAtLeastOne } = require('./helpers/validators');
+const {
+  isVPlusDottedVersionAtLeastOne,
+  isMetric
+} = require('./helpers/validators');
 const isOrdinalNumber = Joi.string().regex(/^[0-9]+(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ)$/);
 const isOrdinalNumberDaily = Joi.string().regex(/^[0-9]+(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ) daily$/);
 
@@ -30,12 +33,107 @@ t.create('version (connection error)')
   .expectJSON({name: 'gem', value: 'inaccessible'});
 
 t.create('version (unexpected response)')
-.get('/v/formatador.json')
+  .get('/v/formatador.json')
   .intercept(nock => nock('https://rubygems.org')
     .get('/api/v1/gems/formatador.json')
     .reply(200, "{{{{{invalid json}}")
   )
   .expectJSON({name: 'gem', value: 'invalid'});
+
+
+// downloads endpoints
+
+// total downloads
+t.create('total downloads (valid)')
+  .get('/dt/rails.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'downloads',
+    value: isMetric
+  }));
+
+t.create('total downloads (not found)')
+  .get('/dt/not-a-package.json')
+  .expectJSON({name: 'downloads', value: 'not found'});
+
+t.create('total downloads (connection error)')
+  .get('/dt/rails.json')
+  .networkOff()
+  .expectJSON({name: 'downloads', value: 'inaccessible'});
+
+t.create('total downloads (unexpected response)')
+  .get('/dt/rails.json')
+  .intercept(nock => nock('https://rubygems.org')
+    .get('/api/v1/gems/rails.json')
+    .reply(200, "{{{{{invalid json}}")
+  )
+  .expectJSON({name: 'downloads', value: 'invalid'});
+
+
+// version downloads
+t.create('version downloads (valid, stable version)')
+  .get('/dv/rails/stable.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'downloads',
+    value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? stable version$/)
+  }));
+
+t.create('version downloads (valid, specific version)')
+  .get('/dv/rails/4.1.0.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'downloads',
+    value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? version 4.1.0$/)
+  }));
+
+t.create('version downloads (package not found)')
+  .get('/dv/not-a-package/4.1.0.json')
+  .expectJSON({name: 'downloads', value: 'not found'});
+
+t.create('version downloads (valid package, invalid version)')
+  .get('/dv/rails/not-a-version.json')
+  .expectJSON({name: 'downloads', value: 'invalid'});
+
+t.create('version downloads (valid package, version not specified)')
+  .get('/dv/rails.json')
+  .expectJSON({name: 'downloads', value: 'invalid'});
+
+t.create('version downloads (connection error)')
+  .get('/dv/rails/4.1.0.json')
+  .networkOff()
+  .expectJSON({name: 'downloads', value: 'inaccessible'});
+
+t.create('version downloads (unexpected response)')
+  .get('/dv/rails/4.1.0.json')
+  .intercept(nock => nock('https://rubygems.org')
+    .get('/api/v1/versions/rails.json')
+    .reply(200, "{{{{{invalid json}}")
+  )
+  .expectJSON({name: 'downloads', value: 'invalid'});
+
+
+// latest version downloads
+t.create('latest version downloads (valid)')
+  .get('/dtv/rails.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'downloads',
+    value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? latest version$/)
+  }));
+
+t.create('latest version downloads (not found)')
+  .get('/dtv/not-a-package.json')
+  .expectJSON({name: 'downloads', value: 'not found'});
+
+t.create('latest version downloads (connection error)')
+  .get('/dtv/rails.json')
+  .networkOff()
+  .expectJSON({name: 'downloads', value: 'inaccessible'});
+
+t.create('latest version downloads (unexpected response)')
+  .get('/dtv/rails.json')
+  .intercept(nock => nock('https://rubygems.org')
+    .get('/api/v1/gems/rails.json')
+    .reply(200, "{{{{{invalid json}}")
+  )
+  .expectJSON({name: 'downloads', value: 'invalid'});
 
 
 // users endpoint
