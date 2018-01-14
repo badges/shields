@@ -2253,8 +2253,7 @@ cache(function(data, match, sendBadge, request) {
   }
   var badgeData = getBadgeData('rank', data);
   request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
