@@ -9,15 +9,6 @@ module.exports = t;
 t.create('Receiving')
   .get('/Gratipay.json')
   .expectJSONTypes(Joi.object().keys({
-    name: 'receives',
-    value: Joi.string().regex(/^\$[0-9]+(\.[0-9]{2})?\/week/)
+    name: 'gratipay',
+    value: 'no longer available',
   }));
-
-
-t.create('Empty')
-  .get('/Gratipay.json')
-  .intercept(nock => nock('https://gratipay.com')
-    .get('/Gratipay/public.json')
-    .reply(200, { receiving: 0.00 })
-  )
-  .expectJSON({ name: 'receives', value: '$0/week'});

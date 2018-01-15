@@ -1131,48 +1131,15 @@ cache(function(data, match, sendBadge, request) {
 
 // Gratipay integration.
 camp.route(/^\/(?:gittip|gratipay(\/user|\/team|\/project)?)\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var type = match[1];  // eg, `user`.
-  var user = match[2];  // eg, `dougwilson`.
-  var format = match[3];
-  if (type === '') { type = '/user'; }
-  if (type === '/user') { user = '~' + user; }
-  var apiUrl = 'https://gratipay.com/' + user + '/public.json';
-  var badgeData = getBadgeData('receives', data);
+cache(function(queryParams, match, sendBadge, request) {
+  const format = match[3];
+  const badgeData = getBadgeData('gratipay', queryParams);
   if (badgeData.template === 'social') {
-    badgeData.logo = getLogo('gratipay', data);
+    badgeData.logo = getLogo('gratipay', queryParams);
   }
-  request(apiUrl, function dealWithData(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      // Avoid falsey checks because amounts may be 0
-      var receiving = isNaN(data.receiving) ? data.taking : data.receiving;
-      if (!isNaN(receiving)) {
-        badgeData.text[1] = '$' + metric(receiving) + '/week';
-        if (receiving === 0) {
-          badgeData.colorscheme = 'red';
-        } else if (receiving < 10) {
-          badgeData.colorscheme = 'yellow';
-        } else if (receiving < 100) {
-          badgeData.colorscheme = 'green';
-        } else {
-          badgeData.colorscheme = 'brightgreen';
-        }
-        sendBadge(format, badgeData);
-      } else {
-        badgeData.text[1] = 'anonymous';
-        sendBadge(format, badgeData);
-      }
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
+  badgeData.colorscheme = 'red';
+  badgeData.text[1] = 'no longer available';
+  sendBadge(format, badgeData);
 }));
 
 // Liberapay integration.
