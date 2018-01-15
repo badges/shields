@@ -1,6 +1,6 @@
 'use strict';
 
-const assert = require('assert');
+const { expect } = require('chai');
 const sinon = require('sinon');
 
 const BaseService = require('./base');
@@ -37,12 +37,12 @@ describe('BaseService', () => {
     });
 
     it('registers the service', () => {
-      assert(mockCamp.route.calledOnce);
-      assert.equal(mockCamp.route.getCall(0).args[0].toString(), expectedRouteRegex);
+      expect(mockCamp.route).to.have.been.calledOnce;
+      expect(mockCamp.route.getCall(0).args[0].toString()).to.equal(expectedRouteRegex.toString());
     });
 
     it('handles the request', async () => {
-      assert(mockHandleRequest.calledOnce);
+      expect(mockHandleRequest).to.have.been.calledOnce;
       const requestHandler = mockHandleRequest.getCall(0).args[0];
 
       const mockSendBadge = sinon.spy();
@@ -56,11 +56,10 @@ describe('BaseService', () => {
         mockRequest
       );
 
-      assert(mockSendBadge.calledOnce);
-      assert(mockSendBadge.calledWith(
+      expect(mockSendBadge).to.have.been.calledOnce;
+      expect(mockSendBadge).to.have.been.calledWith(
         /*format*/ 'svg',
         {
-          message: 'Hello bar',
           text: ['cat', 'Hello bar'],
           colorscheme: 'lightgrey',
           template: 'default',
@@ -68,9 +67,8 @@ describe('BaseService', () => {
           logoWidth: NaN,
           links: [],
           colorA: undefined,
-          colorB: undefined,
         }
-      ));
+      );
     });
   });
 });
