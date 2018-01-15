@@ -40,7 +40,7 @@ describe('BaseService', () => {
 
     it('registers the service', () => {
       expect(mockCamp.route).to.have.been.calledOnce;
-      expect(mockCamp.route.getCall(0).args[0].toString()).to.equal(expectedRouteRegex.toString());
+      expect(mockCamp.route).to.have.been.calledWith(expectedRouteRegex);
     });
 
     it('handles the request', async () => {
