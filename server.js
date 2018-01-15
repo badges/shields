@@ -7625,10 +7625,10 @@ cache({
         switch (type){
           case 'json':
             data = (typeof data == 'object' ? data : JSON.parse(data));
-            let jsonpath = jp.query(data, pathExpression);
+            var jsonpath = jp.query(data, pathExpression);
             if (!jsonpath.length)
               throw 'no result';
-            let innerText = jsonpath.join(', ');
+            var innerText = jsonpath.join(', ');
             badgeData.text[1] = (prefix || '') + innerText + (suffix || '');
             break;
         }
