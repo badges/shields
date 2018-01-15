@@ -13,8 +13,6 @@ COPY package.json /usr/src/app/
 RUN npm install
 COPY . /usr/src/app
 RUN npm run build
-RUN rm -rf /tmp/npm-* /root/.npm
-RUN npm run build
 RUN npm prune --production
 RUN npm cache clean --force
 
