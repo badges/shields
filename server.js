@@ -7631,7 +7631,7 @@ cache({
             break;
         }
       } catch(e) {
-        badgeData.colorscheme = 'lightgrey';
+        badgeData.colorB = '#9f9f9f'; // lightgrey
         badgeData.text[1] = e;
       } finally {
         sendBadge(format, badgeData);
