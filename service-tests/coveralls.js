@@ -2,7 +2,7 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
-const { isPercentage } = require('./helpers/validators');
+const { isIntegerPercentage } = require('./helpers/validators');
 
 const t = new ServiceTester({ id: 'coveralls', title: 'Coveralls.io' });
 module.exports = t;
@@ -92,12 +92,12 @@ t.create('show coverage for bitbucket with branch')
 
 t.create('github coverage')
   .get('/github/jekyll/jekyll.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'coverage', value: isPercentage }));
+  .expectJSONTypes(Joi.object().keys({ name: 'coverage', value: isIntegerPercentage }));
 
 t.create('github coverage for legacy link')
   .get('/jekyll/jekyll.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'coverage', value: isPercentage }));
+  .expectJSONTypes(Joi.object().keys({ name: 'coverage', value: isIntegerPercentage }));
 
 t.create('bitbucket coverage')
   .get('/bitbucket/pyKLIP/pyklip.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'coverage', value: isPercentage }));
+  .expectJSONTypes(Joi.object().keys({ name: 'coverage', value: isIntegerPercentage }));
