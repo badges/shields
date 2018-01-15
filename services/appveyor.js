@@ -16,17 +16,17 @@ module.exports = class AppVeyor extends BaseService {
     });
 
     if (res.statusCode === 404) {
-      return {text: 'project not found or access denied'};
+      return {message: 'project not found or access denied'};
     }
 
     const data = JSON.parse(buffer);
     const status = data.build.status;
     if (status === 'success') {
-      return {text: 'passing', colorscheme: 'brightgreen'};
+      return {message: 'passing', colorscheme: 'brightgreen'};
     } else if (status !== 'running' && status !== 'queued') {
-      return {text: 'failing', colorscheme: 'red'};
+      return {message: 'failing', colorscheme: 'red'};
     } else {
-      return {text: status};
+      return {message: status};
     }
   }
 

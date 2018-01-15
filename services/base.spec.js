@@ -8,7 +8,7 @@ const BaseService = require('./base');
 class DummyService extends BaseService {
   async handle({someArg}) {
     return {
-      text: 'Hello ' + someArg,
+      message: 'Hello ' + someArg,
     };
   }
 
@@ -21,53 +21,56 @@ class DummyService extends BaseService {
   }
 }
 
-const expectedRouteRegex = /^\/foo\/([^/]+).(svg|png|gif|jpg|json)$/;
-
 describe('BaseService', () => {
-  let mockCamp;
-  let mockHandleRequest;
+  describe('ScoutCamp integration', function () {
+    const expectedRouteRegex = /^\/foo\/([^/]+).(svg|png|gif|jpg|json)$/;
 
-  beforeEach(() => {
-    mockCamp = {
-      route: sinon.spy(),
-    };
-    mockHandleRequest = sinon.spy();
-    DummyService.register(mockCamp, mockHandleRequest);
-  });
+    let mockCamp;
+    let mockHandleRequest;
 
-  it('registers the service', () => {
-    assert(mockCamp.route.calledOnce);
-    assert.equal(mockCamp.route.getCall(0).args[0].toString(), expectedRouteRegex);
-  });
+    beforeEach(() => {
+      mockCamp = {
+        route: sinon.spy(),
+      };
+      mockHandleRequest = sinon.spy();
+      DummyService.register(mockCamp, mockHandleRequest);
+    });
 
-  it('handles the request', async () => {
-    assert(mockHandleRequest.calledOnce);
-    const requestHandler = mockHandleRequest.getCall(0).args[0];
+    it('registers the service', () => {
+      assert(mockCamp.route.calledOnce);
+      assert.equal(mockCamp.route.getCall(0).args[0].toString(), expectedRouteRegex);
+    });
 
-    const mockSendBadge = sinon.spy();
-    const mockRequest = {
-      asPromise: sinon.spy(),
-    };
-    await requestHandler(
-      /*data*/ {},
-      /*match*/ '/foo/bar.svg'.match(expectedRouteRegex),
-      mockSendBadge,
-      mockRequest
-    );
+    it('handles the request', async () => {
+      assert(mockHandleRequest.calledOnce);
+      const requestHandler = mockHandleRequest.getCall(0).args[0];
 
-    assert(mockSendBadge.calledOnce);
-    assert(mockSendBadge.calledWith(
-      /*format*/ 'svg',
-      {
-        text: ['cat', 'Hello bar'],
-        colorscheme: 'lightgrey',
-        template: 'default',
-        logo: undefined,
-        logoWidth: NaN,
-        links: [],
-        colorA: undefined,
-        colorB: undefined,
-      }
-    ));
+      const mockSendBadge = sinon.spy();
+      const mockRequest = {
+        asPromise: sinon.spy(),
+      };
+      await requestHandler(
+        /*data*/ {},
+        /*match*/ '/foo/bar.svg'.match(expectedRouteRegex),
+        mockSendBadge,
+        mockRequest
+      );
+
+      assert(mockSendBadge.calledOnce);
+      assert(mockSendBadge.calledWith(
+        /*format*/ 'svg',
+        {
+          message: 'Hello bar',
+          text: ['cat', 'Hello bar'],
+          colorscheme: 'lightgrey',
+          template: 'default',
+          logo: undefined,
+          logoWidth: NaN,
+          links: [],
+          colorA: undefined,
+          colorB: undefined,
+        }
+      ));
+    });
   });
 });
