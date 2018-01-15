@@ -17,7 +17,7 @@ t.create('Connection error')
 
 t.create('No URI specified')
   .get('.json?query=$.name&label=Package Name&style=_shields_test')
-  .expectJSON({ name: 'Package Name', value: 'no uri specified', colorB: colorsB.lightgrey });
+  .expectJSON({ name: 'Package Name', value: 'no uri specified', colorB: colorsB.red });
 
 t.create('JSON from uri')
   .get('.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.name&style=_shields_test')
@@ -50,9 +50,9 @@ t.create('JSON from uri | user color overrides default')
   .expectJSON({ name: 'custom badge', value: 'gh-badges', colorB: '#10ADED' });
 
 t.create('JSON from uri | error color overrides default')
-  .get('.json?query=$.version&style=_shields_test')
-  .expectJSON({ name: 'custom badge', value: 'no uri specified', colorB: colorsB.lightgrey });
+  .get('.json?uri=https://github.com/badges/shields/raw/master/notafile.json&query=$.version&style=_shields_test')
+  .expectJSON({ name: 'custom badge', value: 'invalid resource', colorB: colorsB.lightgrey });
 
 t.create('JSON from uri | error color overrides user specified')
   .get('.json?query=$.version&colorB=10ADED&style=_shields_test')
-  .expectJSON({ name: 'custom badge', value: 'no uri specified', colorB: colorsB.lightgrey });
+  .expectJSON({ name: 'custom badge', value: 'no uri specified', colorB: colorsB.red });
