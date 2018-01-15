@@ -3364,11 +3364,11 @@ cache(function(data, match, sendBadge, request) {
   var apiUrl = 'https://hackage.haskell.org/package/' + repo + '/' + repo + '.cabal';
   var badgeData = getBadgeData('hackage', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
+
     try {
       var lines = buffer.split("\n");
       var versionLines = lines.filter(function(e) {
@@ -3391,31 +3391,45 @@ cache(function(data, match, sendBadge, request) {
 // Hackage dependencies version integration.
 camp.route(/^\/hackage-deps\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `lens`.
-  var format = match[2];
-  var apiUrl = 'http://packdeps.haskellers.com/feed/' + repo;
-  var badgeData = getBadgeData('hackage-deps', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+  const repo = match[1];  // eg, `lens`.
+  const format = match[2];
+  const reverseUrl = 'http://packdeps.haskellers.com/reverse/' + repo;
+  const feedUrl = 'http://packdeps.haskellers.com/feed/' + repo;
+  const badgeData = getBadgeData('dependencies', data);
+
+  // first call /reverse to check if the package exists
+  // this will throw a 404 if it doesn't
+  request(reverseUrl, function(err, res, buffer) {
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
 
-    try {
-      var outdatedStr = "Outdated dependencies for " + repo + " ";
-      if (buffer.indexOf(outdatedStr) >= 0) {
-        badgeData.text[1] = 'outdated';
-        badgeData.colorscheme = 'orange';
-      } else {
-        badgeData.text[1] = 'up to date';
-        badgeData.colorscheme = 'brightgreen';
+    // if the package exists, then query /feed to check the dependencies
+    request(feedUrl, function(err, res, buffer) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
       }
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-    }
-    sendBadge(format, badgeData);
+
+      try {
+        const outdatedStr = "Outdated dependencies for " + repo + " ";
+        if (buffer.indexOf(outdatedStr) >= 0) {
+          badgeData.text[1] = 'outdated';
+          badgeData.colorscheme = 'orange';
+        } else {
+          badgeData.text[1] = 'up to date';
+          badgeData.colorscheme = 'brightgreen';
+        }
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+      }
+      sendBadge(format, badgeData);
+    });
+
   });
+
 }));
 
 // Elm package version integration.
@@ -6592,8 +6606,7 @@ cache(function(data, match, sendBadge, request) {
 
   var badgeData = getBadgeData('homebrew', data);
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -7432,7 +7445,7 @@ cache(function(data, match, sendBadge, request) {
     return;
   }
   request(options, function(err, res, json) {
-    if (err !== null) {
+    if (err !== null || res.statusCode >= 500 || typeof json !== 'object') {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
