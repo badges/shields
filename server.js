@@ -7606,6 +7606,7 @@ cache({
     var badgeData = getBadgeData('custom badge', query);
 
     if (!query.uri){
+      badgeData.colorB = '#9f9f9f'; // lightgrey
       badgeData.text[1] = 'no uri specified';
       sendBadge(format, badgeData);
       return;
