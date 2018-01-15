@@ -1,9 +1,11 @@
 'use strict';
 
-const assert = require('assert');
+const { expect } = require('chai');
 const sinon = require('sinon');
 
 const BaseService = require('./base');
+
+require('../lib/register-chai-plugins.spec');
 
 class DummyService extends BaseService {
   async handle({someArg}) {
@@ -37,12 +39,12 @@ describe('BaseService', () => {
     });
 
     it('registers the service', () => {
-      assert(mockCamp.route.calledOnce);
-      assert.equal(mockCamp.route.getCall(0).args[0].toString(), expectedRouteRegex);
+      expect(mockCamp.route).to.have.been.calledOnce;
+      expect(mockCamp.route).to.have.been.calledWith(expectedRouteRegex);
     });
 
     it('handles the request', async () => {
-      assert(mockHandleRequest.calledOnce);
+      expect(mockHandleRequest).to.have.been.calledOnce;
       const requestHandler = mockHandleRequest.getCall(0).args[0];
 
       const mockSendBadge = sinon.spy();
@@ -56,8 +58,8 @@ describe('BaseService', () => {
         mockRequest
       );
 
-      assert(mockSendBadge.calledOnce);
-      assert(mockSendBadge.calledWith(
+      expect(mockSendBadge).to.have.been.calledOnce;
+      expect(mockSendBadge).to.have.been.calledWith(
         /*format*/ 'svg',
         {
           message: 'Hello bar',
@@ -70,7 +72,7 @@ describe('BaseService', () => {
           colorA: undefined,
           colorB: undefined,
         }
-      ));
+      );
     });
   });
 });
