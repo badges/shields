@@ -7,8 +7,8 @@ const {
   isVPlusDottedVersionAtLeastOne,
   isMetric
 } = require('./helpers/validators');
-const isOrdinalNumber = Joi.string().regex(/^[0-9]+(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ)$/);
-const isOrdinalNumberDaily = Joi.string().regex(/^[0-9]+(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ) daily$/);
+const isOrdinalNumber = Joi.string().regex(/^[1-9][0-9]+(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ)$/);
+const isOrdinalNumberDaily = Joi.string().regex(/^[1-9][0-9]+(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ) daily$/);
 
 const t = new ServiceTester({ id: 'gem', title: 'Ruby Gems' });
 module.exports = t;
