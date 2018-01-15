@@ -1,6 +1,5 @@
 'use strict';
 
-const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
 const t = new ServiceTester({ id: 'gratipay', title: 'Gratipay' });
