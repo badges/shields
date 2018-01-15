@@ -8,7 +8,7 @@ module.exports = t;
 
 t.create('Receiving')
   .get('/Gratipay.json')
-  .expectJSONTypes(Joi.object().keys({
+  .expectJSON({
     name: 'gratipay',
     value: 'no longer available',
-  }));
+  });
