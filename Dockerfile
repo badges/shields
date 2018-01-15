@@ -10,10 +10,15 @@ WORKDIR /usr/src/app
 ARG NODE_ENV
 ENV NODE_ENV $NODE_ENV
 COPY package.json /usr/src/app/
-RUN npm install && \
-    rm -rf /tmp/npm-* /root/.npm
+RUN npm install
 COPY . /usr/src/app
+RUN npm run build
+RUN rm -rf /tmp/npm-* /root/.npm
+RUN npm run build
+RUN npm prune --production
+RUN npm cache clean --force
 
-CMD envsubst < secret.tpl.json > ./private/secret.json && npm start
+CMD envsubst < secret.tpl.json > ./private/secret.json
+CMD node server
 
-EXPOSE 3000
+EXPOSE 80
