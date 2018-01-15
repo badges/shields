@@ -7606,7 +7606,7 @@ cache({
     var badgeData = getBadgeData('custom badge', query);
 
     if (!query.uri){
-      badgeData.colorB = '#e05d44'; // red
+      setBadgeColor(badgeData, 'red');
       badgeData.text[1] = 'no uri specified';
       sendBadge(format, badgeData);
       return;
@@ -7634,7 +7634,7 @@ cache({
             break;
         }
       } catch(e) {
-        badgeData.colorB = '#9f9f9f'; // lightgrey
+        setBadgeColor(badgeData, 'lightgrey');
         badgeData.text[1] = e;
       } finally {
         sendBadge(format, badgeData);
