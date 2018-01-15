@@ -7620,6 +7620,8 @@ cache({
         if (err != null || !res || res.statusCode !== 200)
           throw 'inaccessible';
 
+        badgeData.colorscheme = 'brightgreen';
+
         switch (type){
           case 'json':
             data = (typeof data == 'object' ? data : JSON.parse(data));
