@@ -50,6 +50,8 @@ const readAllStdinSync = require('read-all-stdin-sync');
 const Runner = require('./runner');
 const serverHelpers = require('../../lib/in-process-server-test-helpers');
 
+require('../../lib/unhandled-rejection.spec');
+
 let server;
 before('Start running the server', function () {
   this.timeout(5000);

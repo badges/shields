@@ -22,7 +22,7 @@
     "url": "https://github.com/badges/shields"
   },
   "dependencies": {
-    "camp": "^17.2.0",
+    "camp": "~17.2.1",
     "chrome-web-store-item-property": "~1.1.2",
     "dot": "~1.1.2",
     "gm": "^1.23.0",
@@ -67,7 +67,7 @@
     "build": "next build && next export -o build/",
     "heroku-postbuild": "npm run build",
     "analyze": "ANALYZE=true LONG_CACHE=false BASE_URL=https://img.shields.io npm run build",
-    "start:server": "node server 8080 ::",
+    "start:server": "RATE_LIMIT=false node server 8080 ::",
     "now-start": "node server",
     "prestart": "npm run frontend-depcheck",
     "start": "concurrently --names server,frontend \"ALLOWED_ORIGIN=http://localhost:3000 npm run start:server\" \"BASE_URL=http://[::]:8080 next dev\""
@@ -147,6 +147,7 @@
   },
   "greenkeeper": {
     "ignore": [
+      "joi",
       "redis"
     ]
   },
