@@ -2149,7 +2149,19 @@ cache(function(data, match, sendBadge, request) {
     : null;
   version = (version === "stable") ? version : semver.valid(version);
   var format = match[3];
-  var badgeData = getBadgeData('downloads', data);
+
+  let leftSide;
+  if (version) {
+    leftSide = 'downloads@' + version;
+  } else {
+    if (info === "dtv") {
+      leftSide = 'downloads@latest';
+    } else {
+      leftSide = 'downloads';
+    }
+  }
+  const badgeData = getBadgeData(leftSide, data);
+
   if  (info === "dv"){
     apiUrl = 'https://rubygems.org/api/v1/versions/' + repo + '.json';
   } else {
@@ -2171,7 +2183,7 @@ cache(function(data, match, sendBadge, request) {
       if (info === "dt") {
         downloads = metric(data.downloads);
       } else if (info === "dtv") {
-        downloads = metric(data.version_downloads) + " latest version";
+        downloads = metric(data.version_downloads);
       } else if (info === "dv") {
         downloads = "invalid";
 
@@ -2188,7 +2200,7 @@ cache(function(data, match, sendBadge, request) {
           version_data = data.filter(function(ver) {
             return ver.number === stable_version;
           })[0];
-          downloads = metric(version_data.downloads_count) + " stable version";
+          downloads = metric(version_data.downloads_count);
 
         } else if (version !== null) {
 
@@ -2196,8 +2208,7 @@ cache(function(data, match, sendBadge, request) {
             return ver.number === version;
           })[0];
 
-          downloads = metric(version_data.downloads_count)
-            + " version " + version;
+          downloads = metric(version_data.downloads_count);
         }
       } else { downloads = "invalid"; }
       badgeData.text[1] = downloads;

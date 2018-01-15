@@ -73,20 +73,20 @@ t.create('total downloads (unexpected response)')
 t.create('version downloads (valid, stable version)')
   .get('/dv/rails/stable.json')
   .expectJSONTypes(Joi.object().keys({
-    name: 'downloads',
-    value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? stable version$/)
+    name: 'downloads@stable',
+    value: isMetric
   }));
 
 t.create('version downloads (valid, specific version)')
   .get('/dv/rails/4.1.0.json')
   .expectJSONTypes(Joi.object().keys({
-    name: 'downloads',
-    value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? version 4.1.0$/)
+    name: 'downloads@4.1.0',
+    value: isMetric
   }));
 
 t.create('version downloads (package not found)')
   .get('/dv/not-a-package/4.1.0.json')
-  .expectJSON({name: 'downloads', value: 'not found'});
+  .expectJSON({name: 'downloads@4.1.0', value: 'not found'});
 
 t.create('version downloads (valid package, invalid version)')
   .get('/dv/rails/not-a-version.json')
@@ -99,7 +99,7 @@ t.create('version downloads (valid package, version not specified)')
 t.create('version downloads (connection error)')
   .get('/dv/rails/4.1.0.json')
   .networkOff()
-  .expectJSON({name: 'downloads', value: 'inaccessible'});
+  .expectJSON({name: 'downloads@4.1.0', value: 'inaccessible'});
 
 t.create('version downloads (unexpected response)')
   .get('/dv/rails/4.1.0.json')
@@ -107,25 +107,25 @@ t.create('version downloads (unexpected response)')
     .get('/api/v1/versions/rails.json')
     .reply(200, "{{{{{invalid json}}")
   )
-  .expectJSON({name: 'downloads', value: 'invalid'});
+  .expectJSON({name: 'downloads@4.1.0', value: 'invalid'});
 
 
 // latest version downloads
 t.create('latest version downloads (valid)')
   .get('/dtv/rails.json')
   .expectJSONTypes(Joi.object().keys({
-    name: 'downloads',
-    value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? latest version$/)
+    name: 'downloads@latest',
+    value: isMetric
   }));
 
 t.create('latest version downloads (not found)')
   .get('/dtv/not-a-package.json')
-  .expectJSON({name: 'downloads', value: 'not found'});
+  .expectJSON({name: 'downloads@latest', value: 'not found'});
 
 t.create('latest version downloads (connection error)')
   .get('/dtv/rails.json')
   .networkOff()
-  .expectJSON({name: 'downloads', value: 'inaccessible'});
+  .expectJSON({name: 'downloads@latest', value: 'inaccessible'});
 
 t.create('latest version downloads (unexpected response)')
   .get('/dtv/rails.json')
@@ -133,7 +133,7 @@ t.create('latest version downloads (unexpected response)')
     .get('/api/v1/gems/rails.json')
     .reply(200, "{{{{{invalid json}}")
   )
-  .expectJSON({name: 'downloads', value: 'invalid'});
+  .expectJSON({name: 'downloads@latest', value: 'invalid'});
 
 
 // users endpoint
