@@ -60,6 +60,7 @@ describe('BaseService', () => {
       expect(mockSendBadge).to.have.been.calledWith(
         /*format*/ 'svg',
         {
+          message: 'Hello bar',
           text: ['cat', 'Hello bar'],
           colorscheme: 'lightgrey',
           template: 'default',
@@ -67,6 +68,7 @@ describe('BaseService', () => {
           logoWidth: NaN,
           links: [],
           colorA: undefined,
+          colorB: undefined,
         }
       );
     });
