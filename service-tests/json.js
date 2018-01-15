@@ -35,7 +35,7 @@ t.create('JSON from uri | with prefix & suffix & label')
 
 t.create('JSON from uri | object doesnt exist')
   .get('.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.does_not_exist')
-  .expectJSON({ name: 'custom badge', value: '' });
+  .expectJSON({ name: 'custom badge', value: 'no result' });
 
 t.create('JSON from uri | invalid uri')
   .get('.json?uri=https://github.com/badges/shields/raw/master/notafile.json&query=$.version')
