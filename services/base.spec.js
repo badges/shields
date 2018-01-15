@@ -5,6 +5,8 @@ const sinon = require('sinon');
 
 const BaseService = require('./base');
 
+require('../lib/register-chai-plugins.spec');
+
 class DummyService extends BaseService {
   async handle({someArg}) {
     return {
