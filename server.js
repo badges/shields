@@ -7623,7 +7623,11 @@ cache({
         switch (type){
           case 'json':
             data = (typeof data == 'object' ? data : JSON.parse(data));
-            badgeData.text[1] = (prefix || '') + jp.query(data, pathExpression).join(', ') + (suffix || '');
+            let jsonpath = jp.query(data, pathExpression);
+            if (!jsonpath.length)
+              throw 'no result';
+            let innerText = jsonpath.join(', ');
+            badgeData.text[1] = (prefix || '') + innerText + (suffix || '');
             break;
         }
       } catch(e) {
