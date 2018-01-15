@@ -6249,10 +6249,10 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      if (isNaN(buffer)) {
+      const stars = parseInt(buffer, 10);
+      if (Number.isNaN(stars)) {
         throw Error('Unexpected response.');
       }
-      var stars = +("" + buffer);
       badgeData.text[1] = metric(stars);
       badgeData.colorscheme = null;
       badgeData.colorB = data.colorB || '#008bb8';
