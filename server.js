@@ -7745,13 +7745,17 @@ camp.route(/^\/bundlephobia\/(min|gzip)\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?
     },
     json: true,
   };
+  
+  const formatErrorCode = (code) => 
+    code.replace(/([A-Z])/g, ' $1').toLowerCase()
 
   request(requestOptions, (error, response, body) => {
     if(typeof body !== 'object' || body === null) {
       badgeData.text[1] = 'error';
       badgeData.colorscheme = 'red';
     } else if (error !== null || body.error) {
-      badgeData.text[1] = body.error.code || 'error';
+      badgeData.text[1] = 'code' in body.error ? 
+        formatErrorCode(body.error.code) : 'error';
       badgeData.colorscheme = 'red';
     } else {
       badgeData.text[1] = prettyBytes(showMin ? body.size : body.gzip);
