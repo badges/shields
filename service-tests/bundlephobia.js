@@ -23,10 +23,10 @@ const withoutErrorsMin = {
 }
 
 const withoutErrorsGzip = {
-  A: '/gzip/preact.json',
-  B: '/gzip/preact/8.2.7.json',
-  C: '/gzip/@cycle/core.json',
-  D: '/gzip/@cycle/core/7.0.0.json',
+  A: '/minzip/preact.json',
+  B: '/minzip/preact/8.2.7.json',
+  C: '/minzip/@cycle/core.json',
+  D: '/minzip/@cycle/core/7.0.0.json',
 }
 
 const withoutErrorSizesMin = {
@@ -67,7 +67,7 @@ Object.keys(formats).forEach(format => {
   if (typeof withoutErrorGzip === 'string') {
     t.create(`Format '${formats[format]}' to get the gzipped bundle size`)
       .get(withoutErrorGzip)
-      .expectJSONTypes(Joi.object().keys({ name: 'gzip size', value: withoutErrorSizeGzip }))
+      .expectJSONTypes(Joi.object().keys({ name: 'minzipped size', value: withoutErrorSizeGzip }))
   }
 
   if (typeof noExistPackage === 'string') {

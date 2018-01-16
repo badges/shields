@@ -7716,12 +7716,12 @@ camp.route(/^\/nsp\/npm\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|j
 }));
 
 // bundle size for npm packages
-camp.route(/^\/bundlephobia\/(min|gzip)\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|jpg|json)?$/,
+camp.route(/^\/bundlephobia\/(min|minzip)\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|jpg|json)?$/,
   cache((data, match, sendBadge, request) => {
-  // A: /bundlephobia/(min|gzip)/:package.:format
-  // B: /bundlephobia/(min|gzip)/:package/:version.:format
-  // C: /bundlephobia/(min|gzip)/@:scope/:package.:format
-  // D: /bundlephobia/(min|gzip)/@:scope/:package/:version.:format
+  // A: /bundlephobia/(min|minzip)/:package.:format
+  // B: /bundlephobia/(min|minzip)/:package/:version.:format
+  // C: /bundlephobia/(min|minzip)/@:scope/:package.:format
+  // D: /bundlephobia/(min|minzip)/@:scope/:package/:version.:format
   const resultType = match[1];
   const scope = match[2];
   const packageName = match[3];
@@ -7729,7 +7729,7 @@ camp.route(/^\/bundlephobia\/(min|gzip)\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?
   const format = match[5];
   const showMin = resultType === 'min';
 
-  const badgeData = getBadgeData(showMin ? 'minified size' : 'gzip size', data);
+  const badgeData = getBadgeData(showMin ? 'minified size' : 'minzipped size', data);
 
   let packageString = typeof scope === 'string' ?
     `@${scope}/${packageName}` : packageName;
@@ -7745,8 +7745,8 @@ camp.route(/^\/bundlephobia\/(min|gzip)\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?
     },
     json: true,
   };
-  
-  const formatErrorCode = (code) => 
+
+  const formatErrorCode = (code) =>
     code.replace(/([A-Z])/g, ' $1').substring(1).toLowerCase()
 
   request(requestOptions, (error, response, body) => {
@@ -7754,7 +7754,7 @@ camp.route(/^\/bundlephobia\/(min|gzip)\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?
       badgeData.text[1] = 'error';
       badgeData.colorscheme = 'red';
     } else if (error !== null || body.error) {
-      badgeData.text[1] = 'code' in body.error ? 
+      badgeData.text[1] = 'code' in body.error ?
         formatErrorCode(body.error.code) : 'error';
       badgeData.colorscheme = 'red';
     } else {
