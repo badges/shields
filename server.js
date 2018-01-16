@@ -7612,6 +7612,7 @@ cache({
     var badgeData = getBadgeData('custom badge', query);
 
     if (!query.uri){
+      setBadgeColor(badgeData, 'red');
       badgeData.text[1] = 'no uri specified';
       sendBadge(format, badgeData);
       return;
@@ -7626,14 +7627,20 @@ cache({
         if (err != null || !res || res.statusCode !== 200)
           throw 'inaccessible';
 
+        badgeData.colorscheme = 'brightgreen';
+
         switch (type){
           case 'json':
             data = (typeof data == 'object' ? data : JSON.parse(data));
-            badgeData.text[1] = (prefix || '') + jp.query(data, pathExpression).join(', ') + (suffix || '');
+            var jsonpath = jp.query(data, pathExpression);
+            if (!jsonpath.length)
+              throw 'no result';
+            var innerText = jsonpath.join(', ');
+            badgeData.text[1] = (prefix || '') + innerText + (suffix || '');
             break;
         }
       } catch(e) {
-        badgeData.colorB = 'lightgrey';
+        setBadgeColor(badgeData, 'lightgrey');
         badgeData.text[1] = e;
       } finally {
         sendBadge(format, badgeData);
