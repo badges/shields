@@ -6251,13 +6251,15 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://hub.docker.com/v2/repositories/' + path + '/stars/count/';
   var badgeData = getBadgeData('docker stars', data);
   request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
     try {
-      var stars = +("" + buffer);
+      const stars = parseInt(buffer, 10);
+      if (Number.isNaN(stars)) {
+        throw Error('Unexpected response.');
+      }
       badgeData.text[1] = metric(stars);
       badgeData.colorscheme = null;
       badgeData.colorB = data.colorB || '#008bb8';
@@ -6282,8 +6284,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://hub.docker.com/v2/repositories/' + path;
   var badgeData = getBadgeData('docker pulls', data);
   request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -6315,8 +6316,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://registry.hub.docker.com/v2/repositories/' + path;
   var badgeData = getBadgeData('docker build', data);
   request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -6352,17 +6352,11 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://registry.hub.docker.com/v2/repositories/' + path + '/buildhistory';
   var badgeData = getBadgeData('docker build', data);
   request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
     try {
-      if (res.statusCode == 404) {
-        badgeData.text[1] = 'repo not found';
-        sendBadge(format, badgeData);
-        return;
-      }
       var data = JSON.parse(buffer);
       var most_recent_status = data.results[0].status;
       if (most_recent_status == 10) {
