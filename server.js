@@ -7747,7 +7747,7 @@ camp.route(/^\/bundlephobia\/(min|gzip)\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?
   };
   
   const formatErrorCode = (code) => 
-    code.replace(/([A-Z])/g, ' $1').toLowerCase()
+    code.replace(/([A-Z])/g, ' $1').substring(1).toLowerCase()
 
   request(requestOptions, (error, response, body) => {
     if(typeof body !== 'object' || body === null) {
