@@ -21,8 +21,8 @@ const { inferPullRequest } = require('./infer-pull-request');
 
 function getTitle (owner, repo, pullRequest) {
   let uri = `https://api.github.com/repos/${owner}/${repo}/pulls/${pullRequest}`;
-  if (process.env.GH_TOKEN) {
-    uri += `?access_token=${process.env.GH_TOKEN}`;
+  if (process.env.GITHUB_TOKEN) {
+    uri += `?access_token=${process.env.GITHUB_TOKEN}`;
   }
   const options = { headers: { 'User-Agent': 'badges/shields' } };
   return fetch(uri, options)
