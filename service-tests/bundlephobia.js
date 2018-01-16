@@ -45,7 +45,6 @@ const withoutErrorSizesGzip = {
 
 const noExistPackages = {
   A: '/min/some-no-exist.json',
-  B: '/min/some-no-exist/1.0.0.json',
   C: '/min/@some-no-exist/some-no-exist.json',
 }
 
