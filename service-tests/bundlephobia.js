@@ -75,7 +75,7 @@ Object.keys(formats).forEach(format => {
       .get(noExistPackage)
       .expectJSON({
         name: 'minified size',
-        value: 'PackageNotFoundError',
+        value: 'package not found error',
       })
   }
 })
