@@ -43,3 +43,11 @@ t.create('build status (unexpected response)')
     .reply(200, "{{{{{invalid json}}")
   )
   .expectJSON({name: 'build', value: 'invalid'});
+
+t.create('build status (unexpected status code)')
+  .get('/5444c5ecb904a4b21567b0ff.json')
+  .intercept(nock => nock('https://api.shippable.com/')
+    .get('/projects/5444c5ecb904a4b21567b0ff/branchRunStatus')
+    .reply(200, '[{ "branchName": "master", "statusCode": 63 }]')
+  )
+  .expectJSON({name: 'build', value: 'invalid'});
