@@ -68,7 +68,7 @@ const {
   clearRegularUpdateCache
 } = require('./lib/regular-update');
 const { makeSend } = require('./lib/result-sender');
-const { valueFromSvgBadge, fetchFromSvg } = require('./lib/svg-badge-parser');
+const { fetchFromSvg } = require('./lib/svg-badge-parser');
 const {
   escapeFormat,
   escapeFormatSlashes
