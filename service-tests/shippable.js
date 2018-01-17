@@ -3,7 +3,7 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
-const isBuildStatus = Joi.string().regex(/^(passing|failing|cancelled|unstable|pending|skipped|none)$/);
+const isBuildStatus = Joi.string().regex(/^(waiting|queued|processing|success|skipped|unstable|timeout|cancelled|failed|stopped)$/);
 
 const t = new ServiceTester({ id: 'shippable', title: 'Shippable CI' });
 module.exports = t;
@@ -23,6 +23,10 @@ t.create('build status (valid, with branch)')
     value: isBuildStatus
   }));
 
+t.create('build status (branch not found)')
+  .get('/5444c5ecb904a4b21567b0ff/not-a-branch.json')
+  .expectJSON({name: 'build', value: 'branch not found'});
+
 t.create('build status (not found)')
   .get('/not-a-build.json')
   .expectJSON({name: 'build', value: 'not found'});
@@ -35,7 +39,7 @@ t.create('build status (connection error)')
 t.create('build status (unexpected response)')
   .get('/5444c5ecb904a4b21567b0ff.json')
   .intercept(nock => nock('https://api.shippable.com/')
-    .get('/projects/5444c5ecb904a4b21567b0ff/badge')
+    .get('/projects/5444c5ecb904a4b21567b0ff/branchRunStatus')
     .reply(200, "{{{{{invalid json}}")
   )
   .expectJSON({name: 'build', value: 'invalid'});
