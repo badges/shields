@@ -2119,8 +2119,7 @@ cache(function(data, match, sendBadge, request) {
   var apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
   var badgeData = getBadgeData('gem', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -2149,7 +2148,19 @@ cache(function(data, match, sendBadge, request) {
     : null;
   version = (version === "stable") ? version : semver.valid(version);
   var format = match[3];
-  var badgeData = getBadgeData('downloads', data);
+
+  let leftSide;
+  if (version) {
+    leftSide = 'downloads@' + version;
+  } else {
+    if (info === "dtv") {
+      leftSide = 'downloads@latest';
+    } else {
+      leftSide = 'downloads';
+    }
+  }
+  const badgeData = getBadgeData(leftSide, data);
+
   if  (info === "dv"){
     apiUrl = 'https://rubygems.org/api/v1/versions/' + repo + '.json';
   } else {
@@ -2161,8 +2172,7 @@ cache(function(data, match, sendBadge, request) {
     }
   };
   request(apiUrl, parameters, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -2172,7 +2182,7 @@ cache(function(data, match, sendBadge, request) {
       if (info === "dt") {
         downloads = metric(data.downloads);
       } else if (info === "dtv") {
-        downloads = metric(data.version_downloads) + " latest version";
+        downloads = metric(data.version_downloads);
       } else if (info === "dv") {
         downloads = "invalid";
 
@@ -2189,7 +2199,7 @@ cache(function(data, match, sendBadge, request) {
           version_data = data.filter(function(ver) {
             return ver.number === stable_version;
           })[0];
-          downloads = metric(version_data.downloads_count) + " stable version";
+          downloads = metric(version_data.downloads_count);
 
         } else if (version !== null) {
 
@@ -2197,8 +2207,7 @@ cache(function(data, match, sendBadge, request) {
             return ver.number === version;
           })[0];
 
-          downloads = metric(version_data.downloads_count)
-            + " version " + version;
+          downloads = metric(version_data.downloads_count);
         }
       } else { downloads = "invalid"; }
       badgeData.text[1] = downloads;
@@ -2219,8 +2228,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://rubygems.org/api/v1/owners/' + user + '/gems.json';
   var badgeData = getBadgeData('gems', data);
   request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -2254,8 +2262,7 @@ cache(function(data, match, sendBadge, request) {
   }
   var badgeData = getBadgeData('rank', data);
   request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -6243,13 +6250,15 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://hub.docker.com/v2/repositories/' + path + '/stars/count/';
   var badgeData = getBadgeData('docker stars', data);
   request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
     try {
-      var stars = +("" + buffer);
+      const stars = parseInt(buffer, 10);
+      if (Number.isNaN(stars)) {
+        throw Error('Unexpected response.');
+      }
       badgeData.text[1] = metric(stars);
       badgeData.colorscheme = null;
       badgeData.colorB = data.colorB || '#008bb8';
@@ -6274,8 +6283,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://hub.docker.com/v2/repositories/' + path;
   var badgeData = getBadgeData('docker pulls', data);
   request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -6307,8 +6315,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://registry.hub.docker.com/v2/repositories/' + path;
   var badgeData = getBadgeData('docker build', data);
   request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -6344,17 +6351,11 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://registry.hub.docker.com/v2/repositories/' + path + '/buildhistory';
   var badgeData = getBadgeData('docker build', data);
   request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
     try {
-      if (res.statusCode == 404) {
-        badgeData.text[1] = 'repo not found';
-        sendBadge(format, badgeData);
-        return;
-      }
       var data = JSON.parse(buffer);
       var most_recent_status = data.results[0].status;
       if (most_recent_status == 10) {
@@ -6640,8 +6641,7 @@ cache(function(data, match, sendBadge, request) {
 
   var badgeData = getBadgeData('homebrew', data);
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -7605,6 +7605,7 @@ cache({
     var badgeData = getBadgeData('custom badge', query);
 
     if (!query.uri){
+      setBadgeColor(badgeData, 'red');
       badgeData.text[1] = 'no uri specified';
       sendBadge(format, badgeData);
       return;
@@ -7619,14 +7620,20 @@ cache({
         if (err != null || !res || res.statusCode !== 200)
           throw 'inaccessible';
 
+        badgeData.colorscheme = 'brightgreen';
+
         switch (type){
           case 'json':
             data = (typeof data == 'object' ? data : JSON.parse(data));
-            badgeData.text[1] = (prefix || '') + jp.query(data, pathExpression).join(', ') + (suffix || '');
+            var jsonpath = jp.query(data, pathExpression);
+            if (!jsonpath.length)
+              throw 'no result';
+            var innerText = jsonpath.join(', ');
+            badgeData.text[1] = (prefix || '') + innerText + (suffix || '');
             break;
         }
       } catch(e) {
-        badgeData.colorB = 'lightgrey';
+        setBadgeColor(badgeData, 'lightgrey');
         badgeData.text[1] = e;
       } finally {
         sendBadge(format, badgeData);

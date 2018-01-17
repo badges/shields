@@ -3,7 +3,7 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 const {
-  isPercentage,
+  isIntegerPercentage,
 } = require('./helpers/validators');
 
 const t = new ServiceTester({ id: 'sonar', title: 'SonarQube' });
@@ -13,28 +13,28 @@ t.create('Tech Debt')
   .get('/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/tech_debt.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'tech debt',
-    value: isPercentage
+    value: isIntegerPercentage
   }));
 
 t.create('Coverage')
   .get('/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/coverage.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'coverage',
-    value: isPercentage
+    value: isIntegerPercentage
   }));
 
 t.create('Tech Debt (legacy API supported)')
   .get('/4.2/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/tech_debt.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'tech debt',
-    value: isPercentage
+    value: isIntegerPercentage
   }));
 
 t.create('Coverage (legacy API supported)')
   .get('/4.2/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/coverage.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'coverage',
-    value: isPercentage
+    value: isIntegerPercentage
   }));
 
 t.create('Tech Debt (legacy API unsupported)')
