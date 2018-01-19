@@ -24,6 +24,29 @@ class DummyService extends BaseService {
 }
 
 describe('BaseService', () => {
+  describe('_makeBadgeData', function () {
+    describe('Overrides', function () {
+      it('overrides the label', function () {
+        const badgeData = DummyService._makeBadgeData({ label: 'purr count' }, { label: 'purrs' });
+        expect(badgeData.text).to.deep.equal(['purr count', 'n/a']);
+      });
+    });
+
+    describe('Service data', function () {
+      it('applies the service message', function () {
+        const badgeData = DummyService._makeBadgeData({}, { message: '10k' });
+        expect(badgeData.text).to.deep.equal(['cat', '10k']);
+      });
+    });
+
+    describe('Defaults', function () {
+      it('uses the default label', function () {
+        const badgeData = DummyService._makeBadgeData({}, {});
+        expect(badgeData.text).to.deep.equal(['cat', 'n/a']);
+      });
+    });
+  });
+
   describe('ScoutCamp integration', function () {
     const expectedRouteRegex = /^\/foo\/([^/]+).(svg|png|gif|jpg|json)$/;
 
@@ -62,7 +85,6 @@ describe('BaseService', () => {
       expect(mockSendBadge).to.have.been.calledWith(
         /*format*/ 'svg',
         {
-          message: 'Hello bar',
           text: ['cat', 'Hello bar'],
           colorscheme: 'lightgrey',
           template: 'default',
@@ -70,7 +92,6 @@ describe('BaseService', () => {
           logoWidth: NaN,
           links: [],
           colorA: undefined,
-          colorB: undefined,
         }
       );
     });

@@ -1,7 +1,11 @@
 'use strict';
 
 const {
-  makeBadgeData: getBadgeData,
+  isValidStyle,
+  makeLogo,
+  toArray,
+  makeColor,
+  setBadgeColor,
 } = require('../lib/badge-data');
 
 module.exports = class BaseService {
@@ -84,40 +88,71 @@ module.exports = class BaseService {
     return result;
   }
 
+  static _makeBadgeData(overrides, serviceData) {
+    const {
+      style,
+      label: overrideLabel,
+      logo: overrideLogo,
+      logoWidth: overrideLogoWidth,
+      link: overrideLink,
+      colorA: overrideColorA,
+      colorB: overrideColorB,
+    } = overrides;
+
+    const {
+      label: serviceLabel,
+      message: serviceMessage,
+      color: serviceColor,
+      link: serviceLink,
+    } = serviceData;
+
+    const defaultLabel = this.category;
+    const {
+      color: defaultColor,
+      logo: defaultLogo,
+    } = this.defaultBadgeData;
+
+    const badgeData = {
+      text: [
+        overrideLabel || serviceLabel || defaultLabel,
+        serviceMessage || 'n/a',
+      ],
+      template: isValidStyle(style) ? style : 'default',
+      logo: makeLogo(style === 'social' ? defaultLogo : undefined, { logo: overrideLogo }),
+      logoWidth: +overrideLogoWidth,
+      links: toArray(overrideLink || serviceLink),
+      colorA: makeColor(overrideColorA),
+    };
+    const color = makeColor(overrideColorB || serviceColor || defaultColor || 'lightgrey');
+    setBadgeColor(badgeData, color);
+
+    return badgeData;
+  }
+
   static register(camp, handleRequest) {
     const serviceClass = this; // In a static context, "this" is the class.
 
     camp.route(this._regex,
     handleRequest(async (queryParams, match, sendBadge, request) => {
-      // Assumes the final capture group is the extension
-      const format = match.slice(-1)[0];
-
-      const badgeData = getBadgeData(
-        serviceClass.category,
-        Object.assign({}, serviceClass.defaultBadgeData, queryParams)
-      );
+      let serviceData;
 
       try {
         const namedParams = this._namedParamsForMatch(match);
         const serviceInstance = new serviceClass({
           sendAndCacheRequest: request.asPromise,
         });
-        const serviceData = await serviceInstance.handle(namedParams);
-        const text = badgeData.text;
-        if (serviceData.message) {
-          text[1] = serviceData.message;
-        }
-        Object.assign(badgeData, serviceData);
-        badgeData.text = text;
-        sendBadge(format, badgeData);
-
+        serviceData = await serviceInstance.handle(namedParams);
       } catch (error) {
+        serviceData = { message: 'error' };
         console.log(error);
-        const text = badgeData.text;
-        text[1] = 'error';
-        badgeData.text = text;
-        sendBadge(format, badgeData);
       }
+
+      // Assumes the final capture group is the extension
+      const format = match.slice(-1)[0];
+
+      const badgeData = this._makeBadgeData(queryParams, serviceData);
+
+      sendBadge(format, badgeData);
     }));
   }
 };
