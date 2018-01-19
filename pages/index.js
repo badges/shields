@@ -41,11 +41,6 @@ export default class IndexPage extends React.Component {
             onBadgeClick={example => { this.setState({ example }); }}
             baseUri={baseUri}
             longCache={longCache} />
-          <a
-            className="donate"
-            href="https://opencollective.com/shields">
-            donate
-          </a>
         </section>
         <BadgeExamples
           categories={this.preparedExamples}
@@ -56,12 +51,6 @@ export default class IndexPage extends React.Component {
           baseUri={baseUri}
           longCache={longCache} />
         <Footer baseUri={baseUri} />
-        <style jsx>{`
-          .donate {
-            text-decoration: none;
-            color: rgba(0,0,0,0.1);
-          }
-        `}</style>
       </div>
     );
   }
