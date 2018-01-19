@@ -4,7 +4,7 @@ const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
 const isUptimeStatus = Joi.string().regex(/^(paused|not checked yet|up|seems down|down)$/);
-const { isPercentage } = require('./helpers/validators');
+const { isDecimalPercentage } = require('./helpers/validators');
 
 const t = new ServiceTester({ id: 'uptimerobot', title: 'Uptime Robot' });
 module.exports = t;
@@ -66,14 +66,14 @@ t.create('Uptime Robot: Percentage (valid)')
   .get('/ratio/m778918918-3e92c097147760ee39d02d36.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'uptime',
-    value: isPercentage,
+    value: isDecimalPercentage,
   }));
 
 t.create('Uptime Robot: Percentage (valid, with numberOfDays param)')
   .get('/ratio/7/m778918918-3e92c097147760ee39d02d36.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'uptime',
-    value: isPercentage,
+    value: isDecimalPercentage,
   }));
 
 t.create('Uptime Robot: Percentage (invalid, correct format)')
