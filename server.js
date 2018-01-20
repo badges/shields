@@ -2101,6 +2101,15 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
+      if (data.resultCount === 0) {
+        /* Note the 'not found' response from iTunes is:
+           status code = 200,
+           body = { "resultCount":0, "results": [] }
+        */
+        badgeData.text[1] = 'not found';
+        sendBadge(format, badgeData);
+        return;
+      }
       var version = data.results[0].version;
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
