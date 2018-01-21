@@ -3054,6 +3054,14 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
+    } else if (res.statusCode === 500) {
+      /* note:
+      david returns a 500 response for not found
+      e.g: https://david-dm.org/foo/barbaz/info.json
+      */
+      badgeData.text[1] = 'not found';
+      sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
