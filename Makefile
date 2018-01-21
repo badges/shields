@@ -34,7 +34,7 @@ deploy-s2:
 deploy-gh-pages:
 	(LONG_CACHE=true BASE_URL=https://img.shields.io npm run build && \
 	git checkout -B gh-pages master && \
-	git add -f index.html && \
+	git add -f build index.html && \
 	git commit -m '[DEPLOY] Build index.html' && \
 	git push -f origin gh-pages:gh-pages) || git checkout master
 	git checkout master
