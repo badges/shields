@@ -518,6 +518,8 @@ camp.route(/^\/osslifecycle?\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$
 // Shippable integration
 camp.route(/^\/shippable\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
+
+  // source: https://github.com/badges/shields/pull/1362#discussion_r161693830
   const statusCodes = {
     0:  { color: '#5183A0', label: "waiting" },
     10: { color: '#5183A0', label: "queued" },
