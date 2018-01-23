@@ -43,7 +43,7 @@ t.create('david dependencies (none)')
 
 t.create('david dependencies (repo not found)')
   .get('/pyvesb/emptyrepo.json')
-  .expectJSON({name: 'dependencies', value: 'not found'});
+  .expectJSON({name: 'dependencies', value: 'invalid'});
 
 t.create('david dependencies (connection error)')
   .get('/expressjs/express.json')

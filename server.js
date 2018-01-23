@@ -3056,10 +3056,12 @@ cache(function(data, match, sendBadge, request) {
       return;
     } else if (res.statusCode === 500) {
       /* note:
-      david returns a 500 response for not found
+      david returns a 500 response for 'not found'
       e.g: https://david-dm.org/foo/barbaz/info.json
+      not a 404 so we can't handle 'not found' cleanly
+      because this might also be some other error.
       */
-      badgeData.text[1] = 'not found';
+      badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
       return;
     }
