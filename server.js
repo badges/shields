@@ -518,93 +518,54 @@ camp.route(/^\/osslifecycle?\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$
 // Shippable integration
 camp.route(/^\/shippable\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
-  var defaultOpts = {
-    colorA: '#555555',
-    successLabel: 'passing',
-    successColor: '#44CC11',
-    failLabel: 'failing',
-    failColor: '#DC5F59',
-    cancelledLabel: 'cancelled',
-    cancelledColor: '#6BAFBD',
-    unstableLabel: 'unstable',
-    unstableColor: '#CEA61B',
-    pendingLabel: 'pending',
-    pendingColor: '#5183A0',
-    skippedLabel: 'skipped',
-    skippedColor: '#F8A97D',
-    noBuildLabel: 'none',
-    noBuildColor: '#A1ABAB',
-    inaccessibleLabel: 'inaccessible',
-    inaccessibleColor: '#A1ABAB'
+
+  // source: https://github.com/badges/shields/pull/1362#discussion_r161693830
+  const statusCodes = {
+    0:  { color: '#5183A0', label: "waiting" },
+    10: { color: '#5183A0', label: "queued" },
+    20: { color: '#5183A0', label: "processing" },
+    30: { color: '#44CC11', label: "success" },
+    40: { color: '#F8A97D', label: "skipped" },
+    50: { color: '#CEA61B', label: "unstable" },
+    60: { color: '#555555', label: "timeout" },
+    70: { color: '#6BAFBD', label: "cancelled" },
+    80: { color: '#DC5F59', label: "failed" },
+    90: { color: '#555555', label: "stopped" },
   };
 
-  var badgeData = getBadgeData('build', data);
-  delete badgeData.colorscheme;
-
-  // overwrite the default options if present in query parameters
-  Object.keys(defaultOpts).forEach(
-    function (key) {
-      defaultOpts[key] = data[key] || defaultOpts[key];
-    }
-  );
-
-  badgeData.colorA = defaultOpts.colorA;
-  badgeData.colorB = defaultOpts.noBuildColor;
-
-  var project = match[1];  // eg, 54d119db5ab6cc13528ab183
-  var branch = match[2];
-  var format = match[3];
-  var url = 'https://api.shippable.com/projects/' + project + '/badge';
-
-  if (branch != null) {
-    url += '?branch=' + branch;
+  const project = match[1];  // eg, 54d119db5ab6cc13528ab183
+  let targetBranch = match[2];
+  if (targetBranch == null) {
+    targetBranch = 'master';
   }
+  const format = match[3];
+  const url = 'https://api.shippable.com/projects/' + project + '/branchRunStatus';
+  const options = {
+    method: 'GET',
+    uri: url
+  };
 
-  fetchFromSvg(request, url, function (err, res) {
-    if (err != null) {
-      badgeData.text[1] = defaultOpts.inaccessibleLabel;
+  const badgeData = getBadgeData('build', data);
+
+  request(options, function(err, res, buffer) {
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
-
     try {
-      switch (res) {
-        case 'none':
-          badgeData.text[1] = defaultOpts.noBuildLabel;
-          badgeData.colorB = defaultOpts.noBuildColor;
-          break;
-        case 'shippable':
-          badgeData.text[1] = defaultOpts.successLabel;
-          badgeData.colorB = defaultOpts.successColor;
-          break;
-        case 'failed':
-          badgeData.text[1] = defaultOpts.failLabel;
-          badgeData.colorB = defaultOpts.failColor;
-          break;
-        case 'cancelled':
-          badgeData.text[1] = defaultOpts.cancelledLabel;
-          badgeData.colorB = defaultOpts.cancelledColor;
-          break;
-        case 'pending':
-          badgeData.text[1] = defaultOpts.pendingLabel;
-          badgeData.colorB = defaultOpts.pendingColor;
-          break;
-        case 'skipped':
-          badgeData.text[1] = defaultOpts.skippedLabel;
-          badgeData.colorB = defaultOpts.skippedColor;
-          break;
-        case 'unstable':
-          badgeData.text[1] = defaultOpts.unstableLabel;
-          badgeData.colorB = defaultOpts.unstableColor;
-          break;
-        default:
-          badgeData.text[1] = 'invalid';
-          badgeData.colorB = defaultOpts.noBuildColor;
+      res = JSON.parse(buffer);
+      for (const branch of res) {
+        if (branch.branchName === targetBranch) {
+          badgeData.text[1] = statusCodes[branch.statusCode].label;
+          badgeData.colorB = statusCodes[branch.statusCode].color;
+          sendBadge(format, badgeData);
+          return;
+        }
       }
+      badgeData.text[1] = 'branch not found';
       sendBadge(format, badgeData);
-    } catch (e) {
+    } catch(e) {
       badgeData.text[1] = 'invalid';
-      badgeData.colorB = defaultOpts.noBuildColor;
       sendBadge(format, badgeData);
     }
   });
