@@ -2697,7 +2697,7 @@ cache(function(data, match, sendBadge, request) {
   // Top-level and /coverage URLs equivalent to /c, still supported for backwards compatibility. See #1387. 
   const type = match[2] === 'c' || !match[2] ? 'coverage' : match[2];
   const isLetter = match[3];
-  const userRepo = match[4];  // eg, `Nickersoft/dql`.
+  const userRepo = match[4];  // eg, `twbs/bootstrap`.
   const format = match[5];
   request({
       method: 'GET',
