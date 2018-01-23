@@ -2692,11 +2692,19 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Code Climate integration.
-camp.route(/^\/codeclimate(\/(c|coverage|maintainability|issues)(-letter)?)?\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/codeclimate(\/(c|coverage|maintainability|issues|tech-debt)(-letter|-percentage)?)?\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  // Top-level and /coverage URLs equivalent to /c, still supported for backwards compatibility. See #1387. 
-  const type = match[2] === 'c' || !match[2] ? 'coverage' : match[2];
-  const isLetter = match[3];
+  let type;
+  if (match[2] === 'c' || !match[2]) {
+    // Top-level and /coverage URLs equivalent to /c, still supported for backwards compatibility. See #1387.
+    type = 'coverage';
+  } else if (match[2] === 'tech-debt') {
+    type = 'technical debt';
+  } else {
+    type = match[2];
+  }
+  // For maintainability, default is letter, alternative is percentage. For coverage, default is percentage, alternative is letter.
+  const isAlternativeFormat = match[3];
   const userRepo = match[4];  // eg, `twbs/bootstrap`.
   const format = match[5];
   request({
@@ -2736,7 +2744,7 @@ cache(function(data, match, sendBadge, request) {
         }
 
         const parsedData = JSON.parse(buffer);
-        if (type === 'coverage' && isLetter) {
+        if (type === 'coverage' && isAlternativeFormat) {
           const score = parsedData.data.attributes.rating.letter;
           badgeData.text[1] = score;
           badgeData.colorscheme = letterScoreColor(score);
@@ -2748,15 +2756,19 @@ cache(function(data, match, sendBadge, request) {
           const count = parsedData.data.meta.issues_count;
           badgeData.text[1] = count;
           badgeData.colorscheme = colorScale([1, 5, 10, 20], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(count);
-        } else if (type === 'maintainability' && isLetter) {
+        } else if (type === 'technical debt') {
+          const percentage = parseFloat(parsedData.data.attributes.ratings[0].measure.value);
+          badgeData.text[1] = percentage.toFixed(0) + '%';
+          badgeData.colorscheme = colorScale([5, 10, 20, 50], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(percentage);
+        } else if (type === 'maintainability' && isAlternativeFormat) {
+          // maintainability = 100 - technical debt
+          const percentage = 100 - parseFloat(parsedData.data.attributes.ratings[0].measure.value);
+          badgeData.text[1] = percentage.toFixed(0) + '%';
+          badgeData.colorscheme = colorScale([50, 80, 90, 95], ['red', 'yellow', 'yellowgreen', 'green', 'brightgreen'])(percentage);
+        } else if (type === 'maintainability') {
           const score = parsedData.data.attributes.ratings[0].letter;
           badgeData.text[1] = score;
           badgeData.colorscheme = letterScoreColor(score);
-        } else if (type === 'maintainability') {
-          const percentage = parseFloat(parsedData.data.attributes.ratings[0].measure.value);
-          badgeData.text[0] = getLabel('technical debt', data);
-          badgeData.text[1] = percentage.toFixed(0) + '%';
-          badgeData.colorscheme = colorScale([5, 10, 20, 50], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(percentage);
         }
         sendBadge(format, badgeData);
       });

@@ -59,28 +59,36 @@ t.create('issues count')
     value: Joi.number().integer().positive()
   }));
 
-t.create('maintainability percentage (technical debt)')
-  .get('/maintainability/angular/angular.js.json')
+t.create('technical debt percentage')
+  .get('/tech-debt/angular/angular.js.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'technical debt',
     value: isPercentage
   }));
 
+t.create('maintainability percentage')
+  .get('/maintainability-percentage/angular/angular.js.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'maintainability',
+    value: isPercentage
+  }));
+
+
 t.create('maintainability letter')
-  .get('/maintainability-letter/angular/angular.js.json')
+  .get('/maintainability/angular/angular.js.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'maintainability',
     value: Joi.equal('A', 'B', 'C', 'D', 'E', 'F')
   }));
 
-t.create('maintainability percentage for non-existent repo')
+t.create('maintainability letter for non-existent repo')
   .get('/maintainability/unknown/unknown.json')
   .expectJSON({
     name: 'maintainability',
     value: 'not found'
   });
 
-t.create('maintainability percentage for repo without snapshots')
+t.create('maintainability letter for repo without snapshots')
   .get('/maintainability/kabisaict/flow.json')
   .expectJSON({
     name: 'maintainability',
