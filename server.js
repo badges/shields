@@ -3479,11 +3479,17 @@ cache(function(data, match, sendBadge, request) {
   var spec = match[2];  // eg, AFNetworking
   var format = match[3];
   var apiUrl = 'https://trunk.cocoapods.org/api/v1/pods/' + spec + '/specs/latest';
-  var badgeData = getBadgeData('pod', data);
+  var badgeData;
+  if (type === 'v') {
+    badgeData = getBadgeData('pod', data);
+  } else if (type === 'p') {
+    badgeData = getBadgeData('platform', data);
+  } else if (type === 'l') {
+    badgeData = getBadgeData('license', data);
+  }
   badgeData.colorscheme = null;
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3503,11 +3509,9 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = versionText(version);
         badgeData.colorscheme = versionColor(version);
       } else if (type === 'p') {
-        badgeData.text[0] = getLabel('platform', data);
         badgeData.text[1] = platforms;
         badgeData.colorB = '#989898';
       } else if (type === 'l') {
-        badgeData.text[0] = getLabel('license', data);
         badgeData.text[1] = license;
         badgeData.colorB = '#373737';
       }
@@ -3525,17 +3529,19 @@ camp.route(/^\/cocoapods\/metrics\/doc-percent\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var spec = match[1];  // eg, AFNetworking
   var format = match[2];
-  var apiUrl = 'http://metrics.cocoapods.org/api/v1/pods/' + spec;
-  var badgeData = getBadgeData('pod', data);
+  var apiUrl = 'https://metrics.cocoapods.org/api/v1/pods/' + spec;
+  var badgeData = getBadgeData('docs', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'not found')) {
       sendBadge(format, badgeData);
       return;
     }
     try {
       var parsedData = JSON.parse(buffer);
       var percentage = parsedData.cocoadocs.doc_percent;
+      if (percentage == null) {
+        percentage = 0;
+      }
       badgeData.colorscheme = coveragePercentageColor(percentage);
       badgeData.text[0] = getLabel('docs', data);
       badgeData.text[1] = percentage + '%';
@@ -3553,11 +3559,10 @@ cache(function(data, match, sendBadge, request) {
   var info = match[1]; // One of these: "dm", "dw", "dt"
   var spec = match[2];  // eg, AFNetworking
   var format = match[3];
-  var apiUrl = 'http://metrics.cocoapods.org/api/v1/pods/' + spec;
+  var apiUrl = 'https://metrics.cocoapods.org/api/v1/pods/' + spec;
   var badgeData = getBadgeData('downloads', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3593,11 +3598,10 @@ cache(function(data, match, sendBadge, request) {
   var info = match[1]; // One of these: "aw", "at"
   var spec = match[2];  // eg, AFNetworking
   var format = match[3];
-  var apiUrl = 'http://metrics.cocoapods.org/api/v1/pods/' + spec;
+  var apiUrl = 'https://metrics.cocoapods.org/api/v1/pods/' + spec;
   var badgeData = getBadgeData('apps', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'not found')) {
       sendBadge(format, badgeData);
       return;
     }
