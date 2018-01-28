@@ -11,15 +11,13 @@ const t = new ServiceTester({ id: 'npm', title: 'NPM' });
 module.exports = t;
 const colorsB = mapValues(colorscheme, 'colorB');
 
-const downloads = { name: 'downloads', value: isMetric };
-
 t.create('total downloads of left-pad')
   .get('/dt/left-pad.json?style=_shields_test')
-  .expectJSONTypes(Joi.object().keys({ ...downloads, colorB: colorsB.brightgreen }));
+  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric, colorB: colorsB.brightgreen }));
 
 t.create('total downloads of @cycle/core')
   .get('/dt/@cycle/core.json')
-  .expectJSONTypes(Joi.object().keys(downloads));
+  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }));
 
 t.create('total downloads of package with zero downloads')
   .get('/dt/package-no-downloads.json?style=_shields_test')
