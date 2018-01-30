@@ -3489,7 +3489,7 @@ cache(function(data, match, sendBadge, request) {
   }
   badgeData.colorscheme = null;
   request(apiUrl, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'not found')) {
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3532,7 +3532,7 @@ cache(function(data, match, sendBadge, request) {
   var apiUrl = 'https://metrics.cocoapods.org/api/v1/pods/' + spec;
   var badgeData = getBadgeData('docs', data);
   request(apiUrl, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'not found')) {
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3562,7 +3562,7 @@ cache(function(data, match, sendBadge, request) {
   var apiUrl = 'https://metrics.cocoapods.org/api/v1/pods/' + spec;
   var badgeData = getBadgeData('downloads', data);
   request(apiUrl, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'not found')) {
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3601,7 +3601,7 @@ cache(function(data, match, sendBadge, request) {
   var apiUrl = 'https://metrics.cocoapods.org/api/v1/pods/' + spec;
   var badgeData = getBadgeData('apps', data);
   request(apiUrl, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'not found')) {
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
