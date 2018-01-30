@@ -3543,7 +3543,6 @@ cache(function(data, match, sendBadge, request) {
         percentage = 0;
       }
       badgeData.colorscheme = coveragePercentageColor(percentage);
-      badgeData.text[0] = getLabel('docs', data);
       badgeData.text[1] = percentage + '%';
       sendBadge(format, badgeData);
     } catch(e) {
