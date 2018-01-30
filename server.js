@@ -3479,14 +3479,8 @@ cache(function(data, match, sendBadge, request) {
   var spec = match[2];  // eg, AFNetworking
   var format = match[3];
   var apiUrl = 'https://trunk.cocoapods.org/api/v1/pods/' + spec + '/specs/latest';
-  var badgeData;
-  if (type === 'v') {
-    badgeData = getBadgeData('pod', data);
-  } else if (type === 'p') {
-    badgeData = getBadgeData('platform', data);
-  } else if (type === 'l') {
-    badgeData = getBadgeData('license', data);
-  }
+  const typeToLabel = {'v' : 'pod', 'p': 'platform', 'l': 'license'};
+  const badgeData = getBadgeData(typeToLabel[type], data);
   badgeData.colorscheme = null;
   request(apiUrl, function(err, res, buffer) {
     if (checkErrorResponse(badgeData, err, res)) {
