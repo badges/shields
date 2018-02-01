@@ -15,7 +15,7 @@ export default class SuggestionAndSearch extends React.Component {
 
   constructor(props) {
     super(props);
-    this.queryChangedDebounced = debounce(props.queryChanged, 500, { leading: true });
+    this.queryChangedDebounced = debounce(props.queryChanged, 50, { leading: true });
   }
 
   state = {

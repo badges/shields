@@ -11,7 +11,7 @@
 //
 // Example:
 //
-// TRAVIS_REPO_SLUG=badges/shields TRAVIS_PULL_REQUEST=1108 npm run test:services:pr:prepare
+// TRAVIS=1 TRAVIS_REPO_SLUG=badges/shields TRAVIS_PULL_REQUEST=1108 npm run test:services:pr:prepare
 
 'use strict';
 
@@ -20,8 +20,11 @@ const fetch = require('node-fetch');
 const { inferPullRequest } = require('./infer-pull-request');
 
 function getTitle (owner, repo, pullRequest) {
-  const uri = `https://img.shields.io/github/pulls/detail/title/${owner}/${repo}/${pullRequest}.json`;
-  const options = { headers: { 'User-Agent': 'badges/shields' }};
+  let uri = `https://api.github.com/repos/${owner}/${repo}/pulls/${pullRequest}`;
+  if (process.env.GITHUB_TOKEN) {
+    uri += `?access_token=${process.env.GITHUB_TOKEN}`;
+  }
+  const options = { headers: { 'User-Agent': 'badges/shields' } };
   return fetch(uri, options)
     .then(res => {
       if (! res.ok) {
@@ -30,7 +33,7 @@ function getTitle (owner, repo, pullRequest) {
 
       return res.json();
     })
-    .then(json => json.value);
+    .then(json => json.title);
 }
 
 // [Travis] Fix timeout issues => ['travis']

@@ -22,7 +22,7 @@
     "url": "https://github.com/badges/shields"
   },
   "dependencies": {
-    "camp": "^17.2.0",
+    "camp": "~17.2.1",
     "chrome-web-store-item-property": "~1.1.2",
     "dot": "~1.1.2",
     "gm": "^1.23.0",
@@ -30,6 +30,7 @@
     "jsonpath": "~1.0.0",
     "lodash.countby": "^4.6.0",
     "lodash.mapkeys": "^4.6.0",
+    "lodash.uniq": "~4.5.0",
     "moment": "^2.19.3",
     "node-env-flag": "^0.1.0",
     "pdfkit": "~0.8.0",
@@ -39,8 +40,7 @@
     "request": "~2.83.0",
     "semver": "~5.4.1",
     "svgo": "~0.7.1",
-    "xml2js": "~0.4.16",
-    "lodash.uniq": "~4.5.0"
+    "xml2js": "~0.4.16"
   },
   "scripts": {
     "coverage:test:js": "nyc node_modules/mocha/bin/_mocha '*.spec.js' 'lib/**/*.spec.js' 'service-tests/**/*.spec.js'",
@@ -67,7 +67,7 @@
     "build": "next build && next export -o build/",
     "heroku-postbuild": "npm run build",
     "analyze": "ANALYZE=true LONG_CACHE=false BASE_URL=https://img.shields.io npm run build",
-    "start:server": "node server 8080 ::",
+    "start:server": "RATE_LIMIT=false node server 8080 ::",
     "now-start": "node server",
     "prestart": "npm run frontend-depcheck",
     "start": "concurrently --names server,frontend \"ALLOWED_ORIGIN=http://localhost:3000 npm run start:server\" \"BASE_URL=http://[::]:8080 next dev\""
@@ -81,28 +81,32 @@
     "lib/make-badge.js",
     "lib/colorscheme.json",
     "lib/lru-cache.js",
-    "lib/measure-text.js",
+    "lib/text-measurer.js",
     "lib/svg-to-img.js",
     "templates",
     "logo"
   ],
   "devDependencies": {
     "@mapbox/react-click-to-select": "^2.1.0",
+    "almost-equal": "^1.1.0",
     "babel-eslint": "^8.0.2",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "chai": "^4.1.2",
+    "chai-string": "^1.4.0",
     "chainsmoker": "^0.1.0",
     "check-node-version": "^3.1.0",
     "child-process-promise": "^2.2.1",
     "classnames": "^2.2.5",
     "concurrently": "^3.5.1",
-    "danger": "^2.1.2",
+    "danger": "^3.0.0",
     "dejavu-fonts-ttf": "^2.37.3",
     "eslint": "^4.8.0",
     "eslint-config-prettier": "^2.6.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-config-standard-jsx": "^4.0.2",
     "eslint-config-standard-react": "^5.0.0",
+    "eslint-plugin-chai-friendly": "^0.4.1",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-node": "^5.2.0",
     "eslint-plugin-prettier": "^2.3.1",
@@ -127,7 +131,7 @@
     "node-fetch": "^1.6.3",
     "nyc": "^11.2.1",
     "opn-cli": "^3.1.0",
-    "prettier": "1.9.2",
+    "prettier": "1.10.2",
     "pretty": "^2.0.0",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
@@ -138,10 +142,12 @@
     "sazerac": "^0.4.2",
     "semver-regex": "^1.0.0",
     "sinon": "^4.0.1",
+    "sinon-chai": "^2.14.0",
     "url": "^0.11.0"
   },
   "greenkeeper": {
     "ignore": [
+      "joi",
       "redis"
     ]
   },
