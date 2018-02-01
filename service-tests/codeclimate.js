@@ -3,7 +3,7 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 const {
-  isPercentage,
+  isIntegerPercentage,
 } = require('./helpers/validators');
 
 const t = new ServiceTester({ id: 'codeclimate', title: 'Code Climate' })
@@ -13,21 +13,21 @@ t.create('test coverage percentage')
   .get('/c/jekyll/jekyll.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'coverage',
-    value: isPercentage
+    value: isIntegerPercentage
   }));
 
 t.create('test coverage percentage alternative coverage URL')
   .get('/coverage/jekyll/jekyll.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'coverage',
-    value: isPercentage
+    value: isIntegerPercentage
   }));
 
 t.create('test coverage percentage alternative top-level URL')
   .get('/jekyll/jekyll.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'coverage',
-    value: isPercentage
+    value: isIntegerPercentage
   }));
 
 t.create('test coverage letter')
@@ -63,14 +63,14 @@ t.create('technical debt percentage')
   .get('/tech-debt/angular/angular.js.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'technical debt',
-    value: isPercentage
+    value: isIntegerPercentage
   }));
 
 t.create('maintainability percentage')
   .get('/maintainability-percentage/angular/angular.js.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'maintainability',
-    value: isPercentage
+    value: isIntegerPercentage
   }));
 
 
