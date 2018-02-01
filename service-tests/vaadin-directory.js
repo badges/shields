@@ -62,7 +62,7 @@ t.create('Invalid addon')
   .get('/star/404.json')
   .expectJSON({
     name: 'Vaadin Directory',
-    value: 'invalid'
+    value: 'not found'
   });
 
 t.create('No connection')

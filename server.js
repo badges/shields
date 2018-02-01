@@ -7896,11 +7896,11 @@ camp.route(/^\/vaadin-directory\/(star|status|rating|rc|lv|ld|maturity)\/(.*).(s
   // Set left-side text to 'Vaadin-Directory' by default
   var badgeData = getBadgeData("Vaadin Directory", data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
+
     try {
       var data = JSON.parse(buffer);
       // Round the rating to 1 points decimal
