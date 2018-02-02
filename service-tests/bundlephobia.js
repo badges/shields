@@ -15,68 +15,64 @@ const formats = {
   D: '/bundlephobia/:type/@:scope/:package/:version.:format',
 }
 
-const withoutErrorsMin = {
-  A: '/min/preact.json',
-  B: '/min/preact/8.2.7.json',
-  C: '/min/@cycle/core.json',
-  D: '/min/@cycle/core/7.0.0.json',
-}
-
-const withoutErrorsGzip = {
-  A: '/minzip/preact.json',
-  B: '/minzip/preact/8.2.7.json',
-  C: '/minzip/@cycle/core.json',
-  D: '/minzip/@cycle/core/7.0.0.json',
-}
-
-const withoutErrorSizesMin = {
-  A: isFileSize,
-  B: '8.94 kB',
-  C: isFileSize,
-  D: '3.51 kB',
-}
-
-const withoutErrorSizesGzip = {
-  A: isFileSize,
-  B: '3.58 kB',
-  C: isFileSize,
-  D: '1.23 kB',
-}
-
-const noExistPackages = {
-  A: '/min/some-no-exist.json',
-  C: '/min/@some-no-exist/some-no-exist.json',
-}
-
-Object.keys(formats).forEach(format => {
-  const withoutErrorMin = withoutErrorsMin[format]
-  const withoutErrorSizeMin = withoutErrorSizesMin[format]
-
-  const withoutErrorGzip = withoutErrorsGzip[format]
-  const withoutErrorSizeGzip = withoutErrorSizesGzip[format]
-
-  const noExistPackage = noExistPackages[format]
-
-  if (typeof withoutErrorMin === 'string') {
-    t.create(`Format '${formats[format]}' to get the minified bundle size`)
-      .get(withoutErrorMin)
-      .expectJSONTypes(Joi.object().keys({ name: 'minified size', value: withoutErrorSizeMin }))
+const data = [
+  {
+    format: formats.A,
+    get: '/min/preact.json',
+    expect: { name: 'minified size', value: isFileSize },
+  },
+  {
+    format: formats.B,
+    get: '/min/preact/8.0.0.json',
+    expect: { name: 'minified size', value: '7.94 kB' },
+  },
+  {
+    format: formats.C,
+    get: '/min/@cycle/core.json',
+    expect: { name: 'minified size', value: isFileSize },
+  },
+  {
+    format: formats.D,
+    get: '/min/@cycle/core/7.0.0.json',
+    expect: { name: 'minified size', value: '3.51 kB' },
+  },
+  {
+    format: formats.A,
+    get: '/minzip/preact.json',
+    expect: { name: 'minzipped size', value: isFileSize },
+  },
+  {
+    format: formats.B,
+    get: '/minzip/preact/8.0.0.json',
+    expect: { name: 'minzipped size', value: '3.35 kB' },
+  },
+  {
+    format: formats.C,
+    get: '/minzip/@cycle/core.json',
+    expect: { name: 'minzipped size', value: isFileSize },
+  },
+  {
+    format: formats.D,
+    get: '/minzip/@cycle/core/7.0.0.json',
+    expect: { name: 'minzipped size', value: '1.23 kB' },
+  },
+  {
+    format: formats.A,
+    get: '/min/some-no-exist.json',
+    expect: { name: 'minified size', value: 'package not found error' },
+  },
+  {
+    format: formats.C,
+    get: '/min/@some-no-exist/some-no-exist.json',
+    expect: { name: 'minified size', value: 'package not found error' },
   }
+]
 
-  if (typeof withoutErrorGzip === 'string') {
-    t.create(`Format '${formats[format]}' to get the gzipped bundle size`)
-      .get(withoutErrorGzip)
-      .expectJSONTypes(Joi.object().keys({ name: 'minzipped size', value: withoutErrorSizeGzip }))
+data.forEach( ({format, get, expect }) => {
+  t.create(`Testing format '${format}' against '${get}'`)
+    .get(get)
+    .expectJSONTypes(Joi.object().keys(expect))
   }
-
-  if (typeof noExistPackage === 'string') {
-    t.create(`Format '${formats[format]}' where it doesn't exist`)
-      .get(noExistPackage)
-      .expectJSON({
-        name: 'minified size',
-        value: 'package not found error',
-      })
-  }
-})
+)
 
 module.exports = t
