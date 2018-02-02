@@ -8,6 +8,8 @@ const t = new ServiceTester({
   id: 'bundlephobia', title: 'NPM package bundle size',
 })
 
+module.exports = t
+
 const formats = {
   A: '/bundlephobia/:type/:package.:format',
   B: '/bundlephobia/:type/:package/:version.:format',
@@ -74,5 +76,3 @@ data.forEach( ({format, get, expect }) => {
     .expectJSONTypes(Joi.object().keys(expect))
   }
 )
-
-module.exports = t
