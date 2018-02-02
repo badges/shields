@@ -7606,6 +7606,56 @@ camp.route(/^\/nsp\/npm\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|j
   }
 }));
 
+// bundle size for npm packages
+camp.route(/^\/bundlephobia\/(min|minzip)\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|jpg|json)?$/,
+  cache((data, match, sendBadge, request) => {
+  // A: /bundlephobia/(min|minzip)/:package.:format
+  // B: /bundlephobia/(min|minzip)/:package/:version.:format
+  // C: /bundlephobia/(min|minzip)/@:scope/:package.:format
+  // D: /bundlephobia/(min|minzip)/@:scope/:package/:version.:format
+  const resultType = match[1];
+  const scope = match[2];
+  const packageName = match[3];
+  const packageVersion = match[4];
+  const format = match[5];
+  const showMin = resultType === 'min';
+
+  const badgeData = getBadgeData(showMin ? 'minified size' : 'minzipped size', data);
+
+  let packageString = typeof scope === 'string' ?
+    `@${scope}/${packageName}` : packageName;
+
+  if(packageVersion) {
+    packageString += `@${packageVersion}`;
+  }
+
+  const requestOptions = {
+    url: 'https://bundlephobia.com/api/size',
+    qs: {
+      package: packageString,
+    },
+    json: true,
+  };
+
+  const formatErrorCode = (code) =>
+    code.replace(/([A-Z])/g, ' $1').substring(1).toLowerCase();
+
+  request(requestOptions, (error, response, body) => {
+    if(typeof body !== 'object' || body === null) {
+      badgeData.text[1] = 'error';
+      badgeData.colorscheme = 'red';
+    } else if (error !== null || body.error) {
+      badgeData.text[1] = 'code' in body.error ?
+        formatErrorCode(body.error.code) : 'error';
+      badgeData.colorscheme = 'red';
+    } else {
+      badgeData.text[1] = prettyBytes(showMin ? body.size : body.gzip);
+      badgeData.colorscheme = 'blue';
+    }
+    sendBadge(format, badgeData);
+  });
+}));
+
 // Redmine plugin rating.
 camp.route(/^\/redmine\/plugin\/(rating|stars)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
