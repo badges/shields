@@ -9,7 +9,7 @@ const t = new ServiceTester({ id: 'microbadger', title: 'MicroBadger' });
 module.exports = t;
 
 t.create('image size without a specified tag')
-  .get('/image-size/_/hello-world.json')
+  .get('/image-size/_/centos.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'image size',
     value: isFileSize
