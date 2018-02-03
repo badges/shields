@@ -46,6 +46,7 @@ const {
   coveragePercentage: coveragePercentageColor,
   downloadCount: downloadCountColor,
   floorCount: floorCountColor,
+  letterScore: letterScoreColor,
   version: versionColor,
   age: ageColor,
   colorScale
@@ -2673,100 +2674,28 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Code Climate coverage integration
-camp.route(/^\/codeclimate\/coverage\/(.+)\.(svg|png|gif|jpg|json)$/,
+// Code Climate integration.
+camp.route(/^\/codeclimate(\/(c|coverage|maintainability|issues|tech-debt)(-letter|-percentage)?)?\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];  // eg, `github/triAGENS/ashikawa-core`.
-  var format = match[2];
-  var options = {
-    method: 'HEAD',
-    uri: 'https://codeclimate.com/' + userRepo + '/coverage.png',
-  };
-  var badgeData = getBadgeData('coverage', data);
-  request(options, function(err, res) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var score = res.headers['content-disposition']
-                     .match(/filename=".*coverage_(.+)\.png"/)[1];
-      if (!score) {
-        badgeData.text[1] = 'malformed';
-        sendBadge(format, badgeData);
-        return;
-      }
-      var percentage = parseInt(score);
-      if (percentage !== percentage) {
-        // It is NaN, treat it as unknown.
-        badgeData.text[1] = 'unknown';
-        sendBadge(format, badgeData);
-        return;
-      }
-      badgeData.text[1] = score + '%';
-      badgeData.colorscheme = coveragePercentageColor(percentage);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'not found';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// Code Climate issues integration
-camp.route(/^\/codeclimate\/issues\/(.+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];  // eg, `github/me-and/mdf`.
-  var format = match[2];
-  var options = 'https://codeclimate.com/' + userRepo + '/badges/issue_count.svg';
-  var badgeData = getBadgeData('issues', data);
-  request(options, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var count = buffer.match(/>([0-9]+) issues?/)[1];
-      if (!count) {
-        badgeData.text[1] = 'malformed';
-        sendBadge(format, badgeData);
-        return;
-      }
-      badgeData.text[1] = count;
-      if (count == 0) {
-        badgeData.colorscheme = 'brightgreen';
-      } else if (count < 5) {
-        badgeData.colorscheme = 'green';
-      } else if (count < 10) {
-        badgeData.colorscheme = 'yellowgreen';
-      } else if (count < 20) {
-        badgeData.colorscheme = 'yellow';
-      } else {
-        badgeData.colorscheme = 'red';
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// New Code Climate scores (coverage + maintainability)
-camp.route(/^\/codeclimate\/(c|maintainability)\/(.+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  const isCoverage = match[1] === 'c';
-  const userRepo = match[2];  // eg, `kabisaict/flow`.
-  const format = match[3];
+  let type;
+  if (match[2] === 'c' || !match[2]) {
+    // Top-level and /coverage URLs equivalent to /c, still supported for backwards compatibility. See #1387.
+    type = 'coverage';
+  } else if (match[2] === 'tech-debt') {
+    type = 'technical debt';
+  } else {
+    type = match[2];
+  }
+  // For maintainability, default is letter, alternative is percentage. For coverage, default is percentage, alternative is letter.
+  const isAlternativeFormat = match[3];
+  const userRepo = match[4];  // eg, `twbs/bootstrap`.
+  const format = match[5];
   request({
       method: 'GET',
       uri: `https://api.codeclimate.com/v1/repos?github_slug=${userRepo}`,
       json: true
   }, function (err, res, body) {
-    const badgeData = getBadgeData(isCoverage ? 'coverage' : 'maintainability', data);
-
+    const badgeData = getBadgeData(type, data);
     if (err != null) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
@@ -2778,20 +2707,19 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = 'not found';
         sendBadge(format, badgeData);
         return;
-      } else if (isCoverage && body.data[0].relationships.latest_default_branch_test_report.data == null
-          || !isCoverage && body.data[0].relationships.latest_default_branch_snapshot.data == null) {
+      }
+
+      const branchData = type === 'coverage'
+        ? body.data[0].relationships.latest_default_branch_test_report.data
+        : body.data[0].relationships.latest_default_branch_snapshot.data;
+      if (branchData == null) {
         badgeData.text[1] = 'unknown';
         sendBadge(format, badgeData);
         return;
       }
 
-      let apiUrl = `https://api.codeclimate.com/v1/repos/${body.data[0].id}/`;
-      if (isCoverage) {
-        apiUrl += `test_reports/${body.data[0].relationships.latest_default_branch_test_report.data.id}`;
-      } else {
-        apiUrl += `snapshots/${body.data[0].relationships.latest_default_branch_snapshot.data.id}`;
-      }
-      request(apiUrl, function(err, res, buffer) {
+      const url = `https://api.codeclimate.com/v1/repos/${body.data[0].id}/${type === 'coverage' ? 'test_reports' : 'snapshots'}/${branchData.id}`;
+      request(url, function(err, res, buffer) {
         if (err != null) {
           badgeData.text[1] = 'invalid';
           sendBadge(format, badgeData);
@@ -2799,70 +2727,36 @@ cache(function(data, match, sendBadge, request) {
         }
 
         const parsedData = JSON.parse(buffer);
-        const score = isCoverage ? parsedData.data.attributes.rating.letter : parsedData.data.attributes.ratings[0].letter;
-        badgeData.text[1] = score;
-
-        if (score === 'A') {
-          badgeData.colorscheme = 'brightgreen';
-        } else if (score === 'B') {
-          badgeData.colorscheme = 'green';
-        } else if (score === 'C') {
-          badgeData.colorscheme = 'yellow';
-        } else if (score === 'D') {
-          badgeData.colorscheme = 'orange';
-        } else {
-          badgeData.colorscheme = 'red';
+        if (type === 'coverage' && isAlternativeFormat) {
+          const score = parsedData.data.attributes.rating.letter;
+          badgeData.text[1] = score;
+          badgeData.colorscheme = letterScoreColor(score);
+        } else if (type === 'coverage') {
+          const percentage = parseFloat(parsedData.data.attributes.covered_percent);
+          badgeData.text[1] = percentage.toFixed(0) + '%';
+          badgeData.colorscheme = coveragePercentageColor(percentage);
+        } else if (type === 'issues') {
+          const count = parsedData.data.meta.issues_count;
+          badgeData.text[1] = count;
+          badgeData.colorscheme = colorScale([1, 5, 10, 20], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(count);
+        } else if (type === 'technical debt') {
+          const percentage = parseFloat(parsedData.data.attributes.ratings[0].measure.value);
+          badgeData.text[1] = percentage.toFixed(0) + '%';
+          badgeData.colorscheme = colorScale([5, 10, 20, 50], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(percentage);
+        } else if (type === 'maintainability' && isAlternativeFormat) {
+          // maintainability = 100 - technical debt
+          const percentage = 100 - parseFloat(parsedData.data.attributes.ratings[0].measure.value);
+          badgeData.text[1] = percentage.toFixed(0) + '%';
+          badgeData.colorscheme = colorScale([50, 80, 90, 95], ['red', 'yellow', 'yellowgreen', 'green', 'brightgreen'])(percentage);
+        } else if (type === 'maintainability') {
+          const score = parsedData.data.attributes.ratings[0].letter;
+          badgeData.text[1] = score;
+          badgeData.colorscheme = letterScoreColor(score);
         }
         sendBadge(format, badgeData);
       });
     } catch(e) {
       badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// // Code Climate integration
-camp.route(/^\/codeclimate\/(.+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];  // eg, `github/kabisaict/flow`.
-  var format = match[2];
-  var options = {
-    method: 'HEAD',
-    uri: 'https://codeclimate.com/' + userRepo + '.png',
-  };
-  var badgeData = getBadgeData('code climate', data);
-  request(options, function(err, res) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var statusMatch = res.headers['content-disposition']
-                           .match(/filename=".*code_climate-(.+)\.png"/);
-      if (!statusMatch) {
-        badgeData.text[1] = 'unknown';
-        sendBadge(format, badgeData);
-        return;
-      }
-      var state = statusMatch[1].replace('-', '.');
-      var score = +state;
-      badgeData.text[1] = state;
-      if (score == 4) {
-        badgeData.colorscheme = 'brightgreen';
-      } else if (score > 3) {
-        badgeData.colorscheme = 'green';
-      } else if (score > 2) {
-        badgeData.colorscheme = 'yellow';
-      } else if (score > 1) {
-        badgeData.colorscheme = 'orange';
-      } else {
-        badgeData.colorscheme = 'red';
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'not found';
       sendBadge(format, badgeData);
     }
   });
@@ -3021,6 +2915,16 @@ cache(function(data, match, sendBadge, request) {
   request(options, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    } else if (res.statusCode === 500) {
+      /* note:
+      david returns a 500 response for 'not found'
+      e.g: https://david-dm.org/foo/barbaz/info.json
+      not a 404 so we can't handle 'not found' cleanly
+      because this might also be some other error.
+      */
+      badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
       return;
     }
@@ -3183,7 +3087,7 @@ cache(function(data, match, sendBadge, request) {
     queryParams.branch = branch;
   }
   var query = queryString.stringify(queryParams);
-  var url = 'https://www.codacy.com/project/badge/grade/' + projectId + '?' + query;
+  var url = 'https://api.codacy.com/project/badge/grade/' + projectId + '?' + query;
   var badgeData = getBadgeData('code quality', data);
   fetchFromSvg(request, url, function(err, res) {
     if (err != null) {
@@ -3347,7 +3251,7 @@ cache(function(data, match, sendBadge, request) {
     queryParams.branch = branch;
   }
   var query = queryString.stringify(queryParams);
-  var url = 'https://www.codacy.com/project/badge/coverage/' + projectId + '?' + query;
+  var url = 'https://api.codacy.com/project/badge/coverage/' + projectId + '?' + query;
   var badgeData = getBadgeData('coverage', data);
   fetchFromSvg(request, url, function(err, res) {
     if (err != null) {
