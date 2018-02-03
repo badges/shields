@@ -3,7 +3,7 @@
 const invalidJSON = function() {
   return [
     200,
-    'invalid json',
+    '{{{{{invalid json}}',
     { 'Content-Type': 'application/json' }
   ];
 };
