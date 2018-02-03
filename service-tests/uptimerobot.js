@@ -5,6 +5,7 @@ const ServiceTester = require('./runner/service-tester');
 
 const isUptimeStatus = Joi.string().regex(/^(paused|not checked yet|up|seems down|down)$/);
 const { isDecimalPercentage } = require('./helpers/validators');
+const { invalidJSON } = require('./helpers/response-fixtures');
 
 const t = new ServiceTester({ id: 'uptimerobot', title: 'Uptime Robot' });
 module.exports = t;
@@ -58,7 +59,7 @@ t.create('Uptime Robot: Status (unexpected response, invalid json)')
   .get('/status/m778918918-3e92c097147760ee39d02d36.json')
   .intercept(nock => nock('https://api.uptimerobot.com')
     .post('/v2/getMonitors')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'status', value: 'inaccessible'});
 
@@ -117,6 +118,6 @@ t.create('Uptime Robot: Percentage (unexpected response, invalid json)')
   .get('/ratio/m778918918-3e92c097147760ee39d02d36.json')
   .intercept(nock => nock('https://api.uptimerobot.com')
     .post('/v2/getMonitors')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'uptime', value: 'inaccessible'});
