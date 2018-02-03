@@ -10,7 +10,7 @@ const {
     isVPlusDottedVersionAtLeastOne,
 } = require('./helpers/validators');
 
-const isPlatform = Joi.string().regex(/^\w+( \| \w+)*$/);
+const isPlatform = Joi.string().regex(/^(osx|ios|tvos|watchos)( \| (osx|ios|tvos|watchos))*$/);
 
 const t = new ServiceTester({ id: 'cocoapods', title: 'Cocoa Pods' });
 module.exports = t;
