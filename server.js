@@ -7637,8 +7637,13 @@ camp.route(/^\/bundlephobia\/(min|minzip)\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?
     json: true,
   };
 
+  /**
+   * `ErrorCode` => `error code`
+   * @param {string} code
+   * @returns {string}
+   */
   const formatErrorCode = (code) =>
-    code.replace(/([A-Z])/g, ' $1').substring(1).toLowerCase();
+    code.replace(/([A-Z])/g, ' $1').trim().toLowerCase();
 
   request(requestOptions, (error, response, body) => {
     if(typeof body !== 'object' || body === null) {
