@@ -107,10 +107,6 @@ const {
   parseClassifiers
 } = require('./lib/pypi-helpers.js');
 
-const {
-  age
-} = require('./lib/color-formatters');
-
 const serverStartTime = new Date((new Date()).toGMTString());
 const githubApiUrl = config.services.github.baseUri;
 
@@ -7946,7 +7942,7 @@ camp.route(/^\/vaadin-directory\/(star|status|rating|rc|lv|ld)\/(.*).(svg|png|gi
           badgeData.text[0] = getLabel('latest release date', data);
           // TODO: Shorten the date
           badgeData.text[1] = formatDate(ld);
-          badgeData.colorscheme = age(ld);
+          badgeData.colorscheme = ageColor(ld);
           break;
       }
       sendBadge(format, badgeData);
