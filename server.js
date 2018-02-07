@@ -7886,7 +7886,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Vaadin Directory Integration
-camp.route(/^\/vaadin-directory\/(star|status|rating|rc|lv|ld|maturity)\/(.*).(svg|png|gif|jpg|json)$/, cache(function (data, match, sendBadge, request) {
+camp.route(/^\/vaadin-directory\/(star|status|rating|rc|lv|ld)\/(.*).(svg|png|gif|jpg|json)$/, cache(function (data, match, sendBadge, request) {
   var type = match[1]; // Field required
   var urlIdentifier = match[2]; // Name of repository
   var format = match[3]; // Format
@@ -7947,8 +7947,6 @@ camp.route(/^\/vaadin-directory\/(star|status|rating|rc|lv|ld|maturity)\/(.*).(s
           // TODO: Shorten the date
           badgeData.text[1] = formatDate(ld);
           badgeData.colorscheme = age(ld);
-          break;
-        case 'maturity': // maturity
           break;
       }
       sendBadge(format, badgeData);
