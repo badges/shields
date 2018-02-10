@@ -75,7 +75,7 @@ t.create('version (pre) (valid)')
   }));
 
 t.create('version (pre) (not found)')
-  .get('/v/not-a-real-package.json')
+  .get('/vpre/not-a-real-package.json')
   .expectJSON({name: 'powershellgallery', value: 'not found'});
 
 t.create('version (pre) (connection error)')
