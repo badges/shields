@@ -6,6 +6,12 @@ const {
   isMetric,
   isVPlusDottedVersionNClauses
 } = require('./helpers/validators');
+const colorscheme = require('../lib/colorscheme.json');
+const {
+  versionJsonWithDash,
+  versionJsonFirstCharZero,
+  versionJsonFirstCharNotZero
+} = require('./helpers/nuget-fixtures.js');
 
 const t = new ServiceTester({ id: 'chocolatey', title: 'Chocolatey' });
 module.exports = t;
@@ -47,6 +53,42 @@ t.create('version (valid)')
     value: isVPlusDottedVersionNClauses,
   }));
 
+t.create('version (mocked, yellow badge)')
+  .get('/v/scriptcs.json?style=_shields_test')
+  .intercept(nock => nock('https://www.chocolatey.org')
+    .get("/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true")
+    .reply(200, versionJsonWithDash)
+  )
+  .expectJSON({
+    name: 'chocolatey',
+    value: 'v1.2-beta',
+    colorB: colorscheme.yellow.colorB
+  });
+
+t.create('version (mocked, orange badge)')
+  .get('/v/scriptcs.json?style=_shields_test')
+  .intercept(nock => nock('https://www.chocolatey.org')
+    .get("/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true")
+    .reply(200, versionJsonFirstCharZero)
+  )
+  .expectJSON({
+    name: 'chocolatey',
+    value: 'v0.35',
+    colorB: colorscheme.orange.colorB
+  });
+
+t.create('version (mocked, blue badge)')
+  .get('/v/scriptcs.json?style=_shields_test')
+  .intercept(nock => nock('https://www.chocolatey.org')
+    .get("/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true")
+    .reply(200, versionJsonFirstCharNotZero)
+  )
+  .expectJSON({
+    name: 'chocolatey',
+    value: 'v1.2.7',
+    colorB: colorscheme.blue.colorB
+  });
+
 t.create('version (not found)')
   .get('/v/not-a-real-package.json')
   .expectJSON({name: 'chocolatey', value: 'not found'});
@@ -73,6 +115,42 @@ t.create('version (pre) (valid)')
     name: 'chocolatey',
     value: isVPlusDottedVersionNClauses,
   }));
+
+t.create('version (pre) (mocked, yellow badge)')
+  .get('/vpre/scriptcs.json?style=_shields_test')
+  .intercept(nock => nock('https://www.chocolatey.org')
+  .get("/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsAbsoluteLatestVersion%20eq%20true")
+    .reply(200, versionJsonWithDash)
+  )
+  .expectJSON({
+    name: 'chocolatey',
+    value: 'v1.2-beta',
+    colorB: colorscheme.yellow.colorB
+  });
+
+t.create('version (pre) (mocked, orange badge)')
+  .get('/vpre/scriptcs.json?style=_shields_test')
+  .intercept(nock => nock('https://www.chocolatey.org')
+  .get("/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsAbsoluteLatestVersion%20eq%20true")
+    .reply(200, versionJsonFirstCharZero)
+  )
+  .expectJSON({
+    name: 'chocolatey',
+    value: 'v0.35',
+    colorB: colorscheme.orange.colorB
+  });
+
+t.create('version (pre) (mocked, blue badge)')
+  .get('/vpre/scriptcs.json?style=_shields_test')
+  .intercept(nock => nock('https://www.chocolatey.org')
+  .get("/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsAbsoluteLatestVersion%20eq%20true")
+    .reply(200, versionJsonFirstCharNotZero)
+  )
+  .expectJSON({
+    name: 'chocolatey',
+    value: 'v1.2.7',
+    colorB: colorscheme.blue.colorB
+  });
 
 t.create('version (pre) (not found)')
   .get('/vpre/not-a-real-package.json')
