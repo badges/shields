@@ -7940,7 +7940,6 @@ camp.route(/^\/vaadin-directory\/(star|status|rating|rc|lv|ld)\/(.*).(svg|png|gi
           break;
         case 'ld':
           badgeData.text[0] = getLabel('latest release date', data);
-          // TODO: Shorten the date
           badgeData.text[1] = formatDate(ld);
           badgeData.colorscheme = ageColor(ld);
           break;
