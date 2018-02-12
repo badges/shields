@@ -19,6 +19,10 @@ t.create('No URI specified')
   .get('.json?query=//name&label=Package Name&style=_shields_test')
   .expectJSON({ name: 'Package Name', value: 'no uri specified', colorB: colorsB.red });
 
+t.create('No query specified')
+  .get('.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&label=Package Name&style=_shields_test')
+  .expectJSON({ name: 'Package Name', value: 'no query specified', colorB: colorsB.red });
+
 t.create('XML from uri')
   .get('.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/name&style=_shields_test')
   .expectJSON({ name: 'custom badge', value: 'IndieGala Helper', colorB: colorsB.brightgreen });

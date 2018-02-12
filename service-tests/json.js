@@ -19,6 +19,10 @@ t.create('No URI specified')
   .get('.json?query=$.name&label=Package Name&style=_shields_test')
   .expectJSON({ name: 'Package Name', value: 'no uri specified', colorB: colorsB.red });
 
+t.create('No query specified')
+  .get('.json?uri=https://github.com/badges/shields/raw/master/package.json&label=Package Name&style=_shields_test')
+  .expectJSON({ name: 'Package Name', value: 'no query specified', colorB: colorsB.red });
+
 t.create('JSON from uri')
   .get('.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.name&style=_shields_test')
   .expectJSON({ name: 'custom badge', value: 'gh-badges', colorB: colorsB.brightgreen });
