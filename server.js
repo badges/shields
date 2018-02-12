@@ -7813,6 +7813,81 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Vaadin Directory Integration
+camp.route(/^\/vaadin-directory\/(star|status|rating|rc|rating-count|v|version|rd|release-date)\/(.*).(svg|png|gif|jpg|json)$/, cache(function (data, match, sendBadge, request) {
+  var type = match[1]; // Field required
+  var urlIdentifier = match[2]; // Name of repository
+  var format = match[3]; // Format
+  // API URL which contains also authentication info
+  var apiUrl = 'https://vaadin.com/vaadincom/directory-service/components/search/findByUrlIdentifier?projection=summary&urlIdentifier=' + urlIdentifier;
+
+  // Set left-side text to 'Vaadin-Directory' by default
+  var badgeData = getBadgeData("Vaadin Directory", data);
+  request(apiUrl, function(err, res, buffer) {
+    if (checkErrorResponse(badgeData, err, res)) {
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    try {
+      var data = JSON.parse(buffer);
+      // Round the rating to 1 points decimal
+      var rating = ( Math.round(data.averageRating * 10) / 10 ).toFixed(1);
+      var ratingCount = data.ratingCount;
+      var lv = data.latestAvailableRelease.name.toLowerCase();
+      var ld = data.latestAvailableRelease.publicationDate;
+      switch (type) {
+        case 'star': // Star
+          badgeData.text[0] = getLabel('rating', data);
+          badgeData.text[1] = starRating(rating);
+          badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
+          break;
+        case 'status': // Status of the component
+          var isPublished = data.status.toLowerCase();
+          if (isPublished === 'published') {
+            badgeData.text[1] = "published";
+            badgeData.colorB = '#00b4f0';
+          } else {
+            badgeData.text[1] = "unpublished";
+          }
+          break;
+        case 'rating': // rating
+        badgeData.text[0] = getLabel('rating', data);
+          if (!isNaN(rating)) {
+            badgeData.text[1] = rating + '/5';
+            badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
+          }
+          break;
+        case 'rc': // rating count
+        case 'rating-count':
+          badgeData.text[0] = getLabel('rating count', data);
+          if (ratingCount && ratingCount != 0) {
+            badgeData.text[1] = metric(data.ratingCount) + ' total';
+            badgeData.colorscheme = floorCountColor(data.ratingCount, 5, 50, 500);
+          }
+          break;
+        case 'v': // latest version
+        case 'version':
+          badgeData.text[0] = getLabel('latest ver', data);
+          badgeData.text[1] = lv;
+          badgeData.colorscheme = "blue";
+          break;
+        case 'rd':
+        case 'release-date': // The release date of the latest version
+          badgeData.text[0] = getLabel('latest release date', data);
+          badgeData.text[1] = formatDate(ld);
+          badgeData.colorscheme = ageColor(ld);
+          break;
+      }
+      sendBadge(format, badgeData);
+    } catch (e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+    }
+  });
+
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
