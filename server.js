@@ -1,12 +1,14 @@
 'use strict';
 
 const countBy = require('lodash.countby');
+const dom = require('xmldom').DOMParser;
 const jp = require('jsonpath');
 const path = require('path');
 const prettyBytes = require('pretty-bytes');
 const queryString = require('query-string');
 const semver = require('semver');
 const xml2js = require('xml2js');
+const xpath = require('xpath');
 
 const { checkErrorResponse } = require('./lib/error-helper');
 const analytics = require('./lib/analytics');
@@ -7464,7 +7466,7 @@ camp.route(/^\/maven-metadata\/v\/(https?)\/(.+\.xml)\.(svg|png|gif|jpg|json)$/,
 }));
 
 // User defined sources - JSON response
-camp.route(/^\/badge\/dynamic\/(json)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/badge\/dynamic\/(json|xml)\.(svg|png|gif|jpg|json)$/,
 cache({
   queryParams: ['uri', 'query', 'prefix', 'suffix'],
   handler: function(query, match, sendBadge, request) {
@@ -7503,8 +7505,22 @@ cache({
             var innerText = jsonpath.join(', ');
             badgeData.text[1] = (prefix || '') + innerText + (suffix || '');
             break;
+          case 'xml':
+            data = new dom().parseFromString(data);
+            var xpathdata = xpath.select(pathExpression, data, true);
+            try {
+              badgeData.text[1] = (prefix || '') + (pathExpression.indexOf('@') + 1 ? xpathdata.value : xpathdata.firstChild.data) + (suffix || '');
+            } catch (e) {
+              switch (e.toString()){
+                case "TypeError: Cannot read property 'value' of undefined":
+                case "TypeError: Cannot read property 'firstChild' of undefined":
+                  throw 'no result';
+                default:
+                  throw e;
+              }
+            }
         }
-      } catch(e) {
+      } catch (e) {
         setBadgeColor(badgeData, 'lightgrey');
         badgeData.text[1] = e;
       } finally {
