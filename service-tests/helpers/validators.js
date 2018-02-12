@@ -50,6 +50,7 @@ const isMetricOverTimePeriod = withRegex(/^[1-9][0-9]*[kMGTPEZY]?\/(year|month|4
 
 const isIntegerPercentage = withRegex(/^[0-9]+%$/);
 const isDecimalPercentage = withRegex(/^[0-9]+\.[0-9]*%$/);
+const isPercentage = Joi.alternatives().try(isIntegerPercentage, isDecimalPercentage);
 
 const isFileSize = withRegex(/^[0-9]*[.]?[0-9]+\s(B|kB|MB|GB|TB|PB|EB|ZB|YB)$/);
 
@@ -68,6 +69,7 @@ module.exports = {
   isMetric,
   isMetricOpenIssues,
   isMetricOverTimePeriod,
+  isPercentage,
   isIntegerPercentage,
   isDecimalPercentage,
   isFileSize,

@@ -4,6 +4,7 @@
 // endpoint is called from frontend/components/suggestion-and-search.js.
 
 const ServiceTester = require('./runner/service-tester');
+const { invalidJSON } = require('./helpers/response-fixtures');
 
 const t = new ServiceTester({ id: 'suggest', title: 'suggest', pathPrefix: '/$suggest' });
 module.exports = t;
@@ -55,9 +56,8 @@ t.create('license when json response is invalid')
   .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
   .intercept(nock => nock('https://api.github.com')
     .get(/\/repos\/atom\/atom\/license/)
-    .reply(200, 'invalid json'), {
-    'Content-Type': 'application/json;charset=UTF-8'
-  })
+    .reply(invalidJSON)
+  )
   .expectJSON('badges.?', {
     name: 'GitHub license',
     link: 'https://github.com/atom/atom',

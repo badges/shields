@@ -2,6 +2,7 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
+const { invalidJSON } = require('./helpers/response-fixtures');
 
 const t = new ServiceTester({ id: 'bountysource', title: 'Bountysource' });
 module.exports = t;
@@ -30,7 +31,7 @@ t.create('bounties (unexpected response)')
   .get('/team/mozilla-core/activity.json')
   .intercept(nock => nock('https://api.bountysource.com')
     .get('/teams/mozilla-core')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'bounties', value: 'invalid'});
 

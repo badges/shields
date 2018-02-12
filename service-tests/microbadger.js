@@ -2,13 +2,14 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
-const { isFileSize } = require('./helpers/validators')
+const { isFileSize } = require('./helpers/validators');
+const { invalidJSON } = require('./helpers/response-fixtures');
 
-const t = new ServiceTester({ id: 'microbadger', title: 'MicroBadger' })
+const t = new ServiceTester({ id: 'microbadger', title: 'MicroBadger' });
 module.exports = t;
 
 t.create('image size without a specified tag')
-  .get('/image-size/_/hello-world.json')
+  .get('/image-size/_/centos.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'image size',
     value: isFileSize
@@ -72,6 +73,6 @@ t.create('unexpected response')
   .get('/image-size/_/hello-world.json')
   .intercept(nock => nock('https://api.microbadger.com')
     .get('/v1/images/library/hello-world')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({ name: 'image size', value: 'error' });
