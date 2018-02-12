@@ -44,19 +44,40 @@ t.create('rating count of component')
     value: Joi.string().regex(/^\d+?\stotal$/)
   }));
 
+  t.create('rating count of component')
+    .get('/rating-count/vaadinvaadin-grid.json')
+    .expectJSONTypes(Joi.object().keys({
+      name: 'rating count',
+      value: Joi.string().regex(/^\d+?\stotal$/)
+    }));
+
 t.create('latest version of the component (can have v prefixed or without)')
-  .get('/lv/vaadinvaadin-grid.json')
+  .get('/v/vaadinvaadin-grid.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'latest ver',
     value: isSemver
   }));
 
+  t.create('latest version of the component (can have v prefixed or without)')
+    .get('/version/vaadinvaadin-grid.json')
+    .expectJSONTypes(Joi.object().keys({
+      name: 'latest ver',
+      value: isSemver
+    }));
+
 t.create('latest release date of the component (format: yyyy-mm-dd)')
-  .get('/ld/vaadinvaadin-grid.json')
+  .get('/rd/vaadinvaadin-grid.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'latest release date',
     value: isFormattedDate
   }));
+
+  t.create('latest release date of the component (format: yyyy-mm-dd)')
+    .get('/release-date/vaadinvaadin-grid.json')
+    .expectJSONTypes(Joi.object().keys({
+      name: 'latest release date',
+      value: isFormattedDate
+    }));
 
 t.create('Invalid addon')
   .get('/star/404.json')

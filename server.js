@@ -7882,7 +7882,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Vaadin Directory Integration
-camp.route(/^\/vaadin-directory\/(star|status|rating|rc|lv|ld)\/(.*).(svg|png|gif|jpg|json)$/, cache(function (data, match, sendBadge, request) {
+camp.route(/^\/vaadin-directory\/(star|status|rating|rc|rating-count|v|version|rd|release-date)\/(.*).(svg|png|gif|jpg|json)$/, cache(function (data, match, sendBadge, request) {
   var type = match[1]; // Field required
   var urlIdentifier = match[2]; // Name of repository
   var format = match[3]; // Format
@@ -7905,12 +7905,12 @@ camp.route(/^\/vaadin-directory\/(star|status|rating|rc|lv|ld)\/(.*).(svg|png|gi
       var lv = data.latestAvailableRelease.name.toLowerCase();
       var ld = data.latestAvailableRelease.publicationDate;
       switch (type) {
-        case 'star': // Stars
+        case 'star': // Star
           badgeData.text[0] = getLabel('rating', data);
           badgeData.text[1] = starRating(rating);
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
           break;
-        case 'status': //published or not
+        case 'status': // Status of the component
           var isPublished = data.status.toLowerCase();
           if (isPublished === 'published') {
             badgeData.text[1] = "published";
@@ -7919,26 +7919,29 @@ camp.route(/^\/vaadin-directory\/(star|status|rating|rc|lv|ld)\/(.*).(svg|png|gi
             badgeData.text[1] = "unpublished";
           }
           break;
-        case 'rating': // ratings
+        case 'rating': // rating
         badgeData.text[0] = getLabel('rating', data);
           if (!isNaN(rating)) {
             badgeData.text[1] = rating + '/5';
             badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
           }
           break;
-        case 'rc': // rating counts
+        case 'rc': // rating count
+        case 'rating-count':
           badgeData.text[0] = getLabel('rating count', data);
           if (ratingCount && ratingCount != 0) {
             badgeData.text[1] = metric(data.ratingCount) + ' total';
             badgeData.colorscheme = floorCountColor(data.ratingCount, 5, 50, 500);
           }
           break;
-        case 'lv': // latest version
+        case 'v': // latest version
+        case 'version':
           badgeData.text[0] = getLabel('latest ver', data);
           badgeData.text[1] = lv;
           badgeData.colorscheme = "blue";
           break;
-        case 'ld':
+        case 'rd':
+        case 'release-date': // The release date of the latest version
           badgeData.text[0] = getLabel('latest release date', data);
           badgeData.text[1] = formatDate(ld);
           badgeData.colorscheme = ageColor(ld);
