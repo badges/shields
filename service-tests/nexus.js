@@ -2,6 +2,7 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
+const { invalidJSON } = require('./helpers/response-fixtures');
 
 const t = new ServiceTester({ id: 'nexus', title: 'Nexus' });
 module.exports = t;
@@ -68,5 +69,6 @@ t.create('json parsing error')
   .intercept(nock => nock('https://repository.jboss.org')
     .get('/nexus/service/local/lucene/search')
     .query({g: 'jboss', a: 'jboss-client'})
-    .reply(200, 'this should be a valid json'))
+    .reply(invalidJSON)
+  )
   .expectJSON({ name: 'nexus', value: 'invalid' });

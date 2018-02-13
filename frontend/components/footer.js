@@ -15,10 +15,10 @@ const Footer = ({ baseUri }) => (
         data={resolveUrl('/twitter/follow/shields_io.svg?style=social&label=Follow', baseUri)}
         alt="Follow @shields_io" /> {}
       <a href="https://opencollective.com/shields" alt="Donate to us!">
-        <img src="https://opencollective.com/shields/backers/badge.svg" />
+        <img src="https://opencollective.com/shields/backers/badge.svg?style=social" />
       </a> {}
       <a href="https://opencollective.com/shields" alt="Donate to us!">
-        <img src="https://opencollective.com/shields/sponsors/badge.svg" />
+        <img src="https://opencollective.com/shields/sponsors/badge.svg?style=social" />
       </a> {}
       <object
         data={resolveUrl('/github/forks/badges/shields.svg?style=social&label=Fork', baseUri)}

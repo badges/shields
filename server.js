@@ -46,6 +46,7 @@ const {
   coveragePercentage: coveragePercentageColor,
   downloadCount: downloadCountColor,
   floorCount: floorCountColor,
+  letterScore: letterScoreColor,
   version: versionColor,
   age: ageColor,
   colorScale
@@ -518,93 +519,54 @@ camp.route(/^\/osslifecycle?\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$
 // Shippable integration
 camp.route(/^\/shippable\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
-  var defaultOpts = {
-    colorA: '#555555',
-    successLabel: 'passing',
-    successColor: '#44CC11',
-    failLabel: 'failing',
-    failColor: '#DC5F59',
-    cancelledLabel: 'cancelled',
-    cancelledColor: '#6BAFBD',
-    unstableLabel: 'unstable',
-    unstableColor: '#CEA61B',
-    pendingLabel: 'pending',
-    pendingColor: '#5183A0',
-    skippedLabel: 'skipped',
-    skippedColor: '#F8A97D',
-    noBuildLabel: 'none',
-    noBuildColor: '#A1ABAB',
-    inaccessibleLabel: 'inaccessible',
-    inaccessibleColor: '#A1ABAB'
+
+  // source: https://github.com/badges/shields/pull/1362#discussion_r161693830
+  const statusCodes = {
+    0:  { color: '#5183A0', label: "waiting" },
+    10: { color: '#5183A0', label: "queued" },
+    20: { color: '#5183A0', label: "processing" },
+    30: { color: '#44CC11', label: "success" },
+    40: { color: '#F8A97D', label: "skipped" },
+    50: { color: '#CEA61B', label: "unstable" },
+    60: { color: '#555555', label: "timeout" },
+    70: { color: '#6BAFBD', label: "cancelled" },
+    80: { color: '#DC5F59', label: "failed" },
+    90: { color: '#555555', label: "stopped" },
   };
 
-  var badgeData = getBadgeData('build', data);
-  delete badgeData.colorscheme;
-
-  // overwrite the default options if present in query parameters
-  Object.keys(defaultOpts).forEach(
-    function (key) {
-      defaultOpts[key] = data[key] || defaultOpts[key];
-    }
-  );
-
-  badgeData.colorA = defaultOpts.colorA;
-  badgeData.colorB = defaultOpts.noBuildColor;
-
-  var project = match[1];  // eg, 54d119db5ab6cc13528ab183
-  var branch = match[2];
-  var format = match[3];
-  var url = 'https://api.shippable.com/projects/' + project + '/badge';
-
-  if (branch != null) {
-    url += '?branch=' + branch;
+  const project = match[1];  // eg, 54d119db5ab6cc13528ab183
+  let targetBranch = match[2];
+  if (targetBranch == null) {
+    targetBranch = 'master';
   }
+  const format = match[3];
+  const url = 'https://api.shippable.com/projects/' + project + '/branchRunStatus';
+  const options = {
+    method: 'GET',
+    uri: url
+  };
 
-  fetchFromSvg(request, url, function (err, res) {
-    if (err != null) {
-      badgeData.text[1] = defaultOpts.inaccessibleLabel;
+  const badgeData = getBadgeData('build', data);
+
+  request(options, function(err, res, buffer) {
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
-
     try {
-      switch (res) {
-        case 'none':
-          badgeData.text[1] = defaultOpts.noBuildLabel;
-          badgeData.colorB = defaultOpts.noBuildColor;
-          break;
-        case 'shippable':
-          badgeData.text[1] = defaultOpts.successLabel;
-          badgeData.colorB = defaultOpts.successColor;
-          break;
-        case 'failed':
-          badgeData.text[1] = defaultOpts.failLabel;
-          badgeData.colorB = defaultOpts.failColor;
-          break;
-        case 'cancelled':
-          badgeData.text[1] = defaultOpts.cancelledLabel;
-          badgeData.colorB = defaultOpts.cancelledColor;
-          break;
-        case 'pending':
-          badgeData.text[1] = defaultOpts.pendingLabel;
-          badgeData.colorB = defaultOpts.pendingColor;
-          break;
-        case 'skipped':
-          badgeData.text[1] = defaultOpts.skippedLabel;
-          badgeData.colorB = defaultOpts.skippedColor;
-          break;
-        case 'unstable':
-          badgeData.text[1] = defaultOpts.unstableLabel;
-          badgeData.colorB = defaultOpts.unstableColor;
-          break;
-        default:
-          badgeData.text[1] = 'invalid';
-          badgeData.colorB = defaultOpts.noBuildColor;
+      res = JSON.parse(buffer);
+      for (const branch of res) {
+        if (branch.branchName === targetBranch) {
+          badgeData.text[1] = statusCodes[branch.statusCode].label;
+          badgeData.colorB = statusCodes[branch.statusCode].color;
+          sendBadge(format, badgeData);
+          return;
+        }
       }
+      badgeData.text[1] = 'branch not found';
       sendBadge(format, badgeData);
-    } catch (e) {
+    } catch(e) {
       badgeData.text[1] = 'invalid';
-      badgeData.colorB = defaultOpts.noBuildColor;
       sendBadge(format, badgeData);
     }
   });
@@ -1735,8 +1697,7 @@ cache(function (data, match, sendBadge, request) {
   var apiUrl = 'https://api.npmjs.org/downloads/range/1000-01-01:3000-01-01/' + pkg; // use huge range, will need to fix this in year 3000 :)
   var badgeData = getBadgeData('downloads', data);
   request(apiUrl, function (err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -2101,6 +2062,15 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
+      if (data.resultCount === 0) {
+        /* Note the 'not found' response from iTunes is:
+           status code = 200,
+           body = { "resultCount":0, "results": [] }
+        */
+        badgeData.text[1] = 'not found';
+        sendBadge(format, badgeData);
+        return;
+      }
       var version = data.results[0].version;
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
@@ -2120,8 +2090,7 @@ cache(function(data, match, sendBadge, request) {
   var apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
   var badgeData = getBadgeData('gem', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -2150,7 +2119,19 @@ cache(function(data, match, sendBadge, request) {
     : null;
   version = (version === "stable") ? version : semver.valid(version);
   var format = match[3];
-  var badgeData = getBadgeData('downloads', data);
+
+  let leftSide;
+  if (version) {
+    leftSide = 'downloads@' + version;
+  } else {
+    if (info === "dtv") {
+      leftSide = 'downloads@latest';
+    } else {
+      leftSide = 'downloads';
+    }
+  }
+  const badgeData = getBadgeData(leftSide, data);
+
   if  (info === "dv"){
     apiUrl = 'https://rubygems.org/api/v1/versions/' + repo + '.json';
   } else {
@@ -2162,8 +2143,7 @@ cache(function(data, match, sendBadge, request) {
     }
   };
   request(apiUrl, parameters, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -2173,7 +2153,7 @@ cache(function(data, match, sendBadge, request) {
       if (info === "dt") {
         downloads = metric(data.downloads);
       } else if (info === "dtv") {
-        downloads = metric(data.version_downloads) + " latest version";
+        downloads = metric(data.version_downloads);
       } else if (info === "dv") {
         downloads = "invalid";
 
@@ -2190,7 +2170,7 @@ cache(function(data, match, sendBadge, request) {
           version_data = data.filter(function(ver) {
             return ver.number === stable_version;
           })[0];
-          downloads = metric(version_data.downloads_count) + " stable version";
+          downloads = metric(version_data.downloads_count);
 
         } else if (version !== null) {
 
@@ -2198,8 +2178,7 @@ cache(function(data, match, sendBadge, request) {
             return ver.number === version;
           })[0];
 
-          downloads = metric(version_data.downloads_count)
-            + " version " + version;
+          downloads = metric(version_data.downloads_count);
         }
       } else { downloads = "invalid"; }
       badgeData.text[1] = downloads;
@@ -2220,8 +2199,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://rubygems.org/api/v1/owners/' + user + '/gems.json';
   var badgeData = getBadgeData('gems', data);
   request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -2255,8 +2233,7 @@ cache(function(data, match, sendBadge, request) {
   }
   var badgeData = getBadgeData('rank', data);
   request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -2697,100 +2674,28 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Code Climate coverage integration
-camp.route(/^\/codeclimate\/coverage\/(.+)\.(svg|png|gif|jpg|json)$/,
+// Code Climate integration.
+camp.route(/^\/codeclimate(\/(c|coverage|maintainability|issues|tech-debt)(-letter|-percentage)?)?\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];  // eg, `github/triAGENS/ashikawa-core`.
-  var format = match[2];
-  var options = {
-    method: 'HEAD',
-    uri: 'https://codeclimate.com/' + userRepo + '/coverage.png',
-  };
-  var badgeData = getBadgeData('coverage', data);
-  request(options, function(err, res) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var score = res.headers['content-disposition']
-                     .match(/filename=".*coverage_(.+)\.png"/)[1];
-      if (!score) {
-        badgeData.text[1] = 'malformed';
-        sendBadge(format, badgeData);
-        return;
-      }
-      var percentage = parseInt(score);
-      if (percentage !== percentage) {
-        // It is NaN, treat it as unknown.
-        badgeData.text[1] = 'unknown';
-        sendBadge(format, badgeData);
-        return;
-      }
-      badgeData.text[1] = score + '%';
-      badgeData.colorscheme = coveragePercentageColor(percentage);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'not found';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// Code Climate issues integration
-camp.route(/^\/codeclimate\/issues\/(.+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];  // eg, `github/me-and/mdf`.
-  var format = match[2];
-  var options = 'https://codeclimate.com/' + userRepo + '/badges/issue_count.svg';
-  var badgeData = getBadgeData('issues', data);
-  request(options, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var count = buffer.match(/>([0-9]+) issues?/)[1];
-      if (!count) {
-        badgeData.text[1] = 'malformed';
-        sendBadge(format, badgeData);
-        return;
-      }
-      badgeData.text[1] = count;
-      if (count == 0) {
-        badgeData.colorscheme = 'brightgreen';
-      } else if (count < 5) {
-        badgeData.colorscheme = 'green';
-      } else if (count < 10) {
-        badgeData.colorscheme = 'yellowgreen';
-      } else if (count < 20) {
-        badgeData.colorscheme = 'yellow';
-      } else {
-        badgeData.colorscheme = 'red';
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// New Code Climate scores (coverage + maintainability)
-camp.route(/^\/codeclimate\/(c|maintainability)\/(.+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  const isCoverage = match[1] === 'c';
-  const userRepo = match[2];  // eg, `kabisaict/flow`.
-  const format = match[3];
+  let type;
+  if (match[2] === 'c' || !match[2]) {
+    // Top-level and /coverage URLs equivalent to /c, still supported for backwards compatibility. See #1387.
+    type = 'coverage';
+  } else if (match[2] === 'tech-debt') {
+    type = 'technical debt';
+  } else {
+    type = match[2];
+  }
+  // For maintainability, default is letter, alternative is percentage. For coverage, default is percentage, alternative is letter.
+  const isAlternativeFormat = match[3];
+  const userRepo = match[4];  // eg, `twbs/bootstrap`.
+  const format = match[5];
   request({
       method: 'GET',
       uri: `https://api.codeclimate.com/v1/repos?github_slug=${userRepo}`,
       json: true
   }, function (err, res, body) {
-    const badgeData = getBadgeData(isCoverage ? 'coverage' : 'maintainability', data);
-
+    const badgeData = getBadgeData(type, data);
     if (err != null) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
@@ -2802,20 +2707,19 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = 'not found';
         sendBadge(format, badgeData);
         return;
-      } else if (isCoverage && body.data[0].relationships.latest_default_branch_test_report.data == null
-          || !isCoverage && body.data[0].relationships.latest_default_branch_snapshot.data == null) {
+      }
+
+      const branchData = type === 'coverage'
+        ? body.data[0].relationships.latest_default_branch_test_report.data
+        : body.data[0].relationships.latest_default_branch_snapshot.data;
+      if (branchData == null) {
         badgeData.text[1] = 'unknown';
         sendBadge(format, badgeData);
         return;
       }
 
-      let apiUrl = `https://api.codeclimate.com/v1/repos/${body.data[0].id}/`;
-      if (isCoverage) {
-        apiUrl += `test_reports/${body.data[0].relationships.latest_default_branch_test_report.data.id}`;
-      } else {
-        apiUrl += `snapshots/${body.data[0].relationships.latest_default_branch_snapshot.data.id}`;
-      }
-      request(apiUrl, function(err, res, buffer) {
+      const url = `https://api.codeclimate.com/v1/repos/${body.data[0].id}/${type === 'coverage' ? 'test_reports' : 'snapshots'}/${branchData.id}`;
+      request(url, function(err, res, buffer) {
         if (err != null) {
           badgeData.text[1] = 'invalid';
           sendBadge(format, badgeData);
@@ -2823,70 +2727,36 @@ cache(function(data, match, sendBadge, request) {
         }
 
         const parsedData = JSON.parse(buffer);
-        const score = isCoverage ? parsedData.data.attributes.rating.letter : parsedData.data.attributes.ratings[0].letter;
-        badgeData.text[1] = score;
-
-        if (score === 'A') {
-          badgeData.colorscheme = 'brightgreen';
-        } else if (score === 'B') {
-          badgeData.colorscheme = 'green';
-        } else if (score === 'C') {
-          badgeData.colorscheme = 'yellow';
-        } else if (score === 'D') {
-          badgeData.colorscheme = 'orange';
-        } else {
-          badgeData.colorscheme = 'red';
+        if (type === 'coverage' && isAlternativeFormat) {
+          const score = parsedData.data.attributes.rating.letter;
+          badgeData.text[1] = score;
+          badgeData.colorscheme = letterScoreColor(score);
+        } else if (type === 'coverage') {
+          const percentage = parseFloat(parsedData.data.attributes.covered_percent);
+          badgeData.text[1] = percentage.toFixed(0) + '%';
+          badgeData.colorscheme = coveragePercentageColor(percentage);
+        } else if (type === 'issues') {
+          const count = parsedData.data.meta.issues_count;
+          badgeData.text[1] = count;
+          badgeData.colorscheme = colorScale([1, 5, 10, 20], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(count);
+        } else if (type === 'technical debt') {
+          const percentage = parseFloat(parsedData.data.attributes.ratings[0].measure.value);
+          badgeData.text[1] = percentage.toFixed(0) + '%';
+          badgeData.colorscheme = colorScale([5, 10, 20, 50], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(percentage);
+        } else if (type === 'maintainability' && isAlternativeFormat) {
+          // maintainability = 100 - technical debt
+          const percentage = 100 - parseFloat(parsedData.data.attributes.ratings[0].measure.value);
+          badgeData.text[1] = percentage.toFixed(0) + '%';
+          badgeData.colorscheme = colorScale([50, 80, 90, 95], ['red', 'yellow', 'yellowgreen', 'green', 'brightgreen'])(percentage);
+        } else if (type === 'maintainability') {
+          const score = parsedData.data.attributes.ratings[0].letter;
+          badgeData.text[1] = score;
+          badgeData.colorscheme = letterScoreColor(score);
         }
         sendBadge(format, badgeData);
       });
     } catch(e) {
       badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// // Code Climate integration
-camp.route(/^\/codeclimate\/(.+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];  // eg, `github/kabisaict/flow`.
-  var format = match[2];
-  var options = {
-    method: 'HEAD',
-    uri: 'https://codeclimate.com/' + userRepo + '.png',
-  };
-  var badgeData = getBadgeData('code climate', data);
-  request(options, function(err, res) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var statusMatch = res.headers['content-disposition']
-                           .match(/filename=".*code_climate-(.+)\.png"/);
-      if (!statusMatch) {
-        badgeData.text[1] = 'unknown';
-        sendBadge(format, badgeData);
-        return;
-      }
-      var state = statusMatch[1].replace('-', '.');
-      var score = +state;
-      badgeData.text[1] = state;
-      if (score == 4) {
-        badgeData.colorscheme = 'brightgreen';
-      } else if (score > 3) {
-        badgeData.colorscheme = 'green';
-      } else if (score > 2) {
-        badgeData.colorscheme = 'yellow';
-      } else if (score > 1) {
-        badgeData.colorscheme = 'orange';
-      } else {
-        badgeData.colorscheme = 'red';
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'not found';
       sendBadge(format, badgeData);
     }
   });
@@ -3045,6 +2915,16 @@ cache(function(data, match, sendBadge, request) {
   request(options, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    } else if (res.statusCode === 500) {
+      /* note:
+      david returns a 500 response for 'not found'
+      e.g: https://david-dm.org/foo/barbaz/info.json
+      not a 404 so we can't handle 'not found' cleanly
+      because this might also be some other error.
+      */
+      badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
       return;
     }
@@ -3207,7 +3087,7 @@ cache(function(data, match, sendBadge, request) {
     queryParams.branch = branch;
   }
   var query = queryString.stringify(queryParams);
-  var url = 'https://www.codacy.com/project/badge/grade/' + projectId + '?' + query;
+  var url = 'https://api.codacy.com/project/badge/grade/' + projectId + '?' + query;
   var badgeData = getBadgeData('code quality', data);
   fetchFromSvg(request, url, function(err, res) {
     if (err != null) {
@@ -3371,7 +3251,7 @@ cache(function(data, match, sendBadge, request) {
     queryParams.branch = branch;
   }
   var query = queryString.stringify(queryParams);
-  var url = 'https://www.codacy.com/project/badge/coverage/' + projectId + '?' + query;
+  var url = 'https://api.codacy.com/project/badge/coverage/' + projectId + '?' + query;
   var badgeData = getBadgeData('coverage', data);
   fetchFromSvg(request, url, function(err, res) {
     if (err != null) {
@@ -3502,11 +3382,11 @@ cache(function(data, match, sendBadge, request) {
   var spec = match[2];  // eg, AFNetworking
   var format = match[3];
   var apiUrl = 'https://trunk.cocoapods.org/api/v1/pods/' + spec + '/specs/latest';
-  var badgeData = getBadgeData('pod', data);
+  const typeToLabel = {'v' : 'pod', 'p': 'platform', 'l': 'license'};
+  const badgeData = getBadgeData(typeToLabel[type], data);
   badgeData.colorscheme = null;
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3526,11 +3406,9 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = versionText(version);
         badgeData.colorscheme = versionColor(version);
       } else if (type === 'p') {
-        badgeData.text[0] = getLabel('platform', data);
         badgeData.text[1] = platforms;
         badgeData.colorB = '#989898';
       } else if (type === 'l') {
-        badgeData.text[0] = getLabel('license', data);
         badgeData.text[1] = license;
         badgeData.colorB = '#373737';
       }
@@ -3548,19 +3426,20 @@ camp.route(/^\/cocoapods\/metrics\/doc-percent\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var spec = match[1];  // eg, AFNetworking
   var format = match[2];
-  var apiUrl = 'http://metrics.cocoapods.org/api/v1/pods/' + spec;
-  var badgeData = getBadgeData('pod', data);
+  var apiUrl = 'https://metrics.cocoapods.org/api/v1/pods/' + spec;
+  var badgeData = getBadgeData('docs', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
     try {
       var parsedData = JSON.parse(buffer);
       var percentage = parsedData.cocoadocs.doc_percent;
+      if (percentage == null) {
+        percentage = 0;
+      }
       badgeData.colorscheme = coveragePercentageColor(percentage);
-      badgeData.text[0] = getLabel('docs', data);
       badgeData.text[1] = percentage + '%';
       sendBadge(format, badgeData);
     } catch(e) {
@@ -3576,11 +3455,10 @@ cache(function(data, match, sendBadge, request) {
   var info = match[1]; // One of these: "dm", "dw", "dt"
   var spec = match[2];  // eg, AFNetworking
   var format = match[3];
-  var apiUrl = 'http://metrics.cocoapods.org/api/v1/pods/' + spec;
+  var apiUrl = 'https://metrics.cocoapods.org/api/v1/pods/' + spec;
   var badgeData = getBadgeData('downloads', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3616,11 +3494,10 @@ cache(function(data, match, sendBadge, request) {
   var info = match[1]; // One of these: "aw", "at"
   var spec = match[2];  // eg, AFNetworking
   var format = match[3];
-  var apiUrl = 'http://metrics.cocoapods.org/api/v1/pods/' + spec;
+  var apiUrl = 'https://metrics.cocoapods.org/api/v1/pods/' + spec;
   var badgeData = getBadgeData('apps', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -6244,13 +6121,15 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://hub.docker.com/v2/repositories/' + path + '/stars/count/';
   var badgeData = getBadgeData('docker stars', data);
   request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
     try {
-      var stars = +("" + buffer);
+      const stars = parseInt(buffer, 10);
+      if (Number.isNaN(stars)) {
+        throw Error('Unexpected response.');
+      }
       badgeData.text[1] = metric(stars);
       badgeData.colorscheme = null;
       badgeData.colorB = data.colorB || '#008bb8';
@@ -6275,8 +6154,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://hub.docker.com/v2/repositories/' + path;
   var badgeData = getBadgeData('docker pulls', data);
   request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -6308,8 +6186,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://registry.hub.docker.com/v2/repositories/' + path;
   var badgeData = getBadgeData('docker build', data);
   request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -6345,17 +6222,11 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://registry.hub.docker.com/v2/repositories/' + path + '/buildhistory';
   var badgeData = getBadgeData('docker build', data);
   request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
     try {
-      if (res.statusCode == 404) {
-        badgeData.text[1] = 'repo not found';
-        sendBadge(format, badgeData);
-        return;
-      }
       var data = JSON.parse(buffer);
       var most_recent_status = data.results[0].status;
       if (most_recent_status == 10) {
@@ -6641,8 +6512,7 @@ cache(function(data, match, sendBadge, request) {
 
   var badgeData = getBadgeData('homebrew', data);
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -7606,6 +7476,7 @@ cache({
     var badgeData = getBadgeData('custom badge', query);
 
     if (!query.uri){
+      setBadgeColor(badgeData, 'red');
       badgeData.text[1] = 'no uri specified';
       sendBadge(format, badgeData);
       return;
@@ -7620,14 +7491,20 @@ cache({
         if (err != null || !res || res.statusCode !== 200)
           throw 'inaccessible';
 
+        badgeData.colorscheme = 'brightgreen';
+
         switch (type){
           case 'json':
             data = (typeof data == 'object' ? data : JSON.parse(data));
-            badgeData.text[1] = (prefix || '') + jp.query(data, pathExpression).join(', ') + (suffix || '');
+            var jsonpath = jp.query(data, pathExpression);
+            if (!jsonpath.length)
+              throw 'no result';
+            var innerText = jsonpath.join(', ');
+            badgeData.text[1] = (prefix || '') + innerText + (suffix || '');
             break;
         }
       } catch(e) {
-        badgeData.colorB = 'lightgrey';
+        setBadgeColor(badgeData, 'lightgrey');
         badgeData.text[1] = e;
       } finally {
         sendBadge(format, badgeData);
@@ -7733,6 +7610,61 @@ camp.route(/^\/nsp\/npm\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|j
   } else {
     getNpmVersionThenNspResults(capturedScopeWithoutAtSign, capturedPackageName);
   }
+}));
+
+// bundle size for npm packages
+camp.route(/^\/bundlephobia\/(min|minzip)\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|jpg|json)?$/,
+  cache((data, match, sendBadge, request) => {
+  // A: /bundlephobia/(min|minzip)/:package.:format
+  // B: /bundlephobia/(min|minzip)/:package/:version.:format
+  // C: /bundlephobia/(min|minzip)/@:scope/:package.:format
+  // D: /bundlephobia/(min|minzip)/@:scope/:package/:version.:format
+  const resultType = match[1];
+  const scope = match[2];
+  const packageName = match[3];
+  const packageVersion = match[4];
+  const format = match[5];
+  const showMin = resultType === 'min';
+
+  const badgeData = getBadgeData(showMin ? 'minified size' : 'minzipped size', data);
+
+  let packageString = typeof scope === 'string' ?
+    `@${scope}/${packageName}` : packageName;
+
+  if(packageVersion) {
+    packageString += `@${packageVersion}`;
+  }
+
+  const requestOptions = {
+    url: 'https://bundlephobia.com/api/size',
+    qs: {
+      package: packageString,
+    },
+    json: true,
+  };
+
+  /**
+   * `ErrorCode` => `error code`
+   * @param {string} code
+   * @returns {string}
+   */
+  const formatErrorCode = (code) =>
+    code.replace(/([A-Z])/g, ' $1').trim().toLowerCase();
+
+  request(requestOptions, (error, response, body) => {
+    if(typeof body !== 'object' || body === null) {
+      badgeData.text[1] = 'error';
+      badgeData.colorscheme = 'red';
+    } else if (error !== null || body.error) {
+      badgeData.text[1] = 'code' in body.error ?
+        formatErrorCode(body.error.code) : 'error';
+      badgeData.colorscheme = 'red';
+    } else {
+      badgeData.text[1] = prettyBytes(showMin ? body.size : body.gzip);
+      badgeData.colorscheme = 'blue';
+    }
+    sendBadge(format, badgeData);
+  });
 }));
 
 // Redmine plugin rating.
