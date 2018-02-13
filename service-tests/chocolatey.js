@@ -12,6 +12,7 @@ const {
   versionJsonFirstCharZero,
   versionJsonFirstCharNotZero
 } = require('./helpers/nuget-fixtures.js');
+const { invalidJSON } = require('./helpers/response-fixtures');
 
 const t = new ServiceTester({ id: 'chocolatey', title: 'Chocolatey' });
 module.exports = t;
@@ -39,7 +40,7 @@ t.create('total downloads (unexpected response)')
   .get('/dt/scriptcs.json')
   .intercept(nock => nock('https://www.chocolatey.org')
     .get("/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true")
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'chocolatey', value: 'invalid'});
 
@@ -102,7 +103,7 @@ t.create('version (unexpected response)')
   .get('/v/scriptcs.json')
   .intercept(nock => nock('https://www.chocolatey.org')
     .get("/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true")
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'chocolatey', value: 'invalid'});
 
@@ -165,6 +166,6 @@ t.create('version (pre) (unexpected response)')
   .get('/vpre/scriptcs.json')
   .intercept(nock => nock('https://www.chocolatey.org')
     .get("/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsAbsoluteLatestVersion%20eq%20true")
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'chocolatey', value: 'invalid'});
