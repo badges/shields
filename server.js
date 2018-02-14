@@ -7508,16 +7508,10 @@ cache({
           case 'xml':
             data = new dom().parseFromString(data);
             var xpathdata = xpath.select(pathExpression, data, true);
-            try {
+            if (xpathdata) {
               badgeData.text[1] = (prefix || '') + (pathExpression.indexOf('@') + 1 ? xpathdata.value : xpathdata.firstChild.data) + (suffix || '');
-            } catch (e) {
-              switch (e.toString()){
-                case "TypeError: Cannot read property 'value' of undefined":
-                case "TypeError: Cannot read property 'firstChild' of undefined":
-                  throw 'no result';
-                default:
-                  throw e;
-              }
+            } else {
+              throw 'no result';
             }
         }
       } catch (e) {
