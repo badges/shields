@@ -7494,24 +7494,28 @@ cache({
 
         badgeData.colorscheme = 'brightgreen';
 
+        let innerText = [];
         switch (type){
           case 'json':
             data = (typeof data == 'object' ? data : JSON.parse(data));
-            var jsonpath = jp.query(data, pathExpression);
-            if (!jsonpath.length)
+            data = jp.query(data, pathExpression);
+            if (!data.length) {
               throw 'no result';
-            var innerText = jsonpath.join(', ');
-            badgeData.text[1] = (prefix || '') + innerText + (suffix || '');
+            }
+            innerText = data;
             break;
           case 'xml':
             data = new dom().parseFromString(data);
-            var xpathdata = xpath.select(pathExpression, data, true);
-            if (xpathdata) {
-              badgeData.text[1] = (prefix || '') + (pathExpression.indexOf('@') + 1 ? xpathdata.value : xpathdata.firstChild.data) + (suffix || '');
-            } else {
+            data = xpath.select(pathExpression, data);
+            if (!data.length) {
               throw 'no result';
             }
+            data.forEach((i,v)=>{
+              innerText.push(pathExpression.indexOf('@') + 1 ? i.value : i.firstChild.data);
+            });
+            break;
         }
+        badgeData.text[1] = (prefix || '') + innerText.join(', ') + (suffix || '');
       } catch (e) {
         setBadgeColor(badgeData, 'lightgrey');
         badgeData.text[1] = e;

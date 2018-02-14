@@ -38,6 +38,13 @@ t.create('XML from uri (attribute)')
     value: Joi.string().regex(/^\d+$/)
   }));
 
+t.create('XML from uri | multiple results')
+  .get('.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=//name')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'custom badge',
+    value: Joi.string().regex(/^.+,\s.+$/)
+  }));
+
 t.create('XML from uri | caching with new query params')
   .get('.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/version')
   .expectJSONTypes(Joi.object().keys({
@@ -65,7 +72,7 @@ t.create('XML from uri | invalid uri')
   .expectJSON({ name: 'custom badge', value: 'uri not found', colorB: colorsB.lightgrey });
 
 t.create('XML from uri | user color overrides default')
-  .get('.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=//name&colorB=10ADED&style=_shields_test')
+  .get('.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/name&colorB=10ADED&style=_shields_test')
   .expectJSON({ name: 'custom badge', value: 'IndieGala Helper', colorB: '#10ADED' });
 
 t.create('XML from uri | error color overrides default')
