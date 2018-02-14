@@ -2,6 +2,10 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
+const {
+  isSemver,
+} = require('./helpers/validators');
+
 const colorscheme = require('../lib/colorscheme.json');
 const mapValues = require('lodash.mapvalues');
 
@@ -27,22 +31,33 @@ t.create('XML from uri')
   .get('.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/name&style=_shields_test')
   .expectJSON({ name: 'custom badge', value: 'IndieGala Helper', colorB: colorsB.brightgreen });
 
+t.create('XML from uri (attribute)')
+  .get('.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/reviews/@num')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'custom badge',
+    value: Joi.string().regex(/^\d+$/)
+  }));
+
 t.create('XML from uri | caching with new query params')
   .get('.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/version')
   .expectJSONTypes(Joi.object().keys({
     name: 'custom badge',
-    value: Joi.string().regex(/^\d+(\.\d+)?(\.\d+)?$/)
+    value: isSemver
   }));
 
 t.create('XML from uri | with prefix & suffix & label')
-  .get('.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=//version&prefix=v&suffix= dev&label=Shields')
+  .get('.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=//version&prefix=v&suffix= dev&label=IndieGala Helper')
   .expectJSONTypes(Joi.object().keys({
-    name: 'Shields',
+    name: 'IndieGala Helper',
     value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?\sdev$/)
   }));
 
-t.create('XML from uri | object doesnt exist')
+t.create('XML from uri | query doesnt exist')
   .get('.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/does/not/exist&style=_shields_test')
+  .expectJSON({ name: 'custom badge', value: 'no result', colorB: colorsB.lightgrey });
+
+t.create('XML from uri | query doesnt exist (attribute)')
+  .get('.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/does/not/@exist&style=_shields_test')
   .expectJSON({ name: 'custom badge', value: 'no result', colorB: colorsB.lightgrey });
 
 t.create('XML from uri | invalid uri')
