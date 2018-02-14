@@ -13,7 +13,7 @@ module.exports = t;
 t.create('Connection error')
   .get('.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.name&label=Package Name&style=_shields_test')
   .networkOff()
-  .expectJSON({ name: 'Package Name', value: 'inaccessible', colorB: colorsB.lightgrey });
+  .expectJSON({ name: 'Package Name', value: 'inaccessible', colorB: colorsB.red });
 
 t.create('No URI specified')
   .get('.json?query=$.name&label=Package Name&style=_shields_test')
@@ -47,7 +47,7 @@ t.create('JSON from uri | object doesnt exist')
 
 t.create('JSON from uri | invalid uri')
   .get('.json?uri=https://github.com/badges/shields/raw/master/notafile.json&query=$.version&style=_shields_test')
-  .expectJSON({ name: 'custom badge', value: 'invalid resource', colorB: colorsB.lightgrey });
+  .expectJSON({ name: 'custom badge', value: 'uri not found', colorB: colorsB.lightgrey });
 
 t.create('JSON from uri | user color overrides default')
   .get('.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.name&colorB=10ADED&style=_shields_test')
@@ -55,7 +55,7 @@ t.create('JSON from uri | user color overrides default')
 
 t.create('JSON from uri | error color overrides default')
   .get('.json?uri=https://github.com/badges/shields/raw/master/notafile.json&query=$.version&style=_shields_test')
-  .expectJSON({ name: 'custom badge', value: 'invalid resource', colorB: colorsB.lightgrey });
+  .expectJSON({ name: 'custom badge', value: 'uri not found', colorB: colorsB.lightgrey });
 
 t.create('JSON from uri | error color overrides user specified')
   .get('.json?query=$.version&colorB=10ADED&style=_shields_test')

@@ -13,7 +13,7 @@ module.exports = t;
 t.create('Connection error')
   .get('.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/name&label=Package Name&style=_shields_test')
   .networkOff()
-  .expectJSON({ name: 'Package Name', value: 'inaccessible', colorB: colorsB.lightgrey });
+  .expectJSON({ name: 'Package Name', value: 'inaccessible', colorB: colorsB.red });
 
 t.create('No URI specified')
   .get('.json?query=//name&label=Package Name&style=_shields_test')
@@ -47,7 +47,7 @@ t.create('XML from uri | object doesnt exist')
 
 t.create('XML from uri | invalid uri')
   .get('.json?uri=https://github.com/badges/shields/raw/master/notafile.xml&query=//version&style=_shields_test')
-  .expectJSON({ name: 'custom badge', value: 'invalid resource', colorB: colorsB.lightgrey });
+  .expectJSON({ name: 'custom badge', value: 'uri not found', colorB: colorsB.lightgrey });
 
 t.create('XML from uri | user color overrides default')
   .get('.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=//name&colorB=10ADED&style=_shields_test')
@@ -55,7 +55,7 @@ t.create('XML from uri | user color overrides default')
 
 t.create('XML from uri | error color overrides default')
   .get('.json?uri=https://github.com/badges/shields/raw/master/notafile.xml&query=//version&style=_shields_test')
-  .expectJSON({ name: 'custom badge', value: 'invalid resource', colorB: colorsB.lightgrey });
+  .expectJSON({ name: 'custom badge', value: 'uri not found', colorB: colorsB.lightgrey });
 
 t.create('XML from uri | error color overrides user specified')
   .get('.json?query=//version&colorB=10ADED&style=_shields_test')

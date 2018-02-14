@@ -7488,11 +7488,9 @@ cache({
 
     request(uri, (err, res, data) => {
       try {
-        if (res && res.statusCode === 404)
-          throw 'invalid resource';
-
-        if (err != null || !res || res.statusCode !== 200)
-          throw 'inaccessible';
+        if (checkErrorResponse(badgeData, err, res, 'uri not found')) {
+          return;
+        }
 
         badgeData.colorscheme = 'brightgreen';
 
