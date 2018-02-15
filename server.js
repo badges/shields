@@ -2048,7 +2048,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // iTunes App Store version
-camp.route(/^\/itunes\/v\/(?:(.+)\/)?(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/itunes\/v\/(?:(.+)\/)?(.+)\.(svg|png|gif|jpg|json)$/),
 cache(function(data, match, sendBadge, request) {
   var region = match[1] // eg, `us`
   var bundleId = match[2];  // eg, `324684580`
@@ -2056,9 +2056,10 @@ cache(function(data, match, sendBadge, request) {
 
   if (region !== "") {
     var apiUrl = 'https://itunes.apple.com/lookup?id=' + bundleId;
+  } else {
+    var apiUrl = 'https://itunes.apple.com/' + region + '/lookup?id=' + bundleId;
   }
 
-  var apiUrl = 'https://itunes.apple.com/' + region + '/lookup?id=' + bundleId;
   var badgeData = getBadgeData('itunes app store', data);
 
   request(apiUrl, function(err, res, buffer) {
