@@ -7488,7 +7488,7 @@ cache({
 
     request(uri, (err, res, data) => {
       try {
-        if (checkErrorResponse(badgeData, err, res, 'uri not found')) {
+        if (checkErrorResponse(badgeData, err, res, 'resource not found')) {
           return;
         }
 
