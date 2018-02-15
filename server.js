@@ -2054,11 +2054,9 @@ cache(function(data, match, sendBadge, request) {
   var bundleId = match[2];  // eg, `324684580`
   var format = match[3];
 
-  if (region !== "") {
-    var apiUrl = 'https://itunes.apple.com/lookup?id=' + bundleId;
-  } else {
-    var apiUrl = 'https://itunes.apple.com/' + region + '/lookup?id=' + bundleId;
-  }
+  var apiUrl = (region == '')
+    ? 'https://itunes.apple.com/lookup?id=' + bundleId
+    : 'https://itunes.apple.com/' + region + '/lookup?id=' + bundleId;
 
   var badgeData = getBadgeData('itunes app store', data);
 
