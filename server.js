@@ -2048,9 +2048,9 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // iTunes App Store version
-camp.route(/^\/itunes\/v\/(?:(.+)\/)?(.+)\.(svg|png|gif|jpg|json)$/),
+camp.route(/^\/itunes\/v\/(?:(.+)\/)?(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var region = match[1] // eg, `us`
+  var region = match[1]; // eg, `us`
   var bundleId = match[2];  // eg, `324684580`
   var format = match[3];
 
