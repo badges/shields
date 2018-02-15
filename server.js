@@ -3292,7 +3292,7 @@ cache(function(data, match, sendBadge, request) {
       // We don't have to check length of versionLines, because if we throw,
       // we'll render the 'invalid' badge below, which is the correct thing
       // to do.
-      var version = versionLines[0].replace(/\s+/, '').split(/:/)[1];
+      var version = versionLines[0].split(/:/)[1].trim();
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
