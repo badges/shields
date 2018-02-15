@@ -3308,7 +3308,7 @@ camp.route(/^\/hackage-deps\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const repo = match[1];  // eg, `lens`.
   const format = match[2];
-  const reverseUrl = 'http://packdeps.haskellers.com/reverse/' + repo;
+  const reverseUrl = 'http://packdeps.haskellers.com/licenses/' + repo;
   const feedUrl = 'http://packdeps.haskellers.com/feed/' + repo;
   const badgeData = getBadgeData('dependencies', data);
 
