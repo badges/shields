@@ -28,11 +28,8 @@ t.create('JSON from uri')
   .expectJSON({ name: 'custom badge', value: 'gh-badges', colorB: colorsB.brightgreen });
 
 t.create('JSON from uri | multiple results')
-  .get('.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$..keywords[0:10:1]')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'custom badge',
-    value: Joi.string().regex(/^.+,\s.+$/)
-  }));
+  .get('.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$..keywords[0:2:1]')
+  .expectJSON({ name: 'custom badge', value: 'GitHub, badge' });
 
 t.create('JSON from uri | caching with new query params')
   .get('.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.version')

@@ -39,10 +39,10 @@ t.create('XML from uri (attribute)')
   }));
 
 t.create('XML from uri | multiple results')
-  .get('.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=//name')
+  .get('.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/compatible_applications/application/name')
   .expectJSONTypes(Joi.object().keys({
     name: 'custom badge',
-    value: Joi.string().regex(/^.+,\s.+$/)
+    value: Joi.string().regex(/^Firefox( for Android)?,\sFirefox( for Android)?$/)
   }));
 
 t.create('XML from uri | caching with new query params')
