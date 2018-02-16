@@ -1298,12 +1298,15 @@ cache(function(data, match, sendBadge, request) {
 camp.route(/^\/hhvm\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const user = match[1];  // eg, `symfony/symfony`.
-  const branch = match[2]
+  let branch = match[2]
     ? omitv(match[2])
     : 'dev-master';
   const format = match[3];
   const apiUrl = 'https://php-eye.com/api/v1/package/'+user+'.json';
   let badgeData = getBadgeData('hhvm', data);
+  if (branch === 'master') {
+    branch = 'dev-master';
+  }
   request(apiUrl, function dealWithData(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
