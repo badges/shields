@@ -1330,7 +1330,6 @@ cache(function(data, match, sendBadge, request) {
             badgeData.colorscheme = 'yellow';
             badgeData.text[1] = 'partially tested';
             break;
-          }
           case 3:
             // tested`
             badgeData.colorscheme = 'brightgreen';
