@@ -1295,10 +1295,12 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // HHVM integration.
-camp.route(/^\/hhvm\/([^/]+\/[^/]+)(\/.+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/hhvm\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const user = match[1];  // eg, `symfony/symfony`.
-  const branch = match[2] || 'dev-master';// eg, `/2.4.0.0`.
+  const branch = match[2]
+    ? omitv(match[2])
+    : 'dev-master';
   const format = match[3];
   const apiUrl = 'https://php-eye.com/api/v1/package/'+user+'.json';
   let badgeData = getBadgeData('hhvm', data);
@@ -1311,28 +1313,35 @@ cache(function(data, match, sendBadge, request) {
     try {
       let data = JSON.parse(buffer);
       let verInfo = {};
+      badgeData.text[1] = 'invalid';
+      if (!data.versions) {
+        throw Error('Unexpected response.');
+      }
       for (let i = 0, count = data.versions.length; i < count; i++) {
         verInfo = data.versions[i];
         if (verInfo.name === branch) {
-          switch (verInfo.travis.hhvm) {
-            case 0:
-              // unknown/no config file
-              badgeData.text[1] = 'maybe untested';
-              break;
-            case 1:
-              // not tested
-              badgeData.colorscheme = 'red';
-              badgeData.text[1] = 'not tested';
+          if (!verInfo.travis.runtime_status) {
+            throw Error('Unexpected response.');
+          }
+          switch (verInfo.travis.runtime_status.hhvm) {
+            case 3:
+              // tested`
+              badgeData.colorscheme = 'brightgreen';
+              badgeData.text[1] = 'tested';
               break;
             case 2:
               // allowed failure
               badgeData.colorscheme = 'yellow';
               badgeData.text[1] = 'partially tested';
               break;
-            case 3:
-              // tested`
-              badgeData.colorscheme = 'brightgreen';
-              badgeData.text[1] = 'tested';
+            case 1:
+              // not tested
+              badgeData.colorscheme = 'red';
+              badgeData.text[1] = 'not tested';
+              break;
+            case 0:
+              // unknown/no config file
+              badgeData.text[1] = 'maybe untested';
               break;
           }
           break;
