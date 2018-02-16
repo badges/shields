@@ -1300,12 +1300,9 @@ cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, `symfony/symfony`.
   var branch = match[2];// eg, `/2.4.0.0`.
   var format = match[3];
-  var apiUrl = 'http://hhvm.h4cc.de/badge/' + user + '.json';
-  if (branch) {
-    // Remove the leading slash.
-    apiUrl += '?branch=' + branch.slice(1);
-  }
+  var apiUrl = 'https://php-eye.com/api/v1/package/'+user+'.json';
   var badgeData = getBadgeData('hhvm', data);
+  branch = branch || 'dev-master';
   request(apiUrl, function dealWithData(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -1314,18 +1311,30 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var status = data.hhvm_status;
-      if (status === 'not_tested') {
-        badgeData.colorscheme = 'red';
-        badgeData.text[1] = 'not tested';
-      } else if (status === 'partial') {
-        badgeData.colorscheme = 'yellow';
-        badgeData.text[1] = 'partially tested';
-      } else if (status === 'tested') {
-        badgeData.colorscheme = 'brightgreen';
-        badgeData.text[1] = 'tested';
-      } else {
-        badgeData.text[1] = 'maybe untested';
+      var verInfo = {};
+      for (var i = 0, count = data.versions.length; i < count, i++) {
+        verInfo = data.versions[i];
+        if (verInfo.name == branch) {
+          switch (verInfo.travis.hhvm) {
+          case '0':
+            // unknown/no config file
+            badgeData.text[1] = 'maybe untested';
+          case '1':
+            // not tested
+            badgeData.colorscheme = 'red';
+            badgeData.text[1] = 'not tested';
+          case '2':
+            // allowed failure
+            badgeData.colorscheme = 'yellow';
+            badgeData.text[1] = 'partially tested';
+          }
+          case '2':
+            // tested`
+            badgeData.colorscheme = 'brightgreen';
+            badgeData.text[1] = 'tested';
+          }
+          break;
+        }
       }
       sendBadge(format, badgeData);
     } catch(e) {
