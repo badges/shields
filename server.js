@@ -1312,7 +1312,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var verInfo = {};
-      for (var i = 0, count = data.versions.length; i < count, i++) {
+      for (var i = 0, count = data.versions.length; i < count; i++) {
         verInfo = data.versions[i];
         if (verInfo.name == branch) {
           switch (verInfo.travis.hhvm) {
