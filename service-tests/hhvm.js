@@ -2,9 +2,6 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
-const { invalidJSON } = require('./helpers/response-fixtures');
-
-// const isBuildStatus = Joi.string().regex(/^(waiting|queued|processing|success|skipped|unstable|timeout|cancelled|failed|stopped)$/);
 
 const t = new ServiceTester({ id: 'hhvm', title: 'hhvm status' });
 module.exports = t;
