@@ -1316,22 +1316,26 @@ cache(function(data, match, sendBadge, request) {
         verInfo = data.versions[i];
         if (verInfo.name == branch) {
           switch (verInfo.travis.hhvm) {
-          case '0':
+          case 0:
             // unknown/no config file
             badgeData.text[1] = 'maybe untested';
-          case '1':
+            break;
+          case 1:
             // not tested
             badgeData.colorscheme = 'red';
             badgeData.text[1] = 'not tested';
-          case '2':
+            break;
+          case 2:
             // allowed failure
             badgeData.colorscheme = 'yellow';
             badgeData.text[1] = 'partially tested';
+            break;
           }
-          case '2':
+          case 3:
             // tested`
             badgeData.colorscheme = 'brightgreen';
             badgeData.text[1] = 'tested';
+            break;
           }
           break;
         }
