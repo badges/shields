@@ -3292,7 +3292,7 @@ cache(function(data, match, sendBadge, request) {
       // We don't have to check length of versionLines, because if we throw,
       // we'll render the 'invalid' badge below, which is the correct thing
       // to do.
-      var version = versionLines[0].replace(/\s+/, '').split(/:/)[1];
+      var version = versionLines[0].split(/:/)[1].trim();
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
@@ -3308,7 +3308,7 @@ camp.route(/^\/hackage-deps\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const repo = match[1];  // eg, `lens`.
   const format = match[2];
-  const reverseUrl = 'http://packdeps.haskellers.com/reverse/' + repo;
+  const reverseUrl = 'http://packdeps.haskellers.com/licenses/' + repo;
   const feedUrl = 'http://packdeps.haskellers.com/feed/' + repo;
   const badgeData = getBadgeData('dependencies', data);
 
