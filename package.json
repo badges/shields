@@ -103,7 +103,7 @@
     "dejavu-fonts-ttf": "^2.37.3",
     "eslint": "^4.8.0",
     "eslint-config-prettier": "^2.6.0",
-    "eslint-config-standard": "^10.2.1",
+    "eslint-config-standard": "^11.0.0",
     "eslint-config-standard-jsx": "^4.0.2",
     "eslint-config-standard-react": "^5.0.0",
     "eslint-plugin-chai-friendly": "^0.4.1",
