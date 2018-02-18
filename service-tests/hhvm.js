@@ -2,31 +2,45 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
+const { invalidJSON } = require('./helpers/response-fixtures');
 
 const t = new ServiceTester({ id: 'hhvm', title: 'hhvm status' });
+
+const isAllowedStatus = Joi.string().regex(/^(tested|partially tested|not tested|maybe untested)$/);
+
 module.exports = t;
 
-t.create('get symfony status (default branch - not tested)')
+t.create('get default branch')
     .get('/symfony/symfony.json')
-    .expectJSONTypes(Joi.object().keys({ name: 'hhvm', value: 'not tested' }));
+    .expectJSONTypes(Joi.object().keys({
+      name: 'hhvm',
+      value: isAllowedStatus
+    }));
 
-t.create('get yii status (default branch - partially tested)')
-    .get('/yiisoft/yii.json')
-    .expectJSON({ name: 'hhvm', value: 'partially tested' });
-
-t.create('gets yii 1.1.19 status')
+t.create('get specific branch')
     .get('/yiisoft/yii/1.1.19.json')
-    .expectJSON({ name: 'hhvm', value: 'partially tested' });
+    .expectJSONTypes(Joi.object().keys({
+      name: 'hhvm',
+      value: isAllowedStatus
+    }));
 
-t.create('gets yii 1.1.666 status (invalid branch)')
-    .get('/yiisoft/yii/1.1.666.json')
-    .expectJSON({ name: 'hhvm', value: 'invalid' });
-
-t.create('invalid package name')
+t.create('invalid repo')
     .get('/frodo/is-not-a-package.json')
-    .expectJSON({ name: 'hhvm', value: 'invalid' });
+    .expectJSON({ name: 'hhvm', value: 'repo not found' });
 
-t.create('hhvm status (connection error)')
-  .get('/frodo/is-not-a-package.json')
+t.create('invalid branch')
+    .get('/yiisoft/yii/1.1.666.json')
+    .expectJSON({ name: 'hhvm', value: 'branch not found' });
+
+t.create('connection error')
+  .get('/symfony/symfony.json')
   .networkOff()
   .expectJSON({name: 'hhvm', value: 'inaccessible'});
+
+t.create('unexpected response')
+   .get('/symfony/symfony.json')
+   .intercept(nock => nock('https://php-eye.com')
+     .get('/api/v1/package/symfony/symfony.json')
+     .reply(invalidJSON)
+   )
+   .expectJSON({name: 'hhvm', value: 'invalid'});

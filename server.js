@@ -1308,18 +1308,17 @@ cache(function(data, match, sendBadge, request) {
     branch = 'dev-master';
   }
   request(apiUrl, function dealWithData(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
     try {
       let data = JSON.parse(buffer);
       let verInfo = {};
-      badgeData.text[1] = 'invalid';
       if (!data.versions) {
         throw Error('Unexpected response.');
       }
+      badgeData.text[1] = 'branch not found';
       for (let i = 0, count = data.versions.length; i < count; i++) {
         verInfo = data.versions[i];
         if (verInfo.name === branch) {
