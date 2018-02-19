@@ -1295,37 +1295,59 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // HHVM integration.
-camp.route(/^\/hhvm\/([^/]+\/[^/]+)(\/.+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/hhvm\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, `symfony/symfony`.
-  var branch = match[2];// eg, `/2.4.0.0`.
-  var format = match[3];
-  var apiUrl = 'http://hhvm.h4cc.de/badge/' + user + '.json';
-  if (branch) {
-    // Remove the leading slash.
-    apiUrl += '?branch=' + branch.slice(1);
+  const user = match[1];  // eg, `symfony/symfony`.
+  let branch = match[2]
+    ? omitv(match[2])
+    : 'dev-master';
+  const format = match[3];
+  const apiUrl = 'https://php-eye.com/api/v1/package/'+user+'.json';
+  let badgeData = getBadgeData('hhvm', data);
+  if (branch === 'master') {
+    branch = 'dev-master';
   }
-  var badgeData = getBadgeData('hhvm', data);
   request(apiUrl, function dealWithData(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      var status = data.hhvm_status;
-      if (status === 'not_tested') {
-        badgeData.colorscheme = 'red';
-        badgeData.text[1] = 'not tested';
-      } else if (status === 'partial') {
-        badgeData.colorscheme = 'yellow';
-        badgeData.text[1] = 'partially tested';
-      } else if (status === 'tested') {
-        badgeData.colorscheme = 'brightgreen';
-        badgeData.text[1] = 'tested';
-      } else {
-        badgeData.text[1] = 'maybe untested';
+      let data = JSON.parse(buffer);
+      let verInfo = {};
+      if (!data.versions) {
+        throw Error('Unexpected response.');
+      }
+      badgeData.text[1] = 'branch not found';
+      for (let i = 0, count = data.versions.length; i < count; i++) {
+        verInfo = data.versions[i];
+        if (verInfo.name === branch) {
+          if (!verInfo.travis.runtime_status) {
+            throw Error('Unexpected response.');
+          }
+          switch (verInfo.travis.runtime_status.hhvm) {
+            case 3:
+              // tested`
+              badgeData.colorscheme = 'brightgreen';
+              badgeData.text[1] = 'tested';
+              break;
+            case 2:
+              // allowed failure
+              badgeData.colorscheme = 'yellow';
+              badgeData.text[1] = 'partially tested';
+              break;
+            case 1:
+              // not tested
+              badgeData.colorscheme = 'red';
+              badgeData.text[1] = 'not tested';
+              break;
+            case 0:
+              // unknown/no config file
+              badgeData.text[1] = 'maybe untested';
+              break;
+          }
+          break;
+        }
       }
       sendBadge(format, badgeData);
     } catch(e) {
