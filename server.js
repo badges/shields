@@ -4461,32 +4461,28 @@ cache(function(data, match, sendBadge, request) {
 // Bitbucket Pipelines integration.
 camp.route(/^\/bitbucket\/pipelines\/([^/]+)\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, atlassian
-  var repo = match[2];  // eg, adf-builder-javascript
-  var branch = match[3] || 'master';  // eg, development
-  var format = match[4];
-  var apiUrl = 'https://api.bitbucket.org/2.0/repositories/'
+  const user = match[1];  // eg, atlassian
+  const repo = match[2];  // eg, adf-builder-javascript
+  const branch = match[3] || 'master';  // eg, development
+  const format = match[4];
+  const apiUrl = 'https://api.bitbucket.org/2.0/repositories/'
     + encodeURIComponent(user) + '/' + encodeURIComponent(repo)
     + '/pipelines/?fields=values.state&page=1&pagelen=2&sort=-created_on'
     + '&target.ref_type=BRANCH&target.ref_name=' + encodeURIComponent(branch);
 
-  var badgeData = getBadgeData('build', data);
+  const badgeData = getBadgeData('build', data);
 
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
     try {
-      if (res.statusCode !== 200) {
-        throw Error('Failed to get build results');
-      }
-      var data = JSON.parse(buffer);
+      const data = JSON.parse(buffer);
       if (!data.values) {
         throw Error('Unexpected response');
       }
-      var values = data.values.filter(value => value.state && value.state.name === 'COMPLETED');
+      const values = data.values.filter(value => value.state && value.state.name === 'COMPLETED');
       if (values.length > 0) {
         switch (values[0].state.result.name) {
           case 'SUCCESSFUL':
@@ -4517,11 +4513,7 @@ cache(function(data, match, sendBadge, request) {
       }
       sendBadge(format, badgeData);
     } catch(e) {
-      if (res.statusCode === 404) {
-        badgeData.text[1] = 'not found';
-      } else {
-        badgeData.text[1] = 'invalid';
-      }
+      badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
   });
