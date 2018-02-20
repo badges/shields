@@ -2104,6 +2104,42 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// iTunes International App Store version
+camp.route(/^\/itunes\/v\/(.+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var country = match[1]; // eg, `fr`
+  var bundleId = match[2];  // eg, `484006842`
+  var format = match[3];
+  var apiUrl = 'https://itunes.apple.com/lookup?id=' + bundleId + '&country=' + country;
+  var badgeData = getBadgeData('itunes app store', data);
+  request(apiUrl, function(err, res, buffer) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(buffer);
+      if (data.resultCount === 0) {
+        /* Note the 'not found' response from iTunes is:
+           status code = 200,
+           body = { "resultCount":0, "results": [] }
+        */
+        badgeData.text[1] = 'not found';
+        sendBadge(format, badgeData);
+        return;
+      }
+      var version = data.results[0].version;
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Gem version integration.
 camp.route(/^\/gem\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
