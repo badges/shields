@@ -2075,7 +2075,7 @@ cache(function(data, match, sendBadge, request) {
   const country = match[1]; // eg, `fr` or ``
   const appleId = match[2];  // eg, `484006842`
   const format = match[3];
-  const apiUrl = 'https://itunes.apple.com/lookup?id=' + appleId + (country === '' ? '' : '&country=' + country);
+  const apiUrl = 'https://itunes.apple.com/lookup?id=' + appleId + (typeof country != 'undefined' ? '&country=' + country : '');
   const badgeData = getBadgeData('itunes app store', data);
   request(apiUrl, function(err, res, buffer) {
     if (err !== null) {
