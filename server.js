@@ -2070,13 +2070,14 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // iTunes App Store version
-camp.route(/^\/itunes\/v\/(?:(.+)\/)?(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/itunes\/(v|r|m)\/(?:(.+)\/)?(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  const country = match[1]; // eg, `fr` or ``
-  const appleId = match[2];  // eg, `484006842`
-  const format = match[3];
-  const apiUrl = 'https://itunes.apple.com/lookup?id=' + appleId + (typeof country != 'undefined' ? '&country=' + country : '');
-  const badgeData = getBadgeData('itunes app store', data);
+  const info = match[1]; // either `v` or `r`
+  const country = match[2]; // eg, `fr` or ``
+  const appleId = match[3];  // eg, `484006842`
+  const format = match[4];
+  const apiUrl = 'https://itunes.apple.com/lookup?id=' + appleId + (typeof country !== 'undefined' ? '&country=' + country : '');
+  const badgeData = getBadgeData('itunes app store' + (typeof country !== 'undefined' ? ' ' + country : ''), data);
   request(apiUrl, function(err, res, buffer) {
     if (err !== null) {
       badgeData.text[1] = 'inaccessible';
@@ -2094,12 +2095,37 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
         return;
       }
-      const version = data.results[0].version;
-      badgeData.text[1] = versionText(version);
-      badgeData.colorscheme = versionColor(version);
+      if (info === 'v') {
+        const version = data.results[0].version;
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
+      }
+      else if (info === 'r') {
+        badgeData.colorscheme = 'blue';
+        const rating = data.results[0].averageUserRating;
+        const reviews = data.results[0].userRatingCount;
+        var text = [];
+        if (typeof rating !== 'undefined') {
+          text.push('' + rating + ' stars')
+          badgeData.colorscheme = floorCountColor(rating, 1, 2, 3);
+        }
+        if (typeof reviews !== 'undefined') {
+          text.push('' + reviews + ' reviews')
+        }
+        if (text.length === 0) {
+          text.push('not enough reviews :(')
+          badgeData.colorscheme = 'red';
+        }
+        badgeData.text[1] = text.join(', ');
+      }
+      else if (info === 'm') {
+        const version = data.results[0].minimumOsVersion;
+        badgeData.text[1] = 'iOS ' + version + '+';
+        badgeData.colorscheme = 'blue';
+      }
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'invalid';
+      badgeData.text[1] = 'invalid ' + e;
       sendBadge(format, badgeData);
     }
   });
