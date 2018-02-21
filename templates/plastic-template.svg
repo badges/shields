@@ -16,7 +16,7 @@
     <rect width="{{=it.widths[0]+it.widths[1]}}" height="18" fill="url(#smooth)"/>
   </g>
 
-  <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="110">
+  <g fill="#fff" text-anchor="middle" font-family="SF UI Display,DejaVu Sans,Verdana,Geneva,sans-serif" font-size="110">
     {{?it.logo}}
       <image x="5" y="3" width="{{=it.logoWidth}}" height="14" xlink:href="{{=it.logo}}"/>
     {{?}}
