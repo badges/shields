@@ -2106,14 +2106,14 @@ cache(function(data, match, sendBadge, request) {
         const reviews = data.results[0].userRatingCount;
         var text = [];
         if (typeof rating !== 'undefined') {
-          text.push('' + rating + ' stars')
+          text.push('' + rating + ' stars');
           badgeData.colorscheme = floorCountColor(rating, 1, 2, 3);
         }
         if (typeof reviews !== 'undefined') {
-          text.push('' + reviews + ' reviews')
+          text.push('' + reviews + ' reviews');
         }
         if (text.length === 0) {
-          text.push('not enough reviews :(')
+          text.push('not enough reviews :(');
           badgeData.colorscheme = 'red';
         }
         badgeData.text[1] = text.join(', ');
