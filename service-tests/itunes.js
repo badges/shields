@@ -17,6 +17,13 @@ t.create('iTunes version (valid)')
     value: isVPlusDottedVersionAtLeastOne
   }));
 
+t.create('iTunes version (international, valid)')
+  .get('/v/fr/484006842.json')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'itunes app store',
+    value: isVPlusDottedVersionAtLeastOne
+  }));
+
 t.create('iTunes version (not found)')
   .get('/v/9.json')
   .expectJSON({name: 'itunes app store', value: 'not found'});

@@ -2070,12 +2070,13 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // iTunes App Store version
-camp.route(/^\/itunes\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/itunes\/v\/(?:(.+)\/)?(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var bundleId = match[1];  // eg, `324684580`
-  var format = match[2];
-  var apiUrl = 'https://itunes.apple.com/lookup?id=' + bundleId;
-  var badgeData = getBadgeData('itunes app store', data);
+  const country = match[1]; // eg, `fr` or ``
+  const appleId = match[2];  // eg, `484006842`
+  const format = match[3];
+  const apiUrl = 'https://itunes.apple.com/lookup?id=' + appleId + (country === '' ? '' : '&country=' + country);
+  const badgeData = getBadgeData('itunes app store', data);
   request(apiUrl, function(err, res, buffer) {
     if (err !== null) {
       badgeData.text[1] = 'inaccessible';
@@ -2083,7 +2084,7 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
+      const data = JSON.parse(buffer);
       if (data.resultCount === 0) {
         /* Note the 'not found' response from iTunes is:
            status code = 200,
@@ -2093,43 +2094,7 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
         return;
       }
-      var version = data.results[0].version;
-      badgeData.text[1] = versionText(version);
-      badgeData.colorscheme = versionColor(version);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// iTunes International App Store version
-camp.route(/^\/itunes\/v\/(.+)\/(.+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var country = match[1]; // eg, `fr`
-  var bundleId = match[2];  // eg, `484006842`
-  var format = match[3];
-  var apiUrl = 'https://itunes.apple.com/lookup?id=' + bundleId + '&country=' + country;
-  var badgeData = getBadgeData('itunes app store', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (err !== null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      if (data.resultCount === 0) {
-        /* Note the 'not found' response from iTunes is:
-           status code = 200,
-           body = { "resultCount":0, "results": [] }
-        */
-        badgeData.text[1] = 'not found';
-        sendBadge(format, badgeData);
-        return;
-      }
-      var version = data.results[0].version;
+      const version = data.results[0].version;
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
