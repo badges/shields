@@ -60,6 +60,32 @@ describe('The server', function () {
       });
   });
 
+  it('should not crash with a numeric link', function () {
+    return fetch(`${baseUri}/:fruit-apple-green.svg?link=1`)
+      .then(res => {
+        expect(res.ok).to.be.true;
+        return res.text();
+      }).then(text => {
+        expect(text)
+          .to.satisfy(isSvg)
+          .and.to.include('fruit')
+          .and.to.include('apple');
+      });
+  });
+
+  it('should not crash with a boolean link', function () {
+    return fetch(`${baseUri}/:fruit-apple-green.svg?link=true`)
+      .then(res => {
+        expect(res.ok).to.be.true;
+        return res.text();
+      }).then(text => {
+        expect(text)
+          .to.satisfy(isSvg)
+          .and.to.include('fruit')
+          .and.to.include('apple');
+      });
+  });
+
   context('with svg2img error', function () {
     const expectedError = fs.readFileSync(path.resolve(__dirname, 'public', '500.html'));
 
