@@ -2,7 +2,7 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
-
+const { invalidJSON } = require('./helpers/response-fixtures');
 const isBuildStatus = Joi.string().regex(/^(passing|failed|no tests|scheduled|not run)$/);
 
 const t = new ServiceTester({ id: 'circleci', title: 'Circle CI' });
@@ -36,6 +36,6 @@ t.create('circle ci (unexpected response)')
   .get('/project/github/RedSparr0w/node-csgo-parser.json')
   .intercept(nock => nock('https://circleci.com')
     .get('/api/v1.1/project/github/RedSparr0w/node-csgo-parser?filter=completed&limit=1')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'build', value: 'invalid'});

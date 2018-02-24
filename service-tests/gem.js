@@ -7,6 +7,7 @@ const {
   isVPlusDottedVersionAtLeastOne,
   isMetric
 } = require('./helpers/validators');
+const { invalidJSON } = require('./helpers/response-fixtures');
 const isOrdinalNumber = Joi.string().regex(/^[1-9][0-9]+(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ)$/);
 const isOrdinalNumberDaily = Joi.string().regex(/^[1-9][0-9]+(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ) daily$/);
 
@@ -36,7 +37,7 @@ t.create('version (unexpected response)')
   .get('/v/formatador.json')
   .intercept(nock => nock('https://rubygems.org')
     .get('/api/v1/gems/formatador.json')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'gem', value: 'invalid'});
 
@@ -64,7 +65,7 @@ t.create('total downloads (unexpected response)')
   .get('/dt/rails.json')
   .intercept(nock => nock('https://rubygems.org')
     .get('/api/v1/gems/rails.json')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'downloads', value: 'invalid'});
 
@@ -105,7 +106,7 @@ t.create('version downloads (unexpected response)')
   .get('/dv/rails/4.1.0.json')
   .intercept(nock => nock('https://rubygems.org')
     .get('/api/v1/versions/rails.json')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'downloads@4.1.0', value: 'invalid'});
 
@@ -131,7 +132,7 @@ t.create('latest version downloads (unexpected response)')
   .get('/dtv/rails.json')
   .intercept(nock => nock('https://rubygems.org')
     .get('/api/v1/gems/rails.json')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'downloads@latest', value: 'invalid'});
 
@@ -158,7 +159,7 @@ t.create('users (unexpected response)')
 .get('/u/raphink.json')
   .intercept(nock => nock('https://rubygems.org')
     .get('/api/v1/owners/raphink/gems.json')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'gems', value: 'invalid'});
 
@@ -192,6 +193,6 @@ t.create('rank (unexpected response)')
   .get('/rt/rspec-puppet-facts.json')
     .intercept(nock => nock('http://bestgems.org')
       .get('/api/v1/gems/rspec-puppet-facts/total_ranking.json')
-      .reply(200, "{{{{{invalid json}}")
+      .reply(invalidJSON)
     )
     .expectJSON({name: 'rank', value: 'invalid'});
