@@ -1,3 +1,5 @@
+SHELL:=/bin/bash
+
 all: website favicon test
 
 favicon:
@@ -34,7 +36,12 @@ deploy-s2:
 deploy-gh-pages:
 	(LONG_CACHE=true BASE_URL=https://img.shields.io npm run build && \
 	git checkout -B gh-pages master && \
-	git add -f build index.html && \
+	cp build/index.html index.html && \
+	cp -r build/_next next && \
+	pushd next/*/page && mv {_,}error && popd && \
+	sed -i 's,/_next/,./next/,g' index.html $$(find next -type f) && \
+	sed -i 's,_error,error,g' index.html $$(find next -type f) && \
+	git add -f build index.html next && \
 	git commit -m '[DEPLOY] Build index.html' && \
 	git push -f origin gh-pages:gh-pages) || git checkout master
 	git checkout master
