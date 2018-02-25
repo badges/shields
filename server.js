@@ -53,7 +53,6 @@ const {
 } = require('./lib/color-formatters');
 const {
   makeColorB,
-  isValidStyle,
   isSixHex: sixHex,
   makeLabel: getLabel,
   makeLogo: getLogo,
@@ -8004,9 +8003,7 @@ function(data, match, end, ask) {
         badgeData.colorscheme = color;
       }
     }
-    if (isValidStyle(data.style)) {
-      badgeData.template = data.style;
-    }
+    badgeData.template = data.style;
     if (config.profiling.makeBadge) {
       console.time('makeBadge total');
     }
