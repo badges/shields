@@ -15,7 +15,7 @@ t.create('gets the package version of symfony 2.8')
 
 t.create('gets the package version of yii')
     .get('/php-v/yiisoft/yii.json')
-    .expectJSON({ name: 'PHP', value: '5.3 - 7.1, HHVM' });
+    .expectJSON({ name: 'PHP', value: '>= 5.3, HHVM' });
 
 t.create('invalid package name')
     .get('/php-v/frodo/is-not-a-package.json')
