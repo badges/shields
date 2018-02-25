@@ -45,3 +45,8 @@ export function dynamicJsonBadgeUrl(baseUrl, label, jsonUrl, query, options = {}
 
   return resolveBadgeUrl('/badge/dynamic/json.svg', baseUrl, outOptions);
 }
+
+export function jsonBadgeUrl(baseUrl, url) {
+  const path = encodeURIComponent(url);
+  return resolveUrl(`/json/${path}.svg`, baseUrl, {});
+}

@@ -7545,6 +7545,71 @@ camp.route(/^\/maven-metadata\/v\/(https?)\/(.+\.xml)\.(svg|png|gif|jpg|json)$/,
     });
 }));
 
+// badge-json url
+camp.route(/^\/json\/(https?.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(query, match, sendBadge, request) {
+  const urlEncoded = match[1];
+  const format = match[2];
+  const defaultLabel = 'badge json';
+  let badgeData = getBadgeData(defaultLabel, {});
+  try {
+    const url = encodeURI(decodeURIComponent(urlEncoded));
+    request(url, function dealWithData(err, res, buffer) {
+      if (checkErrorResponse(badgeData, err, res, 'url not found')) {
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        let data = JSON.parse(buffer);
+        if (!data.label) {
+          // label should be non-empty
+          throw {name:'message', message:'invalid badge-json'};
+        }
+        if (!data.isSocial && !data.value) {
+          // non-empty value required when !isSocial
+          throw {name:'message', message:'invalid badge-json'};
+        }
+        if (data.isSocial) {
+          data.style = "social";
+        }
+        // defined query vals override json vals
+        for (let prop in query) {
+          if (query[prop] !== undefined) {
+            data[prop] = query[prop];
+          }
+        }
+        badgeData = getBadgeData(defaultLabel, data);
+        badgeData.text[1] = data.value;
+        if (badgeData.colorB === undefined && data.valueClass) {
+          switch (data.valueClass) {
+            case "error" :
+              badgeData.colorscheme = "red";
+              break;
+            case "notice" :
+              badgeData.colorscheme = "orange";
+              break;
+            case "success" :
+              badgeData.colorscheme = "brightgreen";
+              break;
+            case "info" :
+              badgeData.colorscheme = "blue";
+              break;
+          }
+        }
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = e.name === 'message'
+          ? e.message
+          : 'invalid';
+        sendBadge(format, badgeData);
+      }
+    }); // end request
+  } catch(e) {
+    badgeData.text[1] = 'invalid';
+    sendBadge(format, badgeData);
+  }
+}));
+
 // User defined sources - JSON response
 camp.route(/^\/badge\/dynamic\/(json)\.(svg|png|gif|jpg|json)$/,
 cache({
@@ -7971,7 +8036,7 @@ camp.route(/^\/vaadin-directory\/(star|status|rating|rc|rating-count|v|version|r
 
 }));
 
-// Any badge.
+// "static" badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
   var subject = escapeFormat(match[2]);

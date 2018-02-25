@@ -22,6 +22,9 @@ code,
 input.short {
   width: 5em;
 }
+input.medium {
+  width: 15em;
+}
 
 input {
   text-align: center;
@@ -43,7 +46,7 @@ hr {
   border-width: 1px 0 0 0;
 }
 
-ul {
+ul.options {
   text-align: left;
   margin-left: 25%;
 }

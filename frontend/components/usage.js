@@ -2,6 +2,7 @@ import { Fragment, default as React } from 'react';
 import PropTypes from 'prop-types';
 import StaticBadgeMaker from './static-badge-maker';
 import DynamicBadgeMaker from './dynamic-badge-maker';
+import JsonBadgeMaker from './json-badge-maker';
 import { staticBadgeUrl } from '../lib/badge-url';
 import { advertisedStyles } from '../../lib/supported-features';
 
@@ -114,7 +115,73 @@ export default class Usage extends React.PureComponent {
           </tbody>
         </table>
 
+        <p>Where color is one of these named colors, or hex (xxxxxx)
+        </p>
         { this.renderColorExamples() }
+
+        <hr />
+
+        <h3 id="badge-json">Badge JSON</h3>
+        <JsonBadgeMaker baseUri={baseUri} />
+
+        <p>
+          <code>
+            {baseUri}/json/&lt;URL&gt;.svg
+          </code><br />
+          (&lt;URL&gt; must be url-encoded)
+        </p>
+
+        <p>Your service/website can speak badge by serving badge-json</p>
+
+        <p>badge-json is a simple object with the following properties/values.<br />
+          All Values are optional except for <code>label</code> and <code>value</code>
+        </p>
+
+        <table>
+          <caption>Properties specified in JSON (* = required)</caption>
+          <tbody>
+            <tr>
+              <td><code>label</code> *</td>
+              <td>left-hand-side text</td>
+            </tr>
+            <tr>
+              <td><code>value</code> *</td>
+              <td>right-hand-side text</td>
+            </tr>
+            <tr>
+              <td><code>valueClass</code></td>
+              <td>one of &quot;error&quot;, &quot;notice&quot;, &quot;success&quot;, &quot;info&quot;, or &quot;default&quot;</td>
+            </tr>
+            <tr>
+              <td><code>isSocial</code></td>
+              <td>(boolean) default = <code>false</code>.  If true, will get &quot;social&quot; style by default</td>
+            </tr>
+            <tr>
+              <td style={{verticalAlign:'top'}}><code>logo</code></td>
+              <td>
+                one of:
+                <ul>
+                  <li><a href="https://github.com/badges/shields/tree/gh-pages/logo">named logo</a></li>
+                  <li>data-uri: <code>data:image/png;base64,…</code></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td><code>logoWidth</code></td>
+              <td>Set the horizontal space to give to the logo</td>
+            </tr>
+            <tr>
+              <td><code>colorA</code></td>
+              <td>background color of the left part (overrides <code>valueClass</code> color scheme)</td>
+            </tr>
+            <tr>
+              <td><code>colorB</code></td>
+              <td>background color of the right part (overrides <code>valueClass</code> color scheme)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <hr />
 
         <h3 id="dynamic-badge">Dynamic</h3>
 
@@ -124,17 +191,10 @@ export default class Usage extends React.PureComponent {
           <code>/badge/dynamic/&lt;TYPE&gt;.svg?uri=&lt;URI&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;<a href="https://www.npmjs.com/package/jsonpath" target="_BLANK" title="JSONdata syntax">$.DATA.SUBDATA</a>&gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;</code>
         </p>
 
-        <hr className="spacing" />
-
-        <h2 id="styles">Styles</h2>
+        <h2 id="parameters">Parameters</h2>
 
         <p>
-          The following styles are available (flat is the default as of Feb 1st 2015):
-        </p>
-        { this.renderStyleExamples() }
-
-        <p>
-          Here are a few other parameters you can use: (connecting several with "&" is possible)
+          Optional parameters you can use: (connecting several with "&" is possible)
         </p>
         <table>
           <tbody>
@@ -198,8 +258,26 @@ export default class Usage extends React.PureComponent {
               </td>
               <td>Set the HTTP cache lifetime in secs</td>
             </tr>
+            <tr>
+              <td style={{verticalAlign:'top'}}>
+                <code>?style=flat</code>
+              </td>
+              <td>
+                Specify the badge style.<br />
+                One of : &quot;plastic&quot;, &quot;flat&quot;, &quot;flat-square&quot;, &quot;for-the-badge&quot;, or &quot;social&quot;
+              </td>
+            </tr>
           </tbody>
         </table>
+
+        <h3 id="styles">Styles</h3>
+
+        <p>
+          The following styles are available (flat is the default as of Feb 1st 2015):
+        </p>
+        { this.renderStyleExamples() }
+
+        <hr className="spacing" />
 
         <p>
           We support <code>.svg</code>, <code>.json</code>, <code>.png</code> and a
