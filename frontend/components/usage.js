@@ -122,16 +122,28 @@ export default class Usage extends React.PureComponent {
         <hr />
 
         <h3 id="badge-json">Badge JSON</h3>
+
+        <p>Your service/website can speak badge by serving badge-json</p>
+
         <JsonBadgeMaker baseUri={baseUri} />
 
         <p>
           <code>
             {baseUri}/json/&lt;URL&gt;.svg
-          </code><br />
-          (&lt;URL&gt; must be url-encoded)
+          </code>
         </p>
 
-        <p>Your service/website can speak badge by serving badge-json</p>
+        <table>
+          <tbody>
+            <tr>
+              <td style={{verticalAlign:'top'}}><code>&lt;URL&gt;</code></td>
+              <td>
+                URL that provides badge-json<br />
+                must be url-encoded (above tool will url-encode for you)
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
         <p>badge-json is a simple object with the following properties/values.<br />
           All Values are optional except for <code>label</code> and <code>value</code>
@@ -191,10 +203,33 @@ export default class Usage extends React.PureComponent {
           <code>/badge/dynamic/&lt;TYPE&gt;.svg?uri=&lt;URI&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;<a href="https://www.npmjs.com/package/jsonpath" target="_BLANK" title="JSONdata syntax">$.DATA.SUBDATA</a>&gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;</code>
         </p>
 
+        <table>
+          <caption>Notes</caption>
+          <tbody>
+            <tr>
+              <td style={{verticalAlign:'top'}}><code>query</code></td>
+              <td>
+                Path to value in the json.<br />
+                (see <a href="https://www.npmjs.com/package/jsonpath">https://www.npmjs.com/package/jsonpath</a>)
+              </td>
+            </tr>
+            <tr>
+              <td><code>prefix</code></td>
+              <td>prepended to value</td>
+            </tr>
+            <tr>
+              <td><code>suffix</code></td>
+              <td>appended to value</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <hr />
+
         <h2 id="parameters">Parameters</h2>
 
         <p>
-          Optional parameters you can use: (connecting several with "&" is possible)
+          All badges accept optional parameters: (connecting several with "&" is possible)
         </p>
         <table>
           <tbody>
