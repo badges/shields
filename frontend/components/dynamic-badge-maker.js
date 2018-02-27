@@ -8,6 +8,7 @@ export default class DynamicBadgeMaker extends React.Component {
   };
 
   state = {
+    datatype: '',
     label: '',
     url: '',
     query: '',
@@ -17,9 +18,9 @@ export default class DynamicBadgeMaker extends React.Component {
   };
 
   makeBadgeUri () {
-    const { label, url, query, color, prefix, suffix } = this.state;
+    const { datatype, label, url, query, color, prefix, suffix } = this.state;
     const { baseUri: baseUrl = document.location.href } = this.props;
-    return dynamicJsonBadgeUrl(baseUrl, label, url, query, { color, prefix, suffix });
+    return dynamicJsonBadgeUrl(baseUrl, datatype, label, url, query, { color, prefix, suffix });
   }
 
   handleSubmit(e) {
@@ -28,13 +29,23 @@ export default class DynamicBadgeMaker extends React.Component {
   }
 
   get isValid() {
-    const { label, url, query } = this.state;
-    return label && url && query;
+    const { datatype, label, url, query } = this.state;
+    return datatype && label && url && query;
   }
 
   render() {
     return (
       <form onSubmit={e => this.handleSubmit(e)}>
+        <input
+          className="short"
+          value={this.state.datatype}
+          onChange={event => this.setState({ datatype: event.target.value })}
+          list="datatypes"
+          placeholder="data type" /> {}
+        <datalist id="datatypes">
+          <option value="json" />
+          <option value="xml" />
+        </datalist> {}
         <input
           className="short"
           value={this.state.label}
