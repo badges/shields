@@ -7,7 +7,7 @@ const mapValues = require('lodash.mapvalues');
 
 const colorsB = mapValues(colorscheme, 'colorB');
 
-const t = new ServiceTester({ id: 'badge/dynamic/json', title: 'User Defined JSON Source Data' });
+const t = new ServiceTester({ id: 'dynamic-json', title: 'User Defined JSON Source Data', pathPrefix: '/badge/dynamic/json' });
 module.exports = t;
 
 t.create('Connection error')

@@ -11,7 +11,7 @@ const mapValues = require('lodash.mapvalues');
 
 const colorsB = mapValues(colorscheme, 'colorB');
 
-const t = new ServiceTester({ id: 'badge/dynamic/xml', title: 'User Defined XML Source Data' });
+const t = new ServiceTester({ id: 'dynamic-xml', title: 'User Defined XML Source Data', pathPrefix: '/badge/dynamic/xml' });
 module.exports = t;
 
 t.create('Connection error')
