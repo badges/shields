@@ -51,7 +51,7 @@ jobs:
       - run:
           name: Danger
           when: always
-          command: npm run danger
+          command: npm run danger ci
 
       - run:
           name: Upload Greenkeeper lockfile

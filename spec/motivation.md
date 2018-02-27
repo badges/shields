@@ -24,6 +24,6 @@ As you can see from the zoomed 400% versions of these badges above, nobody is (r
 ## The Shields solution
 As you can see below, without increasing the footprint of these badges, I've tried to increase legibility and coherence, removing useless text to decrease the horizontal length in the (likely) scenario that more of these badge thingies crop up on READMEs all across the land.
 
-![Badge design](spec/proportions.png)
+![Badge design](proportions.png)
 
 This badge design corresponds to an old and now deprecated version which has since been replaced by beautiful and scalable SVG versions that can be found on [shields.io](http://shields.io)

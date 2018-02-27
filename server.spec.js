@@ -1,4 +1,6 @@
-const assert = require('assert');
+'use strict';
+
+const { expect } = require('chai');
 const config = require('./lib/test-config');
 const fetch = require('node-fetch');
 const fs = require('fs');
@@ -24,22 +26,63 @@ describe('The server', function () {
     this.timeout(5000);
     return fetch(`${baseUri}/:fruit-apple-green.svg`)
       .then(res => {
-        assert.ok(res.ok);
+        expect(res.ok).to.be.true;
         return res.text();
       }).then(text => {
-        assert.ok(isSvg(text));
-        assert(text.includes('fruit'), 'fruit');
-        assert(text.includes('apple'), 'apple');
+        expect(text)
+          .to.satisfy(isSvg)
+          .and.to.include('fruit')
+          .and.to.include('apple');
       });
   });
 
   it('should produce colorscheme PNG badges', function () {
     return fetch(`${baseUri}/:fruit-apple-green.png`)
       .then(res => {
-        assert.ok(res.ok);
+        expect(res.ok).to.be.true;
         return res.buffer();
       }).then(data => {
-        assert.ok(isPng(data));
+        expect(data).to.satisfy(isPng);
+      });
+  });
+
+  // https://github.com/badges/shields/pull/1319
+  it('should not crash with a numeric logo', function () {
+    return fetch(`${baseUri}/:fruit-apple-green.svg?logo=1`)
+      .then(res => {
+        expect(res.ok).to.be.true;
+        return res.text();
+      }).then(text => {
+        expect(text)
+          .to.satisfy(isSvg)
+          .and.to.include('fruit')
+          .and.to.include('apple');
+      });
+  });
+
+  it('should not crash with a numeric link', function () {
+    return fetch(`${baseUri}/:fruit-apple-green.svg?link=1`)
+      .then(res => {
+        expect(res.ok).to.be.true;
+        return res.text();
+      }).then(text => {
+        expect(text)
+          .to.satisfy(isSvg)
+          .and.to.include('fruit')
+          .and.to.include('apple');
+      });
+  });
+
+  it('should not crash with a boolean link', function () {
+    return fetch(`${baseUri}/:fruit-apple-green.svg?link=true`)
+      .then(res => {
+        expect(res.ok).to.be.true;
+        return res.text();
+      }).then(text => {
+        expect(text)
+          .to.satisfy(isSvg)
+          .and.to.include('fruit')
+          .and.to.include('apple');
       });
   });
 
@@ -57,10 +100,10 @@ describe('The server', function () {
       return fetch(`${baseUri}/:some_new-badge-green.png`)
         .then(res => {
           // This emits status code 200, though 500 would be preferable.
-          assert.equal(res.status, 200);
+          expect(res.status).to.equal(200);
           return res.text();
         }).then(text => {
-          assert.equal(text, expectedError);
+          expect(text).to.include(expectedError);
         });
     });
   });
@@ -69,10 +112,9 @@ describe('The server', function () {
     it('should return analytics in the expected format', function () {
       return fetch(`${baseUri}/$analytics/v1`)
         .then(res => {
-          assert.ok(res.ok);
+          expect(res.ok).to.be.true;
           return res.json();
         }).then(json => {
-          const keys = Object.keys(json);
           const expectedKeys = [
             'vendorMonthly',
             'rawMonthly',
@@ -81,11 +123,14 @@ describe('The server', function () {
             'vendorFlatSquareMonthly',
             'rawFlatSquareMonthly',
           ];
-          assert.deepEqual(keys.sort(), expectedKeys.sort());
+          expect(json).to.have.all.keys(...expectedKeys);
 
-          keys.forEach(k => {
-            assert.ok(Array.isArray(json[k]));
-            assert.equal(json[k].length, 36);
+          // TODO Switch this when we upgrade to Node 8.
+          // Object.values(json).forEach(stats => {
+          //   expect(stats).to.be.an('array').with.length(36);
+          // });
+          Object.keys(json).forEach(k => {
+            expect(json[k]).to.be.an('array').with.length(36);
           });
         });
     });

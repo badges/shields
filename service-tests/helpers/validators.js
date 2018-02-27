@@ -18,6 +18,9 @@ const isVPlusTripleDottedVersion = withRegex(/^v[0-9]+.[0-9]+.[0-9]+$/);
 
 const isVPlusDottedVersionAtLeastOne = withRegex(/^v\d+(\.\d+)?(\.\d+)?$/);
 
+// matches a version number with N 'clauses' e.g: v1.2 or v1.22.7.392 are valid
+const isVPlusDottedVersionNClauses = withRegex(/^v\d+(\.\d+)*$/);
+
 // Simple regex for test Composer versions rule
 // https://getcomposer.org/doc/articles/versions.md
 // Examples:
@@ -48,7 +51,9 @@ const isMetricOpenIssues = withRegex(/^[1-9][0-9]*[kMGTPEZY]? open$/);
 
 const isMetricOverTimePeriod = withRegex(/^[1-9][0-9]*[kMGTPEZY]?\/(year|month|4 weeks|week|day)$/);
 
-const isPercentage = withRegex(/^[0-9]+%$/);
+const isIntegerPercentage = withRegex(/^[0-9]+%$/);
+const isDecimalPercentage = withRegex(/^[0-9]+\.[0-9]*%$/);
+const isPercentage = Joi.alternatives().try(isIntegerPercentage, isDecimalPercentage);
 
 const isFileSize = withRegex(/^[0-9]*[.]?[0-9]+\s(B|kB|MB|GB|TB|PB|EB|ZB|YB)$/);
 
@@ -61,6 +66,7 @@ module.exports = {
   isSemver,
   isVPlusTripleDottedVersion,
   isVPlusDottedVersionAtLeastOne,
+  isVPlusDottedVersionNClauses,
   isComposerVersion,
   isPhpVersionReduction,
   isStarRating,
@@ -68,6 +74,8 @@ module.exports = {
   isMetricOpenIssues,
   isMetricOverTimePeriod,
   isPercentage,
+  isIntegerPercentage,
+  isDecimalPercentage,
   isFileSize,
   isFormattedDate
 };
