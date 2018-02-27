@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dynamicJsonBadgeUrl } from '../lib/badge-url';
+import { dynamicBadgeUrl } from '../lib/badge-url';
 
 export default class DynamicBadgeMaker extends React.Component {
   static propTypes = {
@@ -20,7 +20,7 @@ export default class DynamicBadgeMaker extends React.Component {
   makeBadgeUri () {
     const { datatype, label, url, query, color, prefix, suffix } = this.state;
     const { baseUri: baseUrl = document.location.href } = this.props;
-    return dynamicJsonBadgeUrl(baseUrl, datatype, label, url, query, { color, prefix, suffix });
+    return dynamicBadgeUrl(baseUrl, datatype, label, url, query, { color, prefix, suffix });
   }
 
   handleSubmit(e) {

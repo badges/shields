@@ -22,7 +22,7 @@ export function staticBadgeUrl(baseUrl, subject, status, color, options) {
 }
 
 // Options can include: { prefix, suffix, color, longCache, style, queryParams }
-export function dynamicJsonBadgeUrl(baseUrl, datatype, label, jsonUrl, query, options = {}) {
+export function dynamicBadgeUrl(baseUrl, datatype, label, jsonUrl, query, options = {}) {
   const { prefix, suffix, color, queryParams = {}, ...rest } = options;
 
   Object.assign(queryParams, {

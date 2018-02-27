@@ -3,7 +3,7 @@ import {
   default as resolveBadgeUrl,
   encodeField,
   staticBadgeUrl,
-  dynamicJsonBadgeUrl,
+  dynamicBadgeUrl,
 } from './badge-url';
 
 const resolveBadgeUrlWithLongCache = (url, baseUrl) =>
@@ -37,13 +37,14 @@ describe('Badge URL functions', function() {
       .expect('http://img.example.com/badge/foo-bar-blue.svg?style=plastic');
   });
 
-  test(dynamicJsonBadgeUrl, () => {
+  test(dynamicBadgeUrl, () => {
     const jsonUrl = 'http://example.com/foo.json';
     const query = '$.bar';
     const prefix = 'value: ';
 
     given(
       'http://img.example.com',
+      'json',
       'foo',
       jsonUrl,
       query,
@@ -52,6 +53,28 @@ describe('Badge URL functions', function() {
       'http://img.example.com/badge/dynamic/json.svg',
       '?label=foo',
       `&uri=${encodeURIComponent(jsonUrl)}`,
+      `&query=${encodeURIComponent(query)}`,
+      `&prefix=${encodeURIComponent(prefix)}`,
+      '&style=plastic',
+    ].join(''))
+  });
+
+  test(dynamicBadgeUrl, () => {
+    const xmlUrl = 'http://example.com/foo.xml';
+    const query = '//bar';
+    const prefix = 'value: ';
+
+    given(
+      'http://img.example.com',
+      'xml',
+      'foo',
+      xmlUrl,
+      query,
+      { prefix, style: 'plastic' }
+    ).expect([
+      'http://img.example.com/badge/dynamic/xml.svg',
+      '?label=foo',
+      `&uri=${encodeURIComponent(xmlUrl)}`,
       `&query=${encodeURIComponent(query)}`,
       `&prefix=${encodeURIComponent(prefix)}`,
       '&style=plastic',
