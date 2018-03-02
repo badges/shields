@@ -6557,8 +6557,13 @@ cache(function(data, match, sendBadge, request) {
       }
 
       if (type === 'image-size') {
-        const size = prettyBytes(parseInt(image.DownloadSize));
-        badgeData.text[1] = size;
+        const downloadSize = image.DownloadSize;
+        if (downloadSize === undefined) {
+          badgeData.text[1] = 'unknown';
+          sendBadge(format, badgeData);
+          return;
+        }
+        badgeData.text[1] = prettyBytes(parseInt(downloadSize));
       } else if (type === 'layers') {
         badgeData.text[1] = image.LayerCount;
       }
