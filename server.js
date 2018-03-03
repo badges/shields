@@ -1137,7 +1137,7 @@ cache(function(queryParams, match, sendBadge, request) {
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('gratipay', queryParams);
   }
-  badgeData.colorscheme = 'red';
+  badgeData.colorscheme = 'lightgray';
   badgeData.text[1] = 'no longer available';
   sendBadge(format, badgeData);
 }));
