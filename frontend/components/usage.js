@@ -121,7 +121,7 @@ export default class Usage extends React.PureComponent {
         <DynamicBadgeMaker baseUri={baseUri} />
 
         <p>
-          <code>/badge/dynamic/&lt;DATATYPE&gt;.svg?uri=&lt;URI&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;<a href="https://www.npmjs.com/package/jsonpath" target="_BLANK" title="JSONdata syntax">$.DATA.SUBDATA</a>|<a href="https://www.npmjs.com/package/xpath" target="_BLANK" title="XPath syntax">//data/subdata</a>&gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;</code>
+          <code>/badge/dynamic/&lt;DATATYPE&gt;.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;<a href="https://www.npmjs.com/package/jsonpath" target="_BLANK" title="JSONdata syntax">$.DATA.SUBDATA</a>|<a href="https://www.npmjs.com/package/xpath" target="_BLANK" title="XPath syntax">//data/subdata</a>&gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;</code>
         </p>
 
         <hr className="spacing" />

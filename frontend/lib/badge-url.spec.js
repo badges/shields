@@ -52,7 +52,7 @@ describe('Badge URL functions', function() {
     ).expect([
       'http://img.example.com/badge/dynamic/json.svg',
       '?label=foo',
-      `&uri=${encodeURIComponent(jsonUrl)}`,
+      `&url=${encodeURIComponent(jsonUrl)}`,
       `&query=${encodeURIComponent(query)}`,
       `&prefix=${encodeURIComponent(prefix)}`,
       '&style=plastic',
@@ -74,7 +74,7 @@ describe('Badge URL functions', function() {
     ).expect([
       'http://img.example.com/badge/dynamic/xml.svg',
       '?label=foo',
-      `&uri=${encodeURIComponent(xmlUrl)}`,
+      `&url=${encodeURIComponent(xmlUrl)}`,
       `&query=${encodeURIComponent(query)}`,
       `&prefix=${encodeURIComponent(prefix)}`,
       '&style=plastic',

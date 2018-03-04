@@ -7468,7 +7468,7 @@ camp.route(/^\/maven-metadata\/v\/(https?)\/(.+\.xml)\.(svg|png|gif|jpg|json)$/,
 // User defined sources - JSON response
 camp.route(/^\/badge\/dynamic\/(json|xml)\.(svg|png|gif|jpg|json)$/,
 cache({
-  queryParams: ['uri', 'query', 'prefix', 'suffix'],
+  queryParams: ['uri', 'url', 'query', 'prefix', 'suffix'],
   handler: function(query, match, sendBadge, request) {
     var type = match[1];
     var format = match[2];
@@ -7478,15 +7478,15 @@ cache({
 
     var badgeData = getBadgeData('custom badge', query);
 
-    if (!query.uri || !query.query){
+    if (!query.uri && !query.url || !query.query){
       setBadgeColor(badgeData, 'red');
-      badgeData.text[1] = !query.uri ? 'no uri specified' : 'no query specified';
+      badgeData.text[1] = !query.query ? 'no query specified' : 'no url specified';
       sendBadge(format, badgeData);
       return;
     }
-    var uri = encodeURI(decodeURIComponent(query.uri));
+    var url = encodeURI(decodeURIComponent(query.url || query.uri));
 
-    request(uri, (err, res, data) => {
+    request(url, (err, res, data) => {
       try {
         if (checkErrorResponse(badgeData, err, res, 'resource not found')) {
           return;
