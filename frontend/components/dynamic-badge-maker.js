@@ -36,16 +36,14 @@ export default class DynamicBadgeMaker extends React.Component {
   render() {
     return (
       <form onSubmit={e => this.handleSubmit(e)}>
-        <input
+        <select
           className="short"
           value={this.state.datatype}
-          onChange={event => this.setState({ datatype: event.target.value })}
-          list="datatypes"
-          placeholder="data type" /> {}
-        <datalist id="datatypes">
-          <option value="json" />
-          <option value="xml" />
-        </datalist> {}
+          onChange={event => this.setState({ datatype: event.target.value })}>
+          <option value="" disabled>data type</option>
+          <option value="json">json</option>
+          <option value="xml">xml</option>
+        </select> {}
         <input
           className="short"
           value={this.state.label}
