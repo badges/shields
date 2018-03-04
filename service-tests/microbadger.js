@@ -9,11 +9,15 @@ const t = new ServiceTester({ id: 'microbadger', title: 'MicroBadger' });
 module.exports = t;
 
 t.create('image size without a specified tag')
-  .get('/image-size/_/centos.json')
+  .get('/image-size/jumanjiman/puppet.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'image size',
     value: isFileSize
   }));
+
+t.create('image size without a specified tag and no download size data returned')
+  .get('/image-size/_/centos.json')
+  .expectJSON({ name: 'image size', value: 'unknown' });
 
 t.create('image size with a specified tag')
   .get('/image-size/_/httpd/alpine.json')
