@@ -53,7 +53,6 @@ const {
 } = require('./lib/color-formatters');
 const {
   makeColorB,
-  isValidStyle,
   isSixHex: sixHex,
   makeLabel: getLabel,
   makeLogo: getLogo,
@@ -1093,48 +1092,15 @@ cache(function(data, match, sendBadge, request) {
 
 // Gratipay integration.
 camp.route(/^\/(?:gittip|gratipay(\/user|\/team|\/project)?)\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var type = match[1];  // eg, `user`.
-  var user = match[2];  // eg, `dougwilson`.
-  var format = match[3];
-  if (type === '') { type = '/user'; }
-  if (type === '/user') { user = '~' + user; }
-  var apiUrl = 'https://gratipay.com/' + user + '/public.json';
-  var badgeData = getBadgeData('receives', data);
+cache(function(queryParams, match, sendBadge, request) {
+  const format = match[3];
+  const badgeData = getBadgeData('gratipay', queryParams);
   if (badgeData.template === 'social') {
-    badgeData.logo = getLogo('gratipay', data);
+    badgeData.logo = getLogo('gratipay', queryParams);
   }
-  request(apiUrl, function dealWithData(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      // Avoid falsey checks because amounts may be 0
-      var receiving = isNaN(data.receiving) ? data.taking : data.receiving;
-      if (!isNaN(receiving)) {
-        badgeData.text[1] = '$' + metric(receiving) + '/week';
-        if (receiving === 0) {
-          badgeData.colorscheme = 'red';
-        } else if (receiving < 10) {
-          badgeData.colorscheme = 'yellow';
-        } else if (receiving < 100) {
-          badgeData.colorscheme = 'green';
-        } else {
-          badgeData.colorscheme = 'brightgreen';
-        }
-        sendBadge(format, badgeData);
-      } else {
-        badgeData.text[1] = 'anonymous';
-        sendBadge(format, badgeData);
-      }
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
+  badgeData.colorscheme = 'lightgray';
+  badgeData.text[1] = 'no longer available';
+  sendBadge(format, badgeData);
 }));
 
 // Liberapay integration.
@@ -1295,37 +1261,59 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // HHVM integration.
-camp.route(/^\/hhvm\/([^/]+\/[^/]+)(\/.+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/hhvm\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, `symfony/symfony`.
-  var branch = match[2];// eg, `/2.4.0.0`.
-  var format = match[3];
-  var apiUrl = 'http://hhvm.h4cc.de/badge/' + user + '.json';
-  if (branch) {
-    // Remove the leading slash.
-    apiUrl += '?branch=' + branch.slice(1);
+  const user = match[1];  // eg, `symfony/symfony`.
+  let branch = match[2]
+    ? omitv(match[2])
+    : 'dev-master';
+  const format = match[3];
+  const apiUrl = 'https://php-eye.com/api/v1/package/'+user+'.json';
+  let badgeData = getBadgeData('hhvm', data);
+  if (branch === 'master') {
+    branch = 'dev-master';
   }
-  var badgeData = getBadgeData('hhvm', data);
   request(apiUrl, function dealWithData(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      var status = data.hhvm_status;
-      if (status === 'not_tested') {
-        badgeData.colorscheme = 'red';
-        badgeData.text[1] = 'not tested';
-      } else if (status === 'partial') {
-        badgeData.colorscheme = 'yellow';
-        badgeData.text[1] = 'partially tested';
-      } else if (status === 'tested') {
-        badgeData.colorscheme = 'brightgreen';
-        badgeData.text[1] = 'tested';
-      } else {
-        badgeData.text[1] = 'maybe untested';
+      let data = JSON.parse(buffer);
+      let verInfo = {};
+      if (!data.versions) {
+        throw Error('Unexpected response.');
+      }
+      badgeData.text[1] = 'branch not found';
+      for (let i = 0, count = data.versions.length; i < count; i++) {
+        verInfo = data.versions[i];
+        if (verInfo.name === branch) {
+          if (!verInfo.travis.runtime_status) {
+            throw Error('Unexpected response.');
+          }
+          switch (verInfo.travis.runtime_status.hhvm) {
+            case 3:
+              // tested`
+              badgeData.colorscheme = 'brightgreen';
+              badgeData.text[1] = 'tested';
+              break;
+            case 2:
+              // allowed failure
+              badgeData.colorscheme = 'yellow';
+              badgeData.text[1] = 'partially tested';
+              break;
+            case 1:
+              // not tested
+              badgeData.colorscheme = 'red';
+              badgeData.text[1] = 'not tested';
+              break;
+            case 0:
+              // unknown/no config file
+              badgeData.text[1] = 'maybe untested';
+              break;
+          }
+          break;
+        }
       }
       sendBadge(format, badgeData);
     } catch(e) {
@@ -4458,6 +4446,67 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Bitbucket Pipelines integration.
+camp.route(/^\/bitbucket\/pipelines\/([^/]+)\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const user = match[1];  // eg, atlassian
+  const repo = match[2];  // eg, adf-builder-javascript
+  const branch = match[3] || 'master';  // eg, development
+  const format = match[4];
+  const apiUrl = 'https://api.bitbucket.org/2.0/repositories/'
+    + encodeURIComponent(user) + '/' + encodeURIComponent(repo)
+    + '/pipelines/?fields=values.state&page=1&pagelen=2&sort=-created_on'
+    + '&target.ref_type=BRANCH&target.ref_name=' + encodeURIComponent(branch);
+
+  const badgeData = getBadgeData('build', data);
+
+  request(apiUrl, function(err, res, buffer) {
+    if (checkErrorResponse(badgeData, err, res)) {
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      const data = JSON.parse(buffer);
+      if (!data.values) {
+        throw Error('Unexpected response');
+      }
+      const values = data.values.filter(value => value.state && value.state.name === 'COMPLETED');
+      if (values.length > 0) {
+        switch (values[0].state.result.name) {
+          case 'SUCCESSFUL':
+            badgeData.text[1] = 'passing';
+            badgeData.colorscheme = 'brightgreen';
+            break;
+          case 'FAILED':
+            badgeData.text[1] = 'failing';
+            badgeData.colorscheme = 'red';
+            break;
+          case 'ERROR':
+            badgeData.text[1] = 'error';
+            badgeData.colorscheme = 'red';
+            break;
+          case 'STOPPED':
+            badgeData.text[1] = 'stopped';
+            badgeData.colorscheme = 'yellow';
+            break;
+          case 'EXPIRED':
+            badgeData.text[1] = 'expired';
+            badgeData.colorscheme = 'yellow';
+            break;
+          default:
+            badgeData.text[1] = 'unknown';
+        }
+      } else {
+        badgeData.text[1] = 'never built';
+      }
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Chef cookbook integration.
 camp.route(/^\/cookbook\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
@@ -6475,8 +6524,13 @@ cache(function(data, match, sendBadge, request) {
       }
 
       if (type === 'image-size') {
-        const size = prettyBytes(parseInt(image.DownloadSize));
-        badgeData.text[1] = size;
+        const downloadSize = image.DownloadSize;
+        if (downloadSize === undefined) {
+          badgeData.text[1] = 'unknown';
+          sendBadge(format, badgeData);
+          return;
+        }
+        badgeData.text[1] = prettyBytes(parseInt(downloadSize));
       } else if (type === 'layers') {
         badgeData.text[1] = image.LayerCount;
       }
@@ -7921,9 +7975,7 @@ function(data, match, end, ask) {
         badgeData.colorscheme = color;
       }
     }
-    if (isValidStyle(data.style)) {
-      badgeData.template = data.style;
-    }
+    badgeData.template = data.style;
     if (config.profiling.makeBadge) {
       console.time('makeBadge total');
     }
