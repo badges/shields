@@ -4,6 +4,7 @@ const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
 const { isMetric } = require('./helpers/validators.js');
+const { invalidJSON } = require('./helpers/response-fixtures');
 const isAutomatedBuildStatus = Joi.string().valid('automated', 'manual');
 const isBuildStatus = Joi.string().regex(/^(passing|failing|building)$/);
 
@@ -40,7 +41,7 @@ t.create('docker stars (unexpected response)')
   .get('/stars/_/ubuntu.json')
   .intercept(nock => nock('https://hub.docker.com/')
     .get('/v2/repositories/library/ubuntu/stars/count/')
-    .reply(200, "some kind of error")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'docker stars', value: 'invalid'});
 
@@ -74,7 +75,7 @@ t.create('docker pulls (unexpected response)')
   .get('/pulls/_/ubuntu.json')
   .intercept(nock => nock('https://hub.docker.com/')
     .get('/v2/repositories/library/ubuntu')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'docker pulls', value: 'invalid'});
 
@@ -108,7 +109,7 @@ t.create('docker automated build (unexpected response)')
   .get('/automated/_/ubuntu.json')
   .intercept(nock => nock('https://registry.hub.docker.com/')
     .get('/v2/repositories/library/ubuntu')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'docker build', value: 'invalid'});
 
@@ -135,6 +136,6 @@ t.create('docker build status (unexpected response)')
   .get('/build/_/ubuntu.json')
   .intercept(nock => nock('https://registry.hub.docker.com/')
     .get('/v2/repositories/library/ubuntu/buildhistory')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'docker build', value: 'invalid'});
