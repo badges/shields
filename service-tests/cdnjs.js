@@ -3,6 +3,7 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 const { isVPlusTripleDottedVersion } = require('./helpers/validators.js');
+const { invalidJSON } = require('./helpers/response-fixtures');
 
 const t = new ServiceTester({ id: 'cdnjs', title: 'CDNJs' });
 module.exports = t;
@@ -28,7 +29,7 @@ t.create('cdnjs (unexpected response)')
   .get('/v/jquery.json')
   .intercept(nock => nock('https://api.cdnjs.com')
     .get('/libraries/jquery?fields=version')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'cdnjs', value: 'invalid'});
 
