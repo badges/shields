@@ -1094,48 +1094,15 @@ cache(function(data, match, sendBadge, request) {
 
 // Gratipay integration.
 camp.route(/^\/(?:gittip|gratipay(\/user|\/team|\/project)?)\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var type = match[1];  // eg, `user`.
-  var user = match[2];  // eg, `dougwilson`.
-  var format = match[3];
-  if (type === '') { type = '/user'; }
-  if (type === '/user') { user = '~' + user; }
-  var apiUrl = 'https://gratipay.com/' + user + '/public.json';
-  var badgeData = getBadgeData('receives', data);
+cache(function(queryParams, match, sendBadge, request) {
+  const format = match[3];
+  const badgeData = getBadgeData('gratipay', queryParams);
   if (badgeData.template === 'social') {
-    badgeData.logo = getLogo('gratipay', data);
+    badgeData.logo = getLogo('gratipay', queryParams);
   }
-  request(apiUrl, function dealWithData(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      // Avoid falsey checks because amounts may be 0
-      var receiving = isNaN(data.receiving) ? data.taking : data.receiving;
-      if (!isNaN(receiving)) {
-        badgeData.text[1] = '$' + metric(receiving) + '/week';
-        if (receiving === 0) {
-          badgeData.colorscheme = 'red';
-        } else if (receiving < 10) {
-          badgeData.colorscheme = 'yellow';
-        } else if (receiving < 100) {
-          badgeData.colorscheme = 'green';
-        } else {
-          badgeData.colorscheme = 'brightgreen';
-        }
-        sendBadge(format, badgeData);
-      } else {
-        badgeData.text[1] = 'anonymous';
-        sendBadge(format, badgeData);
-      }
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
+  badgeData.colorscheme = 'lightgray';
+  badgeData.text[1] = 'no longer available';
+  sendBadge(format, badgeData);
 }));
 
 // Liberapay integration.
@@ -6395,37 +6362,14 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Snap CI build integration.
-// https://snap-ci.com/snap-ci/snap-deploy/branch/master/build_image
+// Snap CI build integration - no longer available.
 camp.route(/^\/snap(-ci?)\/([^/]+\/[^/]+)(?:\/(.+))\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var userRepo = match[2];
-  var branch = match[3];
-  var format = match[4];
-  var url = 'https://snap-ci.com/' + userRepo + '/branch/' + branch + '/build_image.svg';
-
-  var badgeData = getBadgeData('build', data);
-  fetchFromSvg(request, url, function(err, res) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      badgeData.text[1] = res.toLowerCase();
-      if (res === 'Passed') {
-        badgeData.colorscheme = 'brightgreen';
-        badgeData.text[1] = 'passing';
-      } else if (res === 'Failed') {
-        badgeData.colorscheme = 'red';
-      }
-      sendBadge(format, badgeData);
-
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
+  const format = match[4];
+  const badgeData = getBadgeData('snap CI', data);
+  badgeData.colorscheme = 'lightgray';
+  badgeData.text[1] = 'no longer available';
+  sendBadge(format, badgeData);
 }));
 
 // Visual Studio Team Services build integration.
@@ -6559,8 +6503,13 @@ cache(function(data, match, sendBadge, request) {
       }
 
       if (type === 'image-size') {
-        const size = prettyBytes(parseInt(image.DownloadSize));
-        badgeData.text[1] = size;
+        const downloadSize = image.DownloadSize;
+        if (downloadSize === undefined) {
+          badgeData.text[1] = 'unknown';
+          sendBadge(format, badgeData);
+          return;
+        }
+        badgeData.text[1] = prettyBytes(parseInt(downloadSize));
       } else if (type === 'layers') {
         badgeData.text[1] = image.LayerCount;
       }
