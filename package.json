@@ -113,7 +113,7 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^7.4.0",
     "eslint-plugin-standard": "^3.0.1",
-    "fetch-ponyfill": "^4.1.0",
+    "fetch-ponyfill": "^6.0.0",
     "glob": "^7.1.1",
     "icedfrisby": "2.0.0-alpha.1",
     "icedfrisby-nock": "^1.0.0",
