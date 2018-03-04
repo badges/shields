@@ -37,7 +37,7 @@ t.create('missing content-disposition header')
 t.create('connection error')
   .get('/foo/bar.json')
   .networkOff()
-  .expectJSON({ name: 'build', value: 'invalid' });
+  .expectJSON({ name: 'build', value: 'inaccessible' });
 
 // PHP version from .travis.yml
 
