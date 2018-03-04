@@ -55,7 +55,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       console.error('Travis error: ' + err.stack);              // 5
       if (res) { console.error(''+res); }
-      badgeData.text[1] = 'invalid';
+      badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
@@ -271,7 +271,7 @@ network connection errors on any unmocked requests.
 t.create('connection error')
   .get('/foo/bar.json')
   .networkOff()
-  .expectJSON({ name: 'build', value: 'invalid' });
+  .expectJSON({ name: 'build', value: 'inaccessible' });
 ```
 
 
@@ -338,7 +338,7 @@ t.create('missing content-disposition header')
 t.create('connection error')
   .get('/foo/bar.json')
   .networkOff()
-  .expectJSON({ name: 'build', value: 'invalid' });
+  .expectJSON({ name: 'build', value: 'inaccessible' });
 ```
 
 
