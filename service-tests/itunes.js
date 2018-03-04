@@ -4,6 +4,7 @@ const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 
 const { isVPlusDottedVersionAtLeastOne } = require('./helpers/validators');
+const { invalidJSON } = require('./helpers/response-fixtures');
 
 const t = new ServiceTester({ id: 'itunes', title: 'iTunes' });
 module.exports = t;
@@ -33,7 +34,7 @@ t.create('iTunes version (unexpected response)')
   .get('/v/324684580.json')
   .intercept(nock => nock('https://itunes.apple.com')
     .get('/lookup?id=324684580')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'itunes app store', value: 'invalid'});
 

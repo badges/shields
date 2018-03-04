@@ -14,10 +14,10 @@
         <img src="https://img.shields.io/github/last-commit/badges/shields/gh-pages.svg?label=last%20deployed"
             alt="last deployed"></a>
     <a href="https://discord.gg/HjJCwm5">
-        <img src="https://img.shields.io/discord/308323056592486420.svg"
+        <img src="https://img.shields.io/discord/308323056592486420.svg?logo=discord"
             alt="chat on Discord"></a>
     <a href="https://twitter.com/intent/follow?screen_name=shields_io">
-        <img src="https://img.shields.io/twitter/follow/shields_io.svg?style=social"
+        <img src="https://img.shields.io/twitter/follow/shields_io.svg?style=social&logo=twitter"
             alt="follow on Twitter"></a>
 </p>
 

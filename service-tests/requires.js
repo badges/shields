@@ -2,6 +2,7 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
+const { invalidJSON } = require('./helpers/response-fixtures');
 
 const isRequireStatus = Joi.string().regex(/^(up to date|outdated|insecure|unknown)$/);
 
@@ -36,6 +37,6 @@ t.create('requirements (unexpected response)')
   .get('/github/celery/celery.json')
   .intercept(nock => nock('https://requires.io/')
     .get('/api/v1/status/github/celery/celery')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'requirements', value: 'invalid'});
