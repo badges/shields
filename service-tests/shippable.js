@@ -2,6 +2,7 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
+const { invalidJSON } = require('./helpers/response-fixtures');
 
 const isBuildStatus = Joi.string().regex(/^(waiting|queued|processing|success|skipped|unstable|timeout|cancelled|failed|stopped)$/);
 
@@ -40,7 +41,7 @@ t.create('build status (unexpected response)')
   .get('/5444c5ecb904a4b21567b0ff.json')
   .intercept(nock => nock('https://api.shippable.com/')
     .get('/projects/5444c5ecb904a4b21567b0ff/branchRunStatus')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'build', value: 'invalid'});
 

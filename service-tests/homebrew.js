@@ -3,6 +3,7 @@
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 const { isVPlusTripleDottedVersion } = require('./helpers/validators.js');
+const { invalidJSON } = require('./helpers/response-fixtures');
 
 const t = new ServiceTester({ id: 'homebrew', title: 'homebrew' });
 module.exports = t;
@@ -36,6 +37,6 @@ t.create('homebrew (unexpected response)')
   .get('/v/cake.json')
   .intercept(nock => nock('http://formulae.brew.sh')
     .get('/formula/cake/version')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'homebrew', value: 'invalid'});
