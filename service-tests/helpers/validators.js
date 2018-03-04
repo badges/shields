@@ -21,6 +21,11 @@ const isVPlusDottedVersionAtLeastOne = withRegex(/^v\d+(\.\d+)?(\.\d+)?$/);
 // matches a version number with N 'clauses' e.g: v1.2 or v1.22.7.392 are valid
 const isVPlusDottedVersionNClauses = withRegex(/^v\d+(\.\d+)*$/);
 
+// matches a version number with N 'clauses'
+// and an optional text suffix
+// e.g: -beta, -preview1, -release-candidate etc
+const isVPlusDottedVersionNClausesWithOptionalSuffix = withRegex(/^v\d+(\.\d+)*(-.*)?$/);
+
 // Simple regex for test Composer versions rule
 // https://getcomposer.org/doc/articles/versions.md
 // Examples:
@@ -67,6 +72,7 @@ module.exports = {
   isVPlusTripleDottedVersion,
   isVPlusDottedVersionAtLeastOne,
   isVPlusDottedVersionNClauses,
+  isVPlusDottedVersionNClausesWithOptionalSuffix,
   isComposerVersion,
   isPhpVersionReduction,
   isStarRating,
