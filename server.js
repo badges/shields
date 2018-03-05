@@ -6820,7 +6820,7 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Cauditor integration
+// Cauditor integration - Badge deprectiated as of March 2018
 camp.route(/^\/cauditor\/(mi|ccn|npath|hi|i|ca|ce|dit)\/([^/]+)\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const format = match[5];
