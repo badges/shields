@@ -6825,6 +6825,7 @@ camp.route(/^\/cauditor\/(mi|ccn|npath|hi|i|ca|ce|dit)\/([^/]+)\/([^/]+)\/(.+)\.
 cache(function(data, match, sendBadge, request) {
   const format = match[5];
   const badgeData = getBadgeData('cauditor', data);
+  setBadgeColor(badgeData, 'lightgray');
   badgeData.text[1] = 'no longer available';
   sendBadge(format, badgeData);
 }));
