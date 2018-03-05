@@ -1,7 +1,6 @@
 'use strict';
 
 const {
-  isValidStyle,
   makeLogo,
   toArray,
   makeColor,
@@ -117,7 +116,7 @@ module.exports = class BaseService {
         overrideLabel || serviceLabel || defaultLabel,
         serviceMessage || 'n/a',
       ],
-      template: isValidStyle(style) ? style : 'default',
+      template: style,
       logo: makeLogo(style === 'social' ? defaultLogo : undefined, { logo: overrideLogo }),
       logoWidth: +overrideLogoWidth,
       links: toArray(overrideLink || serviceLink),
