@@ -1,12 +1,14 @@
 'use strict';
 
 const countBy = require('lodash.countby');
+const dom = require('xmldom').DOMParser;
 const jp = require('jsonpath');
 const path = require('path');
 const prettyBytes = require('pretty-bytes');
 const queryString = require('query-string');
 const semver = require('semver');
 const xml2js = require('xml2js');
+const xpath = require('xpath');
 
 const { checkErrorResponse } = require('./lib/error-helper');
 const analytics = require('./lib/analytics');
@@ -7438,9 +7440,9 @@ camp.route(/^\/maven-metadata\/v\/(https?)\/(.+\.xml)\.(svg|png|gif|jpg|json)$/,
 }));
 
 // User defined sources - JSON response
-camp.route(/^\/badge\/dynamic\/(json)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/badge\/dynamic\/(json|xml)\.(svg|png|gif|jpg|json)$/,
 cache({
-  queryParams: ['uri', 'query', 'prefix', 'suffix'],
+  queryParams: ['uri', 'url', 'query', 'prefix', 'suffix'],
   handler: function(query, match, sendBadge, request) {
     var type = match[1];
     var format = match[2];
@@ -7450,35 +7452,45 @@ cache({
 
     var badgeData = getBadgeData('custom badge', query);
 
-    if (!query.uri){
+    if (!query.uri && !query.url || !query.query){
       setBadgeColor(badgeData, 'red');
-      badgeData.text[1] = 'no uri specified';
+      badgeData.text[1] = !query.query ? 'no query specified' : 'no url specified';
       sendBadge(format, badgeData);
       return;
     }
-    var uri = encodeURI(decodeURIComponent(query.uri));
+    var url = encodeURI(decodeURIComponent(query.url || query.uri));
 
-    request(uri, (err, res, data) => {
+    request(url, (err, res, data) => {
       try {
-        if (res && res.statusCode === 404)
-          throw 'invalid resource';
-
-        if (err != null || !res || res.statusCode !== 200)
-          throw 'inaccessible';
+        if (checkErrorResponse(badgeData, err, res, 'resource not found')) {
+          return;
+        }
 
         badgeData.colorscheme = 'brightgreen';
 
+        let innerText = [];
         switch (type){
           case 'json':
             data = (typeof data == 'object' ? data : JSON.parse(data));
-            var jsonpath = jp.query(data, pathExpression);
-            if (!jsonpath.length)
+            data = jp.query(data, pathExpression);
+            if (!data.length) {
               throw 'no result';
-            var innerText = jsonpath.join(', ');
-            badgeData.text[1] = (prefix || '') + innerText + (suffix || '');
+            }
+            innerText = data;
+            break;
+          case 'xml':
+            data = new dom().parseFromString(data);
+            data = xpath.select(pathExpression, data);
+            if (!data.length) {
+              throw 'no result';
+            }
+            data.forEach((i,v)=>{
+              innerText.push(pathExpression.indexOf('@') + 1 ? i.value : i.firstChild.data);
+            });
             break;
         }
-      } catch(e) {
+        badgeData.text[1] = (prefix || '') + innerText.join(', ') + (suffix || '');
+      } catch (e) {
         setBadgeColor(badgeData, 'lightgrey');
         badgeData.text[1] = e;
       } finally {
