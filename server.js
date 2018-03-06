@@ -1897,13 +1897,7 @@ cache({
     });
     const badgeData = getBadgeData('type definitions', queryParams);
     request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
-      if (err != null) {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
-      }
-      if (res.statusCode === 404) {
-        badgeData.text[1] = 'package not found';
+      if (checkErrorResponse(badgeData, err, res, 'package not found')) {
         sendBadge(format, badgeData);
         return;
       }
