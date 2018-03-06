@@ -58,7 +58,7 @@ export default class DynamicBadgeMaker extends React.Component {
           className="short"
           value={this.state.query}
           onChange={event => this.setState({ query: event.target.value })}
-          placeholder="$.data.subdata" /> {}
+          placeholder="query" /> {}
         <input
           className="short"
           value={this.state.color}
