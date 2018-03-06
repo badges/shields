@@ -67,6 +67,9 @@ don't see it, feel free to [open a new issue][open an issue].
 
 [open an issue]: https://github.com/badges/shields/issues/new
 
+### Starring the repository
+
+Feel free to star the repository. This will help increase the visibility of the project, therefore attracting more users and contributors to Shields! 
 
 Getting help
 ------------
