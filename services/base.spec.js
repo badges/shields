@@ -87,7 +87,7 @@ describe('BaseService', () => {
         {
           text: ['cat', 'Hello bar'],
           colorscheme: 'lightgrey',
-          template: 'default',
+          template: undefined,
           logo: undefined,
           logoWidth: NaN,
           links: [],
