@@ -128,7 +128,7 @@ Function declarations are placed in `lib/`, not directly in `server.js`.
 Logos
 -----
 
-Please minimize checked-in SVG files through [SVGO][]. You can use [svgomg][].
+Please minimize checked-in SVG files through [SVGO][]. You can use [svgomg][]. In general we only accept logos that have a corresponding badge on the homepage (e.g. the Eclipse logo because we support service badges for the Eclipse Marketplace), but we may also approve logos for tools widely used by developers (e.g. our Slack logo).
 
 [SVGO]: https://github.com/svg/svgo
 [svgomg]: https://jakearchibald.github.io/svgomg/
