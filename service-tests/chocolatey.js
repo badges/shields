@@ -4,13 +4,14 @@ const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
 const {
   isMetric,
-  isVPlusDottedVersionNClauses
+  isVPlusDottedVersionNClauses,
+  isVPlusDottedVersionNClausesWithOptionalSuffix,
 } = require('./helpers/validators');
 const colorscheme = require('../lib/colorscheme.json');
 const {
-  versionJsonWithDash,
-  versionJsonFirstCharZero,
-  versionJsonFirstCharNotZero
+  nuGetV2VersionJsonWithDash,
+  nuGetV2VersionJsonFirstCharZero,
+  nuGetV2VersionJsonFirstCharNotZero
 } = require('./helpers/nuget-fixtures.js');
 const { invalidJSON } = require('./helpers/response-fixtures');
 
@@ -58,7 +59,7 @@ t.create('version (mocked, yellow badge)')
   .get('/v/scriptcs.json?style=_shields_test')
   .intercept(nock => nock('https://www.chocolatey.org')
     .get("/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true")
-    .reply(200, versionJsonWithDash)
+    .reply(200, nuGetV2VersionJsonWithDash)
   )
   .expectJSON({
     name: 'chocolatey',
@@ -70,7 +71,7 @@ t.create('version (mocked, orange badge)')
   .get('/v/scriptcs.json?style=_shields_test')
   .intercept(nock => nock('https://www.chocolatey.org')
     .get("/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true")
-    .reply(200, versionJsonFirstCharZero)
+    .reply(200, nuGetV2VersionJsonFirstCharZero)
   )
   .expectJSON({
     name: 'chocolatey',
@@ -82,7 +83,7 @@ t.create('version (mocked, blue badge)')
   .get('/v/scriptcs.json?style=_shields_test')
   .intercept(nock => nock('https://www.chocolatey.org')
     .get("/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true")
-    .reply(200, versionJsonFirstCharNotZero)
+    .reply(200, nuGetV2VersionJsonFirstCharNotZero)
   )
   .expectJSON({
     name: 'chocolatey',
@@ -114,14 +115,14 @@ t.create('version (pre) (valid)')
   .get('/vpre/scriptcs.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'chocolatey',
-    value: isVPlusDottedVersionNClauses,
+    value: isVPlusDottedVersionNClausesWithOptionalSuffix,
   }));
 
 t.create('version (pre) (mocked, yellow badge)')
   .get('/vpre/scriptcs.json?style=_shields_test')
   .intercept(nock => nock('https://www.chocolatey.org')
   .get("/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsAbsoluteLatestVersion%20eq%20true")
-    .reply(200, versionJsonWithDash)
+    .reply(200, nuGetV2VersionJsonWithDash)
   )
   .expectJSON({
     name: 'chocolatey',
@@ -133,7 +134,7 @@ t.create('version (pre) (mocked, orange badge)')
   .get('/vpre/scriptcs.json?style=_shields_test')
   .intercept(nock => nock('https://www.chocolatey.org')
   .get("/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsAbsoluteLatestVersion%20eq%20true")
-    .reply(200, versionJsonFirstCharZero)
+    .reply(200, nuGetV2VersionJsonFirstCharZero)
   )
   .expectJSON({
     name: 'chocolatey',
@@ -145,7 +146,7 @@ t.create('version (pre) (mocked, blue badge)')
   .get('/vpre/scriptcs.json?style=_shields_test')
   .intercept(nock => nock('https://www.chocolatey.org')
   .get("/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsAbsoluteLatestVersion%20eq%20true")
-    .reply(200, versionJsonFirstCharNotZero)
+    .reply(200, nuGetV2VersionJsonFirstCharNotZero)
   )
   .expectJSON({
     name: 'chocolatey',
