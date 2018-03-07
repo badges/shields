@@ -7898,10 +7898,9 @@ cache(function (data, match, sendBadge, request) {
     json: true,
     uri: 'https://bugzilla.mozilla.org/rest/bug/' + bugNumber
   };
-  var badgeData = getBadgeData('Bug ' + bugNumber, data);
+  var badgeData = getBadgeData('bug ' + bugNumber, data);
   request(options, function (err, res, json) {
     if (checkErrorResponse(badgeData, err, res)) {
-      badgeData.text[1] = 'unknown';
       sendBadge(format, badgeData);
       return;
     }

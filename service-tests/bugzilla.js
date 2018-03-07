@@ -22,15 +22,15 @@ t.create('Bugzilla valid bug status')
   .get('/996038.json')
   .inspectJSON()
   .expectJSONTypes(Joi.object().keys({
-    name: 'Bug 996038',
+    name: 'bug 996038',
     value: bzBugStatus
   }));
 
 t.create('Bugzilla invalid bug status')
   .get('/83548978974387943879.json')
-  .expectJSON({ name: 'Bug 83548978974387943879', value: 'unknown' });
+  .expectJSON({ name: 'bug 83548978974387943879', value: 'not found' });
 
 t.create('Bugzilla failed request bug status')
   .get('/996038.json')
   .networkOff()
-  .expectJSON({ name: 'Bug 996038', value: 'unknown' });
+  .expectJSON({ name: 'bug 996038', value: 'inaccessible' });
