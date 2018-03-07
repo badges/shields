@@ -10,6 +10,7 @@ const semver = require('semver');
 const xml2js = require('xml2js');
 const xpath = require('xpath');
 
+const { isDeprecated, getDeprecatedBadge } = require('./lib/deprecation-helpers');
 const { checkErrorResponse } = require('./lib/error-helper');
 const analytics = require('./lib/analytics');
 const config = require('./lib/server-config');
@@ -1096,12 +1097,10 @@ cache(function(data, match, sendBadge, request) {
 camp.route(/^\/(?:gittip|gratipay(\/user|\/team|\/project)?)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(queryParams, match, sendBadge, request) {
   const format = match[3];
-  const badgeData = getBadgeData('gratipay', queryParams);
+  const badgeData = getDeprecatedBadge('gratipay', queryParams);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('gratipay', queryParams);
   }
-  badgeData.colorscheme = 'lightgray';
-  badgeData.text[1] = 'no longer available';
   sendBadge(format, badgeData);
 }));
 
@@ -2997,6 +2996,13 @@ camp.route(/^\/gemnasium\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `jekyll/jekyll`.
   var format = match[2];
+
+  if (isDeprecated('gemnasium', serverStartTime)) {
+    const badgeData = getDeprecatedBadge('gemnasium', data);
+    sendBadge(format, badgeData);
+    return;
+  }
+
   var options = 'https://gemnasium.com/' + userRepo + '.svg';
   var badgeData = getBadgeData('dependencies', data);
   request(options, function(err, res, buffer) {
@@ -6366,9 +6372,7 @@ cache(function(data, match, sendBadge, request) {
 camp.route(/^\/snap(-ci?)\/([^/]+\/[^/]+)(?:\/(.+))\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const format = match[4];
-  const badgeData = getBadgeData('snap CI', data);
-  badgeData.colorscheme = 'lightgray';
-  badgeData.text[1] = 'no longer available';
+  const badgeData = getDeprecatedBadge('snap CI', data);
   sendBadge(format, badgeData);
 }));
 
@@ -6857,9 +6861,7 @@ cache(function(data, match, sendBadge, request) {
 camp.route(/^\/cauditor\/(mi|ccn|npath|hi|i|ca|ce|dit)\/([^/]+)\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const format = match[5];
-  const badgeData = getBadgeData('cauditor', data);
-  setBadgeColor(badgeData, 'lightgray');
-  badgeData.text[1] = 'no longer available';
+  const badgeData = getDeprecatedBadge('cauditor', data);
   sendBadge(format, badgeData);
 }));
 
