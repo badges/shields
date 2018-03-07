@@ -8,9 +8,11 @@ financial contributions, issues, and pull requests!
 Ways you can help
 -----------------
 
-### Financial contributions
+### Spreading the word
 
-We welcome financial contributions in full transparency on our
+Feel free to star the repository. This will help increase the visibility of the project, therefore attracting more users and contributors to Shields! 
+
+We're also asking for one-time $10 donations from people who use and love Shields. Please donate and spread the word! Financial contributions are handled in full transparency on our
 [open collective](https://opencollective.com/shields). Anyone can file an
 expense. If the expense makes sense for the development of the community, it
 will be "merged" into the ledger of our open collective by the core
@@ -66,10 +68,6 @@ If you have a suggestion of your own, [search the open issues][issues]. If you
 don't see it, feel free to [open a new issue][open an issue].
 
 [open an issue]: https://github.com/badges/shields/issues/new
-
-### Starring the repository
-
-Feel free to star the repository. This will help increase the visibility of the project, therefore attracting more users and contributors to Shields! 
 
 Getting help
 ------------
