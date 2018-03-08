@@ -22,12 +22,12 @@ export function staticBadgeUrl(baseUrl, subject, status, color, options) {
 }
 
 // Options can include: { prefix, suffix, color, longCache, style, queryParams }
-export function dynamicJsonBadgeUrl(baseUrl, label, jsonUrl, query, options = {}) {
+export function dynamicBadgeUrl(baseUrl, datatype, label, dataUrl, query, options = {}) {
   const { prefix, suffix, color, queryParams = {}, ...rest } = options;
 
   Object.assign(queryParams, {
     label,
-    uri: jsonUrl,
+    url: dataUrl,
     query,
   });
 
@@ -43,5 +43,5 @@ export function dynamicJsonBadgeUrl(baseUrl, label, jsonUrl, query, options = {}
 
   const outOptions = Object.assign({ queryParams }, rest);
 
-  return resolveBadgeUrl('/badge/dynamic/json.svg', baseUrl, outOptions);
+  return resolveBadgeUrl(`/badge/dynamic/${datatype}.svg`, baseUrl, outOptions);
 }
