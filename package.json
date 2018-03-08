@@ -144,7 +144,7 @@
     "sazerac": "^0.4.2",
     "semver-regex": "^1.0.0",
     "sinon": "^4.0.1",
-    "sinon-chai": "^2.14.0",
+    "sinon-chai": "^3.0.0",
     "url": "^0.11.0"
   },
   "greenkeeper": {
