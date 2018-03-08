@@ -3,7 +3,7 @@ version: 2
 jobs:
   npm-install:
     docker:
-      - image: shieldsio/shields-node-8:0.0.1
+      - image: shieldsio/shields-ci-node-8:0.0.2
     working_directory: ~/repo
     steps:
       - checkout
@@ -30,7 +30,7 @@ jobs:
 
   main:
     docker:
-      - image: shieldsio/shields-node-8:0.0.1
+      - image: shieldsio/shields-ci-node-8:0.0.2
     working_directory: ~/repo
     steps:
       - checkout
@@ -57,9 +57,9 @@ jobs:
           name: Upload Greenkeeper lockfile
           command: greenkeeper-lockfile-upload
 
-  main@node-6:
+  main@node-9:
     docker:
-      - image: shieldsio/shields-node-6:0.0.1
+      - image: shieldsio/shields-ci-node-9:0.0.2
     working_directory: ~/repo
     steps:
       - checkout
@@ -83,7 +83,7 @@ jobs:
 
   frontend:
     docker:
-      - image: shieldsio/shields-node-8:0.0.1
+      - image: shieldsio/shields-ci-node-8:0.0.2
     working_directory: ~/repo
     steps:
       - checkout
@@ -103,7 +103,7 @@ jobs:
 
   services-pr:
     docker:
-      - image: shieldsio/shields-node-8:0.0.1
+      - image: shieldsio/shields-ci-node-8:0.0.2
     working_directory: ~/repo
     steps:
       - checkout
@@ -135,9 +135,9 @@ jobs:
               echo 'This is not a pull request. Skipping.'
             fi
 
-  services-pr@node-6:
+  services-pr@node-9:
     docker:
-      - image: shieldsio/shields-node-6:0.0.1
+      - image: shieldsio/shields-ci-node-9:0.0.2
     working_directory: ~/repo
     steps:
       - checkout
@@ -171,7 +171,7 @@ jobs:
 
   services-daily:
     docker:
-      - image: shieldsio/shields-node-8:0.0.1
+      - image: shieldsio/shields-ci-node-8:0.0.2
     working_directory: ~/repo
     steps:
       - checkout
@@ -195,18 +195,18 @@ workflows:
       - main:
           requires:
             - npm-install
-      # - main@node-6:
-      #     requires:
-      #       - npm-install
+      - main@node-9:
+          requires:
+            - npm-install
       - frontend:
           requires:
             - npm-install
       - services-pr:
           requires:
             - npm-install
-      # - services-pr@node-6:
-      #     requires:
-      #       - npm-install
+      - services-pr@node-9:
+          requires:
+            - npm-install
 
   daily:
     triggers:
