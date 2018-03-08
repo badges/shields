@@ -770,10 +770,16 @@ cache(function(data, match, sendBadge, request) {
 
 // AppVeyor test status integration.
 camp.route(/^\/appveyor\/tests\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
+cache({
+  queryParams: ['passed', 'failed', 'skipped', 'compactValue'],
+  handler: function(data, match, sendBadge, request) {
   var repo = match[1];  // eg, `gruntjs/grunt`.
   var branch = match[2];
   var format = match[3];
+  var compact = data.compactValue !== undefined;
+  var passed = data.passed || (compact ? '✔' : 'passed');
+  var failed = data.failed || (compact ? '✘' : 'failed');
+  var skipped = data.skipped || (compact ? '●' : 'skipped');
   var apiUrl = 'https://ci.appveyor.com/api/projects/' + repo;
   if (branch != null) {
     apiUrl += '/branch/' + branch;
@@ -807,11 +813,11 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'orange';
       }
 
-      badgeData.text[1] = testsPassed + ' passed';
+      badgeData.text[1] = compact ? (passed + ' ' + testsPassed) : (testsPassed + ' ' + passed);
       if (testsFailed > 0)
-        badgeData.text[1] += ', ' + testsFailed + ' failed';
+        badgeData.text[1] += compact ? (' | ' + failed + ' ' + testsFailed) : (', ' + testsFailed + ' ' + failed);
       if (testsSkipped > 0)
-        badgeData.text[1] += ', ' + testsSkipped + ' skipped';
+        badgeData.text[1] += compact ? (' | ' + skipped + ' ' + testsSkipped) : (', ' + testsSkipped + ' ' + skipped);
 
       sendBadge(format, badgeData);
     } catch(e) {
@@ -819,7 +825,7 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
     }
   });
-}));
+}}));
 
 // Old url for CodeBetter TeamCity instance.
 camp.route(/^\/teamcity\/codebetter\/(.*)\.(svg|png|gif|jpg|json)$/,
