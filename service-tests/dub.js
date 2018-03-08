@@ -16,8 +16,8 @@ const isVersionColor = Joi.equal(
   colorscheme.yellow.colorB,
   colorscheme.yellowgreen.colorB,
   colorscheme.green.colorB,
-  colorscheme.brightgreen.colorB,
-)
+  colorscheme.brightgreen.colorB
+);
 
 const t = new ServiceTester({ id: 'dub', title: 'Dub' });
 module.exports = t;
