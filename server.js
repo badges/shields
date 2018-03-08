@@ -1,6 +1,7 @@
 'use strict';
 
 const countBy = require('lodash.countby');
+const dom = require('xmldom').DOMParser;
 const jp = require('jsonpath');
 const path = require('path');
 const prettyBytes = require('pretty-bytes');
@@ -8,7 +9,9 @@ const glob = require('glob');
 const queryString = require('query-string');
 const semver = require('semver');
 const xml2js = require('xml2js');
+const xpath = require('xpath');
 
+const { isDeprecated, getDeprecatedBadge } = require('./lib/deprecation-helpers');
 const { checkErrorResponse } = require('./lib/error-helper');
 const analytics = require('./lib/analytics');
 const config = require('./lib/server-config');
@@ -393,7 +396,7 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       log.error('Travis error: ' + err.stack);
       if (res) { log.error(''+res); }
-      badgeData.text[1] = 'invalid';
+      badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
@@ -1059,12 +1062,10 @@ cache(function(data, match, sendBadge, request) {
 camp.route(/^\/(?:gittip|gratipay(\/user|\/team|\/project)?)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(queryParams, match, sendBadge, request) {
   const format = match[3];
-  const badgeData = getBadgeData('gratipay', queryParams);
+  const badgeData = getDeprecatedBadge('gratipay', queryParams);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('gratipay', queryParams);
   }
-  badgeData.colorscheme = 'lightgray';
-  badgeData.text[1] = 'no longer available';
   sendBadge(format, badgeData);
 }));
 
@@ -2960,6 +2961,13 @@ camp.route(/^\/gemnasium\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `jekyll/jekyll`.
   var format = match[2];
+
+  if (isDeprecated('gemnasium', serverStartTime)) {
+    const badgeData = getDeprecatedBadge('gemnasium', data);
+    sendBadge(format, badgeData);
+    return;
+  }
+
   var options = 'https://gemnasium.com/' + userRepo + '.svg';
   var badgeData = getBadgeData('dependencies', data);
   request(options, function(err, res, buffer) {
@@ -6329,9 +6337,7 @@ cache(function(data, match, sendBadge, request) {
 camp.route(/^\/snap(-ci?)\/([^/]+\/[^/]+)(?:\/(.+))\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const format = match[4];
-  const badgeData = getBadgeData('snap CI', data);
-  badgeData.colorscheme = 'lightgray';
-  badgeData.text[1] = 'no longer available';
+  const badgeData = getDeprecatedBadge('snap CI', data);
   sendBadge(format, badgeData);
 }));
 
@@ -6816,70 +6822,12 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Cauditor integration
+// Cauditor integration - Badge deprectiated as of March 2018
 camp.route(/^\/cauditor\/(mi|ccn|npath|hi|i|ca|ce|dit)\/([^/]+)\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var labels = {
-    'mi': 'maintainability',
-    'ccn': 'cyclomatic complexity',
-    'npath': 'npath complexity',
-    'hi': 'intelligent content',
-    'i': 'instability',
-    'ca': 'afferent coupling',
-    'ce': 'efferent coupling',
-    'dit': 'depth of inheritance'
-  };
-  // values for color ranges (left = green, right = red)
-  var colors = {
-    'mi': [70, 55, 45, 35],
-    'ccn': [2, 4, 7, 11],
-    'npath': [2, 25, 60, 200],
-    'hi': [2, 20, 45, 80],
-    'i': [.2, .5, .75, .8],
-    'ca': [2, 4, 7, 10],
-    'ce': [2, 7, 13, 20],
-    'dit': [2, 3, 4, 5]
-  };
-  var metric = match[1];
-  var user = match[2];
-  var repo = match[3];
-  var branch = match[4];
-  var format = match[5];
-  var badgeData = getBadgeData(labels[metric], data);
-  var url = 'https://www.cauditor.org/api/v1/' + user + '/' + repo + '/' + branch + '/HEAD';
-  request(url, function(err, res, buffer) {
-    if (err != null || res.statusCode !== 200) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-
-    var data = JSON.parse(buffer);
-    var value = data.metrics.weighed[metric];
-    var range = colors[metric];
-
-    badgeData.text[1] = Math.round(value);
-    if (metric === 'mi') {
-      badgeData.text[1] += '%';
-    }
-
-    // calculate colors: anything in the given range is green to yellow
-    if (value >= Math.min(range[0], range[1]) && value < Math.max(range[0], range[1])) {
-      badgeData.colorscheme = 'green';
-    } else if (value >= Math.min(range[1], range[2]) && value < Math.max(range[1], range[2])) {
-      badgeData.colorscheme = 'yellowgreen';
-    } else if (value >= Math.min(range[2], range[3]) && value < Math.max(range[2], range[3])) {
-      badgeData.colorscheme = 'yellow';
-    // anything higher than (or lower, in case of 'mi') first value is green
-    } else if ((value < range[0] && range[0] < range[1]) || (value > range[0] && range[0] > range[1])) {
-      badgeData.colorscheme = 'brightgreen';
-    // anything not yet matched is bad!
-    } else {
-      badgeData.colorscheme = 'red';
-    }
-
-    sendBadge(format, badgeData);
-  });
+  const format = match[5];
+  const badgeData = getDeprecatedBadge('cauditor', data);
+  sendBadge(format, badgeData);
 }));
 
 // Mozilla addons integration
@@ -7459,9 +7407,9 @@ camp.route(/^\/maven-metadata\/v\/(https?)\/(.+\.xml)\.(svg|png|gif|jpg|json)$/,
 }));
 
 // User defined sources - JSON response
-camp.route(/^\/badge\/dynamic\/(json)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/badge\/dynamic\/(json|xml)\.(svg|png|gif|jpg|json)$/,
 cache({
-  queryParams: ['uri', 'query', 'prefix', 'suffix'],
+  queryParams: ['uri', 'url', 'query', 'prefix', 'suffix'],
   handler: function(query, match, sendBadge, request) {
     var type = match[1];
     var format = match[2];
@@ -7471,35 +7419,45 @@ cache({
 
     var badgeData = getBadgeData('custom badge', query);
 
-    if (!query.uri){
+    if (!query.uri && !query.url || !query.query){
       setBadgeColor(badgeData, 'red');
-      badgeData.text[1] = 'no uri specified';
+      badgeData.text[1] = !query.query ? 'no query specified' : 'no url specified';
       sendBadge(format, badgeData);
       return;
     }
-    var uri = encodeURI(decodeURIComponent(query.uri));
+    var url = encodeURI(decodeURIComponent(query.url || query.uri));
 
-    request(uri, (err, res, data) => {
+    request(url, (err, res, data) => {
       try {
-        if (res && res.statusCode === 404)
-          throw 'invalid resource';
-
-        if (err != null || !res || res.statusCode !== 200)
-          throw 'inaccessible';
+        if (checkErrorResponse(badgeData, err, res, 'resource not found')) {
+          return;
+        }
 
         badgeData.colorscheme = 'brightgreen';
 
+        let innerText = [];
         switch (type){
           case 'json':
             data = (typeof data == 'object' ? data : JSON.parse(data));
-            var jsonpath = jp.query(data, pathExpression);
-            if (!jsonpath.length)
+            data = jp.query(data, pathExpression);
+            if (!data.length) {
               throw 'no result';
-            var innerText = jsonpath.join(', ');
-            badgeData.text[1] = (prefix || '') + innerText + (suffix || '');
+            }
+            innerText = data;
+            break;
+          case 'xml':
+            data = new dom().parseFromString(data);
+            data = xpath.select(pathExpression, data);
+            if (!data.length) {
+              throw 'no result';
+            }
+            data.forEach((i,v)=>{
+              innerText.push(pathExpression.indexOf('@') + 1 ? i.value : i.firstChild.data);
+            });
             break;
         }
-      } catch(e) {
+        badgeData.text[1] = (prefix || '') + innerText.join(', ') + (suffix || '');
+      } catch (e) {
         setBadgeColor(badgeData, 'lightgrey');
         badgeData.text[1] = e;
       } finally {
