@@ -2,6 +2,7 @@
 
 const Joi = require('joi');
 const ServiceTester = require('./runner/service-tester');
+const { invalidJSON } = require('./helpers/response-fixtures');
 
 const t = new ServiceTester({ id: 'clojars', title: 'clojars' });
 module.exports = t;
@@ -27,7 +28,7 @@ t.create('clojars (unexpected response)')
   .get('/v/prismic.json')
   .intercept(nock => nock('https://clojars.org')
     .get('/prismic/latest-version.json')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'clojars', value: 'invalid'});
 
