@@ -23,6 +23,9 @@ const helpers = fileMatch(
   '!**/*.spec.js',
   '!lib/all-badge-examples.js'
 );
+const logos = fileMatch(
+  'logo/*.svg',
+);
 const helperTests = fileMatch('lib/**/*.spec.js');
 const packageJson = fileMatch('package.json');
 const packageLock = fileMatch('package-lock.json');
@@ -70,6 +73,15 @@ if (helpers.created && !helperTests.created) {
   warn([
     'This PR modified helper functions in `lib/` but not accompanying tests. ',
     "That's okay so long as it's refactoring existing code.",
+  ].join(''));
+}
+
+if (logos.created) {
+  message([
+    ':art: Thanks for submitting a logo. ',
+    'Please ensure your contribution follows our ',
+    '[guidance](https://github.com/badges/shields/blob/master/CONTRIBUTING.md#logos) ',
+    'for logo submissions.'
   ].join(''));
 }
 
