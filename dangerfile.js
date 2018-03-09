@@ -28,11 +28,18 @@ const packageJson = fileMatch('package.json');
 const packageLock = fileMatch('package-lock.json');
 const capitals = fileMatch('**/*[A-Z]*.js');
 const underscores = fileMatch('**/*_*.js');
+const targetBranch = danger.github.pr.base.ref;
 
 message([
   ':sparkles: Thanks for your contribution to Shields, ',
   `@${danger.github.pr.user.login}!`
 ].join(''));
+
+if (targetBranch != 'master') {
+  const message = `This PR targets \`${targetBranch}\``;
+  const idea = 'It is likely that the target branch should be `master`';
+  warn(`${message} - <i>${idea}</i>`);
+}
 
 if (documentation.createdOrModified) {
   message([
