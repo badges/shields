@@ -33,13 +33,14 @@ t.create('total downloads (valid)')
     colorB: isVersionColor
   }));
 
-/*t.create('total downloads, specific version (valid)')
+t.create('total downloads, specific version (valid)')
   .get('/dt/vibe-d/0.7.23.json?style=_shields_test')
   .expectJSONTypes(Joi.object().keys({
     name: 'downloads',
     value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? v0.7.23$/),
     colorB: isVersionColor
-  }));*/
+  }))
+  .timeout(15000);
 
 t.create('total downloads, latest version (valid)')
   .get('/dt/vibe-d/latest.json?style=_shields_test')
