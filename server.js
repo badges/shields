@@ -6099,15 +6099,14 @@ cache(function (data, match, sendBadge, request) {
   var pkg = match[2]; // package name, e.g. vibe-d
   var version = match[3]; // version (1.2.3 or latest)
   var format = match[4];
-  var apiUrl = 'http://code.dlang.org/api/packages/'+pkg;
+  var apiUrl = 'https://code.dlang.org/api/packages/'+pkg;
   if (version) {
     apiUrl += '/' + version;
   }
   apiUrl += '/stats';
   var badgeData = getBadgeData('dub', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -6153,7 +6152,7 @@ cache(function (data, match, sendBadge, request) {
   var info = match[1];  // (v - version, l - license)
   var pkg = match[2];  // package name, e.g. vibe-d
   var format = match[3];
-  var apiUrl = 'http://code.dlang.org/api/packages/' + pkg;
+  var apiUrl = 'https://code.dlang.org/api/packages/' + pkg;
   if (info === 'v') {
     apiUrl += '/latest';
   } else if (info === 'l') {
@@ -6161,8 +6160,7 @@ cache(function (data, match, sendBadge, request) {
   }
   var badgeData = getBadgeData('dub', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
