@@ -24,7 +24,7 @@ const helpers = fileMatch(
   '!lib/all-badge-examples.js'
 );
 const logos = fileMatch(
-  'logo/*.svg',
+  'logo/*.svg'
 );
 const helperTests = fileMatch('lib/**/*.spec.js');
 const packageJson = fileMatch('package.json');
