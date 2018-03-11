@@ -132,7 +132,14 @@ badge preview URIs with `maxAge` &ndash; run `LONG_CACHE=true npm run build`.
 To analyze the frontend bundle, run `npm install webpack-bundle-analyzer` and
 then `ANALYZE=true npm start`.
 
+[Snapshot tests][] ensure we don't inadvertently make changes that affect the
+SVG or JSON output. When deliberately changing the output, run
+`SNAPSHOT_DRY=1 npm run test:js:server` to preview changes to the saved
+snapshots, and `SNAPSHOT_UPDATE=1 npm run test:js:server` to update them.
+
+
 [package manager]: https://nodejs.org/en/download/package-manager/
+[snapshot tests]: https://glebbahmutov.com/blog/snapshot-testing/
 
 
 Hosting your own server
