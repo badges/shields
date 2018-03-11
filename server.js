@@ -7900,6 +7900,72 @@ camp.route(/^\/vaadin-directory\/(star|status|rating|rc|rating-count|v|version|r
 
 }));
 
+// Bugzilla bug integration
+camp.route(/^\/bugzilla\/(\d+)\.(svg|png|gif|jpg|json)$/,
+cache(function (data, match, sendBadge, request) {
+  var bugNumber = match[1];  // eg, 1436739
+  var format = match[2];
+  var options = {
+    method: 'GET',
+    json: true,
+    uri: 'https://bugzilla.mozilla.org/rest/bug/' + bugNumber
+  };
+  var badgeData = getBadgeData('bug ' + bugNumber, data);
+  request(options, function (err, res, json) {
+    if (checkErrorResponse(badgeData, err, res)) {
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var bug = json.bugs[0];
+
+      switch (bug.status) {
+        case 'UNCONFIRMED':
+          badgeData.text[1] = 'unconfirmed';
+          badgeData.colorscheme = 'blue';
+          break;
+        case 'NEW':
+          badgeData.text[1] = 'new';
+          badgeData.colorscheme = 'blue';
+          break;
+        case 'ASSIGNED':
+          badgeData.text[1] = 'assigned';
+          badgeData.colorscheme = 'green';
+          break;
+        case 'RESOLVED':
+          if (bug.resolution === 'FIXED') {
+            badgeData.text[1] = 'fixed';
+            badgeData.colorscheme = 'brightgreen';
+          } else if (bug.resolution === 'INVALID') {
+            badgeData.text[1] = 'invalid';
+            badgeData.colorscheme = 'yellow';
+          } else if (bug.resolution === 'WONTFIX') {
+            badgeData.text[1] = 'won\'t fix';
+            badgeData.colorscheme = 'orange';
+          } else if (bug.resolution === 'DUPLICATE') {
+            badgeData.text[1] = 'duplicate';
+            badgeData.colorscheme = 'lightgrey';
+          } else if (bug.resolution === 'WORKSFORME') {
+            badgeData.text[1] = 'works for me';
+            badgeData.colorscheme = 'yellowgreen';
+          } else if (bug.resolution === 'INCOMPLETE') {
+            badgeData.text[1] = 'incomplete';
+            badgeData.colorscheme = 'red';
+          } else {
+            badgeData.text[1] = 'unknown';
+          }
+          break;
+        default:
+          badgeData.text[1] = 'unknown';
+      }
+      sendBadge(format, badgeData);
+    } catch (e) {
+      badgeData.text[1] = 'unknown';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
