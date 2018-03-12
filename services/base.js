@@ -1,6 +1,10 @@
 'use strict';
 
 const {
+  NotFound,
+  InvalidResponse,
+} = require('./errors');
+const {
   makeLogo,
   toArray,
   makeColor,
@@ -32,6 +36,7 @@ module.exports = class BaseService {
   static get category() {
     return 'unknown';
   }
+
   /**
    * Returns an object with two fields:
    *  - format: Regular expression to use for URIs for this service's badges
@@ -105,15 +110,15 @@ module.exports = class BaseService {
       link: serviceLink,
     } = serviceData;
 
-    const defaultLabel = this.category;
     const {
       color: defaultColor,
       logo: defaultLogo,
+      label: defaultLabel,
     } = this.defaultBadgeData;
 
     const badgeData = {
       text: [
-        overrideLabel || serviceLabel || defaultLabel,
+        overrideLabel || serviceLabel || defaultLabel || this.category,
         serviceMessage || 'n/a',
       ],
       template: style,
@@ -128,30 +133,50 @@ module.exports = class BaseService {
     return badgeData;
   }
 
-  static register(camp, handleRequest) {
+  static register(camp, handleRequest, { handleInternalErrors }) {
     const serviceClass = this; // In a static context, "this" is the class.
 
-    camp.route(this._regex,
-    handleRequest(async (queryParams, match, sendBadge, request) => {
-      let serviceData;
+    camp.route(this._regex, handleRequest({
+      queryParams: this.uri.queryParams,
+      handler: async (queryParams, match, sendBadge, request) => {
+        let serviceData;
 
-      try {
-        const namedParams = this._namedParamsForMatch(match);
-        const serviceInstance = new serviceClass({
-          sendAndCacheRequest: request.asPromise,
-        });
-        serviceData = await serviceInstance.handle(namedParams);
-      } catch (error) {
-        serviceData = { message: 'error' };
-        console.log(error);
-      }
+        try {
+          const namedParams = this._namedParamsForMatch(match);
+          const serviceInstance = new serviceClass({
+            sendAndCacheRequest: request.asPromise,
+          });
+          serviceData = await serviceInstance.handle(namedParams, queryParams);
+        } catch (error) {
+          if (error instanceof NotFound) {
+            serviceData = {
+              message: error.message,
+              color: 'red',
+            };
+          } else if (error instanceof InvalidResponse) {
+            serviceData = {
+              message: error.message,
+              color: 'lightgray',
+            };
+          } else if (handleInternalErrors) {
+            serviceData = {
+              label: 'shields',
+              message: 'internal error',
+              color: 'lightgray',
+            };
+            console.log(error);
+          } else {
+            throw error;
+          }
+        }
 
-      // Assumes the final capture group is the extension
-      const format = match.slice(-1)[0];
+        // Assumes the final capture group is the extension
+        const format = match.slice(-1)[0];
 
-      const badgeData = this._makeBadgeData(queryParams, serviceData);
+        const badgeData = this._makeBadgeData(queryParams, serviceData);
 
-      sendBadge(format, badgeData);
+        sendBadge(format, badgeData);
+      },
     }));
   }
 };
