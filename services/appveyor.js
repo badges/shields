@@ -1,25 +1,22 @@
 'use strict';
 
 const BaseService = require('./base');
+const {
+  checkErrorResponse,
+  asJson,
+} = require('../lib/error-helper');
 
-/**
- * AppVeyor CI integration.
- */
 module.exports = class AppVeyor extends BaseService {
   async handle({repo, branch}) {
     let apiUrl = 'https://ci.appveyor.com/api/projects/' + repo;
     if (branch != null) {
       apiUrl += '/branch/' + branch;
     }
-    const {buffer, res} = await this._sendAndCacheRequest(apiUrl, {
+    const json = await this._sendAndCacheRequest(apiUrl, {
       headers: { 'Accept': 'application/json' }
-    });
+    }).then(checkErrorResponse('project not found or access denied'))
+      .then(asJson);
 
-    if (res.statusCode === 404) {
-      return {message: 'project not found or access denied'};
-    }
-
-    const data = JSON.parse(buffer);
     const status = data.build.status;
     if (status === 'success') {
       return {message: 'passing', colorscheme: 'brightgreen'};

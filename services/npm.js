@@ -3,7 +3,7 @@
 const BaseService = require('./base');
 const {
   checkErrorResponse,
-  getJson,
+  asJson,
 } = require('../lib/error-helper');
 const {
   makePackageDataUrl,
@@ -30,11 +30,11 @@ module.exports = class NPMTypeDefinitions extends BaseService {
   async handle({ scope, packageName }, { registry_uri: registryUrl }) {
     const apiUrl = makePackageDataUrl({ registryUrl, scope, packageName });
 
-    const { buffer } = await this._sendAndCacheRequest(apiUrl, {
+    const json = await this._sendAndCacheRequest(apiUrl, {
       headers: { 'Accept': '*/*' },
-    }).then(checkErrorResponse.asPromise({ notFoundMessage: 'package not found' }));
+    }).then(checkErrorResponse.asPromise('package not found'))
+      .then(asJson);
 
-    const json = getJson(buffer);
     let packageData;
     if (scope === undefined) {
       packageData = json;
