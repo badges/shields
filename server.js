@@ -197,6 +197,7 @@ camp.notfound(/.*/, function(query, match, end, request) {
 // Vendors.
 
 // Match modules with the same name as their containing directory.
+// e.g. services/appveyor/appveyor.js
 const serviceRegex = /\/services\/(.*)\/\1\.js$/;
 // New-style services
 glob.sync(`${__dirname}/services/**/*.js`)
