@@ -113,7 +113,7 @@ BadgeExamples.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-module.exports = {
+export {
   Badge,
   BadgeExamples,
 };

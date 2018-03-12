@@ -67,6 +67,11 @@ don't see it, feel free to [open a new issue][open an issue].
 
 [open an issue]: https://github.com/badges/shields/issues/new
 
+### Spreading the word
+
+Feel free to star the repository. This will help increase the visibility of the project, therefore attracting more users and contributors to Shields!
+
+We're also asking for [one-time $10 donations](https://opencollective.com/shields) from developers who use and love Shields, please spread the word!
 
 Getting help
 ------------
@@ -128,7 +133,7 @@ Function declarations are placed in `lib/`, not directly in `server.js`.
 Logos
 -----
 
-Please minimize checked-in SVG files through [SVGO][]. You can use [svgomg][].
+Please minimize checked-in SVG files through [SVGO][]. You can use [svgomg][]. In general we only accept logos that have a corresponding badge on the homepage (e.g. the Eclipse logo because we support service badges for the Eclipse Marketplace), but we may also approve logos for tools widely used by developers (e.g. our Slack logo). We will happily consider all requests, but don't expect systematic approval, it's at the discretion of the maintainers.
 
 [SVGO]: https://github.com/svg/svgo
 [svgomg]: https://jakearchibald.github.io/svgomg/

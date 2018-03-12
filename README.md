@@ -14,10 +14,10 @@
         <img src="https://img.shields.io/github/last-commit/badges/shields/gh-pages.svg?label=last%20deployed"
             alt="last deployed"></a>
     <a href="https://discord.gg/HjJCwm5">
-        <img src="https://img.shields.io/discord/308323056592486420.svg"
+        <img src="https://img.shields.io/discord/308323056592486420.svg?logo=discord"
             alt="chat on Discord"></a>
     <a href="https://twitter.com/intent/follow?screen_name=shields_io">
-        <img src="https://img.shields.io/twitter/follow/shields_io.svg?style=social"
+        <img src="https://img.shields.io/twitter/follow/shields_io.svg?style=social&logo=twitter"
             alt="follow on Twitter"></a>
 </p>
 
@@ -132,7 +132,14 @@ badge preview URIs with `maxAge` &ndash; run `LONG_CACHE=true npm run build`.
 To analyze the frontend bundle, run `npm install webpack-bundle-analyzer` and
 then `ANALYZE=true npm start`.
 
+[Snapshot tests][] ensure we don't inadvertently make changes that affect the
+SVG or JSON output. When deliberately changing the output, run
+`SNAPSHOT_DRY=1 npm run test:js:server` to preview changes to the saved
+snapshots, and `SNAPSHOT_UPDATE=1 npm run test:js:server` to update them.
+
+
 [package manager]: https://nodejs.org/en/download/package-manager/
+[snapshot tests]: https://glebbahmutov.com/blog/snapshot-testing/
 
 
 Hosting your own server
