@@ -189,7 +189,13 @@ In order to enable integration with [Sentry](https://sentry.io), you need your o
 1. Create a new project for Node.js
 1. You should see [Sentry DSN](https://docs.sentry.io/quickstart/#configure-the-dsn) for your project. Sentry DSN can be found by navigating to \[Project Name] -> Project Settings -> Client Keys (DSN) as well.
 
-Start the server using the Sentry DSN:
+Start the server using the Sentry DSN. You can set it:
+- by `SENTRY_DSN` environment variable
 ```
 SENTRY_DSN=https://xxx:yyy@sentry.io/zzz sudo node server
+```
+
+- or by `sentry_dsn` secret property defined in `private/secret.json`
+```
+sudo node server
 ```

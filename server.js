@@ -9,7 +9,8 @@ const semver = require('semver');
 const xml2js = require('xml2js');
 const Raven = require('raven');
 
-Raven.config().install();
+const serverSecrets = require('./lib/server-secrets');
+Raven.config(process.env.SENTRY_DSN || serverSecrets.sentry_dsn).install();
 const { checkErrorResponse } = require('./lib/error-helper');
 const analytics = require('./lib/analytics');
 const config = require('./lib/server-config');
@@ -18,7 +19,6 @@ const sysMonitor = require('./lib/sys/monitor');
 const log = require('./lib/log');
 const { makeMakeBadgeFn } = require('./lib/make-badge');
 const { QuickTextMeasurer } = require('./lib/text-measurer');
-const serverSecrets = require('./lib/server-secrets');
 const suggest = require('./lib/suggest');
 const {licenseToColor} = require('./lib/licenses');
 const { latest: latestVersion } = require('./lib/version');
