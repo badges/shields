@@ -77,7 +77,7 @@ describe('The server', function () {
     afterEach(function () { toBufferStub.restore(); });
 
     it('should emit the 500 message', async function () {
-      const res = await fetch(`${baseUri}/:some_new-badge-green.png`)
+      const res = await fetch(`${baseUri}/:some_new-badge-green.png`);
       // This emits status code 200, though 500 would be preferable.
       expect(res.status).to.equal(200);
       expect(await res.text()).to.include(expectedError);
