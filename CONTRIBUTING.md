@@ -123,7 +123,7 @@ e.g. **[Travis] Fix timeout issues**
 
 When changing other code, please add unit tests.
 
-[service-tests]: https://github.com/badges/shields/blob/master/service-tests/README.md
+[service-tests]: https://github.com/badges/shields/blob/master/doc/service-tests.md
 
 ### Code organization
 

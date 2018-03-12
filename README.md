@@ -75,7 +75,7 @@ Or you can adopt one of these pull requests:
 
 You can read a [tutorial on how to add a badge][tutorial].
 
-[service-tests]: https://github.com/badges/shields/blob/master/service-tests/README.md
+[service-tests]: https://github.com/badges/shields/blob/master/doc/service-tests.md
 [tutorial]: doc/TUTORIAL.md
 [contributing]: CONTRIBUTING.md
 
