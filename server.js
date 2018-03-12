@@ -196,9 +196,11 @@ camp.notfound(/.*/, function(query, match, end, request) {
 
 // Vendors.
 
+// Match modules with the same name as their containing directory.
+const serviceRegex = /\/services\/(.*)\/\1\.js$/;
 // New-style services
-glob.sync(`${__dirname}/services/*.js`)
-  .filter(path => !path.endsWith('base.js') && !path.endsWith('.spec.js'))
+glob.sync(`${__dirname}/services/**/*.js`)
+  .filter(path => serviceRegex.test(path))
   .map(path => require(path))
   .forEach(serviceClass => serviceClass.register(camp, cache));
 
