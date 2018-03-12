@@ -1,6 +1,6 @@
 'use strict';
 
-const BaseService = require('./base');
+const BaseService = require('../base');
 
 /**
  * AppVeyor CI integration.
