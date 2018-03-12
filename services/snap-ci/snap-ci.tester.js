@@ -1,6 +1,6 @@
 'use strict';
 
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 
 const t = new ServiceTester({ id: 'snap-ci', title: 'Snap CI' });
 module.exports = t;

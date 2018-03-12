@@ -1,6 +1,6 @@
 'use strict';
 
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 
 const t = new ServiceTester({ id: 'cauditor', title: 'Cauditor' });
 module.exports = t;

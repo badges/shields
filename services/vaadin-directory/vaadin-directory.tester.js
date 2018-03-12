@@ -1,14 +1,14 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 
 // Get validate function from validator.js lib
 const {
   isSemver,
   isStarRating,
   isFormattedDate
-} = require('./helpers/validators');
+} = require('../test-validators');
 
 const t = new ServiceTester({
   id: 'vaadin-directory',

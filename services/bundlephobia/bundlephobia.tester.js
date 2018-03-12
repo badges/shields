@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('./runner/service-tester')
-const { isFileSize } = require('./helpers/validators')
+const ServiceTester = require('../service-tester')
+const { isFileSize } = require('../test-validators')
 
 const t = new ServiceTester({
   id: 'bundlephobia', title: 'NPM package bundle size',

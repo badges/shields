@@ -1,12 +1,12 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 const {
   isVPlusTripleDottedVersion,
   isMetric,
   isStarRating
-} = require('./helpers/validators');
+} = require('../test-validators');
 
 const isVscodeRating = Joi.string().regex(/[0-5].[0-9]{2}\/5?\s*\([0-9]*\)$/);
 

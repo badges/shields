@@ -1,7 +1,7 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 const {
   isMetric,
   isMetricOpenIssues,
@@ -9,10 +9,10 @@ const {
   isFileSize,
   isFormattedDate,
   isVPlusDottedVersionAtLeastOne
-} = require('./helpers/validators');
-const colorscheme = require('../lib/colorscheme.json');
-const {licenseToColor} = require('../lib/licenses');
-const {makeColor} = require('../lib/badge-data');
+} = require('../test-validators');
+const colorscheme = require('../../lib/colorscheme.json');
+const {licenseToColor} = require('../../lib/licenses');
+const {makeColor} = require('../../lib/badge-data');
 const mapValues = require('lodash.mapvalues');
 
 const t = new ServiceTester({ id: 'github', title: 'Github' });

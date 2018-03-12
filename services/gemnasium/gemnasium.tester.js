@@ -1,9 +1,9 @@
 'use strict';
 
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 const { expect } = require('chai')
 
-const { isDeprecated } = require('../lib/deprecation-helpers');
+const { isDeprecated } = require('../../lib/deprecation-helpers');
 
 const t = new ServiceTester({ id: 'gemnasium', title: 'gemnasium' });
 module.exports = t;

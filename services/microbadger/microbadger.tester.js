@@ -1,9 +1,9 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
-const { isFileSize } = require('./helpers/validators');
-const { invalidJSON } = require('./helpers/response-fixtures');
+const ServiceTester = require('../service-tester');
+const { isFileSize } = require('../test-validators');
+const { invalidJSON } = require('../response-fixtures');
 
 const t = new ServiceTester({ id: 'microbadger', title: 'MicroBadger' });
 module.exports = t;

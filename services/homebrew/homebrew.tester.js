@@ -1,9 +1,9 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
-const { isVPlusTripleDottedVersion } = require('./helpers/validators.js');
-const { invalidJSON } = require('./helpers/response-fixtures');
+const ServiceTester = require('../service-tester');
+const { isVPlusTripleDottedVersion } = require('../test-validators');
+const { invalidJSON } = require('../response-fixtures');
 
 const t = new ServiceTester({ id: 'homebrew', title: 'homebrew' });
 module.exports = t;

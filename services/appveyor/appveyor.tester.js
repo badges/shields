@@ -1,7 +1,7 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 
 const isAppveyorBuildState = Joi.equal('failing', 'passing', 'running', 'queued');
 const isAppveyorTestTotals =

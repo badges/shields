@@ -1,14 +1,14 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 
 const {
     isMetric,
     isMetricOverTimePeriod,
     isIntegerPercentage,
     isVPlusDottedVersionAtLeastOne,
-} = require('./helpers/validators');
+} = require('../test-validators');
 
 const isPlatform = Joi.string().regex(/^(osx|ios|tvos|watchos)( \| (osx|ios|tvos|watchos))*$/);
 

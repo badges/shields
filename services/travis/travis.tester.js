@@ -1,8 +1,8 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
-const {isPhpVersionReduction} = require('./helpers/validators');
+const ServiceTester = require('../service-tester');
+const {isPhpVersionReduction} = require('../test-validators');
 
 const t = new ServiceTester({ id: 'travis', title: 'Travis CI/PHP version from .travis.yml' });
 module.exports = t;

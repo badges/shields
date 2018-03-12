@@ -1,8 +1,8 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
-const { invalidJSON } = require('./helpers/response-fixtures');
+const ServiceTester = require('../service-tester');
+const { invalidJSON } = require('../response-fixtures');
 
 const t = new ServiceTester({ id: 'hhvm', title: 'hhvm status' });
 

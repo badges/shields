@@ -1,7 +1,7 @@
 'use strict';
 
-const ServiceTester = require('./runner/service-tester');
-const colorscheme = require('../lib/colorscheme.json');
+const ServiceTester = require('../service-tester');
+const colorscheme = require('../../lib/colorscheme.json');
 const mapValues = require('lodash.mapvalues');
 
 const t = new ServiceTester({ id: 'website', title: 'website' });

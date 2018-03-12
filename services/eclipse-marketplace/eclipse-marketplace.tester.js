@@ -1,13 +1,13 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 const {
     isFormattedDate,
 	  isMetric,
 	  isMetricOverTimePeriod,
 	  isVPlusDottedVersionAtLeastOne
-} = require('./helpers/validators');
+} = require('../test-validators');
 
 const t = new ServiceTester({ id: 'eclipse-marketplace', title: 'Eclipse' });
 module.exports = t;

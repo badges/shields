@@ -1,20 +1,20 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 const {
   isMetric,
   isVPlusDottedVersionNClauses,
   isVPlusDottedVersionNClausesWithOptionalSuffix,
-} = require('./helpers/validators');
-const colorscheme = require('../lib/colorscheme.json');
+} = require('../test-validators');
+const colorscheme = require('../../lib/colorscheme.json');
 const {
   queryIndex,
   nuGetV3VersionJsonWithDash,
   nuGetV3VersionJsonFirstCharZero,
   nuGetV3VersionJsonFirstCharNotZero,
-} = require('./helpers/nuget-fixtures.js');
-const { invalidJSON } = require('./helpers/response-fixtures');
+} = require('../nuget-fixtures');
+const { invalidJSON } = require('../response-fixtures');
 
 const t = new ServiceTester({ id: 'myget', title: 'MyGet' });
 module.exports = t;

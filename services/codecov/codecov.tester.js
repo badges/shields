@@ -1,8 +1,8 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
-const { isIntegerPercentage } = require('./helpers/validators');
+const ServiceTester = require('../service-tester');
+const { isIntegerPercentage } = require('../test-validators');
 
 const t = new ServiceTester({ id: 'codecov', title: 'Codecov.io' });
 module.exports = t;

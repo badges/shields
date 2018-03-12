@@ -1,8 +1,8 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
-const { invalidJSON } = require('./helpers/response-fixtures');
+const ServiceTester = require('../service-tester');
+const { invalidJSON } = require('../response-fixtures');
 
 const isRequireStatus = Joi.string().regex(/^(up to date|outdated|insecure|unknown)$/);
 

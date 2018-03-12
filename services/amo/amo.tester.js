@@ -1,12 +1,12 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 const {
   isMetric,
   isStarRating,
   isVPlusDottedVersionAtLeastOne,
-} = require('./helpers/validators');
+} = require('../test-validators');
 
 const t = new ServiceTester({ id: 'amo', title: 'Mozilla Addons' });
 module.exports = t;

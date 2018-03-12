@@ -1,8 +1,8 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
-const { isMetric } = require('./helpers/validators');
+const ServiceTester = require('../service-tester');
+const { isMetric } = require('../test-validators');
 
 const t = new ServiceTester({ id: 'ansible', title: 'Ansible Galaxy' });
 module.exports = t;

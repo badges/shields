@@ -1,12 +1,12 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 const {
   isMetric,
   isMetricOpenIssues
-} = require('./helpers/validators.js');
-const { invalidJSON } = require('./helpers/response-fixtures');
+} = require('../test-validators');
+const { invalidJSON } = require('../response-fixtures');
 
 const t = new ServiceTester({ id: 'bitbucket', title: 'Bitbucket badges' });
 module.exports = t;

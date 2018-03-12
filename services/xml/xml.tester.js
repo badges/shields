@@ -1,12 +1,12 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 const {
   isSemver,
-} = require('./helpers/validators');
+} = require('../test-validators');
 
-const colorscheme = require('../lib/colorscheme.json');
+const colorscheme = require('../../lib/colorscheme.json');
 const mapValues = require('lodash.mapvalues');
 
 const colorsB = mapValues(colorscheme, 'colorB');

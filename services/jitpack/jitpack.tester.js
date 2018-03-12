@@ -1,7 +1,7 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 
 // Github allows versions with chars, etc.
 const isAnyV = Joi.string().regex(/^v.+$/);

@@ -1,16 +1,16 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 
-const { invalidJSON } = require('./helpers/response-fixtures');
-const colorscheme = require('../lib/colorscheme.json');
+const { invalidJSON } = require('../response-fixtures');
+const colorscheme = require('../../lib/colorscheme.json');
 
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
   isMetric,
   isMetricOverTimePeriod
-} = require('./helpers/validators');
+} = require('../test-validators');
 const isVersionColor = Joi.equal(
   colorscheme.red.colorB,
   colorscheme.yellow.colorB,

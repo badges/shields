@@ -97,7 +97,7 @@ boilerplate:
 'use strict';
 
 const Joi = require('joi');                                        // 1
-const ServiceTester = require('./runner/service-tester');          // 2
+const ServiceTester = require('../service-tester');                // 2
 
 const t = new ServiceTester({ id: 'travis', title: 'Travis CI' })  // 3
 module.exports = t;                                                // 4
@@ -305,7 +305,7 @@ Complete example
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 
 const t = new ServiceTester({ id: 'travis', title: 'Travis CI' });
 module.exports = t;

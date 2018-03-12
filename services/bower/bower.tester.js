@@ -1,8 +1,8 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
-const { isVPlusDottedVersionAtLeastOne } = require('./helpers/validators');
+const ServiceTester = require('../service-tester');
+const { isVPlusDottedVersionAtLeastOne } = require('../test-validators');
 
 const isBowerPrereleaseVersion = Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?(-?[.\w\d])+?$/);
 

@@ -1,13 +1,13 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 
 const {
   isVPlusDottedVersionAtLeastOne,
   isMetric
-} = require('./helpers/validators');
-const { invalidJSON } = require('./helpers/response-fixtures');
+} = require('../test-validators');
+const { invalidJSON } = require('../response-fixtures');
 const isOrdinalNumber = Joi.string().regex(/^[1-9][0-9]+(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ)$/);
 const isOrdinalNumberDaily = Joi.string().regex(/^[1-9][0-9]+(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ) daily$/);
 

@@ -2,7 +2,7 @@
 
 const { expect } = require('chai');
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 const { Range } = require('semver');
 
 const t = new ServiceTester({ id: 'node', title: 'Node' });

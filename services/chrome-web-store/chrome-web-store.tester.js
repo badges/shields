@@ -1,13 +1,13 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 
 const {
   isVPlusDottedVersionAtLeastOne,
   isStarRating,
   isMetric
-} = require('./helpers/validators');
+} = require('../test-validators');
 
 const t = new ServiceTester({ id: 'chrome-web-store', title: 'Chrome Web Store' });
 module.exports = t;

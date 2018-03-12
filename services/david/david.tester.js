@@ -1,7 +1,7 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 
 const isDependencyStatus = Joi.string().valid('insecure', 'up to date', 'out of date');
 

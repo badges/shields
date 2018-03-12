@@ -1,7 +1,7 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 
 const bzBugStatus = Joi.equal(
   'unconfirmed',

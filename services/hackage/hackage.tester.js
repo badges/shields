@@ -1,9 +1,9 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 
-const { isVPlusDottedVersionAtLeastOne } = require('./helpers/validators');
+const { isVPlusDottedVersionAtLeastOne } = require('../test-validators');
 
 const t = new ServiceTester({ id: 'hackage', title: 'Hackage' });
 module.exports = t;

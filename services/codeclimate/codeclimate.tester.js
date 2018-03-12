@@ -1,10 +1,10 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 const {
   isIntegerPercentage,
-} = require('./helpers/validators');
+} = require('../test-validators');
 
 const t = new ServiceTester({ id: 'codeclimate', title: 'Code Climate' })
 

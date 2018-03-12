@@ -1,8 +1,8 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
-const { isSemver } = require('./helpers/validators');
+const ServiceTester = require('../service-tester');
+const { isSemver } = require('../test-validators');
 
 const isPsycopg2Version = Joi.string().regex(/^v([0-9][.]?)+$/);
 

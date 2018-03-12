@@ -1,8 +1,8 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
-const { invalidJSON } = require('./helpers/response-fixtures');
+const ServiceTester = require('../service-tester');
+const { invalidJSON } = require('../response-fixtures');
 
 const isBuildStatus = Joi.string().regex(/^(waiting|queued|processing|success|skipped|unstable|timeout|cancelled|failed|stopped)$/);
 

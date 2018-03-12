@@ -1,11 +1,11 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 
 const isUptimeStatus = Joi.string().regex(/^(paused|not checked yet|up|seems down|down)$/);
-const { isPercentage } = require('./helpers/validators');
-const { invalidJSON } = require('./helpers/response-fixtures');
+const { isPercentage } = require('../test-validators');
+const { invalidJSON } = require('../response-fixtures');
 
 const t = new ServiceTester({ id: 'uptimerobot', title: 'Uptime Robot' });
 module.exports = t;

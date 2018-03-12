@@ -1,8 +1,8 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
-const { isMetric, isSemver } = require('./helpers/validators');
+const ServiceTester = require('../service-tester');
+const { isMetric, isSemver } = require('../test-validators');
 
 const t = new ServiceTester({ id: 'jetbrains', title: 'JetBrains' });
 module.exports = t;

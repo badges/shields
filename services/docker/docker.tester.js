@@ -1,10 +1,10 @@
 'use strict';
 
 const Joi = require('joi');
-const ServiceTester = require('./runner/service-tester');
+const ServiceTester = require('../service-tester');
 
-const { isMetric } = require('./helpers/validators.js');
-const { invalidJSON } = require('./helpers/response-fixtures');
+const { isMetric } = require('../test-validators');
+const { invalidJSON } = require('../response-fixtures');
 const isAutomatedBuildStatus = Joi.string().valid('automated', 'manual');
 const isBuildStatus = Joi.string().regex(/^(passing|failing|building)$/);
 
