@@ -14,7 +14,8 @@ Prerequisites
 Updating the images
 -------------------
 
-Note: Increment the patch version on the tag in each change.
+Note: Increment the patch version on the tag in each change. Check
+[Docker Hub][] to see the current versions.
 
 ```console
 IMAGE_TAG=<version> npm run circle-images:build
@@ -23,6 +24,8 @@ IMAGE_TAG=<version> npm run circle-images:push
 ```
 
 After pushing the images, bump the tag in `.circleci/config.yml`.
+
+[Docker Hub]: https://hub.docker.com/u/shieldsio/
 
 Reference
 ---------

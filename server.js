@@ -5,6 +5,7 @@ const dom = require('xmldom').DOMParser;
 const jp = require('jsonpath');
 const path = require('path');
 const prettyBytes = require('pretty-bytes');
+const glob = require('glob');
 const queryString = require('query-string');
 const semver = require('semver');
 const xml2js = require('xml2js');
@@ -192,6 +193,12 @@ camp.notfound(/.*/, function(query, match, end, request) {
 });
 
 // Vendors.
+
+// New-style services
+glob.sync(`${__dirname}/services/*.js`)
+  .filter(path => !path.endsWith('base.js') && !path.endsWith('.spec.js'))
+  .map(path => require(path))
+  .forEach(serviceClass => serviceClass.register(camp, cache));
 
 // JIRA issue integration
 camp.route(/^\/jira\/issue\/(http(?:s)?)\/(.+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -720,48 +727,6 @@ cache(function (data, match, sendBadge, request) {
       sendBadge(format, badgeData);
 
     } catch (e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// AppVeyor CI integration.
-camp.route(/^\/appveyor\/ci\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `gruntjs/grunt`.
-  var branch = match[2];
-  var format = match[3];
-  var apiUrl = 'https://ci.appveyor.com/api/projects/' + repo;
-  if (branch != null) {
-    apiUrl += '/branch/' + branch;
-  }
-  var badgeData = getBadgeData('build', data);
-  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      if (res.statusCode === 404) {
-        badgeData.text[1] = 'project not found or access denied';
-        sendBadge(format, badgeData);
-        return;
-      }
-      var data = JSON.parse(buffer);
-      var status = data.build.status;
-      if (status === 'success') {
-        badgeData.text[1] = 'passing';
-        badgeData.colorscheme = 'brightgreen';
-      } else if (status !== 'running' && status !== 'queued') {
-        badgeData.text[1] = 'failing';
-        badgeData.colorscheme = 'red';
-      } else {
-        badgeData.text[1] = status;
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
