@@ -30,8 +30,8 @@ async function getTitle (owner, repo, pullRequest) {
     throw Error(`${res.status} ${res.statusText}`);
   }
 
-  const json = await res.json();
-  return json.title;
+  const { title } = await res.json();
+  return title;
 }
 
 // [Travis] Fix timeout issues => ['travis']
