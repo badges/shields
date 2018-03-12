@@ -11,6 +11,8 @@ const t = new ServiceTester({ id: 'npm', title: 'NPM' });
 module.exports = t;
 const colorsB = mapValues(colorscheme, 'colorB');
 
+const isTypeDefinition = Joi.string().regex(/^(Flow|TypeScript) v?[0-9]+.[0-9]( (Flow|TypeScript) v?[0-9]+.[0-9])?$/);
+
 t.create('total downloads of left-pad')
   .get('/dt/left-pad.json?style=_shields_test')
   .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric, colorB: colorsB.brightgreen }));
@@ -165,3 +167,11 @@ t.create('license when network is off')
   .get('/l/pakage-network-off.json?style=_shields_test')
   .networkOff()
   .expectJSON({ name: 'license', value: 'inaccessible', colorB: colorsB.lightgrey });
+
+t.create('types')
+  .get('/types/chalk.json')
+  .expectJSONTypes(Joi.object().keys({ name: 'type definitions', value: isTypeDefinition }));
+
+t.create('no types')
+  .get('/types/left-pad.json')
+  .expectJSON({ name: 'type definitions', value: 'none' });

@@ -84,7 +84,9 @@ const {
   mapNpmDownloads
 } = require('./lib/npm-provider');
 const {
-  defaultNpmRegistryUri
+  defaultNpmRegistryUri,
+  makePackageDataUrl: makeNpmPackageDataUrl,
+  typeDefinitions: npmTypeDefinitions,
 } = require('./lib/npm-badge-helpers');
 const {
   teamcityBadge
@@ -1719,19 +1721,11 @@ cache({
   handler: function(queryParams, match, sendBadge, request) {
     // e.g. cycle, core, svg
     const [, scope, packageName, format ] = match;
-    const registryUri = queryParams.registry_uri || defaultNpmRegistryUri;
-    let apiUrl;
-    if (scope === undefined) {
-      // e.g. https://registry.npmjs.org/express/latest
-      // Use this endpoint as an optimization. It covers the vast majority of
-      // these badges, and the response is smaller.
-      apiUrl = `${registryUri}/${packageName}/latest`;
-    } else {
-      // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
-      // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
-      const path = encodeURIComponent(`${scope}/${packageName}`);
-      apiUrl = `${registryUri}/@${path}`;
-    }
+    const apiUrl = makeNpmPackageDataUrl({
+      registryUrl: queryParams.registry_uri,
+      scope,
+      packageName,
+    });
     const badgeData = getBadgeData('license', queryParams);
     request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
       if (err != null) {
@@ -1781,20 +1775,12 @@ cache({
   handler: function(queryParams, match, sendBadge, request) {
     // e.g. @stdlib, stdlib, next, svg
     const [, scope, packageName, tag, format] = match;
-    const registryUri = queryParams.registry_uri || defaultNpmRegistryUri;
+    const apiUrl = makeNpmPackageDataUrl({
+      registryUrl: queryParams.registry_uri,
+      scope,
+      packageName,
+    });
     const registryTag = tag || 'latest';
-    let apiUrl;
-    if (scope === undefined) {
-        // e.g. https://registry.npmjs.org/express/latest
-        // Use this endpoint as an optimization. It covers the vast majority of
-        // these badges, and the response is smaller.
-        apiUrl = `${registryUri}/${packageName}/${registryTag}`;
-    } else {
-      // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
-      // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
-      const path = encodeURIComponent(`${scope}/${packageName}`);
-      apiUrl = `${registryUri}/@${path}`;
-    }
     const name = tag ? `node@${tag}` : 'node';
     const badgeData = getBadgeData(name, queryParams);
     // Using the Accept header because of this bug:
@@ -1855,6 +1841,49 @@ cache({
             } catch(e) { }
             sendBadge(format, badgeData);
         });
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }
+}));
+
+// npm type definition integration.
+camp.route(/^\/npm\/types\/(?:@([^/]+)\/)?([^/]+)\.(svg|png|gif|jpg|json)$/,
+cache({
+  queryParams: ['registry_uri'],
+  handler: (queryParams, match, sendBadge, request) => {
+    // e.g. cycle, core, svg
+    const [, scope, packageName, format ] = match;
+    const apiUrl = makeNpmPackageDataUrl({
+      registryUrl: queryParams.registry_uri,
+      scope,
+      packageName,
+    });
+    const badgeData = getBadgeData('type definitions', queryParams);
+    request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
+      if (checkErrorResponse(badgeData, err, res, 'package not found')) {
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        const data = JSON.parse(buffer);
+        let packageData;
+        if (scope === undefined) {
+          packageData = data;
+        } else {
+          const latestVersion = data['dist-tags'].latest;
+          packageData = data.versions[latestVersion];
+        }
+        const typeDefinitions = npmTypeDefinitions(packageData);
+        if (typeDefinitions === 'none') {
+          badgeData.colorscheme = 'lightgray';
+        } else {
+          badgeData.colorscheme = 'blue';
+        }
+        badgeData.text[1] = typeDefinitions;
+        sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'invalid';
         sendBadge(format, badgeData);
