@@ -14,6 +14,7 @@ const Raven = require('raven');
 
 const serverSecrets = require('./lib/server-secrets');
 Raven.config(process.env.SENTRY_DSN || serverSecrets.sentry_dsn).install();
+Raven.disableConsoleAlerts();
 
 const { isDeprecated, getDeprecatedBadge } = require('./lib/deprecation-helpers');
 const { checkErrorResponse } = require('./lib/error-helper');
