@@ -25,6 +25,7 @@
     "camp": "~17.2.1",
     "chrome-web-store-item-property": "~1.1.2",
     "dot": "~1.1.2",
+    "escape-string-regexp": "^1.0.5",
     "gm": "^1.23.0",
     "json-autosave": "~1.1.2",
     "jsonpath": "~1.0.0",
