@@ -19,21 +19,19 @@ const difference = require('lodash.difference');
 const fetch = require('node-fetch');
 const { inferPullRequest } = require('./infer-pull-request');
 
-function getTitle (owner, repo, pullRequest) {
+async function getTitle (owner, repo, pullRequest) {
   let uri = `https://api.github.com/repos/${owner}/${repo}/pulls/${pullRequest}`;
   if (process.env.GITHUB_TOKEN) {
     uri += `?access_token=${process.env.GITHUB_TOKEN}`;
   }
   const options = { headers: { 'User-Agent': 'badges/shields' } };
-  return fetch(uri, options)
-    .then(res => {
-      if (! res.ok) {
-        throw Error(`${res.status} ${res.statusText}`);
-      }
+  const res = await fetch(uri, options);
+  if (! res.ok) {
+    throw Error(`${res.status} ${res.statusText}`);
+  }
 
-      return res.json();
-    })
-    .then(json => json.title);
+  const { title } = await res.json();
+  return title;
 }
 
 // [Travis] Fix timeout issues => ['travis']
@@ -50,20 +48,27 @@ function servicesForTitle (title) {
   return difference(services, blacklist);
 }
 
-const { owner, repo, pullRequest, slug } = inferPullRequest();
-console.error(`PR: ${slug}`);
+async function main() {
+  const { owner, repo, pullRequest, slug } = inferPullRequest();
+  console.error(`PR: ${slug}`);
 
-getTitle(owner, repo, pullRequest)
-  .then(title => {
-    console.error(`Title: ${title}\n`);
-    const services = servicesForTitle(title);
-    if (services.length === 0) {
-      console.error('No services found. Nothing to do.');
-    } else {
-      console.error(`Services: (${services.length} found) ${services.join(', ')}\n`);
-      console.log(services.join('\n'));
-    }
-  }).catch(err => {
-    console.error(err);
-    process.exit(1);
-  });
+  const title = await getTitle(owner, repo, pullRequest);
+
+  console.error(`Title: ${title}\n`);
+  const services = servicesForTitle(title);
+  if (services.length === 0) {
+    console.error('No services found. Nothing to do.');
+  } else {
+    console.error(`Services: (${services.length} found) ${services.join(', ')}\n`);
+    console.log(services.join('\n'));
+  }
+}
+
+(async () => {
+  try {
+    await main()
+  } catch (e) {
+    console.error(e)
+    process.exit(1)
+  }
+})()
