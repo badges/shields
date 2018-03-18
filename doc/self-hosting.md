@@ -4,13 +4,13 @@ Hosting your own Shields server
 Installation
 ------------
 
-You will need version 6 of Node.js, which you can install using a
+You will need Node 8 or later, which you can install using a
 [package manager][].
 
 On Ubuntu / Debian:
 
 ```sh
-curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -; sudo apt-get install -y nodejs
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -; sudo apt-get install -y nodejs
 ```
 
 ```sh
