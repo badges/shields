@@ -2,7 +2,7 @@ Tutorial on how to add a badge for a service
 ============================================
 
 This tutorial should help you add a service to shields.io in form of a badge.
-You will need to learn to use JavaScript, git and Github. 
+You will need to learn to use JavaScript, git and Github.
 Please [improve the tutorial][edit] while you read it.
 
 (1) Reading
@@ -151,7 +151,7 @@ The following numbering explains what happens in the corresponding lines.
 
 1. All badges are preceded by a comment.
    This allows other developers to find the badge regardless of implementation.
-   Usally, badges with an similar topic have their implementation close to each other's.
+   Usually, badges with a similar topic have their implementation close to each other's.
 2. The [regular expression][regex] matches the path behind the host name in the URL, e.g. `img.shields.io`.
    ```
    /^\/docker\/automated\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/
@@ -160,11 +160,11 @@ The following numbering explains what happens in the corresponding lines.
                                             e.g. ".svg"
                           ([^\/]+)\/([^\/]+)
                           The name of the repository
-                          e.g. "jrottenberg/ffmpeg"                       
+                          e.g. "jrottenberg/ffmpeg"
      \/docker\/automated\/
      "/docker/automated/" is the start of the url. "/" must be escaped to "\/".
    ```
-   Example: <https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg>  
+   Example: <https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg>
    All parts are enclosed by brackets `()` are passed though to the function as
    the parameter `match`.
 3. The parts of the match are named.
@@ -176,15 +176,15 @@ The following numbering explains what happens in the corresponding lines.
    It contains the format for all responses, regarless of the API's response.
 6. We request the `url` and pass a call back function to the request.
    The function is called once the data is retrieved from the API.
-7. We want to always see a badge regardless the input. 
+7. We want to always see a badge regardless the input.
    In some cases the API may return an error e.g. if the query was invalid.
-   The error is handled and a badge with the the status "inaccessible" is returned.  
+   The error is handled and a badge with the the status "inaccessible" is returned.
    ![](https://img.shields.io/badge/docker%20build-inaccessible-lightgrey.svg)
 8. The data returned by the API as JSON is parsed.
-9. Based on the result, the text and the color of the badge are altered.  
+9. Based on the result, the text and the color of the badge are altered.
    ![](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg)
    ![](https://img.shields.io/docker/automated/codersos/ubuntu-remix.svg)
-10. In case of an error, an "invalid" badge is constructed.  
+10. In case of an error, an "invalid" badge is constructed.
     ![](https://img.shields.io/docker/automated/,/ubuntu-remix.svg)
 
 The pattern described can be found in may other badges.
@@ -194,7 +194,7 @@ Those can be of additional help when implementing your badge.
 
 ### (4.2) Querying an API with Authentication
 
-TODO  
+TODO
 This has something to do with [private/secret.json](https://github.com/badges/shields/search?utf8=%E2%9C%93&q=private%2Fsecret.json&type=).
 - Credentials should be stored there.
 - You do not need to create this file, the server works without.
