@@ -7480,13 +7480,22 @@ cache({
     }
     var url = encodeURI(decodeURIComponent(query.url || query.uri));
 
-    if (type === 'json') {
-      requestOptions = {
-        headers: {
-          Accept: 'application/json'
-        },
-        json: true
-      };
+    switch (type) {
+      case 'json':
+        requestOptions = {
+          headers: {
+            Accept: 'application/json'
+          },
+          json: true
+        };
+        break;
+      case 'xml':
+        requestOptions = {
+          headers: {
+            Accept: 'application/xml, text/xml'
+          }
+        };
+        break;
     }
 
     request(url, requestOptions, (err, res, data) => {
