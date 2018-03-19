@@ -7,7 +7,7 @@ import { BadgeExamples } from '../frontend/components/badge-examples';
 import MarkupModal from '../frontend/components/markup-modal';
 import Usage from '../frontend/components/usage';
 import Footer from '../frontend/components/footer';
-import badgeExampleData from '../lib/all-badge-examples';
+import badgeExampleData from '../badge-examples.json';
 import { prepareExamples, predicateFromQuery } from '../frontend/lib/prepare-examples';
 
 const baseUri = process.env.BASE_URL;

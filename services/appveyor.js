@@ -42,14 +42,14 @@ module.exports = class AppVeyor extends BaseService {
     };
   }
 
-  static getExamples() {
+  static get examples() {
     return [
       {
-        uri: '/appveyor/ci/gruntjs/grunt',
+        previewUri: '/appveyor/ci/gruntjs/grunt',
       },
       {
-        name: 'Branch',
-        uri: '/appveyor/ci/gruntjs/grunt/master',
+        title: 'branch',
+        previewUri: '/appveyor/ci/gruntjs/grunt/master',
       },
     ];
   }

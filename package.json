@@ -66,12 +66,13 @@
     "depcheck": "check-node-version --node \">= 8.0\"",
     "postinstall": "npm run depcheck",
     "prebuild": "npm run depcheck",
-    "build": "next build && next export -o build/",
+    "examples": "node lib/export-badge-examples-cli.js > badge-examples.json",
+    "build": "npm run examples && next build && next export -o build/",
     "heroku-postbuild": "npm run build",
     "analyze": "ANALYZE=true LONG_CACHE=false BASE_URL=https://img.shields.io npm run build",
     "start:server": "RATE_LIMIT=false node server 8080 ::",
     "now-start": "node server",
-    "prestart": "npm run depcheck",
+    "prestart": "npm run depcheck && npm run examples",
     "start": "concurrently --names server,frontend \"ALLOWED_ORIGIN=http://localhost:3000 npm run start:server\" \"BASE_URL=http://[::]:8080 next dev\""
   },
   "bin": {

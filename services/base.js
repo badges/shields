@@ -57,7 +57,7 @@ module.exports = class BaseService {
    * specified in `uri`, and can be used to demonstrate how to use badges for
    * this service.
    */
-  static getExamples() {
+  static get examples() {
     return [];
   }
 
