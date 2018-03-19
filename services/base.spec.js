@@ -1,6 +1,7 @@
 'use strict';
 
 const { expect } = require('chai');
+const { test, given, forCases } = require('sazerac');
 const sinon = require('sinon');
 
 const BaseService = require('./base');
@@ -24,6 +25,60 @@ class DummyService extends BaseService {
 }
 
 describe('BaseService', () => {
+  describe('URL pattern matching', function () {
+    const regexExec = str => DummyService._regex.exec(str);
+    const getSomeArg = str => {
+      const [, someArg] = regexExec(str);
+      return someArg;
+    };
+    const namedParams = str => {
+      const match = regexExec(str);
+      return DummyService._namedParamsForMatch(match);
+    };
+
+    test(regexExec, () => {
+      forCases([
+        given('/foo/bar.bar.bar.zip'),
+        given('/foo/bar/bar.svg'),
+      ]).expect(null);
+    });
+
+    test(getSomeArg, () => {
+      forCases([
+        given('/foo/bar.bar.bar.svg'),
+        given('/foo/bar.bar.bar.png'),
+        given('/foo/bar.bar.bar.gif'),
+        given('/foo/bar.bar.bar.jpg'),
+        given('/foo/bar.bar.bar.json'),
+      ]).expect('bar.bar.bar');
+    });
+
+    test(namedParams, () => {
+      forCases([
+        given('/foo/bar.bar.bar.svg'),
+        given('/foo/bar.bar.bar.png'),
+        given('/foo/bar.bar.bar.gif'),
+        given('/foo/bar.bar.bar.jpg'),
+        given('/foo/bar.bar.bar.json'),
+      ]).expect({ someArg: 'bar.bar.bar' });
+    });
+  });
+
+  it('Invokes the handler as expected', async function () {
+    const serviceInstance = new DummyService({});
+    const serviceData = await serviceInstance.invokeHandler({ someArg: 'bar.bar.bar' });
+    expect(serviceData).to.deep.equal({ message: 'Hello bar.bar.bar' });
+  });
+
+  describe('Error handling', function () {
+    it('Handles internal errors', async function () {
+      const serviceInstance = new DummyService({});
+      serviceInstance.handle = () => { throw Error("I've made a huge mistake"); };
+      const serviceData = await serviceInstance.invokeHandler({ someArg: 'bar.bar.bar' });
+      expect(serviceData).to.deep.equal({ message: 'error' });
+    });
+  });
+
   describe('_makeBadgeData', function () {
     describe('Overrides', function () {
       it('overrides the label', function () {

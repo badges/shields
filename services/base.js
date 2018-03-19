@@ -87,6 +87,15 @@ module.exports = class BaseService {
     return result;
   }
 
+  async invokeHandler(namedParams) {
+    try {
+      return await this.handle(namedParams);
+    } catch (error) {
+      console.log(error);
+      return { message: 'error' };
+    }
+  }
+
   static _makeBadgeData(overrides, serviceData) {
     const {
       style,
@@ -133,24 +142,15 @@ module.exports = class BaseService {
 
     camp.route(this._regex,
     handleRequest(async (queryParams, match, sendBadge, request) => {
-      let serviceData;
-
-      try {
-        const namedParams = this._namedParamsForMatch(match);
-        const serviceInstance = new serviceClass({
-          sendAndCacheRequest: request.asPromise,
-        });
-        serviceData = await serviceInstance.handle(namedParams);
-      } catch (error) {
-        serviceData = { message: 'error' };
-        console.log(error);
-      }
+      const namedParams = this._namedParamsForMatch(match);
+      const serviceInstance = new serviceClass({
+        sendAndCacheRequest: request.asPromise,
+      });
+      const serviceData = await serviceInstance.invokeHandler(namedParams);
+      const badgeData = this._makeBadgeData(queryParams, serviceData);
 
       // Assumes the final capture group is the extension
       const format = match.slice(-1)[0];
-
-      const badgeData = this._makeBadgeData(queryParams, serviceData);
-
       sendBadge(format, badgeData);
     }));
   }
