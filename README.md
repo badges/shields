@@ -117,9 +117,7 @@ Development
 -----------
 
 1. Install Node 8 or later. You can use the [package manager][] of your choice.
-   Node 8 is required for building or developing the front end. Node 6 or 8 will
-   work to run the server, and we'll transition to Node 8 everywhere once the
-   production server is upgraded. Server tests need to pass in both.
+   Tests need to pass in Node 8 and 9.
 2. Clone this repository.
 3. Run `npm install` to install the dependencies.
 4. Run `npm run build` to build the frontend.
