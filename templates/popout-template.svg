@@ -5,23 +5,23 @@
   </linearGradient>
 
   <clipPath id="round">
-    <rect width="{{=it.widths[0]+it.widths[1]}}" y="{{=10+it.logoPosition}}" height="20" rx="3" fill="#fff"/>
+    <rect width="{{=it.widths[0]+it.widths[1]}}" y="{{=10-it.logoPosition}}" height="20" rx="3" fill="#fff"/>
   </clipPath>
 
   <g clip-path="url(#round)">
-    <rect width="{{=it.widths[0]}}" y="{{=10+it.logoPosition}}" height="20" fill="{{=it.escapeXml(it.colorA||"#555")}}"/>
-    <rect x="{{=it.widths[0]}}" y="{{=10+it.logoPosition}}" width="{{=it.widths[1]}}" height="20" fill="{{=it.escapeXml(it.colorB||"#4c1")}}"/>
-    <rect width="{{=it.widths[0]+it.widths[1]}}" y="{{=10+it.logoPosition}}" height="20" fill="url(#smooth)"/>
+    <rect width="{{=it.widths[0]}}" y="{{=10-it.logoPosition}}" height="20" fill="{{=it.escapeXml(it.colorA||"#555")}}"/>
+    <rect x="{{=it.widths[0]}}" y="{{=10-it.logoPosition}}" width="{{=it.widths[1]}}" height="20" fill="{{=it.escapeXml(it.colorB||"#4c1")}}"/>
+    <rect width="{{=it.widths[0]+it.widths[1]}}" y="{{=10-it.logoPosition}}" height="20" fill="url(#smooth)"/>
   </g>
 
   <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="110">
     {{?it.logo}}
       <image x="5" y="3" width="{{=it.logoWidth}}" height="32" xlink:href="{{=it.logo}}"/>
     {{?}}
-    <text x="{{=(((it.widths[0]+it.logoWidth+it.logoPadding)/2)+1)*10}}" y="{{=(25+it.logoPosition)*10}}" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{=(it.widths[0]-(10+it.logoWidth+it.logoPadding))*10}}" lengthAdjust="spacing">{{=it.escapedText[0]}}</text>
-    <text x="{{=(((it.widths[0]+it.logoWidth+it.logoPadding)/2)+1)*10}}" y="{{=(24+it.logoPosition)*10}}" transform="scale(0.1)" textLength="{{=(it.widths[0]-(10+it.logoWidth+it.logoPadding))*10}}" lengthAdjust="spacing">{{=it.escapedText[0]}}</text>
-    <text x="{{=(it.widths[0]+it.widths[1]/2-1)*10}}" y="{{=(25+it.logoPosition)*10}}" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{=(it.widths[1]-10)*10}}" lengthAdjust="spacing">{{=it.escapedText[1]}}</text>
-    <text x="{{=(it.widths[0]+it.widths[1]/2-1)*10}}" y="{{=(24+it.logoPosition)*10}}" transform="scale(0.1)" textLength="{{=(it.widths[1]-10)*10}}" lengthAdjust="spacing">{{=it.escapedText[1]}}</text>
+    <text x="{{=(((it.widths[0]+it.logoWidth+it.logoPadding)/2)+1)*10}}" y="{{=(25-it.logoPosition)*10}}" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{=(it.widths[0]-(10+it.logoWidth+it.logoPadding))*10}}" lengthAdjust="spacing">{{=it.escapedText[0]}}</text>
+    <text x="{{=(((it.widths[0]+it.logoWidth+it.logoPadding)/2)+1)*10}}" y="{{=(24-it.logoPosition)*10}}" transform="scale(0.1)" textLength="{{=(it.widths[0]-(10+it.logoWidth+it.logoPadding))*10}}" lengthAdjust="spacing">{{=it.escapedText[0]}}</text>
+    <text x="{{=(it.widths[0]+it.widths[1]/2-1)*10}}" y="{{=(25-it.logoPosition)*10}}" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{=(it.widths[1]-10)*10}}" lengthAdjust="spacing">{{=it.escapedText[1]}}</text>
+    <text x="{{=(it.widths[0]+it.widths[1]/2-1)*10}}" y="{{=(24-it.logoPosition)*10}}" transform="scale(0.1)" textLength="{{=(it.widths[1]-10)*10}}" lengthAdjust="spacing">{{=it.escapedText[1]}}</text>
   </g>
   
   {{?(it.links[0] && it.links[0].length)}}
