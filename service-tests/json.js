@@ -1,6 +1,7 @@
 'use strict';
 
 const Joi = require('joi');
+const { expect } = require('chai');
 const ServiceTester = require('./runner/service-tester');
 const colorscheme = require('../lib/colorscheme.json');
 const mapValues = require('lodash.mapvalues');
@@ -68,3 +69,18 @@ t.create('JSON from url | error color overrides default')
 t.create('JSON from url | error color overrides user specified')
   .get('.json?query=$.version&colorB=10ADED&style=_shields_test')
   .expectJSON({ name: 'custom badge', value: 'no url specified', colorB: colorsB.red });
+
+let headers;
+t.create('JSON from url | request should set Accept header')
+  .get('.json?url=https://json-test/api.json&query=$.name')
+  .intercept(nock => nock('https://json-test')
+    .get('/api.json')
+    .reply(200, function (uri, requestBody) {
+      headers = this.req.headers;
+      return '{"name":"test"}';
+    })
+  )
+  .expectJSON({ name: 'custom badge', value: 'test' })
+  .after(function () {
+    expect(headers).to.have.property('accept', 'application/json');
+  });
