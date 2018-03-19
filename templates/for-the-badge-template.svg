@@ -1,5 +1,4 @@
-{{it.widths[0] = it.text[0] && it.text[0].length ? it.widths[0] : 0;}}
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{{=(it.widths[0]+=(10+(it.text[0].length*1.5)))+(it.widths[1]+=(10+(it.text[1].length*2)))}}" height="28">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{{=(it.widths[0] = it.text[0] && it.text[0].length ? it.widths[0]+=(10+(it.text[0].length*1.5)) : 0)+(it.widths[1]+=(10+(it.text[1].length*2)))}}" height="28">
   <g shape-rendering="crispEdges">
     <rect width="{{=it.widths[0]}}" height="28" fill="{{=it.escapeXml(it.colorA||"#555")}}"/>
     <rect x="{{=it.widths[0]}}" width="{{=it.widths[1]}}" height="28" fill="{{=it.escapeXml(it.colorB||"#4c1")}}"/>

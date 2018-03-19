@@ -1,5 +1,4 @@
-{{it.widths[0] = it.text[0] && it.text[0].length ? it.widths[0] : 0;}}
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{{=it.widths[0]+it.widths[1]}}" height="18">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{{=(it.widths[0] = it.text[0] && it.text[0].length ? it.widths[0] : 0)+it.widths[1]}}" height="18">
   <linearGradient id="smooth" x2="0" y2="100%">
     <stop offset="0"  stop-color="#fff" stop-opacity=".7"/>
     <stop offset=".1" stop-color="#aaa" stop-opacity=".1"/>
