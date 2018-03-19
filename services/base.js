@@ -17,7 +17,7 @@ module.exports = class BaseService {
    * parameters (as defined in the `uri` property), performs a request using
    * `this._sendAndCacheRequest`, and returns the badge data.
    */
-  async handle(namedParams) {
+  async handle(namedParams, queryParams) {
     throw new Error(
       `Handler not implemented for ${this.constructor.name}`
     );
@@ -87,9 +87,9 @@ module.exports = class BaseService {
     return result;
   }
 
-  async invokeHandler(namedParams) {
+  async invokeHandler(namedParams, queryParams) {
     try {
-      return await this.handle(namedParams);
+      return await this.handle(namedParams, queryParams);
     } catch (error) {
       console.log(error);
       return { message: 'error' };
@@ -140,18 +140,20 @@ module.exports = class BaseService {
   static register(camp, handleRequest) {
     const serviceClass = this; // In a static context, "this" is the class.
 
-    camp.route(this._regex,
-    handleRequest(async (queryParams, match, sendBadge, request) => {
-      const namedParams = this._namedParamsForMatch(match);
-      const serviceInstance = new serviceClass({
-        sendAndCacheRequest: request.asPromise,
-      });
-      const serviceData = await serviceInstance.invokeHandler(namedParams);
-      const badgeData = this._makeBadgeData(queryParams, serviceData);
+    camp.route(this._regex, handleRequest({
+      queryParams: this.uri.queryParams,
+      handler: async (queryParams, match, sendBadge, request) => {
+        const namedParams = this._namedParamsForMatch(match);
+        const serviceInstance = new serviceClass({
+          sendAndCacheRequest: request.asPromise,
+        });
+        const serviceData = await serviceInstance.invokeHandler(namedParams, queryParams);
+        const badgeData = this._makeBadgeData(queryParams, serviceData);
 
-      // Assumes the final capture group is the extension
-      const format = match.slice(-1)[0];
-      sendBadge(format, badgeData);
+        // Assumes the final capture group is the extension
+        const format = match.slice(-1)[0];
+        sendBadge(format, badgeData);
+      },
     }));
   }
 };

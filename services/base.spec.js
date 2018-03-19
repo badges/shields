@@ -9,17 +9,16 @@ const BaseService = require('./base');
 require('../lib/register-chai-plugins.spec');
 
 class DummyService extends BaseService {
-  async handle({someArg}) {
-    return {
-      message: 'Hello ' + someArg,
-    };
+  async handle({ someArg }, { suffix }) {
+    return { message: `Hello ${someArg}${suffix}` };
   }
 
   static get category() { return 'cat'; }
   static get uri() {
     return {
       format: '/foo/([^/]+)',
-      capture: ['someArg']
+      capture: ['someArg'],
+      queryParams: ['suffix'],
     };
   }
 }
@@ -66,8 +65,10 @@ describe('BaseService', () => {
 
   it('Invokes the handler as expected', async function () {
     const serviceInstance = new DummyService({});
-    const serviceData = await serviceInstance.invokeHandler({ someArg: 'bar.bar.bar' });
-    expect(serviceData).to.deep.equal({ message: 'Hello bar.bar.bar' });
+    const serviceData = await serviceInstance.invokeHandler(
+      { someArg: 'bar.bar.bar' },
+      { suffix: '!' });
+    expect(serviceData).to.deep.equal({ message: 'Hello bar.bar.bar!' });
   });
 
   describe('Error handling', function () {
@@ -123,14 +124,14 @@ describe('BaseService', () => {
 
     it('handles the request', async () => {
       expect(mockHandleRequest).to.have.been.calledOnce;
-      const requestHandler = mockHandleRequest.getCall(0).args[0];
+      const { handler: requestHandler } = mockHandleRequest.getCall(0).args[0];
 
       const mockSendBadge = sinon.spy();
       const mockRequest = {
         asPromise: sinon.spy(),
       };
       await requestHandler(
-        /*data*/ {},
+        /*queryParams*/ { suffix: '?' },
         /*match*/ '/foo/bar.svg'.match(expectedRouteRegex),
         mockSendBadge,
         mockRequest
@@ -140,7 +141,7 @@ describe('BaseService', () => {
       expect(mockSendBadge).to.have.been.calledWith(
         /*format*/ 'svg',
         {
-          text: ['cat', 'Hello bar'],
+          text: ['cat', 'Hello bar?'],
           colorscheme: 'lightgrey',
           template: undefined,
           logo: undefined,
