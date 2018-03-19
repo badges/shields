@@ -49,7 +49,7 @@ const isPhpVersionReduction = withRegex(/^((>= \d+(\.\d+)?)|(\d+\.\d+(, \d+\.\d+
 
 const isStarRating = withRegex(/^(?=.{5}$)(\u2605{0,5}[\u00BC\u00BD\u00BE]?\u2606{0,5})$/);
 
-// Required to be > 0, beacuse accepting zero masks many problems.
+// Required to be > 0, because accepting zero masks many problems.
 const isMetric = withRegex(/^[1-9][0-9]*[kMGTPEZY]?$/);
 
 const isMetricOpenIssues = withRegex(/^[1-9][0-9]*[kMGTPEZY]? open$/);
