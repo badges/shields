@@ -59,7 +59,7 @@ t.create('licence for Invaild Package')
   .expectJSON({ name: 'bower', value: 'invalid' });
 
 
-t.create('Version label should be `no releases` if no offical version')
+t.create('Version label should be `no releases` if no official version')
   .get('/v/bootstrap.json')
   .intercept(nock => nock('https://libraries.io')
     .get('/api/bower/bootstrap')

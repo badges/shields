@@ -57,7 +57,7 @@ t.create('monthly downloads (invalid)')
   - 2.7.3.2
   - 2.0rc1
   - 0.1.30b10
-  are prefectly legal.
+  are perfectly legal.
 
   We'll run this test againt a project that follows SemVer...
 */
