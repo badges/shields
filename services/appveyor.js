@@ -19,9 +19,9 @@ module.exports = class AppVeyor extends BaseService {
 
     const status = data.build.status;
     if (status === 'success') {
-      return {message: 'passing', colorscheme: 'brightgreen'};
+      return {message: 'passing', color: 'brightgreen'};
     } else if (status !== 'running' && status !== 'queued') {
-      return {message: 'failing', colorscheme: 'red'};
+      return {message: 'failing', color: 'red'};
     } else {
       return {message: status};
     }

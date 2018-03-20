@@ -12,8 +12,9 @@ const {
 } = require('../lib/badge-data');
 
 module.exports = class BaseService {
-  constructor({sendAndCacheRequest}) {
+  constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
     this._sendAndCacheRequest = sendAndCacheRequest;
+    this._handleInternalErrors = handleInternalErrors;
   }
 
   /**
@@ -92,6 +93,33 @@ module.exports = class BaseService {
     return result;
   }
 
+  async invokeHandler(namedParams) {
+    try {
+      return await this.handle(namedParams);
+    } catch (error) {
+      if (error instanceof NotFound) {
+        serviceData = {
+          message: error.message,
+          color: 'red',
+        };
+      } else if (error instanceof InvalidResponse) {
+        serviceData = {
+          message: error.message,
+          color: 'lightgray',
+        };
+      } else if (this._handleInternalErrors) {
+        serviceData = {
+          label: 'shields',
+          message: 'internal error',
+          color: 'lightgray',
+        };
+        console.log(error);
+      } else {
+        throw error;
+      }
+    }
+  }
+
   static _makeBadgeData(overrides, serviceData) {
     const {
       style,
@@ -127,7 +155,7 @@ module.exports = class BaseService {
       links: toArray(overrideLink || serviceLink),
       colorA: makeColor(overrideColorA),
     };
-    const color = makeColor(overrideColorB || serviceColor || defaultColor || 'lightgrey');
+    const color = overrideColorB || serviceColor || defaultColor || 'lightgrey';
     setBadgeColor(badgeData, color);
 
     return badgeData;
@@ -136,47 +164,18 @@ module.exports = class BaseService {
   static register(camp, handleRequest, { handleInternalErrors }) {
     const serviceClass = this; // In a static context, "this" is the class.
 
-    camp.route(this._regex, handleRequest({
-      queryParams: this.uri.queryParams,
-      handler: async (queryParams, match, sendBadge, request) => {
-        let serviceData;
+    camp.route(this._regex,
+    handleRequest(async (queryParams, match, sendBadge, request) => {
+      const namedParams = this._namedParamsForMatch(match);
+      const serviceInstance = new serviceClass({
+        sendAndCacheRequest: request.asPromise,
+      }, { handleInternalErrors });
+      const serviceData = await serviceInstance.invokeHandler(namedParams);
+      const badgeData = this._makeBadgeData(queryParams, serviceData);
 
-        try {
-          const namedParams = this._namedParamsForMatch(match);
-          const serviceInstance = new serviceClass({
-            sendAndCacheRequest: request.asPromise,
-          });
-          serviceData = await serviceInstance.handle(namedParams, queryParams);
-        } catch (error) {
-          if (error instanceof NotFound) {
-            serviceData = {
-              message: error.message,
-              color: 'red',
-            };
-          } else if (error instanceof InvalidResponse) {
-            serviceData = {
-              message: error.message,
-              color: 'lightgray',
-            };
-          } else if (handleInternalErrors) {
-            serviceData = {
-              label: 'shields',
-              message: 'internal error',
-              color: 'lightgray',
-            };
-            console.log(error);
-          } else {
-            throw error;
-          }
-        }
-
-        // Assumes the final capture group is the extension
-        const format = match.slice(-1)[0];
-
-        const badgeData = this._makeBadgeData(queryParams, serviceData);
-
-        sendBadge(format, badgeData);
-      },
+      // Assumes the final capture group is the extension
+      const format = match.slice(-1)[0];
+      sendBadge(format, badgeData);
     }));
   }
 };
