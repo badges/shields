@@ -131,7 +131,7 @@ module.exports = class BaseService {
       links: toArray(overrideLink || serviceLink),
       colorA: makeColor(overrideColorA),
     };
-    const color = makeColor(overrideColorB || serviceColor || defaultColor || 'lightgrey');
+    const color = overrideColorB || serviceColor || defaultColor || 'lightgrey';
     setBadgeColor(badgeData, color);
 
     return badgeData;
