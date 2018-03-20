@@ -90,8 +90,8 @@ already:
 npm i
 ```
 
-We'll start by creating a new module, `service-tests/travis.js`, using this
-boilerplate:
+We'll start by creating a new module, `services/travis/travis.tester.js`,
+using this boilerplate:
 
 ```js
 'use strict';
