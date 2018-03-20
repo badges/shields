@@ -86,6 +86,11 @@ describe('BaseService', () => {
         const badgeData = DummyService._makeBadgeData({ label: 'purr count' }, { label: 'purrs' });
         expect(badgeData.text).to.deep.equal(['purr count', 'n/a']);
       });
+
+      it('overrides the color', function () {
+        const badgeData = DummyService._makeBadgeData({ colorB: '10ADED' }, { color: 'red' });
+        expect(badgeData.colorB).to.equal('#10ADED');
+      });
     });
 
     describe('Service data', function () {
@@ -93,12 +98,22 @@ describe('BaseService', () => {
         const badgeData = DummyService._makeBadgeData({}, { message: '10k' });
         expect(badgeData.text).to.deep.equal(['cat', '10k']);
       });
+
+      it('applies the service color', function () {
+        const badgeData = DummyService._makeBadgeData({}, { color: 'red' });
+        expect(badgeData.colorscheme).to.equal('red');
+      });
     });
 
     describe('Defaults', function () {
       it('uses the default label', function () {
         const badgeData = DummyService._makeBadgeData({}, {});
         expect(badgeData.text).to.deep.equal(['cat', 'n/a']);
+      });
+
+      it('uses the default color', function () {
+        const badgeData = DummyService._makeBadgeData({}, {});
+        expect(badgeData.colorscheme).to.equal('lightgrey');
       });
     });
   });

@@ -69,10 +69,6 @@ maybe you'd like to open a pull request to address one of them:
 
 [![GitHub issues by-label](https://img.shields.io/github/issues/badges/shields/good%20first%20issue.svg)](https://github.com/badges/shields/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
-Or you can adopt one of these pull requests:
-
-[![GitHub pull requests by-label](https://img.shields.io/github/issues-pr/badges/shields/good%20first%20issue.svg)](https://github.com/badges/shields/pulls?q=is%3Apr+is%3Aopen+label%3A%22good+first+issue%22)
-
 You can read a [tutorial on how to add a badge][tutorial].
 
 [service-tests]: https://github.com/badges/shields/blob/master/service-tests/README.md
