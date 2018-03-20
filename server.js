@@ -86,6 +86,7 @@ const {
 const {
   defaultNpmRegistryUri,
   makePackageDataUrl: makeNpmPackageDataUrl,
+  typeDefinitions: npmTypeDefinitions,
 } = require('./lib/npm-badge-helpers');
 const {
   teamcityBadge
@@ -1843,6 +1844,49 @@ cache({
             } catch(e) { }
             sendBadge(format, badgeData);
         });
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+  }
+}));
+
+// npm type definition integration.
+camp.route(/^\/npm\/types\/(?:@([^/]+)\/)?([^/]+)\.(svg|png|gif|jpg|json)$/,
+cache({
+  queryParams: ['registry_uri'],
+  handler: (queryParams, match, sendBadge, request) => {
+    // e.g. cycle, core, svg
+    const [, scope, packageName, format ] = match;
+    const apiUrl = makeNpmPackageDataUrl({
+      registryUrl: queryParams.registry_uri,
+      scope,
+      packageName,
+    });
+    const badgeData = getBadgeData('type definitions', queryParams);
+    request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
+      if (checkErrorResponse(badgeData, err, res, 'package not found')) {
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        const data = JSON.parse(buffer);
+        let packageData;
+        if (scope === undefined) {
+          packageData = data;
+        } else {
+          const latestVersion = data['dist-tags'].latest;
+          packageData = data.versions[latestVersion];
+        }
+        const typeDefinitions = npmTypeDefinitions(packageData);
+        if (typeDefinitions === 'none') {
+          badgeData.colorscheme = 'lightgray';
+        } else {
+          badgeData.colorscheme = 'blue';
+        }
+        badgeData.text[1] = typeDefinitions;
+        sendBadge(format, badgeData);
       } catch(e) {
         badgeData.text[1] = 'invalid';
         sendBadge(format, badgeData);
