@@ -1,6 +1,7 @@
 'use strict';
 
 const Joi = require('joi');
+const { expect } = require('chai');
 const ServiceTester = require('../service-tester');
 const {
   isSemver,
@@ -86,3 +87,18 @@ t.create('XML from url | error color overrides default')
 t.create('XML from url | error color overrides user specified')
   .get('.json?query=//version&colorB=10ADED&style=_shields_test')
   .expectJSON({ name: 'custom badge', value: 'no url specified', colorB: colorsB.red });
+
+let headers;
+t.create('XML from url | request should set Accept header')
+  .get('.json?url=https://xml-test/api.xml&query=/name')
+  .intercept(nock => nock('https://xml-test')
+    .get('/api.xml')
+    .reply(200, function (uri, requestBody) {
+      headers = this.req.headers;
+      return '<?xml version="1.0" encoding="utf-8" ?><name>dynamic xml</name>';
+    })
+  )
+  .expectJSON({ name: 'custom badge', value: 'dynamic xml' })
+  .after(function () {
+    expect(headers).to.have.property('accept', 'application/xml, text/xml');
+  });

@@ -7471,6 +7471,7 @@ cache({
     var prefix = query.prefix || '';
     var suffix = query.suffix || '';
     var pathExpression = query.query;
+    var requestOptions = {};
 
     var badgeData = getBadgeData('custom badge', query);
 
@@ -7482,7 +7483,25 @@ cache({
     }
     var url = encodeURI(decodeURIComponent(query.url || query.uri));
 
-    request(url, (err, res, data) => {
+    switch (type) {
+      case 'json':
+        requestOptions = {
+          headers: {
+            Accept: 'application/json'
+          },
+          json: true
+        };
+        break;
+      case 'xml':
+        requestOptions = {
+          headers: {
+            Accept: 'application/xml, text/xml'
+          }
+        };
+        break;
+    }
+
+    request(url, requestOptions, (err, res, data) => {
       try {
         if (checkErrorResponse(badgeData, err, res, 'resource not found')) {
           return;

@@ -23,10 +23,6 @@ maybe you'd like to open a pull request to address one of them:
 
 [![GitHub issues by-label](https://img.shields.io/github/issues/badges/shields/good%20first%20issue.svg)](https://github.com/badges/shields/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
-Or you can adopt one of these pull requests:
-
-[![GitHub issues by-label](https://img.shields.io/github/issues-pr/badges/shields/good%20first%20issue.svg)](https://github.com/badges/shields/pulls?q=is%3Apr+is%3Aopen+label%3A%22good+first+issue%22)
-
 ### Contributing documentation
 
 You can help by improving the project's usage and developer instructions.
