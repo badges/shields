@@ -98,17 +98,17 @@ module.exports = class BaseService {
       return await this.handle(namedParams);
     } catch (error) {
       if (error instanceof NotFound) {
-        serviceData = {
+        return {
           message: error.message,
           color: 'red',
         };
       } else if (error instanceof InvalidResponse) {
-        serviceData = {
+        return {
           message: error.message,
           color: 'lightgray',
         };
       } else if (this._handleInternalErrors) {
-        serviceData = {
+        return {
           label: 'shields',
           message: 'internal error',
           color: 'lightgray',
