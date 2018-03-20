@@ -38,6 +38,9 @@ module.exports = class BaseService {
    *  - capture: Array of names for the capture groups in the regular
    *             expression. The handler will be passed an object containing
    *             the matches.
+   *  - queryParams: Array of names for query parameters which will the service
+   *                 uses. For cache safety, only the whitelisted query
+   *                 parameters will be passed to the handler.
    */
   static get uri() {
     throw new Error(`URI not defined for ${this.name}`);
