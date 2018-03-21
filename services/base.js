@@ -108,12 +108,12 @@ module.exports = class BaseService {
           color: 'lightgray',
         };
       } else if (this._handleInternalErrors) {
+        console.log(error);
         return {
           label: 'shields',
           message: 'internal error',
           color: 'lightgray',
         };
-        console.log(error);
       } else {
         throw error;
       }
