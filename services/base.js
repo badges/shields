@@ -138,12 +138,12 @@ module.exports = class BaseService {
   }
 
   static register(camp, handleRequest) {
-    const serviceClass = this; // In a static context, "this" is the class.
+    const ServiceClass = this; // In a static context, "this" is the class.
 
     camp.route(this._regex,
     handleRequest(async (queryParams, match, sendBadge, request) => {
       const namedParams = this._namedParamsForMatch(match);
-      const serviceInstance = new serviceClass({
+      const serviceInstance = new ServiceClass({
         sendAndCacheRequest: request.asPromise,
       });
       const serviceData = await serviceInstance.invokeHandler(namedParams);
