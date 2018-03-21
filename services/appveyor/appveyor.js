@@ -4,7 +4,7 @@ const BaseService = require('../base');
 const {
   checkErrorResponse,
   asJson,
-} = require('../lib/error-helper');
+} = require('../../lib/error-helper');
 
 module.exports = class AppVeyor extends BaseService {
   async handle({repo, branch}) {
