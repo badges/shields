@@ -1,3 +1,5 @@
+import escapeStringRegexp from 'escape-string-regexp';
+
 export function exampleMatchesRegex(example, regex) {
   const { title, keywords } = example;
   const haystack = [title].concat(keywords).join(' ');
@@ -6,7 +8,8 @@ export function exampleMatchesRegex(example, regex) {
 
 export function predicateFromQuery(query) {
   if (query) {
-    const regex = new RegExp(query, 'i'); // Case-insensitive.
+    const escaped = escapeStringRegexp(query);
+    const regex = new RegExp(escaped, 'i'); // Case-insensitive.
     return example => exampleMatchesRegex(example, regex);
   } else {
     return () => true;

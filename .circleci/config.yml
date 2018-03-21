@@ -25,6 +25,9 @@ jobs:
 
       - run:
           name: Update Greenkeeper lockfile
+          environment:
+            # https://github.com/greenkeeperio/greenkeeper-lockfile/issues/58
+            CI_PULL_REQUEST: ''
           command: |
             greenkeeper-lockfile-update
 
@@ -55,6 +58,9 @@ jobs:
 
       - run:
           name: Upload Greenkeeper lockfile
+          environment:
+            # https://github.com/greenkeeperio/greenkeeper-lockfile/issues/58
+            CI_PULL_REQUEST: ''
           command: greenkeeper-lockfile-upload
 
   main@node-9:
@@ -76,10 +82,6 @@ jobs:
           name: Server unit tests
           when: always
           command: npm run test:js:server
-
-      - run:
-          name: Upload Greenkeeper lockfile
-          command: greenkeeper-lockfile-upload
 
   frontend:
     docker:

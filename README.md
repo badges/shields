@@ -69,13 +69,9 @@ maybe you'd like to open a pull request to address one of them:
 
 [![GitHub issues by-label](https://img.shields.io/github/issues/badges/shields/good%20first%20issue.svg)](https://github.com/badges/shields/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
-Or you can adopt one of these pull requests:
-
-[![GitHub pull requests by-label](https://img.shields.io/github/issues-pr/badges/shields/good%20first%20issue.svg)](https://github.com/badges/shields/pulls?q=is%3Apr+is%3Aopen+label%3A%22good+first+issue%22)
-
 You can read a [tutorial on how to add a badge][tutorial].
 
-[service-tests]: https://github.com/badges/shields/blob/master/service-tests/README.md
+[service-tests]: https://github.com/badges/shields/blob/master/doc/service-tests.md
 [tutorial]: doc/TUTORIAL.md
 [contributing]: CONTRIBUTING.md
 
@@ -117,9 +113,7 @@ Development
 -----------
 
 1. Install Node 8 or later. You can use the [package manager][] of your choice.
-   Node 8 is required for building or developing the front end. Node 6 or 8 will
-   work to run the server, and we'll transition to Node 8 everywhere once the
-   production server is upgraded. Server tests need to pass in both.
+   Tests need to pass in Node 8 and 9.
 2. Clone this repository.
 3. Run `npm install` to install the dependencies.
 4. Run `npm run build` to build the frontend.

@@ -196,9 +196,12 @@ camp.notfound(/.*/, function(query, match, end, request) {
 
 // Vendors.
 
+// Match modules with the same name as their containing directory.
+// e.g. services/appveyor/appveyor.js
+const serviceRegex = /\/services\/(.*)\/\1\.js$/;
 // New-style services
-glob.sync(`${__dirname}/services/*.js`)
-  .filter(path => !path.endsWith('base.js') && !path.endsWith('.spec.js'))
+glob.sync(`${__dirname}/services/**/*.js`)
+  .filter(path => serviceRegex.test(path))
   .map(path => require(path))
   .forEach(serviceClass => serviceClass.register(camp, cache));
 
@@ -7468,6 +7471,7 @@ cache({
     var prefix = query.prefix || '';
     var suffix = query.suffix || '';
     var pathExpression = query.query;
+    var requestOptions = {};
 
     var badgeData = getBadgeData('custom badge', query);
 
@@ -7479,7 +7483,25 @@ cache({
     }
     var url = encodeURI(decodeURIComponent(query.url || query.uri));
 
-    request(url, (err, res, data) => {
+    switch (type) {
+      case 'json':
+        requestOptions = {
+          headers: {
+            Accept: 'application/json'
+          },
+          json: true
+        };
+        break;
+      case 'xml':
+        requestOptions = {
+          headers: {
+            Accept: 'application/xml, text/xml'
+          }
+        };
+        break;
+    }
+
+    request(url, requestOptions, (err, res, data) => {
       try {
         if (checkErrorResponse(badgeData, err, res, 'resource not found')) {
           return;
