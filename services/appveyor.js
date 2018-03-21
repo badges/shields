@@ -14,10 +14,10 @@ module.exports = class AppVeyor extends BaseService {
     }
     const json = await this._sendAndCacheRequest(apiUrl, {
       headers: { 'Accept': 'application/json' }
-    }).then(checkErrorResponse('project not found or access denied'))
+    }).then(checkErrorResponse.asPromise({ notFoundMessage: 'project not found or access denied' }))
       .then(asJson);
 
-    const status = data.build.status;
+    const { build: { status } } = json;
     if (status === 'success') {
       return {message: 'passing', color: 'brightgreen'};
     } else if (status !== 'running' && status !== 'queued') {
