@@ -4820,7 +4820,7 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Jenkins coverage integration
+// Jenkins coverage integration (cobertura)
 camp.route(/^\/jenkins(?:-ci)?\/c\/(http(?:s)?)\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var scheme = match[1];  // http(s)
@@ -4862,6 +4862,61 @@ cache(function(data, match, sendBadge, request) {
         return;
       }
       var coverage = coverageObject.ratio;
+      if (+coverage !== +coverage) {
+        badgeData.text[1] = 'unknown';
+        sendBadge(format, badgeData);
+        return;
+      }
+      badgeData.text[1] = coverage.toFixed(0) + '%';
+      badgeData.colorscheme = coveragePercentageColor(coverage);
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// Jenkins coverage integration (jacoco)
+camp.route(/^\/jenkins(?:-ci)?\/j\/(http(?:s)?)\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var scheme = match[1];  // http(s)
+  var host = match[2];  // example.org:8080
+  var job = match[3];  // folder/job
+  var format = match[4];
+  var options = {
+    json: true,
+    uri: scheme + '://' + host + '/job/' + job
+      + '/lastBuild/jacoco/api/json?tree=instructionCoverage[covered,missed,percentage,total]'
+  };
+  if (job.indexOf('/') > -1 ) {
+    options.uri = scheme + '://' + host + '/' + job
+      + '/lastBuild/jacoco/api/json?tree=instructionCoverage[covered,missed,percentage,total]';
+  }
+
+  if (serverSecrets && serverSecrets.jenkins_user) {
+    options.auth = {
+      user: serverSecrets.jenkins_user,
+      pass: serverSecrets.jenkins_pass
+    };
+  }
+
+  var badgeData = getBadgeData('coverage', data);
+  request(options, function(err, res, json) {
+    if (err !== null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    try {
+      var coverageObject = json.instructionCoverage;
+      if (coverageObject === undefined) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      }
+      var coverage = coverageObject.percentage;
       if (+coverage !== +coverage) {
         badgeData.text[1] = 'unknown';
         sendBadge(format, badgeData);
