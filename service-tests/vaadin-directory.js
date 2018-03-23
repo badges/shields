@@ -16,8 +16,8 @@ const t = new ServiceTester({
 });
 module.exports = t;
 
-t.create('star of component displayed in star icons')
-  .get('/star/vaadinvaadin-grid.json')
+t.create('stars of component displayed in star icons')
+  .get('/stars/vaadinvaadin-grid.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'rating',
     value: isStarRating
