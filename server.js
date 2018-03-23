@@ -7837,7 +7837,7 @@ camp.route(/^\/vaadin-directory\/(star|status|rating|rc|rating-count|v|version|r
       var lv = data.latestAvailableRelease.name.toLowerCase();
       var ld = data.latestAvailableRelease.publicationDate;
       switch (type) {
-        case 'star': // Star
+        case 'stars': // Stars
           badgeData.text[0] = getLabel('rating', data);
           badgeData.text[1] = starRating(rating);
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
