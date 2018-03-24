@@ -131,10 +131,12 @@ SVG or JSON output. When deliberately changing the output, run
 `SNAPSHOT_DRY=1 npm run test:js:server` to preview changes to the saved
 snapshots, and `SNAPSHOT_UPDATE=1 npm run test:js:server` to update them.
 
+The server can be [configured][sentry configuration] to use [Sentry][sentry].
 
 [package manager]: https://nodejs.org/en/download/package-manager/
 [snapshot tests]: https://glebbahmutov.com/blog/snapshot-testing/
-
+[sentry configuration]: doc/self-hosting.md#sentry
+[Sentry]: https://sentry.io/
 
 Hosting your own server
 -----------------------
