@@ -17,7 +17,7 @@ const t = new ServiceTester({
 module.exports = t;
 
 t.create('star of component displayed in star icons')
-  .get('/star/vaadinvaadin-grid.json')
+  .get('/stars/vaadinvaadin-grid.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'rating',
     value: isStarRating
@@ -80,14 +80,14 @@ t.create('latest release date of the component (format: yyyy-mm-dd)')
     }));
 
 t.create('Invalid addon')
-  .get('/star/404.json')
+  .get('/stars/404.json')
   .expectJSON({
     name: 'Vaadin Directory',
     value: 'not found'
   });
 
 t.create('No connection')
-  .get('/star/vaadinvaadin-grid.json')
+  .get('/stars/vaadinvaadin-grid.json')
   .networkOff()
   .expectJSON({
     name: 'Vaadin Directory',
