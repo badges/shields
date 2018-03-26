@@ -10,9 +10,9 @@
     <a href="https://circleci.com/gh/badges/shields/tree/master">
         <img src="https://img.shields.io/circleci/project/github/badges/shields.svg"
             alt="build status"></a>
-    <a href="https://github.com/badges/shields/commits/gh-pages">
-        <img src="https://img.shields.io/github/last-commit/badges/shields/gh-pages.svg?label=last%20deployed"
-            alt="last deployed"></a>
+    <a href="https://github.com/badges/shields/compare/gh-pages...master">
+        <img src="https://img.shields.io/github/commits-since/badges/shields/gh-pages.svg?label=commits%20to%20be%20deployed"
+            alt="commits to be deployed"></a>
     <a href="https://discord.gg/HjJCwm5">
         <img src="https://img.shields.io/discord/308323056592486420.svg?logo=discord"
             alt="chat on Discord"></a>
