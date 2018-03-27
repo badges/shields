@@ -5926,12 +5926,12 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
       return;
     }
-    if (data.message !== undefined){
-      badgeData.text[1] = data.message;
-      sendBadge(format, badgeData);
-      return;
-    }
     try {
+      if (data.message !== undefined){
+        badgeData.text[1] = data.message;
+        sendBadge(format, badgeData);
+        return;
+      }
       var status = data[0].status;
       switch(status) {
       case 'success':
