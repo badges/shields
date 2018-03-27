@@ -2,7 +2,7 @@
 
 class NotFound extends Error {
   constructor(prettyMessage = 'not found') {
-    const message = prettyMessage == 'not found'
+    const message = prettyMessage === 'not found'
       ? 'Not Found'
       : `Not Found: ${prettyMessage}`;
     super(message);
