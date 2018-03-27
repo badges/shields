@@ -2716,34 +2716,39 @@ cache(function(data, match, sendBadge, request) {
           return;
         }
 
-        const parsedData = JSON.parse(buffer);
-        if (type === 'coverage' && isAlternativeFormat) {
-          const score = parsedData.data.attributes.rating.letter;
-          badgeData.text[1] = score;
-          badgeData.colorscheme = letterScoreColor(score);
-        } else if (type === 'coverage') {
-          const percentage = parseFloat(parsedData.data.attributes.covered_percent);
-          badgeData.text[1] = percentage.toFixed(0) + '%';
-          badgeData.colorscheme = coveragePercentageColor(percentage);
-        } else if (type === 'issues') {
-          const count = parsedData.data.meta.issues_count;
-          badgeData.text[1] = count;
-          badgeData.colorscheme = colorScale([1, 5, 10, 20], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(count);
-        } else if (type === 'technical debt') {
-          const percentage = parseFloat(parsedData.data.attributes.ratings[0].measure.value);
-          badgeData.text[1] = percentage.toFixed(0) + '%';
-          badgeData.colorscheme = colorScale([5, 10, 20, 50], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(percentage);
-        } else if (type === 'maintainability' && isAlternativeFormat) {
-          // maintainability = 100 - technical debt
-          const percentage = 100 - parseFloat(parsedData.data.attributes.ratings[0].measure.value);
-          badgeData.text[1] = percentage.toFixed(0) + '%';
-          badgeData.colorscheme = colorScale([50, 80, 90, 95], ['red', 'yellow', 'yellowgreen', 'green', 'brightgreen'])(percentage);
-        } else if (type === 'maintainability') {
-          const score = parsedData.data.attributes.ratings[0].letter;
-          badgeData.text[1] = score;
-          badgeData.colorscheme = letterScoreColor(score);
+        try {
+          const parsedData = JSON.parse(buffer);
+          if (type === 'coverage' && isAlternativeFormat) {
+            const score = parsedData.data.attributes.rating.letter;
+            badgeData.text[1] = score;
+            badgeData.colorscheme = letterScoreColor(score);
+          } else if (type === 'coverage') {
+            const percentage = parseFloat(parsedData.data.attributes.covered_percent);
+            badgeData.text[1] = percentage.toFixed(0) + '%';
+            badgeData.colorscheme = coveragePercentageColor(percentage);
+          } else if (type === 'issues') {
+            const count = parsedData.data.meta.issues_count;
+            badgeData.text[1] = count;
+            badgeData.colorscheme = colorScale([1, 5, 10, 20], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(count);
+          } else if (type === 'technical debt') {
+            const percentage = parseFloat(parsedData.data.attributes.ratings[0].measure.value);
+            badgeData.text[1] = percentage.toFixed(0) + '%';
+            badgeData.colorscheme = colorScale([5, 10, 20, 50], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(percentage);
+          } else if (type === 'maintainability' && isAlternativeFormat) {
+            // maintainability = 100 - technical debt
+            const percentage = 100 - parseFloat(parsedData.data.attributes.ratings[0].measure.value);
+            badgeData.text[1] = percentage.toFixed(0) + '%';
+            badgeData.colorscheme = colorScale([50, 80, 90, 95], ['red', 'yellow', 'yellowgreen', 'green', 'brightgreen'])(percentage);
+          } else if (type === 'maintainability') {
+            const score = parsedData.data.attributes.ratings[0].letter;
+            badgeData.text[1] = score;
+            badgeData.colorscheme = letterScoreColor(score);
+          }
+          sendBadge(format, badgeData);
+        } catch(e) {
+            badgeData.text[1] = 'invalid';
+            sendBadge(format, badgeData);
         }
-        sendBadge(format, badgeData);
       });
     } catch(e) {
       badgeData.text[1] = 'invalid';
