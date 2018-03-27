@@ -3,6 +3,7 @@
 const {
   NotFound,
   InvalidResponse,
+  Inaccessible,
 } = require('./errors');
 const {
   makeLogo,
@@ -99,12 +100,13 @@ module.exports = class BaseService {
     } catch (error) {
       if (error instanceof NotFound) {
         return {
-          message: error.message,
+          message: error.prettyMessage,
           color: 'red',
         };
-      } else if (error instanceof InvalidResponse) {
+      } else if (error instanceof InvalidResponse ||
+        error instanceof Inaccessible) {
         return {
-          message: error.message,
+          message: error.prettyMessage,
           color: 'lightgray',
         };
       } else if (this._handleInternalErrors) {

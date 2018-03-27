@@ -28,7 +28,7 @@ t.create('CI 404')
 t.create('CI (connection error)')
   .get('/ci/this-one/is-not-real-either.json')
   .networkOff()
-  .expectJSON({name: 'pod', value: 'inaccessible'});
+  .expectJSON({ name: 'build', value: 'inaccessible' });
 
 // Test AppVeyor tests status badge
 t.create('tests status')

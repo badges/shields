@@ -95,6 +95,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
     "chai-string": "^1.4.0",
     "chainsmoker": "^0.1.0",
     "check-node-version": "^3.1.0",
