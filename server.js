@@ -5921,8 +5921,7 @@ cache(function(data, match, sendBadge, request) {
 
   var badgeData = getBadgeData('build', data);
   request(apiUrl, {json:true}, function(err, res, data) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
