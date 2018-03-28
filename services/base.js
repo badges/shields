@@ -13,8 +13,8 @@ module.exports = class BaseService {
   }
 
   /**
-   * Asynchronous function to handle requests for this service. Takes the URI
-   * parameters (as defined in the `uri` property), performs a request using
+   * Asynchronous function to handle requests for this service. Takes the URL
+   * parameters (as defined in the `url` property), performs a request using
    * `this._sendAndCacheRequest`, and returns the badge data.
    */
   async handle(namedParams) {
@@ -33,14 +33,16 @@ module.exports = class BaseService {
     return 'unknown';
   }
   /**
-   * Returns an object with two fields:
-   *  - format: Regular expression to use for URIs for this service's badges
+   * Returns an object:
+   *  - base: (Optional) The base path of the URLs for this service. This is
+   *    used as a prefix.
+   *  - format: Regular expression to use for URLs for this service's badges
    *  - capture: Array of names for the capture groups in the regular
    *             expression. The handler will be passed an object containing
    *             the matches.
    */
-  static get uri() {
-    throw new Error(`URI not defined for ${this.name}`);
+  static get url() {
+    throw new Error(`URL not defined for ${this.name}`);
   }
 
   /**
@@ -53,8 +55,8 @@ module.exports = class BaseService {
   }
 
   /**
-   * Example URIs for this service. These should use the format
-   * specified in `uri`, and can be used to demonstrate how to use badges for
+   * Example URLs for this service. These should use the format
+   * specified in `url`, and can be used to demonstrate how to use badges for
    * this service.
    */
   static get examples() {
@@ -62,9 +64,11 @@ module.exports = class BaseService {
   }
 
   static get _regex() {
+    const { base, format } = this.url;
     // Regular expressions treat "/" specially, so we need to escape them
-    const escapedPath = this.uri.format.replace(/\//g, '\\/');
-    const fullRegex = '^' + escapedPath + '.(svg|png|gif|jpg|json)$';
+    const escapedPath = format.replace(/\//g, '\\/');
+    const joined = [base, escapedPath].filter(Boolean).join('/');
+    const fullRegex = `^/${joined}.(svg|png|gif|jpg|json)$`;
     return new RegExp(fullRegex);
   }
 
@@ -73,15 +77,15 @@ module.exports = class BaseService {
     // entire match.
     const captures = match.slice(1, -1);
 
-    if (this.uri.capture.length !== captures.length) {
+    if (this.url.capture.length !== captures.length) {
       throw new Error(
         `Service ${this.constructor.name} declares incorrect number of capture groups `+
-        `(expected ${this.uri.capture.length}, got ${captures.length})`
+        `(expected ${this.url.capture.length}, got ${captures.length})`
       );
     }
 
     const result = {};
-    this.uri.capture.forEach((name, index) => {
+    this.url.capture.forEach((name, index) => {
       result[name] = captures[index];
     });
     return result;
