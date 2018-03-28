@@ -95,4 +95,27 @@ t.create('maintainability letter for repo without snapshots')
     value: 'unknown'
   });
 
+t.create('malformed response for outer user repos query')
+  .get('/maintainability/angular/angular.js.json')
+  .intercept(nock => nock('https://api.codeclimate.com')
+    .get('/v1/repos?github_slug=angular/angular.js')
+    .reply(200, {
+      data: [{}] // No relationships in the list of data elements.
+    }))
+  .expectJSON({
+    name: 'maintainability',
+    value: 'invalid'
+  });
+
+t.create('malformed response for inner specific repo query')
+  .get('/maintainability/angular/angular.js.json')
+  .intercept(nock => nock('https://api.codeclimate.com', {allowUnmocked: true})
+    .get('/v1/repos/526933117e00a40567008444/snapshots/5ab4427859c16c0001003cad')
+    .reply(200, {})) // No data.
+  .networkOn() // Combined with allowUnmocked: true, this allows the outer user repos query to go through.
+  .expectJSON({
+    name: 'maintainability',
+    value: 'invalid'
+  });
+
 module.exports = t;
