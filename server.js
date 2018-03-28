@@ -10,6 +10,11 @@ const queryString = require('query-string');
 const semver = require('semver');
 const xml2js = require('xml2js');
 const xpath = require('xpath');
+const Raven = require('raven');
+
+const serverSecrets = require('./lib/server-secrets');
+Raven.config(process.env.SENTRY_DSN || serverSecrets.sentry_dsn).install();
+Raven.disableConsoleAlerts();
 
 const { isDeprecated, getDeprecatedBadge } = require('./lib/deprecation-helpers');
 const { checkErrorResponse } = require('./lib/error-helper');
@@ -20,7 +25,6 @@ const sysMonitor = require('./lib/sys/monitor');
 const log = require('./lib/log');
 const { makeMakeBadgeFn } = require('./lib/make-badge');
 const { QuickTextMeasurer } = require('./lib/text-measurer');
-const serverSecrets = require('./lib/server-secrets');
 const suggest = require('./lib/suggest');
 const {licenseToColor} = require('./lib/licenses');
 const { latest: latestVersion } = require('./lib/version');
