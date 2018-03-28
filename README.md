@@ -69,13 +69,9 @@ maybe you'd like to open a pull request to address one of them:
 
 [![GitHub issues by-label](https://img.shields.io/github/issues/badges/shields/good%20first%20issue.svg)](https://github.com/badges/shields/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
-Or you can adopt one of these pull requests:
-
-[![GitHub pull requests by-label](https://img.shields.io/github/issues-pr/badges/shields/good%20first%20issue.svg)](https://github.com/badges/shields/pulls?q=is%3Apr+is%3Aopen+label%3A%22good+first+issue%22)
-
 You can read a [tutorial on how to add a badge][tutorial].
 
-[service-tests]: https://github.com/badges/shields/blob/master/service-tests/README.md
+[service-tests]: https://github.com/badges/shields/blob/master/doc/service-tests.md
 [tutorial]: doc/TUTORIAL.md
 [contributing]: CONTRIBUTING.md
 
@@ -135,10 +131,12 @@ SVG or JSON output. When deliberately changing the output, run
 `SNAPSHOT_DRY=1 npm run test:js:server` to preview changes to the saved
 snapshots, and `SNAPSHOT_UPDATE=1 npm run test:js:server` to update them.
 
+The server can be [configured][sentry configuration] to use [Sentry][sentry].
 
 [package manager]: https://nodejs.org/en/download/package-manager/
 [snapshot tests]: https://glebbahmutov.com/blog/snapshot-testing/
-
+[sentry configuration]: doc/self-hosting.md#sentry
+[Sentry]: https://sentry.io/
 
 Hosting your own server
 -----------------------

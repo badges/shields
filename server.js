@@ -10,6 +10,11 @@ const queryString = require('query-string');
 const semver = require('semver');
 const xml2js = require('xml2js');
 const xpath = require('xpath');
+const Raven = require('raven');
+
+const serverSecrets = require('./lib/server-secrets');
+Raven.config(process.env.SENTRY_DSN || serverSecrets.sentry_dsn).install();
+Raven.disableConsoleAlerts();
 
 const { isDeprecated, getDeprecatedBadge } = require('./lib/deprecation-helpers');
 const { checkErrorResponse } = require('./lib/error-helper');
@@ -20,7 +25,6 @@ const sysMonitor = require('./lib/sys/monitor');
 const log = require('./lib/log');
 const { makeMakeBadgeFn } = require('./lib/make-badge');
 const { QuickTextMeasurer } = require('./lib/text-measurer');
-const serverSecrets = require('./lib/server-secrets');
 const suggest = require('./lib/suggest');
 const {licenseToColor} = require('./lib/licenses');
 const { latest: latestVersion } = require('./lib/version');
@@ -196,9 +200,12 @@ camp.notfound(/.*/, function(query, match, end, request) {
 
 // Vendors.
 
+// Match modules with the same name as their containing directory.
+// e.g. services/appveyor/appveyor.js
+const serviceRegex = /\/services\/(.*)\/\1\.js$/;
 // New-style services
-glob.sync(`${__dirname}/services/*.js`)
-  .filter(path => !path.endsWith('base.js') && !path.endsWith('.spec.js'))
+glob.sync(`${__dirname}/services/**/*.js`)
+  .filter(path => serviceRegex.test(path))
   .map(path => require(path))
   .forEach(serviceClass => serviceClass.register(camp, cache));
 
@@ -7468,6 +7475,7 @@ cache({
     var prefix = query.prefix || '';
     var suffix = query.suffix || '';
     var pathExpression = query.query;
+    var requestOptions = {};
 
     var badgeData = getBadgeData('custom badge', query);
 
@@ -7479,7 +7487,25 @@ cache({
     }
     var url = encodeURI(decodeURIComponent(query.url || query.uri));
 
-    request(url, (err, res, data) => {
+    switch (type) {
+      case 'json':
+        requestOptions = {
+          headers: {
+            Accept: 'application/json'
+          },
+          json: true
+        };
+        break;
+      case 'xml':
+        requestOptions = {
+          headers: {
+            Accept: 'application/xml, text/xml'
+          }
+        };
+        break;
+    }
+
+    request(url, requestOptions, (err, res, data) => {
       try {
         if (checkErrorResponse(badgeData, err, res, 'resource not found')) {
           return;

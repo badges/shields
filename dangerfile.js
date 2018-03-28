@@ -17,7 +17,7 @@ const documentation = fileMatch(
   'frontend/components/usage.js'
 );
 const server = fileMatch('server.js');
-const serviceTests = fileMatch('service-tests/*.js');
+const serviceTests = fileMatch('services/**/*.tester.js');
 const helpers = fileMatch(
   'lib/**/*.js',
   '!**/*.spec.js',
