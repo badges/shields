@@ -60,6 +60,28 @@ describe('Badge URL functions', function() {
   });
 
   test(dynamicBadgeUrl, () => {
+    const yamlUrl = 'http://example.com/foo.yaml';
+    const query = '$.bar';
+    const prefix = 'value: ';
+
+    given(
+      'http://img.example.com',
+      'yaml',
+      'foo',
+      yamlUrl,
+      query,
+      { prefix, style: 'plastic' }
+    ).expect([
+      'http://img.example.com/badge/dynamic/yaml.svg',
+      '?label=foo',
+      `&url=${encodeURIComponent(yamlUrl)}`,
+      `&query=${encodeURIComponent(query)}`,
+      `&prefix=${encodeURIComponent(prefix)}`,
+      '&style=plastic',
+    ].join(''))
+  });
+
+  test(dynamicBadgeUrl, () => {
     const xmlUrl = 'http://example.com/foo.xml';
     const query = '//bar';
     const prefix = 'value: ';
