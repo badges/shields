@@ -5921,7 +5921,7 @@ cache(function(data, match, sendBadge, request) {
 
   var badgeData = getBadgeData('build', data);
   request(apiUrl, {json:true}, function(err, res, data) {
-    if (checkErrorResponse(badgeData, err, res)) {
+    if (checkErrorResponse(badgeData, err, res, 'project not found')) {
       sendBadge(format, badgeData);
       return;
     }

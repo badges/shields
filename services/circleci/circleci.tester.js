@@ -25,7 +25,7 @@ t.create('circle ci (valid, with branch)')
 
 t.create('circle ci (not found)')
   .get('/project/github/PyvesB/EmptyRepo.json')
-  .expectJSON({name: 'build', value: 'not found'});
+  .expectJSON({name: 'build', value: 'project not found'});
 
 t.create('circle ci (connection error)')
   .get('/project/github/RedSparr0w/node-csgo-parser.json')
