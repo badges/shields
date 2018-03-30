@@ -42,8 +42,8 @@ export default class DynamicBadgeMaker extends React.Component {
           onChange={event => this.setState({ datatype: event.target.value })}>
           <option value="" disabled>data type</option>
           <option value="json">json</option>
-          <option value="xml">xml</option>
           <option value="yaml">yaml</option>
+          <option value="xml">xml</option>
         </select> {}
         <input
           className="short"
