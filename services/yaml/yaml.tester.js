@@ -11,7 +11,7 @@ const t = new ServiceTester({ id: 'dynamic-yaml', title: 'User Defined YAML Sour
 module.exports = t;
 
 t.create('Connection error')
-  .get('.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.name&label=Package Name&style=_shields_test')
+  .get('.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&query=$.name&label=Package Name&style=_shields_test')
   .networkOff()
   .expectJSON({ name: 'Package Name', value: 'inaccessible', colorB: colorsB.red });
 
@@ -37,17 +37,11 @@ t.create('YAML from url | multiple results')
 
 t.create('YAML from url | caching with new query params')
   .get('.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&query=$.version')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'custom badge',
-    value: Joi.string().regex(/^\d+(\.\d+)?(\.\d+)?$/)
-  }));
+  .expectJSON({ name: 'custom badge', value: '0.8.0' });
 
 t.create('YAML from url | with prefix & suffix & label')
   .get('.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&query=$.version&prefix=v&suffix= dev&label=Shields')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'Shields',
-    value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?\sdev$/)
-  }));
+  .expectJSON({ name: 'Shields', value: 'v0.8.0 dev' });
 
 t.create('YAML from url | object doesnt exist')
   .get('.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&query=$.does_not_exist&style=_shields_test')
