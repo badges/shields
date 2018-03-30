@@ -35,21 +35,22 @@ module.exports = class AppVeyor extends BaseService {
     return 'build';
   }
 
-  static get uri() {
+  static get url() {
     return {
-      format: '/appveyor/ci/([^/]+/[^/]+)(?:/(.+))?',
+      base: 'appveyor/ci',
+      format: '([^/]+/[^/]+)(?:/(.+))?',
       capture: ['repo', 'branch']
     };
   }
 
-  static getExamples() {
+  static get examples() {
     return [
       {
-        uri: '/appveyor/ci/gruntjs/grunt',
+        previewUrl: 'gruntjs/grunt',
       },
       {
-        name: 'Branch',
-        uri: '/appveyor/ci/gruntjs/grunt/master',
+        title: 'branch',
+        previewUrl: 'gruntjs/grunt/master',
       },
     ];
   }

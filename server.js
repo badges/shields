@@ -5,7 +5,6 @@ const dom = require('xmldom').DOMParser;
 const jp = require('jsonpath');
 const path = require('path');
 const prettyBytes = require('pretty-bytes');
-const glob = require('glob');
 const queryString = require('query-string');
 const semver = require('semver');
 const xml2js = require('xml2js');
@@ -16,6 +15,7 @@ const serverSecrets = require('./lib/server-secrets');
 Raven.config(process.env.SENTRY_DSN || serverSecrets.sentry_dsn).install();
 Raven.disableConsoleAlerts();
 
+const { loadServiceClasses } = require('./services');
 const { isDeprecated, getDeprecatedBadge } = require('./lib/deprecation-helpers');
 const { checkErrorResponse } = require('./lib/error-helper');
 const analytics = require('./lib/analytics');
@@ -200,14 +200,8 @@ camp.notfound(/.*/, function(query, match, end, request) {
 
 // Vendors.
 
-// Match modules with the same name as their containing directory.
-// e.g. services/appveyor/appveyor.js
-const serviceRegex = /\/services\/(.*)\/\1\.js$/;
-// New-style services
-glob.sync(`${__dirname}/services/**/*.js`)
-  .filter(path => serviceRegex.test(path))
-  .map(path => require(path))
-  .forEach(serviceClass => serviceClass.register(camp, cache));
+loadServiceClasses().forEach(
+  serviceClass => serviceClass.register(camp, cache));
 
 // JIRA issue integration
 camp.route(/^\/jira\/issue\/(http(?:s)?)\/(.+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
