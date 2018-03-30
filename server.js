@@ -5500,37 +5500,35 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // SourceForge integration.
-camp.route(/^\/sourceforge\/([^/]+)\/([^/]*)\/?(.*).(svg|png|gif|jpg|json)$/,
+camp.route(/^\/sourceforge\/(dt|dm|dw|dd)\/([^/]*)\/?(.*).(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var info = match[1];      // eg, 'dm'
-  var project = match[2];   // eg, 'sevenzip`.
-  var folder = match[3];
-  var format = match[4];
-  var apiUrl = 'http://sourceforge.net/projects/' + project + '/files/' + folder + '/stats/json';
-  var badgeData = getBadgeData('sourceforge', data);
-  var time_period, start_date, end_date;
-  if (info.charAt(0) === 'd') {
-    badgeData.text[0] = getLabel('downloads', data);
-    // get yesterday since today is incomplete
-    end_date = new Date((new Date()).getTime() - 1000*60*60*24);
-    switch (info.charAt(1)) {
-      case 'm':
-        start_date = new Date(end_date.getTime() - 1000*60*60*24*30);
-        time_period = '/month';
-        break;
-      case 'w':
-        start_date = new Date(end_date.getTime() - 1000*60*60*24*6);  // 6, since date range is inclusive
-        time_period = '/week';
-        break;
-      case 'd':
-        start_date = end_date;
-        time_period = '/day';
-        break;
-      case 't':
-        start_date = new Date(99, 0, 1);
-        time_period = '/total';
-        break;
-    }
+  const info = match[1];      // eg, 'dm'
+  const project = match[2];   // eg, 'sevenzip`.
+  const folder = match[3];
+  const format = match[4];
+  let apiUrl = 'http://sourceforge.net/projects/' + project + '/files/' + folder + '/stats/json';
+  const badgeData = getBadgeData('sourceforge', data);
+  let time_period, start_date;
+  badgeData.text[0] = getLabel('downloads', data);
+  // get yesterday since today is incomplete
+  const end_date = new Date((new Date()).getTime() - 1000*60*60*24);
+  switch (info.charAt(1)) {
+    case 'm':
+      start_date = new Date(end_date.getTime() - 1000*60*60*24*30);
+      time_period = '/month';
+      break;
+    case 'w':
+      start_date = new Date(end_date.getTime() - 1000*60*60*24*6);  // 6, since date range is inclusive
+      time_period = '/week';
+      break;
+    case 'd':
+      start_date = end_date;
+      time_period = '/day';
+      break;
+    case 't':
+      start_date = new Date(99, 0, 1);
+      time_period = '';
+      break;
   }
   apiUrl += '?start_date=' + start_date.toISOString().slice(0,10) + '&end_date=' + end_date.toISOString().slice(0,10);
   request(apiUrl, function(err, res, buffer) {
@@ -5540,8 +5538,8 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      var downloads = data.total;
+      const data = JSON.parse(buffer);
+      const downloads = data.total;
       badgeData.text[1] = metric(downloads) + time_period;
       badgeData.colorscheme = downloadCountColor(downloads);
       sendBadge(format, badgeData);
