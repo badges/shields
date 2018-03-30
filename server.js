@@ -5915,17 +5915,16 @@ cache(function(data, match, sendBadge, request) {
 
   var badgeData = getBadgeData('build', data);
   request(apiUrl, {json:true}, function(err, res, data) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    if (data.message !== undefined){
-      badgeData.text[1] = data.message;
+    if (checkErrorResponse(badgeData, err, res, 'project not found')) {
       sendBadge(format, badgeData);
       return;
     }
     try {
+      if (data.message !== undefined){
+        badgeData.text[1] = data.message;
+        sendBadge(format, badgeData);
+        return;
+      }
       var status = data[0].status;
       switch(status) {
       case 'success':
