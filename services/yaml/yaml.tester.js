@@ -1,6 +1,5 @@
 'use strict';
 
-const Joi = require('joi');
 const ServiceTester = require('../service-tester');
 const colorscheme = require('../../lib/colorscheme.json');
 const mapValues = require('lodash.mapvalues');
