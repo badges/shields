@@ -6,7 +6,6 @@ const {
 	  isMetric,
 	  isMetricOverTimePeriod
 } = require('../test-validators');
-const { invalidJSON } = require('../response-fixtures');
 
 const t = new ServiceTester({ id: 'sourceforge', title: 'SourceForge' });
 module.exports = t;
