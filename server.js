@@ -397,7 +397,8 @@ cache(function(data, match, sendBadge, request) {
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res) {
     if (err != null) {
-      log.error('Travis error: ' + err.stack);
+      log.error('Travis error: data:' + JSON.stringify(data) +
+        '\nStack: ' + err.stack);
       if (res) { log.error(''+res); }
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
