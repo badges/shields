@@ -2940,50 +2940,12 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// dotnet-status integration.
+// dotnet-status integration - deprecated as of April 2018.
 camp.route(/^\/dotnetstatus\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var projectUri = match[1]; // gh/{USER}/{REPO}/{PROJECT}
-  var format = match[2];
-  var url = 'http://dotnet-status.com/api/status/' + projectUri + '/';
-  var badgeData = getBadgeData('dependencies', data);
-  var sendErrorBadge = function() {
-    badgeData.text[1] = 'inconclusive';
-    sendBadge(format, badgeData);
-  };
-
-  request(url, function (err, res, buffer) {
-    if (err != null || res.statusCode === 404) {
-      sendErrorBadge();
-      return;
-    }
-
-    if (res.statusCode === 202) {
-      badgeData.text[1] = 'processing';
-      sendBadge(format, badgeData);
-      return;
-    }
-
-    try {
-      var data = JSON.parse(buffer);
-      if(data.projectResults.length === 1 && data.projectResults[0] !== null) {
-        if (data.projectResults[0].outOfDate) {
-          badgeData.text[1] = 'out of date';
-          badgeData.colorscheme = 'red';
-        } else {
-          badgeData.text[1] = 'up to date';
-          badgeData.colorscheme = 'blue';
-        }
-      }
-      else {
-        badgeData.text[1] = 'project not found';
-      }
-      sendBadge(format, badgeData);
-    }
-    catch (e) {
-      sendErrorBadge();
-    }
-  });
+  const format = match[2];
+  const badgeData = getDeprecatedBadge('dotnet status', data);
+  sendBadge(format, badgeData);
 }));
 
 // Gemnasium integration
