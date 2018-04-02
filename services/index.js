@@ -15,7 +15,7 @@ function loadServiceClasses() {
 
 function loadTesters() {
   return glob.sync(`${__dirname}/**/*.tester.js`)
-    .map(name => require(name));
+    .map(path => require(path));
 }
 
 module.exports = {
