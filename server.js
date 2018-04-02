@@ -4920,16 +4920,16 @@ cache(function(data, match, sendBadge, request) {
 // Ansible integration
 camp.route(/^\/ansible\/role\/(?:(d)\/)?(\d+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var type = match[1];      // eg d or nothing
-  var roleId = match[2];    // eg 3078
-  var format = match[3];
-  var options = {
+  const type = match[1];      // eg d or nothing
+  const roleId = match[2];    // eg 3078
+  const format = match[3];
+  const options = {
     json: true,
     uri: 'https://galaxy.ansible.com/api/v1/roles/' + roleId + '/',
   };
-  var badgeData = getBadgeData('role', data);
+  const badgeData = getBadgeData('role', data);
   request(options, function(err, res, json) {
-    if (res && (res.statusCode === 404 || json.state === null)) {
+    if (res && (res.statusCode === 404 || json === undefined || json.state === null)) {
       badgeData.text[1] = 'not found';
       sendBadge(format, badgeData);
       return;
