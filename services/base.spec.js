@@ -26,6 +26,8 @@ class DummyService extends BaseService {
 }
 
 describe('BaseService', () => {
+  const defaultConfig = { handleInternalErrors: false };
+
   describe('URL pattern matching', function () {
     const regexExec = str => DummyService._regex.exec(str);
     const getSomeArg = str => {
@@ -66,17 +68,21 @@ describe('BaseService', () => {
   });
 
   it('Invokes the handler as expected', async function () {
-    const serviceInstance = new DummyService({});
+    const serviceInstance = new DummyService({}, defaultConfig);
     const serviceData = await serviceInstance.invokeHandler({ someArg: 'bar.bar.bar' });
     expect(serviceData).to.deep.equal({ message: 'Hello bar.bar.bar' });
   });
 
   describe('Error handling', function () {
     it('Handles internal errors', async function () {
-      const serviceInstance = new DummyService({});
+      const serviceInstance = new DummyService({}, { handleInternalErrors: true });
       serviceInstance.handle = () => { throw Error("I've made a huge mistake"); };
       const serviceData = await serviceInstance.invokeHandler({ someArg: 'bar.bar.bar' });
-      expect(serviceData).to.deep.equal({ message: 'error' });
+      expect(serviceData).to.deep.equal({
+        color: 'lightgray',
+        label: 'shields',
+        message: 'internal error',
+      });
     });
   });
 
@@ -129,7 +135,7 @@ describe('BaseService', () => {
         route: sinon.spy(),
       };
       mockHandleRequest = sinon.spy();
-      DummyService.register(mockCamp, mockHandleRequest);
+      DummyService.register(mockCamp, mockHandleRequest, defaultConfig);
     });
 
     it('registers the service', () => {

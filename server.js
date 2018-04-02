@@ -201,7 +201,10 @@ camp.notfound(/.*/, function(query, match, end, request) {
 // Vendors.
 
 loadServiceClasses().forEach(
-  serviceClass => serviceClass.register(camp, cache));
+  serviceClass => serviceClass.register(
+    camp,
+    cache,
+    { handleInternalErrors: config.handleInternalErrors }));
 
 // JIRA issue integration
 camp.route(/^\/jira\/issue\/(http(?:s)?)\/(.+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
