@@ -5,12 +5,17 @@ const dom = require('xmldom').DOMParser;
 const jp = require('jsonpath');
 const path = require('path');
 const prettyBytes = require('pretty-bytes');
-const glob = require('glob');
 const queryString = require('query-string');
 const semver = require('semver');
 const xml2js = require('xml2js');
 const xpath = require('xpath');
+const Raven = require('raven');
 
+const serverSecrets = require('./lib/server-secrets');
+Raven.config(process.env.SENTRY_DSN || serverSecrets.sentry_dsn).install();
+Raven.disableConsoleAlerts();
+
+const { loadServiceClasses } = require('./services');
 const { isDeprecated, getDeprecatedBadge } = require('./lib/deprecation-helpers');
 const { checkErrorResponse } = require('./lib/error-helper');
 const analytics = require('./lib/analytics');
@@ -20,7 +25,6 @@ const sysMonitor = require('./lib/sys/monitor');
 const log = require('./lib/log');
 const { makeMakeBadgeFn } = require('./lib/make-badge');
 const { QuickTextMeasurer } = require('./lib/text-measurer');
-const serverSecrets = require('./lib/server-secrets');
 const suggest = require('./lib/suggest');
 const {licenseToColor} = require('./lib/licenses');
 const { latest: latestVersion } = require('./lib/version');
@@ -196,14 +200,8 @@ camp.notfound(/.*/, function(query, match, end, request) {
 
 // Vendors.
 
-// Match modules with the same name as their containing directory.
-// e.g. services/appveyor/appveyor.js
-const serviceRegex = /\/services\/(.*)\/\1\.js$/;
-// New-style services
-glob.sync(`${__dirname}/services/**/*.js`)
-  .filter(path => serviceRegex.test(path))
-  .map(path => require(path))
-  .forEach(serviceClass => serviceClass.register(camp, cache));
+loadServiceClasses().forEach(
+  serviceClass => serviceClass.register(camp, cache));
 
 // JIRA issue integration
 camp.route(/^\/jira\/issue\/(http(?:s)?)\/(.+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -2712,34 +2710,39 @@ cache(function(data, match, sendBadge, request) {
           return;
         }
 
-        const parsedData = JSON.parse(buffer);
-        if (type === 'coverage' && isAlternativeFormat) {
-          const score = parsedData.data.attributes.rating.letter;
-          badgeData.text[1] = score;
-          badgeData.colorscheme = letterScoreColor(score);
-        } else if (type === 'coverage') {
-          const percentage = parseFloat(parsedData.data.attributes.covered_percent);
-          badgeData.text[1] = percentage.toFixed(0) + '%';
-          badgeData.colorscheme = coveragePercentageColor(percentage);
-        } else if (type === 'issues') {
-          const count = parsedData.data.meta.issues_count;
-          badgeData.text[1] = count;
-          badgeData.colorscheme = colorScale([1, 5, 10, 20], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(count);
-        } else if (type === 'technical debt') {
-          const percentage = parseFloat(parsedData.data.attributes.ratings[0].measure.value);
-          badgeData.text[1] = percentage.toFixed(0) + '%';
-          badgeData.colorscheme = colorScale([5, 10, 20, 50], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(percentage);
-        } else if (type === 'maintainability' && isAlternativeFormat) {
-          // maintainability = 100 - technical debt
-          const percentage = 100 - parseFloat(parsedData.data.attributes.ratings[0].measure.value);
-          badgeData.text[1] = percentage.toFixed(0) + '%';
-          badgeData.colorscheme = colorScale([50, 80, 90, 95], ['red', 'yellow', 'yellowgreen', 'green', 'brightgreen'])(percentage);
-        } else if (type === 'maintainability') {
-          const score = parsedData.data.attributes.ratings[0].letter;
-          badgeData.text[1] = score;
-          badgeData.colorscheme = letterScoreColor(score);
+        try {
+          const parsedData = JSON.parse(buffer);
+          if (type === 'coverage' && isAlternativeFormat) {
+            const score = parsedData.data.attributes.rating.letter;
+            badgeData.text[1] = score;
+            badgeData.colorscheme = letterScoreColor(score);
+          } else if (type === 'coverage') {
+            const percentage = parseFloat(parsedData.data.attributes.covered_percent);
+            badgeData.text[1] = percentage.toFixed(0) + '%';
+            badgeData.colorscheme = coveragePercentageColor(percentage);
+          } else if (type === 'issues') {
+            const count = parsedData.data.meta.issues_count;
+            badgeData.text[1] = count;
+            badgeData.colorscheme = colorScale([1, 5, 10, 20], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(count);
+          } else if (type === 'technical debt') {
+            const percentage = parseFloat(parsedData.data.attributes.ratings[0].measure.value);
+            badgeData.text[1] = percentage.toFixed(0) + '%';
+            badgeData.colorscheme = colorScale([5, 10, 20, 50], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(percentage);
+          } else if (type === 'maintainability' && isAlternativeFormat) {
+            // maintainability = 100 - technical debt
+            const percentage = 100 - parseFloat(parsedData.data.attributes.ratings[0].measure.value);
+            badgeData.text[1] = percentage.toFixed(0) + '%';
+            badgeData.colorscheme = colorScale([50, 80, 90, 95], ['red', 'yellow', 'yellowgreen', 'green', 'brightgreen'])(percentage);
+          } else if (type === 'maintainability') {
+            const score = parsedData.data.attributes.ratings[0].letter;
+            badgeData.text[1] = score;
+            badgeData.colorscheme = letterScoreColor(score);
+          }
+          sendBadge(format, badgeData);
+        } catch(e) {
+            badgeData.text[1] = 'invalid';
+            sendBadge(format, badgeData);
         }
-        sendBadge(format, badgeData);
       });
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -5917,17 +5920,16 @@ cache(function(data, match, sendBadge, request) {
 
   var badgeData = getBadgeData('build', data);
   request(apiUrl, {json:true}, function(err, res, data) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    if (data.message !== undefined){
-      badgeData.text[1] = data.message;
+    if (checkErrorResponse(badgeData, err, res, 'project not found')) {
       sendBadge(format, badgeData);
       return;
     }
     try {
+      if (data.message !== undefined){
+        badgeData.text[1] = data.message;
+        sendBadge(format, badgeData);
+        return;
+      }
       var status = data[0].status;
       switch(status) {
       case 'success':

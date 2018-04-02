@@ -14,10 +14,11 @@ class DummyService extends BaseService {
   }
 
   static get category() { return 'cat'; }
-  static get uri() {
+  static get url() {
     return {
-      format: '/foo/([^/]+)',
-      capture: ['someArg'],
+      base: 'foo',
+      format: '([^/]+)',
+      capture: ['someArg']
       queryParams: ['suffix'],
     };
   }
