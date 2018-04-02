@@ -3,6 +3,7 @@
 const countBy = require('lodash.countby');
 const dom = require('xmldom').DOMParser;
 const jp = require('jsonpath');
+const moment = require('moment');
 const path = require('path');
 const prettyBytes = require('pretty-bytes');
 const queryString = require('query-string');
@@ -5511,14 +5512,14 @@ cache(function(data, match, sendBadge, request) {
   let time_period, start_date;
   badgeData.text[0] = getLabel('downloads', data);
   // get yesterday since today is incomplete
-  const end_date = new Date((new Date()).getTime() - 1000*60*60*24);
+  const end_date = moment().subtract(24, 'hours');
   switch (info.charAt(1)) {
     case 'm':
-      start_date = new Date(end_date.getTime() - 1000*60*60*24*30);
+      start_date = moment(end_date).subtract(30, 'days');
       time_period = '/month';
       break;
     case 'w':
-      start_date = new Date(end_date.getTime() - 1000*60*60*24*6);  // 6, since date range is inclusive
+      start_date = moment(end_date).subtract(6, 'days');  // 6, since date range is inclusive
       time_period = '/week';
       break;
     case 'd':
@@ -5526,11 +5527,11 @@ cache(function(data, match, sendBadge, request) {
       time_period = '/day';
       break;
     case 't':
-      start_date = new Date(99, 0, 1);
+      start_date = moment(0);
       time_period = '';
       break;
   }
-  apiUrl += '?start_date=' + start_date.toISOString().slice(0,10) + '&end_date=' + end_date.toISOString().slice(0,10);
+  apiUrl += '?start_date=' + start_date.format("YYYY-MM-DD") + '&end_date=' + end_date.format("YYYY-MM-DD");
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
