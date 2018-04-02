@@ -18,7 +18,7 @@ class DummyService extends BaseService {
     return {
       base: 'foo',
       format: '([^/]+)',
-      capture: ['someArg']
+      capture: ['someArg'],
       queryParams: ['suffix'],
     };
   }
