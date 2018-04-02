@@ -22,8 +22,8 @@
     {{?}}
     <text x="{{=(((it.widths[0]+it.logoWidth+it.logoPadding)/2)+1)*10}}" y="140" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{=(it.widths[0]-(10+it.logoWidth+it.logoPadding))*10}}" lengthAdjust="spacing">{{=it.escapedText[0]}}</text>
     <text x="{{=(((it.widths[0]+it.logoWidth+it.logoPadding)/2)+1)*10}}" y="130" transform="scale(0.1)" textLength="{{=(it.widths[0]-(10+it.logoWidth+it.logoPadding))*10}}" lengthAdjust="spacing">{{=it.escapedText[0]}}</text>
-    <text x="{{=(it.widths[0]+it.widths[1]/2-1)*10}}" y="140" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{=(it.widths[1]-10)*10}}" lengthAdjust="spacing">{{=it.escapedText[1]}}</text>
-    <text x="{{=(it.widths[0]+it.widths[1]/2-1)*10}}" y="130" transform="scale(0.1)" textLength="{{=(it.widths[1]-10)*10}}" lengthAdjust="spacing">{{=it.escapedText[1]}}</text>
+    <text x="{{=(it.widths[0]+it.widths[1]/2-(it.widths[0] ? 1 : 0))*10}}" y="140" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{=(it.widths[1]-10)*10}}" lengthAdjust="spacing">{{=it.escapedText[1]}}</text>
+    <text x="{{=(it.widths[0]+it.widths[1]/2-(it.widths[0] ? 1 : 0))*10}}" y="130" transform="scale(0.1)" textLength="{{=(it.widths[1]-10)*10}}" lengthAdjust="spacing">{{=it.escapedText[1]}}</text>
   </g>
 
   {{?(it.links[0] && it.links[0].length)}}
