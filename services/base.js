@@ -64,8 +64,7 @@ module.exports = class BaseService {
   }
 
   static _makeFullUrl(partialUrl) {
-    const { base } = this.url;
-    return '/' + [base, partialUrl].filter(Boolean).join('/');
+    return '/' + [this.url.base, partialUrl].filter(Boolean).join('/');
   }
 
   /**
@@ -79,7 +78,7 @@ module.exports = class BaseService {
   static prepareExamples() {
     return this.examples.map(({ title, previewUrl, exampleUrl, documentation }) => {
       if (! previewUrl) {
-        throw Error(`Example for ${ServiceClass.name} is missing required previewUrl`);
+        throw Error(`Example for ${this.name} is missing required previewUrl`);
       }
 
       return {
@@ -92,9 +91,8 @@ module.exports = class BaseService {
   }
 
   static get _regex() {
-    const { base, format } = this.url;
     // Regular expressions treat "/" specially, so we need to escape them
-    const escapedPath = format.replace(/\//g, '\\/');
+    const escapedPath = this.url.format.replace(/\//g, '\\/');
     const fullRegex = `^${this._makeFullUrl(escapedPath)}.(svg|png|gif|jpg|json)$`;
     return new RegExp(fullRegex);
   }
