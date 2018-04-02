@@ -63,12 +63,39 @@ module.exports = class BaseService {
     return [];
   }
 
+  static _makeFullUrl(partialUrl) {
+    const { base } = this.url;
+    return '/' + [base, partialUrl].filter(Boolean).join('/');
+  }
+
+  /**
+   * Return an array of examples. Each example is prepared according to the
+   * schema in `lib/all-badge-examples.js`. Four keys are supported:
+   *  - title
+   *  - previewUrl
+   *  - exampleUrl
+   *  - documentation
+   */
+  static prepareExamples() {
+    return this.examples.map(({ title, previewUrl, exampleUrl, documentation }) => {
+      if (! previewUrl) {
+        throw Error(`Example for ${ServiceClass.name} is missing required previewUrl`);
+      }
+
+      return {
+        title: title ? `${this.name} ${title}` : this.name,
+        previewUri: `${this._makeFullUrl(previewUrl)}.svg`,
+        exampleUri: exampleUrl ? `${this._makeFullUrl(exampleUrl)}.svg` : undefined,
+        documentation,
+      };
+    });
+  }
+
   static get _regex() {
     const { base, format } = this.url;
     // Regular expressions treat "/" specially, so we need to escape them
     const escapedPath = format.replace(/\//g, '\\/');
-    const joined = [base, escapedPath].filter(Boolean).join('/');
-    const fullRegex = `^/${joined}.(svg|png|gif|jpg|json)$`;
+    const fullRegex = `^${this._makeFullUrl(escapedPath)}.(svg|png|gif|jpg|json)$`;
     return new RegExp(fullRegex);
   }
 
