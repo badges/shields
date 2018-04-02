@@ -1,6 +1,11 @@
 'use strict';
 
 const {
+  NotFound,
+  InvalidResponse,
+  Inaccessible,
+} = require('./errors');
+const {
   makeLogo,
   toArray,
   makeColor,
@@ -8,8 +13,9 @@ const {
 } = require('../lib/badge-data');
 
 module.exports = class BaseService {
-  constructor({sendAndCacheRequest}) {
+  constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
     this._sendAndCacheRequest = sendAndCacheRequest;
+    this._handleInternalErrors = handleInternalErrors;
   }
 
   /**
@@ -32,6 +38,7 @@ module.exports = class BaseService {
   static get category() {
     return 'unknown';
   }
+
   /**
    * Returns an object:
    *  - base: (Optional) The base path of the URLs for this service. This is
@@ -98,8 +105,27 @@ module.exports = class BaseService {
     try {
       return await this.handle(namedParams, queryParams);
     } catch (error) {
-      console.log(error);
-      return { message: 'error' };
+      if (error instanceof NotFound) {
+        return {
+          message: error.prettyMessage,
+          color: 'red',
+        };
+      } else if (error instanceof InvalidResponse ||
+        error instanceof Inaccessible) {
+        return {
+          message: error.prettyMessage,
+          color: 'lightgray',
+        };
+      } else if (this._handleInternalErrors) {
+        console.log(error);
+        return {
+          label: 'shields',
+          message: 'internal error',
+          color: 'lightgray',
+        };
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -121,15 +147,15 @@ module.exports = class BaseService {
       link: serviceLink,
     } = serviceData;
 
-    const defaultLabel = this.category;
     const {
       color: defaultColor,
       logo: defaultLogo,
+      label: defaultLabel,
     } = this.defaultBadgeData;
 
     const badgeData = {
       text: [
-        overrideLabel || serviceLabel || defaultLabel,
+        overrideLabel || serviceLabel || defaultLabel || this.category,
         serviceMessage || 'n/a',
       ],
       template: style,
@@ -144,7 +170,7 @@ module.exports = class BaseService {
     return badgeData;
   }
 
-  static register(camp, handleRequest) {
+  static register(camp, handleRequest, { handleInternalErrors }) {
     const ServiceClass = this; // In a static context, "this" is the class.
 
     camp.route(this._regex, handleRequest({
@@ -153,7 +179,7 @@ module.exports = class BaseService {
         const namedParams = this._namedParamsForMatch(match);
         const serviceInstance = new ServiceClass({
           sendAndCacheRequest: request.asPromise,
-        });
+        }, { handleInternalErrors });
         const serviceData = await serviceInstance.invokeHandler(namedParams, queryParams);
         const badgeData = this._makeBadgeData(queryParams, serviceData);
 

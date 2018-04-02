@@ -25,6 +25,11 @@ t.create('CI 404')
 .get('/ci/somerandomproject/thatdoesntexits.json')
   .expectJSON({ name: 'build', value: 'project not found or access denied' });
 
+t.create('CI (connection error)')
+  .get('/ci/this-one/is-not-real-either.json')
+  .networkOff()
+  .expectJSON({ name: 'build', value: 'inaccessible' });
+
 // Test AppVeyor tests status badge
 t.create('tests status')
   .get('/tests/NZSmartie/coap-net-iu0to.json')
