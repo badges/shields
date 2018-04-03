@@ -25,7 +25,7 @@ t.create('circle ci (valid, with branch)')
 
 t.create('circle ci (not found)')
   .get('/project/github/PyvesB/EmptyRepo.json')
-  .expectJSON({name: 'build', value: 'Project not found'});
+  .expectJSON({name: 'build', value: 'project not found'});
 
 t.create('circle ci (connection error)')
   .get('/project/github/RedSparr0w/node-csgo-parser.json')
@@ -39,3 +39,11 @@ t.create('circle ci (unexpected response)')
     .reply(invalidJSON)
   )
   .expectJSON({name: 'build', value: 'invalid'});
+
+t.create('circle ci (no response data)')
+  .get('/project/github/RedSparr0w/node-csgo-parser.json')
+  .intercept(nock => nock('https://circleci.com')
+    .get('/api/v1.1/project/github/RedSparr0w/node-csgo-parser?filter=completed&limit=1')
+    .reply(200)
+  )
+  .expectJSON({ name: 'build', value: 'invalid' });
