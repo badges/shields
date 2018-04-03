@@ -7507,7 +7507,7 @@ cache({
       case 'yaml':
         requestOptions = {
           headers: {
-            Accept: 'application/yaml, text/yaml, text/plain'
+            Accept: 'text/x-yaml,  text/yaml, application/x-yaml, application/yaml, text/plain'
           }
         };
         break;
