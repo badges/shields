@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{{=(it.widths[0] = it.text[0] && it.text[0].length ? it.widths[0] : 0)+it.widths[1]}}" height="20">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{{=(it.widths[0] -= it.text[0].length ? 0 : (it.logo ? 8 : 11))+it.widths[1]}}" height="20">
   <linearGradient id="smooth" x2="0" y2="100%">
     <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
     <stop offset="1" stop-opacity=".1"/>
@@ -9,7 +9,7 @@
   </clipPath>
 
   <g clip-path="url(#round)">
-    <rect width="{{=it.widths[0]}}" height="20" fill="{{=it.escapeXml(it.colorA||"#555")}}"/>
+    <rect width="{{=it.widths[0]}}" height="20" fill="{{=it.escapeXml(it.text[0].length ? (it.colorA||"#555") : (it.colorB||"#4c1"))}}"/>
     <rect x="{{=it.widths[0]}}" width="{{=it.widths[1]}}" height="20" fill="{{=it.escapeXml(it.colorB||"#4c1")}}"/>
     <rect width="{{=it.widths[0]+it.widths[1]}}" height="20" fill="url(#smooth)"/>
   </g>
@@ -18,10 +18,12 @@
     {{?it.logo}}
       <image x="5" y="3" width="{{=it.logoWidth}}" height="14" xlink:href="{{=it.logo}}"/>
     {{?}}
-    <text x="{{=(((it.widths[0]+it.logoWidth+it.logoPadding)/2)+1)*10}}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{=(it.widths[0]-(10+it.logoWidth+it.logoPadding))*10}}" lengthAdjust="spacing">{{=it.escapedText[0]}}</text>
-    <text x="{{=(((it.widths[0]+it.logoWidth+it.logoPadding)/2)+1)*10}}" y="140" transform="scale(0.1)" textLength="{{=(it.widths[0]-(10+it.logoWidth+it.logoPadding))*10}}" lengthAdjust="spacing">{{=it.escapedText[0]}}</text>
-    <text x="{{=(it.widths[0]+it.widths[1]/2-(it.widths[0] ? 1 : 0))*10}}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{=(it.widths[1]-10)*10}}" lengthAdjust="spacing">{{=it.escapedText[1]}}</text>
-    <text x="{{=(it.widths[0]+it.widths[1]/2-(it.widths[0] ? 1 : 0))*10}}" y="140" transform="scale(0.1)" textLength="{{=(it.widths[1]-10)*10}}" lengthAdjust="spacing">{{=it.escapedText[1]}}</text>
+    {{?it.text[0].length}}
+        <text x="{{=(((it.widths[0]+it.logoWidth+it.logoPadding)/2)+1)*10}}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{=(it.widths[0]-(10+it.logoWidth+it.logoPadding))*10}}" lengthAdjust="spacing">{{=it.escapedText[0]}}</text>
+        <text x="{{=(((it.widths[0]+it.logoWidth+it.logoPadding)/2)+1)*10}}" y="140" transform="scale(0.1)" textLength="{{=(it.widths[0]-(10+it.logoWidth+it.logoPadding))*10}}" lengthAdjust="spacing">{{=it.escapedText[0]}}</text>
+    {{?}}
+    <text x="{{=(it.widths[0]+it.widths[1]/2-(it.text[0].length ? 1 : 0 ))*10}}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{=(it.widths[1]-10)*10}}" lengthAdjust="spacing">{{=it.escapedText[1]}}</text>
+    <text x="{{=(it.widths[0]+it.widths[1]/2-(it.text[0].length ? 1 : 0 ))*10}}" y="140" transform="scale(0.1)" textLength="{{=(it.widths[1]-10)*10}}" lengthAdjust="spacing">{{=it.escapedText[1]}}</text>
   </g>
   
   {{?(it.links[0] && it.links[0].length)}}
