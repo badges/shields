@@ -17,6 +17,11 @@ module.exports = {
       }));
     }
 
+    config.module.loaders = (config.module.loaders || []).concat({
+      test: /\.json$/,
+      loader: 'json-loader',
+    });
+
     return config;
   },
   exportPathMap: () => ({
