@@ -3,9 +3,9 @@
 const countBy = require('lodash.countby');
 const dom = require('xmldom').DOMParser;
 const jp = require('jsonpath');
+const moment = require('moment');
 const path = require('path');
 const prettyBytes = require('pretty-bytes');
-const glob = require('glob');
 const queryString = require('query-string');
 const semver = require('semver');
 const xml2js = require('xml2js');
@@ -16,6 +16,7 @@ const serverSecrets = require('./lib/server-secrets');
 Raven.config(process.env.SENTRY_DSN || serverSecrets.sentry_dsn).install();
 Raven.disableConsoleAlerts();
 
+const { loadServiceClasses } = require('./services');
 const { isDeprecated, getDeprecatedBadge } = require('./lib/deprecation-helpers');
 const { checkErrorResponse } = require('./lib/error-helper');
 const analytics = require('./lib/analytics');
@@ -200,14 +201,11 @@ camp.notfound(/.*/, function(query, match, end, request) {
 
 // Vendors.
 
-// Match modules with the same name as their containing directory.
-// e.g. services/appveyor/appveyor.js
-const serviceRegex = /\/services\/(.*)\/\1\.js$/;
-// New-style services
-glob.sync(`${__dirname}/services/**/*.js`)
-  .filter(path => serviceRegex.test(path))
-  .map(path => require(path))
-  .forEach(serviceClass => serviceClass.register(camp, cache));
+loadServiceClasses().forEach(
+  serviceClass => serviceClass.register(
+    camp,
+    cache,
+    { handleInternalErrors: config.handleInternalErrors }));
 
 // JIRA issue integration
 camp.route(/^\/jira\/issue\/(http(?:s)?)\/(.+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -2716,34 +2714,39 @@ cache(function(data, match, sendBadge, request) {
           return;
         }
 
-        const parsedData = JSON.parse(buffer);
-        if (type === 'coverage' && isAlternativeFormat) {
-          const score = parsedData.data.attributes.rating.letter;
-          badgeData.text[1] = score;
-          badgeData.colorscheme = letterScoreColor(score);
-        } else if (type === 'coverage') {
-          const percentage = parseFloat(parsedData.data.attributes.covered_percent);
-          badgeData.text[1] = percentage.toFixed(0) + '%';
-          badgeData.colorscheme = coveragePercentageColor(percentage);
-        } else if (type === 'issues') {
-          const count = parsedData.data.meta.issues_count;
-          badgeData.text[1] = count;
-          badgeData.colorscheme = colorScale([1, 5, 10, 20], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(count);
-        } else if (type === 'technical debt') {
-          const percentage = parseFloat(parsedData.data.attributes.ratings[0].measure.value);
-          badgeData.text[1] = percentage.toFixed(0) + '%';
-          badgeData.colorscheme = colorScale([5, 10, 20, 50], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(percentage);
-        } else if (type === 'maintainability' && isAlternativeFormat) {
-          // maintainability = 100 - technical debt
-          const percentage = 100 - parseFloat(parsedData.data.attributes.ratings[0].measure.value);
-          badgeData.text[1] = percentage.toFixed(0) + '%';
-          badgeData.colorscheme = colorScale([50, 80, 90, 95], ['red', 'yellow', 'yellowgreen', 'green', 'brightgreen'])(percentage);
-        } else if (type === 'maintainability') {
-          const score = parsedData.data.attributes.ratings[0].letter;
-          badgeData.text[1] = score;
-          badgeData.colorscheme = letterScoreColor(score);
+        try {
+          const parsedData = JSON.parse(buffer);
+          if (type === 'coverage' && isAlternativeFormat) {
+            const score = parsedData.data.attributes.rating.letter;
+            badgeData.text[1] = score;
+            badgeData.colorscheme = letterScoreColor(score);
+          } else if (type === 'coverage') {
+            const percentage = parseFloat(parsedData.data.attributes.covered_percent);
+            badgeData.text[1] = percentage.toFixed(0) + '%';
+            badgeData.colorscheme = coveragePercentageColor(percentage);
+          } else if (type === 'issues') {
+            const count = parsedData.data.meta.issues_count;
+            badgeData.text[1] = count;
+            badgeData.colorscheme = colorScale([1, 5, 10, 20], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(count);
+          } else if (type === 'technical debt') {
+            const percentage = parseFloat(parsedData.data.attributes.ratings[0].measure.value);
+            badgeData.text[1] = percentage.toFixed(0) + '%';
+            badgeData.colorscheme = colorScale([5, 10, 20, 50], ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red'])(percentage);
+          } else if (type === 'maintainability' && isAlternativeFormat) {
+            // maintainability = 100 - technical debt
+            const percentage = 100 - parseFloat(parsedData.data.attributes.ratings[0].measure.value);
+            badgeData.text[1] = percentage.toFixed(0) + '%';
+            badgeData.colorscheme = colorScale([50, 80, 90, 95], ['red', 'yellow', 'yellowgreen', 'green', 'brightgreen'])(percentage);
+          } else if (type === 'maintainability') {
+            const score = parsedData.data.attributes.ratings[0].letter;
+            badgeData.text[1] = score;
+            badgeData.colorscheme = letterScoreColor(score);
+          }
+          sendBadge(format, badgeData);
+        } catch(e) {
+            badgeData.text[1] = 'invalid';
+            sendBadge(format, badgeData);
         }
-        sendBadge(format, badgeData);
       });
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -2946,50 +2949,12 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// dotnet-status integration.
+// dotnet-status integration - deprecated as of April 2018.
 camp.route(/^\/dotnetstatus\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var projectUri = match[1]; // gh/{USER}/{REPO}/{PROJECT}
-  var format = match[2];
-  var url = 'http://dotnet-status.com/api/status/' + projectUri + '/';
-  var badgeData = getBadgeData('dependencies', data);
-  var sendErrorBadge = function() {
-    badgeData.text[1] = 'inconclusive';
-    sendBadge(format, badgeData);
-  };
-
-  request(url, function (err, res, buffer) {
-    if (err != null || res.statusCode === 404) {
-      sendErrorBadge();
-      return;
-    }
-
-    if (res.statusCode === 202) {
-      badgeData.text[1] = 'processing';
-      sendBadge(format, badgeData);
-      return;
-    }
-
-    try {
-      var data = JSON.parse(buffer);
-      if(data.projectResults.length === 1 && data.projectResults[0] !== null) {
-        if (data.projectResults[0].outOfDate) {
-          badgeData.text[1] = 'out of date';
-          badgeData.colorscheme = 'red';
-        } else {
-          badgeData.text[1] = 'up to date';
-          badgeData.colorscheme = 'blue';
-        }
-      }
-      else {
-        badgeData.text[1] = 'project not found';
-      }
-      sendBadge(format, badgeData);
-    }
-    catch (e) {
-      sendErrorBadge();
-    }
-  });
+  const format = match[2];
+  const badgeData = getDeprecatedBadge('dotnet status', data);
+  sendBadge(format, badgeData);
 }));
 
 // Gemnasium integration
@@ -4918,16 +4883,16 @@ cache(function(data, match, sendBadge, request) {
 // Ansible integration
 camp.route(/^\/ansible\/role\/(?:(d)\/)?(\d+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var type = match[1];      // eg d or nothing
-  var roleId = match[2];    // eg 3078
-  var format = match[3];
-  var options = {
+  const type = match[1];      // eg d or nothing
+  const roleId = match[2];    // eg 3078
+  const format = match[3];
+  const options = {
     json: true,
     uri: 'https://galaxy.ansible.com/api/v1/roles/' + roleId + '/',
   };
-  var badgeData = getBadgeData('role', data);
+  const badgeData = getBadgeData('role', data);
   request(options, function(err, res, json) {
-    if (res && (res.statusCode === 404 || json.state === null)) {
+    if (res && (res.statusCode === 404 || json === undefined || json.state === null)) {
       badgeData.text[1] = 'not found';
       sendBadge(format, badgeData);
       return;
@@ -5506,39 +5471,37 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // SourceForge integration.
-camp.route(/^\/sourceforge\/([^/]+)\/([^/]*)\/?(.*).(svg|png|gif|jpg|json)$/,
+camp.route(/^\/sourceforge\/(dt|dm|dw|dd)\/([^/]*)\/?(.*).(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var info = match[1];      // eg, 'dm'
-  var project = match[2];   // eg, 'sevenzip`.
-  var folder = match[3];
-  var format = match[4];
-  var apiUrl = 'http://sourceforge.net/projects/' + project + '/files/' + folder + '/stats/json';
-  var badgeData = getBadgeData('sourceforge', data);
-  var time_period, start_date, end_date;
-  if (info.charAt(0) === 'd') {
-    badgeData.text[0] = getLabel('downloads', data);
-    // get yesterday since today is incomplete
-    end_date = new Date((new Date()).getTime() - 1000*60*60*24);
-    switch (info.charAt(1)) {
-      case 'm':
-        start_date = new Date(end_date.getTime() - 1000*60*60*24*30);
-        time_period = '/month';
-        break;
-      case 'w':
-        start_date = new Date(end_date.getTime() - 1000*60*60*24*6);  // 6, since date range is inclusive
-        time_period = '/week';
-        break;
-      case 'd':
-        start_date = end_date;
-        time_period = '/day';
-        break;
-      case 't':
-        start_date = new Date(99, 0, 1);
-        time_period = '/total';
-        break;
-    }
+  const info = match[1];      // eg, 'dm'
+  const project = match[2];   // eg, 'sevenzip`.
+  const folder = match[3];
+  const format = match[4];
+  let apiUrl = 'http://sourceforge.net/projects/' + project + '/files/' + folder + '/stats/json';
+  const badgeData = getBadgeData('sourceforge', data);
+  let time_period, start_date;
+  badgeData.text[0] = getLabel('downloads', data);
+  // get yesterday since today is incomplete
+  const end_date = moment().subtract(24, 'hours');
+  switch (info.charAt(1)) {
+    case 'm':
+      start_date = moment(end_date).subtract(30, 'days');
+      time_period = '/month';
+      break;
+    case 'w':
+      start_date = moment(end_date).subtract(6, 'days');  // 6, since date range is inclusive
+      time_period = '/week';
+      break;
+    case 'd':
+      start_date = end_date;
+      time_period = '/day';
+      break;
+    case 't':
+      start_date = moment(0);
+      time_period = '';
+      break;
   }
-  apiUrl += '?start_date=' + start_date.toISOString().slice(0,10) + '&end_date=' + end_date.toISOString().slice(0,10);
+  apiUrl += '?start_date=' + start_date.format("YYYY-MM-DD") + '&end_date=' + end_date.format("YYYY-MM-DD");
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -5546,8 +5509,8 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      var downloads = data.total;
+      const data = JSON.parse(buffer);
+      const downloads = data.total;
       badgeData.text[1] = metric(downloads) + time_period;
       badgeData.colorscheme = downloadCountColor(downloads);
       sendBadge(format, badgeData);
@@ -5921,17 +5884,16 @@ cache(function(data, match, sendBadge, request) {
 
   var badgeData = getBadgeData('build', data);
   request(apiUrl, {json:true}, function(err, res, data) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    if (data.message !== undefined){
-      badgeData.text[1] = data.message;
+    if (checkErrorResponse(badgeData, err, res, 'project not found')) {
       sendBadge(format, badgeData);
       return;
     }
     try {
+      if (data.message !== undefined){
+        badgeData.text[1] = data.message;
+        sendBadge(format, badgeData);
+        return;
+      }
       var status = data[0].status;
       switch(status) {
       case 'success':
