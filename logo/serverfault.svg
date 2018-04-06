@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 120 120" style="enable-background:new 0 0 120 120;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#A7A9AC;}
+	.st1{fill:#818285;}
+	.st2{fill:#58585A;}
+	.st3{fill:#D1D2D4;}
+	.st4{fill:#231F20;}
+	.st5{fill:#992224;}
+	.st6{fill:#630F16;}
+	.st7{fill:#2B1415;}
+	.st8{fill:#E7282D;}
+</style>
+<g>
+	<rect x="13.7" y="41.6" class="st0" width="44" height="8.7"/>
+	<rect x="13.7" y="55.8" class="st1" width="44" height="8.7"/>
+	<rect x="13.7" y="69" class="st2" width="44" height="8.7"/>
+	<rect x="13.7" y="27.6" class="st3" width="44" height="8.7"/>
+	<rect x="13.7" y="83.2" class="st4" width="44" height="8.7"/>
+</g>
+<rect x="63" y="41.6" class="st5" width="18.7" height="8.7"/>
+<rect x="63" y="55.8" class="st6" width="18.7" height="8.7"/>
+<rect x="63" y="69" class="st7" width="18.7" height="8.7"/>
+<rect x="63" y="27.6" class="st8" width="18.7" height="8.7"/>
+<rect x="63" y="83.2" class="st4" width="18.7" height="8.7"/>
+<g>
+	<rect x="86.8" y="42" class="st0" width="18.7" height="8.7"/>
+	<rect x="86.8" y="56.2" class="st1" width="18.7" height="8.7"/>
+	<rect x="86.8" y="69.4" class="st2" width="18.7" height="8.7"/>
+	<rect x="86.8" y="28" class="st3" width="18.7" height="8.7"/>
+	<rect x="86.8" y="83.6" class="st4" width="18.7" height="8.7"/>
+</g>
+</svg>
