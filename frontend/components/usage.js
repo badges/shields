@@ -187,13 +187,13 @@ export default class Usage extends React.PureComponent {
               <td>
                 <code>?colorA=abcdef</code>
               </td>
-              <td>Set background of the left part (hex color only)</td>
+              <td>Set background of the left part (hex, rgb, rgba, hsl, hsla and css named colors supported)</td>
             </tr>
             <tr>
               <td>
                 <code>?colorB=fedcba</code>
               </td>
-              <td>Set background of the right part (hex color only)</td>
+              <td>Set background of the right part (hex, rgb, rgba, hsl, hsla and css named colors supported)</td>
             </tr>
             <tr>
               <td>
