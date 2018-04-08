@@ -10,6 +10,7 @@ const queryString = require('query-string');
 const semver = require('semver');
 const xml2js = require('xml2js');
 const xpath = require('xpath');
+const yaml = require('js-yaml');
 const Raven = require('raven');
 
 const serverSecrets = require('./lib/server-secrets');
@@ -7428,7 +7429,7 @@ camp.route(/^\/maven-metadata\/v\/(https?)\/(.+\.xml)\.(svg|png|gif|jpg|json)$/,
 }));
 
 // User defined sources - JSON response
-camp.route(/^\/badge\/dynamic\/(json|xml)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/badge\/dynamic\/(json|xml|yaml)\.(svg|png|gif|jpg|json)$/,
 cache({
   queryParams: ['uri', 'url', 'query', 'prefix', 'suffix'],
   handler: function(query, match, sendBadge, request) {
@@ -7465,6 +7466,13 @@ cache({
           }
         };
         break;
+      case 'yaml':
+        requestOptions = {
+          headers: {
+            Accept: 'text/x-yaml,  text/yaml, application/x-yaml, application/yaml, text/plain'
+          }
+        };
+        break;
     }
 
     request(url, requestOptions, (err, res, data) => {
@@ -7494,6 +7502,14 @@ cache({
             data.forEach((i,v)=>{
               innerText.push(pathExpression.indexOf('@') + 1 ? i.value : i.firstChild.data);
             });
+            break;
+          case 'yaml':
+            data = yaml.safeLoad(data);
+            data = jp.query(data, pathExpression);
+            if (!data.length) {
+              throw 'no result';
+            }
+            innerText = data;
             break;
         }
         badgeData.text[1] = (prefix || '') + innerText.join(', ') + (suffix || '');
