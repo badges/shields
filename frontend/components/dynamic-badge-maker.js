@@ -63,7 +63,7 @@ export default class DynamicBadgeMaker extends React.Component {
           className="short"
           value={this.state.color}
           onChange={event => this.setState({ color: event.target.value })}
-          placeholder="hex color" /> {}
+          placeholder="color" /> {}
         <input
           className="short"
           value={this.state.prefix}
