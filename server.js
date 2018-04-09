@@ -7824,7 +7824,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Vaadin Directory Integration
-camp.route(/^\/vaadin-directory\/(star|status|rating|rc|rating-count|v|version|rd|release-date)\/(.*).(svg|png|gif|jpg|json)$/, cache(function (data, match, sendBadge, request) {
+camp.route(/^\/vaadin-directory\/(star|stars|status|rating|rc|rating-count|v|version|rd|release-date)\/(.*).(svg|png|gif|jpg|json)$/, cache(function (data, match, sendBadge, request) {
   var type = match[1]; // Field required
   var urlIdentifier = match[2]; // Name of repository
   var format = match[3]; // Format
@@ -7847,8 +7847,11 @@ camp.route(/^\/vaadin-directory\/(star|status|rating|rc|rating-count|v|version|r
       var lv = data.latestAvailableRelease.name.toLowerCase();
       var ld = data.latestAvailableRelease.publicationDate;
       switch (type) {
-        case 'star': // Star
-          badgeData.text[0] = getLabel('rating', data);
+        // Since the first deploy was with `star`, I put the case there
+        // for safety pre-caution
+        case 'star':
+        case 'stars': // Stars
+          badgeData.text[0] = getLabel('stars', data);
           badgeData.text[1] = starRating(rating);
           badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
           break;
@@ -7880,7 +7883,7 @@ camp.route(/^\/vaadin-directory\/(star|status|rating|rc|rating-count|v|version|r
         case 'version':
           badgeData.text[0] = getLabel('latest ver', data);
           badgeData.text[1] = lv;
-          badgeData.colorscheme = "blue";
+          badgeData.colorB = '#00b4f0';
           break;
         case 'rd':
         case 'release-date': // The release date of the latest version
