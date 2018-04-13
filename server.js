@@ -7069,13 +7069,15 @@ cache(function(data, match, sendBadge, request) {
 
   let uri;
   switch (resource) {
-    case 'github':
+    case 'github': {
       uri = 'https://libraries.io/api/github/' + project + '/dependencies';
       break;
-    case 'release':
+    }
+    case 'release': {
       const v = version || 'latest';
       uri = 'https://libraries.io/api/' + project + '/' + v + '/dependencies';
       break;
+    }
   }
 
   const options = {method: 'GET', json: true, uri: uri};
