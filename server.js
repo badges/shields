@@ -7084,9 +7084,9 @@ cache(function(data, match, sendBadge, request) {
   const badgeData = getBadgeData('dependencies', data);
 
   request(options, function(err, res, json) {
-    if (err || res.statusCode !== 200) {
-      badgeData.text[1] = 'not available';
-      return sendBadge(format, badgeData);
+    if (checkErrorResponse(badgeData, err, res, 'not available')) {
+      sendBadge(format, badgeData);
+      return;
     }
 
     try {
