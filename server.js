@@ -7062,59 +7062,62 @@ cache(function(data, match, sendBadge, request) {
 // Libraries.io integration.
 camp.route(/^\/librariesio\/(github|release)\/([\w\-_]+\/[\w\-_]+)\/?([\w\-_.]+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
+  const resource  = match[1];
+  const project   = match[2];
+  const version   = match[3];
+  const format    = match[4];
 
-  var resource  = match[1];
-  var project   = match[2];
-  var version   = match[3];
-  var format    = match[4];
-
-  var uri;
+  let uri;
   switch (resource) {
     case 'github':
       uri = 'https://libraries.io/api/github/' + project + '/dependencies';
       break;
     case 'release':
-      var v = version || 'latest';
+      const v = version || 'latest';
       uri = 'https://libraries.io/api/' + project + '/' + v + '/dependencies';
       break;
   }
 
-  var options = {method: 'GET', json: true, uri: uri};
-  var badgeData = getBadgeData('dependencies', data);
+  const options = {method: 'GET', json: true, uri: uri};
+  const badgeData = getBadgeData('dependencies', data);
 
   request(options, function(err, res, json) {
-
     if (err || res.statusCode !== 200) {
       badgeData.text[1] = 'not available';
       return sendBadge(format, badgeData);
     }
 
-    var deprecated = json.dependencies.filter(function(dep) {
-      return dep.deprecated;
-    });
+    try {
+      const deprecated = json.dependencies.filter(function(dep) {
+        return dep.deprecated;
+      });
 
-    var outofdate = json.dependencies.filter(function(dep) {
-      return dep.outdated;
-    });
+      const outofdate = json.dependencies.filter(function(dep) {
+        return dep.outdated;
+      });
 
-    // Deprecated dependencies are really bad
-    if (deprecated.length > 0) {
-      badgeData.colorscheme = 'red';
-      badgeData.text[1] = deprecated.length + ' deprecated';
+      // Deprecated dependencies are really bad
+      if (deprecated.length > 0) {
+        badgeData.colorscheme = 'red';
+        badgeData.text[1] = deprecated.length + ' deprecated';
+        return sendBadge(format, badgeData);
+      }
+
+      // Out of date dependencies are pretty bad
+      if (outofdate.length > 0) {
+        badgeData.colorscheme = 'orange';
+        badgeData.text[1] = outofdate.length + ' out of date';
+        return sendBadge(format, badgeData);
+      }
+
+      // Up to date dependencies are good!
+      badgeData.colorscheme = 'brightgreen';
+      badgeData.text[1] = 'up to date';
       return sendBadge(format, badgeData);
+    } catch (e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
     }
-
-    // Out of date dependencies are pretty bad
-    if (outofdate.length > 0) {
-      badgeData.colorscheme = 'orange';
-      badgeData.text[1] = outofdate.length + ' out of date';
-      return sendBadge(format, badgeData);
-    }
-
-    // Up to date dependencies are good!
-    badgeData.colorscheme = 'brightgreen';
-    badgeData.text[1] = 'up to date';
-    return sendBadge(format, badgeData);
   });
 }));
 
