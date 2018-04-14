@@ -7967,6 +7967,86 @@ cache(function (data, match, sendBadge, request) {
   });
 }));
 
+// Launchpad integration
+camp.route(/^\/launchpad\/ppa\/([^\/]+)\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  // The type of badge, either version or downloads
+  var type = match[1];
+  // The owner of the ppa
+  var user = match[2];
+  // The name of the ppa
+  var ppa = match[3];
+  // The package in the PPA to use
+  var name = match[4];
+  var format = match[5];
+
+  var badgeData;
+
+  if (type == 'version') {
+    badgeData = getBadgeData('version', 'invalid');
+  }
+  else if (type == 'downloads') {
+    badgeData = getBadgeData('downloads 24h', 'invalid');
+  }
+
+  // Make a request for packages in the PPA
+  var apiUrl = 'https://api.launchpad.net/1.0/~' + user + '/+archive/' + ppa + '?ws.op=getPublishedBinaries&ws.size=150';
+  request(apiUrl, function(err, res, buffer) {
+    try {
+      var data = JSON.parse(buffer);
+      var foundEntry = false;
+
+      // Loop through the results until we find the requested package
+      for (let entry of data.entries) {
+        if (entry.binary_package_name == name) {
+          foundEntry = entry;
+          break;
+        }
+      }
+
+      // Error out if we can't find it
+      if (foundEntry === false) {
+        badgeData.text[1] = 'no binary';
+        sendBadge(format, badgeData);
+        return;
+    }
+
+    // If the type requested was version we can return that
+    if (type == 'version') {
+      badgeData.text[1] = foundEntry.binary_package_version
+      badgeData.colorscheme = 'blue';
+      sendBadge(format, badgeData);
+    }
+
+    // For the download count we need another request
+    if (type == 'downloads') {
+      // Request the download numbers for the last package
+      request(foundEntry.self_link + "?ws.op=getDownloadCounts", function(err, res, buffer) {
+        try {
+          var data = JSON.parse(buffer);
+          var totalCount = 0;
+
+          // Sum the total of al binaries
+          for (let entry of data.entries) {
+            totalCount += entry.count
+          }
+
+          // Put the total on the badge
+          badgeData.text[1] = totalCount
+          badgeData.colorscheme = 'blue';
+          sendBadge(format, badgeData);
+        } catch (e) {
+          badgeData.text[1] = 'invalid';
+          sendBadge(format, badgeData);
+        }
+      })
+    }
+  } catch (e) {
+    badgeData.text[1] = 'invalid';
+    sendBadge(format, badgeData);
+  }
+})}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
