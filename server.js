@@ -7968,7 +7968,7 @@ cache(function (data, match, sendBadge, request) {
 }));
 
 // Launchpad integration
-camp.route(/^\/launchpad\/ppa\/([^\/]+)\/([^\/]+)\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/launchpad\/ppa\/([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   // The type of badge, either version or downloads
   var type = match[1];
@@ -8013,7 +8013,7 @@ cache(function(data, match, sendBadge, request) {
 
     // If the type requested was version we can return that
     if (type == 'version') {
-      badgeData.text[1] = foundEntry.binary_package_version
+      badgeData.text[1] = foundEntry.binary_package_version;
       badgeData.colorscheme = 'blue';
       sendBadge(format, badgeData);
     }
@@ -8028,24 +8028,24 @@ cache(function(data, match, sendBadge, request) {
 
           // Sum the total of al binaries
           for (let entry of data.entries) {
-            totalCount += entry.count
+            totalCount += entry.count;
           }
 
           // Put the total on the badge
-          badgeData.text[1] = totalCount
+          badgeData.text[1] = totalCount;
           badgeData.colorscheme = 'blue';
           sendBadge(format, badgeData);
         } catch (e) {
           badgeData.text[1] = 'invalid';
           sendBadge(format, badgeData);
         }
-      })
+    });
     }
   } catch (e) {
     badgeData.text[1] = 'invalid';
     sendBadge(format, badgeData);
   }
-})}));
+});}));
 
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
