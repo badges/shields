@@ -173,12 +173,12 @@ The following numbering explains what happens in the corresponding lines.
    The `url` is created to query the API.
 5. Create the basic badge to use.
    You can read about the [different formats available][format].
-   It contains the format for all responses, regarless of the API's response.
+   It contains the format for all responses, regardless of the API's response.
 6. We request the `url` and pass a call back function to the request.
    The function is called once the data is retrieved from the API.
 7. We want to always see a badge regardless the input.
    In some cases the API may return an error e.g. if the query was invalid.
-   The error is handled and a badge with the the status "inaccessible" is returned.
+   The error is handled and a badge with the status "inaccessible" is returned.
    ![](https://img.shields.io/badge/docker%20build-inaccessible-lightgrey.svg)
 8. The data returned by the API as JSON is parsed.
 9. Based on the result, the text and the color of the badge are altered.
