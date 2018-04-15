@@ -2252,7 +2252,7 @@ cache(function(data, match, sendBadge, request) {
   var info = match[1];
   var egg = match[2];  // eg, `gevent`, `Django`.
   var format = match[3];
-  var apiUrl = 'https://pypi.python.org/pypi/' + egg + '/json';
+  var apiUrl = 'https://pypi.org/pypi/' + egg + '/json';
   var badgeData = getBadgeData('pypi', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
