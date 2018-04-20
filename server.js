@@ -7968,37 +7968,31 @@ cache(function (data, match, sendBadge, request) {
 }));
 
 // Launchpad integration
-camp.route(/^\/launchpad\/ppa\/([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/launchpad\/ppa\/version\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  // The type of badge, either version or downloads
-  var type = match[1];
   // The owner of the ppa
-  var user = match[2];
+  var user = match[1];
   // The name of the ppa
-  var ppa = match[3];
+  var ppa = match[2];
   // The package in the PPA to use
-  var name = match[4];
-  var format = match[5];
+  var name = match[3];
+  var format = match[4];
 
-  var badgeData;
+  var badgeData = getBadgeData('launchpad', 'invalid');
 
-  if (type == 'version') {
-    badgeData = getBadgeData('version', 'invalid');
-  }
-  else if (type == 'downloads') {
-    badgeData = getBadgeData('downloads 24h', 'invalid');
-  }
-
-  // Make a request for packages in the PPA
-  var apiUrl = 'https://api.launchpad.net/1.0/~' + user + '/+archive/' + ppa + '?ws.op=getPublishedBinaries&ws.size=150';
+  // Make a request for packages in the PPA, returning only the published sources that match the the package
+  // Keep in mind that this will also return packages _starting_ with the package name
+  var apiUrl = 'https://api.launchpad.net/1.0/~' + user + '/+archive/' + ppa + '?ws.op=getPublishedSources&status=Published&source_name=' + name;
   request(apiUrl, function(err, res, buffer) {
+    checkErrorResponse(badgeData, err, res, "not found")
+
     try {
       var data = JSON.parse(buffer);
       var foundEntry = false;
 
       // Loop through the results until we find the requested package
       for (let entry of data.entries) {
-        if (entry.binary_package_name == name) {
+        if (entry.source_package_name == name) {
           foundEntry = entry;
           break;
         }
@@ -8006,46 +8000,24 @@ cache(function(data, match, sendBadge, request) {
 
       // Error out if we can't find it
       if (foundEntry === false) {
-        badgeData.text[1] = 'no binary';
+        badgeData.text[1] = 'no package';
+        badgeData.colorscheme = 'red';
         sendBadge(format, badgeData);
         return;
-    }
+      }
 
-    // If the type requested was version we can return that
-    if (type == 'version') {
-      badgeData.text[1] = foundEntry.binary_package_version;
+
+      badgeData.text[1] = foundEntry.source_package_version;
       badgeData.colorscheme = 'blue';
       sendBadge(format, badgeData);
+
+    } catch (e) {
+      badgeData.text[1] = 'not found';
+      badgeData.colorscheme = 'red';
+      sendBadge(format, badgeData);
     }
-
-    // For the download count we need another request
-    if (type == 'downloads') {
-      // Request the download numbers for the last package
-      request(foundEntry.self_link + "?ws.op=getDownloadCounts", function(err, res, buffer) {
-        try {
-          var data = JSON.parse(buffer);
-          var totalCount = 0;
-
-          // Sum the total of al binaries
-          for (let entry of data.entries) {
-            totalCount += entry.count;
-          }
-
-          // Put the total on the badge
-          badgeData.text[1] = totalCount;
-          badgeData.colorscheme = 'blue';
-          sendBadge(format, badgeData);
-        } catch (e) {
-          badgeData.text[1] = 'invalid';
-          sendBadge(format, badgeData);
-        }
-    });
-    }
-  } catch (e) {
-    badgeData.text[1] = 'invalid';
-    sendBadge(format, badgeData);
-  }
-});}));
+  });
+}));
 
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
