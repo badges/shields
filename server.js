@@ -7984,7 +7984,7 @@ cache(function(data, match, sendBadge, request) {
   // Keep in mind that this will also return packages _starting_ with the package name
   var apiUrl = 'https://api.launchpad.net/1.0/~' + user + '/+archive/' + ppa + '?ws.op=getPublishedSources&status=Published&source_name=' + name;
   request(apiUrl, function(err, res, buffer) {
-    checkErrorResponse(badgeData, err, res, "not found")
+    checkErrorResponse(badgeData, err, res, "not found");
 
     try {
       var data = JSON.parse(buffer);
