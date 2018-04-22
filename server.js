@@ -6217,6 +6217,50 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 
+// Buildkite integration.
+camp.route(/^\/buildkite\/([^/]+)\/branch\/([^/]+)(?:\/label\/)?([^/]+)?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var identifier = match[1];  // eg, 3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489
+  var branch = match[2];  // eg, master
+  var label = match[3];  // eg, iOS (optional)
+  var format = match[4];
+
+  var url = 'https://badge.buildkite.com/' + identifier + '.json?branch=' + branch;
+  var badgeData = getBadgeData('Buildlkite', data);
+
+  request(url, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    try {
+      var data = JSON.parse(buffer);
+      var status = data.status;
+      if (status === 'passing') {
+        badgeData.text[1] = 'Passing';
+        badgeData.colorscheme = 'green';
+      } else if (status === 'failing') {
+        badgeData.text[1] = 'Failing';
+        badgeData.colorscheme = 'red';
+      } else {
+        badgeData.text[1] = 'Unknown';
+        badgeData.colorscheme = 'gray';
+      }
+
+      if (label !== undefined) {
+        badgeData.text[0] = label;
+      }
+
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Docker Hub automated integration.
 camp.route(/^\/docker\/automated\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
