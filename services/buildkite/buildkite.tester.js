@@ -19,3 +19,8 @@ t.create('buildkite valid pipeline skipping branch')
 t.create('buildkite unknown branch')
   .get('/3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489/unknown-branch.json')
   .expectJSON({ name: 'build', value: 'unknown' });
+
+t.create('buildkite connection error')
+  .get('/_.json')
+  .networkOff()
+  .expectJSON({ name: 'build', value: 'inaccessible' });
