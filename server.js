@@ -6218,18 +6218,17 @@ cache(function(data, match, sendBadge, request) {
 
 
 // Buildkite integration.
-camp.route(/^\/buildkite\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/buildkite\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var identifier = match[1];  // eg, 3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489
-  var branch = match[2];  // eg, master
+  var branch = match[2] || 'master';  // Defaults to master if not specified
   var format = match[3];
 
   var url = 'https://badge.buildkite.com/' + identifier + '.json?branch=' + branch;
-  var badgeData = getBadgeData('buildkite', data);
+  var badgeData = getBadgeData('build', data);
 
   request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -6238,13 +6237,13 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       var status = data.status;
       if (status === 'passing') {
-        badgeData.text[1] = 'Passing';
+        badgeData.text[1] = 'passing';
         badgeData.colorscheme = 'green';
       } else if (status === 'failing') {
-        badgeData.text[1] = 'Failing';
+        badgeData.text[1] = 'failing';
         badgeData.colorscheme = 'red';
       } else {
-        badgeData.text[1] = 'Unknown';
+        badgeData.text[1] = 'unknown';
         badgeData.colorscheme = 'gray';
       }
 
