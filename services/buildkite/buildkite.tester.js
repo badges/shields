@@ -19,7 +19,10 @@ t.create('buildkite valid pipeline')
 
 t.create('buildkite valid pipeline skipping branch')
   .get('/3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489.json')
-  .expectJSON({ name: 'build', value: 'passing' });
+  .expectJSONTypes(Joi.object().keys({
+    name: 'build',
+    value: Joi.equal('failing', 'passing', 'unknown')
+  }));
 
 t.create('buildkite unknown branch')
   .get('/3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489/unknown-branch.json')
