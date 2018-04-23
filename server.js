@@ -6218,15 +6218,14 @@ cache(function(data, match, sendBadge, request) {
 
 
 // Buildkite integration.
-camp.route(/^\/buildkite\/([^/]+)\/branch\/([^/]+)(?:\/label\/)?([^/]+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/buildkite\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var identifier = match[1];  // eg, 3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489
   var branch = match[2];  // eg, master
-  var label = match[3];  // eg, iOS (optional)
-  var format = match[4];
+  var format = match[3];
 
   var url = 'https://badge.buildkite.com/' + identifier + '.json?branch=' + branch;
-  var badgeData = getBadgeData('Buildlkite', data);
+  var badgeData = getBadgeData('buildkite', data);
 
   request(url, function(err, res, buffer) {
     if (err != null) {
@@ -6247,10 +6246,6 @@ cache(function(data, match, sendBadge, request) {
       } else {
         badgeData.text[1] = 'Unknown';
         badgeData.colorscheme = 'gray';
-      }
-
-      if (label !== undefined) {
-        badgeData.text[0] = label;
       }
 
       sendBadge(format, badgeData);
