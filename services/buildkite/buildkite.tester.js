@@ -1,5 +1,6 @@
 'use strict';
 
+const Joi = require('joi');
 const ServiceTester = require('../service-tester');
 const t = new ServiceTester({ id: 'buildkite', title: 'Buildkite Builds' });
 const { invalidJSON } = require('../response-fixtures');
@@ -11,7 +12,10 @@ t.create('buildkite invalid pipeline')
 
 t.create('buildkite valid pipeline')
   .get('/3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489/master.json')
-  .expectJSON({ name: 'build', value: 'passing' });
+  .expectJSONTypes(Joi.object().keys({
+    name: 'build',
+    value: Joi.equal('failing', 'passing', 'unknown')
+  }));
 
 t.create('buildkite valid pipeline skipping branch')
   .get('/3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489.json')
