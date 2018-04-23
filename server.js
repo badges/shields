@@ -6244,7 +6244,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'red';
       } else {
         badgeData.text[1] = 'unknown';
-        badgeData.colorscheme = 'gray';
+        badgeData.colorscheme = 'lightgray';
       }
 
       sendBadge(format, badgeData);

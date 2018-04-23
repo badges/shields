@@ -27,7 +27,7 @@ t.create('buildkite connection error')
   .expectJSON({ name: 'build', value: 'inaccessible' });
 
 t.create('buildkite unexpected response')
-  .get('/3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489.json?branch=master')
+  .get('/3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489.json')
   .intercept(nock => nock('https://badge.buildkite.com')
     .get('/3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489.json?branch=master')
     .reply(invalidJSON)
