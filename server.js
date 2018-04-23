@@ -404,7 +404,8 @@ cache(function(data, match, sendBadge, request) {
     if (err != null) {
       log.error('Travis error: ' + err.stack);
       if (res) { log.error(''+res); }
-      badgeData.text[1] = 'inaccessible';
+    }
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
