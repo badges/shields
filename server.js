@@ -7984,35 +7984,43 @@ cache(function(data, match, sendBadge, request) {
   // Keep in mind that this will also return packages _starting_ with the package name
   var apiUrl = 'https://api.launchpad.net/1.0/~' + user + '/+archive/' + ppa + '?ws.op=getPublishedSources&status=Published&source_name=' + name;
   request(apiUrl, function(err, res, buffer) {
-    checkErrorResponse(badgeData, err, res, "not found");
+    if (checkErrorResponse(badgeData, err, res)) {
+      sendBadge(format, badgeData);
+      return;
+    }
 
     try {
       var data = JSON.parse(buffer);
-      var foundEntry = false;
+      var recentEntry = false;
 
-      // Loop through the results until we find the requested package
+      // Loop through to find the most recent package with the same name
       for (let entry of data.entries) {
-        if (entry.source_package_name == name) {
-          foundEntry = entry;
-          break;
-        }
+          // Don't run if the package name doesn't match
+          if (entry.source_package_name != name) continue;
+          // If this is the first entry, set it as most recent
+          if (recentEntry == false) recentEntry = entry; continue;
+
+          // Check if the entry date is later than the current max date and replace it if it is
+          if (Date.parse(entry.date_published) > Date.parse(recentEntry.date_published)) {
+              recentEntry = entry;
+          }
       }
 
-      // Error out if we can't find it
-      if (foundEntry === false) {
+      // Abort if no packages are found
+      if (recentEntry == false) {
         badgeData.text[1] = 'no package';
         badgeData.colorscheme = 'red';
         sendBadge(format, badgeData);
         return;
       }
 
-
-      badgeData.text[1] = foundEntry.source_package_version;
-      badgeData.colorscheme = 'blue';
+      badgeData.text[1] = versionText(recentEntry.source_package_version);
+      badgeData.colorscheme =versionText(recentEntry.source_package_version);
       sendBadge(format, badgeData);
 
     } catch (e) {
-      badgeData.text[1] = 'not found';
+        console.log(e);
+      badgeData.text[1] = 'invalid';
       badgeData.colorscheme = 'red';
       sendBadge(format, badgeData);
     }
