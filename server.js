@@ -7997,7 +7997,7 @@ cache(function(data, match, sendBadge, request) {
       for (let entry of data.entries) {
           // Don't run if the package name doesn't match
           if (entry.source_package_name != name) continue;
-          
+
           // If this is the first entry, set it as most recent
           if (recentEntry == false) {
               recentEntry = entry;
