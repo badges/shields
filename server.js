@@ -4934,7 +4934,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var statusMatch = res.headers['content-disposition']
-                           .match(/filename="status_(.+)\.png"/);
+                           .match(/filename="status_(.+)\./);
       if (!statusMatch) {
         badgeData.text[1] = 'unknown';
         sendBadge(format, badgeData);
@@ -4954,13 +4954,17 @@ cache(function(data, match, sendBadge, request) {
           break;
         case 'testing':
         case 'waiting':
+        case 'initiated':
           badgeData.text[1] = 'pending';
           break;
         case 'error':
+        case 'infrastructure_failure':
           badgeData.text[1] = 'failing';
           badgeData.colorscheme = 'red';
           break;
         case 'stopped':
+        case 'ignored':
+        case 'blocked':
           badgeData.text[1] = 'not built';
           break;
       }
