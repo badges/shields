@@ -4934,7 +4934,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var statusMatch = res.headers['content-disposition']
-                           .match(/filename="status_(.+)\.png"/);
+                           .match(/filename="status_(.+)\./);
       if (!statusMatch) {
         badgeData.text[1] = 'unknown';
         sendBadge(format, badgeData);
