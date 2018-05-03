@@ -109,7 +109,7 @@ This example is the for the Docker Hub automated integration. ([Source][docker-e
 
 ```js
 // Docker Hub automated integration.                                             // (1)
-camp.route(/^\/docker\/automated\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,  // (2)
+camp.route(/^\/docker\/automated\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,    // (2)
 cache(function(data, match, sendBadge, request) {                                // (2)
   var user = match[1];  // eg, jrottenberg                                       // (3)
   var repo = match[2];  // eg, ffmpeg                                            // (3)
@@ -121,14 +121,13 @@ cache(function(data, match, sendBadge, request) {                               
   var url = 'https://registry.hub.docker.com/v2/repositories/' + path;           // (4)
   var badgeData = getBadgeData('docker build', data);                            // (5)
   request(url, function(err, res, buffer) {                                      // (6)
-    if (err != null) {                                                           // (7)
-      badgeData.text[1] = 'inaccessible';                                        // (7)
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {             // (7)
       sendBadge(format, badgeData);                                              // (7)
       return;                                                                    // (7)
     }
     try {
-      var data = JSON.parse(buffer);                                             // (8)
-      var is_automated = data.is_automated;                                      // (8)
+      var parsedData = JSON.parse(buffer);                                       // (8)
+      var is_automated = parsedData.is_automated;                                // (8)
       if (is_automated) {
         badgeData.text[1] = 'automated';                                         // (9)
         badgeData.colorscheme = 'blue';                                          // (9)
@@ -136,7 +135,7 @@ cache(function(data, match, sendBadge, request) {                               
         badgeData.text[1] = 'manual';                                            // (9)
         badgeData.colorscheme = 'yellow';                                        // (9)
       }
-      badgeData.colorB = '#008bb8';                                              // (9)
+      badgeData.colorB = data.colorB || '#008bb8';                               // (9)
       sendBadge(format, badgeData);                                              // (9)
     } catch(e) {                                                                 // (10)
       badgeData.text[1] = 'invalid';                                             // (10)
@@ -145,6 +144,7 @@ cache(function(data, match, sendBadge, request) {                               
   });
 }));
 ```
+
 
 The source code is annotated with `// (1)` and alike on the right side.
 The following numbering explains what happens in the corresponding lines.
@@ -269,7 +269,7 @@ These files can also be of help for creating your own badge.
 [edit]: https://github.com/badges/shields/edit/master/doc/TUTORIAL.md
 [add-pr]: https://github.com/badges/shields/issues?utf8=%E2%9C%93&q=is%3Aissue%20in%3Atitle%20add%20
 [new-badge]: https://github.com/badges/shields/pulls?q=is%3Apr+label%3Anew-badge
-[docker-example]: https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L5014
-[travis-example]: https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L431
+[docker-example]: https://github.com/badges/shields/blob/b126b4ebdc64015a3d6e845d9c051f69ad81c4ea/server.js#L6275
+[travis-example]: https://github.com/badges/shields/blob/b126b4ebdc64015a3d6e845d9c051f69ad81c4ea/server.js#L403
 [regex]: https://www.w3schools.com/jsref/jsref_obj_regexp.asp
 [tests-tutorial]: ../service-tests/#readme
