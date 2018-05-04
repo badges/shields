@@ -1099,6 +1099,65 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// LGTM grades integration
+camp.route(/^\/lgtm\/grade\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const language = match[1]; // eg, `java`
+  const projectId = match[2]; // eg, `g/apache/cloudstack`
+  const format = match[3];
+  const url = 'https://lgtm.com/api/v0.1/project/' + projectId + '/details';
+  const badgeData = getBadgeData('lgtm', data);
+  request(url, function(err, res, buffer) {
+    if (checkErrorResponse(badgeData, err, res, 'project not found')) {
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      const data = JSON.parse(buffer);
+      if (!('languages' in data))
+        throw new Error("Invalid data");
+      for (const languageData of data.languages) {
+        if (languageData.lang === language && 'grade' in languageData) {
+          // Pretty label for the language
+          const languageLabel = (() => {
+            switch(language) {
+              case 'cpp':
+                return 'C/C++';
+              // Javascript analysis on LGTM also includes TypeScript
+              case 'javascript':
+                return 'JS/TS';
+              default:
+                return language.charAt(0).toUpperCase() + language.slice(1);
+            }
+          })();
+          badgeData.text[1] = `${languageLabel}: ${languageData.grade}`;
+          // Pick colour based on grade
+          if (languageData.grade === 'A+') {
+            badgeData.colorscheme = 'brightgreen';
+          } else if (languageData.grade === 'A') {
+            badgeData.colorscheme = 'green';
+          } else if (languageData.grade === 'B') {
+            badgeData.colorscheme = 'yellowgreen';
+          } else if (languageData.grade === 'C') {
+            badgeData.colorscheme = 'yellow';
+          } else if (languageData.grade === 'D') {
+            badgeData.colorscheme = 'orange';
+          } else {
+            badgeData.colorscheme = 'red';
+          }
+        sendBadge(format, badgeData);
+        return;
+        }
+      }
+      badgeData.text[1] = 'no data for language';
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Gratipay integration.
 camp.route(/^\/(?:gittip|gratipay(\/user|\/team|\/project)?)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(queryParams, match, sendBadge, request) {
