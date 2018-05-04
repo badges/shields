@@ -1123,6 +1123,8 @@ cache(function(data, match, sendBadge, request) {
             switch(language) {
               case 'cpp':
                 return 'C/C++';
+              case 'csharp':
+                return 'C#';
               // Javascript analysis on LGTM also includes TypeScript
               case 'javascript':
                 return 'JS/TS';
