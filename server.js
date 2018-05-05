@@ -1067,6 +1067,38 @@ cache(function(data, match, sendBadge, request) {
   }
 }));
 
+// LGTM alerts integration
+camp.route(/^\/lgtm\/alerts\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const projectId = match[1]; // eg, `g/apache/cloudstack`
+  const format = match[2];
+  const url = 'https://lgtm.com/api/v0.1/project/' + projectId + '/details';
+  const badgeData = getBadgeData('lgtm', data);
+  request(url, function(err, res, buffer) {
+    if (checkErrorResponse(badgeData, err, res, 'project not found')) {
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      const data = JSON.parse(buffer);
+      if (!('alerts' in data))
+        throw new Error("Invalid data");
+      badgeData.text[1] = metric(data.alerts) + (data.alerts === 1 ? ' alert' : ' alerts');
+
+      if (data.alerts === 0) {
+        badgeData.colorscheme = 'brightgreen';
+      } else {
+        badgeData.colorscheme = 'yellow';
+      }
+      sendBadge(format, badgeData);
+
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Gratipay integration.
 camp.route(/^\/(?:gittip|gratipay(\/user|\/team|\/project)?)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(queryParams, match, sendBadge, request) {
