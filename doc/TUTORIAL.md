@@ -179,14 +179,16 @@ The following numbering explains what happens in the corresponding lines.
    In some cases the API may return an error or a HTTP status code indicating
    a client error or a server error e.g. if the query was invalid. The error
    is handled by the [checkErrorResponse](https://github.com/badges/shields/blob/8fcc13d5bced23f53c9f075e51b419060f6cc124/lib/error-helper.js#L8)
-   function and a badge with a appropriate status is returned: "inaccessible", "not found" or "invalid".
-   ![](https://img.shields.io/badge/docker%20build-inaccessible-lightgrey.svg)
+   function and a badge with a appropriate status is returned: "inaccessible"
+   ![](https://img.shields.io/badge/docker_build-inaccessible-red.svg), "not found"
+   ![](https://img.shields.io/badge/docker_build-not_found-lightgrey.svg)
+   or "invalid" ![](https://img.shields.io/badge/docker_build-invalid-lightgrey.svg).
 8. The data returned by the API as JSON is parsed.
 9. Based on the result, the text and the color of the badge are altered.
    ![](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg)
    ![](https://img.shields.io/docker/automated/codersos/ubuntu-remix.svg)
 10. In case of an error, an "invalid" badge is constructed.
-    ![](https://img.shields.io/docker/automated/,/ubuntu-remix.svg)
+    ![](https://img.shields.io/badge/docker_build-invalid-lightgrey.svg)
 
 The pattern described can be found in may other badges.
 When you look at the [server.js][server], you find many other badges.
