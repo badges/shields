@@ -153,11 +153,11 @@ The following numbering explains what happens in the corresponding lines.
    Usually, badges with a similar topic have their implementation close to each other's.
 2. The [regular expression][regex] matches the path behind the host name in the URL, e.g. `img.shields.io`.
    ```
-   /^\/docker\/automated\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/
-                                            \.(svg|png|gif|jpg|json)
-                                            The supported endings
-                                            e.g. ".svg"
-                          ([^\/]+)\/([^\/]+)
+   /^\/docker\/automated\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/
+                                          \.(svg|png|gif|jpg|json)
+                                          The supported endings
+                                          e.g. ".svg"
+                          ([^/]+)\/([^/]+)
                           The name of the repository
                           e.g. "jrottenberg/ffmpeg"
      \/docker\/automated\/
