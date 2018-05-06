@@ -145,7 +145,6 @@ cache(function(data, match, sendBadge, request) {                               
 }));
 ```
 
-
 The source code is annotated with `// (1)` and alike on the right side.
 The following numbering explains what happens in the corresponding lines.
 
