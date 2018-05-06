@@ -179,7 +179,7 @@ The following numbering explains what happens in the corresponding lines.
    In some cases the API may return an error or a HTTP status code indicating
    a client error or a server error e.g. if the query was invalid. The error
    is handled by the [checkErrorResponse](https://github.com/badges/shields/blob/8fcc13d5bced23f53c9f075e51b419060f6cc124/lib/error-helper.js#L8)
-   function and a badge with a appropriate status is returned: "inaccessible", "for found" or "invalid".
+   function and a badge with a appropriate status is returned: "inaccessible", "not found" or "invalid".
    ![](https://img.shields.io/badge/docker%20build-inaccessible-lightgrey.svg)
 8. The data returned by the API as JSON is parsed.
 9. Based on the result, the text and the color of the badge are altered.
