@@ -6279,7 +6279,7 @@ cache(function(data, match, sendBadge, request) {
       var is_automated = parsedData.is_automated;
       if (is_automated) {
         badgeData.text[1] = 'automated';
-        badgeData.colorB = data.colorB || '#008bb8';
+        setBadgeColor(badgeData, data.colorB || '008bb8');
       } else {
         badgeData.text[1] = 'manual';
         badgeData.colorscheme = 'yellow';

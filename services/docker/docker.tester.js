@@ -171,7 +171,7 @@ t.create('docker automated build - colorB override in automated')
   .expectJSONTypes(Joi.object().keys({
     name: 'docker build',
     value: isAutomatedBuildStatus,
-    colorB: '#fedcba'
+    colorB: Joi.any().equal('#fedcba').required()
   }));
 
 // build status endpoint
