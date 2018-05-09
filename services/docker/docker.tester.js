@@ -140,7 +140,7 @@ t.create('docker automated build - automated')
     .get('/v2/repositories/library/ubuntu')
     .reply(200, {is_automated: true})
   )
-  .expectJSON({name: 'docker build', value: 'automated', colorB: colorsB.blue});
+  .expectJSON({name: 'docker build', value: 'automated', colorB: '#008bb8'});
 
 t.create('docker automated build - manual')
   .get('/automated/_/ubuntu.json?style=_shields_test')
@@ -150,8 +150,24 @@ t.create('docker automated build - manual')
   )
   .expectJSON({name: 'docker build', value: 'manual', colorB: colorsB.yellow});
 
-t.create('docker automated build - colorB override')
+t.create('docker automated build - colorB override in manual')
   .get('/automated/_/ubuntu.json?colorB=fedcba&style=_shields_test')
+  .intercept(nock => nock('https://registry.hub.docker.com/')
+    .get('/v2/repositories/library/ubuntu')
+    .reply(200, {is_automated: false})
+  )
+  .expectJSONTypes(Joi.object().keys({
+    name: 'docker build',
+    value: isAutomatedBuildStatus,
+    colorB: '#fedcba'
+  }));
+
+t.create('docker automated build - colorB override in automated')
+  .get('/automated/_/ubuntu.json?colorB=fedcba&style=_shields_test')
+  .intercept(nock => nock('https://registry.hub.docker.com/')
+    .get('/v2/repositories/library/ubuntu')
+    .reply(200, {is_automated: true})
+  )
   .expectJSONTypes(Joi.object().keys({
     name: 'docker build',
     value: isAutomatedBuildStatus,
