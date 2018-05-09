@@ -61,10 +61,19 @@ t.create('docker stars (unexpected response)')
 // pulls endpoint
 
 t.create('docker pulls (valid, library)')
-  .get('/pulls/_/ubuntu.json')
+  .get('/pulls/_/ubuntu.json?style=_shields_test')
   .expectJSONTypes(Joi.object().keys({
     name: 'docker pulls',
-    value: isMetric
+    value: isMetric,
+    colorB: '#008bb8'
+  }));
+
+t.create('docker pulls (override colorB)')
+  .get('/pulls/_/ubuntu.json?colorB=fedcba&style=_shields_test')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'docker pulls',
+    value: isMetric,
+    colorB: '#fedcba'
   }));
 
 t.create('docker pulls (valid, user)')
