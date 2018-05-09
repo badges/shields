@@ -109,7 +109,7 @@ This example is the for the Docker Hub automated integration. ([Source][docker-e
 
 ```js
 // Docker Hub automated integration.                                             // (1)
-camp.route(/^\/docker\/automated\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,  // (2)
+camp.route(/^\/docker\/automated\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,    // (2)
 cache(function(data, match, sendBadge, request) {                                // (2)
   var user = match[1];  // eg, jrottenberg                                       // (3)
   var repo = match[2];  // eg, ffmpeg                                            // (3)
@@ -121,14 +121,13 @@ cache(function(data, match, sendBadge, request) {                               
   var url = 'https://registry.hub.docker.com/v2/repositories/' + path;           // (4)
   var badgeData = getBadgeData('docker build', data);                            // (5)
   request(url, function(err, res, buffer) {                                      // (6)
-    if (err != null) {                                                           // (7)
-      badgeData.text[1] = 'inaccessible';                                        // (7)
+    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {             // (7)
       sendBadge(format, badgeData);                                              // (7)
       return;                                                                    // (7)
     }
     try {
-      var data = JSON.parse(buffer);                                             // (8)
-      var is_automated = data.is_automated;                                      // (8)
+      var parsedData = JSON.parse(buffer);                                       // (8)
+      var is_automated = parsedData.is_automated;                                // (8)
       if (is_automated) {
         badgeData.text[1] = 'automated';                                         // (9)
         badgeData.colorscheme = 'blue';                                          // (9)
@@ -136,7 +135,7 @@ cache(function(data, match, sendBadge, request) {                               
         badgeData.text[1] = 'manual';                                            // (9)
         badgeData.colorscheme = 'yellow';                                        // (9)
       }
-      badgeData.colorB = '#008bb8';                                              // (9)
+      badgeData.colorB = data.colorB || '#008bb8';                               // (9)
       sendBadge(format, badgeData);                                              // (9)
     } catch(e) {                                                                 // (10)
       badgeData.text[1] = 'invalid';                                             // (10)
@@ -154,11 +153,11 @@ The following numbering explains what happens in the corresponding lines.
    Usually, badges with a similar topic have their implementation close to each other's.
 2. The [regular expression][regex] matches the path behind the host name in the URL, e.g. `img.shields.io`.
    ```
-   /^\/docker\/automated\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/
-                                            \.(svg|png|gif|jpg|json)
-                                            The supported endings
-                                            e.g. ".svg"
-                          ([^\/]+)\/([^\/]+)
+   /^\/docker\/automated\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/
+                                          \.(svg|png|gif|jpg|json)
+                                          The supported endings
+                                          e.g. ".svg"
+                          ([^/]+)\/([^/]+)
                           The name of the repository
                           e.g. "jrottenberg/ffmpeg"
      \/docker\/automated\/
@@ -177,15 +176,19 @@ The following numbering explains what happens in the corresponding lines.
 6. We request the `url` and pass a call back function to the request.
    The function is called once the data is retrieved from the API.
 7. We want to always see a badge regardless the input.
-   In some cases the API may return an error e.g. if the query was invalid.
-   The error is handled and a badge with the status "inaccessible" is returned.
-   ![](https://img.shields.io/badge/docker%20build-inaccessible-lightgrey.svg)
+   In some cases the API may return an error or a HTTP status code indicating
+   a client error or a server error e.g. if the query was invalid. The error response
+   is handled by the [checkErrorResponse](https://github.com/badges/shields/blob/8fcc13d5bced23f53c9f075e51b419060f6cc124/lib/error-helper.js#L8)
+   function and a badge with an appropriate status is returned: "inaccessible"
+   ![](https://img.shields.io/badge/docker_build-inaccessible-red.svg), "not found"
+   ![](https://img.shields.io/badge/docker_build-not_found-lightgrey.svg)
+   or "invalid" ![](https://img.shields.io/badge/docker_build-invalid-lightgrey.svg).
 8. The data returned by the API as JSON is parsed.
 9. Based on the result, the text and the color of the badge are altered.
    ![](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg)
    ![](https://img.shields.io/docker/automated/codersos/ubuntu-remix.svg)
 10. In case of an error, an "invalid" badge is constructed.
-    ![](https://img.shields.io/docker/automated/,/ubuntu-remix.svg)
+    ![](https://img.shields.io/badge/docker_build-invalid-lightgrey.svg)
 
 The pattern described can be found in may other badges.
 When you look at the [server.js][server], you find many other badges.
@@ -269,7 +272,7 @@ These files can also be of help for creating your own badge.
 [edit]: https://github.com/badges/shields/edit/master/doc/TUTORIAL.md
 [add-pr]: https://github.com/badges/shields/issues?utf8=%E2%9C%93&q=is%3Aissue%20in%3Atitle%20add%20
 [new-badge]: https://github.com/badges/shields/pulls?q=is%3Apr+label%3Anew-badge
-[docker-example]: https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L5014
-[travis-example]: https://github.com/badges/shields/blob/bf373d11cd522835f198b50b4e1719027a0a2184/server.js#L431
+[docker-example]: https://github.com/badges/shields/blob/b126b4ebdc64015a3d6e845d9c051f69ad81c4ea/server.js#L6275
+[travis-example]: https://github.com/badges/shields/blob/b126b4ebdc64015a3d6e845d9c051f69ad81c4ea/server.js#L403
 [regex]: https://www.w3schools.com/jsref/jsref_obj_regexp.asp
 [tests-tutorial]: ../service-tests/#readme
