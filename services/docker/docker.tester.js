@@ -30,7 +30,7 @@ t.create('docker stars (override colorB)')
   .expectJSONTypes(Joi.object().keys({
     name: 'docker stars',
     value: isMetric,
-    colorB: '#fedcba'
+    colorB: Joi.any().equal('#fedcba').required()
   }));
 
 t.create('docker stars (valid, user)')
