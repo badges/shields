@@ -6209,8 +6209,7 @@ cache(function(data, match, sendBadge, request) {
       var parseData = JSON.parse(buffer);
       var pulls = parseData.pull_count;
       badgeData.text[1] = metric(pulls);
-      badgeData.colorscheme = null;
-      badgeData.colorB = data.colorB || '#008bb8';
+      setBadgeColor(badgeData, data.colorB || '008bb8');
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
