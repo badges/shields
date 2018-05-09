@@ -6286,7 +6286,6 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = 'manual';
         badgeData.colorscheme = 'yellow';
       }
-      badgeData.colorB = data.colorB || '#008bb8';
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';

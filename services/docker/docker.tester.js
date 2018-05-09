@@ -2,11 +2,14 @@
 
 const Joi = require('joi');
 const ServiceTester = require('../service-tester');
+const colorscheme = require('../../lib/colorscheme.json');
+const mapValues = require('lodash.mapvalues');
 
 const { isMetric } = require('../test-validators');
 const { invalidJSON } = require('../response-fixtures');
 const isAutomatedBuildStatus = Joi.string().valid('automated', 'manual');
 const isBuildStatus = Joi.string().regex(/^(passing|failing|building)$/);
+const colorsB = mapValues(colorscheme, 'colorB');
 
 const t = new ServiceTester({ id: 'docker', title: 'Docker Hub' });
 module.exports = t;
@@ -113,6 +116,29 @@ t.create('docker automated build (unexpected response)')
   )
   .expectJSON({name: 'docker build', value: 'invalid'});
 
+t.create('docker automated build - automated')
+  .get('/automated/_/ubuntu.json?style=_shields_test')
+  .intercept(nock => nock('https://registry.hub.docker.com/')
+    .get('/v2/repositories/library/ubuntu')
+    .reply(200, {is_automated: true})
+  )
+  .expectJSON({name: 'docker build', value: 'automated', colorB: colorsB.blue});
+
+t.create('docker automated build - manual')
+  .get('/automated/_/ubuntu.json?style=_shields_test')
+  .intercept(nock => nock('https://registry.hub.docker.com/')
+    .get('/v2/repositories/library/ubuntu')
+    .reply(200, {is_automated: false})
+  )
+  .expectJSON({name: 'docker build', value: 'manual', colorB: colorsB.yellow});
+
+t.create('docker automated build - colorB override')
+  .get('/automated/_/ubuntu.json?colorB=fedcba&style=_shields_test')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'docker build',
+    value: isAutomatedBuildStatus,
+    colorB: '#fedcba'
+  }));
 
 // build status endpoint
 
