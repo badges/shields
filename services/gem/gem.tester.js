@@ -139,7 +139,7 @@ t.create('latest version downloads (unexpected response)')
 
 // users endpoint
 
-t.create('version (valid)')
+t.create('users (valid)')
   .get('/u/raphink.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'gems',
