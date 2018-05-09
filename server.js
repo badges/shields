@@ -6312,8 +6312,8 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      var most_recent_status = data.results[0].status;
+      var parsedData = JSON.parse(buffer);
+      var most_recent_status = parsedData.results[0].status;
       if (most_recent_status == 10) {
         badgeData.text[1] = 'passing';
         badgeData.colorscheme = 'brightgreen';
@@ -6322,7 +6322,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'red';
       } else {
         badgeData.text[1] = 'building';
-        badgeData.colorB = data.colorB || '#008bb8';
+        setBadgeColor(badgeData, data.colorB || '008bb8');
       }
       sendBadge(format, badgeData);
     } catch(e) {

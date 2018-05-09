@@ -199,3 +199,51 @@ t.create('docker build status (unexpected response)')
     .reply(invalidJSON)
   )
   .expectJSON({name: 'docker build', value: 'invalid'});
+
+t.create('docker build status (passing)')
+  .get('/build/_/ubuntu.json?style=_shields_test')
+  .intercept(nock => nock('https://registry.hub.docker.com/')
+    .get('/v2/repositories/library/ubuntu/buildhistory')
+    .reply(200, {results: [{status: 10}]})
+  )
+  .expectJSON({name: 'docker build', value: 'passing', colorB: colorsB.brightgreen});
+
+t.create('docker build status (failing)')
+  .get('/build/_/ubuntu.json?style=_shields_test')
+  .intercept(nock => nock('https://registry.hub.docker.com/')
+    .get('/v2/repositories/library/ubuntu/buildhistory')
+    .reply(200, {results: [{status: -1}]})
+  )
+  .expectJSON({name: 'docker build', value: 'failing', colorB: colorsB.red});
+
+t.create('docker build status (building)')
+  .get('/build/_/ubuntu.json?style=_shields_test')
+  .intercept(nock => nock('https://registry.hub.docker.com/')
+    .get('/v2/repositories/library/ubuntu/buildhistory')
+    .reply(200, {results: [{status: 1}]})
+  )
+  .expectJSON({name: 'docker build', value: 'building', colorB: '#008bb8'});
+
+t.create('docker build status (override colorB for passing)')
+  .get('/build/_/ubuntu.json?colorB=fedcba&style=_shields_test')
+  .intercept(nock => nock('https://registry.hub.docker.com/')
+    .get('/v2/repositories/library/ubuntu/buildhistory')
+    .reply(200, {results: [{status: 10}]})
+  )
+  .expectJSON({name: 'docker build', value: 'passing', colorB: '#fedcba'});
+
+t.create('docker build status (override colorB for failing)')
+  .get('/build/_/ubuntu.json?colorB=fedcba&style=_shields_test')
+  .intercept(nock => nock('https://registry.hub.docker.com/')
+    .get('/v2/repositories/library/ubuntu/buildhistory')
+    .reply(200, {results: [{status: -1}]})
+  )
+  .expectJSON({name: 'docker build', value: 'failing', colorB: '#fedcba'});
+
+t.create('docker build status (override colorB for building)')
+  .get('/build/_/ubuntu.json?colorB=fedcba&style=_shields_test')
+  .intercept(nock => nock('https://registry.hub.docker.com/')
+    .get('/v2/repositories/library/ubuntu/buildhistory')
+    .reply(200, {results: [{status: 1}]})
+  )
+  .expectJSON({name: 'docker build', value: 'building', colorB: '#fedcba'});
