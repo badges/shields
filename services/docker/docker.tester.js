@@ -18,10 +18,19 @@ module.exports = t;
 // stars endpoint
 
 t.create('docker stars (valid, library)')
-  .get('/stars/_/ubuntu.json')
+  .get('/stars/_/ubuntu.json?style=_shields_test')
   .expectJSONTypes(Joi.object().keys({
     name: 'docker stars',
-    value: isMetric
+    value: isMetric,
+    colorB: '#008bb8'
+  }));
+
+t.create('docker stars (override colorB)')
+  .get('/stars/_/ubuntu.json?colorB=fedcba&style=_shields_test')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'docker stars',
+    value: isMetric,
+    colorB: '#fedcba'
   }));
 
 t.create('docker stars (valid, user)')
