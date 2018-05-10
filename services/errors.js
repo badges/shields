@@ -1,34 +1,58 @@
 'use strict';
 
-class NotFound extends Error {
-  constructor(prettyMessage = 'not found') {
+class ShieldsRuntimeError extends Error {
+
+  get name() { return 'ShieldsRuntimeError'; }
+  get defaultPrettyMessage() { throw new Error('Must implement abstract method'); }
+
+  constructor(props, message) {
+    props = props || {};
+    super(message);
+    this.prettyMessage = props.prettyMessage || this.defaultPrettyMessage;
+    this.stack = props.underlyingError ? props.underlyingError.stack : '';
+  }
+}
+
+class NotFound extends ShieldsRuntimeError {
+
+  get name() { return 'NotFound'; }
+  get defaultPrettyMessage() { return 'not found'; }
+
+  constructor(props) {
+    props = props || {};
+    const prettyMessage = props.prettyMessage || 'not found';
     const message = prettyMessage === 'not found'
       ? 'Not Found'
       : `Not Found: ${prettyMessage}`;
-    super(message);
-    this.prettyMessage = prettyMessage;
-    this.name = 'NotFound';
+    super(props, message);
   }
 }
 
-class InvalidResponse extends Error {
-  constructor(prettyMessage = 'invalid', underlyingError) {
-    const message = underlyingError
-      ? `Invalid Response: ${underlyingError.message}`
+class InvalidResponse extends ShieldsRuntimeError {
+
+  get name() { return 'InvalidResponse'; }
+  get defaultPrettyMessage() { return 'invalid'; }
+
+  constructor(props) {
+    props = props || {};
+    const message = props.underlyingError
+      ? `Invalid Response: ${props.underlyingError.message}`
       : 'Invalid Response';
-    super(message);
-    this.stack = underlyingError.stack;
-    this.prettyMessage = prettyMessage;
-    this.name = 'InvalidResponse';
+    super(props, message);
   }
 }
 
-class Inaccessible extends Error {
-  constructor(underlyingError, prettyMessage = 'inaccessible') {
-    super(`Inaccessible: ${underlyingError.message}`);
-    this.stack = underlyingError.stack;
-    this.prettyMessage = prettyMessage;
-    this.name = 'Inaccessible';
+class Inaccessible extends ShieldsRuntimeError {
+
+  get name() { return 'Inaccessible'; }
+  get defaultPrettyMessage() { return 'inaccessible'; }
+
+  constructor(props) {
+    props = props || {};
+    const message = props.underlyingError
+      ? `Inaccessible: ${props.underlyingError.message}`
+      : 'Inaccessible';
+    super(props, message);
   }
 }
 

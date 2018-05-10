@@ -129,11 +129,11 @@ class GemDownloads extends BaseService {
 
         downloads = metric(versionData.downloads_count);
       } else {
-        throw new InvalidResponse('invalid', new Error('version is null'));
+        throw new InvalidResponse();
       }
 
     } else {
-      throw new InvalidResponse('invalid', new Error('info is invalid'));
+      throw new InvalidResponse();
     }
 
     return {
