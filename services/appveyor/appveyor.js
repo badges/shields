@@ -46,7 +46,7 @@ module.exports = class AppVeyor extends BaseService {
         previewUrl: 'gruntjs/grunt',
       },
       {
-        title: 'branch',
+        title: `${this.name} branch`,
         previewUrl: 'gruntjs/grunt/master',
       },
     ];

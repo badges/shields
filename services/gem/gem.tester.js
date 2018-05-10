@@ -87,7 +87,7 @@ t.create('version downloads (valid, specific version)')
 
 t.create('version downloads (package not found)')
   .get('/dv/not-a-package/4.1.0.json')
-  .expectJSON({name: 'downloads@4.1.0', value: 'not found'});
+  .expectJSON({name: 'downloads', value: 'not found'});
 
 t.create('version downloads (valid package, invalid version)')
   .get('/dv/rails/not-a-version.json')
@@ -100,7 +100,7 @@ t.create('version downloads (valid package, version not specified)')
 t.create('version downloads (connection error)')
   .get('/dv/rails/4.1.0.json')
   .networkOff()
-  .expectJSON({name: 'downloads@4.1.0', value: 'inaccessible'});
+  .expectJSON({name: 'downloads', value: 'inaccessible'});
 
 t.create('version downloads (unexpected response)')
   .get('/dv/rails/4.1.0.json')
@@ -108,7 +108,7 @@ t.create('version downloads (unexpected response)')
     .get('/api/v1/versions/rails.json')
     .reply(invalidJSON)
   )
-  .expectJSON({name: 'downloads@4.1.0', value: 'invalid'});
+  .expectJSON({name: 'downloads', value: 'invalid'});
 
 
 // latest version downloads
@@ -121,12 +121,12 @@ t.create('latest version downloads (valid)')
 
 t.create('latest version downloads (not found)')
   .get('/dtv/not-a-package.json')
-  .expectJSON({name: 'downloads@latest', value: 'not found'});
+  .expectJSON({name: 'downloads', value: 'not found'});
 
 t.create('latest version downloads (connection error)')
   .get('/dtv/rails.json')
   .networkOff()
-  .expectJSON({name: 'downloads@latest', value: 'inaccessible'});
+  .expectJSON({name: 'downloads', value: 'inaccessible'});
 
 t.create('latest version downloads (unexpected response)')
   .get('/dtv/rails.json')
@@ -134,12 +134,12 @@ t.create('latest version downloads (unexpected response)')
     .get('/api/v1/gems/rails.json')
     .reply(invalidJSON)
   )
-  .expectJSON({name: 'downloads@latest', value: 'invalid'});
+  .expectJSON({name: 'downloads', value: 'invalid'});
 
 
 // users endpoint
 
-t.create('version (valid)')
+t.create('users (valid)')
   .get('/u/raphink.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'gems',

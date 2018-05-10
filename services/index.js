@@ -8,9 +8,22 @@ const serviceRegex = /\/services\/(.*)\/\1\.js$/;
 
 function loadServiceClasses() {
   // New-style services
-  return glob.sync(`${__dirname}/**/*.js`)
+  const services = glob.sync(`${__dirname}/**/*.js`)
     .filter(path => serviceRegex.test(path))
-    .map(path => require(path))
+    .map(path => require(path));
+
+  const serviceClasses = [];
+  services.forEach(service => {
+    if (typeof service === 'function') {
+      serviceClasses.push(service);
+    } else {
+      for (const serviceClass in service) {
+        serviceClasses.push(service[serviceClass]);
+      }
+    }
+  });
+
+  return serviceClasses;
 }
 
 function loadTesters() {
