@@ -67,40 +67,40 @@ t.create('alerts: lgtm inaccessible')
 t.create('grade: missing project')
   .get('/grade/java/g/some-org/this-project-doesnt-exist.json')
   .expectJSON({
-    name: 'lgtm',
+    name: 'lgtm: java',
     value: 'project not found'
   });
 
 t.create('grade: lgtm inaccessible')
   .get('/grade/java/g/apache/cloudstack.json')
   .networkOff()
-  .expectJSON({ name: 'lgtm', value: 'inaccessible' });
+  .expectJSON({ name: 'lgtm: java', value: 'inaccessible' });
 
 t.create('grade: invalid json')
   .get('/grade/java/g/apache/cloudstack.json')
   .intercept(nock => nock('https://lgtm.com')
     .get('/api/v0.1/project/g/apache/cloudstack/details')
     .reply(200, 'not a json string'))
-  .expectJSON({ name: 'lgtm', value: 'invalid' });
+  .expectJSON({ name: 'lgtm: java', value: 'invalid' });
 
 t.create('grade: json missing languages')
   .get('/grade/java/g/apache/cloudstack.json')
   .intercept(nock => nock('https://lgtm.com')
     .get('/api/v0.1/project/g/apache/cloudstack/details')
     .reply(200, {}))
-  .expectJSON({ name: 'lgtm', value: 'invalid' });
+  .expectJSON({ name: 'lgtm: java', value: 'invalid' });
 
 t.create('grade: grade for a project (java)')
   .get('/grade/java/g/apache/cloudstack.json')
   .expectJSONTypes(Joi.object().keys({
-    name: 'lgtm',
-    value: Joi.string().regex(/^Java: (?:A\+)|A|B|C|D|E$/)
+    name: 'lgtm: java',
+    value: Joi.string().regex(/^(?:A\+)|A|B|C|D|E$/)
   }));
 
 t.create('grade: grade for missing language')
   .get('/grade/foo/g/apache/cloudstack.json')
   .expectJSON({
-    name: 'lgtm',
+    name: 'lgtm: foo',
     value: 'no data for language'
   });
 
@@ -121,46 +121,46 @@ t.create('grade: cpp')
   .intercept(nock => nock('https://lgtm.com')
     .get('/api/v0.1/project/g/apache/cloudstack/details')
     .reply(200, data))
-  .expectJSON({ name: 'lgtm', value: 'C/C++: A+' });
+  .expectJSON({ name: 'lgtm: c/c++', value: 'A+' });
 
 t.create('grade: javascript')
   .get('/grade/javascript/g/apache/cloudstack.json')
   .intercept(nock => nock('https://lgtm.com')
     .get('/api/v0.1/project/g/apache/cloudstack/details')
     .reply(200, data))
-  .expectJSON({ name: 'lgtm', value: 'JS/TS: A' });
+  .expectJSON({ name: 'lgtm: js/ts', value: 'A' });
 
 t.create('grade: java')
   .get('/grade/java/g/apache/cloudstack.json')
   .intercept(nock => nock('https://lgtm.com')
     .get('/api/v0.1/project/g/apache/cloudstack/details')
     .reply(200, data))
-  .expectJSON({ name: 'lgtm', value: 'Java: B' });
+  .expectJSON({ name: 'lgtm: java', value: 'B' });
 
 t.create('grade: python')
   .get('/grade/python/g/apache/cloudstack.json')
   .intercept(nock => nock('https://lgtm.com')
     .get('/api/v0.1/project/g/apache/cloudstack/details')
     .reply(200, data))
-  .expectJSON({ name: 'lgtm', value: 'Python: C' });
+  .expectJSON({ name: 'lgtm: python', value: 'C' });
 
 t.create('grade: csharp')
   .get('/grade/csharp/g/apache/cloudstack.json')
   .intercept(nock => nock('https://lgtm.com')
     .get('/api/v0.1/project/g/apache/cloudstack/details')
     .reply(200, data))
-  .expectJSON({ name: 'lgtm', value: 'C#: D' });
+  .expectJSON({ name: 'lgtm: c#', value: 'D' });
 
 t.create('grade: other')
   .get('/grade/other/g/apache/cloudstack.json')
   .intercept(nock => nock('https://lgtm.com')
     .get('/api/v0.1/project/g/apache/cloudstack/details')
     .reply(200, data))
-  .expectJSON({ name: 'lgtm', value: 'Other: E' });
+  .expectJSON({ name: 'lgtm: other', value: 'E' });
 
 t.create('grade: foo (no grade for valid language)')
   .get('/grade/foo/g/apache/cloudstack.json')
   .intercept(nock => nock('https://lgtm.com')
     .get('/api/v0.1/project/g/apache/cloudstack/details')
     .reply(200, data))
-  .expectJSON({ name: 'lgtm', value: 'no data for language' });
+  .expectJSON({ name: 'lgtm: foo', value: 'no data for language' });

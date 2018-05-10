@@ -1106,7 +1106,20 @@ cache(function(data, match, sendBadge, request) {
   const projectId = match[2]; // eg, `g/apache/cloudstack`
   const format = match[3];
   const url = 'https://lgtm.com/api/v0.1/project/' + projectId + '/details';
-  const badgeData = getBadgeData('lgtm', data);
+  const languageLabel = (() => {
+    switch(language) {
+      case 'cpp':
+        return 'c/c++';
+      case 'csharp':
+        return 'c#';
+      // Javascript analysis on LGTM also includes TypeScript
+      case 'javascript':
+        return 'js/ts';
+      default:
+        return language;
+    }
+  })();
+  const badgeData = getBadgeData('lgtm: ' + languageLabel, data);
   request(url, function(err, res, buffer) {
     if (checkErrorResponse(badgeData, err, res, 'project not found')) {
       sendBadge(format, badgeData);
@@ -1119,20 +1132,7 @@ cache(function(data, match, sendBadge, request) {
       for (const languageData of data.languages) {
         if (languageData.lang === language && 'grade' in languageData) {
           // Pretty label for the language
-          const languageLabel = (() => {
-            switch(language) {
-              case 'cpp':
-                return 'C/C++';
-              case 'csharp':
-                return 'C#';
-              // Javascript analysis on LGTM also includes TypeScript
-              case 'javascript':
-                return 'JS/TS';
-              default:
-                return language.charAt(0).toUpperCase() + language.slice(1);
-            }
-          })();
-          badgeData.text[1] = `${languageLabel}: ${languageData.grade}`;
+          badgeData.text[1] = languageData.grade;
           // Pick colour based on grade
           if (languageData.grade === 'A+') {
             badgeData.colorscheme = 'brightgreen';
