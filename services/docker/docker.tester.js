@@ -22,7 +22,7 @@ t.create('docker stars (valid, library)')
   .expectJSONTypes(Joi.object().keys({
     name: 'docker stars',
     value: isMetric,
-    colorB: '#008bb8'
+    colorB: Joi.any().equal('#008bb8').required()
   }));
 
 t.create('docker stars (override colorB)')
@@ -65,7 +65,7 @@ t.create('docker pulls (valid, library)')
   .expectJSONTypes(Joi.object().keys({
     name: 'docker pulls',
     value: isMetric,
-    colorB: '#008bb8'
+    colorB: Joi.any().equal('#008bb8').required()
   }));
 
 t.create('docker pulls (override colorB)')
@@ -159,7 +159,7 @@ t.create('docker automated build - colorB override in manual')
   .expectJSONTypes(Joi.object().keys({
     name: 'docker build',
     value: isAutomatedBuildStatus,
-    colorB: '#fedcba'
+    colorB: Joi.any().equal('#fedcba').required()
   }));
 
 t.create('docker automated build - colorB override in automated')
