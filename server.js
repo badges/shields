@@ -1119,7 +1119,7 @@ cache(function(data, match, sendBadge, request) {
         return language;
     }
   })();
-  const badgeData = getBadgeData('lgtm: ' + languageLabel, data);
+  const badgeData = getBadgeData('code quality: ' + languageLabel, data);
   request(url, function(err, res, buffer) {
     if (checkErrorResponse(badgeData, err, res, 'project not found')) {
       sendBadge(format, badgeData);
