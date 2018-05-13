@@ -37,6 +37,13 @@ t.create('david peer dependencies (valid)')
     value: isDependencyStatus
   }));
 
+t.create('david dependencies (path)')
+  .get('/babel/babel.json?path=packages/babel-core')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'dependencies',
+    value: isDependencyStatus
+  }));
+
 t.create('david dependencies (none)')
   .get('/peer/expressjs/express.json') // express does not specify peer dependencies
   .expectJSON({name: 'peerDependencies', value: 'none'});
