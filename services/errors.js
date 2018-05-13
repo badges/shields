@@ -9,7 +9,9 @@ class ShieldsRuntimeError extends Error {
     props = props || {};
     super(message);
     this.prettyMessage = props.prettyMessage || this.defaultPrettyMessage;
-    this.stack = props.underlyingError ? props.underlyingError.stack : '';
+    if (props.underlyingError) {
+      this.stack = props.underlyingError.stack;
+    }
   }
 }
 
