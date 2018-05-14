@@ -37,7 +37,7 @@ t.create('david peer dependencies (valid)')
     value: isDependencyStatus
   }));
 
-t.create('david dependencies (path)')
+t.create('david dependencies with path (valid)')
   .get('/babel/babel.json?path=packages/babel-core')
   .expectJSONTypes(Joi.object().keys({
     name: 'dependencies',
@@ -50,6 +50,10 @@ t.create('david dependencies (none)')
 
 t.create('david dependencies (repo not found)')
   .get('/pyvesb/emptyrepo.json')
+  .expectJSON({name: 'dependencies', value: 'invalid'});
+
+t.create('david dependencies (path not found')
+  .get('/babel/babel.json?path=does/not/exist')
   .expectJSON({name: 'dependencies', value: 'invalid'});
 
 t.create('david dependencies (connection error)')
