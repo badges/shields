@@ -6459,7 +6459,7 @@ camp.route(/^\/homebrew\/v\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var pkg = match[1];  // eg. cake
   var format = match[2];
-  var apiUrl = 'http://formulae.brew.sh/formula/' + pkg + '/version';
+  var apiUrl = 'http://formulae.brew.sh/api/formula/' + pkg + '.json';
 
   var badgeData = getBadgeData('homebrew', data);
   request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
@@ -6469,7 +6469,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
-      var version = data.stable;
+      var version = data.versions.stable;
 
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
