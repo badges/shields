@@ -5,8 +5,7 @@ class ShieldsRuntimeError extends Error {
   get name() { return 'ShieldsRuntimeError'; }
   get defaultPrettyMessage() { throw new Error('Must implement abstract method'); }
 
-  constructor(props, message) {
-    props = props || {};
+  constructor(props = {}, message) {
     super(message);
     this.prettyMessage = props.prettyMessage || this.defaultPrettyMessage;
     if (props.underlyingError) {
@@ -20,8 +19,7 @@ class NotFound extends ShieldsRuntimeError {
   get name() { return 'NotFound'; }
   get defaultPrettyMessage() { return 'not found'; }
 
-  constructor(props) {
-    props = props || {};
+  constructor(props = {}) {
     const prettyMessage = props.prettyMessage || 'not found';
     const message = prettyMessage === 'not found'
       ? 'Not Found'
@@ -35,8 +33,7 @@ class InvalidResponse extends ShieldsRuntimeError {
   get name() { return 'InvalidResponse'; }
   get defaultPrettyMessage() { return 'invalid'; }
 
-  constructor(props) {
-    props = props || {};
+  constructor(props = {}) {
     const message = props.underlyingError
       ? `Invalid Response: ${props.underlyingError.message}`
       : 'Invalid Response';
@@ -49,8 +46,7 @@ class Inaccessible extends ShieldsRuntimeError {
   get name() { return 'Inaccessible'; }
   get defaultPrettyMessage() { return 'inaccessible'; }
 
-  constructor(props) {
-    props = props || {};
+  constructor(props = {}) {
     const message = props.underlyingError
       ? `Inaccessible: ${props.underlyingError.message}`
       : 'Inaccessible';
