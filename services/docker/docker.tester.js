@@ -22,7 +22,7 @@ t.create('docker stars (valid, library)')
   .expectJSONTypes(Joi.object().keys({
     name: 'docker stars',
     value: isMetric,
-    colorB: Joi.any().equal('#008bb8').required()
+    colorB: Joi.any().equal('#066da5').required()
   }));
 
 t.create('docker stars (override colorB)')
@@ -65,7 +65,7 @@ t.create('docker pulls (valid, library)')
   .expectJSONTypes(Joi.object().keys({
     name: 'docker pulls',
     value: isMetric,
-    colorB: Joi.any().equal('#008bb8').required()
+    colorB: Joi.any().equal('#066da5').required()
   }));
 
 t.create('docker pulls (override colorB)')
@@ -140,7 +140,7 @@ t.create('docker automated build - automated')
     .get('/v2/repositories/library/ubuntu')
     .reply(200, {is_automated: true})
   )
-  .expectJSON({name: 'docker build', value: 'automated', colorB: '#008bb8'});
+  .expectJSON({name: 'docker build', value: 'automated', colorB: '#066da5'});
 
 t.create('docker automated build - manual')
   .get('/automated/_/ubuntu.json?style=_shields_test')
@@ -222,7 +222,7 @@ t.create('docker build status (building)')
     .get('/v2/repositories/library/ubuntu/buildhistory')
     .reply(200, {results: [{status: 1}]})
   )
-  .expectJSON({name: 'docker build', value: 'building', colorB: '#008bb8'});
+  .expectJSON({name: 'docker build', value: 'building', colorB: '#066da5'});
 
 t.create('docker build status (override colorB for passing)')
   .get('/build/_/ubuntu.json?colorB=fedcba&style=_shields_test')

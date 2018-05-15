@@ -6179,7 +6179,7 @@ cache(function(data, match, sendBadge, request) {
         throw Error('Unexpected response.');
       }
       badgeData.text[1] = metric(stars);
-      setBadgeColor(badgeData, data.colorB || '008bb8');
+      setBadgeColor(badgeData, data.colorB || '066da5');
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -6209,7 +6209,7 @@ cache(function(data, match, sendBadge, request) {
       var parseData = JSON.parse(buffer);
       var pulls = parseData.pull_count;
       badgeData.text[1] = metric(pulls);
-      setBadgeColor(badgeData, data.colorB || '008bb8');
+      setBadgeColor(badgeData, data.colorB || '066da5');
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -6279,7 +6279,7 @@ cache(function(data, match, sendBadge, request) {
       var is_automated = parsedData.is_automated;
       if (is_automated) {
         badgeData.text[1] = 'automated';
-        setBadgeColor(badgeData, data.colorB || '008bb8');
+        setBadgeColor(badgeData, data.colorB || '066da5');
       } else {
         badgeData.text[1] = 'manual';
         badgeData.colorscheme = 'yellow';
@@ -6320,7 +6320,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'red';
       } else {
         badgeData.text[1] = 'building';
-        setBadgeColor(badgeData, data.colorB || '008bb8');
+        setBadgeColor(badgeData, data.colorB || '066da5');
       }
       sendBadge(format, badgeData);
     } catch(e) {
