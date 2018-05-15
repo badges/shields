@@ -14,14 +14,17 @@ class ShieldsRuntimeError extends Error {
   }
 }
 
+
+const defaultNotFoundError = 'not found';
+
 class NotFound extends ShieldsRuntimeError {
 
   get name() { return 'NotFound'; }
-  get defaultPrettyMessage() { return 'not found'; }
+  get defaultPrettyMessage() { return defaultNotFoundError; }
 
   constructor(props = {}) {
-    const prettyMessage = props.prettyMessage || 'not found';
-    const message = prettyMessage === 'not found'
+    const prettyMessage = props.prettyMessage || defaultNotFoundError;
+    const message = prettyMessage === defaultNotFoundError
       ? 'Not Found'
       : `Not Found: ${prettyMessage}`;
     super(props, message);
