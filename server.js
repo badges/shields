@@ -6064,8 +6064,7 @@ cache(function(data, match, sendBadge, request) {
         throw Error('Unexpected response.');
       }
       badgeData.text[1] = metric(stars);
-      badgeData.colorscheme = null;
-      badgeData.colorB = data.colorB || '#008bb8';
+      setBadgeColor(badgeData, data.colorB || '066da5');
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -6095,8 +6094,7 @@ cache(function(data, match, sendBadge, request) {
       var parseData = JSON.parse(buffer);
       var pulls = parseData.pull_count;
       badgeData.text[1] = metric(pulls);
-      badgeData.colorscheme = null;
-      badgeData.colorB = data.colorB || '#008bb8';
+      setBadgeColor(badgeData, data.colorB || '066da5');
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -6166,12 +6164,11 @@ cache(function(data, match, sendBadge, request) {
       var is_automated = parsedData.is_automated;
       if (is_automated) {
         badgeData.text[1] = 'automated';
-        badgeData.colorscheme = 'blue';
+        setBadgeColor(badgeData, data.colorB || '066da5');
       } else {
         badgeData.text[1] = 'manual';
         badgeData.colorscheme = 'yellow';
       }
-      badgeData.colorB = data.colorB || '#008bb8';
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -6198,8 +6195,8 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(buffer);
-      var most_recent_status = data.results[0].status;
+      var parsedData = JSON.parse(buffer);
+      var most_recent_status = parsedData.results[0].status;
       if (most_recent_status == 10) {
         badgeData.text[1] = 'passing';
         badgeData.colorscheme = 'brightgreen';
@@ -6208,7 +6205,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.colorscheme = 'red';
       } else {
         badgeData.text[1] = 'building';
-        badgeData.colorB = data.colorB || '#008bb8';
+        setBadgeColor(badgeData, data.colorB || '066da5');
       }
       sendBadge(format, badgeData);
     } catch(e) {
