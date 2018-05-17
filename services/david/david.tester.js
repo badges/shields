@@ -53,7 +53,7 @@ t.create('david dependencies (repo not found)')
   .expectJSON({name: 'dependencies', value: 'invalid'});
 
 t.create('david dependencies (path not found')
-  .get('/babel/babel.json?path=does/not/exist')
+  .get('/babel/babel.json?path=invalid/path')
   .expectJSON({name: 'dependencies', value: 'invalid'});
 
 t.create('david dependencies (connection error)')
