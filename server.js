@@ -2782,57 +2782,64 @@ cache(function(data, match, sendBadge, request) {
 
 // David integration
 camp.route(/^\/david\/(dev\/|optional\/|peer\/)?(.+?)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var dev = match[1];
-  if (dev != null) { dev = dev.slice(0, -1); }  // 'dev', 'optional' or 'peer'.
-  // eg, `expressjs/express`, `webcomponents/generator-element`.
-  var userRepo = match[2];
-  var format = match[3];
-  var options = 'https://david-dm.org/' + userRepo + '/'
-    + (dev ? (dev + '-') : '') + 'info.json';
-  var badgeData = getBadgeData( (dev? (dev+'D') :'d') + 'ependencies', data);
-  request(options, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    } else if (res.statusCode === 500) {
-      /* note:
-      david returns a 500 response for 'not found'
-      e.g: https://david-dm.org/foo/barbaz/info.json
-      not a 404 so we can't handle 'not found' cleanly
-      because this might also be some other error.
-      */
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
+cache({
+  queryParams: ['path'],
+  handler: function(data, match, sendBadge, request) {
+    var dev = match[1];
+    if (dev != null) { dev = dev.slice(0, -1); }  // 'dev', 'optional' or 'peer'.
+    // eg, `expressjs/express`, `webcomponents/generator-element`.
+    var userRepo = match[2];
+    var format = match[3];
+    var options = 'https://david-dm.org/' + userRepo + '/'
+      + (dev ? (dev + '-') : '') + 'info.json';
+    if (data.path) {
+      // path can be used to specify the package.json location, useful for monorepos
+      options += '?path=' + data.path;
     }
-    try {
-      var data = JSON.parse(buffer);
-      var status = data.status;
-      if (status === 'insecure') {
-        badgeData.colorscheme = 'red';
-        status = 'insecure';
-      } else if (status === 'notsouptodate') {
-        badgeData.colorscheme = 'yellow';
-        status = 'up to date';
-      } else if (status === 'outofdate') {
-        badgeData.colorscheme = 'red';
-        status = 'out of date';
-      } else if (status === 'uptodate') {
-        badgeData.colorscheme = 'brightgreen';
-        status = 'up to date';
-      } else if (status === 'none') {
-        badgeData.colorscheme = 'brightgreen';
+    var badgeData = getBadgeData( (dev? (dev+'D') :'d') + 'ependencies', data);
+    request(options, function(err, res, buffer) {
+      if (err != null) {
+        badgeData.text[1] = 'inaccessible';
+        sendBadge(format, badgeData);
+        return;
+      } else if (res.statusCode === 500) {
+        /* note:
+        david returns a 500 response for 'not found'
+        e.g: https://david-dm.org/foo/barbaz/info.json
+        not a 404 so we can't handle 'not found' cleanly
+        because this might also be some other error.
+        */
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
       }
-      badgeData.text[1] = status;
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
-    }
-  });
+      try {
+        var data = JSON.parse(buffer);
+        var status = data.status;
+        if (status === 'insecure') {
+          badgeData.colorscheme = 'red';
+          status = 'insecure';
+        } else if (status === 'notsouptodate') {
+          badgeData.colorscheme = 'yellow';
+          status = 'up to date';
+        } else if (status === 'outofdate') {
+          badgeData.colorscheme = 'red';
+          status = 'out of date';
+        } else if (status === 'uptodate') {
+          badgeData.colorscheme = 'brightgreen';
+          status = 'up to date';
+        } else if (status === 'none') {
+          badgeData.colorscheme = 'brightgreen';
+        }
+        badgeData.text[1] = status;
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
+      }
+    });
+  }
 }));
 
 // dotnet-status integration - deprecated as of April 2018.
