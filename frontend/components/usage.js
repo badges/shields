@@ -126,6 +126,9 @@ export default class Usage extends React.PureComponent {
         <p>
           <code>/badge/dynamic/xml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;<a href="https://www.npmjs.com/package/xpath" target="_BLANK" title="XPath syntax">//data/subdata</a>&gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;</code>
         </p>
+        <p>
+          <code>/badge/dynamic/yaml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;<a href="https://www.npmjs.com/package/jsonpath" target="_BLANK" title="JSONdata syntax">$.DATA.SUBDATA</a>&gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;</code>
+        </p>
 
         <hr className="spacing" />
 

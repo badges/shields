@@ -24,7 +24,7 @@ const copyleftLicenseColor = colorsB[licenseToColor('GPL-3.0')];
 const unknownLicenseColor = colorsB[licenseToColor()];
 
 t.create('Public domain license')
-  .get('/license/badges/shields.json?style=_shields_test')
+  .get('/license/github/gitignore.json?style=_shields_test')
   .expectJSON({ name: 'license', value: 'CC0-1.0', colorB: publicDomainLicenseColor });
 
 t.create('Copyleft license')

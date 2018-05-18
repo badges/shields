@@ -89,7 +89,7 @@ module.exports = class BaseService {
       }
 
       return {
-        title: title ? `${this.name} ${title}` : this.name,
+        title: title ? `${title}` : this.name,
         previewUri: `${this._makeFullUrl(previewUrl)}.svg`,
         exampleUri: exampleUrl ? `${this._makeFullUrl(exampleUrl)}.svg` : undefined,
         documentation,
