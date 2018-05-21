@@ -18,9 +18,9 @@ t.create('homebrew (valid)')
 
 t.create('homebrew (valid, mocked response)')
   .get('/v/cake.json')
-  .intercept(nock => nock('http://formulae.brew.sh')
-    .get('/formula/cake/version')
-    .reply(200, {stable: '0.23.0', devel: null, head: null})
+  .intercept(nock => nock('https://formulae.brew.sh')
+    .get('/api/formula/cake.json')
+    .reply(200, {versions: {stable: '0.23.0', devel: null, head: null}})
   )
   .expectJSON({name: 'homebrew', value: 'v0.23.0'});
 
@@ -35,8 +35,8 @@ t.create('homebrew (connection error)')
 
 t.create('homebrew (unexpected response)')
   .get('/v/cake.json')
-  .intercept(nock => nock('http://formulae.brew.sh')
-    .get('/formula/cake/version')
+  .intercept(nock => nock('https://formulae.brew.sh')
+    .get('/api/formula/cake.json')
     .reply(invalidJSON)
   )
   .expectJSON({name: 'homebrew', value: 'invalid'});
