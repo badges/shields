@@ -2,11 +2,7 @@
 
 const semver = require('semver');
 
-const BaseService = require('../base');
-const {
-  checkErrorResponse,
-  asJson,
-} = require('../../lib/error-helper');
+const { BaseJsonService } = require('../base');
 const { InvalidResponse } = require('../errors');
 const { addv: versionText } = require('../../lib/text-formatters');
 const { version: versionColor} = require('../../lib/color-formatters');
@@ -21,13 +17,10 @@ const {
 const { latest: latestVersion } = require('../../lib/version');
 
 
-class GemVersion extends BaseService {
+class GemVersion extends BaseJsonService {
   async handle({repo}) {
     const apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
-    const json = await this._sendAndCacheRequest(apiUrl, {
-      headers: { 'Accept': 'application/json' }
-    }).then(checkErrorResponse.asPromise())
-      .then(asJson);
+    const json = await this._requestJson(apiUrl);
     const version = json.version;
 
     return {
@@ -66,7 +59,7 @@ class GemVersion extends BaseService {
   }
 };
 
-class GemDownloads extends BaseService {
+class GemDownloads extends BaseJsonService {
 
   _getApiUrl(repo, info) {
     const endpoint = info === "dv" ? 'versions/' : 'gems/';
@@ -94,10 +87,7 @@ class GemDownloads extends BaseService {
     version = (version === "stable") ? version : semver.valid(version);
     const label = this._getLabel(version, info);
     const apiUrl = this._getApiUrl(repo, info);
-    const json = await this._sendAndCacheRequest(apiUrl, {
-      headers: { 'Accept': 'application/atom+json,application/json' }
-    }).then(checkErrorResponse.asPromise())
-      .then(asJson);
+    const json = await this._requestJson(apiUrl);
 
     let downloads;
     if (info === "dt") {
@@ -194,14 +184,11 @@ class GemDownloads extends BaseService {
   }
 };
 
-class GemOwner extends BaseService {
+class GemOwner extends BaseJsonService {
 
   async handle({user}) {
     const apiUrl = 'https://rubygems.org/api/v1/owners/' + user + '/gems.json';
-    const json = await this._sendAndCacheRequest(apiUrl, {
-      headers: { 'Accept': 'application/json' }
-    }).then(checkErrorResponse.asPromise())
-      .then(asJson);
+    const json = await this._requestJson(apiUrl);
     const count = json.length;
 
     return {
@@ -240,7 +227,7 @@ class GemOwner extends BaseService {
   }
 };
 
-class GemRank extends BaseService {
+class GemRank extends BaseJsonService {
 
   _getApiUrl(repo, totalRank, dailyRank) {
     let endpoint;
@@ -256,10 +243,7 @@ class GemRank extends BaseService {
     const totalRank = (info === 'rt');
     const dailyRank = (info === 'rd');
     const apiUrl = this._getApiUrl(repo, totalRank, dailyRank);
-    const json = await this._sendAndCacheRequest(apiUrl, {
-      headers: { 'Accept': 'application/json' }
-    }).then(checkErrorResponse.asPromise())
-      .then(asJson);
+    const json = await this._requestJson(apiUrl);
 
     let rank;
     if (totalRank) {

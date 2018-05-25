@@ -11,8 +11,13 @@ const {
   makeColor,
   setBadgeColor,
 } = require('../lib/badge-data');
+const {
+  checkErrorResponse,
+  asJson,
+} = require('../lib/error-helper');
 
-module.exports = class BaseService {
+
+class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
     this._sendAndCacheRequest = sendAndCacheRequest;
     this._handleInternalErrors = handleInternalErrors;
@@ -209,4 +214,21 @@ module.exports = class BaseService {
       sendBadge(format, badgeData);
     }));
   }
+};
+
+class BaseJsonService extends BaseService {
+  async _requestJson(url, options = {}, notFoundMessage) {
+    return this._sendAndCacheRequest(url,
+      {...{ 'headers': { 'Accept': 'application/json' } }, ...options}
+    ).then(
+      checkErrorResponse.asPromise(
+        notFoundMessage ? { notFoundMessage: notFoundMessage } : undefined
+      )
+    ).then(asJson);
+  }
+};
+
+module.exports = {
+  BaseService,
+  BaseJsonService,
 };

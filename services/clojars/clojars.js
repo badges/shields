@@ -1,20 +1,13 @@
 'use strict';
 
-const BaseService = require('../base');
-const {
-  checkErrorResponse,
-  asJson,
-} = require('../../lib/error-helper');
+const { BaseJsonService } = require('../base');
 const { NotFound } = require('../errors');
 const { version: versionColor} = require('../../lib/color-formatters');
 
-module.exports = class Clojars extends BaseService {
+module.exports = class Clojars extends BaseJsonService {
   async handle({clojar}) {
     const apiUrl = 'https://clojars.org/' + clojar + '/latest-version.json';
-    const json = await this._sendAndCacheRequest(apiUrl, {
-      headers: { 'Accept': 'application/json' }
-    }).then(checkErrorResponse.asPromise())
-      .then(asJson);
+    const json = await this._requestJson(apiUrl);
 
     if (Object.keys(json).length === 0) {
       /* Note the 'not found' response from clojars is:
