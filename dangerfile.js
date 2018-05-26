@@ -96,7 +96,7 @@ const all_files = danger.git.created_files.concat(danger.git.modified_files);
 
 all_files.forEach(function(file) {
   danger.git.diffForFile(file).then(function(diff) {
-    if (/\+.*assert[\(\.]/.test(diff.diff)) {
+    if (/\+.*assert[(.]/.test(diff.diff)) {
       warn([
         `Found 'assert' statement added in ${file}. `,
         'Please ensure tests are written using Chai ',
