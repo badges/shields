@@ -91,3 +91,15 @@ if (capitals.created || underscores.created) {
     '(dash-separated lowercase).',
   ].join(''));
 }
+
+danger.git.created_files.concat(danger.git.modified_files).forEach(function(file) {
+  danger.git.diffForFile(file).then(function(diff) {
+    if (/\+.*assert[\(\.]/.test(diff.diff)) {
+      warn([
+        `Found 'assert' statement added in ${file}. `,
+        'Please ensure tests are written using Chai ',
+        '[expect syntax](http://chaijs.com/guide/styles/#expect)'
+      ].join(''));
+    }
+  });
+});
