@@ -92,7 +92,9 @@ if (capitals.created || underscores.created) {
   ].join(''));
 }
 
-danger.git.created_files.concat(danger.git.modified_files).forEach(function(file) {
+const all_files = danger.git.created_files.concat(danger.git.modified_files);
+
+all_files.forEach(function(file) {
   danger.git.diffForFile(file).then(function(diff) {
     if (/\+.*assert[\(\.]/.test(diff.diff)) {
       warn([
@@ -102,4 +104,16 @@ danger.git.created_files.concat(danger.git.modified_files).forEach(function(file
       ].join(''));
     }
   });
+});
+
+all_files.forEach(function(file) {
+  if (/^services\/.+\/.+\.js$/.test(file) && file.endsWith('.js') && !file.endsWith('.tester.js')) {
+    const tester = file.replace('.js', '.tester.js');
+    if (all_files.indexOf(tester) == -1) {
+      warn([
+        `This PR modified ${file} but not ${tester}. `,
+        "That's okay so long as it's refactoring existing code.",
+      ].join(''));
+    }
+  }
 });
