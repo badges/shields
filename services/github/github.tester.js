@@ -522,6 +522,17 @@ t.create('commit status - commit in branch')
   colorB: colorsB.brightgreen
 });
 
+t.create('commit status - checked commit is identical with the newest commit in branch')
+  .get('/commit-status/badges/shields/master/5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c.json?style=_shields_test')
+  .intercept(nock => nock('https://api.github.com')
+    .get('/repos/badges/shields/compare/master...5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c')
+    .reply(200, { status: 'identical' }))
+  .expectJSON({
+    name: 'commit status',
+    value: 'in master',
+    colorB: colorsB.brightgreen
+});
+
 t.create('commit status - commit not in branch')
 .get('/commit-status/badges/shields/master/960c5bf72d7d1539fcd453343eed3f8617427a41.json?style=_shields_test')
 .expectJSON({
