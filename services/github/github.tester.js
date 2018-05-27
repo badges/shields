@@ -533,15 +533,22 @@ t.create('commit status - commit not in branch (tag)')
 .get('/commit-status/badges/shields/master/960c5bf72d7d1539fcd453343eed3f8617427a41.json?style=_shields_test')
 .expectJSON({
   name: 'commit status',
-  value: 'commit not found',
+  value: 'commit or branch not found',
   colorB: colorsB.lightgrey
 });
-
 
 t.create('commit status - no common ancestor')
 .get('/commit-status/badges/shields/master/b551a3a8daf1c48dba32a3eab1edf99b10c28863.json?style=_shields_test')
 .expectJSON({
   name: 'commit status',
   value: 'no common ancestor',
+  colorB: colorsB.lightgrey
+});
+
+t.create('commit status - unknown branch')
+.get('/commit-status/badges/shields/this-branch-does-not-exist/b551a3a8daf1c48dba32a3eab1edf99b10c28863.json?style=_shields_test')
+.expectJSON({
+  name: 'commit status',
+  value: 'commit or branch not found',
   colorB: colorsB.lightgrey
 });
