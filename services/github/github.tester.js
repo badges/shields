@@ -557,7 +557,7 @@ t.create('commit status - unknown branch')
 t.create('commit status - invalid JSON')
   .get('/commit-status/badges/shields/master/960c5bf72d7d1539fcd453343eed3f8617427a40.json?style=_shields_test')
   .intercept(nock => nock('https://api.github.com')
-    .get('/repos/badges/shields/compare/960c5bf72d7d1539fcd453343eed3f8617427a40...master')
+    .get('/repos/badges/shields/compare/master...960c5bf72d7d1539fcd453343eed3f8617427a40')
     .reply(invalidJSON))
   .expectJSON({
     name: 'commit status',
@@ -577,7 +577,7 @@ t.create('commit status - network error')
 t.create('commit status - github server error')
   .get('/commit-status/badges/shields/master/960c5bf72d7d1539fcd453343eed3f8617427a40.json?style=_shields_test')
   .intercept(nock => nock('https://api.github.com')
-    .get('/repos/badges/shields/compare/960c5bf72d7d1539fcd453343eed3f8617427a40...master')
+    .get('/repos/badges/shields/compare/master...960c5bf72d7d1539fcd453343eed3f8617427a40')
     .reply(500))
   .expectJSON({
     name: 'commit status',
@@ -588,7 +588,7 @@ t.create('commit status - github server error')
 t.create('commit status - 404 with empty JSON form github')
   .get('/commit-status/badges/shields/master/960c5bf72d7d1539fcd453343eed3f8617427a40.json?style=_shields_test')
   .intercept(nock => nock('https://api.github.com')
-    .get('/repos/badges/shields/compare/960c5bf72d7d1539fcd453343eed3f8617427a40...master')
+    .get('/repos/badges/shields/compare/master...960c5bf72d7d1539fcd453343eed3f8617427a40')
     .reply(404, {}))
   .expectJSON({
     name: 'commit status',
@@ -599,7 +599,7 @@ t.create('commit status - 404 with empty JSON form github')
 t.create('commit status - 404 with invalid JSON form github')
   .get('/commit-status/badges/shields/master/960c5bf72d7d1539fcd453343eed3f8617427a40.json?style=_shields_test')
   .intercept(nock => nock('https://api.github.com')
-    .get('/repos/badges/shields/compare/960c5bf72d7d1539fcd453343eed3f8617427a40...master')
+    .get('/repos/badges/shields/compare/master...960c5bf72d7d1539fcd453343eed3f8617427a40')
     .reply(404, invalidJSON))
   .expectJSON({
     name: 'commit status',

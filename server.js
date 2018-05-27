@@ -4267,7 +4267,7 @@ cache(function(data, match, sendBadge, request) {
 camp.route(/^\/github\/commit-status\/([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const [, user, repo, branch, commit, format] = match;
-  const apiUrl = `${githubApiUrl}/repos/${user}/${repo}/compare/${commit}...${branch}`;
+  const apiUrl = `${githubApiUrl}/repos/${user}/${repo}/compare/${branch}...${commit}`;
   const badgeData = getBadgeData('commit status', data);
   githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (checkErrorResponse(badgeData, err, res, 'commit or branch not found')) {
@@ -4287,7 +4287,7 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       const parsedData = JSON.parse(buffer);
-      const isIn = parsedData.status === 'identical' || parsedData.status === 'ahead';
+      const isIn = parsedData.status === 'identical' || parsedData.status === 'behind';
       if (isIn) {
         badgeData.text[1] = 'in ' + branch;
         badgeData.colorscheme = 'brightgreen';
