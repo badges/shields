@@ -522,6 +522,14 @@ t.create('commit status - commit in branch')
   colorB: colorsB.brightgreen
 });
 
+t.create('commit status - commit not in branch')
+.get('/commit-status/badges/shields/master/960c5bf72d7d1539fcd453343eed3f8617427a41.json?style=_shields_test')
+.expectJSON({
+  name: 'commit status',
+  value: 'commit or branch not found',
+  colorB: colorsB.lightgrey
+});
+
 t.create('commit status - unknown commit id')
 .get('/commit-status/atom/atom/v1.27.1/7dfb45eb61a48a4ce18a0dd2e31f944ed4467ae3.json?style=_shields_test')
 .expectJSON({
@@ -530,8 +538,8 @@ t.create('commit status - unknown commit id')
   colorB: colorsB.yellow
 });
 
-t.create('commit status - commit not in branch (tag)')
-.get('/commit-status/badges/shields/master/960c5bf72d7d1539fcd453343eed3f8617427a41.json?style=_shields_test')
+t.create('commit status - unknown branch')
+.get('/commit-status/badges/shields/this-branch-does-not-exist/b551a3a8daf1c48dba32a3eab1edf99b10c28863.json?style=_shields_test')
 .expectJSON({
   name: 'commit status',
   value: 'commit or branch not found',
@@ -543,14 +551,6 @@ t.create('commit status - no common ancestor between commit and branch')
 .expectJSON({
   name: 'commit status',
   value: 'no common ancestor',
-  colorB: colorsB.lightgrey
-});
-
-t.create('commit status - unknown branch')
-.get('/commit-status/badges/shields/this-branch-does-not-exist/b551a3a8daf1c48dba32a3eab1edf99b10c28863.json?style=_shields_test')
-.expectJSON({
-  name: 'commit status',
-  value: 'commit or branch not found',
   colorB: colorsB.lightgrey
 });
 
