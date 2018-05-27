@@ -511,3 +511,28 @@ t.create('repository size')
   name: 'repo size',
   value: isFileSize,
 }));
+
+// Commit status
+t.create('commit status - commit in branch')
+.get('/commit-status/badges/shields/master/960c5bf72d7d1539fcd453343eed3f8617427a40.json?style=_shields_test')
+.expectJSON({
+  name: 'commit status',
+  value: 'in master',
+  colorB: colorsB.brightgreen
+});
+
+t.create('commit status - unknown commit id')
+.get('/commit-status/atom/atom/v1.27.1/7dfb45eb61a48a4ce18a0dd2e31f944ed4467ae3.json?style=_shields_test')
+.expectJSON({
+  name: 'commit status',
+  value: 'not in v1.27.1',
+  colorB: colorsB.yellow
+});
+
+t.create('commit status - commit not in branch (tag)')
+.get('/commit-status/badges/shields/master/960c5bf72d7d1539fcd453343eed3f8617427a41.json?style=_shields_test')
+.expectJSON({
+  name: 'commit status',
+  value: 'commit not found',
+  colorB: colorsB.lightgrey
+});
