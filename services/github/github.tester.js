@@ -14,6 +14,7 @@ const colorscheme = require('../../lib/colorscheme.json');
 const {licenseToColor} = require('../../lib/licenses');
 const {makeColor} = require('../../lib/badge-data');
 const mapValues = require('lodash.mapvalues');
+const { invalidJSON } = require('../response-fixtures');
 
 const t = new ServiceTester({ id: 'github', title: 'Github' });
 module.exports = t;
@@ -551,4 +552,35 @@ t.create('commit status - unknown branch')
   name: 'commit status',
   value: 'commit or branch not found',
   colorB: colorsB.lightgrey
+});
+
+t.create('commit status - invalid JSON')
+  .get('/commit-status/badges/shields/master/960c5bf72d7d1539fcd453343eed3f8617427a40.json?style=_shields_test')
+  .intercept(nock => nock('https://api.github.com')
+    .get('/repos/badges/shields/compare/960c5bf72d7d1539fcd453343eed3f8617427a40...master')
+    .reply(invalidJSON))
+  .expectJSON({
+    name: 'commit status',
+    value: 'invalid',
+    colorB: colorsB.lightgrey
+});
+
+t.create('commit status - network error')
+  .get('/commit-status/badges/shields/master/960c5bf72d7d1539fcd453343eed3f8617427a40.json?style=_shields_test')
+  .networkOff()
+  .expectJSON({
+    name: 'commit status',
+    value: 'inaccessible',
+    colorB: colorsB.red
+});
+
+t.create('commit status - github server error')
+  .get('/commit-status/badges/shields/master/960c5bf72d7d1539fcd453343eed3f8617427a40.json?style=_shields_test')
+  .intercept(nock => nock('https://api.github.com')
+    .get('/repos/badges/shields/compare/960c5bf72d7d1539fcd453343eed3f8617427a40...master')
+    .reply(500))
+  .expectJSON({
+    name: 'commit status',
+    value: 'invalid',
+    colorB: colorsB.lightgrey
 });

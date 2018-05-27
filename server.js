@@ -4271,7 +4271,7 @@ cache(function(data, match, sendBadge, request) {
   const badgeData = getBadgeData('commit status', data);
   githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (checkErrorResponse(badgeData, err, res, 'commit or branch not found')) {
-      if (res.statusCode === 404) {
+      if (res && res.statusCode === 404) {
         if (JSON.parse(buffer).message.startsWith('No common ancestor between')) {
           badgeData.text[1] = 'no common ancestor';
           badgeData.colorscheme = 'lightgrey';
