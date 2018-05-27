@@ -536,3 +536,12 @@ t.create('commit status - commit not in branch (tag)')
   value: 'commit not found',
   colorB: colorsB.lightgrey
 });
+
+
+t.create('commit status - no common ancestor')
+.get('/commit-status/badges/shields/master/b551a3a8daf1c48dba32a3eab1edf99b10c28863.json?style=_shields_test')
+.expectJSON({
+  name: 'commit status',
+  value: 'no common ancestor',
+  colorB: colorsB.lightgrey
+});
