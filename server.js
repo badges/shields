@@ -4272,8 +4272,13 @@ cache(function(data, match, sendBadge, request) {
   githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (checkErrorResponse(badgeData, err, res, 'commit or branch not found')) {
       if (res && res.statusCode === 404) {
-        if (JSON.parse(buffer).message.startsWith('No common ancestor between')) {
-          badgeData.text[1] = 'no common ancestor';
+        try {
+          if (JSON.parse(buffer).message.startsWith('No common ancestor between')) {
+            badgeData.text[1] = 'no common ancestor';
+            badgeData.colorscheme = 'lightgrey';
+          }
+        } catch(e) {
+          badgeData.text[1] = 'invalid';
           badgeData.colorscheme = 'lightgrey';
         }
       }

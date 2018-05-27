@@ -538,7 +538,7 @@ t.create('commit status - commit not in branch (tag)')
   colorB: colorsB.lightgrey
 });
 
-t.create('commit status - no common ancestor')
+t.create('commit status - no common ancestor between commit and branch')
 .get('/commit-status/badges/shields/master/b551a3a8daf1c48dba32a3eab1edf99b10c28863.json?style=_shields_test')
 .expectJSON({
   name: 'commit status',
@@ -579,6 +579,28 @@ t.create('commit status - github server error')
   .intercept(nock => nock('https://api.github.com')
     .get('/repos/badges/shields/compare/960c5bf72d7d1539fcd453343eed3f8617427a40...master')
     .reply(500))
+  .expectJSON({
+    name: 'commit status',
+    value: 'invalid',
+    colorB: colorsB.lightgrey
+});
+
+t.create('commit status - 404 with empty JSON form github')
+  .get('/commit-status/badges/shields/master/960c5bf72d7d1539fcd453343eed3f8617427a40.json?style=_shields_test')
+  .intercept(nock => nock('https://api.github.com')
+    .get('/repos/badges/shields/compare/960c5bf72d7d1539fcd453343eed3f8617427a40...master')
+    .reply(404, {}))
+  .expectJSON({
+    name: 'commit status',
+    value: 'invalid',
+    colorB: colorsB.lightgrey
+});
+
+t.create('commit status - 404 with invalid JSON form github')
+  .get('/commit-status/badges/shields/master/960c5bf72d7d1539fcd453343eed3f8617427a40.json?style=_shields_test')
+  .intercept(nock => nock('https://api.github.com')
+    .get('/repos/badges/shields/compare/960c5bf72d7d1539fcd453343eed3f8617427a40...master')
+    .reply(404, invalidJSON))
   .expectJSON({
     name: 'commit status',
     value: 'invalid',
