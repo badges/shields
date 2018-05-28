@@ -4287,12 +4287,13 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       const parsedData = JSON.parse(buffer);
-      const isIn = parsedData.status === 'identical' || parsedData.status === 'behind';
-      if (isIn) {
-        badgeData.text[1] = 'in ' + branch;
+      const isInBranch = parsedData.status === 'identical' || parsedData.status === 'behind';
+      if (isInBranch) {
+        badgeData.text[1] = `in ${branch}`;
         badgeData.colorscheme = 'brightgreen';
       } else {
-        badgeData.text[1] = 'not in ' + branch;
+        // status: ahead or diverged
+        badgeData.text[1] = `not in ${branch}`;
         badgeData.colorscheme = 'yellow';
       }
       sendBadge(format, badgeData);
