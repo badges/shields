@@ -1254,6 +1254,15 @@ cache(function(data, match, sendBadge, request) {
     }
     try {
       var data = JSON.parse(buffer);
+      if (data.count.length === 0) {
+        /* Note the 'not found' response from libscore is:
+           status code = 200,
+           body = {"github":"","meta":{},"count":[],"sites":[]}
+        */
+        badgeData.text[1] = 'not found';
+        sendBadge(format, badgeData);
+        return;
+      }
       badgeData.text[1] = metric(+data.count[data.count.length-1]);
       badgeData.colorscheme = 'blue';
       sendBadge(format, badgeData);
