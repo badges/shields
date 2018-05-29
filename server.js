@@ -385,6 +385,49 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// Travis (.com) integration
+camp.route(/^\/travis(-ci)?\/com\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var userRepo = match[2];  // eg, espadrine/sc
+  var branch = match[3];
+  var format = match[4];
+  var options = {
+    method: 'HEAD',
+    uri: 'https://api.travis-ci.com/' + userRepo + '.svg',
+  };
+  if (branch != null) {
+    options.uri += '?branch=' + branch;
+  }
+  var badgeData = getBadgeData('build', data);
+  request(options, function(err, res) {
+    if (err != null) {
+      log.error('Travis error: ' + err.stack);
+      if (res) { log.error(''+res); }
+    }
+    if (checkErrorResponse(badgeData, err, res)) {
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var state = res.headers['content-disposition']
+                     .match(/filename="(.+)\.svg"/)[1];
+      badgeData.text[1] = state;
+      if (state === 'passing') {
+        badgeData.colorscheme = 'brightgreen';
+      } else if (state === 'failing') {
+        badgeData.colorscheme = 'red';
+      } else {
+        badgeData.text[1] = state;
+      }
+      sendBadge(format, badgeData);
+
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Travis integration
 camp.route(/^\/travis(-ci)?\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
