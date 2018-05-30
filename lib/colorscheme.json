@@ -1,4 +1,5 @@
 {
+  "default":        { "colorA": "#555", "colorB": "#e05d44" },
   "brightgreen":    { "colorB": "#4c1" },
   "green":          { "colorB": "#97CA00" },
   "yellow":         { "colorB": "#dfb317" },
