@@ -329,7 +329,7 @@ cache(function(data, match, sendBadge, request) {
   const format = match[3];
   const options = {
     method: 'GET',
-    uri: 'https://api.travis-ci.org/repos/' + userRepo + '/branches/' + version,
+    uri: `https://api.travis-ci.org/repos/${userRepo}/branches/${version}`,
   };
   const badgeData = getBadgeData('PHP', data);
   getPhpReleases(githubAuth.request, (err, phpReleases) => {
@@ -388,18 +388,18 @@ cache(function(data, match, sendBadge, request) {
 // Travis integration (.org and .com)
 camp.route(/^\/travis(-ci)?\/(?:(com)\/)?([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var travisDomain = match[2] || 'org';  // (com | org) org by default
-  var userRepo = match[3];  // eg, espadrine/sc
-  var branch = match[4];
-  var format = match[5];
-  var options = {
+  const travisDomain = match[2] || 'org';  // (com | org) org by default
+  const userRepo = match[3];  // eg, espadrine/sc
+  const branch = match[4];
+  const format = match[5];
+  const options = {
     method: 'HEAD',
-    uri: `https://api.travis-ci.${travisDomain}/${userRepo}.svg`
+    uri: `https://api.travis-ci.${travisDomain}/${userRepo}.svg`,
   };
   if (branch != null) {
-    options.uri += '?branch=' + branch;
+    options.uri += `?branch=${branch}`;
   }
-  var badgeData = getBadgeData('build', data);
+  const badgeData = getBadgeData('build', data);
   request(options, function(err, res) {
     if (err != null) {
       log.error('Travis error: ' + err.stack);
@@ -410,7 +410,7 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var state = res.headers['content-disposition']
+      const state = res.headers['content-disposition']
                      .match(/filename="(.+)\.svg"/)[1];
       badgeData.text[1] = state;
       if (state === 'passing') {
@@ -421,7 +421,6 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = state;
       }
       sendBadge(format, badgeData);
-
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
