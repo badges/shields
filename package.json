@@ -107,7 +107,7 @@
     "child-process-promise": "^2.2.1",
     "classnames": "^2.2.5",
     "concurrently": "^3.5.1",
-    "danger": "^3.0.0",
+    "danger": "^3.7.13",
     "dejavu-fonts-ttf": "^2.37.3",
     "eslint": "^4.18.2",
     "eslint-config-prettier": "^2.6.0",
