@@ -14,10 +14,19 @@ module.exports = t;
 // version tests
 
 t.create('version (valid)')
-  .get('/version/yaourt.json')
+  .get('/version/yaourt.json?style=_shields_test')
   .expectJSONTypes(Joi.object().keys({
     name: 'AUR',
     value: isVPlusDottedVersionNClausesWithOptionalSuffix,
+    colorB: '#007ec6',
+  }));
+
+t.create('version (valid, out of date)')
+  .get('/version/gog-gemini-rue.json?style=_shields_test')
+  .expectJSONTypes(Joi.object().keys({
+    name: 'AUR',
+    value: isVPlusDottedVersionNClausesWithOptionalSuffix,
+    colorB: '#fe7d37',
   }));
 
 t.create('version (not found)')
