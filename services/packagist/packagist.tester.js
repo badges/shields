@@ -4,18 +4,10 @@ const Joi = require('joi');
 const ServiceTester = require('../service-tester');
 const {
   isComposerVersion,
+  isVPlusDottedVersionNClausesWithOptionalSuffix,
   isMetric,
   isMetricOverTimePeriod
 } = require('../test-validators');
-
-/*
-  validator for a packagist version number
-
-  From https://packagist.org/about :
-  "version names should match 'X.Y.Z', or 'vX.Y.Z',
-  with an optional suffix for RC, beta, alpha or patch versions"
-*/
-const isPackagistVersion = Joi.string().regex(/^v?[0-9]+.[0-9]+.[0-9]+[\S]*$/);
 
 const t = new ServiceTester({ id: 'packagist', title: 'PHP version from Packagist' });
 module.exports = t;
@@ -93,7 +85,7 @@ t.create('version (valid)')
   .get('/v/symfony/symfony.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'packagist',
-    value: isPackagistVersion
+    value: isVPlusDottedVersionNClausesWithOptionalSuffix
   }));
 
 t.create('version (invalid package name)')
