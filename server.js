@@ -32,7 +32,6 @@ const {licenseToColor} = require('./lib/licenses');
 const { latest: latestVersion } = require('./lib/version');
 const {
   compare: phpVersionCompare,
-  latest: phpLatestVersion,
   isStable: phpStableVersion,
   minorVersion: phpMinorVersion,
   versionReduction: phpVersionReduction,
