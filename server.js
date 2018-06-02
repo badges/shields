@@ -6730,13 +6730,23 @@ cache(function(data, match, sendBadge, request) {
   var apiUrl = 'https://aur.archlinux.org/rpc.php?type=info&arg=' + pkg;
   var badgeData = getBadgeData('AUR', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
     try {
-      var parsedData = JSON.parse(buffer).results;
+      const parsedBuffer = JSON.parse(buffer);
+      const parsedData = parsedBuffer.results;
+      if (parsedBuffer.resultcount === 0) {
+        /* Note the 'not found' response from Arch Linux is:
+           status code = 200,
+           body = {"version":1,"type":"info","resultcount":0,"results":[]}
+        */
+        badgeData.text[1] = 'not found';
+        sendBadge(format, badgeData);
+        return;
+      }
+
       if (info === 'version') {
         badgeData.text[1] = versionText(parsedData.Version);
         if (parsedData.OutOfDate === null) {
