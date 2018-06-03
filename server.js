@@ -32,7 +32,6 @@ const {licenseToColor} = require('./lib/licenses');
 const { latest: latestVersion } = require('./lib/version');
 const {
   compare: phpVersionCompare,
-  latest: phpLatestVersion,
   isStable: phpStableVersion,
   minorVersion: phpMinorVersion,
   versionReduction: phpVersionReduction,
@@ -1564,9 +1563,9 @@ cache(function(data, match, sendBadge, request) {
       switch (info) {
       case 'v':
         var stableVersions = versions.filter(phpStableVersion);
-        var stableVersion = phpLatestVersion(stableVersions);
+        var stableVersion = latestVersion(stableVersions);
         if (!stableVersion) {
-          stableVersion = phpLatestVersion(versions);
+          stableVersion = latestVersion(versions);
         }
         //if (!!aliasesMap[stableVersion]) {
         //  stableVersion = aliasesMap[stableVersion];
@@ -1575,7 +1574,7 @@ cache(function(data, match, sendBadge, request) {
         badgeColor = versionColor(stableVersion);
         break;
       case 'vpre':
-        var unstableVersion = phpLatestVersion(versions);
+        var unstableVersion = latestVersion(versions);
         //if (!!aliasesMap[unstableVersion]) {
         //  unstableVersion = aliasesMap[unstableVersion];
         //}
