@@ -3476,16 +3476,17 @@ cache(function(query_data, match, sendBadge, request) {
   var repo = match[4];
   var branch = match[5] || 'master';
   var format = match[6];
-  var apiUrl = 'https://raw.githubusercontent.com/' + user + '/' + repo + '/' + branch + '/' + type + '.json';
+  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/contents/' + type + '.json?ref=' + branch;
   var badgeData = getBadgeData(type, query_data);
-  request(apiUrl, function(err, res, buffer) {
+  githubAuth.request(request, apiUrl, { }, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
     try {
-      var json_data = JSON.parse(buffer);
+      var response_data = JSON.parse(buffer);
+      var json_data = JSON.parse(Buffer.from(response_data.content, 'base64').toString('utf-8'));
       switch(info) {
         case 'v':
         case 'version':
