@@ -4477,6 +4477,14 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
+// ReSharper
+mapNugetFeedv2({ camp, cache }, 'resharper', 0, function(match) {
+  return {
+    site: 'resharper',
+    feed: 'https://resharper-plugins.jetbrains.com/api/v2'
+  };
+});
+
 // Chocolatey
 mapNugetFeedv2({ camp, cache }, 'chocolatey', 0, function(match) {
   return {
