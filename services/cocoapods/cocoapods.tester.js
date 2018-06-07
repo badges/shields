@@ -142,7 +142,9 @@ t.create('downloads (valid, weekly)')
   .get('/dw/AFNetworking.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'downloads',
-    value: isMetricOverTimePeriod
+    // this is deliberately not isMetricOverTimePeriod due to
+    // https://github.com/CocoaPods/cocoapods.org/issues/348
+    value: Joi.string().regex(/^(0|[1-9][0-9]*)[kMGTPEZY]?\/week$/)
   }));
 
 t.create('downloads (valid, total)')
@@ -176,7 +178,9 @@ t.create('apps (valid, weekly)')
   .get('/aw/AFNetworking.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'apps',
-    value: isMetricOverTimePeriod
+    // this is deliberately not isMetricOverTimePeriod due to
+    // https://github.com/CocoaPods/cocoapods.org/issues/348
+    value: Joi.string().regex(/^(0|[1-9][0-9]*)[kMGTPEZY]?\/week$/)
   }));
 
 t.create('apps (valid, total)')
