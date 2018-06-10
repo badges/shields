@@ -110,7 +110,7 @@ t.create('malformed response for outer user repos query')
 t.create('malformed response for inner specific repo query')
   .get('/maintainability/angular/angular.js.json')
   .intercept(nock => nock('https://api.codeclimate.com', {allowUnmocked: true})
-    .get('/v1/repos/526933117e00a40567008444/snapshots/5ab4427859c16c0001003cad')
+    .get(/\/v1\/repos\/526933117e00a40567008444\/snapshots\/[a-z0-9]+/)
     .reply(200, {})) // No data.
   .networkOn() // Combined with allowUnmocked: true, this allows the outer user repos query to go through.
   .expectJSON({
