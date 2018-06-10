@@ -1861,18 +1861,12 @@ cache({
     // Using the Accept header because of this bug:
     // <https://github.com/npm/npmjs.org/issues/163>
     request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
-      if (err != null) {
-        badgeData.text[1] = 'inaccessible';
+      if (checkErrorResponse(badgeData, err, res, 'package not found')) {
         sendBadge(format, badgeData);
         return;
       }
       try {
         const data = JSON.parse(buffer);
-        if (data.error === 'not_found') {
-          badgeData.text[1] = 'package not found';
-          sendBadge(format, badgeData);
-          return;
-        }
         let releaseData;
         if (scope === undefined) {
           releaseData = data;
