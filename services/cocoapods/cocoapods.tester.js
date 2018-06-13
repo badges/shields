@@ -4,13 +4,20 @@ const Joi = require('joi');
 const ServiceTester = require('../service-tester');
 
 const {
-    isMetric,
-    isMetricOverTimePeriod,
     isIntegerPercentage,
     isVPlusDottedVersionAtLeastOne,
 } = require('../test-validators');
 
 const isPlatform = Joi.string().regex(/^(osx|ios|tvos|watchos)( \| (osx|ios|tvos|watchos))*$/);
+
+// these are deliberately not isMetricOverTimePeriod due to
+// https://github.com/CocoaPods/cocoapods.org/issues/348
+const isMetricOverTimePeriodAllowZero = Joi
+  .string()
+  .regex(/^(0|[1-9][0-9]*)[kMGTPEZY]?\/(year|month|4 weeks|week|day)$/);
+const isMetricAllowZero = Joi
+  .string()
+  .regex(/^(0|[1-9][0-9]*)[kMGTPEZY]?$/);
 
 const t = new ServiceTester({ id: 'cocoapods', title: 'Cocoa Pods' });
 module.exports = t;
@@ -135,23 +142,21 @@ t.create('downloads (valid, monthly)')
   .get('/dm/AFNetworking.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'downloads',
-    value: isMetricOverTimePeriod
+    value: isMetricOverTimePeriodAllowZero
   }));
 
 t.create('downloads (valid, weekly)')
   .get('/dw/AFNetworking.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'downloads',
-    // this is deliberately not isMetricOverTimePeriod due to
-    // https://github.com/CocoaPods/cocoapods.org/issues/348
-    value: Joi.string().regex(/^(0|[1-9][0-9]*)[kMGTPEZY]?\/week$/)
+    value: isMetricOverTimePeriodAllowZero
   }));
 
 t.create('downloads (valid, total)')
   .get('/dt/AFNetworking.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'downloads',
-    value: isMetric
+    value: isMetricAllowZero
   }));
 
 t.create('downloads (not found)')
@@ -178,16 +183,14 @@ t.create('apps (valid, weekly)')
   .get('/aw/AFNetworking.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'apps',
-    // this is deliberately not isMetricOverTimePeriod due to
-    // https://github.com/CocoaPods/cocoapods.org/issues/348
-    value: Joi.string().regex(/^(0|[1-9][0-9]*)[kMGTPEZY]?\/week$/)
+    value: isMetricOverTimePeriodAllowZero
   }));
 
 t.create('apps (valid, total)')
   .get('/at/AFNetworking.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'apps',
-    value: isMetric
+    value: isMetricAllowZero
   }));
 
 t.create('apps (not found)')
