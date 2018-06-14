@@ -4886,12 +4886,10 @@ cache(function(data, match, sendBadge, request) {
   const format = match[4];
   const options = {
     json: true,
-    uri: scheme + '://' + host + '/job/' + job
-      + '/lastBuild/jacoco/api/json?tree=instructionCoverage[covered,missed,percentage,total]'
+    uri: `${scheme}://${host}/job/${job}/lastBuild/jacoco/api/json?tree=instructionCoverage[covered,missed,percentage,total]`
   };
   if (job.indexOf('/') > -1 ) {
-    options.uri = scheme + '://' + host + '/' + job
-      + '/lastBuild/jacoco/api/json?tree=instructionCoverage[covered,missed,percentage,total]';
+    options.uri = `${scheme}://${host}/${job}/lastBuild/jacoco/api/json?tree=instructionCoverage[covered,missed,percentage,total]`;
   }
 
   if (serverSecrets && serverSecrets.jenkins_user) {
