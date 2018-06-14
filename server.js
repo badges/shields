@@ -4914,7 +4914,7 @@ cache(function(data, match, sendBadge, request) {
         return;
       }
       const coverage = coverageObject.percentage;
-      if (+coverage !== +coverage) {
+      if (isNaN(coverage)) {
         badgeData.text[1] = 'unknown';
         sendBadge(format, badgeData);
         return;
