@@ -41,6 +41,14 @@ t.create('cobertura: connection error')
   .networkOff()
   .expectJSON({ name: 'plugin', value: 'inaccessible' });
 
+t.create('jacoco: 81% | valid coverage')
+  .get('/j/https/updates.jenkins-ci.org/job/hello-project/job/master.json')
+  .intercept(nock => nock('https://updates.jenkins-ci.org')
+    .get('/job/hello-project/job/master/lastBuild/jacoco/api/json?tree=instructionCoverage[covered,missed,percentage,total]')
+    .reply(200, { instructionCoverage: { covered: 39498, missed: 9508, percentage: 81, percentageFloat: 80.5983, total: 49006 } })
+  )
+  .expectJSONTypes({ name: 'coverage', value: '81%' });
+
 t.create('jacoco: inaccessible | request error')
   .get('/j/https/updates.jenkins-ci.org/job/hello-project/job/master.json')
   .networkOff()
@@ -61,14 +69,6 @@ t.create('jacoco: unknown | invalid coverage (non-numeric)')
     .reply(200, { instructionCoverage: { covered: 39498, missed: 9508, percentage: 'non-numeric', percentageFloat: 80.5983, total: 49006 } })
   )
   .expectJSONTypes({ name: 'coverage', value: 'unknown' });
-
-t.create('jacoco: 81% | valid coverage')
-  .get('/j/https/updates.jenkins-ci.org/job/hello-project/job/master.json')
-  .intercept(nock => nock('https://updates.jenkins-ci.org')
-    .get('/job/hello-project/job/master/lastBuild/jacoco/api/json?tree=instructionCoverage[covered,missed,percentage,total]')
-    .reply(200, { instructionCoverage: { covered: 39498, missed: 9508, percentage: 81, percentageFloat: 80.5983, total: 49006 } })
-  )
-  .expectJSONTypes({ name: 'coverage', value: '81%' });
 
 t.create('jacoco: unknown | exception handling')
   .get('/j/https/updates.jenkins-ci.org/job/hello-project/job/master.json')
