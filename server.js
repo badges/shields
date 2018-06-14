@@ -4901,8 +4901,7 @@ cache(function(data, match, sendBadge, request) {
 
   const badgeData = getBadgeData('coverage', data);
   request(options, function(err, res, json) {
-    if (err !== null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
