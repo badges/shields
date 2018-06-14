@@ -6,7 +6,7 @@ const ServiceTester = require('../service-tester');
 const t = new ServiceTester({ id: 'jenkins', title: 'Jenkins' });
 module.exports = t;
 
-t.create('latest version')
+t.create('cobertura: latest version')
   .get('/plugin/v/blueocean.json')
   .intercept(nock => nock('https://updates.jenkins-ci.org')
     .get('/current/update-center.actual.json')
@@ -17,7 +17,7 @@ t.create('latest version')
     value: Joi.string().regex(/^v(.*)$/)
   }));
 
-t.create('version 0')
+t.create('cobertura: version 0')
   .get('/plugin/v/blueocean.json')
   .intercept(nock => nock('https://updates.jenkins-ci.org')
     .get('/current/update-center.actual.json')
@@ -28,7 +28,7 @@ t.create('version 0')
     value: Joi.string().regex(/^v0$/)
   }));
 
-t.create('inexistent artifact')
+t.create('cobertura: inexistent artifact')
   .get('/plugin/v/inexistent-artifact-id.json')
   .intercept(nock => nock('https://updates.jenkins-ci.org')
     .get('/current/update-center.actual.json')
@@ -36,7 +36,7 @@ t.create('inexistent artifact')
   )
   .expectJSON({ name: 'plugin', value: 'not found' });
 
-t.create('connection error')
+t.create('cobertura: connection error')
   .get('/plugin/v/blueocean.json')
   .networkOff()
   .expectJSON({ name: 'plugin', value: 'inaccessible' });
