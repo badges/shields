@@ -4880,11 +4880,11 @@ cache(function(data, match, sendBadge, request) {
 // Jenkins coverage integration (jacoco)
 camp.route(/^\/jenkins(?:-ci)?\/j\/(http(?:s)?)\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var scheme = match[1];  // http(s)
-  var host = match[2];  // example.org:8080
-  var job = match[3];  // folder/job
-  var format = match[4];
-  var options = {
+  const scheme = match[1];  // http(s)
+  const host = match[2];  // example.org:8080
+  const job = match[3];  // folder/job
+  const format = match[4];
+  const options = {
     json: true,
     uri: scheme + '://' + host + '/job/' + job
       + '/lastBuild/jacoco/api/json?tree=instructionCoverage[covered,missed,percentage,total]'
@@ -4901,7 +4901,7 @@ cache(function(data, match, sendBadge, request) {
     };
   }
 
-  var badgeData = getBadgeData('coverage', data);
+  const badgeData = getBadgeData('coverage', data);
   request(options, function(err, res, json) {
     if (err !== null) {
       badgeData.text[1] = 'inaccessible';
@@ -4910,13 +4910,13 @@ cache(function(data, match, sendBadge, request) {
     }
 
     try {
-      var coverageObject = json.instructionCoverage;
+      const coverageObject = json.instructionCoverage;
       if (coverageObject === undefined) {
         badgeData.text[1] = 'inaccessible';
         sendBadge(format, badgeData);
         return;
       }
-      var coverage = coverageObject.percentage;
+      const coverage = coverageObject.percentage;
       if (+coverage !== +coverage) {
         badgeData.text[1] = 'unknown';
         sendBadge(format, badgeData);
