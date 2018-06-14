@@ -2,7 +2,7 @@
 
 const { BaseJsonService } = require('../base');
 const { NotFound } = require('../errors');
-const { version: versionColor} = require('../../lib/color-formatters');
+const { version: versionColor } = require('../../lib/color-formatters');
 
 module.exports = class Clojars extends BaseJsonService {
   async handle({clojar}) {
