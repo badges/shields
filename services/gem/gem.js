@@ -41,7 +41,7 @@ class GemVersion extends BaseJsonService {
   static get url() {
     return {
       base: 'gem/v',
-      format: '(.*)',
+      format: '(.+)',
       capture: ['repo']
     };
   }
@@ -145,7 +145,7 @@ class GemDownloads extends BaseJsonService {
   static get url() {
     return {
       base: 'gem',
-      format: '(dt|dtv|dv)/(.*)',
+      format: '(dt|dtv|dv)/(.+)',
       capture: ['info', 'rubygem']
     };
   }
@@ -209,7 +209,7 @@ class GemOwner extends BaseJsonService {
   static get url() {
     return {
       base: 'gem/u',
-      format: '(.*)',
+      format: '(.+)',
       capture: ['user']
     };
   }
@@ -273,7 +273,7 @@ class GemRank extends BaseJsonService {
   static get url() {
     return {
       base: 'gem',
-      format: '(rt|rd)/(.*)',
+      format: '(rt|rd)/(.+)',
       capture: ['info', 'repo']
     };
   }

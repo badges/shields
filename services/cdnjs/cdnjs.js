@@ -35,7 +35,7 @@ module.exports = class Cdnjs extends BaseJsonService {
   static get url() {
     return {
       base: 'cdnjs/v',
-      format: '(.*)',
+      format: '(.+)',
       capture: ['library']
     };
   }

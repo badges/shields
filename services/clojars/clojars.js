@@ -33,7 +33,7 @@ module.exports = class Clojars extends BaseJsonService {
   static get url() {
     return {
       base: 'clojars/v',
-      format: '(.*)',
+      format: '(.+)',
       capture: ['clojar']
     };
   }
