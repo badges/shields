@@ -13,7 +13,7 @@ module.exports = t;
 t.create('semver compatibility (valid)')
   .get('/semver/bundler/puma.json')
   .expectJSONTypes(Joi.object().keys({
-    name: 'semver',
+    name: 'semver compatibility',
     value: isIntegerPercentage,
     link: 'https://dependabot.com/compatibility-score.html?dependency-name=puma&package-manager=bundler&version-scheme=semver',
     colorB: Joi.equal(colorsB.brightgreen, colorsB.orange)
@@ -23,7 +23,7 @@ t.create('semver compatibility (connection error)')
   .get('/semver/bundler/puma.json')
   .networkOff()
   .expectJSONTypes(Joi.object().keys({
-    name: 'semver',
+    name: 'semver compatibility',
     value: 'error',
     colorB: colorsB.lightgrey
   }));

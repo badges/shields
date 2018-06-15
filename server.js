@@ -7976,8 +7976,9 @@ cache(function(data, match, sendBadge, request) {
     headers: { 'Accept': 'application/json' },
     uri: `https://api.dependabot.com/badges/compatibility_score?package-manager=${package_manager}&dependency-name=${dependency_name}&version-scheme=semver`
   };
-  var badgeData = getBadgeData('semver', data);
+  var badgeData = getBadgeData('semver compatibility', data);
   badgeData.links = [`https://dependabot.com/compatibility-score.html?package-manager=${package_manager}&dependency-name=${dependency_name}&version-scheme=semver`];
+  badgeData.logo = getLogo('dependabot', data);
   request(options, function(err, res) {
     if (err != null) {
       badgeData.text[1] = 'error';
@@ -7986,9 +7987,9 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      var data = JSON.parse(res['body']);
-      badgeData.text[1] = data.status;
-      badgeData.colorscheme = data.colour;
+      var dependabotData = JSON.parse(res['body']);
+      badgeData.text[1] = dependabotData.status;
+      badgeData.colorscheme = dependabotData.colour;
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'error';
