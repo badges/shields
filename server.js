@@ -7965,6 +7965,39 @@ cache(function (data, match, sendBadge, request) {
   });
 }));
 
+// Dependabot SemVer compatibility integration
+camp.route(/^\/dependabot\/semver\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var package_manager = match[1];
+  var dependency_name = match[2];
+  var format = match[3];
+  var options = {
+    method: 'GET',
+    headers: { 'Accept': 'application/json' },
+    uri: `https://api.dependabot.com/badges/compatibility_score?package-manager=${package_manager}&dependency-name=${dependency_name}&version-scheme=semver`
+  };
+  var badgeData = getBadgeData('semver', data);
+  badgeData.links = [`https://dependabot.com/compatibility-score.html?package-manager=${package_manager}&dependency-name=${dependency_name}&version-scheme=semver`];
+  request(options, function(err, res) {
+    if (err != null) {
+      badgeData.text[1] = 'error';
+      badgeData.colorscheme = 'lightgrey';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      var data = JSON.parse(res['body']);
+      badgeData.text[1] = data.status;
+      badgeData.colorscheme = data.colour;
+      sendBadge(format, badgeData);
+    } catch(e) {
+      badgeData.text[1] = 'error';
+      badgeData.colorscheme = 'lightgrey';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
