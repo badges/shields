@@ -4845,7 +4845,7 @@ cache(function(data, match, sendBadge, request) {
       options.uri += 'lastBuild/jacoco/api/json?tree=instructionCoverage[covered,missed,percentage,total]';
       break;
   }
-  
+
   if (serverSecrets && serverSecrets.jenkins_user) {
     options.auth = {
       user: serverSecrets.jenkins_user,
