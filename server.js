@@ -7968,32 +7968,30 @@ cache(function (data, match, sendBadge, request) {
 // Dependabot SemVer compatibility integration
 camp.route(/^\/dependabot\/semver\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var package_manager = match[1];
-  var dependency_name = match[2];
-  var format = match[3];
-  var options = {
+  const packageManager = match[1];
+  const dependencyName = match[2];
+  const format = match[3];
+  const options = {
     method: 'GET',
     headers: { 'Accept': 'application/json' },
-    uri: `https://api.dependabot.com/badges/compatibility_score?package-manager=${package_manager}&dependency-name=${dependency_name}&version-scheme=semver`
+    uri: `https://api.dependabot.com/badges/compatibility_score?package-manager=${packageManager}&dependency-name=${dependencyName}&version-scheme=semver`
   };
-  var badgeData = getBadgeData('semver compatibility', data);
-  badgeData.links = [`https://dependabot.com/compatibility-score.html?package-manager=${package_manager}&dependency-name=${dependency_name}&version-scheme=semver`];
+  const badgeData = getBadgeData('semver compatibility', data);
+  badgeData.links = [`https://dependabot.com/compatibility-score.html?package-manager=${packageManager}&dependency-name=${dependencyName}&version-scheme=semver`];
   badgeData.logo = getLogo('dependabot', data);
   request(options, function(err, res) {
-    if (err != null) {
-      badgeData.text[1] = 'error';
-      badgeData.colorscheme = 'lightgrey';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
     try {
-      var dependabotData = JSON.parse(res['body']);
+      const dependabotData = JSON.parse(res['body']);
       badgeData.text[1] = dependabotData.status;
       badgeData.colorscheme = dependabotData.colour;
       sendBadge(format, badgeData);
     } catch(e) {
-      badgeData.text[1] = 'error';
-      badgeData.colorscheme = 'lightgrey';
+      badgeData.text[1] = 'invalid';
+      badgeData.colorscheme = 'red';
       sendBadge(format, badgeData);
     }
   });
