@@ -40,6 +40,7 @@
     "node-env-flag": "^0.1.0",
     "pdfkit": "~0.8.0",
     "pretty-bytes": "^5.0.0",
+    "priorityqueuejs": "^1.0.0",
     "query-string": "^6.0.0",
     "raven": "^2.4.2",
     "redis": "~2.6.2",
