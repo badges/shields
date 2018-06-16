@@ -7901,7 +7901,7 @@ function(data, match, end, ask) {
 
   // Cache management - the badge is constant.
   var cacheDuration = (3600*24*1)|0;    // 1 day.
-  ask.res.setHeader('Cache-Control', 'max-age=' + cacheDuration);
+  ask.res.setHeader('Cache-Control', 'max-age=' + cacheDuration + ', immutable');
   if (+(new Date(ask.req.headers['if-modified-since'])) >= +serverStartTime) {
     ask.res.statusCode = 304;
     ask.res.end();  // not modified.
@@ -7942,7 +7942,7 @@ function(data, match, end, ask) {
 let bitFlip = false;
 camp.route(/^\/flip\.svg$/, function(data, match, end, ask) {
   var cacheSecs = 60;
-  ask.res.setHeader('Cache-Control', 'max-age=' + cacheSecs);
+  ask.res.setHeader('Cache-Control', 'max-age=' + cacheSecs + ', immutable');
   var reqTime = new Date();
   var date = (new Date(+reqTime + cacheSecs * 1000)).toGMTString();
   ask.res.setHeader('Expires', date);
@@ -7963,7 +7963,7 @@ function(data, match, end, ask) {
 
   // Cache management - the badge is constant.
   var cacheDuration = (3600*24*1)|0;    // 1 day.
-  ask.res.setHeader('Cache-Control', 'max-age=' + cacheDuration);
+  ask.res.setHeader('Cache-Control', 'max-age=' + cacheDuration + ', immutable');
   if (+(new Date(ask.req.headers['if-modified-since'])) >= +serverStartTime) {
     ask.res.statusCode = 304;
     ask.res.end();  // not modified.
