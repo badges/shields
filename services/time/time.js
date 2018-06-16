@@ -1,0 +1,34 @@
+'use strict';
+
+const BaseService = require('../base');
+
+module.exports = class Time extends BaseService {
+
+  async handle({library}) {
+    return { message: new Date() };
+  }
+
+  // Metadata
+  static get defaultBadgeData() {
+    return {
+      label: 'time',
+      color: 'blue',
+    };
+  }
+
+  static get category() {
+    return 'debug';
+  }
+
+  static get url() {
+    return {
+      base: 'servertime',
+      format: '',
+      capture: []
+    };
+  }
+
+  static get examples() {
+    return [];
+  }
+};
