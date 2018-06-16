@@ -34,6 +34,7 @@
     "lodash.countby": "^4.6.0",
     "lodash.mapkeys": "^4.6.0",
     "lodash.throttle": "^4.1.1",
+    "lodash.times": "^4.3.2",
     "lodash.uniq": "~4.5.0",
     "moment": "^2.19.3",
     "node-env-flag": "^0.1.0",
