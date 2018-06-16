@@ -11,7 +11,7 @@ const t = new ServiceTester({ id: 'npm', title: 'NPM' });
 module.exports = t;
 const colorsB = mapValues(colorscheme, 'colorB');
 
-const isTypeDefinition = Joi.string().regex(/^(Flow|TypeScript) v?[0-9]+.[0-9]( (Flow|TypeScript) v?[0-9]+.[0-9])?$/);
+const isTypeDefinition = Joi.string().regex(/^(Flow|TypeScript) v?[0-9]+.[0-9]+( \| (Flow|TypeScript) v?[0-9]+.[0-9]+)?$/);
 
 t.create('total downloads of left-pad')
   .get('/dt/left-pad.json?style=_shields_test')

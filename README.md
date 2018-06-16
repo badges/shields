@@ -10,9 +10,9 @@
     <a href="https://circleci.com/gh/badges/shields/tree/master">
         <img src="https://img.shields.io/circleci/project/github/badges/shields.svg"
             alt="build status"></a>
-    <a href="https://github.com/badges/shields/commits/gh-pages">
-        <img src="https://img.shields.io/github/last-commit/badges/shields/gh-pages.svg?label=last%20deployed"
-            alt="last deployed"></a>
+    <a href="https://github.com/badges/shields/compare/gh-pages...master">
+        <img src="https://img.shields.io/github/commits-since/badges/shields/gh-pages.svg?label=commits%20to%20be%20deployed"
+            alt="commits to be deployed"></a>
     <a href="https://discord.gg/HjJCwm5">
         <img src="https://img.shields.io/discord/308323056592486420.svg?logo=discord"
             alt="chat on Discord"></a>
@@ -131,10 +131,12 @@ SVG or JSON output. When deliberately changing the output, run
 `SNAPSHOT_DRY=1 npm run test:js:server` to preview changes to the saved
 snapshots, and `SNAPSHOT_UPDATE=1 npm run test:js:server` to update them.
 
+The server can be [configured][sentry configuration] to use [Sentry][sentry].
 
 [package manager]: https://nodejs.org/en/download/package-manager/
 [snapshot tests]: https://glebbahmutov.com/blog/snapshot-testing/
-
+[sentry configuration]: doc/self-hosting.md#sentry
+[Sentry]: https://sentry.io/
 
 Hosting your own server
 -----------------------

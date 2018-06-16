@@ -1,26 +1,16 @@
 'use strict';
 
-const BaseService = require('../base');
+const { BaseJsonService } = require('../base');
 
-/**
- * AppVeyor CI integration.
- */
-module.exports = class AppVeyor extends BaseService {
+module.exports = class AppVeyor extends BaseJsonService {
   async handle({repo, branch}) {
     let apiUrl = 'https://ci.appveyor.com/api/projects/' + repo;
     if (branch != null) {
       apiUrl += '/branch/' + branch;
     }
-    const {buffer, res} = await this._sendAndCacheRequest(apiUrl, {
-      headers: { 'Accept': 'application/json' }
-    });
+    const json = await this._requestJson(apiUrl, {}, 'project not found or access denied');
 
-    if (res.statusCode === 404) {
-      return {message: 'project not found or access denied'};
-    }
-
-    const data = JSON.parse(buffer);
-    const status = data.build.status;
+    const { build: { status } } = json;
     if (status === 'success') {
       return {message: 'passing', color: 'brightgreen'};
     } else if (status !== 'running' && status !== 'queued') {
@@ -35,21 +25,22 @@ module.exports = class AppVeyor extends BaseService {
     return 'build';
   }
 
-  static get uri() {
+  static get url() {
     return {
-      format: '/appveyor/ci/([^/]+/[^/]+)(?:/(.+))?',
+      base: 'appveyor/ci',
+      format: '([^/]+/[^/]+)(?:/(.+))?',
       capture: ['repo', 'branch']
     };
   }
 
-  static getExamples() {
+  static get examples() {
     return [
       {
-        uri: '/appveyor/ci/gruntjs/grunt',
+        previewUrl: 'gruntjs/grunt',
       },
       {
-        name: 'Branch',
-        uri: '/appveyor/ci/gruntjs/grunt/master',
+        title: `${this.name} branch`,
+        previewUrl: 'gruntjs/grunt/master',
       },
     ];
   }

@@ -89,3 +89,4 @@ typings/
 # Temporary build artifacts.
 /build
 .next
+badge-examples.json
