@@ -41,7 +41,7 @@ module.exports = class NPMTypeDefinitions extends BaseService {
 
     const json = await this._sendAndCacheRequest(apiUrl, {
       headers: { 'Accept': '*/*' },
-    }).then(checkErrorResponse.asPromise('package not found'))
+    }).then(checkErrorResponse.asPromise({ notFoundMessage: 'package not found' }))
       .then(asJson);
 
     let packageData;
