@@ -3,6 +3,7 @@
 const {
   NotFound,
   InvalidResponse,
+  Inaccessible,
 } = require('./errors');
 const {
   makeLogo,
@@ -18,11 +19,11 @@ module.exports = class BaseService {
   }
 
   /**
-   * Asynchronous function to handle requests for this service. Takes the URI
-   * parameters (as defined in the `uri` property), performs a request using
+   * Asynchronous function to handle requests for this service. Takes the URL
+   * parameters (as defined in the `url` property), performs a request using
    * `this._sendAndCacheRequest`, and returns the badge data.
    */
-  async handle(namedParams) {
+  async handle(namedParams, queryParams) {
     throw new Error(
       `Handler not implemented for ${this.constructor.name}`
     );
@@ -39,14 +40,19 @@ module.exports = class BaseService {
   }
 
   /**
-   * Returns an object with two fields:
-   *  - format: Regular expression to use for URIs for this service's badges
+   * Returns an object:
+   *  - base: (Optional) The base path of the URLs for this service. This is
+   *    used as a prefix.
+   *  - format: Regular expression to use for URLs for this service's badges
    *  - capture: Array of names for the capture groups in the regular
    *             expression. The handler will be passed an object containing
    *             the matches.
+   *  - queryParams: Array of names for query parameters which will the service
+   *                 uses. For cache safety, only the whitelisted query
+   *                 parameters will be passed to the handler.
    */
-  static get uri() {
-    throw new Error(`URI not defined for ${this.name}`);
+  static get url() {
+    throw new Error(`URL not defined for ${this.name}`);
   }
 
   /**
@@ -59,18 +65,45 @@ module.exports = class BaseService {
   }
 
   /**
-   * Example URIs for this service. These should use the format
-   * specified in `uri`, and can be used to demonstrate how to use badges for
+   * Example URLs for this service. These should use the format
+   * specified in `url`, and can be used to demonstrate how to use badges for
    * this service.
    */
-  static getExamples() {
+  static get examples() {
     return [];
+  }
+
+  static _makeFullUrl(partialUrl) {
+    return '/' + [this.url.base, partialUrl].filter(Boolean).join('/');
+  }
+
+  /**
+   * Return an array of examples. Each example is prepared according to the
+   * schema in `lib/all-badge-examples.js`. Four keys are supported:
+   *  - title
+   *  - previewUrl
+   *  - exampleUrl
+   *  - documentation
+   */
+  static prepareExamples() {
+    return this.examples.map(({ title, previewUrl, exampleUrl, documentation }) => {
+      if (! previewUrl) {
+        throw Error(`Example for ${this.name} is missing required previewUrl`);
+      }
+
+      return {
+        title: title ? `${title}` : this.name,
+        previewUri: `${this._makeFullUrl(previewUrl)}.svg`,
+        exampleUri: exampleUrl ? `${this._makeFullUrl(exampleUrl)}.svg` : undefined,
+        documentation,
+      };
+    });
   }
 
   static get _regex() {
     // Regular expressions treat "/" specially, so we need to escape them
-    const escapedPath = this.uri.format.replace(/\//g, '\\/');
-    const fullRegex = '^' + escapedPath + '.(svg|png|gif|jpg|json)$';
+    const escapedPath = this.url.format.replace(/\//g, '\\/');
+    const fullRegex = `^${this._makeFullUrl(escapedPath)}.(svg|png|gif|jpg|json)$`;
     return new RegExp(fullRegex);
   }
 
@@ -79,41 +112,42 @@ module.exports = class BaseService {
     // entire match.
     const captures = match.slice(1, -1);
 
-    if (this.uri.capture.length !== captures.length) {
+    if (this.url.capture.length !== captures.length) {
       throw new Error(
         `Service ${this.constructor.name} declares incorrect number of capture groups `+
-        `(expected ${this.uri.capture.length}, got ${captures.length})`
+        `(expected ${this.url.capture.length}, got ${captures.length})`
       );
     }
 
     const result = {};
-    this.uri.capture.forEach((name, index) => {
+    this.url.capture.forEach((name, index) => {
       result[name] = captures[index];
     });
     return result;
   }
 
-  async invokeHandler(namedParams) {
+  async invokeHandler(namedParams, queryParams) {
     try {
-      return await this.handle(namedParams);
+      return await this.handle(namedParams, queryParams);
     } catch (error) {
       if (error instanceof NotFound) {
-        serviceData = {
-          message: error.message,
+        return {
+          message: error.prettyMessage,
           color: 'red',
         };
-      } else if (error instanceof InvalidResponse) {
-        serviceData = {
-          message: error.message,
+      } else if (error instanceof InvalidResponse ||
+        error instanceof Inaccessible) {
+        return {
+          message: error.prettyMessage,
           color: 'lightgray',
         };
       } else if (this._handleInternalErrors) {
-        serviceData = {
+        console.log(error);
+        return {
           label: 'shields',
           message: 'internal error',
           color: 'lightgray',
         };
-        console.log(error);
       } else {
         throw error;
       }
@@ -162,20 +196,22 @@ module.exports = class BaseService {
   }
 
   static register(camp, handleRequest, { handleInternalErrors }) {
-    const serviceClass = this; // In a static context, "this" is the class.
+    const ServiceClass = this; // In a static context, "this" is the class.
 
-    camp.route(this._regex,
-    handleRequest(async (queryParams, match, sendBadge, request) => {
-      const namedParams = this._namedParamsForMatch(match);
-      const serviceInstance = new serviceClass({
-        sendAndCacheRequest: request.asPromise,
-      }, { handleInternalErrors });
-      const serviceData = await serviceInstance.invokeHandler(namedParams);
-      const badgeData = this._makeBadgeData(queryParams, serviceData);
+    camp.route(this._regex, handleRequest({
+      queryParams: this.url.queryParams,
+      handler: async (queryParams, match, sendBadge, request) => {
+        const namedParams = this._namedParamsForMatch(match);
+        const serviceInstance = new ServiceClass({
+          sendAndCacheRequest: request.asPromise,
+        }, { handleInternalErrors });
+        const serviceData = await serviceInstance.invokeHandler(namedParams, queryParams);
+        const badgeData = this._makeBadgeData(queryParams, serviceData);
 
-      // Assumes the final capture group is the extension
-      const format = match.slice(-1)[0];
-      sendBadge(format, badgeData);
+        // Assumes the final capture group is the extension
+        const format = match.slice(-1)[0];
+        sendBadge(format, badgeData);
+      },
     }));
   }
 };
