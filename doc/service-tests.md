@@ -48,14 +48,15 @@ cache(function(data, match, sendBadge, request) {
     uri: 'https://api.travis-ci.org/' + userRepo + '.svg',
   };
   if (branch != null) {
-    options.uri += '?branch=' + branch;                         // (3)
+    options.uri += '?branch=' + branch;                         // 3
   }
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res) {
     if (err != null) {
-      console.error('Travis error: ' + err.stack);              // 5
-      if (res) { console.error(''+res); }
-      badgeData.text[1] = 'inaccessible';
+      log.error('Travis error: ' + err.stack);
+      if (res) { log.error(''+res); }
+    }
+    if (checkErrorResponse(badgeData, err, res)) {              // 5
       sendBadge(format, badgeData);
       return;
     }
@@ -264,8 +265,8 @@ npm run coverage:report:open
 ```
 
 After searching `server.js` for the Travis code, we see that we've missed a
-big block: the error branch in the request callback. To test that, we simulate
-network connection errors on any unmocked requests.
+big block which is executed when `checkErrorResponse` returns `true`. To test
+that, we simulate network connection errors on any unmocked requests.
 
 ```js
 t.create('connection error')
