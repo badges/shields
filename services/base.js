@@ -199,7 +199,7 @@ module.exports = class BaseService {
     const ServiceClass = this; // In a static context, "this" is the class.
 
     camp.route(this._regex, handleRequest({
-      queryParams: this.uri.queryParams,
+      queryParams: this.url.queryParams,
       handler: async (queryParams, match, sendBadge, request) => {
         const namedParams = this._namedParamsForMatch(match);
         const serviceInstance = new ServiceClass({
