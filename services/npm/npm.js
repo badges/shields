@@ -2,10 +2,6 @@
 
 const { BaseJsonService } = require('../base');
 const {
-  checkErrorResponse,
-  asJson,
-} = require('../../lib/error-helper');
-const {
   makePackageDataUrl,
   typeDefinitions,
 } = require('../../lib/npm-badge-helpers');
