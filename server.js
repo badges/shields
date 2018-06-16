@@ -2067,38 +2067,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Clojars version integration
-camp.route(/^\/clojars\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  const clojar = match[1];  // eg, `prismic` or `foo/bar`.
-  const format = match[2];
-  const apiUrl = 'https://clojars.org/' + clojar + '/latest-version.json';
-  const badgeData = getBadgeData('clojars', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (err !== null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      const json = JSON.parse(buffer);
-      if (Object.keys(json).length === 0) {
-        /* Note the 'not found' response from clojars is:
-           status code = 200, body = {} */
-        badgeData.text[1] = 'not found';
-        sendBadge(format, badgeData);
-        return;
-      }
-      badgeData.text[1] = "[" + clojar + " \"" + json.version + "\"]";
-      badgeData.colorscheme = versionColor(json.version);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // iTunes App Store version
 camp.route(/^\/itunes\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {

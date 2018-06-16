@@ -4,7 +4,7 @@ const { expect } = require('chai');
 const { test, given, forCases } = require('sazerac');
 const sinon = require('sinon');
 
-const BaseService = require('./base');
+const { BaseService } = require('./base');
 
 require('../lib/register-chai-plugins.spec');
 

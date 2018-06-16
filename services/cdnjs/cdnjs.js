@@ -1,21 +1,14 @@
 'use strict';
 
-const BaseService = require('../base');
-const {
-  checkErrorResponse,
-  asJson,
-} = require('../../lib/error-helper');
+const { BaseJsonService } = require('../base');
 const { NotFound } = require('../errors');
 const { addv: versionText } = require('../../lib/text-formatters');
 const { version: versionColor} = require('../../lib/color-formatters');
 
-module.exports = class Cdnjs extends BaseService {
+module.exports = class Cdnjs extends BaseJsonService {
   async handle({library}) {
     const apiUrl = 'https://api.cdnjs.com/libraries/' + library + '?fields=version';
-    const json = await this._sendAndCacheRequest(apiUrl, {
-      headers: { 'Accept': 'application/json' }
-    }).then(checkErrorResponse.asPromise())
-      .then(asJson);
+    const json = await this._requestJson(apiUrl);
 
     if (Object.keys(json).length === 0) {
       /* Note the 'not found' response from cdnjs is:
@@ -42,7 +35,7 @@ module.exports = class Cdnjs extends BaseService {
   static get url() {
     return {
       base: 'cdnjs/v',
-      format: '(.*)',
+      format: '(.+)',
       capture: ['library']
     };
   }
