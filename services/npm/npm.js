@@ -1,6 +1,6 @@
 'use strict';
 
-const BaseService = require('../base');
+const { BaseJsonService } = require('../base');
 const {
   checkErrorResponse,
   asJson,
@@ -10,7 +10,7 @@ const {
   typeDefinitions,
 } = require('../../lib/npm-badge-helpers');
 
-module.exports = class NPMTypeDefinitions extends BaseService {
+module.exports = class NPMTypeDefinitions extends BaseJsonService {
   static get category() {
     return 'version';
   }
@@ -39,10 +39,7 @@ module.exports = class NPMTypeDefinitions extends BaseService {
   async handle({ scope, packageName }, { registry_uri: registryUrl }) {
     const apiUrl = makePackageDataUrl({ registryUrl, scope, packageName });
 
-    const json = await this._sendAndCacheRequest(apiUrl, {
-      headers: { 'Accept': '*/*' },
-    }).then(checkErrorResponse.asPromise({ notFoundMessage: 'package not found' }))
-      .then(asJson);
+    const json = await this._requestJson(apiUrl, {}, 'package not found');
 
     let packageData;
     if (scope === undefined) {
