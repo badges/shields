@@ -23,3 +23,11 @@ t.create('connection error')
   .get('/role/14542.json')
   .networkOff()
   .expectJSON({ name: 'role', value: 'errored' });
+
+t.create('no response data')
+  .get('/role/14542.json')
+  .intercept(nock => nock('https://galaxy.ansible.com')
+    .get('/api/v1/roles/14542/')
+    .reply(200)
+  )
+  .expectJSON({ name: 'role', value: 'not found' });
