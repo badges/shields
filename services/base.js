@@ -23,7 +23,7 @@ module.exports = class BaseService {
    * parameters (as defined in the `url` property), performs a request using
    * `this._sendAndCacheRequest`, and returns the badge data.
    */
-  async handle(namedParams) {
+  async handle(namedParams, queryParams) {
     throw new Error(
       `Handler not implemented for ${this.constructor.name}`
     );
@@ -47,6 +47,9 @@ module.exports = class BaseService {
    *  - capture: Array of names for the capture groups in the regular
    *             expression. The handler will be passed an object containing
    *             the matches.
+   *  - queryParams: Array of names for query parameters which will the service
+   *                 uses. For cache safety, only the whitelisted query
+   *                 parameters will be passed to the handler.
    */
   static get url() {
     throw new Error(`URL not defined for ${this.name}`);
@@ -123,9 +126,9 @@ module.exports = class BaseService {
     return result;
   }
 
-  async invokeHandler(namedParams) {
+  async invokeHandler(namedParams, queryParams) {
     try {
-      return await this.handle(namedParams);
+      return await this.handle(namedParams, queryParams);
     } catch (error) {
       if (error instanceof NotFound) {
         return {
@@ -195,18 +198,20 @@ module.exports = class BaseService {
   static register(camp, handleRequest, { handleInternalErrors }) {
     const ServiceClass = this; // In a static context, "this" is the class.
 
-    camp.route(this._regex,
-    handleRequest(async (queryParams, match, sendBadge, request) => {
-      const namedParams = this._namedParamsForMatch(match);
-      const serviceInstance = new ServiceClass({
-        sendAndCacheRequest: request.asPromise,
-      }, { handleInternalErrors });
-      const serviceData = await serviceInstance.invokeHandler(namedParams);
-      const badgeData = this._makeBadgeData(queryParams, serviceData);
+    camp.route(this._regex, handleRequest({
+      queryParams: this.url.queryParams,
+      handler: async (queryParams, match, sendBadge, request) => {
+        const namedParams = this._namedParamsForMatch(match);
+        const serviceInstance = new ServiceClass({
+          sendAndCacheRequest: request.asPromise,
+        }, { handleInternalErrors });
+        const serviceData = await serviceInstance.invokeHandler(namedParams, queryParams);
+        const badgeData = this._makeBadgeData(queryParams, serviceData);
 
-      // Assumes the final capture group is the extension
-      const format = match.slice(-1)[0];
-      sendBadge(format, badgeData);
+        // Assumes the final capture group is the extension
+        const format = match.slice(-1)[0];
+        sendBadge(format, badgeData);
+      },
     }));
   }
 };

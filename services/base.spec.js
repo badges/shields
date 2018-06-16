@@ -9,10 +9,8 @@ const BaseService = require('./base');
 require('../lib/register-chai-plugins.spec');
 
 class DummyService extends BaseService {
-  async handle({someArg}) {
-    return {
-      message: 'Hello ' + someArg,
-    };
+  async handle({ namedParamA }, { queryParamA }) {
+    return { message: `Hello ${namedParamA}${queryParamA}` };
   }
 
   static get category() { return 'cat'; }
@@ -20,7 +18,8 @@ class DummyService extends BaseService {
     return {
       base: 'foo',
       format: '([^/]+)',
-      capture: ['someArg']
+      capture: ['namedParamA'],
+      queryParams: ['queryParamA'],
     };
   }
 }
@@ -30,9 +29,9 @@ describe('BaseService', () => {
 
   describe('URL pattern matching', function () {
     const regexExec = str => DummyService._regex.exec(str);
-    const getSomeArg = str => {
-      const [, someArg] = regexExec(str);
-      return someArg;
+    const getNamedParamA = str => {
+      const [, namedParamA] = regexExec(str);
+      return namedParamA;
     };
     const namedParams = str => {
       const match = regexExec(str);
@@ -46,7 +45,7 @@ describe('BaseService', () => {
       ]).expect(null);
     });
 
-    test(getSomeArg, () => {
+    test(getNamedParamA, () => {
       forCases([
         given('/foo/bar.bar.bar.svg'),
         given('/foo/bar.bar.bar.png'),
@@ -63,21 +62,23 @@ describe('BaseService', () => {
         given('/foo/bar.bar.bar.gif'),
         given('/foo/bar.bar.bar.jpg'),
         given('/foo/bar.bar.bar.json'),
-      ]).expect({ someArg: 'bar.bar.bar' });
+      ]).expect({ namedParamA: 'bar.bar.bar' });
     });
   });
 
   it('Invokes the handler as expected', async function () {
     const serviceInstance = new DummyService({}, defaultConfig);
-    const serviceData = await serviceInstance.invokeHandler({ someArg: 'bar.bar.bar' });
-    expect(serviceData).to.deep.equal({ message: 'Hello bar.bar.bar' });
+    const serviceData = await serviceInstance.invokeHandler(
+      { namedParamA: 'bar.bar.bar' },
+      { queryParamA: '!' });
+    expect(serviceData).to.deep.equal({ message: 'Hello bar.bar.bar!' });
   });
 
   describe('Error handling', function () {
     it('Handles internal errors', async function () {
       const serviceInstance = new DummyService({}, { handleInternalErrors: true });
       serviceInstance.handle = () => { throw Error("I've made a huge mistake"); };
-      const serviceData = await serviceInstance.invokeHandler({ someArg: 'bar.bar.bar' });
+      const serviceData = await serviceInstance.invokeHandler({ namedParamA: 'bar.bar.bar' });
       expect(serviceData).to.deep.equal({
         color: 'lightgray',
         label: 'shields',
@@ -145,24 +146,22 @@ describe('BaseService', () => {
 
     it('handles the request', async () => {
       expect(mockHandleRequest).to.have.been.calledOnce;
-      const requestHandler = mockHandleRequest.getCall(0).args[0];
+      const { handler: requestHandler } = mockHandleRequest.getCall(0).args[0];
 
       const mockSendBadge = sinon.spy();
       const mockRequest = {
         asPromise: sinon.spy(),
       };
-      await requestHandler(
-        /*data*/ {},
-        /*match*/ '/foo/bar.svg'.match(expectedRouteRegex),
-        mockSendBadge,
-        mockRequest
-      );
+      const queryParams = { queryParamA: '?' };
+      const match = '/foo/bar.svg'.match(expectedRouteRegex);
+      await requestHandler(queryParams, match, mockSendBadge, mockRequest);
 
+      const expectedFormat = 'svg';
       expect(mockSendBadge).to.have.been.calledOnce;
       expect(mockSendBadge).to.have.been.calledWith(
-        /*format*/ 'svg',
+        expectedFormat,
         {
-          text: ['cat', 'Hello bar'],
+          text: ['cat', 'Hello bar?'],
           colorscheme: 'lightgrey',
           template: undefined,
           logo: undefined,
