@@ -19,7 +19,7 @@ module.exports = class NPMTypeDefinitions extends BaseService {
     return { label: 'type definitions' };
   }
 
-  static get uri() {
+  static get url() {
     return {
       format: '/npm/types/(?:@([^/]+)/)?([^/]+)',
       capture: ['scope', 'packageName'],
