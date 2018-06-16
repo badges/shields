@@ -7965,6 +7965,70 @@ cache(function (data, match, sendBadge, request) {
   });
 }));
 
+// Launchpad integration
+camp.route(/^\/launchpad\/ppa\/version\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  // The owner of the ppa
+  var user = match[1];
+  // The name of the ppa
+  var ppa = match[2];
+  // The package in the PPA to use
+  var name = match[3];
+  var format = match[4];
+
+  var badgeData = getBadgeData('launchpad', 'invalid');
+
+  // Make a request for packages in the PPA, returning only the published sources that match the the package
+  // Keep in mind that this will also return packages _starting_ with the package name
+  var apiUrl = 'https://api.launchpad.net/1.0/~' + user + '/+archive/' + ppa + '?ws.op=getPublishedSources&status=Published&source_name=' + name;
+  request(apiUrl, function(err, res, buffer) {
+    if (checkErrorResponse(badgeData, err, res)) {
+      sendBadge(format, badgeData);
+      return;
+    }
+
+    try {
+      var data = JSON.parse(buffer);
+      var recentEntry = false;
+
+      // Loop through to find the most recent package with the same name
+      for (let entry of data.entries) {
+          // Don't run if the package name doesn't match
+          if (entry.source_package_name != name) continue;
+
+          // If this is the first entry, set it as most recent
+          if (recentEntry == false) {
+              recentEntry = entry;
+              continue;
+          }
+
+          // Check if the entry date is later than the current max date and replace it if it is
+          if (Date.parse(entry.date_published) > Date.parse(recentEntry.date_published)) {
+              recentEntry = entry;
+          }
+      }
+
+      // Abort if no packages are found
+      if (recentEntry == false) {
+        badgeData.text[1] = 'no package';
+        badgeData.colorscheme = 'red';
+        sendBadge(format, badgeData);
+        return;
+      }
+
+      badgeData.text[1] = versionText(recentEntry.source_package_version);
+      badgeData.colorscheme =versionText(recentEntry.source_package_version);
+      sendBadge(format, badgeData);
+
+    } catch (e) {
+        console.log(e);
+      badgeData.text[1] = 'invalid';
+      badgeData.colorscheme = 'red';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
