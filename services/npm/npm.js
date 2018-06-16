@@ -1,14 +1,14 @@
 'use strict';
 
-const BaseService = require('./base');
+const BaseService = require('../base');
 const {
   checkErrorResponse,
   asJson,
-} = require('../lib/error-helper');
+} = require('../../lib/error-helper');
 const {
   makePackageDataUrl,
   typeDefinitions,
-} = require('../lib/npm-badge-helpers');
+} = require('../../lib/npm-badge-helpers');
 
 module.exports = class NPMTypeDefinitions extends BaseService {
   static get category() {
@@ -21,10 +21,19 @@ module.exports = class NPMTypeDefinitions extends BaseService {
 
   static get url() {
     return {
-      format: '/npm/types/(?:@([^/]+)/)?([^/]+)',
+      base: 'npm/types',
+      format: '(?:@([^/]+)/)?([^/]+)',
       capture: ['scope', 'packageName'],
       queryParams: ['registry_uri'],
     };
+  }
+
+  static get examples() {
+    return [{
+      title: 'npm type definitions',
+      previewUrl: 'chalk',
+      keywords: ['node', 'typescript', 'flow'],
+    }];
   }
 
   async handle({ scope, packageName }, { registry_uri: registryUrl }) {
