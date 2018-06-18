@@ -1,5 +1,6 @@
 'use strict';
 
+const Joi = require('joi');
 const {
   NotFound,
   InvalidResponse,
@@ -222,6 +223,25 @@ class BaseService {
 };
 
 class BaseJsonService extends BaseService {
+  static get responseSchema() {
+    throw Error('Subclasses should define a response schema')
+  }
+
+  static validateResponse(json) {
+    const { error, value } = Joi.validate(json, this.responseSchema, {
+      allowUnknown: true,
+      stripUnknown: true,
+    });
+    if (error) {
+      throw new InvalidResponse({
+        prettyMessage: 'invalid json response',
+        underlyingError: error,
+      });
+    } else {
+      return value;
+    }
+  }
+
   async _requestJson(url, options = {}, notFoundMessage) {
     return this._sendAndCacheRequest(url,
       {...{ 'headers': { 'Accept': 'application/json' } }, ...options}
@@ -229,7 +249,8 @@ class BaseJsonService extends BaseService {
       checkErrorResponse.asPromise(
         notFoundMessage ? { notFoundMessage: notFoundMessage } : undefined
       )
-    ).then(asJson);
+    ).then(asJson
+    ).then(json => this.constructor.validateResponse(json));
   }
 };
 
