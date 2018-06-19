@@ -9,18 +9,14 @@ const t = new ServiceTester({ id: 'microbadger', title: 'MicroBadger' });
 module.exports = t;
 
 t.create('image size without a specified tag')
-  .get('/image-size/jumanjiman/puppet.json')
+  .get('/image-size/wikiwi/docker-build.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'image size',
     value: isFileSize
   }));
 
-t.create('image size without a specified tag and no download size data returned')
-  .get('/image-size/_/centos.json')
-  .expectJSON({ name: 'image size', value: 'unknown' });
-
 t.create('image size with a specified tag')
-  .get('/image-size/_/httpd/alpine.json')
+  .get('/image-size/kelseyhightower/helloworld/appengine.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'image size',
     value: isFileSize
@@ -80,3 +76,11 @@ t.create('unexpected response')
     .reply(invalidJSON)
   )
   .expectJSON({ name: 'image size', value: 'error' });
+
+t.create('missing download size')
+  .get('/image-size/puppet/puppetserver.json')
+  .intercept(nock => nock('https://api.microbadger.com')
+    .get('/v1/images/puppet/puppetserver')
+    .reply(200, {})
+  )
+  .expectJSON({ name: 'image size', value: 'unknown' });
