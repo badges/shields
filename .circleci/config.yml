@@ -63,9 +63,9 @@ jobs:
             CI_PULL_REQUEST: ''
           command: greenkeeper-lockfile-upload
 
-  main@node-10:
+  main@node-latest:
     docker:
-      - image: shieldsio/shields-ci-node-10:0.0.3
+      - image: shieldsio/shields-ci-node-latest:0.0.3
     working_directory: ~/repo
     steps:
       - checkout
@@ -137,9 +137,9 @@ jobs:
               echo 'This is not a pull request. Skipping.'
             fi
 
-  services-pr@node-10:
+  services-pr@node-latest:
     docker:
-      - image: shieldsio/shields-ci-node-10:0.0.3
+      - image: shieldsio/shields-ci-node-latest:0.0.3
     working_directory: ~/repo
     steps:
       - checkout
@@ -197,7 +197,7 @@ workflows:
       - main:
           requires:
             - npm-install
-      - main@node-10:
+      - main@node-latest:
           requires:
             - npm-install
       - frontend:
@@ -206,7 +206,7 @@ workflows:
       - services-pr:
           requires:
             - npm-install
-      - services-pr@node-10:
+      - services-pr@node-latest:
           requires:
             - npm-install
 
