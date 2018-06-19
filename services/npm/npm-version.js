@@ -5,9 +5,8 @@ const { addv } = require('../../lib/text-formatters');
 const { version: versionColor } = require('../../lib/color-formatters');
 const NpmBase = require('./npm-base');
 
-const responseSchema = Joi.object({
-  latest: Joi.string().required(), // This should be a semver.
-}).required();
+// Joi.string should be a semver.
+const responseSchema = Joi.object().pattern(/./, Joi.string()).required();
 
 module.exports = class NpmVersion extends NpmBase {
   static get category() {
@@ -57,16 +56,31 @@ module.exports = class NpmVersion extends NpmBase {
   }
 
   static render(packageData, { tag }) {
-    const { latest } = packageData;
+    let label, version;
+
+    if (tag) {
+      if (tag in packageData) {
+        label = `npm@${tag}`;
+        version = packageData[tag];
+      } else {
+        return {
+          message: 'tag not found',
+          color: 'red',
+        };
+      }
+    } else {
+      version = packageData.latest;
+    }
+
     return {
-      label: tag ? `npm@${tag}` : undefined,
-      message: addv(latest),
-      color: versionColor(latest),
+      label,
+      message: addv(version),
+      color: versionColor(version),
     };
   }
 
   async handle(namedParams, queryParams) {
-    const { scope, packageName, tag } = namedParams;
+    const { scope, packageName } = namedParams;
     const { registry_uri: registryUrl = this.constructor.defaultRegistryUrl } = queryParams;
 
     const slug = scope === undefined
@@ -75,6 +89,7 @@ module.exports = class NpmVersion extends NpmBase {
     const url = `${registryUrl}/-/package/${slug}/dist-tags`;
 
     let packageData = await this._requestJson(url);
+console.log('packageData', packageData)
     packageData = this.constructor.validateResponse(packageData);
 
     return this.constructor.render(packageData, namedParams, queryParams);

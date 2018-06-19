@@ -54,7 +54,7 @@ module.exports = class NpmBase extends BaseJsonService {
 
   async handle(namedParams, queryParams) {
     const { scope, packageName, tag } = namedParams;
-    let { registry_uri: registryUrl = this.constructor.defaultRegistryUrl } = queryParams;
+    const { registry_uri: registryUrl = this.constructor.defaultRegistryUrl } = queryParams;
 
     let packageData;
     if (scope === undefined) {
