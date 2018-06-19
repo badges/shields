@@ -65,8 +65,8 @@
     "test:services:pr:run": "HANDLE_INTERNAL_ERRORS=false mocha --delay lib/service-test-runner/cli.js --stdin < pull-request-services.log",
     "test:services:pr": "npm run test:services:pr:prepare && npm run test:services:pr:run",
     "test": "npm run lint && npm run test:js:frontend && npm run test:js:server",
-    "circle-images:build": "docker build -t shieldsio/shields-ci-node-8:${IMAGE_TAG} -f .circleci/images/node-8/Dockerfile . && docker build -t shieldsio/shields-ci-node-9:${IMAGE_TAG} -f .circleci/images/node-9/Dockerfile .",
-    "circle-images:push": "docker push shieldsio/shields-ci-node-8:${IMAGE_TAG} && docker push shieldsio/shields-ci-node-9:${IMAGE_TAG}",
+    "circle-images:build": "docker build -t shieldsio/shields-ci-node-8:${IMAGE_TAG} -f .circleci/images/node-8/Dockerfile . && docker build -t shieldsio/shields-ci-node-latest:${IMAGE_TAG} -f .circleci/images/node-latest/Dockerfile .",
+    "circle-images:push": "docker push shieldsio/shields-ci-node-8:${IMAGE_TAG} && docker push shieldsio/shields-ci-node-latest:${IMAGE_TAG}",
     "depcheck": "check-node-version --node \">= 8.0\"",
     "postinstall": "npm run depcheck",
     "prebuild": "npm run depcheck",
@@ -160,7 +160,7 @@
     ]
   },
   "engines": {
-    "node": "8.x",
+    "node": ">= 8.x",
     "npm": "5.x"
   },
   "babel": {
