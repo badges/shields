@@ -7900,7 +7900,7 @@ cache(function(data, match, sendBadge, request) {
     headers: { 'Accept': 'application/json' },
     uri: `https://api.dependabot.com/badges/compatibility_score?package-manager=${packageManager}&dependency-name=${dependencyName}&version-scheme=semver`
   };
-  const badgeData = getBadgeData('semver compatibility', data);
+  const badgeData = getBadgeData('semver stability', data);
   badgeData.links = [`https://dependabot.com/compatibility-score.html?package-manager=${packageManager}&dependency-name=${dependencyName}&version-scheme=semver`];
   badgeData.logo = getLogo('dependabot', data);
   request(options, function(err, res) {
