@@ -6606,32 +6606,33 @@ cache({
 // Waffle.io integration
 camp.route(/^\/waffle\/label\/([^/]+)\/([^/]+)\/?([^/]+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, evancohen
-  var repo = match[2];  // eg, smart-mirror
-  var ghLabel = match[3] || 'ready';  // eg, in%20progress
-  var format = match[4];
-  var apiUrl = 'https://api.waffle.io/' + user + '/' + repo + '/cards';
-  var badgeData = getBadgeData('issues', data);
+  const user = match[1];  // eg, evancohen
+  const repo = match[2];  // eg, smart-mirror
+  const ghLabel = match[3] || 'ready';  // eg, in%20progress
+  const format = match[4];
+  const apiUrl = `https://api.waffle.io/${user}/${repo}/columns?with=count`;
+  let badgeData = getBadgeData('waffle', data);
 
   request(apiUrl, function(err, res, buffer) {
     try {
-      var cards = JSON.parse(buffer);
-      if (cards.length === 0) {
+      if (checkErrorResponse(badgeData, err, res)) {
+        sendBadge(format, badgeData);
+        return;
+      }
+      const cols = JSON.parse(buffer);
+      if (cols.length === 0) {
         badgeData.text[1] = 'absent';
         sendBadge(format, badgeData);
         return;
       }
-      var count = 0;
-      var color = '78bdf2';
-      for (var i = 0; i < cards.length; i++) {
-        var cardMetadata = cards[i].githubMetadata;
-        if (cardMetadata.labels && cardMetadata.labels.length > 0) {
-          for (var j = 0; j < cardMetadata.labels.length; j++) {
-            var label = cardMetadata.labels[j];
-            if (label.name === ghLabel) {
-              count++;
-              color = label.color;
-            }
+      let count = 0;
+      let color = '78bdf2';
+      for (let i = 0; i < cols.length; i++) {
+        if (('label' in cols[i]) && (cols[i].label !== null)) {
+          if (cols[i].label.name === ghLabel) {
+            count = cols[i].count;
+            color = cols[i].label.color;
+            break;
           }
         }
       }
