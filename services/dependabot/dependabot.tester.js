@@ -11,47 +11,47 @@ const colorsB = mapValues(colorscheme, 'colorB');
 const t = new ServiceTester({ id: 'dependabot', title: 'Dependabot' });
 module.exports = t;
 
-t.create('semver compatibility (valid)')
+t.create('semver stability (valid)')
   .get('/semver/bundler/puma.json?style=_shields_test')
   .expectJSONTypes(Joi.object().keys({
-    name: 'semver compatibility',
+    name: 'semver stability',
     value: isIntegerPercentage,
     link: 'https://dependabot.com/compatibility-score.html?dependency-name=puma&package-manager=bundler&version-scheme=semver',
     colorB: Joi.equal(colorsB.brightgreen, colorsB.orange).required()
   }));
 
-t.create('semver compatibility (connection error)')
+t.create('semver stability (connection error)')
   .get('/semver/bundler/puma.json?style=_shields_test')
   .networkOff()
   .expectJSONTypes(Joi.object().keys({
-    name: 'semver compatibility',
+    name: 'semver stability',
     value: 'inaccessible',
     colorB: colorsB.red
   }));
 
-t.create('semver compatibility (invalid error)')
+t.create('semver stability (invalid error)')
   .get('/semver/invalid-manager/puma.json?style=_shields_test')
   .expectJSONTypes(Joi.object().keys({
-    name: 'semver compatibility',
+    name: 'semver stability',
     value: 'invalid',
     colorB: colorsB.lightgrey
   }));
 
-t.create('semver compatibility (invalid JSON response)')
+t.create('semver stability (invalid JSON response)')
   .get('/semver/bundler/puma.json')
   .intercept(nock => nock('https://api.dependabot.com')
      .get('/badges/compatibility_score?package-manager=bundler&dependency-name=puma&version-scheme=semver')
      .reply(invalidJSON)
    )
   .expectJSONTypes(Joi.object().keys({
-    name: 'semver compatibility',
+    name: 'semver stability',
     value: 'invalid'
   }));
 
-t.create('semver compatibility (missing dependency)')
+t.create('semver stability (missing dependency)')
   .get('/semver/bundler/some-random-missing-dependency.json?style=_shields_test')
   .expectJSONTypes(Joi.object().keys({
-    name: 'semver compatibility',
+    name: 'semver stability',
     value: 'unknown',
     colorB: colorsB.lightgrey
   }));
