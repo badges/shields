@@ -2,7 +2,7 @@
 
 const Joi = require('joi');
 const ServiceTester = require('../service-tester');
-
+const { invalidJSON } = require('../response-fixtures');
 const {
     isIntegerPercentage,
     isVPlusDottedVersionAtLeastOne,
@@ -45,7 +45,7 @@ t.create('version (unexpected response)')
   .get('/v/AFNetworking.json')
   .intercept(nock => nock('https://trunk.cocoapods.org')
     .get('/api/v1/pods/AFNetworking/specs/latest')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'pod', value: 'invalid'});
 
@@ -72,7 +72,7 @@ t.create('platform (unexpected response)')
   .get('/p/AFNetworking.json')
   .intercept(nock => nock('https://trunk.cocoapods.org')
     .get('/api/v1/pods/AFNetworking/specs/latest')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'platform', value: 'invalid'});
 
@@ -96,7 +96,7 @@ t.create('license (unexpected response)')
   .get('/l/AFNetworking.json')
   .intercept(nock => nock('https://trunk.cocoapods.org')
     .get('/api/v1/pods/AFNetworking/specs/latest')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'license', value: 'invalid'});
 
@@ -131,7 +131,7 @@ t.create('doc percent (unexpected response)')
   .get('/metrics/doc-percent/AFNetworking.json')
   .intercept(nock => nock('https://metrics.cocoapods.org')
     .get('/api/v1/pods/AFNetworking')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'docs', value: 'invalid'});
 
@@ -172,7 +172,7 @@ t.create('downloads (unexpected response)')
   .get('/dt/AFNetworking.json')
   .intercept(nock => nock('https://metrics.cocoapods.org')
     .get('/api/v1/pods/AFNetworking')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'downloads', value: 'invalid'});
 
@@ -206,6 +206,6 @@ t.create('apps (unexpected response)')
   .get('/at/AFNetworking.json')
   .intercept(nock => nock('https://metrics.cocoapods.org')
     .get('/api/v1/pods/AFNetworking')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'apps', value: 'invalid'});
