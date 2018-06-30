@@ -346,7 +346,7 @@ Helpers
 -------
 
 ### Invalid JSON
-[`invalidJSON`](https://github.com/badges/shields/blob/master/services/response-fixtures.js), is a response fixture of an invalid JSON for Nock.
+[`invalidJSON`](https://github.com/badges/shields/blob/master/services/response-fixtures.js) is a response fixture of an invalid JSON for Nock.
 Example usage from [bountysource.tester.js](https://github.com/badges/shields/blob/master/services/bountysource/bountysource.tester.js):
 ```js
 const { invalidJSON } = require('../response-fixtures');
