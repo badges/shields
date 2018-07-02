@@ -2616,7 +2616,7 @@ cache(function(data, match, sendBadge, request) {
           badgeData.colorscheme = 'orange';
         } else if (status === 'unknown') {
           badgeData.colorscheme = 'gray';
-        } 
+        }
       } else {
         let score = parsedData.applications[branch].index._embedded
           .project.metric_values['scrutinizer.quality'];
