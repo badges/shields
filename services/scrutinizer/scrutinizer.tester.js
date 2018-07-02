@@ -32,7 +32,7 @@ t.create('code coverage')
   }));
 
 t.create('code coverage (branch)')
-  .get('/coverage/g/phpmyadmin/phpmyadmin/master.json')
+  .get('/coverage/g/doctrine/doctrine2/master.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'coverage',
     value: isIntegerPercentage,
@@ -52,13 +52,17 @@ t.create('build (branch)')
     value: isBuildStatus,
   }));
 
-t.create('no response data')
-  .get('/g/filp/whoops.json')
-  .intercept(nock => nock('https://scrutinizer-ci.com')
-    .get('/api/repositories/g/filp/whoops')
-    .reply(200))
+t.create('project not found')
+  .get('/build/g/does-not-exist/does-not-exist.json')
   .expectJSON({
-     name: 'code quality',
+     name: 'build',
+     value: 'project or branch not found',
+  });
+
+t.create('code coverage inaccessible')
+  .get('/coverage/g/phpmyadmin/phpmyadmin/master.json')
+  .expectJSON({
+     name: 'coverage',
      value: 'inaccessible',
   });
 
