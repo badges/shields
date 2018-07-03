@@ -267,7 +267,7 @@ class GemRank extends BaseJsonService {
   }
 
   static get category() {
-    return 'miscellaneous';
+    return 'rating';
   }
 
   static get url() {
