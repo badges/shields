@@ -4,7 +4,7 @@ export default class IssueTrackingExamplePage extends ExamplesPage {
 
   constructor(props) {
     super(props);
-    this.preparedExamples = this.prepareExamples('issue_tracking');
+    this.preparedExamples = this.prepareExamples('issue-tracking');
   }
 
 }
