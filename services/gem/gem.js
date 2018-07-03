@@ -203,7 +203,7 @@ class GemOwner extends BaseJsonService {
   }
 
   static get category() {
-    return 'miscellaneous';
+    return 'other';
   }
 
   static get url() {
