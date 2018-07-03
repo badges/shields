@@ -29,19 +29,22 @@ const Badge = ({
     baseUri,
     { longCache: false });
 
-  return (
-    <tr className={classNames({ excluded: !shouldDisplay() })}>
-      <th className={classNames({ clickable: onClick })} onClick={handleClick}>
-        { title }:
-      </th>
-      <td>{ previewImage }</td>
-      <td>
-        <code className={classNames({ clickable: onClick })} onClick={handleClick}>
-          { resolvedExampleUri }
-        </code>
-      </td>
-    </tr>
-  );
+  if (shouldDisplay()) {
+    return (
+      <tr>
+        <th className={classNames({ clickable: onClick })} onClick={handleClick}>
+          { title }:
+        </th>
+        <td>{ previewImage }</td>
+        <td>
+          <code className={classNames({ clickable: onClick })} onClick={handleClick}>
+            { resolvedExampleUri }
+          </code>
+        </td>
+      </tr>
+    );
+  }
+  return null;
 };
 Badge.propTypes = {
   title: PropTypes.string.isRequired,
@@ -56,21 +59,25 @@ Badge.propTypes = {
 
 const Category = ({ category, examples, baseUri, longCache, onClick }) => (
   <div>
-    <h3 id={category.id}>{ category.name }</h3>
-    <table className="badge">
-      <tbody>
-        {
-          examples.map(badgeData => (
-            <Badge
-              key={badgeData.key}
-              {...badgeData}
-              baseUri={baseUri}
-              longCache={longCache}
-              onClick={onClick} />
-          ))
-        }
-      </tbody>
-    </table>
+    <a href={'/examples/' + category.id}>
+      <h3 id={category.id}>{ category.name }</h3>
+    </a>
+    { examples &&
+      <table className="badge">
+        <tbody>
+          {
+            examples.map(badgeData => (
+              <Badge
+                key={badgeData.key}
+                {...badgeData}
+                baseUri={baseUri}
+                longCache={longCache}
+                onClick={onClick} />
+            ))
+          }
+        </tbody>
+      </table>
+    }
   </div>
 );
 Category.propTypes = {
