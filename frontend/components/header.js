@@ -2,7 +2,9 @@ import React from 'react';
 
 export default () => (
   <section>
-    <img alt="Shields.io" src="static/logo.svg" />
+    <a href="/">
+      <img alt="Shields.io" src="/static/logo.svg" />
+    </a>
 
     <hr className="spacing" />
 
