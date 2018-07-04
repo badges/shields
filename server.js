@@ -6611,7 +6611,7 @@ cache(function(data, match, sendBadge, request) {
   const ghLabel = match[3] || 'ready';  // eg, in%20progress
   const format = match[4];
   const apiUrl = `https://api.waffle.io/${user}/${repo}/columns?with=count`;
-  let badgeData = getBadgeData('waffle', data);
+  const badgeData = getBadgeData('waffle', data);
 
   request(apiUrl, function(err, res, buffer) {
     try {
