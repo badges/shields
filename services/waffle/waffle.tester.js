@@ -48,7 +48,7 @@ t.create('label should be `Mybug` & value should be formated.  e.g: Mybug|25')
   .get('/label/ritwickdey/vscode-live-server/bug.json?label=Mybug')
   .expectJSONTypes(Joi.object().keys({
     name: 'Mybug',
-    value: Joi.string().regex(/^\d+$/)
+    value: Joi.number().integer().positive()
   }));
 
 t.create('label (repo not found)')
