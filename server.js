@@ -2569,20 +2569,12 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Scrutinizer coverage integration.
-camp.route(/^\/scrutinizer(\/(build|coverage))?\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/scrutinizer(?:\/(build|coverage))?\/([^/]+\/[^/]+\/[^/]+|gp\/[^/])(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  const type = match[2] ? match[2] : 'code quality';
-  let repo = match[3];  // eg, g/phpmyadmin/phpmyadmin
+  const type = match[1] ? match[1] : 'code quality';
+  const repo = match[2];  // eg, g/phpmyadmin/phpmyadmin
+  let branch = match[3];
   const format = match[4];
-  // The repo may contain a branch, which would be unsuitable.
-  const repoParts = repo.split('/');
-  let branch = null;
-  // Normally, there are 2 slashes in `repo` when the branch is specified.
-  const slashesInRepo = repoParts[0] === 'gp' ? 1 : 2;
-  if ((repoParts.length - 1) > slashesInRepo) {
-    branch = repoParts.slice(slashesInRepo + 1).join('/');
-    repo = repoParts.slice(0, slashesInRepo + 1).join('/');
-  }
   const apiUrl = `https://scrutinizer-ci.com/api/repositories/${repo}`;
   const badgeData = getBadgeData(type, data);
   request(apiUrl, {}, function(err, res, buffer) {
@@ -2593,7 +2585,9 @@ cache(function(data, match, sendBadge, request) {
     try {
       const parsedData = JSON.parse(buffer);
       // Which branch are we dealing with?
-      if (branch === null) { branch = parsedData.default_branch; }
+      if (branch === undefined) {
+        branch = parsedData.default_branch;
+      }
       if (type === 'coverage') {
         const percentage = parsedData.applications[branch].index._embedded
           .project.metric_values['scrutinizer.test_coverage'] * 100;
