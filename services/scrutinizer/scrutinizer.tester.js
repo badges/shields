@@ -59,11 +59,11 @@ t.create('project not found')
      value: 'project or branch not found',
   });
 
-t.create('code coverage inaccessible')
+t.create('code coverage unknown')
   .get('/coverage/g/phpmyadmin/phpmyadmin/master.json')
   .expectJSON({
      name: 'coverage',
-     value: 'inaccessible',
+     value: 'unknown',
   });
 
 t.create('unexpected response data')

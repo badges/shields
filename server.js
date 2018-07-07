@@ -2598,7 +2598,7 @@ cache(function(data, match, sendBadge, request) {
         const percentage = parsedData.applications[branch].index._embedded
           .project.metric_values['scrutinizer.test_coverage'] * 100;
         if (isNaN(percentage)) {
-          badgeData.text[1] = 'inaccessible';
+          badgeData.text[1] = 'unknown';
           badgeData.colorscheme = 'gray';
         } else {
           badgeData.text[1] = percentage.toFixed(0) + '%';
