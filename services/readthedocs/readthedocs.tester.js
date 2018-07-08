@@ -2,6 +2,7 @@
 
 const Joi = require('joi');
 const ServiceTester = require('../service-tester');
+const { isBuildStatus } = require('../test-validators');
 
 const t = new ServiceTester({ id: 'readthedocs', title: 'Read the Docs' })
 module.exports = t;
@@ -10,21 +11,21 @@ t.create('build status')
   .get('/pip.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'docs',
-    value: Joi.equal('failing', 'passing', 'unknown')
+    value: isBuildStatus
   }));
 
 t.create('build status for named version')
   .get('/pip/stable.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'docs',
-    value: Joi.equal('failing', 'passing', 'unknown')
+    value: isBuildStatus
   }));
 
 t.create('build status for named semantic version')
   .get('/scrapy/1.0.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'docs',
-    value: Joi.equal('failing', 'passing', 'unknown')
+    value: isBuildStatus
   }));
 
 t.create('unknown project')

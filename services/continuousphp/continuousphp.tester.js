@@ -2,6 +2,7 @@
 
 const Joi = require('joi');
 const ServiceTester = require('../service-tester');
+const { isBuildStatus } = require('../test-validators');
 
 const t = new ServiceTester({ id: 'continuousphp', title: 'continuousphp' });
 module.exports = t;
@@ -10,14 +11,14 @@ t.create('build status on default branch')
   .get('/git-hub/doctrine/dbal.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: Joi.equal('failing', 'passing', 'unknown', 'unstable')
+    value: isBuildStatus
   }));
 
 t.create('build status on named branch')
   .get('/git-hub/doctrine/dbal/develop.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: Joi.equal('failing', 'passing', 'unknown')
+    value: isBuildStatus
   }));
 
 t.create('unknown repo')

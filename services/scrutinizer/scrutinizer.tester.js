@@ -3,9 +3,9 @@
 const Joi = require('joi');
 const ServiceTester = require('../service-tester');
 const {
+  isBuildStatus,
   isIntegerPercentage
 } = require('../test-validators');
-const isBuildStatus = Joi.string().regex(/^(passing|failed|error|pending|unknown)$/);
 
 const t = new ServiceTester({ id: 'scrutinizer', title: 'Scrutinizer' });
 module.exports = t;
