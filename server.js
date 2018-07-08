@@ -2569,136 +2569,65 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Scrutinizer coverage integration.
-camp.route(/^\/scrutinizer\/coverage\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/scrutinizer(?:\/(build|coverage))?\/([^/]+\/[^/]+\/[^/]+|gp\/[^/])(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, g/phpmyadmin/phpmyadmin
-  var format = match[2];
-  // The repo may contain a branch, which would be unsuitable.
-  var repoParts = repo.split('/');
-  var branch = null;
-  // Normally, there are 2 slashes in `repo` when the branch isn't specified.
-  var slashesInRepo = 2;
-  if (repoParts[0] === 'gp') { slashesInRepo = 1; }
-  if ((repoParts.length - 1) > slashesInRepo) {
-    branch = repoParts.slice(slashesInRepo + 1).join('/');
-    repo = repoParts.slice(0, slashesInRepo + 1).join('/');
-  }
-  var apiUrl = 'https://scrutinizer-ci.com/api/repositories/' + repo;
-  var badgeData = getBadgeData('coverage', data);
+  const type = match[1] ? match[1] : 'code quality';
+  const repo = match[2];  // eg, g/phpmyadmin/phpmyadmin
+  let branch = match[3];
+  const format = match[4];
+  const apiUrl = `https://scrutinizer-ci.com/api/repositories/${repo}`;
+  const badgeData = getBadgeData(type, data);
   request(apiUrl, {}, function(err, res, buffer) {
-    if (err !== null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'project or branch not found')) {
       sendBadge(format, badgeData);
       return;
     }
     try {
-      var data = JSON.parse(buffer);
+      const parsedData = JSON.parse(buffer);
       // Which branch are we dealing with?
-      if (branch === null) { branch = data.default_branch; }
-      var percentage = data.applications[branch].index._embedded
-        .project.metric_values['scrutinizer.test_coverage'] * 100;
-      badgeData.text[1] = percentage.toFixed(0) + '%';
-      badgeData.colorscheme = coveragePercentageColor(percentage);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// Scrutinizer build integration.
-camp.route(/^\/scrutinizer\/build\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, g/phpmyadmin/phpmyadmin
-  var format = match[2];
-  // The repo may contain a branch, which would be unsuitable.
-  var repoParts = repo.split('/');
-  var branch = null;
-  // Normally, there are 2 slashes in `repo` when the branch isn't specified.
-  var slashesInRepo = 2;
-  if (repoParts[0] === 'gp') { slashesInRepo = 1; }
-  if ((repoParts.length - 1) > slashesInRepo) {
-    branch = repoParts.slice(slashesInRepo + 1).join('/');
-    repo = repoParts.slice(0, slashesInRepo + 1).join('/');
-  }
-  var apiUrl = 'https://scrutinizer-ci.com/api/repositories/' + repo;
-  var badgeData = getBadgeData('build', data);
-  request(apiUrl, {}, function(err, res, buffer) {
-    if (err !== null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      // Which branch are we dealing with?
-      if (branch === null) { branch = data.default_branch; }
-      var status = data.applications[branch].build_status.status;
-      badgeData.text[1] = status;
-      if (status === 'passed') {
-        badgeData.colorscheme = 'brightgreen';
-        badgeData.text[1] = 'passing';
-      } else if (status === 'failed' || status === 'error') {
-        badgeData.colorscheme = 'red';
-      } else if (status === 'pending') {
-        badgeData.colorscheme = 'orange';
-      } else if (status === 'unknown') {
-        badgeData.colorscheme = 'gray';
+      if (branch === undefined) {
+        branch = parsedData.default_branch;
       }
-      sendBadge(format, badgeData);
-
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// Scrutinizer integration.
-camp.route(/^\/scrutinizer\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, g/phpmyadmin/phpmyadmin
-  var format = match[2];
-  // The repo may contain a branch, which would be unsuitable.
-  var repoParts = repo.split('/');
-  var branch = null;
-  // Normally, there are 2 slashes in `repo` when the branch isn't specified.
-  var slashesInRepo = 2;
-  if (repoParts[0] === 'gp') { slashesInRepo = 1; }
-  if ((repoParts.length - 1) > slashesInRepo) {
-    branch = repoParts.slice(slashesInRepo + 1).join('/');
-    repo = repoParts.slice(0, slashesInRepo + 1).join('/');
-  }
-  var apiUrl = 'https://scrutinizer-ci.com/api/repositories/' + repo;
-  var badgeData = getBadgeData('code quality', data);
-  request(apiUrl, {}, function(err, res, buffer) {
-    if (err !== null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      // Which branch are we dealing with?
-      if (branch === null) { branch = data.default_branch; }
-      var score = data.applications[branch].index._embedded
-        .project.metric_values['scrutinizer.quality'];
-      score = Math.round(score * 100) / 100;
-      badgeData.text[1] = score;
-      badgeData.colorscheme = 'blue';
-      if (score > 9) {
-        badgeData.colorscheme = 'brightgreen';
-      } else if (score > 7) {
-        badgeData.colorscheme = 'green';
-      } else if (score > 5) {
-        badgeData.colorscheme = 'yellow';
-      } else if (score > 4) {
-        badgeData.colorscheme = 'orange';
+      if (type === 'coverage') {
+        const percentage = parsedData.applications[branch].index._embedded
+          .project.metric_values['scrutinizer.test_coverage'] * 100;
+        if (isNaN(percentage)) {
+          badgeData.text[1] = 'unknown';
+          badgeData.colorscheme = 'gray';
+        } else {
+          badgeData.text[1] = percentage.toFixed(0) + '%';
+          badgeData.colorscheme = coveragePercentageColor(percentage);
+        }
+      } else if (type === 'build') {
+        const status = parsedData.applications[branch].build_status.status;
+        badgeData.text[1] = status;
+        if (status === 'passed') {
+          badgeData.colorscheme = 'brightgreen';
+          badgeData.text[1] = 'passing';
+        } else if (status === 'failed' || status === 'error') {
+          badgeData.colorscheme = 'red';
+        } else if (status === 'pending') {
+          badgeData.colorscheme = 'orange';
+        } else if (status === 'unknown') {
+          badgeData.colorscheme = 'gray';
+        }
       } else {
-        badgeData.colorscheme = 'red';
+        let score = parsedData.applications[branch].index._embedded
+          .project.metric_values['scrutinizer.quality'];
+        score = Math.round(score * 100) / 100;
+        badgeData.text[1] = score;
+        if (score > 9) {
+          badgeData.colorscheme = 'brightgreen';
+        } else if (score > 7) {
+          badgeData.colorscheme = 'green';
+        } else if (score > 5) {
+          badgeData.colorscheme = 'yellow';
+        } else if (score > 4) {
+          badgeData.colorscheme = 'orange';
+        } else {
+          badgeData.colorscheme = 'red';
+        }
       }
-
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
