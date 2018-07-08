@@ -57,12 +57,15 @@ Badge.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-const Category = ({ category, examples, baseUri, longCache, onClick }) => (
-  <div>
-    <a href={'/examples/' + category.id}>
-      <h3 id={category.id}>{ category.name }</h3>
-    </a>
-    { examples &&
+const Category = ({ category, examples, baseUri, longCache, onClick }) => {
+  if (examples.filter(example => example.shouldDisplay()).length === 0){
+    return null;
+  }
+  return (
+    <div>
+      <a href={'/examples/' + category.id}>
+        <h3 id={category.id}>{ category.name }</h3>
+      </a>
       <table className="badge">
         <tbody>
           {
@@ -77,9 +80,9 @@ const Category = ({ category, examples, baseUri, longCache, onClick }) => (
           }
         </tbody>
       </table>
-    }
-  </div>
-);
+    </div>
+  );
+};
 Category.propTypes = {
   category: PropTypes.shape({
     id: PropTypes.string.isRequired,
