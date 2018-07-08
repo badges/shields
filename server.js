@@ -6466,31 +6466,12 @@ cache(function(data, match, sendBadge, request) {
   }
 }));
 
-// bitHound integration
+// bitHound integration - deprecated as of July 2018
 camp.route(/^\/bithound\/(code\/|dependencies\/|devDependencies\/)?(.+?)\.(svg|png|gif|jpg|json)$/,
-cache({
-  queryParams: ['color'], // argh.
-  handler: (data, match, sendBadge, request) => {
-    var type = match[1].slice(0, -1);
-    var userRepo = match[2];  // eg, `github/rexxars/sse-channel`.
-    var format = match[3];
-    var apiUrl = 'https://www.bithound.io/api/' + userRepo + '/badge/' + type;
-    var badgeData = getBadgeData(type === 'devDependencies' ? 'dev dependencies' : type, data);
-
-    request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
-      try {
-        var data = JSON.parse(buffer);
-        badgeData.text[1] = data.label;
-        badgeData.colorscheme = null;
-        badgeData.colorB = '#' + data.color;
-        sendBadge(format, badgeData);
-
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  },
+cache(function(data, match, sendBadge, request) {
+  const format = match[3];
+  const badgeData = getDeprecatedBadge('bithound', data);
+  sendBadge(format, badgeData);
 }));
 
 // Waffle.io integration
