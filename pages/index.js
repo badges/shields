@@ -5,6 +5,11 @@ import { baseUri, longCache } from '../frontend/constants';
 
 export default class IndexPage extends ExamplesPage {
 
+  constructor(props) {
+    super(props);
+    this.state.searchReady = false;
+  }
+
   getBody() {
     if ((this.state.query == null) || (this.state.query.length === 0)) {
       return this.preparedExamples.map(category => (
@@ -17,12 +22,20 @@ export default class IndexPage extends ExamplesPage {
         <div>Search term must have 2 or more characters</div>
       );
     } else {
-      return(<BadgeExamples
-        categories={this.preparedExamples}
-        onClick={example => { this.setState({ example }); }}
-        baseUri={baseUri}
-        longCache={longCache} />
-      );
+      if (this.state.searchReady) {
+        this.state.searchReady = false;
+        return(<BadgeExamples
+          categories={this.preparedExamples}
+          onClick={example => { this.setState({ example }); }}
+          baseUri={baseUri}
+          longCache={longCache} />
+        );
+      } else {
+        window.setTimeout(function() {
+          this.setState({searchReady: true});
+        }.bind(this), 500);
+        return 'searching...';
+      }
     }
   }
 
