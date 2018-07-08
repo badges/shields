@@ -4701,7 +4701,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = metric(json.download_count);
         badgeData.colorscheme = 'blue';
       } else {
-        badgeData.text[1] = json.namespace + '.' + json.name;
+        badgeData.text[1] = json.summary_fields.namespace.name + '.' + json.name;
         badgeData.colorscheme = 'blue';
       }
       sendBadge(format, badgeData);
