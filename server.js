@@ -4587,21 +4587,30 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Jenkins coverage integration
-camp.route(/^\/jenkins(?:-ci)?\/c\/(http(?:s)?)\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+// Jenkins coverage integration (cobertura + jacoco)
+camp.route(/^\/jenkins(?:-ci)?\/(c|j)\/(http(?:s)?)\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var scheme = match[1];  // http(s)
-  var host = match[2];  // example.org:8080
-  var job = match[3];  // folder/job
-  var format = match[4];
-  var options = {
+  const type = match[1];    // c - cobertura | j - jacoco
+  const scheme = match[2];  // http(s)
+  const host = match[3];    // example.org:8080
+  const job = match[4];     // folder/job
+  const format = match[5];
+  const options = {
     json: true,
-    uri: scheme + '://' + host + '/job/' + job
-      + '/lastBuild/cobertura/api/json?tree=results[elements[name,denominator,numerator,ratio]]'
+    uri: `${scheme}://${host}/job/${job}/`
   };
+
   if (job.indexOf('/') > -1 ) {
-    options.uri = scheme + '://' + host + '/' + job
-      + '/lastBuild/cobertura/api/json?tree=results[elements[name,denominator,numerator,ratio]]';
+    options.uri = `${scheme}://${host}/${job}/`;
+  }
+
+  switch (type) {
+    case 'c':
+      options.uri += 'lastBuild/cobertura/api/json?tree=results[elements[name,denominator,numerator,ratio]]';
+      break;
+    case 'j':
+      options.uri += 'lastBuild/jacoco/api/json?tree=instructionCoverage[covered,missed,percentage,total]';
+      break;
   }
 
   if (serverSecrets && serverSecrets.jenkins_user) {
@@ -4611,25 +4620,22 @@ cache(function(data, match, sendBadge, request) {
     };
   }
 
-  var badgeData = getBadgeData('coverage', data);
+  const badgeData = getBadgeData('coverage', data);
   request(options, function(err, res, json) {
-    if (err !== null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
 
     try {
-      var coverageObject = json.results.elements.filter(function (obj) {
-        return obj.name === 'Lines';
-      })[0];
+      const coverageObject = json.instructionCoverage;
       if (coverageObject === undefined) {
         badgeData.text[1] = 'inaccessible';
         sendBadge(format, badgeData);
         return;
       }
-      var coverage = coverageObject.ratio;
-      if (+coverage !== +coverage) {
+      const coverage = coverageObject.percentage;
+      if (isNaN(coverage)) {
         badgeData.text[1] = 'unknown';
         sendBadge(format, badgeData);
         return;
