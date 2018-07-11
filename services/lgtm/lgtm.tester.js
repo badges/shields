@@ -2,7 +2,7 @@
 
 const Joi = require('joi');
 const ServiceTester = require('../service-tester');
-
+const { invalidJSON } = require('../response-fixtures');
 const t = new ServiceTester({ id: 'lgtm', title: 'LGTM' })
 module.exports = t;
 
@@ -54,7 +54,7 @@ t.create('alerts: invalid json')
   .get('/alerts/g/apache/cloudstack.json')
   .intercept(nock => nock('https://lgtm.com')
     .get('/api/v0.1/project/g/apache/cloudstack/details')
-    .reply(200, 'not a json string'))
+    .reply(invalidJSON))
   .expectJSON({ name: 'lgtm', value: 'invalid' });
 
 t.create('alerts: lgtm inaccessible')
@@ -80,7 +80,7 @@ t.create('grade: invalid json')
   .get('/grade/java/g/apache/cloudstack.json')
   .intercept(nock => nock('https://lgtm.com')
     .get('/api/v0.1/project/g/apache/cloudstack/details')
-    .reply(200, 'not a json string'))
+    .reply(invalidJSON))
   .expectJSON({ name: 'code quality: java', value: 'invalid' });
 
 t.create('grade: json missing languages')
