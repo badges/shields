@@ -62,7 +62,6 @@ const {
 } = require('./lib/color-formatters');
 const {
   makeColorB,
-  isSixHex: sixHex,
   makeLabel: getLabel,
   makeLogo: getLogo,
   makeBadgeData: getBadgeData,
@@ -7880,16 +7879,9 @@ function(data, match, end, ask) {
   // Badge creation.
   try {
     var badgeData = getBadgeData(subject, data);
-    badgeData.colorscheme = undefined;
     if (data.label !== undefined) { badgeData.text[0] = '' + data.label; }
     badgeData.text[1] = status;
-    if (badgeData.colorB === undefined) {
-      if (sixHex(color)) {
-        badgeData.colorB = '#' + color;
-      } else if (badgeData.colorA === undefined) {
-        badgeData.colorscheme = color;
-      }
-    }
+    setBadgeColor(badgeData, color);
     badgeData.template = data.style;
     if (config.profiling.makeBadge) {
       console.time('makeBadge total');

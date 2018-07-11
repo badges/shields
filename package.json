@@ -28,6 +28,7 @@
     "escape-string-regexp": "^1.0.5",
     "glob": "^7.1.1",
     "gm": "^1.23.0",
+    "is-css-color": "^1.0.0",
     "js-yaml": "^3.11.0",
     "json-autosave": "~1.1.2",
     "jsonpath": "~1.0.0",
