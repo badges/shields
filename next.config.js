@@ -32,5 +32,5 @@ module.exports = {
   exportPathMap: () => ({
     '/': { page: '/' },
   }),
-  assetPrefix,
+  assetPrefix: assetPrefix,
 };
