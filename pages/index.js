@@ -8,6 +8,7 @@ export default class IndexPage extends ExamplesPage {
   constructor(props) {
     super(props);
     this.state.searchReady = false;
+    this.searchTimeout = 0;
   }
 
   getBody() {
@@ -31,7 +32,8 @@ export default class IndexPage extends ExamplesPage {
           longCache={longCache} />
         );
       } else {
-        window.setTimeout(function() {
+        window.clearTimeout(this.searchTimeout);
+        this.searchTimeout = window.setTimeout(function() {
           this.setState({searchReady: true});
         }.bind(this), 500);
         return 'searching...';
