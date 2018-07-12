@@ -193,9 +193,10 @@ Related projects
 ----------------
 
 - [badgerbadgerbadger gem][gem]
+- [pybadges python library][pybadges]
 
 [gem]: https://github.com/badges/badgerbadgerbadger
-
+[pybadges]: https://github.com/google/pybadges
 
 License
 -------

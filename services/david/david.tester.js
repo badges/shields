@@ -2,7 +2,7 @@
 
 const Joi = require('joi');
 const ServiceTester = require('../service-tester');
-
+const { invalidJSON } = require('../response-fixtures');
 const isDependencyStatus = Joi.string().valid('insecure', 'up to date', 'out of date');
 
 const t = new ServiceTester({ id: 'david', title: 'David' });
@@ -65,6 +65,6 @@ t.create('david dependencies (unexpected response)')
   .get('/expressjs/express.json')
   .intercept(nock => nock('https://david-dm.org')
     .get('/expressjs/express/info.json')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'dependencies', value: 'invalid'});
