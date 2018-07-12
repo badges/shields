@@ -357,7 +357,7 @@ t.create('bounties (unexpected response)')
     .get('/teams/mozilla-core')
     .reply(invalidJSON)
   )
-.expectJSON({name: 'bounties', value: 'invalid'});
+  .expectJSON({ name: 'bounties', value: 'invalid' });
 ```
 
 Further reading
