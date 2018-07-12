@@ -40,7 +40,7 @@ deploy-gh-pages:
 	git worktree prune
 	LONG_CACHE=true \
 		BASE_URL=https://img.shields.io \
-		NEXT_ASSET_PREFIX=https://badges.github.io/shields \
+		NEXT_ASSET_PREFIX=https://shields.io \
 		npm run build
 	git worktree add -B gh-pages ${DEPLOY_TEMP}
 	git -C ${DEPLOY_TEMP} ls-files | xargs git -C ${DEPLOY_TEMP} rm
