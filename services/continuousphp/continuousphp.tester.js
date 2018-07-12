@@ -11,14 +11,14 @@ t.create('build status on default branch')
   .get('/git-hub/doctrine/dbal.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: isBuildStatus
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
   }));
 
 t.create('build status on named branch')
   .get('/git-hub/doctrine/dbal/develop.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: isBuildStatus
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
   }));
 
 t.create('unknown repo')

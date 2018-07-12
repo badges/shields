@@ -16,14 +16,14 @@ t.create('build status on default branch')
   .get('/rust-lang/rust.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: isBuildStatus
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
   }));
 
 t.create('build status on named branch')
   .get('/rust-lang/rust/stable.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: isBuildStatus
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
   }));
 
 t.create('unknown repo')
@@ -48,14 +48,14 @@ t.create('build status on default branch')
   .get('/com/ivandelabeldad/rackian-gateway.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: isBuildStatus
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
   }));
 
 t.create('build status on named branch')
   .get('/com/ivandelabeldad/rackian-gateway.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: isBuildStatus
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
   }));
 
 t.create('unknown repo')

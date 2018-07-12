@@ -11,21 +11,21 @@ t.create('build status')
   .get('/pip.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'docs',
-    value: isBuildStatus
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
   }));
 
 t.create('build status for named version')
   .get('/pip/stable.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'docs',
-    value: isBuildStatus
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
   }));
 
 t.create('build status for named semantic version')
   .get('/scrapy/1.0.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'docs',
-    value: isBuildStatus
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
   }));
 
 t.create('unknown project')

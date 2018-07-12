@@ -69,7 +69,9 @@ const isFormattedDate = Joi.alternatives().try(
 
 const isDependencyState = withRegex(/^(\d+ out of date|\d+ deprecated|up to date)$/);
 
-const isBuildStatus = withRegex(/^(building|cancelled|error|expired|fail(ed|ing)|no tests|not (built|run)|passing|pending|processing|queued|running|scheduled|skipped|stopped|success|timeout|unknown|unstable|waiting)$/);
+const isBuildStatus = Joi.equal('building', 'cancelled', 'error', 'expired', 'failed', 'failing', 'no tests',  
+                                'not built', 'not run', 'passing', 'pending', 'processing', 'queued', 'running',  
+                                'scheduled', 'skipped', 'stopped', 'success', 'timeout', 'unstable', 'waiting');
 
 module.exports = {
   isSemver,

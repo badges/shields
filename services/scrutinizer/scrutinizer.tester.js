@@ -42,14 +42,14 @@ t.create('build')
   .get('/build/g/filp/whoops.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: isBuildStatus,
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
   }));
 
 t.create('build (branch)')
   .get('/build/g/phpmyadmin/phpmyadmin/master.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: isBuildStatus,
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
   }));
 
 t.create('project not found')

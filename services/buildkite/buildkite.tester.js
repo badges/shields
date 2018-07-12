@@ -15,14 +15,14 @@ t.create('buildkite valid pipeline')
   .get('/3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489/master.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: isBuildStatus
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown'))
   }));
 
 t.create('buildkite valid pipeline skipping branch')
   .get('/3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: isBuildStatus
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown'))
   }));
 
 t.create('buildkite unknown branch')
