@@ -42,7 +42,7 @@ t.create('invalid App ID')
 
 t.create('server error')
   .get('/AppID/branch.json?token=token')
-  .intercept(nock => nock('https://www.bitrise.io')
+  .intercept(nock => nock('https://app.bitrise.io')
     .get('/app/AppID/status.json?token=token&branch=branch')
     .reply(500, 'Something went wrong'))
   .expectJSON({ name: 'bitrise', value: 'inaccessible' });
