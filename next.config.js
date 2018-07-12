@@ -32,5 +32,10 @@ module.exports = {
   exportPathMap: () => ({
     '/': { page: '/' },
   }),
-  assetPrefix: assetPrefix,
 };
+
+// Avoid setting an `undefined` value. This causes
+// `TypeError: Cannot read property 'replace' of undefined` at build time.
+if (assetPrefix) {
+  module.exports.assetPrefix = assetPrefix;
+}
