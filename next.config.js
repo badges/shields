@@ -1,6 +1,7 @@
 const envFlag = require('node-env-flag');
 const webpack = require('webpack');
 const shouldAnalyze = envFlag(process.env.ANALYZE);
+const assetPrefix = process.env.NEXT_ASSET_PREFIX;
 
 module.exports = {
   webpack: config => {
@@ -22,9 +23,14 @@ module.exports = {
       loader: 'json-loader',
     });
 
+    if (assetPrefix) {
+      config.output.publicPath = `${assetPrefix}/${config.output.publicPath}`;
+    }
+
     return config;
   },
   exportPathMap: () => ({
     '/': { page: '/' },
   }),
+  assetPrefix,
 };

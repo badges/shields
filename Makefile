@@ -1,5 +1,7 @@
 SHELL:=/bin/bash
 
+DEPLOY_TEMP=${TMPDIR}shields-deploy
+
 all: website favicon test
 
 favicon:
@@ -8,7 +10,7 @@ favicon:
 website:
 	LONG_CACHE=false npm run build
 
-deploy: website deploy-s0 deploy-s1 deploy-s2 deploy-gh-pages
+deploy: website deploy-s0 deploy-s1 deploy-s2 deploy-gh-pages deploy-gh-pages-clean
 
 deploy-s0:
 	# Ship a copy of the front end to each server for debugging.
@@ -34,17 +36,25 @@ deploy-s2:
 	git checkout master
 
 deploy-gh-pages:
-	(LONG_CACHE=true BASE_URL=https://img.shields.io npm run build && \
-	git checkout -B gh-pages master && \
-	cp build/index.html index.html && \
-	cp -r build/_next next && \
-	pushd next/*/page && mv {_,}error && popd && \
-	sed -i 's,/_next/,./next/,g' index.html $$(find next -type f) && \
-	sed -i 's,_error,error,g' index.html $$(find next -type f) && \
-	git add -f build index.html next && \
-	git commit -m '[DEPLOY] Build index.html' && \
-	git push -f origin gh-pages:gh-pages) || git checkout master
-	git checkout master
+	rm -rf ${DEPLOY_TEMP}
+	git worktree prune
+	LONG_CACHE=true \
+		BASE_URL=https://img.shields.io \
+		NEXT_ASSET_PREFIX=https://badges.github.io/shields \
+		npm run build
+	git worktree add -B gh-pages ${DEPLOY_TEMP}
+	git -C ${DEPLOY_TEMP} ls-files | xargs git -C ${DEPLOY_TEMP} rm
+	git -C ${DEPLOY_TEMP} commit -m '[DEPLOY] Completely clean the index'
+	cp -r build/* ${DEPLOY_TEMP}
+	echo shields.io > ${DEPLOY_TEMP}/CNAME
+	touch ${DEPLOY_TEMP}/.nojekyll
+	git -C ${DEPLOY_TEMP} add .
+	git -C ${DEPLOY_TEMP} commit -m '[DEPLOY] Add built site'
+	git push -f origin gh-pages
+
+deploy-gh-pages-clean:
+	rm -rf $DEPLOY_TEMP
+	git worktree prune
 
 deploy-heroku:
 	git add -f Verdana.ttf private/secret.json build/
