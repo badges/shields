@@ -4,6 +4,7 @@ const Joi = require('joi');
 const ServiceTester = require('../service-tester');
 const t = new ServiceTester({ id: 'buildkite', title: 'Buildkite Builds' });
 const { invalidJSON } = require('../response-fixtures');
+const { isBuildStatus } = require('../test-validators');
 module.exports = t;
 
 t.create('buildkite invalid pipeline')
@@ -14,14 +15,14 @@ t.create('buildkite valid pipeline')
   .get('/3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489/master.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: Joi.equal('failing', 'passing', 'unknown')
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown'))
   }));
 
 t.create('buildkite valid pipeline skipping branch')
   .get('/3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: Joi.equal('failing', 'passing', 'unknown')
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown'))
   }));
 
 t.create('buildkite unknown branch')

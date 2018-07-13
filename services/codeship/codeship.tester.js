@@ -2,8 +2,7 @@
 
 const Joi = require('joi');
 const ServiceTester = require('../service-tester');
-
-const isBuildStatus = Joi.string().regex(/^(passing|pending|failing|not built)$/);
+const { isBuildStatus } = require('../test-validators');
 
 const t = new ServiceTester({ id: 'codeship', title: 'codeship' });
 module.exports = t;

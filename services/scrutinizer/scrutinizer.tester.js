@@ -3,9 +3,9 @@
 const Joi = require('joi');
 const ServiceTester = require('../service-tester');
 const {
+  isBuildStatus,
   isIntegerPercentage
 } = require('../test-validators');
-const isBuildStatus = Joi.string().regex(/^(passing|failed|error|pending|unknown)$/);
 
 const t = new ServiceTester({ id: 'scrutinizer', title: 'Scrutinizer' });
 module.exports = t;
@@ -42,14 +42,14 @@ t.create('build')
   .get('/build/g/filp/whoops.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: isBuildStatus,
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
   }));
 
 t.create('build (branch)')
   .get('/build/g/phpmyadmin/phpmyadmin/master.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: isBuildStatus,
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
   }));
 
 t.create('project not found')
