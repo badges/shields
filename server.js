@@ -3476,17 +3476,18 @@ cache(function(query_data, match, sendBadge, request) {
   var repo = match[4];
   var branch = match[5] || 'master';
   var format = match[6];
+  var hasTokens = !!githubAuth.getTokenDebugInfo({ sanitize: false }).tokens.length
   var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/contents/' + type + '.json?ref=' + branch;
   var badgeData = getBadgeData(type, query_data);
-  githubAuth.request(request, apiUrl, { }, function(err, res, buffer) {
+  var requestCallback = function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
       return;
     }
     try {
-      var response_data = JSON.parse(buffer);
-      var json_data = JSON.parse(Buffer.from(response_data.content, 'base64').toString('utf-8'));
+      var json_data = JSON.parse(buffer);
+      if (hasTokens) json_data = JSON.parse(Buffer.from(json_data.content, 'base64'));
       switch(info) {
         case 'v':
         case 'version':
@@ -3509,7 +3510,9 @@ cache(function(query_data, match, sendBadge, request) {
       badgeData.text[1] = 'invalid data';
       sendBadge(format, badgeData);
     }
-  });
+  }
+  if (hasTokens) githubAuth.request(request, apiUrl, { }, requestCallback);
+  else request(apiUrl, requestCallback);
 }));
 
 // GitHub contributors integration.
