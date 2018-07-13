@@ -4536,11 +4536,11 @@ cache(function(data, match, sendBadge, request) {
   var options = {
     json: true,
     uri: scheme + '://' + host + '/job/' + job
-      + '/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]'
+      + '/lastBuild/api/json?tree=actions%5BfailCount,skipCount,totalCount%5D'
   };
   if (job.indexOf('/') > -1 ) {
     options.uri = scheme + '://' + host + '/' + job
-      + '/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]';
+      + '/lastBuild/api/json?tree=actions%5BfailCount,skipCount,totalCount%5D';
   }
 
   if (serverSecrets && serverSecrets.jenkins_user) {
