@@ -3477,7 +3477,7 @@ cache(function(query_data, match, sendBadge, request) {
   var branch = match[5] || 'master';
   var format = match[6];
   var hasTokens = !!githubAuth.getTokenDebugInfo({ sanitize: false }).tokens.length;
-  var apiUrl = hasToken
+  var apiUrl = hasTokens
     ? githubApiUrl + '/repos/' + user + '/' + repo + '/contents/' + type + '.json?ref=' + branch
     : 'https://raw.githubusercontent.com/' + user + '/' + repo + '/' + branch + '/' + type + '.json';
   var badgeData = getBadgeData(type, query_data);
