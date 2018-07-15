@@ -4,7 +4,7 @@ const BaseService = require('../base');
 
 module.exports = class Time extends BaseService {
 
-  async handle({library}) {
+  async handle() {
     return { message: new Date() };
   }
 
