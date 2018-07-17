@@ -5334,84 +5334,50 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // apm download integration.
-camp.route(/^\/apm\/dm\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/apm\/(dm|l|v)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `vim-mode`.
-  var format = match[2];
-  var apiUrl = 'https://atom.io/api/packages/' + repo;
-  var badgeData = getBadgeData('downloads', data);
+  const info = match[1];
+  const repo = match[2]; // eg, `vim-mode`.
+  const format = match[3];
+  const apiUrl = 'https://atom.io/api/packages/' + repo;
+  let badgeData = getBadgeData('apm', data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'package not found')) {
       sendBadge(format, badgeData);
       return;
     }
     try {
-      var dls = JSON.parse(buffer).downloads;
+      const json = JSON.parse(buffer);
+      switch(info){
+        case 'dm':
+          badgeData.text[0] = getLabel('downloads', data);
+          var downloads = json.downloads;
+          badgeData.text[1] = metric(downloads);
+          badgeData.colorscheme = 'green';
+          break;
+        case 'v':
+          var version = json.releases.latest;
+          if (!version)
+            throw Error('Invalid version');
+          badgeData.text[1] = versionText(version);
+          badgeData.colorscheme = versionColor(version);
+          break;
+        case 'l':
+          badgeData.text[0] = getLabel('license', data);
+          var license = json.metadata.license;
+          if (!license)
+            throw Error('Invalid licence');
+          badgeData.text[1] = license;
+          badgeData.colorscheme = 'blue';
+          break;
+        default:
+          throw Error('Invalid info requested');
+      }
+      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
-      return;
     }
-    badgeData.text[1] = metric(dls);
-    badgeData.colorscheme = 'green';
-    sendBadge(format, badgeData);
-  });
-}));
-
-// apm version integration.
-camp.route(/^\/apm\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `vim-mode`.
-  var format = match[2];
-  var apiUrl = 'https://atom.io/api/packages/' + repo;
-  var badgeData = getBadgeData('apm', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var releases = JSON.parse(buffer).releases;
-      var version = releases.latest;
-      if (!version)
-        throw Error('Invalid version');
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
-    }
-    badgeData.text[1] = versionText(version);
-    badgeData.colorscheme = versionColor(version);
-    sendBadge(format, badgeData);
-  });
-}));
-
-// apm license integration.
-camp.route(/^\/apm\/l\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `vim-mode`.
-  var format = match[2];
-  var apiUrl = 'https://atom.io/api/packages/' + repo;
-  var badgeData = getBadgeData('license', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var metadata = JSON.parse(buffer).metadata;
-      var license = metadata.license;
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
-    }
-    badgeData.text[1] = license;
-    badgeData.colorscheme = 'blue';
-    sendBadge(format, badgeData);
   });
 }));
 
