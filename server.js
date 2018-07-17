@@ -5375,6 +5375,8 @@ cache(function(data, match, sendBadge, request) {
     try {
       var releases = JSON.parse(buffer).releases;
       var version = releases.latest;
+      if (!version)
+        throw Error('Invalid version');
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
