@@ -7,7 +7,7 @@ all: website favicon test
 favicon:
 	node lib/badge-cli.js '' '' '#bada55' .png > favicon.png
 
-website:
+website: favicon
 	LONG_CACHE=false npm run build
 
 deploy: website deploy-s0 deploy-s1 deploy-s2 deploy-gh-pages deploy-gh-pages-clean
@@ -46,6 +46,7 @@ deploy-gh-pages:
 	git -C ${DEPLOY_TEMP} ls-files | xargs git -C ${DEPLOY_TEMP} rm
 	git -C ${DEPLOY_TEMP} commit -m '[DEPLOY] Completely clean the index'
 	cp -r build/* ${DEPLOY_TEMP}
+	cp favicon.png ${DEPLOY_TEMP}
 	echo shields.io > ${DEPLOY_TEMP}/CNAME
 	touch ${DEPLOY_TEMP}/.nojekyll
 	git -C ${DEPLOY_TEMP} add .
