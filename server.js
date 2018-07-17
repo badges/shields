@@ -5333,54 +5333,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// apm download integration.
-camp.route(/^\/apm\/(dm|l|v)\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  const info = match[1];
-  const repo = match[2]; // eg, `vim-mode`.
-  const format = match[3];
-  const apiUrl = 'https://atom.io/api/packages/' + repo;
-  let badgeData = getBadgeData('apm', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'package not found')) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      const json = JSON.parse(buffer);
-      switch(info){
-        case 'dm':
-          badgeData.text[0] = getLabel('downloads', data);
-          var downloads = json.downloads;
-          badgeData.text[1] = metric(downloads);
-          badgeData.colorscheme = 'green';
-          break;
-        case 'v':
-          var version = json.releases.latest;
-          if (!version)
-            throw Error('Invalid version');
-          badgeData.text[1] = versionText(version);
-          badgeData.colorscheme = versionColor(version);
-          break;
-        case 'l':
-          badgeData.text[0] = getLabel('license', data);
-          var license = json.metadata.license;
-          if (!license)
-            throw Error('Invalid licence');
-          badgeData.text[1] = license;
-          badgeData.colorscheme = 'blue';
-          break;
-        default:
-          throw Error('Invalid info requested');
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 //vscode-marketplace download/version/rating integration
 camp.route(/^\/vscode-marketplace\/(d|v|r|stars)\/(.*)\.(svg|png|gif|jpg|json)$/,
   cache(function (data, match, sendBadge, request) {
