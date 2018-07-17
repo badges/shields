@@ -24,7 +24,7 @@ t.create('License')
 
 t.create('Downloads | Package not found')
   .get('/dm/notapackage.json')
-  .expectJSON({ name: 'apm', value: 'package not found' });
+  .expectJSON({ name: 'downloads', value: 'package not found' });
 
 t.create('Version | Package not found')
   .get('/v/notapackage.json')
@@ -32,7 +32,7 @@ t.create('Version | Package not found')
 
 t.create('License | Package not found')
   .get('/l/notapackage.json')
-  .expectJSON({ name: 'apm', value: 'package not found' });
+  .expectJSON({ name: 'license', value: 'package not found' });
 
 t.create('Connection error')
   .get('/v/vim-mode.json')
@@ -48,10 +48,10 @@ t.create('Invalid version')
       '{"releases":{}}'
     ])
   )
-  .expectJSON({name: 'apm', value: 'invalid'});
+  .expectJSON({name: 'downloads', value: 'invalid'});
 
 t.create('Invalid License')
-  .get('/dm/vim-mode.json')
+  .get('/l/vim-mode.json')
   .intercept(nock => nock('https://atom.io')
     .get('/api/packages/vim-mode')
     .reply([
@@ -59,7 +59,7 @@ t.create('Invalid License')
       '{"metadata":{}}'
     ])
   )
-  .expectJSON({name: 'apm', value: 'invalid'});
+  .expectJSON({name: 'license', value: 'invalid'});
 
 t.create('Unexpected response')
   .get('/dm/vim-mode.json')
@@ -67,4 +67,4 @@ t.create('Unexpected response')
     .get('/api/packages/vim-mode')
     .reply(invalidJSON)
   )
-  .expectJSON({name: 'apm', value: 'invalid'});
+  .expectJSON({name: 'downloads', value: 'invalid'});
