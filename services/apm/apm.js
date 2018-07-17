@@ -89,9 +89,13 @@ class APMLicense extends BaseJsonService {
       throw Error('Invalid license');
     return {message: license, color: 'blue'};
   }
+
+  static get defaultBadgeData() {
+    return { label: 'license' };
+  }
   
   static get category() {
-    return 'license';
+    return 'miscellaneous';
   }
 
   static get url() {
