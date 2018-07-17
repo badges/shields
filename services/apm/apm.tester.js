@@ -18,7 +18,7 @@ t.create('Version')
   .get('/v/vim-mode.json')
   .expectJSONTypes(Joi.object().keys({ name: 'apm', value: isVPlusTripleDottedVersion }));
 
-t.create('Licence')
+t.create('License')
   .get('/l/vim-mode.json')
   .expectJSON({ name: 'license', value: 'MIT' });
 
@@ -30,7 +30,7 @@ t.create('Version | Package not found')
   .get('/v/notapackage.json')
   .expectJSON({ name: 'apm', value: 'package not found' });
 
-t.create('Licence | Package not found')
+t.create('License | Package not found')
   .get('/l/notapackage.json')
   .expectJSON({ name: 'apm', value: 'package not found' });
 
@@ -50,7 +50,7 @@ t.create('Invalid version')
   )
   .expectJSON({name: 'apm', value: 'invalid'});
 
-t.create('Invalid licence')
+t.create('Invalid License')
   .get('/dm/vim-mode.json')
   .intercept(nock => nock('https://atom.io')
     .get('/api/packages/vim-mode')
