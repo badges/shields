@@ -7247,7 +7247,15 @@ cache({
       sendBadge(format, badgeData);
       return;
     }
-    var url = encodeURI(decodeURIComponent(query.url || query.uri));
+
+    try {
+      var url = encodeURI(decodeURIComponent(query.url || query.uri));
+    } catch(e){
+      setBadgeColor(badgeData, 'red');
+      badgeData.text[1] = 'malformed url';
+      sendBadge(format, badgeData);
+      return;
+    }
 
     switch (type) {
       case 'json':
