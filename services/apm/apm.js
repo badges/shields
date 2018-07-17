@@ -32,6 +32,9 @@ class APMDownloads extends BaseJsonService {
     return [
       {
         previewUrl: 'dm/vim-mode',
+        keywords: [
+          'atom'
+        ]
       },
     ];
   }
@@ -68,6 +71,9 @@ class APMVersion extends BaseJsonService {
     return [
       {
         previewUrl: 'v/vim-mode',
+        keywords: [
+          'atom'
+        ]
       },
     ];
   }
@@ -100,6 +106,9 @@ class APMLicense extends BaseJsonService {
     return [
       {
         previewUrl: 'l/vim-mode',
+        keywords: [
+          'atom'
+        ]
       },
     ];
   }
