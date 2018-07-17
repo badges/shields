@@ -28,7 +28,4 @@ module.exports = class Time extends BaseService {
     };
   }
 
-  static get examples() {
-    return [];
-  }
 };
