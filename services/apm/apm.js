@@ -1,6 +1,7 @@
 'use strict';
 
 const { BaseJsonService } = require('../base');
+const { InvalidResponse } = require('../errors');
 const { version: versionColor } = require('../../lib/color-formatters');
 const {
   metric,
@@ -47,7 +48,7 @@ class APMVersion extends BaseJsonService {
 
     const version = json.releases.latest;
     if (!version)
-      throw InvalidResponse('Invalid version');
+      throw new InvalidResponse({ underlyingError: new Error('version is invalid') });
     return {message: addv(version), color: versionColor(version)};
   }
 
@@ -86,7 +87,7 @@ class APMLicense extends BaseJsonService {
 
     const license = json.metadata.license;
     if (!license)
-      throw InvalidResponse('Invalid license');
+      throw new InvalidResponse({ underlyingError: new Error('licence is invalid') });
     return {message: license, color: 'blue'};
   }
 
