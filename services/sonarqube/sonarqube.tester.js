@@ -38,9 +38,9 @@ t.create('Coverage (legacy API supported)')
   }));
 
 t.create('Tech Debt (legacy API unsupported)')
-  .get('/4.2/http/sonarqube.com/com.github.dannil:scb-java-client/tech_debt.json')
+  .get('/4.2/https/sonarqube.com/com.github.dannil:scb-java-client/tech_debt.json')
   .expectJSON({ name: 'tech debt', value: 'invalid' });
 
 t.create('Coverage (legacy API unsupported)')
-  .get('/4.2/http/sonarqube.com/com.github.dannil:scb-java-client/coverage.json')
+  .get('/4.2/https/sonarqube.com/com.github.dannil:scb-java-client/coverage.json')
   .expectJSON({ name: 'coverage', value: 'invalid' });

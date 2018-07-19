@@ -3,7 +3,7 @@
 const Joi = require('joi');
 const ServiceTester = require('../service-tester');
 const { invalidJSON } = require('../response-fixtures');
-const isBuildStatus = Joi.string().regex(/^(passing|failed|no tests|scheduled|not run)$/);
+const { isBuildStatus } = require('../test-validators');
 
 const t = new ServiceTester({ id: 'circleci', title: 'Circle CI' });
 module.exports = t;

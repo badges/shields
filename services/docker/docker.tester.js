@@ -7,8 +7,8 @@ const mapValues = require('lodash.mapvalues');
 
 const { isMetric } = require('../test-validators');
 const { invalidJSON } = require('../response-fixtures');
+const { isBuildStatus } = require('../test-validators');
 const isAutomatedBuildStatus = Joi.string().valid('automated', 'manual');
-const isBuildStatus = Joi.string().regex(/^(passing|failing|building)$/);
 const colorsB = mapValues(colorscheme, 'colorB');
 
 const t = new ServiceTester({ id: 'docker', title: 'Docker Hub' });

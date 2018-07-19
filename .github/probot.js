@@ -5,4 +5,4 @@ on('pull_request.closed')
 Deploys usually happen every few weeks. After deployment changes are copied to [gh-pages]({{ repository.html_url }}/tree/gh-pages) branch. 
 
 This badge displays deployment status:
-![](https://shields-deployment.now.sh/github/commit-status/{{ repository.full_name }}/gh-pages/{{ pull_request.merge_commit_sha }}.svg?label=deploy%20status)`)
+![](https://img.shields.io/github/commit-status/{{ repository.full_name }}/gh-pages/{{ pull_request.merge_commit_sha }}.svg?label=deploy%20status)`)
