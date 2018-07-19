@@ -47,7 +47,7 @@ class APMVersion extends BaseJsonService {
 
     const version = json.releases.latest;
     if (!version)
-      throw Error('Invalid version');
+      throw InvalidResponse('Invalid version');
     return {message: addv(version), color: versionColor(version)};
   }
 
@@ -86,7 +86,7 @@ class APMLicense extends BaseJsonService {
 
     const license = json.metadata.license;
     if (!license)
-      throw Error('Invalid license');
+      throw InvalidResponse('Invalid license');
     return {message: license, color: 'blue'};
   }
 
