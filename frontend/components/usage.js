@@ -5,8 +5,6 @@ import DynamicBadgeMaker from './dynamic-badge-maker';
 import { staticBadgeUrl } from '../lib/badge-url';
 import { advertisedStyles } from '../../lib/supported-features';
 
-const maxAge = parseInt(process.env.BADGE_MAX_AGE_SECONDS) || 0;
-
 export default class Usage extends React.PureComponent {
   static propTypes = {
     baseUri: PropTypes.string.isRequired,
@@ -204,7 +202,7 @@ export default class Usage extends React.PureComponent {
               <td>
                 <code>?maxAge=3600</code>
               </td>
-              <td>Set the HTTP cache lifetime in secs (values below {maxAge} will be ignored)</td>
+              <td>Set the HTTP cache lifetime in secs (values below the default will be ignored)</td>
             </tr>
           </tbody>
         </table>
