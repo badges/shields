@@ -5,6 +5,7 @@ DEPLOY_TEMP=${TMPDIR}shields-deploy
 all: website favicon test
 
 favicon:
+	# This isn't working right now. See https://github.com/badges/shields/issues/1788
 	node lib/badge-cli.js '' '' '#bada55' .png > favicon.png
 
 website:
