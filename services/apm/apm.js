@@ -1,7 +1,7 @@
 'use strict';
 
 const { BaseJsonService } = require('../base');
-const { version: versionColor} = require('../../lib/color-formatters');
+const { version: versionColor } = require('../../lib/color-formatters');
 const {
   metric,
   addv
