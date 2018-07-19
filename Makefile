@@ -10,7 +10,7 @@ favicon:
 website: favicon
 	LONG_CACHE=false npm run build
 
-deploy: website deploy-s0 deploy-s1 deploy-s2 deploy-gh-pages deploy-gh-pages-clean
+deploy: deploy-s0 deploy-s1 deploy-s2 favicon deploy-gh-pages deploy-gh-pages-clean
 
 deploy-s0:
 	# Ship a copy of the front end to each server for debugging.
