@@ -7,7 +7,7 @@ all: website favicon test
 favicon:
 	node lib/badge-cli.js '' '' '#bada55' .png > favicon.png
 
-website: favicon
+website:
 	LONG_CACHE=false npm run build
 
 # `website` is needed for the server deploys.
