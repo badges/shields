@@ -24,6 +24,10 @@ t.create('No query specified')
   .get('.json?url=https://github.com/badges/shields/raw/master/package.json&label=Package Name&style=_shields_test')
   .expectJSON({ name: 'Package Name', value: 'no query specified', colorB: colorsB.red });
 
+t.create('Malformed url')
+  .get('.json?url=https://github.com/badges/shields/raw/master/%0package.json&query=$.name&label=Package Name&style=_shields_test')
+  .expectJSON({ name: 'Package Name', value: 'malformed url', colorB: colorsB.red });
+
 t.create('JSON from url')
   .get('.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.name&style=_shields_test')
   .expectJSON({ name: 'custom badge', value: 'gh-badges', colorB: colorsB.brightgreen });

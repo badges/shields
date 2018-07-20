@@ -43,6 +43,7 @@ export default class DynamicBadgeMaker extends React.Component {
           <option value="" disabled>data type</option>
           <option value="json">json</option>
           <option value="xml">xml</option>
+          <option value="yaml">yaml</option>
         </select> {}
         <input
           className="short"
@@ -63,7 +64,7 @@ export default class DynamicBadgeMaker extends React.Component {
           className="short"
           value={this.state.color}
           onChange={event => this.setState({ color: event.target.value })}
-          placeholder="hex color" /> {}
+          placeholder="color" /> {}
         <input
           className="short"
           value={this.state.prefix}

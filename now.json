@@ -1,8 +1,9 @@
 {
   "name": "shields",
   "files": [
-    "*.js",
-    "*.png",
+    "server.js",
+    "favicon.png",
+    "next.config.js",
     "build/",
     "frontend/",
     "lib/",
@@ -11,8 +12,7 @@
     "public/",
     "static/",
     "templates/",
-    "!**/*.spec.js",
-    "!**/*.integration.js"
+    "services/"
   ],
   "env": {
     "PERSISTENCE_DIR": "/tmp/persistence",

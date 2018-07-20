@@ -24,18 +24,18 @@ module.exports = t;
 t.create('total downloads (valid)')
   .get('/dt/ACMESharp.json')
   .expectJSONTypes(Joi.object().keys({
-    name: 'powershellgallery',
+    name: 'downloads',
     value: isMetric,
   }));
 
 t.create('total downloads (not found)')
   .get('/dt/not-a-real-package.json')
-  .expectJSON({name: 'powershellgallery', value: 'not found'});
+  .expectJSON({name: 'downloads', value: 'not found'});
 
 t.create('total downloads (connection error)')
   .get('/dt/ACMESharp.json')
   .networkOff()
-  .expectJSON({name: 'powershellgallery', value: 'inaccessible'});
+  .expectJSON({name: 'downloads', value: 'inaccessible'});
 
 t.create('total downloads (unexpected response)')
   .get('/dt/ACMESharp.json')
@@ -43,7 +43,7 @@ t.create('total downloads (unexpected response)')
     .get("/api/v2/Packages()?$filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true")
     .reply(invalidJSON)
   )
-  .expectJSON({name: 'powershellgallery', value: 'invalid'});
+  .expectJSON({name: 'downloads', value: 'invalid'});
 
 
 // version

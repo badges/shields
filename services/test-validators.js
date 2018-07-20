@@ -67,6 +67,12 @@ const isFormattedDate = Joi.alternatives().try(
   Joi.string().regex(/^last (sun|mon|tues|wednes|thurs|fri|satur)day$/),
   Joi.string().regex(/^(january|february|march|april|may|june|july|august|september|october|november|december)( \d{4})?$/));
 
+const isDependencyState = withRegex(/^(\d+ out of date|\d+ deprecated|up to date)$/);
+
+const isBuildStatus = Joi.equal('building', 'cancelled', 'error', 'expired', 'failed', 'failing', 'no tests',  
+                                'not built', 'not run', 'passing', 'pending', 'processing', 'queued', 'running',  
+                                'scheduled', 'skipped', 'stopped', 'success', 'timeout', 'unstable', 'waiting');
+
 module.exports = {
   isSemver,
   isVPlusTripleDottedVersion,
@@ -83,5 +89,7 @@ module.exports = {
   isIntegerPercentage,
   isDecimalPercentage,
   isFileSize,
-  isFormattedDate
+  isFormattedDate,
+  isDependencyState,
+  isBuildStatus,
 };
