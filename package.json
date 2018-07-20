@@ -2,7 +2,13 @@
   "name": "gh-badges",
   "version": "1.3.0",
   "description": "Official Shields.io badge library.",
-  "keywords": ["GitHub", "badge", "SVG", "image", "shields.io"],
+  "keywords": [
+    "GitHub",
+    "badge",
+    "SVG",
+    "image",
+    "shields.io"
+  ],
   "homepage": "http://shields.io",
   "bugs": {
     "url": "https://github.com/badges/shields/issues",
@@ -48,50 +54,32 @@
     "xpath": "~0.0.27"
   },
   "scripts": {
-    "coverage:test:js":
-      "nyc node_modules/mocha/bin/_mocha \"*.spec.js\" \"lib/**/*.spec.js\" \"services/**/*.spec.js\"",
-    "coverage:test:services":
-      "nyc node_modules/mocha/bin/_mocha --delay lib/service-test-runner/cli.js",
-    "coverage:test":
-      "rimraf .nyc_output coverage; npm run coverage:test:js; npm run coverage:test:services",
-    "coverage:report": "nyc report",
-    "coverage:report:reopen": "opn coverage/lcov-report/index.html",
-    "coverage:report:open":
-      "npm run coverage:report && npm run coverage:report:reopen",
-    "lint": "eslint \"**/*.js\"",
-    "danger": "danger",
-    "test:js:frontend":
-      "NODE_ENV=mocha mocha --require babel-polyfill --require babel-register \"frontend/**/*.spec.js\"",
-    "test:js:server":
-      "HANDLE_INTERNAL_ERRORS=false mocha \"*.spec.js\" \"lib/**/*.spec.js\" \"services/**/*.spec.js\"",
-    "test:services":
-      "HANDLE_INTERNAL_ERRORS=false mocha --delay lib/service-test-runner/cli.js",
-    "test:services:pr:prepare":
-      "node lib/service-test-runner/pull-request-services-cli.js > pull-request-services.log",
-    "test:services:pr:run":
-      "HANDLE_INTERNAL_ERRORS=false mocha --delay lib/service-test-runner/cli.js --stdin < pull-request-services.log",
-    "test:services:pr":
-      "npm run test:services:pr:prepare && npm run test:services:pr:run",
-    "test":
-      "npm run lint && npm run test:js:frontend && npm run test:js:server",
-    "circle-images:build":
-      "docker build -t shieldsio/shields-ci-node-8:${IMAGE_TAG} -f .circleci/images/node-8/Dockerfile . && docker build -t shieldsio/shields-ci-node-latest:${IMAGE_TAG} -f .circleci/images/node-latest/Dockerfile .",
-    "circle-images:push":
-      "docker push shieldsio/shields-ci-node-8:${IMAGE_TAG} && docker push shieldsio/shields-ci-node-latest:${IMAGE_TAG}",
+    "coverage:test:js": "nyc node_modules/mocha/bin/_mocha \"*.spec.js\" \"lib/**/*.spec.js\" \"services/**/*.spec.js\"",
+    "coverage:test:services": "nyc node_modules/mocha/bin/_mocha --delay lib/service-test-runner/cli.js",
+    "coverage:test": "rimraf .nyc_output coverage; npm run coverage:test:js; npm run coverage:test:services",
+    "coverage:report": "nyc report", "coverage:report:reopen": "opn coverage/lcov-report/index.html",
+    "coverage:report:open": "npm run coverage:report && npm run coverage:report:reopen",
+    "lint": "eslint \"**/*.js\"", "danger": "danger",
+    "test:js:frontend": "NODE_ENV=mocha mocha --require babel-polyfill --require babel-register \"frontend/**/*.spec.js\"",
+    "test:js:server": "HANDLE_INTERNAL_ERRORS=false mocha \"*.spec.js\" \"lib/**/*.spec.js\" \"services/**/*.spec.js\"",
+    "test:services": "HANDLE_INTERNAL_ERRORS=false mocha --delay lib/service-test-runner/cli.js",
+    "test:services:pr:prepare": "node lib/service-test-runner/pull-request-services-cli.js > pull-request-services.log",
+    "test:services:pr:run": "HANDLE_INTERNAL_ERRORS=false mocha --delay lib/service-test-runner/cli.js --stdin < pull-request-services.log",
+    "test:services:pr": "npm run test:services:pr:prepare && npm run test:services:pr:run",
+    "test": "npm run lint && npm run test:js:frontend && npm run test:js:server",
+    "circle-images:build": "docker build -t shieldsio/shields-ci-node-8:${IMAGE_TAG} -f .circleci/images/node-8/Dockerfile . && docker build -t shieldsio/shields-ci-node-latest:${IMAGE_TAG} -f .circleci/images/node-latest/Dockerfile .",
+    "circle-images:push": "docker push shieldsio/shields-ci-node-8:${IMAGE_TAG} && docker push shieldsio/shields-ci-node-latest:${IMAGE_TAG}",
     "depcheck": "check-node-version --node \">= 8.0\"",
     "postinstall": "npm run depcheck",
     "prebuild": "npm run depcheck",
     "examples": "node lib/export-badge-examples-cli.js > badge-examples.json",
     "build": "npm run examples && next build && next export -o build/",
     "heroku-postbuild": "npm run build",
-    "analyze":
-      "ANALYZE=true LONG_CACHE=false BASE_URL=https://img.shields.io npm run build",
-    "start:server":
-      "HANDLE_INTERNAL_ERRORS=false RATE_LIMIT=false node server 8080 ::",
+    "analyze": "ANALYZE=true LONG_CACHE=false BASE_URL=https://img.shields.io npm run build",
+    "start:server": "HANDLE_INTERNAL_ERRORS=false RATE_LIMIT=false node server 8080 ::",
     "now-start": "node server",
     "prestart": "npm run depcheck && npm run examples",
-    "start":
-      "concurrently --names server,frontend \"ALLOWED_ORIGIN=http://localhost:3000 npm run start:server\" \"BASE_URL=http://[::]:8080 next dev\""
+    "start": "concurrently --names server,frontend \"ALLOWED_ORIGIN=http://localhost:3000 npm run start:server\" \"BASE_URL=http://[::]:8080 next dev\""
   },
   "bin": {
     "badge": "lib/badge-cli.js"
