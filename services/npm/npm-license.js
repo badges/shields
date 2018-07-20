@@ -16,7 +16,7 @@ const responseSchema = Joi.object({
 
 module.exports = class NpmLicense extends NpmBase {
   static get category() {
-    return 'license';
+    return 'miscellaneous';
   }
 
   static get url() {
