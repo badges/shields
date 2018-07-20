@@ -202,7 +202,7 @@ export default class Usage extends React.PureComponent {
               <td>
                 <code>?maxAge=3600</code>
               </td>
-              <td>Set the HTTP cache lifetime in secs</td>
+              <td>Set the HTTP cache lifetime in secs (values below the default will be ignored)</td>
             </tr>
           </tbody>
         </table>
