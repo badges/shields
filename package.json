@@ -33,7 +33,6 @@
     "json-autosave": "~1.1.2",
     "jsonpath": "~1.0.0",
     "lodash.countby": "^4.6.0",
-    "lodash.flatten": "^4.4.0",
     "lodash.mapkeys": "^4.6.0",
     "lodash.throttle": "^4.1.1",
     "lodash.times": "^4.3.2",
