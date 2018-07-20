@@ -393,7 +393,8 @@ cache(function(data, match, sendBadge, request) {
   const badgeData = getBadgeData('build', data);
   request(options, function(err, res) {
     if (err != null) {
-      log.error(`Travis error: ${err.stack}`);
+      log.error('Travis error: data:' + JSON.stringify(data) +
+        '\nStack: ' + err.stack);
       if (res) { log.error(''+res); }
     }
     if (checkErrorResponse(badgeData, err, res)) {
