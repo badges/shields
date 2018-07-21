@@ -1,10 +1,8 @@
 'use strict';
 
-const {
-  checkErrorResponse,
-  asJson,
-} = require('../../lib/error-helper');
+const { checkErrorResponse, asJson } = require('../../lib/error-helper');
 const { BaseJsonService } = require('../base');
+const { rangeStart, minor } = require('../../lib/version');
 
 // Abstract class for NPM badges which display data about the latest version
 // of a package.
@@ -27,7 +25,7 @@ module.exports = class NpmBase extends BaseJsonService {
     }
   }
 
-  static get defaultRegistryUrl () {
+  static get defaultRegistryUrl() {
     return 'https://registry.npmjs.org';
   }
 
@@ -44,17 +42,77 @@ module.exports = class NpmBase extends BaseJsonService {
     // This uses a custom Accept header because of this bug:
     // <https://github.com/npm/npmjs.org/issues/163>
     return this._sendAndCacheRequest(url, { headers: { Accept: '*/*' } })
-      .then(checkErrorResponse.asPromise({ notFoundMessage: 'package not found' }))
+      .then(
+        checkErrorResponse.asPromise({ notFoundMessage: 'package not found' })
+      )
       .then(asJson);
   }
 
-  static render(packageData, namedParams, queryParams) {
-    throw Error('Subclasses must override')
+  async fetch(namedParams, queryParams) {
+    const { scope, packageName } = namedParams;
+    const {
+      registry_uri: registryUrl = this.constructor.defaultRegistryUrl,
+    } = queryParams;
+
+    if (scope === undefined) {
+      // e.g. https://registry.npmjs.org/express/latest
+      // Use this endpoint as an optimization. It covers the vast majority of
+      // these badges, and the response is smaller.
+      return this._requestJson(`${registryUrl}/${packageName}/latest`);
+    } else {
+      // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
+      // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
+      const scoped = this.constructor.encodeScopedPackage({
+        scope,
+        packageName,
+      });
+      return this._requestJson(`${registryUrl}/${scoped}`);
+    }
+  }
+
+  mapResponseToProps(json, namedParams, queryParams) {
+    const { scope, tag } = namedParams;
+
+    let packageData;
+    if (scope === undefined) {
+      packageData = json;
+    } else {
+      const registryTag = tag || 'latest';
+      const latestVersion = json['dist-tags'][registryTag];
+      packageData = json.versions[latestVersion];
+    }
+
+    let { license } = packageData;
+    if (Array.isArray(license)) {
+      license = license.join(', ');
+    } else if (typeof license === 'object') {
+      license = license.type;
+    }
+
+    const { devDependencies } = packageData;
+    const typeDefinitions = [
+      { name: 'TypeScript', range: devDependencies.typescript },
+      { name: 'Flow', range: devDependencies['flow-bin'] },
+    ]
+      .filter(lang => lang.range !== undefined)
+      .map(({ name, range }) => {
+        return {
+          name,
+          version: minor(rangeStart(range)),
+        };
+      });
+
+    return {
+      license,
+      typeDefinitions,
+    };
   }
 
   async handle(namedParams, queryParams) {
     const { scope, packageName, tag } = namedParams;
-    const { registry_uri: registryUrl = this.constructor.defaultRegistryUrl } = queryParams;
+    const {
+      registry_uri: registryUrl = this.constructor.defaultRegistryUrl,
+    } = queryParams;
 
     let packageData;
     if (scope === undefined) {
@@ -67,7 +125,10 @@ module.exports = class NpmBase extends BaseJsonService {
     } else {
       // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
       // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
-      const scoped = this.constructor.encodeScopedPackage({ scope, packageName });
+      const scoped = this.constructor.encodeScopedPackage({
+        scope,
+        packageName,
+      });
       const url = `${registryUrl}/${scoped}`;
 
       const json = await this._requestJson(url);
@@ -80,4 +141,4 @@ module.exports = class NpmBase extends BaseJsonService {
 
     return this.constructor.render(packageData, namedParams, queryParams);
   }
-}
+};

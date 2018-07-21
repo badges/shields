@@ -2,7 +2,6 @@
 
 const Joi = require('joi');
 const NpmBase = require('./npm-base');
-const { rangeStart, minor } = require('../../lib/version');
 
 const responseSchema = Joi.object({
   devDependencies: Joi.object().pattern(/./, Joi.string()),
@@ -22,11 +21,13 @@ module.exports = class NpmTypeDefinitions extends NpmBase {
   }
 
   static get examples() {
-    return [{
-      title: 'npm type definitions',
-      previewUrl: 'chalk',
-      keywords: ['node', 'typescript', 'flow'],
-    }];
+    return [
+      {
+        title: 'npm type definitions',
+        previewUrl: 'chalk',
+        keywords: ['node', 'typescript', 'flow'],
+      },
+    ];
   }
 
   static get responseSchema() {

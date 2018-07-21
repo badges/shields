@@ -6,7 +6,9 @@ const { version: versionColor } = require('../../lib/color-formatters');
 const NpmBase = require('./npm-base');
 
 // Joi.string should be a semver.
-const responseSchema = Joi.object().pattern(/./, Joi.string()).required();
+const responseSchema = Joi.object()
+  .pattern(/./, Joi.string())
+  .required();
 
 module.exports = class NpmVersion extends NpmBase {
   static get category() {
@@ -25,7 +27,7 @@ module.exports = class NpmVersion extends NpmBase {
     return [
       {
         previewUrl: 'npm',
-        keywords: ['node']
+        keywords: ['node'],
       },
       {
         title: 'npm (scoped)',
@@ -81,17 +83,19 @@ module.exports = class NpmVersion extends NpmBase {
 
   async handle(namedParams, queryParams) {
     const { scope, packageName } = namedParams;
-    const { registry_uri: registryUrl = this.constructor.defaultRegistryUrl } = queryParams;
+    const {
+      registry_uri: registryUrl = this.constructor.defaultRegistryUrl,
+    } = queryParams;
 
-    const slug = scope === undefined
-      ? packageName
-      : this.constructor.encodeScopedPackage({ scope, packageName });
+    const slug =
+      scope === undefined
+        ? packageName
+        : this.constructor.encodeScopedPackage({ scope, packageName });
     const url = `${registryUrl}/-/package/${slug}/dist-tags`;
 
     let packageData = await this._requestJson(url);
-console.log('packageData', packageData)
     packageData = this.constructor.validateResponse(packageData);
 
     return this.constructor.render(packageData, namedParams, queryParams);
   }
-}
+};
