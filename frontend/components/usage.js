@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import StaticBadgeMaker from './static-badge-maker';
 import DynamicBadgeMaker from './dynamic-badge-maker';
 import { staticBadgeUrl } from '../lib/badge-url';
-import { advertisedStyles } from '../../lib/supported-features';
+import { advertisedStyles, logos } from '../../supported-features.json';
 
 export default class Usage extends React.PureComponent {
   static propTypes = {
@@ -160,10 +160,7 @@ export default class Usage extends React.PureComponent {
               <td>
                 <code>?logo=appveyor</code>
               </td>
-              <td>
-                Insert one of the {}
-                <a href="https://github.com/badges/shields/tree/gh-pages/logo">named logos</a>
-              </td>
+              <td>Insert one of the named logos ({logos.join(', ')})</td>
             </tr>
             <tr>
               <td>
