@@ -25,6 +25,7 @@
     "camp": "~17.2.1",
     "chrome-web-store-item-property": "~1.1.2",
     "dot": "~1.1.2",
+    "dotenv": "^6.0.0",
     "escape-string-regexp": "^1.0.5",
     "glob": "^7.1.1",
     "gm": "^1.23.0",

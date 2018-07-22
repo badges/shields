@@ -1,5 +1,12 @@
 'use strict';
 
+const config = require('./lib/server-config');
+const serverSecrets = require('./lib/server-secrets');
+
+const Raven = require('raven');
+Raven.config(process.env.SENTRY_DSN || serverSecrets.sentry_dsn).install();
+Raven.disableConsoleAlerts();
+
 const countBy = require('lodash.countby');
 const dom = require('xmldom').DOMParser;
 const jp = require('jsonpath');
@@ -11,17 +18,11 @@ const semver = require('semver');
 const xml2js = require('xml2js');
 const xpath = require('xpath');
 const yaml = require('js-yaml');
-const Raven = require('raven');
-
-const serverSecrets = require('./lib/server-secrets');
-Raven.config(process.env.SENTRY_DSN || serverSecrets.sentry_dsn).install();
-Raven.disableConsoleAlerts();
 
 const { loadServiceClasses } = require('./services');
 const { isDeprecated, getDeprecatedBadge } = require('./lib/deprecation-helpers');
 const { checkErrorResponse } = require('./lib/error-helper');
 const analytics = require('./lib/analytics');
-const config = require('./lib/server-config');
 const githubAuth = require('./lib/github-auth');
 const sysMonitor = require('./lib/sys/monitor');
 const log = require('./lib/log');
