@@ -28,7 +28,7 @@ const log = require('./lib/log');
 const { makeMakeBadgeFn } = require('./lib/make-badge');
 const { QuickTextMeasurer } = require('./lib/text-measurer');
 const suggest = require('./lib/suggest');
-const {licenseToColor} = require('./lib/licenses');
+const { licenseToColor } = require('./lib/licenses');
 const { latest: latestVersion } = require('./lib/version');
 const {
   compare: phpVersionCompare,
@@ -187,7 +187,7 @@ camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
 });
 
 camp.notfound(/.*/, function(query, match, end, request) {
-  end(null, {template: '404.html'});
+  end(null, { template: '404.html' });
 });
 
 // Vendors.
@@ -1992,7 +1992,7 @@ cache(function(data, match, sendBadge, request) {
         let pattern = /^Development Status :: ([1-7]) - (\S+)$/;
         var statusColors = {
             '1': 'red', '2': 'red', '3': 'red', '4': 'yellow',
-            '5': 'brightgreen', '6': 'brightgreen', '7': 'red'};
+            '5': 'brightgreen', '6': 'brightgreen', '7': 'red' };
         var statusCode = '1', statusText = 'unknown';
         for (let i = 0; i < parsedData.info.classifiers.length; i++) {
           let matched = pattern.exec(parsedData.info.classifiers[i]);
@@ -2904,7 +2904,7 @@ cache(function(data, match, sendBadge, request) {
   var spec = match[2];  // eg, AFNetworking
   var format = match[3];
   var apiUrl = 'https://trunk.cocoapods.org/api/v1/pods/' + spec + '/specs/latest';
-  const typeToLabel = {'v' : 'pod', 'p': 'platform', 'l': 'license'};
+  const typeToLabel = { 'v' : 'pod', 'p': 'platform', 'l': 'license' };
   const badgeData = getBadgeData(typeToLabel[type], data);
   badgeData.colorscheme = null;
   request(apiUrl, function(err, res, buffer) {
@@ -3702,7 +3702,7 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[2];
   var search = match[3];
   var format = match[4];
-  var query = {q: search + ' repo:' + user + '/' + repo};
+  var query = { q: search + ' repo:' + user + '/' + repo };
   var badgeData = getBadgeData(search + ' counter', data);
   githubAuth.request(request, githubApiUrl + '/search/code', query, function(err, res, buffer) {
     if (err != null) {
@@ -5338,7 +5338,7 @@ cache({
       rejected: '#CFD0D7'
     };
 
-    request(apiUrl, {json: true}, function(err, res, data) {
+    request(apiUrl, { json: true }, function(err, res, data) {
       try {
         if (res && (res.statusCode === 404 || data.state === null)) {
           badgeData.text[1] = 'not found';
@@ -5385,7 +5385,7 @@ cache({
       unknown: 'lightgrey'
     };
 
-    request(apiUrl, {json: true}, function(err, res, data) {
+    request(apiUrl, { json: true }, function(err, res, data) {
       try {
         if (!res || err !== null || res.statusCode !== 200) {
           badgeData.text[1] = 'inaccessible';
@@ -5438,7 +5438,7 @@ cache(function(data, match, sendBadge, request) {
   apiUrl += '?' + queryString.stringify(queryParams);
 
   var badgeData = getBadgeData('build', data);
-  request(apiUrl, {json:true}, function(err, res, data) {
+  request(apiUrl, { json:true }, function(err, res, data) {
     if (checkErrorResponse(badgeData, err, res, 'project not found')) {
       sendBadge(format, badgeData);
       return;
@@ -6001,7 +6001,7 @@ cache(function(data, match, sendBadge, request) {
     method: 'POST',
     json: true,
     body: {
-      "repos": [{"name": path, "tag": tag}]
+      "repos": [{ "name": path, "tag": tag }]
     },
     uri: 'https://imagelayers.io/registry/analyze'
   };
@@ -6599,7 +6599,7 @@ cache(function(data, match, sendBadge, request) {
   }
 
   var url = 'http://issuestats.com/' + host + '/' + userRepo;
-  var qs = {format: 'json'};
+  var qs = { format: 'json' };
   if (!longForm) {
     qs.concise = true;
   }
@@ -6661,7 +6661,7 @@ cache(function(data, match, sendBadge, request) {
     }
   }
 
-  const options = {method: 'GET', json: true, uri: uri};
+  const options = { method: 'GET', json: true, uri: uri };
   const badgeData = getBadgeData('dependencies', data);
 
   request(options, function(err, res, json) {
@@ -7630,7 +7630,7 @@ function(data, match, end, ask) {
     makeSend(format, ask.res, end)(svg);
   } catch(e) {
     log.error(e.stack);
-    const svg = makeBadge({text: ['error', 'bad badge'], colorscheme: 'red'});
+    const svg = makeBadge({ text: ['error', 'bad badge'], colorscheme: 'red' });
     makeSend(format, ask.res, end)(svg);
   }
 });
@@ -7670,12 +7670,12 @@ function(data, match, end, ask) {
 
   // Badge creation.
   try {
-    var badgeData = {text: [subject, status]};
+    var badgeData = { text: [subject, status] };
     badgeData.colorscheme = color;
     const svg = makeBadge(badgeData);
     makeSend('png', ask.res, end)(svg);
   } catch(e) {
-    const svg = makeBadge({text: ['error', 'bad badge'], colorscheme: 'red'});
+    const svg = makeBadge({ text: ['error', 'bad badge'], colorscheme: 'red' });
     makeSend('png', ask.res, end)(svg);
   }
 });
