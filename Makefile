@@ -1,6 +1,7 @@
 SHELL:=/bin/bash
 
-DEPLOY_TEMP=${TMPDIR}shields-deploy
+SERVER_TMP=${TMPDIR}shields-server-deploy
+FRONTEND_TMP=${TMPDIR}shields-frontend-deploy
 
 all: website favicon test
 
@@ -11,52 +12,59 @@ favicon:
 website:
 	LONG_CACHE=false npm run build
 
-# `website` is needed for the server deploys.
-deploy: website deploy-s0 deploy-s1 deploy-s2 deploy-gh-pages deploy-gh-pages-clean
+deploy: deploy-s0 deploy-s1 deploy-s2 clean-server-deploy deploy-gh-pages deploy-gh-pages-clean
 
-deploy-s0:
+deploy-s0: prepare-server-deploy push-s0
+deploy-s1: prepare-server-deploy push-s1
+deploy-s2: prepare-server-deploy push-s2
+
+prepare-server-deploy: website
 	# Ship a copy of the front end to each server for debugging.
 	# https://github.com/badges/shields/issues/1220
-	git add -f Verdana.ttf private/secret.json build/
-	git commit -m'MUST NOT BE ON GITHUB'
-	git push -f s0 HEAD:master
-	git reset HEAD~1
-	git checkout master
+	rm -rf ${SERVER_TMP}
+	git worktree prune
+	git worktree add -B production ${SERVER_TMP}
+	cp -r build ${SERVER_TMP}
+	git -C ${SERVER_TMP} add build/
+	git -C ${SERVER_TMP} commit -m '[DEPLOY] Add frontend for debugging'
+	cp private/secret-production.json ${SERVER_TMP}/private/secret.json
+	cp Verdana.ttf ${SERVER_TMP}
+	git -C ${SERVER_TMP} add private/secret.json Verdana.ttf
+	git -C ${SERVER_TMP} commit -m '[DEPLOY] MUST NOT BE ON GITHUB'
 
-deploy-s1:
-	git add -f Verdana.ttf private/secret.json build/
-	git commit -m'MUST NOT BE ON GITHUB'
-	git push -f s1 HEAD:master
-	git reset HEAD~1
-	git checkout master
+clean-server-deploy:
+	rm -rf ${SERVER_TMP}
+	git worktree prune
 
-deploy-s2:
-	git add -f Verdana.ttf private/secret.json build/
-	git commit -m'MUST NOT BE ON GITHUB'
-	git push -f s2 HEAD:master
-	git reset HEAD~1
-	git checkout master
+push-s0:
+	git push -f s0 production:master
+
+push-s1:
+	git push -f s1 production:master
+
+push-s2:
+	git push -f s2 production:master
 
 deploy-gh-pages:
-	rm -rf ${DEPLOY_TEMP}
+	rm -rf ${FRONTEND_TMP}
 	git worktree prune
 	LONG_CACHE=true \
 		BASE_URL=https://img.shields.io \
 		NEXT_ASSET_PREFIX=https://shields.io \
 		npm run build
-	git worktree add -B gh-pages ${DEPLOY_TEMP}
-	git -C ${DEPLOY_TEMP} ls-files | xargs git -C ${DEPLOY_TEMP} rm
-	git -C ${DEPLOY_TEMP} commit -m '[DEPLOY] Completely clean the index'
-	cp -r build/* ${DEPLOY_TEMP}
-	cp favicon.png ${DEPLOY_TEMP}
-	echo shields.io > ${DEPLOY_TEMP}/CNAME
-	touch ${DEPLOY_TEMP}/.nojekyll
-	git -C ${DEPLOY_TEMP} add .
-	git -C ${DEPLOY_TEMP} commit -m '[DEPLOY] Add built site'
+	git worktree add -B gh-pages ${FRONTEND_TMP}
+	git -C ${FRONTEND_TMP} ls-files | xargs git -C ${FRONTEND_TMP} rm
+	git -C ${FRONTEND_TMP} commit -m '[DEPLOY] Completely clean the index'
+	cp -r build/* ${FRONTEND_TMP}
+	cp favicon.png ${FRONTEND_TMP}
+	echo shields.io > ${FRONTEND_TMP}/CNAME
+	touch ${FRONTEND_TMP}/.nojekyll
+	git -C ${FRONTEND_TMP} add .
+	git -C ${FRONTEND_TMP} commit -m '[DEPLOY] Add built site'
 	git push -f origin gh-pages
 
 deploy-gh-pages-clean:
-	rm -rf $DEPLOY_TEMP
+	rm -rf ${FRONTEND_TMP}
 	git worktree prune
 
 deploy-heroku:
