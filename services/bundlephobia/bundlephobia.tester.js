@@ -56,7 +56,7 @@ const data = [
   {
     format: formats.D,
     get: '/minzip/@cycle/core/7.0.0.json',
-    expect: { name: 'minzipped size', value: '1.23 kB' },
+    expect: { name: 'minzipped size', value: '1.22 kB' },
   },
   {
     format: formats.A,
