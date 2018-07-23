@@ -1,6 +1,5 @@
 'use strict';
 
-const Joi = require('joi');
 const NPMBase = require('../npm/npm-base');
 const { versionColorForRange } = require('./node-version-color');
 
