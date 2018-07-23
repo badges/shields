@@ -20,7 +20,6 @@ module.exports = t;
 
 t.create('Bugzilla valid bug status')
   .get('/996038.json')
-  .inspectJSON()
   .expectJSONTypes(Joi.object().keys({
     name: 'bug 996038',
     value: bzBugStatus
