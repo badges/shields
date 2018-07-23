@@ -30,7 +30,7 @@ t.create('Missing message')
 
 t.create('Missing label')
   .get('/-message-blue.json?style=_shields_test')
-  .expectJSON({name: 'unknown', value: 'message', colorB: '#007ec6'});
+  .expectJSON({name: 'miscellaneous', value: 'message', colorB: '#007ec6'});
 
 t.create('Override colorB')
   .get('/label-message-blue.json?style=_shields_test&colorB=yellow')
