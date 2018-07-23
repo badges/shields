@@ -6,12 +6,17 @@ const { metric } = require('../../lib/text-formatters');
 
 // https://github.com/npm/registry/blob/master/docs/download-counts.md#output
 const pointResponseSchema = Joi.object({
-  downloads: Joi.number().integer().min(0).required(),
+  downloads: Joi.number()
+    .integer()
+    .min(0)
+    .required(),
 }).required();
 
 // https://github.com/npm/registry/blob/master/docs/download-counts.md#output-1
 const rangeResponseSchema = Joi.object({
-  downloads: Joi.array().items(pointResponseSchema).required(),
+  downloads: Joi.array()
+    .items(pointResponseSchema)
+    .required(),
 }).required();
 
 function DownloadsForInterval(interval) {
@@ -38,6 +43,8 @@ function DownloadsForInterval(interval) {
     },
   }[interval];
 
+  const schema = isRange ? rangeResponseSchema : pointResponseSchema;
+
   // This hits an entirely different API from the rest of the NPM services, so
   // it does not use NpmBase.
   return class NpmDownloads extends BaseJsonService {
@@ -54,24 +61,16 @@ function DownloadsForInterval(interval) {
     }
 
     static get examples() {
-      return [{
-        title: 'npm',
-        previewUrl: 'localeval',
-        keywords: ['node'],
-      }];
-    }
-
-    static get responseSchema() {
-      return isRange ? rangeResponseSchema : pointResponseSchema;
+      return [
+        {
+          title: 'npm',
+          previewUrl: 'localeval',
+          keywords: ['node'],
+        },
+      ];
     }
 
     static render({ downloads }) {
-      if (isRange) {
-        downloads = downloads
-          .map(item => item.downloads)
-          .reduce((accum, current) => accum + current);
-      }
-
       return {
         message: `${metric(downloads)}${messageSuffix}`,
         color: downloads > 0 ? 'brightgreen' : 'red',
@@ -80,10 +79,19 @@ function DownloadsForInterval(interval) {
 
     async handle({ packageName }) {
       const url = `https://api.npmjs.org/downloads/${query}/${packageName}`;
-      const downloadInfo = await this._requestJson(url, {}, 'project not found');
-      return this.constructor.render(downloadInfo);
+      let { downloads } = await this._requestJson({
+        schema,
+        url,
+        notFoundMessage: 'project not found',
+      });
+      if (isRange) {
+        downloads = downloads
+          .map(item => item.downloads)
+          .reduce((accum, current) => accum + current);
+      }
+      return this.constructor.render({ downloads });
     }
-  }
+  };
 }
 
 module.exports = ['week', 'month', 'year', 'total'].map(DownloadsForInterval);

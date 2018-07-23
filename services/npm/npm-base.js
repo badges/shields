@@ -1,8 +1,21 @@
 'use strict';
 
-const { checkErrorResponse, asJson } = require('../../lib/error-helper');
+const Joi = require('joi');
 const { BaseJsonService } = require('../base');
-const { rangeStart, minor } = require('../../lib/version');
+
+const deprecatedLicenseObjectSchema = Joi.object({
+  type: Joi.string().required(),
+});
+const schema = Joi.object({
+  devDependencies: Joi.object().pattern(/./, Joi.string()),
+  license: Joi.alternatives().try(
+    Joi.string(),
+    deprecatedLicenseObjectSchema,
+    Joi.array().items(
+      Joi.alternatives(Joi.string(), deprecatedLicenseObjectSchema)
+    )
+  ),
+}).required();
 
 // Abstract class for NPM badges which display data about the latest version
 // of a package.
@@ -35,30 +48,14 @@ module.exports = class NpmBase extends BaseJsonService {
     return `@${encoded}`;
   }
 
-  async _requestJson(url) {
-    // The caller must validate the response. We don't validate here because
-    // sometimes the caller needs to pluck the desired subkey first.
-    //
-    // This uses a custom Accept header because of this bug:
-    // <https://github.com/npm/npmjs.org/issues/163>
-    return this._sendAndCacheRequest(url, { headers: { Accept: '*/*' } })
-      .then(
-        checkErrorResponse.asPromise({ notFoundMessage: 'package not found' })
-      )
-      .then(asJson);
-  }
-
-  async fetch(namedParams, queryParams) {
-    const { scope, packageName } = namedParams;
-    const {
-      registry_uri: registryUrl = this.constructor.defaultRegistryUrl,
-    } = queryParams;
-
+  async fetchPackageData({ registryUrl, scope, packageName }) {
+    registryUrl = registryUrl || this.constructor.defaultRegistryUrl;
+    let url;
     if (scope === undefined) {
       // e.g. https://registry.npmjs.org/express/latest
       // Use this endpoint as an optimization. It covers the vast majority of
       // these badges, and the response is smaller.
-      return this._requestJson(`${registryUrl}/${packageName}/latest`);
+      url = `${registryUrl}/${packageName}/latest`;
     } else {
       // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
       // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
@@ -66,79 +63,15 @@ module.exports = class NpmBase extends BaseJsonService {
         scope,
         packageName,
       });
-      return this._requestJson(`${registryUrl}/${scoped}`);
+      url = `${registryUrl}/${scoped}`;
     }
-  }
-
-  mapResponseToProps(json, namedParams, queryParams) {
-    const { scope, tag } = namedParams;
-
-    let packageData;
-    if (scope === undefined) {
-      packageData = json;
-    } else {
-      const registryTag = tag || 'latest';
-      const latestVersion = json['dist-tags'][registryTag];
-      packageData = json.versions[latestVersion];
-    }
-
-    let { license } = packageData;
-    if (Array.isArray(license)) {
-      license = license.join(', ');
-    } else if (typeof license === 'object') {
-      license = license.type;
-    }
-
-    const { devDependencies } = packageData;
-    const typeDefinitions = [
-      { name: 'TypeScript', range: devDependencies.typescript },
-      { name: 'Flow', range: devDependencies['flow-bin'] },
-    ]
-      .filter(lang => lang.range !== undefined)
-      .map(({ name, range }) => {
-        return {
-          name,
-          version: minor(rangeStart(range)),
-        };
-      });
-
-    return {
-      license,
-      typeDefinitions,
-    };
-  }
-
-  async handle(namedParams, queryParams) {
-    const { scope, packageName, tag } = namedParams;
-    const {
-      registry_uri: registryUrl = this.constructor.defaultRegistryUrl,
-    } = queryParams;
-
-    let packageData;
-    if (scope === undefined) {
-      // e.g. https://registry.npmjs.org/express/latest
-      // Use this endpoint as an optimization. It covers the vast majority of
-      // these badges, and the response is smaller.
-      const url = `${registryUrl}/${packageName}/latest`;
-
-      packageData = await this._requestJson(url);
-    } else {
-      // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
-      // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
-      const scoped = this.constructor.encodeScopedPackage({
-        scope,
-        packageName,
-      });
-      const url = `${registryUrl}/${scoped}`;
-
-      const json = await this._requestJson(url);
-      const registryTag = tag || 'latest';
-      const latestVersion = json['dist-tags'][registryTag];
-      packageData = json.versions[latestVersion];
-    }
-
-    packageData = this.constructor.validateResponse(packageData);
-
-    return this.constructor.render(packageData, namedParams, queryParams);
+    return this._requestJson({
+      schema,
+      url,
+      // Use a custom Accept header because of this bug:
+      // <https://github.com/npm/npmjs.org/issues/163>
+      options: { Accept: '*/*' },
+      notFoundMessage: 'package not found',
+    });
   }
 };

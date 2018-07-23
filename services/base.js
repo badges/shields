@@ -16,38 +16,6 @@ class BaseService {
     this._handleInternalErrors = handleInternalErrors;
   }
 
-  /**
-   * Asynchronous function to fetch data for this service. Takes the URL
-   * parameters (as defined in the `url` property), performs a request using
-   * `this._sendAndCacheRequest`, and returns the badge data.
-   */
-  async fetch(namedParams, queryParams) {
-    throw new Error(
-      `fetch() function not implemented for ${this.constructor.name}`
-    );
-  }
-
-  static validateResponse(response) {}
-
-  transformResponseToProps(response, namedParams, queryParams) {
-    return response;
-  }
-
-  static validateProps(props) {
-    const { error, value } = Joi.validate(json, this.propSchema, {
-      allowUnknown: true,
-      stripUnknown: true,
-    });
-    if (error) {
-      throw new InvalidResponse({
-        prettyMessage: 'unable to transform response',
-        underlyingError: error,
-      });
-    } else {
-      return value;
-    }
-  }
-
   static render(props, namedParams, queryParams) {
     throw new Error(
       `render() function not implemented for ${this.constructor.name}`
@@ -60,17 +28,9 @@ class BaseService {
    * finally returns the rendered badge.
    */
   async handle(namedParams, queryParams) {
-    const response = await this.fetch(namedParams, queryParams);
-    this.validateResponse(response, namedParams, queryParams);
-
-    const props = this.transformResponseToProps(
-      fetched,
-      namedParams,
-      queryParams
+    throw new Error(
+      `handle() function not implemented for ${this.constructor.name}`
     );
-
-    this.validateProps(props, namedParams, queryParams);
-    return this.constructor.render(props, namedParams, queryParams);
   }
 
   // Metadata
@@ -288,7 +248,22 @@ class BaseJsonService extends BaseService {
     throw Error('Subclasses should define a response schema');
   }
 
-  async _requestJson(url, options = {}, notFoundMessage) {
+  static validateResponse(json, schema) {
+    const { error, value } = Joi.validate(json, schema, {
+      allowUnknown: true,
+      stripUnknown: true,
+    });
+    if (error) {
+      throw new InvalidResponse({
+        prettyMessage: 'invalid json response',
+        underlyingError: error,
+      });
+    } else {
+      return value;
+    }
+  }
+
+  async _requestJson({ schema, url, options = {}, notFoundMessage }) {
     return this._sendAndCacheRequest(url, {
       ...{ headers: { Accept: 'application/json' } },
       ...options,
@@ -299,37 +274,7 @@ class BaseJsonService extends BaseService {
         )
       )
       .then(asJson)
-      .then(json => this.constructor.validateResponse(json));
-  }
-
-  static validateResponse(json) {
-    const { error, value } = Joi.validate(json, this.responseSchema, {
-      allowUnknown: true,
-      stripUnknown: true,
-    });
-    if (error) {
-      throw new InvalidResponse({
-        prettyMessage: 'invalid json response',
-        underlyingError: error,
-      });
-    } else {
-      return value;
-    }
-  }
-
-  static validateResponse(json) {
-    const { error, value } = Joi.validate(json, this.responseSchema, {
-      allowUnknown: true,
-      stripUnknown: true,
-    });
-    if (error) {
-      throw new InvalidResponse({
-        prettyMessage: 'invalid json response',
-        underlyingError: error,
-      });
-    } else {
-      return value;
-    }
+      .then(json => this.constructor.validateResponse(json, schema));
   }
 }
 
