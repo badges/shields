@@ -26,6 +26,15 @@ module.exports = class NpmTypeDefinitions extends NpmBase {
     ];
   }
 
+  static transform({ devDependencies }) {
+    return {
+      supportedLanguages: [
+        { language: 'TypeScript', range: devDependencies.typescript },
+        { language: 'Flow', range: devDependencies['flow-bin'] },
+      ].filter(({ range }) => range !== undefined),
+    };
+  }
+
   static render({ supportedLanguages }) {
     if (supportedLanguages.length === 0) {
       return { message: 'none', color: 'lightgray' };
@@ -36,22 +45,18 @@ module.exports = class NpmTypeDefinitions extends NpmBase {
             ({ language, range }) => `${language} v${minor(rangeStart(range))}`
           )
           .join(' | '),
+        color: 'blue',
       };
     }
   }
 
   async handle({ scope, packageName }, { registry_uri: registryUrl }) {
-    const { devDependencies } = await this.fetchPackageData({
+    const json = await this.fetchPackageData({
       scope,
       packageName,
       registryUrl,
     });
-
-    const supportedLanguages = [
-      { language: 'TypeScript', range: devDependencies.typescript },
-      { language: 'Flow', range: devDependencies['flow-bin'] },
-    ].filter(({ range }) => range !== undefined);
-
-    return this.constructor.render({ supportedLanguages });
+    const props = this.constructor.transform(json);
+    return this.constructor.render(props);
   }
 };
