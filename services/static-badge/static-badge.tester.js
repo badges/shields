@@ -1,6 +1,5 @@
 'use strict';
 
-const Joi = require('joi');
 const ServiceTester = require('../service-tester');
 
 const t = new ServiceTester({ id: 'static-badge', title: 'Static Badge', pathPrefix: '/badge' });

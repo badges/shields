@@ -77,10 +77,7 @@ const {
 } = require('./lib/regular-update');
 const { makeSend } = require('./lib/result-sender');
 const { fetchFromSvg } = require('./lib/svg-badge-parser');
-const {
-  escapeFormat,
-  escapeFormatSlashes
-} = require('./lib/path-helpers');
+const { escapeFormatSlashes } = require('./lib/path-helpers');
 const {
   isSnapshotVersion: isNexusSnapshotVersion
 } = require('./lib/nexus-version');

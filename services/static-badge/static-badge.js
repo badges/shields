@@ -13,7 +13,7 @@ module.exports = class StaticBadge extends BaseService {
 
   static get url() {
     return {
-    format: '(?:badge|:)\/?((?:[^-]|--)*?)-((?:[^-]|--)*)-((?:[^-]|--)+)',
+    format: '(?:badge|:)/?((?:[^-]|--)*?)-((?:[^-]|--)*)-((?:[^-]|--)+)',
       capture: ['label', 'message', 'color']
     };
   }
