@@ -50,7 +50,11 @@ module.exports = class NpmTypeDefinitions extends NpmBase {
     }
   }
 
-  async handle({ scope, packageName }, { registry_uri: registryUrl }) {
+  async handle(namedParams, queryParams) {
+    const { scope, packageName, registryUrl } = this.constructor.unpackParams(
+      namedParams,
+      queryParams
+    );
     const json = await this.fetchPackageData({
       scope,
       packageName,

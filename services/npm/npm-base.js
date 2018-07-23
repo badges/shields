@@ -40,8 +40,16 @@ module.exports = class NpmBase extends BaseJsonService {
     }
   }
 
-  static get defaultRegistryUrl() {
-    return 'https://registry.npmjs.org';
+  static unpackParams(
+    { scope, packageName, tag },
+    { registry_uri: registryUrl = 'https://registry.npmjs.org' }
+  ) {
+    return {
+      scope,
+      packageName,
+      tag,
+      registryUrl,
+    };
   }
 
   static encodeScopedPackage({ scope, packageName }) {

@@ -64,11 +64,18 @@ module.exports = class NodeVersion extends NPMBase {
     }
   }
 
-  async handle({ scope, packageName, tag }, { registry_uri: registryUrl }) {
+  async handle(namedParams, queryParams) {
+    const {
+      scope,
+      packageName,
+      tag,
+      registryUrl,
+    } = this.constructor.unpackParams(namedParams, queryParams);
     const { engines } = await this.fetchPackageData({
       scope,
       packageName,
       registryUrl,
+      tag,
     });
 
     const { node: nodeVersionRange } = engines || {};

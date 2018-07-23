@@ -44,7 +44,11 @@ module.exports = class NpmLicense extends NpmBase {
     };
   }
 
-  async handle({ scope, packageName }, { registry_uri: registryUrl }) {
+  async handle(namedParams, queryParams) {
+    const { scope, packageName, registryUrl } = this.constructor.unpackParams(
+      namedParams,
+      queryParams
+    );
     const { license } = await this.fetchPackageData({
       scope,
       packageName,
