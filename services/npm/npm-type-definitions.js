@@ -1,12 +1,7 @@
 'use strict';
 
-const Joi = require('joi');
-const NpmBase = require('./npm-base');
 const { rangeStart, minor } = require('../../lib/version');
-
-const responseSchema = Joi.object({
-  devDependencies: Joi.object().pattern(/./, Joi.string()),
-}).required();
+const NpmBase = require('./npm-base');
 
 module.exports = class NpmTypeDefinitions extends NpmBase {
   static get category() {
@@ -22,38 +17,41 @@ module.exports = class NpmTypeDefinitions extends NpmBase {
   }
 
   static get examples() {
-    return [{
-      title: 'npm type definitions',
-      previewUrl: 'chalk',
-      keywords: ['node', 'typescript', 'flow'],
-    }];
+    return [
+      {
+        title: 'npm type definitions',
+        previewUrl: 'chalk',
+        keywords: ['node', 'typescript', 'flow'],
+      },
+    ];
   }
 
-  static get responseSchema() {
-    return responseSchema;
-  }
-
-  static render({ devDependencies }) {
-    const supportedLanguages = [
-      { name: 'TypeScript', range: devDependencies.typescript },
-      { name: 'Flow', range: devDependencies['flow-bin'] },
-    ]
-      .filter(lang => lang.range !== undefined)
-      .map(({ name, range }) => {
-        const version = minor(rangeStart(range));
-        return `${name} v${version}`;
-      });
-
-    if (supportedLanguages.length > 0) {
-      return {
-        message: supportedLanguages.join(' | '),
-        color: 'blue',
-      };
+  static render({ supportedLanguages }) {
+    if (supportedLanguages.length === 0) {
+      return { message: 'none', color: 'lightgray' };
     } else {
       return {
-        message: 'none',
-        color: 'lightgray',
+        message: supportedLanguages
+          .map(
+            ({ language, range }) => `${language} v${minor(rangeStart(range))}`
+          )
+          .join(' | '),
       };
     }
+  }
+
+  async handle({ scope, packageName }, { registry_uri: registryUrl }) {
+    const { devDependencies } = await this.fetchPackageData({
+      scope,
+      packageName,
+      registryUrl,
+    });
+
+    const supportedLanguages = [
+      { language: 'TypeScript', range: devDependencies.typescript },
+      { language: 'Flow', range: devDependencies['flow-bin'] },
+    ].filter(({ range }) => range !== undefined);
+
+    return this.constructor.render({ supportedLanguages });
   }
 };

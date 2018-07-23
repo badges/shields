@@ -1,10 +1,21 @@
 'use strict';
 
-const {
-  checkErrorResponse,
-  asJson,
-} = require('../../lib/error-helper');
+const Joi = require('joi');
 const { BaseJsonService } = require('../base');
+
+const deprecatedLicenseObjectSchema = Joi.object({
+  type: Joi.string().required(),
+});
+const schema = Joi.object({
+  devDependencies: Joi.object().pattern(/./, Joi.string()),
+  license: Joi.alternatives().try(
+    Joi.string(),
+    deprecatedLicenseObjectSchema,
+    Joi.array().items(
+      Joi.alternatives(Joi.string(), deprecatedLicenseObjectSchema)
+    )
+  ),
+}).required();
 
 // Abstract class for NPM badges which display data about the latest version
 // of a package.
@@ -27,7 +38,7 @@ module.exports = class NpmBase extends BaseJsonService {
     }
   }
 
-  static get defaultRegistryUrl () {
+  static get defaultRegistryUrl() {
     return 'https://registry.npmjs.org';
   }
 
@@ -37,47 +48,30 @@ module.exports = class NpmBase extends BaseJsonService {
     return `@${encoded}`;
   }
 
-  async _requestJson(url) {
-    // The caller must validate the response. We don't validate here because
-    // sometimes the caller needs to pluck the desired subkey first.
-    //
-    // This uses a custom Accept header because of this bug:
-    // <https://github.com/npm/npmjs.org/issues/163>
-    return this._sendAndCacheRequest(url, { headers: { Accept: '*/*' } })
-      .then(checkErrorResponse.asPromise({ notFoundMessage: 'package not found' }))
-      .then(asJson);
-  }
-
-  static render(packageData, namedParams, queryParams) {
-    throw Error('Subclasses must override')
-  }
-
-  async handle(namedParams, queryParams) {
-    const { scope, packageName, tag } = namedParams;
-    const { registry_uri: registryUrl = this.constructor.defaultRegistryUrl } = queryParams;
-
-    let packageData;
+  async fetchPackageData({ registryUrl, scope, packageName }) {
+    registryUrl = registryUrl || this.constructor.defaultRegistryUrl;
+    let url;
     if (scope === undefined) {
       // e.g. https://registry.npmjs.org/express/latest
       // Use this endpoint as an optimization. It covers the vast majority of
       // these badges, and the response is smaller.
-      const url = `${registryUrl}/${packageName}/latest`;
-
-      packageData = await this._requestJson(url);
+      url = `${registryUrl}/${packageName}/latest`;
     } else {
       // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
       // because https://registry.npmjs.org/@cedx%2Fgulp-david/latest does not work
-      const scoped = this.constructor.encodeScopedPackage({ scope, packageName });
-      const url = `${registryUrl}/${scoped}`;
-
-      const json = await this._requestJson(url);
-      const registryTag = tag || 'latest';
-      const latestVersion = json['dist-tags'][registryTag];
-      packageData = json.versions[latestVersion];
+      const scoped = this.constructor.encodeScopedPackage({
+        scope,
+        packageName,
+      });
+      url = `${registryUrl}/${scoped}`;
     }
-
-    packageData = this.constructor.validateResponse(packageData);
-
-    return this.constructor.render(packageData, namedParams, queryParams);
+    return this._requestJson({
+      schema,
+      url,
+      // Use a custom Accept header because of this bug:
+      // <https://github.com/npm/npmjs.org/issues/163>
+      options: { Accept: '*/*' },
+      notFoundMessage: 'package not found',
+    });
   }
-}
+};

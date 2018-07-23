@@ -3,10 +3,13 @@
 const Joi = require('joi');
 const { addv } = require('../../lib/text-formatters');
 const { version: versionColor } = require('../../lib/color-formatters');
+const { NotFound } = require('../errors');
 const NpmBase = require('./npm-base');
 
 // Joi.string should be a semver.
-const responseSchema = Joi.object().pattern(/./, Joi.string()).required();
+const schema = Joi.object()
+  .pattern(/./, Joi.string())
+  .required();
 
 module.exports = class NpmVersion extends NpmBase {
   static get category() {
@@ -25,7 +28,7 @@ module.exports = class NpmVersion extends NpmBase {
     return [
       {
         previewUrl: 'npm',
-        keywords: ['node']
+        keywords: ['node'],
       },
       {
         title: 'npm (scoped)',
@@ -51,47 +54,35 @@ module.exports = class NpmVersion extends NpmBase {
     ];
   }
 
-  static get responseSchema() {
-    return responseSchema;
-  }
-
-  static render(packageData, { tag }) {
-    let label, version;
-
-    if (tag) {
-      if (tag in packageData) {
-        label = `npm@${tag}`;
-        version = packageData[tag];
-      } else {
-        return {
-          message: 'tag not found',
-          color: 'red',
-        };
-      }
-    } else {
-      version = packageData.latest;
-    }
-
+  static render({ tag, version }) {
     return {
-      label,
+      label: tag ? `npm@${tag}` : undefined,
       message: addv(version),
       color: versionColor(version),
     };
   }
 
-  async handle(namedParams, queryParams) {
-    const { scope, packageName } = namedParams;
-    const { registry_uri: registryUrl = this.constructor.defaultRegistryUrl } = queryParams;
-
-    const slug = scope === undefined
-      ? packageName
-      : this.constructor.encodeScopedPackage({ scope, packageName });
+  async handle({ scope, packageName, tag }, { registry_uri: registryUrl }) {
+    registryUrl = registryUrl || this.constructor.defaultRegistryUrl;
+    const slug =
+      scope === undefined
+        ? packageName
+        : this.constructor.encodeScopedPackage({ scope, packageName });
     const url = `${registryUrl}/-/package/${slug}/dist-tags`;
 
-    let packageData = await this._requestJson(url);
-console.log('packageData', packageData)
-    packageData = this.constructor.validateResponse(packageData);
+    const packageData = await this._requestJson({
+      schema,
+      url,
+      notFoundMessage: 'package not found',
+    });
 
-    return this.constructor.render(packageData, namedParams, queryParams);
+    if (tag && !(tag in packageData)) {
+      throw new NotFound({ prettyMessage: 'tag not found' });
+    }
+
+    return this.constructor.render({
+      tag,
+      version: packageData[tag || 'latest'],
+    });
   }
-}
+};
