@@ -245,17 +245,14 @@ class BaseJsonService extends BaseService {
   }
 
   async _requestJson({ schema, url, options = {}, notFoundMessage }) {
-    return this._sendAndCacheRequest(url, {
-      ...{ headers: { Accept: 'application/json' } },
-      ...options,
-    })
-      .then(
-        checkErrorResponse.asPromise(
-          notFoundMessage ? { notFoundMessage: notFoundMessage } : undefined
-        )
+    return this._sendAndCacheRequest(url,
+      {...{ 'headers': { 'Accept': 'application/json' } }, ...options}
+    ).then(
+      checkErrorResponse.asPromise(
+        notFoundMessage ? { notFoundMessage: notFoundMessage } : undefined
       )
-      .then(asJson)
-      .then(json => this.constructor._validate(json, schema));
+    ).then(asJson)
+     .then(json => this.constructor._validate(json, schema));
   }
 }
 
