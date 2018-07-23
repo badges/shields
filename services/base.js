@@ -115,9 +115,7 @@ class BaseService {
   static get _regex() {
     // Regular expressions treat "/" specially, so we need to escape them
     const escapedPath = this.url.format.replace(/\//g, '\\/');
-    const fullRegex = `^${this._makeFullUrl(
-      escapedPath
-    )}.(svg|png|gif|jpg|json)$`;
+    const fullRegex = `^${this._makeFullUrl(escapedPath)}.(svg|png|gif|jpg|json)$`;
     return new RegExp(fullRegex);
   }
 
