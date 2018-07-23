@@ -3,7 +3,6 @@
 const Joi = require('joi');
 const ServiceTester = require('../service-tester');
 const { isVPlusTripleDottedVersion } = require('../test-validators');
-const { invalidJSON } = require('../response-fixtures');
 
 const t = new ServiceTester({ id: 'cdnjs', title: 'CDNJs' });
 module.exports = t;
@@ -24,14 +23,6 @@ t.create('cdnjs (connection error)')
   .get('/v/jquery.json')
   .networkOff()
   .expectJSON({name: 'cdnjs', value: 'inaccessible'});
-
-t.create('cdnjs (unexpected response)')
-  .get('/v/jquery.json')
-  .intercept(nock => nock('https://api.cdnjs.com')
-    .get('/libraries/jquery?fields=version')
-    .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'cdnjs', value: 'unparseable json response' });
 
 t.create('cdnjs (error response)')
   .get('/v/jquery.json')
