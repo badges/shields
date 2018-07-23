@@ -11,6 +11,10 @@ module.exports = class StaticBadge extends BaseService {
     };
   }
 
+  static get category() {
+    return 'miscellaneous';
+  }
+
   static get url() {
     return {
     format: '(?:badge|:)/?((?:[^-]|--)*?)-((?:[^-]|--)*)-((?:[^-]|--)+)',
