@@ -7807,48 +7807,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Any badge.
-camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
-function(data, match, end, ask) {
-  var subject = escapeFormat(match[2]);
-  var status = escapeFormat(match[4]);
-  var color = escapeFormat(match[6]);
-  var format = match[8];
-
-  analytics.noteRequest(data, match);
-
-  // Cache management - the badge is constant.
-  var cacheDuration = (3600*24*1)|0;    // 1 day.
-  ask.res.setHeader('Cache-Control', 'max-age=' + cacheDuration);
-  if (+(new Date(ask.req.headers['if-modified-since'])) >= +serverStartTime) {
-    ask.res.statusCode = 304;
-    ask.res.end();  // not modified.
-    return;
-  }
-  ask.res.setHeader('Last-Modified', serverStartTime.toGMTString());
-
-  // Badge creation.
-  try {
-    var badgeData = getBadgeData(subject, data);
-    if (data.label !== undefined) { badgeData.text[0] = '' + data.label; }
-    badgeData.text[1] = status;
-    setBadgeColor(badgeData, color);
-    badgeData.template = data.style;
-    if (config.profiling.makeBadge) {
-      console.time('makeBadge total');
-    }
-    const svg = makeBadge(badgeData);
-    if (config.profiling.makeBadge) {
-      console.timeEnd('makeBadge total');
-    }
-    makeSend(format, ask.res, end)(svg);
-  } catch(e) {
-    log.error(e.stack);
-    const svg = makeBadge({ text: ['error', 'bad badge'], colorscheme: 'red' });
-    makeSend(format, ask.res, end)(svg);
-  }
-});
-
 // Production cache debugging.
 let bitFlip = false;
 camp.route(/^\/flip\.svg$/, function(data, match, end, ask) {
