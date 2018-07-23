@@ -1,14 +1,22 @@
 'use strict';
 
 const Joi = require('joi');
-const { NotFound, InvalidResponse, Inaccessible } = require('./errors');
+const {
+  NotFound,
+  InvalidResponse,
+  Inaccessible,
+} = require('./errors');
 const {
   makeLogo,
   toArray,
   makeColor,
   setBadgeColor,
 } = require('../lib/badge-data');
-const { checkErrorResponse, asJson } = require('../lib/error-helper');
+const {
+  checkErrorResponse,
+  asJson,
+} = require('../lib/error-helper');
+
 
 class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
@@ -23,13 +31,13 @@ class BaseService {
   }
 
   /**
-   * Asynchronous function to handle requests for this service. Fetches the
-   * data and validates it, then transforms it and validates it again, and
-   * finally returns the rendered badge.
+   * Asynchronous function to handle requests for this service. Takes the URL
+   * parameters (as defined in the `url` property), performs a request using
+   * `this._sendAndCacheRequest`, and returns the badge data.
    */
   async handle(namedParams, queryParams) {
     throw new Error(
-      `handle() function not implemented for ${this.constructor.name}`
+      `Handler not implemented for ${this.constructor.name}`
     );
   }
 
@@ -90,24 +98,18 @@ class BaseService {
    *  - documentation
    */
   static prepareExamples() {
-    return this.examples.map(
-      ({ title, previewUrl, exampleUrl, documentation }) => {
-        if (!previewUrl) {
-          throw Error(
-            `Example for ${this.name} is missing required previewUrl`
-          );
-        }
-
-        return {
-          title: title ? `${title}` : this.name,
-          previewUri: `${this._makeFullUrl(previewUrl)}.svg`,
-          exampleUri: exampleUrl
-            ? `${this._makeFullUrl(exampleUrl)}.svg`
-            : undefined,
-          documentation,
-        };
+    return this.examples.map(({ title, previewUrl, exampleUrl, documentation }) => {
+      if (! previewUrl) {
+        throw Error(`Example for ${this.name} is missing required previewUrl`);
       }
-    );
+
+      return {
+        title: title ? `${title}` : this.name,
+        previewUri: `${this._makeFullUrl(previewUrl)}.svg`,
+        exampleUri: exampleUrl ? `${this._makeFullUrl(exampleUrl)}.svg` : undefined,
+        documentation,
+      };
+    });
   }
 
   static get _regex() {
@@ -126,10 +128,8 @@ class BaseService {
 
     if (this.url.capture.length !== captures.length) {
       throw new Error(
-        `Service ${
-          this.constructor.name
-        } declares incorrect number of capture groups ` +
-          `(expected ${this.url.capture.length}, got ${captures.length})`
+        `Service ${this.constructor.name} declares incorrect number of capture groups `+
+        `(expected ${this.url.capture.length}, got ${captures.length})`
       );
     }
 
@@ -149,10 +149,8 @@ class BaseService {
           message: error.prettyMessage,
           color: 'red',
         };
-      } else if (
-        error instanceof InvalidResponse ||
-        error instanceof Inaccessible
-      ) {
+      } else if (error instanceof InvalidResponse ||
+        error instanceof Inaccessible) {
         return {
           message: error.prettyMessage,
           color: 'lightgray',
@@ -200,9 +198,7 @@ class BaseService {
         serviceMessage || 'n/a',
       ],
       template: style,
-      logo: makeLogo(style === 'social' ? defaultLogo : undefined, {
-        logo: overrideLogo,
-      }),
+      logo: makeLogo(style === 'social' ? defaultLogo : undefined, { logo: overrideLogo }),
       logoWidth: +overrideLogoWidth,
       links: toArray(overrideLink || serviceLink),
       colorA: makeColor(overrideColorA),
@@ -216,32 +212,23 @@ class BaseService {
   static register(camp, handleRequest, { handleInternalErrors }) {
     const ServiceClass = this; // In a static context, "this" is the class.
 
-    camp.route(
-      this._regex,
-      handleRequest({
-        queryParams: this.url.queryParams,
-        handler: async (queryParams, match, sendBadge, request) => {
-          const namedParams = this._namedParamsForMatch(match);
-          const serviceInstance = new ServiceClass(
-            {
-              sendAndCacheRequest: request.asPromise,
-            },
-            { handleInternalErrors }
-          );
-          const serviceData = await serviceInstance.invokeHandler(
-            namedParams,
-            queryParams
-          );
-          const badgeData = this._makeBadgeData(queryParams, serviceData);
+    camp.route(this._regex, handleRequest({
+      queryParams: this.url.queryParams,
+      handler: async (queryParams, match, sendBadge, request) => {
+        const namedParams = this._namedParamsForMatch(match);
+        const serviceInstance = new ServiceClass({
+          sendAndCacheRequest: request.asPromise,
+        }, { handleInternalErrors });
+        const serviceData = await serviceInstance.invokeHandler(namedParams, queryParams);
+        const badgeData = this._makeBadgeData(queryParams, serviceData);
 
-          // Assumes the final capture group is the extension
-          const format = match.slice(-1)[0];
-          sendBadge(format, badgeData);
-        },
-      })
-    );
+        // Assumes the final capture group is the extension
+        const format = match.slice(-1)[0];
+        sendBadge(format, badgeData);
+      },
+    }));
   }
-}
+};
 
 class BaseJsonService extends BaseService {
   static get responseSchema() {
