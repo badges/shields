@@ -39,7 +39,7 @@ t.create('version (unexpected response)')
     .get('/api/v1/gems/formatador.json')
     .reply(invalidJSON)
   )
-  .expectJSON({name: 'gem', value: 'invalid'});
+  .expectJSON({ name: 'gem', value: 'unparseable json response' });
 
 
 // downloads endpoints
@@ -67,7 +67,7 @@ t.create('total downloads (unexpected response)')
     .get('/api/v1/gems/rails.json')
     .reply(invalidJSON)
   )
-  .expectJSON({name: 'downloads', value: 'invalid'});
+  .expectJSON({ name: 'downloads', value: 'unparseable json response' });
 
 
 // version downloads
@@ -108,7 +108,7 @@ t.create('version downloads (unexpected response)')
     .get('/api/v1/versions/rails.json')
     .reply(invalidJSON)
   )
-  .expectJSON({name: 'downloads', value: 'invalid'});
+  .expectJSON({ name: 'downloads', value: 'unparseable json response' });
 
 
 // latest version downloads
@@ -134,7 +134,7 @@ t.create('latest version downloads (unexpected response)')
     .get('/api/v1/gems/rails.json')
     .reply(invalidJSON)
   )
-  .expectJSON({name: 'downloads', value: 'invalid'});
+  .expectJSON({ name: 'downloads', value: 'unparseable json response' });
 
 
 // users endpoint
@@ -161,7 +161,7 @@ t.create('users (unexpected response)')
     .get('/api/v1/owners/raphink/gems.json')
     .reply(invalidJSON)
   )
-  .expectJSON({name: 'gems', value: 'invalid'});
+  .expectJSON({ name: 'gems', value: 'unparseable json response' });
 
 
 // rank endpoint
@@ -195,4 +195,4 @@ t.create('rank (unexpected response)')
       .get('/api/v1/gems/rspec-puppet-facts/total_ranking.json')
       .reply(invalidJSON)
     )
-    .expectJSON({name: 'rank', value: 'invalid'});
+    .expectJSON({ name: 'rank', value: 'unparseable json response' });

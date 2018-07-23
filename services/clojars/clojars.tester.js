@@ -30,7 +30,7 @@ t.create('clojars (unexpected response)')
     .get('/prismic/latest-version.json')
     .reply(invalidJSON)
   )
-  .expectJSON({name: 'clojars', value: 'invalid'});
+  .expectJSON({ name: 'clojars', value: 'unparseable json response' });
 
 t.create('clojars (error response)')
   .get('/v/prismic.json')

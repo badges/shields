@@ -31,7 +31,7 @@ t.create('cdnjs (unexpected response)')
     .get('/libraries/jquery?fields=version')
     .reply(invalidJSON)
   )
-  .expectJSON({name: 'cdnjs', value: 'invalid'});
+  .expectJSON({ name: 'cdnjs', value: 'unparseable json response' });
 
 t.create('cdnjs (error response)')
   .get('/v/jquery.json')
