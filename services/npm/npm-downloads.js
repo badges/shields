@@ -78,10 +78,9 @@ function DownloadsForInterval(interval) {
     }
 
     async handle({ packageName }) {
-      const url = `https://api.npmjs.org/downloads/${query}/${packageName}`;
       let { downloads } = await this._requestJson({
         schema,
-        url,
+        url: `https://api.npmjs.org/downloads/${query}/${packageName}`,
         notFoundMessage: 'project not found',
       });
       if (isRange) {

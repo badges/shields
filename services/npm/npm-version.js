@@ -68,11 +68,10 @@ module.exports = class NpmVersion extends NpmBase {
       scope === undefined
         ? packageName
         : this.constructor.encodeScopedPackage({ scope, packageName });
-    const url = `${registryUrl}/-/package/${slug}/dist-tags`;
 
     const packageData = await this._requestJson({
       schema,
-      url,
+      url: `${registryUrl}/-/package/${slug}/dist-tags`,
       notFoundMessage: 'package not found',
     });
 
