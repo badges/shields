@@ -66,7 +66,15 @@ export default class Usage extends React.PureComponent {
     );
   }
 
-  render () {
+  static renderNamedLogos() {
+    const renderLogo = logo => <span className="nowrap">{logo}</span>;
+    const [first, ...rest] = logos;
+    return [renderLogo(first)].concat(
+      rest.reduce((result, logo) => result.concat([', ', renderLogo(logo)]), [])
+    );
+  }
+
+  render() {
     const { baseUri } = this.props;
     return (
       <section>
@@ -142,7 +150,7 @@ export default class Usage extends React.PureComponent {
         <p>
           Here are a few other parameters you can use: (connecting several with "&" is possible)
         </p>
-        <table>
+        <table class="usage">
           <tbody>
             <tr>
               <td>
@@ -160,7 +168,9 @@ export default class Usage extends React.PureComponent {
               <td>
                 <code>?logo=appveyor</code>
               </td>
-              <td>Insert one of the named logos ({logos.join(', ')})</td>
+              <td>
+                Insert one of the named logos ({this.constructor.renderNamedLogos()})
+              </td>
             </tr>
             <tr>
               <td>
