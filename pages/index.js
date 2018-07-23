@@ -1,68 +1,44 @@
-import envFlag from 'node-env-flag';
 import React from 'react';
-import Meta from '../frontend/components/meta';
-import Header from '../frontend/components/header';
-import SuggestionAndSearch from '../frontend/components/suggestion-and-search';
 import { BadgeExamples } from '../frontend/components/badge-examples';
-import MarkupModal from '../frontend/components/markup-modal';
-import Usage from '../frontend/components/usage';
-import Footer from '../frontend/components/footer';
-import badgeExampleData from '../badge-examples.json';
-import { prepareExamples, predicateFromQuery } from '../frontend/lib/prepare-examples';
+import ExamplesPage from '../frontend/components/examples-page';
+import { baseUri, longCache } from '../frontend/constants';
 
-const baseUri = process.env.BASE_URL;
-const longCache = envFlag(process.env.LONG_CACHE, false);
-
-export default class IndexPage extends React.Component {
-  state = {
-    query: null,
-    example: null
-  };
+export default class IndexPage extends ExamplesPage {
 
   constructor(props) {
     super(props);
-    this.preparedExamples = prepareExamples(
-      badgeExampleData,
-      () => predicateFromQuery(this.state.query));
+    this.state.searchReady = false;
+    this.searchTimeout = 0;
   }
 
-  render() {
-    return (
-      <div>
-        <Meta />
-        <Header />
-        <MarkupModal
-          example={this.state.example}
-          onRequestClose={() => { this.setState({ example: null }); }}
-          baseUri={baseUri} />
-        <section>
-          <SuggestionAndSearch
-            queryChanged={query => { this.setState({ query }); }}
-            onBadgeClick={example => { this.setState({ example }); }}
-            baseUri={baseUri}
-            longCache={longCache} />
-          <a
-            className="donate"
-            href="https://opencollective.com/shields">
-            donate
-          </a>
-        </section>
-        <BadgeExamples
+  getBody() {
+    if ((this.state.query == null) || (this.state.query.length === 0)) {
+      return this.preparedExamples.map(category => (
+        <a href={'/examples/' + category.category.id}>
+          <h3 id={category.category.id}>{ category.category.name }</h3>
+        </a>
+      ));
+    } else if (this.state.query.length === 1) {
+      return (
+        <div>Search term must have 2 or more characters</div>
+      );
+    } else {
+      if (this.state.searchReady) {
+        this.state.searchReady = false;
+        return(<BadgeExamples
           categories={this.preparedExamples}
           onClick={example => { this.setState({ example }); }}
           baseUri={baseUri}
           longCache={longCache} />
-        <Usage
-          baseUri={baseUri}
-          longCache={longCache} />
-        <Footer baseUri={baseUri} />
-        <style jsx>{`
-          .donate {
-            text-decoration: none;
-            color: rgba(0,0,0,0.1);
-          }
-        `}</style>
-      </div>
-    );
+        );
+      } else {
+        window.clearTimeout(this.searchTimeout);
+        this.searchTimeout = window.setTimeout(function() {
+          this.setState({searchReady: true});
+        }.bind(this), 500);
+        return 'searching...';
+      }
+    }
   }
+
 }
