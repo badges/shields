@@ -58,7 +58,7 @@ t.create('total downloads when API returns an invalid JSON')
   .intercept(nock => nock('https://api.npmjs.org')
     .get('/downloads/range/1000-01-01:3000-01-01/invalid-json')
     .reply(invalidJSON))
-  .expectJSON({ name: 'downloads', value: 'unparseable json response', colorB: colorsB.lightgrey });
+  .expectJSON({ name: 'downloads', value: 'invalid', colorB: colorsB.lightgrey });
 
 t.create('total downloads of unknown package')
   .get('/dt/npm-api-does-not-have-this-package.json?style=_shields_test')
@@ -161,7 +161,7 @@ t.create('license when registry returns an invalid JSON')
   .intercept(nock => nock('https://registry.npmjs.org')
     .get('/invalid-json/latest')
     .reply(invalidJSON))
-  .expectJSON({ name: 'license', value: 'unparseable json response', colorB: colorsB.lightgrey });
+  .expectJSON({ name: 'license', value: 'invalid', colorB: colorsB.lightgrey });
 
 t.create('license when network is off')
   .get('/l/pakage-network-off.json?style=_shields_test')
