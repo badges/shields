@@ -229,10 +229,6 @@ class BaseService {
 };
 
 class BaseJsonService extends BaseService {
-  static get responseSchema() {
-    throw Error('Subclasses should define a response schema');
-  }
-
   static validateResponse(json, schema) {
     const { error, value } = Joi.validate(json, schema, {
       allowUnknown: true,
