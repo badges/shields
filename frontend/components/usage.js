@@ -150,7 +150,7 @@ export default class Usage extends React.PureComponent {
         <p>
           Here are a few other parameters you can use: (connecting several with "&" is possible)
         </p>
-        <table class="usage">
+        <table className="usage">
           <tbody>
             <tr>
               <td>
