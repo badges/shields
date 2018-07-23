@@ -6,6 +6,7 @@ const {
   InvalidResponse,
   Inaccessible,
 } = require('./errors');
+const queryString = require('query-string');
 const {
   makeLogo,
   toArray,
@@ -98,18 +99,27 @@ class BaseService {
    *  - documentation
    */
   static prepareExamples() {
-    return this.examples.map(({ title, previewUrl, exampleUrl, documentation }) => {
-      if (! previewUrl) {
-        throw Error(`Example for ${this.name} is missing required previewUrl`);
-      }
+    return this.examples.map(
+      ({ title, previewUrl, query, exampleUrl, documentation }) => {
+        if (!previewUrl) {
+          throw Error(
+            `Example for ${this.name} is missing required previewUrl`
+          );
+        }
 
-      return {
-        title: title ? `${title}` : this.name,
-        previewUri: `${this._makeFullUrl(previewUrl)}.svg`,
-        exampleUri: exampleUrl ? `${this._makeFullUrl(exampleUrl)}.svg` : undefined,
-        documentation,
-      };
-    });
+        const stringified = queryString.stringify(query);
+        const suffix = stringified ? `?${stringified}` : '';
+
+        return {
+          title: title ? `${title}` : this.name,
+          previewUri: `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
+          exampleUri: exampleUrl
+            ? `${this._makeFullUrl(exampleUrl, query)}.svg${suffix}`
+            : undefined,
+          documentation,
+        };
+      }
+    );
   }
 
   static get _regex() {
