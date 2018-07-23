@@ -4,10 +4,6 @@ const Joi = require('joi');
 const NPMBase = require('../npm/npm-base');
 const { versionColorForRange } = require('./node-version-color');
 
-const responseSchema = Joi.object({
-  engines: Joi.object().pattern(/./, Joi.string()),
-}).required();
-
 module.exports = class NodeVersion extends NPMBase {
   static get category() {
     return 'version';
@@ -51,14 +47,7 @@ module.exports = class NodeVersion extends NPMBase {
     ];
   }
 
-  static get responseSchema() {
-    return responseSchema;
-  }
-
-  static async render(packageData, { tag }) {
-    const { engines = {} } = packageData;
-    const { node: nodeVersionRange } = engines;
-
+  static async render({ tag, nodeVersionRange }) {
     const label = tag ? `node@${tag}` : undefined;
 
     if (nodeVersionRange === undefined) {
@@ -66,13 +55,25 @@ module.exports = class NodeVersion extends NPMBase {
         label,
         message: 'not specified',
         color: 'lightgray',
-      }
+      };
     } else {
       return {
         label,
         message: nodeVersionRange,
         color: await versionColorForRange(nodeVersionRange),
-      }
+      };
     }
   }
-}
+
+  async handle({ scope, packageName, tag }, { registry_uri: registryUrl }) {
+    const { engines } = await this.fetchPackageData({
+      scope,
+      packageName,
+      registryUrl,
+    });
+
+    const { node: nodeVersionRange } = engines || {};
+
+    return this.constructor.render({ tag, nodeVersionRange });
+  }
+};

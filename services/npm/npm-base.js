@@ -2,12 +2,14 @@
 
 const Joi = require('joi');
 const { BaseJsonService } = require('../base');
+const { InvalidResponse, NotFound } = require('../errors');
 
 const deprecatedLicenseObjectSchema = Joi.object({
   type: Joi.string().required(),
 });
 const schema = Joi.object({
   devDependencies: Joi.object().pattern(/./, Joi.string()),
+  engines: Joi.object().pattern(/./, Joi.string()),
   license: Joi.alternatives().try(
     Joi.string(),
     deprecatedLicenseObjectSchema,
@@ -48,7 +50,7 @@ module.exports = class NpmBase extends BaseJsonService {
     return `@${encoded}`;
   }
 
-  async fetchPackageData({ registryUrl, scope, packageName }) {
+  async fetchPackageData({ registryUrl, scope, packageName, tag }) {
     registryUrl = registryUrl || this.constructor.defaultRegistryUrl;
     let url;
     if (scope === undefined) {
@@ -65,13 +67,34 @@ module.exports = class NpmBase extends BaseJsonService {
       });
       url = `${registryUrl}/${scoped}`;
     }
-    return this._requestJson({
-      schema,
+    const json = await this._requestJson({
+      // We don't validate here because we need to pluck the desired subkey first.
+      schema: Joi.any(),
       url,
       // Use a custom Accept header because of this bug:
       // <https://github.com/npm/npmjs.org/issues/163>
       options: { Accept: '*/*' },
       notFoundMessage: 'package not found',
     });
+
+    let packageData;
+    if (scope === undefined) {
+      packageData = json;
+    } else {
+      const registryTag = tag || 'latest';
+      let latestVersion;
+      try {
+        latestVersion = json['dist-tags'][registryTag];
+      } catch (e) {
+        throw new NotFound({ prettyMessage: 'tag not found' });
+      }
+      try {
+        packageData = json.versions[latestVersion];
+      } catch (e) {
+        throw new InvalidResponse('invalid json response');
+      }
+    }
+
+    return this.constructor._validate(packageData, schema);
   }
 };

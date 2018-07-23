@@ -226,10 +226,10 @@ class BaseService {
       },
     }));
   }
-};
+}
 
 class BaseJsonService extends BaseService {
-  static validateResponse(json, schema) {
+  static _validate(json, schema) {
     const { error, value } = Joi.validate(json, schema, {
       allowUnknown: true,
       stripUnknown: true,
@@ -255,7 +255,7 @@ class BaseJsonService extends BaseService {
         )
       )
       .then(asJson)
-      .then(json => this.constructor.validateResponse(json, schema));
+      .then(json => this.constructor._validate(json, schema));
   }
 }
 
