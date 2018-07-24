@@ -12,7 +12,7 @@ module.exports = class StaticBadge extends BaseService {
   }
 
   static get category() {
-    return 'miscellaneous';
+    return 'other';
   }
 
   static get url() {
