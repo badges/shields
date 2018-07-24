@@ -2506,7 +2506,7 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       // Grab the latest stable version, or an unstable
       var versions = data.versions;
-      var version = latestVersion(versions, includePre);
+      var version = latestVersion(versions, { pre: includePre });
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
@@ -3591,7 +3591,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var versions = data.map(function(e) { return e.name; });
-      var tag = latestVersion(versions, includePre);
+      var tag = latestVersion(versions, { pre: includePre });
       badgeData.text[1] = versionText(tag);
       badgeData.colorscheme = versionColor(tag);
       sendBadge(format, badgeData);
