@@ -203,7 +203,7 @@ class GemOwner extends BaseJsonService {
   }
 
   static get category() {
-    return 'miscellaneous';
+    return 'other';
   }
 
   static get url() {
@@ -267,7 +267,7 @@ class GemRank extends BaseJsonService {
   }
 
   static get category() {
-    return 'miscellaneous';
+    return 'rating';
   }
 
   static get url() {
