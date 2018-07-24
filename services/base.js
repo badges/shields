@@ -16,6 +16,9 @@ const {
   asJson,
 } = require('../lib/error-helper');
 
+function coalesce(...candidates) {
+  return candidates.find(c => typeof c === 'string');
+}
 
 class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
@@ -185,8 +188,8 @@ class BaseService {
 
     const badgeData = {
       text: [
-        overrideLabel || serviceLabel || defaultLabel || this.category,
-        serviceMessage || 'n/a',
+        coalesce(overrideLabel, serviceLabel, defaultLabel, this.category),
+        coalesce(serviceMessage, 'n/a'),
       ],
       template: style,
       logo: makeLogo(style === 'social' ? defaultLogo : undefined, { logo: overrideLogo }),
