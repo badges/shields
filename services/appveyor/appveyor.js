@@ -1,21 +1,14 @@
 'use strict';
 
-const BaseService = require('../base');
-const {
-  checkErrorResponse,
-  asJson,
-} = require('../../lib/error-helper');
+const { BaseJsonService } = require('../base');
 
-module.exports = class AppVeyor extends BaseService {
+module.exports = class AppVeyor extends BaseJsonService {
   async handle({repo, branch}) {
     let apiUrl = 'https://ci.appveyor.com/api/projects/' + repo;
     if (branch != null) {
       apiUrl += '/branch/' + branch;
     }
-    const json = await this._sendAndCacheRequest(apiUrl, {
-      headers: { 'Accept': 'application/json' }
-    }).then(checkErrorResponse.asPromise({ notFoundMessage: 'project not found or access denied' }))
-      .then(asJson);
+    const json = await this._requestJson(apiUrl, {}, 'project not found or access denied');
 
     const { build: { status } } = json;
     if (status === 'success') {
@@ -46,7 +39,7 @@ module.exports = class AppVeyor extends BaseService {
         previewUrl: 'gruntjs/grunt',
       },
       {
-        title: 'branch',
+        title: `${this.name} branch`,
         previewUrl: 'gruntjs/grunt/master',
       },
     ];

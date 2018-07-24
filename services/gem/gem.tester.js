@@ -7,7 +7,6 @@ const {
   isVPlusDottedVersionAtLeastOne,
   isMetric
 } = require('../test-validators');
-const { invalidJSON } = require('../response-fixtures');
 const isOrdinalNumber = Joi.string().regex(/^[1-9][0-9]+(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ)$/);
 const isOrdinalNumberDaily = Joi.string().regex(/^[1-9][0-9]+(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ) daily$/);
 
@@ -33,14 +32,6 @@ t.create('version (connection error)')
   .networkOff()
   .expectJSON({name: 'gem', value: 'inaccessible'});
 
-t.create('version (unexpected response)')
-  .get('/v/formatador.json')
-  .intercept(nock => nock('https://rubygems.org')
-    .get('/api/v1/gems/formatador.json')
-    .reply(invalidJSON)
-  )
-  .expectJSON({name: 'gem', value: 'invalid'});
-
 
 // downloads endpoints
 
@@ -61,14 +52,6 @@ t.create('total downloads (connection error)')
   .networkOff()
   .expectJSON({name: 'downloads', value: 'inaccessible'});
 
-t.create('total downloads (unexpected response)')
-  .get('/dt/rails.json')
-  .intercept(nock => nock('https://rubygems.org')
-    .get('/api/v1/gems/rails.json')
-    .reply(invalidJSON)
-  )
-  .expectJSON({name: 'downloads', value: 'invalid'});
-
 
 // version downloads
 t.create('version downloads (valid, stable version)')
@@ -87,7 +70,7 @@ t.create('version downloads (valid, specific version)')
 
 t.create('version downloads (package not found)')
   .get('/dv/not-a-package/4.1.0.json')
-  .expectJSON({name: 'downloads@4.1.0', value: 'not found'});
+  .expectJSON({name: 'downloads', value: 'not found'});
 
 t.create('version downloads (valid package, invalid version)')
   .get('/dv/rails/not-a-version.json')
@@ -100,15 +83,7 @@ t.create('version downloads (valid package, version not specified)')
 t.create('version downloads (connection error)')
   .get('/dv/rails/4.1.0.json')
   .networkOff()
-  .expectJSON({name: 'downloads@4.1.0', value: 'inaccessible'});
-
-t.create('version downloads (unexpected response)')
-  .get('/dv/rails/4.1.0.json')
-  .intercept(nock => nock('https://rubygems.org')
-    .get('/api/v1/versions/rails.json')
-    .reply(invalidJSON)
-  )
-  .expectJSON({name: 'downloads@4.1.0', value: 'invalid'});
+  .expectJSON({name: 'downloads', value: 'inaccessible'});
 
 
 // latest version downloads
@@ -121,25 +96,17 @@ t.create('latest version downloads (valid)')
 
 t.create('latest version downloads (not found)')
   .get('/dtv/not-a-package.json')
-  .expectJSON({name: 'downloads@latest', value: 'not found'});
+  .expectJSON({name: 'downloads', value: 'not found'});
 
 t.create('latest version downloads (connection error)')
   .get('/dtv/rails.json')
   .networkOff()
-  .expectJSON({name: 'downloads@latest', value: 'inaccessible'});
-
-t.create('latest version downloads (unexpected response)')
-  .get('/dtv/rails.json')
-  .intercept(nock => nock('https://rubygems.org')
-    .get('/api/v1/gems/rails.json')
-    .reply(invalidJSON)
-  )
-  .expectJSON({name: 'downloads@latest', value: 'invalid'});
+  .expectJSON({name: 'downloads', value: 'inaccessible'});
 
 
 // users endpoint
 
-t.create('version (valid)')
+t.create('users (valid)')
   .get('/u/raphink.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'gems',
@@ -154,14 +121,6 @@ t.create('users (connection error)')
   .get('/u/raphink.json')
   .networkOff()
   .expectJSON({name: 'gems', value: 'inaccessible'});
-
-t.create('users (unexpected response)')
-.get('/u/raphink.json')
-  .intercept(nock => nock('https://rubygems.org')
-    .get('/api/v1/owners/raphink/gems.json')
-    .reply(invalidJSON)
-  )
-  .expectJSON({name: 'gems', value: 'invalid'});
 
 
 // rank endpoint
@@ -188,11 +147,3 @@ t.create('rank (connection error)')
   .get('/rt/rspec-puppet-facts.json')
   .networkOff()
   .expectJSON({name: 'rank', value: 'inaccessible'});
-
-t.create('rank (unexpected response)')
-  .get('/rt/rspec-puppet-facts.json')
-    .intercept(nock => nock('http://bestgems.org')
-      .get('/api/v1/gems/rspec-puppet-facts/total_ranking.json')
-      .reply(invalidJSON)
-    )
-    .expectJSON({name: 'rank', value: 'invalid'});

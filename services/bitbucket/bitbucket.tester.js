@@ -3,6 +3,7 @@
 const Joi = require('joi');
 const ServiceTester = require('../service-tester');
 const {
+  isBuildStatus,
   isMetric,
   isMetricOpenIssues
 } = require('../test-validators');
@@ -121,7 +122,7 @@ t.create('master build result (valid)')
   .get('/pipelines/atlassian/adf-builder-javascript.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: Joi.equal('failing', 'passing', 'error', 'stopped', 'expired')
+    value: isBuildStatus
   }));
 
 t.create('master build result (not found)')
@@ -132,7 +133,7 @@ t.create('branch build result (valid)')
   .get('/pipelines/atlassian/adf-builder-javascript/shields-test-dont-remove.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: Joi.equal('failing', 'passing', 'error', 'stopped', 'expired')
+    value: isBuildStatus
   }));
 
 t.create('branch build result (not found)')

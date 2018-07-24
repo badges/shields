@@ -2,15 +2,22 @@
 
 const Joi = require('joi');
 const ServiceTester = require('../service-tester');
-
+const { invalidJSON } = require('../response-fixtures');
 const {
-    isMetric,
-    isMetricOverTimePeriod,
     isIntegerPercentage,
     isVPlusDottedVersionAtLeastOne,
 } = require('../test-validators');
 
 const isPlatform = Joi.string().regex(/^(osx|ios|tvos|watchos)( \| (osx|ios|tvos|watchos))*$/);
+
+// these are deliberately not isMetricOverTimePeriod due to
+// https://github.com/CocoaPods/cocoapods.org/issues/348
+const isMetricOverTimePeriodAllowZero = Joi
+  .string()
+  .regex(/^(0|[1-9][0-9]*)[kMGTPEZY]?\/(year|month|4 weeks|week|day)$/);
+const isMetricAllowZero = Joi
+  .string()
+  .regex(/^(0|[1-9][0-9]*)[kMGTPEZY]?$/);
 
 const t = new ServiceTester({ id: 'cocoapods', title: 'Cocoa Pods' });
 module.exports = t;
@@ -38,7 +45,7 @@ t.create('version (unexpected response)')
   .get('/v/AFNetworking.json')
   .intercept(nock => nock('https://trunk.cocoapods.org')
     .get('/api/v1/pods/AFNetworking/specs/latest')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'pod', value: 'invalid'});
 
@@ -65,7 +72,7 @@ t.create('platform (unexpected response)')
   .get('/p/AFNetworking.json')
   .intercept(nock => nock('https://trunk.cocoapods.org')
     .get('/api/v1/pods/AFNetworking/specs/latest')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'platform', value: 'invalid'});
 
@@ -89,7 +96,7 @@ t.create('license (unexpected response)')
   .get('/l/AFNetworking.json')
   .intercept(nock => nock('https://trunk.cocoapods.org')
     .get('/api/v1/pods/AFNetworking/specs/latest')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'license', value: 'invalid'});
 
@@ -124,7 +131,7 @@ t.create('doc percent (unexpected response)')
   .get('/metrics/doc-percent/AFNetworking.json')
   .intercept(nock => nock('https://metrics.cocoapods.org')
     .get('/api/v1/pods/AFNetworking')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'docs', value: 'invalid'});
 
@@ -135,21 +142,21 @@ t.create('downloads (valid, monthly)')
   .get('/dm/AFNetworking.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'downloads',
-    value: isMetricOverTimePeriod
+    value: isMetricOverTimePeriodAllowZero
   }));
 
 t.create('downloads (valid, weekly)')
   .get('/dw/AFNetworking.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'downloads',
-    value: isMetricOverTimePeriod
+    value: isMetricOverTimePeriodAllowZero
   }));
 
 t.create('downloads (valid, total)')
   .get('/dt/AFNetworking.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'downloads',
-    value: isMetric
+    value: isMetricAllowZero
   }));
 
 t.create('downloads (not found)')
@@ -165,7 +172,7 @@ t.create('downloads (unexpected response)')
   .get('/dt/AFNetworking.json')
   .intercept(nock => nock('https://metrics.cocoapods.org')
     .get('/api/v1/pods/AFNetworking')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'downloads', value: 'invalid'});
 
@@ -176,14 +183,14 @@ t.create('apps (valid, weekly)')
   .get('/aw/AFNetworking.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'apps',
-    value: isMetricOverTimePeriod
+    value: isMetricOverTimePeriodAllowZero
   }));
 
 t.create('apps (valid, total)')
   .get('/at/AFNetworking.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'apps',
-    value: isMetric
+    value: isMetricAllowZero
   }));
 
 t.create('apps (not found)')
@@ -199,6 +206,6 @@ t.create('apps (unexpected response)')
   .get('/at/AFNetworking.json')
   .intercept(nock => nock('https://metrics.cocoapods.org')
     .get('/api/v1/pods/AFNetworking')
-    .reply(200, "{{{{{invalid json}}")
+    .reply(invalidJSON)
   )
   .expectJSON({name: 'apps', value: 'invalid'});

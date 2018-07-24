@@ -38,7 +38,7 @@ describe('Badge URL functions', function() {
   });
 
   test(dynamicBadgeUrl, () => {
-    const jsonUrl = 'http://example.com/foo.json';
+    const dataUrl = 'http://example.com/foo.json';
     const query = '$.bar';
     const prefix = 'value: ';
 
@@ -46,35 +46,13 @@ describe('Badge URL functions', function() {
       'http://img.example.com',
       'json',
       'foo',
-      jsonUrl,
+      dataUrl,
       query,
       { prefix, style: 'plastic' }
     ).expect([
       'http://img.example.com/badge/dynamic/json.svg',
       '?label=foo',
-      `&url=${encodeURIComponent(jsonUrl)}`,
-      `&query=${encodeURIComponent(query)}`,
-      `&prefix=${encodeURIComponent(prefix)}`,
-      '&style=plastic',
-    ].join(''))
-  });
-
-  test(dynamicBadgeUrl, () => {
-    const xmlUrl = 'http://example.com/foo.xml';
-    const query = '//bar';
-    const prefix = 'value: ';
-
-    given(
-      'http://img.example.com',
-      'xml',
-      'foo',
-      xmlUrl,
-      query,
-      { prefix, style: 'plastic' }
-    ).expect([
-      'http://img.example.com/badge/dynamic/xml.svg',
-      '?label=foo',
-      `&url=${encodeURIComponent(xmlUrl)}`,
+      `&url=${encodeURIComponent(dataUrl)}`,
       `&query=${encodeURIComponent(query)}`,
       `&prefix=${encodeURIComponent(prefix)}`,
       '&style=plastic',

@@ -13,12 +13,12 @@
     <text x="{{=(it.widths[0]+it.widths[1]/2)*10}}" y="175" font-weight="bold" transform="scale(0.1)" textLength="{{=(it.widths[1]-24)*10}}" lengthAdjust="spacing">{{=it.escapedText[1]}}</text>
   </g>
   {{?(it.text[0].length && it.links[0] && it.links[0].length)}}
-    <a xlink:href="{{=it.links[0]}}">
+    <a target="_blank" xlink:href="{{=it.links[0]}}">
       <rect width="{{=it.widths[0]}}" height="28" fill="rgba(0,0,0,0)"/>
     </a>
   {{?}}
   {{?(it.links[0] && it.links[0].length || it.links[1] && it.links[1].length)}}
-    <a xlink:href="{{=it.links[1] || it.links[0]}}">
+    <a target="_blank" xlink:href="{{=it.links[1] || it.links[0]}}">
       <rect x="{{=it.widths[0]}}" width="{{=it.widths[1]}}" height="28" fill="rgba(0,0,0,0)"/>
     </a>
   {{?}}
