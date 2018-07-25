@@ -9,7 +9,7 @@ export default () => (
     <p className="highlights">
       Pixel-perfect &nbsp;
       Retina-ready &nbsp;
-      Fast &nbsp;
+      Slow &nbsp;
       Consistent &nbsp;
       Hackable &nbsp;
       No tracking
