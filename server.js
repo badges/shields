@@ -7830,9 +7830,9 @@ function(data, match, end, ask) {
   // Badge creation.
   try {
     var badgeData = getBadgeData(subject, data);
-    if (data.label !== undefined) { badgeData.text[0] = '' + data.label; }
+    badgeData.text[0] = getLabel(subject, data);
     badgeData.text[1] = status;
-    setBadgeColor(badgeData, color);
+    badgeData.colorB = makeColorB(color, data);
     badgeData.template = data.style;
     if (config.profiling.makeBadge) {
       console.time('makeBadge total');
