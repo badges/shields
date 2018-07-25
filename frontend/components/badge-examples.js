@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import resolveBadgeUrl from '../lib/badge-url';
@@ -63,9 +64,9 @@ const Category = ({ category, examples, baseUri, longCache, onClick }) => {
   }
   return (
     <div>
-      <a href={'/examples/' + category.id}>
+      <Link to={'/examples/' + category.id}>
         <h3 id={category.id}>{ category.name }</h3>
-      </a>
+      </Link>
       <table className="badge">
         <tbody>
           {

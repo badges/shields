@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Meta from './meta';
 import Header from './header';
 import SuggestionAndSearch from './suggestion-and-search';
@@ -16,6 +17,10 @@ export default class ExamplesPage extends React.Component {
     example: null
   };
 
+  static propTypes = {
+    match: PropTypes.object.isRequired,
+  }
+
   prepareExamples(category) {
     const examples = category ? badgeExampleData.filter(example => example.category.id === category) : badgeExampleData;
     return prepareExamples(examples, () => predicateFromQuery(this.state.query));
@@ -23,7 +28,7 @@ export default class ExamplesPage extends React.Component {
 
   constructor(props) {
     super(props);
-    this.preparedExamples = this.prepareExamples();
+    this.preparedExamples = this.prepareExamples(props.match.params.id);
   }
 
   getBody() {

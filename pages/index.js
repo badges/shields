@@ -1,9 +1,10 @@
 import React from 'react';
+import { HashRouter, StaticRouter, Route, Link } from "react-router-dom";
 import { BadgeExamples } from '../frontend/components/badge-examples';
 import ExamplesPage from '../frontend/components/examples-page';
 import { baseUri, longCache } from '../frontend/constants';
 
-export default class IndexPage extends ExamplesPage {
+class IndexPage extends ExamplesPage {
 
   constructor(props) {
     super(props);
@@ -13,11 +14,13 @@ export default class IndexPage extends ExamplesPage {
 
   getBody() {
     if ((this.state.query == null) || (this.state.query.length === 0)) {
-      return this.preparedExamples.map(category => (
-        <a href={'/examples/' + category.category.id}>
-          <h3 id={category.category.id}>{ category.category.name }</h3>
-        </a>
-      ));
+      return this.preparedExamples.map(function(category, i) {
+        return (
+          <Link to={'/examples/' + category.category.id} key={i}>
+            <h3 id={category.category.id}>{ category.category.name }</h3>
+          </Link>
+        )
+      });
     } else if (this.state.query.length === 1) {
       return (
         <div>Search term must have 2 or more characters</div>
@@ -38,6 +41,26 @@ export default class IndexPage extends ExamplesPage {
         }.bind(this), 500);
         return 'searching...';
       }
+    }
+  }
+
+}
+
+
+export default class Router extends React.Component {
+
+  render() {
+    const router = (
+      <div>
+        <Route path="/" exact component={IndexPage} />
+        <Route path="/examples/:id" component={ExamplesPage} />
+      </div>
+    );
+    if (typeof window !== 'undefined') {
+      return (<HashRouter>{ router }</HashRouter>);
+    } else {
+      const context = {};
+      return (<StaticRouter context={context}>{ router }</StaticRouter>);
     }
   }
 
