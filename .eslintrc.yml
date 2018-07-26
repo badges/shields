@@ -26,3 +26,4 @@ rules:
   # We keep whitespace cleaned up.
   no-trailing-spaces: "error"
   eol-last: "error"
+  object-curly-spacing: ["error", "always"]

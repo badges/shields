@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 import ClickToSelect from '@mapbox/react-click-to-select';
 import resolveBadgeUrl from '../lib/badge-url';
 import generateAllMarkup from '../lib/generate-image-markup';
-import { advertisedStyles } from '../../lib/supported-features';
+import { advertisedStyles } from '../../supported-features.json';
 
 export default class MarkupModal extends React.Component {
   static propTypes = {
