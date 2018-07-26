@@ -1,3 +1,6 @@
+parserOptions:
+  ecmaVersion: 8
+
 env:
   node: true
   # We use Promise, Map, and occasional ES6 syntax.
@@ -23,3 +26,4 @@ rules:
   # We keep whitespace cleaned up.
   no-trailing-spaces: "error"
   eol-last: "error"
+  object-curly-spacing: ["error", "always"]

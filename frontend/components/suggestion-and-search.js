@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import fetchPonyfill from 'fetch-ponyfill';
 import debounce from 'lodash.debounce';
 import { Badge } from './badge-examples';
+import resolveUrl from '../lib/resolve-url';
 
 export default class SuggestionAndSearch extends React.Component {
   static propTypes = {
@@ -14,7 +15,7 @@ export default class SuggestionAndSearch extends React.Component {
 
   constructor(props) {
     super(props);
-    this.queryChangedDebounced = debounce(props.queryChanged, 500, { leading: true });
+    this.queryChangedDebounced = debounce(props.queryChanged, 50, { leading: true });
   }
 
   state = {
@@ -39,8 +40,7 @@ export default class SuggestionAndSearch extends React.Component {
       const { baseUri } = this.props;
       const { projectUri } = this.state;
 
-      const url = new URL('/$suggest/v1', baseUri);
-      url.searchParams.set('url', projectUri);
+      const url = resolveUrl('/$suggest/v1', baseUri, { url: projectUri });
 
       const fetch = window.fetch || fetchPonyfill;
       fetch(url)

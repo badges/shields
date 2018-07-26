@@ -7,23 +7,26 @@ import { BadgeExamples } from '../frontend/components/badge-examples';
 import MarkupModal from '../frontend/components/markup-modal';
 import Usage from '../frontend/components/usage';
 import Footer from '../frontend/components/footer';
-import badgeExampleData from '../lib/all-badge-examples';
-import filterExamples from '../frontend/lib/filter-examples';
+import badgeExampleData from '../badge-examples.json';
+import { prepareExamples, predicateFromQuery } from '../frontend/lib/prepare-examples';
 
 const baseUri = process.env.BASE_URL;
 const longCache = envFlag(process.env.LONG_CACHE, false);
 
 export default class IndexPage extends React.Component {
-  state = { query: null, example: null };
+  state = {
+    query: null,
+    example: null
+  };
+
+  constructor(props) {
+    super(props);
+    this.preparedExamples = prepareExamples(
+      badgeExampleData,
+      () => predicateFromQuery(this.state.query));
+  }
 
   render() {
-    // This approach is the slightest bit slow. Since all the badges are on
-    // the screen at the beginning, we might get a more responsive search by
-    // adjusting visibility of the elements rather than removing them from the
-    // DOM and recreating them, as this does now. That's what the original
-    // code did.
-    const filteredExamples = filterExamples(badgeExampleData, this.state.query);
-
     return (
       <div>
         <Meta />
@@ -45,11 +48,13 @@ export default class IndexPage extends React.Component {
           </a>
         </section>
         <BadgeExamples
-          examples={filteredExamples}
+          categories={this.preparedExamples}
           onClick={example => { this.setState({ example }); }}
           baseUri={baseUri}
           longCache={longCache} />
-        <Usage baseUri={baseUri} />
+        <Usage
+          baseUri={baseUri}
+          longCache={longCache} />
         <Footer baseUri={baseUri} />
         <style jsx>{`
           .donate {

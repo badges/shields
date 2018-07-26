@@ -4,13 +4,13 @@ Hosting your own Shields server
 Installation
 ------------
 
-You will need version 6 of Node.js, which you can install using a
+You will need Node 8 or later, which you can install using a
 [package manager][].
 
 On Ubuntu / Debian:
 
 ```sh
-curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -; sudo apt-get install -y nodejs
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -; sudo apt-get install -y nodejs
 ```
 
 ```sh
@@ -26,7 +26,7 @@ Build the frontend
 ------------------
 
 ```sh
-BASE_URL=https://your-server.example.com npm run build:production
+LONG_CACHE=true npm run build
 ```
 
 
@@ -86,6 +86,8 @@ configuration. See [shields.example.env][shields.example.env] for an example.
 Then run the container:
 
 ```console
+$ docker run --rm -p 8080:80 --name shields shields
+# or if you have shields.env file, run the following instead
 $ docker run --rm -p 8080:80 --env-file shields.env --name shields shields
 
 > gh-badges@1.1.2 start /usr/src/app
@@ -102,6 +104,17 @@ then you will need to replace `localhost` with the IP address of that virtual
 machine.
 
 [shields.example.env]: ../shields.example.env
+
+
+Zeit Now
+--------
+
+To deploy using Zeit Now:
+
+```console
+npm run build  # Not sure why, but this needs to be run before deploying.
+now
+```
 
 
 Server secrets
@@ -136,14 +149,17 @@ Separate frontend hosting
 -------------------------
 
 If you want to host the frontend on a separate server, such as cloud storage
-or a CDN, you can do that. Just copy the built `index.html` there.
+or a CDN, you can do that.
 
-To help out users, you can make the Shields server redirect the server root.
-Set the `REDIRECT_URI` environment variable:
+First, build the frontend, pointing `BASE_URL` to your server.
 
 ```sh
-REDIRECT_URI=http://my-custom-shields.s3.amazonaws.com/
+LONG_CACHE=true BASE_URL=https://your-server.example.com npm run build
 ```
+
+Then copy the contents of the `build/` folder to your static hosting / CDN.
+
+There are also a couple settings you should configure on the server.
 
 If you want to use server suggestions, you should also set `ALLOWED_ORIGIN`:
 
@@ -153,3 +169,33 @@ ALLOWED_ORIGIN=http://my-custom-shields.s3.amazonaws.com,https://my-custom-shiel
 
 This should be a comma-separated list of allowed origin headers. They should
 not have paths or trailing slashes.
+
+To help out users, you can make the Shields server redirect the server root.
+Set the `REDIRECT_URI` environment variable:
+
+```sh
+REDIRECT_URI=http://my-custom-shields.s3.amazonaws.com/
+```
+
+Sentry
+------
+
+In order to enable integration with [Sentry](https://sentry.io), you need your own [Sentry DSN](https://docs.sentry.io/quickstart/#configure-the-dsn). It’s an URL in format `https://{PUBLIC_KEY}:{SECRET_KEY}@sentry.io/{PROJECT_ID}`.
+
+### How to obtain the Sentry DSN
+
+1. [Sign up](https://sentry.io/pricing/) for Sentry
+1. Log in to Sentry
+1. Create a new project for Node.js
+1. You should see [Sentry DSN](https://docs.sentry.io/quickstart/#configure-the-dsn) for your project. Sentry DSN can be found by navigating to \[Project Name] -> Project Settings -> Client Keys (DSN) as well.
+
+Start the server using the Sentry DSN. You can set it:
+- by `SENTRY_DSN` environment variable
+```
+SENTRY_DSN=https://xxx:yyy@sentry.io/zzz sudo node server
+```
+
+- or by `sentry_dsn` secret property defined in `private/secret.json`
+```
+sudo node server
+```

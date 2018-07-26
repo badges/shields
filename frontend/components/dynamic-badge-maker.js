@@ -1,35 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { dynamicBadgeUrl } from '../lib/badge-url';
 
 export default class DynamicBadgeMaker extends React.Component {
   static propTypes = {
-    baseUri: PropTypes.string.isRequired,
+    baseUri: PropTypes.string,
   };
 
   state = {
-    type: 'json',
+    datatype: '',
     label: '',
-    uri: '',
-    colorB: '',
+    url: '',
+    query: '',
+    color: '',
     prefix: '',
     suffix: '',
-    query: '',
   };
 
   makeBadgeUri () {
-    const result = new URL(`/dynamic/${this.state.type}.svg`, this.props.baseUri);
-    const searchParams = [
-      'label',
-      'uri',
-      'colorB',
-      'prefix',
-      'suffix',
-      'query',
-    ];
-    searchParams.forEach(k => {
-      result.searchParams.set(k, this.state[k]);
-    });
-    return result.href;
+    const { datatype, label, url, query, color, prefix, suffix } = this.state;
+    const { baseUri: baseUrl = document.location.href } = this.props;
+    return dynamicBadgeUrl(baseUrl, datatype, label, url, query, { color, prefix, suffix });
   }
 
   handleSubmit(e) {
@@ -38,51 +29,52 @@ export default class DynamicBadgeMaker extends React.Component {
   }
 
   get isValid() {
-    const { label, uri, query } = this.state;
-    return label && uri && query;
+    const { datatype, label, url, query } = this.state;
+    return datatype && label && url && query;
   }
 
   render() {
     return (
       <form onSubmit={e => this.handleSubmit(e)}>
-        <input
+        <select
           className="short"
-          value={this.state.type}
-          readOnly
-          list="dynamic-type" />
-        <datalist id="dynamic-type">
-          <option value="json" />
-        </datalist>
+          value={this.state.datatype}
+          onChange={event => this.setState({ datatype: event.target.value })}>
+          <option value="" disabled>data type</option>
+          <option value="json">json</option>
+          <option value="xml">xml</option>
+          <option value="yaml">yaml</option>
+        </select> {}
         <input
           className="short"
           value={this.state.label}
           onChange={event => this.setState({ label: event.target.value })}
-          placeholder="label" />
+          placeholder="label" /> {}
         <input
           className="short"
-          value={this.state.uri}
-          onChange={event => this.setState({ uri: event.target.value })}
-          placeholder="uri" />
+          value={this.state.url}
+          onChange={event => this.setState({ url: event.target.value })}
+          placeholder="url" /> {}
         <input
           className="short"
           value={this.state.query}
           onChange={event => this.setState({ query: event.target.value })}
-          placeholder="$.data.subdata" />
+          placeholder="query" /> {}
         <input
           className="short"
           value={this.state.color}
           onChange={event => this.setState({ color: event.target.value })}
-          placeholder="hex color" />
+          placeholder="color" /> {}
         <input
           className="short"
           value={this.state.prefix}
           onChange={event => this.setState({ prefix: event.target.value })}
-          placeholder="prefix" />
+          placeholder="prefix" /> {}
         <input
           className="short"
           value={this.state.suffix}
           onChange={event => this.setState({ suffix: event.target.value })}
-          placeholder="suffix" />
+          placeholder="suffix" /> {}
         <button disabled={! this.isValid}>Make Badge</button>
       </form>
     );
