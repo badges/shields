@@ -106,7 +106,7 @@ class APMLicense extends BaseAPMService {
   }
 
   static get category() {
-    return 'miscellaneous';
+    return 'license';
   }
 
   static get url() {
