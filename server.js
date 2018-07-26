@@ -128,7 +128,10 @@ analytics.load();
 analytics.scheduleAutosaving();
 analytics.setRoutes(camp);
 
-const githubProvider = githubAuth.initialize(config.services.github, camp);
+const githubProvider = githubAuth.initialize({
+  persistence: config.persistence,
+  service: config.services.github,
+}, camp);
 
 suggest.setRoutes(config.cors.allowedOrigin, camp);
 
