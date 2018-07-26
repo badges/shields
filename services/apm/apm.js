@@ -8,17 +8,33 @@ const {
   addv
 } = require('../../lib/text-formatters');
 
-class APMDownloads extends BaseJsonService {
-  async handle({repo}) {
+class BaseAPMService extends BaseJsonService {
+
+  async fetch(repo) {
     const apiUrl = 'https://atom.io/api/packages/' + repo;
-    const json = await this._requestJson(apiUrl, {}, 'package not found');
+    return this._requestJson(apiUrl, {}, 'package not found');
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'apm' };
+  }
+
+}
+
+class APMDownloads extends BaseAPMService {
+  async handle({repo}) {
+    const json = await this.fetch(repo);
 
     const downloads = json.downloads;
     return {message: metric(downloads), color: 'green'};
   }
-  
+
   static get category() {
     return 'downloads';
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'downloads' };
   }
 
   static get url() {
@@ -41,10 +57,9 @@ class APMDownloads extends BaseJsonService {
   }
 };
 
-class APMVersion extends BaseJsonService {
+class APMVersion extends BaseAPMService {
   async handle({repo}) {
-    const apiUrl = 'https://atom.io/api/packages/' + repo;
-    const json = await this._requestJson(apiUrl, {}, 'package not found');
+    const json = await this.fetch(repo);
 
     const version = json.releases.latest;
     if (!version)
@@ -52,10 +67,6 @@ class APMVersion extends BaseJsonService {
     return {message: addv(version), color: versionColor(version)};
   }
 
-  static get defaultBadgeData() {
-    return { label: 'apm' };
-  }
-  
   static get category() {
     return 'version';
   }
@@ -80,10 +91,9 @@ class APMVersion extends BaseJsonService {
   }
 };
 
-class APMLicense extends BaseJsonService {
+class APMLicense extends BaseAPMService {
   async handle({repo}) {
-    const apiUrl = 'https://atom.io/api/packages/' + repo;
-    const json = await this._requestJson(apiUrl, {}, 'package not found');
+    const json = await this.fetch(repo);
 
     const license = json.metadata.license;
     if (!license)
@@ -94,7 +104,7 @@ class APMLicense extends BaseJsonService {
   static get defaultBadgeData() {
     return { label: 'license' };
   }
-  
+
   static get category() {
     return 'miscellaneous';
   }
