@@ -48,7 +48,7 @@ t.create('Invalid version')
       '{"releases":{}}'
     ])
   )
-  .expectJSON({name: 'downloads', value: 'invalid'});
+  .expectJSON({name: 'downloads', value: 'unparseable json response'});
 
 t.create('Invalid License')
   .get('/l/vim-mode.json')
@@ -59,7 +59,7 @@ t.create('Invalid License')
       '{"metadata":{}}'
     ])
   )
-  .expectJSON({name: 'license', value: 'invalid'});
+  .expectJSON({name: 'license', value: 'unparseable json response'});
 
 t.create('Unexpected response')
   .get('/dm/vim-mode.json')
@@ -67,4 +67,4 @@ t.create('Unexpected response')
     .get('/api/packages/vim-mode')
     .reply(invalidJSON)
   )
-  .expectJSON({name: 'downloads', value: 'invalid'});
+  .expectJSON({name: 'downloads', value: 'unparseable json response'});
