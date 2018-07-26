@@ -135,6 +135,7 @@ analytics.load();
 analytics.scheduleAutosaving();
 analytics.setRoutes(camp);
 
+githubAuth.setAdminRoutes(camp);
 if (githubAuth.persistence) {
   githubAuth.persistence.initialize().catch(e => {
     console.error(e);
@@ -142,7 +143,7 @@ if (githubAuth.persistence) {
   });
 }
 if (serverSecrets && serverSecrets.gh_client_id) {
-  githubAuth.setRoutes(camp);
+  githubAuth.setAcceptorRoutes(camp);
 }
 
 let githubDebugInterval;
