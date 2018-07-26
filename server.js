@@ -22,7 +22,7 @@ const { isDeprecated, getDeprecatedBadge } = require('./lib/deprecation-helpers'
 const { checkErrorResponse } = require('./lib/error-helper');
 const analytics = require('./lib/analytics');
 const config = require('./lib/server-config');
-const githubAuth = require('./lib/github-auth');
+const GithubConstellation = require('./lib/github-auth/github-constellation');
 const sysMonitor = require('./lib/sys/monitor');
 const log = require('./lib/log');
 const { makeMakeBadgeFn } = require('./lib/make-badge');
@@ -127,13 +127,19 @@ const camp = require('camp').start({
   key: config.ssl.key,
 });
 
+const githubConstellation = new GithubConstellation({
+  persistence: config.persistence,
+  service: config.services.github,
+});
+const { apiProvider: githubApiProvider } = githubConstellation;
+
 function reset() {
   clearRequestCache();
   clearRegularUpdateCache();
 }
 
 function stop(callback) {
-  githubAuth.stop();
+  githubConstellation.stop();
   analytics.cancelAutosaving();
   camp.close(callback);
 }
@@ -164,12 +170,9 @@ if (serverSecrets && serverSecrets.shieldsSecret) {
   sysMonitor.setRoutes(camp);
 }
 
-const githubProvider = githubAuth.initialize({
-  persistence: config.persistence,
-  service: config.services.github,
-}, camp);
+githubConstellation.initialize(camp);
 
-suggest.setRoutes(config.cors.allowedOrigin, camp);
+suggest.setRoutes(config.cors.allowedOrigin, githubApiProvider, camp);
 
 camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
     var format = match[1];
@@ -319,7 +322,7 @@ cache(function(data, match, sendBadge, request) {
     uri: `https://api.travis-ci.org/repos/${userRepo}/branches/${version}`,
   };
   const badgeData = getBadgeData('PHP', data);
-  getPhpReleases(githubAuth.request, (err, phpReleases) => {
+  getPhpReleases(githubApiProvider.request, (err, phpReleases) => {
     if (err != null) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
@@ -3280,12 +3283,12 @@ cache(function(data, match, sendBadge, request) {
   const user = match[2];  // eg, expressjs/express
   const repo = match[3];
   const format = match[4];
-  const apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/tags';
+  const apiUrl = `/repos/${user}/${repo}/tags`;
   let badgeData = getBadgeData('tag', data);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
-  githubProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -3361,7 +3364,7 @@ cache(function(data, match, sendBadge, request) {
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
-  githubProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -3399,7 +3402,7 @@ cache(function(data, match, sendBadge, request) {
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
-  githubProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -3423,10 +3426,10 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub release & pre-release date integration.
-mapGithubReleaseDate({ camp, cache }, githubProvider);
+mapGithubReleaseDate({ camp, cache }, githubApiProvider);
 
 // GitHub commits since integration.
-mapGithubCommitsSince({ camp, cache }, githubProvider);
+mapGithubCommitsSince({ camp, cache }, githubApiProvider);
 
 // GitHub release-download-count and pre-release-download-count integration.
 camp.route(/^\/github\/(downloads|downloads-pre)\/([^/]+)\/([^/]+)(\/.+)?\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -3457,7 +3460,7 @@ cache(function(data, match, sendBadge, request) {
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
-  githubProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       return sendBadge(format, badgeData);
@@ -3536,7 +3539,7 @@ cache(function(data, match, sendBadge, request) {
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
-  githubProvider.request(request, '/search/issues', query, (err, res, buffer) => {
+  githubApiProvider.request(request, '/search/issues', query, (err, res, buffer) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -3564,7 +3567,7 @@ cache((queryParams, match, sendBadge, request) => {
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', queryParams);
   }
-  githubProvider.request(request, uri, {}, (err, res, buffer) => {
+  githubApiProvider.request(request, uri, {}, (err, res, buffer) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -3633,7 +3636,7 @@ cache((queryParams, match, sendBadge, request) => {
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', queryParams);
   }
-  githubProvider.request(request, issueUri, {}, (err, res, buffer) => {
+  githubApiProvider.request(request, issueUri, {}, (err, res, buffer) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -3643,7 +3646,7 @@ cache((queryParams, match, sendBadge, request) => {
       const parsedData = JSON.parse(buffer);
       const ref = parsedData.head.sha;
       const statusUri = `/repos/${owner}/${repo}/commits/${ref}/status`;
-      githubProvider.request(request, statusUri, {}, (err, res, buffer) => {
+      githubApiProvider.request(request, statusUri, {}, (err, res, buffer) => {
         try {
           const parsedData = JSON.parse(buffer);
           const state = badgeData.text[1] = parsedData.state;
@@ -3689,7 +3692,7 @@ cache(function(data, match, sendBadge, request) {
       'https://github.com/' + user + '/' + repo + '/network',
      ];
   }
-  githubProvider.request(request, apiUrl, {}, function(err, res, buffer) {
+  githubApiProvider.request(request, apiUrl, {}, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -3724,7 +3727,7 @@ cache(function(data, match, sendBadge, request) {
       'https://github.com/' + user + '/' + repo + '/stargazers',
      ];
   }
-  githubProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -3757,7 +3760,7 @@ cache(function(data, match, sendBadge, request) {
       'https://github.com/' + user + '/' + repo + '/watchers',
      ];
   }
-  githubProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -3785,7 +3788,7 @@ cache(function(data, match, sendBadge, request) {
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
-  githubProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -3814,7 +3817,7 @@ cache(function(data, match, sendBadge, request) {
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
-  githubProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
     if (res && res.statusCode === 404) {
       badgeData.text[1] = 'repo not found';
       sendBadge(format, badgeData);
@@ -3858,7 +3861,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
 
-  githubProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -3895,7 +3898,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[4];
   var query = { q: search + ' repo:' + user + '/' + repo };
   var badgeData = getBadgeData(search + ' counter', data);
-  githubProvider.request(request, '/search/code', query, function(err, res, buffer) {
+  githubApiProvider.request(request, '/search/code', query, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -3931,7 +3934,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
     badgeData.links = [`https://github.com/${user}/${repo}`];
   }
-  githubProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
     if (err !== null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -3983,7 +3986,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
     badgeData.links = [`https://github.com/${user}/${repo}`];
   }
-  githubProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
     if (err !== null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -4014,7 +4017,7 @@ cache(function(data, match, sendBadge, request) {
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
-  githubProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -4078,7 +4081,7 @@ cache(function(data, match, sendBadge, request) {
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
-  githubProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -4102,7 +4105,7 @@ cache(function(data, match, sendBadge, request) {
   const [, user, repo, branch, commit, format] = match;
   const apiUrl = `/repos/${user}/${repo}/compare/${branch}...${commit}`;
   const badgeData = getBadgeData('commit status', data);
-  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
+  githubApiProvider.request(request, apiUrl, {}, function(err, res, buffer) {
     if (checkErrorResponse(badgeData, err, res, 'commit or branch not found')) {
       if (res && res.statusCode === 404) {
         try {
@@ -7549,7 +7552,7 @@ cache(function(data, match, sendBadge, request) {
     uri: 'https://php-eye.com/api/v1/package/' + userRepo + '.json',
   };
   const badgeData = getBadgeData('PHP tested', data);
-  getPhpReleases(githubAuth.request, (err, phpReleases) => {
+  getPhpReleases(githubApiProvider.request.bind(githubApiProvider), (err, phpReleases) => {
     if (err != null) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
