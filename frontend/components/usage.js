@@ -180,6 +180,12 @@ export default class Usage extends React.PureComponent {
             </tr>
             <tr>
               <td>
+                <code>?logoColor=violet</code>
+              </td>
+              <td>Set the color of the logo (hex, rgb, rgba, hsl, hsla and css named colors supported)</td>
+            </tr>
+            <tr>
+              <td>
                 <code>?logoWidth=40</code>
               </td>
               <td>Set the horizontal space to give to the logo</td>
