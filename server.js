@@ -95,7 +95,6 @@ const {
 } = require('./lib/github-provider');
 
 const serverStartTime = new Date((new Date()).toGMTString());
-const githubProvider = githubAuth.defaultProvider;
 
 const camp = require('camp').start({
   documentRoot: path.join(__dirname, 'public'),
@@ -112,13 +111,7 @@ function reset() {
 }
 
 function stop(callback) {
-  if (githubAuth.persistence) {
-    githubAuth.persistence.stop();
-  }
-  if (githubDebugInterval) {
-    clearInterval(githubDebugInterval);
-    githubDebugInterval = null;
-  }
+  githubAuth.stop();
   analytics.cancelAutosaving();
   camp.close(callback);
 }
@@ -135,23 +128,7 @@ analytics.load();
 analytics.scheduleAutosaving();
 analytics.setRoutes(camp);
 
-githubAuth.setAdminRoutes(camp);
-if (githubAuth.persistence) {
-  githubAuth.persistence.initialize().catch(e => {
-    console.error(e);
-    process.exit(1);
-  });
-}
-if (serverSecrets && serverSecrets.gh_client_id) {
-  githubAuth.setAcceptorRoutes(camp);
-}
-
-let githubDebugInterval;
-if (config.services.github.debug.enabled) {
-  githubDebugInterval = setInterval(() => {
-    log(githubAuth.getTokenDebugInfo());
-  }, 1000 * config.services.github.debug.intervalSeconds);
-}
+const githubProvider = githubAuth.initialize(config.services.github, camp);
 
 suggest.setRoutes(config.cors.allowedOrigin, camp);
 
