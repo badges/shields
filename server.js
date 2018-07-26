@@ -160,6 +160,10 @@ analytics.load();
 analytics.scheduleAutosaving();
 analytics.setRoutes(camp);
 
+if (serverSecrets && serverSecrets.shieldsSecret) {
+  sysMonitor.setRoutes(camp);
+}
+
 const githubProvider = githubAuth.initialize({
   persistence: config.persistence,
   service: config.services.github,
@@ -3417,10 +3421,10 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub release & pre-release date integration.
-mapGithubReleaseDate({ camp, cache }, githubApiUrl, githubProvider);
+mapGithubReleaseDate({ camp, cache }, githubProvider);
 
 // GitHub commits since integration.
-mapGithubCommitsSince({ camp, cache }, githubApiUrl, githubProvider);
+mapGithubCommitsSince({ camp, cache }, githubProvider);
 
 // GitHub release-download-count and pre-release-download-count integration.
 camp.route(/^\/github\/(downloads|downloads-pre)\/([^/]+)\/([^/]+)(\/.+)?\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -4094,7 +4098,7 @@ cache(function(data, match, sendBadge, request) {
 camp.route(/^\/github\/commit-status\/([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const [, user, repo, branch, commit, format] = match;
-  const apiUrl = `${githubApiUrl}/repos/${user}/${repo}/compare/${branch}...${commit}`;
+  const apiUrl = `/repos/${user}/${repo}/compare/${branch}...${commit}`;
   const badgeData = getBadgeData('commit status', data);
   githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
     if (checkErrorResponse(badgeData, err, res, 'commit or branch not found')) {
