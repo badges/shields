@@ -10,14 +10,14 @@
     <a href="https://circleci.com/gh/badges/shields/tree/master">
         <img src="https://img.shields.io/circleci/project/github/badges/shields.svg"
             alt="build status"></a>
-    <a href="https://github.com/badges/shields/commits/gh-pages">
-        <img src="https://img.shields.io/github/last-commit/badges/shields/gh-pages.svg?label=last%20deployed"
-            alt="last deployed"></a>
+    <a href="https://github.com/badges/shields/compare/gh-pages...master">
+        <img src="https://img.shields.io/github/commits-since/badges/shields/gh-pages.svg?label=commits%20to%20be%20deployed"
+            alt="commits to be deployed"></a>
     <a href="https://discord.gg/HjJCwm5">
-        <img src="https://img.shields.io/discord/308323056592486420.svg"
+        <img src="https://img.shields.io/discord/308323056592486420.svg?logo=discord"
             alt="chat on Discord"></a>
     <a href="https://twitter.com/intent/follow?screen_name=shields_io">
-        <img src="https://img.shields.io/twitter/follow/shields_io.svg?style=social"
+        <img src="https://img.shields.io/twitter/follow/shields_io.svg?style=social&logo=twitter"
             alt="follow on Twitter"></a>
 </p>
 
@@ -69,13 +69,9 @@ maybe you'd like to open a pull request to address one of them:
 
 [![GitHub issues by-label](https://img.shields.io/github/issues/badges/shields/good%20first%20issue.svg)](https://github.com/badges/shields/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
-Or you can adopt one of these pull requests:
-
-[![GitHub pull requests by-label](https://img.shields.io/github/issues-pr/badges/shields/good%20first%20issue.svg)](https://github.com/badges/shields/pulls?q=is%3Apr+is%3Aopen+label%3A%22good+first+issue%22)
-
 You can read a [tutorial on how to add a badge][tutorial].
 
-[service-tests]: https://github.com/badges/shields/blob/master/service-tests/README.md
+[service-tests]: https://github.com/badges/shields/blob/master/doc/service-tests.md
 [tutorial]: doc/TUTORIAL.md
 [contributing]: CONTRIBUTING.md
 
@@ -117,9 +113,7 @@ Development
 -----------
 
 1. Install Node 8 or later. You can use the [package manager][] of your choice.
-   Node 8 is required for building or developing the front end. Node 6 or 8 will
-   work to run the server, and we'll transition to Node 8 everywhere once the
-   production server is upgraded. Server tests need to pass in both.
+   Tests need to pass in Node 8 and 9.
 2. Clone this repository.
 3. Run `npm install` to install the dependencies.
 4. Run `npm run build` to build the frontend.
@@ -132,8 +126,17 @@ badge preview URIs with `maxAge` &ndash; run `LONG_CACHE=true npm run build`.
 To analyze the frontend bundle, run `npm install webpack-bundle-analyzer` and
 then `ANALYZE=true npm start`.
 
-[package manager]: https://nodejs.org/en/download/package-manager/
+[Snapshot tests][] ensure we don't inadvertently make changes that affect the
+SVG or JSON output. When deliberately changing the output, run
+`SNAPSHOT_DRY=1 npm run test:js:server` to preview changes to the saved
+snapshots, and `SNAPSHOT_UPDATE=1 npm run test:js:server` to update them.
 
+The server can be [configured][sentry configuration] to use [Sentry][sentry].
+
+[package manager]: https://nodejs.org/en/download/package-manager/
+[snapshot tests]: https://glebbahmutov.com/blog/snapshot-testing/
+[sentry configuration]: doc/self-hosting.md#sentry
+[Sentry]: https://sentry.io/
 
 Hosting your own server
 -----------------------
@@ -190,9 +193,10 @@ Related projects
 ----------------
 
 - [badgerbadgerbadger gem][gem]
+- [pybadges python library][pybadges]
 
 [gem]: https://github.com/badges/badgerbadgerbadger
-
+[pybadges]: https://github.com/google/pybadges
 
 License
 -------

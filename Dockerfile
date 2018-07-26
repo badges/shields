@@ -16,7 +16,7 @@ RUN npm run build
 RUN npm prune --production
 RUN npm cache clean --force
 
-CMD envsubst < secret.tpl.json > ./private/secret.json
-CMD node server
+CMD envsubst < secret.tpl.json > ./private/secret.json \
+ && node server
 
 EXPOSE 80

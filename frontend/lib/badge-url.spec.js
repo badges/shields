@@ -3,7 +3,7 @@ import {
   default as resolveBadgeUrl,
   encodeField,
   staticBadgeUrl,
-  dynamicJsonBadgeUrl,
+  dynamicBadgeUrl,
 } from './badge-url';
 
 const resolveBadgeUrlWithLongCache = (url, baseUrl) =>
@@ -37,21 +37,22 @@ describe('Badge URL functions', function() {
       .expect('http://img.example.com/badge/foo-bar-blue.svg?style=plastic');
   });
 
-  test(dynamicJsonBadgeUrl, () => {
-    const jsonUrl = 'http://example.com/foo.json';
+  test(dynamicBadgeUrl, () => {
+    const dataUrl = 'http://example.com/foo.json';
     const query = '$.bar';
     const prefix = 'value: ';
 
     given(
       'http://img.example.com',
+      'json',
       'foo',
-      jsonUrl,
+      dataUrl,
       query,
       { prefix, style: 'plastic' }
     ).expect([
       'http://img.example.com/badge/dynamic/json.svg',
       '?label=foo',
-      `&uri=${encodeURIComponent(jsonUrl)}`,
+      `&url=${encodeURIComponent(dataUrl)}`,
       `&query=${encodeURIComponent(query)}`,
       `&prefix=${encodeURIComponent(prefix)}`,
       '&style=plastic',

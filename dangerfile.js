@@ -17,22 +17,32 @@ const documentation = fileMatch(
   'frontend/components/usage.js'
 );
 const server = fileMatch('server.js');
-const serviceTests = fileMatch('service-tests/*.js');
+const serviceTests = fileMatch('services/**/*.tester.js');
 const helpers = fileMatch(
   'lib/**/*.js',
   '!**/*.spec.js',
   '!lib/all-badge-examples.js'
+);
+const logos = fileMatch(
+  'logo/*.svg'
 );
 const helperTests = fileMatch('lib/**/*.spec.js');
 const packageJson = fileMatch('package.json');
 const packageLock = fileMatch('package-lock.json');
 const capitals = fileMatch('**/*[A-Z]*.js');
 const underscores = fileMatch('**/*_*.js');
+const targetBranch = danger.github.pr.base.ref;
 
 message([
   ':sparkles: Thanks for your contribution to Shields, ',
   `@${danger.github.pr.user.login}!`
 ].join(''));
+
+if (targetBranch != 'master') {
+  const message = `This PR targets \`${targetBranch}\``;
+  const idea = 'It is likely that the target branch should be `master`';
+  warn(`${message} - <i>${idea}</i>`);
+}
 
 if (documentation.createdOrModified) {
   message([
@@ -66,9 +76,44 @@ if (helpers.created && !helperTests.created) {
   ].join(''));
 }
 
+if (logos.created) {
+  message([
+    ':art: Thanks for submitting a logo. ',
+    'Please ensure your contribution follows our ',
+    '[guidance](https://github.com/badges/shields/blob/master/CONTRIBUTING.md#logos) ',
+    'for logo submissions.'
+  ].join(''));
+}
+
 if (capitals.created || underscores.created) {
   fail([
     'JavaScript source files should be named with kebab-case ',
     '(dash-separated lowercase).',
   ].join(''));
 }
+
+const all_files = danger.git.created_files.concat(danger.git.modified_files);
+
+all_files.forEach(function(file) {
+  danger.git.diffForFile(file).then(function(diff) {
+    if (/\+.*assert[(.]/.test(diff.diff)) {
+      warn([
+        `Found 'assert' statement added in ${file}. `,
+        'Please ensure tests are written using Chai ',
+        '[expect syntax](http://chaijs.com/guide/styles/#expect)'
+      ].join(''));
+    }
+  });
+});
+
+all_files.forEach(function(file) {
+  if (/^services\/.+\/.+\.js$/.test(file) && file.endsWith('.js') && !file.endsWith('.tester.js')) {
+    const tester = file.replace('.js', '.tester.js');
+    if (all_files.indexOf(tester) == -1) {
+      warn([
+        `This PR modified ${file} but not ${tester}. `,
+        "That's okay so long as it's refactoring existing code.",
+      ].join(''));
+    }
+  }
+});

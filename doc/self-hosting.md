@@ -4,13 +4,13 @@ Hosting your own Shields server
 Installation
 ------------
 
-You will need version 6 of Node.js, which you can install using a
+You will need Node 8 or later, which you can install using a
 [package manager][].
 
 On Ubuntu / Debian:
 
 ```sh
-curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -; sudo apt-get install -y nodejs
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -; sudo apt-get install -y nodejs
 ```
 
 ```sh
@@ -175,4 +175,27 @@ Set the `REDIRECT_URI` environment variable:
 
 ```sh
 REDIRECT_URI=http://my-custom-shields.s3.amazonaws.com/
+```
+
+Sentry
+------
+
+In order to enable integration with [Sentry](https://sentry.io), you need your own [Sentry DSN](https://docs.sentry.io/quickstart/#configure-the-dsn). It’s an URL in format `https://{PUBLIC_KEY}:{SECRET_KEY}@sentry.io/{PROJECT_ID}`.
+
+### How to obtain the Sentry DSN
+
+1. [Sign up](https://sentry.io/pricing/) for Sentry
+1. Log in to Sentry
+1. Create a new project for Node.js
+1. You should see [Sentry DSN](https://docs.sentry.io/quickstart/#configure-the-dsn) for your project. Sentry DSN can be found by navigating to \[Project Name] -> Project Settings -> Client Keys (DSN) as well.
+
+Start the server using the Sentry DSN. You can set it:
+- by `SENTRY_DSN` environment variable
+```
+SENTRY_DSN=https://xxx:yyy@sentry.io/zzz sudo node server
+```
+
+- or by `sentry_dsn` secret property defined in `private/secret.json`
+```
+sudo node server
 ```

@@ -3,7 +3,7 @@ version: 2
 jobs:
   npm-install:
     docker:
-      - image: shieldsio/shields-node-8:0.0.1
+      - image: shieldsio/shields-ci-node-8:0.0.3
     working_directory: ~/repo
     steps:
       - checkout
@@ -25,12 +25,15 @@ jobs:
 
       - run:
           name: Update Greenkeeper lockfile
+          environment:
+            # https://github.com/greenkeeperio/greenkeeper-lockfile/issues/58
+            CI_PULL_REQUEST: ''
           command: |
             greenkeeper-lockfile-update
 
   main:
     docker:
-      - image: shieldsio/shields-node-8:0.0.1
+      - image: shieldsio/shields-ci-node-8:0.0.3
     working_directory: ~/repo
     steps:
       - checkout
@@ -55,11 +58,14 @@ jobs:
 
       - run:
           name: Upload Greenkeeper lockfile
+          environment:
+            # https://github.com/greenkeeperio/greenkeeper-lockfile/issues/58
+            CI_PULL_REQUEST: ''
           command: greenkeeper-lockfile-upload
 
-  main@node-6:
+  main@node-latest:
     docker:
-      - image: shieldsio/shields-node-6:0.0.1
+      - image: shieldsio/shields-ci-node-latest:0.0.3
     working_directory: ~/repo
     steps:
       - checkout
@@ -77,13 +83,9 @@ jobs:
           when: always
           command: npm run test:js:server
 
-      - run:
-          name: Upload Greenkeeper lockfile
-          command: greenkeeper-lockfile-upload
-
   frontend:
     docker:
-      - image: shieldsio/shields-node-8:0.0.1
+      - image: shieldsio/shields-ci-node-8:0.0.3
     working_directory: ~/repo
     steps:
       - checkout
@@ -103,7 +105,7 @@ jobs:
 
   services-pr:
     docker:
-      - image: shieldsio/shields-node-8:0.0.1
+      - image: shieldsio/shields-ci-node-8:0.0.3
     working_directory: ~/repo
     steps:
       - checkout
@@ -135,9 +137,9 @@ jobs:
               echo 'This is not a pull request. Skipping.'
             fi
 
-  services-pr@node-6:
+  services-pr@node-latest:
     docker:
-      - image: shieldsio/shields-node-6:0.0.1
+      - image: shieldsio/shields-ci-node-latest:0.0.3
     working_directory: ~/repo
     steps:
       - checkout
@@ -171,7 +173,7 @@ jobs:
 
   services-daily:
     docker:
-      - image: shieldsio/shields-node-8:0.0.1
+      - image: shieldsio/shields-ci-node-8:0.0.3
     working_directory: ~/repo
     steps:
       - checkout
@@ -195,7 +197,7 @@ workflows:
       - main:
           requires:
             - npm-install
-      - main@node-6:
+      - main@node-latest:
           requires:
             - npm-install
       - frontend:
@@ -204,7 +206,7 @@ workflows:
       - services-pr:
           requires:
             - npm-install
-      - services-pr@node-6:
+      - services-pr@node-latest:
           requires:
             - npm-install
 
