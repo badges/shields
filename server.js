@@ -3809,7 +3809,6 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (err != null) {
     if (res && res.statusCode === 404) {
       badgeData.text[1] = 'repo not found';
       sendBadge(format, badgeData);
