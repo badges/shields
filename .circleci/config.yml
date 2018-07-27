@@ -52,6 +52,11 @@ jobs:
           command: npm run test:js:server
 
       - run:
+          name: Integration tests
+          when: always
+          command: npm run test:integration
+
+      - run:
           name: Danger
           when: always
           command: npm run danger ci
