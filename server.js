@@ -23,6 +23,7 @@ const { checkErrorResponse } = require('./lib/error-helper');
 const analytics = require('./lib/analytics');
 const config = require('./lib/server-config');
 const githubAuth = require('./lib/github-auth');
+const { setRoutes: setGithubAdminRoutes } = require('./services/github/auth/admin');
 const sysMonitor = require('./lib/sys/monitor');
 const log = require('./lib/log');
 const { makeMakeBadgeFn } = require('./lib/make-badge');
@@ -165,6 +166,7 @@ analytics.load();
 analytics.scheduleAutosaving();
 analytics.setRoutes(camp);
 
+setGithubAdminRoutes(camp);
 githubAuth.scheduleAutosaving({ dir: config.persistence.dir });
 if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);
@@ -176,7 +178,7 @@ if (serverSecrets && serverSecrets.shieldsSecret) {
 let githubDebugInterval;
 if (config.services.github.debug.enabled) {
   githubDebugInterval = setInterval(() => {
-    log(githubAuth.getTokenDebugInfo());
+    log(githubAuth.serializeDebugInfo());
   }, 1000 * config.services.github.debug.intervalSeconds);
 }
 
