@@ -112,14 +112,14 @@ function onlyUnique(value, index, self) {
 
 const affectedServices = all_files
   .forEach(function(file) {
-    const match = /^services\/(.+)\/.+\.service.js$/.match(file);
+    const match = file.match(/^services\/(.+)\/.+\.service.js$/);
     return match[1];
   })
   .filter(onlyUnique);
 
 const testedServices = all_files
   .forEach(function(file) {
-    const match = /^services\/(.+)\/.+\.tester.js$/.match(file);
+    const match = file.match(/^services\/(.+)\/.+\.tester.js$/);
     return match[1];
   })
   .filter(onlyUnique);
