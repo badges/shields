@@ -331,7 +331,7 @@ cache(function(data, match, sendBadge, request) {
     uri: `https://api.travis-ci.org/repos/${userRepo}/branches/${version}`,
   };
   const badgeData = getBadgeData('PHP', data);
-  getPhpReleases(githubApiProvider.request.bind(githubApiProvider), (err, phpReleases) => {
+  getPhpReleases(githubApiProvider, (err, phpReleases) => {
     if (err != null) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
@@ -7561,7 +7561,7 @@ cache(function(data, match, sendBadge, request) {
     uri: 'https://php-eye.com/api/v1/package/' + userRepo + '.json',
   };
   const badgeData = getBadgeData('PHP tested', data);
-  getPhpReleases(githubApiProvider.request.bind(githubApiProvider), (err, phpReleases) => {
+  getPhpReleases(githubApiProvider, (err, phpReleases) => {
     if (err != null) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
