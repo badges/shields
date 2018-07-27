@@ -331,7 +331,7 @@ cache(function(data, match, sendBadge, request) {
     uri: `https://api.travis-ci.org/repos/${userRepo}/branches/${version}`,
   };
   const badgeData = getBadgeData('PHP', data);
-  getPhpReleases(githubApiProvider.request, (err, phpReleases) => {
+  getPhpReleases(githubApiProvider.request.bind(githubApiProvider), (err, phpReleases) => {
     if (err != null) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
