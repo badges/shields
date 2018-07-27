@@ -106,14 +106,31 @@ all_files.forEach(function(file) {
   });
 });
 
-all_files.forEach(function(file) {
-  if (/^services\/.+\/.+\.js$/.test(file) && file.endsWith('.js') && !file.endsWith('.tester.js')) {
-    const tester = file.replace('.js', '.tester.js');
-    if (all_files.indexOf(tester) == -1) {
-      warn([
-        `This PR modified ${file} but not ${tester}. `,
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
+}
+
+const affectedServices = all_files
+  .forEach(function(file) {
+    const match = /^services\/(.+)\/.+\.service.js$/.match(file);
+    return match[1];
+  })
+  .filter(onlyUnique);
+
+const testedServices = all_files
+  .forEach(function(file) {
+    const match = /^services\/(.+)\/.+\.tester.js$/.match(file);
+    return match[1];
+  })
+  .filter(onlyUnique);
+
+affectedServices.forEach(function(service) {
+  if (testedServices.indexOf(service) === -1) {
+    warn(
+      [
+        `This PR modified service code for ${service} but not its test code. `,
         "That's okay so long as it's refactoring existing code.",
-      ].join(''));
-    }
+      ].join('')
+    );
   }
 });
