@@ -2086,12 +2086,13 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Dart's pub version integration.
-camp.route(/^\/pub\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/pub\/v(pre)?\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1]; // eg, "box2d"
-  var format = match[2];
-  var apiUrl = 'https://pub.dartlang.org/packages/' + userRepo + '.json';
-  var badgeData = getBadgeData('pub', data);
+  const includePre = Boolean(match[1]);
+  const userRepo = match[2]; // eg, "box2d"
+  const format = match[3];
+  const apiUrl = 'https://pub.dartlang.org/packages/' + userRepo + '.json';
+  let badgeData = getBadgeData('pub', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -2102,7 +2103,7 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       // Grab the latest stable version, or an unstable
       var versions = data.versions;
-      var version = latestVersion(versions);
+      var version = latestVersion(versions, { pre: includePre });
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
@@ -3070,13 +3071,14 @@ cache(function (data, match, sendBadge, request) {
 }));
 
 // GitHub tag integration.
-camp.route(/^\/github\/tag\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/tag(-?pre)?\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, expressjs/express
-  var repo = match[2];
-  var format = match[3];
-  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/tags';
-  var badgeData = getBadgeData('tag', data);
+  const includePre = Boolean(match[1]);
+  const user = match[2];  // eg, expressjs/express
+  const repo = match[3];
+  const format = match[4];
+  const apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/tags';
+  let badgeData = getBadgeData('tag', data);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
@@ -3089,7 +3091,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var versions = data.map(function(e) { return e.name; });
-      var tag = latestVersion(versions);
+      var tag = latestVersion(versions, { pre: includePre });
       badgeData.text[1] = versionText(tag);
       badgeData.colorscheme = versionColor(tag);
       sendBadge(format, badgeData);
@@ -7594,7 +7596,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Any badge.
-camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/(:|badge\/)(([^-]|--)*?)-?(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
   var subject = escapeFormat(match[2]);
   var status = escapeFormat(match[4]);
@@ -7616,9 +7618,9 @@ function(data, match, end, ask) {
   // Badge creation.
   try {
     var badgeData = getBadgeData(subject, data);
-    if (data.label !== undefined) { badgeData.text[0] = '' + data.label; }
+    badgeData.text[0] = getLabel(subject, data);
     badgeData.text[1] = status;
-    setBadgeColor(badgeData, color);
+    badgeData.colorB = makeColorB(color, data);
     badgeData.template = data.style;
     if (config.profiling.makeBadge) {
       console.time('makeBadge total');
