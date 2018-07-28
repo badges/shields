@@ -1,10 +1,11 @@
+import { Link } from "react-router-dom";
 import React from 'react';
 
 export default () => (
   <section>
-    <a href="/">
+    <Link to="/">
       <img alt="Shields.io" src="/static/logo.svg" />
-    </a>
+    </Link>
 
     <hr className="spacing" />
 
