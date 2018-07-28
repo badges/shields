@@ -3,41 +3,53 @@ import PropTypes from 'prop-types';
 import Meta from './meta';
 import Header from './header';
 import SuggestionAndSearch from './suggestion-and-search';
-import { BadgeExamples } from './badge-examples';
+import SearchResults from './search-results';
 import MarkupModal from './markup-modal';
 import Usage from './usage';
 import Footer from './footer';
-import badgeExampleData from '../../badge-examples.json';
-import { prepareExamples, predicateFromQuery } from '../lib/prepare-examples';
 import { baseUri, longCache } from '../constants';
 
 export default class ExamplesPage extends React.Component {
-  state = {
-    query: null,
-    example: null
-  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      category: props.match.params.id,
+      query: null,
+      example: null,
+      searchReady: true,
+    };
+    this.searchTimeout = 0;
+    this.renderSearchResults = this.renderSearchResults.bind(this);
+    this.searchQueryChanged = this.searchQueryChanged.bind(this);
+  }
 
   static propTypes = {
     match: PropTypes.object.isRequired,
   }
 
-  prepareExamples(category) {
-    const examples = category ? badgeExampleData.filter(example => example.category.id === category) : badgeExampleData;
-    return prepareExamples(examples, () => predicateFromQuery(this.state.query));
+  searchQueryChanged(query) {
+    this.setState({searchReady: false});
+    window.clearTimeout(this.searchTimeout);
+    this.searchTimeout = window.setTimeout(function() {
+      this.setState({
+        searchReady: true,
+        query: query
+      });
+    }.bind(this), 500);
   }
 
-  constructor(props) {
-    super(props);
-    this.preparedExamples = this.prepareExamples(props.match.params.id);
-  }
-
-  getBody() {
-    return(<BadgeExamples
-      categories={this.preparedExamples}
-      onClick={example => { this.setState({ example }); }}
-      baseUri={baseUri}
-      longCache={longCache} />
-    );
+  renderSearchResults() {
+    if (this.state.searchReady) {
+      return (
+        <SearchResults
+          category={this.state.category}
+          query={this.state.query}
+          clickHandler={example => { this.setState({ example }); }} />
+      );
+    } else {
+      return 'searching...';
+    }
   }
 
   render() {
@@ -51,7 +63,7 @@ export default class ExamplesPage extends React.Component {
           baseUri={baseUri} />
         <section>
           <SuggestionAndSearch
-            queryChanged={query => { this.setState({ query }); }}
+            queryChanged={this.searchQueryChanged}
             onBadgeClick={example => { this.setState({ example }); }}
             baseUri={baseUri}
             longCache={longCache} />
@@ -61,7 +73,7 @@ export default class ExamplesPage extends React.Component {
             donate
           </a>
         </section>
-        { this.getBody() }
+        { this.renderSearchResults() }
         <Usage
           baseUri={baseUri}
           longCache={longCache} />

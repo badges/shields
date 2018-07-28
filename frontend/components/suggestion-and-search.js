@@ -23,6 +23,7 @@ export default class SuggestionAndSearch extends React.Component {
     inProgress: false,
     projectUrl: null,
     suggestions: [],
+    searchReady: false,
   };
 
   queryChanged(query) {
