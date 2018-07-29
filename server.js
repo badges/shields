@@ -5665,28 +5665,33 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
         return;
       }
-      var status = data[0].status;
-      switch(status) {
-      case 'success':
-      case 'fixed':
+
+      let passCount = 0;
+      let status;
+      for (let i=0; i<data.length; i++) {
+        status = data[i].status;
+        if (['success', 'fixed'].indexOf(status) !== -1) {
+          passCount++;
+        } else if (status === 'failed') {
+          badgeData.colorscheme = 'red';
+          badgeData.text[1] = 'failed';
+          sendBadge(format, badgeData);
+          return;
+        } else if (['no_tests', 'scheduled', 'not_run'].indexOf(status) !== -1) {
+          badgeData.colorscheme = 'yellow';
+          badgeData.text[1] = status.replace('_', ' ');
+          sendBadge(format, badgeData);
+          return;
+        } else {
+          badgeData.text[1] = status.replace('_', ' ');
+          sendBadge(format, badgeData);
+          return;
+        }
+      }
+
+      if (passCount === data.length) {
         badgeData.colorscheme = 'brightgreen';
         badgeData.text[1] = 'passing';
-        break;
-
-      case 'failed':
-        badgeData.colorscheme = 'red';
-        badgeData.text[1] = 'failed';
-        break;
-
-      case 'no_tests':
-      case 'scheduled':
-      case 'not_run':
-        badgeData.colorscheme = 'yellow';
-        badgeData.text[1] = status.replace('_', ' ');
-        break;
-
-      default:
-        badgeData.text[1] = status.replace('_', ' ');
       }
       sendBadge(format, badgeData);
     } catch(e) {
