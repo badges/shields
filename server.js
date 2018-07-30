@@ -1977,7 +1977,7 @@ cache(function(queryData, match, sendBadge, request) {
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
-      variant(data, badgeData);
+      variant(queryData, badgeData);
       sendBadge(format, badgeData);
     }
   });
