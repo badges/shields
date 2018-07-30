@@ -157,6 +157,13 @@ t.create('GitHub open issues by label (raw)')
     value: isMetric
   }));
 
+t.create('GitHub open issues repository not found')
+  .get('/issues-raw/PyvesB/ASMGameOfLife.json')
+  .expectJSON({
+    name: 'open issues',
+    value: 'repo not found'
+  });
+
 t.create('GitHub open pull requests by label')
   .get('/issues-pr/badges/shields/service-badge.json')
   .expectJSONTypes(Joi.object().keys({

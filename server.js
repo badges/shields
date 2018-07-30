@@ -105,7 +105,8 @@ const {
 const {
   stateColor: githubStateColor,
   checkStateColor: githubCheckStateColor,
-  commentsColor: githubCommentsColor
+  commentsColor: githubCommentsColor,
+  checkErrorResponse: githubCheckErrorResponse
 } = require('./lib/github-helpers');
 const {
   mapGithubCommitsSince,
@@ -3549,8 +3550,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubAuth.request(request, apiUrl, query, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res, 'repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
