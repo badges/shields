@@ -5670,14 +5670,14 @@ cache(function(data, match, sendBadge, request) {
       let status;
       for (let i=0; i<data.length; i++) {
         status = data[i].status;
-        if (['success', 'fixed'].indexOf(status) !== -1) {
+        if (['success', 'fixed'].includes(status)) {
           passCount++;
         } else if (status === 'failed') {
           badgeData.colorscheme = 'red';
           badgeData.text[1] = 'failed';
           sendBadge(format, badgeData);
           return;
-        } else if (['no_tests', 'scheduled', 'not_run'].indexOf(status) !== -1) {
+        } else if (['no_tests', 'scheduled', 'not_run'].includes(status)) {
           badgeData.colorscheme = 'yellow';
           badgeData.text[1] = status.replace('_', ' ');
           sendBadge(format, badgeData);
