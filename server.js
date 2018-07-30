@@ -5546,14 +5546,14 @@ cache({
 // https://circleci.com/api/v1/project/BrightFlair/PHP.Gt?circle-token=0a5143728784b263d9f0238b8d595522689b3af2&limit=1&filter=completed
 camp.route(/^\/circleci\/(?:token\/(\w+))?[+/]?project\/(?:(github|bitbucket)\/)?([^/]+\/[^/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var token = match[1];
-  var type = match[2] || 'github'; // github OR bitbucket
-  var userRepo = match[3];  // eg, `RedSparr0w/node-csgo-parser`.
-  var branch = match[4];
-  var format = match[5];
+  const token = match[1];
+  const type = match[2] || 'github'; // github OR bitbucket
+  const userRepo = match[3];  // eg, `RedSparr0w/node-csgo-parser`.
+  const branch = match[4];
+  const format = match[5];
 
   // Base API URL
-  var apiUrl = 'https://circleci.com/api/v1.1/project/' + type + '/' + userRepo;
+  let apiUrl = 'https://circleci.com/api/v1.1/project/' + type + '/' + userRepo;
 
   // Query Params
   var queryParams = {};
@@ -5573,7 +5573,7 @@ cache(function(data, match, sendBadge, request) {
   // Apprend query params to API URL
   apiUrl += '?' + queryString.stringify(queryParams);
 
-  var badgeData = getBadgeData('build', data);
+  const badgeData = getBadgeData('build', data);
   request(apiUrl, { json:true }, function(err, res, data) {
     if (checkErrorResponse(badgeData, err, res, 'project not found')) {
       sendBadge(format, badgeData);
@@ -5585,28 +5585,33 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
         return;
       }
-      var status = data[0].status;
-      switch(status) {
-      case 'success':
-      case 'fixed':
+
+      let passCount = 0;
+      let status;
+      for (let i=0; i<data.length; i++) {
+        status = data[i].status;
+        if (['success', 'fixed'].includes(status)) {
+          passCount++;
+        } else if (status === 'failed') {
+          badgeData.colorscheme = 'red';
+          badgeData.text[1] = 'failed';
+          sendBadge(format, badgeData);
+          return;
+        } else if (['no_tests', 'scheduled', 'not_run'].includes(status)) {
+          badgeData.colorscheme = 'yellow';
+          badgeData.text[1] = status.replace('_', ' ');
+          sendBadge(format, badgeData);
+          return;
+        } else {
+          badgeData.text[1] = status.replace('_', ' ');
+          sendBadge(format, badgeData);
+          return;
+        }
+      }
+
+      if (passCount === data.length) {
         badgeData.colorscheme = 'brightgreen';
         badgeData.text[1] = 'passing';
-        break;
-
-      case 'failed':
-        badgeData.colorscheme = 'red';
-        badgeData.text[1] = 'failed';
-        break;
-
-      case 'no_tests':
-      case 'scheduled':
-      case 'not_run':
-        badgeData.colorscheme = 'yellow';
-        badgeData.text[1] = status.replace('_', ' ');
-        break;
-
-      default:
-        badgeData.text[1] = status.replace('_', ' ');
       }
       sendBadge(format, badgeData);
     } catch(e) {
