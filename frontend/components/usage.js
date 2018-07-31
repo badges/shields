@@ -169,7 +169,7 @@ export default class Usage extends React.PureComponent {
                 <code>?logo=appveyor</code>
               </td>
               <td>
-                Insert one of the named logos ({this.constructor.renderNamedLogos()})
+                Insert one of the named logos from ({this.constructor.renderNamedLogos()}) or <a href="https://simpleicons.org/" target="_BLANK">simple-icons</a>
               </td>
             </tr>
             <tr>
