@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import StaticBadgeMaker from './static-badge-maker';
 import DynamicBadgeMaker from './dynamic-badge-maker';
 import { staticBadgeUrl } from '../lib/badge-url';
-import { advertisedStyles } from '../../supported-features.json';
+import { advertisedStyles, logos } from '../../supported-features.json';
 
 export default class Usage extends React.PureComponent {
   static propTypes = {
@@ -63,6 +63,14 @@ export default class Usage extends React.PureComponent {
           })}
         </tbody>
       </table>
+    );
+  }
+
+  static renderNamedLogos() {
+    const renderLogo = logo => <span className="nowrap">{logo}</span>;
+    const [first, ...rest] = logos;
+    return [renderLogo(first)].concat(
+      rest.reduce((result, logo) => result.concat([', ', renderLogo(logo)]), [])
     );
   }
 
@@ -161,7 +169,7 @@ export default class Usage extends React.PureComponent {
                 <code>?logo=appveyor</code>
               </td>
               <td>
-                Insert one of the named logos from <a href="https://github.com/badges/shields/tree/master/logo" target="_BLANK">GitHub</a> or <a href="https://simpleicons.org/" target="_BLANK">simple-icons</a>
+                Insert one of the named logos ({this.constructor.renderNamedLogos()})
               </td>
             </tr>
             <tr>
