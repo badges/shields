@@ -4,7 +4,6 @@ const Joi = require('joi');
 const ServiceTester = require('../service-tester');
 const { isMetric, isSemver } = require('../test-validators');
 const colorscheme = require('../../lib/colorscheme.json');
-const { invalidJSON } = require('../response-fixtures');
 const mapValues = require('lodash.mapvalues');
 
 const t = new ServiceTester({ id: 'npm', title: 'NPM' });
@@ -48,13 +47,6 @@ t.create('total downloads when network is off')
   .get('/dt/@cycle/core.json?style=_shields_test')
   .networkOff()
   .expectJSON({  name: 'downloads', value: 'inaccessible' , colorB: colorsB.lightgray });
-
-t.create('total downloads when API returns an invalid JSON')
-  .get('/dt/invalid-json.json?style=_shields_test')
-  .intercept(nock => nock('https://api.npmjs.org')
-    .get('/downloads/range/1000-01-01:3000-01-01/invalid-json')
-    .reply(invalidJSON))
-  .expectJSON({ name: 'downloads', value: 'invalid', colorB: colorsB.lightgrey });
 
 t.create('total downloads of unknown package')
   .get('/dt/npm-api-does-not-have-this-package.json?style=_shields_test')
@@ -166,13 +158,6 @@ t.create('license for package with a license array')
 t.create('license for unknown package')
   .get('/l/npm-registry-does-not-have-this-package.json?style=_shields_test')
   .expectJSON({ name: 'license', value: 'package not found', colorB: colorsB.red });
-
-t.create('license when registry returns an invalid JSON')
-  .get('/l/invalid-json.json?style=_shields_test')
-  .intercept(nock => nock('https://registry.npmjs.org')
-    .get('/invalid-json/latest')
-    .reply(invalidJSON))
-  .expectJSON({ name: 'license', value: 'invalid', colorB: colorsB.lightgrey });
 
 t.create('license when network is off')
   .get('/l/pakage-network-off.json?style=_shields_test')
