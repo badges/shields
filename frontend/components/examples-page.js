@@ -31,12 +31,12 @@ export default class ExamplesPage extends React.Component {
   searchQueryChanged(query) {
     this.setState({searchReady: false});
     window.clearTimeout(this.searchTimeout);
-    this.searchTimeout = window.setTimeout(function() {
+    this.searchTimeout = window.setTimeout(() => {
       this.setState({
         searchReady: true,
         query: query
       });
-    }.bind(this), 500);
+    }, 500);
   }
 
   renderSearchResults() {
