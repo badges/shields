@@ -6,7 +6,7 @@ const NpmBase = require('./npm-base');
 
 module.exports = class NpmLicense extends NpmBase {
   static get category() {
-    return 'miscellaneous';
+    return 'license';
   }
 
   static get defaultBadgeData() {
