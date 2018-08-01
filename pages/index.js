@@ -12,9 +12,12 @@ export default class Router extends React.Component {
         <Route path="/examples/:id" component={ExamplesPage} />
       </div>
     );
+
     if (typeof window !== 'undefined') {
+      // browser
       return (<HashRouter>{ router }</HashRouter>);
     } else {
+      // server-side rendering
       const context = {};
       return (<StaticRouter context={context}>{ router }</StaticRouter>);
     }
