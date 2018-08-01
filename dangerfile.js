@@ -1,5 +1,9 @@
 // Have you identified a contributing guideline that should be included here?
 // Please open a pull request!
+//
+// To test changes to this file, pick a PR to test against, then run
+// `./node_modules/.bin/danger pr pr-url`
+// Note that the line numbers in the runtime errors are incorrecr.
 
 const { danger, fail, message, warn } = require('danger');
 const chainsmoker = require('chainsmoker');
