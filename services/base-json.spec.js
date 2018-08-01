@@ -17,7 +17,7 @@ class DummyJsonService extends BaseJsonService {
   }
 
   async handle() {
-    const { value } = await this._requestJson();
+    const { value } = await this._requestJson({});
     return { message: value };
   }
 }
