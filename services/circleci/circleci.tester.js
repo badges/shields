@@ -47,3 +47,25 @@ t.create('circle ci (no response data)')
     .reply(200)
   )
   .expectJSON({ name: 'build', value: 'invalid' });
+
+t.create('circle ci (multiple pipelines, pass)')
+  .get('/project/github/RedSparr0w/node-csgo-parser.json?style=_shields_test')
+  .intercept(nock => nock('https://circleci.com')
+    .get('/api/v1.1/project/github/RedSparr0w/node-csgo-parser?filter=completed&limit=1')
+    .reply(200, [
+      {'status': 'success'},
+      {'status': 'fixed'}
+    ])
+  )
+  .expectJSON({ name: 'build', value: 'passing', colorB: '#4c1', });
+
+t.create('circle ci (multiple pipelines, fail)')
+  .get('/project/github/RedSparr0w/node-csgo-parser.json?style=_shields_test')
+  .intercept(nock => nock('https://circleci.com')
+    .get('/api/v1.1/project/github/RedSparr0w/node-csgo-parser?filter=completed&limit=1')
+    .reply(200, [
+      {'status': 'success'},
+      {'status': 'failed'}
+    ])
+  )
+  .expectJSON({ name: 'build', value: 'failed', colorB: '#e05d44', });
