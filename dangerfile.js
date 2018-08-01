@@ -1,5 +1,9 @@
 // Have you identified a contributing guideline that should be included here?
 // Please open a pull request!
+//
+// To test changes to this file, pick a PR to test against, then run
+// `./node_modules/.bin/danger pr pr-url`
+// Note that the line numbers in the runtime errors are incorrecr.
 
 const { danger, fail, message, warn } = require('danger');
 const chainsmoker = require('chainsmoker');
@@ -106,14 +110,33 @@ all_files.forEach(function(file) {
   });
 });
 
-all_files.forEach(function(file) {
-  if (/^services\/.+\/.+\.js$/.test(file) && file.endsWith('.js') && !file.endsWith('.tester.js')) {
-    const tester = file.replace('.js', '.tester.js');
-    if (all_files.indexOf(tester) == -1) {
-      warn([
-        `This PR modified ${file} but not ${tester}. `,
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
+}
+
+const affectedServices = all_files
+  .map(function(file) {
+    const match = file.match(/^services\/(.+)\/.+\.service.js$/);
+    return match ? match[1] : undefined;
+  })
+  .filter(Boolean)
+  .filter(onlyUnique);
+
+const testedServices = all_files
+  .map(function(file) {
+    const match = file.match(/^services\/(.+)\/.+\.tester.js$/);
+    return match ? match[1] : undefined;
+  })
+  .filter(Boolean)
+  .filter(onlyUnique);
+
+affectedServices.forEach(function(service) {
+  if (testedServices.indexOf(service) === -1) {
+    warn(
+      [
+        `This PR modified service code for ${service} but not its test code. `,
         "That's okay so long as it's refactoring existing code.",
-      ].join(''));
-    }
+      ].join('')
+    );
   }
 });
