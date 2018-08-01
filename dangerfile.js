@@ -35,7 +35,7 @@ const targetBranch = danger.github.pr.base.ref;
 
 message([
   ':sparkles: Thanks for your contribution to Shields, ',
-  `@${danger.github.pr.user.login}!`
+  `@${danger.github.pr.user.login}!`,
 ].join(''));
 
 if (targetBranch != 'master') {
@@ -47,7 +47,7 @@ if (targetBranch != 'master') {
 if (documentation.createdOrModified) {
   message([
     'Thanks for contributing to our documentation. ',
-    'We :heart: our [documentarians](http://www.writethedocs.org/)!'
+    'We :heart: our [documentarians](http://www.writethedocs.org/)!',
   ].join(''));
 }
 
@@ -81,7 +81,7 @@ if (logos.created) {
     ':art: Thanks for submitting a logo. ',
     'Please ensure your contribution follows our ',
     '[guidance](https://github.com/badges/shields/blob/master/CONTRIBUTING.md#logos) ',
-    'for logo submissions.'
+    'for logo submissions.',
   ].join(''));
 }
 
@@ -100,7 +100,7 @@ all_files.forEach(function(file) {
       warn([
         `Found 'assert' statement added in ${file}. `,
         'Please ensure tests are written using Chai ',
-        '[expect syntax](http://chaijs.com/guide/styles/#expect)'
+        '[expect syntax](http://chaijs.com/guide/styles/#expect)',
       ].join(''));
     }
   });
