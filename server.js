@@ -49,7 +49,7 @@ const {
   omitv,
   addv: versionText,
   maybePluralize,
-  formatDate
+  formatDate,
 } = require('./lib/text-formatters');
 const {
   coveragePercentage: coveragePercentageColor,
@@ -58,55 +58,55 @@ const {
   letterScore: letterScoreColor,
   version: versionColor,
   age: ageColor,
-  colorScale
+  colorScale,
 } = require('./lib/color-formatters');
 const {
   makeColorB,
   makeLabel: getLabel,
   makeLogo: getLogo,
   makeBadgeData: getBadgeData,
-  setBadgeColor
+  setBadgeColor,
 } = require('./lib/badge-data');
 const {
   makeHandleRequestFn,
-  clearRequestCache
+  clearRequestCache,
 } = require('./lib/request-handler');
 const {
   regularUpdate,
-  clearRegularUpdateCache
+  clearRegularUpdateCache,
 } = require('./lib/regular-update');
 const { makeSend } = require('./lib/result-sender');
 const { fetchFromSvg } = require('./lib/svg-badge-parser');
 const {
   escapeFormat,
-  escapeFormatSlashes
+  escapeFormatSlashes,
 } = require('./lib/path-helpers');
 const {
-  isSnapshotVersion: isNexusSnapshotVersion
+  isSnapshotVersion: isNexusSnapshotVersion,
 } = require('./lib/nexus-version');
 const {
-  teamcityBadge
+  teamcityBadge,
 } = require('./lib/teamcity-badge-helpers');
 const {
   mapNugetFeedv2,
-  mapNugetFeed
+  mapNugetFeed,
 } = require('./lib/nuget-provider');
 const {
   getVscodeApiReqOptions,
-  getVscodeStatistic
+  getVscodeStatistic,
 } = require('./lib/vscode-badge-helpers');
 const {
   stateColor: githubStateColor,
   checkStateColor: githubCheckStateColor,
-  commentsColor: githubCommentsColor
+  commentsColor: githubCommentsColor,
 } = require('./lib/github-helpers');
 const {
   mapGithubCommitsSince,
-  mapGithubReleaseDate
+  mapGithubReleaseDate,
 } = require('./lib/github-provider');
 const {
   sortDjangoVersions,
-  parseClassifiers
+  parseClassifiers,
 } = require('./lib/pypi-helpers.js');
 
 const serverStartTime = new Date((new Date()).toGMTString());
@@ -139,7 +139,7 @@ function stop(callback) {
 module.exports = {
   camp,
   reset,
-  stop
+  stop,
 };
 
 log(`Server is starting up: ${config.baseUri}`);
@@ -210,12 +210,12 @@ cache(function (data, match, sendBadge, request) {
     method: 'GET',
     json: true,
     uri: protocol + '://' + host + '/rest/api/2/issue/' +
-      encodeURIComponent(issueKey)
+      encodeURIComponent(issueKey),
   };
   if (serverSecrets && serverSecrets.jira_username) {
     options.auth = {
       user: serverSecrets.jira_username,
-      pass: serverSecrets.jira_password
+      pass: serverSecrets.jira_password,
     };
   }
 
@@ -226,7 +226,7 @@ cache(function (data, match, sendBadge, request) {
     'yellow': 'yellow',
     'brown': 'orange',
     'warm-red': 'red',
-    'blue-gray': 'blue'
+    'blue-gray': 'blue',
   };
 
   var badgeData = getBadgeData(issueKey, data);
@@ -267,12 +267,12 @@ cache(function (data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     json: true,
-    uri: protocol + '://' + host + '/rest/api/2/search?jql=sprint='+sprintId+'%20AND%20type%20IN%20(Bug,Improvement,Story,"Technical%20task")&fields=resolution&maxResults=500'
+    uri: protocol + '://' + host + '/rest/api/2/search?jql=sprint='+sprintId+'%20AND%20type%20IN%20(Bug,Improvement,Story,"Technical%20task")&fields=resolution&maxResults=500',
   };
   if (serverSecrets && serverSecrets.jira_username) {
     options.auth = {
       user: serverSecrets.jira_username,
-      pass: serverSecrets.jira_password
+      pass: serverSecrets.jira_password,
     };
   }
 
@@ -432,8 +432,8 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     uri: 'https://status.continuousphp.com/' + provider + '/' + userRepo + '/status-info',
     headers: {
-      'Accept': 'application/json'
-    }
+      'Accept': 'application/json',
+    },
   };
 
   if (branch != null) {
@@ -495,7 +495,7 @@ camp.route(/^\/osslifecycle?\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$
     }
     var options = {
       method: 'GET',
-      uri: url
+      uri: url,
     };
     var badgeData = getBadgeData('OSS Lifecycle', data);
     request(options, function(err, res, body) {
@@ -552,7 +552,7 @@ cache(function (data, match, sendBadge, request) {
   const url = 'https://api.shippable.com/projects/' + project + '/branchRunStatus';
   const options = {
     method: 'GET',
-    uri: url
+    uri: url,
   };
 
   const badgeData = getBadgeData('build', data);
@@ -589,7 +589,7 @@ cache(function(data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     json: true,
-    uri: 'https://app.wercker.com/getbuilds/' + projectId + '?limit=1'
+    uri: 'https://app.wercker.com/getbuilds/' + projectId + '?limit=1',
   };
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res, json) {
@@ -630,7 +630,7 @@ cache(function(data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     json: true,
-    uri: 'https://app.wercker.com/api/v3/applications/' + owner + '/' + application + '/builds?limit=1'
+    uri: 'https://app.wercker.com/api/v3/applications/' + owner + '/' + application + '/builds?limit=1',
   };
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res, json) {
@@ -678,7 +678,7 @@ cache(function (data, match, sendBadge, request) {
         version = data.version && data.version.num;
         badgeData.text[1] = metric(downloads) + (version? ' version ' + version: '');
         badgeData.colorscheme = downloadCountColor(downloads);
-      }
+      },
     },
     'dv': {
       name: 'downloads',
@@ -688,7 +688,7 @@ cache(function (data, match, sendBadge, request) {
         version = data.version && data.version.num;
         badgeData.text[1] = metric(downloads) + (version? ' version ' + version: ' latest version');
         badgeData.colorscheme = downloadCountColor(downloads);
-      }
+      },
     },
     'v': {
       name: 'crates.io',
@@ -697,7 +697,7 @@ cache(function (data, match, sendBadge, request) {
         version = data.version? data.version.num: data.crate.max_version;
         badgeData.text[1] = versionText(version);
         badgeData.colorscheme = versionColor(version);
-      }
+      },
     },
     'l': {
       name: 'license',
@@ -705,8 +705,8 @@ cache(function (data, match, sendBadge, request) {
       process: function (data, badgeData) {
         badgeData.text[1] = data.versions[0].license;
         badgeData.colorscheme = 'blue';
-      }
-    }
+      },
+    },
   };
   var behavior = modes[mode];
   var apiUrl = 'https://crates.io/api/v1/crates/' + crate;
@@ -873,12 +873,12 @@ camp.route(/^\/sonar\/?([0-9.]+)?\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|
       var options = {
         uri,
         headers: {
-          Accept: 'application/json'
-        }
+          Accept: 'application/json',
+        },
       };
       if (serverSecrets && serverSecrets.sonarqube_token) {
         options.auth = {
-          user: serverSecrets.sonarqube_token
+          user: serverSecrets.sonarqube_token,
         };
       }
 
@@ -1400,14 +1400,14 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     uri: 'https://insight.sensiolabs.com/api/projects/' + projectUuid,
     headers: {
-      Accept: 'application/vnd.com.sensiolabs.insight+xml'
-    }
+      Accept: 'application/vnd.com.sensiolabs.insight+xml',
+    },
   };
 
   if (serverSecrets && serverSecrets.sl_insight_userUuid) {
     options.auth = {
       user: serverSecrets.sl_insight_userUuid,
-      pass: serverSecrets.sl_insight_apiToken
+      pass: serverSecrets.sl_insight_apiToken,
     };
   }
 
@@ -1714,7 +1714,7 @@ cache(function(queryData, match, sendBadge, request) {
   const labels = {
     'd': 'downloads',
     'p': 'platform',
-    'v': channel
+    'v': channel,
   };
   const modes = {
     // downloads - 'd'
@@ -1733,7 +1733,7 @@ cache(function(queryData, match, sendBadge, request) {
     'p': function(data, badgeData) {
       const platforms = data.conda_platforms.join(' | ');
       badgeData.text[1] = platforms;
-    }
+    },
   };
   const variants = {
     // default use `conda|{channelname}` as label
@@ -1742,7 +1742,7 @@ cache(function(queryData, match, sendBadge, request) {
     },
     // skip `conda|` prefix
     'n': function(queryData, badgeData) {
-    }
+    },
   };
 
   const update = modes[mode.charAt(0)];
@@ -1763,7 +1763,7 @@ cache(function(queryData, match, sendBadge, request) {
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
-      variant(data, badgeData);
+      variant(queryData, badgeData);
       sendBadge(format, badgeData);
     }
   });
@@ -1779,14 +1779,14 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     uri: 'https://bintray.com/api/v1/packages/' + path + '/versions/_latest',
     headers: {
-      Accept: 'application/json'
-    }
+      Accept: 'application/json',
+    },
   };
 
   if (serverSecrets && serverSecrets.bintray_user) {
     options.auth = {
       user: serverSecrets.bintray_user,
-      pass: serverSecrets.bintray_apikey
+      pass: serverSecrets.bintray_apikey,
     };
   }
 
@@ -2281,7 +2281,7 @@ cache(function(data, match, sendBadge, request) {
   request({
       method: 'GET',
       uri: `https://api.codeclimate.com/v1/repos?github_slug=${userRepo}`,
-      json: true
+      json: true,
   }, function (err, res, body) {
     const badgeData = getBadgeData(type, data);
     if (err != null) {
@@ -2482,7 +2482,7 @@ cache({
         return;
       }
     });
-  }
+  },
 }));
 
 // dotnet-status integration - deprecated as of April 2018.
@@ -2660,8 +2660,8 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     uri: url,
     headers: {
-      'Accept': 'application/json'
-    }
+      'Accept': 'application/json',
+    },
   };
 
   var badgeData = getBadgeData('discourse', data);
@@ -2923,7 +2923,7 @@ cache(function(data, match, sendBadge, request) {
 
       var platforms = Object.keys(parsedData.platforms || {
         'ios' : '5.0',
-        'osx' : '10.7'
+        'osx' : '10.7',
       }).join(' | ');
       if (type === 'v') {
         badgeData.text[1] = versionText(version);
@@ -3623,7 +3623,7 @@ cache(function(data, match, sendBadge, request) {
   // https://developer.github.com/v3/licenses/
   var customHeaders = {
     'User-Agent': 'Shields.io',
-    'Accept': 'application/vnd.github.drax-preview+json'
+    'Accept': 'application/vnd.github.drax-preview+json',
   };
   request(apiUrl, { headers: customHeaders }, function(err, res, buffer) {
     if (res && res.statusCode === 404) {
@@ -4116,7 +4116,7 @@ cache(function(data, match, sendBadge, request) {
 mapNugetFeedv2({ camp, cache }, 'resharper', 0, function(match) {
   return {
     site: 'resharper',
-    feed: 'https://resharper-plugins.jetbrains.com/api/v2'
+    feed: 'https://resharper-plugins.jetbrains.com/api/v2',
   };
 });
 
@@ -4124,7 +4124,7 @@ mapNugetFeedv2({ camp, cache }, 'resharper', 0, function(match) {
 mapNugetFeedv2({ camp, cache }, 'chocolatey', 0, function(match) {
   return {
     site: 'chocolatey',
-    feed: 'https://www.chocolatey.org/api/v2'
+    feed: 'https://www.chocolatey.org/api/v2',
   };
 });
 
@@ -4132,7 +4132,7 @@ mapNugetFeedv2({ camp, cache }, 'chocolatey', 0, function(match) {
 mapNugetFeedv2({ camp, cache }, 'powershellgallery', 0, function(match) {
   return {
     site: 'powershellgallery',
-    feed: 'https://www.powershellgallery.com/api/v2'
+    feed: 'https://www.powershellgallery.com/api/v2',
   };
 });
 
@@ -4140,7 +4140,7 @@ mapNugetFeedv2({ camp, cache }, 'powershellgallery', 0, function(match) {
 mapNugetFeed({ camp, cache }, 'nuget', 0, function(match) {
   return {
     site: 'nuget',
-    feed: 'https://api.nuget.org/v3'
+    feed: 'https://api.nuget.org/v3',
   };
 });
 
@@ -4150,7 +4150,7 @@ mapNugetFeed({ camp, cache }, '(.+\\.)?myget\\/(.*)', 2, function(match) {
   var feed = match[2];
   return {
     site: feed,
-    feed: 'https://' + tenant + 'myget.org/F/' + feed + '/api/v3'
+    feed: 'https://' + tenant + 'myget.org/F/' + feed + '/api/v3',
   };
 });
 
@@ -4163,7 +4163,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[4];
   var options = {
     json: true,
-    uri: 'https://forgeapi.puppetlabs.com/v3/modules/' + user + '-' + module
+    uri: 'https://forgeapi.puppetlabs.com/v3/modules/' + user + '-' + module,
   };
   var badgeData = getBadgeData('puppetforge', data);
   request(options, function dealWithData(err, res, json) {
@@ -4229,7 +4229,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[3];
   var options = {
     json: true,
-    uri: 'https://forgeapi.puppetlabs.com/v3/users/' + user
+    uri: 'https://forgeapi.puppetlabs.com/v3/users/' + user,
   };
   var badgeData = getBadgeData('puppetforge', data);
   request(options, function dealWithData(err, res, json) {
@@ -4268,7 +4268,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[4];
   var options = {
     json: true,
-    uri: scheme + '://' + host + '/job/' + job + '/api/json?tree=color'
+    uri: scheme + '://' + host + '/job/' + job + '/api/json?tree=color',
   };
   if (job.indexOf('/') > -1 ) {
     options.uri = scheme + '://' + host + '/' + job + '/api/json?tree=color';
@@ -4277,7 +4277,7 @@ cache(function(data, match, sendBadge, request) {
   if (serverSecrets && serverSecrets.jenkins_user) {
     options.auth = {
       user: serverSecrets.jenkins_user,
-      pass: serverSecrets.jenkins_pass
+      pass: serverSecrets.jenkins_pass,
     };
   }
 
@@ -4325,7 +4325,7 @@ cache(function(data, match, sendBadge, request) {
   var options = {
     json: true,
     uri: scheme + '://' + host + '/job/' + job
-      + '/lastBuild/api/json?tree=' + encodeURIComponent('actions[failCount,skipCount,totalCount]')
+      + '/lastBuild/api/json?tree=' + encodeURIComponent('actions[failCount,skipCount,totalCount]'),
   };
   if (job.indexOf('/') > -1 ) {
     options.uri = scheme + '://' + host + '/' + job
@@ -4335,7 +4335,7 @@ cache(function(data, match, sendBadge, request) {
   if (serverSecrets && serverSecrets.jenkins_user) {
     options.auth = {
       user: serverSecrets.jenkins_user,
-      pass: serverSecrets.jenkins_pass
+      pass: serverSecrets.jenkins_pass,
     };
   }
 
@@ -4385,7 +4385,7 @@ cache(function(data, match, sendBadge, request) {
   const format = match[5];
   const options = {
     json: true,
-    uri: `${scheme}://${host}/job/${job}/`
+    uri: `${scheme}://${host}/job/${job}/`,
   };
 
   if (job.indexOf('/') > -1 ) {
@@ -4404,7 +4404,7 @@ cache(function(data, match, sendBadge, request) {
   if (serverSecrets && serverSecrets.jenkins_user) {
     options.auth = {
       user: serverSecrets.jenkins_user,
-      pass: serverSecrets.jenkins_pass
+      pass: serverSecrets.jenkins_pass,
     };
   }
 
@@ -4514,7 +4514,7 @@ cache(function(data, match, sendBadge, request) {
   var branch = match[2];
   var options = {
     method: 'GET',
-    uri: 'https://codeship.com/projects/' + projectId + '/status' + (branch != null ? '?branch=' + branch : '')
+    uri: 'https://codeship.com/projects/' + projectId + '/status' + (branch != null ? '?branch=' + branch : ''),
   };
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res) {
@@ -4785,7 +4785,7 @@ cache(function(data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     json: true,
-    uri: 'http://wheelmap.org/nodes/' + nodeId + '.json'
+    uri: 'http://wheelmap.org/nodes/' + nodeId + '.json',
   };
   var badgeData = getBadgeData('wheelmap', data);
   request(options, function(err, res, json) {
@@ -4964,7 +4964,7 @@ camp.route(/^\/wordpress\/theme\/r\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var queryParams = {
     'action': 'theme_information',
-    'request[slug]': match[1]  // eg, `hestia`.
+    'request[slug]': match[1],  // eg, `hestia`.
   };
   var format = match[2];
   var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?' + queryString.stringify(queryParams);
@@ -5004,7 +5004,7 @@ camp.route(/^\/wordpress\/theme\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var queryParams = {
     'action': 'theme_information',
-    'request[slug]': match[1] // eg, `hestia`.
+    'request[slug]': match[1], // eg, `hestia`.
   };
   var format = match[2];
   var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?' + queryString.stringify(queryParams);
@@ -5090,7 +5090,7 @@ cache(function(data, match, sendBadge, request) {
   }
   var options = {
     method: 'GET',
-    uri: uri
+    uri: uri,
   };
   var badgeData = getBadgeData('requirements', data);
   request(options, function(err, res, buffer) {
@@ -5119,86 +5119,6 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
       return;
     }
-  });
-}));
-
-// apm download integration.
-camp.route(/^\/apm\/dm\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `vim-mode`.
-  var format = match[2];
-  var apiUrl = 'https://atom.io/api/packages/' + repo;
-  var badgeData = getBadgeData('downloads', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var dls = JSON.parse(buffer).downloads;
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
-    }
-    badgeData.text[1] = metric(dls);
-    badgeData.colorscheme = 'green';
-    sendBadge(format, badgeData);
-  });
-}));
-
-// apm version integration.
-camp.route(/^\/apm\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `vim-mode`.
-  var format = match[2];
-  var apiUrl = 'https://atom.io/api/packages/' + repo;
-  var badgeData = getBadgeData('apm', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var releases = JSON.parse(buffer).releases;
-      var version = releases.latest;
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
-    }
-    badgeData.text[1] = versionText(version);
-    badgeData.colorscheme = versionColor(version);
-    sendBadge(format, badgeData);
-  });
-}));
-
-// apm license integration.
-camp.route(/^\/apm\/l\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `vim-mode`.
-  var format = match[2];
-  var apiUrl = 'https://atom.io/api/packages/' + repo;
-  var badgeData = getBadgeData('license', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var metadata = JSON.parse(buffer).metadata;
-      var license = metadata.license;
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
-    }
-    badgeData.text[1] = license;
-    badgeData.colorscheme = 'blue';
-    sendBadge(format, badgeData);
   });
 }));
 
@@ -5337,7 +5257,7 @@ cache({
       error:    '#F55C51',
       working:  '#FCBC41',
       pending:  '#CFD0D7',
-      rejected: '#CFD0D7'
+      rejected: '#CFD0D7',
     };
 
     request(apiUrl, { json: true }, function(err, res, data) {
@@ -5384,7 +5304,7 @@ cache({
     const statusColorScheme = {
       success: 'brightgreen',
       error: 'red',
-      unknown: 'lightgrey'
+      unknown: 'lightgrey',
     };
 
     request(apiUrl, { json: true }, function(err, res, data) {
@@ -5412,14 +5332,14 @@ cache({
 // https://circleci.com/api/v1/project/BrightFlair/PHP.Gt?circle-token=0a5143728784b263d9f0238b8d595522689b3af2&limit=1&filter=completed
 camp.route(/^\/circleci\/(?:token\/(\w+))?[+/]?project\/(?:(github|bitbucket)\/)?([^/]+\/[^/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var token = match[1];
-  var type = match[2] || 'github'; // github OR bitbucket
-  var userRepo = match[3];  // eg, `RedSparr0w/node-csgo-parser`.
-  var branch = match[4];
-  var format = match[5];
+  const token = match[1];
+  const type = match[2] || 'github'; // github OR bitbucket
+  const userRepo = match[3];  // eg, `RedSparr0w/node-csgo-parser`.
+  const branch = match[4];
+  const format = match[5];
 
   // Base API URL
-  var apiUrl = 'https://circleci.com/api/v1.1/project/' + type + '/' + userRepo;
+  let apiUrl = 'https://circleci.com/api/v1.1/project/' + type + '/' + userRepo;
 
   // Query Params
   var queryParams = {};
@@ -5439,7 +5359,7 @@ cache(function(data, match, sendBadge, request) {
   // Apprend query params to API URL
   apiUrl += '?' + queryString.stringify(queryParams);
 
-  var badgeData = getBadgeData('build', data);
+  const badgeData = getBadgeData('build', data);
   request(apiUrl, { json:true }, function(err, res, data) {
     if (checkErrorResponse(badgeData, err, res, 'project not found')) {
       sendBadge(format, badgeData);
@@ -5451,28 +5371,33 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
         return;
       }
-      var status = data[0].status;
-      switch(status) {
-      case 'success':
-      case 'fixed':
+
+      let passCount = 0;
+      let status;
+      for (let i=0; i<data.length; i++) {
+        status = data[i].status;
+        if (['success', 'fixed'].includes(status)) {
+          passCount++;
+        } else if (status === 'failed') {
+          badgeData.colorscheme = 'red';
+          badgeData.text[1] = 'failed';
+          sendBadge(format, badgeData);
+          return;
+        } else if (['no_tests', 'scheduled', 'not_run'].includes(status)) {
+          badgeData.colorscheme = 'yellow';
+          badgeData.text[1] = status.replace('_', ' ');
+          sendBadge(format, badgeData);
+          return;
+        } else {
+          badgeData.text[1] = status.replace('_', ' ');
+          sendBadge(format, badgeData);
+          return;
+        }
+      }
+
+      if (passCount === data.length) {
         badgeData.colorscheme = 'brightgreen';
         badgeData.text[1] = 'passing';
-        break;
-
-      case 'failed':
-        badgeData.colorscheme = 'red';
-        badgeData.text[1] = 'failed';
-        break;
-
-      case 'no_tests':
-      case 'scheduled':
-      case 'not_run':
-        badgeData.colorscheme = 'yellow';
-        badgeData.text[1] = status.replace('_', ' ');
-        break;
-
-      default:
-        badgeData.text[1] = status.replace('_', ' ');
       }
       sendBadge(format, badgeData);
     } catch(e) {
@@ -5911,7 +5836,7 @@ cache(function(data, match, sendBadge, request) {
   var user = match[1]; // eg, shields_io
   var format = match[2];
   var options = {
-    url: 'http://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=' + user
+    url: 'http://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=' + user,
   };
   var badgeData = getBadgeData('Follow @' + user, data);
 
@@ -5922,7 +5847,7 @@ cache(function(data, match, sendBadge, request) {
   }
   badgeData.links = [
     'https://twitter.com/intent/follow?screen_name=' + user,
-    'https://twitter.com/' + user + '/followers'
+    'https://twitter.com/' + user + '/followers',
   ];
   badgeData.text[1] = '';
   request(options, function(err, res, buffer) {
@@ -6003,9 +5928,9 @@ cache(function(data, match, sendBadge, request) {
     method: 'POST',
     json: true,
     body: {
-      "repos": [{ "name": path, "tag": tag }]
+      "repos": [{ "name": path, "tag": tag }],
     },
-    uri: 'https://imagelayers.io/registry/analyze'
+    uri: 'https://imagelayers.io/registry/analyze',
   };
   request(options, function(err, res, buffer) {
     if (err != null) {
@@ -6053,8 +5978,8 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     uri: url,
     headers: {
-      'Accept': 'application/json'
-    }
+      'Accept': 'application/json',
+    },
   };
   request(options, function(err, res, buffer) {
     if (res && res.statusCode === 404) {
@@ -6162,7 +6087,7 @@ cache(function(data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     uri: 'https://api.stackexchange.com/2.2/' + path + '?site=' + site,
-    gzip: true
+    gzip: true,
   };
   var badgeData = getBadgeData(site, data);
   request(options, function (err, res, buffer) {
@@ -6591,7 +6516,7 @@ cache(function(data, match, sendBadge, request) {
   // Maps type name from URL to JSON property name prefix for badge data
   var typeToPropPrefix = {
     i: 'issue',
-    p: 'pr'
+    p: 'pr',
   };
   var typePropPrefix = typeToPropPrefix[type];
   if (typePropPrefix === undefined) {
@@ -6610,7 +6535,7 @@ cache(function(data, match, sendBadge, request) {
     url: url,
     qs: qs,
     gzip: true,
-    json: true
+    json: true,
   };
   request(options, function(err, res, json) {
     if (err != null || res.statusCode >= 500) {
@@ -6775,7 +6700,7 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     url: url,
     gzip: true,
-    json: true
+    json: true,
   };
   request(options, function(err, res, json) {
     try {
@@ -6821,9 +6746,9 @@ cache(function(data, match, sendBadge, request) {
     json: true,
     body: {
       "api_key": monitorApiKey,
-      "format": "json"
+      "format": "json",
     },
-    uri: 'https://api.uptimerobot.com/v2/getMonitors'
+    uri: 'https://api.uptimerobot.com/v2/getMonitors',
   };
   // A monitor API key must start with "m"
   if (monitorApiKey.substring(0, "m".length) !== "m") {
@@ -6894,9 +6819,9 @@ cache(function(data, match, sendBadge, request) {
     body: {
       "api_key": monitorApiKey,
       "custom_uptime_ratios": numberOfDays,
-      "format": "json"
+      "format": "json",
     },
-    uri: 'https://api.uptimerobot.com/v2/getMonitors'
+    uri: 'https://api.uptimerobot.com/v2/getMonitors',
   };
   // A monitor API key must start with "m"
   if (monitorApiKey.substring(0, "m".length) !== "m") {
@@ -7050,23 +6975,23 @@ cache({
       case 'json':
         requestOptions = {
           headers: {
-            Accept: 'application/json'
+            Accept: 'application/json',
           },
-          json: true
+          json: true,
         };
         break;
       case 'xml':
         requestOptions = {
           headers: {
-            Accept: 'application/xml, text/xml'
-          }
+            Accept: 'application/xml, text/xml',
+          },
         };
         break;
       case 'yaml':
         requestOptions = {
           headers: {
-            Accept: 'text/x-yaml,  text/yaml, application/x-yaml, application/yaml, text/plain'
-          }
+            Accept: 'text/x-yaml,  text/yaml, application/x-yaml, application/yaml, text/plain',
+          },
         };
         break;
     }
@@ -7116,7 +7041,7 @@ cache({
         sendBadge(format, badgeData);
       }
     });
-  }
+  },
 }));
 
 // nsp for npm packages
@@ -7137,10 +7062,10 @@ camp.route(/^\/nsp\/npm\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|j
       body: {
         package: {
           name: null,
-          version: packageVersion
-        }
+          version: packageVersion,
+        },
       },
-      json: true
+      json: true,
     };
 
     if (typeof scopeWithoutAtSign === 'string') {
@@ -7170,9 +7095,9 @@ camp.route(/^\/nsp\/npm\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|j
     // https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md#getpackageversion
     const npmRequestOptions = {
       headers: {
-        Accept: '*/*'
+        Accept: '*/*',
       },
-      json: true
+      json: true,
     };
     let npmURL = null;
 
@@ -7505,7 +7430,7 @@ cache(function (data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     json: true,
-    uri: 'https://bugzilla.mozilla.org/rest/bug/' + bugNumber
+    uri: 'https://bugzilla.mozilla.org/rest/bug/' + bugNumber,
   };
   var badgeData = getBadgeData('bug ' + bugNumber, data);
   request(options, function (err, res, json) {
@@ -7572,7 +7497,7 @@ cache(function(data, match, sendBadge, request) {
   const options = {
     method: 'GET',
     headers: { 'Accept': 'application/json' },
-    uri: `https://api.dependabot.com/badges/compatibility_score?package-manager=${packageManager}&dependency-name=${dependencyName}&version-scheme=semver`
+    uri: `https://api.dependabot.com/badges/compatibility_score?package-manager=${packageManager}&dependency-name=${dependencyName}&version-scheme=semver`,
   };
   const badgeData = getBadgeData('semver stability', data);
   badgeData.links = [`https://dependabot.com/compatibility-score.html?package-manager=${packageManager}&dependency-name=${dependencyName}&version-scheme=semver`];
