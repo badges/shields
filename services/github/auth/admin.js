@@ -1,8 +1,8 @@
 'use strict';
 
 const crypto = require('crypto');
-const { serializeDebugInfo } = require('../../../github-auth');
-const serverSecrets = require('../../../server-secrets');
+const { serializeDebugInfo } = require('../../../lib/github-auth');
+const serverSecrets = require('../../../lib/server-secrets');
 
 function setRoutes(server) {
   // Allow the admin to obtain the tokens for operational and debugging
