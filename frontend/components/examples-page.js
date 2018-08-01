@@ -30,6 +30,16 @@ export default class ExamplesPage extends React.Component {
 
   searchQueryChanged(query) {
     this.setState({searchReady: false});
+    /*
+    Add a small delay before showing search results
+    so that we wait until the user has stipped typing
+    before we start loading stuff.
+
+    This
+    a) reduces the amount of badges we will load and
+    b) stops the page from 'flashing' as the user types, like this:
+    https://user-images.githubusercontent.com/7288322/42600206-9b278470-85b5-11e8-9f63-eb4a0c31cb4a.gif
+    */
     window.clearTimeout(this.searchTimeout);
     this.searchTimeout = window.setTimeout(() => {
       this.setState({
