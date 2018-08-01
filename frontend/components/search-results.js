@@ -33,7 +33,7 @@ export default class SearchResults extends React.Component {
   renderCategoryHeadings() {
     return this.preparedExamples.map(function(category, i) {
       return (
-        <Link to={'/examples/' + category.category.id} key={i}>
+        <Link to={'/examples/' + category.category.id} key={category.category.id}>
           <h3 id={category.category.id}>{ category.category.name }</h3>
         </Link>
       )
