@@ -9,11 +9,6 @@ import { baseUri, longCache } from '../constants';
 
 export default class SearchResults extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.props = props;
-  }
-
   static propTypes = {
     category: PropTypes.string,
     query: PropTypes.string,
