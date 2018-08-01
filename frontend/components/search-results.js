@@ -35,7 +35,7 @@ export default class SearchResults extends React.Component {
     );
   }
 
-  renderCategories() {
+  renderCategoryHeadings() {
     return this.preparedExamples.map(function(category, i) {
       return (
         <Link to={'/examples/' + category.category.id} key={i}>
@@ -51,7 +51,7 @@ export default class SearchResults extends React.Component {
     if (this.props.category) {
       return this.renderExamples();
     } else if ((this.props.query == null) || (this.props.query.length === 0)) {
-      return this.renderCategories();
+      return this.renderCategoryHeadings();
     } else if (this.props.query.length === 1) {
       return (<div>Search term must have 2 or more characters</div>);
     } else {
