@@ -28,7 +28,7 @@ const log = require('./lib/log');
 const { makeMakeBadgeFn } = require('./lib/make-badge');
 const { QuickTextMeasurer } = require('./lib/text-measurer');
 const suggest = require('./lib/suggest');
-const {licenseToColor} = require('./lib/licenses');
+const { licenseToColor } = require('./lib/licenses');
 const { latest: latestVersion } = require('./lib/version');
 const {
   compare: phpVersionCompare,
@@ -49,7 +49,7 @@ const {
   omitv,
   addv: versionText,
   maybePluralize,
-  formatDate
+  formatDate,
 } = require('./lib/text-formatters');
 const {
   coveragePercentage: coveragePercentageColor,
@@ -58,63 +58,62 @@ const {
   letterScore: letterScoreColor,
   version: versionColor,
   age: ageColor,
-  colorScale
+  colorScale,
 } = require('./lib/color-formatters');
 const {
   makeColorB,
-  isSixHex: sixHex,
   makeLabel: getLabel,
   makeLogo: getLogo,
   makeBadgeData: getBadgeData,
-  setBadgeColor
+  setBadgeColor,
 } = require('./lib/badge-data');
 const {
   makeHandleRequestFn,
-  clearRequestCache
+  clearRequestCache,
 } = require('./lib/request-handler');
 const {
   regularUpdate,
-  clearRegularUpdateCache
+  clearRegularUpdateCache,
 } = require('./lib/regular-update');
 const { makeSend } = require('./lib/result-sender');
 const { fetchFromSvg } = require('./lib/svg-badge-parser');
 const {
   escapeFormat,
-  escapeFormatSlashes
+  escapeFormatSlashes,
 } = require('./lib/path-helpers');
 const {
-  isSnapshotVersion: isNexusSnapshotVersion
+  isSnapshotVersion: isNexusSnapshotVersion,
 } = require('./lib/nexus-version');
 const {
-  mapNpmDownloads
+  mapNpmDownloads,
 } = require('./lib/npm-provider');
 const {
   defaultNpmRegistryUri,
   makePackageDataUrl: makeNpmPackageDataUrl,
 } = require('./lib/npm-badge-helpers');
 const {
-  teamcityBadge
+  teamcityBadge,
 } = require('./lib/teamcity-badge-helpers');
 const {
   mapNugetFeedv2,
-  mapNugetFeed
+  mapNugetFeed,
 } = require('./lib/nuget-provider');
 const {
   getVscodeApiReqOptions,
-  getVscodeStatistic
+  getVscodeStatistic,
 } = require('./lib/vscode-badge-helpers');
 const {
   stateColor: githubStateColor,
   checkStateColor: githubCheckStateColor,
-  commentsColor: githubCommentsColor
+  commentsColor: githubCommentsColor,
 } = require('./lib/github-helpers');
 const {
   mapGithubCommitsSince,
-  mapGithubReleaseDate
+  mapGithubReleaseDate,
 } = require('./lib/github-provider');
 const {
   sortDjangoVersions,
-  parseClassifiers
+  parseClassifiers,
 } = require('./lib/pypi-helpers.js');
 
 const serverStartTime = new Date((new Date()).toGMTString());
@@ -147,7 +146,7 @@ function stop(callback) {
 module.exports = {
   camp,
   reset,
-  stop
+  stop,
 };
 
 log(`Server is starting up: ${config.baseUri}`);
@@ -195,7 +194,7 @@ camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
 });
 
 camp.notfound(/.*/, function(query, match, end, request) {
-  end(null, {template: '404.html'});
+  end(null, { template: '404.html' });
 });
 
 // Vendors.
@@ -218,12 +217,12 @@ cache(function (data, match, sendBadge, request) {
     method: 'GET',
     json: true,
     uri: protocol + '://' + host + '/rest/api/2/issue/' +
-      encodeURIComponent(issueKey)
+      encodeURIComponent(issueKey),
   };
   if (serverSecrets && serverSecrets.jira_username) {
     options.auth = {
       user: serverSecrets.jira_username,
-      pass: serverSecrets.jira_password
+      pass: serverSecrets.jira_password,
     };
   }
 
@@ -234,7 +233,7 @@ cache(function (data, match, sendBadge, request) {
     'yellow': 'yellow',
     'brown': 'orange',
     'warm-red': 'red',
-    'blue-gray': 'blue'
+    'blue-gray': 'blue',
   };
 
   var badgeData = getBadgeData(issueKey, data);
@@ -275,12 +274,12 @@ cache(function (data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     json: true,
-    uri: protocol + '://' + host + '/rest/api/2/search?jql=sprint='+sprintId+'%20AND%20type%20IN%20(Bug,Improvement,Story,"Technical%20task")&fields=resolution&maxResults=500'
+    uri: protocol + '://' + host + '/rest/api/2/search?jql=sprint='+sprintId+'%20AND%20type%20IN%20(Bug,Improvement,Story,"Technical%20task")&fields=resolution&maxResults=500',
   };
   if (serverSecrets && serverSecrets.jira_username) {
     options.auth = {
       user: serverSecrets.jira_username,
-      pass: serverSecrets.jira_password
+      pass: serverSecrets.jira_password,
     };
   }
 
@@ -401,7 +400,8 @@ cache(function(data, match, sendBadge, request) {
   const badgeData = getBadgeData('build', data);
   request(options, function(err, res) {
     if (err != null) {
-      log.error(`Travis error: ${err.stack}`);
+      log.error('Travis error: data:' + JSON.stringify(data) +
+        '\nStack: ' + err.stack);
       if (res) { log.error(''+res); }
     }
     if (checkErrorResponse(badgeData, err, res)) {
@@ -439,8 +439,8 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     uri: 'https://status.continuousphp.com/' + provider + '/' + userRepo + '/status-info',
     headers: {
-      'Accept': 'application/json'
-    }
+      'Accept': 'application/json',
+    },
   };
 
   if (branch != null) {
@@ -502,7 +502,7 @@ camp.route(/^\/osslifecycle?\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$
     }
     var options = {
       method: 'GET',
-      uri: url
+      uri: url,
     };
     var badgeData = getBadgeData('OSS Lifecycle', data);
     request(options, function(err, res, body) {
@@ -559,7 +559,7 @@ cache(function (data, match, sendBadge, request) {
   const url = 'https://api.shippable.com/projects/' + project + '/branchRunStatus';
   const options = {
     method: 'GET',
-    uri: url
+    uri: url,
   };
 
   const badgeData = getBadgeData('build', data);
@@ -596,7 +596,7 @@ cache(function(data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     json: true,
-    uri: 'https://app.wercker.com/getbuilds/' + projectId + '?limit=1'
+    uri: 'https://app.wercker.com/getbuilds/' + projectId + '?limit=1',
   };
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res, json) {
@@ -637,7 +637,7 @@ cache(function(data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     json: true,
-    uri: 'https://app.wercker.com/api/v3/applications/' + owner + '/' + application + '/builds?limit=1'
+    uri: 'https://app.wercker.com/api/v3/applications/' + owner + '/' + application + '/builds?limit=1',
   };
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res, json) {
@@ -685,7 +685,7 @@ cache(function (data, match, sendBadge, request) {
         version = data.version && data.version.num;
         badgeData.text[1] = metric(downloads) + (version? ' version ' + version: '');
         badgeData.colorscheme = downloadCountColor(downloads);
-      }
+      },
     },
     'dv': {
       name: 'downloads',
@@ -695,7 +695,7 @@ cache(function (data, match, sendBadge, request) {
         version = data.version && data.version.num;
         badgeData.text[1] = metric(downloads) + (version? ' version ' + version: ' latest version');
         badgeData.colorscheme = downloadCountColor(downloads);
-      }
+      },
     },
     'v': {
       name: 'crates.io',
@@ -704,7 +704,7 @@ cache(function (data, match, sendBadge, request) {
         version = data.version? data.version.num: data.crate.max_version;
         badgeData.text[1] = versionText(version);
         badgeData.colorscheme = versionColor(version);
-      }
+      },
     },
     'l': {
       name: 'license',
@@ -712,8 +712,8 @@ cache(function (data, match, sendBadge, request) {
       process: function (data, badgeData) {
         badgeData.text[1] = data.versions[0].license;
         badgeData.colorscheme = 'blue';
-      }
-    }
+      },
+    },
   };
   var behavior = modes[mode];
   var apiUrl = 'https://crates.io/api/v1/crates/' + crate;
@@ -880,12 +880,12 @@ camp.route(/^\/sonar\/?([0-9.]+)?\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|
       var options = {
         uri,
         headers: {
-          Accept: 'application/json'
-        }
+          Accept: 'application/json',
+        },
       };
       if (serverSecrets && serverSecrets.sonarqube_token) {
         options.auth = {
-          user: serverSecrets.sonarqube_token
+          user: serverSecrets.sonarqube_token,
         };
       }
 
@@ -1407,14 +1407,14 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     uri: 'https://insight.sensiolabs.com/api/projects/' + projectUuid,
     headers: {
-      Accept: 'application/vnd.com.sensiolabs.insight+xml'
-    }
+      Accept: 'application/vnd.com.sensiolabs.insight+xml',
+    },
   };
 
   if (serverSecrets && serverSecrets.sl_insight_userUuid) {
     options.auth = {
       user: serverSecrets.sl_insight_userUuid,
-      pass: serverSecrets.sl_insight_apiToken
+      pass: serverSecrets.sl_insight_apiToken,
     };
   }
 
@@ -1785,7 +1785,7 @@ cache({
         sendBadge(format, badgeData);
       }
     });
-  }
+  },
 }));
 
 // npm license integration.
@@ -1839,7 +1839,7 @@ cache({
         sendBadge(format, badgeData);
       }
     });
-  }
+  },
 }));
 
 // npm node version integration.
@@ -1914,7 +1914,7 @@ cache({
         sendBadge(format, badgeData);
       }
     });
-  }
+  },
 }));
 
 // Anaconda Cloud / conda package manager integration
@@ -1928,7 +1928,7 @@ cache(function(queryData, match, sendBadge, request) {
   const labels = {
     'd': 'downloads',
     'p': 'platform',
-    'v': channel
+    'v': channel,
   };
   const modes = {
     // downloads - 'd'
@@ -1947,7 +1947,7 @@ cache(function(queryData, match, sendBadge, request) {
     'p': function(data, badgeData) {
       const platforms = data.conda_platforms.join(' | ');
       badgeData.text[1] = platforms;
-    }
+    },
   };
   const variants = {
     // default use `conda|{channelname}` as label
@@ -1956,7 +1956,7 @@ cache(function(queryData, match, sendBadge, request) {
     },
     // skip `conda|` prefix
     'n': function(queryData, badgeData) {
-    }
+    },
   };
 
   const update = modes[mode.charAt(0)];
@@ -1977,7 +1977,7 @@ cache(function(queryData, match, sendBadge, request) {
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
-      variant(data, badgeData);
+      variant(queryData, badgeData);
       sendBadge(format, badgeData);
     }
   });
@@ -1993,14 +1993,14 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     uri: 'https://bintray.com/api/v1/packages/' + path + '/versions/_latest',
     headers: {
-      Accept: 'application/json'
-    }
+      Accept: 'application/json',
+    },
   };
 
   if (serverSecrets && serverSecrets.bintray_user) {
     options.auth = {
       user: serverSecrets.bintray_user,
-      pass: serverSecrets.bintray_apikey
+      pass: serverSecrets.bintray_apikey,
     };
   }
 
@@ -2206,7 +2206,7 @@ cache(function(data, match, sendBadge, request) {
         let pattern = /^Development Status :: ([1-7]) - (\S+)$/;
         var statusColors = {
             '1': 'red', '2': 'red', '3': 'red', '4': 'yellow',
-            '5': 'brightgreen', '6': 'brightgreen', '7': 'red'};
+            '5': 'brightgreen', '6': 'brightgreen', '7': 'red' };
         var statusCode = '1', statusText = 'unknown';
         for (let i = 0; i < parsedData.info.classifiers.length; i++) {
           let matched = pattern.exec(parsedData.info.classifiers[i]);
@@ -2300,12 +2300,13 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Dart's pub version integration.
-camp.route(/^\/pub\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/pub\/v(pre)?\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1]; // eg, "box2d"
-  var format = match[2];
-  var apiUrl = 'https://pub.dartlang.org/packages/' + userRepo + '.json';
-  var badgeData = getBadgeData('pub', data);
+  const includePre = Boolean(match[1]);
+  const userRepo = match[2]; // eg, "box2d"
+  const format = match[3];
+  const apiUrl = 'https://pub.dartlang.org/packages/' + userRepo + '.json';
+  let badgeData = getBadgeData('pub', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -2316,7 +2317,7 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       // Grab the latest stable version, or an unstable
       var versions = data.versions;
-      var version = latestVersion(versions);
+      var version = latestVersion(versions, { pre: includePre });
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
@@ -2494,7 +2495,7 @@ cache(function(data, match, sendBadge, request) {
   request({
       method: 'GET',
       uri: `https://api.codeclimate.com/v1/repos?github_slug=${userRepo}`,
-      json: true
+      json: true,
   }, function (err, res, body) {
     const badgeData = getBadgeData(type, data);
     if (err != null) {
@@ -2569,136 +2570,65 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Scrutinizer coverage integration.
-camp.route(/^\/scrutinizer\/coverage\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/scrutinizer(?:\/(build|coverage))?\/([^/]+\/[^/]+\/[^/]+|gp\/[^/])(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, g/phpmyadmin/phpmyadmin
-  var format = match[2];
-  // The repo may contain a branch, which would be unsuitable.
-  var repoParts = repo.split('/');
-  var branch = null;
-  // Normally, there are 2 slashes in `repo` when the branch isn't specified.
-  var slashesInRepo = 2;
-  if (repoParts[0] === 'gp') { slashesInRepo = 1; }
-  if ((repoParts.length - 1) > slashesInRepo) {
-    branch = repoParts.slice(slashesInRepo + 1).join('/');
-    repo = repoParts.slice(0, slashesInRepo + 1).join('/');
-  }
-  var apiUrl = 'https://scrutinizer-ci.com/api/repositories/' + repo;
-  var badgeData = getBadgeData('coverage', data);
+  const type = match[1] ? match[1] : 'code quality';
+  const repo = match[2];  // eg, g/phpmyadmin/phpmyadmin
+  let branch = match[3];
+  const format = match[4];
+  const apiUrl = `https://scrutinizer-ci.com/api/repositories/${repo}`;
+  const badgeData = getBadgeData(type, data);
   request(apiUrl, {}, function(err, res, buffer) {
-    if (err !== null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res, 'project or branch not found')) {
       sendBadge(format, badgeData);
       return;
     }
     try {
-      var data = JSON.parse(buffer);
+      const parsedData = JSON.parse(buffer);
       // Which branch are we dealing with?
-      if (branch === null) { branch = data.default_branch; }
-      var percentage = data.applications[branch].index._embedded
-        .project.metric_values['scrutinizer.test_coverage'] * 100;
-      badgeData.text[1] = percentage.toFixed(0) + '%';
-      badgeData.colorscheme = coveragePercentageColor(percentage);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// Scrutinizer build integration.
-camp.route(/^\/scrutinizer\/build\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, g/phpmyadmin/phpmyadmin
-  var format = match[2];
-  // The repo may contain a branch, which would be unsuitable.
-  var repoParts = repo.split('/');
-  var branch = null;
-  // Normally, there are 2 slashes in `repo` when the branch isn't specified.
-  var slashesInRepo = 2;
-  if (repoParts[0] === 'gp') { slashesInRepo = 1; }
-  if ((repoParts.length - 1) > slashesInRepo) {
-    branch = repoParts.slice(slashesInRepo + 1).join('/');
-    repo = repoParts.slice(0, slashesInRepo + 1).join('/');
-  }
-  var apiUrl = 'https://scrutinizer-ci.com/api/repositories/' + repo;
-  var badgeData = getBadgeData('build', data);
-  request(apiUrl, {}, function(err, res, buffer) {
-    if (err !== null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      // Which branch are we dealing with?
-      if (branch === null) { branch = data.default_branch; }
-      var status = data.applications[branch].build_status.status;
-      badgeData.text[1] = status;
-      if (status === 'passed') {
-        badgeData.colorscheme = 'brightgreen';
-        badgeData.text[1] = 'passing';
-      } else if (status === 'failed' || status === 'error') {
-        badgeData.colorscheme = 'red';
-      } else if (status === 'pending') {
-        badgeData.colorscheme = 'orange';
-      } else if (status === 'unknown') {
-        badgeData.colorscheme = 'gray';
+      if (branch === undefined) {
+        branch = parsedData.default_branch;
       }
-      sendBadge(format, badgeData);
-
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// Scrutinizer integration.
-camp.route(/^\/scrutinizer\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, g/phpmyadmin/phpmyadmin
-  var format = match[2];
-  // The repo may contain a branch, which would be unsuitable.
-  var repoParts = repo.split('/');
-  var branch = null;
-  // Normally, there are 2 slashes in `repo` when the branch isn't specified.
-  var slashesInRepo = 2;
-  if (repoParts[0] === 'gp') { slashesInRepo = 1; }
-  if ((repoParts.length - 1) > slashesInRepo) {
-    branch = repoParts.slice(slashesInRepo + 1).join('/');
-    repo = repoParts.slice(0, slashesInRepo + 1).join('/');
-  }
-  var apiUrl = 'https://scrutinizer-ci.com/api/repositories/' + repo;
-  var badgeData = getBadgeData('code quality', data);
-  request(apiUrl, {}, function(err, res, buffer) {
-    if (err !== null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      // Which branch are we dealing with?
-      if (branch === null) { branch = data.default_branch; }
-      var score = data.applications[branch].index._embedded
-        .project.metric_values['scrutinizer.quality'];
-      score = Math.round(score * 100) / 100;
-      badgeData.text[1] = score;
-      badgeData.colorscheme = 'blue';
-      if (score > 9) {
-        badgeData.colorscheme = 'brightgreen';
-      } else if (score > 7) {
-        badgeData.colorscheme = 'green';
-      } else if (score > 5) {
-        badgeData.colorscheme = 'yellow';
-      } else if (score > 4) {
-        badgeData.colorscheme = 'orange';
+      if (type === 'coverage') {
+        const percentage = parsedData.applications[branch].index._embedded
+          .project.metric_values['scrutinizer.test_coverage'] * 100;
+        if (isNaN(percentage)) {
+          badgeData.text[1] = 'unknown';
+          badgeData.colorscheme = 'gray';
+        } else {
+          badgeData.text[1] = percentage.toFixed(0) + '%';
+          badgeData.colorscheme = coveragePercentageColor(percentage);
+        }
+      } else if (type === 'build') {
+        const status = parsedData.applications[branch].build_status.status;
+        badgeData.text[1] = status;
+        if (status === 'passed') {
+          badgeData.colorscheme = 'brightgreen';
+          badgeData.text[1] = 'passing';
+        } else if (status === 'failed' || status === 'error') {
+          badgeData.colorscheme = 'red';
+        } else if (status === 'pending') {
+          badgeData.colorscheme = 'orange';
+        } else if (status === 'unknown') {
+          badgeData.colorscheme = 'gray';
+        }
       } else {
-        badgeData.colorscheme = 'red';
+        let score = parsedData.applications[branch].index._embedded
+          .project.metric_values['scrutinizer.quality'];
+        score = Math.round(score * 100) / 100;
+        badgeData.text[1] = score;
+        if (score > 9) {
+          badgeData.colorscheme = 'brightgreen';
+        } else if (score > 7) {
+          badgeData.colorscheme = 'green';
+        } else if (score > 5) {
+          badgeData.colorscheme = 'yellow';
+        } else if (score > 4) {
+          badgeData.colorscheme = 'orange';
+        } else {
+          badgeData.colorscheme = 'red';
+        }
       }
-
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
@@ -2766,7 +2696,7 @@ cache({
         return;
       }
     });
-  }
+  },
 }));
 
 // dotnet-status integration - deprecated as of April 2018.
@@ -2944,8 +2874,8 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     uri: url,
     headers: {
-      'Accept': 'application/json'
-    }
+      'Accept': 'application/json',
+    },
   };
 
   var badgeData = getBadgeData('discourse', data);
@@ -3189,7 +3119,7 @@ cache(function(data, match, sendBadge, request) {
   var spec = match[2];  // eg, AFNetworking
   var format = match[3];
   var apiUrl = 'https://trunk.cocoapods.org/api/v1/pods/' + spec + '/specs/latest';
-  const typeToLabel = {'v' : 'pod', 'p': 'platform', 'l': 'license'};
+  const typeToLabel = { 'v' : 'pod', 'p': 'platform', 'l': 'license' };
   const badgeData = getBadgeData(typeToLabel[type], data);
   badgeData.colorscheme = null;
   request(apiUrl, function(err, res, buffer) {
@@ -3207,7 +3137,7 @@ cache(function(data, match, sendBadge, request) {
 
       var platforms = Object.keys(parsedData.platforms || {
         'ios' : '5.0',
-        'osx' : '10.7'
+        'osx' : '10.7',
       }).join(' | ');
       if (type === 'v') {
         badgeData.text[1] = versionText(version);
@@ -3355,13 +3285,14 @@ cache(function (data, match, sendBadge, request) {
 }));
 
 // GitHub tag integration.
-camp.route(/^\/github\/tag\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/tag(-?pre)?\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, expressjs/express
-  var repo = match[2];
-  var format = match[3];
-  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/tags';
-  var badgeData = getBadgeData('tag', data);
+  const includePre = Boolean(match[1]);
+  const user = match[2];  // eg, expressjs/express
+  const repo = match[3];
+  const format = match[4];
+  const apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/tags';
+  let badgeData = getBadgeData('tag', data);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
@@ -3374,7 +3305,7 @@ cache(function(data, match, sendBadge, request) {
     try {
       var data = JSON.parse(buffer);
       var versions = data.map(function(e) { return e.name; });
-      var tag = latestVersion(versions);
+      var tag = latestVersion(versions, { pre: includePre });
       badgeData.text[1] = versionText(tag);
       badgeData.colorscheme = versionColor(tag);
       sendBadge(format, badgeData);
@@ -3906,7 +3837,7 @@ cache(function(data, match, sendBadge, request) {
   // https://developer.github.com/v3/licenses/
   var customHeaders = {
     'User-Agent': 'Shields.io',
-    'Accept': 'application/vnd.github.drax-preview+json'
+    'Accept': 'application/vnd.github.drax-preview+json',
   };
   request(apiUrl, { headers: customHeaders }, function(err, res, buffer) {
     if (res && res.statusCode === 404) {
@@ -3987,7 +3918,7 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[2];
   var search = match[3];
   var format = match[4];
-  var query = {q: search + ' repo:' + user + '/' + repo};
+  var query = { q: search + ' repo:' + user + '/' + repo };
   var badgeData = getBadgeData(search + ' counter', data);
   githubAuth.request(request, githubApiUrl + '/search/code', query, function(err, res, buffer) {
     if (err != null) {
@@ -4399,7 +4330,7 @@ cache(function(data, match, sendBadge, request) {
 mapNugetFeedv2({ camp, cache }, 'resharper', 0, function(match) {
   return {
     site: 'resharper',
-    feed: 'https://resharper-plugins.jetbrains.com/api/v2'
+    feed: 'https://resharper-plugins.jetbrains.com/api/v2',
   };
 });
 
@@ -4407,7 +4338,7 @@ mapNugetFeedv2({ camp, cache }, 'resharper', 0, function(match) {
 mapNugetFeedv2({ camp, cache }, 'chocolatey', 0, function(match) {
   return {
     site: 'chocolatey',
-    feed: 'https://www.chocolatey.org/api/v2'
+    feed: 'https://www.chocolatey.org/api/v2',
   };
 });
 
@@ -4415,7 +4346,7 @@ mapNugetFeedv2({ camp, cache }, 'chocolatey', 0, function(match) {
 mapNugetFeedv2({ camp, cache }, 'powershellgallery', 0, function(match) {
   return {
     site: 'powershellgallery',
-    feed: 'https://www.powershellgallery.com/api/v2'
+    feed: 'https://www.powershellgallery.com/api/v2',
   };
 });
 
@@ -4423,7 +4354,7 @@ mapNugetFeedv2({ camp, cache }, 'powershellgallery', 0, function(match) {
 mapNugetFeed({ camp, cache }, 'nuget', 0, function(match) {
   return {
     site: 'nuget',
-    feed: 'https://api.nuget.org/v3'
+    feed: 'https://api.nuget.org/v3',
   };
 });
 
@@ -4433,7 +4364,7 @@ mapNugetFeed({ camp, cache }, '(.+\\.)?myget\\/(.*)', 2, function(match) {
   var feed = match[2];
   return {
     site: feed,
-    feed: 'https://' + tenant + 'myget.org/F/' + feed + '/api/v3'
+    feed: 'https://' + tenant + 'myget.org/F/' + feed + '/api/v3',
   };
 });
 
@@ -4446,7 +4377,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[4];
   var options = {
     json: true,
-    uri: 'https://forgeapi.puppetlabs.com/v3/modules/' + user + '-' + module
+    uri: 'https://forgeapi.puppetlabs.com/v3/modules/' + user + '-' + module,
   };
   var badgeData = getBadgeData('puppetforge', data);
   request(options, function dealWithData(err, res, json) {
@@ -4512,7 +4443,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[3];
   var options = {
     json: true,
-    uri: 'https://forgeapi.puppetlabs.com/v3/users/' + user
+    uri: 'https://forgeapi.puppetlabs.com/v3/users/' + user,
   };
   var badgeData = getBadgeData('puppetforge', data);
   request(options, function dealWithData(err, res, json) {
@@ -4551,7 +4482,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[4];
   var options = {
     json: true,
-    uri: scheme + '://' + host + '/job/' + job + '/api/json?tree=color'
+    uri: scheme + '://' + host + '/job/' + job + '/api/json?tree=color',
   };
   if (job.indexOf('/') > -1 ) {
     options.uri = scheme + '://' + host + '/' + job + '/api/json?tree=color';
@@ -4560,7 +4491,7 @@ cache(function(data, match, sendBadge, request) {
   if (serverSecrets && serverSecrets.jenkins_user) {
     options.auth = {
       user: serverSecrets.jenkins_user,
-      pass: serverSecrets.jenkins_pass
+      pass: serverSecrets.jenkins_pass,
     };
   }
 
@@ -4608,17 +4539,17 @@ cache(function(data, match, sendBadge, request) {
   var options = {
     json: true,
     uri: scheme + '://' + host + '/job/' + job
-      + '/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]'
+      + '/lastBuild/api/json?tree=' + encodeURIComponent('actions[failCount,skipCount,totalCount]'),
   };
   if (job.indexOf('/') > -1 ) {
     options.uri = scheme + '://' + host + '/' + job
-      + '/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]';
+      + '/lastBuild/api/json?tree=' + encodeURIComponent('actions[failCount,skipCount,totalCount]');
   }
 
   if (serverSecrets && serverSecrets.jenkins_user) {
     options.auth = {
       user: serverSecrets.jenkins_user,
-      pass: serverSecrets.jenkins_pass
+      pass: serverSecrets.jenkins_pass,
     };
   }
 
@@ -4658,49 +4589,55 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Jenkins coverage integration
-camp.route(/^\/jenkins(?:-ci)?\/c\/(http(?:s)?)\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+// Jenkins coverage integration (cobertura + jacoco)
+camp.route(/^\/jenkins(?:-ci)?\/(c|j)\/(http(?:s)?)\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var scheme = match[1];  // http(s)
-  var host = match[2];  // example.org:8080
-  var job = match[3];  // folder/job
-  var format = match[4];
-  var options = {
+  const type = match[1];    // c - cobertura | j - jacoco
+  const scheme = match[2];  // http(s)
+  const host = match[3];    // example.org:8080
+  const job = match[4];     // folder/job
+  const format = match[5];
+  const options = {
     json: true,
-    uri: scheme + '://' + host + '/job/' + job
-      + '/lastBuild/cobertura/api/json?tree=results[elements[name,denominator,numerator,ratio]]'
+    uri: `${scheme}://${host}/job/${job}/`,
   };
+
   if (job.indexOf('/') > -1 ) {
-    options.uri = scheme + '://' + host + '/' + job
-      + '/lastBuild/cobertura/api/json?tree=results[elements[name,denominator,numerator,ratio]]';
+    options.uri = `${scheme}://${host}/${job}/`;
+  }
+
+  switch (type) {
+    case 'c':
+      options.uri += 'lastBuild/cobertura/api/json?tree=results[elements[name,denominator,numerator,ratio]]';
+      break;
+    case 'j':
+      options.uri += 'lastBuild/jacoco/api/json?tree=instructionCoverage[covered,missed,percentage,total]';
+      break;
   }
 
   if (serverSecrets && serverSecrets.jenkins_user) {
     options.auth = {
       user: serverSecrets.jenkins_user,
-      pass: serverSecrets.jenkins_pass
+      pass: serverSecrets.jenkins_pass,
     };
   }
 
-  var badgeData = getBadgeData('coverage', data);
+  const badgeData = getBadgeData('coverage', data);
   request(options, function(err, res, json) {
-    if (err !== null) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
 
     try {
-      var coverageObject = json.results.elements.filter(function (obj) {
-        return obj.name === 'Lines';
-      })[0];
+      const coverageObject = json.instructionCoverage;
       if (coverageObject === undefined) {
         badgeData.text[1] = 'inaccessible';
         sendBadge(format, badgeData);
         return;
       }
-      var coverage = coverageObject.ratio;
-      if (+coverage !== +coverage) {
+      const coverage = coverageObject.percentage;
+      if (isNaN(coverage)) {
         badgeData.text[1] = 'unknown';
         sendBadge(format, badgeData);
         return;
@@ -4772,7 +4709,7 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = metric(json.download_count);
         badgeData.colorscheme = 'blue';
       } else {
-        badgeData.text[1] = json.namespace + '.' + json.name;
+        badgeData.text[1] = json.summary_fields.namespace.name + '.' + json.name;
         badgeData.colorscheme = 'blue';
       }
       sendBadge(format, badgeData);
@@ -4791,7 +4728,7 @@ cache(function(data, match, sendBadge, request) {
   var branch = match[2];
   var options = {
     method: 'GET',
-    uri: 'https://codeship.com/projects/' + projectId + '/status' + (branch != null ? '?branch=' + branch : '')
+    uri: 'https://codeship.com/projects/' + projectId + '/status' + (branch != null ? '?branch=' + branch : ''),
   };
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res) {
@@ -4844,51 +4781,12 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Magnum CI integration
+// Magnum CI integration - deprecated as of July 2018
 camp.route(/^\/magnumci\/ci\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var projectId = match[1]; // E.g. 96ffb83fa700f069024921b0702e76ff
-  var branch = match[2];    // E.g. master
-  var format = match[3];
-  var options = {
-    method: 'GET',
-    uri: 'https://magnum-ci.com/status/' + projectId + '.png'
-  };
-  if (branch != null) {
-    options.uri += '?branch=' + branch;
-  }
-  var badgeData = getBadgeData('build', data);
-  request(options, function(err, res) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var statusMatch = res.headers['content-disposition']
-                           .match(/filename="(.+)\.png"/);
-      if (!statusMatch) {
-        badgeData.text[1] = 'unknown';
-        sendBadge(format, badgeData);
-        return;
-      }
-
-      switch (statusMatch[1]) {
-        case 'pass':
-          badgeData.text[1] = 'passing';
-          badgeData.colorscheme = 'brightgreen';
-          break;
-        case 'fail':
-          badgeData.text[1] = 'failing';
-          badgeData.colorscheme = 'red';
-          break;
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'not found';
-      sendBadge(format, badgeData);
-    }
-  });
+  const format = match[3];
+  const badgeData = getDeprecatedBadge('magnum ci', data);
+  sendBadge(format, badgeData);
 }));
 
 // Maven-Central artifact version integration
@@ -5101,7 +4999,7 @@ cache(function(data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     json: true,
-    uri: 'http://wheelmap.org/nodes/' + nodeId + '.json'
+    uri: 'http://wheelmap.org/nodes/' + nodeId + '.json',
   };
   var badgeData = getBadgeData('wheelmap', data);
   request(options, function(err, res, json) {
@@ -5280,7 +5178,7 @@ camp.route(/^\/wordpress\/theme\/r\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var queryParams = {
     'action': 'theme_information',
-    'request[slug]': match[1]  // eg, `hestia`.
+    'request[slug]': match[1],  // eg, `hestia`.
   };
   var format = match[2];
   var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?' + queryString.stringify(queryParams);
@@ -5320,7 +5218,7 @@ camp.route(/^\/wordpress\/theme\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var queryParams = {
     'action': 'theme_information',
-    'request[slug]': match[1] // eg, `hestia`.
+    'request[slug]': match[1], // eg, `hestia`.
   };
   var format = match[2];
   var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?' + queryString.stringify(queryParams);
@@ -5406,7 +5304,7 @@ cache(function(data, match, sendBadge, request) {
   }
   var options = {
     method: 'GET',
-    uri: uri
+    uri: uri,
   };
   var badgeData = getBadgeData('requirements', data);
   request(options, function(err, res, buffer) {
@@ -5435,86 +5333,6 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
       return;
     }
-  });
-}));
-
-// apm download integration.
-camp.route(/^\/apm\/dm\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `vim-mode`.
-  var format = match[2];
-  var apiUrl = 'https://atom.io/api/packages/' + repo;
-  var badgeData = getBadgeData('downloads', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var dls = JSON.parse(buffer).downloads;
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
-    }
-    badgeData.text[1] = metric(dls);
-    badgeData.colorscheme = 'green';
-    sendBadge(format, badgeData);
-  });
-}));
-
-// apm version integration.
-camp.route(/^\/apm\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `vim-mode`.
-  var format = match[2];
-  var apiUrl = 'https://atom.io/api/packages/' + repo;
-  var badgeData = getBadgeData('apm', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var releases = JSON.parse(buffer).releases;
-      var version = releases.latest;
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
-    }
-    badgeData.text[1] = versionText(version);
-    badgeData.colorscheme = versionColor(version);
-    sendBadge(format, badgeData);
-  });
-}));
-
-// apm license integration.
-camp.route(/^\/apm\/l\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `vim-mode`.
-  var format = match[2];
-  var apiUrl = 'https://atom.io/api/packages/' + repo;
-  var badgeData = getBadgeData('license', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var metadata = JSON.parse(buffer).metadata;
-      var license = metadata.license;
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
-    }
-    badgeData.text[1] = license;
-    badgeData.colorscheme = 'blue';
-    sendBadge(format, badgeData);
   });
 }));
 
@@ -5653,10 +5471,10 @@ cache({
       error:    '#F55C51',
       working:  '#FCBC41',
       pending:  '#CFD0D7',
-      rejected: '#CFD0D7'
+      rejected: '#CFD0D7',
     };
 
-    request(apiUrl, {json: true}, function(err, res, data) {
+    request(apiUrl, { json: true }, function(err, res, data) {
       try {
         if (res && (res.statusCode === 404 || data.state === null)) {
           badgeData.text[1] = 'not found';
@@ -5692,7 +5510,7 @@ cache({
     const format = match[3];
     const token = data.token;
     const badgeData = getBadgeData('bitrise', data);
-    let apiUrl = 'https://www.bitrise.io/app/' + appId + '/status.json?token=' + token;
+    let apiUrl = 'https://app.bitrise.io/app/' + appId + '/status.json?token=' + token;
     if (typeof branch !== 'undefined') {
       apiUrl += '&branch=' + branch;
     }
@@ -5700,10 +5518,10 @@ cache({
     const statusColorScheme = {
       success: 'brightgreen',
       error: 'red',
-      unknown: 'lightgrey'
+      unknown: 'lightgrey',
     };
 
-    request(apiUrl, {json: true}, function(err, res, data) {
+    request(apiUrl, { json: true }, function(err, res, data) {
       try {
         if (!res || err !== null || res.statusCode !== 200) {
           badgeData.text[1] = 'inaccessible';
@@ -5728,14 +5546,14 @@ cache({
 // https://circleci.com/api/v1/project/BrightFlair/PHP.Gt?circle-token=0a5143728784b263d9f0238b8d595522689b3af2&limit=1&filter=completed
 camp.route(/^\/circleci\/(?:token\/(\w+))?[+/]?project\/(?:(github|bitbucket)\/)?([^/]+\/[^/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var token = match[1];
-  var type = match[2] || 'github'; // github OR bitbucket
-  var userRepo = match[3];  // eg, `RedSparr0w/node-csgo-parser`.
-  var branch = match[4];
-  var format = match[5];
+  const token = match[1];
+  const type = match[2] || 'github'; // github OR bitbucket
+  const userRepo = match[3];  // eg, `RedSparr0w/node-csgo-parser`.
+  const branch = match[4];
+  const format = match[5];
 
   // Base API URL
-  var apiUrl = 'https://circleci.com/api/v1.1/project/' + type + '/' + userRepo;
+  let apiUrl = 'https://circleci.com/api/v1.1/project/' + type + '/' + userRepo;
 
   // Query Params
   var queryParams = {};
@@ -5755,8 +5573,8 @@ cache(function(data, match, sendBadge, request) {
   // Apprend query params to API URL
   apiUrl += '?' + queryString.stringify(queryParams);
 
-  var badgeData = getBadgeData('build', data);
-  request(apiUrl, {json:true}, function(err, res, data) {
+  const badgeData = getBadgeData('build', data);
+  request(apiUrl, { json:true }, function(err, res, data) {
     if (checkErrorResponse(badgeData, err, res, 'project not found')) {
       sendBadge(format, badgeData);
       return;
@@ -5767,28 +5585,33 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
         return;
       }
-      var status = data[0].status;
-      switch(status) {
-      case 'success':
-      case 'fixed':
+
+      let passCount = 0;
+      let status;
+      for (let i=0; i<data.length; i++) {
+        status = data[i].status;
+        if (['success', 'fixed'].includes(status)) {
+          passCount++;
+        } else if (status === 'failed') {
+          badgeData.colorscheme = 'red';
+          badgeData.text[1] = 'failed';
+          sendBadge(format, badgeData);
+          return;
+        } else if (['no_tests', 'scheduled', 'not_run'].includes(status)) {
+          badgeData.colorscheme = 'yellow';
+          badgeData.text[1] = status.replace('_', ' ');
+          sendBadge(format, badgeData);
+          return;
+        } else {
+          badgeData.text[1] = status.replace('_', ' ');
+          sendBadge(format, badgeData);
+          return;
+        }
+      }
+
+      if (passCount === data.length) {
         badgeData.colorscheme = 'brightgreen';
         badgeData.text[1] = 'passing';
-        break;
-
-      case 'failed':
-        badgeData.colorscheme = 'red';
-        badgeData.text[1] = 'failed';
-        break;
-
-      case 'no_tests':
-      case 'scheduled':
-      case 'not_run':
-        badgeData.colorscheme = 'yellow';
-        badgeData.text[1] = status.replace('_', ' ');
-        break;
-
-      default:
-        badgeData.text[1] = status.replace('_', ' ');
       }
       sendBadge(format, badgeData);
     } catch(e) {
@@ -6227,7 +6050,7 @@ cache(function(data, match, sendBadge, request) {
   var user = match[1]; // eg, shields_io
   var format = match[2];
   var options = {
-    url: 'http://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=' + user
+    url: 'http://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=' + user,
   };
   var badgeData = getBadgeData('Follow @' + user, data);
 
@@ -6238,7 +6061,7 @@ cache(function(data, match, sendBadge, request) {
   }
   badgeData.links = [
     'https://twitter.com/intent/follow?screen_name=' + user,
-    'https://twitter.com/' + user + '/followers'
+    'https://twitter.com/' + user + '/followers',
   ];
   badgeData.text[1] = '';
   request(options, function(err, res, buffer) {
@@ -6319,9 +6142,9 @@ cache(function(data, match, sendBadge, request) {
     method: 'POST',
     json: true,
     body: {
-      "repos": [{"name": path, "tag": tag}]
+      "repos": [{ "name": path, "tag": tag }],
     },
-    uri: 'https://imagelayers.io/registry/analyze'
+    uri: 'https://imagelayers.io/registry/analyze',
   };
   request(options, function(err, res, buffer) {
     if (err != null) {
@@ -6369,8 +6192,8 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     uri: url,
     headers: {
-      'Accept': 'application/json'
-    }
+      'Accept': 'application/json',
+    },
   };
   request(options, function(err, res, buffer) {
     if (res && res.statusCode === 404) {
@@ -6478,7 +6301,7 @@ cache(function(data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     uri: 'https://api.stackexchange.com/2.2/' + path + '?site=' + site,
-    gzip: true
+    gzip: true,
   };
   var badgeData = getBadgeData(site, data);
   request(options, function (err, res, buffer) {
@@ -6576,62 +6399,44 @@ cache(function(data, match, sendBadge, request) {
   }
 }));
 
-// bitHound integration
+// bitHound integration - deprecated as of July 2018
 camp.route(/^\/bithound\/(code\/|dependencies\/|devDependencies\/)?(.+?)\.(svg|png|gif|jpg|json)$/,
-cache({
-  queryParams: ['color'], // argh.
-  handler: (data, match, sendBadge, request) => {
-    var type = match[1].slice(0, -1);
-    var userRepo = match[2];  // eg, `github/rexxars/sse-channel`.
-    var format = match[3];
-    var apiUrl = 'https://www.bithound.io/api/' + userRepo + '/badge/' + type;
-    var badgeData = getBadgeData(type === 'devDependencies' ? 'dev dependencies' : type, data);
-
-    request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
-      try {
-        var data = JSON.parse(buffer);
-        badgeData.text[1] = data.label;
-        badgeData.colorscheme = null;
-        badgeData.colorB = '#' + data.color;
-        sendBadge(format, badgeData);
-
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  },
+cache(function(data, match, sendBadge, request) {
+  const format = match[3];
+  const badgeData = getDeprecatedBadge('bithound', data);
+  sendBadge(format, badgeData);
 }));
 
 // Waffle.io integration
 camp.route(/^\/waffle\/label\/([^/]+)\/([^/]+)\/?([^/]+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, evancohen
-  var repo = match[2];  // eg, smart-mirror
-  var ghLabel = match[3] || 'ready';  // eg, in%20progress
-  var format = match[4];
-  var apiUrl = 'https://api.waffle.io/' + user + '/' + repo + '/cards';
-  var badgeData = getBadgeData('issues', data);
+  const user = match[1];  // eg, evancohen
+  const repo = match[2];  // eg, smart-mirror
+  const ghLabel = match[3] || 'ready';  // eg, in%20progress
+  const format = match[4];
+  const apiUrl = `https://api.waffle.io/${user}/${repo}/columns?with=count`;
+  const badgeData = getBadgeData('waffle', data);
 
   request(apiUrl, function(err, res, buffer) {
     try {
-      var cards = JSON.parse(buffer);
-      if (cards.length === 0) {
+      if (checkErrorResponse(badgeData, err, res)) {
+        sendBadge(format, badgeData);
+        return;
+      }
+      const cols = JSON.parse(buffer);
+      if (cols.length === 0) {
         badgeData.text[1] = 'absent';
         sendBadge(format, badgeData);
         return;
       }
-      var count = 0;
-      var color = '78bdf2';
-      for (var i = 0; i < cards.length; i++) {
-        var cardMetadata = cards[i].githubMetadata;
-        if (cardMetadata.labels && cardMetadata.labels.length > 0) {
-          for (var j = 0; j < cardMetadata.labels.length; j++) {
-            var label = cardMetadata.labels[j];
-            if (label.name === ghLabel) {
-              count++;
-              color = label.color;
-            }
+      let count = 0;
+      let color = '78bdf2';
+      for (let i = 0; i < cols.length; i++) {
+        if (('label' in cols[i]) && (cols[i].label !== null)) {
+          if (cols[i].label.name === ghLabel) {
+            count = cols[i].count;
+            color = cols[i].label.color;
+            break;
           }
         }
       }
@@ -6925,7 +6730,7 @@ cache(function(data, match, sendBadge, request) {
   // Maps type name from URL to JSON property name prefix for badge data
   var typeToPropPrefix = {
     i: 'issue',
-    p: 'pr'
+    p: 'pr',
   };
   var typePropPrefix = typeToPropPrefix[type];
   if (typePropPrefix === undefined) {
@@ -6935,7 +6740,7 @@ cache(function(data, match, sendBadge, request) {
   }
 
   var url = 'http://issuestats.com/' + host + '/' + userRepo;
-  var qs = {format: 'json'};
+  var qs = { format: 'json' };
   if (!longForm) {
     qs.concise = true;
   }
@@ -6944,7 +6749,7 @@ cache(function(data, match, sendBadge, request) {
     url: url,
     qs: qs,
     gzip: true,
-    json: true
+    json: true,
   };
   request(options, function(err, res, json) {
     if (err != null || res.statusCode >= 500) {
@@ -6997,7 +6802,7 @@ cache(function(data, match, sendBadge, request) {
     }
   }
 
-  const options = {method: 'GET', json: true, uri: uri};
+  const options = { method: 'GET', json: true, uri: uri };
   const badgeData = getBadgeData('dependencies', data);
 
   request(options, function(err, res, json) {
@@ -7109,7 +6914,7 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     url: url,
     gzip: true,
-    json: true
+    json: true,
   };
   request(options, function(err, res, json) {
     try {
@@ -7155,9 +6960,9 @@ cache(function(data, match, sendBadge, request) {
     json: true,
     body: {
       "api_key": monitorApiKey,
-      "format": "json"
+      "format": "json",
     },
-    uri: 'https://api.uptimerobot.com/v2/getMonitors'
+    uri: 'https://api.uptimerobot.com/v2/getMonitors',
   };
   // A monitor API key must start with "m"
   if (monitorApiKey.substring(0, "m".length) !== "m") {
@@ -7228,9 +7033,9 @@ cache(function(data, match, sendBadge, request) {
     body: {
       "api_key": monitorApiKey,
       "custom_uptime_ratios": numberOfDays,
-      "format": "json"
+      "format": "json",
     },
-    uri: 'https://api.uptimerobot.com/v2/getMonitors'
+    uri: 'https://api.uptimerobot.com/v2/getMonitors',
   };
   // A monitor API key must start with "m"
   if (monitorApiKey.substring(0, "m".length) !== "m") {
@@ -7370,29 +7175,37 @@ cache({
       sendBadge(format, badgeData);
       return;
     }
-    var url = encodeURI(decodeURIComponent(query.url || query.uri));
+
+    try {
+      var url = encodeURI(decodeURIComponent(query.url || query.uri));
+    } catch(e){
+      setBadgeColor(badgeData, 'red');
+      badgeData.text[1] = 'malformed url';
+      sendBadge(format, badgeData);
+      return;
+    }
 
     switch (type) {
       case 'json':
         requestOptions = {
           headers: {
-            Accept: 'application/json'
+            Accept: 'application/json',
           },
-          json: true
+          json: true,
         };
         break;
       case 'xml':
         requestOptions = {
           headers: {
-            Accept: 'application/xml, text/xml'
-          }
+            Accept: 'application/xml, text/xml',
+          },
         };
         break;
       case 'yaml':
         requestOptions = {
           headers: {
-            Accept: 'text/x-yaml,  text/yaml, application/x-yaml, application/yaml, text/plain'
-          }
+            Accept: 'text/x-yaml,  text/yaml, application/x-yaml, application/yaml, text/plain',
+          },
         };
         break;
     }
@@ -7442,7 +7255,7 @@ cache({
         sendBadge(format, badgeData);
       }
     });
-  }
+  },
 }));
 
 // nsp for npm packages
@@ -7463,10 +7276,10 @@ camp.route(/^\/nsp\/npm\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|j
       body: {
         package: {
           name: null,
-          version: packageVersion
-        }
+          version: packageVersion,
+        },
       },
-      json: true
+      json: true,
     };
 
     if (typeof scopeWithoutAtSign === 'string') {
@@ -7496,9 +7309,9 @@ camp.route(/^\/nsp\/npm\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|j
     // https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md#getpackageversion
     const npmRequestOptions = {
       headers: {
-        Accept: '*/*'
+        Accept: '*/*',
       },
-      json: true
+      json: true,
     };
     let npmURL = null;
 
@@ -7831,7 +7644,7 @@ cache(function (data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     json: true,
-    uri: 'https://bugzilla.mozilla.org/rest/bug/' + bugNumber
+    uri: 'https://bugzilla.mozilla.org/rest/bug/' + bugNumber,
   };
   var badgeData = getBadgeData('bug ' + bugNumber, data);
   request(options, function (err, res, json) {
@@ -7898,7 +7711,7 @@ cache(function(data, match, sendBadge, request) {
   const options = {
     method: 'GET',
     headers: { 'Accept': 'application/json' },
-    uri: `https://api.dependabot.com/badges/compatibility_score?package-manager=${packageManager}&dependency-name=${dependencyName}&version-scheme=semver`
+    uri: `https://api.dependabot.com/badges/compatibility_score?package-manager=${packageManager}&dependency-name=${dependencyName}&version-scheme=semver`,
   };
   const badgeData = getBadgeData('semver stability', data);
   badgeData.links = [`https://dependabot.com/compatibility-score.html?package-manager=${packageManager}&dependency-name=${dependencyName}&version-scheme=semver`];
@@ -7922,7 +7735,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Any badge.
-camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/(:|badge\/)(([^-]|--)*?)-?(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
   var subject = escapeFormat(match[2]);
   var status = escapeFormat(match[4]);
@@ -7944,16 +7757,9 @@ function(data, match, end, ask) {
   // Badge creation.
   try {
     var badgeData = getBadgeData(subject, data);
-    badgeData.colorscheme = undefined;
-    if (data.label !== undefined) { badgeData.text[0] = '' + data.label; }
+    badgeData.text[0] = getLabel(subject, data);
     badgeData.text[1] = status;
-    if (badgeData.colorB === undefined) {
-      if (sixHex(color)) {
-        badgeData.colorB = '#' + color;
-      } else if (badgeData.colorA === undefined) {
-        badgeData.colorscheme = color;
-      }
-    }
+    badgeData.colorB = makeColorB(color, data);
     badgeData.template = data.style;
     if (config.profiling.makeBadge) {
       console.time('makeBadge total');
@@ -7965,7 +7771,7 @@ function(data, match, end, ask) {
     makeSend(format, ask.res, end)(svg);
   } catch(e) {
     log.error(e.stack);
-    const svg = makeBadge({text: ['error', 'bad badge'], colorscheme: 'red'});
+    const svg = makeBadge({ text: ['error', 'bad badge'], colorscheme: 'red' });
     makeSend(format, ask.res, end)(svg);
   }
 });
@@ -8005,12 +7811,12 @@ function(data, match, end, ask) {
 
   // Badge creation.
   try {
-    var badgeData = {text: [subject, status]};
+    var badgeData = { text: [subject, status] };
     badgeData.colorscheme = color;
     const svg = makeBadge(badgeData);
     makeSend('png', ask.res, end)(svg);
   } catch(e) {
-    const svg = makeBadge({text: ['error', 'bad badge'], colorscheme: 'red'});
+    const svg = makeBadge({ text: ['error', 'bad badge'], colorscheme: 'red' });
     makeSend('png', ask.res, end)(svg);
   }
 });

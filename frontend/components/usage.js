@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import StaticBadgeMaker from './static-badge-maker';
 import DynamicBadgeMaker from './dynamic-badge-maker';
 import { staticBadgeUrl } from '../lib/badge-url';
-import { advertisedStyles } from '../../lib/supported-features';
+import { advertisedStyles, logos } from '../../supported-features.json';
 
 export default class Usage extends React.PureComponent {
   static propTypes = {
@@ -66,7 +66,15 @@ export default class Usage extends React.PureComponent {
     );
   }
 
-  render () {
+  static renderNamedLogos() {
+    const renderLogo = logo => <span className="nowrap">{logo}</span>;
+    const [first, ...rest] = logos;
+    return [renderLogo(first)].concat(
+      rest.reduce((result, logo) => result.concat([', ', renderLogo(logo)]), [])
+    );
+  }
+
+  render() {
     const { baseUri } = this.props;
     return (
       <section>
@@ -142,7 +150,7 @@ export default class Usage extends React.PureComponent {
         <p>
           Here are a few other parameters you can use: (connecting several with "&" is possible)
         </p>
-        <table>
+        <table className="usage">
           <tbody>
             <tr>
               <td>
@@ -161,8 +169,7 @@ export default class Usage extends React.PureComponent {
                 <code>?logo=appveyor</code>
               </td>
               <td>
-                Insert one of the {}
-                <a href="https://github.com/badges/shields/tree/gh-pages/logo">named logos</a>
+                Insert one of the named logos ({this.constructor.renderNamedLogos()})
               </td>
             </tr>
             <tr>
@@ -190,19 +197,19 @@ export default class Usage extends React.PureComponent {
               <td>
                 <code>?colorA=abcdef</code>
               </td>
-              <td>Set background of the left part (hex color only)</td>
+              <td>Set background of the left part (hex, rgb, rgba, hsl, hsla and css named colors supported)</td>
             </tr>
             <tr>
               <td>
                 <code>?colorB=fedcba</code>
               </td>
-              <td>Set background of the right part (hex color only)</td>
+              <td>Set background of the right part (hex, rgb, rgba, hsl, hsla and css named colors supported)</td>
             </tr>
             <tr>
               <td>
                 <code>?maxAge=3600</code>
               </td>
-              <td>Set the HTTP cache lifetime in secs</td>
+              <td>Set the HTTP cache lifetime in secs (values below the default will be ignored)</td>
             </tr>
           </tbody>
         </table>

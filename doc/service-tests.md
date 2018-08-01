@@ -26,7 +26,7 @@ and ideally, all code branches:
   - Non-default parameters like tags and branches
 4. Server errors and other malformed responses
   - Service may return status code 500 and higher
-  - Invalid JSON
+  - [Invalid JSON](#invalid-json)
   - Attributes missing or have incorrect types
   - Headers missing
 5. Connection errors
@@ -342,6 +342,23 @@ t.create('connection error')
   .expectJSON({ name: 'build', value: 'inaccessible' });
 ```
 
+Helpers
+-------
+
+### Invalid JSON
+[`invalidJSON`](https://github.com/badges/shields/blob/master/services/response-fixtures.js) is a response fixture of an invalid JSON for Nock.
+Example usage from [services/bountysource/bountysource.tester.js](https://github.com/badges/shields/blob/master/services/bountysource/bountysource.tester.js):
+```js
+const { invalidJSON } = require('../response-fixtures');
+// ...
+t.create('bounties (unexpected response)')
+  .get('/team/mozilla-core/activity.json')
+  .intercept(nock => nock('https://api.bountysource.com')
+    .get('/teams/mozilla-core')
+    .reply(invalidJSON)
+  )
+  .expectJSON({ name: 'bounties', value: 'invalid' });
+```
 
 Further reading
 ---------------

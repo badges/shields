@@ -2,7 +2,6 @@
 
 const Joi = require('joi');
 const ServiceTester = require('../service-tester');
-const { invalidJSON } = require('../response-fixtures');
 
 const t = new ServiceTester({ id: 'clojars', title: 'clojars' });
 module.exports = t;
@@ -23,14 +22,6 @@ t.create('clojars (connection error)')
   .get('/v/jquery.json')
   .networkOff()
   .expectJSON({name: 'clojars', value: 'inaccessible'});
-
-t.create('clojars (unexpected response)')
-  .get('/v/prismic.json')
-  .intercept(nock => nock('https://clojars.org')
-    .get('/prismic/latest-version.json')
-    .reply(invalidJSON)
-  )
-  .expectJSON({name: 'clojars', value: 'invalid'});
 
 t.create('clojars (error response)')
   .get('/v/prismic.json')

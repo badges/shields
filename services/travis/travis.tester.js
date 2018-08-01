@@ -2,7 +2,10 @@
 
 const Joi = require('joi');
 const ServiceTester = require('../service-tester');
-const {isPhpVersionReduction} = require('../test-validators');
+const {
+  isBuildStatus,
+  isPhpVersionReduction
+} = require('../test-validators');
 
 const t = new ServiceTester({ id: 'travis', title: 'Travis CI/PHP version from .travis.yml' });
 module.exports = t;
@@ -13,14 +16,14 @@ t.create('build status on default branch')
   .get('/rust-lang/rust.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: Joi.equal('failing', 'passing', 'unknown')
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
   }));
 
 t.create('build status on named branch')
   .get('/rust-lang/rust/stable.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: Joi.equal('failing', 'passing', 'unknown')
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
   }));
 
 t.create('unknown repo')
@@ -45,14 +48,14 @@ t.create('build status on default branch')
   .get('/com/ivandelabeldad/rackian-gateway.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: Joi.equal('failing', 'passing', 'unknown')
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
   }));
 
 t.create('build status on named branch')
   .get('/com/ivandelabeldad/rackian-gateway.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'build',
-    value: Joi.equal('failing', 'passing', 'unknown')
+    value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
   }));
 
 t.create('unknown repo')
