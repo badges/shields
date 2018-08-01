@@ -51,14 +51,18 @@ export default class ExamplesPage extends React.Component {
 
   renderSearchResults() {
     if (this.state.searchReady) {
-      return (
-        <SearchResults
-          category={this.state.category}
-          query={this.state.query}
-          clickHandler={example => { this.setState({ example }); }} />
-      );
+      if ((this.state.query != null) && (this.state.query.length === 1)) {
+        return (<div>Search term must have 2 or more characters</div>);
+      } else {
+        return (
+          <SearchResults
+            category={this.state.category}
+            query={this.state.query}
+            clickHandler={example => { this.setState({ example }); }} />
+        );
+      }
     } else {
-      return 'searching...';
+      return (<div>searching...</div>);
     }
   }
 

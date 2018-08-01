@@ -47,8 +47,6 @@ export default class SearchResults extends React.Component {
       return this.renderExamples();
     } else if ((this.props.query == null) || (this.props.query.length === 0)) {
       return this.renderCategoryHeadings();
-    } else if (this.props.query.length === 1) {
-      return (<div>Search term must have 2 or more characters</div>);
     } else {
       return this.renderExamples();
     }
