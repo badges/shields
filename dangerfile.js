@@ -111,7 +111,7 @@ function onlyUnique(value, index, self) {
 }
 
 const affectedServices = all_files
-  .forEach(function(file) {
+  .map(function(file) {
     const match = file.match(/^services\/(.+)\/.+\.service.js$/);
     return match ? match[1] : undefined;
   })
@@ -119,7 +119,7 @@ const affectedServices = all_files
   .filter(onlyUnique);
 
 const testedServices = all_files
-  .forEach(function(file) {
+  .map(function(file) {
     const match = file.match(/^services\/(.+)\/.+\.tester.js$/);
     return match ? match[1] : undefined;
   })
