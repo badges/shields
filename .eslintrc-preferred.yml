@@ -11,8 +11,6 @@ parserOptions:
   sourceType: "script"
 
 rules:
-  prettier/prettier: "error"
-
   # These are not disabled by eslint-config-prettier
   spaced-comment: "off"
   standard/object-curly-even-spacing: "off"
