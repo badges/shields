@@ -108,6 +108,17 @@ Badge URLs
 Coding guidelines
 -----------------
 
+### Prettier
+
+This project formats its source code using Prettier. The most enjoyable way to
+use Prettier is to let is format code for you when you save. You can [integrate
+it into your editor][integrate prettier].
+
+If for whatever reason you don't want to do that, you can run
+`npm run prettier` to format the code from the command line.
+
+[integrate prettier]: https://prettier.io/docs/en/editors.html
+
 ### Tests
 
 When adding or changing a service [please write tests][service-tests].
