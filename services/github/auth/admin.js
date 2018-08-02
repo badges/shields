@@ -1,7 +1,7 @@
 'use strict';
 
 const crypto = require('crypto');
-const serverSecrets = require('../server-secrets');
+const serverSecrets = require('../../../lib/server-secrets');
 
 function setRoutes(tokenProvider, server) {
   // Allow the admin to obtain the tokens for operational and debugging
