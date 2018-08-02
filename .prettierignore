@@ -1,4 +1,7 @@
 server.js
+dangerfile.js
+next.config.js
+server.spec.js
 package.json
 package-lock.json
 /__snapshots__
