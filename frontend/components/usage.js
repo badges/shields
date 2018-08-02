@@ -169,7 +169,7 @@ export default class Usage extends React.PureComponent {
                 <code>?logo=appveyor</code>
               </td>
               <td>
-                Insert one of the named logos ({this.constructor.renderNamedLogos()})
+                Insert one of the named logos from ({this.constructor.renderNamedLogos()}) or <a href="https://simpleicons.org/" target="_BLANK">simple-icons</a>
               </td>
             </tr>
             <tr>
@@ -177,6 +177,12 @@ export default class Usage extends React.PureComponent {
                 <code>?logo=data:image/png;base64,…</code>
               </td>
               <td>Insert custom logo image (≥ 14px high)</td>
+            </tr>
+            <tr>
+              <td>
+                <code>?logoColor=violet</code>
+              </td>
+              <td>Set the color of the logo (hex, rgb, rgba, hsl, hsla and css named colors supported)</td>
             </tr>
             <tr>
               <td>

@@ -6,6 +6,7 @@ const {
   isVPlusTripleDottedVersion,
   isMetric
 } = require('../test-validators');
+const { invalidJSON } = require('../response-fixtures');
 
 const isCondaPlatform = Joi.string().regex(/^\w+-\d+( \| \w+-\d+)*$/);
 
@@ -90,3 +91,11 @@ t.create('connection error')
   .get('/d/conda-forge/zlib.json')
   .networkOff()
   .expectJSON({ name: 'conda|downloads', value: 'inaccessible' });
+
+t.create('unexpected response')
+  .get('/v/conda-forge/zlib.json')
+  .intercept(nock => nock('https://api.anaconda.org')
+    .get('/package/conda-forge/zlib')
+    .reply(invalidJSON)
+  )
+  .expectJSON({name: 'conda|conda-forge', value: 'invalid'});
