@@ -1,5 +1,6 @@
 server.js
 package.json
+package-lock.json
 /__snapshots__
 /.next
 /build
