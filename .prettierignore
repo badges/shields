@@ -1,2 +1,6 @@
 server.js
 package.json
+/__snapshots__
+/.next
+/build
+/coverage
