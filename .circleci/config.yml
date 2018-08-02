@@ -39,6 +39,11 @@ jobs:
           command: npm run lint
 
       - run:
+          name: 'Prettier check (quick fix: `npm run prettier`)'
+          when: always
+          command: npm run prettier-check
+
+      - run:
           name: Server unit tests
           when: always
           command: npm run test:js:server
