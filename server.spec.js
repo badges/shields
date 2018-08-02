@@ -1,4 +1,6 @@
-const assert = require('assert');
+'use strict';
+
+const { expect } = require('chai');
 const config = require('./lib/test-config');
 const fetch = require('node-fetch');
 const fs = require('fs');
@@ -19,26 +21,50 @@ describe('The server', function () {
   });
   after('Shut down the server', function () { serverHelpers.stop(server); });
 
-  it('should produce colorscheme badges', function () {
-    return fetch(`${baseUri}/:fruit-apple-green.svg`)
-      .then(res => {
-        assert.ok(res.ok);
-        return res.text();
-      }).then(text => {
-        assert.ok(isSvg(text));
-        assert(text.includes('fruit'), 'fruit');
-        assert(text.includes('apple'), 'apple');
-      });
+  it('should produce colorscheme badges', async function () {
+    // This is the first server test to run, and often times out.
+    this.timeout(5000);
+    const res = await fetch(`${baseUri}/:fruit-apple-green.svg`);
+    expect(res.ok).to.be.true;
+    expect(await res.text())
+      .to.satisfy(isSvg)
+      .and.to.include('fruit')
+      .and.to.include('apple');
   });
 
-  it('should produce colorscheme PNG badges', function () {
-    return fetch(`${baseUri}/:fruit-apple-green.png`)
-      .then(res => {
-        assert.ok(res.ok);
-        return res.buffer();
-      }).then(data => {
-        assert.ok(isPng(data));
-      });
+  it('should produce colorscheme PNG badges', async function () {
+    this.timeout(5000);
+    const res = await fetch(`${baseUri}/:fruit-apple-green.png`);
+    expect(res.ok).to.be.true;
+    expect(await res.buffer()).to.satisfy(isPng);
+  });
+
+  // https://github.com/badges/shields/pull/1319
+  it('should not crash with a numeric logo', async function () {
+    const res = await fetch(`${baseUri}/:fruit-apple-green.svg?logo=1`);
+    expect(res.ok).to.be.true;
+    expect(await res.text())
+      .to.satisfy(isSvg)
+      .and.to.include('fruit')
+      .and.to.include('apple');
+  });
+
+  it('should not crash with a numeric link', async function () {
+    const res = await fetch(`${baseUri}/:fruit-apple-green.svg?link=1`);
+    expect(res.ok).to.be.true;
+    expect(await res.text())
+      .to.satisfy(isSvg)
+      .and.to.include('fruit')
+      .and.to.include('apple');
+  });
+
+  it('should not crash with a boolean link', async function () {
+    const res = await fetch(`${baseUri}/:fruit-apple-green.svg?link=true`);
+    expect(res.ok).to.be.true;
+    expect(await res.text())
+      .to.satisfy(isSvg)
+      .and.to.include('fruit')
+      .and.to.include('apple');
   });
 
   context('with svg2img error', function () {
@@ -51,41 +77,32 @@ describe('The server', function () {
     });
     afterEach(function () { toBufferStub.restore(); });
 
-    it('should emit the 500 message', function () {
-      return fetch(`${baseUri}/:some_new-badge-green.png`)
-        .then(res => {
-          // This emits status code 200, though 500 would be preferable.
-          assert.equal(res.status, 200);
-          return res.text();
-        }).then(text => {
-          assert.equal(text, expectedError);
-        });
+    it('should emit the 500 message', async function () {
+      const res = await fetch(`${baseUri}/:some_new-badge-green.png`);
+      // This emits status code 200, though 500 would be preferable.
+      expect(res.status).to.equal(200);
+      expect(await res.text()).to.include(expectedError);
     });
   });
 
   describe('analytics endpoint', function () {
-    it('should return analytics in the expected format', function () {
-      return fetch(`${baseUri}/$analytics/v1`)
-        .then(res => {
-          assert.ok(res.ok);
-          return res.json();
-        }).then(json => {
-          const keys = Object.keys(json);
-          const expectedKeys = [
-            'vendorMonthly',
-            'rawMonthly',
-            'vendorFlatMonthly',
-            'rawFlatMonthly',
-            'vendorFlatSquareMonthly',
-            'rawFlatSquareMonthly',
-          ];
-          assert.deepEqual(keys.sort(), expectedKeys.sort());
+    it('should return analytics in the expected format', async function () {
+      const res = await fetch(`${baseUri}/$analytics/v1`);
+      expect(res.ok).to.be.true;
+      const json = await res.json();
+      const expectedKeys = [
+        'vendorMonthly',
+        'rawMonthly',
+        'vendorFlatMonthly',
+        'rawFlatMonthly',
+        'vendorFlatSquareMonthly',
+        'rawFlatSquareMonthly',
+      ];
+      expect(json).to.have.all.keys(...expectedKeys);
 
-          keys.forEach(k => {
-            assert.ok(Array.isArray(json[k]));
-            assert.equal(json[k].length, 36);
-          });
-        });
+      Object.values(json).forEach(stats => {
+        expect(stats).to.be.an('array').with.length(36);
+      });
     });
   });
 });

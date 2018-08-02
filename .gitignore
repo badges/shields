@@ -85,3 +85,9 @@ typings/
 
 # dotenv environment variables file
 .env
+
+# Temporary build artifacts.
+/build
+.next
+badge-examples.json
+supported-features.json
