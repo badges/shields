@@ -1,5 +1,5 @@
-import { test, given, forCases } from 'sazerac';
-import resolveUrl from './resolve-url';
+import { test, given, forCases } from 'sazerac'
+import resolveUrl from './resolve-url'
 
 describe('URL resolver', function() {
   test(resolveUrl, () => {
@@ -20,10 +20,10 @@ describe('URL resolver', function() {
       given('/bar', 'http://foo/'),
     ]).expect('http://foo/bar')
 
-    given('/foo/bar', '/baz', { baz: 'bazinga' })
-      .expect('/foo/bar?baz=bazinga');
+    given('/foo/bar', '/baz', { baz: 'bazinga' }).expect('/foo/bar?baz=bazinga')
 
-    given('/foo/bar?thing=1', undefined, { other: '2' })
-      .expect('/foo/bar?thing=1&other=2');
+    given('/foo/bar?thing=1', undefined, { other: '2' }).expect(
+      '/foo/bar?thing=1&other=2'
+    )
   })
-});
+})

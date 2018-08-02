@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-const frisby = require('icedfrisby-nock')(require('icedfrisby'));
-const config = require('../lib/test-config');
+const frisby = require('icedfrisby-nock')(require('icedfrisby'))
+const config = require('../lib/test-config')
 
 /**
  * Encapsulate a suite of tests. Create new tests using create() and register
@@ -14,23 +14,22 @@ class ServiceTester {
    *   Mocha output. The `path` is the path prefix which is automatically
    *   prepended to each tested URI. The default is `/${attrs.id}`.
    */
-  constructor (attrs) {
+  constructor(attrs) {
     Object.assign(this, {
       id: attrs.id,
       title: attrs.title,
-      pathPrefix: attrs.pathPrefix === undefined
-        ? `/${attrs.id}`
-        : attrs.pathPrefix,
+      pathPrefix:
+        attrs.pathPrefix === undefined ? `/${attrs.id}` : attrs.pathPrefix,
       specs: [],
-      _only: false
-    });
+      _only: false,
+    })
   }
 
   /**
    * Invoked before each test. This is a stub which can be overridden on
    * instances.
    */
-  beforeEach () {}
+  beforeEach() {}
 
   /**
    * Create a new test. The hard work is delegated to IcedFrisby.
@@ -40,34 +39,39 @@ class ServiceTester {
    * invoked automatically by the tester.
    * @param msg The name of the test
    */
-  create (msg) {
-    const spec = frisby.create(msg)
+  create(msg) {
+    const spec = frisby
+      .create(msg)
       .baseUri(`http://localhost:${config.port}${this.pathPrefix}`)
-      .before(() => { this.beforeEach(); });
+      .before(() => {
+        this.beforeEach()
+      })
 
-    this.specs.push(spec);
+    this.specs.push(spec)
 
-    return spec;
+    return spec
   }
 
   /**
    * Run only this tester. This can be invoked using the --only argument to
    * the CLI, or directly on the tester.
    */
-  only () {
-    this._only = true;
+  only() {
+    this._only = true
   }
 
   /**
    * Register the tests with Mocha.
    */
-  toss () {
-    const specs = this.specs;
+  toss() {
+    const specs = this.specs
 
-    const fn = this._only ? describe.only : describe;
-    fn(this.title, function () {
-      specs.forEach(spec => { spec.toss(); });
-    });
+    const fn = this._only ? describe.only : describe
+    fn(this.title, function() {
+      specs.forEach(spec => {
+        spec.toss()
+      })
+    })
   }
 }
-module.exports = ServiceTester;
+module.exports = ServiceTester

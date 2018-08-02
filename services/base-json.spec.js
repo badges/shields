@@ -1,24 +1,24 @@
-'use strict';
+'use strict'
 
-const { expect } = require('chai');
+const { expect } = require('chai')
 
-const { BaseJsonService } = require('./base');
-const { invalidJSON } = require('./response-fixtures');
+const { BaseJsonService } = require('./base')
+const { invalidJSON } = require('./response-fixtures')
 
 class DummyJsonService extends BaseJsonService {
   static get category() {
-    return 'cat';
+    return 'cat'
   }
 
   static get url() {
     return {
       base: 'foo',
-    };
+    }
   }
 
   async handle() {
-    const { value } = await this._requestJson();
-    return { message: value };
+    const { value } = await this._requestJson()
+    return { message: value }
   }
 }
 
@@ -27,15 +27,15 @@ describe('BaseJsonService', () => {
     const sendAndCacheRequest = async () => ({
       buffer: invalidJSON,
       res: { statusCode: 200 },
-    });
+    })
     const serviceInstance = new DummyJsonService(
       { sendAndCacheRequest },
       { handleInternalErrors: false }
-    );
-    const serviceData = await serviceInstance.invokeHandler({}, {});
+    )
+    const serviceData = await serviceInstance.invokeHandler({}, {})
     expect(serviceData).to.deep.equal({
       color: 'lightgray',
       message: 'unparseable json response',
-    });
-  });
-});
+    })
+  })
+})

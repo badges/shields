@@ -1,18 +1,18 @@
-import { Fragment, default as React } from 'react';
-import PropTypes from 'prop-types';
-import StaticBadgeMaker from './static-badge-maker';
-import DynamicBadgeMaker from './dynamic-badge-maker';
-import { staticBadgeUrl } from '../lib/badge-url';
-import { advertisedStyles, logos } from '../../supported-features.json';
+import { Fragment, default as React } from 'react'
+import PropTypes from 'prop-types'
+import StaticBadgeMaker from './static-badge-maker'
+import DynamicBadgeMaker from './dynamic-badge-maker'
+import { staticBadgeUrl } from '../lib/badge-url'
+import { advertisedStyles, logos } from '../../supported-features.json'
 
 export default class Usage extends React.PureComponent {
   static propTypes = {
     baseUri: PropTypes.string.isRequired,
     longCache: PropTypes.bool.isRequired,
-  };
+  }
 
-  renderColorExamples () {
-    const { baseUri, longCache } = this.props;
+  renderColorExamples() {
+    const { baseUri, longCache } = this.props
     const colors = [
       'brightgreen',
       'green',
@@ -23,33 +23,35 @@ export default class Usage extends React.PureComponent {
       'lightgrey',
       'blue',
       'ff69b4',
-    ];
+    ]
     return (
       <p>
-        { colors.map((color, i) => (
+        {colors.map((color, i) => (
           <Fragment key={i}>
             <img
               className="badge-img"
-              src={staticBadgeUrl(baseUri, 'color', color, color, { longCache })}
-              alt={color} /> {}
+              src={staticBadgeUrl(baseUri, 'color', color, color, {
+                longCache,
+              })}
+              alt={color}
+            />{' '}
+            {}
           </Fragment>
         ))}
       </p>
-    );
+    )
   }
 
-  renderStyleExamples () {
-    const { baseUri, longCache } = this.props;
+  renderStyleExamples() {
+    const { baseUri, longCache } = this.props
     return (
       <table className="badge-img">
         <tbody>
-          { advertisedStyles.map((style, i) => {
-            const badgeUri = staticBadgeUrl(
-              baseUri,
-              'style',
+          {advertisedStyles.map((style, i) => {
+            const badgeUri = staticBadgeUrl(baseUri, 'style', style, 'green', {
+              longCache,
               style,
-              'green',
-              { longCache, style });
+            })
             return (
               <tr key={i}>
                 <td>
@@ -59,23 +61,23 @@ export default class Usage extends React.PureComponent {
                   <code>{badgeUri}</code>
                 </td>
               </tr>
-            );
+            )
           })}
         </tbody>
       </table>
-    );
+    )
   }
 
   static renderNamedLogos() {
-    const renderLogo = logo => <span className="nowrap">{logo}</span>;
-    const [first, ...rest] = logos;
+    const renderLogo = logo => <span className="nowrap">{logo}</span>
+    const [first, ...rest] = logos
     return [renderLogo(first)].concat(
       rest.reduce((result, logo) => result.concat([', ', renderLogo(logo)]), [])
-    );
+    )
   }
 
   render() {
-    const { baseUri } = this.props;
+    const { baseUri } = this.props
     return (
       <section>
         <h2 id="your-badge">Your Badge</h2>
@@ -87,7 +89,8 @@ export default class Usage extends React.PureComponent {
 
         <p>
           <code>
-            {baseUri}/badge/&lt;SUBJECT&gt;-&lt;STATUS&gt;-&lt;COLOR&gt;.svg
+            {baseUri}
+            /badge/&lt;SUBJECT&gt;-&lt;STATUS&gt;-&lt;COLOR&gt;.svg
           </code>
         </p>
         <table className="centered">
@@ -122,20 +125,50 @@ export default class Usage extends React.PureComponent {
           </tbody>
         </table>
 
-        { this.renderColorExamples() }
+        {this.renderColorExamples()}
 
         <h3 id="dynamic-badge">Dynamic</h3>
 
         <DynamicBadgeMaker baseUri={baseUri} />
 
         <p>
-          <code>/badge/dynamic/json.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;<a href="https://www.npmjs.com/package/jsonpath" target="_BLANK" title="JSONdata syntax">$.DATA.SUBDATA</a>&gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;</code>
+          <code>
+            /badge/dynamic/json.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
+            <a
+              href="https://www.npmjs.com/package/jsonpath"
+              target="_BLANK"
+              title="JSONdata syntax"
+            >
+              $.DATA.SUBDATA
+            </a>
+            &gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
+          </code>
         </p>
         <p>
-          <code>/badge/dynamic/xml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;<a href="https://www.npmjs.com/package/xpath" target="_BLANK" title="XPath syntax">//data/subdata</a>&gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;</code>
+          <code>
+            /badge/dynamic/xml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
+            <a
+              href="https://www.npmjs.com/package/xpath"
+              target="_BLANK"
+              title="XPath syntax"
+            >
+              //data/subdata
+            </a>
+            &gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
+          </code>
         </p>
         <p>
-          <code>/badge/dynamic/yaml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;<a href="https://www.npmjs.com/package/jsonpath" target="_BLANK" title="JSONdata syntax">$.DATA.SUBDATA</a>&gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;</code>
+          <code>
+            /badge/dynamic/yaml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
+            <a
+              href="https://www.npmjs.com/package/jsonpath"
+              target="_BLANK"
+              title="JSONdata syntax"
+            >
+              $.DATA.SUBDATA
+            </a>
+            &gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
+          </code>
         </p>
 
         <hr className="spacing" />
@@ -143,12 +176,14 @@ export default class Usage extends React.PureComponent {
         <h2 id="styles">Styles</h2>
 
         <p>
-          The following styles are available (flat is the default as of Feb 1st 2015):
+          The following styles are available (flat is the default as of Feb 1st
+          2015):
         </p>
-        { this.renderStyleExamples() }
+        {this.renderStyleExamples()}
 
         <p>
-          Here are a few other parameters you can use: (connecting several with "&" is possible)
+          Here are a few other parameters you can use: (connecting several with
+          "&" is possible)
         </p>
         <table className="usage">
           <tbody>
@@ -169,7 +204,11 @@ export default class Usage extends React.PureComponent {
                 <code>?logo=appveyor</code>
               </td>
               <td>
-                Insert one of the named logos from ({this.constructor.renderNamedLogos()}) or <a href="https://simpleicons.org/" target="_BLANK">simple-icons</a>
+                Insert one of the named logos from (
+                {this.constructor.renderNamedLogos()}) or{' '}
+                <a href="https://simpleicons.org/" target="_BLANK">
+                  simple-icons
+                </a>
               </td>
             </tr>
             <tr>
@@ -182,7 +221,10 @@ export default class Usage extends React.PureComponent {
               <td>
                 <code>?logoColor=violet</code>
               </td>
-              <td>Set the color of the logo (hex, rgb, rgba, hsl, hsla and css named colors supported)</td>
+              <td>
+                Set the color of the logo (hex, rgb, rgba, hsl, hsla and css
+                named colors supported)
+              </td>
             </tr>
             <tr>
               <td>
@@ -195,36 +237,45 @@ export default class Usage extends React.PureComponent {
                 <code>?link=http://left&amp;link=http://right</code>
               </td>
               <td>
-                Specify what clicking on the left/right of a badge should do (esp.
-                for social badge style)
+                Specify what clicking on the left/right of a badge should do
+                (esp. for social badge style)
               </td>
             </tr>
             <tr>
               <td>
                 <code>?colorA=abcdef</code>
               </td>
-              <td>Set background of the left part (hex, rgb, rgba, hsl, hsla and css named colors supported)</td>
+              <td>
+                Set background of the left part (hex, rgb, rgba, hsl, hsla and
+                css named colors supported)
+              </td>
             </tr>
             <tr>
               <td>
                 <code>?colorB=fedcba</code>
               </td>
-              <td>Set background of the right part (hex, rgb, rgba, hsl, hsla and css named colors supported)</td>
+              <td>
+                Set background of the right part (hex, rgb, rgba, hsl, hsla and
+                css named colors supported)
+              </td>
             </tr>
             <tr>
               <td>
                 <code>?maxAge=3600</code>
               </td>
-              <td>Set the HTTP cache lifetime in secs (values below the default will be ignored)</td>
+              <td>
+                Set the HTTP cache lifetime in secs (values below the default
+                will be ignored)
+              </td>
             </tr>
           </tbody>
         </table>
 
         <p>
-          We support <code>.svg</code>, <code>.json</code>, <code>.png</code> and a
-          few others, but use them responsibly.
+          We support <code>.svg</code>, <code>.json</code>, <code>.png</code>{' '}
+          and a few others, but use them responsibly.
         </p>
       </section>
-    );
+    )
   }
 }

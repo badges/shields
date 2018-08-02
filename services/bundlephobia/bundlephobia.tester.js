@@ -5,7 +5,8 @@ const ServiceTester = require('../service-tester')
 const { isFileSize } = require('../test-validators')
 
 const t = new ServiceTester({
-  id: 'bundlephobia', title: 'NPM package bundle size',
+  id: 'bundlephobia',
+  title: 'NPM package bundle size',
 })
 
 module.exports = t
@@ -67,12 +68,11 @@ const data = [
     format: formats.C,
     get: '/min/@some-no-exist/some-no-exist.json',
     expect: { name: 'minified size', value: 'package not found error' },
-  }
+  },
 ]
 
-data.forEach( ({format, get, expect }) => {
+data.forEach(({ format, get, expect }) => {
   t.create(`Testing format '${format}' against '${get}'`)
     .get(get)
     .expectJSONTypes(Joi.object().keys(expect))
-  }
-)
+})

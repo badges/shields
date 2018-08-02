@@ -1,47 +1,52 @@
-'use strict';
+'use strict'
 
-const Joi = require('joi');
-const ServiceTester = require('../service-tester');
-const { invalidJSON } = require('../response-fixtures');
+const Joi = require('joi')
+const ServiceTester = require('../service-tester')
+const { invalidJSON } = require('../response-fixtures')
 
-const t = new ServiceTester({ id: 'bountysource', title: 'Bountysource' });
-module.exports = t;
-
+const t = new ServiceTester({ id: 'bountysource', title: 'Bountysource' })
+module.exports = t
 
 t.create('bounties (valid)')
   .get('/team/mozilla-core/activity.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'bounties',
-    value: Joi.number().integer().positive()
-  }));
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'bounties',
+      value: Joi.number()
+        .integer()
+        .positive(),
+    })
+  )
 
 t.create('bounties (invalid team)')
   .get('/team/not-a-real-team/activity.json')
   .expectJSON({
     name: 'bounties',
-    value: 'not found'
-  });
+    value: 'not found',
+  })
 
 t.create('bounties (connection error)')
   .get('/team/mozilla-core/activity.json')
   .networkOff()
-  .expectJSON({name: 'bounties', value: 'inaccessible'});
+  .expectJSON({ name: 'bounties', value: 'inaccessible' })
 
 t.create('bounties (unexpected response)')
   .get('/team/mozilla-core/activity.json')
-  .intercept(nock => nock('https://api.bountysource.com')
-    .get('/teams/mozilla-core')
-    .reply(invalidJSON)
+  .intercept(nock =>
+    nock('https://api.bountysource.com')
+      .get('/teams/mozilla-core')
+      .reply(invalidJSON)
   )
-  .expectJSON({name: 'bounties', value: 'invalid'});
+  .expectJSON({ name: 'bounties', value: 'invalid' })
 
 t.create('bounties (error response)')
   .get('/team/mozilla-core/activity.json')
-  .intercept(nock => nock('https://api.bountysource.com')
-    .get('/teams/mozilla-core')
-    .reply(500, '{"error":"oh noes!!"}')
+  .intercept(nock =>
+    nock('https://api.bountysource.com')
+      .get('/teams/mozilla-core')
+      .reply(500, '{"error":"oh noes!!"}')
   )
   .expectJSON({
     name: 'bounties',
-    value: 'invalid'
-  });
+    value: 'invalid',
+  })
