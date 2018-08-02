@@ -7124,12 +7124,12 @@ cache((data, match, sendBadge, request) => {
 }));
 
 // Maven metadata versioning integration.
-camp.route(/^\/maven-metadata\/v\/(https?)\/(.+\.xml)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/(?:(\w*)-)?maven-metadata\/v\/(https?)\/(.+\.xml)\.(svg|png|gif|jpg|json)$/,
   cache(function (data, match, sendBadge, request) {
-    const [, scheme, hostAndPath, format] = match;
+    const [, name, scheme, hostAndPath, format] = match;
     const metadataUri = `${scheme}://${hostAndPath}`;
     request(metadataUri, (error, response, body) => {
-      const badge = getBadgeData('maven', data);
+      const badge = getBadgeData(!name ? 'maven' : name, data);
       if (!error && response.statusCode >= 200 && response.statusCode < 300) {
         try {
           xml2js.parseString(body, (err, result) => {
