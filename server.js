@@ -115,6 +115,7 @@ const {
   sortDjangoVersions,
   parseClassifiers
 } = require('./lib/pypi-helpers.js');
+const gitlabHelpers = require('./lib/gitlab-helpers.js');
 
 const serverStartTime = new Date((new Date()).toGMTString());
 const githubApiUrl = config.services.github.baseUri;
@@ -4156,6 +4157,268 @@ cache(function(data, match, sendBadge, request) {
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
+    }
+  });
+}));
+
+// GitLab oauth integration
+camp.route(/^\/gitlab-auth$/, function(data, match, end, request) {
+  const baseURL = process.env.BASE_URL || 'https://img.shields.io';
+
+  if (!(serverSecrets && serverSecrets.gitlab_client_id)) {
+      return end('This server is missing GitLab OAuth secrets.');
+  }
+
+  const query = queryString.stringify({
+    client_id: serverSecrets.gitlab_client_id,
+    redirect_uri: (baseURL + '/gitlab-oauth/done'),
+    response_type: 'code',
+    // state: 'YOUR_UNIQUE_STATE_HASH' // FIXME implement CSRF tokens
+  });
+
+  const redirectURL = 'https://gitlab.com/oauth/authorize?' + queryString.stringify(query);
+
+  request.res.statusCode = 302;
+  request.res.setHeader('Location', redirectURL);
+  request.res.end();
+});
+
+// GitLab oauth callback integration
+camp.route(/^\/gitlab-auth\/done$/, function(data, match, end, request) {
+  const baseURL = process.env.BASE_URL || 'https://img.shields.io';
+
+  if (!(serverSecrets && serverSecrets.gitlab_client_id)) {
+      return end('This server is missing GitLab OAuth secrets.');
+  }
+
+  const options = {
+    method: 'POST',
+    json: true,
+    url: 'https://gitlab.com/oauth/token',
+    form: queryString.stringify({
+      client_id: serverSecrets.gitlab_client_id,
+      client_secret: serverSecrets.gitlab_client_secret,
+      code: data.code,
+      grant_type: 'authorization_code',
+      redirect_uri: (baseURL + '/gitlab-oauth/done')
+    })
+  };
+
+  // FIXME implement CSRF tokens
+
+  request(options, function(err, res, json) {
+    if (err != null) {
+      return end('The connection to GitLab failed.');
+    } else if (!json.access_token) {
+      return end('The GitLab OAuth process did not return an access token.');
+    }
+
+    gitlabHelpers.addToken(json.access_token);
+  });
+});
+
+// GitLab stars & forks integration
+camp.route(/^\/gitlab\/((http(?:s?))\/([^/]+)\/)?(star|fork)s\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const isStar = (match[4] === 'star');
+  const user = match[5];
+  const repo = match[6];
+  const format = match[7];
+  const apiURL = gitlabHelpers.baseURL(match) + "/api/v4/projects/" + user + '%2F' + repo;
+  const badgeData = getBadgeData((isStar ? 'stars' : 'forks'), data);
+
+  gitlabHelpers.request(request, apiURL, {}, true, function(err, res, buf) {
+    if ((err != null) || (res.statusCode !== 200)) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    } else {
+      try {
+        const data = JSON.parse(buf);
+        badgeData.text[1] = metric(parseInt((isStar ? data.star_count : data.forks_count)));
+        badgeData.colorscheme = 'blue';
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    }
+  });
+}));
+
+// GitLab contibutors integration
+camp.route(/^\/gitlab\/((http(?:s?))\/([^/]+)\/)?contributors\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const user = match[4];
+  const repo = match[5];
+  const format = match[6];
+  const apiURL = gitlabHelpers.baseURL(match) + "/api/v4/projects/" + user + '%2F' + repo + '/repository/contributors';
+  const badgeData = getBadgeData('contributors', data);
+
+  gitlabHelpers.request(request, apiURL, {}, true, function(err, res, buf) {
+    if ((err != null) || (res.statusCode !== 200)) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    } else {
+      try {
+        badgeData.text[1] = metric(parseInt(res.headers['x-total']));
+        badgeData.colorscheme = 'blue';
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    }
+  });
+}));
+
+// GitLab build status integration
+camp.route(/^\/gitlab\/((http(?:s?))\/([^/]+)\/)?build\/([^/]+)\/([^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const user = match[4];
+  const repo = match[5];
+  const branch = match[6] || 'master';
+  const format = match[7];
+  const apiURL = gitlabHelpers.baseURL(match) + '/' + user + '/' + repo + '/badges/' + branch + '/pipeline.svg';
+  const badgeData = getBadgeData('build', data);
+
+  request(apiURL, function(err, res, buffer) {
+    if ((err != null) || (res.statusCode !== 200)) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    } else {
+      xml2js.parseString(buffer.toString(), function (err, data) {
+        if (err != null) {
+          badgeData.text[1] = 'invalid';
+          sendBadge(format, badgeData);
+          return;
+        }
+        try {
+          const build_status = data.svg.g[1].g[0].text[3]['_'].trim();
+          badgeData.text[1] = build_status;
+          badgeData.colorscheme = gitlabHelpers.buildColor(build_status);
+          sendBadge(format, badgeData);
+        } catch(e) {
+          badgeData.text[1] = 'invalid';
+          sendBadge(format, badgeData);
+        }
+      });
+    }
+  });
+}));
+
+// GitLab issues & merge requests integration
+camp.route(/^\/gitlab\/((http(?:s?))\/([^/]+)\/)?(issue|merge-request)s(-closed)?(-raw)?\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const isIssue = (match[4] === 'issue');
+  const isClosed = !!match[5];
+  const isRaw = !!match[6];
+  const inWords = (isClosed ? 'closed' : 'open');
+  const user = match[7];
+  const repo = match[8];
+  const format = match[9];
+  const apiURL = gitlabHelpers.baseURL(match) + "/api/v4/projects/" + user + '%2F' + repo + '/' + (isIssue ? 'issues' : 'merge_requests');
+  const badgeData = getBadgeData((isRaw ? (inWords + ' ') : '') + (isIssue ? 'issues' : 'merge requests'), data);
+
+  gitlabHelpers.request(request, apiURL, {state: (isClosed ? 'closed' : 'opened')}, true, function(err, res, buf) {
+    if ((err != null) || (res.statusCode !== 200)) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    } else {
+      try {
+        badgeData.text[1] = metric(parseInt(res.headers['x-total'])) + (isRaw ? '' : (' ' + inWords));
+        badgeData.colorscheme = gitlabHelpers.issueColor(parseInt(res.headers['x-total']), isIssue && !isClosed);
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    }
+  });
+}));
+
+// GitLab last activity integration
+camp.route(/^\/gitlab\/((http(?:s?))\/([^/]+)\/)?last-activity\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const user = match[4];
+  const repo = match[5];
+  const format = match[6];
+  const apiURL = gitlabHelpers.baseURL(match) + "/api/v4/projects/" + user + '%2F' + repo;
+  const badgeData = getBadgeData('last activity', data);
+
+  gitlabHelpers.request(request, apiURL, {}, true, function(err, res, buf) {
+    if ((err != null) || (res.statusCode !== 200)) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    } else {
+      try {
+        const data = JSON.parse(buf);
+        const last_activity = data.last_activity_at;
+        badgeData.text[1] = formatDate(last_activity);
+        badgeData.colorscheme = ageColor(last_activity);
+        sendBadge(format, badgeData);
+      } catch(e) {
+        log.error(e);
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    }
+  });
+}));
+
+// GitLab top language integration
+camp.route(/^\/gitlab\/((http(?:s?))\/([^/]+)\/)?top-language\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const user = match[4];
+  const repo = match[5];
+  const format = match[6];
+  const apiURL = gitlabHelpers.baseURL(match) + "/api/v4/projects/" + user + '%2F' + repo + '/languages';
+  const badgeData = getBadgeData('top language', data);
+
+  gitlabHelpers.request(request, apiURL, {}, true, function(err, res, buf) {
+    if ((err != null) || (res.statusCode !== 200)) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    } else {
+      try {
+        const data = JSON.parse(buf);
+        const top_language = gitlabHelpers.topLanguage(data);
+        badgeData.text[0] = getLabel(top_language[0], data);
+        badgeData.text[1] = top_language[1].toFixed(1) + '%';
+        badgeData.colorscheme = 'blue';
+        sendBadge(format, badgeData);
+      } catch(e) {
+        log.error(e);
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    }
+  });
+}));
+
+// GitLab languages integration
+camp.route(/^\/gitlab\/((http(?:s?))\/([^/]+)\/)?languages\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  const user = match[4];
+  const repo = match[5];
+  const format = match[6];
+  const apiURL = gitlabHelpers.baseURL(match) + "/api/v4/projects/" + user + '%2F' + repo + '/languages';
+  const badgeData = getBadgeData('languages', data);
+
+  gitlabHelpers.request(request, apiURL, {}, true, function(err, res, buf) {
+    if ((err != null) || (res.statusCode !== 200)) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+    } else {
+      try {
+        const data = JSON.parse(buf);
+        badgeData.text[1] = metric(Object.keys(data).length);
+        badgeData.colorscheme = 'blue';
+        sendBadge(format, badgeData);
+      } catch(e) {
+        log.error(e);
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
     }
   });
 }));
