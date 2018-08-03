@@ -4218,13 +4218,13 @@ camp.route(/^\/gitlab-auth\/done$/, function(data, match, end, request) {
 });
 
 // GitLab stars & forks integration
-camp.route(/^\/gitlab\/((http(?:s?))\/([^/]+)\/)?(star|fork)s\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/gitlab\/((https?)\/([^/]+)\/)?(star|fork)s\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const isStar = (match[4] === 'star');
   const user = match[5];
   const repo = match[6];
   const format = match[7];
-  const apiURL = gitlabHelpers.baseURL(match) + "/api/v4/projects/" + user + '%2F' + repo;
+  const apiURL = gitlabHelpers.baseURL(match) + '/api/v4/projects/' + user + '%2F' + repo;
   const badgeData = getBadgeData((isStar ? 'stars' : 'forks'), data);
 
   gitlabHelpers.request(request, apiURL, {}, true, function(err, res, buf) {
@@ -4246,12 +4246,12 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitLab contibutors integration
-camp.route(/^\/gitlab\/((http(?:s?))\/([^/]+)\/)?contributors\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/gitlab\/((https?)\/([^/]+)\/)?contributors\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const user = match[4];
   const repo = match[5];
   const format = match[6];
-  const apiURL = gitlabHelpers.baseURL(match) + "/api/v4/projects/" + user + '%2F' + repo + '/repository/contributors';
+  const apiURL = gitlabHelpers.baseURL(match) + '/api/v4/projects/' + user + '%2F' + repo + '/repository/contributors';
   const badgeData = getBadgeData('contributors', data);
 
   gitlabHelpers.request(request, apiURL, {}, true, function(err, res, buf) {
@@ -4272,7 +4272,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitLab build status integration
-camp.route(/^\/gitlab\/((http(?:s?))\/([^/]+)\/)?build\/([^/]+)\/([^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/gitlab\/((https?)\/([^/]+)\/)?build\/([^/]+)\/([^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const user = match[4];
   const repo = match[5];
@@ -4307,7 +4307,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitLab issues & merge requests integration
-camp.route(/^\/gitlab\/((http(?:s?))\/([^/]+)\/)?(issue|merge-request)s(-closed)?(-raw)?\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/gitlab\/((https?)\/([^/]+)\/)?(issue|merge-request)s(-closed)?(-raw)?\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const isIssue = (match[4] === 'issue');
   const isClosed = !!match[5];
@@ -4316,7 +4316,7 @@ cache(function(data, match, sendBadge, request) {
   const user = match[7];
   const repo = match[8];
   const format = match[9];
-  const apiURL = gitlabHelpers.baseURL(match) + "/api/v4/projects/" + user + '%2F' + repo + '/' + (isIssue ? 'issues' : 'merge_requests');
+  const apiURL = gitlabHelpers.baseURL(match) + '/api/v4/projects/' + user + '%2F' + repo + '/' + (isIssue ? 'issues' : 'merge_requests');
   const badgeData = getBadgeData((isRaw ? (inWords + ' ') : '') + (isIssue ? 'issues' : 'merge requests'), data);
 
   gitlabHelpers.request(request, apiURL, {state: (isClosed ? 'closed' : 'opened')}, true, function(err, res, buf) {
@@ -4337,12 +4337,12 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitLab last activity integration
-camp.route(/^\/gitlab\/((http(?:s?))\/([^/]+)\/)?last-activity\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/gitlab\/((https?)\/([^/]+)\/)?last-activity\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const user = match[4];
   const repo = match[5];
   const format = match[6];
-  const apiURL = gitlabHelpers.baseURL(match) + "/api/v4/projects/" + user + '%2F' + repo;
+  const apiURL = gitlabHelpers.baseURL(match) + '/api/v4/projects/' + user + '%2F' + repo;
   const badgeData = getBadgeData('last activity', data);
 
   gitlabHelpers.request(request, apiURL, {}, true, function(err, res, buf) {
@@ -4366,12 +4366,12 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitLab top language integration
-camp.route(/^\/gitlab\/((http(?:s?))\/([^/]+)\/)?top-language\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/gitlab\/((https?)\/([^/]+)\/)?top-language\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const user = match[4];
   const repo = match[5];
   const format = match[6];
-  const apiURL = gitlabHelpers.baseURL(match) + "/api/v4/projects/" + user + '%2F' + repo + '/languages';
+  const apiURL = gitlabHelpers.baseURL(match) + '/api/v4/projects/' + user + '%2F' + repo + '/languages';
   const badgeData = getBadgeData('top language', data);
 
   gitlabHelpers.request(request, apiURL, {}, true, function(err, res, buf) {
@@ -4396,12 +4396,12 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitLab languages integration
-camp.route(/^\/gitlab\/((http(?:s?))\/([^/]+)\/)?languages\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/gitlab\/((https?)\/([^/]+)\/)?languages\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const user = match[4];
   const repo = match[5];
   const format = match[6];
-  const apiURL = gitlabHelpers.baseURL(match) + "/api/v4/projects/" + user + '%2F' + repo + '/languages';
+  const apiURL = gitlabHelpers.baseURL(match) + '/api/v4/projects/' + user + '%2F' + repo + '/languages';
   const badgeData = getBadgeData('languages', data);
 
   gitlabHelpers.request(request, apiURL, {}, true, function(err, res, buf) {
