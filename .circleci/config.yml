@@ -43,6 +43,16 @@ jobs:
           when: always
           command: npm run test:js:server
 
+  danger:
+    docker:
+      - image: shieldsio/shields-ci-node-8:0.0.3
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+
       - run:
           name: Danger
           when: always
@@ -194,6 +204,12 @@ workflows:
       - services-pr@node-latest:
           requires:
             - npm-install
+      - danger:
+          requires:
+            - npm-install
+          filters:
+            branches:
+              ignore: /dependabot\/.*/
 
   daily:
     triggers:
