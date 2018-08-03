@@ -1,4 +1,6 @@
 import escapeStringRegexp from 'escape-string-regexp';
+import badgeExampleData from '../../badge-examples.json';
+
 
 export function exampleMatchesRegex(example, regex) {
   const { title, keywords } = example;
@@ -33,4 +35,10 @@ export function prepareExamples(categories, predicateProvider) {
     // Assign each example a unique ID.
     key: nextKey++,
   }, example)));
+}
+
+export function getCategoryHeadings() {
+  return badgeExampleData.map(function(category) {
+    return category.category;
+  });
 }

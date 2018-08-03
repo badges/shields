@@ -115,3 +115,29 @@ hr.spacing {
   min-height: 20px;
   vertical-align: middle;
 }
+
+nav ul {
+    padding-top: 30px;
+    min-width: 50%;
+    margin: auto;
+    list-style-type: none;
+    overflow: hidden;
+}
+
+nav li {
+    float: left;
+}
+
+nav li a {
+    display: block;
+    padding: 16px;
+}
+
+li a.active {
+    font-weight: 900;
+}
+
+nav ul {display: block;}
+@media screen and (max-width: 768px) {
+    nav ul {display: none;}
+}

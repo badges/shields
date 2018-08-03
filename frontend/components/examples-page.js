@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Menu from './menu';
 import Meta from './meta';
 import Header from './header';
 import SuggestionAndSearch from './suggestion-and-search';
@@ -22,6 +23,10 @@ export default class ExamplesPage extends React.Component {
     this.searchTimeout = 0;
     this.renderSearchResults = this.renderSearchResults.bind(this);
     this.searchQueryChanged = this.searchQueryChanged.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({category: nextProps.match.params.id});
   }
 
   static propTypes = {
@@ -86,6 +91,7 @@ export default class ExamplesPage extends React.Component {
             href="https://opencollective.com/shields">
             donate
           </a>
+          { this.state.category && <Menu /> }
         </section>
         { this.renderSearchResults() }
         <Usage

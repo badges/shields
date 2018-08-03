@@ -3,7 +3,11 @@ import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { BadgeExamples } from './badge-examples';
 import badgeExampleData from '../../badge-examples.json';
-import { prepareExamples, predicateFromQuery } from '../lib/prepare-examples';
+import {
+  getCategoryHeadings,
+  prepareExamples,
+  predicateFromQuery
+} from '../lib/prepare-examples';
 import { baseUri, longCache } from '../constants';
 
 
@@ -31,10 +35,10 @@ export default class SearchResults extends React.Component {
   }
 
   renderCategoryHeadings() {
-    return this.preparedExamples.map(function(category, i) {
+    return getCategoryHeadings().map(function(category) {
       return (
-        <Link to={'/examples/' + category.category.id} key={category.category.id}>
-          <h3 id={category.category.id}>{ category.category.name }</h3>
+        <Link to={'/examples/' + category.id} key={category.id}>
+          <h3 id={category.id}>{ category.name }</h3>
         </Link>
       )
     });
