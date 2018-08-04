@@ -1,7 +1,7 @@
 'use strict';
 
 const { test, given } = require('sazerac');
-const NpmTypeDefinitions = require('./npm-type-definitions');
+const NpmTypeDefinitions = require('./npm-type-definitions.service');
 
 const transformAndRender = json =>
   NpmTypeDefinitions.render(NpmTypeDefinitions.transform(json));
