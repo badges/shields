@@ -83,6 +83,13 @@ t.create('Contributors')
     value: Joi.string().regex(/^\w+$/)
   }));
 
+t.create('Contributors (repo not found)')
+  .get('/contributors/badges/helmets.json')
+  .expectJSON({
+    name: 'contributors',
+    value: 'repo not found'
+  });
+
 t.create('GitHub closed pull requests')
   .get('/issues-pr-closed/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
@@ -157,8 +164,8 @@ t.create('GitHub open issues by label (raw)')
     value: isMetric
   }));
 
-t.create('GitHub open issues repository not found')
-  .get('/issues-raw/PyvesB/ASMGameOfLife.json')
+t.create('GitHub open issues (repo not found)')
+  .get('/issues-raw/badges/helmets.json')
   .expectJSON({
     name: 'open issues',
     value: 'repo not found'
@@ -185,12 +192,26 @@ t.create('Followers')
     value: Joi.string().regex(/^\w+$/)
   }));
 
+t.create('Followers (user not found)')
+  .get('/followers/PyvesB2.json')
+  .expectJSON({
+    name: 'followers',
+    value: 'user not found'
+  });
+
 t.create('Watchers')
   .get('/watchers/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'watchers',
     value: Joi.number().integer().positive()
   }));
+
+t.create('Watchers (repo not found)')
+  .get('/watchers/badges/helmets.json')
+  .expectJSON({
+    name: 'watchers',
+    value: 'repo not found'
+  });
 
 t.create('Stars')
   .get('/stars/badges/shields.json')
@@ -199,12 +220,26 @@ t.create('Stars')
     value: Joi.string().regex(/^\w+$/)
   }));
 
+t.create('Stars (repo not found)')
+  .get('/stars/badges/helmets.json')
+  .expectJSON({
+    name: 'stars',
+    value: 'repo not found'
+  });
+
 t.create('Forks')
   .get('/forks/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'forks',
     value: Joi.number().integer().positive()
   }));
+
+t.create('Forks (repo not found)')
+  .get('/forks/badges/helmets.json')
+  .expectJSON({
+    name: 'forks',
+    value: 'repo not found'
+  });
 
 t.create('Commits since')
   .get('/commits-since/badges/shields/a0663d8da53fb712472c02665e6ff7547ba945b7.json')
@@ -224,6 +259,10 @@ t.create('Release')
   .get('/release/photonstorm/phaser.json')
   .expectJSONTypes(Joi.object().keys({ name: 'release', value: Joi.string() }));
 
+t.create('Release (repo not found)')
+  .get('/release/badges/helmets.json')
+  .expectJSON({ name: 'release', value: 'repo not found' });
+
 t.create('(pre-)Release')
   .get('/release/photonstorm/phaser/all.json')
   .expectJSONTypes(Joi.object().keys({ name: 'release', value: Joi.string() }));
@@ -242,9 +281,9 @@ t.create('Release Date - Custom Label. e.g myRelease|today')
   value: isFormattedDate
 }));
 
-t.create('Release Date - Should return `no releases or repo not found` for invalid repo')
+t.create('Release Date - Should return `no releases or (repo not found)` for invalid repo')
 .get('/release-date/not-valid-name/not-valid-repo.json')
-.expectJSON({ name: 'release date', value: 'no releases or repo not found' });
+.expectJSON({ name: 'release date', value: 'no releases or (repo not found)' });
 
 t.create('(Pre-)Release Date. e.g release date|today')
 .get('/release-date-pre/microsoft/vscode.json')
@@ -269,12 +308,23 @@ t.create('Tag')
   .get('/tag/photonstorm/phaser.json')
   .expectJSONTypes(Joi.object().keys({ name: 'tag', value: Joi.string() }));
 
+t.create('Tag (repo not found)')
+  .get('/tag/badges/helmets.json')
+  .expectJSON({ name: 'tag', value: 'repo not found' });
+
 t.create('Package version')
   .get('/package-json/v/badges/shields.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'package',
     value: isVPlusDottedVersionAtLeastOne
   }));
+
+t.create('Package version (repo not found)')
+  .get('/package-json/v/badges/helmets.json')
+  .expectJSON({
+    name: 'package',
+    value: 'repo not found'
+  });
 
 t.create('Package name')
   .get('/package-json/n/badges/shields.json')
@@ -344,6 +394,13 @@ t.create('Downloads all releases')
     name: 'downloads',
     value: Joi.string().regex(/^\w+\s+total$/)
   }));
+
+t.create('Downloads all releases (repo not found)')
+  .get('/downloads/badges/helmets/total.json')
+  .expectJSON({
+    name: 'downloads',
+    value: 'repo not found'
+  });
 
 t.create('downloads for latest release')
   .get('/downloads/photonstorm/phaser/latest/total.json')
@@ -428,6 +485,13 @@ t.create('commit activity (1 week)')
     value: isMetricOverTimePeriod,
   }));
 
+t.create('commit activity (repo not found)')
+  .get('/commit-activity/w/badges/helmets.json')
+  .expectJSON({
+    name: 'commit activity',
+    value: 'repo not found',
+  });
+
 t.create('last commit (recent)')
   .get('/last-commit/eslint/eslint.json')
   .expectJSONTypes(Joi.object().keys({ name: 'last commit', value: isFormattedDate }));
@@ -440,12 +504,23 @@ t.create('last commit (on branch)')
   .get('/last-commit/badges/badgr.co/shielded.json')
   .expectJSON({ name: 'last commit', value: 'july 2013' });
 
+t.create('last commit (repo not found)')
+  .get('/last-commit/badges/helmets.json')
+  .expectJSON({ name: 'last commit', value: 'repo not found' });
+
 t.create('github issue state')
   .get('/issues/detail/s/badges/shields/979.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'issue 979',
     value: Joi.equal('open', 'closed'),
   }));
+
+t.create('github issue state (repo not found)')
+  .get('/issues/detail/s/badges/helmets/979.json')
+  .expectJSON({
+    name: 'issue/pull request 979',
+    value: 'issue, pull request or repo not found',
+  });
 
 t.create('github issue title')
   .get('/issues/detail/title/badges/shields/979.json')
@@ -484,6 +559,10 @@ t.create('github pull request check state')
   .get('/status/s/pulls/badges/shields/1110.json')
   .expectJSONTypes(Joi.object().keys({ name: 'checks', value: 'failure' }));
 
+t.create('github pull request check state (pull request not found)')
+  .get('/status/s/pulls/badges/shields/5110.json')
+  .expectJSON({ name: 'checks', value: 'pull request or repo not found' });
+
 t.create('github pull request check contexts')
   .get('/status/contexts/pulls/badges/shields/1110.json')
   .expectJSONTypes(Joi.object().keys({ name: 'checks', value: '1 failure' }));
@@ -506,6 +585,13 @@ t.create('language count')
   value: Joi.number().integer().positive(),
 }));
 
+t.create('language count (repo not found)')
+  .get('/languages/count/badges/helmets.json')
+  .expectJSON({
+    name: 'languages',
+    value: 'repo not found',
+  });
+
 t.create('code size in bytes for all languages')
 .get('/languages/code-size/badges/shields.json')
 .expectJSONTypes(Joi.object().keys({
@@ -519,6 +605,13 @@ t.create('repository size')
   name: 'repo size',
   value: isFileSize,
 }));
+
+t.create('repository size (repo not found)')
+  .get('/repo-size/badges/helmets.json')
+  .expectJSON({
+    name: 'repo size',
+    value: 'repo not found',
+  });
 
 // Commit status
 t.create('commit status - commit in branch')
