@@ -3466,7 +3466,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (githubCheckErrorResponse(badgeData, err, res)) {
+    if (githubCheckErrorResponse(badgeData, err, res, 'repo or release not found')) {
       sendBadge(format, badgeData);
       return;
     }
