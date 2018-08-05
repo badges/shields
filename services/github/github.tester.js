@@ -74,7 +74,7 @@ t.create('License - API rate limit exceeded')
       message: "API rate limit exceeded for 123.123.123.123. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)",
       documentation_url: "https://developer.github.com/v3/#rate-limiting"
   }))
-  .expectJSON({ name: 'license', value: 'inaccessible', colorB: colorsB.lightgrey });
+  .expectJSON({ name: 'license', value: 'invalid', colorB: colorsB.lightgrey });
 
 t.create('Contributors')
   .get('/contributors/cdnjs/cdnjs.json')
@@ -281,9 +281,9 @@ t.create('Release Date - Custom Label. e.g myRelease|today')
   value: isFormattedDate
 }));
 
-t.create('Release Date - Should return `no releases or (repo not found)` for invalid repo')
+t.create('Release Date - Should return `no releases or repo not found` for invalid repo')
 .get('/release-date/not-valid-name/not-valid-repo.json')
-.expectJSON({ name: 'release date', value: 'no releases or (repo not found)' });
+.expectJSON({ name: 'release date', value: 'no releases or repo not found' });
 
 t.create('(Pre-)Release Date. e.g release date|today')
 .get('/release-date-pre/microsoft/vscode.json')
@@ -369,7 +369,7 @@ t.create('Manifest object')
 
 t.create('Manifest invalid json response')
   .get('/manifest-json/v/RedSparr0w/not-a-real-project.json')
-  .expectJSON({ name: 'manifest', value: 'invalid data' });
+  .expectJSON({ name: 'manifest', value: 'repo not found' });
 
 t.create('Manifest no network connection')
   .get('/manifest-json/v/RedSparr0w/IndieGala-Helper.json')
@@ -399,7 +399,7 @@ t.create('Downloads all releases (repo not found)')
   .get('/downloads/badges/helmets/total.json')
   .expectJSON({
     name: 'downloads',
-    value: 'repo not found'
+    value: 'repo or release not found'
   });
 
 t.create('downloads for latest release')
@@ -454,7 +454,7 @@ t.create('downloads for specific asset with slash')
 
 t.create('downloads for unknown release')
   .get('/downloads/atom/atom/does-not-exist/total.json')
-  .expectJSON({ name: 'downloads', value: 'none' });
+  .expectJSON({ name: 'downloads', value: 'repo or release not found' });
 
 t.create('hit counter')
   .get('/search/torvalds/linux/goto.json')
