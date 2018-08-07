@@ -55,4 +55,19 @@ describe('Github API provider', function() {
       });
     });
   });
+
+  context('a connection error', function() {
+    const mockRequest = (...args) => {
+      const callback = args.pop();
+      callback(Error('connection timeout'));
+    };
+
+    it('should invoke the callback', function(done) {
+      provider.request(mockRequest, '/foo', {}, (err, res, buffer) => {
+        expect(err).to.be.an.instanceof(Error);
+        expect(err.message).to.equal('connection timeout');
+        done();
+      });
+    });
+  });
 });
