@@ -62,7 +62,7 @@ describe('Github API provider', function() {
       callback(Error('connection timeout'));
     };
 
-    it('should invoke the callback', function(done) {
+    it('should pass the error to the callback', function(done) {
       provider.request(mockRequest, '/foo', {}, (err, res, buffer) => {
         expect(err).to.be.an.instanceof(Error);
         expect(err.message).to.equal('connection timeout');
