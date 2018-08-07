@@ -1,14 +1,21 @@
 'use strict';
 
 const { expect } = require('chai');
+const { PoolingTokenProvider } = require('./token-provider');
 const GithubApiProvider = require('./github-api-provider');
+const serverSecrets = require('../server-secrets');
 
-describe('Github API provider', function() {
-  const baseUrl = process.env.GITHUB_URL || 'https://api.github.com';
+describe('Github provider with token pool', function() {
+  const githubUri = process.env.GITHUB_URL || 'https://api.github.com';
+  const reserveFraction = 0.333;
 
-  let githubApiProvider;
+  let tokenProvider, githubApiProvider;
   before(function() {
-    githubApiProvider = new GithubApiProvider({ baseUrl });
+    tokenProvider = new PoolingTokenProvider();
+    tokenProvider.addToken(serverSecrets.gh_token);
+
+    githubApiProvider = new GithubApiProvider(githubUri, tokenProvider);
+    githubApiProvider.reserveFraction = reserveFraction;
   });
 
   const headers = [];
@@ -33,5 +40,24 @@ describe('Github API provider', function() {
     const remaining = headers.map(h => +h['x-ratelimit-remaining']);
     const expected = Array.from({ length: 10 }, (e, i) => remaining[0] - i);
     expect(remaining).to.deep.equal(expected);
+  });
+
+  it('should update the token with the final limit remaining and reset time', function() {
+    const lastHeaders = headers.slice(-1)[0];
+    const reserve = reserveFraction * +lastHeaders['x-ratelimit-limit'];
+    const usesRemaining = +lastHeaders['x-ratelimit-remaining'] - reserve;
+    const nextReset = +lastHeaders['x-ratelimit-reset'];
+
+    const tokens = [];
+    tokenProvider.tokenPool.forEach(t => {
+      tokens.push(t);
+    });
+
+    // Confidence check.
+    expect(tokens).to.have.lengthOf(1);
+
+    const token = tokens[0];
+    expect(token.usesRemaining).to.equal(usesRemaining);
+    expect(token.nextReset).to.equal(nextReset);
   });
 });
