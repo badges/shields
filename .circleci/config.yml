@@ -54,6 +54,11 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - run:
+          name: Integration tests
+          when: always
+          command: npm run test:integration
+
+      - run:
           name: Danger
           when: always
           command: npm run danger ci
