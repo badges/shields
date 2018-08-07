@@ -25,7 +25,7 @@ class BaseService {
     this._handleInternalErrors = handleInternalErrors;
   }
 
-  static render(props, namedParams, queryParams) {
+  static render(props) {
     throw new Error(
       `render() function not implemented for ${this.constructor.name}`
     );
