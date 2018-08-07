@@ -255,6 +255,9 @@ class BaseJsonService extends BaseService {
   }
 
   async _requestJson({ schema, url, options = {}, notFoundMessage }) {
+    if (! schema || ! schema.isJoi) {
+      throw Error('A Joi schema is required');
+    }
     return this._sendAndCacheRequest(url,
       {...{ 'headers': { 'Accept': 'application/json' } }, ...options}
     ).then(
