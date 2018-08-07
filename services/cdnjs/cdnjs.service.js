@@ -1,5 +1,6 @@
 'use strict';
 
+const Joi = require('joi');
 const { BaseJsonService } = require('../base');
 const { NotFound } = require('../errors');
 const { addv: versionText } = require('../../lib/text-formatters');
@@ -7,8 +8,11 @@ const { version: versionColor} = require('../../lib/color-formatters');
 
 module.exports = class Cdnjs extends BaseJsonService {
   async handle({library}) {
-    const apiUrl = 'https://api.cdnjs.com/libraries/' + library + '?fields=version';
-    const json = await this._requestJson(apiUrl);
+    const url = `https://api.cdnjs.com/libraries/${library}?fields=version`;
+    const json = await this._requestJson({
+      url,
+      schema: Joi.any(),
+    });
 
     if (Object.keys(json).length === 0) {
       /* Note the 'not found' response from cdnjs is:
