@@ -1,27 +1,27 @@
-'use strict';
+'use strict'
 
-const Joi = require('joi');
-const { addv } = require('../../lib/text-formatters');
-const { version: versionColor } = require('../../lib/color-formatters');
-const { NotFound } = require('../errors');
-const NpmBase = require('./npm-base');
+const Joi = require('joi')
+const { addv } = require('../../lib/text-formatters')
+const { version: versionColor } = require('../../lib/color-formatters')
+const { NotFound } = require('../errors')
+const NpmBase = require('./npm-base')
 
 // Joi.string should be a semver.
 const schema = Joi.object()
   .pattern(/./, Joi.string())
-  .required();
+  .required()
 
 module.exports = class NpmVersion extends NpmBase {
   static get category() {
-    return 'version';
+    return 'version'
   }
 
   static get url() {
-    return this.buildUrl('npm/v', { withTag: true });
+    return this.buildUrl('npm/v', { withTag: true })
   }
 
   static get defaultBadgeData() {
-    return { label: 'npm' };
+    return { label: 'npm' }
   }
 
   static get examples() {
@@ -51,7 +51,7 @@ module.exports = class NpmVersion extends NpmBase {
         previewUrl: '@cycle/core/canary',
         keywords: ['node'],
       },
-    ];
+    ]
   }
 
   static render({ tag, version }) {
@@ -59,7 +59,7 @@ module.exports = class NpmVersion extends NpmBase {
       label: tag ? `npm@${tag}` : undefined,
       message: addv(version),
       color: versionColor(version),
-    };
+    }
   }
 
   async handle(namedParams, queryParams) {
@@ -68,26 +68,26 @@ module.exports = class NpmVersion extends NpmBase {
       packageName,
       tag,
       registryUrl,
-    } = this.constructor.unpackParams(namedParams, queryParams);
+    } = this.constructor.unpackParams(namedParams, queryParams)
 
     const slug =
       scope === undefined
         ? packageName
-        : this.constructor.encodeScopedPackage({ scope, packageName });
+        : this.constructor.encodeScopedPackage({ scope, packageName })
 
     const packageData = await this._requestJson({
       schema,
       url: `${registryUrl}/-/package/${slug}/dist-tags`,
       notFoundMessage: 'package not found',
-    });
+    })
 
     if (tag && !(tag in packageData)) {
-      throw new NotFound({ prettyMessage: 'tag not found' });
+      throw new NotFound({ prettyMessage: 'tag not found' })
     }
 
     return this.constructor.render({
       tag,
       version: packageData[tag || 'latest'],
-    });
+    })
   }
-};
+}
