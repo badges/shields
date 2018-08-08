@@ -4,7 +4,6 @@ const Joi = require('joi');
 const ServiceTester = require('../service-tester');
 const { isMetric, isSemver } = require('../test-validators');
 const colorscheme = require('../../lib/colorscheme.json');
-const { invalidJSON } = require('../response-fixtures');
 const mapValues = require('lodash.mapvalues');
 
 const t = new ServiceTester({ id: 'npm', title: 'NPM' });
@@ -26,10 +25,9 @@ t.create('total downloads of package with zero downloads')
   .intercept(nock => nock('https://api.npmjs.org')
     .get('/downloads/range/1000-01-01:3000-01-01/package-no-downloads')
     .reply(200, {
-      downloads: [{
-        downloads: 0,
-        day: '2018-01-01'
-      }]
+      downloads: [
+        { downloads: 0, day: '2018-01-01' }
+      ],
     }))
   .expectJSON({ name: 'downloads', value: '0', colorB: colorsB.red });
 
@@ -38,31 +36,21 @@ t.create('exact total downloads value')
   .intercept(nock => nock('https://api.npmjs.org')
     .get('/downloads/range/1000-01-01:3000-01-01/exact-value')
     .reply(200, {
-      downloads: [{
-        downloads: 2,
-        day: '2018-01-01'
-      }, {
-        downloads: 3,
-        day: '2018-01-02'
-      }]
+      downloads: [
+        { downloads: 2, day: '2018-01-01' },
+        { downloads: 3, day: '2018-01-02' },
+      ],
     }))
   .expectJSON({ name: 'downloads', value: '5' });
 
 t.create('total downloads when network is off')
   .get('/dt/@cycle/core.json?style=_shields_test')
   .networkOff()
-  .expectJSON({  name: 'downloads', value: 'inaccessible' , colorB: colorsB.red });
-
-t.create('total downloads when API returns an invalid JSON')
-  .get('/dt/invalid-json.json?style=_shields_test')
-  .intercept(nock => nock('https://api.npmjs.org')
-    .get('/downloads/range/1000-01-01:3000-01-01/invalid-json')
-    .reply(invalidJSON))
-  .expectJSON({ name: 'downloads', value: 'invalid', colorB: colorsB.lightgrey });
+  .expectJSON({  name: 'downloads', value: 'inaccessible' , colorB: colorsB.lightgray });
 
 t.create('total downloads of unknown package')
   .get('/dt/npm-api-does-not-have-this-package.json?style=_shields_test')
-  .expectJSON({  name: 'downloads', value: 'not found' , colorB: colorsB.lightgrey });
+  .expectJSON({  name: 'downloads', value: 'project not found' , colorB: colorsB.red });
 
 t.create('gets the package version of left-pad')
   .get('/v/left-pad.json')
@@ -72,9 +60,20 @@ t.create('gets the package version of @cycle/core')
   .get('/v/@cycle/core.json')
   .expectJSONTypes(Joi.object().keys({ name: 'npm', value: isSemver }));
 
-t.create('gets the tagged package version of npm')
+t.create('gets a tagged package version of npm')
   .get('/v/npm/next.json')
   .expectJSONTypes(Joi.object().keys({ name: 'npm@next', value: isSemver }));
+
+t.create('gets the correct tagged package version of npm')
+  .intercept(nock => nock('https://registry.npmjs.org')
+    .get('/-/package/npm/dist-tags')
+    .reply(200, { latest: "1.2.3", next: "4.5.6" }))
+  .get('/v/npm/next.json')
+  .expectJSON({ name: 'npm@next', value: 'v4.5.6' });
+
+t.create('returns an error for version with an invalid tag')
+  .get('/v/npm/frodo.json')
+  .expectJSON({ name: 'npm', value: 'tag not found' });
 
 t.create('gets the package version of left-pad from a custom registry')
   .get('/v/left-pad.json?registry_uri=https://registry.npmjs.com')
@@ -98,7 +97,11 @@ t.create('gets the license of express from a custom registry')
 
 t.create('invalid package name')
   .get('/v/frodo-is-not-a-package.json')
-  .expectJSON({ name: 'npm', value: 'invalid' });
+  .expectJSON({ name: 'npm', value: 'package not found' });
+
+t.create('gets the package version of left-pad from a custom registry')
+  .get('/v/left-pad.json?registry_uri=https://registry.npmjs.com')
+  .expectJSONTypes(Joi.object().keys({ name: 'npm', value: isSemver }));
 
 t.create('public domain license')
   .get('/l/redux-auth.json?style=_shields_test')
@@ -154,14 +157,7 @@ t.create('license for package with a license array')
 
 t.create('license for unknown package')
   .get('/l/npm-registry-does-not-have-this-package.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'package not found', colorB: colorsB.lightgrey });
-
-t.create('license when registry returns an invalid JSON')
-  .get('/l/invalid-json.json?style=_shields_test')
-  .intercept(nock => nock('https://registry.npmjs.org')
-    .get('/invalid-json/latest')
-    .reply(invalidJSON))
-  .expectJSON({ name: 'license', value: 'invalid', colorB: colorsB.lightgrey });
+  .expectJSON({ name: 'license', value: 'package not found', colorB: colorsB.red });
 
 t.create('license when network is off')
   .get('/l/pakage-network-off.json?style=_shields_test')

@@ -1,10 +1,12 @@
 'use strict';
 
+const Joi = require('joi');
 const {
   NotFound,
   InvalidResponse,
   Inaccessible,
 } = require('./errors');
+const queryString = require('query-string');
 const {
   makeLogo,
   toArray,
@@ -21,6 +23,12 @@ class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
     this._sendAndCacheRequest = sendAndCacheRequest;
     this._handleInternalErrors = handleInternalErrors;
+  }
+
+  static render(props) {
+    throw new Error(
+      `render() function not implemented for ${this.constructor.name}`
+    );
   }
 
   /**
@@ -91,18 +99,27 @@ class BaseService {
    *  - documentation
    */
   static prepareExamples() {
-    return this.examples.map(({ title, previewUrl, exampleUrl, documentation }) => {
-      if (! previewUrl) {
-        throw Error(`Example for ${this.name} is missing required previewUrl`);
-      }
+    return this.examples.map(
+      ({ title, previewUrl, query, exampleUrl, documentation }) => {
+        if (!previewUrl) {
+          throw Error(
+            `Example for ${this.name} is missing required previewUrl`
+          );
+        }
 
-      return {
-        title: title ? `${title}` : this.name,
-        previewUri: `${this._makeFullUrl(previewUrl)}.svg`,
-        exampleUri: exampleUrl ? `${this._makeFullUrl(exampleUrl)}.svg` : undefined,
-        documentation,
-      };
-    });
+        const stringified = queryString.stringify(query);
+        const suffix = stringified ? `?${stringified}` : '';
+
+        return {
+          title: title ? `${title}` : this.name,
+          previewUri: `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
+          exampleUri: exampleUrl
+            ? `${this._makeFullUrl(exampleUrl, query)}.svg${suffix}`
+            : undefined,
+          documentation,
+        };
+      }
+    );
   }
 
   static get _regex() {
@@ -219,19 +236,38 @@ class BaseService {
       },
     }));
   }
-};
+}
 
 class BaseJsonService extends BaseService {
-  async _requestJson(url, options = {}, notFoundMessage) {
+  static _validate(json, schema) {
+    const { error, value } = Joi.validate(json, schema, {
+      allowUnknown: true,
+      stripUnknown: true,
+    });
+    if (error) {
+      throw new InvalidResponse({
+        prettyMessage: 'invalid json response',
+        underlyingError: error,
+      });
+    } else {
+      return value;
+    }
+  }
+
+  async _requestJson({ schema, url, options = {}, notFoundMessage }) {
+    if (! schema || ! schema.isJoi) {
+      throw Error('A Joi schema is required');
+    }
     return this._sendAndCacheRequest(url,
       {...{ 'headers': { 'Accept': 'application/json' } }, ...options}
     ).then(
       checkErrorResponse.asPromise(
         notFoundMessage ? { notFoundMessage: notFoundMessage } : undefined
       )
-    ).then(asJson);
+    ).then(asJson)
+     .then(json => this.constructor._validate(json, schema));
   }
-};
+}
 
 module.exports = {
   BaseService,
