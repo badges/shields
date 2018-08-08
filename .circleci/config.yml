@@ -43,25 +43,15 @@ jobs:
           when: always
           command: npm run test:js:server
 
-  danger:
-    docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
-    working_directory: ~/repo
-    steps:
-      - checkout
-
-      - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
-
       - run:
           name: Integration tests
           when: always
           command: npm run test:integration
 
       - run:
-          name: Danger
+          name: 'Prettier check (quick fix: `npm run prettier`)'
           when: always
-          command: npm run danger ci
+          command: npm run prettier-check
 
   main@node-latest:
     docker:
@@ -82,6 +72,31 @@ jobs:
           name: Server unit tests
           when: always
           command: npm run test:js:server
+
+      - run:
+          name: Integration tests
+          when: always
+          command: npm run test:integration
+
+      - run:
+          name: 'Prettier check (quick fix: `npm run prettier`)'
+          when: always
+          command: npm run prettier-check
+
+  danger:
+    docker:
+      - image: shieldsio/shields-ci-node-8:0.0.3
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Danger
+          when: always
+          command: npm run danger ci
 
   frontend:
     docker:

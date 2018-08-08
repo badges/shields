@@ -1,5 +1,6 @@
 'use strict';
 
+const Joi = require('joi');
 const { BaseJsonService } = require('../base');
 const { InvalidResponse } = require('../errors');
 const { version: versionColor } = require('../../lib/color-formatters');
@@ -11,8 +12,11 @@ const {
 class BaseAPMService extends BaseJsonService {
 
   async fetch(repo) {
-    const apiUrl = 'https://atom.io/api/packages/' + repo;
-    return this._requestJson(apiUrl, {}, 'package not found');
+    return this._requestJson({
+      schema: Joi.object(),
+      url: `https://atom.io/api/packages/${repo}`,
+      notFoundMessage: 'package not found'
+    });
   }
 
   static get defaultBadgeData() {
