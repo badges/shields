@@ -3406,10 +3406,10 @@ cache(function(data, match, sendBadge, request) {
   var allReleases = match[2];
   var format = match[3];
   let apiUrl = `/repos/${userRepo}/releases`;
-  var badgeData = getBadgeData('release', data);
   if (allReleases === undefined) {
     apiUrl = apiUrl + '/latest';
   }
+  var badgeData = getBadgeData('release', data);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
