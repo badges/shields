@@ -1,13 +1,17 @@
 'use strict';
 
+const Joi = require('joi');
 const { BaseJsonService } = require('../base');
 const { NotFound } = require('../errors');
 const { version: versionColor } = require('../../lib/color-formatters');
 
 module.exports = class Clojars extends BaseJsonService {
   async handle({clojar}) {
-    const apiUrl = 'https://clojars.org/' + clojar + '/latest-version.json';
-    const json = await this._requestJson(apiUrl);
+    const url = `https://clojars.org/${clojar}/latest-version.json`;
+    const json = await this._requestJson({
+      url,
+      schema: Joi.any(),
+    });
 
     if (Object.keys(json).length === 0) {
       /* Note the 'not found' response from clojars is:
