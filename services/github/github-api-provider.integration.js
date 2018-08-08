@@ -1,37 +1,37 @@
-'use strict';
+'use strict'
 
-const { expect } = require('chai');
-const GithubApiProvider = require('./github-api-provider');
+const { expect } = require('chai')
+const GithubApiProvider = require('./github-api-provider')
 
 describe('Github API provider', function() {
-  const baseUrl = process.env.GITHUB_URL || 'https://api.github.com';
+  const baseUrl = process.env.GITHUB_URL || 'https://api.github.com'
 
-  let githubApiProvider;
+  let githubApiProvider
   before(function() {
-    githubApiProvider = new GithubApiProvider({ baseUrl });
-  });
+    githubApiProvider = new GithubApiProvider({ baseUrl })
+  })
 
-  const headers = [];
+  const headers = []
   async function performOneRequest() {
     const { res } = await githubApiProvider.requestAsPromise(
       require('request'),
       '/repos/rust-lang/rust',
       {}
-    );
-    expect(res.statusCode).to.equal(200);
-    headers.push(res.headers);
+    )
+    expect(res.statusCode).to.equal(200)
+    headers.push(res.headers)
   }
 
   before('should be able to run 10 requests', async function() {
-    this.timeout(10000);
+    this.timeout(10000)
     for (let i = 0; i < 10; ++i) {
-      await performOneRequest();
+      await performOneRequest()
     }
-  });
+  })
 
   it('should decrement the limit remaining with each request', function() {
-    const remaining = headers.map(h => +h['x-ratelimit-remaining']);
-    const expected = Array.from({ length: 10 }, (e, i) => remaining[0] - i);
-    expect(remaining).to.deep.equal(expected);
-  });
-});
+    const remaining = headers.map(h => +h['x-ratelimit-remaining'])
+    const expected = Array.from({ length: 10 }, (e, i) => remaining[0] - i)
+    expect(remaining).to.deep.equal(expected)
+  })
+})

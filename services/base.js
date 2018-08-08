@@ -1,34 +1,26 @@
-'use strict';
+'use strict'
 
-const Joi = require('joi');
-const {
-  NotFound,
-  InvalidResponse,
-  Inaccessible,
-} = require('./errors');
-const queryString = require('query-string');
+const Joi = require('joi')
+const { NotFound, InvalidResponse, Inaccessible } = require('./errors')
+const queryString = require('query-string')
 const {
   makeLogo,
   toArray,
   makeColor,
   setBadgeColor,
-} = require('../lib/badge-data');
-const {
-  checkErrorResponse,
-  asJson,
-} = require('../lib/error-helper');
-
+} = require('../lib/badge-data')
+const { checkErrorResponse, asJson } = require('../lib/error-helper')
 
 class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
-    this._sendAndCacheRequest = sendAndCacheRequest;
-    this._handleInternalErrors = handleInternalErrors;
+    this._sendAndCacheRequest = sendAndCacheRequest
+    this._handleInternalErrors = handleInternalErrors
   }
 
   static render(props) {
     throw new Error(
       `render() function not implemented for ${this.constructor.name}`
-    );
+    )
   }
 
   /**
@@ -37,9 +29,7 @@ class BaseService {
    * `this._sendAndCacheRequest`, and returns the badge data.
    */
   async handle(namedParams, queryParams) {
-    throw new Error(
-      `Handler not implemented for ${this.constructor.name}`
-    );
+    throw new Error(`Handler not implemented for ${this.constructor.name}`)
   }
 
   // Metadata
@@ -49,7 +39,7 @@ class BaseService {
    * the badges on the main shields.io website.
    */
   static get category() {
-    return 'unknown';
+    return 'unknown'
   }
 
   /**
@@ -65,7 +55,7 @@ class BaseService {
    *                 parameters will be passed to the handler.
    */
   static get url() {
-    throw new Error(`URL not defined for ${this.name}`);
+    throw new Error(`URL not defined for ${this.name}`)
   }
 
   /**
@@ -74,7 +64,7 @@ class BaseService {
    * by either the handler or by the user via URL parameters.
    */
   static get defaultBadgeData() {
-    return {};
+    return {}
   }
 
   /**
@@ -83,11 +73,11 @@ class BaseService {
    * this service.
    */
   static get examples() {
-    return [];
+    return []
   }
 
   static _makeFullUrl(partialUrl) {
-    return '/' + [this.url.base, partialUrl].filter(Boolean).join('/');
+    return '/' + [this.url.base, partialUrl].filter(Boolean).join('/')
   }
 
   /**
@@ -102,13 +92,11 @@ class BaseService {
     return this.examples.map(
       ({ title, previewUrl, query, exampleUrl, documentation }) => {
         if (!previewUrl) {
-          throw Error(
-            `Example for ${this.name} is missing required previewUrl`
-          );
+          throw Error(`Example for ${this.name} is missing required previewUrl`)
         }
 
-        const stringified = queryString.stringify(query);
-        const suffix = stringified ? `?${stringified}` : '';
+        const stringified = queryString.stringify(query)
+        const suffix = stringified ? `?${stringified}` : ''
 
         return {
           title: title ? `${title}` : this.name,
@@ -117,61 +105,67 @@ class BaseService {
             ? `${this._makeFullUrl(exampleUrl, query)}.svg${suffix}`
             : undefined,
           documentation,
-        };
+        }
       }
-    );
+    )
   }
 
   static get _regex() {
     // Regular expressions treat "/" specially, so we need to escape them
-    const escapedPath = this.url.format.replace(/\//g, '\\/');
-    const fullRegex = `^${this._makeFullUrl(escapedPath)}.(svg|png|gif|jpg|json)$`;
-    return new RegExp(fullRegex);
+    const escapedPath = this.url.format.replace(/\//g, '\\/')
+    const fullRegex = `^${this._makeFullUrl(
+      escapedPath
+    )}.(svg|png|gif|jpg|json)$`
+    return new RegExp(fullRegex)
   }
 
   static _namedParamsForMatch(match) {
     // Assume the last match is the format, and drop match[0], which is the
     // entire match.
-    const captures = match.slice(1, -1);
+    const captures = match.slice(1, -1)
 
     if (this.url.capture.length !== captures.length) {
       throw new Error(
-        `Service ${this.constructor.name} declares incorrect number of capture groups `+
-        `(expected ${this.url.capture.length}, got ${captures.length})`
-      );
+        `Service ${
+          this.constructor.name
+        } declares incorrect number of capture groups ` +
+          `(expected ${this.url.capture.length}, got ${captures.length})`
+      )
     }
 
-    const result = {};
+    const result = {}
     this.url.capture.forEach((name, index) => {
-      result[name] = captures[index];
-    });
-    return result;
+      result[name] = captures[index]
+    })
+    return result
   }
 
   async invokeHandler(namedParams, queryParams) {
     try {
-      return await this.handle(namedParams, queryParams);
+      return await this.handle(namedParams, queryParams)
     } catch (error) {
       if (error instanceof NotFound) {
         return {
           message: error.prettyMessage,
           color: 'red',
-        };
-      } else if (error instanceof InvalidResponse ||
-        error instanceof Inaccessible) {
+        }
+      } else if (
+        error instanceof InvalidResponse ||
+        error instanceof Inaccessible
+      ) {
         return {
           message: error.prettyMessage,
           color: 'lightgray',
-        };
+        }
       } else if (this._handleInternalErrors) {
-        console.log(error);
+        console.log(error)
         return {
           label: 'shields',
           message: 'internal error',
           color: 'lightgray',
-        };
+        }
       } else {
-        throw error;
+        throw error
       }
     }
   }
@@ -185,20 +179,20 @@ class BaseService {
       link: overrideLink,
       colorA: overrideColorA,
       colorB: overrideColorB,
-    } = overrides;
+    } = overrides
 
     const {
       label: serviceLabel,
       message: serviceMessage,
       color: serviceColor,
       link: serviceLink,
-    } = serviceData;
+    } = serviceData
 
     const {
       color: defaultColor,
       logo: defaultLogo,
       label: defaultLabel,
-    } = this.defaultBadgeData;
+    } = this.defaultBadgeData
 
     const badgeData = {
       text: [
@@ -206,35 +200,46 @@ class BaseService {
         serviceMessage || 'n/a',
       ],
       template: style,
-      logo: makeLogo(style === 'social' ? defaultLogo : undefined, { logo: overrideLogo }),
+      logo: makeLogo(style === 'social' ? defaultLogo : undefined, {
+        logo: overrideLogo,
+      }),
       logoWidth: +overrideLogoWidth,
       links: toArray(overrideLink || serviceLink),
       colorA: makeColor(overrideColorA),
-    };
-    const color = overrideColorB || serviceColor || defaultColor || 'lightgrey';
-    setBadgeColor(badgeData, color);
+    }
+    const color = overrideColorB || serviceColor || defaultColor || 'lightgrey'
+    setBadgeColor(badgeData, color)
 
-    return badgeData;
+    return badgeData
   }
 
   static register(camp, handleRequest, { handleInternalErrors }) {
-    const ServiceClass = this; // In a static context, "this" is the class.
+    const ServiceClass = this // In a static context, "this" is the class.
 
-    camp.route(this._regex, handleRequest({
-      queryParams: this.url.queryParams,
-      handler: async (queryParams, match, sendBadge, request) => {
-        const namedParams = this._namedParamsForMatch(match);
-        const serviceInstance = new ServiceClass({
-          sendAndCacheRequest: request.asPromise,
-        }, { handleInternalErrors });
-        const serviceData = await serviceInstance.invokeHandler(namedParams, queryParams);
-        const badgeData = this._makeBadgeData(queryParams, serviceData);
+    camp.route(
+      this._regex,
+      handleRequest({
+        queryParams: this.url.queryParams,
+        handler: async (queryParams, match, sendBadge, request) => {
+          const namedParams = this._namedParamsForMatch(match)
+          const serviceInstance = new ServiceClass(
+            {
+              sendAndCacheRequest: request.asPromise,
+            },
+            { handleInternalErrors }
+          )
+          const serviceData = await serviceInstance.invokeHandler(
+            namedParams,
+            queryParams
+          )
+          const badgeData = this._makeBadgeData(queryParams, serviceData)
 
-        // Assumes the final capture group is the extension
-        const format = match.slice(-1)[0];
-        sendBadge(format, badgeData);
-      },
-    }));
+          // Assumes the final capture group is the extension
+          const format = match.slice(-1)[0]
+          sendBadge(format, badgeData)
+        },
+      })
+    )
   }
 }
 
@@ -243,33 +248,36 @@ class BaseJsonService extends BaseService {
     const { error, value } = Joi.validate(json, schema, {
       allowUnknown: true,
       stripUnknown: true,
-    });
+    })
     if (error) {
       throw new InvalidResponse({
         prettyMessage: 'invalid json response',
         underlyingError: error,
-      });
+      })
     } else {
-      return value;
+      return value
     }
   }
 
   async _requestJson({ schema, url, options = {}, notFoundMessage }) {
-    if (! schema || ! schema.isJoi) {
-      throw Error('A Joi schema is required');
+    if (!schema || !schema.isJoi) {
+      throw Error('A Joi schema is required')
     }
-    return this._sendAndCacheRequest(url,
-      {...{ 'headers': { 'Accept': 'application/json' } }, ...options}
-    ).then(
-      checkErrorResponse.asPromise(
-        notFoundMessage ? { notFoundMessage: notFoundMessage } : undefined
+    return this._sendAndCacheRequest(url, {
+      ...{ headers: { Accept: 'application/json' } },
+      ...options,
+    })
+      .then(
+        checkErrorResponse.asPromise(
+          notFoundMessage ? { notFoundMessage: notFoundMessage } : undefined
+        )
       )
-    ).then(asJson)
-     .then(json => this.constructor._validate(json, schema));
+      .then(asJson)
+      .then(json => this.constructor._validate(json, schema))
   }
 }
 
 module.exports = {
   BaseService,
   BaseJsonService,
-};
+}

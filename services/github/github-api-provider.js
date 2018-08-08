@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 
-const githubAuth = require('../../lib/github-auth');
+const githubAuth = require('../../lib/github-auth')
 
 // Provide an interface to the Github API. Manages the base URL.
 //
@@ -9,36 +9,36 @@ const githubAuth = require('../../lib/github-auth');
 // to legacy code.
 class GithubApiProvider {
   constructor({ baseUrl }) {
-    this.baseUrl = baseUrl;
+    this.baseUrl = baseUrl
   }
 
   // Act like request(), but tweak headers and query to avoid hitting a rate
   // limit. Inject `request` so we can pass in `cachingRequest` from
   // `request-handler.js`.
   request(request, url, query, callback) {
-    const { baseUrl } = this;
+    const { baseUrl } = this
 
     githubAuth.request(
       request,
       `${baseUrl}${url}`,
       query,
       (err, res, buffer) => {
-        callback(err, res, buffer);
+        callback(err, res, buffer)
       }
-    );
+    )
   }
 
   requestAsPromise(request, url, query) {
     return new Promise((resolve, reject) => {
       this.request(request, url, query, (err, res, buffer) => {
         if (err) {
-          reject(err);
+          reject(err)
         } else {
-          resolve({ res, buffer });
+          resolve({ res, buffer })
         }
-      });
-    });
+      })
+    })
   }
 }
 
-module.exports = GithubApiProvider;
+module.exports = GithubApiProvider

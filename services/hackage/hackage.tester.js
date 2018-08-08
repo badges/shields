@@ -1,50 +1,54 @@
-'use strict';
+'use strict'
 
-const Joi = require('joi');
-const ServiceTester = require('../service-tester');
+const Joi = require('joi')
+const ServiceTester = require('../service-tester')
 
-const { isVPlusDottedVersionAtLeastOne } = require('../test-validators');
+const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'hackage', title: 'Hackage' });
-module.exports = t;
-
+const t = new ServiceTester({ id: 'hackage', title: 'Hackage' })
+module.exports = t
 
 t.create('hackage version (valid)')
   .get('/v/lens.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'hackage',
-    value: isVPlusDottedVersionAtLeastOne,
-  }));
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'hackage',
+      value: isVPlusDottedVersionAtLeastOne,
+    })
+  )
 
 t.create('hackage deps (valid)')
   .get('-deps/v/lens.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'dependencies',
-    value: Joi.string().regex(/^(up to date|outdated)$/),
-  }));
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'dependencies',
+      value: Joi.string().regex(/^(up to date|outdated)$/),
+    })
+  )
 
 t.create('hackage version (not found)')
   .get('/v/not-a-package.json')
-  .expectJSON({name: 'hackage', value: 'not found'});
+  .expectJSON({ name: 'hackage', value: 'not found' })
 
 t.create('hackage version (not found)')
   .get('-deps/v/not-a-package.json')
-  .expectJSON({name: 'dependencies', value: 'not found'});
+  .expectJSON({ name: 'dependencies', value: 'not found' })
 
 t.create('hackage version (connection error)')
   .get('/v/lens.json')
   .networkOff()
-  .expectJSON({name: 'hackage', value: 'inaccessible'});
+  .expectJSON({ name: 'hackage', value: 'inaccessible' })
 
 t.create('hackage deps (connection error)')
   .get('-deps/v/lens.json')
   .networkOff()
-  .expectJSON({name: 'dependencies', value: 'inaccessible'});
+  .expectJSON({ name: 'dependencies', value: 'inaccessible' })
 
 t.create('hackage version (unexpected response)')
   .get('/v/lens.json')
-  .intercept(nock => nock('https://hackage.haskell.org')
-    .get('/package/lens/lens.cabal')
-    .reply(200, "")
+  .intercept(nock =>
+    nock('https://hackage.haskell.org')
+      .get('/package/lens/lens.cabal')
+      .reply(200, '')
   )
-  .expectJSON({name: 'hackage', value: 'invalid'});
+  .expectJSON({ name: 'hackage', value: 'invalid' })
