@@ -1,16 +1,20 @@
 'use strict';
 
+const Joi = require('joi');
 const { BaseJsonService } = require('../base');
 
 module.exports = class AppVeyor extends BaseJsonService {
   async handle({repo, branch}) {
-    let apiUrl = 'https://ci.appveyor.com/api/projects/' + repo;
+    let url = `https://ci.appveyor.com/api/projects/${repo}`;
     if (branch != null) {
-      apiUrl += '/branch/' + branch;
+      url += `/branch/${branch}`;
     }
-    const json = await this._requestJson(apiUrl, {}, 'project not found or access denied');
+    const { build: { status } } = await this._requestJson({
+      schema: Joi.object(),
+      url,
+      notFoundMessage: 'project not found or access denied',
+    });
 
-    const { build: { status } } = json;
     if (status === 'success') {
       return {message: 'passing', color: 'brightgreen'};
     } else if (status !== 'running' && status !== 'queued') {

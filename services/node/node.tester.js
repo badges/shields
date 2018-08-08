@@ -9,10 +9,7 @@ const t = new ServiceTester({ id: 'node', title: 'Node' });
 module.exports = t;
 
 function expectSemverRange(value) {
-  expect(() => {
-    // eslint-disable-next-line no-new
-    new Range(value);
-  }).not.to.throw(null, null, 'Expected value to be a semver range');
+  expect(() => new Range(value)).not.to.throw();
 }
 
 t.create('gets the node version of passport')
