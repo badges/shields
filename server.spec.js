@@ -33,6 +33,7 @@ describe('The server', function () {
   });
 
   it('should produce colorscheme PNG badges', async function () {
+    this.timeout(5000);
     const res = await fetch(`${baseUri}/:fruit-apple-green.png`);
     expect(res.ok).to.be.true;
     expect(await res.buffer()).to.satisfy(isPng);

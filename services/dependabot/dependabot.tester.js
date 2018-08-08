@@ -12,30 +12,29 @@ const t = new ServiceTester({ id: 'dependabot', title: 'Dependabot' });
 module.exports = t;
 
 t.create('semver stability (valid)')
-  .get('/semver/bundler/puma.json?style=_shields_test')
+  .get('/semver/bundler/puma.json')
   .expectJSONTypes(Joi.object().keys({
     name: 'semver stability',
     value: isIntegerPercentage,
     link: 'https://dependabot.com/compatibility-score.html?dependency-name=puma&package-manager=bundler&version-scheme=semver',
-    colorB: Joi.equal(colorsB.brightgreen, colorsB.orange).required()
   }));
 
 t.create('semver stability (connection error)')
   .get('/semver/bundler/puma.json?style=_shields_test')
   .networkOff()
-  .expectJSONTypes(Joi.object().keys({
+  .expectJSON({
     name: 'semver stability',
     value: 'inaccessible',
     colorB: colorsB.red
-  }));
+  });
 
 t.create('semver stability (invalid error)')
   .get('/semver/invalid-manager/puma.json?style=_shields_test')
-  .expectJSONTypes(Joi.object().keys({
+  .expectJSON({
     name: 'semver stability',
     value: 'invalid',
     colorB: colorsB.lightgrey
-  }));
+  });
 
 t.create('semver stability (invalid JSON response)')
   .get('/semver/bundler/puma.json')
@@ -43,15 +42,14 @@ t.create('semver stability (invalid JSON response)')
      .get('/badges/compatibility_score?package-manager=bundler&dependency-name=puma&version-scheme=semver')
      .reply(invalidJSON)
    )
-  .expectJSONTypes(Joi.object().keys({
+  .expectJSON({
     name: 'semver stability',
     value: 'invalid'
-  }));
+  });
 
 t.create('semver stability (missing dependency)')
-  .get('/semver/bundler/some-random-missing-dependency.json?style=_shields_test')
-  .expectJSONTypes(Joi.object().keys({
+  .get('/semver/bundler/some-random-missing-dependency.json')
+  .expectJSON({
     name: 'semver stability',
     value: 'unknown',
-    colorB: colorsB.lightgrey
-  }));
+  });

@@ -1,6 +1,7 @@
 'use strict';
 
 const semver = require('semver');
+const Joi = require('joi');
 
 const { BaseJsonService } = require('../base');
 const { InvalidResponse } = require('../errors');
@@ -19,10 +20,11 @@ const { latest: latestVersion } = require('../../lib/version');
 
 class GemVersion extends BaseJsonService {
   async handle({repo}) {
-    const apiUrl = 'https://rubygems.org/api/v1/gems/' + repo + '.json';
-    const json = await this._requestJson(apiUrl);
-    const version = json.version;
-
+    const url = `https://rubygems.org/api/v1/gems/${repo}.json`;
+    const { version } = await this._requestJson({
+      url,
+      schema: Joi.object(),
+    });
     return {
       message: versionText(version),
       color: versionColor(version)
@@ -61,9 +63,13 @@ class GemVersion extends BaseJsonService {
 
 class GemDownloads extends BaseJsonService {
 
-  _getApiUrl(repo, info) {
+  fetch(repo, info) {
     const endpoint = info === "dv" ? 'versions/' : 'gems/';
-    return `https://rubygems.org/api/v1/${endpoint}${repo}.json`;
+    const url = `https://rubygems.org/api/v1/${endpoint}${repo}.json`;
+    return this._requestJson({
+      url,
+      schema: Joi.any(),
+    });
   }
 
   _getLabel(version, info) {
@@ -86,8 +92,7 @@ class GemDownloads extends BaseJsonService {
       : null;
     version = (version === "stable") ? version : semver.valid(version);
     const label = this._getLabel(version, info);
-    const apiUrl = this._getApiUrl(repo, info);
-    const json = await this._requestJson(apiUrl);
+    const json = await this.fetch(repo, info);
 
     let downloads;
     if (info === "dt") {
@@ -187,8 +192,11 @@ class GemDownloads extends BaseJsonService {
 class GemOwner extends BaseJsonService {
 
   async handle({user}) {
-    const apiUrl = 'https://rubygems.org/api/v1/owners/' + user + '/gems.json';
-    const json = await this._requestJson(apiUrl);
+    const url = `https://rubygems.org/api/v1/owners/${user}/gems.json`;
+    const json = await this._requestJson({
+      url,
+      schema: Joi.array(),
+    });
     const count = json.length;
 
     return {
@@ -242,8 +250,11 @@ class GemRank extends BaseJsonService {
   async handle({info, repo}) {
     const totalRank = (info === 'rt');
     const dailyRank = (info === 'rd');
-    const apiUrl = this._getApiUrl(repo, totalRank, dailyRank);
-    const json = await this._requestJson(apiUrl);
+    const url = this._getApiUrl(repo, totalRank, dailyRank);
+    const json = await this._requestJson({
+      url,
+      schema: Joi.array(),
+    });
 
     let rank;
     if (totalRank) {

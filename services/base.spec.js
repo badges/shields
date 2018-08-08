@@ -14,6 +14,12 @@ class DummyService extends BaseService {
   }
 
   static get category() { return 'cat'; }
+  static get examples() {
+    return [
+      { previewUrl: 'World' },
+      { previewUrl: 'World', query: { queryParamA: '!!!' } },
+    ];
+  }
   static get url() {
     return {
       base: 'foo',
@@ -170,6 +176,24 @@ describe('BaseService', () => {
           colorA: undefined,
         }
       );
+    });
+  });
+
+  describe('prepareExamples', function() {
+    it('returns the expected result', function() {
+      const [first, second] = DummyService.prepareExamples();
+      expect(first).to.deep.equal({
+        title: 'DummyService',
+        previewUri: '/foo/World.svg',
+        exampleUri: undefined,
+        documentation: undefined,
+      });
+      expect(second).to.deep.equal({
+        title: 'DummyService',
+        previewUri: '/foo/World.svg?queryParamA=%21%21%21',
+        exampleUri: undefined,
+        documentation: undefined,
+      });
     });
   });
 });

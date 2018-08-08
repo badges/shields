@@ -1,5 +1,9 @@
 // Have you identified a contributing guideline that should be included here?
 // Please open a pull request!
+//
+// To test changes to this file, pick a PR to test against, then run
+// `./node_modules/.bin/danger pr pr-url`
+// Note that the line numbers in the runtime errors are incorrecr.
 
 const { danger, fail, message, warn } = require('danger');
 const chainsmoker = require('chainsmoker');
@@ -35,7 +39,7 @@ const targetBranch = danger.github.pr.base.ref;
 
 message([
   ':sparkles: Thanks for your contribution to Shields, ',
-  `@${danger.github.pr.user.login}!`
+  `@${danger.github.pr.user.login}!`,
 ].join(''));
 
 if (targetBranch != 'master') {
@@ -47,7 +51,7 @@ if (targetBranch != 'master') {
 if (documentation.createdOrModified) {
   message([
     'Thanks for contributing to our documentation. ',
-    'We :heart: our [documentarians](http://www.writethedocs.org/)!'
+    'We :heart: our [documentarians](http://www.writethedocs.org/)!',
   ].join(''));
 }
 
@@ -81,7 +85,7 @@ if (logos.created) {
     ':art: Thanks for submitting a logo. ',
     'Please ensure your contribution follows our ',
     '[guidance](https://github.com/badges/shields/blob/master/CONTRIBUTING.md#logos) ',
-    'for logo submissions.'
+    'for logo submissions.',
   ].join(''));
 }
 
@@ -100,20 +104,39 @@ all_files.forEach(function(file) {
       warn([
         `Found 'assert' statement added in ${file}. `,
         'Please ensure tests are written using Chai ',
-        '[expect syntax](http://chaijs.com/guide/styles/#expect)'
+        '[expect syntax](http://chaijs.com/guide/styles/#expect)',
       ].join(''));
     }
   });
 });
 
-all_files.forEach(function(file) {
-  if (/^services\/.+\/.+\.js$/.test(file) && file.endsWith('.js') && !file.endsWith('.tester.js')) {
-    const tester = file.replace('.js', '.tester.js');
-    if (all_files.indexOf(tester) == -1) {
-      warn([
-        `This PR modified ${file} but not ${tester}. `,
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
+}
+
+const affectedServices = all_files
+  .map(function(file) {
+    const match = file.match(/^services\/(.+)\/.+\.service.js$/);
+    return match ? match[1] : undefined;
+  })
+  .filter(Boolean)
+  .filter(onlyUnique);
+
+const testedServices = all_files
+  .map(function(file) {
+    const match = file.match(/^services\/(.+)\/.+\.tester.js$/);
+    return match ? match[1] : undefined;
+  })
+  .filter(Boolean)
+  .filter(onlyUnique);
+
+affectedServices.forEach(function(service) {
+  if (testedServices.indexOf(service) === -1) {
+    warn(
+      [
+        `This PR modified service code for ${service} but not its test code. `,
         "That's okay so long as it's refactoring existing code.",
-      ].join(''));
-    }
+      ].join('')
+    );
   }
 });
