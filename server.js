@@ -22,9 +22,7 @@ const { isDeprecated, getDeprecatedBadge } = require('./lib/deprecation-helpers'
 const { checkErrorResponse } = require('./lib/error-helper');
 const analytics = require('./lib/analytics');
 const config = require('./lib/server-config');
-const githubAuth = require('./lib/github-auth');
-const GithubApiProvider = require('./services/github/github-api-provider');
-const { setRoutes: setGithubAdminRoutes } = require('./services/github/auth/admin');
+const GithubConstellation = require('./services/github/github-constellation');
 const sysMonitor = require('./lib/sys/monitor');
 const log = require('./lib/log');
 const { makeMakeBadgeFn } = require('./lib/make-badge');
@@ -119,7 +117,6 @@ const {
 } = require('./lib/pypi-helpers.js');
 
 const serverStartTime = new Date((new Date()).toGMTString());
-const githubApiProvider = new GithubApiProvider({ baseUrl: config.services.github.baseUri });
 
 const camp = require('camp').start({
   documentRoot: path.join(__dirname, 'public'),
@@ -130,17 +127,19 @@ const camp = require('camp').start({
   key: config.ssl.key,
 });
 
+const githubConstellation = new GithubConstellation({
+  persistence: config.persistence,
+  service: config.services.github,
+});
+const { apiProvider: githubApiProvider } = githubConstellation;
+
 function reset() {
   clearRequestCache();
   clearRegularUpdateCache();
 }
 
 function stop(callback) {
-  githubAuth.cancelAutosaving();
-  if (githubDebugInterval) {
-    clearInterval(githubDebugInterval);
-    githubDebugInterval = null;
-  }
+  githubConstellation.stop();
   analytics.cancelAutosaving();
   camp.close(callback);
 }
@@ -167,21 +166,11 @@ analytics.load();
 analytics.scheduleAutosaving();
 analytics.setRoutes(camp);
 
-setGithubAdminRoutes(camp);
-githubAuth.scheduleAutosaving({ dir: config.persistence.dir });
-if (serverSecrets && serverSecrets.gh_client_id) {
-  githubAuth.setRoutes(camp);
-}
 if (serverSecrets && serverSecrets.shieldsSecret) {
   sysMonitor.setRoutes(camp);
 }
 
-let githubDebugInterval;
-if (config.services.github.debug.enabled) {
-  githubDebugInterval = setInterval(() => {
-    log(githubAuth.serializeDebugInfo());
-  }, 1000 * config.services.github.debug.intervalSeconds);
-}
+githubConstellation.initialize(camp);
 
 suggest.setRoutes(config.cors.allowedOrigin, githubApiProvider, camp);
 
