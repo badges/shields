@@ -1,9 +1,8 @@
 'use strict';
 
-const validTokenRegex = /^[0-9a-f]{40}$/;
+// This is only used by the TokenProviders, though probably the acceptor
+// should use it too.
 
-function isValidToken(t) {
-  return validTokenRegex.test(t);
-}
+const isValidToken = t => /^[0-9a-f]{40}$/.test(t);
 
 module.exports = isValidToken;
