@@ -1,6 +1,9 @@
-import envFlag from 'node-env-flag'
+import envFlag from 'node-env-flag';
 
-const baseUri = process.env.BASE_URL
-const longCache = envFlag(process.env.LONG_CACHE, false)
+const baseUri = process.env.BASE_URL;
+const longCache = envFlag(process.env.LONG_CACHE, false);
 
-export { baseUri, longCache }
+export {
+  baseUri,
+  longCache
+}

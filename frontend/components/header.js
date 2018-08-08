@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom'
-import React from 'react'
+import { Link } from "react-router-dom";
+import React from 'react';
 
 export default () => (
   <section>
@@ -10,8 +10,12 @@ export default () => (
     <hr className="spacing" />
 
     <p className="highlights">
-      Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp;
-      Hackable &nbsp; No tracking
+      Pixel-perfect &nbsp;
+      Retina-ready &nbsp;
+      Fast &nbsp;
+      Consistent &nbsp;
+      Hackable &nbsp;
+      No tracking
     </p>
 
     <style jsx>{`
@@ -20,4 +24,4 @@ export default () => (
       }
     `}</style>
   </section>
-)
+);
