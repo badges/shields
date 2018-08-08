@@ -1,12 +1,9 @@
 'use strict';
 
-const { BaseJsonService } = require('../base');
-const {
-  makePackageDataUrl,
-  typeDefinitions,
-} = require('../../lib/npm-badge-helpers');
+const { rangeStart, minor } = require('../../lib/version');
+const NpmBase = require('./npm-base');
 
-module.exports = class NPMTypeDefinitions extends BaseJsonService {
+module.exports = class NpmTypeDefinitions extends NpmBase {
   static get category() {
     return 'version';
   }
@@ -16,39 +13,54 @@ module.exports = class NPMTypeDefinitions extends BaseJsonService {
   }
 
   static get url() {
-    return {
-      base: 'npm/types',
-      format: '(?:@([^/]+)/)?([^/]+)',
-      capture: ['scope', 'packageName'],
-      queryParams: ['registry_uri'],
-    };
+    return this.buildUrl('npm/types', { withTag: false });
   }
 
   static get examples() {
-    return [{
-      title: 'npm type definitions',
-      previewUrl: 'chalk',
-      keywords: ['node', 'typescript', 'flow'],
-    }];
+    return [
+      {
+        title: 'npm type definitions',
+        previewUrl: 'chalk',
+        keywords: ['node', 'typescript', 'flow'],
+      },
+    ];
   }
 
-  async handle({ scope, packageName }, { registry_uri: registryUrl }) {
-    const apiUrl = makePackageDataUrl({ registryUrl, scope, packageName });
-
-    const json = await this._requestJson(apiUrl, {}, 'package not found');
-
-    let packageData;
-    if (scope === undefined) {
-      packageData = json;
-    } else {
-      const latestVersion = json['dist-tags'].latest;
-      packageData = json.versions[latestVersion];
-    }
-
-    const message = typeDefinitions(packageData);
+  static transform({ devDependencies }) {
     return {
-      message,
-      color: message === 'none' ? 'lightgray' : 'blue',
+      supportedLanguages: [
+        { language: 'TypeScript', range: devDependencies.typescript },
+        { language: 'Flow', range: devDependencies['flow-bin'] },
+      ].filter(({ range }) => range !== undefined),
     };
+  }
+
+  static render({ supportedLanguages }) {
+    if (supportedLanguages.length === 0) {
+      return { message: 'none', color: 'lightgray' };
+    } else {
+      return {
+        message: supportedLanguages
+          .map(
+            ({ language, range }) => `${language} v${minor(rangeStart(range))}`
+          )
+          .join(' | '),
+        color: 'blue',
+      };
+    }
+  }
+
+  async handle(namedParams, queryParams) {
+    const { scope, packageName, registryUrl } = this.constructor.unpackParams(
+      namedParams,
+      queryParams
+    );
+    const json = await this.fetchPackageData({
+      scope,
+      packageName,
+      registryUrl,
+    });
+    const props = this.constructor.transform(json);
+    return this.constructor.render(props);
   }
 };
