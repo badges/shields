@@ -1,8 +1,8 @@
-'use strict';
+'use strict'
 
-const Joi = require('joi');
-const { BaseJsonService } = require('../base');
-const { metric } = require('../../lib/text-formatters');
+const Joi = require('joi')
+const { BaseJsonService } = require('../base')
+const { metric } = require('../../lib/text-formatters')
 
 // https://github.com/npm/registry/blob/master/docs/download-counts.md#output
 const pointResponseSchema = Joi.object({
@@ -10,14 +10,14 @@ const pointResponseSchema = Joi.object({
     .integer()
     .min(0)
     .required(),
-}).required();
+}).required()
 
 // https://github.com/npm/registry/blob/master/docs/download-counts.md#output-1
 const rangeResponseSchema = Joi.object({
   downloads: Joi.array()
     .items(pointResponseSchema)
     .required(),
-}).required();
+}).required()
 
 function DownloadsForInterval(interval) {
   const { base, messageSuffix = '', query, isRange = false } = {
@@ -41,15 +41,15 @@ function DownloadsForInterval(interval) {
       query: 'range/1000-01-01:3000-01-01',
       isRange: true,
     },
-  }[interval];
+  }[interval]
 
-  const schema = isRange ? rangeResponseSchema : pointResponseSchema;
+  const schema = isRange ? rangeResponseSchema : pointResponseSchema
 
   // This hits an entirely different API from the rest of the NPM services, so
   // it does not use NpmBase.
   return class NpmDownloads extends BaseJsonService {
     static get category() {
-      return 'downloads';
+      return 'downloads'
     }
 
     static get url() {
@@ -57,7 +57,7 @@ function DownloadsForInterval(interval) {
         base,
         format: '(.*)',
         capture: ['packageName'],
-      };
+      }
     }
 
     static get examples() {
@@ -67,14 +67,14 @@ function DownloadsForInterval(interval) {
           previewUrl: 'localeval',
           keywords: ['node'],
         },
-      ];
+      ]
     }
 
     static render({ downloads }) {
       return {
         message: `${metric(downloads)}${messageSuffix}`,
         color: downloads > 0 ? 'brightgreen' : 'red',
-      };
+      }
     }
 
     async handle({ packageName }) {
@@ -82,15 +82,15 @@ function DownloadsForInterval(interval) {
         schema,
         url: `https://api.npmjs.org/downloads/${query}/${packageName}`,
         notFoundMessage: 'project not found',
-      });
+      })
       if (isRange) {
         downloads = downloads
           .map(item => item.downloads)
-          .reduce((accum, current) => accum + current);
+          .reduce((accum, current) => accum + current)
       }
-      return this.constructor.render({ downloads });
+      return this.constructor.render({ downloads })
     }
-  };
+  }
 }
 
-module.exports = ['week', 'month', 'year', 'total'].map(DownloadsForInterval);
+module.exports = ['week', 'month', 'year', 'total'].map(DownloadsForInterval)

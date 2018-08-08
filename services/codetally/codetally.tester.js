@@ -1,10 +1,10 @@
-'use strict';
+'use strict'
 
-const Joi = require('joi');
-const ServiceTester = require('../service-tester');
+const Joi = require('joi')
+const ServiceTester = require('../service-tester')
 
-const t = new ServiceTester({ id: 'codetally', title: 'Codetally' });
-module.exports = t;
+const t = new ServiceTester({ id: 'codetally', title: 'Codetally' })
+module.exports = t
 
 // This test will extract the currency value from the
 // string value response from the server.
@@ -15,16 +15,23 @@ module.exports = t;
 
 t.create('Codetally')
   .get('/triggerman722/colorstrap.json')
-  .expectJSONTypes(Joi.object().keys({
-    name: 'codetally',
-    value: Joi.string().regex(/\b\d+(?:.\d+)?/)
-  }));
-
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'codetally',
+      value: Joi.string().regex(/\b\d+(?:.\d+)?/),
+    })
+  )
 
 t.create('Empty')
   .get('/triggerman722/colorstrap.json')
-  .intercept(nock => nock('http://www.codetally.com')
-    .get('/formattedshield/triggerman722/colorstrap')
-    .reply(200, { currency_sign: '$', amount: '0.00', multiplier: '', currency_abbreviation: 'CAD' })
+  .intercept(nock =>
+    nock('http://www.codetally.com')
+      .get('/formattedshield/triggerman722/colorstrap')
+      .reply(200, {
+        currency_sign: '$',
+        amount: '0.00',
+        multiplier: '',
+        currency_abbreviation: 'CAD',
+      })
   )
-  .expectJSON({ name: 'codetally', value: ' $0.00 '});
+  .expectJSON({ name: 'codetally', value: ' $0.00 ' })
