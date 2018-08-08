@@ -1,19 +1,19 @@
-'use strict';
+'use strict'
 
-const { rangeStart, minor } = require('../../lib/version');
-const NpmBase = require('./npm-base');
+const { rangeStart, minor } = require('../../lib/version')
+const NpmBase = require('./npm-base')
 
 module.exports = class NpmTypeDefinitions extends NpmBase {
   static get category() {
-    return 'version';
+    return 'version'
   }
 
   static get defaultBadgeData() {
-    return { label: 'type definitions' };
+    return { label: 'type definitions' }
   }
 
   static get url() {
-    return this.buildUrl('npm/types', { withTag: false });
+    return this.buildUrl('npm/types', { withTag: false })
   }
 
   static get examples() {
@@ -23,7 +23,7 @@ module.exports = class NpmTypeDefinitions extends NpmBase {
         previewUrl: 'chalk',
         keywords: ['node', 'typescript', 'flow'],
       },
-    ];
+    ]
   }
 
   static transform({ devDependencies }) {
@@ -32,12 +32,12 @@ module.exports = class NpmTypeDefinitions extends NpmBase {
         { language: 'TypeScript', range: devDependencies.typescript },
         { language: 'Flow', range: devDependencies['flow-bin'] },
       ].filter(({ range }) => range !== undefined),
-    };
+    }
   }
 
   static render({ supportedLanguages }) {
     if (supportedLanguages.length === 0) {
-      return { message: 'none', color: 'lightgray' };
+      return { message: 'none', color: 'lightgray' }
     } else {
       return {
         message: supportedLanguages
@@ -46,7 +46,7 @@ module.exports = class NpmTypeDefinitions extends NpmBase {
           )
           .join(' | '),
         color: 'blue',
-      };
+      }
     }
   }
 
@@ -54,13 +54,13 @@ module.exports = class NpmTypeDefinitions extends NpmBase {
     const { scope, packageName, registryUrl } = this.constructor.unpackParams(
       namedParams,
       queryParams
-    );
+    )
     const json = await this.fetchPackageData({
       scope,
       packageName,
       registryUrl,
-    });
-    const props = this.constructor.transform(json);
-    return this.constructor.render(props);
+    })
+    const props = this.constructor.transform(json)
+    return this.constructor.render(props)
   }
-};
+}
