@@ -8,7 +8,7 @@
     <a href="#sponsors" alt="Sponsors on Open Collective">
         <img src="https://opencollective.com/shields/sponsors/badge.svg" /></a>
     <a href="https://circleci.com/gh/badges/shields/tree/master">
-        <img src="https://img.shields.io/circleci/project/github/badges/shields.svg"
+        <img src="https://img.shields.io/circleci/project/github/badges/shields/master.svg"
             alt="build status"></a>
     <a href="https://github.com/badges/shields/compare/gh-pages...master">
         <img src="https://img.shields.io/github/commits-since/badges/shields/gh-pages.svg?label=commits%20to%20be%20deployed"
