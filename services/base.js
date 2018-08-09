@@ -1,7 +1,12 @@
 'use strict'
 
 const Joi = require('joi')
-const { NotFound, InvalidResponse, Inaccessible } = require('./errors')
+const {
+  NotFound,
+  InvalidResponse,
+  Inaccessible,
+  InvalidParameter,
+} = require('./errors')
 const queryString = require('query-string')
 const {
   makeLogo,
@@ -144,7 +149,7 @@ class BaseService {
     try {
       return await this.handle(namedParams, queryParams)
     } catch (error) {
-      if (error instanceof NotFound) {
+      if (error instanceof NotFound || error instanceof InvalidParameter) {
         return {
           message: error.prettyMessage,
           color: 'red',

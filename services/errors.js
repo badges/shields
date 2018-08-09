@@ -69,8 +69,23 @@ class Inaccessible extends ShieldsRuntimeError {
   }
 }
 
+class InvalidParameter extends ShieldsRuntimeError {
+  get name() {
+    return 'InvalidParameter'
+  }
+  get defaultPrettyMessage() {
+    return 'invalid parameter'
+  }
+
+  constructor(props) {
+    const message = 'Invalid Parameter'
+    super(props, message)
+  }
+}
+
 module.exports = {
   NotFound,
   InvalidResponse,
   Inaccessible,
+  InvalidParameter,
 }

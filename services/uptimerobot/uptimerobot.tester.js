@@ -3,8 +3,12 @@
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 
-const isUptimeStatus = Joi.string().regex(
-  /^(paused|not checked yet|up|seems down|down)$/
+const isUptimeStatus = Joi.string().valid(
+  'paused',
+  'not checked yet',
+  'up',
+  'seems down',
+  'down'
 )
 const { isPercentage } = require('../test-validators')
 const { invalidJSON } = require('../response-fixtures')
@@ -27,7 +31,7 @@ t.create('Uptime Robot: Status (invalid, correct format)')
 
 t.create('Uptime Robot: Status (invalid, incorrect format)')
   .get('/status/not-a-service.json')
-  .expectJSON({ name: 'status', value: 'must use a monitor key' })
+  .expectJSON({ name: 'status', value: 'must use a monitor-specific api key' })
 
 t.create('Uptime Robot: Status (unspecified error)')
   .get('/status/m778918918-3e92c097147760ee39d02d36.json')
@@ -36,7 +40,7 @@ t.create('Uptime Robot: Status (unspecified error)')
       .post('/v2/getMonitors')
       .reply(200, '{"stat": "fail"}')
   )
-  .expectJSON({ name: 'status', value: 'vendor error' })
+  .expectJSON({ name: 'status', value: 'invalid' })
 
 t.create('Uptime Robot: Status (connection error)')
   .get('/status/m778918918-3e92c097147760ee39d02d36.json')
@@ -59,7 +63,7 @@ t.create('Uptime Robot: Status (unexpected response, valid json)')
       .post('/v2/getMonitors')
       .reply(200, '[]')
   )
-  .expectJSON({ name: 'status', value: 'invalid' })
+  .expectJSON({ name: 'status', value: 'invalid json response' })
 
 t.create('Uptime Robot: Status (unexpected response, invalid json)')
   .get('/status/m778918918-3e92c097147760ee39d02d36.json')
@@ -68,7 +72,7 @@ t.create('Uptime Robot: Status (unexpected response, invalid json)')
       .post('/v2/getMonitors')
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'status', value: 'inaccessible' })
+  .expectJSON({ name: 'status', value: 'unparseable json response' })
 
 t.create('Uptime Robot: Percentage (valid)')
   .get('/ratio/m778918918-3e92c097147760ee39d02d36.json')
