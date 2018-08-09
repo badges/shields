@@ -90,3 +90,4 @@ typings/
 /build
 .next
 badge-examples.json
+supported-features.json

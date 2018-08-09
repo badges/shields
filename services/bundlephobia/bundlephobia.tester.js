@@ -5,7 +5,8 @@ const ServiceTester = require('../service-tester')
 const { isFileSize } = require('../test-validators')
 
 const t = new ServiceTester({
-  id: 'bundlephobia', title: 'NPM package bundle size',
+  id: 'bundlephobia',
+  title: 'NPM package bundle size',
 })
 
 module.exports = t
@@ -26,7 +27,7 @@ const data = [
   {
     format: formats.B,
     get: '/min/preact/8.0.0.json',
-    expect: { name: 'minified size', value: '7.94 kB' },
+    expect: { name: 'minified size', value: '7.93 kB' },
   },
   {
     format: formats.C,
@@ -36,7 +37,7 @@ const data = [
   {
     format: formats.D,
     get: '/min/@cycle/core/7.0.0.json',
-    expect: { name: 'minified size', value: '3.51 kB' },
+    expect: { name: 'minified size', value: '3.5 kB' },
   },
   {
     format: formats.A,
@@ -46,7 +47,7 @@ const data = [
   {
     format: formats.B,
     get: '/minzip/preact/8.0.0.json',
-    expect: { name: 'minzipped size', value: '3.35 kB' },
+    expect: { name: 'minzipped size', value: '3.33 kB' },
   },
   {
     format: formats.C,
@@ -56,7 +57,7 @@ const data = [
   {
     format: formats.D,
     get: '/minzip/@cycle/core/7.0.0.json',
-    expect: { name: 'minzipped size', value: '1.23 kB' },
+    expect: { name: 'minzipped size', value: '1.22 kB' },
   },
   {
     format: formats.A,
@@ -67,12 +68,11 @@ const data = [
     format: formats.C,
     get: '/min/@some-no-exist/some-no-exist.json',
     expect: { name: 'minified size', value: 'package not found error' },
-  }
+  },
 ]
 
-data.forEach( ({format, get, expect }) => {
+data.forEach(({ format, get, expect }) => {
   t.create(`Testing format '${format}' against '${get}'`)
     .get(get)
     .expectJSONTypes(Joi.object().keys(expect))
-  }
-)
+})

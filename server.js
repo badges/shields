@@ -23,12 +23,14 @@ const { checkErrorResponse } = require('./lib/error-helper');
 const analytics = require('./lib/analytics');
 const config = require('./lib/server-config');
 const githubAuth = require('./lib/github-auth');
+const GithubApiProvider = require('./services/github/github-api-provider');
+const { setRoutes: setGithubAdminRoutes } = require('./services/github/auth/admin');
 const sysMonitor = require('./lib/sys/monitor');
 const log = require('./lib/log');
 const { makeMakeBadgeFn } = require('./lib/make-badge');
 const { QuickTextMeasurer } = require('./lib/text-measurer');
 const suggest = require('./lib/suggest');
-const {licenseToColor} = require('./lib/licenses');
+const { licenseToColor } = require('./lib/licenses');
 const { latest: latestVersion } = require('./lib/version');
 const {
   compare: phpVersionCompare,
@@ -49,7 +51,7 @@ const {
   omitv,
   addv: versionText,
   maybePluralize,
-  formatDate
+  formatDate,
 } = require('./lib/text-formatters');
 const {
   coveragePercentage: coveragePercentageColor,
@@ -58,67 +60,61 @@ const {
   letterScore: letterScoreColor,
   version: versionColor,
   age: ageColor,
-  colorScale
+  colorScale,
 } = require('./lib/color-formatters');
 const {
   makeColorB,
   makeLabel: getLabel,
   makeLogo: getLogo,
   makeBadgeData: getBadgeData,
-  setBadgeColor
+  setBadgeColor,
 } = require('./lib/badge-data');
 const {
   makeHandleRequestFn,
-  clearRequestCache
+  clearRequestCache,
 } = require('./lib/request-handler');
 const {
   regularUpdate,
-  clearRegularUpdateCache
+  clearRegularUpdateCache,
 } = require('./lib/regular-update');
 const { makeSend } = require('./lib/result-sender');
 const { fetchFromSvg } = require('./lib/svg-badge-parser');
 const {
   escapeFormat,
-  escapeFormatSlashes
+  escapeFormatSlashes,
 } = require('./lib/path-helpers');
 const {
-  isSnapshotVersion: isNexusSnapshotVersion
+  isSnapshotVersion: isNexusSnapshotVersion,
 } = require('./lib/nexus-version');
 const {
-  mapNpmDownloads
-} = require('./lib/npm-provider');
-const {
-  defaultNpmRegistryUri,
-  makePackageDataUrl: makeNpmPackageDataUrl,
-} = require('./lib/npm-badge-helpers');
-const {
-  teamcityBadge
+  teamcityBadge,
 } = require('./lib/teamcity-badge-helpers');
 const {
   mapNugetFeedv2,
-  mapNugetFeed
+  mapNugetFeed,
 } = require('./lib/nuget-provider');
 const {
   getVscodeApiReqOptions,
-  getVscodeStatistic
+  getVscodeStatistic,
 } = require('./lib/vscode-badge-helpers');
 const {
   stateColor: githubStateColor,
   checkStateColor: githubCheckStateColor,
-  commentsColor: githubCommentsColor
+  commentsColor: githubCommentsColor,
+  checkErrorResponse: githubCheckErrorResponse,
 } = require('./lib/github-helpers');
 const {
   mapGithubCommitsSince,
-  mapGithubReleaseDate
+  mapGithubReleaseDate,
 } = require('./lib/github-provider');
 const {
   sortDjangoVersions,
-  parseClassifiers
+  parseClassifiers,
 } = require('./lib/pypi-helpers.js');
 const gitlabHelpers = require('./lib/gitlab-helpers.js');
 
 const serverStartTime = new Date((new Date()).toGMTString());
-const githubApiUrl = config.services.github.baseUri;
+const githubApiProvider = new GithubApiProvider({ baseUrl: config.services.github.baseUri });
 
 const camp = require('camp').start({
   documentRoot: path.join(__dirname, 'public'),
@@ -147,7 +143,7 @@ function stop(callback) {
 module.exports = {
   camp,
   reset,
-  stop
+  stop,
 };
 
 log(`Server is starting up: ${config.baseUri}`);
@@ -166,6 +162,7 @@ analytics.load();
 analytics.scheduleAutosaving();
 analytics.setRoutes(camp);
 
+setGithubAdminRoutes(camp);
 githubAuth.scheduleAutosaving({ dir: config.persistence.dir });
 if (serverSecrets && serverSecrets.gh_client_id) {
   githubAuth.setRoutes(camp);
@@ -177,11 +174,11 @@ if (serverSecrets && serverSecrets.shieldsSecret) {
 let githubDebugInterval;
 if (config.services.github.debug.enabled) {
   githubDebugInterval = setInterval(() => {
-    log(githubAuth.getTokenDebugInfo());
+    log(githubAuth.serializeDebugInfo());
   }, 1000 * config.services.github.debug.intervalSeconds);
 }
 
-suggest.setRoutes(config.cors.allowedOrigin, camp);
+suggest.setRoutes(config.cors.allowedOrigin, githubApiProvider, camp);
 
 camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
     var format = match[1];
@@ -195,7 +192,7 @@ camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
 });
 
 camp.notfound(/.*/, function(query, match, end, request) {
-  end(null, {template: '404.html'});
+  end(null, { template: '404.html' });
 });
 
 // Vendors.
@@ -218,12 +215,12 @@ cache(function (data, match, sendBadge, request) {
     method: 'GET',
     json: true,
     uri: protocol + '://' + host + '/rest/api/2/issue/' +
-      encodeURIComponent(issueKey)
+      encodeURIComponent(issueKey),
   };
   if (serverSecrets && serverSecrets.jira_username) {
     options.auth = {
       user: serverSecrets.jira_username,
-      pass: serverSecrets.jira_password
+      pass: serverSecrets.jira_password,
     };
   }
 
@@ -234,7 +231,7 @@ cache(function (data, match, sendBadge, request) {
     'yellow': 'yellow',
     'brown': 'orange',
     'warm-red': 'red',
-    'blue-gray': 'blue'
+    'blue-gray': 'blue',
   };
 
   var badgeData = getBadgeData(issueKey, data);
@@ -275,12 +272,12 @@ cache(function (data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     json: true,
-    uri: protocol + '://' + host + '/rest/api/2/search?jql=sprint='+sprintId+'%20AND%20type%20IN%20(Bug,Improvement,Story,"Technical%20task")&fields=resolution&maxResults=500'
+    uri: protocol + '://' + host + '/rest/api/2/search?jql=sprint='+sprintId+'%20AND%20type%20IN%20(Bug,Improvement,Story,"Technical%20task")&fields=resolution&maxResults=500',
   };
   if (serverSecrets && serverSecrets.jira_username) {
     options.auth = {
       user: serverSecrets.jira_username,
-      pass: serverSecrets.jira_password
+      pass: serverSecrets.jira_password,
     };
   }
 
@@ -331,7 +328,7 @@ cache(function(data, match, sendBadge, request) {
     uri: `https://api.travis-ci.org/repos/${userRepo}/branches/${version}`,
   };
   const badgeData = getBadgeData('PHP', data);
-  getPhpReleases(githubAuth.request, (err, phpReleases) => {
+  getPhpReleases(githubApiProvider, (err, phpReleases) => {
     if (err != null) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
@@ -440,8 +437,8 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     uri: 'https://status.continuousphp.com/' + provider + '/' + userRepo + '/status-info',
     headers: {
-      'Accept': 'application/json'
-    }
+      'Accept': 'application/json',
+    },
   };
 
   if (branch != null) {
@@ -503,7 +500,7 @@ camp.route(/^\/osslifecycle?\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$
     }
     var options = {
       method: 'GET',
-      uri: url
+      uri: url,
     };
     var badgeData = getBadgeData('OSS Lifecycle', data);
     request(options, function(err, res, body) {
@@ -560,7 +557,7 @@ cache(function (data, match, sendBadge, request) {
   const url = 'https://api.shippable.com/projects/' + project + '/branchRunStatus';
   const options = {
     method: 'GET',
-    uri: url
+    uri: url,
   };
 
   const badgeData = getBadgeData('build', data);
@@ -597,7 +594,7 @@ cache(function(data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     json: true,
-    uri: 'https://app.wercker.com/getbuilds/' + projectId + '?limit=1'
+    uri: 'https://app.wercker.com/getbuilds/' + projectId + '?limit=1',
   };
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res, json) {
@@ -638,7 +635,7 @@ cache(function(data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     json: true,
-    uri: 'https://app.wercker.com/api/v3/applications/' + owner + '/' + application + '/builds?limit=1'
+    uri: 'https://app.wercker.com/api/v3/applications/' + owner + '/' + application + '/builds?limit=1',
   };
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res, json) {
@@ -686,7 +683,7 @@ cache(function (data, match, sendBadge, request) {
         version = data.version && data.version.num;
         badgeData.text[1] = metric(downloads) + (version? ' version ' + version: '');
         badgeData.colorscheme = downloadCountColor(downloads);
-      }
+      },
     },
     'dv': {
       name: 'downloads',
@@ -696,7 +693,7 @@ cache(function (data, match, sendBadge, request) {
         version = data.version && data.version.num;
         badgeData.text[1] = metric(downloads) + (version? ' version ' + version: ' latest version');
         badgeData.colorscheme = downloadCountColor(downloads);
-      }
+      },
     },
     'v': {
       name: 'crates.io',
@@ -705,7 +702,7 @@ cache(function (data, match, sendBadge, request) {
         version = data.version? data.version.num: data.crate.max_version;
         badgeData.text[1] = versionText(version);
         badgeData.colorscheme = versionColor(version);
-      }
+      },
     },
     'l': {
       name: 'license',
@@ -713,8 +710,8 @@ cache(function (data, match, sendBadge, request) {
       process: function (data, badgeData) {
         badgeData.text[1] = data.versions[0].license;
         badgeData.colorscheme = 'blue';
-      }
-    }
+      },
+    },
   };
   var behavior = modes[mode];
   var apiUrl = 'https://crates.io/api/v1/crates/' + crate;
@@ -881,12 +878,12 @@ camp.route(/^\/sonar\/?([0-9.]+)?\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|
       var options = {
         uri,
         headers: {
-          Accept: 'application/json'
-        }
+          Accept: 'application/json',
+        },
       };
       if (serverSecrets && serverSecrets.sonarqube_token) {
         options.auth = {
-          user: serverSecrets.sonarqube_token
+          user: serverSecrets.sonarqube_token,
         };
       }
 
@@ -1408,14 +1405,14 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     uri: 'https://insight.sensiolabs.com/api/projects/' + projectUuid,
     headers: {
-      Accept: 'application/vnd.com.sensiolabs.insight+xml'
-    }
+      Accept: 'application/vnd.com.sensiolabs.insight+xml',
+    },
   };
 
   if (serverSecrets && serverSecrets.sl_insight_userUuid) {
     options.auth = {
       user: serverSecrets.sl_insight_userUuid,
-      pass: serverSecrets.sl_insight_apiToken
+      pass: serverSecrets.sl_insight_apiToken,
     };
   }
 
@@ -1711,213 +1708,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// npm weekly download integration.
-mapNpmDownloads({ camp, cache }, 'dw', 'last-week');
-
-// npm monthly download integration.
-mapNpmDownloads({ camp, cache }, 'dm', 'last-month');
-
-// npm yearly download integration
-mapNpmDownloads({ camp, cache }, 'dy', 'last-year');
-
-// npm total download integration.
-camp.route(/^\/npm\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function (data, match, sendBadge, request) {
-  var pkg = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
-  var format = match[2];
-  var apiUrl = 'https://api.npmjs.org/downloads/range/1000-01-01:3000-01-01/' + pkg; // use huge range, will need to fix this in year 3000 :)
-  var badgeData = getBadgeData('downloads', data);
-  request(apiUrl, function (err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res)) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var totalDownloads = 0;
-
-      var downloads = JSON.parse(buffer).downloads || 0;
-      for (var index = 0; index < downloads.length; index++) {
-        totalDownloads = totalDownloads + downloads[index].downloads;
-      }
-
-      badgeData.text[1] = metric(totalDownloads);
-      if (totalDownloads === 0) {
-        badgeData.colorscheme = 'red';
-      } else {
-        badgeData.colorscheme = 'brightgreen';
-      }
-      sendBadge(format, badgeData);
-    } catch (e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// npm version integration.
-camp.route(/^\/npm\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
-cache({
-  queryParams: ['registry_uri'],
-  handler: function(queryParams, match, sendBadge, request) {
-    // e.g. cycle, core, next, svg
-    const [, scope, packageName, tag, format] = match;
-    const registryUri = queryParams.registry_uri || defaultNpmRegistryUri;
-    const pkg = encodeURIComponent(scope ? `@${scope}/${packageName}` : packageName);
-    const apiUrl = `${registryUri}/-/package/${pkg}/dist-tags`;
-
-    const name = tag ? `npm@${tag}` : 'npm';
-    const badgeData = getBadgeData(name, queryParams);
-    // Using the Accept header because of this bug:
-    // <https://github.com/npm/npmjs.org/issues/163>
-    request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
-      if (err != null) {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
-      }
-      try {
-        const data = JSON.parse(buffer);
-        const version = data[tag || 'latest'];
-        badgeData.text[1] = versionText(version);
-        badgeData.colorscheme = versionColor(version);
-        sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  }
-}));
-
-// npm license integration.
-camp.route(/^\/npm\/l\/(?:@([^/]+)\/)?([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache({
-  queryParams: ['registry_uri'],
-  handler: function(queryParams, match, sendBadge, request) {
-    // e.g. cycle, core, svg
-    const [, scope, packageName, format ] = match;
-    const apiUrl = makeNpmPackageDataUrl({
-      registryUrl: queryParams.registry_uri,
-      scope,
-      packageName,
-    });
-    const badgeData = getBadgeData('license', queryParams);
-    request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
-      if (err != null) {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
-      }
-      if (res.statusCode === 404) {
-        badgeData.text[1] = 'package not found';
-        sendBadge(format, badgeData);
-        return;
-      }
-      try {
-        const data = JSON.parse(buffer);
-        let license;
-        if (scope === undefined) {
-          license = data.license;
-        } else {
-          const latestVersion = data['dist-tags'].latest;
-          license = data.versions[latestVersion].license;
-        }
-        if (Array.isArray(license)) {
-          license = license.join(', ');
-        } else if (typeof license == 'object') {
-          license = license.type;
-        }
-        if (license === undefined) {
-          badgeData.text[1] = 'missing';
-          badgeData.colorscheme = 'red';
-        } else {
-          badgeData.text[1] = license;
-          setBadgeColor(badgeData, licenseToColor(license));
-        }
-        sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  }
-}));
-
-// npm node version integration.
-camp.route(/^\/node\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
-cache({
-  queryParams: ['registry_uri'],
-  handler: function(queryParams, match, sendBadge, request) {
-    // e.g. @stdlib, stdlib, next, svg
-    const [, scope, packageName, tag, format] = match;
-    const apiUrl = makeNpmPackageDataUrl({
-      registryUrl: queryParams.registry_uri,
-      scope,
-      packageName,
-    });
-    const registryTag = tag || 'latest';
-    const name = tag ? `node@${tag}` : 'node';
-    const badgeData = getBadgeData(name, queryParams);
-    // Using the Accept header because of this bug:
-    // <https://github.com/npm/npmjs.org/issues/163>
-    request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
-      if (checkErrorResponse(badgeData, err, res, 'package not found')) {
-        sendBadge(format, badgeData);
-        return;
-      }
-      try {
-        const data = JSON.parse(buffer);
-        let releaseData;
-        if (scope === undefined) {
-          releaseData = data;
-        } else {
-          const version = data['dist-tags'][registryTag];
-          releaseData = data.versions[version];
-        }
-        const versionRange = (releaseData.engines || {}).node;
-        if (! versionRange) {
-          badgeData.text[1] = 'not specified';
-          sendBadge(format, badgeData);
-          return;
-        }
-        badgeData.text[1] = versionRange;
-        regularUpdate({
-          url: 'http://nodejs.org/dist/latest/SHASUMS256.txt',
-          intervalMillis: 24 * 3600 * 1000,
-          json: false,
-          scraper: shasums => {
-            // tarball index start, tarball index end
-            const taris = shasums.indexOf('node-v');
-            const tarie = shasums.indexOf('\n', taris);
-            const tarball = shasums.slice(taris, tarie);
-            const version = tarball.split('-')[1];
-            return version;
-          },
-        }, (err, version) => {
-            if (err != null) {
-              badgeData.text[1] = 'invalid';
-              sendBadge(format, badgeData);
-              return;
-            }
-            try {
-              if (semver.satisfies(version, versionRange)) {
-                badgeData.colorscheme = 'brightgreen';
-              } else if (semver.gtr(version, versionRange)) {
-                badgeData.colorscheme = 'yellow';
-              } else {
-                badgeData.colorscheme = 'orange';
-              }
-            } catch(e) { }
-            sendBadge(format, badgeData);
-        });
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  }
-}));
-
 // Anaconda Cloud / conda package manager integration
 camp.route(/^\/conda\/([dvp]n?)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(queryData, match, sendBadge, request) {
@@ -1929,7 +1719,7 @@ cache(function(queryData, match, sendBadge, request) {
   const labels = {
     'd': 'downloads',
     'p': 'platform',
-    'v': channel
+    'v': channel,
   };
   const modes = {
     // downloads - 'd'
@@ -1948,7 +1738,7 @@ cache(function(queryData, match, sendBadge, request) {
     'p': function(data, badgeData) {
       const platforms = data.conda_platforms.join(' | ');
       badgeData.text[1] = platforms;
-    }
+    },
   };
   const variants = {
     // default use `conda|{channelname}` as label
@@ -1957,7 +1747,7 @@ cache(function(queryData, match, sendBadge, request) {
     },
     // skip `conda|` prefix
     'n': function(queryData, badgeData) {
-    }
+    },
   };
 
   const update = modes[mode.charAt(0)];
@@ -1978,7 +1768,7 @@ cache(function(queryData, match, sendBadge, request) {
       sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
-      variant(data, badgeData);
+      variant(queryData, badgeData);
       sendBadge(format, badgeData);
     }
   });
@@ -1994,14 +1784,14 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     uri: 'https://bintray.com/api/v1/packages/' + path + '/versions/_latest',
     headers: {
-      Accept: 'application/json'
-    }
+      Accept: 'application/json',
+    },
   };
 
   if (serverSecrets && serverSecrets.bintray_user) {
     options.auth = {
       user: serverSecrets.bintray_user,
-      pass: serverSecrets.bintray_apikey
+      pass: serverSecrets.bintray_apikey,
     };
   }
 
@@ -2207,7 +1997,7 @@ cache(function(data, match, sendBadge, request) {
         let pattern = /^Development Status :: ([1-7]) - (\S+)$/;
         var statusColors = {
             '1': 'red', '2': 'red', '3': 'red', '4': 'yellow',
-            '5': 'brightgreen', '6': 'brightgreen', '7': 'red'};
+            '5': 'brightgreen', '6': 'brightgreen', '7': 'red' };
         var statusCode = '1', statusText = 'unknown';
         for (let i = 0; i < parsedData.info.classifiers.length; i++) {
           let matched = pattern.exec(parsedData.info.classifiers[i]);
@@ -2301,12 +2091,13 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Dart's pub version integration.
-camp.route(/^\/pub\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/pub\/v(pre)?\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1]; // eg, "box2d"
-  var format = match[2];
-  var apiUrl = 'https://pub.dartlang.org/packages/' + userRepo + '.json';
-  var badgeData = getBadgeData('pub', data);
+  const includePre = Boolean(match[1]);
+  const userRepo = match[2]; // eg, "box2d"
+  const format = match[3];
+  const apiUrl = 'https://pub.dartlang.org/packages/' + userRepo + '.json';
+  let badgeData = getBadgeData('pub', data);
   request(apiUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
@@ -2317,7 +2108,7 @@ cache(function(data, match, sendBadge, request) {
       var data = JSON.parse(buffer);
       // Grab the latest stable version, or an unstable
       var versions = data.versions;
-      var version = latestVersion(versions);
+      var version = latestVersion(versions, { pre: includePre });
       badgeData.text[1] = versionText(version);
       badgeData.colorscheme = versionColor(version);
       sendBadge(format, badgeData);
@@ -2495,7 +2286,7 @@ cache(function(data, match, sendBadge, request) {
   request({
       method: 'GET',
       uri: `https://api.codeclimate.com/v1/repos?github_slug=${userRepo}`,
-      json: true
+      json: true,
   }, function (err, res, body) {
     const badgeData = getBadgeData(type, data);
     if (err != null) {
@@ -2696,7 +2487,7 @@ cache({
         return;
       }
     });
-  }
+  },
 }));
 
 // dotnet-status integration - deprecated as of April 2018.
@@ -2874,8 +2665,8 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     uri: url,
     headers: {
-      'Accept': 'application/json'
-    }
+      'Accept': 'application/json',
+    },
   };
 
   var badgeData = getBadgeData('discourse', data);
@@ -3119,7 +2910,7 @@ cache(function(data, match, sendBadge, request) {
   var spec = match[2];  // eg, AFNetworking
   var format = match[3];
   var apiUrl = 'https://trunk.cocoapods.org/api/v1/pods/' + spec + '/specs/latest';
-  const typeToLabel = {'v' : 'pod', 'p': 'platform', 'l': 'license'};
+  const typeToLabel = { 'v' : 'pod', 'p': 'platform', 'l': 'license' };
   const badgeData = getBadgeData(typeToLabel[type], data);
   badgeData.colorscheme = null;
   request(apiUrl, function(err, res, buffer) {
@@ -3137,7 +2928,7 @@ cache(function(data, match, sendBadge, request) {
 
       var platforms = Object.keys(parsedData.platforms || {
         'ios' : '5.0',
-        'osx' : '10.7'
+        'osx' : '10.7',
       }).join(' | ');
       if (type === 'v') {
         badgeData.text[1] = versionText(version);
@@ -3285,26 +3076,26 @@ cache(function (data, match, sendBadge, request) {
 }));
 
 // GitHub tag integration.
-camp.route(/^\/github\/tag\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/tag(-?pre)?\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, expressjs/express
-  var repo = match[2];
-  var format = match[3];
-  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/tags';
-  var badgeData = getBadgeData('tag', data);
+  const includePre = Boolean(match[1]);
+  const user = match[2];  // eg, expressjs/express
+  const repo = match[3];
+  const format = match[4];
+  const apiUrl = `/repos/${user}/${repo}/tags`;
+  let badgeData = getBadgeData('tag', data);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
-  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
     try {
       var data = JSON.parse(buffer);
       var versions = data.map(function(e) { return e.name; });
-      var tag = latestVersion(versions);
+      var tag = latestVersion(versions, { pre: includePre });
       badgeData.text[1] = versionText(tag);
       badgeData.colorscheme = versionColor(tag);
       sendBadge(format, badgeData);
@@ -3327,8 +3118,7 @@ cache(function(query_data, match, sendBadge, request) {
   var apiUrl = 'https://raw.githubusercontent.com/' + user + '/' + repo + '/' + branch + '/' + type + '.json';
   var badgeData = getBadgeData(type, query_data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3366,14 +3156,13 @@ cache(function(data, match, sendBadge, request) {
   var user = match[2];
   var repo = match[3];
   var format = match[4];
-  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/contributors?page=1&per_page=1&anon=' + (!!isAnon);
+  const apiUrl = `/repos/${user}/${repo}/contributors?page=1&per_page=1&anon=${!!isAnon}`;
   var badgeData = getBadgeData('contributors', data);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
-  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3401,7 +3190,7 @@ cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, qubyte/rubidium
   var allReleases = match[2];
   var format = match[3];
-  var apiUrl = githubApiUrl + '/repos/' + userRepo + '/releases';
+  let apiUrl = `/repos/${userRepo}/releases`;
   var badgeData = getBadgeData('release', data);
   if (allReleases === undefined) {
     apiUrl = apiUrl + '/latest';
@@ -3409,9 +3198,8 @@ cache(function(data, match, sendBadge, request) {
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
-  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3433,10 +3221,10 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub release & pre-release date integration.
-mapGithubReleaseDate({ camp, cache }, githubApiUrl, githubAuth);
+mapGithubReleaseDate({ camp, cache }, githubApiProvider);
 
 // GitHub commits since integration.
-mapGithubCommitsSince({ camp, cache }, githubApiUrl ,githubAuth);
+mapGithubCommitsSince({ camp, cache }, githubApiProvider);
 
 // GitHub release-download-count and pre-release-download-count integration.
 camp.route(/^\/github\/(downloads|downloads-pre)\/([^/]+)\/([^/]+)(\/.+)?\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -3456,7 +3244,7 @@ cache(function(data, match, sendBadge, request) {
     total = false;
   }
 
-  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/releases';
+  let apiUrl = `/repos/${user}/${repo}/releases`;
   if (!total) {
     var release_path = tag === 'latest' ? (type === 'downloads' ? 'latest' : '') : 'tags/' + tag;
     if (release_path) {
@@ -3467,10 +3255,10 @@ cache(function(data, match, sendBadge, request) {
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
-  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      return sendBadge(format, badgeData);
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+    if (githubCheckErrorResponse(badgeData, err, res, 'repo or release not found')) {
+      sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -3528,7 +3316,6 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[5];  // eg, shields
   var ghLabel = match[6];  // eg, website
   var format = match[7];
-  var apiUrl = githubApiUrl + '/search/issues';
   var query = {};
   var hasLabel = (ghLabel !== undefined);
 
@@ -3547,9 +3334,8 @@ cache(function(data, match, sendBadge, request) {
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
-  githubAuth.request(request, apiUrl, query, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+  githubApiProvider.request(request, '/search/issues', query, (err, res, buffer) => {
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3570,14 +3356,13 @@ cache(function(data, match, sendBadge, request) {
 camp.route(/^\/github\/(?:issues|pulls)\/detail\/(s|title|u|label|comments|age|last-update)\/([^/]+)\/([^/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
 cache((queryParams, match, sendBadge, request) => {
   const [, which, owner, repo, number, format] = match;
-  const uri = `${githubApiUrl}/repos/${owner}/${repo}/issues/${number}`;
-  const badgeData = getBadgeData('', queryParams);
+  const uri = `/repos/${owner}/${repo}/issues/${number}`;
+  const badgeData = getBadgeData(`issue/pull request ${number}`, queryParams);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', queryParams);
   }
-  githubAuth.request(request, uri, {}, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+  githubApiProvider.request(request, uri, {}, (err, res, buffer) => {
+    if (githubCheckErrorResponse(badgeData, err, res, 'issue, pull request or repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3639,22 +3424,21 @@ cache((queryParams, match, sendBadge, request) => {
 camp.route(/^\/github\/status\/(s|contexts)\/pulls\/([^/]+)\/([^/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
 cache((queryParams, match, sendBadge, request) => {
   const [, which, owner, repo, number, format] = match;
-  const issueUri = `${githubApiUrl}/repos/${owner}/${repo}/pulls/${number}`;
+  const issueUri = `/repos/${owner}/${repo}/pulls/${number}`;
   const badgeData = getBadgeData('checks', queryParams);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', queryParams);
   }
-  githubAuth.request(request, issueUri, {}, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+  githubApiProvider.request(request, issueUri, {}, (err, res, buffer) => {
+    if (githubCheckErrorResponse(badgeData, err, res, 'pull request or repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
     try {
       const parsedData = JSON.parse(buffer);
       const ref = parsedData.head.sha;
-      const statusUri = `${githubApiUrl}/repos/${owner}/${repo}/commits/${ref}/status`;
-      githubAuth.request(request, statusUri, {}, (err, res, buffer) => {
+      const statusUri = `/repos/${owner}/${repo}/commits/${ref}/status`;
+      githubApiProvider.request(request, statusUri, {}, (err, res, buffer) => {
         try {
           const parsedData = JSON.parse(buffer);
           const state = badgeData.text[1] = parsedData.state;
@@ -3691,7 +3475,7 @@ cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
   var format = match[3];
-  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo;
+  const apiUrl = `/repos/${user}/${repo}`;
   var badgeData = getBadgeData('forks', data);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
@@ -3700,9 +3484,8 @@ cache(function(data, match, sendBadge, request) {
       'https://github.com/' + user + '/' + repo + '/network',
      ];
   }
-  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+  githubApiProvider.request(request, apiUrl, {}, function(err, res, buffer) {
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3726,7 +3509,7 @@ cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
   var format = match[3];
-  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo;
+  const apiUrl = `/repos/${user}/${repo}`;
   var badgeData = getBadgeData('stars', data);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
@@ -3735,9 +3518,8 @@ cache(function(data, match, sendBadge, request) {
       'https://github.com/' + user + '/' + repo + '/stargazers',
      ];
   }
-  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3759,7 +3541,7 @@ cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte/rubidium
   var repo = match[2];
   var format = match[3];
-  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo;
+  const apiUrl = `/repos/${user}/${repo}`;
   var badgeData = getBadgeData('watchers', data);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
@@ -3768,9 +3550,8 @@ cache(function(data, match, sendBadge, request) {
       'https://github.com/' + user + '/' + repo + '/watchers',
      ];
   }
-  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3791,14 +3572,13 @@ camp.route(/^\/github\/followers\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, qubyte
   var format = match[2];
-  var apiUrl = githubApiUrl + '/users/' + user;
+  const apiUrl = `/users/${user}`;
   var badgeData = getBadgeData('followers', data);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
-  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+    if (githubCheckErrorResponse(badgeData, err, res, 'user not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3820,32 +3600,13 @@ cache(function(data, match, sendBadge, request) {
   var user = match[1];  // eg, mashape
   var repo = match[2];  // eg, apistatus
   var format = match[3];
-  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo;
+  const apiUrl = `/repos/${user}/${repo}`;
   var badgeData = getBadgeData('license', data);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
-  // Using our OAuth App secret grants us 5000 req/hour
-  // instead of the standard 60 req/hour.
-  if (serverSecrets) {
-    apiUrl += '?client_id=' + serverSecrets.gh_client_id
-      + '&client_secret=' + serverSecrets.gh_client_secret;
-  }
-  // Custom user-agent and accept headers are required
-  // http://developer.github.com/v3/#user-agent-required
-  // https://developer.github.com/v3/licenses/
-  var customHeaders = {
-    'User-Agent': 'Shields.io',
-    'Accept': 'application/vnd.github.drax-preview+json'
-  };
-  request(apiUrl, { headers: customHeaders }, function(err, res, buffer) {
-    if (res && res.statusCode === 404) {
-      badgeData.text[1] = 'repo not found';
-      sendBadge(format, badgeData);
-      return;
-    }
-    if (err != null || res.statusCode !== 200) {
-      badgeData.text[1] = 'inaccessible';
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3875,25 +3636,19 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[2];  // eg, apistatus
   var path = match[3];
   var format = match[4];
-  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/contents/' + path;
+  const apiUrl = `/repos/${user}/${repo}/contents/${path}`;
 
   var badgeData = getBadgeData('size', data);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
 
-  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+    if (githubCheckErrorResponse(badgeData, err, res, 'repo or file not found')) {
       sendBadge(format, badgeData);
       return;
     }
     try {
-      if (res.statusCode === 404) {
-        badgeData.text[1] = 'repo or file not found';
-        sendBadge(format, badgeData);
-        return;
-      }
       var body = JSON.parse(buffer);
       if (body && Number.isInteger(body.size)) {
         badgeData.text[1] = prettyBytes(body.size);
@@ -3917,21 +3672,15 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[2];
   var search = match[3];
   var format = match[4];
-  var query = {q: search + ' repo:' + user + '/' + repo};
+  var query = { q: search + ' repo:' + user + '/' + repo };
   var badgeData = getBadgeData(search + ' counter', data);
-  githubAuth.request(request, githubApiUrl + '/search/code', query, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+  githubApiProvider.request(request, '/search/code', query, function(err, res, buffer) {
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
     try {
       var body = JSON.parse(buffer);
-      if (body.message === 'Validation Failed') {
-        badgeData.text[1] = 'repo not found';
-        sendBadge(format, badgeData);
-        return;
-      }
       badgeData.text[1] = metric(body.total_count);
       badgeData.colorscheme = 'blue';
       sendBadge(format, badgeData);
@@ -3949,15 +3698,14 @@ cache(function(data, match, sendBadge, request) {
   const user = match[2];
   const repo = match[3];
   const format = match[4];
-  const apiUrl = `${githubApiUrl}/repos/${user}/${repo}/stats/commit_activity`;
+  const apiUrl = `/repos/${user}/${repo}/stats/commit_activity`;
   const badgeData = getBadgeData('commit activity', data);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
     badgeData.links = [`https://github.com/${user}/${repo}`];
   }
-  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (err !== null) {
-      badgeData.text[1] = 'inaccessible';
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3998,7 +3746,7 @@ cache(function(data, match, sendBadge, request) {
   const repo = match[2];  // eg, apistatus
   const branch = match[3];
   const format = match[4];
-  let apiUrl = `${githubApiUrl}/repos/${user}/${repo}/commits`;
+  let apiUrl = `/repos/${user}/${repo}/commits`;
   if (branch) {
     apiUrl += `?sha=${branch}`;
   }
@@ -4007,9 +3755,8 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
     badgeData.links = [`https://github.com/${user}/${repo}`];
   }
-  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (err !== null) {
-      badgeData.text[1] = 'inaccessible';
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -4033,14 +3780,13 @@ cache(function(data, match, sendBadge, request) {
   var user = match[2];
   var repo = match[3];
   var format = match[4];
-  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo + '/languages';
-  var badgeData = getBadgeData('', data);
+  const apiUrl = `/repos/${user}/${repo}/languages`;
+  var badgeData = getBadgeData('languages', data);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
-  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -4097,14 +3843,13 @@ cache(function(data, match, sendBadge, request) {
   var user = match[1];
   var repo = match[2];
   var format = match[3];
-  var apiUrl = githubApiUrl + '/repos/' + user + '/' + repo;
+  const apiUrl = `/repos/${user}/${repo}`;
   var badgeData = getBadgeData('repo size', data);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
-  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -4124,10 +3869,10 @@ cache(function(data, match, sendBadge, request) {
 camp.route(/^\/github\/commit-status\/([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const [, user, repo, branch, commit, format] = match;
-  const apiUrl = `${githubApiUrl}/repos/${user}/${repo}/compare/${branch}...${commit}`;
+  const apiUrl = `/repos/${user}/${repo}/compare/${branch}...${commit}`;
   const badgeData = getBadgeData('commit status', data);
-  githubAuth.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'commit or branch not found')) {
+  githubApiProvider.request(request, apiUrl, {}, function(err, res, buffer) {
+    if (githubCheckErrorResponse(badgeData, err, res, 'commit or branch not found')) {
       if (res && res.statusCode === 404) {
         try {
           if (JSON.parse(buffer).message.startsWith('No common ancestor between')) {
@@ -4591,7 +4336,7 @@ cache(function(data, match, sendBadge, request) {
 mapNugetFeedv2({ camp, cache }, 'resharper', 0, function(match) {
   return {
     site: 'resharper',
-    feed: 'https://resharper-plugins.jetbrains.com/api/v2'
+    feed: 'https://resharper-plugins.jetbrains.com/api/v2',
   };
 });
 
@@ -4599,7 +4344,7 @@ mapNugetFeedv2({ camp, cache }, 'resharper', 0, function(match) {
 mapNugetFeedv2({ camp, cache }, 'chocolatey', 0, function(match) {
   return {
     site: 'chocolatey',
-    feed: 'https://www.chocolatey.org/api/v2'
+    feed: 'https://www.chocolatey.org/api/v2',
   };
 });
 
@@ -4607,7 +4352,7 @@ mapNugetFeedv2({ camp, cache }, 'chocolatey', 0, function(match) {
 mapNugetFeedv2({ camp, cache }, 'powershellgallery', 0, function(match) {
   return {
     site: 'powershellgallery',
-    feed: 'https://www.powershellgallery.com/api/v2'
+    feed: 'https://www.powershellgallery.com/api/v2',
   };
 });
 
@@ -4615,7 +4360,7 @@ mapNugetFeedv2({ camp, cache }, 'powershellgallery', 0, function(match) {
 mapNugetFeed({ camp, cache }, 'nuget', 0, function(match) {
   return {
     site: 'nuget',
-    feed: 'https://api.nuget.org/v3'
+    feed: 'https://api.nuget.org/v3',
   };
 });
 
@@ -4625,7 +4370,7 @@ mapNugetFeed({ camp, cache }, '(.+\\.)?myget\\/(.*)', 2, function(match) {
   var feed = match[2];
   return {
     site: feed,
-    feed: 'https://' + tenant + 'myget.org/F/' + feed + '/api/v3'
+    feed: 'https://' + tenant + 'myget.org/F/' + feed + '/api/v3',
   };
 });
 
@@ -4638,7 +4383,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[4];
   var options = {
     json: true,
-    uri: 'https://forgeapi.puppetlabs.com/v3/modules/' + user + '-' + module
+    uri: 'https://forgeapi.puppetlabs.com/v3/modules/' + user + '-' + module,
   };
   var badgeData = getBadgeData('puppetforge', data);
   request(options, function dealWithData(err, res, json) {
@@ -4704,7 +4449,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[3];
   var options = {
     json: true,
-    uri: 'https://forgeapi.puppetlabs.com/v3/users/' + user
+    uri: 'https://forgeapi.puppetlabs.com/v3/users/' + user,
   };
   var badgeData = getBadgeData('puppetforge', data);
   request(options, function dealWithData(err, res, json) {
@@ -4743,7 +4488,7 @@ cache(function(data, match, sendBadge, request) {
   var format = match[4];
   var options = {
     json: true,
-    uri: scheme + '://' + host + '/job/' + job + '/api/json?tree=color'
+    uri: scheme + '://' + host + '/job/' + job + '/api/json?tree=color',
   };
   if (job.indexOf('/') > -1 ) {
     options.uri = scheme + '://' + host + '/' + job + '/api/json?tree=color';
@@ -4752,7 +4497,7 @@ cache(function(data, match, sendBadge, request) {
   if (serverSecrets && serverSecrets.jenkins_user) {
     options.auth = {
       user: serverSecrets.jenkins_user,
-      pass: serverSecrets.jenkins_pass
+      pass: serverSecrets.jenkins_pass,
     };
   }
 
@@ -4800,7 +4545,7 @@ cache(function(data, match, sendBadge, request) {
   var options = {
     json: true,
     uri: scheme + '://' + host + '/job/' + job
-      + '/lastBuild/api/json?tree=' + encodeURIComponent('actions[failCount,skipCount,totalCount]')
+      + '/lastBuild/api/json?tree=' + encodeURIComponent('actions[failCount,skipCount,totalCount]'),
   };
   if (job.indexOf('/') > -1 ) {
     options.uri = scheme + '://' + host + '/' + job
@@ -4810,7 +4555,7 @@ cache(function(data, match, sendBadge, request) {
   if (serverSecrets && serverSecrets.jenkins_user) {
     options.auth = {
       user: serverSecrets.jenkins_user,
-      pass: serverSecrets.jenkins_pass
+      pass: serverSecrets.jenkins_pass,
     };
   }
 
@@ -4860,7 +4605,7 @@ cache(function(data, match, sendBadge, request) {
   const format = match[5];
   const options = {
     json: true,
-    uri: `${scheme}://${host}/job/${job}/`
+    uri: `${scheme}://${host}/job/${job}/`,
   };
 
   if (job.indexOf('/') > -1 ) {
@@ -4879,7 +4624,7 @@ cache(function(data, match, sendBadge, request) {
   if (serverSecrets && serverSecrets.jenkins_user) {
     options.auth = {
       user: serverSecrets.jenkins_user,
-      pass: serverSecrets.jenkins_pass
+      pass: serverSecrets.jenkins_pass,
     };
   }
 
@@ -4989,7 +4734,7 @@ cache(function(data, match, sendBadge, request) {
   var branch = match[2];
   var options = {
     method: 'GET',
-    uri: 'https://codeship.com/projects/' + projectId + '/status' + (branch != null ? '?branch=' + branch : '')
+    uri: 'https://codeship.com/projects/' + projectId + '/status' + (branch != null ? '?branch=' + branch : ''),
   };
   var badgeData = getBadgeData('build', data);
   request(options, function(err, res) {
@@ -5260,7 +5005,7 @@ cache(function(data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     json: true,
-    uri: 'http://wheelmap.org/nodes/' + nodeId + '.json'
+    uri: 'http://wheelmap.org/nodes/' + nodeId + '.json',
   };
   var badgeData = getBadgeData('wheelmap', data);
   request(options, function(err, res, json) {
@@ -5439,7 +5184,7 @@ camp.route(/^\/wordpress\/theme\/r\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var queryParams = {
     'action': 'theme_information',
-    'request[slug]': match[1]  // eg, `hestia`.
+    'request[slug]': match[1],  // eg, `hestia`.
   };
   var format = match[2];
   var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?' + queryString.stringify(queryParams);
@@ -5479,7 +5224,7 @@ camp.route(/^\/wordpress\/theme\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var queryParams = {
     'action': 'theme_information',
-    'request[slug]': match[1] // eg, `hestia`.
+    'request[slug]': match[1], // eg, `hestia`.
   };
   var format = match[2];
   var apiUrl = 'https://api.wordpress.org/themes/info/1.1/?' + queryString.stringify(queryParams);
@@ -5565,7 +5310,7 @@ cache(function(data, match, sendBadge, request) {
   }
   var options = {
     method: 'GET',
-    uri: uri
+    uri: uri,
   };
   var badgeData = getBadgeData('requirements', data);
   request(options, function(err, res, buffer) {
@@ -5594,86 +5339,6 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
       return;
     }
-  });
-}));
-
-// apm download integration.
-camp.route(/^\/apm\/dm\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `vim-mode`.
-  var format = match[2];
-  var apiUrl = 'https://atom.io/api/packages/' + repo;
-  var badgeData = getBadgeData('downloads', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var dls = JSON.parse(buffer).downloads;
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
-    }
-    badgeData.text[1] = metric(dls);
-    badgeData.colorscheme = 'green';
-    sendBadge(format, badgeData);
-  });
-}));
-
-// apm version integration.
-camp.route(/^\/apm\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `vim-mode`.
-  var format = match[2];
-  var apiUrl = 'https://atom.io/api/packages/' + repo;
-  var badgeData = getBadgeData('apm', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var releases = JSON.parse(buffer).releases;
-      var version = releases.latest;
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
-    }
-    badgeData.text[1] = versionText(version);
-    badgeData.colorscheme = versionColor(version);
-    sendBadge(format, badgeData);
-  });
-}));
-
-// apm license integration.
-camp.route(/^\/apm\/l\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `vim-mode`.
-  var format = match[2];
-  var apiUrl = 'https://atom.io/api/packages/' + repo;
-  var badgeData = getBadgeData('license', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var metadata = JSON.parse(buffer).metadata;
-      var license = metadata.license;
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
-    }
-    badgeData.text[1] = license;
-    badgeData.colorscheme = 'blue';
-    sendBadge(format, badgeData);
   });
 }));
 
@@ -5812,10 +5477,10 @@ cache({
       error:    '#F55C51',
       working:  '#FCBC41',
       pending:  '#CFD0D7',
-      rejected: '#CFD0D7'
+      rejected: '#CFD0D7',
     };
 
-    request(apiUrl, {json: true}, function(err, res, data) {
+    request(apiUrl, { json: true }, function(err, res, data) {
       try {
         if (res && (res.statusCode === 404 || data.state === null)) {
           badgeData.text[1] = 'not found';
@@ -5859,10 +5524,10 @@ cache({
     const statusColorScheme = {
       success: 'brightgreen',
       error: 'red',
-      unknown: 'lightgrey'
+      unknown: 'lightgrey',
     };
 
-    request(apiUrl, {json: true}, function(err, res, data) {
+    request(apiUrl, { json: true }, function(err, res, data) {
       try {
         if (!res || err !== null || res.statusCode !== 200) {
           badgeData.text[1] = 'inaccessible';
@@ -5887,14 +5552,14 @@ cache({
 // https://circleci.com/api/v1/project/BrightFlair/PHP.Gt?circle-token=0a5143728784b263d9f0238b8d595522689b3af2&limit=1&filter=completed
 camp.route(/^\/circleci\/(?:token\/(\w+))?[+/]?project\/(?:(github|bitbucket)\/)?([^/]+\/[^/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var token = match[1];
-  var type = match[2] || 'github'; // github OR bitbucket
-  var userRepo = match[3];  // eg, `RedSparr0w/node-csgo-parser`.
-  var branch = match[4];
-  var format = match[5];
+  const token = match[1];
+  const type = match[2] || 'github'; // github OR bitbucket
+  const userRepo = match[3];  // eg, `RedSparr0w/node-csgo-parser`.
+  const branch = match[4];
+  const format = match[5];
 
   // Base API URL
-  var apiUrl = 'https://circleci.com/api/v1.1/project/' + type + '/' + userRepo;
+  let apiUrl = 'https://circleci.com/api/v1.1/project/' + type + '/' + userRepo;
 
   // Query Params
   var queryParams = {};
@@ -5914,8 +5579,8 @@ cache(function(data, match, sendBadge, request) {
   // Apprend query params to API URL
   apiUrl += '?' + queryString.stringify(queryParams);
 
-  var badgeData = getBadgeData('build', data);
-  request(apiUrl, {json:true}, function(err, res, data) {
+  const badgeData = getBadgeData('build', data);
+  request(apiUrl, { json:true }, function(err, res, data) {
     if (checkErrorResponse(badgeData, err, res, 'project not found')) {
       sendBadge(format, badgeData);
       return;
@@ -5926,28 +5591,33 @@ cache(function(data, match, sendBadge, request) {
         sendBadge(format, badgeData);
         return;
       }
-      var status = data[0].status;
-      switch(status) {
-      case 'success':
-      case 'fixed':
+
+      let passCount = 0;
+      let status;
+      for (let i=0; i<data.length; i++) {
+        status = data[i].status;
+        if (['success', 'fixed'].includes(status)) {
+          passCount++;
+        } else if (status === 'failed') {
+          badgeData.colorscheme = 'red';
+          badgeData.text[1] = 'failed';
+          sendBadge(format, badgeData);
+          return;
+        } else if (['no_tests', 'scheduled', 'not_run'].includes(status)) {
+          badgeData.colorscheme = 'yellow';
+          badgeData.text[1] = status.replace('_', ' ');
+          sendBadge(format, badgeData);
+          return;
+        } else {
+          badgeData.text[1] = status.replace('_', ' ');
+          sendBadge(format, badgeData);
+          return;
+        }
+      }
+
+      if (passCount === data.length) {
         badgeData.colorscheme = 'brightgreen';
         badgeData.text[1] = 'passing';
-        break;
-
-      case 'failed':
-        badgeData.colorscheme = 'red';
-        badgeData.text[1] = 'failed';
-        break;
-
-      case 'no_tests':
-      case 'scheduled':
-      case 'not_run':
-        badgeData.colorscheme = 'yellow';
-        badgeData.text[1] = status.replace('_', ' ');
-        break;
-
-      default:
-        badgeData.text[1] = status.replace('_', ' ');
       }
       sendBadge(format, badgeData);
     } catch(e) {
@@ -6386,7 +6056,7 @@ cache(function(data, match, sendBadge, request) {
   var user = match[1]; // eg, shields_io
   var format = match[2];
   var options = {
-    url: 'http://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=' + user
+    url: 'http://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=' + user,
   };
   var badgeData = getBadgeData('Follow @' + user, data);
 
@@ -6397,7 +6067,7 @@ cache(function(data, match, sendBadge, request) {
   }
   badgeData.links = [
     'https://twitter.com/intent/follow?screen_name=' + user,
-    'https://twitter.com/' + user + '/followers'
+    'https://twitter.com/' + user + '/followers',
   ];
   badgeData.text[1] = '';
   request(options, function(err, res, buffer) {
@@ -6478,9 +6148,9 @@ cache(function(data, match, sendBadge, request) {
     method: 'POST',
     json: true,
     body: {
-      "repos": [{"name": path, "tag": tag}]
+      "repos": [{ "name": path, "tag": tag }],
     },
-    uri: 'https://imagelayers.io/registry/analyze'
+    uri: 'https://imagelayers.io/registry/analyze',
   };
   request(options, function(err, res, buffer) {
     if (err != null) {
@@ -6528,8 +6198,8 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     uri: url,
     headers: {
-      'Accept': 'application/json'
-    }
+      'Accept': 'application/json',
+    },
   };
   request(options, function(err, res, buffer) {
     if (res && res.statusCode === 404) {
@@ -6637,7 +6307,7 @@ cache(function(data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     uri: 'https://api.stackexchange.com/2.2/' + path + '?site=' + site,
-    gzip: true
+    gzip: true,
   };
   var badgeData = getBadgeData(site, data);
   request(options, function (err, res, buffer) {
@@ -7066,7 +6736,7 @@ cache(function(data, match, sendBadge, request) {
   // Maps type name from URL to JSON property name prefix for badge data
   var typeToPropPrefix = {
     i: 'issue',
-    p: 'pr'
+    p: 'pr',
   };
   var typePropPrefix = typeToPropPrefix[type];
   if (typePropPrefix === undefined) {
@@ -7076,7 +6746,7 @@ cache(function(data, match, sendBadge, request) {
   }
 
   var url = 'http://issuestats.com/' + host + '/' + userRepo;
-  var qs = {format: 'json'};
+  var qs = { format: 'json' };
   if (!longForm) {
     qs.concise = true;
   }
@@ -7085,7 +6755,7 @@ cache(function(data, match, sendBadge, request) {
     url: url,
     qs: qs,
     gzip: true,
-    json: true
+    json: true,
   };
   request(options, function(err, res, json) {
     if (err != null || res.statusCode >= 500) {
@@ -7138,7 +6808,7 @@ cache(function(data, match, sendBadge, request) {
     }
   }
 
-  const options = {method: 'GET', json: true, uri: uri};
+  const options = { method: 'GET', json: true, uri: uri };
   const badgeData = getBadgeData('dependencies', data);
 
   request(options, function(err, res, json) {
@@ -7250,7 +6920,7 @@ cache(function(data, match, sendBadge, request) {
     method: 'GET',
     url: url,
     gzip: true,
-    json: true
+    json: true,
   };
   request(options, function(err, res, json) {
     try {
@@ -7296,9 +6966,9 @@ cache(function(data, match, sendBadge, request) {
     json: true,
     body: {
       "api_key": monitorApiKey,
-      "format": "json"
+      "format": "json",
     },
-    uri: 'https://api.uptimerobot.com/v2/getMonitors'
+    uri: 'https://api.uptimerobot.com/v2/getMonitors',
   };
   // A monitor API key must start with "m"
   if (monitorApiKey.substring(0, "m".length) !== "m") {
@@ -7369,9 +7039,9 @@ cache(function(data, match, sendBadge, request) {
     body: {
       "api_key": monitorApiKey,
       "custom_uptime_ratios": numberOfDays,
-      "format": "json"
+      "format": "json",
     },
-    uri: 'https://api.uptimerobot.com/v2/getMonitors'
+    uri: 'https://api.uptimerobot.com/v2/getMonitors',
   };
   // A monitor API key must start with "m"
   if (monitorApiKey.substring(0, "m".length) !== "m") {
@@ -7525,23 +7195,23 @@ cache({
       case 'json':
         requestOptions = {
           headers: {
-            Accept: 'application/json'
+            Accept: 'application/json',
           },
-          json: true
+          json: true,
         };
         break;
       case 'xml':
         requestOptions = {
           headers: {
-            Accept: 'application/xml, text/xml'
-          }
+            Accept: 'application/xml, text/xml',
+          },
         };
         break;
       case 'yaml':
         requestOptions = {
           headers: {
-            Accept: 'text/x-yaml,  text/yaml, application/x-yaml, application/yaml, text/plain'
-          }
+            Accept: 'text/x-yaml,  text/yaml, application/x-yaml, application/yaml, text/plain',
+          },
         };
         break;
     }
@@ -7591,7 +7261,7 @@ cache({
         sendBadge(format, badgeData);
       }
     });
-  }
+  },
 }));
 
 // nsp for npm packages
@@ -7612,10 +7282,10 @@ camp.route(/^\/nsp\/npm\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|j
       body: {
         package: {
           name: null,
-          version: packageVersion
-        }
+          version: packageVersion,
+        },
       },
-      json: true
+      json: true,
     };
 
     if (typeof scopeWithoutAtSign === 'string') {
@@ -7645,9 +7315,9 @@ camp.route(/^\/nsp\/npm\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|j
     // https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md#getpackageversion
     const npmRequestOptions = {
       headers: {
-        Accept: '*/*'
+        Accept: '*/*',
       },
-      json: true
+      json: true,
     };
     let npmURL = null;
 
@@ -7835,7 +7505,7 @@ cache(function(data, match, sendBadge, request) {
     uri: 'https://php-eye.com/api/v1/package/' + userRepo + '.json',
   };
   const badgeData = getBadgeData('PHP tested', data);
-  getPhpReleases(githubAuth.request, (err, phpReleases) => {
+  getPhpReleases(githubApiProvider, (err, phpReleases) => {
     if (err != null) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
@@ -7980,7 +7650,7 @@ cache(function (data, match, sendBadge, request) {
   var options = {
     method: 'GET',
     json: true,
-    uri: 'https://bugzilla.mozilla.org/rest/bug/' + bugNumber
+    uri: 'https://bugzilla.mozilla.org/rest/bug/' + bugNumber,
   };
   var badgeData = getBadgeData('bug ' + bugNumber, data);
   request(options, function (err, res, json) {
@@ -8047,7 +7717,7 @@ cache(function(data, match, sendBadge, request) {
   const options = {
     method: 'GET',
     headers: { 'Accept': 'application/json' },
-    uri: `https://api.dependabot.com/badges/compatibility_score?package-manager=${packageManager}&dependency-name=${dependencyName}&version-scheme=semver`
+    uri: `https://api.dependabot.com/badges/compatibility_score?package-manager=${packageManager}&dependency-name=${dependencyName}&version-scheme=semver`,
   };
   const badgeData = getBadgeData('semver stability', data);
   badgeData.links = [`https://dependabot.com/compatibility-score.html?package-manager=${packageManager}&dependency-name=${dependencyName}&version-scheme=semver`];
@@ -8071,7 +7741,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // Any badge.
-camp.route(/^\/(:|badge\/)(([^-]|--)*?)-(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
+camp.route(/^\/(:|badge\/)(([^-]|--)*?)-?(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
 function(data, match, end, ask) {
   var subject = escapeFormat(match[2]);
   var status = escapeFormat(match[4]);
@@ -8093,9 +7763,9 @@ function(data, match, end, ask) {
   // Badge creation.
   try {
     var badgeData = getBadgeData(subject, data);
-    if (data.label !== undefined) { badgeData.text[0] = '' + data.label; }
+    badgeData.text[0] = getLabel(subject, data);
     badgeData.text[1] = status;
-    setBadgeColor(badgeData, color);
+    badgeData.colorB = makeColorB(color, data);
     badgeData.template = data.style;
     if (config.profiling.makeBadge) {
       console.time('makeBadge total');
@@ -8107,7 +7777,7 @@ function(data, match, end, ask) {
     makeSend(format, ask.res, end)(svg);
   } catch(e) {
     log.error(e.stack);
-    const svg = makeBadge({text: ['error', 'bad badge'], colorscheme: 'red'});
+    const svg = makeBadge({ text: ['error', 'bad badge'], colorscheme: 'red' });
     makeSend(format, ask.res, end)(svg);
   }
 });
@@ -8147,12 +7817,12 @@ function(data, match, end, ask) {
 
   // Badge creation.
   try {
-    var badgeData = {text: [subject, status]};
+    var badgeData = { text: [subject, status] };
     badgeData.colorscheme = color;
     const svg = makeBadge(badgeData);
     makeSend('png', ask.res, end)(svg);
   } catch(e) {
-    const svg = makeBadge({text: ['error', 'bad badge'], colorscheme: 'red'});
+    const svg = makeBadge({ text: ['error', 'bad badge'], colorscheme: 'red' });
     makeSend('png', ask.res, end)(svg);
   }
 });

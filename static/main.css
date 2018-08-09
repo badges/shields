@@ -57,6 +57,23 @@ table.centered > tbody > tr > td:first-child {
   text-align: right;
 }
 
+table.usage {
+  table-layout: fixed;
+  border-spacing: 20px 10px;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+table.usage td:first-of-type {
+  max-width: 300px;
+}
+
+table.usage td:nth-of-type(2) {
+  max-width: 600px;
+}
+
 th,
 td {
   text-align: left;

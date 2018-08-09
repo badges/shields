@@ -23,14 +23,6 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run:
-          name: Update Greenkeeper lockfile
-          environment:
-            # https://github.com/greenkeeperio/greenkeeper-lockfile/issues/58
-            CI_PULL_REQUEST: ''
-          command: |
-            greenkeeper-lockfile-update
-
   main:
     docker:
       - image: shieldsio/shields-ci-node-8:0.0.3
@@ -52,16 +44,14 @@ jobs:
           command: npm run test:js:server
 
       - run:
-          name: Danger
+          name: Integration tests
           when: always
-          command: npm run danger ci
+          command: npm run test:integration
 
       - run:
-          name: Upload Greenkeeper lockfile
-          environment:
-            # https://github.com/greenkeeperio/greenkeeper-lockfile/issues/58
-            CI_PULL_REQUEST: ''
-          command: greenkeeper-lockfile-upload
+          name: 'Prettier check (quick fix: `npm run prettier`)'
+          when: always
+          command: npm run prettier-check
 
   main@node-latest:
     docker:
@@ -82,6 +72,31 @@ jobs:
           name: Server unit tests
           when: always
           command: npm run test:js:server
+
+      - run:
+          name: Integration tests
+          when: always
+          command: npm run test:integration
+
+      - run:
+          name: 'Prettier check (quick fix: `npm run prettier`)'
+          when: always
+          command: npm run prettier-check
+
+  danger:
+    docker:
+      - image: shieldsio/shields-ci-node-8:0.0.3
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Danger
+          when: always
+          command: npm run danger ci
 
   frontend:
     docker:
@@ -209,6 +224,12 @@ workflows:
       - services-pr@node-latest:
           requires:
             - npm-install
+      - danger:
+          requires:
+            - npm-install
+          filters:
+            branches:
+              ignore: /dependabot\/.*/
 
   daily:
     triggers:
