@@ -136,8 +136,8 @@ async function stop() {
   await githubConstellation.stop();
   analytics.cancelAutosaving();
   return new Promise(resolve => {
-    camp.close(resolve)
-  })
+    camp.close(resolve);
+  });
 }
 
 module.exports = {
