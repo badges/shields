@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-const crypto = require('crypto');
-const serverSecrets = require('../../../lib/server-secrets');
+const crypto = require('crypto')
+const serverSecrets = require('../../../lib/server-secrets')
 
 function setRoutes(tokenProvider, server) {
   // Allow the admin to obtain the tokens for operational and debugging
@@ -20,13 +20,13 @@ function setRoutes(tokenProvider, server) {
     if (!crypto.timingSafeEqual(ask.password, serverSecrets.shieldsSecret)) {
       // An unknown entity tries to connect. Let the connection linger for a minute.
       return setTimeout(function() {
-        end('Invalid secret.');
-      }, 10000);
+        end('Invalid secret.')
+      }, 10000)
     }
-    end(tokenProvider.serializeDebugInfo({ sanitize: false }));
-  });
+    end(tokenProvider.serializeDebugInfo({ sanitize: false }))
+  })
 }
 
 module.exports = {
   setRoutes,
-};
+}

@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 
-const autosave = require('json-autosave');
+const autosave = require('json-autosave')
 
 class TokenPersistence {
   constructor(tokenProvider, path) {
@@ -8,36 +8,36 @@ class TokenPersistence {
       tokenProvider,
       path,
       save: null,
-    });
+    })
   }
 
   async initialize() {
-    const save = await autosave(this.path, { data: [] });
+    const save = await autosave(this.path, { data: [] })
 
-    this.save = save;
+    this.save = save
 
     // Override the autosave handler to refresh the token data before
     // saving.
     save.autosave = () => {
-      save.data = this.tokenProvider.toNative();
-      return save.save();
-    };
+      save.data = this.tokenProvider.toNative()
+      return save.save()
+    }
     // Put the change in autosave handler into effect.
-    save.stop();
-    save.start();
+    save.stop()
+    save.start()
 
     save.data.forEach(tokenString => {
-      this.tokenProvider.addToken(tokenString);
-    });
+      this.tokenProvider.addToken(tokenString)
+    })
   }
 
   async stop() {
     if (this.save) {
-      this.save.stop();
-      await this.save.autosave();
-      this.save = undefined;
+      this.save.stop()
+      await this.save.autosave()
+      this.save = undefined
     }
   }
 }
 
-module.exports = TokenPersistence;
+module.exports = TokenPersistence
