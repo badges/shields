@@ -3945,8 +3945,8 @@ camp.route(/^\/gitlab-auth\/done$/, function(data, match, end, request) {
       client_secret: serverSecrets.gitlab_client_secret,
       code: data.code,
       grant_type: 'authorization_code',
-      redirect_uri: (baseURL + '/gitlab-oauth/done')
-    })
+      redirect_uri: (baseURL + '/gitlab-oauth/done'),
+    }),
   };
 
   // FIXME implement CSRF tokens
@@ -4064,7 +4064,7 @@ cache(function(data, match, sendBadge, request) {
   const apiURL = gitlabHelpers.baseURL(match) + '/api/v4/projects/' + user + '%2F' + repo + '/' + (isIssue ? 'issues' : 'merge_requests');
   const badgeData = getBadgeData((isRaw ? (inWords + ' ') : '') + (isIssue ? 'issues' : 'merge requests'), data);
 
-  gitlabHelpers.request(request, apiURL, {state: (isClosed ? 'closed' : 'opened')}, true, function(err, res, buf) {
+  gitlabHelpers.request(request, apiURL, { state: (isClosed ? 'closed' : 'opened') }, true, function(err, res, buf) {
     if ((err != null) || (res.statusCode !== 200)) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
