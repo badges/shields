@@ -150,19 +150,15 @@ class BaseService {
   }
 
   async invokeHandler(namedParams, queryParams) {
-    const { debug } = this.constructor
-    if (debug) {
-      console.log(sym.chef, 'Service class', this.constructor.name)
-      console.log(sym.ticket, 'Named params', namedParams)
-      console.log(sym.crayon, 'Query params', queryParams)
-    }
+    const logDebug = (...args) => this.constructor.logDebug(...args)
+    logDebug(sym.chef, 'Service class', this.constructor.name)
+    logDebug(sym.ticket, 'Named params', namedParams)
+    logDebug(sym.crayon, 'Query params', queryParams)
     try {
       return await this.handle(namedParams, queryParams)
     } catch (error) {
       if (error instanceof NotFound) {
-        if (debug) {
-          console.log(sym.stop, 'Handled error', error)
-        }
+        logDebug(sym.stop, 'Handled error', error)
         return {
           message: error.prettyMessage,
           color: 'red',
@@ -171,17 +167,15 @@ class BaseService {
         error instanceof InvalidResponse ||
         error instanceof Inaccessible
       ) {
-        if (debug) {
-          console.log(sym.stop, 'Handled error', error)
-        }
+        logDebug(sym.stop, 'Handled error', error)
         return {
           message: error.prettyMessage,
           color: 'lightgray',
         }
       } else if (this._handleInternalErrors) {
-        if (debug) {
-          console.log(sym.bomb, 'Unhandled internal error', error)
-        } else {
+        if (!logDebug(sym.bomb, 'Unhandled internal error', error)) {
+          // This is where we end up if an unhandled exception is thrown in
+          // production. Send the error to the logs.
           console.log(error)
         }
         return {
@@ -190,9 +184,7 @@ class BaseService {
           color: 'lightgray',
         }
       } else {
-        if (debug) {
-          console.log(sym.bomb, 'Unhandled internal error', error)
-        }
+        logDebug(sym.bomb, 'Unhandled internal error', error)
         throw error
       }
     }
@@ -242,7 +234,6 @@ class BaseService {
   }
 
   static register(camp, handleRequest, { handleInternalErrors }) {
-    const { debug } = this
     const ServiceClass = this // In a static context, "this" is the class.
 
     camp.route(
@@ -261,9 +252,7 @@ class BaseService {
             namedParams,
             queryParams
           )
-          if (debug) {
-            console.log(sym.shield, 'Service data', serviceData)
-          }
+          this.logDebug(sym.shield, 'Service data', serviceData)
           const badgeData = this._makeBadgeData(queryParams, serviceData)
 
           // Assumes the final capture group is the extension
@@ -273,33 +262,37 @@ class BaseService {
       })
     )
   }
+
+  static logDebug(...args) {
+    if (this.debug) {
+      console.log(...args)
+      return true
+    } else {
+      return false
+    }
+  }
 }
 
 class BaseJsonService extends BaseService {
   static _validate(json, schema) {
-    const { debug } = this
     const { error, value } = Joi.validate(json, schema, {
       allowUnknown: true,
       stripUnknown: true,
     })
     if (error) {
-      if (debug) {
-        console.log(sym.shrug, 'Response did not match schema', error.message)
-      }
+      this.logDebug(sym.shrug, 'Response did not match schema', error.message)
       throw new InvalidResponse({
         prettyMessage: 'invalid json response',
         underlyingError: error,
       })
     } else {
-      if (debug) {
-        console.log(sym.bathtub, 'JSON after validation', value)
-      }
+      this.logDebug(sym.bathtub, 'JSON after validation', value)
       return value
     }
   }
 
   async _requestJson({ schema, url, options = {}, notFoundMessage }) {
-    const { debug } = this.constructor
+    const logDebug = (...args) => this.constructor.logDebug(...args)
     if (!schema || !schema.isJoi) {
       throw Error('A Joi schema is required')
     }
@@ -307,15 +300,11 @@ class BaseJsonService extends BaseService {
       ...{ headers: { Accept: 'application/json' } },
       ...options,
     }
-    if (debug) {
-      console.log(sym.bowAndArrow, 'request URL', url)
-      console.log(sym.bowAndArrow, 'request options', mergedOptions)
-    }
+    logDebug(sym.bowAndArrow, 'request URL', url)
+    logDebug(sym.bowAndArrow, 'request options', mergedOptions)
     return this._sendAndCacheRequest(url, mergedOptions)
       .then(({ res, buffer }) => {
-        if (debug) {
-          console.log(sym.bullseye, 'Status code', res.statusCode)
-        }
+        logDebug(sym.bullseye, 'Status code', res.statusCode)
         return { res, buffer }
       })
       .then(
@@ -325,9 +314,7 @@ class BaseJsonService extends BaseService {
       )
       .then(asJson)
       .then(json => {
-        if (debug) {
-          console.log(sym.bullseye, 'JSON before validation', json)
-        }
+        logDebug(sym.bullseye, 'JSON before validation', json)
         return json
       })
       .then(json => this.constructor._validate(json, schema))
