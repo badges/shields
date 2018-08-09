@@ -85,13 +85,6 @@ const {
   isSnapshotVersion: isNexusSnapshotVersion,
 } = require('./lib/nexus-version');
 const {
-  mapNpmDownloads,
-} = require('./lib/npm-provider');
-const {
-  defaultNpmRegistryUri,
-  makePackageDataUrl: makeNpmPackageDataUrl,
-} = require('./lib/npm-badge-helpers');
-const {
   teamcityBadge,
 } = require('./lib/teamcity-badge-helpers');
 const {
@@ -106,6 +99,7 @@ const {
   stateColor: githubStateColor,
   checkStateColor: githubCheckStateColor,
   commentsColor: githubCommentsColor,
+  checkErrorResponse: githubCheckErrorResponse,
 } = require('./lib/github-helpers');
 const {
   mapGithubCommitsSince,
@@ -1702,213 +1696,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// npm weekly download integration.
-mapNpmDownloads({ camp, cache }, 'dw', 'last-week');
-
-// npm monthly download integration.
-mapNpmDownloads({ camp, cache }, 'dm', 'last-month');
-
-// npm yearly download integration
-mapNpmDownloads({ camp, cache }, 'dy', 'last-year');
-
-// npm total download integration.
-camp.route(/^\/npm\/dt\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function (data, match, sendBadge, request) {
-  var pkg = encodeURIComponent(match[1]);  // eg, "express" or "@user/express"
-  var format = match[2];
-  var apiUrl = 'https://api.npmjs.org/downloads/range/1000-01-01:3000-01-01/' + pkg; // use huge range, will need to fix this in year 3000 :)
-  var badgeData = getBadgeData('downloads', data);
-  request(apiUrl, function (err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res)) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var totalDownloads = 0;
-
-      var downloads = JSON.parse(buffer).downloads || 0;
-      for (var index = 0; index < downloads.length; index++) {
-        totalDownloads = totalDownloads + downloads[index].downloads;
-      }
-
-      badgeData.text[1] = metric(totalDownloads);
-      if (totalDownloads === 0) {
-        badgeData.colorscheme = 'red';
-      } else {
-        badgeData.colorscheme = 'brightgreen';
-      }
-      sendBadge(format, badgeData);
-    } catch (e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// npm version integration.
-camp.route(/^\/npm\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
-cache({
-  queryParams: ['registry_uri'],
-  handler: function(queryParams, match, sendBadge, request) {
-    // e.g. cycle, core, next, svg
-    const [, scope, packageName, tag, format] = match;
-    const registryUri = queryParams.registry_uri || defaultNpmRegistryUri;
-    const pkg = encodeURIComponent(scope ? `@${scope}/${packageName}` : packageName);
-    const apiUrl = `${registryUri}/-/package/${pkg}/dist-tags`;
-
-    const name = tag ? `npm@${tag}` : 'npm';
-    const badgeData = getBadgeData(name, queryParams);
-    // Using the Accept header because of this bug:
-    // <https://github.com/npm/npmjs.org/issues/163>
-    request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
-      if (err != null) {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
-      }
-      try {
-        const data = JSON.parse(buffer);
-        const version = data[tag || 'latest'];
-        badgeData.text[1] = versionText(version);
-        badgeData.colorscheme = versionColor(version);
-        sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  },
-}));
-
-// npm license integration.
-camp.route(/^\/npm\/l\/(?:@([^/]+)\/)?([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache({
-  queryParams: ['registry_uri'],
-  handler: function(queryParams, match, sendBadge, request) {
-    // e.g. cycle, core, svg
-    const [, scope, packageName, format ] = match;
-    const apiUrl = makeNpmPackageDataUrl({
-      registryUrl: queryParams.registry_uri,
-      scope,
-      packageName,
-    });
-    const badgeData = getBadgeData('license', queryParams);
-    request(apiUrl, { headers: { 'Accept': '*/*' } }, function(err, res, buffer) {
-      if (err != null) {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
-      }
-      if (res.statusCode === 404) {
-        badgeData.text[1] = 'package not found';
-        sendBadge(format, badgeData);
-        return;
-      }
-      try {
-        const data = JSON.parse(buffer);
-        let license;
-        if (scope === undefined) {
-          license = data.license;
-        } else {
-          const latestVersion = data['dist-tags'].latest;
-          license = data.versions[latestVersion].license;
-        }
-        if (Array.isArray(license)) {
-          license = license.join(', ');
-        } else if (typeof license == 'object') {
-          license = license.type;
-        }
-        if (license === undefined) {
-          badgeData.text[1] = 'missing';
-          badgeData.colorscheme = 'red';
-        } else {
-          badgeData.text[1] = license;
-          setBadgeColor(badgeData, licenseToColor(license));
-        }
-        sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  },
-}));
-
-// npm node version integration.
-camp.route(/^\/node\/v\/(?:@([^/]+))?\/?([^/]*)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
-cache({
-  queryParams: ['registry_uri'],
-  handler: function(queryParams, match, sendBadge, request) {
-    // e.g. @stdlib, stdlib, next, svg
-    const [, scope, packageName, tag, format] = match;
-    const apiUrl = makeNpmPackageDataUrl({
-      registryUrl: queryParams.registry_uri,
-      scope,
-      packageName,
-    });
-    const registryTag = tag || 'latest';
-    const name = tag ? `node@${tag}` : 'node';
-    const badgeData = getBadgeData(name, queryParams);
-    // Using the Accept header because of this bug:
-    // <https://github.com/npm/npmjs.org/issues/163>
-    request(apiUrl, { headers: { 'Accept': '*/*' } }, (err, res, buffer) => {
-      if (checkErrorResponse(badgeData, err, res, 'package not found')) {
-        sendBadge(format, badgeData);
-        return;
-      }
-      try {
-        const data = JSON.parse(buffer);
-        let releaseData;
-        if (scope === undefined) {
-          releaseData = data;
-        } else {
-          const version = data['dist-tags'][registryTag];
-          releaseData = data.versions[version];
-        }
-        const versionRange = (releaseData.engines || {}).node;
-        if (! versionRange) {
-          badgeData.text[1] = 'not specified';
-          sendBadge(format, badgeData);
-          return;
-        }
-        badgeData.text[1] = versionRange;
-        regularUpdate({
-          url: 'http://nodejs.org/dist/latest/SHASUMS256.txt',
-          intervalMillis: 24 * 3600 * 1000,
-          json: false,
-          scraper: shasums => {
-            // tarball index start, tarball index end
-            const taris = shasums.indexOf('node-v');
-            const tarie = shasums.indexOf('\n', taris);
-            const tarball = shasums.slice(taris, tarie);
-            const version = tarball.split('-')[1];
-            return version;
-          },
-        }, (err, version) => {
-            if (err != null) {
-              badgeData.text[1] = 'invalid';
-              sendBadge(format, badgeData);
-              return;
-            }
-            try {
-              if (semver.satisfies(version, versionRange)) {
-                badgeData.colorscheme = 'brightgreen';
-              } else if (semver.gtr(version, versionRange)) {
-                badgeData.colorscheme = 'yellow';
-              } else {
-                badgeData.colorscheme = 'orange';
-              }
-            } catch(e) { }
-            sendBadge(format, badgeData);
-        });
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  },
-}));
-
 // Anaconda Cloud / conda package manager integration
 camp.route(/^\/conda\/([dvp]n?)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(queryData, match, sendBadge, request) {
@@ -3289,8 +3076,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3320,8 +3106,7 @@ cache(function(query_data, match, sendBadge, request) {
   var apiUrl = 'https://raw.githubusercontent.com/' + user + '/' + repo + '/' + branch + '/' + type + '.json';
   var badgeData = getBadgeData(type, query_data);
   request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3365,8 +3150,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3403,8 +3187,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3461,9 +3244,9 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      return sendBadge(format, badgeData);
+    if (githubCheckErrorResponse(badgeData, err, res, 'repo or release not found')) {
+      sendBadge(format, badgeData);
+      return;
     }
     try {
       var data = JSON.parse(buffer);
@@ -3540,8 +3323,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubApiProvider.request(request, '/search/issues', query, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3563,13 +3345,12 @@ camp.route(/^\/github\/(?:issues|pulls)\/detail\/(s|title|u|label|comments|age|l
 cache((queryParams, match, sendBadge, request) => {
   const [, which, owner, repo, number, format] = match;
   const uri = `/repos/${owner}/${repo}/issues/${number}`;
-  const badgeData = getBadgeData('', queryParams);
+  const badgeData = getBadgeData(`issue/pull request ${number}`, queryParams);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', queryParams);
   }
   githubApiProvider.request(request, uri, {}, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res, 'issue, pull request or repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3637,8 +3418,7 @@ cache((queryParams, match, sendBadge, request) => {
     badgeData.logo = getLogo('github', queryParams);
   }
   githubApiProvider.request(request, issueUri, {}, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res, 'pull request or repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3693,8 +3473,7 @@ cache(function(data, match, sendBadge, request) {
      ];
   }
   githubApiProvider.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3728,8 +3507,7 @@ cache(function(data, match, sendBadge, request) {
      ];
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3761,8 +3539,7 @@ cache(function(data, match, sendBadge, request) {
      ];
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3789,8 +3566,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res, 'user not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3818,13 +3594,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (res && res.statusCode === 404) {
-      badgeData.text[1] = 'repo not found';
-      sendBadge(format, badgeData);
-      return;
-    }
-    if (err != null || res.statusCode !== 200) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3862,17 +3632,11 @@ cache(function(data, match, sendBadge, request) {
   }
 
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res, 'repo or file not found')) {
       sendBadge(format, badgeData);
       return;
     }
     try {
-      if (res.statusCode === 404) {
-        badgeData.text[1] = 'repo or file not found';
-        sendBadge(format, badgeData);
-        return;
-      }
       var body = JSON.parse(buffer);
       if (body && Number.isInteger(body.size)) {
         badgeData.text[1] = prettyBytes(body.size);
@@ -3899,18 +3663,12 @@ cache(function(data, match, sendBadge, request) {
   var query = { q: search + ' repo:' + user + '/' + repo };
   var badgeData = getBadgeData(search + ' counter', data);
   githubApiProvider.request(request, '/search/code', query, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
     try {
       var body = JSON.parse(buffer);
-      if (body.message === 'Validation Failed') {
-        badgeData.text[1] = 'repo not found';
-        sendBadge(format, badgeData);
-        return;
-      }
       badgeData.text[1] = metric(body.total_count);
       badgeData.colorscheme = 'blue';
       sendBadge(format, badgeData);
@@ -3935,8 +3693,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.links = [`https://github.com/${user}/${repo}`];
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (err !== null) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3987,8 +3744,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.links = [`https://github.com/${user}/${repo}`];
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (err !== null) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -4013,13 +3769,12 @@ cache(function(data, match, sendBadge, request) {
   var repo = match[3];
   var format = match[4];
   const apiUrl = `/repos/${user}/${repo}/languages`;
-  var badgeData = getBadgeData('', data);
+  var badgeData = getBadgeData('languages', data);
   if (badgeData.template === 'social') {
     badgeData.logo = getLogo('github', data);
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -4082,8 +3837,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
+    if (githubCheckErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
       return;
     }
@@ -4106,7 +3860,7 @@ cache(function(data, match, sendBadge, request) {
   const apiUrl = `/repos/${user}/${repo}/compare/${branch}...${commit}`;
   const badgeData = getBadgeData('commit status', data);
   githubApiProvider.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'commit or branch not found')) {
+    if (githubCheckErrorResponse(badgeData, err, res, 'commit or branch not found')) {
       if (res && res.statusCode === 404) {
         try {
           if (JSON.parse(buffer).message.startsWith('No common ancestor between')) {
