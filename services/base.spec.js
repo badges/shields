@@ -96,7 +96,7 @@ describe('BaseService', () => {
     })
     it('Invokes the logger as expected', async function() {
       const serviceInstance = new DummyService({}, defaultConfig)
-      const serviceData = await serviceInstance.invokeHandler(
+      await serviceInstance.invokeHandler(
         {
           namedParamA: 'bar.bar.bar',
         },
