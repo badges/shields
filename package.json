@@ -162,12 +162,6 @@
     "snap-shot-it": "^5.0.1",
     "url": "^0.11.0"
   },
-  "greenkeeper": {
-    "ignore": [
-      "joi",
-      "redis"
-    ]
-  },
   "engines": {
     "node": ">= 8.x",
     "npm": "5.x"
