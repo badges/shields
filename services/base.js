@@ -10,6 +10,7 @@ const {
   setBadgeColor,
 } = require('../lib/badge-data')
 const { checkErrorResponse, asJson } = require('../lib/error-helper')
+const sym = require('../lib/logging-symbols')
 
 class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
@@ -33,6 +34,14 @@ class BaseService {
   }
 
   // Metadata
+
+  /**
+   * When true, enable debugging on this service. Useful for troubleshooting
+   * a live server or in conjunction with `.only()` chained onto a service test.
+   */
+  static get debug() {
+    return false
+  }
 
   /**
    * Name of the category to sort this badge into (eg. "build"). Used to sort
@@ -141,10 +150,19 @@ class BaseService {
   }
 
   async invokeHandler(namedParams, queryParams) {
+    const { debug } = this.constructor
+    if (debug) {
+      console.log(sym.chef, 'Service class', this.constructor.name)
+      console.log(sym.ticket, 'Named params', namedParams)
+      console.log(sym.crayon, 'Query params', queryParams)
+    }
     try {
       return await this.handle(namedParams, queryParams)
     } catch (error) {
       if (error instanceof NotFound) {
+        if (debug) {
+          console.log(sym.stop, 'Handled error', error)
+        }
         return {
           message: error.prettyMessage,
           color: 'red',
@@ -153,18 +171,28 @@ class BaseService {
         error instanceof InvalidResponse ||
         error instanceof Inaccessible
       ) {
+        if (debug) {
+          console.log(sym.stop, 'Handled error', error)
+        }
         return {
           message: error.prettyMessage,
           color: 'lightgray',
         }
       } else if (this._handleInternalErrors) {
-        console.log(error)
+        if (debug) {
+          console.log(sym.bomb, 'Unhandled internal error', error)
+        } else {
+          console.log(error)
+        }
         return {
           label: 'shields',
           message: 'internal error',
           color: 'lightgray',
         }
       } else {
+        if (debug) {
+          console.log(sym.bomb, 'Unhandled internal error', error)
+        }
         throw error
       }
     }
@@ -214,6 +242,7 @@ class BaseService {
   }
 
   static register(camp, handleRequest, { handleInternalErrors }) {
+    const { debug } = this
     const ServiceClass = this // In a static context, "this" is the class.
 
     camp.route(
@@ -232,6 +261,9 @@ class BaseService {
             namedParams,
             queryParams
           )
+          if (debug) {
+            console.log(sym.shield, 'Service data', serviceData)
+          }
           const badgeData = this._makeBadgeData(queryParams, serviceData)
 
           // Assumes the final capture group is the extension
@@ -245,34 +277,59 @@ class BaseService {
 
 class BaseJsonService extends BaseService {
   static _validate(json, schema) {
+    const { debug } = this
     const { error, value } = Joi.validate(json, schema, {
       allowUnknown: true,
       stripUnknown: true,
     })
     if (error) {
+      if (debug) {
+        console.log(sym.shrug, 'Response did not match schema', error.message)
+      }
       throw new InvalidResponse({
         prettyMessage: 'invalid json response',
         underlyingError: error,
       })
     } else {
+      if (debug) {
+        console.log(sym.bathtub, 'JSON after validation', value)
+      }
       return value
     }
   }
 
   async _requestJson({ schema, url, options = {}, notFoundMessage }) {
+    const { debug } = this.constructor
     if (!schema || !schema.isJoi) {
       throw Error('A Joi schema is required')
     }
-    return this._sendAndCacheRequest(url, {
+    const mergedOptions = {
       ...{ headers: { Accept: 'application/json' } },
       ...options,
-    })
+    }
+    if (debug) {
+      console.log(sym.bowAndArrow, 'request URL', url)
+      console.log(sym.bowAndArrow, 'request options', mergedOptions)
+    }
+    return this._sendAndCacheRequest(url, mergedOptions)
+      .then(({ res, buffer }) => {
+        if (debug) {
+          console.log(sym.bullseye, 'Status code', res.statusCode)
+        }
+        return { res, buffer }
+      })
       .then(
         checkErrorResponse.asPromise(
           notFoundMessage ? { notFoundMessage: notFoundMessage } : undefined
         )
       )
       .then(asJson)
+      .then(json => {
+        if (debug) {
+          console.log(sym.bullseye, 'JSON before validation', json)
+        }
+        return json
+      })
       .then(json => this.constructor._validate(json, schema))
   }
 }
