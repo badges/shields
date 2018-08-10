@@ -3,6 +3,12 @@
 const Joi = require('joi')
 const { BaseJsonService } = require('../base')
 
+const appVeyorSchema = Joi.object({
+  build: Joi.object({
+    status: Joi.string().required(),
+  }),
+}).required()
+
 module.exports = class AppVeyor extends BaseJsonService {
   async handle({ repo, branch }) {
     let url = `https://ci.appveyor.com/api/projects/${repo}`
@@ -12,7 +18,7 @@ module.exports = class AppVeyor extends BaseJsonService {
     const {
       build: { status },
     } = await this._requestJson({
-      schema: Joi.object(),
+      schema: appVeyorSchema,
       url,
       notFoundMessage: 'project not found or access denied',
     })

@@ -5,12 +5,17 @@ const { BaseJsonService } = require('../base')
 const { NotFound } = require('../errors')
 const { version: versionColor } = require('../../lib/color-formatters')
 
+const clojarsSchema = Joi.object({
+  // optional due to non-standard 'not found' condition
+  version: Joi.string(),
+}).required()
+
 module.exports = class Clojars extends BaseJsonService {
   async handle({ clojar }) {
     const url = `https://clojars.org/${clojar}/latest-version.json`
     const json = await this._requestJson({
       url,
-      schema: Joi.any(),
+      schema: clojarsSchema,
     })
 
     if (Object.keys(json).length === 0) {
