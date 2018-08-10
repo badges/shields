@@ -3244,7 +3244,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res, { 404: 'repo or release not found' })) {
+    if (githubCheckErrorResponse(badgeData, err, res, 'repo or release not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3350,7 +3350,7 @@ cache((queryParams, match, sendBadge, request) => {
     badgeData.logo = getLogo('github', queryParams);
   }
   githubApiProvider.request(request, uri, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res, { 404: 'issue, pull request or repo not found' })) {
+    if (githubCheckErrorResponse(badgeData, err, res, 'issue, pull request or repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3418,7 +3418,7 @@ cache((queryParams, match, sendBadge, request) => {
     badgeData.logo = getLogo('github', queryParams);
   }
   githubApiProvider.request(request, issueUri, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res, { 404: 'pull request or repo not found' })) {
+    if (githubCheckErrorResponse(badgeData, err, res, 'pull request or repo not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3566,7 +3566,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res, { 404: 'user not found' })) {
+    if (githubCheckErrorResponse(badgeData, err, res, 'user not found')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3594,7 +3594,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res, { 403: 'access denied' })) {
+    if (githubCheckErrorResponse(badgeData, err, res, 'access denied')) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3632,7 +3632,7 @@ cache(function(data, match, sendBadge, request) {
   }
 
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res, { 404: 'repo or file not found' })) {
+    if (githubCheckErrorResponse(badgeData, err, res, 'repo or file not found')) {
       sendBadge(format, badgeData);
       return;
     }
