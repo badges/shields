@@ -6,6 +6,7 @@ const { NotFound } = require('../errors')
 const { version: versionColor } = require('../../lib/color-formatters')
 
 const clojarsSchema = Joi.object({
+  // optional due to non-standard 'not found' condition
   version: Joi.string(),
 }).required()
 

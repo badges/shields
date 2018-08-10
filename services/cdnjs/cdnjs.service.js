@@ -7,6 +7,7 @@ const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
 const cdnjsSchema = Joi.object({
+  // optional due to non-standard 'not found' condition
   version: Joi.string(),
 }).required()
 
