@@ -1059,7 +1059,7 @@ cache(function(data, match, sendBadge, request) {
   const url = 'https://lgtm.com/api/v0.1/project/' + projectId + '/details';
   const badgeData = getBadgeData('lgtm', data);
   request(url, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'project not found')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'project not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -1105,7 +1105,7 @@ cache(function(data, match, sendBadge, request) {
   })();
   const badgeData = getBadgeData('code quality: ' + languageLabel, data);
   request(url, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'project not found')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'project not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -1335,7 +1335,7 @@ cache(function(data, match, sendBadge, request) {
     branch = 'dev-master';
   }
   request(apiUrl, function dealWithData(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'repo not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -2358,7 +2358,7 @@ cache(function(data, match, sendBadge, request) {
   const apiUrl = `https://scrutinizer-ci.com/api/repositories/${repo}`;
   const badgeData = getBadgeData(type, data);
   request(apiUrl, {}, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'project or branch not found')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'project or branch not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3244,7 +3244,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res, 'repo or release not found')) {
+    if (githubCheckErrorResponse(badgeData, err, res, { 404: 'repo or release not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3350,7 +3350,7 @@ cache((queryParams, match, sendBadge, request) => {
     badgeData.logo = getLogo('github', queryParams);
   }
   githubApiProvider.request(request, uri, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res, 'issue, pull request or repo not found')) {
+    if (githubCheckErrorResponse(badgeData, err, res, { 404: 'issue, pull request or repo not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3418,7 +3418,7 @@ cache((queryParams, match, sendBadge, request) => {
     badgeData.logo = getLogo('github', queryParams);
   }
   githubApiProvider.request(request, issueUri, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res, 'pull request or repo not found')) {
+    if (githubCheckErrorResponse(badgeData, err, res, { 404: 'pull request or repo not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3566,7 +3566,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res, 'user not found')) {
+    if (githubCheckErrorResponse(badgeData, err, res, { 404: 'user not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3594,7 +3594,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res)) {
+    if (githubCheckErrorResponse(badgeData, err, res, { 403: 'access denied' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3632,7 +3632,7 @@ cache(function(data, match, sendBadge, request) {
   }
 
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res, 'repo or file not found')) {
+    if (githubCheckErrorResponse(badgeData, err, res, { 404: 'repo or file not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3860,7 +3860,7 @@ cache(function(data, match, sendBadge, request) {
   const apiUrl = `/repos/${user}/${repo}/compare/${branch}...${commit}`;
   const badgeData = getBadgeData('commit status', data);
   githubApiProvider.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (githubCheckErrorResponse(badgeData, err, res, 'commit or branch not found')) {
+    if (githubCheckErrorResponse(badgeData, err, res, { 404: 'commit or branch not found' })) {
       if (res && res.statusCode === 404) {
         try {
           if (JSON.parse(buffer).message.startsWith('No common ancestor between')) {
@@ -5307,7 +5307,7 @@ cache(function(data, match, sendBadge, request) {
 
   const badgeData = getBadgeData('build', data);
   request(apiUrl, { json:true }, function(err, res, data) {
-    if (checkErrorResponse(badgeData, err, res, 'project not found')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'project not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -5592,7 +5592,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://hub.docker.com/v2/repositories/' + path + '/stars/count/';
   var badgeData = getBadgeData('docker stars', data);
   request(url, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'repo not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -5624,7 +5624,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://hub.docker.com/v2/repositories/' + path;
   var badgeData = getBadgeData('docker pulls', data);
   request(url, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'repo not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -5693,7 +5693,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://registry.hub.docker.com/v2/repositories/' + path;
   var badgeData = getBadgeData('docker build', data);
   request(url, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'repo not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -5728,7 +5728,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://registry.hub.docker.com/v2/repositories/' + path + '/buildhistory';
   var badgeData = getBadgeData('docker build', data);
   request(url, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'repo not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -6538,7 +6538,7 @@ cache(function(data, match, sendBadge, request) {
   const badgeData = getBadgeData('dependencies', data);
 
   request(options, function(err, res, json) {
-    if (checkErrorResponse(badgeData, err, res, 'not available')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'not available' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -6944,7 +6944,7 @@ cache({
 
     request(url, requestOptions, (err, res, data) => {
       try {
-        if (checkErrorResponse(badgeData, err, res, 'resource not found')) {
+        if (checkErrorResponse(badgeData, err, res, { 404: 'resource not found' })) {
           return;
         }
 
