@@ -3594,7 +3594,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res, 'repo not found', {403: 'access denied' })) {
+    if (githubCheckErrorResponse(badgeData, err, res, 'repo not found', { 403: 'access denied' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3860,7 +3860,7 @@ cache(function(data, match, sendBadge, request) {
   const apiUrl = `/repos/${user}/${repo}/compare/${branch}...${commit}`;
   const badgeData = getBadgeData('commit status', data);
   githubApiProvider.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (githubCheckErrorResponse(badgeData, err, res, { 404: 'commit or branch not found' })) {
+    if (githubCheckErrorResponse(badgeData, err, res, 'commit or branch not found')) {
       if (res && res.statusCode === 404) {
         try {
           if (JSON.parse(buffer).message.startsWith('No common ancestor between')) {
