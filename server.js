@@ -3594,7 +3594,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res, 'access denied')) {
+    if (githubCheckErrorResponse(badgeData, err, res, 'repo not found', {403: 'access denied' })) {
       sendBadge(format, badgeData);
       return;
     }
