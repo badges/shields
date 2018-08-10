@@ -7,16 +7,19 @@ const { floorCount: floorCountColor } = require('../../lib/color-formatters')
 const { ordinalNumber } = require('../../lib/text-formatters')
 const { nonNegativeInteger } = require('../validators.js')
 
-const rankSchema = Joi.array()
+const totalSchema = Joi.array()
   .items(
-    Joi.alternatives().try(
-      Joi.object({
-        total_ranking: nonNegativeInteger,
-      }),
-      Joi.object({
-        daily_ranking: nonNegativeInteger,
-      })
-    )
+    Joi.object({
+      total_ranking: nonNegativeInteger,
+    })
+  )
+  .min(1)
+  .required()
+const dailySchema = Joi.array()
+  .items(
+    Joi.object({
+      daily_ranking: nonNegativeInteger,
+    })
   )
   .min(1)
   .required()
@@ -35,10 +38,11 @@ module.exports = class GemRank extends BaseJsonService {
   async handle({ info, repo }) {
     const totalRank = info === 'rt'
     const dailyRank = info === 'rd'
+    const schema = totalRank ? totalSchema : dailySchema
     const url = this._getApiUrl(repo, totalRank, dailyRank)
     const json = await this._requestJson({
       url,
-      schema: rankSchema,
+      schema,
     })
 
     let rank
