@@ -5,12 +5,14 @@ const Joi = require('joi')
 const { BaseJsonService } = require('../base')
 const { floorCount: floorCountColor } = require('../../lib/color-formatters')
 
+const ownerSchema = Joi.array().required()
+
 module.exports = class GemOwner extends BaseJsonService {
   async handle({ user }) {
     const url = `https://rubygems.org/api/v1/owners/${user}/gems.json`
     const json = await this._requestJson({
       url,
-      schema: Joi.array(),
+      schema: ownerSchema,
     })
     const count = json.length
 
