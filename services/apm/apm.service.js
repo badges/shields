@@ -32,6 +32,15 @@ class BaseAPMService extends BaseJsonService {
   static get defaultBadgeData() {
     return { label: 'apm' }
   }
+
+  static get examples() {
+    return [
+      {
+        previewUrl: 'vim-mode',
+        keywords: ['atom'],
+      },
+    ]
+  }
 }
 
 class APMDownloads extends BaseAPMService {
@@ -57,15 +66,6 @@ class APMDownloads extends BaseAPMService {
       capture: ['repo'],
     }
   }
-
-  static get examples() {
-    return [
-      {
-        previewUrl: 'vim-mode',
-        keywords: ['atom'],
-      },
-    ]
-  }
 }
 
 class APMVersion extends BaseAPMService {
@@ -90,15 +90,6 @@ class APMVersion extends BaseAPMService {
       format: '(.+)',
       capture: ['repo'],
     }
-  }
-
-  static get examples() {
-    return [
-      {
-        previewUrl: 'vim-mode',
-        keywords: ['atom'],
-      },
-    ]
   }
 }
 
@@ -128,15 +119,6 @@ class APMLicense extends BaseAPMService {
       format: '(.+)',
       capture: ['repo'],
     }
-  }
-
-  static get examples() {
-    return [
-      {
-        previewUrl: 'vim-mode',
-        keywords: ['atom'],
-      },
-    ]
   }
 }
 
