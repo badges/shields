@@ -5,13 +5,10 @@ const { BaseJsonService } = require('../base')
 const { InvalidResponse } = require('../errors')
 const { version: versionColor } = require('../../lib/color-formatters')
 const { metric, addv } = require('../../lib/text-formatters')
+const { positiveInteger } = require('../validators.js')
 
-const count = Joi.number()
-  .integer()
-  .min(0)
-  .required()
 const apmSchema = Joi.object({
-  downloads: count,
+  downloads: positiveInteger,
   releases: Joi.object({
     latest: Joi.string().required(),
   }),

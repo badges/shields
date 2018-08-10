@@ -3,13 +3,11 @@
 const Joi = require('joi')
 const { BaseJsonService } = require('../base')
 const { metric } = require('../../lib/text-formatters')
+const { positiveInteger } = require('../validators.js')
 
 // https://github.com/npm/registry/blob/master/docs/download-counts.md#output
 const pointResponseSchema = Joi.object({
-  downloads: Joi.number()
-    .integer()
-    .min(0)
-    .required(),
+  downloads: positiveInteger,
 }).required()
 
 // https://github.com/npm/registry/blob/master/docs/download-counts.md#output-1
