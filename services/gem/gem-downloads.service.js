@@ -12,30 +12,30 @@ const { metric } = require('../../lib/text-formatters')
 const { latest: latestVersion } = require('../../lib/version')
 const { nonNegativeInteger } = require('../validators.js')
 
-const downloadsSchema = Joi.alternatives().try(
-  Joi.object({
-    downloads: nonNegativeInteger,
-    version_downloads: nonNegativeInteger,
-  }).required(),
-  Joi.array()
-    .items(
-      Joi.object({
-        prerelease: Joi.boolean().required(),
-        number: Joi.string().required(),
-        downloads_count: nonNegativeInteger,
-      })
-    )
-    .min(1)
-    .required()
-)
+const gemsSchema = Joi.object({
+  downloads: nonNegativeInteger,
+  version_downloads: nonNegativeInteger,
+}).required()
+
+const versionsSchema = Joi.array()
+  .items(
+    Joi.object({
+      prerelease: Joi.boolean().required(),
+      number: Joi.string().required(),
+      downloads_count: nonNegativeInteger,
+    })
+  )
+  .min(1)
+  .required()
 
 module.exports = class GemDownloads extends BaseJsonService {
   async fetch(repo, info) {
     const endpoint = info === 'dv' ? 'versions/' : 'gems/'
+    const schema = info === 'dv' ? versionsSchema : gemsSchema
     const url = `https://rubygems.org/api/v1/${endpoint}${repo}.json`
     return this._requestJson({
       url,
-      schema: downloadsSchema,
+      schema,
     })
   }
 
