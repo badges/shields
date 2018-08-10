@@ -56,7 +56,7 @@ class GemVersion extends BaseJsonService {
 }
 
 class GemDownloads extends BaseJsonService {
-  fetch(repo, info) {
+  async fetch(repo, info) {
     const endpoint = info === 'dv' ? 'versions/' : 'gems/'
     const url = `https://rubygems.org/api/v1/${endpoint}${repo}.json`
     return this._requestJson({
