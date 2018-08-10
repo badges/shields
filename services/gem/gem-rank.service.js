@@ -6,6 +6,24 @@ const { BaseJsonService } = require('../base')
 const { floorCount: floorCountColor } = require('../../lib/color-formatters')
 const { ordinalNumber } = require('../../lib/text-formatters')
 
+const count = Joi.number()
+  .integer()
+  .min(0)
+  .required()
+const rankSchema = Joi.array()
+  .items(
+    Joi.alternatives().try(
+      Joi.object({
+        total_ranking: count,
+      }),
+      Joi.object({
+        daily_ranking: count,
+      })
+    )
+  )
+  .min(1)
+  .required()
+
 module.exports = class GemRank extends BaseJsonService {
   _getApiUrl(repo, totalRank, dailyRank) {
     let endpoint
@@ -23,7 +41,7 @@ module.exports = class GemRank extends BaseJsonService {
     const url = this._getApiUrl(repo, totalRank, dailyRank)
     const json = await this._requestJson({
       url,
-      schema: Joi.array(),
+      schema: rankSchema,
     })
 
     let rank

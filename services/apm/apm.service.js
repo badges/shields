@@ -6,10 +6,24 @@ const { InvalidResponse } = require('../errors')
 const { version: versionColor } = require('../../lib/color-formatters')
 const { metric, addv } = require('../../lib/text-formatters')
 
+const count = Joi.number()
+  .integer()
+  .min(0)
+  .required()
+const apmSchema = Joi.object({
+  downloads: count,
+  releases: Joi.object({
+    latest: Joi.string().required(),
+  }),
+  metadata: Joi.object({
+    license: Joi.string().required(),
+  }),
+})
+
 class BaseAPMService extends BaseJsonService {
   async fetch(repo) {
     return this._requestJson({
-      schema: Joi.object(),
+      schema: apmSchema,
       url: `https://atom.io/api/packages/${repo}`,
       notFoundMessage: 'package not found',
     })

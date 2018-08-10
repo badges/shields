@@ -11,13 +11,34 @@ const {
 const { metric } = require('../../lib/text-formatters')
 const { latest: latestVersion } = require('../../lib/version')
 
+const count = Joi.number()
+  .integer()
+  .min(0)
+  .required()
+const downloadsSchema = Joi.alternatives().try(
+  Joi.object({
+    downloads: count,
+    version_downloads: count,
+  }).required(),
+  Joi.array()
+    .items(
+      Joi.object({
+        prerelease: Joi.boolean().required(),
+        number: Joi.string().required(),
+        downloads_count: count,
+      })
+    )
+    .min(1)
+    .required()
+)
+
 module.exports = class GemDownloads extends BaseJsonService {
   async fetch(repo, info) {
     const endpoint = info === 'dv' ? 'versions/' : 'gems/'
     const url = `https://rubygems.org/api/v1/${endpoint}${repo}.json`
     return this._requestJson({
       url,
-      schema: Joi.any(),
+      schema: downloadsSchema,
     })
   }
 
