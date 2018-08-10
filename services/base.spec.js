@@ -83,6 +83,48 @@ describe('BaseService', () => {
     expect(serviceData).to.deep.equal({ message: 'Hello bar.bar.bar!' })
   })
 
+  describe('Logging', function() {
+    let sandbox
+    beforeEach(function() {
+      sandbox = sinon.createSandbox()
+    })
+    afterEach(function() {
+      sandbox.restore()
+    })
+    beforeEach(function() {
+      sinon.stub(DummyService, 'logTrace')
+    })
+    it('Invokes the logger as expected', async function() {
+      const serviceInstance = new DummyService({}, defaultConfig)
+      await serviceInstance.invokeHandler(
+        {
+          namedParamA: 'bar.bar.bar',
+        },
+        { queryParamA: '!' }
+      )
+      expect(DummyService.logTrace).to.be.calledWithMatch(
+        'inbound',
+        sinon.match.string,
+        'Service class',
+        'DummyService'
+      )
+      expect(DummyService.logTrace).to.be.calledWith(
+        'inbound',
+        sinon.match.string,
+        'Named params',
+        {
+          namedParamA: 'bar.bar.bar',
+        }
+      )
+      expect(DummyService.logTrace).to.be.calledWith(
+        'inbound',
+        sinon.match.string,
+        'Query params',
+        { queryParamA: '!' }
+      )
+    })
+  })
+
   describe('Error handling', function() {
     it('Handles internal errors', async function() {
       const serviceInstance = new DummyService(

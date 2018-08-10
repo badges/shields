@@ -23,8 +23,10 @@
   },
   "dependencies": {
     "camp": "~17.2.1",
+    "chalk": "^2.4.1",
     "chrome-web-store-item-property": "~1.1.2",
     "dot": "~1.1.2",
+    "emojic": "^1.1.14",
     "escape-string-regexp": "^1.0.5",
     "glob": "^7.1.1",
     "gm": "^1.23.0",
@@ -69,6 +71,7 @@
     "test:js:server": "HANDLE_INTERNAL_ERRORS=false mocha \"*.spec.js\" \"lib/**/*.spec.js\" \"services/**/*.spec.js\"",
     "test:integration": "mocha \"services/**/*.integration.js\"",
     "test:services": "HANDLE_INTERNAL_ERRORS=false mocha --delay lib/service-test-runner/cli.js",
+    "test:services:trace": "TRACE_SERVICES=true npm run test:services -- $*",
     "test:services:pr:prepare": "node lib/service-test-runner/pull-request-services-cli.js > pull-request-services.log",
     "test:services:pr:run": "HANDLE_INTERNAL_ERRORS=false mocha --delay lib/service-test-runner/cli.js --stdin < pull-request-services.log",
     "test:services:pr": "npm run test:services:pr:prepare && npm run test:services:pr:run",
