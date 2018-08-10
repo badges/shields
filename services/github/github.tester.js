@@ -564,10 +564,12 @@ t.create('downloads for unknown release')
 
 t.create('hit counter')
   .get('/search/torvalds/linux/goto.json')
+  .timeout(8000)
   .expectJSONTypes(Joi.object().keys({ name: 'goto counter', value: isMetric }))
 
 t.create('hit counter for nonexistent repo')
   .get('/search/torvalds/not-linux/goto.json')
+  .timeout(8000)
   .expectJSON({ name: 'goto counter', value: 'repo not found' })
 
 t.create('commit activity (1 year)')

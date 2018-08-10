@@ -5,11 +5,22 @@ const { BaseJsonService } = require('../base')
 const { InvalidResponse } = require('../errors')
 const { version: versionColor } = require('../../lib/color-formatters')
 const { metric, addv } = require('../../lib/text-formatters')
+const { nonNegativeInteger } = require('../validators.js')
+
+const apmSchema = Joi.object({
+  downloads: nonNegativeInteger,
+  releases: Joi.object({
+    latest: Joi.string().required(),
+  }),
+  metadata: Joi.object({
+    license: Joi.string().required(),
+  }),
+})
 
 class BaseAPMService extends BaseJsonService {
   async fetch(repo) {
     return this._requestJson({
-      schema: Joi.object(),
+      schema: apmSchema,
       url: `https://atom.io/api/packages/${repo}`,
       notFoundMessage: 'package not found',
     })
@@ -17,6 +28,15 @@ class BaseAPMService extends BaseJsonService {
 
   static get defaultBadgeData() {
     return { label: 'apm' }
+  }
+
+  static get examples() {
+    return [
+      {
+        previewUrl: 'vim-mode',
+        keywords: ['atom'],
+      },
+    ]
   }
 }
 
@@ -43,15 +63,6 @@ class APMDownloads extends BaseAPMService {
       capture: ['repo'],
     }
   }
-
-  static get examples() {
-    return [
-      {
-        previewUrl: 'dm/vim-mode',
-        keywords: ['atom'],
-      },
-    ]
-  }
 }
 
 class APMVersion extends BaseAPMService {
@@ -76,15 +87,6 @@ class APMVersion extends BaseAPMService {
       format: '(.+)',
       capture: ['repo'],
     }
-  }
-
-  static get examples() {
-    return [
-      {
-        previewUrl: 'v/vim-mode',
-        keywords: ['atom'],
-      },
-    ]
   }
 }
 
@@ -114,15 +116,6 @@ class APMLicense extends BaseAPMService {
       format: '(.+)',
       capture: ['repo'],
     }
-  }
-
-  static get examples() {
-    return [
-      {
-        previewUrl: 'l/vim-mode',
-        keywords: ['atom'],
-      },
-    ]
   }
 }
 

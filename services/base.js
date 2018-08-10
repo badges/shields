@@ -1,6 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
+// See available emoji at http://emoji.muan.co/
+const emojic = require('emojic')
+const chalk = require('chalk')
 const {
   NotFound,
   InvalidResponse,
@@ -15,7 +18,15 @@ const {
   setBadgeColor,
 } = require('../lib/badge-data')
 const { checkErrorResponse, asJson } = require('../lib/error-helper')
-const sym = require('../lib/logging-symbols')
+
+// Config is loaded globally but it would be better to inject it. To do that,
+// there needs to be one instance of the service created at registration time,
+// which gets the config injected into it, instead of one instance per request.
+// That way most of the current static methods could become instance methods,
+// thereby gaining access to the injected config.
+const {
+  services: { trace: enableTraceLogging },
+} = require('../lib/server-config')
 
 class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
@@ -155,19 +166,20 @@ class BaseService {
   }
 
   async invokeHandler(namedParams, queryParams) {
-    const { debug } = this.constructor
-    if (debug) {
-      console.log(sym.chef, 'Service class', this.constructor.name)
-      console.log(sym.ticket, 'Named params', namedParams)
-      console.log(sym.crayon, 'Query params', queryParams)
-    }
+    const logTrace = (...args) => this.constructor.logTrace(...args)
+    logTrace(
+      'inbound',
+      emojic.womanCook,
+      'Service class',
+      this.constructor.name
+    )
+    logTrace('inbound', emojic.ticket, 'Named params', namedParams)
+    logTrace('inbound', emojic.crayon, 'Query params', queryParams)
     try {
       return await this.handle(namedParams, queryParams)
     } catch (error) {
       if (error instanceof NotFound || error instanceof InvalidParameter) {
-        if (debug) {
-          console.log(sym.stop, 'Handled error', error)
-        }
+        logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
         return {
           message: error.prettyMessage,
           color: 'red',
@@ -176,17 +188,22 @@ class BaseService {
         error instanceof InvalidResponse ||
         error instanceof Inaccessible
       ) {
-        if (debug) {
-          console.log(sym.stop, 'Handled error', error)
-        }
+        logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
         return {
           message: error.prettyMessage,
           color: 'lightgray',
         }
       } else if (this._handleInternalErrors) {
-        if (debug) {
-          console.log(sym.bomb, 'Unhandled internal error', error)
-        } else {
+        if (
+          !logTrace(
+            'unhandledError',
+            emojic.boom,
+            'Unhandled internal error',
+            error
+          )
+        ) {
+          // This is where we end up if an unhandled exception is thrown in
+          // production. Send the error to the logs.
           console.log(error)
         }
         return {
@@ -195,9 +212,12 @@ class BaseService {
           color: 'lightgray',
         }
       } else {
-        if (debug) {
-          console.log(sym.bomb, 'Unhandled internal error', error)
-        }
+        logTrace(
+          'unhandledError',
+          emojic.boom,
+          'Unhandled internal error',
+          error
+        )
         throw error
       }
     }
@@ -246,8 +266,7 @@ class BaseService {
     return badgeData
   }
 
-  static register(camp, handleRequest, { handleInternalErrors }) {
-    const { debug } = this
+  static register(camp, handleRequest, serviceConfig) {
     const ServiceClass = this // In a static context, "this" is the class.
 
     camp.route(
@@ -260,15 +279,13 @@ class BaseService {
             {
               sendAndCacheRequest: request.asPromise,
             },
-            { handleInternalErrors }
+            serviceConfig
           )
           const serviceData = await serviceInstance.invokeHandler(
             namedParams,
             queryParams
           )
-          if (debug) {
-            console.log(sym.shield, 'Service data', serviceData)
-          }
+          this.logTrace('outbound', emojic.shield, 'Service data', serviceData)
           const badgeData = this._makeBadgeData(queryParams, serviceData)
 
           // Assumes the final capture group is the extension
@@ -277,6 +294,31 @@ class BaseService {
         },
       })
     )
+  }
+
+  static _formatLabelForStage(stage, label) {
+    const colorFn = {
+      inbound: chalk.black.bgBlue,
+      fetch: chalk.black.bgYellow,
+      validate: chalk.black.bgGreen,
+      unhandledError: chalk.white.bgRed,
+      outbound: chalk.black.bgBlue,
+    }[stage]
+    return colorFn(` ${label} `)
+  }
+
+  static logTrace(stage, symbol, label, ...content) {
+    if (enableTraceLogging) {
+      console.log(
+        this._formatLabelForStage(stage, label),
+        symbol,
+        '\n',
+        ...content
+      )
+      return true
+    } else {
+      return false
+    }
   }
 }
 
@@ -288,23 +330,24 @@ class BaseJsonService extends BaseService {
       stripUnknown: true,
     })
     if (error) {
-      if (debug) {
-        console.log(sym.shrug, 'Response did not match schema', error.message)
-      }
+      this.logTrace(
+        'error',
+        emojic.womanShrugging,
+        'Response did not match schema',
+        error.message
+      )
       throw new InvalidResponse({
         prettyMessage: 'invalid json response',
         underlyingError: error,
       })
     } else {
-      if (debug) {
-        console.log(sym.bathtub, 'JSON after validation', value)
-      }
+      this.logTrace('validate', emojic.bathtub, 'JSON after validation', value)
       return value
     }
   }
 
   async _requestJson({ schema, url, options = {}, notFoundMessage }) {
-    const { debug } = this.constructor
+    const logTrace = (...args) => this.constructor.logTrace('fetch', ...args)
     if (!schema || !schema.isJoi) {
       throw Error('A Joi schema is required')
     }
@@ -312,15 +355,10 @@ class BaseJsonService extends BaseService {
       ...{ headers: { Accept: 'application/json' } },
       ...options,
     }
-    if (debug) {
-      console.log(sym.bowAndArrow, 'request URL', url)
-      console.log(sym.bowAndArrow, 'request options', mergedOptions)
-    }
+    logTrace(emojic.bowAndArrow, 'Request', url, '\n', mergedOptions)
     return this._sendAndCacheRequest(url, mergedOptions)
       .then(({ res, buffer }) => {
-        if (debug) {
-          console.log(sym.bullseye, 'Status code', res.statusCode)
-        }
+        logTrace(emojic.dart, 'Response status code', res.statusCode)
         return { res, buffer }
       })
       .then(
@@ -330,9 +368,7 @@ class BaseJsonService extends BaseService {
       )
       .then(asJson)
       .then(json => {
-        if (debug) {
-          console.log(sym.bullseye, 'JSON before validation', json)
-        }
+        logTrace(emojic.dart, 'Response JSON (before validation)', json)
         return json
       })
       .then(json => this.constructor._validate(json, schema))
