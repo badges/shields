@@ -99,7 +99,11 @@ t.create('License - API rate limit exceeded')
         documentation_url: 'https://developer.github.com/v3/#rate-limiting',
       })
   )
-  .expectJSON({ name: 'license', value: 'access denied', colorB: colorsB.lightgrey })
+  .expectJSON({
+    name: 'license',
+    value: 'access denied',
+    colorB: colorsB.lightgrey,
+  })
 
 t.create('Contributors')
   .get('/contributors/cdnjs/cdnjs.json')
