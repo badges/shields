@@ -61,7 +61,7 @@ class APMDownloads extends BaseAPMService {
   static get examples() {
     return [
       {
-        previewUrl: 'dm/vim-mode',
+        previewUrl: 'vim-mode',
         keywords: ['atom'],
       },
     ]
@@ -95,7 +95,7 @@ class APMVersion extends BaseAPMService {
   static get examples() {
     return [
       {
-        previewUrl: 'v/vim-mode',
+        previewUrl: 'vim-mode',
         keywords: ['atom'],
       },
     ]
@@ -133,7 +133,7 @@ class APMLicense extends BaseAPMService {
   static get examples() {
     return [
       {
-        previewUrl: 'l/vim-mode',
+        previewUrl: 'vim-mode',
         keywords: ['atom'],
       },
     ]
