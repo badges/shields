@@ -92,7 +92,7 @@ describe('BaseService', () => {
       sandbox.restore()
     })
     beforeEach(function() {
-      sinon.stub(DummyService, 'logDebug')
+      sinon.stub(DummyService, 'logTrace')
     })
     it('Invokes the logger as expected', async function() {
       const serviceInstance = new DummyService({}, defaultConfig)
@@ -102,19 +102,22 @@ describe('BaseService', () => {
         },
         { queryParamA: '!' }
       )
-      expect(DummyService.logDebug).to.be.calledWithMatch(
+      expect(DummyService.logTrace).to.be.calledWithMatch(
+        'inbound',
         sinon.match.string,
         'Service class',
         'DummyService'
       )
-      expect(DummyService.logDebug).to.be.calledWith(
+      expect(DummyService.logTrace).to.be.calledWith(
+        'inbound',
         sinon.match.string,
         'Named params',
         {
           namedParamA: 'bar.bar.bar',
         }
       )
-      expect(DummyService.logDebug).to.be.calledWith(
+      expect(DummyService.logTrace).to.be.calledWith(
+        'inbound',
         sinon.match.string,
         'Query params',
         { queryParamA: '!' }
