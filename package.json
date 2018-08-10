@@ -145,7 +145,7 @@
     "node-fetch": "^2.0.0",
     "nyc": "^12.0.1",
     "opn-cli": "^3.1.0",
-    "prettier": "1.14.0",
+    "prettier": "1.14.2",
     "prettier-check": "^2.0.0",
     "pretty": "^2.0.0",
     "prop-types": "^15.6.0",
@@ -161,12 +161,6 @@
     "sinon-chai": "^3.0.0",
     "snap-shot-it": "^5.0.1",
     "url": "^0.11.0"
-  },
-  "greenkeeper": {
-    "ignore": [
-      "joi",
-      "redis"
-    ]
   },
   "engines": {
     "node": ">= 8.x",
