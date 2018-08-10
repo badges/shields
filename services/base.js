@@ -18,7 +18,6 @@ const {
   setBadgeColor,
 } = require('../lib/badge-data')
 const { checkErrorResponse, asJson } = require('../lib/error-helper')
-
 // Config is loaded globally but it would be better to inject it. To do that,
 // there needs to be one instance of the service created at registration time,
 // which gets the config injected into it, instead of one instance per request.
@@ -50,14 +49,6 @@ class BaseService {
   }
 
   // Metadata
-
-  /**
-   * When true, enable debugging on this service. Useful for troubleshooting
-   * a live server or in conjunction with `.only()` chained onto a service test.
-   */
-  static get debug() {
-    return false
-  }
 
   /**
    * Name of the category to sort this badge into (eg. "build"). Used to sort
@@ -324,7 +315,6 @@ class BaseService {
 
 class BaseJsonService extends BaseService {
   static _validate(json, schema) {
-    const { debug } = this
     const { error, value } = Joi.validate(json, schema, {
       allowUnknown: true,
       stripUnknown: true,
