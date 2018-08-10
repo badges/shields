@@ -5,16 +5,16 @@ const Joi = require('joi')
 const { BaseJsonService } = require('../base')
 const { floorCount: floorCountColor } = require('../../lib/color-formatters')
 const { ordinalNumber } = require('../../lib/text-formatters')
-const { positiveInteger } = require('../validators.js')
+const { nonNegativeInteger } = require('../validators.js')
 
 const rankSchema = Joi.array()
   .items(
     Joi.alternatives().try(
       Joi.object({
-        total_ranking: positiveInteger,
+        total_ranking: nonNegativeInteger,
       }),
       Joi.object({
-        daily_ranking: positiveInteger,
+        daily_ranking: nonNegativeInteger,
       })
     )
   )

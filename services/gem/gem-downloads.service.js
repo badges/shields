@@ -10,19 +10,19 @@ const {
 } = require('../../lib/color-formatters')
 const { metric } = require('../../lib/text-formatters')
 const { latest: latestVersion } = require('../../lib/version')
-const { positiveInteger } = require('../validators.js')
+const { nonNegativeInteger } = require('../validators.js')
 
 const downloadsSchema = Joi.alternatives().try(
   Joi.object({
-    downloads: positiveInteger,
-    version_downloads: positiveInteger,
+    downloads: nonNegativeInteger,
+    version_downloads: nonNegativeInteger,
   }).required(),
   Joi.array()
     .items(
       Joi.object({
         prerelease: Joi.boolean().required(),
         number: Joi.string().required(),
-        downloads_count: positiveInteger,
+        downloads_count: nonNegativeInteger,
       })
     )
     .min(1)
