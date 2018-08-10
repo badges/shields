@@ -4,7 +4,12 @@ const Joi = require('joi')
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const chalk = require('chalk')
-const { NotFound, InvalidResponse, Inaccessible } = require('./errors')
+const {
+  NotFound,
+  InvalidResponse,
+  Inaccessible,
+  InvalidParameter,
+} = require('./errors')
 const queryString = require('query-string')
 const {
   makeLogo,
@@ -164,7 +169,7 @@ class BaseService {
     try {
       return await this.handle(namedParams, queryParams)
     } catch (error) {
-      if (error instanceof NotFound) {
+      if (error instanceof NotFound || error instanceof InvalidParameter) {
         logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
         return {
           message: error.prettyMessage,
