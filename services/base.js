@@ -14,8 +14,10 @@ const {
 } = require('../lib/badge-data')
 const { checkErrorResponse, asJson } = require('../lib/error-helper')
 // Config is loaded globally but it would be better to inject it. To do that,
-// there should be one instance of the service created at registration time,
-// instead of one instance per request.
+// there needs to be one instance of the service created at registration time,
+// which gets the config injected into it, instead of one instance per request.
+// That way most of the current static methods could become instance methods,
+// thereby gaining access to the injected config.
 const {
   services: { trace: enableTraceLogging },
 } = require('../lib/server-config')
