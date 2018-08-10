@@ -165,12 +165,6 @@
     "url": "^0.11.0",
     "wait-promise": "^0.4.1"
   },
-  "greenkeeper": {
-    "ignore": [
-      "joi",
-      "redis"
-    ]
-  },
   "engines": {
     "node": ">= 8.x",
     "npm": "5.x"
