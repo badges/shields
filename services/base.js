@@ -213,7 +213,7 @@ class BaseService {
     return badgeData
   }
 
-  static register(camp, handleRequest, { handleInternalErrors }) {
+  static register(camp, handleRequest, serviceConfig) {
     const ServiceClass = this // In a static context, "this" is the class.
 
     camp.route(
@@ -226,7 +226,7 @@ class BaseService {
             {
               sendAndCacheRequest: request.asPromise,
             },
-            { handleInternalErrors }
+            serviceConfig
           )
           const serviceData = await serviceInstance.invokeHandler(
             namedParams,
