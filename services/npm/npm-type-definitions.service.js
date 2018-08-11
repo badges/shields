@@ -1,6 +1,5 @@
 'use strict'
 
-const { rangeStart, minor } = require('../../lib/version')
 const NpmBase = require('./npm-base')
 
 // For this badge to correctly detect type definitions, either the relevant
