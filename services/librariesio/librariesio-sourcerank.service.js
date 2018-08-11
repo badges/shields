@@ -1,6 +1,5 @@
 'use strict'
 
-const { metric } = require('../../lib/text-formatters')
 const { colorScale } = require('../../lib/color-formatters')
 const LibrariesIoBase = require('./librariesio-base')
 
