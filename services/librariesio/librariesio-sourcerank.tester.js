@@ -11,8 +11,7 @@ const t = new ServiceTester({
 })
 module.exports = t
 
-t
-  .create('sourcerank')
+t.create('sourcerank')
   .get('/npm/got.json')
   .expectJSONTypes(
     Joi.object().keys({
@@ -21,8 +20,7 @@ t
     })
   )
 
-t
-  .create('dependent count (not a package)')
+t.create('dependent count (not a package)')
   .get('/npm/foobar-is-not-package.json')
   .expectJSON({
     name: 'sourcerank',
