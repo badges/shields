@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{{=it.widths[0]+it.widths[1]}}" height="40">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{{=(it.widths[0] -= it.text[0].length ? 0 : (it.logo ? (it.colorA ? 0 : 5) : 11))+it.widths[1]}}" height="40">
   <g shape-rendering="crispEdges">
-    <rect width="{{=it.widths[0]}}" y="{{=10-it.logoPosition}}" height="20" fill="{{=it.escapeXml(it.colorA||"#555")}}"/>
+    <rect width="{{=it.widths[0]}}" y="{{=10-it.logoPosition}}" height="20" fill="{{=it.escapeXml(it.text[0].length || it.logo && it.colorA ? (it.colorA||"#555") : (it.colorB||"#4c1"))}}"/>
     <rect x="{{=it.widths[0]}}" y="{{=10-it.logoPosition}}" width="{{=it.widths[1]}}" height="20" fill="{{=it.escapeXml(it.colorB||"#4c1")}}"/>
   </g>
   <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="110">

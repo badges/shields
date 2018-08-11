@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{{=it.widths[0]+it.widths[1]}}" height="40">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{{=(it.widths[0] -= it.text[0].length ? 0 : (it.logo ? (it.colorA ? 0 : 5) : 11))+it.widths[1]}}" height="40">
   <linearGradient id="smooth" x2="0" y2="100%">
     <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
     <stop offset="1" stop-opacity=".1"/>
@@ -9,7 +9,7 @@
   </clipPath>
 
   <g clip-path="url(#round)">
-    <rect width="{{=it.widths[0]}}" y="{{=10-it.logoPosition}}" height="20" fill="{{=it.escapeXml(it.colorA||"#555")}}"/>
+    <rect width="{{=it.widths[0]}}" y="{{=10-it.logoPosition}}" height="20" fill="{{=it.escapeXml(it.text[0].length || it.logo && it.colorA ? (it.colorA||"#555") : (it.colorB||"#4c1"))}}"/>
     <rect x="{{=it.widths[0]}}" y="{{=10-it.logoPosition}}" width="{{=it.widths[1]}}" height="20" fill="{{=it.escapeXml(it.colorB||"#4c1")}}"/>
     <rect width="{{=it.widths[0]+it.widths[1]}}" y="{{=10-it.logoPosition}}" height="20" fill="url(#smooth)"/>
   </g>
@@ -23,7 +23,7 @@
     <text x="{{=(it.widths[0]+it.widths[1]/2-1)*10}}" y="{{=(25-it.logoPosition)*10}}" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{=(it.widths[1]-10)*10}}" lengthAdjust="spacing">{{=it.escapedText[1]}}</text>
     <text x="{{=(it.widths[0]+it.widths[1]/2-1)*10}}" y="{{=(24-it.logoPosition)*10}}" transform="scale(0.1)" textLength="{{=(it.widths[1]-10)*10}}" lengthAdjust="spacing">{{=it.escapedText[1]}}</text>
   </g>
-  
+
   {{?(it.links[0] && it.links[0].length)}}
     <a xlink:href="{{=it.links[0]}}">
       <rect width="{{=it.widths[0]}}" height="40" fill="rgba(0,0,0,0)"/>
