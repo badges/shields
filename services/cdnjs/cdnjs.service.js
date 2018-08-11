@@ -12,12 +12,23 @@ const cdnjsSchema = Joi.object({
 }).required()
 
 module.exports = class Cdnjs extends BaseJsonService {
-  async handle({ library }) {
+  async fetch(library) {
     const url = `https://api.cdnjs.com/libraries/${library}?fields=version`
-    const json = await this._requestJson({
+    return this._requestJson({
       url,
       schema: cdnjsSchema,
     })
+  }
+
+  static render(version) {
+    return {
+      message: versionText(version),
+      color: versionColor(version),
+    }
+  }
+
+  async handle({ library }) {
+    const json = await this.fetch(library)
 
     if (Object.keys(json).length === 0) {
       /* Note the 'not found' response from cdnjs is:
@@ -25,10 +36,7 @@ module.exports = class Cdnjs extends BaseJsonService {
       throw new NotFound()
     }
 
-    return {
-      message: versionText(json.version),
-      color: versionColor(json.version),
-    }
+    return this.constructor.render(json.version)
   }
 
   // Metadata

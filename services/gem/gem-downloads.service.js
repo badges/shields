@@ -39,6 +39,14 @@ module.exports = class GemDownloads extends BaseJsonService {
     })
   }
 
+  static render(label, downloads) {
+    return {
+      label: label,
+      message: metric(downloads),
+      color: downloadCountColor(downloads),
+    }
+  }
+
   _getLabel(version, info) {
     if (version) {
       return 'downloads@' + version
@@ -62,9 +70,9 @@ module.exports = class GemDownloads extends BaseJsonService {
 
     let downloads
     if (info === 'dt') {
-      downloads = metric(json.downloads)
+      downloads = json.downloads
     } else if (info === 'dtv') {
-      downloads = metric(json.version_downloads)
+      downloads = json.version_downloads
     } else if (info === 'dv') {
       let versionData
       if (version !== null && version === 'stable') {
@@ -80,13 +88,13 @@ module.exports = class GemDownloads extends BaseJsonService {
         versionData = json.filter(function(ver) {
           return ver.number === stableVersion
         })[0]
-        downloads = metric(versionData.downloads_count)
+        downloads = versionData.downloads_count
       } else if (version !== null) {
         versionData = json.filter(function(ver) {
           return ver.number === version
         })[0]
 
-        downloads = metric(versionData.downloads_count)
+        downloads = versionData.downloads_count
       } else {
         throw new InvalidResponse({
           underlyingError: new Error('version is null'),
@@ -98,11 +106,7 @@ module.exports = class GemDownloads extends BaseJsonService {
       })
     }
 
-    return {
-      label: label,
-      message: downloads,
-      color: downloadCountColor(downloads),
-    }
+    return this.constructor.render(label, downloads)
   }
 
   // Metadata

@@ -25,40 +25,34 @@ const dailySchema = Joi.array()
   .required()
 
 module.exports = class GemRank extends BaseJsonService {
-  _getApiUrl(repo, totalRank, dailyRank) {
-    let endpoint
-    if (totalRank) {
-      endpoint = '/total_ranking.json'
-    } else if (dailyRank) {
-      endpoint = '/daily_ranking.json'
-    }
-    return `http://bestgems.org/api/v1/gems/${repo}${endpoint}`
-  }
-
-  async handle({ info, repo }) {
+  async fetch(info, repo) {
     const totalRank = info === 'rt'
-    const dailyRank = info === 'rd'
+    const endpoint = totalRank ? '/total_ranking.json' : '/daily_ranking.json'
+    const url = `http://bestgems.org/api/v1/gems/${repo}${endpoint}`
     const schema = totalRank ? totalSchema : dailySchema
-    const url = this._getApiUrl(repo, totalRank, dailyRank)
-    const json = await this._requestJson({
+    return this._requestJson({
       url,
       schema,
     })
+  }
 
-    let rank
-    if (totalRank) {
-      rank = json[0].total_ranking
-    } else if (dailyRank) {
-      rank = json[0].daily_ranking
-    }
-    const count = Math.floor(100000 / rank)
-    let message = ordinalNumber(rank)
-    message += totalRank ? '' : ' daily'
-
+  static render(message, count) {
     return {
       message: message,
       color: floorCountColor(count, 10, 50, 100),
     }
+  }
+
+  async handle({ info, repo }) {
+    const json = await this.fetch(info, repo)
+
+    const totalRank = info === 'rt'
+    const rank = totalRank ? json[0].total_ranking : json[0].daily_ranking
+    const count = Math.floor(100000 / rank)
+    let message = ordinalNumber(rank)
+    message += totalRank ? '' : ' daily'
+
+    return this.constructor.render(message, count)
   }
 
   // Metadata

@@ -41,11 +41,13 @@ class BaseAPMService extends BaseJsonService {
 }
 
 class APMDownloads extends BaseAPMService {
+  static render(downloads) {
+    return { message: metric(downloads), color: 'green' }
+  }
+
   async handle({ repo }) {
     const json = await this.fetch(repo)
-
-    const downloads = json.downloads
-    return { message: metric(downloads), color: 'green' }
+    return this.constructor.render(json.downloads)
   }
 
   static get category() {
@@ -66,6 +68,10 @@ class APMDownloads extends BaseAPMService {
 }
 
 class APMVersion extends BaseAPMService {
+  static render(version) {
+    return { message: addv(version), color: versionColor(version) }
+  }
+
   async handle({ repo }) {
     const json = await this.fetch(repo)
 
@@ -74,7 +80,7 @@ class APMVersion extends BaseAPMService {
       throw new InvalidResponse({
         underlyingError: new Error('version is invalid'),
       })
-    return { message: addv(version), color: versionColor(version) }
+    return this.constructor.render(version)
   }
 
   static get category() {
@@ -91,6 +97,10 @@ class APMVersion extends BaseAPMService {
 }
 
 class APMLicense extends BaseAPMService {
+  static render(license) {
+    return { message: license, color: 'blue' }
+  }
+
   async handle({ repo }) {
     const json = await this.fetch(repo)
 
@@ -99,7 +109,7 @@ class APMLicense extends BaseAPMService {
       throw new InvalidResponse({
         underlyingError: new Error('licence is invalid'),
       })
-    return { message: license, color: 'blue' }
+    return this.constructor.render(license)
   }
 
   static get defaultBadgeData() {
