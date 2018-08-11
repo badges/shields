@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
-const { BaseJsonService } = require('../base')
 const { nonNegativeInteger, anyInteger } = require('../validators.js')
 
 // API doc: https://libraries.io/api#project
