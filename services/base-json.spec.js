@@ -4,7 +4,7 @@ const Joi = require('joi')
 const chai = require('chai')
 const { expect } = chai
 
-const { BaseJsonService } = require('./base')
+const BaseJsonService = require('./base-json')
 const { invalidJSON } = require('./response-fixtures')
 
 chai.use(require('chai-as-promised'))
