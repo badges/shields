@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { BaseJsonService } = require('../base')
+const BaseJsonService = require('../base-json')
 const { InvalidResponse, NotFound } = require('../errors')
 
 const deprecatedLicenseObjectSchema = Joi.object({

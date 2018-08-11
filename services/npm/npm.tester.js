@@ -66,7 +66,7 @@ t.create('total downloads of unknown package')
   .get('/dt/npm-api-does-not-have-this-package.json?style=_shields_test')
   .expectJSON({
     name: 'downloads',
-    value: 'project not found',
+    value: 'package not found or too new',
     colorB: colorsB.red,
   })
 
