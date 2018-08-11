@@ -10,7 +10,7 @@ const {
   InvalidResponse,
   InvalidParameter,
 } = require('./errors')
-const { BaseService } = require('./base')
+const BaseService = require('./base')
 
 require('../lib/register-chai-plugins.spec')
 
