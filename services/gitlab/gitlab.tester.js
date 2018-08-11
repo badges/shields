@@ -26,7 +26,7 @@ t.create('Forks')
   )
 
 t.create('Contributors')
-  .get('/forks/gitlab-org/gitlab-ce.json')
+  .get('/contributors/gitlab-org/gitlab-ce.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'contributors',
@@ -82,7 +82,7 @@ t.create('Closed Merge Requests')
   )
 
 t.create('Last Activity')
-  .get('/merge-requests-closed-raw/gitlab-org/gitlab-ce.json')
+  .get('/last-activity/gitlab-org/gitlab-ce.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'last activity',
