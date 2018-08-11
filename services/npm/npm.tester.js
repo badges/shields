@@ -11,7 +11,7 @@ module.exports = t
 const colorsB = mapValues(colorscheme, 'colorB')
 
 const isTypeDefinition = Joi.string().regex(
-  /^(Flow|TypeScript) v?[0-9]+.[0-9]+( \| (Flow|TypeScript) v?[0-9]+.[0-9]+)?$/
+  /^(Flow|TypeScript)( \| (Flow|TypeScript))?$/
 )
 
 t.create('total downloads of left-pad')
@@ -213,9 +213,15 @@ t.create('license when network is off')
 t.create('types')
   .get('/types/chalk.json')
   .expectJSONTypes(
-    Joi.object().keys({ name: 'type definitions', value: isTypeDefinition })
+    Joi.object().keys({ name: 'types', value: isTypeDefinition })
   )
 
 t.create('no types')
   .get('/types/left-pad.json')
-  .expectJSON({ name: 'type definitions', value: 'none' })
+  .expectJSONTypes(
+    Joi.object().keys({ name: 'types', value: isTypeDefinition })
+  )
+
+t.create('no types')
+  .get('/types/link-into.json')
+  .expectJSON({ name: 'types', value: 'none' })

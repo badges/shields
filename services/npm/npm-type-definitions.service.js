@@ -3,13 +3,16 @@
 const { rangeStart, minor } = require('../../lib/version')
 const NpmBase = require('./npm-base')
 
+// For this badge to correctly detect type definitions, either the relevant
+// dependencies must be declared, or the `types` key must be set in
+// package.json.
 module.exports = class NpmTypeDefinitions extends NpmBase {
   static get category() {
     return 'version'
   }
 
   static get defaultBadgeData() {
-    return { label: 'type definitions' }
+    return { label: 'types' }
   }
 
   static get url() {
@@ -26,13 +29,18 @@ module.exports = class NpmTypeDefinitions extends NpmBase {
     ]
   }
 
-  static transform({ devDependencies }) {
-    return {
-      supportedLanguages: [
-        { language: 'TypeScript', range: devDependencies.typescript },
-        { language: 'Flow', range: devDependencies['flow-bin'] },
-      ].filter(({ range }) => range !== undefined),
+  static transform({ devDependencies, types }) {
+    const supportedLanguages = []
+
+    if (types !== undefined || devDependencies.typescript !== undefined) {
+      supportedLanguages.push('TypeScript')
     }
+
+    if (devDependencies['flow-bin'] !== undefined) {
+      supportedLanguages.push('Flow')
+    }
+
+    return { supportedLanguages }
   }
 
   static render({ supportedLanguages }) {
@@ -40,11 +48,7 @@ module.exports = class NpmTypeDefinitions extends NpmBase {
       return { message: 'none', color: 'lightgray' }
     } else {
       return {
-        message: supportedLanguages
-          .map(
-            ({ language, range }) => `${language} v${minor(rangeStart(range))}`
-          )
-          .join(' | '),
+        message: supportedLanguages.join(' | '),
         color: 'blue',
       }
     }
