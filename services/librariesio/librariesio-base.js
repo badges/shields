@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { BaseJsonService } = require('../base')
+const BaseJsonService = require('../base-json')
 const { nonNegativeInteger } = require('../validators.js')
 
 // API doc: https://libraries.io/api#project
