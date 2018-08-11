@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { BaseJsonService } = require('../base')
+const BaseJsonService = require('../base-json')
 const { metric } = require('../../lib/text-formatters')
 const { nonNegativeInteger } = require('../validators.js')
 
@@ -79,7 +79,7 @@ function DownloadsForInterval(interval) {
       let { downloads } = await this._requestJson({
         schema,
         url: `https://api.npmjs.org/downloads/${query}/${packageName}`,
-        notFoundMessage: 'project not found',
+        notFoundMessage: 'package not found or too new',
       })
       if (isRange) {
         downloads = downloads
