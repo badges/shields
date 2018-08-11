@@ -67,6 +67,7 @@ class ServiceTester {
     const specs = this.specs
 
     const fn = this._only ? describe.only : describe
+    // eslint-disable-next-line mocha/prefer-arrow-callback
     fn(this.title, function() {
       specs.forEach(spec => {
         spec.toss()

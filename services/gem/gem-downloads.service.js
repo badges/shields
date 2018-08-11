@@ -69,22 +69,14 @@ module.exports = class GemDownloads extends BaseJsonService {
       let versionData
       if (version !== null && version === 'stable') {
         const versions = json
-          .filter(function(ver) {
-            return ver.prerelease === false
-          })
-          .map(function(ver) {
-            return ver.number
-          })
+          .filter(ver => ver.prerelease === false)
+          .map(ver => ver.number)
         // Found latest stable version.
         const stableVersion = latestVersion(versions)
-        versionData = json.filter(function(ver) {
-          return ver.number === stableVersion
-        })[0]
+        versionData = json.filter(ver => ver.number === stableVersion)[0]
         downloads = metric(versionData.downloads_count)
       } else if (version !== null) {
-        versionData = json.filter(function(ver) {
-          return ver.number === version
-        })[0]
+        versionData = json.filter(ver => ver.number === version)[0]
 
         downloads = metric(versionData.downloads_count)
       } else {

@@ -32,7 +32,7 @@ class DummyService extends BaseService {
   }
 }
 
-describe('BaseService', () => {
+describe('BaseService', function() {
   const defaultConfig = { handleInternalErrors: false }
 
   describe('URL pattern matching', function() {
@@ -195,7 +195,7 @@ describe('BaseService', () => {
     let mockCamp
     let mockHandleRequest
 
-    beforeEach(() => {
+    beforeEach(function() {
       mockCamp = {
         route: sinon.spy(),
       }
@@ -203,12 +203,12 @@ describe('BaseService', () => {
       DummyService.register(mockCamp, mockHandleRequest, defaultConfig)
     })
 
-    it('registers the service', () => {
+    it('registers the service', function() {
       expect(mockCamp.route).to.have.been.calledOnce
       expect(mockCamp.route).to.have.been.calledWith(expectedRouteRegex)
     })
 
-    it('handles the request', async () => {
+    it('handles the request', async function() {
       expect(mockHandleRequest).to.have.been.calledOnce
       const { handler: requestHandler } = mockHandleRequest.getCall(0).args[0]
 
