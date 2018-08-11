@@ -2,12 +2,13 @@
 
 const Joi = require('joi')
 const { BaseJsonService } = require('../base')
-const { nonNegativeInteger } = require('../validators.js')
+const { nonNegativeInteger, anyInteger } = require('../validators.js')
 
 // API doc: https://libraries.io/api#project
 const schema = Joi.object({
   dependents_count: nonNegativeInteger,
   dependent_repos_count: nonNegativeInteger,
+  rank: anyInteger,
 }).required()
 
 class LibrariesIoBase extends BaseJsonService {
