@@ -37,10 +37,13 @@ class LibrariesIoSourcerank extends LibrariesIoBase {
   }
 
   async handle({ platform, packageName }) {
-    const { rank } = await this.fetch({
-      platform,
-      packageName,
-    })
+    const { rank } = await this.fetch(
+      {
+        platform,
+        packageName,
+      },
+      { allowPackages: true }
+    )
     return this.constructor.render({ rank })
   }
 }
