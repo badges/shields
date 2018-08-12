@@ -45,9 +45,7 @@ class BaseJsonService extends BaseService {
         logTrace(emojic.dart, 'Response status code', res.statusCode)
         return { res, buffer }
       })
-      .then(
-        checkErrorResponse.asPromise(errorMessages)
-      )
+      .then(checkErrorResponse.asPromise(errorMessages))
       .then(asJson)
       .then(json => {
         logTrace(emojic.dart, 'Response JSON (before validation)', json)
