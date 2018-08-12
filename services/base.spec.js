@@ -4,7 +4,13 @@ const { expect } = require('chai')
 const { test, given, forCases } = require('sazerac')
 const sinon = require('sinon')
 
-const { BaseService } = require('./base')
+const {
+  NotFound,
+  Inaccessible,
+  InvalidResponse,
+  InvalidParameter,
+} = require('./errors')
+const BaseService = require('./base')
 
 require('../lib/register-chai-plugins.spec')
 
@@ -83,7 +89,49 @@ describe('BaseService', () => {
     expect(serviceData).to.deep.equal({ message: 'Hello bar.bar.bar!' })
   })
 
-  describe('Error handling', function() {
+  describe('Logging', function() {
+    let sandbox
+    beforeEach(function() {
+      sandbox = sinon.createSandbox()
+    })
+    afterEach(function() {
+      sandbox.restore()
+    })
+    beforeEach(function() {
+      sinon.stub(DummyService, 'logTrace')
+    })
+    it('Invokes the logger as expected', async function() {
+      const serviceInstance = new DummyService({}, defaultConfig)
+      await serviceInstance.invokeHandler(
+        {
+          namedParamA: 'bar.bar.bar',
+        },
+        { queryParamA: '!' }
+      )
+      expect(DummyService.logTrace).to.be.calledWithMatch(
+        'inbound',
+        sinon.match.string,
+        'Service class',
+        'DummyService'
+      )
+      expect(DummyService.logTrace).to.be.calledWith(
+        'inbound',
+        sinon.match.string,
+        'Named params',
+        {
+          namedParamA: 'bar.bar.bar',
+        }
+      )
+      expect(DummyService.logTrace).to.be.calledWith(
+        'inbound',
+        sinon.match.string,
+        'Query params',
+        { queryParamA: '!' }
+      )
+    })
+  })
+
+  describe.only('Error handling', function() {
     it('Handles internal errors', async function() {
       const serviceInstance = new DummyService(
         {},
@@ -92,13 +140,77 @@ describe('BaseService', () => {
       serviceInstance.handle = () => {
         throw Error("I've made a huge mistake")
       }
-      const serviceData = await serviceInstance.invokeHandler({
-        namedParamA: 'bar.bar.bar',
-      })
-      expect(serviceData).to.deep.equal({
+      expect(
+        await serviceInstance.invokeHandler({
+          namedParamA: 'bar.bar.bar',
+        })
+      ).to.deep.equal({
         color: 'lightgray',
         label: 'shields',
         message: 'internal error',
+      })
+    })
+
+    describe('Handles known subtypes of ShieldsInternalError', function() {
+      let serviceInstance
+      beforeEach(function() {
+        serviceInstance = new DummyService({}, {})
+      })
+
+      it('handles NotFound errors', async function() {
+        serviceInstance.handle = () => {
+          throw new NotFound()
+        }
+        expect(
+          await serviceInstance.invokeHandler({
+            namedParamA: 'bar.bar.bar',
+          })
+        ).to.deep.equal({
+          color: 'red',
+          message: 'not found',
+        })
+      })
+
+      it('handles Inaccessible errors', async function() {
+        serviceInstance.handle = () => {
+          throw new Inaccessible()
+        }
+        expect(
+          await serviceInstance.invokeHandler({
+            namedParamA: 'bar.bar.bar',
+          })
+        ).to.deep.equal({
+          color: 'lightgray',
+          message: 'inaccessible',
+        })
+      })
+
+      it('handles InvalidResponse errors', async function() {
+        serviceInstance.handle = () => {
+          throw new InvalidResponse()
+        }
+        expect(
+          await serviceInstance.invokeHandler({
+            namedParamA: 'bar.bar.bar',
+          })
+        ).to.deep.equal({
+          color: 'lightgray',
+          message: 'invalid',
+        })
+      })
+
+      it('handles InvalidParameter errors', async function() {
+        serviceInstance.handle = () => {
+          throw new InvalidParameter()
+        }
+        expect(
+          await serviceInstance.invokeHandler({
+            namedParamA: 'bar.bar.bar',
+          })
+        ).to.deep.equal({
+          color: 'red',
+          message: 'invalid parameter',
+        })
       })
     })
   })

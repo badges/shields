@@ -22,7 +22,7 @@ const { isDeprecated, getDeprecatedBadge } = require('./lib/deprecation-helpers'
 const { checkErrorResponse } = require('./lib/error-helper');
 const analytics = require('./lib/analytics');
 const config = require('./lib/server-config');
-const GithubConstellation = require('./lib/github/github-constellation');
+const GithubConstellation = require('./services/github/github-constellation');
 const sysMonitor = require('./lib/sys/monitor');
 const log = require('./lib/log');
 const { makeMakeBadgeFn } = require('./lib/make-badge');
@@ -132,10 +132,12 @@ function reset() {
   clearRegularUpdateCache();
 }
 
-function stop(callback) {
-  githubConstellation.stop();
+async function stop() {
+  await githubConstellation.stop();
   analytics.cancelAutosaving();
-  camp.close(callback);
+  return new Promise(resolve => {
+    camp.close(resolve);
+  });
 }
 
 module.exports = {
