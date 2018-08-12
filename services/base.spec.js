@@ -131,7 +131,7 @@ describe('BaseService', function() {
     })
   })
 
-  describe.only('Error handling', function() {
+  describe('Error handling', function() {
     it('Handles internal errors', async function() {
       const serviceInstance = new DummyService(
         {},
