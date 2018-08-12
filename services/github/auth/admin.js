@@ -1,8 +1,7 @@
 'use strict'
 
-const crypto = require('crypto')
 const { serializeDebugInfo } = require('../../../lib/github-auth')
-const serverSecrets = require('../../../lib/server-secrets')
+const secretIsValid = require('../../../lib/sys/secret-is-valid')
 
 function setRoutes(server) {
   // Allow the admin to obtain the tokens for operational and debugging
@@ -16,9 +15,9 @@ function setRoutes(server) {
   // password.
   //
   // e.g.
-  // curl -u ':very-very-secret' 'https://example.com/$github-auth/tokens'
+  // curl --insecure -u ':very-very-secret' 'https://s0.shields-server.com/$github-auth/tokens'
   server.ajax.on('github-auth/tokens', (json, end, ask) => {
-    if (!crypto.timingSafeEqual(ask.password, serverSecrets.shieldsSecret)) {
+    if (!secretIsValid(ask.password)) {
       // An unknown entity tries to connect. Let the connection linger for a minute.
       return setTimeout(() => {
         end('Invalid secret.')
