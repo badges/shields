@@ -20,9 +20,16 @@ t.create('dependent count')
     })
   )
 
-t.create('dependent count (not a package)')
+t.create('dependent count (nonexistent package)')
   .get('/npm/foobar-is-not-package.json')
   .expectJSON({
     name: 'dependents',
     value: 'package not found',
+  })
+
+t.create('dependent count (repo)')
+  .get('/github/sindresorhus/got.json')
+  .expectJSON({
+    name: 'dependents',
+    value: 'not supported for repos',
   })

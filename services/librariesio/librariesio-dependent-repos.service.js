@@ -36,10 +36,13 @@ class LibrariesIoDependentRepos extends LibrariesIoBase {
   }
 
   async handle({ platform, packageName }) {
-    const { dependent_repos_count: dependentReposCount } = await this.fetch({
-      platform,
-      packageName,
-    })
+    const { dependent_repos_count: dependentReposCount } = await this.fetch(
+      {
+        platform,
+        packageName,
+      },
+      { allowPackages: true }
+    )
     return this.constructor.render({ dependentReposCount })
   }
 }

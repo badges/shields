@@ -36,10 +36,13 @@ class LibrariesIoDependents extends LibrariesIoBase {
   }
 
   async handle({ platform, packageName }) {
-    const { dependents_count: dependentCount } = await this.fetch({
-      platform,
-      packageName,
-    })
+    const { dependents_count: dependentCount } = await this.fetch(
+      {
+        platform,
+        packageName,
+      },
+      { allowPackages: true }
+    )
     return this.constructor.render({ dependentCount })
   }
 }
