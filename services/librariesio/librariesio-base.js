@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
 const { InvalidResponse } = require('../errors')
-const { nonNegativeInteger } = require('../validators')
+const { nonNegativeInteger, anyInteger } = require('../validators')
 
 // API doc: https://libraries.io/api#project
 // We distinguishb between packages and repos based on the presence of the
@@ -12,6 +12,7 @@ const packageSchema = Joi.object({
   platform: Joi.string().required(),
   dependents_count: nonNegativeInteger,
   dependent_repos_count: nonNegativeInteger,
+  rank: anyInteger,
 }).required()
 
 const repoSchema = Joi.object({
