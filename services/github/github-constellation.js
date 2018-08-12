@@ -43,6 +43,9 @@ class GithubConstellation {
       console.error(e)
     }
 
+    githubAuth.emitter.on('token-added', this.persistence.noteTokenAdded)
+    githubAuth.emitter.on('token-removed', this.persistence.noteTokenRemoved)
+
     setAdminRoutes(server)
 
     if (serverSecrets && serverSecrets.gh_client_id) {
@@ -56,8 +59,14 @@ class GithubConstellation {
       this.debugInterval = undefined
     }
 
-    await this.persistence.stop()
-    this.persistence = undefined
+    githubAuth.emitter.removeListener(
+      'token-added',
+      this.persistence.noteTokenAdded
+    )
+    githubAuth.emitter.removeListener(
+      'token-removed',
+      this.persistence.noteTokenRemoved
+    )
   }
 }
 
