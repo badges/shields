@@ -132,10 +132,12 @@ function reset() {
   clearRegularUpdateCache();
 }
 
-function stop(callback) {
-  githubConstellation.stop();
+async function stop() {
+  await githubConstellation.stop();
   analytics.cancelAutosaving();
-  camp.close(callback);
+  return new Promise(resolve => {
+    camp.close(resolve);
+  });
 }
 
 module.exports = {
