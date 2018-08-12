@@ -6,7 +6,7 @@ const LibrariesIoBase = require('./librariesio-base')
 // https://libraries.io/api#project-dependents
 class LibrariesIoDependents extends LibrariesIoBase {
   static get category() {
-    return 'downloads'
+    return 'other'
   }
 
   static get defaultBadgeData() {
@@ -36,10 +36,13 @@ class LibrariesIoDependents extends LibrariesIoBase {
   }
 
   async handle({ platform, packageName }) {
-    const { dependents_count: dependentCount } = await this.fetch({
-      platform,
-      packageName,
-    })
+    const { dependents_count: dependentCount } = await this.fetch(
+      {
+        platform,
+        packageName,
+      },
+      { allowPackages: true }
+    )
     return this.constructor.render({ dependentCount })
   }
 }

@@ -22,6 +22,7 @@ t.create('dependent repo count')
 
 t.create('dependent repo count (not a package)')
   .get('/npm/foobar-is-not-package.json')
+  .timeout(10000)
   .expectJSON({
     name: 'dependent repos',
     value: 'package not found',

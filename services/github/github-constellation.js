@@ -4,6 +4,7 @@ const path = require('path')
 const githubAuth = require('../../lib/github-auth')
 const serverSecrets = require('../../lib/server-secrets')
 const log = require('../../lib/log')
+const TokenPersistence = require('../../lib/token-persistence')
 const GithubApiProvider = require('./github-api-provider')
 const { setRoutes: setAdminRoutes } = require('./auth/admin')
 
@@ -13,10 +14,12 @@ class GithubConstellation {
   constructor(config) {
     this._debugEnabled = config.service.debug.enabled
     this._debugIntervalSeconds = config.service.debug.intervalSeconds
-    this._userTokensPath = path.resolve(
+
+    const userTokensPath = path.resolve(
       config.persistence.dir,
       'github-user-tokens.json'
     )
+    this.persistence = new TokenPersistence({ path: userTokensPath })
 
     const baseUrl = process.env.GITHUB_URL || 'https://api.github.com'
     this.apiProvider = new GithubApiProvider({ baseUrl })
@@ -33,8 +36,12 @@ class GithubConstellation {
   async initialize(server) {
     this.scheduleDebugLogging()
 
-    githubAuth.scheduleAutosaving(this._userTokensPath)
-    // TODO Catch errors and send them to Sentry.
+    try {
+      await this.persistence.initialize()
+    } catch (e) {
+      // TODO Send to sentry.
+      console.error(e)
+    }
 
     setAdminRoutes(server)
 
@@ -43,12 +50,14 @@ class GithubConstellation {
     }
   }
 
-  stop() {
-    githubAuth.cancelAutosaving()
+  async stop() {
     if (this.debugInterval) {
       clearInterval(this.debugInterval)
       this.debugInterval = undefined
     }
+
+    await this.persistence.stop()
+    this.persistence = undefined
   }
 }
 
