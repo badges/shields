@@ -94,6 +94,12 @@ class BaseService {
     return '/' + [this.url.base, partialUrl].filter(Boolean).join('/')
   }
 
+  static _makeStaticUrl(serviceData) {
+    const badgeData = this._makeBadgeData({}, serviceData)
+    const color = badgeData.colorscheme || badgeData.colorB
+    return `/badge/${badgeData.text[0]}-${badgeData.text[1]}-${color}`
+  }
+
   /**
    * Return an array of examples. Each example is prepared according to the
    * schema in `lib/all-badge-examples.js`. Four keys are supported:
@@ -104,9 +110,20 @@ class BaseService {
    */
   static prepareExamples() {
     return this.examples.map(
-      ({ title, previewUrl, query, exampleUrl, documentation }) => {
-        if (!previewUrl) {
-          throw Error(`Example for ${this.name} is missing required previewUrl`)
+      ({
+        title,
+        staticExample,
+        previewUrl,
+        query,
+        exampleUrl,
+        documentation,
+      }) => {
+        if (!previewUrl && !staticExample) {
+          throw Error(
+            `Example for ${
+              this.name
+            } is missing required previewUrl or staticExample`
+          )
         }
 
         const stringified = queryString.stringify(query)
@@ -114,7 +131,9 @@ class BaseService {
 
         return {
           title: title ? `${title}` : this.name,
-          previewUri: `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
+          previewUri: staticExample
+            ? `${this._makeStaticUrl(staticExample)}.svg`
+            : `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
           exampleUri: exampleUrl
             ? `${this._makeFullUrl(exampleUrl, query)}.svg${suffix}`
             : undefined,
