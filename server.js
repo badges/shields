@@ -3295,7 +3295,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub issues integration.
-camp.route(/^\/github\/issues(-pr)?(-closed)?(-raw)?\/([^/]+)\/([^/]+)\/?(.+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/issues(-pr)?(-closed)?(-raw)?\/(?!detail)([^/]+)\/([^/]+)\/?(.+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var isPR = !!match[1];
   var isClosed = !!match[2];
