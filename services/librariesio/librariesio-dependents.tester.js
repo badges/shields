@@ -22,6 +22,7 @@ t.create('dependent count')
 
 t.create('dependent count (nonexistent package)')
   .get('/npm/foobar-is-not-package.json')
+  .timeout(10000)
   .expectJSON({
     name: 'dependents',
     value: 'package not found',
