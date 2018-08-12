@@ -99,7 +99,7 @@ module.exports = class NpmBase extends BaseJsonService {
       try {
         packageData = json.versions[latestVersion]
       } catch (e) {
-        throw new InvalidResponse('invalid json response')
+        throw new InvalidResponse({ prettyMessage: 'invalid json response' })
       }
     }
 
