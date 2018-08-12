@@ -30,7 +30,7 @@ class BaseJsonService extends BaseService {
     }
   }
 
-  async _requestJson({ schema, url, options = {}, notFoundMessage }) {
+  async _requestJson({ schema, url, options = {}, errorMessages = {} }) {
     const logTrace = (...args) => this.constructor.logTrace('fetch', ...args)
     if (!schema || !schema.isJoi) {
       throw Error('A Joi schema is required')
@@ -46,9 +46,7 @@ class BaseJsonService extends BaseService {
         return { res, buffer }
       })
       .then(
-        checkErrorResponse.asPromise(
-          notFoundMessage ? { notFoundMessage: notFoundMessage } : undefined
-        )
+        checkErrorResponse.asPromise(errorMessages)
       )
       .then(asJson)
       .then(json => {

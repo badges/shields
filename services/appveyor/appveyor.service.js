@@ -20,7 +20,7 @@ module.exports = class AppVeyor extends BaseJsonService {
     } = await this._requestJson({
       schema: appVeyorSchema,
       url,
-      notFoundMessage: 'project not found or access denied',
+      errorMessages: { 404: 'project not found or access denied' },
     })
 
     if (status === 'success') {
