@@ -211,6 +211,16 @@ t.create('GitHub open issues by label (raw)')
     })
   )
 
+// See #1870
+t.create('GitHub open issues by label including slash charactr (raw)')
+  .get('/issues-raw/IgorNovozhilov/ndk/@ndk/cfg.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'open @ndk/cfg issues',
+      value: isMetric,
+    })
+  )
+
 t.create('GitHub open issues (repo not found)')
   .get('/issues-raw/badges/helmets.json')
   .expectJSON({

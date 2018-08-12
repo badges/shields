@@ -133,6 +133,7 @@
     "eslint-plugin-react": "^7.6.1",
     "eslint-plugin-standard": "^3.0.1",
     "fetch-ponyfill": "^6.0.0",
+    "fs-readfile-promise": "^3.0.1",
     "icedfrisby": "2.0.0-alpha.2",
     "icedfrisby-nock": "^1.0.0",
     "is-png": "^1.1.0",
@@ -163,7 +164,9 @@
     "sinon": "^6.0.0",
     "sinon-chai": "^3.0.0",
     "snap-shot-it": "^5.0.1",
-    "url": "^0.11.0"
+    "tmp": "0.0.33",
+    "url": "^0.11.0",
+    "wait-promise": "^0.4.1"
   },
   "engines": {
     "node": ">= 8.x",
