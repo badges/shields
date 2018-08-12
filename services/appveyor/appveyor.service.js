@@ -10,7 +10,7 @@ const appVeyorSchema = Joi.object({
 }).required()
 
 module.exports = class AppVeyor extends BaseJsonService {
-  async fetch(repo, branch) {
+  async fetch({ repo, branch }) {
     let url = `https://ci.appveyor.com/api/projects/${repo}`
     if (branch != null) {
       url += `/branch/${branch}`
@@ -22,7 +22,7 @@ module.exports = class AppVeyor extends BaseJsonService {
     })
   }
 
-  static render(status) {
+  static render({ status }) {
     if (status === 'success') {
       return { message: 'passing', color: 'brightgreen' }
     } else if (status !== 'running' && status !== 'queued') {
@@ -35,8 +35,8 @@ module.exports = class AppVeyor extends BaseJsonService {
   async handle({ repo, branch }) {
     const {
       build: { status },
-    } = await this.fetch(repo, branch)
-    return this.constructor.render(status)
+    } = await this.fetch({ repo, branch })
+    return this.constructor.render({ status })
   }
 
   // Metadata

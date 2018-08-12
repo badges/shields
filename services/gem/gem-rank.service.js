@@ -25,7 +25,7 @@ const dailySchema = Joi.array()
   .required()
 
 module.exports = class GemRank extends BaseJsonService {
-  async fetch(info, repo) {
+  async fetch({ info, repo }) {
     const totalRank = info === 'rt'
     const endpoint = totalRank ? '/total_ranking.json' : '/daily_ranking.json'
     const url = `http://bestgems.org/api/v1/gems/${repo}${endpoint}`
@@ -36,7 +36,7 @@ module.exports = class GemRank extends BaseJsonService {
     })
   }
 
-  static render(message, count) {
+  static render({ message, count }) {
     return {
       message: message,
       color: floorCountColor(count, 10, 50, 100),
@@ -44,7 +44,7 @@ module.exports = class GemRank extends BaseJsonService {
   }
 
   async handle({ info, repo }) {
-    const json = await this.fetch(info, repo)
+    const json = await this.fetch({ info, repo })
 
     const totalRank = info === 'rt'
     const rank = totalRank ? json[0].total_ranking : json[0].daily_ranking
@@ -52,7 +52,7 @@ module.exports = class GemRank extends BaseJsonService {
     let message = ordinalNumber(rank)
     message += totalRank ? '' : ' daily'
 
-    return this.constructor.render(message, count)
+    return this.constructor.render({ message, count })
   }
 
   // Metadata

@@ -11,7 +11,7 @@ const clojarsSchema = Joi.object({
 }).required()
 
 module.exports = class Clojars extends BaseJsonService {
-  async fetch(clojar) {
+  async fetch({ clojar }) {
     const url = `https://clojars.org/${clojar}/latest-version.json`
     return this._requestJson({
       url,
@@ -19,7 +19,7 @@ module.exports = class Clojars extends BaseJsonService {
     })
   }
 
-  static render(clojar, version) {
+  static render({ clojar, version }) {
     return {
       message: '[' + clojar + ' "' + version + '"]',
       color: versionColor(version),
@@ -27,7 +27,7 @@ module.exports = class Clojars extends BaseJsonService {
   }
 
   async handle({ clojar }) {
-    const json = await this.fetch(clojar)
+    const json = await this.fetch({ clojar })
 
     if (Object.keys(json).length === 0) {
       /* Note the 'not found' response from clojars is:
@@ -35,7 +35,7 @@ module.exports = class Clojars extends BaseJsonService {
       throw new NotFound()
     }
 
-    return this.constructor.render(clojar, json.version)
+    return this.constructor.render({ clojar, version: json.version })
   }
 
   // Metadata

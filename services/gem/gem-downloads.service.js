@@ -29,7 +29,7 @@ const versionsSchema = Joi.array()
   .required()
 
 module.exports = class GemDownloads extends BaseJsonService {
-  async fetch(repo, info) {
+  async fetch({ repo, info }) {
     const endpoint = info === 'dv' ? 'versions/' : 'gems/'
     const schema = info === 'dv' ? versionsSchema : gemsSchema
     const url = `https://rubygems.org/api/v1/${endpoint}${repo}.json`
@@ -39,7 +39,7 @@ module.exports = class GemDownloads extends BaseJsonService {
     })
   }
 
-  static render(label, downloads) {
+  static render({ label, downloads }) {
     return {
       label: label,
       message: metric(downloads),
@@ -66,7 +66,7 @@ module.exports = class GemDownloads extends BaseJsonService {
       splitRubygem.length > 1 ? splitRubygem[splitRubygem.length - 1] : null
     version = version === 'stable' ? version : semver.valid(version)
     const label = this._getLabel(version, info)
-    const json = await this.fetch(repo, info)
+    const json = await this.fetch({ repo, info })
 
     let downloads
     if (info === 'dt') {
@@ -106,7 +106,7 @@ module.exports = class GemDownloads extends BaseJsonService {
       })
     }
 
-    return this.constructor.render(label, downloads)
+    return this.constructor.render({ label, downloads })
   }
 
   // Metadata

@@ -14,7 +14,7 @@ const versionSchema = Joi.object({
 }).required()
 
 module.exports = class GemVersion extends BaseJsonService {
-  async fetch(repo) {
+  async fetch({ repo }) {
     const url = `https://rubygems.org/api/v1/gems/${repo}.json`
     return this._requestJson({
       url,
@@ -22,7 +22,7 @@ module.exports = class GemVersion extends BaseJsonService {
     })
   }
 
-  static render(version) {
+  static render({ version }) {
     return {
       message: versionText(version),
       color: versionColor(version),
@@ -30,8 +30,8 @@ module.exports = class GemVersion extends BaseJsonService {
   }
 
   async handle({ repo }) {
-    const { version } = await this.fetch(repo)
-    return this.constructor.render(version)
+    const { version } = await this.fetch({ repo })
+    return this.constructor.render({ version })
   }
 
   // Metadata
