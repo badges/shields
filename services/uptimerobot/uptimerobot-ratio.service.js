@@ -6,6 +6,10 @@ const UptimeRobotBase = require('./uptimerobot-base')
 const ratioColor = colorScale([10, 30, 50, 70])
 
 module.exports = class UptimeRobotRatio extends UptimeRobotBase {
+  static get category() {
+    return 'monitoring'
+  }
+
   static get defaultBadgeData() {
     return {
       label: 'uptime',
