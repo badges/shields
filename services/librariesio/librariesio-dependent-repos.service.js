@@ -6,7 +6,7 @@ const LibrariesIoBase = require('./librariesio-base')
 // https://libraries.io/api#project-dependent-repositories
 class LibrariesIoDependentRepos extends LibrariesIoBase {
   static get category() {
-    return 'downloads'
+    return 'other'
   }
 
   static get defaultBadgeData() {
