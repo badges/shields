@@ -215,6 +215,16 @@ t.create('GitHub open issues by label (raw)')
     })
   )
 
+// See #1870
+t.create('GitHub open issues by label including slash charactr (raw)')
+  .get('/issues-raw/IgorNovozhilov/ndk/@ndk/cfg.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'open @ndk/cfg issues',
+      value: isMetric,
+    })
+  )
+
 t.create('GitHub open issues (repo not found)')
   .get('/issues-raw/badges/helmets.json')
   .expectJSON({
@@ -568,10 +578,12 @@ t.create('downloads for unknown release')
 
 t.create('hit counter')
   .get('/search/torvalds/linux/goto.json')
+  .timeout(8000)
   .expectJSONTypes(Joi.object().keys({ name: 'goto counter', value: isMetric }))
 
 t.create('hit counter for nonexistent repo')
   .get('/search/torvalds/not-linux/goto.json')
+  .timeout(8000)
   .expectJSON({ name: 'goto counter', value: 'repo not found' })
 
 t.create('commit activity (1 year)')
