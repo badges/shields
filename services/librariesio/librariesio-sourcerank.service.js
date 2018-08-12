@@ -7,7 +7,7 @@ const sourceRankColor = colorScale([10, 15, 20, 25, 30])
 
 class LibrariesIoSourcerank extends LibrariesIoBase {
   static get category() {
-    return 'other'
+    return 'rating'
   }
 
   static get defaultBadgeData() {
