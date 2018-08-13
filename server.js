@@ -132,10 +132,12 @@ function reset() {
   clearRegularUpdateCache();
 }
 
-function stop(callback) {
-  githubConstellation.stop();
+async function stop() {
+  await githubConstellation.stop();
   analytics.cancelAutosaving();
-  camp.close(callback);
+  return new Promise(resolve => {
+    camp.close(resolve);
+  });
 }
 
 module.exports = {
@@ -3296,7 +3298,7 @@ cache(function(data, match, sendBadge, request) {
 }));
 
 // GitHub issues integration.
-camp.route(/^\/github\/issues(-pr)?(-closed)?(-raw)?\/([^/]+)\/([^/]+)\/?([^/]+)?\.(svg|png|gif|jpg|json)$/,
+camp.route(/^\/github\/issues(-pr)?(-closed)?(-raw)?\/(?!detail)([^/]+)\/([^/]+)\/?(.+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   var isPR = !!match[1];
   var isClosed = !!match[2];

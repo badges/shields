@@ -18,17 +18,3 @@ t.create('clojars (valid)')
 t.create('clojars (not found)')
   .get('/v/not-a-package.json')
   .expectJSON({ name: 'clojars', value: 'not found' })
-
-t.create('clojars (connection error)')
-  .get('/v/jquery.json')
-  .networkOff()
-  .expectJSON({ name: 'clojars', value: 'inaccessible' })
-
-t.create('clojars (error response)')
-  .get('/v/prismic.json')
-  .intercept(nock =>
-    nock('https://clojars.org')
-      .get('/prismic/latest-version.json')
-      .reply(500, '{"error":"oh noes!!"}')
-  )
-  .expectJSON({ name: 'clojars', value: 'invalid' })

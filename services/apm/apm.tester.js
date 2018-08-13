@@ -33,11 +33,6 @@ t.create('License | Package not found')
   .get('/l/notapackage.json')
   .expectJSON({ name: 'license', value: 'package not found' })
 
-t.create('Connection error')
-  .get('/v/vim-mode.json')
-  .networkOff()
-  .expectJSON({ name: 'apm', value: 'inaccessible' })
-
 t.create('Invalid version')
   .get('/dm/vim-mode.json')
   .intercept(nock =>
