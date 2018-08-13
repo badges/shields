@@ -26,7 +26,7 @@ class DummyJsonService extends BaseJsonService {
   }
 }
 
-describe('BaseJsonService', () => {
+describe('BaseJsonService', function() {
   it('handles unparseable json responses', async function() {
     const sendAndCacheRequest = async () => ({
       buffer: invalidJSON,

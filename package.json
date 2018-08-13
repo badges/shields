@@ -128,6 +128,7 @@
     "eslint-config-standard-react": "^6.0.0",
     "eslint-plugin-chai-friendly": "^0.4.1",
     "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-mocha": "^5.1.0",
     "eslint-plugin-node": "^7.0.0",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-react": "^7.6.1",

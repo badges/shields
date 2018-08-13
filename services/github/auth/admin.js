@@ -19,7 +19,7 @@ function setRoutes(server) {
   server.ajax.on('github-auth/tokens', (json, end, ask) => {
     if (!secretIsValid(ask.password)) {
       // An unknown entity tries to connect. Let the connection linger for a minute.
-      return setTimeout(function() {
+      return setTimeout(() => {
         end('Invalid secret.')
       }, 10000)
     }

@@ -158,6 +158,6 @@ t.create('JSON from url | request should set Accept header')
       })
   )
   .expectJSON({ name: 'custom badge', value: 'test' })
-  .after(function() {
+  .after(() => {
     expect(headers).to.have.property('accept', 'application/json')
   })
