@@ -7,9 +7,9 @@ module.exports = class Debug extends BaseService {
   async handle({ detail }) {
     switch (detail) {
       case 'time':
-        return { label: 'time', message: new Date() }
+        return { label: 'time', message: new Date().toUTCString() }
       case 'starttime':
-        return { label: 'start time', message: new Date(serverStartTime) }
+        return { label: 'start time', message: new Date(serverStartTime).toUTCString() }
     }
   }
 
