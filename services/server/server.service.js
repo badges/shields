@@ -8,10 +8,8 @@ module.exports = class Time extends BaseService {
     switch (detail){
       case 'time':
         return { label: 'time', message: new Date() }
-        break
       case 'starttime':
         return { label: 'start time', message: new Date(serverStartTime) }
-        break
     }
   }
 
