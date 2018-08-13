@@ -97,7 +97,9 @@ class BaseService {
   static _makeStaticExampleUrl(serviceData) {
     const badgeData = this._makeBadgeData({}, serviceData)
     const color = badgeData.colorscheme || badgeData.colorB
-    return `/badge/${badgeData.text[0]}-${badgeData.text[1]}-${color}`
+    return `/badge/${encodeURIComponent(
+      badgeData.text[0]
+    )}-${encodeURIComponent(badgeData.text[1])}-${color}`
   }
 
   /**
