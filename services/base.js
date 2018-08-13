@@ -94,7 +94,7 @@ class BaseService {
     return '/' + [this.url.base, partialUrl].filter(Boolean).join('/')
   }
 
-  static _makeStaticUrl(serviceData) {
+  static _makeStaticExampleUrl(serviceData) {
     const badgeData = this._makeBadgeData({}, serviceData)
     const color = badgeData.colorscheme || badgeData.colorB
     return `/badge/${badgeData.text[0]}-${badgeData.text[1]}-${color}`
@@ -132,7 +132,7 @@ class BaseService {
         return {
           title: title ? `${title}` : this.name,
           previewUri: staticExample
-            ? `${this._makeStaticUrl(staticExample)}.svg`
+            ? `${this._makeStaticExampleUrl(staticExample)}.svg`
             : `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
           exampleUri: exampleUrl
             ? `${this._makeFullUrl(exampleUrl, query)}.svg${suffix}`
