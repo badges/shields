@@ -3973,8 +3973,7 @@ cache(function(data, match, sendBadge, request) {
   const badgeData = getBadgeData((isStar ? 'stars' : 'forks'), data);
 
   gitlabHelpers.request(request, apiURL, {}, true, function(err, res, buf) {
-    if ((err != null) || (res.statusCode !== 200)) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
     } else {
       try {
@@ -3990,7 +3989,7 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// GitLab contibutors integration
+// GitLab contributors integration
 camp.route(/^\/gitlab\/((https?)\/([^/]+)\/)?contributors\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const user = match[4];
@@ -3998,14 +3997,18 @@ cache(function(data, match, sendBadge, request) {
   const format = match[6];
   const apiURL = gitlabHelpers.baseURL(match) + '/api/v4/projects/' + user + '%2F' + repo + '/repository/contributors';
   const badgeData = getBadgeData('contributors', data);
+  const requestOptions = {
+    method: 'HEAD',
+    uri: apiURL,
+  };
 
-  gitlabHelpers.request(request, apiURL, {}, true, function(err, res, buf) {
-    if ((err != null) || (res.statusCode !== 200)) {
-      badgeData.text[1] = 'inaccessible';
+  gitlabHelpers.request(request, requestOptions, {}, true, function(err, res, buf) {
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
     } else {
       try {
-        badgeData.text[1] = metric(parseInt(res.headers['x-total']));
+        let contributorCount= parseInt(res.headers['x-total']);
+        badgeData.text[1] = metric(contributorCount);
         badgeData.colorscheme = 'blue';
         sendBadge(format, badgeData);
       } catch(e) {
@@ -4027,8 +4030,7 @@ cache(function(data, match, sendBadge, request) {
   const badgeData = getBadgeData('build', data);
 
   request(apiURL, function(err, res, buffer) {
-    if ((err != null) || (res.statusCode !== 200)) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
     } else {
       xml2js.parseString(buffer.toString(), function (err, data) {
@@ -4063,14 +4065,18 @@ cache(function(data, match, sendBadge, request) {
   const format = match[9];
   const apiURL = gitlabHelpers.baseURL(match) + '/api/v4/projects/' + user + '%2F' + repo + '/' + (isIssue ? 'issues' : 'merge_requests');
   const badgeData = getBadgeData((isRaw ? (inWords + ' ') : '') + (isIssue ? 'issues' : 'merge requests'), data);
+  const requestOptions = {
+    method: 'HEAD',
+    uri: apiURL,
+  };
 
-  gitlabHelpers.request(request, apiURL, { state: (isClosed ? 'closed' : 'opened') }, true, function(err, res, buf) {
-    if ((err != null) || (res.statusCode !== 200)) {
-      badgeData.text[1] = 'inaccessible';
+  gitlabHelpers.request(request, requestOptions, { state: (isClosed ? 'closed' : 'opened') }, true, function(err, res, buf) {
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
     } else {
       try {
-        badgeData.text[1] = metric(parseInt(res.headers['x-total'])) + (isRaw ? '' : (' ' + inWords));
+        let resourceCount = parseInt(res.headers['x-total']);
+        badgeData.text[1] = metric(resourceCount) + (isRaw ? '' : (' ' + inWords));
         badgeData.colorscheme = gitlabHelpers.issueColor(parseInt(res.headers['x-total']), isIssue && !isClosed);
         sendBadge(format, badgeData);
       } catch(e) {
@@ -4091,18 +4097,16 @@ cache(function(data, match, sendBadge, request) {
   const badgeData = getBadgeData('last activity', data);
 
   gitlabHelpers.request(request, apiURL, {}, true, function(err, res, buf) {
-    if ((err != null) || (res.statusCode !== 200)) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
     } else {
       try {
         const data = JSON.parse(buf);
-        const last_activity = data.last_activity_at;
-        badgeData.text[1] = formatDate(last_activity);
-        badgeData.colorscheme = ageColor(last_activity);
+        const lastActivity = data.last_activity_at;
+        badgeData.text[1] = formatDate(lastActivity);
+        badgeData.colorscheme = ageColor(lastActivity);
         sendBadge(format, badgeData);
       } catch(e) {
-        log.error(e);
         badgeData.text[1] = 'invalid';
         sendBadge(format, badgeData);
       }
@@ -4120,8 +4124,7 @@ cache(function(data, match, sendBadge, request) {
   const badgeData = getBadgeData('top language', data);
 
   gitlabHelpers.request(request, apiURL, {}, true, function(err, res, buf) {
-    if ((err != null) || (res.statusCode !== 200)) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
     } else {
       try {
@@ -4150,8 +4153,7 @@ cache(function(data, match, sendBadge, request) {
   const badgeData = getBadgeData('languages', data);
 
   gitlabHelpers.request(request, apiURL, {}, true, function(err, res, buf) {
-    if ((err != null) || (res.statusCode !== 200)) {
-      badgeData.text[1] = 'inaccessible';
+    if (checkErrorResponse(badgeData, err, res)) {
       sendBadge(format, badgeData);
     } else {
       try {
