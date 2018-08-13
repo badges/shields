@@ -3,7 +3,7 @@
 const BaseService = require('../base')
 const { serverStartTime } = require('../../server')
 
-module.exports = class Time extends BaseService {
+module.exports = class Debug extends BaseService {
   async handle({ detail }) {
     switch (detail) {
       case 'time':
@@ -16,7 +16,7 @@ module.exports = class Time extends BaseService {
   // Metadata
   static get defaultBadgeData() {
     return {
-      label: 'server',
+      label: 'debug',
       color: 'blue',
     }
   }
@@ -27,7 +27,7 @@ module.exports = class Time extends BaseService {
 
   static get url() {
     return {
-      base: 'server',
+      base: 'debug',
       format: '(time|starttime)',
       capture: ['detail'],
     }
