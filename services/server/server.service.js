@@ -4,8 +4,8 @@ const BaseService = require('../base')
 const { serverStartTime } = require('../../server')
 
 module.exports = class Time extends BaseService {
-  async handle({detail}) {
-    switch (detail){
+  async handle({ detail }) {
+    switch (detail) {
       case 'time':
         return { label: 'time', message: new Date() }
       case 'starttime':
