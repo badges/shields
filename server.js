@@ -142,6 +142,7 @@ module.exports = {
   camp,
   reset,
   stop,
+  serverStartTime,
 };
 
 log(`Server is starting up: ${config.baseUri}`);
