@@ -29,7 +29,7 @@ const versionsSchema = Joi.array()
   .required()
 
 module.exports = class GemDownloads extends BaseJsonService {
-  async fetch(repo, info) {
+  async fetch({ repo, info }) {
     const endpoint = info === 'dv' ? 'versions/' : 'gems/'
     const schema = info === 'dv' ? versionsSchema : gemsSchema
     const url = `https://rubygems.org/api/v1/${endpoint}${repo}.json`
@@ -37,6 +37,14 @@ module.exports = class GemDownloads extends BaseJsonService {
       url,
       schema,
     })
+  }
+
+  static render({ label, downloads }) {
+    return {
+      label: label,
+      message: metric(downloads),
+      color: downloadCountColor(downloads),
+    }
   }
 
   _getLabel(version, info) {
@@ -58,13 +66,13 @@ module.exports = class GemDownloads extends BaseJsonService {
       splitRubygem.length > 1 ? splitRubygem[splitRubygem.length - 1] : null
     version = version === 'stable' ? version : semver.valid(version)
     const label = this._getLabel(version, info)
-    const json = await this.fetch(repo, info)
+    const json = await this.fetch({ repo, info })
 
     let downloads
     if (info === 'dt') {
-      downloads = metric(json.downloads)
+      downloads = json.downloads
     } else if (info === 'dtv') {
-      downloads = metric(json.version_downloads)
+      downloads = json.version_downloads
     } else if (info === 'dv') {
       let versionData
       if (version !== null && version === 'stable') {
@@ -74,11 +82,11 @@ module.exports = class GemDownloads extends BaseJsonService {
         // Found latest stable version.
         const stableVersion = latestVersion(versions)
         versionData = json.filter(ver => ver.number === stableVersion)[0]
-        downloads = metric(versionData.downloads_count)
+        downloads = versionData.downloads_count
       } else if (version !== null) {
         versionData = json.filter(ver => ver.number === version)[0]
 
-        downloads = metric(versionData.downloads_count)
+        downloads = versionData.downloads_count
       } else {
         throw new InvalidResponse({
           underlyingError: new Error('version is null'),
@@ -90,11 +98,7 @@ module.exports = class GemDownloads extends BaseJsonService {
       })
     }
 
-    return {
-      label: label,
-      message: downloads,
-      color: downloadCountColor(downloads),
-    }
+    return this.constructor.render({ label, downloads })
   }
 
   // Metadata

@@ -22,7 +22,7 @@ const schema = Joi.object({
 // Abstract class for NPM badges which display data about the latest version
 // of a package.
 module.exports = class NpmBase extends BaseJsonService {
-  static buildUrl(base, { withTag }) {
+  static buildUrl(base, { withTag } = {}) {
     if (withTag) {
       return {
         base,
@@ -99,7 +99,7 @@ module.exports = class NpmBase extends BaseJsonService {
       try {
         packageData = json.versions[latestVersion]
       } catch (e) {
-        throw new InvalidResponse('invalid json response')
+        throw new InvalidResponse({ prettyMessage: 'invalid json response' })
       }
     }
 
