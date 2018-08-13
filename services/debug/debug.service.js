@@ -1,7 +1,7 @@
 'use strict'
 
 const BaseService = require('../base')
-const { serverStartTime } = require('../../server')
+const { serverStartTime } = require('../../lib/server-config')
 
 module.exports = class Debug extends BaseService {
   async handle({ detail }) {

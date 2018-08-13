@@ -110,8 +110,6 @@ const {
   parseClassifiers,
 } = require('./lib/pypi-helpers.js');
 
-const serverStartTime = new Date((new Date()).toGMTString());
-
 const camp = require('camp').start({
   documentRoot: path.join(__dirname, 'public'),
   port: config.bind.port,
@@ -144,7 +142,6 @@ module.exports = {
   camp,
   reset,
   stop,
-  serverStartTime,
 };
 
 log(`Server is starting up: ${config.baseUri}`);
@@ -2495,7 +2492,7 @@ cache(function(data, match, sendBadge, request) {
   var userRepo = match[1];  // eg, `jekyll/jekyll`.
   var format = match[2];
 
-  if (isDeprecated('gemnasium', serverStartTime)) {
+  if (isDeprecated('gemnasium', config.serverStartTime)) {
     const badgeData = getDeprecatedBadge('gemnasium', data);
     sendBadge(format, badgeData);
     return;
@@ -7482,12 +7479,12 @@ function(data, match, end, ask) {
   // Cache management - the badge is constant.
   var cacheDuration = (3600*24*1)|0;    // 1 day.
   ask.res.setHeader('Cache-Control', 'max-age=' + cacheDuration);
-  if (+(new Date(ask.req.headers['if-modified-since'])) >= +serverStartTime) {
+  if (+(new Date(ask.req.headers['if-modified-since'])) >= +config.serverStartTime) {
     ask.res.statusCode = 304;
     ask.res.end();  // not modified.
     return;
   }
-  ask.res.setHeader('Last-Modified', serverStartTime.toGMTString());
+  ask.res.setHeader('Last-Modified', config.serverStartTime.toGMTString());
 
   // Badge creation.
   try {
@@ -7537,12 +7534,12 @@ function(data, match, end, ask) {
   // Cache management - the badge is constant.
   var cacheDuration = (3600*24*1)|0;    // 1 day.
   ask.res.setHeader('Cache-Control', 'max-age=' + cacheDuration);
-  if (+(new Date(ask.req.headers['if-modified-since'])) >= +serverStartTime) {
+  if (+(new Date(ask.req.headers['if-modified-since'])) >= +config.serverStartTime) {
     ask.res.statusCode = 304;
     ask.res.end();  // not modified.
     return;
   }
-  ask.res.setHeader('Last-Modified', serverStartTime.toGMTString());
+  ask.res.setHeader('Last-Modified', config.serverStartTime.toGMTString());
 
   // Badge creation.
   try {
