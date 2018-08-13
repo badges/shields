@@ -3,10 +3,6 @@
 const UptimeRobotBase = require('./uptimerobot-base')
 
 module.exports = class UptimeRobotStatus extends UptimeRobotBase {
-  static get category() {
-    return 'monitoring'
-  }
-
   static get defaultBadgeData() {
     return {
       label: 'status',

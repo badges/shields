@@ -47,7 +47,7 @@ const singleMonitorResponseWithUptime = Joi.alternatives(
 
 module.exports = class UptimeRobotBase extends BaseJsonService {
   static get category() {
-    return 'other'
+    return 'monitoring'
   }
 
   static ensureIsMonitorApiKey(value) {
