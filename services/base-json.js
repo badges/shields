@@ -15,7 +15,7 @@ class BaseJsonService extends BaseService {
     })
     if (error) {
       this.logTrace(
-        'error',
+        'validate',
         emojic.womanShrugging,
         'Response did not match schema',
         error.message

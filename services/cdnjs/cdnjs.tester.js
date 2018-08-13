@@ -19,17 +19,3 @@ t.create('cdnjs (valid)')
 t.create('cdnjs (not found)')
   .get('/v/not-a-library.json')
   .expectJSON({ name: 'cdnjs', value: 'not found' })
-
-t.create('cdnjs (connection error)')
-  .get('/v/jquery.json')
-  .networkOff()
-  .expectJSON({ name: 'cdnjs', value: 'inaccessible' })
-
-t.create('cdnjs (error response)')
-  .get('/v/jquery.json')
-  .intercept(nock =>
-    nock('https://api.cdnjs.com')
-      .get('/libraries/jquery?fields=version')
-      .reply(500, '{"error":"oh noes!!"}')
-  )
-  .expectJSON({ name: 'cdnjs', value: 'invalid' })
