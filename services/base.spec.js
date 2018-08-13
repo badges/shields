@@ -15,17 +15,26 @@ const BaseService = require('./base')
 require('../lib/register-chai-plugins.spec')
 
 class DummyService extends BaseService {
-  async handle({ namedParamA }, { queryParamA }) {
+  static render({ namedParamA, queryParamA }) {
     return { message: `Hello ${namedParamA}${queryParamA}` }
+  }
+
+  async handle({ namedParamA }, { queryParamA }) {
+    return this.constructor.render({ namedParamA, queryParamA })
   }
 
   static get category() {
     return 'cat'
   }
+
   static get examples() {
     return [
       { previewUrl: 'World' },
       { previewUrl: 'World', query: { queryParamA: '!!!' } },
+      {
+        exampleUrl: 'World',
+        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+      },
     ]
   }
   static get url() {
@@ -306,7 +315,7 @@ describe('BaseService', function() {
 
   describe('prepareExamples', function() {
     it('returns the expected result', function() {
-      const [first, second] = DummyService.prepareExamples()
+      const [first, second, third] = DummyService.prepareExamples()
       expect(first).to.deep.equal({
         title: 'DummyService',
         previewUri: '/foo/World.svg',
@@ -317,6 +326,12 @@ describe('BaseService', function() {
         title: 'DummyService',
         previewUri: '/foo/World.svg?queryParamA=%21%21%21',
         exampleUri: undefined,
+        documentation: undefined,
+      })
+      expect(third).to.deep.equal({
+        title: 'DummyService',
+        previewUri: '/badge/cat-Hello%20foobar-lightgrey.svg',
+        exampleUri: '/foo/World.svg',
         documentation: undefined,
       })
     })
