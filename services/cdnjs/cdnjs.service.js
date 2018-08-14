@@ -59,7 +59,7 @@ module.exports = class Cdnjs extends BaseJsonService {
   static get examples() {
     return [
       {
-        exampleUrl: 'jquery',
+        exampleUrl: 'LIBRARY',
         staticExample: this.render({ version: '1.5.2' }),
         keywords: ['cdn', 'cdnjs'],
       },
