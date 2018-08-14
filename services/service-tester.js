@@ -14,12 +14,14 @@ class ServiceTester {
    *   Mocha output. The `path` is the path prefix which is automatically
    *   prepended to each tested URI. The default is `/${attrs.id}`.
    */
-  constructor(attrs) {
+  constructor({ id, title, pathPrefix }) {
+    if (pathPrefix === undefined) {
+      pathPrefix = `/${id}`
+    }
     Object.assign(this, {
-      id: attrs.id,
-      title: attrs.title,
-      pathPrefix:
-        attrs.pathPrefix === undefined ? `/${attrs.id}` : attrs.pathPrefix,
+      id,
+      title,
+      pathPrefix,
       specs: [],
       _only: false,
     })
@@ -67,6 +69,7 @@ class ServiceTester {
     const specs = this.specs
 
     const fn = this._only ? describe.only : describe
+    // eslint-disable-next-line mocha/prefer-arrow-callback
     fn(this.title, function() {
       specs.forEach(spec => {
         spec.toss()

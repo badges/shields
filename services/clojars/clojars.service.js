@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { BaseJsonService } = require('../base')
+const BaseJsonService = require('../base-json')
 const { NotFound } = require('../errors')
 const { version: versionColor } = require('../../lib/color-formatters')
 
@@ -11,12 +11,23 @@ const clojarsSchema = Joi.object({
 }).required()
 
 module.exports = class Clojars extends BaseJsonService {
-  async handle({ clojar }) {
+  async fetch({ clojar }) {
     const url = `https://clojars.org/${clojar}/latest-version.json`
-    const json = await this._requestJson({
+    return this._requestJson({
       url,
       schema: clojarsSchema,
     })
+  }
+
+  static render({ clojar, version }) {
+    return {
+      message: '[' + clojar + ' "' + version + '"]',
+      color: versionColor(version),
+    }
+  }
+
+  async handle({ clojar }) {
+    const json = await this.fetch({ clojar })
 
     if (Object.keys(json).length === 0) {
       /* Note the 'not found' response from clojars is:
@@ -24,10 +35,7 @@ module.exports = class Clojars extends BaseJsonService {
       throw new NotFound()
     }
 
-    return {
-      message: '[' + clojar + ' "' + json.version + '"]',
-      color: versionColor(json.version),
-    }
+    return this.constructor.render({ clojar, version: json.version })
   }
 
   // Metadata

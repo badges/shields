@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { BaseJsonService } = require('../base')
+const BaseJsonService = require('../base-json')
 
 const appVeyorSchema = Joi.object({
   build: Joi.object({
@@ -10,19 +10,19 @@ const appVeyorSchema = Joi.object({
 }).required()
 
 module.exports = class AppVeyor extends BaseJsonService {
-  async handle({ repo, branch }) {
+  async fetch({ repo, branch }) {
     let url = `https://ci.appveyor.com/api/projects/${repo}`
     if (branch != null) {
       url += `/branch/${branch}`
     }
-    const {
-      build: { status },
-    } = await this._requestJson({
+    return this._requestJson({
       schema: appVeyorSchema,
       url,
       notFoundMessage: 'project not found or access denied',
     })
+  }
 
+  static render({ status }) {
     if (status === 'success') {
       return { message: 'passing', color: 'brightgreen' }
     } else if (status !== 'running' && status !== 'queued') {
@@ -30,6 +30,13 @@ module.exports = class AppVeyor extends BaseJsonService {
     } else {
       return { message: status }
     }
+  }
+
+  async handle({ repo, branch }) {
+    const {
+      build: { status },
+    } = await this.fetch({ repo, branch })
+    return this.constructor.render({ status })
   }
 
   // Metadata
