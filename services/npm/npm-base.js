@@ -82,7 +82,7 @@ module.exports = class NpmBase extends BaseJsonService {
       // Use a custom Accept header because of this bug:
       // <https://github.com/npm/npmjs.org/issues/163>
       options: { Accept: '*/*' },
-      notFoundMessage: 'package not found',
+      errorMessages: { 404: 'package not found' },
     })
 
     let packageData
