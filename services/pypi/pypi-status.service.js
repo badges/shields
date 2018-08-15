@@ -26,7 +26,7 @@ module.exports = class PypiStatus extends PypiBase {
     ]
   }
 
-  static render({ status }) {
+  static render({ status = '' }) {
     status = status.toLowerCase()
 
     const color = {
