@@ -3,7 +3,8 @@
 const BaseService = require('./base')
 const { Deprecated } = require('./errors')
 
-function deprecatedService({ category, url, label, examples = [] }) {
+// Only `url` is required.
+function deprecatedService({ url, label, category, examples = [] }) {
   return class DeprecatedService extends BaseService {
     static get category() {
       return category
