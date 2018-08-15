@@ -78,7 +78,7 @@ module.exports = class NpmVersion extends NpmBase {
     const packageData = await this._requestJson({
       schema,
       url: `${registryUrl}/-/package/${slug}/dist-tags`,
-      notFoundMessage: 'package not found',
+      errorMessages: { 404: 'package not found' },
     })
 
     if (tag && !(tag in packageData)) {

@@ -30,7 +30,7 @@ class BaseJsonService extends BaseService {
     }
   }
 
-  async _requestJson({ schema, url, options = {}, notFoundMessage }) {
+  async _requestJson({ schema, url, options = {}, errorMessages = {} }) {
     const logTrace = (...args) => this.constructor.logTrace('fetch', ...args)
     if (!schema || !schema.isJoi) {
       throw Error('A Joi schema is required')
@@ -45,11 +45,7 @@ class BaseJsonService extends BaseService {
         logTrace(emojic.dart, 'Response status code', res.statusCode)
         return { res, buffer }
       })
-      .then(
-        checkErrorResponse.asPromise(
-          notFoundMessage ? { notFoundMessage: notFoundMessage } : undefined
-        )
-      )
+      .then(checkErrorResponse.asPromise(errorMessages))
       .then(asJson)
       .then(json => {
         logTrace(emojic.dart, 'Response JSON (before validation)', json)

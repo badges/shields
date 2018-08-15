@@ -1057,7 +1057,7 @@ cache(function(data, match, sendBadge, request) {
   const url = 'https://lgtm.com/api/v0.1/project/' + projectId + '/details';
   const badgeData = getBadgeData('lgtm', data);
   request(url, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'project not found')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'project not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -1103,7 +1103,7 @@ cache(function(data, match, sendBadge, request) {
   })();
   const badgeData = getBadgeData('code quality: ' + languageLabel, data);
   request(url, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'project not found')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'project not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -1333,7 +1333,7 @@ cache(function(data, match, sendBadge, request) {
     branch = 'dev-master';
   }
   request(apiUrl, function dealWithData(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'repo not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -2179,7 +2179,7 @@ cache(function(data, match, sendBadge, request) {
   const apiUrl = `https://scrutinizer-ci.com/api/repositories/${repo}`;
   const badgeData = getBadgeData(type, data);
   request(apiUrl, {}, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'project or branch not found')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'project or branch not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -3415,7 +3415,7 @@ cache(function(data, match, sendBadge, request) {
     badgeData.logo = getLogo('github', data);
   }
   githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res)) {
+    if (githubCheckErrorResponse(badgeData, err, res, 'repo not found', { 403: 'access denied' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -5128,7 +5128,7 @@ cache(function(data, match, sendBadge, request) {
 
   const badgeData = getBadgeData('build', data);
   request(apiUrl, { json:true }, function(err, res, data) {
-    if (checkErrorResponse(badgeData, err, res, 'project not found')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'project not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -5413,7 +5413,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://hub.docker.com/v2/repositories/' + path + '/stars/count/';
   var badgeData = getBadgeData('docker stars', data);
   request(url, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'repo not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -5445,7 +5445,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://hub.docker.com/v2/repositories/' + path;
   var badgeData = getBadgeData('docker pulls', data);
   request(url, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'repo not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -5514,7 +5514,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://registry.hub.docker.com/v2/repositories/' + path;
   var badgeData = getBadgeData('docker build', data);
   request(url, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'repo not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -5549,7 +5549,7 @@ cache(function(data, match, sendBadge, request) {
   var url = 'https://registry.hub.docker.com/v2/repositories/' + path + '/buildhistory';
   var badgeData = getBadgeData('docker build', data);
   request(url, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res, 'repo not found')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'repo not found' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -6359,7 +6359,7 @@ cache(function(data, match, sendBadge, request) {
   const badgeData = getBadgeData('dependencies', data);
 
   request(options, function(err, res, json) {
-    if (checkErrorResponse(badgeData, err, res, 'not available')) {
+    if (checkErrorResponse(badgeData, err, res, { 404: 'not available' })) {
       sendBadge(format, badgeData);
       return;
     }
@@ -6501,138 +6501,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Uptime Robot status integration.
-// API documentation : https://uptimerobot.com/api
-camp.route(/^\/uptimerobot\/status\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var monitorApiKey = match[1];  // eg, m778918918-3e92c097147760ee39d02d36
-  var format = match[2];
-  var badgeData = getBadgeData('status', data);
-  var options = {
-    method: 'POST',
-    json: true,
-    body: {
-      "api_key": monitorApiKey,
-      "format": "json",
-    },
-    uri: 'https://api.uptimerobot.com/v2/getMonitors',
-  };
-  // A monitor API key must start with "m"
-  if (monitorApiKey.substring(0, "m".length) !== "m") {
-    badgeData.text[1] = 'must use a monitor key';
-    sendBadge(format, badgeData);
-    return;
-  }
-  request(options, function(err, res, json) {
-    if (err !== null || res.statusCode >= 500 || typeof json !== 'object') {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      if (json.stat === 'fail') {
-        badgeData.text[1] = 'vendor error';
-        if (json.error && typeof json.error.message === 'string') {
-          badgeData.text[1] = json.error.message;
-        }
-        badgeData.colorscheme = 'lightgrey';
-        sendBadge(format, badgeData);
-        return;
-      }
-      var status = json.monitors[0].status;
-      if (status === 0) {
-        badgeData.text[1] = 'paused';
-        badgeData.colorscheme = 'yellow';
-      } else if (status === 1) {
-        badgeData.text[1] = 'not checked yet';
-        badgeData.colorscheme = 'yellowgreen';
-      } else if (status === 2) {
-        badgeData.text[1] = 'up';
-        badgeData.colorscheme = 'brightgreen';
-      } else if (status === 8) {
-        badgeData.text[1] = 'seems down';
-        badgeData.colorscheme = 'orange';
-      } else if (status === 9) {
-        badgeData.text[1] = 'down';
-        badgeData.colorscheme = 'red';
-      } else {
-        badgeData.text[1] = 'invalid';
-        badgeData.colorscheme = 'lightgrey';
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// Uptime Robot ratio integration.
-// API documentation : https://uptimerobot.com/api
-camp.route(/^\/uptimerobot\/ratio(\/[^/]+)?\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var numberOfDays = match[1];  // eg, 7, null if querying 30
-  var monitorApiKey = match[2];  // eg, m778918918-3e92c097147760ee39d02d36
-  var format = match[3];
-  var badgeData = getBadgeData('uptime', data);
-  if (numberOfDays) {
-    numberOfDays = numberOfDays.slice(1);
-  } else {
-    numberOfDays = '30';
-  }
-  var options = {
-    method: 'POST',
-    json: true,
-    body: {
-      "api_key": monitorApiKey,
-      "custom_uptime_ratios": numberOfDays,
-      "format": "json",
-    },
-    uri: 'https://api.uptimerobot.com/v2/getMonitors',
-  };
-  // A monitor API key must start with "m"
-  if (monitorApiKey.substring(0, "m".length) !== "m") {
-    badgeData.text[1] = 'must use a monitor key';
-    sendBadge(format, badgeData);
-    return;
-  }
-  request(options, function(err, res, json) {
-    if (err !== null || res.statusCode >= 500 || typeof json !== 'object') {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      if (json.stat === 'fail') {
-        badgeData.text[1] = 'vendor error';
-        if (json.error && typeof json.error.message === 'string') {
-          badgeData.text[1] = json.error.message;
-        }
-        badgeData.colorscheme = 'lightgrey';
-        sendBadge(format, badgeData);
-        return;
-      }
-      var percent = parseFloat(json.monitors[0].custom_uptime_ratio);
-      badgeData.text[1] = percent + '%';
-      if (percent <= 10) {
-        badgeData.colorscheme = 'red';
-      } else if (percent <= 30) {
-        badgeData.colorscheme = 'yellow';
-      } else if (percent <= 50) {
-        badgeData.colorscheme = 'yellowgreen';
-      } else if (percent <= 70) {
-        badgeData.colorscheme = 'green';
-      } else {
-        badgeData.colorscheme = 'brightgreen';
-      }
-      sendBadge(format, badgeData);
-    } catch (e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // Discord integration
 camp.route(/^\/discord\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache((data, match, sendBadge, request) => {
@@ -6765,7 +6633,7 @@ cache({
 
     request(url, requestOptions, (err, res, data) => {
       try {
-        if (checkErrorResponse(badgeData, err, res, 'resource not found')) {
+        if (checkErrorResponse(badgeData, err, res, { 404: 'resource not found' })) {
           return;
         }
 

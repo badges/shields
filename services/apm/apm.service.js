@@ -22,7 +22,7 @@ class BaseAPMService extends BaseJsonService {
     return this._requestJson({
       schema: apmSchema,
       url: `https://atom.io/api/packages/${repo}`,
-      notFoundMessage: 'package not found',
+      errorMessages: { 404: 'package not found' },
     })
   }
 
