@@ -82,7 +82,7 @@ t.create('version (not semver)')
 
 t.create('version (invalid)')
   .get('/v/not-a-package.json')
-  .expectJSON({ name: 'version', value: 'package or version not found' })
+  .expectJSON({ name: 'pypi', value: 'package or version not found' })
 
 // tests for license endpoint
 
@@ -160,7 +160,7 @@ t.create('python versions (valid, no package version specified)')
 
 t.create('python versions (no versions specified)')
   .get('/pyversions/pyshp/1.2.12.json')
-  .expectJSON({ name: 'python', value: 'not found' })
+  .expectJSON({ name: 'python', value: 'missing' })
 
 t.create('python versions (invalid)')
   .get('/pyversions/not-a-package.json')
