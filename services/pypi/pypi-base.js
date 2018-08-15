@@ -18,7 +18,7 @@ module.exports = class PypiBase extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://pypi.org/pypi/${egg}/json`,
-      notFoundMessage: 'package or version not found',
+      errorMessages: { 404: 'package or version not found' },
     })
   }
 }
