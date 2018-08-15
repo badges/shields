@@ -48,7 +48,7 @@
     "query-string": "^6.0.0",
     "raven": "^2.4.2",
     "redis": "~2.8.0",
-    "request": "~2.87.0",
+    "request": "~2.88.0",
     "semver": "~5.5.0",
     "simple-icons": "^1.7.1",
     "svgo": "~1.0.5",
