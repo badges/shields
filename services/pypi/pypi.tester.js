@@ -164,7 +164,7 @@ t.create('python versions (no versions specified)')
 
 t.create('python versions (invalid)')
   .get('/pyversions/not-a-package.json')
-  .expectJSON({ name: 'format', value: 'package or version not found' })
+  .expectJSON({ name: 'python', value: 'package or version not found' })
 
 // tests for django versions endpoint
 
@@ -192,7 +192,10 @@ t.create('supported django versions (no versions specified)')
 
 t.create('supported django versions (invalid)')
   .get('/djversions/not-a-package.json')
-  .expectJSON({ name: 'pypi', value: 'package or version not found' })
+  .expectJSON({
+    name: 'django versions',
+    value: 'package or version not found',
+  })
 
 // tests for implementation endpoint
 
@@ -210,7 +213,7 @@ t.create('implementation (not specified)')
 
 t.create('implementation (invalid)')
   .get('/implementation/not-a-package.json')
-  .expectJSON({ name: 'pypi', value: 'invalid' })
+  .expectJSON({ name: 'implementation', value: 'package or version not found' })
 
 // tests for status endpoint
 
@@ -228,4 +231,4 @@ t.create('status (valid, beta)')
 
 t.create('status (invalid)')
   .get('/status/not-a-package.json')
-  .expectJSON({ name: 'pypi', value: 'package or version not found' })
+  .expectJSON({ name: 'status', value: 'package or version not found' })
