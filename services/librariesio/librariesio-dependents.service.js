@@ -23,7 +23,8 @@ class LibrariesIoDependents extends LibrariesIoBase {
     return [
       {
         title: 'Dependents (via libraries.io)',
-        previewUrl: 'npm/got',
+        exampleUrl: 'PLATFORM/LIBRARY',
+        staticExample: this.render({ dependentCount: '2000' }),
       },
     ]
   }

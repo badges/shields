@@ -122,22 +122,35 @@ module.exports = class GemDownloads extends BaseJsonService {
     return [
       {
         title: 'Gem',
-        previewUrl: 'dv/rails/stable',
+        exampleUrl: 'dv/PACKAGE/stable',
+        staticExample: this.render({
+          label: 'downloads@stable',
+          downloads: 70000,
+        }),
         keywords: ['ruby'],
       },
       {
         title: 'Gem',
-        previewUrl: 'dv/rails/4.1.0',
+        exampleUrl: 'dv/PACKAGE/VERSION',
+        staticExample: this.render({
+          label: 'downloads@4.1.0',
+          downloads: 50000,
+        }),
         keywords: ['ruby'],
       },
       {
         title: 'Gem',
-        previewUrl: 'dtv/rails',
+        exampleUrl: 'dtv/PACKAGE',
+        staticExample: this.render({
+          label: 'downloads@latest',
+          downloads: 70000,
+        }),
         keywords: ['ruby'],
       },
       {
         title: 'Gem',
-        previewUrl: 'dt/rails',
+        exampleUrl: 'dt/PACKAGE',
+        staticExample: this.render({ label: 'downloads', downloads: 900000 }),
         keywords: ['ruby'],
       },
     ]

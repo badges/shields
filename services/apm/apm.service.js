@@ -29,15 +29,6 @@ class BaseAPMService extends BaseJsonService {
   static get defaultBadgeData() {
     return { label: 'apm' }
   }
-
-  static get examples() {
-    return [
-      {
-        previewUrl: 'vim-mode',
-        keywords: ['atom'],
-      },
-    ]
-  }
 }
 
 class APMDownloads extends BaseAPMService {
@@ -64,6 +55,16 @@ class APMDownloads extends BaseAPMService {
       format: '(.+)',
       capture: ['repo'],
     }
+  }
+
+  static get examples() {
+    return [
+      {
+        exampleUrl: 'PACKAGE',
+        staticExample: this.render({ downloads: '60043' }),
+        keywords: ['atom'],
+      },
+    ]
   }
 }
 
@@ -93,6 +94,16 @@ class APMVersion extends BaseAPMService {
       format: '(.+)',
       capture: ['repo'],
     }
+  }
+
+  static get examples() {
+    return [
+      {
+        exampleUrl: 'PACKAGE',
+        staticExample: this.render({ version: '0.6.0' }),
+        keywords: ['atom'],
+      },
+    ]
   }
 }
 
@@ -126,6 +137,16 @@ class APMLicense extends BaseAPMService {
       format: '(.+)',
       capture: ['repo'],
     }
+  }
+
+  static get examples() {
+    return [
+      {
+        exampleUrl: 'PACKAGE',
+        staticExample: this.render({ license: 'MIT' }),
+        keywords: ['atom'],
+      },
+    ]
   }
 }
 

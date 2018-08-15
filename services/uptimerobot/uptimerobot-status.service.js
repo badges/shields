@@ -21,12 +21,13 @@ module.exports = class UptimeRobotStatus extends UptimeRobotBase {
     return [
       {
         title: 'Uptime Robot status',
-        previewUrl: 'm778918918-3e92c097147760ee39d02d36',
+        exampleUrl: 'MONITOR-SPECIFIC-KEY',
+        staticExample: this.render({ status: 2 }),
       },
     ]
   }
 
-  static async render({ status }) {
+  static render({ status }) {
     switch (status) {
       case 0:
         return { message: 'paused', color: 'yellow' }

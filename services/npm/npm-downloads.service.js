@@ -62,7 +62,8 @@ function DownloadsForInterval(interval) {
       return [
         {
           title: 'npm',
-          previewUrl: 'localeval',
+          exampleUrl: 'PACKAGE',
+          staticExample: this.render({ downloads: 30000 }),
           keywords: ['node'],
         },
       ]

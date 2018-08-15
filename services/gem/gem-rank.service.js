@@ -76,12 +76,20 @@ module.exports = class GemRank extends BaseJsonService {
     return [
       {
         title: 'Gems',
-        previewUrl: 'rt/puppet',
+        exampleUrl: 'rt/PACKAGE',
+        staticExample: this.render({
+          message: ordinalNumber(332),
+          count: 332,
+        }),
         keywords: ['ruby'],
       },
       {
         title: 'Gems',
-        previewUrl: 'rd/facter',
+        exampleUrl: 'rd/PACKAGE',
+        staticExample: this.render({
+          message: ordinalNumber(656) + ' daily',
+          count: 656,
+        }),
         keywords: ['ruby'],
       },
     ]
