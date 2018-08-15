@@ -27,8 +27,3 @@ t.create('CI application not found')
 t.create('CI private application')
   .get('/ci/wercker/blueprint.json')
   .expectJSON({ name: 'build', value: 'private application not supported' })
-
-t.create('CI connection error)')
-  .get('/ci/wercker/go-wercker-ap.json')
-  .networkOff()
-  .expectJSON({ name: 'build', value: 'inaccessible' })
