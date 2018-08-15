@@ -8,6 +8,7 @@ const {
   InvalidResponse,
   Inaccessible,
   InvalidParameter,
+  Deprecated,
 } = require('./errors')
 const queryString = require('query-string')
 const {
@@ -175,7 +176,8 @@ class BaseService {
         }
       } else if (
         error instanceof InvalidResponse ||
-        error instanceof Inaccessible
+        error instanceof Inaccessible ||
+        error instanceof Deprecated
       ) {
         logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
         return {

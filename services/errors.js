@@ -83,9 +83,24 @@ class InvalidParameter extends ShieldsRuntimeError {
   }
 }
 
+class Deprecated extends ShieldsRuntimeError {
+  get name() {
+    return 'Deprecated'
+  }
+  get defaultPrettyMessage() {
+    return 'no longer available'
+  }
+
+  constructor(props) {
+    const message = 'Deprecated'
+    super(props, message)
+  }
+}
+
 module.exports = {
   NotFound,
   InvalidResponse,
   Inaccessible,
   InvalidParameter,
+  Deprecated,
 }
