@@ -35,17 +35,6 @@ t.create('circle ci (connection error)')
   .networkOff()
   .expectJSON({ name: 'build', value: 'inaccessible' })
 
-t.create('circle ci (unexpected response)')
-  .get('/project/github/RedSparr0w/node-csgo-parser.json')
-  .intercept(nock =>
-    nock('https://circleci.com')
-      .get(
-        '/api/v1.1/project/github/RedSparr0w/node-csgo-parser?filter=completed&limit=1'
-      )
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'build', value: 'invalid' })
-
 t.create('circle ci (no response data)')
   .get('/project/github/RedSparr0w/node-csgo-parser.json')
   .intercept(nock =>
@@ -55,7 +44,7 @@ t.create('circle ci (no response data)')
       )
       .reply(200)
   )
-  .expectJSON({ name: 'build', value: 'invalid' })
+  .expectJSON({ name: 'build', value: 'unparseable json response' })
 
 t.create('circle ci (multiple pipelines, pass)')
   .get('/project/github/RedSparr0w/node-csgo-parser.json?style=_shields_test')
