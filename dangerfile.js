@@ -148,4 +148,4 @@ noTestShortcuts({
   patterns: {
     only: ['only()'],
   },
-})
+});
