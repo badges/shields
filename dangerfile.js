@@ -135,7 +135,7 @@ affectedServices.forEach(function(service) {
   if (testedServices.indexOf(service) === -1) {
     warn(
       [
-        `This PR modified service code for ${service} but not its test code. `,
+        `This PR modified service code for *${service}* but not its test code. `,
         "That's okay so long as it's refactoring existing code.",
       ].join('')
     );
