@@ -26,7 +26,6 @@ const unknownLicenseColor = colorsB[licenseToColor()]
 
 t.create('Public domain license')
   .get('/license/github/gitignore.json?style=_shields_test')
-  .only()
   .expectJSON({
     name: 'license',
     value: 'CC0-1.0',
