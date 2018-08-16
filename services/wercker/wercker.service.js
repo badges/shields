@@ -15,15 +15,13 @@ const werckerSchema = Joi.array()
 
 module.exports = class Wercker extends BaseJsonService {
   async fetch({ applicationName, projectId, branch }) {
-    let url = applicationName
+    const url = applicationName
       ? `https://app.wercker.com/api/v3/applications/${applicationName}/builds?limit=1`
       : `https://app.wercker.com/getbuilds/${projectId}?limit=1`
-    if (branch) {
-      url += `&branch=${branch}`
-    }
     return this._requestJson({
       schema: werckerSchema,
       url,
+      options: { qs: { branch } },
       errorMessages: {
         401: 'private application not supported',
         404: 'application not found',
@@ -44,8 +42,7 @@ module.exports = class Wercker extends BaseJsonService {
 
   async handle({ applicationName, projectId, branch }) {
     const json = await this.fetch({ applicationName, projectId, branch })
-    const status = json[0].status
-    const result = json[0].result
+    const { status, result } = json[0]
     return this.constructor.render({ status, result })
   }
 
