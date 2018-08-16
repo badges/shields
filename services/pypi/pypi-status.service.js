@@ -59,10 +59,10 @@ module.exports = class PypiStatus extends PypiBase {
     // https://pypi.org/pypi?%3Aaction=list_classifiers
     const status = parseClassifiers(
       packageData,
-      /^Development Status :: (\S+)$/
+      /^Development Status :: (\d - \S+)$/
     )
       .sort()
-      .map(classifier => classifier.split('-').pop())
+      .map(classifier => classifier.split(' - ').pop())
       .map(classifier => classifier.replace(/production\/stable/i, 'stable'))
       .pop()
 

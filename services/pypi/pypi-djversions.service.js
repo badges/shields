@@ -27,7 +27,7 @@ module.exports = class PypiDjangoVersions extends PypiBase {
   }
 
   static render({ versions }) {
-    if (versions.size) {
+    if (versions.length > 0) {
       return {
         message: sortDjangoVersions(versions).join(' | '),
         color: 'blue',

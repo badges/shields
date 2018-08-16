@@ -188,7 +188,7 @@ t.create('supported django versions (valid, no package version specified)')
 
 t.create('supported django versions (no versions specified)')
   .get('/djversions/django/1.11.json')
-  .expectJSON({ name: 'django versions', value: 'not found' })
+  .expectJSON({ name: 'django versions', value: 'missing' })
 
 t.create('supported django versions (invalid)')
   .get('/djversions/not-a-package.json')
@@ -201,7 +201,7 @@ t.create('supported django versions (invalid)')
 
 t.create('implementation (valid, package version in request)')
   .get('/implementation/beehive/1.0.json')
-  .expectJSON({ name: 'implementation', value: 'cpython, jython, pypy' })
+  .expectJSON({ name: 'implementation', value: 'cpython | jython | pypy' })
 
 t.create('implementation (valid, no package version specified)')
   .get('/implementation/numpy.json')
