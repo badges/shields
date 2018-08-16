@@ -3,7 +3,27 @@
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
 
-const schema = Joi.any()
+const schema = Joi.object({
+  info: Joi.object({
+    version: Joi.string().required(),
+    license: Joi.string().required(),
+    classifiers: Joi.array()
+      .items(Joi.string().required())
+      .required(),
+  }).required(),
+  releases: Joi.object()
+    .pattern(
+      Joi.string(),
+      Joi.array()
+        .items(
+          Joi.object({
+            packagetype: Joi.string().required(),
+          })
+        )
+        .required()
+    )
+    .required(),
+}).required()
 
 module.exports = class PypiBase extends BaseJsonService {
   static buildUrl(base) {
