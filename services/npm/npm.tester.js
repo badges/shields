@@ -213,7 +213,6 @@ t.create('license when network is off')
 // This tests error-handling functionality in NpmBase.
 t.create('when json is malformed for scoped package')
   .get('/l/@cycle%2Fcore.json')
-  .only()
   .intercept(nock =>
     nock('https://registry.npmjs.org')
       .get('/@cycle%2Fcore')
