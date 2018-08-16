@@ -7,6 +7,7 @@
 
 const { danger, fail, message, warn } = require('danger');
 const chainsmoker = require('chainsmoker');
+const { default: noTestShortcuts } = require('danger-plugin-no-test-shortcuts');
 
 const fileMatch = chainsmoker({
   created: danger.git.created_files,
@@ -139,4 +140,12 @@ affectedServices.forEach(function(service) {
       ].join('')
     );
   }
+});
+
+// Prevent merging exclusive services tests.
+noTestShortcuts({
+  testFilePredicate: filePath => filePath.endsWith('.tester.js'),
+  patterns: {
+    only: ['only()'],
+  },
 });
