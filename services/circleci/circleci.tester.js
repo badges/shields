@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
-const { invalidJSON } = require('../response-fixtures')
 const { isBuildStatus } = require('../test-validators')
 
 const t = new ServiceTester({ id: 'circleci', title: 'Circle CI' })
