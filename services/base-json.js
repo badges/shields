@@ -26,7 +26,13 @@ class BaseJsonService extends BaseService {
         underlyingError: error,
       })
     } else {
-      trace.logTrace('validate', emojic.bathtub, 'JSON after validation', value)
+      this.logTrace(
+        'validate',
+        emojic.bathtub,
+        'JSON after validation',
+        value,
+        { deep: true }
+      )
       return value
     }
   }
@@ -49,7 +55,9 @@ class BaseJsonService extends BaseService {
       .then(checkErrorResponse.asPromise(errorMessages))
       .then(asJson)
       .then(json => {
-        logTrace(emojic.dart, 'Response JSON (before validation)', json)
+        logTrace(emojic.dart, 'Response JSON (before validation)', json, {
+          deep: true,
+        })
         return json
       })
       .then(json => this.constructor._validate(json, schema))

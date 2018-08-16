@@ -22,9 +22,19 @@ function _formatLabelForStage(stage, label) {
   return colorFn(` ${label} `)
 }
 
-function logTrace(stage, symbol, label, ...content) {
+function logTrace(stage, symbol, label, content, { deep = false } = {}) {
   if (enableTraceLogging) {
-    console.log(_formatLabelForStage(stage, label), symbol, '\n', ...content)
+    if (deep) {
+      console.log(this._formatLabelForStage(stage, label), symbol)
+      console.dir(content, { depth: null })
+    } else {
+      console.log(
+        this._formatLabelForStage(stage, label),
+        symbol,
+        '\n',
+        content
+      )
+    }
     return true
   } else {
     return false
