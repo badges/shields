@@ -6,6 +6,7 @@ const Joi = require('joi')
 const { checkErrorResponse, asJson } = require('../lib/error-helper')
 const BaseService = require('./base')
 const { InvalidResponse } = require('./errors')
+const trace = require('./trace')
 
 class BaseJsonService extends BaseService {
   static _validate(json, schema) {
@@ -14,7 +15,7 @@ class BaseJsonService extends BaseService {
       stripUnknown: true,
     })
     if (error) {
-      this.logTrace(
+      trace.logTrace(
         'validate',
         emojic.womanShrugging,
         'Response did not match schema',
@@ -25,13 +26,13 @@ class BaseJsonService extends BaseService {
         underlyingError: error,
       })
     } else {
-      this.logTrace('validate', emojic.bathtub, 'JSON after validation', value)
+      trace.logTrace('validate', emojic.bathtub, 'JSON after validation', value)
       return value
     }
   }
 
   async _requestJson({ schema, url, options = {}, errorMessages = {} }) {
-    const logTrace = (...args) => this.constructor.logTrace('fetch', ...args)
+    const logTrace = (...args) => trace.logTrace('fetch', ...args)
     if (!schema || !schema.isJoi) {
       throw Error('A Joi schema is required')
     }
