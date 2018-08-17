@@ -66,6 +66,8 @@ class GithubConstellation {
       'token-removed',
       this.persistence.noteTokenRemoved
     )
+
+    await this.persistence.stop()
   }
 }
 
