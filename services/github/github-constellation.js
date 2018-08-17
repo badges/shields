@@ -4,7 +4,7 @@ const path = require('path')
 const githubAuth = require('../../lib/github-auth')
 const serverSecrets = require('../../lib/server-secrets')
 const log = require('../../lib/log')
-const TokenPersistence = require('../../lib/token-persistence')
+const FsTokenPersistence = require('../../lib/fs-token-persistence')
 const GithubApiProvider = require('./github-api-provider')
 const { setRoutes: setAdminRoutes } = require('./auth/admin')
 
@@ -19,7 +19,7 @@ class GithubConstellation {
       config.persistence.dir,
       'github-user-tokens.json'
     )
-    this.persistence = new TokenPersistence({ path: userTokensPath })
+    this.persistence = new FsTokenPersistence({ path: userTokensPath })
 
     const baseUrl = process.env.GITHUB_URL || 'https://api.github.com'
     this.apiProvider = new GithubApiProvider({ baseUrl })
