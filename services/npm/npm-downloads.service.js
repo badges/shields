@@ -79,7 +79,7 @@ function DownloadsForInterval(interval) {
       let { downloads } = await this._requestJson({
         schema,
         url: `https://api.npmjs.org/downloads/${query}/${packageName}`,
-        notFoundMessage: 'package not found or too new',
+        errorMessages: { 404: 'package not found or too new' },
       })
       if (isRange) {
         downloads = downloads

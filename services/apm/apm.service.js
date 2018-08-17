@@ -18,11 +18,11 @@ const apmSchema = Joi.object({
 })
 
 class BaseAPMService extends BaseJsonService {
-  async fetch(repo) {
+  async fetch({ repo }) {
     return this._requestJson({
       schema: apmSchema,
       url: `https://atom.io/api/packages/${repo}`,
-      notFoundMessage: 'package not found',
+      errorMessages: { 404: 'package not found' },
     })
   }
 
@@ -41,11 +41,13 @@ class BaseAPMService extends BaseJsonService {
 }
 
 class APMDownloads extends BaseAPMService {
-  async handle({ repo }) {
-    const json = await this.fetch(repo)
-
-    const downloads = json.downloads
+  static render({ downloads }) {
     return { message: metric(downloads), color: 'green' }
+  }
+
+  async handle({ repo }) {
+    const json = await this.fetch({ repo })
+    return this.constructor.render({ downloads: json.downloads })
   }
 
   static get category() {
@@ -66,15 +68,19 @@ class APMDownloads extends BaseAPMService {
 }
 
 class APMVersion extends BaseAPMService {
+  static render({ version }) {
+    return { message: addv(version), color: versionColor(version) }
+  }
+
   async handle({ repo }) {
-    const json = await this.fetch(repo)
+    const json = await this.fetch({ repo })
 
     const version = json.releases.latest
     if (!version)
       throw new InvalidResponse({
         underlyingError: new Error('version is invalid'),
       })
-    return { message: addv(version), color: versionColor(version) }
+    return this.constructor.render({ version })
   }
 
   static get category() {
@@ -91,15 +97,19 @@ class APMVersion extends BaseAPMService {
 }
 
 class APMLicense extends BaseAPMService {
+  static render({ license }) {
+    return { message: license, color: 'blue' }
+  }
+
   async handle({ repo }) {
-    const json = await this.fetch(repo)
+    const json = await this.fetch({ repo })
 
     const license = json.metadata.license
     if (!license)
       throw new InvalidResponse({
         underlyingError: new Error('licence is invalid'),
       })
-    return { message: license, color: 'blue' }
+    return this.constructor.render({ license })
   }
 
   static get defaultBadgeData() {

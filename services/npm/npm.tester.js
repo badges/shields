@@ -210,6 +210,24 @@ t.create('license when network is off')
     colorB: colorsB.lightgrey,
   })
 
+// This tests error-handling functionality in NpmBase.
+t.create('when json is malformed for scoped package')
+  .get('/l/@cycle%2Fcore.json')
+  .intercept(nock =>
+    nock('https://registry.npmjs.org')
+      .get('/@cycle%2Fcore')
+      .reply(200, {
+        'dist-tags': {
+          latest: '1.2.3',
+        },
+        versions: null,
+      })
+  )
+  .expectJSON({
+    name: 'license',
+    value: 'invalid json response',
+  })
+
 t.create('types')
   .get('/types/chalk.json')
   .expectJSONTypes(
