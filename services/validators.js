@@ -2,11 +2,12 @@
 
 const Joi = require('joi')
 
-const nonNegativeInteger = Joi.number()
-  .integer()
-  .min(0)
-  .required()
-
 module.exports = {
-  nonNegativeInteger,
+  nonNegativeInteger: Joi.number()
+    .integer()
+    .min(0)
+    .required(),
+  anyInteger: Joi.number()
+    .integer()
+    .required(),
 }

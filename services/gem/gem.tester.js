@@ -30,11 +30,6 @@ t.create('version (not found)')
   .get('/v/not-a-package.json')
   .expectJSON({ name: 'gem', value: 'not found' })
 
-t.create('version (connection error)')
-  .get('/v/formatador.json')
-  .networkOff()
-  .expectJSON({ name: 'gem', value: 'inaccessible' })
-
 // downloads endpoints
 
 // total downloads
@@ -50,11 +45,6 @@ t.create('total downloads (valid)')
 t.create('total downloads (not found)')
   .get('/dt/not-a-package.json')
   .expectJSON({ name: 'downloads', value: 'not found' })
-
-t.create('total downloads (connection error)')
-  .get('/dt/rails.json')
-  .networkOff()
-  .expectJSON({ name: 'downloads', value: 'inaccessible' })
 
 // version downloads
 t.create('version downloads (valid, stable version)')
@@ -87,11 +77,6 @@ t.create('version downloads (valid package, version not specified)')
   .get('/dv/rails.json')
   .expectJSON({ name: 'downloads', value: 'invalid' })
 
-t.create('version downloads (connection error)')
-  .get('/dv/rails/4.1.0.json')
-  .networkOff()
-  .expectJSON({ name: 'downloads', value: 'inaccessible' })
-
 // latest version downloads
 t.create('latest version downloads (valid)')
   .get('/dtv/rails.json')
@@ -105,11 +90,6 @@ t.create('latest version downloads (valid)')
 t.create('latest version downloads (not found)')
   .get('/dtv/not-a-package.json')
   .expectJSON({ name: 'downloads', value: 'not found' })
-
-t.create('latest version downloads (connection error)')
-  .get('/dtv/rails.json')
-  .networkOff()
-  .expectJSON({ name: 'downloads', value: 'inaccessible' })
 
 // users endpoint
 
@@ -125,11 +105,6 @@ t.create('users (valid)')
 t.create('users (not found)')
   .get('/u/not-a-package.json')
   .expectJSON({ name: 'gems', value: 'not found' })
-
-t.create('users (connection error)')
-  .get('/u/raphink.json')
-  .networkOff()
-  .expectJSON({ name: 'gems', value: 'inaccessible' })
 
 // rank endpoint
 
@@ -154,8 +129,3 @@ t.create('daily rank (valid)')
 t.create('rank (not found)')
   .get('/rt/not-a-package.json')
   .expectJSON({ name: 'rank', value: 'not found' })
-
-t.create('rank (connection error)')
-  .get('/rt/rspec-puppet-facts.json')
-  .networkOff()
-  .expectJSON({ name: 'rank', value: 'inaccessible' })

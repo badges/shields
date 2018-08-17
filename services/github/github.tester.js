@@ -99,7 +99,11 @@ t.create('License - API rate limit exceeded')
         documentation_url: 'https://developer.github.com/v3/#rate-limiting',
       })
   )
-  .expectJSON({ name: 'license', value: 'invalid', colorB: colorsB.lightgrey })
+  .expectJSON({
+    name: 'license',
+    value: 'access denied',
+    colorB: colorsB.lightgrey,
+  })
 
 t.create('Contributors')
   .get('/contributors/cdnjs/cdnjs.json')
@@ -207,6 +211,16 @@ t.create('GitHub open issues by label (raw)')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'open service-badge issues',
+      value: isMetric,
+    })
+  )
+
+// See #1870
+t.create('GitHub open issues by label including slash charactr (raw)')
+  .get('/issues-raw/IgorNovozhilov/ndk/@ndk/cfg.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'open @ndk/cfg issues',
       value: isMetric,
     })
   )

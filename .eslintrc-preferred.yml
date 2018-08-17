@@ -20,7 +20,10 @@ rules:
   no-var: "error"
   prefer-const: "error"
   strict: "error"
+  arrow-body-style: ["error", "as-needed"]
 
   # Chai friendly.
   no-unused-expressions: "off"
   chai-friendly/no-unused-expressions: "error"
+
+  mocha/prefer-arrow-callback: "error"

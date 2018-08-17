@@ -66,7 +66,7 @@ t.create('total downloads of unknown package')
   .get('/dt/npm-api-does-not-have-this-package.json?style=_shields_test')
   .expectJSON({
     name: 'downloads',
-    value: 'project not found',
+    value: 'package not found or too new',
     colorB: colorsB.red,
   })
 
@@ -208,6 +208,24 @@ t.create('license when network is off')
     name: 'license',
     value: 'inaccessible',
     colorB: colorsB.lightgrey,
+  })
+
+// This tests error-handling functionality in NpmBase.
+t.create('when json is malformed for scoped package')
+  .get('/l/@cycle%2Fcore.json')
+  .intercept(nock =>
+    nock('https://registry.npmjs.org')
+      .get('/@cycle%2Fcore')
+      .reply(200, {
+        'dist-tags': {
+          latest: '1.2.3',
+        },
+        versions: null,
+      })
+  )
+  .expectJSON({
+    name: 'license',
+    value: 'invalid json response',
   })
 
 t.create('types')

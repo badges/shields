@@ -10,7 +10,7 @@ module.exports = t
 
 t.create('no longer available (previously dependencies)')
   .get('/mathiasbynens/he.json')
-  .afterJSON(function(badge) {
+  .afterJSON(badge => {
     if (isDeprecated('gemnasium')) {
       expect(badge.name).to.equal('gemnasium')
       expect(badge.value).to.equal('no longer available')
