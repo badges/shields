@@ -2,11 +2,18 @@
 
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
+const { nonNegativeInteger } = require('../validators')
 
 const schema = Joi.object({
   build: Joi.object({
     status: Joi.string().required(),
-    jobs: Joi.any(),
+    jobs: Joi.array()
+      .items({
+        testsCount: nonNegativeInteger,
+        passedTestsCount: nonNegativeInteger,
+        failedTestsCount: nonNegativeInteger,
+      })
+      .required(),
   }),
 }).required()
 
