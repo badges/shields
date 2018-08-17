@@ -25,15 +25,10 @@ function _formatLabelForStage(stage, label) {
 function logTrace(stage, symbol, label, content, { deep = false } = {}) {
   if (enableTraceLogging) {
     if (deep) {
-      console.log(this._formatLabelForStage(stage, label), symbol)
+      console.log(_formatLabelForStage(stage, label), symbol)
       console.dir(content, { depth: null })
     } else {
-      console.log(
-        this._formatLabelForStage(stage, label),
-        symbol,
-        '\n',
-        content
-      )
+      console.log(_formatLabelForStage(stage, label), symbol, '\n', content)
     }
     return true
   } else {
