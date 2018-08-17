@@ -1,9 +1,12 @@
-# Contributing to Shields
+Contributing to Shields
+=======================
 
 Shields is a community project. We invite your participation through
 financial contributions, issues, and pull requests!
 
-## Ways you can help
+
+Ways you can help
+-----------------
 
 ### Financial contributions
 
@@ -66,7 +69,8 @@ Feel free to star the repository. This will help increase the visibility of the 
 
 We're also asking for [one-time $10 donations](https://opencollective.com/shields) from developers who use and love Shields, please spread the word!
 
-## Getting help
+Getting help
+------------
 
 There are three places to get help:
 
@@ -78,15 +82,19 @@ There are three places to get help:
 
 [tutorial]: doc/TUTORIAL.md
 
-## Badge guidelines
 
-- The left-hand side of a badge should not advertise. It should be a _noun_
+Badge guidelines
+----------------
+
+- The left-hand side of a badge should not advertise. It should be a *noun*
   succinctly describing the meaning of the right-hand side.
-- Query parameters must be _declared by the service_. See `request-handler.js`.
-- Except for badges using the `social` style, logos should be _turned off by
-  default_.
+- Query parameters must be *declared by the service*. See `request-handler.js`.
+- Except for badges using the `social` style, logos should be *turned off by
+  default*.
 
-## Badge URLs
+
+Badge URLs
+----------
 
 - The format of new badges should be of the form
   `/SERVICE/NOUN/PARAMETERS/QUALIFIERS.format`. For instance,
@@ -96,7 +104,9 @@ There are three places to get help:
   `/SERVICE/SCHEME/HOST/NOUN/PARAMETERS/QUALIFIERS.format`. For instance,
   `/discourse/https/discourse.example.com/topics.svg`.
 
-## Coding guidelines
+
+Coding guidelines
+-----------------
 
 ### Prettier
 
@@ -129,9 +139,11 @@ Use `brew install redis`, `yum install redis`, etc.
 
 Function declarations are placed in `lib/`, not directly in `server.js`.
 
-## Logos
+
+Logos
+-----
 
 Please minimize checked-in SVG files through [SVGO][]. You can use [svgomg][]. In general we only accept logos that have a corresponding badge on the homepage (e.g. the Eclipse logo because we support service badges for the Eclipse Marketplace), but we may also approve logos for tools widely used by developers (e.g. our Slack logo). We will happily consider all requests, but don't expect systematic approval, it's at the discretion of the maintainers.
 
-[svgo]: https://github.com/svg/svgo
+[SVGO]: https://github.com/svg/svgo
 [svgomg]: https://jakearchibald.github.io/svgomg/
