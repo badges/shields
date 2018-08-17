@@ -4,13 +4,13 @@ const Joi = require('joi')
 const BaseJsonService = require('../base-json')
 
 const circleSchema = Joi.array()
-  .items(Joi.object({ status: Joi.string() }))
+  .items(Joi.object({ status: Joi.string().required() }))
   .min(1)
   .required()
 
 module.exports = class CircleCi extends BaseJsonService {
-  async fetch({ token, type, userRepo, branch }) {
-    let url = `https://circleci.com/api/v1.1/project/${type}/${userRepo}`
+  async fetch({ token, vcsType, userRepo, branch }) {
+    let url = `https://circleci.com/api/v1.1/project/${vcsType}/${userRepo}`
     if (branch != null) {
       url += `/tree/${branch}`
     }
@@ -30,7 +30,7 @@ module.exports = class CircleCi extends BaseJsonService {
     return { message: status, color: color }
   }
 
-  transform(data) {
+  static transform(data) {
     let passCount = 0
     let circleStatus, shieldsStatus, color
 
@@ -61,9 +61,9 @@ module.exports = class CircleCi extends BaseJsonService {
     return { status: shieldsStatus, color: color }
   }
 
-  async handle({ token, type, userRepo, branch }) {
-    const json = await this.fetch({ token, type, userRepo, branch })
-    const { status, color } = this.transform(json)
+  async handle({ token, vcsType, userRepo, branch }) {
+    const json = await this.fetch({ token, vcsType, userRepo, branch })
+    const { status, color } = this.constructor.transform(json)
     return this.constructor.render({ status, color })
   }
 
@@ -81,7 +81,7 @@ module.exports = class CircleCi extends BaseJsonService {
       base: 'circleci',
       format:
         '(?:token/(w+))?[+/]?project/(?:(github|bitbucket)/)?([^/]+/[^/]+)(?:/(.*))?',
-      capture: ['token', 'type', 'userRepo', 'branch'],
+      capture: ['token', 'vcsType', 'userRepo', 'branch'],
     }
   }
 
