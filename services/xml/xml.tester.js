@@ -182,6 +182,6 @@ t.create('XML from url | request should set Accept header')
       })
   )
   .expectJSON({ name: 'custom badge', value: 'dynamic xml' })
-  .after(function() {
+  .after(() => {
     expect(headers).to.have.property('accept', 'application/xml, text/xml')
   })
