@@ -4,11 +4,7 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isMetric } = require('../test-validators')
 
-const t = new ServiceTester({
-  id: 'librariesio-dependents',
-  title: 'Libraries.io dependents',
-  pathPrefix: '/librariesio/dependents',
-})
+const t = ServiceTester.forThisService()
 module.exports = t
 
 t.create('dependent count')

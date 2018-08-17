@@ -1,7 +1,9 @@
 'use strict'
 
 const frisby = require('icedfrisby-nock')(require('icedfrisby'))
+const caller = require('caller')
 const config = require('../lib/test-config')
+const BaseService = require('./base')
 
 /**
  * Encapsulate a suite of tests. Create new tests using create() and register
@@ -25,6 +27,32 @@ class ServiceTester {
       specs: [],
       _only: false,
     })
+  }
+
+  static forServiceClass(ServiceClass) {
+    const id = ServiceClass.name
+    const pathPrefix = `/${ServiceClass.url.base}`
+    return new this({
+      id,
+      title: id,
+      pathPrefix,
+    })
+  }
+
+  static forThisService() {
+    const servicePath = caller().replace('.tester.js', '.service.js')
+    let ServiceClass
+    try {
+      ServiceClass = require(servicePath)
+    } catch (e) {
+      throw Error(`Couldn't load service from ${servicePath}`)
+    }
+    if (!(ServiceClass.prototype instanceof BaseService)) {
+      throw Error(
+        `${servicePath} does not export a single service. Invoke new ServiceTester() directly.`
+      )
+    }
+    return this.forServiceClass(ServiceClass)
   }
 
   /**

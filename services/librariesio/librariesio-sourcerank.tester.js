@@ -4,11 +4,7 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { anyInteger } = require('../validators')
 
-const t = new ServiceTester({
-  id: 'librariesio-sourcerank',
-  title: 'Libraries.io SourceRank',
-  pathPrefix: '/librariesio/sourcerank',
-})
+const t = ServiceTester.forThisService()
 module.exports = t
 
 t.create('sourcerank')
