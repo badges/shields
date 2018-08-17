@@ -131,7 +131,8 @@ e.g. **[Travis] Fix timeout issues**
 When changing other code, please add unit tests.
 
 To run the integration tests, you must have redis installed and in your PATH.
-Use `brew install redis`, `yum install redis`, etc.
+Use `brew install redis`, `yum install redis`, etc. Ths test runner will
+start the server automatically.
 
 [service-tests]: https://github.com/badges/shields/blob/master/doc/service-tests.md
 
