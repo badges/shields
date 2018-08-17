@@ -26,7 +26,33 @@ function loadTesters() {
   return glob.sync(`${__dirname}/**/*.tester.js`).map(path => require(path))
 }
 
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index
+}
+
+function identifyServices(paths) {
+  return paths
+    .map(file => {
+      const match = file.match(/^services\/(.+)\/.+\.service.js$/)
+      return match ? match[1] : undefined
+    })
+    .filter(Boolean)
+    .filter(onlyUnique)
+}
+
+function identifyTesters(paths) {
+  return paths
+    .map(file => {
+      const match = file.match(/^services\/(.+)\/.+\.tester.js$/)
+      return match ? match[1] : undefined
+    })
+    .filter(Boolean)
+    .filter(onlyUnique)
+}
+
 module.exports = {
   loadServiceClasses,
   loadTesters,
+  identifyServices,
+  identifyTesters,
 }

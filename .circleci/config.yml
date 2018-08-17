@@ -135,22 +135,12 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - run:
-          name: Identify services tagged in the PR title
-          command: |
-            if [[ ! -z $CI_PULL_REQUEST ]]; then
-              npm run test:services:pr:prepare
-            else
-              echo 'This is not a pull request. Skipping.'
-            fi
+          name: Identify services in affected files and tagged in commit messages
+          command: npm run which-services
 
       - run:
-          name: Run tests for tagged services
-          command: |
-            if [[ ! -z $CI_PULL_REQUEST ]]; then
-              npm run test:services:pr:run
-            else
-              echo 'This is not a pull request. Skipping.'
-            fi
+          name: Run tests for identified services
+          command: npm run test:services
 
   services-pr@node-latest:
     docker:
@@ -169,22 +159,12 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - run:
-          name: Identify services tagged in the PR title
-          command: |
-            if [[ ! -z $CI_PULL_REQUEST ]]; then
-              npm run test:services:pr:prepare
-            else
-              echo 'This is not a pull request. Skipping.'
-            fi
+          name: Identify services in affected files and tagged in commit messages
+          command: npm run which-services
 
       - run:
-          name: Run tests for tagged services
-          command: |
-            if [[ ! -z $CI_PULL_REQUEST ]]; then
-              npm run test:services:pr:run
-            else
-              echo 'This is not a pull request. Skipping.'
-            fi
+          name: Run tests for identified services
+          command: npm run test:services
 
   services-daily:
     docker:
@@ -198,7 +178,7 @@ jobs:
 
       - run:
           name: Run all service tests
-          command: npm run test:services
+          command: npm run test:services -- --all
 
 workflows:
   version: 2

@@ -8,6 +8,7 @@
 const { danger, fail, message, warn } = require('danger');
 const chainsmoker = require('chainsmoker');
 const { default: noTestShortcuts } = require('danger-plugin-no-test-shortcuts');
+const { identifyServices, identifyTesters } = require('./services');
 
 const fileMatch = chainsmoker({
   created: danger.git.created_files,
@@ -111,26 +112,8 @@ all_files.forEach(function(file) {
   });
 });
 
-function onlyUnique(value, index, self) {
-  return self.indexOf(value) === index;
-}
-
-const affectedServices = all_files
-  .map(function(file) {
-    const match = file.match(/^services\/(.+)\/.+\.service.js$/);
-    return match ? match[1] : undefined;
-  })
-  .filter(Boolean)
-  .filter(onlyUnique);
-
-const testedServices = all_files
-  .map(function(file) {
-    const match = file.match(/^services\/(.+)\/.+\.tester.js$/);
-    return match ? match[1] : undefined;
-  })
-  .filter(Boolean)
-  .filter(onlyUnique);
-
+const affectedServices = identifyServices(all_files);
+const testedServices = identifyTesters(all_files);
 affectedServices.forEach(function(service) {
   if (testedServices.indexOf(service) === -1) {
     warn(

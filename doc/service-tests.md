@@ -162,11 +162,19 @@ harness will call it for you.
 Run the test:
 
 ```
-npm run test:services -- --only=travis
+npm run test:services
 ```
 
-The `--only=` option indicates which service or services you want to test. You
-can provide a comma-separated list of ids.
+The test runner examines the commit history to automatically detect which
+services to test.
+
+If for any reason it's not detecting the correct services, you can specify them
+yourself:
+
+npm run test:services -- --only=travis
+
+```
+You can provide a comma-separated list of case-insensitive ids.
 
 The `--` tells the NPM CLI to pass the remaining arguments through to the test
 runner.
@@ -279,10 +287,9 @@ t.create('connection error')
 Pull requests
 -------------
 
-The affected service ids should be included in brackets in the pull request
-title. That way, Travis will run those service tests. When a pull request
-affects multiple services, they should be separated with spaces. The test
-runner is case-insensitive, so they should be capitalized for readability.
+If for any reason the automatic service detection doesn't correctly identify
+the affected services, you can tag additional services in your commit
+messages.
 
 For example:
 
