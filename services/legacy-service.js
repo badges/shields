@@ -4,12 +4,12 @@ const BaseService = require('./base')
 
 // registerFn: ({ camp, cache }) => { camp.route(/.../, cache(...)) }
 class LegacyService extends BaseService {
-  static registerLegacyHandler({ camp, cache }) {
-    throw Error('registerLegacyHandler() not implemented')
+  static registerLegacyRouteHandler({ camp, cache }) {
+    throw Error('registerLegacyRouteHandler() not implemented')
   }
 
   static register(camp, handleRequest, serviceConfig) {
-    this.registerLegacyHandler({ camp, cache: handleRequest })
+    this.registerLegacyRouteHandler({ camp, cache: handleRequest })
   }
 }
 

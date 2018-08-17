@@ -28,7 +28,7 @@ module.exports = class Shippable extends LegacyService {
     ]
   }
 
-  static registerLegacyHandler({ camp, cache }) {
+  static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/shippable\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
