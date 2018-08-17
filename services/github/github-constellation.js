@@ -39,8 +39,7 @@ class GithubConstellation {
     try {
       await this.persistence.initialize()
     } catch (e) {
-      // TODO Send to sentry.
-      console.error(e)
+      log.error(e)
     }
 
     githubAuth.emitter.on('token-added', this.persistence.noteTokenAdded)
