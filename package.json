@@ -157,7 +157,6 @@
     "react-dom": "^16.4.2",
     "react-modal": "^3.5.1",
     "react-router-dom": "^4.3.1",
-    "read-all-stdin-sync": "^1.0.5",
     "rimraf": "^2.6.2",
     "sazerac": "^0.4.2",
     "semver-regex": "^2.0.0",
