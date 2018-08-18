@@ -19,7 +19,10 @@ const schema = Joi.object({
       Joi.alternatives(Joi.string(), deprecatedLicenseObjectSchema)
     )
   ),
-  types: Joi.any(),
+  types: Joi.string(),
+  files: Joi.array()
+    .items(Joi.string())
+    .default([]),
 }).required()
 
 // Abstract class for NPM badges which display data about the latest version

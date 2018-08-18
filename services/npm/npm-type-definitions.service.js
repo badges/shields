@@ -28,14 +28,21 @@ module.exports = class NpmTypeDefinitions extends NpmBase {
     ]
   }
 
-  static transform({ devDependencies, types }) {
+  static transform({ devDependencies, types, files }) {
     const supportedLanguages = []
 
-    if (types !== undefined || devDependencies.typescript !== undefined) {
+    if (
+      types !== undefined ||
+      devDependencies.typescript !== undefined ||
+      files.includes('index.d.ts')
+    ) {
       supportedLanguages.push('TypeScript')
     }
 
-    if (devDependencies['flow-bin'] !== undefined) {
+    if (
+      devDependencies['flow-bin'] !== undefined ||
+      files.includes('index.js.flow')
+    ) {
       supportedLanguages.push('Flow')
     }
 
@@ -47,7 +54,7 @@ module.exports = class NpmTypeDefinitions extends NpmBase {
       return { message: 'none', color: 'lightgray' }
     } else {
       return {
-        message: supportedLanguages.join(' | '),
+        message: supportedLanguages.sort().join(' | '),
         color: 'blue',
       }
     }
