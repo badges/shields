@@ -21,7 +21,7 @@ module.exports = class UptimeRobotStatus extends UptimeRobotBase {
     return [
       {
         title: 'Uptime Robot status',
-        exampleUrl: 'MONITOR-SPECIFIC-KEY',
+        exampleUrl: ':monitor-specific-key',
         staticExample: this.render({ status: 2 }),
       },
     ]

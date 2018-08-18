@@ -60,7 +60,7 @@ class APMDownloads extends BaseAPMService {
   static get examples() {
     return [
       {
-        exampleUrl: 'PACKAGE',
+        exampleUrl: ':package',
         staticExample: this.render({ downloads: '60043' }),
         keywords: ['atom'],
       },
@@ -99,7 +99,7 @@ class APMVersion extends BaseAPMService {
   static get examples() {
     return [
       {
-        exampleUrl: 'PACKAGE',
+        exampleUrl: ':package',
         staticExample: this.render({ version: '0.6.0' }),
         keywords: ['atom'],
       },
@@ -142,7 +142,7 @@ class APMLicense extends BaseAPMService {
   static get examples() {
     return [
       {
-        exampleUrl: 'PACKAGE',
+        exampleUrl: ':package',
         staticExample: this.render({ license: 'MIT' }),
         keywords: ['atom'],
       },

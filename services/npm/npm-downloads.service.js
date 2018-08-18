@@ -62,7 +62,7 @@ function DownloadsForInterval(interval) {
       return [
         {
           title: 'npm',
-          exampleUrl: 'PACKAGE',
+          exampleUrl: ':package',
           staticExample: this.render({ downloads: 30000 }),
           keywords: ['node'],
         },

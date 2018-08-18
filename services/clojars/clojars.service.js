@@ -58,7 +58,7 @@ module.exports = class Clojars extends BaseJsonService {
   static get examples() {
     return [
       {
-        exampleUrl: 'PACKAGE',
+        exampleUrl: ':package',
         staticExample: this.render({ clojar: 'clojar', version: '1.2' }),
       },
     ]
