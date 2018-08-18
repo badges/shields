@@ -2,8 +2,10 @@
 
 const frisby = require('icedfrisby-nock')(require('icedfrisby'))
 const caller = require('caller')
+const emojic = require('emojic')
 const config = require('../lib/test-config')
 const BaseService = require('./base')
+const trace = require('./trace')
 
 /**
  * Encapsulate a suite of tests. Create new tests using create() and register
@@ -75,6 +77,16 @@ class ServiceTester {
       .baseUri(`http://localhost:${config.port}${this.pathPrefix}`)
       .before(() => {
         this.beforeEach()
+      })
+      // eslint-disable-next-line mocha/prefer-arrow-callback
+      .finally(function() {
+        // `this` is the IcedFrisby instance.
+        trace.logTrace(
+          'outbound',
+          emojic.shield,
+          'Response',
+          JSON.parse(this._response.body)
+        )
       })
 
     this.specs.push(spec)
