@@ -45,7 +45,8 @@ t.create('circle ci (no response data)')
   )
   .expectJSON({ name: 'build', value: 'unparseable json response' })
 
-t.create('circle ci (multiple pipelines, pass)')
+// we're passing &limit=1 so we expect exactly one array element
+t.create('circle ci (invalid json)')
   .get('/project/github/RedSparr0w/node-csgo-parser.json?style=_shields_test')
   .intercept(nock =>
     nock('https://circleci.com')
@@ -54,15 +55,8 @@ t.create('circle ci (multiple pipelines, pass)')
       )
       .reply(200, [{ status: 'success' }, { status: 'fixed' }])
   )
-  .expectJSON({ name: 'build', value: 'passing', colorB: '#4c1' })
-
-t.create('circle ci (multiple pipelines, fail)')
-  .get('/project/github/RedSparr0w/node-csgo-parser.json?style=_shields_test')
-  .intercept(nock =>
-    nock('https://circleci.com')
-      .get(
-        '/api/v1.1/project/github/RedSparr0w/node-csgo-parser?filter=completed&limit=1'
-      )
-      .reply(200, [{ status: 'success' }, { status: 'failed' }])
-  )
-  .expectJSON({ name: 'build', value: 'failed', colorB: '#e05d44' })
+  .expectJSON({
+    name: 'build',
+    value: 'invalid json response',
+    colorB: '#9f9f9f',
+  })

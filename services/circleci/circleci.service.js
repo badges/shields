@@ -6,6 +6,7 @@ const BaseJsonService = require('../base-json')
 const circleSchema = Joi.array()
   .items(Joi.object({ status: Joi.string().required() }))
   .min(1)
+  .max(1)
   .required()
 
 module.exports = class CircleCi extends BaseJsonService {
@@ -26,45 +27,21 @@ module.exports = class CircleCi extends BaseJsonService {
     })
   }
 
-  static render({ status, color }) {
-    return { message: status, color: color }
-  }
-
-  static transform(data) {
-    let passCount = 0
-    let circleStatus, shieldsStatus, color
-
-    for (let i = 0; i < data.length; i++) {
-      circleStatus = data[i].status
-      if (['success', 'fixed'].includes(circleStatus)) {
-        passCount++
-      } else if (circleStatus === 'failed') {
-        shieldsStatus = 'failed'
-        color = 'red'
-        return { status: shieldsStatus, color: color }
-      } else if (['no_tests', 'scheduled', 'not_run'].includes(circleStatus)) {
-        color = 'yellow'
-        shieldsStatus = circleStatus.replace('_', ' ')
-        return { status: shieldsStatus, color: color }
-      } else {
-        color = 'lightgrey'
-        shieldsStatus = circleStatus.replace('_', ' ')
-        return { status: shieldsStatus, color: color }
-      }
+  static render({ status }) {
+    if (['success', 'fixed'].includes(status)) {
+      return { message: 'passing', color: 'brightgreen' }
+    } else if (status === 'failed') {
+      return { message: 'failed', color: 'red' }
+    } else if (['no_tests', 'scheduled', 'not_run'].includes(status)) {
+      return { message: status.replace('_', ' '), color: 'yellow' }
+    } else {
+      return { message: status.replace('_', ' '), color: 'lightgrey' }
     }
-
-    if (passCount === data.length) {
-      color = 'brightgreen'
-      shieldsStatus = 'passing'
-    }
-
-    return { status: shieldsStatus, color: color }
   }
 
   async handle({ token, vcsType, userRepo, branch }) {
     const json = await this.fetch({ token, vcsType, userRepo, branch })
-    const { status, color } = this.constructor.transform(json)
-    return this.constructor.render({ status, color })
+    return this.constructor.render({ status: json[0].status })
   }
 
   // Metadata
@@ -88,7 +65,7 @@ module.exports = class CircleCi extends BaseJsonService {
   static get examples() {
     return [
       {
-        title: 'CircleCI',
+        title: 'CircleCI (all branches)',
         previewUrl: 'project/github/RedSparr0w/node-csgo-parser',
       },
       {
