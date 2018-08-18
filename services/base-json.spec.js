@@ -70,7 +70,6 @@ describe('BaseJsonService', function() {
       sandbox.restore()
     })
     beforeEach(function() {
-      const t = trace.logTrace
       sandbox.stub(trace, 'logTrace')
     })
 
