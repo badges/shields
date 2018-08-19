@@ -21,7 +21,7 @@ class GithubConstellation {
       log(`RedisTokenPersistence configured with ${redisUrl}`)
       this.persistence = new RedisTokenPersistence({
         url: redisUrl,
-        key: 'githubTokens',
+        key: 'githubUserTokens',
       })
     } else {
       const userTokensPath = path.resolve(
