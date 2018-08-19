@@ -7,15 +7,27 @@ const t = ServiceTester.forThisService()
 module.exports = t
 
 const isTypeDefinition = Joi.string().regex(
-  /^(Flow|TypeScript) v?[0-9]+.[0-9]+( \| (Flow|TypeScript) v?[0-9]+.[0-9]+)?$/
+  /^((Flow|TypeScript)|(Flow \| TypeScript))$/
 )
 
-t.create('types')
-  .get('/chalk.json')
+t.create('types (from dev dependencies + files)')
+  .get('/types/chalk.json')
   .expectJSONTypes(
-    Joi.object().keys({ name: 'type definitions', value: isTypeDefinition })
+    Joi.object().keys({ name: 'types', value: isTypeDefinition })
+  )
+
+t.create('types (from files)')
+  .get('/types/form-data-entries.json')
+  .expectJSONTypes(
+    Joi.object().keys({ name: 'types', value: isTypeDefinition })
+  )
+
+t.create('types (from types key)')
+  .get('/types/left-pad.json')
+  .expectJSONTypes(
+    Joi.object().keys({ name: 'types', value: isTypeDefinition })
   )
 
 t.create('no types')
-  .get('/left-pad.json')
-  .expectJSON({ name: 'type definitions', value: 'none' })
+  .get('/types/link-into.json')
+  .expectJSON({ name: 'types', value: 'none' })
