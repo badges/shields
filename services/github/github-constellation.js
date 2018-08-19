@@ -1,13 +1,17 @@
 'use strict'
 
 const path = require('path')
-const githubAuth = require('../../lib/github-auth')
 const serverSecrets = require('../../lib/server-secrets')
 const log = require('../../lib/log')
 const RedisTokenPersistence = require('../../lib/redis-token-persistence')
 const FsTokenPersistence = require('../../lib/fs-token-persistence')
+const {
+  StaticTokenProvider,
+  PoolingTokenProvider,
+} = require('./token-provider')
 const GithubApiProvider = require('./github-api-provider')
-const { setRoutes: setAdminRoutes } = require('./auth/admin')
+const { setRoutes: setAcceptorRoutes } = require('./acceptor')
+const { setRoutes: setAdminRoutes } = require('./admin')
 
 // Convenience class with all the stuff related to the Github API and its
 // authorization tokens, to simplify server initialization.
@@ -33,13 +37,22 @@ class GithubConstellation {
     }
 
     const baseUrl = process.env.GITHUB_URL || 'https://api.github.com'
-    this.apiProvider = new GithubApiProvider({ baseUrl })
+    const { coreTokenProvider } = this
+    this.apiProvider = new GithubApiProvider({ baseUrl, coreTokenProvider })
   }
 
   scheduleDebugLogging() {
     if (this._debugEnabled) {
       this.debugInterval = setInterval(() => {
-        log(githubAuth.serializeDebugInfo())
+        if (this.coreTokenProvider) {
+          log('coreTokenProvider', this.coreTokenProvider.getTokenDebugInfo())
+        }
+        if (this.searchTokenProvider) {
+          log(
+            'searchTokenProvider',
+            this.searchTokenProvider.getTokenDebugInfo()
+          )
+        }
       }, 1000 * this._debugIntervalSeconds)
     }
   }
@@ -47,19 +60,25 @@ class GithubConstellation {
   async initialize(server) {
     this.scheduleDebugLogging()
 
-    try {
+    if (this.usingPooling) {
+      this.persistence = new TokenPersistence(
+        this.coreTokenProvider,
+        this._userTokensPath
+      )
       await this.persistence.initialize()
-    } catch (e) {
-      log.error(e)
+      this.coreTokenProvider
+        .toNative()
+        .forEach(t => this.searchTokenProvider.addToken(t))
     }
+    // TODO Catch errors and send them to Sentry.
 
     githubAuth.emitter.on('token-added', this.persistence.noteTokenAdded)
     githubAuth.emitter.on('token-removed', this.persistence.noteTokenRemoved)
 
-    setAdminRoutes(server)
+    setAdminRoutes(this.coreTokenProvider, server)
 
     if (serverSecrets && serverSecrets.gh_client_id) {
-      githubAuth.setRoutes(server)
+      setAcceptorRoutes(this.coreTokenProvider, server)
     }
   }
 
