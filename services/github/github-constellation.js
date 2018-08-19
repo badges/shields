@@ -39,9 +39,11 @@ class GithubConstellation {
     try {
       await this.persistence.initialize()
     } catch (e) {
-      // TODO Send to sentry.
-      console.error(e)
+      log.error(e)
     }
+
+    githubAuth.emitter.on('token-added', this.persistence.noteTokenAdded)
+    githubAuth.emitter.on('token-removed', this.persistence.noteTokenRemoved)
 
     setAdminRoutes(server)
 
@@ -56,8 +58,14 @@ class GithubConstellation {
       this.debugInterval = undefined
     }
 
-    await this.persistence.stop()
-    this.persistence = undefined
+    githubAuth.emitter.removeListener(
+      'token-added',
+      this.persistence.noteTokenAdded
+    )
+    githubAuth.emitter.removeListener(
+      'token-removed',
+      this.persistence.noteTokenRemoved
+    )
   }
 }
 
