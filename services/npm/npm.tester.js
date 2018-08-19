@@ -11,7 +11,7 @@ module.exports = t
 const colorsB = mapValues(colorscheme, 'colorB')
 
 const isTypeDefinition = Joi.string().regex(
-  /^(Flow|TypeScript) v?[0-9]+.[0-9]+( \| (Flow|TypeScript) v?[0-9]+.[0-9]+)?$/
+  /^((Flow|TypeScript)|(Flow \| TypeScript))$/
 )
 
 t.create('total downloads of left-pad')
@@ -228,12 +228,24 @@ t.create('when json is malformed for scoped package')
     value: 'invalid json response',
   })
 
-t.create('types')
+t.create('types (from dev dependencies + files)')
   .get('/types/chalk.json')
   .expectJSONTypes(
-    Joi.object().keys({ name: 'type definitions', value: isTypeDefinition })
+    Joi.object().keys({ name: 'types', value: isTypeDefinition })
+  )
+
+t.create('types (from files)')
+  .get('/types/form-data-entries.json')
+  .expectJSONTypes(
+    Joi.object().keys({ name: 'types', value: isTypeDefinition })
+  )
+
+t.create('types (from types key)')
+  .get('/types/left-pad.json')
+  .expectJSONTypes(
+    Joi.object().keys({ name: 'types', value: isTypeDefinition })
   )
 
 t.create('no types')
-  .get('/types/left-pad.json')
-  .expectJSON({ name: 'type definitions', value: 'none' })
+  .get('/types/link-into.json')
+  .expectJSON({ name: 'types', value: 'none' })
