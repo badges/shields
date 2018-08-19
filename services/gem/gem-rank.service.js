@@ -76,6 +76,7 @@ module.exports = class GemRank extends BaseJsonService {
     return [
       {
         title: 'Gems',
+        exampleUrl: 'rt/puppet',
         placeholderUrl: 'rt/:package',
         staticExample: this.render({
           message: ordinalNumber(332),
@@ -85,6 +86,7 @@ module.exports = class GemRank extends BaseJsonService {
       },
       {
         title: 'Gems',
+        exampleUrl: 'rd/facter',
         placeholderUrl: 'rd/:package',
         staticExample: this.render({
           message: ordinalNumber(656) + ' daily',

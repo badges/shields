@@ -114,10 +114,11 @@ class BaseService {
     return this.examples.map(
       ({
         title,
-        staticExample,
-        previewUrl,
         query,
+        exampleUrl,
+        previewUrl,
         placeholderUrl,
+        staticExample,
         documentation,
       }) => {
         if (!previewUrl && !staticExample) {
@@ -133,6 +134,9 @@ class BaseService {
 
         return {
           title: title ? `${title}` : this.name,
+          exampleUri: exampleUrl
+            ? `${this._makeFullUrl(exampleUrl, query)}.svg${suffix}`
+            : undefined,
           previewUri: staticExample
             ? `${this._makeStaticExampleUrl(staticExample)}.svg`
             : `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,

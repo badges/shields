@@ -6,6 +6,7 @@ import resolveBadgeUrl from '../lib/badge-url'
 
 const Badge = ({
   title,
+  exampleUri,
   previewUri,
   placeholderUri,
   documentation,
@@ -15,7 +16,14 @@ const Badge = ({
   onClick,
 }) => {
   const handleClick = onClick
-    ? () => onClick({ title, previewUri, placeholderUri, documentation })
+    ? () =>
+        onClick({
+          title,
+          exampleUri,
+          previewUri,
+          placeholderUri,
+          documentation,
+        })
     : undefined
 
   const previewImage = previewUri ? (
@@ -59,6 +67,7 @@ const Badge = ({
 }
 Badge.propTypes = {
   title: PropTypes.string.isRequired,
+  exampleUri: PropTypes.string,
   previewUri: PropTypes.string,
   placeholderUri: PropTypes.string,
   documentation: PropTypes.string,
@@ -101,6 +110,7 @@ Category.propTypes = {
   examples: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
+      exampleUri: PropTypes.string,
       previewUri: PropTypes.string,
       placeholderUri: PropTypes.string,
       documentation: PropTypes.string,

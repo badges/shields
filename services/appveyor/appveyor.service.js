@@ -55,10 +55,12 @@ module.exports = class AppVeyor extends BaseJsonService {
   static get examples() {
     return [
       {
+        exampleUrl: 'gruntjs/grunt',
         placeholderUrl: ':user/:repo',
         staticExample: this.render({ status: 'success' }),
       },
       {
+        exampleUrl: 'gruntjs/grunt/master',
         title: `${this.name} branch`,
         placeholderUrl: ':user/:repo/:branch',
         staticExample: this.render({ status: 'success' }),

@@ -27,24 +27,28 @@ module.exports = class NpmVersion extends NpmBase {
   static get examples() {
     return [
       {
+        exampleUrl: 'npm',
         placeholderUrl: ':package',
         staticExample: this.render({ tag: undefined, version: '6.3.0' }),
         keywords: ['node'],
       },
       {
         title: 'npm (scoped)',
+        exampleUrl: '@cycle/core',
         placeholderUrl: ':scope/:package',
         staticExample: this.render({ tag: undefined, version: '7.0.0' }),
         keywords: ['node'],
       },
       {
         title: 'npm (tag)',
+        exampleUrl: 'npm/next',
         placeholderUrl: ':package/:tag',
         staticExample: this.render({ tag: 'latest', version: '6.3.0' }),
         keywords: ['node'],
       },
       {
         title: 'npm (custom registry)',
+        exampleUrl: 'npm/next',
         placeholderUrl: ':package/:tag',
         staticExample: this.render({ tag: 'latest', version: '7.0.0' }),
         query: { registry_uri: 'https://registry.npmjs.com' },
@@ -52,6 +56,7 @@ module.exports = class NpmVersion extends NpmBase {
       },
       {
         title: 'npm (scoped with tag)',
+        exampleUrl: '@cycle/core/canary',
         staticExample: this.render({ tag: 'latest', version: '6.3.0' }),
         placeholderUrl: ':scope/:package/:tag',
         keywords: ['node'],
