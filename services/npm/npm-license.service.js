@@ -20,12 +20,12 @@ module.exports = class NpmLicense extends NpmBase {
   static get examples() {
     return [
       {
-        exampleUrl: ':package',
+        placeholderUrl: ':package',
         staticExample: this.render({ licenses: ['MIT'] }),
         keywords: ['node'],
       },
       {
-        exampleUrl: ':package',
+        placeholderUrl: ':package',
         staticExample: this.render({ licenses: ['MIT'] }),
         query: { registry_uri: 'https://registry.npmjs.com' },
         keywords: ['node'],

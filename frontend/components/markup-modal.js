@@ -11,7 +11,7 @@ export default class MarkupModal extends React.Component {
     example: PropTypes.shape({
       title: PropTypes.string.isRequired,
       previewUri: PropTypes.string,
-      exampleUri: PropTypes.string,
+      placeholderUri: PropTypes.string,
       documentation: PropTypes.string,
       link: PropTypes.string,
     }),
@@ -38,10 +38,10 @@ export default class MarkupModal extends React.Component {
 
     // Transfer `badgeUri` and `link` into state so they can be edited by the
     // user.
-    const { exampleUri, previewUri, link } = example
+    const { placeholderUri, previewUri, link } = example
     this.setState({
       badgeUri: resolveBadgeUrl(
-        exampleUri || previewUri,
+        placeholderUri || previewUri,
         baseUri || window.location.href
       ),
       link,

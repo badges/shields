@@ -107,7 +107,7 @@ class BaseService {
    * schema in `lib/all-badge-examples.js`. Four keys are supported:
    *  - title
    *  - previewUrl
-   *  - exampleUrl
+   *  - placeholderUrl
    *  - documentation
    */
   static prepareExamples() {
@@ -117,7 +117,7 @@ class BaseService {
         staticExample,
         previewUrl,
         query,
-        exampleUrl,
+        placeholderUrl,
         documentation,
       }) => {
         if (!previewUrl && !staticExample) {
@@ -136,8 +136,8 @@ class BaseService {
           previewUri: staticExample
             ? `${this._makeStaticExampleUrl(staticExample)}.svg`
             : `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
-          exampleUri: exampleUrl
-            ? `${this._makeFullUrl(exampleUrl, query)}.svg${suffix}`
+          placeholderUri: placeholderUrl
+            ? `${this._makeFullUrl(placeholderUrl, query)}.svg${suffix}`
             : undefined,
           documentation,
         }

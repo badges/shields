@@ -23,7 +23,7 @@ class LibrariesIoDependentRepos extends LibrariesIoBase {
     return [
       {
         title: 'Dependent repos (via libraries.io)',
-        exampleUrl: ':platform/:library',
+        placeholderUrl: ':platform/:library',
         staticExample: this.render({ dependentReposCount: '84000' }),
       },
     ]

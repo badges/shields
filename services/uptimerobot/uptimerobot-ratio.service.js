@@ -24,12 +24,12 @@ module.exports = class UptimeRobotRatio extends UptimeRobotBase {
     return [
       {
         title: 'Uptime Robot ratio (30 days)',
-        exampleUrl: ':monitor-specific-key',
+        placeholderUrl: ':monitor-specific-key',
         staticExample: this.render({ ratio: 100 }),
       },
       {
         title: 'Uptime Robot ratio (7 days)',
-        exampleUrl: '7/:monitor-specific-key',
+        placeholderUrl: '7/:monitor-specific-key',
         staticExample: this.render({ ratio: 100 }),
       },
     ]

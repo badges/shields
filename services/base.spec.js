@@ -34,7 +34,7 @@ class DummyService extends BaseService {
       { previewUrl: 'World' },
       { previewUrl: 'World', query: { queryParamA: '!!!' } },
       {
-        exampleUrl: 'World',
+        placeholderUrl: 'World',
         staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
       },
     ]
@@ -323,20 +323,20 @@ describe('BaseService', function() {
       expect(first).to.deep.equal({
         title: 'DummyService',
         previewUri: '/foo/World.svg',
-        exampleUri: undefined,
+        placeholderUri: undefined,
         documentation: undefined,
       })
       expect(second).to.deep.equal({
         title: 'DummyService',
         previewUri: '/foo/World.svg?queryParamA=%21%21%21',
-        exampleUri: undefined,
+        placeholderUri: undefined,
         documentation: undefined,
       })
       expect(third).to.deep.equal({
         title: 'DummyService',
         previewUri:
           '/badge/cat-Hello%20namedParamA%3A%20foo%20with%20queryParamA%3A%20bar-lightgrey.svg',
-        exampleUri: '/foo/World.svg',
+        placeholderUri: '/foo/World.svg',
         documentation: undefined,
       })
     })
