@@ -19,6 +19,7 @@ module.exports = class NodeVersion extends NPMBase {
   static get examples() {
     return [
       {
+        title: 'node',
         previewUrl: 'passport',
         keywords: ['npm'],
       },
