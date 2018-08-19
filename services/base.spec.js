@@ -16,7 +16,9 @@ require('../lib/register-chai-plugins.spec')
 
 class DummyService extends BaseService {
   static render({ namedParamA, queryParamA }) {
-    return { message: `Hello ${namedParamA}${queryParamA}` }
+    return {
+      message: `Hello namedParamA: ${namedParamA} with queryParamA: ${queryParamA}`,
+    }
   }
 
   async handle({ namedParamA }, { queryParamA }) {
@@ -95,7 +97,9 @@ describe('BaseService', function() {
       { namedParamA: 'bar.bar.bar' },
       { queryParamA: '!' }
     )
-    expect(serviceData).to.deep.equal({ message: 'Hello bar.bar.bar!' })
+    expect(serviceData).to.deep.equal({
+      message: 'Hello namedParamA: bar.bar.bar with queryParamA: !',
+    })
   })
 
   describe('Logging', function() {
@@ -302,7 +306,7 @@ describe('BaseService', function() {
       const expectedFormat = 'svg'
       expect(mockSendBadge).to.have.been.calledOnce
       expect(mockSendBadge).to.have.been.calledWith(expectedFormat, {
-        text: ['cat', 'Hello bar?'],
+        text: ['cat', 'Hello namedParamA: bar with queryParamA: ?'],
         colorscheme: 'lightgrey',
         template: undefined,
         logo: undefined,
@@ -330,7 +334,8 @@ describe('BaseService', function() {
       })
       expect(third).to.deep.equal({
         title: 'DummyService',
-        previewUri: '/badge/cat-Hello%20foobar-lightgrey.svg',
+        previewUri:
+          '/badge/cat-Hello%20namedParamA%3A%20foo%20with%20queryParamA%3A%20bar-lightgrey.svg',
         exampleUri: '/foo/World.svg',
         documentation: undefined,
       })
