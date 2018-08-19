@@ -26,6 +26,7 @@ jobs:
   main:
     docker:
       - image: shieldsio/shields-ci-node-8:0.0.3
+      - image: redis
     working_directory: ~/repo
     steps:
       - checkout
@@ -62,6 +63,7 @@ jobs:
   main@node-latest:
     docker:
       - image: shieldsio/shields-ci-node-latest:0.0.3
+      - image: redis
     working_directory: ~/repo
     steps:
       - checkout
