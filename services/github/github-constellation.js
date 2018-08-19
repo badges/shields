@@ -36,6 +36,22 @@ class GithubConstellation {
       this.persistence = new FsTokenPersistence({ path: userTokensPath })
     }
 
+    const globalTokenString = (serverSecrets || {}).gh_token
+
+    if (globalTokenString) {
+      // When a global gh_token is configured, use that in place of our token
+      // pool. This produces more predictable behavior, and more predictable
+      // failures when that token is exhausted.
+      this.usingPooling = false
+      this.coreTokenProvider = this.searchTokenProvider = new StaticTokenProvider(
+        globalTokenString
+      )
+    } else {
+      this.usingPooling = true
+      this.coreTokenProvider = new PoolingTokenProvider()
+      this.searchTokenProvider = new PoolingTokenProvider()
+    }
+
     const baseUrl = process.env.GITHUB_URL || 'https://api.github.com'
     const { coreTokenProvider } = this
     this.apiProvider = new GithubApiProvider({ baseUrl, coreTokenProvider })
