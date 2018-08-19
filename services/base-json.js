@@ -26,7 +26,7 @@ class BaseJsonService extends BaseService {
         underlyingError: error,
       })
     } else {
-      this.logTrace(
+      trace.logTrace(
         'validate',
         emojic.bathtub,
         'JSON after validation',
