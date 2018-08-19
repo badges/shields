@@ -104,11 +104,7 @@ class BaseService {
 
   /**
    * Return an array of examples. Each example is prepared according to the
-   * schema in `lib/all-badge-examples.js`. Four keys are supported:
-   *  - title
-   *  - previewUrl
-   *  - placeholderUrl
-   *  - documentation
+   * schema in `lib/all-badge-examples.js`.
    */
   static prepareExamples() {
     return this.examples.map(
