@@ -7,7 +7,7 @@ const NpmBase = require('./npm-base')
 // package.json.
 module.exports = class NpmTypeDefinitions extends NpmBase {
   static get category() {
-    return 'version'
+    return 'platform-support'
   }
 
   static get defaultBadgeData() {
