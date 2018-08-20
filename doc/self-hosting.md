@@ -116,6 +116,10 @@ npm run build  # Not sure why, but this needs to be run before deploying.
 now
 ```
 
+## Persistence
+
+To enable Redis-backed GitHub token persistence, point `REDIS_URL` to your
+Redis installation.
 
 Server secrets
 --------------
