@@ -61,7 +61,7 @@ module.exports = class GemRank extends BaseJsonService {
   }
 
   static get category() {
-    return 'rating'
+    return 'downloads'
   }
 
   static get url() {
@@ -75,12 +75,12 @@ module.exports = class GemRank extends BaseJsonService {
   static get examples() {
     return [
       {
-        title: 'Gems',
+        title: 'Gem download rank',
         previewUrl: 'rt/puppet',
         keywords: ['ruby'],
       },
       {
-        title: 'Gems',
+        title: 'Gem download rank (daily)',
         previewUrl: 'rd/facter',
         keywords: ['ruby'],
       },

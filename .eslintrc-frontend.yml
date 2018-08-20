@@ -11,5 +11,9 @@ extends:
   - "standard-react"
   - "./.eslintrc-preferred.yml"
 
+settings:
+  react:
+    version: "16.4"
+
 rules:
   no-console: "error"
