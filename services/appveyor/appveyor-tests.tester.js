@@ -1,13 +1,13 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const createServiceTester = require('../create-service-tester')
 
 const isAppveyorTestTotals = Joi.string().regex(
   /^(?:[0-9]+ (?:passed|skipped|failed)(?:, )?)+$/
 )
 
-const t = ServiceTester.forThisService()
+const t = createServiceTester()
 module.exports = t
 
 // Test AppVeyor tests status badge

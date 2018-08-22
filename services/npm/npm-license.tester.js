@@ -1,11 +1,11 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const createServiceTester = require('../create-service-tester')
 const colorscheme = require('../../lib/colorscheme.json')
 const mapValues = require('lodash.mapvalues')
 
-const t = ServiceTester.forThisService()
+const t = createServiceTester()
 module.exports = t
 const colorsB = mapValues(colorscheme, 'colorB')
 

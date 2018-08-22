@@ -1,12 +1,12 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const createServiceTester = require('../create-service-tester')
 
 const { isPercentage } = require('../test-validators')
 const { invalidJSON } = require('../response-fixtures')
 
-const t = ServiceTester.forThisService()
+const t = createServiceTester()
 module.exports = t
 
 t.create('Uptime Robot: Percentage (valid)')

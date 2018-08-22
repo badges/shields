@@ -1,11 +1,11 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const createServiceTester = require('../create-service-tester')
 
 const { isBuildStatus } = require('../test-validators')
 
-const t = ServiceTester.forThisService()
+const t = createServiceTester()
 module.exports = t
 
 // Test AppVeyor build status badge

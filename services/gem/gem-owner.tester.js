@@ -1,13 +1,12 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const createServiceTester = require('../create-service-tester')
 
-const t = ServiceTester.forThisService()
+const t = createServiceTester()
 module.exports = t
 
-t
-  .create('users (valid)')
+t.create('users (valid)')
   .get('/u/raphink.json')
   .expectJSONTypes(
     Joi.object().keys({
@@ -16,7 +15,6 @@ t
     })
   )
 
-t
-  .create('users (not found)')
+t.create('users (not found)')
   .get('/u/not-a-package.json')
   .expectJSON({ name: 'gems', value: 'not found' })

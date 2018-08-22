@@ -1,10 +1,8 @@
 'use strict'
 
 const frisby = require('icedfrisby-nock')(require('icedfrisby'))
-const caller = require('caller')
 const emojic = require('emojic')
 const config = require('../lib/test-config')
-const BaseService = require('./base')
 const trace = require('./trace')
 
 /**
@@ -39,22 +37,6 @@ class ServiceTester {
       title: id,
       pathPrefix,
     })
-  }
-
-  static forThisService() {
-    const servicePath = caller().replace('.tester.js', '.service.js')
-    let ServiceClass
-    try {
-      ServiceClass = require(servicePath)
-    } catch (e) {
-      throw Error(`Couldn't load service from ${servicePath}`)
-    }
-    if (!(ServiceClass.prototype instanceof BaseService)) {
-      throw Error(
-        `${servicePath} does not export a single service. Invoke new ServiceTester() directly.`
-      )
-    }
-    return this.forServiceClass(ServiceClass)
   }
 
   /**

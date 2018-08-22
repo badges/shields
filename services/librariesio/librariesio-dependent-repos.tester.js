@@ -1,10 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const createServiceTester = require('../create-service-tester')
 const { isMetric } = require('../test-validators')
 
-const t = ServiceTester.forThisService()
+const t = createServiceTester()
 module.exports = t
 
 t.create('dependent repo count')
