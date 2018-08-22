@@ -27,6 +27,7 @@ module.exports = class NpmVersion extends NpmBase {
   static get examples() {
     return [
       {
+        title: 'npm',
         previewUrl: 'npm',
         keywords: ['node'],
       },
