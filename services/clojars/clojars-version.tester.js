@@ -3,11 +3,11 @@
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 
-const t = new ServiceTester({ id: 'clojars', title: 'clojars' })
+const t = ServiceTester.forThisService()
 module.exports = t
 
 t.create('clojars (valid)')
-  .get('/v/prismic.json')
+  .get('/prismic.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'clojars',
@@ -16,5 +16,5 @@ t.create('clojars (valid)')
   )
 
 t.create('clojars (not found)')
-  .get('/v/not-a-package.json')
+  .get('/not-a-package.json')
   .expectJSON({ name: 'clojars', value: 'not found' })
