@@ -27,6 +27,7 @@ module.exports = class NpmVersion extends NpmBase {
   static get examples() {
     return [
       {
+        title: 'npm',
         exampleUrl: 'npm',
         urlPattern: ':package',
         staticExample: this.render({ tag: undefined, version: '6.3.0' }),
@@ -88,7 +89,7 @@ module.exports = class NpmVersion extends NpmBase {
     const packageData = await this._requestJson({
       schema,
       url: `${registryUrl}/-/package/${slug}/dist-tags`,
-      notFoundMessage: 'package not found',
+      errorMessages: { 404: 'package not found' },
     })
 
     if (tag && !(tag in packageData)) {

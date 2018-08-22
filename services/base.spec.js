@@ -3,6 +3,7 @@
 const { expect } = require('chai')
 const { test, given, forCases } = require('sazerac')
 const sinon = require('sinon')
+const trace = require('./trace')
 
 const {
   NotFound,
@@ -112,7 +113,7 @@ describe('BaseService', function() {
       sandbox.restore()
     })
     beforeEach(function() {
-      sinon.stub(DummyService, 'logTrace')
+      sandbox.stub(trace, 'logTrace')
     })
     it('Invokes the logger as expected', async function() {
       const serviceInstance = new DummyService({}, defaultConfig)
@@ -122,13 +123,13 @@ describe('BaseService', function() {
         },
         { queryParamA: '!' }
       )
-      expect(DummyService.logTrace).to.be.calledWithMatch(
+      expect(trace.logTrace).to.be.calledWithMatch(
         'inbound',
         sinon.match.string,
         'Service class',
         'DummyService'
       )
-      expect(DummyService.logTrace).to.be.calledWith(
+      expect(trace.logTrace).to.be.calledWith(
         'inbound',
         sinon.match.string,
         'Named params',
@@ -136,7 +137,7 @@ describe('BaseService', function() {
           namedParamA: 'bar.bar.bar',
         }
       )
-      expect(DummyService.logTrace).to.be.calledWith(
+      expect(trace.logTrace).to.be.calledWith(
         'inbound',
         sinon.match.string,
         'Query params',

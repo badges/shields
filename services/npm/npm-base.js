@@ -8,7 +8,9 @@ const deprecatedLicenseObjectSchema = Joi.object({
   type: Joi.string().required(),
 })
 const schema = Joi.object({
-  devDependencies: Joi.object().pattern(/./, Joi.string()),
+  devDependencies: Joi.object()
+    .pattern(/./, Joi.string())
+    .default({}),
   engines: Joi.object().pattern(/./, Joi.string()),
   license: Joi.alternatives().try(
     Joi.string(),
@@ -17,6 +19,10 @@ const schema = Joi.object({
       Joi.alternatives(Joi.string(), deprecatedLicenseObjectSchema)
     )
   ),
+  types: Joi.string(),
+  files: Joi.array()
+    .items(Joi.string())
+    .default([]),
 }).required()
 
 // Abstract class for NPM badges which display data about the latest version
@@ -82,7 +88,7 @@ module.exports = class NpmBase extends BaseJsonService {
       // Use a custom Accept header because of this bug:
       // <https://github.com/npm/npmjs.org/issues/163>
       options: { Accept: '*/*' },
-      notFoundMessage: 'package not found',
+      errorMessages: { 404: 'package not found' },
     })
 
     let packageData
