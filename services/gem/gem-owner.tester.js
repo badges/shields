@@ -7,7 +7,7 @@ const t = createServiceTester()
 module.exports = t
 
 t.create('users (valid)')
-  .get('/u/raphink.json')
+  .get('/raphink.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'gems',
@@ -16,5 +16,5 @@ t.create('users (valid)')
   )
 
 t.create('users (not found)')
-  .get('/u/not-a-package.json')
+  .get('/not-a-package.json')
   .expectJSON({ name: 'gems', value: 'not found' })
