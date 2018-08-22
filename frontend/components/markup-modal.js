@@ -131,7 +131,18 @@ export default class MarkupModal extends React.Component {
               />
             </label>
           </p>
-          {this.state.exampleUri && <p>Example: {this.state.exampleUri}</p>}
+          {this.state.exampleUri && (
+            <p>
+              Example&nbsp;
+              <ClickToSelect>
+                <input
+                  className="code clickable"
+                  readOnly
+                  value={this.state.exampleUri}
+                />
+              </ClickToSelect>
+            </p>
+          )}
           <p>
             <label>
               Style&nbsp;
