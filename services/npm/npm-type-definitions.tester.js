@@ -11,23 +11,23 @@ const isTypeDefinition = Joi.string().regex(
 )
 
 t.create('types (from dev dependencies + files)')
-  .get('/types/chalk.json')
+  .get('/chalk.json')
   .expectJSONTypes(
     Joi.object().keys({ name: 'types', value: isTypeDefinition })
   )
 
 t.create('types (from files)')
-  .get('/types/form-data-entries.json')
+  .get('/form-data-entries.json')
   .expectJSONTypes(
     Joi.object().keys({ name: 'types', value: isTypeDefinition })
   )
 
 t.create('types (from types key)')
-  .get('/types/left-pad.json')
+  .get('/left-pad.json')
   .expectJSONTypes(
     Joi.object().keys({ name: 'types', value: isTypeDefinition })
   )
 
 t.create('no types')
-  .get('/types/link-into.json')
+  .get('/link-into.json')
   .expectJSON({ name: 'types', value: 'none' })
