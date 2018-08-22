@@ -3,34 +3,14 @@
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 
-const {
-  isVPlusDottedVersionAtLeastOne,
-  isMetric,
-} = require('../test-validators')
-const isOrdinalNumber = Joi.string().regex(/^[1-9][0-9]+(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ)$/)
-const isOrdinalNumberDaily = Joi.string().regex(
-  /^[1-9][0-9]+(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ) daily$/
-)
+const { isMetric } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'gem', title: 'Ruby Gems' })
+const t = new ServiceTester({
+  id: 'gem-downloads',
+  title: 'Ruby Gem Downloads',
+  pathPrefix: '/gem',
+})
 module.exports = t
-
-// version endpoint
-
-t.create('version (valid)')
-  .get('/v/formatador.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'gem',
-      value: isVPlusDottedVersionAtLeastOne,
-    })
-  )
-
-t.create('version (not found)')
-  .get('/v/not-a-package.json')
-  .expectJSON({ name: 'gem', value: 'not found' })
-
-// downloads endpoints
 
 // total downloads
 t.create('total downloads (valid)')
@@ -90,42 +70,3 @@ t.create('latest version downloads (valid)')
 t.create('latest version downloads (not found)')
   .get('/dtv/not-a-package.json')
   .expectJSON({ name: 'downloads', value: 'not found' })
-
-// users endpoint
-
-t.create('users (valid)')
-  .get('/u/raphink.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'gems',
-      value: Joi.string().regex(/^[0-9]+$/),
-    })
-  )
-
-t.create('users (not found)')
-  .get('/u/not-a-package.json')
-  .expectJSON({ name: 'gems', value: 'not found' })
-
-// rank endpoint
-
-t.create('total rank (valid)')
-  .get('/rt/rspec-puppet-facts.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'rank',
-      value: isOrdinalNumber,
-    })
-  )
-
-t.create('daily rank (valid)')
-  .get('/rd/rspec-puppet-facts.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'rank',
-      value: isOrdinalNumberDaily,
-    })
-  )
-
-t.create('rank (not found)')
-  .get('/rt/not-a-package.json')
-  .expectJSON({ name: 'rank', value: 'not found' })
