@@ -136,7 +136,7 @@ class BaseService {
           previewUri: staticExample
             ? `${this._makeStaticExampleUrl(staticExample)}.svg`
             : `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
-          placeholderUri: placeholderUrl
+          urlPattern: placeholderUrl
             ? `${this._makeFullUrl(placeholderUrl, query)}.svg${suffix}`
             : undefined,
           documentation,

@@ -325,14 +325,14 @@ describe('BaseService', function() {
         title: 'DummyService',
         exampleUri: undefined,
         previewUri: '/foo/World.svg',
-        placeholderUri: undefined,
+        urlPattern: undefined,
         documentation: undefined,
       })
       expect(second).to.deep.equal({
         title: 'DummyService',
         exampleUri: undefined,
         previewUri: '/foo/World.svg?queryParamA=%21%21%21',
-        placeholderUri: undefined,
+        urlPattern: undefined,
         documentation: undefined,
       })
       expect(third).to.deep.equal({
@@ -340,7 +340,7 @@ describe('BaseService', function() {
         exampleUri: '/foo/World.svg',
         previewUri:
           '/badge/cat-Hello%20namedParamA%3A%20foo%20with%20queryParamA%3A%20bar-lightgrey.svg',
-        placeholderUri: '/foo/:world.svg',
+        urlPattern: '/foo/:world.svg',
         documentation: undefined,
       })
     })

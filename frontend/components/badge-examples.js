@@ -8,7 +8,7 @@ const Badge = ({
   title,
   exampleUri,
   previewUri,
-  placeholderUri,
+  urlPattern,
   documentation,
   baseUri,
   longCache,
@@ -21,7 +21,7 @@ const Badge = ({
           title,
           exampleUri,
           previewUri,
-          placeholderUri,
+          urlPattern,
           documentation,
         })
     : undefined
@@ -37,7 +37,7 @@ const Badge = ({
     '\u00a0'
   ) // non-breaking space
   const resolvedExampleUri = resolveBadgeUrl(
-    placeholderUri || previewUri,
+    urlPattern || previewUri,
     baseUri,
     { longCache: false }
   )
@@ -69,7 +69,7 @@ Badge.propTypes = {
   title: PropTypes.string.isRequired,
   exampleUri: PropTypes.string,
   previewUri: PropTypes.string,
-  placeholderUri: PropTypes.string,
+  urlPattern: PropTypes.string,
   documentation: PropTypes.string,
   baseUri: PropTypes.string,
   longCache: PropTypes.bool.isRequired,
@@ -112,7 +112,7 @@ Category.propTypes = {
       title: PropTypes.string.isRequired,
       exampleUri: PropTypes.string,
       previewUri: PropTypes.string,
-      placeholderUri: PropTypes.string,
+      urlPattern: PropTypes.string,
       documentation: PropTypes.string,
     })
   ).isRequired,
