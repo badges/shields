@@ -34,7 +34,7 @@ class DummyService extends BaseService {
       { previewUrl: 'World' },
       { previewUrl: 'World', query: { queryParamA: '!!!' } },
       {
-        placeholderUrl: ':world',
+        urlPattern: ':world',
         exampleUrl: 'World',
         staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
       },

@@ -113,7 +113,7 @@ class BaseService {
         query,
         exampleUrl,
         previewUrl,
-        placeholderUrl,
+        urlPattern,
         staticExample,
         documentation,
       }) => {
@@ -136,8 +136,8 @@ class BaseService {
           previewUri: staticExample
             ? `${this._makeStaticExampleUrl(staticExample)}.svg`
             : `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
-          urlPattern: placeholderUrl
-            ? `${this._makeFullUrl(placeholderUrl, query)}.svg${suffix}`
+          urlPattern: urlPattern
+            ? `${this._makeFullUrl(urlPattern, query)}.svg${suffix}`
             : undefined,
           documentation,
         }
