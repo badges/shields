@@ -84,9 +84,6 @@ const {
   isSnapshotVersion: isNexusSnapshotVersion,
 } = require('./lib/nexus-version');
 const {
-  teamcityBadge,
-} = require('./lib/teamcity-badge-helpers');
-const {
   mapNugetFeedv2,
   mapNugetFeed,
 } = require('./lib/nuget-provider');
@@ -191,24 +188,6 @@ loadServiceClasses().forEach(
     { camp, handleRequest: cache, githubApiProvider },
     { handleInternalErrors: config.handleInternalErrors }));
 
-// Old url for CodeBetter TeamCity instance.
-camp.route(/^\/teamcity\/codebetter\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var buildType = match[1];  // eg, `bt428`.
-  var format = match[2];
-  teamcityBadge('http://teamcity.codebetter.com', buildType, false, format, data, sendBadge, request);
-}));
-
-// Generic TeamCity instance
-camp.route(/^\/teamcity\/(http|https)\/(.*)\/(s|e)\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var scheme = match[1];
-  var serverUrl = match[2];
-  var advanced = (match[3] == 'e');
-  var buildType = match[4];  // eg, `bt428`.
-  var format = match[5];
-  teamcityBadge(scheme + '://' + serverUrl, buildType, advanced, format, data, sendBadge, request);
-}));
 
 // TeamCity CodeBetter code coverage
 camp.route(/^\/teamcity\/coverage\/(.*)\.(svg|png|gif|jpg|json)$/,
