@@ -2,7 +2,6 @@
 
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
-const chalk = require('chalk')
 const {
   NotFound,
   InvalidResponse,
@@ -16,14 +15,7 @@ const {
   makeColor,
   setBadgeColor,
 } = require('../lib/badge-data')
-// Config is loaded globally but it would be better to inject it. To do that,
-// there needs to be one instance of the service created at registration time,
-// which gets the config injected into it, instead of one instance per request.
-// That way most of the current static methods could become instance methods,
-// thereby gaining access to the injected config.
-const {
-  services: { trace: enableTraceLogging },
-} = require('../lib/server-config')
+const trace = require('./trace')
 
 class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
@@ -155,20 +147,19 @@ class BaseService {
   }
 
   async invokeHandler(namedParams, queryParams) {
-    const logTrace = (...args) => this.constructor.logTrace(...args)
-    logTrace(
+    trace.logTrace(
       'inbound',
       emojic.womanCook,
       'Service class',
       this.constructor.name
     )
-    logTrace('inbound', emojic.ticket, 'Named params', namedParams)
-    logTrace('inbound', emojic.crayon, 'Query params', queryParams)
+    trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
+    trace.logTrace('inbound', emojic.crayon, 'Query params', queryParams)
     try {
       return await this.handle(namedParams, queryParams)
     } catch (error) {
       if (error instanceof NotFound || error instanceof InvalidParameter) {
-        logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
+        trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
         return {
           message: error.prettyMessage,
           color: 'red',
@@ -177,14 +168,14 @@ class BaseService {
         error instanceof InvalidResponse ||
         error instanceof Inaccessible
       ) {
-        logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
+        trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
         return {
           message: error.prettyMessage,
           color: 'lightgray',
         }
       } else if (this._handleInternalErrors) {
         if (
-          !logTrace(
+          !trace.logTrace(
             'unhandledError',
             emojic.boom,
             'Unhandled internal error',
@@ -201,7 +192,7 @@ class BaseService {
           color: 'lightgray',
         }
       } else {
-        logTrace(
+        trace.logTrace(
           'unhandledError',
           emojic.boom,
           'Unhandled internal error',
@@ -274,7 +265,7 @@ class BaseService {
             namedParams,
             queryParams
           )
-          this.logTrace('outbound', emojic.shield, 'Service data', serviceData)
+          trace.logTrace('outbound', emojic.shield, 'Service data', serviceData)
           const badgeData = this._makeBadgeData(queryParams, serviceData)
 
           // Assumes the final capture group is the extension
@@ -283,31 +274,6 @@ class BaseService {
         },
       })
     )
-  }
-
-  static _formatLabelForStage(stage, label) {
-    const colorFn = {
-      inbound: chalk.black.bgBlue,
-      fetch: chalk.black.bgYellow,
-      validate: chalk.black.bgGreen,
-      unhandledError: chalk.white.bgRed,
-      outbound: chalk.black.bgBlue,
-    }[stage]
-    return colorFn(` ${label} `)
-  }
-
-  static logTrace(stage, symbol, label, ...content) {
-    if (enableTraceLogging) {
-      console.log(
-        this._formatLabelForStage(stage, label),
-        symbol,
-        '\n',
-        ...content
-      )
-      return true
-    } else {
-      return false
-    }
   }
 }
 

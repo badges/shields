@@ -26,12 +26,19 @@ jobs:
   main:
     docker:
       - image: shieldsio/shields-ci-node-8:0.0.3
+      - image: redis
     working_directory: ~/repo
     steps:
       - checkout
 
       - restore_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
+          # https://github.com/badges/shields/issues/1937
+          key: v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm install
 
       - run:
           name: Linter
@@ -56,12 +63,19 @@ jobs:
   main@node-latest:
     docker:
       - image: shieldsio/shields-ci-node-latest:0.0.3
+      - image: redis
     working_directory: ~/repo
     steps:
       - checkout
 
       - restore_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
+          # https://github.com/badges/shields/issues/1937
+          key: v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm install
 
       - run:
           name: Linter
@@ -92,6 +106,12 @@ jobs:
 
       - restore_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
+          # https://github.com/badges/shields/issues/1937
+          key: v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm install
 
       - run:
           name: Danger
@@ -107,6 +127,12 @@ jobs:
 
       - restore_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
+          # https://github.com/badges/shields/issues/1937
+          key: v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm install
 
       - run:
           name: Frontend unit tests
@@ -133,6 +159,12 @@ jobs:
 
       - restore_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
+          # https://github.com/badges/shields/issues/1937
+          key: v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm install
 
       - run:
           name: Identify services tagged in the PR title
@@ -167,6 +199,12 @@ jobs:
 
       - restore_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
+          # https://github.com/badges/shields/issues/1937
+          key: v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm install
 
       - run:
           name: Identify services tagged in the PR title

@@ -1,16 +1,31 @@
 'use strict'
 
-const { test, given } = require('sazerac')
+const { test, given, forCases } = require('sazerac')
 const NpmTypeDefinitions = require('./npm-type-definitions.service')
 
-const transformAndRender = json =>
-  NpmTypeDefinitions.render(NpmTypeDefinitions.transform(json))
-
 describe('NPM type definitions badge', function() {
-  test(transformAndRender, () => {
-    given({ devDependencies: { typescript: '^2.4.7' } }).expect({
-      message: 'TypeScript v2.4',
-      color: 'blue',
+  test(NpmTypeDefinitions.transform, () => {
+    forCases([
+      given({ devDependencies: { typescript: '^2.4.7' }, files: [] }),
+      given({ devDependencies: {}, types: 'types/index.d.ts', files: [] }),
+      given({ devDependencies: {}, types: 'types/index.d.ts', files: [] }),
+    ]).expect({ supportedLanguages: ['TypeScript'] })
+
+    given({ devDependencies: { 'flow-bin': '1.2.3' }, files: [] }).expect({
+      supportedLanguages: ['Flow'],
+    })
+
+    given({
+      devDependencies: { 'flow-bin': '1.2.3', typescript: '^2.4.7' },
+      files: [],
+    }).expect({ supportedLanguages: ['TypeScript', 'Flow'] })
+
+    given({ devDependencies: {}, files: [] }).expect({ supportedLanguages: [] })
+    given({ devDependencies: {}, files: ['index.d.ts'] }).expect({
+      supportedLanguages: ['TypeScript'],
+    })
+    given({ devDependencies: {}, files: ['index.js.flow'] }).expect({
+      supportedLanguages: ['Flow'],
     })
   })
 })
