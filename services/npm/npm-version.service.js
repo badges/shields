@@ -30,14 +30,14 @@ module.exports = class NpmVersion extends NpmBase {
         title: 'npm',
         exampleUrl: 'npm',
         urlPattern: ':package',
-        staticExample: this.render({ tag: undefined, version: '6.3.0' }),
+        staticExample: this.render({ version: '6.3.0' }),
         keywords: ['node'],
       },
       {
         title: 'npm (scoped)',
         exampleUrl: '@cycle/core',
         urlPattern: ':scope/:package',
-        staticExample: this.render({ tag: undefined, version: '7.0.0' }),
+        staticExample: this.render({ version: '7.0.0' }),
         keywords: ['node'],
       },
       {
