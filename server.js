@@ -188,17 +188,6 @@ loadServiceClasses().forEach(
     { camp, handleRequest: cache, githubApiProvider },
     { handleInternalErrors: config.handleInternalErrors }));
 
-// Gratipay integration.
-camp.route(/^\/(?:gittip|gratipay(\/user|\/team|\/project)?)\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(queryParams, match, sendBadge, request) {
-  const format = match[3];
-  const badgeData = getDeprecatedBadge('gratipay', queryParams);
-  if (badgeData.template === 'social') {
-    badgeData.logo = getLogo('gratipay', queryParams);
-  }
-  sendBadge(format, badgeData);
-}));
-
 // Liberapay integration.
 camp.route(/^\/liberapay\/(receives|gives|patrons|goal)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
