@@ -6115,7 +6115,7 @@ cache(function(data, match, sendBadge, request) {
 
   var badgeData = getBadgeData(name, data);
 
-  request(apiUrl, function(err, res, buffer) {
+  request(websiteUrl, function(err, res, buffer) {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
       sendBadge(format, badgeData);
@@ -6127,34 +6127,12 @@ cache(function(data, match, sendBadge, request) {
       return;
     }
     try {
-      xml2js.parseString(buffer.toString(), function (err, data) {
-      if (err != null) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-        return;
-      }
-      try {
-        var version = jp.query(data, pathExpression);
-        badgeData.text[1] = versionText(version);
-        badgeData.colorscheme = versionColor(version);
-        sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-    /*
-      var data = JSON.parse(buffer);
-      var status = data['status'];
-      var color = versionColor(data['version']);
-      var version = versionText(data['version']);
-      if(status !== 'ok'){
-        color = 'red';
-        version = 'unknown';
-      }
-      badgeData.text[1] = version;
-      badgeData.colorscheme = color;
-      sendBadge(format, badgeData);*/
+      var website = buffer.toString();
+      var match = website.match(/<div\s[^>]*class="package-version-header"(?:\s[^>]*)?>[^<]*<a\s+name="([^:>]*)"(?:\s[^>]*)?>/);
+      var version = match[1];
+      badgeData.text[1] = versionText(version);
+      badgeData.colorscheme = versionColor(version);
+      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
