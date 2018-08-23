@@ -12,7 +12,7 @@ module.exports = class FDroid extends BaseHTTPService {
       url,
       options: { },
       errorMessages: {
-        404: 'application not found',
+        404: 'app not found',
       },
     }).then(({ res, buffer }) => {
       const website = buffer.toString();
