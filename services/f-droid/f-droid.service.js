@@ -16,6 +16,8 @@ module.exports = class FDroid extends BaseHTTPService {
       },
     }).then(({ res, buffer }) => {
       const website = buffer.toString();
+      console.log("website");
+      console.log(website);
       const match = website.match(/<div\s[^>]*class="package-version-header"(?:\s[^>]*)?>[^<]*<a\s+name="([^:>]*)"(?:\s[^>]*)?>/);
       if (!match) {
         throw new InvalidResponse({
