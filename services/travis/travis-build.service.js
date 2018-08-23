@@ -3,7 +3,7 @@
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { checkErrorResponse } = require('../../lib/error-helper')
-const log = require('../../log')
+const log = require('../../lib/log')
 
 // Handle .org and .com.
 module.exports = class TravisBuild extends LegacyService {

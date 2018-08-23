@@ -3,7 +3,7 @@
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { checkErrorResponse } = require('../../lib/error-helper')
-const { omitv } = require('./lib/text-formatters')
+const { omitv } = require('../../lib/text-formatters')
 
 module.exports = class PhpeyeHhvm extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {

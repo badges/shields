@@ -4,7 +4,7 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const {
   coveragePercentage: coveragePercentageColor,
-} = require('./lib/color-formatters')
+} = require('../../lib/color-formatters')
 
 // TeamCity CodeBetter code coverage.
 module.exports = class TeamcityCoverage extends LegacyService {

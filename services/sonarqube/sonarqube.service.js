@@ -6,7 +6,7 @@ const serverSecrets = require('../../lib/server-secrets')
 const { metric } = require('../../lib/text-formatters')
 const {
   coveragePercentage: coveragePercentageColor,
-} = require('./lib/color-formatters')
+} = require('../../lib/color-formatters')
 
 module.exports = class Sonarqube extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {

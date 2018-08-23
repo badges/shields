@@ -2,7 +2,7 @@
 
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const log = require('../../log')
+const log = require('../../lib/log')
 
 // For NetflixOSS metadata: https://github.com/Netflix/osstracker
 module.exports = class OssTracker extends LegacyService {

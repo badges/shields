@@ -3,7 +3,9 @@
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { metric } = require('../../lib/text-formatters')
-const { downloadCount: downloadCountColor } = require('./color-formatters')
+const {
+  downloadCount: downloadCountColor,
+} = require('../../lib/color-formatters')
 
 module.exports = class PackagistDownloads extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
