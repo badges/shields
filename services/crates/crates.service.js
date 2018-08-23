@@ -8,7 +8,7 @@ const {
 } = require('../../lib/color-formatters')
 const { metric, addv: versionText } = require('../../lib/text-formatters')
 
-module.exports = class ___ extends LegacyService {
+module.exports = class Crates extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/crates\/(d|v|dv|l)\/([A-Za-z0-9_-]+)(?:\/([0-9.]+))?\.(svg|png|gif|jpg|json)$/,

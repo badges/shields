@@ -4,7 +4,7 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 // For Coverity Code Advisor On Demand.
-module.exports = class ___ extends LegacyService {
+module.exports = class CoverityOnDemand extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/coverity\/ondemand\/(.+)\/(.+)\.(svg|png|gif|jpg|json)$/,
