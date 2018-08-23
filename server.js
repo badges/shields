@@ -6099,6 +6099,69 @@ cache(function(query_data, match, sendBadge, request) {
   });
 }));
 
+// F-Droid.org app version integration.
+camp.route(/^\/f-droid\/version\/([^/]*)\.(svg|png|gif|jpg|json)$/,
+cache(function(data, match, sendBadge, request) {
+  var appId = match[1];   // app id
+  var format = match[2];  // "svg"
+  var name = "F-Droid";
+  // We like to have the first version
+  // https://gitlab.com/fdroid/fdroid-website/blob/9ae61894a18889ed749d36d5afbd0db3d0b0cfdd/_layouts/package.html#L147
+  // See http://goessner.net/articles/JsonPath/ for how this is constructed.
+  var pathExpression = "//div[class=\"package-version-header\"][0]/a[0]/name";
+
+  // example https://f-droid.org/en/packages/eu.quelltext.mundraub/
+  var websiteUrl = "https://f-droid.org/en/packages/" + appId + "/";
+
+  var badgeData = getBadgeData(name, data);
+
+  request(apiUrl, function(err, res, buffer) {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible';
+      sendBadge(format, badgeData);
+      return;
+    }
+    if (res.statusCode === 404) {
+      badgeData.text[1] = 'not found';
+      sendBadge(format, badgeData);
+      return;
+    }
+    try {
+      xml2js.parseString(buffer.toString(), function (err, data) {
+      if (err != null) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+        return;
+      }
+      try {
+        var version = jp.query(data, pathExpression);
+        badgeData.text[1] = versionText(version);
+        badgeData.colorscheme = versionColor(version);
+        sendBadge(format, badgeData);
+      } catch(e) {
+        badgeData.text[1] = 'invalid';
+        sendBadge(format, badgeData);
+      }
+    });
+    /*
+      var data = JSON.parse(buffer);
+      var status = data['status'];
+      var color = versionColor(data['version']);
+      var version = versionText(data['version']);
+      if(status !== 'ok'){
+        color = 'red';
+        version = 'unknown';
+      }
+      badgeData.text[1] = version;
+      badgeData.colorscheme = color;
+      sendBadge(format, badgeData);*/
+    } catch(e) {
+      badgeData.text[1] = 'invalid';
+      sendBadge(format, badgeData);
+    }
+  });
+}));
+
 // jitPack version integration.
 camp.route(/^\/jitpack\/v\/([^/]*)\/([^/]*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
