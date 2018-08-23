@@ -24,16 +24,20 @@ module.exports = class UptimeRobotRatio extends UptimeRobotBase {
     return [
       {
         title: 'Uptime Robot ratio (30 days)',
-        previewUrl: 'm778918918-3e92c097147760ee39d02d36',
+        exampleUrl: 'm778918918-3e92c097147760ee39d02d36',
+        urlPattern: ':monitor-specific-key',
+        staticExample: this.render({ ratio: 100 }),
       },
       {
         title: 'Uptime Robot ratio (7 days)',
-        previewUrl: '7/m778918918-3e92c097147760ee39d02d36',
+        exampleUrl: '7/m778918918-3e92c097147760ee39d02d36',
+        urlPattern: '7/:monitor-specific-key',
+        staticExample: this.render({ ratio: 100 }),
       },
     ]
   }
 
-  static async render({ ratio }) {
+  static render({ ratio }) {
     return {
       message: `${ratio}%`,
       color: ratioColor(ratio),
