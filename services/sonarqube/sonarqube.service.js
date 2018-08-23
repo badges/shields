@@ -9,7 +9,7 @@ const {
 } = require('./lib/color-formatters')
 
 module.exports = class Sonarqube extends LegacyService {
-  static registerLegacyHandler({ camp, cache }) {
+  static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/sonar\/?([0-9.]+)?\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {

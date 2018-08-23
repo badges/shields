@@ -4,7 +4,7 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 module.exports = class ___ extends LegacyService {
-  static registerLegacyHandler({ camp, cache }) {
+  static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/coverity\/scan\/(.+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {

@@ -7,7 +7,7 @@ const log = require('../../log')
 
 // Handle .org and .com.
 module.exports = class TravisBuild extends LegacyService {
-  static registerLegacyHandler({ camp, cache }) {
+  static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/travis(-ci)?\/(?:(com)\/)?([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {

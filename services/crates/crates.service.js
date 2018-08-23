@@ -9,7 +9,7 @@ const {
 const { metric, addv: versionText } = require('../../lib/text-formatters')
 
 module.exports = class ___ extends LegacyService {
-  static registerLegacyHandler({ camp, cache }) {
+  static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/crates\/(d|v|dv|l)\/([A-Za-z0-9_-]+)(?:\/([0-9.]+))?\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {

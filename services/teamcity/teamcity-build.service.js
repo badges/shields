@@ -48,7 +48,7 @@ function teamcityBadge(
 }
 
 module.exports = class TeamcityBuild extends LegacyService {
-  static registerLegacyHandler({ camp, cache }) {
+  static registerLegacyRouteHandler({ camp, cache }) {
     // Old url for CodeBetter TeamCity instance.
     camp.route(
       /^\/teamcity\/codebetter\/(.*)\.(svg|png|gif|jpg|json)$/,

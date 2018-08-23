@@ -8,7 +8,7 @@ const {
 
 // TeamCity CodeBetter code coverage.
 module.exports = class TeamcityCoverage extends LegacyService {
-  static registerLegacyHandler({ camp, cache }) {
+  static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/teamcity\/coverage\/(.*)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
@@ -47,7 +47,7 @@ module.exports = class TeamcityCoverage extends LegacyService {
                 return
               }
 
-              const percentage = (covered / total) * 100
+              const percentage = covered / total * 100
               badgeData.text[1] = percentage.toFixed(0) + '%'
               badgeData.colorscheme = coveragePercentageColor(percentage)
               sendBadge(format, badgeData)
