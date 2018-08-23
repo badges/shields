@@ -188,50 +188,6 @@ loadServiceClasses().forEach(
     { camp, handleRequest: cache, githubApiProvider },
     { handleInternalErrors: config.handleInternalErrors }));
 
-// Packagist integration.
-camp.route(/^\/packagist\/(dm|dd|dt)\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var info = match[1];  // either `dm` or dt`.
-  var userRepo = match[2];  // eg, `doctrine/orm`.
-  var format = match[3];
-  var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
-  var badgeData = getBadgeData('downloads', data);
-  if (userRepo.substr(-14) === '/:package_name') {
-    badgeData.text[1] = 'invalid';
-    return sendBadge(format, badgeData);
-  }
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      var downloads;
-      switch (info.charAt(1)) {
-      case 'm':
-        downloads = data.package.downloads.monthly;
-        badgeData.text[1] = metric(downloads) + '/month';
-        break;
-      case 'd':
-        downloads = data.package.downloads.daily;
-        badgeData.text[1] = metric(downloads) + '/day';
-        break;
-      case 't':
-        downloads = data.package.downloads.total;
-        badgeData.text[1] = metric(downloads);
-        break;
-      }
-      badgeData.colorscheme = downloadCountColor(downloads);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // Packagist version integration.
 camp.route(/^\/packagist\/(v|vpre)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
