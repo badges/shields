@@ -188,40 +188,6 @@ loadServiceClasses().forEach(
     { camp, handleRequest: cache, githubApiProvider },
     { handleInternalErrors: config.handleInternalErrors }));
 
-// Libscore integration.
-camp.route(/^\/libscore\/s\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var library = match[1];  // eg, `jQuery`.
-  var format = match[2];
-  var apiUrl = 'http://api.libscore.com/v1/libraries/' + library;
-  var badgeData = getBadgeData('libscore', data);
-  request(apiUrl, function dealWithData(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      if (data.count.length === 0) {
-        /* Note the 'not found' response from libscore is:
-           status code = 200,
-           body = {"github":"","meta":{},"count":[],"sites":[]}
-        */
-        badgeData.text[1] = 'not found';
-        sendBadge(format, badgeData);
-        return;
-      }
-      badgeData.text[1] = metric(+data.count[data.count.length-1]);
-      badgeData.colorscheme = 'blue';
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // Codetally integration.
 camp.route(/^\/codetally\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
