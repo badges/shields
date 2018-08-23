@@ -24,3 +24,12 @@ t.create('Package is not found')
   )
   .expectJSON({ name: 'F-Droid', value: 'app not found' })
 
+t.create('The api changed')
+  .get('/version/org.pacien.tincapp.json')
+  .intercept(nock =>
+    nock('https://f-droid.org')
+      .get('/en/packages/org.pacien.tincapp/')
+      .reply([404, ""])
+  )
+  .expectJSON({ name: 'F-Droid', value: 'fix this badge' })
+
