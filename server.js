@@ -185,53 +185,6 @@ loadServiceClasses().forEach(
     { camp, handleRequest: cache, githubApiProvider },
     { handleInternalErrors: config.handleInternalErrors }));
 
-// Packagist license integration.
-camp.route(/^\/packagist\/l\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];
-  var format = match[2];
-  var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json';
-  var badgeData = getBadgeData('license', data);
-  if (userRepo.substr(-14) === '/:package_name') {
-    badgeData.text[1] = 'invalid';
-    return sendBadge(format, badgeData);
-  }
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      // Note: if you change the latest version detection algorithm here,
-      // change it above (for the actual version badge).
-      var version;
-      var unstable = function(ver) { return /dev/.test(ver); };
-      // Grab the latest stable version, or an unstable
-      for (var versionName in data.package.versions) {
-        var current = data.package.versions[versionName];
-
-        if (version !== undefined) {
-          if (unstable(version.version) && !unstable(current.version)) {
-            version = current;
-          } else if (version.version_normalized < current.version_normalized) {
-            version = current;
-          }
-        } else {
-          version = current;
-        }
-      }
-      badgeData.text[1] = version.license[0];
-      badgeData.colorscheme = 'blue';
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // Package Control integration.
 camp.route(/^\/packagecontrol\/(dm|dw|dd|dt)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
