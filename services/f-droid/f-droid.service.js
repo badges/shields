@@ -18,6 +18,8 @@ module.exports = class FDroid extends BaseHTTPService {
       const website = buffer.toString();
       console.log("website");
       console.log(website);
+      // we assume the layout as provided here:
+      // https://gitlab.com/fdroid/fdroid-website/blob/9ae61894a18889ed749d36d5afbd0db3d0b0cfdd/_layouts/package.html#L147
       const match = website.match(/<div\s[^>]*class="package-version-header"(?:\s[^>]*)?>[^<]*<a\s+name="([^:>]*)"(?:\s[^>]*)?>/);
       if (!match) {
         throw new InvalidResponse({
