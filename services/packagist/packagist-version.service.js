@@ -14,39 +14,39 @@ module.exports = class PackagistVersion extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/packagist\/(v|vpre)\/(.*)\.(svg|png|gif|jpg|json)$/,
-      cache(function(data, match, sendBadge, request) {
-        var info = match[1] // either `v` or `vpre`.
-        var userRepo = match[2] // eg, `doctrine/orm`.
-        var format = match[3]
-        var apiUrl = 'https://packagist.org/packages/' + userRepo + '.json'
-        var badgeData = getBadgeData('packagist', data)
+      cache((data, match, sendBadge, request) => {
+        const info = match[1] // either `v` or `vpre`.
+        const userRepo = match[2] // eg, `doctrine/orm`.
+        const format = match[3]
+        const apiUrl = 'https://packagist.org/packages/' + userRepo + '.json'
+        const badgeData = getBadgeData('packagist', data)
         if (userRepo.substr(-14) === '/:package_name') {
           badgeData.text[1] = 'invalid'
           return sendBadge(format, badgeData)
         }
-        request(apiUrl, function(err, res, buffer) {
+        request(apiUrl, (err, res, buffer) => {
           if (err != null) {
             badgeData.text[1] = 'inaccessible'
             sendBadge(format, badgeData)
             return
           }
           try {
-            var data = JSON.parse(buffer)
+            const data = JSON.parse(buffer)
 
-            var versionsData = data.package.versions
-            var versions = Object.keys(versionsData)
+            const versionsData = data.package.versions
+            let versions = Object.keys(versionsData)
 
             // Map aliases (eg, dev-master).
-            var aliasesMap = {}
-            versions.forEach(function(version) {
-              var versionData = versionsData[version]
+            const aliasesMap = {}
+            versions.forEach(version => {
+              const versionData = versionsData[version]
               if (
                 versionData.extra &&
                 versionData.extra['branch-alias'] &&
                 versionData.extra['branch-alias'][version]
               ) {
                 // eg, version is 'dev-master', mapped to '2.0.x-dev'.
-                var validVersion = versionData.extra['branch-alias'][version]
+                const validVersion = versionData.extra['branch-alias'][version]
                 if (
                   aliasesMap[validVersion] === undefined ||
                   phpVersionCompare(aliasesMap[validVersion], validVersion) < 0
@@ -56,17 +56,15 @@ module.exports = class PackagistVersion extends LegacyService {
                 }
               }
             })
-            versions = versions.filter(function(version) {
-              return !/^dev-/.test(version)
-            })
+            versions = versions.filter(version => !/^dev-/.test(version))
 
-            var badgeText = null
-            var badgeColor = null
+            let badgeText = null
+            let badgeColor = null
 
             switch (info) {
-              case 'v':
-                var stableVersions = versions.filter(phpStableVersion)
-                var stableVersion = phpLatestVersion(stableVersions)
+              case 'v': {
+                const stableVersions = versions.filter(phpStableVersion)
+                let stableVersion = phpLatestVersion(stableVersions)
                 if (!stableVersion) {
                   stableVersion = phpLatestVersion(versions)
                 }
@@ -76,14 +74,16 @@ module.exports = class PackagistVersion extends LegacyService {
                 badgeText = versionText(stableVersion)
                 badgeColor = versionColor(stableVersion)
                 break
-              case 'vpre':
-                var unstableVersion = phpLatestVersion(versions)
+              }
+              case 'vpre': {
+                const unstableVersion = phpLatestVersion(versions)
                 //if (!!aliasesMap[unstableVersion]) {
                 //  unstableVersion = aliasesMap[unstableVersion];
                 //}
                 badgeText = versionText(unstableVersion)
                 badgeColor = 'orange'
                 break
+              }
             }
 
             if (badgeText !== null) {
