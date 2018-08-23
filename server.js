@@ -188,41 +188,6 @@ loadServiceClasses().forEach(
     { camp, handleRequest: cache, githubApiProvider },
     { handleInternalErrors: config.handleInternalErrors }));
 
-// Bountysource integration.
-camp.route(/^\/bountysource\/team\/([^/]+)\/activity\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  const team = match[1];  // eg, `mozilla-core`.
-  const format = match[2];
-  const url = 'https://api.bountysource.com/teams/' + team;
-  const options = {
-    headers: { 'Accept': 'application/vnd.bountysource+json; version=2' } };
-  let badgeData = getBadgeData('bounties', data);
-  request(url, options, function dealWithData(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      if (res.statusCode !== 200) {
-        throw Error('Bad response.');
-      }
-      const parsedData = JSON.parse(buffer);
-      const activity = parsedData.activity_total;
-      badgeData.colorscheme = 'brightgreen';
-      badgeData.text[1] = activity;
-      sendBadge(format, badgeData);
-    } catch(e) {
-      if (res.statusCode === 404) {
-        badgeData.text[1] = 'not found';
-      } else {
-        badgeData.text[1] = 'invalid';
-      }
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // HHVM integration.
 camp.route(/^\/hhvm\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
