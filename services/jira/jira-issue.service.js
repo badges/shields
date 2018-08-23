@@ -5,7 +5,7 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const serverSecrets = require('../../lib/server-secrets')
 
 module.exports = class JiraIssue extends LegacyService {
-  static registerLegacyHandler({ camp, cache }) {
+  static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/jira\/issue\/(http(?:s)?)\/(.+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {

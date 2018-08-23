@@ -6,7 +6,7 @@ const serverSecrets = require('../../lib/server-secrets')
 
 // JIRA agile sprint completion.
 module.exports = class JiraSprint extends LegacyService {
-  static registerLegacyHandler({ camp, cache }) {
+  static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/jira\/sprint\/(http(?:s)?)\/(.+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
