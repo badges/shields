@@ -24,7 +24,9 @@ class LibrariesIoSourcerank extends LibrariesIoBase {
     return [
       {
         title: 'Libraries.io SourceRank',
-        previewUrl: 'npm/got',
+        exampleUrl: 'npm/got',
+        urlPattern: ':platform/:library',
+        staticExample: this.render({ rank: 25 }),
       },
     ]
   }
