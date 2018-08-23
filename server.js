@@ -356,54 +356,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Coveralls integration.
-camp.route(/^\/coveralls\/(?:(bitbucket|github)\/)?([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repoService = match[1] ? match[1] : 'github';
-  var userRepo = match[2];  // eg, `jekyll/jekyll`.
-  var branch = match[3];
-  var format = match[4];
-  var apiUrl = {
-    url: `https://coveralls.io/repos/${repoService}/${userRepo}/badge.svg`,
-    followRedirect: false,
-    method: 'HEAD',
-  };
-  if (branch) {
-    apiUrl.url += '?branch=' + branch;
-  }
-  var badgeData = getBadgeData('coverage', data);
-  request(apiUrl, function(err, res) {
-    if (err != null) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
-    }
-    // We should get a 302. Look inside the Location header.
-    var buffer = res.headers.location;
-    if (!buffer) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var score = buffer.split('_')[1].split('.')[0];
-      var percentage = parseInt(score);
-      if (percentage !== percentage) {
-        // It is NaN, treat it as unknown.
-        badgeData.text[1] = 'unknown';
-        sendBadge(format, badgeData);
-        return;
-      }
-      badgeData.text[1] = score + '%';
-      badgeData.colorscheme = coveragePercentageColor(percentage);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'malformed';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // Codecov integration.
 camp.route(/^\/codecov\/c\/(?:token\/(\w+))?[+/]?([^/]+\/[^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
