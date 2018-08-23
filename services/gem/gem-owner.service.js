@@ -49,7 +49,9 @@ module.exports = class GemOwner extends BaseJsonService {
     return [
       {
         title: 'Gems',
-        previewUrl: 'raphink',
+        exampleUrl: 'raphink',
+        urlPattern: ':user',
+        staticExample: this.render({ count: 34 }),
         keywords: ['ruby'],
       },
     ]

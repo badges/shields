@@ -47,7 +47,7 @@ module.exports = class GemDownloads extends BaseJsonService {
     }
   }
 
-  _getLabel(version, info) {
+  static _getLabel(version, info) {
     if (version) {
       return 'downloads@' + version
     } else {
@@ -65,7 +65,7 @@ module.exports = class GemDownloads extends BaseJsonService {
     let version =
       splitRubygem.length > 1 ? splitRubygem[splitRubygem.length - 1] : null
     version = version === 'stable' ? version : semver.valid(version)
-    const label = this._getLabel(version, info)
+    const label = this.constructor._getLabel(version, info)
     const json = await this.fetch({ repo, info })
 
     let downloads
@@ -122,22 +122,42 @@ module.exports = class GemDownloads extends BaseJsonService {
     return [
       {
         title: 'Gem',
-        previewUrl: 'dv/rails/stable',
+        exampleUrl: 'dv/rails/stable',
+        urlPattern: 'dv/:package/stable',
+        staticExample: this.render({
+          label: this._getLabel('stable', 'dv'),
+          downloads: 70000,
+        }),
         keywords: ['ruby'],
       },
       {
         title: 'Gem',
-        previewUrl: 'dv/rails/4.1.0',
+        exampleUrl: 'dv/rails/4.1.0',
+        urlPattern: 'dv/:package/:version',
+        staticExample: this.render({
+          label: this._getLabel('4.1.0', 'dv'),
+          downloads: 50000,
+        }),
         keywords: ['ruby'],
       },
       {
         title: 'Gem',
-        previewUrl: 'dtv/rails',
+        exampleUrl: 'dtv/rails',
+        urlPattern: 'dtv/:package',
+        staticExample: this.render({
+          label: this._getLabel(undefined, 'dtv'),
+          downloads: 70000,
+        }),
         keywords: ['ruby'],
       },
       {
         title: 'Gem',
-        previewUrl: 'dt/rails',
+        exampleUrl: 'dt/rails',
+        urlPattern: 'dt/:package',
+        staticExample: this.render({
+          label: this._getLabel(undefined, 'dt'),
+          downloads: 900000,
+        }),
         keywords: ['ruby'],
       },
     ]
