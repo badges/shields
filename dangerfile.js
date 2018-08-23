@@ -67,7 +67,7 @@ if (server.modified && !serviceTests.createdOrModified) {
     'This PR modified the server but none of the service tests. ',
     "That's okay so long as it's refactoring existing code. ",
     "Otherwise, please consider adding tests to the service: ",
-    "https://github.com/badges/shields/blob/master/doc/service-tests.md#readme"
+    "https://github.com/badges/shields/blob/master/doc/service-tests.md#readme",
   ].join(''));
 }
 
