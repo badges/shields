@@ -188,50 +188,6 @@ loadServiceClasses().forEach(
     { camp, handleRequest: cache, githubApiProvider },
     { handleInternalErrors: config.handleInternalErrors }));
 
-
-// TeamCity CodeBetter code coverage
-camp.route(/^\/teamcity\/coverage\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var buildType = match[1];  // eg, `bt428`.
-  var format = match[2];
-  var apiUrl = 'http://teamcity.codebetter.com/app/rest/builds/buildType:(id:' + buildType + ')/statistics?guest=1';
-  var badgeData = getBadgeData('coverage', data);
-  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      var covered;
-      var total;
-
-      data.property.forEach(function(property) {
-        if (property.name === 'CodeCoverageAbsSCovered') {
-          covered = property.value;
-        } else if (property.name === 'CodeCoverageAbsSTotal') {
-          total = property.value;
-        }
-      });
-
-      if (covered === undefined || total === undefined) {
-        badgeData.text[1] = 'malformed';
-        sendBadge(format, badgeData);
-        return;
-      }
-
-      var percentage = covered / total * 100;
-      badgeData.text[1] = percentage.toFixed(0) + '%';
-      badgeData.colorscheme = coveragePercentageColor(percentage);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // SonarQube code coverage
 camp.route(/^\/sonar\/?([0-9.]+)?\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
     cache(function(data, match, sendBadge, request) {
