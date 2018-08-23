@@ -47,7 +47,7 @@ module.exports = class GemDownloads extends BaseJsonService {
     }
   }
 
-  _getLabel(version, info) {
+  static _getLabel(version, info) {
     if (version) {
       return 'downloads@' + version
     } else {
@@ -65,7 +65,7 @@ module.exports = class GemDownloads extends BaseJsonService {
     let version =
       splitRubygem.length > 1 ? splitRubygem[splitRubygem.length - 1] : null
     version = version === 'stable' ? version : semver.valid(version)
-    const label = this._getLabel(version, info)
+    const label = this.constructor._getLabel(version, info)
     const json = await this.fetch({ repo, info })
 
     let downloads
@@ -125,7 +125,7 @@ module.exports = class GemDownloads extends BaseJsonService {
         exampleUrl: 'dv/rails/stable',
         urlPattern: 'dv/:package/stable',
         staticExample: this.render({
-          label: 'downloads@stable',
+          label: this._getLabel('stable', 'dv'),
           downloads: 70000,
         }),
         keywords: ['ruby'],
@@ -135,7 +135,7 @@ module.exports = class GemDownloads extends BaseJsonService {
         exampleUrl: 'dv/rails/4.1.0',
         urlPattern: 'dv/:package/:version',
         staticExample: this.render({
-          label: 'downloads@4.1.0',
+          label: this._getLabel('4.1.0', 'dv'),
           downloads: 50000,
         }),
         keywords: ['ruby'],
@@ -145,7 +145,7 @@ module.exports = class GemDownloads extends BaseJsonService {
         exampleUrl: 'dtv/rails',
         urlPattern: 'dtv/:package',
         staticExample: this.render({
-          label: 'downloads@latest',
+          label: this._getLabel(undefined, 'dtv'),
           downloads: 70000,
         }),
         keywords: ['ruby'],
@@ -154,7 +154,10 @@ module.exports = class GemDownloads extends BaseJsonService {
         title: 'Gem',
         exampleUrl: 'dt/rails',
         urlPattern: 'dt/:package',
-        staticExample: this.render({ label: 'downloads', downloads: 900000 }),
+        staticExample: this.render({
+          label: this._getLabel(undefined, 'dt'),
+          downloads: 900000,
+        }),
         keywords: ['ruby'],
       },
     ]
