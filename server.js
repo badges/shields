@@ -356,48 +356,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Codecov integration.
-camp.route(/^\/codecov\/c\/(?:token\/(\w+))?[+/]?([^/]+\/[^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var token = match[1];
-  var userRepo = match[2];  // eg, `github/codecov/example-python`.
-  var branch = match[3];
-  var format = match[4];
-  let apiUrl;
-  if (branch) {
-    apiUrl = `https://codecov.io/${userRepo}/branch/${branch}/graphs/badge.txt`;
-  } else {
-    apiUrl = `https://codecov.io/${userRepo}/graphs/badge.txt`;
-  }
-  if (token) {
-    apiUrl += '?' + queryString.stringify({ token });
-  }
-  var badgeData = getBadgeData('coverage', data);
-  request(apiUrl, function(err, res, body) {
-    if (err != null) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      // Body: range(0, 100) or "unknown"
-      var coverage = body.trim();
-      // Is `coverage` NaN when converted to number?
-      if (+coverage !== +coverage) {
-        badgeData.text[1] = 'unknown';
-        sendBadge(format, badgeData);
-        return;
-      }
-      badgeData.text[1] = coverage + '%';
-      badgeData.colorscheme = coveragePercentageColor(coverage);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'malformed';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // Code Climate integration.
 camp.route(/^\/codeclimate(\/(c|coverage|maintainability|issues|tech-debt)(-letter|-percentage)?)?\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
