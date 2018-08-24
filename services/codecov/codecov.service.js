@@ -7,9 +7,8 @@ const {
   coveragePercentage: coveragePercentageColor,
 } = require('../../lib/color-formatters')
 
-module.exports = class ___ extends LegacyService {
+module.exports = class Codecov extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
-    // Codecov integration.
     camp.route(
       /^\/codecov\/c\/(?:token\/(\w+))?[+/]?([^/]+\/[^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {

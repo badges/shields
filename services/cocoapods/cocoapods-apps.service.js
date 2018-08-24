@@ -8,7 +8,7 @@ const {
   downloadCount: downloadCountColor,
 } = require('../../lib/color-formatters')
 
-module.exports = class ___ extends LegacyService {
+module.exports = class CocoapodsApps extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/cocoapods\/(aw|at)\/(.*)\.(svg|png|gif|jpg|json)$/,

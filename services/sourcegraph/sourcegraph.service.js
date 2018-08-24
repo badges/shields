@@ -3,7 +3,7 @@
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
-module.exports = class ___ extends LegacyService {
+module.exports = class Sourcegraph extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/sourcegraph\/rrc\/([\s\S]+)\.(svg|png|gif|jpg|json)$/,

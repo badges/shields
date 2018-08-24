@@ -5,9 +5,8 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
-module.exports = class ___ extends LegacyService {
+module.exports = class Itunes extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
-    // iTunes App Store version
     camp.route(
       /^\/itunes\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
