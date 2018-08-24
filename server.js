@@ -1,6 +1,5 @@
 'use strict';
 
-const countBy = require('lodash.countby');
 const dom = require('xmldom').DOMParser;
 const jp = require('jsonpath');
 const moment = require('moment');
@@ -80,7 +79,6 @@ const {
   getVscodeStatistic,
 } = require('./lib/vscode-badge-helpers');
 const {
-  checkStateColor: githubCheckStateColor,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./lib/github-helpers');
 const {
@@ -340,38 +338,6 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = 'request unknown';
         sendBadge(format, badgeData);
       }
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// GitHub stars integration.
-camp.route(/^\/github\/stars\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, qubyte/rubidium
-  var repo = match[2];
-  var format = match[3];
-  const apiUrl = `/repos/${user}/${repo}`;
-  var badgeData = getBadgeData('stars', data);
-  if (badgeData.template === 'social') {
-    badgeData.logo = getLogo('github', data);
-    badgeData.links = [
-      'https://github.com/' + user + '/' + repo,
-      'https://github.com/' + user + '/' + repo + '/stargazers',
-     ];
-  }
-  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res)) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      badgeData.text[1] = metric(JSON.parse(buffer).stargazers_count);
-      badgeData.colorscheme = null;
-      badgeData.colorB = '#4183C4';
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
