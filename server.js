@@ -337,44 +337,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Puppet Forge users
-camp.route(/^\/puppetforge\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var info = match[1]; // either `rc` or `mc`
-  var user = match[2];
-  var format = match[3];
-  var options = {
-    json: true,
-    uri: 'https://forgeapi.puppetlabs.com/v3/users/' + user,
-  };
-  var badgeData = getBadgeData('puppetforge', data);
-  request(options, function dealWithData(err, res, json) {
-    if (err != null || (json.length !== undefined && json.length === 0)) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      if (info === 'rc') {
-        var releases = json.release_count;
-        badgeData.colorscheme = floorCountColor(releases, 10, 50, 100);
-        badgeData.text[0] = getLabel('releases', data);
-        badgeData.text[1] = metric(releases);
-      } else if (info === 'mc') {
-        var modules = json.module_count;
-        badgeData.colorscheme = floorCountColor(modules, 5, 10, 50);
-        badgeData.text[0] = getLabel('modules', data);
-        badgeData.text[1] = metric(modules);
-      }
-      sendBadge(format, badgeData);
-
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // Jenkins build status integration
 camp.route(/^\/jenkins(?:-ci)?\/s\/(http(?:s)?)\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
