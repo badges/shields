@@ -61,11 +61,11 @@ module.exports = class FDroid extends BaseHTTPService {
   static get examples() {
     return [
       {
-        previewUrl: 'wercker/go-wercker-api',
-      },
-      {
-        title: `${this.name} branch`,
-        previewUrl: 'wercker/go-wercker-api/master',
+        title: 'F-Droid',
+        exampleUrl: 'org.thosp.yourlocalweather',
+        urlPattern: ':addId',
+        staticExample: this.render({ version: '1.0' }),
+        keywords: ['fdroid', 'f-droid', 'android', 'app'],
       },
     ]
   }
