@@ -90,7 +90,7 @@ class BaseService {
     const badgeData = this._makeBadgeData({}, serviceData)
     const color = badgeData.colorscheme || badgeData.colorB
     return `/badge/${encodeURIComponent(
-      badgeData.text[0]
+      badgeData.text[0].replace("-", "--")
     )}-${encodeURIComponent(badgeData.text[1])}-${color}`
   }
 
