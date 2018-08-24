@@ -333,67 +333,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Codeship.io integration
-camp.route(/^\/codeship\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var projectId = match[1];  // eg, `ab123456-00c0-0123-42de-6f98765g4h32`.
-  var format = match[3];
-  var branch = match[2];
-  var options = {
-    method: 'GET',
-    uri: 'https://codeship.com/projects/' + projectId + '/status' + (branch != null ? '?branch=' + branch : ''),
-  };
-  var badgeData = getBadgeData('build', data);
-  request(options, function(err, res) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var statusMatch = res.headers['content-disposition']
-                           .match(/filename="status_(.+)\./);
-      if (!statusMatch) {
-        badgeData.text[1] = 'unknown';
-        sendBadge(format, badgeData);
-        return;
-      }
-
-      switch (statusMatch[1]) {
-        case 'success':
-          badgeData.text[1] = 'passing';
-          badgeData.colorscheme = 'brightgreen';
-          break;
-        case 'projectnotfound':
-          badgeData.text[1] = 'not found';
-          break;
-        case 'branchnotfound':
-          badgeData.text[1] = 'branch not found';
-          break;
-        case 'testing':
-        case 'waiting':
-        case 'initiated':
-          badgeData.text[1] = 'pending';
-          break;
-        case 'error':
-        case 'infrastructure_failure':
-          badgeData.text[1] = 'failing';
-          badgeData.colorscheme = 'red';
-          break;
-        case 'stopped':
-        case 'ignored':
-        case 'blocked':
-          badgeData.text[1] = 'not built';
-          break;
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // Magnum CI integration - deprecated as of July 2018
 camp.route(/^\/magnumci\/ci\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
