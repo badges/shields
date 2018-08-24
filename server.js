@@ -345,38 +345,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// GitHub watchers integration.
-camp.route(/^\/github\/watchers\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, qubyte/rubidium
-  var repo = match[2];
-  var format = match[3];
-  const apiUrl = `/repos/${user}/${repo}`;
-  var badgeData = getBadgeData('watchers', data);
-  if (badgeData.template === 'social') {
-    badgeData.logo = getLogo('github', data);
-    badgeData.links = [
-      'https://github.com/' + user + '/' + repo,
-      'https://github.com/' + user + '/' + repo + '/watchers',
-     ];
-  }
-  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res)) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      badgeData.text[1] = JSON.parse(buffer).subscribers_count;
-      badgeData.colorscheme = null;
-      badgeData.colorB = '#4183C4';
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // GitHub user followers integration.
 camp.route(/^\/github\/followers\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
