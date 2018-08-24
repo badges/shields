@@ -11,7 +11,7 @@ t.create('Package is found')
   .intercept(nock =>
     nock('https://f-droid.org')
       .get('/en/packages/org.pacien.tincapp/')
-      .reply([200, manyVersions])
+      .reply(200, manyVersions)
   )
   .expectJSON({ name: 'F-Droid', value: 'v0.19' })
 
@@ -20,7 +20,7 @@ t.create('Package is not found')
   .intercept(nock =>
     nock('https://f-droid.org')
       .get('/en/packages/org.pacien.tincapp/')
-      .reply([404, manyVersions])
+      .reply(404, manyVersions)
   )
   .expectJSON({ name: 'F-Droid', value: 'app not found' })
 
@@ -29,7 +29,7 @@ t.create('The api changed')
   .intercept(nock =>
     nock('https://f-droid.org')
       .get('/en/packages/org.pacien.tincapp/')
-      .reply([404, ""])
+      .reply(200, "")
   )
   .expectJSON({ name: 'F-Droid', value: 'fix this badge' })
 
