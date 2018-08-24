@@ -341,44 +341,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Bitbucket pull requests integration.
-camp.route(/^\/bitbucket\/pr(-raw)?\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var isRaw = !!match[1];
-  var user = match[2];  // eg, atlassian
-  var repo = match[3];  // eg, python-bitbucket
-  var format = match[4];
-  var apiUrl = 'https://bitbucket.org/api/2.0/repositories/'
-    + encodeURI(user) + '/' + encodeURI(repo)
-    + '/pullrequests/?limit=0&state=OPEN';
-
-  var badgeData = getBadgeData('pull requests', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      if (res.statusCode !== 200) {
-        throw Error('Failed to count pull requests.');
-      }
-      var data = JSON.parse(buffer);
-      var pullrequests = data.size;
-      badgeData.text[1] = metric(pullrequests) + (isRaw? '': ' open');
-      badgeData.colorscheme = (pullrequests > 0)? 'yellow': 'brightgreen';
-      sendBadge(format, badgeData);
-    } catch(e) {
-      if (res.statusCode === 404) {
-        badgeData.text[1] = 'not found';
-      } else {
-        badgeData.text[1] = 'invalid';
-      }
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // Bitbucket Pipelines integration.
 camp.route(/^\/bitbucket\/pipelines\/([^/]+)\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
