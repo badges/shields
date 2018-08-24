@@ -354,55 +354,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Codacy integration
-camp.route(/^\/codacy\/(?:grade\/)?(?!coverage\/)([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var projectId = match[1];  // eg. e27821fb6289410b8f58338c7e0bc686
-  var branch = match[2];
-  var format = match[3];
-
-  var queryParams = {};
-  if (branch) {
-    queryParams.branch = branch;
-  }
-  var query = queryString.stringify(queryParams);
-  var url = 'https://api.codacy.com/project/badge/grade/' + projectId + '?' + query;
-  var badgeData = getBadgeData('code quality', data);
-  fetchFromSvg(request, url, function(err, res) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      badgeData.text[1] = res;
-      if (res === 'A') {
-        badgeData.colorscheme = 'brightgreen';
-      } else if (res === 'B') {
-        badgeData.colorscheme = 'green';
-      } else if (res === 'C') {
-        badgeData.colorscheme = 'yellowgreen';
-      } else if (res === 'D') {
-        badgeData.colorscheme = 'yellow';
-      } else if (res === 'E') {
-        badgeData.colorscheme = 'orange';
-      } else if (res === 'F') {
-        badgeData.colorscheme = 'red';
-      } else if (res === 'X') {
-        badgeData.text[1] = 'invalid';
-        badgeData.colorscheme = 'lightgrey';
-      } else {
-        badgeData.colorscheme = 'red';
-      }
-      sendBadge(format, badgeData);
-
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // Discourse integration
 camp.route(/^\/discourse\/(http(?:s)?)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
