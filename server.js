@@ -349,52 +349,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// GitHub issues integration.
-camp.route(/^\/github\/issues(-pr)?(-closed)?(-raw)?\/(?!detail)([^/]+)\/([^/]+)\/?(.+)?\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var isPR = !!match[1];
-  var isClosed = !!match[2];
-  var isRaw = !!match[3];
-  var user = match[4];  // eg, badges
-  var repo = match[5];  // eg, shields
-  var ghLabel = match[6];  // eg, website
-  var format = match[7];
-  var query = {};
-  var hasLabel = (ghLabel !== undefined);
-
-  query.q = 'repo:' + user + '/' + repo +
-    (isPR? ' is:pr': ' is:issue') +
-    (isClosed? ' is:closed': ' is:open') +
-    (hasLabel? ` label:"${ghLabel}"` : '');
-
-  var classText = isClosed? 'closed': 'open';
-  var leftClassText = isRaw? classText + ' ': '';
-  var rightClassText = !isRaw? ' ' + classText: '';
-  const isGhLabelMultiWord = hasLabel && ghLabel.includes(' ');
-  var labelText = hasLabel? (isGhLabelMultiWord? `"${ghLabel}"`: ghLabel) + ' ': '';
-  var targetText = isPR? 'pull requests': 'issues';
-  var badgeData = getBadgeData(leftClassText + labelText + targetText, data);
-  if (badgeData.template === 'social') {
-    badgeData.logo = getLogo('github', data);
-  }
-  githubApiProvider.request(request, '/search/issues', query, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res)) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      var issues = data.total_count;
-      badgeData.text[1] = metric(issues) + rightClassText;
-      badgeData.colorscheme = (issues > 0)? 'yellow': 'brightgreen';
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // GitHub issue detail integration.
 camp.route(/^\/github\/(?:issues|pulls)\/detail\/(s|title|u|label|comments|age|last-update)\/([^/]+)\/([^/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
 cache((queryParams, match, sendBadge, request) => {
