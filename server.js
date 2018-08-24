@@ -354,31 +354,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Depfu integration
-camp.route(/^\/depfu\/(.+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];  // eg, `jekyll/jekyll`.
-  var format = match[2];
-  var url = 'https://depfu.com/github/shields/' + userRepo;
-  var badgeData = getBadgeData('dependencies', data);
-  request(url, function(err, res) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(res['body']);
-      badgeData.text[1] = data['text'];
-      badgeData.colorscheme = data['colorscheme'];
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // VersionEye integration - deprecated as of August 2018.
 camp.route(/^\/versioneye\/d\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
