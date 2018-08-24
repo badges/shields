@@ -2,7 +2,6 @@
 
 const dom = require('xmldom').DOMParser;
 const jp = require('jsonpath');
-const moment = require('moment');
 const path = require('path');
 const prettyBytes = require('pretty-bytes');
 const queryString = require('query-string');
@@ -322,57 +321,6 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = 'request unknown';
         sendBadge(format, badgeData);
       }
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// SourceForge integration.
-camp.route(/^\/sourceforge\/(dt|dm|dw|dd)\/([^/]*)\/?(.*).(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  const info = match[1];      // eg, 'dm'
-  const project = match[2];   // eg, 'sevenzip`.
-  const folder = match[3];
-  const format = match[4];
-  let apiUrl = 'http://sourceforge.net/projects/' + project + '/files/' + folder + '/stats/json';
-  const badgeData = getBadgeData('sourceforge', data);
-  let time_period, start_date;
-  badgeData.text[0] = getLabel('downloads', data);
-  // get yesterday since today is incomplete
-  const end_date = moment().subtract(24, 'hours');
-  switch (info.charAt(1)) {
-    case 'm':
-      start_date = moment(end_date).subtract(30, 'days');
-      time_period = '/month';
-      break;
-    case 'w':
-      start_date = moment(end_date).subtract(6, 'days');  // 6, since date range is inclusive
-      time_period = '/week';
-      break;
-    case 'd':
-      start_date = end_date;
-      time_period = '/day';
-      break;
-    case 't':
-      start_date = moment(0);
-      time_period = '';
-      break;
-  }
-  apiUrl += '?start_date=' + start_date.format("YYYY-MM-DD") + '&end_date=' + end_date.format("YYYY-MM-DD");
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      const data = JSON.parse(buffer);
-      const downloads = data.total;
-      badgeData.text[1] = metric(downloads) + time_period;
-      badgeData.colorscheme = downloadCountColor(downloads);
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
