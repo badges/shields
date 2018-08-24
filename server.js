@@ -12,6 +12,9 @@ const xml2js = require('xml2js');
 const xpath = require('xpath');
 const yaml = require('js-yaml');
 const Raven = require('raven');
+const prometheus = require('prom-client');
+const register = prometheus.register;
+prometheus.collectDefaultMetrics();
 
 const serverSecrets = require('./lib/server-secrets');
 Raven.config(process.env.SENTRY_DSN || serverSecrets.sentry_dsn).install();
@@ -7146,6 +7149,11 @@ function(data, match, end, ask) {
     const svg = makeBadge({ text: ['error', 'bad badge'], colorscheme: 'red' });
     makeSend('png', ask.res, end)(svg);
   }
+});
+
+camp.route(/^\/metrics$/, (data, match, end, ask) => {
+  ask.res.setHeader('Content-Type', register.contentType);
+  ask.res.end(register.metrics());
 });
 
 if (config.redirectUri) {

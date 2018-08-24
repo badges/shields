@@ -45,6 +45,7 @@
     "pdfkit": "~0.8.0",
     "pretty-bytes": "^5.0.0",
     "priorityqueuejs": "^1.0.0",
+    "prom-client": "^11.1.1",
     "query-string": "^6.0.0",
     "raven": "^2.4.2",
     "redis": "~2.8.0",
