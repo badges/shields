@@ -61,10 +61,6 @@ const {
   escapeFormatSlashes,
 } = require('./lib/path-helpers');
 const {
-  getVscodeApiReqOptions,
-  getVscodeStatistic,
-} = require('./lib/vscode-badge-helpers');
-const {
   sortDjangoVersions,
   parseClassifiers,
 } = require('./lib/pypi-helpers.js');
@@ -327,61 +323,6 @@ cache(function(data, match, sendBadge, request) {
     }
   });
 }));
-
-//vscode-marketplace download/version/rating integration
-camp.route(/^\/vscode-marketplace\/(d|v|r|stars)\/(.*)\.(svg|png|gif|jpg|json)$/,
-  cache(function (data, match, sendBadge, request) {
-    let reqType = match[1]; // eg, d/v/r
-    let repo = match[2];  // eg, `ritwickdey.LiveServer`.
-    let format = match[3];
-
-    let badgeData = getBadgeData('vscode-marketplace', data); //temporary name
-    let options = getVscodeApiReqOptions(repo);
-
-    request(options, function (err, res, buffer) {
-      if (err != null) {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
-      }
-
-      try {
-        switch (reqType) {
-          case 'd':
-            badgeData.text[0] = getLabel('downloads', data);
-            var count = getVscodeStatistic(buffer, 'install');
-            badgeData.text[1] = metric(count);
-            badgeData.colorscheme = downloadCountColor(count);
-            break;
-          case 'r':
-            badgeData.text[0] = getLabel('rating', data);
-            var rate = getVscodeStatistic(buffer, 'averagerating').toFixed(2);
-            var totalrate = getVscodeStatistic(buffer, 'ratingcount');
-            badgeData.text[1] = rate + '/5 (' + totalrate + ')';
-            badgeData.colorscheme = floorCountColor(rate, 2, 3, 4);
-            break;
-          case 'stars':
-            badgeData.text[0] = getLabel('rating', data);
-            var rating = getVscodeStatistic(buffer, 'averagerating').toFixed(2);
-            badgeData.text[1] = starRating(rating);
-            badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
-            break;
-          case 'v':
-            badgeData.text[0] = getLabel('visual studio marketplace', data);
-            var version = buffer.results[0].extensions[0].versions[0].version;
-            badgeData.text[1] = versionText(version);
-            badgeData.colorscheme = versionColor(version);
-            break;
-        }
-        sendBadge(format, badgeData);
-      } catch (e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-
-    });
-  })
-);
 
 // Eclipse Marketplace integration.
 camp.route(/^\/eclipse-marketplace\/(dt|dm|v|favorites|last-update)\/(.*)\.(svg|png|gif|jpg|json)$/,
