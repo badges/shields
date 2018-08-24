@@ -353,41 +353,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// GitHub contributors integration.
-camp.route(/^\/github\/contributors(-anon)?\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var isAnon = match[1];
-  var user = match[2];
-  var repo = match[3];
-  var format = match[4];
-  const apiUrl = `/repos/${user}/${repo}/contributors?page=1&per_page=1&anon=${!!isAnon}`;
-  var badgeData = getBadgeData('contributors', data);
-  if (badgeData.template === 'social') {
-    badgeData.logo = getLogo('github', data);
-  }
-  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res)) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var contributors;
-
-      if (res.headers['link'] && res.headers['link'].indexOf('rel="last"') !== -1) {
-        contributors = res.headers['link'].match(/[?&]page=(\d+)[^>]+>; rel="last"/)[1];
-      } else {
-        contributors = JSON.parse(buffer).length;
-      }
-
-      badgeData.text[1] = metric(+contributors);
-      badgeData.colorscheme = 'blue';
-    } catch(e) {
-      badgeData.text[1] = 'inaccessible';
-    }
-    sendBadge(format, badgeData);
-  });
-}));
-
 // GitHub release integration
 camp.route(/^\/github\/release\/([^/]+\/[^/]+)(?:\/(all))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
