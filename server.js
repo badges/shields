@@ -333,47 +333,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Maven-Central artifact version integration
-// (based on repo1.maven.org rather than search.maven.org because of #846)
-camp.route(/^\/maven-central\/v\/([^/]*)\/([^/]*)(?:\/([^/]*))?\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var groupId = match[1]; // eg, `com.google.inject`
-  var artifactId = match[2]; // eg, `guice`
-  var versionPrefix = match[3] || ''; // eg, `1.`
-  var format = match[4] || 'gif'; // eg, `svg`
-  var metadataUrl = 'http://repo1.maven.org/maven2'
-    + '/' + encodeURIComponent(groupId).replace(/\./g, '/')
-    + '/' + encodeURIComponent(artifactId)
-    + '/maven-metadata.xml';
-  var badgeData = getBadgeData('maven-central', data);
-  request(metadataUrl, { headers: { 'Accept': 'text/xml' } }, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    xml2js.parseString(buffer.toString(), function (err, data) {
-      if (err != null) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-        return;
-      }
-      try {
-        var versions = data.metadata.versioning[0].versions[0].version.reverse();
-        var version = versions.find(function(version){
-          return version.indexOf(versionPrefix) === 0;
-        });
-        badgeData.text[1] = versionText(version);
-        badgeData.colorscheme = versionColor(version);
-        sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  });
-}));
-
 // standalone sonatype nexus installation
 // API pattern:
 //   /nexus/(r|s|<repo-name>)/(http|https)/<nexus.host>[:port][/<entry-path>]/<group>/<artifact>[:k1=v1[:k2=v2[...]]].<format>
