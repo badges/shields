@@ -87,7 +87,6 @@ const {
 } = require('./lib/github-helpers');
 const {
   mapGithubCommitsSince,
-  mapGithubReleaseDate,
 } = require('./lib/github-provider');
 const {
   sortDjangoVersions,
@@ -352,9 +351,6 @@ cache(function(data, match, sendBadge, request) {
     }
   });
 }));
-
-// GitHub release & pre-release date integration.
-mapGithubReleaseDate({ camp, cache }, githubApiProvider);
 
 // GitHub commits since integration.
 mapGithubCommitsSince({ camp, cache }, githubApiProvider);
