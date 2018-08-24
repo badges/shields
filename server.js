@@ -354,52 +354,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// CocoaPods version integration.
-camp.route(/^\/cocoapods\/(v|p|l)\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var type = match[1];
-  var spec = match[2];  // eg, AFNetworking
-  var format = match[3];
-  var apiUrl = 'https://trunk.cocoapods.org/api/v1/pods/' + spec + '/specs/latest';
-  const typeToLabel = { 'v' : 'pod', 'p': 'platform', 'l': 'license' };
-  const badgeData = getBadgeData(typeToLabel[type], data);
-  badgeData.colorscheme = null;
-  request(apiUrl, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res)) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var parsedData = JSON.parse(buffer);
-      var version = parsedData.version;
-      var license;
-      if (typeof parsedData.license === 'string') {
-        license = parsedData.license;
-      } else { license = parsedData.license.type; }
-
-      var platforms = Object.keys(parsedData.platforms || {
-        'ios' : '5.0',
-        'osx' : '10.7',
-      }).join(' | ');
-      if (type === 'v') {
-        badgeData.text[1] = versionText(version);
-        badgeData.colorscheme = versionColor(version);
-      } else if (type === 'p') {
-        badgeData.text[1] = platforms;
-        badgeData.colorB = '#989898';
-      } else if (type === 'l') {
-        badgeData.text[1] = license;
-        badgeData.colorB = '#373737';
-      }
-
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // CocoaPods metrics
 camp.route(/^\/cocoapods\/metrics\/doc-percent\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
