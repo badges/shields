@@ -353,42 +353,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// GitHub release integration
-camp.route(/^\/github\/release\/([^/]+\/[^/]+)(?:\/(all))?\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];  // eg, qubyte/rubidium
-  var allReleases = match[2];
-  var format = match[3];
-  let apiUrl = `/repos/${userRepo}/releases`;
-  if (allReleases === undefined) {
-    apiUrl = apiUrl + '/latest';
-  }
-  var badgeData = getBadgeData('release', data);
-  if (badgeData.template === 'social') {
-    badgeData.logo = getLogo('github', data);
-  }
-  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res)) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      if (allReleases === 'all') {
-        data = data[0];
-      }
-      var version = data.tag_name;
-      var prerelease = data.prerelease;
-      badgeData.text[1] = versionText(version);
-      badgeData.colorscheme = prerelease ? 'orange' : 'blue';
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'none';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // GitHub release & pre-release date integration.
 mapGithubReleaseDate({ camp, cache }, githubApiProvider);
 
