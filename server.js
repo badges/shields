@@ -353,49 +353,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// GitHub package and manifest version integration.
-camp.route(/^\/github\/(package|manifest)-json\/([^/]+)\/([^/]+)\/([^/]+)\/?([^/]+)?\.(svg|png|gif|jpg|json)$/,
-cache(function(query_data, match, sendBadge, request) {
-  var type = match[1];
-  var info = match[2];
-  var user = match[3];
-  var repo = match[4];
-  var branch = match[5] || 'master';
-  var format = match[6];
-  var apiUrl = 'https://raw.githubusercontent.com/' + user + '/' + repo + '/' + branch + '/' + type + '.json';
-  var badgeData = getBadgeData(type, query_data);
-  request(apiUrl, function(err, res, buffer) {
-    if (githubCheckErrorResponse(badgeData, err, res)) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var json_data = JSON.parse(buffer);
-      switch(info) {
-        case 'v':
-        case 'version':
-          var version = json_data.version;
-          badgeData.text[1] = versionText(version);
-          badgeData.colorscheme = versionColor(version);
-          break;
-        case 'n':
-          info = 'name';
-          // falls through
-        default:
-          var value = typeof json_data[info] != 'undefined' && typeof json_data[info] != 'object' ? json_data[info] : Array.isArray(json_data[info]) ? json_data[info].join(", ") : 'invalid data';
-          badgeData.text[0] = getLabel(`${type} ${info}`, query_data);
-          badgeData.text[1] = value;
-          badgeData.colorscheme = value != 'invalid data' ? 'blue' : 'lightgrey';
-          break;
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid data';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // GitHub contributors integration.
 camp.route(/^\/github\/contributors(-anon)?\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
