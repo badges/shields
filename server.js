@@ -323,68 +323,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Eclipse Marketplace integration.
-camp.route(/^\/eclipse-marketplace\/(dt|dm|v|favorites|last-update)\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var type = match[1];
-  var project = match[2];
-  var format = match[3];
-  var apiUrl = 'https://marketplace.eclipse.org/content/' + project + '/api/p';
-  var badgeData = getBadgeData('eclipse marketplace', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    xml2js.parseString(buffer.toString(), function (parseErr, parsedData) {
-      if (parseErr != null) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-        return;
-      }
-      try {
-        const projectNode = parsedData.marketplace.node[0];
-        switch (type) {
-          case 'dt':
-            badgeData.text[0] = getLabel('downloads', data);
-            var downloads = parseInt(projectNode.installstotal[0]);
-            badgeData.text[1] = metric(downloads);
-            badgeData.colorscheme = downloadCountColor(downloads);
-            break;
-          case 'dm':
-            badgeData.text[0] = getLabel('downloads', data);
-            var monthlydownloads = parseInt(projectNode.installsrecent[0]);
-            badgeData.text[1] = metric(monthlydownloads) + '/month';
-            badgeData.colorscheme = downloadCountColor(monthlydownloads);
-            break;
-          case 'v':
-            badgeData.text[1] = versionText(projectNode.version[0]);
-            badgeData.colorscheme = versionColor(projectNode.version[0]);
-            break;
-          case 'favorites':
-            badgeData.text[0] = getLabel('favorites', data);
-            badgeData.text[1] = parseInt(projectNode.favorited[0]);
-            badgeData.colorscheme = 'brightgreen';
-            break;
-          case 'last-update':
-            var date = 1000 * parseInt(projectNode.changed[0]);
-            badgeData.text[0] = getLabel('updated', data);
-            badgeData.text[1] = formatDate(date);
-            badgeData.colorscheme = ageColor(Date.parse(date));
-            break;
-          default:
-            throw Error('Unreachable due to regex');
-        }
-        sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  });
-}));
-
 camp.route(/^\/dockbit\/([A-Za-z0-9-_]+)\/([A-Za-z0-9-_]+)\.(svg|png|gif|jpg|json)$/,
 cache({
   queryParams: ['token'],
