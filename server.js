@@ -402,54 +402,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// CRAN/METACRAN integration.
-camp.route(/^\/cran\/([vl])\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(queryParams, match, sendBadge, request) {
-  var info = match[1]; // either `v` or `l`
-  var pkg = match[2]; // eg, devtools
-  var format = match[3];
-  var url = 'http://crandb.r-pkg.org/' + pkg;
-  var badgeData = getBadgeData('cran', queryParams);
-  request(url, function (err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    if (res.statusCode === 404) {
-      badgeData.text[1] = 'not found';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-
-      if (info === 'v') {
-        var version = data.Version;
-        badgeData.text[1] = versionText(version);
-        badgeData.colorscheme = versionColor(version);
-        sendBadge(format, badgeData);
-      } else if (info === 'l') {
-        badgeData.text[0] = getLabel('license', queryParams);
-        var license = data.License;
-        if (license) {
-          badgeData.text[1] = license;
-          badgeData.colorscheme = 'blue';
-        } else {
-          badgeData.text[1] = 'unknown';
-        }
-        sendBadge(format, badgeData);
-      } else {
-        throw Error('Unreachable due to regex');
-      }
-    } catch (e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-
 // CTAN integration.
 camp.route(/^\/ctan\/([vl])\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
