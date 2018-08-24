@@ -55,10 +55,7 @@ const {
   makeHandleRequestFn,
   clearRequestCache,
 } = require('./lib/request-handler');
-const {
-  regularUpdate,
-  clearRegularUpdateCache,
-} = require('./lib/regular-update');
+const { clearRegularUpdateCache } = require('./lib/regular-update');
 const { makeSend } = require('./lib/result-sender');
 const { fetchFromSvg } = require('./lib/svg-badge-parser');
 const {
@@ -334,40 +331,6 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
     }
   });
-}));
-
-// Jenkins Plugins version integration
-camp.route(/^\/jenkins\/plugin\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var pluginId = match[1];  // e.g. blueocean
-  var format = match[2];
-  var badgeData = getBadgeData('plugin', data);
-  regularUpdate({
-    url: 'https://updates.jenkins-ci.org/current/update-center.actual.json',
-    intervalMillis: 4 * 3600 * 1000,
-    scraper: json => Object.keys(json.plugins).reduce((previous, current) => {
-      previous[current] = json.plugins[current].version;
-      return previous;
-    }, {}),
-  }, (err, versions) => {
-      if (err != null) {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
-      }
-      try {
-        var version = versions[pluginId];
-        if (version === undefined) {
-          throw Error('Plugin not found!');
-        }
-        badgeData.text[1] = versionText(version);
-        badgeData.colorscheme = versionColor(version);
-        sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'not found';
-        sendBadge(format, badgeData);
-      }
-    });
 }));
 
 // Ansible integration
