@@ -354,38 +354,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Hackage version integration.
-camp.route(/^\/hackage\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `lens`.
-  var format = match[2];
-  var apiUrl = 'https://hackage.haskell.org/package/' + repo + '/' + repo + '.cabal';
-  var badgeData = getBadgeData('hackage', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res)) {
-      sendBadge(format, badgeData);
-      return;
-    }
-
-    try {
-      var lines = buffer.split("\n");
-      var versionLines = lines.filter(function(e) {
-        return (/^version:/i).test(e) === true;
-      });
-      // We don't have to check length of versionLines, because if we throw,
-      // we'll render the 'invalid' badge below, which is the correct thing
-      // to do.
-      var version = versionLines[0].split(/:/)[1].trim();
-      badgeData.text[1] = versionText(version);
-      badgeData.colorscheme = versionColor(version);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // Hackage dependencies version integration.
 camp.route(/^\/hackage-deps\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
