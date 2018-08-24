@@ -333,40 +333,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Ansible integration
-camp.route(/^\/ansible\/role\/(?:(d)\/)?(\d+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  const type = match[1];      // eg d or nothing
-  const roleId = match[2];    // eg 3078
-  const format = match[3];
-  const options = {
-    json: true,
-    uri: 'https://galaxy.ansible.com/api/v1/roles/' + roleId + '/',
-  };
-  const badgeData = getBadgeData('role', data);
-  request(options, function(err, res, json) {
-    if (res && (res.statusCode === 404 || json === undefined || json.state === null)) {
-      badgeData.text[1] = 'not found';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      if (type === 'd') {
-        badgeData.text[0] = getLabel('role downloads', data);
-        badgeData.text[1] = metric(json.download_count);
-        badgeData.colorscheme = 'blue';
-      } else {
-        badgeData.text[1] = json.summary_fields.namespace.name + '.' + json.name;
-        badgeData.colorscheme = 'blue';
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'errored';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // Codeship.io integration
 camp.route(/^\/codeship\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
