@@ -402,40 +402,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// CPAN integration.
-camp.route(/^\/cpan\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var info = match[1]; // either `v` or `l`
-  var pkg = match[2]; // eg, Config-Augeas
-  var format = match[3];
-  var badgeData = getBadgeData('cpan', data);
-  var url = 'https://fastapi.metacpan.org/v1/release/'+pkg;
-  request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-
-      if (info === 'v') {
-        var version = data.version;
-        badgeData.text[1] = versionText(version);
-        badgeData.colorscheme = versionColor(version);
-      } else if (info === 'l') {
-        var license = data.license[0];
-        badgeData.text[1] = license;
-        badgeData.colorscheme = 'blue';
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // CRAN/METACRAN integration.
 camp.route(/^\/cran\/([vl])\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(queryParams, match, sendBadge, request) {
