@@ -167,7 +167,7 @@ npm run test:services -- --only=travis
 
 The `--only=` option indicates which service or services you want to test. You
 can provide a comma-separated list of ids.
-Thesre ids are those passed to the ServiceTester.
+These ids are those passed to the ServiceTester:
 
 ```
 ... ServiceTester({ id: 'travis', ... })
