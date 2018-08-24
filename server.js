@@ -78,9 +78,6 @@ const {
   getVscodeStatistic,
 } = require('./lib/vscode-badge-helpers');
 const {
-  checkErrorResponse: githubCheckErrorResponse,
-} = require('./lib/github-helpers');
-const {
   sortDjangoVersions,
   parseClassifiers,
 } = require('./lib/pypi-helpers.js');
@@ -337,47 +334,6 @@ cache(function(data, match, sendBadge, request) {
         badgeData.text[1] = 'request unknown';
         sendBadge(format, badgeData);
       }
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// GitHub commit status integration.
-camp.route(/^\/github\/commit-status\/([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  const [, user, repo, branch, commit, format] = match;
-  const apiUrl = `/repos/${user}/${repo}/compare/${branch}...${commit}`;
-  const badgeData = getBadgeData('commit status', data);
-  githubApiProvider.request(request, apiUrl, {}, function(err, res, buffer) {
-    if (githubCheckErrorResponse(badgeData, err, res, 'commit or branch not found')) {
-      if (res && res.statusCode === 404) {
-        try {
-          if (JSON.parse(buffer).message.startsWith('No common ancestor between')) {
-            badgeData.text[1] = 'no common ancestor';
-            badgeData.colorscheme = 'lightgrey';
-          }
-        } catch(e) {
-          badgeData.text[1] = 'invalid';
-          badgeData.colorscheme = 'lightgrey';
-        }
-      }
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      const parsedData = JSON.parse(buffer);
-      const isInBranch = parsedData.status === 'identical' || parsedData.status === 'behind';
-      if (isInBranch) {
-        badgeData.text[1] = `in ${branch}`;
-        badgeData.colorscheme = 'brightgreen';
-      } else {
-        // status: ahead or diverged
-        badgeData.text[1] = `not in ${branch}`;
-        badgeData.colorscheme = 'yellow';
-      }
-      sendBadge(format, badgeData);
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
