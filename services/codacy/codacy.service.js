@@ -3,7 +3,7 @@
 const queryString = require('query-string')
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { fetchFromSvg } = require('./lib/svg-badge-parser')
+const { fetchFromSvg } = require('../../lib/svg-badge-parser')
 
 module.exports = class Codacy extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
