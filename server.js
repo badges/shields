@@ -344,34 +344,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-//GitHub repository size integration.
-camp.route(/^\/github\/repo-size\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var user = match[1];
-  var repo = match[2];
-  var format = match[3];
-  const apiUrl = `/repos/${user}/${repo}`;
-  var badgeData = getBadgeData('repo size', data);
-  if (badgeData.template === 'social') {
-    badgeData.logo = getLogo('github', data);
-  }
-  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res)) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      const parsedData = JSON.parse(buffer);
-      badgeData.text[1] = prettyBytes(parseInt(parsedData.size) * 1024);
-      badgeData.colorscheme = 'blue';
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // GitHub commit status integration.
 camp.route(/^\/github\/commit-status\/([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
