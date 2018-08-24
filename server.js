@@ -18,7 +18,7 @@ Raven.config(process.env.SENTRY_DSN || serverSecrets.sentry_dsn).install();
 Raven.disableConsoleAlerts();
 
 const { loadServiceClasses } = require('./services');
-const { isDeprecated, getDeprecatedBadge } = require('./lib/deprecation-helpers');
+const { getDeprecatedBadge } = require('./lib/deprecation-helpers');
 const { checkErrorResponse } = require('./lib/error-helper');
 const analytics = require('./lib/analytics');
 const config = require('./lib/server-config');
@@ -350,53 +350,6 @@ cache(function(data, match, sendBadge, request) {
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// Gemnasium integration
-camp.route(/^\/gemnasium\/(.+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];  // eg, `jekyll/jekyll`.
-  var format = match[2];
-
-  if (isDeprecated('gemnasium', serverStartTime)) {
-    const badgeData = getDeprecatedBadge('gemnasium', data);
-    sendBadge(format, badgeData);
-    return;
-  }
-
-  var options = 'https://gemnasium.com/' + userRepo + '.svg';
-  var badgeData = getBadgeData('dependencies', data);
-  request(options, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var nameMatch = buffer.match(/(devD|d)ependencies/)[0];
-      var statusMatch = buffer.match(/'14'>(.+)<\/text>\s*<\/g>/)[1];
-      badgeData.text[0] = getLabel(nameMatch, data);
-      badgeData.text[1] = statusMatch;
-      if (statusMatch === 'up-to-date') {
-        badgeData.text[1] = 'up to date';
-        badgeData.colorscheme = 'brightgreen';
-      } else if (statusMatch === 'out-of-date') {
-        badgeData.text[1] = 'out of date';
-        badgeData.colorscheme = 'yellow';
-      } else if (statusMatch === 'update!') {
-        badgeData.colorscheme = 'red';
-      } else if (statusMatch === 'none') {
-        badgeData.colorscheme = 'brightgreen';
-      } else {
-        badgeData.text[1] = 'undefined';
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
     }
   });
 }));
