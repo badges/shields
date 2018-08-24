@@ -354,14 +354,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// dotnet-status integration - deprecated as of April 2018.
-camp.route(/^\/dotnetstatus\/(.+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  const format = match[2];
-  const badgeData = getDeprecatedBadge('dotnet status', data);
-  sendBadge(format, badgeData);
-}));
-
 // Gemnasium integration
 camp.route(/^\/gemnasium\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
