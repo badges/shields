@@ -328,50 +328,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Requires.io status integration
-camp.route(/^\/requires\/([^/]+\/[^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];  // eg, `github/celery/celery`.
-  var branch = match[2];
-  var format = match[3];
-  var uri = 'https://requires.io/api/v1/status/' + userRepo;
-  if (branch != null) {
-    uri += '?branch=' + branch;
-  }
-  var options = {
-    method: 'GET',
-    uri: uri,
-  };
-  var badgeData = getBadgeData('requirements', data);
-  request(options, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res)) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      const json = JSON.parse(buffer);
-      if (json.status === 'up-to-date') {
-        badgeData.text[1] = 'up to date';
-        badgeData.colorscheme = 'brightgreen';
-      } else if (json.status === 'outdated') {
-        badgeData.text[1] = 'outdated';
-        badgeData.colorscheme = 'yellow';
-      } else if (json.status === 'insecure') {
-        badgeData.text[1] = 'insecure';
-        badgeData.colorscheme = 'red';
-      } else {
-        badgeData.text[1] = 'unknown';
-        badgeData.colorscheme = 'lightgrey';
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
-    }
-  });
-}));
-
 //vscode-marketplace download/version/rating integration
 camp.route(/^\/vscode-marketplace\/(d|v|r|stars)\/(.*)\.(svg|png|gif|jpg|json)$/,
   cache(function (data, match, sendBadge, request) {
