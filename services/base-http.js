@@ -7,7 +7,6 @@ const BaseService = require('./base')
 const trace = require('./trace')
 
 class BaseHTTPService extends BaseService {
-
   async _requestHTTP({ url, options = {}, errorMessages = {} }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     logTrace(emojic.bowAndArrow, 'Request', url, '\n', options)
@@ -21,4 +20,3 @@ class BaseHTTPService extends BaseService {
 }
 
 module.exports = BaseHTTPService
-

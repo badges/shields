@@ -7,28 +7,30 @@ const { InvalidResponse } = require('../errors')
 
 module.exports = class FDroid extends BaseHTTPService {
   async fetch({ appId }) {
-    const url = `https://f-droid.org/en/packages/${appId}/`;
+    const url = `https://f-droid.org/en/packages/${appId}/`
     return this._requestHTTP({
       url,
-      options: { },
+      options: {},
       errorMessages: {
         404: 'app not found',
       },
     }).then(({ res, buffer }) => {
-      const website = buffer.toString();
+      const website = buffer.toString()
       // we assume the layout as provided here:
       // https://gitlab.com/fdroid/fdroid-website/blob/9ae61894a18889ed749d36d5afbd0db3d0b0cfdd/_layouts/package.html#L147
-      const match = website.match(/<div\s[^>]*class="package-version-header"(?:\s[^>]*)?>[^<]*<a\s+name="([^:>]*)"(?:\s[^>]*)?>/);
+      const match = website.match(
+        /<div\s[^>]*class="package-version-header"(?:\s[^>]*)?>[^<]*<a\s+name="([^:>]*)"(?:\s[^>]*)?>/
+      )
       if (!match) {
         throw new InvalidResponse({
           prettyMessage: 'fix this badge',
-          underlyingError: new Error("could not find version on website"),
+          underlyingError: new Error('could not find version on website'),
         })
       }
-      return { version: match[1] };
-    });
+      return { version: match[1] }
+    })
   }
-  
+
   static render({ version }) {
     return {
       message: versionText(version),
@@ -45,7 +47,7 @@ module.exports = class FDroid extends BaseHTTPService {
   static get defaultBadgeData() {
     return { label: 'F-Droid' }
   }
-  
+
   static get category() {
     return 'build'
   }
@@ -70,4 +72,3 @@ module.exports = class FDroid extends BaseHTTPService {
     ]
   }
 }
-
