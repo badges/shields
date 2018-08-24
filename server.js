@@ -323,54 +323,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-camp.route(/^\/dockbit\/([A-Za-z0-9-_]+)\/([A-Za-z0-9-_]+)\.(svg|png|gif|jpg|json)$/,
-cache({
-  queryParams: ['token'],
-  handler: (data, match, sendBadge, request) => {
-    const org      = match[1];
-    const pipeline = match[2];
-    const format   = match[3];
-
-    const token     = data.token;
-    const badgeData = getBadgeData('deploy', data);
-    const apiUrl    = `https://dockbit.com/${org}/${pipeline}/status/${token}`;
-
-    var dockbitStates = {
-      success:  '#72BC37',
-      failure:  '#F55C51',
-      error:    '#F55C51',
-      working:  '#FCBC41',
-      pending:  '#CFD0D7',
-      rejected: '#CFD0D7',
-    };
-
-    request(apiUrl, { json: true }, function(err, res, data) {
-      try {
-        if (res && (res.statusCode === 404 || data.state === null)) {
-          badgeData.text[1] = 'not found';
-          sendBadge(format, badgeData);
-          return;
-        }
-
-        if (!res || err !== null || res.statusCode !== 200) {
-          badgeData.text[1] = 'inaccessible';
-          sendBadge(format, badgeData);
-          return;
-        }
-
-        badgeData.text[1] = data.state;
-        badgeData.colorB = dockbitStates[data.state];
-
-        sendBadge(format, badgeData);
-      }
-      catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  },
-}));
-
 camp.route(/^\/bitrise\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache({
   queryParams: ['token'],
