@@ -341,34 +341,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Chef cookbook integration.
-camp.route(/^\/cookbook\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var cookbook = match[1]; // eg, chef-sugar
-  var format = match[2];
-  var apiUrl = 'https://supermarket.getchef.com/api/v1/cookbooks/' + cookbook + '/versions/latest';
-  var badgeData = getBadgeData('cookbook', data);
-
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-
-    try {
-      var data = JSON.parse(buffer);
-      var version = data.version;
-      badgeData.text[1] = versionText(version);
-      badgeData.colorscheme = versionColor(version);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // ReSharper
 mapNugetFeedv2({ camp, cache }, 'resharper', 0, function(match) {
   return {
