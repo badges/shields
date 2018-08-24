@@ -86,9 +86,6 @@ const {
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./lib/github-helpers');
 const {
-  mapGithubCommitsSince,
-} = require('./lib/github-provider');
-const {
   sortDjangoVersions,
   parseClassifiers,
 } = require('./lib/pypi-helpers.js');
@@ -351,9 +348,6 @@ cache(function(data, match, sendBadge, request) {
     }
   });
 }));
-
-// GitHub commits since integration.
-mapGithubCommitsSince({ camp, cache }, githubApiProvider);
 
 // GitHub release-download-count and pre-release-download-count integration.
 camp.route(/^\/github\/(downloads|downloads-pre)\/([^/]+)\/([^/]+)(\/.+)?\/([^/]+)\.(svg|png|gif|jpg|json)$/,
