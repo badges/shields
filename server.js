@@ -354,14 +354,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// VersionEye integration - deprecated as of August 2018.
-camp.route(/^\/versioneye\/d\/(.+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  const format = match[2];
-  const badgeData = getDeprecatedBadge('versioneye', data);
-  sendBadge(format, badgeData);
-}));
-
 // Codacy integration
 camp.route(/^\/codacy\/(?:grade\/)?(?!coverage\/)([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
