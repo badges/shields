@@ -70,10 +70,6 @@ const {
   isSnapshotVersion: isNexusSnapshotVersion,
 } = require('./lib/nexus-version');
 const {
-  mapNugetFeedv2,
-  mapNugetFeed,
-} = require('./lib/nuget-provider');
-const {
   getVscodeApiReqOptions,
   getVscodeStatistic,
 } = require('./lib/vscode-badge-helpers');
@@ -340,48 +336,6 @@ cache(function(data, match, sendBadge, request) {
     }
   });
 }));
-
-// ReSharper
-mapNugetFeedv2({ camp, cache }, 'resharper', 0, function(match) {
-  return {
-    site: 'resharper',
-    feed: 'https://resharper-plugins.jetbrains.com/api/v2',
-  };
-});
-
-// Chocolatey
-mapNugetFeedv2({ camp, cache }, 'chocolatey', 0, function(match) {
-  return {
-    site: 'chocolatey',
-    feed: 'https://www.chocolatey.org/api/v2',
-  };
-});
-
-// PowerShell Gallery
-mapNugetFeedv2({ camp, cache }, 'powershellgallery', 0, function(match) {
-  return {
-    site: 'powershellgallery',
-    feed: 'https://www.powershellgallery.com/api/v2',
-  };
-});
-
-// NuGet
-mapNugetFeed({ camp, cache }, 'nuget', 0, function(match) {
-  return {
-    site: 'nuget',
-    feed: 'https://api.nuget.org/v3',
-  };
-});
-
-// MyGet
-mapNugetFeed({ camp, cache }, '(.+\\.)?myget\\/(.*)', 2, function(match) {
-  var tenant = match[1] || 'www.';  // eg. dotnet
-  var feed = match[2];
-  return {
-    site: feed,
-    feed: 'https://' + tenant + 'myget.org/F/' + feed + '/api/v3',
-  };
-});
 
 // Puppet Forge modules
 camp.route(/^\/puppetforge\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
