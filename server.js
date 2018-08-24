@@ -344,42 +344,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// GitHub file size.
-camp.route(/^\/github\/size\/([^/]+)\/([^/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, mashape
-  var repo = match[2];  // eg, apistatus
-  var path = match[3];
-  var format = match[4];
-  const apiUrl = `/repos/${user}/${repo}/contents/${path}`;
-
-  var badgeData = getBadgeData('size', data);
-  if (badgeData.template === 'social') {
-    badgeData.logo = getLogo('github', data);
-  }
-
-  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res, 'repo or file not found')) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var body = JSON.parse(buffer);
-      if (body && Number.isInteger(body.size)) {
-        badgeData.text[1] = prettyBytes(body.size);
-        badgeData.colorscheme = 'green';
-        sendBadge(format, badgeData);
-      } else {
-        badgeData.text[1] = 'not a regular file';
-        sendBadge(format, badgeData);
-      }
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // GitHub search hit counter.
 camp.route(/^\/github\/search\/([^/]+)\/([^/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
