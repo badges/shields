@@ -402,54 +402,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// CTAN integration.
-camp.route(/^\/ctan\/([vl])\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var info = match[1]; // either `v` or `l`
-  var pkg = match[2]; // eg, tex
-  var format = match[3];
-  var url = 'http://www.ctan.org/json/pkg/' + pkg;
-  var badgeData = getBadgeData('ctan', data);
-  request(url, function (err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    if (res.statusCode === 404) {
-      badgeData.text[1] = 'not found';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var parsedData = JSON.parse(buffer);
-
-      if (info === 'v') {
-        var version = parsedData.version.number;
-        badgeData.text[1] = versionText(version);
-        badgeData.colorscheme = versionColor(version);
-        sendBadge(format, badgeData);
-      } else if (info === 'l') {
-        badgeData.text[0] = getLabel('license', data);
-        var license = parsedData.license;
-        if (Array.isArray(license) && license.length > 0) {
-          // API returns licenses inconsistently ordered, so fix the order.
-          badgeData.text[1] = license.sort().join(',');
-          badgeData.colorscheme = 'blue';
-        } else {
-          badgeData.text[1] = 'unknown';
-        }
-        sendBadge(format, badgeData);
-      } else {
-        throw Error('Unreachable due to regex');
-      }
-    } catch (e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });}
-));
-
 // DUB download integration
 camp.route(/^\/dub\/(dd|dw|dm|dt)\/([^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
 cache(function (data, match, sendBadge, request) {
