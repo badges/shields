@@ -354,45 +354,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Cocoapods Downloads integration.
-camp.route(/^\/cocoapods\/(dm|dw|dt)\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var info = match[1]; // One of these: "dm", "dw", "dt"
-  var spec = match[2];  // eg, AFNetworking
-  var format = match[3];
-  var apiUrl = 'https://metrics.cocoapods.org/api/v1/pods/' + spec;
-  var badgeData = getBadgeData('downloads', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res)) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      var downloads = 0;
-      switch (info.charAt(1)) {
-        case 'm':
-          downloads = data.stats.download_month;
-          badgeData.text[1] = metric(downloads) + '/month';
-          break;
-        case 'w':
-          downloads = data.stats.download_week;
-          badgeData.text[1] = metric(downloads) + '/week';
-          break;
-        case 't':
-          downloads = data.stats.download_total;
-          badgeData.text[1] = metric(downloads);
-          break;
-      }
-      badgeData.colorscheme = downloadCountColor(downloads);
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // CocoaPods Apps Integration
 camp.route(/^\/cocoapods\/(aw|at)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
