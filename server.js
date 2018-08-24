@@ -27,7 +27,6 @@ const log = require('./lib/log');
 const { makeMakeBadgeFn } = require('./lib/make-badge');
 const { QuickTextMeasurer } = require('./lib/text-measurer');
 const suggest = require('./lib/suggest');
-const { licenseToColor } = require('./lib/licenses');
 const {
   versionReduction: phpVersionReduction,
   getPhpReleases,
@@ -336,41 +335,6 @@ cache(function(data, match, sendBadge, request) {
       } else {
         // That request is incorrect.
         badgeData.text[1] = 'request unknown';
-        sendBadge(format, badgeData);
-      }
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// GitHub license integration.
-camp.route(/^\/github\/license\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var user = match[1];  // eg, mashape
-  var repo = match[2];  // eg, apistatus
-  var format = match[3];
-  const apiUrl = `/repos/${user}/${repo}`;
-  var badgeData = getBadgeData('license', data);
-  if (badgeData.template === 'social') {
-    badgeData.logo = getLogo('github', data);
-  }
-  githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-    if (githubCheckErrorResponse(badgeData, err, res, 'repo not found', { 403: 'access denied' })) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var body = JSON.parse(buffer);
-      const license = body.license;
-      if (license != null) {
-        badgeData.text[1] = license.spdx_id || 'unknown';
-        setBadgeColor(badgeData, licenseToColor(license.spdx_id));
-        sendBadge(format, badgeData);
-      } else {
-        badgeData.text[1] = 'missing';
-        badgeData.colorscheme = 'red';
         sendBadge(format, badgeData);
       }
     } catch(e) {
