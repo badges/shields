@@ -354,34 +354,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// CocoaPods metrics
-camp.route(/^\/cocoapods\/metrics\/doc-percent\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var spec = match[1];  // eg, AFNetworking
-  var format = match[2];
-  var apiUrl = 'https://metrics.cocoapods.org/api/v1/pods/' + spec;
-  var badgeData = getBadgeData('docs', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res)) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var parsedData = JSON.parse(buffer);
-      var percentage = parsedData.cocoadocs.doc_percent;
-      if (percentage == null) {
-        percentage = 0;
-      }
-      badgeData.colorscheme = coveragePercentageColor(percentage);
-      badgeData.text[1] = percentage + '%';
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // Cocoapods Downloads integration.
 camp.route(/^\/cocoapods\/(dm|dw|dt)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
