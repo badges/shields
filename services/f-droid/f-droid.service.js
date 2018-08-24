@@ -65,7 +65,7 @@ module.exports = class FDroid extends BaseHTTPService {
       {
         title: 'F-Droid',
         exampleUrl: 'org.thosp.yourlocalweather',
-        urlPattern: ':addId',
+        urlPattern: ':appId',
         staticExample: this.render({ version: '1.0' }),
         keywords: ['fdroid', 'f-droid', 'android', 'app'],
       },
