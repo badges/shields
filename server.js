@@ -1018,14 +1018,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Snap CI build integration - no longer available.
-camp.route(/^\/snap(-ci?)\/([^/]+\/[^/]+)(?:\/(.+))\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  const format = match[4];
-  const badgeData = getDeprecatedBadge('snap CI', data);
-  sendBadge(format, badgeData);
-}));
-
 // Visual Studio Team Services build integration.
 camp.route(/^\/vso\/build\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
