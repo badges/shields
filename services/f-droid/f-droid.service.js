@@ -49,7 +49,7 @@ module.exports = class FDroid extends BaseHTTPService {
   }
 
   static get category() {
-    return 'build'
+    return 'version'
   }
 
   static get url() {
