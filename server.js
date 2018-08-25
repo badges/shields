@@ -402,18 +402,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Gitter room integration.
-camp.route(/^\/gitter\/room\/([^/]+\/[^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  // match[1] is the repo, which is not used.
-  var format = match[2];
-
-  var badgeData = getBadgeData('chat', data);
-  badgeData.text[1] = 'on gitter';
-  badgeData.colorscheme = 'brightgreen';
-  sendBadge(format, badgeData);
-}));
-
 // homebrew integration
 camp.route(/^\/homebrew\/v\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
