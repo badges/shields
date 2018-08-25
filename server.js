@@ -402,58 +402,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// StackExchange integration.
-camp.route(/^\/stackexchange\/([^/]+)\/([^/])\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var site = match[1]; // eg, stackoverflow
-  var info = match[2]; // either `r`
-  var item = match[3]; // eg, 232250
-  var format = match[4];
-  var path;
-  if (info === 'r') {
-    path = 'users/' + item;
-  } else if (info === 't') {
-    path = 'tags/' + item + '/info';
-  }
-  var options = {
-    method: 'GET',
-    uri: 'https://api.stackexchange.com/2.2/' + path + '?site=' + site,
-    gzip: true,
-  };
-  var badgeData = getBadgeData(site, data);
-  request(options, function (err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var parsedData = JSON.parse(buffer.toString());
-
-      // IP rate limiting
-      if (parsedData.error_name === 'throttle_violation') {
-        return;  // Hope for the best in the cache.
-      }
-
-      if (info === 'r') {
-        var reputation = parsedData.items[0].reputation;
-        badgeData.text[0] = getLabel(site + ' reputation', data);
-        badgeData.text[1] = metric(reputation);
-        badgeData.colorscheme = floorCountColor(1000, 10000, 20000);
-      } else if (info === 't') {
-        var count = parsedData.items[0].count;
-        badgeData.text[0] = getLabel(`${site} ${item} questions`, data);
-        badgeData.text[1] = metric(count);
-        badgeData.colorscheme = floorCountColor(1000, 10000, 20000);
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });}
-));
-
 // beerpay.io integration.
 // e.g. JSON response: https://beerpay.io/api/v1/beerpay/projects/beerpay.io
 // e.g. SVG badge: https://beerpay.io/beerpay/beerpay.io/badge.svg?style=flat-square
