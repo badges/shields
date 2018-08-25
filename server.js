@@ -1607,24 +1607,7 @@ cache(function(data, match, sendBadge, request) {
       var parsedData = JSON.parse(buffer);
       if (info === 'dm' || info === 'dw' || info ==='dd') {
         // See #716 for the details of the loss of service.
-        badgeData.text[0] = getLabel('downloads', data);
-        badgeData.text[1] = 'no longer available';
-        //var downloads;
-        //switch (info.charAt(1)) {
-        //  case 'm':
-        //    downloads = data.info.downloads.last_month;
-        //    badgeData.text[1] = metric(downloads) + '/month';
-        //    break;
-        //  case 'w':
-        //    downloads = parsedData.info.downloads.last_week;
-        //    badgeData.text[1] = metric(downloads) + '/week';
-        //    break;
-        //  case 'd':
-        //    downloads = parsedData.info.downloads.last_day;
-        //    badgeData.text[1] = metric(downloads) + '/day';
-        //    break;
-        //}
-        //badgeData.colorscheme = downloadCountColor(downloads);
+        const badgeData = getDeprecatedBadge('downloads', data);
         sendBadge(format, badgeData);
       } else if (info === 'v') {
         var version = parsedData.info.version;
