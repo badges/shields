@@ -402,48 +402,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// DUB license and version integration
-camp.route(/^\/dub\/(v|l)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function (data, match, sendBadge, request) {
-  var info = match[1];  // (v - version, l - license)
-  var pkg = match[2];  // package name, e.g. vibe-d
-  var format = match[3];
-  var apiUrl = 'https://code.dlang.org/api/packages/' + pkg;
-  if (info === 'v') {
-    apiUrl += '/latest';
-  } else if (info === 'l') {
-    apiUrl += '/latest/info';
-  }
-  var badgeData = getBadgeData('dub', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res)) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var parsedData = JSON.parse(buffer);
-      if (info === 'v') {
-        badgeData.text[1] = versionText(parsedData);
-        badgeData.colorscheme = versionColor(parsedData);
-        sendBadge(format, badgeData);
-      } else if (info == 'l') {
-        var license = parsedData.info.license;
-        badgeData.text[0] = getLabel('license', data);
-        if (license == null) {
-          badgeData.text[1] = 'Unknown';
-        } else {
-          badgeData.text[1] = license;
-          badgeData.colorscheme = 'blue';
-        }
-        sendBadge(format, badgeData);
-      }
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // Docker Hub stars integration.
 camp.route(/^\/docker\/stars\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
