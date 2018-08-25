@@ -402,34 +402,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// homebrew integration
-camp.route(/^\/homebrew\/v\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var pkg = match[1];  // eg. cake
-  var format = match[2];
-  var apiUrl = 'https://formulae.brew.sh/api/formula/' + pkg + '.json';
-
-  var badgeData = getBadgeData('homebrew', data);
-  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res)) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      var version = data.versions.stable;
-
-      badgeData.text[1] = versionText(version);
-      badgeData.colorscheme = versionColor(version);
-
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // StackExchange integration.
 camp.route(/^\/stackexchange\/([^/]+)\/([^/])\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
