@@ -2595,8 +2595,8 @@ camp.route(/^\/elm-package\/v\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
   const urlPrefix = 'http://package.elm-lang.org/packages';
   const [, user, repo, format] = match;
-  const apiUrl = `${urlPrefix}/${user}/${repo}/latest/elm-package.json`;
-  const badgeData = getBadgeData('elm-package', data);
+  const apiUrl = `${urlPrefix}/${user}/${repo}/latest/elm.json`;
+  const badgeData = getBadgeData('elm package', data);
   request(apiUrl, (err, res, buffer) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible';
