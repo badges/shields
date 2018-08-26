@@ -90,14 +90,18 @@ class BaseService {
     const badgeData = this._makeBadgeData({}, serviceData)
     const color = badgeData.colorscheme || badgeData.colorB
     return this._makeStaticExampleUrlFromTextAndColor(
-        badgeData.text[0], badgeData.text[1], color)
+      badgeData.text[0],
+      badgeData.text[1],
+      color
+    )
   }
-  
+
   static _makeStaticExampleUrlFromTextAndColor(text1, text2, color) {
     return `/badge/${encodeURIComponent(
       text1.replace('-', '--')
-    )}-${
-    encodeURIComponent(text2).replace('-', '--')}-${encodeURIComponent(color)}`
+    )}-${encodeURIComponent(text2).replace('-', '--')}-${encodeURIComponent(
+      color
+    )}`
   }
 
   /**

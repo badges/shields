@@ -346,19 +346,33 @@ describe('BaseService', function() {
       })
     })
   })
-  
+
   describe('a generated static badge url', function() {
-    it("is concatenated text and color", function() {
-      const url = DummyService._makeStaticExampleUrlFromTextAndColor("name", "value", "green")
-      expect(url).to.equal("/badge/name-value-green")
+    it('is concatenated text and color', function() {
+      const url = DummyService._makeStaticExampleUrlFromTextAndColor(
+        'name',
+        'value',
+        'green'
+      )
+      expect(url).to.equal('/badge/name-value-green')
     })
-    it("uses url encoding", function() {
-      const url = DummyService._makeStaticExampleUrlFromTextAndColor("Hello World", "Привет Мир", "#aabbcc")
-      expect(url).to.equal("/badge/Hello%20World-%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82%20%D0%9C%D0%B8%D1%80-%23aabbcc")
+    it('uses url encoding', function() {
+      const url = DummyService._makeStaticExampleUrlFromTextAndColor(
+        'Hello World',
+        'Привет Мир',
+        '#aabbcc'
+      )
+      expect(url).to.equal(
+        '/badge/Hello%20World-%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82%20%D0%9C%D0%B8%D1%80-%23aabbcc'
+      )
     })
-    it("uses escapes minus signs", function() {
-      const url = DummyService._makeStaticExampleUrlFromTextAndColor("123-123", "abc-abc", "blue")
-      expect(url).to.equal("/badge/123--123-abc--abc-blue")
+    it('uses escapes minus signs', function() {
+      const url = DummyService._makeStaticExampleUrlFromTextAndColor(
+        '123-123',
+        'abc-abc',
+        'blue'
+      )
+      expect(url).to.equal('/badge/123--123-abc--abc-blue')
     })
   })
 })

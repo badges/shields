@@ -37,16 +37,14 @@ t.create('The api changed')
 
 t.create('The real api did not change')
   .get('/v/org.thosp.yourlocalweather.json')
-/*  .intercept(nock => // uncomment to test the test
+  /*  .intercept(nock => // uncomment to test the test
     nock('https://f-droid.org')
       .get('/en/packages/org.pacien.tincapp/')
       .reply(200, '')
   )*/
-  .expectJSONTypes({name: Joi.string(), value: Joi.string()})
+  .expectJSONTypes({ name: Joi.string(), value: Joi.string() })
   .timeout(10000)
-  .afterJSON(({name, value}) => {
+  .afterJSON(({ name, value }) => {
     expect(value).to.not.equal('fix this badge')
     expect(value).to.not.equal('app not found')
   })
-
-
