@@ -5,6 +5,7 @@ const {
   parseClassifiers,
   parseDjangoVersionString,
   sortDjangoVersions,
+  getPackageFormats,
 } = require('./pypi-helpers.js')
 
 const classifiersFixture = {
@@ -70,6 +71,7 @@ describe('PyPI helpers', function() {
   })
 
   test(sortDjangoVersions, function() {
+    // Each of these includes a different variant: 2.0, 2, and 2.0rc1.
     given(['2.0', '1.9', '10', '1.11', '2.1', '2.11']).expect([
       '1.9',
       '1.11',
@@ -96,5 +98,38 @@ describe('PyPI helpers', function() {
       '2.11',
       '10',
     ])
+  })
+
+  test(getPackageFormats, () => {
+    given({
+      info: { version: '2.19.1' },
+      releases: {
+        '1.0.4': [{ packagetype: 'sdist' }],
+        '2.19.1': [{ packagetype: 'bdist_wheel' }, { packagetype: 'sdist' }],
+      },
+    }).expect({ hasWheel: true, hasEgg: false })
+    given({
+      info: { version: '1.0.4' },
+      releases: {
+        '1.0.4': [{ packagetype: 'sdist' }],
+        '2.19.1': [{ packagetype: 'bdist_wheel' }, { packagetype: 'sdist' }],
+      },
+    }).expect({ hasWheel: false, hasEgg: false })
+    given({
+      info: { version: '0.8.2' },
+      releases: {
+        '0.8': [{ packagetype: 'sdist' }],
+        '0.8.1': [
+          { packagetype: 'bdist_egg' },
+          { packagetype: 'bdist_egg' },
+          { packagetype: 'sdist' },
+        ],
+        '0.8.2': [
+          { packagetype: 'bdist_egg' },
+          { packagetype: 'bdist_egg' },
+          { packagetype: 'sdist' },
+        ],
+      },
+    }).expect({ hasWheel: false, hasEgg: true })
   })
 })
