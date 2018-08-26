@@ -400,49 +400,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// jitPack version integration.
-camp.route(/^\/jitpack\/v\/([^/]*)\/([^/]*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var groupId = 'com.github.' + match[1];   // github user
-  var artifactId = match[2];    // the project's name
-  var format = match[3];  // "svg"
-  var name = 'JitPack';
-
-  var pkg = groupId + '/' + artifactId + '/latest';
-  var apiUrl = 'https://jitpack.io/api/builds/' + pkg ;
-
-  var badgeData = getBadgeData(name, data);
-
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    if (res.statusCode === 404) {
-      badgeData.text[1] = 'not found';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var data = JSON.parse(buffer);
-      var status = data['status'];
-      var color = versionColor(data['version']);
-      var version = versionText(data['version']);
-      if(status !== 'ok'){
-        color = 'red';
-        version = 'unknown';
-      }
-      badgeData.text[1] = version;
-      badgeData.colorscheme = color;
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // Test if a webpage is online
 camp.route(/^\/website(-(([^-/]|--|\/\/)+)-(([^-/]|--|\/\/)+)(-(([^-/]|--|\/\/)+)-(([^-/]|--|\/\/)+))?)?\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
