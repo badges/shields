@@ -8,12 +8,5 @@ module.exports = ['pypi/dm', 'pypi/dw', 'pypi/dd'].map(base =>
   deprecatedService({
     category: 'downloads',
     url: PypiBase.buildUrl(base),
-    examples: [
-      {
-        title: 'downloads',
-        previewUrl: 'Django',
-        keywords: ['python'],
-      },
-    ],
   })
 )
