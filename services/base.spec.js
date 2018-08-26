@@ -3,6 +3,7 @@
 const { expect } = require('chai')
 const { test, given, forCases } = require('sazerac')
 const sinon = require('sinon')
+const trace = require('./trace')
 
 const {
   NotFound,
@@ -15,17 +16,29 @@ const BaseService = require('./base')
 require('../lib/register-chai-plugins.spec')
 
 class DummyService extends BaseService {
+  static render({ namedParamA, queryParamA }) {
+    return {
+      message: `Hello namedParamA: ${namedParamA} with queryParamA: ${queryParamA}`,
+    }
+  }
+
   async handle({ namedParamA }, { queryParamA }) {
-    return { message: `Hello ${namedParamA}${queryParamA}` }
+    return this.constructor.render({ namedParamA, queryParamA })
   }
 
   static get category() {
     return 'cat'
   }
+
   static get examples() {
     return [
       { previewUrl: 'World' },
       { previewUrl: 'World', query: { queryParamA: '!!!' } },
+      {
+        urlPattern: ':world',
+        exampleUrl: 'World',
+        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+      },
     ]
   }
   static get url() {
@@ -86,7 +99,9 @@ describe('BaseService', function() {
       { namedParamA: 'bar.bar.bar' },
       { queryParamA: '!' }
     )
-    expect(serviceData).to.deep.equal({ message: 'Hello bar.bar.bar!' })
+    expect(serviceData).to.deep.equal({
+      message: 'Hello namedParamA: bar.bar.bar with queryParamA: !',
+    })
   })
 
   describe('Logging', function() {
@@ -98,7 +113,7 @@ describe('BaseService', function() {
       sandbox.restore()
     })
     beforeEach(function() {
-      sinon.stub(DummyService, 'logTrace')
+      sandbox.stub(trace, 'logTrace')
     })
     it('Invokes the logger as expected', async function() {
       const serviceInstance = new DummyService({}, defaultConfig)
@@ -108,13 +123,13 @@ describe('BaseService', function() {
         },
         { queryParamA: '!' }
       )
-      expect(DummyService.logTrace).to.be.calledWithMatch(
+      expect(trace.logTrace).to.be.calledWithMatch(
         'inbound',
         sinon.match.string,
         'Service class',
         'DummyService'
       )
-      expect(DummyService.logTrace).to.be.calledWith(
+      expect(trace.logTrace).to.be.calledWith(
         'inbound',
         sinon.match.string,
         'Named params',
@@ -122,7 +137,7 @@ describe('BaseService', function() {
           namedParamA: 'bar.bar.bar',
         }
       )
-      expect(DummyService.logTrace).to.be.calledWith(
+      expect(trace.logTrace).to.be.calledWith(
         'inbound',
         sinon.match.string,
         'Query params',
@@ -293,7 +308,7 @@ describe('BaseService', function() {
       const expectedFormat = 'svg'
       expect(mockSendBadge).to.have.been.calledOnce
       expect(mockSendBadge).to.have.been.calledWith(expectedFormat, {
-        text: ['cat', 'Hello bar?'],
+        text: ['cat', 'Hello namedParamA: bar with queryParamA: ?'],
         colorscheme: 'lightgrey',
         template: undefined,
         logo: undefined,
@@ -306,17 +321,27 @@ describe('BaseService', function() {
 
   describe('prepareExamples', function() {
     it('returns the expected result', function() {
-      const [first, second] = DummyService.prepareExamples()
+      const [first, second, third] = DummyService.prepareExamples()
       expect(first).to.deep.equal({
         title: 'DummyService',
-        previewUri: '/foo/World.svg',
         exampleUri: undefined,
+        previewUri: '/foo/World.svg',
+        urlPattern: undefined,
         documentation: undefined,
       })
       expect(second).to.deep.equal({
         title: 'DummyService',
-        previewUri: '/foo/World.svg?queryParamA=%21%21%21',
         exampleUri: undefined,
+        previewUri: '/foo/World.svg?queryParamA=%21%21%21',
+        urlPattern: undefined,
+        documentation: undefined,
+      })
+      expect(third).to.deep.equal({
+        title: 'DummyService',
+        exampleUri: '/foo/World.svg',
+        previewUri:
+          '/badge/cat-Hello%20namedParamA%3A%20foo%20with%20queryParamA%3A%20bar-lightgrey.svg',
+        urlPattern: '/foo/:world.svg',
         documentation: undefined,
       })
     })

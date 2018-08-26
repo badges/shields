@@ -411,66 +411,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// continuousphp integration
-camp.route(/^\/continuousphp\/([^/]+)\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var provider = match[1];
-  var userRepo = match[2];
-  var branch   = match[3];
-  var format   = match[4];
-
-  var options = {
-    method: 'GET',
-    uri: 'https://status.continuousphp.com/' + provider + '/' + userRepo + '/status-info',
-    headers: {
-      'Accept': 'application/json',
-    },
-  };
-
-  if (branch != null) {
-    options.uri += '?branch=' + branch;
-  }
-
-  var badgeData = getBadgeData('build', data);
-  request(options, function(err, res) {
-    if (err != null) {
-      console.error('continuousphp error: ' + err.stack);
-      if (res) {
-        console.error('' + res);
-      }
-
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-      return;
-    }
-
-    try {
-      var status = JSON.parse(res['body']).status;
-
-      badgeData.text[1] = status;
-
-      if (status === 'passing') {
-        badgeData.colorscheme = 'brightgreen';
-      } else if (status === 'failing') {
-        badgeData.colorscheme = 'red';
-      } else if (status === 'unstable') {
-        badgeData.colorscheme = 'yellow';
-      } else if (status === 'running') {
-        badgeData.colorscheme = 'blue';
-      } else if (status === 'unknown') {
-        badgeData.colorscheme = 'lightgrey';
-      } else {
-        badgeData.text[1] = status;
-      }
-
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // NetflixOSS metadata integration
 camp.route(/^\/osslifecycle?\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
   cache(function(data, match, sendBadge, request) {
@@ -514,143 +454,6 @@ camp.route(/^\/osslifecycle?\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$
         sendBadge(format, badgeData);
       }
     });
-}));
-
-// Shippable integration
-camp.route(/^\/shippable\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
-cache(function (data, match, sendBadge, request) {
-
-  // source: https://github.com/badges/shields/pull/1362#discussion_r161693830
-  const statusCodes = {
-    0:  { color: '#5183A0', label: "waiting" },
-    10: { color: '#5183A0', label: "queued" },
-    20: { color: '#5183A0', label: "processing" },
-    30: { color: '#44CC11', label: "success" },
-    40: { color: '#F8A97D', label: "skipped" },
-    50: { color: '#CEA61B', label: "unstable" },
-    60: { color: '#555555', label: "timeout" },
-    70: { color: '#6BAFBD', label: "cancelled" },
-    80: { color: '#DC5F59', label: "failed" },
-    90: { color: '#555555', label: "stopped" },
-  };
-
-  const project = match[1];  // eg, 54d119db5ab6cc13528ab183
-  let targetBranch = match[2];
-  if (targetBranch == null) {
-    targetBranch = 'master';
-  }
-  const format = match[3];
-  const url = 'https://api.shippable.com/projects/' + project + '/branchRunStatus';
-  const options = {
-    method: 'GET',
-    uri: url,
-  };
-
-  const badgeData = getBadgeData('build', data);
-
-  request(options, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res)) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      res = JSON.parse(buffer);
-      for (const branch of res) {
-        if (branch.branchName === targetBranch) {
-          badgeData.text[1] = statusCodes[branch.statusCode].label;
-          badgeData.colorB = statusCodes[branch.statusCode].color;
-          sendBadge(format, badgeData);
-          return;
-        }
-      }
-      badgeData.text[1] = 'branch not found';
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// Wercker integration
-camp.route(/^\/wercker\/ci\/([a-fA-F0-9]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var projectId = match[1];  // eg, `54330318b4ce963d50020750`
-  var format = match[2];
-  var options = {
-    method: 'GET',
-    json: true,
-    uri: 'https://app.wercker.com/getbuilds/' + projectId + '?limit=1',
-  };
-  var badgeData = getBadgeData('build', data);
-  request(options, function(err, res, json) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var build = json[0];
-
-      if (build.status === 'finished') {
-        if (build.result === 'passed') {
-          badgeData.colorscheme = 'brightgreen';
-          badgeData.text[1] = 'passing';
-        } else {
-          badgeData.colorscheme = 'red';
-          badgeData.text[1] = build.result;
-        }
-      } else {
-        badgeData.text[1] = build.status;
-      }
-      sendBadge(format, badgeData);
-
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// Wercker V3 integration
-camp.route(/^\/wercker\/ci\/(.+)\/(.+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var owner = match[1];
-  var application = match[2];
-  var format = match[3];
-  var options = {
-    method: 'GET',
-    json: true,
-    uri: 'https://app.wercker.com/api/v3/applications/' + owner + '/' + application + '/builds?limit=1',
-  };
-  var badgeData = getBadgeData('build', data);
-  request(options, function(err, res, json) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var build = json[0];
-
-      if (build.status === 'finished') {
-        if (build.result === 'passed') {
-          badgeData.colorscheme = 'brightgreen';
-          badgeData.text[1] = 'passing';
-        } else {
-          badgeData.colorscheme = 'red';
-          badgeData.text[1] = build.result;
-        }
-      } else {
-        badgeData.text[1] = build.status;
-      }
-      sendBadge(format, badgeData);
-
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
 }));
 
 // Rust download and version integration
@@ -718,59 +521,6 @@ cache(function (data, match, sendBadge, request) {
       sendBadge(format, badgeData);
 
     } catch (e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// AppVeyor test status integration.
-camp.route(/^\/appveyor\/tests\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var repo = match[1];  // eg, `gruntjs/grunt`.
-  var branch = match[2];
-  var format = match[3];
-  var apiUrl = 'https://ci.appveyor.com/api/projects/' + repo;
-  if (branch != null) {
-    apiUrl += '/branch/' + branch;
-  }
-  var badgeData = getBadgeData('tests', data);
-  request(apiUrl, { headers: { 'Accept': 'application/json' } }, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      if (res.statusCode === 404) {
-        badgeData.text[1] = 'project not found or access denied';
-        sendBadge(format, badgeData);
-        return;
-      }
-      var data = JSON.parse(buffer);
-      var testsTotal = data.build.jobs.reduce((currentValue, job) => currentValue + job.testsCount, 0);
-      var testsPassed = data.build.jobs.reduce((currentValue, job) => currentValue + job.passedTestsCount, 0);
-      var testsFailed = data.build.jobs.reduce((currentValue, job) => currentValue + job.failedTestsCount, 0);
-      var testsSkipped = testsTotal - testsPassed - testsFailed;
-
-      if (testsPassed == testsTotal) {
-        badgeData.colorscheme = 'brightgreen';
-      } else if (testsFailed == 0 ) {
-        badgeData.colorscheme = 'green';
-      } else if (testsPassed == 0 ) {
-        badgeData.colorscheme = 'red';
-      } else{
-        badgeData.colorscheme = 'orange';
-      }
-
-      badgeData.text[1] = testsPassed + ' passed';
-      if (testsFailed > 0)
-        badgeData.text[1] += ', ' + testsFailed + ' failed';
-      if (testsSkipped > 0)
-        badgeData.text[1] += ', ' + testsSkipped + ' skipped';
-
-      sendBadge(format, badgeData);
-    } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
@@ -2379,37 +2129,12 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// VersionEye integration
+// VersionEye integration - deprecated as of August 2018.
 camp.route(/^\/versioneye\/d\/(.+)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
-  var userRepo = match[1];  // eg, `ruby/rails`.
-  var format = match[2];
-  var url = 'https://www.versioneye.com/' + userRepo + '/badge.svg';
-  var badgeData = getBadgeData('dependencies', data);
-  fetchFromSvg(request, url, function(err, res) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      badgeData.text[1] = res;
-      if (res === 'up to date') {
-        badgeData.colorscheme = 'brightgreen';
-      } else if (res === 'none') {
-        badgeData.colorscheme = 'green';
-      } else if (res === 'out of date') {
-        badgeData.colorscheme = 'yellow';
-      } else {
-        badgeData.colorscheme = 'red';
-      }
-      sendBadge(format, badgeData);
-
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
+  const format = match[2];
+  const badgeData = getDeprecatedBadge('versioneye', data);
+  sendBadge(format, badgeData);
 }));
 
 // Codacy integration

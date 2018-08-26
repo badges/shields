@@ -56,6 +56,12 @@ module.exports = class Clojars extends BaseJsonService {
   }
 
   static get examples() {
-    return [{ previewUrl: 'prismic' }]
+    return [
+      {
+        exampleUrl: 'prismic',
+        urlPattern: ':package',
+        staticExample: this.render({ clojar: 'clojar', version: '1.2' }),
+      },
+    ]
   }
 }

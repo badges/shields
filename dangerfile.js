@@ -65,7 +65,9 @@ if (packageJson.modified && !packageLock.modified) {
 if (server.modified && !serviceTests.createdOrModified) {
   warn([
     'This PR modified the server but none of the service tests. ',
-    "That's okay so long as it's refactoring existing code.",
+    "That's okay so long as it's refactoring existing code. ",
+    "Otherwise, please consider adding tests to the service: ",
+    "https://github.com/badges/shields/blob/master/doc/service-tests.md#readme",
   ].join(''));
 }
 
