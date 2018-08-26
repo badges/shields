@@ -53,10 +53,7 @@ const {
 } = require('./lib/request-handler');
 const { clearRegularUpdateCache } = require('./lib/regular-update');
 const { makeSend } = require('./lib/result-sender');
-const {
-  escapeFormat,
-  escapeFormatSlashes,
-} = require('./lib/path-helpers');
+const { escapeFormat } = require('./lib/path-helpers');
 const {
   sortDjangoVersions,
   parseClassifiers,
@@ -396,39 +393,6 @@ cache(function(data, match, sendBadge, request) {
     } catch(e) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
-    }
-  });
-}));
-
-// Test if a webpage is online
-camp.route(/^\/website(-(([^-/]|--|\/\/)+)-(([^-/]|--|\/\/)+)(-(([^-/]|--|\/\/)+)-(([^-/]|--|\/\/)+))?)?\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var onlineMessage = escapeFormatSlashes(match[2] != null ? match[2] : "online");
-  var offlineMessage = escapeFormatSlashes(match[4] != null ? match[4] : "offline");
-  var onlineColor = escapeFormatSlashes(match[7] != null ? match[7] : "brightgreen");
-  var offlineColor = escapeFormatSlashes(match[9] != null ? match[9] : "red");
-  var userProtocol = match[11];
-  var userURI = match[12];
-  var format = match[13];
-  var withProtocolURI = userProtocol + "://" + userURI;
-  var options = {
-    method: 'HEAD',
-    uri: withProtocolURI,
-  };
-  var badgeData = getBadgeData("website", data);
-  badgeData.colorscheme = undefined;
-  request(options, function(err, res) {
-    // We consider all HTTP status codes below 310 as success.
-    if (err != null || res.statusCode >= 310) {
-      badgeData.text[1] = offlineMessage;
-      setBadgeColor(badgeData, offlineColor);
-      sendBadge(format, badgeData);
-      return;
-    } else {
-      badgeData.text[1] = onlineMessage;
-      setBadgeColor(badgeData, onlineColor);
-      sendBadge(format, badgeData);
-      return;
     }
   });
 }));
