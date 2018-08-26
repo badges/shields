@@ -9,7 +9,7 @@ const log = require('../../lib/log')
 module.exports = class TravisBuild extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
-      /^\/travis(-ci)?\/(?:(com)\/)?([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
+      /^\/travis(-ci)?\/(?:(com)\/)?(?!php-v)([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
         const travisDomain = match[2] || 'org' // (com | org) org by default
         const userRepo = match[3] // eg, espadrine/sc
