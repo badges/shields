@@ -5,7 +5,7 @@ const { sortDjangoVersions, parseClassifiers } = require('./pypi-helpers')
 
 module.exports = class PypiDjangoVersions extends PypiBase {
   static get category() {
-    return 'version'
+    return 'platform-support'
   }
 
   static get url() {

@@ -5,7 +5,7 @@ const { parseClassifiers } = require('./pypi-helpers')
 
 module.exports = class PypiPythonVersions extends PypiBase {
   static get category() {
-    return 'version'
+    return 'platform-support'
   }
 
   static get url() {
