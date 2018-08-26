@@ -1,3 +1,4 @@
+/*global expect*/
 'use strict'
 
 const ServiceTester = require('../service-tester')
