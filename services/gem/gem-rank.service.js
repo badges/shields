@@ -25,8 +25,8 @@ const dailySchema = Joi.array()
   .required()
 
 module.exports = class GemRank extends BaseJsonService {
-  async fetch({ info, repo }) {
-    const totalRank = info === 'rt'
+  async fetch({ period, repo }) {
+    const totalRank = period === 'rt'
     const endpoint = totalRank ? '/total_ranking.json' : '/daily_ranking.json'
     const url = `http://bestgems.org/api/v1/gems/${repo}${endpoint}`
     const schema = totalRank ? totalSchema : dailySchema
@@ -36,23 +36,20 @@ module.exports = class GemRank extends BaseJsonService {
     })
   }
 
-  static render({ message, count }) {
+  static render({ period, rank }) {
+    const count = Math.floor(100000 / rank)
+    let message = ordinalNumber(rank)
+    message += period === 'rt' ? '' : ' daily'
     return {
       message: message,
       color: floorCountColor(count, 10, 50, 100),
     }
   }
 
-  async handle({ info, repo }) {
-    const json = await this.fetch({ info, repo })
-
-    const totalRank = info === 'rt'
-    const rank = totalRank ? json[0].total_ranking : json[0].daily_ranking
-    const count = Math.floor(100000 / rank)
-    let message = ordinalNumber(rank)
-    message += totalRank ? '' : ' daily'
-
-    return this.constructor.render({ message, count })
+  async handle({ period, repo }) {
+    const json = await this.fetch({ period, repo })
+    const rank = period === 'rt' ? json[0].total_ranking : json[0].daily_ranking
+    return this.constructor.render({ period, rank })
   }
 
   // Metadata
@@ -68,7 +65,7 @@ module.exports = class GemRank extends BaseJsonService {
     return {
       base: 'gem',
       format: '(rt|rd)/(.+)',
-      capture: ['info', 'repo'],
+      capture: ['period', 'repo'],
     }
   }
 
@@ -76,12 +73,16 @@ module.exports = class GemRank extends BaseJsonService {
     return [
       {
         title: 'Gem download rank',
-        previewUrl: 'rt/puppet',
+        exampleUrl: 'rt/puppet',
+        urlPattern: 'rt/:package',
+        staticExample: this.render({ period: 'rt', rank: 332 }),
         keywords: ['ruby'],
       },
       {
         title: 'Gem download rank (daily)',
-        previewUrl: 'rd/facter',
+        exampleUrl: 'rd/facter',
+        urlPattern: 'rd/:package',
+        staticExample: this.render({ period: 'rd', rank: 656 }),
         keywords: ['ruby'],
       },
     ]

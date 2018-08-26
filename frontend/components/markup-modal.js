@@ -10,8 +10,9 @@ export default class MarkupModal extends React.Component {
   static propTypes = {
     example: PropTypes.shape({
       title: PropTypes.string.isRequired,
-      previewUri: PropTypes.string,
       exampleUri: PropTypes.string,
+      previewUri: PropTypes.string,
+      urlPattern: PropTypes.string,
       documentation: PropTypes.string,
       link: PropTypes.string,
     }),
@@ -20,6 +21,7 @@ export default class MarkupModal extends React.Component {
   }
 
   state = {
+    exampleUri: null,
     badgeUri: null,
     link: null,
     style: 'flat',
@@ -38,10 +40,13 @@ export default class MarkupModal extends React.Component {
 
     // Transfer `badgeUri` and `link` into state so they can be edited by the
     // user.
-    const { exampleUri, previewUri, link } = example
+    const { exampleUri, urlPattern, previewUri, link } = example
     this.setState({
+      exampleUri: exampleUri
+        ? resolveBadgeUrl(exampleUri, baseUri || window.location.href)
+        : null,
       badgeUri: resolveBadgeUrl(
-        exampleUri || previewUri,
+        urlPattern || previewUri,
         baseUri || window.location.href
       ),
       link,
@@ -126,6 +131,18 @@ export default class MarkupModal extends React.Component {
               />
             </label>
           </p>
+          {this.state.exampleUri && (
+            <p>
+              Example&nbsp;
+              <ClickToSelect>
+                <input
+                  className="code clickable"
+                  readOnly
+                  value={this.state.exampleUri}
+                />
+              </ClickToSelect>
+            </p>
+          )}
           <p>
             <label>
               Style&nbsp;

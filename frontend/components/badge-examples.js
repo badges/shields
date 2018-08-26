@@ -6,8 +6,9 @@ import resolveBadgeUrl from '../lib/badge-url'
 
 const Badge = ({
   title,
-  previewUri,
   exampleUri,
+  previewUri,
+  urlPattern,
   documentation,
   baseUri,
   longCache,
@@ -15,7 +16,14 @@ const Badge = ({
   onClick,
 }) => {
   const handleClick = onClick
-    ? () => onClick({ title, previewUri, exampleUri, documentation })
+    ? () =>
+        onClick({
+          title,
+          exampleUri,
+          previewUri,
+          urlPattern,
+          documentation,
+        })
     : undefined
 
   const previewImage = previewUri ? (
@@ -29,7 +37,7 @@ const Badge = ({
     '\u00a0'
   ) // non-breaking space
   const resolvedExampleUri = resolveBadgeUrl(
-    exampleUri || previewUri,
+    urlPattern || previewUri,
     baseUri,
     { longCache: false }
   )
@@ -59,8 +67,9 @@ const Badge = ({
 }
 Badge.propTypes = {
   title: PropTypes.string.isRequired,
-  previewUri: PropTypes.string,
   exampleUri: PropTypes.string,
+  previewUri: PropTypes.string,
+  urlPattern: PropTypes.string,
   documentation: PropTypes.string,
   baseUri: PropTypes.string,
   longCache: PropTypes.bool.isRequired,
@@ -101,8 +110,9 @@ Category.propTypes = {
   examples: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
-      previewUri: PropTypes.string,
       exampleUri: PropTypes.string,
+      previewUri: PropTypes.string,
+      urlPattern: PropTypes.string,
       documentation: PropTypes.string,
     })
   ).isRequired,
