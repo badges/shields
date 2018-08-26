@@ -402,58 +402,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Arch user repository (AUR) integration.
-camp.route(/^\/aur\/(version|votes|license)\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var info = match[1];
-  var pkg = match[2];
-  var format = match[3];
-  var apiUrl = 'https://aur.archlinux.org/rpc.php?type=info&arg=' + pkg;
-  var badgeData = getBadgeData('AUR', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (checkErrorResponse(badgeData, err, res)) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      const parsedBuffer = JSON.parse(buffer);
-      const parsedData = parsedBuffer.results;
-      if (parsedBuffer.resultcount === 0) {
-        /* Note the 'not found' response from Arch Linux is:
-           status code = 200,
-           body = {"version":1,"type":"info","resultcount":0,"results":[]}
-        */
-        badgeData.text[1] = 'not found';
-        sendBadge(format, badgeData);
-        return;
-      }
-
-      if (info === 'version') {
-        badgeData.text[1] = versionText(parsedData.Version);
-        if (parsedData.OutOfDate === null) {
-          badgeData.colorscheme = 'blue';
-        } else {
-          badgeData.colorscheme = 'orange';
-        }
-      } else if (info === 'votes') {
-        var votes = parsedData.NumVotes;
-        badgeData.text[0] = getLabel('votes', data);
-        badgeData.text[1] = votes;
-        badgeData.colorscheme = floorCountColor(votes, 2, 20, 60);
-      } else if (info === 'license') {
-        var license = parsedData.License;
-        badgeData.text[0] = getLabel('license', data);
-        badgeData.text[1] = license;
-        badgeData.colorscheme = 'blue';
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // Chrome web store integration
 camp.route(/^\/chrome-web-store\/(v|d|users|price|rating|stars|rating-count)\/(.*)\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
