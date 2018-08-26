@@ -396,57 +396,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Swagger Validator integration.
-camp.route(/^\/swagger\/(valid)\/(2\.0)\/(https?)\/(.+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  // match[1] is not used                 // e.g. `valid` for validate
-  // match[2] is reserved for future use  // e.g. `2.0` for OpenAPI 2.0
-  var scheme = match[3];                  // e.g. `https`
-  var swaggerUrl = match[4];              // e.g. `api.example.com/swagger.yaml`
-  var format = match[5];
-
-  var badgeData = getBadgeData('swagger', data);
-
-  var urlParam = encodeURIComponent(scheme + '://' + swaggerUrl);
-  var url = 'http://online.swagger.io/validator/debug?url=' + urlParam;
-  var options = {
-    method: 'GET',
-    url: url,
-    gzip: true,
-    json: true,
-  };
-  request(options, function(err, res, json) {
-    try {
-      if (err != null || res.statusCode >= 500 || typeof json !== 'object') {
-        badgeData.text[1] = 'inaccessible';
-        sendBadge(format, badgeData);
-        return;
-      }
-
-      var messages = json.schemaValidationMessages;
-      if (messages == null || messages.length === 0) {
-        badgeData.colorscheme = 'brightgreen';
-        badgeData.text[1] = 'valid';
-      } else {
-        badgeData.colorscheme = 'red';
-
-        var firstMessage = messages[0];
-        if (messages.length === 1 &&
-            firstMessage.level === 'error' &&
-            /^Can't read from/.test(firstMessage.message)) {
-          badgeData.text[1] = 'not found';
-        } else {
-          badgeData.text[1] = 'invalid';
-        }
-      }
-      sendBadge(format, badgeData);
-    } catch (e) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // Discord integration
 camp.route(/^\/discord\/([^/]+)\.(svg|png|gif|jpg|json)$/,
 cache((data, match, sendBadge, request) => {
