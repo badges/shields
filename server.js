@@ -30,7 +30,6 @@ const {
   getPhpReleases,
 } = require('./lib/php-version');
 const {
-  currencyFromCode,
   metric,
   starRating,
   addv: versionText,
@@ -399,68 +398,6 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
-  });
-}));
-
-// Chrome web store integration
-camp.route(/^\/chrome-web-store\/(v|d|users|price|rating|stars|rating-count)\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var type = match[1];
-  var storeId = match[2];  // eg, nimelepbpejjlbmoobocpfnjhihnpked
-  var format = match[3];
-  var badgeData = getBadgeData('chrome web store', data);
-  var url = 'https://chrome.google.com/webstore/detail/' + storeId + '?hl=en&gl=US';
-  var chromeWebStore = require('chrome-web-store-item-property');
-  request(url, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    chromeWebStore.convert(buffer)
-      .then(function (value) {
-        var rating;
-        switch (type) {
-          case 'v':
-            badgeData.text[1] = versionText(value.version);
-            badgeData.colorscheme = versionColor(value.version);
-            break;
-          case 'd':
-          case 'users':
-            var downloads = value.interactionCount.UserDownloads;
-            badgeData.text[0] = getLabel('users', data);
-            badgeData.text[1] = metric(downloads);
-            badgeData.colorscheme = downloadCountColor(downloads);
-            break;
-          case 'price':
-            badgeData.text[0] = getLabel('price', data);
-            badgeData.text[1] = currencyFromCode(value.priceCurrency) + value.price;
-            badgeData.colorscheme = 'brightgreen';
-            break;
-          case 'rating':
-            rating = Math.round(value.ratingValue * 100) / 100;
-            badgeData.text[0] = getLabel('rating', data);
-            badgeData.text[1] = rating + '/5';
-            badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
-            break;
-          case 'stars':
-            rating = parseFloat(value.ratingValue);
-            badgeData.text[0] = getLabel('rating', data);
-            badgeData.text[1] = starRating(rating);
-            badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
-            break;
-          case 'rating-count':
-            var ratingCount = value.ratingCount;
-            badgeData.text[0] = getLabel('rating count', data);
-            badgeData.text[1] = metric(ratingCount) + ' total';
-            badgeData.colorscheme = floorCountColor(ratingCount, 5, 50, 500);
-            break;
-        }
-        sendBadge(format, badgeData);
-      }).catch(function (err) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      });
   });
 }));
 
