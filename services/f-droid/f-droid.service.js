@@ -54,7 +54,7 @@ module.exports = class FDroid extends BaseHTTPService {
 
   static get url() {
     return {
-      base: 'f-droid/version',
+      base: 'f-droid/v',
       format: '(.+)',
       capture: ['appId'],
     }
