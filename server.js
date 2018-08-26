@@ -396,47 +396,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// Discord integration
-camp.route(/^\/discord\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache((data, match, sendBadge, request) => {
-  const serverID = match[1];
-  const format = match[2];
-  const apiUrl = `https://discordapp.com/api/guilds/${serverID}/widget.json`;
-
-  request(apiUrl, (err, res, buffer) => {
-    const badgeData = getBadgeData('chat', data);
-    if (res && res.statusCode === 404) {
-      badgeData.text[1] = 'invalid server';
-      sendBadge(format, badgeData);
-      return;
-    }
-    if (err != null || !res || res.statusCode !== 200) {
-      badgeData.text[1] = 'inaccessible';
-      if (res && res.headers['content-type'] === 'application/json') {
-        try {
-          const data = JSON.parse(buffer);
-          if (data && typeof data.message === 'string') {
-            badgeData.text[1] = data.message.toLowerCase();
-          }
-        } catch(e) {
-        }
-      }
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      const data = JSON.parse(buffer);
-      const members = Array.isArray(data.members) ? data.members : [];
-      badgeData.text[1] = members.length + ' online';
-      badgeData.colorscheme = 'brightgreen';
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // Maven metadata versioning integration.
 camp.route(/^\/maven-metadata\/v\/(https?)\/(.+\.xml)\.(svg|png|gif|jpg|json)$/,
   cache(function (data, match, sendBadge, request) {
