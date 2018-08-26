@@ -5,7 +5,7 @@ const {
   makeBadgeData: getBadgeData,
   makeLabel: getLabel,
   makeLogo: getLogo,
-} = require('./badge-data')
+} = require('../../lib/badge-data')
 
 module.exports = class GithubCommitsSince extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
