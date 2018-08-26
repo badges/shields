@@ -15,7 +15,6 @@ Raven.config(process.env.SENTRY_DSN || serverSecrets.sentry_dsn).install();
 Raven.disableConsoleAlerts();
 
 const { loadServiceClasses } = require('./services');
-const { getDeprecatedBadge } = require('./lib/deprecation-helpers');
 const { checkErrorResponse } = require('./lib/error-helper');
 const analytics = require('./lib/analytics');
 const config = require('./lib/server-config');
@@ -399,14 +398,6 @@ cache(function(data, match, sendBadge, request) {
       sendBadge(format, badgeData);
     }
   });
-}));
-
-// Cauditor integration - Badge deprectiated as of March 2018
-camp.route(/^\/cauditor\/(mi|ccn|npath|hi|i|ca|ce|dit)\/([^/]+)\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  const format = match[5];
-  const badgeData = getDeprecatedBadge('cauditor', data);
-  sendBadge(format, badgeData);
 }));
 
 // Mozilla addons integration
