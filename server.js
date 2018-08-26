@@ -402,14 +402,6 @@ cache(function(data, match, sendBadge, request) {
   });
 }));
 
-// bitHound integration - deprecated as of July 2018
-camp.route(/^\/bithound\/(code\/|dependencies\/|devDependencies\/)?(.+?)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  const format = match[3];
-  const badgeData = getDeprecatedBadge('bithound', data);
-  sendBadge(format, badgeData);
-}));
-
 // Waffle.io integration
 camp.route(/^\/waffle\/label\/([^/]+)\/([^/]+)\/?([^/]+)?\.(svg|png|gif|jpg|json)$/,
 cache(function(data, match, sendBadge, request) {
