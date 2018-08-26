@@ -35,7 +35,6 @@ const {
   formatDate,
 } = require('./lib/text-formatters');
 const {
-  downloadCount: downloadCountColor,
   floorCount: floorCountColor,
   version: versionColor,
   age: ageColor,
@@ -394,58 +393,6 @@ cache(function(data, match, sendBadge, request) {
       badgeData.text[1] = 'invalid';
       sendBadge(format, badgeData);
     }
-  });
-}));
-
-// JetBrains Plugins repository integration
-camp.route(/^\/jetbrains\/plugin\/(d|v)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var pluginId = match[2];
-  var type = match[1];
-  var format = match[3];
-  var leftText = type === 'v' ? 'jetbrains plugin' : 'downloads';
-  var badgeData = getBadgeData(leftText, data);
-  var url = 'https://plugins.jetbrains.com/plugins/list?pluginId=' + pluginId;
-
-  request(url, function(err, res, buffer) {
-    if (err || res.statusCode !== 200) {
-      badgeData.text[1] = 'inaccessible';
-      return sendBadge(format, badgeData);
-    }
-
-    xml2js.parseString(buffer.toString(), function (err, data) {
-      if (err) {
-        badgeData.text[1] = 'invalid';
-        return sendBadge(format, badgeData);
-      }
-
-      try {
-        var plugin = data["plugin-repository"].category;
-        if (!plugin) {
-          badgeData.text[1] = 'not found';
-          return sendBadge(format, badgeData);
-        }
-        switch (type) {
-        case 'd':
-          var downloads = parseInt(data["plugin-repository"].category[0]["idea-plugin"][0]["$"].downloads, 10);
-          if (isNaN(downloads)) {
-            badgeData.text[1] = 'invalid';
-            return sendBadge(format, badgeData);
-          }
-          badgeData.text[1] = metric(downloads);
-          badgeData.colorscheme = downloadCountColor(downloads);
-          return sendBadge(format, badgeData);
-        case 'v':
-          var version = data['plugin-repository'].category[0]["idea-plugin"][0].version[0];
-          badgeData.text[1] = versionText(version);
-          badgeData.colorscheme = versionColor(version);
-          return sendBadge(format, badgeData);
-        }
-      } catch (err) {
-        badgeData.text[1] = 'invalid';
-        return sendBadge(format, badgeData);
-      }
-    });
   });
 }));
 
