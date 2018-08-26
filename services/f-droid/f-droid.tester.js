@@ -32,4 +32,15 @@ t.create('The api changed')
       .get('/en/packages/org.pacien.tincapp/')
       .reply(200, '')
   )
-  .expectJSON({ name: 'F-Droid', value: 'fix this badge' })
+  .expectJSON({ name: 'F-Droid', value: 'fix this badge' }) // INVALID_API_RESPONSE
+
+t.create('The real api does not change')
+  .get('/version/org.pacien.tincapp.json')
+  .intercept(nock =>
+    nock('https://f-droid.org')
+      .get('/en/packages/org.pacien.tincapp/')
+      .reply(200, '')
+  )
+  .expectJSON.property("value").to.not.equal("fix this badge")
+
+
