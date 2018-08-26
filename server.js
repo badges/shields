@@ -4,7 +4,6 @@ const dom = require('xmldom').DOMParser;
 const jp = require('jsonpath');
 const path = require('path');
 const queryString = require('query-string');
-const xml2js = require('xml2js');
 const xpath = require('xpath');
 const yaml = require('js-yaml');
 const Raven = require('raven');
@@ -496,48 +495,6 @@ cache({
       }
     });
   },
-}));
-
-// Redmine plugin rating.
-camp.route(/^\/redmine\/plugin\/(rating|stars)\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var type = match[1];
-  var plugin = match[2];
-  var format = match[3];
-  var options = {
-    method: 'GET',
-    uri: 'https://www.redmine.org/plugins/' + plugin + '.xml',
-  };
-
-  var badgeData = getBadgeData(type, data);
-  request(options, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-
-    xml2js.parseString(buffer.toString(), function (err, data) {
-      try {
-        var rating = data['redmine-plugin']['ratings-average'][0]._;
-        badgeData.colorscheme = floorCountColor(rating, 2, 3, 4);
-
-        switch (type) {
-          case 'rating':
-            badgeData.text[1] = rating + '/5.0';
-            break;
-          case 'stars':
-            badgeData.text[1] = starRating(Math.round(rating));
-            break;
-        }
-
-        sendBadge(format, badgeData);
-      } catch(e) {
-        badgeData.text[1] = 'invalid';
-        sendBadge(format, badgeData);
-      }
-    });
-  });
 }));
 
 // PHP version from Packagist
