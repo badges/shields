@@ -51,7 +51,21 @@ Before you want to implement your service, you may want to [open an issue][openi
 You may additionally proceed to say what you want to work on.
 This information allows other humans to help and build on your work.
 
-(4) Implementing
+(4) Obsolete Implementation
+---------------------------
+
+As of [#1958], this tutorial will be obsolete.
+The services described here are all in the server.js. The new services are in the [services] directory.
+You can help write a new tutorial about what you learned adding a service in the new style.
+
+Example services:
+- HTTP + JSON request
+  - [apm]
+  - [wercker]
+- HTTP + raw data request
+  - [f-droid]
+
+(4.1) Implementing
 ----------------
 
 If there is already a related badge, you may want to place your code next to it.
@@ -276,3 +290,8 @@ These files can also be of help for creating your own badge.
 [travis-example]: https://github.com/badges/shields/blob/b126b4ebdc64015a3d6e845d9c051f69ad81c4ea/server.js#L403
 [regex]: https://www.w3schools.com/jsref/jsref_obj_regexp.asp
 [tests-tutorial]: service-tests.md#readme
+[#1958]: https://github.com/badges/shields/pull/1958#pullrequestreview-149661148
+[services]: ../services
+[wercker]: ../services/wercker
+[apm]: ../services/apm
+[f-droid]: https://github.com/badges/shields/pull/1965
