@@ -285,7 +285,10 @@ describe('BaseService', function() {
         route: sinon.spy(),
       }
       mockHandleRequest = sinon.spy()
-      DummyService.register(mockCamp, mockHandleRequest, defaultConfig)
+      DummyService.register(
+        { camp: mockCamp, handleRequest: mockHandleRequest },
+        defaultConfig
+      )
     })
 
     it('registers the service', function() {
