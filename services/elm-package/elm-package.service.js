@@ -10,7 +10,7 @@ module.exports = class ElmPackage extends LegacyService {
     camp.route(
       /^\/elm-package\/v\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
-        const urlPrefix = 'http://package.elm-lang.org/packages'
+        const urlPrefix = 'https://package.elm-lang.org/packages'
         const [, user, repo, format] = match
         const apiUrl = `${urlPrefix}/${user}/${repo}/latest/elm.json`
         const badgeData = getBadgeData('elm package', data)
