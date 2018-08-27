@@ -62,8 +62,6 @@ Example services:
 - HTTP + JSON request
   - [apm]
   - [wercker]
-- HTTP + raw data request
-  - [f-droid]
 
 (4.1) Implementing
 ----------------
