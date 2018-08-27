@@ -1,9 +1,9 @@
 'use strict'
 
-const { colorScale } = require('./color-formatters')
+const { colorScale } = require('../../lib/color-formatters')
 const {
   checkErrorResponse: standardCheckErrorResponse,
-} = require('./error-helper')
+} = require('../../lib/error-helper')
 
 function stateColor(s) {
   return { open: '2cbe4e', closed: 'cb2431', merged: '6f42c1' }[s]
