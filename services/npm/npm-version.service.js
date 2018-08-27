@@ -1,8 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { addv } = require('../../lib/text-formatters')
-const { version: versionColor } = require('../../lib/color-formatters')
+const { renderVersionBadge } = require('../../lib/version')
 const { NotFound } = require('../errors')
 const NpmBase = require('./npm-base')
 
@@ -27,39 +26,51 @@ module.exports = class NpmVersion extends NpmBase {
   static get examples() {
     return [
       {
-        previewUrl: 'npm',
+        title: 'npm',
+        exampleUrl: 'npm',
+        urlPattern: ':package',
+        staticExample: this.render({ version: '6.3.0' }),
         keywords: ['node'],
       },
       {
         title: 'npm (scoped)',
-        previewUrl: '@cycle/core',
+        exampleUrl: '@cycle/core',
+        urlPattern: ':scope/:package',
+        staticExample: this.render({ version: '7.0.0' }),
         keywords: ['node'],
       },
       {
         title: 'npm (tag)',
-        previewUrl: 'npm/next',
+        exampleUrl: 'npm/next',
+        urlPattern: ':package/:tag',
+        staticExample: this.render({ tag: 'latest', version: '6.3.0' }),
         keywords: ['node'],
       },
       {
         title: 'npm (custom registry)',
-        previewUrl: 'npm/next',
+        exampleUrl: 'npm/next',
+        urlPattern: ':package/:tag',
+        staticExample: this.render({ tag: 'latest', version: '7.0.0' }),
         query: { registry_uri: 'https://registry.npmjs.com' },
         keywords: ['node'],
       },
       {
         title: 'npm (scoped with tag)',
-        previewUrl: '@cycle/core/canary',
+        exampleUrl: '@cycle/core/canary',
+        staticExample: this.render({ tag: 'latest', version: '6.3.0' }),
+        urlPattern: ':scope/:package/:tag',
         keywords: ['node'],
       },
     ]
   }
 
   static render({ tag, version }) {
-    return {
-      label: tag ? `npm@${tag}` : undefined,
-      message: addv(version),
-      color: versionColor(version),
-    }
+    const { label: defaultLabel } = this.defaultBadgeData
+    return renderVersionBadge({
+      tag,
+      version,
+      defaultLabel,
+    })
   }
 
   async handle(namedParams, queryParams) {

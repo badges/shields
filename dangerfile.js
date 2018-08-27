@@ -57,7 +57,7 @@ if (documentation.createdOrModified) {
 }
 
 if (packageJson.modified && !packageLock.modified) {
-  const message = 'This PR modified package.json, but not package-lock.json';
+  const message = 'This PR modified `package.json`, but not `package-lock.json`';
   const idea = 'Perhaps you need to run `npm install`?';
   warn(`${message} - <i>${idea}</i>`);
 }
@@ -65,7 +65,9 @@ if (packageJson.modified && !packageLock.modified) {
 if (server.modified && !serviceTests.createdOrModified) {
   warn([
     'This PR modified the server but none of the service tests. ',
-    "That's okay so long as it's refactoring existing code.",
+    "That's okay so long as it's refactoring existing code. ",
+    "Otherwise, please consider adding tests to the service: ",
+    "https://github.com/badges/shields/blob/master/doc/service-tests.md#readme",
   ].join(''));
 }
 
@@ -92,7 +94,7 @@ if (logos.created) {
 
 if (capitals.created || underscores.created) {
   fail([
-    'JavaScript source files should be named with kebab-case ',
+    'JavaScript source files should be named with `kebab-case` ',
     '(dash-separated lowercase).',
   ].join(''));
 }
@@ -103,7 +105,7 @@ all_files.forEach(function(file) {
   danger.git.diffForFile(file).then(function(diff) {
     if (/\+.*assert[(.]/.test(diff.diff)) {
       warn([
-        `Found 'assert' statement added in ${file}. `,
+        `Found 'assert' statement added in \`${file}\`. `,
         'Please ensure tests are written using Chai ',
         '[expect syntax](http://chaijs.com/guide/styles/#expect)',
       ].join(''));
@@ -135,7 +137,7 @@ affectedServices.forEach(function(service) {
   if (testedServices.indexOf(service) === -1) {
     warn(
       [
-        `This PR modified service code for ${service} but not its test code. `,
+        `This PR modified service code for <kbd>${service}</kbd> but not its test code. `,
         "That's okay so long as it's refactoring existing code.",
       ].join('')
     );

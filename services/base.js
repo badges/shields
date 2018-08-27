@@ -2,12 +2,12 @@
 
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
-const chalk = require('chalk')
 const {
   NotFound,
   InvalidResponse,
   Inaccessible,
   InvalidParameter,
+  Deprecated,
 } = require('./errors')
 const queryString = require('query-string')
 const {
@@ -16,14 +16,7 @@ const {
   makeColor,
   setBadgeColor,
 } = require('../lib/badge-data')
-// Config is loaded globally but it would be better to inject it. To do that,
-// there needs to be one instance of the service created at registration time,
-// which gets the config injected into it, instead of one instance per request.
-// That way most of the current static methods could become instance methods,
-// thereby gaining access to the injected config.
-const {
-  services: { trace: enableTraceLogging },
-} = require('../lib/server-config')
+const trace = require('./trace')
 
 class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
@@ -94,19 +87,35 @@ class BaseService {
     return '/' + [this.url.base, partialUrl].filter(Boolean).join('/')
   }
 
+  static _makeStaticExampleUrl(serviceData) {
+    const badgeData = this._makeBadgeData({}, serviceData)
+    const color = badgeData.colorscheme || badgeData.colorB
+    return `/badge/${encodeURIComponent(
+      badgeData.text[0]
+    )}-${encodeURIComponent(badgeData.text[1])}-${color}`
+  }
+
   /**
    * Return an array of examples. Each example is prepared according to the
-   * schema in `lib/all-badge-examples.js`. Four keys are supported:
-   *  - title
-   *  - previewUrl
-   *  - exampleUrl
-   *  - documentation
+   * schema in `lib/all-badge-examples.js`.
    */
   static prepareExamples() {
     return this.examples.map(
-      ({ title, previewUrl, query, exampleUrl, documentation }) => {
-        if (!previewUrl) {
-          throw Error(`Example for ${this.name} is missing required previewUrl`)
+      ({
+        title,
+        query,
+        exampleUrl,
+        previewUrl,
+        urlPattern,
+        staticExample,
+        documentation,
+      }) => {
+        if (!previewUrl && !staticExample) {
+          throw Error(
+            `Example for ${
+              this.name
+            } is missing required previewUrl or staticExample`
+          )
         }
 
         const stringified = queryString.stringify(query)
@@ -114,9 +123,14 @@ class BaseService {
 
         return {
           title: title ? `${title}` : this.name,
-          previewUri: `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
           exampleUri: exampleUrl
             ? `${this._makeFullUrl(exampleUrl, query)}.svg${suffix}`
+            : undefined,
+          previewUri: staticExample
+            ? `${this._makeStaticExampleUrl(staticExample)}.svg`
+            : `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
+          urlPattern: urlPattern
+            ? `${this._makeFullUrl(urlPattern, query)}.svg${suffix}`
             : undefined,
           documentation,
         }
@@ -155,36 +169,36 @@ class BaseService {
   }
 
   async invokeHandler(namedParams, queryParams) {
-    const logTrace = (...args) => this.constructor.logTrace(...args)
-    logTrace(
+    trace.logTrace(
       'inbound',
       emojic.womanCook,
       'Service class',
       this.constructor.name
     )
-    logTrace('inbound', emojic.ticket, 'Named params', namedParams)
-    logTrace('inbound', emojic.crayon, 'Query params', queryParams)
+    trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
+    trace.logTrace('inbound', emojic.crayon, 'Query params', queryParams)
     try {
       return await this.handle(namedParams, queryParams)
     } catch (error) {
       if (error instanceof NotFound || error instanceof InvalidParameter) {
-        logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
+        trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
         return {
           message: error.prettyMessage,
           color: 'red',
         }
       } else if (
         error instanceof InvalidResponse ||
-        error instanceof Inaccessible
+        error instanceof Inaccessible ||
+        error instanceof Deprecated
       ) {
-        logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
+        trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
         return {
           message: error.prettyMessage,
           color: 'lightgray',
         }
       } else if (this._handleInternalErrors) {
         if (
-          !logTrace(
+          !trace.logTrace(
             'unhandledError',
             emojic.boom,
             'Unhandled internal error',
@@ -201,7 +215,7 @@ class BaseService {
           color: 'lightgray',
         }
       } else {
-        logTrace(
+        trace.logTrace(
           'unhandledError',
           emojic.boom,
           'Unhandled internal error',
@@ -274,7 +288,7 @@ class BaseService {
             namedParams,
             queryParams
           )
-          this.logTrace('outbound', emojic.shield, 'Service data', serviceData)
+          trace.logTrace('outbound', emojic.shield, 'Service data', serviceData)
           const badgeData = this._makeBadgeData(queryParams, serviceData)
 
           // Assumes the final capture group is the extension
@@ -283,31 +297,6 @@ class BaseService {
         },
       })
     )
-  }
-
-  static _formatLabelForStage(stage, label) {
-    const colorFn = {
-      inbound: chalk.black.bgBlue,
-      fetch: chalk.black.bgYellow,
-      validate: chalk.black.bgGreen,
-      unhandledError: chalk.white.bgRed,
-      outbound: chalk.black.bgBlue,
-    }[stage]
-    return colorFn(` ${label} `)
-  }
-
-  static logTrace(stage, symbol, label, ...content) {
-    if (enableTraceLogging) {
-      console.log(
-        this._formatLabelForStage(stage, label),
-        symbol,
-        '\n',
-        ...content
-      )
-      return true
-    } else {
-      return false
-    }
   }
 }
 

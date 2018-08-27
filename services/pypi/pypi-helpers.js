@@ -50,8 +50,25 @@ const parseClassifiers = function(parsedData, pattern) {
   return results
 }
 
+function getPackageFormats(packageData) {
+  const {
+    info: { version },
+    releases,
+  } = packageData
+  const releasesForVersion = releases[version]
+  return {
+    hasWheel: releasesForVersion.some(({ packagetype }) =>
+      ['wheel', 'bdist_wheel'].includes(packagetype)
+    ),
+    hasEgg: releasesForVersion.some(({ packagetype }) =>
+      ['egg', 'bdist_egg'].includes(packagetype)
+    ),
+  }
+}
+
 module.exports = {
   parseClassifiers,
   parseDjangoVersionString,
   sortDjangoVersions,
+  getPackageFormats,
 }

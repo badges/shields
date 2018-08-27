@@ -27,6 +27,10 @@ maybe you'd like to open a pull request to address one of them:
 
 You can help by improving the project's usage and developer instructions.
 
+- When you read the documentation, you can fix mistakes and add your own thoughts.
+- When your pull request follows the documentation but the practice changed,
+  consider pointing this out and change the documentation for the next person.
+
 ### Helping others
 
 You can help with code review, which reduces bugs, and over time has a
@@ -129,6 +133,10 @@ request title. That way, those service tests will run in CI.
 e.g. **[Travis] Fix timeout issues**
 
 When changing other code, please add unit tests.
+
+To run the integration tests, you must have redis installed and in your PATH.
+Use `brew install redis`, `yum install redis`, etc. The test runner will
+start the server automatically.
 
 [service-tests]: https://github.com/badges/shields/blob/master/doc/service-tests.md
 
