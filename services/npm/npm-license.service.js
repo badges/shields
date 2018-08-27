@@ -1,16 +1,12 @@
 'use strict'
 
-const { licenseToColor } = require('../../lib/licenses')
+const { renderLicenseBadge } = require('../../lib/licenses')
 const { toArray } = require('../../lib/badge-data')
 const NpmBase = require('./npm-base')
 
 module.exports = class NpmLicense extends NpmBase {
   static get category() {
     return 'license'
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'license' }
   }
 
   static get url() {
@@ -36,16 +32,7 @@ module.exports = class NpmLicense extends NpmBase {
   }
 
   static render({ licenses }) {
-    if (licenses.length === 0) {
-      return { message: 'missing', color: 'red' }
-    }
-
-    return {
-      message: licenses.join(', '),
-      // TODO This does not provide a color when more than one license is
-      // present. Probably that should be fixed.
-      color: licenseToColor(licenses),
-    }
+    return renderLicenseBadge({ licenses })
   }
 
   async handle(namedParams, queryParams) {

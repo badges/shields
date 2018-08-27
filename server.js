@@ -22,8 +22,6 @@ const log = require('./lib/log');
 const { makeMakeBadgeFn } = require('./lib/make-badge');
 const { QuickTextMeasurer } = require('./lib/text-measurer');
 const suggest = require('./lib/suggest');
-const { addv: versionText } = require('./lib/text-formatters');
-const { version: versionColor } = require('./lib/color-formatters');
 const {
   makeColorB,
   makeLabel: getLabel,
@@ -37,10 +35,6 @@ const {
 const { clearRegularUpdateCache } = require('./lib/regular-update');
 const { makeSend } = require('./lib/result-sender');
 const { escapeFormat } = require('./lib/path-helpers');
-const {
-  sortDjangoVersions,
-  parseClassifiers,
-} = require('./lib/pypi-helpers.js');
 
 const serverStartTime = new Date((new Date()).toGMTString());
 
@@ -123,183 +117,6 @@ loadServiceClasses().forEach(
   serviceClass => serviceClass.register(
     { camp, handleRequest: cache, githubApiProvider },
     { handleInternalErrors: config.handleInternalErrors }));
-
-// PyPI integration.
-camp.route(/^\/pypi\/([^/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  var info = match[1];
-  var egg = match[2];  // eg, `gevent`, `Django`.
-  var format = match[3];
-  var apiUrl = 'https://pypi.org/pypi/' + egg + '/json';
-  var badgeData = getBadgeData('pypi', data);
-  request(apiUrl, function(err, res, buffer) {
-    if (err != null) {
-      badgeData.text[1] = 'inaccessible';
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      var parsedData = JSON.parse(buffer);
-      if (info === 'dm' || info === 'dw' || info ==='dd') {
-        // See #716 for the details of the loss of service.
-        badgeData.text[0] = getLabel('downloads', data);
-        badgeData.text[1] = 'no longer available';
-        //var downloads;
-        //switch (info.charAt(1)) {
-        //  case 'm':
-        //    downloads = data.info.downloads.last_month;
-        //    badgeData.text[1] = metric(downloads) + '/month';
-        //    break;
-        //  case 'w':
-        //    downloads = parsedData.info.downloads.last_week;
-        //    badgeData.text[1] = metric(downloads) + '/week';
-        //    break;
-        //  case 'd':
-        //    downloads = parsedData.info.downloads.last_day;
-        //    badgeData.text[1] = metric(downloads) + '/day';
-        //    break;
-        //}
-        //badgeData.colorscheme = downloadCountColor(downloads);
-        sendBadge(format, badgeData);
-      } else if (info === 'v') {
-        var version = parsedData.info.version;
-        badgeData.text[1] = versionText(version);
-        badgeData.colorscheme = versionColor(version);
-        sendBadge(format, badgeData);
-      } else if (info === 'l') {
-        var license = parsedData.info.license;
-        badgeData.text[0] = getLabel('license', data);
-        if (license === null || license === 'UNKNOWN') {
-          badgeData.text[1] = 'Unknown';
-        } else {
-          badgeData.text[1] = license;
-          badgeData.colorscheme = 'blue';
-        }
-        sendBadge(format, badgeData);
-      } else if (info === 'wheel') {
-        let releases = parsedData.releases[parsedData.info.version];
-        let hasWheel = false;
-        for (let i = 0; i < releases.length; i++) {
-          if (releases[i].packagetype === 'wheel' ||
-              releases[i].packagetype === 'bdist_wheel') {
-            hasWheel = true;
-            break;
-          }
-        }
-        badgeData.text[0] = getLabel('wheel', data);
-        badgeData.text[1] = hasWheel ? 'yes' : 'no';
-        badgeData.colorscheme = hasWheel ? 'brightgreen' : 'red';
-        sendBadge(format, badgeData);
-      } else if (info === 'format') {
-        let releases = parsedData.releases[parsedData.info.version];
-        let hasWheel = false;
-        var hasEgg = false;
-        for (var i = 0; i < releases.length; i++) {
-          if (releases[i].packagetype === 'wheel' ||
-              releases[i].packagetype === 'bdist_wheel') {
-            hasWheel = true;
-            break;
-          }
-          if (releases[i].packagetype === 'egg' ||
-              releases[i].packagetype === 'bdist_egg') {
-            hasEgg = true;
-          }
-        }
-        badgeData.text[0] = getLabel('format', data);
-        if (hasWheel) {
-          badgeData.text[1] = 'wheel';
-          badgeData.colorscheme = 'brightgreen';
-        } else if (hasEgg) {
-          badgeData.text[1] = 'egg';
-          badgeData.colorscheme = 'red';
-        } else {
-          badgeData.text[1] = 'source';
-          badgeData.colorscheme = 'yellow';
-        }
-        sendBadge(format, badgeData);
-      } else if (info === 'pyversions') {
-        let versions = parseClassifiers(
-          parsedData,
-          /^Programming Language :: Python :: ([\d.]+)$/
-        );
-
-        // We only show v2 if eg. v2.4 does not appear.
-        // See https://github.com/badges/shields/pull/489 for more.
-        ['2', '3'].forEach(function(version) {
-          var hasSubVersion = function(v) { return v.indexOf(version + '.') === 0; };
-          if (versions.some(hasSubVersion)) {
-            versions = versions.filter(function(v) { return v !== version; });
-          }
-        });
-        if (!versions.length) {
-          versions.push('not found');
-        }
-        badgeData.text[0] = getLabel('python', data);
-        badgeData.text[1] = versions.sort().join(', ');
-        badgeData.colorscheme = 'blue';
-        sendBadge(format, badgeData);
-      } else if (info === 'djversions') {
-        let versions = parseClassifiers(
-          parsedData,
-          /^Framework :: Django :: ([\d.]+)$/
-        );
-
-        if (!versions.length) {
-          versions.push('not found');
-        }
-
-        // sort low to high
-        versions = sortDjangoVersions(versions);
-
-        badgeData.text[0] = getLabel('django versions', data);
-        badgeData.text[1] = versions.join(', ');
-        badgeData.colorscheme = 'blue';
-        sendBadge(format, badgeData);
-      } else if (info === 'implementation') {
-        let implementations = parseClassifiers(
-          parsedData,
-          /^Programming Language :: Python :: Implementation :: (\S+)$/
-        );
-
-        if (!implementations.length) {
-          implementations.push('cpython');  // assume CPython
-        }
-        badgeData.text[0] = getLabel('implementation', data);
-        badgeData.text[1] = implementations.sort().join(', ');
-        badgeData.colorscheme = 'blue';
-        sendBadge(format, badgeData);
-      } else if (info === 'status') {
-        let pattern = /^Development Status :: ([1-7]) - (\S+)$/;
-        var statusColors = {
-            '1': 'red', '2': 'red', '3': 'red', '4': 'yellow',
-            '5': 'brightgreen', '6': 'brightgreen', '7': 'red' };
-        var statusCode = '1', statusText = 'unknown';
-        for (let i = 0; i < parsedData.info.classifiers.length; i++) {
-          let matched = pattern.exec(parsedData.info.classifiers[i]);
-          if (matched && matched[1] && matched[2]) {
-            statusCode = matched[1];
-            statusText = matched[2].toLowerCase().replace('-', '--');
-            if (statusText === 'production/stable') {
-              statusText = 'stable';
-            }
-            break;
-          }
-        }
-        badgeData.text[0] = getLabel('status', data);
-        badgeData.text[1] = statusText;
-        badgeData.colorscheme = statusColors[statusCode];
-        sendBadge(format, badgeData);
-      } else {
-        // That request is incorrect.
-        badgeData.text[1] = 'request unknown';
-        sendBadge(format, badgeData);
-      }
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
 
 // CircleCI build integration.
 // https://circleci.com/api/v1/project/BrightFlair/PHP.Gt?circle-token=0a5143728784b263d9f0238b8d595522689b3af2&limit=1&filter=completed
