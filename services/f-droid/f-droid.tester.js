@@ -1,6 +1,6 @@
-/*global expect*/
 'use strict'
 
+const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 const ServiceTester = require('../service-tester')
 const t = new ServiceTester({ id: 'f-droid', title: 'F-Droid' })
 const Joi = require('joi')
@@ -36,16 +36,13 @@ t.create('The api changed')
   )
   .expectJSON({ name: 'F-Droid', value: 'fix this badge' })
 
+/* If this test fails, either the API has changed or the app was deleted. */
 t.create('The real api did not change')
   .get('/v/org.thosp.yourlocalweather.json')
-  /*  .intercept(nock => // uncomment to test the test
-    nock('https://f-droid.org')
-      .get('/en/packages/org.pacien.tincapp/')
-      .reply(200, '')
-  )*/
-  .expectJSONTypes({ name: Joi.string(), value: Joi.string() })
   .timeout(10000)
-  .afterJSON(({ name, value }) => {
-    expect(value).to.not.equal('fix this badge')
-    expect(value).to.not.equal('app not found')
-  })
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'F-Droid',
+      value: isVPlusDottedVersionAtLeastOne,
+    })
+  )
