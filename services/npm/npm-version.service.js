@@ -1,8 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { addv } = require('../../lib/text-formatters')
-const { version: versionColor } = require('../../lib/color-formatters')
+const { renderVersionBadge } = require('../../lib/version')
 const { NotFound } = require('../errors')
 const NpmBase = require('./npm-base')
 
@@ -66,11 +65,12 @@ module.exports = class NpmVersion extends NpmBase {
   }
 
   static render({ tag, version }) {
-    return {
-      label: tag ? `npm@${tag}` : undefined,
-      message: addv(version),
-      color: versionColor(version),
-    }
+    const { label: defaultLabel } = this.defaultBadgeData
+    return renderVersionBadge({
+      tag,
+      version,
+      defaultLabel,
+    })
   }
 
   async handle(namedParams, queryParams) {
