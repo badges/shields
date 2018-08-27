@@ -269,7 +269,7 @@ class BaseService {
     return badgeData
   }
 
-  static register(camp, handleRequest, serviceConfig) {
+  static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
     const ServiceClass = this // In a static context, "this" is the class.
 
     camp.route(

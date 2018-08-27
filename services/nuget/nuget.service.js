@@ -1,9 +1,12 @@
 'use strict'
 
-const { downloadCount: downloadCountColor } = require('./color-formatters')
-const { makeBadgeData: getBadgeData } = require('./badge-data')
-const { metric } = require('./text-formatters')
-const { regularUpdate } = require('./regular-update')
+const LegacyService = require('../legacy-service')
+const {
+  downloadCount: downloadCountColor,
+} = require('../../lib/color-formatters')
+const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const { metric } = require('../../lib/text-formatters')
+const { regularUpdate } = require('../../lib/regular-update')
 
 function mapNugetFeedv2({ camp, cache }, pattern, offset, getInfo) {
   const vRegex = new RegExp(
@@ -323,7 +326,40 @@ function mapNugetFeed({ camp, cache }, pattern, offset, getInfo) {
   )
 }
 
-module.exports = {
-  mapNugetFeedv2,
-  mapNugetFeed,
+module.exports = class Nuget extends LegacyService {
+  static registerLegacyRouteHandler({ camp, cache }) {
+    // ReSharper
+    mapNugetFeedv2({ camp, cache }, 'resharper', 0, match => ({
+      site: 'resharper',
+      feed: 'https://resharper-plugins.jetbrains.com/api/v2',
+    }))
+
+    // Chocolatey
+    mapNugetFeedv2({ camp, cache }, 'chocolatey', 0, match => ({
+      site: 'chocolatey',
+      feed: 'https://www.chocolatey.org/api/v2',
+    }))
+
+    // PowerShell Gallery
+    mapNugetFeedv2({ camp, cache }, 'powershellgallery', 0, match => ({
+      site: 'powershellgallery',
+      feed: 'https://www.powershellgallery.com/api/v2',
+    }))
+
+    // NuGet
+    mapNugetFeed({ camp, cache }, 'nuget', 0, match => ({
+      site: 'nuget',
+      feed: 'https://api.nuget.org/v3',
+    }))
+
+    // MyGet
+    mapNugetFeed({ camp, cache }, '(.+\\.)?myget\\/(.*)', 2, match => {
+      const tenant = match[1] || 'www.' // eg. dotnet
+      const feed = match[2]
+      return {
+        site: feed,
+        feed: 'https://' + tenant + 'myget.org/F/' + feed + '/api/v3',
+      }
+    })
+  }
 }
