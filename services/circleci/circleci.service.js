@@ -31,7 +31,9 @@ module.exports = class CircleCi extends BaseJsonService {
     if (status === 'passing') {
       color = 'brightgreen'
     } else if (
-      ['failed', 'infrastructure fail', 'canceled', 'timed out'].includes(status)
+      ['failed', 'infrastructure fail', 'canceled', 'timed out'].includes(
+        status
+      )
     ) {
       color = 'red'
     } else if (status === 'no tests') {
