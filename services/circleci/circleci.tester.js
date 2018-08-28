@@ -25,6 +25,15 @@ t.create('circle ci (valid, with branch)')
     })
   )
 
+t.create('circle ci (valid, project that uses workflows)')
+  .get('/project/github/badges/shields/master.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'build',
+      value: isBuildStatus,
+    })
+  )
+
 t.create('circle ci (not found)')
   .get('/project/github/PyvesB/EmptyRepo.json')
   .expectJSON({ name: 'build', value: 'project not found' })
@@ -38,25 +47,18 @@ t.create('circle ci (no response data)')
   .get('/project/github/RedSparr0w/node-csgo-parser.json')
   .intercept(nock =>
     nock('https://circleci.com')
-      .get(
-        '/api/v1.1/project/github/RedSparr0w/node-csgo-parser?filter=completed&limit=1'
-      )
+      .get('/api/v1.1/project/github/RedSparr0w/node-csgo-parser?limit=50')
       .reply(200)
   )
   .expectJSON({ name: 'build', value: 'unparseable json response' })
 
-// we're passing &limit=1 so we expect exactly one array element
-t.create('circle ci (invalid json)')
-  .get('/project/github/RedSparr0w/node-csgo-parser.json?style=_shields_test')
+t.create(
+  "circle ci (valid response that we can't generate a build status from)"
+)
+  .get('/project/github/RedSparr0w/node-csgo-parser.json')
   .intercept(nock =>
     nock('https://circleci.com')
-      .get(
-        '/api/v1.1/project/github/RedSparr0w/node-csgo-parser?filter=completed&limit=1'
-      )
-      .reply(200, [{ status: 'success' }, { status: 'fixed' }])
+      .get('/api/v1.1/project/github/RedSparr0w/node-csgo-parser?limit=50')
+      .reply(200, [])
   )
-  .expectJSON({
-    name: 'build',
-    value: 'invalid json response',
-    colorB: '#9f9f9f',
-  })
+  .expectJSON({ name: 'build', value: 'could not summarize build status' })

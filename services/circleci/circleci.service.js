@@ -1,13 +1,12 @@
 'use strict'
 
-const Joi = require('joi')
 const BaseJsonService = require('../base-json')
-
-const circleSchema = Joi.array()
-  .items(Joi.object({ status: Joi.string().required() }))
-  .min(1)
-  .max(1)
-  .required()
+const { InvalidResponse } = require('../errors')
+const {
+  circleSchema,
+  getLatestCompleteBuildOutcome,
+  summarizeBuildsForLatestCompleteWorkflow,
+} = require('./circleci.helpers.js')
 
 module.exports = class CircleCi extends BaseJsonService {
   async fetch({ token, vcsType, userRepo, branch }) {
@@ -15,7 +14,7 @@ module.exports = class CircleCi extends BaseJsonService {
     if (branch != null) {
       url += `/tree/${branch}`
     }
-    const query = { filter: 'completed', limit: 1 }
+    const query = { limit: 50 }
     if (token) {
       query['circle-token'] = token
     }
@@ -28,20 +27,32 @@ module.exports = class CircleCi extends BaseJsonService {
   }
 
   static render({ status }) {
-    if (['success', 'fixed'].includes(status)) {
-      return { message: 'passing', color: 'brightgreen' }
-    } else if (status === 'failed') {
-      return { message: 'failed', color: 'red' }
-    } else if (['no_tests', 'scheduled', 'not_run'].includes(status)) {
-      return { message: status.replace('_', ' '), color: 'yellow' }
-    } else {
-      return { message: status.replace('_', ' '), color: 'lightgrey' }
+    let color = 'lightgrey'
+    if (status === 'passing') {
+      color = 'brightgreen'
+    } else if (
+      ['failed', 'infrastructure fail', 'canceled', 'timed out'].includes(status)
+    ) {
+      color = 'red'
+    } else if (status === 'no tests') {
+      color = 'yellow'
     }
+    return { message: status, color }
   }
 
   async handle({ token, vcsType, userRepo, branch }) {
     const json = await this.fetch({ token, vcsType, userRepo, branch })
-    return this.constructor.render({ status: json[0].status })
+    try {
+      const status =
+        'workflows' in json[0]
+          ? summarizeBuildsForLatestCompleteWorkflow(json)
+          : getLatestCompleteBuildOutcome(json)
+      return this.constructor.render({ status })
+    } catch (e) {
+      throw new InvalidResponse({
+        prettyMessage: 'could not summarize build status',
+      })
+    }
   }
 
   // Metadata
@@ -68,13 +79,13 @@ module.exports = class CircleCi extends BaseJsonService {
         title: 'CircleCI (all branches)',
         exampleUrl: 'project/github/RedSparr0w/node-csgo-parser',
         urlPattern: 'project/:vcsType/:owner/:repo',
-        staticExample: this.render({ status: 'success' }),
+        staticExample: this.render({ status: 'passing' }),
       },
       {
         title: 'CircleCI branch',
         exampleUrl: 'project/github/RedSparr0w/node-csgo-parser/master',
         urlPattern: 'project/:vcsType/:owner/:repo/:branch',
-        staticExample: this.render({ status: 'success' }),
+        staticExample: this.render({ status: 'passing' }),
       },
       {
         title: 'CircleCI token',
@@ -82,7 +93,7 @@ module.exports = class CircleCi extends BaseJsonService {
           'circleci/token/:token/project/:vcsType/:owner/:repo/:branch',
         exampleUrl:
           'circleci/token/b90b5c49e59a4c67ba3a92f7992587ac7a0408c2/project/github/RedSparr0w/node-csgo-parser/master',
-        staticExample: this.render({ status: 'success' }),
+        staticExample: this.render({ status: 'passing' }),
       },
     ]
   }
