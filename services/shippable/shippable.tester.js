@@ -1,11 +1,11 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const createServiceTester = require('../create-service-tester')
 const { invalidJSON } = require('../response-fixtures')
 const { isBuildStatus } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'shippable', title: 'Shippable CI' })
+const t = createServiceTester()
 module.exports = t
 
 t.create('build status (valid, without branch)')
