@@ -4,7 +4,7 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isSemver } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'elm package', title: 'ELM PACKAGE' })
+const t = new ServiceTester({ id: 'elm-package', title: 'ELM PACKAGE' })
 module.exports = t
 
 t.create('gets the package version of elm-lang/core')
