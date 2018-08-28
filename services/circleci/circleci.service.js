@@ -66,22 +66,22 @@ module.exports = class CircleCi extends BaseJsonService {
     return [
       {
         title: 'CircleCI (all branches)',
-        previewUrl: 'project/github/RedSparr0w/node-csgo-parser',
+        exampleUrl: 'project/github/RedSparr0w/node-csgo-parser',
+        urlPattern: 'project/:vcsType/:owner/:repo',
         staticExample: this.render({ status: 'success' }),
       },
       {
         title: 'CircleCI branch',
-        previewUrl: 'project/github/RedSparr0w/node-csgo-parser/master',
+        exampleUrl: 'project/github/RedSparr0w/node-csgo-parser/master',
+        urlPattern: 'project/:vcsType/:owner/:repo/:branch',
         staticExample: this.render({ status: 'success' }),
       },
       {
         title: 'CircleCI token',
-        previewUrl:
-          '/circleci/project/github/RedSparr0w/node-csgo-parser/master',
         urlPattern:
-          '/circleci/token/:token/project/github/RedSparr0w/node-csgo-parser/master',
+          'circleci/token/:token/project/:vcsType/:owner/:repo/:branch',
         exampleUrl:
-          '/circleci/token/b90b5c49e59a4c67ba3a92f7992587ac7a0408c2/project/github/RedSparr0w/node-csgo-parser/master',
+          'circleci/token/b90b5c49e59a4c67ba3a92f7992587ac7a0408c2/project/github/RedSparr0w/node-csgo-parser/master',
         staticExample: this.render({ status: 'success' }),
       },
     ]
