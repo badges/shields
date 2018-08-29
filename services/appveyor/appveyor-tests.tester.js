@@ -7,24 +7,31 @@ const isAppveyorTestTotals = Joi.string().regex(
   /^(?:[0-9]+ (?:passed|skipped|failed)(?:, )?)+$/
 )
 
+const isCompactAppveyorTestTotals = Joi.string().regex(
+  /^(?:[0-9]* ?(?:✔|✘|➟) ?[0-9]*(?:, | \| )?)+$/
+)
+
 const t = createServiceTester()
 module.exports = t
 
-// Test AppVeyor tests status badge
-t.create('tests status')
+t.create('test status')
   .get('/NZSmartie/coap-net-iu0to.json')
   .expectJSONTypes(
     Joi.object().keys({ name: 'tests', value: isAppveyorTestTotals })
   )
 
-// Test AppVeyor branch tests status badge
-t.create('tests status on master branch')
+t.create('test status on branch')
   .get('/NZSmartie/coap-net-iu0to/master.json')
   .expectJSONTypes(
     Joi.object().keys({ name: 'tests', value: isAppveyorTestTotals })
   )
 
-// Test AppVeyor tests status badge for a non-existing project
-t.create('tests 404')
-  .get('/somerandomproject/thatdoesntexits.json')
+t.create('test status with compact message')
+  .get('/NZSmartie/coap-net-iu0to.json?compact_message')
+  .expectJSONTypes(
+    Joi.object().keys({ name: 'tests', value: isCompactAppveyorTestTotals })
+  )
+
+t.create('test status on non-existent project')
+  .get('/somerandomproject/thatdoesntexist.json')
   .expectJSON({ name: 'tests', value: 'project not found or access denied' })

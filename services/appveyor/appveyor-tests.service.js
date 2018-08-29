@@ -1,10 +1,11 @@
 'use strict'
 
 const AppVeyorBase = require('./appveyor-base')
+const { renderTestResultBadge } = require('../../lib/text-formatters')
 
 module.exports = class AppVeyorTests extends AppVeyorBase {
   static get url() {
-    return this.buildUrl('appveyor/tests')
+    return this.buildUrl('appveyor/tests', { withCompact: true })
   }
 
   static get defaultBadgeData() {
@@ -26,30 +27,13 @@ module.exports = class AppVeyorTests extends AppVeyorBase {
     ]
   }
 
-  static render({ passed, failed, skipped, total }) {
-    let message = `${passed} passed`
-    if (failed > 0) {
-      message += `, ${failed} failed`
-    }
-    if (skipped > 0) {
-      message += `, ${skipped} skipped`
-    }
-
-    let color
-    if (passed === total) {
-      color = 'brightgreen'
-    } else if (failed === 0) {
-      color = 'green'
-    } else if (passed === 0) {
-      color = 'red'
-    } else {
-      color = 'orange'
-    }
-
-    return { message, color }
+  static render({ passed, failed, skipped, total, isCompact }) {
+    return renderTestResultBadge({ passed, failed, skipped, total, isCompact })
   }
 
-  async handle({ repo, branch }) {
+  async handle({ repo, branch }, { compact_message: compactMessage }) {
+    const isCompact = compactMessage !== undefined
+
     const {
       build: { jobs },
     } = await this.fetch({ repo, branch })
@@ -64,6 +48,12 @@ module.exports = class AppVeyorTests extends AppVeyorBase {
     })
     const skipped = total - passed - failed
 
-    return this.constructor.render({ passed, failed, skipped, total })
+    return this.constructor.render({
+      passed,
+      failed,
+      skipped,
+      total,
+      isCompact,
+    })
   }
 }
