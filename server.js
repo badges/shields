@@ -213,7 +213,7 @@ cache({
         badgeData.text[1] = (prefix || '') + innerText.join(', ') + (suffix || '');
       } catch (e) {
         setBadgeColor(badgeData, 'lightgrey');
-        badgeData.text[1] = e;
+        badgeData.text[1] = e.message;
       } finally {
         sendBadge(format, badgeData);
       }
