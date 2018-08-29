@@ -1,11 +1,12 @@
 'use strict'
 
 const Joi = require('joi')
+const { renderLicenseBadge } = require('../../lib/licenses')
+const { renderVersionBadge } = require('../../lib/version')
+const { metric } = require('../../lib/text-formatters')
 const BaseJsonService = require('../base-json')
 const { InvalidResponse } = require('../errors')
-const { version: versionColor } = require('../../lib/color-formatters')
-const { metric, addv } = require('../../lib/text-formatters')
-const { nonNegativeInteger } = require('../validators.js')
+const { nonNegativeInteger } = require('../validators')
 
 const apmSchema = Joi.object({
   downloads: nonNegativeInteger,
@@ -71,7 +72,7 @@ class APMDownloads extends BaseAPMService {
 
 class APMVersion extends BaseAPMService {
   static render({ version }) {
-    return { message: addv(version), color: versionColor(version) }
+    return renderVersionBadge({ version })
   }
 
   async handle({ repo }) {
@@ -111,7 +112,7 @@ class APMVersion extends BaseAPMService {
 
 class APMLicense extends BaseAPMService {
   static render({ license }) {
-    return { message: license, color: 'blue' }
+    return renderLicenseBadge({ license })
   }
 
   async handle({ repo }) {
