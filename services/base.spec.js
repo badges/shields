@@ -10,6 +10,7 @@ const {
   Inaccessible,
   InvalidResponse,
   InvalidParameter,
+  Deprecated,
 } = require('./errors')
 const BaseService = require('./base')
 
@@ -239,6 +240,20 @@ describe('BaseService', function() {
         ).to.deep.equal({
           color: 'lightgray',
           message: 'invalid',
+        })
+      })
+
+      it('handles Deprecated', async function() {
+        serviceInstance.handle = () => {
+          throw new Deprecated()
+        }
+        expect(
+          await serviceInstance.invokeHandler({
+            namedParamA: 'bar.bar.bar',
+          })
+        ).to.deep.equal({
+          color: 'lightgray',
+          message: 'no longer available',
         })
       })
 
