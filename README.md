@@ -183,9 +183,12 @@ Project leaders
 These contributors donate time on a consistent basis to help guide and
 maintain the project:
 
+* [chris48s](https://github.com/chris48s)
 * [Daniel15](https://github.com/Daniel15)
 * [espadrine](https://github.com/espadrine)
 * [paulmelnikow](https://github.com/paulmelnikow)
+* [platan](https://github.com/platan)
+* [PyvesB](https://github.com/PyvesB)
 * [RedSparr0w](https://github.com/RedSparr0w)
 
 
