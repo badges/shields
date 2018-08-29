@@ -148,21 +148,23 @@ class BaseService {
   }
 
   static _namedParamsForMatch(match) {
+    const names = this.url.capture || []
+
     // Assume the last match is the format, and drop match[0], which is the
     // entire match.
     const captures = match.slice(1, -1)
 
-    if (this.url.capture.length !== captures.length) {
+    if (names.length !== captures.length) {
       throw new Error(
         `Service ${
           this.constructor.name
         } declares incorrect number of capture groups ` +
-          `(expected ${this.url.capture.length}, got ${captures.length})`
+          `(expected ${names.length}, got ${captures.length})`
       )
     }
 
     const result = {}
-    this.url.capture.forEach((name, index) => {
+    names.forEach((name, index) => {
       result[name] = captures[index]
     })
     return result

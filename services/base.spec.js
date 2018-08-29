@@ -55,41 +55,69 @@ describe('BaseService', function() {
   const defaultConfig = { handleInternalErrors: false }
 
   describe('URL pattern matching', function() {
-    const regexExec = str => DummyService._regex.exec(str)
-    const getNamedParamA = str => {
-      const [, namedParamA] = regexExec(str)
-      return namedParamA
-    }
-    const namedParams = str => {
-      const match = regexExec(str)
-      return DummyService._namedParamsForMatch(match)
-    }
+    context('A named param is declared', function() {
+      const regexExec = str => DummyService._regex.exec(str)
+      const getNamedParamA = str => {
+        const [, namedParamA] = regexExec(str)
+        return namedParamA
+      }
+      const namedParams = str => {
+        const match = regexExec(str)
+        return DummyService._namedParamsForMatch(match)
+      }
 
-    test(regexExec, () => {
-      forCases([
-        given('/foo/bar.bar.bar.zip'),
-        given('/foo/bar/bar.svg'),
-      ]).expect(null)
+      test(regexExec, () => {
+        forCases([
+          given('/foo/bar.bar.bar.zip'),
+          given('/foo/bar/bar.svg'),
+        ]).expect(null)
+      })
+
+      test(getNamedParamA, () => {
+        forCases([
+          given('/foo/bar.bar.bar.svg'),
+          given('/foo/bar.bar.bar.png'),
+          given('/foo/bar.bar.bar.gif'),
+          given('/foo/bar.bar.bar.jpg'),
+          given('/foo/bar.bar.bar.json'),
+        ]).expect('bar.bar.bar')
+      })
+
+      test(namedParams, () => {
+        forCases([
+          given('/foo/bar.bar.bar.svg'),
+          given('/foo/bar.bar.bar.png'),
+          given('/foo/bar.bar.bar.gif'),
+          given('/foo/bar.bar.bar.jpg'),
+          given('/foo/bar.bar.bar.json'),
+        ]).expect({ namedParamA: 'bar.bar.bar' })
+      })
     })
 
-    test(getNamedParamA, () => {
-      forCases([
-        given('/foo/bar.bar.bar.svg'),
-        given('/foo/bar.bar.bar.png'),
-        given('/foo/bar.bar.bar.gif'),
-        given('/foo/bar.bar.bar.jpg'),
-        given('/foo/bar.bar.bar.json'),
-      ]).expect('bar.bar.bar')
-    })
+    describe('No named params are declared', function() {
+      class ServiceWithZeroNamedParams extends BaseService {
+        static get url() {
+          return {
+            base: 'foo',
+            format: '(?:[^/]+)',
+          }
+        }
+      }
 
-    test(namedParams, () => {
-      forCases([
-        given('/foo/bar.bar.bar.svg'),
-        given('/foo/bar.bar.bar.png'),
-        given('/foo/bar.bar.bar.gif'),
-        given('/foo/bar.bar.bar.jpg'),
-        given('/foo/bar.bar.bar.json'),
-      ]).expect({ namedParamA: 'bar.bar.bar' })
+      const namedParams = str => {
+        const match = ServiceWithZeroNamedParams._regex.exec(str)
+        return ServiceWithZeroNamedParams._namedParamsForMatch(match)
+      }
+
+      test(namedParams, () => {
+        forCases([
+          given('/foo/bar.bar.bar.svg'),
+          given('/foo/bar.bar.bar.png'),
+          given('/foo/bar.bar.bar.gif'),
+          given('/foo/bar.bar.bar.jpg'),
+          given('/foo/bar.bar.bar.json'),
+        ]).expect({})
+      })
     })
   })
 
