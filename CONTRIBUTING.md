@@ -36,22 +36,23 @@ You can help by improving the project's usage and developer instructions.
 You can help with code review, which reduces bugs, and over time has a
 wonderful side effect of making the code more readable and therefore more
 approachable. It's also a great way to teach and learn. Feel free to jump in!
-Be welcoming, appreciative, and helpful.
+Be welcoming, appreciative, and helpful. You can perform first reviews of
+simple changes, like badge additions. These are usually tagged with
+[service badge][service badge PR tag].
 
 Please review [these impeccable guidelines][code review guidelines].
-
-You can perform first reviews of simple changes, like badge additions. You can
-also review @paulmelnikow's changes, most of which are otherwise
-self-reviewed.
 
 You can monitor [issues][] and the [chat room][], and help other people who
 have questions about contributing to Shields, or using it for their projects.
 
-Feel free to reach out to @paulmelnikow if you'd need help getting started.
+Feel free to reach out to one of the [maintainers][]
+if you need help getting started.
 
+[service badge PR tag]: https://github.com/badges/shields/pulls?q=is%3Apr+is%3Aopen+label%3Aservice-badge
 [code review guidelines]: http://amyciavolino.com/assets/MindfulCommunicationInCodeReviews.pdf
 [issues]: https://github.com/badges/shields/issues
 [chat room]: https://discordapp.com/invite/HjJCwm5
+[maintainers]: https://github.com/badges/shields#project-leaders
 
 ### Suggesting improvements
 
