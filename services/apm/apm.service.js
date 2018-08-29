@@ -5,7 +5,7 @@ const BaseJsonService = require('../base-json')
 const { InvalidResponse } = require('../errors')
 const { version: versionColor } = require('../../lib/color-formatters')
 const { metric, addv } = require('../../lib/text-formatters')
-const { nonNegativeInteger } = require('../validators.js')
+const { nonNegativeInteger } = require('../validators')
 
 const apmSchema = Joi.object({
   downloads: nonNegativeInteger,

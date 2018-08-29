@@ -9,6 +9,7 @@ env:
 
 plugins:
   - mocha
+  - no-extension-in-require
 
 extends:
   # Enable a set of unopinionated, style-agnostic rules which cover many
@@ -34,3 +35,5 @@ rules:
 
   mocha/no-exclusive-tests: "error"
   mocha/no-mocha-arrows: "error"
+
+  no-extension-in-require/main: "error"
