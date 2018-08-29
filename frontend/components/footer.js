@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import resolveUrl from '../lib/resolve-url'
 
-const Footer = ({ baseUri }) => (
+const Footer = ({ baseUrl }) => (
   <section>
     <h2 id="like-this">Like This?</h2>
 
@@ -18,7 +18,7 @@ const Footer = ({ baseUri }) => (
       <object
         data={resolveUrl(
           '/twitter/follow/shields_io.svg?style=social&label=Follow',
-          baseUri
+          baseUrl
         )}
         alt="Follow @shields_io"
       />{' '}
@@ -34,7 +34,7 @@ const Footer = ({ baseUri }) => (
       <object
         data={resolveUrl(
           '/github/forks/badges/shields.svg?style=social&label=Fork',
-          baseUri
+          baseUrl
         )}
         alt="Fork on GitHub"
       />{' '}
@@ -42,7 +42,7 @@ const Footer = ({ baseUri }) => (
       <object
         data={resolveUrl(
           '/discord/308323056592486420.svg?style=social&label=Chat&link=https://discord.gg/HjJCwm5',
-          baseUri
+          baseUrl
         )}
         alt="chat on Discord"
       />
@@ -59,5 +59,5 @@ const Footer = ({ baseUri }) => (
 )
 export default Footer
 Footer.propTypes = {
-  baseUri: PropTypes.string.isRequired,
+  baseUrl: PropTypes.string.isRequired,
 }
