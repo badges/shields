@@ -20,7 +20,7 @@ export function reStructuredText(badgeUri, link, title) {
 
 function quoteAsciiDocAttribute(attr) {
   if (typeof attr === 'string') {
-    const withQuotesEscaped = attr.replace('"', '\\"')
+    const withQuotesEscaped = attr.replace(/"/g, '\\"')
     return `"${withQuotesEscaped}"`
   } else if (attr == null) {
     return 'None'
