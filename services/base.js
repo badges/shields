@@ -7,6 +7,7 @@ const {
   InvalidResponse,
   Inaccessible,
   InvalidParameter,
+  Deprecated,
 } = require('./errors')
 const queryString = require('query-string')
 const {
@@ -86,19 +87,35 @@ class BaseService {
     return '/' + [this.url.base, partialUrl].filter(Boolean).join('/')
   }
 
+  static _makeStaticExampleUrl(serviceData) {
+    const badgeData = this._makeBadgeData({}, serviceData)
+    const color = badgeData.colorscheme || badgeData.colorB
+    return `/badge/${encodeURIComponent(
+      badgeData.text[0]
+    )}-${encodeURIComponent(badgeData.text[1])}-${color}`
+  }
+
   /**
    * Return an array of examples. Each example is prepared according to the
-   * schema in `lib/all-badge-examples.js`. Four keys are supported:
-   *  - title
-   *  - previewUrl
-   *  - exampleUrl
-   *  - documentation
+   * schema in `lib/all-badge-examples.js`.
    */
   static prepareExamples() {
     return this.examples.map(
-      ({ title, previewUrl, query, exampleUrl, documentation }) => {
-        if (!previewUrl) {
-          throw Error(`Example for ${this.name} is missing required previewUrl`)
+      ({
+        title,
+        query,
+        exampleUrl,
+        previewUrl,
+        urlPattern,
+        staticExample,
+        documentation,
+      }) => {
+        if (!previewUrl && !staticExample) {
+          throw Error(
+            `Example for ${
+              this.name
+            } is missing required previewUrl or staticExample`
+          )
         }
 
         const stringified = queryString.stringify(query)
@@ -106,9 +123,14 @@ class BaseService {
 
         return {
           title: title ? `${title}` : this.name,
-          previewUri: `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
           exampleUri: exampleUrl
             ? `${this._makeFullUrl(exampleUrl, query)}.svg${suffix}`
+            : undefined,
+          previewUri: staticExample
+            ? `${this._makeStaticExampleUrl(staticExample)}.svg`
+            : `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
+          urlPattern: urlPattern
+            ? `${this._makeFullUrl(urlPattern, query)}.svg${suffix}`
             : undefined,
           documentation,
         }
@@ -166,7 +188,8 @@ class BaseService {
         }
       } else if (
         error instanceof InvalidResponse ||
-        error instanceof Inaccessible
+        error instanceof Inaccessible ||
+        error instanceof Deprecated
       ) {
         trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
         return {
@@ -246,7 +269,7 @@ class BaseService {
     return badgeData
   }
 
-  static register(camp, handleRequest, serviceConfig) {
+  static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
     const ServiceClass = this // In a static context, "this" is the class.
 
     camp.route(

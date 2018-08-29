@@ -55,7 +55,9 @@ module.exports = class GemVersion extends BaseJsonService {
     return [
       {
         title: 'Gem',
-        previewUrl: 'formatador',
+        exampleUrl: 'formatador',
+        urlPattern: ':package',
+        staticExample: this.render({ version: '2.1.0' }),
         keywords: ['ruby'],
       },
     ]
