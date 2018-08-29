@@ -1,4 +1,4 @@
-import { Fragment, default as React } from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import StaticBadgeMaker from './static-badge-maker'
 import DynamicBadgeMaker from './dynamic-badge-maker'
