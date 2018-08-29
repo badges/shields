@@ -11,13 +11,9 @@ const documentation = `
   <br>
   For example, if you want to use a different terminology:
   <br>
-  <code>/appveyor/tests/NZSmartie/coap-net-iu0to.svg?passed_label=good&failed_label=bad&skipped_label=n/a</code>
+  <code>/appveyor/tests/NZSmartie/coap-net-iu0to.svg?passed_label=good&failed_label=bad&skipped_label=n%2Fa</code>
   <br>
-  Or, use Unicode characters:
-  <br>
-  <code>/appveyor/tests/NZSmartie/coap-net-iu0to.svg?passed_label=%E2%9C%94&failed_label=%E2%9D%8C&skipped_label=%E2%9D%97</code>
-  <br>
-  Or symbols:
+  Or, use symbols:
   <br>
   <code>/appveyor/tests/NZSmartie/coap-net-iu0to.svg?compact_message&passed_label=%F0%9F%8E%89&failed_label=%F0%9F%92%A2&skipped_label=%F0%9F%A4%B7</code>
 </p>
@@ -63,7 +59,11 @@ module.exports = class AppVeyorTests extends AppVeyorBase {
       {
         title: 'AppVeyor tests with custom labels',
         previewUrl: 'NZSmartie/coap-net-iu0to',
-        query: { passed: 'good', failed: 'bad', skipped: 'n/a' },
+        query: {
+          passed_label: 'good',
+          failed_label: 'bad',
+          skipped_label: 'n/a',
+        },
         documentation,
       },
     ]
