@@ -1,3 +1,5 @@
+'use strict'
+
 const envFlag = require('node-env-flag');
 const webpack = require('webpack');
 const shouldAnalyze = envFlag(process.env.ANALYZE);
