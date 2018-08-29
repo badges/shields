@@ -1,7 +1,6 @@
 'use strict'
 
 const { renderTestResultBadge } = require('../../lib/text-formatters')
-const { InvalidParameter } = require('../errors')
 const AppVeyorBase = require('./appveyor-base')
 
 const documentation = `
