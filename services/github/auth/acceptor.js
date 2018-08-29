@@ -7,6 +7,41 @@ const githubAuth = require('../../../lib/github-auth')
 const serverSecrets = require('../../../lib/server-secrets')
 const secretIsValid = require('../../../lib/sys/secret-is-valid')
 
+function sendTokenToAllServers(token) {
+  const { shieldsIps, shieldsSecret } = serverSecrets
+  return Promise.all(
+    shieldsIps.map(
+      ip =>
+        new Promise((resolve, reject) => {
+          const options = {
+            url: `https://${ip}/github-auth/add-token`,
+            method: 'POST',
+            form: {
+              shieldsSecret,
+              token,
+            },
+            // We target servers by IP, and we use HTTPS. Assuming that
+            // 1. Internet routers aren't hacked, and
+            // 2. We don't unknowingly lose our IP to someone else,
+            // we're not leaking people's and our information.
+            // (If we did, it would have no impact, as we only ask for a token,
+            // no GitHub scope. The malicious entity would only be able to use
+            // our rate limit pool.)
+            // FIXME: use letsencrypt.
+            strictSSL: false,
+          }
+          request(options, (err, res, body) => {
+            if (err != null) {
+              reject(err)
+            } else {
+              resolve()
+            }
+          })
+        })
+    )
+  )
+}
+
 function setRoutes(server) {
   const baseUrl = process.env.BASE_URL || 'https://img.shields.io'
 
@@ -92,41 +127,7 @@ function setRoutes(server) {
   })
 }
 
-function sendTokenToAllServers(token) {
-  const { shieldsIps, shieldsSecret } = serverSecrets
-  return Promise.all(
-    shieldsIps.map(
-      ip =>
-        new Promise((resolve, reject) => {
-          const options = {
-            url: `https://${ip}/github-auth/add-token`,
-            method: 'POST',
-            form: {
-              shieldsSecret,
-              token,
-            },
-            // We target servers by IP, and we use HTTPS. Assuming that
-            // 1. Internet routers aren't hacked, and
-            // 2. We don't unknowingly lose our IP to someone else,
-            // we're not leaking people's and our information.
-            // (If we did, it would have no impact, as we only ask for a token,
-            // no GitHub scope. The malicious entity would only be able to use
-            // our rate limit pool.)
-            // FIXME: use letsencrypt.
-            strictSSL: false,
-          }
-          request(options, (err, res, body) => {
-            if (err != null) {
-              reject(err)
-            } else {
-              resolve()
-            }
-          })
-        })
-    )
-  )
-}
-
 module.exports = {
+  sendTokenToAllServers,
   setRoutes,
 }
