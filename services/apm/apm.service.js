@@ -6,7 +6,7 @@ const { renderVersionBadge } = require('../../lib/version')
 const { metric } = require('../../lib/text-formatters')
 const BaseJsonService = require('../base-json')
 const { InvalidResponse } = require('../errors')
-const { nonNegativeInteger } = require('../validators')
+const { nonNegativeInteger } = require('../validators.js')
 
 const apmSchema = Joi.object({
   downloads: nonNegativeInteger,
