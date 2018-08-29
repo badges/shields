@@ -8,7 +8,7 @@ const isPsycopg2Version = Joi.string().regex(/^v([0-9][.]?)+$/)
 
 // These regexes are the same, but declared separately for clarity.
 const isPipeSeparatedPythonVersions = Joi.string().regex(
-  /^([0-9]+.[0-9]+(?: \| )?)+$/
+  /^([0-9]+\.[0-9]+(?: \| )?)+$/
 )
 const isPipeSeparatedDjangoVersions = isPipeSeparatedPythonVersions
 
