@@ -218,7 +218,7 @@ Downloads, ...) and add your badge:
   keywords: [
     'some-search-keyword'
   ],
-  previewUri: '/test/subject/STATUS.svg',
+  previewUrl: '/test/subject/STATUS.svg',
 },
 ```
 

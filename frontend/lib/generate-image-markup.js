@@ -1,5 +1,5 @@
-export function markdown(badgeUri, link, title) {
-  const withoutLink = `![${title || ''}](${badgeUri})`
+export function markdown(badgeUrl, link, title) {
+  const withoutLink = `![${title || ''}](${badgeUrl})`
   if (link) {
     return `[${withoutLink}](${link})`
   } else {
@@ -7,8 +7,8 @@ export function markdown(badgeUri, link, title) {
   }
 }
 
-export function reStructuredText(badgeUri, link, title) {
-  let result = `.. image:: ${badgeUri}`
+export function reStructuredText(badgeUrl, link, title) {
+  let result = `.. image:: ${badgeUrl}`
   if (title) {
     result += `   :alt: ${title}`
   }
@@ -59,17 +59,17 @@ export function renderAsciiDocAttributes(positional, named) {
   }
 }
 
-export function asciiDoc(badgeUri, link, title) {
+export function asciiDoc(badgeUrl, link, title) {
   const positional = title ? [title] : []
   const named = link ? { link } : {}
   const attrs = renderAsciiDocAttributes(positional, named)
-  return `image:${badgeUri}${attrs}`
+  return `image:${badgeUrl}${attrs}`
 }
 
-export default function generateAllMarkup(badgeUri, link, title) {
+export default function generateAllMarkup(badgeUrl, link, title) {
   // This is a wee bit "clever". It runs each of the three functions on the
   // parameters provided, and returns the result in an object.
   return mapValues({ markdown, reStructuredText, asciiDoc }, fn =>
-    fn(badgeUri, link, title)
+    fn(badgeUrl, link, title)
   )
 }

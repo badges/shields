@@ -6,11 +6,11 @@ import resolveBadgeUrl from '../lib/badge-url'
 
 const Badge = ({
   title,
-  exampleUri,
-  previewUri,
+  exampleUrl,
+  previewUrl,
   urlPattern,
   documentation,
-  baseUri,
+  baseUrl,
   longCache,
   shouldDisplay = () => true,
   onClick,
@@ -19,26 +19,26 @@ const Badge = ({
     ? () =>
         onClick({
           title,
-          exampleUri,
-          previewUri,
+          exampleUrl,
+          previewUrl,
           urlPattern,
           documentation,
         })
     : undefined
 
-  const previewImage = previewUri ? (
+  const previewImage = previewUrl ? (
     <img
       className={classNames('badge-img', { clickable: onClick })}
       onClick={handleClick}
-      src={resolveBadgeUrl(previewUri, baseUri, { longCache })}
+      src={resolveBadgeUrl(previewUrl, baseUrl, { longCache })}
       alt=""
     />
   ) : (
     '\u00a0'
   ) // non-breaking space
-  const resolvedExampleUri = resolveBadgeUrl(
-    urlPattern || previewUri,
-    baseUri,
+  const resolvedExampleUrl = resolveBadgeUrl(
+    urlPattern || previewUrl,
+    baseUrl,
     { longCache: false }
   )
 
@@ -57,7 +57,7 @@ const Badge = ({
             className={classNames({ clickable: onClick })}
             onClick={handleClick}
           >
-            {resolvedExampleUri}
+            {resolvedExampleUrl}
           </code>
         </td>
       </tr>
@@ -67,17 +67,17 @@ const Badge = ({
 }
 Badge.propTypes = {
   title: PropTypes.string.isRequired,
-  exampleUri: PropTypes.string,
-  previewUri: PropTypes.string,
+  exampleUrl: PropTypes.string,
+  previewUrl: PropTypes.string,
   urlPattern: PropTypes.string,
   documentation: PropTypes.string,
-  baseUri: PropTypes.string,
+  baseUrl: PropTypes.string,
   longCache: PropTypes.bool.isRequired,
   shouldDisplay: PropTypes.func,
   onClick: PropTypes.func.isRequired,
 }
 
-const Category = ({ category, examples, baseUri, longCache, onClick }) => {
+const Category = ({ category, examples, baseUrl, longCache, onClick }) => {
   if (examples.filter(example => example.shouldDisplay()).length === 0) {
     return null
   }
@@ -92,7 +92,7 @@ const Category = ({ category, examples, baseUri, longCache, onClick }) => {
             <Badge
               key={badgeData.key}
               {...badgeData}
-              baseUri={baseUri}
+              baseUrl={baseUrl}
               longCache={longCache}
               onClick={onClick}
             />
@@ -110,24 +110,24 @@ Category.propTypes = {
   examples: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
-      exampleUri: PropTypes.string,
-      previewUri: PropTypes.string,
+      exampleUrl: PropTypes.string,
+      previewUrl: PropTypes.string,
       urlPattern: PropTypes.string,
       documentation: PropTypes.string,
     })
   ).isRequired,
-  baseUri: PropTypes.string,
+  baseUrl: PropTypes.string,
   longCache: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
 }
 
-const BadgeExamples = ({ categories, baseUri, longCache, onClick }) => (
+const BadgeExamples = ({ categories, baseUrl, longCache, onClick }) => (
   <div>
     {categories.map((categoryData, i) => (
       <Category
         key={i}
         {...categoryData}
-        baseUri={baseUri}
+        baseUrl={baseUrl}
         longCache={longCache}
         onClick={onClick}
       />
@@ -141,7 +141,7 @@ BadgeExamples.propTypes = {
       examples: Category.propTypes.examples,
     })
   ),
-  baseUri: PropTypes.string,
+  baseUrl: PropTypes.string,
   longCache: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
 }
