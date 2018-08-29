@@ -56,13 +56,13 @@ module.exports = class AppVeyorTests extends AppVeyorBase {
       },
       {
         title: 'AppVeyor tests (compact)',
-        previewUrl: 'NZSmartie/coap-net-iu0to.svg',
+        previewUrl: 'NZSmartie/coap-net-iu0to',
         query: { compactValue: null },
         documentation,
       },
       {
         title: 'AppVeyor tests with custom labels',
-        previewUrl: 'NZSmartie/coap-net-iu0to.svg',
+        previewUrl: 'NZSmartie/coap-net-iu0to',
         query: { passed: 'good', failed: 'bad', skipped: 'n/a' },
         documentation,
       },
