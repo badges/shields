@@ -7,12 +7,12 @@ import { advertisedStyles, logos } from '../../supported-features.json'
 
 export default class Usage extends React.PureComponent {
   static propTypes = {
-    baseUri: PropTypes.string.isRequired,
+    baseUrl: PropTypes.string.isRequired,
     longCache: PropTypes.bool.isRequired,
   }
 
   renderColorExamples() {
-    const { baseUri, longCache } = this.props
+    const { baseUrl, longCache } = this.props
     const colors = [
       'brightgreen',
       'green',
@@ -30,7 +30,7 @@ export default class Usage extends React.PureComponent {
           <Fragment key={i}>
             <img
               className="badge-img"
-              src={staticBadgeUrl(baseUri, 'color', color, color, {
+              src={staticBadgeUrl(baseUrl, 'color', color, color, {
                 longCache,
               })}
               alt={color}
@@ -43,22 +43,22 @@ export default class Usage extends React.PureComponent {
   }
 
   renderStyleExamples() {
-    const { baseUri, longCache } = this.props
+    const { baseUrl, longCache } = this.props
     return (
       <table className="badge-img">
         <tbody>
           {advertisedStyles.map((style, i) => {
-            const badgeUri = staticBadgeUrl(baseUri, 'style', style, 'green', {
+            const badgeUrl = staticBadgeUrl(baseUrl, 'style', style, 'green', {
               longCache,
               style,
             })
             return (
               <tr key={i}>
                 <td>
-                  <img className="badge-img" src={badgeUri} alt={style} />
+                  <img className="badge-img" src={badgeUrl} alt={style} />
                 </td>
                 <td>
-                  <code>{badgeUri}</code>
+                  <code>{badgeUrl}</code>
                 </td>
               </tr>
             )
@@ -77,19 +77,19 @@ export default class Usage extends React.PureComponent {
   }
 
   render() {
-    const { baseUri } = this.props
+    const { baseUrl } = this.props
     return (
       <section>
         <h2 id="your-badge">Your Badge</h2>
 
         <h3 id="static-badge">Static</h3>
-        <StaticBadgeMaker baseUri={baseUri} />
+        <StaticBadgeMaker baseUrl={baseUrl} />
 
         <hr className="spacing" />
 
         <p>
           <code>
-            {baseUri}
+            {baseUrl}
             /badge/&lt;SUBJECT&gt;-&lt;STATUS&gt;-&lt;COLOR&gt;.svg
           </code>
         </p>
@@ -129,7 +129,7 @@ export default class Usage extends React.PureComponent {
 
         <h3 id="dynamic-badge">Dynamic</h3>
 
-        <DynamicBadgeMaker baseUri={baseUri} />
+        <DynamicBadgeMaker baseUrl={baseUrl} />
 
         <p>
           <code>
