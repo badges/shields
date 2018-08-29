@@ -224,7 +224,7 @@ Downloads, ...) and add your badge:
 
 Save, run `npm run build`, and you can see it [locally][home].
 
-## (4.4) Write Tests
+### (4.4) Write Tests
 
 When creating a badge for a new service or changing a badge's behavior, tests
 should be included. They serve several purposes:

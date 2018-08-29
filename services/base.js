@@ -25,9 +25,7 @@ class BaseService {
   }
 
   static render(props) {
-    throw new Error(
-      `render() function not implemented for ${this.constructor.name}`
-    )
+    throw new Error(`render() function not implemented for ${this.name}`)
   }
 
   /**
@@ -154,9 +152,7 @@ class BaseService {
 
     if (this.url.capture.length !== captures.length) {
       throw new Error(
-        `Service ${
-          this.constructor.name
-        } declares incorrect number of capture groups ` +
+        `Service ${this.name} declares incorrect number of capture groups ` +
           `(expected ${this.url.capture.length}, got ${captures.length})`
       )
     }
