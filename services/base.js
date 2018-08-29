@@ -123,10 +123,10 @@ class BaseService {
 
         return {
           title: title ? `${title}` : this.name,
-          exampleUri: exampleUrl
+          exampleUrl: exampleUrl
             ? `${this._makeFullUrl(exampleUrl, query)}.svg${suffix}`
             : undefined,
-          previewUri: staticExample
+          previewUrl: staticExample
             ? `${this._makeStaticExampleUrl(staticExample)}.svg`
             : `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
           urlPattern: urlPattern
