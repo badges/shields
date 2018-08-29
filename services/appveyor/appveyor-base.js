@@ -34,12 +34,11 @@ module.exports = class AppVeyorBase extends BaseJsonService {
     })
   }
 
-  static buildUrl(base, { withCompact = false } = {}) {
+  static buildUrl(base) {
     return {
       base,
       format: '([^/]+/[^/]+)(?:/(.+))?',
       capture: ['repo', 'branch'],
-      queryParams: withCompact ? ['compact_message'] : undefined,
     }
   }
 }

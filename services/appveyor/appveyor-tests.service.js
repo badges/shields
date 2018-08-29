@@ -1,11 +1,40 @@
 'use strict'
 
-const AppVeyorBase = require('./appveyor-base')
 const { renderTestResultBadge } = require('../../lib/text-formatters')
+const { InvalidParameter } = require('../errors')
+const AppVeyorBase = require('./appveyor-base')
+
+const documentation = `
+<p>
+  You may change the "passed", "failed" and "skipped" text on this badge by supplying query parameters <code>&passed_label=</code>, <code>&failed_label=</code> and <code>&skipped_label=</code> respectively.
+  <br>
+  There is also a <code>&compact_message</code> query parameter, which will default to displaying ✔, ✘ and ➟, separated by a horizontal bar |.
+  <br>
+  For example, if you want to use a different terminology:
+  <br>
+  <code>/appveyor/tests/NZSmartie/coap-net-iu0to.svg?passed_label=good&failed_label=bad&skipped_label=n/a</code>
+  <br>
+  Or, use Unicode characters:
+  <br>
+  <code>/appveyor/tests/NZSmartie/coap-net-iu0to.svg?passed_label=%E2%9C%94&failed_label=%E2%9D%8C&skipped_label=%E2%9D%97</code>
+  <br>
+  Or symbols:
+  <br>
+  <code>/appveyor/tests/NZSmartie/coap-net-iu0to.svg?compact_message&passed_label=%F0%9F%8E%89&failed_label=%F0%9F%92%A2&skipped_label=%F0%9F%A4%B7</code>
+</p>
+`
 
 module.exports = class AppVeyorTests extends AppVeyorBase {
   static get url() {
-    return this.buildUrl('appveyor/tests', { withCompact: true })
+    return {
+      ...this.buildUrl('appveyor/tests'),
+      queryParams: [
+        'compact_message',
+        'passed_label',
+        'failed_label',
+        'skipped_label',
+      ],
+    }
   }
 
   static get defaultBadgeData() {
@@ -19,19 +48,59 @@ module.exports = class AppVeyorTests extends AppVeyorBase {
       {
         title: 'AppVeyor tests',
         previewUrl: 'NZSmartie/coap-net-iu0to',
+        documentation,
       },
       {
         title: 'AppVeyor tests branch',
         previewUrl: 'NZSmartie/coap-net-iu0to/master',
+        documentation,
+      },
+      {
+        title: 'AppVeyor tests (compact)',
+        previewUrl: 'NZSmartie/coap-net-iu0to.svg',
+        query: { compactValue: null },
+        documentation,
+      },
+      {
+        title: 'AppVeyor tests with custom labels',
+        previewUri: 'NZSmartie/coap-net-iu0to.svg',
+        query: { passed: 'good', failed: 'bad', skipped: 'n/a' },
+        documentation,
       },
     ]
   }
 
-  static render({ passed, failed, skipped, total, isCompact }) {
-    return renderTestResultBadge({ passed, failed, skipped, total, isCompact })
+  static render({
+    passed,
+    failed,
+    skipped,
+    total,
+    passedLabel,
+    failedLabel,
+    skippedLabel,
+    isCompact,
+  }) {
+    return renderTestResultBadge({
+      passed,
+      failed,
+      skipped,
+      total,
+      passedLabel,
+      failedLabel,
+      skippedLabel,
+      isCompact,
+    })
   }
 
-  async handle({ repo, branch }, { compact_message: compactMessage }) {
+  async handle(
+    { repo, branch },
+    {
+      compact_message: compactMessage,
+      passed_label: passedLabel,
+      failed_label: failedLabel,
+      skipped_label: skippedLabel,
+    }
+  ) {
     const isCompact = compactMessage !== undefined
 
     const {
@@ -53,6 +122,9 @@ module.exports = class AppVeyorTests extends AppVeyorBase {
       failed,
       skipped,
       total,
+      passedLabel,
+      failedLabel,
+      skippedLabel,
       isCompact,
     })
   }
