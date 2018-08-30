@@ -1,15 +1,11 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const createServiceTester = require('../create-service-tester')
 
 const { isMetric } = require('../test-validators')
 
-const t = new ServiceTester({
-  id: 'gem-downloads',
-  title: 'Ruby Gem Downloads',
-  pathPrefix: '/gem',
-})
+const t = createServiceTester()
 module.exports = t
 
 // total downloads
