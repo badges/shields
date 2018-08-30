@@ -10,19 +10,19 @@ export default class MarkupModal extends React.Component {
   static propTypes = {
     example: PropTypes.shape({
       title: PropTypes.string.isRequired,
-      exampleUri: PropTypes.string,
-      previewUri: PropTypes.string,
+      exampleUrl: PropTypes.string,
+      previewUrl: PropTypes.string,
       urlPattern: PropTypes.string,
       documentation: PropTypes.string,
       link: PropTypes.string,
     }),
-    baseUri: PropTypes.string.isRequired,
+    baseUrl: PropTypes.string.isRequired,
     onRequestClose: PropTypes.func.isRequired,
   }
 
   state = {
-    exampleUri: null,
-    badgeUri: null,
+    exampleUrl: null,
+    badgeUrl: null,
     link: null,
     style: 'flat',
   }
@@ -32,34 +32,34 @@ export default class MarkupModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { example, baseUri } = nextProps
+    const { example, baseUrl } = nextProps
 
     if (!example) {
       return
     }
 
-    // Transfer `badgeUri` and `link` into state so they can be edited by the
+    // Transfer `badgeUrl` and `link` into state so they can be edited by the
     // user.
-    const { exampleUri, urlPattern, previewUri, link } = example
+    const { exampleUrl, urlPattern, previewUrl, link } = example
     this.setState({
-      exampleUri: exampleUri
-        ? resolveBadgeUrl(exampleUri, baseUri || window.location.href)
+      exampleUrl: exampleUrl
+        ? resolveBadgeUrl(exampleUrl, baseUrl || window.location.href)
         : null,
-      badgeUri: resolveBadgeUrl(
-        urlPattern || previewUri,
-        baseUri || window.location.href
+      badgeUrl: resolveBadgeUrl(
+        urlPattern || previewUrl,
+        baseUrl || window.location.href
       ),
       link,
     })
   }
 
   generateCompleteBadgeUrl() {
-    const { baseUri } = this.props
-    const { badgeUri, style } = this.state
+    const { baseUrl } = this.props
+    const { badgeUrl, style } = this.state
 
     return resolveBadgeUrl(
-      badgeUri,
-      baseUri || window.location.href,
+      badgeUrl,
+      baseUrl || window.location.href,
       // Default style doesn't need to be specified.
       style === 'flat' ? undefined : { style }
     )
@@ -124,21 +124,21 @@ export default class MarkupModal extends React.Component {
               Image&nbsp;
               <input
                 type="url"
-                value={this.state.badgeUri}
+                value={this.state.badgeUrl}
                 onChange={event => {
-                  this.setState({ badgeUri: event.target.value })
+                  this.setState({ badgeUrl: event.target.value })
                 }}
               />
             </label>
           </p>
-          {this.state.exampleUri && (
+          {this.state.exampleUrl && (
             <p>
               Example&nbsp;
               <ClickToSelect>
                 <input
                   className="code clickable"
                   readOnly
-                  value={this.state.exampleUri}
+                  value={this.state.exampleUrl}
                 />
               </ClickToSelect>
             </p>

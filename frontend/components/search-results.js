@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { BadgeExamples } from './badge-examples'
 import badgeExampleData from '../../badge-examples.json'
 import { prepareExamples, predicateFromQuery } from '../lib/prepare-examples'
-import { baseUri, longCache } from '../constants'
+import { baseUrl, longCache } from '../constants'
 
 export default class SearchResults extends React.Component {
   static propTypes = {
@@ -25,7 +25,7 @@ export default class SearchResults extends React.Component {
       <BadgeExamples
         categories={this.preparedExamples}
         onClick={this.props.clickHandler}
-        baseUri={baseUri}
+        baseUrl={baseUrl}
         longCache={longCache}
       />
     )
