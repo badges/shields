@@ -84,6 +84,25 @@ t.create('version (invalid)')
   .get('/v/not-a-package.json')
   .expectJSON({ name: 'pypi', value: 'package or version not found' })
 
+t.create('no trove classifiers')
+  .get('/v/mapi.json')
+  .intercept(nock =>
+    nock('https://pypi.org')
+      .get('/pypi/mapi/json')
+      .reply(200, {
+        info: {
+          version: '1.2.3',
+          license: 'foo',
+          classifiers: [],
+        },
+        releases: {},
+      })
+  )
+  .expectJSON({
+    name: 'pypi',
+    value: 'v1.2.3',
+  })
+
 // tests for license endpoint
 
 t.create('license (valid, package version in request)')
@@ -97,6 +116,25 @@ t.create('license (valid, no package version specified)')
 t.create('license (invalid)')
   .get('/l/not-a-package.json')
   .expectJSON({ name: 'license', value: 'package or version not found' })
+
+t.create('license (from trove classifier)')
+  .get('/l/mapi.json')
+  .intercept(nock =>
+    nock('https://pypi.org')
+      .get('/pypi/mapi/json')
+      .reply(200, {
+        info: {
+          version: '1.2.3',
+          license: '',
+          classifiers: ['License :: OSI Approved :: MIT License'],
+        },
+        releases: {},
+      })
+  )
+  .expectJSON({
+    name: 'license',
+    value: 'mit license',
+  })
 
 // tests for wheel endpoint
 
