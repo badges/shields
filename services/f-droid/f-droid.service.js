@@ -23,7 +23,7 @@ module.exports = class FDroid extends BaseHTTPService {
       )
       if (!match) {
         throw new InvalidResponse({
-          prettyMessage: 'fix this badge',
+          prettyMessage: 'invalid response',
           underlyingError: new Error('could not find version on website'),
         })
       }

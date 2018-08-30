@@ -34,7 +34,7 @@ t.create('The api changed')
       .get('/en/packages/org.pacien.tincapp/')
       .reply(200, '')
   )
-  .expectJSON({ name: 'F-Droid', value: 'fix this badge' })
+  .expectJSON({ name: 'F-Droid', value: 'invalid response' })
 
 /* If this test fails, either the API has changed or the app was deleted. */
 t.create('The real api did not change')
