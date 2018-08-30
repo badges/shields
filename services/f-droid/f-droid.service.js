@@ -7,7 +7,8 @@ const { InvalidResponse } = require('../errors')
 
 module.exports = class FDroid extends BaseHTTPService {
   async fetch({ appId }) {
-    const url = `https://f-droid.org/en/packages/${appId}/`
+    // currently, we only use the txt format. There are few apps using the yml format.
+    const url = `https://gitlab.com/fdroid/fdroiddata/raw/master/metadata/${appId}.txt`
     return this._requestHTTP({
       url,
       options: {},
@@ -15,12 +16,13 @@ module.exports = class FDroid extends BaseHTTPService {
         404: 'app not found',
       },
     }).then(({ res, buffer }) => {
-      const website = buffer.toString()
+      const metadata = buffer.toString()
       // we assume the layout as provided here:
-      // https://gitlab.com/fdroid/fdroid-website/blob/9ae61894a18889ed749d36d5afbd0db3d0b0cfdd/_layouts/package.html#L147
-      const match = website.match(
-        /<div\s[^>]*class="package-version-header"(?:\s[^>]*)?>[^<]*<a\s+name="([^:>]*)"(?:\s[^>]*)?>/
-      )
+      // https://gitlab.com/fdroid/fdroiddata/raw/master/metadata/axp.tool.apkextractor.txt
+      const positionOfCurrentVersionAtEndOfTheFile = metadata.lastIndexOf("Current Version:"); // credits: https://stackoverflow.com/a/11134049
+      const lastVersion = metadata.substring(positionOfCurrentVersionAtEndOfTheFile);
+      console.log("XX" + lastVersion + "YY");
+      const match = lastVersion.match(/^Current Version:\s*(.*?)\s*$/m)
       if (!match) {
         throw new InvalidResponse({
           prettyMessage: 'invalid response',
@@ -45,7 +47,7 @@ module.exports = class FDroid extends BaseHTTPService {
 
   // Metadata
   static get defaultBadgeData() {
-    return { label: 'F-Droid' }
+    return { label: 'f-droid' }
   }
 
   static get category() {
@@ -63,7 +65,7 @@ module.exports = class FDroid extends BaseHTTPService {
   static get examples() {
     return [
       {
-        title: 'f-droid',
+        title: 'F-Droid',
         exampleUrl: 'org.thosp.yourlocalweather',
         urlPattern: ':appId',
         staticExample: this.render({ version: '1.0' }),

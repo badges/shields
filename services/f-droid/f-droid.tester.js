@@ -6,35 +6,85 @@ const t = new ServiceTester({ id: 'f-droid', title: 'F-Droid' })
 const Joi = require('joi')
 module.exports = t
 
-const manyVersions =
-  '<span></span><span class="doctype">&lt;!DOCTYPE html&gt;</span><span>\n\t<ul class="package-versions-list">\n\t\t\t\n\t\t\t<li class="package-version">\n\t\t\t\t<div class="package-version-header">\n\t\t\t\t\t\n\t\t\t\t\t\n                                        <a name="0.19"></a>\n                                        <a name="19"></a>\n\t\t\t\t\t<b>Version 0.19</b> (19) - Added on 2018-08-23\n\t\t\t\t</div>\n\t\t\t\t<p class="package-version-requirement">\n\t\t\t\t\t\n\t\t\t\t\tThis version requires Android 5.0 or newer.\n\t\t\t\t</p>\n\n\t\t\t\t<p class="package-version-source">\n\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\tIt is built and signed by F-Droid, and guaranteed to correspond to <a href="https://f-droid.org/repo/org.pacien.tincapp_19_src.tar.gz">this source tarball</a>.\n\t\t\t\t\t\n\t\t\t\t</p>\n\n\t\t\t\t<p class="package-version-download">\n\t\t\t\t\t<a href="https://f-droid.org/repo/org.pacien.tincapp_19.apk">\n\t\t\t\t\t\tDownload APK\n\t\t\t\t\t</a>\n\t\t\t\t\t6.9 MiB\n\t\t\t\t\t<a href="https://f-droid.org/repo/org.pacien.tincapp_19.apk.asc">PGP Signature</a>\n\t\t\t\t</p>\n\n\t\t\t\t<div class="package-version-permissions">\n                    <details open="">\n                        <summary class="package-version-permissions-summary">\n                            Permissions\n                        </summary>\n                        <ul class="package-version-permissions-list">\n                            \n                            <li>\n                                android.permission.INTERNET\n                                \n                            </li>\n                            \n                            <li>\n                                android.permission.CAMERA\n                                \n                            </li>\n                            \n                        </ul>\n                    </details>\n\t\t\t\t</div>\n\n\t\t\t</li>\n\n\t\t\t\n\t\t\t<li class="package-version">\n\t\t\t\t<div class="package-version-header">\n\t\t\t\t\t\n\t\t\t\t\t\n                                        <a name="0.18"></a>\n                                        <a name="18"></a>\n\t\t\t\t\t<b>Version 0.18</b> (18) - Added on 2018-08-12\n\t\t\t\t</div>\n\t\t\t\t<p class="package-version-requirement">\n\t\t\t\t\t\n\t\t\t\t\tThis version requires Android 5.0 or newer.\n\t\t\t\t</p>\n\n\t\t\t\t<p class="package-version-source">\n\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\tIt is built and signed by F-Droid, and guaranteed to correspond to <a href="https://f-droid.org/repo/org.pacien.tincapp_18_src.tar.gz">this source tarball</a>.\n\t\t\t\t\t\n\t\t\t\t</p>\n\n\t\t\t\t<p class="package-version-download">\n\t\t\t\t\t<a href="https://f-droid.org/repo/org.pacien.tincapp_18.apk">\n\t\t\t\t\t\tDownload APK\n\t\t\t\t\t</a>\n\t\t\t\t\t6.7 MiB\n\t\t\t\t\t<a href="https://f-droid.org/repo/org.pacien.tincapp_18.apk.asc">PGP Signature</a>\n\t\t\t\t</p>\n\n\t\t\t\t<div class="package-version-permissions">\n                    <details>\n                        <summary class="package-version-permissions-summary">\n                            Permissions\n                        </summary>\n                        <ul class="package-version-permissions-list">\n                            \n                            <li>\n                                android.permission.INTERNET\n                                \n                            </li>\n                            \n                        </ul>\n                    </details>\n\t\t\t\t</div>\n\n\t\t\t</li>\n\n</ul></span>'
+const testString = "Categories:System\n"+
+        "License:MIT\n"+
+        "Web Site:https://github.com/axxapy/apkExtractor/blob/HEAD/README.md\n"+
+        "Source Code:https://github.com/axxapy/apkExtractor\n"+
+        "Issue Tracker:https://github.com/axxapy/apkExtractor/issues\n"+
+        "\n"+
+        "Auto Name:Apk Extractor\n"+
+        "Summary:Get APK files from installed apps\n"+
+        "Description:\n"+
+        "Extract APKs from your device, even if installed from the Playstore. Root access\n"+
+        "is required for paid apps.\n"+
+        "\n"+
+        "* Fast and easy to use.\n"+
+        "* Extracts almost all applications, includes system applications.\n"+
+        "* ROOT access only required for extracting paid apps.\n"+
+        "* Apk's will be saved in /sdcard/Download/Eimon/.\n"+
+        "* Provided Search option to search applications.\n"+
+        "* Compatible with latest version of Android 6.0\n"+
+        "* Saved apk format : AppPackageName.apk.\n"+
+        "Current Version:1.8\n"+
+        ".\n"+
+        "\n"+
+        "Repo Type:git\n"+
+        "Repo:https://github.com/axxapy/apkExtractor\n"+
+        "\n"+
+        "Build:1.0,1\n"+
+        "    commit=9b3b62c3ceda74b17eaa22c9e4f893aac10c4442\n"+
+        "    gradle=yes\n"+
+        "\n"+
+        "Build:1.1,2\n"+
+        "    commit=1.1\n"+
+        "    gradle=yes\n"+
+        "\n"+
+        "Build:1.2,3\n"+
+        "    disable=lintVitalRelease fails\n"+
+        "    commit=1.2\n"+
+        "    gradle=yes\n"+
+        "\n"+
+        "Build:1.3,4\n"+
+        "    commit=1.3\n"+
+        "    gradle=yes\n"+
+        "\n"+
+        "Build:1.4,5\n"+
+        "    commit=1.4\n"+
+        "    gradle=yes\n"+
+        "\n"+
+        "Auto Update Mode:Version %v\n"+
+        "Update Check Mode:Tags\n"+
+        "Current Version:1.4\n"+
+        "Current Version Code:5\n";
+const base = "https://gitlab.com"
+const path = "/fdroid/fdroiddata/raw/master/metadata/axp.tool.apkextractor.txt"
 
 t.create('Package is found')
-  .get('/v/org.pacien.tincapp.json')
+  .get('/v/axp.tool.apkextractor.json')
   .intercept(nock =>
-    nock('https://f-droid.org')
-      .get('/en/packages/org.pacien.tincapp/')
-      .reply(200, manyVersions)
+    nock(base)
+      .get(path)
+      .reply(200, testString)
   )
-  .expectJSON({ name: 'F-Droid', value: 'v0.19' })
+  .expectJSON({ name: 'f-droid', value: 'v1.4' })
 
 t.create('Package is not found')
-  .get('/v/org.pacien.tincapp.json')
+  .get('/v/axp.tool.apkextractor.json')
   .intercept(nock =>
-    nock('https://f-droid.org')
-      .get('/en/packages/org.pacien.tincapp/')
-      .reply(404, manyVersions)
+    nock(base)
+      .get(path)
+      .reply(404, testString)
   )
-  .expectJSON({ name: 'F-Droid', value: 'app not found' })
+  .expectJSON({ name: 'f-droid', value: 'app not found' })
 
 t.create('The api changed')
-  .get('/v/org.pacien.tincapp.json')
+  .get('/v/axp.tool.apkextractor.json')
   .intercept(nock =>
-    nock('https://f-droid.org')
-      .get('/en/packages/org.pacien.tincapp/')
+    nock(base)
+      .get(path)
       .reply(200, '')
   )
-  .expectJSON({ name: 'F-Droid', value: 'invalid response' })
+  .expectJSON({ name: 'f-droid', value: 'invalid response' })
 
 /* If this test fails, either the API has changed or the app was deleted. */
 t.create('The real api did not change')
@@ -42,7 +92,7 @@ t.create('The real api did not change')
   .timeout(10000)
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'F-Droid',
+      name: 'f-droid',
       value: isVPlusDottedVersionAtLeastOne,
     })
   )
