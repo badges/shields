@@ -52,13 +52,12 @@ const parseClassifiers = function(parsedData, pattern) {
 
 function getLicenses(packageData) {
   const {
-    info: { license, classifiers },
+    info: { license },
   } = packageData
-  if (license.length > 0) {
+  if (license) {
     return [license]
   } else {
-    console.log('yololo')
-    const acronymRegex = /\([^\)+]\)/
+    const acronymRegex = /\([^)+]\)/
     let licenses = parseClassifiers(packageData, /^License :: (.+)$/)
       .map(classifier => classifier.split(' :: ').pop())
       .map(license => {
