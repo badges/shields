@@ -25,9 +25,7 @@ class BaseService {
   }
 
   static render(props) {
-    throw new Error(
-      `render() function not implemented for ${this.constructor.name}`
-    )
+    throw new Error(`render() function not implemented for ${this.name}`)
   }
 
   /**
@@ -133,10 +131,10 @@ class BaseService {
 
         return {
           title: title ? `${title}` : this.name,
-          exampleUri: exampleUrl
+          exampleUrl: exampleUrl
             ? `${this._makeFullUrl(exampleUrl, query)}.svg${suffix}`
             : undefined,
-          previewUri: staticExample
+          previewUrl: staticExample
             ? `${this._makeStaticExampleUrl(staticExample)}.svg`
             : `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
           urlPattern: urlPattern
@@ -164,9 +162,7 @@ class BaseService {
 
     if (this.url.capture.length !== captures.length) {
       throw new Error(
-        `Service ${
-          this.constructor.name
-        } declares incorrect number of capture groups ` +
+        `Service ${this.name} declares incorrect number of capture groups ` +
           `(expected ${this.url.capture.length}, got ${captures.length})`
       )
     }
