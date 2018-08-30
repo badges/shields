@@ -136,6 +136,27 @@ t.create('license (from trove classifier)')
     value: 'mit license',
   })
 
+t.create('license (as acronym from trove classifier)')
+  .get('/l/magma.json')
+  .intercept(nock =>
+    nock('https://pypi.org')
+      .get('/pypi/magma/json')
+      .reply(200, {
+        info: {
+          version: '1.2.3',
+          license: '',
+          classifiers: [
+            'License :: OSI Approved :: GNU General Public License (GPL)',
+          ],
+        },
+        releases: {},
+      })
+  )
+  .expectJSON({
+    name: 'license',
+    value: 'GPL',
+  })
+
 // tests for wheel endpoint
 
 t.create('wheel (has wheel, package version in request)')
