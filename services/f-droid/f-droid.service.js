@@ -25,7 +25,6 @@ module.exports = class FDroid extends BaseHTTPService {
       const lastVersion = metadata.substring(
         positionOfCurrentVersionAtEndOfTheFile
       )
-      console.log('XX' + lastVersion + 'YY')
       const match = lastVersion.match(/^Current Version:\s*(.*?)\s*$/m)
       if (!match) {
         throw new InvalidResponse({
