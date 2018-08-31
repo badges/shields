@@ -63,7 +63,7 @@ module.exports = class ReadTheDocs extends BaseHTTPService {
       )}/badge/`,
     })
 
-    if (status == 'unknown') {
+    if (status === 'unknown') {
       throw new NotFound({ prettyMessage: 'project or build not found' })
     }
 
