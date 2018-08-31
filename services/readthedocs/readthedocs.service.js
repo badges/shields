@@ -1,49 +1,72 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { fetchFromSvg } = require('../../lib/svg-badge-parser')
+const { fetchFromSvgAsPromise } = require('../../lib/svg-badge-parser')
+const BaseHTTPService = require('../base-http')
+const { NotFound } = require('../errors')
 
-module.exports = class ReadTheDocs extends LegacyService {
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/readthedocs\/([^/]+)(?:\/(.+))?.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const project = match[1]
-        const version = match[2]
-        const format = match[3]
-        const badgeData = getBadgeData('docs', data)
-        let url =
-          'https://readthedocs.org/projects/' +
-          encodeURIComponent(project) +
-          '/badge/'
-        if (version != null) {
-          url += '?version=' + encodeURIComponent(version)
-        }
-        fetchFromSvg(request, url, (err, res) => {
-          if (err != null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            badgeData.text[1] = res
-            if (res === 'passing') {
-              badgeData.colorscheme = 'brightgreen'
-            } else if (res === 'failing') {
-              badgeData.colorscheme = 'red'
-            } else if (res === 'unknown') {
-              badgeData.colorscheme = 'yellow'
-            } else {
-              badgeData.colorscheme = 'red'
-            }
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+module.exports = class ReadTheDocs extends BaseHTTPService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'readthedocs',
+      format: '([^/]+)(?:/(.+))?',
+      capture: ['project', 'version'],
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Read the Docs',
+        previewUrl: 'pip',
+        keywords: ['documentation'],
+      },
+      {
+        title: 'Read the Docs (version)',
+        previewUrl: 'pip/stable',
+        keywords: ['documentation'],
+      },
+    ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'docs',
+    }
+  }
+
+  static render({ status }) {
+    let color
+    if (status === 'passing') {
+      color = 'brightgreen'
+    } else if (status === 'failing') {
+      color = 'red'
+    } else if (status === 'unknown') {
+      color = 'yellow'
+    } else {
+      color = 'red'
+    }
+
+    return {
+      message: status,
+      color,
+    }
+  }
+
+  async handle({ project, version }) {
+    const status = await fetchFromSvgAsPromise(this, {
+      url: `https://readthedocs.org/projects/${encodeURIComponent(
+        project
+      )}/badge/`,
+    })
+
+    if (status == 'unknown') {
+      throw new NotFound({ prettyMessage: 'project or build not found' })
+    }
+
+    return this.constructor.render({ status })
   }
 }

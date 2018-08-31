@@ -96,6 +96,7 @@ const isBuildStatus = Joi.equal(
   'failing',
   'no tests',
   'not built',
+  'never built',
   'not run',
   'passing',
   'pending',
