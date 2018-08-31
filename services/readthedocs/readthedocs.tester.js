@@ -37,4 +37,3 @@ t.create('build status for named semantic version')
 t.create('unknown project')
   .get('/this-repo/does-not-exist.json')
   .expectJSON({ name: 'docs', value: 'project or build not found' })
-
