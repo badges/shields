@@ -1,10 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
+const { renderVersionBadge } = require('../../lib/version')
 const BaseJsonService = require('../base-json')
 const { NotFound } = require('../errors')
-const { addv: versionText } = require('../../lib/text-formatters')
-const { version: versionColor } = require('../../lib/color-formatters')
 
 const cdnjsSchema = Joi.object({
   // optional due to non-standard 'not found' condition
@@ -21,10 +20,7 @@ module.exports = class Cdnjs extends BaseJsonService {
   }
 
   static render({ version }) {
-    return {
-      message: versionText(version),
-      color: versionColor(version),
-    }
+    return renderVersionBadge({ version })
   }
 
   async handle({ library }) {
@@ -59,7 +55,9 @@ module.exports = class Cdnjs extends BaseJsonService {
   static get examples() {
     return [
       {
-        previewUrl: 'jquery',
+        urlPattern: ':library',
+        exampleUrl: 'jquery',
+        staticExample: this.render({ version: '1.5.2' }),
         keywords: ['cdn', 'cdnjs'],
       },
     ]

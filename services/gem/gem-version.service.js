@@ -2,9 +2,8 @@
 
 const Joi = require('joi')
 
+const { renderVersionBadge } = require('../../lib/version')
 const BaseJsonService = require('../base-json')
-const { addv: versionText } = require('../../lib/text-formatters')
-const { version: versionColor } = require('../../lib/color-formatters')
 
 // Response should contain a string key 'version'
 // In most cases this will be a SemVer
@@ -23,10 +22,7 @@ module.exports = class GemVersion extends BaseJsonService {
   }
 
   static render({ version }) {
-    return {
-      message: versionText(version),
-      color: versionColor(version),
-    }
+    return renderVersionBadge({ version })
   }
 
   async handle({ repo }) {
@@ -55,7 +51,9 @@ module.exports = class GemVersion extends BaseJsonService {
     return [
       {
         title: 'Gem',
-        previewUrl: 'formatador',
+        exampleUrl: 'formatador',
+        urlPattern: ':package',
+        staticExample: this.render({ version: '2.1.0' }),
         keywords: ['ruby'],
       },
     ]

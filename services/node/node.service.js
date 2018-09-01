@@ -5,7 +5,7 @@ const { versionColorForRange } = require('./node-version-color')
 
 module.exports = class NodeVersion extends NPMBase {
   static get category() {
-    return 'version'
+    return 'platform-support'
   }
 
   static get defaultBadgeData() {

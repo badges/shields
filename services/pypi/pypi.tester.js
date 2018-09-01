@@ -6,13 +6,11 @@ const { isSemver } = require('../test-validators')
 
 const isPsycopg2Version = Joi.string().regex(/^v([0-9][.]?)+$/)
 
-// These regexes are the same, but defined separately for clarity.
-const isCommaSeperatedPythonVersions = Joi.string().regex(
-  /^([0-9]+.[0-9]+[,]?[ ]?)+$/
+// These regexes are the same, but declared separately for clarity.
+const isPipeSeparatedPythonVersions = Joi.string().regex(
+  /^([0-9]+\.[0-9]+(?: \| )?)+$/
 )
-const isCommaSeperatedDjangoVersions = Joi.string().regex(
-  /^([0-9]+.[0-9]+[,]?[ ]?)+$/
-)
+const isPipeSeparatedDjangoVersions = isPipeSeparatedPythonVersions
 
 const t = new ServiceTester({ id: 'pypi', title: 'PyPi badges' })
 module.exports = t
@@ -39,15 +37,15 @@ t.create('monthly downloads (expected failure)')
 
 t.create('daily downloads (invalid)')
   .get('/dd/not-a-package.json')
-  .expectJSON({ name: 'pypi', value: 'invalid' })
+  .expectJSON({ name: 'downloads', value: 'no longer available' })
 
 t.create('weekly downloads (invalid)')
   .get('/dw/not-a-package.json')
-  .expectJSON({ name: 'pypi', value: 'invalid' })
+  .expectJSON({ name: 'downloads', value: 'no longer available' })
 
 t.create('monthly downloads (invalid)')
   .get('/dm/not-a-package.json')
-  .expectJSON({ name: 'pypi', value: 'invalid' })
+  .expectJSON({ name: 'downloads', value: 'no longer available' })
 
 /*
   tests for version endpoint
@@ -84,7 +82,26 @@ t.create('version (not semver)')
 
 t.create('version (invalid)')
   .get('/v/not-a-package.json')
-  .expectJSON({ name: 'pypi', value: 'invalid' })
+  .expectJSON({ name: 'pypi', value: 'package or version not found' })
+
+t.create('no trove classifiers')
+  .get('/v/mapi.json')
+  .intercept(nock =>
+    nock('https://pypi.org')
+      .get('/pypi/mapi/json')
+      .reply(200, {
+        info: {
+          version: '1.2.3',
+          license: 'foo',
+          classifiers: [],
+        },
+        releases: {},
+      })
+  )
+  .expectJSON({
+    name: 'pypi',
+    value: 'v1.2.3',
+  })
 
 // tests for license endpoint
 
@@ -98,7 +115,47 @@ t.create('license (valid, no package version specified)')
 
 t.create('license (invalid)')
   .get('/l/not-a-package.json')
-  .expectJSON({ name: 'pypi', value: 'invalid' })
+  .expectJSON({ name: 'license', value: 'package or version not found' })
+
+t.create('license (from trove classifier)')
+  .get('/l/mapi.json')
+  .intercept(nock =>
+    nock('https://pypi.org')
+      .get('/pypi/mapi/json')
+      .reply(200, {
+        info: {
+          version: '1.2.3',
+          license: '',
+          classifiers: ['License :: OSI Approved :: MIT License'],
+        },
+        releases: {},
+      })
+  )
+  .expectJSON({
+    name: 'license',
+    value: 'mit license',
+  })
+
+t.create('license (as acronym from trove classifier)')
+  .get('/l/magma.json')
+  .intercept(nock =>
+    nock('https://pypi.org')
+      .get('/pypi/magma/json')
+      .reply(200, {
+        info: {
+          version: '1.2.3',
+          license: '',
+          classifiers: [
+            'License :: OSI Approved :: GNU General Public License (GPL)',
+          ],
+        },
+        releases: {},
+      })
+  )
+  .expectJSON({
+    name: 'license',
+    value: 'GPL',
+  })
 
 // tests for wheel endpoint
 
@@ -116,7 +173,7 @@ t.create('wheel (no wheel)')
 
 t.create('wheel (invalid)')
   .get('/wheel/not-a-package.json')
-  .expectJSON({ name: 'pypi', value: 'invalid' })
+  .expectJSON({ name: 'wheel', value: 'package or version not found' })
 
 // tests for format endpoint
 
@@ -138,7 +195,7 @@ t.create('format (egg)')
 
 t.create('format (invalid)')
   .get('/format/not-a-package.json')
-  .expectJSON({ name: 'pypi', value: 'invalid' })
+  .expectJSON({ name: 'format', value: 'package or version not found' })
 
 // tests for pyversions endpoint
 
@@ -147,7 +204,7 @@ t.create('python versions (valid, package version in request)')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'python',
-      value: isCommaSeperatedPythonVersions,
+      value: isPipeSeparatedPythonVersions,
     })
   )
 
@@ -156,17 +213,17 @@ t.create('python versions (valid, no package version specified)')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'python',
-      value: isCommaSeperatedPythonVersions,
+      value: isPipeSeparatedPythonVersions,
     })
   )
 
 t.create('python versions (no versions specified)')
   .get('/pyversions/pyshp/1.2.12.json')
-  .expectJSON({ name: 'python', value: 'not found' })
+  .expectJSON({ name: 'python', value: 'missing' })
 
 t.create('python versions (invalid)')
   .get('/pyversions/not-a-package.json')
-  .expectJSON({ name: 'pypi', value: 'invalid' })
+  .expectJSON({ name: 'python', value: 'package or version not found' })
 
 // tests for django versions endpoint
 
@@ -175,7 +232,7 @@ t.create('supported django versions (valid, package version in request)')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'django versions',
-      value: isCommaSeperatedDjangoVersions,
+      value: isPipeSeparatedDjangoVersions,
     })
   )
 
@@ -184,23 +241,26 @@ t.create('supported django versions (valid, no package version specified)')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'django versions',
-      value: isCommaSeperatedDjangoVersions,
+      value: isPipeSeparatedDjangoVersions,
     })
   )
 
 t.create('supported django versions (no versions specified)')
   .get('/djversions/django/1.11.json')
-  .expectJSON({ name: 'django versions', value: 'not found' })
+  .expectJSON({ name: 'django versions', value: 'missing' })
 
 t.create('supported django versions (invalid)')
   .get('/djversions/not-a-package.json')
-  .expectJSON({ name: 'pypi', value: 'invalid' })
+  .expectJSON({
+    name: 'django versions',
+    value: 'package or version not found',
+  })
 
 // tests for implementation endpoint
 
 t.create('implementation (valid, package version in request)')
   .get('/implementation/beehive/1.0.json')
-  .expectJSON({ name: 'implementation', value: 'cpython, jython, pypy' })
+  .expectJSON({ name: 'implementation', value: 'cpython | jython | pypy' })
 
 t.create('implementation (valid, no package version specified)')
   .get('/implementation/numpy.json')
@@ -212,7 +272,7 @@ t.create('implementation (not specified)')
 
 t.create('implementation (invalid)')
   .get('/implementation/not-a-package.json')
-  .expectJSON({ name: 'pypi', value: 'invalid' })
+  .expectJSON({ name: 'implementation', value: 'package or version not found' })
 
 // tests for status endpoint
 
@@ -230,4 +290,4 @@ t.create('status (valid, beta)')
 
 t.create('status (invalid)')
   .get('/status/not-a-package.json')
-  .expectJSON({ name: 'pypi', value: 'invalid' })
+  .expectJSON({ name: 'status', value: 'package or version not found' })

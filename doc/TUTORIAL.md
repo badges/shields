@@ -218,13 +218,13 @@ Downloads, ...) and add your badge:
   keywords: [
     'some-search-keyword'
   ],
-  previewUri: '/test/subject/STATUS.svg',
+  previewUrl: '/test/subject/STATUS.svg',
 },
 ```
 
 Save, run `npm run build`, and you can see it [locally][home].
 
-## (4.4) Write Tests
+### (4.4) Write Tests
 
 When creating a badge for a new service or changing a badge's behavior, tests
 should be included. They serve several purposes:
@@ -275,4 +275,4 @@ These files can also be of help for creating your own badge.
 [docker-example]: https://github.com/badges/shields/blob/b126b4ebdc64015a3d6e845d9c051f69ad81c4ea/server.js#L6275
 [travis-example]: https://github.com/badges/shields/blob/b126b4ebdc64015a3d6e845d9c051f69ad81c4ea/server.js#L403
 [regex]: https://www.w3schools.com/jsref/jsref_obj_regexp.asp
-[tests-tutorial]: ../service-tests/#readme
+[tests-tutorial]: service-tests.md#readme

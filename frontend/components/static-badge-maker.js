@@ -4,7 +4,7 @@ import { staticBadgeUrl } from '../lib/badge-url'
 
 export default class StaticBadgeMaker extends React.Component {
   static propTypes = {
-    baseUri: PropTypes.string,
+    baseUrl: PropTypes.string,
   }
 
   state = {
@@ -16,16 +16,16 @@ export default class StaticBadgeMaker extends React.Component {
   handleSubmit(e) {
     e.preventDefault()
 
-    const { baseUri } = this.props
+    const { baseUrl } = this.props
     const { subject, status, color } = this.state
-    const badgeUri = staticBadgeUrl(
-      baseUri || window.location.href,
+    const badgeUrl = staticBadgeUrl(
+      baseUrl || window.location.href,
       subject,
       status,
       color
     )
 
-    document.location = badgeUri
+    document.location = badgeUrl
   }
 
   render() {
