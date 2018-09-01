@@ -1,19 +1,20 @@
-parserOptions:
-  ecmaVersion: 8
+extends:
+  - standard
+  - prettier
 
 env:
   node: true
-  # We use Promise, Map, and occasional ES6 syntax.
-  es6: true
   mocha: true
+
+parserOptions:
+  # Override eslint-config-standard, which incorrectly sets this to "module",
+  # though that setting is only for ES6 modules, not CommonJS modules.
+  sourceType: "script"
 
 plugins:
   - mocha
-
-extends:
-  # Enable a set of unopinionated, style-agnostic rules which cover many
-  # likely errors.
-  - "eslint:recommended"
+  - no-extension-in-require
+  - "chai-friendly"
 
 rules:
   # Disable some rules from eslint:recommended.
@@ -23,14 +24,23 @@ rules:
   # what the functions are doing.
   no-unused-vars: ["error", {"args": "none"}]
 
-  # We use semicolons.
-  semi: ["error", "always"]
+  # These should be disabled by eslint-config-prettier, but are not.
+  spaced-comment: "off"
+  standard/object-curly-even-spacing: "off"
+  one-var: "off"
 
-  # We keep whitespace cleaned up.
-  no-trailing-spaces: "error"
-  eol-last: "error"
-  object-curly-spacing: ["error", "always"]
-  comma-dangle: ["error", "always-multiline"]
+  # Shields additions.
+  no-var: "error"
+  prefer-const: "error"
+  strict: "error"
+  arrow-body-style: ["error", "as-needed"]
+  no-extension-in-require/main: "error"
 
+  # Mocha-related.
   mocha/no-exclusive-tests: "error"
   mocha/no-mocha-arrows: "error"
+  mocha/prefer-arrow-callback: "error"
+
+  # Chai friendly.
+  no-unused-expressions: "off"
+  chai-friendly/no-unused-expressions: "error"

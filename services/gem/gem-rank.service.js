@@ -5,7 +5,7 @@ const Joi = require('joi')
 const BaseJsonService = require('../base-json')
 const { floorCount: floorCountColor } = require('../../lib/color-formatters')
 const { ordinalNumber } = require('../../lib/text-formatters')
-const { nonNegativeInteger } = require('../validators.js')
+const { nonNegativeInteger } = require('../validators')
 
 const totalSchema = Joi.array()
   .items(

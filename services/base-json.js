@@ -13,7 +13,11 @@ class BaseJsonService extends BaseService {
       ...{ headers: { Accept: 'application/json' } },
       ...options,
     }
-    const jsonData = await this._request({ url, mergedOptions, errorMessages })
+    const jsonData = await this._request({
+      url,
+      options: mergedOptions,
+      errorMessages,
+    })
     const json = await asJson(jsonData)
     logTrace(emojic.dart, 'Response JSON (before validation)', json, {
       deep: true,

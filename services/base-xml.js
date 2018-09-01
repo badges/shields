@@ -13,7 +13,11 @@ class BaseXmlService extends BaseService {
       ...{ headers: { Accept: 'application/xml, text/xml' } },
       ...options,
     }
-    const xmlData = await this._request({ url, mergedOptions, errorMessages })
+    const xmlData = await this._request({
+      url,
+      options: mergedOptions,
+      errorMessages,
+    })
     const xml = await asXml(xmlData)
     logTrace(emojic.dart, 'Response XML (before validation)', xml, {
       deep: true,
