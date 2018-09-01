@@ -6,17 +6,9 @@ const { renderVersionBadge } = require('../../lib/version')
 
 const versionResponseSchema = Joi.object({
   marketplace: Joi.object({
-    node: Joi.array()
-      .items(
-        Joi.object({
-          version: Joi.array()
-            .items(Joi.string().required())
-            .min(1)
-            .required(),
-        })
-      )
-      .min(1)
-      .required(),
+    node: Joi.object({
+      version: Joi.string().required(),
+    }),
   }),
 }).required()
 
@@ -53,7 +45,7 @@ module.exports = class EclipseMarketplaceVersion extends EclipseMarketplaceBase 
       name,
       schema: versionResponseSchema,
     })
-    const version = marketplace.node[0].version[0]
+    const version = marketplace.node.version
     return this.constructor.render({ version })
   }
 }

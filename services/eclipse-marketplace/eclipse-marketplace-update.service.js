@@ -8,17 +8,9 @@ const { nonNegativeInteger } = require('../validators.js')
 
 const updateResponseSchema = Joi.object({
   marketplace: Joi.object({
-    node: Joi.array()
-      .items(
-        Joi.object({
-          changed: Joi.array()
-            .items(nonNegativeInteger)
-            .min(1)
-            .required(),
-        })
-      )
-      .min(1)
-      .required(),
+    node: Joi.object({
+      changed: nonNegativeInteger,
+    }),
   }),
 }).required()
 
@@ -58,7 +50,7 @@ module.exports = class EclipseMarketplaceUpdate extends EclipseMarketplaceBase {
       name,
       schema: updateResponseSchema,
     })
-    const date = 1000 * parseInt(marketplace.node[0].changed[0])
+    const date = 1000 * parseInt(marketplace.node.changed)
     return this.constructor.render({ date })
   }
 }

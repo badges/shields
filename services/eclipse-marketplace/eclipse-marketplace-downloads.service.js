@@ -10,33 +10,17 @@ const { nonNegativeInteger } = require('../validators.js')
 
 const monthlyResponseSchema = Joi.object({
   marketplace: Joi.object({
-    node: Joi.array()
-      .items(
-        Joi.object({
-          installsrecent: Joi.array()
-            .items(nonNegativeInteger)
-            .min(1)
-            .required(),
-        })
-      )
-      .min(1)
-      .required(),
+    node: Joi.object({
+      installsrecent: nonNegativeInteger,
+    }),
   }),
 }).required()
 
 const totalResponseSchema = Joi.object({
   marketplace: Joi.object({
-    node: Joi.array()
-      .items(
-        Joi.object({
-          installstotal: Joi.array()
-            .items(nonNegativeInteger)
-            .min(1)
-            .required(),
-        })
-      )
-      .min(1)
-      .required(),
+    node: Joi.object({
+      installstotal: nonNegativeInteger,
+    }),
   }),
 }).required()
 
@@ -83,8 +67,8 @@ function DownloadsForInterval(interval) {
     async handle({ name }) {
       const { marketplace } = await this.fetch({ name, schema })
       const downloads = base.endsWith('dt')
-        ? marketplace.node[0].installstotal[0]
-        : marketplace.node[0].installsrecent[0]
+        ? marketplace.node.installstotal
+        : marketplace.node.installsrecent
       return this.constructor.render({ downloads })
     }
   }

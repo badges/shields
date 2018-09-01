@@ -6,17 +6,9 @@ const { nonNegativeInteger } = require('../validators.js')
 
 const favoritesResponseSchema = Joi.object({
   marketplace: Joi.object({
-    node: Joi.array()
-      .items(
-        Joi.object({
-          favorited: Joi.array()
-            .items(nonNegativeInteger)
-            .min(1)
-            .required(),
-        })
-      )
-      .min(1)
-      .required(),
+    node: Joi.object({
+      favorited: nonNegativeInteger,
+    }),
   }),
 }).required()
 
@@ -56,7 +48,7 @@ module.exports = class EclipseMarketplaceFavorites extends EclipseMarketplaceBas
       name,
       schema: favoritesResponseSchema,
     })
-    const favorited = marketplace.node[0].favorited[0]
+    const favorited = marketplace.node.favorited
     return this.constructor.render({ favorited })
   }
 }
