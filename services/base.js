@@ -345,7 +345,7 @@ class BaseService {
     logTrace(emojic.bowAndArrow, 'Request', url, '\n', options)
     const { res, buffer } = await this._sendAndCacheRequest(url, options)
     logTrace(emojic.dart, 'Response status code', res.statusCode)
-    return await checkErrorResponse.asPromise(errorMessages)({ buffer, res })
+    return checkErrorResponse.asPromise(errorMessages)({ buffer, res })
   }
 }
 
