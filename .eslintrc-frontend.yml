@@ -9,7 +9,7 @@ parserOptions:
 extends:
   - "standard-jsx"
   - "standard-react"
-  - "./.eslintrc-preferred.yml"
+  - "./.eslintrc.yml"
 
 settings:
   react:
