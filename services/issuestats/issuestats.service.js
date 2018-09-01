@@ -5,7 +5,7 @@ const deprecatedService = require('../deprecated-service')
 module.exports = deprecatedService({
   url: {
     base: 'issuestats',
-    format: '(?:[^/]+)(?:\/long)?\/(?:[^/]+)\/(?:.+)',
+    format: '(?:[^/]+)(?:/long)?/(?:[^/]+)/(?:.+)',
   },
   label: 'issue stats',
 })

@@ -11,11 +11,10 @@ t.create('no longer available (previously issue analysis)')
     name: 'issue stats',
     value: 'no longer available',
   })
-  
-  t.create('no longer available (previously pull request analysis, long form)')
+
+t.create('no longer available (previously pull request analysis, long form)')
   .get('/p/long/github/expressjs/express.json')
   .expectJSON({
     name: 'issue stats',
     value: 'no longer available',
   })
-  
