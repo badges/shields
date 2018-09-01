@@ -1,3 +1,5 @@
+'use strict'
+
 // Have you identified a contributing guideline that should be included here?
 // Please open a pull request!
 //
@@ -43,7 +45,7 @@ message([
   `@${danger.github.pr.user.login}!`,
 ].join(''));
 
-if (targetBranch != 'master') {
+if (targetBranch !== 'master') {
   const message = `This PR targets \`${targetBranch}\``;
   const idea = 'It is likely that the target branch should be `master`';
   warn(`${message} - <i>${idea}</i>`);
@@ -99,10 +101,10 @@ if (capitals.created || underscores.created) {
   ].join(''));
 }
 
-const all_files = danger.git.created_files.concat(danger.git.modified_files);
+const allFiles = danger.git.created_files.concat(danger.git.modified_files);
 
-all_files.forEach(function(file) {
-  danger.git.diffForFile(file).then(function(diff) {
+allFiles.forEach(file => {
+  danger.git.diffForFile(file).then(diff => {
     if (/\+.*assert[(.]/.test(diff.diff)) {
       warn([
         `Found 'assert' statement added in \`${file}\`. <br>`,
@@ -117,23 +119,23 @@ function onlyUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
 
-const affectedServices = all_files
-  .map(function(file) {
+const affectedServices = allFiles
+  .map(file => {
     const match = file.match(/^services\/(.+)\/.+\.service.js$/);
     return match ? match[1] : undefined;
   })
   .filter(Boolean)
   .filter(onlyUnique);
 
-const testedServices = all_files
-  .map(function(file) {
+const testedServices = allFiles
+  .map(file => {
     const match = file.match(/^services\/(.+)\/.+\.tester.js$/);
     return match ? match[1] : undefined;
   })
   .filter(Boolean)
   .filter(onlyUnique);
 
-affectedServices.forEach(function(service) {
+affectedServices.forEach(service => {
   if (testedServices.indexOf(service) === -1) {
     warn(
       [
