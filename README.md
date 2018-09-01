@@ -13,6 +13,9 @@
     <a href="https://github.com/badges/shields/compare/gh-pages...master">
         <img src="https://img.shields.io/github/commits-since/badges/shields/gh-pages.svg?label=commits%20to%20be%20deployed"
             alt="commits to be deployed"></a>
+    <a href="https://lgtm.com/projects/g/badges/shields/alerts/">
+        <img src="https://img.shields.io/lgtm/alerts/g/badges/shields.svg?logo=lgtm&logoWidth=18"
+            alt="Total alerts"/></a>
     <a href="https://discord.gg/HjJCwm5">
         <img src="https://img.shields.io/discord/308323056592486420.svg?logo=discord"
             alt="chat on Discord"></a>
