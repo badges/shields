@@ -6,7 +6,7 @@ const { metric } = require('../../lib/text-formatters')
 const {
   downloadCount: downloadCountColor,
 } = require('../../lib/color-formatters')
-const { nonNegativeInteger } = require('../validators.js')
+const { nonNegativeInteger } = require('../validators')
 
 const monthlyResponseSchema = Joi.object({
   marketplace: Joi.object({
