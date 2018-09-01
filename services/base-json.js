@@ -46,7 +46,7 @@ class BaseJsonService extends BaseHTTPService {
       ...{ headers: { Accept: 'application/json' } },
       ...options,
     }
-    return this._requestHTTP({ url, mergedOptions, errorMessages })
+    return this._requestHTTP({ url, options: mergedOptions, errorMessages })
       .then(asJson)
       .then(json => {
         logTrace(emojic.dart, 'Response JSON (before validation)', json, {
