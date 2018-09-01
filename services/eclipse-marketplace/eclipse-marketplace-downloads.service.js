@@ -66,9 +66,10 @@ function DownloadsForInterval(interval) {
 
     async handle({ name }) {
       const { marketplace } = await this.fetch({ name, schema })
-      const downloads = base.endsWith('dt')
-        ? marketplace.node.installstotal
-        : marketplace.node.installsrecent
+      const downloads =
+        interval === 'total'
+          ? marketplace.node.installstotal
+          : marketplace.node.installsrecent
       return this.constructor.render({ downloads })
     }
   }
