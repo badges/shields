@@ -472,7 +472,7 @@ describe('BaseService', function() {
         expect(e.message).to.equal(
           'Invalid Response: child "requiredString" fails because ["requiredString" must be a string]'
         )
-        expect(e.prettyMessage).to.equal('invalid data response')
+        expect(e.prettyMessage).to.equal('invalid response data')
       }
       expect(trace.logTrace).to.be.calledWithMatch(
         'validate',

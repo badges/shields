@@ -113,7 +113,7 @@ describe('BaseJsonService', function() {
       const serviceData = await serviceInstance.invokeHandler({}, {})
       expect(serviceData).to.deep.equal({
         color: 'lightgray',
-        message: 'invalid data response',
+        message: 'invalid response data',
       })
     })
 

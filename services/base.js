@@ -325,7 +325,7 @@ class BaseService {
         error.message
       )
       throw new InvalidResponse({
-        prettyMessage: 'invalid data response',
+        prettyMessage: 'invalid response data',
         underlyingError: error,
       })
     } else {
