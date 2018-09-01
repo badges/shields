@@ -7,7 +7,7 @@ const {
   sortDjangoVersions,
   getLicenses,
   getPackageFormats,
-} = require('./pypi-helpers.js')
+} = require('./pypi-helpers')
 
 const classifiersFixture = {
   info: {

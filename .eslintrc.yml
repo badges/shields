@@ -13,6 +13,7 @@ parserOptions:
 
 plugins:
   - mocha
+  - no-extension-in-require
   - "chai-friendly"
 
 rules:
@@ -33,6 +34,7 @@ rules:
   prefer-const: "error"
   strict: "error"
   arrow-body-style: ["error", "as-needed"]
+  no-extension-in-require/main: "error"
 
   # Mocha-related.
   mocha/no-exclusive-tests: "error"
