@@ -86,7 +86,7 @@ describe('BaseJsonService', function() {
   })
 
   describe('Making badges', function() {
-    it('handles json responses', async function() {
+    it('handles valid json responses', async function() {
       const sendAndCacheRequest = async () => ({
         buffer: '{"requiredString": "some-string"}',
         res: { statusCode: 200 },
@@ -98,6 +98,22 @@ describe('BaseJsonService', function() {
       const serviceData = await serviceInstance.invokeHandler({}, {})
       expect(serviceData).to.deep.equal({
         message: 'some-string',
+      })
+    })
+
+    it('handles json responses which do not match the schema', async function() {
+      const sendAndCacheRequest = async () => ({
+        buffer: '{"unexpectedKey": "some-string"}',
+        res: { statusCode: 200 },
+      })
+      const serviceInstance = new DummyJsonService(
+        { sendAndCacheRequest },
+        { handleInternalErrors: false }
+      )
+      const serviceData = await serviceInstance.invokeHandler({}, {})
+      expect(serviceData).to.deep.equal({
+        color: 'lightgray',
+        message: 'invalid data response',
       })
     })
 
