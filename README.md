@@ -16,9 +16,6 @@
     <a href="https://lgtm.com/projects/g/badges/shields/alerts/">
         <img src="https://img.shields.io/lgtm/alerts/g/badges/shields.svg?logo=lgtm&logoWidth=18"
             alt="Total alerts"/></a>
-    <a href="https://lgtm.com/projects/g/badges/shields/context:javascript">
-        <img src="https://img.shields.io/lgtm/grade/javascript/g/badges/shields.svg?logo=lgtm&logoWidth=18"
-            alt="Language grade: JavaScript"/></a>
     <a href="https://discord.gg/HjJCwm5">
         <img src="https://img.shields.io/discord/308323056592486420.svg?logo=discord"
             alt="chat on Discord"></a>
