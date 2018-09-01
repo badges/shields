@@ -9,7 +9,7 @@ export default class SuggestionAndSearch extends React.Component {
   static propTypes = {
     queryChanged: PropTypes.func.isRequired,
     onBadgeClick: PropTypes.func.isRequired,
-    baseUri: PropTypes.string.isRequired,
+    baseUrl: PropTypes.string.isRequired,
     longCache: PropTypes.bool.isRequired,
   }
 
@@ -28,10 +28,10 @@ export default class SuggestionAndSearch extends React.Component {
   }
 
   queryChanged(query) {
-    const isUri = query.startsWith('https://') || query.startsWith('http://')
+    const isUrl = query.startsWith('https://') || query.startsWith('http://')
     this.setState({
-      isUri,
-      projectUri: isUri ? query : null,
+      isUrl,
+      projectUrl: isUrl ? query : null,
     })
 
     this.queryChangedDebounced(query)
@@ -39,10 +39,10 @@ export default class SuggestionAndSearch extends React.Component {
 
   getSuggestions() {
     this.setState({ inProgress: true }, () => {
-      const { baseUri } = this.props
-      const { projectUri } = this.state
+      const { baseUrl } = this.props
+      const { projectUrl } = this.state
 
-      const url = resolveUrl('/$suggest/v1', baseUri, { url: projectUri })
+      const url = resolveUrl('/$suggest/v1', baseUrl, { url: projectUrl })
 
       const fetch = window.fetch || fetchPonyfill
       fetch(url)
@@ -57,7 +57,7 @@ export default class SuggestionAndSearch extends React.Component {
   }
 
   renderSuggestions() {
-    const { baseUri, longCache } = this.props
+    const { baseUrl, longCache } = this.props
     const { suggestions } = this.state
 
     if (suggestions.length === 0) {
@@ -72,15 +72,15 @@ export default class SuggestionAndSearch extends React.Component {
             <Badge
               key={i}
               title={name}
-              previewUri={badge}
+              previewUrl={badge}
               onClick={() =>
                 this.props.onBadgeClick({
                   title: name,
-                  previewUri: badge,
+                  previewUrl: badge,
                   link,
                 })
               }
-              baseUri={baseUri}
+              baseUrl={baseUrl}
               longCache={longCache}
             />
           ))}
@@ -103,7 +103,7 @@ export default class SuggestionAndSearch extends React.Component {
           <button
             onClick={event => this.getSuggestions(event.target.value)}
             disabled={this.state.inProgress}
-            hidden={!this.state.isUri}
+            hidden={!this.state.isUrl}
           >
             Suggest badges
           </button>

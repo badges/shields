@@ -25,9 +25,7 @@ class BaseService {
   }
 
   static render(props) {
-    throw new Error(
-      `render() function not implemented for ${this.constructor.name}`
-    )
+    throw new Error(`render() function not implemented for ${this.name}`)
   }
 
   /**
@@ -90,9 +88,19 @@ class BaseService {
   static _makeStaticExampleUrl(serviceData) {
     const badgeData = this._makeBadgeData({}, serviceData)
     const color = badgeData.colorscheme || badgeData.colorB
+    return this._makeStaticExampleUrlFromTextAndColor(
+      badgeData.text[0],
+      badgeData.text[1],
+      color
+    )
+  }
+
+  static _makeStaticExampleUrlFromTextAndColor(text1, text2, color) {
     return `/badge/${encodeURIComponent(
-      badgeData.text[0]
-    )}-${encodeURIComponent(badgeData.text[1])}-${color}`
+      text1.replace('-', '--')
+    )}-${encodeURIComponent(text2).replace('-', '--')}-${encodeURIComponent(
+      color
+    )}`
   }
 
   /**
@@ -123,10 +131,10 @@ class BaseService {
 
         return {
           title: title ? `${title}` : this.name,
-          exampleUri: exampleUrl
+          exampleUrl: exampleUrl
             ? `${this._makeFullUrl(exampleUrl, query)}.svg${suffix}`
             : undefined,
-          previewUri: staticExample
+          previewUrl: staticExample
             ? `${this._makeStaticExampleUrl(staticExample)}.svg`
             : `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
           urlPattern: urlPattern
@@ -148,21 +156,21 @@ class BaseService {
   }
 
   static _namedParamsForMatch(match) {
+    const names = this.url.capture || []
+
     // Assume the last match is the format, and drop match[0], which is the
     // entire match.
     const captures = match.slice(1, -1)
 
-    if (this.url.capture.length !== captures.length) {
+    if (names.length !== captures.length) {
       throw new Error(
-        `Service ${
-          this.constructor.name
-        } declares incorrect number of capture groups ` +
-          `(expected ${this.url.capture.length}, got ${captures.length})`
+        `Service ${this.name} declares incorrect number of capture groups ` +
+          `(expected ${names.length}, got ${captures.length})`
       )
     }
 
     const result = {}
-    this.url.capture.forEach((name, index) => {
+    names.forEach((name, index) => {
       result[name] = captures[index]
     })
     return result
