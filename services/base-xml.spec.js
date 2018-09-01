@@ -4,7 +4,7 @@ const Joi = require('joi')
 const chai = require('chai')
 const { expect } = chai
 
-const BaseJsonService = require('./base-json')
+const BaseXmlService = require('./base-xml')
 
 chai.use(require('chai-as-promised'))
 
@@ -12,7 +12,7 @@ const dummySchema = Joi.object({
   requiredString: Joi.string().required(),
 }).required()
 
-class DummyJsonService extends BaseJsonService {
+class DummyXmlService extends BaseXmlService {
   static get category() {
     return 'cat'
   }
@@ -24,18 +24,18 @@ class DummyJsonService extends BaseJsonService {
   }
 
   async handle() {
-    const { requiredString } = await this._requestJson({ schema: dummySchema })
+    const { requiredString } = await this._requestXml({ schema: dummySchema })
     return { message: requiredString }
   }
 }
 
-describe('BaseJsonService', function() {
-  it('handles json responses', async function() {
+describe('BaseXmlService', function() {
+  it('handles xml responses', async function() {
     const sendAndCacheRequest = async () => ({
-      buffer: '{"requiredString": "some-string"}',
+      buffer: '<requiredString>some-string</requiredString>',
       res: { statusCode: 200 },
     })
-    const serviceInstance = new DummyJsonService(
+    const serviceInstance = new DummyXmlService(
       { sendAndCacheRequest },
       { handleInternalErrors: false }
     )
@@ -45,19 +45,19 @@ describe('BaseJsonService', function() {
     })
   })
 
-  it('handles unparseable json responses', async function() {
+  it('handles unparseable xml responses', async function() {
     const sendAndCacheRequest = async () => ({
-      buffer: 'not json',
+      buffer: 'not xml',
       res: { statusCode: 200 },
     })
-    const serviceInstance = new DummyJsonService(
+    const serviceInstance = new DummyXmlService(
       { sendAndCacheRequest },
       { handleInternalErrors: false }
     )
     const serviceData = await serviceInstance.invokeHandler({}, {})
     expect(serviceData).to.deep.equal({
       color: 'lightgray',
-      message: 'unparseable json response',
+      message: 'unparseable xml response',
     })
   })
 })
