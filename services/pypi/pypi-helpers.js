@@ -50,6 +50,27 @@ const parseClassifiers = function(parsedData, pattern) {
   return results
 }
 
+function getLicenses(packageData) {
+  const {
+    info: { license },
+  } = packageData
+  if (license) {
+    return [license]
+  } else {
+    const acronymRegex = /\(([^)]+)\)/
+    let licenses = parseClassifiers(packageData, /^License :: (.+)$/)
+      .map(classifier => classifier.split(' :: ').pop())
+      .map(license => {
+        const match = license.match(acronymRegex)
+        return match ? match[1].toUpperCase() : license
+      })
+    if (licenses.length > 1) {
+      licenses = licenses.filter(l => l !== 'dfsg approved')
+    }
+    return licenses
+  }
+}
+
 function getPackageFormats(packageData) {
   const {
     info: { version },
@@ -70,5 +91,6 @@ module.exports = {
   parseClassifiers,
   parseDjangoVersionString,
   sortDjangoVersions,
+  getLicenses,
   getPackageFormats,
 }

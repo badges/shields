@@ -66,28 +66,28 @@ if (packageJson.modified && !packageLock.modified) {
 
 if (server.modified && !serviceTests.createdOrModified) {
   warn([
-    'This PR modified the server but none of the service tests. ',
+    'This PR modified the server but none of the service tests. <br>',
     "That's okay so long as it's refactoring existing code. ",
     "Otherwise, please consider adding tests to the service: ",
-    "https://github.com/badges/shields/blob/master/doc/service-tests.md#readme",
+    "[How-to](https://github.com/badges/shields/blob/master/doc/service-tests.md#readme)",
   ].join(''));
 }
 
 if (helpers.created && !helperTests.created) {
   warn([
-    'This PR added helper modules in `lib/` but not accompanying tests. ',
+    'This PR added helper modules in `lib/` but not accompanying tests. <br>',
     'Generally helper modules should have their own tests.',
   ].join(''));
 } else if (helpers.createdOrModified && !helperTests.createdOrModified) {
   warn([
-    'This PR modified helper functions in `lib/` but not accompanying tests. ',
+    'This PR modified helper functions in `lib/` but not accompanying tests. <br>',
     "That's okay so long as it's refactoring existing code.",
   ].join(''));
 }
 
 if (logos.created) {
   message([
-    ':art: Thanks for submitting a logo. ',
+    ':art: Thanks for submitting a logo. <br>',
     'Please ensure your contribution follows our ',
     '[guidance](https://github.com/badges/shields/blob/master/CONTRIBUTING.md#logos) ',
     'for logo submissions.',
@@ -107,7 +107,7 @@ allFiles.forEach(file => {
   danger.git.diffForFile(file).then(diff => {
     if (/\+.*assert[(.]/.test(diff.diff)) {
       warn([
-        `Found 'assert' statement added in \`${file}\`. `,
+        `Found 'assert' statement added in \`${file}\`. <br>`,
         'Please ensure tests are written using Chai ',
         '[expect syntax](http://chaijs.com/guide/styles/#expect)',
       ].join(''));
@@ -139,7 +139,7 @@ affectedServices.forEach(service => {
   if (testedServices.indexOf(service) === -1) {
     warn(
       [
-        `This PR modified service code for <kbd>${service}</kbd> but not its test code. `,
+        `This PR modified service code for <kbd>${service}</kbd> but not its test code. <br>`,
         "That's okay so long as it's refactoring existing code.",
       ].join('')
     );
