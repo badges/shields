@@ -27,12 +27,66 @@ class DummyJsonService extends BaseJsonService {
   }
 
   async handle() {
-    const { value } = await this._requestJson({ schema: dummySchema })
+    const { value } = await this._requestJson({
+      schema: dummySchema,
+      url: 'http://example.com/foo.json',
+    })
     return { message: value }
   }
 }
 
 describe('BaseJsonService', function() {
+  describe('Making requests', function() {
+    let sendAndCacheRequest, serviceInstance
+    beforeEach(function() {
+      sendAndCacheRequest = sinon.stub().returns(
+        Promise.resolve({
+          buffer: '{"some": "json"}',
+          res: { statusCode: 200 },
+        })
+      )
+      serviceInstance = new DummyJsonService(
+        { sendAndCacheRequest },
+        { handleInternalErrors: false }
+      )
+    })
+
+    it('invokes _sendAndCacheRequest', async function() {
+      await serviceInstance.invokeHandler({}, {})
+
+      expect(sendAndCacheRequest).to.have.been.calledOnceWith(
+        'http://example.com/foo.json',
+        {
+          headers: { Accept: 'application/json' },
+        }
+      )
+    })
+
+    it('forwards options to _sendAndCacheRequest', async function() {
+      Object.assign(serviceInstance, {
+        async handle() {
+          const { value } = await this._requestJson({
+            schema: dummySchema,
+            url: 'http://example.com/foo.json',
+            options: { method: 'POST', qs: { queryParam: 123 } },
+          })
+          return { message: value }
+        },
+      })
+
+      await serviceInstance.invokeHandler({}, {})
+
+      expect(sendAndCacheRequest).to.have.been.calledOnceWith(
+        'http://example.com/foo.json',
+        {
+          headers: { Accept: 'application/json' },
+          method: 'POST',
+          qs: { queryParam: 123 },
+        }
+      )
+    })
+  })
+
   it('handles unparseable json responses', async function() {
     const sendAndCacheRequest = async () => ({
       buffer: invalidJSON,
