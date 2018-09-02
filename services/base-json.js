@@ -3,12 +3,12 @@
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const Joi = require('joi')
-const { checkErrorResponse, asJson } = require('../lib/error-helper')
-const BaseService = require('./base')
+const { asJson } = require('../lib/error-helper')
+const BaseHTTPService = require('./base-http')
 const { InvalidResponse } = require('./errors')
 const trace = require('./trace')
 
-class BaseJsonService extends BaseService {
+class BaseJsonService extends BaseHTTPService {
   static _validate(json, schema) {
     const { error, value } = Joi.validate(json, schema, {
       allowUnknown: true,
@@ -46,13 +46,7 @@ class BaseJsonService extends BaseService {
       ...{ headers: { Accept: 'application/json' } },
       ...options,
     }
-    logTrace(emojic.bowAndArrow, 'Request', url, '\n', mergedOptions)
-    return this._sendAndCacheRequest(url, mergedOptions)
-      .then(({ res, buffer }) => {
-        logTrace(emojic.dart, 'Response status code', res.statusCode)
-        return { res, buffer }
-      })
-      .then(checkErrorResponse.asPromise(errorMessages))
+    return this._requestHTTP({ url, options: mergedOptions, errorMessages })
       .then(asJson)
       .then(json => {
         logTrace(emojic.dart, 'Response JSON (before validation)', json, {

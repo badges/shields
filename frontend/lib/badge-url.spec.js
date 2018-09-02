@@ -1,6 +1,5 @@
 import { test, given } from 'sazerac'
-import {
-  default as resolveBadgeUrl,
+import resolveBadgeUrl, {
   encodeField,
   staticBadgeUrl,
   dynamicBadgeUrl,

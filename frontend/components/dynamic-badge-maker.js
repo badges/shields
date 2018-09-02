@@ -4,7 +4,7 @@ import { dynamicBadgeUrl } from '../lib/badge-url'
 
 export default class DynamicBadgeMaker extends React.Component {
   static propTypes = {
-    baseUri: PropTypes.string,
+    baseUrl: PropTypes.string,
   }
 
   state = {
@@ -17,9 +17,9 @@ export default class DynamicBadgeMaker extends React.Component {
     suffix: '',
   }
 
-  makeBadgeUri() {
+  makeBadgeUrl() {
     const { datatype, label, url, query, color, prefix, suffix } = this.state
-    const { baseUri: baseUrl = document.location.href } = this.props
+    const { baseUrl: baseUrl = document.location.href } = this.props
     return dynamicBadgeUrl(baseUrl, datatype, label, url, query, {
       color,
       prefix,
@@ -29,7 +29,7 @@ export default class DynamicBadgeMaker extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault()
-    document.location = this.makeBadgeUri()
+    document.location = this.makeBadgeUrl()
   }
 
   get isValid() {

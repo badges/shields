@@ -1,9 +1,8 @@
 'use strict';
 
-const dom = require('xmldom').DOMParser;
+const { DOMParser } = require('xmldom');
 const jp = require('jsonpath');
 const path = require('path');
-const queryString = require('query-string');
 const xpath = require('xpath');
 const yaml = require('js-yaml');
 const Raven = require('raven');
@@ -96,9 +95,9 @@ githubConstellation.initialize(camp);
 
 suggest.setRoutes(config.cors.allowedOrigin, githubApiProvider, camp);
 
-camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
-    var format = match[1];
-    var badgeData = getBadgeData("404", query);
+camp.notfound(/\.(svg|png|gif|jpg|json)/, (query, match, end, request) => {
+    const format = match[1];
+    const badgeData = getBadgeData("404", query);
     badgeData.text[1] = 'badge not found';
     badgeData.colorscheme = 'red';
     // Add format to badge data.
@@ -107,7 +106,7 @@ camp.notfound(/\.(svg|png|gif|jpg|json)/, function(query, match, end, request) {
     makeSend(format, request.res, end)(svg);
 });
 
-camp.notfound(/.*/, function(query, match, end, request) {
+camp.notfound(/.*/, (query, match, end, request) => {
   end(null, { template: '404.html' });
 });
 
@@ -118,98 +117,19 @@ loadServiceClasses().forEach(
     { camp, handleRequest: cache, githubApiProvider },
     { handleInternalErrors: config.handleInternalErrors }));
 
-// CircleCI build integration.
-// https://circleci.com/api/v1/project/BrightFlair/PHP.Gt?circle-token=0a5143728784b263d9f0238b8d595522689b3af2&limit=1&filter=completed
-camp.route(/^\/circleci\/(?:token\/(\w+))?[+/]?project\/(?:(github|bitbucket)\/)?([^/]+\/[^/]+)(?:\/(.*))?\.(svg|png|gif|jpg|json)$/,
-cache(function(data, match, sendBadge, request) {
-  const token = match[1];
-  const type = match[2] || 'github'; // github OR bitbucket
-  const userRepo = match[3];  // eg, `RedSparr0w/node-csgo-parser`.
-  const branch = match[4];
-  const format = match[5];
-
-  // Base API URL
-  let apiUrl = 'https://circleci.com/api/v1.1/project/' + type + '/' + userRepo;
-
-  // Query Params
-  var queryParams = {};
-  queryParams['limit'] = 1;
-  queryParams['filter'] = 'completed';
-
-  // Custom Banch if present
-  if (branch != null) {
-    apiUrl += "/tree/" + branch;
-  }
-
-  // Append Token to Query Params if present
-  if (token) {
-    queryParams['circle-token'] = token;
-  }
-
-  // Apprend query params to API URL
-  apiUrl += '?' + queryString.stringify(queryParams);
-
-  const badgeData = getBadgeData('build', data);
-  request(apiUrl, { json:true }, function(err, res, data) {
-    if (checkErrorResponse(badgeData, err, res, { 404: 'project not found' })) {
-      sendBadge(format, badgeData);
-      return;
-    }
-    try {
-      if (data.message !== undefined){
-        badgeData.text[1] = data.message;
-        sendBadge(format, badgeData);
-        return;
-      }
-
-      let passCount = 0;
-      let status;
-      for (let i=0; i<data.length; i++) {
-        status = data[i].status;
-        if (['success', 'fixed'].includes(status)) {
-          passCount++;
-        } else if (status === 'failed') {
-          badgeData.colorscheme = 'red';
-          badgeData.text[1] = 'failed';
-          sendBadge(format, badgeData);
-          return;
-        } else if (['no_tests', 'scheduled', 'not_run'].includes(status)) {
-          badgeData.colorscheme = 'yellow';
-          badgeData.text[1] = status.replace('_', ' ');
-          sendBadge(format, badgeData);
-          return;
-        } else {
-          badgeData.text[1] = status.replace('_', ' ');
-          sendBadge(format, badgeData);
-          return;
-        }
-      }
-
-      if (passCount === data.length) {
-        badgeData.colorscheme = 'brightgreen';
-        badgeData.text[1] = 'passing';
-      }
-      sendBadge(format, badgeData);
-    } catch(e) {
-      badgeData.text[1] = 'invalid';
-      sendBadge(format, badgeData);
-    }
-  });
-}));
-
 // User defined sources - JSON response
 camp.route(/^\/badge\/dynamic\/(json|xml|yaml)\.(svg|png|gif|jpg|json)$/,
 cache({
   queryParams: ['uri', 'url', 'query', 'prefix', 'suffix'],
   handler: function(query, match, sendBadge, request) {
-    var type = match[1];
-    var format = match[2];
-    var prefix = query.prefix || '';
-    var suffix = query.suffix || '';
-    var pathExpression = query.query;
-    var requestOptions = {};
+    const type = match[1];
+    const format = match[2];
+    const prefix = query.prefix || '';
+    const suffix = query.suffix || '';
+    const pathExpression = query.query;
+    let requestOptions = {};
 
-    var badgeData = getBadgeData('custom badge', query);
+    const badgeData = getBadgeData('custom badge', query);
 
     if (!query.uri && !query.url || !query.query){
       setBadgeColor(badgeData, 'red');
@@ -218,8 +138,9 @@ cache({
       return;
     }
 
+    let url
     try {
-      var url = encodeURI(decodeURIComponent(query.url || query.uri));
+      url = encodeURI(decodeURIComponent(query.url || query.uri));
     } catch(e){
       setBadgeColor(badgeData, 'red');
       badgeData.text[1] = 'malformed url';
@@ -263,18 +184,18 @@ cache({
         let innerText = [];
         switch (type){
           case 'json':
-            data = (typeof data == 'object' ? data : JSON.parse(data));
+            data = (typeof data === 'object' ? data : JSON.parse(data));
             data = jp.query(data, pathExpression);
             if (!data.length) {
-              throw 'no result';
+              throw Error('no result');
             }
             innerText = data;
             break;
           case 'xml':
-            data = new dom().parseFromString(data);
+            data = new DOMParser().parseFromString(data);
             data = xpath.select(pathExpression, data);
             if (!data.length) {
-              throw 'no result';
+              throw Error('no result');
             }
             data.forEach((i,v)=>{
               innerText.push(pathExpression.indexOf('@') + 1 ? i.value : i.firstChild.data);
@@ -284,7 +205,7 @@ cache({
             data = yaml.safeLoad(data);
             data = jp.query(data, pathExpression);
             if (!data.length) {
-              throw 'no result';
+              throw Error('no result');
             }
             innerText = data;
             break;
@@ -292,7 +213,7 @@ cache({
         badgeData.text[1] = (prefix || '') + innerText.join(', ') + (suffix || '');
       } catch (e) {
         setBadgeColor(badgeData, 'lightgrey');
-        badgeData.text[1] = e;
+        badgeData.text[1] = e.message;
       } finally {
         sendBadge(format, badgeData);
       }
@@ -302,16 +223,16 @@ cache({
 
 // Any badge.
 camp.route(/^\/(:|badge\/)(([^-]|--)*?)-?(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
-function(data, match, end, ask) {
-  var subject = escapeFormat(match[2]);
-  var status = escapeFormat(match[4]);
-  var color = escapeFormat(match[6]);
-  var format = match[8];
+(data, match, end, ask) => {
+  const subject = escapeFormat(match[2]);
+  const status = escapeFormat(match[4]);
+  const color = escapeFormat(match[6]);
+  const format = match[8];
 
   analytics.noteRequest(data, match);
 
   // Cache management - the badge is constant.
-  var cacheDuration = (3600*24*1)|0;    // 1 day.
+  const cacheDuration = (3600*24*1)|0;    // 1 day.
   ask.res.setHeader('Cache-Control', 'max-age=' + cacheDuration);
   if (+(new Date(ask.req.headers['if-modified-since'])) >= +serverStartTime) {
     ask.res.statusCode = 304;
@@ -322,7 +243,7 @@ function(data, match, end, ask) {
 
   // Badge creation.
   try {
-    var badgeData = getBadgeData(subject, data);
+    const badgeData = getBadgeData(subject, data);
     badgeData.text[0] = getLabel(subject, data);
     badgeData.text[1] = status;
     badgeData.colorB = makeColorB(color, data);
@@ -344,13 +265,13 @@ function(data, match, end, ask) {
 
 // Production cache debugging.
 let bitFlip = false;
-camp.route(/^\/flip\.svg$/, function(data, match, end, ask) {
-  var cacheSecs = 60;
+camp.route(/^\/flip\.svg$/, (data, match, end, ask) => {
+  const cacheSecs = 60;
   ask.res.setHeader('Cache-Control', 'max-age=' + cacheSecs);
-  var reqTime = new Date();
-  var date = (new Date(+reqTime + cacheSecs * 1000)).toGMTString();
+  const reqTime = new Date();
+  const date = (new Date(+reqTime + cacheSecs * 1000)).toGMTString();
   ask.res.setHeader('Expires', date);
-  var badgeData = getBadgeData('flip', data);
+  const badgeData = getBadgeData('flip', data);
   bitFlip = !bitFlip;
   badgeData.text[1] = bitFlip? 'on': 'off';
   badgeData.colorscheme = bitFlip? 'brightgreen': 'red';
@@ -360,13 +281,13 @@ camp.route(/^\/flip\.svg$/, function(data, match, end, ask) {
 
 // Any badge, old version.
 camp.route(/^\/([^/]+)\/(.+).png$/,
-function(data, match, end, ask) {
-  var subject = match[1];
-  var status = match[2];
-  var color = data.color;
+(data, match, end, ask) => {
+  const subject = match[1];
+  const status = match[2];
+  const color = data.color;
 
   // Cache management - the badge is constant.
-  var cacheDuration = (3600*24*1)|0;    // 1 day.
+  const cacheDuration = (3600*24*1)|0;    // 1 day.
   ask.res.setHeader('Cache-Control', 'max-age=' + cacheDuration);
   if (+(new Date(ask.req.headers['if-modified-since'])) >= +serverStartTime) {
     ask.res.statusCode = 304;
@@ -377,7 +298,7 @@ function(data, match, end, ask) {
 
   // Badge creation.
   try {
-    var badgeData = { text: [subject, status] };
+    const badgeData = { text: [subject, status] };
     badgeData.colorscheme = color;
     const svg = makeBadge(badgeData);
     makeSend('png', ask.res, end)(svg);

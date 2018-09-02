@@ -1,12 +1,13 @@
 'use strict'
 
-const { test, given } = require('sazerac')
+const { test, given, forCases } = require('sazerac')
 const {
   parseClassifiers,
   parseDjangoVersionString,
   sortDjangoVersions,
+  getLicenses,
   getPackageFormats,
-} = require('./pypi-helpers.js')
+} = require('./pypi-helpers')
 
 const classifiersFixture = {
   info: {
@@ -98,6 +99,29 @@ describe('PyPI helpers', function() {
       '2.11',
       '10',
     ])
+  })
+
+  test(getLicenses, () => {
+    forCases([given({ info: { license: 'MIT', classifiers: [] } })]).expect([
+      'MIT',
+    ])
+    forCases([
+      given({
+        info: {
+          license: '',
+          classifiers: ['License :: OSI Approved :: MIT License'],
+        },
+      }),
+      given({
+        info: {
+          license: '',
+          classifiers: [
+            'License :: OSI Approved :: MIT License',
+            'License :: DFSG approved',
+          ],
+        },
+      }),
+    ]).expect(['mit license'])
   })
 
   test(getPackageFormats, () => {
