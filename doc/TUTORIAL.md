@@ -292,4 +292,3 @@ These files can also be of help for creating your own badge.
 [services]: ../services
 [wercker]: ../services/wercker
 [apm]: ../services/apm
-[f-droid]: https://github.com/badges/shields/pull/1965
