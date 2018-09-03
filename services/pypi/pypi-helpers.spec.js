@@ -122,6 +122,18 @@ describe('PyPI helpers', function() {
         },
       }),
     ]).expect(['mit license'])
+    given({
+      info: {
+        license: '',
+        classifiers: ['License :: Public Domain'],
+      },
+    }).expect(['public domain'])
+    given({
+      info: {
+        license: '',
+        classifiers: ['License :: Netscape Public License (NPL)'],
+      },
+    }).expect(['NPL'])
   })
 
   test(getPackageFormats, () => {
