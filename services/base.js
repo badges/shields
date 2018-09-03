@@ -2,6 +2,7 @@
 
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
+const Joi = require('joi')
 const {
   NotFound,
   InvalidResponse,
@@ -9,6 +10,7 @@ const {
   InvalidParameter,
   Deprecated,
 } = require('./errors')
+const { checkErrorResponse } = require('../lib/error-helper')
 const queryString = require('query-string')
 const {
   makeLogo,
@@ -305,6 +307,45 @@ class BaseService {
         },
       })
     )
+  }
+
+  static _validate(data, schema) {
+    if (!schema || !schema.isJoi) {
+      throw Error('A Joi schema is required')
+    }
+    const { error, value } = Joi.validate(data, schema, {
+      allowUnknown: true,
+      stripUnknown: true,
+    })
+    if (error) {
+      trace.logTrace(
+        'validate',
+        emojic.womanShrugging,
+        'Response did not match schema',
+        error.message
+      )
+      throw new InvalidResponse({
+        prettyMessage: 'invalid response data',
+        underlyingError: error,
+      })
+    } else {
+      trace.logTrace(
+        'validate',
+        emojic.bathtub,
+        'Data after validation',
+        value,
+        { deep: true }
+      )
+      return value
+    }
+  }
+
+  async _request({ url, options = {}, errorMessages = {} }) {
+    const logTrace = (...args) => trace.logTrace('fetch', ...args)
+    logTrace(emojic.bowAndArrow, 'Request', url, '\n', options)
+    const { res, buffer } = await this._sendAndCacheRequest(url, options)
+    logTrace(emojic.dart, 'Response status code', res.statusCode)
+    return checkErrorResponse.asPromise(errorMessages)({ buffer, res })
   }
 }
 
