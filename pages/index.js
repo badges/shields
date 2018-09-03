@@ -17,7 +17,11 @@ export default class Router extends React.Component {
     } else {
       // server-side rendering
       const context = {}
-      return <StaticRouter context={context}>{router}</StaticRouter>
+      return (
+        <StaticRouter context={context} basename="#">
+          {router}
+        </StaticRouter>
+      )
     }
   }
 }
