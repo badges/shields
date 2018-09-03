@@ -2,9 +2,10 @@
 
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
-const { asXml } = require('../lib/response-parsers')
+const fastXmlParser = require('fast-xml-parser')
 const BaseService = require('./base')
 const trace = require('./trace')
+const { InvalidResponse } = require('./errors')
 
 class BaseXmlService extends BaseService {
   async _requestXml({ schema, url, options = {}, errorMessages = {} }) {
@@ -13,12 +14,19 @@ class BaseXmlService extends BaseService {
       ...{ headers: { Accept: 'application/xml, text/xml' } },
       ...options,
     }
-    const xmlData = await this._request({
+    const { buffer } = await this._request({
       url,
       options: mergedOptions,
       errorMessages,
     })
-    const xml = await asXml(xmlData)
+    const validateResult = fastXmlParser.validate(buffer)
+    if (validateResult !== true) {
+      throw new InvalidResponse({
+        prettyMessage: 'unparseable xml response',
+        underlyingError: validateResult.err,
+      })
+    }
+    const xml = fastXmlParser.parse(buffer)
     logTrace(emojic.dart, 'Response XML (before validation)', xml, {
       deep: true,
     })

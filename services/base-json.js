@@ -2,9 +2,9 @@
 
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
-const { asJson } = require('../lib/response-parsers')
 const BaseService = require('./base')
 const trace = require('./trace')
+const { InvalidResponse } = require('./errors')
 
 class BaseJsonService extends BaseService {
   async _requestJson({ schema, url, options = {}, errorMessages = {} }) {
@@ -13,12 +13,20 @@ class BaseJsonService extends BaseService {
       ...{ headers: { Accept: 'application/json' } },
       ...options,
     }
-    const jsonData = await this._request({
+    const { buffer } = await this._request({
       url,
       options: mergedOptions,
       errorMessages,
     })
-    const json = await asJson(jsonData)
+    let json
+    try {
+      json = JSON.parse(buffer)
+    } catch (err) {
+      throw new InvalidResponse({
+        prettyMessage: 'unparseable json response',
+        underlyingError: err,
+      })
+    }
     logTrace(emojic.dart, 'Response JSON (before validation)', json, {
       deep: true,
     })
