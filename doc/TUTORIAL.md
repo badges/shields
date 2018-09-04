@@ -48,24 +48,36 @@ This information allows other humans to help and build on your work.
 
 ### (4.1) Structure and Layout
 
-Service badge code is stored in the `/services` directory in files ending in with `.service.js`
+Service badge code is stored in the [/services](https://github.com/badges/shields/tree/master/services/) directory.
+Each service has a directory for its files:
 
-For services with a single badge, the badge code will generally be stored in
-`/services/servicename/servicename.service.js` e.g: [wercker](https://github.com/badges/shields/tree/master/services/wercker)
+* In files ending with `.service.js`, you can find the code which generates
+  the badge and handles requests.
+  Sometimes, code for a service can be re-used.
+  This might be the case when you add a badge for an API which is already used
+  by other badges.
 
-For service families with multiple badges we usually store the code for each badge in its own file e.g:
-* `/services/servicename/servicename-downloads.service.js`
-* `/services/servicename/servicename-version.service.js` etc
+  Replace `SERVICENAME` with your service name in the following:
+  * For services with a single badge, the badge code will generally be stored in
+    `/services/SERVICENAME/SERVICENAME.service.js`.  
+    If you add a badge for a new API, create a new directory.
 
-e.g: [ruby gems](https://github.com/badges/shields/tree/master/services/gem)
+    Example: [wercker](https://github.com/badges/shields/tree/master/services/wercker)
 
-[Tests](TUTORIAL.md#45-write-tests) for badge code are stored alongside the badge code in corresponding files ending with `.tester.js`.
+  * For service families with multiple badges we usually store the code for each
+    badge in its own file like this:
+    * `/services/SERVICENAME/SERVICENAME-downloads.service.js`
+    * `/services/SERVICENAME/SERVICENAME-version.service.js` etc.
 
-If you are contributing a badge relating to a new service, create a new directory in `/services`. If there are already badges for this service, work in the existing directory.
+    Example: [ruby gems](https://github.com/badges/shields/tree/master/services/gem)
 
-All service badge classes inherit from `BaseService` or another class which itself extends `BaseService` e.g: `BaseJsonService`.
+* In files ending with `.tester.js`, you can find the code which uses
+  the shields server to test if the badges are generated correctly.
+  There is a [chapter on Tests][write tests].
 
 ### (4.2) Our First Badge
+
+All service badge classes inherit from `BaseService` or another class whichitself extends `BaseService` e.g: `BaseJsonService`.
 
 As a first step we will look at the code for an example which generates a badge without contacting an API.
 
@@ -236,7 +248,8 @@ module.exports = class GemVersion extends BaseJsonService {
 
 Save, run `npm start`, and you can see it [locally](http://127.0.0.1:3000/).
 
-### (4.5) Write Tests
+### (4.5) Write Tests <!-- Change the link below when you change the heading -->
+[write tests]: #45-write-tests 
 
 When creating a badge for a new service or changing a badge's behavior, tests
 should be included. They serve several purposes:
