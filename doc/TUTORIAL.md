@@ -77,7 +77,17 @@ Each service has a directory for its files:
 
 ### (4.2) Our First Badge
 
-All service badge classes inherit from `BaseService` or another class whichitself extends `BaseService` e.g: `BaseJsonService`.
+All service badge classes inherit from [BaseService] or another class which extends it.
+Other classes implement useful behavior on top of [BaseService].
+
+* [BaseJsonService](https://github.com/badges/shields/blob/master/services/base-json.js)
+  implements methods for performing requests to a JSON API and schema validation.
+* [BaseXmlService](https://github.com/badges/shields/blob/master/services/base-xml.js)
+  implements methods for performing requests to an XML API and schema validation.
+* If you are contributing to a *service family*, you may define a common super
+  class for the badges or one may already exist.
+
+[BaseService]: https://github.com/badges/shields/blob/master/services/base.js
 
 As a first step we will look at the code for an example which generates a badge without contacting an API.
 
