@@ -17,8 +17,9 @@ to see how other people implemented their badges.
 (2) Setup
 ---------
 
-I suppose you have [git](https://git-scm.com/) installed.
-If you do not, install it and learn about the [Github workflow](http://try.github.io/).
+You should have [git](https://git-scm.com/) installed.
+If you do not, [install git](https://www.linode.com/docs/development/version-control/how-to-install-git-on-linux-mac-and-windows/)
+and learn about the [Github workflow](http://try.github.io/).
 
 1. [Fork](https://github.com/badges/shields/fork) this repository.
 2. Clone the fork
