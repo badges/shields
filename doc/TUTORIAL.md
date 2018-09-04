@@ -144,7 +144,7 @@ To try out this example badge:
 
 ### (4.3) Querying an API
 
-The example above was completely static. In order to make a useful service badge we will need to get some data from somewhere. By far the most common case is that we will query an API which serves up some JSON data. In principle we might also query a service which serves another data format.
+The example above was completely static. In order to make a useful service badge we will need to get some data from somewhere. The most common case is that we will query an API which serves up some JSON data, but other formats (e.g: XML) may be used.
 
 This example is based on the [Ruby Gems version](https://github.com/badges/shields/blob/master/services/gem/gem-version.service.js) badge:
 
