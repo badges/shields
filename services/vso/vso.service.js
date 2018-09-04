@@ -4,6 +4,33 @@ const LegacyService = require('../legacy-service')
 const { fetchFromSvg } = require('../../lib/svg-badge-parser')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
+const fetchVstsBadge = (request, url, badgeData, sendBadge, format) => {
+  fetchFromSvg(request, url, (err, res) => {
+    if (err != null) {
+      badgeData.text[1] = 'inaccessible'
+      sendBadge(format, badgeData)
+      return
+    }
+    try {
+      badgeData.text[1] = res.toLowerCase()
+      if (res === 'succeeded') {
+        badgeData.colorscheme = 'brightgreen'
+        badgeData.text[1] = 'passing'
+      } else if (res === 'partially succeeded') {
+        badgeData.colorscheme = 'orange'
+        badgeData.text[1] = 'passing'
+      } else if (res === 'failed') {
+        badgeData.colorscheme = 'red'
+        badgeData.text[1] = 'failing'
+      }
+      sendBadge(format, badgeData)
+    } catch (e) {
+      badgeData.text[1] = 'invalid'
+      sendBadge(format, badgeData)
+    }
+  })
+}
+
 module.exports = class Vso extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     // For Visual Studio Team Services builds.
@@ -20,30 +47,7 @@ module.exports = class Vso extends LegacyService {
           url += `?branchName=${branch}`
         }
         const badgeData = getBadgeData('build', data)
-        fetchFromSvg(request, url, (err, res) => {
-          if (err != null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            badgeData.text[1] = res.toLowerCase()
-            if (res === 'succeeded') {
-              badgeData.colorscheme = 'brightgreen'
-              badgeData.text[1] = 'passing'
-            } else if (res === 'partially succeeded') {
-              badgeData.colorscheme = 'orange'
-              badgeData.text[1] = 'passing'
-            } else if (res === 'failed') {
-              badgeData.colorscheme = 'red'
-              badgeData.text[1] = 'failing'
-            }
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
+        fetchVstsBadge(request, url, badgeData, sendBadge, format)
       })
     )
 
@@ -58,30 +62,7 @@ module.exports = class Vso extends LegacyService {
         const format = match[5]
         const url = `https://${name}.vsrm.visualstudio.com/_apis/public/release/badge/${project}/${release}/${environment}`
         const badgeData = getBadgeData('deployment', data)
-        fetchFromSvg(request, url, (err, res) => {
-          if (err != null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            badgeData.text[1] = res.toLowerCase()
-            if (res === 'succeeded') {
-              badgeData.colorscheme = 'brightgreen'
-              badgeData.text[1] = 'passing'
-            } else if (res === 'partially succeeded') {
-              badgeData.colorscheme = 'orange'
-              badgeData.text[1] = 'passing'
-            } else if (res === 'failed') {
-              badgeData.colorscheme = 'red'
-              badgeData.text[1] = 'failing'
-            }
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
+        fetchVstsBadge(request, url, badgeData, sendBadge, format)
       })
     )
   }
