@@ -197,7 +197,11 @@ module.exports = class GemVersion extends BaseJsonService {     // (5)
 Description of the code:
 1. As with the first example, we declare strict mode at the start of each file.
 2. Our badge will query a JSON API so we will extend `BaseJsonService` instead of `BaseService`. This contains some helpers to reduce the need for boilerplate when calling a JSON API.
-3. In this case we are making a version badge, which is a common pattern. Instead of directly returning an object in this badge we will use a helper function to format our data consistently. There are a variety of helper functions to help with common tasks in `/lib`.
+3. In this case we are making a version badge, which is a common pattern. Instead of directly returning an object in this badge we will use a helper function to format our data consistently. There are a variety of helper functions to help with common tasks in `/lib`. Some useful generic helpers can be found in:
+    * [color-formatters.js](https://github.com/badges/shields/blob/master/lib/color-formatters.js)
+    * [licenses.js](https://github.com/badges/shields/blob/master/lib/licenses.js)
+    * [text-formatters.js](https://github.com/badges/shields/blob/master/lib/text-formatters.js)
+    * [version.js](https://github.com/badges/shields/blob/master/lib/version.js)
 4. We perform input validation by defining a schema which we expect the JSON we receive to conform to. This is done using [Joi](https://github.com/hapijs/joi). Defining a schema means we can ensure the JSON we receive meets our expectations and throw an error if we receive unexpected input without having to explicitly code validation checks. The schema also acts as a filter on the JSON object. Any properties we're going to reference need to be validated, otherwise they will be filtered out. In this case our schema declares that we expect to reveive an object which must have a property called 'status', which is a string.
 5. Our module exports a class which extends `BaseJsonService`
 6. As with our previous badge, we need to declare a route. This time we will capture a variable called `gem`.
