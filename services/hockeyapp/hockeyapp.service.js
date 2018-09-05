@@ -74,7 +74,7 @@ module.exports = class Hockeyapp extends BaseJsonService {
   static get examples() {
     return [
       {
-        exampleUrl: 'hockeyapp/simple',
+        exampleUrl: 'your-app-token/your-app-id',
         urlPattern: ':apptoken/:appid',
         staticExample: this.render({ version: '1.0.0' }),
       },
