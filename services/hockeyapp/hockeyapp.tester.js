@@ -2,7 +2,7 @@
 
 const createServiceTester = require('../create-service-tester')
 
-const { isVPlusTripleDottedVersion } = require('../test-validators')
+const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
 const t = createServiceTester()
 module.exports = t
@@ -26,7 +26,7 @@ t.create('Android App')
             }
         ]
       }))
-.expectJSONTypes({ name: 'hockeyapp', value: '1.0.24'})
+.expectJSONTypes({ name: 'hockeyapp', value: isVPlusDottedVersionAtLeastOne})
 
 t.create('iOS App')
 .get('hockeyapp/v/15011995/30071996.json')
@@ -43,4 +43,4 @@ t.create('iOS App')
             }
         ]
       }))
-.expectJSONTypes({ name: 'hockeyapp', value: '1.0.24'})
+.expectJSONTypes({ name: 'hockeyapp', value: isVPlusDottedVersionAtLeastOne})
