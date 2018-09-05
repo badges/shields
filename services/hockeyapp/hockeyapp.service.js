@@ -40,7 +40,7 @@ module.exports = class Hockeyapp extends BaseJsonService {
 
     let version
 
-    // need this check because of hockeyapp handles build numbers differnt for iOS and Android
+    // need this check because hockeyapp handles build numbers differntly for iOS and Android
     if (
       !latestVersionObject.version.includes(latestVersionObject.shortversion)
     ) {
