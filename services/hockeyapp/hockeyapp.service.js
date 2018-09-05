@@ -32,7 +32,7 @@ module.exports = class Hockeyapp extends BaseJsonService {
   async handle({ apptoken, appid }) {
     const json = await this.fetch({ apptoken, appid })
 
-    if (json.app_versions === undefined || json.app_versions.length === 0) {
+    if (json.app_versions.length === 0) {
       throw new NotFound()
     }
 
