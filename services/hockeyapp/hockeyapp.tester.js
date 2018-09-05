@@ -11,14 +11,13 @@ t.create('Invalid AppToken or AppId')
   .get('hockeyapp/v/1234/1234.json')
   .expectJSON({ name: 'hockeyapp', value: 'invalid' })
 
-  t.create('Empty app versions array')
+t.create('Empty app versions array')
   .get('hockeyapp/v/15011995/30071996.json')
   .intercept(nock =>
     nock('https://rink.hockeyapp.net')
       .get('/api/2/apps/30071996/app_versions')
       .reply(200, {
-        app_versions: [
-        ],
+        app_versions: [],
       })
   )
   .expectJSON({ name: 'hockeyapp', value: 'not found' })
