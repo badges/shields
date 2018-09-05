@@ -9,7 +9,7 @@ module.exports = t
 
 t.create('Invalid AppToken or AppId')
   .get('hockeyapp/v/1234/1234.json')
-  .expectJSONTypes({ name: 'hockeyapp', value: 'invalid' })
+  .expectJSON({ name: 'hockeyapp', value: 'invalid' })
 
 t.create('Android App')
   .get('hockeyapp/v/15011995/30071996.json')
@@ -25,7 +25,7 @@ t.create('Android App')
         ],
       })
   )
-  .expectJSONTypes({ name: 'hockeyapp', value: isVPlusDottedVersionAtLeastOne })
+  .expectJSON({ name: 'hockeyapp', value: isVPlusDottedVersionAtLeastOne })
 
 t.create('iOS App')
   .get('hockeyapp/v/15011995/30071996.json')
@@ -41,4 +41,4 @@ t.create('iOS App')
         ],
       })
   )
-  .expectJSONTypes({ name: 'hockeyapp', value: isVPlusDottedVersionAtLeastOne })
+  .expectJSON({ name: 'hockeyapp', value: isVPlusDottedVersionAtLeastOne })

@@ -51,7 +51,7 @@ module.exports = class Hockeyapp extends BaseJsonService {
       version = latestVersionObject.version
     }
 
-    return this.constructor.render({ version: version })
+    return this.constructor.render({ version })
   }
 
   // Metadata
