@@ -6,20 +6,18 @@ const BaseJsonService = require('../base-json')
 const { NotFound } = require('../errors')
 
 const hockeyappSchema = Joi.object({
-  app_versions: Joi.array()
-    .items(
-      Joi.object({
-          version: Joi.string().required(),
-          shortversion: Joi.string().required(),
-        }
-      )
-    )
-  }).required()
+  app_versions: Joi.array().items(
+    Joi.object({
+      version: Joi.string().required(),
+      shortversion: Joi.string().required(),
+    })
+  ),
+}).required()
 
 module.exports = class Hockeyapp extends BaseJsonService {
   async fetch({ apptoken, appid }) {
-    const url = `https://rink.hockeyapp.net/api/2/apps/${appid}/app_versions` 
-    const options = { headers: { 'X-HockeyAppToken': apptoken }}
+    const url = `https://rink.hockeyapp.net/api/2/apps/${appid}/app_versions`
+    const options = { headers: { 'X-HockeyAppToken': apptoken } }
     return this._requestJson({
       url,
       schema: hockeyappSchema,
@@ -38,17 +36,19 @@ module.exports = class Hockeyapp extends BaseJsonService {
       throw new NotFound()
     }
 
-    const latestVersionObject = json.app_versions[0];
+    const latestVersionObject = json.app_versions[0]
 
-    let version;
+    let version
 
     // need this check because of hockeyapp handles build numbers differnt for iOS and Android
-    if (!latestVersionObject.version.includes(latestVersionObject.shortversion))
-    {
-      version = `${latestVersionObject.shortversion}.${latestVersionObject.version}`;
-    } else
-    {
-      version = latestVersionObject.version;
+    if (
+      !latestVersionObject.version.includes(latestVersionObject.shortversion)
+    ) {
+      version = `${latestVersionObject.shortversion}.${
+        latestVersionObject.version
+      }`
+    } else {
+      version = latestVersionObject.version
     }
 
     return this.constructor.render({ version: version })
