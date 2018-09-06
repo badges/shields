@@ -271,7 +271,6 @@ class BaseService {
         logo: overrideLogo,
         logoColor: overrideLogoColor,
       }),
-
       logoWidth: +overrideLogoWidth,
       links: toArray(overrideLink || serviceLink),
       colorA: makeColor(overrideColorA),
