@@ -9,6 +9,13 @@ exports['The badge generator JSON should always produce the same JSON (unless we
 }
 `
 
+exports['The badge generator JSON should always produce the same JSON on Windows (unless we have changed something!) 1'] = `
+{
+  "name": "cactus",
+  "value": "grown"
+}
+`
+
 exports['shields GitHub logo default color (#333333) 1'] = `
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="113" height="20"><linearGradient id="b" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient><clipPath id="a"><rect width="113" height="20" rx="3" fill="#fff"/></clipPath><g clip-path="url(#a)"><path fill="#555" d="M0 0h54v20H0z"/><path fill="#007ec6" d="M54 0h59v20H54z"/><path fill="url(#b)" d="M0 0h113v20H0z"/></g><g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="110"><image x="5" y="3" width="14" height="14" xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMTIgMTIgNDAgNDAiPg0KPHBhdGggZmlsbD0iIzMzMzMzMyIgZD0iTTMyLDEzLjRjLTEwLjUsMC0xOSw4LjUtMTksMTljMCw4LjQsNS41LDE1LjUsMTMsMThjMSwwLjIsMS4zLTAuNCwxLjMtMC45YzAtMC41LDAtMS43LDAtMy4yIGMtNS4zLDEuMS02LjQtMi42LTYuNC0yLjZDMjAsNDEuNiwxOC44LDQxLDE4LjgsNDFjLTEuNy0xLjIsMC4xLTEuMSwwLjEtMS4xYzEuOSwwLjEsMi45LDIsMi45LDJjMS43LDIuOSw0LjUsMi4xLDUuNSwxLjYgYzAuMi0xLjIsMC43LTIuMSwxLjItMi42Yy00LjItMC41LTguNy0yLjEtOC43LTkuNGMwLTIuMSwwLjctMy43LDItNS4xYy0wLjItMC41LTAuOC0yLjQsMC4yLTVjMCwwLDEuNi0wLjUsNS4yLDIgYzEuNS0wLjQsMy4xLTAuNyw0LjgtMC43YzEuNiwwLDMuMywwLjIsNC43LDAuN2MzLjYtMi40LDUuMi0yLDUuMi0yYzEsMi42LDAuNCw0LjYsMC4yLDVjMS4yLDEuMywyLDMsMiw1LjFjMCw3LjMtNC41LDguOS04LjcsOS40IGMwLjcsMC42LDEuMywxLjcsMS4zLDMuNWMwLDIuNiwwLDQuNiwwLDUuMmMwLDAuNSwwLjQsMS4xLDEuMywwLjljNy41LTIuNiwxMy05LjcsMTMtMTguMUM1MSwyMS45LDQyLjUsMTMuNCwzMiwxMy40eiIvPg0KPC9zdmc+DQo="/> <text x="365" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="270">label</text><text x="365" y="140" transform="scale(.1)" textLength="270">label</text><text x="825" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="490">message</text><text x="825" y="140" transform="scale(.1)" textLength="490">message</text></g> </svg>
 `
