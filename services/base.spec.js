@@ -1,5 +1,6 @@
 'use strict'
 
+const Joi = require('joi')
 const { expect } = require('chai')
 const { test, given, forCases } = require('sazerac')
 const sinon = require('sinon')
@@ -419,6 +420,129 @@ describe('BaseService', function() {
         'blue'
       )
       expect(url).to.equal('/badge/123--123-abc--abc-blue')
+    })
+  })
+
+  describe('validate', function() {
+    const dummySchema = Joi.object({
+      requiredString: Joi.string().required(),
+    }).required()
+
+    let sandbox
+    beforeEach(function() {
+      sandbox = sinon.createSandbox()
+    })
+    afterEach(function() {
+      sandbox.restore()
+    })
+    beforeEach(function() {
+      sandbox.stub(trace, 'logTrace')
+    })
+
+    it('throws the expected error if schema is not provided', async function() {
+      try {
+        DummyService._validate({ requiredString: 'bar' }, undefined)
+        expect.fail('Expected to throw')
+      } catch (e) {
+        expect(e).to.be.an.instanceof(Error)
+        expect(e.message).to.equal('A Joi schema is required')
+      }
+    })
+
+    it('logs valid responses', async function() {
+      DummyService._validate({ requiredString: 'bar' }, dummySchema)
+      expect(trace.logTrace).to.be.calledWithMatch(
+        'validate',
+        sinon.match.string,
+        'Data after validation',
+        { requiredString: 'bar' },
+        { deep: true }
+      )
+    })
+
+    it('logs invalid responses and throws error', async function() {
+      try {
+        DummyService._validate(
+          { requiredString: ['this', "shouldn't", 'work'] },
+          dummySchema
+        )
+        expect.fail('Expected to throw')
+      } catch (e) {
+        expect(e).to.be.an.instanceof(InvalidResponse)
+        expect(e.message).to.equal(
+          'Invalid Response: child "requiredString" fails because ["requiredString" must be a string]'
+        )
+        expect(e.prettyMessage).to.equal('invalid response data')
+      }
+      expect(trace.logTrace).to.be.calledWithMatch(
+        'validate',
+        sinon.match.string,
+        'Response did not match schema',
+        'child "requiredString" fails because ["requiredString" must be a string]'
+      )
+    })
+  })
+
+  describe('request', function() {
+    let sandbox
+    beforeEach(function() {
+      sandbox = sinon.createSandbox()
+    })
+    afterEach(function() {
+      sandbox.restore()
+    })
+    beforeEach(function() {
+      sandbox.stub(trace, 'logTrace')
+    })
+
+    it('logs appropriate information', async function() {
+      const sendAndCacheRequest = async () => ({
+        buffer: '',
+        res: { statusCode: 200 },
+      })
+      const serviceInstance = new DummyService(
+        { sendAndCacheRequest },
+        defaultConfig
+      )
+
+      const url = 'some-url'
+      const options = { headers: { Cookie: 'some-cookie' } }
+      await serviceInstance._request({ url, options })
+
+      expect(trace.logTrace).to.be.calledWithMatch(
+        'fetch',
+        sinon.match.string,
+        'Request',
+        url,
+        '\n',
+        options
+      )
+      expect(trace.logTrace).to.be.calledWithMatch(
+        'fetch',
+        sinon.match.string,
+        'Response status code',
+        200
+      )
+    })
+
+    it('handles errors', async function() {
+      const sendAndCacheRequest = async () => ({
+        buffer: '',
+        res: { statusCode: 404 },
+      })
+      const serviceInstance = new DummyService(
+        { sendAndCacheRequest },
+        defaultConfig
+      )
+
+      try {
+        await serviceInstance._request({})
+        expect.fail('Expected to throw')
+      } catch (e) {
+        expect(e).to.be.an.instanceof(NotFound)
+        expect(e.message).to.equal('Not Found')
+        expect(e.prettyMessage).to.equal('not found')
+      }
     })
   })
 })
