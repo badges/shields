@@ -201,7 +201,7 @@ t.create('GitHub open issues by multi-word label is > zero')
   .get('/issues/Cockatrice/Cockatrice/App%20-%20Cockatrice.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: '"App - Cockatrice" issues',
+      name: '"app - cockatrice" issues',
       value: isMetricOpenIssues,
     })
   )
