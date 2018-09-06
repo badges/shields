@@ -716,7 +716,7 @@ t.create('top language')
   .get('/languages/top/badges/shields.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'JavaScript',
+      name: 'javascript',
       value: Joi.string().regex(/^([1-9]?[0-9]\.[0-9]|100\.0)%$/),
     })
   )

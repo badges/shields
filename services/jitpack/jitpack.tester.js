@@ -11,11 +11,11 @@ module.exports = t
 
 t.create('version')
   .get('/v/jitpack/maven-simple.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'JitPack', value: isAnyV }))
+  .expectJSONTypes(Joi.object().keys({ name: 'jitpack', value: isAnyV }))
 
 t.create('unknown package')
   .get('/v/some-bogus-user/project.json')
-  .expectJSON({ name: 'JitPack', value: 'invalid' })
+  .expectJSON({ name: 'jitpack', value: 'invalid' })
 
 t.create('unknown info')
   .get('/z/devtools.json')
@@ -25,4 +25,4 @@ t.create('unknown info')
 t.create('connection error')
   .get('/v/jitpack/maven-simple.json')
   .networkOff()
-  .expectJSON({ name: 'JitPack', value: 'inaccessible' })
+  .expectJSON({ name: 'jitpack', value: 'inaccessible' })

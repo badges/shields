@@ -23,7 +23,7 @@ module.exports = class OssTracker extends LegacyService {
           method: 'GET',
           uri: url,
         }
-        const badgeData = getBadgeData('OSS Lifecycle', data)
+        const badgeData = getBadgeData('oss lifecycle', data)
         request(options, (err, res, body) => {
           if (err != null) {
             log.error('NetflixOSS error: ' + err.stack)
