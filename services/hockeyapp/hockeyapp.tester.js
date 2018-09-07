@@ -36,7 +36,7 @@ t.create('Android App')
         ],
       })
   )
-  .expectJSON({ name: 'hockeyapp', value: isVPlusDottedVersionAtLeastOne })
+  .expectJSONTypes({ name: 'hockeyapp', value: isVPlusDottedVersionAtLeastOne })
 
 t.create('iOS App')
   .get('hockeyapp/v/15011995/30071996.json')
@@ -52,4 +52,4 @@ t.create('iOS App')
         ],
       })
   )
-  .expectJSON({ name: 'hockeyapp', value: isVPlusDottedVersionAtLeastOne })
+  .expectJSONTypes({ name: 'hockeyapp', value: isVPlusDottedVersionAtLeastOne })
