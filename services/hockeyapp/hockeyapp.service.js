@@ -15,9 +15,9 @@ const hockeyappSchema = Joi.object({
 }).required()
 
 module.exports = class Hockeyapp extends BaseJsonService {
-  async fetch({ apptoken, appid }) {
+  async fetch({ apitoken, appid }) {
     const url = `https://rink.hockeyapp.net/api/2/apps/${appid}/app_versions`
-    const options = { headers: { 'X-HockeyAppToken': apptoken } }
+    const options = { headers: { 'X-HockeyAppToken': apitoken } }
     return this._requestJson({
       url,
       schema: hockeyappSchema,
@@ -29,8 +29,8 @@ module.exports = class Hockeyapp extends BaseJsonService {
     return renderVersionBadge({ version })
   }
 
-  async handle({ apptoken, appid }) {
-    const json = await this.fetch({ apptoken, appid })
+  async handle({ apitoken, appid }) {
+    const json = await this.fetch({ apitoken, appid })
 
     if (json.app_versions.length === 0) {
       throw new NotFound()
@@ -67,7 +67,7 @@ module.exports = class Hockeyapp extends BaseJsonService {
     return {
       base: 'hockeyapp/v',
       format: '(.+)/(.+)',
-      capture: ['apptoken', 'appid'],
+      capture: ['apitoken', 'appid'],
     }
   }
 
@@ -76,8 +76,12 @@ module.exports = class Hockeyapp extends BaseJsonService {
       {
         exampleUrl:
           '78e9ae0287ca4a07b2cbbb1338e1c71b/7e53b1f0ebe171be1b9004ff04a2f663',
-        urlPattern: ':apptoken/:appid',
+        urlPattern: ':read-only-api-token/:appid',
         staticExample: this.render({ version: '1.0.0' }),
+        documentation: `Log in to HockeyApp and follow the link https://rink.hockeyapp.net/manage/auth_tokens 
+          to generate a read-only API Token to avoid that others can e.g. manipulat your build uploads. 
+          Optionally you can also set the scope of the token just to the app that is used by your badge. 
+          More information about the HockeyApp API can be found here https://support.hockeyapp.net/kb/api/api-basics-and-authentication.`,
       },
     ]
   }
