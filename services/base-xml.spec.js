@@ -5,7 +5,7 @@ const chai = require('chai')
 const { expect } = chai
 const sinon = require('sinon')
 
-const BaseJsonService = require('./base-json')
+const BaseXmlService = require('./base-xml')
 
 chai.use(require('chai-as-promised'))
 
@@ -13,7 +13,7 @@ const dummySchema = Joi.object({
   requiredString: Joi.string().required(),
 }).required()
 
-class DummyJsonService extends BaseJsonService {
+class DummyXmlService extends BaseXmlService {
   static get category() {
     return 'cat'
   }
@@ -25,25 +25,25 @@ class DummyJsonService extends BaseJsonService {
   }
 
   async handle() {
-    const { requiredString } = await this._requestJson({
+    const { requiredString } = await this._requestXml({
       schema: dummySchema,
-      url: 'http://example.com/foo.json',
+      url: 'http://example.com/foo.xml',
     })
     return { message: requiredString }
   }
 }
 
-describe('BaseJsonService', function() {
+describe('BaseXmlService', function() {
   describe('Making requests', function() {
     let sendAndCacheRequest, serviceInstance
     beforeEach(function() {
       sendAndCacheRequest = sinon.stub().returns(
         Promise.resolve({
-          buffer: '{"some": "json"}',
+          buffer: '<requiredString>some-string</requiredString>',
           res: { statusCode: 200 },
         })
       )
-      serviceInstance = new DummyJsonService(
+      serviceInstance = new DummyXmlService(
         { sendAndCacheRequest },
         { handleInternalErrors: false }
       )
@@ -53,9 +53,9 @@ describe('BaseJsonService', function() {
       await serviceInstance.invokeHandler({}, {})
 
       expect(sendAndCacheRequest).to.have.been.calledOnceWith(
-        'http://example.com/foo.json',
+        'http://example.com/foo.xml',
         {
-          headers: { Accept: 'application/json' },
+          headers: { Accept: 'application/xml, text/xml' },
         }
       )
     })
@@ -63,9 +63,9 @@ describe('BaseJsonService', function() {
     it('forwards options to _sendAndCacheRequest', async function() {
       Object.assign(serviceInstance, {
         async handle() {
-          const { value } = await this._requestJson({
+          const { value } = await this._requestXml({
             schema: dummySchema,
-            url: 'http://example.com/foo.json',
+            url: 'http://example.com/foo.xml',
             options: { method: 'POST', qs: { queryParam: 123 } },
           })
           return { message: value }
@@ -75,9 +75,9 @@ describe('BaseJsonService', function() {
       await serviceInstance.invokeHandler({}, {})
 
       expect(sendAndCacheRequest).to.have.been.calledOnceWith(
-        'http://example.com/foo.json',
+        'http://example.com/foo.xml',
         {
-          headers: { Accept: 'application/json' },
+          headers: { Accept: 'application/xml, text/xml' },
           method: 'POST',
           qs: { queryParam: 123 },
         }
@@ -86,12 +86,12 @@ describe('BaseJsonService', function() {
   })
 
   describe('Making badges', function() {
-    it('handles valid json responses', async function() {
+    it('handles valid xml responses', async function() {
       const sendAndCacheRequest = async () => ({
-        buffer: '{"requiredString": "some-string"}',
+        buffer: '<requiredString>some-string</requiredString>',
         res: { statusCode: 200 },
       })
-      const serviceInstance = new DummyJsonService(
+      const serviceInstance = new DummyXmlService(
         { sendAndCacheRequest },
         { handleInternalErrors: false }
       )
@@ -101,12 +101,12 @@ describe('BaseJsonService', function() {
       })
     })
 
-    it('handles json responses which do not match the schema', async function() {
+    it('handles xml responses which do not match the schema', async function() {
       const sendAndCacheRequest = async () => ({
-        buffer: '{"unexpectedKey": "some-string"}',
+        buffer: '<unexpectedAttribute>some-string</unexpectedAttribute>',
         res: { statusCode: 200 },
       })
-      const serviceInstance = new DummyJsonService(
+      const serviceInstance = new DummyXmlService(
         { sendAndCacheRequest },
         { handleInternalErrors: false }
       )
@@ -117,19 +117,19 @@ describe('BaseJsonService', function() {
       })
     })
 
-    it('handles unparseable json responses', async function() {
+    it('handles unparseable xml responses', async function() {
       const sendAndCacheRequest = async () => ({
-        buffer: 'not json',
+        buffer: 'not xml',
         res: { statusCode: 200 },
       })
-      const serviceInstance = new DummyJsonService(
+      const serviceInstance = new DummyXmlService(
         { sendAndCacheRequest },
         { handleInternalErrors: false }
       )
       const serviceData = await serviceInstance.invokeHandler({}, {})
       expect(serviceData).to.deep.equal({
         color: 'lightgray',
-        message: 'unparseable json response',
+        message: 'unparseable xml response',
       })
     })
   })
