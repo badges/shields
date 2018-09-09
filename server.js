@@ -6,7 +6,7 @@ const path = require('path')
 const xpath = require('xpath')
 const yaml = require('js-yaml')
 const Raven = require('raven')
-const prometheus = require('prom-client');
+const prometheus = require('prom-client')
 
 const serverSecrets = require('./lib/server-secrets')
 Raven.config(process.env.SENTRY_DSN || serverSecrets.sentry_dsn).install()
@@ -335,9 +335,9 @@ camp.route(/^\/([^/]+)\/(.+).png$/, (data, match, end, ask) => {
 
 if (config.metrics.prometheus.enabled) {
   camp.route(/^\/metrics$/, (data, match, end, ask) => {
-    ask.res.setHeader('Content-Type', register.contentType);
-    ask.res.end(register.metrics());
-  });
+    ask.res.setHeader('Content-Type', register.contentType)
+    ask.res.end(register.metrics())
+  })
 }
 
 if (config.redirectUri) {
