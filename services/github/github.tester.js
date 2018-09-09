@@ -201,7 +201,7 @@ t.create('GitHub open issues by multi-word label is > zero')
   .get('/issues/Cockatrice/Cockatrice/App%20-%20Cockatrice.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: '"App - Cockatrice" issues',
+      name: '"app - cockatrice" issues',
       value: isMetricOpenIssues,
     })
   )
@@ -716,7 +716,7 @@ t.create('top language')
   .get('/languages/top/badges/shields.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'JavaScript',
+      name: 'javascript',
       value: Joi.string().regex(/^([1-9]?[0-9]\.[0-9]|100\.0)%$/),
     })
   )
