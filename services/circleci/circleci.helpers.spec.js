@@ -7,7 +7,7 @@ const {
   circleSchema,
   getLatestCompleteBuildOutcome,
   summarizeBuildsForLatestCompleteWorkflow,
-} = require('./circleci.helpers.js')
+} = require('./circleci.helpers')
 
 describe('circleci: getLatestCompleteBuildOutcome() function', function() {
   test(getLatestCompleteBuildOutcome, () => {

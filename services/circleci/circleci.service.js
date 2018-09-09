@@ -6,7 +6,7 @@ const {
   circleSchema,
   getLatestCompleteBuildOutcome,
   summarizeBuildsForLatestCompleteWorkflow,
-} = require('./circleci.helpers.js')
+} = require('./circleci.helpers')
 
 module.exports = class CircleCi extends BaseJsonService {
   async fetch({ token, vcsType, userRepo, branch }) {
