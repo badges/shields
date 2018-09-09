@@ -134,7 +134,7 @@ SVG or JSON output. When deliberately changing the output, run
 `SNAPSHOT_DRY=1 npm run test:js:server` to preview changes to the saved
 snapshots, and `SNAPSHOT_UPDATE=1 npm run test:js:server` to update them.
 
-The server can be configured to use [Sentry][] ([sentry configuration][configuration]) and [Prometheus][] ([prometheus configuration][configuration]).
+The server can be configured to use [Sentry][] ([configuration][sentry configuration]) and [Prometheus][] ([configuration][prometheus configuration]).
 
 [package manager]: https://nodejs.org/en/download/package-manager/
 [snapshot tests]: https://glebbahmutov.com/blog/snapshot-testing/
