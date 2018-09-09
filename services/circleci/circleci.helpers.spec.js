@@ -18,9 +18,6 @@ describe('circleci: getLatestCompleteBuildOutcome() function', function() {
     given([{ outcome: 'success' }, { outcome: 'failed' }]).expect('passing')
     given([{ outcome: null }, { outcome: 'failed' }]).expect('failed')
 
-    expect(() =>
-      getLatestCompleteBuildOutcome([{ outcome: 'cheese' }])
-    ).to.throw(Error, 'Found unexpected outcome')
     expect(() => getLatestCompleteBuildOutcome([{ outcome: null }])).to.throw(
       Error,
       'No complete builds found'
@@ -110,20 +107,6 @@ describe('circleci: summarizeBuildsForLatestCompleteWorkflow() function', functi
 
     expect(() =>
       summarizeBuildsForLatestCompleteWorkflow([
-        {
-          outcome: 'failed',
-          workflows: { workflow_id: 'aaaaaaaa-1111-aaaa-1111-aaaaaaaaaaaa' },
-        },
-        // this status value is not expected
-        {
-          outcome: 'cheese',
-          workflows: { workflow_id: 'aaaaaaaa-1111-aaaa-1111-aaaaaaaaaaaa' },
-        },
-      ])
-    ).to.throw(Error, 'Found unexpected outcome')
-
-    expect(() =>
-      summarizeBuildsForLatestCompleteWorkflow([
         // this response doesn't have workflows
         { outcome: 'failed' },
         { outcome: 'success' },
@@ -174,4 +157,7 @@ describe('circleci: schema validation', function() {
     validate([{ outcome: 'failed', workflows: { foo: 'bar' } }], circleSchema)
       .error
   ).to.not.equal(null)
+
+  // unexpect value for outcome
+  expect(validate([{ foo: 'cheese' }], circleSchema).error).to.not.equal(null)
 })

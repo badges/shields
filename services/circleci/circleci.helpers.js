@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
+const countBy = require('lodash.countby')
 
 const getWorkflowId = function(build) {
   return build.workflows.workflow_id
@@ -36,23 +37,10 @@ const getBuildsForLatestCompleteWorkflow = function(builds) {
 }
 
 const countOutcomes = function(builds) {
-  let total = 0
-  const counts = {
-    canceled: 0,
-    infrastructure_fail: 0,
-    timedout: 0,
-    failed: 0,
-    no_tests: 0,
-    success: 0,
+  return {
+    total: builds.length,
+    counts: countBy(builds, build => build.outcome),
   }
-  for (let i = 0; i < builds.length; i++) {
-    if (!(builds[i].outcome in counts)) {
-      throw new Error('Found unexpected outcome')
-    }
-    counts[builds[i].outcome]++
-    total++
-  }
-  return { total, counts }
 }
 
 // reduce the outcomes for an array of builds to a single status
@@ -82,12 +70,11 @@ const summarizeBuildsForLatestCompleteWorkflow = function(builds) {
 // return the status of the latest complete build
 // we need this if a project doesn't use workflows
 const getLatestCompleteBuildOutcome = function(builds) {
-  for (let i = 0; i < builds.length; i++) {
-    if (builds[i].outcome != null) {
-      return summarizeBuilds([builds[i]])
-    }
+  const completeBuilds = builds.filter(build => build.outcome != null)
+  if (completeBuilds.length === 0) {
+    throw new Error('No complete builds found')
   }
-  throw new Error('No complete builds found')
+  return summarizeBuilds([completeBuilds[0]])
 }
 
 const populatedArraySchema = Joi.array()
@@ -95,7 +82,15 @@ const populatedArraySchema = Joi.array()
     Joi.object({
       // if we have >0 items in our array, every object must have an 'outcome' key
       outcome: Joi.string()
-        .allow(null)
+        .allow(
+          'success',
+          'no_tests',
+          'infrastructure_fail',
+          'canceled',
+          'timedout',
+          'failed',
+          null
+        )
         .required(),
 
       // 'workflows' key is optional - not all projects have workflows
