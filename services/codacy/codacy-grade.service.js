@@ -25,7 +25,7 @@ module.exports = class CodacyGrade extends LegacyService {
           '?' +
           query
         const badgeData = getBadgeData('code quality', data)
-        fetchFromSvg(request, url, (err, res) => {
+        fetchFromSvg(request, url, /visibility="hidden">([^<>]+)<\/text>/, (err, res) => {
           if (err != null) {
             badgeData.text[1] = 'inaccessible'
             sendBadge(format, badgeData)

@@ -5,7 +5,7 @@ const { fetchFromSvg } = require('../../lib/svg-badge-parser')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 const fetchVstsBadge = (request, url, badgeData, sendBadge, format) => {
-  fetchFromSvg(request, url, (err, res) => {
+  fetchFromSvg(request, url, />([^<>]+)<\/text><\/g>/, (err, res) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible'
       sendBadge(format, badgeData)

@@ -28,7 +28,7 @@ module.exports = class CodacyCoverage extends LegacyService {
           '?' +
           query
         const badgeData = getBadgeData('coverage', data)
-        fetchFromSvg(request, url, (err, res) => {
+        fetchFromSvg(request, url, /text-anchor="middle">([^<>]+)<\/text>/, (err, res) => {
           if (err != null) {
             badgeData.text[1] = 'inaccessible'
             sendBadge(format, badgeData)
