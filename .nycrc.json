@@ -1,12 +1,12 @@
 {
- "reporter": [
-    "lcov"
-  ],
+  "reporter": ["lcov"],
   "all": true,
   "exclude": [
     "**/*.spec.js",
-    "service-tests",
-    "coverage"
+    "**/*.integration.js",
+    "services/**/*.tester.js",
+    "coverage",
+    "build"
   ],
   "silent": true,
   "clean": false

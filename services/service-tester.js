@@ -29,6 +29,16 @@ class ServiceTester {
     })
   }
 
+  static forServiceClass(ServiceClass) {
+    const id = ServiceClass.name
+    const pathPrefix = `/${ServiceClass.url.base}`
+    return new this({
+      id,
+      title: id,
+      pathPrefix,
+    })
+  }
+
   /**
    * Invoked before each test. This is a stub which can be overridden on
    * instances.

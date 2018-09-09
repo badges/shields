@@ -17,18 +17,18 @@ Contributors should take care to cover each part of a badge's functionality,
 and ideally, all code branches:
 
 1. Typical case
-  - File is present
-  - Build fails/succeeds
+    - File is present
+    - Build fails/succeeds
 2. Expected resource not found
-  - Service may provide 200 error code with different response format
-  - Service may return a 404 or other >= 400 status code
+    - Service may provide 200 error code with different response format
+    - Service may return a 404 or other >= 400 status code
 3. Customization
-  - Non-default parameters like tags and branches
+    - Non-default parameters like tags and branches
 4. Server errors and other malformed responses
-  - Service may return status code 500 and higher
-  - [Invalid JSON](#invalid-json)
-  - Attributes missing or have incorrect types
-  - Headers missing
+    - Service may return status code 500 and higher
+    - [Invalid JSON](#invalid-json)
+    - Attributes missing or have incorrect types
+    - Headers missing
 5. Connection errors
 
 Tutorial
@@ -167,6 +167,11 @@ npm run test:services -- --only=travis
 
 The `--only=` option indicates which service or services you want to test. You
 can provide a comma-separated list of ids.
+These ids are those passed to the ServiceTester:
+
+```
+... ServiceTester({ id: 'travis', ... })
+```
 
 The `--` tells the NPM CLI to pass the remaining arguments through to the test
 runner.

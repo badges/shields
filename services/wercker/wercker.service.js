@@ -62,11 +62,15 @@ module.exports = class Wercker extends BaseJsonService {
   static get examples() {
     return [
       {
-        previewUrl: 'wercker/go-wercker-api',
+        exampleUrl: 'wercker/go-wercker-api',
+        urlPattern: ':applicationName/:projectId',
+        staticExample: this.render({ status: 'finished', result: 'passed' }),
       },
       {
         title: `${this.name} branch`,
-        previewUrl: 'wercker/go-wercker-api/master',
+        urlPattern: ':applicationName/:projectId/:branch',
+        exampleUrl: 'wercker/go-wercker-api/master',
+        staticExample: this.render({ status: 'finished', result: 'passed' }),
       },
     ]
   }
