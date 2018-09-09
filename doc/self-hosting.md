@@ -203,3 +203,11 @@ sudo SENTRY_DSN=https://xxx:yyy@sentry.io/zzz node server
 ```
 sudo node server
 ```
+
+### Prometheus
+Shields uses [prom-client](https://github.com/siimon/prom-client) to provide [default metrics](https://prometheus.io/docs/instrumenting/writing_clientlibs/#standard-and-runtime-collectors). These metrics are disabled by default.
+You can enable them by `METRICS_PROMETHEUS_ENABLED` environment variable:
+```bash
+METRICS_PROMETHEUS_ENABLED=true npm start
+```
+Metrics are available at `/metrics` resource.
