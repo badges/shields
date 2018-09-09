@@ -25,38 +25,43 @@ module.exports = class CodacyGrade extends LegacyService {
           '?' +
           query
         const badgeData = getBadgeData('code quality', data)
-        fetchFromSvg(request, url, /visibility="hidden">([^<>]+)<\/text>/, (err, res) => {
-          if (err != null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            badgeData.text[1] = res
-            if (res === 'A') {
-              badgeData.colorscheme = 'brightgreen'
-            } else if (res === 'B') {
-              badgeData.colorscheme = 'green'
-            } else if (res === 'C') {
-              badgeData.colorscheme = 'yellowgreen'
-            } else if (res === 'D') {
-              badgeData.colorscheme = 'yellow'
-            } else if (res === 'E') {
-              badgeData.colorscheme = 'orange'
-            } else if (res === 'F') {
-              badgeData.colorscheme = 'red'
-            } else if (res === 'X') {
-              badgeData.text[1] = 'invalid'
-              badgeData.colorscheme = 'lightgrey'
-            } else {
-              badgeData.colorscheme = 'red'
+        fetchFromSvg(
+          request,
+          url,
+          /visibility="hidden">([^<>]+)<\/text>/,
+          (err, res) => {
+            if (err != null) {
+              badgeData.text[1] = 'inaccessible'
+              sendBadge(format, badgeData)
+              return
             }
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
+            try {
+              badgeData.text[1] = res
+              if (res === 'A') {
+                badgeData.colorscheme = 'brightgreen'
+              } else if (res === 'B') {
+                badgeData.colorscheme = 'green'
+              } else if (res === 'C') {
+                badgeData.colorscheme = 'yellowgreen'
+              } else if (res === 'D') {
+                badgeData.colorscheme = 'yellow'
+              } else if (res === 'E') {
+                badgeData.colorscheme = 'orange'
+              } else if (res === 'F') {
+                badgeData.colorscheme = 'red'
+              } else if (res === 'X') {
+                badgeData.text[1] = 'invalid'
+                badgeData.colorscheme = 'lightgrey'
+              } else {
+                badgeData.colorscheme = 'red'
+              }
+              sendBadge(format, badgeData)
+            } catch (e) {
+              badgeData.text[1] = 'invalid'
+              sendBadge(format, badgeData)
+            }
           }
-        })
+        )
       })
     )
   }

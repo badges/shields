@@ -3,14 +3,7 @@
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isIntegerPercentage } = require('../test-validators')
-const isCodacyGrade = Joi.equal(
-  'A',
-  'B',
-  'C',
-  'D',
-  'E',
-  'F',
-)
+const isCodacyGrade = Joi.equal('A', 'B', 'C', 'D', 'E', 'F')
 
 const t = new ServiceTester({ id: 'codacy', title: 'Codacy' })
 module.exports = t
@@ -23,7 +16,7 @@ t.create('Coverage')
       value: isIntegerPercentage,
     })
   )
-  
+
 t.create('Coverage on branch')
   .get('/coverage/59d607d0e311408885e418004068ea58/master.json')
   .expectJSONTypes(
@@ -32,7 +25,7 @@ t.create('Coverage on branch')
       value: isIntegerPercentage,
     })
   )
-  
+
 t.create('Code qualiy')
   .get('/grade/e27821fb6289410b8f58338c7e0bc686.json')
   .expectJSONTypes(
@@ -41,7 +34,7 @@ t.create('Code qualiy')
       value: isCodacyGrade,
     })
   )
-  
+
 t.create('Code qualiy on branch')
   .get('/grade/e27821fb6289410b8f58338c7e0bc686/master.json')
   .expectJSONTypes(
