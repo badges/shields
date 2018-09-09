@@ -6,19 +6,22 @@ const path = require('path')
 const xpath = require('xpath')
 const yaml = require('js-yaml')
 const Raven = require('raven')
-
 const prometheus = require('prom-client');
-const register = prometheus.register;
-prometheus.collectDefaultMetrics();
 
 const serverSecrets = require('./lib/server-secrets')
 Raven.config(process.env.SENTRY_DSN || serverSecrets.sentry_dsn).install()
 Raven.disableConsoleAlerts()
 
+const config = require('./lib/server-config')
+let register
+if (config.metrics.prometheus.enabled) {
+  register = prometheus.register
+  prometheus.collectDefaultMetrics()
+}
+
 const { loadServiceClasses } = require('./services')
 const { checkErrorResponse } = require('./lib/error-helper')
 const analytics = require('./lib/analytics')
-const config = require('./lib/server-config')
 const GithubConstellation = require('./services/github/github-constellation')
 const sysMonitor = require('./lib/sys/monitor')
 const log = require('./lib/log')
@@ -330,10 +333,12 @@ camp.route(/^\/([^/]+)\/(.+).png$/, (data, match, end, ask) => {
   }
 })
 
-camp.route(/^\/metrics$/, (data, match, end, ask) => {
-  ask.res.setHeader('Content-Type', register.contentType);
-  ask.res.end(register.metrics());
-});
+if (config.metrics.prometheus.enabled) {
+  camp.route(/^\/metrics$/, (data, match, end, ask) => {
+    ask.res.setHeader('Content-Type', register.contentType);
+    ask.res.end(register.metrics());
+  });
+}
 
 if (config.redirectUri) {
   camp.route(/^\/$/, (data, match, end, ask) => {
