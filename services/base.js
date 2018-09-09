@@ -2,6 +2,7 @@
 
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
+const Joi = require('joi')
 const {
   NotFound,
   InvalidResponse,
@@ -9,6 +10,7 @@ const {
   InvalidParameter,
   Deprecated,
 } = require('./errors')
+const { checkErrorResponse } = require('../lib/error-helper')
 const queryString = require('query-string')
 const {
   makeLogo,
@@ -25,9 +27,7 @@ class BaseService {
   }
 
   static render(props) {
-    throw new Error(
-      `render() function not implemented for ${this.constructor.name}`
-    )
+    throw new Error(`render() function not implemented for ${this.name}`)
   }
 
   /**
@@ -90,9 +90,19 @@ class BaseService {
   static _makeStaticExampleUrl(serviceData) {
     const badgeData = this._makeBadgeData({}, serviceData)
     const color = badgeData.colorscheme || badgeData.colorB
+    return this._makeStaticExampleUrlFromTextAndColor(
+      badgeData.text[0],
+      badgeData.text[1],
+      color
+    )
+  }
+
+  static _makeStaticExampleUrlFromTextAndColor(text1, text2, color) {
     return `/badge/${encodeURIComponent(
-      badgeData.text[0]
-    )}-${encodeURIComponent(badgeData.text[1])}-${color}`
+      text1.replace('-', '--')
+    )}-${encodeURIComponent(text2).replace('-', '--')}-${encodeURIComponent(
+      color
+    )}`
   }
 
   /**
@@ -123,10 +133,10 @@ class BaseService {
 
         return {
           title: title ? `${title}` : this.name,
-          exampleUri: exampleUrl
+          exampleUrl: exampleUrl
             ? `${this._makeFullUrl(exampleUrl, query)}.svg${suffix}`
             : undefined,
-          previewUri: staticExample
+          previewUrl: staticExample
             ? `${this._makeStaticExampleUrl(staticExample)}.svg`
             : `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
           urlPattern: urlPattern
@@ -148,21 +158,21 @@ class BaseService {
   }
 
   static _namedParamsForMatch(match) {
+    const names = this.url.capture || []
+
     // Assume the last match is the format, and drop match[0], which is the
     // entire match.
     const captures = match.slice(1, -1)
 
-    if (this.url.capture.length !== captures.length) {
+    if (names.length !== captures.length) {
       throw new Error(
-        `Service ${
-          this.constructor.name
-        } declares incorrect number of capture groups ` +
-          `(expected ${this.url.capture.length}, got ${captures.length})`
+        `Service ${this.name} declares incorrect number of capture groups ` +
+          `(expected ${names.length}, got ${captures.length})`
       )
     }
 
     const result = {}
-    this.url.capture.forEach((name, index) => {
+    names.forEach((name, index) => {
       result[name] = captures[index]
     })
     return result
@@ -231,6 +241,7 @@ class BaseService {
       style,
       label: overrideLabel,
       logo: overrideLogo,
+      logoColor: overrideLogoColor,
       logoWidth: overrideLogoWidth,
       link: overrideLink,
       colorA: overrideColorA,
@@ -258,6 +269,7 @@ class BaseService {
       template: style,
       logo: makeLogo(style === 'social' ? defaultLogo : undefined, {
         logo: overrideLogo,
+        logoColor: overrideLogoColor,
       }),
       logoWidth: +overrideLogoWidth,
       links: toArray(overrideLink || serviceLink),
@@ -297,6 +309,45 @@ class BaseService {
         },
       })
     )
+  }
+
+  static _validate(data, schema) {
+    if (!schema || !schema.isJoi) {
+      throw Error('A Joi schema is required')
+    }
+    const { error, value } = Joi.validate(data, schema, {
+      allowUnknown: true,
+      stripUnknown: true,
+    })
+    if (error) {
+      trace.logTrace(
+        'validate',
+        emojic.womanShrugging,
+        'Response did not match schema',
+        error.message
+      )
+      throw new InvalidResponse({
+        prettyMessage: 'invalid response data',
+        underlyingError: error,
+      })
+    } else {
+      trace.logTrace(
+        'validate',
+        emojic.bathtub,
+        'Data after validation',
+        value,
+        { deep: true }
+      )
+      return value
+    }
+  }
+
+  async _request({ url, options = {}, errorMessages = {} }) {
+    const logTrace = (...args) => trace.logTrace('fetch', ...args)
+    logTrace(emojic.bowAndArrow, 'Request', url, '\n', options)
+    const { res, buffer } = await this._sendAndCacheRequest(url, options)
+    logTrace(emojic.dart, 'Response status code', res.statusCode)
+    return checkErrorResponse.asPromise(errorMessages)({ buffer, res })
   }
 }
 

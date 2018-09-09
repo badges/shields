@@ -28,7 +28,7 @@ module.exports = class David extends LegacyService {
             options += '?path=' + data.path
           }
           const badgeData = getBadgeData(
-            (dev ? dev + 'D' : 'd') + 'ependencies',
+            (dev ? dev + ' ' : '') + 'dependencies',
             data
           )
           request(options, (err, res, buffer) => {
