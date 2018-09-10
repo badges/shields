@@ -45,7 +45,7 @@ module.exports = class Twitter extends LegacyService {
             'http://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=' +
             user,
         }
-        const badgeData = getBadgeData('Follow @' + user, data)
+        const badgeData = getBadgeData('follow @' + user, data)
 
         badgeData.colorscheme = null
         badgeData.colorB = '#55ACEE'

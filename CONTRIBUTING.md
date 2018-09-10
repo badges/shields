@@ -93,7 +93,7 @@ Badge guidelines
 
 - Shields.io hosts integrations for services which are primarily
   used by developers or which are widely used by developers
-- The left-hand side of a badge should not advertise. It should be a *noun*
+- The left-hand side of a badge should not advertise. It should be a lowercase *noun*
   succinctly describing the meaning of the right-hand side.
 - Query parameters must be *declared by the service*. See `request-handler.js`.
 - Except for badges using the `social` style, logos should be *turned off by
