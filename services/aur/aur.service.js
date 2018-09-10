@@ -19,7 +19,7 @@ module.exports = class Aur extends LegacyService {
         const pkg = match[2]
         const format = match[3]
         const apiUrl = 'https://aur.archlinux.org/rpc.php?type=info&arg=' + pkg
-        const badgeData = getBadgeData('AUR', data)
+        const badgeData = getBadgeData('aur', data)
         request(apiUrl, (err, res, buffer) => {
           if (checkErrorResponse(badgeData, err, res)) {
             sendBadge(format, badgeData)

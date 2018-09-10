@@ -16,7 +16,7 @@ t.create('version (valid)')
   .get('/version/yaourt.json?style=_shields_test')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'AUR',
+      name: 'aur',
       value: isVPlusDottedVersionNClausesWithOptionalSuffix,
       colorB: '#007ec6',
     })
@@ -26,7 +26,7 @@ t.create('version (valid, out of date)')
   .get('/version/gog-gemini-rue.json?style=_shields_test')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'AUR',
+      name: 'aur',
       value: isVPlusDottedVersionNClausesWithOptionalSuffix,
       colorB: '#fe7d37',
     })
@@ -34,12 +34,12 @@ t.create('version (valid, out of date)')
 
 t.create('version (not found)')
   .get('/version/not-a-package.json')
-  .expectJSON({ name: 'AUR', value: 'not found' })
+  .expectJSON({ name: 'aur', value: 'not found' })
 
 t.create('version (connection error)')
   .get('/version/yaourt.json')
   .networkOff()
-  .expectJSON({ name: 'AUR', value: 'inaccessible' })
+  .expectJSON({ name: 'aur', value: 'inaccessible' })
 
 t.create('version (unexpected response)')
   .get('/version/yaourt.json')
@@ -48,7 +48,7 @@ t.create('version (unexpected response)')
       .get('/rpc.php?type=info&arg=yaourt')
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'AUR', value: 'invalid' })
+  .expectJSON({ name: 'aur', value: 'invalid' })
 
 t.create('version (error response)')
   .get('/version/yaourt.json')
@@ -57,7 +57,7 @@ t.create('version (error response)')
       .get('/rpc.php?type=info&arg=yaourt')
       .reply(500, '{"error":"oh noes!!"}')
   )
-  .expectJSON({ name: 'AUR', value: 'invalid' })
+  .expectJSON({ name: 'aur', value: 'invalid' })
 
 // votes tests
 
@@ -72,12 +72,12 @@ t.create('votes (valid)')
 
 t.create('votes (not found)')
   .get('/votes/not-a-package.json')
-  .expectJSON({ name: 'AUR', value: 'not found' })
+  .expectJSON({ name: 'aur', value: 'not found' })
 
 t.create('votes (connection error)')
   .get('/votes/yaourt.json')
   .networkOff()
-  .expectJSON({ name: 'AUR', value: 'inaccessible' })
+  .expectJSON({ name: 'aur', value: 'inaccessible' })
 
 t.create('votes (unexpected response)')
   .get('/votes/yaourt.json')
@@ -86,7 +86,7 @@ t.create('votes (unexpected response)')
       .get('/rpc.php?type=info&arg=yaourt')
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'AUR', value: 'invalid' })
+  .expectJSON({ name: 'aur', value: 'invalid' })
 
 t.create('votes (error response)')
   .get('/votes/yaourt.json')
@@ -95,7 +95,7 @@ t.create('votes (error response)')
       .get('/rpc.php?type=info&arg=yaourt')
       .reply(500, '{"error":"oh noes!!"}')
   )
-  .expectJSON({ name: 'AUR', value: 'invalid' })
+  .expectJSON({ name: 'aur', value: 'invalid' })
 
 // license tests
 
@@ -105,12 +105,12 @@ t.create('license (valid)')
 
 t.create('license (not found)')
   .get('/license/not-a-package.json')
-  .expectJSON({ name: 'AUR', value: 'not found' })
+  .expectJSON({ name: 'aur', value: 'not found' })
 
 t.create('license (connection error)')
   .get('/license/yaourt.json')
   .networkOff()
-  .expectJSON({ name: 'AUR', value: 'inaccessible' })
+  .expectJSON({ name: 'aur', value: 'inaccessible' })
 
 t.create('license (unexpected response)')
   .get('/license/yaourt.json')
@@ -119,7 +119,7 @@ t.create('license (unexpected response)')
       .get('/rpc.php?type=info&arg=yaourt')
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'AUR', value: 'invalid' })
+  .expectJSON({ name: 'aur', value: 'invalid' })
 
 t.create('license (error response)')
   .get('/license/yaourt.json')
@@ -128,4 +128,4 @@ t.create('license (error response)')
       .get('/rpc.php?type=info&arg=yaourt')
       .reply(500, '{"error":"oh noes!!"}')
   )
-  .expectJSON({ name: 'AUR', value: 'invalid' })
+  .expectJSON({ name: 'aur', value: 'invalid' })

@@ -26,7 +26,7 @@ module.exports = class VaadinDirectory extends LegacyService {
           urlIdentifier
 
         // Set left-side text to 'Vaadin-Directory' by default
-        const badgeData = getBadgeData('Vaadin Directory', data)
+        const badgeData = getBadgeData('vaadin directory', data)
         request(apiUrl, (err, res, buffer) => {
           if (checkErrorResponse(badgeData, err, res)) {
             sendBadge(format, badgeData)

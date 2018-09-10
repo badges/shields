@@ -16,7 +16,7 @@ module.exports = class PackagistPhpVersion extends LegacyService {
           method: 'GET',
           uri: 'https://packagist.org/p/' + userRepo + '.json',
         }
-        const badgeData = getBadgeData('PHP', data)
+        const badgeData = getBadgeData('php', data)
         request(options, (err, res, buffer) => {
           if (err !== null) {
             log.error('Packagist error: ' + err.stack)

@@ -20,7 +20,7 @@ module.exports = class PhpEyePhpVersion extends LegacyService {
           method: 'GET',
           uri: 'https://php-eye.com/api/v1/package/' + userRepo + '.json',
         }
-        const badgeData = getBadgeData('PHP tested', data)
+        const badgeData = getBadgeData('php tested', data)
         getPhpReleases(githubApiProvider, (err, phpReleases) => {
           if (err != null) {
             badgeData.text[1] = 'invalid'
