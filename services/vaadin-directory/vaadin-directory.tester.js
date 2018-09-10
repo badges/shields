@@ -12,7 +12,7 @@ const {
 
 const t = new ServiceTester({
   id: 'vaadin-directory',
-  title: 'Vaadin Directory',
+  title: 'vaadin directory',
 })
 module.exports = t
 
@@ -38,7 +38,7 @@ t.create('publish status of the component')
   .get('/status/vaadinvaadin-grid.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'Vaadin Directory',
+      name: 'vaadin directory',
       value: Joi.equal(
         'published',
         'unpublished',
@@ -116,7 +116,7 @@ t.create('latest release date of the component (format: yyyy-mm-dd)')
 t.create('Invalid addon')
   .get('/stars/404.json')
   .expectJSON({
-    name: 'Vaadin Directory',
+    name: 'vaadin directory',
     value: 'not found',
   })
 
@@ -124,6 +124,6 @@ t.create('No connection')
   .get('/stars/vaadinvaadin-grid.json')
   .networkOff()
   .expectJSON({
-    name: 'Vaadin Directory',
+    name: 'vaadin directory',
     value: 'inaccessible',
   })

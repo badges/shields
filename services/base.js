@@ -241,6 +241,7 @@ class BaseService {
       style,
       label: overrideLabel,
       logo: overrideLogo,
+      logoColor: overrideLogoColor,
       logoWidth: overrideLogoWidth,
       link: overrideLink,
       colorA: overrideColorA,
@@ -268,6 +269,7 @@ class BaseService {
       template: style,
       logo: makeLogo(style === 'social' ? defaultLogo : undefined, {
         logo: overrideLogo,
+        logoColor: overrideLogoColor,
       }),
       logoWidth: +overrideLogoWidth,
       links: toArray(overrideLink || serviceLink),

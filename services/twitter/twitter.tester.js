@@ -12,7 +12,7 @@ t.create('Followers')
   .get('/follow/shields_io.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'Follow @shields_io',
+      name: 'follow @shields_io',
       value: isMetric,
     })
   )
