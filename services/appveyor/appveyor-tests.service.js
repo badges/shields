@@ -104,7 +104,7 @@ module.exports = class AppVeyorTests extends AppVeyorBase {
     const data = await this.fetch({ repo, branch })
 
     if (!data.hasOwnProperty('build')) {
-      return { message: 'unknown' }
+      return { message: 'no builds found' }
     }
 
     let total = 0,

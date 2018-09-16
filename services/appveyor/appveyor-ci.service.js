@@ -30,7 +30,7 @@ module.exports = class AppVeyorCi extends AppVeyorBase {
     } else if (
       status !== 'running' &&
       status !== 'queued' &&
-      status !== 'unknown'
+      status !== 'no builds found'
     ) {
       return { message: 'failing', color: 'red' }
     } else {
@@ -42,7 +42,7 @@ module.exports = class AppVeyorCi extends AppVeyorBase {
     const data = await this.fetch({ repo, branch })
     if (!data.hasOwnProperty('build')) {
       // this project exists but no builds have been run on it yet
-      return this.constructor.render({ status: 'unknown' })
+      return this.constructor.render({ status: 'no builds found' })
     }
     return this.constructor.render({ status: data.build.status })
   }
