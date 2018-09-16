@@ -71,3 +71,12 @@ t.create('Test status with compact message and custom labels')
 t.create('Test status on non-existent project')
   .get('/somerandomproject/thatdoesntexist.json')
   .expectJSON({ name: 'tests', value: 'project not found or access denied' })
+
+t.create('Test status on project that does exist but has no builds yet')
+  .get('/gruntjs/grunt.json?style=_shields_test')
+  .intercept(nock =>
+    nock('https://ci.appveyor.com/api/projects/')
+      .get('/gruntjs/grunt')
+      .reply(200, {})
+  )
+  .expectJSON({ name: 'tests', value: 'unknown', colorB: '#9f9f9f' })

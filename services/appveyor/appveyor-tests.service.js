@@ -101,15 +101,16 @@ module.exports = class AppVeyorTests extends AppVeyorBase {
     }
   ) {
     const isCompact = compactMessage !== undefined
+    const data = await this.fetch({ repo, branch })
 
-    const {
-      build: { jobs },
-    } = await this.fetch({ repo, branch })
+    if (!data.hasOwnProperty('build')) {
+      return { message: 'unknown' }
+    }
 
     let total = 0,
       passed = 0,
       failed = 0
-    jobs.forEach(job => {
+    data.build.jobs.forEach(job => {
       total += job.testsCount
       passed += job.passedTestsCount
       failed += job.failedTestsCount
