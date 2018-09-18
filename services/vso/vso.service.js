@@ -5,7 +5,7 @@ const { fetchFromSvg } = require('../../lib/svg-badge-parser')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 const fetchVstsBadge = (request, url, badgeData, sendBadge, format) => {
-  fetchFromSvg(request, url, (err, res) => {
+  fetchFromSvg(request, url, />([^<>]+)<\/text><\/g>/, (err, res) => {
     if (err != null) {
       badgeData.text[1] = 'inaccessible'
       sendBadge(format, badgeData)
@@ -42,7 +42,7 @@ module.exports = class Vso extends LegacyService {
         const build = match[3] // Build definition ID, e.g. 1
         const branch = match[4]
         const format = match[5]
-        let url = `https://${name}.visualstudio.com/_apis/public/build/definitions/${project}/${build}/badge`
+        let url = `https://${name}.visualstudio.com/${project}/_apis/build/status/${build}`
         if (branch != null) {
           url += `?branchName=${branch}`
         }

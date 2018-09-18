@@ -20,7 +20,7 @@ module.exports = class ReadTheDocs extends LegacyService {
         if (version != null) {
           url += '?version=' + encodeURIComponent(version)
         }
-        fetchFromSvg(request, url, (err, res) => {
+        fetchFromSvg(request, url, />([^<>]+)<\/text><\/g>/, (err, res) => {
           if (err != null) {
             badgeData.text[1] = 'inaccessible'
             sendBadge(format, badgeData)

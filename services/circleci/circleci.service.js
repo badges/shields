@@ -70,7 +70,7 @@ module.exports = class CircleCi extends BaseJsonService {
     return {
       base: 'circleci',
       format:
-        '(?:token/(w+))?[+/]?project/(?:(github|bitbucket)/)?([^/]+/[^/]+)(?:/(.*))?',
+        '(?:token/(\\w+)/)?project/(?:(github|bitbucket)/)?([^/]+/[^/]+)(?:/(.*))?',
       capture: ['token', 'vcsType', 'userRepo', 'branch'],
     }
   }
