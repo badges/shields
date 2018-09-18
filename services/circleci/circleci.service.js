@@ -91,8 +91,7 @@ module.exports = class CircleCi extends BaseJsonService {
       },
       {
         title: 'CircleCI token',
-        urlPattern:
-          'token/:token/project/:vcsType/:owner/:repo/:branch',
+        urlPattern: 'token/:token/project/:vcsType/:owner/:repo/:branch',
         exampleUrl:
           'token/b90b5c49e59a4c67ba3a92f7992587ac7a0408c2/project/github/RedSparr0w/node-csgo-parser/master',
         staticExample: this.render({ status: 'passing' }),
