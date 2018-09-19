@@ -48,7 +48,7 @@ Examples
 * package manager release: `gem | 1.2.3`
 * status of third-party dependencies: `dependencies | out-of-date`
 * static code analysis GPA: `code climate | 3.8`
-* [SemVer](http://semver.org/) version observance: `semver | 2.0.0`
+* [SemVer](https://semver.org/) version observance: `semver | 2.0.0`
 * amount of [Gratipay](http://gratipay.com) donations per week: `tips | $2/week`
 
 [Make your own badges!][custom badges]
