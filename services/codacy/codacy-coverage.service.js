@@ -40,7 +40,7 @@ module.exports = class CodacyCoverage extends LegacyService {
             }
             try {
               const coverage = parseInt(res)
-              if (isNaN(coverage)) {
+              if (Number.isNaN(coverage)) {
                 badgeData.text[1] = 'unknown'
               } else {
                 badgeData.text[1] = res
