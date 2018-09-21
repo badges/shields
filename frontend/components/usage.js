@@ -49,6 +49,7 @@ export default class Usage extends React.PureComponent {
         <tbody>
           {advertisedStyles.map((style, i) => {
             const badgeUrl = staticBadgeUrl(baseUrl, 'style', style, 'green', {
+              logo: 'appveyor',
               longCache,
               style,
             })
@@ -177,7 +178,7 @@ export default class Usage extends React.PureComponent {
 
         <p>
           The following styles are available (flat is the default as of Feb 1st
-          2015):
+          2015). Examples are shown with an optional logo:
         </p>
         {this.renderStyleExamples()}
 

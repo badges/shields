@@ -182,7 +182,8 @@ function mapNugetFeed({ camp, cache }, pattern, offset, getInfo) {
             searchQueryResources[randomEndpointIdx]['@id'] +
             '?q=packageid:' +
             encodeURIComponent(id.toLowerCase()) + // NuGet package id (lowercase)
-            '&prerelease=true' // Include prerelease versions?
+            '&prerelease=true' + // Include prerelease versions?
+            '&semVerLevel=2' // Include packages with SemVer 2 version numbers
 
           request(reqUrl, (err, res, buffer) => {
             if (err != null) {
