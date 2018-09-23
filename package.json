@@ -172,7 +172,7 @@
     "semver-regex": "^2.0.0",
     "sinon": "^6.0.0",
     "sinon-chai": "^3.0.0",
-    "snap-shot-it": "^5.0.1",
+    "snap-shot-it": "^6.1.8",
     "tmp": "0.0.33",
     "url": "^0.11.0",
     "wait-promise": "^0.4.1"
