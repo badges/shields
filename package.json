@@ -123,7 +123,7 @@
     "child-process-promise": "^2.2.1",
     "classnames": "^2.2.5",
     "concurrently": "^4.0.1",
-    "danger": "^3.7.13",
+    "danger": "^4.0.1",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
     "dejavu-fonts-ttf": "^2.37.3",
     "eol": "^0.9.1",
