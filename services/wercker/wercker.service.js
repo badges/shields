@@ -77,7 +77,8 @@ module.exports = class Wercker extends BaseJsonService {
   static get url() {
     return {
       base: 'wercker',
-      format: '(?:(?:ci/)([a-fA-F0-9]{24})|(?:build|ci)/([^/]+/[^/]+))(?:/(.+))?',
+      format:
+        '(?:(?:ci/)([a-fA-F0-9]{24})|(?:build|ci)/([^/]+/[^/]+))(?:/(.+))?',
       capture: ['projectId', 'applicationName', 'branch'],
     }
   }
