@@ -25,14 +25,6 @@ t.create('CI status (no builds yet)')
   )
   .expectJSON({ name: 'build', value: 'no builds' })
 
-t.create('Build status by ID')
-  .get('/build/559e33c8e982fc615500b357.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'build', value: isBuildStatus }))
-
-t.create('Build status by ID (with branch)')
-  .get('/build/559e33c8e982fc615500b357/master.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'build', value: isBuildStatus }))
-
 t.create('Build status by name')
   .get('/build/wercker/go-wercker-api.json')
   .expectJSONTypes(Joi.object().keys({ name: 'build', value: isBuildStatus }))

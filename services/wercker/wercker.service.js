@@ -15,13 +15,11 @@ const werckerSchema = Joi.array()
   .required()
 
 module.exports = class Wercker extends BaseJsonService {
-  static getBaseUrl({ endpoint, projectId, applicationName }) {
+  static getBaseUrl({ projectId, applicationName }) {
     if (applicationName) {
       return `https://app.wercker.com/api/v3/applications/${applicationName}/builds`
-    } else if (endpoint === 'ci') {
+    } else {
       return `https://app.wercker.com/api/v3/runs?applicationId=${projectId}`
-    } else if (endpoint === 'build') {
-      return `https://app.wercker.com/getbuilds/${projectId}`
     }
   }
 
@@ -53,10 +51,9 @@ module.exports = class Wercker extends BaseJsonService {
     return { message: status }
   }
 
-  async handle({ endpoint, projectId, applicationName, branch }) {
+  async handle({ projectId, applicationName, branch }) {
     const json = await this.fetch({
       baseUrl: this.constructor.getBaseUrl({
-        endpoint,
         projectId,
         applicationName,
       }),
@@ -80,8 +77,8 @@ module.exports = class Wercker extends BaseJsonService {
   static get url() {
     return {
       base: 'wercker',
-      format: '(build|ci)/(?:([a-fA-F0-9]{24})|([^/]+/[^/]+))(?:/(.+))?',
-      capture: ['endpoint', 'projectId', 'applicationName', 'branch'],
+      format: '(?:(?:ci/)([a-fA-F0-9]{24})|(?:build|ci)/([^/]+/[^/]+))(?:/(.+))?',
+      capture: ['projectId', 'applicationName', 'branch'],
     }
   }
 
@@ -97,18 +94,6 @@ module.exports = class Wercker extends BaseJsonService {
         title: `Wercker CI Run`,
         exampleUrl: 'ci/559e33c8e982fc615500b357/master',
         urlPattern: 'ci/:applicationId/:branch',
-        staticExample: this.render({ status: 'finished', result: 'passed' }),
-      },
-      {
-        title: `Wercker Build`,
-        exampleUrl: 'build/559e33c8e982fc615500b357',
-        urlPattern: 'build/:applicationId',
-        staticExample: this.render({ status: 'finished', result: 'passed' }),
-      },
-      {
-        title: `Wercker Build branch`,
-        exampleUrl: 'build/559e33c8e982fc615500b357/master',
-        urlPattern: 'build/:applicationId/:branch',
         staticExample: this.render({ status: 'finished', result: 'passed' }),
       },
       {
