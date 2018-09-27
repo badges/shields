@@ -10,18 +10,29 @@ const werckerSchema = Joi.array()
       result: Joi.string().required(),
     })
   )
-  .min(1)
+  .min(0)
+  .max(1)
   .required()
 
 module.exports = class Wercker extends BaseJsonService {
-  async fetch({ applicationName, projectId, branch }) {
-    const url = applicationName
-      ? `https://app.wercker.com/api/v3/applications/${applicationName}/builds?limit=1`
-      : `https://app.wercker.com/getbuilds/${projectId}?limit=1`
+  static getBaseUrl({ projectId, applicationName }) {
+    if (applicationName) {
+      return `https://app.wercker.com/api/v3/applications/${applicationName}/builds`
+    } else {
+      return `https://app.wercker.com/api/v3/runs?applicationId=${projectId}`
+    }
+  }
+
+  async fetch({ baseUrl, branch }) {
     return this._requestJson({
       schema: werckerSchema,
-      url,
-      options: { qs: { branch } },
+      url: baseUrl,
+      options: {
+        qs: {
+          branch: branch,
+          limit: 1,
+        },
+      },
       errorMessages: {
         401: 'private application not supported',
         404: 'application not found',
@@ -40,8 +51,20 @@ module.exports = class Wercker extends BaseJsonService {
     return { message: status }
   }
 
-  async handle({ applicationName, projectId, branch }) {
-    const json = await this.fetch({ applicationName, projectId, branch })
+  async handle({ projectId, applicationName, branch }) {
+    const json = await this.fetch({
+      baseUrl: this.constructor.getBaseUrl({
+        projectId,
+        applicationName,
+      }),
+      branch: branch,
+    })
+    if (json.length === 0) {
+      return this.constructor.render({
+        status: 'finished',
+        result: 'no builds',
+      })
+    }
     const { status, result } = json[0]
     return this.constructor.render({ status, result })
   }
@@ -53,23 +76,37 @@ module.exports = class Wercker extends BaseJsonService {
 
   static get url() {
     return {
-      base: 'wercker/ci',
-      format: '(?:([^/]+/[^/]+)|([a-fA-F0-9]+))(?:/(.+))?',
-      capture: ['applicationName', 'projectId', 'branch'],
+      base: 'wercker',
+      format:
+        '(?:(?:ci/)([a-fA-F0-9]{24})|(?:build|ci)/([^/]+/[^/]+))(?:/(.+))?',
+      capture: ['projectId', 'applicationName', 'branch'],
     }
   }
 
   static get examples() {
     return [
       {
-        exampleUrl: 'wercker/go-wercker-api',
-        urlPattern: ':applicationName/:projectId',
+        title: `Wercker CI Run`,
+        exampleUrl: 'ci/559e33c8e982fc615500b357',
+        urlPattern: 'ci/:applicationId',
         staticExample: this.render({ status: 'finished', result: 'passed' }),
       },
       {
-        title: `${this.name} branch`,
-        urlPattern: ':applicationName/:projectId/:branch',
-        exampleUrl: 'wercker/go-wercker-api/master',
+        title: `Wercker CI Run`,
+        exampleUrl: 'ci/559e33c8e982fc615500b357/master',
+        urlPattern: 'ci/:applicationId/:branch',
+        staticExample: this.render({ status: 'finished', result: 'passed' }),
+      },
+      {
+        title: `Wercker Build`,
+        exampleUrl: 'build/wercker/go-wercker-api',
+        urlPattern: 'build/:userName/:applicationName',
+        staticExample: this.render({ status: 'finished', result: 'passed' }),
+      },
+      {
+        title: `Wercker Build branch`,
+        exampleUrl: 'build/wercker/go-wercker-api/master',
+        urlPattern: 'build/:userName/:applicationName/:branch',
         staticExample: this.render({ status: 'finished', result: 'passed' }),
       },
     ]
