@@ -27,7 +27,7 @@ Tutorial
 Before getting started, set up a development environment by following the
 [setup instructions](https://github.com/badges/shields/blob/master/doc/TUTORIAL.md#2-setup)
 
-We will write some tests for the [Wercker service](https://github.com/badges/shields/blob/master/services/wercker/wercker.service.js)
+We will write some tests for the [Wercker Build service](https://github.com/badges/shields/blob/master/services/wercker/wercker.service.js)
 
 ### (1) Boilerplate
 
@@ -57,12 +57,12 @@ First we'll add a test for the typical case:
 ```js
 const { isBuildStatus } = require('../test-validators')
 
-t.create('CI build status')            // 1
-  .get('/wercker/go-wercker-api.json') // 2
-  .expectJSONTypes(                    // 3
-    Joi.object().keys({                // 4
-      name: 'build',                   // 5
-      value: isBuildStatus,            // 6
+t.create('Build status')                     // 1
+  .get('/build/wercker/go-wercker-api.json') // 2
+  .expectJSONTypes(                          // 3
+    Joi.object().keys({                      // 4
+      name: 'build',                         // 5
+      value: isBuildStatus,                  // 6
     })
   )
 ```
@@ -73,8 +73,8 @@ Here's a [longer example][] and the complete [API guide][IcedFrisby API].
 2. We use the `get()` method to request a badge. There are several points to consider here:
     * We need a real project to test against. In this case we have used [wercker/go-wercker-api](https://app.wercker.com/wercker/go-wercker-api/runs) but we could have chosen any stable project.
     * Note that when we call our badge, we are allowing it to communicate with an external service without mocking the reponse. We write tests which interact with external services, which is unusual practice in unit testing. We do this because one of the purposes of service tests is to notify us if a badge has broken due to an upstream API change. For this reason it is important for at least one test to call the live API without mocking the interaction.
-    * All badges on shields can be requested in a number of formats. As well as calling https://img.shields.io/wercker/ci/wercker/go-wercker-api.svg to generate ![](https://img.shields.io/wercker/ci/wercker/go-wercker-api.svg) we can also call https://img.shields.io/wercker/ci/wercker/go-wercker-api.json to request the same content as JSON. When writing service tests, we request the badge in JSON format so it is easier to make assertions about the content.
-    * We don't need to explicitly call `/wercker/ci/wercker/go-wercker-api.json` here, only `/wercker/go-wercker-api.json`. When we create a tester object with `createServiceTester()` the URL base defined in our service class (in this case (`/wercker/ci`) is used as the base URL for any requests made by the tester object.
+    * All badges on shields can be requested in a number of formats. As well as calling https://img.shields.io/wercker/build/wercker/go-wercker-api.svg to generate ![](https://img.shields.io/wercker/build/wercker/go-wercker-api.svg) we can also call https://img.shields.io/wercker/build/wercker/go-wercker-api.json to request the same content as JSON. When writing service tests, we request the badge in JSON format so it is easier to make assertions about the content.
+    * We don't need to explicitly call `/wercker/build/wercker/go-wercker-api.json` here, only `/build/wercker/go-wercker-api.json`. When we create a tester object with `createServiceTester()` the URL base defined in our service class (in this case `/wercker`) is used as the base URL for any requests made by the tester object.
 3. `expectJSONTypes()` is an IcedFrisby method which accepts a [Joi][] schema.
 Joi is a validation library that is build into IcedFrisby which you can use to
 match based on a set of allowed strings, regexes, or specific values. You can
@@ -112,9 +112,9 @@ Here's the output:
 ```
 Server is starting up: http://lib/service-test-runner/cli.js:80/
   Wercker
-    CI build status
+    Build status
       ✓
-        [ GET /wercker/go-wercker-api.json ] (572ms)
+        [ GET /build/wercker/go-wercker-api.json ] (572ms)
 
   1 passing (1s)
 ```
@@ -134,8 +134,8 @@ to run the test with some additional debug output.
 We should write tests cases for valid paths through our code. The Wercker badge supports an optional branch parameter so we'll add a second test for a branch build.
 
 ```js
-t.create('CI build status (branch)')
-  .get('/wercker/go-wercker-api/master.json')
+t.create('Build status (with branch)')
+  .get('/build/wercker/go-wercker-api/master.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'build',
@@ -147,12 +147,12 @@ t.create('CI build status (branch)')
 ```
 Server is starting up: http://lib/service-test-runner/cli.js:80/
   Wercker
-    CI build status
+    Build status
       ✓
-        [ GET /wercker/go-wercker-api.json ] (572ms)
-    CI build status (branch)
+        [ GET /build/wercker/go-wercker-api.json ] (572ms)
+    Build status (with branch)
       ✓
-        [ GET /wercker/go-wercker-api/master.json ] (368ms)
+        [ GET /build/wercker/go-wercker-api/master.json ] (368ms)
 
   2 passing (1s)
 ```
@@ -169,8 +169,8 @@ errorMessages: {
 First we'll add a test for a project which will return a 404 error:
 
 ```js
-t.create('CI application not found')
-  .get('/some-project/that-doesnt-exist.json')
+t.create('Build status (application not found)')
+  .get('/build/some-project/that-doesnt-exist.json')
   .expectJSON({ name: 'build', value: 'application not found' })
 ```
 
@@ -179,8 +179,8 @@ In this case we are expecting an object literal instead of a pattern so we shoul
 We also want to include a test for the 'private application not supported' case. One way to do this would be to find another example of a private project which is unlikely to change. For example:
 
 ```js
-t.create('CI private application')
-  .get('/wercker/blueprint.json')
+t.create('Build status (private application)')
+  .get('/build/wercker/blueprint.json')
   .expectJSON({ name: 'build', value: 'private application not supported' })
 ```
 
@@ -189,8 +189,8 @@ t.create('CI private application')
 If we didn't have a stable example of a private project, another approach would be to mock the response. An alternative test for the 'private application' case might look like:
 
 ```js
-t.create('CI private application')
-  .get('/wercker/go-wercker-api.json')
+t.create('Build status (private application)')
+  .get('/build/wercker/go-wercker-api.json')
   .intercept(nock => nock('https://app.wercker.com/api/v3/applications/')
     .get('/wercker/go-wercker-api/builds?limit=1')
     .reply(401)
@@ -229,8 +229,8 @@ static render({ status, result }) {
 We can also use nock to intercept API calls to return a known response body.
 
 ```js
-t.create('CI passed (mocked)')
-  .get('/wercker/go-wercker-api.json?style=_shields_test')
+t.create('Build passed (mocked)')
+  .get('/build/wercker/go-wercker-api.json?style=_shields_test')
   .intercept(nock =>
     nock('https://app.wercker.com/api/v3/applications/')
       .get('/wercker/go-wercker-api/builds?limit=1')
@@ -238,8 +238,8 @@ t.create('CI passed (mocked)')
   )
   .expectJSON({ name: 'build', value: 'passing', colorB: '#4c1' })
 
-t.create('CI failed (mocked)')
-  .get('/wercker/go-wercker-api.json?style=_shields_test')
+t.create('Build failed (mocked)')
+  .get('/build/wercker/go-wercker-api.json?style=_shields_test')
   .intercept(nock =>
     nock('https://app.wercker.com/api/v3/applications/')
       .get('/wercker/go-wercker-api/builds?limit=1')
