@@ -1,0 +1,26 @@
+---
+name: 💡 Badge Request
+about: Ideas for new badges
+
+---
+
+:clipboard: **Description**
+<!--
+A clear and concise description of the new feature.
+
+- Which service is this badge for e.g: GitHub, Travis CI
+- What sort of information should this badge show e.g: version, downloads
+-->
+
+:link: **Data**
+<!--
+Where can we get the data from?
+
+- Is there a public API?
+- Does the API requires an API key?
+- Link to the API documentation.
+-->
+
+
+<!-- Love Shields? Please consider donating $10 to sustain our activities:
+👉  https://opencollective.com/shields -->
