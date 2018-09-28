@@ -111,7 +111,7 @@
   "devDependencies": {
     "@mapbox/react-click-to-select": "^2.2.0",
     "almost-equal": "^1.1.0",
-    "babel-eslint": "^9.0.0",
+    "babel-eslint": "^10.0.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "caller": "^1.0.1",
@@ -123,7 +123,7 @@
     "child-process-promise": "^2.2.1",
     "classnames": "^2.2.5",
     "concurrently": "^4.0.1",
-    "danger": "^3.7.13",
+    "danger": "^4.0.1",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
     "dejavu-fonts-ttf": "^2.37.3",
     "eol": "^0.9.1",
@@ -172,7 +172,7 @@
     "semver-regex": "^2.0.0",
     "sinon": "^6.0.0",
     "sinon-chai": "^3.0.0",
-    "snap-shot-it": "^5.0.1",
+    "snap-shot-it": "^6.1.8",
     "tmp": "0.0.33",
     "url": "^0.11.0",
     "wait-promise": "^0.4.1"
