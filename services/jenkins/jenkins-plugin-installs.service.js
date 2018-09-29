@@ -3,7 +3,7 @@
 const Joi = require('joi')
 
 const BaseJsonService = require('../base-json')
-const { NotFound, InvalidParameter } = require('../errors')
+const { NotFound } = require('../errors')
 const {
   downloadCount: downloadCountColor,
 } = require('../../lib/color-formatters')
