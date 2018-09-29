@@ -9,7 +9,7 @@ const t = createServiceTester()
 // total installs
 
 t.create('total installs | valid')
-  .get('/i/view-job-filters.json')
+  .get('/view-job-filters.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'installs',
@@ -18,7 +18,7 @@ t.create('total installs | valid')
   )
 
 t.create('total installs | invalid: no "installations" property')
-  .get('/i/view-job-filters.json')
+  .get('/view-job-filters.json')
   .intercept(nock =>
     nock('https://stats.jenkins.io')
       .get('/plugin-installation-trend/view-job-filters.stats.json')
@@ -27,7 +27,7 @@ t.create('total installs | invalid: no "installations" property')
   .expectJSON({ name: 'installs', value: 'invalid response data' })
 
 t.create('total installs | invalid: empty "installations" object')
-  .get('/i/view-job-filters.json')
+  .get('/view-job-filters.json')
   .intercept(nock =>
     nock('https://stats.jenkins.io')
       .get('/plugin-installation-trend/view-job-filters.stats.json')
@@ -36,7 +36,7 @@ t.create('total installs | invalid: empty "installations" object')
   .expectJSON({ name: 'installs', value: 'invalid response data' })
 
 t.create('total installs | invalid: non-numeric "installations" key')
-  .get('/i/view-job-filters.json')
+  .get('/view-job-filters.json')
   .intercept(nock =>
     nock('https://stats.jenkins.io')
       .get('/plugin-installation-trend/view-job-filters.stats.json')
@@ -45,18 +45,18 @@ t.create('total installs | invalid: non-numeric "installations" key')
   .expectJSON({ name: 'installs', value: 'invalid response data' })
 
 t.create('total installs | not found')
-  .get('/i/not-a-plugin.json')
+  .get('/not-a-plugin.json')
   .expectJSON({ name: 'installs', value: 'not found' })
 
 t.create('total installs | inaccessible: connection error')
-  .get('/i/view-job-filters.json')
+  .get('/view-job-filters.json')
   .networkOff()
   .expectJSON({ name: 'installs', value: 'inaccessible' })
 
 // version installs
 
 t.create('version installs | valid: numeric version')
-  .get('/iv/view-job-filters/1.26.json')
+  .get('/view-job-filters/1.26.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'installs@1.26',
@@ -65,7 +65,7 @@ t.create('version installs | valid: numeric version')
   )
 
 t.create('version installs | valid: alpha-numeric version')
-  .get('/iv/view-job-filters/1.27-DRE1.00.json')
+  .get('/view-job-filters/1.27-DRE1.00.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'installs@1.27-DRE1.00',
@@ -74,7 +74,7 @@ t.create('version installs | valid: alpha-numeric version')
   )
 
 t.create('version installs | invalid: "installationsPerVersion" missing')
-  .get('/iv/view-job-filters/1.26.json')
+  .get('/view-job-filters/1.26.json')
   .intercept(nock =>
     nock('https://stats.jenkins.io')
       .get('/plugin-installation-trend/view-job-filters.stats.json')
@@ -83,7 +83,7 @@ t.create('version installs | invalid: "installationsPerVersion" missing')
   .expectJSON({ name: 'installs', value: 'invalid response data' })
 
 t.create('version installs | invalid: empty "installationsPerVersion" object')
-  .get('/iv/view-job-filters/1.26.json')
+  .get('/view-job-filters/1.26.json')
   .intercept(nock =>
     nock('https://stats.jenkins.io')
       .get('/plugin-installation-trend/view-job-filters.stats.json')
@@ -92,15 +92,15 @@ t.create('version installs | invalid: empty "installationsPerVersion" object')
   .expectJSON({ name: 'installs', value: 'invalid response data' })
 
 t.create('version installs | not found: non-existent plugin')
-  .get('/iv/not-a-plugin/1.26.json')
+  .get('/not-a-plugin/1.26.json')
   .expectJSON({ name: 'installs', value: 'not found' })
 
 t.create('version installs | not found: non-existent version')
-  .get('/iv/view-job-filters/1.99.json')
+  .get('/view-job-filters/1.99.json')
   .expectJSON({ name: 'installs', value: 'not found' })
 
 t.create('version installs | inaccessible: connection error')
-  .get('/iv/view-job-filters/1.26.json')
+  .get('/view-job-filters/1.26.json')
   .networkOff()
   .expectJSON({ name: 'installs', value: 'inaccessible' })
 

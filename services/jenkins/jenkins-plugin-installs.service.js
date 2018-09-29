@@ -59,27 +59,23 @@ class JenkinsPluginInstalls extends BaseJsonService {
     }
   }
 
-  async handle({ info, plugin, version }) {
+  async handle({ plugin, version }) {
     const label = this.constructor._getLabel(version)
     const json = await this.fetch({ plugin, version })
 
     let installs
-    if (info === 'iv') {
+    if (version) {
       installs = json.installationsPerVersion[version]
       if (!installs) {
         throw new NotFound({
           underlyingError: new Error('non-existent version'),
         })
       }
-    } else if (info === 'i') {
+    } else {
       const latestDate = Object.keys(json.installations)
         .sort()
         .slice(-1)[0]
       installs = json.installations[latestDate]
-    } else {
-      throw new InvalidParameter({
-        underlyingError: new Error('invalid info'),
-      })
     }
 
     return this.constructor.render({ label, installs })
@@ -95,9 +91,9 @@ class JenkinsPluginInstalls extends BaseJsonService {
 
   static get url() {
     return {
-      base: 'jenkins/plugin',
-      format: '(i|iv)/([^/]+)/?([^/]+)?',
-      capture: ['info', 'plugin', 'version'],
+      base: 'jenkins/plugin/i',
+      format: '([^/]+)/?([^/]+)?',
+      capture: ['plugin', 'version'],
     }
   }
 
@@ -105,21 +101,21 @@ class JenkinsPluginInstalls extends BaseJsonService {
     return [
       {
         title: 'Jenkins Plugin installs',
-        exampleUrl: 'i/view-job-filters',
-        urlPattern: 'i/:plugin',
+        exampleUrl: 'view-job-filters',
+        urlPattern: ':plugin',
         staticExample: this.render({
           label: this._getLabel(),
           installs: 10247,
-        })
+        }),
       },
       {
         title: 'Jenkins Plugin installs',
-        exampleUrl: 'iv/view-job-filters/1.26',
-        urlPattern: 'iv/:plugin/:version',
+        exampleUrl: 'view-job-filters/1.26',
+        urlPattern: ':plugin/:version',
         staticExample: this.render({
           label: this._getLabel('1.26'),
           installs: 955,
-        })
+        }),
       },
     ]
   }
