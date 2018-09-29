@@ -46,7 +46,7 @@ t.create('total installs | invalid: non-numeric "installations" key')
 
 t.create('total installs | not found')
   .get('/not-a-plugin.json')
-  .expectJSON({ name: 'installs', value: 'not found' })
+  .expectJSON({ name: 'installs', value: 'plugin not found' })
 
 t.create('total installs | inaccessible: connection error')
   .get('/view-job-filters.json')
@@ -93,11 +93,11 @@ t.create('version installs | invalid: empty "installationsPerVersion" object')
 
 t.create('version installs | not found: non-existent plugin')
   .get('/not-a-plugin/1.26.json')
-  .expectJSON({ name: 'installs', value: 'not found' })
+  .expectJSON({ name: 'installs', value: 'plugin not found' })
 
 t.create('version installs | not found: non-existent version')
   .get('/view-job-filters/1.99.json')
-  .expectJSON({ name: 'installs', value: 'not found' })
+  .expectJSON({ name: 'installs', value: 'version not found' })
 
 t.create('version installs | inaccessible: connection error')
   .get('/view-job-filters/1.26.json')

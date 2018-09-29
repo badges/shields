@@ -32,7 +32,13 @@ class JenkinsPluginInstalls extends BaseJsonService {
   async fetch({ plugin, version }) {
     const url = `https://stats.jenkins.io/plugin-installation-trend/${plugin}.stats.json`
     const schema = this.constructor._getSchema(version)
-    return this._requestJson({ url, schema })
+    return this._requestJson({
+      url,
+      schema,
+      errorMessages: {
+        404: 'plugin not found',
+      },
+    })
   }
 
   static render({ label, installs }) {
@@ -68,7 +74,7 @@ class JenkinsPluginInstalls extends BaseJsonService {
       installs = json.installationsPerVersion[version]
       if (!installs) {
         throw new NotFound({
-          underlyingError: new Error('non-existent version'),
+          prettyMessage: 'version not found',
         })
       }
     } else {
