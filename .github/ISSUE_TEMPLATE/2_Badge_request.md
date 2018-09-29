@@ -6,10 +6,12 @@ about: Ideas for new badges
 
 :clipboard: **Description**
 <!--
-A clear and concise description of the new feature.
+A clear and concise description of the new badge.
 
 - Which service is this badge for e.g: GitHub, Travis CI
-- What sort of information should this badge show e.g: version, downloads
+- What sort of information should this badge show?
+  Provide an example in plain text e.g: "version | v1.01" or as a static badge
+  (static badge generator can be found at https://shields.io)
 -->
 
 :link: **Data**
