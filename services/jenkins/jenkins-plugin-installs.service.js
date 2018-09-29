@@ -110,8 +110,7 @@ class JenkinsPluginInstalls extends BaseJsonService {
         staticExample: this.render({
           label: this._getLabel(),
           installs: 10247,
-        }),
-        keywords: ['jenkins'],
+        })
       },
       {
         title: 'Jenkins Plugin installs',
@@ -120,8 +119,7 @@ class JenkinsPluginInstalls extends BaseJsonService {
         staticExample: this.render({
           label: this._getLabel('1.26'),
           installs: 955,
-        }),
-        keywords: ['jenkins'],
+        })
       },
     ]
   }
