@@ -57,7 +57,9 @@ t.create('total downloads (unexpected second response)')
   )
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
-      .get('/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true')
+      .get(
+        '/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
+      )
       .reply(invalidJSON)
   )
   .expectJSON({ name: 'downloads', value: 'invalid' })
@@ -82,7 +84,9 @@ t.create('version (mocked, yellow badge)')
   )
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
-      .get('/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true')
+      .get(
+        '/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
+      )
       .reply(200, nuGetV3VersionJsonWithDash)
   )
   .expectJSON({
@@ -100,7 +104,9 @@ t.create('version (mocked, orange badge)')
   )
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
-      .get('/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true')
+      .get(
+        '/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
+      )
       .reply(200, nuGetV3VersionJsonFirstCharZero)
   )
   .expectJSON({
@@ -118,7 +124,9 @@ t.create('version (mocked, blue badge)')
   )
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
-      .get('/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true')
+      .get(
+        '/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
+      )
       .reply(200, nuGetV3VersionJsonFirstCharNotZero)
   )
   .expectJSON({
@@ -154,7 +162,9 @@ t.create('version (unexpected second response)')
   )
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
-      .get('/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true')
+      .get(
+        '/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
+      )
       .reply(invalidJSON)
   )
   .expectJSON({ name: 'nuget', value: 'invalid' })
@@ -179,7 +189,9 @@ t.create('version (pre) (mocked, yellow badge)')
   )
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
-      .get('/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true')
+      .get(
+        '/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
+      )
       .reply(200, nuGetV3VersionJsonWithDash)
   )
   .expectJSON({
@@ -197,7 +209,9 @@ t.create('version (pre) (mocked, orange badge)')
   )
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
-      .get('/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true')
+      .get(
+        '/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
+      )
       .reply(200, nuGetV3VersionJsonFirstCharZero)
   )
   .expectJSON({
@@ -215,7 +229,9 @@ t.create('version (pre) (mocked, blue badge)')
   )
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
-      .get('/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true')
+      .get(
+        '/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
+      )
       .reply(200, nuGetV3VersionJsonFirstCharNotZero)
   )
   .expectJSON({
@@ -251,7 +267,9 @@ t.create('version (pre) (unexpected second response)')
   )
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
-      .get('/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true')
+      .get(
+        '/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
+      )
       .reply(invalidJSON)
   )
   .expectJSON({ name: 'nuget', value: 'invalid' })

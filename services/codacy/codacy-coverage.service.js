@@ -39,8 +39,13 @@ module.exports = class CodacyCoverage extends LegacyService {
               return
             }
             try {
-              badgeData.text[1] = res
-              badgeData.colorscheme = coveragePercentageColor(parseInt(res))
+              const coverage = parseInt(res)
+              if (Number.isNaN(coverage)) {
+                badgeData.text[1] = 'unknown'
+              } else {
+                badgeData.text[1] = res
+                badgeData.colorscheme = coveragePercentageColor(coverage)
+              }
               sendBadge(format, badgeData)
             } catch (e) {
               badgeData.text[1] = 'invalid'
