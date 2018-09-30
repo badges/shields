@@ -96,7 +96,7 @@ t.create('version installs | not found: non-existent plugin')
   .expectJSON({ name: 'installs', value: 'plugin not found' })
 
 t.create('version installs | not found: non-existent version')
-  .get('/view-job-filters/1.99.json')
+  .get('/view-job-filters/1.1-NOT-FOUND.json')
   .expectJSON({ name: 'installs', value: 'version not found' })
 
 t.create('version installs | inaccessible: connection error')
