@@ -28,8 +28,8 @@ t.create('Subscriptions')
   )
 
 t.create('Favorites')
-  .get('/favorited/1523924535.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'favorited', value: isMetric }))
+  .get('/favorites/1523924535.json')
+  .expectJSONTypes(Joi.object().keys({ name: 'favorites', value: isMetric }))
 
 t.create('Downloads')
   .get('/downloads/1523924535.json')
@@ -56,8 +56,8 @@ t.create('Subscriptions | File Not Found')
   .expectJSON({ name: 'subscriptions', value: 'file not found' })
 
 t.create('Favorites | File Not Found')
-  .get('/favorited/1.json')
-  .expectJSON({ name: 'favorited', value: 'file not found' })
+  .get('/favorites/1.json')
+  .expectJSON({ name: 'favorites', value: 'file not found' })
 
 t.create('Downloads | File Not Found')
   .get('/downloads/1.json')
