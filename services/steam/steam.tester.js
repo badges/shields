@@ -17,11 +17,15 @@ t.create('File Size')
 
 t.create('Release Date')
   .get('/release-date/1523924535.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'release date', value: isFormattedDate }))
+  .expectJSONTypes(
+    Joi.object().keys({ name: 'release date', value: isFormattedDate })
+  )
 
 t.create('Subscriptions')
   .get('/subscriptions/1523924535.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'subscriptions', value: isMetric }))
+  .expectJSONTypes(
+    Joi.object().keys({ name: 'subscriptions', value: isMetric })
+  )
 
 t.create('Favorites')
   .get('/favorited/1523924535.json')
@@ -35,7 +39,7 @@ t.create('Views')
   .get('/views/1523924535.json')
   .expectJSONTypes(Joi.object().keys({ name: 'views', value: isMetric }))
 
-  t.create('Collection Files | Collection Not Found')
+t.create('Collection Files | Collection Not Found')
   .get('/collection-files/1.json')
   .expectJSON({ name: 'files', value: 'collection not found' })
 
@@ -66,5 +70,4 @@ t.create('Views | File Not Found')
 t.create('Connection Error')
   .get('/views/100.json')
   .networkOff()
-  .expectJSON({ name: 'views', value: 'inaccessible' });
-
+  .expectJSON({ name: 'views', value: 'inaccessible' })
