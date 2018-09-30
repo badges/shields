@@ -81,7 +81,7 @@ match based on a set of allowed strings, regexes, or specific values. You can
 refer to their [API reference][Joi API].
 4. `Joi.object().keys()` defines a Joi object schema containing some defined keys
 5. We expect `name` to be a string literal `"build"`
-6. Because this test depends on a live service, we don't want our test to depend on our API call returning a particular build status. Instead we should perform a "picture check" to assert that the badge data conforms to an expected pattern. Our test should not depend on the status of the example project's build, but should fail if trying to generate the badge throws an error, or if there is a breaking change to the upstream API. In this case we will use a pre-defined regular expression to check that the badge value looks like a build status. [services/test-validators.js](https://github.com/badges/shields/blob/master/services/test-validators.js) defines a number of useful validators we can use. Many of the common badge types (version, downloads, rank, etc) already have validators defined here.
+6. Because this test depends on a live service, we don't want our test to depend on our API call returning a particular build status. Instead we should perform a "picture check" to assert that the badge data conforms to an expected pattern. Our test should not depend on the status of the example project's build, but should fail if trying to generate the badge throws an error, or if there is a breaking change to the upstream API. In this case we will use a pre-defined regular expression to check that the badge value looks like a build status. [services/test-validators.js](https://github.com/badges/shields/blob/master/services/test-validators.js) defines a number of useful validators we can use. Many of the common badge types (version, downloads, rank, etc.) already have validators defined here.
 
 When defining an IcedFrisby test, typically you would invoke the `toss()`
 method, to register the test. This is not necessary, because the Shields test
@@ -157,6 +157,12 @@ Server is starting up: http://lib/service-test-runner/cli.js:80/
   2 passing (1s)
 ```
 
+Once we have multiple tests, sometimes it is useful to run only one test. We can do this using the `--fgrep` argument. For example:
+
+```
+npm run test:services -- --only="wercker" --fgrep="Build status (with branch)"
+```
+
 Having covered the typical and custom cases, we'll move on to errors. We should include tests for any cusom error handling. The Wercker integration defines a couple of custom error conditions:
 
 ```js
@@ -211,7 +217,7 @@ and path.
 [icedfrisby-nock]: https://github.com/paulmelnikow/icedfrisby-nock#usage
 [Nock]: https://github.com/node-nock/nock
 
-Sometimes it may be also helpful to include service tests which receive a known value from the API. For example, in the `render()` method of our service, there is some logic which sets the badge color based on the build status:
+Our test suite should also include service tests which receive a known value from the API. For example, in the `render()` method of our service, there is some logic which sets the badge color based on the build status:
 
 ```js
 static render({ status, result }) {
@@ -229,6 +235,8 @@ static render({ status, result }) {
 We can also use nock to intercept API calls to return a known response body.
 
 ```js
+const { colorScheme } = require('../test-helpers')
+
 t.create('Build passed (mocked)')
   .get('/build/wercker/go-wercker-api.json?style=_shields_test')
   .intercept(nock =>
@@ -236,7 +244,7 @@ t.create('Build passed (mocked)')
       .get('/wercker/go-wercker-api/builds?limit=1')
       .reply(200, [{ status: 'finished', result: 'passed' }])
   )
-  .expectJSON({ name: 'build', value: 'passing', colorB: '#4c1' })
+  .expectJSON({ name: 'build', value: 'passing', colorB: colorScheme.brightgreen })
 
 t.create('Build failed (mocked)')
   .get('/build/wercker/go-wercker-api.json?style=_shields_test')
@@ -245,11 +253,20 @@ t.create('Build failed (mocked)')
       .get('/wercker/go-wercker-api/builds?limit=1')
       .reply(200, [{ status: 'finished', result: 'failed' }])
   )
-  .expectJSON({ name: 'build', value: 'failed', colorB: '#e05d44' })
+  .expectJSON({ name: 'build', value: 'failed', colorB: colorScheme.red })
 ```
 
-Note that in these tests, we are passing the URL parameter `?style=_shields_test`. This returns a JSON response which also contains the color. This is helpful in a case like this when we want to test custom color logic, but it is only necessary to explicitly test color values if our badge implements custom logic for setting the badge colors.
+Note that in these tests, we are passing the URL parameter `?style=_shields_test`. This returns a JSON response which also contains the color. This is helpful in a case like this when we want to test custom color logic, but it is only necessary to explicitly test color values if our badge implements custom logic for setting the badge colors. Using the `colorScheme` test helper here allows us to test against named colors instead of literal hex values, so we can write
 
+```js
+.expectJSON({ name: 'build', value: 'failed', colorB: colorScheme.red })
+```
+
+instead of
+
+```js
+.expectJSON({ name: 'build', value: 'passing', colorB: '#e05d44' })
+```
 
 Code coverage
 -------------
