@@ -37,7 +37,7 @@ and learn about the [Github workflow](http://try.github.io/).
 (3) Open an Issue
 -----------------
 
-Before you want to implement your service, you may want to [open an issue](https://github.com/badges/shields/issues/new) and describe what you have in mind:
+Before you want to implement your service, you may want to [open an issue](https://github.com/badges/shields/issues/new?template=2_Badge_request.md) and describe what you have in mind:
 - What is the badge for?
 - Which API do you want to use?
 
