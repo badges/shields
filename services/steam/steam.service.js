@@ -7,51 +7,78 @@ const { age: ageColor } = require('../../lib/color-formatters')
 const prettyBytes = require('pretty-bytes')
 
 const steamCollectionSchema = Joi.object({
-  response: Joi.object().keys({
-    result: Joi.number().integer().min(1).max(1).required(),
-    resultcount: Joi.number().integer().min(0).max(1).required(),
-    collectiondetails: Joi.array().items(Joi.object({
-      publishedfileid: Joi.string(),
-      result: Joi.number().integer(),
-      children: Joi.array()
-    })).required()
-  }).required(),
+  response: Joi.object()
+    .keys({
+      result: Joi.number()
+        .integer()
+        .min(1)
+        .max(1)
+        .required(),
+      resultcount: Joi.number()
+        .integer()
+        .min(0)
+        .max(1)
+        .required(),
+      collectiondetails: Joi.array()
+        .items(
+          Joi.object({
+            publishedfileid: Joi.string(),
+            result: Joi.number().integer(),
+            children: Joi.array(),
+          })
+        )
+        .required(),
+    })
+    .required(),
 }).required()
 
 const steamFileSchema = Joi.object({
-  response: Joi.object().keys({
-    result: Joi.number().integer().min(1).required(),
-    resultcount: Joi.number().integer().min(0).required(),
-    publishedfiledetails: Joi.array().items(Joi.object({
-      publishedfileid: Joi.string().required(),
-      result: Joi.number().integer().required(),
-      file_size: Joi.number().integer(),
-      time_created: Joi.number().integer(),
-      subscriptions: Joi.number().integer(),
-      favorited: Joi.number().integer(),
-      lifetime_subscriptions: Joi.number().integer(),
-      lifetime_favorited: Joi.number().integer(),
-      views: Joi.number().integer(),
-    }))
-  }).required(),
+  response: Joi.object()
+    .keys({
+      result: Joi.number()
+        .integer()
+        .min(1)
+        .required(),
+      resultcount: Joi.number()
+        .integer()
+        .min(0)
+        .required(),
+      publishedfiledetails: Joi.array().items(
+        Joi.object({
+          publishedfileid: Joi.string().required(),
+          result: Joi.number()
+            .integer()
+            .required(),
+          file_size: Joi.number().integer(),
+          time_created: Joi.number().integer(),
+          subscriptions: Joi.number().integer(),
+          favorited: Joi.number().integer(),
+          lifetime_subscriptions: Joi.number().integer(),
+          lifetime_favorited: Joi.number().integer(),
+          views: Joi.number().integer(),
+        })
+      ),
+    })
+    .required(),
 }).required()
 
 class SteamCollectionFiles extends BaseJsonService {
-  async fetch({collectionId}) {
-    const url = 'https://api.steampowered.com/ISteamRemoteStorage/GetCollectionDetails/v1/?format=json'
+  async fetch({ collectionId }) {
+    const url =
+      'https://api.steampowered.com/ISteamRemoteStorage/GetCollectionDetails/v1/?format=json'
     return this._requestJson({
       url,
       schema: steamCollectionSchema,
       errorMessages: {
-        400: 'bad request'
+        400: 'bad request',
       },
       options: {
         method: 'POST',
         form: {
           collectioncount: '1',
-          'publishedfileids[0]': collectionId
-        }
-      }
+          'publishedfileids[0]': collectionId,
+        },
+      },
     })
   }
 
@@ -62,7 +89,9 @@ class SteamCollectionFiles extends BaseJsonService {
   async handle({ collectionId }) {
     const json = await this.fetch({ collectionId })
     if (json.response.collectiondetails[0].result === 1) {
-      return this.constructor.render({ size: json.response.collectiondetails[0].children.length})
+      return this.constructor.render({
+        size: json.response.collectiondetails[0].children.length,
+      })
     } else {
       return { message: 'collection not found', color: 'red' }
     }
@@ -89,31 +118,31 @@ class SteamCollectionFiles extends BaseJsonService {
       {
         title: 'Steam Collection Files',
         exampleUrl: '180077636',
-        urlPattern: ":collection_id",
+        urlPattern: ':collection_id',
         staticExample: this.render({ size: 32 }),
-        keywords: ['steam']
-      }
+        keywords: ['steam'],
+      },
     ]
   }
 }
 
 class SteamFileService extends BaseJsonService {
-
-  async fetch({fileId}) {
-    const url = 'https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1/?format=json'
+  async fetch({ fileId }) {
+    const url =
+      'https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1/?format=json'
     return this._requestJson({
       url,
       schema: steamFileSchema,
       errorMessages: {
-        400: 'bad request'
+        400: 'bad request',
       },
       options: {
         method: 'POST',
         form: {
           itemcount: 1,
           'publishedfileids[0]': fileId,
-        }
-      }
+        },
+      },
     })
   }
 
@@ -127,10 +156,10 @@ class SteamFileService extends BaseJsonService {
     }
   }
 
-  async onRequest({response}) {}
+  async onRequest({ response }) {}
 
   static get defaultBadgeData() {
-    return {label: 'steam'}
+    return { label: 'steam' }
   }
 
   static get category() {
@@ -143,7 +172,7 @@ class SteamFileSize extends SteamFileService {
     return { message: prettyBytes(fileSize), color: 'green' }
   }
 
-  async onRequest({response}) {
+  async onRequest({ response }) {
     return this.constructor.render({ fileSize: response.file_size })
   }
 
@@ -152,14 +181,14 @@ class SteamFileSize extends SteamFileService {
   }
 
   static get defaultBadgeData() {
-    return {label: 'size'}
+    return { label: 'size' }
   }
 
   static get url() {
     return {
       base: 'steam/size',
       format: '(.+)',
-      capture: ['fileId']
+      capture: ['fileId'],
     }
   }
 
@@ -170,8 +199,8 @@ class SteamFileSize extends SteamFileService {
         exampleUrl: '100',
         urlPattern: ':file_id',
         staticExample: this.render({ fileSize: 20000 }),
-        keywords: ['steam']
-      }
+        keywords: ['steam'],
+      },
     ]
   }
 }
@@ -181,7 +210,7 @@ class SteamReleaseDate extends SteamFileService {
     return { message: formatDate(releaseDate), color: ageColor(releaseDate) }
   }
 
-  async onRequest({response}) {
+  async onRequest({ response }) {
     return this.constructor.render({ releaseDate: response.time_created })
   }
 
@@ -193,7 +222,7 @@ class SteamReleaseDate extends SteamFileService {
     return {
       base: 'steam/release-date',
       format: '(.+)',
-      capture: ['fileId']
+      capture: ['fileId'],
     }
   }
 
@@ -204,8 +233,8 @@ class SteamReleaseDate extends SteamFileService {
         exampleUrl: '100',
         urlPattern: ':file_id',
         staticExample: this.render({ releaseDate: '12-12-2020' }),
-        keywords: ['steam']
-      }
+        keywords: ['steam'],
+      },
     ]
   }
 }
@@ -215,7 +244,7 @@ class SteamSubscriptions extends SteamFileService {
     return { message: metric(subscriptions), color: 'lime' }
   }
 
-  async onRequest({response}) {
+  async onRequest({ response }) {
     return this.constructor.render({ subscriptions: response.subscriptions })
   }
 
@@ -227,7 +256,7 @@ class SteamSubscriptions extends SteamFileService {
     return {
       base: 'steam/subscriptions',
       format: '(.+)',
-      capture: ['fileId']
+      capture: ['fileId'],
     }
   }
 
@@ -238,8 +267,8 @@ class SteamSubscriptions extends SteamFileService {
         exampleUrl: '100',
         urlPattern: ':file_id',
         staticExample: this.render({ subscriptions: 20124 }),
-        keywords: ['steam']
-      }
+        keywords: ['steam'],
+      },
     ]
   }
 }
@@ -249,7 +278,7 @@ class SteamFavorites extends SteamFileService {
     return { message: metric(favorited), color: 'lime' }
   }
 
-  async onRequest({response}) {
+  async onRequest({ response }) {
     return this.constructor.render({ favorited: response.favorited })
   }
 
@@ -261,7 +290,7 @@ class SteamFavorites extends SteamFileService {
     return {
       base: 'steam/favorited',
       format: '(.+)',
-      capture: ['fileId']
+      capture: ['fileId'],
     }
   }
 
@@ -272,8 +301,8 @@ class SteamFavorites extends SteamFileService {
         exampleUrl: '100',
         urlPattern: ':file_id',
         staticExample: this.render({ favorited: 20124 }),
-        keywords: ['steam']
-      }
+        keywords: ['steam'],
+      },
     ]
   }
 }
@@ -283,8 +312,10 @@ class SteamDownloads extends SteamFileService {
     return { message: metric(downloads), color: 'lime' }
   }
 
-  async onRequest({response}) {
-    return this.constructor.render({ downloads: response.lifetime_subscriptions })
+  async onRequest({ response }) {
+    return this.constructor.render({
+      downloads: response.lifetime_subscriptions,
+    })
   }
 
   static get category() {
@@ -299,7 +330,7 @@ class SteamDownloads extends SteamFileService {
     return {
       base: 'steam/downloads',
       format: '(.+)',
-      capture: ['fileId']
+      capture: ['fileId'],
     }
   }
 
@@ -310,8 +341,8 @@ class SteamDownloads extends SteamFileService {
         exampleUrl: '100',
         urlPattern: ':file_id',
         staticExample: this.render({ downloads: 20124 }),
-        keywords: ['steam']
-      }
+        keywords: ['steam'],
+      },
     ]
   }
 }
@@ -321,7 +352,7 @@ class SteamViews extends SteamFileService {
     return { message: metric(views), color: 'lime' }
   }
 
-  async onRequest({response}) {
+  async onRequest({ response }) {
     return this.constructor.render({ views: response.views })
   }
 
@@ -333,7 +364,7 @@ class SteamViews extends SteamFileService {
     return {
       base: 'steam/views',
       format: '(.+)',
-      capture: ['fileId']
+      capture: ['fileId'],
     }
   }
 
@@ -344,8 +375,8 @@ class SteamViews extends SteamFileService {
         exampleUrl: '100',
         urlPattern: ':file_id',
         staticExample: this.render({ views: 20000 }),
-        keywords: ['steam']
-      }
+        keywords: ['steam'],
+      },
     ]
   }
 }
@@ -357,5 +388,5 @@ module.exports = {
   SteamSubscriptions,
   SteamFavorites,
   SteamDownloads,
-  SteamViews
+  SteamViews,
 }
