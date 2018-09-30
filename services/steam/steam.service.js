@@ -233,7 +233,9 @@ class SteamReleaseDate extends SteamFileService {
         title: 'Steam Release Date',
         exampleUrl: '100',
         urlPattern: ':file_id',
-        staticExample: this.render({ releaseDate: new Date(0).setUTCSeconds(1538288239) }),
+        staticExample: this.render({
+          releaseDate: new Date(0).setUTCSeconds(1538288239),
+        }),
         keywords: ['steam'],
       },
     ]
