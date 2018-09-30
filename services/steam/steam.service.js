@@ -211,7 +211,8 @@ class SteamReleaseDate extends SteamFileService {
   }
 
   async onRequest({ response }) {
-    return this.constructor.render({ releaseDate: response.time_created })
+    const releaseDate = new Date(0).setUTCSeconds(response.time_created)
+    return this.constructor.render({ releaseDate: releaseDate })
   }
 
   static get defaultBadgeData() {
@@ -232,7 +233,7 @@ class SteamReleaseDate extends SteamFileService {
         title: 'Steam Release Date',
         exampleUrl: '100',
         urlPattern: ':file_id',
-        staticExample: this.render({ releaseDate: '12-12-2020' }),
+        staticExample: this.render({ releaseDate: new Date(0).setUTCSeconds(1538288239) }),
         keywords: ['steam'],
       },
     ]
@@ -274,8 +275,8 @@ class SteamSubscriptions extends SteamFileService {
 }
 
 class SteamFavorites extends SteamFileService {
-  static render({ favorited }) {
-    return { message: metric(favorited), color: 'lime' }
+  static render({ favorites }) {
+    return { message: metric(favorites), color: 'lime' }
   }
 
   async onRequest({ response }) {
@@ -283,12 +284,12 @@ class SteamFavorites extends SteamFileService {
   }
 
   static get defaultBadgeData() {
-    return { label: 'favorited' }
+    return { label: 'favorites' }
   }
 
   static get url() {
     return {
-      base: 'steam/favorited',
+      base: 'steam/favorites',
       format: '(.+)',
       capture: ['fileId'],
     }
@@ -300,7 +301,7 @@ class SteamFavorites extends SteamFileService {
         title: 'Steam Favourites',
         exampleUrl: '100',
         urlPattern: ':file_id',
-        staticExample: this.render({ favorited: 20124 }),
+        staticExample: this.render({ favorites: 20124 }),
         keywords: ['steam'],
       },
     ]
