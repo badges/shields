@@ -36,7 +36,7 @@ const steamFileSchema = Joi.object({
   }).required(),
 }).required()
 
-class SteamCollectionCount extends BaseJsonService {
+class SteamCollectionFiles extends BaseJsonService {
   async fetch({collectionId}) {
     const url = 'https://api.steampowered.com/ISteamRemoteStorage/GetCollectionDetails/v1/?format=json'
     return this._requestJson({
@@ -61,7 +61,11 @@ class SteamCollectionCount extends BaseJsonService {
 
   async handle({ collectionId }) {
     const json = await this.fetch({ collectionId })
-    return this.constructor.render({ size: json.response.collectiondetails[0].children.length})
+    if (json.response.collectiondetails[0].result === 1) {
+      return this.constructor.render({ size: json.response.collectiondetails[0].children.length})
+    } else {
+      return { message: 'collection not found', color: 'red' }
+    }
   }
 
   static get category() {
@@ -74,7 +78,7 @@ class SteamCollectionCount extends BaseJsonService {
 
   static get url() {
     return {
-      base: 'steam/collection-size',
+      base: 'steam/collection-files',
       format: '(.+)',
       capture: ['collectionId'],
     }
@@ -83,10 +87,10 @@ class SteamCollectionCount extends BaseJsonService {
   static get examples() {
     return [
       {
-        title: 'Steam Collection Size',
-        exampleUrl: '16524',
+        title: 'Steam Collection Files',
+        exampleUrl: '180077636',
         urlPattern: ":collection_id",
-        staticExample: this.render({ size: 20 }),
+        staticExample: this.render({ size: 32 }),
         keywords: ['steam']
       }
     ]
@@ -347,7 +351,7 @@ class SteamViews extends SteamFileService {
 }
 
 module.exports = {
-  SteamCollectionCount,
+  SteamCollectionFiles,
   SteamFileSize,
   SteamReleaseDate,
   SteamSubscriptions,
