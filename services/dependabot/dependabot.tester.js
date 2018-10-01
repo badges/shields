@@ -4,9 +4,7 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isIntegerPercentage } = require('../test-validators')
 const { invalidJSON } = require('../response-fixtures')
-const colorscheme = require('../../lib/colorscheme.json')
-const mapValues = require('lodash.mapvalues')
-const colorsB = mapValues(colorscheme, 'colorB')
+const { colorScheme: colorsB } = require('../test-helpers')
 
 const t = new ServiceTester({ id: 'dependabot', title: 'Dependabot' })
 module.exports = t
