@@ -2,30 +2,19 @@
 
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
+const { NotFound, InvalidResponse } = require('../errors')
 const { metric, formatDate } = require('../../lib/text-formatters')
-const { age: ageColor } = require('../../lib/color-formatters')
+const { age: ageColor, downloadCount } = require('../../lib/color-formatters')
 const prettyBytes = require('pretty-bytes')
 
 const steamCollectionSchema = Joi.object({
   response: Joi.object()
     .keys({
-      result: Joi.number()
-        .integer()
-        .min(1)
-        .max(1)
-        .required(),
-      resultcount: Joi.number()
-        .integer()
-        .min(0)
-        .max(1)
-        .required(),
       collectiondetails: Joi.array()
         .items(
           Joi.object({
-            publishedfileid: Joi.string(),
-            result: Joi.number().integer(),
-            children: Joi.array(),
-          })
+            children: Joi.array().required(),
+          }).required()
         )
         .required(),
     })
@@ -35,29 +24,17 @@ const steamCollectionSchema = Joi.object({
 const steamFileSchema = Joi.object({
   response: Joi.object()
     .keys({
-      result: Joi.number()
-        .integer()
-        .min(1)
-        .required(),
-      resultcount: Joi.number()
-        .integer()
-        .min(0)
-        .required(),
       publishedfiledetails: Joi.array().items(
         Joi.object({
-          publishedfileid: Joi.string().required(),
-          result: Joi.number()
-            .integer()
-            .required(),
-          file_size: Joi.number().integer(),
-          time_created: Joi.number().integer(),
-          subscriptions: Joi.number().integer(),
-          favorited: Joi.number().integer(),
-          lifetime_subscriptions: Joi.number().integer(),
-          lifetime_favorited: Joi.number().integer(),
-          views: Joi.number().integer(),
+          file_size: Joi.number().integer().required(),
+          time_created: Joi.number().integer().required(),
+          subscriptions: Joi.number().integer().required(),
+          favorited: Joi.number().integer().required(),
+          lifetime_subscriptions: Joi.number().integer().required(),
+          lifetime_favorited: Joi.number().integer().required(),
+          views: Joi.number().integer().required(),
         })
-      ),
+      ).min(1).max(1).required(),
     })
     .required(),
 }).required()
@@ -83,18 +60,23 @@ class SteamCollectionFiles extends BaseJsonService {
   }
 
   static render({ size }) {
-    return { message: metric(size), color: 'green' }
+    return { message: metric(size), color: 'brightgreen' }
   }
 
   async handle({ collectionId }) {
-    const json = await this.fetch({ collectionId })
-    if (json.response.collectiondetails[0].result === 1) {
-      return this.constructor.render({
-        size: json.response.collectiondetails[0].children.length,
-      })
-    } else {
-      return { message: 'collection not found', color: 'red' }
+    let json = {};
+    try {
+      json = await this.fetch({ collectionId })
     }
+    catch(err) {
+      if (err instanceof InvalidResponse) {
+        throw new NotFound({ prettyMessage: 'collection not found' })
+      } else {
+        throw err
+      }
+    }
+
+    return this.constructor.render({ size: json.response.collectiondetails[0].children.length })
   }
 
   static get category() {
@@ -118,7 +100,7 @@ class SteamCollectionFiles extends BaseJsonService {
       {
         title: 'Steam Collection Files',
         exampleUrl: '180077636',
-        urlPattern: ':collection_id',
+        urlPattern: ':id',
         staticExample: this.render({ size: 32 }),
         keywords: ['steam'],
       },
@@ -147,13 +129,19 @@ class SteamFileService extends BaseJsonService {
   }
 
   async handle({ fileId }) {
-    const json = await this.fetch({ fileId })
-
-    if (json.response.publishedfiledetails[0].result === 1) {
-      return this.onRequest({ response: json.response.publishedfiledetails[0] })
-    } else {
-      return { message: 'file not found', color: 'red' }
+    let json = {};
+    try {
+      json = await this.fetch({ fileId })
     }
+    catch(err) {
+      if (err instanceof InvalidResponse) {
+        throw new NotFound({ prettyMessage: 'file not found' })
+      } else {
+        throw err
+      }
+    }
+    
+    return this.onRequest({ response: json.response.publishedfiledetails[0] })
   }
 
   async onRequest({ response }) {}
@@ -169,7 +157,7 @@ class SteamFileService extends BaseJsonService {
 
 class SteamFileSize extends SteamFileService {
   static render({ fileSize }) {
-    return { message: prettyBytes(fileSize), color: 'green' }
+    return { message: prettyBytes(fileSize), color: 'brightgreen' }
   }
 
   async onRequest({ response }) {
@@ -197,7 +185,7 @@ class SteamFileSize extends SteamFileService {
       {
         title: 'Steam File Size',
         exampleUrl: '100',
-        urlPattern: ':file_id',
+        urlPattern: ':id',
         staticExample: this.render({ fileSize: 20000 }),
         keywords: ['steam'],
       },
@@ -232,7 +220,7 @@ class SteamReleaseDate extends SteamFileService {
       {
         title: 'Steam Release Date',
         exampleUrl: '100',
-        urlPattern: ':file_id',
+        urlPattern: ':id',
         staticExample: this.render({
           releaseDate: new Date(0).setUTCSeconds(1538288239),
         }),
@@ -244,7 +232,7 @@ class SteamReleaseDate extends SteamFileService {
 
 class SteamSubscriptions extends SteamFileService {
   static render({ subscriptions }) {
-    return { message: metric(subscriptions), color: 'lime' }
+    return { message: metric(subscriptions), color: 'brightgreen' }
   }
 
   async onRequest({ response }) {
@@ -253,6 +241,10 @@ class SteamSubscriptions extends SteamFileService {
 
   static get defaultBadgeData() {
     return { label: 'subscriptions' }
+  }
+
+  static get category() {
+    return 'rating'
   }
 
   static get url() {
@@ -268,7 +260,7 @@ class SteamSubscriptions extends SteamFileService {
       {
         title: 'Steam Subscriptions',
         exampleUrl: '100',
-        urlPattern: ':file_id',
+        urlPattern: ':id',
         staticExample: this.render({ subscriptions: 20124 }),
         keywords: ['steam'],
       },
@@ -278,15 +270,19 @@ class SteamSubscriptions extends SteamFileService {
 
 class SteamFavorites extends SteamFileService {
   static render({ favorites }) {
-    return { message: metric(favorites), color: 'lime' }
+    return { message: metric(favorites), color: 'brightgreen' }
   }
 
   async onRequest({ response }) {
-    return this.constructor.render({ favorited: response.favorited })
+    return this.constructor.render({ favorites: response.favorited })
   }
 
   static get defaultBadgeData() {
     return { label: 'favorites' }
+  }
+
+  static get category() {
+    return 'rating'
   }
 
   static get url() {
@@ -300,10 +296,10 @@ class SteamFavorites extends SteamFileService {
   static get examples() {
     return [
       {
-        title: 'Steam Favourites',
+        title: 'Steam Favorites',
         exampleUrl: '100',
-        urlPattern: ':file_id',
-        staticExample: this.render({ favorites: 20124 }),
+        urlPattern: ':id',
+        staticExample: this.render({ favorites: 20000 }),
         keywords: ['steam'],
       },
     ]
@@ -312,7 +308,7 @@ class SteamFavorites extends SteamFileService {
 
 class SteamDownloads extends SteamFileService {
   static render({ downloads }) {
-    return { message: metric(downloads), color: 'lime' }
+    return { message: metric(downloads), color: downloadCount(downloads) }
   }
 
   async onRequest({ response }) {
@@ -342,7 +338,7 @@ class SteamDownloads extends SteamFileService {
       {
         title: 'Steam Downloads',
         exampleUrl: '100',
-        urlPattern: ':file_id',
+        urlPattern: ':id',
         staticExample: this.render({ downloads: 20124 }),
         keywords: ['steam'],
       },
@@ -352,7 +348,7 @@ class SteamDownloads extends SteamFileService {
 
 class SteamViews extends SteamFileService {
   static render({ views }) {
-    return { message: metric(views), color: 'lime' }
+    return { message: metric(views), color: 'brightgreen' }
   }
 
   async onRequest({ response }) {
@@ -376,7 +372,7 @@ class SteamViews extends SteamFileService {
       {
         title: 'Steam Views',
         exampleUrl: '100',
-        urlPattern: ':file_id',
+        urlPattern: ':id',
         staticExample: this.render({ views: 20000 }),
         keywords: ['steam'],
       },
