@@ -24,17 +24,35 @@ const steamCollectionSchema = Joi.object({
 const steamFileSchema = Joi.object({
   response: Joi.object()
     .keys({
-      publishedfiledetails: Joi.array().items(
-        Joi.object({
-          file_size: Joi.number().integer().required(),
-          time_created: Joi.number().integer().required(),
-          subscriptions: Joi.number().integer().required(),
-          favorited: Joi.number().integer().required(),
-          lifetime_subscriptions: Joi.number().integer().required(),
-          lifetime_favorited: Joi.number().integer().required(),
-          views: Joi.number().integer().required(),
-        })
-      ).min(1).max(1).required(),
+      publishedfiledetails: Joi.array()
+        .items(
+          Joi.object({
+            file_size: Joi.number()
+              .integer()
+              .required(),
+            time_created: Joi.number()
+              .integer()
+              .required(),
+            subscriptions: Joi.number()
+              .integer()
+              .required(),
+            favorited: Joi.number()
+              .integer()
+              .required(),
+            lifetime_subscriptions: Joi.number()
+              .integer()
+              .required(),
+            lifetime_favorited: Joi.number()
+              .integer()
+              .required(),
+            views: Joi.number()
+              .integer()
+              .required(),
+          })
+        )
+        .min(1)
+        .max(1)
+        .required(),
     })
     .required(),
 }).required()
@@ -64,11 +82,10 @@ class SteamCollectionFiles extends BaseJsonService {
   }
 
   async handle({ collectionId }) {
-    let json = {};
+    let json = {}
     try {
       json = await this.fetch({ collectionId })
-    }
-    catch(err) {
+    } catch (err) {
       if (err instanceof InvalidResponse) {
         throw new NotFound({ prettyMessage: 'collection not found' })
       } else {
@@ -76,7 +93,9 @@ class SteamCollectionFiles extends BaseJsonService {
       }
     }
 
-    return this.constructor.render({ size: json.response.collectiondetails[0].children.length })
+    return this.constructor.render({
+      size: json.response.collectiondetails[0].children.length,
+    })
   }
 
   static get category() {
@@ -129,18 +148,17 @@ class SteamFileService extends BaseJsonService {
   }
 
   async handle({ fileId }) {
-    let json = {};
+    let json = {}
     try {
       json = await this.fetch({ fileId })
-    }
-    catch(err) {
+    } catch (err) {
       if (err instanceof InvalidResponse) {
         throw new NotFound({ prettyMessage: 'file not found' })
       } else {
         throw err
       }
     }
-    
+
     return this.onRequest({ response: json.response.publishedfiledetails[0] })
   }
 
