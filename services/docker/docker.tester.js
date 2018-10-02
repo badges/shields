@@ -2,14 +2,11 @@
 
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
-const colorscheme = require('../../lib/colorscheme.json')
-const mapValues = require('lodash.mapvalues')
-
+const { colorScheme: colorsB } = require('../test-helpers')
 const { isMetric } = require('../test-validators')
 const { invalidJSON } = require('../response-fixtures')
 const { isBuildStatus } = require('../test-validators')
 const isAutomatedBuildStatus = Joi.string().valid('automated', 'manual')
-const colorsB = mapValues(colorscheme, 'colorB')
 
 const t = new ServiceTester({ id: 'docker', title: 'Docker Hub' })
 module.exports = t
