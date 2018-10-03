@@ -40,6 +40,7 @@ class DummyService extends BaseService {
         urlPattern: ':world',
         exampleUrl: 'World',
         staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+        keywords: ['hello'],
       },
     ]
   }
@@ -375,6 +376,7 @@ describe('BaseService', function() {
         previewUrl: '/foo/World.svg',
         urlPattern: undefined,
         documentation: undefined,
+        keywords: undefined,
       })
       expect(second).to.deep.equal({
         title: 'DummyService',
@@ -382,6 +384,7 @@ describe('BaseService', function() {
         previewUrl: '/foo/World.svg?queryParamA=%21%21%21',
         urlPattern: undefined,
         documentation: undefined,
+        keywords: undefined,
       })
       expect(third).to.deep.equal({
         title: 'DummyService',
@@ -390,6 +393,7 @@ describe('BaseService', function() {
           '/badge/cat-Hello%20namedParamA%3A%20foo%20with%20queryParamA%3A%20bar-lightgrey.svg',
         urlPattern: '/foo/:world.svg',
         documentation: undefined,
+        keywords: ['hello'],
       })
     })
   })
