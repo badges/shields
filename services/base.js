@@ -119,6 +119,7 @@ class BaseService {
         urlPattern,
         staticExample,
         documentation,
+        keywords,
       }) => {
         if (!previewUrl && !staticExample) {
           throw Error(
@@ -149,6 +150,7 @@ class BaseService {
             ? `${this._makeFullUrl(urlPattern, query)}.svg${suffix}`
             : undefined,
           documentation,
+          keywords,
         }
       }
     )
