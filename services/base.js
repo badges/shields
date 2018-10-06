@@ -119,6 +119,7 @@ class BaseService {
         urlPattern,
         staticExample,
         documentation,
+        keywords,
       }) => {
         if (!previewUrl && !staticExample) {
           throw Error(
@@ -126,6 +127,12 @@ class BaseService {
               this.name
             } is missing required previewUrl or staticExample`
           )
+        }
+        if (staticExample && !urlPattern) {
+          throw new Error('Must declare a urlPattern if using staticExample')
+        }
+        if (staticExample && !exampleUrl) {
+          throw new Error('Must declare an exampleUrl if using staticExample')
         }
 
         const stringified = queryString.stringify(query)
@@ -143,6 +150,7 @@ class BaseService {
             ? `${this._makeFullUrl(urlPattern, query)}.svg${suffix}`
             : undefined,
           documentation,
+          keywords,
         }
       }
     )
