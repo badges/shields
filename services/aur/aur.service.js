@@ -11,8 +11,7 @@ const aurSchema = Joi.object({
   resultcount: nonNegativeInteger,
   results: Joi.alternatives(
     Joi.array()
-      .min(0)
-      .max(0)
+      .length(0)
       .required(),
     Joi.object({
       License: Joi.string().required(),
