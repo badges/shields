@@ -66,7 +66,7 @@ the top post.
 If you have a suggestion of your own, [search the open issues][issues]. If you
 don't see it, feel free to [open a new issue][open an issue].
 
-[open an issue]: https://github.com/badges/shields/issues/new
+[open an issue]: https://github.com/badges/shields/issues/new/choose
 
 ### Spreading the word
 
