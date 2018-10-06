@@ -1,67 +1,169 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const {
-  makeBadgeData: getBadgeData,
-  makeLabel: getLabel,
-} = require('../../lib/badge-data')
-const { checkErrorResponse } = require('../../lib/error-helper')
+const Joi = require('joi')
 const { floorCount: floorCountColor } = require('../../lib/color-formatters')
 const { addv: versionText } = require('../../lib/text-formatters')
+const BaseJsonService = require('../base-json')
+const { NotFound } = require('../errors')
+const { nonNegativeInteger } = require('../validators')
 
-// For the Arch user repository (AUR).
-module.exports = class Aur extends LegacyService {
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/aur\/(version|votes|license)\/(.*)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const info = match[1]
-        const pkg = match[2]
-        const format = match[3]
-        const apiUrl = 'https://aur.archlinux.org/rpc.php?type=info&arg=' + pkg
-        const badgeData = getBadgeData('aur', data)
-        request(apiUrl, (err, res, buffer) => {
-          if (checkErrorResponse(badgeData, err, res)) {
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const parsedBuffer = JSON.parse(buffer)
-            const parsedData = parsedBuffer.results
-            if (parsedBuffer.resultcount === 0) {
-              // Note the 'not found' response from Arch Linux is:
-              // status code = 200,
-              // body = {"version":1,"type":"info","resultcount":0,"results":[]}
-              badgeData.text[1] = 'not found'
-              sendBadge(format, badgeData)
-              return
-            }
+const aurSchema = Joi.object({
+  resultcount: nonNegativeInteger,
+  results: Joi.alternatives(
+    Joi.array()
+      .length(0)
+      .required(),
+    Joi.object({
+      License: Joi.string().required(),
+      NumVotes: nonNegativeInteger,
+      Version: Joi.string().required(),
+      OutOfDate: nonNegativeInteger.allow(null),
+    }).required()
+  ),
+}).required()
 
-            if (info === 'version') {
-              badgeData.text[1] = versionText(parsedData.Version)
-              if (parsedData.OutOfDate === null) {
-                badgeData.colorscheme = 'blue'
-              } else {
-                badgeData.colorscheme = 'orange'
-              }
-            } else if (info === 'votes') {
-              const votes = parsedData.NumVotes
-              badgeData.text[0] = getLabel('votes', data)
-              badgeData.text[1] = votes
-              badgeData.colorscheme = floorCountColor(votes, 2, 20, 60)
-            } else if (info === 'license') {
-              const license = parsedData.License
-              badgeData.text[0] = getLabel('license', data)
-              badgeData.text[1] = license
-              badgeData.colorscheme = 'blue'
-            }
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+class BaseAurService extends BaseJsonService {
+  async fetch({ pkg }) {
+    return this._requestJson({
+      schema: aurSchema,
+      url: `https://aur.archlinux.org/rpc.php?type=info&arg=${pkg}`,
+    })
   }
+
+  static get defaultBadgeData() {
+    return { label: 'aur' }
+  }
+
+  static _validate(data, schema) {
+    if (data.resultcount === 0) {
+      // Note the 'not found' response from Arch Linux is:
+      // status code = 200,
+      // body = {"version":1,"type":"info","resultcount":0,"results":[]}
+      throw new NotFound()
+    }
+    return super._validate(data, schema)
+  }
+}
+
+class AurLicense extends BaseAurService {
+  static render({ license }) {
+    return { message: license, color: 'blue' }
+  }
+
+  async handle({ pkg }) {
+    const json = await this.fetch({ pkg })
+    return this.constructor.render({ license: json.results.License })
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'license' }
+  }
+
+  static get category() {
+    return 'license'
+  }
+
+  static get url() {
+    return {
+      base: 'aur/license',
+      format: '(.+)',
+      capture: ['pkg'],
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: `AUR license`,
+        urlPattern: ':package',
+        exampleUrl: 'yaourt',
+        staticExample: this.render({ license: 'GPL' }),
+      },
+    ]
+  }
+}
+
+class AurVotes extends BaseAurService {
+  static render({ votes }) {
+    return {
+      message: votes,
+      color: floorCountColor(votes, 2, 20, 60),
+    }
+  }
+
+  async handle({ pkg }) {
+    const json = await this.fetch({ pkg })
+    return this.constructor.render({ votes: json.results.NumVotes })
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'votes' }
+  }
+
+  static get category() {
+    return 'rating'
+  }
+
+  static get url() {
+    return {
+      base: 'aur/votes',
+      format: '(.+)',
+      capture: ['pkg'],
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: `AUR votes`,
+        urlPattern: ':package',
+        exampleUrl: 'yaourt',
+        staticExample: this.render({ license: '3029' }),
+      },
+    ]
+  }
+}
+
+class AurVersion extends BaseAurService {
+  static render({ version, outOfDate }) {
+    const color = outOfDate === null ? 'blue' : 'orange'
+    return { message: versionText(version), color: color }
+  }
+
+  async handle({ pkg }) {
+    const json = await this.fetch({ pkg })
+    return this.constructor.render({
+      version: json.results.Version,
+      outOfDate: json.results.OutOfDate,
+    })
+  }
+
+  static get category() {
+    return 'version'
+  }
+
+  static get url() {
+    return {
+      base: 'aur/version',
+      format: '(.+)',
+      capture: ['pkg'],
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: `AUR version`,
+        urlPattern: ':package',
+        exampleUrl: 'yaourt',
+        staticExample: this.render({ version: 'v1.9-1', outOfDate: null }),
+      },
+    ]
+  }
+}
+
+module.exports = {
+  AurLicense,
+  AurVersion,
+  AurVotes,
 }
