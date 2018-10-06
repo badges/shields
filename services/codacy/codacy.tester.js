@@ -17,6 +17,13 @@ t.create('Coverage')
     })
   )
 
+t.create('Coverage unknown')
+  .get('/coverage/e27821fb6289410b8f58338c7e0bc686.json')
+  .expectJSON({
+    name: 'coverage',
+    value: 'unknown',
+  })
+
 t.create('Coverage on branch')
   .get('/coverage/59d607d0e311408885e418004068ea58/master.json')
   .expectJSONTypes(

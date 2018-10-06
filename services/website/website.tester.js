@@ -1,12 +1,10 @@
 'use strict'
 
 const ServiceTester = require('../service-tester')
-const colorscheme = require('../../lib/colorscheme.json')
-const mapValues = require('lodash.mapvalues')
+const { colorScheme: colorsB } = require('../test-helpers')
 
 const t = new ServiceTester({ id: 'website', title: 'website' })
 module.exports = t
-const colorsB = mapValues(colorscheme, 'colorB')
 
 t.create('status of http://shields.io')
   .get('/http/shields.io.json?style=_shields_test')

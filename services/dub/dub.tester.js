@@ -35,11 +35,11 @@ t.create('total downloads (valid)')
   )
 
 t.create('total downloads, specific version (valid)')
-  .get('/dt/vibe-d/0.7.27.json?style=_shields_test')
+  .get('/dt/vibe-d/0.8.4.json?style=_shields_test')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'downloads',
-      value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? v0.7.27$/),
+      value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? v0.8.4$/),
       colorB: isVersionColor,
     })
   )
