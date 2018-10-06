@@ -15,14 +15,8 @@ const isPipeSeparatedDjangoVersions = isPipeSeparatedPythonVersions
 const t = new ServiceTester({ id: 'pypi', title: 'PyPi badges' })
 module.exports = t
 
-/*
-  tests for downloads endpoints
+// tests for downloads endpoints
 
-  Note:
-  Download statistics are no longer available from pypi
-  it is exptected that the download badges all show
-  'no longer available'
-*/
 t.create('daily downloads (valid)')
   .get('/dd/djangorestframework.json')
   .expectJSONTypes({ name: 'downloads', value: isMetricOverTimePeriod })
