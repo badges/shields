@@ -259,7 +259,7 @@ camp.route(
     // Badge creation.
     try {
       const badgeData = getBadgeData(subject, data)
-      badgeData.text[0] = getLabel(subject, data)
+      badgeData.text[0] = getLabel(undefined, { label: subject })
       badgeData.text[1] = status
       badgeData.colorB = makeColorB(color, data)
       badgeData.template = data.style
