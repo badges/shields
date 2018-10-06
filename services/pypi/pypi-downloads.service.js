@@ -2,6 +2,7 @@
 
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
+const { downloadCount } = require('../../lib/color-formatters')
 const { metric } = require('../../lib/text-formatters')
 const { nonNegativeInteger } = require('../validators')
 
@@ -43,7 +44,7 @@ module.exports = class PypiDownloads extends BaseJsonService {
   static render({ period, downloads }) {
     return {
       message: `${metric(downloads)}${periodMap[period].suffix}`,
-      color: downloads > 0 ? 'brightgreen' : 'red',
+      color: downloadCount(downloads),
     }
   }
 
