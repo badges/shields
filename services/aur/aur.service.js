@@ -138,10 +138,6 @@ class AurVersion extends BaseAurService {
     })
   }
 
-  static get defaultBadgeData() {
-    return { label: 'version' }
-  }
-
   static get category() {
     return 'version'
   }

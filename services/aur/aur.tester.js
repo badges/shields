@@ -15,7 +15,7 @@ t.create('version (valid)')
   .get('/version/yaourt.json?style=_shields_test')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'version',
+      name: 'aur',
       value: isVPlusDottedVersionNClausesWithOptionalSuffix,
       colorB: '#007ec6',
     })
@@ -25,7 +25,7 @@ t.create('version (valid, out of date)')
   .get('/version/gog-gemini-rue.json?style=_shields_test')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'version',
+      name: 'aur',
       value: isVPlusDottedVersionNClausesWithOptionalSuffix,
       colorB: '#fe7d37',
     })
@@ -33,7 +33,7 @@ t.create('version (valid, out of date)')
 
 t.create('version (not found)')
   .get('/version/not-a-package.json')
-  .expectJSON({ name: 'version', value: 'not found' })
+  .expectJSON({ name: 'aur', value: 'not found' })
 
 // votes tests
 
