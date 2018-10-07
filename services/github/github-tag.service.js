@@ -15,7 +15,7 @@ const {
 module.exports = class GithubTag extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
-      /^\/github\/(tag-?pre|tag-date|tag)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+      /^\/github\/(tag-pre|tag-date|tag)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
         const includePre = match[1].includes('pre')
         const sortOrder = match[1] === 'tag-date' ? 'date' : 'semver'

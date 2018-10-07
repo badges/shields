@@ -13,7 +13,7 @@ const {
 module.exports = class GithubRelease extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
-      /^\/github\/release(-?pre)?\/([^/]+\/[^/]+)(?:\/(all))?\.(svg|png|gif|jpg|json)$/,
+      /^\/github\/release(-pre)?\/([^/]+\/[^/]+)(?:\/(all))?\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
         const includePre = Boolean(match[1]) || match[3] === 'all'
         const userRepo = match[2] // eg, qubyte/rubidium
