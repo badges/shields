@@ -41,7 +41,7 @@ class BaseJenkinsCoverage extends BaseJsonService {
       options,
       schema,
       errorMessages: {
-        404: 'job not found',
+        404: 'job or coverage not found',
       },
     })
   }

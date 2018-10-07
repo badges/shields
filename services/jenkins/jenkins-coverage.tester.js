@@ -56,7 +56,7 @@ t.create('jacoco: invalid data response (non numeric coverage)')
 
 t.create('jacoco: job not found')
   .get('/j/https/updates.jenkins-ci.org/job/does-not-exist.json')
-  .expectJSON({ name: 'coverage', value: 'job not found' })
+  .expectJSON({ name: 'coverage', value: 'job or coverage not found' })
 
 t.create('cobertura: valid coverage')
   .get('/c/https/updates.jenkins-ci.org/job/hello-project/job/master.json')
@@ -124,4 +124,4 @@ t.create('cobertura: invalid data response (missing line coverage)')
 
 t.create('cobertura: job not found')
   .get('/c/https/updates.jenkins-ci.org/job/does-not-exist.json')
-  .expectJSON({ name: 'coverage', value: 'job not found' })
+  .expectJSON({ name: 'coverage', value: 'job or coverage not found' })
