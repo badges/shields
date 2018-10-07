@@ -402,6 +402,10 @@ t.create('Tag')
   .get('/tag/photonstorm/phaser.json')
   .expectJSONTypes(Joi.object().keys({ name: 'tag', value: Joi.string() }))
 
+t.create('Tag (inc pre-release)')
+  .get('/tag-pre/photonstorm/phaser.json')
+  .expectJSONTypes(Joi.object().keys({ name: 'tag', value: Joi.string() }))
+
 t.create('Tag (repo not found)')
   .get('/tag/badges/helmets.json')
   .expectJSON({ name: 'tag', value: 'repo not found' })
