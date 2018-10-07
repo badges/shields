@@ -347,6 +347,10 @@ t.create('Release (repo not found)')
   .expectJSON({ name: 'release', value: 'repo not found' })
 
 t.create('(pre-)Release')
+  .get('/release-pre/photonstorm/phaser.json')
+  .expectJSONTypes(Joi.object().keys({ name: 'release', value: Joi.string() }))
+
+t.create('(pre-)Release (for legacy compatibility)')
   .get('/release/photonstorm/phaser/all.json')
   .expectJSONTypes(Joi.object().keys({ name: 'release', value: Joi.string() }))
 
