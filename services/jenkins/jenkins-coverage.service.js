@@ -114,8 +114,7 @@ class JacocoJenkinsCoverage extends BaseJenkinsCoverage {
         exampleUrl: 'jenkins/j/https/ci.eclipse.org/ecp/job/gerrit',
         urlPattern: 'jenkins/j/:scheme/:host/:job',
         staticExample: this.render({
-          label: this._getLabel(),
-          installs: 96,
+          coverage: 96,
         }),
       },
     ]
@@ -154,8 +153,7 @@ class CoberturaJenkinsCoverage extends BaseJenkinsCoverage {
           'jenkins/c/https/builds.apache.org/job/olingo-odata4-cobertura',
         urlPattern: 'jenkins/c/:scheme/:host/:job',
         staticExample: this.render({
-          label: this._getLabel(),
-          installs: 94,
+          coverage: 94,
         }),
       },
     ]
