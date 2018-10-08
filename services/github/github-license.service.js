@@ -38,7 +38,11 @@ module.exports = class GithubLicense extends LegacyService {
             const body = JSON.parse(buffer)
             const license = body.license
             if (license != null) {
-              badgeData.text[1] = license.spdx_id || 'unknown'
+              if (!license.spdx_id || license.spdx_id === 'NOASSERTION') {
+                badgeData.text[1] = 'unknown'
+              } else {
+                badgeData.text[1] = license.spdx_id
+              }
               setBadgeColor(badgeData, licenseToColor(license.spdx_id))
               sendBadge(format, badgeData)
             } else {
