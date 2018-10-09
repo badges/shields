@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
+const BaseSteamAPI = require('./steam-base')
 const { NotFound } = require('../errors')
 const { metric, formatDate } = require('../../lib/text-formatters')
 const { age: ageColor, downloadCount } = require('../../lib/color-formatters')
@@ -15,11 +15,11 @@ const docs = `
   src="https://user-images.githubusercontent.com/6497721/46358801-1bcb3200-c668-11e8-9963-931397853945.PNG"
   alt="The ID is the number found right after ?id= in the URI" />
 <p>
-  The same applies to the steam client, however you may need to enable url address bar:
+  In the steam client you can simply just Right-Click and 'Copy Page URL' and follow the above step
 </p>
 <img
-  src="https://user-images.githubusercontent.com/6497721/46357617-8b8bed80-c665-11e8-8648-20a0fa7714c6.PNG"
-  alt="1. Top Left: Click Steam; 2. Dropdown: Click Settings; 3. Menu Tab: Click Interface; 4. Settings: Ticked 'Display Steam URL address bar when availible'; 5. Menu - Bottom Right: Click Ok;">
+  src="https://user-images.githubusercontent.com/7288322/46567027-27c83400-c987-11e8-9850-ab67d987202f.png"
+  alt="Right-Click and 'Copy Page URL'">
 `
 
 const steamCollectionSchema = Joi.object({
@@ -54,7 +54,7 @@ const steamCollectionNotFoundSchema = Joi.object({
     .required(),
 }).required()
 
-const collectionFoundOrNoteSchema = Joi.alternatives(
+const collectionFoundOrNotSchema = Joi.alternatives(
   steamCollectionSchema,
   steamCollectionNotFoundSchema
 )
@@ -115,29 +115,22 @@ const steamFileNotFoundSchema = Joi.object({
     .required(),
 }).required()
 
-const fileFoundOrNoteSchema = Joi.alternatives(
+const fileFoundOrNotSchema = Joi.alternatives(
   steamFileSchema,
   steamFileNotFoundSchema
 )
 
-class SteamCollectionFiles extends BaseJsonService {
-  async fetch({ collectionId }) {
-    const url =
-      'https://api.steampowered.com/ISteamRemoteStorage/GetCollectionDetails/v1/?format=json'
-    return this._requestJson({
-      url,
-      schema: collectionFoundOrNoteSchema,
-      errorMessages: {
-        400: 'bad request',
-      },
-      options: {
-        method: 'POST',
-        form: {
-          collectioncount: '1',
-          'publishedfileids[0]': collectionId,
-        },
-      },
-    })
+class SteamCollectionSize extends BaseSteamAPI {
+  static get interf() {
+    return 'ISteamRemoteStorage'
+  }
+
+  static get method() {
+    return 'GetCollectionDetails'
+  }
+
+  static get version() {
+    return '1'
   }
 
   static render({ size }) {
@@ -145,7 +138,19 @@ class SteamCollectionFiles extends BaseJsonService {
   }
 
   async handle({ collectionId }) {
-    const json = await this.fetch({ collectionId })
+    const options = {
+      method: 'POST',
+      form: {
+        collectioncount: '1',
+        'publishedfileids[0]': collectionId,
+      },
+    }
+
+    const json = await this.fetch({
+      schema: collectionFoundOrNotSchema,
+      options,
+    })
+
     if (json.response.collectiondetails[0].result) {
       throw new NotFound({ prettyMessage: 'collection not found' })
     }
@@ -185,28 +190,29 @@ class SteamCollectionFiles extends BaseJsonService {
   }
 }
 
-class SteamFileService extends BaseJsonService {
-  async fetch({ fileId }) {
-    const url =
-      'https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1/?format=json'
-    return this._requestJson({
-      url,
-      schema: fileFoundOrNoteSchema,
-      errorMessages: {
-        400: 'bad request',
-      },
-      options: {
-        method: 'POST',
-        form: {
-          itemcount: 1,
-          'publishedfileids[0]': fileId,
-        },
-      },
-    })
+class SteamFileService extends BaseSteamAPI {
+  static get interf() {
+    return 'ISteamRemoteStorage'
+  }
+
+  static get method() {
+    return 'GetPublishedFileDetails'
+  }
+
+  static get version() {
+    return '1'
   }
 
   async handle({ fileId }) {
-    const json = await this.fetch({ fileId })
+    const options = {
+      method: 'POST',
+      form: {
+        itemcount: 1,
+        'publishedfileids[0]': fileId,
+      },
+    }
+
+    const json = await this.fetch({ schema: fileFoundOrNotSchema, options })
 
     if (json.response.publishedfiledetails[0].result) {
       throw new NotFound({ prettyMessage: 'file not found' })
@@ -215,7 +221,9 @@ class SteamFileService extends BaseJsonService {
     return this.onRequest({ response: json.response.publishedfiledetails[0] })
   }
 
-  async onRequest({ response }) {}
+  async onRequest({ response }) {
+    throw new Error(`onRequest() wasn't implemented for ${this.name}`)
+  }
 
   static get defaultBadgeData() {
     return { label: 'steam' }
@@ -265,7 +273,7 @@ class SteamFileSize extends SteamFileService {
   }
 }
 
-class SteamReleaseDate extends SteamFileService {
+class SteamFileReleaseDate extends SteamFileService {
   static render({ releaseDate }) {
     return { message: formatDate(releaseDate), color: ageColor(releaseDate) }
   }
@@ -303,7 +311,7 @@ class SteamReleaseDate extends SteamFileService {
   }
 }
 
-class SteamSubscriptions extends SteamFileService {
+class SteamFileSubscriptions extends SteamFileService {
   static render({ subscriptions }) {
     return { message: metric(subscriptions), color: 'brightgreen' }
   }
@@ -342,7 +350,7 @@ class SteamSubscriptions extends SteamFileService {
   }
 }
 
-class SteamFavorites extends SteamFileService {
+class SteamFileFavorites extends SteamFileService {
   static render({ favorites }) {
     return { message: metric(favorites), color: 'brightgreen' }
   }
@@ -381,7 +389,7 @@ class SteamFavorites extends SteamFileService {
   }
 }
 
-class SteamDownloads extends SteamFileService {
+class SteamFileDownloads extends SteamFileService {
   static render({ downloads }) {
     return { message: metric(downloads), color: downloadCount(downloads) }
   }
@@ -422,7 +430,7 @@ class SteamDownloads extends SteamFileService {
   }
 }
 
-class SteamViews extends SteamFileService {
+class SteamFileViews extends SteamFileService {
   static render({ views }) {
     return { message: metric(views), color: 'brightgreen' }
   }
@@ -458,11 +466,11 @@ class SteamViews extends SteamFileService {
 }
 
 module.exports = {
-  SteamCollectionFiles,
+  SteamCollectionSize,
   SteamFileSize,
-  SteamReleaseDate,
-  SteamSubscriptions,
-  SteamFavorites,
-  SteamDownloads,
-  SteamViews,
+  SteamFileReleaseDate,
+  SteamFileSubscriptions,
+  SteamFileFavorites,
+  SteamFileDownloads,
+  SteamFileViews,
 }

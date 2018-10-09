@@ -4,7 +4,7 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isMetric, isFileSize, isFormattedDate } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'steam', title: 'Steam' })
+const t = new ServiceTester({ id: 'steam', title: 'Steam Workshop Tests' })
 module.exports = t
 
 t.create('Collection Files')
