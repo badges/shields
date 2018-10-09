@@ -15,7 +15,7 @@ t.create('Plugin Version')
   .get('/plugin/v/akismet.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'version',
+      name: 'plugin',
       value: isVPlusDottedVersionAtLeastOne,
     })
   )
@@ -24,7 +24,7 @@ t.create('Theme Version')
   .get('/theme/v/twentyseventeen.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'version',
+      name: 'theme',
       value: isVPlusDottedVersionAtLeastOne,
     })
   )
@@ -32,13 +32,13 @@ t.create('Theme Version')
 t.create('Plugin Version | Not Found')
   .get('/plugin/v/100.json')
   .expectJSON({
-    name: 'version',
+    name: 'plugin',
     value: 'not found',
   })
 
 t.create('Theme Version | Not Found')
   .get('/theme/v/100.json')
   .expectJSON({
-    name: 'version',
+    name: 'theme',
     value: 'not found',
   })

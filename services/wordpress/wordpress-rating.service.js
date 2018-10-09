@@ -95,7 +95,7 @@ function StarsForExtensionType(extensionType) {
         {
           title: `Wordpress ${capt} Rating`,
           exampleUrl: exampleSlug,
-          urlPattern: ':slug',
+          urlPattern: '(r|stars)/:slug',
           staticExample: this.render({
             response: {
               rating: 80,

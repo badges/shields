@@ -33,7 +33,7 @@ function VersionForExtensionType(extensionType) {
     }
 
     static get defaultBadgeData() {
-      return { label: 'version' }
+      return { label: extensionType }
     }
 
     static get url() {

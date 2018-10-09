@@ -12,10 +12,10 @@ const t = new ServiceTester({
 module.exports = t
 
 t.create('Plugin Required WP Version')
-  .get('/v/akismet.json')
+  .get('/plugin/wp-version/akismet.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'requires',
+      name: 'wordpress',
       value: isVPlusDottedVersionAtLeastOne,
     })
   )
@@ -24,21 +24,37 @@ t.create('Plugin Tested WP Version')
   .get('/plugin/tested/akismet.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'tested',
-      value: isVPlusDottedVersionAtLeastOne,
+      name: 'wordpress',
+      value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)? tested$/),
+    })
+  )
+
+t.create('Plugin Tested WP Version (Alias)')
+  .get('/v/akismet.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'wordpress',
+      value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)? tested$/),
     })
   )
 
 t.create('Plugin Required WP Version | Not Found')
-  .get('/v/100.json')
+  .get('/plugin/wp-version/100.json')
   .expectJSON({
-    name: 'requires',
+    name: 'wordpress',
     value: 'not found',
   })
 
 t.create('Plugin Tested WP Version | Not Found')
   .get('/plugin/tested/100.json')
   .expectJSON({
-    name: 'tested',
+    name: 'wordpress',
+    value: 'not found',
+  })
+
+t.create('Plugin Tested WP Version (Alias) | Not Found')
+  .get('/v/100.json')
+  .expectJSON({
+    name: 'wordpress',
     value: 'not found',
   })
