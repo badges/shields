@@ -13,13 +13,13 @@ const {
 module.exports = class GithubRelease extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
-      /^\/github\/release\/([^/]+\/[^/]+)(?:\/(all))?\.(svg|png|gif|jpg|json)$/,
+      /^\/github\/release(-pre)?\/([^/]+\/[^/]+)(?:\/(all))?\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
-        const userRepo = match[1] // eg, qubyte/rubidium
-        const allReleases = match[2]
-        const format = match[3]
+        const includePre = Boolean(match[1]) || match[3] === 'all'
+        const userRepo = match[2] // eg, qubyte/rubidium
+        const format = match[4]
         let apiUrl = `/repos/${userRepo}/releases`
-        if (allReleases === undefined) {
+        if (!includePre) {
           apiUrl = apiUrl + '/latest'
         }
         const badgeData = getBadgeData('release', data)
@@ -33,7 +33,7 @@ module.exports = class GithubRelease extends LegacyService {
           }
           try {
             let data = JSON.parse(buffer)
-            if (allReleases === 'all') {
+            if (includePre) {
               data = data[0]
             }
             const version = data.tag_name
