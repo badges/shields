@@ -92,7 +92,8 @@
     "start:server": "HANDLE_INTERNAL_ERRORS=false RATE_LIMIT=false node server 8080 ::",
     "now-start": "node server",
     "prestart": "npm run depcheck && npm run examples && npm run features",
-    "start": "concurrently --names server,frontend \"ALLOWED_ORIGIN=http://localhost:3000 npm run start:server\" \"BASE_URL=http://[::]:8080 next dev\""
+    "start": "concurrently --names server,frontend \"ALLOWED_ORIGIN=http://localhost:3000 npm run start:server\" \"BASE_URL=http://[::]:8080 next dev\"",
+    "refactoring-report": "node lib/refactoring-cli.js"
   },
   "bin": {
     "badge": "lib/badge-cli.js"
