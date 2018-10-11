@@ -62,9 +62,7 @@ class BaseJenkinsCoverage extends BaseJsonService {
   }
 
   static buildUrl(scheme, host, job, plugin) {
-    return job.indexOf('/') > -1
-      ? `${scheme}://${host}/${job}/lastBuild/${plugin}/api/json`
-      : `${scheme}://${host}/job/${job}/lastBuild/${plugin}/api/json`
+    return `${scheme}://${host}/job/${job}/lastBuild/${plugin}/api/json`
   }
 
   static buildOptions(treeParam) {
@@ -102,7 +100,7 @@ class JacocoJenkinsCoverage extends BaseJenkinsCoverage {
   static get url() {
     return {
       base: 'jenkins/j',
-      format: '(http(?:s)?)/([^/]+)/(.+)',
+      format: '(http(?:s)?)/([^/]+)/(?:job/)?(.+)',
       capture: ['scheme', 'host', 'job'],
     }
   }
@@ -140,7 +138,7 @@ class CoberturaJenkinsCoverage extends BaseJenkinsCoverage {
   static get url() {
     return {
       base: 'jenkins/c',
-      format: '(http(?:s)?)/([^/]+)/(.+)',
+      format: '(http(?:s)?)/([^/]+)/(?:job/)?(.+)',
       capture: ['scheme', 'host', 'job'],
     }
   }

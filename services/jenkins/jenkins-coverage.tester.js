@@ -24,6 +24,23 @@ t.create('jacoco: valid coverage')
   )
   .expectJSON({ name: 'coverage', value: '81%' })
 
+t.create(
+  'jacoco: valid coverage (badge URL without leading /job after Jenkins host)'
+)
+  .get('/j/https/updates.jenkins-ci.org/hello-project/job/master.json')
+  .intercept(nock =>
+    nock('https://updates.jenkins-ci.org')
+      .get(
+        '/job/hello-project/job/master/lastBuild/jacoco/api/json?tree=instructionCoverage%5Bpercentage%5D'
+      )
+      .reply(200, {
+        instructionCoverage: {
+          percentage: 81,
+        },
+      })
+  )
+  .expectJSON({ name: 'coverage', value: '81%' })
+
 t.create('jacoco: invalid data response (no instructionCoverage object)')
   .get('/j/https/updates.jenkins-ci.org/job/hello-project/job/master.json')
   .intercept(nock =>
@@ -60,6 +77,32 @@ t.create('jacoco: job not found')
 
 t.create('cobertura: valid coverage')
   .get('/c/https/updates.jenkins-ci.org/job/hello-project/job/master.json')
+  .intercept(nock =>
+    nock('https://updates.jenkins-ci.org')
+      .get(
+        '/job/hello-project/job/master/lastBuild/cobertura/api/json?tree=results%5Belements%5Bname%2Cratio%5D%5D'
+      )
+      .reply(200, {
+        results: {
+          elements: [
+            {
+              name: 'Conditionals',
+              ratio: 95.146,
+            },
+            {
+              name: 'Lines',
+              ratio: 63.745,
+            },
+          ],
+        },
+      })
+  )
+  .expectJSON({ name: 'coverage', value: '64%' })
+
+t.create(
+  'cobertura: valid coverage (badge URL without leading /job after Jenkins host)'
+)
+  .get('/c/https/updates.jenkins-ci.org/hello-project/job/master.json')
   .intercept(nock =>
     nock('https://updates.jenkins-ci.org')
       .get(
