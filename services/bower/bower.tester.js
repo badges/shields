@@ -11,7 +11,7 @@ const isBowerPrereleaseVersion = Joi.string().regex(
 const t = new ServiceTester({ id: 'bower', title: 'Bower' })
 module.exports = t
 
-t.create('license')
+t.create('licence')
   .get('/l/bootstrap.json')
   .expectJSON({ name: 'license', value: 'MIT' })
 
