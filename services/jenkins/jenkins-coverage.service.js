@@ -48,7 +48,7 @@ class BaseJenkinsCoverage extends BaseJsonService {
 
   static render({ coverage }) {
     return {
-      message: coverage.toFixed(0) + '%',
+      message: `${coverage.toFixed(0)}%`,
       color: coveragePercentageColor(coverage),
     }
   }
