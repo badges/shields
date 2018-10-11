@@ -41,6 +41,14 @@ describe('The server', function() {
     expect(await res.buffer()).to.satisfy(isPng)
   })
 
+  it('should preserve label case', async function() {
+    const res = await fetch(`${baseUri}/:fRuiT-apple-green.svg`)
+    expect(res.ok).to.be.true
+    expect(await res.text())
+      .to.satisfy(isSvg)
+      .and.to.include('fRuiT')
+  })
+
   // https://github.com/badges/shields/pull/1319
   it('should not crash with a numeric logo', async function() {
     const res = await fetch(`${baseUri}/:fruit-apple-green.svg?logo=1`)
