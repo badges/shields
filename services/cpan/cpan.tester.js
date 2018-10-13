@@ -1,8 +1,7 @@
 'use strict'
 
-const ServiceTester = require('../service-tester')
-
-const t = new ServiceTester({ id: 'cpan', title: 'Cpan' })
+const createServiceTester = require('../create-service-tester')
+const t = createServiceTester()
 module.exports = t
 
 t.create('license')
