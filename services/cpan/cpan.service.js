@@ -31,6 +31,7 @@ module.exports = class Cpan extends LegacyService {
             } else if (info === 'l') {
               const license = data.license[0]
               badgeData.text[1] = license
+              badgeData.text[0] = 'license'
               badgeData.colorscheme = 'blue'
             }
             sendBadge(format, badgeData)
