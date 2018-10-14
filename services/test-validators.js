@@ -130,4 +130,5 @@ module.exports = {
   isFormattedDate,
   isDependencyState,
   isBuildStatus,
+  withRegex,
 }
