@@ -7,6 +7,9 @@ const { version: versionColor } = require('../../lib/color-formatters')
 const serverSecrets = require('../../lib/server-secrets')
 
 module.exports = class Bintray extends LegacyService {
+  static get url() {
+    return { base: 'bintray' }
+  }
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/bintray\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
