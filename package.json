@@ -48,6 +48,7 @@
     "priorityqueuejs": "^1.0.0",
     "query-string": "^6.0.0",
     "raven": "^2.4.2",
+    "react-router-hash-link": "^1.2.0",
     "redis": "~2.8.0",
     "request": "~2.88.0",
     "semver": "~5.6.0",

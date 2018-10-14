@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { HashLink as Link } from 'react-router-hash-link'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import resolveBadgeUrl from '../lib/badge-url'
