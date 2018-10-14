@@ -7,6 +7,9 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 // e.g. JSON response: https://beerpay.io/api/v1/beerpay/projects/beerpay.io
 // e.g. SVG badge: https://beerpay.io/beerpay/beerpay.io/badge.svg?style=flat-square
 module.exports = class Beerpay extends LegacyService {
+  static get url() {
+    return { base: 'beerpay' }
+  }
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/beerpay\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
