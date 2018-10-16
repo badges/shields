@@ -121,6 +121,9 @@ This project formats its source code using Prettier. The most enjoyable way to
 use Prettier is to let is format code for you when you save. You can [integrate
 it into your editor][integrate prettier].
 
+Whether you integrate it into your editor or not, a pre-commit hook will run
+Prettier before a commit by default.
+
 [integrate prettier]: https://prettier.io/docs/en/editors.html
 
 ### Tests
