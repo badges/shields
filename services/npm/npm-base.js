@@ -66,16 +66,15 @@ module.exports = class NpmBase extends BaseJsonService {
   }
 
   async _requestJson(data) {
+    // Use a custom Accept header because of this bug:
+    // <https://github.com/npm/npmjs.org/issues/163>
+    const headers = { Accept: '*/*' }
+    if (serverSecrets.npm_token) {
+      headers.Authorization = `Bearer ${serverSecrets.npm_token}`
+    }
     return super._requestJson({
       ...data,
-      options: {
-        headers: {
-          // Use a custom Accept header because of this bug:
-          // <https://github.com/npm/npmjs.org/issues/163>
-          Accept: '*/*',
-          Authorization: `Bearer ${serverSecrets.npm_token || ''}`,
-        },
-      },
+      options: { headers },
     })
   }
 
