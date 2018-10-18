@@ -44,7 +44,7 @@ t.create('total downloads (connection error)')
 t.create('total downloads (unexpected response)')
   .get('/dt/ACMESharp.json')
   .intercept(nock =>
-    nock('https://www.powershellgallery.com')
+    nock('https://msconfiggallery.cloudapp.net')
       .get(
         '/api/v2/Packages()?$filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
       )
@@ -66,7 +66,7 @@ t.create('version (valid)')
 t.create('version (mocked, yellow badge)')
   .get('/v/ACMESharp.json?style=_shields_test')
   .intercept(nock =>
-    nock('https://www.powershellgallery.com')
+    nock('https://msconfiggallery.cloudapp.net')
       .get(
         '/api/v2/Packages()?$filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
       )
@@ -81,7 +81,7 @@ t.create('version (mocked, yellow badge)')
 t.create('version (mocked, orange badge)')
   .get('/v/ACMESharp.json?style=_shields_test')
   .intercept(nock =>
-    nock('https://www.powershellgallery.com')
+    nock('https://msconfiggallery.cloudapp.net')
       .get(
         '/api/v2/Packages()?$filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
       )
@@ -96,7 +96,7 @@ t.create('version (mocked, orange badge)')
 t.create('version (mocked, blue badge)')
   .get('/v/ACMESharp.json?style=_shields_test')
   .intercept(nock =>
-    nock('https://www.powershellgallery.com')
+    nock('https://msconfiggallery.cloudapp.net')
       .get(
         '/api/v2/Packages()?$filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
       )
@@ -120,7 +120,7 @@ t.create('version (connection error)')
 t.create('version (unexpected response)')
   .get('/v/ACMESharp.json')
   .intercept(nock =>
-    nock('https://www.powershellgallery.com')
+    nock('https://msconfiggallery.cloudapp.net')
       .get(
         '/api/v2/Packages()?$filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
       )
@@ -142,7 +142,7 @@ t.create('version (pre) (valid)')
 t.create('version (pre) (mocked, yellow badge)')
   .get('/vpre/ACMESharp.json?style=_shields_test')
   .intercept(nock =>
-    nock('https://www.powershellgallery.com')
+    nock('https://msconfiggallery.cloudapp.net')
       .get(
         '/api/v2/Packages()?$filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
       )
@@ -157,7 +157,7 @@ t.create('version (pre) (mocked, yellow badge)')
 t.create('version (pre) (mocked, orange badge)')
   .get('/vpre/ACMESharp.json?style=_shields_test')
   .intercept(nock =>
-    nock('https://www.powershellgallery.com')
+    nock('https://msconfiggallery.cloudapp.net')
       .get(
         '/api/v2/Packages()?$filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
       )
@@ -172,7 +172,7 @@ t.create('version (pre) (mocked, orange badge)')
 t.create('version (pre) (mocked, blue badge)')
   .get('/vpre/ACMESharp.json?style=_shields_test')
   .intercept(nock =>
-    nock('https://www.powershellgallery.com')
+    nock('https://msconfiggallery.cloudapp.net')
       .get(
         '/api/v2/Packages()?$filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
       )
@@ -196,7 +196,7 @@ t.create('version (pre) (connection error)')
 t.create('version (pre) (unexpected response)')
   .get('/vpre/ACMESharp.json')
   .intercept(nock =>
-    nock('https://www.powershellgallery.com')
+    nock('https://msconfiggallery.cloudapp.net')
       .get(
         '/api/v2/Packages()?$filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
       )
