@@ -73,9 +73,9 @@ module.exports = class NpmBase extends BaseJsonService {
           // Use a custom Accept header because of this bug:
           // <https://github.com/npm/npmjs.org/issues/163>
           Accept: '*/*',
-          Authorization: `Bearer ${serverSecrets.npm_token || ''}`
-        }
-      }
+          Authorization: `Bearer ${serverSecrets.npm_token || ''}`,
+        },
+      },
     })
   }
 
