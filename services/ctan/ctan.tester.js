@@ -34,6 +34,23 @@ t.create('license missing')
     value: 'missing',
   })
 
+t.create('single license')
+  .get('/l/tex.json')
+  .intercept(nock =>
+    nock('http://www.ctan.org')
+      .get('/json/pkg/tex')
+      .reply(200, {
+        license: 'knuth',
+        version: {
+          number: 'notRelevant',
+        },
+      })
+  )
+  .expectJSON({
+    name: 'license',
+    value: 'knuth',
+  })
+
 t.create('version')
   .get('/v/novel.json')
   .expectJSONTypes(
