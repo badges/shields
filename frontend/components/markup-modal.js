@@ -20,6 +20,13 @@ export default class MarkupModal extends React.Component {
     onRequestClose: PropTypes.func.isRequired,
   }
 
+  state = {
+    exampleUrl: null,
+    badgeUrl: null,
+    link: '',
+    style: 'flat',
+  }
+
   constructor(props) {
     super(props)
 
@@ -29,6 +36,7 @@ export default class MarkupModal extends React.Component {
     if (example) {
       const {exampleUrl, urlPattern, previewUrl, link} = example
       this.state = {
+        ...this.state,
         exampleUrl: exampleUrl
           ? resolveBadgeUrl(exampleUrl, baseUrl || window.location.href)
           : null,
@@ -83,10 +91,6 @@ export default class MarkupModal extends React.Component {
   }
 
   render() {
-    if (!this.props.example) {
-      return null
-    }
-
     const { markdown, reStructuredText, asciiDoc } = this.generateMarkup()
 
     const completeBadgeUrl = this.isOpen
