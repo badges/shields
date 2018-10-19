@@ -5,7 +5,10 @@ const ServiceTester = require('../service-tester')
 const { colorScheme } = require('../test-helpers')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'ctan', title: 'Comprehensive TEX Archive Network' })
+const t = new ServiceTester({
+  id: 'ctan',
+  title: 'Comprehensive TEX Archive Network',
+})
 module.exports = t
 
 t.create('license')
