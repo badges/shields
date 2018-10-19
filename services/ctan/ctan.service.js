@@ -9,6 +9,9 @@ const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
 module.exports = class Ctan extends LegacyService {
+  static get url() {
+    return { base: 'ctan' }
+  }
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/ctan\/([vl])\/([^/]+)\.(svg|png|gif|jpg|json)$/,
