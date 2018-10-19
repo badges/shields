@@ -76,7 +76,7 @@ export default class ExamplesPage extends React.Component {
         <MarkupModal
           example={this.state.example}
           onRequestClose={() => {
-            this.setState({example: null})
+            this.setState({ example: null })
           }}
           baseUrl={baseUrl}
           key={this.state.example}

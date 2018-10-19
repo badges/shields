@@ -34,7 +34,7 @@ export default class MarkupModal extends React.Component {
     // user.
     const { example, baseUrl } = props
     if (example) {
-      const {exampleUrl, urlPattern, previewUrl, link} = example
+      const { exampleUrl, urlPattern, previewUrl, link } = example
       this.state = {
         ...this.state,
         exampleUrl: exampleUrl
@@ -44,7 +44,7 @@ export default class MarkupModal extends React.Component {
           urlPattern || previewUrl,
           baseUrl || window.location.href
         ),
-        link: !link ? '' : link
+        link: !link ? '' : link,
       }
     }
   }
