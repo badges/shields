@@ -15,9 +15,10 @@ const {
 module.exports = class GithubTag extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
-      /^\/github\/tag(-?pre)?\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+      /^\/github\/(tag-pre|tag-date|tag)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
-        const includePre = Boolean(match[1])
+        const includePre = match[1].includes('pre')
+        const sortOrder = match[1] === 'tag-date' ? 'date' : 'semver'
         const user = match[2] // eg, expressjs/express
         const repo = match[3]
         const format = match[4]
@@ -34,9 +35,13 @@ module.exports = class GithubTag extends LegacyService {
           try {
             const data = JSON.parse(buffer)
             const versions = data.map(e => e.name)
-            const tag = latestVersion(versions, { pre: includePre })
+            const tag =
+              sortOrder === 'date'
+                ? versions[0]
+                : latestVersion(versions, { pre: includePre })
             badgeData.text[1] = versionText(tag)
-            badgeData.colorscheme = versionColor(tag)
+            badgeData.colorscheme =
+              sortOrder === 'date' ? 'blue' : versionColor(tag)
             sendBadge(format, badgeData)
           } catch (e) {
             badgeData.text[1] = 'none'
