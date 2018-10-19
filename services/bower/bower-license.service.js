@@ -11,7 +11,7 @@ module.exports = class BowerLicense extends LegacyService {
       cache((data, match, sendBadge, request) => {
         const repo = match[1] // eg, `bootstrap`.
         const format = match[2]
-        const badgeData = getBadgeData('bower', data)
+        const badgeData = getBadgeData('license', data)
         // API doc: https://libraries.io/api#project
         const options = {
           method: 'GET',
