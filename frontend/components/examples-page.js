@@ -73,16 +73,14 @@ export default class ExamplesPage extends React.Component {
       <div>
         <Meta />
         <Header />
-        {
-          this.state.example && <MarkupModal
-            example={this.state.example}
-            onRequestClose={() => {
-              this.setState({example: null})
-            }}
-            baseUrl={baseUrl}
-            key={this.state.example}
-          />
-        }
+        <MarkupModal
+          example={this.state.example}
+          onRequestClose={() => {
+            this.setState({example: null})
+          }}
+          baseUrl={baseUrl}
+          key={this.state.example}
+        />
         <section>
           <SuggestionAndSearch
             queryChanged={this.searchQueryChanged}
