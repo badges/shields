@@ -15,33 +15,19 @@ export default class MarkupModal extends React.Component {
       urlPattern: PropTypes.string,
       documentation: PropTypes.string,
       link: PropTypes.string,
-    }),
+    }).isRequired,
     baseUrl: PropTypes.string.isRequired,
     onRequestClose: PropTypes.func.isRequired,
   }
 
-  state = {
-    exampleUrl: null,
-    badgeUrl: null,
-    link: null,
-    style: 'flat',
-  }
-
-  get isOpen() {
-    return this.props.example !== null
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { example, baseUrl } = nextProps
-
-    if (!example) {
-      return
-    }
+  constructor(props) {
+    super(props)
 
     // Transfer `badgeUrl` and `link` into state so they can be edited by the
     // user.
+    const { example, baseUrl } = props
     const { exampleUrl, urlPattern, previewUrl, link } = example
-    this.setState({
+    this.state = {
       exampleUrl: exampleUrl
         ? resolveBadgeUrl(exampleUrl, baseUrl || window.location.href)
         : null,
@@ -49,8 +35,12 @@ export default class MarkupModal extends React.Component {
         urlPattern || previewUrl,
         baseUrl || window.location.href
       ),
-      link,
-    })
+      link: !link ? '' : link
+    }
+  }
+
+  get isOpen() {
+    return this.props.example !== null
   }
 
   generateCompleteBadgeUrl() {
