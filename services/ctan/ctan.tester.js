@@ -32,8 +32,8 @@ t.create('version (mocked)')
       .get('/json/pkg/novel')
       .reply(200, {
         version: {
-          number: 'v1.11'
-        }
+          number: 'v1.11',
+        },
       })
   )
   .expectJSON({
