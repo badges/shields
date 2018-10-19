@@ -95,6 +95,13 @@
     "start": "concurrently --names server,frontend \"ALLOWED_ORIGIN=http://localhost:3000 npm run start:server\" \"BASE_URL=http://[::]:8080 next dev\"",
     "refactoring-report": "node lib/refactoring-cli.js"
   },
+  "lint-staged": {
+    "**/*.js": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ]
+  },
   "bin": {
     "badge": "lib/badge-cli.js"
   },
@@ -143,10 +150,12 @@
     "eslint-plugin-standard": "^4.0.0",
     "fetch-ponyfill": "^6.0.0",
     "fs-readfile-promise": "^3.0.1",
+    "husky": "^1.1.2",
     "icedfrisby": "2.0.0-alpha.2",
     "icedfrisby-nock": "^1.0.0",
     "is-png": "^1.1.0",
     "is-svg": "^3.0.0",
+    "lint-staged": "^7.3.0",
     "lodash.debounce": "^4.0.8",
     "lodash.difference": "^4.5.0",
     "lodash.mapvalues": "^4.6.0",
@@ -201,5 +210,10 @@
     "type": "opencollective",
     "url": "https://opencollective.com/shields",
     "logo": "https://opencollective.com/opencollective/logo.txt"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
