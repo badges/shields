@@ -149,6 +149,7 @@ packages by [generating an npm token] and using that for the `npm_token` value.
 
 [github rate limit]: https://developer.github.com/v3/#rate-limiting
 [personal access tokens]: https://github.com/settings/tokens
+[generating an npm token]: https://docs.npmjs.com/getting-started/working_with_tokens
 
 Separate frontend hosting
 -------------------------
