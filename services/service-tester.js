@@ -1,8 +1,10 @@
 'use strict'
 
-const frisby = require('icedfrisby-nock')(require('icedfrisby'))
 const emojic = require('emojic')
 const config = require('../lib/test-config')
+const frisby = require('./icedfrisby-no-nock')(
+  require('icedfrisby-nock')(require('icedfrisby'))
+)
 const trace = require('./trace')
 
 /**
@@ -56,7 +58,11 @@ class ServiceTester {
   create(msg) {
     const spec = frisby
       .create(msg)
-      .baseUri(`http://localhost:${config.port}${this.pathPrefix}`)
+      .baseUri(
+        `${config.tested.protocol}//${config.tested.hostname}:${
+          config.tested.port
+        }${this.pathPrefix}`
+      )
       .before(() => {
         this.beforeEach()
       })
@@ -87,14 +93,16 @@ class ServiceTester {
   /**
    * Register the tests with Mocha.
    */
-  toss() {
+  toss(options) {
     const specs = this.specs
 
     const fn = this._only ? describe.only : describe
     // eslint-disable-next-line mocha/prefer-arrow-callback
     fn(this.title, function() {
       specs.forEach(spec => {
-        spec.toss()
+        if (!options.skipIntercepted || !spec.intercepted) {
+          spec.toss()
+        }
       })
     })
   }
