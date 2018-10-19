@@ -43,12 +43,28 @@ class CtanLicense extends BaseCtanService {
     return renderLicenseBadge({ licenses: json.license && json.license.sort() })
   }
 
+  static render({ licenses }) {
+    return renderLicenseBadge({ licenses })
+  }
+
   static get url() {
     return {
       base: 'ctan/l',
       format: '(.+)',
       capture: ['library'],
     }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'CTAN',
+        exampleUrl: 'novel',
+        urlPattern: ':library',
+        staticExample: this.render({ licenses: ['ppl1.3c', 'ofl'] }),
+        keywords: ['tex'],
+      },
+    ]
   }
 }
 
@@ -62,12 +78,28 @@ class CtanVersion extends BaseCtanService {
     return renderVersionBadge({ version: json.version.number })
   }
 
+  static render({ version }) {
+    return renderVersionBadge({ version })
+  }
+
   static get url() {
     return {
       base: 'ctan/v',
       format: '(.+)',
       capture: ['library'],
     }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'CTAN',
+        exampleUrl: 'tex',
+        urlPattern: ':library',
+        staticExample: this.render({ version: '3.14159265' }),
+        keywords: ['tex'],
+      },
+    ]
   }
 }
 
