@@ -70,7 +70,11 @@ export default class Usage extends React.PureComponent {
   }
 
   static renderNamedLogos() {
-    const renderLogo = logo => <span className="nowrap">{logo}</span>
+    const renderLogo = logo => (
+      <span className="nowrap" key={logo}>
+        {logo}
+      </span>
+    )
     const [first, ...rest] = logos
     return [renderLogo(first)].concat(
       rest.reduce((result, logo) => result.concat([', ', renderLogo(logo)]), [])
