@@ -16,7 +16,7 @@
   },
   "license": "CC0-1.0",
   "author": "Thaddée Tyl <thaddee.tyl@gmail.com>",
-  "main": "lib/make-badge.js",
+  "main": "lib/gh-badges.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/badges/shields"
