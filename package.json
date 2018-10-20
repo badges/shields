@@ -114,6 +114,7 @@
     "lib/lru-cache.js",
     "lib/text-measurer.js",
     "lib/svg-to-img.js",
+    "lib/defaults.js",
     "templates",
     "logo"
   ],
