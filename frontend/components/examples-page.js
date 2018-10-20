@@ -79,6 +79,7 @@ export default class ExamplesPage extends React.Component {
             this.setState({ example: null })
           }}
           baseUrl={baseUrl}
+          key={this.state.example}
         />
         <section>
           <SuggestionAndSearch
