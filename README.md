@@ -88,28 +88,34 @@ badge build passed :green .png > mybadge.png
 ```
 
 ```js
-const badge = require('gh-badges')
+const {
+  makeBadge,
+  PDFKitTextMeasurer,
+  QuickTextMeasurer,
+} = require('gh-badges')
 
-// Optional step, to have accurate text width computation.
 const format = {
   text: ['build', 'passed'],
   colorscheme: 'green',
   template: 'flat',
 }
+```
 
-badge.loadFont('/path/to/Verdana.ttf', err => {
-  badge(format, (svg, err) => {
-    // svg is a string containing your badge
-  })})
+```js
+// optimised for speed
+const svg = makeBadge(new QuickTextMeasurer('/path/to/Verdana.ttf'), format)
+```
+
+```js
+// optimised for accuracy
+const svg = makeBadge(new PDFKitTextMeasurer('/path/to/Verdana.ttf'), format)
 ```
 
 View the [documentation for gh-badges][gh-badges doc].
 
-**Note:** The badge library was last released in 2016.
-
 [![npm version](http://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges)
 
-[gh-badges doc]: doc/gh-badges.md
+[gh-badges doc]: https://github.com/badges/shields/blob/master/doc/gh-badges.md
 
 
 Development
