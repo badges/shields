@@ -99,7 +99,6 @@ t.create('Plugin Tested WP Version - old (mocked)')
       .get('/core/version-check/1.7/')
       .reply(200, mockedCoreResponseData)
   )
-  .networkOn()
   .expectJSON({
     name: 'wordpress',
     value: 'v4.9.6 tested',
@@ -124,7 +123,6 @@ t.create('Plugin Tested WP Version - non-exsistant or unsupported (mocked)')
       .get('/core/version-check/1.7/')
       .reply(200, mockedCoreResponseData)
   )
-  .networkOn()
   .expectJSON({
     name: 'wordpress',
     value: 'v4.0.0 tested',
