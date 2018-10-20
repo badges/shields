@@ -94,8 +94,8 @@ function StarsForExtensionType(extensionType) {
       return [
         {
           title: `Wordpress ${capt} Rating`,
-          exampleUrl: exampleSlug,
-          urlPattern: '(r|stars)/:slug',
+          exampleUrl: `stars/${exampleSlug}`,
+          urlPattern: 'stars/:slug',
           staticExample: this.render({
             response: {
               rating: 80,
@@ -103,6 +103,7 @@ function StarsForExtensionType(extensionType) {
             },
           }),
           keywords: ['wordpress'],
+          documentation: 'There is an alias <code>/r/:slug.svg</code> aswell',
         },
       ]
     }
