@@ -24,6 +24,7 @@
   "dependencies": {
     "camp": "~17.2.1",
     "chalk": "^2.4.1",
+    "check-node-version": "^3.1.0",
     "chrome-web-store-item-property": "~1.1.2",
     "dot": "~1.1.2",
     "emojic": "^1.1.14",
@@ -127,7 +128,6 @@
     "chai-as-promised": "^7.1.1",
     "chai-string": "^1.4.0",
     "chainsmoker": "^0.1.0",
-    "check-node-version": "^3.1.0",
     "child-process-promise": "^2.2.1",
     "classnames": "^2.2.5",
     "concurrently": "^4.0.1",
