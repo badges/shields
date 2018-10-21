@@ -149,20 +149,20 @@ module.exports = class Codeclimate extends LegacyService {
     return [
       {
         title: 'Code Climate issues',
-        exampleUrl: 'issues/twbs/bootstrap.svg',
-        urlPattern: 'issues/:userRepo.svg',
+        exampleUrl: 'issues/twbs/bootstrap',
+        urlPattern: 'issues/:userRepo',
         staticExample: { label: 'issues', message: '89', color: 'red' },
       },
       {
         title: 'Code Climate maintainability',
-        exampleUrl: 'maintainability/angular/angular.js.svg',
-        urlPattern: 'maintainability/:userRepo.svg',
+        exampleUrl: 'maintainability/angular/angular.js',
+        urlPattern: 'maintainability/:userRepo',
         staticExample: { label: 'maintainability', message: 'F', color: 'red' },
       },
       {
         title: 'Code Climate maintainability (percentage)',
-        exampleUrl: 'maintainability-percentage/angular/angular.js.svg',
-        urlPattern: 'maintainability-percentage/:userRepo.svg',
+        exampleUrl: 'maintainability-percentage/angular/angular.js',
+        urlPattern: 'maintainability-percentage/:userRepo',
         staticExample: {
           label: 'maintainability',
           message: '4.6%',
@@ -171,8 +171,8 @@ module.exports = class Codeclimate extends LegacyService {
       },
       {
         title: 'Code Climate coverage',
-        exampleUrl: 'coverage/jekyll/jekyll.svg',
-        urlPattern: 'coverage/:userRepo.svg',
+        exampleUrl: 'coverage/jekyll/jekyll',
+        urlPattern: 'coverage/:userRepo',
         staticExample: {
           label: 'coverage',
           message: '95%',
@@ -181,14 +181,14 @@ module.exports = class Codeclimate extends LegacyService {
       },
       {
         title: 'Code Climate coverage (letter)',
-        exampleUrl: 'coverage-letter/jekyll/jekyll.svg',
-        urlPattern: 'coverage-letter/:userRepo.svg',
+        exampleUrl: 'coverage-letter/jekyll/jekyll',
+        urlPattern: 'coverage-letter/:userRepo',
         staticExample: { label: 'coverage', message: 'A', color: 'green' },
       },
       {
         title: 'Code Climate technical debt',
-        exampleUrl: 'tech-debt/jekyll/jekyll.svg',
-        urlPattern: 'tech-debt/:userRepo.svg',
+        exampleUrl: 'tech-debt/jekyll/jekyll',
+        urlPattern: 'tech-debt/:userRepo',
         staticExample: {
           label: 'technical debt',
           message: '3%',
