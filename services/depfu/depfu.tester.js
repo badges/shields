@@ -24,7 +24,7 @@ t.create('depfu dependencies (valid)')
 
 t.create('depfu dependencies (repo not found)')
   .get('/pyvesb/emptyrepo.json')
-  .expectJSON({ name: 'dependencies', value: 'invalid' })
+  .expectJSON({ name: 'dependencies', value: 'not found' })
 
 t.create('depfu dependencies (connection error)')
   .get('/depfu/example-ruby.json')
