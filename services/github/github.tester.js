@@ -300,6 +300,26 @@ t.create('Stars (repo not found)')
     value: 'repo not found',
   })
 
+t.create('Stars (named color override)')
+  .get('/stars/badges/shields.json?colorB=yellow&style=_shields_test')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'stars',
+      value: Joi.string().regex(/^\w+$/),
+      colorB: Joi.equal(colorsB.yellow).required(),
+    })
+  )
+
+t.create('Stars (hex color override)')
+  .get('/stars/badges/shields.json?colorB=abcdef&style=_shields_test')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'stars',
+      value: Joi.string().regex(/^\w+$/),
+      colorB: Joi.equal('#abcdef').required(),
+    })
+  )
+
 t.create('Forks')
   .get('/forks/badges/shields.json')
   .expectJSONTypes(
