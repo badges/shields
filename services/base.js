@@ -165,6 +165,19 @@ class BaseService {
     return new RegExp(fullRegex)
   }
 
+  static get _cacheLength() {
+    if (this.category === 'build') {
+      return 30
+    }
+    if (this.category === 'license') {
+      return 3600
+    }
+    if (this.category === 'version') {
+      return 300
+    }
+    return undefined
+  }
+
   static _namedParamsForMatch(match) {
     const names = this.url.capture || []
 
@@ -315,6 +328,7 @@ class BaseService {
           const format = match.slice(-1)[0]
           sendBadge(format, badgeData)
         },
+        cacheLength: this._cacheLength,
       })
     )
   }
