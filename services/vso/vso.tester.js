@@ -2,7 +2,8 @@
 
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
-const { isBuildStatus } = require('../test-validators')
+
+const isValidStatus = Joi.equal('passing', 'failing')
 
 const t = new ServiceTester({
   id: 'vso',
@@ -10,23 +11,25 @@ const t = new ServiceTester({
 })
 module.exports = t
 
+// https://dev.azure.com/totodem/Shields.io is a public Azure DevOps project solely created for Shield.io testing
+
 // Builds
 
 t.create('build status on default branch')
-  .get('/build/devdiv/0bdbc590-a062-4c3f-b0f6-9383f67865ee/7716.json')
+  .get('/build/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'build',
-      value: isBuildStatus,
+      value: isValidStatus,
     })
   )
 
 t.create('build status on named branch')
-  .get('/build/devdiv/0bdbc590-a062-4c3f-b0f6-9383f67865ee/7716/master.json')
+  .get('/build/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2/master.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'build',
-      value: isBuildStatus,
+      value: isValidStatus,
     })
   )
 
@@ -42,37 +45,13 @@ t.create('build status with connection error')
 // Releases
 
 t.create('release status is succeeded')
-  .get('/release/devdiv/0bdbc590-a062-4c3f-b0f6-9383f67865ee/77/16.json')
-  .intercept(nock =>
-    nock('https://devdiv.vsrm.visualstudio.com')
-      .get(
-        '/_apis/public/release/badge/0bdbc590-a062-4c3f-b0f6-9383f67865ee/77/16'
-      )
-      .reply(200, '<svg><g><text>succeeded</text></g></svg>')
+  .get('/release/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/1/1.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'deployment',
+      value: isValidStatus,
+    })
   )
-  .expectJSON({ name: 'deployment', value: 'passing' })
-
-t.create('release status is partially succeeded')
-  .get('/release/devdiv/0bdbc590-a062-4c3f-b0f6-9383f67865ee/77/16.json')
-  .intercept(nock =>
-    nock('https://devdiv.vsrm.visualstudio.com')
-      .get(
-        '/_apis/public/release/badge/0bdbc590-a062-4c3f-b0f6-9383f67865ee/77/16'
-      )
-      .reply(200, '<svg><g><text>partially succeeded</text></g></svg>')
-  )
-  .expectJSON({ name: 'deployment', value: 'passing' })
-
-t.create('release status is failed')
-  .get('/release/devdiv/0bdbc590-a062-4c3f-b0f6-9383f67865ee/77/16.json')
-  .intercept(nock =>
-    nock('https://devdiv.vsrm.visualstudio.com')
-      .get(
-        '/_apis/public/release/badge/0bdbc590-a062-4c3f-b0f6-9383f67865ee/77/16'
-      )
-      .reply(200, '<svg><g><text>failed</text></g></svg>')
-  )
-  .expectJSON({ name: 'deployment', value: 'failing' })
 
 t.create('release status on unknown repo')
   .get('/release/this-repo/does-not-exist/1/2.json')
