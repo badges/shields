@@ -176,14 +176,18 @@ module.exports = class Codeclimate extends LegacyService {
         staticExample: {
           label: 'coverage',
           message: '95%',
-          color: 'yellowgreen',
+          color: 'green',
         },
       },
       {
         title: 'Code Climate coverage (letter)',
         exampleUrl: 'coverage-letter/jekyll/jekyll',
         urlPattern: 'coverage-letter/:userRepo',
-        staticExample: { label: 'coverage', message: 'A', color: 'green' },
+        staticExample: {
+          label: 'coverage',
+          message: 'A',
+          color: 'brightgreen',
+        },
       },
       {
         title: 'Code Climate technical debt',
@@ -192,7 +196,7 @@ module.exports = class Codeclimate extends LegacyService {
         staticExample: {
           label: 'technical debt',
           message: '3%',
-          color: 'green',
+          color: 'brightgreen',
         },
       },
     ]
