@@ -3,6 +3,7 @@
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
 const { InvalidResponse, NotFound } = require('../errors')
+const serverSecrets = require('../../lib/server-secrets')
 
 const deprecatedLicenseObjectSchema = Joi.object({
   type: Joi.string().required(),
@@ -64,6 +65,19 @@ module.exports = class NpmBase extends BaseJsonService {
     return `@${encoded}`
   }
 
+  async _requestJson(data) {
+    // Use a custom Accept header because of this bug:
+    // <https://github.com/npm/npmjs.org/issues/163>
+    const headers = { Accept: '*/*' }
+    if (serverSecrets.npm_token) {
+      headers.Authorization = `Bearer ${serverSecrets.npm_token}`
+    }
+    return super._requestJson({
+      ...data,
+      options: { headers },
+    })
+  }
+
   async fetchPackageData({ registryUrl, scope, packageName, tag }) {
     registryUrl = registryUrl || this.constructor.defaultRegistryUrl
     let url
@@ -85,9 +99,6 @@ module.exports = class NpmBase extends BaseJsonService {
       // We don't validate here because we need to pluck the desired subkey first.
       schema: Joi.any(),
       url,
-      // Use a custom Accept header because of this bug:
-      // <https://github.com/npm/npmjs.org/issues/163>
-      options: { Accept: '*/*' },
       errorMessages: { 404: 'package not found' },
     })
 

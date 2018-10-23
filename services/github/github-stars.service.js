@@ -34,8 +34,7 @@ module.exports = class GithubStars extends LegacyService {
           }
           try {
             badgeData.text[1] = metric(JSON.parse(buffer).stargazers_count)
-            badgeData.colorscheme = null
-            badgeData.colorB = '#4183C4'
+            badgeData.colorscheme = 'blue'
             sendBadge(format, badgeData)
           } catch (e) {
             badgeData.text[1] = 'invalid'
