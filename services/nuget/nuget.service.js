@@ -344,7 +344,7 @@ module.exports = class Nuget extends LegacyService {
     // PowerShell Gallery
     mapNugetFeedv2({ camp, cache }, 'powershellgallery', 0, match => ({
       site: 'powershellgallery',
-      feed: 'https://www.powershellgallery.com/api/v2',
+      feed: 'https://msconfiggallery.cloudapp.net/api/v2',
     }))
 
     // NuGet
