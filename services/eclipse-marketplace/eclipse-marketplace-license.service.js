@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const EclipseMarketplaceBase = require('./eclipse-marketplace-base')
-const { renderLicenseBadge } = require('../../lib/licenses')
 
 const licenseResponseSchema = Joi.object({
   marketplace: Joi.object({
@@ -44,7 +43,10 @@ module.exports = class EclipseMarketplaceLicense extends EclipseMarketplaceBase 
         message: 'not specified',
       }
     }
-    return renderLicenseBadge({ license })
+    return {
+      message: license,
+      color: 'blue',
+    }
   }
 
   async handle({ name }) {
