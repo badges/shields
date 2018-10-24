@@ -88,27 +88,17 @@ badge build passed :green .png > mybadge.png
 ```
 
 ```js
-const {
-  makeBadge,
-  PDFKitTextMeasurer,
-  QuickTextMeasurer,
-} = require('gh-badges')
+const { BadgeFactory } = require('gh-badges')
+
+const bf = new BadgeFactory({ fontPath: '/path/to/Verdana.ttf' })
 
 const format = {
   text: ['build', 'passed'],
   colorscheme: 'green',
   template: 'flat',
 }
-```
 
-```js
-// optimised for speed
-const svg = makeBadge(new QuickTextMeasurer('/path/to/Verdana.ttf'), format)
-```
-
-```js
-// optimised for accuracy
-const svg = makeBadge(new PDFKitTextMeasurer('/path/to/Verdana.ttf'), format)
+const svg = bf.create(format)
 ```
 
 View the [documentation for gh-badges][gh-badges doc].
