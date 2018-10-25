@@ -166,16 +166,14 @@ class BaseService {
   }
 
   static get _cacheLength() {
-    if (this.category === 'build') {
-      return 30
+    const cacheLengths = {
+      build: 30,
+      license: 3600,
+      version: 300,
     }
-    if (this.category === 'license') {
-      return 3600
-    }
-    if (this.category === 'version') {
-      return 300
-    }
-    return undefined
+    return cacheLengths.hasOwnProperty(this.category)
+      ? cacheLengths[this.category]
+      : undefined
   }
 
   static _namedParamsForMatch(match) {
