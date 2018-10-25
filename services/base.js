@@ -171,9 +171,7 @@ class BaseService {
       license: 3600,
       version: 300,
     }
-    return cacheLengths.hasOwnProperty(this.category)
-      ? cacheLengths[this.category]
-      : undefined
+    return cacheLengths[this.category]
   }
 
   static _namedParamsForMatch(match) {
