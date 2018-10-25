@@ -23,7 +23,7 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
     return {
       base: 'swagger/valid/2.0',
       format: '(http(?:s)?)/(.+)',
-      capture: ['protocol', 'url'],
+      capture: ['scheme', 'url'],
     }
   }
 
@@ -31,8 +31,8 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
     return { label: 'swagger' }
   }
 
-  async handle({ protocol, url }) {
-    const json = await this.fetch({ protocol, urlF: url })
+  async handle({ scheme, url }) {
+    const json = await this.fetch({ scheme, urlF: url })
     const valMessages = json.schemaValidationMessages
 
     if (!valMessages || valMessages.length === 0) {
@@ -42,11 +42,16 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
     }
   }
 
-  async fetch({ protocol, urlF }) {
-    const url = `http://online.swagger.io/validator/debug?url=${protocol}://${urlF}`
+  async fetch({ scheme, urlF }) {
+    const url = 'http://online.swagger.io/validator/debug'
     return this._requestJson({
       url,
       schema: validatorSchema,
+      options: {
+        qs: {
+          url: `${scheme}://${urlF}`,
+        },
+      },
     })
   }
 
@@ -58,11 +63,10 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
     return [
       {
         title: 'Swagger Validator',
-        urlPattern: 'https/:url',
+        urlPattern: ':scheme/:url',
         staticExample: this.render({ message: 'valid', clr: 'brightgreen' }),
         exampleUrl:
           'https/raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded.json',
-        keywords: ['swagger'],
       },
     ]
   }
