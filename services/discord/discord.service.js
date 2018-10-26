@@ -22,6 +22,10 @@ module.exports = class Discord extends BaseJsonService {
     })
   }
 
+  static get _cacheLength() {
+    return 30
+  }
+
   static render({ members }) {
     return {
       message: `${members} online`,
