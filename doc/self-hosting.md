@@ -116,6 +116,10 @@ npm run build  # Not sure why, but this needs to be run before deploying.
 now
 ```
 
+## Persistence
+
+To enable Redis-backed GitHub token persistence, point `REDIS_URL` to your
+Redis installation.
 
 Server secrets
 --------------
@@ -140,10 +144,12 @@ will have access to your private repositories.
 When a `gh_token` is specified, it is used in place of the Shields token
 rotation logic.
 
+You can also give your self-hosted Shields installation access to private npm
+packages by [generating an npm token] and using that for the `npm_token` value.
 
 [github rate limit]: https://developer.github.com/v3/#rate-limiting
 [personal access tokens]: https://github.com/settings/tokens
-
+[generating an npm token]: https://docs.npmjs.com/getting-started/working_with_tokens
 
 Separate frontend hosting
 -------------------------
@@ -185,14 +191,14 @@ In order to enable integration with [Sentry](https://sentry.io), you need your o
 ### How to obtain the Sentry DSN
 
 1. [Sign up](https://sentry.io/pricing/) for Sentry
-1. Log in to Sentry
-1. Create a new project for Node.js
-1. You should see [Sentry DSN](https://docs.sentry.io/quickstart/#configure-the-dsn) for your project. Sentry DSN can be found by navigating to \[Project Name] -> Project Settings -> Client Keys (DSN) as well.
+2. Log in to Sentry
+3. Create a new project for Node.js
+4. You should see [Sentry DSN](https://docs.sentry.io/quickstart/#configure-the-dsn) for your project. Sentry DSN can be found by navigating to \[Project Name] -> Project Settings -> Client Keys (DSN) as well.
 
 Start the server using the Sentry DSN. You can set it:
 - by `SENTRY_DSN` environment variable
 ```
-SENTRY_DSN=https://xxx:yyy@sentry.io/zzz sudo node server
+sudo SENTRY_DSN=https://xxx:yyy@sentry.io/zzz node server
 ```
 
 - or by `sentry_dsn` secret property defined in `private/secret.json`

@@ -1,4 +1,8 @@
-server.js
-server.spec.js
 package.json
+package-lock.json
+/__snapshots__
+/.next
+/build
+/coverage
+**/*.md
 private/*.json

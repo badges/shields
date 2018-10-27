@@ -1,26 +1,33 @@
-'use strict';
+'use strict'
 
+// See available emoji at http://emoji.muan.co/
+const emojic = require('emojic')
+const Joi = require('joi')
 const {
   NotFound,
   InvalidResponse,
   Inaccessible,
-} = require('./errors');
+  InvalidParameter,
+  Deprecated,
+} = require('./errors')
+const { checkErrorResponse } = require('../lib/error-helper')
+const queryString = require('query-string')
 const {
   makeLogo,
   toArray,
   makeColor,
   setBadgeColor,
-} = require('../lib/badge-data');
-const {
-  checkErrorResponse,
-  asJson,
-} = require('../lib/error-helper');
-
+} = require('../lib/badge-data')
+const trace = require('./trace')
 
 class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
-    this._sendAndCacheRequest = sendAndCacheRequest;
-    this._handleInternalErrors = handleInternalErrors;
+    this._sendAndCacheRequest = sendAndCacheRequest
+    this._handleInternalErrors = handleInternalErrors
+  }
+
+  static render(props) {
+    throw new Error(`render() function not implemented for ${this.name}`)
   }
 
   /**
@@ -29,9 +36,7 @@ class BaseService {
    * `this._sendAndCacheRequest`, and returns the badge data.
    */
   async handle(namedParams, queryParams) {
-    throw new Error(
-      `Handler not implemented for ${this.constructor.name}`
-    );
+    throw new Error(`Handler not implemented for ${this.constructor.name}`)
   }
 
   // Metadata
@@ -41,7 +46,7 @@ class BaseService {
    * the badges on the main shields.io website.
    */
   static get category() {
-    return 'unknown';
+    return 'unknown'
   }
 
   /**
@@ -57,7 +62,7 @@ class BaseService {
    *                 parameters will be passed to the handler.
    */
   static get url() {
-    throw new Error(`URL not defined for ${this.name}`);
+    throw new Error(`URL not defined for ${this.name}`)
   }
 
   /**
@@ -66,7 +71,7 @@ class BaseService {
    * by either the handler or by the user via URL parameters.
    */
   static get defaultBadgeData() {
-    return {};
+    return {}
   }
 
   /**
@@ -75,86 +80,175 @@ class BaseService {
    * this service.
    */
   static get examples() {
-    return [];
+    return []
   }
 
   static _makeFullUrl(partialUrl) {
-    return '/' + [this.url.base, partialUrl].filter(Boolean).join('/');
+    return '/' + [this.url.base, partialUrl].filter(Boolean).join('/')
+  }
+
+  static _makeStaticExampleUrl(serviceData) {
+    const badgeData = this._makeBadgeData({}, serviceData)
+    const color = badgeData.colorscheme || badgeData.colorB
+    return this._makeStaticExampleUrlFromTextAndColor(
+      badgeData.text[0],
+      badgeData.text[1],
+      color
+    )
+  }
+
+  static _makeStaticExampleUrlFromTextAndColor(text1, text2, color) {
+    return `/badge/${encodeURIComponent(
+      text1.replace('-', '--')
+    )}-${encodeURIComponent(text2).replace('-', '--')}-${encodeURIComponent(
+      color
+    )}`
   }
 
   /**
    * Return an array of examples. Each example is prepared according to the
-   * schema in `lib/all-badge-examples.js`. Four keys are supported:
-   *  - title
-   *  - previewUrl
-   *  - exampleUrl
-   *  - documentation
+   * schema in `lib/all-badge-examples.js`.
    */
   static prepareExamples() {
-    return this.examples.map(({ title, previewUrl, exampleUrl, documentation }) => {
-      if (! previewUrl) {
-        throw Error(`Example for ${this.name} is missing required previewUrl`);
-      }
-
-      return {
-        title: title ? `${title}` : this.name,
-        previewUri: `${this._makeFullUrl(previewUrl)}.svg`,
-        exampleUri: exampleUrl ? `${this._makeFullUrl(exampleUrl)}.svg` : undefined,
+    return this.examples.map(
+      ({
+        title,
+        query,
+        exampleUrl,
+        previewUrl,
+        urlPattern,
+        staticExample,
         documentation,
-      };
-    });
+        keywords,
+      }) => {
+        if (!previewUrl && !staticExample) {
+          throw Error(
+            `Example for ${
+              this.name
+            } is missing required previewUrl or staticExample`
+          )
+        }
+        if (staticExample && !urlPattern) {
+          throw new Error('Must declare a urlPattern if using staticExample')
+        }
+        if (staticExample && !exampleUrl) {
+          throw new Error('Must declare an exampleUrl if using staticExample')
+        }
+
+        const stringified = queryString.stringify(query)
+        const suffix = stringified ? `?${stringified}` : ''
+
+        return {
+          title: title ? `${title}` : this.name,
+          exampleUrl: exampleUrl
+            ? `${this._makeFullUrl(exampleUrl, query)}.svg${suffix}`
+            : undefined,
+          previewUrl: staticExample
+            ? `${this._makeStaticExampleUrl(staticExample)}.svg`
+            : `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
+          urlPattern: urlPattern
+            ? `${this._makeFullUrl(urlPattern, query)}.svg${suffix}`
+            : undefined,
+          documentation,
+          keywords,
+        }
+      }
+    )
   }
 
   static get _regex() {
     // Regular expressions treat "/" specially, so we need to escape them
-    const escapedPath = this.url.format.replace(/\//g, '\\/');
-    const fullRegex = `^${this._makeFullUrl(escapedPath)}.(svg|png|gif|jpg|json)$`;
-    return new RegExp(fullRegex);
+    const escapedPath = this.url.format.replace(/\//g, '\\/')
+    const fullRegex = `^${this._makeFullUrl(
+      escapedPath
+    )}.(svg|png|gif|jpg|json)$`
+    return new RegExp(fullRegex)
+  }
+
+  static get _cacheLength() {
+    const cacheLengths = {
+      build: 30,
+      license: 3600,
+      version: 300,
+    }
+    return cacheLengths[this.category]
   }
 
   static _namedParamsForMatch(match) {
+    const names = this.url.capture || []
+
     // Assume the last match is the format, and drop match[0], which is the
     // entire match.
-    const captures = match.slice(1, -1);
+    const captures = match.slice(1, -1)
 
-    if (this.url.capture.length !== captures.length) {
+    if (names.length !== captures.length) {
       throw new Error(
-        `Service ${this.constructor.name} declares incorrect number of capture groups `+
-        `(expected ${this.url.capture.length}, got ${captures.length})`
-      );
+        `Service ${this.name} declares incorrect number of capture groups ` +
+          `(expected ${names.length}, got ${captures.length})`
+      )
     }
 
-    const result = {};
-    this.url.capture.forEach((name, index) => {
-      result[name] = captures[index];
-    });
-    return result;
+    const result = {}
+    names.forEach((name, index) => {
+      result[name] = captures[index]
+    })
+    return result
   }
 
   async invokeHandler(namedParams, queryParams) {
+    trace.logTrace(
+      'inbound',
+      emojic.womanCook,
+      'Service class',
+      this.constructor.name
+    )
+    trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
+    trace.logTrace('inbound', emojic.crayon, 'Query params', queryParams)
     try {
-      return await this.handle(namedParams, queryParams);
+      return await this.handle(namedParams, queryParams)
     } catch (error) {
-      if (error instanceof NotFound) {
+      if (error instanceof NotFound || error instanceof InvalidParameter) {
+        trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
         return {
           message: error.prettyMessage,
           color: 'red',
-        };
-      } else if (error instanceof InvalidResponse ||
-        error instanceof Inaccessible) {
+        }
+      } else if (
+        error instanceof InvalidResponse ||
+        error instanceof Inaccessible ||
+        error instanceof Deprecated
+      ) {
+        trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
         return {
           message: error.prettyMessage,
           color: 'lightgray',
-        };
+        }
       } else if (this._handleInternalErrors) {
-        console.log(error);
+        if (
+          !trace.logTrace(
+            'unhandledError',
+            emojic.boom,
+            'Unhandled internal error',
+            error
+          )
+        ) {
+          // This is where we end up if an unhandled exception is thrown in
+          // production. Send the error to the logs.
+          console.log(error)
+        }
         return {
           label: 'shields',
           message: 'internal error',
           color: 'lightgray',
-        };
+        }
       } else {
-        throw error;
+        trace.logTrace(
+          'unhandledError',
+          emojic.boom,
+          'Unhandled internal error',
+          error
+        )
+        throw error
       }
     }
   }
@@ -164,24 +258,25 @@ class BaseService {
       style,
       label: overrideLabel,
       logo: overrideLogo,
+      logoColor: overrideLogoColor,
       logoWidth: overrideLogoWidth,
       link: overrideLink,
       colorA: overrideColorA,
       colorB: overrideColorB,
-    } = overrides;
+    } = overrides
 
     const {
       label: serviceLabel,
       message: serviceMessage,
       color: serviceColor,
       link: serviceLink,
-    } = serviceData;
+    } = serviceData
 
     const {
       color: defaultColor,
       logo: defaultLogo,
       label: defaultLabel,
-    } = this.defaultBadgeData;
+    } = this.defaultBadgeData
 
     const badgeData = {
       text: [
@@ -189,51 +284,89 @@ class BaseService {
         serviceMessage || 'n/a',
       ],
       template: style,
-      logo: makeLogo(style === 'social' ? defaultLogo : undefined, { logo: overrideLogo }),
+      logo: makeLogo(style === 'social' ? defaultLogo : undefined, {
+        logo: overrideLogo,
+        logoColor: overrideLogoColor,
+      }),
       logoWidth: +overrideLogoWidth,
       links: toArray(overrideLink || serviceLink),
       colorA: makeColor(overrideColorA),
-    };
-    const color = overrideColorB || serviceColor || defaultColor || 'lightgrey';
-    setBadgeColor(badgeData, color);
+    }
+    const color = overrideColorB || serviceColor || defaultColor || 'lightgrey'
+    setBadgeColor(badgeData, color)
 
-    return badgeData;
+    return badgeData
   }
 
-  static register(camp, handleRequest, { handleInternalErrors }) {
-    const ServiceClass = this; // In a static context, "this" is the class.
+  static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
+    const ServiceClass = this // In a static context, "this" is the class.
 
-    camp.route(this._regex, handleRequest({
-      queryParams: this.url.queryParams,
-      handler: async (queryParams, match, sendBadge, request) => {
-        const namedParams = this._namedParamsForMatch(match);
-        const serviceInstance = new ServiceClass({
-          sendAndCacheRequest: request.asPromise,
-        }, { handleInternalErrors });
-        const serviceData = await serviceInstance.invokeHandler(namedParams, queryParams);
-        const badgeData = this._makeBadgeData(queryParams, serviceData);
+    camp.route(
+      this._regex,
+      handleRequest({
+        queryParams: this.url.queryParams,
+        handler: async (queryParams, match, sendBadge, request) => {
+          const namedParams = this._namedParamsForMatch(match)
+          const serviceInstance = new ServiceClass(
+            {
+              sendAndCacheRequest: request.asPromise,
+            },
+            serviceConfig
+          )
+          const serviceData = await serviceInstance.invokeHandler(
+            namedParams,
+            queryParams
+          )
+          trace.logTrace('outbound', emojic.shield, 'Service data', serviceData)
+          const badgeData = this._makeBadgeData(queryParams, serviceData)
 
-        // Assumes the final capture group is the extension
-        const format = match.slice(-1)[0];
-        sendBadge(format, badgeData);
-      },
-    }));
+          // Assumes the final capture group is the extension
+          const format = match.slice(-1)[0]
+          sendBadge(format, badgeData)
+        },
+        cacheLength: this._cacheLength,
+      })
+    )
   }
-};
 
-class BaseJsonService extends BaseService {
-  async _requestJson(url, options = {}, notFoundMessage) {
-    return this._sendAndCacheRequest(url,
-      {...{ 'headers': { 'Accept': 'application/json' } }, ...options}
-    ).then(
-      checkErrorResponse.asPromise(
-        notFoundMessage ? { notFoundMessage: notFoundMessage } : undefined
+  static _validate(data, schema) {
+    if (!schema || !schema.isJoi) {
+      throw Error('A Joi schema is required')
+    }
+    const { error, value } = Joi.validate(data, schema, {
+      allowUnknown: true,
+      stripUnknown: true,
+    })
+    if (error) {
+      trace.logTrace(
+        'validate',
+        emojic.womanShrugging,
+        'Response did not match schema',
+        error.message
       )
-    ).then(asJson);
+      throw new InvalidResponse({
+        prettyMessage: 'invalid response data',
+        underlyingError: error,
+      })
+    } else {
+      trace.logTrace(
+        'validate',
+        emojic.bathtub,
+        'Data after validation',
+        value,
+        { deep: true }
+      )
+      return value
+    }
   }
-};
 
-module.exports = {
-  BaseService,
-  BaseJsonService,
-};
+  async _request({ url, options = {}, errorMessages = {} }) {
+    const logTrace = (...args) => trace.logTrace('fetch', ...args)
+    logTrace(emojic.bowAndArrow, 'Request', url, '\n', options)
+    const { res, buffer } = await this._sendAndCacheRequest(url, options)
+    logTrace(emojic.dart, 'Response status code', res.statusCode)
+    return checkErrorResponse.asPromise(errorMessages)({ buffer, res })
+  }
+}
+
+module.exports = BaseService

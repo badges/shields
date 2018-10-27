@@ -23,15 +23,81 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run:
-          name: Update Greenkeeper lockfile
-          environment:
-            # https://github.com/greenkeeperio/greenkeeper-lockfile/issues/58
-            CI_PULL_REQUEST: ''
-          command: |
-            greenkeeper-lockfile-update
-
   main:
+    docker:
+      - image: shieldsio/shields-ci-node-8:0.0.3
+      - image: redis
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+          # https://github.com/badges/shields/issues/1937
+          key: v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm install
+
+      - run:
+          name: Linter
+          when: always
+          command: npm run lint
+
+      - run:
+          name: Server unit tests
+          when: always
+          command: npm run test:js:server
+
+      - run:
+          name: Integration tests
+          when: always
+          command: npm run test:integration
+
+      - run:
+          name: 'Prettier check (quick fix: `npm run prettier`)'
+          when: always
+          command: npm run prettier-check
+
+  main@node-latest:
+    docker:
+      - image: shieldsio/shields-ci-node-latest:0.0.3
+      - image: redis
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+          # https://github.com/badges/shields/issues/1937
+          key: v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm install
+
+      - run:
+          name: Linter
+          when: always
+          command: npm run lint
+
+      - run:
+          name: Server unit tests
+          when: always
+          command: npm run test:js:server
+
+      - run:
+          name: Integration tests
+          when: always
+          command: npm run test:integration
+
+      - run:
+          name: 'Prettier check (quick fix: `npm run prettier`)'
+          when: always
+          command: npm run prettier-check
+
+  danger:
     docker:
       - image: shieldsio/shields-ci-node-8:0.0.3
     working_directory: ~/repo
@@ -40,48 +106,17 @@ jobs:
 
       - restore_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
+          # https://github.com/badges/shields/issues/1937
+          key: v1-dependencies-
 
       - run:
-          name: Linter
-          when: always
-          command: npm run lint
-
-      - run:
-          name: Server unit tests
-          when: always
-          command: npm run test:js:server
+          name: Install dependencies
+          command: npm install
 
       - run:
           name: Danger
           when: always
           command: npm run danger ci
-
-      - run:
-          name: Upload Greenkeeper lockfile
-          environment:
-            # https://github.com/greenkeeperio/greenkeeper-lockfile/issues/58
-            CI_PULL_REQUEST: ''
-          command: greenkeeper-lockfile-upload
-
-  main@node-latest:
-    docker:
-      - image: shieldsio/shields-ci-node-latest:0.0.3
-    working_directory: ~/repo
-    steps:
-      - checkout
-
-      - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
-
-      - run:
-          name: Linter
-          when: always
-          command: npm run lint
-
-      - run:
-          name: Server unit tests
-          when: always
-          command: npm run test:js:server
 
   frontend:
     docker:
@@ -92,6 +127,12 @@ jobs:
 
       - restore_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
+          # https://github.com/badges/shields/issues/1937
+          key: v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm install
 
       - run:
           name: Frontend unit tests
@@ -118,6 +159,12 @@ jobs:
 
       - restore_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
+          # https://github.com/badges/shields/issues/1937
+          key: v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm install
 
       - run:
           name: Identify services tagged in the PR title
@@ -152,6 +199,12 @@ jobs:
 
       - restore_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
+          # https://github.com/badges/shields/issues/1937
+          key: v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm install
 
       - run:
           name: Identify services tagged in the PR title
@@ -209,6 +262,12 @@ workflows:
       - services-pr@node-latest:
           requires:
             - npm-install
+      - danger:
+          requires:
+            - npm-install
+          filters:
+            branches:
+              ignore: /dependabot\/.*/
 
   daily:
     triggers:
