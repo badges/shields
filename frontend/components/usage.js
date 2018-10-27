@@ -269,8 +269,9 @@ export default class Usage extends React.PureComponent {
                 <code>?maxAge=3600</code>
               </td>
               <td>
-                Set the HTTP cache lifetime in secs (values below the default
-                (currently 120 seconds) will be ignored)
+                Set the HTTP cache lifetime in secs (rules are applied to infer
+                a default value on a per-badge basis, any values specified below
+                the default will be ignored)
               </td>
             </tr>
           </tbody>
