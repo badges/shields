@@ -7,7 +7,7 @@ const {
   sortDjangoVersions,
   getLicenses,
   getPackageFormats,
-} = require('./pypi-helpers.js')
+} = require('./pypi-helpers')
 
 const classifiersFixture = {
   info: {
@@ -122,6 +122,18 @@ describe('PyPI helpers', function() {
         },
       }),
     ]).expect(['mit license'])
+    given({
+      info: {
+        license: '',
+        classifiers: ['License :: Public Domain'],
+      },
+    }).expect(['public domain'])
+    given({
+      info: {
+        license: '',
+        classifiers: ['License :: Netscape Public License (NPL)'],
+      },
+    }).expect(['NPL'])
   })
 
   test(getPackageFormats, () => {

@@ -3,6 +3,7 @@
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isBuildStatus, isIntegerPercentage } = require('../test-validators')
+const { colorScheme } = require('../test-helpers')
 
 const t = new ServiceTester({ id: 'scrutinizer', title: 'Scrutinizer' })
 module.exports = t
@@ -85,4 +86,26 @@ t.create('unexpected response data')
   .expectJSON({
     name: 'coverage',
     value: 'invalid',
+  })
+
+t.create('build - unknown')
+  .get('/build/g/filp/whoops.json?style=_shields_test')
+  .intercept(nock =>
+    nock('https://scrutinizer-ci.com')
+      .get('/api/repositories/g/filp/whoops')
+      .reply(200, {
+        default_branch: 'master',
+        applications: {
+          master: {
+            build_status: {
+              status: 'unknown',
+            },
+          },
+        },
+      })
+  )
+  .expectJSON({
+    name: 'build',
+    value: 'unknown',
+    colorB: colorScheme.lightgrey,
   })

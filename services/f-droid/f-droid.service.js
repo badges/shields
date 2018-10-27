@@ -1,15 +1,15 @@
 'use strict'
 
-const BaseHTTPService = require('../base-http')
+const BaseService = require('../base')
 const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 const { InvalidResponse } = require('../errors')
 
-module.exports = class FDroid extends BaseHTTPService {
+module.exports = class FDroid extends BaseService {
   async fetch({ appId }) {
     // currently, we only use the txt format. There are few apps using the yml format.
     const url = `https://gitlab.com/fdroid/fdroiddata/raw/master/metadata/${appId}.txt`
-    return this._requestHTTP({
+    return this._request({
       url,
       options: {},
       errorMessages: {

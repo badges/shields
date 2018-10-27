@@ -1,62 +1,109 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const {
-  makeBadgeData: getBadgeData,
-  makeLabel: getLabel,
-} = require('../../lib/badge-data')
-const { addv: versionText } = require('../../lib/text-formatters')
-const { version: versionColor } = require('../../lib/color-formatters')
+const Joi = require('joi')
+const BaseJsonService = require('../base-json')
+const { renderLicenseBadge } = require('../../lib/licenses')
+const { renderVersionBadge } = require('../../lib/version')
 
-module.exports = class Ctan extends LegacyService {
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/ctan\/([vl])\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const info = match[1] // either `v` or `l`
-        const pkg = match[2] // eg, tex
-        const format = match[3]
-        const url = 'http://www.ctan.org/json/pkg/' + pkg
-        const badgeData = getBadgeData('ctan', data)
-        request(url, (err, res, buffer) => {
-          if (err != null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-          if (res.statusCode === 404) {
-            badgeData.text[1] = 'not found'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const parsedData = JSON.parse(buffer)
+const schema = Joi.object({
+  license: Joi.array()
+    .items(Joi.string())
+    .single(),
+  version: Joi.object({
+    number: Joi.string().required(),
+  }).required(),
+}).required()
 
-            if (info === 'v') {
-              const version = parsedData.version.number
-              badgeData.text[1] = versionText(version)
-              badgeData.colorscheme = versionColor(version)
-              sendBadge(format, badgeData)
-            } else if (info === 'l') {
-              badgeData.text[0] = getLabel('license', data)
-              const license = parsedData.license
-              if (Array.isArray(license) && license.length > 0) {
-                // API returns licenses inconsistently ordered, so fix the order.
-                badgeData.text[1] = license.sort().join(',')
-                badgeData.colorscheme = 'blue'
-              } else {
-                badgeData.text[1] = 'unknown'
-              }
-              sendBadge(format, badgeData)
-            } else {
-              throw Error('Unreachable due to regex')
-            }
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+class BaseCtanService extends BaseJsonService {
+  async fetch({ library }) {
+    const url = `http://www.ctan.org/json/pkg/${library}`
+    return this._requestJson({
+      schema,
+      url,
+    })
   }
+
+  static get defaultBadgeData() {
+    return { label: 'ctan' }
+  }
+}
+
+class CtanLicense extends BaseCtanService {
+  static get defaultBadgeData() {
+    return { label: 'license' }
+  }
+
+  static get category() {
+    return 'license'
+  }
+
+  async handle({ library }) {
+    const json = await this.fetch({ library })
+    // when present, API returns licenses inconsistently ordered, so fix the order
+    return renderLicenseBadge({ licenses: json.license && json.license.sort() })
+  }
+
+  static render({ licenses }) {
+    return renderLicenseBadge({ licenses })
+  }
+
+  static get url() {
+    return {
+      base: 'ctan/l',
+      format: '(.+)',
+      capture: ['library'],
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'CTAN',
+        exampleUrl: 'novel',
+        urlPattern: ':library',
+        staticExample: this.render({ licenses: ['ppl1.3c', 'ofl'] }),
+        keywords: ['tex'],
+      },
+    ]
+  }
+}
+
+class CtanVersion extends BaseCtanService {
+  static get category() {
+    return 'version'
+  }
+
+  async handle({ library }) {
+    const json = await this.fetch({ library })
+    return renderVersionBadge({ version: json.version.number })
+  }
+
+  static render({ version }) {
+    return renderVersionBadge({ version })
+  }
+
+  static get url() {
+    return {
+      base: 'ctan/v',
+      format: '(.+)',
+      capture: ['library'],
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'CTAN',
+        exampleUrl: 'tex',
+        urlPattern: ':library',
+        staticExample: this.render({ version: '3.14159265' }),
+        keywords: ['tex'],
+      },
+    ]
+  }
+}
+
+module.exports = {
+  CtanLicense,
+  CtanVersion,
 }

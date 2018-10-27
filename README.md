@@ -13,6 +13,9 @@
     <a href="https://github.com/badges/shields/compare/gh-pages...master">
         <img src="https://img.shields.io/github/commits-since/badges/shields/gh-pages.svg?label=commits%20to%20be%20deployed"
             alt="commits to be deployed"></a>
+    <a href="https://lgtm.com/projects/g/badges/shields/alerts/">
+        <img src="https://img.shields.io/lgtm/alerts/g/badges/shields.svg?logo=lgtm&logoWidth=18"
+            alt="Total alerts"/></a>
     <a href="https://discord.gg/HjJCwm5">
         <img src="https://img.shields.io/discord/308323056592486420.svg?logo=discord"
             alt="chat on Discord"></a>
@@ -45,7 +48,7 @@ Examples
 * package manager release: `gem | 1.2.3`
 * status of third-party dependencies: `dependencies | out-of-date`
 * static code analysis GPA: `code climate | 3.8`
-* [SemVer](http://semver.org/) version observance: `semver | 2.0.0`
+* [SemVer](https://semver.org/) version observance: `semver | 2.0.0`
 * amount of [Gratipay](http://gratipay.com) donations per week: `tips | $2/week`
 
 [Make your own badges!][custom badges]
@@ -204,7 +207,7 @@ Related projects
 License
 -------
 
-All assets and code are under the [CC0 LICENSE](LICENSE.md) and in the public
+All assets and code are under the [CC0 LICENSE](LICENSE) and in the public
 domain unless specified otherwise.
 
 The assets in `logo/` are trademarks of their respective companies and are

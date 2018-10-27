@@ -10,7 +10,7 @@ const {
 } = require('../../lib/color-formatters')
 const { metric } = require('../../lib/text-formatters')
 const { latest: latestVersion } = require('../../lib/version')
-const { nonNegativeInteger } = require('../validators.js')
+const { nonNegativeInteger } = require('../validators')
 
 const gemsSchema = Joi.object({
   downloads: nonNegativeInteger,

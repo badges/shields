@@ -13,12 +13,11 @@ module.exports = class Jitpack extends LegacyService {
         const groupId = 'com.github.' + match[1] // github user
         const artifactId = match[2] // the project's name
         const format = match[3] // "svg"
-        const name = 'JitPack'
 
         const pkg = groupId + '/' + artifactId + '/latest'
         const apiUrl = 'https://jitpack.io/api/builds/' + pkg
 
-        const badgeData = getBadgeData(name, data)
+        const badgeData = getBadgeData('jitpack', data)
 
         request(apiUrl, (err, res, buffer) => {
           if (err != null) {
