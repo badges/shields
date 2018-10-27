@@ -1,7 +1,7 @@
 'use strict'
 
 const glob = require('glob')
-const { BaseService } = require('./base')
+const BaseService = require('./base')
 
 function loadServiceClasses() {
   // New-style services
