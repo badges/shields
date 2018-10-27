@@ -26,11 +26,11 @@ prepare-server-deploy: website
 	git worktree add -B production ${SERVER_TMP}
 	cp -r build ${SERVER_TMP}
 	git -C ${SERVER_TMP} add build/
-	git -C ${SERVER_TMP} commit -m '[DEPLOY] Add frontend for debugging'
+	git -C ${SERVER_TMP} commit --no-verify -m '[DEPLOY] Add frontend for debugging'
 	cp private/secret-production.json ${SERVER_TMP}/private/secret.json
 	cp Verdana.ttf ${SERVER_TMP}
 	git -C ${SERVER_TMP} add private/secret.json Verdana.ttf
-	git -C ${SERVER_TMP} commit -m '[DEPLOY] MUST NOT BE ON GITHUB'
+	git -C ${SERVER_TMP} commit --no-verify -m '[DEPLOY] MUST NOT BE ON GITHUB'
 
 clean-server-deploy:
 	rm -rf ${SERVER_TMP}
@@ -54,13 +54,13 @@ deploy-gh-pages:
 		npm run build
 	git worktree add -B gh-pages ${FRONTEND_TMP}
 	git -C ${FRONTEND_TMP} ls-files | xargs git -C ${FRONTEND_TMP} rm
-	git -C ${FRONTEND_TMP} commit -m '[DEPLOY] Completely clean the index'
+	git -C ${FRONTEND_TMP} commit --no-verify -m '[DEPLOY] Completely clean the index'
 	cp -r build/* ${FRONTEND_TMP}
 	cp favicon.png ${FRONTEND_TMP}
 	echo shields.io > ${FRONTEND_TMP}/CNAME
 	touch ${FRONTEND_TMP}/.nojekyll
 	git -C ${FRONTEND_TMP} add .
-	git -C ${FRONTEND_TMP} commit -m '[DEPLOY] Add built site'
+	git -C ${FRONTEND_TMP} commit --no-verify -m '[DEPLOY] Add built site'
 	git push -f origin gh-pages
 
 deploy-gh-pages-clean:
@@ -69,7 +69,7 @@ deploy-gh-pages-clean:
 
 deploy-heroku:
 	git add -f Verdana.ttf private/secret.json build/
-	git commit -m'MUST NOT BE ON GITHUB'
+	git commit --no-verify -m'MUST NOT BE ON GITHUB'
 	git push -f heroku HEAD:master
 	git reset HEAD~1
 	(git checkout -B gh-pages && \
