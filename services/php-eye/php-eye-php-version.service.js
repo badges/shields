@@ -21,12 +21,7 @@ module.exports = class PhpEyePhpVersion extends LegacyService {
           uri: 'https://php-eye.com/api/v1/package/' + userRepo + '.json',
         }
         const badgeData = getBadgeData('php tested', data)
-        getPhpReleases(githubApiProvider, (err, phpReleases) => {
-          if (err != null) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-            return
-          }
+        getPhpReleases(githubApiProvider).then(phpReleases => {
           request(options, (err, res, buffer) => {
             if (err !== null) {
               log.error('PHP-Eye error: ' + err.stack)
@@ -80,6 +75,9 @@ module.exports = class PhpEyePhpVersion extends LegacyService {
             } catch (e) {
               badgeData.text[1] = 'invalid'
             }
+            sendBadge(format, badgeData)
+          }).catch(() => {
+            badgeData.text[1] = 'invalid'
             sendBadge(format, badgeData)
           })
         })
