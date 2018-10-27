@@ -4,7 +4,6 @@ const { expect } = require('chai')
 const Camp = require('camp')
 const got = require('got')
 const queryString = require('query-string')
-const sinon = require('sinon')
 const nock = require('nock')
 const config = require('../../../lib/test-config')
 const serverSecrets = require('../../../lib/server-secrets')
@@ -14,15 +13,16 @@ const baseUri = `http://127.0.0.1:${config.port}`
 const fakeClientId = 'githubdabomb'
 
 describe('Github token acceptor', function() {
-  let sandbox
-  beforeEach(function() {
-    sandbox = sinon.createSandbox()
-    sandbox.stub(serverSecrets, 'gh_client_id').value(fakeClientId)
-    sandbox.stub(serverSecrets, 'shieldsIps').value([])
+  // Frustratingly, potentially undefined properties can't reliably be stubbed
+  // with Sinon.
+  // https://github.com/sinonjs/sinon/pull/1557
+  before(function() {
+    serverSecrets.gh_client_id = fakeClientId
+    serverSecrets.shieldsIps = []
   })
-
-  afterEach(function() {
-    sandbox.restore()
+  after(function() {
+    delete serverSecrets.gh_client_id
+    delete serverSecrets.shieldsIps
   })
 
   let camp
@@ -30,7 +30,6 @@ describe('Github token acceptor', function() {
     camp = Camp.start({ port: config.port, hostname: '::' })
     camp.on('listening', () => done())
   })
-
   afterEach(function(done) {
     if (camp) {
       camp.close(() => done())
