@@ -21,66 +21,68 @@ module.exports = class PhpEyePhpVersion extends LegacyService {
           uri: 'https://php-eye.com/api/v1/package/' + userRepo + '.json',
         }
         const badgeData = getBadgeData('php tested', data)
-        getPhpReleases(githubApiProvider).then(phpReleases => {
-          request(options, (err, res, buffer) => {
-            if (err !== null) {
-              log.error('PHP-Eye error: ' + err.stack)
-              if (res) {
-                log.error('' + res)
-              }
-              badgeData.text[1] = 'invalid'
-              sendBadge(format, badgeData)
-              return
-            }
-
-            try {
-              const data = JSON.parse(buffer)
-              const travis = data.versions.filter(
-                release => release.name === version
-              )[0].travis
-
-              if (!travis.config_exists) {
-                badgeData.colorscheme = 'red'
-                badgeData.text[1] = 'not tested'
+        getPhpReleases(githubApiProvider)
+          .then(phpReleases => {
+            request(options, (err, res, buffer) => {
+              if (err !== null) {
+                log.error('PHP-Eye error: ' + err.stack)
+                if (res) {
+                  log.error('' + res)
+                }
+                badgeData.text[1] = 'invalid'
                 sendBadge(format, badgeData)
                 return
               }
 
-              const versions = []
-              for (const index in travis.runtime_status) {
-                if (
-                  travis.runtime_status[index] === 3 &&
-                  index.match(/^php\d\d$/) !== null
-                ) {
-                  versions.push(index.replace(/^php(\d)(\d)$/, '$1.$2'))
+              try {
+                const data = JSON.parse(buffer)
+                const travis = data.versions.filter(
+                  release => release.name === version
+                )[0].travis
+
+                if (!travis.config_exists) {
+                  badgeData.colorscheme = 'red'
+                  badgeData.text[1] = 'not tested'
+                  sendBadge(format, badgeData)
+                  return
                 }
-              }
 
-              let reduction = phpVersionReduction(versions, phpReleases)
+                const versions = []
+                for (const index in travis.runtime_status) {
+                  if (
+                    travis.runtime_status[index] === 3 &&
+                    index.match(/^php\d\d$/) !== null
+                  ) {
+                    versions.push(index.replace(/^php(\d)(\d)$/, '$1.$2'))
+                  }
+                }
 
-              if (travis.runtime_status.hhvm === 3) {
-                reduction += reduction ? ', ' : ''
-                reduction += 'HHVM'
-              }
+                let reduction = phpVersionReduction(versions, phpReleases)
 
-              if (reduction) {
-                badgeData.colorscheme = 'brightgreen'
-                badgeData.text[1] = reduction
-              } else if (!versions.length) {
-                badgeData.colorscheme = 'red'
-                badgeData.text[1] = 'not tested'
-              } else {
+                if (travis.runtime_status.hhvm === 3) {
+                  reduction += reduction ? ', ' : ''
+                  reduction += 'HHVM'
+                }
+
+                if (reduction) {
+                  badgeData.colorscheme = 'brightgreen'
+                  badgeData.text[1] = reduction
+                } else if (!versions.length) {
+                  badgeData.colorscheme = 'red'
+                  badgeData.text[1] = 'not tested'
+                } else {
+                  badgeData.text[1] = 'invalid'
+                }
+              } catch (e) {
                 badgeData.text[1] = 'invalid'
               }
-            } catch (e) {
-              badgeData.text[1] = 'invalid'
-            }
-            sendBadge(format, badgeData)
-          }).catch(() => {
+              sendBadge(format, badgeData)
+            })
+          })
+          .catch(() => {
             badgeData.text[1] = 'invalid'
             sendBadge(format, badgeData)
           })
-        })
       })
     )
   }
