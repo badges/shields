@@ -1,6 +1,9 @@
 env:
   browser: true
 
+plugins:
+  - import
+
 parser: "babel-eslint"
 
 parserOptions:
@@ -9,7 +12,7 @@ parserOptions:
 extends:
   - "standard-jsx"
   - "standard-react"
-  - "./.eslintrc-preferred.yml"
+  - "./.eslintrc.yml"
 
 settings:
   react:
@@ -17,3 +20,5 @@ settings:
 
 rules:
   no-console: "error"
+
+  import/extensions: ["error", "never", { "json": "always" }]

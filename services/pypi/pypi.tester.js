@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
-const { isSemver } = require('../test-validators')
+const { isMetricOverTimePeriod, isSemver } = require('../test-validators')
 
 const isPsycopg2Version = Joi.string().regex(/^v([0-9][.]?)+$/)
 
@@ -15,37 +15,35 @@ const isPipeSeparatedDjangoVersions = isPipeSeparatedPythonVersions
 const t = new ServiceTester({ id: 'pypi', title: 'PyPi badges' })
 module.exports = t
 
-/*
-  tests for downloads endpoints
+// tests for downloads endpoints
 
-  Note:
-  Download statistics are no longer available from pypi
-  it is exptected that the download badges all show
-  'no longer available'
-*/
-t.create('daily downloads (expected failure)')
+t.create('daily downloads (valid)')
   .get('/dd/djangorestframework.json')
-  .expectJSON({ name: 'downloads', value: 'no longer available' })
+  .expectJSONTypes({ name: 'downloads', value: isMetricOverTimePeriod })
 
-t.create('weekly downloads (expected failure)')
+t.create('weekly downloads (valid)')
   .get('/dw/djangorestframework.json')
-  .expectJSON({ name: 'downloads', value: 'no longer available' })
+  .expectJSONTypes({ name: 'downloads', value: isMetricOverTimePeriod })
 
-t.create('monthly downloads (expected failure)')
+t.create('monthly downloads (valid)')
   .get('/dm/djangorestframework.json')
-  .expectJSON({ name: 'downloads', value: 'no longer available' })
+  .expectJSONTypes({ name: 'downloads', value: isMetricOverTimePeriod })
 
-t.create('daily downloads (invalid)')
+t.create('downloads (mixed-case package name)')
+  .get('/dd/DjangoRestFramework.json')
+  .expectJSONTypes({ name: 'downloads', value: isMetricOverTimePeriod })
+
+t.create('daily downloads (not found)')
   .get('/dd/not-a-package.json')
-  .expectJSON({ name: 'downloads', value: 'no longer available' })
+  .expectJSON({ name: 'downloads', value: 'package not found' })
 
-t.create('weekly downloads (invalid)')
+t.create('weekly downloads (not found)')
   .get('/dw/not-a-package.json')
-  .expectJSON({ name: 'downloads', value: 'no longer available' })
+  .expectJSON({ name: 'downloads', value: 'package not found' })
 
-t.create('monthly downloads (invalid)')
+t.create('monthly downloads (not found)')
   .get('/dm/not-a-package.json')
-  .expectJSON({ name: 'downloads', value: 'no longer available' })
+  .expectJSON({ name: 'downloads', value: 'package not found' })
 
 /*
   tests for version endpoint
@@ -84,6 +82,25 @@ t.create('version (invalid)')
   .get('/v/not-a-package.json')
   .expectJSON({ name: 'pypi', value: 'package or version not found' })
 
+t.create('no trove classifiers')
+  .get('/v/mapi.json')
+  .intercept(nock =>
+    nock('https://pypi.org')
+      .get('/pypi/mapi/json')
+      .reply(200, {
+        info: {
+          version: '1.2.3',
+          license: 'foo',
+          classifiers: [],
+        },
+        releases: {},
+      })
+  )
+  .expectJSON({
+    name: 'pypi',
+    value: 'v1.2.3',
+  })
+
 // tests for license endpoint
 
 t.create('license (valid, package version in request)')
@@ -97,6 +114,46 @@ t.create('license (valid, no package version specified)')
 t.create('license (invalid)')
   .get('/l/not-a-package.json')
   .expectJSON({ name: 'license', value: 'package or version not found' })
+
+t.create('license (from trove classifier)')
+  .get('/l/mapi.json')
+  .intercept(nock =>
+    nock('https://pypi.org')
+      .get('/pypi/mapi/json')
+      .reply(200, {
+        info: {
+          version: '1.2.3',
+          license: '',
+          classifiers: ['License :: OSI Approved :: MIT License'],
+        },
+        releases: {},
+      })
+  )
+  .expectJSON({
+    name: 'license',
+    value: 'mit license',
+  })
+
+t.create('license (as acronym from trove classifier)')
+  .get('/l/magma.json')
+  .intercept(nock =>
+    nock('https://pypi.org')
+      .get('/pypi/magma/json')
+      .reply(200, {
+        info: {
+          version: '1.2.3',
+          license: '',
+          classifiers: [
+            'License :: OSI Approved :: GNU General Public License (GPL)',
+          ],
+        },
+        releases: {},
+      })
+  )
+  .expectJSON({
+    name: 'license',
+    value: 'GPL',
+  })
 
 // tests for wheel endpoint
 

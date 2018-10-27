@@ -54,8 +54,6 @@ module.exports = class Scrutinizer extends LegacyService {
                 badgeData.colorscheme = 'red'
               } else if (status === 'pending') {
                 badgeData.colorscheme = 'orange'
-              } else if (status === 'unknown') {
-                badgeData.colorscheme = 'gray'
               }
             } else {
               let score =

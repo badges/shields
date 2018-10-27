@@ -21,7 +21,7 @@ module.exports = class TravisPhpVersion extends LegacyService {
           method: 'GET',
           uri: `https://api.travis-ci.org/repos/${userRepo}/branches/${version}`,
         }
-        const badgeData = getBadgeData('PHP', data)
+        const badgeData = getBadgeData('php', data)
         getPhpReleases(githubApiProvider, (err, phpReleases) => {
           if (err != null) {
             badgeData.text[1] = 'invalid'

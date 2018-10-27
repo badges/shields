@@ -65,7 +65,7 @@ t.create('Uptime Robot: Percentage (unexpected response, valid json)')
       .post('/v2/getMonitors')
       .reply(200, '[]')
   )
-  .expectJSON({ name: 'uptime', value: 'invalid json response' })
+  .expectJSON({ name: 'uptime', value: 'invalid response data' })
 
 t.create('Uptime Robot: Percentage (unexpected response, invalid json)')
   .get('/m778918918-3e92c097147760ee39d02d36.json')

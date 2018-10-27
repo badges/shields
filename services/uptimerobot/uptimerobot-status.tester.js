@@ -62,7 +62,7 @@ t.create('Uptime Robot: Status (unexpected response, valid json)')
       .post('/v2/getMonitors')
       .reply(200, '[]')
   )
-  .expectJSON({ name: 'status', value: 'invalid json response' })
+  .expectJSON({ name: 'status', value: 'invalid response data' })
 
 t.create('Uptime Robot: Status (unexpected response, invalid json)')
   .get('/m778918918-3e92c097147760ee39d02d36.json')

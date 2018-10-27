@@ -28,21 +28,31 @@ module.exports = class CodacyCoverage extends LegacyService {
           '?' +
           query
         const badgeData = getBadgeData('coverage', data)
-        fetchFromSvg(request, url, (err, res) => {
-          if (err != null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
+        fetchFromSvg(
+          request,
+          url,
+          /text-anchor="middle">([^<>]+)<\/text>/,
+          (err, res) => {
+            if (err != null) {
+              badgeData.text[1] = 'inaccessible'
+              sendBadge(format, badgeData)
+              return
+            }
+            try {
+              const coverage = parseInt(res)
+              if (Number.isNaN(coverage)) {
+                badgeData.text[1] = 'unknown'
+              } else {
+                badgeData.text[1] = res
+                badgeData.colorscheme = coveragePercentageColor(coverage)
+              }
+              sendBadge(format, badgeData)
+            } catch (e) {
+              badgeData.text[1] = 'invalid'
+              sendBadge(format, badgeData)
+            }
           }
-          try {
-            badgeData.text[1] = res
-            badgeData.colorscheme = coveragePercentageColor(parseInt(res))
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
+        )
       })
     )
   }

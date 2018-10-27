@@ -182,7 +182,8 @@ function mapNugetFeed({ camp, cache }, pattern, offset, getInfo) {
             searchQueryResources[randomEndpointIdx]['@id'] +
             '?q=packageid:' +
             encodeURIComponent(id.toLowerCase()) + // NuGet package id (lowercase)
-            '&prerelease=true' // Include prerelease versions?
+            '&prerelease=true' + // Include prerelease versions?
+            '&semVerLevel=2' // Include packages with SemVer 2 version numbers
 
           request(reqUrl, (err, res, buffer) => {
             if (err != null) {
@@ -343,7 +344,7 @@ module.exports = class Nuget extends LegacyService {
     // PowerShell Gallery
     mapNugetFeedv2({ camp, cache }, 'powershellgallery', 0, match => ({
       site: 'powershellgallery',
-      feed: 'https://www.powershellgallery.com/api/v2',
+      feed: 'https://msconfiggallery.cloudapp.net/api/v2',
     }))
 
     // NuGet

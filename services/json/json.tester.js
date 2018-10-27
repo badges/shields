@@ -3,10 +3,7 @@
 const Joi = require('joi')
 const { expect } = require('chai')
 const ServiceTester = require('../service-tester')
-const colorscheme = require('../../lib/colorscheme.json')
-const mapValues = require('lodash.mapvalues')
-
-const colorsB = mapValues(colorscheme, 'colorB')
+const { colorScheme: colorsB } = require('../test-helpers')
 
 const t = new ServiceTester({
   id: 'dynamic-json',

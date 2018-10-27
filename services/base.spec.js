@@ -1,5 +1,6 @@
 'use strict'
 
+const Joi = require('joi')
 const { expect } = require('chai')
 const { test, given, forCases } = require('sazerac')
 const sinon = require('sinon')
@@ -10,6 +11,7 @@ const {
   Inaccessible,
   InvalidResponse,
   InvalidParameter,
+  Deprecated,
 } = require('./errors')
 const BaseService = require('./base')
 
@@ -38,6 +40,7 @@ class DummyService extends BaseService {
         urlPattern: ':world',
         exampleUrl: 'World',
         staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+        keywords: ['hello'],
       },
     ]
   }
@@ -55,41 +58,69 @@ describe('BaseService', function() {
   const defaultConfig = { handleInternalErrors: false }
 
   describe('URL pattern matching', function() {
-    const regexExec = str => DummyService._regex.exec(str)
-    const getNamedParamA = str => {
-      const [, namedParamA] = regexExec(str)
-      return namedParamA
-    }
-    const namedParams = str => {
-      const match = regexExec(str)
-      return DummyService._namedParamsForMatch(match)
-    }
+    context('A named param is declared', function() {
+      const regexExec = str => DummyService._regex.exec(str)
+      const getNamedParamA = str => {
+        const [, namedParamA] = regexExec(str)
+        return namedParamA
+      }
+      const namedParams = str => {
+        const match = regexExec(str)
+        return DummyService._namedParamsForMatch(match)
+      }
 
-    test(regexExec, () => {
-      forCases([
-        given('/foo/bar.bar.bar.zip'),
-        given('/foo/bar/bar.svg'),
-      ]).expect(null)
+      test(regexExec, () => {
+        forCases([
+          given('/foo/bar.bar.bar.zip'),
+          given('/foo/bar/bar.svg'),
+        ]).expect(null)
+      })
+
+      test(getNamedParamA, () => {
+        forCases([
+          given('/foo/bar.bar.bar.svg'),
+          given('/foo/bar.bar.bar.png'),
+          given('/foo/bar.bar.bar.gif'),
+          given('/foo/bar.bar.bar.jpg'),
+          given('/foo/bar.bar.bar.json'),
+        ]).expect('bar.bar.bar')
+      })
+
+      test(namedParams, () => {
+        forCases([
+          given('/foo/bar.bar.bar.svg'),
+          given('/foo/bar.bar.bar.png'),
+          given('/foo/bar.bar.bar.gif'),
+          given('/foo/bar.bar.bar.jpg'),
+          given('/foo/bar.bar.bar.json'),
+        ]).expect({ namedParamA: 'bar.bar.bar' })
+      })
     })
 
-    test(getNamedParamA, () => {
-      forCases([
-        given('/foo/bar.bar.bar.svg'),
-        given('/foo/bar.bar.bar.png'),
-        given('/foo/bar.bar.bar.gif'),
-        given('/foo/bar.bar.bar.jpg'),
-        given('/foo/bar.bar.bar.json'),
-      ]).expect('bar.bar.bar')
-    })
+    describe('No named params are declared', function() {
+      class ServiceWithZeroNamedParams extends BaseService {
+        static get url() {
+          return {
+            base: 'foo',
+            format: '(?:[^/]+)',
+          }
+        }
+      }
 
-    test(namedParams, () => {
-      forCases([
-        given('/foo/bar.bar.bar.svg'),
-        given('/foo/bar.bar.bar.png'),
-        given('/foo/bar.bar.bar.gif'),
-        given('/foo/bar.bar.bar.jpg'),
-        given('/foo/bar.bar.bar.json'),
-      ]).expect({ namedParamA: 'bar.bar.bar' })
+      const namedParams = str => {
+        const match = ServiceWithZeroNamedParams._regex.exec(str)
+        return ServiceWithZeroNamedParams._namedParamsForMatch(match)
+      }
+
+      test(namedParams, () => {
+        forCases([
+          given('/foo/bar.bar.bar.svg'),
+          given('/foo/bar.bar.bar.png'),
+          given('/foo/bar.bar.bar.gif'),
+          given('/foo/bar.bar.bar.jpg'),
+          given('/foo/bar.bar.bar.json'),
+        ]).expect({})
+      })
     })
   })
 
@@ -214,6 +245,20 @@ describe('BaseService', function() {
         })
       })
 
+      it('handles Deprecated', async function() {
+        serviceInstance.handle = () => {
+          throw new Deprecated()
+        }
+        expect(
+          await serviceInstance.invokeHandler({
+            namedParamA: 'bar.bar.bar',
+          })
+        ).to.deep.equal({
+          color: 'lightgray',
+          message: 'no longer available',
+        })
+      })
+
       it('handles InvalidParameter errors', async function() {
         serviceInstance.handle = () => {
           throw new InvalidParameter()
@@ -331,6 +376,7 @@ describe('BaseService', function() {
         previewUrl: '/foo/World.svg',
         urlPattern: undefined,
         documentation: undefined,
+        keywords: undefined,
       })
       expect(second).to.deep.equal({
         title: 'DummyService',
@@ -338,6 +384,7 @@ describe('BaseService', function() {
         previewUrl: '/foo/World.svg?queryParamA=%21%21%21',
         urlPattern: undefined,
         documentation: undefined,
+        keywords: undefined,
       })
       expect(third).to.deep.equal({
         title: 'DummyService',
@@ -346,7 +393,160 @@ describe('BaseService', function() {
           '/badge/cat-Hello%20namedParamA%3A%20foo%20with%20queryParamA%3A%20bar-lightgrey.svg',
         urlPattern: '/foo/:world.svg',
         documentation: undefined,
+        keywords: ['hello'],
       })
+    })
+  })
+
+  describe('a generated static badge url', function() {
+    it('is concatenated text and color', function() {
+      const url = DummyService._makeStaticExampleUrlFromTextAndColor(
+        'name',
+        'value',
+        'green'
+      )
+      expect(url).to.equal('/badge/name-value-green')
+    })
+    it('uses url encoding', function() {
+      const url = DummyService._makeStaticExampleUrlFromTextAndColor(
+        'Hello World',
+        'Привет Мир',
+        '#aabbcc'
+      )
+      expect(url).to.equal(
+        '/badge/Hello%20World-%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82%20%D0%9C%D0%B8%D1%80-%23aabbcc'
+      )
+    })
+    it('uses escapes minus signs', function() {
+      const url = DummyService._makeStaticExampleUrlFromTextAndColor(
+        '123-123',
+        'abc-abc',
+        'blue'
+      )
+      expect(url).to.equal('/badge/123--123-abc--abc-blue')
+    })
+  })
+
+  describe('validate', function() {
+    const dummySchema = Joi.object({
+      requiredString: Joi.string().required(),
+    }).required()
+
+    let sandbox
+    beforeEach(function() {
+      sandbox = sinon.createSandbox()
+    })
+    afterEach(function() {
+      sandbox.restore()
+    })
+    beforeEach(function() {
+      sandbox.stub(trace, 'logTrace')
+    })
+
+    it('throws the expected error if schema is not provided', async function() {
+      try {
+        DummyService._validate({ requiredString: 'bar' }, undefined)
+        expect.fail('Expected to throw')
+      } catch (e) {
+        expect(e).to.be.an.instanceof(Error)
+        expect(e.message).to.equal('A Joi schema is required')
+      }
+    })
+
+    it('logs valid responses', async function() {
+      DummyService._validate({ requiredString: 'bar' }, dummySchema)
+      expect(trace.logTrace).to.be.calledWithMatch(
+        'validate',
+        sinon.match.string,
+        'Data after validation',
+        { requiredString: 'bar' },
+        { deep: true }
+      )
+    })
+
+    it('logs invalid responses and throws error', async function() {
+      try {
+        DummyService._validate(
+          { requiredString: ['this', "shouldn't", 'work'] },
+          dummySchema
+        )
+        expect.fail('Expected to throw')
+      } catch (e) {
+        expect(e).to.be.an.instanceof(InvalidResponse)
+        expect(e.message).to.equal(
+          'Invalid Response: child "requiredString" fails because ["requiredString" must be a string]'
+        )
+        expect(e.prettyMessage).to.equal('invalid response data')
+      }
+      expect(trace.logTrace).to.be.calledWithMatch(
+        'validate',
+        sinon.match.string,
+        'Response did not match schema',
+        'child "requiredString" fails because ["requiredString" must be a string]'
+      )
+    })
+  })
+
+  describe('request', function() {
+    let sandbox
+    beforeEach(function() {
+      sandbox = sinon.createSandbox()
+    })
+    afterEach(function() {
+      sandbox.restore()
+    })
+    beforeEach(function() {
+      sandbox.stub(trace, 'logTrace')
+    })
+
+    it('logs appropriate information', async function() {
+      const sendAndCacheRequest = async () => ({
+        buffer: '',
+        res: { statusCode: 200 },
+      })
+      const serviceInstance = new DummyService(
+        { sendAndCacheRequest },
+        defaultConfig
+      )
+
+      const url = 'some-url'
+      const options = { headers: { Cookie: 'some-cookie' } }
+      await serviceInstance._request({ url, options })
+
+      expect(trace.logTrace).to.be.calledWithMatch(
+        'fetch',
+        sinon.match.string,
+        'Request',
+        url,
+        '\n',
+        options
+      )
+      expect(trace.logTrace).to.be.calledWithMatch(
+        'fetch',
+        sinon.match.string,
+        'Response status code',
+        200
+      )
+    })
+
+    it('handles errors', async function() {
+      const sendAndCacheRequest = async () => ({
+        buffer: '',
+        res: { statusCode: 404 },
+      })
+      const serviceInstance = new DummyService(
+        { sendAndCacheRequest },
+        defaultConfig
+      )
+
+      try {
+        await serviceInstance._request({})
+        expect.fail('Expected to throw')
+      } catch (e) {
+        expect(e).to.be.an.instanceof(NotFound)
+        expect(e.message).to.equal('Not Found')
+        expect(e.prettyMessage).to.equal('not found')
+      }
     })
   })
 })
