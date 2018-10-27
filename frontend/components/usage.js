@@ -1,4 +1,4 @@
-import { Fragment, default as React } from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import StaticBadgeMaker from './static-badge-maker'
 import DynamicBadgeMaker from './dynamic-badge-maker'
@@ -7,12 +7,12 @@ import { advertisedStyles, logos } from '../../supported-features.json'
 
 export default class Usage extends React.PureComponent {
   static propTypes = {
-    baseUri: PropTypes.string.isRequired,
+    baseUrl: PropTypes.string.isRequired,
     longCache: PropTypes.bool.isRequired,
   }
 
   renderColorExamples() {
-    const { baseUri, longCache } = this.props
+    const { baseUrl, longCache } = this.props
     const colors = [
       'brightgreen',
       'green',
@@ -30,7 +30,7 @@ export default class Usage extends React.PureComponent {
           <Fragment key={i}>
             <img
               className="badge-img"
-              src={staticBadgeUrl(baseUri, 'color', color, color, {
+              src={staticBadgeUrl(baseUrl, 'color', color, color, {
                 longCache,
               })}
               alt={color}
@@ -43,22 +43,23 @@ export default class Usage extends React.PureComponent {
   }
 
   renderStyleExamples() {
-    const { baseUri, longCache } = this.props
+    const { baseUrl, longCache } = this.props
     return (
       <table className="badge-img">
         <tbody>
           {advertisedStyles.map((style, i) => {
-            const badgeUri = staticBadgeUrl(baseUri, 'style', style, 'green', {
+            const badgeUrl = staticBadgeUrl(baseUrl, 'style', style, 'green', {
+              logo: 'appveyor',
               longCache,
               style,
             })
             return (
               <tr key={i}>
                 <td>
-                  <img className="badge-img" src={badgeUri} alt={style} />
+                  <img className="badge-img" src={badgeUrl} alt={style} />
                 </td>
                 <td>
-                  <code>{badgeUri}</code>
+                  <code>{badgeUrl}</code>
                 </td>
               </tr>
             )
@@ -69,7 +70,11 @@ export default class Usage extends React.PureComponent {
   }
 
   static renderNamedLogos() {
-    const renderLogo = logo => <span className="nowrap">{logo}</span>
+    const renderLogo = logo => (
+      <span className="nowrap" key={logo}>
+        {logo}
+      </span>
+    )
     const [first, ...rest] = logos
     return [renderLogo(first)].concat(
       rest.reduce((result, logo) => result.concat([', ', renderLogo(logo)]), [])
@@ -77,19 +82,19 @@ export default class Usage extends React.PureComponent {
   }
 
   render() {
-    const { baseUri } = this.props
+    const { baseUrl } = this.props
     return (
       <section>
         <h2 id="your-badge">Your Badge</h2>
 
         <h3 id="static-badge">Static</h3>
-        <StaticBadgeMaker baseUri={baseUri} />
+        <StaticBadgeMaker baseUrl={baseUrl} />
 
         <hr className="spacing" />
 
         <p>
           <code>
-            {baseUri}
+            {baseUrl}
             /badge/&lt;SUBJECT&gt;-&lt;STATUS&gt;-&lt;COLOR&gt;.svg
           </code>
         </p>
@@ -129,7 +134,7 @@ export default class Usage extends React.PureComponent {
 
         <h3 id="dynamic-badge">Dynamic</h3>
 
-        <DynamicBadgeMaker baseUri={baseUri} />
+        <DynamicBadgeMaker baseUrl={baseUrl} />
 
         <p>
           <code>
@@ -177,7 +182,7 @@ export default class Usage extends React.PureComponent {
 
         <p>
           The following styles are available (flat is the default as of Feb 1st
-          2015):
+          2015). Examples are shown with an optional logo:
         </p>
         {this.renderStyleExamples()}
 
@@ -264,8 +269,9 @@ export default class Usage extends React.PureComponent {
                 <code>?maxAge=3600</code>
               </td>
               <td>
-                Set the HTTP cache lifetime in secs (values below the default
-                (currently 120 seconds) will be ignored)
+                Set the HTTP cache lifetime in secs (rules are applied to infer
+                a default value on a per-badge basis, any values specified below
+                the default will be ignored)
               </td>
             </tr>
           </tbody>

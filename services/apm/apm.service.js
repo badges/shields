@@ -1,11 +1,12 @@
 'use strict'
 
 const Joi = require('joi')
+const { renderLicenseBadge } = require('../../lib/licenses')
+const { renderVersionBadge } = require('../../lib/version')
+const { metric } = require('../../lib/text-formatters')
 const BaseJsonService = require('../base-json')
 const { InvalidResponse } = require('../errors')
-const { version: versionColor } = require('../../lib/color-formatters')
-const { metric, addv } = require('../../lib/text-formatters')
-const { nonNegativeInteger } = require('../validators.js')
+const { nonNegativeInteger } = require('../validators')
 
 const apmSchema = Joi.object({
   downloads: nonNegativeInteger,
@@ -22,21 +23,12 @@ class BaseAPMService extends BaseJsonService {
     return this._requestJson({
       schema: apmSchema,
       url: `https://atom.io/api/packages/${repo}`,
-      notFoundMessage: 'package not found',
+      errorMessages: { 404: 'package not found' },
     })
   }
 
   static get defaultBadgeData() {
     return { label: 'apm' }
-  }
-
-  static get examples() {
-    return [
-      {
-        previewUrl: 'vim-mode',
-        keywords: ['atom'],
-      },
-    ]
   }
 }
 
@@ -65,11 +57,22 @@ class APMDownloads extends BaseAPMService {
       capture: ['repo'],
     }
   }
+
+  static get examples() {
+    return [
+      {
+        exampleUrl: 'vim-mode',
+        urlPattern: ':package',
+        staticExample: this.render({ downloads: '60043' }),
+        keywords: ['atom'],
+      },
+    ]
+  }
 }
 
 class APMVersion extends BaseAPMService {
   static render({ version }) {
-    return { message: addv(version), color: versionColor(version) }
+    return renderVersionBadge({ version })
   }
 
   async handle({ repo }) {
@@ -94,11 +97,22 @@ class APMVersion extends BaseAPMService {
       capture: ['repo'],
     }
   }
+
+  static get examples() {
+    return [
+      {
+        exampleUrl: 'vim-mode',
+        urlPattern: ':package',
+        staticExample: this.render({ version: '0.6.0' }),
+        keywords: ['atom'],
+      },
+    ]
+  }
 }
 
 class APMLicense extends BaseAPMService {
   static render({ license }) {
-    return { message: license, color: 'blue' }
+    return renderLicenseBadge({ license })
   }
 
   async handle({ repo }) {
@@ -126,6 +140,17 @@ class APMLicense extends BaseAPMService {
       format: '(.+)',
       capture: ['repo'],
     }
+  }
+
+  static get examples() {
+    return [
+      {
+        exampleUrl: 'vim-mode',
+        urlPattern: ':package',
+        staticExample: this.render({ license: 'MIT' }),
+        keywords: ['atom'],
+      },
+    ]
   }
 }
 

@@ -1,10 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const createServiceTester = require('../create-service-tester')
 const { isBuildStatus } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'continuousphp', title: 'continuousphp' })
+const t = createServiceTester()
 module.exports = t
 
 t.create('build status on default branch')

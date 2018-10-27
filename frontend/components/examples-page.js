@@ -7,7 +7,7 @@ import SearchResults from './search-results'
 import MarkupModal from './markup-modal'
 import Usage from './usage'
 import Footer from './footer'
-import { baseUri, longCache } from '../constants'
+import { baseUrl, longCache } from '../constants'
 
 export default class ExamplesPage extends React.Component {
   constructor(props) {
@@ -78,7 +78,8 @@ export default class ExamplesPage extends React.Component {
           onRequestClose={() => {
             this.setState({ example: null })
           }}
-          baseUri={baseUri}
+          baseUrl={baseUrl}
+          key={this.state.example}
         />
         <section>
           <SuggestionAndSearch
@@ -86,7 +87,7 @@ export default class ExamplesPage extends React.Component {
             onBadgeClick={example => {
               this.setState({ example })
             }}
-            baseUri={baseUri}
+            baseUrl={baseUrl}
             longCache={longCache}
           />
           <a className="donate" href="https://opencollective.com/shields">
@@ -94,8 +95,8 @@ export default class ExamplesPage extends React.Component {
           </a>
         </section>
         {this.renderSearchResults()}
-        <Usage baseUri={baseUri} longCache={longCache} />
-        <Footer baseUri={baseUri} />
+        <Usage baseUrl={baseUrl} longCache={longCache} />
+        <Footer baseUrl={baseUrl} />
         <style jsx>{`
           .donate {
             text-decoration: none;

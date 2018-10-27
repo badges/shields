@@ -3,12 +3,15 @@
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
 const { InvalidResponse, NotFound } = require('../errors')
+const serverSecrets = require('../../lib/server-secrets')
 
 const deprecatedLicenseObjectSchema = Joi.object({
   type: Joi.string().required(),
 })
 const schema = Joi.object({
-  devDependencies: Joi.object().pattern(/./, Joi.string()),
+  devDependencies: Joi.object()
+    .pattern(/./, Joi.string())
+    .default({}),
   engines: Joi.object().pattern(/./, Joi.string()),
   license: Joi.alternatives().try(
     Joi.string(),
@@ -17,6 +20,10 @@ const schema = Joi.object({
       Joi.alternatives(Joi.string(), deprecatedLicenseObjectSchema)
     )
   ),
+  types: Joi.string(),
+  files: Joi.array()
+    .items(Joi.string())
+    .default([]),
 }).required()
 
 // Abstract class for NPM badges which display data about the latest version
@@ -58,6 +65,19 @@ module.exports = class NpmBase extends BaseJsonService {
     return `@${encoded}`
   }
 
+  async _requestJson(data) {
+    // Use a custom Accept header because of this bug:
+    // <https://github.com/npm/npmjs.org/issues/163>
+    const headers = { Accept: '*/*' }
+    if (serverSecrets.npm_token) {
+      headers.Authorization = `Bearer ${serverSecrets.npm_token}`
+    }
+    return super._requestJson({
+      ...data,
+      options: { headers },
+    })
+  }
+
   async fetchPackageData({ registryUrl, scope, packageName, tag }) {
     registryUrl = registryUrl || this.constructor.defaultRegistryUrl
     let url
@@ -79,10 +99,7 @@ module.exports = class NpmBase extends BaseJsonService {
       // We don't validate here because we need to pluck the desired subkey first.
       schema: Joi.any(),
       url,
-      // Use a custom Accept header because of this bug:
-      // <https://github.com/npm/npmjs.org/issues/163>
-      options: { Accept: '*/*' },
-      notFoundMessage: 'package not found',
+      errorMessages: { 404: 'package not found' },
     })
 
     let packageData

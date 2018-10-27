@@ -3,11 +3,15 @@
 const Joi = require('joi')
 const chai = require('chai')
 const { expect } = chai
+const sinon = require('sinon')
 
 const BaseJsonService = require('./base-json')
-const { invalidJSON } = require('./response-fixtures')
 
 chai.use(require('chai-as-promised'))
+
+const dummySchema = Joi.object({
+  requiredString: Joi.string().required(),
+}).required()
 
 class DummyJsonService extends BaseJsonService {
   static get category() {
@@ -21,40 +25,112 @@ class DummyJsonService extends BaseJsonService {
   }
 
   async handle() {
-    const { value } = await this._requestJson({ schema: Joi.any() })
-    return { message: value }
+    const { requiredString } = await this._requestJson({
+      schema: dummySchema,
+      url: 'http://example.com/foo.json',
+    })
+    return { message: requiredString }
   }
 }
 
 describe('BaseJsonService', function() {
-  it('handles unparseable json responses', async function() {
-    const sendAndCacheRequest = async () => ({
-      buffer: invalidJSON,
-      res: { statusCode: 200 },
+  describe('Making requests', function() {
+    let sendAndCacheRequest, serviceInstance
+    beforeEach(function() {
+      sendAndCacheRequest = sinon.stub().returns(
+        Promise.resolve({
+          buffer: '{"some": "json"}',
+          res: { statusCode: 200 },
+        })
+      )
+      serviceInstance = new DummyJsonService(
+        { sendAndCacheRequest },
+        { handleInternalErrors: false }
+      )
     })
-    const serviceInstance = new DummyJsonService(
-      { sendAndCacheRequest },
-      { handleInternalErrors: false }
-    )
-    const serviceData = await serviceInstance.invokeHandler(
-      { schema: Joi.any() },
-      {}
-    )
-    expect(serviceData).to.deep.equal({
-      color: 'lightgray',
-      message: 'unparseable json response',
+
+    it('invokes _sendAndCacheRequest', async function() {
+      await serviceInstance.invokeHandler({}, {})
+
+      expect(sendAndCacheRequest).to.have.been.calledOnceWith(
+        'http://example.com/foo.json',
+        {
+          headers: { Accept: 'application/json' },
+        }
+      )
+    })
+
+    it('forwards options to _sendAndCacheRequest', async function() {
+      Object.assign(serviceInstance, {
+        async handle() {
+          const { value } = await this._requestJson({
+            schema: dummySchema,
+            url: 'http://example.com/foo.json',
+            options: { method: 'POST', qs: { queryParam: 123 } },
+          })
+          return { message: value }
+        },
+      })
+
+      await serviceInstance.invokeHandler({}, {})
+
+      expect(sendAndCacheRequest).to.have.been.calledOnceWith(
+        'http://example.com/foo.json',
+        {
+          headers: { Accept: 'application/json' },
+          method: 'POST',
+          qs: { queryParam: 123 },
+        }
+      )
     })
   })
 
-  context('a schema is not provided', function() {
-    it('throws the expected error', async function() {
+  describe('Making badges', function() {
+    it('handles valid json responses', async function() {
+      const sendAndCacheRequest = async () => ({
+        buffer: '{"requiredString": "some-string"}',
+        res: { statusCode: 200 },
+      })
       const serviceInstance = new DummyJsonService(
-        {},
+        { sendAndCacheRequest },
         { handleInternalErrors: false }
       )
-      expect(
-        serviceInstance._requestJson({ schema: undefined })
-      ).to.be.rejectedWith('A Joi schema is required')
+      const serviceData = await serviceInstance.invokeHandler({}, {})
+      expect(serviceData).to.deep.equal({
+        message: 'some-string',
+      })
+    })
+
+    it('handles json responses which do not match the schema', async function() {
+      const sendAndCacheRequest = async () => ({
+        buffer: '{"unexpectedKey": "some-string"}',
+        res: { statusCode: 200 },
+      })
+      const serviceInstance = new DummyJsonService(
+        { sendAndCacheRequest },
+        { handleInternalErrors: false }
+      )
+      const serviceData = await serviceInstance.invokeHandler({}, {})
+      expect(serviceData).to.deep.equal({
+        color: 'lightgray',
+        message: 'invalid response data',
+      })
+    })
+
+    it('handles unparseable json responses', async function() {
+      const sendAndCacheRequest = async () => ({
+        buffer: 'not json',
+        res: { statusCode: 200 },
+      })
+      const serviceInstance = new DummyJsonService(
+        { sendAndCacheRequest },
+        { handleInternalErrors: false }
+      )
+      const serviceData = await serviceInstance.invokeHandler({}, {})
+      expect(serviceData).to.deep.equal({
+        color: 'lightgray',
+        message: 'unparseable json response',
+      })
     })
   })
 })
