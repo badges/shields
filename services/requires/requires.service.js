@@ -11,7 +11,7 @@ module.exports = class RequiresIo extends BaseJsonService {
   static get url() {
     return {
       base: 'requires',
-      format: '(github|bitbucket)/([^/]+/[^/]+)(?:/(.+))?',
+      format: '([^/]+)/([^/]+/[^/]+)(?:/(.+))?',
       capture: ['service', 'repo', 'branch'],
     }
   }
