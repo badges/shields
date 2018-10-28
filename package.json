@@ -117,11 +117,11 @@
     "logo"
   ],
   "devDependencies": {
-    "@babel/core": "^7.0.0",
+    "@babel/core": "^7.1.0",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/polyfill": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "7.0.0",
     "@mapbox/react-click-to-select": "^2.2.0",
@@ -198,7 +198,7 @@
   },
   "babel": {
     "presets": [
-      "@babel/preset-react",
+      "@babel/preset-env",
       "next/babel"
     ],
     "plugins": [
@@ -208,7 +208,7 @@
     "env": {
       "mocha": {
         "presets": [
-          "@babel/preset-env"
+          "@babel/preset-react"
         ]
       }
     }
