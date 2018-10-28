@@ -134,4 +134,71 @@ module.exports = class Codeclimate extends LegacyService {
       })
     )
   }
+
+  static get url() {
+    return {
+      base: 'codeclimate',
+    }
+  }
+
+  static get category() {
+    return 'build'
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Code Climate issues',
+        exampleUrl: 'issues/twbs/bootstrap',
+        urlPattern: 'issues/:userRepo',
+        staticExample: { label: 'issues', message: '89', color: 'red' },
+      },
+      {
+        title: 'Code Climate maintainability',
+        exampleUrl: 'maintainability/angular/angular.js',
+        urlPattern: 'maintainability/:userRepo',
+        staticExample: { label: 'maintainability', message: 'F', color: 'red' },
+      },
+      {
+        title: 'Code Climate maintainability (percentage)',
+        exampleUrl: 'maintainability-percentage/angular/angular.js',
+        urlPattern: 'maintainability-percentage/:userRepo',
+        staticExample: {
+          label: 'maintainability',
+          message: '4.6%',
+          color: 'red',
+        },
+      },
+      {
+        title: 'Code Climate coverage',
+        exampleUrl: 'coverage/jekyll/jekyll',
+        urlPattern: 'coverage/:userRepo',
+        staticExample: {
+          label: 'coverage',
+          message: '95%',
+          color: 'green',
+        },
+      },
+      {
+        title: 'Code Climate coverage (letter)',
+        exampleUrl: 'coverage-letter/jekyll/jekyll',
+        urlPattern: 'coverage-letter/:userRepo',
+        staticExample: {
+          label: 'coverage',
+          message: 'A',
+          color: 'brightgreen',
+        },
+      },
+      {
+        title: 'Code Climate technical debt',
+        exampleUrl: 'tech-debt/jekyll/jekyll',
+        urlPattern: 'tech-debt/:userRepo',
+        staticExample: {
+          label: 'technical debt',
+          message: '3%',
+          color: 'brightgreen',
+        },
+      },
+    ]
+  }
 }
