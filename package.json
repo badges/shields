@@ -123,6 +123,7 @@
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
+    "@babel/register": "7.0.0",
     "@mapbox/react-click-to-select": "^2.2.0",
     "almost-equal": "^1.1.0",
     "babel-eslint": "^10.0.0",
