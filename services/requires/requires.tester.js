@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const createServiceTester = require('../create-service-tester')
-const { invalidJSON } = require('../response-fixtures')
 
 const isRequireStatus = Joi.string().regex(
   /^(up to date|outdated|insecure|unknown)$/
@@ -28,21 +27,3 @@ t.create('requirements (valid, with branch)')
       value: isRequireStatus,
     })
   )
-
-t.create('requirements (not found)')
-  .get('/github/PyvesB/EmptyRepo.json')
-  .expectJSON({ name: 'requirements', value: 'not found' })
-
-t.create('requirements (connection error)')
-  .get('/github/celery/celery.json')
-  .networkOff()
-  .expectJSON({ name: 'requirements', value: 'inaccessible' })
-
-t.create('requirements (unexpected response)')
-  .get('/github/celery/celery.json')
-  .intercept(nock =>
-    nock('https://requires.io/')
-      .get('/api/v1/status/github/celery/celery')
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'requirements', value: 'unparseable json response' })

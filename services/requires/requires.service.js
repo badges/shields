@@ -11,8 +11,8 @@ module.exports = class RequiresIo extends BaseJsonService {
   static get url() {
     return {
       base: 'requires',
-      format: '([^/]+/[^/]+/[^/]+)(?:/(.+))?',
-      capture: ['repo', 'branch'],
+      format: '(github|bitbucket)/([^/]+/[^/]+)(?:/(.+))?',
+      capture: ['service', 'repo', 'branch'],
     }
   }
 
@@ -20,24 +20,13 @@ module.exports = class RequiresIo extends BaseJsonService {
     return { label: 'requirements' }
   }
 
-  async handle({ repo, branch }) {
-    const { status: statusRaw } = await this.fetch({ repo, branch })
-    let status = statusRaw
-    let color = 'lightgrey'
-    if (status === 'up-to-date') {
-      status = 'up to date'
-      color = 'brightgreen'
-    } else if (status === 'outdated') {
-      color = 'yellow'
-    } else if (status === 'insecure') {
-      color = 'red'
-    }
-
-    return this.constructor.render({ status, color })
+  async handle({ service, repo, branch }) {
+    const { status } = await this.fetch({ service, repo, branch })
+    return this.constructor.render({ status })
   }
 
-  async fetch({ repo, branch }) {
-    const url = `https://requires.io/api/v1/status/${repo}`
+  async fetch({ service, repo, branch }) {
+    const url = `https://requires.io/api/v1/status/${service}/${repo}`
     return this._requestJson({
       url,
       schema: statusSchema,
@@ -45,8 +34,18 @@ module.exports = class RequiresIo extends BaseJsonService {
     })
   }
 
-  static render({ status, color }) {
-    return { message: status, color: color }
+  static render({ status }) {
+    let message = status
+    let color = 'lightgrey'
+    if (status === 'up-to-date') {
+      message = 'up to date'
+      color = 'brightgreen'
+    } else if (status === 'outdated') {
+      color = 'yellow'
+    } else if (status === 'insecure') {
+      color = 'red'
+    }
+    return { message, color }
   }
 
   static get category() {
@@ -58,10 +57,7 @@ module.exports = class RequiresIo extends BaseJsonService {
       {
         title: 'Requires.io',
         urlPattern: ':service/:user/:repo',
-        staticExample: this.render({
-          status: 'up to date',
-          color: 'brightgreen',
-        }),
+        staticExample: this.render({ status: 'up-to-date' }),
         exampleUrl: 'github/celery/celery',
         keywords: ['requires'],
       },
