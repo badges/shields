@@ -977,3 +977,43 @@ t.create('commit status - 404 with invalid JSON form github')
     value: 'invalid',
     colorB: colorsB.lightgrey,
   })
+
+t.create('Revision')
+  .get('/revision/Ang-YC/wx-voice/README.md.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'revision',
+      value: Joi.string().regex(/^\w+$/),
+    })
+  )
+
+t.create('Revision - whole repository')
+  .get('/revision/Ang-YC/wx-voice/.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'revision',
+      value: Joi.string().regex(/^\w+$/),
+    })
+  )
+
+t.create('Revision - file not found')
+  .get('/revision/Ang-YC/wx-voice/file-not-found.json')
+  .expectJSON({
+    name: 'revision',
+    value: '0',
+  })
+
+t.create('Revision - repo not found')
+  .get('/revision/Ang-YC/repo-not-found/.json')
+  .expectJSON({
+    name: 'revision',
+    value: 'repo not found',
+  })
+
+t.create('Revision - network error')
+  .get('/revision/Ang-YC/wx-voice/.json')
+  .networkOff()
+  .expectJSON({
+    name: 'revision',
+    value: 'inaccessible',
+  })
