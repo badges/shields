@@ -38,21 +38,23 @@ export default class SuggestionAndSearch extends React.Component {
   }
 
   getSuggestions() {
-    this.setState({ inProgress: true }, () => {
+    this.setState({ inProgress: true }, async () => {
       const { baseUrl } = this.props
       const { projectUrl } = this.state
 
       const url = resolveUrl('/$suggest/v1', baseUrl, { url: projectUrl })
 
       const fetch = window.fetch || fetchPonyfill
-      fetch(url)
-        .then(res => res.json())
-        .then(json => {
-          this.setState({ inProgress: false, suggestions: json.badges })
-        })
-        .catch(() => {
-          this.setState({ inProgress: false, suggestions: [] })
-        })
+      const res = await fetch(url)
+      let suggestions
+      try {
+        const json = await res.json()
+        suggestions = json.badges
+      } catch (e) {
+        suggestions = []
+      }
+
+      this.setState({ inProgress: false, suggestions })
     })
   }
 
