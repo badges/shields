@@ -1,14 +1,14 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const createServiceTester = require('../create-service-tester')
 const { invalidJSON } = require('../response-fixtures')
 
 const isRequireStatus = Joi.string().regex(
   /^(up to date|outdated|insecure|unknown)$/
 )
 
-const t = new ServiceTester({ id: 'requires', title: 'Requires.io' })
+const t = createServiceTester()
 module.exports = t
 
 t.create('requirements (valid, without branch)')
@@ -45,4 +45,4 @@ t.create('requirements (unexpected response)')
       .get('/api/v1/status/github/celery/celery')
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'requirements', value: 'invalid' })
+  .expectJSON({ name: 'requirements', value: 'unparseable json response' })
