@@ -42,14 +42,16 @@ specification.
 Examples
 --------
 
-* build status: `build | failing`
 * code coverage percentage: `coverage | 80%`
 * stable release version: `version | 1.2.3`
 * package manager release: `gem | 1.2.3`
 * status of third-party dependencies: `dependencies | out-of-date`
-* static code analysis GPA: `code climate | 3.8`
+* static code analysis grade: `codacy | B`
 * [SemVer](https://semver.org/) version observance: `semver | 2.0.0`
-* amount of [Gratipay](http://gratipay.com) donations per week: `tips | $2/week`
+* amount of [Liberapay](https://liberapay.com/) donations per week: `receives | 2.00 USD/week`
+* Python package downloads: `downloads | 13k/month`
+* Chrome Web Store extension rating: `rating | ★★★★☆`
+* [Uptime Robot](https://uptimerobot.com) percentage: `uptime | 100%`
 
 [Make your own badges!][custom badges]
 (Quick example: `https://img.shields.io/badge/left-right-f39f37.svg`)
