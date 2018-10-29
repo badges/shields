@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
-const { isMetric, isSemver } = require('../test-validators')
+const { isMetric, isVPlusDottedVersionNClauses } = require('../test-validators')
 
 const t = new ServiceTester({ id: 'jetbrains', title: 'JetBrains' })
 module.exports = t
@@ -249,19 +249,28 @@ t.create('version for unknown plugin')
 t.create('version (user friendly plugin id)')
   .get('/plugin/v/1347-scala.json')
   .expectJSONTypes(
-    Joi.object().keys({ name: 'jetbrains plugin', value: isSemver })
+    Joi.object().keys({
+      name: 'jetbrains plugin',
+      value: isVPlusDottedVersionNClauses,
+    })
   )
 
 t.create('version (plugin id from plugin.xml)')
   .get('/plugin/v/org.intellij.scala.json')
   .expectJSONTypes(
-    Joi.object().keys({ name: 'jetbrains plugin', value: isSemver })
+    Joi.object().keys({
+      name: 'jetbrains plugin',
+      value: isVPlusDottedVersionNClauses,
+    })
   )
 
 t.create('version (number as a plugin id)')
   .get('/plugin/v/7495.json')
   .expectJSONTypes(
-    Joi.object().keys({ name: 'jetbrains plugin', value: isSemver })
+    Joi.object().keys({
+      name: 'jetbrains plugin',
+      value: isVPlusDottedVersionNClauses,
+    })
   )
 
 t.create('version (mocked)')

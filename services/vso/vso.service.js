@@ -33,34 +33,36 @@ const fetchVstsBadge = (request, url, badgeData, sendBadge, format) => {
 
 module.exports = class Vso extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
-    // For Visual Studio Team Services builds.
+    // For Azure DevOps builds.
     camp.route(
       /^\/vso\/build\/([^/]+)\/([^/]+)\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
-        const name = match[1] // User name
-        const project = match[2] // Project ID, e.g. 953a34b9-5966-4923-a48a-c41874cfb5f5
-        const build = match[3] // Build definition ID, e.g. 1
-        const branch = match[4]
+        // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/vsts/build/status/get
+        const organization = match[1] // The name (string) of the Azure DevOps organization.
+        const projectId = match[2] // The ID (uuid) of the project.
+        const definitionId = match[3] // The ID (int) of the definition.
+        const branchName = match[4] // The name (string) of the branch.
         const format = match[5]
-        let url = `https://${name}.visualstudio.com/${project}/_apis/build/status/${build}`
-        if (branch != null) {
-          url += `?branchName=${branch}`
+        let url = `https://dev.azure.com/${organization}/${projectId}/_apis/build/status/${definitionId}`
+        if (branchName != null) {
+          url += `?branchName=${branchName}`
         }
         const badgeData = getBadgeData('build', data)
         fetchVstsBadge(request, url, badgeData, sendBadge, format)
       })
     )
 
-    // For Visual Studio Team Services releases.
+    // For Azure DevOps releases.
     camp.route(
       /^\/vso\/release\/([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
-        const name = match[1] // User name
-        const project = match[2] // Project ID, e.g. 953a34b9-5966-4923-a48a-c41874cfb5f5
-        const release = match[3] // Release definition ID, e.g. 1
-        const environment = match[4] // Environment ID, e.g. 1
+        // Microsoft documentation: ?
+        const organization = match[1] // The name (string) of the Azure DevOps organization.
+        const projectId = match[2] // The ID (uuid) of the project.
+        const definitionId = match[3] // The ID (int) of the definition.
+        const environmentId = match[4] // The ID (int) of the release environment.
         const format = match[5]
-        const url = `https://${name}.vsrm.visualstudio.com/_apis/public/release/badge/${project}/${release}/${environment}`
+        const url = `https://vsrm.dev.azure.com/${organization}/_apis/public/Release/badge/${projectId}/${definitionId}/${environmentId}`
         const badgeData = getBadgeData('deployment', data)
         fetchVstsBadge(request, url, badgeData, sendBadge, format)
       })
