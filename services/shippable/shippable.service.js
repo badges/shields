@@ -19,11 +19,15 @@ module.exports = class Shippable extends LegacyService {
     return [
       {
         title: 'Shippable',
-        previewUrl: '5444c5ecb904a4b21567b0ff',
+        urlPattern: ':projectId',
+        exampleUrl: '5444c5ecb904a4b21567b0ff',
+        staticExample: { label: 'build', message: 'success', color: '#44CC11' },
       },
       {
         title: 'Shippable branch',
-        previewUrl: '5444c5ecb904a4b21567b0ff/master',
+        urlPattern: ':projectId/:branch',
+        exampleUrl: '5444c5ecb904a4b21567b0ff/master',
+        staticExample: { label: 'build', message: 'success', color: '#44CC11' },
       },
     ]
   }
@@ -46,14 +50,14 @@ module.exports = class Shippable extends LegacyService {
           90: { color: '#555555', label: 'stopped' },
         }
 
-        const project = match[1] // eg, 54d119db5ab6cc13528ab183
+        const projectId = match[1] // eg, 54d119db5ab6cc13528ab183
         let targetBranch = match[2]
         if (targetBranch == null) {
           targetBranch = 'master'
         }
         const format = match[3]
         const url =
-          'https://api.shippable.com/projects/' + project + '/branchRunStatus'
+          'https://api.shippable.com/projects/' + projectId + '/branchRunStatus'
         const options = {
           method: 'GET',
           uri: url,
