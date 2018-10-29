@@ -1,10 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const createServiceTester = require('../create-service-tester')
 const { isBuildStatus } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'readthedocs', title: 'Read the Docs' })
+const t = createServiceTester()
 module.exports = t
 
 t.create('build status')
@@ -36,9 +36,4 @@ t.create('build status for named semantic version')
 
 t.create('unknown project')
   .get('/this-repo/does-not-exist.json')
-  .expectJSON({ name: 'docs', value: 'unknown' })
-
-t.create('connection error')
-  .get('/pip.json')
-  .networkOff()
-  .expectJSON({ name: 'docs', value: 'inaccessible' })
+  .expectJSON({ name: 'docs', value: 'project or build not found' })
