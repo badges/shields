@@ -3,6 +3,11 @@ SHELL:=/bin/bash
 SERVER_TMP=${TMPDIR}shields-server-deploy
 FRONTEND_TMP=${TMPDIR}shields-frontend-deploy
 
+# This branch is reserved for the deploy process and should not be used for
+# development. The deploy script will clobber it. To avoid accidentally
+# pushing secrets to GitHub, this branch is configured to reject pushes.
+WORKING_BRANCH=server-deploy-working-branch
+
 all: website favicon test
 
 favicon:
@@ -23,7 +28,7 @@ prepare-server-deploy: website
 	# https://github.com/badges/shields/issues/1220
 	rm -rf ${SERVER_TMP}
 	git worktree prune
-	git worktree add -B production ${SERVER_TMP}
+	git worktree add -B ${WORKING_BRANCH} ${SERVER_TMP}
 	cp -r build ${SERVER_TMP}
 	git -C ${SERVER_TMP} add build/
 	git -C ${SERVER_TMP} commit --no-verify -m '[DEPLOY] Add frontend for debugging'
@@ -37,13 +42,13 @@ clean-server-deploy:
 	git worktree prune
 
 push-s0:
-	git push -f s0 production:master
+	git push -f s0 ${WORKING_BRANCH}:master
 
 push-s1:
-	git push -f s1 production:master
+	git push -f s1 ${WORKING_BRANCH}:master
 
 push-s2:
-	git push -f s2 production:master
+	git push -f s2 ${WORKING_BRANCH}:master
 
 deploy-gh-pages:
 	rm -rf ${FRONTEND_TMP}
