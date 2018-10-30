@@ -42,16 +42,16 @@ specification.
 Examples
 --------
 
-* code coverage percentage: `coverage | 80%`
-* stable release version: `version | 1.2.3`
-* package manager release: `gem | 1.2.3`
-* status of third-party dependencies: `dependencies | out-of-date`
-* static code analysis grade: `codacy | B`
-* [SemVer](https://semver.org/) version observance: `semver | 2.0.0`
-* amount of [Liberapay](https://liberapay.com/) donations per week: `receives | 2.00 USD/week`
-* Python package downloads: `downloads | 13k/month`
-* Chrome Web Store extension rating: `rating | ★★★★☆`
-* [Uptime Robot](https://uptimerobot.com) percentage: `uptime | 100%`
+* code coverage percentage: ![coverage](https://img.shields.io/badge/coverage-80%25-yellowgreen.svg)
+* stable release version: ![version](https://img.shields.io/badge/version-1.2.3-blue.svg)
+* package manager release: ![gem](https://img.shields.io/badge/gem-2.2.0-blue.svg)
+* status of third-party dependencies: ![dependencies](https://img.shields.io/badge/dependencies-out%20of%20date-orange.svg)
+* static code analysis grade: ![codacy](https://img.shields.io/badge/codacy-B-green.svg)
+* [SemVer](https://semver.org/) version observance: ![semver](https://img.shields.io/badge/semver-2.0.0-blue.svg)
+* amount of [Liberapay](https://liberapay.com/) donations per week: ![receives](https://img.shields.io/badge/receives-2.00%20USD%2Fweek-yellow.svg)
+* Python package downloads: ![downloads](https://img.shields.io/badge/downloads-13k%2Fmonth-brightgreen.svg)
+* Chrome Web Store extension rating: ![rating](https://img.shields.io/badge/rating-★★★★☆-brightgreen.svg)
+* [Uptime Robot](https://uptimerobot.com) percentage: ![uptime](https://img.shields.io/badge/uptime-100%25-brightgreen.svg)
 
 [Make your own badges!][custom badges]
 (Quick example: `https://img.shields.io/badge/left-right-f39f37.svg`)
