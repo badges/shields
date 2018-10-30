@@ -30,11 +30,12 @@ prepare-server-deploy: website
 	git worktree prune
 	git worktree add -B ${WORKING_BRANCH} ${SERVER_TMP}
 	cp -r build ${SERVER_TMP}
-	git -C ${SERVER_TMP} add build/
+	git -C ${SERVER_TMP} add -f build/
 	git -C ${SERVER_TMP} commit --no-verify -m '[DEPLOY] Add frontend for debugging'
+	mkdir -p ${SERVER_TMP}/private
 	cp private/secret-production.json ${SERVER_TMP}/private/secret.json
 	cp Verdana.ttf ${SERVER_TMP}
-	git -C ${SERVER_TMP} add private/secret.json Verdana.ttf
+	git -C ${SERVER_TMP} add -f private/secret.json Verdana.ttf
 	git -C ${SERVER_TMP} commit --no-verify -m '[DEPLOY] MUST NOT BE ON GITHUB'
 
 clean-server-deploy:
