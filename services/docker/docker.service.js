@@ -8,7 +8,7 @@ const {
 const { checkErrorResponse } = require('../../lib/error-helper')
 const { metric } = require('../../lib/text-formatters')
 
-module.exports = class Docker extends LegacyService {
+class DockerPopularity extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     // Docker Hub stars integration.
     camp.route(
@@ -80,7 +80,36 @@ module.exports = class Docker extends LegacyService {
         })
       })
     )
+  }
+}
 
+class DockerBuild extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'docker',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Docker Automated build',
+        previewUrl: 'automated/jrottenberg/ffmpeg',
+        keywords: ['docker', 'automated', 'build'],
+      },
+      {
+        title: 'Docker Build Status',
+        previewUrl: 'build/jrottenberg/ffmpeg',
+        keywords: ['docker', 'build', 'status'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler({ camp, cache }) {
     // Docker Hub automated integration, most recent build's status (passed, pending, failed)
     camp.route(
       /^\/docker\/build\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -166,3 +195,5 @@ module.exports = class Docker extends LegacyService {
     )
   }
 }
+
+module.exports = [DockerPopularity, DockerBuild]
