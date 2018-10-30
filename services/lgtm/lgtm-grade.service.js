@@ -19,7 +19,7 @@ module.exports = class LgtmGrade extends LegacyService {
     return [
       {
         title: 'LGTM Grade',
-        previewUrl: '/lgtm/grade/java/g/apache/cloudstack',
+        previewUrl: 'java/g/apache/cloudstack',
       },
     ]
   }
