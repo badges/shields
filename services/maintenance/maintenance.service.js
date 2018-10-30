@@ -5,6 +5,25 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const log = require('../../lib/log')
 
 module.exports = class Maintenance extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get url() {
+    return {
+      base: 'maintenance',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Maintenance',
+        previewUrl: 'yes/2017',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/maintenance\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,

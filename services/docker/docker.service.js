@@ -8,9 +8,28 @@ const {
 const { checkErrorResponse } = require('../../lib/error-helper')
 const { metric } = require('../../lib/text-formatters')
 
-class DockerPopularity extends LegacyService {
+class DockerStars extends LegacyService {
+  static get category() {
+    return 'rating'
+  }
+
+  static get url() {
+    return {
+      base: 'docker/stars',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Docker Stars',
+        previewUrl: '_/ubuntu',
+        keywords: ['docker', 'stars'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
-    // Docker Hub stars integration.
     camp.route(
       /^\/docker\/stars\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
@@ -46,8 +65,31 @@ class DockerPopularity extends LegacyService {
         })
       })
     )
+  }
+}
 
-    // Docker Hub pulls integration.
+class DockerPulls extends LegacyService {
+  static get category() {
+    return 'downloads'
+  }
+
+  static get url() {
+    return {
+      base: 'docker/pulls',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Docker Pulls',
+        previewUrl: 'mashape/kong',
+        keywords: ['docker', 'pulls'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/docker\/pulls\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
@@ -110,7 +152,6 @@ class DockerBuild extends LegacyService {
   }
 
   static registerLegacyRouteHandler({ camp, cache }) {
-    // Docker Hub automated integration, most recent build's status (passed, pending, failed)
     camp.route(
       /^\/docker\/build\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
@@ -196,4 +237,4 @@ class DockerBuild extends LegacyService {
   }
 }
 
-module.exports = [DockerPopularity, DockerBuild]
+module.exports = [DockerStars, DockerPulls, DockerBuild]
