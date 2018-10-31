@@ -14,17 +14,6 @@ module.exports = class Dockbit extends LegacyService {
     }
   }
 
-  static get examples() {
-    return [
-      {
-        title: 'Dockbit',
-        previewUrl: 'DockbitStatus/health?token=TvavttxFHJ4qhnKstDxrvBXM',
-        urlPattern: ':organisation/:pipeline?token=:token',
-        exampleUrl: 'DockbitStatus/health?token=TvavttxFHJ4qhnKstDxrvBXM',
-      },
-    ]
-  }
-
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/dockbit\/([A-Za-z0-9-_]+)\/([A-Za-z0-9-_]+)\.(svg|png|gif|jpg|json)$/,
