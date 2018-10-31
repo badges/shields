@@ -26,7 +26,7 @@ module.exports = class Imagelayers extends LegacyService {
           method: 'POST',
           json: true,
           body: {
-            repos: [{ name: path, tag: tag }],
+            repos: [{ name: path, tag }],
           },
           uri: 'https://imagelayers.io/registry/analyze',
         }

@@ -38,7 +38,7 @@ module.exports = class BaseWordpress extends BaseJsonService {
         qs: {
           action: `${this.constructor.extensionType}_information`,
           request: {
-            slug: slug,
+            slug,
             fields: {
               active_installs: 1,
               sections: 0,
