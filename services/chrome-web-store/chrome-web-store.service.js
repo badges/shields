@@ -38,6 +38,8 @@ module.exports = class ChromeWebStore extends LegacyService {
           }
           chromeWebStore
             .convert(buffer)
+            // Switch to async/await when this is refactored.
+            // eslint-disable-next-line promise/prefer-await-to-then
             .then(value => {
               let rating
               switch (type) {
