@@ -105,6 +105,14 @@ class BaseService {
     )}`
   }
 
+  static _dotSvg(url) {
+    if (url.includes('?')) {
+      return url.replace('?', '.svg?')
+    } else {
+      return `${url}.svg`
+    }
+  }
+
   /**
    * Return an array of examples. Each example is prepared according to the
    * schema in `lib/all-badge-examples.js`.
@@ -141,13 +149,13 @@ class BaseService {
         return {
           title: title ? `${title}` : this.name,
           exampleUrl: exampleUrl
-            ? `${this._makeFullUrl(exampleUrl, query)}.svg${suffix}`
+            ? `${this._dotSvg(this._makeFullUrl(exampleUrl))}${suffix}`
             : undefined,
           previewUrl: staticExample
             ? `${this._makeStaticExampleUrl(staticExample)}.svg`
-            : `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
+            : `${this._dotSvg(this._makeFullUrl(previewUrl))}${suffix}`,
           urlPattern: urlPattern
-            ? `${this._makeFullUrl(urlPattern, query)}.svg${suffix}`
+            ? `${this._dotSvg(this._makeFullUrl(urlPattern))}${suffix}`
             : undefined,
           documentation,
           keywords,

@@ -4,6 +4,25 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 module.exports = class Codetally extends LegacyService {
+  static get category() {
+    return 'funding'
+  }
+
+  static get url() {
+    return {
+      base: 'codetally',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Codetally',
+        previewUrl: 'triggerman722/colorstrap',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/codetally\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,

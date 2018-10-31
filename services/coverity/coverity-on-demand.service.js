@@ -5,6 +5,29 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 // For Coverity Code Advisor On Demand.
 module.exports = class CoverityOnDemand extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'coverity/ondemand',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Coverity Code Advisor On Demand Stream',
+        previewUrl: 'streams/STREAM',
+      },
+      {
+        title: 'Coverity Code Advisor On Demand Job',
+        previewUrl: 'jobs/JOB',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/coverity\/ondemand\/(.+)\/(.+)\.(svg|png|gif|jpg|json)$/,

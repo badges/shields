@@ -5,6 +5,29 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { checkErrorResponse } = require('../../lib/error-helper')
 
 module.exports = class BitbucketPipelines extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'bitbucket/pipelines',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Bitbucket Pipelines',
+        previewUrl: 'atlassian/adf-builder-javascript',
+      },
+      {
+        title: 'Bitbucket Pipelines branch',
+        previewUrl: 'atlassian/adf-builder-javascript/task/SECO-2168',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/bitbucket\/pipelines\/([^/]+)\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
