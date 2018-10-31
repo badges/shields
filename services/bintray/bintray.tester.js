@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const createServiceTester = require('../create-service-tester')
 const { colorScheme } = require('../test-helpers')
-const { isVPlusTripleDottedVersion } = require('../test-validators')
+const { isVPlusDottedVersionNClauses } = require('../test-validators')
 
 const t = createServiceTester()
 
@@ -14,7 +14,7 @@ t.create('version')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'bintray',
-      value: isVPlusTripleDottedVersion,
+      value: isVPlusDottedVersionNClauses,
     })
   )
 
