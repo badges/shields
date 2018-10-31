@@ -14,6 +14,17 @@ module.exports = class Bitrise extends LegacyService {
     }
   }
 
+  static get examples() {
+    return [
+      {
+        title: 'Bitrise',
+        previewUrl: 'cde737473028420d/master?token=GCIdEzacE4GW32jLVrZb7A',
+        urlPattern: ':app-id/:branch?token=:app-status-badge-token',
+        exampleUrl: 'cde737473028420d/master?token=GCIdEzacE4GW32jLVrZb7A',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/bitrise\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
