@@ -13,12 +13,7 @@ module.exports = class BitbucketIssues extends LegacyService {
         const user = match[2] // eg, atlassian
         const repo = match[3] // eg, python-bitbucket
         const format = match[4]
-        const apiUrl =
-          'https://bitbucket.org/api/1.0/repositories/' +
-          user +
-          '/' +
-          repo +
-          '/issues/?limit=0&status=new&status=open'
+        const apiUrl = `https://bitbucket.org/api/1.0/repositories/${user}/${repo}/issues/?limit=0&status=new&status=open`
 
         const badgeData = getBadgeData('issues', data)
         request(apiUrl, (err, res, buffer) => {

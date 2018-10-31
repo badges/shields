@@ -12,7 +12,7 @@ function teamcityBadge(
   sendBadge,
   request
 ) {
-  const apiUrl = url + '/app/rest/builds/buildType:(id:' + buildId + ')?guest=1'
+  const apiUrl = `${url}/app/rest/builds/buildType:(id:${buildId})?guest=1`
   const badgeData = getBadgeData('build', data)
   request(
     apiUrl,
@@ -77,7 +77,7 @@ module.exports = class TeamcityBuild extends LegacyService {
         const buildType = match[4] // eg, `bt428`.
         const format = match[5]
         teamcityBadge(
-          scheme + '://' + serverUrl,
+          `${scheme}://${serverUrl}`,
           buildType,
           advanced,
           format,

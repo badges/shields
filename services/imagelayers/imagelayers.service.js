@@ -20,7 +20,7 @@ module.exports = class Imagelayers extends LegacyService {
         if (user === '_') {
           user = 'library'
         }
-        const path = user + '/' + repo
+        const path = `${user}/${repo}`
         const badgeData = getBadgeData(type, data)
         const options = {
           method: 'POST',
@@ -38,7 +38,7 @@ module.exports = class Imagelayers extends LegacyService {
           }
           try {
             if (type === 'image-size') {
-              const size = metric(buffer[0].repo.size) + 'B'
+              const size = `${metric(buffer[0].repo.size)}B`
               badgeData.text[0] = getLabel('image size', data)
               badgeData.text[1] = size
             } else if (type === 'layers') {

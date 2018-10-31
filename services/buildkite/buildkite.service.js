@@ -13,8 +13,7 @@ module.exports = class Buildkite extends LegacyService {
         const branch = match[2] || 'master' // Defaults to master if not specified
         const format = match[3]
 
-        const url =
-          'https://badge.buildkite.com/' + identifier + '.json?branch=' + branch
+        const url = `https://badge.buildkite.com/${identifier}.json?branch=${branch}`
         const badgeData = getBadgeData('build', data)
 
         request(url, (err, res, buffer) => {

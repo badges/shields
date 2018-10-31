@@ -10,8 +10,7 @@ module.exports = class CoverityScan extends LegacyService {
       cache((data, match, sendBadge, request) => {
         const projectId = match[1] // eg, `3997`
         const format = match[2]
-        const url =
-          'https://scan.coverity.com/projects/' + projectId + '/badge.json'
+        const url = `https://scan.coverity.com/projects/${projectId}/badge.json`
         const badgeData = getBadgeData('coverity', data)
         request(url, (err, res, buffer) => {
           if (err != null) {

@@ -22,11 +22,7 @@ module.exports = class CodacyCoverage extends LegacyService {
           queryParams.branch = branch
         }
         const query = queryString.stringify(queryParams)
-        const url =
-          'https://api.codacy.com/project/badge/coverage/' +
-          projectId +
-          '?' +
-          query
+        const url = `https://api.codacy.com/project/badge/coverage/${projectId}?${query}`
         const badgeData = getBadgeData('coverage', data)
         fetchFromSvg(
           request,

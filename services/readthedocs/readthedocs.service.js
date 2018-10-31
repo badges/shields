@@ -13,12 +13,11 @@ module.exports = class ReadTheDocs extends LegacyService {
         const version = match[2]
         const format = match[3]
         const badgeData = getBadgeData('docs', data)
-        let url =
-          'https://readthedocs.org/projects/' +
-          encodeURIComponent(project) +
-          '/badge/'
+        let url = `https://readthedocs.org/projects/${encodeURIComponent(
+          project
+        )}/badge/`
         if (version != null) {
-          url += '?version=' + encodeURIComponent(version)
+          url += `?version=${encodeURIComponent(version)}`
         }
         fetchFromSvg(request, url, />([^<>]+)<\/text><\/g>/, (err, res) => {
           if (err != null) {

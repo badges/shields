@@ -15,24 +15,14 @@ module.exports = class JenkinsTests extends LegacyService {
         const format = match[4]
         const options = {
           json: true,
-          uri:
-            scheme +
-            '://' +
-            host +
-            '/job/' +
-            job +
-            '/lastBuild/api/json?tree=' +
-            encodeURIComponent('actions[failCount,skipCount,totalCount]'),
+          uri: `${scheme}://${host}/job/${job}/lastBuild/api/json?tree=${encodeURIComponent(
+            'actions[failCount,skipCount,totalCount]'
+          )}`,
         }
         if (job.indexOf('/') > -1) {
-          options.uri =
-            scheme +
-            '://' +
-            host +
-            '/' +
-            job +
-            '/lastBuild/api/json?tree=' +
-            encodeURIComponent('actions[failCount,skipCount,totalCount]')
+          options.uri = `${scheme}://${host}/${job}/lastBuild/api/json?tree=${encodeURIComponent(
+            'actions[failCount,skipCount,totalCount]'
+          )}`
         }
 
         if (serverSecrets && serverSecrets.jenkins_user) {
@@ -63,7 +53,7 @@ module.exports = class JenkinsTests extends LegacyService {
               testsObject.totalCount -
               (testsObject.failCount + testsObject.skipCount)
             const percent = successfulTests / testsObject.totalCount
-            badgeData.text[1] = successfulTests + ' / ' + testsObject.totalCount
+            badgeData.text[1] = `${successfulTests} / ${testsObject.totalCount}`
             if (percent === 1) {
               badgeData.colorscheme = 'brightgreen'
             } else if (percent === 0) {

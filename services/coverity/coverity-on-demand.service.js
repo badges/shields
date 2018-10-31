@@ -32,12 +32,7 @@ module.exports = class CoverityOnDemand extends LegacyService {
           // https://api.ondemand.coverity.com/streams/44b25sjc9l3ntc2ngfi29tngro/badge
           // https://api.ondemand.coverity.com/jobs/p4tmm8031t4i971r0im4s7lckk/badge
           //
-          const url =
-            'https://api.ondemand.coverity.com/' +
-            badgeType +
-            '/' +
-            badgeTypeId +
-            '/badge'
+          const url = `https://api.ondemand.coverity.com/${badgeType}/${badgeTypeId}/badge`
           request(url, (err, res, buffer) => {
             if (err != null) {
               badgeData.text[1] = 'inaccessible'

@@ -29,21 +29,12 @@ module.exports = class Sonarqube extends LegacyService {
         const useLegacyApi = !!version && version < 5.4
 
         const uri = useLegacyApi
-          ? scheme +
-            '://' +
-            serverUrl +
-            '/api/resources?resource=' +
-            buildType +
-            '&depth=0&metrics=' +
-            encodeURIComponent(sonarMetricName) +
-            '&includetrends=true'
-          : scheme +
-            '://' +
-            serverUrl +
-            '/api/measures/component?componentKey=' +
-            buildType +
-            '&metricKeys=' +
-            encodeURIComponent(sonarMetricName)
+          ? `${scheme}://${serverUrl}/api/resources?resource=${buildType}&depth=0&metrics=${encodeURIComponent(
+              sonarMetricName
+            )}&includetrends=true`
+          : `${scheme}://${serverUrl}/api/measures/component?componentKey=${buildType}&metricKeys=${encodeURIComponent(
+              sonarMetricName
+            )}`
 
         const options = {
           uri,
@@ -81,7 +72,7 @@ module.exports = class Sonarqube extends LegacyService {
             }
 
             if (metricName.indexOf('coverage') !== -1) {
-              badgeData.text[1] = value.toFixed(0) + '%'
+              badgeData.text[1] = `${value.toFixed(0)}%`
               badgeData.colorscheme = coveragePercentageColor(value)
             } else if (/^\w+_violations$/.test(metricName)) {
               badgeData.text[1] = value
@@ -100,7 +91,7 @@ module.exports = class Sonarqube extends LegacyService {
                 }
               }
             } else if (metricName === 'fortify-security-rating') {
-              badgeData.text[1] = value + '/5'
+              badgeData.text[1] = `${value}/5`
 
               if (value === 0) {
                 badgeData.colorscheme = 'red'
@@ -133,7 +124,7 @@ module.exports = class Sonarqube extends LegacyService {
                 //Some metrics higher % is better
                 colorValue = 100 - value
               }
-              badgeData.text[1] = value + '%'
+              badgeData.text[1] = `${value}%`
               if (colorValue >= 100) {
                 badgeData.colorscheme = 'red'
               } else if (colorValue >= 50) {

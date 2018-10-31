@@ -12,7 +12,7 @@ module.exports = class Itunes extends LegacyService {
       cache((data, match, sendBadge, request) => {
         const bundleId = match[1] // eg, `324684580`
         const format = match[2]
-        const apiUrl = 'https://itunes.apple.com/lookup?id=' + bundleId
+        const apiUrl = `https://itunes.apple.com/lookup?id=${bundleId}`
         const badgeData = getBadgeData('itunes app store', data)
         request(apiUrl, (err, res, buffer) => {
           if (err !== null) {

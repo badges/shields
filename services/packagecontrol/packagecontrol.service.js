@@ -15,8 +15,7 @@ module.exports = class PackageControl extends LegacyService {
         const info = match[1] // either `dm`, `dw`, `dd` or dt`.
         const userRepo = match[2] // eg, `Package%20Control`.
         const format = match[3]
-        const apiUrl =
-          'https://packagecontrol.io/packages/' + userRepo + '.json'
+        const apiUrl = `https://packagecontrol.io/packages/${userRepo}.json`
         const badgeData = getBadgeData('downloads', data)
         request(apiUrl, (err, res, buffer) => {
           if (err != null) {
@@ -39,7 +38,7 @@ module.exports = class PackageControl extends LegacyService {
                     downloads += platform.totals[i]
                   }
                 })
-                badgeData.text[1] = metric(downloads) + '/month'
+                badgeData.text[1] = `${metric(downloads)}/month`
                 break
               case 'w':
                 // daily downloads are separated by Operating System
@@ -51,7 +50,7 @@ module.exports = class PackageControl extends LegacyService {
                     downloads += platform.totals[i]
                   }
                 })
-                badgeData.text[1] = metric(downloads) + '/week'
+                badgeData.text[1] = `${metric(downloads)}/week`
                 break
               case 'd':
                 // daily downloads are separated by Operating System
@@ -60,7 +59,7 @@ module.exports = class PackageControl extends LegacyService {
                   // use the downloads from yesterday
                   downloads += platform.totals[1]
                 })
-                badgeData.text[1] = metric(downloads) + '/day'
+                badgeData.text[1] = `${metric(downloads)}/day`
                 break
               case 't':
                 // all-time downloads are already compiled

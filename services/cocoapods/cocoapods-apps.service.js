@@ -16,7 +16,7 @@ module.exports = class CocoapodsApps extends LegacyService {
         const info = match[1] // One of these: "aw", "at"
         const spec = match[2] // eg, AFNetworking
         const format = match[3]
-        const apiUrl = 'https://metrics.cocoapods.org/api/v1/pods/' + spec
+        const apiUrl = `https://metrics.cocoapods.org/api/v1/pods/${spec}`
         const badgeData = getBadgeData('apps', data)
         request(apiUrl, (err, res, buffer) => {
           if (checkErrorResponse(badgeData, err, res)) {
@@ -29,7 +29,7 @@ module.exports = class CocoapodsApps extends LegacyService {
             switch (info.charAt(1)) {
               case 'w':
                 apps = data.stats.app_week
-                badgeData.text[1] = metric(apps) + '/week'
+                badgeData.text[1] = `${metric(apps)}/week`
                 break
               case 't':
                 apps = data.stats.app_total

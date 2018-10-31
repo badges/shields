@@ -28,7 +28,7 @@ module.exports = class TravisPhpVersion extends LegacyService {
               if (err !== null) {
                 log.error(`Travis CI error: ${err.stack}`)
                 if (res) {
-                  log.error('' + res)
+                  log.error(`${res}`)
                 }
                 badgeData.text[1] = 'invalid'
                 sendBadge(format, badgeData)

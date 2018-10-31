@@ -16,10 +16,7 @@ module.exports = class Cookbook extends LegacyService {
       cache((data, match, sendBadge, request) => {
         const cookbook = match[1] // eg, chef-sugar
         const format = match[2]
-        const apiUrl =
-          'https://supermarket.getchef.com/api/v1/cookbooks/' +
-          cookbook +
-          '/versions/latest'
+        const apiUrl = `https://supermarket.getchef.com/api/v1/cookbooks/${cookbook}/versions/latest`
         const badgeData = getBadgeData('cookbook', data)
 
         request(apiUrl, (err, res, buffer) => {

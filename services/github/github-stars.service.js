@@ -23,8 +23,8 @@ module.exports = class GithubStars extends LegacyService {
         if (badgeData.template === 'social') {
           badgeData.logo = getLogo('github', data)
           badgeData.links = [
-            'https://github.com/' + user + '/' + repo,
-            'https://github.com/' + user + '/' + repo + '/stargazers',
+            `https://github.com/${user}/${repo}`,
+            `https://github.com/${user}/${repo}/stargazers`,
           ]
         }
         githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {

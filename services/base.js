@@ -84,7 +84,7 @@ class BaseService {
   }
 
   static _makeFullUrl(partialUrl) {
-    return '/' + [this.url.base, partialUrl].filter(Boolean).join('/')
+    return `/${[this.url.base, partialUrl].filter(Boolean).join('/')}`
   }
 
   static _makeStaticExampleUrl(serviceData) {

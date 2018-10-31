@@ -18,7 +18,7 @@ module.exports = class PuppetforgeUsers extends LegacyService {
         const format = match[3]
         const options = {
           json: true,
-          uri: 'https://forgeapi.puppetlabs.com/v3/users/' + user,
+          uri: `https://forgeapi.puppetlabs.com/v3/users/${user}`,
         }
         const badgeData = getBadgeData('puppetforge', data)
         request(options, (err, res, json) => {

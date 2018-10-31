@@ -17,12 +17,9 @@ module.exports = class JiraIssue extends LegacyService {
         const options = {
           method: 'GET',
           json: true,
-          uri:
-            protocol +
-            '://' +
-            host +
-            '/rest/api/2/issue/' +
-            encodeURIComponent(issueKey),
+          uri: `${protocol}://${host}/rest/api/2/issue/${encodeURIComponent(
+            issueKey
+          )}`,
         }
         if (serverSecrets && serverSecrets.jira_username) {
           options.auth = {

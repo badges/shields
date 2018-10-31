@@ -15,11 +15,10 @@ module.exports = class JenkinsBuild extends LegacyService {
         const format = match[4]
         const options = {
           json: true,
-          uri: scheme + '://' + host + '/job/' + job + '/api/json?tree=color',
+          uri: `${scheme}://${host}/job/${job}/api/json?tree=color`,
         }
         if (job.indexOf('/') > -1) {
-          options.uri =
-            scheme + '://' + host + '/' + job + '/api/json?tree=color'
+          options.uri = `${scheme}://${host}/${job}/api/json?tree=color`
         }
 
         if (serverSecrets && serverSecrets.jenkins_user) {

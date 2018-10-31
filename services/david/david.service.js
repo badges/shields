@@ -17,18 +17,15 @@ module.exports = class David extends LegacyService {
           // eg, `expressjs/express`, `webcomponents/generator-element`.
           const userRepo = match[2]
           const format = match[3]
-          let options =
-            'https://david-dm.org/' +
-            userRepo +
-            '/' +
-            (dev ? dev + '-' : '') +
-            'info.json'
+          let options = `https://david-dm.org/${userRepo}/${
+            dev ? `${dev}-` : ''
+          }info.json`
           if (data.path) {
             // path can be used to specify the package.json location, useful for monorepos
-            options += '?path=' + data.path
+            options += `?path=${data.path}`
           }
           const badgeData = getBadgeData(
-            (dev ? dev + ' ' : '') + 'dependencies',
+            `${dev ? `${dev} ` : ''}dependencies`,
             data
           )
           request(options, (err, res, buffer) => {

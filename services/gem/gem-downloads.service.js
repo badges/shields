@@ -49,7 +49,7 @@ module.exports = class GemDownloads extends BaseJsonService {
 
   static _getLabel(version, info) {
     if (version) {
-      return 'downloads@' + version
+      return `downloads@${version}`
     } else {
       if (info === 'dtv') {
         return 'downloads@latest'

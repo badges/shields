@@ -81,7 +81,7 @@ module.exports = class Codeclimate extends LegacyService {
                     const percentage = parseFloat(
                       parsedData.data.attributes.covered_percent
                     )
-                    badgeData.text[1] = percentage.toFixed(0) + '%'
+                    badgeData.text[1] = `${percentage.toFixed(0)}%`
                     badgeData.colorscheme = coveragePercentageColor(percentage)
                   } else if (type === 'issues') {
                     const count = parsedData.data.meta.issues_count
@@ -94,7 +94,7 @@ module.exports = class Codeclimate extends LegacyService {
                     const percentage = parseFloat(
                       parsedData.data.attributes.ratings[0].measure.value
                     )
-                    badgeData.text[1] = percentage.toFixed(0) + '%'
+                    badgeData.text[1] = `${percentage.toFixed(0)}%`
                     badgeData.colorscheme = colorScale(
                       [5, 10, 20, 50],
                       ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red']
@@ -109,7 +109,7 @@ module.exports = class Codeclimate extends LegacyService {
                       parseFloat(
                         parsedData.data.attributes.ratings[0].measure.value
                       )
-                    badgeData.text[1] = percentage.toFixed(0) + '%'
+                    badgeData.text[1] = `${percentage.toFixed(0)}%`
                     badgeData.colorscheme = colorScale(
                       [50, 80, 90, 95],
                       ['red', 'yellow', 'yellowgreen', 'green', 'brightgreen']

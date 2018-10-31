@@ -20,9 +20,8 @@ module.exports = class Docker extends LegacyService {
         if (user === '_') {
           user = 'library'
         }
-        const path = user + '/' + repo
-        const url =
-          'https://hub.docker.com/v2/repositories/' + path + '/stars/count/'
+        const path = `${user}/${repo}`
+        const url = `https://hub.docker.com/v2/repositories/${path}/stars/count/`
         const badgeData = getBadgeData('docker stars', data)
         request(url, (err, res, buffer) => {
           if (
@@ -57,8 +56,8 @@ module.exports = class Docker extends LegacyService {
         if (user === '_') {
           user = 'library'
         }
-        const path = user + '/' + repo
-        const url = 'https://hub.docker.com/v2/repositories/' + path
+        const path = `${user}/${repo}`
+        const url = `https://hub.docker.com/v2/repositories/${path}`
         const badgeData = getBadgeData('docker pulls', data)
         request(url, (err, res, buffer) => {
           if (
@@ -91,11 +90,8 @@ module.exports = class Docker extends LegacyService {
         if (user === '_') {
           user = 'library'
         }
-        const path = user + '/' + repo
-        const url =
-          'https://registry.hub.docker.com/v2/repositories/' +
-          path +
-          '/buildhistory'
+        const path = `${user}/${repo}`
+        const url = `https://registry.hub.docker.com/v2/repositories/${path}/buildhistory`
         const badgeData = getBadgeData('docker build', data)
         request(url, (err, res, buffer) => {
           if (
@@ -136,8 +132,8 @@ module.exports = class Docker extends LegacyService {
         if (user === '_') {
           user = 'library'
         }
-        const path = user + '/' + repo
-        const url = 'https://registry.hub.docker.com/v2/repositories/' + path
+        const path = `${user}/${repo}`
+        const url = `https://registry.hub.docker.com/v2/repositories/${path}`
         const badgeData = getBadgeData('docker build', data)
         request(url, (err, res, buffer) => {
           if (
