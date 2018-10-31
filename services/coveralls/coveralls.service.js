@@ -7,6 +7,37 @@ const {
 } = require('../../lib/color-formatters')
 
 module.exports = class Coveralls extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'coveralls',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Coveralls github',
+        previewUrl: 'github/jekyll/jekyll',
+      },
+      {
+        title: 'Coveralls github branch',
+        previewUrl: 'github/jekyll/jekyll/master',
+      },
+      {
+        title: 'Coveralls bitbucket',
+        previewUrl: 'bitbucket/pyKLIP/pyklip',
+      },
+      {
+        title: 'Coveralls bitbucket branch',
+        previewUrl: 'bitbucket/pyKLIP/pyklip/master',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/coveralls\/(?:(bitbucket|github)\/)?([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,

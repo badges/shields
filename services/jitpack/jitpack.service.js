@@ -6,6 +6,26 @@ const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
 module.exports = class Jitpack extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get url() {
+    return {
+      base: 'jitpack/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'JitPack',
+        previewUrl: 'jitpack/maven-simple',
+        keywords: ['jitpack', 'java', 'maven'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/jitpack\/v\/([^/]*)\/([^/]*)\.(svg|png|gif|jpg|json)$/,

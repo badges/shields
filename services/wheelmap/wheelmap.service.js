@@ -4,6 +4,25 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 module.exports = class Wheelmap extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get url() {
+    return {
+      base: 'wheelmap/a',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Wheelmap',
+        previewUrl: '2323004600',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/wheelmap\/a\/(.*)\.(svg|png|gif|jpg|json)$/,

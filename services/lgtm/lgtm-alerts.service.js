@@ -6,6 +6,25 @@ const { checkErrorResponse } = require('../../lib/error-helper')
 const { metric } = require('../../lib/text-formatters')
 
 module.exports = class LgtmAlerts extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'lgtm/alerts',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'LGTM Alerts',
+        previewUrl: 'g/apache/cloudstack',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/lgtm\/alerts\/(.+)\.(svg|png|gif|jpg|json)$/,

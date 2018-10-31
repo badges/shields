@@ -6,6 +6,29 @@ const { checkErrorResponse } = require('../../lib/error-helper')
 const { omitv } = require('../../lib/text-formatters')
 
 module.exports = class PhpeyeHhvm extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get url() {
+    return {
+      base: 'hhvm',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'HHVM',
+        previewUrl: 'symfony/symfony',
+      },
+      {
+        title: 'HHVM (branch)',
+        previewUrl: 'symfony/symfony/master',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/hhvm\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,

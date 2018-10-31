@@ -7,9 +7,23 @@ const { version: versionColor } = require('../../lib/color-formatters')
 
 // For Chef cookbook.
 module.exports = class Cookbook extends LegacyService {
-  static get url() {
-    return { base: 'cookbook' }
+  static get category() {
+    return 'version'
   }
+
+  static get url() {
+    return { base: 'cookbook/v' }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Chef cookbook',
+        previewUrl: 'chef-sugar',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/cookbook\/v\/(.*)\.(svg|png|gif|jpg|json)$/,

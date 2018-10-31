@@ -6,6 +6,27 @@ const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
 module.exports = class Itunes extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get url() {
+    return {
+      base: 'itunes/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'iTunes App Store',
+        previewUrl: '803453959',
+        urlPattern: ':bundle-id',
+        exampleUrl: '803453959',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/itunes\/v\/(.+)\.(svg|png|gif|jpg|json)$/,

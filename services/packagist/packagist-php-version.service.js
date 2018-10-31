@@ -5,6 +5,25 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const log = require('../../lib/log')
 
 module.exports = class PackagistPhpVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get url() {
+    return {
+      base: 'packagist/php-v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'PHP from Packagist',
+        previewUrl: 'symfony/symfony',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/packagist\/php-v\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,

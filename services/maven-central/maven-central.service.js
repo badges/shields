@@ -8,6 +8,29 @@ const { version: versionColor } = require('../../lib/color-formatters')
 
 // Based on repo1.maven.org rather than search.maven.org because of #846.
 module.exports = class MavenCentral extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get url() {
+    return {
+      base: 'maven-central/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Maven Central',
+        previewUrl: 'org.apache.maven/apache-maven',
+      },
+      {
+        title: 'Maven Central with version prefix filter',
+        previewUrl: 'org.apache.maven/apache-maven/2',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/maven-central\/v\/([^/]*)\/([^/]*)(?:\/([^/]*))?\.(svg|png|gif|jpg|json)$/,

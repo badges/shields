@@ -8,6 +8,25 @@ const {
 
 // TeamCity CodeBetter code coverage.
 module.exports = class TeamcityCoverage extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'teamcity/coverage',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'TeamCity CodeBetter Coverage',
+        previewUrl: 'bt428',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/teamcity\/coverage\/(.*)\.(svg|png|gif|jpg|json)$/,

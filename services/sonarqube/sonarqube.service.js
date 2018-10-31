@@ -9,6 +9,41 @@ const {
 } = require('../../lib/color-formatters')
 
 module.exports = class Sonarqube extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'sonar',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'SonarQube Coverage',
+        previewUrl:
+          'http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/coverage',
+      },
+      {
+        title: 'SonarQube Tech Debt',
+        previewUrl:
+          'http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/tech_debt',
+      },
+      {
+        title: 'SonarQube Coverage (legacy API)',
+        previewUrl:
+          '4.2/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/coverage',
+      },
+      {
+        title: 'SonarQube Tech Debt (legacy API)',
+        previewUrl:
+          '4.2/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/tech_debt',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/sonar\/?([0-9.]+)?\/(http|https)\/(.*)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,

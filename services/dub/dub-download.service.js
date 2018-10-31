@@ -13,6 +13,37 @@ const {
 } = require('../../lib/color-formatters')
 
 module.exports = class DubDownload extends LegacyService {
+  static get category() {
+    return 'downloads'
+  }
+
+  static get url() {
+    return {
+      base: 'dub',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'DUB',
+        previewUrl: 'dd/vibe-d',
+      },
+      {
+        title: 'DUB',
+        previewUrl: 'dw/vibe-d',
+      },
+      {
+        title: 'DUB',
+        previewUrl: 'dm/vibe-d/latest',
+      },
+      {
+        title: 'DUB',
+        previewUrl: 'dt/vibe-d/0.8.4',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/dub\/(dd|dw|dm|dt)\/([^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,

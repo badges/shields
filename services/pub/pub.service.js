@@ -8,6 +8,25 @@ const { latest: latestVersion } = require('../../lib/version')
 
 // For Dart's pub.
 module.exports = class Pub extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get url() {
+    return {
+      base: 'pub',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Pub',
+        previewUrl: 'v/box2d',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/pub\/v(pre)?\/(.*)\.(svg|png|gif|jpg|json)$/,

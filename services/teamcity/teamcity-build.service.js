@@ -48,6 +48,33 @@ function teamcityBadge(
 }
 
 module.exports = class TeamcityBuild extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'teamcity',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'TeamCity CodeBetter',
+        previewUrl: 'codebetter/bt428',
+      },
+      {
+        title: 'TeamCity (simple build status)',
+        previewUrl: 'http/teamcity.jetbrains.com/s/bt345',
+      },
+      {
+        title: 'TeamCity (full build status)',
+        previewUrl: 'http/teamcity.jetbrains.com/e/bt345',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     // Old url for CodeBetter TeamCity instance.
     camp.route(

@@ -8,6 +8,36 @@ const {
 } = require('../../lib/color-formatters')
 
 module.exports = class PackagistDownloads extends LegacyService {
+  static get category() {
+    return 'downloads'
+  }
+
+  static get url() {
+    return {
+      base: 'packagist',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Packagist',
+        previewUrl: 'dm/doctrine/orm',
+        keywords: ['PHP'],
+      },
+      {
+        title: 'Packagist',
+        previewUrl: 'dd/doctrine/orm',
+        keywords: ['PHP'],
+      },
+      {
+        title: 'Packagist',
+        previewUrl: 'dt/doctrine/orm',
+        keywords: ['PHP'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/packagist\/(dm|dd|dt)\/(.*)\.(svg|png|gif|jpg|json)$/,
