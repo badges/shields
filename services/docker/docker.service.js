@@ -8,9 +8,28 @@ const {
 const { checkErrorResponse } = require('../../lib/error-helper')
 const { metric } = require('../../lib/text-formatters')
 
-module.exports = class Docker extends LegacyService {
+class DockerStars extends LegacyService {
+  static get category() {
+    return 'rating'
+  }
+
+  static get url() {
+    return {
+      base: 'docker/stars',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Docker Stars',
+        previewUrl: '_/ubuntu',
+        keywords: ['docker', 'stars'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
-    // Docker Hub stars integration.
     camp.route(
       /^\/docker\/stars\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
@@ -46,8 +65,31 @@ module.exports = class Docker extends LegacyService {
         })
       })
     )
+  }
+}
 
-    // Docker Hub pulls integration.
+class DockerPulls extends LegacyService {
+  static get category() {
+    return 'downloads'
+  }
+
+  static get url() {
+    return {
+      base: 'docker/pulls',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Docker Pulls',
+        previewUrl: 'mashape/kong',
+        keywords: ['docker', 'pulls'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/docker\/pulls\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
@@ -80,8 +122,36 @@ module.exports = class Docker extends LegacyService {
         })
       })
     )
+  }
+}
 
-    // Docker Hub automated integration, most recent build's status (passed, pending, failed)
+class DockerBuild extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'docker',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Docker Automated build',
+        previewUrl: 'automated/jrottenberg/ffmpeg',
+        keywords: ['docker', 'automated', 'build'],
+      },
+      {
+        title: 'Docker Build Status',
+        previewUrl: 'build/jrottenberg/ffmpeg',
+        keywords: ['docker', 'build', 'status'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/docker\/build\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
@@ -166,3 +236,5 @@ module.exports = class Docker extends LegacyService {
     )
   }
 }
+
+module.exports = [DockerStars, DockerPulls, DockerBuild]

@@ -5,6 +5,25 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const serverSecrets = require('../../lib/server-secrets')
 
 module.exports = class Sensiolabs extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'sensiolabs',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'SensioLabs Insight',
+        previewUrl: 'i/45afb680-d4e6-4e66-93ea-bcfa79eb8a87',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/sensiolabs\/i\/([^/]+)\.(svg|png|gif|jpg|json)$/,

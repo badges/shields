@@ -4,6 +4,25 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 module.exports = class Bountysource extends LegacyService {
+  static get category() {
+    return 'funding'
+  }
+
+  static get url() {
+    return {
+      base: 'bountysource',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Bountysource',
+        previewUrl: 'team/mozilla-core/activity',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/bountysource\/team\/([^/]+)\/activity\.(svg|png|gif|jpg|json)$/,
