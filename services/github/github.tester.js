@@ -761,18 +761,6 @@ t.create('github issue update')
     Joi.object().keys({ name: 'updated', value: isFormattedDate })
   )
 
-t.create('github pull request check state')
-  .get('/status/s/pulls/badges/shields/1110.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'checks', value: 'failure' }))
-
-t.create('github pull request check state (pull request not found)')
-  .get('/status/s/pulls/badges/shields/5110.json')
-  .expectJSON({ name: 'checks', value: 'pull request or repo not found' })
-
-t.create('github pull request check contexts')
-  .get('/status/contexts/pulls/badges/shields/1110.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'checks', value: '1 failure' }))
-
 t.create('top language')
   .get('/languages/top/badges/shields.json')
   .expectJSONTypes(
