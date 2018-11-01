@@ -41,8 +41,8 @@ t.create('unknown definition')
 
 t.create('unknown project')
   .get('/larsbrinkhoff/foo/515.json')
-  .expectJSON({ name: 'build', value: 'inaccessible or project not found' })
+  .expectJSON({ name: 'build', value: 'user or project not found' })
 
 t.create('unknown user')
   .get('/notarealuser/foo/515.json')
-  .expectJSON({ name: 'build', value: 'user not found' })
+  .expectJSON({ name: 'build', value: 'user or project not found' })

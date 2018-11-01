@@ -61,8 +61,7 @@ module.exports = class AzureDevOpsBuild extends BaseSvgService {
       url: `https://dev.azure.com/${organization}/${projectId}/_apis/build/status/${definitionId}`,
       qs: { branchName: branch },
       errorMessages: {
-        404: 'user not found',
-        500: 'inaccessible or project not found',
+        404: 'user or project not found',
       },
     })
     if (status === 'set up now') {
