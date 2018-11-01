@@ -8,6 +8,25 @@ const {
 } = require('../../lib/color-formatters')
 
 module.exports = class CocoapodsMetrics extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get url() {
+    return {
+      title: 'Cocoapods doc percentage',
+      base: 'cocoapods/metrics/doc-percent',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        previewUrl: 'AFNetworking',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/cocoapods\/metrics\/doc-percent\/(.*)\.(svg|png|gif|jpg|json)$/,
