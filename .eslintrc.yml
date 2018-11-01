@@ -35,6 +35,7 @@ rules:
   strict: "error"
   arrow-body-style: ["error", "as-needed"]
   no-extension-in-require/main: "error"
+  object-shorthand: ["error", "properties"]
 
   # Mocha-related.
   mocha/no-exclusive-tests: "error"

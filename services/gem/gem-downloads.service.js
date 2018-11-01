@@ -41,7 +41,7 @@ module.exports = class GemDownloads extends BaseJsonService {
 
   static render({ label, downloads }) {
     return {
-      label: label,
+      label,
       message: metric(downloads),
       color: downloadCountColor(downloads),
     }

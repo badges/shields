@@ -69,7 +69,7 @@ class WordpressPluginTestedVersion extends BaseWordpressPlatform {
   static render({ version, color }) {
     return {
       message: `${addv(version)} tested`,
-      color: color,
+      color,
     }
   }
 
