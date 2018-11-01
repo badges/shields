@@ -9,6 +9,29 @@ const {
 } = require('../../lib/color-formatters')
 
 module.exports = class CocoapodsApps extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get url() {
+    return {
+      base: 'cocoapods',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Cocoapods apps',
+        previewUrl: 'at/AFNetworking',
+      },
+      {
+        title: 'Cocoapods apps',
+        previewUrl: 'aw/AFNetworking',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/cocoapods\/(aw|at)\/(.*)\.(svg|png|gif|jpg|json)$/,

@@ -119,28 +119,47 @@ class BaseService {
    */
   static prepareExamples() {
     return this.examples.map(
-      ({
-        title,
-        query,
-        exampleUrl,
-        previewUrl,
-        urlPattern,
-        staticExample,
-        documentation,
-        keywords,
-      }) => {
-        if (!previewUrl && !staticExample) {
+      (
+        {
+          title,
+          query,
+          exampleUrl,
+          previewUrl,
+          urlPattern,
+          staticExample,
+          documentation,
+          keywords,
+        },
+        index
+      ) => {
+        if (staticExample) {
+          if (!urlPattern) {
+            throw new Error(
+              `Static example for ${
+                this.name
+              } at index ${index} does not declare a urlPattern`
+            )
+          }
+          if (!exampleUrl) {
+            throw new Error(
+              `Static example for ${
+                this.name
+              } at index ${index} does not declare an exampleUrl`
+            )
+          }
+          if (previewUrl) {
+            throw new Error(
+              `Static example for ${
+                this.name
+              } at index ${index} also declares a dynamic previewUrl, which is not allowed`
+            )
+          }
+        } else if (!previewUrl) {
           throw Error(
             `Example for ${
               this.name
-            } is missing required previewUrl or staticExample`
+            } at index ${index} is missing required previewUrl or staticExample`
           )
-        }
-        if (staticExample && !urlPattern) {
-          throw new Error('Must declare a urlPattern if using staticExample')
-        }
-        if (staticExample && !exampleUrl) {
-          throw new Error('Must declare an exampleUrl if using staticExample')
         }
 
         const stringified = queryString.stringify(query)
