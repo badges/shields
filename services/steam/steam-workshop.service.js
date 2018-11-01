@@ -280,7 +280,7 @@ class SteamFileReleaseDate extends SteamFileService {
 
   async onRequest({ response }) {
     const releaseDate = new Date(0).setUTCSeconds(response.time_created)
-    return this.constructor.render({ releaseDate: releaseDate })
+    return this.constructor.render({ releaseDate })
   }
 
   static get defaultBadgeData() {

@@ -38,11 +38,11 @@ module.exports = class BaseSteamAPI extends BaseJsonService {
     const url = `https://api.steampowered.com/${interf}/${method}/v${version}/?format=json`
     return this._requestJson({
       url,
-      schema: schema,
+      schema,
       errorMessages: {
         400: 'bad request',
       },
-      options: options,
+      options,
     })
   }
 }
