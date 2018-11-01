@@ -28,9 +28,13 @@ class BaseSvgScrapingService extends BaseService {
 
   async _requestSvg({ valueMatcher, url, options = {}, errorMessages = {} }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
+    const mergedOptions = {
+      ...{ headers: { Accept: 'image/svg+xml' } },
+      ...options,
+    }
     const { buffer } = await this._request({
       url,
-      options,
+      options: mergedOptions,
       errorMessages,
     })
     logTrace(emojic.dart, 'Response SVG', buffer)
