@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-const { NotFound } = require('../errors')
 
 const schema = Joi.object({
   message: Joi.equal(
