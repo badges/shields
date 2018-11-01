@@ -43,7 +43,7 @@ class JenkinsPluginInstalls extends BaseJsonService {
 
   static render({ label, installs }) {
     return {
-      label: label,
+      label,
       message: metric(installs),
       color: downloadCountColor(installs),
     }
