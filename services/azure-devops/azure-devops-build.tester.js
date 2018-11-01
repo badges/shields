@@ -1,0 +1,48 @@
+'use strict'
+
+const Joi = require('joi')
+const { isBuildStatus } = require('../test-validators')
+const t = require('../create-service-tester')()
+module.exports = t
+
+// https://dev.azure.com/totodem/Shields.io is a public Azure DevOps project
+// solely created for Shields.io testing.
+
+t.create('default branch')
+  .get('/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'build',
+      value: isBuildStatus,
+    })
+  )
+
+// t.create('default branch (alternate project)')
+//   .get('/larsbrinkhoff/953a34b9-5966-4923-a48a-c41874cfb5f5/1.json')
+//   .expectJSONTypes(
+//     Joi.object().keys({
+//       name: 'build',
+//       value: isBuildStatus,
+//     })
+//   )
+
+t.create('named branch')
+  .get('/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2/master.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'build',
+      value: isBuildStatus,
+    })
+  )
+
+t.create('unknown definition')
+  .get('/larsbrinkhoff/953a34b9-5966-4923-a48a-c41874cfb5f5/515.json')
+  .expectJSON({ name: 'build', value: 'definition not found' })
+
+t.create('unknown project')
+  .get('/larsbrinkhoff/foo/515.json')
+  .expectJSON({ name: 'build', value: 'inaccessible or project not found' })
+
+t.create('unknown user')
+  .get('/notarealuser/foo/515.json')
+  .expectJSON({ name: 'build', value: 'user not found' })
