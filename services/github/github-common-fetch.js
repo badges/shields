@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { errorMessagesFor } = require('../github-helpers')
+const { errorMessagesFor } = require('./github-helpers')
 
 const issueSchema = Joi.object({
   head: Joi.object({
