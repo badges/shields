@@ -20,15 +20,15 @@ module.exports = class ReadTheDocs extends BaseSvgScrapingService {
     return [
       {
         title: 'Read the Docs',
-        previewUrl: 'pip',
         urlPattern: ':package',
+        exampleUrl: 'pip',
         staticExample: this.render({ status: 'passing' }),
         keywords: ['documentation'],
       },
       {
         title: 'Read the Docs (version)',
-        previewUrl: 'pip/stable',
         urlPattern: ':package/:version',
+        exampleUrl: 'pip/stable',
         staticExample: this.render({ status: 'passing' }),
         keywords: ['documentation'],
       },
