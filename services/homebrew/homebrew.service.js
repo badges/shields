@@ -7,6 +7,25 @@ const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
 module.exports = class Homebrew extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get url() {
+    return {
+      base: 'homebrew/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'homebrew',
+        previewUrl: 'cake',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/homebrew\/v\/([^/]+)\.(svg|png|gif|jpg|json)$/,

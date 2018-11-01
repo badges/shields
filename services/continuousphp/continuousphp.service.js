@@ -4,8 +4,21 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 module.exports = class ContinuousPhp extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
   static get url() {
     return { base: 'continuousphp' }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'continuousphp',
+        previewUrl: 'git-hub/doctrine/dbal/master',
+      },
+    ]
   }
 
   static registerLegacyRouteHandler({ camp, cache }) {

@@ -5,6 +5,31 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { fetchFromSvg } = require('../../lib/svg-badge-parser')
 
 module.exports = class ReadTheDocs extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'readthedocs',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Read the Docs',
+        previewUrl: 'pip',
+        keywords: ['documentation'],
+      },
+      {
+        title: 'Read the Docs (version)',
+        previewUrl: 'pip/stable',
+        keywords: ['documentation'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/readthedocs\/([^/]+)(?:\/(.+))?.(svg|png|gif|jpg|json)$/,
