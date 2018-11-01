@@ -41,7 +41,7 @@ module.exports = class GemRank extends BaseJsonService {
     let message = ordinalNumber(rank)
     message += period === 'rt' ? '' : ' daily'
     return {
-      message: message,
+      message,
       color: floorCountColor(count, 10, 50, 100),
     }
   }

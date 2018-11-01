@@ -127,7 +127,7 @@ class AurVotes extends BaseAurService {
 class AurVersion extends BaseAurService {
   static render({ version, outOfDate }) {
     const color = outOfDate === null ? 'blue' : 'orange'
-    return { message: versionText(version), color: color }
+    return { message: versionText(version), color }
   }
 
   async handle({ pkg }) {

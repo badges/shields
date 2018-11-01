@@ -51,7 +51,7 @@ module.exports = class LibrariesioDependencies extends LegacyService {
           }
         }
 
-        const options = { method: 'GET', json: true, uri: uri }
+        const options = { method: 'GET', json: true, uri }
         const badgeData = getBadgeData('dependencies', data)
 
         request(options, (err, res, json) => {
