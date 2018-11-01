@@ -63,9 +63,12 @@ module.exports = class ReadTheDocs extends BaseSvgScrapingService {
       url: `https://readthedocs.org/projects/${encodeURIComponent(
         project
       )}/badge/`,
+      options: { qs: { version } },
     })
     if (status === 'unknown') {
-      throw new NotFound({ prettyMessage: 'project or build not found' })
+      throw new NotFound({
+        prettyMessage: 'project or version not found',
+      })
     }
     return this.constructor.render({ status })
   }
