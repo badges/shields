@@ -64,12 +64,14 @@ describe('BaseSvgScrapingService', function() {
       )
     })
 
-    it('invokes _sendAndCacheRequest', async function() {
+    it('invokes _sendAndCacheRequest with the expected header', async function() {
       await serviceInstance.invokeHandler({}, {})
 
       expect(sendAndCacheRequest).to.have.been.calledOnceWith(
         'http://example.com/foo.svg',
-        {}
+        {
+          headers: { Accept: 'image/svg+xml' },
+        }
       )
     })
 
@@ -78,7 +80,10 @@ describe('BaseSvgScrapingService', function() {
         async handle() {
           const { value } = await this._requestSvg({
             url: 'http://example.com/foo.svg',
-            options: { method: 'POST', qs: { queryParam: 123 } },
+            options: {
+              method: 'POST',
+              qs: { queryParam: 123 },
+            },
           })
           return { message: value }
         },
@@ -90,6 +95,7 @@ describe('BaseSvgScrapingService', function() {
         'http://example.com/foo.svg',
         {
           method: 'POST',
+          headers: { Accept: 'image/svg+xml' },
           qs: { queryParam: 123 },
         }
       )
