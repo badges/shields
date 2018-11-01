@@ -7,9 +7,28 @@ const {
 } = require('../../lib/badge-data')
 const { metric } = require('../../lib/text-formatters')
 
-module.exports = class Twitter extends LegacyService {
+class TwitterUrl extends LegacyService {
+  static get category() {
+    return 'social'
+  }
+
+  static get url() {
+    return {
+      base: 'twitter/url',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Twitter URL',
+        previewUrl: 'http/shields.io',
+        query: { style: 'social' },
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
-    // Twitter integration.
     camp.route(
       /^\/twitter\/url\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
@@ -33,8 +52,31 @@ module.exports = class Twitter extends LegacyService {
         sendBadge(format, badgeData)
       })
     )
+  }
+}
 
-    // Twitter follow badge.
+class TwitterFollow extends LegacyService {
+  static get category() {
+    return 'social'
+  }
+
+  static get url() {
+    return {
+      base: 'twitter/follow',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Twitter Follow',
+        previewUrl: 'espadrine',
+        query: { style: 'social', label: 'Follow' },
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/twitter\/follow\/@?([^/]+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
@@ -81,3 +123,5 @@ module.exports = class Twitter extends LegacyService {
     )
   }
 }
+
+module.exports = [TwitterUrl, TwitterFollow]

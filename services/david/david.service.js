@@ -4,6 +4,42 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 module.exports = class David extends LegacyService {
+  static get category() {
+    return 'dependencies'
+  }
+
+  static get url() {
+    return {
+      base: 'david',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'David',
+        previewUrl: 'expressjs/express',
+      },
+      {
+        title: 'David',
+        previewUrl: 'dev/expressjs/express',
+      },
+      {
+        title: 'David',
+        previewUrl: 'optional/elnounch/byebye',
+      },
+      {
+        title: 'David',
+        previewUrl: 'peer/webcomponents/generator-element',
+      },
+      {
+        title: 'David (path)',
+        previewUrl: 'babel/babel',
+        query: { path: 'packages/babel-core' },
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/david\/(dev\/|optional\/|peer\/)?(.+?)\.(svg|png|gif|jpg|json)$/,

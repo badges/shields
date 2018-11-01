@@ -5,6 +5,41 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { metric } = require('../../lib/text-formatters')
 
 module.exports = class Discourse extends LegacyService {
+  static get category() {
+    return 'chat'
+  }
+
+  static get url() {
+    return {
+      base: 'discourse',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Discourse topics',
+        previewUrl: 'https/meta.discourse.org/topics',
+      },
+      {
+        title: 'Discourse posts',
+        previewUrl: 'https/meta.discourse.org/posts',
+      },
+      {
+        title: 'Discourse users',
+        previewUrl: 'https/meta.discourse.org/users',
+      },
+      {
+        title: 'Discourse likes',
+        previewUrl: 'https/meta.discourse.org/likes',
+      },
+      {
+        title: 'Discourse status',
+        previewUrl: 'https/meta.discourse.org/status',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/discourse\/(http(?:s)?)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,

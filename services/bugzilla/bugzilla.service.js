@@ -4,7 +4,34 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { checkErrorResponse } = require('../../lib/error-helper')
 
+const documentation = `
+<p>
+  If your Bugzilla badge errors, it might be because you are trying to load a private bug.
+</p>
+`
+
 module.exports = class Bugzilla extends LegacyService {
+  static get category() {
+    return 'issue-tracking'
+  }
+
+  static get url() {
+    return {
+      base: 'bugzilla',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Bugzilla bug status',
+        previewUrl: '996038',
+        keywords: ['Bugzilla', 'bug'],
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/bugzilla\/(\d+)\.(svg|png|gif|jpg|json)$/,

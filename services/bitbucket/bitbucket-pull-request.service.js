@@ -5,6 +5,30 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { metric } = require('../../lib/text-formatters')
 
 module.exports = class BitbucketPullRequest extends LegacyService {
+  static get category() {
+    return 'issue-tracking'
+  }
+
+  static get url() {
+    return {
+      base: 'bitbucket',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Bitbucket open pull requests',
+        previewUrl: 'pr/osrf/gazebo',
+      },
+      {
+        title: 'Bitbucket open pull requests',
+        previewUrl: 'pr-raw/osrf/gazebo',
+        keywords: ['Bitbucket'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/bitbucket\/pr(-raw)?\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,

@@ -8,6 +8,37 @@ const {
 } = require('../../lib/color-formatters')
 
 module.exports = class Scrutinizer extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'scrutinizer',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Scrutinizer',
+        previewUrl: 'g/filp/whoops',
+      },
+      {
+        title: 'Scrutinizer Coverage',
+        previewUrl: 'coverage/g/filp/whoops',
+      },
+      {
+        title: 'Scrutinizer branch',
+        previewUrl: 'coverage/g/doctrine/doctrine2/master',
+      },
+      {
+        title: 'Scrutinizer Build',
+        previewUrl: 'build/g/filp/whoops',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/scrutinizer(?:\/(build|coverage))?\/([^/]+\/[^/]+\/[^/]+|gp\/[^/])(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,

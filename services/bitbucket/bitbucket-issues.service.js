@@ -5,6 +5,30 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { metric } = require('../../lib/text-formatters')
 
 module.exports = class BitbucketIssues extends LegacyService {
+  static get category() {
+    return 'issue-tracking'
+  }
+
+  static get url() {
+    return {
+      base: 'bitbucket',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Bitbucket issues',
+        previewUrl: 'issues/atlassian/python-bitbucket',
+      },
+      {
+        title: 'Bitbucket issues',
+        previewUrl: 'issues-raw/atlassian/python-bitbucket',
+        keywords: ['Bitbucket'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/bitbucket\/issues(-raw)?\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,

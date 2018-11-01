@@ -8,6 +8,29 @@ const {
 const { metric } = require('../../lib/text-formatters')
 
 module.exports = class Imagelayers extends LegacyService {
+  static get category() {
+    return 'size'
+  }
+
+  static get url() {
+    return {
+      base: 'imagelayers',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'ImageLayers Size',
+        previewUrl: 'image-size/_/ubuntu/latest',
+      },
+      {
+        title: 'ImageLayers Layers',
+        previewUrl: 'layers/_/ubuntu/latest',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/imagelayers\/(image-size|layers)\/([^/]+)\/([^/]+)\/([^/]*)\.(svg|png|gif|jpg|json)$/,

@@ -6,6 +6,25 @@ const log = require('../../lib/log')
 
 // For NetflixOSS metadata: https://github.com/Netflix/osstracker
 module.exports = class OssTracker extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get url() {
+    return {
+      base: 'osslifecycle',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'NetflixOSS Lifecycle',
+        previewUrl: 'Netflix/osstracker',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/osslifecycle?\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,

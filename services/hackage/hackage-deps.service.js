@@ -5,6 +5,25 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { checkErrorResponse } = require('../../lib/error-helper')
 
 module.exports = class HackageDeps extends LegacyService {
+  static get category() {
+    return 'dependencies'
+  }
+
+  static get url() {
+    return {
+      base: 'hackage-deps/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Hackage-Deps',
+        previewUrl: 'lens',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/hackage-deps\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
