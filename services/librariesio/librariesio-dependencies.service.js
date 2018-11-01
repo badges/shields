@@ -5,6 +5,29 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { checkErrorResponse } = require('../../lib/error-helper')
 
 module.exports = class LibrariesioDependencies extends LegacyService {
+  static get category() {
+    return 'dependencies'
+  }
+
+  static get url() {
+    return {
+      base: 'librariesio',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Libraries.io for releases',
+        previewUrl: 'release/hex/phoenix/1.0.3',
+      },
+      {
+        title: 'Libraries.io for GitHub',
+        previewUrl: 'github/phoenixframework/phoenix',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/librariesio\/(github|release)\/([\w\-_]+\/[\w\-_]+)\/?([\w\-_.]+)?\.(svg|png|gif|jpg|json)$/,
@@ -28,7 +51,7 @@ module.exports = class LibrariesioDependencies extends LegacyService {
           }
         }
 
-        const options = { method: 'GET', json: true, uri: uri }
+        const options = { method: 'GET', json: true, uri }
         const badgeData = getBadgeData('dependencies', data)
 
         request(options, (err, res, json) => {

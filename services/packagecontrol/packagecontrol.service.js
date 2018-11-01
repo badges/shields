@@ -8,6 +8,41 @@ const {
 } = require('../../lib/color-formatters')
 
 module.exports = class PackageControl extends LegacyService {
+  static get category() {
+    return 'downloads'
+  }
+
+  static get url() {
+    return {
+      base: 'packagecontrol',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Package Control',
+        previewUrl: 'dm/GitGutter',
+        keywords: ['sublime'],
+      },
+      {
+        title: 'Package Control',
+        previewUrl: 'dw/GitGutter',
+        keywords: ['sublime'],
+      },
+      {
+        title: 'Package Control',
+        previewUrl: 'dd/GitGutter',
+        keywords: ['sublime'],
+      },
+      {
+        title: 'Package Control',
+        previewUrl: 'dt/GitGutter',
+        keywords: ['sublime'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/packagecontrol\/(dm|dw|dd|dt)\/(.*)\.(svg|png|gif|jpg|json)$/,

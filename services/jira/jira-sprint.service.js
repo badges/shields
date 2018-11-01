@@ -4,8 +4,35 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const serverSecrets = require('../../lib/server-secrets')
 
-// JIRA agile sprint completion.
+const documentation = `
+<p>
+  To get the <code>Sprint ID</code>, go to your Backlog view in your project,
+  right click on your sprint name and get the value of
+  <code>data-sprint-id</code>.
+</p>
+`
+
 module.exports = class JiraSprint extends LegacyService {
+  static get category() {
+    return 'issue-tracking'
+  }
+
+  static get url() {
+    return {
+      base: 'jira/sprint',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'JIRA sprint completion',
+        previewUrl: 'https/jira.spring.io/94',
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/jira\/sprint\/(http(?:s)?)\/(.+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,

@@ -8,6 +8,35 @@ const {
 } = require('../../lib/color-formatters')
 
 module.exports = class Codecov extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'codecov/c',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Codecov',
+        previewUrl: 'github/codecov/example-python',
+      },
+      {
+        title: 'Codecov branch',
+        previewUrl: 'github/codecov/example-python/master',
+      },
+      {
+        title: 'Codecov private',
+        previewUrl: 'github/codecov/example-python',
+        urlPattern: 'token/:token/github/codecov/example-python',
+        exampleUrl: 'token/My0A8VL917/github/codecov/example-python',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/codecov\/c\/(?:token\/(\w+))?[+/]?([^/]+\/[^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,

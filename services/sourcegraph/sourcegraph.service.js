@@ -4,6 +4,25 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 module.exports = class Sourcegraph extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get url() {
+    return {
+      base: 'sourcegraph/rrc',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Sourcegraph for Repo Reference Count',
+        previewUrl: 'github.com/gorilla/mux',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/sourcegraph\/rrc\/([\s\S]+)\.(svg|png|gif|jpg|json)$/,

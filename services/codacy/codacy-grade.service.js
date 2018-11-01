@@ -6,6 +6,29 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { fetchFromSvg } = require('../../lib/svg-badge-parser')
 
 module.exports = class CodacyGrade extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'codacy',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Codacy grade',
+        previewUrl: 'grade/e27821fb6289410b8f58338c7e0bc686',
+      },
+      {
+        title: 'Codacy branch grade',
+        previewUrl: 'grade/e27821fb6289410b8f58338c7e0bc686/master',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/codacy\/(?:grade\/)?(?!coverage\/)([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,

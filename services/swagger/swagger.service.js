@@ -16,7 +16,7 @@ const validatorSchema = Joi.object()
 
 module.exports = class SwaggerValidatorService extends BaseJsonService {
   static render({ message, clr }) {
-    return { message: message, color: clr }
+    return { message, color: clr }
   }
 
   static get url() {
