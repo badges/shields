@@ -10,6 +10,25 @@ const {
 } = require('../../lib/php-version')
 
 module.exports = class TravisPhpVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get url() {
+    return {
+      base: 'travis/php-v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'PHP from Travis config',
+        previewUrl: 'symfony/symfony',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/travis(?:-ci)?\/php-v\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
@@ -30,7 +49,7 @@ module.exports = class TravisPhpVersion extends LegacyService {
               if (err !== null) {
                 log.error(`Travis CI error: ${err.stack}`)
                 if (res) {
-                  log.error('' + res)
+                  log.error(`${res}`)
                 }
                 badgeData.text[1] = 'invalid'
                 sendBadge(format, badgeData)

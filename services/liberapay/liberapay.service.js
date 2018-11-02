@@ -7,6 +7,37 @@ const { makeLogo: getLogo } = require('../../lib/badge-data')
 const { colorScale } = require('../../lib/color-formatters')
 
 module.exports = class Liberapay extends LegacyService {
+  static get category() {
+    return 'funding'
+  }
+
+  static get url() {
+    return {
+      base: 'liberapay',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Liberapay receiving',
+        previewUrl: 'receives/Changaco',
+      },
+      {
+        title: 'Liberapay giving',
+        previewUrl: 'gives/Changaco',
+      },
+      {
+        title: 'Liberapay patrons',
+        previewUrl: 'patrons/Changaco',
+      },
+      {
+        title: 'Liberapay goal progress',
+        previewUrl: 'goal/Changaco',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/liberapay\/(receives|gives|patrons|goal)\/(.*)\.(svg|png|gif|jpg|json)$/,
@@ -14,7 +45,7 @@ module.exports = class Liberapay extends LegacyService {
         const type = match[1] // e.g., 'gives'
         const entity = match[2] // e.g., 'Changaco'
         const format = match[3]
-        const apiUrl = 'https://liberapay.com/' + entity + '/public.json'
+        const apiUrl = `https://liberapay.com/${entity}/public.json`
         // Lock down type
         const label = {
           receives: 'receives',

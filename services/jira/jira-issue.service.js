@@ -5,6 +5,25 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const serverSecrets = require('../../lib/server-secrets')
 
 module.exports = class JiraIssue extends LegacyService {
+  static get category() {
+    return 'issue-tracking'
+  }
+
+  static get url() {
+    return {
+      base: 'jira/issue',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'JIRA issue',
+        previewUrl: 'https/issues.apache.org/jira/KAFKA-2896',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/jira\/issue\/(http(?:s)?)\/(.+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -17,12 +36,9 @@ module.exports = class JiraIssue extends LegacyService {
         const options = {
           method: 'GET',
           json: true,
-          uri:
-            protocol +
-            '://' +
-            host +
-            '/rest/api/2/issue/' +
-            encodeURIComponent(issueKey),
+          uri: `${protocol}://${host}/rest/api/2/issue/${encodeURIComponent(
+            issueKey
+          )}`,
         }
         if (serverSecrets && serverSecrets.jira_username) {
           options.auth = {

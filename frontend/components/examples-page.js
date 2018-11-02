@@ -43,7 +43,7 @@ export default class ExamplesPage extends React.Component {
     this.searchTimeout = window.setTimeout(() => {
       this.setState({
         searchReady: true,
-        query: query,
+        query,
       })
     }, 500)
   }

@@ -10,7 +10,7 @@ module.exports = class PackagistLicense extends LegacyService {
       cache((data, match, sendBadge, request) => {
         const userRepo = match[1]
         const format = match[2]
-        const apiUrl = 'https://packagist.org/packages/' + userRepo + '.json'
+        const apiUrl = `https://packagist.org/packages/${userRepo}.json`
         const badgeData = getBadgeData('license', data)
         if (userRepo.substr(-14) === '/:package_name') {
           badgeData.text[1] = 'invalid'

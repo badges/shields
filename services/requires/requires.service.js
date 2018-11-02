@@ -30,7 +30,7 @@ module.exports = class RequiresIo extends BaseJsonService {
     return this._requestJson({
       url,
       schema: statusSchema,
-      options: { qs: { branch: branch } },
+      options: { qs: { branch } },
     })
   }
 

@@ -9,6 +9,29 @@ const {
 } = require('../../lib/color-formatters')
 
 module.exports = class CodacyCoverage extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'codacy',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Codacy coverage',
+        previewUrl: 'coverage/59d607d0e311408885e418004068ea58',
+      },
+      {
+        title: 'Codacy branch coverage',
+        previewUrl: 'coverage/59d607d0e311408885e418004068ea58/master',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/codacy\/coverage\/(?!grade\/)([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
@@ -22,11 +45,7 @@ module.exports = class CodacyCoverage extends LegacyService {
           queryParams.branch = branch
         }
         const query = queryString.stringify(queryParams)
-        const url =
-          'https://api.codacy.com/project/badge/coverage/' +
-          projectId +
-          '?' +
-          query
+        const url = `https://api.codacy.com/project/badge/coverage/${projectId}?${query}`
         const badgeData = getBadgeData('coverage', data)
         fetchFromSvg(
           request,

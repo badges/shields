@@ -5,14 +5,33 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { checkErrorResponse } = require('../../lib/error-helper')
 
 module.exports = class HackageDeps extends LegacyService {
+  static get category() {
+    return 'dependencies'
+  }
+
+  static get url() {
+    return {
+      base: 'hackage-deps/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Hackage-Deps',
+        previewUrl: 'lens',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/hackage-deps\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
         const repo = match[1] // eg, `lens`.
         const format = match[2]
-        const reverseUrl = 'http://packdeps.haskellers.com/licenses/' + repo
-        const feedUrl = 'http://packdeps.haskellers.com/feed/' + repo
+        const reverseUrl = `http://packdeps.haskellers.com/licenses/${repo}`
+        const feedUrl = `http://packdeps.haskellers.com/feed/${repo}`
         const badgeData = getBadgeData('dependencies', data)
 
         // first call /reverse to check if the package exists
@@ -32,7 +51,7 @@ module.exports = class HackageDeps extends LegacyService {
             }
 
             try {
-              const outdatedStr = 'Outdated dependencies for ' + repo + ' '
+              const outdatedStr = `Outdated dependencies for ${repo} `
               if (buffer.indexOf(outdatedStr) >= 0) {
                 badgeData.text[1] = 'outdated'
                 badgeData.colorscheme = 'orange'

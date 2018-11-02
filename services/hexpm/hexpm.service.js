@@ -162,7 +162,7 @@ function DownloadsForInterval(interval) {
 
     static get url() {
       return {
-        base: base,
+        base,
         format: '(.+)',
         capture: ['pkg'],
       }

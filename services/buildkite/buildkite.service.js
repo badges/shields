@@ -5,6 +5,25 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { checkErrorResponse } = require('../../lib/error-helper')
 
 module.exports = class Buildkite extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'buildkite',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Buildkite',
+        previewUrl: '3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489/master',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/buildkite\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
@@ -13,8 +32,7 @@ module.exports = class Buildkite extends LegacyService {
         const branch = match[2] || 'master' // Defaults to master if not specified
         const format = match[3]
 
-        const url =
-          'https://badge.buildkite.com/' + identifier + '.json?branch=' + branch
+        const url = `https://badge.buildkite.com/${identifier}.json?branch=${branch}`
         const badgeData = getBadgeData('build', data)
 
         request(url, (err, res, buffer) => {

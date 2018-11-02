@@ -83,7 +83,7 @@ module.exports = class VscodeMarketplace extends LegacyService {
                   'averagerating'
                 ).toFixed(2)
                 const totalrate = getVscodeStatistic(buffer, 'ratingcount')
-                badgeData.text[1] = rate + '/5 (' + totalrate + ')'
+                badgeData.text[1] = `${rate}/5 (${totalrate})`
                 badgeData.colorscheme = floorCountColor(rate, 2, 3, 4)
                 break
               }

@@ -29,7 +29,7 @@ module.exports = class Wercker extends BaseJsonService {
       url: baseUrl,
       options: {
         qs: {
-          branch: branch,
+          branch,
           limit: 1,
         },
       },
@@ -57,7 +57,7 @@ module.exports = class Wercker extends BaseJsonService {
         projectId,
         applicationName,
       }),
-      branch: branch,
+      branch,
     })
     if (json.length === 0) {
       return this.constructor.render({

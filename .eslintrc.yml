@@ -35,6 +35,8 @@ rules:
   strict: "error"
   arrow-body-style: ["error", "as-needed"]
   no-extension-in-require/main: "error"
+  object-shorthand: ["error", "properties"]
+  prefer-template: "error"
   promise/prefer-await-to-then: "error"
 
   # Mocha-related.

@@ -12,6 +12,41 @@ const {
 } = require('../../lib/color-formatters')
 
 module.exports = class Sourceforge extends LegacyService {
+  static get category() {
+    return 'downloads'
+  }
+
+  static get url() {
+    return {
+      base: 'sourceforge',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'SourceForge',
+        previewUrl: 'dm/sevenzip',
+      },
+      {
+        title: 'SourceForge',
+        previewUrl: 'dw/sevenzip',
+      },
+      {
+        title: 'SourceForge',
+        previewUrl: 'dd/sevenzip',
+      },
+      {
+        title: 'SourceForge',
+        previewUrl: 'dt/sevenzip',
+      },
+      {
+        title: 'SourceForge',
+        previewUrl: 'dt/arianne/stendhal',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/sourceforge\/(dt|dm|dw|dd)\/([^/]*)\/?(.*).(svg|png|gif|jpg|json)$/,
@@ -20,12 +55,7 @@ module.exports = class Sourceforge extends LegacyService {
         const project = match[2] // eg, 'sevenzip`.
         const folder = match[3]
         const format = match[4]
-        let apiUrl =
-          'http://sourceforge.net/projects/' +
-          project +
-          '/files/' +
-          folder +
-          '/stats/json'
+        let apiUrl = `http://sourceforge.net/projects/${project}/files/${folder}/stats/json`
         const badgeData = getBadgeData('sourceforge', data)
         let timePeriod, startDate
         badgeData.text[0] = getLabel('downloads', data)
@@ -49,11 +79,9 @@ module.exports = class Sourceforge extends LegacyService {
             timePeriod = ''
             break
         }
-        apiUrl +=
-          '?start_date=' +
-          startDate.format('YYYY-MM-DD') +
-          '&end_date=' +
-          endDate.format('YYYY-MM-DD')
+        apiUrl += `?start_date=${startDate.format(
+          'YYYY-MM-DD'
+        )}&end_date=${endDate.format('YYYY-MM-DD')}`
         request(apiUrl, (err, res, buffer) => {
           if (err != null) {
             badgeData.text[1] = 'inaccessible'
