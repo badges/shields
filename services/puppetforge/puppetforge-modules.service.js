@@ -17,7 +17,7 @@ module.exports = class PuppetforgeModules extends LegacyService {
     camp.route(
       /^\/puppetforge\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
-        const info = match[1] // either `v`, `dt`, `e` or `f`
+        const info = match[1] // either `v`, `dt`, `e`, `f`, or `p`
         const user = match[2]
         const module = match[3]
         const format = match[4]
@@ -71,6 +71,16 @@ module.exports = class PuppetforgeModules extends LegacyService {
                 badgeData.colorscheme = coveragePercentageColor(feedback)
               } else {
                 badgeData.text[1] = 'unknown'
+                badgeData.colorscheme = 'lightgrey'
+              }
+            } else if (info === 'p') {
+              badgeData.text[0] = 'pdk version'
+              if (json.current_release.pdk) {
+                const pdkVersion = json.current_release.metadata['pdk-version']
+                badgeData.text[1] = versionText(pdkVersion)
+                badgeData.colorscheme = versionColor(pdkVersion)
+              } else {
+                badgeData.text[1] = 'none'
                 badgeData.colorscheme = 'lightgrey'
               }
             }
