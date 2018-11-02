@@ -33,8 +33,7 @@ module.exports = class Bintray extends LegacyService {
 
         const options = {
           method: 'GET',
-          uri:
-            'https://bintray.com/api/v1/packages/' + path + '/versions/_latest',
+          uri: `https://bintray.com/api/v1/packages/${path}/versions/_latest`,
           headers: {
             Accept: 'application/json',
           },

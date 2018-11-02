@@ -14,8 +14,7 @@ module.exports = class CocoapodsVersionPlatformLicense extends LegacyService {
         const type = match[1]
         const spec = match[2] // eg, AFNetworking
         const format = match[3]
-        const apiUrl =
-          'https://trunk.cocoapods.org/api/v1/pods/' + spec + '/specs/latest'
+        const apiUrl = `https://trunk.cocoapods.org/api/v1/pods/${spec}/specs/latest`
         const typeToLabel = { v: 'pod', p: 'platform', l: 'license' }
         const badgeData = getBadgeData(typeToLabel[type], data)
         badgeData.colorscheme = null

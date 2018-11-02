@@ -19,13 +19,13 @@ module.exports = class StackExchange extends LegacyService {
         const format = match[4]
         let path
         if (info === 'r') {
-          path = 'users/' + item
+          path = `users/${item}`
         } else if (info === 't') {
-          path = 'tags/' + item + '/info'
+          path = `tags/${item}/info`
         }
         const options = {
           method: 'GET',
-          uri: 'https://api.stackexchange.com/2.2/' + path + '?site=' + site,
+          uri: `https://api.stackexchange.com/2.2/${path}?site=${site}`,
           gzip: true,
         }
         const badgeData = getBadgeData(site, data)
@@ -45,7 +45,7 @@ module.exports = class StackExchange extends LegacyService {
 
             if (info === 'r') {
               const reputation = parsedData.items[0].reputation
-              badgeData.text[0] = getLabel(site + ' reputation', data)
+              badgeData.text[0] = getLabel(`${site} reputation`, data)
               badgeData.text[1] = metric(reputation)
               badgeData.colorscheme = floorCountColor(1000, 10000, 20000)
             } else if (info === 't') {

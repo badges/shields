@@ -39,9 +39,9 @@ module.exports = class GithubDownloads extends LegacyService {
               ? type === 'downloads'
                 ? 'latest'
                 : ''
-              : 'tags/' + tag
+              : `tags/${tag}`
           if (releasePath) {
-            apiUrl = apiUrl + '/' + releasePath
+            apiUrl = `${apiUrl}/${releasePath}`
           }
         }
         const badgeData = getBadgeData('downloads', data)

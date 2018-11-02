@@ -30,8 +30,8 @@ module.exports = class HackageDeps extends LegacyService {
       cache((data, match, sendBadge, request) => {
         const repo = match[1] // eg, `lens`.
         const format = match[2]
-        const reverseUrl = 'http://packdeps.haskellers.com/licenses/' + repo
-        const feedUrl = 'http://packdeps.haskellers.com/feed/' + repo
+        const reverseUrl = `http://packdeps.haskellers.com/licenses/${repo}`
+        const feedUrl = `http://packdeps.haskellers.com/feed/${repo}`
         const badgeData = getBadgeData('dependencies', data)
 
         // first call /reverse to check if the package exists
@@ -51,7 +51,7 @@ module.exports = class HackageDeps extends LegacyService {
             }
 
             try {
-              const outdatedStr = 'Outdated dependencies for ' + repo + ' '
+              const outdatedStr = `Outdated dependencies for ${repo} `
               if (buffer.indexOf(outdatedStr) >= 0) {
                 badgeData.text[1] = 'outdated'
                 badgeData.colorscheme = 'orange'

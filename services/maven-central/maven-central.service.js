@@ -39,13 +39,11 @@ module.exports = class MavenCentral extends LegacyService {
         const artifactId = match[2] // eg, `guice`
         const versionPrefix = match[3] || '' // eg, `1.`
         const format = match[4] || 'gif' // eg, `svg`
-        const metadataUrl =
-          'http://repo1.maven.org/maven2' +
-          '/' +
-          encodeURIComponent(groupId).replace(/\./g, '/') +
-          '/' +
-          encodeURIComponent(artifactId) +
-          '/maven-metadata.xml'
+        const metadataUrl = `${'http://repo1.maven.org/maven2' +
+          '/'}${encodeURIComponent(groupId).replace(
+          /\./g,
+          '/'
+        )}/${encodeURIComponent(artifactId)}/maven-metadata.xml`
         const badgeData = getBadgeData('maven-central', data)
         request(
           metadataUrl,

@@ -27,7 +27,7 @@ module.exports = class Crates extends LegacyService {
                 : data.version.downloads
               version = data.version && data.version.num
               badgeData.text[1] =
-                metric(downloads) + (version ? ' version ' + version : '')
+                metric(downloads) + (version ? ` version ${version}` : '')
               badgeData.colorscheme = downloadCountColor(downloads)
             },
           },
@@ -41,7 +41,7 @@ module.exports = class Crates extends LegacyService {
               version = data.version && data.version.num
               badgeData.text[1] =
                 metric(downloads) +
-                (version ? ' version ' + version : ' latest version')
+                (version ? ` version ${version}` : ' latest version')
               badgeData.colorscheme = downloadCountColor(downloads)
             },
           },
@@ -64,9 +64,9 @@ module.exports = class Crates extends LegacyService {
           },
         }
         const behavior = modes[mode]
-        let apiUrl = 'https://crates.io/api/v1/crates/' + crate
+        let apiUrl = `https://crates.io/api/v1/crates/${crate}`
         if (version != null && behavior.version) {
-          apiUrl += '/' + version
+          apiUrl += `/${version}`
         }
 
         const badgeData = getBadgeData(behavior.name, data)

@@ -72,7 +72,7 @@ module.exports = class Scrutinizer extends LegacyService {
                 badgeData.text[1] = 'unknown'
                 badgeData.colorscheme = 'gray'
               } else {
-                badgeData.text[1] = percentage.toFixed(0) + '%'
+                badgeData.text[1] = `${percentage.toFixed(0)}%`
                 badgeData.colorscheme = coveragePercentageColor(percentage)
               }
             } else if (type === 'build') {

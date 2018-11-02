@@ -42,11 +42,7 @@ module.exports = class CodacyGrade extends LegacyService {
           queryParams.branch = branch
         }
         const query = queryString.stringify(queryParams)
-        const url =
-          'https://api.codacy.com/project/badge/grade/' +
-          projectId +
-          '?' +
-          query
+        const url = `https://api.codacy.com/project/badge/grade/${projectId}?${query}`
         const badgeData = getBadgeData('code quality', data)
         fetchFromSvg(
           request,
