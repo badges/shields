@@ -56,8 +56,7 @@ module.exports = class Shippable extends LegacyService {
           targetBranch = 'master'
         }
         const format = match[3]
-        const url =
-          'https://api.shippable.com/projects/' + projectId + '/branchRunStatus'
+        const url = `https://api.shippable.com/projects/${projectId}/branchRunStatus`
         const options = {
           method: 'GET',
           uri: url,

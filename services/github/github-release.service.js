@@ -20,7 +20,7 @@ module.exports = class GithubRelease extends LegacyService {
         const format = match[4]
         let apiUrl = `/repos/${userRepo}/releases`
         if (!includePre) {
-          apiUrl = apiUrl + '/latest'
+          apiUrl = `${apiUrl}/latest`
         }
         const badgeData = getBadgeData('release', data)
         if (badgeData.template === 'social') {

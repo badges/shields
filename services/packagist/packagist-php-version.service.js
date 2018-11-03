@@ -33,14 +33,14 @@ module.exports = class PackagistPhpVersion extends LegacyService {
         const format = match[3]
         const options = {
           method: 'GET',
-          uri: 'https://packagist.org/p/' + userRepo + '.json',
+          uri: `https://packagist.org/p/${userRepo}.json`,
         }
         const badgeData = getBadgeData('php', data)
         request(options, (err, res, buffer) => {
           if (err !== null) {
-            log.error('Packagist error: ' + err.stack)
+            log.error(`Packagist error: ${err.stack}`)
             if (res) {
-              log.error('' + res)
+              log.error(`${res}`)
             }
             badgeData.text[1] = 'invalid'
             sendBadge(format, badgeData)

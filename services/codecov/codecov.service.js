@@ -52,7 +52,7 @@ module.exports = class Codecov extends LegacyService {
           apiUrl = `https://codecov.io/${userRepo}/graphs/badge.txt`
         }
         if (token) {
-          apiUrl += '?' + queryString.stringify({ token })
+          apiUrl += `?${queryString.stringify({ token })}`
         }
         const badgeData = getBadgeData('coverage', data)
         request(apiUrl, (err, res, body) => {
@@ -69,7 +69,7 @@ module.exports = class Codecov extends LegacyService {
               sendBadge(format, badgeData)
               return
             }
-            badgeData.text[1] = coverage + '%'
+            badgeData.text[1] = `${coverage}%`
             badgeData.colorscheme = coveragePercentageColor(coverage)
             sendBadge(format, badgeData)
           } catch (e) {

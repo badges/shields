@@ -36,13 +36,9 @@ module.exports = class Bitrise extends LegacyService {
           const format = match[3]
           const token = data.token
           const badgeData = getBadgeData('bitrise', data)
-          let apiUrl =
-            'https://app.bitrise.io/app/' +
-            appId +
-            '/status.json?token=' +
-            token
+          let apiUrl = `https://app.bitrise.io/app/${appId}/status.json?token=${token}`
           if (typeof branch !== 'undefined') {
-            apiUrl += '&branch=' + branch
+            apiUrl += `&branch=${branch}`
           }
 
           const statusColorScheme = {

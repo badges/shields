@@ -22,8 +22,8 @@ module.exports = class GithubWatchers extends LegacyService {
         if (badgeData.template === 'social') {
           badgeData.logo = getLogo('github', data)
           badgeData.links = [
-            'https://github.com/' + user + '/' + repo,
-            'https://github.com/' + user + '/' + repo + '/watchers',
+            `https://github.com/${user}/${repo}`,
+            `https://github.com/${user}/${repo}/watchers`,
           ]
         }
         githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
