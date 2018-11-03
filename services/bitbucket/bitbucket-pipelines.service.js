@@ -5,6 +5,29 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { checkErrorResponse } = require('../../lib/error-helper')
 
 module.exports = class BitbucketPipelines extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'bitbucket/pipelines',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Bitbucket Pipelines',
+        previewUrl: 'atlassian/adf-builder-javascript',
+      },
+      {
+        title: 'Bitbucket Pipelines branch',
+        previewUrl: 'atlassian/adf-builder-javascript/task/SECO-2168',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/bitbucket\/pipelines\/([^/]+)\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
@@ -14,13 +37,14 @@ module.exports = class BitbucketPipelines extends LegacyService {
         const branch = match[3] || 'master' // eg, development
         const format = match[4]
         const apiUrl =
-          'https://api.bitbucket.org/2.0/repositories/' +
-          encodeURIComponent(user) +
-          '/' +
-          encodeURIComponent(repo) +
-          '/pipelines/?fields=values.state&page=1&pagelen=2&sort=-created_on' +
-          '&target.ref_type=BRANCH&target.ref_name=' +
-          encodeURIComponent(branch)
+          `https://api.bitbucket.org/2.0/repositories/${encodeURIComponent(
+            user
+          )}/${encodeURIComponent(
+            repo
+          )}/pipelines/?fields=values.state&page=1&pagelen=2&sort=-created_on` +
+          `&target.ref_type=BRANCH&target.ref_name=${encodeURIComponent(
+            branch
+          )}`
 
         const badgeData = getBadgeData('build', data)
 

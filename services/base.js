@@ -85,7 +85,7 @@ class BaseService {
   }
 
   static _makeFullUrl(partialUrl) {
-    return '/' + [this.url.base, partialUrl].filter(Boolean).join('/')
+    return `/${[this.url.base, partialUrl].filter(Boolean).join('/')}`
   }
 
   static _makeStaticExampleUrl(serviceData) {
@@ -97,34 +97,61 @@ class BaseService {
     })
   }
 
+  static _dotSvg(url) {
+    if (url.includes('?')) {
+      return url.replace('?', '.svg?')
+    } else {
+      return `${url}.svg`
+    }
+  }
+
   /**
    * Return an array of examples. Each example is prepared according to the
    * schema in `lib/all-badge-examples.js`.
    */
   static prepareExamples() {
     return this.examples.map(
-      ({
-        title,
-        query,
-        exampleUrl,
-        previewUrl,
-        urlPattern,
-        staticExample,
-        documentation,
-        keywords,
-      }) => {
-        if (!previewUrl && !staticExample) {
+      (
+        {
+          title,
+          query,
+          exampleUrl,
+          previewUrl,
+          urlPattern,
+          staticExample,
+          documentation,
+          keywords,
+        },
+        index
+      ) => {
+        if (staticExample) {
+          if (!urlPattern) {
+            throw new Error(
+              `Static example for ${
+                this.name
+              } at index ${index} does not declare a urlPattern`
+            )
+          }
+          if (!exampleUrl) {
+            throw new Error(
+              `Static example for ${
+                this.name
+              } at index ${index} does not declare an exampleUrl`
+            )
+          }
+          if (previewUrl) {
+            throw new Error(
+              `Static example for ${
+                this.name
+              } at index ${index} also declares a dynamic previewUrl, which is not allowed`
+            )
+          }
+        } else if (!previewUrl) {
           throw Error(
             `Example for ${
               this.name
-            } is missing required previewUrl or staticExample`
+            } at index ${index} is missing required previewUrl or staticExample`
           )
-        }
-        if (staticExample && !urlPattern) {
-          throw new Error('Must declare a urlPattern if using staticExample')
-        }
-        if (staticExample && !exampleUrl) {
-          throw new Error('Must declare an exampleUrl if using staticExample')
         }
 
         const stringified = queryString.stringify(query)
@@ -133,13 +160,13 @@ class BaseService {
         return {
           title: title ? `${title}` : this.name,
           exampleUrl: exampleUrl
-            ? `${this._makeFullUrl(exampleUrl, query)}.svg${suffix}`
+            ? `${this._dotSvg(this._makeFullUrl(exampleUrl))}${suffix}`
             : undefined,
           previewUrl: staticExample
             ? this._makeStaticExampleUrl(staticExample)
-            : `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
+            : `${this._dotSvg(this._makeFullUrl(previewUrl))}${suffix}`,
           urlPattern: urlPattern
-            ? `${this._makeFullUrl(urlPattern, query)}.svg${suffix}`
+            ? `${this._dotSvg(this._makeFullUrl(urlPattern))}${suffix}`
             : undefined,
           documentation,
           keywords,

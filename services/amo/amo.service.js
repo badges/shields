@@ -26,8 +26,7 @@ module.exports = class Amo extends LegacyService {
         const addonId = match[2]
         const format = match[3]
         const badgeData = getBadgeData('mozilla add-on', queryData)
-        const url =
-          'https://services.addons.mozilla.org/api/1.5/addon/' + addonId
+        const url = `https://services.addons.mozilla.org/api/1.5/addon/${addonId}`
 
         request(url, (err, res, buffer) => {
           if (err) {
@@ -62,7 +61,7 @@ module.exports = class Amo extends LegacyService {
                 case 'rating':
                   rating = parseInt(data.addon.rating, 10)
                   badgeData.text[0] = getLabel('rating', queryData)
-                  badgeData.text[1] = rating + '/5'
+                  badgeData.text[1] = `${rating}/5`
                   badgeData.colorscheme = floorCountColor(rating, 2, 3, 4)
                   break
                 case 'stars':

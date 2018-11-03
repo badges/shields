@@ -17,7 +17,7 @@ module.exports = class DubLicenseVersion extends LegacyService {
         const info = match[1] // (v - version, l - license)
         const pkg = match[2] // package name, e.g. vibe-d
         const format = match[3]
-        let apiUrl = 'https://code.dlang.org/api/packages/' + pkg
+        let apiUrl = `https://code.dlang.org/api/packages/${pkg}`
         if (info === 'v') {
           apiUrl += '/latest'
         } else if (info === 'l') {

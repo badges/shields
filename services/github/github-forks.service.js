@@ -22,8 +22,8 @@ module.exports = class GithubForks extends LegacyService {
         if (badgeData.template === 'social') {
           badgeData.logo = getLogo('github', data)
           badgeData.links = [
-            'https://github.com/' + user + '/' + repo + '/fork',
-            'https://github.com/' + user + '/' + repo + '/network',
+            `https://github.com/${user}/${repo}/fork`,
+            `https://github.com/${user}/${repo}/network`,
           ]
         }
         githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
