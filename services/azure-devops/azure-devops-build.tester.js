@@ -9,7 +9,9 @@ module.exports = t
 // solely created for Shields.io testing.
 
 t.create('default branch')
-  .get('/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2.json')
+  .get(
+    '/azure-devops/build/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2.json'
+  )
   .expectJSONTypes(
     Joi.object().keys({
       name: 'build',
@@ -18,7 +20,9 @@ t.create('default branch')
   )
 
 t.create('named branch')
-  .get('/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2/master.json')
+  .get(
+    '/azure-devops/build/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2/master.json'
+  )
   .expectJSONTypes(
     Joi.object().keys({
       name: 'build',
@@ -27,13 +31,15 @@ t.create('named branch')
   )
 
 t.create('unknown definition')
-  .get('/larsbrinkhoff/953a34b9-5966-4923-a48a-c41874cfb5f5/515.json')
+  .get(
+    '/azure-devops/build/larsbrinkhoff/953a34b9-5966-4923-a48a-c41874cfb5f5/515.json'
+  )
   .expectJSON({ name: 'build', value: 'definition not found' })
 
 t.create('unknown project')
-  .get('/larsbrinkhoff/foo/515.json')
+  .get('/azure-devops/build/larsbrinkhoff/foo/515.json')
   .expectJSON({ name: 'build', value: 'user or project not found' })
 
 t.create('unknown user')
-  .get('/notarealuser/foo/515.json')
+  .get('/azure-devops/build/notarealuser/foo/515.json')
   .expectJSON({ name: 'build', value: 'user or project not found' })

@@ -28,8 +28,8 @@ module.exports = class AzureDevOpsRelease extends BaseSvgService {
 
   static get url() {
     return {
-      base: 'vso/release',
-      format: '([^/]+)/([^/]+)/([^/]+)/([^/]+)',
+      base: '',
+      format: '(?:azure-devops|vso)/release/([^/]+)/([^/]+)/([^/]+)/([^/]+)',
       capture: ['organization', 'projectId', 'definitionId', 'environmentId'],
     }
   }
@@ -38,7 +38,8 @@ module.exports = class AzureDevOpsRelease extends BaseSvgService {
     return [
       {
         title: 'Azure DevOps releases',
-        previewUrl: 'totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/1/1',
+        previewUrl:
+          'azure-devops/release/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/1/1',
         documentation,
       },
     ]

@@ -39,8 +39,8 @@ module.exports = class AzureDevOpsBuild extends BaseSvgService {
 
   static get url() {
     return {
-      base: 'vso/build',
-      format: '([^/]+)/([^/]+)/([^/]+)(?:/(.+))?',
+      base: '',
+      format: '(?:azure-devops|vso)/build/([^/]+)/([^/]+)/([^/]+)(?:/(.+))?',
       capture: ['organization', 'projectId', 'definitionId', 'branch'],
     }
   }
@@ -49,7 +49,8 @@ module.exports = class AzureDevOpsBuild extends BaseSvgService {
     return [
       {
         title: 'Azure DevOps builds',
-        previewUrl: 'totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2',
+        previewUrl:
+          'azure-devops/build/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2',
         documentation,
       },
     ]
