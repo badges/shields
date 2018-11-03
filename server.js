@@ -248,7 +248,7 @@ camp.route(
 
     // Cache management - the badge is constant.
     const cacheDuration = (3600 * 24 * 1) | 0 // 1 day.
-    ask.res.setHeader('Cache-Control', 'max-age=' + cacheDuration)
+    ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
     if (+new Date(ask.req.headers['if-modified-since']) >= +serverStartTime) {
       ask.res.statusCode = 304
       ask.res.end() // not modified.
@@ -286,7 +286,7 @@ camp.route(
 let bitFlip = false
 camp.route(/^\/flip\.svg$/, (data, match, end, ask) => {
   const cacheSecs = 60
-  ask.res.setHeader('Cache-Control', 'max-age=' + cacheSecs)
+  ask.res.setHeader('Cache-Control', `max-age=${cacheSecs}`)
   const reqTime = new Date()
   const date = new Date(+reqTime + cacheSecs * 1000).toGMTString()
   ask.res.setHeader('Expires', date)
@@ -306,7 +306,7 @@ camp.route(/^\/([^/]+)\/(.+).png$/, (data, match, end, ask) => {
 
   // Cache management - the badge is constant.
   const cacheDuration = (3600 * 24 * 1) | 0 // 1 day.
-  ask.res.setHeader('Cache-Control', 'max-age=' + cacheDuration)
+  ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
   if (+new Date(ask.req.headers['if-modified-since']) >= +serverStartTime) {
     ask.res.statusCode = 304
     ask.res.end() // not modified.

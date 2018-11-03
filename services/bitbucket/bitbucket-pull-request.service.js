@@ -37,12 +37,9 @@ module.exports = class BitbucketPullRequest extends LegacyService {
         const user = match[2] // eg, atlassian
         const repo = match[3] // eg, python-bitbucket
         const format = match[4]
-        const apiUrl =
-          'https://bitbucket.org/api/2.0/repositories/' +
-          encodeURI(user) +
-          '/' +
-          encodeURI(repo) +
-          '/pullrequests/?limit=0&state=OPEN'
+        const apiUrl = `https://bitbucket.org/api/2.0/repositories/${encodeURI(
+          user
+        )}/${encodeURI(repo)}/pullrequests/?limit=0&state=OPEN`
 
         const badgeData = getBadgeData('pull requests', data)
         request(apiUrl, (err, res, buffer) => {

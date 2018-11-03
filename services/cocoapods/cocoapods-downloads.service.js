@@ -43,7 +43,7 @@ module.exports = class CocoapodsDownloads extends LegacyService {
         const info = match[1] // One of these: "dm", "dw", "dt"
         const spec = match[2] // eg, AFNetworking
         const format = match[3]
-        const apiUrl = 'https://metrics.cocoapods.org/api/v1/pods/' + spec
+        const apiUrl = `https://metrics.cocoapods.org/api/v1/pods/${spec}`
         const badgeData = getBadgeData('downloads', data)
         request(apiUrl, (err, res, buffer) => {
           if (checkErrorResponse(badgeData, err, res)) {
@@ -56,11 +56,11 @@ module.exports = class CocoapodsDownloads extends LegacyService {
             switch (info.charAt(1)) {
               case 'm':
                 downloads = data.stats.download_month
-                badgeData.text[1] = metric(downloads) + '/month'
+                badgeData.text[1] = `${metric(downloads)}/month`
                 break
               case 'w':
                 downloads = data.stats.download_week
-                badgeData.text[1] = metric(downloads) + '/week'
+                badgeData.text[1] = `${metric(downloads)}/week`
                 break
               case 't':
                 downloads = data.stats.download_total

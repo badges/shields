@@ -65,13 +65,10 @@ module.exports = class TravisBuild extends LegacyService {
         request(options, (err, res) => {
           if (err != null) {
             log.error(
-              'Travis error: data:' +
-                JSON.stringify(data) +
-                '\nStack: ' +
-                err.stack
+              `Travis error: data:${JSON.stringify(data)}\nStack: ${err.stack}`
             )
             if (res) {
-              log.error('' + res)
+              log.error(`${res}`)
             }
           }
           if (checkErrorResponse(badgeData, err, res)) {

@@ -35,15 +35,15 @@ class TwitterUrl extends LegacyService {
         const scheme = match[1] // eg, https
         const path = match[2] // eg, shields.io
         const format = match[3]
-        const page = encodeURIComponent(scheme + '://' + path)
+        const page = encodeURIComponent(`${scheme}://${path}`)
         // The URL API died: #568.
         //var url = 'http://cdn.api.twitter.com/1/urls/count.json?url=' + page;
         const badgeData = getBadgeData('tweet', data)
         if (badgeData.template === 'social') {
           badgeData.logo = getLogo('twitter', data)
           badgeData.links = [
-            'https://twitter.com/intent/tweet?text=Wow:&url=' + page,
-            'https://twitter.com/search?q=' + page,
+            `https://twitter.com/intent/tweet?text=Wow:&url=${page}`,
+            `https://twitter.com/search?q=${page}`,
           ]
         }
         badgeData.text[1] = ''
@@ -83,11 +83,9 @@ class TwitterFollow extends LegacyService {
         const user = match[1] // eg, shields_io
         const format = match[2]
         const options = {
-          url:
-            'http://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=' +
-            user,
+          url: `http://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=${user}`,
         }
-        const badgeData = getBadgeData('follow @' + user, data)
+        const badgeData = getBadgeData(`follow @${user}`, data)
 
         badgeData.colorscheme = null
         badgeData.colorB = '#55ACEE'
@@ -95,8 +93,8 @@ class TwitterFollow extends LegacyService {
           badgeData.logo = getLogo('twitter', data)
         }
         badgeData.links = [
-          'https://twitter.com/intent/follow?screen_name=' + user,
-          'https://twitter.com/' + user + '/followers',
+          `https://twitter.com/intent/follow?screen_name=${user}`,
+          `https://twitter.com/${user}/followers`,
         ]
         badgeData.text[1] = ''
         request(options, (err, res, buffer) => {
