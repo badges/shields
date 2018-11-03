@@ -46,11 +46,11 @@ t.create('total downloads (unexpected response)')
   .intercept(nock =>
     nock('https://msconfiggallery.cloudapp.net')
       .get(
-        '/api/v2/Packages()?$filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
+        '/api/v2/Packages()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
       )
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'downloads', value: 'invalid' })
+  .expectJSON({ name: 'downloads', value: 'unparseable json response' })
 
 // version
 
@@ -68,7 +68,7 @@ t.create('version (mocked, yellow badge)')
   .intercept(nock =>
     nock('https://msconfiggallery.cloudapp.net')
       .get(
-        '/api/v2/Packages()?$filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
+        '/api/v2/Packages()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
       )
       .reply(200, nuGetV2VersionJsonWithDash)
   )
@@ -83,7 +83,7 @@ t.create('version (mocked, orange badge)')
   .intercept(nock =>
     nock('https://msconfiggallery.cloudapp.net')
       .get(
-        '/api/v2/Packages()?$filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
+        '/api/v2/Packages()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
       )
       .reply(200, nuGetV2VersionJsonFirstCharZero)
   )
@@ -98,7 +98,7 @@ t.create('version (mocked, blue badge)')
   .intercept(nock =>
     nock('https://msconfiggallery.cloudapp.net')
       .get(
-        '/api/v2/Packages()?$filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
+        '/api/v2/Packages()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
       )
       .reply(200, nuGetV2VersionJsonFirstCharNotZero)
   )
@@ -122,11 +122,11 @@ t.create('version (unexpected response)')
   .intercept(nock =>
     nock('https://msconfiggallery.cloudapp.net')
       .get(
-        '/api/v2/Packages()?$filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
+        '/api/v2/Packages()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
       )
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'powershellgallery', value: 'invalid' })
+  .expectJSON({ name: 'powershellgallery', value: 'unparseable json response' })
 
 // version (pre)
 
@@ -144,7 +144,7 @@ t.create('version (pre) (mocked, yellow badge)')
   .intercept(nock =>
     nock('https://msconfiggallery.cloudapp.net')
       .get(
-        '/api/v2/Packages()?$filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
+        '/api/v2/Packages()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
       )
       .reply(200, nuGetV2VersionJsonWithDash)
   )
@@ -159,7 +159,7 @@ t.create('version (pre) (mocked, orange badge)')
   .intercept(nock =>
     nock('https://msconfiggallery.cloudapp.net')
       .get(
-        '/api/v2/Packages()?$filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
+        '/api/v2/Packages()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
       )
       .reply(200, nuGetV2VersionJsonFirstCharZero)
   )
@@ -174,7 +174,7 @@ t.create('version (pre) (mocked, blue badge)')
   .intercept(nock =>
     nock('https://msconfiggallery.cloudapp.net')
       .get(
-        '/api/v2/Packages()?$filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
+        '/api/v2/Packages()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
       )
       .reply(200, nuGetV2VersionJsonFirstCharNotZero)
   )
@@ -198,8 +198,8 @@ t.create('version (pre) (unexpected response)')
   .intercept(nock =>
     nock('https://msconfiggallery.cloudapp.net')
       .get(
-        '/api/v2/Packages()?$filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
+        '/api/v2/Packages()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
       )
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'powershellgallery', value: 'invalid' })
+  .expectJSON({ name: 'powershellgallery', value: 'unparseable json response' })
