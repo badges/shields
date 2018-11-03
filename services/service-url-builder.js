@@ -7,7 +7,7 @@ const { toArray } = require('../lib/badge-data')
  * in complex collections of service classes, when the URL is built
  * conditionally.
  */
-module.exports = class UrlBuilder {
+module.exports = class ServiceUrlBuilder {
   constructor({ base = '' } = {}) {
     this.base = base
 

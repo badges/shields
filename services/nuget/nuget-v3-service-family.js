@@ -3,25 +3,26 @@
 const { promisify } = require('util')
 const Joi = require('joi')
 const { regularUpdate } = require('../../lib/regular-update')
-const UrlBuilder = require('../url-builder')
+const ServiceUrlBuilder = require('../service-url-builder')
 const BaseJsonService = require('../base-json')
 const { NotFound } = require('../errors')
 const { renderVersionBadge, renderDownloadBadge } = require('./nuget-helpers')
 
 /*
- * Build the Shields service URL object for the given service configuration.
+ * Build the Shields service URL object for the given service configuration. Return
+ * the ServiceUrlBuilder instance to which the service can add the route.
  */
 function buildUrl({ serviceBaseUrl, withTenant, withFeed }) {
   let result
   if (withTenant) {
-    result = new UrlBuilder().push(`(.+\\.)?${serviceBaseUrl}`, 'tenant')
+    result = new ServiceUrlBuilder().push(`(.+\\.)?${serviceBaseUrl}`, 'tenant')
   } else {
-    result = new UrlBuilder({ base: serviceBaseUrl })
+    result = new ServiceUrlBuilder({ base: serviceBaseUrl })
   }
   if (withFeed) {
     result.push('([^/]+)', 'feed')
   }
-  return result.toObject()
+  return result
 }
 
 /*
