@@ -51,7 +51,7 @@ const githubConstellation = new GithubConstellation({
   persistence: config.persistence,
   service: config.services.github,
 })
-const metrics = new PrometheusMetrics({ ...config.metrics.prometheus })
+const metrics = new PrometheusMetrics(config.metrics.prometheus)
 const { apiProvider: githubApiProvider } = githubConstellation
 
 function reset() {
