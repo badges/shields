@@ -8,6 +8,25 @@ const {
 const { checkErrorResponse } = require('../../lib/error-helper')
 
 module.exports = class DependabotSemverCompatibility extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get url() {
+    return {
+      base: 'dependabot/semver',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'SemVer Compatibility',
+        previewUrl: 'bundler/puma',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/dependabot\/semver\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,

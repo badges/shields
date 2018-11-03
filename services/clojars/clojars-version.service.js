@@ -21,7 +21,7 @@ module.exports = class Clojars extends BaseJsonService {
 
   static render({ clojar, version }) {
     return {
-      message: '[' + clojar + ' "' + version + '"]',
+      message: `[${clojar} "${version}"]`,
       color: versionColor(version),
     }
   }

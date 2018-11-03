@@ -1,80 +1,163 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const Joi = require('joi')
+const BaseJsonService = require('../base-json')
 const serverSecrets = require('../../lib/server-secrets')
-const { checkErrorResponse } = require('../../lib/error-helper')
+
 const {
   coveragePercentage: coveragePercentageColor,
 } = require('../../lib/color-formatters')
 
-// For Jenkins coverage (cobertura + jacoco).
-module.exports = class JenkinsCoverage extends LegacyService {
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/jenkins(?:-ci)?\/(c|j)\/(http(?:s)?)\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const type = match[1] // c - cobertura | j - jacoco
-        const scheme = match[2] // http(s)
-        const host = match[3] // example.org:8080
-        const job = match[4] // folder/job
-        const format = match[5]
-        const options = {
-          json: true,
-          uri: `${scheme}://${host}/job/${job}/`,
-        }
+const jacocoCoverageSchema = Joi.object({
+  instructionCoverage: Joi.object({
+    percentage: Joi.number()
+      .min(0)
+      .max(100)
+      .required(),
+  }).required(),
+}).required()
 
-        if (job.indexOf('/') > -1) {
-          options.uri = `${scheme}://${host}/${job}/`
-        }
-
-        switch (type) {
-          case 'c':
-            options.uri +=
-              'lastBuild/cobertura/api/json?tree=results[elements[name,denominator,numerator,ratio]]'
-            break
-          case 'j':
-            options.uri +=
-              'lastBuild/jacoco/api/json?tree=instructionCoverage[covered,missed,percentage,total]'
-            break
-        }
-
-        if (serverSecrets && serverSecrets.jenkins_user) {
-          options.auth = {
-            user: serverSecrets.jenkins_user,
-            pass: serverSecrets.jenkins_pass,
-          }
-        }
-
-        const badgeData = getBadgeData('coverage', data)
-        request(options, (err, res, json) => {
-          if (checkErrorResponse(badgeData, err, res)) {
-            sendBadge(format, badgeData)
-            return
-          }
-
-          try {
-            const coverageObject = json.instructionCoverage
-            if (coverageObject === undefined) {
-              badgeData.text[1] = 'inaccessible'
-              sendBadge(format, badgeData)
-              return
-            }
-            const coverage = coverageObject.percentage
-            if (isNaN(coverage)) {
-              badgeData.text[1] = 'unknown'
-              sendBadge(format, badgeData)
-              return
-            }
-            badgeData.text[1] = coverage.toFixed(0) + '%'
-            badgeData.colorscheme = coveragePercentageColor(coverage)
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
+const coberturaCoverageSchema = Joi.object({
+  results: Joi.object({
+    elements: Joi.array()
+      .items(
+        Joi.object({
+          name: 'Lines',
+          ratio: Joi.number()
+            .min(0)
+            .max(100)
+            .required(),
         })
-      })
-    )
+      )
+      .min(1)
+      .required(),
+  }).required(),
+}).required()
+
+class BaseJenkinsCoverage extends BaseJsonService {
+  async fetch({ url, options, schema }) {
+    return this._requestJson({
+      url,
+      options,
+      schema,
+      errorMessages: {
+        404: 'job or coverage not found',
+      },
+    })
   }
+
+  static render({ coverage }) {
+    return {
+      message: `${coverage.toFixed(0)}%`,
+      color: coveragePercentageColor(coverage),
+    }
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'coverage' }
+  }
+
+  static get category() {
+    return 'build'
+  }
+
+  static buildUrl(scheme, host, job, plugin) {
+    return `${scheme}://${host}/job/${job}/lastBuild/${plugin}/api/json`
+  }
+
+  static buildOptions(treeParam) {
+    const options = {
+      qs: {
+        tree: treeParam,
+      },
+    }
+    if (serverSecrets && serverSecrets.jenkins_user) {
+      options.auth = {
+        user: serverSecrets.jenkins_user,
+        pass: serverSecrets.jenkins_pass,
+      }
+    }
+    return options
+  }
+}
+
+class JacocoJenkinsCoverage extends BaseJenkinsCoverage {
+  async handle({ scheme, host, job }) {
+    const url = this.constructor.buildUrl(scheme, host, job, 'jacoco')
+    const options = this.constructor.buildOptions(
+      'instructionCoverage[percentage]'
+    )
+    const json = await this.fetch({
+      url,
+      options,
+      schema: jacocoCoverageSchema,
+    })
+    return this.constructor.render({
+      coverage: json.instructionCoverage.percentage,
+    })
+  }
+
+  static get url() {
+    return {
+      base: 'jenkins/j',
+      format: '(http(?:s)?)/([^/]+)/(?:job/)?(.+)',
+      capture: ['scheme', 'host', 'job'],
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Jenkins JaCoCo coverage',
+        exampleUrl: 'https/ci.eclipse.org/ecp/job/gerrit',
+        urlPattern: ':scheme/:host/:job',
+        staticExample: this.render({
+          coverage: 96,
+        }),
+      },
+    ]
+  }
+}
+
+class CoberturaJenkinsCoverage extends BaseJenkinsCoverage {
+  async handle({ scheme, host, job }) {
+    const url = this.constructor.buildUrl(scheme, host, job, 'cobertura')
+    const options = this.constructor.buildOptions(
+      'results[elements[name,ratio]]'
+    )
+    const json = await this.fetch({
+      url,
+      options,
+      schema: coberturaCoverageSchema,
+    })
+    return this.constructor.render({
+      coverage: json.results.elements[0].ratio,
+    })
+  }
+
+  static get url() {
+    return {
+      base: 'jenkins/c',
+      format: '(http(?:s)?)/([^/]+)/(?:job/)?(.+)',
+      capture: ['scheme', 'host', 'job'],
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Jenkins Cobertura coverage',
+        exampleUrl: 'https/builds.apache.org/job/olingo-odata4-cobertura',
+        urlPattern: ':scheme/:host/:job',
+        staticExample: this.render({
+          coverage: 94,
+        }),
+      },
+    ]
+  }
+}
+
+module.exports = {
+  JacocoJenkinsCoverage,
+  CoberturaJenkinsCoverage,
 }

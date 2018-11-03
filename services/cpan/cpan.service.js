@@ -6,6 +6,9 @@ const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
 module.exports = class Cpan extends LegacyService {
+  static get url() {
+    return { base: 'cpan' }
+  }
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/cpan\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -14,7 +17,7 @@ module.exports = class Cpan extends LegacyService {
         const pkg = match[2] // eg, Config-Augeas
         const format = match[3]
         const badgeData = getBadgeData('cpan', data)
-        const url = 'https://fastapi.metacpan.org/v1/release/' + pkg
+        const url = `https://fastapi.metacpan.org/v1/release/${pkg}`
         request(url, (err, res, buffer) => {
           if (err != null) {
             badgeData.text[1] = 'inaccessible'
@@ -31,6 +34,7 @@ module.exports = class Cpan extends LegacyService {
             } else if (info === 'l') {
               const license = data.license[0]
               badgeData.text[1] = license
+              badgeData.text[0] = 'license'
               badgeData.colorscheme = 'blue'
             }
             sendBadge(format, badgeData)

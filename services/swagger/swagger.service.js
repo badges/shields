@@ -1,67 +1,73 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const Joi = require('joi')
+const BaseJsonService = require('../base-json')
 
-// For a Swagger Validator.
-module.exports = class Swagger extends LegacyService {
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/swagger\/(valid)\/(2\.0)\/(https?)\/(.+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        // match[1] is not used                 // e.g. `valid` for validate
-        // match[2] is reserved for future use  // e.g. `2.0` for OpenAPI 2.0
-        const scheme = match[3] // e.g. `https`
-        const swaggerUrl = match[4] // e.g. `api.example.com/swagger.yaml`
-        const format = match[5]
+const validatorSchema = Joi.object()
+  .keys({
+    schemaValidationMessages: Joi.array().items(
+      Joi.object({
+        level: Joi.string().required(),
+        message: Joi.string().required(),
+      }).required()
+    ),
+  })
+  .required()
 
-        const badgeData = getBadgeData('swagger', data)
+module.exports = class SwaggerValidatorService extends BaseJsonService {
+  static render({ message, clr }) {
+    return { message, color: clr }
+  }
 
-        const urlParam = encodeURIComponent(scheme + '://' + swaggerUrl)
-        const url = 'http://online.swagger.io/validator/debug?url=' + urlParam
-        const options = {
-          method: 'GET',
-          url: url,
-          gzip: true,
-          json: true,
-        }
-        request(options, (err, res, json) => {
-          try {
-            if (
-              err != null ||
-              res.statusCode >= 500 ||
-              typeof json !== 'object'
-            ) {
-              badgeData.text[1] = 'inaccessible'
-              sendBadge(format, badgeData)
-              return
-            }
+  static get url() {
+    return {
+      base: 'swagger/valid/2.0',
+      format: '(http(?:s)?)/(.+)',
+      capture: ['scheme', 'url'],
+    }
+  }
 
-            const messages = json.schemaValidationMessages
-            if (messages == null || messages.length === 0) {
-              badgeData.colorscheme = 'brightgreen'
-              badgeData.text[1] = 'valid'
-            } else {
-              badgeData.colorscheme = 'red'
+  static get defaultBadgeData() {
+    return { label: 'swagger' }
+  }
 
-              const firstMessage = messages[0]
-              if (
-                messages.length === 1 &&
-                firstMessage.level === 'error' &&
-                /^Can't read from/.test(firstMessage.message)
-              ) {
-                badgeData.text[1] = 'not found'
-              } else {
-                badgeData.text[1] = 'invalid'
-              }
-            }
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  async handle({ scheme, url }) {
+    const json = await this.fetch({ scheme, urlF: url })
+    const valMessages = json.schemaValidationMessages
+
+    if (!valMessages || valMessages.length === 0) {
+      return this.constructor.render({ message: 'valid', clr: 'brightgreen' })
+    } else {
+      return this.constructor.render({ message: 'invalid', clr: 'red' })
+    }
+  }
+
+  async fetch({ scheme, urlF }) {
+    const url = 'http://online.swagger.io/validator/debug'
+    return this._requestJson({
+      url,
+      schema: validatorSchema,
+      options: {
+        qs: {
+          url: `${scheme}://${urlF}`,
+        },
+      },
+    })
+  }
+
+  static get category() {
+    return 'other'
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Swagger Validator',
+        urlPattern: ':scheme/:url',
+        staticExample: this.render({ message: 'valid', clr: 'brightgreen' }),
+        exampleUrl:
+          'https/raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded.json',
+      },
+    ]
   }
 }

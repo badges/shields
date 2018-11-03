@@ -3,6 +3,7 @@
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isMetric, isMetricOverTimePeriod } = require('../test-validators')
+const { colorScheme } = require('../test-helpers')
 
 const isHexpmVersion = Joi.string().regex(/^v\d+.\d+.?\d?$/)
 
@@ -30,19 +31,45 @@ t.create('version')
   .expectJSONTypes(Joi.object().keys({ name: 'hex', value: isHexpmVersion }))
 
 t.create('license')
-  .get('/l/cowboy.json')
+  .get('/l/cowboy.json?style=_shields_test')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'license',
       value: Joi.string().required(),
+      colorB: colorScheme.blue,
     })
   )
 
-t.create('unknown repo')
-  .get('/l/this-repo-does-not-exist.json')
-  .expectJSON({ name: 'hex', value: 'invalid' })
+t.create('license (multiple licenses)')
+  .get('/l/cowboy.json?style=_shields_test')
+  .intercept(nock =>
+    nock('https://hex.pm/')
+      .get('/api/packages/cowboy')
+      .reply(200, {
+        downloads: { all: 0, week: 0, day: 0 },
+        releases: [{ version: '1.0' }],
+        meta: { licenses: ['GPLv2', 'MIT'] },
+      })
+  )
+  .expectJSON({
+    name: 'licenses',
+    value: 'GPLv2, MIT',
+    colorB: colorScheme.blue,
+  })
 
-t.create('connection error')
-  .get('/l/cowboy.json')
-  .networkOff()
-  .expectJSON({ name: 'hex', value: 'inaccessible' })
+t.create('license (no license)')
+  .get('/l/cowboy.json?style=_shields_test')
+  .intercept(nock =>
+    nock('https://hex.pm/')
+      .get('/api/packages/cowboy')
+      .reply(200, {
+        downloads: { all: 0, week: 0, day: 0 },
+        releases: [{ version: '1.0' }],
+        meta: { licenses: [] },
+      })
+  )
+  .expectJSON({
+    name: 'license',
+    value: 'Unknown',
+    colorB: colorScheme.lightgrey,
+  })

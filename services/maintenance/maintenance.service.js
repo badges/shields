@@ -5,6 +5,25 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const log = require('../../lib/log')
 
 module.exports = class Maintenance extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get url() {
+    return {
+      base: 'maintenance',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Maintenance',
+        previewUrl: 'yes/2017',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/maintenance\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -18,15 +37,15 @@ module.exports = class Maintenance extends LegacyService {
           const cy = now.getUTCFullYear() // current year.
           const m = now.getUTCMonth() // month.
           if (status === 'no') {
-            badgeData.text[1] = 'no! (as of ' + year + ')'
+            badgeData.text[1] = `no! (as of ${year})`
             badgeData.colorscheme = 'red'
           } else if (cy <= year) {
             badgeData.text[1] = status
             badgeData.colorscheme = 'brightgreen'
           } else if (cy === year + 1 && m < 3) {
-            badgeData.text[1] = 'stale (as of ' + cy + ')'
+            badgeData.text[1] = `stale (as of ${cy})`
           } else {
-            badgeData.text[1] = 'no! (as of ' + year + ')'
+            badgeData.text[1] = `no! (as of ${year})`
             badgeData.colorscheme = 'red'
           }
           sendBadge(format, badgeData)

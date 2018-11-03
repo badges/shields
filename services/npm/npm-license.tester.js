@@ -2,12 +2,10 @@
 
 const Joi = require('joi')
 const createServiceTester = require('../create-service-tester')
-const colorscheme = require('../../lib/colorscheme.json')
-const mapValues = require('lodash.mapvalues')
+const { colorScheme: colorsB } = require('../test-helpers')
 
 const t = createServiceTester()
 module.exports = t
-const colorsB = mapValues(colorscheme, 'colorB')
 
 t.create('gets the license of express')
   .get('/express.json')

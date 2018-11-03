@@ -49,6 +49,7 @@ export default class Usage extends React.PureComponent {
         <tbody>
           {advertisedStyles.map((style, i) => {
             const badgeUrl = staticBadgeUrl(baseUrl, 'style', style, 'green', {
+              logo: 'appveyor',
               longCache,
               style,
             })
@@ -69,7 +70,11 @@ export default class Usage extends React.PureComponent {
   }
 
   static renderNamedLogos() {
-    const renderLogo = logo => <span className="nowrap">{logo}</span>
+    const renderLogo = logo => (
+      <span className="nowrap" key={logo}>
+        {logo}
+      </span>
+    )
     const [first, ...rest] = logos
     return [renderLogo(first)].concat(
       rest.reduce((result, logo) => result.concat([', ', renderLogo(logo)]), [])
@@ -177,7 +182,7 @@ export default class Usage extends React.PureComponent {
 
         <p>
           The following styles are available (flat is the default as of Feb 1st
-          2015):
+          2015). Examples are shown with an optional logo:
         </p>
         {this.renderStyleExamples()}
 
@@ -264,8 +269,9 @@ export default class Usage extends React.PureComponent {
                 <code>?maxAge=3600</code>
               </td>
               <td>
-                Set the HTTP cache lifetime in secs (values below the default
-                (currently 120 seconds) will be ignored)
+                Set the HTTP cache lifetime in secs (rules are applied to infer
+                a default value on a per-badge basis, any values specified below
+                the default will be ignored)
               </td>
             </tr>
           </tbody>

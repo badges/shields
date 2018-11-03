@@ -5,6 +5,30 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { metric } = require('../../lib/text-formatters')
 
 module.exports = class BitbucketPullRequest extends LegacyService {
+  static get category() {
+    return 'issue-tracking'
+  }
+
+  static get url() {
+    return {
+      base: 'bitbucket',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Bitbucket open pull requests',
+        previewUrl: 'pr/osrf/gazebo',
+      },
+      {
+        title: 'Bitbucket open pull requests',
+        previewUrl: 'pr-raw/osrf/gazebo',
+        keywords: ['Bitbucket'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/bitbucket\/pr(-raw)?\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -13,12 +37,9 @@ module.exports = class BitbucketPullRequest extends LegacyService {
         const user = match[2] // eg, atlassian
         const repo = match[3] // eg, python-bitbucket
         const format = match[4]
-        const apiUrl =
-          'https://bitbucket.org/api/2.0/repositories/' +
-          encodeURI(user) +
-          '/' +
-          encodeURI(repo) +
-          '/pullrequests/?limit=0&state=OPEN'
+        const apiUrl = `https://bitbucket.org/api/2.0/repositories/${encodeURI(
+          user
+        )}/${encodeURI(repo)}/pullrequests/?limit=0&state=OPEN`
 
         const badgeData = getBadgeData('pull requests', data)
         request(apiUrl, (err, res, buffer) => {

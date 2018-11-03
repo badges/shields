@@ -10,20 +10,20 @@ const { regularUpdate } = require('../../lib/regular-update')
 
 function mapNugetFeedv2({ camp, cache }, pattern, offset, getInfo) {
   const vRegex = new RegExp(
-    '^\\/' + pattern + '\\/v\\/(.*)\\.(svg|png|gif|jpg|json)$'
+    `^\\/${pattern}\\/v\\/(.*)\\.(svg|png|gif|jpg|json)$`
   )
   const vPreRegex = new RegExp(
-    '^\\/' + pattern + '\\/vpre\\/(.*)\\.(svg|png|gif|jpg|json)$'
+    `^\\/${pattern}\\/vpre\\/(.*)\\.(svg|png|gif|jpg|json)$`
   )
   const dtRegex = new RegExp(
-    '^\\/' + pattern + '\\/dt\\/(.*)\\.(svg|png|gif|jpg|json)$'
+    `^\\/${pattern}\\/dt\\/(.*)\\.(svg|png|gif|jpg|json)$`
   )
 
   function getNugetPackage(apiUrl, id, includePre, request, done) {
     const filter = includePre
-      ? "Id eq '" + id + "' and IsAbsoluteLatestVersion eq true"
-      : "Id eq '" + id + "' and IsLatestVersion eq true"
-    const reqUrl = apiUrl + '/Packages()?$filter=' + encodeURIComponent(filter)
+      ? `Id eq '${id}' and IsAbsoluteLatestVersion eq true`
+      : `Id eq '${id}' and IsLatestVersion eq true`
+    const reqUrl = `${apiUrl}/Packages()?$filter=${encodeURIComponent(filter)}`
     request(
       reqUrl,
       { headers: { Accept: 'application/atom+json,application/json' } },
@@ -68,7 +68,7 @@ function mapNugetFeedv2({ camp, cache }, pattern, offset, getInfo) {
           return
         }
         const version = data.NormalizedVersion || data.Version
-        badgeData.text[1] = 'v' + version
+        badgeData.text[1] = `v${version}`
         if (version.indexOf('-') !== -1) {
           badgeData.colorscheme = 'yellow'
         } else if (version[0] === '0') {
@@ -97,7 +97,7 @@ function mapNugetFeedv2({ camp, cache }, pattern, offset, getInfo) {
           return
         }
         const version = data.NormalizedVersion || data.Version
-        badgeData.text[1] = 'v' + version
+        badgeData.text[1] = `v${version}`
         if (version.indexOf('-') !== -1) {
           badgeData.colorscheme = 'yellow'
         } else if (version[0] === '0') {
@@ -135,13 +135,13 @@ function mapNugetFeedv2({ camp, cache }, pattern, offset, getInfo) {
 
 function mapNugetFeed({ camp, cache }, pattern, offset, getInfo) {
   const vRegex = new RegExp(
-    '^\\/' + pattern + '\\/v\\/(.*)\\.(svg|png|gif|jpg|json)$'
+    `^\\/${pattern}\\/v\\/(.*)\\.(svg|png|gif|jpg|json)$`
   )
   const vPreRegex = new RegExp(
-    '^\\/' + pattern + '\\/vpre\\/(.*)\\.(svg|png|gif|jpg|json)$'
+    `^\\/${pattern}\\/vpre\\/(.*)\\.(svg|png|gif|jpg|json)$`
   )
   const dtRegex = new RegExp(
-    '^\\/' + pattern + '\\/dt\\/(.*)\\.(svg|png|gif|jpg|json)$'
+    `^\\/${pattern}\\/dt\\/(.*)\\.(svg|png|gif|jpg|json)$`
   )
 
   function getNugetData(apiUrl, id, request, done) {
@@ -149,7 +149,7 @@ function mapNugetFeed({ camp, cache }, pattern, offset, getInfo) {
 
     regularUpdate(
       {
-        url: apiUrl + '/index.json',
+        url: `${apiUrl}/index.json`,
         // The endpoint changes once per year (ie, a period of n = 1 year).
         // We minimize the users' waiting time for information.
         // With l = latency to fetch the endpoint and x = endpoint update period
@@ -179,10 +179,9 @@ function mapNugetFeed({ camp, cache }, pattern, offset, getInfo) {
             Math.random() * searchQueryResources.length
           )
           const reqUrl =
-            searchQueryResources[randomEndpointIdx]['@id'] +
-            '?q=packageid:' +
-            encodeURIComponent(id.toLowerCase()) + // NuGet package id (lowercase)
-            '&prerelease=true' // Include prerelease versions?
+            `${searchQueryResources[randomEndpointIdx]['@id']}?q=packageid:${
+              encodeURIComponent(id.toLowerCase()) // NuGet package id (lowercase)
+            }&prerelease=true` + `&semVerLevel=2` // Include prerelease versions? // Include packages with SemVer 2 version numbers
 
           request(reqUrl, (err, res, buffer) => {
             if (err != null) {
@@ -245,7 +244,7 @@ function mapNugetFeed({ camp, cache }, pattern, offset, getInfo) {
           return
         }
         try {
-          badgeData.text[1] = 'v' + version
+          badgeData.text[1] = `v${version}`
           if (version.indexOf('-') !== -1) {
             badgeData.colorscheme = 'yellow'
           } else if (version[0] === '0') {
@@ -278,7 +277,7 @@ function mapNugetFeed({ camp, cache }, pattern, offset, getInfo) {
           return
         }
         try {
-          badgeData.text[1] = 'v' + version
+          badgeData.text[1] = `v${version}`
           if (version.indexOf('-') !== -1) {
             badgeData.colorscheme = 'yellow'
           } else if (version[0] === '0') {
@@ -343,7 +342,7 @@ module.exports = class Nuget extends LegacyService {
     // PowerShell Gallery
     mapNugetFeedv2({ camp, cache }, 'powershellgallery', 0, match => ({
       site: 'powershellgallery',
-      feed: 'https://www.powershellgallery.com/api/v2',
+      feed: 'https://msconfiggallery.cloudapp.net/api/v2',
     }))
 
     // NuGet
@@ -358,7 +357,7 @@ module.exports = class Nuget extends LegacyService {
       const feed = match[2]
       return {
         site: feed,
-        feed: 'https://' + tenant + 'myget.org/F/' + feed + '/api/v3',
+        feed: `https://${tenant}myget.org/F/${feed}/api/v3`,
       }
     })
   }

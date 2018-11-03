@@ -21,8 +21,7 @@ module.exports = class JetBrains extends LegacyService {
         const format = match[3]
         const leftText = type === 'v' ? 'jetbrains plugin' : 'downloads'
         const badgeData = getBadgeData(leftText, data)
-        const url =
-          'https://plugins.jetbrains.com/plugins/list?pluginId=' + pluginId
+        const url = `https://plugins.jetbrains.com/plugins/list?pluginId=${pluginId}`
 
         request(url, (err, res, buffer) => {
           if (err || res.statusCode !== 200) {

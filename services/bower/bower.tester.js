@@ -13,7 +13,7 @@ module.exports = t
 
 t.create('licence')
   .get('/l/bootstrap.json')
-  .expectJSON({ name: 'bower', value: 'MIT' })
+  .expectJSON({ name: 'license', value: 'MIT' })
 
 t.create('custom label for licence')
   .get('/l/bootstrap.json?label=my licence')
@@ -65,7 +65,7 @@ t.create('Pre Version for Invaild Package')
 
 t.create('licence for Invaild Package')
   .get('/l/it-is-a-invalid-package-should-error.json')
-  .expectJSON({ name: 'bower', value: 'invalid' })
+  .expectJSON({ name: 'license', value: 'invalid' })
 
 t.create('Version label should be `no releases` if no official version')
   .get('/v/bootstrap.json')

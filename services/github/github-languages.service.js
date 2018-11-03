@@ -51,8 +51,9 @@ module.exports = class GithubLanguages extends LegacyService {
                   badgeData.text[1] = 'none'
                   badgeData.colorscheme = 'blue'
                 } else {
-                  badgeData.text[1] =
-                    ((maxBytes / sumBytes) * 100).toFixed(1) + '%' // eg, 9.1%
+                  badgeData.text[1] = `${((maxBytes / sumBytes) * 100).toFixed(
+                    1
+                  )}%` // eg, 9.1%
                 }
                 break
               }

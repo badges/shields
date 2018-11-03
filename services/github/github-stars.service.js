@@ -23,8 +23,8 @@ module.exports = class GithubStars extends LegacyService {
         if (badgeData.template === 'social') {
           badgeData.logo = getLogo('github', data)
           badgeData.links = [
-            'https://github.com/' + user + '/' + repo,
-            'https://github.com/' + user + '/' + repo + '/stargazers',
+            `https://github.com/${user}/${repo}`,
+            `https://github.com/${user}/${repo}/stargazers`,
           ]
         }
         githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
@@ -34,8 +34,7 @@ module.exports = class GithubStars extends LegacyService {
           }
           try {
             badgeData.text[1] = metric(JSON.parse(buffer).stargazers_count)
-            badgeData.colorscheme = null
-            badgeData.colorB = '#4183C4'
+            badgeData.colorscheme = 'blue'
             sendBadge(format, badgeData)
           } catch (e) {
             badgeData.text[1] = 'invalid'

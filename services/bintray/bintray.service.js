@@ -7,6 +7,23 @@ const { version: versionColor } = require('../../lib/color-formatters')
 const serverSecrets = require('../../lib/server-secrets')
 
 module.exports = class Bintray extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get url() {
+    return { base: 'bintray/v' }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Bintray',
+        previewUrl: 'asciidoctor/maven/asciidoctorj',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/bintray\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
@@ -16,8 +33,7 @@ module.exports = class Bintray extends LegacyService {
 
         const options = {
           method: 'GET',
-          uri:
-            'https://bintray.com/api/v1/packages/' + path + '/versions/_latest',
+          uri: `https://bintray.com/api/v1/packages/${path}/versions/_latest`,
           headers: {
             Accept: 'application/json',
           },
