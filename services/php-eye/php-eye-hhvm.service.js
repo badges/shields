@@ -6,6 +6,29 @@ const { checkErrorResponse } = require('../../lib/error-helper')
 const { omitv } = require('../../lib/text-formatters')
 
 module.exports = class PhpeyeHhvm extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get url() {
+    return {
+      base: 'hhvm',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'HHVM',
+        previewUrl: 'symfony/symfony',
+      },
+      {
+        title: 'HHVM (branch)',
+        previewUrl: 'symfony/symfony/master',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/hhvm\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
@@ -13,7 +36,7 @@ module.exports = class PhpeyeHhvm extends LegacyService {
         const user = match[1] // eg, `symfony/symfony`.
         let branch = match[2] ? omitv(match[2]) : 'dev-master'
         const format = match[3]
-        const apiUrl = 'https://php-eye.com/api/v1/package/' + user + '.json'
+        const apiUrl = `https://php-eye.com/api/v1/package/${user}.json`
         const badgeData = getBadgeData('hhvm', data)
         if (branch === 'master') {
           branch = 'dev-master'

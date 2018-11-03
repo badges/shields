@@ -4,6 +4,25 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 module.exports = class Codetally extends LegacyService {
+  static get category() {
+    return 'funding'
+  }
+
+  static get url() {
+    return {
+      base: 'codetally',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Codetally',
+        previewUrl: 'triggerman722/colorstrap',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/codetally\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
@@ -11,8 +30,7 @@ module.exports = class Codetally extends LegacyService {
         const owner = match[1] // eg, triggerman722.
         const repo = match[2] // eg, colorstrap
         const format = match[3]
-        const apiUrl =
-          'http://www.codetally.com/formattedshield/' + owner + '/' + repo
+        const apiUrl = `http://www.codetally.com/formattedshield/${owner}/${repo}`
         const badgeData = getBadgeData('codetally', data)
         request(apiUrl, (err, res, buffer) => {
           if (err != null) {
@@ -22,8 +40,9 @@ module.exports = class Codetally extends LegacyService {
           }
           try {
             const data = JSON.parse(buffer)
-            badgeData.text[1] =
-              ' ' + data.currency_sign + data.amount + ' ' + data.multiplier
+            badgeData.text[1] = ` ${data.currency_sign}${data.amount} ${
+              data.multiplier
+            }`
             badgeData.colorscheme = null
             badgeData.colorB = '#2E8B57'
             sendBadge(format, badgeData)

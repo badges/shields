@@ -177,7 +177,7 @@ function DownloadsForInterval(interval) {
         url: `https://api.wordpress.org/stats/plugin/1.0/downloads.php`,
         options: {
           qs: {
-            slug: slug,
+            slug,
             limit: query,
           },
         },

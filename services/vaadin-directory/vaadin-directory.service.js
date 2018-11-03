@@ -21,9 +21,7 @@ module.exports = class VaadinDirectory extends LegacyService {
         const urlIdentifier = match[2] // Name of repository
         const format = match[3] // Format
         // API URL which contains also authentication info
-        const apiUrl =
-          'https://vaadin.com/vaadincom/directory-service/components/search/findByUrlIdentifier?projection=summary&urlIdentifier=' +
-          urlIdentifier
+        const apiUrl = `https://vaadin.com/vaadincom/directory-service/components/search/findByUrlIdentifier?projection=summary&urlIdentifier=${urlIdentifier}`
 
         // Set left-side text to 'Vaadin-Directory' by default
         const badgeData = getBadgeData('vaadin directory', data)
@@ -63,7 +61,7 @@ module.exports = class VaadinDirectory extends LegacyService {
               case 'rating': // rating
                 badgeData.text[0] = getLabel('rating', data)
                 if (!isNaN(rating)) {
-                  badgeData.text[1] = rating + '/5'
+                  badgeData.text[1] = `${rating}/5`
                   badgeData.colorscheme = floorCountColor(rating, 2, 3, 4)
                 }
                 break
@@ -71,7 +69,7 @@ module.exports = class VaadinDirectory extends LegacyService {
               case 'rating-count':
                 badgeData.text[0] = getLabel('rating count', data)
                 if (ratingCount && ratingCount !== 0) {
-                  badgeData.text[1] = metric(data.ratingCount) + ' total'
+                  badgeData.text[1] = `${metric(data.ratingCount)} total`
                   badgeData.colorscheme = floorCountColor(
                     data.ratingCount,
                     5,

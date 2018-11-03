@@ -23,8 +23,7 @@ module.exports = class PuppetforgeModules extends LegacyService {
         const format = match[4]
         const options = {
           json: true,
-          uri:
-            'https://forgeapi.puppetlabs.com/v3/modules/' + user + '-' + module,
+          uri: `https://forgeapi.puppetlabs.com/v3/modules/${user}-${module}`,
         }
         const badgeData = getBadgeData('puppetforge', data)
         request(options, (err, res, json) => {
@@ -67,7 +66,7 @@ module.exports = class PuppetforgeModules extends LegacyService {
               const feedback = json.feedback_score
               badgeData.text[0] = getLabel('score', data)
               if (feedback != null) {
-                badgeData.text[1] = feedback + '%'
+                badgeData.text[1] = `${feedback}%`
                 badgeData.colorscheme = coveragePercentageColor(feedback)
               } else {
                 badgeData.text[1] = 'unknown'

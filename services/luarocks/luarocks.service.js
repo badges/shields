@@ -16,8 +16,7 @@ module.exports = class Luarocks extends LegacyService {
         const user = match[1] // eg, `leafo`.
         const moduleName = match[2] // eg, `lapis`.
         const format = match[4]
-        const apiUrl =
-          'https://luarocks.org/manifests/' + user + '/manifest.json'
+        const apiUrl = `https://luarocks.org/manifests/${user}/manifest.json`
         const badgeData = getBadgeData('luarocks', data)
         let version = match[3] // you can explicitly specify a version
         request(apiUrl, (err, res, buffer) => {

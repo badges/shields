@@ -6,6 +6,31 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 // Bundle size for npm packages.
 module.exports = class Bundlephobia extends LegacyService {
+  static get category() {
+    return 'size'
+  }
+
+  static get url() {
+    return {
+      base: 'bundlephobia',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'npm bundle size (minified)',
+        previewUrl: 'min/react',
+        keywords: ['node'],
+      },
+      {
+        title: 'npm bundle size (minified + gzip)',
+        previewUrl: 'minzip/react',
+        keywords: ['node'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/bundlephobia\/(min|minzip)\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|jpg|json)?$/,

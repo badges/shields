@@ -7,6 +7,25 @@ const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
 module.exports = class JenkinsPlugin extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get url() {
+    return {
+      base: 'jenkins/plugin/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Jenkins Plugins',
+        previewUrl: 'blueocean',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/jenkins\/plugin\/v\/(.*)\.(svg|png|gif|jpg|json)$/,

@@ -6,16 +6,36 @@ const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
 module.exports = class Jitpack extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get url() {
+    return {
+      base: 'jitpack/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'JitPack',
+        previewUrl: 'jitpack/maven-simple',
+        keywords: ['jitpack', 'java', 'maven'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/jitpack\/v\/([^/]*)\/([^/]*)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
-        const groupId = 'com.github.' + match[1] // github user
+        const groupId = `com.github.${match[1]}` // github user
         const artifactId = match[2] // the project's name
         const format = match[3] // "svg"
 
-        const pkg = groupId + '/' + artifactId + '/latest'
-        const apiUrl = 'https://jitpack.io/api/builds/' + pkg
+        const pkg = `${groupId}/${artifactId}/latest`
+        const apiUrl = `https://jitpack.io/api/builds/${pkg}`
 
         const badgeData = getBadgeData('jitpack', data)
 

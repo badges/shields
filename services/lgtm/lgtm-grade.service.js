@@ -5,6 +5,25 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { checkErrorResponse } = require('../../lib/error-helper')
 
 module.exports = class LgtmGrade extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'lgtm/grade',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'LGTM Grade',
+        previewUrl: 'java/g/apache/cloudstack',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/lgtm\/grade\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
@@ -12,8 +31,7 @@ module.exports = class LgtmGrade extends LegacyService {
         const language = match[1] // eg, `java`
         const projectId = match[2] // eg, `g/apache/cloudstack`
         const format = match[3]
-        const url =
-          'https://lgtm.com/api/v0.1/project/' + projectId + '/details'
+        const url = `https://lgtm.com/api/v0.1/project/${projectId}/details`
         const languageLabel = (() => {
           switch (language) {
             case 'cpp':
@@ -27,7 +45,7 @@ module.exports = class LgtmGrade extends LegacyService {
               return language
           }
         })()
-        const badgeData = getBadgeData('code quality: ' + languageLabel, data)
+        const badgeData = getBadgeData(`code quality: ${languageLabel}`, data)
         request(url, (err, res, buffer) => {
           if (
             checkErrorResponse(badgeData, err, res, {

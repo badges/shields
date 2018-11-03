@@ -7,6 +7,37 @@ const {
 } = require('../../lib/color-formatters')
 
 module.exports = class Coveralls extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get url() {
+    return {
+      base: 'coveralls',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Coveralls github',
+        previewUrl: 'github/jekyll/jekyll',
+      },
+      {
+        title: 'Coveralls github branch',
+        previewUrl: 'github/jekyll/jekyll/master',
+      },
+      {
+        title: 'Coveralls bitbucket',
+        previewUrl: 'bitbucket/pyKLIP/pyklip',
+      },
+      {
+        title: 'Coveralls bitbucket branch',
+        previewUrl: 'bitbucket/pyKLIP/pyklip/master',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/coveralls\/(?:(bitbucket|github)\/)?([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
@@ -21,7 +52,7 @@ module.exports = class Coveralls extends LegacyService {
           method: 'HEAD',
         }
         if (branch) {
-          apiUrl.url += '?branch=' + branch
+          apiUrl.url += `?branch=${branch}`
         }
         const badgeData = getBadgeData('coverage', data)
         request(apiUrl, (err, res) => {
@@ -45,7 +76,7 @@ module.exports = class Coveralls extends LegacyService {
               sendBadge(format, badgeData)
               return
             }
-            badgeData.text[1] = score + '%'
+            badgeData.text[1] = `${score}%`
             badgeData.colorscheme = coveragePercentageColor(percentage)
             sendBadge(format, badgeData)
           } catch (e) {

@@ -4,8 +4,21 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 module.exports = class Gitter extends LegacyService {
+  static get category() {
+    return 'chat'
+  }
+
   static get url() {
-    return { base: 'gitter' }
+    return { base: 'gitter/room' }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Gitter',
+        previewUrl: 'nwjs/nw.js',
+      },
+    ]
   }
 
   static registerLegacyRouteHandler({ camp, cache }) {

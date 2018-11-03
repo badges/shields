@@ -16,7 +16,7 @@ module.exports = class GithubCommitsSince extends LegacyService {
         const repo = match[2] // eg, subtitleedit
         const version = match[3] // eg, 3.4.7 or latest
         const format = match[4]
-        const badgeData = getBadgeData('commits since ' + version, data)
+        const badgeData = getBadgeData(`commits since ${version}`, data)
 
         function setCommitsSinceBadge(user, repo, version) {
           const apiUrl = `/repos/${user}/${repo}/compare/${version}...master`
@@ -34,7 +34,7 @@ module.exports = class GithubCommitsSince extends LegacyService {
               const result = JSON.parse(buffer)
               badgeData.text[1] = result.ahead_by
               badgeData.colorscheme = 'blue'
-              badgeData.text[0] = getLabel('commits since ' + version, data)
+              badgeData.text[0] = getLabel(`commits since ${version}`, data)
               sendBadge(format, badgeData)
             } catch (e) {
               badgeData.text[1] = 'invalid'
