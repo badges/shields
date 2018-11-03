@@ -7,7 +7,6 @@ const {
   isMetric,
   isMetricOpenIssues,
 } = require('../test-validators')
-const { invalidJSON } = require('../response-fixtures')
 
 const t = new ServiceTester({ id: 'bitbucket', title: 'Bitbucket badges' })
 module.exports = t
@@ -23,18 +22,9 @@ t.create('issues-raw (valid)')
     })
   )
 
-t.create('issues-raw (not found)')
-  .get('/issues-raw/atlassian/not-a-repo.json')
-  .expectJSON({ name: 'issues', value: 'not found' })
-
-t.create('issues-raw (invalid)')
+t.create('issues-raw (private repo)')
   .get('/issues-raw/chris48s/example-private-repo.json')
-  .expectJSON({ name: 'issues', value: 'invalid' })
-
-t.create('issues-raw (connection error)')
-  .get('/issues-raw/atlassian/python-bitbucket.json')
-  .networkOff()
-  .expectJSON({ name: 'issues', value: 'inaccessible' })
+  .expectJSON({ name: 'issues', value: 'private repo' })
 
 t.create('issues (valid)')
   .get('/issues/atlassian/python-bitbucket.json')
@@ -45,18 +35,9 @@ t.create('issues (valid)')
     })
   )
 
-t.create('issues (not found)')
-  .get('/issues/atlassian/not-a-repo.json')
-  .expectJSON({ name: 'issues', value: 'not found' })
-
-t.create('issues (invalid)')
+t.create('issues (private repo)')
   .get('/issues/chris48s/example-private-repo.json')
-  .expectJSON({ name: 'issues', value: 'invalid' })
-
-t.create('issues (connection error)')
-  .get('/issues/atlassian/python-bitbucket.json')
-  .networkOff()
-  .expectJSON({ name: 'issues', value: 'inaccessible' })
+  .expectJSON({ name: 'issues', value: 'private repo' })
 
 // tests for pull requests endpoints
 
@@ -69,18 +50,9 @@ t.create('pr-raw (valid)')
     })
   )
 
-t.create('pr-raw (not found)')
-  .get('/pr-raw/atlassian/not-a-repo.json')
-  .expectJSON({ name: 'pull requests', value: 'not found' })
-
-t.create('pr-raw (invalid)')
+t.create('pr-raw (private repo)')
   .get('/pr-raw/chris48s/example-private-repo.json')
-  .expectJSON({ name: 'pull requests', value: 'invalid' })
-
-t.create('pr-raw (connection error)')
-  .get('/pr-raw/atlassian/python-bitbucket.json')
-  .networkOff()
-  .expectJSON({ name: 'pull requests', value: 'inaccessible' })
+  .expectJSON({ name: 'pull requests', value: 'private repo' })
 
 t.create('pr (valid)')
   .get('/pr/atlassian/python-bitbucket.json')
@@ -91,18 +63,9 @@ t.create('pr (valid)')
     })
   )
 
-t.create('pr (not found)')
-  .get('/pr/atlassian/not-a-repo.json')
-  .expectJSON({ name: 'pull requests', value: 'not found' })
-
-t.create('pr (invalid)')
+t.create('pr (private repo)')
   .get('/pr/chris48s/example-private-repo.json')
-  .expectJSON({ name: 'pull requests', value: 'invalid' })
-
-t.create('pr (connection error)')
-  .get('/pr/atlassian/python-bitbucket.json')
-  .networkOff()
-  .expectJSON({ name: 'pull requests', value: 'inaccessible' })
+  .expectJSON({ name: 'pull requests', value: 'private repo' })
 
 // tests for Bitbucket Pipelines
 
@@ -132,10 +95,6 @@ t.create('master build result (valid)')
     })
   )
 
-t.create('master build result (not found)')
-  .get('/pipelines/atlassian/not-a-repo.json')
-  .expectJSON({ name: 'build', value: 'not found' })
-
 t.create('branch build result (valid)')
   .get(
     '/pipelines/atlassian/adf-builder-javascript/shields-test-dont-remove.json'
@@ -146,10 +105,6 @@ t.create('branch build result (valid)')
       value: isBuildStatus,
     })
   )
-
-t.create('branch build result (not found)')
-  .get('/pipelines/atlassian/not-a-repo/some-branch.json')
-  .expectJSON({ name: 'build', value: 'not found' })
 
 t.create('branch build result (never built)')
   .get('/pipelines/atlassian/adf-builder-javascript/some/new/branch.json')
@@ -208,26 +163,3 @@ t.create('build result (unknown)')
       .reply(200, bitbucketApiResponse('NEW_AND_UNEXPECTED'))
   )
   .expectJSON({ name: 'build', value: 'unknown' })
-
-t.create('build result (empty json)')
-  .get('/pipelines/atlassian/adf-builder-javascript.json')
-  .intercept(nock =>
-    nock('https://api.bitbucket.org')
-      .get(/^\/2.0\/.*/)
-      .reply(200, '{}')
-  )
-  .expectJSON({ name: 'build', value: 'invalid' })
-
-t.create('build result (invalid json)')
-  .get('/pipelines/atlassian/adf-builder-javascript.json')
-  .intercept(nock =>
-    nock('https://api.bitbucket.org')
-      .get(/^\/2.0\/.*/)
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'build', value: 'invalid' })
-
-t.create('build result (network error)')
-  .get('/pipelines/atlassian/adf-builder-javascript.json')
-  .networkOff()
-  .expectJSON({ name: 'build', value: 'inaccessible' })
