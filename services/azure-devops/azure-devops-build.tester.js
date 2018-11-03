@@ -17,15 +17,6 @@ t.create('default branch')
     })
   )
 
-// t.create('default branch (alternate project)')
-//   .get('/larsbrinkhoff/953a34b9-5966-4923-a48a-c41874cfb5f5/1.json')
-//   .expectJSONTypes(
-//     Joi.object().keys({
-//       name: 'build',
-//       value: isBuildStatus,
-//     })
-//   )
-
 t.create('named branch')
   .get('/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2/master.json')
   .expectJSONTypes(
