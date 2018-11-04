@@ -8,11 +8,11 @@ module.exports = class GithubAuthService extends BaseJsonService {
 
     const { sendAndCacheRequestWithCallbacks, githubApiProvider } = context
 
-    this._requestFetcher = async (url, query) =>
+    this._requestFetcher = async (url, { qs }) =>
       githubApiProvider.requestAsPromise(
         sendAndCacheRequestWithCallbacks,
         url,
-        query
+        qs
       )
   }
 }
