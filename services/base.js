@@ -92,7 +92,7 @@ class BaseService {
     const badgeData = this._makeBadgeData({}, serviceData)
     return staticBadgeUrl({
       label: badgeData.text[0],
-      message: `${  badgeData.text[1]}`,
+      message: `${badgeData.text[1]}`,
       color: badgeData.colorscheme,
     })
   }
