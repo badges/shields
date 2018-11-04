@@ -28,6 +28,7 @@ class DummyXmlService extends BaseXmlService {
     const { requiredString } = await this._requestXml({
       schema: dummySchema,
       url: 'http://example.com/foo.xml',
+      parserOptions: { trimValues: false },
     })
     return { message: requiredString }
   }
@@ -98,6 +99,22 @@ describe('BaseXmlService', function() {
       const serviceData = await serviceInstance.invokeHandler({}, {})
       expect(serviceData).to.deep.equal({
         message: 'some-string',
+      })
+    })
+
+    it('parses XML response with custom parser options', async function() {
+      const sendAndCacheRequest = async () => ({
+        buffer:
+          '<requiredString>some-string with trailing whitespace   </requiredString>',
+        res: { statusCode: 200 },
+      })
+      const serviceInstance = new DummyXmlService(
+        { sendAndCacheRequest },
+        { handleInternalErrors: false }
+      )
+      const serviceData = await serviceInstance.invokeHandler({}, {})
+      expect(serviceData).to.deep.equal({
+        message: 'some-string with trailing whitespace   ',
       })
     })
 
