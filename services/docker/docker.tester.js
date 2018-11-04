@@ -4,7 +4,6 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { colorScheme: colorsB } = require('../test-helpers')
 const { isMetric } = require('../test-validators')
-const { invalidJSON } = require('../response-fixtures')
 const { isBuildStatus } = require('../test-validators')
 const isAutomatedBuildStatus = Joi.string().valid('automated', 'manual')
 
@@ -50,20 +49,6 @@ t.create('docker stars (not found)')
   .get('/stars/_/not-a-real-repo.json')
   .expectJSON({ name: 'docker stars', value: 'repo not found' })
 
-t.create('docker stars (connection error)')
-  .get('/stars/_/ubuntu.json')
-  .networkOff()
-  .expectJSON({ name: 'docker stars', value: 'inaccessible' })
-
-t.create('docker stars (unexpected response)')
-  .get('/stars/_/ubuntu.json')
-  .intercept(nock =>
-    nock('https://hub.docker.com/')
-      .get('/v2/repositories/library/ubuntu/stars/count/')
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'docker stars', value: 'invalid' })
-
 // pulls endpoint
 
 t.create('docker pulls (valid, library)')
@@ -103,20 +88,6 @@ t.create('docker pulls (not found)')
   .get('/pulls/_/not-a-real-repo.json')
   .expectJSON({ name: 'docker pulls', value: 'repo not found' })
 
-t.create('docker pulls (connection error)')
-  .get('/pulls/_/ubuntu.json')
-  .networkOff()
-  .expectJSON({ name: 'docker pulls', value: 'inaccessible' })
-
-t.create('docker pulls (unexpected response)')
-  .get('/pulls/_/ubuntu.json')
-  .intercept(nock =>
-    nock('https://hub.docker.com/')
-      .get('/v2/repositories/library/ubuntu')
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'docker pulls', value: 'invalid' })
-
 // automated build endpoint
 
 t.create('docker automated build (valid, library)')
@@ -140,20 +111,6 @@ t.create('docker automated build (valid, user)')
 t.create('docker automated build (not found)')
   .get('/automated/_/not-a-real-repo.json')
   .expectJSON({ name: 'docker build', value: 'repo not found' })
-
-t.create('docker automated build (connection error)')
-  .get('/automated/_/ubuntu.json')
-  .networkOff()
-  .expectJSON({ name: 'docker build', value: 'inaccessible' })
-
-t.create('docker automated build (unexpected response)')
-  .get('/automated/_/ubuntu.json')
-  .intercept(nock =>
-    nock('https://registry.hub.docker.com/')
-      .get('/v2/repositories/library/ubuntu')
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'docker build', value: 'invalid' })
 
 t.create('docker automated build - automated')
   .get('/automated/_/ubuntu.json?style=_shields_test')
@@ -221,20 +178,6 @@ t.create('docker build status (valid, user)')
 t.create('docker build status (not found)')
   .get('/build/_/not-a-real-repo.json')
   .expectJSON({ name: 'docker build', value: 'repo not found' })
-
-t.create('docker build status (connection error)')
-  .get('/build/_/ubuntu.json')
-  .networkOff()
-  .expectJSON({ name: 'docker build', value: 'inaccessible' })
-
-t.create('docker build status (unexpected response)')
-  .get('/build/_/ubuntu.json')
-  .intercept(nock =>
-    nock('https://registry.hub.docker.com/')
-      .get('/v2/repositories/library/ubuntu/buildhistory')
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'docker build', value: 'invalid' })
 
 t.create('docker build status (passing)')
   .get('/build/_/ubuntu.json?style=_shields_test')
