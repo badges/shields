@@ -57,6 +57,7 @@ module.exports = class GithubPullRequestCheckState extends GithubAuthService {
   static get defaultBadgeData() {
     return {
       label: 'checks',
+      logo: 'github',
     }
   }
 
