@@ -17,7 +17,7 @@ const schema = Joi.object({
         .single()
         .required(),
     }),
-  }),
+  }).required(),
 }).required()
 
 module.exports = class JetbrainsDownloads extends JetbrainsBase {
