@@ -38,7 +38,10 @@ module.exports = class AzureDevOpsRelease extends BaseSvgService {
     return [
       {
         title: 'Azure DevOps releases',
-        previewUrl:
+        urlPattern:
+          'azure-devops/release/:organization/:projectId/:definitionId/:environmentId',
+        staticExample: render({ status: 'succeeded' }),
+        exampleUrl:
           'azure-devops/release/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/1/1',
         documentation,
       },
