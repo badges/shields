@@ -34,13 +34,20 @@ module.exports = class GithubPullRequestCheckState extends GithubAuthService {
     return [
       {
         title: 'GitHub pull request check state',
-        previewUrl: 's/pulls/badges/shields/1110',
+        urlPattern: 's/pulls/:user/:repo/:number',
+        staticExample: this.render({ which: 's', state: 'pending' }),
+        exampleUrl: 's/pulls/badges/shields/1110',
         keywords: ['GitHub', 'pullrequest', 'detail', 'check'],
         documentation,
       },
       {
         title: 'GitHub pull request check contexts',
-        previewUrl: 'contexts/pulls/badges/shields/1110',
+        urlPattern: 'contexts/pulls/:user/:repo/:number',
+        staticExample: this.render({
+          which: 'contexts',
+          stateCounts: { passed: 5, pending: 1 },
+        }),
+        exampleUrl: 'contexts/pulls/badges/shields/1110',
         keywords: ['GitHub', 'pullrequest', 'detail', 'check'],
         documentation,
       },
@@ -53,12 +60,11 @@ module.exports = class GithubPullRequestCheckState extends GithubAuthService {
     }
   }
 
-  static render({ which, state, statuses }) {
+  static render({ which, state, stateCounts }) {
     let message
     if (which === 'contexts') {
-      const counts = countBy(statuses, 'state')
-      message = Object.keys(counts)
-        .map(k => `${counts[k]} ${k}`)
+      message = Object.entries(stateCounts)
+        .map(([state, count]) => `${count} ${state}`)
         .join(', ')
     } else {
       message = state
@@ -73,18 +79,26 @@ module.exports = class GithubPullRequestCheckState extends GithubAuthService {
     return { message, color }
   }
 
+  static transform({ state, statuses }) {
+    return {
+      state,
+      stateCounts: countBy(statuses, 'state'),
+    }
+  }
+
   async handle({ which, user, repo, number }) {
     const {
       head: { sha: ref },
     } = await fetchIssue(this, { user, repo, number })
 
     // https://developer.github.com/v3/repos/statuses/#get-the-combined-status-for-a-specific-ref
-    const { state, statuses } = await this._requestJson({
+    const json = await this._requestJson({
       schema,
       url: `/repos/${user}/${repo}/commits/${ref}/status`,
       errorMessages: errorMessagesFor('commit not found'),
     })
+    const { state, stateCounts } = this.constructor.transform(json)
 
-    return this.constructor.render({ which, state, statuses })
+    return this.constructor.render({ which, state, stateCounts })
   }
 }
