@@ -21,6 +21,7 @@ t.create(
         .get('/repos/badges/shields/pulls/1110')
         .reply(200, JSON.stringify({ head: { sha: 'abc123' } })) // Looks like a real ref, but isn't.
   )
+  .networkOn()
   .expectJSON({
     name: 'checks',
     value: 'commit not found',
