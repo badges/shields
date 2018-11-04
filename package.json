@@ -22,7 +22,7 @@
     "url": "https://github.com/badges/shields"
   },
   "dependencies": {
-    "camp": "~17.2.1",
+    "camp": "~17.2.2",
     "chalk": "^2.4.1",
     "check-node-version": "^3.1.0",
     "chrome-web-store-item-property": "~1.1.2",
@@ -47,6 +47,7 @@
     "pdfkit": "~0.8.0",
     "pretty-bytes": "^5.0.0",
     "priorityqueuejs": "^1.0.0",
+    "prom-client": "^11.1.2",
     "query-string": "^6.0.0",
     "raven": "^2.4.2",
     "redis": "~2.8.0",

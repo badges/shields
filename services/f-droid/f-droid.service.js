@@ -9,31 +9,30 @@ module.exports = class FDroid extends BaseService {
   async fetch({ appId }) {
     // currently, we only use the txt format. There are few apps using the yml format.
     const url = `https://gitlab.com/fdroid/fdroiddata/raw/master/metadata/${appId}.txt`
-    return this._request({
+    const { buffer } = await this._request({
       url,
       options: {},
       errorMessages: {
         404: 'app not found',
       },
-    }).then(({ res, buffer }) => {
-      const metadata = buffer.toString()
-      // we assume the layout as provided here:
-      // https://gitlab.com/fdroid/fdroiddata/raw/master/metadata/axp.tool.apkextractor.txt
-      const positionOfCurrentVersionAtEndOfTheFile = metadata.lastIndexOf(
-        'Current Version:'
-      ) // credits: https://stackoverflow.com/a/11134049
-      const lastVersion = metadata.substring(
-        positionOfCurrentVersionAtEndOfTheFile
-      )
-      const match = lastVersion.match(/^Current Version:\s*(.*?)\s*$/m)
-      if (!match) {
-        throw new InvalidResponse({
-          prettyMessage: 'invalid response',
-          underlyingError: new Error('could not find version on website'),
-        })
-      }
-      return { version: match[1] }
     })
+    const metadata = buffer.toString()
+    // we assume the layout as provided here:
+    // https://gitlab.com/fdroid/fdroiddata/raw/master/metadata/axp.tool.apkextractor.txt
+    const positionOfCurrentVersionAtEndOfTheFile = metadata.lastIndexOf(
+      'Current Version:'
+    ) // credits: https://stackoverflow.com/a/11134049
+    const lastVersion = metadata.substring(
+      positionOfCurrentVersionAtEndOfTheFile
+    )
+    const match = lastVersion.match(/^Current Version:\s*(.*?)\s*$/m)
+    if (!match) {
+      throw new InvalidResponse({
+        prettyMessage: 'invalid response',
+        underlyingError: new Error('could not find version on website'),
+      })
+    }
+    return { version: match[1] }
   }
 
   static render({ version }) {
