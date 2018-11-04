@@ -18,7 +18,7 @@ module.exports = class PackagistVersion extends LegacyService {
         const info = match[1] // either `v` or `vpre`.
         const userRepo = match[2] // eg, `doctrine/orm`.
         const format = match[3]
-        const apiUrl = 'https://packagist.org/packages/' + userRepo + '.json'
+        const apiUrl = `https://packagist.org/packages/${userRepo}.json`
         const badgeData = getBadgeData('packagist', data)
         if (userRepo.substr(-14) === '/:package_name') {
           badgeData.text[1] = 'invalid'

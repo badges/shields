@@ -83,7 +83,7 @@ const Category = ({ category, examples, baseUrl, longCache, onClick }) => {
   }
   return (
     <div>
-      <Link to={'/examples/' + category.id}>
+      <Link to={`/examples/${category.id}`}>
         <h3 id={category.id}>{category.name}</h3>
       </Link>
       <table className="badge">

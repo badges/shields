@@ -25,10 +25,7 @@ module.exports = class ChromeWebStore extends LegacyService {
         const storeId = match[2] // eg, nimelepbpejjlbmoobocpfnjhihnpked
         const format = match[3]
         const badgeData = getBadgeData('chrome web store', data)
-        const url =
-          'https://chrome.google.com/webstore/detail/' +
-          storeId +
-          '?hl=en&gl=US'
+        const url = `https://chrome.google.com/webstore/detail/${storeId}?hl=en&gl=US`
         const chromeWebStore = require('chrome-web-store-item-property')
         request(url, (err, res, buffer) => {
           if (err != null) {
@@ -38,6 +35,8 @@ module.exports = class ChromeWebStore extends LegacyService {
           }
           chromeWebStore
             .convert(buffer)
+            // Switch to async/await when this is refactored.
+            // eslint-disable-next-line promise/prefer-await-to-then
             .then(value => {
               let rating
               switch (type) {
@@ -62,7 +61,7 @@ module.exports = class ChromeWebStore extends LegacyService {
                 case 'rating':
                   rating = Math.round(value.ratingValue * 100) / 100
                   badgeData.text[0] = getLabel('rating', data)
-                  badgeData.text[1] = rating + '/5'
+                  badgeData.text[1] = `${rating}/5`
                   badgeData.colorscheme = floorCountColor(rating, 2, 3, 4)
                   break
                 case 'stars':
@@ -74,7 +73,7 @@ module.exports = class ChromeWebStore extends LegacyService {
                 case 'rating-count': {
                   const ratingCount = value.ratingCount
                   badgeData.text[0] = getLabel('rating count', data)
-                  badgeData.text[1] = metric(ratingCount) + ' total'
+                  badgeData.text[1] = `${metric(ratingCount)} total`
                   badgeData.colorscheme = floorCountColor(
                     ratingCount,
                     5,

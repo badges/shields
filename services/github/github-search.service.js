@@ -17,8 +17,8 @@ module.exports = class GithubSearch extends LegacyService {
         const repo = match[2]
         const search = match[3]
         const format = match[4]
-        const query = { q: search + ' repo:' + user + '/' + repo }
-        const badgeData = getBadgeData(search + ' counter', data)
+        const query = { q: `${search} repo:${user}/${repo}` }
+        const badgeData = getBadgeData(`${search} counter`, data)
         githubApiProvider.request(
           request,
           '/search/code',

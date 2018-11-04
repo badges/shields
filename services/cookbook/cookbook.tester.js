@@ -10,7 +10,7 @@ const t = createServiceTester()
 module.exports = t
 
 t.create('version')
-  .get('/v/chef-sugar.json')
+  .get('/chef-sugar.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'cookbook',
@@ -19,7 +19,7 @@ t.create('version')
   )
 
 t.create('version (mocked)')
-  .get('/v/chef-sugar.json?style=_shields_test')
+  .get('/chef-sugar.json?style=_shields_test')
   .intercept(nock =>
     nock('https://supermarket.getchef.com')
       .get('/api/v1/cookbooks/chef-sugar/versions/latest')
