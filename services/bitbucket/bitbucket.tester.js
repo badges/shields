@@ -22,6 +22,10 @@ t.create('issues-raw (valid)')
     })
   )
 
+t.create('issues-raw (not found)')
+  .get('/issues-raw/atlassian/not-a-repo.json')
+  .expectJSON({ name: 'issues', value: 'not found' })
+
 t.create('issues-raw (private repo)')
   .get('/issues-raw/chris48s/example-private-repo.json')
   .expectJSON({ name: 'issues', value: 'private repo' })
@@ -34,6 +38,10 @@ t.create('issues (valid)')
       value: isMetricOpenIssues,
     })
   )
+
+t.create('issues (not found)')
+  .get('/issues/atlassian/not-a-repo.json')
+  .expectJSON({ name: 'issues', value: 'not found' })
 
 t.create('issues (private repo)')
   .get('/issues/chris48s/example-private-repo.json')
@@ -50,6 +58,10 @@ t.create('pr-raw (valid)')
     })
   )
 
+t.create('pr-raw (not found)')
+  .get('/pr-raw/atlassian/not-a-repo.json')
+  .expectJSON({ name: 'pull requests', value: 'not found' })
+
 t.create('pr-raw (private repo)')
   .get('/pr-raw/chris48s/example-private-repo.json')
   .expectJSON({ name: 'pull requests', value: 'private repo' })
@@ -62,6 +74,10 @@ t.create('pr (valid)')
       value: isMetricOpenIssues,
     })
   )
+
+t.create('pr (not found)')
+  .get('/pr/atlassian/not-a-repo.json')
+  .expectJSON({ name: 'pull requests', value: 'not found' })
 
 t.create('pr (private repo)')
   .get('/pr/chris48s/example-private-repo.json')
@@ -95,6 +111,10 @@ t.create('master build result (valid)')
     })
   )
 
+t.create('master build result (not found)')
+  .get('/pipelines/atlassian/not-a-repo.json')
+  .expectJSON({ name: 'build', value: 'not found' })
+
 t.create('branch build result (valid)')
   .get(
     '/pipelines/atlassian/adf-builder-javascript/shields-test-dont-remove.json'
@@ -105,6 +125,10 @@ t.create('branch build result (valid)')
       value: isBuildStatus,
     })
   )
+
+t.create('branch build result (not found)')
+  .get('/pipelines/atlassian/not-a-repo/some-branch.json')
+  .expectJSON({ name: 'build', value: 'not found' })
 
 t.create('branch build result (never built)')
   .get('/pipelines/atlassian/adf-builder-javascript/some/new/branch.json')
