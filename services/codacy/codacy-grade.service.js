@@ -69,7 +69,7 @@ module.exports = class CodacyGrade extends BaseSvgScrapingService {
       options: { qs: { branch } },
       valueMatcher: /visibility="hidden">([^<>]+)<\/text>/,
     })
-    if (grade == 'X') {
+    if (grade === 'X') {
       throw new NotFound({
         prettyMessage: 'project or branch not found',
       })

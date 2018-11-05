@@ -71,7 +71,7 @@ module.exports = class CodacyCoverage extends BaseSvgScrapingService {
       options: { qs: { branch } },
       valueMatcher: /text-anchor="middle">([^<>]+)<\/text>/,
     })
-    if (coverageString == '!') {
+    if (coverageString === '!') {
       throw new NotFound({
         prettyMessage: 'project or branch not found',
       })

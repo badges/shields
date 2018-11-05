@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
 
 const t = require('../create-service-tester')()
 module.exports = t
