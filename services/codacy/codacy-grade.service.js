@@ -1,18 +1,23 @@
 'use strict'
 
-const queryString = require('query-string')
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { fetchFromSvg } = require('../../lib/svg-badge-parser')
+const Joi = require('joi')
+const BaseSvgScrapingService = require('../base-svg-scraping')
+const { NotFound } = require('../errors')
 
-module.exports = class CodacyGrade extends LegacyService {
+const schema = Joi.object({
+  message: Joi.equal('A', 'B', 'C', 'D', 'E', 'F', 'X'),
+}).required()
+
+module.exports = class CodacyGrade extends BaseSvgScrapingService {
   static get category() {
     return 'build'
   }
 
   static get url() {
     return {
-      base: 'codacy',
+      base: 'codacy/grade',
+      format: '(?:grade/)?(?!coverage/)([^/]+)(?:/(.+))?',
+      capture: ['projectId', 'branch'],
     }
   }
 
@@ -20,68 +25,55 @@ module.exports = class CodacyGrade extends LegacyService {
     return [
       {
         title: 'Codacy grade',
-        previewUrl: 'grade/e27821fb6289410b8f58338c7e0bc686',
+        urlPattern: ':projectId',
+        staticExample: this.constructor.render({ grade: 'A' }),
+        previewUrl: 'e27821fb6289410b8f58338c7e0bc686',
       },
       {
         title: 'Codacy branch grade',
-        previewUrl: 'grade/e27821fb6289410b8f58338c7e0bc686/master',
+        urlPattern: ':projectId/:branch',
+        staticExample: this.constructor.render({ grade: 'A' }),
+        previewUrl: 'e27821fb6289410b8f58338c7e0bc686/master',
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/codacy\/(?:grade\/)?(?!coverage\/)([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const projectId = match[1] // eg. e27821fb6289410b8f58338c7e0bc686
-        const branch = match[2]
-        const format = match[3]
+  static get defaultBadgeData() {
+    return {
+      label: 'code quality',
+    }
+  }
 
-        const queryParams = {}
-        if (branch) {
-          queryParams.branch = branch
-        }
-        const query = queryString.stringify(queryParams)
-        const url = `https://api.codacy.com/project/badge/grade/${projectId}?${query}`
-        const badgeData = getBadgeData('code quality', data)
-        fetchFromSvg(
-          request,
-          url,
-          /visibility="hidden">([^<>]+)<\/text>/,
-          (err, res) => {
-            if (err != null) {
-              badgeData.text[1] = 'inaccessible'
-              sendBadge(format, badgeData)
-              return
-            }
-            try {
-              badgeData.text[1] = res
-              if (res === 'A') {
-                badgeData.colorscheme = 'brightgreen'
-              } else if (res === 'B') {
-                badgeData.colorscheme = 'green'
-              } else if (res === 'C') {
-                badgeData.colorscheme = 'yellowgreen'
-              } else if (res === 'D') {
-                badgeData.colorscheme = 'yellow'
-              } else if (res === 'E') {
-                badgeData.colorscheme = 'orange'
-              } else if (res === 'F') {
-                badgeData.colorscheme = 'red'
-              } else if (res === 'X') {
-                badgeData.text[1] = 'invalid'
-                badgeData.colorscheme = 'lightgrey'
-              } else {
-                badgeData.colorscheme = 'red'
-              }
-              sendBadge(format, badgeData)
-            } catch (e) {
-              badgeData.text[1] = 'invalid'
-              sendBadge(format, badgeData)
-            }
-          }
-        )
+  static render({ grade }) {
+    const color = {
+      A: 'brightgreen',
+      B: 'green',
+      C: 'yellowgreen',
+      D: 'yellow',
+      E: 'orange',
+      F: 'red',
+    }[grade]
+
+    return {
+      message: grade,
+      color,
+    }
+  }
+
+  async handle({ projectId, branch }) {
+    const { message: grade } = await this._requestSvg({
+      schema,
+      url: `https://api.codacy.com/project/badge/grade/${encodeURIComponent(
+        projectId
+      )}`,
+      options: { qs: { branch } },
+      valueMatcher: /visibility="hidden">([^<>]+)<\/text>/,
+    })
+    if (grade == 'X') {
+      throw new NotFound({
+        prettyMessage: 'project or branch not found',
       })
-    )
+    }
+    return this.constructor.render({ grade })
   }
 }
