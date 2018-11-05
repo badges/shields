@@ -26,7 +26,13 @@ class BaseSvgScrapingService extends BaseService {
     }
   }
 
-  async _requestSvg({ valueMatcher, url, options = {}, errorMessages = {} }) {
+  async _requestSvg({
+    schema,
+    valueMatcher,
+    url,
+    options = {},
+    errorMessages = {},
+  }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     const mergedOptions = {
       ...{ headers: { Accept: 'image/svg+xml' } },
@@ -38,8 +44,13 @@ class BaseSvgScrapingService extends BaseService {
       errorMessages,
     })
     logTrace(emojic.dart, 'Response SVG', buffer)
-    const message = this.constructor.valueFromSvgBadge(buffer, valueMatcher)
-    return { message }
+    const data = {
+      message: this.constructor.valueFromSvgBadge(buffer, valueMatcher),
+    }
+    logTrace(emojic.dart, 'Response SVG (before validation)', data, {
+      deep: true,
+    })
+    return this.constructor._validate(data, schema)
   }
 }
 

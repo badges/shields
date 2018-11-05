@@ -4,6 +4,7 @@
     "server.js",
     "favicon.png",
     "next.config.js",
+    "package-lock.json",
     "build/",
     "frontend/",
     "lib/",
