@@ -45,7 +45,7 @@ export default class SuggestionAndSearch extends React.Component {
       const url = resolveUrl('/$suggest/v1', baseUrl, { url: projectUrl })
 
       const fetch = window.fetch || fetchPonyfill
-      const res = await fetch(url, { mode: 'cors' })
+      const res = await fetch(url)
       let suggestions
       try {
         const json = await res.json()
