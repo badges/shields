@@ -166,7 +166,7 @@ module.exports = class GemVersion extends BaseJsonService {     // (5)
   static get url() {                                            // (6)
     return {
       base: 'gem/v',
-      format: ':gem',
+      pattern: ':gem',
     }
   }
 
