@@ -22,6 +22,19 @@ t.create('downloads per day')
     Joi.object().keys({ name: 'downloads', value: isMetricOverTimePeriod })
   )
 
+t.create('downloads (zero for period)')
+  .get('/dd/cowboy.json')
+  .intercept(nock =>
+    nock('https://hex.pm/')
+      .get('/api/packages/cowboy')
+      .reply(200, {
+        downloads: { all: 100 }, // there is no 'day' key here
+        releases: [{ version: '1.0' }],
+        meta: { licenses: ['MIT'] },
+      })
+  )
+  .expectJSON({ name: 'downloads', value: '0/day' })
+
 t.create('downloads in total')
   .get('/dt/cowboy.json')
   .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }))
@@ -54,7 +67,7 @@ t.create('license (multiple licenses)')
     nock('https://hex.pm/')
       .get('/api/packages/cowboy')
       .reply(200, {
-        downloads: { all: 0, week: 0, day: 0 },
+        downloads: { all: 100 },
         releases: [{ version: '1.0' }],
         meta: { licenses: ['GPLv2', 'MIT'] },
       })
@@ -71,7 +84,7 @@ t.create('license (no license)')
     nock('https://hex.pm/')
       .get('/api/packages/cowboy')
       .reply(200, {
-        downloads: { all: 0, week: 0, day: 0 },
+        downloads: { all: 100 },
         releases: [{ version: '1.0' }],
         meta: { licenses: [] },
       })
