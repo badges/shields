@@ -3,6 +3,7 @@
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const Joi = require('joi')
+const queryString = require('query-string')
 const {
   NotFound,
   InvalidResponse,
@@ -11,13 +12,13 @@ const {
   Deprecated,
 } = require('./errors')
 const { checkErrorResponse } = require('../lib/error-helper')
-const queryString = require('query-string')
 const {
   makeLogo,
   toArray,
   makeColor,
   setBadgeColor,
 } = require('../lib/badge-data')
+const { staticBadgeUrl } = require('../lib/make-badge-url')
 const trace = require('./trace')
 
 class BaseService {
@@ -84,25 +85,24 @@ class BaseService {
   }
 
   static _makeFullUrl(partialUrl) {
-    return '/' + [this.url.base, partialUrl].filter(Boolean).join('/')
+    return `/${[this.url.base, partialUrl].filter(Boolean).join('/')}`
   }
 
   static _makeStaticExampleUrl(serviceData) {
     const badgeData = this._makeBadgeData({}, serviceData)
-    const color = badgeData.colorscheme || badgeData.colorB
-    return this._makeStaticExampleUrlFromTextAndColor(
-      badgeData.text[0],
-      badgeData.text[1],
-      color
-    )
+    return staticBadgeUrl({
+      label: badgeData.text[0],
+      message: `${badgeData.text[1]}`,
+      color: badgeData.colorscheme,
+    })
   }
 
-  static _makeStaticExampleUrlFromTextAndColor(text1, text2, color) {
-    return `/badge/${encodeURIComponent(
-      text1.replace('-', '--')
-    )}-${encodeURIComponent(text2).replace('-', '--')}-${encodeURIComponent(
-      color
-    )}`
+  static _dotSvg(url) {
+    if (url.includes('?')) {
+      return url.replace('?', '.svg?')
+    } else {
+      return `${url}.svg`
+    }
   }
 
   /**
@@ -111,28 +111,47 @@ class BaseService {
    */
   static prepareExamples() {
     return this.examples.map(
-      ({
-        title,
-        query,
-        exampleUrl,
-        previewUrl,
-        urlPattern,
-        staticExample,
-        documentation,
-        keywords,
-      }) => {
-        if (!previewUrl && !staticExample) {
+      (
+        {
+          title,
+          query,
+          exampleUrl,
+          previewUrl,
+          urlPattern,
+          staticExample,
+          documentation,
+          keywords,
+        },
+        index
+      ) => {
+        if (staticExample) {
+          if (!urlPattern) {
+            throw new Error(
+              `Static example for ${
+                this.name
+              } at index ${index} does not declare a urlPattern`
+            )
+          }
+          if (!exampleUrl) {
+            throw new Error(
+              `Static example for ${
+                this.name
+              } at index ${index} does not declare an exampleUrl`
+            )
+          }
+          if (previewUrl) {
+            throw new Error(
+              `Static example for ${
+                this.name
+              } at index ${index} also declares a dynamic previewUrl, which is not allowed`
+            )
+          }
+        } else if (!previewUrl) {
           throw Error(
             `Example for ${
               this.name
-            } is missing required previewUrl or staticExample`
+            } at index ${index} is missing required previewUrl or staticExample`
           )
-        }
-        if (staticExample && !urlPattern) {
-          throw new Error('Must declare a urlPattern if using staticExample')
-        }
-        if (staticExample && !exampleUrl) {
-          throw new Error('Must declare an exampleUrl if using staticExample')
         }
 
         const stringified = queryString.stringify(query)
@@ -141,13 +160,13 @@ class BaseService {
         return {
           title: title ? `${title}` : this.name,
           exampleUrl: exampleUrl
-            ? `${this._makeFullUrl(exampleUrl, query)}.svg${suffix}`
+            ? `${this._dotSvg(this._makeFullUrl(exampleUrl))}${suffix}`
             : undefined,
           previewUrl: staticExample
-            ? `${this._makeStaticExampleUrl(staticExample)}.svg`
-            : `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
+            ? this._makeStaticExampleUrl(staticExample)
+            : `${this._dotSvg(this._makeFullUrl(previewUrl))}${suffix}`,
           urlPattern: urlPattern
-            ? `${this._makeFullUrl(urlPattern, query)}.svg${suffix}`
+            ? `${this._dotSvg(this._makeFullUrl(urlPattern))}${suffix}`
             : undefined,
           documentation,
           keywords,

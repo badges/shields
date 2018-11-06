@@ -8,6 +8,29 @@ const {
 const { metric } = require('../../lib/text-formatters')
 
 module.exports = class Imagelayers extends LegacyService {
+  static get category() {
+    return 'size'
+  }
+
+  static get url() {
+    return {
+      base: 'imagelayers',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'ImageLayers Size',
+        previewUrl: 'image-size/_/ubuntu/latest',
+      },
+      {
+        title: 'ImageLayers Layers',
+        previewUrl: 'layers/_/ubuntu/latest',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/imagelayers\/(image-size|layers)\/([^/]+)\/([^/]+)\/([^/]*)\.(svg|png|gif|jpg|json)$/,
@@ -20,13 +43,13 @@ module.exports = class Imagelayers extends LegacyService {
         if (user === '_') {
           user = 'library'
         }
-        const path = user + '/' + repo
+        const path = `${user}/${repo}`
         const badgeData = getBadgeData(type, data)
         const options = {
           method: 'POST',
           json: true,
           body: {
-            repos: [{ name: path, tag: tag }],
+            repos: [{ name: path, tag }],
           },
           uri: 'https://imagelayers.io/registry/analyze',
         }
@@ -38,7 +61,7 @@ module.exports = class Imagelayers extends LegacyService {
           }
           try {
             if (type === 'image-size') {
-              const size = metric(buffer[0].repo.size) + 'B'
+              const size = `${metric(buffer[0].repo.size)}B`
               badgeData.text[0] = getLabel('image size', data)
               badgeData.text[1] = size
             } else if (type === 'layers') {

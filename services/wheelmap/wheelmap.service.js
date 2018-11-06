@@ -4,6 +4,25 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 module.exports = class Wheelmap extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get url() {
+    return {
+      base: 'wheelmap/a',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Wheelmap',
+        previewUrl: '2323004600',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/wheelmap\/a\/(.*)\.(svg|png|gif|jpg|json)$/,
@@ -13,7 +32,7 @@ module.exports = class Wheelmap extends LegacyService {
         const options = {
           method: 'GET',
           json: true,
-          uri: 'http://wheelmap.org/nodes/' + nodeId + '.json',
+          uri: `http://wheelmap.org/nodes/${nodeId}.json`,
         }
         const badgeData = getBadgeData('wheelmap', data)
         // eslint-disable-next-line handle-callback-err

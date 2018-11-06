@@ -4,9 +4,10 @@ about: Report errors and problems
 
 ---
 
-Are you experiencing this issue on shields.io or your own instance?
- - [ ] shields.io
- - [ ] My instance
+Are you experiencing an issue with...
+ - [ ] [shields.io](https://shields.io/#/)
+ - [ ] My own instance
+ - [ ] [gh-badges NPM package](https://www.npmjs.com/package/gh-badges)
 
 :beetle: **Description**
 <!-- A clear and concise description of the problem. -->

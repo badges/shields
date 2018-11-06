@@ -25,21 +25,16 @@ module.exports = class GithubIssues extends LegacyService {
         const query = {}
         const hasLabel = ghLabel !== undefined
 
-        query.q =
-          'repo:' +
-          user +
-          '/' +
-          repo +
-          (isPR ? ' is:pr' : ' is:issue') +
-          (isClosed ? ' is:closed' : ' is:open') +
-          (hasLabel ? ` label:"${ghLabel}"` : '')
+        query.q = `repo:${user}/${repo}${isPR ? ' is:pr' : ' is:issue'}${
+          isClosed ? ' is:closed' : ' is:open'
+        }${hasLabel ? ` label:"${ghLabel}"` : ''}`
 
         const classText = isClosed ? 'closed' : 'open'
-        const leftClassText = isRaw ? classText + ' ' : ''
-        const rightClassText = !isRaw ? ' ' + classText : ''
+        const leftClassText = isRaw ? `${classText} ` : ''
+        const rightClassText = !isRaw ? ` ${classText}` : ''
         const isGhLabelMultiWord = hasLabel && ghLabel.includes(' ')
         const labelText = hasLabel
-          ? (isGhLabelMultiWord ? `"${ghLabel}"` : ghLabel) + ' '
+          ? `${isGhLabelMultiWord ? `"${ghLabel}"` : ghLabel} `
           : ''
         const targetText = isPR ? 'pull requests' : 'issues'
         const badgeData = getBadgeData(
