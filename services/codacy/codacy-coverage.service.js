@@ -58,7 +58,7 @@ module.exports = class CodacyCoverage extends BaseSvgScrapingService {
 
   static transform({ coverageString }) {
     return {
-      percentage: parseFloat(coverageString.replace('%', '')),
+      percentage: parseFloat(coverageString.replace(/%$/, '')),
     }
   }
 
