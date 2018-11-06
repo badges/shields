@@ -15,9 +15,15 @@ const {
 const hexSchema = Joi.object({
   downloads: Joi.object({
     // these keys may or may not exist
-    all: Joi.number().integer(),
-    week: Joi.number().integer(),
-    day: Joi.number().integer(),
+    all: Joi.number()
+      .integer()
+      .default(0),
+    week: Joi.number()
+      .integer()
+      .default(0),
+    day: Joi.number()
+      .integer()
+      .default(0),
   }).required(),
   meta: Joi.object({
     licenses: Joi.array().required(),
@@ -149,9 +155,7 @@ function DownloadsForInterval(interval) {
 
     async handle({ pkg }) {
       const json = await this.fetch({ pkg })
-      return this.constructor.render({
-        downloads: json.downloads[interval] || 0,
-      })
+      return this.constructor.render({ downloads: json.downloads[interval] })
     }
 
     static get defaultBadgeData() {
