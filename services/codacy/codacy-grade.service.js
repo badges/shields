@@ -26,13 +26,13 @@ module.exports = class CodacyGrade extends BaseSvgScrapingService {
       {
         title: 'Codacy grade',
         urlPattern: ':projectId',
-        staticExample: this.constructor.render({ grade: 'A' }),
+        staticExample: this.render({ grade: 'A' }),
         previewUrl: 'e27821fb6289410b8f58338c7e0bc686',
       },
       {
         title: 'Codacy branch grade',
         urlPattern: ':projectId/:branch',
-        staticExample: this.constructor.render({ grade: 'A' }),
+        staticExample: this.render({ grade: 'A' }),
         previewUrl: 'e27821fb6289410b8f58338c7e0bc686/master',
       },
     ]
