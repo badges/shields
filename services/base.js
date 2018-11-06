@@ -4,6 +4,7 @@
 const emojic = require('emojic')
 const Joi = require('joi')
 const queryString = require('query-string')
+const pathToRegexp = require('path-to-regexp')
 const {
   NotFound,
   InvalidResponse,
@@ -176,12 +177,31 @@ class BaseService {
   }
 
   static get _regex() {
-    // Regular expressions treat "/" specially, so we need to escape them
-    const escapedPath = this.url.format.replace(/\//g, '\\/')
-    const fullRegex = `^${this._makeFullUrl(
-      escapedPath
-    )}.(svg|png|gif|jpg|json)$`
-    return new RegExp(fullRegex)
+    const { pattern, format, capture } = this.url
+    if (pattern) {
+      if (format || capture) {
+        throw Error(
+          `Since the route for ${
+            this.name
+          } includes a pattern, it should not include a format or capture`
+        )
+      }
+      const fullPattern = `${this._makeFullUrl(
+        pattern
+      )}.:ext(svg|png|gif|jpg|json)`
+      return pathToRegexp(fullPattern, {
+        delimiter: '.',
+        strict: true,
+        sensitive: true,
+      })
+    } else {
+      // Regular expressions treat "/" specially, so we need to escape them
+      const escapedPath = this.url.format.replace(/\//g, '\\/')
+      const fullRegex = `^${this._makeFullUrl(
+        escapedPath
+      )}.(svg|png|gif|jpg|json)$`
+      return new RegExp(fullRegex)
+    }
   }
 
   static get _cacheLength() {
@@ -194,7 +214,13 @@ class BaseService {
   }
 
   static _namedParamsForMatch(match) {
-    const names = this.url.capture || []
+    const { url } = this
+    let names
+    if (url.pattern) {
+      names = this._regex.keys.map(item => item.name).slice(0, -1)
+    } else {
+      names = url.capture || []
+    }
 
     // Assume the last match is the format, and drop match[0], which is the
     // entire match.

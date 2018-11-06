@@ -47,8 +47,7 @@ class DummyService extends BaseService {
   static get url() {
     return {
       base: 'foo',
-      format: '([^/]+)',
-      capture: ['namedParamA'],
+      pattern: ':namedParamA',
       queryParams: ['queryParamA'],
     }
   }
@@ -58,7 +57,7 @@ describe('BaseService', function() {
   const defaultConfig = { handleInternalErrors: false }
 
   describe('URL pattern matching', function() {
-    context('A named param is declared', function() {
+    context('A `pattern` with a named param is declared', function() {
       const regexExec = str => DummyService._regex.exec(str)
       const getNamedParamA = str => {
         const [, namedParamA] = regexExec(str)
@@ -97,7 +96,56 @@ describe('BaseService', function() {
       })
     })
 
-    describe('No named params are declared', function() {
+    context('A `format` with a named param is declared', function() {
+      class ServiceWithFormat extends BaseService {
+        static get url() {
+          return {
+            base: 'foo',
+            format: '([^/]+)',
+            capture: ['namedParamA'],
+          }
+        }
+      }
+
+      const regexExec = str => ServiceWithFormat._regex.exec(str)
+      const getNamedParamA = str => {
+        const [, namedParamA] = regexExec(str)
+        return namedParamA
+      }
+      const namedParams = str => {
+        const match = regexExec(str)
+        return ServiceWithFormat._namedParamsForMatch(match)
+      }
+
+      test(regexExec, () => {
+        forCases([
+          given('/foo/bar.bar.bar.zip'),
+          given('/foo/bar/bar.svg'),
+        ]).expect(null)
+      })
+
+      test(getNamedParamA, () => {
+        forCases([
+          given('/foo/bar.bar.bar.svg'),
+          given('/foo/bar.bar.bar.png'),
+          given('/foo/bar.bar.bar.gif'),
+          given('/foo/bar.bar.bar.jpg'),
+          given('/foo/bar.bar.bar.json'),
+        ]).expect('bar.bar.bar')
+      })
+
+      test(namedParams, () => {
+        forCases([
+          given('/foo/bar.bar.bar.svg'),
+          given('/foo/bar.bar.bar.png'),
+          given('/foo/bar.bar.bar.gif'),
+          given('/foo/bar.bar.bar.jpg'),
+          given('/foo/bar.bar.bar.json'),
+        ]).expect({ namedParamA: 'bar.bar.bar' })
+      })
+    })
+
+    context('No named params are declared', function() {
       class ServiceWithZeroNamedParams extends BaseService {
         static get url() {
           return {
@@ -320,7 +368,7 @@ describe('BaseService', function() {
   })
 
   describe('ScoutCamp integration', function() {
-    const expectedRouteRegex = /^\/foo\/([^/]+).(svg|png|gif|jpg|json)$/
+    const expectedRouteRegex = /^\/foo\/((?:[^\/]+?))\.((?:svg|png|gif|jpg|json))$/.toString()
 
     let mockCamp
     let mockHandleRequest
@@ -338,7 +386,9 @@ describe('BaseService', function() {
 
     it('registers the service', function() {
       expect(mockCamp.route).to.have.been.calledOnce
-      expect(mockCamp.route).to.have.been.calledWith(expectedRouteRegex)
+      expect(mockCamp.route.getCall(0).args[0].toString()).to.equal(
+        expectedRouteRegex
+      )
     })
 
     it('handles the request', async function() {
@@ -350,7 +400,7 @@ describe('BaseService', function() {
         asPromise: sinon.spy(),
       }
       const queryParams = { queryParamA: '?' }
-      const match = '/foo/bar.svg'.match(expectedRouteRegex)
+      const match = DummyService._regex.exec('/foo/bar.svg')
       await requestHandler(queryParams, match, mockSendBadge, mockRequest)
 
       const expectedFormat = 'svg'
