@@ -368,7 +368,8 @@ describe('BaseService', function() {
   })
 
   describe('ScoutCamp integration', function() {
-    const expectedRouteRegex = /^\/foo\/((?:[^\/]+?))\.((?:svg|png|gif|jpg|json))$/.toString()
+    // const expectedRouteRegex = /^\/foo\/([^/]+).(svg|png|gif|jpg|json)$/
+    const expectedRouteRegex = /^\/foo\/([^/]+?)\.(svg|png|gif|jpg|json)$/
 
     let mockCamp
     let mockHandleRequest
@@ -386,9 +387,7 @@ describe('BaseService', function() {
 
     it('registers the service', function() {
       expect(mockCamp.route).to.have.been.calledOnce
-      expect(mockCamp.route.getCall(0).args[0].toString()).to.equal(
-        expectedRouteRegex
-      )
+      expect(mockCamp.route).to.have.been.calledWith(expectedRouteRegex)
     })
 
     it('handles the request', async function() {

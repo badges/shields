@@ -176,6 +176,22 @@ class BaseService {
     )
   }
 
+  static get _regexFromPath() {
+    const { pattern } = this.url
+    const fullPattern = `${this._makeFullUrl(
+      pattern
+    )}.:ext(svg|png|gif|jpg|json)`
+
+    const keys = []
+    const regex = pathToRegexp(fullPattern, keys, {
+      strict: true,
+      sensitive: true,
+    })
+    const capture = keys.map(item => item.name).slice(0, -1)
+
+    return { regex, capture }
+  }
+
   static get _regex() {
     const { pattern, format, capture } = this.url
     if (pattern) {
@@ -186,14 +202,7 @@ class BaseService {
           } includes a pattern, it should not include a format or capture`
         )
       }
-      const fullPattern = `${this._makeFullUrl(
-        pattern
-      )}.:ext(svg|png|gif|jpg|json)`
-      return pathToRegexp(fullPattern, {
-        delimiter: '.',
-        strict: true,
-        sensitive: true,
-      })
+      return this._regexFromPath.regex
     } else {
       // Regular expressions treat "/" specially, so we need to escape them
       const escapedPath = this.url.format.replace(/\//g, '\\/')
@@ -215,12 +224,7 @@ class BaseService {
 
   static _namedParamsForMatch(match) {
     const { url } = this
-    let names
-    if (url.pattern) {
-      names = this._regex.keys.map(item => item.name).slice(0, -1)
-    } else {
-      names = url.capture || []
-    }
+    const names = url.pattern ? this._regexFromPath.capture : url.capture || []
 
     // Assume the last match is the format, and drop match[0], which is the
     // entire match.
