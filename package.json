@@ -194,8 +194,8 @@
     "wait-promise": "^0.4.1"
   },
   "engines": {
-    "node": ">= 8.x",
-    "npm": "5.x"
+    "node": ">= 8",
+    "npm": ">= 5"
   },
   "babel": {
     "presets": [
