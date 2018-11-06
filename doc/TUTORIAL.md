@@ -123,9 +123,9 @@ Description of the code:
 3. Our module must export a class which extends `BaseService`
 4. `url()` declares a route. We declare getters as `static`.
     * `base` defines the static part of the route.
-    * `pattern` is a pattern defining the variable part of the route. It can
-      include any number of named parameters. These are handled by
-      [`path-to-regexp`][path-to-regexp].
+    * `pattern` defines the variable part of the route. It can include any
+      number of named parameters. These are converted into
+      regular expressions by [`path-to-regexp`][path-to-regexp].
 5. All badges must implement the `async handle()` function. This is called to invoke our code. Note that the signature of `handle()` will match the capturing group defined in `url()` Because we're capturing a single variable called `text` our function signature is `async handle({ text })`. Although in this simple case, we aren't performing any asynchronous calls, `handle()` would usually spend some time blocked on I/O. We use the `async`/`await` pattern for asynchronous code. Our `handle()` function returns an object with 3 properties:
     * `label`: the text on the left side of the badge
     * `message`: the text on the right side of the badge - here we are passing through the parameter we captured in the URL regex
