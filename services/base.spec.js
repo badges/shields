@@ -398,7 +398,7 @@ describe('BaseService', function() {
         asPromise: sinon.spy(),
       }
       const queryParams = { queryParamA: '?' }
-      const match = DummyService._regex.exec('/foo/bar.svg')
+      const match = '/foo/bar.svg'.match(expectedRouteRegex)
       await requestHandler(queryParams, match, mockSendBadge, mockRequest)
 
       const expectedFormat = 'svg'
