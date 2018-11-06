@@ -194,22 +194,26 @@ class BaseService {
 
   static get _regex() {
     const { pattern, format, capture } = this.url
-    if (pattern) {
-      if (format || capture) {
-        throw Error(
-          `Since the route for ${
-            this.name
-          } includes a pattern, it should not include a format or capture`
-        )
-      }
+    if (
+      pattern !== undefined &&
+      (format !== undefined || capture !== undefined)
+    ) {
+      throw Error(
+        `Since the route for ${
+          this.name
+        } includes a pattern, it should not include a format or capture`
+      )
+    } else if (pattern !== undefined) {
       return this._regexFromPath.regex
-    } else {
+    } else if (format !== undefined) {
       // Regular expressions treat "/" specially, so we need to escape them
       const escapedPath = this.url.format.replace(/\//g, '\\/')
       const fullRegex = `^${this._makeFullUrl(
         escapedPath
       )}.(svg|png|gif|jpg|json)$`
       return new RegExp(fullRegex)
+    } else {
+      throw Error(`The route for ${this.name} has neither pattern nor format`)
     }
   }
 
