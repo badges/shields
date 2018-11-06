@@ -26,9 +26,17 @@ t.create('downloads in total')
   .get('/dt/cowboy.json')
   .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }))
 
+t.create('downloads (not found)')
+  .get('/dt/this-package-does-not-exist.json')
+  .expectJSON({ name: 'downloads', value: 'not found' })
+
 t.create('version')
   .get('/v/cowboy.json')
   .expectJSONTypes(Joi.object().keys({ name: 'hex', value: isHexpmVersion }))
+
+t.create('version (not found)')
+  .get('/v/this-package-does-not-exist.json')
+  .expectJSON({ name: 'hex', value: 'not found' })
 
 t.create('license')
   .get('/l/cowboy.json?style=_shields_test')
@@ -73,3 +81,7 @@ t.create('license (no license)')
     value: 'Unknown',
     colorB: colorScheme.lightgrey,
   })
+
+t.create('license (not found)')
+  .get('/l/this-package-does-not-exist.json')
+  .expectJSON({ name: 'license', value: 'not found' })
