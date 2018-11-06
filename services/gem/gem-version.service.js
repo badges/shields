@@ -14,8 +14,8 @@ const schema = Joi.object({
 module.exports = class GemVersion extends BaseJsonService {
   async fetch({ gem }) {
     return this._requestJson({
-      url: `https://rubygems.org/api/v1/gems/${gem}.json`,
       schema,
+      url: `https://rubygems.org/api/v1/gems/${gem}.json`,
     })
   }
 
