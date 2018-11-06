@@ -47,7 +47,7 @@ class AnsibleGalaxyRoleDownloads extends AnsibleGalaxyRole {
     return 'downloads'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'ansible/role/d',
       format: '(.+)',
@@ -86,7 +86,7 @@ class AnsibleGalaxyRoleName extends AnsibleGalaxyRole {
     return 'other'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'ansible/role',
       format: '(.+)',

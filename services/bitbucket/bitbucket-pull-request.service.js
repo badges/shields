@@ -9,7 +9,7 @@ module.exports = class BitbucketPullRequest extends LegacyService {
     return 'issue-tracking'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'bitbucket',
     }

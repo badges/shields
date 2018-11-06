@@ -12,7 +12,7 @@ module.exports = class MicroBadger extends LegacyService {
     return 'size'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'microbadger',
     }

@@ -50,7 +50,7 @@ class APMDownloads extends BaseAPMService {
     return { label: 'downloads' }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'apm/dm',
       format: '(.+)',
@@ -90,7 +90,7 @@ class APMVersion extends BaseAPMService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'apm/v',
       format: '(.+)',
@@ -134,7 +134,7 @@ class APMLicense extends BaseAPMService {
     return 'license'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'apm/l',
       format: '(.+)',

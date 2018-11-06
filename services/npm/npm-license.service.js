@@ -9,8 +9,8 @@ module.exports = class NpmLicense extends NpmBase {
     return 'license'
   }
 
-  static get url() {
-    return this.buildUrl('npm/l', { withTag: false })
+  static get route() {
+    return this.buildRoute('npm/l', { withTag: false })
   }
 
   static get examples() {

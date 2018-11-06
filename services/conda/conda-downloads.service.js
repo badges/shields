@@ -7,7 +7,7 @@ module.exports = class CondaDownloads extends LegacyService {
     return 'downloads'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'conda',
     }

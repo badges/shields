@@ -69,7 +69,7 @@ class HexPmLicense extends BaseHexPmService {
     return 'license'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'hexpm/l',
       format: '(.+)',
@@ -103,7 +103,7 @@ class HexPmVersion extends BaseHexPmService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'hexpm/v',
       format: '(.+)',
@@ -160,7 +160,7 @@ function DownloadsForInterval(interval) {
       return 'downloads'
     }
 
-    static get url() {
+    static get route() {
       return {
         base,
         format: '(.+)',

@@ -19,7 +19,7 @@ module.exports = class Time extends BaseService {
     return 'debug'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'servertime',
       format: '',

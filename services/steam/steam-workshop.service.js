@@ -168,7 +168,7 @@ class SteamCollectionSize extends BaseSteamAPI {
     return { label: 'files' }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/collection-files',
       format: '(.+)',
@@ -251,7 +251,7 @@ class SteamFileSize extends SteamFileService {
     return { label: 'size' }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/size',
       format: '(.+)',
@@ -287,7 +287,7 @@ class SteamFileReleaseDate extends SteamFileService {
     return { label: 'release date' }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/release-date',
       format: '(.+)',
@@ -328,7 +328,7 @@ class SteamFileSubscriptions extends SteamFileService {
     return 'rating'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/subscriptions',
       format: '(.+)',
@@ -367,7 +367,7 @@ class SteamFileFavorites extends SteamFileService {
     return 'rating'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/favorites',
       format: '(.+)',
@@ -408,7 +408,7 @@ class SteamFileDownloads extends SteamFileService {
     return { label: 'downloads' }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/downloads',
       format: '(.+)',
@@ -443,7 +443,7 @@ class SteamFileViews extends SteamFileService {
     return { label: 'views' }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/views',
       format: '(.+)',

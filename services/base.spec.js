@@ -44,7 +44,7 @@ class DummyService extends BaseService {
       },
     ]
   }
-  static get url() {
+  static get route() {
     return {
       base: 'foo',
       format: '([^/]+)',
@@ -99,7 +99,7 @@ describe('BaseService', function() {
 
     describe('No named params are declared', function() {
       class ServiceWithZeroNamedParams extends BaseService {
-        static get url() {
+        static get route() {
           return {
             base: 'foo',
             format: '(?:[^/]+)',

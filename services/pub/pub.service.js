@@ -12,7 +12,7 @@ module.exports = class Pub extends LegacyService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'pub',
     }

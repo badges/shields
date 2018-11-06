@@ -27,7 +27,7 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class PypiBase extends BaseJsonService {
-  static buildUrl(base) {
+  static buildRoute(base) {
     return {
       base,
       format: '(.*)',

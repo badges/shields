@@ -14,7 +14,7 @@ module.exports = class TravisPhpVersion extends LegacyService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'travis/php-v',
     }

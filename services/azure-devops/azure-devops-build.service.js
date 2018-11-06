@@ -37,7 +37,7 @@ module.exports = class AzureDevOpsBuild extends BaseSvgService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: '',
       format: '(?:azure-devops|vso)/build/([^/]+)/([^/]+)/([^/]+)(?:/(.+))?',
