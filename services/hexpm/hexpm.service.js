@@ -11,13 +11,13 @@ const {
   downloadCount: downloadCountColor,
   version: versionColor,
 } = require('../../lib/color-formatters')
-const { nonNegativeInteger } = require('../validators')
 
 const hexSchema = Joi.object({
   downloads: Joi.object({
-    all: nonNegativeInteger,
-    week: nonNegativeInteger,
-    day: nonNegativeInteger,
+    // these keys may or may not exist
+    all: Joi.number().integer(),
+    week: Joi.number().integer(),
+    day: Joi.number().integer(),
   }).required(),
   meta: Joi.object({
     licenses: Joi.array().required(),
@@ -149,7 +149,9 @@ function DownloadsForInterval(interval) {
 
     async handle({ pkg }) {
       const json = await this.fetch({ pkg })
-      return this.constructor.render({ downloads: json.downloads[interval] })
+      return this.constructor.render({
+        downloads: json.downloads[interval] || 0,
+      })
     }
 
     static get defaultBadgeData() {
