@@ -18,7 +18,6 @@ const {
   makeColor,
   setBadgeColor,
 } = require('../lib/badge-data')
-
 const { staticBadgeUrl } = require('../lib/make-badge-url')
 const trace = require('./trace')
 
