@@ -1,21 +1,23 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import fetchPonyfill from 'fetch-ponyfill';
-import debounce from 'lodash.debounce';
-import { Badge } from './badge-examples';
-import resolveUrl from '../lib/resolve-url';
+import React from 'react'
+import PropTypes from 'prop-types'
+import fetchPonyfill from 'fetch-ponyfill'
+import debounce from 'lodash.debounce'
+import { Badge } from './badge-examples'
+import resolveUrl from '../lib/resolve-url'
 
 export default class SuggestionAndSearch extends React.Component {
   static propTypes = {
     queryChanged: PropTypes.func.isRequired,
     onBadgeClick: PropTypes.func.isRequired,
-    baseUri: PropTypes.string.isRequired,
+    baseUrl: PropTypes.string.isRequired,
     longCache: PropTypes.bool.isRequired,
-  };
+  }
 
   constructor(props) {
-    super(props);
-    this.queryChangedDebounced = debounce(props.queryChanged, 50, { leading: true });
+    super(props)
+    this.queryChangedDebounced = debounce(props.queryChanged, 50, {
+      leading: true,
+    })
   }
 
   state = {
@@ -23,63 +25,70 @@ export default class SuggestionAndSearch extends React.Component {
     inProgress: false,
     projectUrl: null,
     suggestions: [],
-  };
+  }
 
   queryChanged(query) {
-    const isUri = query.startsWith('https://') || query.startsWith('http://');
+    const isUrl = query.startsWith('https://') || query.startsWith('http://')
     this.setState({
-      isUri,
-      projectUri: isUri ? query : null,
-    });
+      isUrl,
+      projectUrl: isUrl ? query : null,
+    })
 
-    this.queryChangedDebounced(query);
+    this.queryChangedDebounced(query)
   }
 
   getSuggestions() {
-    this.setState({ inProgress: true }, () => {
-      const { baseUri } = this.props;
-      const { projectUri } = this.state;
+    this.setState({ inProgress: true }, async () => {
+      const { baseUrl } = this.props
+      const { projectUrl } = this.state
 
-      const url = resolveUrl('/$suggest/v1', baseUri, { url: projectUri });
+      const url = resolveUrl('/$suggest/v1', baseUrl, { url: projectUrl })
 
-      const fetch = window.fetch || fetchPonyfill;
-      fetch(url)
-        .then(res => res.json())
-        .then(json => {
-          this.setState({ inProgress: false, suggestions: json.badges });
-        })
-        .catch(() => {
-          this.setState({ inProgress: false, suggestions: [] });
-        });
-    });
+      const fetch = window.fetch || fetchPonyfill
+      const res = await fetch(url)
+      let suggestions
+      try {
+        const json = await res.json()
+        suggestions = json.badges
+      } catch (e) {
+        suggestions = []
+      }
+
+      this.setState({ inProgress: false, suggestions })
+    })
   }
 
   renderSuggestions() {
-    const { baseUri, longCache } = this.props;
-    const { suggestions } = this.state;
+    const { baseUrl, longCache } = this.props
+    const { suggestions } = this.state
 
     if (suggestions.length === 0) {
-      return null;
+      return null
     }
 
     return (
-      <table className="badge"><tbody>
-        { suggestions.map(({ name, link, badge }, i) => (
-          // TODO We need to deal with `link`.
-          <Badge
-            key={i}
-            title={name}
-            previewUri={badge}
-            onClick={() => this.props.onBadgeClick({
-              title: name,
-              previewUri: badge,
-              link,
-            })}
-            baseUri={baseUri}
-            longCache={longCache} />
-        ))}
-      </tbody></table>
-    );
+      <table className="badge">
+        <tbody>
+          {suggestions.map(({ name, link, badge }, i) => (
+            // TODO We need to deal with `link`.
+            <Badge
+              key={i}
+              title={name}
+              previewUrl={badge}
+              onClick={() =>
+                this.props.onBadgeClick({
+                  title: name,
+                  previewUrl: badge,
+                  link,
+                })
+              }
+              baseUrl={baseUrl}
+              longCache={longCache}
+            />
+          ))}
+        </tbody>
+      </table>
+    )
   }
 
   render() {
@@ -88,18 +97,21 @@ export default class SuggestionAndSearch extends React.Component {
         <form action="javascript:void 0" autoComplete="off">
           <input
             onChange={event => this.queryChanged(event.target.value)}
-            autofill="off" autoFocus
-            placeholder="search / project URL" />
+            autofill="off"
+            autoFocus
+            placeholder="search / project URL"
+          />
           <br />
           <button
             onClick={event => this.getSuggestions(event.target.value)}
             disabled={this.state.inProgress}
-            hidden={! this.state.isUri}>
+            hidden={!this.state.isUrl}
+          >
             Suggest badges
           </button>
         </form>
-        { this.renderSuggestions() }
+        {this.renderSuggestions()}
       </section>
-    );
+    )
   }
 }

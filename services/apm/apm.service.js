@@ -1,133 +1,158 @@
-'use strict';
+'use strict'
 
-const { BaseJsonService } = require('../base');
-const { InvalidResponse } = require('../errors');
-const { version: versionColor } = require('../../lib/color-formatters');
-const {
-  metric,
-  addv
-} = require('../../lib/text-formatters');
+const Joi = require('joi')
+const { renderLicenseBadge } = require('../../lib/licenses')
+const { renderVersionBadge } = require('../../lib/version')
+const { metric } = require('../../lib/text-formatters')
+const BaseJsonService = require('../base-json')
+const { InvalidResponse } = require('../errors')
+const { nonNegativeInteger } = require('../validators')
+
+const apmSchema = Joi.object({
+  downloads: nonNegativeInteger,
+  releases: Joi.object({
+    latest: Joi.string().required(),
+  }),
+  metadata: Joi.object({
+    license: Joi.string().required(),
+  }),
+})
 
 class BaseAPMService extends BaseJsonService {
-
-  async fetch(repo) {
-    const apiUrl = 'https://atom.io/api/packages/' + repo;
-    return this._requestJson(apiUrl, {}, 'package not found');
+  async fetch({ repo }) {
+    return this._requestJson({
+      schema: apmSchema,
+      url: `https://atom.io/api/packages/${repo}`,
+      errorMessages: { 404: 'package not found' },
+    })
   }
 
   static get defaultBadgeData() {
-    return { label: 'apm' };
+    return { label: 'apm' }
   }
-
 }
 
 class APMDownloads extends BaseAPMService {
-  async handle({repo}) {
-    const json = await this.fetch(repo);
+  static render({ downloads }) {
+    return { message: metric(downloads), color: 'green' }
+  }
 
-    const downloads = json.downloads;
-    return {message: metric(downloads), color: 'green'};
+  async handle({ repo }) {
+    const json = await this.fetch({ repo })
+    return this.constructor.render({ downloads: json.downloads })
   }
 
   static get category() {
-    return 'downloads';
+    return 'downloads'
   }
 
   static get defaultBadgeData() {
-    return { label: 'downloads' };
+    return { label: 'downloads' }
   }
 
   static get url() {
     return {
       base: 'apm/dm',
       format: '(.+)',
-      capture: ['repo']
-    };
+      capture: ['repo'],
+    }
   }
 
   static get examples() {
     return [
       {
-        previewUrl: 'dm/vim-mode',
-        keywords: [
-          'atom'
-        ]
+        exampleUrl: 'vim-mode',
+        urlPattern: ':package',
+        staticExample: this.render({ downloads: '60043' }),
+        keywords: ['atom'],
       },
-    ];
+    ]
   }
-};
+}
 
 class APMVersion extends BaseAPMService {
-  async handle({repo}) {
-    const json = await this.fetch(repo);
+  static render({ version }) {
+    return renderVersionBadge({ version })
+  }
 
-    const version = json.releases.latest;
+  async handle({ repo }) {
+    const json = await this.fetch({ repo })
+
+    const version = json.releases.latest
     if (!version)
-      throw new InvalidResponse({ underlyingError: new Error('version is invalid') });
-    return {message: addv(version), color: versionColor(version)};
+      throw new InvalidResponse({
+        underlyingError: new Error('version is invalid'),
+      })
+    return this.constructor.render({ version })
   }
 
   static get category() {
-    return 'version';
+    return 'version'
   }
 
   static get url() {
     return {
       base: 'apm/v',
       format: '(.+)',
-      capture: ['repo']
-    };
+      capture: ['repo'],
+    }
   }
 
   static get examples() {
     return [
       {
-        previewUrl: 'v/vim-mode',
-        keywords: [
-          'atom'
-        ]
+        exampleUrl: 'vim-mode',
+        urlPattern: ':package',
+        staticExample: this.render({ version: '0.6.0' }),
+        keywords: ['atom'],
       },
-    ];
+    ]
   }
-};
+}
 
 class APMLicense extends BaseAPMService {
-  async handle({repo}) {
-    const json = await this.fetch(repo);
+  static render({ license }) {
+    return renderLicenseBadge({ license })
+  }
 
-    const license = json.metadata.license;
+  async handle({ repo }) {
+    const json = await this.fetch({ repo })
+
+    const license = json.metadata.license
     if (!license)
-      throw new InvalidResponse({ underlyingError: new Error('licence is invalid') });
-    return {message: license, color: 'blue'};
+      throw new InvalidResponse({
+        underlyingError: new Error('licence is invalid'),
+      })
+    return this.constructor.render({ license })
   }
 
   static get defaultBadgeData() {
-    return { label: 'license' };
+    return { label: 'license' }
   }
 
   static get category() {
-    return 'license';
+    return 'license'
   }
 
   static get url() {
     return {
       base: 'apm/l',
       format: '(.+)',
-      capture: ['repo']
-    };
+      capture: ['repo'],
+    }
   }
 
   static get examples() {
     return [
       {
-        previewUrl: 'l/vim-mode',
-        keywords: [
-          'atom'
-        ]
+        exampleUrl: 'vim-mode',
+        urlPattern: ':package',
+        staticExample: this.render({ license: 'MIT' }),
+        keywords: ['atom'],
       },
-    ];
+    ]
   }
-};
+}
 
 module.exports = {
   APMDownloads,

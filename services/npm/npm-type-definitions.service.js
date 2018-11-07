@@ -1,54 +1,76 @@
-'use strict';
+'use strict'
 
-const { BaseJsonService } = require('../base');
-const {
-  makePackageDataUrl,
-  typeDefinitions,
-} = require('../../lib/npm-badge-helpers');
+const NpmBase = require('./npm-base')
 
-module.exports = class NPMTypeDefinitions extends BaseJsonService {
+// For this badge to correctly detect type definitions, either the relevant
+// dependencies must be declared, or the `types` key must be set in
+// package.json.
+module.exports = class NpmTypeDefinitions extends NpmBase {
   static get category() {
-    return 'version';
+    return 'other'
   }
 
   static get defaultBadgeData() {
-    return { label: 'type definitions' };
+    return { label: 'types' }
   }
 
   static get url() {
-    return {
-      base: 'npm/types',
-      format: '(?:@([^/]+)/)?([^/]+)',
-      capture: ['scope', 'packageName'],
-      queryParams: ['registry_uri'],
-    };
+    return this.buildUrl('npm/types', { withTag: false })
   }
 
   static get examples() {
-    return [{
-      title: 'npm type definitions',
-      previewUrl: 'chalk',
-      keywords: ['node', 'typescript', 'flow'],
-    }];
+    return [
+      {
+        title: 'npm type definitions',
+        previewUrl: 'chalk',
+        keywords: ['node', 'typescript', 'flow'],
+      },
+    ]
   }
 
-  async handle({ scope, packageName }, { registry_uri: registryUrl }) {
-    const apiUrl = makePackageDataUrl({ registryUrl, scope, packageName });
+  static transform({ devDependencies, types, files }) {
+    const supportedLanguages = []
 
-    const json = await this._requestJson(apiUrl, {}, 'package not found');
-
-    let packageData;
-    if (scope === undefined) {
-      packageData = json;
-    } else {
-      const latestVersion = json['dist-tags'].latest;
-      packageData = json.versions[latestVersion];
+    if (
+      types !== undefined ||
+      devDependencies.typescript !== undefined ||
+      files.includes('index.d.ts')
+    ) {
+      supportedLanguages.push('TypeScript')
     }
 
-    const message = typeDefinitions(packageData);
-    return {
-      message,
-      color: message === 'none' ? 'lightgray' : 'blue',
-    };
+    if (
+      devDependencies['flow-bin'] !== undefined ||
+      files.includes('index.js.flow')
+    ) {
+      supportedLanguages.push('Flow')
+    }
+
+    return { supportedLanguages }
   }
-};
+
+  static render({ supportedLanguages }) {
+    if (supportedLanguages.length === 0) {
+      return { message: 'none', color: 'lightgray' }
+    } else {
+      return {
+        message: supportedLanguages.sort().join(' | '),
+        color: 'blue',
+      }
+    }
+  }
+
+  async handle(namedParams, queryParams) {
+    const { scope, packageName, registryUrl } = this.constructor.unpackParams(
+      namedParams,
+      queryParams
+    )
+    const json = await this.fetchPackageData({
+      scope,
+      packageName,
+      registryUrl,
+    })
+    const props = this.constructor.transform(json)
+    return this.constructor.render(props)
+  }
+}
