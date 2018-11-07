@@ -307,6 +307,8 @@ class BaseService {
 
     const badgeData = {
       text: [
+        // Use `coalesce()` to support empty labels and messages, as in the
+        // static badge.
         coalesce(overrideLabel, serviceLabel, defaultLabel, this.category),
         coalesce(serviceMessage, 'n/a'),
       ],
