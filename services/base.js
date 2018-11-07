@@ -18,12 +18,9 @@ const {
   makeColor,
   setBadgeColor,
 } = require('../lib/badge-data')
-const { makeMakeBadgeFn } = require('../lib/make-badge')
-const { makeSend } = require('../lib/result-sender')
+
 const { staticBadgeUrl } = require('../lib/make-badge-url')
 const trace = require('./trace')
-
-const serverStartTime = new Date(new Date().toGMTString())
 
 function coalesce(...candidates) {
   return candidates.find(c => typeof c === 'string')
@@ -201,10 +198,6 @@ class BaseService {
     return cacheLengths[this.category]
   }
 
-  static get isStatic() {
-    return false
-  }
-
   static _namedParamsForMatch(match) {
     const names = this.url.capture || []
 
@@ -337,82 +330,33 @@ class BaseService {
     { camp, measurer, handleRequest, githubApiProvider },
     serviceConfig
   ) {
-    if (this.isStatic) {
-      const makeBadge = makeMakeBadgeFn(measurer)
-      camp.route(this._regex, (queryParams, match, end, ask) => {
-        if (
-          +new Date(ask.req.headers['if-modified-since']) >= +serverStartTime
-        ) {
-          // Send Not Modified.
-          ask.res.statusCode = 304
-          ask.res.end()
-          return
-        }
+    camp.route(
+      this._regex,
+      handleRequest({
+        queryParams: this.url.queryParams,
+        handler: async (queryParams, match, sendBadge, request) => {
+          const serviceInstance = new this(
+            {
+              sendAndCacheRequest: request.asPromise,
+            },
+            serviceConfig
+          )
+          const namedParams = this._namedParamsForMatch(match)
+          const serviceData = await serviceInstance.invokeHandler(
+            namedParams,
+            queryParams
+          )
+          trace.logTrace('outbound', emojic.shield, 'Service data', serviceData)
+          const badgeData = this._makeBadgeData(queryParams, serviceData)
 
-        const serviceInstance = new this({}, serviceConfig)
-        const namedParams = this._namedParamsForMatch(match)
-        let serviceData
-        try {
-          // Note: no `await`.
-          serviceData = serviceInstance.handle(namedParams, queryParams)
-        } catch (error) {
-          serviceData = serviceInstance._handleError(error)
-        }
+          // The final capture group is the extension.
+          const format = match.slice(-1)[0]
 
-        const badgeData = this._makeBadgeData(queryParams, serviceData)
-
-        // The final capture group is the extension.
-        const format = match.slice(-1)[0]
-        badgeData.format = format
-
-        if (serviceConfig.profiling.makeBadge) {
-          console.time('makeBadge total')
-        }
-        const svg = makeBadge(badgeData)
-        if (serviceConfig.profiling.makeBadge) {
-          console.timeEnd('makeBadge total')
-        }
-
-        const cacheDuration = 3600 * 24 * 1 // 1 day.
-        ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
-        ask.res.setHeader('Last-Modified', serverStartTime.toGMTString())
-
-        makeSend(format, ask.res, end)(svg)
+          sendBadge(format, badgeData)
+        },
+        cacheLength: this._cacheLength,
       })
-    } else {
-      camp.route(
-        this._regex,
-        handleRequest({
-          queryParams: this.url.queryParams,
-          handler: async (queryParams, match, sendBadge, request) => {
-            const serviceInstance = new this(
-              {
-                sendAndCacheRequest: request.asPromise,
-              },
-              serviceConfig
-            )
-            const namedParams = this._namedParamsForMatch(match)
-            const serviceData = await serviceInstance.invokeHandler(
-              namedParams,
-              queryParams
-            )
-            trace.logTrace(
-              'outbound',
-              emojic.shield,
-              'Service data',
-              serviceData
-            )
-            const badgeData = this._makeBadgeData(queryParams, serviceData)
-
-            // The final capture group is the extension.
-            const format = match.slice(-1)[0]
-
-            sendBadge(format, badgeData)
-          },
-          cacheLength: this._cacheLength,
-        })
-      )
-    }
+    )
   }
 
   static _validate(data, schema) {

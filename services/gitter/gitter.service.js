@@ -1,8 +1,8 @@
 'use strict'
 
-const BaseService = require('../base')
+const BaseStaticService = require('../base-static')
 
-module.exports = class Gitter extends BaseService {
+module.exports = class Gitter extends BaseStaticService {
   static get category() {
     return 'chat'
   }
@@ -23,10 +23,6 @@ module.exports = class Gitter extends BaseService {
         exampleUrl: 'nwjs/nw.js',
       },
     ]
-  }
-
-  static get isStatic() {
-    return true
   }
 
   static get defaultBadgeData() {

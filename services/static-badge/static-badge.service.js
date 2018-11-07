@@ -1,8 +1,8 @@
 'use strict'
 
-const BaseService = require('../base')
+const BaseStaticService = require('../base-static')
 
-module.exports = class StaticBadge extends BaseService {
+module.exports = class StaticBadge extends StaticService {
   static get category() {
     return 'other'
   }
@@ -12,10 +12,6 @@ module.exports = class StaticBadge extends BaseService {
       format: '(?:badge|:)/?((?:[^-]|--)*?)-((?:[^-]|--)*)-((?:[^-]|--)+)',
       capture: ['label', 'message', 'color'],
     }
-  }
-
-  static get isStatic() {
-    return true
   }
 
   // Note: Since `isStatic` is true, `handle()` is not `async`.
