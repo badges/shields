@@ -9,8 +9,6 @@ const t = new ServiceTester({
 })
 module.exports = t
 
-// version endpoint
-
 t.create('Shields colorscheme color')
   .get('/label-message-blue.json?style=_shields_test')
   .expectJSON({ name: 'label', value: 'message', colorB: '#007ec6' })
