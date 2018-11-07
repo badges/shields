@@ -14,11 +14,11 @@ module.exports = class StaticBadge extends BaseService {
     }
   }
 
+  static get isStatic() {
+    return true
+  }
+
   async handle({ label, message, color }) {
-    return {
-      label,
-      message,
-      color,
-    }
+    return { label, message, color }
   }
 }

@@ -197,6 +197,10 @@ class BaseService {
     return cacheLengths[this.category]
   }
 
+  static get isStatic() {
+    return false
+  }
+
   static _namedParamsForMatch(match) {
     const names = this.url.capture || []
 
@@ -348,6 +352,7 @@ class BaseService {
           sendBadge(format, badgeData)
         },
         cacheLength: this._cacheLength,
+        isStatic: this.isStatic,
       })
     )
   }
