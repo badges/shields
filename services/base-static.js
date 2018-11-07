@@ -2,6 +2,7 @@
 
 const { makeMakeBadgeFn } = require('../lib/make-badge')
 const { makeSend } = require('../lib/result-sender')
+const analytics = require('../lib/analytics')
 const BaseService = require('./base')
 
 const serverStartTime = new Date(new Date().toGMTString())
@@ -16,6 +17,8 @@ module.exports = class BaseStaticService extends BaseService {
     const makeBadge = makeMakeBadgeFn(measurer)
 
     camp.route(this._regex, (queryParams, match, end, ask) => {
+      analytics.noteRequest(queryParams, match)
+
       if (+new Date(ask.req.headers['if-modified-since']) >= +serverStartTime) {
         // Send Not Modified.
         ask.res.statusCode = 304
