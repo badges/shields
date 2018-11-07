@@ -226,7 +226,7 @@ class BaseService {
     return result
   }
 
-  static async _handleError(error) {
+  _handleError(error) {
     if (error instanceof NotFound || error instanceof InvalidParameter) {
       trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
       return {
@@ -284,7 +284,7 @@ class BaseService {
     try {
       return await this.handle(namedParams, queryParams)
     } catch (error) {
-      this._handleError(error)
+      return this._handleError(error)
     }
   }
 
@@ -356,7 +356,7 @@ class BaseService {
           // Note: no `await`.
           serviceData = serviceInstance.handle(namedParams, queryParams)
         } catch (error) {
-          this._handleError(error)
+          serviceData = serviceInstance._handleError(error)
         }
 
         const badgeData = this._makeBadgeData(queryParams, serviceData)
@@ -364,7 +364,14 @@ class BaseService {
         // The final capture group is the extension.
         const format = match.slice(-1)[0]
         badgeData.format = format
+
+        if (serviceConfig.profiling.makeBadge) {
+          console.time('makeBadge total')
+        }
         const svg = makeBadge(badgeData)
+        if (serviceConfig.profiling.makeBadge) {
+          console.timeEnd('makeBadge total')
+        }
 
         const cacheDuration = 3600 * 24 * 1 // 1 day.
         ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
