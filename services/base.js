@@ -326,10 +326,7 @@ class BaseService {
     return badgeData
   }
 
-  static register(
-    { camp, measurer, handleRequest, githubApiProvider },
-    serviceConfig
-  ) {
+  static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
     camp.route(
       this._regex,
       handleRequest({
@@ -351,7 +348,6 @@ class BaseService {
 
           // The final capture group is the extension.
           const format = match.slice(-1)[0]
-
           sendBadge(format, badgeData)
         },
         cacheLength: this._cacheLength,
