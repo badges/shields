@@ -2,7 +2,7 @@
 
 const BaseStaticService = require('../base-static')
 
-module.exports = class StaticBadge extends StaticService {
+module.exports = class StaticBadge extends BaseStaticService {
   static get category() {
     return 'other'
   }
