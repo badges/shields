@@ -37,7 +37,8 @@ module.exports = class Gitter extends BaseService {
     return { message: 'on gitter', color: 'brightgreen' }
   }
 
-  async handle() {
+  // Note: Since `isStatic` is true, `handle()` is not `async`.
+  handle() {
     return this.constructor.render()
   }
 }

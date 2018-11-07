@@ -114,7 +114,7 @@ camp.notfound(/.*/, (query, match, end, request) => {
 
 loadServiceClasses().forEach(serviceClass =>
   serviceClass.register(
-    { camp, handleRequest: cache, githubApiProvider },
+    { camp, measurer, handleRequest: cache, githubApiProvider },
     { handleInternalErrors: config.handleInternalErrors }
   )
 )

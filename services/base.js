@@ -18,8 +18,12 @@ const {
   makeColor,
   setBadgeColor,
 } = require('../lib/badge-data')
+const { makeMakeBadgeFn } = require('../lib/make-badge')
+const { makeSend } = require('../lib/result-sender')
 const { staticBadgeUrl } = require('../lib/make-badge-url')
 const trace = require('./trace')
+
+const serverStartTime = new Date(new Date().toGMTString())
 
 function coalesce(...candidates) {
   return candidates.find(c => typeof c === 'string')
@@ -222,6 +226,52 @@ class BaseService {
     return result
   }
 
+  static async _handleError(error) {
+    if (error instanceof NotFound || error instanceof InvalidParameter) {
+      trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
+      return {
+        message: error.prettyMessage,
+        color: 'red',
+      }
+    } else if (
+      error instanceof InvalidResponse ||
+      error instanceof Inaccessible ||
+      error instanceof Deprecated
+    ) {
+      trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
+      return {
+        message: error.prettyMessage,
+        color: 'lightgray',
+      }
+    } else if (this._handleInternalErrors) {
+      if (
+        !trace.logTrace(
+          'unhandledError',
+          emojic.boom,
+          'Unhandled internal error',
+          error
+        )
+      ) {
+        // This is where we end up if an unhandled exception is thrown in
+        // production. Send the error to the logs.
+        console.log(error)
+      }
+      return {
+        label: 'shields',
+        message: 'internal error',
+        color: 'lightgray',
+      }
+    } else {
+      trace.logTrace(
+        'unhandledError',
+        emojic.boom,
+        'Unhandled internal error',
+        error
+      )
+      throw error
+    }
+  }
+
   async invokeHandler(namedParams, queryParams) {
     trace.logTrace(
       'inbound',
@@ -234,49 +284,7 @@ class BaseService {
     try {
       return await this.handle(namedParams, queryParams)
     } catch (error) {
-      if (error instanceof NotFound || error instanceof InvalidParameter) {
-        trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
-        return {
-          message: error.prettyMessage,
-          color: 'red',
-        }
-      } else if (
-        error instanceof InvalidResponse ||
-        error instanceof Inaccessible ||
-        error instanceof Deprecated
-      ) {
-        trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
-        return {
-          message: error.prettyMessage,
-          color: 'lightgray',
-        }
-      } else if (this._handleInternalErrors) {
-        if (
-          !trace.logTrace(
-            'unhandledError',
-            emojic.boom,
-            'Unhandled internal error',
-            error
-          )
-        ) {
-          // This is where we end up if an unhandled exception is thrown in
-          // production. Send the error to the logs.
-          console.log(error)
-        }
-        return {
-          label: 'shields',
-          message: 'internal error',
-          color: 'lightgray',
-        }
-      } else {
-        trace.logTrace(
-          'unhandledError',
-          emojic.boom,
-          'Unhandled internal error',
-          error
-        )
-        throw error
-      }
+      this._handleError(error)
     }
   }
 
@@ -325,36 +333,79 @@ class BaseService {
     return badgeData
   }
 
-  static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
-    const ServiceClass = this // In a static context, "this" is the class.
+  static register(
+    { camp, measurer, handleRequest, githubApiProvider },
+    serviceConfig
+  ) {
+    if (this.isStatic) {
+      const makeBadge = makeMakeBadgeFn(measurer)
+      camp.route(this._regex, (queryParams, match, end, ask) => {
+        if (
+          +new Date(ask.req.headers['if-modified-since']) >= +serverStartTime
+        ) {
+          // Send Not Modified.
+          ask.res.statusCode = 304
+          ask.res.end()
+          return
+        }
 
-    camp.route(
-      this._regex,
-      handleRequest({
-        queryParams: this.url.queryParams,
-        handler: async (queryParams, match, sendBadge, request) => {
-          const namedParams = this._namedParamsForMatch(match)
-          const serviceInstance = new ServiceClass(
-            {
-              sendAndCacheRequest: request.asPromise,
-            },
-            serviceConfig
-          )
-          const serviceData = await serviceInstance.invokeHandler(
-            namedParams,
-            queryParams
-          )
-          trace.logTrace('outbound', emojic.shield, 'Service data', serviceData)
-          const badgeData = this._makeBadgeData(queryParams, serviceData)
+        const serviceInstance = new this({}, serviceConfig)
+        const namedParams = this._namedParamsForMatch(match)
+        let serviceData
+        try {
+          // Note: no `await`.
+          serviceData = serviceInstance.handle(namedParams, queryParams)
+        } catch (error) {
+          this._handleError(error)
+        }
 
-          // Assumes the final capture group is the extension
-          const format = match.slice(-1)[0]
-          sendBadge(format, badgeData)
-        },
-        cacheLength: this._cacheLength,
-        isStatic: this.isStatic,
+        const badgeData = this._makeBadgeData(queryParams, serviceData)
+
+        // The final capture group is the extension.
+        const format = match.slice(-1)[0]
+        badgeData.format = format
+        const svg = makeBadge(badgeData)
+
+        const cacheDuration = 3600 * 24 * 1 // 1 day.
+        ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
+        ask.res.setHeader('Last-Modified', serverStartTime.toGMTString())
+
+        makeSend(format, ask.res, end)(svg)
       })
-    )
+    } else {
+      camp.route(
+        this._regex,
+        handleRequest({
+          queryParams: this.url.queryParams,
+          handler: async (queryParams, match, sendBadge, request) => {
+            const serviceInstance = new this(
+              {
+                sendAndCacheRequest: request.asPromise,
+              },
+              serviceConfig
+            )
+            const namedParams = this._namedParamsForMatch(match)
+            const serviceData = await serviceInstance.invokeHandler(
+              namedParams,
+              queryParams
+            )
+            trace.logTrace(
+              'outbound',
+              emojic.shield,
+              'Service data',
+              serviceData
+            )
+            const badgeData = this._makeBadgeData(queryParams, serviceData)
+
+            // The final capture group is the extension.
+            const format = match.slice(-1)[0]
+
+            sendBadge(format, badgeData)
+          },
+          cacheLength: this._cacheLength,
+        })
+      )
+    }
   }
 
   static _validate(data, schema) {

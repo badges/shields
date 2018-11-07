@@ -18,7 +18,8 @@ module.exports = class StaticBadge extends BaseService {
     return true
   }
 
-  async handle({ label, message, color }) {
+  // Note: Since `isStatic` is true, `handle()` is not `async`.
+  handle({ label, message, color }) {
     return { label, message, color }
   }
 }
