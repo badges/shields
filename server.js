@@ -23,8 +23,6 @@ const { makeMakeBadgeFn } = require('./lib/make-badge')
 const { QuickTextMeasurer } = require('./lib/text-measurer')
 const suggest = require('./lib/suggest')
 const {
-  makeColorB,
-  makeLabel: getLabel,
   makeBadgeData: getBadgeData,
   setBadgeColor,
 } = require('./lib/badge-data')
@@ -34,7 +32,6 @@ const {
 } = require('./lib/request-handler')
 const { clearRegularUpdateCache } = require('./lib/regular-update')
 const { makeSend } = require('./lib/result-sender')
-const { escapeFormat } = require('./lib/path-helpers')
 
 const serverStartTime = new Date(new Date().toGMTString())
 
