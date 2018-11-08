@@ -42,6 +42,8 @@ module.exports = class TravisPhpVersion extends LegacyService {
         }
         const badgeData = getBadgeData('php', data)
         getPhpReleases(githubApiProvider)
+          // Switch to async/await when this is refactored.
+          // eslint-disable-next-line promise/prefer-await-to-then
           .then(phpReleases => {
             request(options, (err, res, buffer) => {
               if (err !== null) {

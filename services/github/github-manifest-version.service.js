@@ -49,8 +49,8 @@ module.exports = class GithubManifestVersion extends LegacyService {
                   typeof jsonData[info] !== 'object'
                     ? jsonData[info]
                     : Array.isArray(jsonData[info])
-                      ? jsonData[info].join(', ')
-                      : 'invalid data'
+                    ? jsonData[info].join(', ')
+                    : 'invalid data'
                 badgeData.text[0] = getLabel(`${type} ${info}`, queryData)
                 badgeData.text[1] = value
                 badgeData.colorscheme =

@@ -3,6 +3,8 @@
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const Joi = require('joi')
+const queryString = require('query-string')
+const pathToRegexp = require('path-to-regexp')
 const {
   NotFound,
   InvalidResponse,
@@ -11,13 +13,13 @@ const {
   Deprecated,
 } = require('./errors')
 const { checkErrorResponse } = require('../lib/error-helper')
-const queryString = require('query-string')
 const {
   makeLogo,
   toArray,
   makeColor,
   setBadgeColor,
 } = require('../lib/badge-data')
+const { staticBadgeUrl } = require('../lib/make-badge-url')
 const trace = require('./trace')
 
 class BaseService {
@@ -89,20 +91,11 @@ class BaseService {
 
   static _makeStaticExampleUrl(serviceData) {
     const badgeData = this._makeBadgeData({}, serviceData)
-    const color = badgeData.colorscheme || badgeData.colorB
-    return this._makeStaticExampleUrlFromTextAndColor(
-      badgeData.text[0],
-      badgeData.text[1],
-      color
-    )
-  }
-
-  static _makeStaticExampleUrlFromTextAndColor(text1, text2, color) {
-    return `/badge/${encodeURIComponent(
-      text1.replace('-', '--')
-    )}-${encodeURIComponent(text2).replace('-', '--')}-${encodeURIComponent(
-      color
-    )}`
+    return staticBadgeUrl({
+      label: badgeData.text[0],
+      message: `${badgeData.text[1]}`,
+      color: badgeData.colorscheme,
+    })
   }
 
   static _dotSvg(url) {
@@ -171,7 +164,7 @@ class BaseService {
             ? `${this._dotSvg(this._makeFullUrl(exampleUrl))}${suffix}`
             : undefined,
           previewUrl: staticExample
-            ? `${this._makeStaticExampleUrl(staticExample)}.svg`
+            ? this._makeStaticExampleUrl(staticExample)
             : `${this._dotSvg(this._makeFullUrl(previewUrl))}${suffix}`,
           urlPattern: urlPattern
             ? `${this._dotSvg(this._makeFullUrl(urlPattern))}${suffix}`
@@ -183,13 +176,45 @@ class BaseService {
     )
   }
 
+  static get _regexFromPath() {
+    const { pattern } = this.url
+    const fullPattern = `${this._makeFullUrl(
+      pattern
+    )}.:ext(svg|png|gif|jpg|json)`
+
+    const keys = []
+    const regex = pathToRegexp(fullPattern, keys, {
+      strict: true,
+      sensitive: true,
+    })
+    const capture = keys.map(item => item.name).slice(0, -1)
+
+    return { regex, capture }
+  }
+
   static get _regex() {
-    // Regular expressions treat "/" specially, so we need to escape them
-    const escapedPath = this.url.format.replace(/\//g, '\\/')
-    const fullRegex = `^${this._makeFullUrl(
-      escapedPath
-    )}.(svg|png|gif|jpg|json)$`
-    return new RegExp(fullRegex)
+    const { pattern, format, capture } = this.url
+    if (
+      pattern !== undefined &&
+      (format !== undefined || capture !== undefined)
+    ) {
+      throw Error(
+        `Since the route for ${
+          this.name
+        } includes a pattern, it should not include a format or capture`
+      )
+    } else if (pattern !== undefined) {
+      return this._regexFromPath.regex
+    } else if (format !== undefined) {
+      // Regular expressions treat "/" specially, so we need to escape them
+      const escapedPath = this.url.format.replace(/\//g, '\\/')
+      const fullRegex = `^${this._makeFullUrl(
+        escapedPath
+      )}.(svg|png|gif|jpg|json)$`
+      return new RegExp(fullRegex)
+    } else {
+      throw Error(`The route for ${this.name} has neither pattern nor format`)
+    }
   }
 
   static get _cacheLength() {
@@ -202,7 +227,8 @@ class BaseService {
   }
 
   static _namedParamsForMatch(match) {
-    const names = this.url.capture || []
+    const { url } = this
+    const names = url.pattern ? this._regexFromPath.capture : url.capture || []
 
     // Assume the last match is the format, and drop match[0], which is the
     // entire match.
