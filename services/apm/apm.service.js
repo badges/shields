@@ -53,8 +53,7 @@ class APMDownloads extends BaseAPMService {
   static get route() {
     return {
       base: 'apm/dm',
-      format: '(.+)',
-      capture: ['repo'],
+      pattern: ':repo',
     }
   }
 

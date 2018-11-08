@@ -4,6 +4,7 @@
 const emojic = require('emojic')
 const Joi = require('joi')
 const queryString = require('query-string')
+const pathToRegexp = require('path-to-regexp')
 const {
   NotFound,
   InvalidResponse,
@@ -52,9 +53,9 @@ class BaseService {
 
   /**
    * Returns an object:
-   *  - base: (Optional) The base path of the routes for this service. This is
+   *  - base: (Optional) The base path of the URLs for this service. This is
    *    used as a prefix.
-   *  - format: Regular expression to use for routes for this service's badges
+   *  - format: Regular expression to use for URLs for this service's badges
    *  - capture: Array of names for the capture groups in the regular
    *             expression. The handler will be passed an object containing
    *             the matches.
@@ -62,14 +63,14 @@ class BaseService {
    *                 uses. For cache safety, only the whitelisted query
    *                 parameters will be passed to the handler.
    */
-  static get route() {
-    throw new Error(`Route not defined for ${this.name}`)
+  static get url() {
+    throw new Error(`URL not defined for ${this.name}`)
   }
 
   /**
    * Default data for the badge. Can include things such as default logo, color,
    * etc. These defaults will be used if the value is not explicitly overridden
-   * by either the handler or by the user via query parameters.
+   * by either the handler or by the user via URL parameters.
    */
   static get defaultBadgeData() {
     return {}
@@ -77,7 +78,7 @@ class BaseService {
 
   /**
    * Example URLs for this service. These should use the format
-   * specified in `route`, and can be used to demonstrate how to use badges for
+   * specified in `url`, and can be used to demonstrate how to use badges for
    * this service.
    */
   static get examples() {
@@ -85,7 +86,7 @@ class BaseService {
   }
 
   static _makeFullUrl(partialUrl) {
-    return `/${[this.route.base, partialUrl].filter(Boolean).join('/')}`
+    return `/${[this.url.base, partialUrl].filter(Boolean).join('/')}`
   }
 
   static _makeStaticExampleUrl(serviceData) {
@@ -175,13 +176,45 @@ class BaseService {
     )
   }
 
+  static get _regexFromPath() {
+    const { pattern } = this.url
+    const fullPattern = `${this._makeFullUrl(
+      pattern
+    )}.:ext(svg|png|gif|jpg|json)`
+
+    const keys = []
+    const regex = pathToRegexp(fullPattern, keys, {
+      strict: true,
+      sensitive: true,
+    })
+    const capture = keys.map(item => item.name).slice(0, -1)
+
+    return { regex, capture }
+  }
+
   static get _regex() {
-    // Regular expressions treat "/" specially, so we need to escape them
-    const escapedPath = this.route.format.replace(/\//g, '\\/')
-    const fullRegex = `^${this._makeFullUrl(
-      escapedPath
-    )}.(svg|png|gif|jpg|json)$`
-    return new RegExp(fullRegex)
+    const { pattern, format, capture } = this.url
+    if (
+      pattern !== undefined &&
+      (format !== undefined || capture !== undefined)
+    ) {
+      throw Error(
+        `Since the route for ${
+          this.name
+        } includes a pattern, it should not include a format or capture`
+      )
+    } else if (pattern !== undefined) {
+      return this._regexFromPath.regex
+    } else if (format !== undefined) {
+      // Regular expressions treat "/" specially, so we need to escape them
+      const escapedPath = this.url.format.replace(/\//g, '\\/')
+      const fullRegex = `^${this._makeFullUrl(
+        escapedPath
+      )}.(svg|png|gif|jpg|json)$`
+      return new RegExp(fullRegex)
+    } else {
+      throw Error(`The route for ${this.name} has neither pattern nor format`)
+    }
   }
 
   static get _cacheLength() {
@@ -194,7 +227,8 @@ class BaseService {
   }
 
   static _namedParamsForMatch(match) {
-    const names = this.route.capture || []
+    const { url } = this
+    const names = url.pattern ? this._regexFromPath.capture : url.capture || []
 
     // Assume the last match is the format, and drop match[0], which is the
     // entire match.
@@ -323,7 +357,7 @@ class BaseService {
     camp.route(
       this._regex,
       handleRequest({
-        queryParams: this.route.queryParams,
+        queryParams: this.url.queryParams,
         handler: async (queryParams, match, sendBadge, request) => {
           const namedParams = this._namedParamsForMatch(match)
           const serviceInstance = new ServiceClass(

@@ -45,8 +45,8 @@ module.exports = class NpmLicense extends NpmBase {
       packageName,
       registryUrl,
     })
-    const licenses = toArray(license).map(
-      license => (typeof license === 'string' ? license : license.type)
+    const licenses = toArray(license).map(license =>
+      typeof license === 'string' ? license : license.type
     )
     return this.constructor.render({ licenses })
   }

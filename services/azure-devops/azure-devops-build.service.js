@@ -53,6 +53,7 @@ module.exports = class AzureDevOpsBuild extends BaseSvgService {
         staticExample: render({ status: 'succeeded' }),
         exampleUrl:
           'azure-devops/build/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2',
+        keywords: ['vso'],
         documentation,
       },
       {
@@ -62,6 +63,7 @@ module.exports = class AzureDevOpsBuild extends BaseSvgService {
         staticExample: render({ status: 'succeeded' }),
         exampleUrl:
           'azure-devops/build/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2/master',
+        keywords: ['vso'],
         documentation,
       },
     ]

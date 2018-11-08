@@ -50,8 +50,7 @@ class AnsibleGalaxyRoleDownloads extends AnsibleGalaxyRole {
   static get route() {
     return {
       base: 'ansible/role/d',
-      format: '(.+)',
-      capture: ['roleId'],
+      pattern: ':roleId',
     }
   }
 
