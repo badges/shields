@@ -11,13 +11,19 @@ const {
   downloadCount: downloadCountColor,
   version: versionColor,
 } = require('../../lib/color-formatters')
-const { nonNegativeInteger } = require('../validators')
 
 const hexSchema = Joi.object({
   downloads: Joi.object({
-    all: nonNegativeInteger,
-    week: nonNegativeInteger,
-    day: nonNegativeInteger,
+    // these keys may or may not exist
+    all: Joi.number()
+      .integer()
+      .default(0),
+    week: Joi.number()
+      .integer()
+      .default(0),
+    day: Joi.number()
+      .integer()
+      .default(0),
   }).required(),
   meta: Joi.object({
     licenses: Joi.array().required(),
