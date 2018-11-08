@@ -98,7 +98,7 @@ describe('BaseService', function() {
 
     context('A `format` with a named param is declared', function() {
       class ServiceWithFormat extends BaseService {
-        static get url() {
+        static get route() {
           return {
             base: 'foo',
             format: '([^/]+)',
