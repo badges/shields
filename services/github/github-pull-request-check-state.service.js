@@ -45,6 +45,7 @@ module.exports = class GithubPullRequestCheckState extends GithubAuthService {
         urlPattern: 'contexts/pulls/:user/:repo/:number',
         staticExample: this.render({
           which: 'contexts',
+          state: 'pending',
           stateCounts: { passed: 5, pending: 1 },
         }),
         exampleUrl: 'contexts/pulls/badges/shields/1110',
