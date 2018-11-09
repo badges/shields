@@ -2,12 +2,12 @@
 
 const BaseService = require('../base')
 const { metric } = require('../../lib/text-formatters')
-const { InvalidResponse } = require('../errors')
 const {
   dockerBlue,
   buildDockerUrl,
   getDockerHubUser,
 } = require('./docker-helpers')
+const { nonNegativeInteger } = require('../validators')
 
 module.exports = class DockerStars extends BaseService {
   async fetch({ user, repo }) {
@@ -18,11 +18,7 @@ module.exports = class DockerStars extends BaseService {
       url,
       errorMessages: { 404: 'repo not found' },
     })
-    const num = parseInt(buffer.toString(), 10)
-    if (Number.isNaN(num)) {
-      throw new InvalidResponse('Unexpected response.')
-    }
-    return num
+    return this.constructor._validate(buffer, nonNegativeInteger)
   }
 
   static render({ stars }) {
