@@ -42,7 +42,7 @@ module.exports = class DockerBuild extends BaseJsonService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return buildDockerUrl('build')
   }
 

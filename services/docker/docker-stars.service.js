@@ -43,7 +43,7 @@ module.exports = class DockerStars extends BaseService {
     return 'rating'
   }
 
-  static get url() {
+  static get route() {
     return buildDockerUrl('stars')
   }
 

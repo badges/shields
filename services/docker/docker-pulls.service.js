@@ -46,7 +46,7 @@ module.exports = class DockerPulls extends BaseJsonService {
     return 'downloads'
   }
 
-  static get url() {
+  static get route() {
     return buildDockerUrl('pulls')
   }
 

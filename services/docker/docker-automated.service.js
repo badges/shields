@@ -41,7 +41,7 @@ module.exports = class DockerAutomatedBuild extends BaseJsonService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return buildDockerUrl('automated')
   }
 
