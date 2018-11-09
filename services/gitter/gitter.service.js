@@ -10,7 +10,7 @@ module.exports = class Gitter extends BaseStaticService {
   static get url() {
     return {
       base: 'gitter/room',
-      format: '[^/]+/[^/]+',
+      pattern: ':user/:repo',
     }
   }
 
