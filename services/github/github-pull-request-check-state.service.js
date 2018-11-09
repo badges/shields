@@ -22,11 +22,10 @@ module.exports = class GithubPullRequestCheckState extends GithubAuthService {
     return 'other'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'github/status',
-      format: '(s|contexts)/pulls/([^/]+)/([^/]+)/(\\d+)',
-      capture: ['which', 'user', 'repo', 'number'],
+      pattern: ':which(s|contexts)/pulls/:user/:repo/:number(\\d+)',
     }
   }
 
