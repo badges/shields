@@ -9,7 +9,7 @@ module.exports = class JiraIssue extends LegacyService {
     return 'issue-tracking'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'jira/issue',
     }

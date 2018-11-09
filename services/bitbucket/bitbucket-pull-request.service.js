@@ -10,7 +10,7 @@ const bitbucketPullRequestsSchema = Joi.object({
 }).required()
 
 function pullRequestClassGenerator(raw) {
-  const urlPrefix = raw ? 'pr-raw' : 'pr'
+  const routePrefix = raw ? 'pr-raw' : 'pr'
   const badgeSuffix = raw ? '' : ' open'
 
   return class BitbucketPullRequests extends BaseJsonService {
@@ -44,9 +44,9 @@ function pullRequestClassGenerator(raw) {
       return { label: 'pull requests' }
     }
 
-    static get url() {
+    static get route() {
       return {
-        base: `bitbucket/${urlPrefix}`,
+        base: `bitbucket/${routePrefix}`,
         format: '([^/]+)/([^/]+)',
         capture: ['user', 'repo'],
       }

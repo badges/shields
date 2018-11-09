@@ -18,7 +18,7 @@ class DummyJsonService extends BaseJsonService {
     return 'cat'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'foo',
     }

@@ -9,7 +9,7 @@ module.exports = class JenkinsTests extends LegacyService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'jenkins/t',
     }

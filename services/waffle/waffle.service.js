@@ -13,7 +13,7 @@ module.exports = class Waffle extends LegacyService {
     return 'issue-tracking'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'waffle',
     }

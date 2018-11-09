@@ -8,7 +8,7 @@ module.exports = class Sourcegraph extends LegacyService {
     return 'other'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'sourcegraph/rrc',
     }
