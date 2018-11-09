@@ -16,8 +16,8 @@ class LibrariesIoSourcerank extends LibrariesIoBase {
     }
   }
 
-  static get url() {
-    return this.buildUrl('librariesio/sourcerank')
+  static get route() {
+    return this.buildRoute('librariesio/sourcerank')
   }
 
   static get examples() {

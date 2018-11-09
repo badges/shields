@@ -15,8 +15,8 @@ module.exports = class NpmVersion extends NpmBase {
     return 'version'
   }
 
-  static get url() {
-    return this.buildUrl('npm/v', { withTag: true })
+  static get route() {
+    return this.buildRoute('npm/v', { withTag: true })
   }
 
   static get defaultBadgeData() {

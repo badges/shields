@@ -48,7 +48,7 @@ module.exports = class Discord extends BaseJsonService {
     return 'chat'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'discord',
       format: '([^/]+)',

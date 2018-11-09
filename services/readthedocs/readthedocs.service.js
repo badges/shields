@@ -13,7 +13,7 @@ module.exports = class ReadTheDocs extends BaseSvgScrapingService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'readthedocs',
       format: '([^/]+)(?:/(.+))?',

@@ -44,11 +44,10 @@ class BaseWordpressPlatform extends BaseWordpress {
 }
 
 class WordpressPluginRequiresVersion extends BaseWordpressPlatform {
-  static get url() {
+  static get route() {
     return {
       base: `wordpress/plugin/wp-version`,
-      format: '(.+)',
-      capture: ['slug'],
+      pattern: ':slug',
     }
   }
 
@@ -114,7 +113,7 @@ class WordpressPluginTestedVersion extends BaseWordpressPlatform {
     return this.constructor.render({ version: testedVersion, color })
   }
 
-  static get url() {
+  static get route() {
     return {
       base: `wordpress/plugin/tested`,
       format: '(.+)',
@@ -137,7 +136,7 @@ class WordpressPluginTestedVersion extends BaseWordpressPlatform {
 }
 
 class WordpressPluginTestedVersionAlias extends WordpressPluginTestedVersion {
-  static get url() {
+  static get route() {
     return {
       base: `wordpress/v`,
       format: '(.+)',

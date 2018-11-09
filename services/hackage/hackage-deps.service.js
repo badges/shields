@@ -9,7 +9,7 @@ module.exports = class HackageDeps extends LegacyService {
     return 'dependencies'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'hackage-deps/v',
     }

@@ -115,3 +115,8 @@ hr.spacing {
   min-height: 20px;
   vertical-align: middle;
 }
+
+.spaced-row * {
+  margin-left: 10px;
+  margin-right: 10px;
+}

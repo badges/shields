@@ -13,7 +13,7 @@ module.exports = class CodacyGrade extends BaseSvgScrapingService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'codacy/grade',
       format: '(?:grade/)?(?!coverage/)([^/]+)(?:/(.+))?',

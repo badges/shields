@@ -9,7 +9,7 @@ module.exports = class Discourse extends LegacyService {
     return 'chat'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'discourse',
     }

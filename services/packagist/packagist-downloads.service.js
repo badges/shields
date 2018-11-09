@@ -12,7 +12,7 @@ module.exports = class PackagistDownloads extends LegacyService {
     return 'downloads'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'packagist',
     }

@@ -34,8 +34,8 @@ module.exports = class EclipseMarketplaceUpdate extends EclipseMarketplaceBase {
     ]
   }
 
-  static get url() {
-    return this.buildUrl('eclipse-marketplace/last-update')
+  static get route() {
+    return this.buildRoute('eclipse-marketplace/last-update')
   }
 
   static render({ date }) {

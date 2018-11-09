@@ -11,7 +11,7 @@ module.exports = class JenkinsPlugin extends LegacyService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'jenkins/plugin/v',
     }

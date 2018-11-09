@@ -53,8 +53,8 @@ function DownloadsForInterval(interval) {
       ]
     }
 
-    static get url() {
-      return this.buildUrl(base)
+    static get route() {
+      return this.buildRoute(base)
     }
 
     static render({ downloads }) {
