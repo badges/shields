@@ -41,8 +41,7 @@ function RatingForExtensionType(extensionType) {
     static get route() {
       return {
         base: `wordpress/${extensionType}/rating`,
-        format: '(.+)',
-        capture: ['slug'],
+        pattern: ':slug',
       }
     }
 
