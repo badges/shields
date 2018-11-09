@@ -14,9 +14,7 @@ t.create('docker pulls (valid, library)')
     Joi.object().keys({
       name: 'docker pulls',
       value: isMetric,
-      colorB: Joi.any()
-        .equal(`#${dockerBlue}`)
-        .required(),
+      colorB: `#${dockerBlue}`,
     })
   )
 
@@ -26,9 +24,7 @@ t.create('docker pulls (override colorB)')
     Joi.object().keys({
       name: 'docker pulls',
       value: isMetric,
-      colorB: Joi.any()
-        .equal('#fedcba')
-        .required(),
+      colorB: '#fedcba',
     })
   )
 

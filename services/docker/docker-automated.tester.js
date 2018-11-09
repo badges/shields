@@ -64,9 +64,7 @@ t.create('docker automated build - colorB override in manual')
     Joi.object().keys({
       name: 'docker build',
       value: isAutomatedBuildStatus,
-      colorB: Joi.any()
-        .equal('#fedcba')
-        .required(),
+      colorB: '#fedcba',
     })
   )
 
@@ -81,8 +79,6 @@ t.create('docker automated build - colorB override in automated')
     Joi.object().keys({
       name: 'docker build',
       value: isAutomatedBuildStatus,
-      colorB: Joi.any()
-        .equal('#fedcba')
-        .required(),
+      colorB: '#fedcba',
     })
   )
