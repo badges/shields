@@ -33,8 +33,8 @@ module.exports = class EclipseMarketplaceLicense extends EclipseMarketplaceBase 
     ]
   }
 
-  static get url() {
-    return this.buildUrl('eclipse-marketplace/l')
+  static get route() {
+    return this.buildRoute('eclipse-marketplace/l')
   }
 
   static render({ license }) {

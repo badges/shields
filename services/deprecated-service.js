@@ -10,7 +10,7 @@ function deprecatedService({ url, label, category, examples = [] }) {
       return category
     }
 
-    static get url() {
+    static get route() {
       return url
     }
 

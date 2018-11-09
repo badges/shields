@@ -10,7 +10,7 @@ const bitbucketIssuesSchema = Joi.object({
 }).required()
 
 function issueClassGenerator(raw) {
-  const urlPrefix = raw ? 'issues-raw' : 'issues'
+  const routePrefix = raw ? 'issues-raw' : 'issues'
   const badgeSuffix = raw ? '' : ' open'
 
   return class BitbucketIssues extends BaseJsonService {
@@ -47,9 +47,9 @@ function issueClassGenerator(raw) {
       return { label: 'issues' }
     }
 
-    static get url() {
+    static get route() {
       return {
-        base: `bitbucket/${urlPrefix}`,
+        base: `bitbucket/${routePrefix}`,
         format: '([^/]+)/([^/]+)',
         capture: ['user', 'repo'],
       }

@@ -8,8 +8,8 @@ module.exports = class PypiDjangoVersions extends PypiBase {
     return 'platform-support'
   }
 
-  static get url() {
-    return this.buildUrl('pypi/djversions')
+  static get route() {
+    return this.buildRoute('pypi/djversions')
   }
 
   static get defaultBadgeData() {

@@ -64,11 +64,10 @@ module.exports = class PypiDownloads extends BaseJsonService {
     return 'downloads'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'pypi',
-      format: '(dd|dw|dm)/(.+)',
-      capture: ['period', 'pkg'],
+      pattern: ':period(dd|dw|dm)/:pkg',
     }
   }
 

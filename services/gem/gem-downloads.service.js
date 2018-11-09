@@ -110,7 +110,7 @@ module.exports = class GemDownloads extends BaseJsonService {
     return 'downloads'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'gem',
       format: '(dt|dtv|dv)/(.+)',

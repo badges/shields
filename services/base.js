@@ -37,9 +37,9 @@ class BaseService {
   }
 
   /**
-   * Asynchronous function to handle requests for this service. Takes the URL
-   * parameters (as defined in the `url` property), performs a request using
-   * `this._sendAndCacheRequest`, and returns the badge data.
+   * Asynchronous function to handle requests for this service. Take the route
+   * parameters (as defined in the `route` property), perform a request using
+   * `this._sendAndCacheRequest`, and return the badge data.
    */
   async handle(namedParams, queryParams) {
     throw new Error(`Handler not implemented for ${this.constructor.name}`)
@@ -57,9 +57,9 @@ class BaseService {
 
   /**
    * Returns an object:
-   *  - base: (Optional) The base path of the URLs for this service. This is
+   *  - base: (Optional) The base path of the routes for this service. This is
    *    used as a prefix.
-   *  - format: Regular expression to use for URLs for this service's badges
+   *  - format: Regular expression to use for routes for this service's badges
    *  - capture: Array of names for the capture groups in the regular
    *             expression. The handler will be passed an object containing
    *             the matches.
@@ -67,14 +67,14 @@ class BaseService {
    *                 uses. For cache safety, only the whitelisted query
    *                 parameters will be passed to the handler.
    */
-  static get url() {
-    throw new Error(`URL not defined for ${this.name}`)
+  static get route() {
+    throw new Error(`Route not defined for ${this.name}`)
   }
 
   /**
    * Default data for the badge. Can include things such as default logo, color,
    * etc. These defaults will be used if the value is not explicitly overridden
-   * by either the handler or by the user via URL parameters.
+   * by either the handler or by the user via query parameters.
    */
   static get defaultBadgeData() {
     return {}
@@ -82,7 +82,7 @@ class BaseService {
 
   /**
    * Example URLs for this service. These should use the format
-   * specified in `url`, and can be used to demonstrate how to use badges for
+   * specified in `route`, and can be used to demonstrate how to use badges for
    * this service.
    */
   static get examples() {
@@ -90,7 +90,7 @@ class BaseService {
   }
 
   static _makeFullUrl(partialUrl) {
-    return `/${[this.url.base, partialUrl].filter(Boolean).join('/')}`
+    return `/${[this.route.base, partialUrl].filter(Boolean).join('/')}`
   }
 
   static _makeStaticExampleUrl(serviceData) {
@@ -98,7 +98,7 @@ class BaseService {
     return staticBadgeUrl({
       label: badgeData.text[0],
       message: `${badgeData.text[1]}`,
-      color: badgeData.colorscheme,
+      color: badgeData.colorscheme || badgeData.colorB,
     })
   }
 
@@ -181,7 +181,7 @@ class BaseService {
   }
 
   static get _regexFromPath() {
-    const { pattern } = this.url
+    const { pattern } = this.route
     const fullPattern = `${this._makeFullUrl(
       pattern
     )}.:ext(svg|png|gif|jpg|json)`
@@ -197,7 +197,7 @@ class BaseService {
   }
 
   static get _regex() {
-    const { pattern, format, capture } = this.url
+    const { pattern, format, capture } = this.route
     if (
       pattern !== undefined &&
       (format !== undefined || capture !== undefined)
@@ -211,7 +211,7 @@ class BaseService {
       return this._regexFromPath.regex
     } else if (format !== undefined) {
       // Regular expressions treat "/" specially, so we need to escape them
-      const escapedPath = this.url.format.replace(/\//g, '\\/')
+      const escapedPath = this.route.format.replace(/\//g, '\\/')
       const fullRegex = `^${this._makeFullUrl(
         escapedPath
       )}.(svg|png|gif|jpg|json)$`
@@ -231,8 +231,8 @@ class BaseService {
   }
 
   static _namedParamsForMatch(match) {
-    const { url } = this
-    const names = url.pattern ? this._regexFromPath.capture : url.capture || []
+    const { pattern, capture } = this.route
+    const names = pattern ? this._regexFromPath.capture : capture || []
 
     // Assume the last match is the format, and drop match[0], which is the
     // entire match.
@@ -365,7 +365,7 @@ class BaseService {
     camp.route(
       this._regex,
       handleRequest({
-        queryParams: this.url.queryParams,
+        queryParams: this.route.queryParams,
         handler: async (queryParams, match, sendBadge, request) => {
           const serviceInstance = new this(
             {

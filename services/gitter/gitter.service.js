@@ -7,7 +7,7 @@ module.exports = class Gitter extends BaseStaticService {
     return 'chat'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'gitter/room',
       pattern: ':user/:repo',

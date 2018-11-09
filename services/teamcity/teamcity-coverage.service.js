@@ -12,7 +12,7 @@ module.exports = class TeamcityCoverage extends LegacyService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'teamcity/coverage',
     }
