@@ -44,8 +44,7 @@ function DownloadsForExtensionType(extensionType) {
     static get url() {
       return {
         base: `wordpress/${extensionType}/dt`,
-        format: '(.+)',
-        capture: ['slug'],
+        pattern: ':slug',
       }
     }
     static get extensionType() {

@@ -15,8 +15,7 @@ module.exports = class UptimeRobotRatio extends UptimeRobotBase {
   static get url() {
     return {
       base: 'uptimerobot/ratio',
-      format: '(?:([\\d+])/)?(.*)',
-      capture: ['numberOfDays', 'monitorApiKey'],
+      pattern: ':numberOfDays(\\d+)?/:monitorApiKey',
     }
   }
 
