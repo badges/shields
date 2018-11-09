@@ -12,8 +12,7 @@ module.exports = class UptimeRobotStatus extends UptimeRobotBase {
   static get url() {
     return {
       base: 'uptimerobot/status',
-      format: '(.*)',
-      capture: ['monitorApiKey'],
+      pattern: ':monitorApiKey',
     }
   }
 
