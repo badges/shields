@@ -47,8 +47,7 @@ class WordpressPluginRequiresVersion extends BaseWordpressPlatform {
   static get url() {
     return {
       base: `wordpress/plugin/wp-version`,
-      format: '(.+)',
-      capture: ['slug'],
+      pattern: ':slug',
     }
   }
 

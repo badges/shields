@@ -39,8 +39,7 @@ function VersionForExtensionType(extensionType) {
     static get url() {
       return {
         base: `wordpress/${extensionType}/v`,
-        format: '(.+)',
-        capture: ['slug'],
+        pattern: ':slug',
       }
     }
 

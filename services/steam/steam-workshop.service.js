@@ -171,8 +171,7 @@ class SteamCollectionSize extends BaseSteamAPI {
   static get url() {
     return {
       base: 'steam/collection-files',
-      format: '(.+)',
-      capture: ['collectionId'],
+      pattern: ':collectionId',
     }
   }
 
@@ -254,8 +253,7 @@ class SteamFileSize extends SteamFileService {
   static get url() {
     return {
       base: 'steam/size',
-      format: '(.+)',
-      capture: ['fileId'],
+      pattern: ':fileId',
     }
   }
 
@@ -290,8 +288,7 @@ class SteamFileReleaseDate extends SteamFileService {
   static get url() {
     return {
       base: 'steam/release-date',
-      format: '(.+)',
-      capture: ['fileId'],
+      pattern: ':fileId',
     }
   }
 
@@ -331,8 +328,7 @@ class SteamFileSubscriptions extends SteamFileService {
   static get url() {
     return {
       base: 'steam/subscriptions',
-      format: '(.+)',
-      capture: ['fileId'],
+      pattern: ':fileId',
     }
   }
 
@@ -370,8 +366,7 @@ class SteamFileFavorites extends SteamFileService {
   static get url() {
     return {
       base: 'steam/favorites',
-      format: '(.+)',
-      capture: ['fileId'],
+      pattern: ':fileId',
     }
   }
 
@@ -411,8 +406,7 @@ class SteamFileDownloads extends SteamFileService {
   static get url() {
     return {
       base: 'steam/downloads',
-      format: '(.+)',
-      capture: ['fileId'],
+      pattern: ':fileId',
     }
   }
 
@@ -446,8 +440,7 @@ class SteamFileViews extends SteamFileService {
   static get url() {
     return {
       base: 'steam/views',
-      format: '(.+)',
-      capture: ['fileId'],
+      pattern: ':fileId',
     }
   }
 
