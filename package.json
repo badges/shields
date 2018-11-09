@@ -34,7 +34,7 @@
     "glob": "^7.1.1",
     "gm": "^1.23.0",
     "is-css-color": "^1.0.0",
-    "joi": "14.0.3",
+    "joi": "14.0.4",
     "js-yaml": "^3.11.0",
     "jsonpath": "~1.0.0",
     "lodash.countby": "^4.6.0",
@@ -44,6 +44,7 @@
     "lodash.uniq": "~4.5.0",
     "moment": "^2.19.3",
     "node-env-flag": "^0.1.0",
+    "path-to-regexp": "^2.4.0",
     "pdfkit": "~0.8.0",
     "pretty-bytes": "^5.0.0",
     "priorityqueuejs": "^1.0.0",
@@ -53,7 +54,7 @@
     "redis": "~2.8.0",
     "request": "~2.88.0",
     "semver": "~5.6.0",
-    "simple-icons": "1.9.12",
+    "simple-icons": "1.9.13",
     "svgo": "~1.1.1",
     "xml2js": "~0.4.16",
     "xmldom": "~0.1.27",
@@ -137,7 +138,7 @@
     "child-process-promise": "^2.2.1",
     "classnames": "^2.2.5",
     "concurrently": "^4.0.1",
-    "danger": "^4.0.1",
+    "danger": "^6.0.5",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
     "dejavu-fonts-ttf": "^2.37.3",
     "eol": "^0.9.1",
@@ -174,7 +175,7 @@
     "node-fetch": "^2.0.0",
     "nyc": "^13.0.1",
     "opn-cli": "^3.1.0",
-    "prettier": "1.14.3",
+    "prettier": "1.15.1",
     "prettier-check": "^2.0.0",
     "pretty": "^2.0.0",
     "prop-types": "^15.6.0",
@@ -194,8 +195,8 @@
     "wait-promise": "^0.4.1"
   },
   "engines": {
-    "node": ">= 8.x",
-    "npm": "5.x"
+    "node": ">= 8",
+    "npm": ">= 5"
   },
   "babel": {
     "presets": [
