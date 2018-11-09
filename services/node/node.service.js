@@ -12,8 +12,8 @@ module.exports = class NodeVersion extends NPMBase {
     return { label: 'node' }
   }
 
-  static get url() {
-    return this.buildUrl('node/v', { withTag: true })
+  static get route() {
+    return this.buildRoute('node/v', { withTag: true })
   }
 
   static get examples() {
