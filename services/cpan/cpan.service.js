@@ -6,7 +6,7 @@ const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
 module.exports = class Cpan extends LegacyService {
-  static get url() {
+  static get route() {
     return { base: 'cpan' }
   }
   static registerLegacyRouteHandler({ camp, cache }) {

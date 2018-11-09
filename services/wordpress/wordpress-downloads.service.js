@@ -41,7 +41,7 @@ function DownloadsForExtensionType(extensionType) {
       return { label: 'downloads' }
     }
 
-    static get url() {
+    static get route() {
       return {
         base: `wordpress/${extensionType}/dt`,
         pattern: ':slug',
@@ -88,7 +88,7 @@ function InstallsForExtensionType(extensionType) {
       return { label: 'active installs' }
     }
 
-    static get url() {
+    static get route() {
       return {
         base: `wordpress/${extensionType}/installs`,
         format: '(.+)',
@@ -143,7 +143,7 @@ function DownloadsForInterval(interval) {
       return { label: 'downloads' }
     }
 
-    static get url() {
+    static get route() {
       return {
         base,
         format: '(.*)',

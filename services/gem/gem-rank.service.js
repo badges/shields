@@ -61,7 +61,7 @@ module.exports = class GemRank extends BaseJsonService {
     return 'downloads'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'gem',
       format: '(rt|rd)/(.+)',

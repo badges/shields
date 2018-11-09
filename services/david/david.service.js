@@ -8,7 +8,7 @@ module.exports = class David extends LegacyService {
     return 'dependencies'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'david',
     }

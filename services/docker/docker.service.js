@@ -13,7 +13,7 @@ class DockerStars extends LegacyService {
     return 'rating'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'docker/stars',
     }
@@ -72,7 +72,7 @@ class DockerPulls extends LegacyService {
     return 'downloads'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'docker/pulls',
     }
@@ -129,7 +129,7 @@ class DockerBuild extends LegacyService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'docker',
     }

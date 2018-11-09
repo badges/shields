@@ -47,7 +47,7 @@ module.exports = class Clojars extends BaseJsonService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'clojars/v',
       format: '(.+)',

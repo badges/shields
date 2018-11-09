@@ -12,7 +12,7 @@ class TwitterUrl extends LegacyService {
     return 'social'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'twitter/url',
     }
@@ -60,7 +60,7 @@ class TwitterFollow extends LegacyService {
     return 'social'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'twitter/follow',
     }

@@ -56,7 +56,7 @@ module.exports = class FDroid extends BaseService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'f-droid/v',
       format: '(.+)',
