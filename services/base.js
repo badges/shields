@@ -227,8 +227,8 @@ class BaseService {
   }
 
   static _namedParamsForMatch(match) {
-    const { url } = this
-    const names = url.pattern ? this._regexFromPath.capture : url.capture || []
+    const { pattern, capture } = this.route
+    const names = pattern ? this._regexFromPath.capture : capture || []
 
     // Assume the last match is the format, and drop match[0], which is the
     // entire match.
