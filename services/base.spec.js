@@ -415,6 +415,25 @@ describe('BaseService', function() {
     })
   })
 
+  describe('_makeStaticExampleUrl', function() {
+    test(
+      serviceData => DummyService._makeStaticExampleUrl(serviceData),
+      () => {
+        given({
+          message: 'hello',
+          color: 'dcdc00',
+        }).expect('/badge/cat-hello-%23dcdc00.svg')
+        given({
+          message: 'hello',
+          color: 'red',
+        }).expect('/badge/cat-hello-red.svg')
+        given({
+          message: 'hello',
+        }).expect('/badge/cat-hello-lightgrey.svg')
+      }
+    )
+  })
+
   describe('prepareExamples', function() {
     it('returns the expected result', function() {
       const [first, second, third] = DummyService.prepareExamples()
