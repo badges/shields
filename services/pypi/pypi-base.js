@@ -30,8 +30,7 @@ module.exports = class PypiBase extends BaseJsonService {
   static buildUrl(base) {
     return {
       base,
-      format: '(.*)',
-      capture: ['egg'],
+      pattern: ':egg*',
     }
   }
 

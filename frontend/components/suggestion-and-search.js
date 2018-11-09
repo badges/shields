@@ -49,7 +49,9 @@ export default class SuggestionAndSearch extends React.Component {
       let suggestions
       try {
         const json = await res.json()
-        suggestions = json.badges
+        // This doesn't validate the response. The default value here prevents
+        // a crash if the server returns {"err":"Disallowed"}.
+        suggestions = json.badges || []
       } catch (e) {
         suggestions = []
       }

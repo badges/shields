@@ -7,14 +7,6 @@ const Footer = ({ baseUrl }) => (
     <h2 id="like-this">Like This?</h2>
 
     <p>
-      What is your favorite badge service to use?
-      <br />
-      <a href="https://github.com/badges/shields/blob/master/CONTRIBUTING.md">
-        Tell us
-      </a>{' '}
-      and we might bring it to you!
-    </p>
-    <p>
       <object
         data={resolveUrl(
           '/twitter/follow/shields_io.svg?style=social&label=Follow',
@@ -47,13 +39,19 @@ const Footer = ({ baseUrl }) => (
         alt="chat on Discord"
       />
     </p>
-    <p>
-      <a href="https://github.com/h5bp/lazyweb-requests/issues/150">This</a> is
-      where the current server got started.
-    </p>
 
     <p>
-      <small>:wq</small>
+      What is your favorite badge service to use?
+      <br />
+      <a href="https://github.com/badges/shields/blob/master/CONTRIBUTING.md">
+        Tell us
+      </a>{' '}
+      and we might bring it to you!
+    </p>
+
+    <p className="spaced-row">
+      <a href="https://status.shields.io/">Status</a>
+      <a href="https://github.com/badges/shields/">GitHub</a>
     </p>
   </section>
 )
