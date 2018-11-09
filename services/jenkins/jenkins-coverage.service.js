@@ -97,7 +97,7 @@ class JacocoJenkinsCoverage extends BaseJenkinsCoverage {
     })
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'jenkins/j',
       format: '(http(?:s)?)/([^/]+)/(?:job/)?(.+)',
@@ -135,7 +135,7 @@ class CoberturaJenkinsCoverage extends BaseJenkinsCoverage {
     })
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'jenkins/c',
       format: '(http(?:s)?)/([^/]+)/(?:job/)?(.+)',

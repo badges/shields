@@ -44,11 +44,10 @@ class DummyService extends BaseService {
       },
     ]
   }
-  static get url() {
+  static get route() {
     return {
       base: 'foo',
-      format: '([^/]+)',
-      capture: ['namedParamA'],
+      pattern: ':namedParamA',
       queryParams: ['queryParamA'],
     }
   }
@@ -58,7 +57,7 @@ describe('BaseService', function() {
   const defaultConfig = { handleInternalErrors: false }
 
   describe('URL pattern matching', function() {
-    context('A named param is declared', function() {
+    context('A `pattern` with a named param is declared', function() {
       const regexExec = str => DummyService._regex.exec(str)
       const getNamedParamA = str => {
         const [, namedParamA] = regexExec(str)
@@ -97,9 +96,58 @@ describe('BaseService', function() {
       })
     })
 
-    describe('No named params are declared', function() {
+    context('A `format` with a named param is declared', function() {
+      class ServiceWithFormat extends BaseService {
+        static get route() {
+          return {
+            base: 'foo',
+            format: '([^/]+)',
+            capture: ['namedParamA'],
+          }
+        }
+      }
+
+      const regexExec = str => ServiceWithFormat._regex.exec(str)
+      const getNamedParamA = str => {
+        const [, namedParamA] = regexExec(str)
+        return namedParamA
+      }
+      const namedParams = str => {
+        const match = regexExec(str)
+        return ServiceWithFormat._namedParamsForMatch(match)
+      }
+
+      test(regexExec, () => {
+        forCases([
+          given('/foo/bar.bar.bar.zip'),
+          given('/foo/bar/bar.svg'),
+        ]).expect(null)
+      })
+
+      test(getNamedParamA, () => {
+        forCases([
+          given('/foo/bar.bar.bar.svg'),
+          given('/foo/bar.bar.bar.png'),
+          given('/foo/bar.bar.bar.gif'),
+          given('/foo/bar.bar.bar.jpg'),
+          given('/foo/bar.bar.bar.json'),
+        ]).expect('bar.bar.bar')
+      })
+
+      test(namedParams, () => {
+        forCases([
+          given('/foo/bar.bar.bar.svg'),
+          given('/foo/bar.bar.bar.png'),
+          given('/foo/bar.bar.bar.gif'),
+          given('/foo/bar.bar.bar.jpg'),
+          given('/foo/bar.bar.bar.json'),
+        ]).expect({ namedParamA: 'bar.bar.bar' })
+      })
+    })
+
+    context('No named params are declared', function() {
       class ServiceWithZeroNamedParams extends BaseService {
-        static get url() {
+        static get route() {
           return {
             base: 'foo',
             format: '(?:[^/]+)',
@@ -320,7 +368,7 @@ describe('BaseService', function() {
   })
 
   describe('ScoutCamp integration', function() {
-    const expectedRouteRegex = /^\/foo\/([^/]+).(svg|png|gif|jpg|json)$/
+    const expectedRouteRegex = /^\/foo\/([^/]+?)\.(svg|png|gif|jpg|json)$/
 
     let mockCamp
     let mockHandleRequest
@@ -367,6 +415,25 @@ describe('BaseService', function() {
     })
   })
 
+  describe('_makeStaticExampleUrl', function() {
+    test(
+      serviceData => DummyService._makeStaticExampleUrl(serviceData),
+      () => {
+        given({
+          message: 'hello',
+          color: 'dcdc00',
+        }).expect('/badge/cat-hello-%23dcdc00.svg')
+        given({
+          message: 'hello',
+          color: 'red',
+        }).expect('/badge/cat-hello-red.svg')
+        given({
+          message: 'hello',
+        }).expect('/badge/cat-hello-lightgrey.svg')
+      }
+    )
+  })
+
   describe('prepareExamples', function() {
     it('returns the expected result', function() {
       const [first, second, third] = DummyService.prepareExamples()
@@ -395,35 +462,6 @@ describe('BaseService', function() {
         documentation: undefined,
         keywords: ['hello'],
       })
-    })
-  })
-
-  describe('a generated static badge url', function() {
-    it('is concatenated text and color', function() {
-      const url = DummyService._makeStaticExampleUrlFromTextAndColor(
-        'name',
-        'value',
-        'green'
-      )
-      expect(url).to.equal('/badge/name-value-green')
-    })
-    it('uses url encoding', function() {
-      const url = DummyService._makeStaticExampleUrlFromTextAndColor(
-        'Hello World',
-        'Привет Мир',
-        '#aabbcc'
-      )
-      expect(url).to.equal(
-        '/badge/Hello%20World-%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82%20%D0%9C%D0%B8%D1%80-%23aabbcc'
-      )
-    })
-    it('uses escapes minus signs', function() {
-      const url = DummyService._makeStaticExampleUrlFromTextAndColor(
-        '123-123',
-        'abc-abc',
-        'blue'
-      )
-      expect(url).to.equal('/badge/123--123-abc--abc-blue')
     })
   })
 

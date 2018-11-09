@@ -7,7 +7,7 @@ module.exports = class CocoapodsVersion extends LegacyService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'cocoapods/v',
     }

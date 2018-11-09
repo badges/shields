@@ -7,7 +7,7 @@ module.exports = class CocoapodsLicense extends LegacyService {
     return 'license'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'cocoapods/l',
     }

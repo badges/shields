@@ -99,11 +99,10 @@ const BaseService = require('../base')               // (2)
 
 module.exports = class Example extends BaseService { // (3)
 
-  static get url() {                                 // (4)
+  static get route() {                                 // (4)
     return {
       base: 'example',
-      format: '([^/]+)',
-      capture: ['text'],
+      pattern: ':text',
     }
   }
 
@@ -122,14 +121,14 @@ Description of the code:
 1. We declare strict mode at the start of each file. This prevents certain classes of error such as undeclared variables.
 2. Our service badge class will extend `BaseService` so we need to require it. We declare variables with `const` and `let` in preference to `var`.
 3. Our module must export a class which extends `BaseService`
-4. `url()` declares a route. We declare getters as `static`.
+4. `route()` declares a route. We declare getters as `static`.
     * `base` defines the static part of the route.
-    * `format` is a [regular expression](https://www.w3schools.com/jsref/jsref_obj_regexp.asp) defining the variable part of the route.
-    * We can use `capture` to extract matched regex clauses into one or more named variables. Here we are declaring that we want to store the string matched by `([^/]+)` in a variable called `text`.
-    This declaration adds the route `/^\/test\/([^\/]+)\.(svg|png|gif|jpg|json)$/` to our application.
-5. All badges must implement the `async handle()` function. This is called to invoke our code. Note that the signature of `handle()` will match the capturing group defined in `url()` Because we're capturing a single variable called `text` our function signature is `async handle({ text })`. Although in this simple case, we aren't performing any asynchronous calls, `handle()` would usually spend some time blocked on I/O. We use the `async`/`await` pattern for asynchronous code. Our `handle()` function returns an object with 3 properties:
+    * `pattern` defines the variable part of the route. It can include any
+      number of named parameters. These are converted into
+      regular expressions by [`path-to-regexp`][path-to-regexp].
+5. All badges must implement the `async handle()` function. This is called to invoke our code. Note that the signature of `handle()` will match the capturing group defined in `route()` Because we're capturing a single variable called `text` our function signature is `async handle({ text })`. Although in this simple case, we aren't performing any asynchronous calls, `handle()` would usually spend some time blocked on I/O. We use the `async`/`await` pattern for asynchronous code. Our `handle()` function returns an object with 3 properties:
     * `label`: the text on the left side of the badge
-    * `message`: the text on the right side of the badge - here we are passing through the parameter we captured in the URL regex
+    * `message`: the text on the right side of the badge - here we are passing through the parameter we captured in the route regex
     * `color`: the background color of the right side of the badge
 
 The process of turning this object into an image is handled automatically by the `BaseService` class.
@@ -142,6 +141,8 @@ To try out this example badge:
    `npm start`
 4. Visit the badge at <http://[::]:8080/example/foo.svg>.
    It should look like this: ![](https://img.shields.io/badge/example-foo-blue.svg)
+
+[path-to-regexp]: https://github.com/pillarjs/path-to-regexp#parameters
 
 ### (4.3) Querying an API
 
@@ -156,17 +157,16 @@ const BaseJsonService = require('../base-json')                 // (2)
 const { renderVersionBadge } = require('../../lib/version')     // (3)
 
 const Joi = require('joi')                                      // (4)
-const versionSchema = Joi.object({                              // (4)
+const schema = Joi.object({                                     // (4)
   version: Joi.string().required(),                             // (4)
 }).required()                                                   // (4)
 
 module.exports = class GemVersion extends BaseJsonService {     // (5)
 
-  static get url() {                                            // (6)
+  static get route() {                                          // (6)
     return {
       base: 'gem/v',
-      format: '(.+)',
-      capture: ['gem'],
+      pattern: ':gem',
     }
   }
 
@@ -174,16 +174,15 @@ module.exports = class GemVersion extends BaseJsonService {     // (5)
     return { label: 'gem' }
   }
 
-  async handle({ gem }) {                                      // (8)
+  async handle({ gem }) {                                       // (8)
     const { version } = await this.fetch({ gem })
     return this.constructor.render({ version })
   }
 
-  async fetch({ gem }) {                                       // (9)
-    const url = `https://rubygems.org/api/v1/gems/${gem}.json`
+  async fetch({ gem }) {                                        // (9)
     return this._requestJson({
-      url,
-      schema: versionSchema,
+      schema,
+      url: `https://rubygems.org/api/v1/gems/${gem}.json`,
     })
   }
 
@@ -271,7 +270,7 @@ module.exports = class GemVersion extends BaseJsonService {
 2. The examples property defines an array of examples. In this case the array will contain a single object, but in some cases it is helpful to provide multiple usage examples.
 3. Our example object should contain the following properties:
     * `title`: Descriptive text that will be shown next to the badge
-    * `urlPattern`: Describe the variable part of the URL using `:param` syntax.
+    * `urlPattern`: Describe the variable part of the route using `:param` syntax.
     * `staticExample`: On the index page we want to show an example badge, but for performance reasons we want that example to be generated without making an API call. `staticExample` should be populated by calling our `render()` method with some valid data.
     * `exampleUrl`: Provide a valid example of params we can call the badge with. In this case we need a valid ruby gem, so we've picked [formatador](https://rubygems.org/gems/formatador)
     * `keywords`: If we want to provide additional keywords other than the title, we can add them here. This helps users to search for relevant badges.

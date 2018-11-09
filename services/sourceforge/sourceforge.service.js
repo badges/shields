@@ -16,7 +16,7 @@ module.exports = class Sourceforge extends LegacyService {
     return 'downloads'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'sourceforge',
     }

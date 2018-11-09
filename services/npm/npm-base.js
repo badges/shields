@@ -29,7 +29,7 @@ const schema = Joi.object({
 // Abstract class for NPM badges which display data about the latest version
 // of a package.
 module.exports = class NpmBase extends BaseJsonService {
-  static buildUrl(base, { withTag } = {}) {
+  static buildRoute(base, { withTag } = {}) {
     if (withTag) {
       return {
         base,
