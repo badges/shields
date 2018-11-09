@@ -5,8 +5,7 @@ const dockerBlue = '066da5' // see https://github.com/badges/shields/pull/1690
 const buildDockerUrl = function(badgeName) {
   return {
     base: `docker/${badgeName}`,
-    format: '([^/]+)/([^/]+)',
-    capture: ['user', 'repo'],
+    pattern: ':user/:repo',
   }
 }
 
