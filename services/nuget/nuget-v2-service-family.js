@@ -51,8 +51,7 @@ function createServiceFamily({ defaultLabel, serviceBaseUrl, apiBaseUrl }) {
     static get url() {
       return {
         base: serviceBaseUrl,
-        format: '(v|vpre)/(.*)',
-        capture: ['which', 'repo'],
+        pattern: ':which(v|vpre)/:repo',
       }
     }
 
