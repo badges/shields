@@ -94,7 +94,7 @@ class BaseService {
     return staticBadgeUrl({
       label: badgeData.text[0],
       message: `${badgeData.text[1]}`,
-      color: badgeData.colorscheme,
+      color: badgeData.colorscheme || badgeData.colorB,
     })
   }
 
