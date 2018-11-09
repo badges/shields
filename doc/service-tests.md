@@ -163,7 +163,7 @@ Once we have multiple tests, sometimes it is useful to run only one test. We can
 npm run test:services -- --only="wercker" --fgrep="Build status (with branch)"
 ```
 
-Having covered the typical and custom cases, we'll move on to errors. We should include tests for any cusom error handling. The Wercker integration defines a couple of custom error conditions:
+Having covered the typical and custom cases, we'll move on to errors. We should include a test for the 'not found' response and also tests for any other cusom error handling. The Wercker integration defines a custom error condition for 401 as well as a custom 404 message:
 
 ```js
 errorMessages: {

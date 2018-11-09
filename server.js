@@ -16,6 +16,7 @@ const { checkErrorResponse } = require('./lib/error-helper')
 const analytics = require('./lib/analytics')
 const config = require('./lib/server-config')
 const GithubConstellation = require('./services/github/github-constellation')
+const PrometheusMetrics = require('./lib/sys/prometheus-metrics')
 const sysMonitor = require('./lib/sys/monitor')
 const log = require('./lib/log')
 const { makeMakeBadgeFn } = require('./lib/make-badge')
@@ -50,6 +51,7 @@ const githubConstellation = new GithubConstellation({
   persistence: config.persistence,
   service: config.services.github,
 })
+const metrics = new PrometheusMetrics(config.metrics.prometheus)
 const { apiProvider: githubApiProvider } = githubConstellation
 
 function reset() {
@@ -92,6 +94,7 @@ if (serverSecrets && serverSecrets.shieldsSecret) {
 }
 
 githubConstellation.initialize(camp)
+metrics.initialize(camp)
 
 suggest.setRoutes(config.cors.allowedOrigin, githubApiProvider, camp)
 
