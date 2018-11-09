@@ -58,7 +58,7 @@ module.exports = class CircleCi extends BaseJsonService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'circleci',
       format:

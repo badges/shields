@@ -10,7 +10,7 @@ module.exports = class PhpeyeHhvm extends LegacyService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'hhvm',
     }

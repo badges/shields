@@ -37,7 +37,7 @@ module.exports = class GemVersion extends BaseJsonService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'gem/v',
       pattern: ':gem',

@@ -50,7 +50,7 @@ function DownloadsForInterval(interval) {
       return 'downloads'
     }
 
-    static get url() {
+    static get route() {
       return {
         base,
         format: '(.*)',

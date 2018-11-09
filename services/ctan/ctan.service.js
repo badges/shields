@@ -47,7 +47,7 @@ class CtanLicense extends BaseCtanService {
     return renderLicenseBadge({ licenses })
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'ctan/l',
       format: '(.+)',
@@ -82,7 +82,7 @@ class CtanVersion extends BaseCtanService {
     return renderVersionBadge({ version })
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'ctan/v',
       format: '(.+)',

@@ -12,7 +12,7 @@ module.exports = class UptimeRobotRatio extends UptimeRobotBase {
     }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'uptimerobot/ratio',
       pattern: ':numberOfDays(\\d+)?/:monitorApiKey',

@@ -10,7 +10,7 @@ module.exports = class CodacyGrade extends LegacyService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'codacy',
     }

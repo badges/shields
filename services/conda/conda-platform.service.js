@@ -7,7 +7,7 @@ module.exports = class CondaPlatform extends LegacyService {
     return 'platform-support'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'conda',
     }

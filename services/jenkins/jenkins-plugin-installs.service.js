@@ -95,7 +95,7 @@ class JenkinsPluginInstalls extends BaseJsonService {
     return 'downloads'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'jenkins/plugin/i',
       format: '([^/]+)/?([^/]+)?',

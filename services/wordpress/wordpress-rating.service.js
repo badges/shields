@@ -38,7 +38,7 @@ function RatingForExtensionType(extensionType) {
   const { capt, exampleSlug } = extensionData[extensionType]
 
   return class WordpressRating extends WordpressRatingBase {
-    static get url() {
+    static get route() {
       return {
         base: `wordpress/${extensionType}/rating`,
         pattern: ':slug',
@@ -77,7 +77,7 @@ function StarsForExtensionType(extensionType) {
       return { message: starRating(rating), color: floorCount(rating, 2, 3, 4) }
     }
 
-    static get url() {
+    static get route() {
       return {
         base: `wordpress/${extensionType}`,
         format: '(?:stars|r)/(.+)',
