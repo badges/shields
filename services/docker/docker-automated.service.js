@@ -16,7 +16,9 @@ module.exports = class DockerAutomatedBuild extends BaseJsonService {
   async fetch({ user, repo }) {
     return this._requestJson({
       schema: automatedBuildSchema,
-      url: `https://registry.hub.docker.com/v2/repositories/${user}/${repo}`,
+      url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
+        user
+      )}/${repo}`,
       errorMessages: { 404: 'repo not found' },
     })
   }
@@ -30,10 +32,7 @@ module.exports = class DockerAutomatedBuild extends BaseJsonService {
   }
 
   async handle({ user, repo }) {
-    const data = await this.fetch({
-      user: getDockerHubUser(user),
-      repo,
-    })
+    const data = await this.fetch({ user, repo })
     return this.constructor.render({ isAutomated: data.is_automated })
   }
 

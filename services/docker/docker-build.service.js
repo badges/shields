@@ -19,7 +19,9 @@ module.exports = class DockerBuild extends BaseJsonService {
   async fetch({ user, repo }) {
     return this._requestJson({
       schema: buildSchema,
-      url: `https://registry.hub.docker.com/v2/repositories/${user}/${repo}/buildhistory`,
+      url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
+        user
+      )}/${repo}/buildhistory`,
       errorMessages: { 404: 'repo not found' },
     })
   }
@@ -34,7 +36,7 @@ module.exports = class DockerBuild extends BaseJsonService {
   }
 
   async handle({ user, repo }) {
-    const data = await this.fetch({ user: getDockerHubUser(user), repo })
+    const data = await this.fetch({ user, repo })
     return this.constructor.render({ status: data.results[0].status })
   }
 

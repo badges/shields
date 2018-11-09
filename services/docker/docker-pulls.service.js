@@ -18,7 +18,9 @@ module.exports = class DockerPulls extends BaseJsonService {
   async fetch({ user, repo }) {
     return this._requestJson({
       schema: pullsSchema,
-      url: `https://hub.docker.com/v2/repositories/${user}/${repo}`,
+      url: `https://hub.docker.com/v2/repositories/${getDockerHubUser(
+        user
+      )}/${repo}`,
       errorMessages: { 404: 'repo not found' },
     })
   }
@@ -31,10 +33,7 @@ module.exports = class DockerPulls extends BaseJsonService {
   }
 
   async handle({ user, repo }) {
-    const data = await this.fetch({
-      user: getDockerHubUser(user),
-      repo,
-    })
+    const data = await this.fetch({ user, repo })
     return this.constructor.render({ count: data.pull_count })
   }
 

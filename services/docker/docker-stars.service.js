@@ -11,7 +11,9 @@ const {
 
 module.exports = class DockerStars extends BaseService {
   async fetch({ user, repo }) {
-    const url = `https://hub.docker.com/v2/repositories/${user}/${repo}/stars/count/`
+    const url = `https://hub.docker.com/v2/repositories/${getDockerHubUser(
+      user
+    )}/${repo}/stars/count/`
     const { buffer } = await this._request({
       url,
       errorMessages: { 404: 'repo not found' },
@@ -31,7 +33,7 @@ module.exports = class DockerStars extends BaseService {
   }
 
   async handle({ user, repo }) {
-    const stars = await this.fetch({ user: getDockerHubUser(user), repo })
+    const stars = await this.fetch({ user, repo })
     return this.constructor.render({ stars })
   }
 
