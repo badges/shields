@@ -22,8 +22,7 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
   static get url() {
     return {
       base: 'swagger/valid/2.0',
-      format: '(http(?:s)?)/(.+)',
-      capture: ['scheme', 'url'],
+      pattern: ':scheme(http|https)?/:url*',
     }
   }
 
