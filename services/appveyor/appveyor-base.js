@@ -34,7 +34,7 @@ module.exports = class AppVeyorBase extends BaseJsonService {
     })
   }
 
-  static buildUrl(base) {
+  static buildRoute(base) {
     return {
       base,
       format: '([^/]+/[^/]+)(?:/(.+))?',

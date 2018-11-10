@@ -76,7 +76,7 @@ module.exports = class BitbucketPipelines extends BaseJsonService {
     return { label: 'build' }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'bitbucket/pipelines',
       format: '([^/]+)/([^/]+)(?:/(.+))?',

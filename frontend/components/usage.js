@@ -181,8 +181,8 @@ export default class Usage extends React.PureComponent {
         <h2 id="styles">Styles</h2>
 
         <p>
-          The following styles are available (flat is the default as of Feb 1st
-          2015). Examples are shown with an optional logo:
+          The following styles are available. Flat is the default. Examples are
+          shown with an optional logo:
         </p>
         {this.renderStyleExamples()}
 

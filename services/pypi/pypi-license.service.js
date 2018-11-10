@@ -9,8 +9,8 @@ module.exports = class PypiLicense extends PypiBase {
     return 'license'
   }
 
-  static get url() {
-    return this.buildUrl('pypi/l')
+  static get route() {
+    return this.buildRoute('pypi/l')
   }
 
   static get examples() {

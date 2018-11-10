@@ -44,7 +44,7 @@ module.exports = class Cdnjs extends BaseJsonService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'cdnjs/v',
       format: '(.+)',

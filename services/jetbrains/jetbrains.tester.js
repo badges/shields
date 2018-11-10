@@ -19,6 +19,27 @@ t.create('downloads (user friendly plugin id)')
   .get('/plugin/d/1347-scala.json')
   .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }))
 
+t.create('downloads (mocked)')
+  .get('/plugin/d/9435.json')
+  .intercept(
+    nock =>
+      nock('https://plugins.jetbrains.com')
+        .get('/plugins/list?pluginId=9435')
+        .reply(
+          200,
+          `<?xml version="1.0" encoding="UTF-8"?>
+            <plugin-repository>
+              <category name="Code editing">
+                <idea-plugin downloads="2" size="13159" date="1485601807000" url=""></idea-plugin>
+              </category>
+            </plugin-repository>`
+        ),
+    {
+      'Content-Type': 'text/xml;charset=UTF-8',
+    }
+  )
+  .expectJSON({ name: 'downloads', value: '2' })
+
 t.create('unknown plugin')
   .get('/plugin/d/unknown-plugin.json')
   .expectJSON({ name: 'downloads', value: 'not found' })
@@ -44,7 +65,7 @@ t.create('empty response')
       .get('/plugins/list?pluginId=7495')
       .reply(200, '')
   )
-  .expectJSON({ name: 'downloads', value: 'invalid' })
+  .expectJSON({ name: 'downloads', value: 'unparseable xml response' })
 
 t.create('incorrect response format (JSON instead of XML)')
   .get('/plugin/d/7495.json')
@@ -53,7 +74,7 @@ t.create('incorrect response format (JSON instead of XML)')
       .get('/plugins/list?pluginId=7495')
       .reply(200, { downloads: 2 })
   )
-  .expectJSON({ name: 'downloads', value: 'invalid' })
+  .expectJSON({ name: 'downloads', value: 'unparseable xml response' })
 
 t.create('missing required XML element')
   .get('/plugin/d/9435.json')
@@ -75,7 +96,7 @@ t.create('missing required XML element')
       'Content-Type': 'text/xml;charset=UTF-8',
     }
   )
-  .expectJSON({ name: 'downloads', value: 'invalid' })
+  .expectJSON({ name: 'downloads', value: 'invalid response data' })
 
 t.create('missing required XML attribute')
   .get('/plugin/d/9435.json')
@@ -108,7 +129,7 @@ t.create('missing required XML attribute')
       'Content-Type': 'text/xml;charset=UTF-8',
     }
   )
-  .expectJSON({ name: 'downloads', value: 'invalid' })
+  .expectJSON({ name: 'downloads', value: 'invalid response data' })
 
 t.create('empty XML')
   .get('/plugin/d/9435.json')
@@ -121,7 +142,20 @@ t.create('empty XML')
       'Content-Type': 'text/xml;charset=UTF-8',
     }
   )
-  .expectJSON({ name: 'downloads', value: 'invalid' })
+  .expectJSON({ name: 'downloads', value: 'unparseable xml response' })
+
+t.create('XML with unknown root')
+  .get('/plugin/d/9435.json')
+  .intercept(
+    nock =>
+      nock('https://plugins.jetbrains.com')
+        .get('/plugins/list?pluginId=9435')
+        .reply(200, '<?xml version="1.0" encoding="UTF-8"?><plugin />'),
+    {
+      'Content-Type': 'text/xml;charset=UTF-8',
+    }
+  )
+  .expectJSON({ name: 'downloads', value: 'invalid response data' })
 
 t.create('404 status code')
   .get('/plugin/d/7495.json')
@@ -130,7 +164,7 @@ t.create('404 status code')
       .get('/plugins/list?pluginId=7495')
       .reply(404)
   )
-  .expectJSON({ name: 'downloads', value: 'inaccessible' })
+  .expectJSON({ name: 'downloads', value: 'not found' })
 
 t.create('empty XML(v)')
   .get('/plugin/v/9435.json')
@@ -143,7 +177,7 @@ t.create('empty XML(v)')
       'Content-Type': 'text/xml;charset=UTF-8',
     }
   )
-  .expectJSON({ name: 'jetbrains plugin', value: 'invalid' })
+  .expectJSON({ name: 'jetbrains plugin', value: 'unparseable xml response' })
 
 t.create('404 status code(v)')
   .get('/plugin/v/7495.json')
@@ -152,7 +186,7 @@ t.create('404 status code(v)')
       .get('/plugins/list?pluginId=7495')
       .reply(404)
   )
-  .expectJSON({ name: 'jetbrains plugin', value: 'inaccessible' })
+  .expectJSON({ name: 'jetbrains plugin', value: 'not found' })
 
 t.create('missing required XML element(v)')
   .get('/plugin/v/9435.json')
@@ -174,7 +208,7 @@ t.create('missing required XML element(v)')
       'Content-Type': 'text/xml;charset=UTF-8',
     }
   )
-  .expectJSON({ name: 'jetbrains plugin', value: 'invalid' })
+  .expectJSON({ name: 'jetbrains plugin', value: 'invalid response data' })
 
 t.create('incorrect response format (JSON instead of XML)(v)')
   .get('/plugin/v/7495.json')
@@ -183,7 +217,7 @@ t.create('incorrect response format (JSON instead of XML)(v)')
       .get('/plugins/list?pluginId=7495')
       .reply(200, { version: 2.0 })
   )
-  .expectJSON({ name: 'jetbrains plugin', value: 'invalid' })
+  .expectJSON({ name: 'jetbrains plugin', value: 'unparseable xml response' })
 
 t.create('empty response(v)')
   .get('/plugin/v/7495.json')
@@ -192,7 +226,7 @@ t.create('empty response(v)')
       .get('/plugins/list?pluginId=7495')
       .reply(200, '')
   )
-  .expectJSON({ name: 'jetbrains plugin', value: 'invalid' })
+  .expectJSON({ name: 'jetbrains plugin', value: 'unparseable xml response' })
 
 t.create('server error(v)')
   .get('/plugin/v/7495.json')
@@ -238,3 +272,39 @@ t.create('version (number as a plugin id)')
       value: isVPlusDottedVersionNClauses,
     })
   )
+
+t.create('version (mocked)')
+  .get('/plugin/v/9435.json')
+  .intercept(
+    nock =>
+      nock('https://plugins.jetbrains.com')
+        .get('/plugins/list?pluginId=9435')
+        .reply(
+          200,
+          `<?xml version="1.0" encoding="UTF-8"?>
+            <plugin-repository>
+              <category name="Code editing">
+                <idea-plugin downloads="2" size="13159" date="1485601807000" url="">
+                  <version>1.0</version>
+                </idea-plugin>
+              </category>
+            </plugin-repository>`
+        ),
+    {
+      'Content-Type': 'text/xml;charset=UTF-8',
+    }
+  )
+  .expectJSON({ name: 'jetbrains plugin', value: 'v1.0' })
+
+t.create('XML with unknown root (v)')
+  .get('/plugin/v/9435.json')
+  .intercept(
+    nock =>
+      nock('https://plugins.jetbrains.com')
+        .get('/plugins/list?pluginId=9435')
+        .reply(200, '<?xml version="1.0" encoding="UTF-8"?><plugin />'),
+    {
+      'Content-Type': 'text/xml;charset=UTF-8',
+    }
+  )
+  .expectJSON({ name: 'jetbrains plugin', value: 'invalid response data' })

@@ -3,7 +3,7 @@
 const BaseXmlService = require('../base-xml')
 
 module.exports = class EclipseMarketplaceBase extends BaseXmlService {
-  static buildUrl(base) {
+  static buildRoute(base) {
     return {
       base,
       format: '(.+)',

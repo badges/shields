@@ -63,7 +63,7 @@ class AurLicense extends BaseAurService {
     return 'license'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'aur/license',
       format: '(.+)',
@@ -104,7 +104,7 @@ class AurVotes extends BaseAurService {
     return 'rating'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'aur/votes',
       format: '(.+)',
@@ -142,7 +142,7 @@ class AurVersion extends BaseAurService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'aur/version',
       format: '(.+)',

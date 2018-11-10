@@ -9,7 +9,7 @@ module.exports = class Maintenance extends LegacyService {
     return 'other'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'maintenance',
     }

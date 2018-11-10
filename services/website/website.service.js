@@ -74,7 +74,7 @@ module.exports = class Website extends LegacyService {
     return 'monitoring'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: '',
     }
