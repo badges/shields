@@ -40,7 +40,7 @@ module.exports = class JetbrainsDownloads extends JetbrainsBase {
     ]
   }
 
-  static get url() {
+  static get route() {
     return this.buildUrl('jetbrains/plugin/v')
   }
 
