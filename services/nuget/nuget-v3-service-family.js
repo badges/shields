@@ -3,21 +3,21 @@
 const { promisify } = require('util')
 const Joi = require('joi')
 const { regularUpdate } = require('../../lib/regular-update')
-const ServiceUrlBuilder = require('../service-url-builder')
+const RouteBuilder = require('../route-builder')
 const BaseJsonService = require('../base-json')
 const { NotFound } = require('../errors')
 const { renderVersionBadge, renderDownloadBadge } = require('./nuget-helpers')
 
 /*
  * Build the Shields service URL object for the given service configuration. Return
- * the ServiceUrlBuilder instance to which the service can add the route.
+ * the RouteBuilder instance to which the service can add the route.
  */
-function buildUrl({ serviceBaseUrl, withTenant, withFeed }) {
+function buildRoute({ serviceBaseUrl, withTenant, withFeed }) {
   let result
   if (withTenant) {
-    result = new ServiceUrlBuilder().push(`(.+\\.)?${serviceBaseUrl}`, 'tenant')
+    result = new RouteBuilder().push(`(.+\\.)?${serviceBaseUrl}`, 'tenant')
   } else {
-    result = new ServiceUrlBuilder({ base: serviceBaseUrl })
+    result = new RouteBuilder({ base: serviceBaseUrl })
   }
   if (withFeed) {
     result.push('([^/]+)', 'feed')
@@ -142,8 +142,8 @@ function createServiceFamily({
       return 'version'
     }
 
-    static get url() {
-      return buildUrl({ serviceBaseUrl, withTenant, withFeed })
+    static get route() {
+      return buildRoute({ serviceBaseUrl, withTenant, withFeed })
         .push('(v|vpre)', 'which')
         .push('(.*)', 'packageName')
         .toObject()
@@ -193,8 +193,8 @@ function createServiceFamily({
       return 'downloads'
     }
 
-    static get url() {
-      return buildUrl({ serviceBaseUrl, withTenant, withFeed })
+    static get route() {
+      return buildRoute({ serviceBaseUrl, withTenant, withFeed })
         .push('dt')
         .push('(.*)', 'packageName')
         .toObject()

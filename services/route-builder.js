@@ -3,11 +3,14 @@
 const { toArray } = require('../lib/badge-data')
 
 /*
- * Factory class for building a BaseService `url` object. This class is useful
+ * Factory class for building a BaseService `route` object. This class is useful
  * in complex collections of service classes, when the URL is built
  * conditionally.
+ *
+ * Patterns based on path-to-regex may obviate the need for this, though they
+ * haven't done so yet.
  */
-module.exports = class ServiceUrlBuilder {
+module.exports = class RouteBuilder {
   constructor({ base = '' } = {}) {
     this.base = base
 

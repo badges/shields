@@ -48,7 +48,7 @@ function createServiceFamily({ defaultLabel, serviceBaseUrl, apiBaseUrl }) {
       return 'version'
     }
 
-    static get url() {
+    static get route() {
       return {
         base: serviceBaseUrl,
         pattern: ':which(v|vpre)/:repo',
