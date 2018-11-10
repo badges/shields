@@ -8,12 +8,12 @@ const { renderVersionBadge, renderDownloadBadge } = require('./nuget-helpers')
 
 async function fetch(
   serviceInstance,
-  { baseUrl, repo, includePrereleases = false }
+  { baseUrl, packageName, includePrereleases = false }
 ) {
   const releaseTypeFilter = includePrereleases
     ? 'IsAbsoluteLatestVersion eq true'
     : 'IsLatestVersion eq true'
-  const filter = `Id eq '${repo}' and ${releaseTypeFilter}`
+  const filter = `Id eq '${packageName}' and ${releaseTypeFilter}`
   const data = await serviceInstance._requestJson({
     schema: Joi.any(),
     url: `${baseUrl}/Packages()`,
@@ -28,7 +28,11 @@ async function fetch(
   if (packageData) {
     return packageData
   } else if (!includePrereleases) {
-    return fetch(serviceInstance, { baseUrl, repo, includePrereleases: true })
+    return fetch(serviceInstance, {
+      baseUrl,
+      packageName,
+      includePrereleases: true,
+    })
   } else {
     throw new NotFound()
   }
@@ -51,7 +55,7 @@ function createServiceFamily({ defaultLabel, serviceBaseUrl, apiBaseUrl }) {
     static get route() {
       return {
         base: serviceBaseUrl,
-        pattern: ':which(v|vpre)/:repo',
+        pattern: ':which(v|vpre)/:packageName',
       }
     }
 
@@ -69,10 +73,10 @@ function createServiceFamily({ defaultLabel, serviceBaseUrl, apiBaseUrl }) {
       return renderVersionBadge(props)
     }
 
-    async handle({ which, repo }) {
+    async handle({ which, packageName }) {
       const packageData = await fetch(this, {
         baseUrl: apiBaseUrl,
-        repo,
+        packageName,
         includePrereleases: which === 'vpre',
       })
       const version = packageData.NormalizedVersion || packageData.Version
@@ -85,11 +89,10 @@ function createServiceFamily({ defaultLabel, serviceBaseUrl, apiBaseUrl }) {
       return 'downloads'
     }
 
-    static get url() {
+    static get route() {
       return {
         base: serviceBaseUrl,
-        format: 'dt/(.*)',
-        capture: ['repo'],
+        pattern: 'dt/:packageName',
       }
     }
 
@@ -101,10 +104,10 @@ function createServiceFamily({ defaultLabel, serviceBaseUrl, apiBaseUrl }) {
       return renderDownloadBadge(props)
     }
 
-    async handle({ repo }) {
+    async handle({ packageName }) {
       const packageData = await fetch(this, {
         baseUrl: apiBaseUrl,
-        repo,
+        packageName,
       })
       const { DownloadCount: downloads } = packageData
       return this.constructor.render({ downloads })
