@@ -1,11 +1,10 @@
 'use strict'
 
-const { expect } = require('chai')
 const isPng = require('is-png')
 const isSvg = require('is-svg')
 const { spawn } = require('child-process-promise')
 
-const { use } = require('chai')
+const { expect, use } = require('chai')
 use(require('chai-string'))
 use(require('sinon-chai'))
 
