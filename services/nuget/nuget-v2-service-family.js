@@ -4,7 +4,23 @@ const Joi = require('joi')
 
 const BaseJsonService = require('../base-json')
 const { NotFound } = require('../errors')
+const { nonNegativeInteger } = require('../validators')
 const { renderVersionBadge, renderDownloadBadge } = require('./nuget-helpers')
+
+const schema = Joi.object({
+  d: Joi.object({
+    results: Joi.array()
+      .items(
+        Joi.object({
+          Version: Joi.string(),
+          NormalizedVersion: Joi.string(),
+          DownloadCount: nonNegativeInteger,
+        })
+      )
+      .max(1)
+      .default([]),
+  }).required(),
+}).required()
 
 async function fetch(
   serviceInstance,
@@ -15,7 +31,7 @@ async function fetch(
     : 'IsLatestVersion eq true'
   const filter = `Id eq '${packageName}' and ${releaseTypeFilter}`
   const data = await serviceInstance._requestJson({
-    schema: Joi.any(),
+    schema,
     url: `${baseUrl}/Packages()`,
     options: {
       headers: { Accept: 'application/atom+json,application/json' },
