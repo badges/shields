@@ -9,6 +9,7 @@ module.exports = {
     path: path.join(
       __dirname,
       '..',
+      '..',
       'node_modules',
       'dejavu-fonts-ttf',
       'ttf',

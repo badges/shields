@@ -12,7 +12,7 @@ all: website favicon test
 
 favicon:
 	# This isn't working right now. See https://github.com/badges/shields/issues/1788
-	node lib/badge-cli.js '' '' '#bada55' .png > favicon.png
+	node gh-badges/lib/badge-cli.js '' '' '#bada55' .png > favicon.png
 
 website:
 	LONG_CACHE=false npm run build

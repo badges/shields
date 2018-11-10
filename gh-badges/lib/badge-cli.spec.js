@@ -5,11 +5,14 @@ const isPng = require('is-png')
 const isSvg = require('is-svg')
 const { spawn } = require('child-process-promise')
 
-// https://github.com/badges/shields/pull/1419#discussion_r159957055
-require('./register-chai-plugins.spec')
+const { use } = require('chai')
+use(require('chai-string'))
+use(require('sinon-chai'))
 
 function runCli(args) {
-  return spawn('node', ['lib/badge-cli.js', ...args], { capture: ['stdout'] })
+  return spawn('node', ['gh-badges/lib/badge-cli.js', ...args], {
+    capture: ['stdout'],
+  })
 }
 
 describe('The CLI', function() {

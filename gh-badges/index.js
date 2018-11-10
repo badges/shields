@@ -1,7 +1,7 @@
 'use strict'
 
-const { makeBadge } = require('./make-badge')
-const { PDFKitTextMeasurer, QuickTextMeasurer } = require('./text-measurer')
+const { makeBadge } = require('./lib/make-badge')
+const { PDFKitTextMeasurer, QuickTextMeasurer } = require('./lib/text-measurer')
 
 class BadgeFactory {
   constructor({ fontPath, fallbackFontPath, precomputeWidths = false }) {

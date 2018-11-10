@@ -5,7 +5,6 @@ const path = require('path')
 const fs = require('fs')
 const sinon = require('sinon')
 const { PDFKitTextMeasurer, QuickTextMeasurer } = require('./text-measurer')
-const { starRating } = require('./text-formatters')
 const defaults = require('./defaults')
 const testHelpers = require('./make-badge-test-helpers')
 const almostEqual = require('almost-equal')
@@ -120,7 +119,7 @@ function registerTests(fontPath, skip) {
     })
 
     context('when given non-ASCII strings', function() {
-      const strings = [starRating(3.5), '\u2026']
+      const strings = ['★★★½☆', '\u2026']
 
       strings.forEach(str => {
         it(`should measure '${str}' in parity with PDFKit`, function() {
