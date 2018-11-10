@@ -6,6 +6,7 @@ const { regularUpdate } = require('../../lib/regular-update')
 const RouteBuilder = require('../route-builder')
 const BaseJsonService = require('../base-json')
 const { NotFound } = require('../errors')
+const { nonNegativeInteger } = require('../validators')
 const { renderVersionBadge, renderDownloadBadge } = require('./nuget-helpers')
 
 /*
@@ -80,7 +81,19 @@ async function searchQueryServiceUrl(baseUrl) {
 
 const schema = Joi.object({
   data: Joi.array()
-    .items(Joi.any())
+    .items(
+      Joi.object({
+        versions: Joi.array()
+          .items(
+            Joi.object({
+              version: Joi.string().required(),
+            })
+          )
+          .default([]),
+        totalDownloads: Joi.number().integer(),
+        totaldownloads: Joi.number().integer(),
+      })
+    )
     .max(1)
     .default([]),
 }).required()

@@ -30,6 +30,7 @@ const nuGetV2VersionJsonFirstCharNotZero = JSON.stringify({
 const nuGetV3VersionJsonWithDash = JSON.stringify({
   data: [
     {
+      totalDownloads: 0,
       versions: [{ version: '1.2-beta' }],
     },
   ],
@@ -37,6 +38,7 @@ const nuGetV3VersionJsonWithDash = JSON.stringify({
 const nuGetV3VersionJsonFirstCharZero = JSON.stringify({
   data: [
     {
+      totalDownloads: 0,
       versions: [{ version: '0.35' }],
     },
   ],
@@ -44,6 +46,7 @@ const nuGetV3VersionJsonFirstCharZero = JSON.stringify({
 const nuGetV3VersionJsonFirstCharNotZero = JSON.stringify({
   data: [
     {
+      totalDownloads: 0,
       versions: [{ version: '1.2.7' }],
     },
   ],
