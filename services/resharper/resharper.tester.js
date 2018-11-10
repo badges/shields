@@ -7,7 +7,7 @@ const {
   isVPlusDottedVersionNClauses,
   isVPlusDottedVersionNClausesWithOptionalSuffix,
 } = require('../test-validators')
-const colorscheme = require('../../lib/colorscheme.json')
+const { colorScheme } = require('../test-helpers')
 const {
   nuGetV2VersionJsonWithDash,
   nuGetV2VersionJsonFirstCharZero,
@@ -72,7 +72,7 @@ t.create('version (mocked, yellow badge)')
   .expectJSON({
     name: 'resharper',
     value: 'v1.2-beta',
-    colorB: colorscheme.yellow.colorB,
+    colorB: colorScheme.yellow,
   })
 
 t.create('version (mocked, orange badge)')
@@ -87,7 +87,7 @@ t.create('version (mocked, orange badge)')
   .expectJSON({
     name: 'resharper',
     value: 'v0.35',
-    colorB: colorscheme.orange.colorB,
+    colorB: colorScheme.orange,
   })
 
 t.create('version (mocked, blue badge)')
@@ -102,7 +102,7 @@ t.create('version (mocked, blue badge)')
   .expectJSON({
     name: 'resharper',
     value: 'v1.2.7',
-    colorB: colorscheme.blue.colorB,
+    colorB: colorScheme.blue,
   })
 
 t.create('version (not found)')
@@ -148,7 +148,7 @@ t.create('version (pre) (mocked, yellow badge)')
   .expectJSON({
     name: 'resharper',
     value: 'v1.2-beta',
-    colorB: colorscheme.yellow.colorB,
+    colorB: colorScheme.yellow,
   })
 
 t.create('version (pre) (mocked, orange badge)')
@@ -163,7 +163,7 @@ t.create('version (pre) (mocked, orange badge)')
   .expectJSON({
     name: 'resharper',
     value: 'v0.35',
-    colorB: colorscheme.orange.colorB,
+    colorB: colorScheme.orange,
   })
 
 t.create('version (pre) (mocked, blue badge)')
@@ -178,7 +178,7 @@ t.create('version (pre) (mocked, blue badge)')
   .expectJSON({
     name: 'resharper',
     value: 'v1.2.7',
-    colorB: colorscheme.blue.colorB,
+    colorB: colorScheme.blue,
   })
 
 t.create('version (pre) (not found)')
