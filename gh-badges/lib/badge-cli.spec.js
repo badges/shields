@@ -1,5 +1,6 @@
 'use strict'
 
+const path = require('path')
 const isPng = require('is-png')
 const isSvg = require('is-svg')
 const { spawn } = require('child-process-promise')
@@ -9,7 +10,7 @@ use(require('chai-string'))
 use(require('sinon-chai'))
 
 function runCli(args) {
-  return spawn('node', ['gh-badges/lib/badge-cli.js', ...args], {
+  return spawn('node', [path.join(__dirname, 'badge-cli.js'), ...args], {
     capture: ['stdout'],
   })
 }
