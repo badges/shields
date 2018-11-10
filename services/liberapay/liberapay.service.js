@@ -11,7 +11,7 @@ module.exports = class Liberapay extends LegacyService {
     return 'funding'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'liberapay',
     }

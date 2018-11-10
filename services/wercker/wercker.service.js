@@ -74,7 +74,7 @@ module.exports = class Wercker extends BaseJsonService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'wercker',
       format:

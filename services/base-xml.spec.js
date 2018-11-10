@@ -18,7 +18,7 @@ class DummyXmlService extends BaseXmlService {
     return 'cat'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'foo',
     }

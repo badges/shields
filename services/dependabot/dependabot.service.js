@@ -12,7 +12,7 @@ module.exports = class DependabotSemverCompatibility extends LegacyService {
     return 'other'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'dependabot/semver',
     }

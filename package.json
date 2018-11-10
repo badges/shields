@@ -1,6 +1,6 @@
 {
   "name": "gh-badges",
-  "version": "2.0.0-beta1",
+  "version": "2.0.0",
   "description": "Official Shields.io badge library.",
   "keywords": [
     "GitHub",
@@ -54,7 +54,7 @@
     "redis": "~2.8.0",
     "request": "~2.88.0",
     "semver": "~5.6.0",
-    "simple-icons": "1.9.12",
+    "simple-icons": "1.9.13",
     "svgo": "~1.1.1",
     "xml2js": "~0.4.16",
     "xmldom": "~0.1.27",
@@ -138,7 +138,7 @@
     "child-process-promise": "^2.2.1",
     "classnames": "^2.2.5",
     "concurrently": "^4.0.1",
-    "danger": "^4.0.1",
+    "danger": "^6.0.5",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
     "dejavu-fonts-ttf": "^2.37.3",
     "eol": "^0.9.1",
@@ -157,6 +157,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "fetch-ponyfill": "^6.0.0",
     "fs-readfile-promise": "^3.0.1",
+    "got": "^9.2.2",
     "husky": "^1.1.2",
     "icedfrisby": "2.0.0-alpha.2",
     "icedfrisby-nock": "^1.0.0",
@@ -195,8 +196,8 @@
     "wait-promise": "^0.4.1"
   },
   "engines": {
-    "node": ">= 8.x",
-    "npm": "5.x"
+    "node": ">= 8",
+    "npm": ">= 5"
   },
   "babel": {
     "presets": [

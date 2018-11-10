@@ -20,9 +20,9 @@ const documentation = `
 `
 
 module.exports = class AppVeyorTests extends AppVeyorBase {
-  static get url() {
+  static get route() {
     return {
-      ...this.buildUrl('appveyor/tests'),
+      ...this.buildRoute('appveyor/tests'),
       queryParams: [
         'compact_message',
         'passed_label',

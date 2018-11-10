@@ -15,7 +15,7 @@ module.exports = class Bugzilla extends LegacyService {
     return 'issue-tracking'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'bugzilla',
     }

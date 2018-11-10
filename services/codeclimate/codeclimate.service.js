@@ -135,7 +135,7 @@ module.exports = class Codeclimate extends LegacyService {
     )
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'codeclimate',
     }
