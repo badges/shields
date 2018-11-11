@@ -5,17 +5,25 @@ const {
   checkErrorResponse: standardCheckErrorResponse,
 } = require('../../lib/error-helper')
 
+const documentation = `
+<p>
+  If your GitHub badge errors, it might be because you hit GitHub's rate limits.
+  <br>
+  You can increase Shields.io's rate limit by
+  <a href="https://img.shields.io/github-auth">going to this page</a> to add
+  Shields as a GitHub application on your GitHub account.
+</p>
+`
+
 function stateColor(s) {
   return { open: '2cbe4e', closed: 'cb2431', merged: '6f42c1' }[s]
 }
 
-function checkStateColor(s) {
+function errorMessagesFor(notFoundMessage = 'repo not found') {
   return {
-    pending: 'dbab09',
-    success: '2cbe4e',
-    failure: 'cb2431',
-    error: 'cb2431',
-  }[s]
+    404: notFoundMessage,
+    422: notFoundMessage,
+  }
 }
 
 function checkErrorResponse(
@@ -27,16 +35,16 @@ function checkErrorResponse(
 ) {
   return standardCheckErrorResponse(badgeData, err, res, {
     ...errorMessages,
-    404: notFoundMessage,
-    422: notFoundMessage,
+    ...errorMessagesFor(notFoundMessage),
   })
 }
 
 const commentsColor = colorScale([1, 3, 10, 25], undefined, true)
 
 module.exports = {
+  documentation,
   stateColor,
-  checkStateColor,
   commentsColor,
+  errorMessagesFor,
   checkErrorResponse,
 }
