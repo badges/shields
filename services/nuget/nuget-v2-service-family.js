@@ -7,6 +7,13 @@ const { NotFound } = require('../errors')
 const { nonNegativeInteger } = require('../validators')
 const { renderVersionBadge, renderDownloadBadge } = require('./nuget-helpers')
 
+function createFilter({ packageName, includePrereleases }) {
+  const releaseTypeFilter = includePrereleases
+    ? 'IsAbsoluteLatestVersion eq true'
+    : 'IsLatestVersion eq true'
+  return `Id eq '${packageName}' and ${releaseTypeFilter}`
+}
+
 const schema = Joi.object({
   d: Joi.object({
     results: Joi.array()
@@ -26,16 +33,12 @@ async function fetch(
   serviceInstance,
   { baseUrl, packageName, includePrereleases = false }
 ) {
-  const releaseTypeFilter = includePrereleases
-    ? 'IsAbsoluteLatestVersion eq true'
-    : 'IsLatestVersion eq true'
-  const filter = `Id eq '${packageName}' and ${releaseTypeFilter}`
   const data = await serviceInstance._requestJson({
     schema,
-    url: `${baseUrl}/Packages()`,
+    url: `${baseUrl}/Search()`,
     options: {
       headers: { Accept: 'application/atom+json,application/json' },
-      qs: { $filter: filter },
+      qs: { $filter: createFilter({ packageName, includePrereleases }) },
     },
   })
 
@@ -134,5 +137,6 @@ function createServiceFamily({ defaultLabel, serviceBaseUrl, apiBaseUrl }) {
 }
 
 module.exports = {
+  createFilter,
   createServiceFamily,
 }

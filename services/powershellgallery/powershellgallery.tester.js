@@ -36,21 +36,16 @@ t.create('total downloads (not found)')
   .get('/dt/not-a-real-package.json')
   .expectJSON({ name: 'downloads', value: 'not found' })
 
-t.create('total downloads (connection error)')
-  .get('/dt/ACMESharp.json')
-  .networkOff()
-  .expectJSON({ name: 'downloads', value: 'inaccessible' })
-
 t.create('total downloads (unexpected response)')
   .get('/dt/ACMESharp.json')
   .intercept(nock =>
-    nock('https://msconfiggallery.cloudapp.net')
+    nock('https://www.powershellgallery.com')
       .get(
         '/api/v2/Packages()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
       )
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'downloads', value: 'unparseable json response' })
+  .expectJSON({ name: 'downloads', value: 'unparseable xml response' })
 
 // version
 
@@ -58,7 +53,7 @@ t.create('version (valid)')
   .get('/v/ACMESharp.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'powershellgallery',
+      name: 'powershell gallery',
       value: isVPlusDottedVersionNClauses,
     })
   )
@@ -66,14 +61,14 @@ t.create('version (valid)')
 t.create('version (mocked, yellow badge)')
   .get('/v/ACMESharp.json?style=_shields_test')
   .intercept(nock =>
-    nock('https://msconfiggallery.cloudapp.net')
+    nock('https://www.powershellgallery.com')
       .get(
         '/api/v2/Packages()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
       )
       .reply(200, nuGetV2VersionJsonWithDash)
   )
   .expectJSON({
-    name: 'powershellgallery',
+    name: 'powershell gallery',
     value: 'v1.2-beta',
     colorB: colorscheme.yellow.colorB,
   })
@@ -81,14 +76,14 @@ t.create('version (mocked, yellow badge)')
 t.create('version (mocked, orange badge)')
   .get('/v/ACMESharp.json?style=_shields_test')
   .intercept(nock =>
-    nock('https://msconfiggallery.cloudapp.net')
+    nock('https://www.powershellgallery.com')
       .get(
         '/api/v2/Packages()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
       )
       .reply(200, nuGetV2VersionJsonFirstCharZero)
   )
   .expectJSON({
-    name: 'powershellgallery',
+    name: 'powershell gallery',
     value: 'v0.35',
     colorB: colorscheme.orange.colorB,
   })
@@ -96,14 +91,14 @@ t.create('version (mocked, orange badge)')
 t.create('version (mocked, blue badge)')
   .get('/v/ACMESharp.json?style=_shields_test')
   .intercept(nock =>
-    nock('https://msconfiggallery.cloudapp.net')
+    nock('https://www.powershellgallery.com')
       .get(
         '/api/v2/Packages()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
       )
       .reply(200, nuGetV2VersionJsonFirstCharNotZero)
   )
   .expectJSON({
-    name: 'powershellgallery',
+    name: 'powershell gallery',
     value: 'v1.2.7',
     colorB: colorscheme.blue.colorB,
   })
@@ -115,18 +110,22 @@ t.create('version (not found)')
 t.create('version (connection error)')
   .get('/v/ACMESharp.json')
   .networkOff()
-  .expectJSON({ name: 'powershellgallery', value: 'inaccessible' })
+  .expectJSON({ name: 'powershell gallery', value: 'inaccessible' })
 
 t.create('version (unexpected response)')
   .get('/v/ACMESharp.json')
+  .only()
   .intercept(nock =>
-    nock('https://msconfiggallery.cloudapp.net')
+    nock('https://www.powershellgallery.com')
       .get(
-        '/api/v2/Packages()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
+        '/api/v2/Search()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsLatestVersion%20eq%20true'
       )
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'powershellgallery', value: 'unparseable json response' })
+  .expectJSON({
+    name: 'powershell gallery',
+    value: 'unparseable xml response',
+  })
 
 // version (pre)
 
@@ -134,7 +133,7 @@ t.create('version (pre) (valid)')
   .get('/vpre/ACMESharp.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'powershellgallery',
+      name: 'powershell gallery',
       value: isVPlusDottedVersionNClausesWithOptionalSuffix,
     })
   )
@@ -142,14 +141,14 @@ t.create('version (pre) (valid)')
 t.create('version (pre) (mocked, yellow badge)')
   .get('/vpre/ACMESharp.json?style=_shields_test')
   .intercept(nock =>
-    nock('https://msconfiggallery.cloudapp.net')
+    nock('https://www.powershellgallery.com')
       .get(
-        '/api/v2/Packages()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
+        '/api/v2/Search()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
       )
       .reply(200, nuGetV2VersionJsonWithDash)
   )
   .expectJSON({
-    name: 'powershellgallery',
+    name: 'powershell gallery',
     value: 'v1.2-beta',
     colorB: colorscheme.yellow.colorB,
   })
@@ -157,14 +156,14 @@ t.create('version (pre) (mocked, yellow badge)')
 t.create('version (pre) (mocked, orange badge)')
   .get('/vpre/ACMESharp.json?style=_shields_test')
   .intercept(nock =>
-    nock('https://msconfiggallery.cloudapp.net')
+    nock('https://www.powershellgallery.com')
       .get(
-        '/api/v2/Packages()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
+        '/api/v2/Search()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
       )
       .reply(200, nuGetV2VersionJsonFirstCharZero)
   )
   .expectJSON({
-    name: 'powershellgallery',
+    name: 'powershell gallery',
     value: 'v0.35',
     colorB: colorscheme.orange.colorB,
   })
@@ -172,34 +171,32 @@ t.create('version (pre) (mocked, orange badge)')
 t.create('version (pre) (mocked, blue badge)')
   .get('/vpre/ACMESharp.json?style=_shields_test')
   .intercept(nock =>
-    nock('https://msconfiggallery.cloudapp.net')
+    nock('https://www.powershellgallery.com')
       .get(
-        '/api/v2/Packages()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
+        '/api/v2/Search()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
       )
       .reply(200, nuGetV2VersionJsonFirstCharNotZero)
   )
   .expectJSON({
-    name: 'powershellgallery',
+    name: 'powershell gallery',
     value: 'v1.2.7',
     colorB: colorscheme.blue.colorB,
   })
 
 t.create('version (pre) (not found)')
   .get('/vpre/not-a-real-package.json')
-  .expectJSON({ name: 'powershellgallery', value: 'not found' })
-
-t.create('version (pre) (connection error)')
-  .get('/vpre/ACMESharp.json')
-  .networkOff()
-  .expectJSON({ name: 'powershellgallery', value: 'inaccessible' })
+  .expectJSON({ name: 'powershell gallery', value: 'not found' })
 
 t.create('version (pre) (unexpected response)')
   .get('/vpre/ACMESharp.json')
   .intercept(nock =>
-    nock('https://msconfiggallery.cloudapp.net')
+    nock('https://www.powershellgallery.com')
       .get(
-        '/api/v2/Packages()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
+        '/api/v2/Search()?%24filter=Id%20eq%20%27ACMESharp%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
       )
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'powershellgallery', value: 'unparseable json response' })
+  .expectJSON({
+    name: 'powershell gallery',
+    value: 'unparseable xml response',
+  })
