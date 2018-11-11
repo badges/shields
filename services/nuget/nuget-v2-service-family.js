@@ -35,7 +35,7 @@ async function fetch(
 ) {
   const data = await serviceInstance._requestJson({
     schema,
-    url: `${baseUrl}/Search()`,
+    url: `${baseUrl}/Packages()`,
     options: {
       headers: { Accept: 'application/atom+json,application/json' },
       qs: { $filter: createFilter({ packageName, includePrereleases }) },
