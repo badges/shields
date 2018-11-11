@@ -6,7 +6,6 @@ const { regularUpdate } = require('../../lib/regular-update')
 const RouteBuilder = require('../route-builder')
 const BaseJsonService = require('../base-json')
 const { NotFound } = require('../errors')
-const { nonNegativeInteger } = require('../validators')
 const { renderVersionBadge, renderDownloadBadge } = require('./nuget-helpers')
 
 /*
