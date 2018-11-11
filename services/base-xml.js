@@ -8,7 +8,13 @@ const trace = require('./trace')
 const { InvalidResponse } = require('./errors')
 
 class BaseXmlService extends BaseService {
-  async _requestXml({ schema, url, options = {}, errorMessages = {} }) {
+  async _requestXml({
+    schema,
+    url,
+    options = {},
+    errorMessages = {},
+    parserOptions = {},
+  }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     const mergedOptions = {
       ...{ headers: { Accept: 'application/xml, text/xml' } },
@@ -26,7 +32,7 @@ class BaseXmlService extends BaseService {
         underlyingError: validateResult.err,
       })
     }
-    const xml = fastXmlParser.parse(buffer)
+    const xml = fastXmlParser.parse(buffer, parserOptions)
     logTrace(emojic.dart, 'Response XML (before validation)', xml, {
       deep: true,
     })
