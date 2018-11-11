@@ -114,7 +114,6 @@ t.create('version (connection error)')
 
 t.create('version (unexpected response)')
   .get('/v/ACMESharp.json')
-  .only()
   .intercept(nock =>
     nock('https://www.powershellgallery.com')
       .get(
