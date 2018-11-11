@@ -28,7 +28,7 @@ function coalesce(...candidates) {
 
 class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
-    this._sendAndCacheRequest = sendAndCacheRequest
+    this._requestFetcher = sendAndCacheRequest
     this._handleInternalErrors = handleInternalErrors
   }
 
@@ -370,6 +370,8 @@ class BaseService {
           const serviceInstance = new this(
             {
               sendAndCacheRequest: request.asPromise,
+              sendAndCacheRequestWithCallbacks: request,
+              githubApiProvider,
             },
             serviceConfig
           )
@@ -424,7 +426,7 @@ class BaseService {
   async _request({ url, options = {}, errorMessages = {} }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     logTrace(emojic.bowAndArrow, 'Request', url, '\n', options)
-    const { res, buffer } = await this._sendAndCacheRequest(url, options)
+    const { res, buffer } = await this._requestFetcher(url, options)
     logTrace(emojic.dart, 'Response status code', res.statusCode)
     return checkErrorResponse.asPromise(errorMessages)({ buffer, res })
   }
