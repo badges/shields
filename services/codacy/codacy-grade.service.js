@@ -2,11 +2,9 @@
 
 const Joi = require('joi')
 const BaseSvgScrapingService = require('../base-svg-scraping')
-const { NotFound } = require('../errors')
+const { codacyGrade } = require('./codacy-helpers')
 
-const schema = Joi.object({
-  message: Joi.equal('A', 'B', 'C', 'D', 'E', 'F', 'X'),
-}).required()
+const schema = Joi.object({ message: codacyGrade }).required()
 
 module.exports = class CodacyGrade extends BaseSvgScrapingService {
   static get category() {
@@ -67,13 +65,9 @@ module.exports = class CodacyGrade extends BaseSvgScrapingService {
         projectId
       )}`,
       options: { qs: { branch } },
+      errorMessages: { 404: 'project or branch not found' },
       valueMatcher: /visibility="hidden">([^<>]+)<\/text>/,
     })
-    if (grade === 'X') {
-      throw new NotFound({
-        prettyMessage: 'project or branch not found',
-      })
-    }
     return this.constructor.render({ grade })
   }
 }

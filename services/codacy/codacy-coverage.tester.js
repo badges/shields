@@ -22,6 +22,8 @@ t.create('Coverage unknown')
     value: 'project or branch not found',
   })
 
+// As sending an invalid branch produces the same response, it's not clear
+// whether the branch parameter does anything.
 t.create('Coverage on branch')
   .get('/59d607d0e311408885e418004068ea58/master.json')
   .expectJSONTypes(
