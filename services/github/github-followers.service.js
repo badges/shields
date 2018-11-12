@@ -6,10 +6,32 @@ const {
   makeLogo: getLogo,
 } = require('../../lib/badge-data')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
 module.exports = class GithubFollowers extends LegacyService {
+  static get category() {
+    return 'social'
+  }
+
+  static get route() {
+    return {
+      base: 'github/followers',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub followers',
+        previewUrl: 'espadrine',
+        query: { style: 'social', label: 'Follow' },
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/followers\/([^/]+)\.(svg|png|gif|jpg|json)$/,

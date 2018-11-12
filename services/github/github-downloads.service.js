@@ -7,10 +7,62 @@ const {
 } = require('../../lib/badge-data')
 const { metric } = require('../../lib/text-formatters')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
 module.exports = class GithubDownloads extends LegacyService {
+  static get category() {
+    return 'downloads'
+  }
+
+  static get route() {
+    return {
+      base: 'github',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub All Releases',
+        previewUrl: 'downloads/atom/atom/total',
+        keywords: ['github'],
+        documentation,
+      },
+      {
+        title: 'GitHub Releases',
+        previewUrl: 'downloads/atom/atom/latest/total',
+        keywords: ['github'],
+        documentation,
+      },
+      {
+        title: 'GitHub Pre-Releases',
+        previewUrl: 'downloads-pre/atom/atom/latest/total',
+        keywords: ['github'],
+        documentation,
+      },
+      {
+        title: 'GitHub Releases (by Release)',
+        previewUrl: 'downloads/atom/atom/v0.190.0/total',
+        keywords: ['github'],
+        documentation,
+      },
+      {
+        title: 'GitHub Releases (by Asset)',
+        previewUrl: 'downloads/atom/atom/latest/atom-amd64.deb',
+        keywords: ['github'],
+        documentation,
+      },
+      {
+        title: 'GitHub Pre-Releases (by Asset)',
+        previewUrl: 'downloads-pre/atom/atom/latest/atom-amd64.deb',
+        keywords: ['github'],
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/(downloads|downloads-pre)\/([^/]+)\/([^/]+)(\/.+)?\/([^/]+)\.(svg|png|gif|jpg|json)$/,
