@@ -62,7 +62,6 @@ t.create('total downloads (unexpected second response)')
       )
       .reply(invalidJSON)
   )
-  // .expectJSON({ name: 'myget', value: 'unparseable json response' })
   .expectJSON({ name: 'downloads', value: 'unparseable json response' })
 
 // version
