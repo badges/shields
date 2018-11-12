@@ -40,6 +40,6 @@
     "svgo": "~1.1.1"
   },
   "scripts": {
-    "test": "echo 'Run tests from parent dir'"
+    "test": "echo 'Run tests from parent dir'; false"
   }
 }
