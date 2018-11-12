@@ -269,9 +269,9 @@ module.exports = class GemVersion extends BaseJsonService {
 2. The examples property defines an array of examples. In this case the array will contain a single object, but in some cases it is helpful to provide multiple usage examples.
 3. Our example object should contain the following properties:
     * `title`: Descriptive text that will be shown next to the badge
-    * `urlPattern`: Describe the variable part of the route using `:param` syntax.
+    * `namedParams`: Provide a valid example of params we can substitute into
+      the pattern. In this case we need a valid ruby gem, so we've picked [formatador](https://rubygems.org/gems/formatador).
     * `staticExample`: On the index page we want to show an example badge, but for performance reasons we want that example to be generated without making an API call. `staticExample` should be populated by calling our `render()` method with some valid data.
-    * `exampleUrl`: Provide a valid example of params we can call the badge with. In this case we need a valid ruby gem, so we've picked [formatador](https://rubygems.org/gems/formatador)
     * `keywords`: If we want to provide additional keywords other than the title, we can add them here. This helps users to search for relevant badges.
 
 Save, run `npm start`, and you can see it [locally](http://127.0.0.1:3000/).
