@@ -34,7 +34,9 @@ Every month it serves over 470 million images.
 This repo hosts:
 
 * The [Shields.io][shields.io] frontend and server code
-* An [NPM library for generating badges][gh-badges] (see the [docs][gh-badges-docs])
+* An [NPM library for generating badges][gh-badges]
+    * [documentation][gh-badges-docs]
+    * [changelog][gh-badges-changelog]
 * The [badge design specification][badge-spec]
 
 
@@ -42,6 +44,7 @@ This repo hosts:
 [gh-badges]: https://www.npmjs.com/package/gh-badges
 [badge-spec]: https://github.com/badges/shields/tree/master/spec
 [gh-badges-docs]: https://github.com/badges/shields/tree/master/gh-badges/README.md
+[gh-badges-changelog]: https://github.com/badges/shields/tree/master/gh-badges/CHANGELOG.md
 
 
 Examples
