@@ -9,6 +9,7 @@ const {
   isFileSize,
   isFormattedDate,
   isVPlusDottedVersionAtLeastOne,
+  isSemver,
 } = require('../test-validators')
 const colorscheme = require('../../lib/colorscheme.json')
 const { licenseToColor } = require('../../lib/licenses')
@@ -472,7 +473,7 @@ t.create('Package version')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'package',
-      value: isVPlusDottedVersionAtLeastOne,
+      value: isSemver,
     })
   )
 
@@ -639,12 +640,12 @@ t.create('downloads for unknown release')
 
 t.create('hit counter')
   .get('/search/torvalds/linux/goto.json')
-  .timeout(8000)
+  .timeout(10000)
   .expectJSONTypes(Joi.object().keys({ name: 'goto counter', value: isMetric }))
 
 t.create('hit counter for nonexistent repo')
   .get('/search/torvalds/not-linux/goto.json')
-  .timeout(8000)
+  .timeout(10000)
   .expectJSON({ name: 'goto counter', value: 'repo not found' })
 
 t.create('commit activity (1 year)')
@@ -760,18 +761,6 @@ t.create('github issue update')
   .expectJSONTypes(
     Joi.object().keys({ name: 'updated', value: isFormattedDate })
   )
-
-t.create('github pull request check state')
-  .get('/status/s/pulls/badges/shields/1110.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'checks', value: 'failure' }))
-
-t.create('github pull request check state (pull request not found)')
-  .get('/status/s/pulls/badges/shields/5110.json')
-  .expectJSON({ name: 'checks', value: 'pull request or repo not found' })
-
-t.create('github pull request check contexts')
-  .get('/status/contexts/pulls/badges/shields/1110.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'checks', value: '1 failure' }))
 
 t.create('top language')
   .get('/languages/top/badges/shields.json')

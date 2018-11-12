@@ -17,7 +17,7 @@ module.exports = class DubDownload extends LegacyService {
     return 'downloads'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'dub',
     }

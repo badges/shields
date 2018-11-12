@@ -32,8 +32,8 @@ module.exports = class EclipseMarketplaceVersion extends EclipseMarketplaceBase 
     ]
   }
 
-  static get url() {
-    return this.buildUrl('eclipse-marketplace/v')
+  static get route() {
+    return this.buildRoute('eclipse-marketplace/v')
   }
 
   static render({ version }) {

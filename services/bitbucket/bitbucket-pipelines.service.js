@@ -1,17 +1,86 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { checkErrorResponse } = require('../../lib/error-helper')
+const Joi = require('joi')
+const BaseJsonService = require('../base-json')
 
-module.exports = class BitbucketPipelines extends LegacyService {
+const bitbucketPipelinesSchema = Joi.object({
+  values: Joi.array()
+    .items(
+      Joi.object({
+        state: Joi.object({
+          name: Joi.string().required(),
+          result: Joi.object({
+            name: Joi.string().required(),
+          }).required(),
+        }).required(),
+      })
+    )
+    .required(),
+}).required()
+
+module.exports = class BitbucketPipelines extends BaseJsonService {
+  async fetch({ user, repo, branch }) {
+    const url = `https://api.bitbucket.org/2.0/repositories/${user}/${repo}/pipelines/`
+    return this._requestJson({
+      url,
+      schema: bitbucketPipelinesSchema,
+      options: {
+        qs: {
+          fields: 'values.state',
+          page: 1,
+          pagelen: 2,
+          sort: '-created_on',
+          'target.ref_type': 'BRANCH',
+          'target.ref_name': branch,
+        },
+      },
+      errorMessages: { 403: 'private repo' },
+    })
+  }
+
+  static render({ status }) {
+    const responses = {
+      SUCCESSFUL: { message: 'passing', color: 'brightgreen' },
+      FAILED: { message: 'failing', color: 'red' },
+      ERROR: { message: 'error', color: 'red' },
+      STOPPED: { message: 'stopped', color: 'yellow' },
+      EXPIRED: { message: 'expired', color: 'yellow' },
+      'never built': { message: 'never built', color: 'lightgrey' },
+    }
+    if (Object.keys(responses).includes(status)) {
+      return responses[status]
+    }
+    return { message: 'unknown', color: 'lightgrey' }
+  }
+
+  static transform(data) {
+    const values = data.values.filter(
+      value => value.state && value.state.name === 'COMPLETED'
+    )
+    if (values.length > 0) {
+      return values[0].state.result.name
+    }
+    return 'never built'
+  }
+
+  async handle({ user, repo, branch }) {
+    const data = await this.fetch({ user, repo, branch: branch || 'master' })
+    return this.constructor.render({ status: this.constructor.transform(data) })
+  }
+
   static get category() {
     return 'build'
   }
 
-  static get url() {
+  static get defaultBadgeData() {
+    return { label: 'build' }
+  }
+
+  static get route() {
     return {
       base: 'bitbucket/pipelines',
+      format: '([^/]+)/([^/]+)(?:/(.+))?',
+      capture: ['user', 'repo', 'branch'],
     }
   }
 
@@ -19,83 +88,16 @@ module.exports = class BitbucketPipelines extends LegacyService {
     return [
       {
         title: 'Bitbucket Pipelines',
-        previewUrl: 'atlassian/adf-builder-javascript',
+        exampleUrl: 'atlassian/adf-builder-javascript',
+        urlPattern: ':user/:repo',
+        staticExample: this.render({ status: 'SUCCESSFUL' }),
       },
       {
         title: 'Bitbucket Pipelines branch',
-        previewUrl: 'atlassian/adf-builder-javascript/task/SECO-2168',
+        exampleUrl: 'atlassian/adf-builder-javascript/task/SECO-2168',
+        urlPattern: ':user/:repo/:branch',
+        staticExample: this.render({ status: 'SUCCESSFUL' }),
       },
     ]
-  }
-
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/bitbucket\/pipelines\/([^/]+)\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const user = match[1] // eg, atlassian
-        const repo = match[2] // eg, adf-builder-javascript
-        const branch = match[3] || 'master' // eg, development
-        const format = match[4]
-        const apiUrl =
-          `https://api.bitbucket.org/2.0/repositories/${encodeURIComponent(
-            user
-          )}/${encodeURIComponent(
-            repo
-          )}/pipelines/?fields=values.state&page=1&pagelen=2&sort=-created_on` +
-          `&target.ref_type=BRANCH&target.ref_name=${encodeURIComponent(
-            branch
-          )}`
-
-        const badgeData = getBadgeData('build', data)
-
-        request(apiUrl, (err, res, buffer) => {
-          if (checkErrorResponse(badgeData, err, res)) {
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const data = JSON.parse(buffer)
-            if (!data.values) {
-              throw Error('Unexpected response')
-            }
-            const values = data.values.filter(
-              value => value.state && value.state.name === 'COMPLETED'
-            )
-            if (values.length > 0) {
-              switch (values[0].state.result.name) {
-                case 'SUCCESSFUL':
-                  badgeData.text[1] = 'passing'
-                  badgeData.colorscheme = 'brightgreen'
-                  break
-                case 'FAILED':
-                  badgeData.text[1] = 'failing'
-                  badgeData.colorscheme = 'red'
-                  break
-                case 'ERROR':
-                  badgeData.text[1] = 'error'
-                  badgeData.colorscheme = 'red'
-                  break
-                case 'STOPPED':
-                  badgeData.text[1] = 'stopped'
-                  badgeData.colorscheme = 'yellow'
-                  break
-                case 'EXPIRED':
-                  badgeData.text[1] = 'expired'
-                  badgeData.colorscheme = 'yellow'
-                  break
-                default:
-                  badgeData.text[1] = 'unknown'
-              }
-            } else {
-              badgeData.text[1] = 'never built'
-            }
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
   }
 }

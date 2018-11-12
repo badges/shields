@@ -168,11 +168,10 @@ class SteamCollectionSize extends BaseSteamAPI {
     return { label: 'files' }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/collection-files',
-      format: '(.+)',
-      capture: ['collectionId'],
+      pattern: ':collectionId',
     }
   }
 
@@ -251,11 +250,10 @@ class SteamFileSize extends SteamFileService {
     return { label: 'size' }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/size',
-      format: '(.+)',
-      capture: ['fileId'],
+      pattern: ':fileId',
     }
   }
 
@@ -287,11 +285,10 @@ class SteamFileReleaseDate extends SteamFileService {
     return { label: 'release date' }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/release-date',
-      format: '(.+)',
-      capture: ['fileId'],
+      pattern: ':fileId',
     }
   }
 
@@ -328,11 +325,10 @@ class SteamFileSubscriptions extends SteamFileService {
     return 'rating'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/subscriptions',
-      format: '(.+)',
-      capture: ['fileId'],
+      pattern: ':fileId',
     }
   }
 
@@ -367,11 +363,10 @@ class SteamFileFavorites extends SteamFileService {
     return 'rating'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/favorites',
-      format: '(.+)',
-      capture: ['fileId'],
+      pattern: ':fileId',
     }
   }
 
@@ -408,11 +403,10 @@ class SteamFileDownloads extends SteamFileService {
     return { label: 'downloads' }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/downloads',
-      format: '(.+)',
-      capture: ['fileId'],
+      pattern: ':fileId',
     }
   }
 
@@ -443,11 +437,10 @@ class SteamFileViews extends SteamFileService {
     return { label: 'views' }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/views',
-      format: '(.+)',
-      capture: ['fileId'],
+      pattern: ':fileId',
     }
   }
 

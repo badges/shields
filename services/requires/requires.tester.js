@@ -27,3 +27,7 @@ t.create('requirements (valid, with branch)')
       value: isRequireStatus,
     })
   )
+
+t.create('requirements (not found)')
+  .get('/github/PyvesB/EmptyRepo.json')
+  .expectJSON({ name: 'requirements', value: 'not found' })

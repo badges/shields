@@ -8,8 +8,8 @@ module.exports = class PypiWheel extends PypiBase {
     return 'other'
   }
 
-  static get url() {
-    return this.buildUrl('pypi/wheel')
+  static get route() {
+    return this.buildRoute('pypi/wheel')
   }
 
   static get defaultBadgeData() {

@@ -13,7 +13,7 @@ module.exports = class CocoapodsDownloads extends LegacyService {
     return 'downloads'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'cocoapods',
     }

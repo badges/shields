@@ -26,7 +26,7 @@ module.exports = class AzureDevOpsRelease extends BaseSvgService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: '',
       format: '(?:azure-devops|vso)/release/([^/]+)/([^/]+)/([^/]+)/([^/]+)',
@@ -43,6 +43,7 @@ module.exports = class AzureDevOpsRelease extends BaseSvgService {
         staticExample: render({ status: 'succeeded' }),
         exampleUrl:
           'azure-devops/release/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/1/1',
+        keywords: ['vso'],
         documentation,
       },
     ]

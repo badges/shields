@@ -4,7 +4,6 @@ jobs:
   npm-install:
     docker:
       - image: shieldsio/shields-ci-node-8:0.0.3
-    working_directory: ~/repo
     steps:
       - checkout
 
@@ -27,7 +26,6 @@ jobs:
     docker:
       - image: shieldsio/shields-ci-node-8:0.0.3
       - image: redis
-    working_directory: ~/repo
     steps:
       - checkout
 
@@ -64,7 +62,6 @@ jobs:
     docker:
       - image: shieldsio/shields-ci-node-latest:0.0.3
       - image: redis
-    working_directory: ~/repo
     steps:
       - checkout
 
@@ -100,7 +97,6 @@ jobs:
   danger:
     docker:
       - image: shieldsio/shields-ci-node-8:0.0.3
-    working_directory: ~/repo
     steps:
       - checkout
 
@@ -121,7 +117,6 @@ jobs:
   frontend:
     docker:
       - image: shieldsio/shields-ci-node-8:0.0.3
-    working_directory: ~/repo
     steps:
       - checkout
 
@@ -147,7 +142,6 @@ jobs:
   services-pr:
     docker:
       - image: shieldsio/shields-ci-node-8:0.0.3
-    working_directory: ~/repo
     steps:
       - checkout
 
@@ -187,7 +181,6 @@ jobs:
   services-pr@node-latest:
     docker:
       - image: shieldsio/shields-ci-node-latest:0.0.3
-    working_directory: ~/repo
     steps:
       - checkout
 
@@ -227,7 +220,6 @@ jobs:
   services-daily:
     docker:
       - image: shieldsio/shields-ci-node-8:0.0.3
-    working_directory: ~/repo
     steps:
       - checkout
 

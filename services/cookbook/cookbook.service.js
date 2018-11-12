@@ -11,7 +11,7 @@ module.exports = class Cookbook extends LegacyService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return { base: 'cookbook/v' }
   }
 
