@@ -27,7 +27,7 @@ class GithubCodeSize extends LegacyService {
     return [
       {
         title: 'GitHub code size in bytes',
-        previewUrl: 'badges/shields.svg',
+        previewUrl: 'badges/shields',
         keywords: ['GitHub', 'byte', 'code', 'size'],
         documentation,
       },
