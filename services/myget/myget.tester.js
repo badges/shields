@@ -16,13 +16,13 @@ const {
 } = require('../nuget-fixtures')
 const { invalidJSON } = require('../response-fixtures')
 
-const t = new ServiceTester({ id: 'myget', title: 'MyGet' })
+const t = new ServiceTester({ id: 'myget', title: 'MyGet', pathPrefix: '' })
 module.exports = t
 
 // downloads
 
 t.create('total downloads (valid)')
-  .get('/mongodb/dt/MongoDB.Driver.Core.json')
+  .get('/myget/mongodb/dt/MongoDB.Driver.Core.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'downloads',
@@ -31,16 +31,16 @@ t.create('total downloads (valid)')
   )
 
 t.create('total downloads (not found)')
-  .get('/mongodb/dt/not-a-real-package.json')
+  .get('/myget/mongodb/dt/not-a-real-package.json')
   .expectJSON({ name: 'downloads', value: 'package not found' })
 
 // t.create('total downloads (connection error)')
-//   .get('/mongodb/dt/MongoDB.Driver.Core.json')
+//   .get('/myget/mongodb/dt/MongoDB.Driver.Core.json')
 //   .networkOff()
 //   .expectJSON({ name: 'downloads', value: 'inaccessible' })
 
 // t.create('total downloads (unexpected first response)')
-//   .get('/mongodb/dt/MongoDB.Driver.Core.json')
+//   .get('/myget/mongodb/dt/MongoDB.Driver.Core.json')
 //   .intercept(nock =>
 //     nock('https://www.myget.org')
 //       .get('/F/mongodb/api/v3/index.json')
@@ -49,7 +49,7 @@ t.create('total downloads (not found)')
 //   .expectJSON({ name: 'downloads', value: 'invalid' })
 
 t.create('total downloads (unexpected second response)')
-  .get('/mongodb/dt/MongoDB.Driver.Core.json')
+  .get('/myget/mongodb/dt/MongoDB.Driver.Core.json')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
@@ -67,7 +67,7 @@ t.create('total downloads (unexpected second response)')
 // version
 
 t.create('version (valid)')
-  .get('/mongodb/v/MongoDB.Driver.Core.json')
+  .get('/myget/mongodb/v/MongoDB.Driver.Core.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'mongodb',
@@ -76,7 +76,7 @@ t.create('version (valid)')
   )
 
 t.create('version (mocked, yellow badge)')
-  .get('/mongodb/v/MongoDB.Driver.Core.json?style=_shields_test')
+  .get('/myget/mongodb/v/MongoDB.Driver.Core.json?style=_shields_test')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
@@ -96,7 +96,7 @@ t.create('version (mocked, yellow badge)')
   })
 
 t.create('version (mocked, orange badge)')
-  .get('/mongodb/v/MongoDB.Driver.Core.json?style=_shields_test')
+  .get('/myget/mongodb/v/MongoDB.Driver.Core.json?style=_shields_test')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
@@ -116,7 +116,7 @@ t.create('version (mocked, orange badge)')
   })
 
 t.create('version (mocked, blue badge)')
-  .get('/mongodb/v/MongoDB.Driver.Core.json?style=_shields_test')
+  .get('/myget/mongodb/v/MongoDB.Driver.Core.json?style=_shields_test')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
@@ -136,16 +136,16 @@ t.create('version (mocked, blue badge)')
   })
 
 t.create('version (not found)')
-  .get('/foo/v/not-a-real-package.json')
+  .get('/myget/foo/v/not-a-real-package.json')
   .expectJSON({ name: 'myget', value: 'package not found' })
 
 // t.create('version (connection error)')
-//   .get('/mongodb/v/MongoDB.Driver.Core.json')
+//   .get('/myget/mongodb/v/MongoDB.Driver.Core.json')
 //   .networkOff()
 //   .expectJSON({ name: 'mongodb', value: 'inaccessible' })
 
 // t.create('version (unexpected first response)')
-//   .get('/mongodb/v/MongoDB.Driver.Core.json')
+//   .get('/myget/mongodb/v/MongoDB.Driver.Core.json')
 //   .intercept(nock =>
 //     nock('https://www.myget.org')
 //       .get('/F/mongodb/api/v3/index.json')
@@ -154,7 +154,7 @@ t.create('version (not found)')
 //   .expectJSON({ name: 'myget', value: 'unparseable json response' })
 
 t.create('version (unexpected second response)')
-  .get('/mongodb/v/MongoDB.Driver.Core.json')
+  .get('/myget/mongodb/v/MongoDB.Driver.Core.json')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
@@ -172,7 +172,7 @@ t.create('version (unexpected second response)')
 // version (pre)
 
 t.create('version (pre) (valid)')
-  .get('/mongodb/vpre/MongoDB.Driver.Core.json')
+  .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'mongodb',
@@ -181,7 +181,7 @@ t.create('version (pre) (valid)')
   )
 
 t.create('version (pre) (mocked, yellow badge)')
-  .get('/mongodb/vpre/MongoDB.Driver.Core.json?style=_shields_test')
+  .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json?style=_shields_test')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
@@ -201,7 +201,7 @@ t.create('version (pre) (mocked, yellow badge)')
   })
 
 t.create('version (pre) (mocked, orange badge)')
-  .get('/mongodb/vpre/MongoDB.Driver.Core.json?style=_shields_test')
+  .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json?style=_shields_test')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
@@ -221,7 +221,7 @@ t.create('version (pre) (mocked, orange badge)')
   })
 
 t.create('version (pre) (mocked, blue badge)')
-  .get('/mongodb/vpre/MongoDB.Driver.Core.json?style=_shields_test')
+  .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json?style=_shields_test')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
@@ -241,16 +241,16 @@ t.create('version (pre) (mocked, blue badge)')
   })
 
 t.create('version (pre) (not found)')
-  .get('/foo/vpre/not-a-real-package.json')
+  .get('/myget/foo/vpre/not-a-real-package.json')
   .expectJSON({ name: 'myget', value: 'package not found' })
 
 // t.create('version (pre) (connection error)')
-//   .get('/mongodb/vpre/MongoDB.Driver.Core.json')
+//   .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json')
 //   .networkOff()
 //   .expectJSON({ name: 'mongodb', value: 'inaccessible' })
 
 // t.create('version (pre) (unexpected first response)')
-//   .get('/mongodb/vpre/MongoDB.Driver.Core.json')
+//   .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json')
 //   .intercept(nock =>
 //     nock('https://www.myget.org')
 //       .get('/F/mongodb/api/v3/index.json')
@@ -259,7 +259,7 @@ t.create('version (pre) (not found)')
 //   .expectJSON({ name: 'mongodb', value: 'invalid' })
 
 t.create('version (pre) (unexpected second response)')
-  .get('/mongodb/vpre/MongoDB.Driver.Core.json')
+  .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
