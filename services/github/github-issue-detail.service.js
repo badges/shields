@@ -10,6 +10,7 @@ const {
 const { formatDate } = require('../../lib/text-formatters')
 const { age: ageColor } = require('../../lib/color-formatters')
 const {
+  documentation,
   stateColor: githubStateColor,
   commentsColor: githubCommentsColor,
   checkErrorResponse: githubCheckErrorResponse,
