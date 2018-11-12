@@ -1,7 +1,8 @@
 {
   "name": "shields.io",
   "version": "0.0.0",
-  "description": "Shields.io Website",
+  "description": "Shields.io server and frontend",
+  "private": true,
   "keywords": [
     "GitHub",
     "badge",
