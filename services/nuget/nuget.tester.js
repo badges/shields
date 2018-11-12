@@ -34,20 +34,6 @@ t.create('total downloads (not found)')
   .get('/dt/not-a-real-package.json')
   .expectJSON({ name: 'downloads', value: 'package not found' })
 
-// t.create('total downloads (connection error)')
-//   .get('/dt/Microsoft.AspNetCore.Mvc.json')
-//   .networkOff()
-//   .expectJSON({ name: 'downloads', value: 'inaccessible' })
-
-// t.create('total downloads (unexpected first response)')
-//   .get('/dt/Microsoft.AspNetCore.Mvc.json')
-//   .intercept(nock =>
-//     nock('https://api.nuget.org')
-//       .get('/v3/index.json')
-//       .reply(invalidJSON)
-//   )
-//   .expectJSON({ name: 'downloads', value: 'unparseable json response' })
-
 t.create('total downloads (unexpected second response)')
   .get('/dt/Microsoft.AspNetCore.Mvc.json')
   .intercept(nock =>
@@ -139,20 +125,6 @@ t.create('version (not found)')
   .get('/v/not-a-real-package.json')
   .expectJSON({ name: 'nuget', value: 'package not found' })
 
-// t.create('version (connection error)')
-//   .get('/v/Microsoft.AspNetCore.Mvc.json')
-//   .networkOff()
-//   .expectJSON({ name: 'nuget', value: 'inaccessible' })
-
-// t.create('version (unexpected first response)')
-//   .get('/v/Microsoft.AspNetCore.Mvc.json')
-//   .intercept(nock =>
-//     nock('https://api.nuget.org')
-//       .get('/v3/index.json')
-//       .reply(invalidJSON)
-//   )
-//   .expectJSON({ name: 'nuget', value: 'unparseable json response' })
-
 t.create('version (unexpected second response)')
   .get('/v/Microsoft.AspNetCore.Mvc.json')
   .intercept(nock =>
@@ -243,20 +215,6 @@ t.create('version (pre) (mocked, blue badge)')
 t.create('version (pre) (not found)')
   .get('/vpre/not-a-real-package.json')
   .expectJSON({ name: 'nuget', value: 'package not found' })
-
-// t.create('version (pre) (connection error)')
-//   .get('/vpre/Microsoft.AspNetCore.Mvc.json')
-//   .networkOff()
-//   .expectJSON({ name: 'nuget', value: 'inaccessible' })
-
-// t.create('version (pre) (unexpected first response)')
-//   .get('/vpre/Microsoft.AspNetCore.Mvc.json')
-//   .intercept(nock =>
-//     nock('https://api.nuget.org')
-//       .get('/v3/index.json')
-//       .reply(invalidJSON)
-//   )
-//   .expectJSON({ name: 'nuget', value: 'unparseable json response' })
 
 t.create('version (pre) (unexpected second response)')
   .get('/vpre/Microsoft.AspNetCore.Mvc.json')

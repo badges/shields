@@ -42,19 +42,27 @@ t.create('total downloads (not found)')
   .get('/myget/mongodb/dt/not-a-real-package.json')
   .expectJSON({ name: 'downloads', value: 'package not found' })
 
-// t.create('total downloads (connection error)')
-//   .get('/myget/mongodb/dt/MongoDB.Driver.Core.json')
-//   .networkOff()
-//   .expectJSON({ name: 'downloads', value: 'inaccessible' })
+// This tests the erroring behavior in regular-update.
+t.create('total downloads (connection error)')
+  .get('/myget/mongodb/dt/MongoDB.Driver.Core.json')
+  .networkOff()
+  .expectJSON({
+    name: 'downloads',
+    value: 'intermediate resource inaccessible',
+  })
 
-// t.create('total downloads (unexpected first response)')
-//   .get('/myget/mongodb/dt/MongoDB.Driver.Core.json')
-//   .intercept(nock =>
-//     nock('https://www.myget.org')
-//       .get('/F/mongodb/api/v3/index.json')
-//       .reply(invalidJSON)
-//   )
-//   .expectJSON({ name: 'downloads', value: 'invalid' })
+// This tests the erroring behavior in regular-update.
+t.create('total downloads (unexpected first response)')
+  .get('/myget/mongodb/dt/MongoDB.Driver.Core.json')
+  .intercept(nock =>
+    nock('https://www.myget.org')
+      .get('/F/mongodb/api/v3/index.json')
+      .reply(invalidJSON)
+  )
+  .expectJSON({
+    name: 'downloads',
+    value: 'unparseable intermediate json response',
+  })
 
 t.create('total downloads (unexpected second response)')
   .get('/myget/mongodb/dt/MongoDB.Driver.Core.json')
@@ -156,20 +164,6 @@ t.create('version (not found)')
   .get('/myget/foo/v/not-a-real-package.json')
   .expectJSON({ name: 'myget', value: 'package not found' })
 
-// t.create('version (connection error)')
-//   .get('/myget/mongodb/v/MongoDB.Driver.Core.json')
-//   .networkOff()
-//   .expectJSON({ name: 'mongodb', value: 'inaccessible' })
-
-// t.create('version (unexpected first response)')
-//   .get('/myget/mongodb/v/MongoDB.Driver.Core.json')
-//   .intercept(nock =>
-//     nock('https://www.myget.org')
-//       .get('/F/mongodb/api/v3/index.json')
-//       .reply(invalidJSON)
-//   )
-//   .expectJSON({ name: 'myget', value: 'unparseable json response' })
-
 t.create('version (unexpected second response)')
   .get('/myget/mongodb/v/MongoDB.Driver.Core.json')
   .intercept(nock =>
@@ -260,20 +254,6 @@ t.create('version (pre) (mocked, blue badge)')
 t.create('version (pre) (not found)')
   .get('/myget/foo/vpre/not-a-real-package.json')
   .expectJSON({ name: 'myget', value: 'package not found' })
-
-// t.create('version (pre) (connection error)')
-//   .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json')
-//   .networkOff()
-//   .expectJSON({ name: 'mongodb', value: 'inaccessible' })
-
-// t.create('version (pre) (unexpected first response)')
-//   .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json')
-//   .intercept(nock =>
-//     nock('https://www.myget.org')
-//       .get('/F/mongodb/api/v3/index.json')
-//       .reply(invalidJSON)
-//   )
-//   .expectJSON({ name: 'mongodb', value: 'invalid' })
 
 t.create('version (pre) (unexpected second response)')
   .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json')
