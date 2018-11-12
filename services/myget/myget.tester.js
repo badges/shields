@@ -4,7 +4,6 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const {
   isMetric,
-  isVPlusDottedVersionNClauses,
   isVPlusDottedVersionNClausesWithOptionalSuffix,
 } = require('../test-validators')
 const colorscheme = require('../../lib/colorscheme.json')
@@ -23,6 +22,15 @@ module.exports = t
 
 t.create('total downloads (valid)')
   .get('/myget/mongodb/dt/MongoDB.Driver.Core.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'downloads',
+      value: isMetric,
+    })
+  )
+
+t.create('total downloads (tenant)')
+  .get('/dotnet.myget/dotnet-coreclr/dt/Microsoft.DotNet.CoreCLR.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'downloads',
@@ -71,7 +79,16 @@ t.create('version (valid)')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'mongodb',
-      value: isVPlusDottedVersionNClauses,
+      value: isVPlusDottedVersionNClausesWithOptionalSuffix,
+    })
+  )
+
+t.create('total downloads (tenant)')
+  .get('/dotnet.myget/dotnet-coreclr/v/Microsoft.DotNet.CoreCLR.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'dotnet-coreclr',
+      value: isVPlusDottedVersionNClausesWithOptionalSuffix,
     })
   )
 

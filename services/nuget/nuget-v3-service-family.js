@@ -15,7 +15,7 @@ const { renderVersionBadge, renderDownloadBadge } = require('./nuget-helpers')
 function buildRoute({ serviceBaseUrl, withTenant, withFeed }) {
   let result
   if (withTenant) {
-    result = new RouteBuilder().push(`(.+\\.)?${serviceBaseUrl}`, 'tenant')
+    result = new RouteBuilder().push(`(?:(.+)\\.)?${serviceBaseUrl}`, 'tenant')
   } else {
     result = new RouteBuilder({ base: serviceBaseUrl })
   }
