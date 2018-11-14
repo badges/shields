@@ -32,21 +32,7 @@ t.create('total downloads (valid)')
 
 t.create('total downloads (not found)')
   .get('/dt/not-a-real-package.json')
-  .expectJSON({ name: 'downloads', value: 'not found' })
-
-t.create('total downloads (connection error)')
-  .get('/dt/Microsoft.AspNetCore.Mvc.json')
-  .networkOff()
-  .expectJSON({ name: 'downloads', value: 'inaccessible' })
-
-t.create('total downloads (unexpected first response)')
-  .get('/dt/Microsoft.AspNetCore.Mvc.json')
-  .intercept(nock =>
-    nock('https://api.nuget.org')
-      .get('/v3/index.json')
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'downloads', value: 'invalid' })
+  .expectJSON({ name: 'downloads', value: 'package not found' })
 
 t.create('total downloads (unexpected second response)')
   .get('/dt/Microsoft.AspNetCore.Mvc.json')
@@ -58,11 +44,11 @@ t.create('total downloads (unexpected second response)')
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
       .get(
-        '/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
+        '/query?q=packageid%3Amicrosoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
       )
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'downloads', value: 'invalid' })
+  .expectJSON({ name: 'downloads', value: 'unparseable json response' })
 
 // version
 
@@ -85,7 +71,7 @@ t.create('version (mocked, yellow badge)')
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
       .get(
-        '/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
+        '/query?q=packageid%3Amicrosoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
       )
       .reply(200, nuGetV3VersionJsonWithDash)
   )
@@ -105,7 +91,7 @@ t.create('version (mocked, orange badge)')
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
       .get(
-        '/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
+        '/query?q=packageid%3Amicrosoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
       )
       .reply(200, nuGetV3VersionJsonFirstCharZero)
   )
@@ -125,7 +111,7 @@ t.create('version (mocked, blue badge)')
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
       .get(
-        '/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
+        '/query?q=packageid%3Amicrosoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
       )
       .reply(200, nuGetV3VersionJsonFirstCharNotZero)
   )
@@ -137,21 +123,7 @@ t.create('version (mocked, blue badge)')
 
 t.create('version (not found)')
   .get('/v/not-a-real-package.json')
-  .expectJSON({ name: 'nuget', value: 'not found' })
-
-t.create('version (connection error)')
-  .get('/v/Microsoft.AspNetCore.Mvc.json')
-  .networkOff()
-  .expectJSON({ name: 'nuget', value: 'inaccessible' })
-
-t.create('version (unexpected first response)')
-  .get('/v/Microsoft.AspNetCore.Mvc.json')
-  .intercept(nock =>
-    nock('https://api.nuget.org')
-      .get('/v3/index.json')
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'nuget', value: 'invalid' })
+  .expectJSON({ name: 'nuget', value: 'package not found' })
 
 t.create('version (unexpected second response)')
   .get('/v/Microsoft.AspNetCore.Mvc.json')
@@ -163,11 +135,11 @@ t.create('version (unexpected second response)')
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
       .get(
-        '/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
+        '/query?q=packageid%3Amicrosoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
       )
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'nuget', value: 'invalid' })
+  .expectJSON({ name: 'nuget', value: 'unparseable json response' })
 
 // version (pre)
 
@@ -190,7 +162,7 @@ t.create('version (pre) (mocked, yellow badge)')
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
       .get(
-        '/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
+        '/query?q=packageid%3Amicrosoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
       )
       .reply(200, nuGetV3VersionJsonWithDash)
   )
@@ -210,7 +182,7 @@ t.create('version (pre) (mocked, orange badge)')
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
       .get(
-        '/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
+        '/query?q=packageid%3Amicrosoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
       )
       .reply(200, nuGetV3VersionJsonFirstCharZero)
   )
@@ -230,7 +202,7 @@ t.create('version (pre) (mocked, blue badge)')
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
       .get(
-        '/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
+        '/query?q=packageid%3Amicrosoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
       )
       .reply(200, nuGetV3VersionJsonFirstCharNotZero)
   )
@@ -242,21 +214,7 @@ t.create('version (pre) (mocked, blue badge)')
 
 t.create('version (pre) (not found)')
   .get('/vpre/not-a-real-package.json')
-  .expectJSON({ name: 'nuget', value: 'not found' })
-
-t.create('version (pre) (connection error)')
-  .get('/vpre/Microsoft.AspNetCore.Mvc.json')
-  .networkOff()
-  .expectJSON({ name: 'nuget', value: 'inaccessible' })
-
-t.create('version (pre) (unexpected first response)')
-  .get('/vpre/Microsoft.AspNetCore.Mvc.json')
-  .intercept(nock =>
-    nock('https://api.nuget.org')
-      .get('/v3/index.json')
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'nuget', value: 'invalid' })
+  .expectJSON({ name: 'nuget', value: 'package not found' })
 
 t.create('version (pre) (unexpected second response)')
   .get('/vpre/Microsoft.AspNetCore.Mvc.json')
@@ -268,8 +226,8 @@ t.create('version (pre) (unexpected second response)')
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
       .get(
-        '/query?q=packageid:microsoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
+        '/query?q=packageid%3Amicrosoft.aspnetcore.mvc&prerelease=true&semVerLevel=2'
       )
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'nuget', value: 'invalid' })
+  .expectJSON({ name: 'nuget', value: 'unparseable json response' })
