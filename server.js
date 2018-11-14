@@ -19,8 +19,7 @@ const GithubConstellation = require('./services/github/github-constellation')
 const PrometheusMetrics = require('./lib/sys/prometheus-metrics')
 const sysMonitor = require('./lib/sys/monitor')
 const log = require('./lib/log')
-const { makeMakeBadgeFn } = require('./lib/make-badge')
-const { QuickTextMeasurer } = require('./lib/text-measurer')
+const makeBadge = require('./lib/make-badge')
 const suggest = require('./lib/suggest')
 const {
   makeColorB,
@@ -29,7 +28,7 @@ const {
   setBadgeColor,
 } = require('./lib/badge-data')
 const {
-  makeHandleRequestFn,
+  handleRequest: cache,
   clearRequestCache,
 } = require('./lib/request-handler')
 const { clearRegularUpdateCache } = require('./lib/regular-update')
@@ -74,10 +73,6 @@ module.exports = {
 }
 
 log(`Server is starting up: ${config.baseUri}`)
-
-const measurer = new QuickTextMeasurer()
-const makeBadge = makeMakeBadgeFn(measurer)
-const cache = makeHandleRequestFn(makeBadge)
 
 analytics.load()
 analytics.scheduleAutosaving()

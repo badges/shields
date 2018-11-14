@@ -92,7 +92,7 @@ badge build passed :green .png > mybadge.png
 ```js
 const { BadgeFactory } = require('gh-badges')
 
-const bf = new BadgeFactory({ fontPath: '/path/to/Verdana.ttf' })
+const bf = new BadgeFactory()
 
 const format = {
   text: ['build', 'passed'],
