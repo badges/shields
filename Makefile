@@ -8,7 +8,7 @@ FRONTEND_TMP=${TMPDIR}shields-frontend-deploy
 # pushing secrets to GitHub, this branch is configured to reject pushes.
 WORKING_BRANCH=server-deploy-working-branch
 
-all: website favicon test
+all: website test
 
 website:
 	LONG_CACHE=false npm run build
