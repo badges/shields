@@ -31,12 +31,20 @@ continuous integration services, package registries, distributions, app
 stores, social networks, code coverage services, and code analysis services.
 Every month it serves over 470 million images.
 
-In addition to hosting the shields.io frontend and server code, this monorepo
-hosts an [NPM library for generating badges][gh-badges], and the badge design
-specification.
+This repo hosts:
+
+* The [Shields.io][shields.io] frontend and server code
+* An [NPM library for generating badges][gh-badges]
+    * [documentation][gh-badges-docs]
+    * [changelog][gh-badges-changelog]
+* The [badge design specification][badge-spec]
+
 
 [shields.io]: https://shields.io/
 [gh-badges]: https://www.npmjs.com/package/gh-badges
+[badge-spec]: https://github.com/badges/shields/tree/master/spec
+[gh-badges-docs]: https://github.com/badges/shields/tree/master/gh-badges/README.md
+[gh-badges-changelog]: https://github.com/badges/shields/tree/master/gh-badges/CHANGELOG.md
 
 
 Examples
@@ -79,35 +87,6 @@ You can read a [tutorial on how to add a badge][tutorial].
 [service-tests]: https://github.com/badges/shields/blob/master/doc/service-tests.md
 [tutorial]: doc/TUTORIAL.md
 [contributing]: CONTRIBUTING.md
-
-
-Using the badge library
------------------------
-
-```sh
-npm install -g gh-badges
-badge build passed :green .png > mybadge.png
-```
-
-```js
-const { BadgeFactory } = require('gh-badges')
-
-const bf = new BadgeFactory({ fontPath: '/path/to/Verdana.ttf' })
-
-const format = {
-  text: ['build', 'passed'],
-  colorscheme: 'green',
-  template: 'flat',
-}
-
-const svg = bf.create(format)
-```
-
-View the [documentation for gh-badges][gh-badges doc].
-
-[![npm version](http://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges)
-
-[gh-badges doc]: https://github.com/badges/shields/blob/master/doc/gh-badges.md
 
 
 Development
