@@ -5,7 +5,7 @@ const { expect } = require('chai')
 const sinon = require('sinon')
 const Joi = require('joi')
 const { makeBadgeData } = require('../lib/badge-data')
-const makeBadge = require('../lib/make-badge')
+const makeBadge = require('../gh-badges/lib/make-badge')
 const BaseSvgScrapingService = require('./base-svg-scraping')
 
 chai.use(require('chai-as-promised'))

@@ -9,7 +9,7 @@ const isSvg = require('is-svg')
 const path = require('path')
 const serverHelpers = require('./lib/in-process-server-test-helpers')
 const sinon = require('sinon')
-const svg2img = require('./lib/svg-to-img')
+const svg2img = require('./gh-badges/lib/svg-to-img')
 
 describe('The server', function() {
   const baseUri = `http://127.0.0.1:${config.port}`
