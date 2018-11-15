@@ -2,6 +2,7 @@
 
 const Joi = require('joi')
 const createServiceTester = require('../create-service-tester')
+const { isMetric } = require('../test-validators')
 
 const t = createServiceTester()
 module.exports = t
@@ -11,16 +12,7 @@ t.create('clojars downloads (valid)')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'downloads',
-      value: /^[0-9]+$/,
-    })
-  )
-
-t.create('clojars downloads (lots)')
-  .get('/prismic.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'downloads',
-      value: /^[0-9]+[kMGTPEZY]?$/,
+      value: isMetric,
     })
   )
 
