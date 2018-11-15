@@ -2,6 +2,7 @@
 
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
+const { NotFound } = require('../errors')
 // const serverSecrets = require('../../lib/server-secrets')
 
 // const documentation = `
@@ -36,25 +37,33 @@ const {
 } = require('../../lib/color-formatters')
 
 const latestBuildSchema = Joi.object({
+  count: Joi.number().required(),
   value: Joi.array()
-    .items({
-      id: Joi.number().required()
-    })
-    .required()
+    .items(
+      Joi.object({
+        id: Joi.number().required(),
+      })
+    )
+    .required(),
 }).required()
 
 const buildCodeCoverageSchema = Joi.object({
   coverageData: Joi.array()
-  .items({
-    coverageStats: Joi.array()
-      .items({
-        label: Joi.string().required(),
-        total: Joi.number().required(),
-        covered: Joi.number().required()
+    .items(
+      Joi.object({
+        coverageStats: Joi.array()
+          .items(
+            Joi.object({
+              label: Joi.string().required(),
+              total: Joi.number().required(),
+              covered: Joi.number().required(),
+            })
+          )
+          .min(1)
+          .required(),
       })
-      .required()
-  })
-  .required()
+    )
+    .required(),
 }).required()
 
 module.exports = class AzureDevOpsCoverage extends BaseJsonService {
@@ -87,41 +96,54 @@ module.exports = class AzureDevOpsCoverage extends BaseJsonService {
       options,
       schema,
       errorMessages: {
-        404: 'job or coverage not found',
+        404: 'build pipeline or coverage not found',
       },
     })
   }
 
   async getLatestBuildId(organization, project, definitionId, branch) {
-    const url = `https://dev.azure.com/${organization}/${project}/_apis/build/builds?definitions=${definitionId}&$top=1&api-version=5.0-preview.4`;
+    let url = `https://dev.azure.com/${organization}/${project}/_apis/build/builds?definitions=${definitionId}&$top=1&api-version=5.0-preview.4`
+    if (branch) {
+      url += `&branch=${branch}`
+    }
     const json = await this.fetch({
       url,
-      options: { },
-      schema: latestBuildSchema
-    });
-    return json.value[0].id;
-  };
+      options: {},
+      schema: latestBuildSchema,
+    })
+
+    if (json.count !== 1) {
+      throw new NotFound({ prettyMessage: 'build pipeline not found' })
+    }
+    return json.value[0].id
+  }
 
   async handle({ organization, project, definitionId, branch }) {
-    const buildId = await this.getLatestBuildId(organization, project, definitionId, branch);
-    const url = `https://dev.azure.com/${organization}/${project}/_apis/test/codecoverage?buildId=${buildId}&api-version=5.0-preview.1`;
+    const buildId = await this.getLatestBuildId(
+      organization,
+      project,
+      definitionId,
+      branch
+    )
+    const url = `https://dev.azure.com/${organization}/${project}/_apis/test/codecoverage?buildId=${buildId}&api-version=5.0-preview.1`
 
     const json = await this.fetch({
       url,
-      options: { },
-      schema: buildCodeCoverageSchema
-    });
+      options: {},
+      schema: buildCodeCoverageSchema,
+    })
 
-    let covered = 0;
-    let total = 0;
+    let covered = 0
+    let total = 0
     json.coverageData.forEach(cd => {
       cd.coverageStats.forEach(coverageStat => {
         if (coverageStat.label === 'Lines') {
-          covered += coverageStat.covered;
-          total += coverageStat.total;
+          covered += coverageStat.covered
+          total += coverageStat.total
         }
-      });
-    });
-    return this.constructor.render({ coverage: (covered / total) * 100 });
+      })
+    })
+    const coverage = covered ? (covered / total) * 100 : 0
+    return this.constructor.render({ coverage })
   }
 }
