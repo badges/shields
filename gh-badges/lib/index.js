@@ -1,13 +1,14 @@
 'use strict'
 
-const { makeBadge } = require('./make-badge')
-const { PDFKitTextMeasurer, QuickTextMeasurer } = require('./text-measurer')
+const makeBadge = require('./make-badge')
 
 class BadgeFactory {
-  constructor({ fontPath, fallbackFontPath, precomputeWidths = false }) {
-    this.measurer = precomputeWidths
-      ? new QuickTextMeasurer(fontPath, fallbackFontPath)
-      : new PDFKitTextMeasurer(fontPath, fallbackFontPath)
+  constructor(options) {
+    if (options !== undefined) {
+      console.error(
+        'BadgeFactory: Constructor options are deprecated and will be ignored'
+      )
+    }
   }
 
   /**
@@ -24,7 +25,7 @@ class BadgeFactory {
    * @see https://github.com/badges/shields/tree/master/gh-badges/README.md
    */
   create(format) {
-    return makeBadge(this.measurer, format)
+    return makeBadge(format)
   }
 }
 

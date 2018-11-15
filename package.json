@@ -123,7 +123,6 @@
     "concurrently": "^4.0.1",
     "danger": "^6.0.5",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
-    "dejavu-fonts-ttf": "^2.37.3",
     "eol": "^0.9.1",
     "eslint": "^5.0.1",
     "eslint-config-prettier": "^3.0.1",
