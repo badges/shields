@@ -10,8 +10,8 @@ const {
   PoolingTokenProvider,
 } = require('./token-provider')
 const GithubApiProvider = require('./github-api-provider')
-const { setRoutes: setAcceptorRoutes } = require('./acceptor')
-const { setRoutes: setAdminRoutes } = require('./admin')
+const { setRoutes: setAdminRoutes } = require('./auth/admin')
+const { setRoutes: setAcceptorRoutes } = require('./auth/acceptor')
 
 // Convenience class with all the stuff related to the Github API and its
 // authorization tokens, to simplify server initialization.
