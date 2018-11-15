@@ -76,24 +76,28 @@ class GithubConstellation {
   async initialize(server) {
     this.scheduleDebugLogging()
 
-    if (this.usingPooling) {
-      this.persistence = new TokenPersistence(
-        this.coreTokenProvider,
-        this._userTokensPath
-      )
+    try {
       await this.persistence.initialize()
+    } catch (e) {
+      log.error(e)
+    }
+
+    if (this.usingPooling) {
+      // Is this needed?
       this.coreTokenProvider
         .toNative()
         .forEach(t => this.searchTokenProvider.addToken(t))
     }
-    // TODO Catch errors and send them to Sentry.
 
+    // Register for this event after `initialize()` finishes, so we don't
+    // catch `token-added` events for the initial tokens, which would be
+    // inefficient, though it wouldn't break anything.
     githubAuth.emitter.on('token-added', this.persistence.noteTokenAdded)
     githubAuth.emitter.on('token-removed', this.persistence.noteTokenRemoved)
 
     setAdminRoutes(this.coreTokenProvider, server)
 
-    if (serverSecrets && serverSecrets.gh_client_id) {
+    if (serverSecrets.gh_client_id && serverSecrets.gh_client_secret) {
       setAcceptorRoutes(this.coreTokenProvider, server)
     }
   }
