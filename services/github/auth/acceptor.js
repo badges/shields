@@ -3,7 +3,6 @@
 const queryString = require('query-string')
 const request = require('request')
 const log = require('../../../lib/log')
-const githubAuth = require('../../../lib/github-auth')
 const serverSecrets = require('../../../lib/server-secrets')
 const secretIsValid = require('../../../lib/sys/secret-is-valid')
 
