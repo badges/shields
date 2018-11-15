@@ -19,8 +19,8 @@ const GithubConstellation = require('./services/github/github-constellation')
 const PrometheusMetrics = require('./lib/sys/prometheus-metrics')
 const sysMonitor = require('./lib/sys/monitor')
 const log = require('./lib/log')
-const { makeMakeBadgeFn } = require('./lib/make-badge')
-const { QuickTextMeasurer } = require('./lib/text-measurer')
+const { makeMakeBadgeFn } = require('./gh-badges/lib/make-badge')
+const { QuickTextMeasurer } = require('./gh-badges/lib/text-measurer')
 const suggest = require('./lib/suggest')
 const {
   makeColorB,
