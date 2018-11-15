@@ -3,6 +3,14 @@
 const makeBadge = require('./make-badge')
 
 class BadgeFactory {
+  constructor(options) {
+    if (options !== undefined) {
+      console.error(
+        'BadgeFactory: Constructor options are deprecated and will be ignored'
+      )
+    }
+  }
+
   /**
    * Create a badge
    *
