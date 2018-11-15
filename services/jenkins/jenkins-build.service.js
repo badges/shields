@@ -5,6 +5,26 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const serverSecrets = require('../../lib/server-secrets')
 
 module.exports = class JenkinsBuild extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get route() {
+    return {
+      base: 'jenkins/s',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Jenkins',
+        previewUrl:
+          'https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/jenkins(?:-ci)?\/s\/(http(?:s)?)\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
@@ -15,11 +35,10 @@ module.exports = class JenkinsBuild extends LegacyService {
         const format = match[4]
         const options = {
           json: true,
-          uri: scheme + '://' + host + '/job/' + job + '/api/json?tree=color',
+          uri: `${scheme}://${host}/job/${job}/api/json?tree=color`,
         }
         if (job.indexOf('/') > -1) {
-          options.uri =
-            scheme + '://' + host + '/' + job + '/api/json?tree=color'
+          options.uri = `${scheme}://${host}/${job}/api/json?tree=color`
         }
 
         if (serverSecrets && serverSecrets.jenkins_user) {

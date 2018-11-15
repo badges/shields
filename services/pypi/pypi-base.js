@@ -6,9 +6,10 @@ const BaseJsonService = require('../base-json')
 const schema = Joi.object({
   info: Joi.object({
     version: Joi.string().required(),
-    license: Joi.string().required(),
+    // https://github.com/badges/shields/issues/2022
+    license: Joi.string().allow(''),
     classifiers: Joi.array()
-      .items(Joi.string().required())
+      .items(Joi.string())
       .required(),
   }).required(),
   releases: Joi.object()
@@ -26,11 +27,10 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class PypiBase extends BaseJsonService {
-  static buildUrl(base) {
+  static buildRoute(base) {
     return {
       base,
-      format: '(.*)',
-      capture: ['egg'],
+      pattern: ':egg*',
     }
   }
 

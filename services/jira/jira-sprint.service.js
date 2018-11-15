@@ -4,8 +4,35 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const serverSecrets = require('../../lib/server-secrets')
 
-// JIRA agile sprint completion.
+const documentation = `
+<p>
+  To get the <code>Sprint ID</code>, go to your Backlog view in your project,
+  right click on your sprint name and get the value of
+  <code>data-sprint-id</code>.
+</p>
+`
+
 module.exports = class JiraSprint extends LegacyService {
+  static get category() {
+    return 'issue-tracking'
+  }
+
+  static get route() {
+    return {
+      base: 'jira/sprint',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'JIRA sprint completion',
+        previewUrl: 'https/jira.spring.io/94',
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/jira\/sprint\/(http(?:s)?)\/(.+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -18,13 +45,7 @@ module.exports = class JiraSprint extends LegacyService {
         const options = {
           method: 'GET',
           json: true,
-          uri:
-            protocol +
-            '://' +
-            host +
-            '/rest/api/2/search?jql=sprint=' +
-            sprintId +
-            '%20AND%20type%20IN%20(Bug,Improvement,Story,"Technical%20task")&fields=resolution&maxResults=500',
+          uri: `${protocol}://${host}/rest/api/2/search?jql=sprint=${sprintId}%20AND%20type%20IN%20(Bug,Improvement,Story,"Technical%20task")&fields=resolution&maxResults=500`,
         }
         if (serverSecrets && serverSecrets.jira_username) {
           options.auth = {
@@ -47,8 +68,9 @@ module.exports = class JiraSprint extends LegacyService {
                   return el.fields.resolution.name !== 'Unresolved'
                 }
               }).length
-              badgeData.text[1] =
-                Math.round((issuesDone * 100) / json.total) + '%'
+              badgeData.text[1] = `${Math.round(
+                (issuesDone * 100) / json.total
+              )}%`
               switch (issuesDone) {
                 case 0:
                   badgeData.colorscheme = 'red'

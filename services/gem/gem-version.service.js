@@ -5,19 +5,17 @@ const Joi = require('joi')
 const { renderVersionBadge } = require('../../lib/version')
 const BaseJsonService = require('../base-json')
 
-// Response should contain a string key 'version'
-// In most cases this will be a SemVer
-// but the registry doesn't actually enforce this
-const versionSchema = Joi.object({
+const schema = Joi.object({
+  // In most cases `version` will be a SemVer but the registry doesn't
+  // actually enforce this.
   version: Joi.string().required(),
 }).required()
 
 module.exports = class GemVersion extends BaseJsonService {
-  async fetch({ repo }) {
-    const url = `https://rubygems.org/api/v1/gems/${repo}.json`
+  async fetch({ gem }) {
     return this._requestJson({
-      url,
-      schema: versionSchema,
+      schema,
+      url: `https://rubygems.org/api/v1/gems/${gem}.json`,
     })
   }
 
@@ -25,8 +23,8 @@ module.exports = class GemVersion extends BaseJsonService {
     return renderVersionBadge({ version })
   }
 
-  async handle({ repo }) {
-    const { version } = await this.fetch({ repo })
+  async handle({ gem }) {
+    const { version } = await this.fetch({ gem })
     return this.constructor.render({ version })
   }
 
@@ -39,11 +37,10 @@ module.exports = class GemVersion extends BaseJsonService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'gem/v',
-      format: '(.+)',
-      capture: ['repo'],
+      pattern: ':gem',
     }
   }
 

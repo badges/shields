@@ -21,8 +21,7 @@ module.exports = class Conda extends LegacyService {
         const channel = match[2]
         const pkgname = match[3]
         const format = match[4]
-        const url =
-          'https://api.anaconda.org/package/' + channel + '/' + pkgname
+        const url = `https://api.anaconda.org/package/${channel}/${pkgname}`
         const labels = {
           d: 'downloads',
           p: 'platform',

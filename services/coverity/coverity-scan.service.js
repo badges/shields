@@ -4,14 +4,32 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 module.exports = class CoverityScan extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get route() {
+    return {
+      base: 'coverity/scan',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Coverity Scan',
+        previewUrl: '3997',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/coverity\/scan\/(.+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
         const projectId = match[1] // eg, `3997`
         const format = match[2]
-        const url =
-          'https://scan.coverity.com/projects/' + projectId + '/badge.json'
+        const url = `https://scan.coverity.com/projects/${projectId}/badge.json`
         const badgeData = getBadgeData('coverity', data)
         request(url, (err, res, buffer) => {
           if (err != null) {

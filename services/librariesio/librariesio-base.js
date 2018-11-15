@@ -22,7 +22,7 @@ const repoSchema = Joi.object({
 const packageOrRepoSchema = Joi.alternatives(repoSchema, packageSchema)
 
 class LibrariesIoBase extends BaseJsonService {
-  static buildUrl(base) {
+  static buildRoute(base) {
     return {
       base,
       format: '(\\w+)/(.+)',

@@ -4,6 +4,42 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 module.exports = class David extends LegacyService {
+  static get category() {
+    return 'dependencies'
+  }
+
+  static get route() {
+    return {
+      base: 'david',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'David',
+        previewUrl: 'expressjs/express',
+      },
+      {
+        title: 'David',
+        previewUrl: 'dev/expressjs/express',
+      },
+      {
+        title: 'David',
+        previewUrl: 'optional/elnounch/byebye',
+      },
+      {
+        title: 'David',
+        previewUrl: 'peer/webcomponents/generator-element',
+      },
+      {
+        title: 'David (path)',
+        previewUrl: 'babel/babel',
+        query: { path: 'packages/babel-core' },
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/david\/(dev\/|optional\/|peer\/)?(.+?)\.(svg|png|gif|jpg|json)$/,
@@ -17,18 +53,15 @@ module.exports = class David extends LegacyService {
           // eg, `expressjs/express`, `webcomponents/generator-element`.
           const userRepo = match[2]
           const format = match[3]
-          let options =
-            'https://david-dm.org/' +
-            userRepo +
-            '/' +
-            (dev ? dev + '-' : '') +
-            'info.json'
+          let options = `https://david-dm.org/${userRepo}/${
+            dev ? `${dev}-` : ''
+          }info.json`
           if (data.path) {
             // path can be used to specify the package.json location, useful for monorepos
-            options += '?path=' + data.path
+            options += `?path=${data.path}`
           }
           const badgeData = getBadgeData(
-            (dev ? dev + 'D' : 'd') + 'ependencies',
+            `${dev ? `${dev} ` : ''}dependencies`,
             data
           )
           request(options, (err, res, buffer) => {

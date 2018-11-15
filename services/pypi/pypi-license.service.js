@@ -2,14 +2,15 @@
 
 const { renderLicenseBadge } = require('../../lib/licenses')
 const PypiBase = require('./pypi-base')
+const { getLicenses } = require('./pypi-helpers')
 
 module.exports = class PypiLicense extends PypiBase {
   static get category() {
     return 'license'
   }
 
-  static get url() {
-    return this.buildUrl('pypi/l')
+  static get route() {
+    return this.buildRoute('pypi/l')
   }
 
   static get examples() {
@@ -22,14 +23,13 @@ module.exports = class PypiLicense extends PypiBase {
     ]
   }
 
-  static render({ license }) {
-    return renderLicenseBadge({ license })
+  static render({ licenses }) {
+    return renderLicenseBadge({ licenses })
   }
 
   async handle({ egg }) {
-    const {
-      info: { license },
-    } = await this.fetch({ egg })
-    return this.constructor.render({ license })
+    const packageData = await this.fetch({ egg })
+    const licenses = getLicenses(packageData)
+    return this.constructor.render({ licenses })
   }
 }

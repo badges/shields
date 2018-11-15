@@ -10,7 +10,7 @@ const {
 } = require('../../lib/color-formatters')
 const { metric } = require('../../lib/text-formatters')
 const { latest: latestVersion } = require('../../lib/version')
-const { nonNegativeInteger } = require('../validators.js')
+const { nonNegativeInteger } = require('../validators')
 
 const gemsSchema = Joi.object({
   downloads: nonNegativeInteger,
@@ -41,7 +41,7 @@ module.exports = class GemDownloads extends BaseJsonService {
 
   static render({ label, downloads }) {
     return {
-      label: label,
+      label,
       message: metric(downloads),
       color: downloadCountColor(downloads),
     }
@@ -49,7 +49,7 @@ module.exports = class GemDownloads extends BaseJsonService {
 
   static _getLabel(version, info) {
     if (version) {
-      return 'downloads@' + version
+      return `downloads@${version}`
     } else {
       if (info === 'dtv') {
         return 'downloads@latest'
@@ -110,7 +110,7 @@ module.exports = class GemDownloads extends BaseJsonService {
     return 'downloads'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'gem',
       format: '(dt|dtv|dv)/(.+)',

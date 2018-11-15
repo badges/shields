@@ -15,8 +15,8 @@ class LibrariesIoDependents extends LibrariesIoBase {
     }
   }
 
-  static get url() {
-    return this.buildUrl('librariesio/dependents')
+  static get route() {
+    return this.buildRoute('librariesio/dependents')
   }
 
   static get examples() {

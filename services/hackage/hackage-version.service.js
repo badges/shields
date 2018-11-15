@@ -13,8 +13,7 @@ module.exports = class HackageVersion extends LegacyService {
       cache((data, match, sendBadge, request) => {
         const repo = match[1] // eg, `lens`.
         const format = match[2]
-        const apiUrl =
-          'https://hackage.haskell.org/package/' + repo + '/' + repo + '.cabal'
+        const apiUrl = `https://hackage.haskell.org/package/${repo}/${repo}.cabal`
         const badgeData = getBadgeData('hackage', data)
         request(apiUrl, (err, res, buffer) => {
           if (checkErrorResponse(badgeData, err, res)) {

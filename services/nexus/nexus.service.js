@@ -26,24 +26,11 @@ module.exports = class Nexus extends LegacyService {
 
         const badgeData = getBadgeData('nexus', data)
 
-        const apiUrl =
-          scheme +
-          '://' +
-          host +
-          (repo === 'r' || repo === 's'
-            ? '/service/local/lucene/search?g=' +
-              groupId +
-              '&a=' +
-              artifactId +
-              queryOpt
-            : '/service/local/artifact/maven/resolve?r=' +
-              repo +
-              '&g=' +
-              groupId +
-              '&a=' +
-              artifactId +
-              '&v=LATEST' +
-              queryOpt)
+        const apiUrl = `${scheme}://${host}${
+          repo === 'r' || repo === 's'
+            ? `/service/local/lucene/search?g=${groupId}&a=${artifactId}${queryOpt}`
+            : `/service/local/artifact/maven/resolve?r=${repo}&g=${groupId}&a=${artifactId}&v=LATEST${queryOpt}`
+        }`
 
         request(
           apiUrl,
