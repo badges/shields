@@ -75,11 +75,12 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
 
   static render({ status }) {
     const color = {
-      passed: 'brightgreen',
-      running: 'blue',
       pending: 'yellow',
-      canceled: 'orange',
+      running: 'yellow',
+      passed: 'brightgreen',
       failed: 'red',
+      skipped: 'lightgray',
+      canceled: 'lightgray',
     }[status]
 
     return {
