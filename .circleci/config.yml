@@ -9,9 +9,9 @@ jobs:
 
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
+          - v2-dependencies-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+          - v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -20,7 +20,7 @@ jobs:
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package.json" }}
 
   main:
     docker:
@@ -30,9 +30,9 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package.json" }}
           # https://github.com/badges/shields/issues/1937
-          key: v1-dependencies-
+          key: v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -71,9 +71,9 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package.json" }}
           # https://github.com/badges/shields/issues/1937
-          key: v1-dependencies-
+          key: v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -111,9 +111,9 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package.json" }}
           # https://github.com/badges/shields/issues/1937
-          key: v1-dependencies-
+          key: v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -131,9 +131,9 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package.json" }}
           # https://github.com/badges/shields/issues/1937
-          key: v1-dependencies-
+          key: v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -162,9 +162,9 @@ jobs:
             echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package.json" }}
           # https://github.com/badges/shields/issues/1937
-          key: v1-dependencies-
+          key: v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -201,9 +201,9 @@ jobs:
             echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package.json" }}
           # https://github.com/badges/shields/issues/1937
-          key: v1-dependencies-
+          key: v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -234,7 +234,7 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package.json" }}
 
       - run:
           name: Run all service tests
