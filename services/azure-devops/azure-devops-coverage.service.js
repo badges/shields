@@ -98,7 +98,7 @@ module.exports = class AzureDevOpsCoverage extends BaseJsonService {
     ]
   }
 
-  static get url() {
+  static get route() {
     return {
       base: '',
       format: '(?:azure-devops|vso)/coverage/([^/]+)/([^/]+)/([^/]+)(?:/(.+))?',
