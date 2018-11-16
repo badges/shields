@@ -10,6 +10,12 @@
     <a href="https://circleci.com/gh/badges/shields/tree/master">
         <img src="https://img.shields.io/circleci/project/github/badges/shields/master.svg"
             alt="build status"></a>
+    <a href="https://circleci.com/gh/badges/daily-tests">
+        <img src="https://img.shields.io/circleci/project/github/badges/daily-tests.svg?label=daily%20tests"
+            alt="daily build status"></a>
+    <a href="https://coveralls.io/github/badges/shields">
+        <img src="https://img.shields.io/coveralls/github/badges/shields.svg"
+            alt="coverage"></a>
     <a href="https://github.com/badges/shields/compare/gh-pages...master">
         <img src="https://img.shields.io/github/commits-since/badges/shields/gh-pages.svg?label=commits%20to%20be%20deployed"
             alt="commits to be deployed"></a>
@@ -113,12 +119,15 @@ snapshots, and `SNAPSHOT_UPDATE=1 npm run test:js:server` to update them.
 
 The server can be configured to use [Sentry][] ([configuration][sentry configuration]) and [Prometheus][] ([configuration][prometheus configuration]).
 
+Daily tests, including a full run of the service tests and overall code coverage, are run via [badges/daily-tests][daily-tests].
+
 [package manager]: https://nodejs.org/en/download/package-manager/
 [snapshot tests]: https://glebbahmutov.com/blog/snapshot-testing/
 [Prometheus]: https://prometheus.io/
 [prometheus configuration]: doc/self-hosting.md#prometheus
 [Sentry]: https://sentry.io/
 [sentry configuration]: doc/self-hosting.md#sentry
+[daily-tests]: https://github.com/badges/daily-tests
 
 Hosting your own server
 -----------------------
