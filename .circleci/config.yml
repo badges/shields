@@ -3,7 +3,7 @@ version: 2
 jobs:
   npm-install:
     docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
+      - image: circleci/node:8
     steps:
       - checkout
 
@@ -24,7 +24,7 @@ jobs:
 
   main:
     docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
+      - image: circleci/node:8
       - image: redis
     steps:
       - checkout
@@ -65,7 +65,7 @@ jobs:
 
   main@node-latest:
     docker:
-      - image: shieldsio/shields-ci-node-latest:0.0.3
+      - image: circleci/node:latest
       - image: redis
     steps:
       - checkout
@@ -106,7 +106,7 @@ jobs:
 
   danger:
     docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
+      - image: circleci/node:8
     steps:
       - checkout
 
@@ -126,7 +126,7 @@ jobs:
 
   frontend:
     docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
+      - image: circleci/node:8
     steps:
       - checkout
 
@@ -151,7 +151,7 @@ jobs:
 
   services-pr:
     docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
+      - image: circleci/node:8
     steps:
       - checkout
 
@@ -190,7 +190,7 @@ jobs:
 
   services-pr@node-latest:
     docker:
-      - image: shieldsio/shields-ci-node-latest:0.0.3
+      - image: circleci/node:latest
     steps:
       - checkout
 
@@ -229,7 +229,7 @@ jobs:
 
   services-daily:
     docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
+      - image: circleci/node:8
     steps:
       - checkout
 
