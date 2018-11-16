@@ -9,7 +9,7 @@ const isSvg = require('is-svg')
 const path = require('path')
 const serverHelpers = require('./lib/in-process-server-test-helpers')
 const sinon = require('sinon')
-const svg2img = require('./lib/svg-to-img')
+const svg2img = require('./gh-badges/lib/svg-to-img')
 
 describe('The server', function() {
   const baseUri = `http://127.0.0.1:${config.port}`
@@ -39,6 +39,14 @@ describe('The server', function() {
     const res = await fetch(`${baseUri}/:fruit-apple-green.png`)
     expect(res.ok).to.be.true
     expect(await res.buffer()).to.satisfy(isPng)
+  })
+
+  it('should preserve label case', async function() {
+    const res = await fetch(`${baseUri}/:fRuiT-apple-green.svg`)
+    expect(res.ok).to.be.true
+    expect(await res.text())
+      .to.satisfy(isSvg)
+      .and.to.include('fRuiT')
   })
 
   // https://github.com/badges/shields/pull/1319

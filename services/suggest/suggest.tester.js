@@ -14,7 +14,7 @@ const t = new ServiceTester({
 module.exports = t
 
 t.create('issues, forks, stars and twitter')
-  .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
+  .get(`/v1?url=${encodeURIComponent('https://github.com/atom/atom')}`)
   // suggest resource requires this header value
   .expectJSON('badges.?', {
     name: 'GitHub issues',
@@ -40,7 +40,7 @@ t.create('issues, forks, stars and twitter')
   })
 
 t.create('license')
-  .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
+  .get(`/v1?url=${encodeURIComponent('https://github.com/atom/atom')}`)
   .expectJSON('badges.?', {
     name: 'GitHub license',
     link: 'https://github.com/atom/atom/blob/master/LICENSE.md',
@@ -48,7 +48,7 @@ t.create('license')
   })
 
 t.create('license for non-existing project')
-  .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
+  .get(`/v1?url=${encodeURIComponent('https://github.com/atom/atom')}`)
   .intercept(nock =>
     nock('https://api.github.com')
       .get(/\/repos\/atom\/atom\/license/)
@@ -61,7 +61,7 @@ t.create('license for non-existing project')
   })
 
 t.create('license when json response is invalid')
-  .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
+  .get(`/v1?url=${encodeURIComponent('https://github.com/atom/atom')}`)
   .intercept(nock =>
     nock('https://api.github.com')
       .get(/\/repos\/atom\/atom\/license/)
@@ -74,7 +74,7 @@ t.create('license when json response is invalid')
   })
 
 t.create('license when html_url not found in GitHub api response')
-  .get('/v1?url=' + encodeURIComponent('https://github.com/atom/atom'))
+  .get(`/v1?url=${encodeURIComponent('https://github.com/atom/atom')}`)
   .intercept(nock =>
     nock('https://api.github.com')
       .get(/\/repos\/atom\/atom\/license/)

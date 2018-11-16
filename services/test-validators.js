@@ -7,12 +7,11 @@
   should be declared in that service's test file.
 */
 
-const Joi = require('joi')
-const semverRegex = require('semver-regex')()
+const Joi = require('joi').extend(require('joi-extension-semver'))
 
 const withRegex = re => Joi.string().regex(re)
 
-const isSemver = withRegex(semverRegex)
+const isSemver = Joi.semver().valid()
 
 const isVPlusTripleDottedVersion = withRegex(/^v[0-9]+.[0-9]+.[0-9]+$/)
 
@@ -66,7 +65,7 @@ const isMetricOverTimePeriod = withRegex(
   /^[1-9][0-9]*[kMGTPEZY]?\/(year|month|4 weeks|week|day)$/
 )
 
-const isIntegerPercentage = withRegex(/^[0-9]+%$/)
+const isIntegerPercentage = withRegex(/^[1-9][0-9]?%|^100%|^0%$/)
 const isDecimalPercentage = withRegex(/^[0-9]+\.[0-9]*%$/)
 const isPercentage = Joi.alternatives().try(
   isIntegerPercentage,
@@ -130,4 +129,5 @@ module.exports = {
   isFormattedDate,
   isDependencyState,
   isBuildStatus,
+  withRegex,
 }

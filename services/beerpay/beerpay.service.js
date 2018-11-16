@@ -7,6 +7,23 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 // e.g. JSON response: https://beerpay.io/api/v1/beerpay/projects/beerpay.io
 // e.g. SVG badge: https://beerpay.io/beerpay/beerpay.io/badge.svg?style=flat-square
 module.exports = class Beerpay extends LegacyService {
+  static get category() {
+    return 'funding'
+  }
+
+  static get route() {
+    return { base: 'beerpay' }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Beerpay',
+        previewUrl: 'hashdog/scrapfy-chrome-extension',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/beerpay\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
@@ -15,8 +32,7 @@ module.exports = class Beerpay extends LegacyService {
         const project = match[2] // eg, beerpay.io
         const format = match[3]
 
-        const apiUrl =
-          'https://beerpay.io/api/v1/' + user + '/projects/' + project
+        const apiUrl = `https://beerpay.io/api/v1/${user}/projects/${project}`
         const badgeData = getBadgeData('beerpay', data)
 
         request(apiUrl, (err, res, buffer) => {
@@ -28,7 +44,7 @@ module.exports = class Beerpay extends LegacyService {
 
           try {
             const data = JSON.parse(buffer)
-            badgeData.text[1] = '$' + (data.total_amount || 0)
+            badgeData.text[1] = `$${data.total_amount || 0}`
             badgeData.colorscheme = 'red'
             sendBadge(format, badgeData)
           } catch (e) {

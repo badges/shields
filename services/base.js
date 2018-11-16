@@ -3,6 +3,8 @@
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const Joi = require('joi')
+const queryString = require('query-string')
+const pathToRegexp = require('path-to-regexp')
 const {
   NotFound,
   InvalidResponse,
@@ -11,18 +13,18 @@ const {
   Deprecated,
 } = require('./errors')
 const { checkErrorResponse } = require('../lib/error-helper')
-const queryString = require('query-string')
 const {
   makeLogo,
   toArray,
   makeColor,
   setBadgeColor,
 } = require('../lib/badge-data')
+const { staticBadgeUrl } = require('../lib/make-badge-url')
 const trace = require('./trace')
 
 class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
-    this._sendAndCacheRequest = sendAndCacheRequest
+    this._requestFetcher = sendAndCacheRequest
     this._handleInternalErrors = handleInternalErrors
   }
 
@@ -31,9 +33,9 @@ class BaseService {
   }
 
   /**
-   * Asynchronous function to handle requests for this service. Takes the URL
-   * parameters (as defined in the `url` property), performs a request using
-   * `this._sendAndCacheRequest`, and returns the badge data.
+   * Asynchronous function to handle requests for this service. Take the route
+   * parameters (as defined in the `route` property), perform a request using
+   * `this._sendAndCacheRequest`, and return the badge data.
    */
   async handle(namedParams, queryParams) {
     throw new Error(`Handler not implemented for ${this.constructor.name}`)
@@ -51,9 +53,9 @@ class BaseService {
 
   /**
    * Returns an object:
-   *  - base: (Optional) The base path of the URLs for this service. This is
+   *  - base: (Optional) The base path of the routes for this service. This is
    *    used as a prefix.
-   *  - format: Regular expression to use for URLs for this service's badges
+   *  - format: Regular expression to use for routes for this service's badges
    *  - capture: Array of names for the capture groups in the regular
    *             expression. The handler will be passed an object containing
    *             the matches.
@@ -61,14 +63,14 @@ class BaseService {
    *                 uses. For cache safety, only the whitelisted query
    *                 parameters will be passed to the handler.
    */
-  static get url() {
-    throw new Error(`URL not defined for ${this.name}`)
+  static get route() {
+    throw new Error(`Route not defined for ${this.name}`)
   }
 
   /**
    * Default data for the badge. Can include things such as default logo, color,
    * etc. These defaults will be used if the value is not explicitly overridden
-   * by either the handler or by the user via URL parameters.
+   * by either the handler or by the user via query parameters.
    */
   static get defaultBadgeData() {
     return {}
@@ -76,7 +78,7 @@ class BaseService {
 
   /**
    * Example URLs for this service. These should use the format
-   * specified in `url`, and can be used to demonstrate how to use badges for
+   * specified in `route`, and can be used to demonstrate how to use badges for
    * this service.
    */
   static get examples() {
@@ -84,25 +86,24 @@ class BaseService {
   }
 
   static _makeFullUrl(partialUrl) {
-    return '/' + [this.url.base, partialUrl].filter(Boolean).join('/')
+    return `/${[this.route.base, partialUrl].filter(Boolean).join('/')}`
   }
 
   static _makeStaticExampleUrl(serviceData) {
     const badgeData = this._makeBadgeData({}, serviceData)
-    const color = badgeData.colorscheme || badgeData.colorB
-    return this._makeStaticExampleUrlFromTextAndColor(
-      badgeData.text[0],
-      badgeData.text[1],
-      color
-    )
+    return staticBadgeUrl({
+      label: badgeData.text[0],
+      message: `${badgeData.text[1]}`,
+      color: badgeData.colorscheme || badgeData.colorB,
+    })
   }
 
-  static _makeStaticExampleUrlFromTextAndColor(text1, text2, color) {
-    return `/badge/${encodeURIComponent(
-      text1.replace('-', '--')
-    )}-${encodeURIComponent(text2).replace('-', '--')}-${encodeURIComponent(
-      color
-    )}`
+  static _dotSvg(url) {
+    if (url.includes('?')) {
+      return url.replace('?', '.svg?')
+    } else {
+      return `${url}.svg`
+    }
   }
 
   /**
@@ -111,20 +112,46 @@ class BaseService {
    */
   static prepareExamples() {
     return this.examples.map(
-      ({
-        title,
-        query,
-        exampleUrl,
-        previewUrl,
-        urlPattern,
-        staticExample,
-        documentation,
-      }) => {
-        if (!previewUrl && !staticExample) {
+      (
+        {
+          title,
+          query,
+          exampleUrl,
+          previewUrl,
+          urlPattern,
+          staticExample,
+          documentation,
+          keywords,
+        },
+        index
+      ) => {
+        if (staticExample) {
+          if (!urlPattern) {
+            throw new Error(
+              `Static example for ${
+                this.name
+              } at index ${index} does not declare a urlPattern`
+            )
+          }
+          if (!exampleUrl) {
+            throw new Error(
+              `Static example for ${
+                this.name
+              } at index ${index} does not declare an exampleUrl`
+            )
+          }
+          if (previewUrl) {
+            throw new Error(
+              `Static example for ${
+                this.name
+              } at index ${index} also declares a dynamic previewUrl, which is not allowed`
+            )
+          }
+        } else if (!previewUrl) {
           throw Error(
             `Example for ${
               this.name
-            } is missing required previewUrl or staticExample`
+            } at index ${index} is missing required previewUrl or staticExample`
           )
         }
 
@@ -134,31 +161,74 @@ class BaseService {
         return {
           title: title ? `${title}` : this.name,
           exampleUrl: exampleUrl
-            ? `${this._makeFullUrl(exampleUrl, query)}.svg${suffix}`
+            ? `${this._dotSvg(this._makeFullUrl(exampleUrl))}${suffix}`
             : undefined,
           previewUrl: staticExample
-            ? `${this._makeStaticExampleUrl(staticExample)}.svg`
-            : `${this._makeFullUrl(previewUrl, query)}.svg${suffix}`,
+            ? this._makeStaticExampleUrl(staticExample)
+            : `${this._dotSvg(this._makeFullUrl(previewUrl))}${suffix}`,
           urlPattern: urlPattern
-            ? `${this._makeFullUrl(urlPattern, query)}.svg${suffix}`
+            ? `${this._dotSvg(this._makeFullUrl(urlPattern))}${suffix}`
             : undefined,
           documentation,
+          keywords,
         }
       }
     )
   }
 
+  static get _regexFromPath() {
+    const { pattern } = this.route
+    const fullPattern = `${this._makeFullUrl(
+      pattern
+    )}.:ext(svg|png|gif|jpg|json)`
+
+    const keys = []
+    const regex = pathToRegexp(fullPattern, keys, {
+      strict: true,
+      sensitive: true,
+    })
+    const capture = keys.map(item => item.name).slice(0, -1)
+
+    return { regex, capture }
+  }
+
   static get _regex() {
-    // Regular expressions treat "/" specially, so we need to escape them
-    const escapedPath = this.url.format.replace(/\//g, '\\/')
-    const fullRegex = `^${this._makeFullUrl(
-      escapedPath
-    )}.(svg|png|gif|jpg|json)$`
-    return new RegExp(fullRegex)
+    const { pattern, format, capture } = this.route
+    if (
+      pattern !== undefined &&
+      (format !== undefined || capture !== undefined)
+    ) {
+      throw Error(
+        `Since the route for ${
+          this.name
+        } includes a pattern, it should not include a format or capture`
+      )
+    } else if (pattern !== undefined) {
+      return this._regexFromPath.regex
+    } else if (format !== undefined) {
+      // Regular expressions treat "/" specially, so we need to escape them
+      const escapedPath = this.route.format.replace(/\//g, '\\/')
+      const fullRegex = `^${this._makeFullUrl(
+        escapedPath
+      )}.(svg|png|gif|jpg|json)$`
+      return new RegExp(fullRegex)
+    } else {
+      throw Error(`The route for ${this.name} has neither pattern nor format`)
+    }
+  }
+
+  static get _cacheLength() {
+    const cacheLengths = {
+      build: 30,
+      license: 3600,
+      version: 300,
+    }
+    return cacheLengths[this.category]
   }
 
   static _namedParamsForMatch(match) {
-    const names = this.url.capture || []
+    const { pattern, capture } = this.route
+    const names = pattern ? this._regexFromPath.capture : capture || []
 
     // Assume the last match is the format, and drop match[0], which is the
     // entire match.
@@ -287,12 +357,14 @@ class BaseService {
     camp.route(
       this._regex,
       handleRequest({
-        queryParams: this.url.queryParams,
+        queryParams: this.route.queryParams,
         handler: async (queryParams, match, sendBadge, request) => {
           const namedParams = this._namedParamsForMatch(match)
           const serviceInstance = new ServiceClass(
             {
               sendAndCacheRequest: request.asPromise,
+              sendAndCacheRequestWithCallbacks: request,
+              githubApiProvider,
             },
             serviceConfig
           )
@@ -307,6 +379,7 @@ class BaseService {
           const format = match.slice(-1)[0]
           sendBadge(format, badgeData)
         },
+        cacheLength: this._cacheLength,
       })
     )
   }
@@ -345,7 +418,7 @@ class BaseService {
   async _request({ url, options = {}, errorMessages = {} }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     logTrace(emojic.bowAndArrow, 'Request', url, '\n', options)
-    const { res, buffer } = await this._sendAndCacheRequest(url, options)
+    const { res, buffer } = await this._requestFetcher(url, options)
     logTrace(emojic.dart, 'Response status code', res.statusCode)
     return checkErrorResponse.asPromise(errorMessages)({ buffer, res })
   }

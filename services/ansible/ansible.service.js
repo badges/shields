@@ -1,54 +1,113 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const {
-  makeBadgeData: getBadgeData,
-  makeLabel: getLabel,
-} = require('../../lib/badge-data')
+const Joi = require('joi')
+const BaseJsonService = require('../base-json')
+const { downloadCount } = require('../../lib/color-formatters')
 const { metric } = require('../../lib/text-formatters')
+const { nonNegativeInteger } = require('../validators')
 
-module.exports = class Ansible extends LegacyService {
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/ansible\/role\/(?:(d)\/)?(\d+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const type = match[1] // eg d or nothing
-        const roleId = match[2] // eg 3078
-        const format = match[3]
-        const options = {
-          json: true,
-          uri: 'https://galaxy.ansible.com/api/v1/roles/' + roleId + '/',
-        }
-        const badgeData = getBadgeData('role', data)
-        // eslint-disable-next-line handle-callback-err
-        request(options, (err, res, json) => {
-          if (
-            res &&
-            (res.statusCode === 404 ||
-              json === undefined ||
-              json.state === null)
-          ) {
-            badgeData.text[1] = 'not found'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            if (type === 'd') {
-              badgeData.text[0] = getLabel('role downloads', data)
-              badgeData.text[1] = metric(json.download_count)
-              badgeData.colorscheme = 'blue'
-            } else {
-              badgeData.text[1] =
-                json.summary_fields.namespace.name + '.' + json.name
-              badgeData.colorscheme = 'blue'
-            }
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'errored'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+const ansibleRoleSchema = Joi.object({
+  download_count: nonNegativeInteger,
+  name: Joi.string().required(),
+  summary_fields: Joi.object({
+    namespace: Joi.object({
+      name: Joi.string().required(),
+    }),
+  }),
+}).required()
+
+class AnsibleGalaxyRole extends BaseJsonService {
+  async fetch({ roleId }) {
+    const url = `https://galaxy.ansible.com/api/v1/roles/${roleId}/`
+    return this._requestJson({
+      url,
+      schema: ansibleRoleSchema,
+    })
   }
+}
+
+class AnsibleGalaxyRoleDownloads extends AnsibleGalaxyRole {
+  static render({ downloads }) {
+    return {
+      message: metric(downloads),
+      color: downloadCount(downloads),
+    }
+  }
+
+  async handle({ roleId }) {
+    const json = await this.fetch({ roleId })
+    return this.constructor.render({ downloads: json.download_count })
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'role downloads' }
+  }
+
+  static get category() {
+    return 'downloads'
+  }
+
+  static get route() {
+    return {
+      base: 'ansible/role/d',
+      pattern: ':roleId',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: `Ansible Role`,
+        urlPattern: ':roleId',
+        exampleUrl: '3078',
+        staticExample: this.render({ downloads: 76 }),
+      },
+    ]
+  }
+}
+
+class AnsibleGalaxyRoleName extends AnsibleGalaxyRole {
+  static render({ name }) {
+    return { message: name, color: 'blue' }
+  }
+
+  async handle({ roleId }) {
+    const json = await this.fetch({ roleId })
+    const name = `${json.summary_fields.namespace.name}.${json.name}`
+    return this.constructor.render({ name })
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'role' }
+  }
+
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'ansible/role',
+      format: '(.+)',
+      capture: ['roleId'],
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: `Ansible Role`,
+        urlPattern: ':roleId',
+        exampleUrl: '3078',
+        staticExample: this.render({
+          name: 'ansible-roles.sublimetext3_packagecontrol',
+        }),
+      },
+    ]
+  }
+}
+
+module.exports = {
+  AnsibleGalaxyRoleDownloads,
+  AnsibleGalaxyRoleName,
 }

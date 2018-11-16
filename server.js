@@ -16,10 +16,10 @@ const { checkErrorResponse } = require('./lib/error-helper')
 const analytics = require('./lib/analytics')
 const config = require('./lib/server-config')
 const GithubConstellation = require('./services/github/github-constellation')
+const PrometheusMetrics = require('./lib/sys/prometheus-metrics')
 const sysMonitor = require('./lib/sys/monitor')
 const log = require('./lib/log')
-const { makeMakeBadgeFn } = require('./lib/make-badge')
-const { QuickTextMeasurer } = require('./lib/text-measurer')
+const makeBadge = require('./gh-badges/lib/make-badge')
 const suggest = require('./lib/suggest')
 const {
   makeColorB,
@@ -28,7 +28,7 @@ const {
   setBadgeColor,
 } = require('./lib/badge-data')
 const {
-  makeHandleRequestFn,
+  handleRequest: cache,
   clearRequestCache,
 } = require('./lib/request-handler')
 const { clearRegularUpdateCache } = require('./lib/regular-update')
@@ -50,6 +50,7 @@ const githubConstellation = new GithubConstellation({
   persistence: config.persistence,
   service: config.services.github,
 })
+const metrics = new PrometheusMetrics(config.metrics.prometheus)
 const { apiProvider: githubApiProvider } = githubConstellation
 
 function reset() {
@@ -73,16 +74,6 @@ module.exports = {
 
 log(`Server is starting up: ${config.baseUri}`)
 
-let measurer
-try {
-  measurer = new QuickTextMeasurer(config.font.path, config.font.fallbackPath)
-} catch (e) {
-  console.log(`Unable to load fallback font. Using Helvetica-Bold instead.`)
-  measurer = new QuickTextMeasurer('Helvetica')
-}
-const makeBadge = makeMakeBadgeFn(measurer)
-const cache = makeHandleRequestFn(makeBadge)
-
 analytics.load()
 analytics.scheduleAutosaving()
 analytics.setRoutes(camp)
@@ -92,6 +83,7 @@ if (serverSecrets && serverSecrets.shieldsSecret) {
 }
 
 githubConstellation.initialize(camp)
+metrics.initialize(camp)
 
 suggest.setRoutes(config.cors.allowedOrigin, githubApiProvider, camp)
 
@@ -248,7 +240,7 @@ camp.route(
 
     // Cache management - the badge is constant.
     const cacheDuration = (3600 * 24 * 1) | 0 // 1 day.
-    ask.res.setHeader('Cache-Control', 'max-age=' + cacheDuration)
+    ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
     if (+new Date(ask.req.headers['if-modified-since']) >= +serverStartTime) {
       ask.res.statusCode = 304
       ask.res.end() // not modified.
@@ -259,7 +251,7 @@ camp.route(
     // Badge creation.
     try {
       const badgeData = getBadgeData(subject, data)
-      badgeData.text[0] = getLabel(subject, data)
+      badgeData.text[0] = getLabel(undefined, { label: subject })
       badgeData.text[1] = status
       badgeData.colorB = makeColorB(color, data)
       badgeData.template = data.style
@@ -286,7 +278,7 @@ camp.route(
 let bitFlip = false
 camp.route(/^\/flip\.svg$/, (data, match, end, ask) => {
   const cacheSecs = 60
-  ask.res.setHeader('Cache-Control', 'max-age=' + cacheSecs)
+  ask.res.setHeader('Cache-Control', `max-age=${cacheSecs}`)
   const reqTime = new Date()
   const date = new Date(+reqTime + cacheSecs * 1000).toGMTString()
   ask.res.setHeader('Expires', date)
@@ -306,7 +298,7 @@ camp.route(/^\/([^/]+)\/(.+).png$/, (data, match, end, ask) => {
 
   // Cache management - the badge is constant.
   const cacheDuration = (3600 * 24 * 1) | 0 // 1 day.
-  ask.res.setHeader('Cache-Control', 'max-age=' + cacheDuration)
+  ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
   if (+new Date(ask.req.headers['if-modified-since']) >= +serverStartTime) {
     ask.res.statusCode = 304
     ask.res.end() // not modified.

@@ -12,7 +12,7 @@ function teamcityBadge(
   sendBadge,
   request
 ) {
-  const apiUrl = url + '/app/rest/builds/buildType:(id:' + buildId + ')?guest=1'
+  const apiUrl = `${url}/app/rest/builds/buildType:(id:${buildId})?guest=1`
   const badgeData = getBadgeData('build', data)
   request(
     apiUrl,
@@ -48,6 +48,33 @@ function teamcityBadge(
 }
 
 module.exports = class TeamcityBuild extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get route() {
+    return {
+      base: 'teamcity',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'TeamCity CodeBetter',
+        previewUrl: 'codebetter/bt428',
+      },
+      {
+        title: 'TeamCity (simple build status)',
+        previewUrl: 'http/teamcity.jetbrains.com/s/bt345',
+      },
+      {
+        title: 'TeamCity (full build status)',
+        previewUrl: 'http/teamcity.jetbrains.com/e/bt345',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     // Old url for CodeBetter TeamCity instance.
     camp.route(
@@ -77,7 +104,7 @@ module.exports = class TeamcityBuild extends LegacyService {
         const buildType = match[4] // eg, `bt428`.
         const format = match[5]
         teamcityBadge(
-          scheme + '://' + serverUrl,
+          `${scheme}://${serverUrl}`,
           buildType,
           advanced,
           format,

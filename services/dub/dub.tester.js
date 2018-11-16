@@ -4,7 +4,7 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 
 const { invalidJSON } = require('../response-fixtures')
-const colorscheme = require('../../lib/colorscheme.json')
+const { colorScheme } = require('../test-helpers')
 
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
@@ -12,11 +12,11 @@ const {
   isMetricOverTimePeriod,
 } = require('../test-validators')
 const isVersionColor = Joi.equal(
-  colorscheme.red.colorB,
-  colorscheme.yellow.colorB,
-  colorscheme.yellowgreen.colorB,
-  colorscheme.green.colorB,
-  colorscheme.brightgreen.colorB
+  colorScheme.red,
+  colorScheme.yellow,
+  colorScheme.yellowgreen,
+  colorScheme.green,
+  colorScheme.brightgreen
 )
 
 const t = new ServiceTester({ id: 'dub', title: 'Dub' })
@@ -35,11 +35,11 @@ t.create('total downloads (valid)')
   )
 
 t.create('total downloads, specific version (valid)')
-  .get('/dt/vibe-d/0.7.27.json?style=_shields_test')
+  .get('/dt/vibe-d/0.8.4.json?style=_shields_test')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'downloads',
-      value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? v0.7.27$/),
+      value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? v0.8.4$/),
       colorB: isVersionColor,
     })
   )
@@ -111,7 +111,7 @@ t.create('version (valid)')
     Joi.object().keys({
       name: 'dub',
       value: isVPlusDottedVersionNClausesWithOptionalSuffix,
-      colorB: Joi.equal(colorscheme.blue.colorB, colorscheme.orange.colorB),
+      colorB: Joi.equal(colorScheme.blue, colorScheme.orange),
     })
   )
 
@@ -140,7 +140,7 @@ t.create('license (valid)')
   .expectJSON({
     name: 'license',
     value: 'MIT',
-    colorB: colorscheme.blue.colorB,
+    colorB: colorScheme.blue,
   })
 
 t.create('license (not found)')

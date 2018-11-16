@@ -34,6 +34,15 @@ t.create('circle ci (valid, project that uses workflows)')
     })
   )
 
+t.create('build status with "github" as a default VCS')
+  .get('/project/RedSparr0w/node-csgo-parser/master.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'build',
+      value: isBuildStatus,
+    })
+  )
+
 t.create('circle ci (valid, with token)')
   .get(
     '/token/b90b5c49e59a4c67ba3a92f7992587ac7a0408c2/project/github/RedSparr0w/node-csgo-parser/master.json'

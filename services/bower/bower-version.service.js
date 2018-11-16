@@ -7,6 +7,29 @@ const { version: versionColor } = require('../../lib/color-formatters')
 const serverSecrets = require('../../lib/server-secrets')
 
 module.exports = class BowerVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'bower',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Bower',
+        previewUrl: 'v/bootstrap',
+      },
+      {
+        title: 'Bower Pre Release',
+        previewUrl: 'vpre/bootstrap',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/bower\/(v|vpre)\/(.*)\.(svg|png|gif|jpg|json)$/,

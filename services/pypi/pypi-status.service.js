@@ -8,8 +8,8 @@ module.exports = class PypiStatus extends PypiBase {
     return 'other'
   }
 
-  static get url() {
-    return this.buildUrl('pypi/status')
+  static get route() {
+    return this.buildRoute('pypi/status')
   }
 
   static get defaultBadgeData() {

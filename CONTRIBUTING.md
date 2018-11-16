@@ -66,7 +66,7 @@ the top post.
 If you have a suggestion of your own, [search the open issues][issues]. If you
 don't see it, feel free to [open a new issue][open an issue].
 
-[open an issue]: https://github.com/badges/shields/issues/new
+[open an issue]: https://github.com/badges/shields/issues/new/choose
 
 ### Spreading the word
 
@@ -121,8 +121,8 @@ This project formats its source code using Prettier. The most enjoyable way to
 use Prettier is to let is format code for you when you save. You can [integrate
 it into your editor][integrate prettier].
 
-If for whatever reason you don't want to do that, you can run
-`npm run prettier` to format the code from the command line.
+Whether you integrate it into your editor or not, a pre-commit hook will run
+Prettier before a commit by default.
 
 [integrate prettier]: https://prettier.io/docs/en/editors.html
 

@@ -31,7 +31,9 @@ class ServiceTester {
 
   static forServiceClass(ServiceClass) {
     const id = ServiceClass.name
-    const pathPrefix = `/${ServiceClass.url.base}`
+    const pathPrefix = ServiceClass.route.base
+      ? `/${ServiceClass.route.base}`
+      : ''
     return new this({
       id,
       title: id,

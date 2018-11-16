@@ -4,6 +4,27 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 module.exports = class Dockbit extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get route() {
+    return {
+      base: 'dockbit',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Dockbit',
+        previewUrl: 'DockbitStatus/health?token=TvavttxFHJ4qhnKstDxrvBXM',
+        urlPattern: ':organisation/:pipeline?token=:token',
+        exampleUrl: 'DockbitStatus/health?token=TvavttxFHJ4qhnKstDxrvBXM',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/dockbit\/([A-Za-z0-9-_]+)\/([A-Za-z0-9-_]+)\.(svg|png|gif|jpg|json)$/,

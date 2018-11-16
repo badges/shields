@@ -31,25 +31,35 @@ continuous integration services, package registries, distributions, app
 stores, social networks, code coverage services, and code analysis services.
 Every month it serves over 470 million images.
 
-In addition to hosting the shields.io frontend and server code, this monorepo
-hosts an [NPM library for generating badges][gh-badges], and the badge design
-specification.
+This repo hosts:
+
+* The [Shields.io][shields.io] frontend and server code
+* An [NPM library for generating badges][gh-badges]
+    * [documentation][gh-badges-docs]
+    * [changelog][gh-badges-changelog]
+* The [badge design specification][badge-spec]
+
 
 [shields.io]: https://shields.io/
 [gh-badges]: https://www.npmjs.com/package/gh-badges
+[badge-spec]: https://github.com/badges/shields/tree/master/spec
+[gh-badges-docs]: https://github.com/badges/shields/tree/master/gh-badges/README.md
+[gh-badges-changelog]: https://github.com/badges/shields/tree/master/gh-badges/CHANGELOG.md
 
 
 Examples
 --------
 
-* build status: `build | failing`
-* code coverage percentage: `coverage | 80%`
-* stable release version: `version | 1.2.3`
-* package manager release: `gem | 1.2.3`
-* status of third-party dependencies: `dependencies | out-of-date`
-* static code analysis GPA: `code climate | 3.8`
-* [SemVer](https://semver.org/) version observance: `semver | 2.0.0`
-* amount of [Gratipay](http://gratipay.com) donations per week: `tips | $2/week`
+* code coverage percentage: ![coverage](https://img.shields.io/badge/coverage-80%25-yellowgreen.svg?maxAge=2592000)
+* stable release version: ![version](https://img.shields.io/badge/version-1.2.3-blue.svg?maxAge=2592000)
+* package manager release: ![gem](https://img.shields.io/badge/gem-2.2.0-blue.svg?maxAge=2592000)
+* status of third-party dependencies: ![dependencies](https://img.shields.io/badge/dependencies-out%20of%20date-orange.svg?maxAge=2592000)
+* static code analysis grade: ![codacy](https://img.shields.io/badge/codacy-B-green.svg?maxAge=2592000)
+* [SemVer](https://semver.org/) version observance: ![semver](https://img.shields.io/badge/semver-2.0.0-blue.svg?maxAge=2592000)
+* amount of [Liberapay](https://liberapay.com/) donations per week: ![receives](https://img.shields.io/badge/receives-2.00%20USD%2Fweek-yellow.svg?maxAge=2592000)
+* Python package downloads: ![downloads](https://img.shields.io/badge/downloads-13k%2Fmonth-brightgreen.svg?maxAge=2592000)
+* Chrome Web Store extension rating: ![rating](https://img.shields.io/badge/rating-★★★★☆-brightgreen.svg?maxAge=2592000)
+* [Uptime Robot](https://uptimerobot.com) percentage: ![uptime](https://img.shields.io/badge/uptime-100%25-brightgreen.svg?maxAge=2592000)
 
 [Make your own badges!][custom badges]
 (Quick example: `https://img.shields.io/badge/left-right-f39f37.svg`)
@@ -79,39 +89,6 @@ You can read a [tutorial on how to add a badge][tutorial].
 [contributing]: CONTRIBUTING.md
 
 
-Using the badge library
------------------------
-
-```sh
-npm install -g gh-badges
-badge build passed :green .png > mybadge.png
-```
-
-```js
-const badge = require('gh-badges')
-
-// Optional step, to have accurate text width computation.
-const format = {
-  text: ['build', 'passed'],
-  colorscheme: 'green',
-  template: 'flat',
-}
-
-badge.loadFont('/path/to/Verdana.ttf', err => {
-  badge(format, (svg, err) => {
-    // svg is a string containing your badge
-  })})
-```
-
-View the [documentation for gh-badges][gh-badges doc].
-
-**Note:** The badge library was last released in 2016.
-
-[![npm version](http://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges)
-
-[gh-badges doc]: doc/gh-badges.md
-
-
 Development
 -----------
 
@@ -134,12 +111,14 @@ SVG or JSON output. When deliberately changing the output, run
 `SNAPSHOT_DRY=1 npm run test:js:server` to preview changes to the saved
 snapshots, and `SNAPSHOT_UPDATE=1 npm run test:js:server` to update them.
 
-The server can be [configured][sentry configuration] to use [Sentry][sentry].
+The server can be configured to use [Sentry][] ([configuration][sentry configuration]) and [Prometheus][] ([configuration][prometheus configuration]).
 
 [package manager]: https://nodejs.org/en/download/package-manager/
 [snapshot tests]: https://glebbahmutov.com/blog/snapshot-testing/
-[sentry configuration]: doc/self-hosting.md#sentry
+[Prometheus]: https://prometheus.io/
+[prometheus configuration]: doc/self-hosting.md#prometheus
 [Sentry]: https://sentry.io/
+[sentry configuration]: doc/self-hosting.md#sentry
 
 Hosting your own server
 -----------------------
@@ -207,7 +186,7 @@ Related projects
 License
 -------
 
-All assets and code are under the [CC0 LICENSE](LICENSE.md) and in the public
+All assets and code are under the [CC0 LICENSE](LICENSE) and in the public
 domain unless specified otherwise.
 
 The assets in `logo/` are trademarks of their respective companies and are

@@ -4,6 +4,27 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 module.exports = class Bitrise extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get route() {
+    return {
+      base: 'bitrise',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Bitrise',
+        previewUrl: 'cde737473028420d/master?token=GCIdEzacE4GW32jLVrZb7A',
+        urlPattern: ':app-id/:branch?token=:app-status-badge-token',
+        exampleUrl: 'cde737473028420d/master?token=GCIdEzacE4GW32jLVrZb7A',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/bitrise\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
@@ -15,13 +36,9 @@ module.exports = class Bitrise extends LegacyService {
           const format = match[3]
           const token = data.token
           const badgeData = getBadgeData('bitrise', data)
-          let apiUrl =
-            'https://app.bitrise.io/app/' +
-            appId +
-            '/status.json?token=' +
-            token
+          let apiUrl = `https://app.bitrise.io/app/${appId}/status.json?token=${token}`
           if (typeof branch !== 'undefined') {
-            apiUrl += '&branch=' + branch
+            apiUrl += `&branch=${branch}`
           }
 
           const statusColorScheme = {

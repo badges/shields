@@ -37,7 +37,7 @@ module.exports = class GemOwner extends BaseJsonService {
     return 'other'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'gem/u',
       format: '(.+)',

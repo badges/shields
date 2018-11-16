@@ -43,7 +43,12 @@ module.exports = class CircleCi extends BaseJsonService {
   }
 
   async handle({ token, vcsType, userRepo, branch }) {
-    const json = await this.fetch({ token, vcsType, userRepo, branch })
+    const json = await this.fetch({
+      token,
+      vcsType: vcsType || 'github',
+      userRepo,
+      branch,
+    })
     try {
       const status =
         'workflows' in json[0]
@@ -66,7 +71,7 @@ module.exports = class CircleCi extends BaseJsonService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'circleci',
       format:

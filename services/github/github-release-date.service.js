@@ -8,9 +8,36 @@ const {
 } = require('../../lib/badge-data')
 const { formatDate } = require('../../lib/text-formatters')
 const { age } = require('../../lib/color-formatters')
+const { documentation } = require('./github-helpers')
 
-// For Github Release & Pre-Release Date release-date-pre (?:\/(all))?
 module.exports = class GithubReleaseDate extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'github',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub Release Date',
+        previewUrl: 'release-date/SubtitleEdit/subtitleedit',
+        keywords: ['GitHub', 'release', 'date'],
+        documentation,
+      },
+      {
+        title: 'GitHub (Pre-)Release Date',
+        previewUrl: 'release-date-pre/Cockatrice/Cockatrice',
+        keywords: ['GitHub', 'release', 'date'],
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/(release-date|release-date-pre)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,

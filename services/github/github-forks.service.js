@@ -6,10 +6,32 @@ const {
   makeLogo: getLogo,
 } = require('../../lib/badge-data')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
 module.exports = class GithubForks extends LegacyService {
+  static get category() {
+    return 'social'
+  }
+
+  static get route() {
+    return {
+      base: 'github/forks',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub forks',
+        previewUrl: 'badges/shields',
+        query: { style: 'social', label: 'Fork' },
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/forks\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -22,8 +44,8 @@ module.exports = class GithubForks extends LegacyService {
         if (badgeData.template === 'social') {
           badgeData.logo = getLogo('github', data)
           badgeData.links = [
-            'https://github.com/' + user + '/' + repo + '/fork',
-            'https://github.com/' + user + '/' + repo + '/network',
+            `https://github.com/${user}/${repo}/fork`,
+            `https://github.com/${user}/${repo}/network`,
           ]
         }
         githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {

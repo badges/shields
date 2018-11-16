@@ -11,23 +11,26 @@ const queryIndex = JSON.stringify({
 
 const nuGetV2VersionJsonWithDash = JSON.stringify({
   d: {
-    results: [{ NormalizedVersion: '1.2-beta' }],
+    results: [
+      { NormalizedVersion: '1.2-beta', Version: 'xxx', DownloadCount: 0 },
+    ],
   },
 })
 const nuGetV2VersionJsonFirstCharZero = JSON.stringify({
   d: {
-    results: [{ NormalizedVersion: '0.35' }],
+    results: [{ NormalizedVersion: '0.35', Version: 'xxx', DownloadCount: 0 }],
   },
 })
 const nuGetV2VersionJsonFirstCharNotZero = JSON.stringify({
   d: {
-    results: [{ NormalizedVersion: '1.2.7' }],
+    results: [{ NormalizedVersion: '1.2.7', Version: 'xxx', DownloadCount: 0 }],
   },
 })
 
 const nuGetV3VersionJsonWithDash = JSON.stringify({
   data: [
     {
+      totalDownloads: 0,
       versions: [{ version: '1.2-beta' }],
     },
   ],
@@ -35,6 +38,7 @@ const nuGetV3VersionJsonWithDash = JSON.stringify({
 const nuGetV3VersionJsonFirstCharZero = JSON.stringify({
   data: [
     {
+      totalDownloads: 0,
       versions: [{ version: '0.35' }],
     },
   ],
@@ -42,6 +46,7 @@ const nuGetV3VersionJsonFirstCharZero = JSON.stringify({
 const nuGetV3VersionJsonFirstCharNotZero = JSON.stringify({
   data: [
     {
+      totalDownloads: 0,
       versions: [{ version: '1.2.7' }],
     },
   ],
