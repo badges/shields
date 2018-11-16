@@ -124,7 +124,7 @@
     "danger": "^6.1.4",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
     "eol": "^0.9.1",
-    "eslint": "^5.0.1",
+    "eslint": "^5.9.0",
     "eslint-config-prettier": "^3.0.1",
     "eslint-config-standard": "^12.0.0",
     "eslint-config-standard-jsx": "^6.0.2",
