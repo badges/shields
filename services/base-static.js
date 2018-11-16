@@ -1,6 +1,6 @@
 'use strict'
 
-const { makeMakeBadgeFn } = require('../lib/make-badge')
+const makeBadge = require('../lib/make-badge')
 const { makeSend } = require('../lib/result-sender')
 const analytics = require('../lib/analytics')
 const BaseService = require('./base')
@@ -13,9 +13,7 @@ module.exports = class BaseStaticService extends BaseService {
     throw new Error(`Handler not implemented for ${this.constructor.name}`)
   }
 
-  static register({ camp, measurer }, serviceConfig) {
-    const makeBadge = makeMakeBadgeFn(measurer)
-
+  static register({ camp }, serviceConfig) {
     camp.route(this._regex, (queryParams, match, end, ask) => {
       analytics.noteRequest(queryParams, match)
 
