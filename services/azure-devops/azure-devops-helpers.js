@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
+const serverSecrets = require('../../lib/server-secrets')
 
 const schema = Joi.object({
   message: Joi.equal(
@@ -43,4 +44,16 @@ function render({ status }) {
   }
 }
 
-module.exports = { fetch, render }
+function buildOptions() {
+  const options = {}
+  if (serverSecrets && serverSecrets.azure_devops_token) {
+    const pat = serverSecrets.azure_devops_token
+    const auth = Buffer.from(`:${pat}`).toString('base64')
+    options.headers = {
+      Authorization: `basic ${auth}`,
+    }
+  }
+  return options
+}
+
+module.exports = { fetch, render, buildOptions }
