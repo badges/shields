@@ -7,10 +7,32 @@ const {
   makeLogo: getLogo,
 } = require('../../lib/badge-data')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
 module.exports = class GithubRepoSize extends LegacyService {
+  static get category() {
+    return 'size'
+  }
+
+  static get route() {
+    return {
+      base: 'github/repo-size',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub repo size in bytes',
+        previewUrl: 'badges/shields',
+        keywords: ['GitHub', 'repo', 'size'],
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/repo-size\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,

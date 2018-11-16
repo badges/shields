@@ -10,12 +10,70 @@ const {
 const { formatDate } = require('../../lib/text-formatters')
 const { age: ageColor } = require('../../lib/color-formatters')
 const {
+  documentation,
   stateColor: githubStateColor,
   commentsColor: githubCommentsColor,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
 module.exports = class GithubIssueDetail extends LegacyService {
+  static get category() {
+    return 'issue-tracking'
+  }
+
+  static get route() {
+    return {
+      base: 'github/issues/detail',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub issue/pull request state',
+        previewUrl: 's/badges/shields/979',
+        keywords: ['GitHub', 'issue', 'pullrequest', 'detail'],
+        documentation,
+      },
+      {
+        title: 'GitHub issue/pull request title',
+        previewUrl: 'title/badges/shields/1290',
+        keywords: ['GitHub', 'issue', 'pullrequest', 'detail'],
+        documentation,
+      },
+      {
+        title: 'GitHub issue/pull request author',
+        previewUrl: 'u/badges/shields/979',
+        keywords: ['GitHub', 'issue', 'pullrequest', 'detail'],
+        documentation,
+      },
+      {
+        title: 'GitHub issue/pull request label',
+        previewUrl: 'label/badges/shields/979',
+        keywords: ['GitHub', 'issue', 'pullrqeuest', 'detail'],
+        documentation,
+      },
+      {
+        title: 'GitHub issue/pull request comments',
+        previewUrl: 'comments/badges/shields/979',
+        keywords: ['GitHub', 'issue', 'pullrequest', 'detail'],
+        documentation,
+      },
+      {
+        title: 'GitHub issue/pull request age',
+        previewUrl: 'age/badges/shields/979',
+        keywords: ['GitHub', 'issue', 'pullrequest', 'detail'],
+        documentation,
+      },
+      {
+        title: 'GitHub issue/pull request last update',
+        previewUrl: 'last-update/badges/shields/979',
+        keywords: ['GitHub', 'issue', 'pullrequest', 'detail'],
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/(?:issues|pulls)\/detail\/(s|title|u|label|comments|age|last-update)\/([^/]+)\/([^/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
