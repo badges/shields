@@ -44,16 +44,15 @@ function render({ status }) {
   }
 }
 
-function buildOptions() {
-  const options = {}
+function getHeaders() {
+  const headers = {}
   if (serverSecrets && serverSecrets.azure_devops_token) {
     const pat = serverSecrets.azure_devops_token
     const auth = Buffer.from(`:${pat}`).toString('base64')
-    options.headers = {
-      Authorization: `basic ${auth}`,
-    }
+    headers.Authorization = `basic ${auth}`
   }
-  return options
+
+  return headers
 }
 
-module.exports = { fetch, render, buildOptions }
+module.exports = { fetch, render, getHeaders }

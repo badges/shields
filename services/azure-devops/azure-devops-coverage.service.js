@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
 const { NotFound } = require('../errors')
-const { buildOptions } = require('./azure-devops-helpers')
+const { getHeaders } = require('./azure-devops-helpers')
 
 const documentation = `
 <p>
@@ -100,27 +100,36 @@ module.exports = class AzureDevOpsCoverage extends BaseJsonService {
 
   static get route() {
     return {
-      base: '',
-      format: '(?:azure-devops|vso)/coverage/([^/]+)/([^/]+)/([^/]+)(?:/(.+))?',
+      base: 'azure-devops/coverage',
+      format: '([^/]+)/([^/]+)/([^/]+)(?:/(.+))?',
       capture: ['organization', 'project', 'definitionId', 'branch'],
     }
   }
 
   async fetch({ url, options, schema }) {
     return this._requestJson({
+      schema,
       url,
       options,
-      schema,
       errorMessages: {
         404: 'build pipeline or coverage not found',
       },
     })
   }
 
-  async getLatestBuildId(organization, project, definitionId, branch, options) {
-    let url = `https://dev.azure.com/${organization}/${project}/_apis/build/builds?definitions=${definitionId}&$top=1&api-version=5.0-preview.4`
+  async getLatestBuildId(organization, project, definitionId, branch, headers) {
+    // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/azure/devops/build/builds/list?view=azure-devops-rest-5.0
+    const url = `https://dev.azure.com/${organization}/${project}/_apis/build/builds`
+    const options = {
+      qs: {
+        definitions: definitionId,
+        $top: 1,
+        'api-version': '5.0-preview.4',
+      },
+      headers,
+    }
     if (branch) {
-      url += `&branch=${branch}`
+      options.qs.branch = branch
     }
     const json = await this.fetch({
       url,
@@ -136,16 +145,23 @@ module.exports = class AzureDevOpsCoverage extends BaseJsonService {
   }
 
   async handle({ organization, project, definitionId, branch }) {
-    const options = buildOptions()
+    const headers = getHeaders()
     const buildId = await this.getLatestBuildId(
       organization,
       project,
       definitionId,
       branch,
-      options
+      headers
     )
-    const url = `https://dev.azure.com/${organization}/${project}/_apis/test/codecoverage?buildId=${buildId}&api-version=5.0-preview.1`
-
+    // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/azure/devops/test/code%20coverage/get%20build%20code%20coverage?view=azure-devops-rest-5.0
+    const url = `https://dev.azure.com/${organization}/${project}/_apis/test/codecoverage`
+    const options = {
+      qs: {
+        buildId,
+        'api-version': '5.0-preview.1',
+      },
+      headers,
+    }
     const json = await this.fetch({
       url,
       options,
