@@ -1,6 +1,6 @@
 'use strict'
 
-const makeBadge = require('../lib/make-badge')
+const makeBadge = require('../gh-badges/lib/make-badge')
 const { makeSend } = require('../lib/result-sender')
 const analytics = require('../lib/analytics')
 const BaseService = require('./base')
