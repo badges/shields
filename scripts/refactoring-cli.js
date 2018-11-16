@@ -13,7 +13,7 @@ const legacyServices = serviceClasses
   .map(cls => (typeof cls.registerLegacyRouteHandler === 'function' ? 1 : 0))
   .reduce((a, b) => a + b)
 const newServices = serviceClasses.length - legacyServices
-const percentDone = (newServices / serviceClasses.length * 100).toFixed(2)
+const percentDone = ((newServices / serviceClasses.length) * 100).toFixed(2)
 const color = floorCount(percentDone, 10, 50, 100)
 
 console.log(`Found ${serviceClasses.length} services:`)
