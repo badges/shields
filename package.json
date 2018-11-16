@@ -121,7 +121,7 @@
     "child-process-promise": "^2.2.1",
     "classnames": "^2.2.5",
     "concurrently": "^4.0.1",
-    "danger": "^6.0.5",
+    "danger": "^6.1.4",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
     "eol": "^0.9.1",
     "eslint": "^5.0.1",
