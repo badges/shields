@@ -8,10 +8,63 @@ const {
   makeLabel: getLabel,
 } = require('../../lib/badge-data')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
-module.exports = class GithubLanguages extends LegacyService {
+class GithubCodeSize extends LegacyService {
+  static get category() {
+    return 'size'
+  }
+
+  static get route() {
+    return {
+      base: 'github/languages/code-size',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub code size in bytes',
+        previewUrl: 'badges/shields',
+        keywords: ['GitHub', 'byte', 'code', 'size'],
+        documentation,
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class GithubLanguages extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'github/languages',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub top language',
+        previewUrl: 'top/badges/shields',
+        keywords: ['GitHub', 'top', 'language'],
+        documentation,
+      },
+      {
+        title: 'GitHub language count',
+        previewUrl: 'count/badges/shields',
+        keywords: ['GitHub', 'language', 'count'],
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/languages\/(top|count|code-size)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -83,3 +136,5 @@ module.exports = class GithubLanguages extends LegacyService {
     )
   }
 }
+
+module.exports = { GithubCodeSize, GithubLanguages }

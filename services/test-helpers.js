@@ -1,5 +1,5 @@
 'use strict'
-const colorscheme = require('../lib/colorscheme.json')
+const colorscheme = require('../gh-badges/lib/colorscheme.json')
 const mapValues = require('lodash.mapvalues')
 
 module.exports = {

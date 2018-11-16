@@ -4,9 +4,7 @@ const { expect } = require('chai')
 const isPng = require('is-png')
 const sinon = require('sinon')
 const svg2img = require('./svg-to-img')
-const testHelpers = require('./make-badge-test-helpers')
-
-const makeBadge = testHelpers.makeBadge()
+const makeBadge = require('./make-badge')
 
 describe('The rasterizer', function() {
   let cacheGet
