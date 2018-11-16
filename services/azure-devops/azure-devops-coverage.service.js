@@ -79,19 +79,17 @@ module.exports = class AzureDevOpsCoverage extends BaseJsonService {
     return [
       {
         title: 'Azure DevOps coverage',
-        urlPattern:
-          'azure-devops/coverage/:organization/:project/:definitionId',
+        urlPattern: ':organization/:project/:definitionId',
         staticExample: this.render({ coverage: 100 }),
-        exampleUrl: 'azure-devops/coverage/swellaby/opensource/25',
+        exampleUrl: 'swellaby/opensource/25',
         keywords: ['vso', 'vsts', 'azure-devops'],
         documentation,
       },
       {
         title: 'Azure DevOps coverage (branch)',
-        urlPattern:
-          'azure-devops/coverage/:organization/:project/:definitionId/:branch',
+        urlPattern: ':organization/:project/:definitionId/:branch',
         staticExample: this.render({ coverage: 100 }),
-        exampleUrl: 'azure-devops/coverage/swellaby/opensource/25/master',
+        exampleUrl: 'swellaby/opensource/25/master',
         keywords: ['vso', 'vsts', 'azure-devops'],
         documentation,
       },
