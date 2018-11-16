@@ -15,15 +15,6 @@ t.create('Coverage')
     })
   )
 
-t.create('Coverage unknown')
-  .get('/e27821fb6289410b8f58338c7e0bc686.json')
-  .expectJSON({
-    name: 'coverage',
-    value: 'project or branch not found',
-  })
-
-// As sending an invalid branch produces the same response, it's not clear
-// whether the branch parameter does anything.
 t.create('Coverage on branch')
   .get('/59d607d0e311408885e418004068ea58/master.json')
   .expectJSONTypes(
@@ -32,3 +23,17 @@ t.create('Coverage on branch')
       value: isIntegerPercentage,
     })
   )
+
+t.create('Coverage not enabled')
+  .get('/e27821fb6289410b8f58338c7e0bc686.json')
+  .expectJSON({
+    name: 'coverage',
+    value: 'not enabled for this project',
+  })
+
+t.create('Coverage (project not found)')
+  .get('/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.json')
+  .expectJSON({
+    name: 'coverage',
+    value: 'project not found',
+  })

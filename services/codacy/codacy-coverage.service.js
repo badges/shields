@@ -70,12 +70,20 @@ module.exports = class CodacyCoverage extends BaseSvgScrapingService {
       )}`,
       options: { qs: { branch } },
       valueMatcher: /text-anchor="middle">([^<>]+)<\/text>/,
+      errorMessages: {
+        404: 'project not found',
+      },
     })
+
+    // When sending an invalid branch, Codacy ignores the branch, failing
+    // silently, so we can't provide an error message for this case.
+
     if (coverageString === '!') {
       throw new NotFound({
-        prettyMessage: 'project or branch not found',
+        prettyMessage: 'not enabled for this project',
       })
     }
+
     const { percentage } = this.constructor.transform({ coverageString })
     return this.constructor.render({ percentage })
   }
