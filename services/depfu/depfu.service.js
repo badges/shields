@@ -34,7 +34,7 @@ module.exports = class Depfu extends BaseJsonService {
     return 'dependencies'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'depfu',
       format: '(.+)',

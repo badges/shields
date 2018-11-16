@@ -8,8 +8,8 @@ module.exports = class PypiFormat extends PypiBase {
     return 'other'
   }
 
-  static get url() {
-    return this.buildUrl('pypi/format')
+  static get route() {
+    return this.buildRoute('pypi/format')
   }
 
   static get defaultBadgeData() {

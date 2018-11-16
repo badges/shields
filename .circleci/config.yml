@@ -4,7 +4,6 @@ jobs:
   npm-install:
     docker:
       - image: shieldsio/shields-ci-node-8:0.0.3
-    working_directory: ~/repo
     steps:
       - checkout
 
@@ -27,7 +26,6 @@ jobs:
     docker:
       - image: shieldsio/shields-ci-node-8:0.0.3
       - image: redis
-    working_directory: ~/repo
     steps:
       - checkout
 
@@ -54,6 +52,11 @@ jobs:
           name: Integration tests
           when: always
           command: npm run test:integration
+
+      - run:
+          name: Tests for gh-badges package
+          when: always
+          command: npm run test:js:package
 
       - run:
           name: 'Prettier check (quick fix: `npm run prettier`)'
@@ -64,7 +67,6 @@ jobs:
     docker:
       - image: shieldsio/shields-ci-node-latest:0.0.3
       - image: redis
-    working_directory: ~/repo
     steps:
       - checkout
 
@@ -93,6 +95,11 @@ jobs:
           command: npm run test:integration
 
       - run:
+          name: Tests for gh-badges package
+          when: always
+          command: npm run test:js:package
+
+      - run:
           name: 'Prettier check (quick fix: `npm run prettier`)'
           when: always
           command: npm run prettier-check
@@ -100,7 +107,6 @@ jobs:
   danger:
     docker:
       - image: shieldsio/shields-ci-node-8:0.0.3
-    working_directory: ~/repo
     steps:
       - checkout
 
@@ -121,7 +127,6 @@ jobs:
   frontend:
     docker:
       - image: shieldsio/shields-ci-node-8:0.0.3
-    working_directory: ~/repo
     steps:
       - checkout
 
@@ -147,7 +152,6 @@ jobs:
   services-pr:
     docker:
       - image: shieldsio/shields-ci-node-8:0.0.3
-    working_directory: ~/repo
     steps:
       - checkout
 
@@ -187,7 +191,6 @@ jobs:
   services-pr@node-latest:
     docker:
       - image: shieldsio/shields-ci-node-latest:0.0.3
-    working_directory: ~/repo
     steps:
       - checkout
 
@@ -227,7 +230,6 @@ jobs:
   services-daily:
     docker:
       - image: shieldsio/shields-ci-node-8:0.0.3
-    working_directory: ~/repo
     steps:
       - checkout
 

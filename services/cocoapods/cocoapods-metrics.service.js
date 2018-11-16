@@ -12,7 +12,7 @@ module.exports = class CocoapodsMetrics extends LegacyService {
     return 'other'
   }
 
-  static get url() {
+  static get route() {
     return {
       title: 'Cocoapods doc percentage',
       base: 'cocoapods/metrics/doc-percent',

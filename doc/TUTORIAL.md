@@ -99,7 +99,7 @@ const BaseService = require('../base')               // (2)
 
 module.exports = class Example extends BaseService { // (3)
 
-  static get url() {                                 // (4)
+  static get route() {                                 // (4)
     return {
       base: 'example',
       pattern: ':text',
@@ -121,14 +121,14 @@ Description of the code:
 1. We declare strict mode at the start of each file. This prevents certain classes of error such as undeclared variables.
 2. Our service badge class will extend `BaseService` so we need to require it. We declare variables with `const` and `let` in preference to `var`.
 3. Our module must export a class which extends `BaseService`
-4. `url()` declares a route. We declare getters as `static`.
+4. `route()` declares a route. We declare getters as `static`.
     * `base` defines the static part of the route.
     * `pattern` defines the variable part of the route. It can include any
       number of named parameters. These are converted into
       regular expressions by [`path-to-regexp`][path-to-regexp].
-5. All badges must implement the `async handle()` function. This is called to invoke our code. Note that the signature of `handle()` will match the capturing group defined in `url()` Because we're capturing a single variable called `text` our function signature is `async handle({ text })`. Although in this simple case, we aren't performing any asynchronous calls, `handle()` would usually spend some time blocked on I/O. We use the `async`/`await` pattern for asynchronous code. Our `handle()` function returns an object with 3 properties:
+5. All badges must implement the `async handle()` function. This is called to invoke our code. Note that the signature of `handle()` will match the capturing group defined in `route()` Because we're capturing a single variable called `text` our function signature is `async handle({ text })`. Although in this simple case, we aren't performing any asynchronous calls, `handle()` would usually spend some time blocked on I/O. We use the `async`/`await` pattern for asynchronous code. Our `handle()` function returns an object with 3 properties:
     * `label`: the text on the left side of the badge
-    * `message`: the text on the right side of the badge - here we are passing through the parameter we captured in the URL regex
+    * `message`: the text on the right side of the badge - here we are passing through the parameter we captured in the route regex
     * `color`: the background color of the right side of the badge
 
 The process of turning this object into an image is handled automatically by the `BaseService` class.
@@ -157,13 +157,13 @@ const BaseJsonService = require('../base-json')                 // (2)
 const { renderVersionBadge } = require('../../lib/version')     // (3)
 
 const Joi = require('joi')                                      // (4)
-const versionSchema = Joi.object({                              // (4)
+const schema = Joi.object({                                     // (4)
   version: Joi.string().required(),                             // (4)
 }).required()                                                   // (4)
 
 module.exports = class GemVersion extends BaseJsonService {     // (5)
 
-  static get url() {                                            // (6)
+  static get route() {                                          // (6)
     return {
       base: 'gem/v',
       pattern: ':gem',
@@ -174,16 +174,15 @@ module.exports = class GemVersion extends BaseJsonService {     // (5)
     return { label: 'gem' }
   }
 
-  async handle({ gem }) {                                      // (8)
+  async handle({ gem }) {                                       // (8)
     const { version } = await this.fetch({ gem })
     return this.constructor.render({ version })
   }
 
-  async fetch({ gem }) {                                       // (9)
-    const url = `https://rubygems.org/api/v1/gems/${gem}.json`
+  async fetch({ gem }) {                                        // (9)
     return this._requestJson({
-      url,
-      schema: versionSchema,
+      schema,
+      url: `https://rubygems.org/api/v1/gems/${gem}.json`,
     })
   }
 
@@ -202,11 +201,11 @@ Description of the code:
     * [licenses.js](https://github.com/badges/shields/blob/master/lib/licenses.js)
     * [text-formatters.js](https://github.com/badges/shields/blob/master/lib/text-formatters.js)
     * [version.js](https://github.com/badges/shields/blob/master/lib/version.js)
-4. We perform input validation by defining a schema which we expect the JSON we receive to conform to. This is done using [Joi](https://github.com/hapijs/joi). Defining a schema means we can ensure the JSON we receive meets our expectations and throw an error if we receive unexpected input without having to explicitly code validation checks. The schema also acts as a filter on the JSON object. Any properties we're going to reference need to be validated, otherwise they will be filtered out. In this case our schema declares that we expect to reveive an object which must have a property called 'status', which is a string.
+4. We perform input validation by defining a schema which we expect the JSON we receive to conform to. This is done using [Joi](https://github.com/hapijs/joi). Defining a schema means we can ensure the JSON we receive meets our expectations and throw an error if we receive unexpected input without having to explicitly code validation checks. The schema also acts as a filter on the JSON object. Any properties we're going to reference need to be validated, otherwise they will be filtered out. In this case our schema declares that we expect to recieve an object which must have a property called 'status', which is a string.
 5. Our module exports a class which extends `BaseJsonService`
 6. As with our previous badge, we need to declare a route. This time we will capture a variable called `gem`.
 7. We can use `defaultBadgeData()` to set a default `color`, `logo` and/or `label`. If `handle()` doesn't return any of these keys, we'll use the default. Instead of explicitly setting the label text when we return a badge object, we'll use `defaultBadgeData()` here to define it declaratively.
-8. Our bage must implement the `async handle()` function. Because our URL pattern captures a variable called `gem`, our function signature is `async handle({ gem })`. We usually seperate the process of generating a badge into 2 stages or concerns: fetch and render. The `fetch()` function is responsible for calling an API endpoint to get data. The `render()` function formats the data for display. In a case where there is a lot of calculation or intermediate steps, this pattern may be thought of as fetch, transform, render and it might be necessary to define some helper functions to assist with the 'transform' step.
+8. Our bage must implement the `async handle()` function. Because our URL pattern captures a variable called `gem`, our function signature is `async handle({ gem })`. We usually separate the process of generating a badge into 2 stages or concerns: fetch and render. The `fetch()` function is responsible for calling an API endpoint to get data. The `render()` function formats the data for display. In a case where there is a lot of calculation or intermediate steps, this pattern may be thought of as fetch, transform, render and it might be necessary to define some helper functions to assist with the 'transform' step.
 9. The `async fetch()` method is responsible for calling an API endpoint to get data. Extending `BaseJsonService` gives us the helper function `_requestJson()`. Note here that we pass the schema we defined in step 4 as an argument. `_requestJson()` will deal with validating the response against the schema and throwing an error if necessary.
     * `_requestJson()` automatically adds an Accept header, checks the status code, parses the response as JSON, and returns the parsed response.
     * `_requestJson()` uses [request](https://github.com/request/request) to perform the HTTP request. Options can be passed to request, including method, query string, and headers. If headers are provided they will override the ones automatically set by `_requestJson()`. There is no need to specify json, as the JSON parsing is handled by `_requestJson()`. See the `request` docs for [supported options](https://github.com/request/request#requestoptions-callback).
@@ -271,7 +270,7 @@ module.exports = class GemVersion extends BaseJsonService {
 2. The examples property defines an array of examples. In this case the array will contain a single object, but in some cases it is helpful to provide multiple usage examples.
 3. Our example object should contain the following properties:
     * `title`: Descriptive text that will be shown next to the badge
-    * `urlPattern`: Describe the variable part of the URL using `:param` syntax.
+    * `urlPattern`: Describe the variable part of the route using `:param` syntax.
     * `staticExample`: On the index page we want to show an example badge, but for performance reasons we want that example to be generated without making an API call. `staticExample` should be populated by calling our `render()` method with some valid data.
     * `exampleUrl`: Provide a valid example of params we can call the badge with. In this case we need a valid ruby gem, so we've picked [formatador](https://rubygems.org/gems/formatador)
     * `keywords`: If we want to provide additional keywords other than the title, we can add them here. This helps users to search for relevant badges.

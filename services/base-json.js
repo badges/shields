@@ -22,6 +22,7 @@ class BaseJsonService extends BaseService {
     try {
       json = JSON.parse(buffer)
     } catch (err) {
+      logTrace(emojic.dart, 'Response JSON (unparseable)', json)
       throw new InvalidResponse({
         prettyMessage: 'unparseable json response',
         underlyingError: err,

@@ -8,7 +8,7 @@ const statusSchema = Joi.object({
 }).required()
 
 module.exports = class RequiresIo extends BaseJsonService {
-  static get url() {
+  static get route() {
     return {
       base: 'requires',
       format: '([^/]+)/([^/]+/[^/]+)(?:/(.+))?',

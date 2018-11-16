@@ -44,7 +44,7 @@ class DummyService extends BaseService {
       },
     ]
   }
-  static get url() {
+  static get route() {
     return {
       base: 'foo',
       pattern: ':namedParamA',
@@ -98,7 +98,7 @@ describe('BaseService', function() {
 
     context('A `format` with a named param is declared', function() {
       class ServiceWithFormat extends BaseService {
-        static get url() {
+        static get route() {
           return {
             base: 'foo',
             format: '([^/]+)',
@@ -147,7 +147,7 @@ describe('BaseService', function() {
 
     context('No named params are declared', function() {
       class ServiceWithZeroNamedParams extends BaseService {
-        static get url() {
+        static get route() {
           return {
             base: 'foo',
             format: '(?:[^/]+)',
@@ -413,6 +413,25 @@ describe('BaseService', function() {
         colorA: undefined,
       })
     })
+  })
+
+  describe('_makeStaticExampleUrl', function() {
+    test(
+      serviceData => DummyService._makeStaticExampleUrl(serviceData),
+      () => {
+        given({
+          message: 'hello',
+          color: 'dcdc00',
+        }).expect('/badge/cat-hello-%23dcdc00.svg')
+        given({
+          message: 'hello',
+          color: 'red',
+        }).expect('/badge/cat-hello-red.svg')
+        given({
+          message: 'hello',
+        }).expect('/badge/cat-hello-lightgrey.svg')
+      }
+    )
   })
 
   describe('prepareExamples', function() {

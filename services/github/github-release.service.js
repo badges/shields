@@ -7,10 +7,36 @@ const {
 } = require('../../lib/badge-data')
 const { addv: versionText } = require('../../lib/text-formatters')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
 module.exports = class GithubRelease extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'github',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub release',
+        previewUrl: 'release/qubyte/rubidium',
+        documentation,
+      },
+      {
+        title: 'GitHub (pre-)release',
+        previewUrl: 'release-pre/qubyte/rubidium',
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/release(-pre)?\/([^/]+\/[^/]+)(?:\/(all))?\.(svg|png|gif|jpg|json)$/,

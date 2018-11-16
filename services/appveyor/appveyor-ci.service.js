@@ -3,8 +3,8 @@
 const AppVeyorBase = require('./appveyor-base')
 
 module.exports = class AppVeyorCi extends AppVeyorBase {
-  static get url() {
-    return this.buildUrl('appveyor/ci')
+  static get route() {
+    return this.buildRoute('appveyor/ci')
   }
 
   static get examples() {

@@ -8,6 +8,7 @@ const RedisTokenPersistence = require('../../lib/redis-token-persistence')
 const FsTokenPersistence = require('../../lib/fs-token-persistence')
 const GithubApiProvider = require('./github-api-provider')
 const { setRoutes: setAdminRoutes } = require('./auth/admin')
+const { setRoutes: setAcceptorRoutes } = require('./auth/acceptor')
 
 // Convenience class with all the stuff related to the Github API and its
 // authorization tokens, to simplify server initialization.
@@ -53,13 +54,16 @@ class GithubConstellation {
       log.error(e)
     }
 
+    // Register for this event after `initialize()` finishes, so we don't
+    // catch `token-added` events for the initial tokens, which would be
+    // inefficient, though it wouldn't break anything.
     githubAuth.emitter.on('token-added', this.persistence.noteTokenAdded)
     githubAuth.emitter.on('token-removed', this.persistence.noteTokenRemoved)
 
     setAdminRoutes(server)
 
-    if (serverSecrets && serverSecrets.gh_client_id) {
-      githubAuth.setRoutes(server)
+    if (serverSecrets.gh_client_id && serverSecrets.gh_client_secret) {
+      setAcceptorRoutes(server)
     }
   }
 

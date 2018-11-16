@@ -8,11 +8,36 @@ const {
 const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
-// For GitHub package and manifest version.
 module.exports = class GithubManifestVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'github',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub package version',
+        previewUrl: 'package-json/v/badges/shields',
+        documentation,
+      },
+      {
+        title: 'GitHub manifest version',
+        previewUrl: 'manifest-json/v/RedSparr0w/IndieGala-Helper',
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/github\/(package|manifest)-json\/([^/]+)\/([^/]+)\/([^/]+)\/?([^/]+)?\.(svg|png|gif|jpg|json)$/,

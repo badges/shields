@@ -3,10 +3,33 @@
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
 module.exports = class GithubCommitStatus extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'github/commit-status',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub commit merge status',
+        previewUrl:
+          'badges/shields/master/5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c',
+        keywords: ['GitHub', 'commit', 'branch', 'merge'],
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/commit-status\/([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,

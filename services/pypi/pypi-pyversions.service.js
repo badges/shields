@@ -8,8 +8,8 @@ module.exports = class PypiPythonVersions extends PypiBase {
     return 'platform-support'
   }
 
-  static get url() {
-    return this.buildUrl('pypi/pyversions')
+  static get route() {
+    return this.buildRoute('pypi/pyversions')
   }
 
   static get defaultBadgeData() {
@@ -28,8 +28,8 @@ module.exports = class PypiPythonVersions extends PypiBase {
 
   static render({ versions }) {
     const versionSet = new Set(versions)
-      // We only show v2 if eg. v2.4 does not appear.
-      // See https://github.com/badges/shields/pull/489 for more.
+    // We only show v2 if eg. v2.4 does not appear.
+    // See https://github.com/badges/shields/pull/489 for more.
     ;['2', '3'].forEach(majorVersion => {
       if (Array.from(versions).some(v => v.startsWith(`${majorVersion}.`))) {
         versionSet.delete(majorVersion)
