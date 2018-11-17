@@ -4,6 +4,26 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 module.exports = class PackagistLicense extends LegacyService {
+  static get category() {
+    return 'license'
+  }
+
+  static get route() {
+    return {
+      base: 'packagist/l',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Packagist',
+        previewUrl: 'doctrine/orm',
+        keywords: ['PHP'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/packagist\/l\/(.*)\.(svg|png|gif|jpg|json)$/,
