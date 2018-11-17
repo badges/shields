@@ -64,13 +64,14 @@ class ServiceTester {
       })
       // eslint-disable-next-line mocha/prefer-arrow-callback
       .finally(function() {
+        let responseBody
+        try {
+          responseBody = JSON.parse(this._response.body)
+        } catch (e) {
+          responseBody = this._response.body
+        }
         // `this` is the IcedFrisby instance.
-        trace.logTrace(
-          'outbound',
-          emojic.shield,
-          'Response',
-          JSON.parse(this._response.body)
-        )
+        trace.logTrace('outbound', emojic.shield, 'Response', responseBody)
       })
 
     this.specs.push(spec)

@@ -19,6 +19,7 @@ const GithubConstellation = require('./services/github/github-constellation')
 const PrometheusMetrics = require('./lib/sys/prometheus-metrics')
 const sysMonitor = require('./lib/sys/monitor')
 const log = require('./lib/log')
+const { staticBadgeUrl } = require('./lib/make-badge-url')
 const makeBadge = require('./gh-badges/lib/make-badge')
 const suggest = require('./lib/suggest')
 const {
@@ -243,32 +244,26 @@ camp.route(/^\/flip\.svg$/, (data, match, end, ask) => {
   makeSend('svg', ask.res, end)(svg)
 })
 
-// Any badge, old version.
-camp.route(/^\/([^/]+)\/(.+).png$/, (data, match, end, ask) => {
-  const subject = match[1]
-  const status = match[2]
-  const color = data.color
+// Any badge, old version. This route must be registered last.
+camp.route(/^\/([^/]+)\/(.+).png$/, (queryParams, match, end, ask) => {
+  const [, label, message] = match
+  const { color } = queryParams
 
-  // Cache management - the badge is constant.
-  const cacheDuration = (3600 * 24 * 1) | 0 // 1 day.
+  const redirectUrl = staticBadgeUrl({
+    label,
+    message,
+    color,
+    format: 'png',
+  })
+
+  ask.res.statusCode = 301
+  ask.res.setHeader('Location', redirectUrl)
+
+  // The redirect is permanent.
+  const cacheDuration = (365 * 24 * 3600) | 0 // 1 year
   ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
-  if (+new Date(ask.req.headers['if-modified-since']) >= +serverStartTime) {
-    ask.res.statusCode = 304
-    ask.res.end() // not modified.
-    return
-  }
-  ask.res.setHeader('Last-Modified', serverStartTime.toGMTString())
 
-  // Badge creation.
-  try {
-    const badgeData = { text: [subject, status] }
-    badgeData.colorscheme = color
-    const svg = makeBadge(badgeData)
-    makeSend('png', ask.res, end)(svg)
-  } catch (e) {
-    const svg = makeBadge({ text: ['error', 'bad badge'], colorscheme: 'red' })
-    makeSend('png', ask.res, end)(svg)
-  }
+  ask.res.end()
 })
 
 if (config.redirectUri) {
