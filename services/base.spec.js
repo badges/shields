@@ -72,6 +72,9 @@ describe('BaseService', function() {
         forCases([
           given('/foo/bar.bar.bar.zip'),
           given('/foo/bar/bar.svg'),
+          // This is a valid example with the wrong extension separator, to
+          // test that we only accept a `.`.
+          given('/foo/bar.bar.bar_svg'),
         ]).expect(null)
       })
 
@@ -121,6 +124,9 @@ describe('BaseService', function() {
         forCases([
           given('/foo/bar.bar.bar.zip'),
           given('/foo/bar/bar.svg'),
+          // This is a valid example with the wrong extension separator, to
+          // test that we only accept a `.`.
+          given('/foo/bar.bar.bar_svg'),
         ]).expect(null)
       })
 
