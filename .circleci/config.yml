@@ -149,7 +149,7 @@ jobs:
           when: always
           command: npm run build
 
-  services-pr:
+  services:
     docker:
       - image: circleci/node:8
     steps:
@@ -188,7 +188,7 @@ jobs:
               echo 'This is not a pull request. Skipping.'
             fi
 
-  services-pr@node-latest:
+  services@node-latest:
     docker:
       - image: circleci/node:latest
     steps:
@@ -245,10 +245,10 @@ workflows:
       - frontend:
           requires:
             - npm-install
-      - services-pr:
+      - services:
           requires:
             - npm-install
-      - services-pr@node-latest:
+      - services@node-latest:
           requires:
             - npm-install
       - danger:
