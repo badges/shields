@@ -14,7 +14,7 @@ module.exports = class BaseStaticService extends BaseService {
   }
 
   static register({ camp }, serviceConfig) {
-    camp.route(this._regex, (queryParams, match, end, ask) => {
+    camp.route(this._regex, async (queryParams, match, end, ask) => {
       analytics.noteRequest(queryParams, match)
 
       if (+new Date(ask.req.headers['if-modified-since']) >= +serverStartTime) {
@@ -24,18 +24,15 @@ module.exports = class BaseStaticService extends BaseService {
         return
       }
 
-      const serviceInstance = new this({}, serviceConfig)
       const namedParams = this._namedParamsForMatch(match)
-      let serviceData
-      try {
-        // Note: no `await`.
-        serviceData = serviceInstance.handle(namedParams, queryParams)
-      } catch (error) {
-        serviceData = serviceInstance._handleError(error)
-      }
+      const serviceData = await this.invoke(
+        {},
+        serviceConfig,
+        namedParams,
+        queryParams
+      )
 
       const badgeData = this._makeBadgeData(queryParams, serviceData)
-
       // The final capture group is the extension.
       const format = match.slice(-1)[0]
       badgeData.format = format

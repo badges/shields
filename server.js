@@ -227,22 +227,6 @@ camp.route(
   })
 )
 
-// Production cache debugging.
-let bitFlip = false
-camp.route(/^\/flip\.svg$/, (data, match, end, ask) => {
-  const cacheSecs = 60
-  ask.res.setHeader('Cache-Control', `max-age=${cacheSecs}`)
-  const reqTime = new Date()
-  const date = new Date(+reqTime + cacheSecs * 1000).toGMTString()
-  ask.res.setHeader('Expires', date)
-  const badgeData = getBadgeData('flip', data)
-  bitFlip = !bitFlip
-  badgeData.text[1] = bitFlip ? 'on' : 'off'
-  badgeData.colorscheme = bitFlip ? 'brightgreen' : 'red'
-  const svg = makeBadge(badgeData)
-  makeSend('svg', ask.res, end)(svg)
-})
-
 // Any badge, old version.
 camp.route(/^\/([^/]+)\/(.+).png$/, (data, match, end, ask) => {
   const subject = match[1]

@@ -191,12 +191,14 @@ describe('BaseService', function() {
   })
 
   it('Invokes the handler as expected', async function() {
-    const serviceInstance = new DummyService({}, defaultConfig)
-    const serviceData = await serviceInstance.invokeHandler(
-      { namedParamA: 'bar.bar.bar' },
-      { queryParamA: '!' }
-    )
-    expect(serviceData).to.deep.equal({
+    expect(
+      await DummyService.invoke(
+        {},
+        defaultConfig,
+        { namedParamA: 'bar.bar.bar' },
+        { queryParamA: '!' }
+      )
+    ).to.deep.equal({
       message: 'Hello namedParamA: bar.bar.bar with queryParamA: !',
     })
   })
@@ -213,11 +215,10 @@ describe('BaseService', function() {
       sandbox.stub(trace, 'logTrace')
     })
     it('Invokes the logger as expected', async function() {
-      const serviceInstance = new DummyService({}, defaultConfig)
-      await serviceInstance.invokeHandler(
-        {
-          namedParamA: 'bar.bar.bar',
-        },
+      await DummyService.invoke(
+        {},
+        defaultConfig,
+        { namedParamA: 'bar.bar.bar' },
         { queryParamA: '!' }
       )
       expect(trace.logTrace).to.be.calledWithMatch(
@@ -230,9 +231,7 @@ describe('BaseService', function() {
         'inbound',
         sinon.match.string,
         'Named params',
-        {
-          namedParamA: 'bar.bar.bar',
-        }
+        { namedParamA: 'bar.bar.bar' }
       )
       expect(trace.logTrace).to.be.calledWith(
         'inbound',
@@ -245,17 +244,17 @@ describe('BaseService', function() {
 
   describe('Error handling', function() {
     it('Handles internal errors', async function() {
-      const serviceInstance = new DummyService(
-        {},
-        { handleInternalErrors: true }
-      )
-      serviceInstance.handle = () => {
-        throw Error("I've made a huge mistake")
+      class ThrowingService extends DummyService {
+        async handle() {
+          throw Error("I've made a huge mistake")
+        }
       }
       expect(
-        await serviceInstance.invokeHandler({
-          namedParamA: 'bar.bar.bar',
-        })
+        await ThrowingService.invoke(
+          {},
+          { handleInternalErrors: true },
+          { namedParamA: 'bar.bar.bar' }
+        )
       ).to.deep.equal({
         color: 'lightgray',
         label: 'shields',
@@ -264,19 +263,14 @@ describe('BaseService', function() {
     })
 
     describe('Handles known subtypes of ShieldsInternalError', function() {
-      let serviceInstance
-      beforeEach(function() {
-        serviceInstance = new DummyService({}, {})
-      })
-
       it('handles NotFound errors', async function() {
-        serviceInstance.handle = () => {
-          throw new NotFound()
+        class ThrowingService extends DummyService {
+          async handle() {
+            throw new NotFound()
+          }
         }
         expect(
-          await serviceInstance.invokeHandler({
-            namedParamA: 'bar.bar.bar',
-          })
+          await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
           color: 'red',
           message: 'not found',
@@ -284,13 +278,13 @@ describe('BaseService', function() {
       })
 
       it('handles Inaccessible errors', async function() {
-        serviceInstance.handle = () => {
-          throw new Inaccessible()
+        class ThrowingService extends DummyService {
+          async handle() {
+            throw new Inaccessible()
+          }
         }
         expect(
-          await serviceInstance.invokeHandler({
-            namedParamA: 'bar.bar.bar',
-          })
+          await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
           color: 'lightgray',
           message: 'inaccessible',
@@ -298,13 +292,13 @@ describe('BaseService', function() {
       })
 
       it('handles InvalidResponse errors', async function() {
-        serviceInstance.handle = () => {
-          throw new InvalidResponse()
+        class ThrowingService extends DummyService {
+          async handle() {
+            throw new InvalidResponse()
+          }
         }
         expect(
-          await serviceInstance.invokeHandler({
-            namedParamA: 'bar.bar.bar',
-          })
+          await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
           color: 'lightgray',
           message: 'invalid',
@@ -312,13 +306,13 @@ describe('BaseService', function() {
       })
 
       it('handles Deprecated', async function() {
-        serviceInstance.handle = () => {
-          throw new Deprecated()
+        class ThrowingService extends DummyService {
+          async handle() {
+            throw new Deprecated()
+          }
         }
         expect(
-          await serviceInstance.invokeHandler({
-            namedParamA: 'bar.bar.bar',
-          })
+          await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
           color: 'lightgray',
           message: 'no longer available',
@@ -326,13 +320,13 @@ describe('BaseService', function() {
       })
 
       it('handles InvalidParameter errors', async function() {
-        serviceInstance.handle = () => {
-          throw new InvalidParameter()
+        class ThrowingService extends DummyService {
+          async handle() {
+            throw new InvalidParameter()
+          }
         }
         expect(
-          await serviceInstance.invokeHandler({
-            namedParamA: 'bar.bar.bar',
-          })
+          await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
           color: 'red',
           message: 'invalid parameter',

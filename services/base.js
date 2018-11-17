@@ -246,6 +246,7 @@ class BaseService {
       build: 30,
       license: 3600,
       version: 300,
+      debug: 60,
     }
     return cacheLengths[this.category]
   }
@@ -318,20 +319,28 @@ class BaseService {
     }
   }
 
-  async invokeHandler(namedParams, queryParams) {
-    trace.logTrace(
-      'inbound',
-      emojic.womanCook,
-      'Service class',
-      this.constructor.name
-    )
+  static async invoke(
+    context = {},
+    config = {},
+    namedParams = {},
+    queryParams = {}
+  ) {
+    trace.logTrace('inbound', emojic.womanCook, 'Service class', this.name)
     trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
     trace.logTrace('inbound', emojic.crayon, 'Query params', queryParams)
+
+    const serviceInstance = new this(context, config)
+
+    let serviceData
     try {
-      return await this.handle(namedParams, queryParams)
+      serviceData = await serviceInstance.handle(namedParams, queryParams)
     } catch (error) {
-      return this._handleError(error)
+      serviceData = serviceInstance._handleError(error)
     }
+
+    trace.logTrace('outbound', emojic.shield, 'Service data', serviceData)
+
+    return serviceData
   }
 
   static _makeBadgeData(overrides, serviceData) {
@@ -387,22 +396,19 @@ class BaseService {
       handleRequest({
         queryParams: this.route.queryParams,
         handler: async (queryParams, match, sendBadge, request) => {
-          const serviceInstance = new this(
+          const namedParams = this._namedParamsForMatch(match)
+          const serviceData = await this.invoke(
             {
               sendAndCacheRequest: request.asPromise,
               sendAndCacheRequestWithCallbacks: request,
               githubApiProvider,
             },
-            serviceConfig
-          )
-          const namedParams = this._namedParamsForMatch(match)
-          const serviceData = await serviceInstance.invokeHandler(
+            serviceConfig,
             namedParams,
             queryParams
           )
-          trace.logTrace('outbound', emojic.shield, 'Service data', serviceData)
-          const badgeData = this._makeBadgeData(queryParams, serviceData)
 
+          const badgeData = this._makeBadgeData(queryParams, serviceData)
           // The final capture group is the extension.
           const format = match.slice(-1)[0]
           sendBadge(format, badgeData)

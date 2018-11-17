@@ -1,8 +1,8 @@
 'use strict'
 
-const BaseService = require('../base')
+const NoncachingBaseService = require('../base-noncaching')
 
-module.exports = class Time extends BaseService {
+module.exports = class Time extends NoncachingBaseService {
   async handle() {
     return { message: new Date() }
   }
