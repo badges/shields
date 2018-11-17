@@ -11,15 +11,13 @@ const {
   isVPlusDottedVersionAtLeastOne,
   isSemver,
 } = require('../test-validators')
-const colorscheme = require('../../lib/colorscheme.json')
+const { colorScheme: colorsB } = require('../test-helpers')
 const { licenseToColor } = require('../../lib/licenses')
 const { makeColor } = require('../../lib/badge-data')
-const mapValues = require('lodash.mapvalues')
 const { invalidJSON } = require('../response-fixtures')
 
 const t = new ServiceTester({ id: 'github', title: 'Github' })
 module.exports = t
-const colorsB = mapValues(colorscheme, 'colorB')
 const publicDomainLicenseColor = makeColor(licenseToColor('CC0-1.0'))
 const permissiveLicenseColor = colorsB[licenseToColor('MIT')]
 const copyleftLicenseColor = colorsB[licenseToColor('GPL-3.0')]

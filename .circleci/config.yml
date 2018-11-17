@@ -54,6 +54,11 @@ jobs:
           command: npm run test:integration
 
       - run:
+          name: Tests for gh-badges package
+          when: always
+          command: npm run test:js:package
+
+      - run:
           name: 'Prettier check (quick fix: `npm run prettier`)'
           when: always
           command: npm run prettier-check
@@ -88,6 +93,11 @@ jobs:
           name: Integration tests
           when: always
           command: npm run test:integration
+
+      - run:
+          name: Tests for gh-badges package
+          when: always
+          command: npm run test:js:package
 
       - run:
           name: 'Prettier check (quick fix: `npm run prettier`)'
@@ -217,19 +227,6 @@ jobs:
               echo 'This is not a pull request. Skipping.'
             fi
 
-  services-daily:
-    docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
-    steps:
-      - checkout
-
-      - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
-
-      - run:
-          name: Run all service tests
-          command: npm run test:services
-
 workflows:
   version: 2
 
@@ -260,13 +257,3 @@ workflows:
           filters:
             branches:
               ignore: /dependabot\/.*/
-
-  daily:
-    triggers:
-      - schedule:
-          cron: "0 17 * * *"
-          filters:
-            branches:
-              only: master
-    jobs:
-      - services-daily

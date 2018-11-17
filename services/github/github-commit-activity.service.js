@@ -7,10 +7,32 @@ const {
 } = require('../../lib/badge-data')
 const { metric } = require('../../lib/text-formatters')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
 module.exports = class GithubCommitActivity extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'github/commit-activity',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub commit activity the past week, 4 weeks, year',
+        previewUrl: 'y/eslint/eslint',
+        keywords: ['GitHub', 'commit', 'commits', 'activity'],
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/commit-activity\/(y|4w|w)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,

@@ -10,6 +10,12 @@
     <a href="https://circleci.com/gh/badges/shields/tree/master">
         <img src="https://img.shields.io/circleci/project/github/badges/shields/master.svg"
             alt="build status"></a>
+    <a href="https://circleci.com/gh/badges/daily-tests">
+        <img src="https://img.shields.io/circleci/project/github/badges/daily-tests.svg?label=daily%20tests"
+            alt="daily build status"></a>
+    <a href="https://coveralls.io/github/badges/shields">
+        <img src="https://img.shields.io/coveralls/github/badges/shields.svg"
+            alt="coverage"></a>
     <a href="https://github.com/badges/shields/compare/gh-pages...master">
         <img src="https://img.shields.io/github/commits-since/badges/shields/gh-pages.svg?label=commits%20to%20be%20deployed"
             alt="commits to be deployed"></a>
@@ -31,12 +37,20 @@ continuous integration services, package registries, distributions, app
 stores, social networks, code coverage services, and code analysis services.
 Every month it serves over 470 million images.
 
-In addition to hosting the shields.io frontend and server code, this monorepo
-hosts an [NPM library for generating badges][gh-badges], and the badge design
-specification.
+This repo hosts:
+
+* The [Shields.io][shields.io] frontend and server code
+* An [NPM library for generating badges][gh-badges]
+    * [documentation][gh-badges-docs]
+    * [changelog][gh-badges-changelog]
+* The [badge design specification][badge-spec]
+
 
 [shields.io]: https://shields.io/
 [gh-badges]: https://www.npmjs.com/package/gh-badges
+[badge-spec]: https://github.com/badges/shields/tree/master/spec
+[gh-badges-docs]: https://github.com/badges/shields/tree/master/gh-badges/README.md
+[gh-badges-changelog]: https://github.com/badges/shields/tree/master/gh-badges/CHANGELOG.md
 
 
 Examples
@@ -81,35 +95,6 @@ You can read a [tutorial on how to add a badge][tutorial].
 [contributing]: CONTRIBUTING.md
 
 
-Using the badge library
------------------------
-
-```sh
-npm install -g gh-badges
-badge build passed :green .png > mybadge.png
-```
-
-```js
-const { BadgeFactory } = require('gh-badges')
-
-const bf = new BadgeFactory({ fontPath: '/path/to/Verdana.ttf' })
-
-const format = {
-  text: ['build', 'passed'],
-  colorscheme: 'green',
-  template: 'flat',
-}
-
-const svg = bf.create(format)
-```
-
-View the [documentation for gh-badges][gh-badges doc].
-
-[![npm version](http://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges)
-
-[gh-badges doc]: https://github.com/badges/shields/blob/master/doc/gh-badges.md
-
-
 Development
 -----------
 
@@ -134,12 +119,15 @@ snapshots, and `SNAPSHOT_UPDATE=1 npm run test:js:server` to update them.
 
 The server can be configured to use [Sentry][] ([configuration][sentry configuration]) and [Prometheus][] ([configuration][prometheus configuration]).
 
+Daily tests, including a full run of the service tests and overall code coverage, are run via [badges/daily-tests][daily-tests].
+
 [package manager]: https://nodejs.org/en/download/package-manager/
 [snapshot tests]: https://glebbahmutov.com/blog/snapshot-testing/
 [Prometheus]: https://prometheus.io/
 [prometheus configuration]: doc/self-hosting.md#prometheus
 [Sentry]: https://sentry.io/
 [sentry configuration]: doc/self-hosting.md#sentry
+[daily-tests]: https://github.com/badges/daily-tests
 
 Hosting your own server
 -----------------------
