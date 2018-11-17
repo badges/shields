@@ -23,7 +23,7 @@ const { staticBadgeUrl } = require('../lib/make-badge-url')
 const trace = require('./trace')
 
 function coalesce(...candidates) {
-  return candidates.find(c => typeof c === 'string')
+  return candidates.find(c => c !== undefined)
 }
 
 class BaseService {
