@@ -348,6 +348,21 @@ describe('BaseService', function() {
         expect(badgeData.text).to.deep.equal(['cat', '10k'])
       })
 
+      it('preserves an empty label', function() {
+        const badgeData = DummyService._makeBadgeData(
+          {},
+          { label: '', message: '10k' }
+        )
+        expect(badgeData.text).to.deep.equal(['', '10k'])
+      })
+
+      it('applies a numeric service message', function() {
+        // While a number of badges use this, in the long run we may want
+        // `render()` to always return a string.
+        const badgeData = DummyService._makeBadgeData({}, { message: 10 })
+        expect(badgeData.text).to.deep.equal(['cat', 10])
+      })
+
       it('applies the service color', function() {
         const badgeData = DummyService._makeBadgeData({}, { color: 'red' })
         expect(badgeData.colorscheme).to.equal('red')
