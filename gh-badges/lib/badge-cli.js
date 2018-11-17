@@ -2,11 +2,9 @@
 
 'use strict'
 
-const { PDFKitTextMeasurer } = require('./text-measurer')
-const { makeBadge } = require('./make-badge')
+const makeBadge = require('./make-badge')
 const svg2img = require('./svg-to-img')
 const colorscheme = require('./colorscheme.json')
-const defaults = require('./defaults')
 
 if (process.argv.length < 4) {
   console.log('Usage: badge subject status [:colorscheme] [.output] [@style]')
@@ -26,8 +24,6 @@ if (process.argv.length < 4) {
   console.log()
   process.exit()
 }
-
-const fontPath = process.env.FONT_PATH || defaults.font.path
 
 // Find a format specifier.
 let format = 'svg'
@@ -71,10 +67,7 @@ if (color[0] === ':') {
 }
 
 async function main() {
-  // The widths are going to be off if Helvetica-Bold is used, though this
-  // should print a warning.
-  const measurer = new PDFKitTextMeasurer(fontPath, 'Helvetica-Bold')
-  const svg = makeBadge(measurer, badgeData)
+  const svg = makeBadge(badgeData)
 
   if (/png|jpg|gif/.test(format)) {
     const data = await svg2img(svg, format)

@@ -4,11 +4,8 @@ const fs = require('fs')
 const path = require('path')
 const SVGO = require('svgo')
 const dot = require('dot')
-const LruCache = require('./lru-cache')
+const anafanafo = require('anafanafo')
 const isCSSColor = require('is-css-color')
-
-// Holds widths of badge keys (left hand side of badge).
-const badgeKeyWidthCache = new LruCache(1000)
 
 // cache templates.
 const templates = {}
@@ -108,22 +105,18 @@ function assignColor(color = '', colorschemeType = 'colorB') {
 
 const definedColorschemes = require(path.join(__dirname, 'colorscheme.json'))
 
-// Inject the measurer to avoid placing any persistent state in this module.
-function makeBadge(
-  measurer,
-  {
-    format,
-    template,
-    text,
-    colorscheme,
-    colorA,
-    colorB,
-    logo,
-    logoPosition,
-    logoWidth,
-    links = ['', ''],
-  }
-) {
+function makeBadge({
+  format,
+  template,
+  text,
+  colorscheme,
+  colorA,
+  colorB,
+  logo,
+  logoPosition,
+  logoWidth,
+  links = ['', ''],
+}) {
   // String coercion.
   text = text.map(value => `${value}`)
 
@@ -156,16 +149,12 @@ function makeBadge(
   colorB = assignColor(colorB, 'colorB')
 
   const [left, right] = text
-  let leftWidth = badgeKeyWidthCache.get(left)
-  if (leftWidth === undefined) {
-    leftWidth = measurer.widthOf(left) | 0
-    // Increase chances of pixel grid alignment.
-    if (leftWidth % 2 === 0) {
-      leftWidth++
-    }
-    badgeKeyWidthCache.set(left, leftWidth)
+  let leftWidth = (anafanafo(left) / 10) | 0
+  // Increase chances of pixel grid alignment.
+  if (leftWidth % 2 === 0) {
+    leftWidth++
   }
-  let rightWidth = measurer.widthOf(right) | 0
+  let rightWidth = (anafanafo(right) / 10) | 0
   // Increase chances of pixel grid alignment.
   if (rightWidth % 2 === 0) {
     rightWidth++
@@ -200,9 +189,4 @@ function makeBadge(
   return templateFn(context)
 }
 
-module.exports = {
-  makeBadge,
-  makeMakeBadgeFn: measurer => data => makeBadge(measurer, data),
-  // Expose for testing.
-  _badgeKeyWidthCache: badgeKeyWidthCache,
-}
+module.exports = makeBadge
