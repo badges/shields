@@ -55,8 +55,7 @@ function DownloadsForExtensionType(extensionType) {
       return [
         {
           title: `Wordpress ${capt} Downloads`,
-          exampleUrl: exampleSlug,
-          urlPattern: ':slug',
+          namedParams: { slug: exampleSlug },
           staticExample: this.render({ response: { downloaded: 200000 } }),
           keywords: ['wordpress'],
         },

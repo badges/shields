@@ -4,7 +4,10 @@
   "exclude": [
     "**/*.spec.js",
     "**/*.integration.js",
+    "dangerfile.js",
     "services/**/*.tester.js",
+    "test-fixtures",
+    "scripts",
     "coverage",
     "build"
   ],

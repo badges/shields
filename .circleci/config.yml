@@ -227,19 +227,6 @@ jobs:
               echo 'This is not a pull request. Skipping.'
             fi
 
-  services-daily:
-    docker:
-      - image: circleci/node:8
-    steps:
-      - checkout
-
-      - restore_cache:
-          key: v2-dependencies-{{ checksum "package.json" }}
-
-      - run:
-          name: Run all service tests
-          command: npm run test:services
-
 workflows:
   version: 2
 
@@ -270,13 +257,3 @@ workflows:
           filters:
             branches:
               ignore: /dependabot\/.*/
-
-  daily:
-    triggers:
-      - schedule:
-          cron: "0 17 * * *"
-          filters:
-            branches:
-              only: master
-    jobs:
-      - services-daily

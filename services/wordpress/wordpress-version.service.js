@@ -47,8 +47,7 @@ function VersionForExtensionType(extensionType) {
       return [
         {
           title: `Wordpress ${capt} Version`,
-          exampleUrl: exampleSlug,
-          urlPattern: ':slug',
+          namedParams: { slug: exampleSlug },
           staticExample: this.render({ response: { version: 2.5 } }),
           keywords: ['wordpress'],
         },
