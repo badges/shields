@@ -39,23 +39,28 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
     return [
       {
         title: 'Gitlab pipeline status',
-        urlPattern: ':user/:repo',
-        exampleUrl: 'gitlab-org/gitlab-ce',
+        pattern: ':user/:repo',
+        namedParams: { user: 'gitlab-org', repo: 'gitlab-ce' },
         staticExample: this.render({ status: 'passed' }),
       },
       {
         title: 'Gitlab pipeline status (branch)',
-        urlPattern: ':user/:repo/:branch',
-        exampleUrl: 'gitlab-org/gitlab-ce/master',
+        pattern: ':user/:repo/:branch',
+        namedParams: {
+          user: 'gitlab-org',
+          repo: 'gitlab-ce',
+          branch: 'master',
+        },
         staticExample: this.render({ status: 'passed' }),
       },
-      // TODO Find an example of a self-hosted gitlab.
       {
         title: 'Gitlab pipeline status (self-hosted)',
-        urlPattern: ':user/:repo',
-        exampleUrl: 'gitlab-org/gitlab-ce/master',
-        staticExample: this.render({ status: 'passed' }),
+        pattern: ':user/:repo',
+        namedParams: { user: 'gitlab-org', repo: 'gitlab-ce' },
+        // It would be good to find an example of a publicly accessible, self-
+        // hosted gitlab.
         query: { gitlab_url: 'https://gitlab.com' },
+        staticExample: this.render({ status: 'passed' }),
       },
     ]
   }
