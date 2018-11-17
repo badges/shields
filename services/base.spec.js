@@ -84,6 +84,9 @@ describe('BaseService', function() {
         forCases([
           given('/foo/bar.bar.bar.zip'),
           given('/foo/bar/bar.svg'),
+          // This is a valid example with the wrong extension separator, to
+          // test that we only accept a `.`.
+          given('/foo/bar.bar.bar_svg'),
         ]).expect(null)
       })
 
@@ -133,6 +136,9 @@ describe('BaseService', function() {
         forCases([
           given('/foo/bar.bar.bar.zip'),
           given('/foo/bar/bar.svg'),
+          // This is a valid example with the wrong extension separator, to
+          // test that we only accept a `.`.
+          given('/foo/bar.bar.bar_svg'),
         ]).expect(null)
       })
 
@@ -358,6 +364,21 @@ describe('BaseService', function() {
       it('applies the service message', function() {
         const badgeData = DummyService._makeBadgeData({}, { message: '10k' })
         expect(badgeData.text).to.deep.equal(['cat', '10k'])
+      })
+
+      it('preserves an empty label', function() {
+        const badgeData = DummyService._makeBadgeData(
+          {},
+          { label: '', message: '10k' }
+        )
+        expect(badgeData.text).to.deep.equal(['', '10k'])
+      })
+
+      it('applies a numeric service message', function() {
+        // While a number of badges use this, in the long run we may want
+        // `render()` to always return a string.
+        const badgeData = DummyService._makeBadgeData({}, { message: 10 })
+        expect(badgeData.text).to.deep.equal(['cat', 10])
       })
 
       it('applies the service color', function() {

@@ -24,7 +24,7 @@ const trace = require('./trace')
 const validateExample = require('./validate-example')
 
 function coalesce(...candidates) {
-  return candidates.find(c => typeof c === 'string')
+  return candidates.find(c => c !== undefined)
 }
 
 class BaseService {
@@ -233,12 +233,9 @@ class BaseService {
     } else if (pattern !== undefined) {
       return this._regexFromPath.regex
     } else if (format !== undefined) {
-      // Regular expressions treat "/" specially, so we need to escape them
-      const escapedPath = this.route.format.replace(/\//g, '\\/')
-      const fullRegex = `^${this._makeFullUrl(
-        escapedPath
-      )}.(svg|png|gif|jpg|json)$`
-      return new RegExp(fullRegex)
+      return new RegExp(
+        `^${this._makeFullUrl(this.route.format)}\\.(svg|png|gif|jpg|json)$`
+      )
     } else {
       throw Error(`The route for ${this.name} has neither pattern nor format`)
     }
