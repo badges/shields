@@ -22,34 +22,34 @@ module.exports = function validateExample(
     if (!pattern) {
       throw new Error(
         `Static example for ${
-          this.name
+          ServiceClass.name
         } at index ${index} does not declare a pattern`
       )
     }
     if (namedParams && exampleUrl) {
       throw new Error(
         `Static example for ${
-          this.name
+          ServiceClass.name
         } at index ${index} declares both namedParams and exampleUrl`
       )
     } else if (!namedParams && !exampleUrl) {
       throw new Error(
         `Static example for ${
-          this.name
+          ServiceClass.name
         } at index ${index} does not declare namedParams nor exampleUrl`
       )
     }
     if (previewUrl) {
       throw new Error(
         `Static example for ${
-          this.name
+          ServiceClass.name
         } at index ${index} also declares a dynamic previewUrl, which is not allowed`
       )
     }
   } else if (!previewUrl) {
     throw Error(
       `Example for ${
-        this.name
+        ServiceClass.name
       } at index ${index} is missing required previewUrl or staticExample`
     )
   }
