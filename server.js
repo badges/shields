@@ -33,8 +33,6 @@ const {
 const { clearRegularUpdateCache } = require('./lib/regular-update')
 const { makeSend } = require('./lib/result-sender')
 
-const serverStartTime = new Date(new Date().toGMTString())
-
 const camp = require('camp').start({
   documentRoot: path.join(__dirname, 'public'),
   port: config.bind.port,
