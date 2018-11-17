@@ -39,7 +39,7 @@ t.create('Pipeline status (nonexistent repo)')
   })
 
 t.create('Pipeline status (custom gitlab URL)')
-  .get('/gitlab-org/gitlab-ce.json?gitlab_url=https://gitlab.com')
+  .get('/GNOME/pango.json?gitlab_url=https://gitlab.gnome.org')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'build',

@@ -56,10 +56,8 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
       {
         title: 'Gitlab pipeline status (self-hosted)',
         pattern: ':user/:repo',
-        namedParams: { user: 'gitlab-org', repo: 'gitlab-ce' },
-        // It would be good to find an example of a publicly accessible, self-
-        // hosted gitlab.
-        query: { gitlab_url: 'https://gitlab.com' },
+        namedParams: { user: 'GNOME', repo: 'pango' },
+        query: { gitlab_url: 'https://gitlab.gnome.org' },
         staticExample: this.render({ status: 'passed' }),
       },
     ]
