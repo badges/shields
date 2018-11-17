@@ -1,11 +1,12 @@
 'use strict'
 
-const makeBadge = require('../gh-badges/lib/make-badge')
+const { BadgeFactory } = require('gh-badges')
 const { makeSend } = require('../lib/result-sender')
 const analytics = require('../lib/analytics')
 const BaseService = require('./base')
 
 const serverStartTime = new Date(new Date().toGMTString())
+const bf = new BadgeFactory()
 
 module.exports = class BaseStaticService extends BaseService {
   // Note: Since this is a static service, it is not `async`.
@@ -43,7 +44,8 @@ module.exports = class BaseStaticService extends BaseService {
       if (serviceConfig.profiling.makeBadge) {
         console.time('makeBadge total')
       }
-      const svg = makeBadge(badgeData)
+
+      const svg = bf.create(badgeData)
       if (serviceConfig.profiling.makeBadge) {
         console.timeEnd('makeBadge total')
       }

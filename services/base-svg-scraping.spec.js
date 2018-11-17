@@ -5,15 +5,17 @@ const { expect } = require('chai')
 const sinon = require('sinon')
 const Joi = require('joi')
 const { makeBadgeData } = require('../lib/badge-data')
-const makeBadge = require('../gh-badges/lib/make-badge')
+const { BadgeFactory } = require('gh-badges')
 const BaseSvgScrapingService = require('./base-svg-scraping')
+
+const bf = new BadgeFactory()
 
 chai.use(require('chai-as-promised'))
 
 function makeExampleSvg({ label, message }) {
   const badgeData = makeBadgeData('this is the label', {})
   badgeData.text[1] = 'this is the result!'
-  return makeBadge(badgeData)
+  return bf.create(badgeData)
 }
 
 const schema = Joi.object({

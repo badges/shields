@@ -19,7 +19,7 @@ const GithubConstellation = require('./services/github/github-constellation')
 const PrometheusMetrics = require('./lib/sys/prometheus-metrics')
 const sysMonitor = require('./lib/sys/monitor')
 const log = require('./lib/log')
-const makeBadge = require('./gh-badges/lib/make-badge')
+const { BadgeFactory } = require('gh-badges')
 const suggest = require('./lib/suggest')
 const {
   makeBadgeData: getBadgeData,
@@ -33,6 +33,7 @@ const { clearRegularUpdateCache } = require('./lib/regular-update')
 const { makeSend } = require('./lib/result-sender')
 
 const serverStartTime = new Date(new Date().toGMTString())
+const bf = new BadgeFactory()
 
 const camp = require('camp').start({
   documentRoot: path.join(__dirname, 'public'),
@@ -91,7 +92,7 @@ camp.notfound(/\.(svg|png|gif|jpg|json)/, (query, match, end, request) => {
   badgeData.colorscheme = 'red'
   // Add format to badge data.
   badgeData.format = format
-  const svg = makeBadge(badgeData)
+  const svg = bf.create(badgeData)
   makeSend(format, request.res, end)(svg)
 })
 
@@ -239,7 +240,7 @@ camp.route(/^\/flip\.svg$/, (data, match, end, ask) => {
   bitFlip = !bitFlip
   badgeData.text[1] = bitFlip ? 'on' : 'off'
   badgeData.colorscheme = bitFlip ? 'brightgreen' : 'red'
-  const svg = makeBadge(badgeData)
+  const svg = bf.create(badgeData)
   makeSend('svg', ask.res, end)(svg)
 })
 
@@ -263,10 +264,10 @@ camp.route(/^\/([^/]+)\/(.+).png$/, (data, match, end, ask) => {
   try {
     const badgeData = { text: [subject, status] }
     badgeData.colorscheme = color
-    const svg = makeBadge(badgeData)
+    const svg = bf.create(badgeData)
     makeSend('png', ask.res, end)(svg)
   } catch (e) {
-    const svg = makeBadge({ text: ['error', 'bad badge'], colorscheme: 'red' })
+    const svg = bf.create({ text: ['error', 'bad badge'], colorscheme: 'red' })
     makeSend('png', ask.res, end)(svg)
   }
 })
