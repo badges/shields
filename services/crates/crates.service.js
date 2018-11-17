@@ -81,6 +81,8 @@ class CratesLicense extends LegacyService {
       },
     ]
   }
+
+  static registerLegacyRouteHandler() {}
 }
 
 class Crates extends LegacyService {
