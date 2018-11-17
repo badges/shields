@@ -418,7 +418,7 @@ describe('BaseService', function() {
 
     it('handles the request', async function() {
       expect(mockHandleRequest).to.have.been.calledOnce
-      const { handler: requestHandler } = mockHandleRequest.getCall(0).args[0]
+      const { handler: requestHandler } = mockHandleRequest.getCall(0).args[1]
 
       const mockSendBadge = sinon.spy()
       const mockRequest = {

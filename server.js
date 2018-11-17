@@ -106,6 +106,7 @@ loadServiceClasses().forEach(serviceClass =>
     { camp, handleRequest: cache, githubApiProvider },
     {
       handleInternalErrors: config.handleInternalErrors,
+      cacheHeaders: config.cacheHeaders,
       profiling: config.profiling,
     }
   )
@@ -114,7 +115,7 @@ loadServiceClasses().forEach(serviceClass =>
 // User defined sources - JSON response
 camp.route(
   /^\/badge\/dynamic\/(json|xml|yaml)\.(svg|png|gif|jpg|json)$/,
-  cache({
+  cache(config.cacheHeaders, {
     queryParams: ['uri', 'url', 'query', 'prefix', 'suffix'],
     handler: function(query, match, sendBadge, request) {
       const type = match[1]

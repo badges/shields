@@ -3,40 +3,24 @@
 const makeBadge = require('../gh-badges/lib/make-badge')
 const { makeSend } = require('../lib/result-sender')
 const BaseService = require('./base')
+const { coalesceCacheLength, setCacheHeaders } = require('./caching')
 
-function isInt(number) {
-  return number !== undefined && /^[0-9]+$/.test(number)
-}
-
-// The `handle()` function of most `BaseService` subclasses is wrapped in caching
-// logic. See `lib/request-handler.js` and `BaseService.prototype.register()`.
+// All services may be cached downstream, as is controlled by the service,
+// the user's request, and the configured default cache length.
 //
-// In contrast, services deriving from `BaseNoncachedService` are not cached
-// on the server. They may be cached downstream, however.
+// The `handle()` function of most `BaseService` subclasses is wrapped in
+// _additional_  caching, which lives in memory on the servers. See
+// `lib/request-handler.js` and `BaseService.prototype.register()`.
 //
-// Typicaly each request that hits the server triggers another call to the
-// handler. This makes them more useful for internal diagnostics.
+// In contrast, services deriving from `BaseNoncachedService` are _not_ cached
+// on the server. This means that each request that hits the server triggers
+// another call to the handler. This makes them more useful for server
+// diagnostics.
 module.exports = class NoncachingBaseService extends BaseService {
-  // Note: Like the static service, not `async`.
-  handle(namedParams, queryParams) {
-    throw new Error(`Handler not implemented for ${this.constructor.name}`)
-  }
-
   static register({ camp }, serviceConfig) {
-    camp.route(this._regex, async (queryParams, match, end, ask) => {
-      let cacheSecs
-      if (this._cacheLength === undefined) {
-        cacheSecs = isInt(process.env.BADGE_MAX_AGE_SECONDS)
-          ? parseInt(process.env.BADGE_MAX_AGE_SECONDS)
-          : 120
-      } else {
-        cacheSecs = this._cacheLength
-      }
-      ask.res.setHeader('Cache-Control', `max-age=${cacheSecs}`)
-      const reqTime = new Date()
-      const date = new Date(+reqTime + cacheSecs * 1000).toGMTString()
-      ask.res.setHeader('Expires', date)
+    const { cacheHeaders: cacheConfig } = serviceConfig
 
+    camp.route(this._regex, async (queryParams, match, end, ask) => {
       const namedParams = this._namedParamsForMatch(match)
       const serviceData = await this.invoke(
         {},
@@ -51,6 +35,14 @@ module.exports = class NoncachingBaseService extends BaseService {
       badgeData.format = format
 
       const svg = makeBadge(badgeData)
+
+      const cacheLengthSeconds = coalesceCacheLength(
+        cacheConfig,
+        this._cacheLength,
+        queryParams
+      )
+      setCacheHeaders(cacheLengthSeconds)
+
       makeSend(format, ask.res, end)(svg)
     })
   }

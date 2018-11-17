@@ -12,6 +12,7 @@ const {
   InvalidParameter,
   Deprecated,
 } = require('./errors')
+const coalesce = require('../lib/coalesce')
 const { checkErrorResponse } = require('../lib/error-helper')
 const {
   makeLogo,
@@ -22,10 +23,6 @@ const {
 const { staticBadgeUrl } = require('../lib/make-badge-url')
 const trace = require('./trace')
 const validateExample = require('./validate-example')
-
-function coalesce(...candidates) {
-  return candidates.find(c => c !== undefined)
-}
 
 class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
@@ -391,9 +388,10 @@ class BaseService {
   }
 
   static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
+    const { cacheHeaders: cacheConfig } = serviceConfig
     camp.route(
       this._regex,
-      handleRequest({
+      handleRequest(cacheConfig, {
         queryParams: this.route.queryParams,
         handler: async (queryParams, match, sendBadge, request) => {
           const namedParams = this._namedParamsForMatch(match)

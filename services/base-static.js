@@ -4,20 +4,21 @@ const makeBadge = require('../gh-badges/lib/make-badge')
 const { makeSend } = require('../lib/result-sender')
 const analytics = require('../lib/analytics')
 const BaseService = require('./base')
-
-const serverStartTime = new Date(new Date().toGMTString())
+const {
+  serverHasBeenUpSinceResourceCached,
+  setCacheHeadersForStaticResource,
+} = require('./caching')
 
 module.exports = class BaseStaticService extends BaseService {
-  // Note: Since this is a static service, it is not `async`.
-  handle(namedParams, queryParams) {
-    throw new Error(`Handler not implemented for ${this.constructor.name}`)
-  }
-
   static register({ camp }, serviceConfig) {
+    const {
+      profiling: { makeBadge: profileMakeBadge },
+    } = serviceConfig
+
     camp.route(this._regex, async (queryParams, match, end, ask) => {
       analytics.noteRequest(queryParams, match)
 
-      if (+new Date(ask.req.headers['if-modified-since']) >= +serverStartTime) {
+      if (serverHasBeenUpSinceResourceCached(ask.req)) {
         // Send Not Modified.
         ask.res.statusCode = 304
         ask.res.end()
@@ -37,17 +38,15 @@ module.exports = class BaseStaticService extends BaseService {
       const format = match.slice(-1)[0]
       badgeData.format = format
 
-      if (serviceConfig.profiling.makeBadge) {
+      if (profileMakeBadge) {
         console.time('makeBadge total')
       }
       const svg = makeBadge(badgeData)
-      if (serviceConfig.profiling.makeBadge) {
+      if (profileMakeBadge) {
         console.timeEnd('makeBadge total')
       }
 
-      const cacheDuration = 3600 * 24 * 1 // 1 day.
-      ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
-      ask.res.setHeader('Last-Modified', serverStartTime.toGMTString())
+      setCacheHeadersForStaticResource(ask.res)
 
       makeSend(format, ask.res, end)(svg)
     })
