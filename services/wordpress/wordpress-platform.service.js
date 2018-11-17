@@ -55,8 +55,7 @@ class WordpressPluginRequiresVersion extends BaseWordpressPlatform {
     return [
       {
         title: 'Wordpress Plugin: Required WP Version',
-        exampleUrl: 'bbpress',
-        urlPattern: ':slug',
+        namedParams: { slug: 'bbpress' },
         staticExample: this.render({ response: { requires: '4.8' } }),
         keywords: ['wordpress'],
       },
