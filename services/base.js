@@ -211,7 +211,7 @@ class BaseService {
       return this._regexFromPath.regex
     } else if (format !== undefined) {
       return new RegExp(
-        `^${this._makeFullUrl(this.route.format)}.(svg|png|gif|jpg|json)$`
+        `^${this._makeFullUrl(this.route.format)}\\.(svg|png|gif|jpg|json)$`
       )
     } else {
       throw Error(`The route for ${this.name} has neither pattern nor format`)
