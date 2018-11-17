@@ -42,6 +42,18 @@ class DummyService extends BaseService {
         staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
         keywords: ['hello'],
       },
+      {
+        pattern: ':world',
+        exampleUrl: 'World',
+        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+        keywords: ['hello'],
+      },
+      {
+        pattern: ':world',
+        namedParams: { world: 'World' },
+        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+        keywords: ['hello'],
+      },
     ]
   }
   static get route() {
@@ -457,7 +469,13 @@ describe('BaseService', function() {
 
   describe('prepareExamples', function() {
     it('returns the expected result', function() {
-      const [first, second, third] = DummyService.prepareExamples()
+      const [
+        first,
+        second,
+        third,
+        fourth,
+        fifth,
+      ] = DummyService.prepareExamples()
       expect(first).to.deep.equal({
         title: 'DummyService',
         exampleUrl: undefined,
@@ -474,7 +492,7 @@ describe('BaseService', function() {
         documentation: undefined,
         keywords: undefined,
       })
-      expect(third).to.deep.equal({
+      const preparedStaticExample = {
         title: 'DummyService',
         exampleUrl: '/foo/World.svg',
         previewUrl:
@@ -482,7 +500,10 @@ describe('BaseService', function() {
         urlPattern: '/foo/:world.svg',
         documentation: undefined,
         keywords: ['hello'],
-      })
+      }
+      expect(third).to.deep.equal(preparedStaticExample)
+      expect(fourth).to.deep.equal(preparedStaticExample)
+      expect(fifth).to.deep.equal(preparedStaticExample)
     })
   })
 
