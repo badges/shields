@@ -21,6 +21,7 @@ const {
 } = require('../lib/badge-data')
 const { staticBadgeUrl } = require('../lib/make-badge-url')
 const trace = require('./trace')
+const validateExample = require('./validate-example')
 
 function coalesce(...candidates) {
   return candidates.find(c => typeof c === 'string')
@@ -154,93 +155,52 @@ class BaseService {
    * schema in `lib/all-badge-examples.js`.
    */
   static prepareExamples() {
-    return this.examples.map(
-      (
-        {
-          title,
-          query,
-          namedParams,
-          exampleUrl,
-          previewUrl,
-          pattern,
-          urlPattern,
-          staticExample,
-          documentation,
-          keywords,
-        },
-        index
-      ) => {
-        pattern = pattern || urlPattern || this.route.pattern
-        if (staticExample) {
-          if (!pattern) {
-            throw new Error(
-              `Static example for ${
-                this.name
-              } at index ${index} does not declare a pattern`
-            )
-          }
-          if (namedParams && exampleUrl) {
-            throw new Error(
-              `Static example for ${
-                this.name
-              } at index ${index} declares both namedParams and exampleUrl`
-            )
-          } else if (!namedParams && !exampleUrl) {
-            throw new Error(
-              `Static example for ${
-                this.name
-              } at index ${index} does not declare namedParams nor exampleUrl`
-            )
-          }
-          if (previewUrl) {
-            throw new Error(
-              `Static example for ${
-                this.name
-              } at index ${index} also declares a dynamic previewUrl, which is not allowed`
-            )
-          }
-        } else if (!previewUrl) {
-          throw Error(
-            `Example for ${
-              this.name
-            } at index ${index} is missing required previewUrl or staticExample`
-          )
-        }
+    return this.examples.map((example, index) => {
+      const {
+        title,
+        query,
+        namedParams,
+        exampleUrl,
+        previewUrl,
+        pattern,
+        staticExample,
+        documentation,
+        keywords,
+      } = validateExample(example, index, this)
 
-        const stringified = queryString.stringify(query)
-        const suffix = stringified ? `?${stringified}` : ''
+      const stringified = queryString.stringify(query)
+      const suffix = stringified ? `?${stringified}` : ''
 
-        let outExampleUrl
-        let outPreviewUrl
-        let outPattern
-        if (namedParams) {
-          outExampleUrl = this._makeFullUrlFromParams(pattern, namedParams)
-          outPreviewUrl = this._makeStaticExampleUrl(staticExample)
-          outPattern = `${this._dotSvg(this._makeFullUrl(pattern))}${suffix}`
-        } else if (staticExample) {
-          outExampleUrl = `${this._dotSvg(
-            this._makeFullUrl(exampleUrl)
-          )}${suffix}`
-          outPreviewUrl = this._makeStaticExampleUrl(staticExample)
-          outPattern = `${this._dotSvg(this._makeFullUrl(pattern))}${suffix}`
-        } else {
-          outExampleUrl = undefined
-          outPreviewUrl = `${this._dotSvg(
-            this._makeFullUrl(previewUrl)
-          )}${suffix}`
-          outPattern = undefined
-        }
-
-        return {
-          title: title ? `${title}` : this.name,
-          exampleUrl: outExampleUrl,
-          previewUrl: outPreviewUrl,
-          urlPattern: outPattern,
-          documentation,
-          keywords,
-        }
+      let outExampleUrl
+      let outPreviewUrl
+      let outPattern
+      if (namedParams) {
+        outExampleUrl = this._makeFullUrlFromParams(pattern, namedParams)
+        outPreviewUrl = this._makeStaticExampleUrl(staticExample)
+        outPattern = `${this._dotSvg(this._makeFullUrl(pattern))}${suffix}`
+      } else if (staticExample) {
+        outExampleUrl = `${this._dotSvg(
+          this._makeFullUrl(exampleUrl)
+        )}${suffix}`
+        outPreviewUrl = this._makeStaticExampleUrl(staticExample)
+        outPattern = `${this._dotSvg(this._makeFullUrl(pattern))}${suffix}`
+      } else {
+        outExampleUrl = undefined
+        outPreviewUrl = `${this._dotSvg(
+          this._makeFullUrl(previewUrl)
+        )}${suffix}`
+        outPattern = undefined
       }
-    )
+
+      return {
+        title: title ? `${title}` : this.name,
+        exampleUrl: outExampleUrl,
+        previewUrl: outPreviewUrl,
+        urlPattern: outPattern,
+        documentation,
+        keywords,
+      }
+    })
   }
 
   static get _regexFromPath() {
