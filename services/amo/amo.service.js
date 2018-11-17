@@ -96,7 +96,7 @@ class AmoRating extends LegacyService {
 
 class AmoUsers extends LegacyService {
   static get category() {
-    return 'users'
+    return 'other'
   }
 
   static get route() {
