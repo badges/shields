@@ -4,12 +4,9 @@ const { test, given, forCases } = require('sazerac')
 const { expect } = require('chai')
 const snapshot = require('snap-shot-it')
 const eol = require('eol')
-const { _badgeKeyWidthCache } = require('./make-badge')
 const isSvg = require('is-svg')
-const testHelpers = require('./make-badge-test-helpers')
+const makeBadge = require('./make-badge')
 const colorschemes = require('./colorscheme.json')
-
-const makeBadge = testHelpers.makeBadge()
 
 function testColor(color = '') {
   return JSON.parse(
@@ -23,10 +20,6 @@ function testColor(color = '') {
 }
 
 describe('The badge generator', function() {
-  beforeEach(function() {
-    _badgeKeyWidthCache.clear()
-  })
-
   describe('color test', function() {
     test(testColor, () => {
       // valid hex
@@ -81,11 +74,6 @@ describe('The badge generator', function() {
     it('should always produce the same SVG (unless we have changed something!)', function() {
       const svg = makeBadge({ text: ['cactus', 'grown'], format: 'svg' })
       snapshot(svg)
-    })
-
-    it('should cache width of badge key', function() {
-      makeBadge({ text: ['cached', 'not-cached'], format: 'svg' })
-      expect(_badgeKeyWidthCache.cache).to.have.keys('cached')
     })
   })
 

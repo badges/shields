@@ -8,11 +8,7 @@ FRONTEND_TMP=${TMPDIR}shields-frontend-deploy
 # pushing secrets to GitHub, this branch is configured to reject pushes.
 WORKING_BRANCH=server-deploy-working-branch
 
-all: website favicon test
-
-favicon:
-	# This isn't working right now. See https://github.com/badges/shields/issues/1788
-	node lib/badge-cli.js '' '' '#bada55' .png > favicon.png
+all: website test
 
 website:
 	LONG_CACHE=false npm run build
@@ -86,4 +82,4 @@ deploy-heroku:
 test:
 	npm test
 
-.PHONY: all favicon website deploy prepare-server-deploy clean-server-deploy deploy-s0 deploy-s1 deploy-s2 push-s0 push-s1 push-s2 deploy-gh-pages deploy-gh-pages-clean deploy-heroku setup redis test
+.PHONY: all website deploy prepare-server-deploy clean-server-deploy deploy-s0 deploy-s1 deploy-s2 push-s0 push-s1 push-s2 deploy-gh-pages deploy-gh-pages-clean deploy-heroku setup redis test

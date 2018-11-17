@@ -8,12 +8,33 @@ const {
 } = require('../../lib/badge-data')
 const { licenseToColor } = require('../../lib/licenses')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
 module.exports = class GithubLicense extends LegacyService {
+  static get category() {
+    return 'license'
+  }
+
+  static get route() {
+    return {
+      base: 'github/license',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub',
+        previewUrl: 'mashape/apistatus',
+        keywords: ['GitHub', 'license'],
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
-    // GitHub license integration.
     camp.route(
       /^\/github\/license\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {

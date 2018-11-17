@@ -4,12 +4,33 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { metric } = require('../../lib/text-formatters')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
 module.exports = class GithubSearch extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'github/search',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub search hit counter',
+        previewUrl: 'torvalds/linux/goto',
+        keywords: ['GitHub', 'search', 'hit', 'counter'],
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
-    // GitHub search hit counter.
     camp.route(
       /^\/github\/search\/([^/]+)\/([^/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {

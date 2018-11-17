@@ -6,8 +6,36 @@ const {
   makeLabel: getLabel,
   makeLogo: getLogo,
 } = require('../../lib/badge-data')
+const { documentation } = require('./github-helpers')
 
 module.exports = class GithubCommitsSince extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'github/commits-since',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub commits',
+        previewUrl: 'SubtitleEdit/subtitleedit/3.4.7',
+        keywords: ['GitHub', 'commit'],
+        documentation,
+      },
+      {
+        title: 'GitHub commits (since latest release)',
+        previewUrl: 'SubtitleEdit/subtitleedit/latest',
+        keywords: ['GitHub', 'commit'],
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/commits-since\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
