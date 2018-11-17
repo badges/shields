@@ -105,7 +105,6 @@ function assignColor(color = '', colorschemeType = 'colorB') {
 
 const definedColorschemes = require(path.join(__dirname, 'colorscheme.json'))
 
-// Inject the measurer to avoid placing any persistent state in this module.
 function makeBadge({
   format,
   template,
