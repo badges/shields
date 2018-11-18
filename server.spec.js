@@ -17,8 +17,12 @@ const { loadServiceClasses } = require('./services')
 describe('The server', function() {
   let dummyCamp = Camp.start({ port: config.port, hostname: '::' })
   before('Check the services', function() {
-    // Without this block here, if registering a service fails, the log
-    // message is opaque:
+    // The responsibility of this `before()` hook is to verify that the server
+    // will be able to register all the services. When it fails, the balance of
+    // this `describe()` block – that is, the server tests – does not run.
+    //
+    // Without this block, the next `before()` hook fails while printing this
+    // quite opaque message:
     //
     // Error: listen EADDRINUSE :::1111
     //   at Object._errnoException (util.js:1022:11)
@@ -28,9 +32,6 @@ describe('The server', function() {
     //   at doListen (net.js:1517:7)
     //   at _combinedTickCallback (internal/process/next_tick.js:141:11)
     //   at process._tickDomainCallback (internal/process/next_tick.js:218:9)
-    //
-    // Putting it here prevents the tests in this `describe()` from running at
-    // all.
     loadServiceClasses().forEach(serviceClass =>
       serviceClass.register({ camp: dummyCamp, handleRequest }, {})
     )
