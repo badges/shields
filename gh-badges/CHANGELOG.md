@@ -1,5 +1,33 @@
 # Changelog
 
+## 2.1.0
+
+gh-badges v2.1.0 implements a new text width measurer which removes the
+dependency on Verdana for accurate text width computation. As such, the `fontPath` and `precomputeWidths` parameters are now deprecated. The recommended call to create an instance of `BadgeFactory` is now
+
+```js
+const bf = new BadgeFactory()
+```
+
+For backwards compatibility you can still construct an instance of `BadgeFactory` with a call like
+
+```js
+const bf = new BadgeFactory({ fontPath: '/path/to/Verdana.ttf', precomputeWidths: true })
+```
+
+but the behaviour will be the same as:
+
+```js
+const bf = new BadgeFactory()
+```
+
+These arguments will be removed in a future release.
+
+### Other changes in this release:
+
+* Remove unnecessary dependencies
+* Documentation improvements
+
 ## 2.0.0 - 2018-11-09
 
 gh-badges v2.0.0 declares a new public interface which is synchronous.
