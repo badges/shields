@@ -47,7 +47,7 @@ module.exports = class Depfu extends BaseJsonService {
       {
         title: 'Depfu',
         exampleUrl: 'depfu/example-ruby',
-        urlPattern: ':user/:repo',
+        pattern: ':user/:repo',
         staticExample: this.render({
           text: 'recent',
           colorscheme: 'brightgreen',

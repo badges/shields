@@ -150,19 +150,19 @@ module.exports = class Codeclimate extends LegacyService {
       {
         title: 'Code Climate issues',
         exampleUrl: 'issues/twbs/bootstrap',
-        urlPattern: 'issues/:userRepo',
+        pattern: 'issues/:userRepo',
         staticExample: { label: 'issues', message: '89', color: 'red' },
       },
       {
         title: 'Code Climate maintainability',
         exampleUrl: 'maintainability/angular/angular.js',
-        urlPattern: 'maintainability/:userRepo',
+        pattern: 'maintainability/:userRepo',
         staticExample: { label: 'maintainability', message: 'F', color: 'red' },
       },
       {
         title: 'Code Climate maintainability (percentage)',
         exampleUrl: 'maintainability-percentage/angular/angular.js',
-        urlPattern: 'maintainability-percentage/:userRepo',
+        pattern: 'maintainability-percentage/:userRepo',
         staticExample: {
           label: 'maintainability',
           message: '4.6%',
@@ -172,7 +172,7 @@ module.exports = class Codeclimate extends LegacyService {
       {
         title: 'Code Climate coverage',
         exampleUrl: 'coverage/jekyll/jekyll',
-        urlPattern: 'coverage/:userRepo',
+        pattern: 'coverage/:userRepo',
         staticExample: {
           label: 'coverage',
           message: '95%',
@@ -182,7 +182,7 @@ module.exports = class Codeclimate extends LegacyService {
       {
         title: 'Code Climate coverage (letter)',
         exampleUrl: 'coverage-letter/jekyll/jekyll',
-        urlPattern: 'coverage-letter/:userRepo',
+        pattern: 'coverage-letter/:userRepo',
         staticExample: {
           label: 'coverage',
           message: 'A',
@@ -192,7 +192,7 @@ module.exports = class Codeclimate extends LegacyService {
       {
         title: 'Code Climate technical debt',
         exampleUrl: 'tech-debt/jekyll/jekyll',
-        urlPattern: 'tech-debt/:userRepo',
+        pattern: 'tech-debt/:userRepo',
         staticExample: {
           label: 'technical debt',
           message: '3%',

@@ -61,7 +61,7 @@ module.exports = class Discord extends BaseJsonService {
       {
         title: 'Discord',
         exampleUrl: '102860784329052160',
-        urlPattern: ':serverId',
+        pattern: ':serverId',
         staticExample: this.render({ members: 23 }),
       },
     ]
