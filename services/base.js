@@ -175,21 +175,24 @@ class BaseService {
       let outPreviewUrl
       let outPattern
       if (namedParams) {
-        outExampleUrl = this._makeFullUrlFromParams(pattern, namedParams)
         outPreviewUrl = this._makeStaticExampleUrl(staticExample)
         outPattern = `${this._dotSvg(this._makeFullUrl(pattern))}${suffix}`
+        outExampleUrl = `${this._makeFullUrlFromParams(
+          pattern,
+          namedParams
+        )}${suffix}`
       } else if (staticExample) {
+        outPreviewUrl = this._makeStaticExampleUrl(staticExample)
+        outPattern = `${this._dotSvg(this._makeFullUrl(pattern))}${suffix}`
         outExampleUrl = `${this._dotSvg(
           this._makeFullUrl(exampleUrl)
         )}${suffix}`
-        outPreviewUrl = this._makeStaticExampleUrl(staticExample)
-        outPattern = `${this._dotSvg(this._makeFullUrl(pattern))}${suffix}`
       } else {
-        outExampleUrl = undefined
         outPreviewUrl = `${this._dotSvg(
           this._makeFullUrl(previewUrl)
         )}${suffix}`
         outPattern = undefined
+        outExampleUrl = undefined
       }
 
       return {

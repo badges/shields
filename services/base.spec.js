@@ -54,6 +54,13 @@ class DummyService extends BaseService {
         staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
         keywords: ['hello'],
       },
+      {
+        pattern: ':world',
+        namedParams: { world: 'World' },
+        query: { queryParamA: '!!!' },
+        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+        keywords: ['hello'],
+      },
     ]
   }
   static get route() {
@@ -475,6 +482,7 @@ describe('BaseService', function() {
         third,
         fourth,
         fifth,
+        sixth,
       ] = DummyService.prepareExamples()
       expect(first).to.deep.equal({
         title: 'DummyService',
@@ -504,6 +512,15 @@ describe('BaseService', function() {
       expect(third).to.deep.equal(preparedStaticExample)
       expect(fourth).to.deep.equal(preparedStaticExample)
       expect(fifth).to.deep.equal(preparedStaticExample)
+      expect(sixth).to.deep.equal({
+        title: 'DummyService',
+        exampleUrl: '/foo/World.svg?queryParamA=%21%21%21',
+        previewUrl:
+          '/badge/cat-Hello%20namedParamA%3A%20foo%20with%20queryParamA%3A%20bar-lightgrey.svg',
+        urlPattern: '/foo/:world.svg?queryParamA=%21%21%21',
+        documentation: undefined,
+        keywords: ['hello'],
+      })
     })
   })
 
