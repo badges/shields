@@ -17,8 +17,8 @@ function coalesceCacheLength(
   queryParams
 ) {
   const { defaultCacheLengthSeconds } = cacheHeaderConfig
-  // The config always returns a number, but let's make sure it's been wired
-  // up correctly.
+  // The config returns a number so this would only fail if we break the
+  // wiring. Better to fail obviously than silently.
   assert(defaultCacheLengthSeconds !== undefined)
 
   const ourCacheLength = coalesce(
