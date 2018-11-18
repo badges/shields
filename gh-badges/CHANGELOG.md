@@ -2,8 +2,10 @@
 
 ## 2.1.0
 
-gh-badges v2.1.0 implements a new text width measurer which removes the
-dependency on Verdana for accurate text width computation. As such, the `fontPath` and `precomputeWidths` parameters are now deprecated. The recommended call to create an instance of `BadgeFactory` is now
+gh-badges v2.1.0 implements a new text width measurer which uses a lookup table, removing the dependency
+on PDFKit. It is no longer necessary to provide a local copy of Verdana for accurate text width computation.
+
+As such, the `fontPath` and `precomputeWidths` parameters are now deprecated. The recommended call to create an instance of `BadgeFactory` is now
 
 ```js
 const bf = new BadgeFactory()
