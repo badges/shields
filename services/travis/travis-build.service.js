@@ -22,25 +22,25 @@ module.exports = class TravisBuild extends LegacyService {
       {
         title: 'Travis (.org)',
         previewUrl: 'rust-lang/rust',
-        urlPattern: ':user/:repo',
+        pattern: ':user/:repo',
         exampleUrl: 'rust-lang/rust',
       },
       {
         title: 'Travis (.org) branch',
         previewUrl: 'rust-lang/rust/master',
-        urlPattern: ':user/:repo/:branch',
+        pattern: ':user/:repo/:branch',
         exampleUrl: 'rust-lang/rust/master',
       },
       {
         title: 'Travis (.com)',
         previewUrl: 'com/ivandelabeldad/rackian-gateway',
-        urlPattern: 'com/:user/:repo',
+        pattern: 'com/:user/:repo',
         exampleUrl: 'com/ivandelabeldad/rackian-gateway',
       },
       {
         title: 'Travis (.com) branch',
         previewUrl: 'com/ivandelabeldad/rackian-gateway/master',
-        urlPattern: 'com/:user/:repo/:branch',
+        pattern: 'com/:user/:repo/:branch',
         exampleUrl: 'com/ivandelabeldad/rackian-gateway/master',
       },
     ]

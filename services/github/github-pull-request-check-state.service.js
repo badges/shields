@@ -33,7 +33,7 @@ module.exports = class GithubPullRequestCheckState extends GithubAuthService {
     return [
       {
         title: 'GitHub pull request check state',
-        urlPattern: 's/pulls/:user/:repo/:number',
+        pattern: 's/pulls/:user/:repo/:number',
         staticExample: this.render({ which: 's', state: 'pending' }),
         exampleUrl: 's/pulls/badges/shields/1110',
         keywords: ['GitHub', 'pullrequest', 'detail', 'check'],
@@ -41,7 +41,7 @@ module.exports = class GithubPullRequestCheckState extends GithubAuthService {
       },
       {
         title: 'GitHub pull request check contexts',
-        urlPattern: 'contexts/pulls/:user/:repo/:number',
+        pattern: 'contexts/pulls/:user/:repo/:number',
         staticExample: this.render({
           which: 'contexts',
           state: 'pending',

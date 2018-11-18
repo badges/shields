@@ -180,7 +180,7 @@ class SteamCollectionSize extends BaseSteamAPI {
       {
         title: 'Steam Collection Files',
         exampleUrl: '180077636',
-        urlPattern: ':id',
+        pattern: ':id',
         staticExample: this.render({ size: 32 }),
         keywords: ['steam'],
         documentation: docs,
@@ -262,7 +262,7 @@ class SteamFileSize extends SteamFileService {
       {
         title: 'Steam File Size',
         exampleUrl: '100',
-        urlPattern: ':id',
+        pattern: ':id',
         staticExample: this.render({ fileSize: 20000 }),
         keywords: ['steam'],
         documentation: docs,
@@ -297,7 +297,7 @@ class SteamFileReleaseDate extends SteamFileService {
       {
         title: 'Steam Release Date',
         exampleUrl: '100',
-        urlPattern: ':id',
+        pattern: ':id',
         staticExample: this.render({
           releaseDate: new Date(0).setUTCSeconds(1538288239),
         }),
@@ -337,7 +337,7 @@ class SteamFileSubscriptions extends SteamFileService {
       {
         title: 'Steam Subscriptions',
         exampleUrl: '100',
-        urlPattern: ':id',
+        pattern: ':id',
         staticExample: this.render({ subscriptions: 20124 }),
         keywords: ['steam'],
         documentation: docs,
@@ -375,7 +375,7 @@ class SteamFileFavorites extends SteamFileService {
       {
         title: 'Steam Favorites',
         exampleUrl: '100',
-        urlPattern: ':id',
+        pattern: ':id',
         staticExample: this.render({ favorites: 20000 }),
         keywords: ['steam'],
         documentation: docs,
@@ -415,7 +415,7 @@ class SteamFileDownloads extends SteamFileService {
       {
         title: 'Steam Downloads',
         exampleUrl: '100',
-        urlPattern: ':id',
+        pattern: ':id',
         staticExample: this.render({ downloads: 20124 }),
         keywords: ['steam'],
         documentation: docs,
@@ -449,7 +449,7 @@ class SteamFileViews extends SteamFileService {
       {
         title: 'Steam Views',
         exampleUrl: '100',
-        urlPattern: ':id',
+        pattern: ':id',
         staticExample: this.render({ views: 20000 }),
         keywords: ['steam'],
         documentation: docs,
