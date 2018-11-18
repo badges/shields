@@ -54,6 +54,13 @@ class DummyService extends BaseService {
         staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
         keywords: ['hello'],
       },
+      {
+        pattern: ':world',
+        namedParams: { world: 'World' },
+        query: { queryParamA: '!!!' },
+        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+        keywords: ['hello'],
+      },
     ]
   }
   static get route() {
@@ -475,6 +482,7 @@ describe('BaseService', function() {
         third,
         fourth,
         fifth,
+        sixth,
       ] = DummyService.prepareExamples()
       expect(first).to.deep.equal({
         title: 'DummyService',
@@ -504,6 +512,15 @@ describe('BaseService', function() {
       expect(third).to.deep.equal(preparedStaticExample)
       expect(fourth).to.deep.equal(preparedStaticExample)
       expect(fifth).to.deep.equal(preparedStaticExample)
+      expect(sixth).to.deep.equal({
+        title: 'DummyService',
+        exampleUrl: '/foo/World.svg?queryParamA=%21%21%21',
+        previewUrl:
+          '/badge/cat-Hello%20namedParamA%3A%20foo%20with%20queryParamA%3A%20bar-lightgrey.svg',
+        urlPattern: '/foo/:world.svg?queryParamA=%21%21%21',
+        documentation: undefined,
+        keywords: ['hello'],
+      })
     })
   })
 
@@ -512,39 +529,7 @@ describe('BaseService', function() {
       requiredString: Joi.string().required(),
     }).required()
 
-    let sandbox
-    beforeEach(function() {
-      sandbox = sinon.createSandbox()
-    })
-    afterEach(function() {
-      sandbox.restore()
-    })
-    beforeEach(function() {
-      sandbox.stub(trace, 'logTrace')
-    })
-
-    it('throws the expected error if schema is not provided', async function() {
-      try {
-        DummyService._validate({ requiredString: 'bar' }, undefined)
-        expect.fail('Expected to throw')
-      } catch (e) {
-        expect(e).to.be.an.instanceof(Error)
-        expect(e.message).to.equal('A Joi schema is required')
-      }
-    })
-
-    it('logs valid responses', async function() {
-      DummyService._validate({ requiredString: 'bar' }, dummySchema)
-      expect(trace.logTrace).to.be.calledWithMatch(
-        'validate',
-        sinon.match.string,
-        'Data after validation',
-        { requiredString: 'bar' },
-        { deep: true }
-      )
-    })
-
-    it('logs invalid responses and throws error', async function() {
+    it('throws error for invalid responses', async function() {
       try {
         DummyService._validate(
           { requiredString: ['this', "shouldn't", 'work'] },
@@ -553,17 +538,7 @@ describe('BaseService', function() {
         expect.fail('Expected to throw')
       } catch (e) {
         expect(e).to.be.an.instanceof(InvalidResponse)
-        expect(e.message).to.equal(
-          'Invalid Response: child "requiredString" fails because ["requiredString" must be a string]'
-        )
-        expect(e.prettyMessage).to.equal('invalid response data')
       }
-      expect(trace.logTrace).to.be.calledWithMatch(
-        'validate',
-        sinon.match.string,
-        'Response did not match schema',
-        'child "requiredString" fails because ["requiredString" must be a string]'
-      )
     })
   })
 

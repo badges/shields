@@ -19,7 +19,7 @@ module.exports = class Dockbit extends LegacyService {
       {
         title: 'Dockbit',
         previewUrl: 'DockbitStatus/health?token=TvavttxFHJ4qhnKstDxrvBXM',
-        urlPattern: ':organisation/:pipeline?token=:token',
+        pattern: ':organisation/:pipeline?token=:token',
         exampleUrl: 'DockbitStatus/health?token=TvavttxFHJ4qhnKstDxrvBXM',
       },
     ]

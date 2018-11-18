@@ -31,7 +31,7 @@ module.exports = class Codecov extends LegacyService {
       {
         title: 'Codecov private',
         previewUrl: 'github/codecov/example-python',
-        urlPattern: 'token/:token/github/codecov/example-python',
+        pattern: 'token/:token/github/codecov/example-python',
         exampleUrl: 'token/My0A8VL917/github/codecov/example-python',
       },
     ]
