@@ -125,7 +125,7 @@ class WordpressPluginTestedVersion extends BaseWordpressPlatform {
       {
         title: 'Wordpress Plugin: Tested WP Version',
         exampleUrl: 'bbpress',
-        urlPattern: ':slug',
+        pattern: ':slug',
         staticExample: this.render({ version: '4.9.8', color: 'brightgreen' }),
         keywords: ['wordpress'],
         documentation: `<p>There is an alias for this badge. <code>wordpress/v/:slug.svg</code></p>`,

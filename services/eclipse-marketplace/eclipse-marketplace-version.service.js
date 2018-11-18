@@ -26,7 +26,7 @@ module.exports = class EclipseMarketplaceVersion extends EclipseMarketplaceBase 
       {
         title: 'Eclipse Marketplace',
         exampleUrl: 'notepad4e',
-        urlPattern: ':name',
+        pattern: ':name',
         staticExample: this.render({ version: '1.0.1' }),
       },
     ]
