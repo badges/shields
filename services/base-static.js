@@ -12,7 +12,7 @@ const {
 module.exports = class BaseStaticService extends BaseService {
   static register({ camp }, serviceConfig) {
     const {
-      profiling: { makeBadge: profileMakeBadge },
+      profiling: { makeBadge: shouldProfileMakeBadge },
     } = serviceConfig
 
     camp.route(this._regex, async (queryParams, match, end, ask) => {
@@ -38,11 +38,11 @@ module.exports = class BaseStaticService extends BaseService {
       const format = match.slice(-1)[0]
       badgeData.format = format
 
-      if (profileMakeBadge) {
+      if (shouldProfileMakeBadge) {
         console.time('makeBadge total')
       }
       const svg = makeBadge(badgeData)
-      if (profileMakeBadge) {
+      if (shouldProfileMakeBadge) {
         console.timeEnd('makeBadge total')
       }
 
