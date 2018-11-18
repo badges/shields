@@ -7,6 +7,8 @@ const sinon = require('sinon')
 
 const BaseJsonService = require('./base-json')
 
+chai.use(require('chai-as-promised'))
+
 const dummySchema = Joi.object({
   requiredString: Joi.string().required(),
 }).required()

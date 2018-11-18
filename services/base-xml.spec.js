@@ -7,6 +7,8 @@ const sinon = require('sinon')
 
 const BaseXmlService = require('./base-xml')
 
+chai.use(require('chai-as-promised'))
+
 const dummySchema = Joi.object({
   requiredString: Joi.string().required(),
 }).required()
