@@ -11,7 +11,7 @@ t.create('no longer available (previously image size)')
     name: 'imagelayers',
     value: 'no longer available',
   })
-  
+
 t.create('no longer available (previously number of layers)')
   .get('/layers/_/ubuntu/latest.json')
   .expectJSON({
