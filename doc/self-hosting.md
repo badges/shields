@@ -60,7 +60,6 @@ Once you have installed the [Heroku Toolbelt][]:
 heroku login
 heroku create your-app-name
 heroku config:set BUILDPACK_URL=https://github.com/mojodna/heroku-buildpack-multi.git#build-env
-cp /path/to/Verdana.ttf .
 make deploy
 heroku open
 ```
