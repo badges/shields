@@ -1,6 +1,6 @@
 FROM node:8.9.4-alpine
 
-RUN apk add --no-cache gettext imagemagick librsvg ttf-dejavu git
+RUN apk add --no-cache gettext imagemagick librsvg git
 
 RUN mkdir -p /usr/src/app
 RUN mkdir /usr/src/app/private
