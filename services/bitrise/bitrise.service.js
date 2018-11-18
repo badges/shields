@@ -19,7 +19,7 @@ module.exports = class Bitrise extends LegacyService {
       {
         title: 'Bitrise',
         previewUrl: 'cde737473028420d/master?token=GCIdEzacE4GW32jLVrZb7A',
-        urlPattern: ':app-id/:branch?token=:app-status-badge-token',
+        pattern: ':app-id/:branch?token=:app-status-badge-token',
         exampleUrl: 'cde737473028420d/master?token=GCIdEzacE4GW32jLVrZb7A',
       },
     ]
