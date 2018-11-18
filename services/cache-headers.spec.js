@@ -1,9 +1,9 @@
 'use strict'
 
 const { test, given } = require('sazerac')
-const { coalesceCacheLength } = require('./caching')
+const { coalesceCacheLength } = require('./cache-headers')
 
-describe('getBadgeMaxAge function', function() {
+describe('coalesceCacheLength', function() {
   const exampleCacheConfig = { defaultCacheLengthSeconds: 777 }
   test(coalesceCacheLength, () => {
     given(exampleCacheConfig, undefined, {}).expect(777)

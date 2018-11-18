@@ -3,7 +3,7 @@
 const makeBadge = require('../gh-badges/lib/make-badge')
 const { makeSend } = require('../lib/result-sender')
 const BaseService = require('./base')
-const { coalesceCacheLength, setCacheHeaders } = require('./caching')
+const { coalesceCacheLength, setCacheHeaders } = require('./cache-headers')
 
 // All services may be cached downstream, as is controlled by the service,
 // the user's request, and the configured default cache length.

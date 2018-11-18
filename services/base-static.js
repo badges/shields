@@ -7,7 +7,7 @@ const BaseService = require('./base')
 const {
   serverHasBeenUpSinceResourceCached,
   setCacheHeadersForStaticResource,
-} = require('./caching')
+} = require('./cache-headers')
 
 module.exports = class BaseStaticService extends BaseService {
   static register({ camp }, serviceConfig) {
