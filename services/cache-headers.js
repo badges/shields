@@ -12,11 +12,11 @@ function isInt(number) {
 }
 
 function coalesceCacheLength(
-  cacheConfig,
+  cacheHeaderConfig,
   serviceCacheLengthSeconds,
   queryParams
 ) {
-  const { defaultCacheLengthSeconds } = cacheConfig
+  const { defaultCacheLengthSeconds } = cacheHeaderConfig
   // The config always returns a number, but let's make sure it's been wired
   // up correctly.
   assert(defaultCacheLengthSeconds !== undefined)
@@ -36,7 +36,7 @@ function coalesceCacheLength(
   }
 }
 
-function setCacheHeaders(res, cacheLengthSeconds) {
+function setHeadersForCacheLength(res, cacheLengthSeconds) {
   const reqTime = new Date()
   const reqTimeGMTString = reqTime.toGMTString()
 
@@ -55,6 +55,20 @@ function setCacheHeaders(res, cacheLengthSeconds) {
   }
 }
 
+function setCacheHeaders({
+  cacheHeaderConfig,
+  serviceCacheLengthSeconds,
+  queryParams,
+  res,
+}) {
+  const cacheLengthSeconds = coalesceCacheLength(
+    cacheHeaderConfig,
+    serviceCacheLengthSeconds,
+    queryParams
+  )
+  setHeadersForCacheLength(res, cacheLengthSeconds)
+}
+
 const staticCacheControlHeader = `max-age=${24 * 3600}` // 1 day.
 function setCacheHeadersForStaticResource(res) {
   res.setHeader('Cache-Control', staticCacheControlHeader)
@@ -68,6 +82,7 @@ function serverHasBeenUpSinceResourceCached(req) {
 module.exports = {
   coalesceCacheLength,
   setCacheHeaders,
+  setHeadersForCacheLength,
   setCacheHeadersForStaticResource,
   serverHasBeenUpSinceResourceCached,
 }

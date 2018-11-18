@@ -9,10 +9,10 @@ class LegacyService extends BaseService {
   }
 
   static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
-    const { cache: cacheConfig } = serviceConfig
+    const { cache: cacheHeaderConfig } = serviceConfig
     this.registerLegacyRouteHandler({
       camp,
-      cache: (...args) => handleRequest(cacheConfig, ...args),
+      cache: (...args) => handleRequest(cacheHeaderConfig, ...args),
       githubApiProvider,
     })
   }

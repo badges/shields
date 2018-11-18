@@ -391,10 +391,10 @@ class BaseService {
   }
 
   static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
-    const { cacheHeaders: cacheConfig } = serviceConfig
+    const { cacheHeaders: cacheHeaderConfig } = serviceConfig
     camp.route(
       this._regex,
-      handleRequest(cacheConfig, {
+      handleRequest(cacheHeaderConfig, {
         queryParams: this.route.queryParams,
         handler: async (queryParams, match, sendBadge, request) => {
           const namedParams = this._namedParamsForMatch(match)

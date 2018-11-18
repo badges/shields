@@ -3,7 +3,7 @@
 const makeBadge = require('../gh-badges/lib/make-badge')
 const { makeSend } = require('../lib/result-sender')
 const BaseService = require('./base')
-const { coalesceCacheLength, setCacheHeaders } = require('./cache-headers')
+const { setCacheHeaders } = require('./cache-headers')
 
 // All services may be cached downstream, as is controlled by the service,
 // the user's request, and the configured default cache length.
@@ -18,7 +18,8 @@ const { coalesceCacheLength, setCacheHeaders } = require('./cache-headers')
 // diagnostics.
 module.exports = class NoncachingBaseService extends BaseService {
   static register({ camp }, serviceConfig) {
-    const { cacheHeaders: cacheConfig } = serviceConfig
+    const { cacheHeaders: cacheHeaderConfig } = serviceConfig
+    const { _cacheLength: serviceCacheLengthSeconds } = this
 
     camp.route(this._regex, async (queryParams, match, end, ask) => {
       const namedParams = this._namedParamsForMatch(match)
@@ -36,12 +37,12 @@ module.exports = class NoncachingBaseService extends BaseService {
 
       const svg = makeBadge(badgeData)
 
-      const cacheLengthSeconds = coalesceCacheLength(
-        cacheConfig,
-        this._cacheLength,
-        queryParams
-      )
-      setCacheHeaders(cacheLengthSeconds)
+      setCacheHeaders({
+        cacheHeaderConfig,
+        serviceCacheLengthSeconds,
+        queryParams,
+        res: ask.res,
+      })
 
       makeSend(format, ask.res, end)(svg)
     })
