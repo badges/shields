@@ -30,8 +30,7 @@ prepare-server-deploy: website
 	git -C ${SERVER_TMP} commit --no-verify -m '[DEPLOY] Add frontend for debugging'
 	mkdir -p ${SERVER_TMP}/private
 	cp private/secret-production.json ${SERVER_TMP}/private/secret.json
-	cp Verdana.ttf ${SERVER_TMP}
-	git -C ${SERVER_TMP} add -f private/secret.json Verdana.ttf
+	git -C ${SERVER_TMP} add -f private/secret.json
 	git -C ${SERVER_TMP} commit --no-verify -m '[DEPLOY] MUST NOT BE ON GITHUB'
 
 clean-server-deploy:
@@ -70,7 +69,7 @@ deploy-gh-pages-clean:
 	git worktree prune
 
 deploy-heroku:
-	git add -f Verdana.ttf private/secret.json build/
+	git add -f private/secret.json build/
 	git commit --no-verify -m'MUST NOT BE ON GITHUB'
 	git push -f heroku HEAD:master
 	git reset HEAD~1
