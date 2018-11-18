@@ -61,7 +61,7 @@ class APMDownloads extends BaseAPMService {
     return [
       {
         exampleUrl: 'vim-mode',
-        urlPattern: ':package',
+        pattern: ':package',
         staticExample: this.render({ downloads: '60043' }),
         keywords: ['atom'],
       },
@@ -101,7 +101,7 @@ class APMVersion extends BaseAPMService {
     return [
       {
         exampleUrl: 'vim-mode',
-        urlPattern: ':package',
+        pattern: ':package',
         staticExample: this.render({ version: '0.6.0' }),
         keywords: ['atom'],
       },
@@ -145,7 +145,7 @@ class APMLicense extends BaseAPMService {
     return [
       {
         exampleUrl: 'vim-mode',
-        urlPattern: ':package',
+        pattern: ':package',
         staticExample: this.render({ license: 'MIT' }),
         keywords: ['atom'],
       },
