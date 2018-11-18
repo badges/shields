@@ -22,7 +22,7 @@ module.exports = class CondaPlatform extends BaseCondaService {
         pattern: 'pn/:channel/:package',
         staticExample: this.render({
           which: 'pn',
-          platforms: 'linux-64 | win-32 | osx-64 | win-64',
+          platforms: ['linux-64', 'win-32', 'osx-64', 'win-64'],
         }),
       },
     ]
@@ -31,13 +31,12 @@ module.exports = class CondaPlatform extends BaseCondaService {
   static render({ which, platforms }) {
     return {
       label: which === 'pn' ? 'platform' : 'conda|platform',
-      message: platforms,
+      message: platforms.join(' | '),
     }
   }
 
   async handle({ which, channel, pkg }) {
     const json = await this.fetch({ channel, pkg })
-    const platforms = json.conda_platforms.join(' | ')
-    return this.constructor.render({ which, platforms })
+    return this.constructor.render({ which, platforms: json.conda_platforms })
   }
 }
