@@ -2,7 +2,6 @@
 
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
-const Joi = require('joi')
 const queryString = require('query-string')
 const pathToRegexp = require('path-to-regexp')
 const {
@@ -12,6 +11,7 @@ const {
   InvalidParameter,
   Deprecated,
 } = require('./errors')
+const validate = require('../lib/validate')
 const { checkErrorResponse } = require('../lib/error-helper')
 const {
   makeLogo,
@@ -175,21 +175,24 @@ class BaseService {
       let outPreviewUrl
       let outPattern
       if (namedParams) {
-        outExampleUrl = this._makeFullUrlFromParams(pattern, namedParams)
         outPreviewUrl = this._makeStaticExampleUrl(staticExample)
         outPattern = `${this._dotSvg(this._makeFullUrl(pattern))}${suffix}`
+        outExampleUrl = `${this._makeFullUrlFromParams(
+          pattern,
+          namedParams
+        )}${suffix}`
       } else if (staticExample) {
+        outPreviewUrl = this._makeStaticExampleUrl(staticExample)
+        outPattern = `${this._dotSvg(this._makeFullUrl(pattern))}${suffix}`
         outExampleUrl = `${this._dotSvg(
           this._makeFullUrl(exampleUrl)
         )}${suffix}`
-        outPreviewUrl = this._makeStaticExampleUrl(staticExample)
-        outPattern = `${this._dotSvg(this._makeFullUrl(pattern))}${suffix}`
       } else {
-        outExampleUrl = undefined
         outPreviewUrl = `${this._dotSvg(
           this._makeFullUrl(previewUrl)
         )}${suffix}`
         outPattern = undefined
+        outExampleUrl = undefined
       }
 
       return {
@@ -413,34 +416,16 @@ class BaseService {
   }
 
   static _validate(data, schema) {
-    if (!schema || !schema.isJoi) {
-      throw Error('A Joi schema is required')
-    }
-    const { error, value } = Joi.validate(data, schema, {
-      allowUnknown: true,
-      stripUnknown: true,
-    })
-    if (error) {
-      trace.logTrace(
-        'validate',
-        emojic.womanShrugging,
-        'Response did not match schema',
-        error.message
-      )
-      throw new InvalidResponse({
-        prettyMessage: 'invalid response data',
-        underlyingError: error,
-      })
-    } else {
-      trace.logTrace(
-        'validate',
-        emojic.bathtub,
-        'Data after validation',
-        value,
-        { deep: true }
-      )
-      return value
-    }
+    return validate(
+      {
+        ErrorClass: InvalidResponse,
+        prettyErrorMessage: 'invalid response data',
+        traceErrorMessage: 'Response did not match schema',
+        traceSuccessMessage: 'Response after validation',
+      },
+      data,
+      schema
+    )
   }
 
   async _request({ url, options = {}, errorMessages = {} }) {

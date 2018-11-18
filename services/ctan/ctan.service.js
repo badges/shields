@@ -60,7 +60,7 @@ class CtanLicense extends BaseCtanService {
       {
         title: 'CTAN',
         exampleUrl: 'novel',
-        urlPattern: ':library',
+        pattern: ':library',
         staticExample: this.render({ licenses: ['ppl1.3c', 'ofl'] }),
         keywords: ['tex'],
       },
@@ -95,7 +95,7 @@ class CtanVersion extends BaseCtanService {
       {
         title: 'CTAN',
         exampleUrl: 'tex',
-        urlPattern: ':library',
+        pattern: ':library',
         staticExample: this.render({ version: '3.14159265' }),
         keywords: ['tex'],
       },
