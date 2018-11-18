@@ -91,8 +91,3 @@ t.create('unknown package')
 t.create('unknown channel')
   .get('/d/some-bogus-channel-that-never-exists/zlib.json')
   .expectJSON({ name: 'conda', value: 'not found' })
-
-t.create('unknown info')
-  .get('/x/conda-forge/zlib.json')
-  .expectStatus(404)
-  .expectJSON({ name: '404', value: 'badge not found' })
