@@ -8,7 +8,7 @@ module.exports = class ContinuousPhp extends LegacyService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return { base: 'continuousphp' }
   }
 
@@ -32,27 +32,22 @@ module.exports = class ContinuousPhp extends LegacyService {
 
         const options = {
           method: 'GET',
-          uri:
-            'https://status.continuousphp.com/' +
-            provider +
-            '/' +
-            userRepo +
-            '/status-info',
+          uri: `https://status.continuousphp.com/${provider}/${userRepo}/status-info`,
           headers: {
             Accept: 'application/json',
           },
         }
 
         if (branch != null) {
-          options.uri += '?branch=' + branch
+          options.uri += `?branch=${branch}`
         }
 
         const badgeData = getBadgeData('build', data)
         request(options, (err, res) => {
           if (err != null) {
-            console.error('continuousphp error: ' + err.stack)
+            console.error(`continuousphp error: ${err.stack}`)
             if (res) {
-              console.error('' + res)
+              console.error(`${res}`)
             }
 
             badgeData.text[1] = 'invalid'

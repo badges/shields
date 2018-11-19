@@ -1,10 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
 const { invalidJSON } = require('../response-fixtures')
 
-const t = new ServiceTester({ id: 'nexus', title: 'Nexus' })
+const t = require('../create-service-tester')()
 module.exports = t
 
 t.create('search release version')

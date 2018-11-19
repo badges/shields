@@ -63,7 +63,7 @@ class AurLicense extends BaseAurService {
     return 'license'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'aur/license',
       format: '(.+)',
@@ -75,7 +75,7 @@ class AurLicense extends BaseAurService {
     return [
       {
         title: `AUR license`,
-        urlPattern: ':package',
+        pattern: ':package',
         exampleUrl: 'yaourt',
         staticExample: this.render({ license: 'GPL' }),
       },
@@ -104,7 +104,7 @@ class AurVotes extends BaseAurService {
     return 'rating'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'aur/votes',
       format: '(.+)',
@@ -116,7 +116,7 @@ class AurVotes extends BaseAurService {
     return [
       {
         title: `AUR votes`,
-        urlPattern: ':package',
+        pattern: ':package',
         exampleUrl: 'yaourt',
         staticExample: this.render({ license: '3029' }),
       },
@@ -142,7 +142,7 @@ class AurVersion extends BaseAurService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'aur/version',
       format: '(.+)',
@@ -154,7 +154,7 @@ class AurVersion extends BaseAurService {
     return [
       {
         title: `AUR version`,
-        urlPattern: ':package',
+        pattern: ':package',
         exampleUrl: 'yaourt',
         staticExample: this.render({ version: 'v1.9-1', outOfDate: null }),
       },

@@ -4,7 +4,7 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 
 const { invalidJSON } = require('../response-fixtures')
-const colorscheme = require('../../lib/colorscheme.json')
+const { colorScheme } = require('../test-helpers')
 
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
@@ -12,11 +12,11 @@ const {
   isMetricOverTimePeriod,
 } = require('../test-validators')
 const isVersionColor = Joi.equal(
-  colorscheme.red.colorB,
-  colorscheme.yellow.colorB,
-  colorscheme.yellowgreen.colorB,
-  colorscheme.green.colorB,
-  colorscheme.brightgreen.colorB
+  colorScheme.red,
+  colorScheme.yellow,
+  colorScheme.yellowgreen,
+  colorScheme.green,
+  colorScheme.brightgreen
 )
 
 const t = new ServiceTester({ id: 'dub', title: 'Dub' })
@@ -111,7 +111,7 @@ t.create('version (valid)')
     Joi.object().keys({
       name: 'dub',
       value: isVPlusDottedVersionNClausesWithOptionalSuffix,
-      colorB: Joi.equal(colorscheme.blue.colorB, colorscheme.orange.colorB),
+      colorB: Joi.equal(colorScheme.blue, colorScheme.orange),
     })
   )
 
@@ -140,7 +140,7 @@ t.create('license (valid)')
   .expectJSON({
     name: 'license',
     value: 'MIT',
-    colorB: colorscheme.blue.colorB,
+    colorB: colorScheme.blue,
   })
 
 t.create('license (not found)')

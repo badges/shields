@@ -10,7 +10,7 @@ module.exports = class LgtmAlerts extends LegacyService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'lgtm/alerts',
     }
@@ -31,8 +31,7 @@ module.exports = class LgtmAlerts extends LegacyService {
       cache((data, match, sendBadge, request) => {
         const projectId = match[1] // eg, `g/apache/cloudstack`
         const format = match[2]
-        const url =
-          'https://lgtm.com/api/v0.1/project/' + projectId + '/details'
+        const url = `https://lgtm.com/api/v0.1/project/${projectId}/details`
         const badgeData = getBadgeData('lgtm', data)
         request(url, (err, res, buffer) => {
           if (

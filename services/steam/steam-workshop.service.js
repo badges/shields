@@ -168,11 +168,10 @@ class SteamCollectionSize extends BaseSteamAPI {
     return { label: 'files' }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/collection-files',
-      format: '(.+)',
-      capture: ['collectionId'],
+      pattern: ':collectionId',
     }
   }
 
@@ -181,7 +180,7 @@ class SteamCollectionSize extends BaseSteamAPI {
       {
         title: 'Steam Collection Files',
         exampleUrl: '180077636',
-        urlPattern: ':id',
+        pattern: ':id',
         staticExample: this.render({ size: 32 }),
         keywords: ['steam'],
         documentation: docs,
@@ -251,11 +250,10 @@ class SteamFileSize extends SteamFileService {
     return { label: 'size' }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/size',
-      format: '(.+)',
-      capture: ['fileId'],
+      pattern: ':fileId',
     }
   }
 
@@ -264,7 +262,7 @@ class SteamFileSize extends SteamFileService {
       {
         title: 'Steam File Size',
         exampleUrl: '100',
-        urlPattern: ':id',
+        pattern: ':id',
         staticExample: this.render({ fileSize: 20000 }),
         keywords: ['steam'],
         documentation: docs,
@@ -287,11 +285,10 @@ class SteamFileReleaseDate extends SteamFileService {
     return { label: 'release date' }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/release-date',
-      format: '(.+)',
-      capture: ['fileId'],
+      pattern: ':fileId',
     }
   }
 
@@ -300,7 +297,7 @@ class SteamFileReleaseDate extends SteamFileService {
       {
         title: 'Steam Release Date',
         exampleUrl: '100',
-        urlPattern: ':id',
+        pattern: ':id',
         staticExample: this.render({
           releaseDate: new Date(0).setUTCSeconds(1538288239),
         }),
@@ -328,11 +325,10 @@ class SteamFileSubscriptions extends SteamFileService {
     return 'rating'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/subscriptions',
-      format: '(.+)',
-      capture: ['fileId'],
+      pattern: ':fileId',
     }
   }
 
@@ -341,7 +337,7 @@ class SteamFileSubscriptions extends SteamFileService {
       {
         title: 'Steam Subscriptions',
         exampleUrl: '100',
-        urlPattern: ':id',
+        pattern: ':id',
         staticExample: this.render({ subscriptions: 20124 }),
         keywords: ['steam'],
         documentation: docs,
@@ -367,11 +363,10 @@ class SteamFileFavorites extends SteamFileService {
     return 'rating'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/favorites',
-      format: '(.+)',
-      capture: ['fileId'],
+      pattern: ':fileId',
     }
   }
 
@@ -380,7 +375,7 @@ class SteamFileFavorites extends SteamFileService {
       {
         title: 'Steam Favorites',
         exampleUrl: '100',
-        urlPattern: ':id',
+        pattern: ':id',
         staticExample: this.render({ favorites: 20000 }),
         keywords: ['steam'],
         documentation: docs,
@@ -408,11 +403,10 @@ class SteamFileDownloads extends SteamFileService {
     return { label: 'downloads' }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/downloads',
-      format: '(.+)',
-      capture: ['fileId'],
+      pattern: ':fileId',
     }
   }
 
@@ -421,7 +415,7 @@ class SteamFileDownloads extends SteamFileService {
       {
         title: 'Steam Downloads',
         exampleUrl: '100',
-        urlPattern: ':id',
+        pattern: ':id',
         staticExample: this.render({ downloads: 20124 }),
         keywords: ['steam'],
         documentation: docs,
@@ -443,11 +437,10 @@ class SteamFileViews extends SteamFileService {
     return { label: 'views' }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'steam/views',
-      format: '(.+)',
-      capture: ['fileId'],
+      pattern: ':fileId',
     }
   }
 
@@ -456,7 +449,7 @@ class SteamFileViews extends SteamFileService {
       {
         title: 'Steam Views',
         exampleUrl: '100',
-        urlPattern: ':id',
+        pattern: ':id',
         staticExample: this.render({ views: 20000 }),
         keywords: ['steam'],
         documentation: docs,

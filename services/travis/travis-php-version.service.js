@@ -14,7 +14,7 @@ module.exports = class TravisPhpVersion extends LegacyService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'travis/php-v',
     }
@@ -42,12 +42,14 @@ module.exports = class TravisPhpVersion extends LegacyService {
         }
         const badgeData = getBadgeData('php', data)
         getPhpReleases(githubApiProvider)
+          // Switch to async/await when this is refactored.
+          // eslint-disable-next-line promise/prefer-await-to-then
           .then(phpReleases => {
             request(options, (err, res, buffer) => {
               if (err !== null) {
                 log.error(`Travis CI error: ${err.stack}`)
                 if (res) {
-                  log.error('' + res)
+                  log.error(`${res}`)
                 }
                 badgeData.text[1] = 'invalid'
                 sendBadge(format, badgeData)

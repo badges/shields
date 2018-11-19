@@ -36,11 +36,10 @@ function VersionForExtensionType(extensionType) {
       return { label: extensionType }
     }
 
-    static get url() {
+    static get route() {
       return {
         base: `wordpress/${extensionType}/v`,
-        format: '(.+)',
-        capture: ['slug'],
+        pattern: ':slug',
       }
     }
 
@@ -48,8 +47,7 @@ function VersionForExtensionType(extensionType) {
       return [
         {
           title: `Wordpress ${capt} Version`,
-          exampleUrl: exampleSlug,
-          urlPattern: ':slug',
+          namedParams: { slug: exampleSlug },
           staticExample: this.render({ response: { version: 2.5 } }),
           keywords: ['wordpress'],
         },

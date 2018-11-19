@@ -8,7 +8,7 @@ module.exports = class Sourcegraph extends LegacyService {
     return 'other'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'sourcegraph/rrc',
     }
@@ -29,8 +29,7 @@ module.exports = class Sourcegraph extends LegacyService {
       cache((data, match, sendBadge, request) => {
         const repo = match[1]
         const format = match[2]
-        const apiUrl =
-          'https://sourcegraph.com/.api/repos/' + repo + '/-/shield'
+        const apiUrl = `https://sourcegraph.com/.api/repos/${repo}/-/shield`
         const badgeData = getBadgeData('used by', data)
         request(apiUrl, (err, res, buffer) => {
           if (err != null) {

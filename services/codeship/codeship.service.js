@@ -8,7 +8,7 @@ module.exports = class Codeship extends LegacyService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'codeship',
     }
@@ -36,11 +36,9 @@ module.exports = class Codeship extends LegacyService {
         const branch = match[2]
         const options = {
           method: 'GET',
-          uri:
-            'https://codeship.com/projects/' +
-            projectId +
-            '/status' +
-            (branch != null ? '?branch=' + branch : ''),
+          uri: `https://codeship.com/projects/${projectId}/status${
+            branch != null ? `?branch=${branch}` : ''
+          }`,
         }
         const badgeData = getBadgeData('build', data)
         request(options, (err, res) => {

@@ -11,7 +11,7 @@ module.exports = class Homebrew extends LegacyService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'homebrew/v',
     }
@@ -32,7 +32,7 @@ module.exports = class Homebrew extends LegacyService {
       cache((data, match, sendBadge, request) => {
         const pkg = match[1] // eg. cake
         const format = match[2]
-        const apiUrl = 'https://formulae.brew.sh/api/formula/' + pkg + '.json'
+        const apiUrl = `https://formulae.brew.sh/api/formula/${pkg}.json`
 
         const badgeData = getBadgeData('homebrew', data)
         request(

@@ -11,7 +11,7 @@ module.exports = class Liberapay extends LegacyService {
     return 'funding'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'liberapay',
     }
@@ -45,7 +45,7 @@ module.exports = class Liberapay extends LegacyService {
         const type = match[1] // e.g., 'gives'
         const entity = match[2] // e.g., 'Changaco'
         const format = match[3]
-        const apiUrl = 'https://liberapay.com/' + entity + '/public.json'
+        const apiUrl = `https://liberapay.com/${entity}/public.json`
         // Lock down type
         const label = {
           receives: 'receives',

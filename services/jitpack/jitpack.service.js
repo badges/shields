@@ -10,7 +10,7 @@ module.exports = class Jitpack extends LegacyService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'jitpack/v',
     }
@@ -30,12 +30,12 @@ module.exports = class Jitpack extends LegacyService {
     camp.route(
       /^\/jitpack\/v\/([^/]*)\/([^/]*)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
-        const groupId = 'com.github.' + match[1] // github user
+        const groupId = `com.github.${match[1]}` // github user
         const artifactId = match[2] // the project's name
         const format = match[3] // "svg"
 
-        const pkg = groupId + '/' + artifactId + '/latest'
-        const apiUrl = 'https://jitpack.io/api/builds/' + pkg
+        const pkg = `${groupId}/${artifactId}/latest`
+        const apiUrl = `https://jitpack.io/api/builds/${pkg}`
 
         const badgeData = getBadgeData('jitpack', data)
 

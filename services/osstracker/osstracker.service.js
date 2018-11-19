@@ -10,7 +10,7 @@ module.exports = class OssTracker extends LegacyService {
     return 'other'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'osslifecycle',
     }
@@ -32,9 +32,9 @@ module.exports = class OssTracker extends LegacyService {
         const orgOrUserAndRepo = match[1]
         const branch = match[2]
         const format = match[3]
-        let url = 'https://raw.githubusercontent.com/' + orgOrUserAndRepo
+        let url = `https://raw.githubusercontent.com/${orgOrUserAndRepo}`
         if (branch != null) {
-          url += '/' + branch + '/OSSMETADATA'
+          url += `/${branch}/OSSMETADATA`
         } else {
           url += '/master/OSSMETADATA'
         }
@@ -45,9 +45,9 @@ module.exports = class OssTracker extends LegacyService {
         const badgeData = getBadgeData('oss lifecycle', data)
         request(options, (err, res, body) => {
           if (err != null) {
-            log.error('NetflixOSS error: ' + err.stack)
+            log.error(`NetflixOSS error: ${err.stack}`)
             if (res) {
-              log.error('' + res)
+              log.error(`${res}`)
             }
             badgeData.text[1] = 'invalid'
             sendBadge(format, badgeData)

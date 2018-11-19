@@ -17,7 +17,7 @@ module.exports = class JiraSprint extends LegacyService {
     return 'issue-tracking'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'jira/sprint',
     }
@@ -45,13 +45,7 @@ module.exports = class JiraSprint extends LegacyService {
         const options = {
           method: 'GET',
           json: true,
-          uri:
-            protocol +
-            '://' +
-            host +
-            '/rest/api/2/search?jql=sprint=' +
-            sprintId +
-            '%20AND%20type%20IN%20(Bug,Improvement,Story,"Technical%20task")&fields=resolution&maxResults=500',
+          uri: `${protocol}://${host}/rest/api/2/search?jql=sprint=${sprintId}%20AND%20type%20IN%20(Bug,Improvement,Story,"Technical%20task")&fields=resolution&maxResults=500`,
         }
         if (serverSecrets && serverSecrets.jira_username) {
           options.auth = {
@@ -74,8 +68,9 @@ module.exports = class JiraSprint extends LegacyService {
                   return el.fields.resolution.name !== 'Unresolved'
                 }
               }).length
-              badgeData.text[1] =
-                Math.round((issuesDone * 100) / json.total) + '%'
+              badgeData.text[1] = `${Math.round(
+                (issuesDone * 100) / json.total
+              )}%`
               switch (issuesDone) {
                 case 0:
                   badgeData.colorscheme = 'red'

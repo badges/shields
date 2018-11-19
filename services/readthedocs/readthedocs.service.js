@@ -1,14 +1,19 @@
 'use strict'
 
+const Joi = require('joi')
 const BaseSvgScrapingService = require('../base-svg-scraping')
 const { NotFound } = require('../errors')
+
+const schema = Joi.object({
+  message: Joi.string().required(),
+}).required()
 
 module.exports = class ReadTheDocs extends BaseSvgScrapingService {
   static get category() {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'readthedocs',
       format: '([^/]+)(?:/(.+))?',
@@ -20,14 +25,14 @@ module.exports = class ReadTheDocs extends BaseSvgScrapingService {
     return [
       {
         title: 'Read the Docs',
-        urlPattern: ':package',
+        pattern: ':package',
         exampleUrl: 'pip',
         staticExample: this.render({ status: 'passing' }),
         keywords: ['documentation'],
       },
       {
         title: 'Read the Docs (version)',
-        urlPattern: ':package/:version',
+        pattern: ':package/:version',
         exampleUrl: 'pip/stable',
         staticExample: this.render({ status: 'passing' }),
         keywords: ['documentation'],
@@ -60,6 +65,7 @@ module.exports = class ReadTheDocs extends BaseSvgScrapingService {
 
   async handle({ project, version }) {
     const { message: status } = await this._requestSvg({
+      schema,
       url: `https://readthedocs.org/projects/${encodeURIComponent(
         project
       )}/badge/`,

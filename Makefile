@@ -8,11 +8,7 @@ FRONTEND_TMP=${TMPDIR}shields-frontend-deploy
 # pushing secrets to GitHub, this branch is configured to reject pushes.
 WORKING_BRANCH=server-deploy-working-branch
 
-all: website favicon test
-
-favicon:
-	# This isn't working right now. See https://github.com/badges/shields/issues/1788
-	node lib/badge-cli.js '' '' '#bada55' .png > favicon.png
+all: website test
 
 website:
 	LONG_CACHE=false npm run build
@@ -34,8 +30,7 @@ prepare-server-deploy: website
 	git -C ${SERVER_TMP} commit --no-verify -m '[DEPLOY] Add frontend for debugging'
 	mkdir -p ${SERVER_TMP}/private
 	cp private/secret-production.json ${SERVER_TMP}/private/secret.json
-	cp Verdana.ttf ${SERVER_TMP}
-	git -C ${SERVER_TMP} add -f private/secret.json Verdana.ttf
+	git -C ${SERVER_TMP} add -f private/secret.json
 	git -C ${SERVER_TMP} commit --no-verify -m '[DEPLOY] MUST NOT BE ON GITHUB'
 
 clean-server-deploy:
@@ -74,7 +69,7 @@ deploy-gh-pages-clean:
 	git worktree prune
 
 deploy-heroku:
-	git add -f Verdana.ttf private/secret.json build/
+	git add -f private/secret.json build/
 	git commit --no-verify -m'MUST NOT BE ON GITHUB'
 	git push -f heroku HEAD:master
 	git reset HEAD~1
@@ -86,4 +81,4 @@ deploy-heroku:
 test:
 	npm test
 
-.PHONY: all favicon website deploy prepare-server-deploy clean-server-deploy deploy-s0 deploy-s1 deploy-s2 push-s0 push-s1 push-s2 deploy-gh-pages deploy-gh-pages-clean deploy-heroku setup redis test
+.PHONY: all website deploy prepare-server-deploy clean-server-deploy deploy-s0 deploy-s1 deploy-s2 push-s0 push-s1 push-s2 deploy-gh-pages deploy-gh-pages-clean deploy-heroku setup redis test

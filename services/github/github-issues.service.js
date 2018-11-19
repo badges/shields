@@ -7,10 +7,98 @@ const {
 } = require('../../lib/badge-data')
 const { metric } = require('../../lib/text-formatters')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
 module.exports = class GithubIssues extends LegacyService {
+  static get category() {
+    return 'issue-tracking'
+  }
+
+  static get route() {
+    return {
+      base: 'github',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub issues',
+        previewUrl: 'issues/badges/shields',
+        keywords: ['GitHub', 'issue'],
+        documentation,
+      },
+      {
+        title: 'GitHub issues',
+        previewUrl: 'issues-raw/badges/shields',
+        keywords: ['GitHub', 'issue'],
+        documentation,
+      },
+      {
+        title: 'GitHub pull requests',
+        previewUrl: 'issues-pr/cdnjs/cdnjs',
+        keywords: ['GitHub', 'pullrequest', 'pr'],
+        documentation,
+      },
+      {
+        title: 'GitHub pull requests',
+        previewUrl: 'issues-pr-raw/cdnjs/cdnjs',
+        keywords: ['GitHub', 'pullrequest', 'pr'],
+        documentation,
+      },
+      {
+        title: 'GitHub closed issues',
+        previewUrl: 'issues-closed/badges/shields',
+        keywords: ['GitHub', 'issue'],
+        documentation,
+      },
+      {
+        title: 'GitHub closed issues',
+        previewUrl: 'issues-closed-raw/badges/shields',
+        keywords: ['GitHub', 'issue'],
+        documentation,
+      },
+      {
+        title: 'GitHub closed pull requests',
+        previewUrl: 'issues-pr-closed/cdnjs/cdnjs',
+        keywords: ['GitHub', 'pullrequest', 'pr'],
+        documentation,
+      },
+      {
+        title: 'GitHub closed pull requests',
+        previewUrl: 'issues-pr-closed-raw/cdnjs/cdnjs',
+        keywords: ['GitHub', 'pullrequest', 'pr'],
+        documentation,
+      },
+      {
+        title: 'GitHub issues by-label',
+        previewUrl: 'issues/badges/shields/service-badge',
+        keywords: ['GitHub', 'issue', 'label'],
+        documentation,
+      },
+      {
+        title: 'GitHub issues by-label',
+        previewUrl: 'issues-raw/badges/shields/service-badge',
+        keywords: ['GitHub', 'issue', 'label'],
+        documentation,
+      },
+      {
+        title: 'GitHub pull requests by-label',
+        previewUrl: 'issues-pr/badges/shields/service-badge',
+        keywords: ['GitHub', 'pullrequests', 'label'],
+        documentation,
+      },
+      {
+        title: 'GitHub pull requests by-label',
+        previewUrl: 'issues-pr-raw/badges/shields/service-badge',
+        keywords: ['GitHub', 'pullrequests', 'label'],
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/issues(-pr)?(-closed)?(-raw)?\/(?!detail)([^/]+)\/([^/]+)\/?(.+)?\.(svg|png|gif|jpg|json)$/,
@@ -25,21 +113,16 @@ module.exports = class GithubIssues extends LegacyService {
         const query = {}
         const hasLabel = ghLabel !== undefined
 
-        query.q =
-          'repo:' +
-          user +
-          '/' +
-          repo +
-          (isPR ? ' is:pr' : ' is:issue') +
-          (isClosed ? ' is:closed' : ' is:open') +
-          (hasLabel ? ` label:"${ghLabel}"` : '')
+        query.q = `repo:${user}/${repo}${isPR ? ' is:pr' : ' is:issue'}${
+          isClosed ? ' is:closed' : ' is:open'
+        }${hasLabel ? ` label:"${ghLabel}"` : ''}`
 
         const classText = isClosed ? 'closed' : 'open'
-        const leftClassText = isRaw ? classText + ' ' : ''
-        const rightClassText = !isRaw ? ' ' + classText : ''
+        const leftClassText = isRaw ? `${classText} ` : ''
+        const rightClassText = !isRaw ? ` ${classText}` : ''
         const isGhLabelMultiWord = hasLabel && ghLabel.includes(' ')
         const labelText = hasLabel
-          ? (isGhLabelMultiWord ? `"${ghLabel}"` : ghLabel) + ' '
+          ? `${isGhLabelMultiWord ? `"${ghLabel}"` : ghLabel} `
           : ''
         const targetText = isPR ? 'pull requests' : 'issues'
         const badgeData = getBadgeData(

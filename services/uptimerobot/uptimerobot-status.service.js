@@ -9,11 +9,10 @@ module.exports = class UptimeRobotStatus extends UptimeRobotBase {
     }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'uptimerobot/status',
-      format: '(.*)',
-      capture: ['monitorApiKey'],
+      pattern: ':monitorApiKey',
     }
   }
 
@@ -22,7 +21,7 @@ module.exports = class UptimeRobotStatus extends UptimeRobotBase {
       {
         title: 'Uptime Robot status',
         exampleUrl: 'm778918918-3e92c097147760ee39d02d36',
-        urlPattern: ':monitor-specific-key',
+        pattern: ':monitor-specific-key',
         staticExample: this.render({ status: 2 }),
       },
     ]

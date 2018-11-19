@@ -8,7 +8,7 @@ module.exports = class Bitrise extends LegacyService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'bitrise',
     }
@@ -19,7 +19,7 @@ module.exports = class Bitrise extends LegacyService {
       {
         title: 'Bitrise',
         previewUrl: 'cde737473028420d/master?token=GCIdEzacE4GW32jLVrZb7A',
-        urlPattern: ':app-id/:branch?token=:app-status-badge-token',
+        pattern: ':app-id/:branch?token=:app-status-badge-token',
         exampleUrl: 'cde737473028420d/master?token=GCIdEzacE4GW32jLVrZb7A',
       },
     ]
@@ -36,13 +36,9 @@ module.exports = class Bitrise extends LegacyService {
           const format = match[3]
           const token = data.token
           const badgeData = getBadgeData('bitrise', data)
-          let apiUrl =
-            'https://app.bitrise.io/app/' +
-            appId +
-            '/status.json?token=' +
-            token
+          let apiUrl = `https://app.bitrise.io/app/${appId}/status.json?token=${token}`
           if (typeof branch !== 'undefined') {
-            apiUrl += '&branch=' + branch
+            apiUrl += `&branch=${branch}`
           }
 
           const statusColorScheme = {

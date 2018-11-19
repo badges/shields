@@ -8,8 +8,55 @@ const {
 const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
-// For CRAN/METACRAN.
-module.exports = class Cran extends LegacyService {
+class CranLicense extends LegacyService {
+  static get category() {
+    return 'license'
+  }
+
+  static get route() {
+    return {
+      base: 'cran/l',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'CRAN/METACRAN',
+        previewUrl: 'devtools',
+        keywords: ['R'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class CranVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'cran/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'CRAN/METACRAN',
+        previewUrl: 'devtools',
+        keywords: ['R'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class Cran extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/cran\/([vl])\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -17,7 +64,7 @@ module.exports = class Cran extends LegacyService {
         const info = match[1] // either `v` or `l`
         const pkg = match[2] // eg, devtools
         const format = match[3]
-        const url = 'http://crandb.r-pkg.org/' + pkg
+        const url = `http://crandb.r-pkg.org/${pkg}`
         const badgeData = getBadgeData('cran', queryParams)
         request(url, (err, res, buffer) => {
           if (err != null) {
@@ -59,4 +106,10 @@ module.exports = class Cran extends LegacyService {
       })
     )
   }
+}
+
+module.exports = {
+  CranLicense,
+  CranVersion,
+  Cran,
 }

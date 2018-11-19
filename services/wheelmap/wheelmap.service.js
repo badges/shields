@@ -8,7 +8,7 @@ module.exports = class Wheelmap extends LegacyService {
     return 'other'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'wheelmap/a',
     }
@@ -32,7 +32,7 @@ module.exports = class Wheelmap extends LegacyService {
         const options = {
           method: 'GET',
           json: true,
-          uri: 'http://wheelmap.org/nodes/' + nodeId + '.json',
+          uri: `http://wheelmap.org/nodes/${nodeId}.json`,
         }
         const badgeData = getBadgeData('wheelmap', data)
         // eslint-disable-next-line handle-callback-err

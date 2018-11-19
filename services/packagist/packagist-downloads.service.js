@@ -12,7 +12,7 @@ module.exports = class PackagistDownloads extends LegacyService {
     return 'downloads'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'packagist',
     }
@@ -45,7 +45,7 @@ module.exports = class PackagistDownloads extends LegacyService {
         const info = match[1] // either `dm` or dt`.
         const userRepo = match[2] // eg, `doctrine/orm`.
         const format = match[3]
-        const apiUrl = 'https://packagist.org/packages/' + userRepo + '.json'
+        const apiUrl = `https://packagist.org/packages/${userRepo}.json`
         const badgeData = getBadgeData('downloads', data)
         if (userRepo.substr(-14) === '/:package_name') {
           badgeData.text[1] = 'invalid'
@@ -63,11 +63,11 @@ module.exports = class PackagistDownloads extends LegacyService {
             switch (info.charAt(1)) {
               case 'm':
                 downloads = data.package.downloads.monthly
-                badgeData.text[1] = metric(downloads) + '/month'
+                badgeData.text[1] = `${metric(downloads)}/month`
                 break
               case 'd':
                 downloads = data.package.downloads.daily
-                badgeData.text[1] = metric(downloads) + '/day'
+                badgeData.text[1] = `${metric(downloads)}/day`
                 break
               case 't':
                 downloads = data.package.downloads.total

@@ -8,7 +8,7 @@ const statusSchema = Joi.object({
 }).required()
 
 module.exports = class RequiresIo extends BaseJsonService {
-  static get url() {
+  static get route() {
     return {
       base: 'requires',
       format: '([^/]+)/([^/]+/[^/]+)(?:/(.+))?',
@@ -56,7 +56,7 @@ module.exports = class RequiresIo extends BaseJsonService {
     return [
       {
         title: 'Requires.io',
-        urlPattern: ':service/:user/:repo',
+        pattern: ':service/:user/:repo',
         staticExample: this.render({ status: 'up-to-date' }),
         exampleUrl: 'github/celery/celery',
         keywords: ['requires'],

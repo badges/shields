@@ -10,7 +10,7 @@ module.exports = class Bundlephobia extends LegacyService {
     return 'size'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'bundlephobia',
     }

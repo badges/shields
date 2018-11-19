@@ -10,7 +10,7 @@ module.exports = class PhpeyeHhvm extends LegacyService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'hhvm',
     }
@@ -36,7 +36,7 @@ module.exports = class PhpeyeHhvm extends LegacyService {
         const user = match[1] // eg, `symfony/symfony`.
         let branch = match[2] ? omitv(match[2]) : 'dev-master'
         const format = match[3]
-        const apiUrl = 'https://php-eye.com/api/v1/package/' + user + '.json'
+        const apiUrl = `https://php-eye.com/api/v1/package/${user}.json`
         const badgeData = getBadgeData('hhvm', data)
         if (branch === 'master') {
           branch = 'dev-master'

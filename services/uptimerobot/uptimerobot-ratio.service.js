@@ -12,11 +12,10 @@ module.exports = class UptimeRobotRatio extends UptimeRobotBase {
     }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'uptimerobot/ratio',
-      format: '(?:([\\d+])/)?(.*)',
-      capture: ['numberOfDays', 'monitorApiKey'],
+      pattern: ':numberOfDays(\\d+)?/:monitorApiKey',
     }
   }
 
@@ -25,13 +24,13 @@ module.exports = class UptimeRobotRatio extends UptimeRobotBase {
       {
         title: 'Uptime Robot ratio (30 days)',
         exampleUrl: 'm778918918-3e92c097147760ee39d02d36',
-        urlPattern: ':monitor-specific-key',
+        pattern: ':monitor-specific-key',
         staticExample: this.render({ ratio: 100 }),
       },
       {
         title: 'Uptime Robot ratio (7 days)',
         exampleUrl: '7/m778918918-3e92c097147760ee39d02d36',
-        urlPattern: '7/:monitor-specific-key',
+        pattern: '7/:monitor-specific-key',
         staticExample: this.render({ ratio: 100 }),
       },
     ]

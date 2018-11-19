@@ -13,7 +13,7 @@ module.exports = class Waffle extends LegacyService {
     return 'issue-tracking'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'waffle',
     }
@@ -63,7 +63,7 @@ module.exports = class Waffle extends LegacyService {
               }
             }
             badgeData.text[0] = getLabel(ghLabel, data)
-            badgeData.text[1] = '' + count
+            badgeData.text[1] = `${count}`
             badgeData.colorscheme = null
             badgeData.colorB = makeColorB(color, data)
             sendBadge(format, badgeData)

@@ -3,8 +3,8 @@
 const AppVeyorBase = require('./appveyor-base')
 
 module.exports = class AppVeyorCi extends AppVeyorBase {
-  static get url() {
-    return this.buildUrl('appveyor/ci')
+  static get route() {
+    return this.buildRoute('appveyor/ci')
   }
 
   static get examples() {
@@ -12,13 +12,13 @@ module.exports = class AppVeyorCi extends AppVeyorBase {
       {
         title: 'AppVeyor',
         exampleUrl: 'gruntjs/grunt',
-        urlPattern: ':user/:repo',
+        pattern: ':user/:repo',
         staticExample: this.render({ status: 'success' }),
       },
       {
         title: 'AppVeyor branch',
         exampleUrl: 'gruntjs/grunt/master',
-        urlPattern: ':user/:repo/:branch',
+        pattern: ':user/:repo/:branch',
         staticExample: this.render({ status: 'success' }),
       },
     ]

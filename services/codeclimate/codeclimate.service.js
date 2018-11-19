@@ -81,7 +81,7 @@ module.exports = class Codeclimate extends LegacyService {
                     const percentage = parseFloat(
                       parsedData.data.attributes.covered_percent
                     )
-                    badgeData.text[1] = percentage.toFixed(0) + '%'
+                    badgeData.text[1] = `${percentage.toFixed(0)}%`
                     badgeData.colorscheme = coveragePercentageColor(percentage)
                   } else if (type === 'issues') {
                     const count = parsedData.data.meta.issues_count
@@ -94,7 +94,7 @@ module.exports = class Codeclimate extends LegacyService {
                     const percentage = parseFloat(
                       parsedData.data.attributes.ratings[0].measure.value
                     )
-                    badgeData.text[1] = percentage.toFixed(0) + '%'
+                    badgeData.text[1] = `${percentage.toFixed(0)}%`
                     badgeData.colorscheme = colorScale(
                       [5, 10, 20, 50],
                       ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red']
@@ -109,7 +109,7 @@ module.exports = class Codeclimate extends LegacyService {
                       parseFloat(
                         parsedData.data.attributes.ratings[0].measure.value
                       )
-                    badgeData.text[1] = percentage.toFixed(0) + '%'
+                    badgeData.text[1] = `${percentage.toFixed(0)}%`
                     badgeData.colorscheme = colorScale(
                       [50, 80, 90, 95],
                       ['red', 'yellow', 'yellowgreen', 'green', 'brightgreen']
@@ -135,7 +135,7 @@ module.exports = class Codeclimate extends LegacyService {
     )
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'codeclimate',
     }
@@ -150,19 +150,19 @@ module.exports = class Codeclimate extends LegacyService {
       {
         title: 'Code Climate issues',
         exampleUrl: 'issues/twbs/bootstrap',
-        urlPattern: 'issues/:userRepo',
+        pattern: 'issues/:userRepo',
         staticExample: { label: 'issues', message: '89', color: 'red' },
       },
       {
         title: 'Code Climate maintainability',
         exampleUrl: 'maintainability/angular/angular.js',
-        urlPattern: 'maintainability/:userRepo',
+        pattern: 'maintainability/:userRepo',
         staticExample: { label: 'maintainability', message: 'F', color: 'red' },
       },
       {
         title: 'Code Climate maintainability (percentage)',
         exampleUrl: 'maintainability-percentage/angular/angular.js',
-        urlPattern: 'maintainability-percentage/:userRepo',
+        pattern: 'maintainability-percentage/:userRepo',
         staticExample: {
           label: 'maintainability',
           message: '4.6%',
@@ -172,7 +172,7 @@ module.exports = class Codeclimate extends LegacyService {
       {
         title: 'Code Climate coverage',
         exampleUrl: 'coverage/jekyll/jekyll',
-        urlPattern: 'coverage/:userRepo',
+        pattern: 'coverage/:userRepo',
         staticExample: {
           label: 'coverage',
           message: '95%',
@@ -182,7 +182,7 @@ module.exports = class Codeclimate extends LegacyService {
       {
         title: 'Code Climate coverage (letter)',
         exampleUrl: 'coverage-letter/jekyll/jekyll',
-        urlPattern: 'coverage-letter/:userRepo',
+        pattern: 'coverage-letter/:userRepo',
         staticExample: {
           label: 'coverage',
           message: 'A',
@@ -192,7 +192,7 @@ module.exports = class Codeclimate extends LegacyService {
       {
         title: 'Code Climate technical debt',
         exampleUrl: 'tech-debt/jekyll/jekyll',
-        urlPattern: 'tech-debt/:userRepo',
+        pattern: 'tech-debt/:userRepo',
         staticExample: {
           label: 'technical debt',
           message: '3%',

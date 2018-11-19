@@ -12,7 +12,7 @@ module.exports = class TeamcityCoverage extends LegacyService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'teamcity/coverage',
     }
@@ -33,10 +33,7 @@ module.exports = class TeamcityCoverage extends LegacyService {
       cache((data, match, sendBadge, request) => {
         const buildType = match[1] // eg, `bt428`.
         const format = match[2]
-        const apiUrl =
-          'http://teamcity.codebetter.com/app/rest/builds/buildType:(id:' +
-          buildType +
-          ')/statistics?guest=1'
+        const apiUrl = `http://teamcity.codebetter.com/app/rest/builds/buildType:(id:${buildType})/statistics?guest=1`
         const badgeData = getBadgeData('coverage', data)
         request(
           apiUrl,
@@ -67,7 +64,7 @@ module.exports = class TeamcityCoverage extends LegacyService {
               }
 
               const percentage = (covered / total) * 100
-              badgeData.text[1] = percentage.toFixed(0) + '%'
+              badgeData.text[1] = `${percentage.toFixed(0)}%`
               badgeData.colorscheme = coveragePercentageColor(percentage)
               sendBadge(format, badgeData)
             } catch (e) {

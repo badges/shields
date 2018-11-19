@@ -11,7 +11,7 @@ module.exports = class Coveralls extends LegacyService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'coveralls',
     }
@@ -52,7 +52,7 @@ module.exports = class Coveralls extends LegacyService {
           method: 'HEAD',
         }
         if (branch) {
-          apiUrl.url += '?branch=' + branch
+          apiUrl.url += `?branch=${branch}`
         }
         const badgeData = getBadgeData('coverage', data)
         request(apiUrl, (err, res) => {
@@ -76,7 +76,7 @@ module.exports = class Coveralls extends LegacyService {
               sendBadge(format, badgeData)
               return
             }
-            badgeData.text[1] = score + '%'
+            badgeData.text[1] = `${score}%`
             badgeData.colorscheme = coveragePercentageColor(percentage)
             sendBadge(format, badgeData)
           } catch (e) {

@@ -10,7 +10,7 @@ module.exports = class Itunes extends LegacyService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'itunes/v',
     }
@@ -21,7 +21,7 @@ module.exports = class Itunes extends LegacyService {
       {
         title: 'iTunes App Store',
         previewUrl: '803453959',
-        urlPattern: ':bundle-id',
+        pattern: ':bundle-id',
         exampleUrl: '803453959',
       },
     ]
@@ -33,7 +33,7 @@ module.exports = class Itunes extends LegacyService {
       cache((data, match, sendBadge, request) => {
         const bundleId = match[1] // eg, `324684580`
         const format = match[2]
-        const apiUrl = 'https://itunes.apple.com/lookup?id=' + bundleId
+        const apiUrl = `https://itunes.apple.com/lookup?id=${bundleId}`
         const badgeData = getBadgeData('itunes app store', data)
         request(apiUrl, (err, res, buffer) => {
           if (err !== null) {

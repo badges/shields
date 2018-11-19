@@ -13,7 +13,7 @@ module.exports = class PhpEyePhpVersion extends LegacyService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'php-eye',
     }
@@ -37,16 +37,18 @@ module.exports = class PhpEyePhpVersion extends LegacyService {
         const format = match[3]
         const options = {
           method: 'GET',
-          uri: 'https://php-eye.com/api/v1/package/' + userRepo + '.json',
+          uri: `https://php-eye.com/api/v1/package/${userRepo}.json`,
         }
         const badgeData = getBadgeData('php tested', data)
         getPhpReleases(githubApiProvider)
+          // Switch to async/await when this is refactored.
+          // eslint-disable-next-line promise/prefer-await-to-then
           .then(phpReleases => {
             request(options, (err, res, buffer) => {
               if (err !== null) {
-                log.error('PHP-Eye error: ' + err.stack)
+                log.error(`PHP-Eye error: ${err.stack}`)
                 if (res) {
-                  log.error('' + res)
+                  log.error(`${res}`)
                 }
                 badgeData.text[1] = 'invalid'
                 sendBadge(format, badgeData)

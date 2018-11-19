@@ -3,8 +3,9 @@
 const chai = require('chai')
 const { expect } = require('chai')
 const sinon = require('sinon')
+const Joi = require('joi')
 const { makeBadgeData } = require('../lib/badge-data')
-const testHelpers = require('../lib/make-badge-test-helpers')
+const makeBadge = require('../gh-badges/lib/make-badge')
 const BaseSvgScrapingService = require('./base-svg-scraping')
 
 chai.use(require('chai-as-promised'))
@@ -12,15 +13,19 @@ chai.use(require('chai-as-promised'))
 function makeExampleSvg({ label, message }) {
   const badgeData = makeBadgeData('this is the label', {})
   badgeData.text[1] = 'this is the result!'
-  return testHelpers.makeBadge()(badgeData)
+  return makeBadge(badgeData)
 }
+
+const schema = Joi.object({
+  message: Joi.string().required(),
+}).required()
 
 class DummySvgScrapingService extends BaseSvgScrapingService {
   static get category() {
     return 'cat'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'foo',
     }
@@ -28,6 +33,7 @@ class DummySvgScrapingService extends BaseSvgScrapingService {
 
   async handle() {
     return this._requestSvg({
+      schema,
       url: 'http://example.com/foo.svg',
     })
   }
@@ -79,6 +85,7 @@ describe('BaseSvgScrapingService', function() {
       Object.assign(serviceInstance, {
         async handle() {
           const { value } = await this._requestSvg({
+            schema,
             url: 'http://example.com/foo.svg',
             options: {
               method: 'POST',
@@ -130,6 +137,7 @@ describe('BaseSvgScrapingService', function() {
       Object.assign(serviceInstance, {
         async handle() {
           return this._requestSvg({
+            schema,
             valueMatcher: />([^<>]+)<\/desc>/,
             url: 'http://example.com/foo.svg',
           })

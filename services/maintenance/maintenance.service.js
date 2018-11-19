@@ -9,7 +9,7 @@ module.exports = class Maintenance extends LegacyService {
     return 'other'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'maintenance',
     }
@@ -37,15 +37,15 @@ module.exports = class Maintenance extends LegacyService {
           const cy = now.getUTCFullYear() // current year.
           const m = now.getUTCMonth() // month.
           if (status === 'no') {
-            badgeData.text[1] = 'no! (as of ' + year + ')'
+            badgeData.text[1] = `no! (as of ${year})`
             badgeData.colorscheme = 'red'
           } else if (cy <= year) {
             badgeData.text[1] = status
             badgeData.colorscheme = 'brightgreen'
           } else if (cy === year + 1 && m < 3) {
-            badgeData.text[1] = 'stale (as of ' + cy + ')'
+            badgeData.text[1] = `stale (as of ${cy})`
           } else {
-            badgeData.text[1] = 'no! (as of ' + year + ')'
+            badgeData.text[1] = `no! (as of ${year})`
             badgeData.colorscheme = 'red'
           }
           sendBadge(format, badgeData)

@@ -15,7 +15,7 @@ module.exports = class Bugzilla extends LegacyService {
     return 'issue-tracking'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'bugzilla',
     }
@@ -41,9 +41,9 @@ module.exports = class Bugzilla extends LegacyService {
         const options = {
           method: 'GET',
           json: true,
-          uri: 'https://bugzilla.mozilla.org/rest/bug/' + bugNumber,
+          uri: `https://bugzilla.mozilla.org/rest/bug/${bugNumber}`,
         }
-        const badgeData = getBadgeData('bug ' + bugNumber, data)
+        const badgeData = getBadgeData(`bug ${bugNumber}`, data)
         request(options, (err, res, json) => {
           if (checkErrorResponse(badgeData, err, res)) {
             sendBadge(format, badgeData)

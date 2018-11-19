@@ -4,13 +4,33 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 module.exports = class PackagistLicense extends LegacyService {
+  static get category() {
+    return 'license'
+  }
+
+  static get route() {
+    return {
+      base: 'packagist/l',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Packagist',
+        previewUrl: 'doctrine/orm',
+        keywords: ['PHP'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/packagist\/l\/(.*)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
         const userRepo = match[1]
         const format = match[2]
-        const apiUrl = 'https://packagist.org/packages/' + userRepo + '.json'
+        const apiUrl = `https://packagist.org/packages/${userRepo}.json`
         const badgeData = getBadgeData('license', data)
         if (userRepo.substr(-14) === '/:package_name') {
           badgeData.text[1] = 'invalid'

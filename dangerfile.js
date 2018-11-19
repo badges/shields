@@ -116,6 +116,7 @@ if (capitals.created || underscores.created) {
 const allFiles = danger.git.created_files.concat(danger.git.modified_files)
 
 allFiles.forEach(file => {
+  // eslint-disable-next-line promise/prefer-await-to-then
   danger.git.diffForFile(file).then(diff => {
     if (/\+.*assert[(.]/.test(diff.diff)) {
       warn(

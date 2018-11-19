@@ -34,7 +34,7 @@ module.exports = class Depfu extends BaseJsonService {
     return 'dependencies'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'depfu',
       format: '(.+)',
@@ -47,7 +47,7 @@ module.exports = class Depfu extends BaseJsonService {
       {
         title: 'Depfu',
         exampleUrl: 'depfu/example-ruby',
-        urlPattern: ':user/:repo',
+        pattern: ':user/:repo',
         staticExample: this.render({
           text: 'recent',
           colorscheme: 'brightgreen',

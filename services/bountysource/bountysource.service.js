@@ -8,7 +8,7 @@ module.exports = class Bountysource extends LegacyService {
     return 'funding'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'bountysource',
     }
@@ -29,7 +29,7 @@ module.exports = class Bountysource extends LegacyService {
       cache((data, match, sendBadge, request) => {
         const team = match[1] // eg, `mozilla-core`.
         const format = match[2]
-        const url = 'https://api.bountysource.com/teams/' + team
+        const url = `https://api.bountysource.com/teams/${team}`
         const options = {
           headers: { Accept: 'application/vnd.bountysource+json; version=2' },
         }

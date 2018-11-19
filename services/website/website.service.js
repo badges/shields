@@ -74,7 +74,7 @@ module.exports = class Website extends LegacyService {
     return 'monitoring'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: '',
     }
@@ -110,7 +110,7 @@ module.exports = class Website extends LegacyService {
         const userProtocol = match[11]
         const userURI = match[12]
         const format = match[13]
-        const withProtocolURI = userProtocol + '://' + userURI
+        const withProtocolURI = `${userProtocol}://${userURI}`
         const options = {
           method: 'HEAD',
           uri: withProtocolURI,

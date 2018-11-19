@@ -7,6 +7,7 @@
 /private
 /index.html
 /shields.env
+gh-badges/package-lock.json
 
 # Folder view configuration files
 .DS_Store

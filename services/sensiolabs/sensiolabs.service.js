@@ -9,7 +9,7 @@ module.exports = class Sensiolabs extends LegacyService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'sensiolabs',
     }
@@ -32,7 +32,7 @@ module.exports = class Sensiolabs extends LegacyService {
         const format = match[2]
         const options = {
           method: 'GET',
-          uri: 'https://insight.sensiolabs.com/api/projects/' + projectUuid,
+          uri: `https://insight.sensiolabs.com/api/projects/${projectUuid}`,
           headers: {
             Accept: 'application/vnd.com.sensiolabs.insight+xml',
           },

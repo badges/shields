@@ -97,7 +97,7 @@ class JacocoJenkinsCoverage extends BaseJenkinsCoverage {
     })
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'jenkins/j',
       format: '(http(?:s)?)/([^/]+)/(?:job/)?(.+)',
@@ -110,7 +110,7 @@ class JacocoJenkinsCoverage extends BaseJenkinsCoverage {
       {
         title: 'Jenkins JaCoCo coverage',
         exampleUrl: 'https/ci.eclipse.org/ecp/job/gerrit',
-        urlPattern: ':scheme/:host/:job',
+        pattern: ':scheme/:host/:job',
         staticExample: this.render({
           coverage: 96,
         }),
@@ -135,7 +135,7 @@ class CoberturaJenkinsCoverage extends BaseJenkinsCoverage {
     })
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'jenkins/c',
       format: '(http(?:s)?)/([^/]+)/(?:job/)?(.+)',
@@ -148,7 +148,7 @@ class CoberturaJenkinsCoverage extends BaseJenkinsCoverage {
       {
         title: 'Jenkins Cobertura coverage',
         exampleUrl: 'https/builds.apache.org/job/olingo-odata4-cobertura',
-        urlPattern: ':scheme/:host/:job',
+        pattern: ':scheme/:host/:job',
         staticExample: this.render({
           coverage: 94,
         }),

@@ -18,7 +18,7 @@ const extensionData = {
 class WordpressRatingBase extends BaseWordpress {
   static render({ response }) {
     const total = response.num_ratings
-    const rating = (response.rating / 100) * 5
+    const rating = ((response.rating / 100) * 5).toFixed(1)
     return {
       message: `${rating}/5 (${metric(total)})`,
       color: floorCount(rating, 2, 3, 4),
@@ -38,11 +38,10 @@ function RatingForExtensionType(extensionType) {
   const { capt, exampleSlug } = extensionData[extensionType]
 
   return class WordpressRating extends WordpressRatingBase {
-    static get url() {
+    static get route() {
       return {
         base: `wordpress/${extensionType}/rating`,
-        format: '(.+)',
-        capture: ['slug'],
+        pattern: ':slug',
       }
     }
 
@@ -55,7 +54,7 @@ function RatingForExtensionType(extensionType) {
         {
           title: `Wordpress ${capt} Rating`,
           exampleUrl: exampleSlug,
-          urlPattern: ':slug',
+          pattern: ':slug',
           staticExample: this.render({
             response: {
               rating: 80,
@@ -78,7 +77,7 @@ function StarsForExtensionType(extensionType) {
       return { message: starRating(rating), color: floorCount(rating, 2, 3, 4) }
     }
 
-    static get url() {
+    static get route() {
       return {
         base: `wordpress/${extensionType}`,
         format: '(?:stars|r)/(.+)',
@@ -94,8 +93,8 @@ function StarsForExtensionType(extensionType) {
       return [
         {
           title: `Wordpress ${capt} Rating`,
-          exampleUrl: `stars/${exampleSlug}`,
-          urlPattern: 'stars/:slug',
+          pattern: 'stars/:slug',
+          namedParams: { slug: exampleSlug },
           staticExample: this.render({
             response: {
               rating: 80,
@@ -103,7 +102,7 @@ function StarsForExtensionType(extensionType) {
             },
           }),
           keywords: ['wordpress'],
-          documentation: 'There is an alias <code>/r/:slug.svg</code> aswell',
+          documentation: 'There is an alias <code>/r/:slug.svg</code> as well.',
         },
       ]
     }

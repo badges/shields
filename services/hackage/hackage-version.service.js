@@ -7,14 +7,32 @@ const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
 module.exports = class HackageVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'hackage/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Hackage',
+        previewUrl: 'lens',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/hackage\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
         const repo = match[1] // eg, `lens`.
         const format = match[2]
-        const apiUrl =
-          'https://hackage.haskell.org/package/' + repo + '/' + repo + '.cabal'
+        const apiUrl = `https://hackage.haskell.org/package/${repo}/${repo}.cabal`
         const badgeData = getBadgeData('hackage', data)
         request(apiUrl, (err, res, buffer) => {
           if (checkErrorResponse(badgeData, err, res)) {

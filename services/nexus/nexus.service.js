@@ -7,6 +7,29 @@ const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
 module.exports = class Nexus extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'nexus',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Sonatype Nexus (Releases)',
+        previewUrl: 'r/https/oss.sonatype.org/com.google.guava/guava',
+      },
+      {
+        title: 'Sonatype Nexus (Snapshots)',
+        previewUrl: 's/https/oss.sonatype.org/com.google.guava/guava',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     // standalone sonatype nexus installation
     // API pattern:
@@ -26,24 +49,11 @@ module.exports = class Nexus extends LegacyService {
 
         const badgeData = getBadgeData('nexus', data)
 
-        const apiUrl =
-          scheme +
-          '://' +
-          host +
-          (repo === 'r' || repo === 's'
-            ? '/service/local/lucene/search?g=' +
-              groupId +
-              '&a=' +
-              artifactId +
-              queryOpt
-            : '/service/local/artifact/maven/resolve?r=' +
-              repo +
-              '&g=' +
-              groupId +
-              '&a=' +
-              artifactId +
-              '&v=LATEST' +
-              queryOpt)
+        const apiUrl = `${scheme}://${host}${
+          repo === 'r' || repo === 's'
+            ? `/service/local/lucene/search?g=${groupId}&a=${artifactId}${queryOpt}`
+            : `/service/local/artifact/maven/resolve?r=${repo}&g=${groupId}&a=${artifactId}&v=LATEST${queryOpt}`
+        }`
 
         request(
           apiUrl,
