@@ -170,7 +170,7 @@ module.exports = class AzureDevOpsCoverage extends BaseJsonService {
     let total = 0
     json.coverageData.forEach(cd => {
       cd.coverageStats.forEach(coverageStat => {
-        if (coverageStat.label === 'Lines') {
+        if (coverageStat.label === 'Line' || coverageStat.label === 'Lines') {
           covered += coverageStat.covered
           total += coverageStat.total
         }

@@ -7,6 +7,31 @@ const { starRating } = require('../../lib/text-formatters')
 const { floorCount: floorCountColor } = require('../../lib/color-formatters')
 
 module.exports = class Redmine extends LegacyService {
+  static get category() {
+    return 'rating'
+  }
+
+  static get route() {
+    return {
+      base: 'redmine/plugin',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Plugin on redmine.org',
+        previewUrl: 'rating/redmine_xlsx_format_issue_exporter',
+        keywords: ['redmine', 'plugin'],
+      },
+      {
+        title: 'Plugin on redmine.org',
+        previewUrl: 'stars/redmine_xlsx_format_issue_exporter',
+        keywords: ['redmine', 'plugin'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/redmine\/plugin\/(rating|stars)\/(.*)\.(svg|png|gif|jpg|json)$/,

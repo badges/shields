@@ -8,7 +8,53 @@ const {
 const { metric } = require('../../lib/text-formatters')
 const { floorCount: floorCountColor } = require('../../lib/color-formatters')
 
-module.exports = class StackExchange extends LegacyService {
+class StackExchangeReputation extends LegacyService {
+  static get category() {
+    return 'rating'
+  }
+
+  static get route() {
+    return {
+      base: 'stackexchange',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'StackExchange',
+        previewUrl: 'tex/r/951',
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class StackExchangeQuestions extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'stackexchange',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'StackExchange',
+        previewUrl: 'stackoverflow/t/augeas',
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class StackExchange extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/stackexchange\/([^/]+)\/([^/])\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -63,4 +109,10 @@ module.exports = class StackExchange extends LegacyService {
       })
     )
   }
+}
+
+module.exports = {
+  StackExchangeReputation,
+  StackExchangeQuestions,
+  StackExchange,
 }
