@@ -161,7 +161,7 @@
     "prettier-check": "^2.0.0",
     "pretty": "^2.0.0",
     "prop-types": "^15.6.0",
-    "react": "^16.4.2",
+    "react": "^16.6.3",
     "react-dom": "^16.4.2",
     "react-modal": "^3.5.1",
     "react-router-dom": "^4.3.1",
