@@ -31,6 +31,14 @@ t.create('Missing label')
   .get('/badge/-message-blue.json?style=_shields_test')
   .expectJSON({ name: '', value: 'message', colorB: '#007ec6' })
 
+t.create('Case is preserved')
+  .get('/badge/LiCeNsE-mIt-blue.json?style=_shields_test')
+  .expectJSON({ name: 'LiCeNsE', value: 'mIt', colorB: '#007ec6' })
+
+t.create('"Shields-encoded" dash')
+  .get('/badge/best--license-Apache--2.0-blue.json?style=_shields_test')
+  .expectJSON({ name: 'best-license', value: 'Apache-2.0', colorB: '#007ec6' })
+
 t.create('Override colorB')
   .get('/badge/label-message-blue.json?style=_shields_test&colorB=yellow')
   .expectJSON({ name: 'label', value: 'message', colorB: '#dfb317' })

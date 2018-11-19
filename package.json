@@ -139,7 +139,7 @@
     "fetch-ponyfill": "^6.0.0",
     "fs-readfile-promise": "^3.0.1",
     "got": "^9.2.2",
-    "husky": "^1.1.2",
+    "husky": "^1.1.4",
     "icedfrisby": "2.0.0-alpha.2",
     "icedfrisby-nock": "^1.0.0",
     "is-png": "^1.1.0",
@@ -171,7 +171,7 @@
     "sazerac": "^0.4.2",
     "sinon": "^7.0.0",
     "sinon-chai": "^3.0.0",
-    "snap-shot-it": "^6.1.8",
+    "snap-shot-it": "^6.2.5",
     "tmp": "0.0.33",
     "url": "^0.11.0",
     "wait-promise": "^0.4.1"
