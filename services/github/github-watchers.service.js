@@ -6,10 +6,32 @@ const {
   makeLogo: getLogo,
 } = require('../../lib/badge-data')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
 module.exports = class GithubWatchers extends LegacyService {
+  static get category() {
+    return 'social'
+  }
+
+  static get route() {
+    return {
+      base: 'github/watchers',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub watchers',
+        previewUrl: 'badges/shields',
+        query: { style: 'social', label: 'Watch' },
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/watchers\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -22,8 +44,8 @@ module.exports = class GithubWatchers extends LegacyService {
         if (badgeData.template === 'social') {
           badgeData.logo = getLogo('github', data)
           badgeData.links = [
-            'https://github.com/' + user + '/' + repo,
-            'https://github.com/' + user + '/' + repo + '/watchers',
+            `https://github.com/${user}/${repo}`,
+            `https://github.com/${user}/${repo}/watchers`,
           ]
         }
         githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {

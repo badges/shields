@@ -9,6 +9,26 @@ const {
 } = require('./luarocks-version')
 
 module.exports = class Luarocks extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'luarocks/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'LuaRocks',
+        previewUrl: 'mpeterv/luacheck',
+        keywords: ['lua'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/luarocks\/v\/([^/]+)\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
@@ -16,8 +36,7 @@ module.exports = class Luarocks extends LegacyService {
         const user = match[1] // eg, `leafo`.
         const moduleName = match[2] // eg, `lapis`.
         const format = match[4]
-        const apiUrl =
-          'https://luarocks.org/manifests/' + user + '/manifest.json'
+        const apiUrl = `https://luarocks.org/manifests/${user}/manifest.json`
         const badgeData = getBadgeData('luarocks', data)
         let version = match[3] // you can explicitly specify a version
         request(apiUrl, (err, res, buffer) => {

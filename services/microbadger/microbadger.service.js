@@ -8,6 +8,41 @@ const {
 } = require('../../lib/badge-data')
 
 module.exports = class MicroBadger extends LegacyService {
+  static get category() {
+    return 'size'
+  }
+
+  static get route() {
+    return {
+      base: 'microbadger',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'MicroBadger Size',
+        previewUrl: 'image-size/fedora/apache',
+        keywords: ['docker'],
+      },
+      {
+        title: 'MicroBadger Size (tag)',
+        previewUrl: 'image-size/_/httpd/alpine',
+        keywords: ['docker'],
+      },
+      {
+        title: 'MicroBadger Layers',
+        previewUrl: 'layers/_/httpd',
+        keywords: ['docker'],
+      },
+      {
+        title: 'MicroBadger Layers (tag)',
+        previewUrl: 'layers/_/httpd/alpine',
+        keywords: ['docker'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/microbadger\/(image-size|layers)\/([^/]+)\/([^/]+)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,

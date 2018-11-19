@@ -16,26 +16,22 @@ const { checkErrorResponse } = require('./lib/error-helper')
 const analytics = require('./lib/analytics')
 const config = require('./lib/server-config')
 const GithubConstellation = require('./services/github/github-constellation')
+const PrometheusMetrics = require('./lib/sys/prometheus-metrics')
 const sysMonitor = require('./lib/sys/monitor')
 const log = require('./lib/log')
-const { makeMakeBadgeFn } = require('./lib/make-badge')
-const { QuickTextMeasurer } = require('./lib/text-measurer')
+const { staticBadgeUrl } = require('./lib/make-badge-url')
+const makeBadge = require('./gh-badges/lib/make-badge')
 const suggest = require('./lib/suggest')
 const {
-  makeColorB,
-  makeLabel: getLabel,
   makeBadgeData: getBadgeData,
   setBadgeColor,
 } = require('./lib/badge-data')
 const {
-  makeHandleRequestFn,
+  handleRequest: cache,
   clearRequestCache,
 } = require('./lib/request-handler')
 const { clearRegularUpdateCache } = require('./lib/regular-update')
 const { makeSend } = require('./lib/result-sender')
-const { escapeFormat } = require('./lib/path-helpers')
-
-const serverStartTime = new Date(new Date().toGMTString())
 
 const camp = require('camp').start({
   documentRoot: path.join(__dirname, 'public'),
@@ -50,6 +46,7 @@ const githubConstellation = new GithubConstellation({
   persistence: config.persistence,
   service: config.services.github,
 })
+const metrics = new PrometheusMetrics(config.metrics.prometheus)
 const { apiProvider: githubApiProvider } = githubConstellation
 
 function reset() {
@@ -73,16 +70,6 @@ module.exports = {
 
 log(`Server is starting up: ${config.baseUri}`)
 
-let measurer
-try {
-  measurer = new QuickTextMeasurer(config.font.path, config.font.fallbackPath)
-} catch (e) {
-  console.log(`Unable to load fallback font. Using Helvetica-Bold instead.`)
-  measurer = new QuickTextMeasurer('Helvetica')
-}
-const makeBadge = makeMakeBadgeFn(measurer)
-const cache = makeHandleRequestFn(makeBadge)
-
 analytics.load()
 analytics.scheduleAutosaving()
 analytics.setRoutes(camp)
@@ -92,6 +79,7 @@ if (serverSecrets && serverSecrets.shieldsSecret) {
 }
 
 githubConstellation.initialize(camp)
+metrics.initialize(camp)
 
 suggest.setRoutes(config.cors.allowedOrigin, githubApiProvider, camp)
 
@@ -115,7 +103,10 @@ camp.notfound(/.*/, (query, match, end, request) => {
 loadServiceClasses().forEach(serviceClass =>
   serviceClass.register(
     { camp, handleRequest: cache, githubApiProvider },
-    { handleInternalErrors: config.handleInternalErrors }
+    {
+      handleInternalErrors: config.handleInternalErrors,
+      profiling: config.profiling,
+    }
   )
 )
 
@@ -235,58 +226,11 @@ camp.route(
   })
 )
 
-// Any badge.
-camp.route(
-  /^\/(:|badge\/)(([^-]|--)*?)-?(([^-]|--)*)-(([^-]|--)+)\.(svg|png|gif|jpg)$/,
-  (data, match, end, ask) => {
-    const subject = escapeFormat(match[2])
-    const status = escapeFormat(match[4])
-    const color = escapeFormat(match[6])
-    const format = match[8]
-
-    analytics.noteRequest(data, match)
-
-    // Cache management - the badge is constant.
-    const cacheDuration = (3600 * 24 * 1) | 0 // 1 day.
-    ask.res.setHeader('Cache-Control', 'max-age=' + cacheDuration)
-    if (+new Date(ask.req.headers['if-modified-since']) >= +serverStartTime) {
-      ask.res.statusCode = 304
-      ask.res.end() // not modified.
-      return
-    }
-    ask.res.setHeader('Last-Modified', serverStartTime.toGMTString())
-
-    // Badge creation.
-    try {
-      const badgeData = getBadgeData(subject, data)
-      badgeData.text[0] = getLabel(undefined, { label: subject })
-      badgeData.text[1] = status
-      badgeData.colorB = makeColorB(color, data)
-      badgeData.template = data.style
-      if (config.profiling.makeBadge) {
-        console.time('makeBadge total')
-      }
-      const svg = makeBadge(badgeData)
-      if (config.profiling.makeBadge) {
-        console.timeEnd('makeBadge total')
-      }
-      makeSend(format, ask.res, end)(svg)
-    } catch (e) {
-      log.error(e.stack)
-      const svg = makeBadge({
-        text: ['error', 'bad badge'],
-        colorscheme: 'red',
-      })
-      makeSend(format, ask.res, end)(svg)
-    }
-  }
-)
-
 // Production cache debugging.
 let bitFlip = false
 camp.route(/^\/flip\.svg$/, (data, match, end, ask) => {
   const cacheSecs = 60
-  ask.res.setHeader('Cache-Control', 'max-age=' + cacheSecs)
+  ask.res.setHeader('Cache-Control', `max-age=${cacheSecs}`)
   const reqTime = new Date()
   const date = new Date(+reqTime + cacheSecs * 1000).toGMTString()
   ask.res.setHeader('Expires', date)
@@ -298,32 +242,26 @@ camp.route(/^\/flip\.svg$/, (data, match, end, ask) => {
   makeSend('svg', ask.res, end)(svg)
 })
 
-// Any badge, old version.
-camp.route(/^\/([^/]+)\/(.+).png$/, (data, match, end, ask) => {
-  const subject = match[1]
-  const status = match[2]
-  const color = data.color
+// Any badge, old version. This route must be registered last.
+camp.route(/^\/([^/]+)\/(.+).png$/, (queryParams, match, end, ask) => {
+  const [, label, message] = match
+  const { color } = queryParams
 
-  // Cache management - the badge is constant.
-  const cacheDuration = (3600 * 24 * 1) | 0 // 1 day.
-  ask.res.setHeader('Cache-Control', 'max-age=' + cacheDuration)
-  if (+new Date(ask.req.headers['if-modified-since']) >= +serverStartTime) {
-    ask.res.statusCode = 304
-    ask.res.end() // not modified.
-    return
-  }
-  ask.res.setHeader('Last-Modified', serverStartTime.toGMTString())
+  const redirectUrl = staticBadgeUrl({
+    label,
+    message,
+    color,
+    format: 'png',
+  })
 
-  // Badge creation.
-  try {
-    const badgeData = { text: [subject, status] }
-    badgeData.colorscheme = color
-    const svg = makeBadge(badgeData)
-    makeSend('png', ask.res, end)(svg)
-  } catch (e) {
-    const svg = makeBadge({ text: ['error', 'bad badge'], colorscheme: 'red' })
-    makeSend('png', ask.res, end)(svg)
-  }
+  ask.res.statusCode = 301
+  ask.res.setHeader('Location', redirectUrl)
+
+  // The redirect is permanent.
+  const cacheDuration = (365 * 24 * 3600) | 0 // 1 year
+  ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
+
+  ask.res.end()
 })
 
 if (config.redirectUri) {

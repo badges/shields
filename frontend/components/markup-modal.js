@@ -23,34 +23,34 @@ export default class MarkupModal extends React.Component {
   state = {
     exampleUrl: null,
     badgeUrl: null,
-    link: null,
+    link: '',
     style: 'flat',
+  }
+
+  constructor(props) {
+    super(props)
+
+    // Transfer `badgeUrl` and `link` into state so they can be edited by the
+    // user.
+    const { example, baseUrl } = props
+    if (example) {
+      const { exampleUrl, urlPattern, previewUrl, link } = example
+      this.state = {
+        ...this.state,
+        exampleUrl: exampleUrl
+          ? resolveBadgeUrl(exampleUrl, baseUrl || window.location.href)
+          : null,
+        badgeUrl: resolveBadgeUrl(
+          urlPattern || previewUrl,
+          baseUrl || window.location.href
+        ),
+        link: !link ? '' : link,
+      }
+    }
   }
 
   get isOpen() {
     return this.props.example !== null
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { example, baseUrl } = nextProps
-
-    if (!example) {
-      return
-    }
-
-    // Transfer `badgeUrl` and `link` into state so they can be edited by the
-    // user.
-    const { exampleUrl, urlPattern, previewUrl, link } = example
-    this.setState({
-      exampleUrl: exampleUrl
-        ? resolveBadgeUrl(exampleUrl, baseUrl || window.location.href)
-        : null,
-      badgeUrl: resolveBadgeUrl(
-        urlPattern || previewUrl,
-        baseUrl || window.location.href
-      ),
-      link,
-    })
   }
 
   generateCompleteBadgeUrl() {

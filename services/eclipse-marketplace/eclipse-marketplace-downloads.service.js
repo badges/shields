@@ -47,14 +47,14 @@ function DownloadsForInterval(interval) {
         {
           title: 'Eclipse Marketplace',
           exampleUrl: 'notepad4e',
-          urlPattern: ':name',
+          pattern: ':name',
           staticExample: this.render({ downloads: 30000 }),
         },
       ]
     }
 
-    static get url() {
-      return this.buildUrl(base)
+    static get route() {
+      return this.buildRoute(base)
     }
 
     static render({ downloads }) {

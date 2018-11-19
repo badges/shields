@@ -1,51 +1,68 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const Joi = require('joi')
+const BaseJsonService = require('../base-json')
 const { metric } = require('../../lib/text-formatters')
+const { nonNegativeInteger } = require('../validators')
 
-module.exports = class BitbucketPullRequest extends LegacyService {
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/bitbucket\/pr(-raw)?\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const isRaw = !!match[1]
-        const user = match[2] // eg, atlassian
-        const repo = match[3] // eg, python-bitbucket
-        const format = match[4]
-        const apiUrl =
-          'https://bitbucket.org/api/2.0/repositories/' +
-          encodeURI(user) +
-          '/' +
-          encodeURI(repo) +
-          '/pullrequests/?limit=0&state=OPEN'
+const bitbucketPullRequestsSchema = Joi.object({
+  size: nonNegativeInteger,
+}).required()
 
-        const badgeData = getBadgeData('pull requests', data)
-        request(apiUrl, (err, res, buffer) => {
-          if (err != null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            if (res.statusCode !== 200) {
-              throw Error('Failed to count pull requests.')
-            }
-            const data = JSON.parse(buffer)
-            const pullrequests = data.size
-            badgeData.text[1] = metric(pullrequests) + (isRaw ? '' : ' open')
-            badgeData.colorscheme = pullrequests > 0 ? 'yellow' : 'brightgreen'
-            sendBadge(format, badgeData)
-          } catch (e) {
-            if (res.statusCode === 404) {
-              badgeData.text[1] = 'not found'
-            } else {
-              badgeData.text[1] = 'invalid'
-            }
-            sendBadge(format, badgeData)
-          }
-        })
+function pullRequestClassGenerator(raw) {
+  const routePrefix = raw ? 'pr-raw' : 'pr'
+  const badgeSuffix = raw ? '' : ' open'
+
+  return class BitbucketPullRequests extends BaseJsonService {
+    async fetch({ user, repo }) {
+      const url = `https://bitbucket.org/api/2.0/repositories/${user}/${repo}/pullrequests/`
+      return this._requestJson({
+        url,
+        schema: bitbucketPullRequestsSchema,
+        options: { qs: { state: 'OPEN', limit: 0 } },
+        errorMessages: { 403: 'private repo' },
       })
-    )
+    }
+
+    static render({ prs }) {
+      return {
+        message: `${metric(prs)}${badgeSuffix}`,
+        color: prs ? 'yellow' : 'brightgreen',
+      }
+    }
+
+    async handle({ user, repo }) {
+      const data = await this.fetch({ user, repo })
+      return this.constructor.render({ prs: data.size })
+    }
+
+    static get category() {
+      return 'issue-tracking'
+    }
+
+    static get defaultBadgeData() {
+      return { label: 'pull requests' }
+    }
+
+    static get route() {
+      return {
+        base: `bitbucket/${routePrefix}`,
+        format: '([^/]+)/([^/]+)',
+        capture: ['user', 'repo'],
+      }
+    }
+
+    static get examples() {
+      return [
+        {
+          title: 'Bitbucket open pull requests',
+          exampleUrl: 'atlassian/python-bitbucket',
+          pattern: ':user/:repo',
+          staticExample: this.render({ prs: 22 }),
+        },
+      ]
+    }
   }
 }
+
+module.exports = [true, false].map(pullRequestClassGenerator)

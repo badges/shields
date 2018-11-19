@@ -22,6 +22,10 @@ module.exports = class Discord extends BaseJsonService {
     })
   }
 
+  static get _cacheLength() {
+    return 30
+  }
+
   static render({ members }) {
     return {
       message: `${members} online`,
@@ -44,7 +48,7 @@ module.exports = class Discord extends BaseJsonService {
     return 'chat'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'discord',
       format: '([^/]+)',
@@ -57,7 +61,7 @@ module.exports = class Discord extends BaseJsonService {
       {
         title: 'Discord',
         exampleUrl: '102860784329052160',
-        urlPattern: ':serverId',
+        pattern: ':serverId',
         staticExample: this.render({ members: 23 }),
       },
     ]

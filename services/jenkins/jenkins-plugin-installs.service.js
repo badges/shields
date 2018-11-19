@@ -43,7 +43,7 @@ class JenkinsPluginInstalls extends BaseJsonService {
 
   static render({ label, installs }) {
     return {
-      label: label,
+      label,
       message: metric(installs),
       color: downloadCountColor(installs),
     }
@@ -59,7 +59,7 @@ class JenkinsPluginInstalls extends BaseJsonService {
 
   static _getLabel(version) {
     if (version) {
-      return 'installs@' + version
+      return `installs@${version}`
     } else {
       return 'installs'
     }
@@ -95,7 +95,7 @@ class JenkinsPluginInstalls extends BaseJsonService {
     return 'downloads'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'jenkins/plugin/i',
       format: '([^/]+)/?([^/]+)?',
@@ -108,7 +108,7 @@ class JenkinsPluginInstalls extends BaseJsonService {
       {
         title: 'Jenkins Plugin installs',
         exampleUrl: 'view-job-filters',
-        urlPattern: ':plugin',
+        pattern: ':plugin',
         staticExample: this.render({
           label: this._getLabel(),
           installs: 10247,
@@ -117,7 +117,7 @@ class JenkinsPluginInstalls extends BaseJsonService {
       {
         title: 'Jenkins Plugin installs',
         exampleUrl: 'view-job-filters/1.26',
-        urlPattern: ':plugin/:version',
+        pattern: ':plugin/:version',
         staticExample: this.render({
           label: this._getLabel('1.26'),
           installs: 955,

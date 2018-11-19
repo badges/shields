@@ -9,16 +9,15 @@ const {
   isFileSize,
   isFormattedDate,
   isVPlusDottedVersionAtLeastOne,
+  isSemver,
 } = require('../test-validators')
-const colorscheme = require('../../lib/colorscheme.json')
+const { colorScheme: colorsB } = require('../test-helpers')
 const { licenseToColor } = require('../../lib/licenses')
 const { makeColor } = require('../../lib/badge-data')
-const mapValues = require('lodash.mapvalues')
 const { invalidJSON } = require('../response-fixtures')
 
 const t = new ServiceTester({ id: 'github', title: 'Github' })
 module.exports = t
-const colorsB = mapValues(colorscheme, 'colorB')
 const publicDomainLicenseColor = makeColor(licenseToColor('CC0-1.0'))
 const permissiveLicenseColor = colorsB[licenseToColor('MIT')]
 const copyleftLicenseColor = colorsB[licenseToColor('GPL-3.0')]
@@ -300,6 +299,26 @@ t.create('Stars (repo not found)')
     value: 'repo not found',
   })
 
+t.create('Stars (named color override)')
+  .get('/stars/badges/shields.json?colorB=yellow&style=_shields_test')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'stars',
+      value: Joi.string().regex(/^\w+$/),
+      colorB: Joi.equal(colorsB.yellow).required(),
+    })
+  )
+
+t.create('Stars (hex color override)')
+  .get('/stars/badges/shields.json?colorB=abcdef&style=_shields_test')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'stars',
+      value: Joi.string().regex(/^\w+$/),
+      colorB: Joi.equal('#abcdef').required(),
+    })
+  )
+
 t.create('Forks')
   .get('/forks/badges/shields.json')
   .expectJSONTypes(
@@ -452,7 +471,7 @@ t.create('Package version')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'package',
-      value: isVPlusDottedVersionAtLeastOne,
+      value: isSemver,
     })
   )
 
@@ -619,12 +638,12 @@ t.create('downloads for unknown release')
 
 t.create('hit counter')
   .get('/search/torvalds/linux/goto.json')
-  .timeout(8000)
+  .timeout(10000)
   .expectJSONTypes(Joi.object().keys({ name: 'goto counter', value: isMetric }))
 
 t.create('hit counter for nonexistent repo')
   .get('/search/torvalds/not-linux/goto.json')
-  .timeout(8000)
+  .timeout(10000)
   .expectJSON({ name: 'goto counter', value: 'repo not found' })
 
 t.create('commit activity (1 year)')
@@ -740,18 +759,6 @@ t.create('github issue update')
   .expectJSONTypes(
     Joi.object().keys({ name: 'updated', value: isFormattedDate })
   )
-
-t.create('github pull request check state')
-  .get('/status/s/pulls/badges/shields/1110.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'checks', value: 'failure' }))
-
-t.create('github pull request check state (pull request not found)')
-  .get('/status/s/pulls/badges/shields/5110.json')
-  .expectJSON({ name: 'checks', value: 'pull request or repo not found' })
-
-t.create('github pull request check contexts')
-  .get('/status/contexts/pulls/badges/shields/1110.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'checks', value: '1 failure' }))
 
 t.create('top language')
   .get('/languages/top/badges/shields.json')

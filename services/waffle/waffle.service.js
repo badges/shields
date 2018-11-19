@@ -9,6 +9,25 @@ const {
 const { checkErrorResponse } = require('../../lib/error-helper')
 
 module.exports = class Waffle extends LegacyService {
+  static get category() {
+    return 'issue-tracking'
+  }
+
+  static get route() {
+    return {
+      base: 'waffle',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Waffle.io',
+        previewUrl: 'label/evancohen/smart-mirror/status%3A%20in%20progress',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/waffle\/label\/([^/]+)\/([^/]+)\/?([^/]+)?\.(svg|png|gif|jpg|json)$/,
@@ -44,7 +63,7 @@ module.exports = class Waffle extends LegacyService {
               }
             }
             badgeData.text[0] = getLabel(ghLabel, data)
-            badgeData.text[1] = '' + count
+            badgeData.text[1] = `${count}`
             badgeData.colorscheme = null
             badgeData.colorB = makeColorB(color, data)
             sendBadge(format, badgeData)

@@ -15,8 +15,8 @@ class LibrariesIoDependentRepos extends LibrariesIoBase {
     }
   }
 
-  static get url() {
-    return this.buildUrl('librariesio/dependent-repos')
+  static get route() {
+    return this.buildRoute('librariesio/dependent-repos')
   }
 
   static get examples() {
@@ -24,7 +24,7 @@ class LibrariesIoDependentRepos extends LibrariesIoBase {
       {
         title: 'Dependent repos (via libraries.io)',
         exampleUrl: 'npm/got',
-        urlPattern: ':platform/:library',
+        pattern: ':platform/:library',
         staticExample: this.render({ dependentReposCount: 84000 }),
       },
     ]

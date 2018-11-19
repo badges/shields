@@ -8,11 +8,36 @@ const {
 const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
-// For GitHub package and manifest version.
 module.exports = class GithubManifestVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'github',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub package version',
+        previewUrl: 'package-json/v/badges/shields',
+        documentation,
+      },
+      {
+        title: 'GitHub manifest version',
+        previewUrl: 'manifest-json/v/RedSparr0w/IndieGala-Helper',
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/github\/(package|manifest)-json\/([^/]+)\/([^/]+)\/([^/]+)\/?([^/]+)?\.(svg|png|gif|jpg|json)$/,
@@ -23,16 +48,7 @@ module.exports = class GithubManifestVersion extends LegacyService {
         const repo = match[4]
         const branch = match[5] || 'master'
         const format = match[6]
-        const apiUrl =
-          'https://raw.githubusercontent.com/' +
-          user +
-          '/' +
-          repo +
-          '/' +
-          branch +
-          '/' +
-          type +
-          '.json'
+        const apiUrl = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${type}.json`
         const badgeData = getBadgeData(type, queryData)
         request(apiUrl, (err, res, buffer) => {
           if (githubCheckErrorResponse(badgeData, err, res)) {
@@ -58,8 +74,8 @@ module.exports = class GithubManifestVersion extends LegacyService {
                   typeof jsonData[info] !== 'object'
                     ? jsonData[info]
                     : Array.isArray(jsonData[info])
-                      ? jsonData[info].join(', ')
-                      : 'invalid data'
+                    ? jsonData[info].join(', ')
+                    : 'invalid data'
                 badgeData.text[0] = getLabel(`${type} ${info}`, queryData)
                 badgeData.text[1] = value
                 badgeData.colorscheme =

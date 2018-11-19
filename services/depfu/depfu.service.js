@@ -1,34 +1,58 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const Joi = require('joi')
+const BaseJsonService = require('../base-json')
 
-module.exports = class Depfu extends LegacyService {
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/depfu\/(.+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const userRepo = match[1] // eg, `jekyll/jekyll`.
-        const format = match[2]
-        const url = 'https://depfu.com/github/shields/' + userRepo
-        const badgeData = getBadgeData('dependencies', data)
-        request(url, (err, res) => {
-          if (err != null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const data = JSON.parse(res['body'])
-            badgeData.text[1] = data['text']
-            badgeData.colorscheme = data['colorscheme']
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+const depfuSchema = Joi.object({
+  text: Joi.string().required(),
+  colorscheme: Joi.string().required(),
+}).required()
+
+module.exports = class Depfu extends BaseJsonService {
+  async fetch({ userRepo }) {
+    const url = `https://depfu.com/github/shields/${userRepo}`
+    return this._requestJson({ url, schema: depfuSchema })
+  }
+
+  static render({ text, colorscheme }) {
+    return {
+      message: text,
+      color: colorscheme,
+    }
+  }
+
+  async handle({ userRepo }) {
+    const { text, colorscheme } = await this.fetch({ userRepo })
+    return this.constructor.render({ text, colorscheme })
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'dependencies' }
+  }
+
+  static get category() {
+    return 'dependencies'
+  }
+
+  static get route() {
+    return {
+      base: 'depfu',
+      format: '(.+)',
+      capture: ['userRepo'],
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Depfu',
+        exampleUrl: 'depfu/example-ruby',
+        pattern: ':user/:repo',
+        staticExample: this.render({
+          text: 'recent',
+          colorscheme: 'brightgreen',
+        }),
+      },
+    ]
   }
 }

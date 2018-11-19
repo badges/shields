@@ -77,8 +77,10 @@ class InvalidParameter extends ShieldsRuntimeError {
     return 'invalid parameter'
   }
 
-  constructor(props) {
-    const message = 'Invalid Parameter'
+  constructor(props = {}) {
+    const message = props.underlyingError
+      ? `Invalid Parameter: ${props.underlyingError.message}`
+      : 'Invalid Parameter'
     super(props, message)
   }
 }

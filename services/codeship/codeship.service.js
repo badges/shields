@@ -4,6 +4,29 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 module.exports = class Codeship extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get route() {
+    return {
+      base: 'codeship',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Codeship',
+        previewUrl: 'd6c1ddd0-16a3-0132-5f85-2e35c05e22b1',
+      },
+      {
+        title: 'Codeship',
+        previewUrl: 'd6c1ddd0-16a3-0132-5f85-2e35c05e22b1/master',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/codeship\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
@@ -13,11 +36,9 @@ module.exports = class Codeship extends LegacyService {
         const branch = match[2]
         const options = {
           method: 'GET',
-          uri:
-            'https://codeship.com/projects/' +
-            projectId +
-            '/status' +
-            (branch != null ? '?branch=' + branch : ''),
+          uri: `https://codeship.com/projects/${projectId}/status${
+            branch != null ? `?branch=${branch}` : ''
+          }`,
         }
         const badgeData = getBadgeData('build', data)
         request(options, (err, res) => {

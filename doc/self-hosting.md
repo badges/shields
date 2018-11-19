@@ -60,7 +60,6 @@ Once you have installed the [Heroku Toolbelt][]:
 heroku login
 heroku create your-app-name
 heroku config:set BUILDPACK_URL=https://github.com/mojodna/heroku-buildpack-multi.git#build-env
-cp /path/to/Verdana.ttf .
 make deploy
 heroku open
 ```
@@ -144,10 +143,12 @@ will have access to your private repositories.
 When a `gh_token` is specified, it is used in place of the Shields token
 rotation logic.
 
+You can also give your self-hosted Shields installation access to private npm
+packages by [generating an npm token] and using that for the `npm_token` value.
 
 [github rate limit]: https://developer.github.com/v3/#rate-limiting
 [personal access tokens]: https://github.com/settings/tokens
-
+[generating an npm token]: https://docs.npmjs.com/getting-started/working_with_tokens
 
 Separate frontend hosting
 -------------------------
@@ -189,9 +190,9 @@ In order to enable integration with [Sentry](https://sentry.io), you need your o
 ### How to obtain the Sentry DSN
 
 1. [Sign up](https://sentry.io/pricing/) for Sentry
-1. Log in to Sentry
-1. Create a new project for Node.js
-1. You should see [Sentry DSN](https://docs.sentry.io/quickstart/#configure-the-dsn) for your project. Sentry DSN can be found by navigating to \[Project Name] -> Project Settings -> Client Keys (DSN) as well.
+2. Log in to Sentry
+3. Create a new project for Node.js
+4. You should see [Sentry DSN](https://docs.sentry.io/quickstart/#configure-the-dsn) for your project. Sentry DSN can be found by navigating to \[Project Name] -> Project Settings -> Client Keys (DSN) as well.
 
 Start the server using the Sentry DSN. You can set it:
 - by `SENTRY_DSN` environment variable
@@ -203,3 +204,11 @@ sudo SENTRY_DSN=https://xxx:yyy@sentry.io/zzz node server
 ```
 sudo node server
 ```
+
+### Prometheus
+Shields uses [prom-client](https://github.com/siimon/prom-client) to provide [default metrics](https://prometheus.io/docs/instrumenting/writing_clientlibs/#standard-and-runtime-collectors). These metrics are disabled by default.
+You can enable them by `METRICS_PROMETHEUS_ENABLED` environment variable. Moreover access to metrics resource is blocked for requests from any IP address by default. You can provide a regular expression with allowed IP addresses by `METRICS_PROMETHEUS_ALLOWED_IPS` environment variable.
+```bash
+METRICS_PROMETHEUS_ENABLED=true METRICS_PROMETHEUS_ALLOWED_IPS="^127\.0\.0\.1$" npm start
+```
+Metrics are available at `/metrics` resource.

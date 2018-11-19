@@ -12,7 +12,128 @@ const {
   age: ageColor,
 } = require('../../lib/color-formatters')
 
-module.exports = class VaadinDirectory extends LegacyService {
+class VaadinDirectoryRating extends LegacyService {
+  static get category() {
+    return 'rating'
+  }
+
+  static get route() {
+    return {
+      base: 'vaadin-directory',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Vaadin Directory',
+        previewUrl: 'rating/vaadinvaadin-grid',
+        keywords: ['vaadin-directory', 'vaadin directory', 'rating'],
+      },
+      {
+        title: 'Vaadin Directory',
+        previewUrl: 'stars/vaadinvaadin-grid',
+        keywords: ['vaadin-directory', 'vaadin directory', 'star', 'stars'],
+      },
+      {
+        title: 'Vaadin Directory',
+        previewUrl: 'rating-count/vaadinvaadin-grid',
+        keywords: [
+          'vaadin-directory',
+          'vaadin directory',
+          'rating-count',
+          'rating count',
+        ],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class VaadinDirectoryVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'vaadin-directory/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Vaadin Directory',
+        previewUrl: 'vaadinvaadin-grid',
+        keywords: [
+          'vaadin-directory',
+          'vaadin directory',
+          'version',
+          'latest version',
+        ],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class VaadinDirectoryStatus extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'vaadin-directory/status',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Vaadin Directory',
+        previewUrl: 'vaadinvaadin-grid',
+        keywords: ['vaadin-directory', 'vaadin directory', 'status'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class VaadinDirectoryReleaseDate extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'vaadin-directory/release-date',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Vaadin Directory',
+        previewUrl: 'vaadinvaadin-grid',
+        keywords: [
+          'vaadin-directory',
+          'vaadin directory',
+          'date',
+          'latest release date',
+        ],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class VaadinDirectory extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/vaadin-directory\/(star|stars|status|rating|rc|rating-count|v|version|rd|release-date)\/(.*).(svg|png|gif|jpg|json)$/,
@@ -21,9 +142,7 @@ module.exports = class VaadinDirectory extends LegacyService {
         const urlIdentifier = match[2] // Name of repository
         const format = match[3] // Format
         // API URL which contains also authentication info
-        const apiUrl =
-          'https://vaadin.com/vaadincom/directory-service/components/search/findByUrlIdentifier?projection=summary&urlIdentifier=' +
-          urlIdentifier
+        const apiUrl = `https://vaadin.com/vaadincom/directory-service/components/search/findByUrlIdentifier?projection=summary&urlIdentifier=${urlIdentifier}`
 
         // Set left-side text to 'Vaadin-Directory' by default
         const badgeData = getBadgeData('vaadin directory', data)
@@ -63,7 +182,7 @@ module.exports = class VaadinDirectory extends LegacyService {
               case 'rating': // rating
                 badgeData.text[0] = getLabel('rating', data)
                 if (!isNaN(rating)) {
-                  badgeData.text[1] = rating + '/5'
+                  badgeData.text[1] = `${rating}/5`
                   badgeData.colorscheme = floorCountColor(rating, 2, 3, 4)
                 }
                 break
@@ -71,7 +190,7 @@ module.exports = class VaadinDirectory extends LegacyService {
               case 'rating-count':
                 badgeData.text[0] = getLabel('rating count', data)
                 if (ratingCount && ratingCount !== 0) {
-                  badgeData.text[1] = metric(data.ratingCount) + ' total'
+                  badgeData.text[1] = `${metric(data.ratingCount)} total`
                   badgeData.colorscheme = floorCountColor(
                     data.ratingCount,
                     5,
@@ -102,4 +221,12 @@ module.exports = class VaadinDirectory extends LegacyService {
       })
     )
   }
+}
+
+module.exports = {
+  VaadinDirectoryRating,
+  VaadinDirectoryVersion,
+  VaadinDirectoryStatus,
+  VaadinDirectoryReleaseDate,
+  VaadinDirectory,
 }

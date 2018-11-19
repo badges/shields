@@ -16,7 +16,137 @@ const {
   currencyFromCode,
 } = require('../../lib/text-formatters')
 
-module.exports = class ChromeWebStore extends LegacyService {
+class ChromeWebStoreDownloads extends LegacyService {
+  static get category() {
+    return 'downloads'
+  }
+
+  static get route() {
+    return {
+      base: 'chrome-web-store/d',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Chrome Web Store',
+        previewUrl: 'ogffaloegjglncjfehdfplabnoondfjo',
+        keywords: ['chrome'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class ChromeWebStoreVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'chrome-web-store/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Chrome Web Store',
+        previewUrl: 'ogffaloegjglncjfehdfplabnoondfjo',
+        keywords: ['chrome'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class ChromeWebStorePrice extends LegacyService {
+  static get category() {
+    return 'funding'
+  }
+
+  static get route() {
+    return {
+      base: 'chrome-web-store/price',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Chrome Web Store',
+        previewUrl: 'ogffaloegjglncjfehdfplabnoondfjo',
+        keywords: ['chrome'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class ChromeWebStoreRating extends LegacyService {
+  static get category() {
+    return 'rating'
+  }
+
+  static get route() {
+    return {
+      base: 'chrome-web-store',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Chrome Web Store',
+        previewUrl: 'rating/ogffaloegjglncjfehdfplabnoondfjo',
+        keywords: ['chrome'],
+      },
+      {
+        title: 'Chrome Web Store',
+        previewUrl: 'stars/ogffaloegjglncjfehdfplabnoondfjo',
+        keywords: ['chrome'],
+      },
+      {
+        title: 'Chrome Web Store',
+        previewUrl: 'rating-count/ogffaloegjglncjfehdfplabnoondfjo',
+        keywords: ['chrome'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class ChromeWebStoreUsers extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'chrome-web-store/users',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Chrome Web Store',
+        previewUrl: 'ogffaloegjglncjfehdfplabnoondfjo',
+        keywords: ['chrome'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class ChromeWebStore extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/chrome-web-store\/(v|d|users|price|rating|stars|rating-count)\/(.*)\.(svg|png|gif|jpg|json)$/,
@@ -25,10 +155,7 @@ module.exports = class ChromeWebStore extends LegacyService {
         const storeId = match[2] // eg, nimelepbpejjlbmoobocpfnjhihnpked
         const format = match[3]
         const badgeData = getBadgeData('chrome web store', data)
-        const url =
-          'https://chrome.google.com/webstore/detail/' +
-          storeId +
-          '?hl=en&gl=US'
+        const url = `https://chrome.google.com/webstore/detail/${storeId}?hl=en&gl=US`
         const chromeWebStore = require('chrome-web-store-item-property')
         request(url, (err, res, buffer) => {
           if (err != null) {
@@ -38,6 +165,8 @@ module.exports = class ChromeWebStore extends LegacyService {
           }
           chromeWebStore
             .convert(buffer)
+            // Switch to async/await when this is refactored.
+            // eslint-disable-next-line promise/prefer-await-to-then
             .then(value => {
               let rating
               switch (type) {
@@ -62,7 +191,7 @@ module.exports = class ChromeWebStore extends LegacyService {
                 case 'rating':
                   rating = Math.round(value.ratingValue * 100) / 100
                   badgeData.text[0] = getLabel('rating', data)
-                  badgeData.text[1] = rating + '/5'
+                  badgeData.text[1] = `${rating}/5`
                   badgeData.colorscheme = floorCountColor(rating, 2, 3, 4)
                   break
                 case 'stars':
@@ -74,7 +203,7 @@ module.exports = class ChromeWebStore extends LegacyService {
                 case 'rating-count': {
                   const ratingCount = value.ratingCount
                   badgeData.text[0] = getLabel('rating count', data)
-                  badgeData.text[1] = metric(ratingCount) + ' total'
+                  badgeData.text[1] = `${metric(ratingCount)} total`
                   badgeData.colorscheme = floorCountColor(
                     ratingCount,
                     5,
@@ -95,4 +224,13 @@ module.exports = class ChromeWebStore extends LegacyService {
       })
     )
   }
+}
+
+module.exports = {
+  ChromeWebStoreDownloads,
+  ChromeWebStoreVersion,
+  ChromeWebStorePrice,
+  ChromeWebStoreRating,
+  ChromeWebStoreUsers,
+  ChromeWebStore,
 }
