@@ -119,7 +119,7 @@
     "chainsmoker": "^0.1.0",
     "child-process-promise": "^2.2.1",
     "classnames": "^2.2.5",
-    "concurrently": "^4.0.1",
+    "concurrently": "^4.1.0",
     "danger": "^6.1.4",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
     "eol": "^0.9.1",
