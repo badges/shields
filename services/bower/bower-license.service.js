@@ -5,6 +5,25 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const serverSecrets = require('../../lib/server-secrets')
 
 module.exports = class BowerLicense extends LegacyService {
+  static get category() {
+    return 'license'
+  }
+
+  static get route() {
+    return {
+      base: 'bower/l',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Bower',
+        previewUrl: 'bootstrap',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/bower\/l\/(.*)\.(svg|png|gif|jpg|json)$/,
