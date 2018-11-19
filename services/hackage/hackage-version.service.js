@@ -7,6 +7,25 @@ const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
 module.exports = class HackageVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'hackage/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Hackage',
+        previewUrl: 'lens',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/hackage\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
