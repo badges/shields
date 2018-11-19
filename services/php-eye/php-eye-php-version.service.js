@@ -9,6 +9,25 @@ const {
 const log = require('../../lib/log')
 
 module.exports = class PhpEyePhpVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'php-eye',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'PHP version from PHP-Eye',
+        previewUrl: 'symfony/symfony',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/php-eye\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
@@ -18,16 +37,18 @@ module.exports = class PhpEyePhpVersion extends LegacyService {
         const format = match[3]
         const options = {
           method: 'GET',
-          uri: 'https://php-eye.com/api/v1/package/' + userRepo + '.json',
+          uri: `https://php-eye.com/api/v1/package/${userRepo}.json`,
         }
         const badgeData = getBadgeData('php tested', data)
         getPhpReleases(githubApiProvider)
+          // Switch to async/await when this is refactored.
+          // eslint-disable-next-line promise/prefer-await-to-then
           .then(phpReleases => {
             request(options, (err, res, buffer) => {
               if (err !== null) {
-                log.error('PHP-Eye error: ' + err.stack)
+                log.error(`PHP-Eye error: ${err.stack}`)
                 if (res) {
-                  log.error('' + res)
+                  log.error(`${res}`)
                 }
                 badgeData.text[1] = 'invalid'
                 sendBadge(format, badgeData)

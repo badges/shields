@@ -41,7 +41,7 @@ module.exports = class GemRank extends BaseJsonService {
     let message = ordinalNumber(rank)
     message += period === 'rt' ? '' : ' daily'
     return {
-      message: message,
+      message,
       color: floorCountColor(count, 10, 50, 100),
     }
   }
@@ -61,7 +61,7 @@ module.exports = class GemRank extends BaseJsonService {
     return 'downloads'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'gem',
       format: '(rt|rd)/(.+)',
@@ -74,14 +74,14 @@ module.exports = class GemRank extends BaseJsonService {
       {
         title: 'Gem download rank',
         exampleUrl: 'rt/puppet',
-        urlPattern: 'rt/:package',
+        pattern: 'rt/:package',
         staticExample: this.render({ period: 'rt', rank: 332 }),
         keywords: ['ruby'],
       },
       {
         title: 'Gem download rank (daily)',
         exampleUrl: 'rd/facter',
-        urlPattern: 'rd/:package',
+        pattern: 'rd/:package',
         staticExample: this.render({ period: 'rd', rank: 656 }),
         keywords: ['ruby'],
       },

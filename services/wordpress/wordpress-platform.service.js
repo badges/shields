@@ -44,11 +44,10 @@ class BaseWordpressPlatform extends BaseWordpress {
 }
 
 class WordpressPluginRequiresVersion extends BaseWordpressPlatform {
-  static get url() {
+  static get route() {
     return {
       base: `wordpress/plugin/wp-version`,
-      format: '(.+)',
-      capture: ['slug'],
+      pattern: ':slug',
     }
   }
 
@@ -56,8 +55,7 @@ class WordpressPluginRequiresVersion extends BaseWordpressPlatform {
     return [
       {
         title: 'Wordpress Plugin: Required WP Version',
-        exampleUrl: 'bbpress',
-        urlPattern: ':slug',
+        namedParams: { slug: 'bbpress' },
         staticExample: this.render({ response: { requires: '4.8' } }),
         keywords: ['wordpress'],
       },
@@ -69,7 +67,7 @@ class WordpressPluginTestedVersion extends BaseWordpressPlatform {
   static render({ version, color }) {
     return {
       message: `${addv(version)} tested`,
-      color: color,
+      color,
     }
   }
 
@@ -114,7 +112,7 @@ class WordpressPluginTestedVersion extends BaseWordpressPlatform {
     return this.constructor.render({ version: testedVersion, color })
   }
 
-  static get url() {
+  static get route() {
     return {
       base: `wordpress/plugin/tested`,
       format: '(.+)',
@@ -127,7 +125,7 @@ class WordpressPluginTestedVersion extends BaseWordpressPlatform {
       {
         title: 'Wordpress Plugin: Tested WP Version',
         exampleUrl: 'bbpress',
-        urlPattern: ':slug',
+        pattern: ':slug',
         staticExample: this.render({ version: '4.9.8', color: 'brightgreen' }),
         keywords: ['wordpress'],
         documentation: `<p>There is an alias for this badge. <code>wordpress/v/:slug.svg</code></p>`,
@@ -137,7 +135,7 @@ class WordpressPluginTestedVersion extends BaseWordpressPlatform {
 }
 
 class WordpressPluginTestedVersionAlias extends WordpressPluginTestedVersion {
-  static get url() {
+  static get route() {
     return {
       base: `wordpress/v`,
       format: '(.+)',

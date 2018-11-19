@@ -16,14 +16,13 @@ const validatorSchema = Joi.object()
 
 module.exports = class SwaggerValidatorService extends BaseJsonService {
   static render({ message, clr }) {
-    return { message: message, color: clr }
+    return { message, color: clr }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'swagger/valid/2.0',
-      format: '(http(?:s)?)/(.+)',
-      capture: ['scheme', 'url'],
+      pattern: ':scheme(http|https)?/:url*',
     }
   }
 
@@ -63,7 +62,7 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
     return [
       {
         title: 'Swagger Validator',
-        urlPattern: ':scheme/:url',
+        pattern: ':scheme/:url',
         staticExample: this.render({ message: 'valid', clr: 'brightgreen' }),
         exampleUrl:
           'https/raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded.json',

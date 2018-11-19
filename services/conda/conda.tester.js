@@ -3,7 +3,6 @@
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isVPlusTripleDottedVersion, isMetric } = require('../test-validators')
-const { invalidJSON } = require('../response-fixtures')
 
 const isCondaPlatform = Joi.string().regex(/^\w+-\d+( \| \w+-\d+)*$/)
 
@@ -87,27 +86,8 @@ t.create('downloads (skip prefix, relabel)')
 
 t.create('unknown package')
   .get('/d/conda-forge/some-bogus-package-that-never-exists.json')
-  .expectJSON({ name: 'conda|downloads', value: 'invalid' })
+  .expectJSON({ name: 'conda', value: 'not found' })
 
 t.create('unknown channel')
   .get('/d/some-bogus-channel-that-never-exists/zlib.json')
-  .expectJSON({ name: 'conda|downloads', value: 'invalid' })
-
-t.create('unknown info')
-  .get('/x/conda-forge/zlib.json')
-  .expectStatus(404)
-  .expectJSON({ name: '404', value: 'badge not found' })
-
-t.create('connection error')
-  .get('/d/conda-forge/zlib.json')
-  .networkOff()
-  .expectJSON({ name: 'conda|downloads', value: 'inaccessible' })
-
-t.create('unexpected response')
-  .get('/v/conda-forge/zlib.json')
-  .intercept(nock =>
-    nock('https://api.anaconda.org')
-      .get('/package/conda-forge/zlib')
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'conda|conda-forge', value: 'invalid' })
+  .expectJSON({ name: 'conda', value: 'not found' })

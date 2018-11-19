@@ -16,8 +16,8 @@ class LibrariesIoSourcerank extends LibrariesIoBase {
     }
   }
 
-  static get url() {
-    return this.buildUrl('librariesio/sourcerank')
+  static get route() {
+    return this.buildRoute('librariesio/sourcerank')
   }
 
   static get examples() {
@@ -25,7 +25,7 @@ class LibrariesIoSourcerank extends LibrariesIoBase {
       {
         title: 'Libraries.io SourceRank',
         exampleUrl: 'npm/got',
-        urlPattern: ':platform/:library',
+        pattern: ':platform/:library',
         staticExample: this.render({ rank: 25 }),
       },
     ]

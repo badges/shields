@@ -1,51 +1,71 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const Joi = require('joi')
+const BaseJsonService = require('../base-json')
 const { metric } = require('../../lib/text-formatters')
+const { nonNegativeInteger } = require('../validators')
 
-module.exports = class BitbucketIssues extends LegacyService {
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/bitbucket\/issues(-raw)?\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const isRaw = !!match[1]
-        const user = match[2] // eg, atlassian
-        const repo = match[3] // eg, python-bitbucket
-        const format = match[4]
-        const apiUrl =
-          'https://bitbucket.org/api/1.0/repositories/' +
-          user +
-          '/' +
-          repo +
-          '/issues/?limit=0&status=new&status=open'
+const bitbucketIssuesSchema = Joi.object({
+  count: nonNegativeInteger,
+}).required()
 
-        const badgeData = getBadgeData('issues', data)
-        request(apiUrl, (err, res, buffer) => {
-          if (err != null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            if (res.statusCode !== 200) {
-              throw Error('Failed to count issues.')
-            }
-            const data = JSON.parse(buffer)
-            const issues = data.count
-            badgeData.text[1] = metric(issues) + (isRaw ? '' : ' open')
-            badgeData.colorscheme = issues ? 'yellow' : 'brightgreen'
-            sendBadge(format, badgeData)
-          } catch (e) {
-            if (res.statusCode === 404) {
-              badgeData.text[1] = 'not found'
-            } else {
-              badgeData.text[1] = 'invalid'
-            }
-            sendBadge(format, badgeData)
-          }
-        })
+function issueClassGenerator(raw) {
+  const routePrefix = raw ? 'issues-raw' : 'issues'
+  const badgeSuffix = raw ? '' : ' open'
+
+  return class BitbucketIssues extends BaseJsonService {
+    async fetch({ user, repo }) {
+      const url = `https://bitbucket.org/api/1.0/repositories/${user}/${repo}/issues/`
+      return this._requestJson({
+        url,
+        schema: bitbucketIssuesSchema,
+        options: {
+          qs: { limit: 0, status: ['new', 'open'] },
+          useQuerystring: true,
+        },
+        errorMessages: { 403: 'private repo' },
       })
-    )
+    }
+
+    static render({ issues }) {
+      return {
+        message: `${metric(issues)}${badgeSuffix}`,
+        color: issues ? 'yellow' : 'brightgreen',
+      }
+    }
+
+    async handle({ user, repo }) {
+      const data = await this.fetch({ user, repo })
+      return this.constructor.render({ issues: data.count })
+    }
+
+    static get category() {
+      return 'issue-tracking'
+    }
+
+    static get defaultBadgeData() {
+      return { label: 'issues' }
+    }
+
+    static get route() {
+      return {
+        base: `bitbucket/${routePrefix}`,
+        format: '([^/]+)/([^/]+)',
+        capture: ['user', 'repo'],
+      }
+    }
+
+    static get examples() {
+      return [
+        {
+          title: 'Bitbucket open issues',
+          exampleUrl: 'atlassian/python-bitbucket',
+          pattern: ':user/:repo',
+          staticExample: this.render({ issues: 33 }),
+        },
+      ]
+    }
   }
 }
+
+module.exports = [true, false].map(issueClassGenerator)

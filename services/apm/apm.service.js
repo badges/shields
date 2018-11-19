@@ -50,11 +50,10 @@ class APMDownloads extends BaseAPMService {
     return { label: 'downloads' }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'apm/dm',
-      format: '(.+)',
-      capture: ['repo'],
+      pattern: ':repo',
     }
   }
 
@@ -62,7 +61,7 @@ class APMDownloads extends BaseAPMService {
     return [
       {
         exampleUrl: 'vim-mode',
-        urlPattern: ':package',
+        pattern: ':package',
         staticExample: this.render({ downloads: '60043' }),
         keywords: ['atom'],
       },
@@ -90,7 +89,7 @@ class APMVersion extends BaseAPMService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'apm/v',
       format: '(.+)',
@@ -102,7 +101,7 @@ class APMVersion extends BaseAPMService {
     return [
       {
         exampleUrl: 'vim-mode',
-        urlPattern: ':package',
+        pattern: ':package',
         staticExample: this.render({ version: '0.6.0' }),
         keywords: ['atom'],
       },
@@ -134,7 +133,7 @@ class APMLicense extends BaseAPMService {
     return 'license'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'apm/l',
       format: '(.+)',
@@ -146,7 +145,7 @@ class APMLicense extends BaseAPMService {
     return [
       {
         exampleUrl: 'vim-mode',
-        urlPattern: ':package',
+        pattern: ':package',
         staticExample: this.render({ license: 'MIT' }),
         keywords: ['atom'],
       },

@@ -26,14 +26,14 @@ module.exports = class EclipseMarketplaceFavorites extends EclipseMarketplaceBas
       {
         title: 'Eclipse Marketplace',
         exampleUrl: 'notepad4e',
-        urlPattern: ':name',
+        pattern: ':name',
         staticExample: this.render({ favorited: 55 }),
       },
     ]
   }
 
-  static get url() {
-    return this.buildUrl('eclipse-marketplace/favorites')
+  static get route() {
+    return this.buildRoute('eclipse-marketplace/favorites')
   }
 
   static render({ favorited }) {

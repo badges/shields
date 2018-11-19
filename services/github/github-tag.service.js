@@ -9,10 +9,41 @@ const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 const { latest: latestVersion } = require('../../lib/version')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
 module.exports = class GithubTag extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'github',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub tag (latest SemVer)',
+        previewUrl: 'tag/expressjs/express',
+        documentation,
+      },
+      {
+        title: 'GitHub tag (latest SemVer pre-release)',
+        previewUrl: 'tag-pre/expressjs/express',
+        documentation,
+      },
+      {
+        title: 'GitHub tag (latest by date)',
+        previewUrl: 'tag-date/expressjs/express',
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/(tag-pre|tag-date|tag)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,

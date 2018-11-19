@@ -8,7 +8,53 @@ const {
 const { metric } = require('../../lib/text-formatters')
 const { floorCount: floorCountColor } = require('../../lib/color-formatters')
 
-module.exports = class StackExchange extends LegacyService {
+class StackExchangeReputation extends LegacyService {
+  static get category() {
+    return 'rating'
+  }
+
+  static get route() {
+    return {
+      base: 'stackexchange',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'StackExchange',
+        previewUrl: 'tex/r/951',
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class StackExchangeQuestions extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'stackexchange',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'StackExchange',
+        previewUrl: 'stackoverflow/t/augeas',
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class StackExchange extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/stackexchange\/([^/]+)\/([^/])\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -19,13 +65,13 @@ module.exports = class StackExchange extends LegacyService {
         const format = match[4]
         let path
         if (info === 'r') {
-          path = 'users/' + item
+          path = `users/${item}`
         } else if (info === 't') {
-          path = 'tags/' + item + '/info'
+          path = `tags/${item}/info`
         }
         const options = {
           method: 'GET',
-          uri: 'https://api.stackexchange.com/2.2/' + path + '?site=' + site,
+          uri: `https://api.stackexchange.com/2.2/${path}?site=${site}`,
           gzip: true,
         }
         const badgeData = getBadgeData(site, data)
@@ -45,7 +91,7 @@ module.exports = class StackExchange extends LegacyService {
 
             if (info === 'r') {
               const reputation = parsedData.items[0].reputation
-              badgeData.text[0] = getLabel(site + ' reputation', data)
+              badgeData.text[0] = getLabel(`${site} reputation`, data)
               badgeData.text[1] = metric(reputation)
               badgeData.colorscheme = floorCountColor(1000, 10000, 20000)
             } else if (info === 't') {
@@ -63,4 +109,10 @@ module.exports = class StackExchange extends LegacyService {
       })
     )
   }
+}
+
+module.exports = {
+  StackExchangeReputation,
+  StackExchangeQuestions,
+  StackExchange,
 }

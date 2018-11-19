@@ -58,7 +58,7 @@ module.exports = class CircleCi extends BaseJsonService {
     return 'build'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'circleci',
       format:
@@ -72,19 +72,18 @@ module.exports = class CircleCi extends BaseJsonService {
       {
         title: 'CircleCI (all branches)',
         exampleUrl: 'project/github/RedSparr0w/node-csgo-parser',
-        urlPattern: 'project/:vcsType/:owner/:repo',
+        pattern: 'project/:vcsType/:owner/:repo',
         staticExample: this.render({ status: 'success' }),
       },
       {
         title: 'CircleCI branch',
         exampleUrl: 'project/github/RedSparr0w/node-csgo-parser/master',
-        urlPattern: 'project/:vcsType/:owner/:repo/:branch',
+        pattern: 'project/:vcsType/:owner/:repo/:branch',
         staticExample: this.render({ status: 'success' }),
       },
       {
         title: 'CircleCI token',
-        urlPattern:
-          'circleci/token/:token/project/:vcsType/:owner/:repo/:branch',
+        pattern: 'circleci/token/:token/project/:vcsType/:owner/:repo/:branch',
         exampleUrl:
           'circleci/token/b90b5c49e59a4c67ba3a92f7992587ac7a0408c2/project/github/RedSparr0w/node-csgo-parser/master',
         staticExample: this.render({ status: 'success' }),

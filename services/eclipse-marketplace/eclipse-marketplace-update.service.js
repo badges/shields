@@ -28,14 +28,14 @@ module.exports = class EclipseMarketplaceUpdate extends EclipseMarketplaceBase {
       {
         title: 'Eclipse Marketplace',
         exampleUrl: 'notepad4e',
-        urlPattern: ':name',
+        pattern: ':name',
         staticExample: this.render({ date: new Date().getTime() }),
       },
     ]
   }
 
-  static get url() {
-    return this.buildUrl('eclipse-marketplace/last-update')
+  static get route() {
+    return this.buildRoute('eclipse-marketplace/last-update')
   }
 
   static render({ date }) {

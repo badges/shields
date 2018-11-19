@@ -7,7 +7,7 @@ const {
   isVPlusDottedVersionNClauses,
   isVPlusDottedVersionNClausesWithOptionalSuffix,
 } = require('../test-validators')
-const colorscheme = require('../../lib/colorscheme.json')
+const { colorScheme } = require('../test-helpers')
 const {
   nuGetV2VersionJsonWithDash,
   nuGetV2VersionJsonFirstCharZero,
@@ -43,11 +43,11 @@ t.create('total downloads (unexpected response)')
   .intercept(nock =>
     nock('https://www.chocolatey.org')
       .get(
-        '/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true'
+        '/api/v2/Packages()?%24filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true'
       )
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'downloads', value: 'invalid' })
+  .expectJSON({ name: 'downloads', value: 'unparseable json response' })
 
 // version
 
@@ -65,14 +65,14 @@ t.create('version (mocked, yellow badge)')
   .intercept(nock =>
     nock('https://www.chocolatey.org')
       .get(
-        '/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true'
+        '/api/v2/Packages()?%24filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true'
       )
       .reply(200, nuGetV2VersionJsonWithDash)
   )
   .expectJSON({
     name: 'chocolatey',
     value: 'v1.2-beta',
-    colorB: colorscheme.yellow.colorB,
+    colorB: colorScheme.yellow,
   })
 
 t.create('version (mocked, orange badge)')
@@ -80,14 +80,14 @@ t.create('version (mocked, orange badge)')
   .intercept(nock =>
     nock('https://www.chocolatey.org')
       .get(
-        '/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true'
+        '/api/v2/Packages()?%24filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true'
       )
       .reply(200, nuGetV2VersionJsonFirstCharZero)
   )
   .expectJSON({
     name: 'chocolatey',
     value: 'v0.35',
-    colorB: colorscheme.orange.colorB,
+    colorB: colorScheme.orange,
   })
 
 t.create('version (mocked, blue badge)')
@@ -95,14 +95,14 @@ t.create('version (mocked, blue badge)')
   .intercept(nock =>
     nock('https://www.chocolatey.org')
       .get(
-        '/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true'
+        '/api/v2/Packages()?%24filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true'
       )
       .reply(200, nuGetV2VersionJsonFirstCharNotZero)
   )
   .expectJSON({
     name: 'chocolatey',
     value: 'v1.2.7',
-    colorB: colorscheme.blue.colorB,
+    colorB: colorScheme.blue,
   })
 
 t.create('version (not found)')
@@ -119,11 +119,11 @@ t.create('version (unexpected response)')
   .intercept(nock =>
     nock('https://www.chocolatey.org')
       .get(
-        '/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true'
+        '/api/v2/Packages()?%24filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true'
       )
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'chocolatey', value: 'invalid' })
+  .expectJSON({ name: 'chocolatey', value: 'unparseable json response' })
 
 // version (pre)
 
@@ -141,14 +141,14 @@ t.create('version (pre) (mocked, yellow badge)')
   .intercept(nock =>
     nock('https://www.chocolatey.org')
       .get(
-        '/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
+        '/api/v2/Packages()?%24filter=Id%20eq%20%27scriptcs%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
       )
       .reply(200, nuGetV2VersionJsonWithDash)
   )
   .expectJSON({
     name: 'chocolatey',
     value: 'v1.2-beta',
-    colorB: colorscheme.yellow.colorB,
+    colorB: colorScheme.yellow,
   })
 
 t.create('version (pre) (mocked, orange badge)')
@@ -156,14 +156,14 @@ t.create('version (pre) (mocked, orange badge)')
   .intercept(nock =>
     nock('https://www.chocolatey.org')
       .get(
-        '/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
+        '/api/v2/Packages()?%24filter=Id%20eq%20%27scriptcs%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
       )
       .reply(200, nuGetV2VersionJsonFirstCharZero)
   )
   .expectJSON({
     name: 'chocolatey',
     value: 'v0.35',
-    colorB: colorscheme.orange.colorB,
+    colorB: colorScheme.orange,
   })
 
 t.create('version (pre) (mocked, blue badge)')
@@ -171,14 +171,14 @@ t.create('version (pre) (mocked, blue badge)')
   .intercept(nock =>
     nock('https://www.chocolatey.org')
       .get(
-        '/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
+        '/api/v2/Packages()?%24filter=Id%20eq%20%27scriptcs%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
       )
       .reply(200, nuGetV2VersionJsonFirstCharNotZero)
   )
   .expectJSON({
     name: 'chocolatey',
     value: 'v1.2.7',
-    colorB: colorscheme.blue.colorB,
+    colorB: colorScheme.blue,
   })
 
 t.create('version (pre) (not found)')
@@ -195,8 +195,8 @@ t.create('version (pre) (unexpected response)')
   .intercept(nock =>
     nock('https://www.chocolatey.org')
       .get(
-        '/api/v2/Packages()?$filter=Id%20eq%20%27scriptcs%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
+        '/api/v2/Packages()?%24filter=Id%20eq%20%27scriptcs%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
       )
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'chocolatey', value: 'invalid' })
+  .expectJSON({ name: 'chocolatey', value: 'unparseable json response' })

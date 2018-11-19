@@ -1,25 +1,39 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const BaseStaticService = require('../base-static')
 
-module.exports = class Gitter extends LegacyService {
-  static get url() {
-    return { base: 'gitter' }
+module.exports = class Gitter extends BaseStaticService {
+  static get category() {
+    return 'chat'
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/gitter\/room\/([^/]+\/[^/]+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        // match[1] is the repo, which is not used.
-        const format = match[2]
+  static get route() {
+    return {
+      base: 'gitter/room',
+      pattern: ':user/:repo',
+    }
+  }
 
-        const badgeData = getBadgeData('chat', data)
-        badgeData.text[1] = 'on gitter'
-        badgeData.colorscheme = 'brightgreen'
-        sendBadge(format, badgeData)
-      })
-    )
+  static get examples() {
+    return [
+      {
+        title: 'Gitter',
+        pattern: ':user/:repo',
+        staticExample: this.render(),
+        exampleUrl: 'nwjs/nw.js',
+      },
+    ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'chat' }
+  }
+
+  static render() {
+    return { message: 'on gitter', color: 'brightgreen' }
+  }
+
+  handle() {
+    return this.constructor.render()
   }
 }

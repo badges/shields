@@ -27,14 +27,14 @@ module.exports = class EclipseMarketplaceLicense extends EclipseMarketplaceBase 
       {
         title: 'Eclipse Marketplace',
         exampleUrl: 'notepad4e',
-        urlPattern: ':name',
+        pattern: ':name',
         staticExample: this.render({ license: 'GPL' }),
       },
     ]
   }
 
-  static get url() {
-    return this.buildUrl('eclipse-marketplace/l')
+  static get route() {
+    return this.buildRoute('eclipse-marketplace/l')
   }
 
   static render({ license }) {

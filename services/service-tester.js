@@ -31,7 +31,9 @@ class ServiceTester {
 
   static forServiceClass(ServiceClass) {
     const id = ServiceClass.name
-    const pathPrefix = `/${ServiceClass.url.base}`
+    const pathPrefix = ServiceClass.route.base
+      ? `/${ServiceClass.route.base}`
+      : ''
     return new this({
       id,
       title: id,
@@ -63,12 +65,13 @@ class ServiceTester {
       // eslint-disable-next-line mocha/prefer-arrow-callback
       .finally(function() {
         // `this` is the IcedFrisby instance.
-        trace.logTrace(
-          'outbound',
-          emojic.shield,
-          'Response',
-          JSON.parse(this._response.body)
-        )
+        let responseBody
+        try {
+          responseBody = JSON.parse(this._response.body)
+        } catch (e) {
+          responseBody = this._response.body
+        }
+        trace.logTrace('outbound', emojic.shield, 'Response', responseBody)
       })
 
     this.specs.push(spec)

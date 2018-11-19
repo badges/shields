@@ -11,13 +11,19 @@ const {
   downloadCount: downloadCountColor,
   version: versionColor,
 } = require('../../lib/color-formatters')
-const { nonNegativeInteger } = require('../validators')
 
 const hexSchema = Joi.object({
   downloads: Joi.object({
-    all: nonNegativeInteger,
-    week: nonNegativeInteger,
-    day: nonNegativeInteger,
+    // these keys may or may not exist
+    all: Joi.number()
+      .integer()
+      .default(0),
+    week: Joi.number()
+      .integer()
+      .default(0),
+    day: Joi.number()
+      .integer()
+      .default(0),
   }).required(),
   meta: Joi.object({
     licenses: Joi.array().required(),
@@ -69,7 +75,7 @@ class HexPmLicense extends BaseHexPmService {
     return 'license'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'hexpm/l',
       format: '(.+)',
@@ -81,7 +87,7 @@ class HexPmLicense extends BaseHexPmService {
     return [
       {
         title: 'Hex.pm',
-        urlPattern: ':package',
+        pattern: ':package',
         exampleUrl: 'plug',
         staticExample: this.render({ licenses: ['Apache 2'] }),
       },
@@ -103,7 +109,7 @@ class HexPmVersion extends BaseHexPmService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'hexpm/v',
       format: '(.+)',
@@ -115,7 +121,7 @@ class HexPmVersion extends BaseHexPmService {
     return [
       {
         title: 'Hex.pm',
-        urlPattern: ':package',
+        pattern: ':package',
         exampleUrl: 'plug',
         staticExample: this.render({ version: '1.6.4' }),
       },
@@ -160,9 +166,9 @@ function DownloadsForInterval(interval) {
       return 'downloads'
     }
 
-    static get url() {
+    static get route() {
       return {
-        base: base,
+        base,
         format: '(.+)',
         capture: ['pkg'],
       }
@@ -172,7 +178,7 @@ function DownloadsForInterval(interval) {
       return [
         {
           title: 'Hex.pm',
-          urlPattern: ':package',
+          pattern: ':package',
           exampleUrl: 'plug',
           staticExample: this.render({ downloads: 85000 }),
         },

@@ -41,11 +41,10 @@ function DownloadsForExtensionType(extensionType) {
       return { label: 'downloads' }
     }
 
-    static get url() {
+    static get route() {
       return {
         base: `wordpress/${extensionType}/dt`,
-        format: '(.+)',
-        capture: ['slug'],
+        pattern: ':slug',
       }
     }
     static get extensionType() {
@@ -56,8 +55,7 @@ function DownloadsForExtensionType(extensionType) {
       return [
         {
           title: `Wordpress ${capt} Downloads`,
-          exampleUrl: exampleSlug,
-          urlPattern: ':slug',
+          namedParams: { slug: exampleSlug },
           staticExample: this.render({ response: { downloaded: 200000 } }),
           keywords: ['wordpress'],
         },
@@ -89,7 +87,7 @@ function InstallsForExtensionType(extensionType) {
       return { label: 'active installs' }
     }
 
-    static get url() {
+    static get route() {
       return {
         base: `wordpress/${extensionType}/installs`,
         format: '(.+)',
@@ -102,7 +100,7 @@ function InstallsForExtensionType(extensionType) {
         {
           title: `Wordpress ${capt} Active Installs`,
           exampleUrl: exampleSlug,
-          urlPattern: ':slug',
+          pattern: ':slug',
           staticExample: this.render({ response: { active_installs: 300000 } }),
           keywords: ['wordpress'],
         },
@@ -144,7 +142,7 @@ function DownloadsForInterval(interval) {
       return { label: 'downloads' }
     }
 
-    static get url() {
+    static get route() {
       return {
         base,
         format: '(.*)',
@@ -157,7 +155,7 @@ function DownloadsForInterval(interval) {
         {
           title: 'WordPress Plugin Downloads',
           exampleUrl: 'bbpress',
-          urlPattern: ':slug',
+          pattern: ':slug',
           staticExample: this.render({ downloads: 30000 }),
           keywords: ['wordpress'],
         },
@@ -177,7 +175,7 @@ function DownloadsForInterval(interval) {
         url: `https://api.wordpress.org/stats/plugin/1.0/downloads.php`,
         options: {
           qs: {
-            slug: slug,
+            slug,
             limit: query,
           },
         },

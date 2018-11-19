@@ -8,6 +8,25 @@ const { latest: latestVersion } = require('../../lib/version')
 
 // For Dart's pub.
 module.exports = class Pub extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'pub',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Pub',
+        previewUrl: 'v/box2d',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/pub\/v(pre)?\/(.*)\.(svg|png|gif|jpg|json)$/,
@@ -15,7 +34,7 @@ module.exports = class Pub extends LegacyService {
         const includePre = Boolean(match[1])
         const userRepo = match[2] // eg, "box2d"
         const format = match[3]
-        const apiUrl = 'https://pub.dartlang.org/packages/' + userRepo + '.json'
+        const apiUrl = `https://pub.dartlang.org/packages/${userRepo}.json`
         const badgeData = getBadgeData('pub', data)
         request(apiUrl, (err, res, buffer) => {
           if (err != null) {
