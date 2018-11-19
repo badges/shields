@@ -21,6 +21,13 @@ const latestBuildResponse = {
   count: 1,
   value: [{ id: buildId }],
 }
+
+const firstLineCovStat = {
+  label: 'Line',
+  total: 23,
+  covered: 19,
+}
+
 const firstLinesCovStat = {
   label: 'Lines',
   total: 23,
@@ -31,6 +38,12 @@ const branchCovStat = {
   label: 'Branches',
   total: 11,
   covered: 7,
+}
+
+const secondLineCovStat = {
+  label: 'Lines',
+  total: 47,
+  covered: 35,
 }
 
 const secondLinesCovStat = {
@@ -203,6 +216,56 @@ t.create('multiple line coverage stat reports')
               branchCovStat,
               secondLinesCovStat,
             ],
+          },
+        ],
+      })
+  )
+
+t.create('single JaCoCo style line coverage stats')
+  .get(mockBadgeUriPath)
+  .intercept(nock =>
+    nock(azureDevOpsApiBaseUri)
+      .get(mockLatestBuildApiUriPath)
+      .reply(200, latestBuildResponse)
+      .get(mockCodeCoverageApiUriPath)
+      .reply(200, {
+        coverageData: [
+          {
+            coverageStats: [firstLineCovStat],
+          },
+        ],
+      })
+  )
+  .expectJSON({ name: 'coverage', value: expCoverageSingleReport })
+
+t.create('mixed JaCoCo style line and branch coverage stats')
+  .get(mockBadgeUriPath)
+  .intercept(nock =>
+    nock(azureDevOpsApiBaseUri)
+      .get(mockLatestBuildApiUriPath)
+      .reply(200, latestBuildResponse)
+      .get(mockCodeCoverageApiUriPath)
+      .reply(200, {
+        coverageData: [
+          {
+            coverageStats: [firstLineCovStat, branchCovStat],
+          },
+        ],
+      })
+  )
+  .expectJSON({ name: 'coverage', value: expCoverageSingleReport })
+
+t.create('multiple JaCoCo style line coverage stat reports')
+  .get(mockBadgeUriPath)
+  .intercept(nock =>
+    nock(azureDevOpsApiBaseUri)
+      .get(mockLatestBuildApiUriPath)
+      .reply(200, latestBuildResponse)
+      .get(mockCodeCoverageApiUriPath)
+      .reply(200, {
+        coverageData: [
+          {
+            coverageStats: [firstLineCovStat, branchCovStat, secondLineCovStat],
           },
         ],
       })
