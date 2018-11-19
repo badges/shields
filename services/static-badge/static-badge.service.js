@@ -1,6 +1,7 @@
 'use strict'
 
 const BaseStaticService = require('../base-static')
+const { escapeFormat } = require('../../lib/path-helpers')
 
 module.exports = class StaticBadge extends BaseStaticService {
   static get category() {
@@ -15,6 +16,6 @@ module.exports = class StaticBadge extends BaseStaticService {
   }
 
   handle({ label, message, color }) {
-    return { label, message, color }
+    return { label: escapeFormat(label), message: escapeFormat(message), color }
   }
 }
