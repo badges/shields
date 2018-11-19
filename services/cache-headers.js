@@ -37,20 +37,20 @@ function coalesceCacheLength(
 }
 
 function setHeadersForCacheLength(res, cacheLengthSeconds) {
-  const reqTime = new Date()
-  const reqTimeGMTString = reqTime.toGMTString()
+  const now = new Date()
+  const nowGMTString = now.toGMTString()
 
-  res.setHeader('Date', reqTimeGMTString)
+  res.setHeader('Date', nowGMTString)
 
   // Send both Cache-Control max-age and Expires in case the client implements
   // HTTP/1.0 but not HTTP/1.1.
   if (cacheLengthSeconds === 0) {
+    // Prevent all possible downstream caching.
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
-    res.setHeader('Expires', reqTimeGMTString)
+    res.setHeader('Expires', nowGMTString)
   } else {
     res.setHeader('Cache-Control', `max-age=${cacheLengthSeconds}`)
-
-    const date = new Date(+reqTime + cacheLengthSeconds * 1000).toGMTString()
+    const date = new Date(+now + cacheLengthSeconds * 1000).toGMTString()
     res.setHeader('Expires', date)
   }
 }
