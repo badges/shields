@@ -65,6 +65,7 @@ export default class DynamicBadgeMaker extends React.Component {
           value={this.state.url}
           onChange={event => this.setState({ url: event.target.value })}
           placeholder="url"
+          required="required"
         />{' '}
         {}
         <input
@@ -72,6 +73,7 @@ export default class DynamicBadgeMaker extends React.Component {
           value={this.state.query}
           onChange={event => this.setState({ query: event.target.value })}
           placeholder="query"
+          required="required"
         />{' '}
         {}
         <input
@@ -79,6 +81,7 @@ export default class DynamicBadgeMaker extends React.Component {
           value={this.state.color}
           onChange={event => this.setState({ color: event.target.value })}
           placeholder="color"
+          required="required"
         />{' '}
         {}
         <input

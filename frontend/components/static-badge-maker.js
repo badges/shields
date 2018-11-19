@@ -36,6 +36,7 @@ export default class StaticBadgeMaker extends React.Component {
           value={this.state.subject}
           onChange={event => this.setState({ subject: event.target.value })}
           placeholder="subject"
+          required="required"
         />{' '}
         {}
         <input
@@ -43,6 +44,7 @@ export default class StaticBadgeMaker extends React.Component {
           value={this.state.status}
           onChange={event => this.setState({ status: event.target.value })}
           placeholder="status"
+          required="required"
         />{' '}
         {}
         <input
@@ -51,6 +53,7 @@ export default class StaticBadgeMaker extends React.Component {
           onChange={event => this.setState({ color: event.target.value })}
           list="default-colors"
           placeholder="color"
+          required="required"
         />{' '}
         {}
         <datalist id="default-colors">
