@@ -8,7 +8,7 @@ const { floorCount: floorCountColor } = require('../../lib/color-formatters')
 
 module.exports = class Redmine extends LegacyService {
   static get category() {
-    return 'version'
+    return 'rating'
   }
 
   static get route() {

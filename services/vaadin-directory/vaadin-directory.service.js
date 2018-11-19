@@ -66,7 +66,7 @@ class VaadinDirectoryVersion extends LegacyService {
     return [
       {
         title: 'Vaadin Directory',
-        previewUrl: '/vaadin-directory/v/vaadinvaadin-grid',
+        previewUrl: 'vaadinvaadin-grid',
         keywords: [
           'vaadin-directory',
           'vaadin directory',
@@ -119,7 +119,7 @@ class VaadinDirectoryReleaseDate extends LegacyService {
     return [
       {
         title: 'Vaadin Directory',
-        previewUrl: '/vaadin-directory/release-date/vaadinvaadin-grid',
+        previewUrl: 'vaadinvaadin-grid',
         keywords: [
           'vaadin-directory',
           'vaadin directory',

@@ -24,7 +24,7 @@ class AmoDownloads extends LegacyService {
 
   static get route() {
     return {
-      base: 'amo/s',
+      base: 'amo/d',
     }
   }
 

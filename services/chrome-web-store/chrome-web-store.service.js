@@ -90,7 +90,7 @@ class ChromeWebStorePrice extends LegacyService {
 
 class ChromeWebStoreRating extends LegacyService {
   static get category() {
-    return 'version'
+    return 'rating'
   }
 
   static get route() {
@@ -124,7 +124,7 @@ class ChromeWebStoreRating extends LegacyService {
 
 class ChromeWebStoreUsers extends LegacyService {
   static get category() {
-    return 'version'
+    return 'other'
   }
 
   static get route() {

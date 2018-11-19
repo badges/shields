@@ -33,7 +33,7 @@ class PuppetforgeUserReleases extends LegacyService {
 
 class PuppetforgeUserModules extends LegacyService {
   static get category() {
-    return 'version'
+    return 'other'
   }
 
   static get route() {

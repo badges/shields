@@ -10,7 +10,7 @@ const { version: versionColor } = require('../../lib/color-formatters')
 
 class CranLicense extends LegacyService {
   static get category() {
-    return 'version'
+    return 'license'
   }
 
   static get route() {
