@@ -3,15 +3,15 @@ version: 2
 jobs:
   npm-install:
     docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
+      - image: circleci/node:8
     steps:
       - checkout
 
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
+          - v2-dependencies-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+          - v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -20,19 +20,19 @@ jobs:
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package.json" }}
 
   main:
     docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
+      - image: circleci/node:8
       - image: redis
     steps:
       - checkout
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package.json" }}
           # https://github.com/badges/shields/issues/1937
-          key: v1-dependencies-
+          key: v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -65,15 +65,15 @@ jobs:
 
   main@node-latest:
     docker:
-      - image: shieldsio/shields-ci-node-latest:0.0.3
+      - image: circleci/node:latest
       - image: redis
     steps:
       - checkout
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package.json" }}
           # https://github.com/badges/shields/issues/1937
-          key: v1-dependencies-
+          key: v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -106,14 +106,14 @@ jobs:
 
   danger:
     docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
+      - image: circleci/node:8
     steps:
       - checkout
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package.json" }}
           # https://github.com/badges/shields/issues/1937
-          key: v1-dependencies-
+          key: v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -126,14 +126,14 @@ jobs:
 
   frontend:
     docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
+      - image: circleci/node:8
     steps:
       - checkout
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package.json" }}
           # https://github.com/badges/shields/issues/1937
-          key: v1-dependencies-
+          key: v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -149,9 +149,9 @@ jobs:
           when: always
           command: npm run build
 
-  services-pr:
+  services:
     docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
+      - image: circleci/node:8
     steps:
       - checkout
 
@@ -162,9 +162,9 @@ jobs:
             echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package.json" }}
           # https://github.com/badges/shields/issues/1937
-          key: v1-dependencies-
+          key: v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -188,9 +188,9 @@ jobs:
               echo 'This is not a pull request. Skipping.'
             fi
 
-  services-pr@node-latest:
+  services@node-latest:
     docker:
-      - image: shieldsio/shields-ci-node-latest:0.0.3
+      - image: circleci/node:latest
     steps:
       - checkout
 
@@ -201,9 +201,9 @@ jobs:
             echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package.json" }}
           # https://github.com/badges/shields/issues/1937
-          key: v1-dependencies-
+          key: v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -226,19 +226,6 @@ jobs:
             else
               echo 'This is not a pull request. Skipping.'
             fi
-
-  services-daily:
-    docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
-    steps:
-      - checkout
-
-      - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
-
-      - run:
-          name: Run all service tests
-          command: npm run test:services
 
 workflows:
   version: 2
@@ -258,10 +245,10 @@ workflows:
       - frontend:
           requires:
             - npm-install
-      - services-pr:
+      - services:
           requires:
             - npm-install
-      - services-pr@node-latest:
+      - services@node-latest:
           requires:
             - npm-install
       - danger:
@@ -270,13 +257,3 @@ workflows:
           filters:
             branches:
               ignore: /dependabot\/.*/
-
-  daily:
-    triggers:
-      - schedule:
-          cron: "0 17 * * *"
-          filters:
-            branches:
-              only: master
-    jobs:
-      - services-daily

@@ -9,9 +9,44 @@ const isSvg = require('is-svg')
 const path = require('path')
 const serverHelpers = require('./lib/in-process-server-test-helpers')
 const sinon = require('sinon')
+const Camp = require('camp')
 const svg2img = require('./gh-badges/lib/svg-to-img')
+const { handleRequest } = require('./lib/request-handler')
+const { loadServiceClasses } = require('./services')
 
 describe('The server', function() {
+  let dummyCamp = Camp.start({ port: config.port, hostname: '::' })
+  before('Check the services', function() {
+    // The responsibility of this `before()` hook is to verify that the server
+    // will be able to register all the services. When it fails, the balance of
+    // this `describe()` block – that is, the server tests – does not run.
+    //
+    // Without this block, the next `before()` hook fails while printing this
+    // quite opaque message:
+    //
+    // Error: listen EADDRINUSE :::1111
+    //   at Object._errnoException (util.js:1022:11)
+    //   at _exceptionWithHostPort (util.js:1044:20)
+    //   at Camp.setupListenHandle [as _listen2] (net.js:1367:14)
+    //   at listenInCluster (net.js:1408:12)
+    //   at doListen (net.js:1517:7)
+    //   at _combinedTickCallback (internal/process/next_tick.js:141:11)
+    //   at process._tickDomainCallback (internal/process/next_tick.js:218:9)
+    loadServiceClasses().forEach(serviceClass =>
+      serviceClass.register({ camp: dummyCamp, handleRequest }, {})
+    )
+    dummyCamp.close()
+    dummyCamp = undefined
+  })
+  after(function() {
+    // Free up the port and shut down the server immediately, even when the
+    // `before()` block fails during registration.
+    if (dummyCamp) {
+      dummyCamp.close()
+      dummyCamp = undefined
+    }
+  })
+
   const baseUri = `http://127.0.0.1:${config.port}`
 
   let server

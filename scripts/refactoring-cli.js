@@ -5,7 +5,7 @@ const mapValues = require('lodash.mapvalues')
 
 const colorscheme = require('../gh-badges/lib/colorscheme.json')
 const colorsMap = mapValues(colorscheme, 'colorB')
-const { floorCount } = require('./color-formatters')
+const { floorCount } = require('../lib/color-formatters')
 const { loadServiceClasses } = require('../services')
 
 const serviceClasses = loadServiceClasses()

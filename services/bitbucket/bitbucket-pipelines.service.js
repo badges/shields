@@ -89,13 +89,13 @@ module.exports = class BitbucketPipelines extends BaseJsonService {
       {
         title: 'Bitbucket Pipelines',
         exampleUrl: 'atlassian/adf-builder-javascript',
-        urlPattern: ':user/:repo',
+        pattern: ':user/:repo',
         staticExample: this.render({ status: 'SUCCESSFUL' }),
       },
       {
         title: 'Bitbucket Pipelines branch',
         exampleUrl: 'atlassian/adf-builder-javascript/task/SECO-2168',
-        urlPattern: ':user/:repo/:branch',
+        pattern: ':user/:repo/:branch',
         staticExample: this.render({ status: 'SUCCESSFUL' }),
       },
     ]

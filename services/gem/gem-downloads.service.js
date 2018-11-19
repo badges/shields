@@ -123,7 +123,7 @@ module.exports = class GemDownloads extends BaseJsonService {
       {
         title: 'Gem',
         exampleUrl: 'dv/rails/stable',
-        urlPattern: 'dv/:package/stable',
+        pattern: 'dv/:package/stable',
         staticExample: this.render({
           label: this._getLabel('stable', 'dv'),
           downloads: 70000,
@@ -133,7 +133,7 @@ module.exports = class GemDownloads extends BaseJsonService {
       {
         title: 'Gem',
         exampleUrl: 'dv/rails/4.1.0',
-        urlPattern: 'dv/:package/:version',
+        pattern: 'dv/:package/:version',
         staticExample: this.render({
           label: this._getLabel('4.1.0', 'dv'),
           downloads: 50000,
@@ -143,7 +143,7 @@ module.exports = class GemDownloads extends BaseJsonService {
       {
         title: 'Gem',
         exampleUrl: 'dtv/rails',
-        urlPattern: 'dtv/:package',
+        pattern: 'dtv/:package',
         staticExample: this.render({
           label: this._getLabel(undefined, 'dtv'),
           downloads: 70000,
@@ -153,7 +153,7 @@ module.exports = class GemDownloads extends BaseJsonService {
       {
         title: 'Gem',
         exampleUrl: 'dt/rails',
-        urlPattern: 'dt/:package',
+        pattern: 'dt/:package',
         staticExample: this.render({
           label: this._getLabel(undefined, 'dt'),
           downloads: 900000,

@@ -49,7 +49,7 @@ module.exports = class AzureDevOpsBuild extends BaseSvgService {
     return [
       {
         title: 'Azure DevOps builds',
-        urlPattern: 'azure-devops/build/:organization/:projectId/:definitionId',
+        pattern: 'azure-devops/build/:organization/:projectId/:definitionId',
         staticExample: render({ status: 'succeeded' }),
         exampleUrl:
           'azure-devops/build/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2',
@@ -58,7 +58,7 @@ module.exports = class AzureDevOpsBuild extends BaseSvgService {
       },
       {
         title: 'Azure DevOps builds (branch)',
-        urlPattern:
+        pattern:
           'azure-devops/build/:organization/:projectId/:definitionId/:branch',
         staticExample: render({ status: 'succeeded' }),
         exampleUrl:
