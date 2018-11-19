@@ -3,8 +3,8 @@
 const assert = require('assert')
 const coalesce = require('../lib/coalesce')
 
-const serverStartTime = new Date(new Date().toGMTString())
-const serverStartTimeGMTString = serverStartTime.toGMTString()
+const serverStartTimeGMTString = new Date().toGMTString()
+const serverStartTimestamp = Date.now()
 
 const numRegex = /^[0-9]+$/
 function isInt(number) {
@@ -40,19 +40,21 @@ function setHeadersForCacheLength(res, cacheLengthSeconds) {
   const now = new Date()
   const nowGMTString = now.toGMTString()
 
-  res.setHeader('Date', nowGMTString)
-
   // Send both Cache-Control max-age and Expires in case the client implements
   // HTTP/1.0 but not HTTP/1.1.
+  let cacheControl, expires
   if (cacheLengthSeconds === 0) {
-    // Prevent all possible downstream caching.
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
-    res.setHeader('Expires', nowGMTString)
+    // Prevent as much downstream caching as possible.
+    cacheControl = 'no-cache, no-store, must-revalidate'
+    expires = nowGMTString
   } else {
-    res.setHeader('Cache-Control', `max-age=${cacheLengthSeconds}`)
-    const date = new Date(+now + cacheLengthSeconds * 1000).toGMTString()
-    res.setHeader('Expires', date)
+    cacheControl = `max-age=${cacheLengthSeconds}`
+    expires = new Date(now.getTime() + cacheLengthSeconds * 1000).toGMTString()
   }
+
+  res.setHeader('Date', nowGMTString)
+  res.setHeader('Cache-Control', cacheControl)
+  res.setHeader('Expires', expires)
 }
 
 function setCacheHeaders({
@@ -76,7 +78,9 @@ function setCacheHeadersForStaticResource(res) {
 }
 
 function serverHasBeenUpSinceResourceCached(req) {
-  return +serverStartTime <= +new Date(req.headers['if-modified-since'])
+  return (
+    serverStartTimestamp <= new Date(req.headers['if-modified-since']).getTime()
+  )
 }
 
 module.exports = {
