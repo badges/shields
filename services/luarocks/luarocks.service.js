@@ -9,6 +9,26 @@ const {
 } = require('./luarocks-version')
 
 module.exports = class Luarocks extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'luarocks/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'LuaRocks',
+        previewUrl: 'mpeterv/luacheck',
+        keywords: ['lua'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/luarocks\/v\/([^/]+)\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
