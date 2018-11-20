@@ -57,15 +57,69 @@ const testString =
   'Update Check Mode:Tags\n' +
   'Current Version:1.4\n' +
   'Current Version Code:5\n'
+const testYmlString =
+  'Categories: System\n' +
+  'License: MIT\n' +
+  'WebSite: https://github.com/axxapy/apkExtractor/blob/HEAD/README.md\n' +
+  'SourceCode: https://github.com/axxapy/apkExtractor\n' +
+  'IssueTracker: https://github.com/axxapy/apkExtractor/issues\n' +
+  '\n' +
+  'AutoName: Apk Extractor\n' +
+  'Summary: Get APK files from installed apps\n' +
+  'Description: |-\n' +
+  '    Extract APKs from your device, even if installed from the Playstore. Root access\n' +
+  '    is required for paid apps.\n' +
+  '    \n' +
+  '    * Fast and easy to use.\n' +
+  '    * Extracts almost all applications, includes system applications.\n' +
+  '    * ROOT access only required for extracting paid apps.\n' +
+  "    * Apk's will be saved in /sdcard/Download/Eimon/.\n" +
+  '    * Provided Search option to search applications.\n' +
+  '    * Compatible with latest version of Android 6.0\n' +
+  '    * Saved apk format : AppPackageName.apk.\n' +
+  'CurrentVersion: 1.8\n' +
+  '.\n' +
+  '\n' +
+  'RepoType: git\n' +
+  'Repo: https://github.com/axxapy/apkExtractor\n' +
+  '\n' +
+  'Builds:' +
+  "  - versionName: '1.2'" +
+  '    versionCode: 32' +
+  "    commit: '0.32'" +
+  '    subdir: app' +
+  '    gradle:' +
+  '      - yes' +
+  '\n' +
+  "  - versionName: '1.4'" +
+  '    versionCode: 33' +
+  "    commit: '5'" +
+  '    subdir: app' +
+  '    gradle:' +
+  '      - yes' +
+  '\n' +
+  'AutoUpdateMode: Version %v\n' +
+  'UpdateCheckMode: Tags\n' +
+  'CurrentVersion: 1.4\n' +
+  'CurrentVersionCode: 33\n'
 const base = 'https://gitlab.com'
-const path = '/fdroid/fdroiddata/raw/master/metadata/axp.tool.apkextractor.txt'
+const path = '/fdroid/fdroiddata/raw/master/metadata/axp.tool.apkextractor'
 
-t.create('Package is found')
+t.create('Package is found with default metadata format')
   .get('/v/axp.tool.apkextractor.json')
   .intercept(nock =>
     nock(base)
-      .get(path)
+      .get(`${path}.txt`)
       .reply(200, testString)
+  )
+  .expectJSON({ name: 'f-droid', value: 'v1.4' })
+
+t.create('Package is found with yml matadata format')
+  .get('/v/axp.tool.apkextractor.json?format=yml')
+  .intercept(nock =>
+    nock(base)
+      .get(`${path}.yml`)
+      .reply(200, testYmlString)
   )
   .expectJSON({ name: 'f-droid', value: 'v1.4' })
 
@@ -73,7 +127,7 @@ t.create('Package is not found')
   .get('/v/axp.tool.apkextractor.json')
   .intercept(nock =>
     nock(base)
-      .get(path)
+      .get(`${path}.txt`)
       .reply(404, testString)
   )
   .expectJSON({ name: 'f-droid', value: 'app not found' })
@@ -82,10 +136,17 @@ t.create('The api changed')
   .get('/v/axp.tool.apkextractor.json')
   .intercept(nock =>
     nock(base)
-      .get(path)
+      .get(`${path}.txt`)
       .reply(200, '')
   )
   .expectJSON({ name: 'f-droid', value: 'invalid response' })
+
+t.create('Package is not found due invalid format')
+  .get('/v/axp.tool.apkextractor.json?format=xml')
+  .expectJSON({
+    name: 'f-droid',
+    value: 'invalid parameter, valid formats=yml or txt',
+  })
 
 /* If this test fails, either the API has changed or the app was deleted. */
 t.create('The real api did not change')
