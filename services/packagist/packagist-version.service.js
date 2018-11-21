@@ -11,6 +11,31 @@ const {
 } = require('../../lib/php-version')
 
 module.exports = class PackagistVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'packagist',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Packagist',
+        previewUrl: 'v/symfony/symfony',
+        keywords: ['PHP'],
+      },
+      {
+        title: 'Packagist Pre Release',
+        previewUrl: 'vpre/symfony/symfony',
+        keywords: ['PHP'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/packagist\/(v|vpre)\/(.*)\.(svg|png|gif|jpg|json)$/,

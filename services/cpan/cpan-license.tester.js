@@ -5,7 +5,7 @@ const t = createServiceTester()
 module.exports = t
 
 t.create('license')
-  .get('/l/Config-Augeas.json')
+  .get('/Config-Augeas.json')
   .expectJSON({
     name: 'license',
     value: 'lgpl_2_1',
