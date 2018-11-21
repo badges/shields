@@ -11,8 +11,8 @@
         <img src="https://img.shields.io/circleci/project/github/badges/shields/master.svg"
             alt="build status"></a>
     <a href="https://circleci.com/gh/badges/daily-tests">
-        <img src="https://img.shields.io/circleci/project/github/badges/daily-tests.svg?label=daily%20tests"
-            alt="daily build status"></a>
+        <img src="https://img.shields.io/circleci/project/github/badges/daily-tests.svg?label=service%20tests"
+            alt="service-test status"></a>
     <a href="https://coveralls.io/github/badges/shields">
         <img src="https://img.shields.io/coveralls/github/badges/shields.svg"
             alt="coverage"></a>
