@@ -161,7 +161,7 @@
     "pretty": "^2.0.0",
     "prop-types": "^15.6.0",
     "react": "^16.6.3",
-    "react-dom": "^16.6.1",
+    "react-dom": "^16.6.3",
     "react-modal": "^3.5.1",
     "react-router-dom": "^4.3.1",
     "read-all-stdin-sync": "^1.0.5",
