@@ -60,11 +60,7 @@ class ServiceTester {
   create(msg) {
     const spec = frisby
       .create(msg)
-      .baseUri(
-        `${config.tested.protocol}//${config.tested.hostname}:${
-          config.tested.port
-        }${this.pathPrefix}`
-      )
+      .baseUri(`${config.testedServerUrl}${this.pathPrefix}`)
       .before(() => {
         this.beforeEach()
       })
