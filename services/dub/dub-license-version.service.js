@@ -9,7 +9,55 @@ const { checkErrorResponse } = require('../../lib/error-helper')
 const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
-module.exports = class DubLicenseVersion extends LegacyService {
+class DubVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'dub/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'DUB',
+        previewUrl: 'vibe-d',
+        keywords: ['dub'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class DubLicense extends LegacyService {
+  static get category() {
+    return 'license'
+  }
+
+  static get route() {
+    return {
+      base: 'dub/l',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'DUB',
+        previewUrl: 'vibe-d',
+        keywords: ['dub'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class DubLicenseVersion extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/dub\/(v|l)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -54,4 +102,10 @@ module.exports = class DubLicenseVersion extends LegacyService {
       })
     )
   }
+}
+
+module.exports = {
+  DubVersion,
+  DubLicense,
+  DubLicenseVersion,
 }

@@ -1,13 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const chai = require('chai')
-const { expect } = chai
+const { expect } = require('chai')
 const sinon = require('sinon')
 
 const BaseXmlService = require('./base-xml')
-
-chai.use(require('chai-as-promised'))
 
 const dummySchema = Joi.object({
   requiredString: Joi.string().required(),

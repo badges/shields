@@ -7,6 +7,29 @@ const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
 module.exports = class Nexus extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'nexus',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Sonatype Nexus (Releases)',
+        previewUrl: 'r/https/oss.sonatype.org/com.google.guava/guava',
+      },
+      {
+        title: 'Sonatype Nexus (Snapshots)',
+        previewUrl: 's/https/oss.sonatype.org/com.google.guava/guava',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     // standalone sonatype nexus installation
     // API pattern:
