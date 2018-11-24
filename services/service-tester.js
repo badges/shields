@@ -92,14 +92,14 @@ class ServiceTester {
   /**
    * Register the tests with Mocha.
    */
-  toss(options) {
+  toss() {
     const specs = this.specs
 
     const fn = this._only ? describe.only : describe
     // eslint-disable-next-line mocha/prefer-arrow-callback
     fn(this.title, function() {
       specs.forEach(spec => {
-        if (!options.skipIntercepted || !spec.intercepted) {
+        if (!config.skipIntercepted || !spec.intercepted) {
           spec.toss()
         }
       })
