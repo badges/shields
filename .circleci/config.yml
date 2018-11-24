@@ -172,21 +172,11 @@ jobs:
 
       - run:
           name: Identify services tagged in the PR title
-          command: |
-            if [[ ! -z $CI_PULL_REQUEST ]]; then
-              npm run test:services:pr:prepare
-            else
-              echo 'This is not a pull request. Skipping.'
-            fi
+          command: npm run test:services:pr:prepare
 
       - run:
           name: Run tests for tagged services
-          command: |
-            if [[ ! -z $CI_PULL_REQUEST ]]; then
-              npm run test:services:pr:run
-            else
-              echo 'This is not a pull request. Skipping.'
-            fi
+          command: npm run test:services:pr:run
 
   services@node-latest:
     docker:
@@ -211,21 +201,11 @@ jobs:
 
       - run:
           name: Identify services tagged in the PR title
-          command: |
-            if [[ ! -z $CI_PULL_REQUEST ]]; then
-              npm run test:services:pr:prepare
-            else
-              echo 'This is not a pull request. Skipping.'
-            fi
+          command: npm run test:services:pr:prepare
 
       - run:
           name: Run tests for tagged services
-          command: |
-            if [[ ! -z $CI_PULL_REQUEST ]]; then
-              npm run test:services:pr:run
-            else
-              echo 'This is not a pull request. Skipping.'
-            fi
+          command: npm run test:services:pr:run
 
 workflows:
   version: 2
