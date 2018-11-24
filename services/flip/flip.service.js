@@ -1,11 +1,11 @@
 'use strict'
 
-const NoncachingBaseService = require('../base-noncaching')
+const NonMemoryCachingBaseService = require('../base-non-memory-caching')
 
 let bitFlip = false
 
 // Production cache debugging.
-module.exports = class Flip extends NoncachingBaseService {
+module.exports = class Flip extends NonMemoryCachingBaseService {
   static get category() {
     return 'debug'
   }
