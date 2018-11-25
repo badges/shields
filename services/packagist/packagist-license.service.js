@@ -2,6 +2,7 @@
 
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const { getLatestVersion } = require('./packagist-helpers')
 
 module.exports = class PackagistLicense extends LegacyService {
   static get category() {
@@ -44,28 +45,8 @@ module.exports = class PackagistLicense extends LegacyService {
           }
           try {
             const data = JSON.parse(buffer)
-            // Note: if you change the latest version detection algorithm here,
-            // change it above (for the actual version badge).
-            let version
-            const unstable = function(ver) {
-              return /dev/.test(ver)
-            }
-            // Grab the latest stable version, or an unstable
-            for (const versionName in data.package.versions) {
-              const current = data.package.versions[versionName]
-
-              if (version !== undefined) {
-                if (unstable(version.version) && !unstable(current.version)) {
-                  version = current
-                } else if (
-                  version.version_normalized < current.version_normalized
-                ) {
-                  version = current
-                }
-              } else {
-                version = current
-              }
-            }
+            const version =
+              data.package.versions[getLatestVersion(data.package.versions)]
             badgeData.text[1] = version.license[0]
             badgeData.colorscheme = 'blue'
             sendBadge(format, badgeData)
