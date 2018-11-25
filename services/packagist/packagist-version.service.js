@@ -4,11 +4,7 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
-const {
-  compare: phpVersionCompare,
-  latest: phpLatestVersion,
-  isStable: phpStableVersion,
-} = require('../../lib/php-version')
+const { getLatestVersion } = require('./packagist-helpers')
 
 module.exports = class PackagistVersion extends LegacyService {
   static get category() {
@@ -57,59 +53,10 @@ module.exports = class PackagistVersion extends LegacyService {
           }
           try {
             const data = JSON.parse(buffer)
-
-            const versionsData = data.package.versions
-            let versions = Object.keys(versionsData)
-
-            // Map aliases (eg, dev-master).
-            const aliasesMap = {}
-            versions.forEach(version => {
-              const versionData = versionsData[version]
-              if (
-                versionData.extra &&
-                versionData.extra['branch-alias'] &&
-                versionData.extra['branch-alias'][version]
-              ) {
-                // eg, version is 'dev-master', mapped to '2.0.x-dev'.
-                const validVersion = versionData.extra['branch-alias'][version]
-                if (
-                  aliasesMap[validVersion] === undefined ||
-                  phpVersionCompare(aliasesMap[validVersion], validVersion) < 0
-                ) {
-                  versions.push(validVersion)
-                  aliasesMap[validVersion] = version
-                }
-              }
-            })
-            versions = versions.filter(version => !/^dev-/.test(version))
-
-            let badgeText = null
-            let badgeColor = null
-
-            switch (info) {
-              case 'v': {
-                const stableVersions = versions.filter(phpStableVersion)
-                let stableVersion = phpLatestVersion(stableVersions)
-                if (!stableVersion) {
-                  stableVersion = phpLatestVersion(versions)
-                }
-                //if (!!aliasesMap[stableVersion]) {
-                //  stableVersion = aliasesMap[stableVersion];
-                //}
-                badgeText = versionText(stableVersion)
-                badgeColor = versionColor(stableVersion)
-                break
-              }
-              case 'vpre': {
-                const unstableVersion = phpLatestVersion(versions)
-                //if (!!aliasesMap[unstableVersion]) {
-                //  unstableVersion = aliasesMap[unstableVersion];
-                //}
-                badgeText = versionText(unstableVersion)
-                badgeColor = 'orange'
-                break
-              }
-            }
+            const stable = info === 'v'
+            const version = getLatestVersion(data.package.versions, stable)
+            const badgeText = versionText(version)
+            const badgeColor = stable ? versionColor(version) : 'orange'
 
             if (badgeText !== null) {
               badgeData.text[1] = badgeText
