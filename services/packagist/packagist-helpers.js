@@ -35,6 +35,7 @@ const getLatestVersion = function(versionsData, stable = true) {
     const stableVersions = versions.filter(phpStableVersion)
     let stableVersion = phpLatestVersion(stableVersions)
     if (!stableVersion) {
+      // if there are no stable versions, return an unstable version
       stableVersion = phpLatestVersion(versions)
     }
     return stableVersion
