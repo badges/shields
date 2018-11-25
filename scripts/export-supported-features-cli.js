@@ -11,6 +11,7 @@ const supportedFeatures = {
     'plastic',
     'flat',
     'flat-square',
+    'pill',
     'for-the-badge',
     'popout',
     'popout-square',

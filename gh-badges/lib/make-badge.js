@@ -169,6 +169,10 @@ function makeBadge({
     logoPadding = logo ? 3 : 0
   }
 
+  if (template === 'pill') {
+    logoPadding += 2
+  }
+
   const context = {
     text: [left, right],
     escapedText: text.map(escapeXml),
