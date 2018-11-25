@@ -144,7 +144,7 @@
     "is-png": "^1.1.0",
     "is-svg": "^3.0.0",
     "joi-extension-semver": "2.0.0",
-    "lint-staged": "^8.0.5",
+    "lint-staged": "^8.1.0",
     "lodash.debounce": "^4.0.8",
     "lodash.difference": "^4.5.0",
     "lodash.mapvalues": "^4.6.0",
