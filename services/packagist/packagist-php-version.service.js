@@ -3,6 +3,7 @@
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const log = require('../../lib/log')
+const { getLatestVersion } = require('./packagist-helpers')
 
 module.exports = class PackagistPhpVersion extends LegacyService {
   static get category() {
@@ -29,7 +30,6 @@ module.exports = class PackagistPhpVersion extends LegacyService {
       /^\/packagist\/php-v\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
         const userRepo = match[1] // eg, espadrine/sc
-        const version = match[2] ? match[2] : 'dev-master'
         const format = match[3]
         const options = {
           method: 'GET',
@@ -49,6 +49,9 @@ module.exports = class PackagistPhpVersion extends LegacyService {
 
           try {
             const data = JSON.parse(buffer)
+            const version = match[2]
+              ? match[2]
+              : getLatestVersion(data.packages[userRepo])
             badgeData.text[1] = data.packages[userRepo][version].require.php
             badgeData.colorscheme = 'blue'
           } catch (e) {
