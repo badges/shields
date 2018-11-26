@@ -26,7 +26,7 @@ module.exports = class DynamicJson extends BaseJsonService {
     }
   }
 
-  async handle({}, queryParams) {
+  async handle(namedParams, queryParams) {
     const {
       url,
       query: pathExpression,

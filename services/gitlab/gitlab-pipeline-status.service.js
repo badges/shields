@@ -1,10 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const validate = require('../../lib/validate')
 const BaseSvgScrapingService = require('../base-svg-scraping')
 const { optionalUrl } = require('../validators')
-const { InvalidParameter, NotFound } = require('../errors')
+const { NotFound } = require('../errors')
 const { isPipelineStatus } = require('./gitlab-helpers')
 
 const badgeSchema = Joi.object({

@@ -1,6 +1,7 @@
 'use strict'
 
 const { DOMParser } = require('xmldom')
+const jp = require('jsonpath')
 const path = require('path')
 const xpath = require('xpath')
 const yaml = require('js-yaml')
