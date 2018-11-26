@@ -65,7 +65,16 @@ async function fetch(
  * serviceBaseUrl: The base URL for the Shields service, e.g. chocolatey, resharper
  * apiBaseUrl: The complete base URL of the API, e.g. https://api.example.com/api/v2
  */
-function createServiceFamily({ defaultLabel, serviceBaseUrl, apiBaseUrl }) {
+function createServiceFamily({
+  defaultLabel,
+  serviceBaseUrl,
+  apiBaseUrl,
+  title,
+  examplePackageName,
+  exampleVersion,
+  examplePrereleaseVersion,
+  exampleDownloadCount,
+}) {
   class NugetVersionService extends BaseJsonService {
     static get category() {
       return 'version'
@@ -79,7 +88,22 @@ function createServiceFamily({ defaultLabel, serviceBaseUrl, apiBaseUrl }) {
     }
 
     static get examples() {
-      return []
+      if (!title) return []
+
+      return [
+        {
+          title,
+          pattern: 'v/:packageName',
+          namedParams: { which: 'v', packageName: examplePackageName },
+          staticExample: this.render({ version: exampleVersion }),
+        },
+        {
+          title: `${title} (with prereleases)`,
+          pattern: 'vpre/:packageName',
+          namedParams: { which: 'vpre', packageName: examplePackageName },
+          staticExample: this.render({ version: examplePrereleaseVersion }),
+        },
+      ]
     }
 
     static get defaultBadgeData() {
@@ -116,7 +140,15 @@ function createServiceFamily({ defaultLabel, serviceBaseUrl, apiBaseUrl }) {
     }
 
     static get examples() {
-      return []
+      if (!title) return []
+
+      return [
+        {
+          title,
+          namedParams: { packageName: examplePackageName },
+          staticExample: this.render({ downloads: exampleDownloadCount }),
+        },
+      ]
     }
 
     static render(props) {
