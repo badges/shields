@@ -137,6 +137,15 @@ t.create('Package is found with yml matadata format')
   )
   .expectJSON({ name: 'f-droid', value: 'v1.4' })
 
+t.create('Package is not found with "metadata_format" query parameter')
+  .get('/v/axp.tool.apkextractor.json?metadata_format=yml')
+  .intercept(nock =>
+    nock(base)
+      .get(`${path}.yml`)
+      .reply(404)
+  )
+  .expectJSON({ name: 'f-droid', value: 'app not found' })
+
 t.create('Package is not found')
   .get('/v/axp.tool.apkextractor.json')
   .intercept(nock =>
