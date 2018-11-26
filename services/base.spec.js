@@ -540,6 +540,18 @@ describe('BaseService', function() {
         expect(e).to.be.an.instanceof(InvalidResponse)
       }
     })
+
+    it('throws error for invalid query params', async function() {
+      try {
+        DummyService._validateQueryParams(
+          { requiredString: ['this', "shouldn't", 'work'] },
+          dummySchema
+        )
+        expect.fail('Expected to throw')
+      } catch (e) {
+        expect(e).to.be.an.instanceof(InvalidParameter)
+      }
+    })
   })
 
   describe('request', function() {

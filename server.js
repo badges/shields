@@ -1,7 +1,6 @@
 'use strict'
 
 const { DOMParser } = require('xmldom')
-const jp = require('jsonpath')
 const path = require('path')
 const xpath = require('xpath')
 const yaml = require('js-yaml')
@@ -112,7 +111,7 @@ loadServiceClasses().forEach(serviceClass =>
 
 // User defined sources - JSON response
 camp.route(
-  /^\/badge\/dynamic\/(json|xml|yaml)\.(svg|png|gif|jpg|json)$/,
+  /^\/badge\/dynamic\/(xml|yaml)\.(svg|png|gif|jpg|json)$/,
   cache({
     queryParams: ['uri', 'url', 'query', 'prefix', 'suffix'],
     handler: function(query, match, sendBadge, request) {
@@ -145,14 +144,6 @@ camp.route(
       }
 
       switch (type) {
-        case 'json':
-          requestOptions = {
-            headers: {
-              Accept: 'application/json',
-            },
-            json: true,
-          }
-          break
         case 'xml':
           requestOptions = {
             headers: {
@@ -184,14 +175,6 @@ camp.route(
 
           let innerText = []
           switch (type) {
-            case 'json':
-              data = typeof data === 'object' ? data : JSON.parse(data)
-              data = jp.query(data, pathExpression)
-              if (!data.length) {
-                throw Error('no result')
-              }
-              innerText = data
-              break
             case 'xml':
               data = new DOMParser().parseFromString(data)
               data = xpath.select(pathExpression, data)

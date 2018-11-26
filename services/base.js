@@ -428,6 +428,20 @@ class BaseService {
     )
   }
 
+  static _validateQueryParams(queryParams, queryParamSchema) {
+    return validate(
+      {
+        ErrorClass: InvalidParameter,
+        prettyErrorMessage: 'invalid query parameter',
+        includeKeys: true,
+        traceErrorMessage: 'Query params did not match schema',
+        traceSuccessMessage: 'Query params after validation',
+      },
+      queryParams,
+      queryParamSchema
+    )
+  }
+
   async _request({ url, options = {}, errorMessages = {} }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     logTrace(emojic.bowAndArrow, 'Request', url, '\n', options)
