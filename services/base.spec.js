@@ -524,6 +524,86 @@ describe('BaseService', function() {
     })
   })
 
+  describe('getDefinition', function() {
+    it('returns the expected result', function() {
+      const {
+        examples: [first, second, third, fourth, fifth, sixth],
+      } = DummyService.getDefinition()
+      expect(first).to.deep.equal({
+        title: 'DummyService',
+        example: {
+          path: '/foo/World',
+          queryParams: {},
+        },
+        preview: {
+          path: '/foo/World',
+          queryParams: {},
+        },
+        keywords: [],
+        documentation: undefined,
+      })
+      expect(second).to.deep.equal({
+        title: 'DummyService',
+        example: {
+          path: '/foo/World',
+          queryParams: { queryParamA: '!!!' },
+        },
+        preview: {
+          path: '/foo/World',
+          queryParams: { queryParamA: '!!!' },
+        },
+        keywords: [],
+        documentation: undefined,
+      })
+      const expectedDefinition = {
+        title: 'DummyService',
+        example: {
+          path: '/foo/World',
+          queryParams: {},
+        },
+        preview: {
+          label: 'cat',
+          message: 'Hello namedParamA: foo with queryParamA: bar',
+          color: 'lightgrey',
+        },
+        keywords: ['hello'],
+        documentation: undefined,
+      }
+      expect(third).to.deep.equal(expectedDefinition)
+      expect(fourth).to.deep.equal(expectedDefinition)
+      expect(fifth).to.deep.equal({
+        title: 'DummyService',
+        example: {
+          pattern: '/foo/:world',
+          namedParams: { world: 'World' },
+          queryParams: {},
+        },
+        preview: {
+          label: 'cat',
+          message: 'Hello namedParamA: foo with queryParamA: bar',
+          color: 'lightgrey',
+        },
+        keywords: ['hello'],
+        documentation: undefined,
+      })
+      expect(sixth).to.deep.equal({
+        title: 'DummyService',
+        example: {
+          pattern: '/foo/:world',
+          namedParams: { world: 'World' },
+          queryParams: { queryParamA: '!!!' },
+        },
+        preview: {
+          color: 'lightgrey',
+          label: 'cat',
+          message: 'Hello namedParamA: foo with queryParamA: bar',
+        },
+        keywords: ['hello'],
+        documentation: undefined,
+      })
+    })
+  })
+
   describe('validate', function() {
     const dummySchema = Joi.object({
       requiredString: Joi.string().required(),
