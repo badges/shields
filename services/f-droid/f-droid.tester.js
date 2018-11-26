@@ -114,8 +114,22 @@ t.create('Package is found with default metadata format')
   )
   .expectJSON({ name: 'f-droid', value: 'v1.4' })
 
+t.create('Package is found with fallback yml matadata format')
+  .get('/v/axp.tool.apkextractor.json')
+  .intercept(nock =>
+    nock(base)
+      .get(`${path}.txt`)
+      .reply(404)
+  )
+  .intercept(nock =>
+    nock(base)
+      .get(`${path}.yml`)
+      .reply(200, testYmlString)
+  )
+  .expectJSON({ name: 'f-droid', value: 'v1.4' })
+
 t.create('Package is found with yml matadata format')
-  .get('/v/axp.tool.apkextractor.json?format=yml')
+  .get('/v/axp.tool.apkextractor.json?metadata_format=yml')
   .intercept(nock =>
     nock(base)
       .get(`${path}.yml`)
@@ -128,7 +142,12 @@ t.create('Package is not found')
   .intercept(nock =>
     nock(base)
       .get(`${path}.txt`)
-      .reply(404, testString)
+      .reply(404)
+  )
+  .intercept(nock =>
+    nock(base)
+      .get(`${path}.yml`)
+      .reply(404)
   )
   .expectJSON({ name: 'f-droid', value: 'app not found' })
 
@@ -141,11 +160,11 @@ t.create('The api changed')
   )
   .expectJSON({ name: 'f-droid', value: 'invalid response' })
 
-t.create('Package is not found due invalid format')
-  .get('/v/axp.tool.apkextractor.json?format=xml')
+t.create('Package is not found due invalid metadata format')
+  .get('/v/axp.tool.apkextractor.json?metadata_format=xml')
   .expectJSON({
     name: 'f-droid',
-    value: 'invalid parameter, valid formats=yml or txt',
+    value: 'invalid parameter, valid metadata_format=yml or txt',
   })
 
 /* If this test fails, either the API has changed or the app was deleted. */

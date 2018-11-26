@@ -10,14 +10,23 @@ const { InvalidResponse, InvalidParameter } = require('../errors')
 module.exports = class FDroid extends BaseService {
   async fetch({ appId, format }) {
     // currently, we only use the txt format. There are few apps using the yml format.
-    const url = `https://gitlab.com/fdroid/fdroiddata/raw/master/metadata/${appId}.${format}`
-    const { buffer } = await this._request({
-      url,
+    const url = `https://gitlab.com/fdroid/fdroiddata/raw/master/metadata/${appId}`
+    const reqOptions = {
+      url: `${url}.${format || 'txt'}`,
       options: {},
       errorMessages: {
         404: 'app not found',
       },
-    })
+    }
+    let buffer
+    try {
+      ;({ buffer } = await this._request(reqOptions))
+    } catch (error) {
+      if (format) {
+        throw error
+      }
+      ;({ buffer } = await this._request({ ...reqOptions, url: `${url}.yml` }))
+    }
     const metadata = buffer.toString()
     // we assume the layout as provided here:
     // https://gitlab.com/fdroid/fdroiddata/raw/master/metadata/axp.tool.apkextractor.txt
@@ -47,7 +56,7 @@ module.exports = class FDroid extends BaseService {
 
   async handle({ appId }, queryParams) {
     const constructor = this.constructor
-    const { format: format = 'txt' } = constructor.validateParams(queryParams)
+    const { metadata_format: format } = constructor.validateParams(queryParams)
     const result = await this.fetch({ appId, format })
 
     return constructor.render(result)
@@ -55,13 +64,14 @@ module.exports = class FDroid extends BaseService {
 
   static validateParams(queryParams) {
     const queryParamsSchema = Joi.object({
-      format: Joi.string().valid(['yml', 'txt']),
+      metadata_format: Joi.string().valid(['yml', 'txt']),
     }).required()
 
     return validate(
       {
         ErrorClass: InvalidParameter,
-        prettyErrorMessage: 'invalid parameter, valid formats=yml or txt',
+        prettyErrorMessage:
+          'invalid parameter, valid metadata_format=yml or txt',
         traceErrorMessage: 'Query params did not match schema',
         traceSuccessMessage: 'Query params after validation',
       },
@@ -84,7 +94,7 @@ module.exports = class FDroid extends BaseService {
       base: 'f-droid/v',
       format: '(.+)',
       capture: ['appId'],
-      queryParams: ['format'],
+      queryParams: ['metadata_format'],
     }
   }
 
@@ -92,7 +102,7 @@ module.exports = class FDroid extends BaseService {
     return [
       {
         title: 'F-Droid',
-        exampleUrl: 'org.thosp.yourlocalweather?format=yml',
+        exampleUrl: 'org.thosp.yourlocalweather?metadata_format=yml',
         pattern: ':appId',
         staticExample: this.render({ version: '1.0' }),
         keywords: ['fdroid', 'android', 'app'],
