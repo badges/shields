@@ -28,6 +28,9 @@ describe('Cache header functions', function() {
       given(exampleCacheConfig, 900, {}).expect(900)
       given(exampleCacheConfig, 900, { maxAge: 1000 }).expect(1000)
       given(exampleCacheConfig, 900, { maxAge: 400 }).expect(900)
+      given(exampleCacheConfig, 900, { maxAge: '-1000' }).expect(900)
+      given(exampleCacheConfig, 900, { maxAge: '' }).expect(900)
+      given(exampleCacheConfig, 900, { maxAge: 'not a number' }).expect(900)
     })
   })
 

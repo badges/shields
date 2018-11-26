@@ -1,15 +1,18 @@
 'use strict'
 
 const assert = require('assert')
+const Joi = require('joi')
 const coalesce = require('../lib/coalesce')
 
 const serverStartTimeGMTString = new Date().toGMTString()
 const serverStartTimestamp = Date.now()
 
-const numRegex = /^[0-9]+$/
-function isInt(number) {
-  return number !== undefined && numRegex.test(number)
-}
+const queryParamSchema = Joi.object({
+  // Not using nonNegativeInteger because it's not required.
+  maxAge: Joi.number()
+    .integer()
+    .min(0),
+}).required()
 
 function coalesceCacheLength(
   cacheHeaderConfig,
@@ -26,9 +29,13 @@ function coalesceCacheLength(
     defaultCacheLengthSeconds
   )
 
-  const { maxAge: maxAgeParam } = queryParams
-  if (isInt(maxAgeParam)) {
-    const overrideCacheLength = parseInt(maxAgeParam)
+  const { value: { maxAge: overrideCacheLength } = {}, error } = Joi.validate(
+    queryParams,
+    queryParamSchema,
+    { allowUnknown: true }
+  )
+
+  if (!error && overrideCacheLength !== undefined) {
     // The user can request _more_ caching, but not less.
     return Math.max(overrideCacheLength, ourCacheLength)
   } else {
