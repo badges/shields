@@ -169,8 +169,9 @@ function makeBadge({
     logoPadding = logo ? 3 : 0
   }
 
+  let containerPadding = 0
   if (template === 'pill') {
-    logoPadding += 2
+    containerPadding = 2
   }
 
   const context = {
@@ -185,6 +186,7 @@ function makeBadge({
     colorA,
     colorB,
     escapeXml,
+    containerPadding,
   }
 
   const templateFn = templates[`${template}-${format}`]
