@@ -118,7 +118,7 @@ class AurVotes extends BaseAurService {
         title: `AUR votes`,
         pattern: ':package',
         exampleUrl: 'yaourt',
-        staticExample: this.render({ license: '3029' }),
+        staticExample: this.render({ votes: 3029 }),
       },
     ]
   }
