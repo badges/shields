@@ -5,7 +5,7 @@ const sinon = require('sinon')
 const GithubApiProvider = require('./github-api-provider')
 
 describe('Github API provider', function() {
-  const baseUri = 'https://github-api.example.com'
+  const baseUrl = 'https://github-api.example.com'
   const reserveFraction = 0.333
 
   let mockToken, mockSearchToken, mockTokenProvider, provider
@@ -16,7 +16,7 @@ describe('Github API provider', function() {
       nextToken: sinon.stub().returns(mockToken),
       nextSearchToken: sinon.stub().returns(mockSearchToken),
     }
-    provider = new GithubApiProvider(baseUri, mockTokenProvider)
+    provider = new GithubApiProvider(baseUrl, mockTokenProvider)
     provider.reserveFraction = reserveFraction
   })
 
