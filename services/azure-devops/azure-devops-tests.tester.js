@@ -28,20 +28,64 @@ const mockEmptyTestResultSummaryResponse = {
   },
 }
 
-const isAzureDevOpsTestTotals = Joi.string().regex(
-  /^(?:[0-9]+ (?:passed|skipped|failed)(?:, )?)+$/
-)
+function getLabelRegex(label, isCompact) {
+  return isCompact ? `(?:${label} [0-9]*)` : `(?:[0-9]* ${label})`
+}
 
-const isCompactAzureDevOpsTestTotals = Joi.string().regex(
-  /^(?:[0-9]* ?(?:✔|✘|➟) ?[0-9]*(?:, | \| )?)+$/
-)
+function isAzureDevOpsTestTotals(
+  passedLabel,
+  failedLabel,
+  skippedLabel,
+  isCompact
+) {
+  const regexStrings = [
+    `^${getLabelRegex(passedLabel, isCompact)}$`,
+    `^${getLabelRegex(failedLabel, isCompact)}$`,
+    `^${getLabelRegex(skippedLabel, isCompact)}$`,
+    `^${getLabelRegex(passedLabel, isCompact)} ${getLabelRegex(
+      failedLabel,
+      isCompact
+    )}$`,
+    `^${getLabelRegex(failedLabel, isCompact)} ${getLabelRegex(
+      skippedLabel,
+      isCompact
+    )}$`,
+    `^${getLabelRegex(passedLabel, isCompact)} ${getLabelRegex(
+      skippedLabel,
+      isCompact
+    )}$`,
+    `^${getLabelRegex(passedLabel, isCompact)} ${getLabelRegex(
+      failedLabel,
+      isCompact
+    )} ${getLabelRegex(skippedLabel, isCompact)}$`,
+  ]
 
-const isCustomAzureDevOpsTestTotals = Joi.string().regex(
-  /^(?:[0-9]+ (?:good|bad|n\/a)(?:, )?)+$/
-)
+  return Joi.alternatives().try(
+    regexStrings.map(regexStr => Joi.string().regex(new RegExp(regexStr)))
+  )
+}
 
-const isCompactCustomAzureDevOpsTestTotals = Joi.string().regex(
-  /^(?:[0-9]* ?(?:💃|🤦‍♀️|🤷) ?[0-9]*(?:, | \| )?)+$/
+const isDefaultAzureDevOpsTestTotals = isAzureDevOpsTestTotals(
+  'passed',
+  'skipped',
+  'failed'
+)
+const isCompactAzureDevOpsTestTotals = isAzureDevOpsTestTotals(
+  '✔',
+  '✘',
+  '➟',
+  true
+)
+const isCustomAzureDevOpsTestTotals = isAzureDevOpsTestTotals(
+  'good',
+  'bad',
+  'n\\/a'
+)
+const isCompactCustomAzureDevOpsTestTotals = isAzureDevOpsTestTotals(
+  '💃',
+  '🤦‍♀️',
+  '🤷',
+  true
 )
 
 t.create('unknown build definition')
@@ -111,13 +155,13 @@ t.create('no tests in test result summary response')
 t.create('test status')
   .get(mockBadgeUri)
   .expectJSONTypes(
-    Joi.object().keys({ name: 'tests', value: isAzureDevOpsTestTotals })
+    Joi.object().keys({ name: 'tests', value: isDefaultAzureDevOpsTestTotals })
   )
 
 t.create('test status on branch')
   .get(mockBranchBadgeUri)
   .expectJSONTypes(
-    Joi.object().keys({ name: 'tests', value: isAzureDevOpsTestTotals })
+    Joi.object().keys({ name: 'tests', value: isDefaultAzureDevOpsTestTotals })
   )
 
 t.create('test status with compact message')
