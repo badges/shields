@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 const schema = Joi.object({
   total_amount: Joi.number()

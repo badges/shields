@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const { withRegex } = require('../test-validators')
-const { colorScheme } = require('../test-helpers')
 
 const t = require('../create-service-tester')()
 module.exports = t
