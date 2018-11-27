@@ -33,8 +33,8 @@ class GithubApiProvider {
 
   addToken(tokenString) {
     if (this.withPooling) {
-      this.tokenPool.add(tokenString)
-      this.searchTokenPool.add(tokenString)
+      this.standardTokens.add(tokenString)
+      this.searchTokens.add(tokenString)
     } else {
       throw Error('When using token pooling, do not provide static tokens')
     }

@@ -1,21 +1,27 @@
 'use strict'
 
 const { expect } = require('chai')
-const { PoolingTokenProvider } = require('./token-provider')
+const serverSecrets = require('../../lib/server-secrets')
 const GithubApiProvider = require('./github-api-provider')
-const serverSecrets = require('../server-secrets')
 
 describe('Github provider with token pool', function() {
-  const githubUri = process.env.GITHUB_URL || 'https://api.github.com'
+  const baseUrl = process.env.GITHUB_URL || 'https://api.github.com'
   const reserveFraction = 0.333
 
-  let tokenProvider, githubApiProvider
+  let githubApiProvider
   before(function() {
-    tokenProvider = new PoolingTokenProvider()
-    tokenProvider.addToken(serverSecrets.gh_token)
+    githubApiProvider = new GithubApiProvider({
+      baseUrl,
+      withPooling: true,
+      reserveFraction,
+    })
 
-    githubApiProvider = new GithubApiProvider(githubUri, tokenProvider)
-    githubApiProvider.reserveFraction = reserveFraction
+    const { gh_token: token } = serverSecrets
+    if (!token) {
+      throw Error('The integration tests require a gh_token to be set')
+    }
+
+    githubApiProvider.addToken(token)
   })
 
   const headers = []
@@ -49,14 +55,14 @@ describe('Github provider with token pool', function() {
     const nextReset = +lastHeaders['x-ratelimit-reset']
 
     const tokens = []
-    tokenProvider.tokenPool.forEach(t => {
+    githubApiProvider.standardTokens.forEach(t => {
       tokens.push(t)
     })
 
     // Confidence check.
     expect(tokens).to.have.lengthOf(1)
 
-    const token = tokens[0]
+    const [token] = tokens
     expect(token.usesRemaining).to.equal(usesRemaining)
     expect(token.nextReset).to.equal(nextReset)
   })
