@@ -27,7 +27,7 @@ const data = [
   {
     format: formats.B,
     get: '/min/preact/8.0.0.json',
-    expect: { name: 'minified size', value: '7.93 kB' },
+    expect: { name: 'minified size', value: isFileSize },
   },
   {
     format: formats.C,
@@ -37,7 +37,7 @@ const data = [
   {
     format: formats.D,
     get: '/min/@cycle/core/7.0.0.json',
-    expect: { name: 'minified size', value: '3.5 kB' },
+    expect: { name: 'minified size', value: isFileSize },
   },
   {
     format: formats.A,
@@ -47,7 +47,7 @@ const data = [
   {
     format: formats.B,
     get: '/minzip/preact/8.0.0.json',
-    expect: { name: 'minzipped size', value: '3.33 kB' },
+    expect: { name: 'minzipped size', value: isFileSize },
   },
   {
     format: formats.C,
@@ -57,7 +57,7 @@ const data = [
   {
     format: formats.D,
     get: '/minzip/@cycle/core/7.0.0.json',
-    expect: { name: 'minzipped size', value: '1.22 kB' },
+    expect: { name: 'minzipped size', value: isFileSize },
   },
   {
     format: formats.A,

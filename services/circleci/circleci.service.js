@@ -9,6 +9,16 @@ const circleSchema = Joi.array()
   .max(1)
   .required()
 
+const documentation = `
+  <p>
+    Please note that <code>status</code> tokens will not work. Instead, you should generate an <code>all</code> scoped token.
+    <br />
+    For the sake of security, please use <b>Project Tokens</b> and never <b>Personal Tokens</b> as they grant full read write permissions to your projects.
+    <br />
+    For more information about managing Circle CI tokens, please read this <a target="_blank" href="https://circleci.com/docs/2.0/managing-api-tokens">article</a>.
+  </p>
+  `
+
 module.exports = class CircleCi extends BaseJsonService {
   async fetch({ token, vcsType, userRepo, branch }) {
     let url = `https://circleci.com/api/v1.1/project/${vcsType}/${userRepo}`
@@ -72,22 +82,22 @@ module.exports = class CircleCi extends BaseJsonService {
       {
         title: 'CircleCI (all branches)',
         exampleUrl: 'project/github/RedSparr0w/node-csgo-parser',
-        urlPattern: 'project/:vcsType/:owner/:repo',
+        pattern: 'project/:vcsType/:owner/:repo',
         staticExample: this.render({ status: 'success' }),
       },
       {
         title: 'CircleCI branch',
         exampleUrl: 'project/github/RedSparr0w/node-csgo-parser/master',
-        urlPattern: 'project/:vcsType/:owner/:repo/:branch',
+        pattern: 'project/:vcsType/:owner/:repo/:branch',
         staticExample: this.render({ status: 'success' }),
       },
       {
         title: 'CircleCI token',
-        urlPattern:
-          'circleci/token/:token/project/:vcsType/:owner/:repo/:branch',
+        pattern: 'token/:token/project/:vcsType/:owner/:repo/:branch',
         exampleUrl:
-          'circleci/token/b90b5c49e59a4c67ba3a92f7992587ac7a0408c2/project/github/RedSparr0w/node-csgo-parser/master',
+          'token/b90b5c49e59a4c67ba3a92f7992587ac7a0408c2/project/github/RedSparr0w/node-csgo-parser/master',
         staticExample: this.render({ status: 'success' }),
+        documentation,
       },
     ]
   }

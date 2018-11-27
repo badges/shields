@@ -63,7 +63,20 @@ class PowershellGalleryVersion extends BaseXmlService {
   }
 
   static get examples() {
-    return []
+    return [
+      {
+        title: 'PowerShell Gallery',
+        pattern: 'v/:packageName',
+        namedParams: { which: 'v', packageName: 'Azure.Storage' },
+        staticExample: this.render({ version: '4.4.0' }),
+      },
+      {
+        title: 'PowerShell Gallery (with prereleases)',
+        pattern: 'vpre/:packageName',
+        namedParams: { which: 'vpre', packageName: 'Azure.Storage' },
+        staticExample: this.render({ version: '4.4.1-preview' }),
+      },
+    ]
   }
 
   static get defaultBadgeData() {
@@ -94,13 +107,19 @@ class PowershellGalleryDownloads extends BaseXmlService {
 
   static get route() {
     return {
-      base: 'powershellgallery',
-      pattern: 'dt/:packageName',
+      base: 'powershellgallery/dt',
+      pattern: ':packageName',
     }
   }
 
   static get examples() {
-    return []
+    return [
+      {
+        title: 'PowerShell Gallery',
+        namedParams: { packageName: 'Azure.Storage' },
+        staticExample: this.render({ downloads: 1.2e7 }),
+      },
+    ]
   }
 
   static render(props) {

@@ -8,7 +8,84 @@ const {
 } = require('../../lib/color-formatters')
 const { metric, addv: versionText } = require('../../lib/text-formatters')
 
-module.exports = class Crates extends LegacyService {
+class CratesDownloads extends LegacyService {
+  static get category() {
+    return 'downloads'
+  }
+
+  static get route() {
+    return {
+      base: 'crates',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Crates.io',
+        previewUrl: 'd/rustc-serialize',
+        keywords: ['Rust'],
+      },
+      {
+        title: 'Crates.io',
+        previewUrl: 'dv/rustc-serialize',
+        keywords: ['Rust'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class CratesVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'crates/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Crates.io',
+        previewUrl: 'rustc-serialize',
+        keywords: ['Rust'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class CratesLicense extends LegacyService {
+  static get category() {
+    return 'license'
+  }
+
+  static get route() {
+    return {
+      base: 'crates/l',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Crates.io',
+        previewUrl: 'rustc-serialize',
+        keywords: ['Rust'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class Crates extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/crates\/(d|v|dv|l)\/([A-Za-z0-9_-]+)(?:\/([0-9.]+))?\.(svg|png|gif|jpg|json)$/,
@@ -92,4 +169,11 @@ module.exports = class Crates extends LegacyService {
       })
     )
   }
+}
+
+module.exports = {
+  CratesDownloads,
+  CratesVersion,
+  CratesLicense,
+  Crates,
 }

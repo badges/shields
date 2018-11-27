@@ -12,7 +12,99 @@ const {
   downloadCount: downloadCountColor,
 } = require('../../lib/color-formatters')
 
-module.exports = class PuppetforgeModules extends LegacyService {
+class PuppetforgeModuleVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'puppetforge/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Puppet Forge',
+        previewUrl: 'vStone/percona',
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class PuppetforgeModuleDownloads extends LegacyService {
+  static get category() {
+    return 'downloads'
+  }
+
+  static get route() {
+    return {
+      base: 'puppetforge/dt',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Puppet Forge',
+        previewUrl: 'camptocamp/openldap',
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class PuppetforgeModuleEndorsement extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'puppetforge/e',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Puppet Forge',
+        previewUrl: 'camptocamp/openssl',
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class PuppetforgeModuleFeedback extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'puppetforge/f',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Puppet Forge',
+        previewUrl: 'camptocamp/openssl',
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class PuppetforgeModules extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/puppetforge\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -82,4 +174,12 @@ module.exports = class PuppetforgeModules extends LegacyService {
       })
     )
   }
+}
+
+module.exports = {
+  PuppetforgeModuleVersion,
+  PuppetforgeModuleDownloads,
+  PuppetforgeModuleFeedback,
+  PuppetforgeModuleEndorsement,
+  PuppetforgeModules,
 }

@@ -5,7 +5,7 @@ const BaseService = require('./base')
 // registerFn: ({ camp, cache }) => { camp.route(/.../, cache(...)) }
 class LegacyService extends BaseService {
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
-    throw Error('registerLegacyRouteHandler() not implemented')
+    throw Error(`registerLegacyRouteHandler() not implemented for ${this.name}`)
   }
 
   static register(

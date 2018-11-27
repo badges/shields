@@ -65,7 +65,7 @@ const isMetricOverTimePeriod = withRegex(
   /^[1-9][0-9]*[kMGTPEZY]?\/(year|month|4 weeks|week|day)$/
 )
 
-const isIntegerPercentage = withRegex(/^[0-9]+%$/)
+const isIntegerPercentage = withRegex(/^[1-9][0-9]?%|^100%|^0%$/)
 const isDecimalPercentage = withRegex(/^[0-9]+\.[0-9]*%$/)
 const isPercentage = Joi.alternatives().try(
   isIntegerPercentage,
@@ -96,6 +96,7 @@ const isBuildStatus = Joi.equal(
   'no tests',
   'not built',
   'not run',
+  'passed',
   'passing',
   'pending',
   'processing',

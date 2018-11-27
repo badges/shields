@@ -17,7 +17,108 @@ const {
   floorCount: floorCountColor,
 } = require('../../lib/color-formatters')
 
-module.exports = class Amo extends LegacyService {
+class AmoDownloads extends LegacyService {
+  static get category() {
+    return 'downloads'
+  }
+
+  static get route() {
+    return {
+      base: 'amo/d',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Mozilla Add-on',
+        previewUrl: 'dustman',
+        keywords: ['amo', 'firefox'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class AmoVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'amo/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Mozilla Add-on',
+        previewUrl: 'dustman',
+        keywords: ['amo', 'firefox'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class AmoRating extends LegacyService {
+  static get category() {
+    return 'rating'
+  }
+
+  static get route() {
+    return {
+      base: 'amo',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Mozilla Add-on',
+        previewUrl: 'rating/dustman',
+        keywords: ['amo', 'firefox'],
+      },
+      {
+        title: 'Mozilla Add-on',
+        previewUrl: 'stars/dustman',
+        keywords: ['amo', 'firefox'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class AmoUsers extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'amo/users',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Mozilla Add-on',
+        previewUrl: 'dustman',
+        keywords: ['amo', 'firefox'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class Amo extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/amo\/(v|d|rating|stars|users)\/(.*)\.(svg|png|gif|jpg|json)$/,
@@ -89,4 +190,12 @@ module.exports = class Amo extends LegacyService {
       })
     )
   }
+}
+
+module.exports = {
+  AmoDownloads,
+  AmoVersion,
+  AmoRating,
+  AmoUsers,
+  Amo,
 }

@@ -1,19 +1,16 @@
 'use strict'
 
-const chai = require('chai')
 const { expect } = require('chai')
 const sinon = require('sinon')
 const Joi = require('joi')
 const { makeBadgeData } = require('../lib/badge-data')
-const testHelpers = require('../lib/make-badge-test-helpers')
+const makeBadge = require('../gh-badges/lib/make-badge')
 const BaseSvgScrapingService = require('./base-svg-scraping')
-
-chai.use(require('chai-as-promised'))
 
 function makeExampleSvg({ label, message }) {
   const badgeData = makeBadgeData('this is the label', {})
   badgeData.text[1] = 'this is the result!'
-  return testHelpers.makeBadge()(badgeData)
+  return makeBadge(badgeData)
 }
 
 const schema = Joi.object({

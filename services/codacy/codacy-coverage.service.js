@@ -1,21 +1,28 @@
 'use strict'
 
-const queryString = require('query-string')
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { fetchFromSvg } = require('../../lib/svg-badge-parser')
+const Joi = require('joi')
 const {
   coveragePercentage: coveragePercentageColor,
 } = require('../../lib/color-formatters')
+const BaseSvgScrapingService = require('../base-svg-scraping')
+const { NotFound } = require('../errors')
 
-module.exports = class CodacyCoverage extends LegacyService {
+const schema = Joi.object({
+  message: Joi.alternatives()
+    .try([Joi.string().regex(/^[0-9]+%$/), Joi.equal('!')])
+    .required(),
+}).required()
+
+module.exports = class CodacyCoverage extends BaseSvgScrapingService {
   static get category() {
     return 'build'
   }
 
   static get route() {
     return {
-      base: 'codacy',
+      base: 'codacy/coverage',
+      format: '(?!grade/)([^/]+)(?:/(.+))?',
+      capture: ['projectId', 'branch'],
     }
   }
 
@@ -23,56 +30,61 @@ module.exports = class CodacyCoverage extends LegacyService {
     return [
       {
         title: 'Codacy coverage',
-        previewUrl: 'coverage/59d607d0e311408885e418004068ea58',
+        pattern: ':projectId',
+        staticExample: this.render({ percentage: 90 }),
+        exampleUrl: '59d607d0e311408885e418004068ea58',
       },
       {
         title: 'Codacy branch coverage',
-        previewUrl: 'coverage/59d607d0e311408885e418004068ea58/master',
+        pattern: ':projectId/:branch',
+        staticExample: this.render({ percentage: 90 }),
+        exampleUrl: '59d607d0e311408885e418004068ea58/master',
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/codacy\/coverage\/(?!grade\/)([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const projectId = match[1] // eg. e27821fb6289410b8f58338c7e0bc686
-        const branch = match[2]
-        const format = match[3]
+  static get defaultBadgeData() {
+    return {
+      label: 'coverage',
+    }
+  }
 
-        const queryParams = {}
-        if (branch) {
-          queryParams.branch = branch
-        }
-        const query = queryString.stringify(queryParams)
-        const url = `https://api.codacy.com/project/badge/coverage/${projectId}?${query}`
-        const badgeData = getBadgeData('coverage', data)
-        fetchFromSvg(
-          request,
-          url,
-          /text-anchor="middle">([^<>]+)<\/text>/,
-          (err, res) => {
-            if (err != null) {
-              badgeData.text[1] = 'inaccessible'
-              sendBadge(format, badgeData)
-              return
-            }
-            try {
-              const coverage = parseInt(res)
-              if (Number.isNaN(coverage)) {
-                badgeData.text[1] = 'unknown'
-              } else {
-                badgeData.text[1] = res
-                badgeData.colorscheme = coveragePercentageColor(coverage)
-              }
-              sendBadge(format, badgeData)
-            } catch (e) {
-              badgeData.text[1] = 'invalid'
-              sendBadge(format, badgeData)
-            }
-          }
-        )
+  static render({ percentage }) {
+    return {
+      message: `${percentage}%`,
+      color: coveragePercentageColor(percentage),
+    }
+  }
+
+  static transform({ coverageString }) {
+    return {
+      percentage: parseFloat(coverageString.replace(/%$/, '')),
+    }
+  }
+
+  async handle({ projectId, branch }) {
+    const { message: coverageString } = await this._requestSvg({
+      schema,
+      url: `https://api.codacy.com/project/badge/coverage/${encodeURIComponent(
+        projectId
+      )}`,
+      options: { qs: { branch } },
+      valueMatcher: /text-anchor="middle">([^<>]+)<\/text>/,
+      errorMessages: {
+        404: 'project not found',
+      },
+    })
+
+    // When sending an invalid branch, Codacy ignores the branch, failing
+    // silently, so we can't provide an error message for this case.
+
+    if (coverageString === '!') {
+      throw new NotFound({
+        prettyMessage: 'not enabled for this project',
       })
-    )
+    }
+
+    const { percentage } = this.constructor.transform({ coverageString })
+    return this.constructor.render({ percentage })
   }
 }

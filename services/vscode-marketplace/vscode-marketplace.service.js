@@ -48,7 +48,84 @@ function getVscodeStatistic(data, statisticName) {
   }
 }
 
-module.exports = class VscodeMarketplace extends LegacyService {
+class VscodeMarketplaceDownloads extends LegacyService {
+  static get category() {
+    return 'downloads'
+  }
+
+  static get route() {
+    return {
+      base: 'vscode-marketplace/d',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Visual Studio Marketplace',
+        previewUrl: 'ritwickdey.LiveServer',
+        keywords: ['vscode-marketplace'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class VscodeMarketplaceRating extends LegacyService {
+  static get category() {
+    return 'rating'
+  }
+
+  static get route() {
+    return {
+      base: 'vscode-marketplace',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Visual Studio Marketplace',
+        previewUrl: 'r/ritwickdey.LiveServer',
+        keywords: ['vscode-marketplace'],
+      },
+      {
+        title: 'Visual Studio Marketplace',
+        previewUrl: 'stars/ritwickdey.LiveServer',
+        keywords: ['vscode-marketplace'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class VscodeMarketplaceVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'vscode-marketplace/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Visual Studio Marketplace',
+        previewUrl: 'ritwickdey.LiveServer',
+        keywords: ['vscode-marketplace'],
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class VscodeMarketplace extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/vscode-marketplace\/(d|v|r|stars)\/(.*)\.(svg|png|gif|jpg|json)$/,
@@ -115,4 +192,11 @@ module.exports = class VscodeMarketplace extends LegacyService {
       })
     )
   }
+}
+
+module.exports = {
+  VscodeMarketplaceDownloads,
+  VscodeMarketplaceRating,
+  VscodeMarketplaceVersion,
+  VscodeMarketplace,
 }

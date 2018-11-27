@@ -8,7 +8,53 @@ const {
 const { metric } = require('../../lib/text-formatters')
 const { floorCount: floorCountColor } = require('../../lib/color-formatters')
 
-module.exports = class PuppetforgeUsers extends LegacyService {
+class PuppetforgeUserReleases extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'puppetforge/rc',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Puppet Forge',
+        previewUrl: 'camptocamp',
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class PuppetforgeUserModules extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'puppetforge/mc',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Puppet Forge',
+        previewUrl: 'camptocamp',
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class PuppetforgeUsers extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/puppetforge\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -48,4 +94,10 @@ module.exports = class PuppetforgeUsers extends LegacyService {
       })
     )
   }
+}
+
+module.exports = {
+  PuppetforgeUserReleases,
+  PuppetforgeUserModules,
+  PuppetforgeUsers,
 }

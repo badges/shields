@@ -55,8 +55,7 @@ function DownloadsForExtensionType(extensionType) {
       return [
         {
           title: `Wordpress ${capt} Downloads`,
-          exampleUrl: exampleSlug,
-          urlPattern: ':slug',
+          namedParams: { slug: exampleSlug },
           staticExample: this.render({ response: { downloaded: 200000 } }),
           keywords: ['wordpress'],
         },
@@ -101,7 +100,7 @@ function InstallsForExtensionType(extensionType) {
         {
           title: `Wordpress ${capt} Active Installs`,
           exampleUrl: exampleSlug,
-          urlPattern: ':slug',
+          pattern: ':slug',
           staticExample: this.render({ response: { active_installs: 300000 } }),
           keywords: ['wordpress'],
         },
@@ -156,7 +155,7 @@ function DownloadsForInterval(interval) {
         {
           title: 'WordPress Plugin Downloads',
           exampleUrl: 'bbpress',
-          urlPattern: ':slug',
+          pattern: ':slug',
           staticExample: this.render({ downloads: 30000 }),
           keywords: ['wordpress'],
         },

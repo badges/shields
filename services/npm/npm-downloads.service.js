@@ -63,7 +63,7 @@ function DownloadsForInterval(interval) {
         {
           title: 'npm',
           exampleUrl: 'localeval',
-          urlPattern: ':package',
+          pattern: ':package',
           staticExample: this.render({ downloads: 30000 }),
           keywords: ['node'],
         },
