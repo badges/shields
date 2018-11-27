@@ -1,58 +1,60 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
+const Joi = require('joi')
+const BaseJsonService = require('../base-json')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
-// beerpay.io integration.
-// e.g. JSON response: https://beerpay.io/api/v1/beerpay/projects/beerpay.io
-// e.g. SVG badge: https://beerpay.io/beerpay/beerpay.io/badge.svg?style=flat-square
-module.exports = class Beerpay extends LegacyService {
+const schema = Joi.object({
+  total_amount: Joi.number()
+    .min(0)
+    .required(),
+}).required()
+
+module.exports = class Beerpay extends BaseJsonService {
   static get category() {
     return 'funding'
   }
 
   static get route() {
-    return { base: 'beerpay' }
+    return {
+      base: 'beerpay',
+      pattern: ':user/:project',
+    }
   }
 
   static get examples() {
     return [
       {
         title: 'Beerpay',
-        previewUrl: 'hashdog/scrapfy-chrome-extension',
+        namedParams: { user: 'hashdog', project: 'scrapfy-chrome-extension' },
+        staticExample: this.render({ totalAmount: 10 }),
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/beerpay\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const user = match[1] // eg, beerpay
-        const project = match[2] // eg, beerpay.io
-        const format = match[3]
+  static get defaultBadgeData() {
+    return {
+      label: 'beerpay',
+    }
+  }
 
-        const apiUrl = `https://beerpay.io/api/v1/${user}/projects/${project}`
-        const badgeData = getBadgeData('beerpay', data)
+  static render({ totalAmount }) {
+    return {
+      message: `$${totalAmount}`,
+      color: totalAmount > 0 ? 'blue' : 'red',
+    }
+  }
 
-        request(apiUrl, (err, res, buffer) => {
-          if (err) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-
-          try {
-            const data = JSON.parse(buffer)
-            badgeData.text[1] = `$${data.total_amount || 0}`
-            badgeData.colorscheme = 'red'
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  async handle({ user, project }) {
+    // e.g. JSON response: https://beerpay.io/api/v1/beerpay/projects/beerpay.io
+    // e.g. SVG badge: https://beerpay.io/beerpay/beerpay.io/badge.svg?style=flat-square
+    const { total_amount: totalAmount } = await this._requestJson({
+      schema,
+      url: `https://beerpay.io/api/v1/${user}/projects/${project}`,
+      errorMessages: {
+        404: 'project not found',
+      },
+    })
+    return this.constructor.render({ totalAmount })
   }
 }
