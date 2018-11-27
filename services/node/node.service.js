@@ -3,6 +3,8 @@
 const NPMBase = require('../npm/npm-base')
 const { versionColorForRange } = require('./node-version-color')
 
+const keywords = ['npm']
+
 module.exports = class NodeVersion extends NPMBase {
   static get category() {
     return 'platform-support'
@@ -20,31 +22,64 @@ module.exports = class NodeVersion extends NPMBase {
     return [
       {
         title: 'node',
-        previewUrl: 'passport',
-        keywords: ['npm'],
+        pattern: ':packageName',
+        namedParams: { packageName: 'passport' },
+        staticExample: this.renderStaticExample({
+          nodeVersionRange: '>= 6.0.0',
+        }),
+        keywords,
       },
       {
         title: 'node (scoped)',
-        previewUrl: '@stdlib/stdlib',
-        keywords: ['npm'],
+        pattern: '@:scope/:packageName',
+        namedParams: { scope: 'stdlib', packageName: 'stdlib' },
+        staticExample: this.renderStaticExample({
+          nodeVersionRange: '>= 6.0.0',
+        }),
+        keywords,
       },
       {
         title: 'node (tag)',
-        previewUrl: 'passport/latest',
-        keywords: ['npm'],
+        pattern: ':packageName/:tag',
+        namedParams: { packageName: 'passport', tag: 'latest' },
+        staticExample: this.renderStaticExample({
+          nodeVersionRange: '>= 6.0.0',
+          tag: 'latest',
+        }),
+        keywords,
       },
       {
         title: 'node (scoped with tag)',
-        previewUrl: '@stdlib/stdlib/latest',
-        keywords: ['npm'],
+        pattern: '@:scope/:packageName/:tag',
+        namedParams: { scope: 'stdlib', packageName: 'stdlib', tag: 'latest' },
+        staticExample: this.renderStaticExample({
+          nodeVersionRange: '>= 6.0.0',
+          tag: 'latest',
+        }),
+        keywords,
       },
       {
         title: 'node (scoped with tag, custom registry)',
-        previewUrl: '@stdlib/stdlib/latest',
+        pattern: '@:scope/:packageName/:tag',
+        namedParams: { scope: 'stdlib', packageName: 'stdlib', tag: 'latest' },
         query: { registry_uri: 'https://registry.npmjs.com' },
-        keywords: ['npm'],
+        staticExample: this.renderStaticExample({
+          nodeVersionRange: '>= 6.0.0',
+          tag: 'latest',
+        }),
+        keywords,
       },
     ]
+  }
+
+  static renderStaticExample({ tag, nodeVersionRange }) {
+    // This should match the behavior of `async render()`, which is enforced
+    // with a unit test.
+    return {
+      label: tag ? `node@${tag}` : undefined,
+      message: nodeVersionRange,
+      color: 'brightgreen',
+    }
   }
 
   static async render({ tag, nodeVersionRange }) {
