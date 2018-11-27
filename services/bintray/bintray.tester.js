@@ -1,12 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const createServiceTester = require('../create-service-tester')
 const { colorScheme } = require('../test-helpers')
-const { isVPlusDottedVersionNClauses } = require('../test-validators')
+const { isSemver } = require('../test-validators')
 
-const t = createServiceTester()
-
+const t = require('../create-service-tester')()
 module.exports = t
 
 t.create('version')
@@ -14,7 +12,7 @@ t.create('version')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'bintray',
-      value: isVPlusDottedVersionNClauses,
+      value: isSemver,
     })
   )
 
