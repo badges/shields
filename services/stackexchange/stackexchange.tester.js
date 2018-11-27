@@ -10,21 +10,11 @@ module.exports = t
 
 t.create('Invalid t parameter')
   .get('/stackoverflow/t/invalidimage.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'stackoverflow',
-      value: 'invalid',
-    })
-  )
+  .expectJSON({ name: 'stackoverflow', value: 'invalid' })
 
 t.create('Invalid r parameter')
   .get('/stackoverflow/r/invalidimage.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'stackoverflow',
-      value: 'invalid',
-    })
-  )
+  .expectJSON({ name: 'stackoverflow', value: 'invalid' })
 
 t.create('JavaScript Questions')
   .get('/stackoverflow/t/javascript.json')
