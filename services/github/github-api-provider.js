@@ -1,17 +1,39 @@
 'use strict'
 
-// Provide an interface to the Github API. Manages the base URL.
-//
-// Eventually this class will be responsible for managing headers,
-// authentication, and actually making the request. Currently it's delegating
-// to legacy code.
-class GithubApiProvider {
-  constructor({ baseUrl, tokenProvider }) {
-    this.baseUrl = baseUrl
-    this.tokenProvider = tokenProvider
+const TokenPool = require('../../lib/token-pool')
 
-    // How much of a token's quota do we reserve for the user?
-    this.reserveFraction = 0.25
+// Provide an interface to the Github API. Manages the base URL.
+class GithubApiProvider {
+  // reserveFraction: The amount of much of a token's quota we avoid using, to
+  //   reserve it for the user.
+  constructor({
+    baseUrl,
+    withPooling = true,
+    globalToken,
+    reserveFraction = 0.25,
+  }) {
+    Object.assign(this, { baseUrl, withPooling, globalToken, reserveFraction })
+
+    if (this.withPooling) {
+      this.standardTokens = new TokenPool({ batchSize: 25 })
+      this.searchTokens = new TokenPool({ batchSize: 5 })
+    }
+  }
+
+  serializeDebugInfo({ sanitize = true } = {}) {
+    return {
+      standardTokens: this.standardTokens.serializeDebugInfo({ sanitize }),
+      searchTokens: this.searchTokens.serializeDebugInfo({ sanitize }),
+    }
+  }
+
+  addToken(tokenString) {
+    if (this.withPooling) {
+      this.tokenPool.add(tokenString)
+      this.searchTokenPool.add(tokenString)
+    } else {
+      throw Error('When using token pooling, do not provide static tokens')
+    }
   }
 
   updateToken(token, headers) {
@@ -24,11 +46,22 @@ class GithubApiProvider {
     token.update(usesRemaining, nextReset)
   }
 
-  tokenForUri(url) {
-    if (url.startsWith('/search')) {
-      return this.tokenProvider.nextSearchToken()
+  invalidateToken(token) {
+    token.invalidate()
+    // Also invalidate the corresponding token in the other pool!
+  }
+
+  tokenForUrl(url) {
+    const { globalToken } = this
+    if (globalToken) {
+      // When a global gh_token is configured, use that in place of our token
+      // pool. This produces more predictable behavior, and more predictable
+      // failures when that token is exhausted.
+      return globalToken
+    } else if (url.startsWith('/search')) {
+      return this.standardTokens.nextToken()
     } else {
-      return this.tokenProvider.nextToken()
+      return this.searchTokens.nextToken()
     }
   }
 
@@ -40,7 +73,7 @@ class GithubApiProvider {
 
     let token
     try {
-      token = this.tokenForUri(url)
+      token = this.tokenForUrl(url)
     } catch (e) {
       callback(e)
       return
@@ -60,7 +93,7 @@ class GithubApiProvider {
     request(options, (err, res, buffer) => {
       if (err === null) {
         if (res.statusCode === 401) {
-          token.invalidate()
+          this.invalidateToken(token)
         } else if (res.statusCode < 500) {
           this.updateToken(token, res.headers)
         }

@@ -1,14 +1,11 @@
 'use strict'
 
 const path = require('path')
+const { EventEmitter } = require('events')
 const serverSecrets = require('../../lib/server-secrets')
 const log = require('../../lib/log')
 const RedisTokenPersistence = require('../../lib/redis-token-persistence')
 const FsTokenPersistence = require('../../lib/fs-token-persistence')
-const {
-  StaticTokenProvider,
-  PoolingTokenProvider,
-} = require('./token-provider')
 const GithubApiProvider = require('./github-api-provider')
 const { setRoutes: setAdminRoutes } = require('./auth/admin')
 const { setRoutes: setAcceptorRoutes } = require('./auth/acceptor')
@@ -19,6 +16,8 @@ class GithubConstellation {
   constructor(config) {
     this._debugEnabled = config.service.debug.enabled
     this._debugIntervalSeconds = config.service.debug.intervalSeconds
+
+    this.emitter = new EventEmitter()
 
     const { redisUrl, dir: persistenceDir } = config.persistence
     if (config.persistence.redisUrl) {
@@ -36,25 +35,9 @@ class GithubConstellation {
       this.persistence = new FsTokenPersistence({ path: userTokensPath })
     }
 
-    const globalTokenString = (serverSecrets || {}).gh_token
-
-    if (globalTokenString) {
-      // When a global gh_token is configured, use that in place of our token
-      // pool. This produces more predictable behavior, and more predictable
-      // failures when that token is exhausted.
-      this.usingPooling = false
-      this.coreTokenProvider = this.searchTokenProvider = new StaticTokenProvider(
-        globalTokenString
-      )
-    } else {
-      this.usingPooling = true
-      this.coreTokenProvider = new PoolingTokenProvider()
-      this.searchTokenProvider = new PoolingTokenProvider()
-    }
-
+    const globalToken = (serverSecrets || {}).gh_token
     const baseUrl = process.env.GITHUB_URL || 'https://api.github.com'
-    const { coreTokenProvider } = this
-    this.apiProvider = new GithubApiProvider({ baseUrl, coreTokenProvider })
+    this.apiProvider = new GithubApiProvider({ baseUrl, globalToken })
   }
 
   scheduleDebugLogging() {
@@ -82,7 +65,7 @@ class GithubConstellation {
       log.error(e)
     }
 
-    if (this.usingPooling) {
+    if (this.apiProvider.withPooling) {
       // Is this needed?
       this.coreTokenProvider
         .toNative()
@@ -92,10 +75,10 @@ class GithubConstellation {
     // Register for this event after `initialize()` finishes, so we don't
     // catch `token-added` events for the initial tokens, which would be
     // inefficient, though it wouldn't break anything.
-    githubAuth.emitter.on('token-added', this.persistence.noteTokenAdded)
-    githubAuth.emitter.on('token-removed', this.persistence.noteTokenRemoved)
+    this.emitter.on('token-added', this.persistence.noteTokenAdded)
+    this.emitter.on('token-removed', this.persistence.noteTokenRemoved)
 
-    setAdminRoutes(this.coreTokenProvider, server)
+    setAdminRoutes(this.apiProvider, server)
 
     if (serverSecrets.gh_client_id && serverSecrets.gh_client_secret) {
       setAcceptorRoutes(this.coreTokenProvider, server)
@@ -108,11 +91,8 @@ class GithubConstellation {
       this.debugInterval = undefined
     }
 
-    githubAuth.emitter.removeListener(
-      'token-added',
-      this.persistence.noteTokenAdded
-    )
-    githubAuth.emitter.removeListener(
+    this.emitter.removeListener('token-added', this.persistence.noteTokenAdded)
+    this.emitter.removeListener(
       'token-removed',
       this.persistence.noteTokenRemoved
     )
