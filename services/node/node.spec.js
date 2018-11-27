@@ -15,9 +15,9 @@ describe('renderStaticExample', function() {
       tag: 'latest',
     })
 
-    test(NodeVersion.staticExample, () => {
-      given().expect(expectedNoTag)
-      given({ tag: 'latest' }).expect(expectedLatestTag)
+    test(NodeVersion.renderStaticExample, () => {
+      given({ nodeVersionRange }).expect(expectedNoTag)
+      given({ nodeVersionRange, tag: 'latest' }).expect(expectedLatestTag)
     })
   })
 })
