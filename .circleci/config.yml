@@ -49,14 +49,20 @@ jobs:
           command: npm run test:js:server
 
       - run:
-          name: Integration tests
-          when: always
-          command: npm run test:integration
-
-      - run:
           name: Tests for gh-badges package
           when: always
           command: npm run test:js:package
+
+      - run:
+          name: Prepare integration tests
+          command: |
+            mkdir private
+            echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
+
+      - run:
+          name: Integration tests
+          when: always
+          command: npm run test:integration
 
       - run:
           name: 'Prettier check (quick fix: `npm run prettier`)'
