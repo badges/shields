@@ -1,6 +1,6 @@
 'use strict'
 
-const TokenPool = require('../../lib/token-pool')
+const { TokenPool } = require('../../lib/token-pool')
 
 // Provide an interface to the Github API. Manages the base URL.
 class GithubApiProvider {
@@ -21,9 +21,13 @@ class GithubApiProvider {
   }
 
   serializeDebugInfo({ sanitize = true } = {}) {
-    return {
-      standardTokens: this.standardTokens.serializeDebugInfo({ sanitize }),
-      searchTokens: this.searchTokens.serializeDebugInfo({ sanitize }),
+    if (this.withPooling) {
+      return {
+        standardTokens: this.standardTokens.serializeDebugInfo({ sanitize }),
+        searchTokens: this.searchTokens.serializeDebugInfo({ sanitize }),
+      }
+    } else {
+      return {}
     }
   }
 
@@ -59,9 +63,9 @@ class GithubApiProvider {
       // failures when that token is exhausted.
       return globalToken
     } else if (url.startsWith('/search')) {
-      return this.standardTokens.nextToken()
+      return this.searchTokens.next()
     } else {
-      return this.searchTokens.nextToken()
+      return this.standardTokens.next()
     }
   }
 

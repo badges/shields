@@ -41,7 +41,7 @@ function sendTokenToAllServers(token) {
   )
 }
 
-function setRoutes(tokenProvider, server) {
+function setRoutes(apiProvider, server) {
   const baseUrl = process.env.BASE_URL || 'https://img.shields.io'
 
   server.route(/^\/github-auth$/, (data, match, end, ask) => {
@@ -121,7 +121,7 @@ function setRoutes(tokenProvider, server) {
       return
     }
 
-    tokenProvider.addToken(data.token)
+    apiProvider.addToken(data.token)
     end('Thanks!')
   })
 }

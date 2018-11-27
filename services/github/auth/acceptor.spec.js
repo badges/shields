@@ -7,6 +7,7 @@ const queryString = require('query-string')
 const nock = require('nock')
 const config = require('../../../lib/test-config')
 const serverSecrets = require('../../../lib/server-secrets')
+const GithubApiProvider = require('../github-api-provider')
 const acceptor = require('./acceptor')
 
 const baseUri = `http://127.0.0.1:${config.port}`
@@ -38,7 +39,8 @@ describe('Github token acceptor', function() {
   })
 
   beforeEach(function() {
-    acceptor.setRoutes(camp)
+    const apiProvider = new GithubApiProvider({ withPooling: true })
+    acceptor.setRoutes(apiProvider, camp)
   })
 
   it('should start the OAuth process', async function() {

@@ -8,16 +8,15 @@ describe('Github API provider', function() {
   const baseUrl = 'https://github-api.example.com'
   const reserveFraction = 0.333
 
-  let mockToken, mockSearchToken, mockTokenProvider, provider
+  let mockStandardToken, mockSearchToken, provider
   beforeEach(function() {
-    mockToken = { update: sinon.spy(), invalidate: sinon.spy() }
+    provider = new GithubApiProvider({ baseUrl, reserveFraction })
+
+    mockStandardToken = { update: sinon.spy(), invalidate: sinon.spy() }
+    sinon.stub(provider.standardTokens, 'next').returns(mockStandardToken)
+
     mockSearchToken = { update: sinon.spy(), invalidate: sinon.spy() }
-    mockTokenProvider = {
-      nextToken: sinon.stub().returns(mockToken),
-      nextSearchToken: sinon.stub().returns(mockSearchToken),
-    }
-    provider = new GithubApiProvider(baseUrl, mockTokenProvider)
-    provider.reserveFraction = reserveFraction
+    sinon.stub(provider.searchTokens, 'next').returns(mockSearchToken)
   })
 
   context('a search API request', function() {
@@ -27,8 +26,8 @@ describe('Github API provider', function() {
     it('should obtain an appropriate token', function(done) {
       provider.request(mockRequest, '/search', {}, (err, res, buffer) => {
         expect(err).to.be.undefined
-        expect(mockTokenProvider.nextSearchToken).to.have.been.calledOnce
-        expect(mockTokenProvider.nextToken).not.to.have.been.called
+        expect(provider.searchTokens.next).to.have.been.calledOnce
+        expect(provider.standardTokens.next).not.to.have.been.called
         done()
       })
     })
@@ -41,8 +40,8 @@ describe('Github API provider', function() {
     it('should obtain an appropriate token', function(done) {
       provider.request(mockRequest, '/repo', {}, (err, res, buffer) => {
         expect(err).to.be.undefined
-        expect(mockTokenProvider.nextSearchToken).not.to.have.been.called
-        expect(mockTokenProvider.nextToken).to.have.been.calledOnce
+        expect(provider.searchTokens.next).not.to.have.been.called
+        expect(provider.standardTokens.next).to.have.been.calledOnce
         done()
       })
     })
@@ -80,9 +79,10 @@ describe('Github API provider', function() {
         expect(err).to.equal(null)
         const expectedUsesRemaining = remaining - reserveFraction * rateLimit
         expect(
-          mockToken.update.withArgs(expectedUsesRemaining, nextReset).calledOnce
+          mockStandardToken.update.withArgs(expectedUsesRemaining, nextReset)
+            .calledOnce
         ).to.be.true
-        expect(mockToken.invalidate).not.to.have.been.called
+        expect(mockStandardToken.invalidate).not.to.have.been.called
         done()
       })
     })
@@ -99,8 +99,8 @@ describe('Github API provider', function() {
     it('should invoke the callback and update the token with the expected values', function(done) {
       provider.request(mockRequest, '/foo', {}, (err, res, buffer) => {
         expect(err).to.equal(null)
-        expect(mockToken.invalidate).to.have.been.calledOnce
-        expect(mockToken.update).not.to.have.been.called
+        expect(mockStandardToken.invalidate).to.have.been.calledOnce
+        expect(mockStandardToken.update).not.to.have.been.called
         done()
       })
     })

@@ -67,9 +67,9 @@ class GithubConstellation {
 
     if (this.apiProvider.withPooling) {
       // Is this needed?
-      this.coreTokenProvider
-        .toNative()
-        .forEach(t => this.searchTokenProvider.addToken(t))
+      // this.coreTokenProvider
+      //   .toNative()
+      //   .forEach(t => this.searchTokenProvider.addToken(t))
     }
 
     // Register for this event after `initialize()` finishes, so we don't
@@ -81,7 +81,7 @@ class GithubConstellation {
     setAdminRoutes(this.apiProvider, server)
 
     if (serverSecrets.gh_client_id && serverSecrets.gh_client_secret) {
-      setAcceptorRoutes(this.coreTokenProvider, server)
+      setAcceptorRoutes(this.apiProvider, server)
     }
   }
 
