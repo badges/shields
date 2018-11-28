@@ -484,11 +484,11 @@ t.create('Package version (repo not found)')
 
 t.create('Package name')
   .get('/package-json/n/badges/shields.json')
-  .expectJSON({ name: 'package name', value: 'gh-badges' })
+  .expectJSON({ name: 'package name', value: 'shields.io' })
 
 t.create('Package name - Custom label')
   .get('/package-json/name/badges/shields.json?label=Dev Name')
-  .expectJSON({ name: 'Dev Name', value: 'gh-badges' })
+  .expectJSON({ name: 'Dev Name', value: 'shields.io' })
 
 t.create('Package array')
   .get('/package-json/keywords/badges/shields.json')
