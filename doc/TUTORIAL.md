@@ -123,9 +123,9 @@ Description of the code:
 1. We declare strict mode at the start of each file. This prevents certain classes of error such as undeclared variables.
 2. Our service badge class will extend `BaseService` so we need to require it. We declare variables with `const` and `let` in preference to `var`.
 3. Our module must export a class which extends `BaseService`
-4. `route()` declares a route. We declare getters as `static`, which means they don't have access to object properties and contain everything they need inside.
-    * `base` defines the static part of the route.
-    * `pattern` defines the variable part of the route. It can include any
+4. `route()` maps URL paths to handler parameters. `static` getters don't have access to object properties, so they contain everything they need inside.
+    * `base` defines the first part of the URL that doesn't change, e.g. `/example/`.
+    * `pattern` defines the variable part of the route, everything that comes after `/example/`. It can include any
       number of named parameters. These are converted into
       regular expressions by [`path-to-regexp`][path-to-regexp].
 5. All badges must implement the `async handle()` function. This is called to invoke our code. Note that the signature of `handle()` will match the capturing group defined in `route()` Because we're capturing a single variable called `text` our function signature is `async handle({ text })`. Although in this simple case, we aren't performing any asynchronous calls, `handle()` would usually spend some time blocked on I/O. We use the `async`/`await` pattern for asynchronous code. Our `handle()` function returns an object with 3 properties:
