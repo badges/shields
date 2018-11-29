@@ -49,6 +49,8 @@ This information allows other humans to help and build on your work.
 
 ### (4.1) Structure and Layout
 
+We will create code that generates badge at the http://[::]:8080/SERVICENAME/PARAM.svg URL.
+
 Service badge code is stored in the [/services](https://github.com/badges/shields/tree/master/services/) directory.
 Each service has a directory for its files:
 
@@ -121,7 +123,7 @@ Description of the code:
 1. We declare strict mode at the start of each file. This prevents certain classes of error such as undeclared variables.
 2. Our service badge class will extend `BaseService` so we need to require it. We declare variables with `const` and `let` in preference to `var`.
 3. Our module must export a class which extends `BaseService`
-4. `route()` declares a route. We declare getters as `static`.
+4. `route()` declares a route. We declare getters as `static`, which means they don't have access to object properties and contain everything they need inside.
     * `base` defines the static part of the route.
     * `pattern` defines the variable part of the route. It can include any
       number of named parameters. These are converted into
