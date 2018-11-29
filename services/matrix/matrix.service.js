@@ -7,14 +7,12 @@ const matrixRegisterSchema = Joi.object({
   access_token: Joi.string().required(),
 }).required()
 
-const matrixMembersSchema = Joi.object({
-  chunk: Joi.array().required(),
-}).required()
-
 module.exports = class Matrix extends BaseJsonService {
-  async fetch({ host, roomId }) {
-    const auth = await this._requestJson({
-      url: `https://${host}/_matrix/client/r0/register`,
+  async registerAccount({ host, guest }) {
+    return this._requestJson({
+      url: `https://${host}/_matrix/client/r0/register${
+        guest ? '?kind=guest' : ''
+      }`,
       schema: matrixRegisterSchema,
       options: {
         method: 'POST',
@@ -25,21 +23,35 @@ module.exports = class Matrix extends BaseJsonService {
       },
       errorMessages: {
         401: 'auth failed',
+        403: 'guests not allowed',
+        429: 'rate limited',
       },
     })
+  }
+
+  async fetch({ host, roomId }) {
+    let auth
+    try {
+      auth = await this.registerAccount({ host, guest: true })
+    } catch (e) {
+      if (e.prettyMessage === 'guests not allowed') {
+        // attempt fallback method
+        auth = await this.registerAccount({ host, guest: false })
+      } else throw e
+    }
     const data = await this._requestJson({
-      url: `https://${host}/_matrix/client/r0/rooms/${roomId}/members?access_token=${
+      url: `https://${host}/_matrix/client/r0/rooms/${roomId}/state?access_token=${
         auth.access_token
       }`,
-      schema: matrixMembersSchema,
+      schema: Joi.any(),
       errorMessages: {
         400: 'unknown request',
         401: 'bad auth token',
         403: 'invalid or private room',
       },
     })
-    return Array.isArray(data.chunk)
-      ? data.chunk.filter(
+    return Array.isArray(data)
+      ? data.filter(
           m => m.sender === m.state_key && m.content.membership === 'join'
         ).length
       : 0
@@ -84,7 +96,8 @@ module.exports = class Matrix extends BaseJsonService {
     return [
       {
         title: 'Matrix',
-        exampleUrl: '!OjvOEGLmupvmEYhadQ/nerdsin.space',
+        //exampleUrl: '!OjvOEGLmupvmEYhadQ/nerdsin.space', // if matrix.org is too slow go back to this
+        exampleUrl: '!CbWGSqXrUpGnRUglfe/matrix.org',
         pattern: ':roomId/:host',
         staticExample: this.render({ members: 42 }),
       },

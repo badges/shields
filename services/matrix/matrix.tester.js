@@ -5,10 +5,74 @@ const ServiceTester = require('../service-tester')
 const t = new ServiceTester({ id: 'matrix', title: 'Matrix' })
 module.exports = t
 
-t.create('get member status')
+t.create('get room state as guest')
   .get('/ROOM/DUMMY.dumb.json?style=_shields_test')
   .intercept(nock =>
     nock('https://DUMMY.dumb/')
+      .post('/_matrix/client/r0/register?kind=guest')
+      .reply(
+        200,
+        JSON.stringify({
+          access_token: 'TOKEN',
+        })
+      )
+      .get('/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/state?access_token=TOKEN')
+      .reply(
+        200,
+        JSON.stringify([
+          {
+            // valid user 1
+            sender: '@user1:DUMMY.dumb',
+            state_key: '@user1:DUMMY.dumb',
+            content: {
+              membership: 'join',
+            },
+          },
+          {
+            // valid user 2
+            sender: '@user2:DUMMY.dumb',
+            state_key: '@user2:DUMMY.dumb',
+            content: {
+              membership: 'join',
+            },
+          },
+          {
+            // should exclude banned/invited/left members
+            sender: '@user3:DUMMY.dumb',
+            state_key: '@user3:DUMMY.dumb',
+            content: {
+              membership: 'ban',
+            },
+          },
+          {
+            // exclude events like banning and invites
+            sender: '@user4:DUMMY.dumb',
+            state_key: '@user4_actor:DUMMY.dumb',
+            content: {
+              membership: 'join',
+            },
+          },
+        ])
+      )
+  )
+  .expectJSON({
+    name: 'chat',
+    value: '2 users',
+    colorB: '#4c1',
+  })
+
+t.create('get room state as member (backup method)')
+  .get('/ROOM/DUMMY.dumb.json?style=_shields_test')
+  .intercept(nock =>
+    nock('https://DUMMY.dumb/')
+      .post('/_matrix/client/r0/register?kind=guest')
+      .reply(
+        403,
+        JSON.stringify({
+          errcode: 'M_GUEST_ACCESS_FORBIDDEN', // i think this is the right one
+          error: 'Guest access not allowed',
+        })
+      )
       .post('/_matrix/client/r0/register')
       .reply(
         200,
@@ -16,50 +80,43 @@ t.create('get member status')
           access_token: 'TOKEN',
         })
       )
-  )
-  .intercept(nock =>
-    nock('https://DUMMY.dumb/')
-      .get(
-        '/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/members?access_token=TOKEN'
-      )
+      .get('/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/state?access_token=TOKEN')
       .reply(
         200,
-        JSON.stringify({
-          chunk: [
-            {
-              // valid user 1
-              sender: '@user1:DUMMY.dumb',
-              state_key: '@user1:DUMMY.dumb',
-              content: {
-                membership: 'join',
-              },
+        JSON.stringify([
+          {
+            // valid user 1
+            sender: '@user1:DUMMY.dumb',
+            state_key: '@user1:DUMMY.dumb',
+            content: {
+              membership: 'join',
             },
-            {
-              // valid user 2
-              sender: '@user2:DUMMY.dumb',
-              state_key: '@user2:DUMMY.dumb',
-              content: {
-                membership: 'join',
-              },
+          },
+          {
+            // valid user 2
+            sender: '@user2:DUMMY.dumb',
+            state_key: '@user2:DUMMY.dumb',
+            content: {
+              membership: 'join',
             },
-            {
-              // should exclude banned/invited/left members
-              sender: '@user3:DUMMY.dumb',
-              state_key: '@user3:DUMMY.dumb',
-              content: {
-                membership: 'ban',
-              },
+          },
+          {
+            // should exclude banned/invited/left members
+            sender: '@user3:DUMMY.dumb',
+            state_key: '@user3:DUMMY.dumb',
+            content: {
+              membership: 'ban',
             },
-            {
-              // exclude events like banning and invites
-              sender: '@user4:DUMMY.dumb',
-              state_key: '@user4_actor:DUMMY.dumb',
-              content: {
-                membership: 'join',
-              },
+          },
+          {
+            // exclude events like banning and invites
+            sender: '@user4:DUMMY.dumb',
+            state_key: '@user4_actor:DUMMY.dumb',
+            content: {
+              membership: 'join',
             },
-          ],
-        })
+          },
+        ])
       )
   )
   .expectJSON({
@@ -81,19 +138,14 @@ t.create('invalid room')
   .get('/ROOM/DUMMY.dumb.json?style=_shields_test')
   .intercept(nock =>
     nock('https://DUMMY.dumb/')
-      .post('/_matrix/client/r0/register')
+      .post('/_matrix/client/r0/register?kind=guest')
       .reply(
         200,
         JSON.stringify({
           access_token: 'TOKEN',
         })
       )
-  )
-  .intercept(nock =>
-    nock('https://DUMMY.dumb/')
-      .get(
-        '/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/members?access_token=TOKEN'
-      )
+      .get('/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/state?access_token=TOKEN')
       .reply(
         403,
         JSON.stringify({
@@ -112,19 +164,14 @@ t.create('invalid token')
   .get('/ROOM/DUMMY.dumb.json?style=_shields_test')
   .intercept(nock =>
     nock('https://DUMMY.dumb/')
-      .post('/_matrix/client/r0/register')
+      .post('/_matrix/client/r0/register?kind=guest')
       .reply(
         200,
         JSON.stringify({
           access_token: 'TOKEN',
         })
       )
-  )
-  .intercept(nock =>
-    nock('https://DUMMY.dumb/')
-      .get(
-        '/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/members?access_token=TOKEN'
-      )
+      .get('/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/state?access_token=TOKEN')
       .reply(
         401,
         JSON.stringify({
@@ -143,19 +190,14 @@ t.create('unknown request')
   .get('/ROOM/DUMMY.dumb.json?style=_shields_test')
   .intercept(nock =>
     nock('https://DUMMY.dumb/')
-      .post('/_matrix/client/r0/register')
+      .post('/_matrix/client/r0/register?kind=guest')
       .reply(
         200,
         JSON.stringify({
           access_token: 'TOKEN',
         })
       )
-  )
-  .intercept(nock =>
-    nock('https://DUMMY.dumb/')
-      .get(
-        '/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/members?access_token=TOKEN'
-      )
+      .get('/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/state?access_token=TOKEN')
       .reply(
         400,
         JSON.stringify({
