@@ -6,7 +6,7 @@ const t = require('../create-service-tester')()
 module.exports = t
 
 t.create('JavaScript Questions')
-  .get('/stackoverflow/q/javascript.json')
+  .get('/stackoverflow/t/javascript.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'stackoverflow javascript questions',
@@ -15,7 +15,7 @@ t.create('JavaScript Questions')
   )
 
 t.create('Tex Programming Questions')
-  .get('/tex/q/programming.json')
+  .get('/tex/t/programming.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'tex programming questions',
