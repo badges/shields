@@ -49,7 +49,7 @@ This information allows other humans to help and build on your work.
 
 ### (4.1) Structure and Layout
 
-We will create code that generates badge at the http://[::]:8080/SERVICENAME/PARAM.svg URL.
+
 
 Service badge code is stored in the [/services](https://github.com/badges/shields/tree/master/services/) directory.
 Each service has a directory for its files:
@@ -59,18 +59,19 @@ Each service has a directory for its files:
   Sometimes, code for a service can be re-used.
   This might be the case when you add a badge for an API which is already used
   by other badges.
+  
+  Imagine a service that lives at https://img.shields.io/example/some-param-here.svg.
 
-  Replace `SERVICENAME` with your service name in the following:
   * For services with a single badge, the badge code will generally be stored in
-    `/services/SERVICENAME/SERVICENAME.service.js`.  
+    `/services/example/example.service.js`.  
     If you add a badge for a new API, create a new directory.
 
     Example: [wercker](https://github.com/badges/shields/tree/master/services/wercker)
 
   * For service families with multiple badges we usually store the code for each
     badge in its own file like this:
-    * `/services/SERVICENAME/SERVICENAME-downloads.service.js`
-    * `/services/SERVICENAME/SERVICENAME-version.service.js` etc.
+    * `/services/example/example-downloads.service.js`
+    * `/services/example/example-version.service.js` etc.
 
     Example: [ruby gems](https://github.com/badges/shields/tree/master/services/gem)
 
