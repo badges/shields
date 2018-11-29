@@ -7,7 +7,7 @@ const Joi = require('joi')
 
 const reputationSchema = Joi.object({
   items: Joi.array()
-    .min(1)
+    .length(1)
     .items(
       Joi.object({
         reputation: Joi.number()
