@@ -25,8 +25,9 @@ module.exports = class StackExchangeReputation extends BaseJsonService {
 
   static get route() {
     return {
-      base: 'stackexchange/r',
-      pattern: ':stackexchangesite/:query',
+      base: 'stackexchange',
+      format: '(.+)/(r)/(.+)',
+      capture: ['stackexchangesite', 'infotype', 'query'],
     }
   }
 
@@ -38,7 +39,8 @@ module.exports = class StackExchangeReputation extends BaseJsonService {
     return [
       {
         title: 'Stack Exchange reputation',
-        namedParams: { stackexchangesite: 'stackoverflow', query: '123' },
+        exampleUrl: 'stackoverflow/r/123',
+        pattern: ':stackexchangesite/r/:query',
         staticExample: this.render({
           stackexchangesite: 'stackoverflow',
           numValue: 10,

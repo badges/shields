@@ -31,7 +31,8 @@ module.exports = class StackExchangeQuestions extends BaseJsonService {
     return [
       {
         title: 'Stack Exchange questions',
-        namedParams: { stackexchangesite: 'stackoverflow', query: 'gson' },
+        exampleUrl: 'stackoverflow/q/gson',
+        pattern: ':stackexchangesite/q/:query',
         staticExample: this.render({
           stackexchangesite: 'stackoverflow',
           query: 'gson',
@@ -44,8 +45,9 @@ module.exports = class StackExchangeQuestions extends BaseJsonService {
 
   static get route() {
     return {
-      base: 'stackexchange/t',
-      pattern: ':stackexchangesite/:query',
+      base: 'stackexchange',
+      format: '(.+)/(q)/(.+)',
+      capture: ['stackexchangesite', 'infotype', 'query'],
     }
   }
 
