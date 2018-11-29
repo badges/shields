@@ -34,7 +34,8 @@ module.exports = class StackExchangeQuestions extends BaseJsonService {
         namedParams: { stackexchangesite: 'stackoverflow', query: 'gson' },
         staticExample: this.render({
           stackexchangesite: 'stackoverflow',
-          numvalue: 10,
+          query: 'gson',
+          numValue: 10,
         }),
         keywords: ['stackexchange', 'stackoverflow'],
       },
@@ -54,7 +55,7 @@ module.exports = class StackExchangeQuestions extends BaseJsonService {
     return {
       label,
       message: metric(numValue),
-      color: floorCountColor(numValue),
+      color: floorCountColor(numValue, 1000, 10000, 20000),
     }
   }
 

@@ -41,7 +41,7 @@ module.exports = class StackExchangeReputation extends BaseJsonService {
         namedParams: { stackexchangesite: 'stackoverflow', query: '123' },
         staticExample: this.render({
           stackexchangesite: 'stackoverflow',
-          numvalue: 10,
+          numValue: 10,
         }),
         keywords: ['stackexchange', 'stackoverflow'],
       },
@@ -54,7 +54,7 @@ module.exports = class StackExchangeReputation extends BaseJsonService {
     return {
       label,
       message: metric(numValue),
-      color: floorCountColor(numValue),
+      color: floorCountColor(numValue, 1000, 10000, 20000),
     }
   }
 
