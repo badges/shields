@@ -41,8 +41,8 @@ module.exports = class Matrix extends BaseJsonService {
     return Array.isArray(data.chunk)
       ? data.chunk.filter(
           m => m.sender === m.state_key && m.content.membership === 'join'
-        )
-      : []
+        ).length
+      : 0
   }
 
   static get _cacheLength() {
@@ -57,11 +57,11 @@ module.exports = class Matrix extends BaseJsonService {
   }
 
   async handle({ roomId, host, authServer }) {
-    const data = await this.fetch({
+    const members = await this.fetch({
       host,
       roomId: `${roomId}:${host}`,
     })
-    return this.constructor.render({ members: data.length })
+    return this.constructor.render({ members })
   }
 
   static get defaultBadgeData() {
