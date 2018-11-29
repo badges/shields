@@ -1,5 +1,8 @@
 'use strict'
 
+const Joi = require('joi')
+const { semver: isSemver } = require('./validators')
+
 /*
   Note:
   Validators defined in this file are used by more than one service.
@@ -7,11 +10,7 @@
   should be declared in that service's test file.
 */
 
-const Joi = require('joi').extend(require('joi-extension-semver'))
-
 const withRegex = re => Joi.string().regex(re)
-
-const isSemver = Joi.semver().valid()
 
 const isVPlusTripleDottedVersion = withRegex(/^v[0-9]+.[0-9]+.[0-9]+$/)
 
