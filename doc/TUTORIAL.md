@@ -49,8 +49,6 @@ This information allows other humans to help and build on your work.
 
 ### (4.1) Structure and Layout
 
-
-
 Service badge code is stored in the [/services](https://github.com/badges/shields/tree/master/services/) directory.
 Each service has a directory for its files:
 
