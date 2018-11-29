@@ -57,18 +57,19 @@ Each service has a directory for its files:
   Sometimes, code for a service can be re-used.
   This might be the case when you add a badge for an API which is already used
   by other badges.
+  
+  Imagine a service that lives at https://img.shields.io/example/some-param-here.svg.
 
-  Replace `SERVICENAME` with your service name in the following:
   * For services with a single badge, the badge code will generally be stored in
-    `/services/SERVICENAME/SERVICENAME.service.js`.  
+    `/services/example/example.service.js`.  
     If you add a badge for a new API, create a new directory.
 
     Example: [wercker](https://github.com/badges/shields/tree/master/services/wercker)
 
   * For service families with multiple badges we usually store the code for each
     badge in its own file like this:
-    * `/services/SERVICENAME/SERVICENAME-downloads.service.js`
-    * `/services/SERVICENAME/SERVICENAME-version.service.js` etc.
+    * `/services/example/example-downloads.service.js`
+    * `/services/example/example-version.service.js` etc.
 
     Example: [ruby gems](https://github.com/badges/shields/tree/master/services/gem)
 
@@ -120,13 +121,14 @@ Description of the code:
 
 1. We declare strict mode at the start of each file. This prevents certain classes of error such as undeclared variables.
 2. Our service badge class will extend `BaseService` so we need to require it. We declare variables with `const` and `let` in preference to `var`.
-3. Our module must export a class which extends `BaseService`
-4. `route()` declares a route. We declare getters as `static`.
-    * `base` defines the static part of the route.
-    * `pattern` defines the variable part of the route. It can include any
+3. Our module must export a class which extends `BaseService`.
+4. `route()` declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
+    * `base` defines the first part of the URL that doesn't change, e.g. `/example/`.
+    * `pattern` defines the variable part of the route, everything that comes after `/example/`. It can include any
       number of named parameters. These are converted into
       regular expressions by [`path-to-regexp`][path-to-regexp].
-5. All badges must implement the `async handle()` function. This is called to invoke our code. Note that the signature of `handle()` will match the capturing group defined in `route()` Because we're capturing a single variable called `text` our function signature is `async handle({ text })`. Although in this simple case, we aren't performing any asynchronous calls, `handle()` would usually spend some time blocked on I/O. We use the `async`/`await` pattern for asynchronous code. Our `handle()` function returns an object with 3 properties:
+5. Because a service instance won't be created until it's time to handle a request, the route and other metadata must be obtained by examining the classes themselves. [That's why they're marked `static`.][static]
+6. All badges must implement the `async handle()` function that receives parameters to render the badge. Parameters of `handle()` will match the name defined in `route()` Because we're capturing a single variable called `text` our function signature is `async handle({ text })`. `async` is needed to let JavaScript do other things while we are waiting for result from external API. Although in this simple case, we don't make any external calls. Our `handle()` function should return an object with 3 properties:
     * `label`: the text on the left side of the badge
     * `message`: the text on the right side of the badge - here we are passing through the parameter we captured in the route regex
     * `color`: the background color of the right side of the badge
@@ -143,6 +145,7 @@ To try out this example badge:
    It should look like this: ![](https://img.shields.io/badge/example-foo-blue.svg)
 
 [path-to-regexp]: https://github.com/pillarjs/path-to-regexp#parameters
+[static]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static
 
 ### (4.3) Querying an API
 
