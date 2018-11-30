@@ -52,8 +52,8 @@ This information allows other humans to help and build on your work.
 Service badge code is stored in the [/services](https://github.com/badges/shields/tree/master/services/) directory.
 Each service has a directory for its files:
 
-* In files ending with `.service.js`, you can find the code which generates
-  the badge and handles requests.
+* In files ending with `.service.js`, you can find the code which handles
+  incoming requests and generates the badges.
   Sometimes, code for a service can be re-used.
   This might be the case when you add a badge for an API which is already used
   by other badges.
