@@ -48,7 +48,7 @@ class ExampleDownloads extends BaseJsonService {
   static get route() {
     return {
        base: 'example/d',
-       pattern: ':param1/:param2’:',
+       pattern: ':param1/:param2',
      }
    }
 
