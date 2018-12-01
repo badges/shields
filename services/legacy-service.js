@@ -8,13 +8,11 @@ class LegacyService extends BaseService {
     throw Error(`registerLegacyRouteHandler() not implemented for ${this.name}`)
   }
 
-  static register(
-    { camp, handleRequest: cache, githubApiProvider },
-    serviceConfig
-  ) {
+  static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
+    const { cache: cacheHeaderConfig } = serviceConfig
     this.registerLegacyRouteHandler({
       camp,
-      cache,
+      cache: (...args) => handleRequest(cacheHeaderConfig, ...args),
       githubApiProvider,
     })
   }
