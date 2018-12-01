@@ -156,7 +156,7 @@
     "node-fetch": "^2.3.0",
     "nyc": "^13.0.1",
     "opn-cli": "^4.0.0",
-    "prettier": "1.15.2",
+    "prettier": "1.15.3",
     "prettier-check": "^2.0.0",
     "pretty": "^2.0.0",
     "prop-types": "^15.6.0",
