@@ -114,9 +114,8 @@ class AurVotes extends BaseAurService {
     return [
       {
         title: 'AUR votes',
-        exampleUrl: 'yaourt',
         namedParams: { packageName: 'yaourt' },
-        staticExample: this.render({ votes: 3029 }),
+        staticExample: this.render({ votes: '3029' }),
       },
     ]
   }
