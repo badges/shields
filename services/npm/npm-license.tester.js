@@ -80,7 +80,7 @@ t.create('license for package with a license array')
   .expectJSON({
     name: 'license',
     value: 'MPL-2.0, MIT',
-    colorB: colorsB.lightgrey,
+    colorB: colorsB.green,
   })
 
 t.create('license for unknown package')
