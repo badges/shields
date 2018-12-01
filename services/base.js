@@ -11,6 +11,7 @@ const {
   InvalidParameter,
   Deprecated,
 } = require('./errors')
+const coalesce = require('../lib/coalesce')
 const validate = require('../lib/validate')
 const { checkErrorResponse } = require('../lib/error-helper')
 const {
@@ -22,10 +23,6 @@ const {
 const { staticBadgeUrl } = require('../lib/make-badge-url')
 const trace = require('./trace')
 const validateExample = require('./validate-example')
-
-function coalesce(...candidates) {
-  return candidates.find(c => c !== undefined)
-}
 
 class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
@@ -249,6 +246,7 @@ class BaseService {
       build: 30,
       license: 3600,
       version: 300,
+      debug: 60,
     }
     return cacheLengths[this.category]
   }
@@ -321,20 +319,28 @@ class BaseService {
     }
   }
 
-  async invokeHandler(namedParams, queryParams) {
-    trace.logTrace(
-      'inbound',
-      emojic.womanCook,
-      'Service class',
-      this.constructor.name
-    )
+  static async invoke(
+    context = {},
+    config = {},
+    namedParams = {},
+    queryParams = {}
+  ) {
+    trace.logTrace('inbound', emojic.womanCook, 'Service class', this.name)
     trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
     trace.logTrace('inbound', emojic.crayon, 'Query params', queryParams)
+
+    const serviceInstance = new this(context, config)
+
+    let serviceData
     try {
-      return await this.handle(namedParams, queryParams)
+      serviceData = await serviceInstance.handle(namedParams, queryParams)
     } catch (error) {
-      return this._handleError(error)
+      serviceData = serviceInstance._handleError(error)
     }
+
+    trace.logTrace('outbound', emojic.shield, 'Service data', serviceData)
+
+    return serviceData
   }
 
   static _makeBadgeData(overrides, serviceData) {
@@ -385,27 +391,25 @@ class BaseService {
   }
 
   static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
+    const { cacheHeaders: cacheHeaderConfig } = serviceConfig
     camp.route(
       this._regex,
-      handleRequest({
+      handleRequest(cacheHeaderConfig, {
         queryParams: this.route.queryParams,
         handler: async (queryParams, match, sendBadge, request) => {
-          const serviceInstance = new this(
+          const namedParams = this._namedParamsForMatch(match)
+          const serviceData = await this.invoke(
             {
               sendAndCacheRequest: request.asPromise,
               sendAndCacheRequestWithCallbacks: request,
               githubApiProvider,
             },
-            serviceConfig
-          )
-          const namedParams = this._namedParamsForMatch(match)
-          const serviceData = await serviceInstance.invokeHandler(
+            serviceConfig,
             namedParams,
             queryParams
           )
-          trace.logTrace('outbound', emojic.shield, 'Service data', serviceData)
-          const badgeData = this._makeBadgeData(queryParams, serviceData)
 
+          const badgeData = this._makeBadgeData(queryParams, serviceData)
           // The final capture group is the extension.
           const format = match.slice(-1)[0]
           sendBadge(format, badgeData)
