@@ -113,6 +113,21 @@ describe('The server', function() {
       .and.to.include('apple')
   })
 
+  it('should return the 404 badge for unknown badges', async function() {
+    const res = await fetch(`${baseUri}/this/is/not/a/badge.svg`)
+    expect(res.status).to.equal(404)
+    expect(await res.text())
+      .to.satisfy(isSvg)
+      .and.to.include('404')
+      .and.to.include('badge not found')
+  })
+
+  it('should return the 404 html page for rando links', async function() {
+    const res = await fetch(`${baseUri}/this/is/most/definitely/not/a/badge.js`)
+    expect(res.status).to.equal(404)
+    expect(await res.text()).to.include('blood, toil, tears and sweat')
+  })
+
   context('with svg2img error', function() {
     const expectedError = fs.readFileSync(
       path.resolve(__dirname, 'public', '500.html')
