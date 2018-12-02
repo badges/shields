@@ -11,15 +11,17 @@ tests are passing, though.
 
 1. When there’s a single legacy service that handles lots of different things
 (e.g. version, license, and downloads), it should be split into three separate
-service classes and placed in three separate files.
-`myservice-version.service.js`, `myservice-license.service.js`,
-`myservice-downloads.service.js`.
+service classes and placed in three separate files, e.g.:
 
-2. When a service has different variants of basically the same thing, it’s okay
-to put them in the same service. For example, daily/weekly/monthly/total
+- `example-version.service.js`
+- `example-license.service.js`
+- `example-downloads.service.js`
+
+2. When a badge offers different variants of basically the same thing, it’s okay
+to put them in the same service class. For example, daily/weekly/monthly/total
 downloads can go in one badge, and star rating vs point rating vs rating count
 can go in one badge, and same with various kinds of detail about a pull request.
-The hard limit (as of now anyway) is *one category per service*.
+The hard limit (as of now anyway) is *one category per service class*.
 
 3. If the tests haven’t been split up, split them up too and make sure they
 still pass.
