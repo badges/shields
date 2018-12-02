@@ -44,8 +44,8 @@ module.exports = class StackExchangeQuestions extends BaseJsonService {
 
   static get route() {
     return {
-      base: 'stackexchange/t',
-      pattern: ':stackexchangesite/:query',
+      base: 'stackexchange',
+      pattern: ':stackexchangesite/t/:query',
     }
   }
 

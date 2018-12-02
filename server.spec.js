@@ -2,6 +2,7 @@
 
 const { expect } = require('chai')
 const config = require('./lib/test-config')
+const serverConfig = require('./lib/server-config')
 const fetch = require('node-fetch')
 const fs = require('fs')
 const isPng = require('is-png')
@@ -33,7 +34,7 @@ describe('The server', function() {
     //   at _combinedTickCallback (internal/process/next_tick.js:141:11)
     //   at process._tickDomainCallback (internal/process/next_tick.js:218:9)
     loadServiceClasses().forEach(serviceClass =>
-      serviceClass.register({ camp: dummyCamp, handleRequest }, {})
+      serviceClass.register({ camp: dummyCamp, handleRequest }, serverConfig)
     )
     dummyCamp.close()
     dummyCamp = undefined
@@ -50,7 +51,7 @@ describe('The server', function() {
   const baseUri = `http://127.0.0.1:${config.port}`
 
   let server
-  before('Start running the server', function() {
+  before('Start the server', function() {
     this.timeout(5000)
     server = serverHelpers.start()
   })
