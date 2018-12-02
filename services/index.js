@@ -2,6 +2,8 @@
 
 const glob = require('glob')
 const BaseService = require('./base')
+const { categories } = require('./categories')
+const { assertValidServiceDefinitionExport } = require('./service-definitions')
 
 class InvalidService extends Error {
   constructor(message) {
@@ -49,6 +51,19 @@ function loadServiceClasses(servicePaths) {
   return serviceClasses
 }
 
+function collectDefinitions() {
+  const services = loadServiceClasses()
+    // flatMap.
+    .map(ServiceClass => ServiceClass.getDefinition())
+    .reduce((accum, these) => accum.concat(these), [])
+
+  const result = { schemaVersion: '0', categories, services }
+
+  assertValidServiceDefinitionExport(result)
+
+  return result
+}
+
 function loadTesters() {
   return glob.sync(`${__dirname}/**/*.tester.js`).map(path => require(path))
 }
@@ -57,4 +72,5 @@ module.exports = {
   InvalidService,
   loadServiceClasses,
   loadTesters,
+  collectDefinitions,
 }
