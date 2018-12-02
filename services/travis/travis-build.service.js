@@ -51,7 +51,7 @@ module.exports = class TravisBuild extends LegacyService {
     ]
   }
 
-  static staticExample() {
+  static get staticExample() {
     return { message: 'passing', color: 'brightgreen' }
   }
 
