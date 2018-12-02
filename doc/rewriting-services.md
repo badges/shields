@@ -159,12 +159,54 @@ module.exports = class PypiBase extends BaseJsonService {
 
 </details>
 
-2. Save validation for last. While you're getting things working, you can use
-`const schema = Joi.any()`, which matches anything.
+2. Validation should be handled using Joi. Save this for last. While you're
+getting things working, you can use `const schema = Joi.any()`, which matches
+anything.
 
-3. To keep with the design pattern of `render()`, formatting concerns, including
+3. Substitution of default values should also be handled by Joi, using
+`.default()`.
+
+5. To keep with the design pattern of `render()`, formatting concerns, including
 concatenation and color computation, should be dealt with inside `render()`.
 This helps avoid static examples falling out of sync with the implementation.
+
+## Error handling
+
+BaseService includes built-in runtime error handling. Error classes are defined
+in `services/errors.js`. Request code and validation code will throw a runtime
+error, which will then bubble up to BaseService, which then renders an error
+badge. The cases covered by built-in error handling need not be tested in each
+service, and existing tests should be removed.
+
+1. If an external server can't be reached or returns a 5xx status code,
+`_requestJson()` along with code in `lib/error-helper.js` will bubble up an
+**Inaccessible** error.
+
+2. If a response does not match the schema, `validate()` will bubble up an
+**InvalidResponse** error which will display **invalid response data**.
+
+Error handling can also be customized by the service. Alternate messages
+corresponding to HTTP status codes can be specified in the `errorMessages`
+parameter to `_requestJson()` etc.
+
+For the not found case, a service test should establish that the API is doing
+what we expect. If the API returns a 404 error, code in `lib/error-helper.js`
+will automatically throw a **NotFound** error. The error message can, and
+generally should be customized to display something more specific like
+**package not found** or **room not found**.
+
+Not all services return a 404 response in the not found case. Sometimes a
+different status code is returned.
+
+Sometimes a 200 response must be examined to distinguish the not found case from a success case. This can be handled in either of two ways:
+
+- Write a schema which accommodates both the success and error cases.
+- Write the schema for the success case. Pass `schema: Joi.any()` to
+  `_requestJson()`. Manually check for the error case, then invoke
+  `_validate()` with the success-case schema.
+
+In either case, the service should throw e.g
+`new NotFound({ prettyMessage: 'package not found' })`.
 
 ## Convert the examples
 
