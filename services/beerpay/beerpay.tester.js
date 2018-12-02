@@ -1,13 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-
-const createServiceTester = require('../create-service-tester')
 const { withRegex } = require('../test-validators')
-const { colorScheme } = require('../test-helpers')
 
-const t = createServiceTester()
-
+const t = require('../create-service-tester')()
 module.exports = t
 
 const amountOfMoney = withRegex(/^\$[0-9]+(\.[0-9]+)?/)
@@ -21,15 +17,9 @@ t.create('funding')
     })
   )
 
-t.create('funding 0')
-  .get('/hashdog/scrapfy-chrome-extension.json?style=_shields_test')
-  .intercept(nock =>
-    nock('https://beerpay.io')
-      .get('/api/v1/hashdog/projects/scrapfy-chrome-extension')
-      .reply(200, {})
-  )
+t.create('funding (unknown project)')
+  .get('/hashdog/not-a-real-project.json')
   .expectJSON({
     name: 'beerpay',
-    value: '$0',
-    colorB: colorScheme.red,
+    value: 'project not found',
   })
