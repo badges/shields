@@ -146,9 +146,11 @@
     "is-png": "^1.1.0",
     "is-svg": "^3.0.0",
     "joi-extension-semver": "2.0.0",
+    "js-yaml-loader": "^1.0.1",
     "lint-staged": "^8.1.0",
     "lodash.debounce": "^4.0.8",
     "lodash.difference": "^4.5.0",
+    "lodash.groupby": "^4.6.0",
     "lodash.mapvalues": "^4.6.0",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
@@ -176,8 +178,7 @@
     "snap-shot-it": "^6.2.7",
     "tmp": "0.0.33",
     "url": "^0.11.0",
-    "wait-promise": "^0.4.1",
-    "yaml-loader": "^0.5.0"
+    "wait-promise": "^0.4.1"
   },
   "engines": {
     "node": ">= 8",

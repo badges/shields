@@ -3,30 +3,34 @@ import PropTypes from 'prop-types'
 import Meta from './meta'
 import Header from './header'
 import SuggestionAndSearch from './suggestion-and-search'
-import SearchResults from './search-results'
 import MarkupModal from './markup-modal'
 import Usage from './usage'
 import Footer from './footer'
+import { CategoryHeadings } from './category-headings'
+import {
+  categories,
+  services,
+  getDefinitionsForCategory,
+} from '../lib/service-definitions'
+import BadgeExamples from './badge-examples'
 import { baseUrl, longCache } from '../constants'
+import ServiceDefinitionSetHelper from '../lib/service-definitions/service-definition-set-helper'
 
 export default class ExamplesPage extends React.Component {
   constructor(props) {
     super(props)
 
-    const { category } = props.match.params
-
     this.state = {
-      category,
-      query: undefined,
+      isSearchInProgress: false,
+      isQueryTooShort: false,
+      searchResults: undefined,
       selectedExample: undefined,
-      searchReady: true,
     }
 
     this.searchTimeout = 0
 
     this.handleExampleSelected = this.handleExampleSelected.bind(this)
     this.dismissMarkupModal = this.dismissMarkupModal.bind(this)
-    this.renderSearchResults = this.renderSearchResults.bind(this)
     this.searchQueryChanged = this.searchQueryChanged.bind(this)
   }
 
@@ -34,9 +38,29 @@ export default class ExamplesPage extends React.Component {
     match: PropTypes.object.isRequired,
   }
 
-  searchQueryChanged(query) {
-    this.setState({ searchReady: false })
+  get category() {
+    return this.props.match.params.category
+  }
 
+  performSearch(query) {
+    const isQueryTooShort = query !== undefined && query.length === 1
+
+    let searchResults
+    if (!isQueryTooShort) {
+      searchResults = ServiceDefinitionSetHelper.create(services)
+        .notDeprecated()
+        .search(query)
+        .asNative()
+    }
+
+    this.setState({
+      isSearchInProgress: false,
+      isQueryTooShort,
+      searchResults,
+    })
+  }
+
+  searchQueryChanged(query) {
     /*
     Add a small delay before showing search results
     so that we wait until the user has stipped typing
@@ -47,13 +71,9 @@ export default class ExamplesPage extends React.Component {
     b) stops the page from 'flashing' as the user types, like this:
     https://user-images.githubusercontent.com/7288322/42600206-9b278470-85b5-11e8-9f63-eb4a0c31cb4a.gif
     */
+    this.setState({ isSearchInProgress: true })
     window.clearTimeout(this.searchTimeout)
-    this.searchTimeout = window.setTimeout(() => {
-      this.setState({
-        searchReady: true,
-        query,
-      })
-    }, 500)
+    this.searchTimeout = window.setTimeout(() => this.performSearch(query), 500)
   }
 
   handleExampleSelected(example) {
@@ -64,23 +84,39 @@ export default class ExamplesPage extends React.Component {
     this.setState({ selectedExample: undefined })
   }
 
-  renderSearchResults() {
-    const { searchReady, query, category } = this.state
+  renderMain() {
+    const { category } = this
+    const { isSearchInProgress, isQueryTooShort, searchResults } = this.state
 
-    if (searchReady) {
-      if (query !== undefined && query.length === 1) {
-        return <div>Search term must have 2 or more characters</div>
-      } else {
-        return (
-          <SearchResults
-            category={this.state.category}
-            query={this.state.query}
-            clickHandler={this.handleExampleSelected}
-          />
-        )
-      }
-    } else {
+    if (isSearchInProgress) {
       return <div>searching...</div>
+    } else if (isQueryTooShort) {
+      return <div>Search term must have 2 or more characters</div>
+    } else if (searchResults) {
+      return (
+        <BadgeExamples
+          definitions={searchResults}
+          onClick={this.handleExampleSelected}
+          baseUrl={baseUrl}
+          longCache={longCache}
+        />
+      )
+    } else if (category) {
+      const definitions = ServiceDefinitionSetHelper.create(
+        getDefinitionsForCategory(category)
+      )
+        .notDeprecated()
+        .asNative()
+      return (
+        <BadgeExamples
+          definitions={definitions}
+          onClick={this.handleExampleSelected}
+          baseUrl={baseUrl}
+          longCache={longCache}
+        />
+      )
+    } else {
+      return <CategoryHeadings categories={categories} />
     }
   }
 
@@ -108,7 +144,7 @@ export default class ExamplesPage extends React.Component {
             donate
           </a>
         </section>
-        {this.renderSearchResults()}
+        {this.renderMain()}
         <Usage baseUrl={baseUrl} longCache={longCache} />
         <Footer baseUrl={baseUrl} />
         <style jsx>{`
