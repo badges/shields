@@ -32,12 +32,13 @@ still pass.
 `registerLegacyRouteHandler()`.
 
 2. Set up the route for one of the badges. First determine if you can express
-the route using a `pattern`. A `pattern` is the simplest way to declare the
-route, also the most readable, and will be useful for displaying a badge builder
-with fields in the front end and generating badge URLs programmatically. One
-limitation to keep in mind is that, at present, the trailing parameter of a
-pattern can't be optional. If the last part of a route is optional, like a
-branch, you will need to use a `format` regex.
+the route using a `pattern`. A `pattern` (e.g. `pattern: ':param1/:param2'`) is
+the simplest way to declare the route, also the most readable, and will be
+useful for displaying a badge builder with fields in the front end and
+generating badge URLs programmatically. One limitation to keep in mind is that,
+at present, the trailing parameter of a pattern can't be optional. If the last
+part of a route is optional, like a branch, you will need to use a `format`
+regex string (e.g. `format: '([^/]+/[^/]+)'`).
 
 3. When creating the initial route, you can stub out the service. A minimal
 service extends BaseJsonService (or BaseService, or one of the others), and
