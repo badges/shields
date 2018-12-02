@@ -91,10 +91,12 @@ update the tests _and_ the examples. Take care to do that.
 
 ## Implement `render()` and `handle()`
 
-1. Once the route is working, fill out `render()` and `handle()`. If there’s a
-single service, you can implement fetch as a method or a function at the top of
-the file. If there are more than one service which share fetching code, you can
-put the fetch function in `example-common.js` like this one for github:
+Once the route is working, fill out `render()` and `handle()`.
+
+1. If there’s a single service, you can implement fetch as a method or a
+function at the top of the file. If there are more than one service which share
+fetching code, you can put the fetch function in `example-common.js` like this
+one for github:
 
 <details>
 
@@ -157,7 +159,10 @@ module.exports = class PypiBase extends BaseJsonService {
 
 </details>
 
-2. To keep with the design pattern of `render()`, formatting concerns, including
+2. Save validation for last. While you're getting things working, you can use
+`const schema = Joi.any()`, which matches anything.
+
+3. To keep with the design pattern of `render()`, formatting concerns, including
 concatenation and color computation, should be dealt with inside `render()`.
 This helps avoid static examples falling out of sync with the implementation.
 
@@ -172,9 +177,8 @@ Remember, none of them are live.
 
 ## Validation
 
-Add the schemas toward the end.
-
-Joi API docs: https://github.com/hapijs/joi/blob/master/API.md
+When it's time to add the schema, refer to the Joi API docs:
+https://github.com/hapijs/joi/blob/master/API.md
 
 ## Housekeeping
 
