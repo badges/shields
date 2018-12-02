@@ -12,13 +12,20 @@ import { baseUrl, longCache } from '../constants'
 export default class ExamplesPage extends React.Component {
   constructor(props) {
     super(props)
+
+    const { category } = props.match.params
+
     this.state = {
-      category: props.match.params.id,
-      query: null,
-      example: null,
+      category,
+      query: undefined,
+      selectedExample: undefined,
       searchReady: true,
     }
+
     this.searchTimeout = 0
+
+    this.handleExampleSelected = this.handleExampleSelected.bind(this)
+    this.dismissMarkupModal = this.dismissMarkupModal.bind(this)
     this.renderSearchResults = this.renderSearchResults.bind(this)
     this.searchQueryChanged = this.searchQueryChanged.bind(this)
   }
@@ -29,6 +36,7 @@ export default class ExamplesPage extends React.Component {
 
   searchQueryChanged(query) {
     this.setState({ searchReady: false })
+
     /*
     Add a small delay before showing search results
     so that we wait until the user has stipped typing
@@ -48,18 +56,26 @@ export default class ExamplesPage extends React.Component {
     }, 500)
   }
 
+  handleExampleSelected(example) {
+    this.setState({ selectedExample: example })
+  }
+
+  dismissMarkupModal() {
+    this.setState({ selectedExample: undefined })
+  }
+
   renderSearchResults() {
-    if (this.state.searchReady) {
-      if (this.state.query != null && this.state.query.length === 1) {
+    const { searchReady, query, category } = this.state
+
+    if (searchReady) {
+      if (query !== undefined && query.length === 1) {
         return <div>Search term must have 2 or more characters</div>
       } else {
         return (
           <SearchResults
             category={this.state.category}
             query={this.state.query}
-            clickHandler={example => {
-              this.setState({ example })
-            }}
+            clickHandler={this.handleExampleSelected}
           />
         )
       }
@@ -69,24 +85,22 @@ export default class ExamplesPage extends React.Component {
   }
 
   render() {
+    const { selectedExample } = this.state
+
     return (
       <div>
         <Meta />
         <Header />
         <MarkupModal
-          example={this.state.example}
-          onRequestClose={() => {
-            this.setState({ example: null })
-          }}
+          example={selectedExample}
+          onRequestClose={this.dismissMarkupModal}
           baseUrl={baseUrl}
-          key={this.state.example}
+          key={selectedExample}
         />
         <section>
           <SuggestionAndSearch
             queryChanged={this.searchQueryChanged}
-            onBadgeClick={example => {
-              this.setState({ example })
-            }}
+            onBadgeClick={this.handleExampleSelected}
             baseUrl={baseUrl}
             longCache={longCache}
           />

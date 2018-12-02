@@ -176,7 +176,8 @@
     "snap-shot-it": "^6.2.7",
     "tmp": "0.0.33",
     "url": "^0.11.0",
-    "wait-promise": "^0.4.1"
+    "wait-promise": "^0.4.1",
+    "yaml-loader": "^0.5.0"
   },
   "engines": {
     "node": ">= 8",

@@ -7,7 +7,7 @@ export default class Router extends React.Component {
     const router = (
       <div>
         <Route path="/" exact component={ExamplesPage} />
-        <Route path="/examples/:id" component={ExamplesPage} />
+        <Route path="/examples/:category" component={ExamplesPage} />
       </div>
     )
 

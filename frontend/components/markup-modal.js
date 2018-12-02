@@ -50,7 +50,7 @@ export default class MarkupModal extends React.Component {
   }
 
   get isOpen() {
-    return this.props.example !== null
+    return this.props.example !== undefined
   }
 
   generateCompleteBadgeUrl() {
