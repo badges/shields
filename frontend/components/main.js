@@ -17,7 +17,7 @@ import BadgeExamples from './badge-examples'
 import { baseUrl, longCache } from '../constants'
 import ServiceDefinitionSetHelper from '../lib/service-definitions/service-definition-set-helper'
 
-export default class ExamplesPage extends React.Component {
+export default class Main extends React.Component {
   constructor(props) {
     super(props)
 
