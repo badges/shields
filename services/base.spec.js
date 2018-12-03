@@ -37,12 +37,6 @@ class DummyService extends BaseService {
       { previewUrl: 'World' },
       { previewUrl: 'World', queryParams: { queryParamA: '!!!' } },
       {
-        urlPattern: ':world',
-        exampleUrl: 'World',
-        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
-        keywords: ['hello'],
-      },
-      {
         pattern: ':world',
         exampleUrl: 'World',
         staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
@@ -476,7 +470,6 @@ describe('BaseService', function() {
         third,
         fourth,
         fifth,
-        sixth,
       ] = DummyService.prepareExamples()
       expect(first).to.deep.equal({
         title: 'DummyService',
@@ -505,8 +498,7 @@ describe('BaseService', function() {
       }
       expect(third).to.deep.equal(preparedStaticExample)
       expect(fourth).to.deep.equal(preparedStaticExample)
-      expect(fifth).to.deep.equal(preparedStaticExample)
-      expect(sixth).to.deep.equal({
+      expect(fifth).to.deep.equal({
         title: 'DummyService',
         exampleUrl: '/foo/World.svg?queryParamA=%21%21%21',
         previewUrl:
@@ -521,7 +513,7 @@ describe('BaseService', function() {
   describe('getDefinition', function() {
     it('returns the expected result', function() {
       const {
-        examples: [first, second, third, fourth, fifth, sixth],
+        examples: [first, second, third, fourth, fifth],
       } = DummyService.getDefinition()
       expect(first).to.deep.equal({
         title: 'DummyService',
@@ -564,8 +556,7 @@ describe('BaseService', function() {
         documentation: undefined,
       }
       expect(third).to.deep.equal(expectedDefinition)
-      expect(fourth).to.deep.equal(expectedDefinition)
-      expect(fifth).to.deep.equal({
+      expect(fourth).to.deep.equal({
         title: 'DummyService',
         example: {
           pattern: '/foo/:world',
@@ -580,7 +571,7 @@ describe('BaseService', function() {
         keywords: ['hello'],
         documentation: undefined,
       })
-      expect(sixth).to.deep.equal({
+      expect(fifth).to.deep.equal({
         title: 'DummyService',
         example: {
           pattern: '/foo/:world',
