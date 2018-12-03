@@ -73,8 +73,9 @@ module.exports = class NodeVersion extends NPMBase {
   }
 
   static renderStaticExample({ tag, nodeVersionRange }) {
-    // This should match the behavior of `async render()`, which is enforced
-    // with a unit test.
+    // Since this badge has an async `render()` function, but `get examples()` has to
+    // be synchronous, this method exists. It should return the same value as the
+    // real `render()`. There's a unit test to check that.
     return {
       label: tag ? `node@${tag}` : undefined,
       message: nodeVersionRange,
@@ -83,6 +84,8 @@ module.exports = class NodeVersion extends NPMBase {
   }
 
   static async render({ tag, nodeVersionRange }) {
+    // Atypically, the `render()` function of this badge is `async` because it needs to pull
+    // data from the server.
     const label = tag ? `node@${tag}` : undefined
 
     if (nodeVersionRange === undefined) {
