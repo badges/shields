@@ -35,7 +35,7 @@ class DummyService extends BaseService {
   static get examples() {
     return [
       { previewUrl: 'World' },
-      { previewUrl: 'World', query: { queryParamA: '!!!' } },
+      { previewUrl: 'World', queryParams: { queryParamA: '!!!' } },
       {
         urlPattern: ':world',
         exampleUrl: 'World',
@@ -57,7 +57,7 @@ class DummyService extends BaseService {
       {
         pattern: ':world',
         namedParams: { world: 'World' },
-        query: { queryParamA: '!!!' },
+        queryParams: { queryParamA: '!!!' },
         staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
         keywords: ['hello'],
       },

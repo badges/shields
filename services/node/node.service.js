@@ -41,7 +41,7 @@ module.exports = class NodeVersion extends NPMBase {
       {
         title: 'node (scoped with tag, custom registry)',
         previewUrl: '@stdlib/stdlib/latest',
-        query: { registry_uri: 'https://registry.npmjs.com' },
+        queryParams: { registry_uri: 'https://registry.npmjs.com' },
         keywords: ['npm'],
       },
     ]
