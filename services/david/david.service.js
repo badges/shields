@@ -18,26 +18,48 @@ module.exports = class David extends LegacyService {
     return [
       {
         title: 'David',
-        previewUrl: 'expressjs/express',
+        pattern: ':user/:repo',
+        namedParams: { user: 'expressjs', repo: 'express' },
+        staticExample: this.renderStaticExample(),
       },
       {
         title: 'David',
-        previewUrl: 'dev/expressjs/express',
+        pattern: 'dev/:user/:repo',
+        namedParams: { user: 'expressjs', repo: 'express' },
+        staticExample: this.renderStaticExample({ label: 'dev dependencies' }),
       },
       {
         title: 'David',
-        previewUrl: 'optional/elnounch/byebye',
+        pattern: 'optional/:user/:repo',
+        namedParams: { user: 'elnounch', repo: 'byebye' },
+        staticExample: this.renderStaticExample({
+          label: 'optional dependencies',
+        }),
       },
       {
         title: 'David',
-        previewUrl: 'peer/webcomponents/generator-element',
+        pattern: 'peer/:user/:repo',
+        namedParams: { user: 'webcomponents', repo: 'generator-element' },
+        staticExample: this.renderStaticExample({ label: 'peer dependencies' }),
       },
       {
         title: 'David (path)',
-        previewUrl: 'babel/babel',
+        pattern: ':user/:repo',
+        namedParams: { user: 'babel', repo: 'babel' },
         query: { path: 'packages/babel-core' },
+        staticExample: this.renderStaticExample(),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'dependencies',
+    }
+  }
+
+  static renderStaticExample({ label } = {}) {
+    return { label, message: 'up to date', color: 'brightgreen' }
   }
 
   static registerLegacyRouteHandler({ camp, cache }) {

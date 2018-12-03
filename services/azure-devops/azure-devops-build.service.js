@@ -2,7 +2,7 @@
 
 const BaseSvgService = require('../base-svg-scraping')
 const { NotFound } = require('../errors')
-const { fetch, render } = require('./azure-devops-helpers')
+const { keywords, fetch, render } = require('./azure-devops-helpers')
 
 const documentation = `
 <p>
@@ -50,20 +50,27 @@ module.exports = class AzureDevOpsBuild extends BaseSvgService {
       {
         title: 'Azure DevOps builds',
         pattern: 'azure-devops/build/:organization/:projectId/:definitionId',
+        namedParams: {
+          organization: 'totodem',
+          projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
+          definitionId: '2',
+        },
         staticExample: render({ status: 'succeeded' }),
-        exampleUrl:
-          'azure-devops/build/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2',
-        keywords: ['vso'],
+        keywords,
         documentation,
       },
       {
         title: 'Azure DevOps builds (branch)',
         pattern:
           'azure-devops/build/:organization/:projectId/:definitionId/:branch',
+        namedParams: {
+          organization: 'totodem',
+          projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
+          definitionId: '2',
+          branch: 'master',
+        },
         staticExample: render({ status: 'succeeded' }),
-        exampleUrl:
-          'azure-devops/build/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2/master',
-        keywords: ['vso'],
+        keywords,
         documentation,
       },
     ]

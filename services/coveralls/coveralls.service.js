@@ -18,24 +18,53 @@ module.exports = class Coveralls extends LegacyService {
   }
 
   static get examples() {
+    const { staticExample } = this
     return [
       {
         title: 'Coveralls github',
-        previewUrl: 'github/jekyll/jekyll',
+        pattern: ':vcsType/:user/:repo',
+        namedParams: { vcsType: 'github', user: 'jekyll', repo: 'jekyll' },
+        staticExample,
       },
       {
         title: 'Coveralls github branch',
-        previewUrl: 'github/jekyll/jekyll/master',
+        pattern: ':vcsType/:user/:repo/:branch',
+        namedParams: {
+          vcsType: 'github',
+          user: 'jekyll',
+          repo: 'jekyll',
+          branch: 'master',
+        },
+        staticExample,
       },
       {
         title: 'Coveralls bitbucket',
-        previewUrl: 'bitbucket/pyKLIP/pyklip',
+        pattern: ':vcsType/:user/:repo',
+        namedParams: { vcsType: 'bitbucket', user: 'pyKLIP', repo: 'pyklip' },
+        staticExample,
       },
       {
         title: 'Coveralls bitbucket branch',
-        previewUrl: 'bitbucket/pyKLIP/pyklip/master',
+        pattern: ':vcsType/:user/:repo/:branch',
+        namedParams: {
+          vcsType: 'bitbucket',
+          user: 'pyKLIP',
+          repo: 'pyklip',
+          branch: 'master',
+        },
+        staticExample,
       },
     ]
+  }
+
+  static get staticExample() {
+    return { message: '83%', color: 'yellowgreen' }
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'coverage',
+    }
   }
 
   static registerLegacyRouteHandler({ camp, cache }) {

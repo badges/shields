@@ -1,7 +1,7 @@
 'use strict'
 
 const BaseSvgService = require('../base-svg-scraping')
-const { fetch, render } = require('./azure-devops-helpers')
+const { keywords, fetch, render } = require('./azure-devops-helpers')
 
 const documentation = `
 <p>
@@ -40,10 +40,14 @@ module.exports = class AzureDevOpsRelease extends BaseSvgService {
         title: 'Azure DevOps releases',
         pattern:
           'azure-devops/release/:organization/:projectId/:definitionId/:environmentId',
+        namedParams: {
+          organization: 'totodem',
+          projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
+          definitionId: '1',
+          environmentId: '1',
+        },
         staticExample: render({ status: 'succeeded' }),
-        exampleUrl:
-          'azure-devops/release/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/1/1',
-        keywords: ['vso'],
+        keywords,
         documentation,
       },
     ]
