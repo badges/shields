@@ -1,8 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
-const { NotFound } = require('../errors')
+const BaseAzureDevOpsService = require('./azure-devops-base')
 const { getHeaders } = require('./azure-devops-helpers')
 const { renderTestResultBadge } = require('../../lib/text-formatters')
 
@@ -40,17 +39,6 @@ const documentation = `
 </p>
 `
 
-const latestBuildSchema = Joi.object({
-  count: Joi.number().required(),
-  value: Joi.array()
-    .items(
-      Joi.object({
-        id: Joi.number().required(),
-      })
-    )
-    .required(),
-}).required()
-
 const buildTestResultSummarySchema = Joi.object({
   aggregatedResultsAnalysis: Joi.object({
     totalTests: Joi.number().required(),
@@ -68,7 +56,7 @@ const buildTestResultSummarySchema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class AzureDevOpsTests extends BaseJsonService {
+module.exports = class AzureDevOpsTests extends BaseAzureDevOpsService {
   static render({
     passed,
     failed,
@@ -182,44 +170,6 @@ module.exports = class AzureDevOpsTests extends BaseJsonService {
     }
   }
 
-  async fetch({ url, options, schema }) {
-    return this._requestJson({
-      schema,
-      url,
-      options,
-      errorMessages: {
-        404: 'build pipeline or test result summary not found',
-      },
-    })
-  }
-
-  async getLatestBuildId(organization, project, definitionId, branch, headers) {
-    // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/azure/devops/build/builds/list?view=azure-devops-rest-5.0
-    const url = `https://dev.azure.com/${organization}/${project}/_apis/build/builds`
-    const options = {
-      qs: {
-        definitions: definitionId,
-        $top: 1,
-        'api-version': '5.0-preview.4',
-      },
-      headers,
-    }
-    if (branch) {
-      options.qs.branch = branch
-    }
-    const json = await this.fetch({
-      url,
-      options,
-      schema: latestBuildSchema,
-    })
-
-    if (json.count !== 1) {
-      throw new NotFound({ prettyMessage: 'build pipeline not found' })
-    }
-
-    return json.value[0].id
-  }
-
   async handle(
     { organization, project, definitionId, branch },
     {
@@ -230,12 +180,16 @@ module.exports = class AzureDevOpsTests extends BaseJsonService {
     }
   ) {
     const headers = getHeaders()
+    const errorMessages = {
+      404: 'build pipeline or test result summary not found',
+    }
     const buildId = await this.getLatestBuildId(
       organization,
       project,
       definitionId,
       branch,
-      headers
+      headers,
+      errorMessages
     )
 
     // https://dev.azure.com/azuredevops-powershell/azuredevops-powershell/_apis/test/ResultSummaryByBuild?buildId=20
@@ -251,6 +205,7 @@ module.exports = class AzureDevOpsTests extends BaseJsonService {
       url,
       options,
       schema: buildTestResultSummarySchema,
+      errorMessages,
     })
 
     const total = json.aggregatedResultsAnalysis.totalTests
