@@ -25,7 +25,7 @@ module.exports = class NpmLicense extends NpmBase {
         exampleUrl: 'express',
         pattern: ':package',
         staticExample: this.render({ licenses: ['MIT'] }),
-        query: { registry_uri: 'https://registry.npmjs.com' },
+        queryParams: { registry_uri: 'https://registry.npmjs.com' },
         keywords: ['node'],
       },
     ]
