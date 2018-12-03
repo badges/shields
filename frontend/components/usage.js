@@ -8,10 +8,11 @@ import { advertisedStyles, logos } from '../../supported-features.json'
 export default class Usage extends React.PureComponent {
   static propTypes = {
     baseUrl: PropTypes.string.isRequired,
+    longCache: PropTypes.bool.isRequired,
   }
 
   renderColorExamples() {
-    const { baseUrl } = this.props
+    const { baseUrl, longCache } = this.props
     const colors = [
       'brightgreen',
       'green',
@@ -29,7 +30,9 @@ export default class Usage extends React.PureComponent {
           <Fragment key={i}>
             <img
               className="badge-img"
-              src={staticBadgeUrl(baseUrl, 'color', color, color)}
+              src={staticBadgeUrl(baseUrl, 'color', color, color, {
+                longCache,
+              })}
               alt={color}
             />{' '}
             {}
@@ -40,13 +43,14 @@ export default class Usage extends React.PureComponent {
   }
 
   renderStyleExamples() {
-    const { baseUrl } = this.props
+    const { baseUrl, longCache } = this.props
     return (
       <table className="badge-img">
         <tbody>
           {advertisedStyles.map((style, i) => {
             const badgeUrl = staticBadgeUrl(baseUrl, 'style', style, 'green', {
               logo: 'appveyor',
+              longCache,
               style,
             })
             return (
