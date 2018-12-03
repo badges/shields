@@ -13,19 +13,27 @@ boilerplate for [creating the tester][creating a tester].
 Legacy services look like:
 
 ```js
-camp.route(
-  /^\/example\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
-  cache(function(data, match, sendBadge, request) {
-    var first = match[1]
-    var second = match[2]
-    var format = match[3]
-    var badgeData = getBadgeData('X' + first + 'X', data)
-    badgeData.text[1] = second
-    badgeData.colorscheme = 'blue'
-    badgeData.colorB = '#008bb8'
-    sendBadge(format, badgeData)
-  })
-)
+module.exports = class ExampleService extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static registerLegacyRouteHandler({ camp, cache }) {
+    camp.route(
+      /^\/example\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+      cache(function(data, match, sendBadge, request) {
+        var first = match[1]
+        var second = match[2]
+        var format = match[3]
+        var badgeData = getBadgeData('X' + first + 'X', data)
+        badgeData.text[1] = second
+        badgeData.colorscheme = 'blue'
+        badgeData.colorB = '#008bb8'
+        sendBadge(format, badgeData)
+      })
+    )
+  }
+}
 ```
 
 References:
