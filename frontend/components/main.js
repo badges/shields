@@ -16,6 +16,7 @@ import {
 import BadgeExamples from './badge-examples'
 import { baseUrl, longCache } from '../constants'
 import ServiceDefinitionSetHelper from '../lib/service-definitions/service-definition-set-helper'
+import groupBy from 'lodash.groupby'
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -48,10 +49,11 @@ export default class Main extends React.Component {
 
     let searchResults
     if (query.length >= 2) {
-      searchResults = ServiceDefinitionSetHelper.create(services)
+      const flat = (searchResults = ServiceDefinitionSetHelper.create(services)
         .notDeprecated()
         .search(query)
-        .asNative()
+        .asNative())
+      searchResults = groupBy(flat, 'category')
     }
 
     this.setState({
@@ -85,6 +87,22 @@ export default class Main extends React.Component {
     this.setState({ selectedExample: undefined })
   }
 
+  renderCategory(category, definitions) {
+    const { id } = category
+
+    return (
+      <div key={id}>
+        <CategoryHeading category={category} />
+        <BadgeExamples
+          definitions={definitions}
+          onClick={this.handleExampleSelected}
+          baseUrl={baseUrl}
+          longCache={longCache}
+        />
+      </div>
+    )
+  }
+
   renderMain() {
     const { category: categoryId } = this
     const { isSearchInProgress, isQueryTooShort, searchResults } = this.state
@@ -96,13 +114,8 @@ export default class Main extends React.Component {
     } else if (isQueryTooShort) {
       return <div>Search term must have 2 or more characters</div>
     } else if (searchResults) {
-      return (
-        <BadgeExamples
-          definitions={searchResults}
-          onClick={this.handleExampleSelected}
-          baseUrl={baseUrl}
-          longCache={longCache}
-        />
+      return Object.entries(searchResults).map(([categoryId, definitions]) =>
+        this.renderCategory(findCategory(categoryId), definitions)
       )
     } else if (category) {
       const definitions = ServiceDefinitionSetHelper.create(
@@ -110,17 +123,7 @@ export default class Main extends React.Component {
       )
         .notDeprecated()
         .asNative()
-      return (
-        <div>
-          <CategoryHeading category={category} />
-          <BadgeExamples
-            definitions={definitions}
-            onClick={this.handleExampleSelected}
-            baseUrl={baseUrl}
-            longCache={longCache}
-          />
-        </div>
-      )
+      return this.renderCategory(category, definitions)
     } else if (categoryId) {
       return (
         <div>
