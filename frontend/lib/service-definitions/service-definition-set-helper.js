@@ -1,4 +1,17 @@
-import { predicateFromQuery } from '../prepare-examples'
+import escapeStringRegexp from 'escape-string-regexp'
+
+export function exampleMatchesRegex(example, regex) {
+  const { title, keywords } = example
+  const haystack = [title].concat(keywords).join(' ')
+  return regex.test(haystack)
+}
+
+export function predicateFromQuery(query) {
+  const escaped = escapeStringRegexp(query)
+  const regex = new RegExp(escaped, 'i') // Case-insensitive.
+  return ({ examples }) =>
+    examples.some(example => exampleMatchesRegex(example, regex))
+}
 
 export default class ServiceDefinitionSetHelper {
   constructor(definitionData) {

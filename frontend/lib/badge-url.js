@@ -49,5 +49,5 @@ export function dynamicBadgeUrl(
 
   const outOptions = Object.assign({ queryParams }, rest)
 
-  return resolveBadgeUrl(`/badge/dynamic/${datatype}.svg`, baseUrl, outOptions)
+  return resolveBadgeUrl(`/badge/dynamic/${datatype}`, baseUrl, outOptions)
 }
