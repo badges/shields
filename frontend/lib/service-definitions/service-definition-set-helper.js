@@ -1,3 +1,5 @@
+import { predicateFromQuery } from '../prepare-examples'
+
 export default class ServiceDefinitionSetHelper {
   constructor(definitionData) {
     this.definitionData = definitionData
@@ -14,8 +16,9 @@ export default class ServiceDefinitionSetHelper {
   }
 
   search(query) {
+    const predicate = predicateFromQuery(query)
     return ServiceDefinitionSetHelper.create(
-      this.definitionData.filter(() => false)
+      this.definitionData.filter(predicate)
     )
   }
 

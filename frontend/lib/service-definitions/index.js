@@ -1,10 +1,10 @@
 import groupBy from 'lodash.groupby'
 
-import { services } from '../../../service-definitions.yml'
+import { services, categories } from '../../../service-definitions.yml'
 export { services, categories } from '../../../service-definitions.yml'
 
-export function getCategoryName(category) {
-  return category.find(({ id }) => id === category).map(({ name } = {}) => name)
+export function findCategory(category) {
+  return categories.find(({ id }) => id === category)
 }
 
 const byCategory = groupBy(services, 'category')

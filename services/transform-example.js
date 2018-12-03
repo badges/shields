@@ -106,7 +106,7 @@ function transformExample(inExample, index, ServiceClass) {
   let example
   if (namedParams) {
     example = {
-      pattern: ServiceClass._makeFullUrl(pattern),
+      pattern: ServiceClass._makeFullUrl(pattern || ServiceClass.route.pattern),
       namedParams,
       queryParams,
     }

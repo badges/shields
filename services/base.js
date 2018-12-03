@@ -237,7 +237,7 @@ class BaseService {
 
     let route
     if (pattern) {
-      route = { pattern, queryParams }
+      route = { pattern: this._makeFullUrl(pattern), queryParams }
     } else if (format) {
       route = { format, queryParams }
     } else {

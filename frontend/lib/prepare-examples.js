@@ -7,13 +7,10 @@ export function exampleMatchesRegex(example, regex) {
 }
 
 export function predicateFromQuery(query) {
-  if (query) {
-    const escaped = escapeStringRegexp(query)
-    const regex = new RegExp(escaped, 'i') // Case-insensitive.
-    return example => exampleMatchesRegex(example, regex)
-  } else {
-    return () => true
-  }
+  const escaped = escapeStringRegexp(query)
+  const regex = new RegExp(escaped, 'i') // Case-insensitive.
+  return ({ examples }) =>
+    examples.some(example => exampleMatchesRegex(example, regex))
 }
 
 export function mapExamples(categories, iteratee) {

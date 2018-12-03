@@ -6,9 +6,10 @@ import SuggestionAndSearch from './suggestion-and-search'
 import MarkupModal from './markup-modal'
 import Usage from './usage'
 import Footer from './footer'
-import { CategoryHeadings } from './category-headings'
+import { CategoryHeading, CategoryHeadings } from './category-headings'
 import {
   categories,
+  findCategory,
   services,
   getDefinitionsForCategory,
 } from '../lib/service-definitions'
@@ -43,10 +44,10 @@ export default class ExamplesPage extends React.Component {
   }
 
   performSearch(query) {
-    const isQueryTooShort = query !== undefined && query.length === 1
+    const isQueryTooShort = query.length === 1
 
     let searchResults
-    if (!isQueryTooShort) {
+    if (query.length >= 2) {
       searchResults = ServiceDefinitionSetHelper.create(services)
         .notDeprecated()
         .search(query)
@@ -85,8 +86,10 @@ export default class ExamplesPage extends React.Component {
   }
 
   renderMain() {
-    const { category } = this
+    const { category: categoryId } = this
     const { isSearchInProgress, isQueryTooShort, searchResults } = this.state
+
+    const category = findCategory(categoryId)
 
     if (isSearchInProgress) {
       return <div>searching...</div>
@@ -103,17 +106,26 @@ export default class ExamplesPage extends React.Component {
       )
     } else if (category) {
       const definitions = ServiceDefinitionSetHelper.create(
-        getDefinitionsForCategory(category)
+        getDefinitionsForCategory(categoryId)
       )
         .notDeprecated()
         .asNative()
       return (
-        <BadgeExamples
-          definitions={definitions}
-          onClick={this.handleExampleSelected}
-          baseUrl={baseUrl}
-          longCache={longCache}
-        />
+        <div>
+          <CategoryHeading category={category} />
+          <BadgeExamples
+            definitions={definitions}
+            onClick={this.handleExampleSelected}
+            baseUrl={baseUrl}
+            longCache={longCache}
+          />
+        </div>
+      )
+    } else if (categoryId) {
+      return (
+        <div>
+          Unknown category <b>{categoryId}</b>
+        </div>
       )
     } else {
       return <CategoryHeadings categories={categories} />
