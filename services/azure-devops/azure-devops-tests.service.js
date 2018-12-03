@@ -92,7 +92,11 @@ module.exports = class AzureDevOpsTests extends BaseAzureDevOpsService {
       {
         title: 'Azure DevOps tests',
         pattern: ':organization/:project/:definitionId',
-        exampleUrl: 'azuredevops-powershell/azuredevops-powershell/1',
+        namedParams: {
+          organization: 'azuredevops-powershell',
+          project: 'azuredevops-powershell',
+          definitionId: '1',
+        },
         staticExample: this.render({
           passed: 20,
           failed: 1,
@@ -105,7 +109,12 @@ module.exports = class AzureDevOpsTests extends BaseAzureDevOpsService {
       {
         title: 'Azure DevOps tests (branch)',
         pattern: ':organization/:project/:definitionId/:branch',
-        exampleUrl: 'azuredevops-powershell/azuredevops-powershell/1/master',
+        namedParams: {
+          organization: 'azuredevops-powershell',
+          project: 'azuredevops-powershell',
+          definitionId: '1',
+          branch: 'master',
+        },
         staticExample: this.render({
           passed: 20,
           failed: 1,
@@ -118,8 +127,12 @@ module.exports = class AzureDevOpsTests extends BaseAzureDevOpsService {
       {
         title: 'Azure DevOps tests (compact)',
         pattern: ':organization/:project/:definitionId',
-        exampleUrl: 'azuredevops-powershell/azuredevops-powershell/1',
-        query: {
+        namedParams: {
+          organization: 'azuredevops-powershell',
+          project: 'azuredevops-powershell',
+          definitionId: '1',
+        },
+        queryParams: {
           compact_message: null,
         },
         keywords: ['vso', 'vsts', 'azure-devops'],
@@ -135,7 +148,11 @@ module.exports = class AzureDevOpsTests extends BaseAzureDevOpsService {
       {
         title: 'Azure DevOps tests with custom labels',
         pattern: ':organization/:project/:definitionId',
-        exampleUrl: 'azuredevops-powershell/azuredevops-powershell/1',
+        namedParams: {
+          organization: 'azuredevops-powershell',
+          project: 'azuredevops-powershell',
+          definitionId: '1',
+        },
         keywords: ['vso', 'vsts', 'azure-devops'],
         query: {
           passed_label: 'good',
