@@ -30,13 +30,13 @@ camp.route(
 
 References:
 
-- [Old tutorial on legacy services][old tutorial]
 - Current documentation
     - [Defining a route][]
     - [Defining examples][]
     - [Creating a tester][]
 - [BaseService, the new service framework][BaseService]
 - [LegacyService, the adapter][LegacyService]
+- [Obsolete tutorial on legacy services][old tutorial], possibly useful as a reference
 
 [Old tutorial]: https://github.com/badges/shields/blob/e25e748a03d4cbb50c60b69d2b2404fc08e7cead/doc/TUTORIAL.md
 [Defining a route]: https://github.com/badges/shields/blob/master/doc/TUTORIAL.md#42-our-first-badge
