@@ -51,7 +51,7 @@ module.exports = class NpmVersion extends NpmBase {
         exampleUrl: 'npm/next',
         pattern: ':package/:tag',
         staticExample: this.render({ tag: 'latest', version: '7.0.0' }),
-        query: { registry_uri: 'https://registry.npmjs.com' },
+        queryParams: { registry_uri: 'https://registry.npmjs.com' },
         keywords: ['node'],
       },
       {

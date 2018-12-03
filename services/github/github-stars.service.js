@@ -27,7 +27,7 @@ module.exports = class GithubStars extends LegacyService {
       {
         title: 'GitHub stars',
         previewUrl: 'badges/shields',
-        query: { style: 'social', label: 'Stars' },
+        queryParams: { style: 'social', label: 'Stars' },
         documentation,
       },
     ]
