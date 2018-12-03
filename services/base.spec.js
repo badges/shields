@@ -55,6 +55,11 @@ class DummyService extends BaseService {
         keywords: ['hello'],
       },
       {
+        namedParams: { namedParamA: 'World' },
+        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+        keywords: ['hello'],
+      },
+      {
         pattern: ':world',
         namedParams: { world: 'World' },
         query: { queryParamA: '!!!' },
@@ -452,8 +457,28 @@ describe('BaseService', function() {
   describe('getDefinition', function() {
     it('returns the expected result', function() {
       const {
-        examples: [first, second, third, fourth, fifth, sixth],
+        category,
+        name,
+        isDeprecated,
+        route,
+        examples,
       } = DummyService.getDefinition()
+      expect({
+        category,
+        name,
+        isDeprecated,
+        route,
+      }).to.deep.equal({
+        category: 'cat',
+        name: 'DummyService',
+        isDeprecated: false,
+        route: {
+          pattern: '/foo/:namedParamA',
+          queryParams: [],
+        },
+      })
+
+      const [first, second, third, fourth, fifth, sixth, seventh] = examples
       expect(first).to.deep.equal({
         title: 'DummyService',
         example: {
@@ -512,6 +537,21 @@ describe('BaseService', function() {
         documentation: undefined,
       })
       expect(sixth).to.deep.equal({
+        title: 'DummyService',
+        example: {
+          pattern: '/foo/:namedParamA',
+          namedParams: { namedParamA: 'World' },
+          queryParams: {},
+        },
+        preview: {
+          label: 'cat',
+          message: 'Hello namedParamA: foo with queryParamA: bar',
+          color: 'lightgrey',
+        },
+        keywords: ['hello'],
+        documentation: undefined,
+      })
+      expect(seventh).to.deep.equal({
         title: 'DummyService',
         example: {
           pattern: '/foo/:world',
