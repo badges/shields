@@ -63,8 +63,8 @@ export default class MarkupModal extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
     const {
-      badgeUrl: badgeUrlForProps,
-      exampleUrl: exampleUrlForProps,
+      badgeUrl: badgeUrlForProps = '',
+      exampleUrl: exampleUrlForProps = '',
     } = MarkupModal.urlsForProps(props)
 
     const { badgeUrlForProps: prevBadgeUrlForProps } = state
@@ -170,10 +170,10 @@ export default class MarkupModal extends React.Component {
     const { link, badgeUrl, exampleUrl, style } = this.state
 
     const common = {
-      autocomplete: 'off',
-      autocorrect: 'off',
-      autocapitalize: 'off',
-      spellcheck: 'false',
+      autoComplete: 'off',
+      autoCorrect: 'off',
+      autoCapitalize: 'off',
+      spellCheck: 'false',
     }
 
     return (
