@@ -23,7 +23,7 @@ class TwitterUrl extends LegacyService {
       {
         title: 'Twitter URL',
         previewUrl: 'http/shields.io',
-        query: { style: 'social' },
+        queryParams: { style: 'social' },
       },
     ]
   }
@@ -71,7 +71,7 @@ class TwitterFollow extends LegacyService {
       {
         title: 'Twitter Follow',
         previewUrl: 'espadrine',
-        query: { style: 'social', label: 'Follow' },
+        queryParams: { style: 'social', label: 'Follow' },
       },
     ]
   }

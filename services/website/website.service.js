@@ -84,7 +84,7 @@ module.exports = class Website extends LegacyService {
     return [
       {
         previewUrl: 'website-up-down-green-red/https/shields.io',
-        query: { label: 'my-website' },
+        queryParams: { label: 'my-website' },
         keywords: ['website'],
         documentation,
       },
