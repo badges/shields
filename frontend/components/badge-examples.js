@@ -1,10 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
-import resolveBadgeUrl from '../lib/badge-url'
-import { staticBadgeUrl } from '../../lib/make-badge-url'
-
-const nonBreakingSpace = '\u00a0'
+import { badgeUrlFromPath, staticBadgeUrl } from '../../lib/make-badge-url'
 
 export default class BadgeExamples extends React.Component {
   static propTypes = {
@@ -14,39 +10,36 @@ export default class BadgeExamples extends React.Component {
     onClick: PropTypes.func.isRequired,
   }
 
-  buildUrl({ path, pattern, namedParams, queryParams }, { longCache } = {}) {
-    const { baseUrl } = this.props
-
-    let outPath
-    let outLongCache
-    if (pattern === undefined) {
-      outPath = path
-      outLongCache = longCache
-    } else {
-      outPath = pattern
-      outLongCache = false
-    }
-
-    return resolveBadgeUrl(outPath, baseUrl, {
-      queryParams,
-      longCache: outLongCache,
-      format: 'svg',
-    })
-  }
-
   renderExample(exampleData) {
     const { baseUrl, longCache, onClick } = this.props
-    const { title, example, preview, keywords, documentation } = exampleData
+    const { title, example, preview } = exampleData
 
     let previewUrl
+    // There are two alternatives for `preview`. Refer to the schema in
+    // `services/service-definitions.js`.
     if (preview.label !== undefined) {
       const { label, message, color } = preview
       previewUrl = staticBadgeUrl({ baseUrl, label, message, color })
     } else {
-      previewUrl = this.buildUrl(preview, { longCache: true })
+      const { path, queryParams } = preview
+      previewUrl = badgeUrlFromPath({ baseUrl, path, queryParams, longCache })
     }
 
-    const exampleUrl = this.buildUrl(example)
+    // There are two alternatives for `example`. Refer to the schema in
+    // `services/service-definitions.js`.
+    let exampleUrl
+    if (example.pattern !== undefined) {
+      const { pattern, namedParams, queryParams } = example
+      exampleUrl = badgeUrlFromPath({
+        baseUrl,
+        path: pattern,
+        namedParams,
+        queryParams,
+      })
+    } else {
+      const { path, queryParams } = example
+      exampleUrl = badgeUrlFromPath({ baseUrl, path, queryParams })
+    }
 
     const key = `${title} ${previewUrl} ${exampleUrl}`
 
