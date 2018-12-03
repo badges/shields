@@ -1,5 +1,50 @@
 # Tips for rewriting legacy services
 
+## Background
+
+The services are in the process of being rewritten to use our new service
+framework (#1584). Meanwhile, the legacy services extend from an abstract
+adapter called [LegacyService][] which provides a place to put the
+`camp.route()` invocation. The wrapper extends from [BaseService][], so it
+supports badge examples via `category`, `examples`, and `route`. Setting `route`
+also enables `create-service-tester.js` to infer a service's base path, reducing
+boilerplate for [creating the tester][creating a tester].
+
+Legacy services look like:
+
+```js
+camp.route(
+  /^\/example\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+  cache(function(data, match, sendBadge, request) {
+    var first = match[1]
+    var second = match[2]
+    var format = match[3]
+    var badgeData = getBadgeData('X' + first + 'X', data)
+    badgeData.text[1] = second
+    badgeData.colorscheme = 'blue'
+    badgeData.colorB = '#008bb8'
+    sendBadge(format, badgeData)
+  })
+)
+```
+
+References:
+
+- [Old tutorial on legacy services][old tutorial]
+- Current documentation
+    - [Defining a route][]
+    - [Defining examples][]
+    - [Creating a tester][]
+- [BaseService, the new service framework][BaseService]
+- [LegacyService, the adapter][LegacyService]
+
+[Old tutorial]: https://github.com/badges/shields/blob/e25e748a03d4cbb50c60b69d2b2404fc08e7cead/doc/TUTORIAL.md
+[Defining a route]: https://github.com/badges/shields/blob/master/doc/TUTORIAL.md#42-our-first-badge
+[Defining examples]: https://github.com/badges/shields/blob/master/doc/TUTORIAL.md#44-adding-an-example-to-the-front-page
+[Creating a tester]: https://github.com/badges/shields/blob/master/doc/service-tests.md#1-boilerplate
+[BaseService]: https://github.com/badges/shields/blob/master/services/base.js
+[LegacyService]: https://github.com/badges/shields/blob/master/services/legacy-service.js
+
 ## First, write some tests
 
 If service tests don’t exist for the legacy service, stop and write them first.
