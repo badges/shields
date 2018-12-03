@@ -31,7 +31,7 @@ module.exports = class UptimeRobotRatio extends UptimeRobotBase {
       },
       {
         title: 'Uptime Robot ratio (7 days)',
-        pattern: '7/:monitor-specific-key',
+        pattern: '7/:monitorSpecificKey',
         namedParams: {
           monitorSpecificKey: 'm778918918-3e92c097147760ee39d02d36',
         },
