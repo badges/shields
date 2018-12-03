@@ -3,6 +3,8 @@
 const NPMBase = require('../npm/npm-base')
 const { versionColorForRange } = require('./node-version-color')
 
+const keywords = ['npm']
+
 module.exports = class NodeVersion extends NPMBase {
   static get category() {
     return 'platform-support'
@@ -20,34 +22,70 @@ module.exports = class NodeVersion extends NPMBase {
     return [
       {
         title: 'node',
-        previewUrl: 'passport',
-        keywords: ['npm'],
+        pattern: ':packageName',
+        namedParams: { packageName: 'passport' },
+        staticExample: this.renderStaticExample({
+          nodeVersionRange: '>= 6.0.0',
+        }),
+        keywords,
       },
       {
         title: 'node (scoped)',
-        previewUrl: '@stdlib/stdlib',
-        keywords: ['npm'],
+        pattern: '@:scope/:packageName',
+        namedParams: { scope: 'stdlib', packageName: 'stdlib' },
+        staticExample: this.renderStaticExample({
+          nodeVersionRange: '>= 6.0.0',
+        }),
+        keywords,
       },
       {
         title: 'node (tag)',
-        previewUrl: 'passport/latest',
-        keywords: ['npm'],
+        pattern: ':packageName/:tag',
+        namedParams: { packageName: 'passport', tag: 'latest' },
+        staticExample: this.renderStaticExample({
+          nodeVersionRange: '>= 6.0.0',
+          tag: 'latest',
+        }),
+        keywords,
       },
       {
         title: 'node (scoped with tag)',
-        previewUrl: '@stdlib/stdlib/latest',
-        keywords: ['npm'],
+        pattern: '@:scope/:packageName/:tag',
+        namedParams: { scope: 'stdlib', packageName: 'stdlib', tag: 'latest' },
+        staticExample: this.renderStaticExample({
+          nodeVersionRange: '>= 6.0.0',
+          tag: 'latest',
+        }),
+        keywords,
       },
       {
         title: 'node (scoped with tag, custom registry)',
-        previewUrl: '@stdlib/stdlib/latest',
-        queryParams: { registry_uri: 'https://registry.npmjs.com' },
-        keywords: ['npm'],
+        pattern: '@:scope/:packageName/:tag',
+        namedParams: { scope: 'stdlib', packageName: 'stdlib', tag: 'latest' },
+        query: { registry_uri: 'https://registry.npmjs.com' },
+        staticExample: this.renderStaticExample({
+          nodeVersionRange: '>= 6.0.0',
+          tag: 'latest',
+        }),
+        keywords,
       },
     ]
   }
 
+  static renderStaticExample({ tag, nodeVersionRange }) {
+    // Since this badge has an async `render()` function, but `get examples()` has to
+    // be synchronous, this method exists. It should return the same value as the
+    // real `render()`. There's a unit test to check that.
+    return {
+      label: tag ? `node@${tag}` : undefined,
+      message: nodeVersionRange,
+      color: 'brightgreen',
+    }
+  }
+
   static async render({ tag, nodeVersionRange }) {
+    // Atypically, the `render()` function of this badge is `async` because it needs to pull
+    // data from the server.
     const label = tag ? `node@${tag}` : undefined
 
     if (nodeVersionRange === undefined) {
