@@ -15,7 +15,7 @@ module.exports = class UptimeRobotRatio extends UptimeRobotBase {
   static get route() {
     return {
       base: 'uptimerobot/ratio',
-      pattern: ':numberOfDays(\\d+)?/:monitorApiKey',
+      pattern: ':numberOfDays(\\d+)?/:monitorSpecificKey',
     }
   }
 
@@ -23,14 +23,18 @@ module.exports = class UptimeRobotRatio extends UptimeRobotBase {
     return [
       {
         title: 'Uptime Robot ratio (30 days)',
-        exampleUrl: 'm778918918-3e92c097147760ee39d02d36',
-        pattern: ':monitor-specific-key',
+        pattern: ':monitorSpecificKey',
+        namedParams: {
+          monitorSpecificKey: 'm778918918-3e92c097147760ee39d02d36',
+        },
         staticExample: this.render({ ratio: 100 }),
       },
       {
         title: 'Uptime Robot ratio (7 days)',
-        exampleUrl: '7/m778918918-3e92c097147760ee39d02d36',
         pattern: '7/:monitor-specific-key',
+        namedParams: {
+          monitorSpecificKey: 'm778918918-3e92c097147760ee39d02d36',
+        },
         staticExample: this.render({ ratio: 100 }),
       },
     ]
@@ -43,8 +47,8 @@ module.exports = class UptimeRobotRatio extends UptimeRobotBase {
     }
   }
 
-  async handle({ numberOfDays = 30, monitorApiKey }) {
-    const { monitors } = await this.fetch({ monitorApiKey, numberOfDays })
+  async handle({ numberOfDays = 30, monitorSpecificKey }) {
+    const { monitors } = await this.fetch({ monitorSpecificKey, numberOfDays })
     const ratio = Number.parseFloat(monitors[0].custom_uptime_ratio)
     return this.constructor.render({ ratio })
   }
