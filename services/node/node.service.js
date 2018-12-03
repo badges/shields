@@ -62,7 +62,7 @@ module.exports = class NodeVersion extends NPMBase {
         title: 'node (scoped with tag, custom registry)',
         pattern: '@:scope/:packageName/:tag',
         namedParams: { scope: 'stdlib', packageName: 'stdlib', tag: 'latest' },
-        query: { registry_uri: 'https://registry.npmjs.com' },
+        queryParams: { registry_uri: 'https://registry.npmjs.com' },
         staticExample: this.renderStaticExample({
           nodeVersionRange: '>= 6.0.0',
           tag: 'latest',

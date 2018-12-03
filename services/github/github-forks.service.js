@@ -26,7 +26,7 @@ module.exports = class GithubForks extends LegacyService {
       {
         title: 'GitHub forks',
         previewUrl: 'badges/shields',
-        query: { style: 'social', label: 'Fork' },
+        queryParams: { style: 'social', label: 'Fork' },
         documentation,
       },
     ]

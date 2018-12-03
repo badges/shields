@@ -132,7 +132,7 @@ module.exports = class AzureDevOpsTests extends BaseAzureDevOpsService {
           project: 'azuredevops-powershell',
           definitionId: '1',
         },
-        query: {
+        queryParams: {
           compact_message: null,
         },
         keywords: ['vso', 'vsts', 'azure-devops'],
@@ -154,7 +154,7 @@ module.exports = class AzureDevOpsTests extends BaseAzureDevOpsService {
           definitionId: '1',
         },
         keywords: ['vso', 'vsts', 'azure-devops'],
-        query: {
+        queryParams: {
           passed_label: 'good',
           failed_label: 'bad',
           skipped_label: 'n/a',
