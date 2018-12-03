@@ -60,6 +60,8 @@ describe('loadServiceClasses function', function() {
   })
 
   it('can collect the service definitions', function() {
-    expect(() => collectDefinitions()).not.to.throw()
+    // When this fails, it will throw AssertionErrors. Wrapping this in an
+    // `expect().not.to.throw()` makes the error output unreadable.
+    collectDefinitions()
   })
 })

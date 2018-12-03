@@ -137,7 +137,7 @@ module.exports = class AzureDevOpsTests extends BaseAzureDevOpsService {
         pattern: ':organization/:project/:definitionId',
         exampleUrl: 'azuredevops-powershell/azuredevops-powershell/1',
         keywords: ['vso', 'vsts', 'azure-devops'],
-        query: {
+        queryParams: {
           passed_label: 'good',
           failed_label: 'bad',
           skipped_label: 'n/a',
