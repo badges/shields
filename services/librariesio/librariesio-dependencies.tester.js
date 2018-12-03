@@ -1,14 +1,21 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
 const { isDependencyState } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'librariesio', title: 'Libraries.io' })
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('dependencies for releases')
   .get('/release/hex/phoenix/1.0.3.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'dependencies',
+      value: isDependencyState,
+    })
+  )
+
+t.create('dependencies for releases (project name contains dot)')
+  .get('/release/nuget/Newtonsoft.Json.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'dependencies',

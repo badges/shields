@@ -17,6 +17,8 @@ const {
   floorCount: floorCountColor,
 } = require('../../lib/color-formatters')
 
+const keywords = ['amo', 'firefox']
+
 class AmoDownloads extends LegacyService {
   static get category() {
     return 'downloads'
@@ -25,6 +27,7 @@ class AmoDownloads extends LegacyService {
   static get route() {
     return {
       base: 'amo/d',
+      pattern: ':addonId',
     }
   }
 
@@ -32,8 +35,9 @@ class AmoDownloads extends LegacyService {
     return [
       {
         title: 'Mozilla Add-on',
-        previewUrl: 'dustman',
-        keywords: ['amo', 'firefox'],
+        namedParams: { addonId: 'dustman' },
+        staticExample: { message: '12k', color: 'brightgreen' },
+        keywords,
       },
     ]
   }
@@ -49,6 +53,7 @@ class AmoVersion extends LegacyService {
   static get route() {
     return {
       base: 'amo/v',
+      pattern: ':addonId',
     }
   }
 
@@ -56,10 +61,17 @@ class AmoVersion extends LegacyService {
     return [
       {
         title: 'Mozilla Add-on',
-        previewUrl: 'dustman',
-        keywords: ['amo', 'firefox'],
+        namedParams: { addonId: 'dustman' },
+        staticExample: { message: 'v2.1.0', color: 'blue' },
+        keywords,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'mozilla add-on',
+    }
   }
 
   static registerLegacyRouteHandler() {}
@@ -80,13 +92,25 @@ class AmoRating extends LegacyService {
     return [
       {
         title: 'Mozilla Add-on',
-        previewUrl: 'rating/dustman',
-        keywords: ['amo', 'firefox'],
+        pattern: 'rating/:addonId',
+        namedParams: { addonId: 'dustman' },
+        staticExample: {
+          label: 'rating',
+          message: '4/5',
+          color: 'brightgreen',
+        },
+        keywords,
       },
       {
         title: 'Mozilla Add-on',
-        previewUrl: 'stars/dustman',
-        keywords: ['amo', 'firefox'],
+        pattern: 'stars/:addonId',
+        namedParams: { addonId: 'dustman' },
+        staticExample: {
+          label: 'rating',
+          message: starRating(4),
+          color: 'brightgreen',
+        },
+        keywords,
       },
     ]
   }
@@ -102,6 +126,7 @@ class AmoUsers extends LegacyService {
   static get route() {
     return {
       base: 'amo/users',
+      pattern: ':addonId',
     }
   }
 
@@ -109,10 +134,17 @@ class AmoUsers extends LegacyService {
     return [
       {
         title: 'Mozilla Add-on',
-        previewUrl: 'dustman',
-        keywords: ['amo', 'firefox'],
+        namedParams: { addonId: 'dustman' },
+        staticExample: { message: '706', color: 'brightgreen' },
+        keywords,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'users',
+    }
   }
 
   static registerLegacyRouteHandler() {}

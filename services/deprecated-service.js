@@ -14,6 +14,10 @@ function deprecatedService({ url, label, category, examples = [] }) {
       return url
     }
 
+    static get isDeprecated() {
+      return true
+    }
+
     static get defaultBadgeData() {
       return { label }
     }
