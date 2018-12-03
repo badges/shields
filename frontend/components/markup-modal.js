@@ -16,9 +16,9 @@ export default class MarkupModal extends React.Component {
   }
 
   state = {
-    badgeUrl: undefined,
-    badgeUrlForProps: undefined,
-    exampleUrl: undefined,
+    badgeUrl: '',
+    badgeUrlForProps: '',
+    exampleUrl: '',
     link: '',
     style: 'flat',
   }
@@ -56,6 +56,7 @@ export default class MarkupModal extends React.Component {
         path,
         queryParams,
       })
+      exampleUrl = ''
     }
 
     return { badgeUrl, exampleUrl }
