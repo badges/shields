@@ -38,26 +38,18 @@ function isAzureDevOpsTestTotals(
   skippedLabel,
   isCompact
 ) {
+  const passedRegex = getLabelRegex(passedLabel, isCompact)
+  const failedRegex = getLabelRegex(failedLabel, isCompact)
+  const skippedRegex = getLabelRegex(skippedLabel, isCompact)
+  const separator = isCompact ? ' | ' : ', '
   const regexStrings = [
-    `^${getLabelRegex(passedLabel, isCompact)}$`,
-    `^${getLabelRegex(failedLabel, isCompact)}$`,
-    `^${getLabelRegex(skippedLabel, isCompact)}$`,
-    `^${getLabelRegex(passedLabel, isCompact)} ${getLabelRegex(
-      failedLabel,
-      isCompact
-    )}$`,
-    `^${getLabelRegex(failedLabel, isCompact)} ${getLabelRegex(
-      skippedLabel,
-      isCompact
-    )}$`,
-    `^${getLabelRegex(passedLabel, isCompact)} ${getLabelRegex(
-      skippedLabel,
-      isCompact
-    )}$`,
-    `^${getLabelRegex(passedLabel, isCompact)} ${getLabelRegex(
-      failedLabel,
-      isCompact
-    )} ${getLabelRegex(skippedLabel, isCompact)}$`,
+    `^${passedRegex}$`,
+    `^${failedRegex}$`,
+    `^${skippedRegex}`,
+    `^${passedRegex}${separator}${failedRegex}$`,
+    `^${failedRegex}${separator}${skippedRegex}$`,
+    `^${passedRegex}${separator}${skippedRegex}$`,
+    `^${passedRegex}${separator}${failedRegex}${separator}${skippedLabel}$`,
   ]
 
   return Joi.alternatives().try(
