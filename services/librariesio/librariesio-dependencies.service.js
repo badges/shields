@@ -30,7 +30,7 @@ module.exports = class LibrariesioDependencies extends LegacyService {
 
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
-      /^\/librariesio\/(github|release)\/([\w\-_]+\/[\w\-_]+)\/?([\w\-_.]+)?\.(svg|png|gif|jpg|json)$/,
+      /^\/librariesio\/(github|release)\/([\w\-_]+\/[\w\-_.]+)\/?([\w\-_.]+)?\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
         const resource = match[1]
         const project = match[2]

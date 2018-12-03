@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const BaseAzureDevOpsService = require('./azure-devops-base')
-const { getHeaders } = require('./azure-devops-helpers')
+const { keywords, getHeaders } = require('./azure-devops-helpers')
 
 const documentation = `
 <p>
@@ -68,17 +68,26 @@ module.exports = class AzureDevOpsCoverage extends BaseAzureDevOpsService {
       {
         title: 'Azure DevOps coverage',
         pattern: ':organization/:project/:definitionId',
+        namedParams: {
+          organization: 'swellaby',
+          project: 'opensource',
+          definitionId: '25',
+        },
         staticExample: this.render({ coverage: 100 }),
-        exampleUrl: 'swellaby/opensource/25',
-        keywords: ['vso', 'vsts', 'azure-devops'],
+        keywords,
         documentation,
       },
       {
         title: 'Azure DevOps coverage (branch)',
         pattern: ':organization/:project/:definitionId/:branch',
+        namedParams: {
+          organization: 'swellaby',
+          project: 'opensource',
+          definitionId: '25',
+          branch: 'master',
+        },
         staticExample: this.render({ coverage: 100 }),
-        exampleUrl: 'swellaby/opensource/25/master',
-        keywords: ['vso', 'vsts', 'azure-devops'],
+        keywords,
         documentation,
       },
     ]

@@ -138,6 +138,7 @@ export default class Usage extends React.PureComponent {
 
         <p>
           <code>
+            {baseUrl}
             /badge/dynamic/json.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
             <a
               href="https://www.npmjs.com/package/jsonpath"
@@ -151,6 +152,7 @@ export default class Usage extends React.PureComponent {
         </p>
         <p>
           <code>
+            {baseUrl}
             /badge/dynamic/xml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
             <a
               href="https://www.npmjs.com/package/xpath"
@@ -164,6 +166,7 @@ export default class Usage extends React.PureComponent {
         </p>
         <p>
           <code>
+            {baseUrl}
             /badge/dynamic/yaml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
             <a
               href="https://www.npmjs.com/package/jsonpath"

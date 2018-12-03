@@ -3,6 +3,8 @@
 const Joi = require('joi')
 const serverSecrets = require('../../lib/server-secrets')
 
+const keywords = ['vso', 'vsts', 'azure-devops']
+
 const schema = Joi.object({
   message: Joi.equal(
     'succeeded',
@@ -55,4 +57,4 @@ function getHeaders() {
   return headers
 }
 
-module.exports = { fetch, render, getHeaders }
+module.exports = { keywords, fetch, render, getHeaders }

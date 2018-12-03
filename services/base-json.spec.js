@@ -32,7 +32,7 @@ class DummyJsonService extends BaseJsonService {
 
 describe('BaseJsonService', function() {
   describe('Making requests', function() {
-    let sendAndCacheRequest, serviceInstance
+    let sendAndCacheRequest
     beforeEach(function() {
       sendAndCacheRequest = sinon.stub().returns(
         Promise.resolve({
@@ -40,25 +40,22 @@ describe('BaseJsonService', function() {
           res: { statusCode: 200 },
         })
       )
-      serviceInstance = new DummyJsonService(
-        { sendAndCacheRequest },
-        { handleInternalErrors: false }
-      )
     })
 
     it('invokes _sendAndCacheRequest', async function() {
-      await serviceInstance.invokeHandler({}, {})
+      await DummyJsonService.invoke(
+        { sendAndCacheRequest },
+        { handleInternalErrors: false }
+      )
 
       expect(sendAndCacheRequest).to.have.been.calledOnceWith(
         'http://example.com/foo.json',
-        {
-          headers: { Accept: 'application/json' },
-        }
+        { headers: { Accept: 'application/json' } }
       )
     })
 
     it('forwards options to _sendAndCacheRequest', async function() {
-      Object.assign(serviceInstance, {
+      class WithOptions extends DummyJsonService {
         async handle() {
           const { value } = await this._requestJson({
             schema: dummySchema,
@@ -66,10 +63,13 @@ describe('BaseJsonService', function() {
             options: { method: 'POST', qs: { queryParam: 123 } },
           })
           return { message: value }
-        },
-      })
+        }
+      }
 
-      await serviceInstance.invokeHandler({}, {})
+      await WithOptions.invoke(
+        { sendAndCacheRequest },
+        { handleInternalErrors: false }
+      )
 
       expect(sendAndCacheRequest).to.have.been.calledOnceWith(
         'http://example.com/foo.json',
@@ -88,12 +88,12 @@ describe('BaseJsonService', function() {
         buffer: '{"requiredString": "some-string"}',
         res: { statusCode: 200 },
       })
-      const serviceInstance = new DummyJsonService(
-        { sendAndCacheRequest },
-        { handleInternalErrors: false }
-      )
-      const serviceData = await serviceInstance.invokeHandler({}, {})
-      expect(serviceData).to.deep.equal({
+      expect(
+        await DummyJsonService.invoke(
+          { sendAndCacheRequest },
+          { handleInternalErrors: false }
+        )
+      ).to.deep.equal({
         message: 'some-string',
       })
     })
@@ -103,12 +103,12 @@ describe('BaseJsonService', function() {
         buffer: '{"unexpectedKey": "some-string"}',
         res: { statusCode: 200 },
       })
-      const serviceInstance = new DummyJsonService(
-        { sendAndCacheRequest },
-        { handleInternalErrors: false }
-      )
-      const serviceData = await serviceInstance.invokeHandler({}, {})
-      expect(serviceData).to.deep.equal({
+      expect(
+        await DummyJsonService.invoke(
+          { sendAndCacheRequest },
+          { handleInternalErrors: false }
+        )
+      ).to.deep.equal({
         color: 'lightgray',
         message: 'invalid response data',
       })
@@ -119,12 +119,12 @@ describe('BaseJsonService', function() {
         buffer: 'not json',
         res: { statusCode: 200 },
       })
-      const serviceInstance = new DummyJsonService(
-        { sendAndCacheRequest },
-        { handleInternalErrors: false }
-      )
-      const serviceData = await serviceInstance.invokeHandler({}, {})
-      expect(serviceData).to.deep.equal({
+      expect(
+        await DummyJsonService.invoke(
+          { sendAndCacheRequest },
+          { handleInternalErrors: false }
+        )
+      ).to.deep.equal({
         color: 'lightgray',
         message: 'unparseable json response',
       })
