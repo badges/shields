@@ -2,7 +2,6 @@
 
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
-const queryString = require('query-string')
 const pathToRegexp = require('path-to-regexp')
 const {
   NotFound,
@@ -20,7 +19,6 @@ const {
   makeColor,
   setBadgeColor,
 } = require('../lib/badge-data')
-const { staticBadgeUrl } = require('../lib/make-badge-url')
 const trace = require('./trace')
 const { validateExample, transformExample } = require('./transform-example')
 const { assertValidCategory } = require('./categories')
