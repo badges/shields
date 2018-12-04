@@ -122,14 +122,6 @@ class BaseService {
     return `/${[this.route.base, partialUrl].filter(Boolean).join('/')}`
   }
 
-  static _dotSvg(url) {
-    if (url.includes('?')) {
-      return url.replace('?', '.svg?')
-    } else {
-      return `${url}.svg`
-    }
-  }
-
   static validateDefinition() {
     assertValidCategory(this.category, `Category for ${this.name}`)
 

@@ -472,7 +472,7 @@ describe('BaseService', function() {
         },
       })
 
-      const [first, second, third, fourth, fifth, sixth, seventh] = examples
+      const [first, second, third, fourth, fifth, sixth] = examples
       expect(first).to.deep.equal({
         title: 'DummyService',
         example: {
@@ -544,7 +544,7 @@ describe('BaseService', function() {
         keywords: ['hello'],
         documentation: undefined,
       })
-      expect(seventh).to.deep.equal({
+      expect(sixth).to.deep.equal({
         title: 'DummyService',
         example: {
           pattern: '/foo/:world',
