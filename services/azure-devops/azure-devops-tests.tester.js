@@ -45,11 +45,11 @@ function isAzureDevOpsTestTotals(
   const regexStrings = [
     `^${passedRegex}$`,
     `^${failedRegex}$`,
-    `^${skippedRegex}`,
+    `^${skippedRegex}$`,
     `^${passedRegex}${separator}${failedRegex}$`,
     `^${failedRegex}${separator}${skippedRegex}$`,
     `^${passedRegex}${separator}${skippedRegex}$`,
-    `^${passedRegex}${separator}${failedRegex}${separator}${skippedLabel}$`,
+    `^${passedRegex}${separator}${failedRegex}${separator}${skippedRegex}$`,
   ]
 
   return Joi.alternatives().try(
@@ -59,8 +59,8 @@ function isAzureDevOpsTestTotals(
 
 const isDefaultAzureDevOpsTestTotals = isAzureDevOpsTestTotals(
   'passed',
-  'skipped',
-  'failed'
+  'failed',
+  'skipped'
 )
 const isCompactAzureDevOpsTestTotals = isAzureDevOpsTestTotals(
   '✔',
