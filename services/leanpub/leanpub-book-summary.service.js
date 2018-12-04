@@ -32,7 +32,7 @@ module.exports = class LeanPubBookSummaryService extends BaseJsonService {
   static get examples() {
     return [
       {
-        title: 'LeanPub Book Page Count',
+        title: 'Leanpub Book Page Count',
         pattern: ':book/:metric',
         namedParams: {
           book: 'juice-shop',
@@ -42,7 +42,7 @@ module.exports = class LeanPubBookSummaryService extends BaseJsonService {
         keywords,
       },
       {
-        title: 'LeanPub Book Total Copies Sold',
+        title: 'Leanpub Book Total Copies Sold',
         pattern: ':book/:metric',
         namedParams: {
           book: 'juice-shop',
@@ -52,7 +52,7 @@ module.exports = class LeanPubBookSummaryService extends BaseJsonService {
         keywords,
       },
       {
-        title: 'LeanPub Book Total Revenue',
+        title: 'Leanpub Book Total Revenue',
         pattern: ':book/:metric',
         namedParams: {
           book: 'juice-shop',
@@ -60,6 +60,8 @@ module.exports = class LeanPubBookSummaryService extends BaseJsonService {
         },
         staticExample: this.render({ label: 'revenue', message: 1123334.14 }),
         keywords,
+        documentation:
+          '<p>Note this badge is only available on self-hosted Shields instances</p>',
       },
     ]
   }
@@ -75,6 +77,8 @@ module.exports = class LeanPubBookSummaryService extends BaseJsonService {
   getOptions() {
     const options = {}
     if (serverSecrets && serverSecrets.leanpub_token) {
+      // The Leanpub API docs only mention passing the API key as a query param.
+      // This could most likely be supplied via a Header instead, but that isn't documented.
       options.qs = {
         api_key: serverSecrets.leanpub_token,
       }
@@ -104,7 +108,7 @@ module.exports = class LeanPubBookSummaryService extends BaseJsonService {
     } else if (metric === 'sold') {
       label = 'sold'
       value = json.total_copies_sold
-    } else if (metric === 'revenue') {
+    } else {
       label = 'revenue'
       value = json.total_revenue
     }
