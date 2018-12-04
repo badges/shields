@@ -1,25 +1,24 @@
 'use strict'
 
 const Joi = require('joi')
-const withRegex = re => Joi.string().regex(re)
-const isMonthMetric = withRegex(/^[1-9][0-9]*[kMGTPEZY]?\/(month)?$/)
+const { isMetricOverTimePeriod } = require('../test-validators')
 const t = require('../create-service-tester')()
 module.exports = t
 
 t.create('Monthly Questions for StackOverflow Momentjs')
-  .get('/stackoverflow/monthlyquestions/momentjs.json')
+  .get('/stackoverflow/qm/momentjs.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'stackoverflow questions',
-      value: isMonthMetric,
+      name: 'stackoverflow momentjs questions',
+      value: isMetricOverTimePeriod,
     })
   )
 
 t.create('Monthly Questions for Tex Spacing')
-  .get('/tex/monthlyquestions/spacing.json')
+  .get('/tex/qm/spacing.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'tex questions',
-      value: isMonthMetric,
+      name: 'tex spacing questions',
+      value: isMetricOverTimePeriod,
     })
   )

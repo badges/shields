@@ -1,8 +1,7 @@
 'use strict'
 
 const BaseJsonService = require('../base-json')
-const { metric } = require('../../lib/text-formatters')
-const { floorCount: floorCountColor } = require('../../lib/color-formatters')
+const renderQuestionsBadge = require('./stackexchange-helpers')
 const moment = require('moment')
 const Joi = require('joi')
 
@@ -28,6 +27,7 @@ module.exports = class StackExchangeMonthlyQuestions extends BaseJsonService {
         namedParams: { stackexchangesite: 'stackoverflow', query: 'momentjs' },
         staticExample: this.render({
           stackexchangesite: 'stackoverflow',
+          query: 'momentjs',
           numValue: 2000,
         }),
         keywords: ['stackexchange', 'stackoverflow'],
@@ -38,18 +38,15 @@ module.exports = class StackExchangeMonthlyQuestions extends BaseJsonService {
   static get route() {
     return {
       base: 'stackexchange',
-      pattern: ':stackexchangesite/monthlyquestions/:query',
+      pattern: ':stackexchangesite/qm/:query',
     }
   }
 
-  static render({ stackexchangesite, numValue }) {
-    const label = `${stackexchangesite} questions`
-
-    return {
-      label,
-      message: `${metric(numValue)}/month`,
-      color: floorCountColor(numValue, 1000, 10000, 20000),
-    }
+  static render(props) {
+    return renderQuestionsBadge({
+      suffix: '/month',
+      ...props,
+    })
   }
 
   async handle({ stackexchangesite, query }) {
@@ -82,6 +79,7 @@ module.exports = class StackExchangeMonthlyQuestions extends BaseJsonService {
 
     return this.constructor.render({
       stackexchangesite,
+      query,
       numValue,
     })
   }
