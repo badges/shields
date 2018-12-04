@@ -57,7 +57,7 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
         title: 'Gitlab pipeline status (self-hosted)',
         pattern: ':user/:repo',
         namedParams: { user: 'GNOME', repo: 'pango' },
-        query: { gitlab_url: 'https://gitlab.gnome.org' },
+        queryParams: { gitlab_url: 'https://gitlab.gnome.org' },
         staticExample: this.render({ status: 'passed' }),
       },
     ]

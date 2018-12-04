@@ -46,7 +46,7 @@ module.exports = class David extends LegacyService {
         title: 'David (path)',
         pattern: ':user/:repo',
         namedParams: { user: 'babel', repo: 'babel' },
-        query: { path: 'packages/babel-core' },
+        queryParams: { path: 'packages/babel-core' },
         staticExample: this.renderStaticExample(),
       },
     ]

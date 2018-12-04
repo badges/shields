@@ -35,13 +35,7 @@ class DummyService extends BaseService {
   static get examples() {
     return [
       { previewUrl: 'World' },
-      { previewUrl: 'World', query: { queryParamA: '!!!' } },
-      {
-        urlPattern: ':world',
-        exampleUrl: 'World',
-        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
-        keywords: ['hello'],
-      },
+      { previewUrl: 'World', queryParams: { queryParamA: '!!!' } },
       {
         pattern: ':world',
         exampleUrl: 'World',
@@ -62,7 +56,7 @@ class DummyService extends BaseService {
       {
         pattern: ':world',
         namedParams: { world: 'World' },
-        query: { queryParamA: '!!!' },
+        queryParams: { queryParamA: '!!!' },
         staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
         keywords: ['hello'],
       },
@@ -520,8 +514,7 @@ describe('BaseService', function() {
         documentation: undefined,
       }
       expect(third).to.deep.equal(expectedDefinition)
-      expect(fourth).to.deep.equal(expectedDefinition)
-      expect(fifth).to.deep.equal({
+      expect(fourth).to.deep.equal({
         title: 'DummyService',
         example: {
           pattern: '/foo/:world',
@@ -536,7 +529,7 @@ describe('BaseService', function() {
         keywords: ['hello'],
         documentation: undefined,
       })
-      expect(sixth).to.deep.equal({
+      expect(fifth).to.deep.equal({
         title: 'DummyService',
         example: {
           pattern: '/foo/:namedParamA',
