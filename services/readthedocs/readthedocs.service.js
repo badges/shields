@@ -4,6 +4,8 @@ const Joi = require('joi')
 const BaseSvgScrapingService = require('../base-svg-scraping')
 const { NotFound } = require('../errors')
 
+const keywords = ['documentation']
+
 const schema = Joi.object({
   message: Joi.string().required(),
 }).required()
@@ -25,17 +27,17 @@ module.exports = class ReadTheDocs extends BaseSvgScrapingService {
     return [
       {
         title: 'Read the Docs',
-        pattern: ':package',
-        exampleUrl: 'pip',
+        pattern: ':packageName',
+        namedParams: { packageName: 'pip' },
         staticExample: this.render({ status: 'passing' }),
-        keywords: ['documentation'],
+        keywords,
       },
       {
         title: 'Read the Docs (version)',
-        pattern: ':package/:version',
-        exampleUrl: 'pip/stable',
+        pattern: ':packageName/:version',
+        namedParams: { packageName: 'pip', version: 'stable' },
         staticExample: this.render({ status: 'passing' }),
-        keywords: ['documentation'],
+        keywords,
       },
     ]
   }
