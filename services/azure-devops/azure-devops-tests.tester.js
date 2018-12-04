@@ -15,7 +15,7 @@ const mockBadgeUriPath = `${uriPrefix}/${definitionId}`
 const mockBadgeUri = `${mockBadgeUriPath}.json`
 const mockBranchBadgeUri = `${mockBadgeUriPath}/master.json`
 const mockLatestBuildApiUriPath = `/build/builds?definitions=${definitionId}&%24top=1&api-version=5.0-preview.4`
-const mockNonExistendBuildApiUriPath = `/build/builds?definitions=${nonExistentDefinitionId}&%24top=1&api-version=5.0-preview.4`
+const mockNonExistentBuildApiUriPath = `/build/builds?definitions=${nonExistentDefinitionId}&%24top=1&api-version=5.0-preview.4`
 const mockTestResultSummaryApiUriPath = `/test/ResultSummaryByBuild?buildId=${buildId}`
 const latestBuildResponse = {
   count: 1,
@@ -100,7 +100,7 @@ t.create('no build response')
   .get(`${uriPrefix}/${nonExistentDefinitionId}.json`)
   .intercept(nock =>
     nock(azureDevOpsApiBaseUri)
-      .get(mockNonExistendBuildApiUriPath)
+      .get(mockNonExistentBuildApiUriPath)
       .reply(200, {
         count: 0,
         value: [],
