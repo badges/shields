@@ -106,7 +106,7 @@ class VaadinDirectoryStatus extends LegacyService {
 
 class VaadinDirectoryReleaseDate extends LegacyService {
   static get category() {
-    return 'other'
+    return 'activity'
   }
 
   static get route() {

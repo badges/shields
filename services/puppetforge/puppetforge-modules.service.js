@@ -83,7 +83,7 @@ class PuppetforgeModuleEndorsement extends LegacyService {
 
 class PuppetforgeModuleFeedback extends LegacyService {
   static get category() {
-    return 'other'
+    return 'rating'
   }
 
   static get route() {

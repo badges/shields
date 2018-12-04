@@ -13,7 +13,7 @@ const {
 
 module.exports = class GithubContributors extends LegacyService {
   static get category() {
-    return 'other'
+    return 'activity'
   }
 
   static get route() {

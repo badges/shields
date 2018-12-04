@@ -223,14 +223,6 @@ class SteamFileService extends BaseSteamAPI {
   async onRequest({ response }) {
     throw new Error(`onRequest() wasn't implemented for ${this.name}`)
   }
-
-  static get defaultBadgeData() {
-    return { label: 'steam' }
-  }
-
-  static get category() {
-    return 'other'
-  }
 }
 
 class SteamFileSize extends SteamFileService {
@@ -305,6 +297,10 @@ class SteamFileReleaseDate extends SteamFileService {
         documentation: docs,
       },
     ]
+  }
+
+  static get category() {
+    return 'activity'
   }
 }
 
@@ -455,6 +451,10 @@ class SteamFileViews extends SteamFileService {
         documentation: docs,
       },
     ]
+  }
+
+  static get category() {
+    return 'other'
   }
 }
 
