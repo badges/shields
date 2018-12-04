@@ -3,7 +3,8 @@
 ## Background
 
 The services are in the process of being rewritten to use our new service
-framework (#1584). Meanwhile, the legacy services extend from an abstract
+framework ([#1358](https://github.com/badges/shields/issues/1358)).
+Meanwhile, the legacy services extend from an abstract
 adapter called [LegacyService][] which provides a place to put the
 `camp.route()` invocation. The wrapper extends from [BaseService][], so it
 supports badge examples via `category`, `examples`, and `route`. Setting `route`
@@ -120,7 +121,7 @@ class ExampleDownloads extends BaseJsonService {
 
 4. We don’t have really good tools for debugging matches, so the best you can do
 is run a subset of your tests. To run a single service test, add `.only()`
-somewhere in the chain, and run `npm run test:services:trace — —only=example`.
+somewhere in the chain, and run `npm run test:services:trace -- --only=example`.
 
 ```js
 t.create('build status')
