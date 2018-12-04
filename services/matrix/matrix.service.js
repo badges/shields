@@ -40,24 +40,17 @@ const documentation = `
   `
 
 module.exports = class Matrix extends BaseJsonService {
-  static getRegisterUrl({ host, guest }) {
-    return guest
-      ? `https://${host}/_matrix/client/r0/register?kind=guest`
-      : `https://${host}/_matrix/client/r0/register`
-  }
-
-  static getStateUrl({ host, roomId, accessToken }) {
-    // maybe able to do /state/m.room.member in the future but atm it responds M_NOT_FOUND
-    // which is either a bug or intentional. awaiting
-    return `https://${host}/_matrix/client/r0/rooms/${roomId}/state?access_token=${accessToken}`
-  }
-
   async registerAccount({ host, guest }) {
     return this._requestJson({
-      url: this.constructor.getRegisterUrl({ host, guest }),
+      url: `https://${host}/_matrix/client/r0/register`,
       schema: matrixRegisterSchema,
       options: {
         method: 'POST',
+        qs: guest
+          ? {
+              kind: 'guest',
+            }
+          : {},
         body: JSON.stringify({
           password: '',
           auth: { type: 'm.login.dummy' },
@@ -82,12 +75,13 @@ module.exports = class Matrix extends BaseJsonService {
       } else throw e
     }
     const data = await this._requestJson({
-      url: this.constructor.getStateUrl({
-        host,
-        roomId,
-        accessToken: auth.access_token,
-      }),
+      url: `https://${host}/_matrix/client/r0/rooms/${roomId}/state`,
       schema: matrixStateSchema,
+      options: {
+        qs: {
+          access_token: auth.access_token,
+        },
+      },
       errorMessages: {
         400: 'unknown request',
         401: 'bad auth token',
