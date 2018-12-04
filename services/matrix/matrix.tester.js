@@ -1,5 +1,6 @@
 'use strict'
 
+const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 
 const t = new ServiceTester({ id: 'matrix', title: 'Matrix' })
@@ -22,6 +23,7 @@ t.create('get room state as guest')
         JSON.stringify([
           {
             // valid user 1
+            type: 'm.room.member',
             sender: '@user1:DUMMY.dumb',
             state_key: '@user1:DUMMY.dumb',
             content: {
@@ -30,6 +32,7 @@ t.create('get room state as guest')
           },
           {
             // valid user 2
+            type: 'm.room.member',
             sender: '@user2:DUMMY.dumb',
             state_key: '@user2:DUMMY.dumb',
             content: {
@@ -38,18 +41,20 @@ t.create('get room state as guest')
           },
           {
             // should exclude banned/invited/left members
+            type: 'm.room.member',
             sender: '@user3:DUMMY.dumb',
             state_key: '@user3:DUMMY.dumb',
             content: {
-              membership: 'ban',
+              membership: 'leave',
             },
           },
           {
-            // exclude events like banning and invites
+            // exclude events like the room name
+            type: 'm.room.name',
             sender: '@user4:DUMMY.dumb',
-            state_key: '@user4_actor:DUMMY.dumb',
+            state_key: '@user4:DUMMY.dumb',
             content: {
-              membership: 'join',
+              membership: 'fake room',
             },
           },
         ])
@@ -86,6 +91,7 @@ t.create('get room state as member (backup method)')
         JSON.stringify([
           {
             // valid user 1
+            type: 'm.room.member',
             sender: '@user1:DUMMY.dumb',
             state_key: '@user1:DUMMY.dumb',
             content: {
@@ -94,6 +100,7 @@ t.create('get room state as member (backup method)')
           },
           {
             // valid user 2
+            type: 'm.room.member',
             sender: '@user2:DUMMY.dumb',
             state_key: '@user2:DUMMY.dumb',
             content: {
@@ -102,18 +109,20 @@ t.create('get room state as member (backup method)')
           },
           {
             // should exclude banned/invited/left members
+            type: 'm.room.member',
             sender: '@user3:DUMMY.dumb',
             state_key: '@user3:DUMMY.dumb',
             content: {
-              membership: 'ban',
+              membership: 'leave',
             },
           },
           {
-            // exclude events like banning and invites
+            // exclude events like the room name
+            type: 'm.room.name',
             sender: '@user4:DUMMY.dumb',
-            state_key: '@user4_actor:DUMMY.dumb',
+            state_key: '@user4:DUMMY.dumb',
             content: {
-              membership: 'join',
+              membership: 'fake room',
             },
           },
         ])
@@ -156,7 +165,7 @@ t.create('invalid room')
   )
   .expectJSON({
     name: 'chat',
-    value: 'invalid or private room',
+    value: 'room not world readable or is invalid',
     colorB: '#9f9f9f',
   })
 
@@ -211,3 +220,13 @@ t.create('unknown request')
     value: 'unknown request',
     colorB: '#9f9f9f',
   })
+
+t.create('test on real matrix room for API compliance')
+  .get('/!ltIjvaLydYAWZyihee/matrix.org.json?style=_shields_test')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'chat',
+      value: Joi.string().regex(/^[0-9]+ users$/),
+      colorB: '#4c1',
+    })
+  )

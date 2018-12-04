@@ -7,12 +7,54 @@ const matrixRegisterSchema = Joi.object({
   access_token: Joi.string().required(),
 }).required()
 
+const matrixStateSchema = Joi.array()
+  .items(
+    Joi.object({
+      content: Joi.object({
+        membership: Joi.string().optional(),
+      }).required(),
+      type: Joi.string().required(),
+      sender: Joi.string().required(),
+      state_key: Joi.string()
+        .allow('')
+        .required(),
+    })
+  )
+  .required()
+
+const documentation = `
+  <p>
+    In order for this badge to work, the host of your room must allow guest accounts or dummy accounts to register, and the room must be world readable (chat history visible to anyone).
+    </br>
+    The following steps will show you how to setup the badge URL using the Riot.im Matrix client.
+    </br>
+    <ul>
+      <li>Select the desired room inside the Riot.im client</li>
+      <li>Click on the room settings button (gear icon) located near the top right of the client</li>
+      <li>Scroll to the very bottom of the settings page and look under the <code>Advanced</code> tab</li>
+      <li>You should see the <code>Internal room ID</code> with your rooms ID next to it (ex: <code>!ltIjvaLydYAWZyihee:matrix.org</code>)</li>
+      <li>Replace the IDs <code>:</code> with <code>/</code></li>
+      <li>The final badge URL should look something like this <code>/matrix/!ltIjvaLydYAWZyihee/matrix.org.svg</code></li>
+    </ul>
+  </p>
+  `
+
 module.exports = class Matrix extends BaseJsonService {
+  static getRegisterUrl({ host, guest }) {
+    return guest
+      ? `https://${host}/_matrix/client/r0/register?kind=guest`
+      : `https://${host}/_matrix/client/r0/register`
+  }
+
+  static getStateUrl({ host, roomId, accessToken }) {
+    // maybe able to do /state/m.room.member in the future but atm it responds M_NOT_FOUND
+    // which is either a bug or intentional. awaiting
+    return `https://${host}/_matrix/client/r0/rooms/${roomId}/state?access_token=${accessToken}`
+  }
+
   async registerAccount({ host, guest }) {
     return this._requestJson({
-      url: `https://${host}/_matrix/client/r0/register${
-        guest ? '?kind=guest' : ''
-      }`,
+      url: this.constructor.getRegisterUrl({ host, guest }),
       schema: matrixRegisterSchema,
       options: {
         method: 'POST',
@@ -24,7 +66,7 @@ module.exports = class Matrix extends BaseJsonService {
       errorMessages: {
         401: 'auth failed',
         403: 'guests not allowed',
-        429: 'rate limited',
+        429: 'rate limited by rooms host',
       },
     })
   }
@@ -40,19 +82,24 @@ module.exports = class Matrix extends BaseJsonService {
       } else throw e
     }
     const data = await this._requestJson({
-      url: `https://${host}/_matrix/client/r0/rooms/${roomId}/state?access_token=${
-        auth.access_token
-      }`,
-      schema: Joi.any(),
+      url: this.constructor.getStateUrl({
+        host,
+        roomId,
+        accessToken: auth.access_token,
+      }),
+      schema: matrixStateSchema,
       errorMessages: {
         400: 'unknown request',
         401: 'bad auth token',
-        403: 'invalid or private room',
+        403: 'room not world readable or is invalid',
       },
     })
     return Array.isArray(data)
       ? data.filter(
-          m => m.sender === m.state_key && m.content.membership === 'join'
+          m =>
+            m.type === 'm.room.member' &&
+            m.sender === m.state_key &&
+            m.content.membership === 'join'
         ).length
       : 0
   }
@@ -96,10 +143,10 @@ module.exports = class Matrix extends BaseJsonService {
     return [
       {
         title: 'Matrix',
-        //exampleUrl: '!OjvOEGLmupvmEYhadQ/nerdsin.space', // if matrix.org is too slow go back to this
-        exampleUrl: '!CbWGSqXrUpGnRUglfe/matrix.org',
+        exampleUrl: '!ltIjvaLydYAWZyihee/matrix.org',
         pattern: ':roomId/:host',
         staticExample: this.render({ members: 42 }),
+        documentation,
       },
     ]
   }
