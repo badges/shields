@@ -99,7 +99,7 @@ function InstallsForExtensionType(extensionType) {
         {
           title: `Wordpress ${capt} Active Installs`,
           pattern: ':slug',
-          namedParams: { slug: 'exampleSlug' },
+          namedParams: { slug: exampleSlug },
           staticExample: this.render({ response: { active_installs: 300000 } }),
         },
       ]
