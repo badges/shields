@@ -2,6 +2,7 @@
 
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
+const { colorScheme } = require('../test-helpers')
 
 const t = new ServiceTester({ id: 'matrix', title: 'Matrix' })
 module.exports = t
@@ -63,7 +64,7 @@ t.create('get room state as guest')
   .expectJSON({
     name: 'chat',
     value: '2 users',
-    colorB: '#4c1',
+    colorB: colorScheme.brightgreen,
   })
 
 t.create('get room state as member (backup method)')
@@ -131,7 +132,7 @@ t.create('get room state as member (backup method)')
   .expectJSON({
     name: 'chat',
     value: '2 users',
-    colorB: '#4c1',
+    colorB: colorScheme.brightgreen,
   })
 
 t.create('bad server or connection')
@@ -140,7 +141,7 @@ t.create('bad server or connection')
   .expectJSON({
     name: 'chat',
     value: 'inaccessible',
-    colorB: '#9f9f9f',
+    colorB: colorScheme.lightgray,
   })
 
 t.create('invalid room')
@@ -166,7 +167,7 @@ t.create('invalid room')
   .expectJSON({
     name: 'chat',
     value: 'room not world readable or is invalid',
-    colorB: '#9f9f9f',
+    colorB: colorScheme.lightgray,
   })
 
 t.create('invalid token')
@@ -192,7 +193,7 @@ t.create('invalid token')
   .expectJSON({
     name: 'chat',
     value: 'bad auth token',
-    colorB: '#9f9f9f',
+    colorB: colorScheme.lightgray,
   })
 
 t.create('unknown request')
@@ -218,7 +219,7 @@ t.create('unknown request')
   .expectJSON({
     name: 'chat',
     value: 'unknown request',
-    colorB: '#9f9f9f',
+    colorB: colorScheme.lightgray,
   })
 
 t.create('test on real matrix room for API compliance')
@@ -227,6 +228,6 @@ t.create('test on real matrix room for API compliance')
     Joi.object().keys({
       name: 'chat',
       value: Joi.string().regex(/^[0-9]+ users$/),
-      colorB: '#4c1',
+      colorB: colorScheme.brightgreen,
     })
   )
