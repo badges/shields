@@ -13,4 +13,7 @@ module.exports = {
   semver: Joi.semver()
     .valid()
     .required(),
+  semverRange: Joi.semver()
+    .validRange()
+    .required(),
 }
