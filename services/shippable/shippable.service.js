@@ -20,13 +20,16 @@ module.exports = class Shippable extends LegacyService {
       {
         title: 'Shippable',
         pattern: ':projectId',
-        exampleUrl: '5444c5ecb904a4b21567b0ff',
+        namedParams: { projectId: '5444c5ecb904a4b21567b0ff' },
         staticExample: { label: 'build', message: 'success', color: '#44CC11' },
       },
       {
         title: 'Shippable branch',
         pattern: ':projectId/:branch',
-        exampleUrl: '5444c5ecb904a4b21567b0ff/master',
+        namedParams: {
+          projectId: '5444c5ecb904a4b21567b0ff',
+          branch: 'master',
+        },
         staticExample: { label: 'build', message: 'success', color: '#44CC11' },
       },
     ]
