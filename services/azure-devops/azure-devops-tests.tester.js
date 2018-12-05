@@ -44,6 +44,19 @@ const mockTestResultSummaryResponse = {
     },
   },
 }
+const mockTestResultSummarySetup = nock =>
+  nock(azureDevOpsApiBaseUri)
+    .get(mockLatestBuildApiUriPath)
+    .reply(200, latestBuildResponse)
+    .get(mockTestResultSummaryApiUriPath)
+    .reply(200, mockTestResultSummaryResponse)
+const mockBranchTestResultSummarySetup = nock =>
+  nock(azureDevOpsApiBaseUri)
+    .get(mockLatestBranchBuildApiUriPath)
+    .reply(200, latestBuildResponse)
+    .get(mockTestResultSummaryApiUriPath)
+    .reply(200, mockTestResultSummaryResponse)
+
 const expectedDefaultAzureDevOpsTestTotals = '1 passed, 1 failed, 1 skipped'
 const expectedCompactAzureDevOpsTestTotals = '✔ 1 | ✘ 1 | ➟ 1'
 const expectedCustomAzureDevOpsTestTotals = '1 good, 1 bad, 1 n/a'
@@ -168,13 +181,7 @@ t.create('no tests in test result summary response')
 
 t.create('test status')
   .get(mockBadgeUri)
-  .intercept(nock =>
-    nock(azureDevOpsApiBaseUri)
-      .get(mockLatestBuildApiUriPath)
-      .reply(200, latestBuildResponse)
-      .get(mockTestResultSummaryApiUriPath)
-      .reply(200, mockTestResultSummaryResponse)
-  )
+  .intercept(mockTestResultSummarySetup)
   .expectJSONTypes(
     Joi.object().keys({
       name: 'tests',
@@ -184,13 +191,7 @@ t.create('test status')
 
 t.create('test status on branch')
   .get(mockBranchBadgeUri)
-  .intercept(nock =>
-    nock(azureDevOpsApiBaseUri)
-      .get(mockLatestBranchBuildApiUriPath)
-      .reply(200, latestBuildResponse)
-      .get(mockTestResultSummaryApiUriPath)
-      .reply(200, mockTestResultSummaryResponse)
-  )
+  .intercept(mockBranchTestResultSummarySetup)
   .expectJSONTypes(
     Joi.object().keys({
       name: 'tests',
@@ -204,13 +205,7 @@ t.create('test status with compact message')
       compact_message: null,
     },
   })
-  .intercept(nock =>
-    nock(azureDevOpsApiBaseUri)
-      .get(mockLatestBuildApiUriPath)
-      .reply(200, latestBuildResponse)
-      .get(mockTestResultSummaryApiUriPath)
-      .reply(200, mockTestResultSummaryResponse)
-  )
+  .intercept(mockTestResultSummarySetup)
   .expectJSONTypes(
     Joi.object().keys({
       name: 'tests',
@@ -226,13 +221,7 @@ t.create('test status with custom labels')
       skipped_label: 'n/a',
     },
   })
-  .intercept(nock =>
-    nock(azureDevOpsApiBaseUri)
-      .get(mockLatestBuildApiUriPath)
-      .reply(200, latestBuildResponse)
-      .get(mockTestResultSummaryApiUriPath)
-      .reply(200, mockTestResultSummaryResponse)
-  )
+  .intercept(mockTestResultSummarySetup)
   .expectJSONTypes(
     Joi.object().keys({
       name: 'tests',
@@ -249,13 +238,7 @@ t.create('test status with compact message and custom labels')
       skipped_label: '🤷',
     },
   })
-  .intercept(nock =>
-    nock(azureDevOpsApiBaseUri)
-      .get(mockLatestBuildApiUriPath)
-      .reply(200, latestBuildResponse)
-      .get(mockTestResultSummaryApiUriPath)
-      .reply(200, mockTestResultSummaryResponse)
-  )
+  .intercept(mockTestResultSummarySetup)
   .expectJSONTypes(
     Joi.object().keys({
       name: 'tests',
