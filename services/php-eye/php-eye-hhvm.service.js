@@ -7,7 +7,7 @@ const { omitv } = require('../../lib/text-formatters')
 
 module.exports = class PhpeyeHhvm extends LegacyService {
   static get category() {
-    return 'version'
+    return 'platform-support'
   }
 
   static get route() {
