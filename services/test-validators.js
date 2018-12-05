@@ -48,7 +48,7 @@ const isComposerVersion = withRegex(
 // 5.4, 5.6, 7.2
 // 5.4 - 7.1, HHVM
 const isPhpVersionReduction = withRegex(
-  /^((>= \d+(\.\d+)?)|(\d+\.\d+(, \d+\.\d+)*)|(\d+\.\d+ \\- \d+\.\d+))(, HHVM)?$/
+  /^((>= \d+(\.\d+)?)|(\d+\.\d+(, \d+\.\d+)*)|(\d+\.\d+ - \d+\.\d+))(, HHVM)?$/
 )
 
 const isStarRating = withRegex(
