@@ -2,10 +2,13 @@
 
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
-const t = new ServiceTester({ id: 'buildkite', title: 'Buildkite Builds' })
 const { invalidJSON } = require('../response-fixtures')
 const { isBuildStatus } = require('../test-validators')
-module.exports = t
+
+const t = (module.exports = new ServiceTester({
+  id: 'buildkite',
+  title: 'Buildkite Builds',
+}))
 
 t.create('buildkite invalid pipeline')
   .get('/unknown-identifier/unknown-branch.json')

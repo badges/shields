@@ -1,14 +1,12 @@
 'use strict'
 
 const Joi = require('joi')
-const createServiceTester = require('../create-service-tester')
-
-const t = createServiceTester()
-module.exports = t
 
 const isTypeDefinition = Joi.string().regex(
   /^((Flow|TypeScript)|(Flow \| TypeScript))$/
 )
+
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('types (from dev dependencies + files)')
   .get('/chalk.json')

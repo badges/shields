@@ -3,8 +3,10 @@
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 
-const t = new ServiceTester({ id: 'codetally', title: 'Codetally' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'codetally',
+  title: 'Codetally',
+}))
 
 // This test will extract the currency value from the
 // string value response from the server.

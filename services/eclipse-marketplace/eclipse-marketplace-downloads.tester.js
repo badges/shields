@@ -2,15 +2,13 @@
 
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
-
 const { isMetric, isMetricOverTimePeriod } = require('../test-validators')
 
-const t = new ServiceTester({
+const t = (module.exports = new ServiceTester({
   id: 'eclipse-marketplace-downloads',
   title: 'EclipseMarketplaceDownloads',
   pathPrefix: '/eclipse-marketplace',
-})
-module.exports = t
+}))
 
 t.create('total marketplace downloads')
   .get('/dt/notepad4e.json')

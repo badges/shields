@@ -4,8 +4,10 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { invalidJSON } = require('../response-fixtures')
 
-const t = new ServiceTester({ id: 'bountysource', title: 'Bountysource' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'bountysource',
+  title: 'Bountysource',
+}))
 
 t.create('bounties (valid)')
   .get('/team/mozilla-core/activity.json')

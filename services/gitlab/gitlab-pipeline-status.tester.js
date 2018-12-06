@@ -3,8 +3,7 @@
 const Joi = require('joi')
 const { isPipelineStatus } = require('./gitlab-helpers')
 
-const t = require('../create-service-tester')()
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('Pipeline status')
   .get('/gitlab-org/gitlab-ce.json')

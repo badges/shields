@@ -1,8 +1,6 @@
 'use strict'
 
-const createServiceTester = require('../create-service-tester')
-const t = createServiceTester()
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('license')
   .get('/Config-Augeas.json')
