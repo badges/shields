@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const countBy = require('lodash.countby')
-const GithubAuthService = require('./github-auth-service')
+const { GithubAuthService } = require('./github-auth-service')
 const { fetchIssue } = require('./github-common-fetch')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 

@@ -8,8 +8,6 @@ const {
   isMetricOverTimePeriod,
   isFileSize,
   isFormattedDate,
-  isVPlusDottedVersionAtLeastOne,
-  isSemver,
 } = require('../test-validators')
 const { colorScheme: colorsB } = require('../test-helpers')
 const { licenseToColor } = require('../../lib/licenses')
@@ -465,78 +463,6 @@ t.create('Tag (mocked response, date ordering)')
       .reply(200, tagsFixture)
   )
   .expectJSON({ name: 'tag', value: 'cheese', colorB: colorsB.blue })
-
-t.create('Package version')
-  .get('/package-json/v/badges/shields.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'package',
-      value: isSemver,
-    })
-  )
-
-t.create('Package version (repo not found)')
-  .get('/package-json/v/badges/helmets.json')
-  .expectJSON({
-    name: 'package',
-    value: 'repo not found',
-  })
-
-t.create('Package name')
-  .get('/package-json/n/badges/shields.json')
-  .expectJSON({ name: 'package name', value: 'shields.io' })
-
-t.create('Package name - Custom label')
-  .get('/package-json/name/badges/shields.json?label=Dev Name')
-  .expectJSON({ name: 'Dev Name', value: 'shields.io' })
-
-t.create('Package array')
-  .get('/package-json/keywords/badges/shields.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'package keywords',
-      value: Joi.string().regex(/.*?,/),
-    })
-  )
-
-t.create('Package object')
-  .get('/package-json/dependencies/badges/shields.json')
-  .expectJSON({ name: 'package dependencies', value: 'invalid data' })
-
-t.create('Manifest version')
-  .get('/manifest-json/v/RedSparr0w/IndieGala-Helper.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'manifest',
-      value: isVPlusDottedVersionAtLeastOne,
-    })
-  )
-
-t.create('Manifest name')
-  .get('/manifest-json/n/RedSparr0w/IndieGala-Helper.json')
-  .expectJSON({ name: 'manifest name', value: 'IndieGala Helper' })
-
-t.create('Manifest array')
-  .get('/manifest-json/permissions/RedSparr0w/IndieGala-Helper.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'manifest permissions',
-      value: Joi.string().regex(/.*?,/),
-    })
-  )
-
-t.create('Manifest object')
-  .get('/manifest-json/background/RedSparr0w/IndieGala-Helper.json')
-  .expectJSON({ name: 'manifest background', value: 'invalid data' })
-
-t.create('Manifest invalid json response')
-  .get('/manifest-json/v/RedSparr0w/not-a-real-project.json')
-  .expectJSON({ name: 'manifest', value: 'repo not found' })
-
-t.create('Manifest no network connection')
-  .get('/manifest-json/v/RedSparr0w/IndieGala-Helper.json')
-  .networkOff()
-  .expectJSON({ name: 'manifest', value: 'inaccessible' })
 
 t.create('File size')
   .get('/size/webcaetano/craft/build/phaser-craft.min.js.json')
