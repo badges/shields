@@ -1,8 +1,7 @@
 'use strict'
 
 const BaseJsonService = require('../base-json')
-const { metric } = require('../../lib/text-formatters')
-const { floorCount: floorCountColor } = require('../../lib/color-formatters')
+const renderQuestionsBadge = require('./stackexchange-helpers')
 const Joi = require('joi')
 
 const tagSchema = Joi.object({
@@ -20,7 +19,7 @@ const tagSchema = Joi.object({
 
 module.exports = class StackExchangeQuestions extends BaseJsonService {
   static get category() {
-    return 'other'
+    return 'chat'
   }
 
   static get defaultBadgeData() {
@@ -49,14 +48,11 @@ module.exports = class StackExchangeQuestions extends BaseJsonService {
     }
   }
 
-  static render({ stackexchangesite, query, numValue }) {
-    const label = `${stackexchangesite} ${query} questions`
-
-    return {
-      label,
-      message: metric(numValue),
-      color: floorCountColor(numValue, 1000, 10000, 20000),
-    }
+  static render(props) {
+    return renderQuestionsBadge({
+      suffix: '',
+      ...props,
+    })
   }
 
   async handle({ stackexchangesite, query }) {

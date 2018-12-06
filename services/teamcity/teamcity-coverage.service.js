@@ -6,7 +6,6 @@ const {
   coveragePercentage: coveragePercentageColor,
 } = require('../../lib/color-formatters')
 
-// TeamCity CodeBetter code coverage.
 module.exports = class TeamcityCoverage extends LegacyService {
   static get category() {
     return 'build'
@@ -15,6 +14,7 @@ module.exports = class TeamcityCoverage extends LegacyService {
   static get route() {
     return {
       base: 'teamcity/coverage',
+      pattern: ':buildType',
     }
   }
 
@@ -22,9 +22,16 @@ module.exports = class TeamcityCoverage extends LegacyService {
     return [
       {
         title: 'TeamCity CodeBetter Coverage',
-        previewUrl: 'bt428',
+        namedParams: { buildType: 'bt428' },
+        staticPreview: { message: '55%', color: 'yellow' },
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'coverage',
+    }
   }
 
   static registerLegacyRouteHandler({ camp, cache }) {
