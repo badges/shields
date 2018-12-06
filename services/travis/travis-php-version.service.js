@@ -11,7 +11,7 @@ const {
 
 module.exports = class TravisPhpVersion extends LegacyService {
   static get category() {
-    return 'version'
+    return 'platform-support'
   }
 
   static get route() {

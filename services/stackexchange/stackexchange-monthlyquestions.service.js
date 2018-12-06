@@ -13,7 +13,7 @@ const tagSchema = Joi.object({
 
 module.exports = class StackExchangeMonthlyQuestions extends BaseJsonService {
   static get category() {
-    return 'other'
+    return 'chat'
   }
 
   static get defaultBadgeData() {
