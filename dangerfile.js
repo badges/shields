@@ -25,7 +25,6 @@ const documentation = fileMatch(
 )
 const server = fileMatch('server.js')
 const serverTests = fileMatch('server.spec.js')
-const serviceTests = fileMatch('services/**/*.tester.js')
 const helpers = fileMatch(
   'lib/**/*.js',
   '!**/*.spec.js',
