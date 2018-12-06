@@ -8,11 +8,10 @@ import { advertisedStyles, logos } from '../../supported-features.json'
 export default class Usage extends React.PureComponent {
   static propTypes = {
     baseUrl: PropTypes.string.isRequired,
-    longCache: PropTypes.bool.isRequired,
   }
 
   renderColorExamples() {
-    const { baseUrl, longCache } = this.props
+    const { baseUrl } = this.props
     const colors = [
       'brightgreen',
       'green',
@@ -30,9 +29,7 @@ export default class Usage extends React.PureComponent {
           <Fragment key={i}>
             <img
               className="badge-img"
-              src={staticBadgeUrl(baseUrl, 'color', color, color, {
-                longCache,
-              })}
+              src={staticBadgeUrl(baseUrl, 'color', color, color)}
               alt={color}
             />{' '}
             {}
@@ -43,14 +40,13 @@ export default class Usage extends React.PureComponent {
   }
 
   renderStyleExamples() {
-    const { baseUrl, longCache } = this.props
+    const { baseUrl } = this.props
     return (
       <table className="badge-img">
         <tbody>
           {advertisedStyles.map((style, i) => {
             const badgeUrl = staticBadgeUrl(baseUrl, 'style', style, 'green', {
               logo: 'appveyor',
-              longCache,
               style,
             })
             return (
@@ -138,6 +134,7 @@ export default class Usage extends React.PureComponent {
 
         <p>
           <code>
+            {baseUrl}
             /badge/dynamic/json.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
             <a
               href="https://www.npmjs.com/package/jsonpath"
@@ -151,6 +148,7 @@ export default class Usage extends React.PureComponent {
         </p>
         <p>
           <code>
+            {baseUrl}
             /badge/dynamic/xml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
             <a
               href="https://www.npmjs.com/package/xpath"
@@ -164,6 +162,7 @@ export default class Usage extends React.PureComponent {
         </p>
         <p>
           <code>
+            {baseUrl}
             /badge/dynamic/yaml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
             <a
               href="https://www.npmjs.com/package/jsonpath"

@@ -92,3 +92,4 @@ typings/
 .next
 badge-examples.json
 supported-features.json
+service-definitions.yml

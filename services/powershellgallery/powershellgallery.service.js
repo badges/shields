@@ -11,6 +11,10 @@ const {
   renderDownloadBadge,
 } = require('../nuget/nuget-helpers')
 
+const WINDOWS_TAG_NAME = 'windows'
+const MACOS_TAG_NAME = 'macos'
+const LINUX_TAG_NAME = 'linux'
+
 const schema = Joi.object({
   feed: Joi.object({
     entry: Joi.object({
@@ -18,6 +22,7 @@ const schema = Joi.object({
         'd:Version': Joi.string(),
         'd:NormalizedVersion': Joi.string(),
         'd:DownloadCount': nonNegativeInteger,
+        'd:Tags': Joi.string(),
       }),
     }),
   }).required(),
@@ -135,4 +140,83 @@ class PowershellGalleryDownloads extends BaseXmlService {
   }
 }
 
-module.exports = { PowershellGalleryVersion, PowershellGalleryDownloads }
+class PowershellGalleryPlatformSupport extends BaseXmlService {
+  static get category() {
+    return 'platform-support'
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'platform',
+    }
+  }
+
+  static get route() {
+    return {
+      base: 'powershellgallery/p',
+      pattern: ':packageName',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'PowerShell Gallery',
+        namedParams: { packageName: 'Az.Storage' },
+        staticExample: this.render({
+          platforms: ['windows', 'macos', 'linux'],
+        }),
+      },
+    ]
+  }
+
+  static render({ platforms }) {
+    return {
+      message: platforms.join(' | '),
+    }
+  }
+
+  async handle({ packageName }) {
+    const packageData = await fetch(this, {
+      packageName,
+    })
+    const { 'd:Tags': tagStr } = packageData
+
+    const platforms = new Set()
+    const tagArr = tagStr.split(' ')
+
+    for (const tag of tagArr) {
+      switch (tag.toLowerCase()) {
+        // Look for Windows
+        case WINDOWS_TAG_NAME:
+          platforms.add(WINDOWS_TAG_NAME.toLowerCase())
+          break
+
+        // Look for MacOS
+        case MACOS_TAG_NAME:
+          platforms.add(MACOS_TAG_NAME.toLowerCase())
+          break
+
+        // Look for Linux
+        case LINUX_TAG_NAME:
+          platforms.add(LINUX_TAG_NAME.toLowerCase())
+          break
+
+        default:
+          break
+      }
+    }
+
+    if (platforms.size === 0) {
+      platforms.add('not specified')
+    }
+
+    return this.constructor.render({ platforms: [...platforms] })
+  }
+}
+
+module.exports = {
+  PowershellGalleryVersion,
+  PowershellGalleryDownloads,
+  PowershellGalleryPlatformSupport,
+}

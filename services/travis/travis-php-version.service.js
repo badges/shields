@@ -11,12 +11,19 @@ const {
 
 module.exports = class TravisPhpVersion extends LegacyService {
   static get category() {
-    return 'version'
+    return 'platform-support'
   }
 
   static get route() {
     return {
       base: 'travis/php-v',
+      pattern: ':user/:repo',
+    }
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'php',
     }
   }
 
@@ -24,7 +31,8 @@ module.exports = class TravisPhpVersion extends LegacyService {
     return [
       {
         title: 'PHP from Travis config',
-        previewUrl: 'symfony/symfony',
+        namedParams: { user: 'symfony', repo: 'symfony' },
+        staticPreview: { message: '^7.1.3', color: 'blue' },
       },
     ]
   }
