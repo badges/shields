@@ -7,7 +7,7 @@ module.exports = t
 const knownValidBook = 'juice-shop'
 
 t.create('known book pages')
-  .get(`/${knownValidBook}/pages.json`)
+  .get(`/pages/${knownValidBook}.json`)
   .expectJSONTypes(
     Joi.object().keys({
       name: 'pages',
@@ -16,7 +16,7 @@ t.create('known book pages')
   )
 
 t.create('known book sold')
-  .get(`/${knownValidBook}/sold.json`)
+  .get(`/sold/${knownValidBook}.json`)
   .expectJSONTypes(
     Joi.object().keys({
       name: 'sold',
@@ -25,11 +25,11 @@ t.create('known book sold')
   )
 
 t.create('unknown book')
-  .get(`/234uFjAsDf234209/pages.json`)
+  .get(`/pages/234uFjAsDf234209.json`)
   .expectJSON({ name: 'leanpub', value: 'book not found' })
 
 t.create('404 book summary error response')
-  .get(`/${knownValidBook}/pages.json`)
+  .get(`/pages/${knownValidBook}.json`)
   .intercept(nock =>
     nock('https://leanpub.com/')
       .get(`/${knownValidBook}.json`)
@@ -41,7 +41,7 @@ t.create('404 book summary error response')
   })
 
 t.create('correct page count')
-  .get(`/${knownValidBook}/pages.json`)
+  .get(`/pages/${knownValidBook}.json`)
   .intercept(nock =>
     nock('https://leanpub.com/')
       .get(`/${knownValidBook}.json`)
@@ -57,7 +57,7 @@ t.create('correct page count')
   })
 
 t.create('correct sold count')
-  .get(`/${knownValidBook}/sold.json`)
+  .get(`/sold/${knownValidBook}.json`)
   .intercept(nock =>
     nock('https://leanpub.com/')
       .get(`/${knownValidBook}.json`)

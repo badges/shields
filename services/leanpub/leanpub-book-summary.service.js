@@ -31,21 +31,21 @@ module.exports = class LeanpubBookSummaryService extends BaseJsonService {
     return [
       {
         title: 'Leanpub Book Page Count',
-        pattern: ':book/:metric',
         namedParams: {
-          book: 'juice-shop',
           metric: 'pages',
+          book: 'juice-shop',
         },
+        pattern: 'pages/:book',
         staticExample: this.render({ label: 'pages', message: 226 }),
         keywords,
       },
       {
         title: 'Leanpub Book Total Copies Sold',
-        pattern: ':book/:metric',
         namedParams: {
-          book: 'juice-shop',
           metric: 'sold',
+          book: 'juice-shop',
         },
+        pattern: 'sold/:book',
         staticExample: this.render({ label: 'sold', message: 2691 }),
         keywords,
       },
@@ -54,13 +54,12 @@ module.exports = class LeanpubBookSummaryService extends BaseJsonService {
 
   static get route() {
     return {
-      base: 'leanpub/book/summary',
-      format: '([^/]+)/(pages|sold)',
-      capture: ['book', 'metric'],
+      base: 'leanpub/book',
+      pattern: ':metric(pages|sold)/:book',
     }
   }
 
-  async handle({ book, metric }) {
+  async handle({ metric, book }) {
     // LeanPub API Docs https://leanpub.com/help/api#getting-book-info
     const url = `https://leanpub.com/${book}.json`
     const options = {}
@@ -74,15 +73,13 @@ module.exports = class LeanpubBookSummaryService extends BaseJsonService {
       errorMessages,
     })
 
-    let label, value
+    let value
 
     if (metric === 'pages') {
-      label = 'pages'
       value = json.page_count_published
     } else {
-      label = 'sold'
       value = json.total_copies_sold
     }
-    return this.constructor.render({ label, message: value })
+    return this.constructor.render({ label: metric, message: value })
   }
 }
