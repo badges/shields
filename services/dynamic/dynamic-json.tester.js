@@ -53,7 +53,7 @@ t.create('JSON from url')
   .expectJSON({
     name: 'custom badge',
     value: 'shields.io',
-    colorB: colorsB.brightgreen,
+    colorB: colorsB.blue,
   })
 
 t.create('JSON from uri (support uri query paramater)')
@@ -63,7 +63,7 @@ t.create('JSON from uri (support uri query paramater)')
   .expectJSON({
     name: 'custom badge',
     value: 'shields.io',
-    colorB: colorsB.brightgreen,
+    colorB: colorsB.blue,
   })
 
 t.create('JSON from url | multiple results')
