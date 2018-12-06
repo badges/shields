@@ -16,7 +16,7 @@ const updateResponseSchema = Joi.object({
 
 module.exports = class EclipseMarketplaceUpdate extends EclipseMarketplaceBase {
   static get category() {
-    return 'other'
+    return 'activity'
   }
 
   static get defaultBadgeData() {

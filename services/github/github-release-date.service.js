@@ -12,7 +12,7 @@ const { documentation } = require('./github-helpers')
 
 module.exports = class GithubReleaseDate extends LegacyService {
   static get category() {
-    return 'other'
+    return 'activity'
   }
 
   static get route() {
