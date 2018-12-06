@@ -145,9 +145,15 @@ class PowershellGalleryPlatformSupport extends BaseXmlService {
     return 'platform-support'
   }
 
+  static get defaultBadgeData() {
+    return {
+      label: 'platform',
+    }
+  }
+
   static get route() {
     return {
-      base: 'powershellgallery/ps',
+      base: 'powershellgallery/p',
       pattern: ':packageName',
     }
   }
@@ -166,7 +172,6 @@ class PowershellGalleryPlatformSupport extends BaseXmlService {
 
   static render({ platforms }) {
     return {
-      label: 'platform',
       message: platforms.join(' | '),
     }
   }
@@ -203,7 +208,7 @@ class PowershellGalleryPlatformSupport extends BaseXmlService {
     }
 
     if (platforms.size === 0) {
-      platforms.add('unknown')
+      platforms.add('not specified')
     }
 
     return this.constructor.render({ platforms: [...platforms] })
