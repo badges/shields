@@ -71,20 +71,3 @@ t.create('correct sold count')
     name: 'sold',
     value: '82347',
   })
-
-t.create('correct revenue')
-  .get(`/${knownValidBook}/revenue.json`)
-  .intercept(nock =>
-    nock('https://leanpub.com/')
-      .get(`/${knownValidBook}.json`)
-      .reply(200, {
-        id: 5,
-        page_count_published: 87,
-        total_copies_sold: 200,
-        total_revenue: 579999.21,
-      })
-  )
-  .expectJSON({
-    name: 'revenue',
-    value: '579999.21',
-  })
