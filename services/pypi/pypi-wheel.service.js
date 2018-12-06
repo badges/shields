@@ -5,7 +5,7 @@ const { getPackageFormats } = require('./pypi-helpers')
 
 module.exports = class PypiWheel extends PypiBase {
   static get category() {
-    return 'other'
+    return 'platform-support'
   }
 
   static get route() {

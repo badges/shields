@@ -9,7 +9,7 @@ const {
 
 module.exports = class GithubCommitStatus extends LegacyService {
   static get category() {
-    return 'other'
+    return 'issue-tracking'
   }
 
   static get route() {

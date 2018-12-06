@@ -14,7 +14,7 @@ const {
 
 module.exports = class GithubLastCommit extends LegacyService {
   static get category() {
-    return 'other'
+    return 'activity'
   }
 
   static get route() {
