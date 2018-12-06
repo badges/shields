@@ -2,7 +2,6 @@
 
 const ServiceTester = require('../service-tester')
 const { isMetric } = require('../test-validators')
-const Joi = require('joi')
 
 const t = new ServiceTester({
   id: 'crates',
@@ -18,22 +17,22 @@ t.create('total downloads')
 t.create('total downloads (with version)')
   .get('/d/libc/0.2.31.json')
   .expectJSONTypes({
-    name: 'downloads',
-    value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? version 0.2.31$/),
+    name: 'downloads@0.2.31',
+    value: isMetric,
   })
 
 t.create('downloads for version')
   .get('/dv/libc.json')
   .expectJSONTypes({
-    name: 'downloads',
-    value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? latest version$/),
+    name: 'downloads@latest',
+    value: isMetric,
   })
 
 t.create('downloads for version (with version)')
   .get('/dv/libc/0.2.31.json')
   .expectJSONTypes({
-    name: 'downloads',
-    value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? version 0.2.31$/),
+    name: 'downloads@0.2.31',
+    value: isMetric,
   })
 
 t.create('downloads (invalid version)')

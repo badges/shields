@@ -24,28 +24,28 @@ module.exports = class CratesDownloads extends BaseCratesService {
       {
         title: 'Crates.io',
         pattern: 'd/:crate',
-        exampleUrl: 'd/rustc-serialize',
+        namedParams: { crate: 'rustc-serialize' },
         staticExample: this.render({ downloads: 5000000 }),
         keywords,
       },
       {
         title: 'Crates.io',
         pattern: 'd/:crate/:version',
-        exampleUrl: 'd/rustc-serialize/0.3.24',
+        namedParams: { crate: 'rustc-serialize', version: '0.3.24' },
         staticExample: this.render({ downloads: 2000000, version: '0.3.24' }),
         keywords,
       },
       {
         title: 'Crates.io',
         pattern: 'dv/:crate',
-        exampleUrl: 'dv/rustc-serialize',
+        namedParams: { crate: 'rustc-serialize' },
         staticExample: this.render({ which: 'dv', downloads: 2000000 }),
         keywords,
       },
       {
         title: 'Crates.io',
         pattern: 'dv/:crate/:version',
-        exampleUrl: 'dv/rustc-serialize/0.3.24',
+        namedParams: { crate: 'rustc-serialize', version: '0.3.24' },
         staticExample: this.render({
           which: 'dv',
           downloads: 2000000,
@@ -56,12 +56,22 @@ module.exports = class CratesDownloads extends BaseCratesService {
     ]
   }
 
+  static _getLabel(version, which) {
+    if (version) {
+      return `downloads@${version}`
+    } else {
+      if (which === 'dv') {
+        return 'downloads@latest'
+      } else {
+        return 'downloads'
+      }
+    }
+  }
+
   static render({ which, downloads, version }) {
-    const defaultSuffix = which === 'dv' ? ' latest version' : ''
     return {
-      label: 'downloads',
-      message:
-        metric(downloads) + (version ? ` version ${version}` : defaultSuffix),
+      label: this._getLabel(version, which),
+      message: metric(downloads),
       color: downloadCountColor(downloads),
     }
   }

@@ -20,14 +20,14 @@ module.exports = class CratesLicense extends BaseCratesService {
       {
         title: 'Crates.io',
         pattern: ':crate',
-        exampleUrl: 'rustc-serialize',
+        namedParams: { crate: 'rustc-serialize' },
         staticExample: this.render({ license: 'MIT/Apache-2.0' }),
         keywords,
       },
       {
         title: 'Crates.io',
         pattern: ':crate/:version',
-        exampleUrl: 'rustc-serialize/0.3.24',
+        namedParams: { crate: 'rustc-serialize', version: '0.3.24' },
         staticExample: this.render({ license: 'MIT/Apache-2.0' }),
         keywords,
       },

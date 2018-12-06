@@ -1,7 +1,6 @@
 'use strict'
 
-const { version: versionColor } = require('../../lib/color-formatters')
-const { addv: versionText } = require('../../lib/text-formatters')
+const { renderVersionBadge } = require('../../lib/version')
 const { BaseCratesService, keywords } = require('./crates-base')
 
 module.exports = class CratesVersion extends BaseCratesService {
@@ -12,8 +11,7 @@ module.exports = class CratesVersion extends BaseCratesService {
   static get route() {
     return {
       base: 'crates/v',
-      format: '([A-Za-z0-9_-]+)',
-      capture: ['crate'],
+      pattern: ':crate',
     }
   }
 
@@ -21,8 +19,7 @@ module.exports = class CratesVersion extends BaseCratesService {
     return [
       {
         title: 'Crates.io',
-        pattern: ':crate',
-        exampleUrl: 'rustc-serialize',
+        namedParams: { crate: 'rustc-serialize' },
         staticExample: this.render({ version: '0.3.24' }),
         keywords,
       },
@@ -30,10 +27,7 @@ module.exports = class CratesVersion extends BaseCratesService {
   }
 
   static render({ version }) {
-    return {
-      message: versionText(version),
-      color: versionColor(version),
-    }
+    return renderVersionBadge({ version })
   }
 
   async handle({ crate }) {
