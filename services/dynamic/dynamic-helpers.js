@@ -27,7 +27,7 @@ const errorMessages = {
 function renderDynamicBadge({ values, prefix = '', suffix = '' }) {
   return {
     message: `${prefix}${values.join(', ')}${suffix}`,
-    color: 'lightgreen',
+    color: 'brightgreen',
   }
 }
 
