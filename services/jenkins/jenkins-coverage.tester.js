@@ -1,5 +1,7 @@
 'use strict'
 
+const Joi = require('joi')
+const { isIntegerPercentage } = require('../test-validators')
 const ServiceTester = require('../service-tester')
 
 const t = new ServiceTester({
@@ -168,3 +170,9 @@ t.create('cobertura: invalid data response (missing line coverage)')
 t.create('cobertura: job not found')
   .get('/c/https/updates.jenkins-ci.org/job/does-not-exist.json')
   .expectJSON({ name: 'coverage', value: 'job or coverage not found' })
+
+t.create('cobertura: job found')
+  .get('/c/https/builds.apache.org/job/olingo-odata4-cobertura.json')
+  .expectJSONTypes(
+    Joi.object().keys({ name: 'coverage', value: isIntegerPercentage })
+  )
