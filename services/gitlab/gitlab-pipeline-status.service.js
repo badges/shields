@@ -1,9 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const validate = require('../../lib/validate')
 const BaseSvgScrapingService = require('../base-svg-scraping')
-const { InvalidParameter, NotFound } = require('../errors')
+const { optionalUrl } = require('../validators')
+const { NotFound } = require('../errors')
 const { isPipelineStatus } = require('./gitlab-helpers')
 
 const badgeSchema = Joi.object({
@@ -12,10 +12,8 @@ const badgeSchema = Joi.object({
     .required(),
 }).required()
 
-const queryParamsSchema = Joi.object({
-  // TODO This accepts URLs with query strings and fragments, which should be
-  // rejected.
-  gitlab_url: Joi.string().uri({ scheme: ['https'] }),
+const queryParamSchema = Joi.object({
+  gitlab_url: optionalUrl,
 }).required()
 
 module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
@@ -63,19 +61,6 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
     ]
   }
 
-  static validateQueryParams(queryParams) {
-    return validate(
-      {
-        ErrorClass: InvalidParameter,
-        prettyErrorMessage: 'invalid query parameter',
-        traceErrorMessage: 'Query params did not match schema',
-        traceSuccessMessage: 'Query params after validation',
-      },
-      queryParams,
-      queryParamsSchema
-    )
-  }
-
   static render({ status }) {
     const color = {
       pending: 'yellow',
@@ -95,7 +80,7 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
   async handle({ user, repo, branch = 'master' }, queryParams) {
     const {
       gitlab_url: baseUrl = 'https://gitlab.com',
-    } = this.constructor.validateQueryParams(queryParams)
+    } = this.constructor._validateQueryParams(queryParams, queryParamSchema)
     const { message: status } = await this._requestSvg({
       schema: badgeSchema,
       url: `${baseUrl}/${user}/${repo}/badges/${branch}/pipeline.svg`,
