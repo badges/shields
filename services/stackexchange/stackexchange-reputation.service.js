@@ -20,7 +20,7 @@ const reputationSchema = Joi.object({
 
 module.exports = class StackExchangeReputation extends BaseJsonService {
   static get category() {
-    return 'rating'
+    return 'chat'
   }
 
   static get route() {

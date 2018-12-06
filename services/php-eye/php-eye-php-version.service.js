@@ -10,7 +10,7 @@ const log = require('../../lib/log')
 
 module.exports = class PhpEyePhpVersion extends LegacyService {
   static get category() {
-    return 'version'
+    return 'platform-support'
   }
 
   static get route() {

@@ -10,7 +10,7 @@ const { documentation } = require('./github-helpers')
 
 module.exports = class GithubCommitsSince extends LegacyService {
   static get category() {
-    return 'version'
+    return 'activity'
   }
 
   static get route() {

@@ -286,7 +286,7 @@ const t = require('../create-service-tester')()
 
 This may require updating the URLs, which will be relative to the service's base
 URL. When using `createServiceTester`, services need to be specified using
-the non-case-sensitive service class name, or a trailing substring (e.g.
+the non-case-sensitive service class name, or a leading substring (e.g.
 `AppveyorTests` or `appveyor`).
 
 Do this last. Since it involves changing test URLs, and you don't want to
