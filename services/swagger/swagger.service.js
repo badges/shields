@@ -62,6 +62,7 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
     return [
       {
         title: 'Swagger Validator',
+        pattern: ':scheme/:url',
         staticExample: this.render({ message: 'valid', clr: 'brightgreen' }),
         namedParams: {
           scheme: 'https',
