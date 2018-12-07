@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import StaticBadgeMaker from './static-badge-maker'
 import DynamicBadgeMaker from './dynamic-badge-maker'
@@ -127,6 +128,20 @@ export default class Usage extends React.PureComponent {
         </table>
 
         {this.renderColorExamples()}
+
+        <h3 id="static-badge">Endpoint</h3>
+
+        <p>
+          Create badges from{' '}
+          <Link to={'/endpoint'}>your own JSON endpoint</Link>
+        </p>
+
+        <p>
+          <code>
+            {baseUrl}
+            /badge/endpoint.svg?url=&lt;URL&gt;&amp;style=&lt;STYLE&gt;
+          </code>
+        </p>
 
         <h3 id="dynamic-badge">Dynamic</h3>
 
