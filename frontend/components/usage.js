@@ -129,7 +129,7 @@ export default class Usage extends React.PureComponent {
 
         {this.renderColorExamples()}
 
-        <h3 id="static-badge">Endpoint</h3>
+        <h3 id="endpoint">Endpoint</h3>
 
         <p>
           Create badges from{' '}
