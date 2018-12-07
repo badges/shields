@@ -346,12 +346,63 @@ describe('BaseService', function() {
         expect(badgeData.text).to.deep.equal(['purr count', 'n/a'])
       })
 
-      it('overrides the color', function() {
+      it('overrides the colorA', function() {
+        const badgeData = DummyService._makeBadgeData(
+          { colorA: '42f483' },
+          { color: 'green' }
+        )
+        expect(badgeData.colorA).to.equal('#42f483')
+      })
+
+      it('overrides the colorB', function() {
         const badgeData = DummyService._makeBadgeData(
           { colorB: '10ADED' },
           { color: 'red' }
         )
         expect(badgeData.colorB).to.equal('#10ADED')
+      })
+
+      it('overrides the logo', function() {
+        const expLogo =
+          'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMTIgMTIgNDAgNDAiPgo8cGF0aCBmaWxsPSIjMzMzMzMzIiBkPSJNMzIsMTMuNGMtMTAuNSwwLTE5LDguNS0xOSwxOWMwLDguNCw1LjUsMTUuNSwxMywxOGMxLDAuMiwxLjMtMC40LDEuMy0wLjljMC0wLjUsMC0xLjcsMC0zLjIgYy01LjMsMS4xLTYuNC0yLjYtNi40LTIuNkMyMCw0MS42LDE4LjgsNDEsMTguOCw0MWMtMS43LTEuMiwwLjEtMS4xLDAuMS0xLjFjMS45LDAuMSwyLjksMiwyLjksMmMxLjcsMi45LDQuNSwyLjEsNS41LDEuNiBjMC4yLTEuMiwwLjctMi4xLDEuMi0yLjZjLTQuMi0wLjUtOC43LTIuMS04LjctOS40YzAtMi4xLDAuNy0zLjcsMi01LjFjLTAuMi0wLjUtMC44LTIuNCwwLjItNWMwLDAsMS42LTAuNSw1LjIsMiBjMS41LTAuNCwzLjEtMC43LDQuOC0wLjdjMS42LDAsMy4zLDAuMiw0LjcsMC43YzMuNi0yLjQsNS4yLTIsNS4yLTJjMSwyLjYsMC40LDQuNiwwLjIsNWMxLjIsMS4zLDIsMywyLDUuMWMwLDcuMy00LjUsOC45LTguNyw5LjQgYzAuNywwLjYsMS4zLDEuNywxLjMsMy41YzAsMi42LDAsNC42LDAsNS4yYzAsMC41LDAuNCwxLjEsMS4zLDAuOWM3LjUtMi42LDEzLTkuNywxMy0xOC4xQzUxLDIxLjksNDIuNSwxMy40LDMyLDEzLjR6Ii8+Cjwvc3ZnPgo='
+        const badgeData = DummyService._makeBadgeData(
+          { logo: 'github', style: 'social' },
+          {}
+        )
+        expect(badgeData.logo).to.equal(expLogo)
+      })
+
+      it('overrides the logo with color', function() {
+        const expLogo =
+          'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMTIgMTIgNDAgNDAiPgo8cGF0aCBmaWxsPSIjMDA3ZWM2IiBkPSJNMzIsMTMuNGMtMTAuNSwwLTE5LDguNS0xOSwxOWMwLDguNCw1LjUsMTUuNSwxMywxOGMxLDAuMiwxLjMtMC40LDEuMy0wLjljMC0wLjUsMC0xLjcsMC0zLjIgYy01LjMsMS4xLTYuNC0yLjYtNi40LTIuNkMyMCw0MS42LDE4LjgsNDEsMTguOCw0MWMtMS43LTEuMiwwLjEtMS4xLDAuMS0xLjFjMS45LDAuMSwyLjksMiwyLjksMmMxLjcsMi45LDQuNSwyLjEsNS41LDEuNiBjMC4yLTEuMiwwLjctMi4xLDEuMi0yLjZjLTQuMi0wLjUtOC43LTIuMS04LjctOS40YzAtMi4xLDAuNy0zLjcsMi01LjFjLTAuMi0wLjUtMC44LTIuNCwwLjItNWMwLDAsMS42LTAuNSw1LjIsMiBjMS41LTAuNCwzLjEtMC43LDQuOC0wLjdjMS42LDAsMy4zLDAuMiw0LjcsMC43YzMuNi0yLjQsNS4yLTIsNS4yLTJjMSwyLjYsMC40LDQuNiwwLjIsNWMxLjIsMS4zLDIsMywyLDUuMWMwLDcuMy00LjUsOC45LTguNyw5LjQgYzAuNywwLjYsMS4zLDEuNywxLjMsMy41YzAsMi42LDAsNC42LDAsNS4yYzAsMC41LDAuNCwxLjEsMS4zLDAuOWM3LjUtMi42LDEzLTkuNywxMy0xOC4xQzUxLDIxLjksNDIuNSwxMy40LDMyLDEzLjR6Ii8+Cjwvc3ZnPgo='
+        const badgeData = DummyService._makeBadgeData(
+          { logo: 'github', logoColor: 'blue' },
+          {}
+        )
+        expect(badgeData.logo).to.equal(expLogo)
+      })
+
+      it('overrides the logoWidth', function() {
+        const badgeData = DummyService._makeBadgeData({ logoWidth: 20 }, {})
+        expect(badgeData.logoWidth).to.equal(20)
+      })
+
+      it('overrides the links', function() {
+        const badgeData = DummyService._makeBadgeData(
+          { link: 'https://circleci.com/gh/badges/daily-tests' },
+          {
+            link:
+              'https://circleci.com/workflow-run/184ef3de-4836-4805-a2e4-0ceba099f92d',
+          }
+        )
+        expect(badgeData.links).to.deep.equal([
+          'https://circleci.com/gh/badges/daily-tests',
+        ])
+      })
+
+      it('overrides the template', function() {
+        const badgeData = DummyService._makeBadgeData({ style: 'pill' }, {})
+        expect(badgeData.template).to.equal('pill')
       })
     })
 
