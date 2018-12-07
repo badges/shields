@@ -50,7 +50,7 @@ module.exports = class FDroid extends BaseService {
       ...options,
     })
 
-    // we assume the yaml structure as provided here:
+    // we assume the yaml layout as provided here:
     // https://gitlab.com/fdroid/fdroiddata/raw/master/metadata/org.dystopia.email.yml
     try {
       const { CurrentVersion: version } = yaml.safeLoad(
@@ -75,7 +75,7 @@ module.exports = class FDroid extends BaseService {
       ...options,
     })
     const metadata = buffer.toString()
-    // we assume the txt structure as provided here:
+    // we assume the layout as provided here:
     // https://gitlab.com/fdroid/fdroiddata/raw/master/metadata/axp.tool.apkextractor.txt
     const value = (metadata.match(/CurrentVersion:|Current Version:/) || [
       'Current Version:',
