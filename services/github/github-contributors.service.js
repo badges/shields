@@ -26,7 +26,16 @@ module.exports = class GithubContributors extends LegacyService {
     return [
       {
         title: 'GitHub contributors',
-        previewUrl: 'contributors/cdnjs/cdnjs',
+        pattern: 'contributors/:user/:repo',
+        namedParams: {
+          user: 'cdnjs',
+          repo: 'cdnjs',
+        },
+        staticPreview: {
+          label: 'contributors',
+          message: '397',
+          color: 'blue',
+        },
         keywords: ['GitHub', 'contributor'],
         documentation,
       },

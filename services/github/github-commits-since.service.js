@@ -8,6 +8,8 @@ const {
 } = require('../../lib/badge-data')
 const { documentation } = require('./github-helpers')
 
+const keywords = ['GitHub', 'commit']
+
 module.exports = class GithubCommitsSince extends LegacyService {
   static get category() {
     return 'activity'
@@ -16,6 +18,7 @@ module.exports = class GithubCommitsSince extends LegacyService {
   static get route() {
     return {
       base: 'github/commits-since',
+      pattern: ':user/:repo/:version',
     }
   }
 
@@ -23,14 +26,32 @@ module.exports = class GithubCommitsSince extends LegacyService {
     return [
       {
         title: 'GitHub commits',
-        previewUrl: 'SubtitleEdit/subtitleedit/3.4.7',
-        keywords: ['GitHub', 'commit'],
+        namedParams: {
+          user: 'SubtitleEdit',
+          repo: 'subtitleedit',
+          version: '3.4.7',
+        },
+        staticPreview: {
+          label: 'commits since 3.4.7',
+          message: '4225',
+          color: 'blue',
+        },
+        keywords,
         documentation,
       },
       {
         title: 'GitHub commits (since latest release)',
-        previewUrl: 'SubtitleEdit/subtitleedit/latest',
-        keywords: ['GitHub', 'commit'],
+        namedParams: {
+          user: 'SubtitleEdit',
+          repo: 'subtitleedit',
+          version: 'latest',
+        },
+        staticPreview: {
+          label: 'commits since 3.5.7',
+          message: '157',
+          color: 'blue',
+        },
+        keywords,
         documentation,
       },
     ]

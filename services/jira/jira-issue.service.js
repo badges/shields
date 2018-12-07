@@ -19,7 +19,17 @@ module.exports = class JiraIssue extends LegacyService {
     return [
       {
         title: 'JIRA issue',
-        previewUrl: 'https/issues.apache.org/jira/KAFKA-2896',
+        pattern: ':protocol/:hostAndPath*/:issueKey',
+        namedParams: {
+          protocol: 'https',
+          hostAndPath: 'issues.apache.org/jira',
+          issueKey: 'KAFKA-2896',
+        },
+        staticPreview: {
+          label: 'kafka-2896',
+          message: 'Resolved',
+          color: 'green',
+        },
       },
     ]
   }

@@ -20,11 +20,29 @@ module.exports = class PhpeyeHhvm extends LegacyService {
     return [
       {
         title: 'HHVM',
-        previewUrl: 'symfony/symfony',
+        pattern: ':user/:packageName',
+        namedParams: { user: 'symfony', packageName: 'symfony' },
+        staticPreview: {
+          label: 'hhvm',
+          message: 'not tested',
+          color: 'red',
+        },
+        keywords: ['php', 'runtime'],
       },
       {
         title: 'HHVM (branch)',
-        previewUrl: 'symfony/symfony/master',
+        pattern: ':user/:packageName/:branch',
+        namedParams: {
+          user: 'symfony',
+          packageName: 'symfony',
+          branch: 'master',
+        },
+        staticPreview: {
+          label: 'hhvm',
+          message: 'not tested',
+          color: 'red',
+        },
+        keywords: ['php', 'runtime'],
       },
     ]
   }

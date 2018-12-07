@@ -25,7 +25,15 @@ module.exports = class GithubFollowers extends LegacyService {
     return [
       {
         title: 'GitHub followers',
-        previewUrl: 'espadrine',
+        pattern: ':user',
+        namedParams: {
+          user: 'espadrine',
+        },
+        staticPreview: {
+          label: 'Follow',
+          message: '150',
+          // style: 'social',
+        },
         queryParams: { style: 'social', label: 'Follow' },
         documentation,
       },
