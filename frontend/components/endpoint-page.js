@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import Meta from './meta'
 import Header from './header'
 import Footer from './footer'
@@ -16,7 +15,7 @@ const example = JSON.stringify(
   2
 )
 
-const EndpointPage = ({ baseUrl }) => (
+const EndpointPage = () => (
   <div>
     <Meta />
     <Header />
