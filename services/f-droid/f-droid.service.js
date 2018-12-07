@@ -131,10 +131,10 @@ module.exports = class FDroid extends BaseService {
       },
       {
         title: 'F-Droid (explicit metadata format)',
-        exampleUrl: 'org.thosp.yourlocalweather',
+        exampleUrl: 'org.dystopia.email',
         pattern: ':appId',
         queryParams: { metadata_format: 'yml' },
-        staticExample: this.render({ version: '1.0' }),
+        staticExample: this.render({ version: '1.2.1' }),
         keywords: ['fdroid', 'android', 'app'],
       },
     ]
