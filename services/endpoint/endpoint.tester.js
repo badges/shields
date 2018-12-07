@@ -4,7 +4,6 @@ const t = (module.exports = require('../create-service-tester')())
 
 t.create('Valid schema (mocked)')
   .get('.json?url=https://example.com/badge')
-  .only()
   .intercept(nock =>
     nock('https://example.com/')
       .get('/badge')
