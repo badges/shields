@@ -190,7 +190,7 @@ t.create('Package is not found due invalid metadata format')
   .get('/v/axp.tool.apkextractor.json?metadata_format=xml')
   .expectJSON({
     name: 'f-droid',
-    value: 'invalid parameter, valid metadata_format=yml or txt',
+    value: 'invalid query parameter: metadata_format',
   })
 
 /* If this test fails, either the API has changed or the app was deleted. */

@@ -3,10 +3,9 @@
 const Joi = require('joi')
 const yaml = require('js-yaml')
 const BaseService = require('../base')
-const validate = require('../../lib/validate')
 const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
-const { InvalidResponse, InvalidParameter } = require('../errors')
+const { InvalidResponse } = require('../errors')
 
 module.exports = class FDroid extends BaseService {
   static render({ version }) {
@@ -101,17 +100,7 @@ module.exports = class FDroid extends BaseService {
       metadata_format: Joi.string().valid(['yml', 'txt']),
     }).required()
 
-    return validate(
-      {
-        ErrorClass: InvalidParameter,
-        prettyErrorMessage:
-          'invalid parameter, valid metadata_format=yml or txt',
-        traceErrorMessage: 'Query params did not match schema',
-        traceSuccessMessage: 'Query params after validation',
-      },
-      queryParams,
-      queryParamsSchema
-    )
+    return this._validateQueryParams(queryParams, queryParamsSchema)
   }
 
   // Metadata
