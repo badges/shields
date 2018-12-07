@@ -77,15 +77,14 @@ module.exports = class FDroid extends BaseService {
     const metadata = buffer.toString()
     // we assume the layout as provided here:
     // https://gitlab.com/fdroid/fdroiddata/raw/master/metadata/axp.tool.apkextractor.txt
-    const value = (metadata.match(/CurrentVersion:|Current Version:/) || [
-      'Current Version:',
-    ])[0]
-    const positionOfCurrentVersionAtEndOfTheFile = metadata.lastIndexOf(value) // credits: https://stackoverflow.com/a/11134049
+    const positionOfCurrentVersionAtEndOfTheFile = metadata.lastIndexOf(
+      'Current Version:'
+    ) // credits: https://stackoverflow.com/a/11134049
     const lastVersion = metadata.substring(
       positionOfCurrentVersionAtEndOfTheFile
     )
 
-    const match = lastVersion.match(new RegExp(`^${value}\\s*(.*?)\\s*$`, 'm'))
+    const match = lastVersion.match(/^Current Version:\s*(.*?)\s*$/m)
     if (!match) {
       throw new InvalidResponse({
         prettyMessage: 'invalid response',
