@@ -105,6 +105,7 @@ loadServiceClasses().forEach(serviceClass =>
     { camp, handleRequest: cache, githubApiProvider },
     {
       handleInternalErrors: config.handleInternalErrors,
+      cacheHeaders: config.cacheHeaders,
       profiling: config.profiling,
     }
   )
@@ -112,8 +113,8 @@ loadServiceClasses().forEach(serviceClass =>
 
 // User defined sources - JSON response
 camp.route(
-  /^\/badge\/dynamic\/(json|xml|yaml)\.(svg|png|gif|jpg|json)$/,
-  cache({
+  /^\/badge\/dynamic\/(xml|yaml)\.(svg|png|gif|jpg|json)$/,
+  cache(config.cacheHeaders, {
     queryParams: ['uri', 'url', 'query', 'prefix', 'suffix'],
     handler: function(query, match, sendBadge, request) {
       const type = match[1]
@@ -145,14 +146,6 @@ camp.route(
       }
 
       switch (type) {
-        case 'json':
-          requestOptions = {
-            headers: {
-              Accept: 'application/json',
-            },
-            json: true,
-          }
-          break
         case 'xml':
           requestOptions = {
             headers: {
@@ -184,14 +177,6 @@ camp.route(
 
           let innerText = []
           switch (type) {
-            case 'json':
-              data = typeof data === 'object' ? data : JSON.parse(data)
-              data = jp.query(data, pathExpression)
-              if (!data.length) {
-                throw Error('no result')
-              }
-              innerText = data
-              break
             case 'xml':
               data = new DOMParser().parseFromString(data)
               data = xpath.select(pathExpression, data)
@@ -225,22 +210,6 @@ camp.route(
     },
   })
 )
-
-// Production cache debugging.
-let bitFlip = false
-camp.route(/^\/flip\.svg$/, (data, match, end, ask) => {
-  const cacheSecs = 60
-  ask.res.setHeader('Cache-Control', `max-age=${cacheSecs}`)
-  const reqTime = new Date()
-  const date = new Date(+reqTime + cacheSecs * 1000).toGMTString()
-  ask.res.setHeader('Expires', date)
-  const badgeData = getBadgeData('flip', data)
-  bitFlip = !bitFlip
-  badgeData.text[1] = bitFlip ? 'on' : 'off'
-  badgeData.colorscheme = bitFlip ? 'brightgreen' : 'red'
-  const svg = makeBadge(badgeData)
-  makeSend('svg', ask.res, end)(svg)
-})
 
 // Any badge, old version. This route must be registered last.
 camp.route(/^\/([^/]+)\/(.+).png$/, (queryParams, match, end, ask) => {

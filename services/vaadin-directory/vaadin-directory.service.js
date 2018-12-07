@@ -27,17 +27,35 @@ class VaadinDirectoryRating extends LegacyService {
     return [
       {
         title: 'Vaadin Directory',
-        previewUrl: 'rating/vaadinvaadin-grid',
+        pattern: 'rating/:packageName',
+        namedParams: { packageName: 'vaadinvaadin-grid' },
+        staticPreview: {
+          label: 'rating',
+          message: '5.0/5',
+          color: 'brightgreen',
+        },
         keywords: ['vaadin-directory', 'vaadin directory', 'rating'],
       },
       {
         title: 'Vaadin Directory',
-        previewUrl: 'stars/vaadinvaadin-grid',
+        pattern: 'stars/:packageName',
+        namedParams: { packageName: 'vaadinvaadin-grid' },
+        staticPreview: {
+          label: 'stars',
+          message: starRating(4.75),
+          color: 'brightgreen',
+        },
         keywords: ['vaadin-directory', 'vaadin directory', 'star', 'stars'],
       },
       {
         title: 'Vaadin Directory',
-        previewUrl: 'rating-count/vaadinvaadin-grid',
+        pattern: 'rating-count/:packageName',
+        namedParams: { packageName: 'vaadinvaadin-grid' },
+        staticPreview: {
+          label: 'rating count',
+          message: '6 total',
+          color: 'yellow',
+        },
         keywords: [
           'vaadin-directory',
           'vaadin directory',
@@ -59,6 +77,7 @@ class VaadinDirectoryVersion extends LegacyService {
   static get route() {
     return {
       base: 'vaadin-directory/v',
+      pattern: ':packageName',
     }
   }
 
@@ -66,7 +85,12 @@ class VaadinDirectoryVersion extends LegacyService {
     return [
       {
         title: 'Vaadin Directory',
-        previewUrl: 'vaadinvaadin-grid',
+        namedParams: { packageName: 'vaadinvaadin-grid' },
+        staticPreview: {
+          label: 'latest ver',
+          message: 'v5.3.0-alpha4',
+          color: '00b4f0',
+        },
         keywords: [
           'vaadin-directory',
           'vaadin directory',
@@ -88,6 +112,7 @@ class VaadinDirectoryStatus extends LegacyService {
   static get route() {
     return {
       base: 'vaadin-directory/status',
+      pattern: ':packageName',
     }
   }
 
@@ -95,7 +120,12 @@ class VaadinDirectoryStatus extends LegacyService {
     return [
       {
         title: 'Vaadin Directory',
-        previewUrl: 'vaadinvaadin-grid',
+        namedParams: { packageName: 'vaadinvaadin-grid' },
+        staticPreview: {
+          label: 'vaadin directory',
+          message: 'published',
+          color: '00b4f0',
+        },
         keywords: ['vaadin-directory', 'vaadin directory', 'status'],
       },
     ]
@@ -106,12 +136,13 @@ class VaadinDirectoryStatus extends LegacyService {
 
 class VaadinDirectoryReleaseDate extends LegacyService {
   static get category() {
-    return 'other'
+    return 'activity'
   }
 
   static get route() {
     return {
       base: 'vaadin-directory/release-date',
+      pattern: ':packageName',
     }
   }
 
@@ -119,7 +150,12 @@ class VaadinDirectoryReleaseDate extends LegacyService {
     return [
       {
         title: 'Vaadin Directory',
-        previewUrl: 'vaadinvaadin-grid',
+        namedParams: { packageName: 'vaadinvaadin-grid' },
+        staticPreview: {
+          label: 'latest release date',
+          message: 'last wednesday',
+          color: 'brightgreen',
+        },
         keywords: [
           'vaadin-directory',
           'vaadin directory',

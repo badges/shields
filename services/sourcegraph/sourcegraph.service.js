@@ -40,7 +40,7 @@ module.exports = class Sourcegraph extends LegacyService {
           try {
             badgeData.colorscheme = 'brightgreen'
             const data = JSON.parse(buffer)
-            badgeData.text[1] = data.value
+            badgeData.text[1] = data.value.trim() // The value generally comes with a leading space.
             sendBadge(format, badgeData)
           } catch (e) {
             badgeData.text[1] = 'invalid'

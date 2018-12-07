@@ -4,12 +4,14 @@ module.exports = function validateExample(
   {
     title,
     query,
+    queryParams,
     namedParams,
     exampleUrl,
     previewUrl,
     pattern,
     urlPattern,
     staticExample,
+    staticPreview,
     documentation,
     keywords,
   },
@@ -17,6 +19,8 @@ module.exports = function validateExample(
   ServiceClass
 ) {
   pattern = pattern || urlPattern || ServiceClass.route.pattern
+  staticExample = staticExample || staticPreview
+  query = query || queryParams
 
   if (staticExample) {
     if (!pattern) {

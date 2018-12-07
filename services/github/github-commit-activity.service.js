@@ -13,7 +13,7 @@ const {
 
 module.exports = class GithubCommitActivity extends LegacyService {
   static get category() {
-    return 'version'
+    return 'activity'
   }
 
   static get route() {

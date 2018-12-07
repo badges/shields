@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { floorCount: floorCountColor } = require('../../lib/color-formatters')
-const { addv: versionText } = require('../../lib/text-formatters')
+const { addv, metric } = require('../../lib/text-formatters')
 const BaseJsonService = require('../base-json')
 const { NotFound } = require('../errors')
 const { nonNegativeInteger } = require('../validators')
@@ -23,10 +23,11 @@ const aurSchema = Joi.object({
 }).required()
 
 class BaseAurService extends BaseJsonService {
-  async fetch({ pkg }) {
+  async fetch({ packageName }) {
     return this._requestJson({
       schema: aurSchema,
-      url: `https://aur.archlinux.org/rpc.php?type=info&arg=${pkg}`,
+      url: 'https://aur.archlinux.org/rpc.php',
+      options: { qs: { type: 'info', arg: packageName } },
     })
   }
 
@@ -39,7 +40,7 @@ class BaseAurService extends BaseJsonService {
       // Note the 'not found' response from Arch Linux is:
       // status code = 200,
       // body = {"version":1,"type":"info","resultcount":0,"results":[]}
-      throw new NotFound()
+      throw new NotFound({ prettyMessage: 'package not found' })
     }
     return super._validate(data, schema)
   }
@@ -50,8 +51,8 @@ class AurLicense extends BaseAurService {
     return { message: license, color: 'blue' }
   }
 
-  async handle({ pkg }) {
-    const json = await this.fetch({ pkg })
+  async handle({ packageName }) {
+    const json = await this.fetch({ packageName })
     return this.constructor.render({ license: json.results.License })
   }
 
@@ -66,17 +67,15 @@ class AurLicense extends BaseAurService {
   static get route() {
     return {
       base: 'aur/license',
-      format: '(.+)',
-      capture: ['pkg'],
+      pattern: ':packageName',
     }
   }
 
   static get examples() {
     return [
       {
-        title: `AUR license`,
-        pattern: ':package',
-        exampleUrl: 'yaourt',
+        title: 'AUR license',
+        namedParams: { packageName: 'yaourt' },
         staticExample: this.render({ license: 'GPL' }),
       },
     ]
@@ -86,13 +85,13 @@ class AurLicense extends BaseAurService {
 class AurVotes extends BaseAurService {
   static render({ votes }) {
     return {
-      message: votes,
+      message: metric(votes),
       color: floorCountColor(votes, 2, 20, 60),
     }
   }
 
-  async handle({ pkg }) {
-    const json = await this.fetch({ pkg })
+  async handle({ packageName }) {
+    const json = await this.fetch({ packageName })
     return this.constructor.render({ votes: json.results.NumVotes })
   }
 
@@ -107,18 +106,16 @@ class AurVotes extends BaseAurService {
   static get route() {
     return {
       base: 'aur/votes',
-      format: '(.+)',
-      capture: ['pkg'],
+      pattern: ':packageName',
     }
   }
 
   static get examples() {
     return [
       {
-        title: `AUR votes`,
-        pattern: ':package',
-        exampleUrl: 'yaourt',
-        staticExample: this.render({ license: '3029' }),
+        title: 'AUR votes',
+        namedParams: { packageName: 'yaourt' },
+        staticExample: this.render({ votes: '3029' }),
       },
     ]
   }
@@ -127,11 +124,11 @@ class AurVotes extends BaseAurService {
 class AurVersion extends BaseAurService {
   static render({ version, outOfDate }) {
     const color = outOfDate === null ? 'blue' : 'orange'
-    return { message: versionText(version), color }
+    return { message: addv(version), color }
   }
 
-  async handle({ pkg }) {
-    const json = await this.fetch({ pkg })
+  async handle({ packageName }) {
+    const json = await this.fetch({ packageName })
     return this.constructor.render({
       version: json.results.Version,
       outOfDate: json.results.OutOfDate,
@@ -145,17 +142,15 @@ class AurVersion extends BaseAurService {
   static get route() {
     return {
       base: 'aur/version',
-      format: '(.+)',
-      capture: ['pkg'],
+      pattern: ':packageName',
     }
   }
 
   static get examples() {
     return [
       {
-        title: `AUR version`,
-        pattern: ':package',
-        exampleUrl: 'yaourt',
+        title: 'AUR version',
+        namedParams: { packageName: 'yaourt' },
         staticExample: this.render({ version: 'v1.9-1', outOfDate: null }),
       },
     ]
