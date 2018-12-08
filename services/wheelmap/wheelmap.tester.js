@@ -1,7 +1,5 @@
 'use strict'
 
-const Joi = require('joi')
-const ServiceTester = require('../service-tester')
 const { colorScheme } = require('../test-helpers')
 const serverSecrets = require('../../lib/server-secrets')
 
