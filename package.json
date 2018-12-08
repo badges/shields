@@ -140,7 +140,7 @@
     "got": "^9.2.2",
     "husky": "^1.2.0",
     "icedfrisby": "2.0.0-alpha.2",
-    "icedfrisby-nock": "^1.0.0",
+    "icedfrisby-nock": "^1.1.0",
     "is-png": "^1.1.0",
     "is-svg": "^3.0.0",
     "joi-extension-semver": "2.0.0",
