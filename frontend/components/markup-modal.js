@@ -28,16 +28,15 @@ export default class MarkupModal extends React.Component {
   }
 
   static urlsForProps(props) {
-    const { example, baseUrl } = props
+    const {
+      example: { example },
+      baseUrl,
+    } = props
 
-    if (!example) {
-      return {}
-    }
-
-    // There are two alternatives for `example`. Refer to the schema in
-    // `services/service-definitions.js`.
     let badgeUrl
     let exampleUrl
+    // There are two alternatives for `example`. Refer to the schema in
+    // `services/service-definitions.js`.
     if (example.pattern !== undefined) {
       const { pattern, namedParams, queryParams } = example
       badgeUrl = badgeUrlFromPath({
@@ -63,23 +62,23 @@ export default class MarkupModal extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const {
-      badgeUrl: badgeUrlForProps = '',
-      exampleUrl: exampleUrlForProps = '',
-    } = MarkupModal.urlsForProps(props)
-
-    const { badgeUrlForProps: prevBadgeUrlForProps } = state
-
-    if (badgeUrlForProps === prevBadgeUrlForProps) {
-      return null
+    let urlsForProps, link
+    if (props.example) {
+      urlsForProps = MarkupModal.urlsForProps(props)
+      link = props.example.example.link
+    } else {
+      urlsForProps = { badgeUrl: '', exampleUrl: '' }
+      link = ''
     }
 
-    const { example: { link = '' } = {} } = props
-    return {
-      badgeUrl: badgeUrlForProps,
-      exampleUrl: exampleUrlForProps,
-      badgeUrlForProps,
-      link,
+    if (urlsForProps.badgeUrl === state.badgeUrlFromPath) {
+      return null
+    } else {
+      return {
+        ...urlsForProps,
+        badgeUrlForProps: urlsForProps.badgeUrl,
+        link,
+      }
     }
   }
 
@@ -108,8 +107,11 @@ export default class MarkupModal extends React.Component {
   }
 
   renderMarkup() {
+    console.log('props', this.props)
     const {
-      example: { title },
+      example: {
+        example: { title },
+      },
     } = this.props
     const { link } = this.state
 
@@ -168,6 +170,8 @@ export default class MarkupModal extends React.Component {
   }
 
   render() {
+    const { isOpen } = this
+    const { onRequestClose } = this.props
     const { link, badgeUrl, exampleUrl, style } = this.state
 
     const common = {
@@ -179,13 +183,13 @@ export default class MarkupModal extends React.Component {
 
     return (
       <Modal
-        isOpen={this.isOpen}
-        onRequestClose={this.props.onRequestClose}
+        isOpen={isOpen}
+        onRequestClose={onRequestClose}
         contentLabel="Example Modal"
         ariaHideApp={false}
       >
         <form action="">
-          <p>{this.isOpen && this.renderLivePreview()}</p>
+          <p>{isOpen && this.renderLivePreview()}</p>
           <p>
             <label>
               Link&nbsp;
@@ -237,8 +241,8 @@ export default class MarkupModal extends React.Component {
               </select>
             </label>
           </p>
-          {this.isOpen && this.renderMarkup()}
-          {this.isOpen && this.renderDocumentation()}
+          {isOpen && this.renderMarkup()}
+          {isOpen && this.renderDocumentation()}
         </form>
       </Modal>
     )

@@ -136,14 +136,14 @@ export default class Main extends React.Component {
   }
 
   render() {
-    const { selectedExample = {} } = this.state
+    const { selectedExample } = this.state
 
     return (
       <div id="app">
         <Meta />
         <Header />
         <MarkupModal
-          example={selectedExample.example}
+          example={selectedExample}
           onRequestClose={this.dismissMarkupModal}
           baseUrl={baseUrl}
           key={selectedExample}
