@@ -52,7 +52,7 @@ export default class Main extends React.Component {
       const flat = (searchResults = ServiceDefinitionSetHelper.create(services)
         .notDeprecated()
         .search(query)
-        .asNative())
+        .toArray())
       searchResults = groupBy(flat, 'category')
     }
 
@@ -122,7 +122,7 @@ export default class Main extends React.Component {
         getDefinitionsForCategory(categoryId)
       )
         .notDeprecated()
-        .asNative()
+        .toArray()
       return this.renderCategory(category, definitions)
     } else if (categoryId) {
       return (

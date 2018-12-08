@@ -41,7 +41,7 @@ export default class ServiceDefinitionSetHelper {
     )
   }
 
-  asNative() {
+  toArray() {
     return this.definitionData
   }
 }
