@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import fetchPonyfill from 'fetch-ponyfill'
 import debounce from 'lodash.debounce'
-import { Badge } from './badge-examples'
+import BadgeExamples from './badge-examples'
 import resolveUrl from '../lib/resolve-url'
 
 export default class SuggestionAndSearch extends React.Component {
@@ -51,7 +51,7 @@ export default class SuggestionAndSearch extends React.Component {
         const json = await res.json()
         // This doesn't validate the response. The default value here prevents
         // a crash if the server returns {"err":"Disallowed"}.
-        suggestions = json.badges || []
+        suggestions = json.suggestions || []
       } catch (e) {
         suggestions = []
       }
@@ -68,28 +68,24 @@ export default class SuggestionAndSearch extends React.Component {
       return null
     }
 
+    const transformed = [
+      {
+        examples: suggestions.map(({ title, path, link, queryParams }) => ({
+          title,
+          preview: { path, queryParams },
+          example: { path, queryParams },
+          link,
+        })),
+      },
+    ]
+
     return (
-      <table className="badge">
-        <tbody>
-          {suggestions.map(({ name, link, badge }, i) => (
-            // TODO We need to deal with `link`.
-            <Badge
-              key={i}
-              title={name}
-              previewUrl={badge}
-              onClick={() =>
-                this.props.onBadgeClick({
-                  title: name,
-                  previewUrl: badge,
-                  link,
-                })
-              }
-              baseUrl={baseUrl}
-              longCache={longCache}
-            />
-          ))}
-        </tbody>
-      </table>
+      <BadgeExamples
+        definitions={transformed}
+        baseUrl={baseUrl}
+        longCache={longCache}
+        onClick={this.props.onBadgeClick}
+      />
     )
   }
 
