@@ -1,9 +1,60 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const Joi = require('joi')
+const BaseJsonService = require('../base-json')
 
-module.exports = class Wheelmap extends LegacyService {
+const serverSecrets = require('../../lib/server-secrets')
+
+const wheelmapSchema = Joi.object({
+  node: Joi.object({
+    wheelchair: Joi.string().required(),
+  }).required(),
+}).required()
+
+module.exports = class Wheelmap extends BaseJsonService {
+  async fetch({ nodeId }) {
+    let options
+    if (serverSecrets.wheelmap_token) {
+      options = {
+        qs: {
+          api_key: `${serverSecrets.wheelmap_token}`,
+        },
+      }
+    }
+
+    return this._requestJson({
+      schema: wheelmapSchema,
+      url: `http://wheelmap.org/api/nodes/${nodeId}`,
+      options: options,
+      errorMessages: {
+        401: 'invalid token',
+        404: 'node not found',
+      },
+    })
+  }
+
+  static render({ accessibility }) {
+    let color
+    if (accessibility === 'yes') {
+      color = 'brightgreen'
+    } else if (accessibility === 'limited') {
+      color = 'yellow'
+    } else if (accessibility === 'no') {
+      color = 'red'
+    }
+    return { message: accessibility, color: color }
+  }
+
+  async handle({ nodeId }) {
+    const json = await this.fetch({ nodeId })
+    const accessibility = json.node.wheelchair
+    return this.constructor.render({ accessibility })
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'accessibility' }
+  }
+
   static get category() {
     return 'other'
   }
@@ -11,6 +62,8 @@ module.exports = class Wheelmap extends LegacyService {
   static get route() {
     return {
       base: 'wheelmap/a',
+      format: '(-?[0-9]+)',
+      capture: ['nodeId'],
     }
   }
 
@@ -18,42 +71,10 @@ module.exports = class Wheelmap extends LegacyService {
     return [
       {
         title: 'Wheelmap',
-        previewUrl: '2323004600',
+        exampleUrl: '26699541',
+        pattern: ':nodeId',
+        staticExample: this.render({ accessibility: 'yes' }),
       },
     ]
-  }
-
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/wheelmap\/a\/(.*)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const nodeId = match[1] // eg, `2323004600`.
-        const format = match[2]
-        const options = {
-          method: 'GET',
-          json: true,
-          uri: `http://wheelmap.org/nodes/${nodeId}.json`,
-        }
-        const badgeData = getBadgeData('wheelmap', data)
-        // eslint-disable-next-line handle-callback-err
-        request(options, (err, res, json) => {
-          try {
-            const accessibility = json.node.wheelchair
-            badgeData.text[1] = accessibility
-            if (accessibility === 'yes') {
-              badgeData.colorscheme = 'brightgreen'
-            } else if (accessibility === 'limited') {
-              badgeData.colorscheme = 'yellow'
-            } else if (accessibility === 'no') {
-              badgeData.colorscheme = 'red'
-            }
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'void'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
   }
 }
