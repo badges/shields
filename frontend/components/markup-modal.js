@@ -107,7 +107,6 @@ export default class MarkupModal extends React.Component {
   }
 
   renderMarkup() {
-    console.log('props', this.props)
     const {
       example: {
         example: { title },
