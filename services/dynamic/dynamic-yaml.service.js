@@ -54,7 +54,16 @@ module.exports = class DynamicYaml extends BaseService {
       suffix,
     } = this.constructor._validateQueryParams(queryParams, queryParamSchema)
 
-    const { buffer } = await this._request({ url, errorMessages })
+    const { buffer } = await this._request({
+      url,
+      options: {
+        headers: {
+          Accept:
+            'text/x-yaml, text/yaml, application/x-yaml, application/yaml, text/plain',
+        },
+      },
+      errorMessages,
+    })
 
     const data = this.parseYml(buffer)
 
