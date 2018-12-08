@@ -49,10 +49,10 @@ export default class Main extends React.Component {
 
     let searchResults
     if (query.length >= 2) {
-      const flat = (searchResults = ServiceDefinitionSetHelper.create(services)
+      const flat = ServiceDefinitionSetHelper.create(services)
         .notDeprecated()
         .search(query)
-        .toArray())
+        .toArray()
       searchResults = groupBy(flat, 'category')
     }
 
