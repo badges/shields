@@ -25,7 +25,7 @@ module.exports = class Wheelmap extends BaseJsonService {
     return this._requestJson({
       schema: wheelmapSchema,
       url: `http://wheelmap.org/api/nodes/${nodeId}`,
-      options: options,
+      options,
       errorMessages: {
         401: 'invalid token',
         404: 'node not found',
@@ -42,7 +42,7 @@ module.exports = class Wheelmap extends BaseJsonService {
     } else if (accessibility === 'no') {
       color = 'red'
     }
-    return { message: accessibility, color: color }
+    return { message: accessibility, color }
   }
 
   async handle({ nodeId }) {
