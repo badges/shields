@@ -228,9 +228,15 @@ workflows:
       - services:
           requires:
             - npm-install
+          filters:
+            branches:
+              ignore: master
       - services@node-latest:
           requires:
             - npm-install
+          filters:
+            branches:
+              ignore: master
       - danger:
           requires:
             - npm-install

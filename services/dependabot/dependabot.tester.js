@@ -6,8 +6,10 @@ const { isIntegerPercentage } = require('../test-validators')
 const { invalidJSON } = require('../response-fixtures')
 const { colorScheme: colorsB } = require('../test-helpers')
 
-const t = new ServiceTester({ id: 'dependabot', title: 'Dependabot' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'dependabot',
+  title: 'Dependabot',
+}))
 
 t.create('semver stability (valid)')
   .get('/semver/bundler/puma.json')

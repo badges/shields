@@ -2,11 +2,9 @@
 
 const { expect } = require('chai')
 const Joi = require('joi')
-const createServiceTester = require('../create-service-tester')
 const { Range } = require('semver')
 
-const t = createServiceTester()
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 function expectSemverRange(value) {
   expect(() => new Range(value)).not.to.throw()

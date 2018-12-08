@@ -2,8 +2,10 @@
 
 const ServiceTester = require('../service-tester')
 
-const t = new ServiceTester({ id: 'dockbit', title: 'Dockbit' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'dockbit',
+  title: 'Dockbit',
+}))
 
 t.create('no longer available (previously image size)')
   .get('/image-size/_/ubuntu/latest.json')

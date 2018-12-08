@@ -16,6 +16,7 @@ const categories = [
   { id: 'version', name: 'Version' },
   { id: 'platform-support', name: 'Platform & Version Support' },
   { id: 'monitoring', name: 'Monitoring' },
+  { id: 'activity', name: 'Activity' },
   { id: 'other', name: 'Other' },
 ]
 

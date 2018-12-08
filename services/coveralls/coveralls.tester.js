@@ -4,8 +4,10 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isIntegerPercentage } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'coveralls', title: 'Coveralls.io' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'coveralls',
+  title: 'Coveralls.io',
+}))
 
 t.create('error status code - location header is missing')
   .get('/github/not/existed.json')

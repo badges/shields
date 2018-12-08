@@ -59,8 +59,8 @@ module.exports = class UptimeRobotBase extends BaseJsonService {
     }
   }
 
-  async fetch({ monitorApiKey, numberOfDays }) {
-    this.constructor.ensureIsMonitorApiKey(monitorApiKey)
+  async fetch({ monitorSpecificKey, numberOfDays }) {
+    this.constructor.ensureIsMonitorApiKey(monitorSpecificKey)
 
     let opts, schema
     if (numberOfDays) {
@@ -80,7 +80,7 @@ module.exports = class UptimeRobotBase extends BaseJsonService {
           'content-type': 'application/x-www-form-urlencoded',
         },
         form: {
-          api_key: monitorApiKey,
+          api_key: monitorSpecificKey,
           format: 'json',
           ...opts,
         },

@@ -87,26 +87,36 @@ module.exports = class Wercker extends BaseJsonService {
     return [
       {
         title: `Wercker CI Run`,
-        exampleUrl: 'ci/559e33c8e982fc615500b357',
         pattern: 'ci/:applicationId',
+        namedParams: { applicationId: '559e33c8e982fc615500b357' },
         staticExample: this.render({ status: 'finished', result: 'passed' }),
       },
       {
         title: `Wercker CI Run`,
-        exampleUrl: 'ci/559e33c8e982fc615500b357/master',
         pattern: 'ci/:applicationId/:branch',
+        namedParams: {
+          applicationId: '559e33c8e982fc615500b357',
+          branch: 'master',
+        },
         staticExample: this.render({ status: 'finished', result: 'passed' }),
       },
       {
         title: `Wercker Build`,
-        exampleUrl: 'build/wercker/go-wercker-api',
         pattern: 'build/:userName/:applicationName',
+        namedParams: {
+          userName: 'wercker',
+          applicationName: 'go-wercker-api',
+        },
         staticExample: this.render({ status: 'finished', result: 'passed' }),
       },
       {
         title: `Wercker Build branch`,
-        exampleUrl: 'build/wercker/go-wercker-api/master',
         pattern: 'build/:userName/:applicationName/:branch',
+        namedParams: {
+          userName: 'wercker',
+          applicationName: 'go-wercker-api',
+          branch: 'master',
+        },
         staticExample: this.render({ status: 'finished', result: 'passed' }),
       },
     ]

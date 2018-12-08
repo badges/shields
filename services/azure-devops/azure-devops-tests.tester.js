@@ -1,8 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-const t = require('../create-service-tester')()
-module.exports = t
 
 const org = 'azuredevops-powershell'
 const project = 'azuredevops-powershell'
@@ -15,7 +13,8 @@ const mockBadgeUriPath = `${uriPrefix}/${definitionId}`
 const mockBadgeUri = `${mockBadgeUriPath}.json`
 const mockBranchBadgeUri = `${mockBadgeUriPath}/master.json`
 const mockLatestBuildApiUriPath = `/build/builds?definitions=${definitionId}&%24top=1&api-version=5.0-preview.4`
-const mockNonExistendBuildApiUriPath = `/build/builds?definitions=${nonExistentDefinitionId}&%24top=1&api-version=5.0-preview.4`
+const mockLatestBranchBuildApiUriPath = `/build/builds?definitions=${definitionId}&%24top=1&api-version=5.0-preview.4&branch=master`
+const mockNonExistentBuildApiUriPath = `/build/builds?definitions=${nonExistentDefinitionId}&%24top=1&api-version=5.0-preview.4`
 const mockTestResultSummaryApiUriPath = `/test/ResultSummaryByBuild?buildId=${buildId}`
 const latestBuildResponse = {
   count: 1,
@@ -27,6 +26,39 @@ const mockEmptyTestResultSummaryResponse = {
     resultsByOutcome: {},
   },
 }
+const mockTestResultSummaryResponse = {
+  aggregatedResultsAnalysis: {
+    totalTests: 3,
+    resultsByOutcome: {
+      Passed: {
+        count: 1,
+      },
+      Failed: {
+        count: 1,
+      },
+      Skipped: {
+        count: 1,
+      },
+    },
+  },
+}
+const mockTestResultSummarySetup = nock =>
+  nock(azureDevOpsApiBaseUri)
+    .get(mockLatestBuildApiUriPath)
+    .reply(200, latestBuildResponse)
+    .get(mockTestResultSummaryApiUriPath)
+    .reply(200, mockTestResultSummaryResponse)
+const mockBranchTestResultSummarySetup = nock =>
+  nock(azureDevOpsApiBaseUri)
+    .get(mockLatestBranchBuildApiUriPath)
+    .reply(200, latestBuildResponse)
+    .get(mockTestResultSummaryApiUriPath)
+    .reply(200, mockTestResultSummaryResponse)
+
+const expectedDefaultAzureDevOpsTestTotals = '1 passed, 1 failed, 1 skipped'
+const expectedCompactAzureDevOpsTestTotals = '✔ 1 | ✘ 1 | ➟ 1'
+const expectedCustomAzureDevOpsTestTotals = '1 good, 1 bad, 1 n/a'
+const expectedCompactCustomAzureDevOpsTestTotals = '💃 1 | 🤦‍♀️ 1 | 🤷 1'
 
 function getLabelRegex(label, isCompact) {
   return isCompact ? `(?:${label} [0-9]*)` : `(?:[0-9]* ${label})`
@@ -45,11 +77,12 @@ function isAzureDevOpsTestTotals(
   const regexStrings = [
     `^${passedRegex}$`,
     `^${failedRegex}$`,
-    `^${skippedRegex}`,
+    `^${skippedRegex}$`,
     `^${passedRegex}${separator}${failedRegex}$`,
     `^${failedRegex}${separator}${skippedRegex}$`,
     `^${passedRegex}${separator}${skippedRegex}$`,
-    `^${passedRegex}${separator}${failedRegex}${separator}${skippedLabel}$`,
+    `^${passedRegex}${separator}${failedRegex}${separator}${skippedRegex}$`,
+    `^no tests$`,
   ]
 
   return Joi.alternatives().try(
@@ -59,8 +92,8 @@ function isAzureDevOpsTestTotals(
 
 const isDefaultAzureDevOpsTestTotals = isAzureDevOpsTestTotals(
   'passed',
-  'skipped',
-  'failed'
+  'failed',
+  'skipped'
 )
 const isCompactAzureDevOpsTestTotals = isAzureDevOpsTestTotals(
   '✔',
@@ -79,6 +112,8 @@ const isCompactCustomAzureDevOpsTestTotals = isAzureDevOpsTestTotals(
   '🤷',
   true
 )
+
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('unknown build definition')
   .get(`${uriPrefix}/${nonExistentDefinitionId}.json`)
@@ -100,7 +135,7 @@ t.create('no build response')
   .get(`${uriPrefix}/${nonExistentDefinitionId}.json`)
   .intercept(nock =>
     nock(azureDevOpsApiBaseUri)
-      .get(mockNonExistendBuildApiUriPath)
+      .get(mockNonExistentBuildApiUriPath)
       .reply(200, {
         count: 0,
         value: [],
@@ -146,17 +181,84 @@ t.create('no tests in test result summary response')
 
 t.create('test status')
   .get(mockBadgeUri)
+  .intercept(mockTestResultSummarySetup)
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'tests',
+      value: expectedDefaultAzureDevOpsTestTotals,
+    })
+  )
+
+t.create('test status on branch')
+  .get(mockBranchBadgeUri)
+  .intercept(mockBranchTestResultSummarySetup)
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'tests',
+      value: expectedDefaultAzureDevOpsTestTotals,
+    })
+  )
+
+t.create('test status with compact message')
+  .get(mockBadgeUri, {
+    qs: {
+      compact_message: null,
+    },
+  })
+  .intercept(mockTestResultSummarySetup)
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'tests',
+      value: expectedCompactAzureDevOpsTestTotals,
+    })
+  )
+
+t.create('test status with custom labels')
+  .get(mockBadgeUri, {
+    qs: {
+      passed_label: 'good',
+      failed_label: 'bad',
+      skipped_label: 'n/a',
+    },
+  })
+  .intercept(mockTestResultSummarySetup)
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'tests',
+      value: expectedCustomAzureDevOpsTestTotals,
+    })
+  )
+
+t.create('test status with compact message and custom labels')
+  .get(mockBadgeUri, {
+    qs: {
+      compact_message: null,
+      passed_label: '💃',
+      failed_label: '🤦‍♀️',
+      skipped_label: '🤷',
+    },
+  })
+  .intercept(mockTestResultSummarySetup)
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'tests',
+      value: expectedCompactCustomAzureDevOpsTestTotals,
+    })
+  )
+
+t.create('live test status')
+  .get(mockBadgeUri)
   .expectJSONTypes(
     Joi.object().keys({ name: 'tests', value: isDefaultAzureDevOpsTestTotals })
   )
 
-t.create('test status on branch')
+t.create('live test status on branch')
   .get(mockBranchBadgeUri)
   .expectJSONTypes(
     Joi.object().keys({ name: 'tests', value: isDefaultAzureDevOpsTestTotals })
   )
 
-t.create('test status with compact message')
+t.create('live test status with compact message')
   .get(mockBadgeUri, {
     qs: {
       compact_message: null,
@@ -166,7 +268,7 @@ t.create('test status with compact message')
     Joi.object().keys({ name: 'tests', value: isCompactAzureDevOpsTestTotals })
   )
 
-t.create('test status with custom labels')
+t.create('live test status with custom labels')
   .get(mockBadgeUri, {
     qs: {
       passed_label: 'good',
@@ -178,7 +280,7 @@ t.create('test status with custom labels')
     Joi.object().keys({ name: 'tests', value: isCustomAzureDevOpsTestTotals })
   )
 
-t.create('test status with compact message and custom labels')
+t.create('live test status with compact message and custom labels')
   .get(mockBadgeUri, {
     qs: {
       compact_message: null,
