@@ -3,8 +3,7 @@
 const Joi = require('joi')
 const { isMetric } = require('../test-validators')
 
-const createServiceTester = require('../create-service-tester')
-const t = createServiceTester()
+const t = (module.exports = require('../create-service-tester')())
 
 // total installs
 

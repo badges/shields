@@ -6,12 +6,11 @@ const ServiceTester = require('../service-tester')
 const { isSemver } = require('../test-validators')
 const { colorScheme: colorsB } = require('../test-helpers')
 
-const t = new ServiceTester({
+const t = (module.exports = new ServiceTester({
   id: 'dynamic-xml',
   title: 'User Defined XML Source Data',
   pathPrefix: '/badge/dynamic/xml',
-})
-module.exports = t
+}))
 
 t.create('Connection error')
   .get(

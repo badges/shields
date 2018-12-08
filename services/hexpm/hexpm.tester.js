@@ -7,8 +7,7 @@ const { colorScheme } = require('../test-helpers')
 
 const isHexpmVersion = Joi.string().regex(/^v\d+.\d+.?\d?$/)
 
-const t = new ServiceTester({ id: 'hexpm', title: 'Hex.pm' })
-module.exports = t
+const t = (module.exports = new ServiceTester({ id: 'hexpm', title: 'Hex.pm' }))
 
 t.create('downloads per week')
   .get('/dw/cowboy.json')

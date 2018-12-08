@@ -2,11 +2,12 @@
 
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
-
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'hackage', title: 'Hackage' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'hackage',
+  title: 'Hackage',
+}))
 
 t.create('hackage version (valid)')
   .get('/v/lens.json')

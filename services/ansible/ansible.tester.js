@@ -4,8 +4,10 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isMetric } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'ansible', title: 'Ansible Galaxy' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'ansible',
+  title: 'Ansible Galaxy',
+}))
 
 t.create('role name (valid)')
   .get('/role/14542.json')
