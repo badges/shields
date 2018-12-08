@@ -10,6 +10,9 @@ const nonBreakingSpace = '\u00a0'
 
 export default class MarkupModal extends React.Component {
   static propTypes = {
+    // This is an item from the `examples` array within the
+    // `serviceDefinition` schema.
+    // https://github.com/badges/shields/blob/master/services/service-definitions.js
     example: PropTypes.object,
     baseUrl: PropTypes.string.isRequired,
     onRequestClose: PropTypes.func.isRequired,
