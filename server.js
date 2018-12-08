@@ -1,9 +1,7 @@
 'use strict'
 
-const { DOMParser } = require('xmldom')
 const jp = require('jsonpath')
 const path = require('path')
-const xpath = require('xpath')
 const yaml = require('js-yaml')
 const Raven = require('raven')
 
@@ -146,13 +144,6 @@ camp.route(
       }
 
       switch (type) {
-        case 'xml':
-          requestOptions = {
-            headers: {
-              Accept: 'application/xml, text/xml',
-            },
-          }
-          break
         case 'yaml':
           requestOptions = {
             headers: {
@@ -177,18 +168,6 @@ camp.route(
 
           let innerText = []
           switch (type) {
-            case 'xml':
-              data = new DOMParser().parseFromString(data)
-              data = xpath.select(pathExpression, data)
-              if (!data.length) {
-                throw Error('no result')
-              }
-              data.forEach((i, v) => {
-                innerText.push(
-                  pathExpression.indexOf('@') + 1 ? i.value : i.firstChild.data
-                )
-              })
-              break
             case 'yaml':
               data = yaml.safeLoad(data)
               data = jp.query(data, pathExpression)
