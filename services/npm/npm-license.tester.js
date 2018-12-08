@@ -1,11 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const createServiceTester = require('../create-service-tester')
 const { colorScheme: colorsB } = require('../test-helpers')
 
-const t = createServiceTester()
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('gets the license of express')
   .get('/express.json')

@@ -2,7 +2,6 @@
 
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
-const queryString = require('query-string')
 const pathToRegexp = require('path-to-regexp')
 const {
   NotFound,
@@ -20,9 +19,7 @@ const {
   makeColor,
   setBadgeColor,
 } = require('../lib/badge-data')
-const { staticBadgeUrl } = require('../lib/make-badge-url')
 const trace = require('./trace')
-const oldValidateExample = require('./validate-example')
 const { validateExample, transformExample } = require('./transform-example')
 const { assertValidCategory } = require('./categories')
 const { assertValidServiceDefinition } = require('./service-definitions')
@@ -125,92 +122,6 @@ class BaseService {
     return `/${[this.route.base, partialUrl].filter(Boolean).join('/')}`
   }
 
-  static _makeFullUrlFromParams(pattern, namedParams, ext = 'svg') {
-    const fullPattern = `${this._makeFullUrl(
-      pattern
-    )}.:ext(svg|png|gif|jpg|json)`
-
-    const toPath = pathToRegexp.compile(fullPattern, {
-      strict: true,
-      sensitive: true,
-    })
-
-    return toPath({ ext, ...namedParams })
-  }
-
-  static _makeStaticExampleUrl(serviceData) {
-    const badgeData = this._makeBadgeData({}, serviceData)
-    return staticBadgeUrl({
-      label: badgeData.text[0],
-      message: `${badgeData.text[1]}`,
-      color: badgeData.colorscheme || badgeData.colorB,
-    })
-  }
-
-  static _dotSvg(url) {
-    if (url.includes('?')) {
-      return url.replace('?', '.svg?')
-    } else {
-      return `${url}.svg`
-    }
-  }
-
-  /**
-   * Return an array of examples. Each example is prepared according to the
-   * schema in `lib/all-badge-examples.js`.
-   */
-  static prepareExamples() {
-    return this.examples.map((example, index) => {
-      const {
-        title,
-        query,
-        namedParams,
-        exampleUrl,
-        previewUrl,
-        pattern,
-        staticExample,
-        documentation,
-        keywords,
-      } = oldValidateExample(example, index, this)
-
-      const stringified = queryString.stringify(query)
-      const suffix = stringified ? `?${stringified}` : ''
-
-      let outExampleUrl
-      let outPreviewUrl
-      let outPattern
-      if (namedParams) {
-        outPreviewUrl = this._makeStaticExampleUrl(staticExample)
-        outPattern = `${this._dotSvg(this._makeFullUrl(pattern))}${suffix}`
-        outExampleUrl = `${this._makeFullUrlFromParams(
-          pattern,
-          namedParams
-        )}${suffix}`
-      } else if (staticExample) {
-        outPreviewUrl = this._makeStaticExampleUrl(staticExample)
-        outPattern = `${this._dotSvg(this._makeFullUrl(pattern))}${suffix}`
-        outExampleUrl = `${this._dotSvg(
-          this._makeFullUrl(exampleUrl)
-        )}${suffix}`
-      } else {
-        outPreviewUrl = `${this._dotSvg(
-          this._makeFullUrl(previewUrl)
-        )}${suffix}`
-        outPattern = undefined
-        outExampleUrl = undefined
-      }
-
-      return {
-        title: title ? `${title}` : this.name,
-        exampleUrl: outExampleUrl,
-        previewUrl: outPreviewUrl,
-        urlPattern: outPattern,
-        documentation,
-        keywords,
-      }
-    })
-  }
-
   static validateDefinition() {
     assertValidCategory(this.category, `Category for ${this.name}`)
 
@@ -235,7 +146,7 @@ class BaseService {
 
     let route
     if (pattern) {
-      route = { pattern, queryParams }
+      route = { pattern: this._makeFullUrl(pattern), queryParams }
     } else if (format) {
       route = { format, queryParams }
     } else {
@@ -475,6 +386,20 @@ class BaseService {
       },
       data,
       schema
+    )
+  }
+
+  static _validateQueryParams(queryParams, queryParamSchema) {
+    return validate(
+      {
+        ErrorClass: InvalidParameter,
+        prettyErrorMessage: 'invalid query parameter',
+        includeKeys: true,
+        traceErrorMessage: 'Query params did not match schema',
+        traceSuccessMessage: 'Query params after validation',
+      },
+      queryParams,
+      queryParamSchema
     )
   }
 

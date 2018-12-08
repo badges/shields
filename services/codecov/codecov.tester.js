@@ -4,8 +4,10 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isIntegerPercentage } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'codecov', title: 'Codecov.io' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'codecov',
+  title: 'Codecov.io',
+}))
 
 t.create('gets coverage status')
   .get('/c/github/codecov/example-python.json')

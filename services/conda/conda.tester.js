@@ -6,8 +6,7 @@ const { isVPlusTripleDottedVersion, isMetric } = require('../test-validators')
 
 const isCondaPlatform = Joi.string().regex(/^\w+-\d+( \| \w+-\d+)*$/)
 
-const t = new ServiceTester({ id: 'conda', title: 'Conda' })
-module.exports = t
+const t = (module.exports = new ServiceTester({ id: 'conda', title: 'Conda' }))
 
 t.create('version')
   .get('/v/conda-forge/zlib.json')

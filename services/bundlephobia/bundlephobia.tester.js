@@ -4,12 +4,10 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isFileSize } = require('../test-validators')
 
-const t = new ServiceTester({
+const t = (module.exports = new ServiceTester({
   id: 'bundlephobia',
   title: 'NPM package bundle size',
-})
-
-module.exports = t
+}))
 
 const formats = {
   A: '/bundlephobia/:type/:package.:format',
