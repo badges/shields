@@ -142,7 +142,7 @@ module.exports = class Codeclimate extends LegacyService {
   }
 
   static get category() {
-    return 'build'
+    return 'quality'
   }
 
   static get examples() {

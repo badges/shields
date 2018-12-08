@@ -9,7 +9,7 @@ const { checkErrorResponse } = require('../../lib/error-helper')
 
 module.exports = class DependabotSemverCompatibility extends LegacyService {
   static get category() {
-    return 'other'
+    return 'quality'
   }
 
   static get route() {
