@@ -19,8 +19,10 @@ const isMetricOverTimePeriodAllowZero = Joi.string().regex(
 )
 const isMetricAllowZero = Joi.string().regex(/^(0|[1-9][0-9]*)[kMGTPEZY]?$/)
 
-const t = new ServiceTester({ id: 'cocoapods', title: 'Cocoa Pods' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'cocoapods',
+  title: 'Cocoa Pods',
+}))
 
 // version endpoint
 

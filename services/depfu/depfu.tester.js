@@ -10,8 +10,7 @@ const isDependencyStatus = Joi.string().valid(
   'stale'
 )
 
-const t = new ServiceTester({ id: 'depfu', title: 'Depfu' })
-module.exports = t
+const t = (module.exports = new ServiceTester({ id: 'depfu', title: 'Depfu' }))
 
 t.create('depfu dependencies (valid)')
   .get('/depfu/example-ruby.json')

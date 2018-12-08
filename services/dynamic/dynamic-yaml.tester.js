@@ -3,12 +3,11 @@
 const ServiceTester = require('../service-tester')
 const { colorScheme: colorsB } = require('../test-helpers')
 
-const t = new ServiceTester({
+const t = (module.exports = new ServiceTester({
   id: 'dynamic-yaml',
   title: 'User Defined YAML Source Data',
   pathPrefix: '/badge/dynamic/yaml',
-})
-module.exports = t
+}))
 
 t.create('Connection error')
   .get(

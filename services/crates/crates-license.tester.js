@@ -2,12 +2,11 @@
 
 const ServiceTester = require('../service-tester')
 
-const t = new ServiceTester({
+const t = (module.exports = new ServiceTester({
   id: 'crates',
   title: 'crates.io',
   pathPrefix: '/crates/l',
-})
-module.exports = t
+}))
 
 t.create('license')
   .get('/libc.json')

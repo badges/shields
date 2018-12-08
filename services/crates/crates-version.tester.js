@@ -3,12 +3,11 @@
 const ServiceTester = require('../service-tester')
 const { isSemver } = require('../test-validators')
 
-const t = new ServiceTester({
+const t = (module.exports = new ServiceTester({
   id: 'crates',
   title: 'crates.io',
   pathPrefix: '/crates/v',
-})
-module.exports = t
+}))
 
 t.create('version')
   .get('/libc.json')

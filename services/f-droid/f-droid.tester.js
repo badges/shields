@@ -1,10 +1,13 @@
 'use strict'
 
-const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
-const ServiceTester = require('../service-tester')
-const t = new ServiceTester({ id: 'f-droid', title: 'F-Droid' })
 const Joi = require('joi')
-module.exports = t
+const ServiceTester = require('../service-tester')
+const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
+
+const t = (module.exports = new ServiceTester({
+  id: 'f-droid',
+  title: 'F-Droid',
+}))
 
 const testString = `
 Categories:System
