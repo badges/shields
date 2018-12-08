@@ -66,7 +66,7 @@ export default class Main extends React.Component {
   searchQueryChanged(query) {
     /*
     Add a small delay before showing search results
-    so that we wait until the user has stipped typing
+    so that we wait until the user has stopped typing
     before we start loading stuff.
 
     This
