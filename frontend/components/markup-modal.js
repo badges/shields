@@ -74,7 +74,7 @@ export default class MarkupModal extends React.Component {
       link = ''
     }
 
-    if (urlsForProps.badgeUrl === state.badgeUrlFromPath) {
+    if (urlsForProps.badgeUrl === state.badgeUrlForProps) {
       return null
     } else {
       return {
