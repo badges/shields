@@ -6,19 +6,16 @@ const serverSecrets = require('../../lib/server-secrets')
 const t = (module.exports = require('../create-service-tester')())
 
 const noToken = !serverSecrets.wheelmap_token
-before(function() {
+function logTokenWarning() {
   if (noToken) {
     console.warn(
-      'No Wheelmap token provided, the tests for this service will mock API responses.'
-    )
-  } else {
-    console.info(
-      'Found Wheelmap token, the tests will forward requests to the real Wheelmap service.'
+      "No token provided, this test will mock Wheelmap's API responses."
     )
   }
-})
+}
 
 t.create('node with accessibility')
+  .before(logTokenWarning)
   .get('/26699541.json?style=_shields_test')
   .timeout(7500)
   .interceptIf(noToken, nock =>
@@ -40,6 +37,7 @@ t.create('node with accessibility')
   })
 
 t.create('node with limited accessibility')
+  .before(logTokenWarning)
   .get('/2034868974.json?style=_shields_test')
   .timeout(7500)
   .interceptIf(noToken, nock =>
@@ -61,6 +59,7 @@ t.create('node with limited accessibility')
   })
 
 t.create('node without accessibility')
+  .before(logTokenWarning)
   .get('/-147495158.json?style=_shields_test')
   .timeout(7500)
   .interceptIf(noToken, nock =>
@@ -82,6 +81,7 @@ t.create('node without accessibility')
   })
 
 t.create('node not found')
+  .before(logTokenWarning)
   .get('/0.json')
   .timeout(7500)
   .interceptIf(noToken, nock =>
