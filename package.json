@@ -187,14 +187,14 @@
     "npm": ">= 5"
   },
   "babel": {
+    "plugins": [
+      "@babel/plugin-proposal-class-properties",
+      "@babel/plugin-proposal-object-rest-spread"
+    ],
     "env": {
       "production": {
         "presets": [
           "next/babel"
-        ],
-        "plugins": [
-          "@babel/plugin-proposal-class-properties",
-          "@babel/plugin-proposal-object-rest-spread"
         ]
       },
       "test": {
