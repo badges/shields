@@ -24,7 +24,7 @@ module.exports = class Wheelmap extends BaseJsonService {
 
     return this._requestJson({
       schema: wheelmapSchema,
-      url: `http://wheelmap.org/api/nodes/${nodeId}`,
+      url: `https://wheelmap.org/api/nodes/${nodeId}`,
       options,
       errorMessages: {
         401: 'invalid token',
@@ -62,8 +62,7 @@ module.exports = class Wheelmap extends BaseJsonService {
   static get route() {
     return {
       base: 'wheelmap/a',
-      format: '(-?[0-9]+)',
-      capture: ['nodeId'],
+      pattern: ':nodeId(-?[0-9]+)',
     }
   }
 
@@ -71,8 +70,7 @@ module.exports = class Wheelmap extends BaseJsonService {
     return [
       {
         title: 'Wheelmap',
-        exampleUrl: '26699541',
-        pattern: ':nodeId',
+        namedParams: { nodeId: '26699541' },
         staticExample: this.render({ accessibility: 'yes' }),
       },
     ]

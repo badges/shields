@@ -5,16 +5,24 @@ const serverSecrets = require('../../lib/server-secrets')
 
 const t = (module.exports = require('../create-service-tester')())
 
-// If no Wheelmap token is provided (e.g. local development), API
-// responses are intercepted and mocked. If a token is found, the
-// requests will be forwarded to the real Wheelmap service.
 const noToken = !serverSecrets.wheelmap_token
+before(function() {
+  if (noToken) {
+    console.warn(
+      'No Wheelmap token provided, the tests for this service will mock API responses.'
+    )
+  } else {
+    console.info(
+      'Found Wheelmap token, the tests will forward requests to the real Wheelmap service.'
+    )
+  }
+})
 
 t.create('node with accessibility')
   .get('/26699541.json?style=_shields_test')
   .timeout(7500)
   .interceptIf(noToken, nock =>
-    nock('http://wheelmap.org/')
+    nock('https://wheelmap.org/')
       .get('/api/nodes/26699541')
       .reply(
         200,
@@ -35,7 +43,7 @@ t.create('node with limited accessibility')
   .get('/2034868974.json?style=_shields_test')
   .timeout(7500)
   .interceptIf(noToken, nock =>
-    nock('http://wheelmap.org/')
+    nock('https://wheelmap.org/')
       .get('/api/nodes/2034868974')
       .reply(
         200,
@@ -56,7 +64,7 @@ t.create('node without accessibility')
   .get('/-147495158.json?style=_shields_test')
   .timeout(7500)
   .interceptIf(noToken, nock =>
-    nock('http://wheelmap.org/')
+    nock('https://wheelmap.org/')
       .get('/api/nodes/-147495158')
       .reply(
         200,
@@ -77,7 +85,7 @@ t.create('node not found')
   .get('/0.json')
   .timeout(7500)
   .interceptIf(noToken, nock =>
-    nock('http://wheelmap.org/')
+    nock('https://wheelmap.org/')
       .get('/api/nodes/0')
       .reply(404)
   )
