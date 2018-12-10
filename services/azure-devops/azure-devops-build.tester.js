@@ -2,11 +2,11 @@
 
 const Joi = require('joi')
 const { isBuildStatus } = require('../test-validators')
-const t = require('../create-service-tester')()
-module.exports = t
 
 // https://dev.azure.com/totodem/Shields.io is a public Azure DevOps project
 // solely created for Shields.io testing.
+
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('default branch')
   .get(

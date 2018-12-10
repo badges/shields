@@ -3,8 +3,10 @@
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 
-const t = new ServiceTester({ id: 'discourse', title: 'Discourse' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'discourse',
+  title: 'Discourse',
+}))
 
 const data = {
   topic_count: 22513,

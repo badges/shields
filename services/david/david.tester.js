@@ -3,14 +3,14 @@
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { invalidJSON } = require('../response-fixtures')
+
 const isDependencyStatus = Joi.string().valid(
   'insecure',
   'up to date',
   'out of date'
 )
 
-const t = new ServiceTester({ id: 'david', title: 'David' })
-module.exports = t
+const t = (module.exports = new ServiceTester({ id: 'david', title: 'David' }))
 
 t.create('david dependencies (valid)')
   .get('/expressjs/express.json')

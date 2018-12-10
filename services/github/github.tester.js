@@ -1,6 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
+const { licenseToColor } = require('../../lib/licenses')
+const { makeColor } = require('../../lib/badge-data')
 const ServiceTester = require('../service-tester')
 const {
   isMetric,
@@ -12,16 +14,17 @@ const {
   isSemver,
 } = require('../test-validators')
 const { colorScheme: colorsB } = require('../test-helpers')
-const { licenseToColor } = require('../../lib/licenses')
-const { makeColor } = require('../../lib/badge-data')
 const { invalidJSON } = require('../response-fixtures')
 
-const t = new ServiceTester({ id: 'github', title: 'Github' })
-module.exports = t
 const publicDomainLicenseColor = makeColor(licenseToColor('CC0-1.0'))
 const permissiveLicenseColor = colorsB[licenseToColor('MIT')]
 const copyleftLicenseColor = colorsB[licenseToColor('GPL-3.0')]
 const unknownLicenseColor = colorsB[licenseToColor()]
+
+const t = (module.exports = new ServiceTester({
+  id: 'github',
+  title: 'Github',
+}))
 
 t.create('Public domain license')
   .get('/license/github/gitignore.json?style=_shields_test')

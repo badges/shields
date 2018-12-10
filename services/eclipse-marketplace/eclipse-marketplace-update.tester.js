@@ -2,15 +2,13 @@
 
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
-
 const { isFormattedDate } = require('../test-validators')
 
-const t = new ServiceTester({
+const t = (module.exports = new ServiceTester({
   id: 'eclipse-marketplace-update',
   title: 'EclipseMarketplaceUpdate',
   pathPrefix: '/eclipse-marketplace',
-})
-module.exports = t
+}))
 
 t.create('last update date')
   .get('/last-update/notepad4e.json')

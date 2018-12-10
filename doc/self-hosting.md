@@ -144,11 +144,15 @@ When a `gh_token` is specified, it is used in place of the Shields token
 rotation logic.
 
 You can also give your self-hosted Shields installation access to private npm
-packages by [generating an npm token] and using that for the `npm_token` value.
+packages by [generating an npm token][npm token] and using that for the `npm_token` value.
+
+To integrate with Wheelmap.org, you can [sign into your account][wheelmap token] and use
+the _Authentication Token_ displayed on your profile page for the `wheelmap_token` value.
 
 [github rate limit]: https://developer.github.com/v3/#rate-limiting
 [personal access tokens]: https://github.com/settings/tokens
-[generating an npm token]: https://docs.npmjs.com/getting-started/working_with_tokens
+[npm token]: https://docs.npmjs.com/getting-started/working_with_tokens
+[wheelmap token]: http://classic.wheelmap.org/en/users/sign_in
 
 Separate frontend hosting
 -------------------------
