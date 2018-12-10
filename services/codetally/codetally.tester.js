@@ -36,4 +36,4 @@ t.create('Empty')
         currency_abbreviation: 'CAD',
       })
   )
-  .expectJSON({ name: 'codetally', value: ' $0.00 ' })
+  .expectJSON({ name: 'codetally', value: '$0.00' })
