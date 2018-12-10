@@ -2,6 +2,7 @@
 
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
+const { isMetric } = require('../test-validators')
 
 const t = (module.exports = new ServiceTester({
   id: 'bountysource',
@@ -13,9 +14,7 @@ t.create('bounties (valid)')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'bounties',
-      value: Joi.number()
-        .integer()
-        .positive(),
+      value: isMetric,
     })
   )
 

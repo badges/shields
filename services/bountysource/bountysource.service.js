@@ -3,6 +3,7 @@
 const BaseJsonService = require('../base-json')
 const Joi = require('joi')
 const { nonNegativeInteger } = require('../validators')
+const { metric } = require('../../lib/text-formatters')
 
 const schema = Joi.object({ activity_total: nonNegativeInteger })
 
@@ -45,7 +46,7 @@ module.exports = class Bountysource extends BaseJsonService {
 
   static render({ total }) {
     return {
-      message: total,
+      message: metric(total),
       color: 'brightgreen',
     }
   }
