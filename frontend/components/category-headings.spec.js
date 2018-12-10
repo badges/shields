@@ -23,7 +23,7 @@ describe('<CategoryHeadings />', function() {
     shallow(<CategoryHeadings categories={exampleCategories} />)
   })
 
-  it('contains a link to the status page', function() {
+  it('contains the expected child', function() {
     const wrapper = shallow(<CategoryHeadings categories={exampleCategories} />)
     expect(wrapper).to.contain(
       <CategoryHeading category={exampleCategories[0]} />
