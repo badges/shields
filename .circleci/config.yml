@@ -159,7 +159,7 @@ jobs:
           name: Prepare service tests
           command: |
             mkdir private
-            echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
+            echo "{\"gh_token\":\"$GITHUB_TOKEN\", \"wheelmap_token\":\"$WHEELMAP_TOKEN\"}" > private/secret.json
 
       - restore_cache:
           key: v2-dependencies-{{ checksum "package.json" }}
