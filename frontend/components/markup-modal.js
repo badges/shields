@@ -85,6 +85,27 @@ export default class MarkupModal extends React.Component {
     }
   }
 
+  handleResetClicked = event => {
+    const { badgeUrlForProps } = this.state
+    this.setState({ badgeUrl: badgeUrlForProps })
+  }
+
+  handleExampleClicked = event => {
+    const {
+      example: {
+        example: { pattern, namedParams, queryParams },
+      },
+    } = this.props
+    const exampleUrlPath = badgeUrlFromPattern({
+      pattern,
+      namedParams,
+      queryParams,
+    })
+    this.setState({
+      badgeUrl: exampleUrlPath,
+    })
+  }
+
   generateBuiltBadgeUrl() {
     const { baseUrl } = this.props
     const { badgeUrl, style } = this.state
@@ -174,7 +195,7 @@ export default class MarkupModal extends React.Component {
   render() {
     const { isOpen } = this
     const { onRequestClose } = this.props
-    const { link, badgeUrl, exampleUrl, style } = this.state
+    const { badgeUrlForProps, link, badgeUrl, exampleUrl, style } = this.state
 
     const common = {
       autoComplete: 'off',
@@ -182,6 +203,8 @@ export default class MarkupModal extends React.Component {
       autoCapitalize: 'off',
       spellCheck: 'false',
     }
+
+    const canReset = badgeUrlForProps !== badgeUrl
 
     return (
       <Modal
@@ -217,12 +240,29 @@ export default class MarkupModal extends React.Component {
                 {...common}
               />
             </label>
+            <br />
+            {canReset ? (
+              <a
+                style={{ marginLeft: '15px', fontSize: '11px' }}
+                className="clickable"
+                onClick={this.handleResetClicked}
+              >
+                Reset
+              </a>
+            ) : (
+              nonBreakingSpace
+            )}
           </p>
           {exampleUrl && (
             <p>
               Example&nbsp;
               <ClickToSelect>
-                <input className="code clickable" readOnly value={exampleUrl} />
+                <input
+                  onClick={this.handleExampleClicked}
+                  className="code clickable"
+                  readOnly
+                  value={exampleUrl}
+                />
               </ClickToSelect>
             </p>
           )}
