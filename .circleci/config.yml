@@ -140,8 +140,11 @@ jobs:
           command: npm install
 
       - run:
+          name: Prepare frontend tests
+          command: npm run defs && npm run features
+
+      - run:
           name: Frontend unit tests
-          when: always
           command: npm run test:js:frontend
 
       - run:
