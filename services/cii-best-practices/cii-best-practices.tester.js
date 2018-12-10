@@ -2,6 +2,7 @@
 
 const Joi = require('joi')
 const t = require('../create-service-tester')()
+const { withRegex } = require('../test-validators')
 module.exports = t
 
 t.create('live: level known project')
@@ -9,7 +10,7 @@ t.create('live: level known project')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'cii',
-      value: Joi.string(),
+      value: withRegex(/in progress|passing|silver|gold/),
     })
   )
 
@@ -18,16 +19,16 @@ t.create('live: percentage known project')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'cii',
-      value: Joi.string(),
+      value: withRegex(/([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-9][0-9]|300)%/),
     })
   )
 
-t.create('live: default known project')
-  .get(`/default/33.json`)
+t.create('live: summary known project')
+  .get(`/summary/33.json`)
   .expectJSONTypes(
     Joi.object().keys({
       name: 'cii',
-      value: Joi.string(),
+      value: withRegex(/(in progress [0-9]|[1-9][0-9]%)|passing|silver|gold/),
     })
   )
 
@@ -179,8 +180,8 @@ t.create('percentage: in progress project')
     value: '94%',
   })
 
-t.create('default: unknown project')
-  .get(`/default/2.json`)
+t.create('summary: unknown project')
+  .get(`/summary/2.json`)
   .intercept(nock =>
     nock('https://bestpractices.coreinfrastructure.org/projects')
       .get('/2/badge.json')
@@ -191,8 +192,8 @@ t.create('default: unknown project')
     value: 'project not found',
   })
 
-t.create('default: gold project')
-  .get(`/default/1.json`)
+t.create('summary: gold project')
+  .get(`/summary/1.json`)
   .intercept(nock =>
     nock('https://bestpractices.coreinfrastructure.org/projects')
       .get('/1/badge.json')
@@ -206,8 +207,8 @@ t.create('default: gold project')
     value: 'gold',
   })
 
-t.create('default: silver project')
-  .get(`/default/34.json`)
+t.create('summary: silver project')
+  .get(`/summary/34.json`)
   .intercept(nock =>
     nock('https://bestpractices.coreinfrastructure.org/projects')
       .get('/34/badge.json')
@@ -221,8 +222,8 @@ t.create('default: silver project')
     value: 'silver',
   })
 
-t.create('default: passing project')
-  .get(`/default/29.json`)
+t.create('summary: passing project')
+  .get(`/summary/29.json`)
   .intercept(nock =>
     nock('https://bestpractices.coreinfrastructure.org/projects')
       .get('/29/badge.json')
@@ -236,8 +237,8 @@ t.create('default: passing project')
     value: 'passing',
   })
 
-t.create('default: in progress project')
-  .get(`/default/33.json`)
+t.create('summary: in progress project')
+  .get(`/summary/33.json`)
   .intercept(nock =>
     nock('https://bestpractices.coreinfrastructure.org/projects')
       .get('/33/badge.json')
