@@ -11,6 +11,7 @@ module.exports = class PackagistLicense extends LegacyService {
   static get route() {
     return {
       base: 'packagist/l',
+      pattern: ':user/:repo',
     }
   }
 
@@ -18,7 +19,12 @@ module.exports = class PackagistLicense extends LegacyService {
     return [
       {
         title: 'Packagist',
-        previewUrl: 'doctrine/orm',
+        namedParams: { user: 'doctrine', repo: 'orm' },
+        staticPreview: {
+          label: 'license',
+          message: 'MIT',
+          color: 'blue',
+        },
         keywords: ['PHP'],
       },
     ]

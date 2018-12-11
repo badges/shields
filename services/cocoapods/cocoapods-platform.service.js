@@ -10,6 +10,7 @@ module.exports = class CocoapodsPlatform extends LegacyService {
   static get route() {
     return {
       base: 'cocoapods/p',
+      pattern: ':packageName',
     }
   }
 
@@ -17,7 +18,12 @@ module.exports = class CocoapodsPlatform extends LegacyService {
     return [
       {
         title: 'Cocoapods',
-        previewUrl: 'AFNetworking',
+        namedParams: { packageName: 'AFNetworking' },
+        staticPreview: {
+          label: 'platform',
+          message: 'ios | osx | watchos | tvos',
+          color: 'lightgrey',
+        },
       },
     ]
   }

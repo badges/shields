@@ -20,7 +20,9 @@ module.exports = class PypiImplementation extends PypiBase {
     return [
       {
         title: 'PyPI - Implementation',
-        previewUrl: 'Django',
+        pattern: ':packageName',
+        namedParams: { packageName: 'Django' },
+        staticPreview: this.render({ implementations: ['cpython'] }),
         keywords: ['python'],
       },
     ]
