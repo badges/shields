@@ -173,6 +173,7 @@ t.create('cobertura: job not found')
 
 t.create('cobertura: job found')
   .get('/c/https/builds.apache.org/job/olingo-odata4-cobertura.json')
+  .timeout(10000)
   .expectJSONTypes(
     Joi.object().keys({ name: 'coverage', value: isIntegerPercentage })
   )
