@@ -27,17 +27,17 @@ module.exports = class MicroBadger extends LegacyService {
       },
       {
         title: 'MicroBadger Size (tag)',
-        previewUrl: 'image-size/_/httpd/alpine',
+        previewUrl: 'image-size/fedora/apache/latest',
         keywords: ['docker'],
       },
       {
         title: 'MicroBadger Layers',
-        previewUrl: 'layers/_/httpd',
+        previewUrl: 'layers/_/alpine',
         keywords: ['docker'],
       },
       {
         title: 'MicroBadger Layers (tag)',
-        previewUrl: 'layers/_/httpd/alpine',
+        previewUrl: 'layers/_/alpine/2.7',
         keywords: ['docker'],
       },
     ]
