@@ -19,7 +19,7 @@ module.exports = class JiraIssue extends LegacyService {
     return [
       {
         title: 'JIRA issue',
-        pattern: ':protocol/:hostAndPath*/:issueKey',
+        pattern: ':protocol/:hostAndPath+/:issueKey',
         namedParams: {
           protocol: 'https',
           hostAndPath: 'issues.apache.org/jira',
