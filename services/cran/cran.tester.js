@@ -4,8 +4,10 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isVPlusTripleDottedVersion } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'cran', title: 'CRAN/METACRAN' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'cran',
+  title: 'CRAN/METACRAN',
+}))
 
 t.create('version')
   .get('/v/devtools.json')

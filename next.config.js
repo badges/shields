@@ -24,9 +24,11 @@ module.exports = {
       )
     }
 
-    config.module.loaders = (config.module.loaders || []).concat({
-      test: /\.json$/,
-      loader: 'json-loader',
+    config.module.rules.push({
+      test: /\.yml$/,
+      use: {
+        loader: 'js-yaml-loader',
+      },
     })
 
     if (assetPrefix) {

@@ -1,12 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const createServiceTester = require('../create-service-tester')
 const { invalidJSON } = require('../response-fixtures')
 const { isBuildStatus } = require('../test-validators')
 
-const t = createServiceTester()
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('build status (valid, without branch)')
   .get('/5444c5ecb904a4b21567b0ff.json')

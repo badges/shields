@@ -15,8 +15,10 @@ const {
 } = require('../nuget-fixtures')
 const { invalidJSON } = require('../response-fixtures')
 
-const t = new ServiceTester({ id: 'chocolatey', title: 'Chocolatey' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'chocolatey',
+  title: 'Chocolatey',
+}))
 
 // downloads
 

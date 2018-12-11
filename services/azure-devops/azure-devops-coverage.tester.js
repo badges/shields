@@ -2,8 +2,6 @@
 
 const Joi = require('joi')
 const { isIntegerPercentage } = require('../test-validators')
-const t = require('../create-service-tester')()
-module.exports = t
 
 const org = 'swellaby'
 const project = 'opensource'
@@ -54,6 +52,8 @@ const secondLinesCovStat = {
 
 const expCoverageSingleReport = '83%'
 const expCoverageMultipleReports = '77%'
+
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('default branch coverage')
   .get(`${uriPrefix}/${linuxDefinitionId}.json`)

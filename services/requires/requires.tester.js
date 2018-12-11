@@ -1,14 +1,12 @@
 'use strict'
 
 const Joi = require('joi')
-const createServiceTester = require('../create-service-tester')
 
 const isRequireStatus = Joi.string().regex(
   /^(up to date|outdated|insecure|unknown)$/
 )
 
-const t = createServiceTester()
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('requirements (valid, without branch)')
   .get('/github/celery/celery.json')

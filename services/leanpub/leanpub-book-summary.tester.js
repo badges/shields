@@ -1,10 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const t = require('../create-service-tester')()
-module.exports = t
 
 const knownValidBook = 'juice-shop'
+
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('known book pages')
   .get(`/pages/${knownValidBook}.json`)

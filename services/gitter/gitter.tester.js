@@ -1,9 +1,6 @@
 'use strict'
 
-const createServiceTester = require('../create-service-tester')
-const t = createServiceTester()
-
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('on gitter')
   .get('/nwjs/nw.js.json')
