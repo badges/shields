@@ -9,11 +9,10 @@ const {
   isMetric,
 } = require('../test-validators')
 
-const t = new ServiceTester({
+const t = (module.exports = new ServiceTester({
   id: 'chrome-web-store',
   title: 'Chrome Web Store',
-})
-module.exports = t
+}))
 
 t.create('Downloads (now users)')
   .get('/d/alhjnofcnnpeaphgeakdhkebafjcpeae.json')

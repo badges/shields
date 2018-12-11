@@ -16,6 +16,12 @@ const {
   currencyFromCode,
 } = require('../../lib/text-formatters')
 
+const commonExample = {
+  title: 'Chrome Web Store',
+  pattern: ':storeId',
+  namedParams: { storeId: 'ogffaloegjglncjfehdfplabnoondfjo' },
+}
+
 class ChromeWebStoreDownloads extends LegacyService {
   static get category() {
     return 'downloads'
@@ -23,16 +29,15 @@ class ChromeWebStoreDownloads extends LegacyService {
 
   static get route() {
     return {
-      base: 'chrome-web-store/d',
+      base: 'chrome-web-store/users',
     }
   }
 
   static get examples() {
     return [
       {
-        title: 'Chrome Web Store',
-        previewUrl: 'ogffaloegjglncjfehdfplabnoondfjo',
-        keywords: ['chrome'],
+        ...commonExample,
+        staticPreview: { label: 'users', message: '573', color: 'green' },
       },
     ]
   }
@@ -54,9 +59,12 @@ class ChromeWebStoreVersion extends LegacyService {
   static get examples() {
     return [
       {
-        title: 'Chrome Web Store',
-        previewUrl: 'ogffaloegjglncjfehdfplabnoondfjo',
-        keywords: ['chrome'],
+        ...commonExample,
+        staticPreview: {
+          label: 'chrome web store',
+          message: 'v1.1.0',
+          color: 'blue',
+        },
       },
     ]
   }
@@ -78,9 +86,8 @@ class ChromeWebStorePrice extends LegacyService {
   static get examples() {
     return [
       {
-        title: 'Chrome Web Store',
-        previewUrl: 'ogffaloegjglncjfehdfplabnoondfjo',
-        keywords: ['chrome'],
+        ...commonExample,
+        staticPreview: { label: 'price', message: '$0', color: 'brightgreen' },
       },
     ]
   }
@@ -102,43 +109,27 @@ class ChromeWebStoreRating extends LegacyService {
   static get examples() {
     return [
       {
-        title: 'Chrome Web Store',
-        previewUrl: 'rating/ogffaloegjglncjfehdfplabnoondfjo',
-        keywords: ['chrome'],
+        ...commonExample,
+        pattern: 'rating/:storeId',
+        staticPreview: { label: 'rating', message: '3.67/5', color: 'green' },
       },
       {
-        title: 'Chrome Web Store',
-        previewUrl: 'stars/ogffaloegjglncjfehdfplabnoondfjo',
-        keywords: ['chrome'],
+        ...commonExample,
+        pattern: 'stars/:storeId',
+        staticPreview: {
+          label: 'rating',
+          message: starRating(3.75),
+          color: 'green',
+        },
       },
       {
-        title: 'Chrome Web Store',
-        previewUrl: 'rating-count/ogffaloegjglncjfehdfplabnoondfjo',
-        keywords: ['chrome'],
-      },
-    ]
-  }
-
-  static registerLegacyRouteHandler() {}
-}
-
-class ChromeWebStoreUsers extends LegacyService {
-  static get category() {
-    return 'other'
-  }
-
-  static get route() {
-    return {
-      base: 'chrome-web-store/users',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Chrome Web Store',
-        previewUrl: 'ogffaloegjglncjfehdfplabnoondfjo',
-        keywords: ['chrome'],
+        ...commonExample,
+        pattern: 'rating-count/:storeId',
+        staticPreview: {
+          label: 'rating',
+          message: '12 total',
+          color: 'yellowgreen',
+        },
       },
     ]
   }
@@ -231,6 +222,5 @@ module.exports = {
   ChromeWebStoreVersion,
   ChromeWebStorePrice,
   ChromeWebStoreRating,
-  ChromeWebStoreUsers,
   ChromeWebStore,
 }

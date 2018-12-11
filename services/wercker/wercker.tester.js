@@ -1,12 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const createServiceTester = require('../create-service-tester')
 const { isBuildStatus } = require('../test-validators')
 const { colorScheme } = require('../test-helpers')
 
-const t = createServiceTester()
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('Build status')
   .get('/build/wercker/go-wercker-api.json')

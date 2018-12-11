@@ -1,8 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-const t = require('../create-service-tester')()
-module.exports = t
 
 const org = 'azuredevops-powershell'
 const project = 'azuredevops-powershell'
@@ -114,6 +112,8 @@ const isCompactCustomAzureDevOpsTestTotals = isAzureDevOpsTestTotals(
   '🤷',
   true
 )
+
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('unknown build definition')
   .get(`${uriPrefix}/${nonExistentDefinitionId}.json`)

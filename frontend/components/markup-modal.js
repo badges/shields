@@ -2,86 +2,167 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Modal from 'react-modal'
 import ClickToSelect from '@mapbox/react-click-to-select'
-import resolveBadgeUrl from '../lib/badge-url'
+import { badgeUrlFromPath, badgeUrlFromPattern } from '../../lib/make-badge-url'
 import generateAllMarkup from '../lib/generate-image-markup'
 import { advertisedStyles } from '../../supported-features.json'
 
+const nonBreakingSpace = '\u00a0'
+
 export default class MarkupModal extends React.Component {
   static propTypes = {
-    example: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      exampleUrl: PropTypes.string,
-      previewUrl: PropTypes.string,
-      urlPattern: PropTypes.string,
-      documentation: PropTypes.string,
-      link: PropTypes.string,
-    }),
+    // This is an item from the `examples` array within the
+    // `serviceDefinition` schema.
+    // https://github.com/badges/shields/blob/master/services/service-definitions.js
+    example: PropTypes.object,
     baseUrl: PropTypes.string.isRequired,
     onRequestClose: PropTypes.func.isRequired,
   }
 
   state = {
-    exampleUrl: null,
-    badgeUrl: null,
+    badgeUrl: '',
+    badgeUrlForProps: '',
+    exampleUrl: '',
     link: '',
     style: 'flat',
   }
 
-  constructor(props) {
-    super(props)
+  get isOpen() {
+    return this.props.example !== undefined
+  }
 
-    // Transfer `badgeUrl` and `link` into state so they can be edited by the
-    // user.
-    const { example, baseUrl } = props
-    if (example) {
-      const { exampleUrl, urlPattern, previewUrl, link } = example
-      this.state = {
-        ...this.state,
-        exampleUrl: exampleUrl
-          ? resolveBadgeUrl(exampleUrl, baseUrl || window.location.href)
-          : null,
-        badgeUrl: resolveBadgeUrl(
-          urlPattern || previewUrl,
-          baseUrl || window.location.href
-        ),
-        link: !link ? '' : link,
+  static urlsForProps(props) {
+    const {
+      example: { example },
+      baseUrl,
+    } = props
+
+    let badgeUrl
+    let exampleUrl
+    // There are two alternatives for `example`. Refer to the schema in
+    // `services/service-definitions.js`.
+    if (example.pattern !== undefined) {
+      const { pattern, namedParams, queryParams } = example
+      badgeUrl = badgeUrlFromPath({
+        path: pattern,
+        queryParams,
+      })
+      exampleUrl = badgeUrlFromPattern({
+        baseUrl,
+        pattern,
+        namedParams,
+        queryParams,
+      })
+    } else {
+      const { path, queryParams } = example
+      badgeUrl = badgeUrlFromPath({
+        path,
+        queryParams,
+      })
+      exampleUrl = ''
+    }
+
+    return { badgeUrl, exampleUrl }
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    let urlsForProps, link
+    if (props.example) {
+      urlsForProps = MarkupModal.urlsForProps(props)
+      link = props.example.example.link
+    } else {
+      urlsForProps = { badgeUrl: '', exampleUrl: '' }
+      link = ''
+    }
+
+    if (urlsForProps.badgeUrl === state.badgeUrlForProps) {
+      return null
+    } else {
+      return {
+        ...urlsForProps,
+        badgeUrlForProps: urlsForProps.badgeUrl,
+        link,
       }
     }
   }
 
-  get isOpen() {
-    return this.props.example !== null
-  }
-
-  generateCompleteBadgeUrl() {
+  generateBuiltBadgeUrl() {
     const { baseUrl } = this.props
     const { badgeUrl, style } = this.state
 
-    return resolveBadgeUrl(
-      badgeUrl,
-      baseUrl || window.location.href,
-      // Default style doesn't need to be specified.
-      style === 'flat' ? undefined : { style }
+    return badgeUrlFromPath({
+      baseUrl,
+      path: badgeUrl,
+      format: '', // `badgeUrl` already contains `.svg`.
+      style: style === 'flat' ? undefined : style,
+    })
+  }
+
+  renderLivePreview() {
+    const { badgeUrl } = this.state
+    const includesPlaceholders = badgeUrl.includes(':')
+
+    if (includesPlaceholders) {
+      return nonBreakingSpace
+    } else {
+      const livePreviewUrl = this.generateBuiltBadgeUrl()
+      return <img className="badge-img" src={livePreviewUrl} />
+    }
+  }
+
+  renderMarkup() {
+    const {
+      example: {
+        example: { title },
+      },
+    } = this.props
+    const { link } = this.state
+
+    const builtBadgeUrl = this.generateBuiltBadgeUrl()
+    const { markdown, reStructuredText, asciiDoc } = generateAllMarkup(
+      builtBadgeUrl,
+      link,
+      title
+    )
+
+    return (
+      <div>
+        <p>
+          URL&nbsp;
+          <ClickToSelect>
+            <input className="code clickable" readOnly value={builtBadgeUrl} />
+          </ClickToSelect>
+        </p>
+        <p>
+          Markdown&nbsp;
+          <ClickToSelect>
+            <input className="code clickable" readOnly value={markdown} />
+          </ClickToSelect>
+        </p>
+        <p>
+          reStructuredText&nbsp;
+          <ClickToSelect>
+            <input
+              className="code clickable"
+              readOnly
+              value={reStructuredText}
+            />
+          </ClickToSelect>
+        </p>
+        <p>
+          AsciiDoc&nbsp;
+          <ClickToSelect>
+            <input className="code clickable" readOnly value={asciiDoc} />
+          </ClickToSelect>
+        </p>
+      </div>
     )
   }
 
-  generateMarkup() {
-    if (!this.isOpen) {
-      return {}
-    }
-
-    const { title } = this.props.example
-    const { link } = this.state
-    const completeBadgeUrl = this.generateCompleteBadgeUrl()
-    return generateAllMarkup(completeBadgeUrl, link, title)
-  }
-
   renderDocumentation() {
-    if (!this.isOpen) {
-      return null
-    }
+    const {
+      example: { documentation },
+    } = this.props
 
-    const { documentation } = this.props.example
     return documentation ? (
       <div>
         <h4>Documentation</h4>
@@ -91,55 +172,57 @@ export default class MarkupModal extends React.Component {
   }
 
   render() {
-    const { markdown, reStructuredText, asciiDoc } = this.generateMarkup()
+    const { isOpen } = this
+    const { onRequestClose } = this.props
+    const { link, badgeUrl, exampleUrl, style } = this.state
 
-    const completeBadgeUrl = this.isOpen
-      ? this.generateCompleteBadgeUrl()
-      : undefined
+    const common = {
+      autoComplete: 'off',
+      autoCorrect: 'off',
+      autoCapitalize: 'off',
+      spellCheck: 'false',
+    }
 
     return (
       <Modal
-        isOpen={this.isOpen}
-        onRequestClose={this.props.onRequestClose}
+        isOpen={isOpen}
+        onRequestClose={onRequestClose}
         contentLabel="Example Modal"
+        ariaHideApp={false}
       >
         <form action="">
-          <p>
-            <img className="badge-img" src={completeBadgeUrl} />
-          </p>
+          <p>{isOpen && this.renderLivePreview()}</p>
           <p>
             <label>
               Link&nbsp;
               <input
                 type="url"
-                value={this.state.link}
+                value={link}
                 onChange={event => {
                   this.setState({ link: event.target.value })
                 }}
+                {...common}
               />
             </label>
           </p>
           <p>
             <label>
-              Image&nbsp;
+              Path&nbsp;
               <input
                 type="url"
-                value={this.state.badgeUrl}
+                value={badgeUrl}
                 onChange={event => {
                   this.setState({ badgeUrl: event.target.value })
                 }}
+                {...common}
               />
             </label>
           </p>
-          {this.state.exampleUrl && (
+          {exampleUrl && (
             <p>
               Example&nbsp;
               <ClickToSelect>
-                <input
-                  className="code clickable"
-                  readOnly
-                  value={this.state.exampleUrl}
-                />
+                <input className="code clickable" readOnly value={exampleUrl} />
               </ClickToSelect>
             </p>
           )}
@@ -147,7 +230,7 @@ export default class MarkupModal extends React.Component {
             <label>
               Style&nbsp;
               <select
-                value={this.state.style}
+                value={style}
                 onChange={event => {
                   this.setState({ style: event.target.value })
                 }}
@@ -160,29 +243,8 @@ export default class MarkupModal extends React.Component {
               </select>
             </label>
           </p>
-          <p>
-            Markdown&nbsp;
-            <ClickToSelect>
-              <input className="code clickable" readOnly value={markdown} />
-            </ClickToSelect>
-          </p>
-          <p>
-            reStructuredText&nbsp;
-            <ClickToSelect>
-              <input
-                className="code clickable"
-                readOnly
-                value={reStructuredText}
-              />
-            </ClickToSelect>
-          </p>
-          <p>
-            AsciiDoc&nbsp;
-            <ClickToSelect>
-              <input className="code clickable" readOnly value={asciiDoc} />
-            </ClickToSelect>
-          </p>
-          {this.renderDocumentation()}
+          {isOpen && this.renderMarkup()}
+          {isOpen && this.renderDocumentation()}
         </form>
       </Modal>
     )

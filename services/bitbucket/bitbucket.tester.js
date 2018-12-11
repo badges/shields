@@ -8,8 +8,10 @@ const {
   isMetricOpenIssues,
 } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'bitbucket', title: 'Bitbucket badges' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'bitbucket',
+  title: 'Bitbucket badges',
+}))
 
 // tests for issues endpoints
 

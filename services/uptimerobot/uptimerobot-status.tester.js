@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const createServiceTester = require('../create-service-tester')
+const { invalidJSON } = require('../response-fixtures')
 
 const isUptimeStatus = Joi.string().valid(
   'paused',
@@ -10,10 +10,8 @@ const isUptimeStatus = Joi.string().valid(
   'seems down',
   'down'
 )
-const { invalidJSON } = require('../response-fixtures')
 
-const t = createServiceTester()
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('Uptime Robot: Status (valid)')
   .get('/m778918918-3e92c097147760ee39d02d36.json')

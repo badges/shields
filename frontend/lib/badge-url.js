@@ -4,7 +4,7 @@ import { staticBadgeUrl as makeStaticBadgeUrl } from '../../lib/make-badge-url'
 export default function resolveBadgeUrl(
   url,
   baseUrl,
-  { longCache, style, queryParams: inQueryParams } = {}
+  { longCache, style, queryParams: inQueryParams, format = 'svg' } = {}
 ) {
   const outQueryParams = Object.assign({}, inQueryParams)
   if (longCache) {
@@ -13,7 +13,8 @@ export default function resolveBadgeUrl(
   if (style) {
     outQueryParams.style = style
   }
-  return resolveUrl(url, baseUrl, outQueryParams)
+
+  return resolveUrl(`${url}.${format}`, baseUrl, outQueryParams)
 }
 
 export function staticBadgeUrl(baseUrl, label, message, color, options) {
@@ -48,5 +49,5 @@ export function dynamicBadgeUrl(
 
   const outOptions = Object.assign({ queryParams }, rest)
 
-  return resolveBadgeUrl(`/badge/dynamic/${datatype}.svg`, baseUrl, outOptions)
+  return resolveBadgeUrl(`/badge/dynamic/${datatype}`, baseUrl, outOptions)
 }

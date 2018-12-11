@@ -16,6 +16,7 @@ class CranLicense extends LegacyService {
   static get route() {
     return {
       base: 'cran/l',
+      pattern: ':packageName',
     }
   }
 
@@ -23,7 +24,12 @@ class CranLicense extends LegacyService {
     return [
       {
         title: 'CRAN/METACRAN',
-        previewUrl: 'devtools',
+        namedParams: { packageName: 'devtools' },
+        staticPreview: {
+          label: 'license',
+          message: 'GPL (>= 2)',
+          color: 'blue',
+        },
         keywords: ['R'],
       },
     ]

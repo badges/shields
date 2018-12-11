@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-const createServiceTester = require('../create-service-tester')
 
 const isAppveyorTestTotals = Joi.string().regex(
   /^(?:[0-9]+ (?:passed|skipped|failed)(?:, )?)+$/
@@ -19,8 +18,7 @@ const isCompactCustomAppveyorTestTotals = Joi.string().regex(
   /^(?:[0-9]* ?(?:💃|🤦‍♀️|🤷) ?[0-9]*(?:, | \| )?)+$/
 )
 
-const t = createServiceTester()
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('Test status')
   .get('/NZSmartie/coap-net-iu0to.json')

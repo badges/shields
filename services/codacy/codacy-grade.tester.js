@@ -3,8 +3,7 @@
 const Joi = require('joi')
 const { codacyGrade } = require('./codacy-helpers')
 
-const t = require('../create-service-tester')()
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('Code quality')
   .get('/grade/e27821fb6289410b8f58338c7e0bc686.json')

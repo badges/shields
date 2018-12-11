@@ -7,8 +7,10 @@ const {
   isMetric,
 } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'aur', title: 'Arch Linux AUR' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'aur',
+  title: 'Arch Linux AUR',
+}))
 
 // version tests
 

@@ -20,6 +20,7 @@ module.exports = class GithubLicense extends LegacyService {
   static get route() {
     return {
       base: 'github/license',
+      pattern: ':user/:repo',
     }
   }
 
@@ -27,7 +28,12 @@ module.exports = class GithubLicense extends LegacyService {
     return [
       {
         title: 'GitHub',
-        previewUrl: 'mashape/apistatus',
+        namedParams: { user: 'mashape', repo: 'apistatus' },
+        staticExample: {
+          label: 'license',
+          message: 'MIT',
+          color: 'green',
+        },
         keywords: ['GitHub', 'license'],
         documentation,
       },

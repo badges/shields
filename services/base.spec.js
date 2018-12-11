@@ -49,6 +49,11 @@ class DummyService extends BaseService {
         keywords: ['hello'],
       },
       {
+        namedParams: { namedParamA: 'World' },
+        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+        keywords: ['hello'],
+      },
+      {
         pattern: ':world',
         namedParams: { world: 'World' },
         queryParams: { queryParamA: '!!!' },
@@ -346,12 +351,63 @@ describe('BaseService', function() {
         expect(badgeData.text).to.deep.equal(['purr count', 'n/a'])
       })
 
-      it('overrides the color', function() {
+      it('overrides the colorA', function() {
+        const badgeData = DummyService._makeBadgeData(
+          { colorA: '42f483' },
+          { color: 'green' }
+        )
+        expect(badgeData.colorA).to.equal('#42f483')
+      })
+
+      it('overrides the colorB', function() {
         const badgeData = DummyService._makeBadgeData(
           { colorB: '10ADED' },
           { color: 'red' }
         )
         expect(badgeData.colorB).to.equal('#10ADED')
+      })
+
+      it('overrides the logo', function() {
+        const expLogo =
+          'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMTIgMTIgNDAgNDAiPgo8cGF0aCBmaWxsPSIjMzMzMzMzIiBkPSJNMzIsMTMuNGMtMTAuNSwwLTE5LDguNS0xOSwxOWMwLDguNCw1LjUsMTUuNSwxMywxOGMxLDAuMiwxLjMtMC40LDEuMy0wLjljMC0wLjUsMC0xLjcsMC0zLjIgYy01LjMsMS4xLTYuNC0yLjYtNi40LTIuNkMyMCw0MS42LDE4LjgsNDEsMTguOCw0MWMtMS43LTEuMiwwLjEtMS4xLDAuMS0xLjFjMS45LDAuMSwyLjksMiwyLjksMmMxLjcsMi45LDQuNSwyLjEsNS41LDEuNiBjMC4yLTEuMiwwLjctMi4xLDEuMi0yLjZjLTQuMi0wLjUtOC43LTIuMS04LjctOS40YzAtMi4xLDAuNy0zLjcsMi01LjFjLTAuMi0wLjUtMC44LTIuNCwwLjItNWMwLDAsMS42LTAuNSw1LjIsMiBjMS41LTAuNCwzLjEtMC43LDQuOC0wLjdjMS42LDAsMy4zLDAuMiw0LjcsMC43YzMuNi0yLjQsNS4yLTIsNS4yLTJjMSwyLjYsMC40LDQuNiwwLjIsNWMxLjIsMS4zLDIsMywyLDUuMWMwLDcuMy00LjUsOC45LTguNyw5LjQgYzAuNywwLjYsMS4zLDEuNywxLjMsMy41YzAsMi42LDAsNC42LDAsNS4yYzAsMC41LDAuNCwxLjEsMS4zLDAuOWM3LjUtMi42LDEzLTkuNywxMy0xOC4xQzUxLDIxLjksNDIuNSwxMy40LDMyLDEzLjR6Ii8+Cjwvc3ZnPgo='
+        const badgeData = DummyService._makeBadgeData(
+          { logo: 'github', style: 'social' },
+          {}
+        )
+        expect(badgeData.logo).to.equal(expLogo)
+      })
+
+      it('overrides the logo with color', function() {
+        const expLogo =
+          'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMTIgMTIgNDAgNDAiPgo8cGF0aCBmaWxsPSIjMDA3ZWM2IiBkPSJNMzIsMTMuNGMtMTAuNSwwLTE5LDguNS0xOSwxOWMwLDguNCw1LjUsMTUuNSwxMywxOGMxLDAuMiwxLjMtMC40LDEuMy0wLjljMC0wLjUsMC0xLjcsMC0zLjIgYy01LjMsMS4xLTYuNC0yLjYtNi40LTIuNkMyMCw0MS42LDE4LjgsNDEsMTguOCw0MWMtMS43LTEuMiwwLjEtMS4xLDAuMS0xLjFjMS45LDAuMSwyLjksMiwyLjksMmMxLjcsMi45LDQuNSwyLjEsNS41LDEuNiBjMC4yLTEuMiwwLjctMi4xLDEuMi0yLjZjLTQuMi0wLjUtOC43LTIuMS04LjctOS40YzAtMi4xLDAuNy0zLjcsMi01LjFjLTAuMi0wLjUtMC44LTIuNCwwLjItNWMwLDAsMS42LTAuNSw1LjIsMiBjMS41LTAuNCwzLjEtMC43LDQuOC0wLjdjMS42LDAsMy4zLDAuMiw0LjcsMC43YzMuNi0yLjQsNS4yLTIsNS4yLTJjMSwyLjYsMC40LDQuNiwwLjIsNWMxLjIsMS4zLDIsMywyLDUuMWMwLDcuMy00LjUsOC45LTguNyw5LjQgYzAuNywwLjYsMS4zLDEuNywxLjMsMy41YzAsMi42LDAsNC42LDAsNS4yYzAsMC41LDAuNCwxLjEsMS4zLDAuOWM3LjUtMi42LDEzLTkuNywxMy0xOC4xQzUxLDIxLjksNDIuNSwxMy40LDMyLDEzLjR6Ii8+Cjwvc3ZnPgo='
+        const badgeData = DummyService._makeBadgeData(
+          { logo: 'github', logoColor: 'blue' },
+          {}
+        )
+        expect(badgeData.logo).to.equal(expLogo)
+      })
+
+      it('overrides the logoWidth', function() {
+        const badgeData = DummyService._makeBadgeData({ logoWidth: 20 }, {})
+        expect(badgeData.logoWidth).to.equal(20)
+      })
+
+      it('overrides the links', function() {
+        const badgeData = DummyService._makeBadgeData(
+          { link: 'https://circleci.com/gh/badges/daily-tests' },
+          {
+            link:
+              'https://circleci.com/workflow-run/184ef3de-4836-4805-a2e4-0ceba099f92d',
+          }
+        )
+        expect(badgeData.links).to.deep.equal([
+          'https://circleci.com/gh/badges/daily-tests',
+        ])
+      })
+
+      it('overrides the template', function() {
+        const badgeData = DummyService._makeBadgeData({ style: 'pill' }, {})
+        expect(badgeData.template).to.equal('pill')
       })
     })
 
@@ -443,78 +499,31 @@ describe('BaseService', function() {
     })
   })
 
-  describe('_makeStaticExampleUrl', function() {
-    test(
-      serviceData => DummyService._makeStaticExampleUrl(serviceData),
-      () => {
-        given({
-          message: 'hello',
-          color: 'dcdc00',
-        }).expect('/badge/cat-hello-%23dcdc00.svg')
-        given({
-          message: 'hello',
-          color: 'red',
-        }).expect('/badge/cat-hello-red.svg')
-        given({
-          message: 'hello',
-        }).expect('/badge/cat-hello-lightgrey.svg')
-      }
-    )
-  })
-
-  describe('prepareExamples', function() {
-    it('returns the expected result', function() {
-      const [
-        first,
-        second,
-        third,
-        fourth,
-        fifth,
-      ] = DummyService.prepareExamples()
-      expect(first).to.deep.equal({
-        title: 'DummyService',
-        exampleUrl: undefined,
-        previewUrl: '/foo/World.svg',
-        urlPattern: undefined,
-        documentation: undefined,
-        keywords: undefined,
-      })
-      expect(second).to.deep.equal({
-        title: 'DummyService',
-        exampleUrl: undefined,
-        previewUrl: '/foo/World.svg?queryParamA=%21%21%21',
-        urlPattern: undefined,
-        documentation: undefined,
-        keywords: undefined,
-      })
-      const preparedStaticExample = {
-        title: 'DummyService',
-        exampleUrl: '/foo/World.svg',
-        previewUrl:
-          '/badge/cat-Hello%20namedParamA%3A%20foo%20with%20queryParamA%3A%20bar-lightgrey.svg',
-        urlPattern: '/foo/:world.svg',
-        documentation: undefined,
-        keywords: ['hello'],
-      }
-      expect(third).to.deep.equal(preparedStaticExample)
-      expect(fourth).to.deep.equal(preparedStaticExample)
-      expect(fifth).to.deep.equal({
-        title: 'DummyService',
-        exampleUrl: '/foo/World.svg?queryParamA=%21%21%21',
-        previewUrl:
-          '/badge/cat-Hello%20namedParamA%3A%20foo%20with%20queryParamA%3A%20bar-lightgrey.svg',
-        urlPattern: '/foo/:world.svg?queryParamA=%21%21%21',
-        documentation: undefined,
-        keywords: ['hello'],
-      })
-    })
-  })
-
   describe('getDefinition', function() {
     it('returns the expected result', function() {
       const {
-        examples: [first, second, third, fourth, fifth],
+        category,
+        name,
+        isDeprecated,
+        route,
+        examples,
       } = DummyService.getDefinition()
+      expect({
+        category,
+        name,
+        isDeprecated,
+        route,
+      }).to.deep.equal({
+        category: 'cat',
+        name: 'DummyService',
+        isDeprecated: false,
+        route: {
+          pattern: '/foo/:namedParamA',
+          queryParams: [],
+        },
+      })
+
+      const [first, second, third, fourth, fifth, sixth] = examples
       expect(first).to.deep.equal({
         title: 'DummyService',
         example: {
@@ -574,6 +583,21 @@ describe('BaseService', function() {
       expect(fifth).to.deep.equal({
         title: 'DummyService',
         example: {
+          pattern: '/foo/:namedParamA',
+          namedParams: { namedParamA: 'World' },
+          queryParams: {},
+        },
+        preview: {
+          label: 'cat',
+          message: 'Hello namedParamA: foo with queryParamA: bar',
+          color: 'lightgrey',
+        },
+        keywords: ['hello'],
+        documentation: undefined,
+      })
+      expect(sixth).to.deep.equal({
+        title: 'DummyService',
+        example: {
           pattern: '/foo/:world',
           namedParams: { world: 'World' },
           queryParams: { queryParamA: '!!!' },
@@ -603,6 +627,18 @@ describe('BaseService', function() {
         expect.fail('Expected to throw')
       } catch (e) {
         expect(e).to.be.an.instanceof(InvalidResponse)
+      }
+    })
+
+    it('throws error for invalid query params', async function() {
+      try {
+        DummyService._validateQueryParams(
+          { requiredString: ['this', "shouldn't", 'work'] },
+          dummySchema
+        )
+        expect.fail('Expected to throw')
+      } catch (e) {
+        expect(e).to.be.an.instanceof(InvalidParameter)
       }
     })
   })

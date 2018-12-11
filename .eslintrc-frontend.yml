@@ -21,4 +21,4 @@ settings:
 rules:
   no-console: "error"
 
-  import/extensions: ["error", "never", { "json": "always" }]
+  import/extensions: ["error", "never", { "json": "always", "yml": "always" }]
