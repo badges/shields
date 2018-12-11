@@ -10,6 +10,7 @@ module.exports = class CocoapodsLicense extends LegacyService {
   static get route() {
     return {
       base: 'cocoapods/l',
+      pattern: ':packageName',
     }
   }
 
@@ -17,7 +18,8 @@ module.exports = class CocoapodsLicense extends LegacyService {
     return [
       {
         title: 'Cocoapods',
-        previewUrl: 'AFNetworking',
+        namedParams: { packageName: 'AFNetworking' },
+        staticPreview: { label: 'license', message: 'MIT', color: '000' },
       },
     ]
   }

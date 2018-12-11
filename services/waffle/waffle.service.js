@@ -15,7 +15,7 @@ module.exports = class Waffle extends LegacyService {
 
   static get route() {
     return {
-      base: 'waffle',
+      base: 'waffle/label',
     }
   }
 
@@ -23,7 +23,17 @@ module.exports = class Waffle extends LegacyService {
     return [
       {
         title: 'Waffle.io',
-        previewUrl: 'label/evancohen/smart-mirror/status%3A%20in%20progress',
+        pattern: ':user/:repo/:query',
+        namedParams: {
+          user: 'evancohen',
+          repo: 'smart-mirror',
+          query: 'status: in progress',
+        },
+        staticPreview: {
+          label: 'status: in progress',
+          message: '2',
+          color: '000',
+        },
       },
     ]
   }

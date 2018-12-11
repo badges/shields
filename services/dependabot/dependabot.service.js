@@ -1,13 +1,28 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const {
-  makeBadgeData: getBadgeData,
-  makeLogo: getLogo,
-} = require('../../lib/badge-data')
-const { checkErrorResponse } = require('../../lib/error-helper')
+const BaseJsonService = require('../base-json')
+const Joi = require('joi')
+const url = require('url')
 
-module.exports = class DependabotSemverCompatibility extends LegacyService {
+const schema = Joi.object({
+  status: Joi.string().required(),
+  colour: Joi.string().required(),
+})
+
+module.exports = class DependabotSemverCompatibility extends BaseJsonService {
+  async fetch({ packageManager, dependencyName }) {
+    const url = `https://api.dependabot.com/badges/compatibility_score`
+    return this._requestJson({
+      schema,
+      url,
+      options: { qs: this._getQuery({ packageManager, dependencyName }) },
+    })
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'semver stability' }
+  }
+
   static get category() {
     return 'other'
   }
@@ -15,52 +30,44 @@ module.exports = class DependabotSemverCompatibility extends LegacyService {
   static get route() {
     return {
       base: 'dependabot/semver',
+      pattern: ':packageManager/:dependencyName',
     }
+  }
+
+  _getQuery({ packageManager, dependencyName }) {
+    return {
+      'package-manager': packageManager,
+      'dependency-name': dependencyName,
+      'version-scheme': 'semver',
+    }
+  }
+
+  _getLink({ packageManager, dependencyName }) {
+    const qs = new url.URLSearchParams(
+      this._getQuery({ packageManager, dependencyName })
+    )
+    return `https://dependabot.com/compatibility-score.html?${qs.toString()}`
   }
 
   static get examples() {
     return [
       {
-        title: 'SemVer Compatibility',
-        previewUrl: 'bundler/puma',
+        title: 'Dependabot SemVer Compatibility',
+        namedParams: { packageManager: 'bundler', dependencyName: 'puma' },
+        staticExample: {
+          color: 'green',
+          message: '98%',
+        },
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/dependabot\/semver\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const packageManager = match[1]
-        const dependencyName = match[2]
-        const format = match[3]
-        const options = {
-          method: 'GET',
-          headers: { Accept: 'application/json' },
-          uri: `https://api.dependabot.com/badges/compatibility_score?package-manager=${packageManager}&dependency-name=${dependencyName}&version-scheme=semver`,
-        }
-        const badgeData = getBadgeData('semver stability', data)
-        badgeData.links = [
-          `https://dependabot.com/compatibility-score.html?package-manager=${packageManager}&dependency-name=${dependencyName}&version-scheme=semver`,
-        ]
-        badgeData.logo = getLogo('dependabot', data)
-        request(options, (err, res) => {
-          if (checkErrorResponse(badgeData, err, res)) {
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const dependabotData = JSON.parse(res['body'])
-            badgeData.text[1] = dependabotData.status
-            badgeData.colorscheme = dependabotData.colour
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            badgeData.colorscheme = 'red'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  async handle({ packageManager, dependencyName }) {
+    const json = await this.fetch({ packageManager, dependencyName })
+    return {
+      color: json.colour,
+      message: json.status,
+      link: this._getLink({ packageManager, dependencyName }),
+    }
   }
 }

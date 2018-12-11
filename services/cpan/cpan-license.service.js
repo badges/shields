@@ -10,6 +10,7 @@ module.exports = class CpanLicense extends LegacyService {
   static get route() {
     return {
       base: 'cpan/l',
+      pattern: ':packageName',
     }
   }
 
@@ -17,7 +18,8 @@ module.exports = class CpanLicense extends LegacyService {
     return [
       {
         title: 'CPAN',
-        previewUrl: 'Config-Augeas',
+        namedParams: { packageName: 'Config-Augeas' },
+        staticPreview: { label: 'CPAN', message: 'lgpl_2_1', color: 'blue' },
         keywords: ['perl'],
       },
     ]

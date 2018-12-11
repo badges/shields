@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Meta from './meta'
 import Header from './header'
 import SuggestionAndSearch from './suggestion-and-search'
+import DonateBox from './donate'
 import MarkupModal from './markup-modal'
 import Usage from './usage'
 import Footer from './footer'
@@ -155,19 +156,11 @@ export default class Main extends React.Component {
             baseUrl={baseUrl}
             longCache={longCache}
           />
-          <a className="donate" href="https://opencollective.com/shields">
-            donate
-          </a>
+          <DonateBox />
         </section>
         {this.renderMain()}
         <Usage baseUrl={baseUrl} longCache={longCache} />
         <Footer baseUrl={baseUrl} />
-        <style jsx>{`
-          .donate {
-            text-decoration: none;
-            color: rgba(0, 0, 0, 0.1);
-          }
-        `}</style>
       </div>
     )
   }
