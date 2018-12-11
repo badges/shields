@@ -17,7 +17,9 @@ module.exports = class PypiLicense extends PypiBase {
     return [
       {
         title: 'PyPI - License',
-        previewUrl: 'Django',
+        pattern: ':packageName',
+        namedParams: { packageName: 'Django' },
+        staticPreview: { label: 'license', message: 'BSD', color: 'lightgrey' },
         keywords: ['python'],
       },
     ]

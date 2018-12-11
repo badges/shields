@@ -22,7 +22,11 @@ module.exports = class NpmTypeDefinitions extends NpmBase {
     return [
       {
         title: 'npm type definitions',
-        previewUrl: 'chalk',
+        pattern: ':packageName',
+        namedParams: { packageName: 'chalk' },
+        staticPreview: this.render({
+          supportedLanguages: ['TypeScript', 'Flow'],
+        }),
         keywords: ['node', 'typescript', 'flow'],
       },
     ]
