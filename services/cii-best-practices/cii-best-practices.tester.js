@@ -36,18 +36,6 @@ t.create('live: unknown project')
   .get(`/level/abc.json`)
   .expectJSON({ name: 'cii', value: 'project not found' })
 
-t.create('level: unknown project')
-  .get(`/level/2.json`)
-  .intercept(nock =>
-    nock('https://bestpractices.coreinfrastructure.org/projects')
-      .get('/2/badge.json')
-      .reply(404)
-  )
-  .expectJSON({
-    name: 'cii',
-    value: 'project not found',
-  })
-
 t.create('level: gold project')
   .get(`/level/1.json`)
   .intercept(nock =>
@@ -108,18 +96,6 @@ t.create('level: in progress project')
     value: 'in progress',
   })
 
-t.create('percentage: unknown project')
-  .get(`/percentage/2.json`)
-  .intercept(nock =>
-    nock('https://bestpractices.coreinfrastructure.org/projects')
-      .get('/2/badge.json')
-      .reply(404)
-  )
-  .expectJSON({
-    name: 'cii',
-    value: 'project not found',
-  })
-
 t.create('percentage: gold project')
   .get(`/percentage/1.json`)
   .intercept(nock =>
@@ -178,18 +154,6 @@ t.create('percentage: in progress project')
   .expectJSON({
     name: 'cii',
     value: '94%',
-  })
-
-t.create('summary: unknown project')
-  .get(`/summary/2.json`)
-  .intercept(nock =>
-    nock('https://bestpractices.coreinfrastructure.org/projects')
-      .get('/2/badge.json')
-      .reply(404)
-  )
-  .expectJSON({
-    name: 'cii',
-    value: 'project not found',
   })
 
 t.create('summary: gold project')
