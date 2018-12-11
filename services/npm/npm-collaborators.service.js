@@ -1,11 +1,8 @@
 'use strict'
 
-const { colorScale } = require('../../lib/color-formatters')
 const NpmBase = require('./npm-base')
 
 const keywords = ['node']
-
-const collaboratorColor = colorScale([2, 3, 4, 6])
 
 module.exports = class NpmCollaborators extends NpmBase {
   static get category() {
@@ -43,9 +40,18 @@ module.exports = class NpmCollaborators extends NpmBase {
   }
 
   static render({ collaborators }) {
+    let color
+    if (collaborators > 2) {
+      color = 'blue'
+    } else if (collaborators === 2) {
+      color = 'yellow'
+    } else {
+      color = 'red'
+    }
+
     return {
       message: collaborators,
-      color: collaboratorColor(collaborators),
+      color,
     }
   }
 
