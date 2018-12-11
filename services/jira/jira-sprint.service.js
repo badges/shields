@@ -27,7 +27,17 @@ module.exports = class JiraSprint extends LegacyService {
     return [
       {
         title: 'JIRA sprint completion',
-        previewUrl: 'https/jira.spring.io/94',
+        pattern: ':protocol/:host/:sprintId',
+        namedParams: {
+          protocol: 'https',
+          host: 'jira.spring.io',
+          sprintId: '94',
+        },
+        staticPreview: {
+          label: 'completion',
+          message: '96%',
+          color: 'orange',
+        },
         documentation,
       },
     ]

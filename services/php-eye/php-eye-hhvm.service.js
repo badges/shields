@@ -5,6 +5,8 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { checkErrorResponse } = require('../../lib/error-helper')
 const { omitv } = require('../../lib/text-formatters')
 
+const keywords = ['php', 'runtime']
+
 module.exports = class PhpeyeHhvm extends LegacyService {
   static get category() {
     return 'platform-support'
@@ -20,11 +22,29 @@ module.exports = class PhpeyeHhvm extends LegacyService {
     return [
       {
         title: 'HHVM',
-        previewUrl: 'symfony/symfony',
+        pattern: ':user/:packageName',
+        namedParams: { user: 'symfony', packageName: 'symfony' },
+        staticPreview: {
+          label: 'hhvm',
+          message: 'not tested',
+          color: 'red',
+        },
+        keywords,
       },
       {
         title: 'HHVM (branch)',
-        previewUrl: 'symfony/symfony/master',
+        pattern: ':user/:packageName/:branch',
+        namedParams: {
+          user: 'symfony',
+          packageName: 'symfony',
+          branch: 'master',
+        },
+        staticPreview: {
+          label: 'hhvm',
+          message: 'not tested',
+          color: 'red',
+        },
+        keywords,
       },
     ]
   }
