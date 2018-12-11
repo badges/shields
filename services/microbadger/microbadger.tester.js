@@ -49,7 +49,7 @@ t.create('layers with a specified tag')
   )
 
 t.create('specified tag when repository has only one')
-  .get('/layers/_/hello-world/wrong-tag.json')
+  .get('/layers/_/alpine/wrong-tag.json')
   .expectJSON({ name: 'layers', value: 'not found' })
 
 t.create('nonexistent repository')

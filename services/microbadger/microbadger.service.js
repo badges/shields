@@ -22,22 +22,38 @@ module.exports = class MicroBadger extends LegacyService {
     return [
       {
         title: 'MicroBadger Size',
-        previewUrl: 'image-size/fedora/apache',
+        pattern: ':imageId+',
+        namedParams: { imageId: 'fedora/apache' },
+        staticPreview: {
+          label: 'image size',
+          message: '126 MB',
+          color: 'blue',
+        },
         keywords: ['docker'],
       },
       {
         title: 'MicroBadger Size (tag)',
-        previewUrl: 'image-size/fedora/apache/latest',
+        pattern: ':imageId+/:tag',
+        namedParams: { imageId: 'fedora/apache', tag: 'latest' },
+        staticPreview: {
+          label: 'image size',
+          message: '103 MB',
+          color: 'blue',
+        },
         keywords: ['docker'],
       },
       {
         title: 'MicroBadger Layers',
-        previewUrl: 'layers/_/alpine',
+        pattern: ':imageId+',
+        namedParams: { imageId: '_/alpine' },
+        staticPreview: { label: 'layers', message: '15', color: 'blue' },
         keywords: ['docker'],
       },
       {
         title: 'MicroBadger Layers (tag)',
-        previewUrl: 'layers/_/alpine/2.7',
+        pattern: ':imageId+/:tag',
+        namedParams: { imageId: '_/alpine', tag: '2.7' },
+        staticPreview: { label: 'layers', message: '12', color: 'blue' },
         keywords: ['docker'],
       },
     ]
@@ -111,7 +127,7 @@ module.exports = class MicroBadger extends LegacyService {
               badgeData.text[1] = image.LayerCount
             }
             badgeData.colorscheme = null
-            badgeData.colorB = '#007ec6'
+            badgeData.colorB = 'blue'
             sendBadge(format, badgeData)
           } catch (e) {
             badgeData.colorscheme = 'red'
