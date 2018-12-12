@@ -24,7 +24,7 @@ module.exports = class DependabotSemverCompatibility extends BaseJsonService {
   }
 
   static get category() {
-    return 'other'
+    return 'quality'
   }
 
   static get route() {

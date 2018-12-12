@@ -24,7 +24,7 @@ module.exports = class LeanpubBookSummaryService extends BaseJsonService {
   }
 
   static get category() {
-    return 'other'
+    return 'funding'
   }
 
   static get examples() {

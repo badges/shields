@@ -6,7 +6,7 @@ const { checkErrorResponse } = require('../../lib/error-helper')
 
 module.exports = class LgtmGrade extends LegacyService {
   static get category() {
-    return 'build'
+    return 'quality'
   }
 
   static get route() {

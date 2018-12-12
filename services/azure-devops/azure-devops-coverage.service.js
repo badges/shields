@@ -60,7 +60,7 @@ module.exports = class AzureDevOpsCoverage extends BaseAzureDevOpsService {
   }
 
   static get category() {
-    return 'build'
+    return 'quality'
   }
 
   static get examples() {

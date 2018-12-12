@@ -9,7 +9,7 @@ const {
 
 module.exports = class Codecov extends LegacyService {
   static get category() {
-    return 'build'
+    return 'quality'
   }
 
   static get route() {
