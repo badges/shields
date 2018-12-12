@@ -9,4 +9,11 @@ Raven.disableConsoleAlerts()
 const Server = require('./lib/server')
 const config = require('./lib/server-config')
 
-new Server(config).start()
+;(async () => {
+  try {
+    await new Server(config).start()
+  } catch (e) {
+    console.error(e)
+    process.exit(1)
+  }
+})()
