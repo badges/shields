@@ -43,6 +43,7 @@ export default class MarkupModal extends React.Component {
     if (example.pattern !== undefined) {
       const { pattern, namedParams, queryParams } = example
       badgeUrl = badgeUrlFromPath({
+        baseUrl,
         path: pattern,
         queryParams,
       })
@@ -55,6 +56,7 @@ export default class MarkupModal extends React.Component {
     } else {
       const { path, queryParams } = example
       badgeUrl = badgeUrlFromPath({
+        baseUrl,
         path,
         queryParams,
       })
@@ -89,6 +91,14 @@ export default class MarkupModal extends React.Component {
     const { baseUrl } = this.props
     const { badgeUrl, style } = this.state
 
+    if (badgeUrl.startsWith(baseUrl)) {
+      return badgeUrlFromPath({
+        path: badgeUrl,
+        format: '', // `badgeUrl` already contains `.svg`.
+        style: style === 'flat' ? undefined : style,
+      })
+    }
+
     return badgeUrlFromPath({
       baseUrl,
       path: badgeUrl,
@@ -99,7 +109,7 @@ export default class MarkupModal extends React.Component {
 
   renderLivePreview() {
     const { badgeUrl } = this.state
-    const includesPlaceholders = badgeUrl.includes(':')
+    const includesPlaceholders = badgeUrl.includes('/:')
 
     if (includesPlaceholders) {
       return nonBreakingSpace
