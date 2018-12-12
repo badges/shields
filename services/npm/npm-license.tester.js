@@ -46,6 +46,7 @@ t.create('license for package without a license property')
       .get('/package-without-license/latest')
       .reply(200, {
         name: 'package-without-license',
+        maintainers: [],
       })
   )
   .expectJSON({ name: 'license', value: 'missing', colorB: colorsB.red })
@@ -61,6 +62,7 @@ t.create('license for package with a license object')
           type: 'MIT',
           url: 'https://www.opensource.org/licenses/mit-license.php',
         },
+        maintainers: [],
       })
   )
   .expectJSON({ name: 'license', value: 'MIT', colorB: colorsB.green })
@@ -73,6 +75,7 @@ t.create('license for package with a license array')
       .reply(200, {
         name: 'package-license-object',
         license: ['MPL-2.0', 'MIT'],
+        maintainers: [],
       })
   )
   .expectJSON({
