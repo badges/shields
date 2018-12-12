@@ -120,7 +120,7 @@ class AmoRating extends LegacyService {
 
 class AmoUsers extends LegacyService {
   static get category() {
-    return 'other'
+    return 'downloads'
   }
 
   static get route() {

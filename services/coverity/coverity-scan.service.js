@@ -5,7 +5,7 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
 module.exports = class CoverityScan extends LegacyService {
   static get category() {
-    return 'build'
+    return 'quality'
   }
 
   static get route() {

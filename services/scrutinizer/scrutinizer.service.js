@@ -7,9 +7,32 @@ const {
   coveragePercentage: coveragePercentageColor,
 } = require('../../lib/color-formatters')
 
-module.exports = class Scrutinizer extends LegacyService {
+class ScrutinizerBuild extends LegacyService {
   static get category() {
     return 'build'
+  }
+
+  static get route() {
+    return {
+      base: 'scrutinizer',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Scrutinizer Build',
+        previewUrl: 'build/g/filp/whoops',
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler({ camp, cache }) {}
+}
+
+class Scrutinizer extends LegacyService {
+  static get category() {
+    return 'quality'
   }
 
   static get route() {
@@ -31,10 +54,6 @@ module.exports = class Scrutinizer extends LegacyService {
       {
         title: 'Scrutinizer branch',
         previewUrl: 'coverage/g/doctrine/doctrine2/master',
-      },
-      {
-        title: 'Scrutinizer Build',
-        previewUrl: 'build/g/filp/whoops',
       },
     ]
   }
@@ -113,4 +132,9 @@ module.exports = class Scrutinizer extends LegacyService {
       })
     )
   }
+}
+
+module.exports = {
+  ScrutinizerBuild,
+  Scrutinizer,
 }
