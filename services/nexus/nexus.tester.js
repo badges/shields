@@ -3,8 +3,7 @@
 const Joi = require('joi')
 const { invalidJSON } = require('../response-fixtures')
 
-const t = require('../create-service-tester')()
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('search release version')
   .get('/r/https/repository.jboss.org/nexus/jboss/jboss-client.json')

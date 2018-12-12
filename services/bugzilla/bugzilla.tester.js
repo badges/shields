@@ -15,8 +15,10 @@ const bzBugStatus = Joi.equal(
   'incomplete'
 )
 
-const t = new ServiceTester({ id: 'bugzilla', title: 'Bugzilla' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'bugzilla',
+  title: 'Bugzilla',
+}))
 
 t.create('Bugzilla valid bug status')
   .get('/996038.json')

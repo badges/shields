@@ -19,7 +19,7 @@ const schema = Joi.object({
 
 module.exports = class GithubPullRequestCheckState extends GithubAuthService {
   static get category() {
-    return 'other'
+    return 'build'
   }
 
   static get route() {

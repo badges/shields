@@ -12,6 +12,7 @@ module.exports = class BowerLicense extends LegacyService {
   static get route() {
     return {
       base: 'bower/l',
+      pattern: ':packageName',
     }
   }
 
@@ -19,7 +20,8 @@ module.exports = class BowerLicense extends LegacyService {
     return [
       {
         title: 'Bower',
-        previewUrl: 'bootstrap',
+        namedParams: { packageName: 'bootstrap' },
+        staticPreview: { label: 'license', message: 'MIT', color: 'blue' },
       },
     ]
   }

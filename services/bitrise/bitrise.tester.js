@@ -3,8 +3,10 @@
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 
-const t = new ServiceTester({ id: 'bitrise', title: 'Bitrise' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'bitrise',
+  title: 'Bitrise',
+}))
 
 t.create('deploy status')
   .get('/cde737473028420d/master.json?token=GCIdEzacE4GW32jLVrZb7A')

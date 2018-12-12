@@ -3,12 +3,11 @@
 const ServiceTester = require('../service-tester')
 const { isMetric } = require('../test-validators')
 
-const t = new ServiceTester({
+const t = (module.exports = new ServiceTester({
   id: 'crates',
   title: 'crates.io',
   pathPrefix: '/crates',
-})
-module.exports = t
+}))
 
 t.create('total downloads')
   .get('/d/libc.json')

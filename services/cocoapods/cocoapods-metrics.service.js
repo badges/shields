@@ -9,7 +9,7 @@ const {
 
 module.exports = class CocoapodsMetrics extends LegacyService {
   static get category() {
-    return 'other'
+    return 'quality'
   }
 
   static get route() {

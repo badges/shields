@@ -5,7 +5,7 @@
 //
 // To test changes to this file, pick a PR to test against, then run
 // `./node_modules/.bin/danger pr pr-url`
-// Note that the line numbers in the runtime errors are incorrecr.
+// Note that the line numbers in the runtime errors are incorrect.
 
 const { danger, fail, message, warn } = require('danger')
 const chainsmoker = require('chainsmoker')
@@ -24,7 +24,7 @@ const documentation = fileMatch(
   'frontend/components/usage.js'
 )
 const server = fileMatch('server.js')
-const serviceTests = fileMatch('services/**/*.tester.js')
+const serverTests = fileMatch('server.spec.js')
 const helpers = fileMatch(
   'lib/**/*.js',
   '!**/*.spec.js',
@@ -66,13 +66,11 @@ if (packageJson.modified && !packageLock.modified) {
   warn(`${message} - <i>${idea}</i>`)
 }
 
-if (server.modified && !serviceTests.createdOrModified) {
+if (server.modified && !serverTests.modified) {
   warn(
     [
-      'This PR modified the server but none of the service tests. <br>',
-      "That's okay so long as it's refactoring existing code. ",
-      'Otherwise, please consider adding tests to the service: ',
-      '[How-to](https://github.com/badges/shields/blob/master/doc/service-tests.md#readme)',
+      'This PR modified the server but none of its tests. <br>',
+      "That's okay so long as it's refactoring existing code.",
     ].join('')
   )
 }

@@ -2,8 +2,8 @@
 
 const Joi = require('joi')
 const { isMetric } = require('../test-validators')
-const t = require('../create-service-tester')()
-module.exports = t
+
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('JavaScript Questions')
   .get('/stackoverflow/t/javascript.json')
