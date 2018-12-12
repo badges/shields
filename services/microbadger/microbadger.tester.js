@@ -9,7 +9,7 @@ const t = new ServiceTester({ id: 'microbadger', title: 'MicroBadger' })
 module.exports = t
 
 t.create('image size without a specified tag')
-  .get('/image-size/wikiwi/docker-build.json')
+  .get('/image-size/fedora/apache.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'image size',
@@ -18,7 +18,7 @@ t.create('image size without a specified tag')
   )
 
 t.create('image size with a specified tag')
-  .get('/image-size/kelseyhightower/helloworld/appengine.json')
+  .get('/image-size/fedora/apache/latest.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'image size',
@@ -27,7 +27,7 @@ t.create('image size with a specified tag')
   )
 
 t.create('layers without a specified tag')
-  .get('/layers/_/hello-world.json')
+  .get('/layers/_/alpine.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'layers',
@@ -38,7 +38,7 @@ t.create('layers without a specified tag')
   )
 
 t.create('layers with a specified tag')
-  .get('/layers/_/httpd/alpine.json')
+  .get('/layers/_/alpine/2.7.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'layers',
@@ -49,7 +49,7 @@ t.create('layers with a specified tag')
   )
 
 t.create('specified tag when repository has only one')
-  .get('/layers/_/hello-world/wrong-tag.json')
+  .get('/layers/_/alpine/wrong-tag.json')
   .expectJSON({ name: 'layers', value: 'not found' })
 
 t.create('nonexistent repository')
