@@ -15,7 +15,7 @@ const schema = Joi.object({
 
 module.exports = class CodacyCoverage extends BaseSvgScrapingService {
   static get category() {
-    return 'build'
+    return 'quality'
   }
 
   static get route() {

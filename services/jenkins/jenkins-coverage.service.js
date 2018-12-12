@@ -59,7 +59,7 @@ class BaseJenkinsCoverage extends BaseJsonService {
   }
 
   static get category() {
-    return 'build'
+    return 'quality'
   }
 
   static buildUrl(scheme, host, job, plugin) {
