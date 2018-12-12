@@ -22,7 +22,7 @@ module.exports = class MicroBadger extends LegacyService {
     return [
       {
         title: 'MicroBadger Size',
-        pattern: ':imageId+',
+        pattern: 'image-size/:imageId+',
         namedParams: { imageId: 'fedora/apache' },
         staticPreview: {
           label: 'image size',
@@ -33,7 +33,7 @@ module.exports = class MicroBadger extends LegacyService {
       },
       {
         title: 'MicroBadger Size (tag)',
-        pattern: ':imageId+/:tag',
+        pattern: 'image-size/:imageId+/:tag',
         namedParams: { imageId: 'fedora/apache', tag: 'latest' },
         staticPreview: {
           label: 'image size',
@@ -44,14 +44,14 @@ module.exports = class MicroBadger extends LegacyService {
       },
       {
         title: 'MicroBadger Layers',
-        pattern: ':imageId+',
+        pattern: 'layers/:imageId+',
         namedParams: { imageId: '_/alpine' },
         staticPreview: { label: 'layers', message: '15', color: 'blue' },
         keywords: ['docker'],
       },
       {
         title: 'MicroBadger Layers (tag)',
-        pattern: ':imageId+/:tag',
+        pattern: 'layers/:imageId+/:tag',
         namedParams: { imageId: '_/alpine', tag: '2.7' },
         staticPreview: { label: 'layers', message: '12', color: 'blue' },
         keywords: ['docker'],
