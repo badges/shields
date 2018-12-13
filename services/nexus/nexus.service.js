@@ -6,13 +6,15 @@ const { isSnapshotVersion: isNexusSnapshotVersion } = require('./nexus-version')
 const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
+const versionRegex = /^\d+(\.\d+)*(-.*)?$/
+
 const searchApiSchema = Joi.object({
   data: Joi.array()
     .items(
       Joi.object({
-        latestRelease: Joi.string(),
-        latestSnapshot: Joi.string(),
-        version: Joi.string(),
+        latestRelease: Joi.string().regex(versionRegex),
+        latestSnapshot: Joi.string().regex(versionRegex),
+        version: Joi.string().regex(versionRegex),
       })
     )
     .required(),
@@ -20,8 +22,8 @@ const searchApiSchema = Joi.object({
 
 const resolveApiSchema = Joi.object({
   data: Joi.object({
-    baseVersion: Joi.string(),
-    version: Joi.string(),
+    baseVersion: Joi.string().regex(versionRegex),
+    version: Joi.string().regex(versionRegex),
   }).required(),
 }).required()
 
