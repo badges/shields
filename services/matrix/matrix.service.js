@@ -9,6 +9,12 @@ const matrixRegisterSchema = Joi.object({
   access_token: Joi.string().required(),
 }).required()
 
+const matrixClientVersionsSchema = Joi.object({
+  versions: Joi.array()
+    .items(Joi.string().required())
+    .required(),
+}).required()
+
 const matrixStateSchema = Joi.array()
   .items(
     Joi.object({
@@ -49,6 +55,13 @@ module.exports = class Matrix extends BaseJsonService {
     return resolve(srvPrefix + host)
   }
 
+  async checkMatrixHomeserverClientAPI(host) {
+    return this._requestJson({
+      url: `https://${host}/_matrix/client/versions`,
+      schema: matrixClientVersionsSchema,
+    })
+  }
+
   async registerAccount({ host, guest }) {
     return this._requestJson({
       url: `https://${host}/_matrix/client/r0/register`,
@@ -77,9 +90,20 @@ module.exports = class Matrix extends BaseJsonService {
     try {
       const addrs = await this.lookupMatrixHomeserver(host)
       if (addrs.length) {
-        host = addrs[0].name
+        // The address we are given may be only to use for federation. Therefore
+        // we check if we can painlessly reach the client APIs at this address,
+        // and if not we don't do anything, and ignore the error, since host
+        // already holds the right value, and we expect this check to fail in
+        // some cases.
+        try {
+          await this.checkMatrixHomeserverClientAPI(addrs[0].name)
+          host = addrs[0].name
+        } catch (e) {}
       }
     } catch (e) {
+      // If the error is ENOTFOUND, it means that there is no SRV record for
+      // this server, and that we need to fall back on the value host already
+      // holds.
       if (e.code !== 'ENOTFOUND') {
         throw e
       }
