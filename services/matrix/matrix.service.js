@@ -122,7 +122,7 @@ module.exports = class Matrix extends BaseJsonService {
         },
       },
       errorMessages: {
-        401: 'auth failed',
+        401: 'bad auth token',
         404: 'room not found',
         429: 'rate limited by rooms host',
       },
