@@ -5,22 +5,21 @@ import styled from 'styled-components'
 import { badgeUrlFromPath, badgeUrlFromPattern } from '../../lib/make-badge-url'
 import generateAllMarkup from '../lib/generate-image-markup'
 import { advertisedStyles } from '../../supported-features.json'
-import { Snippet } from './snippet'
+import { Snippet2 } from './snippet'
 import { BaseFont, H3, Badge, BlockInput } from './common'
-import MarkupModalContent from './markup-modal-content'
 
 const ContentContainer = styled(BaseFont)`
   text-align: center;
 `
 
 const WeeSnippet = ({ snippet }) => (
-  <Snippet truncate fontSize="10pt" snippet={snippet} />
+  <Snippet2 truncate fontSize="10pt" snippet={snippet} />
 )
 WeeSnippet.propTypes = {
   snippet: PropTypes.string.isRequired,
 }
 
-export default class MarkupModal extends React.Component {
+export default class MarkupModalContent extends React.Component {
   static propTypes = {
     // This is an item from the `examples` array within the
     // `serviceDefinition` schema.
@@ -36,10 +35,6 @@ export default class MarkupModal extends React.Component {
     exampleUrl: '',
     link: '',
     style: 'flat',
-  }
-
-  get isOpen() {
-    return this.props.example !== undefined
   }
 
   static urlsForProps(props) {
@@ -79,7 +74,7 @@ export default class MarkupModal extends React.Component {
   static getDerivedStateFromProps(props, state) {
     let urlsForProps, link
     if (props.example) {
-      urlsForProps = MarkupModal.urlsForProps(props)
+      urlsForProps = MarkupModalContent.urlsForProps(props)
       link = props.example.example.link
     } else {
       urlsForProps = { badgeUrl: '', exampleUrl: '' }
@@ -172,11 +167,15 @@ export default class MarkupModal extends React.Component {
   }
 
   render() {
-    const { isOpen } = this
-    const { onRequestClose, example: { title } = {} } = this.props
+    const {
+      baseUrl,
+      onRequestClose,
+      example: {
+        title,
+        example: { pattern },
+      },
+    } = this.props
     const { link, badgeUrl, exampleUrl, style } = this.state
-
-    const hasModernExample = isOpen && this.props.example.example.pattern
 
     const common = {
       autoComplete: 'off',
@@ -186,74 +185,64 @@ export default class MarkupModal extends React.Component {
     }
 
     return (
-      <Modal
-        isOpen={isOpen}
-        onRequestClose={onRequestClose}
-        contentLabel="Example Modal"
-        ariaHideApp={false}
-      >
-        {hasModernExample ? (
-          <MarkupModalContent {...this.props} />
-        ) : (
-          <ContentContainer>
-            <form action="">
-              <H3>{title}</H3>
-              {isOpen && this.renderLivePreview()}
-              <p>
-                <label>
-                  Link&nbsp;
-                  <BlockInput
-                    type="url"
-                    value={link}
-                    onChange={event => {
-                      this.setState({ link: event.target.value })
-                    }}
-                    {...common}
-                  />
-                </label>
-              </p>
-              <p>
-                <label>
-                  Path&nbsp;
-                  <BlockInput
-                    type="url"
-                    value={badgeUrl}
-                    onChange={event => {
-                      this.setState({ badgeUrl: event.target.value })
-                    }}
-                    {...common}
-                  />
-                </label>
-              </p>
-              {exampleUrl && (
-                <p>
-                  Example&nbsp;
-                  <Snippet fontSize="10pt" snippet={exampleUrl} />
-                </p>
-              )}
-              <p>
-                <label>
-                  Style&nbsp;
-                  <select
-                    value={style}
-                    onChange={event => {
-                      this.setState({ style: event.target.value })
-                    }}
-                  >
-                    {advertisedStyles.map(style => (
-                      <option key={style} value={style}>
-                        {style}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </p>
-              {isOpen && this.renderMarkup()}
-              {isOpen && this.renderDocumentation()}
-            </form>
-          </ContentContainer>
-        )}
-      </Modal>
+      <ContentContainer>
+        <form action="">
+          <H3>{title}</H3>
+          <Snippet2 snippet={pattern} snippetToCopy={`${baseUrl}${pattern}`} />
+          {this.renderLivePreview()}
+          <p>
+            <label>
+              Link&nbsp;
+              <BlockInput
+                type="url"
+                value={link}
+                onChange={event => {
+                  this.setState({ link: event.target.value })
+                }}
+                {...common}
+              />
+            </label>
+          </p>
+          <p>
+            <label>
+              Path&nbsp;
+              <BlockInput
+                type="url"
+                value={badgeUrl}
+                onChange={event => {
+                  this.setState({ badgeUrl: event.target.value })
+                }}
+                {...common}
+              />
+            </label>
+          </p>
+          {exampleUrl && (
+            <p>
+              Example&nbsp;
+              <Snippet2 fontSize="10pt" snippet={exampleUrl} />
+            </p>
+          )}
+          <p>
+            <label>
+              Style&nbsp;
+              <select
+                value={style}
+                onChange={event => {
+                  this.setState({ style: event.target.value })
+                }}
+              >
+                {advertisedStyles.map(style => (
+                  <option key={style} value={style}>
+                    {style}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </p>
+          {this.renderMarkup()}
+          {this.renderDocumentation()}
+        </form>
+      </ContentContainer>
     )
   }
 }
