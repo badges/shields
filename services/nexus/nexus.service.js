@@ -5,6 +5,7 @@ const Joi = require('joi')
 const { isSnapshotVersion: isNexusSnapshotVersion } = require('./nexus-version')
 const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
+const serverSecrets = require('../../lib/server-secrets')
 
 const versionRegex = /^\d+(\.\d+)*(-.*)?$/
 
@@ -189,6 +190,20 @@ module.exports = class Nexus extends BaseJsonService {
         options.qs[key] = val
       })
     }
+
+    if (serverSecrets) {
+      if (serverSecrets.nexus_base64auth) {
+        options.headers = {
+          Authorization: `basic ${serverSecrets.nexus_base64auth}`
+        }
+      } else if (serverSecrets.nexus_user) {
+        options.auth = {
+          user: serverSecrets.nexus_user,
+          pass: serverSecrets.nexus_pass,
+        }
+      }
+    }
+
     return {
       schema,
       url,
