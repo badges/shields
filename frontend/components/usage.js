@@ -94,7 +94,7 @@ export default class Usage extends React.PureComponent {
       <QueryParamTable>
         <tbody>
           {advertisedStyles.map(style => {
-            const snippet = `?logo=appveyor&style=${style}`
+            const snippet = `?style=${style}&logo=appveyor`
             const badgeUrl = staticBadgeUrl(baseUrl, 'style', style, 'green', {
               logo: 'appveyor',
               style,
