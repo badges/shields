@@ -195,6 +195,7 @@ jobs:
 
       - run:
           name: Look for results
+          when: always
           command: ls junit
 
       - store_test_results:
