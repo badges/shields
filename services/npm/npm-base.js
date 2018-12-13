@@ -10,7 +10,15 @@ const deprecatedLicenseObjectSchema = Joi.object({
   type: Joi.string().required(),
 })
 const dependencyMap = Joi.object()
-  .pattern(/./, semverRange)
+  .pattern(
+    /./,
+    Joi.alternatives().try(
+      semverRange,
+      Joi.string()
+        .uri()
+        .required()
+    )
+  )
   .default({})
 const schema = Joi.object({
   dependencies: dependencyMap,
