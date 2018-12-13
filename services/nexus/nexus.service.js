@@ -194,7 +194,7 @@ module.exports = class Nexus extends BaseJsonService {
     if (serverSecrets) {
       if (serverSecrets.nexus_base64auth) {
         options.headers = {
-          Authorization: `basic ${serverSecrets.nexus_base64auth}`
+          Authorization: `basic ${serverSecrets.nexus_base64auth}`,
         }
       } else if (serverSecrets.nexus_user) {
         options.auth = {
