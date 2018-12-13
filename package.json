@@ -142,6 +142,7 @@
     "fetch-ponyfill": "^6.0.0",
     "fs-readfile-promise": "^3.0.1",
     "got": "^9.4.0",
+    "humanize-string": "^1.0.2",
     "husky": "^1.2.0",
     "icedfrisby": "2.0.0-alpha.2",
     "icedfrisby-nock": "^1.1.0",
