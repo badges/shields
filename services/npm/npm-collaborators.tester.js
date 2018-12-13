@@ -20,5 +20,5 @@ t.create('contributor count for unknown package')
   .get('/npm-registry-does-not-have-this-package.json')
   .expectJSON({
     name: 'npm collaborators',
-    value: 'broken test package not found',
+    value: 'package not found',
   })
