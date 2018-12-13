@@ -157,6 +157,8 @@
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "mocha": "^5.0.0",
+    "mocha-env-reporter": "^3.0.0",
+    "mocha-junit-reporter": "^1.18.0",
     "mocha-yaml-loader": "^1.0.3",
     "next": "^6.1.1",
     "nock": "^10.0.4",
@@ -201,9 +203,12 @@
       "test": {
         "presets": [
           "@babel/preset-env",
-          ["@babel/preset-react", {
-            "development": true
-          }]
+          [
+            "@babel/preset-react",
+            {
+              "development": true
+            }
+          ]
         ]
       }
     }
