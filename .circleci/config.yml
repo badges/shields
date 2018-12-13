@@ -190,8 +190,12 @@ jobs:
           name: Frontend unit tests
           environment:
             mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/frontend.xml
+            MOCHA_FILE: junit/frontend/results.xml
           command: npm run test:js:frontend
+
+      - run:
+          name: Look for results
+          command: ls junit
 
       - store_test_results:
           path: junit
