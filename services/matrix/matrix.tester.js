@@ -8,7 +8,7 @@ const t = new ServiceTester({ id: 'matrix', title: 'Matrix' })
 module.exports = t
 
 t.create('get room state as guest')
-  .get('/ROOM/DUMMY.dumb.json?style=_shields_test')
+  .get('/ALIAS:DUMMY.dumb.json?style=_shields_test')
   .intercept(nock =>
     nock('https://DUMMY.dumb/')
       .post('/_matrix/client/r0/register?kind=guest')
@@ -16,6 +16,15 @@ t.create('get room state as guest')
         200,
         JSON.stringify({
           access_token: 'TOKEN',
+        })
+      )
+      .get(
+        '/_matrix/client/r0/directory/room/%23ALIAS:DUMMY.dumb?access_token=TOKEN'
+      )
+      .reply(
+        200,
+        JSON.stringify({
+          room_id: 'ROOM:DUMMY.dumb',
         })
       )
       .get('/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/state?access_token=TOKEN')
@@ -68,14 +77,14 @@ t.create('get room state as guest')
   })
 
 t.create('get room state as member (backup method)')
-  .get('/ROOM/DUMMY.dumb.json?style=_shields_test')
+  .get('/ALIAS:DUMMY.dumb.json?style=_shields_test')
   .intercept(nock =>
     nock('https://DUMMY.dumb/')
       .post('/_matrix/client/r0/register?kind=guest')
       .reply(
         403,
         JSON.stringify({
-          errcode: 'M_GUEST_ACCESS_FORBIDDEN', // i think this is the right one
+          errcode: 'M_GUEST_ACCESS_FORBIDDEN',
           error: 'Guest access not allowed',
         })
       )
@@ -84,6 +93,15 @@ t.create('get room state as member (backup method)')
         200,
         JSON.stringify({
           access_token: 'TOKEN',
+        })
+      )
+      .get(
+        '/_matrix/client/r0/directory/room/%23ALIAS:DUMMY.dumb?access_token=TOKEN'
+      )
+      .reply(
+        200,
+        JSON.stringify({
+          room_id: 'ROOM:DUMMY.dumb',
         })
       )
       .get('/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/state?access_token=TOKEN')
@@ -136,7 +154,7 @@ t.create('get room state as member (backup method)')
   })
 
 t.create('bad server or connection')
-  .get('/ROOM/DUMMY.dumb.json?style=_shields_test')
+  .get('/ALIAS:DUMMY.dumb.json?style=_shields_test')
   .networkOff()
   .expectJSON({
     name: 'chat',
@@ -145,7 +163,7 @@ t.create('bad server or connection')
   })
 
 t.create('invalid room')
-  .get('/ROOM/DUMMY.dumb.json?style=_shields_test')
+  .get('/ALIAS:DUMMY.dumb.json?style=_shields_test')
   .intercept(nock =>
     nock('https://DUMMY.dumb/')
       .post('/_matrix/client/r0/register?kind=guest')
@@ -153,6 +171,15 @@ t.create('invalid room')
         200,
         JSON.stringify({
           access_token: 'TOKEN',
+        })
+      )
+      .get(
+        '/_matrix/client/r0/directory/room/%23ALIAS:DUMMY.dumb?access_token=TOKEN'
+      )
+      .reply(
+        200,
+        JSON.stringify({
+          room_id: 'ROOM:DUMMY.dumb',
         })
       )
       .get('/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/state?access_token=TOKEN')
@@ -171,7 +198,7 @@ t.create('invalid room')
   })
 
 t.create('invalid token')
-  .get('/ROOM/DUMMY.dumb.json?style=_shields_test')
+  .get('/ALIAS:DUMMY.dumb.json?style=_shields_test')
   .intercept(nock =>
     nock('https://DUMMY.dumb/')
       .post('/_matrix/client/r0/register?kind=guest')
@@ -181,7 +208,9 @@ t.create('invalid token')
           access_token: 'TOKEN',
         })
       )
-      .get('/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/state?access_token=TOKEN')
+      .get(
+        '/_matrix/client/r0/directory/room/%23ALIAS:DUMMY.dumb?access_token=TOKEN'
+      )
       .reply(
         401,
         JSON.stringify({
@@ -197,7 +226,7 @@ t.create('invalid token')
   })
 
 t.create('unknown request')
-  .get('/ROOM/DUMMY.dumb.json?style=_shields_test')
+  .get('/ALIAS:DUMMY.dumb.json?style=_shields_test')
   .intercept(nock =>
     nock('https://DUMMY.dumb/')
       .post('/_matrix/client/r0/register?kind=guest')
@@ -222,8 +251,37 @@ t.create('unknown request')
     colorB: colorScheme.lightgray,
   })
 
+t.create('unknown alias')
+  .get('/ALIAS:DUMMY.dumb.json?style=_shields_test')
+  .intercept(nock =>
+    nock('https://DUMMY.dumb/')
+      .post('/_matrix/client/r0/register?kind=guest')
+      .reply(
+        200,
+        JSON.stringify({
+          access_token: 'TOKEN',
+        })
+      )
+      .get(
+        '/_matrix/client/r0/directory/room/%23ALIAS:DUMMY.dumb?access_token=TOKEN'
+      )
+      .reply(
+        404,
+        JSON.stringify({
+          errcode: 'M_NOT_FOUND',
+          error: 'Room alias #ALIAS:DUMMY.dumb not found.',
+        })
+      )
+  )
+  .expectJSON({
+    name: 'chat',
+    value: 'room not found',
+    colorB: colorScheme.red,
+  })
+
 t.create('test on real matrix room for API compliance')
-  .get('/!ltIjvaLydYAWZyihee/matrix.org.json?style=_shields_test')
+  .get('/twim:matrix.org.json?style=_shields_test')
+  .timeout(10000)
   .expectJSONTypes(
     Joi.object().keys({
       name: 'chat',
