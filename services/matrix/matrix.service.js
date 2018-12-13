@@ -1,5 +1,7 @@
 'use strict'
 
+const dns = require('dns')
+const util = require('util')
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
 
@@ -39,7 +41,14 @@ const documentation = `
   </p>
   `
 
+const srvPrefix = '_matrix._tcp.'
+const resolve = util.promisify(dns.resolveSrv)
+
 module.exports = class Matrix extends BaseJsonService {
+  async lookupMatrixHomeserver(host) {
+    return resolve(srvPrefix + host)
+  }
+
   async registerAccount({ host, guest }) {
     return this._requestJson({
       url: `https://${host}/_matrix/client/r0/register`,
@@ -65,6 +74,16 @@ module.exports = class Matrix extends BaseJsonService {
   }
 
   async fetch({ host, roomId }) {
+    try {
+      const addrs = await this.lookupMatrixHomeserver(host)
+      if (addrs.length) {
+        host = addrs[0].name
+      }
+    } catch (e) {
+      if (e.code !== 'ENOTFOUND') {
+        throw e
+      }
+    }
     let auth
     try {
       auth = await this.registerAccount({ host, guest: true })
