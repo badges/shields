@@ -1,8 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const { invalidJSON } = require('../response-fixtures')
-
+const {
+  isVPlusDottedVersionNClausesWithOptionalSuffix: isVersion,
+} = require('../test-validators')
 const t = (module.exports = require('../create-service-tester')())
 
 t.create('search release version')
@@ -10,7 +11,7 @@ t.create('search release version')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'nexus',
-      value: Joi.string().regex(/^v4(\.\d+)+$/),
+      value: isVersion,
     })
   )
 
@@ -23,7 +24,7 @@ t.create('search snapshot version')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'nexus',
-      value: Joi.string().regex(/-SNAPSHOT$/),
+      value: isVersion,
     })
   )
 
@@ -50,7 +51,7 @@ t.create('resolve version')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'nexus',
-      value: Joi.string().regex(/^v3(\.\d+)+$/),
+      value: isVersion,
     })
   )
 
@@ -61,7 +62,7 @@ t.create('resolve version with query')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'nexus',
-      value: Joi.string().regex(/^v7(\.\d+)+-SNAPSHOT$/),
+      value: isVersion,
     })
   )
 
@@ -75,13 +76,3 @@ t.create('connection error')
   .get('/r/https/repository.jboss.org/nexus/jboss/jboss-client.json')
   .networkOff()
   .expectJSON({ name: 'nexus', value: 'inaccessible' })
-
-t.create('json parsing error')
-  .get('/r/https/repository.jboss.org/nexus/jboss/jboss-client.json')
-  .intercept(nock =>
-    nock('https://repository.jboss.org')
-      .get('/nexus/service/local/lucene/search')
-      .query({ g: 'jboss', a: 'jboss-client' })
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'nexus', value: 'invalid' })
