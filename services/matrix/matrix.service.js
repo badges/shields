@@ -4,6 +4,7 @@ const dns = require('dns')
 const util = require('util')
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
+const errors = require('../errors')
 
 const matrixRegisterSchema = Joi.object({
   access_token: Joi.string().required(),
@@ -14,6 +15,10 @@ const matrixClientVersionsSchema = Joi.object({
     .items(Joi.string().required())
     .required(),
 }).required()
+
+const matrixAliasLookupSchema = Joi.object({
+  room_id: Joi.string().required(),
+})
 
 const matrixStateSchema = Joi.array()
   .items(
@@ -86,27 +91,57 @@ module.exports = class Matrix extends BaseJsonService {
     })
   }
 
-  async fetch({ host, roomId }) {
-    try {
-      const addrs = await this.lookupMatrixHomeserver({ host })
-      if (addrs.length) {
-        // The address we are given may be only to use for federation. Therefore
-        // we check if we can painlessly reach the client APIs at this address,
-        // and if not we don't do anything, and ignore the error, since host
-        // already holds the right value, and we expect this check to fail in
-        // some cases.
-        try {
-          await this.checkMatrixHomeserverClientAPI({ host: addrs[0].name })
-          host = addrs[0].name
-        } catch (e) {}
+  async lookupRoomAlias({ host, roomAlias, auth }) {
+    return this._requestJson({
+      url: `https://${host}/_matrix/client/r0/directory/room/%23${roomAlias}`,
+      schema: matrixAliasLookupSchema,
+      options: {
+        qs: {
+          access_token: auth.access_token,
+        },
+      },
+      errorMessages: {
+        401: 'auth failed',
+        404: 'room not found',
+        429: 'rate limited by rooms host',
+      },
+    })
+  }
+
+  async fetch({ roomAlias }) {
+    const splitAlias = roomAlias.split(':')
+    // A room alias can either be in the form #localpart:server or
+    // #localpart:server:port. In the latter case, it's wiser to skip the name
+    // resolution and use that value right away.
+    if (splitAlias.length < 2 || splitAlias.length > 3) {
+      throw new errors.InvalidParameter()
+    }
+    let host
+    if (splitAlias.length === 2) {
+      host = splitAlias[1]
+      try {
+        const addrs = await this.lookupMatrixHomeserver({ host })
+        if (addrs.length) {
+          // The address we are given may be only to use for federation.
+          // Therefore we check if we can painlessly reach the client APIs at
+          // this address, and if not we don't do anything, and ignore the
+          // error, since host already holds the right value, and we expect this
+          // check to fail in some cases.
+          try {
+            await this.checkMatrixHomeserverClientAPI({ host: addrs[0].name })
+            host = addrs[0].name
+          } catch (e) {}
+        }
+      } catch (e) {
+        // If the error is ENOTFOUND, it means that there is no SRV record for
+        // this server, and that we need to fall back on the value host already
+        // holds.
+        if (e.code !== 'ENOTFOUND') {
+          throw e
+        }
       }
-    } catch (e) {
-      // If the error is ENOTFOUND, it means that there is no SRV record for
-      // this server, and that we need to fall back on the value host already
-      // holds.
-      if (e.code !== 'ENOTFOUND') {
-        throw e
-      }
+    } else {
+      host = splitAlias[2] + splitAlias[3]
     }
     let auth
     try {
@@ -117,8 +152,9 @@ module.exports = class Matrix extends BaseJsonService {
         auth = await this.registerAccount({ host, guest: false })
       } else throw e
     }
+    const lookup = await this.lookupRoomAlias({ host, roomAlias, auth })
     const data = await this._requestJson({
-      url: `https://${host}/_matrix/client/r0/rooms/${roomId}/state`,
+      url: `https://${host}/_matrix/client/r0/rooms/${lookup.room_id}/state`,
       schema: matrixStateSchema,
       options: {
         qs: {
@@ -152,11 +188,8 @@ module.exports = class Matrix extends BaseJsonService {
     }
   }
 
-  async handle({ roomId, host, authServer }) {
-    const members = await this.fetch({
-      host,
-      roomId: `${roomId}:${host}`,
-    })
+  async handle({ roomAlias, authServer }) {
+    const members = await this.fetch({ roomAlias })
     return this.constructor.render({ members })
   }
 
@@ -171,8 +204,8 @@ module.exports = class Matrix extends BaseJsonService {
   static get route() {
     return {
       base: 'matrix',
-      format: '([^/]+)/([^/]+)',
-      capture: ['roomId', 'host'],
+      format: '([^/]+)',
+      capture: ['roomAlias'],
     }
   }
 
