@@ -193,11 +193,6 @@ jobs:
             MOCHA_FILE: junit/frontend/results.xml
           command: npm run test:js:frontend
 
-      - run:
-          name: Look for results
-          when: always
-          command: ls junit
-
       - store_test_results:
           path: junit
 
