@@ -54,7 +54,7 @@ jobs:
           when: always
           environment:
             mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/server.xml
+            MOCHA_FILE: junit/server/results.xml
           command: npm run test:js:server
 
       - run:
@@ -62,7 +62,7 @@ jobs:
           when: always
           environment:
             mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/integration.xml
+            MOCHA_FILE: junit/server/integration.xml
           command: npm run test:integration
 
       - run:
@@ -70,7 +70,7 @@ jobs:
           when: always
           environment:
             mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/gh-badges.xml
+            MOCHA_FILE: junit/server/gh-badges.xml
           command: npm run test:js:package
 
       - store_test_results:
@@ -113,7 +113,7 @@ jobs:
           when: always
           environment:
             mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/server.xml
+            MOCHA_FILE: junit/server/results.xml
           command: npm run test:js:server
 
       - run:
@@ -121,7 +121,7 @@ jobs:
           when: always
           environment:
             mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/integration.xml
+            MOCHA_FILE: junit/integration/results.xml
           command: npm run test:integration
 
       - run:
@@ -129,7 +129,7 @@ jobs:
           when: always
           environment:
             mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/gh-badges.xml
+            MOCHA_FILE: junit/gh-badges/results.xml
           command: npm run test:js:package
 
       - store_test_results:
@@ -236,7 +236,7 @@ jobs:
           name: Run tests for tagged services
           environment:
             mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/services.xml
+            MOCHA_FILE: junit/services/results.xml
           command: npm run test:services:pr:run
 
       - store_test_results:
@@ -277,7 +277,7 @@ jobs:
           name: Run tests for tagged services
           environment:
             mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/services.xml
+            MOCHA_FILE: junit/services/results.xml
           command: npm run test:services:pr:run
 
       - store_test_results:
