@@ -44,10 +44,11 @@ const documentation = `
     <ul>
       <li>Select the desired room inside the Riot.im client</li>
       <li>Click on the room settings button (gear icon) located near the top right of the client</li>
-      <li>Scroll to the very bottom of the settings page and look under the <code>Advanced</code> tab</li>
-      <li>You should see the <code>Internal room ID</code> with your rooms ID next to it (ex: <code>!ltIjvaLydYAWZyihee:matrix.org</code>)</li>
-      <li>Replace the IDs <code>:</code> with <code>/</code></li>
-      <li>The final badge URL should look something like this <code>/matrix/!ltIjvaLydYAWZyihee/matrix.org.svg</code></li>
+      <li>Scroll to the very bottom of the settings page and look under the <code>Addresses</code> section</li>
+      <li>You should see one or more <code>room addresses (or aliases)</code>, which can be easily identified with their starting hash (<code>#</code>) character (ex: <code>#twim:matrix.org</code>)</li>
+      <li>If there is no address for this room, add one under <code>Local addresses for this room</code></li>
+      <li>Remove the starting hash character (<code>#</code>)</li>
+      <li>The final badge URL should look something like this <code>/matrix/twim:matrix.org.svg</code></li>
     </ul>
   </p>
   `
@@ -225,8 +226,8 @@ module.exports = class Matrix extends BaseJsonService {
     return [
       {
         title: 'Matrix',
-        exampleUrl: '!ltIjvaLydYAWZyihee/matrix.org',
-        pattern: ':roomId/:host',
+        exampleUrl: 'twim:matrix.org',
+        pattern: ':roomAlias',
         staticExample: this.render({ members: 42 }),
         documentation,
       },
