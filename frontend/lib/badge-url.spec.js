@@ -14,7 +14,7 @@ describe('Badge URL functions', function() {
 
   test(resolveBadgeUrlWithLongCache, () => {
     given('/badge/foo-bar-blue', undefined).expect(
-      '/badge/foo-bar-blue.svg?maxAge=2592000'
+      '/broken/badge/foo-bar-blue.svg?maxAge=2592000'
     )
     given('/badge/foo-bar-blue', 'http://example.com').expect(
       'http://example.com/badge/foo-bar-blue.svg?maxAge=2592000'
