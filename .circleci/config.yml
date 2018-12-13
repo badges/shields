@@ -239,6 +239,9 @@ jobs:
             MOCHA_FILE: junit/services.xml
           command: npm run test:services:pr:run
 
+      - store_test_results:
+          path: junit
+
   services@node-latest:
     docker:
       - image: circleci/node:latest
@@ -276,6 +279,9 @@ jobs:
             mocha_reporter: mocha-junit-reporter
             MOCHA_FILE: junit/services.xml
           command: npm run test:services:pr:run
+
+      - store_test_results:
+          path: junit
 
 workflows:
   version: 2
