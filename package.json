@@ -180,8 +180,7 @@
     "sinon-chai": "^3.3.0",
     "snap-shot-it": "^6.2.7",
     "tmp": "0.0.33",
-    "url": "^0.11.0",
-    "wait-promise": "^0.4.1"
+    "url": "^0.11.0"
   },
   "engines": {
     "node": ">= 8",
@@ -201,9 +200,12 @@
       "test": {
         "presets": [
           "@babel/preset-env",
-          ["@babel/preset-react", {
-            "development": true
-          }]
+          [
+            "@babel/preset-react",
+            {
+              "development": true
+            }
+          ]
         ]
       }
     }
