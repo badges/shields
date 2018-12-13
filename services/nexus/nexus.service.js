@@ -84,7 +84,7 @@ module.exports = class Nexus extends BaseJsonService {
       },
       {
         title: 'Sonatype Nexus (Repository)',
-        pattern: ':repositoryName/:scheme/:host/:groupId/:artifactId',
+        pattern: ':repo/:scheme/:host/:groupId/:artifactId',
         namedParams: {
           repo: 'developer',
           scheme: 'https',
