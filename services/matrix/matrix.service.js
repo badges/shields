@@ -55,6 +55,8 @@ const documentation = `
 const srvPrefix = '_matrix._tcp.'
 const resolve = util.promisify(dns.resolveSrv)
 
+const accessTokens = {}
+
 module.exports = class Matrix extends BaseJsonService {
   async lookupMatrixHomeserver({ host }) {
     return resolve(srvPrefix + host)
@@ -65,6 +67,24 @@ module.exports = class Matrix extends BaseJsonService {
       url: `https://${host}/_matrix/client/versions`,
       schema: matrixClientVersionsSchema,
     })
+  }
+
+  async retrieveAccessToken({ host }) {
+    if (accessTokens[host] === undefined) {
+      let auth
+      try {
+        auth = await this.registerAccount({ host, guest: true })
+      } catch (e) {
+        if (e.prettyMessage === 'guests not allowed') {
+          // attempt fallback method
+          auth = await this.registerAccount({ host, guest: false })
+        } else throw e
+      }
+
+      accessTokens[host] = auth.access_token
+    }
+
+    return accessTokens[host]
   }
 
   async registerAccount({ host, guest }) {
@@ -91,13 +111,13 @@ module.exports = class Matrix extends BaseJsonService {
     })
   }
 
-  async lookupRoomAlias({ host, roomAlias, auth }) {
+  async lookupRoomAlias({ host, roomAlias, accessToken }) {
     return this._requestJson({
       url: `https://${host}/_matrix/client/r0/directory/room/%23${roomAlias}`,
       schema: matrixAliasLookupSchema,
       options: {
         qs: {
-          access_token: auth.access_token,
+          access_token: accessToken,
         },
       },
       errorMessages: {
@@ -143,22 +163,14 @@ module.exports = class Matrix extends BaseJsonService {
     } else {
       host = splitAlias[2] + splitAlias[3]
     }
-    let auth
-    try {
-      auth = await this.registerAccount({ host, guest: true })
-    } catch (e) {
-      if (e.prettyMessage === 'guests not allowed') {
-        // attempt fallback method
-        auth = await this.registerAccount({ host, guest: false })
-      } else throw e
-    }
-    const lookup = await this.lookupRoomAlias({ host, roomAlias, auth })
+    const accessToken = await this.retrieveAccessToken({ host })
+    const lookup = await this.lookupRoomAlias({ host, roomAlias, accessToken })
     const data = await this._requestJson({
       url: `https://${host}/_matrix/client/r0/rooms/${lookup.room_id}/state`,
       schema: matrixStateSchema,
       options: {
         qs: {
-          access_token: auth.access_token,
+          access_token: accessToken,
         },
       },
       errorMessages: {
