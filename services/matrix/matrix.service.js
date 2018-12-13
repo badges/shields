@@ -51,11 +51,11 @@ const srvPrefix = '_matrix._tcp.'
 const resolve = util.promisify(dns.resolveSrv)
 
 module.exports = class Matrix extends BaseJsonService {
-  async lookupMatrixHomeserver(host) {
+  async lookupMatrixHomeserver({ host }) {
     return resolve(srvPrefix + host)
   }
 
-  async checkMatrixHomeserverClientAPI(host) {
+  async checkMatrixHomeserverClientAPI({ host }) {
     return this._requestJson({
       url: `https://${host}/_matrix/client/versions`,
       schema: matrixClientVersionsSchema,
@@ -88,7 +88,7 @@ module.exports = class Matrix extends BaseJsonService {
 
   async fetch({ host, roomId }) {
     try {
-      const addrs = await this.lookupMatrixHomeserver(host)
+      const addrs = await this.lookupMatrixHomeserver({ host })
       if (addrs.length) {
         // The address we are given may be only to use for federation. Therefore
         // we check if we can painlessly reach the client APIs at this address,
@@ -96,7 +96,7 @@ module.exports = class Matrix extends BaseJsonService {
         // already holds the right value, and we expect this check to fail in
         // some cases.
         try {
-          await this.checkMatrixHomeserverClientAPI(addrs[0].name)
+          await this.checkMatrixHomeserverClientAPI({ host: addrs[0].name })
           host = addrs[0].name
         } catch (e) {}
       }
