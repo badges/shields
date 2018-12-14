@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { staticBadgeUrl } from '../lib/badge-url'
 import { badgeUrlFromPath, badgeUrlFromPattern } from '../../lib/make-badge-url'
 import generateAllMarkup from '../lib/generate-image-markup'
 import { advertisedStyles } from '../../supported-features.json'
@@ -93,21 +94,30 @@ export default class MarkupModalContent extends React.Component {
     return badgeUrlFromPath({
       baseUrl,
       path: badgeUrl,
-      format: '', // `badgeUrl` already contains `.svg`.
       style: style === 'flat' ? undefined : style,
     })
   }
 
   renderLivePreview() {
-    const { badgeUrl } = this.state
-    const includesPlaceholders = badgeUrl.includes(':')
+    const { baseUrl } = this.props
+    const { isComplete } = this.state
     let src
-    if (badgeUrl && !includesPlaceholders) {
+    if (isComplete) {
       src = this.generateBuiltBadgeUrl()
     } else {
-      src = undefined
+      src = staticBadgeUrl(
+        baseUrl,
+        'preview',
+        'some parameters missing',
+        'lightgray'
+      )
     }
-    return <Badge display="block" src={src} />
+    return (
+      <p>
+        Live preview&nbsp;
+        <Badge display="block" src={src} />
+      </p>
+    )
   }
 
   renderMarkup() {
@@ -176,6 +186,10 @@ export default class MarkupModalContent extends React.Component {
     )
   }
 
+  handlePathChange = ({ path, isComplete }) => {
+    this.setState({ badgeUrl: path, isComplete })
+  }
+
   render() {
     const {
       example: {
@@ -188,8 +202,11 @@ export default class MarkupModalContent extends React.Component {
     return (
       <form action="">
         <H3>{title}</H3>
-        <PathBuilder pattern={pattern} exampleParams={namedParams} />
-        {this.renderLivePreview()}
+        <PathBuilder
+          pattern={pattern}
+          exampleParams={namedParams}
+          onChange={this.handlePathChange}
+        />
         <p>
           <label>
             Style&nbsp;
@@ -207,6 +224,7 @@ export default class MarkupModalContent extends React.Component {
             </select>
           </label>
         </p>
+        {this.renderLivePreview()}
         {this.renderMarkup()}
         {this.renderDocumentation()}
         {this.renderFullPattern()}

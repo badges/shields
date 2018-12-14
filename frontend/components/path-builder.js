@@ -73,44 +73,75 @@ export default class PathBuilder extends React.Component {
   constructor(props) {
     super(props)
 
+    const { pattern } = props
+    const tokens = pathToRegexp.parse(pattern)
+
     const namedParams = {}
-    this.tokens
+    tokens
       .filter(t => typeof t !== 'string')
       .map(t => t.name)
       .forEach(name => {
         namedParams[name] = ''
       })
 
-    this.state = { namedParams }
+    this.state = {
+      tokens,
+      namedParams,
+    }
   }
 
-  get tokens() {
-    const { pattern } = this.props
-    return pathToRegexp.parse(pattern)
+  getPath(namedParams) {
+    const { tokens } = this.state
+
+    let isComplete = true
+    const path = tokens
+      .map(token => {
+        if (typeof token === 'string') {
+          return token
+        } else {
+          const { delimiter, name } = token
+          let value = namedParams[name]
+          if (!value) {
+            isComplete = false
+            value = `:${name}`
+          }
+          return `${delimiter}${value}`
+        }
+      })
+      .join('')
+    return { path, isComplete }
   }
 
   handleTokenChange = event => {
     const { name, value } = event.target
-    const { namedParams } = this.state
-    this.setState({
-      namedParams: {
-        ...namedParams,
-        [name]: value,
-      },
-    })
+    const { namedParams: oldNamedParams } = this.state
+
+    const namedParams = {
+      ...oldNamedParams,
+      [name]: value,
+    }
+
+    this.setState({ namedParams })
+
+    const { onChange } = this.props
+    if (onChange) {
+      const path = this.getPath(namedParams)
+      console.log('path', path)
+      onChange(path)
+    }
   }
 
-  renderLiteral(literal, index) {
+  renderLiteral(literal, tokenIndex) {
     return (
-      <Column key={literal}>
-        <Literal marginLeft={index === 0 ? '3px' : undefined}>
+      <Column key={`${tokenIndex}-${literal}`}>
+        <Literal marginLeft={tokenIndex === 0 ? '3px' : undefined}>
           {literal}
         </Literal>
       </Column>
     )
   }
 
-  renderNamedParam(token, index) {
+  renderNamedParam(token, tokenIndex, namedParamIndex) {
     const { delimiter, name } = token
 
     const { exampleParams } = this.props
@@ -121,7 +152,7 @@ export default class PathBuilder extends React.Component {
 
     return (
       <>
-        {this.renderLiteral(delimiter)}
+        {this.renderLiteral(delimiter, tokenIndex)}
         <Column key={token.name} horizPadding="8px">
           <PositionedLabel htmlFor={name}>
             {humanizeString(name)}
@@ -134,7 +165,7 @@ export default class PathBuilder extends React.Component {
             {...noAutocorrect}
           />
           <PositionedCaption>
-            {index === 0 ? `e.g. ${exampleValue}` : exampleValue}
+            {namedParamIndex === 0 ? `e.g. ${exampleValue}` : exampleValue}
           </PositionedCaption>
         </Column>
       </>
@@ -142,13 +173,15 @@ export default class PathBuilder extends React.Component {
   }
 
   render() {
+    const { tokens } = this.state
+
     let namedParamIndex = 0
     return (
       <NamedParamFieldContainer>
-        {this.tokens.map((token, tokenIndex) =>
+        {tokens.map((token, tokenIndex) =>
           typeof token === 'string'
             ? this.renderLiteral(token, tokenIndex)
-            : this.renderNamedParam(token, namedParamIndex++)
+            : this.renderNamedParam(token, tokenIndex, namedParamIndex++)
         )}
       </NamedParamFieldContainer>
     )
@@ -157,4 +190,5 @@ export default class PathBuilder extends React.Component {
 PathBuilder.propTypes = {
   pattern: PropTypes.string.isRequired,
   exampleParams: PropTypes.object.isRequired,
+  onChange: PropTypes.func,
 }
