@@ -5,6 +5,15 @@ import pathToRegexp from 'path-to-regexp'
 import humanizeString from 'humanize-string'
 import { StyledInput, noAutocorrect } from './common'
 
+const Container = styled.div`
+  display: inline-block;
+
+  padding: 11px 14px 10px;
+
+  border-radius: 4px;
+  background: #eef;
+`
+
 const Column = styled.span`
   height: 58px;
 
@@ -58,15 +67,6 @@ const PositionedCaption = styled.span`
   font-family: system-ui;
   font-size: 11px;
   text-transform: lowercase;
-`
-
-const NamedParamFieldContainer = styled.div`
-  display: inline-block;
-
-  padding: 11px 14px 10px;
-
-  border-radius: 4px;
-  background: #eef;
 `
 
 export default class PathBuilder extends React.Component {
@@ -177,13 +177,13 @@ export default class PathBuilder extends React.Component {
 
     let namedParamIndex = 0
     return (
-      <NamedParamFieldContainer>
+      <Container>
         {tokens.map((token, tokenIndex) =>
           typeof token === 'string'
             ? this.renderLiteral(token, tokenIndex)
             : this.renderNamedParam(token, tokenIndex, namedParamIndex++)
         )}
-      </NamedParamFieldContainer>
+      </Container>
     )
   }
 }
