@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import pathToRegexp from 'path-to-regexp'
 import humanizeString from 'humanize-string'
 import { badgeUrlFromPath, badgeUrlFromPattern } from '../../lib/make-badge-url'
 import generateAllMarkup from '../lib/generate-image-markup'
 import { advertisedStyles } from '../../supported-features.json'
 import { Snippet2 } from './snippet'
-import { BaseFont, H3, Badge, BlockInput, InlineInput } from './common'
+import { BaseFont, H3, Badge, BlockInput, StyledInput } from './common'
 
 const common = {
   autoComplete: 'off',
@@ -16,10 +16,6 @@ const common = {
   spellCheck: 'false',
 }
 
-const ContentContainer = styled(BaseFont)`
-  text-align: center;
-`
-
 const WeeSnippet = ({ snippet }) => (
   <Snippet2 truncate fontSize="10pt" snippet={snippet} />
 )
@@ -27,15 +23,36 @@ WeeSnippet.propTypes = {
   snippet: PropTypes.string.isRequired,
 }
 
-const AnnotatedInlineInputContainer = styled.span`
-  position: relative;
+const Column = styled.span`
+  height: 58px;
+
+  float: left;
+  display: flex;
+  flex-direction: column;
+
+  margin: 5px 0;
+
+  ${({ horizPadding }) =>
+    horizPadding &&
+    css`
+      padding-left: ${horizPadding};
+      padding-right: ${horizPadding};
+    `};
+`
+
+const Literal = styled.div`
+  margin-top: 20px;
+  ${({ marginLeft }) =>
+    marginLeft &&
+    css`
+      margin-left: ${marginLeft};
+    `};
 `
 
 const PositionedLabel = styled.label`
-  position: absolute;
-  top: -20px;
-
+  height: 20px;
   width: 100%;
+
   text-align: center;
 
   font-family: system-ui;
@@ -43,10 +60,14 @@ const PositionedLabel = styled.label`
   text-transform: lowercase;
 `
 
-const PositionedCaption = styled.span`
-  position: absolute;
-  top: 20px;
+const PositionedInput = styled(StyledInput)`
+  width: 100%;
+  text-align: center;
 
+  margin-bottom: 10px;
+`
+
+const PositionedCaption = styled.span`
   width: 100%;
   text-align: center;
 
@@ -57,26 +78,10 @@ const PositionedCaption = styled.span`
   text-transform: lowercase;
 `
 
-const AnnotatedInlineInput = ({ name, value, exampleValue, onChange }) => (
-  <AnnotatedInlineInputContainer>
-    <PositionedLabel htmlFor={name}>{humanizeString(name)}</PositionedLabel>
-    <PositionedCaption>{exampleValue}</PositionedCaption>
-    <InlineInput
-      type="text"
-      name={name}
-      value={value}
-      onChange={onChange}
-      {...common}
-    />
-  </AnnotatedInlineInputContainer>
-)
+const NamedParamFieldContainer = styled.div`
+  display: inline-block;
 
-const NamedParamFieldBlockContainer = styled.div`
-  margin-top: 50px;
-`
-
-const NamedParamFieldContainer = styled.span`
-  padding: 38px 15px 15px;
+  padding: 11px 14px 10px;
 
   border-radius: 4px;
   background: #eef;
@@ -108,40 +113,58 @@ class NamedParamFields extends React.Component {
     })
   }
 
-  renderToken(token) {
-    if (typeof token === 'string') {
-      return <span>{token}</span>
-    } else {
-      const { delimiter, name } = token
+  renderLiteral(literal, index) {
+    return (
+      <Column key={literal}>
+        <Literal marginLeft={index === 0 ? '3px' : undefined}>
+          {literal}
+        </Literal>
+      </Column>
+    )
+  }
 
-      const { exampleParams } = this.props
-      const exampleValue = exampleParams[name]
+  renderNamedParam(token, index) {
+    const { delimiter, name } = token
 
-      const { namedParams } = this.state
-      const value = namedParams[name]
+    const { exampleParams } = this.props
+    const exampleValue = exampleParams[name]
 
-      return (
-        <span key={name}>
-          {delimiter}
-          <AnnotatedInlineInput
+    const { namedParams } = this.state
+    const value = namedParams[name]
+
+    return (
+      <>
+        {this.renderLiteral(delimiter)}
+        <Column key={token.name} horizPadding="8px">
+          <PositionedLabel htmlFor={name}>
+            {humanizeString(name)}
+          </PositionedLabel>
+          <PositionedInput
+            type="text"
             name={name}
             value={value}
-            exampleValue={exampleValue}
             onChange={this.handleTokenChange}
+            {...common}
           />
-        </span>
-      )
-    }
+          <PositionedCaption>
+            {index === 0 ? `e.g. ${exampleValue}` : exampleValue}
+          </PositionedCaption>
+        </Column>
+      </>
+    )
   }
 
   render() {
     const { tokens } = this.props
+    let namedParamIndex = 0
     return (
-      <NamedParamFieldBlockContainer>
-        <NamedParamFieldContainer>
-          {tokens.map(token => this.renderToken(token))}
-        </NamedParamFieldContainer>
-      </NamedParamFieldBlockContainer>
+      <NamedParamFieldContainer>
+        {tokens.map((token, tokenIndex) =>
+          typeof token === 'string'
+            ? this.renderLiteral(token, tokenIndex)
+            : this.renderNamedParam(token, namedParamIndex++)
+        )}
+      </NamedParamFieldContainer>
     )
   }
 }
@@ -336,36 +359,34 @@ export default class MarkupModalContent extends React.Component {
     const { link, badgeUrl, exampleUrl, style } = this.state
 
     return (
-      <ContentContainer>
-        <form action="">
-          <H3>{title}</H3>
-          <NamedParamFields
-            tokens={pathToRegexp.parse(pattern)}
-            exampleParams={namedParams}
-          />
-          {this.renderLivePreview()}
-          <p>
-            <label>
-              Style&nbsp;
-              <select
-                value={style}
-                onChange={event => {
-                  this.setState({ style: event.target.value })
-                }}
-              >
-                {advertisedStyles.map(style => (
-                  <option key={style} value={style}>
-                    {style}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </p>
-          {this.renderMarkup()}
-          {this.renderDocumentation()}
-          {this.renderFullPattern()}
-        </form>
-      </ContentContainer>
+      <form action="">
+        <H3>{title}</H3>
+        <NamedParamFields
+          tokens={pathToRegexp.parse(pattern)}
+          exampleParams={namedParams}
+        />
+        {this.renderLivePreview()}
+        <p>
+          <label>
+            Style&nbsp;
+            <select
+              value={style}
+              onChange={event => {
+                this.setState({ style: event.target.value })
+              }}
+            >
+              {advertisedStyles.map(style => (
+                <option key={style} value={style}>
+                  {style}
+                </option>
+              ))}
+            </select>
+          </label>
+        </p>
+        {this.renderMarkup()}
+        {this.renderDocumentation()}
+        {this.renderFullPattern()}
+      </form>
     )
   }
 }

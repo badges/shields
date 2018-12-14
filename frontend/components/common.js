@@ -91,6 +91,7 @@ export {
   H2,
   H3,
   Badge,
+  StyledInput,
   InlineInput,
   BlockInput,
   VerticalSpace,

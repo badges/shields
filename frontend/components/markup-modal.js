@@ -11,6 +11,10 @@ import MarkupModalContent from './markup-modal-content'
 
 const ContentContainer = styled(BaseFont)`
   text-align: center;
+
+  * {
+    box-sizing: border-box;
+  }
 `
 
 const WeeSnippet = ({ snippet }) => (
@@ -193,7 +197,9 @@ export default class MarkupModal extends React.Component {
         ariaHideApp={false}
       >
         {hasModernExample ? (
-          <MarkupModalContent {...this.props} />
+          <ContentContainer>
+            <MarkupModalContent {...this.props} />
+          </ContentContainer>
         ) : (
           <ContentContainer>
             <form action="">
