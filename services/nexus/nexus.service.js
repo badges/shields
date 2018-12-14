@@ -80,7 +80,10 @@ module.exports = class Nexus extends BaseJsonService {
           groupId: 'com.google.guava',
           artifactId: 'guava',
         },
-        staticExample: this.render({ message: 'v24.0-SNAPSHOT' }),
+        staticExample: this.render({
+          message: 'v24.0-SNAPSHOT',
+          color: 'orange',
+        }),
         keywords,
       },
       {
