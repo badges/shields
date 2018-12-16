@@ -6,6 +6,12 @@ const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 const { InvalidResponse } = require('../errors')
 
+const schema = Joi.object({
+  CurrentVersion: Joi.alternatives()
+    .try(Joi.number(), Joi.string())
+    .required(),
+}).required()
+
 module.exports = class FDroid extends BaseYamlService {
   static render({ version }) {
     return {
@@ -44,11 +50,6 @@ module.exports = class FDroid extends BaseYamlService {
   }
 
   async fetchYaml(url, options) {
-    const schema = Joi.object({
-      CurrentVersion: Joi.alternatives()
-        .try(Joi.number(), Joi.string())
-        .required(),
-    }).required()
     const yaml = await this._requestYaml({
       schema,
       url: `${url}.yml`,
