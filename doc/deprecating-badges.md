@@ -7,29 +7,10 @@ Deprecating a badge involves 3 steps:
  3. Updating the service tests to reflect the new behavior of the deprecated service
 
 ## Update Deprecated Service List
-All deprecated services are enumerated in the `deprecated-services.js` file which can be found in the `lib` directory (`./lib/deprecated-services.js`).
+All deprecated services are enumerated in the `deprecated-services.js` [file](https://github.com/badges/shields/blob/master/lib/deprecated-services.js) which can be found in the `lib` directory (`./lib/deprecated-services.js`).
 
 Add a key for the service with the corresponding date for deprecation, for example: `nsp: new Date('2018-12-13')`,  to the `deprecatedServices` object.
 
-```js
-const deprecatedServices = {
-  gittip: new Date('2017-12-29'),
-  gratipay: new Date('2017-12-29'),
-  dockbit: new Date('2017-12-31'),
-  gemnasium: new Date('2018-05-15'),
-  snap: new Date('2018-01-23'),
-  'snap-ci': new Date('2018-01-23'),
-  cauditor: new Date('2018-02-15'),
-  dotnetstatus: new Date('2018-04-01'),
-  magnumci: new Date('2018-07-08'),
-  bithound: new Date('2018-07-08'),
-  versioneye: new Date('2018-08-20'),
-  issuestats: new Date('2018-09-01'),
-  libscore: new Date('2018-09-22'),
-  imagelayers: new Date('2018-11-18'),
-  nsp: new Date('2018-12-13'),
-}
-```
 
 ## Update Service Implementation
 Locate the source file(s) for the service, which can be found in `*.service.js` files located within the directory for the service (`./services/:service-name/`) such as `./services/imagelayers/imagelayers.service.js`.
