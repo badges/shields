@@ -9,7 +9,7 @@ const t = (module.exports = new ServiceTester({
   title: 'CRAN/METACRAN',
 }))
 
-t.create('version')
+t.create('version (valid)')
   .get('/v/devtools.json')
   .expectJSONTypes(
     Joi.object().keys({
@@ -18,38 +18,14 @@ t.create('version')
     })
   )
 
-t.create('specified license')
+t.create('version (not found)')
+  .get('/v/some-bogus-package.json')
+  .expectJSON({ name: 'cran', value: 'not found' })
+
+t.create('license (valid)')
   .get('/l/devtools.json')
   .expectJSON({ name: 'license', value: 'GPL (>= 2)' })
 
-t.create('unknown package')
+t.create('license (not found)')
   .get('/l/some-bogus-package.json')
   .expectJSON({ name: 'cran', value: 'not found' })
-
-t.create('unknown info')
-  .get('/z/devtools.json')
-  .expectStatus(404)
-  .expectJSON({ name: '404', value: 'badge not found' })
-
-t.create('malformed response')
-  .get('/v/foobar.json')
-  .intercept(nock =>
-    nock('http://crandb.r-pkg.org')
-      .get('/foobar')
-      .reply(200)
-  ) // JSON without Version.
-  .expectJSON({ name: 'cran', value: 'invalid' })
-
-t.create('connection error')
-  .get('/v/foobar.json')
-  .networkOff()
-  .expectJSON({ name: 'cran', value: 'inaccessible' })
-
-t.create('unspecified license')
-  .get('/l/foobar.json')
-  .intercept(nock =>
-    nock('http://crandb.r-pkg.org')
-      .get('/foobar')
-      .reply(200, {})
-  ) // JSON without License.
-  .expectJSON({ name: 'license', value: 'unknown' })
