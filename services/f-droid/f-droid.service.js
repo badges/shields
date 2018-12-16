@@ -1,13 +1,12 @@
 'use strict'
 
 const Joi = require('joi')
-const yaml = require('js-yaml')
-const BaseService = require('../base')
+const BaseYamlService = require('../base-yaml')
 const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 const { InvalidResponse } = require('../errors')
 
-module.exports = class FDroid extends BaseService {
+module.exports = class FDroid extends BaseYamlService {
   static render({ version }) {
     return {
       message: versionText(version),
@@ -45,28 +44,17 @@ module.exports = class FDroid extends BaseService {
   }
 
   async fetchYaml(url, options) {
-    const { buffer } = await this._request({
+    const schema = Joi.object({
+      CurrentVersion: Joi.alternatives()
+        .try(Joi.number(), Joi.string())
+        .required(),
+    }).required()
+    const yaml = await this._requestYaml({
+      schema,
       url: `${url}.yml`,
       ...options,
     })
-
-    // we assume the yaml layout as provided here:
-    // https://gitlab.com/fdroid/fdroiddata/raw/master/metadata/org.dystopia.email.yml
-    try {
-      const { CurrentVersion: version } = yaml.safeLoad(
-        buffer.toString(),
-        'utf8'
-      )
-      if (!version) {
-        throw new Error('could not find version on website')
-      }
-      return { version }
-    } catch (error) {
-      throw new InvalidResponse({
-        prettyMessage: 'invalid response',
-        underlyingError: error,
-      })
-    }
+    return { version: yaml['CurrentVersion'] }
   }
 
   async fetchText(url, options) {
