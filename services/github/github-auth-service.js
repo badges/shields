@@ -24,8 +24,9 @@ class GithubAuthService extends BaseJsonService {
 
 // Use Github auth, but only when static auth is configured. By using this
 // class, in production it will behave like GithubAuthService, and in self-
-// hosting (i.e. with a configured token) like BaseJsonService. This avoids
-// wasting API quota on public files in production.
+// hosting (i.e. with a configured token) like BaseJsonService. This is
+// useful when consuming GitHub endpoints which are not rate-limited: it
+// avoids wasting API quota on them in production.
 class ConditionalGithubAuthService extends BaseJsonService {
   constructor(context, config) {
     super(context, config)
