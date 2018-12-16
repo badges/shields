@@ -53,7 +53,7 @@ jobs:
           name: Server unit tests
           when: always
           environment:
-            mocha_reporter: mocha-junit-reporter
+            mocha_reporter: xunit
             MOCHA_FILE: junit/server/results.xml
           command: npm run test:js:server
 
@@ -61,7 +61,7 @@ jobs:
           name: Integration tests
           when: always
           environment:
-            mocha_reporter: mocha-junit-reporter
+            mocha_reporter: xunit
             MOCHA_FILE: junit/server/integration.xml
           command: npm run test:integration
 
@@ -69,7 +69,7 @@ jobs:
           name: Tests for gh-badges package
           when: always
           environment:
-            mocha_reporter: mocha-junit-reporter
+            mocha_reporter: xunit
             MOCHA_FILE: junit/server/gh-badges.xml
           command: npm run test:js:package
 
@@ -112,7 +112,7 @@ jobs:
           name: Server unit tests
           when: always
           environment:
-            mocha_reporter: mocha-junit-reporter
+            mocha_reporter: xunit
             MOCHA_FILE: junit/server/results.xml
           command: npm run test:js:server
 
@@ -120,7 +120,7 @@ jobs:
           name: Integration tests
           when: always
           environment:
-            mocha_reporter: mocha-junit-reporter
+            mocha_reporter: xunit
             MOCHA_FILE: junit/integration/results.xml
           command: npm run test:integration
 
@@ -128,7 +128,7 @@ jobs:
           name: Tests for gh-badges package
           when: always
           environment:
-            mocha_reporter: mocha-junit-reporter
+            mocha_reporter: xunit
             MOCHA_FILE: junit/gh-badges/results.xml
           command: npm run test:js:package
 
@@ -189,7 +189,7 @@ jobs:
       - run:
           name: Frontend unit tests
           environment:
-            mocha_reporter: mocha-junit-reporter
+            mocha_reporter: xunit
             MOCHA_FILE: junit/frontend/results.xml
           command: npm run test:js:frontend
 
@@ -235,7 +235,7 @@ jobs:
       - run:
           name: Run tests for tagged services
           environment:
-            mocha_reporter: mocha-junit-reporter
+            mocha_reporter: xunit
             MOCHA_FILE: junit/services/results.xml
           command: npm run test:services:pr:run
 
@@ -276,7 +276,7 @@ jobs:
       - run:
           name: Run tests for tagged services
           environment:
-            mocha_reporter: mocha-junit-reporter
+            mocha_reporter: xunit
             MOCHA_FILE: junit/services/results.xml
           command: npm run test:services:pr:run
 
