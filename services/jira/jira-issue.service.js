@@ -1,17 +1,36 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const serverSecrets = require('../../lib/server-secrets')
+const Joi = require('joi')
+const BaseJiraService = require('./jira-base')
 
-module.exports = class JiraIssue extends LegacyService {
-  static get category() {
-    return 'issue-tracking'
+const schema = Joi.object({
+  fields: Joi.object({
+    status: Joi.object({
+      name: Joi.string().required(),
+      statusCategory: Joi.object({
+        colorName: Joi.string().required(),
+      }),
+    }).required(),
+  }).required(),
+}).required()
+
+module.exports = class JiraIssue extends BaseJiraService {
+  static render({ issue, statusName, color }) {
+    return {
+      label: issue,
+      message: statusName,
+      color,
+    }
+  }
+
+  static get defaultBadgeData() {
+    return { color: 'lightgrey', label: 'jira' }
   }
 
   static get route() {
     return {
       base: 'jira/issue',
+      pattern: ':protocol(https?)/:host/:path?/:issueKey',
     }
   }
 
@@ -19,82 +38,55 @@ module.exports = class JiraIssue extends LegacyService {
     return [
       {
         title: 'JIRA issue',
-        pattern: ':protocol/:hostAndPath+/:issueKey',
+        pattern: ':protocol/:host/:issueKey',
         namedParams: {
           protocol: 'https',
-          hostAndPath: 'issues.apache.org/jira',
+          host: 'issues.apache.org/jira',
           issueKey: 'KAFKA-2896',
         },
-        staticPreview: {
-          label: 'kafka-2896',
-          message: 'Resolved',
+        staticPreview: this.render({
+          issue: 'KAFKA-2896',
+          statusName: 'Resolved',
           color: 'green',
-        },
+        }),
+        keywords: ['jira', 'issue'],
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/jira\/issue\/(http(?:s)?)\/(.+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const protocol = match[1] // eg, https
-        const host = match[2] // eg, issues.apache.org/jira
-        const issueKey = match[3] // eg, KAFKA-2896
-        const format = match[4]
+  async handle({ protocol, host, path, issueKey }) {
+    let url = `${protocol}://${host}`
+    if (path) {
+      url += `/${path}`
+    }
 
-        const options = {
-          method: 'GET',
-          json: true,
-          uri: `${protocol}://${host}/rest/api/2/issue/${encodeURIComponent(
-            issueKey
-          )}`,
-        }
-        if (serverSecrets && serverSecrets.jira_username) {
-          options.auth = {
-            user: serverSecrets.jira_username,
-            pass: serverSecrets.jira_password,
-          }
-        }
+    // Atlassian Documentation: https://developer.atlassian.com/cloud/jira/platform/rest/v2/#api-api-2-issue-issueIdOrKey-get
+    url += `/rest/api/2/issue/${encodeURIComponent(issueKey)}`
 
-        // map JIRA color names to closest shields color schemes
-        const colorMap = {
-          'medium-gray': 'lightgrey',
-          green: 'green',
-          yellow: 'yellow',
-          brown: 'orange',
-          'warm-red': 'red',
-          'blue-gray': 'blue',
-        }
+    const json = await this.fetch({
+      url,
+      schema,
+      options: {},
+      errorMessages: {
+        404: 'issue not found',
+      },
+    })
+    const issueStatus = json.fields.status
+    const statusName = issueStatus.name
+    let color = 'lightgrey'
+    if (issueStatus.statusCategory) {
+      // map JIRA color names to closest shields color schemes
+      const colorMap = {
+        'medium-gray': 'lightgrey',
+        green: 'green',
+        yellow: 'yellow',
+        brown: 'orange',
+        'warm-red': 'red',
+        'blue-gray': 'blue',
+      }
+      color = colorMap[issueStatus.statusCategory.colorName]
+    }
 
-        const badgeData = getBadgeData(issueKey, data)
-        request(options, (err, res, json) => {
-          if (err !== null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const jiraIssue = json
-            if (jiraIssue.fields && jiraIssue.fields.status) {
-              if (jiraIssue.fields.status.name) {
-                badgeData.text[1] = jiraIssue.fields.status.name // e.g. "In Development"
-              }
-              if (jiraIssue.fields.status.statusCategory) {
-                badgeData.colorscheme =
-                  colorMap[jiraIssue.fields.status.statusCategory.colorName] ||
-                  'lightgrey'
-              }
-            } else {
-              badgeData.text[1] = 'invalid'
-            }
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+    return this.constructor.render({ issue: issueKey, statusName, color })
   }
 }
