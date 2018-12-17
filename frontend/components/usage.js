@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { staticBadgeUrl } from '../lib/badge-url'
 import { advertisedStyles, logos } from '../../supported-features.json'
 import StaticBadgeMaker from './static-badge-maker'
@@ -29,38 +29,25 @@ const QueryParamTable = styled.table`
 
 const QueryParamSyntax = styled.td`
   max-width: 300px;
-
-  ${({ textAlign }) =>
-    textAlign &&
-    css`
-      text-align: ${textAlign};
-    `};
+  text-align: left;
 `
 
 const QueryParamDocumentation = styled.td`
   max-width: 600px;
-
-  ${({ textAlign }) =>
-    textAlign &&
-    css`
-      text-align: ${textAlign};
-    `};
+  text-align: left;
 `
 
-const QueryParam = ({ snippet, documentation, textAlign = 'left' }) => (
+const QueryParam = ({ snippet, documentation }) => (
   <tr>
-    <QueryParamSyntax textAlign={textAlign}>
+    <QueryParamSyntax>
       <Snippet snippet={snippet} />
     </QueryParamSyntax>
-    <QueryParamDocumentation textAlign={textAlign}>
-      {documentation}
-    </QueryParamDocumentation>
+    <QueryParamDocumentation>{documentation}</QueryParamDocumentation>
   </tr>
 )
 QueryParam.propTypes = {
   snippet: PropTypes.string.isRequired,
   documentation: PropTypes.element.isRequired,
-  textAlign: PropTypes.string,
 }
 
 const EscapingConversion = ({ lhs, rhs }) => (
@@ -120,7 +107,6 @@ export default class Usage extends React.PureComponent {
             })
             return (
               <QueryParam
-                textAlign="center"
                 key={style}
                 snippet={snippet}
                 documentation={<Badge src={badgeUrl} alt={style} />}
