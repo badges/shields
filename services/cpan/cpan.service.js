@@ -5,6 +5,12 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class Cpan extends LegacyService {
   static get route() {
     return { base: 'cpan' }
