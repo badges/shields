@@ -279,8 +279,8 @@ npm run coverage:report:open
 Pull requests
 -------------
 
-The affected service ids should be included in brackets in the pull request
-title. That way, Travis will run those service tests. When a pull request
+The affected service ids should be included in square brackets in the pull request
+title. That way, Circle CI will run those service tests. When a pull request
 affects multiple services, they should be separated with spaces. The test
 runner is case-insensitive, so they should be capitalized for readability.
 
