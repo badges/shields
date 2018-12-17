@@ -59,7 +59,7 @@ class GithubPackageJsonVersion extends ConditionalGithubAuthService {
     })
   }
 
-  async handle({ kind, which, user, repo, branch }) {
+  async handle({ user, repo, branch }) {
     const { version } = await fetchJsonFromRepo(this, {
       schema: versionSchema,
       user,
