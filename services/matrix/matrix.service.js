@@ -1,19 +1,11 @@
 'use strict'
 
-const dns = require('dns')
-const util = require('util')
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
 const errors = require('../errors')
 
 const matrixRegisterSchema = Joi.object({
   access_token: Joi.string().required(),
-}).required()
-
-const matrixClientVersionsSchema = Joi.object({
-  versions: Joi.array()
-    .items(Joi.string().required())
-    .required(),
 }).required()
 
 const matrixAliasLookupSchema = Joi.object({
@@ -50,26 +42,18 @@ const documentation = `
       <li>Remove the starting hash character (<code>#</code>)</li>
       <li>The final badge URL should look something like this <code>/matrix/twim:matrix.org.svg</code></li>
     </ul>
+    </br>
+    Some Matrix homeservers don't hold a server name matching where they live (e.g. if the homeserver <code>example.com</code> that created the room alias <code>#mysuperroom:example.com</code> lives at <code>matrix.example.com</code>).
+    </br>
+    If that is the case of the homeserver that created the room alias used for generating the badge, you will need to add an extra parameter to the URL, by adding a forward slash followed by the server's FQDN (fully qualified domain name) between the room alias and the <code>.svg</code> extension.
+    </br>
+    The final badge URL should then look something like this <code>/matrix/mysuperroom:example.com/matrix.example.com.svg</code>.
   </p>
   `
-
-const srvPrefix = '_matrix._tcp.'
-const resolve = util.promisify(dns.resolveSrv)
 
 const accessTokens = {}
 
 module.exports = class Matrix extends BaseJsonService {
-  async lookupMatrixHomeserver({ host }) {
-    return resolve(srvPrefix + host)
-  }
-
-  async checkMatrixHomeserverClientAPI({ host }) {
-    return this._requestJson({
-      url: `https://${host}/_matrix/client/versions`,
-      schema: matrixClientVersionsSchema,
-    })
-  }
-
   async retrieveAccessToken({ host }) {
     if (accessTokens[host] === undefined) {
       let auth
@@ -129,40 +113,25 @@ module.exports = class Matrix extends BaseJsonService {
     })
   }
 
-  async fetch({ roomAlias }) {
-    const splitAlias = roomAlias.split(':')
-    // A room alias can either be in the form #localpart:server or
-    // #localpart:server:port. In the latter case, it's wiser to skip the name
-    // resolution and use that value right away.
-    if (splitAlias.length < 2 || splitAlias.length > 3) {
-      throw new errors.InvalidParameter()
-    }
+  async fetch({ roomAlias, serverFQDN }) {
     let host
-    if (splitAlias.length === 2) {
-      host = splitAlias[1]
-      try {
-        const addrs = await this.lookupMatrixHomeserver({ host })
-        if (addrs.length) {
-          // The address we are given may be only to use for federation.
-          // Therefore we check if we can painlessly reach the client APIs at
-          // this address, and if not we don't do anything, and ignore the
-          // error, since host already holds the right value, and we expect this
-          // check to fail in some cases.
-          try {
-            await this.checkMatrixHomeserverClientAPI({ host: addrs[0].name })
-            host = addrs[0].name
-          } catch (e) {}
-        }
-      } catch (e) {
-        // If the error is ENOTFOUND, it means that there is no SRV record for
-        // this server, and that we need to fall back on the value host already
-        // holds.
-        if (e.code !== 'ENOTFOUND') {
-          throw e
-        }
+    if (serverFQDN === undefined) {
+      const splitAlias = roomAlias.split(':')
+      // A room alias can either be in the form #localpart:server or
+      // #localpart:server:port. In the latter case, it's wiser to skip the name
+      // resolution and use that value right away.
+      switch (splitAlias.length) {
+        case 2:
+          host = splitAlias[1]
+          break
+        case 3:
+          host = splitAlias[2] + splitAlias[3]
+          break
+        default:
+          throw new errors.InvalidParameter()
       }
     } else {
-      host = splitAlias[2] + splitAlias[3]
+      host = serverFQDN
     }
     const accessToken = await this.retrieveAccessToken({ host })
     const lookup = await this.lookupRoomAlias({ host, roomAlias, accessToken })
@@ -201,8 +170,8 @@ module.exports = class Matrix extends BaseJsonService {
     }
   }
 
-  async handle({ roomAlias, authServer }) {
-    const members = await this.fetch({ roomAlias })
+  async handle({ roomAlias, serverFQDN }) {
+    const members = await this.fetch({ roomAlias, serverFQDN })
     return this.constructor.render({ members })
   }
 
@@ -217,8 +186,8 @@ module.exports = class Matrix extends BaseJsonService {
   static get route() {
     return {
       base: 'matrix',
-      format: '([^/]+)',
-      capture: ['roomAlias'],
+      format: '([^/]+)(?:/([^/]+))?',
+      capture: ['roomAlias', 'serverFQDN'],
     }
   }
 
@@ -227,7 +196,7 @@ module.exports = class Matrix extends BaseJsonService {
       {
         title: 'Matrix',
         exampleUrl: 'twim:matrix.org',
-        pattern: ':roomAlias',
+        pattern: ':roomAlias/:server_fqdn_optional',
         staticExample: this.render({ members: 42 }),
         documentation,
       },
