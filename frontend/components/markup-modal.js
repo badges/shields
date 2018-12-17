@@ -12,11 +12,12 @@ const ContentContainer = styled(BaseFont)`
   text-align: center;
 `
 
-const WeeSnippet = ({ snippet }) => (
-  <Snippet truncate fontSize="10pt" snippet={snippet} />
+const WeeSnippet = ({ snippet, truncate = false }) => (
+  <Snippet truncate={truncate} fontSize="10pt" snippet={snippet} />
 )
 WeeSnippet.propTypes = {
   snippet: PropTypes.string.isRequired,
+  truncate: PropTypes.bool,
 }
 
 export default class MarkupModal extends React.Component {
@@ -143,15 +144,15 @@ export default class MarkupModal extends React.Component {
         </p>
         <p>
           Markdown&nbsp;
-          <WeeSnippet snippet={markdown} />
+          <WeeSnippet truncate snippet={markdown} />
         </p>
         <p>
           reStructuredText&nbsp;
-          <WeeSnippet snippet={reStructuredText} />
+          <WeeSnippet truncate snippet={reStructuredText} />
         </p>
         <p>
           AsciiDoc&nbsp;
-          <WeeSnippet snippet={asciiDoc} />
+          <WeeSnippet truncate snippet={asciiDoc} />
         </p>
       </div>
     )
