@@ -15,6 +15,8 @@ const schema = Joi.object({
   version: individualValueSchema,
 }).required()
 
+const flexibleSchema = Joi.object().required()
+
 class GithubManifestVersion extends ConditionalGithubAuthService {
   static get category() {
     return 'version'
@@ -32,7 +34,7 @@ class GithubManifestVersion extends ConditionalGithubAuthService {
     return [
       {
         title: 'GitHub manifest version',
-        pattern: 'manifest-json/v/:user/:repo',
+        pattern: ':user/:repo',
         namedParams: {
           user: 'RedSparr0w',
           repo: 'IndieGala-Helper',
@@ -42,7 +44,7 @@ class GithubManifestVersion extends ConditionalGithubAuthService {
       },
       {
         title: 'GitHub manifest version',
-        pattern: 'manifest-json/v/:user/:repo/:branch',
+        pattern: ':user/:repo/:branch',
         namedParams: {
           user: 'RedSparr0w',
           repo: 'IndieGala-Helper',
@@ -62,7 +64,7 @@ class GithubManifestVersion extends ConditionalGithubAuthService {
     })
   }
 
-  async handle({ kind, which, user, repo, branch }) {
+  async handle({ user, repo, branch }) {
     const { version } = await fetchJsonFromRepo(this, {
       schema,
       user,
@@ -91,7 +93,7 @@ class DynamicGithubManifest extends ConditionalGithubAuthService {
     return [
       {
         title: 'GitHub manifest.json dynamic',
-        pattern: 'manifest-json/:key/:user/:repo',
+        pattern: ':key/:user/:repo',
         namedParams: {
           key: 'permissions',
           user: 'developit',
@@ -105,7 +107,7 @@ class DynamicGithubManifest extends ConditionalGithubAuthService {
       },
       {
         title: 'GitHub manifest.json dynamic',
-        pattern: 'manifest-json/:key/:user/:repo/:branch',
+        pattern: ':key/:user/:repo/:branch',
         namedParams: {
           key: 'permissions',
           user: 'developit',
@@ -142,7 +144,7 @@ class DynamicGithubManifest extends ConditionalGithubAuthService {
       key = 'name'
     }
     const data = await fetchJsonFromRepo(this, {
-      schema: Joi.object().required(),
+      schema: flexibleSchema,
       user,
       repo,
       branch,
