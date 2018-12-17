@@ -106,7 +106,7 @@ module.exports = class AzureDevOpsCoverage extends BaseAzureDevOpsService {
     const errorMessages = {
       404: 'build pipeline or coverage not found',
     }
-    const buildId = await this.getLatestBuildId(
+    const buildId = await this.getLatestCompletedBuildId(
       organization,
       project,
       definitionId,

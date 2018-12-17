@@ -200,7 +200,7 @@ module.exports = class AzureDevOpsTests extends BaseAzureDevOpsService {
     const errorMessages = {
       404: 'build pipeline or test result summary not found',
     }
-    const buildId = await this.getLatestBuildId(
+    const buildId = await this.getLatestCompletedBuildId(
       organization,
       project,
       definitionId,

@@ -25,7 +25,7 @@ module.exports = class BaseAzureDevOpsService extends BaseJsonService {
     })
   }
 
-  async getLatestBuildId(
+  async getLatestCompletedBuildId(
     organization,
     project,
     definitionId,
@@ -39,6 +39,7 @@ module.exports = class BaseAzureDevOpsService extends BaseJsonService {
       qs: {
         definitions: definitionId,
         $top: 1,
+        statusFilter: 'completed',
         'api-version': '5.0-preview.4',
       },
       headers,

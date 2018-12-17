@@ -12,9 +12,9 @@ const azureDevOpsApiBaseUri = `https://dev.azure.com/${org}/${project}/_apis`
 const mockBadgeUriPath = `${uriPrefix}/${definitionId}`
 const mockBadgeUri = `${mockBadgeUriPath}.json`
 const mockBranchBadgeUri = `${mockBadgeUriPath}/master.json`
-const mockLatestBuildApiUriPath = `/build/builds?definitions=${definitionId}&%24top=1&api-version=5.0-preview.4`
-const mockLatestBranchBuildApiUriPath = `/build/builds?definitions=${definitionId}&%24top=1&api-version=5.0-preview.4&branch=master`
-const mockNonExistentBuildApiUriPath = `/build/builds?definitions=${nonExistentDefinitionId}&%24top=1&api-version=5.0-preview.4`
+const mockLatestBuildApiUriPath = `/build/builds?definitions=${definitionId}&%24top=1&statusFilter=completed&api-version=5.0-preview.4`
+const mockLatestBranchBuildApiUriPath = `/build/builds?definitions=${definitionId}&%24top=1&statusFilter=completed&api-version=5.0-preview.4&branch=master`
+const mockNonExistentBuildApiUriPath = `/build/builds?definitions=${nonExistentDefinitionId}&%24top=1&statusFilter=completed&api-version=5.0-preview.4`
 const mockTestResultSummaryApiUriPath = `/test/ResultSummaryByBuild?buildId=${buildId}`
 const latestBuildResponse = {
   count: 1,
