@@ -9,9 +9,9 @@ jobs:
 
       - restore_cache:
           keys:
-          - v2-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v2-dependencies-
+            - v2-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -30,9 +30,10 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: v2-dependencies-{{ checksum "package.json" }}
-          # https://github.com/badges/shields/issues/1937
-          key: v2-dependencies-
+          keys:
+            - v2-dependencies-{{ checksum "package.json" }}
+            # https://github.com/badges/shields/issues/1937
+            - v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -44,19 +45,36 @@ jobs:
           command: npm run lint
 
       - run:
+          name: Prepare test summary
+          when: always
+          command: mkdir junit
+
+      - run:
           name: Server unit tests
           when: always
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/server/results.xml
           command: npm run test:js:server
 
       - run:
           name: Integration tests
           when: always
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/server/integration.xml
           command: npm run test:integration
 
       - run:
           name: Tests for gh-badges package
           when: always
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/server/gh-badges.xml
           command: npm run test:js:package
+
+      - store_test_results:
+          path: junit
 
       - run:
           name: 'Prettier check (quick fix: `npm run prettier`)'
@@ -71,9 +89,10 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: v2-dependencies-{{ checksum "package.json" }}
-          # https://github.com/badges/shields/issues/1937
-          key: v2-dependencies-
+          keys:
+            - v2-dependencies-{{ checksum "package.json" }}
+            # https://github.com/badges/shields/issues/1937
+            - v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -85,19 +104,36 @@ jobs:
           command: npm run lint
 
       - run:
+          name: Prepare test summary
+          when: always
+          command: mkdir junit
+
+      - run:
           name: Server unit tests
           when: always
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/server/results.xml
           command: npm run test:js:server
 
       - run:
           name: Integration tests
           when: always
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/integration/results.xml
           command: npm run test:integration
 
       - run:
           name: Tests for gh-badges package
           when: always
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/gh-badges/results.xml
           command: npm run test:js:package
+
+      - store_test_results:
+          path: junit
 
       - run:
           name: 'Prettier check (quick fix: `npm run prettier`)'
@@ -111,9 +147,10 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: v2-dependencies-{{ checksum "package.json" }}
-          # https://github.com/badges/shields/issues/1937
-          key: v2-dependencies-
+          keys:
+            - v2-dependencies-{{ checksum "package.json" }}
+            # https://github.com/badges/shields/issues/1937
+            - v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -131,9 +168,10 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: v2-dependencies-{{ checksum "package.json" }}
-          # https://github.com/badges/shields/issues/1937
-          key: v2-dependencies-
+          keys:
+            - v2-dependencies-{{ checksum "package.json" }}
+            # https://github.com/badges/shields/issues/1937
+            - v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -144,8 +182,19 @@ jobs:
           command: npm run defs && npm run features
 
       - run:
+          name: Prepare test summary
+          when: always
+          command: mkdir junit
+
+      - run:
           name: Frontend unit tests
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/frontend/results.xml
           command: npm run test:js:frontend
+
+      - store_test_results:
+          path: junit
 
       - run:
           name: Frontend build completes successfully
@@ -165,9 +214,10 @@ jobs:
             echo "{\"gh_token\":\"$GITHUB_TOKEN\", \"wheelmap_token\":\"$WHEELMAP_TOKEN\"}" > private/secret.json
 
       - restore_cache:
-          key: v2-dependencies-{{ checksum "package.json" }}
-          # https://github.com/badges/shields/issues/1937
-          key: v2-dependencies-
+          keys:
+            - v2-dependencies-{{ checksum "package.json" }}
+            # https://github.com/badges/shields/issues/1937
+            - v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -178,8 +228,19 @@ jobs:
           command: npm run test:services:pr:prepare
 
       - run:
+          name: Prepare test summary
+          when: always
+          command: mkdir junit
+
+      - run:
           name: Run tests for tagged services
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/services/results.xml
           command: npm run test:services:pr:run
+
+      - store_test_results:
+          path: junit
 
   services@node-latest:
     docker:
@@ -194,9 +255,10 @@ jobs:
             echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
 
       - restore_cache:
-          key: v2-dependencies-{{ checksum "package.json" }}
-          # https://github.com/badges/shields/issues/1937
-          key: v2-dependencies-
+          keys:
+            - v2-dependencies-{{ checksum "package.json" }}
+            # https://github.com/badges/shields/issues/1937
+            - v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -207,8 +269,19 @@ jobs:
           command: npm run test:services:pr:prepare
 
       - run:
+          name: Prepare test summary
+          when: always
+          command: mkdir junit
+
+      - run:
           name: Run tests for tagged services
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/services/results.xml
           command: npm run test:services:pr:run
+
+      - store_test_results:
+          path: junit
 
 workflows:
   version: 2
