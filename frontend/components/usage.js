@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { staticBadgeUrl } from '../lib/badge-url'
 import { advertisedStyles, logos } from '../../supported-features.json'
 import StaticBadgeMaker from './static-badge-maker'
 import DynamicBadgeMaker from './dynamic-badge-maker'
 import { H2, H3, Badge, VerticalSpace } from './common'
-import { Snippet } from './snippet'
+import { Snippet, StyledCode } from './snippet'
 
 const LogoName = styled.span`
   white-space: nowrap;
@@ -14,6 +14,10 @@ const LogoName = styled.span`
 
 const Lhs = styled.td`
   text-align: right;
+`
+
+const EscapingRuleTable = styled.table`
+  margin: auto;
 `
 
 const QueryParamTable = styled.table`
@@ -25,23 +29,38 @@ const QueryParamTable = styled.table`
 
 const QueryParamSyntax = styled.td`
   max-width: 300px;
+
+  ${({ textAlign }) =>
+    textAlign &&
+    css`
+      text-align: ${textAlign};
+    `};
 `
 
 const QueryParamDocumentation = styled.td`
   max-width: 600px;
+
+  ${({ textAlign }) =>
+    textAlign &&
+    css`
+      text-align: ${textAlign};
+    `};
 `
 
-const QueryParam = ({ snippet, documentation }) => (
+const QueryParam = ({ snippet, documentation, textAlign = 'left' }) => (
   <tr>
-    <QueryParamSyntax>
+    <QueryParamSyntax textAlign={textAlign}>
       <Snippet snippet={snippet} />
     </QueryParamSyntax>
-    <QueryParamDocumentation>{documentation}</QueryParamDocumentation>
+    <QueryParamDocumentation textAlign={textAlign}>
+      {documentation}
+    </QueryParamDocumentation>
   </tr>
 )
 QueryParam.propTypes = {
   snippet: PropTypes.string.isRequired,
   documentation: PropTypes.element.isRequired,
+  textAlign: PropTypes.string,
 }
 
 const EscapingConversion = ({ lhs, rhs }) => (
@@ -101,6 +120,7 @@ export default class Usage extends React.PureComponent {
             })
             return (
               <QueryParam
+                textAlign="center"
                 key={style}
                 snippet={snippet}
                 documentation={<Badge src={badgeUrl} alt={style} />}
@@ -122,7 +142,7 @@ export default class Usage extends React.PureComponent {
 
   static renderStaticBadgeEscapingRules() {
     return (
-      <table>
+      <EscapingRuleTable>
         <tbody>
           <EscapingConversion
             key="dashes"
@@ -164,7 +184,7 @@ export default class Usage extends React.PureComponent {
             }
           />
         </tbody>
-      </table>
+      </EscapingRuleTable>
     )
   }
 
@@ -180,10 +200,9 @@ export default class Usage extends React.PureComponent {
         <VerticalSpace />
 
         <p>
-          <code>
-            {baseUrl}
-            /badge/&lt;SUBJECT&gt;-&lt;STATUS&gt;-&lt;COLOR&gt;.svg
-          </code>
+          <Snippet
+            snippet={`${baseUrl}/badge/<SUBJECT>-<STATUS>-<COLOR>.svg`}
+          />
         </p>
         {this.constructor.renderStaticBadgeEscapingRules()}
         {this.renderColorExamples()}
@@ -193,7 +212,7 @@ export default class Usage extends React.PureComponent {
         <DynamicBadgeMaker baseUrl={baseUrl} />
 
         <p>
-          <code>
+          <StyledCode>
             {baseUrl}
             /badge/dynamic/json.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
             <a
@@ -204,10 +223,10 @@ export default class Usage extends React.PureComponent {
               $.DATA.SUBDATA
             </a>
             &gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
-          </code>
+          </StyledCode>
         </p>
         <p>
-          <code>
+          <StyledCode>
             {baseUrl}
             /badge/dynamic/xml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
             <a
@@ -218,10 +237,10 @@ export default class Usage extends React.PureComponent {
               //data/subdata
             </a>
             &gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
-          </code>
+          </StyledCode>
         </p>
         <p>
-          <code>
+          <StyledCode>
             {baseUrl}
             /badge/dynamic/yaml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
             <a
@@ -232,7 +251,7 @@ export default class Usage extends React.PureComponent {
               $.DATA.SUBDATA
             </a>
             &gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
-          </code>
+          </StyledCode>
         </p>
 
         <VerticalSpace />
