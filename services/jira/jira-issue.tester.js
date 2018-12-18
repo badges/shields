@@ -1,6 +1,7 @@
 'use strict'
 
 const t = (module.exports = require('../create-service-tester')())
+const jiraTestHelpers = require('./jira-test-helpers')
 
 t.create('live: unknown issue')
   .get('/https/issues.apache.org/jira/notArealIssue-000.json')
@@ -69,3 +70,24 @@ t.create('endpoint with no port nor path')
       })
   )
   .expectJSON({ name: 'test-001', value: 'in progress' })
+
+t.create('with auth')
+  .before(jiraTestHelpers.mockJiraCreds)
+  .get('/https/myprivatejira.com/secure-234.json')
+  .intercept(nock =>
+    nock('https://myprivatejira.com/rest/api/2/issue')
+      .get(`/${encodeURIComponent('secure-234')}`)
+      .basicAuth({
+        user: jiraTestHelpers.user,
+        pass: jiraTestHelpers.pass,
+      })
+      .reply(200, {
+        fields: {
+          status: {
+            name: 'in progress',
+          },
+        },
+      })
+  )
+  .finally(jiraTestHelpers.restore)
+  .expectJSON({ name: 'secure-234', value: 'in progress' })

@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJiraService = require('./jira-base')
+const JiraBase = require('./jira-base')
 
 const schema = Joi.object({
   total: Joi.number(),
@@ -26,8 +26,17 @@ const documentation = `
 </p>
 `
 
-module.exports = class JiraSprint extends BaseJiraService {
-  static render({ percentComplete, color }) {
+module.exports = class JiraSprint extends JiraBase {
+  static render({ numCompletedIssues, numTotalIssues }) {
+    const percentComplete = numTotalIssues
+      ? (numCompletedIssues / numTotalIssues) * 100
+      : 0
+    let color = 'orange'
+    if (numCompletedIssues === 0) {
+      color = 'red'
+    } else if (numCompletedIssues === numTotalIssues) {
+      color = 'brightgreen'
+    }
     return {
       label: 'completion',
       message: `${percentComplete.toFixed(0)}%`,
@@ -42,7 +51,7 @@ module.exports = class JiraSprint extends BaseJiraService {
   static get route() {
     return {
       base: 'jira/sprint',
-      pattern: ':protocol(https?)/:host/:path?/:sprintId',
+      pattern: ':protocol(http|https)/:host(.+)/:sprintId',
     }
   }
 
@@ -57,8 +66,8 @@ module.exports = class JiraSprint extends BaseJiraService {
           sprintId: '94',
         },
         staticPreview: this.render({
-          percentComplete: 96,
-          color: 'orange',
+          numCompletedIssues: 27,
+          numTotalIssues: 28,
         }),
         documentation,
         keywords: ['jira', 'sprint', 'issues'],
@@ -66,26 +75,20 @@ module.exports = class JiraSprint extends BaseJiraService {
     ]
   }
 
-  async handle({ protocol, host, path, sprintId }) {
-    let url = `${protocol}://${host}`
-    if (path) {
-      url += `/${path}`
-    }
+  async handle({ protocol, host, sprintId }) {
     // Atlassian Documentation: https://developer.atlassian.com/cloud/jira/platform/rest/v2/#api-group-Search
     // There are other sprint-specific APIs but those require authentication. The search API
     // allows us to get the needed data without being forced to authenticate.
-    url += '/rest/api/2/search'
-    const options = {
-      qs: {
-        jql: `sprint=${sprintId} AND type IN (Bug,Improvement,Story,"Technical task")`,
-        fields: 'resolution',
-        maxResults: 500,
-      },
+    const url = `${protocol}://${host}/rest/api/2/search`
+    const qs = {
+      jql: `sprint=${sprintId} AND type IN (Bug,Improvement,Story,"Technical task")`,
+      fields: 'resolution',
+      maxResults: 500,
     }
     const json = await this.fetch({
       url,
       schema,
-      options,
+      qs,
       errorMessages: {
         400: 'sprint not found',
         404: 'sprint not found',
@@ -98,15 +101,6 @@ module.exports = class JiraSprint extends BaseJiraService {
       }
     }).length
 
-    const percentComplete = numTotalIssues
-      ? (numCompletedIssues / numTotalIssues) * 100
-      : 0
-    let color = 'orange'
-    if (numCompletedIssues === 0) {
-      color = 'red'
-    } else if (numCompletedIssues === numTotalIssues) {
-      color = 'brightgreen'
-    }
-    return this.constructor.render({ percentComplete, color })
+    return this.constructor.render({ numTotalIssues, numCompletedIssues })
   }
 }

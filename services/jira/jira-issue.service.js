@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJiraService = require('./jira-base')
+const JiraBase = require('./jira-base')
 
 const schema = Joi.object({
   fields: Joi.object({
@@ -14,10 +14,23 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class JiraIssue extends BaseJiraService {
-  static render({ issue, statusName, color }) {
+module.exports = class JiraIssue extends JiraBase {
+  static render({ issueKey, statusName, statusColor }) {
+    let color = 'lightgrey'
+    if (statusColor) {
+      // map JIRA status color names to closest shields color schemes
+      const colorMap = {
+        'medium-gray': 'lightgrey',
+        green: 'green',
+        yellow: 'yellow',
+        brown: 'orange',
+        'warm-red': 'red',
+        'blue-gray': 'blue',
+      }
+      color = colorMap[statusColor]
+    }
     return {
-      label: issue,
+      label: issueKey,
       message: statusName,
       color,
     }
@@ -30,7 +43,7 @@ module.exports = class JiraIssue extends BaseJiraService {
   static get route() {
     return {
       base: 'jira/issue',
-      pattern: ':protocol(https?)/:host/:path?/:issueKey',
+      pattern: ':protocol(http|https)/:host(.+)/:issueKey',
     }
   }
 
@@ -45,48 +58,37 @@ module.exports = class JiraIssue extends BaseJiraService {
           issueKey: 'KAFKA-2896',
         },
         staticPreview: this.render({
-          issue: 'KAFKA-2896',
+          issueKey: 'KAFKA-2896',
           statusName: 'Resolved',
-          color: 'green',
+          statusColor: 'green',
         }),
         keywords: ['jira', 'issue'],
       },
     ]
   }
 
-  async handle({ protocol, host, path, issueKey }) {
-    let url = `${protocol}://${host}`
-    if (path) {
-      url += `/${path}`
-    }
-
+  async handle({ protocol, host, issueKey }) {
     // Atlassian Documentation: https://developer.atlassian.com/cloud/jira/platform/rest/v2/#api-api-2-issue-issueIdOrKey-get
-    url += `/rest/api/2/issue/${encodeURIComponent(issueKey)}`
-
+    const url = `${protocol}://${host}/rest/api/2/issue/${encodeURIComponent(
+      issueKey
+    )}`
     const json = await this.fetch({
       url,
       schema,
-      options: {},
       errorMessages: {
         404: 'issue not found',
       },
     })
     const issueStatus = json.fields.status
     const statusName = issueStatus.name
-    let color = 'lightgrey'
+    let statusColor
     if (issueStatus.statusCategory) {
-      // map JIRA color names to closest shields color schemes
-      const colorMap = {
-        'medium-gray': 'lightgrey',
-        green: 'green',
-        yellow: 'yellow',
-        brown: 'orange',
-        'warm-red': 'red',
-        'blue-gray': 'blue',
-      }
-      color = colorMap[issueStatus.statusCategory.colorName]
+      statusColor = issueStatus.statusCategory.colorName
     }
-
-    return this.constructor.render({ issue: issueKey, statusName, color })
+    return this.constructor.render({
+      issueKey,
+      statusName,
+      statusColor,
+    })
   }
 }

@@ -3,6 +3,7 @@
 const Joi = require('joi')
 const t = (module.exports = require('../create-service-tester')())
 const { isIntegerPercentage } = require('../test-validators')
+const jiraTestHelpers = require('./jira-test-helpers')
 
 const sprintId = 8
 const queryString = {
@@ -110,4 +111,38 @@ t.create('issue with null resolution value')
         ],
       })
   )
+  .expectJSON({ name: 'completion', value: '50%' })
+
+t.create('with auth')
+  .before(jiraTestHelpers.mockJiraCreds)
+  .get(`/https/myprivatejira/jira/${sprintId}.json`)
+  .intercept(nock =>
+    nock('https://myprivatejira/jira/rest/api/2')
+      .get('/search')
+      .query(queryString)
+      .basicAuth({
+        user: jiraTestHelpers.user,
+        pass: jiraTestHelpers.pass,
+      })
+      .reply(200, {
+        total: 2,
+        issues: [
+          {
+            fields: {
+              resolution: {
+                name: 'done',
+              },
+            },
+          },
+          {
+            fields: {
+              resolution: {
+                name: 'Unresolved',
+              },
+            },
+          },
+        ],
+      })
+  )
+  .finally(jiraTestHelpers.restore)
   .expectJSON({ name: 'completion', value: '50%' })
