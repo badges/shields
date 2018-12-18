@@ -6,7 +6,12 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
-// Based on repo1.maven.org rather than search.maven.org because of #846.
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class MavenCentral extends LegacyService {
   static get category() {
     return 'version'
@@ -39,6 +44,7 @@ module.exports = class MavenCentral extends LegacyService {
         const artifactId = match[2] // eg, `guice`
         const versionPrefix = match[3] || '' // eg, `1.`
         const format = match[4] || 'gif' // eg, `svg`
+        // Based on repo1.maven.org rather than search.maven.org because of #846.
         const metadataUrl = `${'http://repo1.maven.org/maven2' +
           '/'}${encodeURIComponent(groupId).replace(
           /\./g,
