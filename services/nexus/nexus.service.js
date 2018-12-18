@@ -28,8 +28,6 @@ const resolveApiSchema = Joi.object({
   }).required(),
 }).required()
 
-const keywords = ['sonatype']
-
 module.exports = class Nexus extends BaseJsonService {
   static render({ version }) {
     let message, color
@@ -83,7 +81,6 @@ module.exports = class Nexus extends BaseJsonService {
         staticExample: this.render({
           version: 'v27.0.1-jre',
         }),
-        keywords,
       },
       {
         title: 'Sonatype Nexus (Snapshots)',
@@ -97,7 +94,6 @@ module.exports = class Nexus extends BaseJsonService {
         staticExample: this.render({
           version: 'v24.0-SNAPSHOT',
         }),
-        keywords,
       },
       {
         title: 'Sonatype Nexus (Repository)',
@@ -112,7 +108,6 @@ module.exports = class Nexus extends BaseJsonService {
         staticExample: this.render({
           version: '3.22.0.2',
         }),
-        keywords,
       },
       {
         title: 'Sonatype Nexus (Query Options)',
@@ -128,7 +123,6 @@ module.exports = class Nexus extends BaseJsonService {
         staticExample: this.render({
           version: '7.0.1-SNAPSHOT',
         }),
-        keywords,
         documentation: `
         <p>
           Note that you can use query options with any Nexus badge type (Releases, Snapshots, or Repository)
