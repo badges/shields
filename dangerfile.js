@@ -35,7 +35,8 @@ const helperTests = fileMatch('lib/**/*.spec.js')
 const packageJson = fileMatch('package.json')
 const packageLock = fileMatch('package-lock.json')
 const capitals = fileMatch('**/*[A-Z]*.js')
-const underscores = fileMatch('**/*_*.js')
+// _document.js is used by convention by Next.
+const underscores = fileMatch('**/*_*.js', '!pages/_document.js')
 const targetBranch = danger.github.pr.base.ref
 
 message(

@@ -1,9 +1,66 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import StaticBadgeMaker from './static-badge-maker'
-import DynamicBadgeMaker from './dynamic-badge-maker'
+import styled from 'styled-components'
 import { staticBadgeUrl } from '../lib/badge-url'
 import { advertisedStyles, logos } from '../../supported-features.json'
+import StaticBadgeMaker from './static-badge-maker'
+import DynamicBadgeMaker from './dynamic-badge-maker'
+import { H2, H3, Badge, VerticalSpace } from './common'
+import { Snippet, StyledCode } from './snippet'
+
+const LogoName = styled.span`
+  white-space: nowrap;
+`
+
+const Lhs = styled.td`
+  text-align: right;
+`
+
+const EscapingRuleTable = styled.table`
+  margin: auto;
+`
+
+const QueryParamTable = styled.table`
+  min-width: 50%;
+  margin: auto;
+  table-layout: fixed;
+  border-spacing: 20px 10px;
+`
+
+const QueryParamSyntax = styled.td`
+  max-width: 300px;
+  text-align: left;
+`
+
+const QueryParamDocumentation = styled.td`
+  max-width: 600px;
+  text-align: left;
+`
+
+const QueryParam = ({ snippet, documentation }) => (
+  <tr>
+    <QueryParamSyntax>
+      <Snippet snippet={snippet} />
+    </QueryParamSyntax>
+    <QueryParamDocumentation>{documentation}</QueryParamDocumentation>
+  </tr>
+)
+QueryParam.propTypes = {
+  snippet: PropTypes.string.isRequired,
+  documentation: PropTypes.element.isRequired,
+}
+
+const EscapingConversion = ({ lhs, rhs }) => (
+  <tr>
+    <Lhs>{lhs}</Lhs>
+    <td>→</td>
+    <td>{rhs}</td>
+  </tr>
+)
+EscapingConversion.propTypes = {
+  lhs: PropTypes.element.isRequired,
+  rhs: PropTypes.element.isRequired,
+}
 
 export default class Usage extends React.PureComponent {
   static propTypes = {
@@ -27,12 +84,10 @@ export default class Usage extends React.PureComponent {
       <p>
         {colors.map((color, i) => (
           <Fragment key={i}>
-            <img
-              className="badge-img"
+            <Badge
               src={staticBadgeUrl(baseUrl, 'color', color, color)}
               alt={color}
-            />{' '}
-            {}
+            />
           </Fragment>
         ))}
       </p>
@@ -42,38 +97,80 @@ export default class Usage extends React.PureComponent {
   renderStyleExamples() {
     const { baseUrl } = this.props
     return (
-      <table className="badge-img">
+      <QueryParamTable>
         <tbody>
-          {advertisedStyles.map((style, i) => {
+          {advertisedStyles.map(style => {
+            const snippet = `?style=${style}&logo=appveyor`
             const badgeUrl = staticBadgeUrl(baseUrl, 'style', style, 'green', {
               logo: 'appveyor',
               style,
             })
             return (
-              <tr key={i}>
-                <td>
-                  <img className="badge-img" src={badgeUrl} alt={style} />
-                </td>
-                <td>
-                  <code>{badgeUrl}</code>
-                </td>
-              </tr>
+              <QueryParam
+                key={style}
+                snippet={snippet}
+                documentation={<Badge src={badgeUrl} alt={style} />}
+              />
             )
           })}
         </tbody>
-      </table>
+      </QueryParamTable>
     )
   }
 
   static renderNamedLogos() {
-    const renderLogo = logo => (
-      <span className="nowrap" key={logo}>
-        {logo}
-      </span>
-    )
+    const renderLogo = logo => <LogoName key={logo}>{logo}</LogoName>
     const [first, ...rest] = logos
     return [renderLogo(first)].concat(
       rest.reduce((result, logo) => result.concat([', ', renderLogo(logo)]), [])
+    )
+  }
+
+  static renderStaticBadgeEscapingRules() {
+    return (
+      <EscapingRuleTable>
+        <tbody>
+          <EscapingConversion
+            key="dashes"
+            lhs={
+              <span>
+                Dashes <code>--</code>
+              </span>
+            }
+            rhs={
+              <span>
+                <code>-</code> Dash
+              </span>
+            }
+          />
+          <EscapingConversion
+            key="underscores"
+            lhs={
+              <span>
+                Underscores <code>__</code>
+              </span>
+            }
+            rhs={
+              <span>
+                <code>_</code> Underscore
+              </span>
+            }
+          />
+          <EscapingConversion
+            key="spaces"
+            lhs={
+              <span>
+                <code>_</code> or Space <code>&nbsp;</code>
+              </span>
+            }
+            rhs={
+              <span>
+                <code>&nbsp;</code> Space
+              </span>
+            }
+          />
+        </tbody>
+      </EscapingRuleTable>
     )
   }
 
@@ -81,59 +178,27 @@ export default class Usage extends React.PureComponent {
     const { baseUrl } = this.props
     return (
       <section>
-        <h2 id="your-badge">Your Badge</h2>
+        <H2 id="your-badge">Your Badge</H2>
 
-        <h3 id="static-badge">Static</h3>
+        <H3 id="static-badge">Static</H3>
         <StaticBadgeMaker baseUrl={baseUrl} />
 
-        <hr className="spacing" />
+        <VerticalSpace />
 
         <p>
-          <code>
-            {baseUrl}
-            /badge/&lt;SUBJECT&gt;-&lt;STATUS&gt;-&lt;COLOR&gt;.svg
-          </code>
+          <Snippet
+            snippet={`${baseUrl}/badge/<SUBJECT>-<STATUS>-<COLOR>.svg`}
+          />
         </p>
-        <table className="centered">
-          <tbody>
-            <tr>
-              <td>
-                Dashes <code>--</code>
-              </td>
-              <td>→</td>
-              <td>
-                <code>-</code> Dash
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Underscores <code>__</code>
-              </td>
-              <td>→</td>
-              <td>
-                <code>_</code> Underscore
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <code>_</code> or Space <code>&nbsp;</code>
-              </td>
-              <td>→</td>
-              <td>
-                <code>&nbsp;</code> Space
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
+        {this.constructor.renderStaticBadgeEscapingRules()}
         {this.renderColorExamples()}
 
-        <h3 id="dynamic-badge">Dynamic</h3>
+        <H3 id="dynamic-badge">Dynamic</H3>
 
         <DynamicBadgeMaker baseUrl={baseUrl} />
 
         <p>
-          <code>
+          <StyledCode>
             {baseUrl}
             /badge/dynamic/json.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
             <a
@@ -144,10 +209,10 @@ export default class Usage extends React.PureComponent {
               $.DATA.SUBDATA
             </a>
             &gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
-          </code>
+          </StyledCode>
         </p>
         <p>
-          <code>
+          <StyledCode>
             {baseUrl}
             /badge/dynamic/xml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
             <a
@@ -158,10 +223,10 @@ export default class Usage extends React.PureComponent {
               //data/subdata
             </a>
             &gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
-          </code>
+          </StyledCode>
         </p>
         <p>
-          <code>
+          <StyledCode>
             {baseUrl}
             /badge/dynamic/yaml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
             <a
@@ -172,12 +237,12 @@ export default class Usage extends React.PureComponent {
               $.DATA.SUBDATA
             </a>
             &gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
-          </code>
+          </StyledCode>
         </p>
 
-        <hr className="spacing" />
+        <VerticalSpace />
 
-        <h2 id="styles">Styles</h2>
+        <H2 id="styles">Styles</H2>
 
         <p>
           The following styles are available. Flat is the default. Examples are
@@ -189,92 +254,101 @@ export default class Usage extends React.PureComponent {
           Here are a few other parameters you can use: (connecting several with
           "&" is possible)
         </p>
-        <table className="usage">
+        <QueryParamTable>
           <tbody>
-            <tr>
-              <td>
-                <code>?label=healthinesses</code>
-              </td>
-              <td>
-                Override the default left-hand-side text (
-                <a href="https://developer.mozilla.org/en-US/docs/Glossary/percent-encoding">
-                  URL-Encoding
-                </a>
-                {} needed for spaces or special characters!)
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <code>?logo=appveyor</code>
-              </td>
-              <td>
-                Insert one of the named logos from (
-                {this.constructor.renderNamedLogos()}) or{' '}
-                <a href="https://simpleicons.org/" target="_BLANK">
-                  simple-icons
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <code>?logo=data:image/png;base64,…</code>
-              </td>
-              <td>Insert custom logo image (≥ 14px high)</td>
-            </tr>
-            <tr>
-              <td>
-                <code>?logoColor=violet</code>
-              </td>
-              <td>
-                Set the color of the logo (hex, rgb, rgba, hsl, hsla and css
-                named colors supported)
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <code>?logoWidth=40</code>
-              </td>
-              <td>Set the horizontal space to give to the logo</td>
-            </tr>
-            <tr>
-              <td>
-                <code>?link=http://left&amp;link=http://right</code>
-              </td>
-              <td>
-                Specify what clicking on the left/right of a badge should do
-                (esp. for social badge style)
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <code>?colorA=abcdef</code>
-              </td>
-              <td>
-                Set background of the left part (hex, rgb, rgba, hsl, hsla and
-                css named colors supported)
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <code>?colorB=fedcba</code>
-              </td>
-              <td>
-                Set background of the right part (hex, rgb, rgba, hsl, hsla and
-                css named colors supported)
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <code>?maxAge=3600</code>
-              </td>
-              <td>
-                Set the HTTP cache lifetime in secs (rules are applied to infer
-                a default value on a per-badge basis, any values specified below
-                the default will be ignored)
-              </td>
-            </tr>
+            <QueryParam
+              key="label"
+              snippet="?label=healthinesses"
+              documentation={
+                <span>
+                  Override the default left-hand-side text (
+                  <a href="https://developer.mozilla.org/en-US/docs/Glossary/percent-encoding">
+                    URL-Encoding
+                  </a>
+                  {} needed for spaces or special characters!)
+                </span>
+              }
+            />
+            <QueryParam
+              key="logo"
+              snippet="?logo=appveyor"
+              documentation={
+                <span>
+                  Insert one of the named logos from (
+                  {this.constructor.renderNamedLogos()}) or{' '}
+                  <a href="https://simpleicons.org/" target="_BLANK">
+                    simple-icons
+                  </a>
+                </span>
+              }
+            />
+            <QueryParam
+              key="logoSvg"
+              snippet="?logo=data:image/png;base64,…"
+              documentation={
+                <span>Insert custom logo image (≥ 14px high)</span>
+              }
+            />
+            <QueryParam
+              key="logoColor"
+              snippet="?logoColor=violet"
+              documentation={
+                <span>
+                  Set the color of the logo (hex, rgb, rgba, hsl, hsla and css
+                  named colors supported)
+                </span>
+              }
+            />
+            <QueryParam
+              key="logoWidth"
+              snippet="?logoWidth=40"
+              documentation={
+                <span>Set the horizontal space to give to the logo</span>
+              }
+            />
+            <QueryParam
+              key="link"
+              snippet="?link=http://left&amp;link=http://right"
+              documentation={
+                <span>
+                  Specify what clicking on the left/right of a badge should do
+                  (esp. for social badge style)
+                </span>
+              }
+            />
+            <QueryParam
+              key="colorA"
+              snippet="?colorA=abcdef"
+              documentation={
+                <span>
+                  Set background of the left part (hex, rgb, rgba, hsl, hsla and
+                  css named colors supported)
+                </span>
+              }
+            />
+            <QueryParam
+              key="colorB"
+              snippet="?colorB=fedcba"
+              documentation={
+                <span>
+                  Set background of the right part (hex, rgb, rgba, hsl, hsla
+                  and css named colors supported)
+                </span>
+              }
+            />
+            <QueryParam
+              key="maxAge"
+              snippet="?maxAge=3600"
+              documentation={
+                <span>
+                  Set the HTTP cache lifetime in secs (rules are applied to
+                  infer a default value on a per-badge basis, any values
+                  specified below the default will be ignored)
+                </span>
+              }
+            />
           </tbody>
-        </table>
+        </QueryParamTable>
 
         <p>
           We support <code>.svg</code>, <code>.json</code>, <code>.png</code>{' '}
