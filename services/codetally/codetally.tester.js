@@ -1,12 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'codetally',
-  title: 'Codetally',
-}))
+const t = (module.exports = require('../create-service-tester')())
 
 // This test will extract the currency value from the
 // string value response from the server.
@@ -37,3 +32,8 @@ t.create('Empty')
       })
   )
   .expectJSON({ name: 'codetally', value: '$0.00' })
+
+t.create('Non existent')
+  .get('/not/real.json')
+  .timeout(10000)
+  .expectJSON({ name: 'codetally', value: 'repo not found' })
