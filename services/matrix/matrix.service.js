@@ -51,25 +51,19 @@ const documentation = `
   </p>
   `
 
-const accessTokens = {}
-
 module.exports = class Matrix extends BaseJsonService {
   async retrieveAccessToken({ host }) {
-    if (accessTokens[host] === undefined) {
-      let auth
-      try {
-        auth = await this.registerAccount({ host, guest: true })
-      } catch (e) {
-        if (e.prettyMessage === 'guests not allowed') {
-          // attempt fallback method
-          auth = await this.registerAccount({ host, guest: false })
-        } else throw e
-      }
-
-      accessTokens[host] = auth.access_token
+    let auth
+    try {
+      auth = await this.registerAccount({ host, guest: true })
+    } catch (e) {
+      if (e.prettyMessage === 'guests not allowed') {
+        // attempt fallback method
+        auth = await this.registerAccount({ host, guest: false })
+      } else throw e
     }
 
-    return accessTokens[host]
+    return auth.access_token
   }
 
   async registerAccount({ host, guest }) {
