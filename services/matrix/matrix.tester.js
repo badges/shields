@@ -279,6 +279,75 @@ t.create('unknown alias')
     colorB: colorScheme.red,
   })
 
+t.create('specify the homeserver fqdn')
+  .get('/ALIAS:DUMMY.dumb/matrix.DUMMY.dumb.json?style=_shields_test')
+  .intercept(nock =>
+    nock('https://matrix.DUMMY.dumb/')
+      .post('/_matrix/client/r0/register?kind=guest')
+      .reply(
+        200,
+        JSON.stringify({
+          access_token: 'TOKEN',
+        })
+      )
+      .get(
+        '/_matrix/client/r0/directory/room/%23ALIAS:DUMMY.dumb?access_token=TOKEN'
+      )
+      .reply(
+        200,
+        JSON.stringify({
+          room_id: 'ROOM:DUMMY.dumb',
+        })
+      )
+      .get('/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/state?access_token=TOKEN')
+      .reply(
+        200,
+        JSON.stringify([
+          {
+            // valid user 1
+            type: 'm.room.member',
+            sender: '@user1:DUMMY.dumb',
+            state_key: '@user1:DUMMY.dumb',
+            content: {
+              membership: 'join',
+            },
+          },
+          {
+            // valid user 2
+            type: 'm.room.member',
+            sender: '@user2:DUMMY.dumb',
+            state_key: '@user2:DUMMY.dumb',
+            content: {
+              membership: 'join',
+            },
+          },
+          {
+            // should exclude banned/invited/left members
+            type: 'm.room.member',
+            sender: '@user3:DUMMY.dumb',
+            state_key: '@user3:DUMMY.dumb',
+            content: {
+              membership: 'leave',
+            },
+          },
+          {
+            // exclude events like the room name
+            type: 'm.room.name',
+            sender: '@user4:DUMMY.dumb',
+            state_key: '@user4:DUMMY.dumb',
+            content: {
+              membership: 'fake room',
+            },
+          },
+        ])
+      )
+  )
+  .expectJSON({
+    name: 'chat',
+    value: '2 users',
+    colorB: colorScheme.brightgreen,
+  })
+
 t.create('test on real matrix room for API compliance')
   .get('/twim:matrix.org.json?style=_shields_test')
   .timeout(10000)
