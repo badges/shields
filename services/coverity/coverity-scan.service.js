@@ -1,16 +1,49 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const Joi = require('joi')
+const BaseJsonService = require('../base-json')
 
-module.exports = class CoverityScan extends LegacyService {
+const messageRegex = /passed|passed .* new defects|pending|failed/
+const schema = Joi.object({
+  message: Joi.string()
+    .regex(messageRegex)
+    .required(),
+}).required()
+
+module.exports = class CoverityScan extends BaseJsonService {
+  static render({ message }) {
+    let color
+    if (message === 'passed') {
+      color = 'brightgreen'
+      message = 'passing'
+    } else if (/^passed .* new defects$/.test(message)) {
+      color = 'yellow'
+    } else if (message === 'pending') {
+      color = 'orange'
+    } else {
+      color = 'red'
+    }
+
+    return {
+      message,
+      color,
+    }
+  }
+
   static get category() {
     return 'quality'
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'coverity',
+    }
   }
 
   static get route() {
     return {
       base: 'coverity/scan',
+      pattern: ':projectId',
     }
   }
 
@@ -18,46 +51,27 @@ module.exports = class CoverityScan extends LegacyService {
     return [
       {
         title: 'Coverity Scan',
-        previewUrl: '3997',
+        pattern: ':projectId',
+        namedParams: {
+          projectId: '3997',
+        },
+        staticPreview: this.render({
+          message: 'passed',
+        }),
+        keywords: ['coverity', 'scan'],
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/coverity\/scan\/(.+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const projectId = match[1] // eg, `3997`
-        const format = match[2]
-        const url = `https://scan.coverity.com/projects/${projectId}/badge.json`
-        const badgeData = getBadgeData('coverity', data)
-        request(url, (err, res, buffer) => {
-          if (err != null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const data = JSON.parse(buffer)
-            badgeData.text[1] = data.message
-
-            if (data.message === 'passed') {
-              badgeData.colorscheme = 'brightgreen'
-              badgeData.text[1] = 'passing'
-            } else if (/^passed .* new defects$/.test(data.message)) {
-              badgeData.colorscheme = 'yellow'
-            } else if (data.message === 'pending') {
-              badgeData.colorscheme = 'orange'
-            } else if (data.message === 'failed') {
-              badgeData.colorscheme = 'red'
-            }
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  async handle({ projectId }) {
+    const url = `https://scan.coverity.com/projects/${projectId}/badge.json`
+    const json = await this._requestJson({
+      url,
+      schema,
+      errorMessages: {
+        404: 'project not found',
+      },
+    })
+    return this.constructor.render({ message: json.message })
   }
 }
