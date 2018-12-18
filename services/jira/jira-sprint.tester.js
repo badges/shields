@@ -120,6 +120,8 @@ t.create('with auth')
     nock('https://myprivatejira/jira/rest/api/2')
       .get('/search')
       .query(queryString)
+      // This ensures that the expected credentials from serverSecrets are actually being sent with the HTTP request.
+      // Without this the request wouldn't match and the test would fail.
       .basicAuth({
         user: jiraTestHelpers.user,
         pass: jiraTestHelpers.pass,

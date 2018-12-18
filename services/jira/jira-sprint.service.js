@@ -51,7 +51,7 @@ module.exports = class JiraSprint extends JiraBase {
   static get route() {
     return {
       base: 'jira/sprint',
-      pattern: ':protocol(http|https)/:host(.+)/:sprintId',
+      pattern: ':protocol(http|https)/:hostAndPath(.+)/:sprintId',
     }
   }
 
@@ -59,10 +59,10 @@ module.exports = class JiraSprint extends JiraBase {
     return [
       {
         title: 'JIRA sprint completion',
-        pattern: ':protocol/:host/:sprintId',
+        pattern: ':protocol/:hostAndPath/:sprintId',
         namedParams: {
           protocol: 'https',
-          host: 'jira.spring.io',
+          hostAndPath: 'jira.spring.io',
           sprintId: '94',
         },
         staticPreview: this.render({
@@ -75,11 +75,11 @@ module.exports = class JiraSprint extends JiraBase {
     ]
   }
 
-  async handle({ protocol, host, sprintId }) {
+  async handle({ protocol, hostAndPath, sprintId }) {
     // Atlassian Documentation: https://developer.atlassian.com/cloud/jira/platform/rest/v2/#api-group-Search
     // There are other sprint-specific APIs but those require authentication. The search API
     // allows us to get the needed data without being forced to authenticate.
-    const url = `${protocol}://${host}/rest/api/2/search`
+    const url = `${protocol}://${hostAndPath}/rest/api/2/search`
     const qs = {
       jql: `sprint=${sprintId} AND type IN (Bug,Improvement,Story,"Technical task")`,
       fields: 'resolution',

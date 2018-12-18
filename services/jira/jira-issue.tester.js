@@ -77,6 +77,8 @@ t.create('with auth')
   .intercept(nock =>
     nock('https://myprivatejira.com/rest/api/2/issue')
       .get(`/${encodeURIComponent('secure-234')}`)
+      // This ensures that the expected credentials from serverSecrets are actually being sent with the HTTP request.
+      // Without this the request wouldn't match and the test would fail.
       .basicAuth({
         user: jiraTestHelpers.user,
         pass: jiraTestHelpers.pass,

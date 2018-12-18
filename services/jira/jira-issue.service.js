@@ -43,7 +43,7 @@ module.exports = class JiraIssue extends JiraBase {
   static get route() {
     return {
       base: 'jira/issue',
-      pattern: ':protocol(http|https)/:host(.+)/:issueKey',
+      pattern: ':protocol(http|https)/:hostAndPath(.+)/:issueKey',
     }
   }
 
@@ -51,10 +51,10 @@ module.exports = class JiraIssue extends JiraBase {
     return [
       {
         title: 'JIRA issue',
-        pattern: ':protocol/:host/:issueKey',
+        pattern: ':protocol/:hostAndPath/:issueKey',
         namedParams: {
           protocol: 'https',
-          host: 'issues.apache.org/jira',
+          hostAndPath: 'issues.apache.org/jira',
           issueKey: 'KAFKA-2896',
         },
         staticPreview: this.render({
@@ -67,9 +67,9 @@ module.exports = class JiraIssue extends JiraBase {
     ]
   }
 
-  async handle({ protocol, host, issueKey }) {
+  async handle({ protocol, hostAndPath, issueKey }) {
     // Atlassian Documentation: https://developer.atlassian.com/cloud/jira/platform/rest/v2/#api-api-2-issue-issueIdOrKey-get
-    const url = `${protocol}://${host}/rest/api/2/issue/${encodeURIComponent(
+    const url = `${protocol}://${hostAndPath}/rest/api/2/issue/${encodeURIComponent(
       issueKey
     )}`
     const json = await this.fetch({
