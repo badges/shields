@@ -58,7 +58,6 @@ module.exports = class CoverityScan extends BaseJsonService {
         staticPreview: this.render({
           message: 'passed',
         }),
-        keywords: ['coverity', 'scan'],
       },
     ]
   }

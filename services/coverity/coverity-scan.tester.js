@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
+const { colorScheme } = require('../test-helpers')
 const t = (module.exports = require('../create-service-tester')())
 
 t.create('live: known project id')
@@ -27,7 +28,7 @@ t.create('404 response')
   .expectJSON({ name: 'coverity', value: 'project not found' })
 
 t.create('passed')
-  .get('/2.json')
+  .get('/2.json?style=_shields_test')
   .intercept(nock =>
     nock('https://scan.coverity.com/projects/2')
       .get('/badge.json')
@@ -35,10 +36,14 @@ t.create('passed')
         message: 'passed',
       })
   )
-  .expectJSON({ name: 'coverity', value: 'passing' })
+  .expectJSON({
+    name: 'coverity',
+    value: 'passing',
+    colorB: colorScheme.brightgreen,
+  })
 
 t.create('passed with defects')
-  .get('/2.json')
+  .get('/2.json?style=_shields_test')
   .intercept(nock =>
     nock('https://scan.coverity.com/projects/2')
       .get('/badge.json')
@@ -46,10 +51,14 @@ t.create('passed with defects')
         message: 'passed 51 new defects',
       })
   )
-  .expectJSON({ name: 'coverity', value: 'passed 51 new defects' })
+  .expectJSON({
+    name: 'coverity',
+    value: 'passed 51 new defects',
+    colorB: colorScheme.yellow,
+  })
 
 t.create('pending')
-  .get('/2.json')
+  .get('/2.json?style=_shields_test')
   .intercept(nock =>
     nock('https://scan.coverity.com/projects/2')
       .get('/badge.json')
@@ -57,10 +66,14 @@ t.create('pending')
         message: 'pending',
       })
   )
-  .expectJSON({ name: 'coverity', value: 'pending' })
+  .expectJSON({
+    name: 'coverity',
+    value: 'pending',
+    colorB: colorScheme.orange,
+  })
 
 t.create('failed')
-  .get('/2.json')
+  .get('/2.json?style=_shields_test')
   .intercept(nock =>
     nock('https://scan.coverity.com/projects/2')
       .get('/badge.json')
@@ -68,4 +81,8 @@ t.create('failed')
         message: 'failed',
       })
   )
-  .expectJSON({ name: 'coverity', value: 'failed' })
+  .expectJSON({
+    name: 'coverity',
+    value: 'failed',
+    colorB: colorScheme.red,
+  })
