@@ -236,6 +236,15 @@ t.create('unknown request')
           access_token: 'TOKEN',
         })
       )
+      .get(
+        '/_matrix/client/r0/directory/room/%23ALIAS:DUMMY.dumb?access_token=TOKEN'
+      )
+      .reply(
+        200,
+        JSON.stringify({
+          room_id: 'ROOM:DUMMY.dumb',
+        })
+      )
       .get('/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/state?access_token=TOKEN')
       .reply(
         400,
