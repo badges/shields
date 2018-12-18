@@ -35,10 +35,5 @@ t.create('Empty')
 
 t.create('Non existent')
   .get('/not/real.json')
-  .intercept(nock =>
-    nock('http://www.codetally.com')
-      .get('/formattedshield/not/real')
-      // apparently a 503 is returned when a non-existent repo is requested
-      .reply(503)
-  )
-  .expectJSON({ name: 'codetally', value: 'inaccessible' })
+  .timeout(10000)
+  .expectJSON({ name: 'codetally', value: 'repo not found' })

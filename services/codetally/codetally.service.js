@@ -60,6 +60,10 @@ module.exports = class Codetally extends BaseJsonService {
     const json = await this._requestJson({
       url,
       schema,
+      errorMessages: {
+        404: 'repo not found',
+        503: 'repo not found',
+      },
     })
 
     return this.constructor.render({
