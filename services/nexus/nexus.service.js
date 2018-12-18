@@ -31,7 +31,19 @@ const resolveApiSchema = Joi.object({
 const keywords = ['sonatype']
 
 module.exports = class Nexus extends BaseJsonService {
-  static render({ message, color }) {
+  static render({ version }) {
+    let message, color
+    if (version === 'no-artifact') {
+      message = version
+      color = 'red'
+    } else if (version !== '0') {
+      message = versionText(version)
+      color = versionColor(version)
+    } else {
+      message = 'undefined'
+      color = 'orange'
+    }
+
     return {
       message,
       color,
@@ -68,7 +80,9 @@ module.exports = class Nexus extends BaseJsonService {
           groupId: 'com.google.guava',
           artifactId: 'guava',
         },
-        staticExample: this.render({ message: 'v27.0.1-jre' }),
+        staticExample: this.render({
+          version: 'v27.0.1-jre',
+        }),
         keywords,
       },
       {
@@ -81,8 +95,7 @@ module.exports = class Nexus extends BaseJsonService {
           artifactId: 'guava',
         },
         staticExample: this.render({
-          message: 'v24.0-SNAPSHOT',
-          color: 'orange',
+          version: 'v24.0-SNAPSHOT',
         }),
         keywords,
       },
@@ -96,7 +109,9 @@ module.exports = class Nexus extends BaseJsonService {
           groupId: 'ai.h2o',
           artifactId: 'h2o-automl',
         },
-        staticExample: this.render({ message: '3.22.0.2' }),
+        staticExample: this.render({
+          version: '3.22.0.2',
+        }),
         keywords,
       },
       {
@@ -111,8 +126,7 @@ module.exports = class Nexus extends BaseJsonService {
           queryOpt: ':c=agent-apple-osx:p=tar.gz',
         },
         staticExample: this.render({
-          message: '7.0.1-SNAPSHOT',
-          color: 'orange',
+          version: '7.0.1-SNAPSHOT',
         }),
         keywords,
         documentation: `
@@ -138,7 +152,7 @@ module.exports = class Nexus extends BaseJsonService {
     })
     const json = await this._requestJson(requestParams)
     if (json.data.length === 0) {
-      return this.constructor.render({ message: 'no-artifact', color: 'red' })
+      return this.constructor.render({ version: 'no-artifact' })
     }
 
     let version = '0'
@@ -159,7 +173,7 @@ module.exports = class Nexus extends BaseJsonService {
     } else {
       version = json.data.baseVersion || json.data.version
     }
-    return this.buildBadge(version)
+    return this.constructor.render({ version })
   }
 
   getRequestParams({ repo, scheme, host, groupId, artifactId, queryOpt }) {
@@ -194,16 +208,10 @@ module.exports = class Nexus extends BaseJsonService {
       })
     }
 
-    if (serverSecrets) {
-      if (serverSecrets.nexus_base64auth) {
-        options.headers = {
-          Authorization: `basic ${serverSecrets.nexus_base64auth}`,
-        }
-      } else if (serverSecrets.nexus_user) {
-        options.auth = {
-          user: serverSecrets.nexus_user,
-          pass: serverSecrets.nexus_pass,
-        }
+    if (serverSecrets && serverSecrets.nexus_user) {
+      options.auth = {
+        user: serverSecrets.nexus_user,
+        pass: serverSecrets.nexus_pass,
       }
     }
 
@@ -215,18 +223,5 @@ module.exports = class Nexus extends BaseJsonService {
         404: 'no-artifact',
       },
     }
-  }
-
-  buildBadge(version) {
-    let message, color
-    if (version !== '0') {
-      message = versionText(version)
-      color = versionColor(version)
-    } else {
-      message = 'undefined'
-      color = 'orange'
-    }
-
-    return this.constructor.render({ message, color })
   }
 }
