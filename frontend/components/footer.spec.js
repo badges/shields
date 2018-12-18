@@ -1,5 +1,5 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, render } from 'enzyme'
 import { expect } from 'chai'
 import Footer from './footer'
 
@@ -11,7 +11,7 @@ describe('<Footer />', function() {
   })
 
   it('contains a link to the status page', function() {
-    const wrapper = shallow(<Footer baseUrl="https://example.shields.io" />)
-    expect(wrapper).to.contain(<a href="https://status.shields.io/">Status</a>)
+    const wrapper = render(<Footer baseUrl="https://example.shields.io" />)
+    expect(wrapper.html()).to.contain('https://status.shields.io/')
   })
 })

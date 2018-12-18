@@ -1,12 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Modal from 'react-modal'
-import ClickToSelect from '@mapbox/react-click-to-select'
+import styled from 'styled-components'
 import { badgeUrlFromPath, badgeUrlFromPattern } from '../../lib/make-badge-url'
 import generateAllMarkup from '../lib/generate-image-markup'
 import { advertisedStyles } from '../../supported-features.json'
+import { Snippet } from './snippet'
+import { BaseFont, H3, Badge, BlockInput } from './common'
 
-const nonBreakingSpace = '\u00a0'
+const ContentContainer = styled(BaseFont)`
+  text-align: center;
+`
+
+const WeeSnippet = ({ snippet, truncate = false }) => (
+  <Snippet truncate={truncate} fontSize="10pt" snippet={snippet} />
+)
+WeeSnippet.propTypes = {
+  snippet: PropTypes.string.isRequired,
+  truncate: PropTypes.bool,
+}
 
 export default class MarkupModal extends React.Component {
   static propTypes = {
@@ -100,13 +112,13 @@ export default class MarkupModal extends React.Component {
   renderLivePreview() {
     const { badgeUrl } = this.state
     const includesPlaceholders = badgeUrl.includes(':')
-
-    if (includesPlaceholders) {
-      return nonBreakingSpace
+    let src
+    if (badgeUrl && !includesPlaceholders) {
+      src = this.generateBuiltBadgeUrl()
     } else {
-      const livePreviewUrl = this.generateBuiltBadgeUrl()
-      return <img className="badge-img" src={livePreviewUrl} />
+      src = undefined
     }
+    return <Badge display="block" src={src} />
   }
 
   renderMarkup() {
@@ -128,31 +140,19 @@ export default class MarkupModal extends React.Component {
       <div>
         <p>
           URL&nbsp;
-          <ClickToSelect>
-            <input className="code clickable" readOnly value={builtBadgeUrl} />
-          </ClickToSelect>
+          <WeeSnippet snippet={builtBadgeUrl} />
         </p>
         <p>
           Markdown&nbsp;
-          <ClickToSelect>
-            <input className="code clickable" readOnly value={markdown} />
-          </ClickToSelect>
+          <WeeSnippet truncate snippet={markdown} />
         </p>
         <p>
           reStructuredText&nbsp;
-          <ClickToSelect>
-            <input
-              className="code clickable"
-              readOnly
-              value={reStructuredText}
-            />
-          </ClickToSelect>
+          <WeeSnippet truncate snippet={reStructuredText} />
         </p>
         <p>
           AsciiDoc&nbsp;
-          <ClickToSelect>
-            <input className="code clickable" readOnly value={asciiDoc} />
-          </ClickToSelect>
+          <WeeSnippet truncate snippet={asciiDoc} />
         </p>
       </div>
     )
@@ -173,7 +173,7 @@ export default class MarkupModal extends React.Component {
 
   render() {
     const { isOpen } = this
-    const { onRequestClose } = this.props
+    const { onRequestClose, example: { title } = {} } = this.props
     const { link, badgeUrl, exampleUrl, style } = this.state
 
     const common = {
@@ -190,62 +190,63 @@ export default class MarkupModal extends React.Component {
         contentLabel="Example Modal"
         ariaHideApp={false}
       >
-        <form action="">
-          <p>{isOpen && this.renderLivePreview()}</p>
-          <p>
-            <label>
-              Link&nbsp;
-              <input
-                type="url"
-                value={link}
-                onChange={event => {
-                  this.setState({ link: event.target.value })
-                }}
-                {...common}
-              />
-            </label>
-          </p>
-          <p>
-            <label>
-              Path&nbsp;
-              <input
-                type="url"
-                value={badgeUrl}
-                onChange={event => {
-                  this.setState({ badgeUrl: event.target.value })
-                }}
-                {...common}
-              />
-            </label>
-          </p>
-          {exampleUrl && (
+        <ContentContainer>
+          <form action="">
+            <H3>{title}</H3>
+            {isOpen && this.renderLivePreview()}
             <p>
-              Example&nbsp;
-              <ClickToSelect>
-                <input className="code clickable" readOnly value={exampleUrl} />
-              </ClickToSelect>
+              <label>
+                Link&nbsp;
+                <BlockInput
+                  type="url"
+                  value={link}
+                  onChange={event => {
+                    this.setState({ link: event.target.value })
+                  }}
+                  {...common}
+                />
+              </label>
             </p>
-          )}
-          <p>
-            <label>
-              Style&nbsp;
-              <select
-                value={style}
-                onChange={event => {
-                  this.setState({ style: event.target.value })
-                }}
-              >
-                {advertisedStyles.map(style => (
-                  <option key={style} value={style}>
-                    {style}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </p>
-          {isOpen && this.renderMarkup()}
-          {isOpen && this.renderDocumentation()}
-        </form>
+            <p>
+              <label>
+                Path&nbsp;
+                <BlockInput
+                  type="url"
+                  value={badgeUrl}
+                  onChange={event => {
+                    this.setState({ badgeUrl: event.target.value })
+                  }}
+                  {...common}
+                />
+              </label>
+            </p>
+            {exampleUrl && (
+              <p>
+                Example&nbsp;
+                <Snippet fontSize="10pt" snippet={exampleUrl} />
+              </p>
+            )}
+            <p>
+              <label>
+                Style&nbsp;
+                <select
+                  value={style}
+                  onChange={event => {
+                    this.setState({ style: event.target.value })
+                  }}
+                >
+                  {advertisedStyles.map(style => (
+                    <option key={style} value={style}>
+                      {style}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </p>
+            {isOpen && this.renderMarkup()}
+            {isOpen && this.renderDocumentation()}
+          </form>
+        </ContentContainer>
       </Modal>
     )
   }
