@@ -15,7 +15,7 @@ const CodeContainer = styled.span`
   ${({ truncate }) =>
     truncate &&
     css`
-      width: 175px;
+      max-width: 40%;
       overflow: hidden;
       text-overflow: ellipsis;
     `}

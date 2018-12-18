@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseAzureDevOpsService = require('./azure-devops-base')
+const AzureDevOpsBase = require('./azure-devops-base')
 const { keywords, getHeaders } = require('./azure-devops-helpers')
 
 const documentation = `
@@ -47,7 +47,7 @@ const buildCodeCoverageSchema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class AzureDevOpsCoverage extends BaseAzureDevOpsService {
+module.exports = class AzureDevOpsCoverage extends AzureDevOpsBase {
   static render({ coverage }) {
     return {
       message: `${coverage.toFixed(0)}%`,
@@ -106,7 +106,7 @@ module.exports = class AzureDevOpsCoverage extends BaseAzureDevOpsService {
     const errorMessages = {
       404: 'build pipeline or coverage not found',
     }
-    const buildId = await this.getLatestBuildId(
+    const buildId = await this.getLatestCompletedBuildId(
       organization,
       project,
       definitionId,

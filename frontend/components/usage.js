@@ -6,7 +6,7 @@ import { advertisedStyles, logos } from '../../supported-features.json'
 import StaticBadgeMaker from './static-badge-maker'
 import DynamicBadgeMaker from './dynamic-badge-maker'
 import { H2, H3, Badge, VerticalSpace } from './common'
-import { Snippet } from './snippet'
+import { Snippet, StyledCode } from './snippet'
 
 const LogoName = styled.span`
   white-space: nowrap;
@@ -14,6 +14,10 @@ const LogoName = styled.span`
 
 const Lhs = styled.td`
   text-align: right;
+`
+
+const EscapingRuleTable = styled.table`
+  margin: auto;
 `
 
 const QueryParamTable = styled.table`
@@ -25,10 +29,12 @@ const QueryParamTable = styled.table`
 
 const QueryParamSyntax = styled.td`
   max-width: 300px;
+  text-align: left;
 `
 
 const QueryParamDocumentation = styled.td`
   max-width: 600px;
+  text-align: left;
 `
 
 const QueryParam = ({ snippet, documentation }) => (
@@ -94,7 +100,7 @@ export default class Usage extends React.PureComponent {
       <QueryParamTable>
         <tbody>
           {advertisedStyles.map(style => {
-            const snippet = `?logo=appveyor&style=${style}`
+            const snippet = `?style=${style}&logo=appveyor`
             const badgeUrl = staticBadgeUrl(baseUrl, 'style', style, 'green', {
               logo: 'appveyor',
               style,
@@ -122,7 +128,7 @@ export default class Usage extends React.PureComponent {
 
   static renderStaticBadgeEscapingRules() {
     return (
-      <table>
+      <EscapingRuleTable>
         <tbody>
           <EscapingConversion
             key="dashes"
@@ -164,7 +170,7 @@ export default class Usage extends React.PureComponent {
             }
           />
         </tbody>
-      </table>
+      </EscapingRuleTable>
     )
   }
 
@@ -180,10 +186,9 @@ export default class Usage extends React.PureComponent {
         <VerticalSpace />
 
         <p>
-          <code>
-            {baseUrl}
-            /badge/&lt;SUBJECT&gt;-&lt;STATUS&gt;-&lt;COLOR&gt;.svg
-          </code>
+          <Snippet
+            snippet={`${baseUrl}/badge/<SUBJECT>-<STATUS>-<COLOR>.svg`}
+          />
         </p>
         {this.constructor.renderStaticBadgeEscapingRules()}
         {this.renderColorExamples()}
@@ -193,7 +198,7 @@ export default class Usage extends React.PureComponent {
         <DynamicBadgeMaker baseUrl={baseUrl} />
 
         <p>
-          <code>
+          <StyledCode>
             {baseUrl}
             /badge/dynamic/json.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
             <a
@@ -204,10 +209,10 @@ export default class Usage extends React.PureComponent {
               $.DATA.SUBDATA
             </a>
             &gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
-          </code>
+          </StyledCode>
         </p>
         <p>
-          <code>
+          <StyledCode>
             {baseUrl}
             /badge/dynamic/xml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
             <a
@@ -218,10 +223,10 @@ export default class Usage extends React.PureComponent {
               //data/subdata
             </a>
             &gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
-          </code>
+          </StyledCode>
         </p>
         <p>
-          <code>
+          <StyledCode>
             {baseUrl}
             /badge/dynamic/yaml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
             <a
@@ -232,7 +237,7 @@ export default class Usage extends React.PureComponent {
               $.DATA.SUBDATA
             </a>
             &gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
-          </code>
+          </StyledCode>
         </p>
 
         <VerticalSpace />
