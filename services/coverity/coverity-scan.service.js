@@ -69,6 +69,8 @@ module.exports = class CoverityScan extends BaseJsonService {
       url,
       schema,
       errorMessages: {
+        // At the moment Coverity returns an HTTP 200 with an HTML page
+        // displaying the text 404 when project is not found.
         404: 'project not found',
       },
     })
