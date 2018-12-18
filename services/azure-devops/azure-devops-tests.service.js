@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseAzureDevOpsService = require('./azure-devops-base')
+const AzureDevOpsBase = require('./azure-devops-base')
 const { getHeaders } = require('./azure-devops-helpers')
 const { renderTestResultBadge } = require('../../lib/text-formatters')
 
@@ -56,7 +56,7 @@ const buildTestResultSummarySchema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class AzureDevOpsTests extends BaseAzureDevOpsService {
+module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
   static render({
     passed,
     failed,

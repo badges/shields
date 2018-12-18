@@ -15,7 +15,7 @@ const latestBuildSchema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class BaseAzureDevOpsService extends BaseJsonService {
+module.exports = class AzureDevOpsBase extends BaseJsonService {
   async fetch({ url, options, schema, errorMessages }) {
     return this._requestJson({
       schema,
