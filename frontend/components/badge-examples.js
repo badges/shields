@@ -1,6 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import { badgeUrlFromPath, staticBadgeUrl } from '../../lib/make-badge-url'
+import { Badge } from './common'
+import { StyledCode } from './snippet'
+
+const ExampleTable = styled.table`
+  min-width: 50%;
+  margin: auto;
+
+  th,
+  td {
+    text-align: left;
+  }
+`
+
+const ClickableTh = styled.th`
+  cursor: pointer;
+`
+
+const ClickableCode = styled(StyledCode)`
+  cursor: pointer;
+`
 
 export default class BadgeExamples extends React.Component {
   static propTypes = {
@@ -47,21 +68,12 @@ export default class BadgeExamples extends React.Component {
 
     return (
       <tr key={key}>
-        <th className="clickable" onClick={handleClick}>
-          {title}:
-        </th>
+        <ClickableTh onClick={handleClick}>{title}:</ClickableTh>
         <td>
-          <img
-            className="badge-img clickable"
-            onClick={handleClick}
-            src={previewUrl}
-            alt=""
-          />
+          <Badge clickable onClick={handleClick} src={previewUrl} />
         </td>
         <td>
-          <code className="clickable" onClick={handleClick}>
-            {exampleUrl}
-          </code>
+          <ClickableCode onClick={handleClick}>{exampleUrl}</ClickableCode>
         </td>
       </tr>
     )
@@ -80,13 +92,11 @@ export default class BadgeExamples extends React.Component {
     }, [])
 
     return (
-      <div>
-        <table className="badge">
-          <tbody>
-            {flattened.map(exampleData => this.renderExample(exampleData))}
-          </tbody>
-        </table>
-      </div>
+      <ExampleTable>
+        <tbody>
+          {flattened.map(exampleData => this.renderExample(exampleData))}
+        </tbody>
+      </ExampleTable>
     )
   }
 }
