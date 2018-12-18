@@ -7,6 +7,12 @@ const {
   makeLabel: getLabel,
 } = require('../../lib/badge-data')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class MicroBadger extends LegacyService {
   static get category() {
     return 'size'

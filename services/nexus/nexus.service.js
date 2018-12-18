@@ -28,7 +28,7 @@ const resolveApiSchema = Joi.object({
   }).required(),
 }).required()
 
-const keywords = ['nexus', 'sonatype']
+const keywords = ['sonatype']
 
 module.exports = class Nexus extends BaseJsonService {
   static render({ message, color }) {
