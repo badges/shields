@@ -13,7 +13,7 @@ const buildId = 946
 const uriPrefix = `/${org}/${project}`
 const azureDevOpsApiBaseUri = `https://dev.azure.com/${org}/${project}/_apis`
 const mockBadgeUriPath = `${uriPrefix}/${macDefinitionId}.json`
-const mockLatestBuildApiUriPath = `/build/builds?definitions=${macDefinitionId}&%24top=1&api-version=5.0-preview.4`
+const mockLatestBuildApiUriPath = `/build/builds?definitions=${macDefinitionId}&%24top=1&statusFilter=completed&api-version=5.0-preview.4`
 const mockCodeCoverageApiUriPath = `/test/codecoverage?buildId=${buildId}&api-version=5.0-preview.1`
 const latestBuildResponse = {
   count: 1,
@@ -94,7 +94,7 @@ t.create('no build response')
   .intercept(nock =>
     nock(azureDevOpsApiBaseUri)
       .get(
-        `/build/builds?definitions=${nonExistentDefinitionId}&%24top=1&api-version=5.0-preview.4`
+        `/build/builds?definitions=${nonExistentDefinitionId}&%24top=1&statusFilter=completed&api-version=5.0-preview.4`
       )
       .reply(200, {
         count: 0,
