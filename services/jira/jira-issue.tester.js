@@ -1,0 +1,95 @@
+'use strict'
+
+const t = (module.exports = require('../create-service-tester')())
+const jiraTestHelpers = require('./jira-test-helpers')
+
+t.create('live: unknown issue')
+  .get('/https/issues.apache.org/jira/notArealIssue-000.json')
+  .expectJSON({ name: 'jira', value: 'issue not found' })
+
+t.create('live: known issue')
+  .get('/https/issues.apache.org/jira/kafka-2896.json')
+  .expectJSON({ name: 'kafka-2896', value: 'Resolved' })
+
+t.create('http endpoint')
+  .get('/http/issues.apache.org/jira/foo-123.json')
+  .intercept(nock =>
+    nock('http://issues.apache.org/jira/rest/api/2/issue')
+      .get(`/${encodeURIComponent('foo-123')}`)
+      .reply(200, {
+        fields: {
+          status: {
+            name: 'pending',
+          },
+        },
+      })
+  )
+  .expectJSON({ name: 'foo-123', value: 'pending' })
+
+t.create('endpoint with port and path')
+  .get('/https/issues.apache.org:8000/jira/bar-345.json')
+  .intercept(nock =>
+    nock('https://issues.apache.org:8000/jira/rest/api/2/issue')
+      .get(`/${encodeURIComponent('bar-345')}`)
+      .reply(200, {
+        fields: {
+          status: {
+            name: 'done',
+          },
+        },
+      })
+  )
+  .expectJSON({ name: 'bar-345', value: 'done' })
+
+t.create('endpoint with port and no path')
+  .get('/https/issues.apache.org:8080/abc-123.json')
+  .intercept(nock =>
+    nock('https://issues.apache.org:8080/rest/api/2/issue')
+      .get(`/${encodeURIComponent('abc-123')}`)
+      .reply(200, {
+        fields: {
+          status: {
+            name: 'under review',
+          },
+        },
+      })
+  )
+  .expectJSON({ name: 'abc-123', value: 'under review' })
+
+t.create('endpoint with no port nor path')
+  .get('/https/issues.apache.org/test-001.json')
+  .intercept(nock =>
+    nock('https://issues.apache.org/rest/api/2/issue')
+      .get(`/${encodeURIComponent('test-001')}`)
+      .reply(200, {
+        fields: {
+          status: {
+            name: 'in progress',
+          },
+        },
+      })
+  )
+  .expectJSON({ name: 'test-001', value: 'in progress' })
+
+t.create('with auth')
+  .before(jiraTestHelpers.mockJiraCreds)
+  .get('/https/myprivatejira.com/secure-234.json')
+  .intercept(nock =>
+    nock('https://myprivatejira.com/rest/api/2/issue')
+      .get(`/${encodeURIComponent('secure-234')}`)
+      // This ensures that the expected credentials from serverSecrets are actually being sent with the HTTP request.
+      // Without this the request wouldn't match and the test would fail.
+      .basicAuth({
+        user: jiraTestHelpers.user,
+        pass: jiraTestHelpers.pass,
+      })
+      .reply(200, {
+        fields: {
+          status: {
+            name: 'in progress',
+          },
+        },
+      })
+  )
+  .finally(jiraTestHelpers.restore)
+  .expectJSON({ name: 'secure-234', value: 'in progress' })
