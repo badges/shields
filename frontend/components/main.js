@@ -1,5 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import groupBy from 'lodash.groupby'
+import {
+  categories,
+  findCategory,
+  services,
+  getDefinitionsForCategory,
+} from '../lib/service-definitions'
+import ServiceDefinitionSetHelper from '../lib/service-definitions/service-definition-set-helper'
+import { baseUrl, longCache } from '../constants'
 import Meta from './meta'
 import Header from './header'
 import SuggestionAndSearch from './suggestion-and-search'
@@ -8,16 +18,12 @@ import MarkupModal from './markup-modal'
 import Usage from './usage'
 import Footer from './footer'
 import { CategoryHeading, CategoryHeadings } from './category-headings'
-import {
-  categories,
-  findCategory,
-  services,
-  getDefinitionsForCategory,
-} from '../lib/service-definitions'
 import BadgeExamples from './badge-examples'
-import { baseUrl, longCache } from '../constants'
-import ServiceDefinitionSetHelper from '../lib/service-definitions/service-definition-set-helper'
-import groupBy from 'lodash.groupby'
+import { BaseFont } from './common'
+
+const AppContainer = styled(BaseFont)`
+  text-align: center;
+`
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -140,7 +146,7 @@ export default class Main extends React.Component {
     const { selectedExample } = this.state
 
     return (
-      <div id="app">
+      <AppContainer id="app">
         <Meta />
         <Header />
         <MarkupModal
@@ -161,7 +167,7 @@ export default class Main extends React.Component {
         {this.renderMain()}
         <Usage baseUrl={baseUrl} longCache={longCache} />
         <Footer baseUrl={baseUrl} />
-      </div>
+      </AppContainer>
     )
   }
 }
