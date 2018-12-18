@@ -162,7 +162,7 @@ t.create('bad server or connection')
     colorB: colorScheme.lightgray,
   })
 
-t.create('invalid room')
+t.create('non-world readable room')
   .get('/ALIAS:DUMMY.dumb.json?style=_shields_test')
   .intercept(nock =>
     nock('https://DUMMY.dumb/')
