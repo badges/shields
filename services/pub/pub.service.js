@@ -7,6 +7,13 @@ const { version: versionColor } = require('../../lib/color-formatters')
 const { latest: latestVersion } = require('../../lib/version')
 
 // For Dart's pub.
+//
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class Pub extends LegacyService {
   static get category() {
     return 'version'
