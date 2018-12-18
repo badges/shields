@@ -18,7 +18,7 @@ const CodeContainer = styled.span`
       max-width: 40%;
       overflow: hidden;
       text-overflow: ellipsis;
-    `}
+    `};
 `
 
 const StyledCode = styled.code`
@@ -30,9 +30,7 @@ const StyledCode = styled.code`
     withBackground !== false &&
     css`
       background: #eef;
-    `}
-
-  font-family: Lekton;
+    `} font-family: Lekton;
   font-size: ${({ fontSize }) => fontSize};
 
   white-space: nowrap;

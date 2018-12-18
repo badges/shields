@@ -8,6 +8,12 @@ const {
 } = require('../../lib/php-version')
 const log = require('../../lib/log')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class PhpEyePhpVersion extends LegacyService {
   static get category() {
     return 'platform-support'
