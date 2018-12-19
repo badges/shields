@@ -2,8 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import fetchPonyfill from 'fetch-ponyfill'
 import debounce from 'lodash.debounce'
-import BadgeExamples from './badge-examples'
 import resolveUrl from '../lib/resolve-url'
+import BadgeExamples from './badge-examples'
+import { BlockInput } from './common'
 
 export default class SuggestionAndSearch extends React.Component {
   static propTypes = {
@@ -93,7 +94,7 @@ export default class SuggestionAndSearch extends React.Component {
     return (
       <section>
         <form action="javascript:void 0" autoComplete="off">
-          <input
+          <BlockInput
             onChange={event => this.queryChanged(event.target.value)}
             autofill="off"
             autoFocus
