@@ -24,7 +24,7 @@ module.exports = class GithubContributors extends LegacyService {
 
   static get route() {
     return {
-      base: 'github',
+      base: 'github/contributors',
     }
   }
 
@@ -32,7 +32,7 @@ module.exports = class GithubContributors extends LegacyService {
     return [
       {
         title: 'GitHub contributors',
-        pattern: 'contributors/:user/:repo',
+        pattern: ':user/:repo',
         namedParams: {
           user: 'cdnjs',
           repo: 'cdnjs',
@@ -42,7 +42,6 @@ module.exports = class GithubContributors extends LegacyService {
           message: '397',
           color: 'blue',
         },
-        keywords: ['GitHub', 'contributor'],
         documentation,
       },
     ]
