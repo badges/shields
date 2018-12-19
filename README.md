@@ -169,19 +169,25 @@ You can read more about [the project's inception][thread],
 Project leaders
 ---------------
 
-[espadrine](https://github.com/espadrine) is the sysadmin.
+Maintainers:
 
-These contributors donate time on a consistent basis to help guide and
-maintain the project:
+* [calebcartwright](https://github.com/calebcartwright)
+* [chris48s](https://github.com/chris48s) (core team)
+* [Daniel15](https://github.com/Daniel15) (core team)
+* [espadrine](https://github.com/espadrine) (core team)
+* [paulmelnikow](https://github.com/paulmelnikow) (core team)
+* [platan](https://github.com/platan) (core team)
+* [PyvesB](https://github.com/PyvesB) (core team)
+* [RedSparr0w](https://github.com/RedSparr0w) (core team)
 
-* [chris48s](https://github.com/chris48s)
-* [Daniel15](https://github.com/Daniel15)
-* [espadrine](https://github.com/espadrine)
-* [paulmelnikow](https://github.com/paulmelnikow)
-* [platan](https://github.com/platan)
-* [PyvesB](https://github.com/PyvesB)
-* [RedSparr0w](https://github.com/RedSparr0w)
+Operations:
 
+* [espadrine](https://github.com/espadrine) (sysadmin)
+* [paulmelnikow](https://github.com/paulmelnikow) (limited access)
+
+Alumni:
+
+* [olivierlacan](https://github.com/olivierlacan)
 
 Related projects
 ----------------
