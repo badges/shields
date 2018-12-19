@@ -7,8 +7,25 @@ const trace = require('./trace')
 const { InvalidResponse } = require('./errors')
 
 class BaseJsonService extends BaseService {
-  async _requestJson({ schema, url, options = {}, errorMessages = {} }) {
+  _parseJson(buffer) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
+    let json
+    try {
+      json = JSON.parse(buffer)
+    } catch (err) {
+      logTrace(emojic.dart, 'Response JSON (unparseable)', buffer)
+      throw new InvalidResponse({
+        prettyMessage: 'unparseable json response',
+        underlyingError: err,
+      })
+    }
+    logTrace(emojic.dart, 'Response JSON (before validation)', json, {
+      deep: true,
+    })
+    return json
+  }
+
+  async _requestJson({ schema, url, options = {}, errorMessages = {} }) {
     const mergedOptions = {
       ...{ headers: { Accept: 'application/json' } },
       ...options,
@@ -18,19 +35,7 @@ class BaseJsonService extends BaseService {
       options: mergedOptions,
       errorMessages,
     })
-    let json
-    try {
-      json = JSON.parse(buffer)
-    } catch (err) {
-      logTrace(emojic.dart, 'Response JSON (unparseable)', json)
-      throw new InvalidResponse({
-        prettyMessage: 'unparseable json response',
-        underlyingError: err,
-      })
-    }
-    logTrace(emojic.dart, 'Response JSON (before validation)', json, {
-      deep: true,
-    })
+    const json = this._parseJson(buffer)
     return this.constructor._validate(json, schema)
   }
 }

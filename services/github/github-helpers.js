@@ -1,5 +1,6 @@
 'use strict'
 
+const serverSecrets = require('../../lib/server-secrets')
 const { colorScale } = require('../../lib/color-formatters')
 const {
   checkErrorResponse: standardCheckErrorResponse,
@@ -41,10 +42,15 @@ function checkErrorResponse(
 
 const commentsColor = colorScale([1, 3, 10, 25], undefined, true)
 
+function staticAuthConfigured() {
+  return Boolean(serverSecrets.gh_token)
+}
+
 module.exports = {
   documentation,
   stateColor,
   commentsColor,
   errorMessagesFor,
   checkErrorResponse,
+  staticAuthConfigured,
 }
