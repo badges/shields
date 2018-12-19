@@ -47,7 +47,7 @@ t.create('live: search snapshot version valid snapshot artifact')
 
 t.create('live: search snapshot version of a release artifact')
   .get('/s/https/repository.jboss.org/nexus/jboss/jboss-client.json')
-  .expectJSON({ name: 'nexus', value: 'invalid artifact version' })
+  .expectJSON({ name: 'nexus', value: 'no snapshot versions found' })
 
 t.create('live: search snapshot version of an inexistent artifact')
   .get(
@@ -121,7 +121,7 @@ t.create('search snapshot no snapshot versions')
   )
   .expectJSON({
     name: 'nexus',
-    value: 'invalid artifact version',
+    value: 'no snapshot versions found',
     colorB: colorScheme.lightgrey,
   })
 

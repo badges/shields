@@ -130,7 +130,8 @@ module.exports = class Nexus extends BaseJsonService {
     if (repo === 'r') {
       return { version: json.data[0].latestRelease }
     } else if (repo === 's') {
-      let version
+      // only want to match 1.2.3-SNAPSHOT style versions, which may not always be in
+      // 'latestSnapshot' so check 'version' as well before continuing to next entry
       for (const artifact of json.data) {
         if (isSnapshotVersion(artifact.latestSnapshot)) {
           return { version: artifact.latestSnapshot }
@@ -139,7 +140,7 @@ module.exports = class Nexus extends BaseJsonService {
           return { version: artifact.version }
         }
       }
-      return { version }
+      throw new InvalidResponse({ prettyMessage: 'no snapshot versions found' })
     } else {
       return { version: json.data.baseVersion || json.data.version }
     }
