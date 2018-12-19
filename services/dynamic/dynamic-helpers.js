@@ -24,16 +24,8 @@ const errorMessages = {
   404: 'resource not found',
 }
 
-function renderDynamicBadge({ values, prefix = '', suffix = '' }) {
-  return {
-    message: `${prefix}${values.join(', ')}${suffix}`,
-    color: 'brightgreen',
-  }
-}
-
 module.exports = {
   createRoute,
   queryParamSchema,
   errorMessages,
-  renderDynamicBadge,
 }
