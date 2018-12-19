@@ -3,7 +3,8 @@
 const Joi = require('joi')
 const t = (module.exports = require('../create-service-tester')())
 const { isIntegerPercentage } = require('../test-validators')
-const jiraTestHelpers = require('./jira-test-helpers')
+const { colorScheme } = require('../test-helpers')
+const { mockJiraCreds, restore, user, pass } = require('./jira-test-helpers')
 
 const sprintId = 8
 const queryString = {
@@ -26,7 +27,7 @@ t.create('live: known sprint')
   )
 
 t.create('100% completion')
-  .get(`/http/issues.apache.org/jira/${sprintId}.json`)
+  .get(`/http/issues.apache.org/jira/${sprintId}.json?style=_shields_test`)
   .intercept(nock =>
     nock('http://issues.apache.org/jira/rest/api/2')
       .get('/search')
@@ -51,10 +52,14 @@ t.create('100% completion')
         ],
       })
   )
-  .expectJSON({ name: 'completion', value: '100%' })
+  .expectJSON({
+    name: 'completion',
+    value: '100%',
+    colorB: colorScheme.brightgreen,
+  })
 
 t.create('0% completion')
-  .get(`/http/issues.apache.org/jira/${sprintId}.json`)
+  .get(`/http/issues.apache.org/jira/${sprintId}.json?style=_shields_test`)
   .intercept(nock =>
     nock('http://issues.apache.org/jira/rest/api/2')
       .get('/search')
@@ -72,10 +77,14 @@ t.create('0% completion')
         ],
       })
   )
-  .expectJSON({ name: 'completion', value: '0%' })
+  .expectJSON({
+    name: 'completion',
+    value: '0%',
+    colorB: colorScheme.red,
+  })
 
 t.create('no issues in sprint')
-  .get(`/http/issues.apache.org/jira/${sprintId}.json`)
+  .get(`/http/issues.apache.org/jira/${sprintId}.json?style=_shields_test`)
   .intercept(nock =>
     nock('http://issues.apache.org/jira/rest/api/2')
       .get('/search')
@@ -85,10 +94,14 @@ t.create('no issues in sprint')
         issues: [],
       })
   )
-  .expectJSON({ name: 'completion', value: '0%' })
+  .expectJSON({
+    name: 'completion',
+    value: '0%',
+    colorB: colorScheme.red,
+  })
 
 t.create('issue with null resolution value')
-  .get(`/https/jira.spring.io:8080/${sprintId}.json`)
+  .get(`/https/jira.spring.io:8080/${sprintId}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://jira.spring.io:8080/rest/api/2')
       .get('/search')
@@ -111,10 +124,14 @@ t.create('issue with null resolution value')
         ],
       })
   )
-  .expectJSON({ name: 'completion', value: '50%' })
+  .expectJSON({
+    name: 'completion',
+    value: '50%',
+    colorB: colorScheme.orange,
+  })
 
 t.create('with auth')
-  .before(jiraTestHelpers.mockJiraCreds)
+  .before(mockJiraCreds)
   .get(`/https/myprivatejira/jira/${sprintId}.json`)
   .intercept(nock =>
     nock('https://myprivatejira/jira/rest/api/2')
@@ -123,8 +140,8 @@ t.create('with auth')
       // This ensures that the expected credentials from serverSecrets are actually being sent with the HTTP request.
       // Without this the request wouldn't match and the test would fail.
       .basicAuth({
-        user: jiraTestHelpers.user,
-        pass: jiraTestHelpers.pass,
+        user: user,
+        pass: pass,
       })
       .reply(200, {
         total: 2,
@@ -146,5 +163,5 @@ t.create('with auth')
         ],
       })
   )
-  .finally(jiraTestHelpers.restore)
+  .finally(restore)
   .expectJSON({ name: 'completion', value: '50%' })
