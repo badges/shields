@@ -127,35 +127,26 @@ module.exports = class Nexus extends BaseJsonService {
   }
 
   transform({ repo, json }) {
-    let version
     if (repo === 'r') {
-      version = json.data[0].latestRelease
+      return { version: json.data[0].latestRelease }
     } else if (repo === 's') {
+      let version
       for (const artifact of json.data) {
         if (isSnapshotVersion(artifact.latestSnapshot)) {
-          version = artifact.latestSnapshot
-          break
+          return { version: artifact.latestSnapshot }
         }
         if (isSnapshotVersion(artifact.version)) {
-          version = artifact.version
-          break
+          return { version: artifact.version }
         }
       }
+      return { version }
     } else {
-      version = json.data.baseVersion || json.data.version
-    }
-
-    if (!version) {
-      throw new InvalidResponse({ prettyMessage: 'invalid artifact version' })
-    }
-
-    return {
-      version,
+      return { version: json.data.baseVersion || json.data.version }
     }
   }
 
   async handle({ repo, scheme, host, groupId, artifactId, queryOpt }) {
-    const requestParams = this.getRequestParams({
+    const { json } = await this.fetch({
       repo,
       scheme,
       host,
@@ -163,11 +154,13 @@ module.exports = class Nexus extends BaseJsonService {
       artifactId,
       queryOpt,
     })
-    const json = await this._requestJson(requestParams)
     if (json.data.length === 0) {
       throw new NotFound({ prettyMessage: 'artifact or version not found' })
     }
     const { version } = this.transform({ repo, json })
+    if (!version) {
+      throw new InvalidResponse({ prettyMessage: 'invalid artifact version' })
+    }
     return this.constructor.render({ version })
   }
 
@@ -185,7 +178,7 @@ module.exports = class Nexus extends BaseJsonService {
     })
   }
 
-  getRequestParams({ repo, scheme, host, groupId, artifactId, queryOpt }) {
+  async fetch({ repo, scheme, host, groupId, artifactId, queryOpt }) {
     const qs = {
       g: groupId,
       a: artifactId,
@@ -218,13 +211,15 @@ module.exports = class Nexus extends BaseJsonService {
       }
     }
 
-    return {
+    const json = await this._requestJson({
       schema,
       url,
       options,
       errorMessages: {
         404: 'artifact not found',
       },
-    }
+    })
+
+    return { json }
   }
 }
