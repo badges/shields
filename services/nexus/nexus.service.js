@@ -1,21 +1,24 @@
 'use strict'
 
-const BaseJsonService = require('../base-json')
 const Joi = require('joi')
-const { isSnapshotVersion: isNexusSnapshotVersion } = require('./nexus-version')
-const { addv: versionText } = require('../../lib/text-formatters')
-const { version: versionColor } = require('../../lib/color-formatters')
-const serverSecrets = require('../../lib/server-secrets')
 
-const versionRegex = /^\d+(\.\d+)*(-.*)?$/
+const BaseJsonService = require('../base-json')
+const { InvalidResponse, NotFound } = require('../errors')
+const { isSnapshotVersion } = require('./nexus-version')
+const { version: versionColor } = require('../../lib/color-formatters')
+const { addv } = require('../../lib/text-formatters')
+const serverSecrets = require('../../lib/server-secrets')
+const {
+  optionalDottedVersionNClausesWithOptionalSuffix,
+} = require('../validators')
 
 const searchApiSchema = Joi.object({
   data: Joi.array()
     .items(
       Joi.object({
-        latestRelease: Joi.string().regex(versionRegex),
-        latestSnapshot: Joi.string().regex(versionRegex),
-        version: Joi.string().regex(versionRegex),
+        latestRelease: optionalDottedVersionNClausesWithOptionalSuffix,
+        latestSnapshot: optionalDottedVersionNClausesWithOptionalSuffix,
+        version: optionalDottedVersionNClausesWithOptionalSuffix,
       })
     )
     .required(),
@@ -23,28 +26,16 @@ const searchApiSchema = Joi.object({
 
 const resolveApiSchema = Joi.object({
   data: Joi.object({
-    baseVersion: Joi.string().regex(versionRegex),
-    version: Joi.string().regex(versionRegex),
+    baseVersion: optionalDottedVersionNClausesWithOptionalSuffix,
+    version: optionalDottedVersionNClausesWithOptionalSuffix,
   }).required(),
 }).required()
 
 module.exports = class Nexus extends BaseJsonService {
   static render({ version }) {
-    let message, color
-    if (version === 'no-artifact') {
-      message = version
-      color = 'red'
-    } else if (version !== '0') {
-      message = versionText(version)
-      color = versionColor(version)
-    } else {
-      message = 'undefined'
-      color = 'orange'
-    }
-
     return {
-      message,
-      color,
+      message: addv(version),
+      color: versionColor(version),
     }
   }
 
@@ -135,6 +126,34 @@ module.exports = class Nexus extends BaseJsonService {
     ]
   }
 
+  transform({ repo, json }) {
+    let version
+    if (repo === 'r') {
+      version = json.data[0].latestRelease
+    } else if (repo === 's') {
+      for (const artifact of json.data) {
+        if (isSnapshotVersion(artifact.latestSnapshot)) {
+          version = artifact.latestSnapshot
+          break
+        }
+        if (isSnapshotVersion(artifact.version)) {
+          version = artifact.version
+          break
+        }
+      }
+    } else {
+      version = json.data.baseVersion || json.data.version
+    }
+
+    if (!version) {
+      throw new InvalidResponse({ prettyMessage: 'invalid artifact version' })
+    }
+
+    return {
+      version,
+    }
+  }
+
   async handle({ repo, scheme, host, groupId, artifactId, queryOpt }) {
     const requestParams = this.getRequestParams({
       repo,
@@ -146,36 +165,30 @@ module.exports = class Nexus extends BaseJsonService {
     })
     const json = await this._requestJson(requestParams)
     if (json.data.length === 0) {
-      return this.constructor.render({ version: 'no-artifact' })
+      throw new NotFound({ prettyMessage: 'artifact or version not found' })
     }
-
-    let version = '0'
-    if (repo === 'r') {
-      version = json.data[0].latestRelease
-    } else if (repo === 's') {
-      json.data.every(artifact => {
-        if (isNexusSnapshotVersion(artifact.latestSnapshot)) {
-          version = artifact.latestSnapshot
-          return
-        }
-        if (isNexusSnapshotVersion(artifact.version)) {
-          version = artifact.version
-          return
-        }
-        return true
-      })
-    } else {
-      version = json.data.baseVersion || json.data.version
-    }
+    const { version } = this.transform({ repo, json })
     return this.constructor.render({ version })
   }
 
+  addQueryParamsToQueryString({ qs, queryOpt }) {
+    // Users specify query options with 'key=value' pairs, using a
+    // semicolon delimiter between pairs ([:k1=v1[:k2=v2[...]]]).
+    // queryOpt will be a string containing those key/value pairs,
+    // For example:  :c=agent-apple-osx:p=tar.gz
+    const keyValuePairs = queryOpt.split(':')
+    keyValuePairs.forEach(keyValuePair => {
+      const paramParts = keyValuePair.split('=')
+      const paramKey = paramParts[0]
+      const paramValue = paramParts[1]
+      qs[paramKey] = paramValue
+    })
+  }
+
   getRequestParams({ repo, scheme, host, groupId, artifactId, queryOpt }) {
-    const options = {
-      qs: {
-        g: groupId,
-        a: artifactId,
-      },
+    const qs = {
+      g: groupId,
+      a: artifactId,
     }
     let schema
     let url = `${scheme}://${host}/`
@@ -188,19 +201,15 @@ module.exports = class Nexus extends BaseJsonService {
     } else {
       schema = resolveApiSchema
       url += 'service/local/artifact/maven/resolve'
-      options.qs.r = repo
-      options.qs.v = 'LATEST'
+      qs.r = repo
+      qs.v = 'LATEST'
     }
 
     if (queryOpt) {
-      const opts = queryOpt.split(':')
-      opts.forEach(opt => {
-        const kvp = opt.split('=')
-        const key = kvp[0]
-        const val = kvp[1]
-        options.qs[key] = val
-      })
+      this.addQueryParamsToQueryString({ qs, queryOpt })
     }
+
+    const options = { qs }
 
     if (serverSecrets && serverSecrets.nexus_user) {
       options.auth = {
@@ -214,7 +223,7 @@ module.exports = class Nexus extends BaseJsonService {
       url,
       options,
       errorMessages: {
-        404: 'no-artifact',
+        404: 'artifact not found',
       },
     }
   }
