@@ -140,8 +140,8 @@ t.create('with auth')
       // This ensures that the expected credentials from serverSecrets are actually being sent with the HTTP request.
       // Without this the request wouldn't match and the test would fail.
       .basicAuth({
-        user: user,
-        pass: pass,
+        user,
+        pass,
       })
       .reply(200, {
         total: 2,
