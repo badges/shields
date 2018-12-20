@@ -286,6 +286,85 @@ t.create('unknown alias')
     colorB: colorScheme.red,
   })
 
+t.create('invalid alias')
+  .get('/ALIASDUMMY.dumb.json?style=_shields_test')
+  .expectJSON({
+    name: 'chat',
+    value: 'invalid alias',
+    colorB: colorScheme.red,
+  })
+
+t.create('server uses a custom port')
+  .get('/ALIAS:DUMMY.dumb:5555.json?style=_shields_test')
+  .intercept(nock =>
+    nock('https://DUMMY.dumb:5555/')
+      .post('/_matrix/client/r0/register?kind=guest')
+      .reply(
+        200,
+        JSON.stringify({
+          access_token: 'TOKEN',
+        })
+      )
+      .get(
+        '/_matrix/client/r0/directory/room/%23ALIAS:DUMMY.dumb:5555?access_token=TOKEN'
+      )
+      .reply(
+        200,
+        JSON.stringify({
+          room_id: 'ROOM:DUMMY.dumb:5555',
+        })
+      )
+      .get(
+        '/_matrix/client/r0/rooms/ROOM:DUMMY.dumb:5555/state?access_token=TOKEN'
+      )
+      .reply(
+        200,
+        JSON.stringify([
+          {
+            // valid user 1
+            type: 'm.room.member',
+            sender: '@user1:DUMMY.dumb:5555',
+            state_key: '@user1:DUMMY.dumb:5555',
+            content: {
+              membership: 'join',
+            },
+          },
+          {
+            // valid user 2
+            type: 'm.room.member',
+            sender: '@user2:DUMMY.dumb:5555',
+            state_key: '@user2:DUMMY.dumb:5555',
+            content: {
+              membership: 'join',
+            },
+          },
+          {
+            // should exclude banned/invited/left members
+            type: 'm.room.member',
+            sender: '@user3:DUMMY.dumb:5555',
+            state_key: '@user3:DUMMY.dumb:5555',
+            content: {
+              membership: 'leave',
+            },
+          },
+          {
+            // exclude events like the room name
+            type: 'm.room.name',
+            sender: '@user4:DUMMY.dumb:5555',
+            state_key: '@user4:DUMMY.dumb:5555',
+            content: {
+              membership: 'fake room',
+            },
+          },
+        ])
+      )
+  )
+  .expectJSON({
+    name: 'chat',
+    value: '2 users',
+    colorB: colorScheme.brightgreen,
+  })
+
 t.create('specify the homeserver fqdn')
   .get('/ALIAS:DUMMY.dumb/matrix.DUMMY.dumb.json?style=_shields_test')
   .intercept(nock =>
