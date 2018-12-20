@@ -112,8 +112,7 @@ module.exports = class Matrix extends BaseJsonService {
     if (serverFQDN === undefined) {
       const splitAlias = roomAlias.split(':')
       // A room alias can either be in the form #localpart:server or
-      // #localpart:server:port. In the latter case, it's wiser to skip the name
-      // resolution and use that value right away.
+      // #localpart:server:port.
       switch (splitAlias.length) {
         case 2:
           host = splitAlias[1]
