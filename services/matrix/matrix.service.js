@@ -122,7 +122,7 @@ module.exports = class Matrix extends BaseJsonService {
           host = splitAlias[2] + splitAlias[3]
           break
         default:
-          throw new errors.InvalidParameter()
+          throw new errors.InvalidParameter({ prettyMessage: 'invalid alias' })
       }
     } else {
       host = serverFQDN
