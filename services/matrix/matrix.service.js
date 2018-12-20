@@ -92,7 +92,9 @@ module.exports = class Matrix extends BaseJsonService {
 
   async lookupRoomAlias({ host, roomAlias, accessToken }) {
     return this._requestJson({
-      url: `https://${host}/_matrix/client/r0/directory/room/%23${roomAlias}`,
+      url: `https://${host}/_matrix/client/r0/directory/room/${encodeURIComponent(
+        `#${roomAlias}`
+      )}`,
       schema: matrixAliasLookupSchema,
       options: {
         qs: {
@@ -129,7 +131,9 @@ module.exports = class Matrix extends BaseJsonService {
     const accessToken = await this.retrieveAccessToken({ host })
     const lookup = await this.lookupRoomAlias({ host, roomAlias, accessToken })
     const data = await this._requestJson({
-      url: `https://${host}/_matrix/client/r0/rooms/${lookup.room_id}/state`,
+      url: `https://${host}/_matrix/client/r0/rooms/${encodeURIComponent(
+        lookup.room_id
+      )}/state`,
       schema: matrixStateSchema,
       options: {
         qs: {

@@ -17,7 +17,7 @@ t.create('get room state as guest')
         })
       )
       .get(
-        '/_matrix/client/r0/directory/room/%23ALIAS:DUMMY.dumb?access_token=TOKEN'
+        '/_matrix/client/r0/directory/room/%23ALIAS%3ADUMMY.dumb?access_token=TOKEN'
       )
       .reply(
         200,
@@ -25,7 +25,9 @@ t.create('get room state as guest')
           room_id: 'ROOM:DUMMY.dumb',
         })
       )
-      .get('/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/state?access_token=TOKEN')
+      .get(
+        '/_matrix/client/r0/rooms/ROOM%3ADUMMY.dumb/state?access_token=TOKEN'
+      )
       .reply(
         200,
         JSON.stringify([
@@ -94,7 +96,7 @@ t.create('get room state as member (backup method)')
         })
       )
       .get(
-        '/_matrix/client/r0/directory/room/%23ALIAS:DUMMY.dumb?access_token=TOKEN'
+        '/_matrix/client/r0/directory/room/%23ALIAS%3ADUMMY.dumb?access_token=TOKEN'
       )
       .reply(
         200,
@@ -102,7 +104,9 @@ t.create('get room state as member (backup method)')
           room_id: 'ROOM:DUMMY.dumb',
         })
       )
-      .get('/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/state?access_token=TOKEN')
+      .get(
+        '/_matrix/client/r0/rooms/ROOM%3ADUMMY.dumb/state?access_token=TOKEN'
+      )
       .reply(
         200,
         JSON.stringify([
@@ -172,7 +176,7 @@ t.create('non-world readable room')
         })
       )
       .get(
-        '/_matrix/client/r0/directory/room/%23ALIAS:DUMMY.dumb?access_token=TOKEN'
+        '/_matrix/client/r0/directory/room/%23ALIAS%3ADUMMY.dumb?access_token=TOKEN'
       )
       .reply(
         200,
@@ -180,7 +184,9 @@ t.create('non-world readable room')
           room_id: 'ROOM:DUMMY.dumb',
         })
       )
-      .get('/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/state?access_token=TOKEN')
+      .get(
+        '/_matrix/client/r0/rooms/ROOM%3ADUMMY.dumb/state?access_token=TOKEN'
+      )
       .reply(
         403,
         JSON.stringify({
@@ -207,7 +213,7 @@ t.create('invalid token')
         })
       )
       .get(
-        '/_matrix/client/r0/directory/room/%23ALIAS:DUMMY.dumb?access_token=TOKEN'
+        '/_matrix/client/r0/directory/room/%23ALIAS%3ADUMMY.dumb?access_token=TOKEN'
       )
       .reply(
         401,
@@ -235,7 +241,7 @@ t.create('unknown request')
         })
       )
       .get(
-        '/_matrix/client/r0/directory/room/%23ALIAS:DUMMY.dumb?access_token=TOKEN'
+        '/_matrix/client/r0/directory/room/%23ALIAS%3ADUMMY.dumb?access_token=TOKEN'
       )
       .reply(
         200,
@@ -243,7 +249,9 @@ t.create('unknown request')
           room_id: 'ROOM:DUMMY.dumb',
         })
       )
-      .get('/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/state?access_token=TOKEN')
+      .get(
+        '/_matrix/client/r0/rooms/ROOM%3ADUMMY.dumb/state?access_token=TOKEN'
+      )
       .reply(
         400,
         JSON.stringify({
@@ -270,13 +278,13 @@ t.create('unknown alias')
         })
       )
       .get(
-        '/_matrix/client/r0/directory/room/%23ALIAS:DUMMY.dumb?access_token=TOKEN'
+        '/_matrix/client/r0/directory/room/%23ALIAS%3ADUMMY.dumb?access_token=TOKEN'
       )
       .reply(
         404,
         JSON.stringify({
           errcode: 'M_NOT_FOUND',
-          error: 'Room alias #ALIAS:DUMMY.dumb not found.',
+          error: 'Room alias #ALIAS%3ADUMMY.dumb not found.',
         })
       )
   )
@@ -306,7 +314,7 @@ t.create('server uses a custom port')
         })
       )
       .get(
-        '/_matrix/client/r0/directory/room/%23ALIAS:DUMMY.dumb:5555?access_token=TOKEN'
+        '/_matrix/client/r0/directory/room/%23ALIAS%3ADUMMY.dumb%3A5555?access_token=TOKEN'
       )
       .reply(
         200,
@@ -315,7 +323,7 @@ t.create('server uses a custom port')
         })
       )
       .get(
-        '/_matrix/client/r0/rooms/ROOM:DUMMY.dumb:5555/state?access_token=TOKEN'
+        '/_matrix/client/r0/rooms/ROOM%3ADUMMY.dumb%3A5555/state?access_token=TOKEN'
       )
       .reply(
         200,
@@ -377,7 +385,7 @@ t.create('specify the homeserver fqdn')
         })
       )
       .get(
-        '/_matrix/client/r0/directory/room/%23ALIAS:DUMMY.dumb?access_token=TOKEN'
+        '/_matrix/client/r0/directory/room/%23ALIAS%3ADUMMY.dumb?access_token=TOKEN'
       )
       .reply(
         200,
@@ -385,7 +393,9 @@ t.create('specify the homeserver fqdn')
           room_id: 'ROOM:DUMMY.dumb',
         })
       )
-      .get('/_matrix/client/r0/rooms/ROOM:DUMMY.dumb/state?access_token=TOKEN')
+      .get(
+        '/_matrix/client/r0/rooms/ROOM%3ADUMMY.dumb/state?access_token=TOKEN'
+      )
       .reply(
         200,
         JSON.stringify([
