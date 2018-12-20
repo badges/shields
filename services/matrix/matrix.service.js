@@ -119,7 +119,7 @@ module.exports = class Matrix extends BaseJsonService {
           host = splitAlias[1]
           break
         case 3:
-          host = splitAlias[2] + splitAlias[3]
+          host = `${splitAlias[1]}:${splitAlias[2]}`
           break
         default:
           throw new errors.InvalidParameter({ prettyMessage: 'invalid alias' })
