@@ -1,10 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import resolveUrl from '../lib/resolve-url'
+import { H2 } from './common'
+
+const SpacedA = styled.a`
+  margin-left: 10px;
+  margin-right: 10px;
+`
 
 const Footer = ({ baseUrl }) => (
   <section>
-    <h2 id="like-this">Like This?</h2>
+    <H2 id="like-this">Like This?</H2>
 
     <p>
       <object
@@ -49,9 +56,9 @@ const Footer = ({ baseUrl }) => (
       and we might bring it to you!
     </p>
 
-    <p className="spaced-row">
-      <a href="https://status.shields.io/">Status</a>
-      <a href="https://github.com/badges/shields/">GitHub</a>
+    <p>
+      <SpacedA href="https://status.shields.io/">Status</SpacedA>
+      <SpacedA href="https://github.com/badges/shields/">GitHub</SpacedA>
     </p>
   </section>
 )

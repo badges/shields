@@ -40,8 +40,7 @@
     "lodash.mapkeys": "^4.6.0",
     "lodash.throttle": "^4.1.1",
     "lodash.times": "^4.3.2",
-    "lodash.uniq": "~4.5.0",
-    "moment": "^2.19.3",
+    "moment": "^2.23.0",
     "node-env-flag": "^0.1.0",
     "path-to-regexp": "^2.4.0",
     "pretty-bytes": "^5.0.0",
@@ -58,11 +57,11 @@
     "xpath": "~0.0.27"
   },
   "scripts": {
-    "coverage:test:frontend": "BABEL_ENV=test nyc node_modules/mocha/bin/_mocha --require @babel/polyfill --require @babel/register --require mocha-yaml-loader \"frontend/**/*.spec.js\"",
-    "coverage:test:server": "HANDLE_INTERNAL_ERRORS=false nyc node_modules/mocha/bin/_mocha \"lib/**/*.spec.js\" \"services/**/*.spec.js\"",
-    "coverage:test:package": "nyc node_modules/mocha/bin/_mocha \"gh-badges/**/*.spec.js\"",
-    "coverage:test:integration": "nyc node_modules/mocha/bin/_mocha \"lib/**/*.integration.js\" \"services/**/*.integration.js\"",
-    "coverage:test:services": "nyc node_modules/mocha/bin/_mocha --delay lib/service-test-runner/cli.js",
+    "coverage:test:frontend": "BABEL_ENV=test nyc --nycrc-path .nycrc-frontend.json node_modules/mocha/bin/_mocha --opts mocha.opts --require @babel/polyfill --require @babel/register --require mocha-yaml-loader \"frontend/**/*.spec.js\"",
+    "coverage:test:server": "HANDLE_INTERNAL_ERRORS=false nyc node_modules/mocha/bin/_mocha --opts mocha.opts \"lib/**/*.spec.js\" \"services/**/*.spec.js\"",
+    "coverage:test:package": "nyc node_modules/mocha/bin/_mocha --opts mocha.opts \"gh-badges/**/*.spec.js\"",
+    "coverage:test:integration": "nyc node_modules/mocha/bin/_mocha --opts mocha.opts \"lib/**/*.integration.js\" \"services/**/*.integration.js\"",
+    "coverage:test:services": "nyc node_modules/mocha/bin/_mocha --opts mocha.opts --delay lib/service-test-runner/cli.js",
     "coverage:test": "rimraf .nyc_output coverage; npm run coverage:test:server; npm run coverage:test:package; npm run coverage:test:frontend; npm run coverage:test:integration; npm run coverage:test:services",
     "coverage:report": "nyc report",
     "coverage:report:reopen": "opn coverage/lcov-report/index.html",
@@ -71,14 +70,14 @@
     "prettier": "prettier --write \"**/*.js\"",
     "prettier-check": "prettier-check \"**/*.js\"",
     "danger": "danger",
-    "test:js:frontend": "BABEL_ENV=test mocha --require @babel/polyfill --require @babel/register --require mocha-yaml-loader \"frontend/**/*.spec.js\"",
-    "test:js:server": "HANDLE_INTERNAL_ERRORS=false mocha \"lib/**/*.spec.js\" \"services/**/*.spec.js\"",
-    "test:js:package": "mocha \"gh-badges/**/*.spec.js\"",
-    "test:integration": "mocha \"lib/**/*.integration.js\" \"services/**/*.integration.js\"",
-    "test:services": "HANDLE_INTERNAL_ERRORS=false mocha --delay lib/service-test-runner/cli.js",
+    "test:js:frontend": "BABEL_ENV=test mocha --opts mocha.opts --require @babel/polyfill --require @babel/register --require mocha-yaml-loader \"frontend/**/*.spec.js\"",
+    "test:js:server": "HANDLE_INTERNAL_ERRORS=false mocha --opts mocha.opts \"lib/**/*.spec.js\" \"services/**/*.spec.js\"",
+    "test:js:package": "mocha --opts mocha.opts \"gh-badges/**/*.spec.js\"",
+    "test:integration": "mocha --opts mocha.opts \"lib/**/*.integration.js\" \"services/**/*.integration.js\"",
+    "test:services": "HANDLE_INTERNAL_ERRORS=false mocha --opts mocha.opts --delay lib/service-test-runner/cli.js",
     "test:services:trace": "TRACE_SERVICES=true npm run test:services -- $*",
     "test:services:pr:prepare": "node lib/service-test-runner/pull-request-services-cli.js > pull-request-services.log",
-    "test:services:pr:run": "HANDLE_INTERNAL_ERRORS=false mocha --delay lib/service-test-runner/cli.js --stdin < pull-request-services.log",
+    "test:services:pr:run": "HANDLE_INTERNAL_ERRORS=false mocha --opts mocha.opts --delay lib/service-test-runner/cli.js --stdin < pull-request-services.log",
     "test:services:pr": "npm run test:services:pr:prepare && npm run test:services:pr:run",
     "test": "npm run defs && npm run lint && npm run test:js:frontend && npm run test:js:package && npm run test:js:server",
     "depcheck": "check-node-version --node \">= 8.0\"",
@@ -111,8 +110,8 @@
     "@babel/preset-env": "^7.1.6",
     "@babel/register": "7.0.0",
     "@mapbox/react-click-to-select": "^2.2.0",
-    "almost-equal": "^1.1.0",
     "babel-eslint": "^10.0.0",
+    "babel-plugin-istanbul": "^5.1.0",
     "caller": "^1.0.1",
     "chai": "^4.1.2",
     "chai-datetime": "^1.5.0",
@@ -141,7 +140,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "fetch-ponyfill": "^6.0.0",
     "fs-readfile-promise": "^3.0.1",
-    "got": "^9.4.0",
+    "got": "^9.5.0",
     "husky": "^1.2.0",
     "icedfrisby": "2.0.0-alpha.2",
     "icedfrisby-nock": "^1.1.0",
@@ -157,6 +156,8 @@
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "mocha": "^5.0.0",
+    "mocha-env-reporter": "^3.0.0",
+    "mocha-junit-reporter": "^1.18.0",
     "mocha-yaml-loader": "^1.0.3",
     "next": "^6.1.1",
     "nock": "^10.0.4",
@@ -177,12 +178,12 @@
     "redis-server": "^1.2.2",
     "rimraf": "^2.6.2",
     "sazerac": "^0.4.2",
-    "sinon": "^7.2.0",
+    "sinon": "^7.2.2",
     "sinon-chai": "^3.3.0",
     "snap-shot-it": "^6.2.7",
+    "styled-components": "^4.1.2",
     "tmp": "0.0.33",
-    "url": "^0.11.0",
-    "wait-promise": "^0.4.1"
+    "url": "^0.11.0"
   },
   "engines": {
     "node": ">= 8",
@@ -200,11 +201,17 @@
         ]
       },
       "test": {
+        "plugins": [
+          "istanbul"
+        ],
         "presets": [
           "@babel/preset-env",
-          ["@babel/preset-react", {
-            "development": true
-          }]
+          [
+            "@babel/preset-react",
+            {
+              "development": true
+            }
+          ]
         ]
       }
     }

@@ -2,6 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { expect } from 'chai'
 import { CategoryHeading, CategoryHeadings } from './category-headings'
+import { H3 } from './common'
 
 import './enzyme-conf.spec'
 
@@ -14,7 +15,7 @@ describe('<CategoryHeading />', function() {
 
   it('contains the expected heading', function() {
     const wrapper = shallow(<CategoryHeading category={exampleCategories[0]} />)
-    expect(wrapper).to.contain(<h3 id="cat">Example category</h3>)
+    expect(wrapper).to.contain(<H3 id="cat">Example category</H3>)
   })
 })
 

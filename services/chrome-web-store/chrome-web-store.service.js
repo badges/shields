@@ -137,6 +137,12 @@ class ChromeWebStoreRating extends LegacyService {
   static registerLegacyRouteHandler() {}
 }
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 class ChromeWebStore extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(

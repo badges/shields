@@ -1,11 +1,9 @@
 'use strict'
 
-const yaml = require('js-yaml')
-const jp = require('jsonpath')
-const emojic = require('emojic')
-const BaseService = require('../base')
+const BaseYamlService = require('../base-yaml')
 const { InvalidResponse } = require('../errors')
-const trace = require('../trace')
+const Joi = require('joi')
+const jp = require('jsonpath')
 const {
   createRoute,
   queryParamSchema,
@@ -13,7 +11,7 @@ const {
   renderDynamicBadge,
 } = require('./dynamic-helpers')
 
-module.exports = class DynamicYaml extends BaseService {
+module.exports = class DynamicYaml extends BaseYamlService {
   static get category() {
     return 'dynamic'
   }
@@ -28,24 +26,6 @@ module.exports = class DynamicYaml extends BaseService {
     }
   }
 
-  parseYml(buffer) {
-    const logTrace = (...args) => trace.logTrace('fetch', ...args)
-    let parsed
-    try {
-      parsed = yaml.safeLoad(buffer)
-    } catch (err) {
-      logTrace(emojic.dart, 'Response YAML (unparseable)', buffer)
-      throw new InvalidResponse({
-        prettyMessage: 'unparseable yaml response',
-        underlyingError: err,
-      })
-    }
-    logTrace(emojic.dart, 'Response YAML (before validation)', parsed, {
-      deep: true,
-    })
-    return parsed
-  }
-
   async handle(namedParams, queryParams) {
     const {
       url,
@@ -54,18 +34,11 @@ module.exports = class DynamicYaml extends BaseService {
       suffix,
     } = this.constructor._validateQueryParams(queryParams, queryParamSchema)
 
-    const { buffer } = await this._request({
+    const data = await this._requestYaml({
+      schema: Joi.any(),
       url,
-      options: {
-        headers: {
-          Accept:
-            'text/x-yaml, text/yaml, application/x-yaml, application/yaml, text/plain',
-        },
-      },
       errorMessages,
     })
-
-    const data = this.parseYml(buffer)
 
     const values = jp.query(data, pathExpression)
 

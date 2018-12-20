@@ -11,6 +11,12 @@ const {
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class GithubContributors extends LegacyService {
   static get category() {
     return 'activity'
@@ -18,7 +24,7 @@ module.exports = class GithubContributors extends LegacyService {
 
   static get route() {
     return {
-      base: 'github',
+      base: 'github/contributors',
     }
   }
 
@@ -26,7 +32,7 @@ module.exports = class GithubContributors extends LegacyService {
     return [
       {
         title: 'GitHub contributors',
-        pattern: 'contributors/:user/:repo',
+        pattern: ':user/:repo',
         namedParams: {
           user: 'cdnjs',
           repo: 'cdnjs',
@@ -36,7 +42,6 @@ module.exports = class GithubContributors extends LegacyService {
           message: '397',
           color: 'blue',
         },
-        keywords: ['GitHub', 'contributor'],
         documentation,
       },
     ]
