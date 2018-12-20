@@ -45,9 +45,9 @@ const documentation = `
     </br>
     Some Matrix homeservers don't hold a server name matching where they live (e.g. if the homeserver <code>example.com</code> that created the room alias <code>#mysuperroom:example.com</code> lives at <code>matrix.example.com</code>).
     </br>
-    If that is the case of the homeserver that created the room alias used for generating the badge, you will need to add an extra parameter to the URL, by adding a forward slash followed by the server's FQDN (fully qualified domain name) between the room alias and the <code>.svg</code> extension.
+    If that is the case of the homeserver that created the room alias used for generating the badge, you will need to add the server's FQDN (fully qualified domain name) as a query parameter.
     </br>
-    The final badge URL should then look something like this <code>/matrix/mysuperroom:example.com/matrix.example.com.svg</code>.
+    The final badge URL should then look something like this <code>/matrix/mysuperroom:example.com.svg?serverFQDN=matrix.example.com.svg</code>.
   </p>
   `
 
@@ -193,11 +193,16 @@ module.exports = class Matrix extends BaseJsonService {
     return [
       {
         title: 'Matrix',
-        namedParams: {
-          roomAlias: 'twim:matrix.org',
-          serverFqdnOptional: 'matrix.org',
-        },
-        pattern: ':roomAlias/:serverFqdnOptional',
+        namedParams: { roomAlias: 'twim:matrix.org' },
+        pattern: ':roomAlias',
+        staticExample: this.render({ members: 42 }),
+        documentation,
+      },
+      {
+        title: 'Matrix',
+        namedParams: { roomAlias: 'twim:matrix.org' },
+        queryParams: { serverFQDN: 'matrix.org' },
+        pattern: ':roomAlias',
         staticExample: this.render({ members: 42 }),
         documentation,
       },
