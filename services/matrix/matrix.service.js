@@ -47,7 +47,7 @@ const documentation = `
     </br>
     If that is the case of the homeserver that created the room alias used for generating the badge, you will need to add the server's FQDN (fully qualified domain name) as a query parameter.
     </br>
-    The final badge URL should then look something like this <code>/matrix/mysuperroom:example.com.svg?serverFQDN=matrix.example.com.svg</code>.
+    The final badge URL should then look something like this <code>/matrix/mysuperroom:example.com.svg?serverFQDN=matrix.example.com</code>.
   </p>
   `
 
