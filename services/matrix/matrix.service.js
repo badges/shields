@@ -167,7 +167,7 @@ module.exports = class Matrix extends BaseJsonService {
     }
   }
 
-  async handle({ roomAlias, serverFQDN }) {
+  async handle({ roomAlias }, { serverFQDN }) {
     const members = await this.fetch({ roomAlias, serverFQDN })
     return this.constructor.render({ members })
   }
@@ -183,8 +183,9 @@ module.exports = class Matrix extends BaseJsonService {
   static get route() {
     return {
       base: 'matrix',
-      format: '([^/]+)(?:/([^/]+))?',
-      capture: ['roomAlias', 'serverFQDN'],
+      format: '([^/]+)',
+      capture: ['roomAlias'],
+      queryParams: ['serverFQDN'],
     }
   }
 
