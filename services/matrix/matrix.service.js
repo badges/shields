@@ -189,8 +189,10 @@ module.exports = class Matrix extends BaseJsonService {
     return [
       {
         title: 'Matrix',
-        exampleUrl: 'twim:matrix.org',
-        pattern: ':roomAlias/:server_fqdn_optional',
+        namedParams: {
+          roomAlias: 'twim:matrix.org',
+        },
+        pattern: ':roomAlias/:serverFqdnOptional',
         staticExample: this.render({ members: 42 }),
         documentation,
       },
