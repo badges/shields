@@ -4,6 +4,10 @@ const Joi = require('joi')
 const BaseJsonService = require('../base-json')
 const errors = require('../errors')
 
+const queryParamSchema = Joi.object({
+  server_fqdn: Joi.string().hostname(),
+}).required()
+
 const matrixRegisterSchema = Joi.object({
   access_token: Joi.string().required(),
 }).required()
@@ -47,7 +51,7 @@ const documentation = `
     </br>
     If that is the case of the homeserver that created the room alias used for generating the badge, you will need to add the server's FQDN (fully qualified domain name) as a query parameter.
     </br>
-    The final badge URL should then look something like this <code>/matrix/mysuperroom:example.com.svg?serverFQDN=matrix.example.com</code>.
+    The final badge URL should then look something like this <code>/matrix/mysuperroom:example.com.svg?server_fqdn=matrix.example.com</code>.
   </p>
   `
 
@@ -167,7 +171,11 @@ module.exports = class Matrix extends BaseJsonService {
     }
   }
 
-  async handle({ roomAlias }, { serverFQDN }) {
+  async handle({ roomAlias }, queryParams) {
+    const { server_fqdn: serverFQDN } = this.constructor._validateQueryParams(
+      queryParams,
+      queryParamSchema
+    )
     const members = await this.fetch({ roomAlias, serverFQDN })
     return this.constructor.render({ members })
   }
@@ -185,7 +193,7 @@ module.exports = class Matrix extends BaseJsonService {
       base: 'matrix',
       format: '([^/]+)',
       capture: ['roomAlias'],
-      queryParams: ['serverFQDN'],
+      queryParams: ['server_fqdn'],
     }
   }
 
@@ -201,7 +209,7 @@ module.exports = class Matrix extends BaseJsonService {
       {
         title: 'Matrix',
         namedParams: { roomAlias: 'twim:matrix.org' },
-        queryParams: { serverFQDN: 'matrix.org' },
+        queryParams: { server_fqdn: 'matrix.org' },
         pattern: ':roomAlias',
         staticExample: this.render({ members: 42 }),
         documentation,

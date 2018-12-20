@@ -375,7 +375,7 @@ t.create('server uses a custom port')
 
 t.create('specify the homeserver fqdn')
   .get(
-    '/ALIAS:DUMMY.dumb.json?style=_shields_test&serverFQDN=matrix.DUMMY.dumb'
+    '/ALIAS:DUMMY.dumb.json?style=_shields_test&server_fqdn=matrix.DUMMY.dumb'
   )
   .intercept(nock =>
     nock('https://matrix.DUMMY.dumb/')
