@@ -1,0 +1,9 @@
+{
+  "reporter": ["lcov"],
+  "all": true,
+  "silent": true,
+  "clean": false,
+  "sourceMap": false,
+  "instrument": false,
+  "exclude": ["**/*.spec.js"]
+}

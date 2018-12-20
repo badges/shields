@@ -58,7 +58,7 @@
     "xpath": "~0.0.27"
   },
   "scripts": {
-    "coverage:test:frontend": "BABEL_ENV=test nyc node_modules/mocha/bin/_mocha --opts mocha.opts --require @babel/polyfill --require @babel/register --require mocha-yaml-loader \"frontend/**/*.spec.js\"",
+    "coverage:test:frontend": "BABEL_ENV=test nyc --nycrc-path .nycrc-frontend.json node_modules/mocha/bin/_mocha --opts mocha.opts --require @babel/polyfill --require @babel/register --require mocha-yaml-loader \"frontend/**/*.spec.js\"",
     "coverage:test:server": "HANDLE_INTERNAL_ERRORS=false nyc node_modules/mocha/bin/_mocha --opts mocha.opts \"*.spec.js\" \"lib/**/*.spec.js\" \"services/**/*.spec.js\"",
     "coverage:test:package": "nyc node_modules/mocha/bin/_mocha --opts mocha.opts \"gh-badges/**/*.spec.js\"",
     "coverage:test:integration": "nyc node_modules/mocha/bin/_mocha --opts mocha.opts \"lib/**/*.integration.js\" \"services/**/*.integration.js\"",
@@ -113,6 +113,7 @@
     "@mapbox/react-click-to-select": "^2.2.0",
     "almost-equal": "^1.1.0",
     "babel-eslint": "^10.0.0",
+    "babel-plugin-istanbul": "^5.1.0",
     "caller": "^1.0.1",
     "chai": "^4.1.2",
     "chai-datetime": "^1.5.0",
@@ -141,7 +142,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "fetch-ponyfill": "^6.0.0",
     "fs-readfile-promise": "^3.0.1",
-    "got": "^9.4.0",
+    "got": "^9.5.0",
     "husky": "^1.2.0",
     "icedfrisby": "2.0.0-alpha.2",
     "icedfrisby-nock": "^1.1.0",
@@ -201,6 +202,9 @@
         ]
       },
       "test": {
+        "plugins": [
+          "istanbul"
+        ],
         "presets": [
           "@babel/preset-env",
           [
