@@ -1,11 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
 const { colorScheme } = require('../test-helpers')
 
-const t = new ServiceTester({ id: 'matrix', title: 'Matrix' })
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('get room state as guest')
   .get('/ALIAS:DUMMY.dumb.json?style=_shields_test')
