@@ -59,15 +59,18 @@ export default class QueryStringBuilder extends React.Component {
     const { exampleParams } = props
 
     const queryParams = {}
-    for (const name in exampleParams) {
-      queryParams[name] = ''
-    }
+    Object.entries(exampleParams).forEach(([name, value]) => {
+      const isStringParam = typeof value === 'string'
+      queryParams[name] = isStringParam ? '' : true
+    })
 
     this.state = { queryParams }
   }
 
   handleTokenChange = event => {
-    const { name, value } = event.target
+    const { name, type } = event.target
+    const value =
+      type === 'checkbox' ? event.target.checked : event.target.value
     const { queryParams: oldQueryParams } = this.state
 
     const queryParams = {
@@ -85,6 +88,7 @@ export default class QueryStringBuilder extends React.Component {
 
   renderQueryParam(name, value) {
     const exampleValue = this.props.exampleParams[name]
+    const isStringParam = typeof exampleValue === 'string'
     return (
       <tr>
         <td>
@@ -93,16 +97,28 @@ export default class QueryStringBuilder extends React.Component {
           </NamedParamLabel>
         </td>
         <td>
-          <NamedParamCaption>{`e.g. ${exampleValue}`}</NamedParamCaption>
+          {isStringParam && (
+            <NamedParamCaption>{`e.g. ${exampleValue}`}</NamedParamCaption>
+          )}
         </td>
         <td>
-          <NamedParamInput
-            type="text"
-            name={name}
-            value={value}
-            onChange={this.handleTokenChange}
-            {...noAutocorrect}
-          />
+          {isStringParam ? (
+            <NamedParamInput
+              type="text"
+              name={name}
+              checked={value}
+              onChange={this.handleTokenChange}
+              {...noAutocorrect}
+            />
+          ) : (
+            <input
+              type="checkbox"
+              name={name}
+              checked={value}
+              onChange={this.handleTokenChange}
+              {...noAutocorrect}
+            />
+          )}
         </td>
       </tr>
     )

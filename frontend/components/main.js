@@ -153,7 +153,6 @@ export default class Main extends React.Component {
           example={selectedExample}
           onRequestClose={this.dismissMarkupModal}
           baseUrl={baseUrl}
-          key={selectedExample}
         />
         <section>
           <SuggestionAndSearch
