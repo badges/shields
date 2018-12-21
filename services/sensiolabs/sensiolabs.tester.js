@@ -1,31 +1,56 @@
 'use strict'
 
-// const Joi = require('joi')
-const sinon = require('sinon')
+const Joi = require('joi')
 const { colorScheme } = require('../test-helpers')
 const t = (module.exports = require('../create-service-tester')())
-const serverSecrets = require('../../lib/server-secrets')
+const { withRegex } = require('../test-validators')
+
 const {
-  // statusRegex,
   runningMockResponse,
   platinumMockResponse,
   goldMockResponse,
   silverMockResponse,
   bronzeMockResponse,
   noMedalMockResponse,
-} = require('./sensiolabs-helpers')
+  mockSLUser,
+  mockSLApiToken,
+  mockSensiolabsCreds,
+  restore,
+  tokenExists,
+  logTokenWarning,
+} = require('./sensiolabs-test-helpers')
 
-// const messageRegex = /platinum|gold|silver|bronze|no medal/
+const gradeRegex = /platinum|gold|silver|bronze|no medal/
 const sampleProjectUuid = '45afb680-d4e6-4e66-93ea-bcfa79eb8a87'
-const mockSLUser = 'admin'
-const mockSLApiToken = 'password'
 
-function mockSensiolabsCreds() {
-  serverSecrets['sl_insight_userUuid'] = undefined
-  serverSecrets['sl_insight_apiToken'] = undefined
-  sinon.stub(serverSecrets, 'sl_insight_userUuid').value(mockSLUser)
-  sinon.stub(serverSecrets, 'sl_insight_apiToken').value(mockSLApiToken)
-}
+t.create('live: valid project')
+  .before(logTokenWarning)
+  .get(`/${sampleProjectUuid}.json`)
+  .timeout(10000)
+  .interceptIf(!tokenExists, nock =>
+    nock('https://insight.sensiolabs.com/api/projects')
+      .get(`/${sampleProjectUuid}`)
+      .reply(200, platinumMockResponse)
+  )
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'check',
+      value: withRegex(gradeRegex),
+    })
+  )
+
+t.create('live: nonexistent project')
+  .before(logTokenWarning)
+  .get('/45afb680-d4e6-4e66-93ea-bcfa79eb8a88.json')
+  .interceptIf(!tokenExists, nock =>
+    nock('https://insight.sensiolabs.com/api/projects')
+      .get('/45afb680-d4e6-4e66-93ea-bcfa79eb8a88')
+      .reply(404)
+  )
+  .expectJSON({
+    name: 'check',
+    value: 'project not found',
+  })
 
 t.create('404 project not found')
   .get(`/${sampleProjectUuid}.json`)
@@ -148,4 +173,4 @@ t.create('auth')
     value: 'bronze',
     colorB: colorScheme.orange,
   })
-  .finally(sinon.restore)
+  .finally(restore)

@@ -3,13 +3,12 @@
 const Joi = require('joi')
 const BaseXmlService = require('../base-xml')
 const serverSecrets = require('../../lib/server-secrets')
-const { statusRegex } = require('./sensiolabs-helpers')
 
 const schema = Joi.object({
   project: Joi.object({
     'last-analysis': Joi.object({
       status: Joi.string()
-        .regex(statusRegex)
+        .regex(/ordered|running|measured|analyzed|finished/)
         .required(),
       grade: Joi.string()
         .regex(/platinum|gold|silver|bronze|none/)

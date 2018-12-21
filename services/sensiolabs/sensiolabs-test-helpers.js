@@ -1,6 +1,7 @@
 'use strict'
 
-const statusRegex = /ordered|running|measured|analyzed|finished/
+const sinon = require('sinon')
+const serverSecrets = require('../../lib/server-secrets')
 
 function createMockResponse({ status, grade }) {
   return `
@@ -37,6 +38,25 @@ const noMedalMockResponse = createMockResponse({
   grade: 'none',
 })
 
+const mockSLUser = 'admin'
+const mockSLApiToken = 'password'
+
+function mockSensiolabsCreds() {
+  serverSecrets['sl_insight_userUuid'] = undefined
+  serverSecrets['sl_insight_apiToken'] = undefined
+  sinon.stub(serverSecrets, 'sl_insight_userUuid').value(mockSLUser)
+  sinon.stub(serverSecrets, 'sl_insight_apiToken').value(mockSLApiToken)
+}
+
+const tokenExists = serverSecrets.sl_insight_userUuid
+function logTokenWarning() {
+  if (!tokenExists) {
+    console.warn(
+      'No token provided, this test will mock Symfony Insight API responses.'
+    )
+  }
+}
+
 module.exports = {
   runningMockResponse,
   platinumMockResponse,
@@ -44,5 +64,10 @@ module.exports = {
   silverMockResponse,
   bronzeMockResponse,
   noMedalMockResponse,
-  statusRegex,
+  mockSLUser,
+  mockSLApiToken,
+  mockSensiolabsCreds,
+  restore: sinon.restore,
+  tokenExists,
+  logTokenWarning,
 }
