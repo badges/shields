@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { staticBadgeUrl } from '../lib/badge-url'
-import { badgeUrlFromPath, badgeUrlFromPattern } from '../../lib/make-badge-url'
+import { badgeUrlFromPath } from '../../lib/make-badge-url'
 import generateAllMarkup from '../lib/generate-image-markup'
 import { advertisedStyles } from '../../supported-features.json'
 import { Snippet2 } from './snippet'
@@ -25,75 +25,18 @@ export default class MarkupModalContent extends React.Component {
   }
 
   state = {
-    badgeUrl: '',
-    badgeUrlForProps: '',
-    exampleUrl: '',
+    path: '',
     link: '',
     style: 'flat',
   }
 
-  static urlsForProps(props) {
-    const {
-      example: { example },
-      baseUrl,
-    } = props
-
-    let badgeUrl
-    let exampleUrl
-    // There are two alternatives for `example`. Refer to the schema in
-    // `services/service-definitions.js`.
-    if (example.pattern !== undefined) {
-      const { pattern, namedParams, queryParams } = example
-      badgeUrl = badgeUrlFromPath({
-        path: pattern,
-        queryParams,
-      })
-      exampleUrl = badgeUrlFromPattern({
-        baseUrl,
-        pattern,
-        namedParams,
-        queryParams,
-      })
-    } else {
-      const { path, queryParams } = example
-      badgeUrl = badgeUrlFromPath({
-        path,
-        queryParams,
-      })
-      exampleUrl = ''
-    }
-
-    return { badgeUrl, exampleUrl }
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    let urlsForProps, link
-    if (props.example) {
-      urlsForProps = MarkupModalContent.urlsForProps(props)
-      link = props.example.example.link
-    } else {
-      urlsForProps = { badgeUrl: '', exampleUrl: '' }
-      link = ''
-    }
-
-    if (urlsForProps.badgeUrl === state.badgeUrlForProps) {
-      return null
-    } else {
-      return {
-        ...urlsForProps,
-        badgeUrlForProps: urlsForProps.badgeUrl,
-        link,
-      }
-    }
-  }
-
   generateBuiltBadgeUrl() {
     const { baseUrl } = this.props
-    const { badgeUrl, style } = this.state
+    const { path, style } = this.state
 
     return badgeUrlFromPath({
       baseUrl,
-      path: badgeUrl,
+      path,
       style: style === 'flat' ? undefined : style,
     })
   }
@@ -187,7 +130,7 @@ export default class MarkupModalContent extends React.Component {
   }
 
   handlePathChange = ({ path, isComplete }) => {
-    this.setState({ badgeUrl: path, isComplete })
+    this.setState({ path, isComplete })
   }
 
   render() {
