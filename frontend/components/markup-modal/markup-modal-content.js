@@ -7,6 +7,7 @@ import { advertisedStyles } from '../../../supported-features.json'
 import { Snippet2 } from '../snippet'
 import { H3, Badge } from '../common'
 import PathBuilder from './path-builder'
+import QueryStringBuilder from './query-string-builder'
 
 const WeeSnippet = ({ snippet }) => (
   <Snippet2 truncate fontSize="10pt" snippet={snippet} />
@@ -133,14 +134,19 @@ export default class MarkupModalContent extends React.Component {
     this.setState({ path, isComplete })
   }
 
+  handleQueryParamChange = ({ queryParams }) => {
+    this.setState({ queryParams })
+  }
+
   render() {
     const {
       example: {
         title,
-        example: { pattern, namedParams },
+        example: { pattern, namedParams, queryParams },
       },
     } = this.props
     const { style } = this.state
+    const hasQueryParams = Boolean(Object.keys(queryParams).length)
 
     return (
       <form action="">
@@ -150,6 +156,12 @@ export default class MarkupModalContent extends React.Component {
           exampleParams={namedParams}
           onChange={this.handlePathChange}
         />
+        {hasQueryParams && (
+          <QueryStringBuilder
+            exampleParams={queryParams}
+            onChange={this.handleQueryParamChange}
+          />
+        )}
         <p>
           <label>
             Style&nbsp;

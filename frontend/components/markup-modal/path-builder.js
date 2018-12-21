@@ -4,15 +4,7 @@ import styled, { css } from 'styled-components'
 import pathToRegexp from 'path-to-regexp'
 import humanizeString from 'humanize-string'
 import { StyledInput, noAutocorrect } from '../common'
-
-const PathBuilderContainer = styled.div`
-  display: inline-block;
-
-  padding: 11px 14px 10px;
-
-  border-radius: 4px;
-  background: #eef;
-`
+import { BuilderContainer } from './builder-common'
 
 const PathBuilderColumn = styled.span`
   height: 58px;
@@ -175,13 +167,13 @@ export default class PathBuilder extends React.Component {
     const { tokens } = this.state
     let namedParamIndex = 0
     return (
-      <PathBuilderContainer>
+      <BuilderContainer>
         {tokens.map((token, tokenIndex) =>
           typeof token === 'string'
             ? this.renderLiteral(token, tokenIndex)
             : this.renderNamedParam(token, tokenIndex, namedParamIndex++)
         )}
-      </PathBuilderContainer>
+      </BuilderContainer>
     )
   }
 }
