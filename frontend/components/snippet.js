@@ -76,23 +76,29 @@ class Snippet2 extends React.Component {
     this.setState({ copied: false })
   }
 
+  renderCopiedLink() {
+    // Render a copied link that floats up from the text box, then disappears
+    // (by setting `copied` back to `false`).
+    const { snippet, fontSize } = this.props
+    return (
+      <CopiedLink
+        initialPose="init"
+        pose="copied"
+        onPoseComplete={this.handlePoseComplete}
+      >
+        <StyledCode fontSize={fontSize} withBackground={false}>
+          {snippet}
+        </StyledCode>
+      </CopiedLink>
+    )
+  }
+
   render() {
     const { snippet, snippetToCopy, truncate, fontSize } = this.props
     const { copied } = this.state
-
     return (
       <CodeContainer truncate={truncate}>
-        {copied && (
-          <CopiedLink
-            initialPose="init"
-            pose="copied"
-            onPoseComplete={this.handlePoseComplete}
-          >
-            <StyledCode fontSize={fontSize} withBackground={false}>
-              {snippet}
-            </StyledCode>
-          </CopiedLink>
-        )}
+        {copied && this.renderCopiedLink()}
         <CopyToClipboard
           text={coalesce(snippetToCopy, snippet)}
           onCopy={this.handleCopied}
