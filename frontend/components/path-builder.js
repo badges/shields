@@ -150,9 +150,9 @@ export default class PathBuilder extends React.Component {
     const value = namedParams[name]
 
     return (
-      <>
+      <React.Fragment key={token.name}>
         {this.renderLiteral(delimiter, tokenIndex)}
-        <Column key={token.name} horizPadding="8px">
+        <Column horizPadding="8px">
           <PositionedLabel htmlFor={name}>
             {humanizeString(name)}
           </PositionedLabel>
@@ -167,7 +167,7 @@ export default class PathBuilder extends React.Component {
             {namedParamIndex === 0 ? `e.g. ${exampleValue}` : exampleValue}
           </PositionedCaption>
         </Column>
-      </>
+      </React.Fragment>
     )
   }
 
