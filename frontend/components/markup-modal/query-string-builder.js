@@ -1,55 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
-import pathToRegexp from 'path-to-regexp'
 import humanizeString from 'humanize-string'
 import { StyledInput, noAutocorrect } from '../common'
-import { BuilderContainer } from './builder-common'
+import {
+  BuilderContainer,
+  BuilderLabel,
+  BuilderInput,
+  BuilderCaption,
+} from './builder-common'
 
-const QueryStringBuilderRow = styled.span`
-  height: 58px;
-
-  float: left;
-  display: flex;
-  flex-direction: column;
-
-  margin: 5px 0;
-
-  ${({ horizPadding }) =>
-    horizPadding &&
-    css`
-      padding-left: ${horizPadding};
-      padding-right: ${horizPadding};
-    `};
+const QueryParamLabel = styled(BuilderLabel)`
+  margin: 5px;
 `
 
-const NamedParamLabel = styled.label`
-  height: 20px;
-  width: 100%;
-
-  text-align: center;
-
-  font-family: system-ui;
-  font-size: 11px;
-  text-transform: lowercase;
+const QueryParamInput = styled(BuilderInput)`
+  margin: 5px 10px;
 `
 
-const NamedParamInput = styled(StyledInput)`
-  width: 100%;
-  text-align: center;
-
-  margin-bottom: 10px;
-`
-
-const NamedParamCaption = styled.span`
-  width: 100%;
-  text-align: center;
-
-  color: #999;
-
-  font-family: system-ui;
-  font-size: 11px;
-  text-transform: lowercase;
+const QueryParamCaption = styled(BuilderCaption)`
+  margin: 5px;
 `
 
 export default class QueryStringBuilder extends React.Component {
@@ -86,24 +56,25 @@ export default class QueryStringBuilder extends React.Component {
     }
   }
 
-  renderQueryParam(name, value) {
+  renderQueryParam({ name, value, isStringParam, stringParamCount }) {
     const exampleValue = this.props.exampleParams[name]
-    const isStringParam = typeof exampleValue === 'string'
     return (
       <tr>
         <td>
-          <NamedParamLabel htmlFor={name}>
+          <QueryParamLabel htmlFor={name}>
             {humanizeString(name).toLowerCase()}
-          </NamedParamLabel>
+          </QueryParamLabel>
         </td>
         <td>
           {isStringParam && (
-            <NamedParamCaption>{`e.g. ${exampleValue}`}</NamedParamCaption>
+            <QueryParamCaption>
+              {stringParamCount === 0 ? `e.g. ${exampleValue}` : exampleValue}
+            </QueryParamCaption>
           )}
         </td>
         <td>
           {isStringParam ? (
-            <NamedParamInput
+            <QueryParamInput
               type="text"
               name={name}
               checked={value}
@@ -126,13 +97,22 @@ export default class QueryStringBuilder extends React.Component {
 
   render() {
     const { queryParams } = this.state
+    let stringParamCount = 0
     return (
       <BuilderContainer>
         <table>
           <tbody>
-            {Object.entries(queryParams).map(([name, value]) =>
-              this.renderQueryParam(name, value)
-            )}
+            {Object.entries(queryParams).map(([name, value]) => {
+              const isStringParam = typeof value === 'string'
+              return this.renderQueryParam({
+                name,
+                value,
+                isStringParam,
+                stringParamCount: isStringParam
+                  ? stringParamCount++
+                  : undefined,
+              })
+            })}
           </tbody>
         </table>
       </BuilderContainer>

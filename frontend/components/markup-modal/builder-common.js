@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
+import { StyledInput } from '../common'
 
 const BuilderOuterContainer = styled.div`
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `
 
 // The inner container is inline-block so that its width matches its columns.
@@ -29,4 +30,20 @@ BuilderContainer.propTypes = {
   ]),
 }
 
-export { BuilderContainer }
+const BuilderLabel = styled.label`
+  font-family: system-ui;
+  font-size: 11px;
+  text-transform: lowercase;
+`
+
+const BuilderInput = StyledInput
+
+const BuilderCaption = styled.span`
+  color: #999;
+
+  font-family: system-ui;
+  font-size: 11px;
+  text-transform: lowercase;
+`
+
+export { BuilderContainer, BuilderLabel, BuilderInput, BuilderCaption }

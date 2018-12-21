@@ -4,7 +4,12 @@ import styled, { css } from 'styled-components'
 import pathToRegexp from 'path-to-regexp'
 import humanizeString from 'humanize-string'
 import { StyledInput, noAutocorrect } from '../common'
-import { BuilderContainer } from './builder-common'
+import {
+  BuilderContainer,
+  BuilderLabel,
+  BuilderInput,
+  BuilderCaption,
+} from './builder-common'
 
 const PathBuilderColumn = styled.span`
   height: 58px;
@@ -32,33 +37,23 @@ const PathLiteral = styled.div`
     `};
 `
 
-const NamedParamLabel = styled.label`
+const NamedParamLabel = styled(BuilderLabel)`
   height: 20px;
   width: 100%;
 
   text-align: center;
-
-  font-family: system-ui;
-  font-size: 11px;
-  text-transform: lowercase;
 `
 
-const NamedParamInput = styled(StyledInput)`
+const NamedParamInput = styled(BuilderInput)`
   width: 100%;
   text-align: center;
 
   margin-bottom: 10px;
 `
 
-const NamedParamCaption = styled.span`
+const NamedParamCaption = styled(BuilderCaption)`
   width: 100%;
   text-align: center;
-
-  color: #999;
-
-  font-family: system-ui;
-  font-size: 11px;
-  text-transform: lowercase;
 `
 
 export default class PathBuilder extends React.Component {
