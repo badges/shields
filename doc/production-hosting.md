@@ -24,7 +24,7 @@ These settings are currently set on the production server:
 
 Gathered from
 ```
-cat private/secret-production.json | jq keys | grep -o '".*"' | sed 's/"//g' | sed 's/^/- /`
+jq keys private/secret-production.json | grep -o '".*"' | sed 's/"//g' | sed 's/^/- /`
 ```
 
 The `secret.tpl.json` is a template file used by the Docker container to set the secrets based on
