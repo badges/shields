@@ -5,7 +5,7 @@ import pathToRegexp from 'path-to-regexp'
 import humanizeString from 'humanize-string'
 import { StyledInput, noAutocorrect } from './common'
 
-const Container = styled.div`
+const PathBuilderContainer = styled.div`
   display: inline-block;
 
   padding: 11px 14px 10px;
@@ -14,7 +14,7 @@ const Container = styled.div`
   background: #eef;
 `
 
-const Column = styled.span`
+const PathBuilderColumn = styled.span`
   height: 58px;
 
   float: left;
@@ -31,7 +31,7 @@ const Column = styled.span`
     `};
 `
 
-const Literal = styled.div`
+const PathLiteral = styled.div`
   margin-top: 20px;
   ${({ marginLeft }) =>
     marginLeft &&
@@ -40,7 +40,7 @@ const Literal = styled.div`
     `};
 `
 
-const PositionedLabel = styled.label`
+const NamedParamLabel = styled.label`
   height: 20px;
   width: 100%;
 
@@ -51,14 +51,14 @@ const PositionedLabel = styled.label`
   text-transform: lowercase;
 `
 
-const PositionedInput = styled(StyledInput)`
+const NamedParamInput = styled(StyledInput)`
   width: 100%;
   text-align: center;
 
   margin-bottom: 10px;
 `
 
-const PositionedCaption = styled.span`
+const NamedParamCaption = styled.span`
   width: 100%;
   text-align: center;
 
@@ -132,11 +132,11 @@ export default class PathBuilder extends React.Component {
 
   renderLiteral(literal, tokenIndex) {
     return (
-      <Column key={`${tokenIndex}-${literal}`}>
-        <Literal marginLeft={tokenIndex === 0 ? '3px' : undefined}>
+      <PathBuilderColumn key={`${tokenIndex}-${literal}`}>
+        <PathLiteral marginLeft={tokenIndex === 0 ? '3px' : undefined}>
           {literal}
-        </Literal>
-      </Column>
+        </PathLiteral>
+      </PathBuilderColumn>
     )
   }
 
@@ -152,37 +152,36 @@ export default class PathBuilder extends React.Component {
     return (
       <React.Fragment key={token.name}>
         {this.renderLiteral(delimiter, tokenIndex)}
-        <Column horizPadding="8px">
-          <PositionedLabel htmlFor={name}>
+        <PathBuilderColumn horizPadding="8px">
+          <NamedParamLabel htmlFor={name}>
             {humanizeString(name)}
-          </PositionedLabel>
-          <PositionedInput
+          </NamedParamLabel>
+          <NamedParamInput
             type="text"
             name={name}
             value={value}
             onChange={this.handleTokenChange}
             {...noAutocorrect}
           />
-          <PositionedCaption>
+          <NamedParamCaption>
             {namedParamIndex === 0 ? `e.g. ${exampleValue}` : exampleValue}
-          </PositionedCaption>
-        </Column>
+          </NamedParamCaption>
+        </PathBuilderColumn>
       </React.Fragment>
     )
   }
 
   render() {
     const { tokens } = this.state
-
     let namedParamIndex = 0
     return (
-      <Container>
+      <PathBuilderContainer>
         {tokens.map((token, tokenIndex) =>
           typeof token === 'string'
             ? this.renderLiteral(token, tokenIndex)
             : this.renderNamedParam(token, tokenIndex, namedParamIndex++)
         )}
-      </Container>
+      </PathBuilderContainer>
     )
   }
 }
