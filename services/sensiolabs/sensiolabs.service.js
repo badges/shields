@@ -1,23 +1,66 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const Joi = require('joi')
+const BaseXmlService = require('../base-xml')
 const serverSecrets = require('../../lib/server-secrets')
+const { statusRegex } = require('./sensiolabs-helpers')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class Sensiolabs extends LegacyService {
+const schema = Joi.object({
+  project: Joi.object({
+    'last-analysis': Joi.object({
+      status: Joi.string()
+        .regex(statusRegex)
+        .required(),
+      grade: Joi.string()
+        .regex(/platinum|gold|silver|bronze|none/)
+        .allow('', null),
+    }),
+  }).required(),
+}).required()
+
+module.exports = class Sensiolabs extends BaseXmlService {
+  static render({ status, grade }) {
+    if (status !== 'finished') {
+      return {
+        message: 'pending',
+        color: 'grey',
+      }
+    }
+    let color,
+      message = grade
+    if (grade === 'platinum') {
+      color = 'brightgreen'
+    } else if (grade === 'gold') {
+      color = 'yellow'
+    } else if (grade === 'silver') {
+      color = 'lightgrey'
+    } else if (grade === 'bronze') {
+      color = 'orange'
+    } else {
+      message = 'no medal'
+      color = 'red'
+    }
+
+    return {
+      message,
+      color,
+    }
+  }
+
   static get category() {
     return 'build'
   }
 
   static get route() {
     return {
-      base: 'sensiolabs',
+      base: 'sensiolabs/i',
+      pattern: ':projectUuid',
+    }
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'check',
     }
   }
 
@@ -25,86 +68,52 @@ module.exports = class Sensiolabs extends LegacyService {
     return [
       {
         title: 'SensioLabs Insight',
-        previewUrl: 'i/45afb680-d4e6-4e66-93ea-bcfa79eb8a87',
+        pattern: ':projectUuid',
+        namedParams: {
+          projectUuid: '45afb680-d4e6-4e66-93ea-bcfa79eb8a87',
+        },
+        staticPreview: this.render({
+          status: 'finished',
+          grade: 'bronze',
+        }),
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/sensiolabs\/i\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const projectUuid = match[1]
-        const format = match[2]
-        const options = {
-          method: 'GET',
-          uri: `https://insight.sensiolabs.com/api/projects/${projectUuid}`,
-          headers: {
-            Accept: 'application/vnd.com.sensiolabs.insight+xml',
-          },
-        }
+  async fetch({ projectUuid }) {
+    const url = `https://insight.sensiolabs.com/api/projects/${projectUuid}`
+    const options = {
+      headers: {
+        Accept: 'application/vnd.com.sensiolabs.insight+xml',
+      },
+    }
 
-        if (serverSecrets && serverSecrets.sl_insight_userUuid) {
-          options.auth = {
-            user: serverSecrets.sl_insight_userUuid,
-            pass: serverSecrets.sl_insight_apiToken,
-          }
-        }
+    if (serverSecrets && serverSecrets.sl_insight_userUuid) {
+      options.auth = {
+        user: serverSecrets.sl_insight_userUuid,
+        pass: serverSecrets.sl_insight_apiToken,
+      }
+    }
 
-        const badgeData = getBadgeData('check', data)
+    return this._requestXml({
+      url,
+      options,
+      schema,
+      errorMessages: {
+        401: 'not authorized to access project',
+        404: 'project not found',
+      },
+    })
+  }
 
-        request(options, (err, res, body) => {
-          if (err != null || res.statusCode !== 200) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
+  transform({ data }) {
+    const lastAnalysis = data.project['last-analysis']
+    return { status: lastAnalysis.status, grade: lastAnalysis.grade }
+  }
 
-          const matchStatus = body.match(
-            /<status><!\[CDATA\[([a-z]+)\]\]><\/status>/im
-          )
-          const matchGrade = body.match(
-            /<grade><!\[CDATA\[([a-z]+)\]\]><\/grade>/im
-          )
-
-          if (matchStatus === null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          } else if (matchStatus[1] !== 'finished') {
-            badgeData.text[1] = 'pending'
-            sendBadge(format, badgeData)
-            return
-          } else if (matchGrade === null) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-            return
-          }
-
-          if (matchGrade[1] === 'platinum') {
-            badgeData.text[1] = 'platinum'
-            badgeData.colorscheme = 'brightgreen'
-          } else if (matchGrade[1] === 'gold') {
-            badgeData.text[1] = 'gold'
-            badgeData.colorscheme = 'yellow'
-          } else if (matchGrade[1] === 'silver') {
-            badgeData.text[1] = 'silver'
-            badgeData.colorscheme = 'lightgrey'
-          } else if (matchGrade[1] === 'bronze') {
-            badgeData.text[1] = 'bronze'
-            badgeData.colorscheme = 'orange'
-          } else if (matchGrade[1] === 'none') {
-            badgeData.text[1] = 'no medal'
-            badgeData.colorscheme = 'red'
-          } else {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-            return
-          }
-
-          sendBadge(format, badgeData)
-        })
-      })
-    )
+  async handle({ projectUuid }) {
+    const data = await this.fetch({ projectUuid })
+    const { status, grade } = this.transform({ data })
+    return this.constructor.render({ status, grade })
   }
 }
