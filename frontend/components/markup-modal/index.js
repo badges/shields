@@ -2,11 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Modal from 'react-modal'
 import styled from 'styled-components'
-import { badgeUrlFromPath, badgeUrlFromPattern } from '../../lib/make-badge-url'
-import generateAllMarkup from '../lib/generate-image-markup'
-import { advertisedStyles } from '../../supported-features.json'
-import { Snippet } from './snippet'
-import { BaseFont, H3, Badge, BlockInput } from './common'
+import {
+  badgeUrlFromPath,
+  badgeUrlFromPattern,
+} from '../../../lib/make-badge-url'
+import { advertisedStyles } from '../../../supported-features.json'
+import generateAllMarkup from '../../lib/generate-image-markup'
+import { Snippet } from '../snippet'
+import { BaseFont, H3, Badge, BlockInput } from '../common'
 import MarkupModalContent from './markup-modal-content'
 
 const ContentContainer = styled(BaseFont)`

@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { staticBadgeUrl } from '../lib/badge-url'
-import { badgeUrlFromPath } from '../../lib/make-badge-url'
-import generateAllMarkup from '../lib/generate-image-markup'
-import { advertisedStyles } from '../../supported-features.json'
-import { Snippet2 } from './snippet'
-import { H3, Badge } from './common'
+import { staticBadgeUrl } from '../../lib/badge-url'
+import { badgeUrlFromPath } from '../../../lib/make-badge-url'
+import generateAllMarkup from '../../lib/generate-image-markup'
+import { advertisedStyles } from '../../../supported-features.json'
+import { Snippet2 } from '../snippet'
+import { H3, Badge } from '../common'
 import PathBuilder from './path-builder'
 
 const WeeSnippet = ({ snippet }) => (
