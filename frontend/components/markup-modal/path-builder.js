@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import pathToRegexp from 'path-to-regexp'
 import humanizeString from 'humanize-string'
-import { StyledInput, noAutocorrect } from '../common'
+import { noAutocorrect } from '../common'
 import {
   BuilderContainer,
   BuilderLabel,

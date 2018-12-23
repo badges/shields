@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import humanizeString from 'humanize-string'
-import { StyledInput, noAutocorrect } from '../common'
+import { noAutocorrect } from '../common'
 import {
   BuilderContainer,
   BuilderLabel,
