@@ -4,11 +4,11 @@ const { DOMParser } = require('xmldom')
 const xpath = require('xpath')
 const BaseService = require('../base')
 const { InvalidResponse } = require('../errors')
+const { renderDynamicBadge } = require('../dynamic-common')
 const {
   createRoute,
   queryParamSchema,
   errorMessages,
-  renderDynamicBadge,
 } = require('./dynamic-helpers')
 
 // This service extends BaseService because it uses a different XML parser
@@ -58,6 +58,6 @@ module.exports = class DynamicXml extends BaseService {
       throw new InvalidResponse({ prettyMessage: 'no result' })
     }
 
-    return renderDynamicBadge({ values, prefix, suffix })
+    return renderDynamicBadge({ value: values, prefix, suffix })
   }
 }
