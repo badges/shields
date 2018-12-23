@@ -17,6 +17,9 @@ Desktop.ini
 ._*
 Thumbs.db
 
+# Visual Studio Code
+.vscode/
+
 # eclipse
 .project
 .settings
