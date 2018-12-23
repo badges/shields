@@ -1,8 +1,8 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
+const BaseCpanService = require('./cpan')
 
-module.exports = class CpanLicense extends LegacyService {
+module.exports = class CpanLicense extends BaseCpanService {
   static get category() {
     return 'license'
   }
@@ -19,11 +19,22 @@ module.exports = class CpanLicense extends LegacyService {
       {
         title: 'CPAN',
         namedParams: { packageName: 'Config-Augeas' },
-        staticPreview: { label: 'CPAN', message: 'lgpl_2_1', color: 'blue' },
+        staticPreview: this.render({ license: 'lgpl_2_1' }),
         keywords: ['perl'],
       },
     ]
   }
 
-  static registerLegacyRouteHandler() {}
+  static render({ license }) {
+    return {
+      label: 'license',
+      message: license,
+      color: 'blue',
+    }
+  }
+
+  async handle({ packageName }) {
+    const data = await this.fetch({ packageName })
+    return this.constructor.render({ license: data.license[0] })
+  }
 }
