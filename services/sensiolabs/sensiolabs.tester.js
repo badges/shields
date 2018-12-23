@@ -25,7 +25,7 @@ const sampleProjectUuid = '45afb680-d4e6-4e66-93ea-bcfa79eb8a87'
 
 t.create('live: valid project')
   .before(logTokenWarning)
-  .get(`/${sampleProjectUuid}.json`)
+  .get(`/sensiolabs/i/${sampleProjectUuid}.json`)
   .timeout(10000)
   .interceptIf(!tokenExists, nock =>
     nock('https://insight.sensiolabs.com/api/projects')
@@ -34,129 +34,129 @@ t.create('live: valid project')
   )
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'check',
+      name: 'checks',
       value: withRegex(gradeRegex),
     })
   )
 
 t.create('live: nonexistent project')
   .before(logTokenWarning)
-  .get('/45afb680-d4e6-4e66-93ea-bcfa79eb8a88.json')
+  .get('/sensiolabs/i/45afb680-d4e6-4e66-93ea-bcfa79eb8a88.json')
   .interceptIf(!tokenExists, nock =>
     nock('https://insight.sensiolabs.com/api/projects')
       .get('/45afb680-d4e6-4e66-93ea-bcfa79eb8a88')
       .reply(404)
   )
   .expectJSON({
-    name: 'check',
+    name: 'checks',
     value: 'project not found',
   })
 
 t.create('404 project not found')
-  .get(`/${sampleProjectUuid}.json`)
+  .get(`/sensiolabs/i/grade/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.sensiolabs.com/api/projects')
       .get(`/${sampleProjectUuid}`)
       .reply(404)
   )
   .expectJSON({
-    name: 'check',
+    name: 'checks',
     value: 'project not found',
   })
 
 t.create('401 not authorized')
-  .get(`/${sampleProjectUuid}.json`)
+  .get(`/sensiolabs/i/grade/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.sensiolabs.com/api/projects')
       .get(`/${sampleProjectUuid}`)
       .reply(401)
   )
   .expectJSON({
-    name: 'check',
+    name: 'checks',
     value: 'not authorized to access project',
   })
 
 t.create('pending project')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/sensiolabs/i/grade/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.sensiolabs.com/api/projects')
       .get(`/${sampleProjectUuid}`)
       .reply(200, runningMockResponse)
   )
   .expectJSON({
-    name: 'check',
+    name: 'checks',
     value: 'pending',
     colorB: colorScheme.grey,
   })
 
 t.create('platinum medal project')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/sensiolabs/i/grade/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.sensiolabs.com/api/projects')
       .get(`/${sampleProjectUuid}`)
       .reply(200, platinumMockResponse)
   )
   .expectJSON({
-    name: 'check',
+    name: 'checks',
     value: 'platinum',
     colorB: colorScheme.brightgreen,
   })
 
 t.create('gold medal project')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/sensiolabs/i/grade/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.sensiolabs.com/api/projects')
       .get(`/${sampleProjectUuid}`)
       .reply(200, goldMockResponse)
   )
   .expectJSON({
-    name: 'check',
+    name: 'checks',
     value: 'gold',
     colorB: colorScheme.yellow,
   })
 
 t.create('silver medal project')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/sensiolabs/i/grade/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.sensiolabs.com/api/projects')
       .get(`/${sampleProjectUuid}`)
       .reply(200, silverMockResponse)
   )
   .expectJSON({
-    name: 'check',
+    name: 'checks',
     value: 'silver',
     colorB: colorScheme.lightgrey,
   })
 
 t.create('bronze medal project')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/sensiolabs/i/grade/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.sensiolabs.com/api/projects')
       .get(`/${sampleProjectUuid}`)
       .reply(200, bronzeMockResponse)
   )
   .expectJSON({
-    name: 'check',
+    name: 'checks',
     value: 'bronze',
     colorB: colorScheme.orange,
   })
 
 t.create('no medal project')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/sensiolabs/i/grade/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.sensiolabs.com/api/projects')
       .get(`/${sampleProjectUuid}`)
       .reply(200, noMedalMockResponse)
   )
   .expectJSON({
-    name: 'check',
+    name: 'checks',
     value: 'no medal',
     colorB: colorScheme.red,
   })
 
 t.create('auth')
   .before(mockSensiolabsCreds)
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/sensiolabs/i/grade/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.sensiolabs.com/api/projects')
       .get(`/${sampleProjectUuid}`)
@@ -169,7 +169,7 @@ t.create('auth')
       .reply(200, bronzeMockResponse)
   )
   .expectJSON({
-    name: 'check',
+    name: 'checks',
     value: 'bronze',
     colorB: colorScheme.orange,
   })

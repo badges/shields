@@ -8,7 +8,10 @@ function createMockResponse({ status, grade }) {
     <project>
       <last-analysis>
         <status><![CDATA[${status}]]></status>
-        <violations></violations>
+        <violations>
+          <violation severity="info">foo</violation>
+          <violation severity="minor">bar</violation>
+        </violations>
         ${grade ? `<grade><![CDATA[${grade}]]></grade>` : ''}
       </last-analysis>
     </project>`
