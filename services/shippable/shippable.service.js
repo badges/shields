@@ -2,8 +2,7 @@
 
 const BaseJsonService = require('../base-json')
 const Joi = require('joi')
-const { InvalidResponse, NotFound } = require('../errors')
-const { nonNegativeInteger } = require('../validators')
+const { NotFound } = require('../errors')
 
 // source: https://github.com/badges/shields/pull/1362#discussion_r161693830
 const statusCodes = {
@@ -23,7 +22,9 @@ const schema = Joi.array()
   .items(
     Joi.object({
       branchName: Joi.string().required(),
-      statusCode: nonNegativeInteger,
+      statusCode: Joi.number()
+        .valid(Object.keys(statusCodes).map(key => parseInt(key)))
+        .required(),
     }).required()
   )
   .required()
@@ -84,10 +85,6 @@ module.exports = class Shippable extends BaseJsonService {
     if (builds.length === 0) {
       throw new NotFound({ prettyMessage: 'branch not found' })
     }
-    if (statusCodes[builds[0].statusCode] === undefined) {
-      throw new InvalidResponse({ prettyMessage: 'unknown status code' })
-    }
-
     return this.constructor.render({ code: builds[0].statusCode })
   }
 }
