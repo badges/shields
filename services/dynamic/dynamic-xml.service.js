@@ -4,11 +4,11 @@ const { DOMParser } = require('xmldom')
 const xpath = require('xpath')
 const BaseService = require('../base')
 const { InvalidResponse } = require('../errors')
+const { renderDynamicBadge } = require('../dynamic-common')
 const {
   createRoute,
   queryParamSchema,
   errorMessages,
-  renderDynamicBadge,
 } = require('./dynamic-helpers')
 
 // This service extends BaseService because it uses a different XML parser

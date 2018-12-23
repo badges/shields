@@ -4,11 +4,11 @@ const BaseYamlService = require('../base-yaml')
 const { InvalidResponse } = require('../errors')
 const Joi = require('joi')
 const jp = require('jsonpath')
+const { renderDynamicBadge } = require('../dynamic-common')
 const {
   createRoute,
   queryParamSchema,
   errorMessages,
-  renderDynamicBadge,
 } = require('./dynamic-helpers')
 
 module.exports = class DynamicYaml extends BaseYamlService {
