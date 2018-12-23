@@ -13,15 +13,21 @@
     <a href="https://circleci.com/gh/badges/daily-tests">
         <img src="https://img.shields.io/circleci/project/github/badges/daily-tests.svg?label=service%20tests"
             alt="service-test status"></a>
+    <a href="https://docs.google.com/spreadsheets/d/1cHIUSVaiKrIFw3KIu0yt-EMNlMkIfU5alE7YKZ4PeOE/edit#gid=0">
+        <img src="https://img.shields.io/github/search/badges/shields/extends%20LegacyService.svg?label=legacy%20services%20needing%20refactor"
+            alt="legacy services needing refactor"></a>
+    <a href="https://github.com/search?utf8=%E2%9C%93&q=exampleUrl+repo%3Abadges%2Fshields+path%3A%2Fservices&type=Code&ref=advsearch&l=&l=">
+        <img src="https://img.shields.io/github/search/badges/shields/exampleUrl.svg?label=`exampleUrl`s%20needing%20refactor"
+            alt="`exampleUrl`s needing refactor"></a>
     <a href="https://coveralls.io/github/badges/shields">
         <img src="https://img.shields.io/coveralls/github/badges/shields.svg"
             alt="coverage"></a>
+    <a href="https://lgtm.com/projects/g/badges/shields/alerts/">
+        <img src="https://img.shields.io/lgtm/alerts/g/badges/shields.svg"
+            alt="Total alerts"/></a>
     <a href="https://github.com/badges/shields/compare/gh-pages...master">
         <img src="https://img.shields.io/github/commits-since/badges/shields/gh-pages.svg?label=commits%20to%20be%20deployed"
             alt="commits to be deployed"></a>
-    <a href="https://lgtm.com/projects/g/badges/shields/alerts/">
-        <img src="https://img.shields.io/lgtm/alerts/g/badges/shields.svg?logo=lgtm&logoWidth=18"
-            alt="Total alerts"/></a>
     <a href="https://discord.gg/HjJCwm5">
         <img src="https://img.shields.io/discord/308323056592486420.svg?logo=discord"
             alt="chat on Discord"></a>
@@ -169,19 +175,25 @@ You can read more about [the project's inception][thread],
 Project leaders
 ---------------
 
-[espadrine](https://github.com/espadrine) is the sysadmin.
+Maintainers:
 
-These contributors donate time on a consistent basis to help guide and
-maintain the project:
+* [calebcartwright](https://github.com/calebcartwright)
+* [chris48s](https://github.com/chris48s) (core team)
+* [Daniel15](https://github.com/Daniel15) (core team)
+* [espadrine](https://github.com/espadrine) (core team)
+* [paulmelnikow](https://github.com/paulmelnikow) (core team)
+* [platan](https://github.com/platan) (core team)
+* [PyvesB](https://github.com/PyvesB) (core team)
+* [RedSparr0w](https://github.com/RedSparr0w) (core team)
 
-* [chris48s](https://github.com/chris48s)
-* [Daniel15](https://github.com/Daniel15)
-* [espadrine](https://github.com/espadrine)
-* [paulmelnikow](https://github.com/paulmelnikow)
-* [platan](https://github.com/platan)
-* [PyvesB](https://github.com/PyvesB)
-* [RedSparr0w](https://github.com/RedSparr0w)
+Operations:
 
+* [espadrine](https://github.com/espadrine) (sysadmin)
+* [paulmelnikow](https://github.com/paulmelnikow) (limited access)
+
+Alumni:
+
+* [olivierlacan](https://github.com/olivierlacan)
 
 Related projects
 ----------------
