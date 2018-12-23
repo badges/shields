@@ -112,8 +112,8 @@ export default class PathBuilder extends React.Component {
 
     const { onChange } = this.props
     if (onChange) {
-      const path = this.getPath(namedParams)
-      onChange(path)
+      const { path, isComplete } = this.getPath(namedParams)
+      onChange({ path, isComplete })
     }
   }
 

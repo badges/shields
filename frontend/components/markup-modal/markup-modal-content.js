@@ -1,9 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import { staticBadgeUrl } from '../../lib/badge-url'
-import { badgeUrlFromPath } from '../../../lib/make-badge-url'
 import generateAllMarkup from '../../lib/generate-image-markup'
-import { advertisedStyles } from '../../../supported-features.json'
 import { Snippet2 } from '../snippet'
 import { H3, Badge } from '../common'
 import PathBuilder from './path-builder'
@@ -15,6 +14,11 @@ const WeeSnippet = ({ snippet }) => (
 WeeSnippet.propTypes = {
   snippet: PropTypes.string.isRequired,
 }
+
+const Documentation = styled.div`
+  max-width: 800px;
+  margin: 35px auto 20px;
+`
 
 export default class MarkupModalContent extends React.Component {
   static propTypes = {
@@ -28,25 +32,25 @@ export default class MarkupModalContent extends React.Component {
   state = {
     path: '',
     link: '',
-    style: 'flat',
   }
 
   generateBuiltBadgeUrl() {
     const { baseUrl } = this.props
-    const { path, style } = this.state
+    const { path, queryString } = this.state
 
-    return badgeUrlFromPath({
-      baseUrl,
-      path,
-      style: style === 'flat' ? undefined : style,
-    })
+    const suffix = queryString ? `?${queryString}` : ''
+    return `${baseUrl}${path}.svg${suffix}`
   }
 
   renderLivePreview() {
+    // There are some usability issues here. It would be better if the message
+    // changed from a validation error to a loading message once the
+    // parameters were filled in, and also switched back to loading when the
+    // parameters changed.
     const { baseUrl } = this.props
-    const { isComplete } = this.state
+    const { pathIsComplete } = this.state
     let src
-    if (isComplete) {
+    if (pathIsComplete) {
       src = this.generateBuiltBadgeUrl()
     } else {
       src = staticBadgeUrl(
@@ -107,35 +111,32 @@ export default class MarkupModalContent extends React.Component {
     } = this.props
 
     return documentation ? (
-      <div>
-        <h4>Documentation</h4>
-        <div dangerouslySetInnerHTML={{ __html: documentation }} />
-      </div>
+      <Documentation dangerouslySetInnerHTML={{ __html: documentation }} />
     ) : null
   }
 
-  renderFullPattern() {
-    const {
-      baseUrl,
-      example: {
-        example: { pattern },
-      },
-    } = this.props
-    return (
-      <Snippet2
-        snippet={pattern}
-        snippetToCopy={`${baseUrl}${pattern}.svg`}
-        fontSize="9pt"
-      />
-    )
-  }
+  // renderFullPattern() {
+  //   const {
+  //     baseUrl,
+  //     example: {
+  //       example: { pattern },
+  //     },
+  //   } = this.props
+  //   return (
+  //     <Snippet2
+  //       snippet={pattern}
+  //       snippetToCopy={`${baseUrl}${pattern}.svg`}
+  //       fontSize="9pt"
+  //     />
+  //   )
+  // }
 
   handlePathChange = ({ path, isComplete }) => {
-    this.setState({ path, isComplete })
+    this.setState({ path, pathIsComplete: isComplete })
   }
 
-  handleQueryParamChange = ({ queryParams }) => {
-    this.setState({ queryParams })
+  handleQueryStringChange = ({ queryString, isComplete }) => {
+    this.setState({ queryString, queryStringIsComplete: isComplete })
   }
 
   render() {
@@ -145,44 +146,21 @@ export default class MarkupModalContent extends React.Component {
         example: { pattern, namedParams, queryParams },
       },
     } = this.props
-    const { style } = this.state
-    const hasQueryParams = Boolean(Object.keys(queryParams).length)
-
     return (
       <form action="">
         <H3>{title}</H3>
+        {this.renderDocumentation()}
         <PathBuilder
           pattern={pattern}
           exampleParams={namedParams}
           onChange={this.handlePathChange}
         />
-        {hasQueryParams && (
-          <QueryStringBuilder
-            exampleParams={queryParams}
-            onChange={this.handleQueryParamChange}
-          />
-        )}
-        <p>
-          <label>
-            Style&nbsp;
-            <select
-              value={style}
-              onChange={event => {
-                this.setState({ style: event.target.value })
-              }}
-            >
-              {advertisedStyles.map(style => (
-                <option key={style} value={style}>
-                  {style}
-                </option>
-              ))}
-            </select>
-          </label>
-        </p>
+        <QueryStringBuilder
+          exampleParams={queryParams}
+          onChange={this.handleQueryStringChange}
+        />
         {this.renderLivePreview()}
         {this.renderMarkup()}
-        {this.renderDocumentation()}
-        {this.renderFullPattern()}
       </form>
     )
   }
