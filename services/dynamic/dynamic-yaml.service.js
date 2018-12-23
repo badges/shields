@@ -46,6 +46,6 @@ module.exports = class DynamicYaml extends BaseYamlService {
       throw new InvalidResponse({ prettyMessage: 'no result' })
     }
 
-    return renderDynamicBadge({ values, prefix, suffix })
+    return renderDynamicBadge({ value: values, prefix, suffix })
   }
 }

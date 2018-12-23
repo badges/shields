@@ -29,7 +29,7 @@ t.create('YAML from url')
   .expectJSON({
     name: 'custom badge',
     value: 'coredns',
-    colorB: colorsB.brightgreen,
+    colorB: colorsB.blue,
   })
 
 t.create('YAML from uri (support uri query paramater)')
@@ -39,7 +39,7 @@ t.create('YAML from uri (support uri query paramater)')
   .expectJSON({
     name: 'custom badge',
     value: 'coredns',
-    colorB: colorsB.brightgreen,
+    colorB: colorsB.blue,
   })
 
 t.create('YAML from url | multiple results')
