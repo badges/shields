@@ -58,6 +58,6 @@ module.exports = class DynamicXml extends BaseService {
       throw new InvalidResponse({ prettyMessage: 'no result' })
     }
 
-    return renderDynamicBadge({ values, prefix, suffix })
+    return renderDynamicBadge({ value: values, prefix, suffix })
   }
 }

@@ -32,7 +32,7 @@ t.create('XML from url')
   .expectJSON({
     name: 'custom badge',
     value: 'IndieGala Helper',
-    colorB: colorsB.brightgreen,
+    colorB: colorsB.blue,
   })
 
 t.create('XML from uri (support uri query paramater)')
@@ -42,7 +42,7 @@ t.create('XML from uri (support uri query paramater)')
   .expectJSON({
     name: 'custom badge',
     value: 'IndieGala Helper',
-    colorB: colorsB.brightgreen,
+    colorB: colorsB.blue,
   })
 
 t.create('XML from url (attribute)')
