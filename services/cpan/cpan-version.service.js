@@ -1,8 +1,9 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
+const BaseCpanService = require('./cpan')
+const { renderVersionBadge } = require('../../lib/version')
 
-module.exports = class CpanVersion extends LegacyService {
+module.exports = class CpanVersion extends BaseCpanService {
   static get category() {
     return 'version'
   }
@@ -10,6 +11,7 @@ module.exports = class CpanVersion extends LegacyService {
   static get route() {
     return {
       base: 'cpan/v',
+      pattern: ':packageName',
     }
   }
 
@@ -17,11 +19,15 @@ module.exports = class CpanVersion extends LegacyService {
     return [
       {
         title: 'CPAN',
-        previewUrl: 'Config-Augeas',
+        namedParams: { packageName: 'Config-Augeas' },
+        staticPreview: renderVersionBadge({ version: '1.000' }),
         keywords: ['perl'],
       },
     ]
   }
 
-  static registerLegacyRouteHandler() {}
+  async handle({ packageName }) {
+    const { version } = await this.fetch({ packageName })
+    return renderVersionBadge({ version })
+  }
 }
