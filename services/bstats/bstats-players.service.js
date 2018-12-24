@@ -1,18 +1,14 @@
-'use strict' // (1)
+'use strict'
 
-const BaseJsonService = require('../base-json') // (2)
+const BaseJsonService = require('../base-json')
 
-const Joi = require('joi') // (4)
+const Joi = require('joi')
 const schema = Joi.object({
-  // (4)
-  players: Joi.number().required(), // (4)
-}).required() // (4)
+  players: Joi.number().required(),
+}).required()
 
 module.exports = class BStatsPlayers extends BaseJsonService {
-  // (5)
-
   static get route() {
-    // (6)
     return {
       base: 'bstats/players',
       pattern: ':pluginid',
@@ -20,18 +16,15 @@ module.exports = class BStatsPlayers extends BaseJsonService {
   }
 
   static get defaultBadgeData() {
-    // (7)
     return { label: 'players' }
   }
 
   async handle({ pluginid }) {
-    // (8)
     const { players } = await this.fetch({ pluginid })
     return this.constructor.render({ players })
   }
 
   async fetch({ pluginid }) {
-    // (9)
     return this._requestJson({
       schema,
       url: `https://bstats-api-format.glitch.me/players/${pluginid}`,
