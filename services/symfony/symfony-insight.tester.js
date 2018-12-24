@@ -32,8 +32,8 @@ t.create('live: valid project grade')
   .before(logTokenWarning)
   .get(`/symfony/i/grade/${sampleProjectUuid}.json`)
   .timeout(10000)
-  .interceptIf(!tokenExists, nock =>
-    nock('https://insight.smyfony.com/api/projects')
+  .interceptIf(tokenExists, nock =>
+    nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
       .reply(200, platinumMockResponse)
   )
@@ -48,10 +48,10 @@ t.create('live: valid project violations')
   .before(logTokenWarning)
   .get(`/symfony/i/violations/${sampleProjectUuid}.json`)
   .timeout(10000)
-  .interceptIf(!tokenExists, nock =>
-    nock('https://insight.smyfony.com/api/projects')
+  .interceptIf(tokenExists, nock =>
+    nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
-      .reply(200, platinumMockResponse)
+      .reply(200, multipleViolations)
   )
   .expectJSONTypes(
     Joi.object().keys({
