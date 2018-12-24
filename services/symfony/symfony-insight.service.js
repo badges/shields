@@ -4,33 +4,39 @@ const Joi = require('joi')
 const BaseXmlService = require('../base-xml')
 const serverSecrets = require('../../lib/server-secrets')
 
+const violationSchema = Joi.object({
+  severity: Joi.string()
+    .regex(/info|minor|major|critical/)
+    .required(),
+}).required()
+
 const schema = Joi.object({
   project: Joi.object({
     'last-analysis': Joi.object({
       status: Joi.string()
         .regex(/ordered|running|measured|analyzed|finished/)
         .required(),
-      grade: Joi.string()
-        .regex(/platinum|gold|silver|bronze|none/)
-        .allow('', null),
+      grade: Joi.string().regex(/platinum|gold|silver|bronze|none/),
       violations: Joi.object({
-        violation: Joi.array()
-          .optional()
-          .items(
-            Joi.object({
-              severity: Joi.string()
-                .regex(/info|minor|major|critical/)
-                .required(),
-            })
-          ),
-      })
-        .optional()
-        .allow(''),
+        // RE: https://github.com/NaturalIntelligence/fast-xml-parser/issues/68
+        // The BaseXmlService uses the fast-xml-parser which doesn't support forcing
+        // the xml nodes to always be parsed as an array. Currently, if the response
+        // only contains a single violation then it will be parsed as an object,
+        // otherwise it will be parsed as an array.
+        violation: [
+          violationSchema,
+          Joi.array()
+            .items(violationSchema)
+            .required(),
+        ],
+      }),
     }),
   }).required(),
 }).required()
 
-module.exports = class Sensiolabs extends BaseXmlService {
+const keywords = ['sensiolabs']
+
+module.exports = class SymfonyInsight extends BaseXmlService {
   static render({
     metric,
     status,
@@ -65,13 +71,13 @@ module.exports = class Sensiolabs extends BaseXmlService {
     let color,
       message = grade
     if (grade === 'platinum') {
-      color = 'brightgreen'
+      color = '#E5E4E2'
     } else if (grade === 'gold') {
-      color = 'yellow'
+      color = '#EBC760'
     } else if (grade === 'silver') {
-      color = 'lightgrey'
+      color = '#C0C0C0'
     } else if (grade === 'bronze') {
-      color = 'orange'
+      color = '#C88F6A'
     } else {
       message = 'no medal'
       color = 'red'
@@ -92,7 +98,7 @@ module.exports = class Sensiolabs extends BaseXmlService {
   }) {
     if (numViolations === 0) {
       return {
-        message: '0 violations',
+        message: '0',
         color: 'brightgreen',
       }
     }
@@ -112,7 +118,7 @@ module.exports = class Sensiolabs extends BaseXmlService {
       color = 'orange'
     }
     if (numCriticalViolations > 0) {
-      violationSummary.unshift(`${numCriticalViolations} major`)
+      violationSummary.unshift(`${numCriticalViolations} critical`)
       color = 'red'
     }
 
@@ -128,9 +134,13 @@ module.exports = class Sensiolabs extends BaseXmlService {
 
   static get route() {
     return {
-      // base: '(symfony|sensiolabs)/i',
-      // pattern: ':metric(grade|violations)?/:projectUuid',
-      pattern: '(symfony|sensiolabs)/i/:metric(grade|violations)?/:projectUuid',
+      base: '',
+      // The SymfonyInsight service was previously branded as SensioLabs, and
+      // accordingly the badge path used to be /sensiolabs/i/projectUuid'.
+      // This is used to provide backward compatibility for the old path as well as
+      // supporting the new/current path.
+      format: '(?:sensiolabs/i|symfony/i/(grade|violations))/([^/]+)',
+      capture: ['metric', 'projectUuid'],
     }
   }
 
@@ -143,30 +153,32 @@ module.exports = class Sensiolabs extends BaseXmlService {
   static get examples() {
     return [
       {
-        title: 'SensioLabs Insight Grade',
-        pattern: 'grade/:projectUuid',
+        title: 'SymfonyInsight Grade',
+        pattern: 'symfony/i/grade/:projectUuid',
         namedParams: {
           projectUuid: '45afb680-d4e6-4e66-93ea-bcfa79eb8a87',
         },
         staticPreview: this.renderGradeBadge({
           grade: 'bronze',
         }),
+        keywords,
       },
       {
-        title: 'SensioLabs Insight Violations',
-        pattern: 'violations/:projectUuid',
+        title: 'SymfonyInsight Violations',
+        pattern: 'symfony/i/violations/:projectUuid',
         namedParams: {
           projectUuid: '45afb680-d4e6-4e66-93ea-bcfa79eb8a87',
         },
         staticPreview: this.renderGradeBadge({
           numViolations: 0,
         }),
+        keywords,
       },
     ]
   }
 
   async fetch({ projectUuid }) {
-    const url = `https://insight.sensiolabs.com/api/projects/${projectUuid}`
+    const url = `https://insight.symfony.com/api/projects/${projectUuid}`
     const options = {
       headers: {
         Accept: 'application/vnd.com.sensiolabs.insight+xml',
@@ -204,9 +216,16 @@ module.exports = class Sensiolabs extends BaseXmlService {
     let numInfoViolations = 0
 
     const violationContainer = lastAnalysis.violations
-
-    if (violationContainer && violationContainer.violations) {
-      const violations = violationContainer.violations
+    if (violationContainer && violationContainer.violation) {
+      let violations = []
+      // See above note on schema RE: https://github.com/NaturalIntelligence/fast-xml-parser/issues/68
+      // This covers the scenario of multiple violations which are parsed as an array and single
+      // violations which is parsed as a single object.
+      if (Array.isArray(violationContainer.violation)) {
+        violations = violationContainer.violation
+      } else {
+        violations.push(violationContainer.violation)
+      }
       numViolations = violations.length
       violations.forEach(violation => {
         if (violation.severity === 'critical') {
