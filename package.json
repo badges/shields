@@ -187,7 +187,7 @@
     "sazerac": "^0.4.2",
     "sinon": "^7.2.2",
     "sinon-chai": "^3.3.0",
-    "snap-shot-it": "^6.2.7",
+    "snap-shot-it": "^6.2.8",
     "styled-components": "^4.1.2",
     "tmp": "0.0.33",
     "url": "^0.11.0"
