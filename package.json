@@ -64,7 +64,7 @@
     "coverage:test:services": "nyc npm run test:services",
     "coverage:clean": "rimraf .nyc_output coverage",
     "precoverage:test": "run-s --silent coverage:clean defs features",
-    "coverage:test": "run-s --silent --continue-on-error coverage:test:server coverage:test:package coverage:test:frontend coverage:test:integration",
+    "coverage:test": "run-s --silent --continue-on-error coverage:test:server coverage:test:package coverage:test:frontend coverage:test:integration coverage:test:services",
     "coverage:report:generate": "nyc report",
     "coverage:report:open": "opn coverage/lcov-report/index.html",
     "coverage:report": "run-s --silent coverage:report:generate coverage:report:open",
