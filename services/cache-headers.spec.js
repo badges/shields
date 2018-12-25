@@ -164,7 +164,7 @@ describe('Cache header functions', function() {
         it('returns true', function() {
           const modifiedTimeStamp = new Date(Date.now() + 1800000)
           const req = httpMocks.createRequest({
-            headers: { 'If-Modified-Since': modifiedTimeStamp.toUTCString() },
+            headers: { 'If-Modified-Since': modifiedTimeStamp.toDateString() },
           })
           expect(serverHasBeenUpSinceResourceCached(req)).to.equal(true)
         })
