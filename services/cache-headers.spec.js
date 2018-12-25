@@ -131,14 +131,6 @@ describe('Cache header functions', function() {
   })
 
   describe('serverHasBeenUpSinceResourceCached', function() {
-    beforeEach(function() {
-      sinon.useFakeTimers({ now: 1545674651924 })
-    })
-
-    afterEach(function() {
-      sinon.restore()
-    })
-
     // The stringified req's are hard to understand. I thought Sazerac
     // provided a way to override the describe message, though I can't find it.
     context('when there is no If-Modified-Since header', function() {
@@ -172,7 +164,7 @@ describe('Cache header functions', function() {
         it('returns true', function() {
           const modifiedTimeStamp = new Date(Date.now() + 1800000)
           const req = httpMocks.createRequest({
-            headers: { 'If-Modified-Since': modifiedTimeStamp.toDateString() },
+            headers: { 'If-Modified-Since': modifiedTimeStamp.toISOString() },
           })
           expect(serverHasBeenUpSinceResourceCached(req)).to.equal(true)
         })
