@@ -17,21 +17,30 @@ to see how other people implemented their badges.
 (2) Setup
 ---------
 
+### Pre-requisites
+
+#### Git
+
 You should have [git](https://git-scm.com/) installed.
 If you do not, [install git](https://www.linode.com/docs/development/version-control/how-to-install-git-on-linux-mac-and-windows/)
 and learn about the [Github workflow](http://try.github.io/).
+
+#### Node, NPM
+
+Node 8 or later is required. If you don't already have them,
+install node and npm: https://nodejs.org/en/download/
+
+### Setup a dev install
 
 1. [Fork](https://github.com/badges/shields/fork) this repository.
 2. Clone the fork
    `git clone git@github.com:YOURGITHUBUSERNAME/shields.git`
 3. `cd shields`
-4. Node 8 or later is required. If you don't already have them,
-   install node and npm: https://nodejs.org/en/download/
-5. Install project dependencies
+4. Install project dependencies
    `npm install`
-6. Run the server
+5. Run the server
    `npm start`
-7. Visit the website to check the front-end is loaded:
+6. Visit the website to check the front-end is loaded:
    [http://127.0.0.1:3000/](http://127.0.0.1:3000/)
 
 You may also want to install
