@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import Select from 'react-select'
 import { staticBadgeUrl } from '../../lib/badge-url'
-import generateAllMarkup from '../../lib/generate-image-markup'
+import { generateMarkup } from '../../lib/generate-image-markup'
 import { Snippet2 } from '../snippet'
 import { H3, Badge } from '../common'
 import PathBuilder from './path-builder'
@@ -20,6 +21,41 @@ const Documentation = styled.div`
   margin: 35px auto 20px;
 `
 
+const markupOptions = [
+  { value: 'markdown', label: 'Copy Markdown' },
+  { value: 'rst', label: 'Copy reStructuredText' },
+  { value: 'asciidoc', label: 'Copy AsciiDoc' },
+  { value: 'html', label: 'Copy HTML' },
+]
+
+const MarkupFormatSelect = styled(Select)`
+  width: 200px;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  font-weight: 700;
+
+  .markup-format__control {
+    background-color: #2684ff;
+    border-width: 0;
+    box-shadow: unset;
+  }
+
+  .markup-format__value-container {
+    cursor: copy;
+  }
+
+  .markup-format__placeholder {
+    color: hsl(120, 0%, 90%);
+  }
+
+  .markup-format__option {
+    text-align: left;
+    cursor: copy;
+  }
+`
+
 export default class MarkupModalContent extends React.Component {
   static propTypes = {
     // This is an item from the `examples` array within the
@@ -32,6 +68,7 @@ export default class MarkupModalContent extends React.Component {
   state = {
     path: '',
     link: '',
+    markupFormat: 'link',
   }
 
   generateBuiltBadgeUrl() {
@@ -62,13 +99,12 @@ export default class MarkupModalContent extends React.Component {
     }
     return (
       <p>
-        Live preview&nbsp;
         <Badge display="block" src={src} />
       </p>
     )
   }
 
-  renderMarkup() {
+  copyMarkup = ({ value: markupFormat } = { value: 'link' }) => {
     const {
       example: {
         example: { title },
@@ -77,30 +113,32 @@ export default class MarkupModalContent extends React.Component {
     const { link } = this.state
 
     const builtBadgeUrl = this.generateBuiltBadgeUrl()
-    const { markdown, reStructuredText, asciiDoc } = generateAllMarkup(
-      builtBadgeUrl,
+    const markup = generateMarkup({
+      badgeUrl: builtBadgeUrl,
       link,
-      title
-    )
+      title,
+      markupFormat,
+    })
+    console.log(markup)
+  }
 
+  renderMarkupAndLivePreview() {
     return (
       <div>
-        <p>
-          URL&nbsp;
-          <WeeSnippet snippet={builtBadgeUrl} />
-        </p>
-        <p>
-          Markdown&nbsp;
-          <WeeSnippet snippet={markdown} />
-        </p>
-        <p>
-          reStructuredText&nbsp;
-          <WeeSnippet snippet={reStructuredText} />
-        </p>
-        <p>
-          AsciiDoc&nbsp;
-          <WeeSnippet snippet={asciiDoc} />
-        </p>
+        {this.renderLivePreview()}
+        <MarkupFormatSelect
+          classNamePrefix="markup-format"
+          placeholder="Copy Badge URL"
+          value=""
+          onClick={() => {
+            console.log('foo')
+          }}
+          closeMenuOnScroll
+          menuPlacement="auto"
+          isSearchable={false}
+          onChange={this.copyMarkup}
+          options={markupOptions}
+        />
       </div>
     )
   }
@@ -159,8 +197,7 @@ export default class MarkupModalContent extends React.Component {
           exampleParams={queryParams}
           onChange={this.handleQueryStringChange}
         />
-        {this.renderLivePreview()}
-        {this.renderMarkup()}
+        <div>{this.renderMarkupAndLivePreview()}</div>
       </form>
     )
   }
