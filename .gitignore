@@ -1,4 +1,5 @@
 # Project-specific files
+/.vscode
 /Verdana.ttf
 /analytics.json
 /coverage.html
