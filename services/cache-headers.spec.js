@@ -162,8 +162,9 @@ describe('Cache header functions', function() {
       'when the If-Modified-Since header is after the process started',
       function() {
         it('returns true', function() {
+          const modifiedTimeStamp = new Date(Date.now() + 1800000)
           const req = httpMocks.createRequest({
-            headers: { 'If-Modified-Since': new Date().toGMTString() },
+            headers: { 'If-Modified-Since': modifiedTimeStamp.toISOString() },
           })
           expect(serverHasBeenUpSinceResourceCached(req)).to.equal(true)
         })
