@@ -301,6 +301,12 @@ should be included. They serve several purposes:
 There is a dedicated [tutorial for tests in the service-tests folder](service-tests.md).
 Please follow it to include tests on your pull-request.
 
+### (4.6) Update the Docs
+
+If your submission require an API token or authentication credentials, please
+update [server-secrets.md](./server-secrets.md). You should explain what the
+token or credentials are for and how to obtain them.
+
 ## (5) Create a Pull Request
 
 Once you have implemented a new badge:

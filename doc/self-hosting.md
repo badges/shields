@@ -125,34 +125,7 @@ Server secrets
 
 You can add your own server secrets in `private/secret.json`.
 
-Because of Github rate limits, you will need to provide a token, or else badges
-will stop working once you hit 60 requests per hour, the
-[unauthenticated rate limit][github rate limit].
-
-You can [create a personal access token][personal access tokens] through the
-Github website. When you create the token, you can choose to give read access
-to your repositories. If you do that, your self-hosted Shields installation
-will have access to your private repositories.
-
-```
-{
-  "gh_token": "..."
-}
-```
-
-When a `gh_token` is specified, it is used in place of the Shields token
-rotation logic.
-
-You can also give your self-hosted Shields installation access to private npm
-packages by [generating an npm token][npm token] and using that for the `npm_token` value.
-
-To integrate with Wheelmap.org, you can [sign into your account][wheelmap token] and use
-the _Authentication Token_ displayed on your profile page for the `wheelmap_token` value.
-
-[github rate limit]: https://developer.github.com/v3/#rate-limiting
-[personal access tokens]: https://github.com/settings/tokens
-[npm token]: https://docs.npmjs.com/getting-started/working_with_tokens
-[wheelmap token]: http://classic.wheelmap.org/en/users/sign_in
+These are documented in [server-secrets.md](./server-secrets.md)
 
 Separate frontend hosting
 -------------------------
