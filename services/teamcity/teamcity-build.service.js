@@ -1,59 +1,45 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const Joi = require('joi')
+const TeamCityBase = require('./teamcity-base')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-function teamcityBadge(
-  url,
-  buildId,
-  advanced,
-  format,
-  data,
-  sendBadge,
-  request
-) {
-  const apiUrl = `${url}/app/rest/builds/buildType:(id:${buildId})?guest=1`
-  const badgeData = getBadgeData('build', data)
-  request(
-    apiUrl,
-    { headers: { Accept: 'application/json' } },
-    (err, res, buffer) => {
-      if (err != null) {
-        badgeData.text[1] = 'inaccessible'
-        sendBadge(format, badgeData)
-        return
-      }
-      try {
-        const data = JSON.parse(buffer)
-        if (advanced)
-          badgeData.text[1] = (
-            data.statusText ||
-            data.status ||
-            ''
-          ).toLowerCase()
-        else badgeData.text[1] = (data.status || '').toLowerCase()
-        if (data.status === 'SUCCESS') {
-          badgeData.colorscheme = 'brightgreen'
-          badgeData.text[1] = 'passing'
-        } else {
-          badgeData.colorscheme = 'red'
-        }
-        sendBadge(format, badgeData)
-      } catch (e) {
-        badgeData.text[1] = 'invalid'
-        sendBadge(format, badgeData)
-      }
+const buildStatusRegex = /SUCCESS|FAILURE|ERROR/
+const buildStatusTextRegex = /^Success|Failure|Error|Tests( failed: \d+( \(\d+ new\))?)?(,)?( passed: \d+)?(,)?( ignored: \d+)?(,)?( muted: \d+)?$/
+const buildStatusSchema = Joi.object({
+  status: Joi.string()
+    .regex(buildStatusRegex)
+    .required(),
+  statusText: Joi.string()
+    .regex(buildStatusTextRegex)
+    .required(),
+}).required()
+
+module.exports = class TeamCityBuild extends TeamCityBase {
+  static render({ status, statusText, useVerbose }) {
+    let color = 'red'
+    let message = status.toLowerCase()
+
+    if (useVerbose) {
+      message = (statusText || status).toLowerCase()
     }
-  )
-}
 
-module.exports = class TeamcityBuild extends LegacyService {
+    if (status === 'SUCCESS') {
+      color = 'brightgreen'
+      message = 'passing'
+    }
+
+    return {
+      message,
+      color,
+    }
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'build',
+    }
+  }
+
   static get category() {
     return 'build'
   }
@@ -61,64 +47,69 @@ module.exports = class TeamcityBuild extends LegacyService {
   static get route() {
     return {
       base: 'teamcity',
+      format: '(?:codebetter|(http|https)/(.+)/(s|e))/([^/]+)',
+      capture: ['protocol', 'hostAndPath', 'verbosity', 'buildId'],
     }
   }
 
   static get examples() {
     return [
       {
-        title: 'TeamCity CodeBetter',
-        previewUrl: 'codebetter/bt428',
+        title: 'TeamCity Build Status (CodeBetter)',
+        pattern: 'codebetter/:buildId',
+        namedParams: {
+          buildId: 'bt428',
+        },
+        staticPreview: this.render({
+          status: 'SUCCESS',
+        }),
       },
       {
-        title: 'TeamCity (simple build status)',
-        previewUrl: 'http/teamcity.jetbrains.com/s/bt345',
+        title: 'TeamCity Simple Build Status',
+        pattern: ':protocol/:hostAndPath/s/:buildId',
+        namedParams: {
+          protocol: 'https',
+          hostAndPath: 'https/teamcity.jetbrains.com',
+          buildId: 'bt428',
+        },
+        staticPreview: this.render({
+          status: 'SUCCESS',
+        }),
       },
       {
-        title: 'TeamCity (full build status)',
-        previewUrl: 'http/teamcity.jetbrains.com/e/bt345',
+        title: 'TeamCity Full Build Status',
+        pattern: ':protocol/:hostAndPath/e/:buildId',
+        namedParams: {
+          protocol: 'https',
+          hostAndPath: 'https/teamcity.jetbrains.com',
+          buildId: 'bt345',
+        },
+        staticPreview: this.render({
+          status: 'SUCCESS',
+          statusText: 'Tests passed: 1103, ignored: 2',
+          useVerbose: true,
+        }),
+        keywords: ['test', 'test results'],
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    // Old url for CodeBetter TeamCity instance.
-    camp.route(
-      /^\/teamcity\/codebetter\/(.*)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const buildType = match[1] // eg, `bt428`.
-        const format = match[2]
-        teamcityBadge(
-          'http://teamcity.codebetter.com',
-          buildType,
-          false,
-          format,
-          data,
-          sendBadge,
-          request
-        )
-      })
-    )
-
-    // Generic TeamCity instance
-    camp.route(
-      /^\/teamcity\/(http|https)\/(.*)\/(s|e)\/(.*)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const scheme = match[1]
-        const serverUrl = match[2]
-        const advanced = match[3] === 'e'
-        const buildType = match[4] // eg, `bt428`.
-        const format = match[5]
-        teamcityBadge(
-          `${scheme}://${serverUrl}`,
-          buildType,
-          advanced,
-          format,
-          data,
-          sendBadge,
-          request
-        )
-      })
-    )
+  async handle({ protocol, hostAndPath, verbosity, buildId }) {
+    // JetBrains Docs: https://confluence.jetbrains.com/display/TCD18/REST+API#RESTAPI-BuildStatusIcon
+    const buildLocator = `buildType:(id:${buildId})`
+    const apiPath = `app/rest/builds/${encodeURIComponent(buildLocator)}`
+    const json = await this.fetch({
+      protocol,
+      hostAndPath,
+      apiPath,
+      schema: buildStatusSchema,
+    })
+    // If the verbosity is 'e' then the user has requested the verbose (full) build status.
+    const useVerbose = verbosity === 'e'
+    return this.constructor.render({
+      status: json.status,
+      statusText: json.statusText,
+      useVerbose,
+    })
   }
 }
