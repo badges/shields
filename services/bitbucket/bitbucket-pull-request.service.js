@@ -60,7 +60,7 @@ function pullRequestClassGenerator(raw) {
     }
 
     async fetch({ proto, hostAndPath, user, repo }) {
-      if (proto !== undefined && hostAndPath !== undefined) {
+      if (hostAndPath !== undefined) {
         return this.fetchServer({ proto, hostAndPath, user, repo })
       } else {
         return this.fetchCloud({ user, repo })
