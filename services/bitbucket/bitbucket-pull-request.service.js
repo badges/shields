@@ -15,19 +15,27 @@ function pullRequestClassGenerator(raw) {
   const badgeSuffix = raw ? '' : ' open'
 
   return class BitbucketPullRequests extends BaseJsonService {
-    async fetchCloud({ user, repo }) {
-      const url = `https://bitbucket.org/api/2.0/repositories/${user}/${repo}/pullrequests/`
-      return this._requestJson({
-        url,
-        schema: bitbucketPullRequestsSchema,
-        options: { qs: { state: 'OPEN', limit: 0 } },
-        errorMessages: { 403: 'private repo' },
-      })
+    async fetchCloud({ args, user, repo }) {
+      args.url = `https://bitbucket.org/api/2.0/repositories/${user}/${repo}/pullrequests/`
+      args.options = { qs: { state: 'OPEN', limit: 0 } }
+
+      if (
+        serverSecrets &&
+        serverSecrets.bitbucket_username &&
+        serverSecrets.bitbucket_password
+      ) {
+        args.options.auth = {
+          user: serverSecrets.bitbucket_username,
+          pass: serverSecrets.bitbucket_password,
+        }
+      }
+
+      return this._requestJson(args)
     }
 
-    async fetchServer({ proto, hostAndPath, user, repo }) {
-      const url = `${proto}://${hostAndPath}/rest/api/1.0/projects/${user}/repos/${repo}/pull-requests`
-      const options = {
+    async fetchServer({ args, proto, hostAndPath, user, repo }) {
+      args.url = `${proto}://${hostAndPath}/rest/api/1.0/projects/${user}/repos/${repo}/pull-requests`
+      args.options = {
         qs: {
           state: 'OPEN',
           limit: 100,
@@ -41,29 +49,29 @@ function pullRequestClassGenerator(raw) {
         serverSecrets.bitbucket_server_username &&
         serverSecrets.bitbucket_server_password
       ) {
-        options.auth = {
+        args.options.auth = {
           user: serverSecrets.bitbucket_server_username,
           pass: serverSecrets.bitbucket_server_password,
         }
       }
 
-      return this._requestJson({
-        url,
-        schema: bitbucketPullRequestsSchema,
-        options,
-        errorMessages: {
-          401: 'Authentication Required',
-          403: 'Private Repo',
-          404: 'Repo Not Found',
-        },
-      })
+      return this._requestJson(args)
     }
 
     async fetch({ proto, hostAndPath, user, repo }) {
+      const args = {
+        schema: bitbucketPullRequestsSchema,
+        errorMessages: {
+          401: 'invalid credentials',
+          403: 'private repo',
+          404: 'not found',
+        },
+      }
+
       if (hostAndPath !== undefined) {
-        return this.fetchServer({ proto, hostAndPath, user, repo })
+        return this.fetchServer({ args, proto, hostAndPath, user, repo })
       } else {
-        return this.fetchCloud({ user, repo })
+        return this.fetchCloud({ args, user, repo })
       }
     }
 
