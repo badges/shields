@@ -85,8 +85,8 @@ module.exports = class TeamCityBuild extends TeamCityBase {
           buildId: 'bt345',
         },
         staticPreview: this.render({
-          status: 'SUCCESS',
-          statusText: 'Tests passed: 1103, ignored: 2',
+          status: 'FAILURE',
+          statusText: 'Tests failed: 4, passed: 1103, ignored: 2',
           useVerbose: true,
         }),
         keywords: ['test', 'test results'],
