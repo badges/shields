@@ -49,11 +49,15 @@ const markupOptions = [
 ]
 
 class GetMarkupButton extends React.PureComponent {
+  selectRef = React.createRef()
+
   onPlaceholderClick = () => {
+    const { selectRef } = this
     const { onMarkupRequested } = this.props
     if (onMarkupRequested) {
       onMarkupRequested('link')
     }
+    selectRef.current.blur()
   }
 
   onOptionClick = ({ value: markupFormat }) => {
@@ -66,12 +70,14 @@ class GetMarkupButton extends React.PureComponent {
   render() {
     return (
       <MarkupFormatSelect
+        ref={this.selectRef}
         options={markupOptions}
         placeholder="Copy Badge URL"
         value=""
         closeMenuOnScroll
         openMenuOnFocus={false}
         openMenuOnClick={false}
+        blurInputOnSelect
         menuPlacement="auto"
         isSearchable={false}
         onPlaceholderClick={this.onPlaceholderClick}
