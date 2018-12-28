@@ -99,13 +99,21 @@ function pullRequestClassGenerator(raw) {
       return [
         {
           title: 'Bitbucket open pull requests',
-          exampleUrl: 'atlassian/python-bitbucket',
+          namedParams: {
+            user: 'atlassian',
+            repo: 'python-bitbucket',
+          },
           pattern: ':user/:repo',
           staticExample: this.render({ prs: 22 }),
         },
         {
           title: 'Bitbucket Server open pull requests',
-          exampleUrl: 'https/bitbucket.mydomain.net/foo/bar',
+          namedParams: {
+            proto: 'https',
+            hostAndPath: 'bitbucket.mydomain.net',
+            user: 'foo',
+            repo: 'bar',
+          },
           pattern: ':proto/:hostAndPath/:user/:repo',
           staticExample: this.render({ prs: 42 }),
         },
