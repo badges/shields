@@ -3,6 +3,13 @@
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const {
+  mockBitbucketCreds,
+  mockBitbucketServerCreds,
+  restore,
+  user,
+  pass,
+} = require('./bitbucket-test-helpers')
+const {
   isBuildStatus,
   isMetric,
   isMetricOpenIssues,
@@ -165,6 +172,39 @@ t.create('pr (server, not found)')
     })
   )
 
+t.create('pr (auth)')
+  .before(mockBitbucketCreds)
+  .get('/pr/atlassian/python-bitbucket.json')
+  .intercept(nock =>
+    nock('https://bitbucket.org/api/2.0/repositories/')
+      .get(/.*/)
+      .basicAuth({ user, pass })
+      .reply(200, { size: 42 })
+  )
+  .finally(restore)
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'pull requests',
+      value: isMetricOpenIssues,
+    })
+  )
+
+t.create('pr (server, auth)')
+  .before(mockBitbucketServerCreds)
+  .get('/pr/https/bitbucket.mydomain.net/project/repo.json')
+  .intercept(nock =>
+    nock('https://bitbucket.mydomain.net/rest/api/1.0/projects')
+      .get(/.*/)
+      .basicAuth({ user, pass })
+      .reply(200, { size: 42 })
+  )
+  .finally(restore)
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'pull requests',
+      value: isMetricOpenIssues,
+    })
+  )
 // tests for Bitbucket Pipelines
 
 function bitbucketApiResponse(status) {
