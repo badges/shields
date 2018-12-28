@@ -4,7 +4,7 @@ const { expect } = require('chai')
 const sinon = require('sinon')
 const Camp = require('camp')
 const fetch = require('node-fetch')
-const config = require('../../../lib/test-config')
+const portfinder = require('portfinder')
 const serverSecrets = require('../../../lib/server-secrets')
 const { setRoutes } = require('./admin')
 
@@ -34,16 +34,20 @@ describe('GitHub admin route', function() {
     sandbox.restore()
   })
 
-  const baseUrl = `http://127.0.0.1:${config.port}`
+  let port, baseUrl
+  before(async function() {
+    port = await portfinder.getPortPromise()
+    baseUrl = `http://127.0.0.1:${port}`
+  })
 
   let camp
-  before(function(done) {
-    camp = Camp.start({ port: config.port, hostname: '::' })
-    camp.on('listening', () => done())
+  before(async function() {
+    camp = Camp.start({ port, hostname: '::' })
+    await new Promise(resolve => camp.on('listening', () => resolve()))
   })
-  after(function(done) {
+  after(async function() {
     if (camp) {
-      camp.close(() => done())
+      await new Promise(resolve => camp.close(resolve))
       camp = undefined
     }
   })
