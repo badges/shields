@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Select from 'react-select'
+import Select, { components } from 'react-select'
 import { staticBadgeUrl } from '../../lib/badge-url'
 import { generateMarkup } from '../../lib/generate-image-markup'
 import { Snippet2 } from '../snippet'
@@ -28,6 +28,15 @@ const markupOptions = [
   { value: 'html', label: 'Copy HTML' },
 ]
 
+const ClickablePlaceholder = props => (
+  <components.Placeholder
+    {...props}
+    innerProps={{
+      onClick: props.selectProps.onPlaceholderClick,
+    }}
+  />
+)
+
 const MarkupFormatSelect = styled(Select)`
   width: 200px;
 
@@ -47,7 +56,7 @@ const MarkupFormatSelect = styled(Select)`
   }
 
   .markup-format__placeholder {
-    color: hsl(120, 0%, 90%);
+    color: hsl(120, 0%, 95%);
   }
 
   .markup-format__option {
@@ -104,7 +113,7 @@ export default class MarkupModalContent extends React.Component {
     )
   }
 
-  copyMarkup = ({ value: markupFormat } = { value: 'link' }) => {
+  copyMarkup = ({ value: markupFormat }) => {
     const {
       example: {
         example: { title },
@@ -127,17 +136,20 @@ export default class MarkupModalContent extends React.Component {
       <div>
         {this.renderLivePreview()}
         <MarkupFormatSelect
-          classNamePrefix="markup-format"
+          options={markupOptions}
           placeholder="Copy Badge URL"
           value=""
-          onClick={() => {
-            console.log('foo')
-          }}
           closeMenuOnScroll
+          openMenuOnFocus={false}
+          openMenuOnClick={false}
           menuPlacement="auto"
           isSearchable={false}
           onChange={this.copyMarkup}
-          options={markupOptions}
+          onPlaceholderClick={() => this.copyMarkup({ value: 'link' })}
+          classNamePrefix="markup-format"
+          components={{
+            Placeholder: ClickablePlaceholder,
+          }}
         />
       </div>
     )
@@ -184,6 +196,7 @@ export default class MarkupModalContent extends React.Component {
         example: { pattern, namedParams, queryParams },
       },
     } = this.props
+
     return (
       <form action="">
         <H3>{title}</H3>
