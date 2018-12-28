@@ -2,6 +2,7 @@
 
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
+const serverSecrets = require('../../lib/server-secrets')
 const { metric } = require('../../lib/text-formatters')
 const { nonNegativeInteger } = require('../validators')
 
@@ -14,7 +15,7 @@ function pullRequestClassGenerator(raw) {
   const badgeSuffix = raw ? '' : ' open'
 
   return class BitbucketPullRequests extends BaseJsonService {
-    async fetch({ user, repo }) {
+    async fetchCloud({ user, repo }) {
       const url = `https://bitbucket.org/api/2.0/repositories/${user}/${repo}/pullrequests/`
       return this._requestJson({
         url,
@@ -24,6 +25,48 @@ function pullRequestClassGenerator(raw) {
       })
     }
 
+    async fetchServer({ proto, hostAndPath, user, repo }) {
+      const url = `${proto}://${hostAndPath}/rest/api/1.0/projects/${user}/repos/${repo}/pull-requests`
+      const options = {
+        qs: {
+          state: 'OPEN',
+          limit: 100,
+          withProperties: false,
+          withAttributes: false,
+        },
+      }
+
+      if (
+        serverSecrets &&
+        serverSecrets.bitbucket_server_username &&
+        serverSecrets.bitbucket_server_password
+      ) {
+        options.auth = {
+          user: serverSecrets.bitbucket_server_username,
+          pass: serverSecrets.bitbucket_server_password,
+        }
+      }
+
+      return this._requestJson({
+        url,
+        schema: bitbucketPullRequestsSchema,
+        options,
+        errorMessages: {
+          401: 'Authentication Required',
+          403: 'Private Repo',
+          404: 'Repo Not Found',
+        },
+      })
+    }
+
+    async fetch({ proto, hostAndPath, user, repo }) {
+      if (proto !== undefined && hostAndPath !== undefined) {
+        return this.fetchServer({ proto, hostAndPath, user, repo })
+      } else {
+        return this.fetchCloud({ user, repo })
+      }
+    }
+
     static render({ prs }) {
       return {
         message: `${metric(prs)}${badgeSuffix}`,
@@ -31,8 +74,8 @@ function pullRequestClassGenerator(raw) {
       }
     }
 
-    async handle({ user, repo }) {
-      const data = await this.fetch({ user, repo })
+    async handle({ proto, hostAndPath, user, repo }) {
+      const data = await this.fetch({ proto, hostAndPath, user, repo })
       return this.constructor.render({ prs: data.size })
     }
 
@@ -47,8 +90,8 @@ function pullRequestClassGenerator(raw) {
     static get route() {
       return {
         base: `bitbucket/${routePrefix}`,
-        format: '([^/]+)/([^/]+)',
-        capture: ['user', 'repo'],
+        format: `(?:(http|https)/(.+)/)?([^/]+)/([^/]+)`,
+        capture: ['proto', 'hostAndPath', 'user', 'repo'],
       }
     }
 
@@ -59,6 +102,12 @@ function pullRequestClassGenerator(raw) {
           exampleUrl: 'atlassian/python-bitbucket',
           pattern: ':user/:repo',
           staticExample: this.render({ prs: 22 }),
+        },
+        {
+          title: 'Bitbucket Server open pull requests',
+          exampleUrl: 'https/bitbucket.mydomain.net/foo/bar',
+          pattern: ':proto/:hostAndPath/:user/:repo',
+          staticExample: this.render({ prs: 42 }),
         },
       ]
     }

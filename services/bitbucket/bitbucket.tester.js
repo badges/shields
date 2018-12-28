@@ -85,6 +85,26 @@ t.create('pr (private repo)')
   .get('/pr/chris48s/example-private-repo.json')
   .expectJSON({ name: 'pull requests', value: 'private repo' })
 
+t.create('pr (server)')
+  .get('/pr/https/bitbucket.mydomain.net/project/repo.json')
+  .intercept(nock =>
+    nock('https://bitbucket.mydomain.net/rest/api/1.0/projects')
+      .get('/project/repos/repo/pull-requests')
+      .query({
+        state: 'OPEN',
+        limit: 100,
+        withProperties: false,
+        withAttributes: false,
+      })
+      .reply(200, { size: 42 })
+  )
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'pull requests',
+      value: isMetricOpenIssues,
+    })
+  )
+
 // tests for Bitbucket Pipelines
 
 function bitbucketApiResponse(status) {
