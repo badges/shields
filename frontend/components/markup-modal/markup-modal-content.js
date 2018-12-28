@@ -8,6 +8,7 @@ import { Snippet2 } from '../snippet'
 import { H3, Badge } from '../common'
 import PathBuilder from './path-builder'
 import QueryStringBuilder from './query-string-builder'
+import RequestMarkupButtom from './request-markup-button'
 
 const WeeSnippet = ({ snippet }) => (
   <Snippet2 truncate fontSize="10pt" snippet={snippet} />
@@ -19,50 +20,6 @@ WeeSnippet.propTypes = {
 const Documentation = styled.div`
   max-width: 800px;
   margin: 35px auto 20px;
-`
-
-const markupOptions = [
-  { value: 'markdown', label: 'Copy Markdown' },
-  { value: 'rst', label: 'Copy reStructuredText' },
-  { value: 'asciidoc', label: 'Copy AsciiDoc' },
-  { value: 'html', label: 'Copy HTML' },
-]
-
-const ClickablePlaceholder = props => (
-  <components.Placeholder
-    {...props}
-    innerProps={{
-      onClick: props.selectProps.onPlaceholderClick,
-    }}
-  />
-)
-
-const MarkupFormatSelect = styled(Select)`
-  width: 200px;
-
-  margin-left: auto;
-  margin-right: auto;
-
-  font-weight: 700;
-
-  .markup-format__control {
-    background-color: #2684ff;
-    border-width: 0;
-    box-shadow: unset;
-  }
-
-  .markup-format__value-container {
-    cursor: copy;
-  }
-
-  .markup-format__placeholder {
-    color: hsl(120, 0%, 95%);
-  }
-
-  .markup-format__option {
-    text-align: left;
-    cursor: copy;
-  }
 `
 
 export default class MarkupModalContent extends React.Component {
@@ -113,7 +70,7 @@ export default class MarkupModalContent extends React.Component {
     )
   }
 
-  copyMarkup = ({ value: markupFormat }) => {
+  copyMarkup = markupFormat => {
     const {
       example: {
         example: { title },
@@ -135,22 +92,7 @@ export default class MarkupModalContent extends React.Component {
     return (
       <div>
         {this.renderLivePreview()}
-        <MarkupFormatSelect
-          options={markupOptions}
-          placeholder="Copy Badge URL"
-          value=""
-          closeMenuOnScroll
-          openMenuOnFocus={false}
-          openMenuOnClick={false}
-          menuPlacement="auto"
-          isSearchable={false}
-          onChange={this.copyMarkup}
-          onPlaceholderClick={() => this.copyMarkup({ value: 'link' })}
-          classNamePrefix="markup-format"
-          components={{
-            Placeholder: ClickablePlaceholder,
-          }}
-        />
+        <RequestMarkupButtom onMarkupRequested={this.copyMarkup} />
       </div>
     )
   }
