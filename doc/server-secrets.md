@@ -96,8 +96,9 @@ Create an account, sign in and obtain a uuid and token from your
 
 * `sonarqube_token`
 
-Provide a token to give your self-hosted Shields installation access to a
-private SonarQube instance.
+[Generate a token](https://docs.sonarqube.org/latest/user-guide/user-token/)
+to give your self-hosted Shields installation access to a
+private SonarQube instance or private project on a public instance.
 
 ## Wheelmap
 
