@@ -43,6 +43,10 @@ rotation logic.
 * `gh_client_id`
 * `gh_client_secret`
 
+These settings are used by shields.io for GitHub OAuth app authorization
+but will not be necessary for most self-hosted installations. See
+[production-hosting.md](./production-hosting.md).
+
 ## Jenkins CI
 
 * `jenkins_user`
