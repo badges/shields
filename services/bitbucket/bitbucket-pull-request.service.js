@@ -33,6 +33,7 @@ function pullRequestClassGenerator(raw) {
       return this._requestJson(args)
     }
 
+    // https://docs.atlassian.com/bitbucket-server/rest/5.16.0/bitbucket-rest.html#idm46229602363312
     async fetchServer({ args, proto, hostAndPath, user, repo }) {
       args.url = `${proto}://${hostAndPath}/rest/api/1.0/projects/${user}/repos/${repo}/pull-requests`
       args.options = {
