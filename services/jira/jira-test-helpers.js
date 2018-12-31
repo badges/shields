@@ -7,10 +7,10 @@ const user = 'admin'
 const pass = 'password'
 
 function mockJiraCreds() {
-  serverSecrets['jira_username'] = undefined
-  serverSecrets['jira_password'] = undefined
-  sinon.stub(serverSecrets, 'jira_username').value(user)
-  sinon.stub(serverSecrets, 'jira_password').value(pass)
+  serverSecrets['jira_user'] = undefined
+  serverSecrets['jira_pass'] = undefined
+  sinon.stub(serverSecrets, 'jira_user').value(user)
+  sinon.stub(serverSecrets, 'jira_pass').value(pass)
 }
 
 function restore() {

@@ -7,17 +7,17 @@ const user = 'admin'
 const pass = 'password'
 
 function mockBitbucketCreds() {
-  serverSecrets['bitbucket_username'] = undefined
-  serverSecrets['bitbucket_password'] = undefined
-  sinon.stub(serverSecrets, 'bitbucket_username').value(user)
-  sinon.stub(serverSecrets, 'bitbucket_password').value(pass)
+  serverSecrets['bitbucket_user'] = undefined
+  serverSecrets['bitbucket_pass'] = undefined
+  sinon.stub(serverSecrets, 'bitbucket_user').value(user)
+  sinon.stub(serverSecrets, 'bitbucket_pass').value(pass)
 }
 
 function mockBitbucketServerCreds() {
-  serverSecrets['bitbucket_server_username'] = undefined
-  serverSecrets['bitbucket_server_password'] = undefined
-  sinon.stub(serverSecrets, 'bitbucket_server_username').value(user)
-  sinon.stub(serverSecrets, 'bitbucket_server_password').value(pass)
+  serverSecrets['bitbucket_server_user'] = undefined
+  serverSecrets['bitbucket_server_pass'] = undefined
+  sinon.stub(serverSecrets, 'bitbucket_server_user').value(user)
+  sinon.stub(serverSecrets, 'bitbucket_server_pass').value(pass)
 }
 
 function restore() {

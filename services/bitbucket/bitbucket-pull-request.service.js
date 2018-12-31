@@ -21,12 +21,12 @@ function pullRequestClassGenerator(raw) {
 
       if (
         serverSecrets &&
-        serverSecrets.bitbucket_username &&
-        serverSecrets.bitbucket_password
+        serverSecrets.bitbucket_user &&
+        serverSecrets.bitbucket_pass
       ) {
         args.options.auth = {
-          user: serverSecrets.bitbucket_username,
-          pass: serverSecrets.bitbucket_password,
+          user: serverSecrets.bitbucket_user,
+          pass: serverSecrets.bitbucket_pass,
         }
       }
 
@@ -46,12 +46,12 @@ function pullRequestClassGenerator(raw) {
 
       if (
         serverSecrets &&
-        serverSecrets.bitbucket_server_username &&
-        serverSecrets.bitbucket_server_password
+        serverSecrets.bitbucket_server_user &&
+        serverSecrets.bitbucket_server_pass
       ) {
         args.options.auth = {
-          user: serverSecrets.bitbucket_server_username,
-          pass: serverSecrets.bitbucket_server_password,
+          user: serverSecrets.bitbucket_server_user,
+          pass: serverSecrets.bitbucket_server_pass,
         }
       }
 
