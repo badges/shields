@@ -16,7 +16,10 @@ module.exports = class BStatsServers extends BaseJsonService {
   }
 
   static get defaultBadgeData() {
-    return { label: 'servers' }
+    return {
+      label: 'servers',
+      color: 'blue',
+    }
   }
 
   async handle({ pluginid }) {
@@ -33,13 +36,9 @@ module.exports = class BStatsServers extends BaseJsonService {
 
   static render({ servers }) {
     return {
-      label: 'servers',
       message: servers,
-      color: 'blue',
     }
   }
-
-  // Front page
 
   static get category() {
     return 'other'
@@ -48,13 +47,10 @@ module.exports = class BStatsServers extends BaseJsonService {
     return [
       {
         title: 'bStats Servers',
-        exampleUrl: '1',
-        pattern: ':pluginid',
-        staticPreview: {
-          label: 'servers',
-          color: 'blue',
-          message: 57479,
+        namedParams: {
+          pluginid: '1',
         },
+        staticPreview: this.render({ servers: 57479 }),
       },
     ]
   }
