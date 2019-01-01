@@ -80,7 +80,7 @@ export default class MarkupModal extends React.Component {
     let urlsForProps, link
     if (props.example) {
       urlsForProps = MarkupModal.urlsForProps(props)
-      // https://github.com/yannickcr/eslint-plugin-react/pull/2099
+      // https://github.com/yannickcr/eslint-plugin-react/issues/2101
       // eslint-disable-next-line react/prop-types
       link = props.example.example.link
     } else {
