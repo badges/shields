@@ -4,11 +4,11 @@ const Joi = require('joi')
 const jp = require('jsonpath')
 const BaseJsonService = require('../base-json')
 const { InvalidResponse } = require('../errors')
+const { renderDynamicBadge } = require('../dynamic-common')
 const {
   createRoute,
   queryParamSchema,
   errorMessages,
-  renderDynamicBadge,
 } = require('./dynamic-helpers')
 
 module.exports = class DynamicJson extends BaseJsonService {
@@ -46,6 +46,6 @@ module.exports = class DynamicJson extends BaseJsonService {
       throw new InvalidResponse({ prettyMessage: 'no result' })
     }
 
-    return renderDynamicBadge({ values, prefix, suffix })
+    return renderDynamicBadge({ value: values, prefix, suffix })
   }
 }

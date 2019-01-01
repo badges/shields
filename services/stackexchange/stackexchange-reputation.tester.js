@@ -2,8 +2,8 @@
 
 const Joi = require('joi')
 const { isMetric } = require('../test-validators')
-const t = require('../create-service-tester')()
-module.exports = t
+
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('Invalid parameters')
   .get('/stackoverflow/r/invalidimage.json')

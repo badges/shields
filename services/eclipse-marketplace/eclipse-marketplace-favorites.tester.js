@@ -3,12 +3,11 @@
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 
-const t = new ServiceTester({
+const t = (module.exports = new ServiceTester({
   id: 'eclipse-marketplace-favorites',
   title: 'EclipseMarketplaceFavorites',
   pathPrefix: '/eclipse-marketplace',
-})
-module.exports = t
+}))
 
 t.create('favorites count')
   .get('/favorites/notepad4e.json')

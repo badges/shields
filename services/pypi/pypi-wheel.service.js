@@ -20,7 +20,9 @@ module.exports = class PypiWheel extends PypiBase {
     return [
       {
         title: 'PyPI - Wheel',
-        previewUrl: 'Django',
+        pattern: ':packageName',
+        namedParams: { packageName: 'Django' },
+        staticPreview: this.render({ hasWheel: true }),
         keywords: ['python'],
       },
     ]

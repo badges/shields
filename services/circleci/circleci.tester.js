@@ -4,8 +4,10 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isBuildStatus } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'circleci', title: 'Circle CI' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'circleci',
+  title: 'Circle CI',
+}))
 
 t.create('circle ci (valid, without branch)')
   .get('/project/github/RedSparr0w/node-csgo-parser.json')

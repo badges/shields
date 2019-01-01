@@ -11,6 +11,12 @@ const {
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class GithubCommitActivity extends LegacyService {
   static get category() {
     return 'activity'
@@ -26,7 +32,13 @@ module.exports = class GithubCommitActivity extends LegacyService {
     return [
       {
         title: 'GitHub commit activity the past week, 4 weeks, year',
-        previewUrl: 'y/eslint/eslint',
+        pattern: 'y/:user/:repo',
+        namedParams: { user: 'eslint', repo: 'eslint' },
+        staticPreview: {
+          label: 'commit activity',
+          message: '457/year',
+          color: 'blue',
+        },
         keywords: ['GitHub', 'commit', 'commits', 'activity'],
         documentation,
       },

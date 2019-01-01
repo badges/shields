@@ -1,11 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const createServiceTester = require('../create-service-tester')
 const { isBuildStatus } = require('../test-validators')
 
-const t = createServiceTester()
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('build status on default branch')
   .get('/git-hub/doctrine/dbal.json')

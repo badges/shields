@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { dynamicBadgeUrl } from '../lib/badge-url'
+import { InlineInput } from './common'
 
 export default class DynamicBadgeMaker extends React.Component {
   static propTypes = {
@@ -52,49 +53,42 @@ export default class DynamicBadgeMaker extends React.Component {
           <option value="xml">xml</option>
           <option value="yaml">yaml</option>
         </select>{' '}
-        {}
-        <input
+        <InlineInput
           className="short"
           value={this.state.label}
           onChange={event => this.setState({ label: event.target.value })}
           placeholder="label"
-        />{' '}
-        {}
-        <input
+        />
+        <InlineInput
           className="short"
           value={this.state.url}
           onChange={event => this.setState({ url: event.target.value })}
           placeholder="url"
-        />{' '}
-        {}
-        <input
+        />
+        <InlineInput
           className="short"
           value={this.state.query}
           onChange={event => this.setState({ query: event.target.value })}
           placeholder="query"
-        />{' '}
-        {}
-        <input
+        />
+        <InlineInput
           className="short"
           value={this.state.color}
           onChange={event => this.setState({ color: event.target.value })}
           placeholder="color"
-        />{' '}
-        {}
-        <input
+        />
+        <InlineInput
           className="short"
           value={this.state.prefix}
           onChange={event => this.setState({ prefix: event.target.value })}
           placeholder="prefix"
-        />{' '}
-        {}
-        <input
+        />
+        <InlineInput
           className="short"
           value={this.state.suffix}
           onChange={event => this.setState({ suffix: event.target.value })}
           placeholder="suffix"
-        />{' '}
-        {}
+        />
         <button disabled={!this.isValid}>Make Badge</button>
       </form>
     )

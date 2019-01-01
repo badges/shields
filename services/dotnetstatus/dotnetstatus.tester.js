@@ -2,8 +2,10 @@
 
 const ServiceTester = require('../service-tester')
 
-const t = new ServiceTester({ id: 'dotnetstatus', title: 'dotnet-status' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'dotnetstatus',
+  title: 'dotnet-status',
+}))
 
 t.create('no longer available (previously get package status)')
   .get('/gh/jaredcnance/dotnet-status/API.json')

@@ -4,8 +4,7 @@ const Joi = require('joi')
 const { expect } = require('chai')
 const { colorScheme: colorsB } = require('../test-helpers')
 
-const t = require('../create-service-tester')()
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('Connection error')
   .get(
@@ -53,7 +52,7 @@ t.create('JSON from url')
   .expectJSON({
     name: 'custom badge',
     value: 'shields.io',
-    colorB: colorsB.brightgreen,
+    colorB: colorsB.blue,
   })
 
 t.create('JSON from uri (support uri query paramater)')
@@ -63,7 +62,7 @@ t.create('JSON from uri (support uri query paramater)')
   .expectJSON({
     name: 'custom badge',
     value: 'shields.io',
-    colorB: colorsB.brightgreen,
+    colorB: colorsB.blue,
   })
 
 t.create('JSON from url | multiple results')

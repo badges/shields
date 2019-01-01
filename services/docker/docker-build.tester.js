@@ -1,13 +1,11 @@
 'use strict'
 
 const Joi = require('joi')
-const createServiceTester = require('../create-service-tester')
 const { colorScheme: colorsB } = require('../test-helpers')
 const { dockerBlue } = require('./docker-helpers')
 const { isBuildStatus } = require('../test-validators')
 
-const t = createServiceTester()
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('docker build status (valid, user)')
   .get('/jrottenberg/ffmpeg.json')
