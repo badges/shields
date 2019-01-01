@@ -2,32 +2,20 @@
 
 const Joi = require('joi')
 
+// const t = (module.exports = require('../create-service-tester')())
 const ServiceTester = require('../service-tester')
 const t = (module.exports = new ServiceTester({
   id: 'bstats',
-  title: 'bStats badges',
+  title: 'bStats',
 }))
 
-const withRegex = re => Joi.string().regex(re)
+const { isNumber } = require('../test-validators')
 
-const isNumber = withRegex(/^[-+]?\d+$/)
-
-// Players Test
 t.create('Players')
   .get('/players/1.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'players',
-      value: isNumber,
-    })
-  )
-
-// Servers Test
-t.create('Servers')
-  .get('/servers/1.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'servers',
       value: isNumber,
     })
   )

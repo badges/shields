@@ -12,6 +12,8 @@ const { semver: isSemver } = require('./validators')
 
 const withRegex = re => Joi.string().regex(re)
 
+const isNumber = withRegex(/^[-+]?\d+$/)
+
 const isVPlusTripleDottedVersion = withRegex(/^v[0-9]+.[0-9]+.[0-9]+$/)
 
 const isVPlusDottedVersionAtLeastOne = withRegex(/^v\d+(\.\d+)?(\.\d+)?$/)
@@ -129,5 +131,6 @@ module.exports = {
   isFormattedDate,
   isDependencyState,
   isBuildStatus,
+  isNumber,
   withRegex,
 }
