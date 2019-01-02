@@ -166,7 +166,7 @@
     "mocha-env-reporter": "^3.0.0",
     "mocha-junit-reporter": "^1.18.0",
     "mocha-yaml-loader": "^1.0.3",
-    "next": "^6.1.1",
+    "next": "^7.0.2",
     "nock": "11.0.0-beta.2",
     "node-fetch": "^2.3.0",
     "node-mocks-http": "^1.7.3",
