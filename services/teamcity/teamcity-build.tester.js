@@ -12,7 +12,7 @@ const {
 } = require('./teamcity-test-helpers')
 const t = (module.exports = require('../create-service-tester')())
 
-const buildStatusValues = Joi.equal('passing', 'failure', 'error')
+const buildStatusValues = Joi.equal('passing', 'failure', 'error').required()
 const buildStatusTextRegex = /^success|failure|error|tests( failed: \d+( \(\d+ new\))?)?(,)?( passed: \d+)?(,)?( ignored: \d+)?(,)?( muted: \d+)?$/
 
 t.create('live: codebetter unknown build')
