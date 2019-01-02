@@ -1,9 +1,8 @@
 import { test, given } from 'sazerac'
-import {
+import generateAllMarkup, {
   markdown,
   reStructuredText,
   asciiDoc,
-  default as generateAllMarkup,
 } from './generate-image-markup'
 
 test(markdown, () => {
