@@ -26,3 +26,13 @@ t.create('role downloads (valid)')
 t.create('role downloads (not found)')
   .get('/role/d/does-not-exist.json')
   .expectJSON({ name: 'role downloads', value: 'not found' })
+
+t.create('quality score (valid)')
+  .get('/content/q/432')
+  .expectJSONTypes(
+    Joi.object().keys({ name: 'role downloads', value: isMetric })
+  )
+
+t.create('quality score (not found)')
+  .get('/content/q/0')
+  .expectJSON({ name: 'role downloads', value: 'not found' })
