@@ -5,30 +5,30 @@ const BaseXmlService = require('../base-xml')
 const serverSecrets = require('../../lib/server-secrets')
 
 const violationSchema = Joi.object({
-  severity: Joi.string()
-    .regex(/info|minor|major|critical/)
-    .required(),
+  severity: Joi.equal('info', 'minor', 'major', 'critical').required(),
 }).required()
 
 const schema = Joi.object({
   project: Joi.object({
     'last-analysis': Joi.object({
-      status: Joi.string()
-        .regex(/ordered|running|measured|analyzed|finished/)
-        .required(),
-      grade: Joi.string().regex(/platinum|gold|silver|bronze|none/),
+      status: Joi.equal(
+        'ordered',
+        'running',
+        'measured',
+        'analyzed',
+        'finished'
+      ).required(),
+      grade: Joi.equal('platinum', 'gold', 'silver', 'bronze', 'none'),
       violations: Joi.object({
         // RE: https://github.com/NaturalIntelligence/fast-xml-parser/issues/68
         // The BaseXmlService uses the fast-xml-parser which doesn't support forcing
         // the xml nodes to always be parsed as an array. Currently, if the response
         // only contains a single violation then it will be parsed as an object,
         // otherwise it will be parsed as an array.
-        violation: [
-          violationSchema,
-          Joi.array()
-            .items(violationSchema)
-            .required(),
-        ],
+        violation: Joi.array()
+          .items(violationSchema)
+          .single()
+          .required(),
       }),
     }),
   }).required(),
@@ -49,8 +49,9 @@ module.exports = class SymfonyInsight extends BaseXmlService {
   }) {
     if (status !== 'finished') {
       return {
+        label: metric,
         message: 'pending',
-        color: 'grey',
+        color: 'lightgrey',
       }
     }
 
@@ -84,6 +85,7 @@ module.exports = class SymfonyInsight extends BaseXmlService {
     }
 
     return {
+      label: 'grade',
       message,
       color,
     }
@@ -98,6 +100,7 @@ module.exports = class SymfonyInsight extends BaseXmlService {
   }) {
     if (numViolations === 0) {
       return {
+        label: 'violations',
         message: '0',
         color: 'brightgreen',
       }
@@ -123,8 +126,15 @@ module.exports = class SymfonyInsight extends BaseXmlService {
     }
 
     return {
+      label: 'violations',
       message: violationSummary.join(', '),
       color,
+    }
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'symfony insight',
     }
   }
 
@@ -141,12 +151,6 @@ module.exports = class SymfonyInsight extends BaseXmlService {
       // supporting the new/current path.
       format: '(?:sensiolabs/i|symfony/i/(grade|violations))/([^/]+)',
       capture: ['metric', 'projectUuid'],
-    }
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'checks',
     }
   }
 
@@ -169,7 +173,7 @@ module.exports = class SymfonyInsight extends BaseXmlService {
         namedParams: {
           projectUuid: '45afb680-d4e6-4e66-93ea-bcfa79eb8a87',
         },
-        staticPreview: this.renderGradeBadge({
+        staticPreview: this.renderViolationsBadge({
           numViolations: 0,
         }),
         keywords,

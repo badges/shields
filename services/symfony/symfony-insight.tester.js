@@ -25,7 +25,6 @@ const {
   multipleViolations,
 } = require('./symfony-test-helpers')
 
-const gradeRegex = /platinum|gold|silver|bronze|no medal/
 const sampleProjectUuid = '45afb680-d4e6-4e66-93ea-bcfa79eb8a87'
 
 t.create('live: valid project grade')
@@ -39,8 +38,14 @@ t.create('live: valid project grade')
   )
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'checks',
-      value: withRegex(gradeRegex),
+      name: 'grade',
+      value: Joi.equal(
+        'platinum',
+        'gold',
+        'silver',
+        'bronze',
+        'no medal'
+      ).required(),
     })
   )
 
@@ -55,7 +60,7 @@ t.create('live: valid project violations')
   )
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'checks',
+      name: 'violations',
       value: withRegex(
         /\d* critical|\d* critical, \d* major|\d* critical, \d* major, \d* minor|\d* critical, \d* major, \d* minor, \d* info|\d* critical, \d* minor|\d* critical, \d* info|\d* major|\d* major, \d* minor|\d* major, \d* minor, \d* info|\d* major, \d* info|\d* minor|\d* minor, \d* info/
       ),
@@ -71,7 +76,7 @@ t.create('live: nonexistent project')
       .reply(404)
   )
   .expectJSON({
-    name: 'checks',
+    name: 'symfony insight',
     value: 'project not found',
   })
 
@@ -83,7 +88,7 @@ t.create('404 project not found grade')
       .reply(404)
   )
   .expectJSON({
-    name: 'checks',
+    name: 'symfony insight',
     value: 'project not found',
   })
 
@@ -95,7 +100,7 @@ t.create('401 not authorized grade')
       .reply(401)
   )
   .expectJSON({
-    name: 'checks',
+    name: 'symfony insight',
     value: 'not authorized to access project',
   })
 
@@ -107,9 +112,9 @@ t.create('pending project grade')
       .reply(200, runningMockResponse)
   )
   .expectJSON({
-    name: 'checks',
+    name: 'grade',
     value: 'pending',
-    colorB: colorScheme.grey,
+    colorB: colorScheme.lightgrey,
   })
 
 t.create('platinum grade')
@@ -120,7 +125,7 @@ t.create('platinum grade')
       .reply(200, platinumMockResponse)
   )
   .expectJSON({
-    name: 'checks',
+    name: 'grade',
     value: 'platinum',
     colorB: '#E5E4E2',
   })
@@ -133,7 +138,7 @@ t.create('gold grade')
       .reply(200, goldMockResponse)
   )
   .expectJSON({
-    name: 'checks',
+    name: 'grade',
     value: 'gold',
     colorB: '#EBC760',
   })
@@ -146,7 +151,7 @@ t.create('silver grade')
       .reply(200, silverMockResponse)
   )
   .expectJSON({
-    name: 'checks',
+    name: 'grade',
     value: 'silver',
     colorB: '#C0C0C0',
   })
@@ -159,7 +164,7 @@ t.create('bronze grade')
       .reply(200, bronzeMockResponse)
   )
   .expectJSON({
-    name: 'checks',
+    name: 'grade',
     value: 'bronze',
     colorB: '#C88F6A',
   })
@@ -172,7 +177,7 @@ t.create('no medal grade')
       .reply(200, noMedalMockResponse)
   )
   .expectJSON({
-    name: 'checks',
+    name: 'grade',
     value: 'no medal',
     colorB: colorScheme.red,
   })
@@ -185,7 +190,7 @@ t.create('zero violations')
       .reply(200, goldMockResponse)
   )
   .expectJSON({
-    name: 'checks',
+    name: 'violations',
     value: '0',
     colorB: colorScheme.brightgreen,
   })
@@ -198,7 +203,7 @@ t.create('critical violations')
       .reply(200, criticalViolation)
   )
   .expectJSON({
-    name: 'checks',
+    name: 'violations',
     value: '1 critical',
     colorB: colorScheme.red,
   })
@@ -211,7 +216,7 @@ t.create('major violations')
       .reply(200, majorViolation)
   )
   .expectJSON({
-    name: 'checks',
+    name: 'violations',
     value: '1 major',
     colorB: colorScheme.orange,
   })
@@ -224,7 +229,7 @@ t.create('minor violations')
       .reply(200, minorViolation)
   )
   .expectJSON({
-    name: 'checks',
+    name: 'violations',
     value: '1 minor',
     colorB: colorScheme.yellow,
   })
@@ -237,7 +242,7 @@ t.create('info violations')
       .reply(200, infoViolation)
   )
   .expectJSON({
-    name: 'checks',
+    name: 'violations',
     value: '1 info',
     colorB: colorScheme.yellowgreen,
   })
@@ -250,7 +255,7 @@ t.create('multiple violations grade')
       .reply(200, multipleViolations)
   )
   .expectJSON({
-    name: 'checks',
+    name: 'violations',
     value: '1 critical, 1 info',
     colorB: colorScheme.red,
   })
@@ -270,7 +275,7 @@ t.create('auth')
       .reply(200, bronzeMockResponse)
   )
   .expectJSON({
-    name: 'checks',
+    name: 'grade',
     value: 'bronze',
     colorB: '#C88F6A',
   })
@@ -285,9 +290,9 @@ t.create('legacy path: pending project grade')
       .reply(200, runningMockResponse)
   )
   .expectJSON({
-    name: 'checks',
+    name: 'grade',
     value: 'pending',
-    colorB: colorScheme.grey,
+    colorB: colorScheme.lightgrey,
   })
 
 t.create('legacy path: platinum grade')
@@ -298,7 +303,7 @@ t.create('legacy path: platinum grade')
       .reply(200, platinumMockResponse)
   )
   .expectJSON({
-    name: 'checks',
+    name: 'grade',
     value: 'platinum',
     colorB: '#E5E4E2',
   })
