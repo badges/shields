@@ -83,6 +83,15 @@ installation access to private npm packages
 
 [npm token]: https://docs.npmjs.com/getting-started/working_with_tokens
 
+## Sentry
+
+* `sentry_dsn`
+
+A [Sentry DSN](https://docs.sentry.io/error-reporting/quickstart/?platform=javascript#configure-the-dsn)
+may be used to send error reports from your installation to
+[Sentry.io](http://sentry.io/). For more info, see the
+[self hosting docs](https://github.com/badges/shields/blob/master/doc/self-hosting.md#sentry).
+
 ## SymfonyInsight (formerly Sensiolabs)
 
 * `sl_insight_userUuid`
