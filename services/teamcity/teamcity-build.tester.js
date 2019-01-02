@@ -12,7 +12,7 @@ const {
 } = require('./teamcity-test-helpers')
 const t = (module.exports = require('../create-service-tester')())
 
-const buildStatusValues = ['passing', 'failure', 'error']
+const buildStatusValues = Joi.equal('passing', 'failure', 'error')
 const buildStatusTextRegex = /^success|failure|error|tests( failed: \d+( \(\d+ new\))?)?(,)?( passed: \d+)?(,)?( ignored: \d+)?(,)?( muted: \d+)?$/
 
 t.create('live: codebetter unknown build')
@@ -24,7 +24,7 @@ t.create('live: codebetter known build')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'build',
-      value: Joi.equal(buildStatusValues),
+      value: buildStatusValues,
     })
   )
 
@@ -33,7 +33,7 @@ t.create('live: simple status for known build')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'build',
-      value: Joi.equal(buildStatusValues),
+      value: buildStatusValues,
     })
   )
 
