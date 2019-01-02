@@ -4,6 +4,8 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isMetric } = require('../test-validators')
 
+const isQualityScore = Joi.string().regex(/^[0-9]+\.[0-9]/)
+
 const t = (module.exports = new ServiceTester({
   id: 'ansible',
   title: 'Ansible Galaxy',
@@ -28,11 +30,11 @@ t.create('role downloads (not found)')
   .expectJSON({ name: 'role downloads', value: 'not found' })
 
 t.create('quality score (valid)')
-  .get('/content/q/432')
+  .get('/score/quality/432.json')
   .expectJSONTypes(
-    Joi.object().keys({ name: 'role downloads', value: isMetric })
+    Joi.object().keys({ name: 'quality', value: isQualityScore })
   )
 
 t.create('quality score (not found)')
-  .get('/content/q/0')
-  .expectJSON({ name: 'role downloads', value: 'not found' })
+  .get('/score/quality/0.json')
+  .expectJSON({ name: 'quality', value: 'not found' })

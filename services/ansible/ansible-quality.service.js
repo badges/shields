@@ -41,7 +41,7 @@ class AnsibleGalaxyContentQualityScore extends AnsibleGalaxyContent {
 
   static get route() {
     return {
-      base: 'ansible/score/q',
+      base: 'ansible/score/quality',
       pattern: ':projectId',
     }
   }
@@ -49,7 +49,7 @@ class AnsibleGalaxyContentQualityScore extends AnsibleGalaxyContent {
   static get examples() {
     return [
       {
-        title: `Ansible Score Quality`,
+        title: `Ansible Quality Score`,
         pattern: ':projectId',
         exampleUrl: ':projectId',
         staticExample: this.render({ qualityScore: 4.125 }),
