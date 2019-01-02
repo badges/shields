@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 
 const noAutocorrect = {
@@ -59,6 +60,13 @@ const Badge = ({
     {src ? <img src={src} alt={alt} {...rest} /> : nonBreakingSpace}
   </BadgeWrapper>
 )
+Badge.propTypes = {
+  src: PropTypes.string.isRequired,
+  alt: PropTypes.string,
+  display: PropTypes.oneOf(['inline', 'block', 'inline-block']),
+  height: PropTypes.string,
+  clickable: PropTypes.bool,
+}
 
 const StyledInput = styled.input`
   height: 15px;
