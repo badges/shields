@@ -97,15 +97,11 @@ module.exports = class TeamCityCoverage extends TeamCityBase {
       }
 
       if (covered !== undefined && total !== undefined) {
-        break
+        const coverage = covered ? (covered / total) * 100 : 0
+        return { coverage }
       }
     }
 
-    if (covered === undefined || total === undefined) {
-      throw new InvalidResponse({ prettyMessage: 'no coverage data available' })
-    }
-
-    const coverage = covered ? (covered / total) * 100 : 0
-    return { coverage }
+    throw new InvalidResponse({ prettyMessage: 'no coverage data available' })
   }
 }

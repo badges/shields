@@ -3,12 +3,9 @@
 const Joi = require('joi')
 const TeamCityBase = require('./teamcity-base')
 
-const buildStatusRegex = /SUCCESS|FAILURE|ERROR/
 const buildStatusTextRegex = /^Success|Failure|Error|Tests( failed: \d+( \(\d+ new\))?)?(,)?( passed: \d+)?(,)?( ignored: \d+)?(,)?( muted: \d+)?$/
 const buildStatusSchema = Joi.object({
-  status: Joi.string()
-    .regex(buildStatusRegex)
-    .required(),
+  status: Joi.equal('SUCCESS', 'FAILURE', 'ERROR').required(),
   statusText: Joi.string()
     .regex(buildStatusTextRegex)
     .required(),
@@ -16,21 +13,21 @@ const buildStatusSchema = Joi.object({
 
 module.exports = class TeamCityBuild extends TeamCityBase {
   static render({ status, statusText, useVerbose }) {
-    let color = 'red'
-    let message = status.toLowerCase()
-
-    if (useVerbose) {
-      message = (statusText || status).toLowerCase()
-    }
-
     if (status === 'SUCCESS') {
-      color = 'brightgreen'
-      message = 'passing'
-    }
-
-    return {
-      message,
-      color,
+      return {
+        message: 'passing',
+        color: 'brightgreen',
+      }
+    } else if (statusText && useVerbose) {
+      return {
+        message: statusText.toLowerCase(),
+        color: 'red',
+      }
+    } else {
+      return {
+        message: status.toLowerCase(),
+        color: 'red',
+      }
     }
   }
 
