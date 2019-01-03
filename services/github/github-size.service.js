@@ -7,10 +7,38 @@ const {
   makeLogo: getLogo,
 } = require('../../lib/badge-data')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class GithubSize extends LegacyService {
+  static get category() {
+    return 'size'
+  }
+
+  static get route() {
+    return {
+      base: 'github/size',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub repo size in bytes',
+        previewUrl: 'webcaetano/craft/build/phaser-craft.min.js',
+        keywords: ['GitHub', 'file', 'size'],
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/size\/([^/]+)\/([^/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,

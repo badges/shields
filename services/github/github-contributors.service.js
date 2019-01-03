@@ -7,10 +7,46 @@ const {
 } = require('../../lib/badge-data')
 const { metric } = require('../../lib/text-formatters')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class GithubContributors extends LegacyService {
+  static get category() {
+    return 'activity'
+  }
+
+  static get route() {
+    return {
+      base: 'github/contributors',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub contributors',
+        pattern: ':user/:repo',
+        namedParams: {
+          user: 'cdnjs',
+          repo: 'cdnjs',
+        },
+        staticPreview: {
+          label: 'contributors',
+          message: '397',
+          color: 'blue',
+        },
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/contributors(-anon)?\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,

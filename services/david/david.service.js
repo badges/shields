@@ -3,7 +3,71 @@
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class David extends LegacyService {
+  static get category() {
+    return 'dependencies'
+  }
+
+  static get route() {
+    return {
+      base: 'david',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'David',
+        pattern: ':user/:repo',
+        namedParams: { user: 'expressjs', repo: 'express' },
+        staticExample: this.renderStaticExample(),
+      },
+      {
+        title: 'David',
+        pattern: 'dev/:user/:repo',
+        namedParams: { user: 'expressjs', repo: 'express' },
+        staticExample: this.renderStaticExample({ label: 'dev dependencies' }),
+      },
+      {
+        title: 'David',
+        pattern: 'optional/:user/:repo',
+        namedParams: { user: 'elnounch', repo: 'byebye' },
+        staticExample: this.renderStaticExample({
+          label: 'optional dependencies',
+        }),
+      },
+      {
+        title: 'David',
+        pattern: 'peer/:user/:repo',
+        namedParams: { user: 'webcomponents', repo: 'generator-element' },
+        staticExample: this.renderStaticExample({ label: 'peer dependencies' }),
+      },
+      {
+        title: 'David (path)',
+        pattern: ':user/:repo',
+        namedParams: { user: 'babel', repo: 'babel' },
+        queryParams: { path: 'packages/babel-core' },
+        staticExample: this.renderStaticExample(),
+      },
+    ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'dependencies',
+    }
+  }
+
+  static renderStaticExample({ label } = {}) {
+    return { label, message: 'up to date', color: 'brightgreen' }
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/david\/(dev\/|optional\/|peer\/)?(.+?)\.(svg|png|gif|jpg|json)$/,
@@ -17,18 +81,15 @@ module.exports = class David extends LegacyService {
           // eg, `expressjs/express`, `webcomponents/generator-element`.
           const userRepo = match[2]
           const format = match[3]
-          let options =
-            'https://david-dm.org/' +
-            userRepo +
-            '/' +
-            (dev ? dev + '-' : '') +
-            'info.json'
+          let options = `https://david-dm.org/${userRepo}/${
+            dev ? `${dev}-` : ''
+          }info.json`
           if (data.path) {
             // path can be used to specify the package.json location, useful for monorepos
-            options += '?path=' + data.path
+            options += `?path=${data.path}`
           }
           const badgeData = getBadgeData(
-            (dev ? dev + 'D' : 'd') + 'ependencies',
+            `${dev ? `${dev} ` : ''}dependencies`,
             data
           )
           request(options, (err, res, buffer) => {

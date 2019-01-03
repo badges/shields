@@ -1,16 +1,14 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
 const { isSemver } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'elm-package', title: 'ELM PACKAGE' })
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('gets the package version of elm/core')
-  .get('/v/elm/core.json')
+  .get('/elm/core.json')
   .expectJSONTypes(Joi.object().keys({ name: 'elm package', value: isSemver }))
 
 t.create('invalid package name')
-  .get('/v/elm-community/frodo-is-not-a-package.json')
-  .expectJSON({ name: 'elm package', value: 'invalid' })
+  .get('/elm-community/frodo-is-not-a-package.json')
+  .expectJSON({ name: 'elm package', value: 'package not found' })

@@ -8,10 +8,44 @@ const {
 const { formatDate } = require('../../lib/text-formatters')
 const { age: ageColor } = require('../../lib/color-formatters')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class GithubLastCommit extends LegacyService {
+  static get category() {
+    return 'activity'
+  }
+
+  static get route() {
+    return {
+      base: 'github/last-commit',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub last commit',
+        previewUrl: 'google/skia',
+        keywords: ['GitHub', 'last', 'latest', 'commit'],
+        documentation,
+      },
+      {
+        title: 'GitHub last commit (branch)',
+        previewUrl: 'google/skia/infra/config',
+        keywords: ['GitHub', 'last', 'latest', 'commit'],
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/last-commit\/([^/]+)\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,

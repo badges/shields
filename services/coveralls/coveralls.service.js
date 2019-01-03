@@ -6,7 +6,73 @@ const {
   coveragePercentage: coveragePercentageColor,
 } = require('../../lib/color-formatters')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class Coveralls extends LegacyService {
+  static get category() {
+    return 'quality'
+  }
+
+  static get route() {
+    return {
+      base: 'coveralls',
+    }
+  }
+
+  static get examples() {
+    const { staticExample } = this
+    return [
+      {
+        title: 'Coveralls github',
+        pattern: ':vcsType/:user/:repo',
+        namedParams: { vcsType: 'github', user: 'jekyll', repo: 'jekyll' },
+        staticExample,
+      },
+      {
+        title: 'Coveralls github branch',
+        pattern: ':vcsType/:user/:repo/:branch',
+        namedParams: {
+          vcsType: 'github',
+          user: 'jekyll',
+          repo: 'jekyll',
+          branch: 'master',
+        },
+        staticExample,
+      },
+      {
+        title: 'Coveralls bitbucket',
+        pattern: ':vcsType/:user/:repo',
+        namedParams: { vcsType: 'bitbucket', user: 'pyKLIP', repo: 'pyklip' },
+        staticExample,
+      },
+      {
+        title: 'Coveralls bitbucket branch',
+        pattern: ':vcsType/:user/:repo/:branch',
+        namedParams: {
+          vcsType: 'bitbucket',
+          user: 'pyKLIP',
+          repo: 'pyklip',
+          branch: 'master',
+        },
+        staticExample,
+      },
+    ]
+  }
+
+  static get staticExample() {
+    return { message: '83%', color: 'yellowgreen' }
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'coverage',
+    }
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/coveralls\/(?:(bitbucket|github)\/)?([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
@@ -21,7 +87,7 @@ module.exports = class Coveralls extends LegacyService {
           method: 'HEAD',
         }
         if (branch) {
-          apiUrl.url += '?branch=' + branch
+          apiUrl.url += `?branch=${branch}`
         }
         const badgeData = getBadgeData('coverage', data)
         request(apiUrl, (err, res) => {
@@ -45,7 +111,7 @@ module.exports = class Coveralls extends LegacyService {
               sendBadge(format, badgeData)
               return
             }
-            badgeData.text[1] = score + '%'
+            badgeData.text[1] = `${score}%`
             badgeData.colorscheme = coveragePercentageColor(percentage)
             sendBadge(format, badgeData)
           } catch (e) {

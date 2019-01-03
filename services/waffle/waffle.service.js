@@ -8,7 +8,42 @@ const {
 } = require('../../lib/badge-data')
 const { checkErrorResponse } = require('../../lib/error-helper')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class Waffle extends LegacyService {
+  static get category() {
+    return 'issue-tracking'
+  }
+
+  static get route() {
+    return {
+      base: 'waffle/label',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Waffle.io',
+        pattern: ':user/:repo/:query',
+        namedParams: {
+          user: 'evancohen',
+          repo: 'smart-mirror',
+          query: 'status: in progress',
+        },
+        staticPreview: {
+          label: 'status: in progress',
+          message: '2',
+          color: '000',
+        },
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/waffle\/label\/([^/]+)\/([^/]+)\/?([^/]+)?\.(svg|png|gif|jpg|json)$/,
@@ -44,7 +79,7 @@ module.exports = class Waffle extends LegacyService {
               }
             }
             badgeData.text[0] = getLabel(ghLabel, data)
-            badgeData.text[1] = '' + count
+            badgeData.text[1] = `${count}`
             badgeData.colorscheme = null
             badgeData.colorB = makeColorB(color, data)
             sendBadge(format, badgeData)

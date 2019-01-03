@@ -10,7 +10,38 @@ const {
   isStable: phpStableVersion,
 } = require('../../lib/php-version')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class PackagistVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'packagist',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Packagist',
+        previewUrl: 'v/symfony/symfony',
+        keywords: ['PHP'],
+      },
+      {
+        title: 'Packagist Pre Release',
+        previewUrl: 'vpre/symfony/symfony',
+        keywords: ['PHP'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/packagist\/(v|vpre)\/(.*)\.(svg|png|gif|jpg|json)$/,
@@ -18,7 +49,7 @@ module.exports = class PackagistVersion extends LegacyService {
         const info = match[1] // either `v` or `vpre`.
         const userRepo = match[2] // eg, `doctrine/orm`.
         const format = match[3]
-        const apiUrl = 'https://packagist.org/packages/' + userRepo + '.json'
+        const apiUrl = `https://packagist.org/packages/${userRepo}.json`
         const badgeData = getBadgeData('packagist', data)
         if (userRepo.substr(-14) === '/:package_name') {
           badgeData.text[1] = 'invalid'

@@ -7,10 +7,44 @@ const {
 } = require('../../lib/badge-data')
 const { metric } = require('../../lib/text-formatters')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class GithubCommitActivity extends LegacyService {
+  static get category() {
+    return 'activity'
+  }
+
+  static get route() {
+    return {
+      base: 'github/commit-activity',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub commit activity the past week, 4 weeks, year',
+        pattern: 'y/:user/:repo',
+        namedParams: { user: 'eslint', repo: 'eslint' },
+        staticPreview: {
+          label: 'commit activity',
+          message: '457/year',
+          color: 'blue',
+        },
+        keywords: ['GitHub', 'commit', 'commits', 'activity'],
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/commit-activity\/(y|4w|w)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,

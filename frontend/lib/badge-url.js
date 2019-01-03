@@ -1,7 +1,11 @@
 import resolveUrl from './resolve-url'
+import { staticBadgeUrl as makeStaticBadgeUrl } from '../../lib/make-badge-url'
 
-export default function resolveBadgeUrl(url, baseUrl, options) {
-  const { longCache, style, queryParams: inQueryParams } = options || {}
+export default function resolveBadgeUrl(
+  url,
+  baseUrl,
+  { longCache, style, queryParams: inQueryParams, format = 'svg' } = {}
+) {
   const outQueryParams = Object.assign({}, inQueryParams)
   if (longCache) {
     outQueryParams.maxAge = '2592000'
@@ -9,16 +13,13 @@ export default function resolveBadgeUrl(url, baseUrl, options) {
   if (style) {
     outQueryParams.style = style
   }
-  return resolveUrl(url, baseUrl, outQueryParams)
+
+  return resolveUrl(`${url}.${format}`, baseUrl, outQueryParams)
 }
 
-export function encodeField(s) {
-  return encodeURIComponent(s.replace(/-/g, '--').replace(/_/g, '__'))
-}
-
-export function staticBadgeUrl(baseUrl, subject, status, color, options) {
-  const path = [subject, status, color].map(encodeField).join('-')
-  return resolveUrl(`/badge/${path}.svg`, baseUrl, options)
+export function staticBadgeUrl(baseUrl, label, message, color, options) {
+  const path = makeStaticBadgeUrl({ label, message, color })
+  return resolveUrl(path, baseUrl, options)
 }
 
 // Options can include: { prefix, suffix, color, longCache, style, queryParams }
@@ -28,10 +29,8 @@ export function dynamicBadgeUrl(
   label,
   dataUrl,
   query,
-  options = {}
+  { prefix, suffix, color, queryParams = {}, ...rest } = {}
 ) {
-  const { prefix, suffix, color, queryParams = {}, ...rest } = options
-
   Object.assign(queryParams, {
     label,
     url: dataUrl,
@@ -50,5 +49,5 @@ export function dynamicBadgeUrl(
 
   const outOptions = Object.assign({ queryParams }, rest)
 
-  return resolveBadgeUrl(`/badge/dynamic/${datatype}.svg`, baseUrl, outOptions)
+  return resolveBadgeUrl(`/badge/dynamic/${datatype}`, baseUrl, outOptions)
 }

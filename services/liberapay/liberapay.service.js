@@ -6,7 +6,44 @@ const { metric } = require('../../lib/text-formatters')
 const { makeLogo: getLogo } = require('../../lib/badge-data')
 const { colorScale } = require('../../lib/color-formatters')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class Liberapay extends LegacyService {
+  static get category() {
+    return 'funding'
+  }
+
+  static get route() {
+    return {
+      base: 'liberapay',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Liberapay receiving',
+        previewUrl: 'receives/Changaco',
+      },
+      {
+        title: 'Liberapay giving',
+        previewUrl: 'gives/Changaco',
+      },
+      {
+        title: 'Liberapay patrons',
+        previewUrl: 'patrons/Changaco',
+      },
+      {
+        title: 'Liberapay goal progress',
+        previewUrl: 'goal/Changaco',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/liberapay\/(receives|gives|patrons|goal)\/(.*)\.(svg|png|gif|jpg|json)$/,
@@ -14,7 +51,7 @@ module.exports = class Liberapay extends LegacyService {
         const type = match[1] // e.g., 'gives'
         const entity = match[2] // e.g., 'Changaco'
         const format = match[3]
-        const apiUrl = 'https://liberapay.com/' + entity + '/public.json'
+        const apiUrl = `https://liberapay.com/${entity}/public.json`
         // Lock down type
         const label = {
           receives: 'receives',

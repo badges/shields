@@ -1,19 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import resolveUrl from '../lib/resolve-url'
+import { H2 } from './common'
+
+const SpacedA = styled.a`
+  margin-left: 10px;
+  margin-right: 10px;
+`
 
 const Footer = ({ baseUrl }) => (
   <section>
-    <h2 id="like-this">Like This?</h2>
+    <H2 id="like-this">Like This?</H2>
 
-    <p>
-      What is your favorite badge service to use?
-      <br />
-      <a href="https://github.com/badges/shields/blob/master/CONTRIBUTING.md">
-        Tell us
-      </a>{' '}
-      and we might bring it to you!
-    </p>
     <p>
       <object
         data={resolveUrl(
@@ -47,13 +46,19 @@ const Footer = ({ baseUrl }) => (
         alt="chat on Discord"
       />
     </p>
+
     <p>
-      <a href="https://github.com/h5bp/lazyweb-requests/issues/150">This</a> is
-      where the current server got started.
+      What is your favorite badge service to use?
+      <br />
+      <a href="https://github.com/badges/shields/blob/master/CONTRIBUTING.md">
+        Tell us
+      </a>{' '}
+      and we might bring it to you!
     </p>
 
     <p>
-      <small>:wq</small>
+      <SpacedA href="https://status.shields.io/">Status</SpacedA>
+      <SpacedA href="https://github.com/badges/shields/">GitHub</SpacedA>
     </p>
   </section>
 )

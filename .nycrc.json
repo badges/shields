@@ -1,13 +1,23 @@
 {
   "reporter": ["lcov"],
   "all": true,
+  "silent": true,
+  "clean": false,
   "exclude": [
     "**/*.spec.js",
     "**/*.integration.js",
+    "**/test-helpers.js",
+    "**/*-test-helpers.js",
+    "dangerfile.js",
+    "next.config.js",
     "services/**/*.tester.js",
+    "services/service-tester.js",
+    "services/create-service-tester.js",
+    "services/test-validators.js",
+    "services/icedfrisby-no-nock.js",
+    "test-fixtures",
+    "scripts",
     "coverage",
     "build"
-  ],
-  "silent": true,
-  "clean": false
+  ]
 }

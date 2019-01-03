@@ -9,11 +9,10 @@ module.exports = class UptimeRobotStatus extends UptimeRobotBase {
     }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'uptimerobot/status',
-      format: '(.*)',
-      capture: ['monitorApiKey'],
+      pattern: ':monitorSpecificKey',
     }
   }
 
@@ -21,8 +20,9 @@ module.exports = class UptimeRobotStatus extends UptimeRobotBase {
     return [
       {
         title: 'Uptime Robot status',
-        exampleUrl: 'm778918918-3e92c097147760ee39d02d36',
-        urlPattern: ':monitor-specific-key',
+        namedParams: {
+          monitorSpecificKey: 'm778918918-3e92c097147760ee39d02d36',
+        },
         staticExample: this.render({ status: 2 }),
       },
     ]
@@ -45,8 +45,8 @@ module.exports = class UptimeRobotStatus extends UptimeRobotBase {
     }
   }
 
-  async handle({ monitorApiKey }) {
-    const { monitors } = await this.fetch({ monitorApiKey })
+  async handle({ monitorSpecificKey }) {
+    const { monitors } = await this.fetch({ monitorSpecificKey })
     const { status } = monitors[0]
     return this.constructor.render({ status })
   }

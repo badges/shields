@@ -4,7 +4,32 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const serverSecrets = require('../../lib/server-secrets')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class Sensiolabs extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get route() {
+    return {
+      base: 'sensiolabs',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'SensioLabs Insight',
+        previewUrl: 'i/45afb680-d4e6-4e66-93ea-bcfa79eb8a87',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/sensiolabs\/i\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -13,7 +38,7 @@ module.exports = class Sensiolabs extends LegacyService {
         const format = match[2]
         const options = {
           method: 'GET',
-          uri: 'https://insight.sensiolabs.com/api/projects/' + projectUuid,
+          uri: `https://insight.sensiolabs.com/api/projects/${projectUuid}`,
           headers: {
             Accept: 'application/vnd.com.sensiolabs.insight+xml',
           },

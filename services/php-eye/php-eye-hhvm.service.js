@@ -5,7 +5,56 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { checkErrorResponse } = require('../../lib/error-helper')
 const { omitv } = require('../../lib/text-formatters')
 
+const keywords = ['php', 'runtime']
+
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class PhpeyeHhvm extends LegacyService {
+  static get category() {
+    return 'platform-support'
+  }
+
+  static get route() {
+    return {
+      base: 'hhvm',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'HHVM',
+        pattern: ':user/:packageName',
+        namedParams: { user: 'symfony', packageName: 'symfony' },
+        staticPreview: {
+          label: 'hhvm',
+          message: 'not tested',
+          color: 'red',
+        },
+        keywords,
+      },
+      {
+        title: 'HHVM (branch)',
+        pattern: ':user/:packageName/:branch',
+        namedParams: {
+          user: 'symfony',
+          packageName: 'symfony',
+          branch: 'master',
+        },
+        staticPreview: {
+          label: 'hhvm',
+          message: 'not tested',
+          color: 'red',
+        },
+        keywords,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/hhvm\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
@@ -13,7 +62,7 @@ module.exports = class PhpeyeHhvm extends LegacyService {
         const user = match[1] // eg, `symfony/symfony`.
         let branch = match[2] ? omitv(match[2]) : 'dev-master'
         const format = match[3]
-        const apiUrl = 'https://php-eye.com/api/v1/package/' + user + '.json'
+        const apiUrl = `https://php-eye.com/api/v1/package/${user}.json`
         const badgeData = getBadgeData('hhvm', data)
         if (branch === 'master') {
           branch = 'dev-master'

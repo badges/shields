@@ -8,7 +8,36 @@ const {
   downloadCount: downloadCountColor,
 } = require('../../lib/color-formatters')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class CocoapodsApps extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'cocoapods',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Cocoapods apps',
+        previewUrl: 'at/AFNetworking',
+      },
+      {
+        title: 'Cocoapods apps',
+        previewUrl: 'aw/AFNetworking',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/cocoapods\/(aw|at)\/(.*)\.(svg|png|gif|jpg|json)$/,
@@ -16,7 +45,7 @@ module.exports = class CocoapodsApps extends LegacyService {
         const info = match[1] // One of these: "aw", "at"
         const spec = match[2] // eg, AFNetworking
         const format = match[3]
-        const apiUrl = 'https://metrics.cocoapods.org/api/v1/pods/' + spec
+        const apiUrl = `https://metrics.cocoapods.org/api/v1/pods/${spec}`
         const badgeData = getBadgeData('apps', data)
         request(apiUrl, (err, res, buffer) => {
           if (checkErrorResponse(badgeData, err, res)) {
@@ -29,7 +58,7 @@ module.exports = class CocoapodsApps extends LegacyService {
             switch (info.charAt(1)) {
               case 'w':
                 apps = data.stats.app_week
-                badgeData.text[1] = metric(apps) + '/week'
+                badgeData.text[1] = `${metric(apps)}/week`
                 break
               case 't':
                 apps = data.stats.app_total

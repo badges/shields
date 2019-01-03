@@ -12,7 +12,44 @@ const {
   downloadCount: downloadCountColor,
 } = require('../../lib/color-formatters')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class DubDownload extends LegacyService {
+  static get category() {
+    return 'downloads'
+  }
+
+  static get route() {
+    return {
+      base: 'dub',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'DUB',
+        previewUrl: 'dd/vibe-d',
+      },
+      {
+        title: 'DUB',
+        previewUrl: 'dw/vibe-d',
+      },
+      {
+        title: 'DUB',
+        previewUrl: 'dm/vibe-d/latest',
+      },
+      {
+        title: 'DUB',
+        previewUrl: 'dt/vibe-d/0.8.4',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/dub\/(dd|dw|dm|dt)\/([^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
@@ -21,9 +58,9 @@ module.exports = class DubDownload extends LegacyService {
         const pkg = match[2] // package name, e.g. vibe-d
         const version = match[3] // version (1.2.3 or latest)
         const format = match[4]
-        let apiUrl = 'https://code.dlang.org/api/packages/' + pkg
+        let apiUrl = `https://code.dlang.org/api/packages/${pkg}`
         if (version) {
-          apiUrl += '/' + version
+          apiUrl += `/${version}`
         }
         apiUrl += '/stats'
         const badgeData = getBadgeData('dub', data)
@@ -40,15 +77,15 @@ module.exports = class DubDownload extends LegacyService {
               switch (info.charAt(1)) {
                 case 'm':
                   downloads = parsedData.downloads.monthly
-                  badgeData.text[1] = metric(downloads) + '/month'
+                  badgeData.text[1] = `${metric(downloads)}/month`
                   break
                 case 'w':
                   downloads = parsedData.downloads.weekly
-                  badgeData.text[1] = metric(downloads) + '/week'
+                  badgeData.text[1] = `${metric(downloads)}/week`
                   break
                 case 'd':
                   downloads = parsedData.downloads.daily
-                  badgeData.text[1] = metric(downloads) + '/day'
+                  badgeData.text[1] = `${metric(downloads)}/day`
                   break
                 case 't':
                   downloads = parsedData.downloads.total
@@ -56,7 +93,7 @@ module.exports = class DubDownload extends LegacyService {
                   break
               }
               if (version) {
-                badgeData.text[1] += ' ' + versionText(version)
+                badgeData.text[1] += ` ${versionText(version)}`
               }
               badgeData.colorscheme = downloadCountColor(downloads)
               sendBadge(format, badgeData)

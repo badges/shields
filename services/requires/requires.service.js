@@ -1,53 +1,78 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { checkErrorResponse } = require('../../lib/error-helper')
+const BaseJsonService = require('../base-json')
+const Joi = require('joi')
 
-module.exports = class RequiresIo extends LegacyService {
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/requires\/([^/]+\/[^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const userRepo = match[1] // eg, `github/celery/celery`.
-        const branch = match[2]
-        const format = match[3]
-        let uri = 'https://requires.io/api/v1/status/' + userRepo
-        if (branch != null) {
-          uri += '?branch=' + branch
-        }
-        const options = {
-          method: 'GET',
-          uri: uri,
-        }
-        const badgeData = getBadgeData('requirements', data)
-        request(options, (err, res, buffer) => {
-          if (checkErrorResponse(badgeData, err, res)) {
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const json = JSON.parse(buffer)
-            if (json.status === 'up-to-date') {
-              badgeData.text[1] = 'up to date'
-              badgeData.colorscheme = 'brightgreen'
-            } else if (json.status === 'outdated') {
-              badgeData.text[1] = 'outdated'
-              badgeData.colorscheme = 'yellow'
-            } else if (json.status === 'insecure') {
-              badgeData.text[1] = 'insecure'
-              badgeData.colorscheme = 'red'
-            } else {
-              badgeData.text[1] = 'unknown'
-              badgeData.colorscheme = 'lightgrey'
-            }
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+const statusSchema = Joi.object({
+  status: Joi.string().required(),
+}).required()
+
+module.exports = class RequiresIo extends BaseJsonService {
+  static get route() {
+    return {
+      base: 'requires',
+      format: '([^/]+)/([^/]+/[^/]+)(?:/(.+))?',
+      capture: ['service', 'repo', 'branch'],
+    }
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'requirements' }
+  }
+
+  async handle({ service, repo, branch }) {
+    const { status } = await this.fetch({ service, repo, branch })
+    return this.constructor.render({ status })
+  }
+
+  async fetch({ service, repo, branch }) {
+    const url = `https://requires.io/api/v1/status/${service}/${repo}`
+    return this._requestJson({
+      url,
+      schema: statusSchema,
+      options: { qs: { branch } },
+    })
+  }
+
+  static render({ status }) {
+    let message = status
+    let color = 'lightgrey'
+    if (status === 'up-to-date') {
+      message = 'up to date'
+      color = 'brightgreen'
+    } else if (status === 'outdated') {
+      color = 'yellow'
+    } else if (status === 'insecure') {
+      color = 'red'
+    }
+    return { message, color }
+  }
+
+  static get category() {
+    return 'dependencies'
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Requires.io',
+        pattern: ':service/:user/:repo',
+        namedParams: { service: 'github', user: 'celery', repo: 'celery' },
+        staticExample: this.render({ status: 'up-to-date' }),
+        keywords: ['requires'],
+      },
+      {
+        title: 'Requires.io (branch)',
+        pattern: ':service/:user/:repo/:branch',
+        namedParams: {
+          service: 'github',
+          user: 'celery',
+          repo: 'celery',
+          branch: 'master',
+        },
+        staticExample: this.render({ status: 'up-to-date' }),
+        keywords: ['requires'],
+      },
+    ]
   }
 }

@@ -7,7 +7,42 @@ const {
   coveragePercentage: coveragePercentageColor,
 } = require('../../lib/color-formatters')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class Codecov extends LegacyService {
+  static get category() {
+    return 'quality'
+  }
+
+  static get route() {
+    return {
+      base: 'codecov/c',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Codecov',
+        previewUrl: 'github/codecov/example-python',
+      },
+      {
+        title: 'Codecov branch',
+        previewUrl: 'github/codecov/example-python/master',
+      },
+      {
+        title: 'Codecov private',
+        previewUrl: 'github/codecov/example-python',
+        pattern: 'token/:token/github/codecov/example-python',
+        exampleUrl: 'token/My0A8VL917/github/codecov/example-python',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/codecov\/c\/(?:token\/(\w+))?[+/]?([^/]+\/[^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
@@ -23,7 +58,7 @@ module.exports = class Codecov extends LegacyService {
           apiUrl = `https://codecov.io/${userRepo}/graphs/badge.txt`
         }
         if (token) {
-          apiUrl += '?' + queryString.stringify({ token })
+          apiUrl += `?${queryString.stringify({ token })}`
         }
         const badgeData = getBadgeData('coverage', data)
         request(apiUrl, (err, res, body) => {
@@ -40,7 +75,7 @@ module.exports = class Codecov extends LegacyService {
               sendBadge(format, badgeData)
               return
             }
-            badgeData.text[1] = coverage + '%'
+            badgeData.text[1] = `${coverage}%`
             badgeData.colorscheme = coveragePercentageColor(coverage)
             sendBadge(format, badgeData)
           } catch (e) {

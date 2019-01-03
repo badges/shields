@@ -6,7 +6,62 @@ const { checkErrorResponse } = require('../../lib/error-helper')
 const log = require('../../lib/log')
 
 // Handle .org and .com.
+//
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class TravisBuild extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get route() {
+    return {
+      base: 'travis',
+    }
+  }
+
+  static get examples() {
+    const { staticExample } = this
+    return [
+      {
+        title: 'Travis (.org)',
+        pattern: ':user/:repo',
+        namedParams: { user: 'rust-lang', repo: 'rust' },
+        staticExample,
+      },
+      {
+        title: 'Travis (.org) branch',
+        pattern: ':user/:repo/:branch',
+        namedParams: { user: 'rust-lang', repo: 'rust', branch: 'master' },
+        staticExample,
+      },
+      {
+        title: 'Travis (.com)',
+        pattern: 'com/:user/:repo',
+        namedParams: { user: 'ivandelabeldad', repo: 'rackian-gateway' },
+        staticExample,
+      },
+      {
+        title: 'Travis (.com) branch',
+        pattern: 'com/:user/:repo/:branch',
+        namedParams: {
+          user: 'ivandelabeldad',
+          repo: 'rackian-gateway',
+          branch: 'master',
+        },
+        staticExample,
+      },
+    ]
+  }
+
+  static get staticExample() {
+    return { message: 'passing', color: 'brightgreen' }
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/travis(-ci)?\/(?:(com)\/)?(?!php-v)([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
@@ -26,13 +81,10 @@ module.exports = class TravisBuild extends LegacyService {
         request(options, (err, res) => {
           if (err != null) {
             log.error(
-              'Travis error: data:' +
-                JSON.stringify(data) +
-                '\nStack: ' +
-                err.stack
+              `Travis error: data:${JSON.stringify(data)}\nStack: ${err.stack}`
             )
             if (res) {
-              log.error('' + res)
+              log.error(`${res}`)
             }
           }
           if (checkErrorResponse(badgeData, err, res)) {

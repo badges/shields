@@ -6,10 +6,38 @@ const {
   makeLogo: getLogo,
 } = require('../../lib/badge-data')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class GithubForks extends LegacyService {
+  static get category() {
+    return 'social'
+  }
+
+  static get route() {
+    return {
+      base: 'github/forks',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub forks',
+        previewUrl: 'badges/shields',
+        queryParams: { style: 'social', label: 'Fork' },
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/forks\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -22,8 +50,8 @@ module.exports = class GithubForks extends LegacyService {
         if (badgeData.template === 'social') {
           badgeData.logo = getLogo('github', data)
           badgeData.links = [
-            'https://github.com/' + user + '/' + repo + '/fork',
-            'https://github.com/' + user + '/' + repo + '/network',
+            `https://github.com/${user}/${repo}/fork`,
+            `https://github.com/${user}/${repo}/network`,
           ]
         }
         githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {

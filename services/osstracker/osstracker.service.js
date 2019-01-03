@@ -5,7 +5,33 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const log = require('../../lib/log')
 
 // For NetflixOSS metadata: https://github.com/Netflix/osstracker
+//
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class OssTracker extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'osslifecycle',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'NetflixOSS Lifecycle',
+        previewUrl: 'Netflix/osstracker',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/osslifecycle?\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
@@ -13,9 +39,9 @@ module.exports = class OssTracker extends LegacyService {
         const orgOrUserAndRepo = match[1]
         const branch = match[2]
         const format = match[3]
-        let url = 'https://raw.githubusercontent.com/' + orgOrUserAndRepo
+        let url = `https://raw.githubusercontent.com/${orgOrUserAndRepo}`
         if (branch != null) {
-          url += '/' + branch + '/OSSMETADATA'
+          url += `/${branch}/OSSMETADATA`
         } else {
           url += '/master/OSSMETADATA'
         }
@@ -23,12 +49,12 @@ module.exports = class OssTracker extends LegacyService {
           method: 'GET',
           uri: url,
         }
-        const badgeData = getBadgeData('OSS Lifecycle', data)
+        const badgeData = getBadgeData('oss lifecycle', data)
         request(options, (err, res, body) => {
           if (err != null) {
-            log.error('NetflixOSS error: ' + err.stack)
+            log.error(`NetflixOSS error: ${err.stack}`)
             if (res) {
-              log.error('' + res)
+              log.error(`${res}`)
             }
             badgeData.text[1] = 'invalid'
             sendBadge(format, badgeData)

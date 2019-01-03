@@ -6,10 +6,38 @@ const {
   makeLogo: getLogo,
 } = require('../../lib/badge-data')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class GithubWatchers extends LegacyService {
+  static get category() {
+    return 'social'
+  }
+
+  static get route() {
+    return {
+      base: 'github/watchers',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub watchers',
+        previewUrl: 'badges/shields',
+        queryParams: { style: 'social', label: 'Watch' },
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/watchers\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -22,8 +50,8 @@ module.exports = class GithubWatchers extends LegacyService {
         if (badgeData.template === 'social') {
           badgeData.logo = getLogo('github', data)
           badgeData.links = [
-            'https://github.com/' + user + '/' + repo,
-            'https://github.com/' + user + '/' + repo + '/watchers',
+            `https://github.com/${user}/${repo}`,
+            `https://github.com/${user}/${repo}/watchers`,
           ]
         }
         githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {

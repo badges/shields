@@ -3,8 +3,7 @@
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isMetric } = require('../test-validators')
-const colorscheme = require('../../lib/colorscheme.json')
-const mapValues = require('lodash.mapvalues')
+const { colorScheme: colorsB } = require('../test-helpers')
 
 const t = new ServiceTester({
   id: 'NpmDownloads',
@@ -12,8 +11,6 @@ const t = new ServiceTester({
   pathPrefix: '/npm',
 })
 module.exports = t
-
-const colorsB = mapValues(colorscheme, 'colorB')
 
 t.create('total downloads of left-pad')
   .get('/dt/left-pad.json?style=_shields_test')

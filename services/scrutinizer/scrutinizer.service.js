@@ -7,7 +7,63 @@ const {
   coveragePercentage: coveragePercentageColor,
 } = require('../../lib/color-formatters')
 
-module.exports = class Scrutinizer extends LegacyService {
+class ScrutinizerBuild extends LegacyService {
+  static get category() {
+    return 'build'
+  }
+
+  static get route() {
+    return {
+      base: 'scrutinizer',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Scrutinizer Build',
+        previewUrl: 'build/g/filp/whoops',
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler({ camp, cache }) {}
+}
+
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
+class Scrutinizer extends LegacyService {
+  static get category() {
+    return 'quality'
+  }
+
+  static get route() {
+    return {
+      base: 'scrutinizer',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Scrutinizer',
+        previewUrl: 'g/filp/whoops',
+      },
+      {
+        title: 'Scrutinizer Coverage',
+        previewUrl: 'coverage/g/filp/whoops',
+      },
+      {
+        title: 'Scrutinizer branch',
+        previewUrl: 'coverage/g/doctrine/doctrine2/master',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/scrutinizer(?:\/(build|coverage))?\/([^/]+\/[^/]+\/[^/]+|gp\/[^/])(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
@@ -41,7 +97,7 @@ module.exports = class Scrutinizer extends LegacyService {
                 badgeData.text[1] = 'unknown'
                 badgeData.colorscheme = 'gray'
               } else {
-                badgeData.text[1] = percentage.toFixed(0) + '%'
+                badgeData.text[1] = `${percentage.toFixed(0)}%`
                 badgeData.colorscheme = coveragePercentageColor(percentage)
               }
             } else if (type === 'build') {
@@ -54,8 +110,6 @@ module.exports = class Scrutinizer extends LegacyService {
                 badgeData.colorscheme = 'red'
               } else if (status === 'pending') {
                 badgeData.colorscheme = 'orange'
-              } else if (status === 'unknown') {
-                badgeData.colorscheme = 'gray'
               }
             } else {
               let score =
@@ -84,4 +138,9 @@ module.exports = class Scrutinizer extends LegacyService {
       })
     )
   }
+}
+
+module.exports = {
+  ScrutinizerBuild,
+  Scrutinizer,
 }

@@ -35,19 +35,37 @@ class DummyService extends BaseService {
   static get examples() {
     return [
       { previewUrl: 'World' },
-      { previewUrl: 'World', query: { queryParamA: '!!!' } },
+      { previewUrl: 'World', queryParams: { queryParamA: '!!!' } },
       {
-        urlPattern: ':world',
+        pattern: ':world',
         exampleUrl: 'World',
         staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+        keywords: ['hello'],
+      },
+      {
+        pattern: ':world',
+        namedParams: { world: 'World' },
+        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+        keywords: ['hello'],
+      },
+      {
+        namedParams: { namedParamA: 'World' },
+        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+        keywords: ['hello'],
+      },
+      {
+        pattern: ':world',
+        namedParams: { world: 'World' },
+        queryParams: { queryParamA: '!!!' },
+        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+        keywords: ['hello'],
       },
     ]
   }
-  static get url() {
+  static get route() {
     return {
       base: 'foo',
-      format: '([^/]+)',
-      capture: ['namedParamA'],
+      pattern: ':namedParamA',
       queryParams: ['queryParamA'],
     }
   }
@@ -57,7 +75,7 @@ describe('BaseService', function() {
   const defaultConfig = { handleInternalErrors: false }
 
   describe('URL pattern matching', function() {
-    context('A named param is declared', function() {
+    context('A `pattern` with a named param is declared', function() {
       const regexExec = str => DummyService._regex.exec(str)
       const getNamedParamA = str => {
         const [, namedParamA] = regexExec(str)
@@ -72,6 +90,9 @@ describe('BaseService', function() {
         forCases([
           given('/foo/bar.bar.bar.zip'),
           given('/foo/bar/bar.svg'),
+          // This is a valid example with the wrong extension separator, to
+          // test that we only accept a `.`.
+          given('/foo/bar.bar.bar_svg'),
         ]).expect(null)
       })
 
@@ -96,9 +117,61 @@ describe('BaseService', function() {
       })
     })
 
-    describe('No named params are declared', function() {
+    context('A `format` with a named param is declared', function() {
+      class ServiceWithFormat extends BaseService {
+        static get route() {
+          return {
+            base: 'foo',
+            format: '([^/]+)',
+            capture: ['namedParamA'],
+          }
+        }
+      }
+
+      const regexExec = str => ServiceWithFormat._regex.exec(str)
+      const getNamedParamA = str => {
+        const [, namedParamA] = regexExec(str)
+        return namedParamA
+      }
+      const namedParams = str => {
+        const match = regexExec(str)
+        return ServiceWithFormat._namedParamsForMatch(match)
+      }
+
+      test(regexExec, () => {
+        forCases([
+          given('/foo/bar.bar.bar.zip'),
+          given('/foo/bar/bar.svg'),
+          // This is a valid example with the wrong extension separator, to
+          // test that we only accept a `.`.
+          given('/foo/bar.bar.bar_svg'),
+        ]).expect(null)
+      })
+
+      test(getNamedParamA, () => {
+        forCases([
+          given('/foo/bar.bar.bar.svg'),
+          given('/foo/bar.bar.bar.png'),
+          given('/foo/bar.bar.bar.gif'),
+          given('/foo/bar.bar.bar.jpg'),
+          given('/foo/bar.bar.bar.json'),
+        ]).expect('bar.bar.bar')
+      })
+
+      test(namedParams, () => {
+        forCases([
+          given('/foo/bar.bar.bar.svg'),
+          given('/foo/bar.bar.bar.png'),
+          given('/foo/bar.bar.bar.gif'),
+          given('/foo/bar.bar.bar.jpg'),
+          given('/foo/bar.bar.bar.json'),
+        ]).expect({ namedParamA: 'bar.bar.bar' })
+      })
+    })
+
+    context('No named params are declared', function() {
       class ServiceWithZeroNamedParams extends BaseService {
-        static get url() {
+        static get route() {
           return {
             base: 'foo',
             format: '(?:[^/]+)',
@@ -124,12 +197,14 @@ describe('BaseService', function() {
   })
 
   it('Invokes the handler as expected', async function() {
-    const serviceInstance = new DummyService({}, defaultConfig)
-    const serviceData = await serviceInstance.invokeHandler(
-      { namedParamA: 'bar.bar.bar' },
-      { queryParamA: '!' }
-    )
-    expect(serviceData).to.deep.equal({
+    expect(
+      await DummyService.invoke(
+        {},
+        defaultConfig,
+        { namedParamA: 'bar.bar.bar' },
+        { queryParamA: '!' }
+      )
+    ).to.deep.equal({
       message: 'Hello namedParamA: bar.bar.bar with queryParamA: !',
     })
   })
@@ -146,11 +221,10 @@ describe('BaseService', function() {
       sandbox.stub(trace, 'logTrace')
     })
     it('Invokes the logger as expected', async function() {
-      const serviceInstance = new DummyService({}, defaultConfig)
-      await serviceInstance.invokeHandler(
-        {
-          namedParamA: 'bar.bar.bar',
-        },
+      await DummyService.invoke(
+        {},
+        defaultConfig,
+        { namedParamA: 'bar.bar.bar' },
         { queryParamA: '!' }
       )
       expect(trace.logTrace).to.be.calledWithMatch(
@@ -163,9 +237,7 @@ describe('BaseService', function() {
         'inbound',
         sinon.match.string,
         'Named params',
-        {
-          namedParamA: 'bar.bar.bar',
-        }
+        { namedParamA: 'bar.bar.bar' }
       )
       expect(trace.logTrace).to.be.calledWith(
         'inbound',
@@ -178,17 +250,17 @@ describe('BaseService', function() {
 
   describe('Error handling', function() {
     it('Handles internal errors', async function() {
-      const serviceInstance = new DummyService(
-        {},
-        { handleInternalErrors: true }
-      )
-      serviceInstance.handle = () => {
-        throw Error("I've made a huge mistake")
+      class ThrowingService extends DummyService {
+        async handle() {
+          throw Error("I've made a huge mistake")
+        }
       }
       expect(
-        await serviceInstance.invokeHandler({
-          namedParamA: 'bar.bar.bar',
-        })
+        await ThrowingService.invoke(
+          {},
+          { handleInternalErrors: true },
+          { namedParamA: 'bar.bar.bar' }
+        )
       ).to.deep.equal({
         color: 'lightgray',
         label: 'shields',
@@ -197,19 +269,14 @@ describe('BaseService', function() {
     })
 
     describe('Handles known subtypes of ShieldsInternalError', function() {
-      let serviceInstance
-      beforeEach(function() {
-        serviceInstance = new DummyService({}, {})
-      })
-
       it('handles NotFound errors', async function() {
-        serviceInstance.handle = () => {
-          throw new NotFound()
+        class ThrowingService extends DummyService {
+          async handle() {
+            throw new NotFound()
+          }
         }
         expect(
-          await serviceInstance.invokeHandler({
-            namedParamA: 'bar.bar.bar',
-          })
+          await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
           color: 'red',
           message: 'not found',
@@ -217,13 +284,13 @@ describe('BaseService', function() {
       })
 
       it('handles Inaccessible errors', async function() {
-        serviceInstance.handle = () => {
-          throw new Inaccessible()
+        class ThrowingService extends DummyService {
+          async handle() {
+            throw new Inaccessible()
+          }
         }
         expect(
-          await serviceInstance.invokeHandler({
-            namedParamA: 'bar.bar.bar',
-          })
+          await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
           color: 'lightgray',
           message: 'inaccessible',
@@ -231,13 +298,13 @@ describe('BaseService', function() {
       })
 
       it('handles InvalidResponse errors', async function() {
-        serviceInstance.handle = () => {
-          throw new InvalidResponse()
+        class ThrowingService extends DummyService {
+          async handle() {
+            throw new InvalidResponse()
+          }
         }
         expect(
-          await serviceInstance.invokeHandler({
-            namedParamA: 'bar.bar.bar',
-          })
+          await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
           color: 'lightgray',
           message: 'invalid',
@@ -245,13 +312,13 @@ describe('BaseService', function() {
       })
 
       it('handles Deprecated', async function() {
-        serviceInstance.handle = () => {
-          throw new Deprecated()
+        class ThrowingService extends DummyService {
+          async handle() {
+            throw new Deprecated()
+          }
         }
         expect(
-          await serviceInstance.invokeHandler({
-            namedParamA: 'bar.bar.bar',
-          })
+          await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
           color: 'lightgray',
           message: 'no longer available',
@@ -259,13 +326,13 @@ describe('BaseService', function() {
       })
 
       it('handles InvalidParameter errors', async function() {
-        serviceInstance.handle = () => {
-          throw new InvalidParameter()
+        class ThrowingService extends DummyService {
+          async handle() {
+            throw new InvalidParameter()
+          }
         }
         expect(
-          await serviceInstance.invokeHandler({
-            namedParamA: 'bar.bar.bar',
-          })
+          await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
           color: 'red',
           message: 'invalid parameter',
@@ -284,12 +351,63 @@ describe('BaseService', function() {
         expect(badgeData.text).to.deep.equal(['purr count', 'n/a'])
       })
 
-      it('overrides the color', function() {
+      it('overrides the colorA', function() {
+        const badgeData = DummyService._makeBadgeData(
+          { colorA: '42f483' },
+          { color: 'green' }
+        )
+        expect(badgeData.colorA).to.equal('#42f483')
+      })
+
+      it('overrides the colorB', function() {
         const badgeData = DummyService._makeBadgeData(
           { colorB: '10ADED' },
           { color: 'red' }
         )
         expect(badgeData.colorB).to.equal('#10ADED')
+      })
+
+      it('overrides the logo', function() {
+        const expLogo =
+          'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMTIgMTIgNDAgNDAiPgo8cGF0aCBmaWxsPSIjMzMzMzMzIiBkPSJNMzIsMTMuNGMtMTAuNSwwLTE5LDguNS0xOSwxOWMwLDguNCw1LjUsMTUuNSwxMywxOGMxLDAuMiwxLjMtMC40LDEuMy0wLjljMC0wLjUsMC0xLjcsMC0zLjIgYy01LjMsMS4xLTYuNC0yLjYtNi40LTIuNkMyMCw0MS42LDE4LjgsNDEsMTguOCw0MWMtMS43LTEuMiwwLjEtMS4xLDAuMS0xLjFjMS45LDAuMSwyLjksMiwyLjksMmMxLjcsMi45LDQuNSwyLjEsNS41LDEuNiBjMC4yLTEuMiwwLjctMi4xLDEuMi0yLjZjLTQuMi0wLjUtOC43LTIuMS04LjctOS40YzAtMi4xLDAuNy0zLjcsMi01LjFjLTAuMi0wLjUtMC44LTIuNCwwLjItNWMwLDAsMS42LTAuNSw1LjIsMiBjMS41LTAuNCwzLjEtMC43LDQuOC0wLjdjMS42LDAsMy4zLDAuMiw0LjcsMC43YzMuNi0yLjQsNS4yLTIsNS4yLTJjMSwyLjYsMC40LDQuNiwwLjIsNWMxLjIsMS4zLDIsMywyLDUuMWMwLDcuMy00LjUsOC45LTguNyw5LjQgYzAuNywwLjYsMS4zLDEuNywxLjMsMy41YzAsMi42LDAsNC42LDAsNS4yYzAsMC41LDAuNCwxLjEsMS4zLDAuOWM3LjUtMi42LDEzLTkuNywxMy0xOC4xQzUxLDIxLjksNDIuNSwxMy40LDMyLDEzLjR6Ii8+Cjwvc3ZnPgo='
+        const badgeData = DummyService._makeBadgeData(
+          { logo: 'github', style: 'social' },
+          {}
+        )
+        expect(badgeData.logo).to.equal(expLogo)
+      })
+
+      it('overrides the logo with color', function() {
+        const expLogo =
+          'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMTIgMTIgNDAgNDAiPgo8cGF0aCBmaWxsPSIjMDA3ZWM2IiBkPSJNMzIsMTMuNGMtMTAuNSwwLTE5LDguNS0xOSwxOWMwLDguNCw1LjUsMTUuNSwxMywxOGMxLDAuMiwxLjMtMC40LDEuMy0wLjljMC0wLjUsMC0xLjcsMC0zLjIgYy01LjMsMS4xLTYuNC0yLjYtNi40LTIuNkMyMCw0MS42LDE4LjgsNDEsMTguOCw0MWMtMS43LTEuMiwwLjEtMS4xLDAuMS0xLjFjMS45LDAuMSwyLjksMiwyLjksMmMxLjcsMi45LDQuNSwyLjEsNS41LDEuNiBjMC4yLTEuMiwwLjctMi4xLDEuMi0yLjZjLTQuMi0wLjUtOC43LTIuMS04LjctOS40YzAtMi4xLDAuNy0zLjcsMi01LjFjLTAuMi0wLjUtMC44LTIuNCwwLjItNWMwLDAsMS42LTAuNSw1LjIsMiBjMS41LTAuNCwzLjEtMC43LDQuOC0wLjdjMS42LDAsMy4zLDAuMiw0LjcsMC43YzMuNi0yLjQsNS4yLTIsNS4yLTJjMSwyLjYsMC40LDQuNiwwLjIsNWMxLjIsMS4zLDIsMywyLDUuMWMwLDcuMy00LjUsOC45LTguNyw5LjQgYzAuNywwLjYsMS4zLDEuNywxLjMsMy41YzAsMi42LDAsNC42LDAsNS4yYzAsMC41LDAuNCwxLjEsMS4zLDAuOWM3LjUtMi42LDEzLTkuNywxMy0xOC4xQzUxLDIxLjksNDIuNSwxMy40LDMyLDEzLjR6Ii8+Cjwvc3ZnPgo='
+        const badgeData = DummyService._makeBadgeData(
+          { logo: 'github', logoColor: 'blue' },
+          {}
+        )
+        expect(badgeData.logo).to.equal(expLogo)
+      })
+
+      it('overrides the logoWidth', function() {
+        const badgeData = DummyService._makeBadgeData({ logoWidth: 20 }, {})
+        expect(badgeData.logoWidth).to.equal(20)
+      })
+
+      it('overrides the links', function() {
+        const badgeData = DummyService._makeBadgeData(
+          { link: 'https://circleci.com/gh/badges/daily-tests' },
+          {
+            link:
+              'https://circleci.com/workflow-run/184ef3de-4836-4805-a2e4-0ceba099f92d',
+          }
+        )
+        expect(badgeData.links).to.deep.equal([
+          'https://circleci.com/gh/badges/daily-tests',
+        ])
+      })
+
+      it('overrides the template', function() {
+        const badgeData = DummyService._makeBadgeData({ style: 'pill' }, {})
+        expect(badgeData.template).to.equal('pill')
       })
     })
 
@@ -297,6 +415,21 @@ describe('BaseService', function() {
       it('applies the service message', function() {
         const badgeData = DummyService._makeBadgeData({}, { message: '10k' })
         expect(badgeData.text).to.deep.equal(['cat', '10k'])
+      })
+
+      it('preserves an empty label', function() {
+        const badgeData = DummyService._makeBadgeData(
+          {},
+          { label: '', message: '10k' }
+        )
+        expect(badgeData.text).to.deep.equal(['', '10k'])
+      })
+
+      it('applies a numeric service message', function() {
+        // While a number of badges use this, in the long run we may want
+        // `render()` to always return a string.
+        const badgeData = DummyService._makeBadgeData({}, { message: 10 })
+        expect(badgeData.text).to.deep.equal(['cat', 10])
       })
 
       it('applies the service color', function() {
@@ -319,7 +452,7 @@ describe('BaseService', function() {
   })
 
   describe('ScoutCamp integration', function() {
-    const expectedRouteRegex = /^\/foo\/([^/]+).(svg|png|gif|jpg|json)$/
+    const expectedRouteRegex = /^\/foo\/([^/]+?)\.(svg|png|gif|jpg|json)$/
 
     let mockCamp
     let mockHandleRequest
@@ -342,7 +475,7 @@ describe('BaseService', function() {
 
     it('handles the request', async function() {
       expect(mockHandleRequest).to.have.been.calledOnce
-      const { handler: requestHandler } = mockHandleRequest.getCall(0).args[0]
+      const { handler: requestHandler } = mockHandleRequest.getCall(0).args[1]
 
       const mockSendBadge = sinon.spy()
       const mockRequest = {
@@ -366,60 +499,117 @@ describe('BaseService', function() {
     })
   })
 
-  describe('prepareExamples', function() {
+  describe('getDefinition', function() {
     it('returns the expected result', function() {
-      const [first, second, third] = DummyService.prepareExamples()
+      const {
+        category,
+        name,
+        isDeprecated,
+        route,
+        examples,
+      } = DummyService.getDefinition()
+      expect({
+        category,
+        name,
+        isDeprecated,
+        route,
+      }).to.deep.equal({
+        category: 'cat',
+        name: 'DummyService',
+        isDeprecated: false,
+        route: {
+          pattern: '/foo/:namedParamA',
+          queryParams: [],
+        },
+      })
+
+      const [first, second, third, fourth, fifth, sixth] = examples
       expect(first).to.deep.equal({
         title: 'DummyService',
-        exampleUrl: undefined,
-        previewUrl: '/foo/World.svg',
-        urlPattern: undefined,
+        example: {
+          path: '/foo/World',
+          queryParams: {},
+        },
+        preview: {
+          path: '/foo/World',
+          queryParams: {},
+        },
+        keywords: [],
         documentation: undefined,
       })
       expect(second).to.deep.equal({
         title: 'DummyService',
-        exampleUrl: undefined,
-        previewUrl: '/foo/World.svg?queryParamA=%21%21%21',
-        urlPattern: undefined,
+        example: {
+          path: '/foo/World',
+          queryParams: { queryParamA: '!!!' },
+        },
+        preview: {
+          path: '/foo/World',
+          queryParams: { queryParamA: '!!!' },
+        },
+        keywords: [],
         documentation: undefined,
       })
-      expect(third).to.deep.equal({
+      const expectedDefinition = {
         title: 'DummyService',
-        exampleUrl: '/foo/World.svg',
-        previewUrl:
-          '/badge/cat-Hello%20namedParamA%3A%20foo%20with%20queryParamA%3A%20bar-lightgrey.svg',
-        urlPattern: '/foo/:world.svg',
+        example: {
+          path: '/foo/World',
+          queryParams: {},
+        },
+        preview: {
+          label: 'cat',
+          message: 'Hello namedParamA: foo with queryParamA: bar',
+          color: 'lightgrey',
+        },
+        keywords: ['hello'],
+        documentation: undefined,
+      }
+      expect(third).to.deep.equal(expectedDefinition)
+      expect(fourth).to.deep.equal({
+        title: 'DummyService',
+        example: {
+          pattern: '/foo/:world',
+          namedParams: { world: 'World' },
+          queryParams: {},
+        },
+        preview: {
+          label: 'cat',
+          message: 'Hello namedParamA: foo with queryParamA: bar',
+          color: 'lightgrey',
+        },
+        keywords: ['hello'],
         documentation: undefined,
       })
-    })
-  })
-
-  describe('a generated static badge url', function() {
-    it('is concatenated text and color', function() {
-      const url = DummyService._makeStaticExampleUrlFromTextAndColor(
-        'name',
-        'value',
-        'green'
-      )
-      expect(url).to.equal('/badge/name-value-green')
-    })
-    it('uses url encoding', function() {
-      const url = DummyService._makeStaticExampleUrlFromTextAndColor(
-        'Hello World',
-        'Привет Мир',
-        '#aabbcc'
-      )
-      expect(url).to.equal(
-        '/badge/Hello%20World-%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82%20%D0%9C%D0%B8%D1%80-%23aabbcc'
-      )
-    })
-    it('uses escapes minus signs', function() {
-      const url = DummyService._makeStaticExampleUrlFromTextAndColor(
-        '123-123',
-        'abc-abc',
-        'blue'
-      )
-      expect(url).to.equal('/badge/123--123-abc--abc-blue')
+      expect(fifth).to.deep.equal({
+        title: 'DummyService',
+        example: {
+          pattern: '/foo/:namedParamA',
+          namedParams: { namedParamA: 'World' },
+          queryParams: {},
+        },
+        preview: {
+          label: 'cat',
+          message: 'Hello namedParamA: foo with queryParamA: bar',
+          color: 'lightgrey',
+        },
+        keywords: ['hello'],
+        documentation: undefined,
+      })
+      expect(sixth).to.deep.equal({
+        title: 'DummyService',
+        example: {
+          pattern: '/foo/:world',
+          namedParams: { world: 'World' },
+          queryParams: { queryParamA: '!!!' },
+        },
+        preview: {
+          color: 'lightgrey',
+          label: 'cat',
+          message: 'Hello namedParamA: foo with queryParamA: bar',
+        },
+        keywords: ['hello'],
+        documentation: undefined,
+      })
     })
   })
 
@@ -428,39 +618,7 @@ describe('BaseService', function() {
       requiredString: Joi.string().required(),
     }).required()
 
-    let sandbox
-    beforeEach(function() {
-      sandbox = sinon.createSandbox()
-    })
-    afterEach(function() {
-      sandbox.restore()
-    })
-    beforeEach(function() {
-      sandbox.stub(trace, 'logTrace')
-    })
-
-    it('throws the expected error if schema is not provided', async function() {
-      try {
-        DummyService._validate({ requiredString: 'bar' }, undefined)
-        expect.fail('Expected to throw')
-      } catch (e) {
-        expect(e).to.be.an.instanceof(Error)
-        expect(e.message).to.equal('A Joi schema is required')
-      }
-    })
-
-    it('logs valid responses', async function() {
-      DummyService._validate({ requiredString: 'bar' }, dummySchema)
-      expect(trace.logTrace).to.be.calledWithMatch(
-        'validate',
-        sinon.match.string,
-        'Data after validation',
-        { requiredString: 'bar' },
-        { deep: true }
-      )
-    })
-
-    it('logs invalid responses and throws error', async function() {
+    it('throws error for invalid responses', async function() {
       try {
         DummyService._validate(
           { requiredString: ['this', "shouldn't", 'work'] },
@@ -469,17 +627,19 @@ describe('BaseService', function() {
         expect.fail('Expected to throw')
       } catch (e) {
         expect(e).to.be.an.instanceof(InvalidResponse)
-        expect(e.message).to.equal(
-          'Invalid Response: child "requiredString" fails because ["requiredString" must be a string]'
-        )
-        expect(e.prettyMessage).to.equal('invalid response data')
       }
-      expect(trace.logTrace).to.be.calledWithMatch(
-        'validate',
-        sinon.match.string,
-        'Response did not match schema',
-        'child "requiredString" fails because ["requiredString" must be a string]'
-      )
+    })
+
+    it('throws error for invalid query params', async function() {
+      try {
+        DummyService._validateQueryParams(
+          { requiredString: ['this', "shouldn't", 'work'] },
+          dummySchema
+        )
+        expect.fail('Expected to throw')
+      } catch (e) {
+        expect(e).to.be.an.instanceof(InvalidParameter)
+      }
     })
   })
 

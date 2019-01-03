@@ -5,11 +5,11 @@ const { parseClassifiers } = require('./pypi-helpers')
 
 module.exports = class PypiImplementation extends PypiBase {
   static get category() {
-    return 'other'
+    return 'platform-support'
   }
 
-  static get url() {
-    return this.buildUrl('pypi/implementation')
+  static get route() {
+    return this.buildRoute('pypi/implementation')
   }
 
   static get defaultBadgeData() {
@@ -20,7 +20,9 @@ module.exports = class PypiImplementation extends PypiBase {
     return [
       {
         title: 'PyPI - Implementation',
-        previewUrl: 'Django',
+        pattern: ':packageName',
+        namedParams: { packageName: 'Django' },
+        staticPreview: this.render({ implementations: ['cpython'] }),
         keywords: ['python'],
       },
     ]

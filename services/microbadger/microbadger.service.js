@@ -7,7 +7,64 @@ const {
   makeLabel: getLabel,
 } = require('../../lib/badge-data')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class MicroBadger extends LegacyService {
+  static get category() {
+    return 'size'
+  }
+
+  static get route() {
+    return {
+      base: 'microbadger',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'MicroBadger Size',
+        pattern: 'image-size/:imageId+',
+        namedParams: { imageId: 'fedora/apache' },
+        staticPreview: {
+          label: 'image size',
+          message: '126 MB',
+          color: 'blue',
+        },
+        keywords: ['docker'],
+      },
+      {
+        title: 'MicroBadger Size (tag)',
+        pattern: 'image-size/:imageId+/:tag',
+        namedParams: { imageId: 'fedora/apache', tag: 'latest' },
+        staticPreview: {
+          label: 'image size',
+          message: '103 MB',
+          color: 'blue',
+        },
+        keywords: ['docker'],
+      },
+      {
+        title: 'MicroBadger Layers',
+        pattern: 'layers/:imageId+',
+        namedParams: { imageId: '_/alpine' },
+        staticPreview: { label: 'layers', message: '15', color: 'blue' },
+        keywords: ['docker'],
+      },
+      {
+        title: 'MicroBadger Layers (tag)',
+        pattern: 'layers/:imageId+/:tag',
+        namedParams: { imageId: '_/alpine', tag: '2.7' },
+        staticPreview: { label: 'layers', message: '12', color: 'blue' },
+        keywords: ['docker'],
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/microbadger\/(image-size|layers)\/([^/]+)\/([^/]+)\/?([^/]*)\.(svg|png|gif|jpg|json)$/,
@@ -76,7 +133,7 @@ module.exports = class MicroBadger extends LegacyService {
               badgeData.text[1] = image.LayerCount
             }
             badgeData.colorscheme = null
-            badgeData.colorB = '#007ec6'
+            badgeData.colorB = 'blue'
             sendBadge(format, badgeData)
           } catch (e) {
             badgeData.colorscheme = 'red'

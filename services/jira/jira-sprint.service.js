@@ -1,74 +1,106 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const serverSecrets = require('../../lib/server-secrets')
+const Joi = require('joi')
+const JiraBase = require('./jira-base')
 
-// JIRA agile sprint completion.
-module.exports = class JiraSprint extends LegacyService {
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/jira\/sprint\/(http(?:s)?)\/(.+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const protocol = match[1] // eg, https
-        const host = match[2] // eg, jira.spring.io
-        const sprintId = match[3] // eg, 94
-        const format = match[4] // eg, png
-
-        const options = {
-          method: 'GET',
-          json: true,
-          uri:
-            protocol +
-            '://' +
-            host +
-            '/rest/api/2/search?jql=sprint=' +
-            sprintId +
-            '%20AND%20type%20IN%20(Bug,Improvement,Story,"Technical%20task")&fields=resolution&maxResults=500',
-        }
-        if (serverSecrets && serverSecrets.jira_username) {
-          options.auth = {
-            user: serverSecrets.jira_username,
-            pass: serverSecrets.jira_password,
-          }
-        }
-
-        const badgeData = getBadgeData('completion', data)
-        request(options, (err, res, json) => {
-          if (err != null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            if (json && json.total >= 0) {
-              const issuesDone = json.issues.filter(el => {
-                if (el.fields.resolution != null) {
-                  return el.fields.resolution.name !== 'Unresolved'
-                }
-              }).length
-              badgeData.text[1] =
-                Math.round((issuesDone * 100) / json.total) + '%'
-              switch (issuesDone) {
-                case 0:
-                  badgeData.colorscheme = 'red'
-                  break
-                case json.total:
-                  badgeData.colorscheme = 'brightgreen'
-                  break
-                default:
-                  badgeData.colorscheme = 'orange'
-              }
-            } else {
-              badgeData.text[1] = 'invalid'
-            }
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
+const schema = Joi.object({
+  total: Joi.number(),
+  issues: Joi.array()
+    .items(
+      Joi.object({
+        fields: Joi.object({
+          resolution: Joi.object({
+            name: Joi.string(),
+          }).allow(null),
+        }).required(),
       })
     )
+    .required(),
+}).required()
+
+const documentation = `
+<p>
+  To get the <code>Sprint ID</code>, go to your Backlog view in your project,
+  right click on your sprint name and get the value of
+  <code>data-sprint-id</code>.
+</p>
+`
+
+module.exports = class JiraSprint extends JiraBase {
+  static render({ numCompletedIssues, numTotalIssues }) {
+    const percentComplete = numTotalIssues
+      ? (numCompletedIssues / numTotalIssues) * 100
+      : 0
+    let color = 'orange'
+    if (numCompletedIssues === 0) {
+      color = 'red'
+    } else if (numCompletedIssues === numTotalIssues) {
+      color = 'brightgreen'
+    }
+    return {
+      label: 'completion',
+      message: `${percentComplete.toFixed(0)}%`,
+      color,
+    }
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'jira' }
+  }
+
+  static get route() {
+    return {
+      base: 'jira/sprint',
+      pattern: ':protocol(http|https)/:hostAndPath(.+)/:sprintId',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'JIRA sprint completion',
+        pattern: ':protocol/:hostAndPath/:sprintId',
+        namedParams: {
+          protocol: 'https',
+          hostAndPath: 'jira.spring.io',
+          sprintId: '94',
+        },
+        staticPreview: this.render({
+          numCompletedIssues: 27,
+          numTotalIssues: 28,
+        }),
+        documentation,
+        keywords: ['jira', 'sprint', 'issues'],
+      },
+    ]
+  }
+
+  async handle({ protocol, hostAndPath, sprintId }) {
+    // Atlassian Documentation: https://developer.atlassian.com/cloud/jira/platform/rest/v2/#api-group-Search
+    // There are other sprint-specific APIs but those require authentication. The search API
+    // allows us to get the needed data without being forced to authenticate.
+    const url = `${protocol}://${hostAndPath}/rest/api/2/search`
+    const qs = {
+      jql: `sprint=${sprintId} AND type IN (Bug,Improvement,Story,"Technical task")`,
+      fields: 'resolution',
+      maxResults: 500,
+    }
+    const json = await this.fetch({
+      url,
+      schema,
+      qs,
+      errorMessages: {
+        400: 'sprint not found',
+        404: 'sprint not found',
+      },
+    })
+    const numTotalIssues = json.total
+    const numCompletedIssues = json.issues.filter(issue => {
+      if (issue.fields.resolution != null) {
+        return issue.fields.resolution.name !== 'Unresolved'
+      }
+    }).length
+
+    return this.constructor.render({ numTotalIssues, numCompletedIssues })
   }
 }

@@ -8,12 +8,45 @@ const {
 } = require('../../lib/badge-data')
 const { licenseToColor } = require('../../lib/licenses')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class GithubLicense extends LegacyService {
+  static get category() {
+    return 'license'
+  }
+
+  static get route() {
+    return {
+      base: 'github/license',
+      pattern: ':user/:repo',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub',
+        namedParams: { user: 'mashape', repo: 'apistatus' },
+        staticExample: {
+          label: 'license',
+          message: 'MIT',
+          color: 'green',
+        },
+        keywords: ['GitHub', 'license'],
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
-    // GitHub license integration.
     camp.route(
       /^\/github\/license\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
@@ -38,7 +71,11 @@ module.exports = class GithubLicense extends LegacyService {
             const body = JSON.parse(buffer)
             const license = body.license
             if (license != null) {
-              badgeData.text[1] = license.spdx_id || 'unknown'
+              if (!license.spdx_id || license.spdx_id === 'NOASSERTION') {
+                badgeData.text[1] = 'unknown'
+              } else {
+                badgeData.text[1] = license.spdx_id
+              }
               setBadgeColor(badgeData, licenseToColor(license.spdx_id))
               sendBadge(format, badgeData)
             } else {

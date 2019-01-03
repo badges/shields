@@ -1,12 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const createServiceTester = require('../create-service-tester')
-
 const { isMetric } = require('../test-validators')
 
-const t = createServiceTester()
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 // total downloads
 t.create('total downloads (valid)')

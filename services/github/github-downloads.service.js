@@ -7,10 +7,123 @@ const {
 } = require('../../lib/badge-data')
 const { metric } = require('../../lib/text-formatters')
 const {
+  documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class GithubDownloads extends LegacyService {
+  static get category() {
+    return 'downloads'
+  }
+
+  static get route() {
+    return {
+      base: 'github',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub All Releases',
+        pattern: 'downloads/:user/:repo/total',
+        namedParams: {
+          user: 'atom',
+          repo: 'atom',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '857k total',
+          color: 'brightgreen',
+        },
+        documentation,
+      },
+      {
+        title: 'GitHub Releases',
+        pattern: 'downloads/:user/:repo/:tag/total',
+        namedParams: {
+          user: 'atom',
+          repo: 'atom',
+          tag: 'latest',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '27k',
+          color: 'brightgreen',
+        },
+        documentation,
+      },
+      {
+        title: 'GitHub Pre-Releases',
+        pattern: 'downloads-pre/:user/:repo/:tag/total',
+        namedParams: {
+          user: 'atom',
+          repo: 'atom',
+          tag: 'latest',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '2k',
+          color: 'brightgreen',
+        },
+        documentation,
+      },
+      {
+        title: 'GitHub Releases (by Release)',
+        pattern: 'downloads/:user/:repo/:tag/total',
+        namedParams: {
+          user: 'atom',
+          repo: 'atom',
+          tag: 'v0.190.0',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '490k v0.190.0',
+          color: 'brightgreen',
+        },
+        documentation,
+      },
+      {
+        title: 'GitHub Releases (by Asset)',
+        pattern: 'downloads/:user/:repo/:tag/:path*',
+        namedParams: {
+          user: 'atom',
+          repo: 'atom',
+          tag: 'latest',
+          path: 'atom-amd64.deb',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '3k [atom-amd64.deb]',
+          color: 'brightgreen',
+        },
+        documentation,
+      },
+      {
+        title: 'GitHub Pre-Releases (by Asset)',
+        pattern: 'downloads-pre/:user/:repo/:tag/:path*',
+        namedParams: {
+          user: 'atom',
+          repo: 'atom',
+          tag: 'latest',
+          path: 'atom-amd64.deb',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '237 [atom-amd64.deb]',
+          color: 'brightgreen',
+        },
+        documentation,
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
       /^\/github\/(downloads|downloads-pre)\/([^/]+)\/([^/]+)(\/.+)?\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -39,9 +152,9 @@ module.exports = class GithubDownloads extends LegacyService {
               ? type === 'downloads'
                 ? 'latest'
                 : ''
-              : 'tags/' + tag
+              : `tags/${tag}`
           if (releasePath) {
-            apiUrl = apiUrl + '/' + releasePath
+            apiUrl = `${apiUrl}/${releasePath}`
           }
         }
         const badgeData = getBadgeData('downloads', data)

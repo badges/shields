@@ -1,5 +1,11 @@
 import { Link } from 'react-router-dom'
 import React from 'react'
+import styled from 'styled-components'
+import { VerticalSpace } from './common'
+
+const Highlights = styled.p`
+  font-style: italic;
+`
 
 export default () => (
   <section>
@@ -7,17 +13,11 @@ export default () => (
       <img alt="Shields.io" src="/static/logo.svg" />
     </Link>
 
-    <hr className="spacing" />
+    <VerticalSpace />
 
-    <p className="highlights">
+    <Highlights>
       Pixel-perfect &nbsp; Retina-ready &nbsp; Fast &nbsp; Consistent &nbsp;
       Hackable &nbsp; No tracking
-    </p>
-
-    <style jsx>{`
-      .highlights {
-        font-style: italic;
-      }
-    `}</style>
+    </Highlights>
   </section>
 )

@@ -66,7 +66,7 @@ the top post.
 If you have a suggestion of your own, [search the open issues][issues]. If you
 don't see it, feel free to [open a new issue][open an issue].
 
-[open an issue]: https://github.com/badges/shields/issues/new
+[open an issue]: https://github.com/badges/shields/issues/new/choose
 
 ### Spreading the word
 
@@ -93,7 +93,7 @@ Badge guidelines
 
 - Shields.io hosts integrations for services which are primarily
   used by developers or which are widely used by developers
-- The left-hand side of a badge should not advertise. It should be a *noun*
+- The left-hand side of a badge should not advertise. It should be a lowercase *noun*
   succinctly describing the meaning of the right-hand side.
 - Query parameters must be *declared by the service*. See `request-handler.js`.
 - Except for badges using the `social` style, logos should be *turned off by
@@ -118,11 +118,11 @@ Coding guidelines
 ### Prettier
 
 This project formats its source code using Prettier. The most enjoyable way to
-use Prettier is to let is format code for you when you save. You can [integrate
+use Prettier is to let it format code for you when you save. You can [integrate
 it into your editor][integrate prettier].
 
-If for whatever reason you don't want to do that, you can run
-`npm run prettier` to format the code from the command line.
+Whether you integrate it into your editor or not, a pre-commit hook will run
+Prettier before a commit by default.
 
 [integrate prettier]: https://prettier.io/docs/en/editors.html
 

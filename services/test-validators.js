@@ -1,5 +1,8 @@
 'use strict'
 
+const Joi = require('joi')
+const { semver: isSemver } = require('./validators')
+
 /*
   Note:
   Validators defined in this file are used by more than one service.
@@ -7,12 +10,7 @@
   should be declared in that service's test file.
 */
 
-const Joi = require('joi')
-const semverRegex = require('semver-regex')()
-
 const withRegex = re => Joi.string().regex(re)
-
-const isSemver = withRegex(semverRegex)
 
 const isVPlusTripleDottedVersion = withRegex(/^v[0-9]+.[0-9]+.[0-9]+$/)
 
@@ -50,7 +48,7 @@ const isComposerVersion = withRegex(
 // 5.4, 5.6, 7.2
 // 5.4 - 7.1, HHVM
 const isPhpVersionReduction = withRegex(
-  /^((>= \d+(\.\d+)?)|(\d+\.\d+(, \d+\.\d+)*)|(\d+\.\d+ \\- \d+\.\d+))(, HHVM)?$/
+  /^((>= \d+(\.\d+)?)|(\d+\.\d+(, \d+\.\d+)*)|(\d+\.\d+ - \d+\.\d+))(, HHVM)?$/
 )
 
 const isStarRating = withRegex(
@@ -66,7 +64,7 @@ const isMetricOverTimePeriod = withRegex(
   /^[1-9][0-9]*[kMGTPEZY]?\/(year|month|4 weeks|week|day)$/
 )
 
-const isIntegerPercentage = withRegex(/^[0-9]+%$/)
+const isIntegerPercentage = withRegex(/^[1-9][0-9]?%|^100%|^0%$/)
 const isDecimalPercentage = withRegex(/^[0-9]+\.[0-9]*%$/)
 const isPercentage = Joi.alternatives().try(
   isIntegerPercentage,
@@ -97,6 +95,7 @@ const isBuildStatus = Joi.equal(
   'no tests',
   'not built',
   'not run',
+  'passed',
   'passing',
   'pending',
   'processing',
@@ -130,4 +129,5 @@ module.exports = {
   isFormattedDate,
   isDependencyState,
   isBuildStatus,
+  withRegex,
 }

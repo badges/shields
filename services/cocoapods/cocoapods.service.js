@@ -6,6 +6,12 @@ const { checkErrorResponse } = require('../../lib/error-helper')
 const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class CocoapodsVersionPlatformLicense extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
@@ -14,8 +20,7 @@ module.exports = class CocoapodsVersionPlatformLicense extends LegacyService {
         const type = match[1]
         const spec = match[2] // eg, AFNetworking
         const format = match[3]
-        const apiUrl =
-          'https://trunk.cocoapods.org/api/v1/pods/' + spec + '/specs/latest'
+        const apiUrl = `https://trunk.cocoapods.org/api/v1/pods/${spec}/specs/latest`
         const typeToLabel = { v: 'pod', p: 'platform', l: 'license' }
         const badgeData = getBadgeData(typeToLabel[type], data)
         badgeData.colorscheme = null

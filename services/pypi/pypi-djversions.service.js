@@ -8,8 +8,8 @@ module.exports = class PypiDjangoVersions extends PypiBase {
     return 'platform-support'
   }
 
-  static get url() {
-    return this.buildUrl('pypi/djversions')
+  static get route() {
+    return this.buildRoute('pypi/djversions')
   }
 
   static get defaultBadgeData() {
@@ -20,7 +20,9 @@ module.exports = class PypiDjangoVersions extends PypiBase {
     return [
       {
         title: 'PyPI - Django Version',
-        previewUrl: 'djangorestframework',
+        pattern: ':packageName',
+        namedParams: { packageName: 'djangorestframework' },
+        staticPreview: this.render({ versions: ['1.11', '2.0', '2.1'] }),
         keywords: ['python', 'django'],
       },
     ]

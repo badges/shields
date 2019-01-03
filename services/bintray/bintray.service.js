@@ -6,7 +6,30 @@ const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 const serverSecrets = require('../../lib/server-secrets')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class Bintray extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return { base: 'bintray/v' }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Bintray',
+        previewUrl: 'asciidoctor/maven/asciidoctorj',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/bintray\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
@@ -16,8 +39,7 @@ module.exports = class Bintray extends LegacyService {
 
         const options = {
           method: 'GET',
-          uri:
-            'https://bintray.com/api/v1/packages/' + path + '/versions/_latest',
+          uri: `https://bintray.com/api/v1/packages/${path}/versions/_latest`,
           headers: {
             Accept: 'application/json',
           },

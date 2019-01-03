@@ -1,8 +1,8 @@
 'use strict'
 
-const BaseService = require('../base')
+const NonMemoryCachingBaseService = require('../base-non-memory-caching')
 
-module.exports = class Time extends BaseService {
+module.exports = class Time extends NonMemoryCachingBaseService {
   async handle() {
     return { message: new Date() }
   }
@@ -19,11 +19,10 @@ module.exports = class Time extends BaseService {
     return 'debug'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'servertime',
-      format: '',
-      capture: [],
+      pattern: '',
     }
   }
 }

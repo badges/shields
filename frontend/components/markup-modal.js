@@ -1,87 +1,168 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Modal from 'react-modal'
-import ClickToSelect from '@mapbox/react-click-to-select'
-import resolveBadgeUrl from '../lib/badge-url'
+import styled from 'styled-components'
+import { badgeUrlFromPath, badgeUrlFromPattern } from '../../lib/make-badge-url'
 import generateAllMarkup from '../lib/generate-image-markup'
 import { advertisedStyles } from '../../supported-features.json'
+import { Snippet } from './snippet'
+import { BaseFont, H3, Badge, BlockInput } from './common'
+
+const ContentContainer = styled(BaseFont)`
+  text-align: center;
+`
+
+const WeeSnippet = ({ snippet, truncate = false }) => (
+  <Snippet truncate={truncate} fontSize="10pt" snippet={snippet} />
+)
+WeeSnippet.propTypes = {
+  snippet: PropTypes.string.isRequired,
+  truncate: PropTypes.bool,
+}
 
 export default class MarkupModal extends React.Component {
   static propTypes = {
-    example: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      exampleUrl: PropTypes.string,
-      previewUrl: PropTypes.string,
-      urlPattern: PropTypes.string,
-      documentation: PropTypes.string,
-      link: PropTypes.string,
-    }),
+    // This is an item from the `examples` array within the
+    // `serviceDefinition` schema.
+    // https://github.com/badges/shields/blob/master/services/service-definitions.js
+    example: PropTypes.object,
     baseUrl: PropTypes.string.isRequired,
     onRequestClose: PropTypes.func.isRequired,
   }
 
   state = {
-    exampleUrl: null,
-    badgeUrl: null,
-    link: null,
+    badgeUrl: '',
+    badgeUrlForProps: '',
+    exampleUrl: '',
+    link: '',
     style: 'flat',
   }
 
   get isOpen() {
-    return this.props.example !== null
+    return this.props.example !== undefined
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { example, baseUrl } = nextProps
+  static urlsForProps(props) {
+    const {
+      example: { example },
+      baseUrl,
+    } = props
 
-    if (!example) {
-      return
+    let badgeUrl
+    let exampleUrl
+    // There are two alternatives for `example`. Refer to the schema in
+    // `services/service-definitions.js`.
+    if (example.pattern !== undefined) {
+      const { pattern, namedParams, queryParams } = example
+      badgeUrl = badgeUrlFromPath({
+        path: pattern,
+        queryParams,
+      })
+      exampleUrl = badgeUrlFromPattern({
+        baseUrl,
+        pattern,
+        namedParams,
+        queryParams,
+      })
+    } else {
+      const { path, queryParams } = example
+      badgeUrl = badgeUrlFromPath({
+        path,
+        queryParams,
+      })
+      exampleUrl = ''
     }
 
-    // Transfer `badgeUrl` and `link` into state so they can be edited by the
-    // user.
-    const { exampleUrl, urlPattern, previewUrl, link } = example
-    this.setState({
-      exampleUrl: exampleUrl
-        ? resolveBadgeUrl(exampleUrl, baseUrl || window.location.href)
-        : null,
-      badgeUrl: resolveBadgeUrl(
-        urlPattern || previewUrl,
-        baseUrl || window.location.href
-      ),
-      link,
-    })
+    return { badgeUrl, exampleUrl }
   }
 
-  generateCompleteBadgeUrl() {
+  static getDerivedStateFromProps(props, state) {
+    let urlsForProps, link
+    if (props.example) {
+      urlsForProps = MarkupModal.urlsForProps(props)
+      link = props.example.example.link
+    } else {
+      urlsForProps = { badgeUrl: '', exampleUrl: '' }
+      link = ''
+    }
+
+    if (urlsForProps.badgeUrl === state.badgeUrlForProps) {
+      return null
+    } else {
+      return {
+        ...urlsForProps,
+        badgeUrlForProps: urlsForProps.badgeUrl,
+        link,
+      }
+    }
+  }
+
+  generateBuiltBadgeUrl() {
     const { baseUrl } = this.props
     const { badgeUrl, style } = this.state
 
-    return resolveBadgeUrl(
-      badgeUrl,
-      baseUrl || window.location.href,
-      // Default style doesn't need to be specified.
-      style === 'flat' ? undefined : { style }
+    return badgeUrlFromPath({
+      baseUrl,
+      path: badgeUrl,
+      format: '', // `badgeUrl` already contains `.svg`.
+      style: style === 'flat' ? undefined : style,
+    })
+  }
+
+  renderLivePreview() {
+    const { badgeUrl } = this.state
+    const includesPlaceholders = badgeUrl.includes(':')
+    let src
+    if (badgeUrl && !includesPlaceholders) {
+      src = this.generateBuiltBadgeUrl()
+    } else {
+      src = undefined
+    }
+    return <Badge display="block" src={src} />
+  }
+
+  renderMarkup() {
+    const {
+      example: {
+        example: { title },
+      },
+    } = this.props
+    const { link } = this.state
+
+    const builtBadgeUrl = this.generateBuiltBadgeUrl()
+    const { markdown, reStructuredText, asciiDoc } = generateAllMarkup(
+      builtBadgeUrl,
+      link,
+      title
+    )
+
+    return (
+      <div>
+        <p>
+          URL&nbsp;
+          <WeeSnippet snippet={builtBadgeUrl} />
+        </p>
+        <p>
+          Markdown&nbsp;
+          <WeeSnippet truncate snippet={markdown} />
+        </p>
+        <p>
+          reStructuredText&nbsp;
+          <WeeSnippet truncate snippet={reStructuredText} />
+        </p>
+        <p>
+          AsciiDoc&nbsp;
+          <WeeSnippet truncate snippet={asciiDoc} />
+        </p>
+      </div>
     )
   }
 
-  generateMarkup() {
-    if (!this.isOpen) {
-      return {}
-    }
-
-    const { title } = this.props.example
-    const { link } = this.state
-    const completeBadgeUrl = this.generateCompleteBadgeUrl()
-    return generateAllMarkup(completeBadgeUrl, link, title)
-  }
-
   renderDocumentation() {
-    if (!this.isOpen) {
-      return null
-    }
+    const {
+      example: { documentation },
+    } = this.props
 
-    const { documentation } = this.props.example
     return documentation ? (
       <div>
         <h4>Documentation</h4>
@@ -91,99 +172,81 @@ export default class MarkupModal extends React.Component {
   }
 
   render() {
-    const { markdown, reStructuredText, asciiDoc } = this.generateMarkup()
+    const { isOpen } = this
+    const { onRequestClose, example: { title } = {} } = this.props
+    const { link, badgeUrl, exampleUrl, style } = this.state
 
-    const completeBadgeUrl = this.isOpen
-      ? this.generateCompleteBadgeUrl()
-      : undefined
+    const common = {
+      autoComplete: 'off',
+      autoCorrect: 'off',
+      autoCapitalize: 'off',
+      spellCheck: 'false',
+    }
 
     return (
       <Modal
-        isOpen={this.isOpen}
-        onRequestClose={this.props.onRequestClose}
+        isOpen={isOpen}
+        onRequestClose={onRequestClose}
         contentLabel="Example Modal"
+        ariaHideApp={false}
       >
-        <form action="">
-          <p>
-            <img className="badge-img" src={completeBadgeUrl} />
-          </p>
-          <p>
-            <label>
-              Link&nbsp;
-              <input
-                type="url"
-                value={this.state.link}
-                onChange={event => {
-                  this.setState({ link: event.target.value })
-                }}
-              />
-            </label>
-          </p>
-          <p>
-            <label>
-              Image&nbsp;
-              <input
-                type="url"
-                value={this.state.badgeUrl}
-                onChange={event => {
-                  this.setState({ badgeUrl: event.target.value })
-                }}
-              />
-            </label>
-          </p>
-          {this.state.exampleUrl && (
+        <ContentContainer>
+          <form action="">
+            <H3>{title}</H3>
+            {isOpen && this.renderLivePreview()}
             <p>
-              Example&nbsp;
-              <ClickToSelect>
-                <input
-                  className="code clickable"
-                  readOnly
-                  value={this.state.exampleUrl}
+              <label>
+                Link&nbsp;
+                <BlockInput
+                  type="url"
+                  value={link}
+                  onChange={event => {
+                    this.setState({ link: event.target.value })
+                  }}
+                  {...common}
                 />
-              </ClickToSelect>
+              </label>
             </p>
-          )}
-          <p>
-            <label>
-              Style&nbsp;
-              <select
-                value={this.state.style}
-                onChange={event => {
-                  this.setState({ style: event.target.value })
-                }}
-              >
-                {advertisedStyles.map(style => (
-                  <option key={style} value={style}>
-                    {style}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </p>
-          <p>
-            Markdown&nbsp;
-            <ClickToSelect>
-              <input className="code clickable" readOnly value={markdown} />
-            </ClickToSelect>
-          </p>
-          <p>
-            reStructuredText&nbsp;
-            <ClickToSelect>
-              <input
-                className="code clickable"
-                readOnly
-                value={reStructuredText}
-              />
-            </ClickToSelect>
-          </p>
-          <p>
-            AsciiDoc&nbsp;
-            <ClickToSelect>
-              <input className="code clickable" readOnly value={asciiDoc} />
-            </ClickToSelect>
-          </p>
-          {this.renderDocumentation()}
-        </form>
+            <p>
+              <label>
+                Path&nbsp;
+                <BlockInput
+                  type="url"
+                  value={badgeUrl}
+                  onChange={event => {
+                    this.setState({ badgeUrl: event.target.value })
+                  }}
+                  {...common}
+                />
+              </label>
+            </p>
+            {exampleUrl && (
+              <p>
+                Example&nbsp;
+                <Snippet fontSize="10pt" snippet={exampleUrl} />
+              </p>
+            )}
+            <p>
+              <label>
+                Style&nbsp;
+                <select
+                  value={style}
+                  onChange={event => {
+                    this.setState({ style: event.target.value })
+                  }}
+                >
+                  {advertisedStyles.map(style => (
+                    <option key={style} value={style}>
+                      {style}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </p>
+            {isOpen && this.renderMarkup()}
+            {isOpen && this.renderDocumentation()}
+          </form>
+        </ContentContainer>
       </Modal>
     )
   }

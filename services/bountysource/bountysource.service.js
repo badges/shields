@@ -1,45 +1,58 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const BaseJsonService = require('../base-json')
+const Joi = require('joi')
+const { nonNegativeInteger } = require('../validators')
+const { metric } = require('../../lib/text-formatters')
 
-module.exports = class Bountysource extends LegacyService {
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/bountysource\/team\/([^/]+)\/activity\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const team = match[1] // eg, `mozilla-core`.
-        const format = match[2]
-        const url = 'https://api.bountysource.com/teams/' + team
-        const options = {
-          headers: { Accept: 'application/vnd.bountysource+json; version=2' },
-        }
-        const badgeData = getBadgeData('bounties', data)
-        request(url, options, (err, res, buffer) => {
-          if (err != null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            if (res.statusCode !== 200) {
-              throw Error('Bad response.')
-            }
-            const parsedData = JSON.parse(buffer)
-            const activity = parsedData.activity_total
-            badgeData.colorscheme = 'brightgreen'
-            badgeData.text[1] = activity
-            sendBadge(format, badgeData)
-          } catch (e) {
-            if (res.statusCode === 404) {
-              badgeData.text[1] = 'not found'
-            } else {
-              badgeData.text[1] = 'invalid'
-            }
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+const schema = Joi.object({ activity_total: nonNegativeInteger })
+
+module.exports = class Bountysource extends BaseJsonService {
+  async fetch({ team }) {
+    const url = `https://api.bountysource.com/teams/${team}`
+    return this._requestJson({
+      schema,
+      url,
+      options: {
+        headers: { Accept: 'application/vnd.bountysource+json; version=2' },
+      },
+    })
+  }
+
+  static get category() {
+    return 'funding'
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'bounties' }
+  }
+
+  static get route() {
+    return {
+      base: 'bountysource/team',
+      pattern: ':team/activity',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Bountysource',
+        namedParams: { team: 'mozilla-core' },
+        staticExample: this.render({ total: 53000 }),
+      },
+    ]
+  }
+
+  static render({ total }) {
+    return {
+      message: metric(total),
+      color: 'brightgreen',
+    }
+  }
+
+  async handle({ team }) {
+    const json = await this.fetch({ team })
+    return this.constructor.render({ total: json.activity_total })
   }
 }

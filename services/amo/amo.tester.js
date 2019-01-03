@@ -8,8 +8,10 @@ const {
   isVPlusDottedVersionAtLeastOne,
 } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'amo', title: 'Mozilla Addons' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'amo',
+  title: 'Mozilla Addons',
+}))
 
 t.create('Downloads')
   .get('/d/IndieGala-Helper.json')

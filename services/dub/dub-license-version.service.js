@@ -9,7 +9,63 @@ const { checkErrorResponse } = require('../../lib/error-helper')
 const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
-module.exports = class DubLicenseVersion extends LegacyService {
+class DubVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'dub/v',
+      pattern: ':packageName',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'DUB',
+        namedParams: { packageName: 'vibe-d' },
+        staticPreview: { label: 'version', message: 'v0.8.4', color: 'orange' },
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class DubLicense extends LegacyService {
+  static get category() {
+    return 'license'
+  }
+
+  static get route() {
+    return {
+      base: 'dub/l',
+      pattern: ':packageName',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'DUB',
+        namedParams: { packageName: 'vibe-d' },
+        staticPreview: { label: 'license', message: 'MIT', color: 'blue' },
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
+class DubLicenseVersion extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/dub\/(v|l)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -17,7 +73,7 @@ module.exports = class DubLicenseVersion extends LegacyService {
         const info = match[1] // (v - version, l - license)
         const pkg = match[2] // package name, e.g. vibe-d
         const format = match[3]
-        let apiUrl = 'https://code.dlang.org/api/packages/' + pkg
+        let apiUrl = `https://code.dlang.org/api/packages/${pkg}`
         if (info === 'v') {
           apiUrl += '/latest'
         } else if (info === 'l') {
@@ -54,4 +110,10 @@ module.exports = class DubLicenseVersion extends LegacyService {
       })
     )
   }
+}
+
+module.exports = {
+  DubVersion,
+  DubLicense,
+  DubLicenseVersion,
 }

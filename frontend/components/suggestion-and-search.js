@@ -2,8 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import fetchPonyfill from 'fetch-ponyfill'
 import debounce from 'lodash.debounce'
-import { Badge } from './badge-examples'
 import resolveUrl from '../lib/resolve-url'
+import BadgeExamples from './badge-examples'
+import { BlockInput } from './common'
 
 export default class SuggestionAndSearch extends React.Component {
   static propTypes = {
@@ -38,21 +39,25 @@ export default class SuggestionAndSearch extends React.Component {
   }
 
   getSuggestions() {
-    this.setState({ inProgress: true }, () => {
+    this.setState({ inProgress: true }, async () => {
       const { baseUrl } = this.props
       const { projectUrl } = this.state
 
       const url = resolveUrl('/$suggest/v1', baseUrl, { url: projectUrl })
 
       const fetch = window.fetch || fetchPonyfill
-      fetch(url)
-        .then(res => res.json())
-        .then(json => {
-          this.setState({ inProgress: false, suggestions: json.badges })
-        })
-        .catch(() => {
-          this.setState({ inProgress: false, suggestions: [] })
-        })
+      const res = await fetch(url)
+      let suggestions
+      try {
+        const json = await res.json()
+        // This doesn't validate the response. The default value here prevents
+        // a crash if the server returns {"err":"Disallowed"}.
+        suggestions = json.suggestions || []
+      } catch (e) {
+        suggestions = []
+      }
+
+      this.setState({ inProgress: false, suggestions })
     })
   }
 
@@ -64,28 +69,24 @@ export default class SuggestionAndSearch extends React.Component {
       return null
     }
 
+    const transformed = [
+      {
+        examples: suggestions.map(({ title, path, link, queryParams }) => ({
+          title,
+          preview: { path, queryParams },
+          example: { path, queryParams },
+          link,
+        })),
+      },
+    ]
+
     return (
-      <table className="badge">
-        <tbody>
-          {suggestions.map(({ name, link, badge }, i) => (
-            // TODO We need to deal with `link`.
-            <Badge
-              key={i}
-              title={name}
-              previewUrl={badge}
-              onClick={() =>
-                this.props.onBadgeClick({
-                  title: name,
-                  previewUrl: badge,
-                  link,
-                })
-              }
-              baseUrl={baseUrl}
-              longCache={longCache}
-            />
-          ))}
-        </tbody>
-      </table>
+      <BadgeExamples
+        definitions={transformed}
+        baseUrl={baseUrl}
+        longCache={longCache}
+        onClick={this.props.onBadgeClick}
+      />
     )
   }
 
@@ -93,7 +94,7 @@ export default class SuggestionAndSearch extends React.Component {
     return (
       <section>
         <form action="javascript:void 0" autoComplete="off">
-          <input
+          <BlockInput
             onChange={event => this.queryChanged(event.target.value)}
             autofill="off"
             autoFocus

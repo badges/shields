@@ -15,8 +15,8 @@ module.exports = class NpmVersion extends NpmBase {
     return 'version'
   }
 
-  static get url() {
-    return this.buildUrl('npm/v', { withTag: true })
+  static get route() {
+    return this.buildRoute('npm/v', { withTag: true })
   }
 
   static get defaultBadgeData() {
@@ -28,37 +28,37 @@ module.exports = class NpmVersion extends NpmBase {
       {
         title: 'npm',
         exampleUrl: 'npm',
-        urlPattern: ':package',
+        pattern: ':package',
         staticExample: this.render({ version: '6.3.0' }),
         keywords: ['node'],
       },
       {
         title: 'npm (scoped)',
         exampleUrl: '@cycle/core',
-        urlPattern: ':scope/:package',
+        pattern: ':scope/:package',
         staticExample: this.render({ version: '7.0.0' }),
         keywords: ['node'],
       },
       {
         title: 'npm (tag)',
         exampleUrl: 'npm/next',
-        urlPattern: ':package/:tag',
+        pattern: ':package/:tag',
         staticExample: this.render({ tag: 'latest', version: '6.3.0' }),
         keywords: ['node'],
       },
       {
         title: 'npm (custom registry)',
         exampleUrl: 'npm/next',
-        urlPattern: ':package/:tag',
+        pattern: ':package/:tag',
         staticExample: this.render({ tag: 'latest', version: '7.0.0' }),
-        query: { registry_uri: 'https://registry.npmjs.com' },
+        queryParams: { registry_uri: 'https://registry.npmjs.com' },
         keywords: ['node'],
       },
       {
         title: 'npm (scoped with tag)',
         exampleUrl: '@cycle/core/canary',
         staticExample: this.render({ tag: 'latest', version: '6.3.0' }),
-        urlPattern: ':scope/:package/:tag',
+        pattern: ':scope/:package/:tag',
         keywords: ['node'],
       },
     ]

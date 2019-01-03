@@ -8,8 +8,8 @@ module.exports = class PypiPythonVersions extends PypiBase {
     return 'platform-support'
   }
 
-  static get url() {
-    return this.buildUrl('pypi/pyversions')
+  static get route() {
+    return this.buildRoute('pypi/pyversions')
   }
 
   static get defaultBadgeData() {
@@ -20,7 +20,9 @@ module.exports = class PypiPythonVersions extends PypiBase {
     return [
       {
         title: 'PyPI - Python Version',
-        previewUrl: 'Django',
+        pattern: ':packageName',
+        namedParams: { packageName: 'Django' },
+        staticPreview: this.render({ versions: ['3.5', '3.6', '3.7'] }),
         keywords: ['python'],
       },
     ]

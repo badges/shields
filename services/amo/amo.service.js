@@ -17,7 +17,146 @@ const {
   floorCount: floorCountColor,
 } = require('../../lib/color-formatters')
 
-module.exports = class Amo extends LegacyService {
+const keywords = ['amo', 'firefox']
+
+class AmoDownloads extends LegacyService {
+  static get category() {
+    return 'downloads'
+  }
+
+  static get route() {
+    return {
+      base: 'amo/d',
+      pattern: ':addonId',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Mozilla Add-on',
+        namedParams: { addonId: 'dustman' },
+        staticExample: { message: '12k', color: 'brightgreen' },
+        keywords,
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class AmoVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'amo/v',
+      pattern: ':addonId',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Mozilla Add-on',
+        namedParams: { addonId: 'dustman' },
+        staticExample: { message: 'v2.1.0', color: 'blue' },
+        keywords,
+      },
+    ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'mozilla add-on',
+    }
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class AmoRating extends LegacyService {
+  static get category() {
+    return 'rating'
+  }
+
+  static get route() {
+    return {
+      base: 'amo',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Mozilla Add-on',
+        pattern: 'rating/:addonId',
+        namedParams: { addonId: 'dustman' },
+        staticExample: {
+          label: 'rating',
+          message: '4/5',
+          color: 'brightgreen',
+        },
+        keywords,
+      },
+      {
+        title: 'Mozilla Add-on',
+        pattern: 'stars/:addonId',
+        namedParams: { addonId: 'dustman' },
+        staticExample: {
+          label: 'rating',
+          message: starRating(4),
+          color: 'brightgreen',
+        },
+        keywords,
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class AmoUsers extends LegacyService {
+  static get category() {
+    return 'downloads'
+  }
+
+  static get route() {
+    return {
+      base: 'amo/users',
+      pattern: ':addonId',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Mozilla Add-on',
+        namedParams: { addonId: 'dustman' },
+        staticExample: { message: '706', color: 'brightgreen' },
+        keywords,
+      },
+    ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'users',
+    }
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
+class Amo extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/amo\/(v|d|rating|stars|users)\/(.*)\.(svg|png|gif|jpg|json)$/,
@@ -26,8 +165,7 @@ module.exports = class Amo extends LegacyService {
         const addonId = match[2]
         const format = match[3]
         const badgeData = getBadgeData('mozilla add-on', queryData)
-        const url =
-          'https://services.addons.mozilla.org/api/1.5/addon/' + addonId
+        const url = `https://services.addons.mozilla.org/api/1.5/addon/${addonId}`
 
         request(url, (err, res, buffer) => {
           if (err) {
@@ -62,7 +200,7 @@ module.exports = class Amo extends LegacyService {
                 case 'rating':
                   rating = parseInt(data.addon.rating, 10)
                   badgeData.text[0] = getLabel('rating', queryData)
-                  badgeData.text[1] = rating + '/5'
+                  badgeData.text[1] = `${rating}/5`
                   badgeData.colorscheme = floorCountColor(rating, 2, 3, 4)
                   break
                 case 'stars':
@@ -90,4 +228,12 @@ module.exports = class Amo extends LegacyService {
       })
     )
   }
+}
+
+module.exports = {
+  AmoDownloads,
+  AmoVersion,
+  AmoRating,
+  AmoUsers,
+  Amo,
 }

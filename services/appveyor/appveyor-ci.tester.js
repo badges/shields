@@ -1,29 +1,27 @@
 'use strict'
 
 const Joi = require('joi')
-const createServiceTester = require('../create-service-tester')
-
 const { isBuildStatus } = require('../test-validators')
 
-const t = createServiceTester()
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
-// Test AppVeyor build status badge
-t.create('CI build status')
+t.create('CI status')
   .get('/gruntjs/grunt.json')
   .expectJSONTypes(Joi.object().keys({ name: 'build', value: isBuildStatus }))
 
-// Test AppVeyor branch build status badge
-t.create('CI build status on master branch')
+t.create('CI status on branch')
   .get('/gruntjs/grunt/master.json')
   .expectJSONTypes(Joi.object().keys({ name: 'build', value: isBuildStatus }))
 
-// Test AppVeyor build status badge on a non-existing project
-t.create('CI 404')
-  .get('/somerandomproject/thatdoesntexits.json')
+t.create('CI status on nonexistent project')
+  .get('/somerandomproject/thatdoesntexist.json')
   .expectJSON({ name: 'build', value: 'project not found or access denied' })
 
-t.create('CI (connection error)')
-  .get('/this-one/is-not-real-either.json')
-  .networkOff()
-  .expectJSON({ name: 'build', value: 'inaccessible' })
+t.create('CI status on project that does exist but has no builds yet')
+  .get('/gruntjs/grunt.json?style=_shields_test')
+  .intercept(nock =>
+    nock('https://ci.appveyor.com/api/projects/')
+      .get('/gruntjs/grunt')
+      .reply(200, {})
+  )
+  .expectJSON({ name: 'build', value: 'no builds found', colorB: '#9f9f9f' })

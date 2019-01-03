@@ -9,15 +9,17 @@ module.exports = class PypiLicense extends PypiBase {
     return 'license'
   }
 
-  static get url() {
-    return this.buildUrl('pypi/l')
+  static get route() {
+    return this.buildRoute('pypi/l')
   }
 
   static get examples() {
     return [
       {
         title: 'PyPI - License',
-        previewUrl: 'Django',
+        pattern: ':packageName',
+        namedParams: { packageName: 'Django' },
+        staticPreview: { label: 'license', message: 'BSD', color: 'lightgrey' },
         keywords: ['python'],
       },
     ]

@@ -3,16 +3,15 @@ version: 2
 jobs:
   npm-install:
     docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
-    working_directory: ~/repo
+      - image: circleci/node:8
     steps:
       - checkout
 
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+            - v2-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -21,20 +20,20 @@ jobs:
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package.json" }}
 
   main:
     docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
+      - image: circleci/node:8
       - image: redis
-    working_directory: ~/repo
     steps:
       - checkout
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
-          # https://github.com/badges/shields/issues/1937
-          key: v1-dependencies-
+          keys:
+            - v2-dependencies-{{ checksum "package.json" }}
+            # https://github.com/badges/shields/issues/1937
+            - v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -46,14 +45,36 @@ jobs:
           command: npm run lint
 
       - run:
+          name: Prepare test summary
+          when: always
+          command: mkdir junit
+
+      - run:
           name: Server unit tests
           when: always
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/server/results.xml
           command: npm run test:js:server
 
       - run:
           name: Integration tests
           when: always
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/server/integration.xml
           command: npm run test:integration
+
+      - run:
+          name: Tests for gh-badges package
+          when: always
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/server/gh-badges.xml
+          command: npm run test:js:package
+
+      - store_test_results:
+          path: junit
 
       - run:
           name: 'Prettier check (quick fix: `npm run prettier`)'
@@ -62,16 +83,16 @@ jobs:
 
   main@node-latest:
     docker:
-      - image: shieldsio/shields-ci-node-latest:0.0.3
+      - image: circleci/node:latest
       - image: redis
-    working_directory: ~/repo
     steps:
       - checkout
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
-          # https://github.com/badges/shields/issues/1937
-          key: v1-dependencies-
+          keys:
+            - v2-dependencies-{{ checksum "package.json" }}
+            # https://github.com/badges/shields/issues/1937
+            - v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -83,14 +104,36 @@ jobs:
           command: npm run lint
 
       - run:
+          name: Prepare test summary
+          when: always
+          command: mkdir junit
+
+      - run:
           name: Server unit tests
           when: always
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/server/results.xml
           command: npm run test:js:server
 
       - run:
           name: Integration tests
           when: always
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/integration/results.xml
           command: npm run test:integration
+
+      - run:
+          name: Tests for gh-badges package
+          when: always
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/gh-badges/results.xml
+          command: npm run test:js:package
+
+      - store_test_results:
+          path: junit
 
       - run:
           name: 'Prettier check (quick fix: `npm run prettier`)'
@@ -99,15 +142,15 @@ jobs:
 
   danger:
     docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
-    working_directory: ~/repo
+      - image: circleci/node:8
     steps:
       - checkout
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
-          # https://github.com/badges/shields/issues/1937
-          key: v1-dependencies-
+          keys:
+            - v2-dependencies-{{ checksum "package.json" }}
+            # https://github.com/badges/shields/issues/1937
+            - v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -120,34 +163,88 @@ jobs:
 
   frontend:
     docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
-    working_directory: ~/repo
+      - image: circleci/node:8
     steps:
       - checkout
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
-          # https://github.com/badges/shields/issues/1937
-          key: v1-dependencies-
+          keys:
+            - v2-dependencies-{{ checksum "package.json" }}
+            # https://github.com/badges/shields/issues/1937
+            - v2-dependencies-
 
       - run:
           name: Install dependencies
           command: npm install
 
       - run:
-          name: Frontend unit tests
+          name: Prepare frontend tests
+          command: npm run defs && npm run features
+
+      - run:
+          name: Prepare test summary
           when: always
+          command: mkdir junit
+
+      - run:
+          name: Frontend unit tests
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/frontend/results.xml
           command: npm run test:js:frontend
+
+      - store_test_results:
+          path: junit
 
       - run:
           name: Frontend build completes successfully
           when: always
           command: npm run build
 
-  services-pr:
+  services:
     docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
-    working_directory: ~/repo
+      - image: circleci/node:8
+    steps:
+      - checkout
+
+      - run:
+          name: Prepare service tests
+          command: |
+            mkdir private
+            echo "{\"gh_token\":\"$GITHUB_TOKEN\", \"wheelmap_token\":\"$WHEELMAP_TOKEN\"}" > private/secret.json
+
+      - restore_cache:
+          keys:
+            - v2-dependencies-{{ checksum "package.json" }}
+            # https://github.com/badges/shields/issues/1937
+            - v2-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm install
+
+      - run:
+          name: Identify services tagged in the PR title
+          command: npm run test:services:pr:prepare
+
+      - run:
+          name: Prepare test summary
+          when: always
+          command: mkdir junit
+
+      - run:
+          name: Run tests for tagged services
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/services/results.xml
+          command: npm run test:services:pr:run
+
+      - store_test_results:
+          path: junit
+
+  services@node-latest:
+    docker:
+      - image: circleci/node:latest
     steps:
       - checkout
 
@@ -158,9 +255,10 @@ jobs:
             echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
-          # https://github.com/badges/shields/issues/1937
-          key: v1-dependencies-
+          keys:
+            - v2-dependencies-{{ checksum "package.json" }}
+            # https://github.com/badges/shields/issues/1937
+            - v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -168,75 +266,22 @@ jobs:
 
       - run:
           name: Identify services tagged in the PR title
-          command: |
-            if [[ ! -z $CI_PULL_REQUEST ]]; then
-              npm run test:services:pr:prepare
-            else
-              echo 'This is not a pull request. Skipping.'
-            fi
+          command: npm run test:services:pr:prepare
+
+      - run:
+          name: Prepare test summary
+          when: always
+          command: mkdir junit
 
       - run:
           name: Run tests for tagged services
-          command: |
-            if [[ ! -z $CI_PULL_REQUEST ]]; then
-              npm run test:services:pr:run
-            else
-              echo 'This is not a pull request. Skipping.'
-            fi
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/services/results.xml
+          command: npm run test:services:pr:run
 
-  services-pr@node-latest:
-    docker:
-      - image: shieldsio/shields-ci-node-latest:0.0.3
-    working_directory: ~/repo
-    steps:
-      - checkout
-
-      - run:
-          name: Prepare service tests
-          command: |
-            mkdir private
-            echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
-
-      - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
-          # https://github.com/badges/shields/issues/1937
-          key: v1-dependencies-
-
-      - run:
-          name: Install dependencies
-          command: npm install
-
-      - run:
-          name: Identify services tagged in the PR title
-          command: |
-            if [[ ! -z $CI_PULL_REQUEST ]]; then
-              npm run test:services:pr:prepare
-            else
-              echo 'This is not a pull request. Skipping.'
-            fi
-
-      - run:
-          name: Run tests for tagged services
-          command: |
-            if [[ ! -z $CI_PULL_REQUEST ]]; then
-              npm run test:services:pr:run
-            else
-              echo 'This is not a pull request. Skipping.'
-            fi
-
-  services-daily:
-    docker:
-      - image: shieldsio/shields-ci-node-8:0.0.3
-    working_directory: ~/repo
-    steps:
-      - checkout
-
-      - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
-
-      - run:
-          name: Run all service tests
-          command: npm run test:services
+      - store_test_results:
+          path: junit
 
 workflows:
   version: 2
@@ -256,25 +301,21 @@ workflows:
       - frontend:
           requires:
             - npm-install
-      - services-pr:
+      - services:
           requires:
             - npm-install
-      - services-pr@node-latest:
+          filters:
+            branches:
+              ignore: master
+      - services@node-latest:
           requires:
             - npm-install
+          filters:
+            branches:
+              ignore: master
       - danger:
           requires:
             - npm-install
           filters:
             branches:
               ignore: /dependabot\/.*/
-
-  daily:
-    triggers:
-      - schedule:
-          cron: "0 17 * * *"
-          filters:
-            branches:
-              only: master
-    jobs:
-      - services-daily

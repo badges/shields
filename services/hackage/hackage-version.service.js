@@ -6,15 +6,39 @@ const { checkErrorResponse } = require('../../lib/error-helper')
 const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class HackageVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'hackage/v',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Hackage',
+        previewUrl: 'lens',
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/hackage\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
         const repo = match[1] // eg, `lens`.
         const format = match[2]
-        const apiUrl =
-          'https://hackage.haskell.org/package/' + repo + '/' + repo + '.cabal'
+        const apiUrl = `https://hackage.haskell.org/package/${repo}/${repo}.cabal`
         const badgeData = getBadgeData('hackage', data)
         request(apiUrl, (err, res, buffer) => {
           if (checkErrorResponse(badgeData, err, res)) {

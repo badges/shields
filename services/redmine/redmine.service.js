@@ -1,55 +1,98 @@
 'use strict'
 
-const xml2js = require('xml2js')
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { starRating } = require('../../lib/text-formatters')
 const { floorCount: floorCountColor } = require('../../lib/color-formatters')
 
-module.exports = class Redmine extends LegacyService {
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/redmine\/plugin\/(rating|stars)\/(.*)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const type = match[1]
-        const plugin = match[2]
-        const format = match[3]
-        const options = {
-          method: 'GET',
-          uri: 'https://www.redmine.org/plugins/' + plugin + '.xml',
-        }
+const Joi = require('joi')
+const BaseXmlService = require('../base-xml')
 
-        const badgeData = getBadgeData(type, data)
-        request(options, (err, res, buffer) => {
-          if (err != null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
+const schema = Joi.object({
+  'redmine-plugin': Joi.object({
+    'ratings-average': Joi.number()
+      .min(0)
+      .required(),
+  }).required(),
+})
 
-          // eslint-disable-next-line handle-callback-err
-          xml2js.parseString(buffer.toString(), (err, data) => {
-            try {
-              const rating = data['redmine-plugin']['ratings-average'][0]._
-              badgeData.colorscheme = floorCountColor(rating, 2, 3, 4)
+class BaseRedminePluginRating extends BaseXmlService {
+  async fetch({ plugin }) {
+    const url = `https://www.redmine.org/plugins/${plugin}.xml`
+    return this._requestXml({ schema, url })
+  }
 
-              switch (type) {
-                case 'rating':
-                  badgeData.text[1] = rating + '/5.0'
-                  break
-                case 'stars':
-                  badgeData.text[1] = starRating(Math.round(rating))
-                  break
-              }
+  static get category() {
+    return 'rating'
+  }
 
-              sendBadge(format, badgeData)
-            } catch (e) {
-              badgeData.text[1] = 'invalid'
-              sendBadge(format, badgeData)
-            }
-          })
-        })
-      })
-    )
+  static render({ rating }) {
+    throw new Error(`render() function not implemented for ${this.name}`)
+  }
+
+  async handle({ plugin }) {
+    const data = await this.fetch({ plugin })
+    const rating = data['redmine-plugin']['ratings-average']
+    return this.constructor.render({ rating })
   }
 }
+
+class RedminePluginRating extends BaseRedminePluginRating {
+  static get route() {
+    return {
+      base: 'redmine/plugin/rating',
+      pattern: ':plugin',
+    }
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'redmine' }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Plugin on redmine.org',
+        namedParams: { plugin: 'redmine_xlsx_format_issue_exporter' },
+        staticExample: this.render({ rating: 5 }),
+        keywords: ['redmine', 'plugin'],
+      },
+    ]
+  }
+
+  static render({ rating }) {
+    return {
+      label: 'rating',
+      message: `${rating.toFixed(1)}/5.0`,
+      color: floorCountColor(rating, 2, 3, 4),
+    }
+  }
+}
+
+class RedminePluginStars extends BaseRedminePluginRating {
+  static get route() {
+    return {
+      base: 'redmine/plugin/stars',
+      pattern: ':plugin',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Plugin on redmine.org',
+        namedParams: { plugin: 'redmine_xlsx_format_issue_exporter' },
+        staticExample: this.render({ rating: 5 }),
+        keywords: ['redmine', 'plugin'],
+      },
+    ]
+  }
+
+  static render({ rating }) {
+    return {
+      label: 'stars',
+      message: starRating(Math.round(rating)),
+      color: floorCountColor(rating, 2, 3, 4),
+    }
+  }
+}
+
+module.exports = { RedminePluginRating, RedminePluginStars }

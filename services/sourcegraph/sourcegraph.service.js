@@ -1,35 +1,55 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const Joi = require('joi')
+const BaseJsonService = require('../base-json')
 
-module.exports = class Sourcegraph extends LegacyService {
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/sourcegraph\/rrc\/([\s\S]+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const repo = match[1]
-        const format = match[2]
-        const apiUrl =
-          'https://sourcegraph.com/.api/repos/' + repo + '/-/shield'
-        const badgeData = getBadgeData('used by', data)
-        request(apiUrl, (err, res, buffer) => {
-          if (err != null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            badgeData.colorscheme = 'brightgreen'
-            const data = JSON.parse(buffer)
-            badgeData.text[1] = data.value
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+const projectsCountRegex = /^\s[0-9]*(\.[0-9]k)?\sprojects$/
+const schema = Joi.object({
+  value: Joi.string()
+    .regex(projectsCountRegex)
+    .required(),
+}).required()
+
+module.exports = class Sourcegraph extends BaseJsonService {
+  static render({ projectsCount }) {
+    return {
+      message: projectsCount,
+    }
+  }
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'sourcegraph/rrc',
+      pattern: ':repo(.*)',
+    }
+  }
+
+  static get defaultBadgeData() {
+    return { color: 'brightgreen', label: 'used by' }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Sourcegraph for Repo Reference Count',
+        pattern: ':repo',
+        namedParams: {
+          repo: 'github.com/gorilla/mux',
+        },
+        staticExample: this.render({ projectsCount: '9.9k projects' }),
+      },
+    ]
+  }
+
+  async handle({ repo }) {
+    const url = `https://sourcegraph.com/.api/repos/${repo}/-/shield`
+    const json = await this._requestJson({
+      url,
+      schema,
+    })
+    return this.constructor.render({ projectsCount: json.value.trim() })
   }
 }

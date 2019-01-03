@@ -1,5 +1,12 @@
 'use strict'
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
+
 const LegacyService = require('../legacy-service')
 const {
   makeBadgeData: getBadgeData,
@@ -12,6 +19,8 @@ const {
 } = require('../../lib/color-formatters')
 const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
+
+const keywords = ['vscode-marketplace']
 
 //To generate API request Options for VS Code marketplace
 function getVscodeApiReqOptions(packageName) {
@@ -48,7 +57,98 @@ function getVscodeStatistic(data, statisticName) {
   }
 }
 
-module.exports = class VscodeMarketplace extends LegacyService {
+class VscodeMarketplaceDownloads extends LegacyService {
+  static get category() {
+    return 'downloads'
+  }
+
+  static get route() {
+    return {
+      base: 'vscode-marketplace/d',
+      pattern: ':repo',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Visual Studio Marketplace',
+        namedParams: { repo: 'ritwickdey.LiveServer' },
+        staticPreview: { message: '1M', color: 'brightgreen' },
+        keywords,
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class VscodeMarketplaceRating extends LegacyService {
+  static get category() {
+    return 'rating'
+  }
+
+  static get route() {
+    return {
+      base: 'vscode-marketplace',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Visual Studio Marketplace',
+        pattern: 'r/:repo',
+        namedParams: { repo: 'ritwickdey.LiveServer' },
+        staticPreview: { message: '4.79/5 (145)', color: 'brightgreen' },
+        keywords,
+      },
+      {
+        title: 'Visual Studio Marketplace',
+        pattern: 'stars/:repo',
+        namedParams: { repo: 'ritwickdey.LiveServer' },
+        staticPreview: { message: starRating(4.75), color: 'brightgreen' },
+        keywords,
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class VscodeMarketplaceVersion extends LegacyService {
+  static get category() {
+    return 'version'
+  }
+
+  static get route() {
+    return {
+      base: 'vscode-marketplace/v',
+      pattern: ':repo',
+    }
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'visual studio marketplace',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Visual Studio Marketplace',
+        namedParams: { repo: 'ritwickdey.LiveServer' },
+        staticPreview: { message: 'v5.2.0', color: 'blue' },
+        keywords,
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+class VscodeMarketplace extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/vscode-marketplace\/(d|v|r|stars)\/(.*)\.(svg|png|gif|jpg|json)$/,
@@ -83,7 +183,7 @@ module.exports = class VscodeMarketplace extends LegacyService {
                   'averagerating'
                 ).toFixed(2)
                 const totalrate = getVscodeStatistic(buffer, 'ratingcount')
-                badgeData.text[1] = rate + '/5 (' + totalrate + ')'
+                badgeData.text[1] = `${rate}/5 (${totalrate})`
                 badgeData.colorscheme = floorCountColor(rate, 2, 3, 4)
                 break
               }
@@ -115,4 +215,11 @@ module.exports = class VscodeMarketplace extends LegacyService {
       })
     )
   }
+}
+
+module.exports = {
+  VscodeMarketplaceDownloads,
+  VscodeMarketplaceRating,
+  VscodeMarketplaceVersion,
+  VscodeMarketplace,
 }

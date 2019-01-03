@@ -5,7 +5,7 @@
 //
 // To test changes to this file, pick a PR to test against, then run
 // `./node_modules/.bin/danger pr pr-url`
-// Note that the line numbers in the runtime errors are incorrecr.
+// Note that the line numbers in the runtime errors are incorrect.
 
 const { danger, fail, message, warn } = require('danger')
 const chainsmoker = require('chainsmoker')
@@ -24,7 +24,7 @@ const documentation = fileMatch(
   'frontend/components/usage.js'
 )
 const server = fileMatch('server.js')
-const serviceTests = fileMatch('services/**/*.tester.js')
+const serverTests = fileMatch('server.spec.js')
 const helpers = fileMatch(
   'lib/**/*.js',
   '!**/*.spec.js',
@@ -34,8 +34,10 @@ const logos = fileMatch('logo/*.svg')
 const helperTests = fileMatch('lib/**/*.spec.js')
 const packageJson = fileMatch('package.json')
 const packageLock = fileMatch('package-lock.json')
+const secretsDocs = fileMatch('doc/server-secrets.md')
 const capitals = fileMatch('**/*[A-Z]*.js')
-const underscores = fileMatch('**/*_*.js')
+// _document.js is used by convention by Next.
+const underscores = fileMatch('**/*_*.js', '!pages/_document.js')
 const targetBranch = danger.github.pr.base.ref
 
 message(
@@ -66,13 +68,11 @@ if (packageJson.modified && !packageLock.modified) {
   warn(`${message} - <i>${idea}</i>`)
 }
 
-if (server.modified && !serviceTests.createdOrModified) {
+if (server.modified && !serverTests.modified) {
   warn(
     [
-      'This PR modified the server but none of the service tests. <br>',
-      "That's okay so long as it's refactoring existing code. ",
-      'Otherwise, please consider adding tests to the service: ',
-      '[How-to](https://github.com/badges/shields/blob/master/doc/service-tests.md#readme)',
+      'This PR modified the server but none of its tests. <br>',
+      "That's okay so long as it's refactoring existing code.",
     ].join('')
   )
 }
@@ -116,6 +116,7 @@ if (capitals.created || underscores.created) {
 const allFiles = danger.git.created_files.concat(danger.git.modified_files)
 
 allFiles.forEach(file => {
+  // eslint-disable-next-line promise/prefer-await-to-then
   danger.git.diffForFile(file).then(diff => {
     if (/\+.*assert[(.]/.test(diff.diff)) {
       warn(
@@ -123,6 +124,21 @@ allFiles.forEach(file => {
           `Found 'assert' statement added in \`${file}\`. <br>`,
           'Please ensure tests are written using Chai ',
           '[expect syntax](http://chaijs.com/guide/styles/#expect)',
+        ].join('')
+      )
+    }
+  })
+})
+
+allFiles.forEach(file => {
+  // eslint-disable-next-line promise/prefer-await-to-then
+  danger.git.diffForFile(file).then(diff => {
+    if (/serverSecrets/.test(diff.diff) && !secretsDocs.modified) {
+      warn(
+        [
+          `:books: Remember to ensure any changes to \`serverSecrets\` `,
+          `in \`${file}\` are reflected in the [server secrets documentation]`,
+          '(https://github.com/badges/shields/blob/master/doc/server-secrets.md)',
         ].join('')
       )
     }
