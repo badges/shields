@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Select, { components } from 'react-select'
+import clipboardCopy from 'clipboard-copy'
 import { staticBadgeUrl } from '../../lib/badge-url'
 import { generateMarkup } from '../../lib/generate-image-markup'
 import { Snippet2 } from '../snippet'
@@ -70,7 +71,7 @@ export default class MarkupModalContent extends React.Component {
     )
   }
 
-  copyMarkup = markupFormat => {
+  copyMarkup = async markupFormat => {
     const {
       example: {
         example: { title },
@@ -85,14 +86,19 @@ export default class MarkupModalContent extends React.Component {
       title,
       markupFormat,
     })
-    console.log(markup)
+
+    await clipboardCopy(markup)
   }
 
   renderMarkupAndLivePreview() {
+    const { pathIsComplete } = this.state
     return (
       <div>
         {this.renderLivePreview()}
-        <RequestMarkupButtom onMarkupRequested={this.copyMarkup} />
+        <RequestMarkupButtom
+          isDisabled={!pathIsComplete}
+          onMarkupRequested={this.copyMarkup}
+        />
       </div>
     )
   }

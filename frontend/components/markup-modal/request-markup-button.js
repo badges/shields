@@ -22,7 +22,7 @@ const MarkupFormatSelect = styled(Select)`
   font-weight: 700;
 
   .markup-format__control {
-    background-color: #2684ff;
+    /* background-color: #2684ff; */
     border-width: 0;
     box-shadow: unset;
   }
@@ -31,9 +31,11 @@ const MarkupFormatSelect = styled(Select)`
     cursor: copy;
   }
 
+  /*
   .markup-format__placeholder {
     color: hsl(120, 0%, 95%);
   }
+  */
 
   .markup-format__option {
     text-align: left;
@@ -67,13 +69,32 @@ class GetMarkupButton extends React.PureComponent {
     }
   }
 
+  static theme({ borderRadius, colors, spacing }) {
+    return {
+      borderRadius,
+      colors: {
+        ...colors,
+        //   neutral5: 'hsl(214, 100%, 100%)',
+        //   neutral0: 'hsl(214, 100%, 57%)',
+        //   neutral50: 'hsl(214, 100%, 50%)',
+        //   // neutral50: 'hsl(120, 0%, 98%)',
+        //   // neutral50: 'hsl(0, 0%, 50%)',
+      },
+      spacing,
+    }
+  }
+
   render() {
+    const { isDisabled } = this.props
+
     return (
       <MarkupFormatSelect
         ref={this.selectRef}
         options={markupOptions}
+        theme={this.constructor.theme}
         placeholder="Copy Badge URL"
         value=""
+        isDisabled={isDisabled}
         closeMenuOnScroll
         openMenuOnFocus={false}
         openMenuOnClick={false}
@@ -92,5 +113,6 @@ class GetMarkupButton extends React.PureComponent {
 }
 GetMarkupButton.propTypes = {
   onMarkupRequested: PropTypes.func.isRequired,
+  isDisabled: PropTypes.bool,
 }
 export default GetMarkupButton
