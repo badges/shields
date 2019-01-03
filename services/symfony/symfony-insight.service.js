@@ -190,7 +190,10 @@ module.exports = class SymfonyInsight extends BaseXmlService {
       },
     }
 
-    if (!serverSecrets.sl_insight_userUuid) {
+    if (
+      !serverSecrets.sl_insight_userUuid ||
+      !serverSecrets.sl_insight_apiToken
+    ) {
       throw new Inaccessible({
         prettyMessage: 'required API tokens not found in config',
       })

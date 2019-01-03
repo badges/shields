@@ -15,6 +15,7 @@ const {
   mockSymfonyUser,
   mockSymfonyToken,
   mockSymfonyInsightCreds,
+  setSymfonyInsightCredsToFalsy,
   restore,
   realTokenExists,
   prepLiveTest,
@@ -27,15 +28,16 @@ const {
 
 const sampleProjectUuid = '45afb680-d4e6-4e66-93ea-bcfa79eb8a87'
 
-beforeEach(function() {
-  mockSymfonyInsightCreds()
-})
+function create(title, { withMockCreds = true } = { withMockCreds: true }) {
+  const result = t.create(title)
+  if (withMockCreds) {
+    result.before(mockSymfonyInsightCreds)
+    result.finally(restore)
+  }
+  return result
+}
 
-afterEach(function() {
-  restore()
-})
-
-t.create('live: valid project grade')
+create('live: valid project grade', { withMockCreds: false })
   .before(prepLiveTest)
   .get(`/symfony/i/grade/${sampleProjectUuid}.json`)
   .timeout(15000)
@@ -57,7 +59,7 @@ t.create('live: valid project grade')
     })
   )
 
-t.create('live: valid project violations')
+create('live: valid project violations', { withMockCreds: false })
   .before(prepLiveTest)
   .get(`/symfony/i/violations/${sampleProjectUuid}.json`)
   .timeout(15000)
@@ -75,7 +77,7 @@ t.create('live: valid project violations')
     })
   )
 
-t.create('live: nonexistent project')
+create('live: nonexistent project', { withMockCreds: false })
   .before(prepLiveTest)
   .get('/symfony/i/grade/45afb680-d4e6-4e66-93ea-bcfa79eb8a88.json')
   .interceptIf(!realTokenExists, nock =>
@@ -88,7 +90,7 @@ t.create('live: nonexistent project')
     value: 'project not found',
   })
 
-t.create('404 project not found grade')
+create('404 project not found grade')
   .get(`/symfony/i/grade/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
@@ -100,7 +102,7 @@ t.create('404 project not found grade')
     value: 'project not found',
   })
 
-t.create('401 not authorized grade')
+create('401 not authorized grade')
   .get(`/symfony/i/grade/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
@@ -112,7 +114,7 @@ t.create('401 not authorized grade')
     value: 'not authorized to access project',
   })
 
-t.create('pending project grade')
+create('pending project grade')
   .get(`/symfony/i/grade/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
@@ -125,7 +127,7 @@ t.create('pending project grade')
     colorB: colorScheme.lightgrey,
   })
 
-t.create('platinum grade')
+create('platinum grade')
   .get(`/symfony/i/grade/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
@@ -138,7 +140,7 @@ t.create('platinum grade')
     colorB: '#E5E4E2',
   })
 
-t.create('gold grade')
+create('gold grade')
   .get(`/symfony/i/grade/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
@@ -151,7 +153,7 @@ t.create('gold grade')
     colorB: '#EBC760',
   })
 
-t.create('silver grade')
+create('silver grade')
   .get(`/symfony/i/grade/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
@@ -164,7 +166,7 @@ t.create('silver grade')
     colorB: '#C0C0C0',
   })
 
-t.create('bronze grade')
+create('bronze grade')
   .get(`/symfony/i/grade/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
@@ -177,7 +179,7 @@ t.create('bronze grade')
     colorB: '#C88F6A',
   })
 
-t.create('no medal grade')
+create('no medal grade')
   .get(`/symfony/i/grade/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
@@ -190,7 +192,7 @@ t.create('no medal grade')
     colorB: colorScheme.red,
   })
 
-t.create('zero violations')
+create('zero violations')
   .get(`/symfony/i/violations/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
@@ -203,7 +205,7 @@ t.create('zero violations')
     colorB: colorScheme.brightgreen,
   })
 
-t.create('critical violations')
+create('critical violations')
   .get(`/symfony/i/violations/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
@@ -216,7 +218,7 @@ t.create('critical violations')
     colorB: colorScheme.red,
   })
 
-t.create('major violations')
+create('major violations')
   .get(`/symfony/i/violations/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
@@ -229,7 +231,7 @@ t.create('major violations')
     colorB: colorScheme.orange,
   })
 
-t.create('minor violations')
+create('minor violations')
   .get(`/symfony/i/violations/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
@@ -246,7 +248,7 @@ t.create('minor violations')
     colorB: colorScheme.yellow,
   })
 
-t.create('info violations')
+create('info violations')
   .get(`/symfony/i/violations/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
@@ -263,7 +265,7 @@ t.create('info violations')
     colorB: colorScheme.yellowgreen,
   })
 
-t.create('multiple violations grade')
+create('multiple violations grade')
   .get(`/symfony/i/violations/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
@@ -280,8 +282,8 @@ t.create('multiple violations grade')
     colorB: colorScheme.red,
   })
 
-t.create('auth missing')
-  .before(restore)
+create('auth missing', { withMockCreds: false })
+  .before(setSymfonyInsightCredsToFalsy)
   .get(`/symfony/i/grade/${sampleProjectUuid}.json`)
   .expectJSON({
     name: 'symfony insight',
@@ -289,7 +291,7 @@ t.create('auth missing')
   })
 
 // These tests ensure that the legacy badge path (/sensiolabs/i/projectUuid) still works
-t.create('legacy path: pending project grade')
+create('legacy path: pending project grade')
   .get(`/sensiolabs/i/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
@@ -302,7 +304,7 @@ t.create('legacy path: pending project grade')
     colorB: colorScheme.lightgrey,
   })
 
-t.create('legacy path: platinum grade')
+create('legacy path: platinum grade')
   .get(`/sensiolabs/i/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
