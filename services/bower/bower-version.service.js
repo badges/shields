@@ -4,7 +4,6 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
-const serverSecrets = require('../../lib/server-secrets')
 
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //
@@ -51,11 +50,7 @@ module.exports = class BowerVersion extends LegacyService {
           json: true,
           uri: `https://libraries.io/api/bower/${repo}`,
         }
-        if (serverSecrets && serverSecrets.libraries_io_api_key) {
-          options.qs = {
-            api_key: serverSecrets.libraries_io_api_key,
-          }
-        }
+
         request(options, (err, res, data) => {
           if (err != null) {
             badgeData.text[1] = 'inaccessible'
