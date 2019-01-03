@@ -1,7 +1,11 @@
 'use strict'
 
 const { expect } = require('chai')
-const { loadServiceClasses, InvalidService } = require('./index')
+const {
+  loadServiceClasses,
+  InvalidService,
+  collectDefinitions,
+} = require('./index')
 
 describe('loadServiceClasses function', function() {
   it('throws if module exports empty', function() {
@@ -53,5 +57,11 @@ describe('loadServiceClasses function', function() {
         '../test-fixtures/valid-class.fixture.js',
       ])
     ).to.have.length(5)
+  })
+
+  it('check the service definitions', function() {
+    // When this fails, it will throw AssertionErrors. Wrapping this in an
+    // `expect().not.to.throw()` makes the error output unreadable.
+    collectDefinitions()
   })
 })

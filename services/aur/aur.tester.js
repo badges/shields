@@ -4,10 +4,13 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
+  isMetric,
 } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'aur', title: 'Arch Linux AUR' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'aur',
+  title: 'Arch Linux AUR',
+}))
 
 // version tests
 
@@ -33,7 +36,7 @@ t.create('version (valid, out of date)')
 
 t.create('version (not found)')
   .get('/version/not-a-package.json')
-  .expectJSON({ name: 'aur', value: 'not found' })
+  .expectJSON({ name: 'aur', value: 'package not found' })
 
 // votes tests
 
@@ -42,13 +45,13 @@ t.create('votes (valid)')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'votes',
-      value: Joi.number().integer(),
+      value: isMetric,
     })
   )
 
 t.create('votes (not found)')
   .get('/votes/not-a-package.json')
-  .expectJSON({ name: 'votes', value: 'not found' })
+  .expectJSON({ name: 'votes', value: 'package not found' })
 
 // license tests
 
@@ -58,4 +61,4 @@ t.create('license (valid)')
 
 t.create('license (not found)')
   .get('/license/not-a-package.json')
-  .expectJSON({ name: 'license', value: 'not found' })
+  .expectJSON({ name: 'license', value: 'package not found' })

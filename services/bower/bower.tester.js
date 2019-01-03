@@ -8,8 +8,7 @@ const isBowerPrereleaseVersion = Joi.string().regex(
   /^v\d+(\.\d+)?(\.\d+)?(-?[.\w\d])+?$/
 )
 
-const t = new ServiceTester({ id: 'bower', title: 'Bower' })
-module.exports = t
+const t = (module.exports = new ServiceTester({ id: 'bower', title: 'Bower' }))
 
 t.create('licence')
   .get('/l/bootstrap.json')

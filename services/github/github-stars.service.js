@@ -11,6 +11,12 @@ const {
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class GithubStars extends LegacyService {
   static get category() {
     return 'social'
@@ -27,7 +33,7 @@ module.exports = class GithubStars extends LegacyService {
       {
         title: 'GitHub stars',
         previewUrl: 'badges/shields',
-        query: { style: 'social', label: 'Stars' },
+        queryParams: { style: 'social', label: 'Stars' },
         documentation,
       },
     ]

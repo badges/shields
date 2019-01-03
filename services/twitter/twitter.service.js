@@ -7,6 +7,12 @@ const {
 } = require('../../lib/badge-data')
 const { metric } = require('../../lib/text-formatters')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 class TwitterUrl extends LegacyService {
   static get category() {
     return 'social'
@@ -23,7 +29,7 @@ class TwitterUrl extends LegacyService {
       {
         title: 'Twitter URL',
         previewUrl: 'http/shields.io',
-        query: { style: 'social' },
+        queryParams: { style: 'social' },
       },
     ]
   }
@@ -55,6 +61,12 @@ class TwitterUrl extends LegacyService {
   }
 }
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 class TwitterFollow extends LegacyService {
   static get category() {
     return 'social'
@@ -71,7 +83,7 @@ class TwitterFollow extends LegacyService {
       {
         title: 'Twitter Follow',
         previewUrl: 'espadrine',
-        query: { style: 'social', label: 'Follow' },
+        queryParams: { style: 'social', label: 'Follow' },
       },
     ]
   }

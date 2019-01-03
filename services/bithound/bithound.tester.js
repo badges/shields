@@ -2,8 +2,10 @@
 
 const ServiceTester = require('../service-tester')
 
-const t = new ServiceTester({ id: 'bithound', title: 'BitHound' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'bithound',
+  title: 'BitHound',
+}))
 
 t.create('no longer available (code)')
   .get('/code/github/rexxars/sse-channel.json')

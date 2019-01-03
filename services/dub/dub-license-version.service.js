@@ -17,6 +17,7 @@ class DubVersion extends LegacyService {
   static get route() {
     return {
       base: 'dub/v',
+      pattern: ':packageName',
     }
   }
 
@@ -24,8 +25,8 @@ class DubVersion extends LegacyService {
     return [
       {
         title: 'DUB',
-        previewUrl: 'vibe-d',
-        keywords: ['dub'],
+        namedParams: { packageName: 'vibe-d' },
+        staticPreview: { label: 'version', message: 'v0.8.4', color: 'orange' },
       },
     ]
   }
@@ -41,6 +42,7 @@ class DubLicense extends LegacyService {
   static get route() {
     return {
       base: 'dub/l',
+      pattern: ':packageName',
     }
   }
 
@@ -48,8 +50,8 @@ class DubLicense extends LegacyService {
     return [
       {
         title: 'DUB',
-        previewUrl: 'vibe-d',
-        keywords: ['dub'],
+        namedParams: { packageName: 'vibe-d' },
+        staticPreview: { label: 'license', message: 'MIT', color: 'blue' },
       },
     ]
   }
@@ -57,6 +59,12 @@ class DubLicense extends LegacyService {
   static registerLegacyRouteHandler() {}
 }
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 class DubLicenseVersion extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(

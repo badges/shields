@@ -3,6 +3,12 @@
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class David extends LegacyService {
   static get category() {
     return 'dependencies'
@@ -18,26 +24,48 @@ module.exports = class David extends LegacyService {
     return [
       {
         title: 'David',
-        previewUrl: 'expressjs/express',
+        pattern: ':user/:repo',
+        namedParams: { user: 'expressjs', repo: 'express' },
+        staticExample: this.renderStaticExample(),
       },
       {
         title: 'David',
-        previewUrl: 'dev/expressjs/express',
+        pattern: 'dev/:user/:repo',
+        namedParams: { user: 'expressjs', repo: 'express' },
+        staticExample: this.renderStaticExample({ label: 'dev dependencies' }),
       },
       {
         title: 'David',
-        previewUrl: 'optional/elnounch/byebye',
+        pattern: 'optional/:user/:repo',
+        namedParams: { user: 'elnounch', repo: 'byebye' },
+        staticExample: this.renderStaticExample({
+          label: 'optional dependencies',
+        }),
       },
       {
         title: 'David',
-        previewUrl: 'peer/webcomponents/generator-element',
+        pattern: 'peer/:user/:repo',
+        namedParams: { user: 'webcomponents', repo: 'generator-element' },
+        staticExample: this.renderStaticExample({ label: 'peer dependencies' }),
       },
       {
         title: 'David (path)',
-        previewUrl: 'babel/babel',
-        query: { path: 'packages/babel-core' },
+        pattern: ':user/:repo',
+        namedParams: { user: 'babel', repo: 'babel' },
+        queryParams: { path: 'packages/babel-core' },
+        staticExample: this.renderStaticExample(),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'dependencies',
+    }
+  }
+
+  static renderStaticExample({ label } = {}) {
+    return { label, message: 'up to date', color: 'brightgreen' }
   }
 
   static registerLegacyRouteHandler({ camp, cache }) {

@@ -5,9 +5,17 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { checkErrorResponse } = require('../../lib/error-helper')
 const { omitv } = require('../../lib/text-formatters')
 
+const keywords = ['php', 'runtime']
+
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class PhpeyeHhvm extends LegacyService {
   static get category() {
-    return 'version'
+    return 'platform-support'
   }
 
   static get route() {
@@ -20,11 +28,29 @@ module.exports = class PhpeyeHhvm extends LegacyService {
     return [
       {
         title: 'HHVM',
-        previewUrl: 'symfony/symfony',
+        pattern: ':user/:packageName',
+        namedParams: { user: 'symfony', packageName: 'symfony' },
+        staticPreview: {
+          label: 'hhvm',
+          message: 'not tested',
+          color: 'red',
+        },
+        keywords,
       },
       {
         title: 'HHVM (branch)',
-        previewUrl: 'symfony/symfony/master',
+        pattern: ':user/:packageName/:branch',
+        namedParams: {
+          user: 'symfony',
+          packageName: 'symfony',
+          branch: 'master',
+        },
+        staticPreview: {
+          label: 'hhvm',
+          message: 'not tested',
+          color: 'red',
+        },
+        keywords,
       },
     ]
   }

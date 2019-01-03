@@ -2,15 +2,14 @@
 
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
-
 const { invalidJSON } = require('../response-fixtures')
 const { colorScheme } = require('../test-helpers')
-
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
   isMetric,
   isMetricOverTimePeriod,
 } = require('../test-validators')
+
 const isVersionColor = Joi.equal(
   colorScheme.red,
   colorScheme.yellow,
@@ -19,8 +18,7 @@ const isVersionColor = Joi.equal(
   colorScheme.brightgreen
 )
 
-const t = new ServiceTester({ id: 'dub', title: 'Dub' })
-module.exports = t
+const t = (module.exports = new ServiceTester({ id: 'dub', title: 'Dub' }))
 
 // downloads
 
