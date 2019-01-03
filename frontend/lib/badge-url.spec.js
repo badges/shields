@@ -45,5 +45,23 @@ describe('Badge URL functions', function() {
         '&style=plastic',
       ].join('')
     )
+
+    const suffix = '<- value'
+    const color = 'blue'
+    given('http://img.example.com', 'json', 'foo', dataUrl, query, {
+      suffix,
+      color,
+      style: 'plastic',
+    }).expect(
+      [
+        'http://img.example.com/badge/dynamic/json.svg',
+        '?label=foo',
+        `&url=${encodeURIComponent(dataUrl)}`,
+        `&query=${encodeURIComponent(query)}`,
+        '&colorB=blue',
+        `&suffix=${encodeURIComponent(suffix)}`,
+        '&style=plastic',
+      ].join('')
+    )
   })
 })
