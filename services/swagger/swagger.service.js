@@ -64,8 +64,11 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
         title: 'Swagger Validator',
         pattern: ':scheme/:url',
         staticExample: this.render({ message: 'valid', clr: 'brightgreen' }),
-        exampleUrl:
-          'https/raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded.json',
+        namedParams: {
+          scheme: 'https',
+          url:
+            'raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded.json',
+        },
       },
     ]
   }

@@ -38,17 +38,13 @@ We'll start by adding some boilerplate to our file:
 ```js
 'use strict'
 
-const Joi = require('joi')                                      // 1
+const Joi = require('joi')                                           // 1
 
-const createServiceTester = require('../create-service-tester') // 2
-const t = createServiceTester()                                 // 2
-
-module.exports = t                                              // 3
+const t = (module.exports = require('../create-service-tester')())   // 2
 ```
 
 1. Import [Joi][] We'll use this to make assertions. This is the same library we use to define schema for validation in the main badge class.
-2. If our `.service.js` module exports a single class, we can `require('../create-service-tester')` and use convention to create a `ServiceTester` object. Calling `createServiceTester()` inside `services/wercker/wercker.tester.js` will create a `ServiceTester` object configured for the service exported in `services/wercker/wercker.service.js`. We will add our tests to this `ServiceTester` object `t`.
-3. `t` is exported from the module.
+2. If our `.service.js` module exports a single class, we can `require('../create-service-tester')` and use convention to create a `ServiceTester` object. Calling this inside `services/wercker/wercker.tester.js` will create a `ServiceTester` object configured for the service exported in `services/wercker/wercker.service.js`. We will add our tests to this `ServiceTester` object `t`, which is exported from the module.
 
 ### (2) Our First Test Case
 
@@ -283,8 +279,8 @@ npm run coverage:report:open
 Pull requests
 -------------
 
-The affected service ids should be included in brackets in the pull request
-title. That way, Travis will run those service tests. When a pull request
+The affected service ids should be included in square brackets in the pull request
+title. That way, Circle CI will run those service tests. When a pull request
 affects multiple services, they should be separated with spaces. The test
 runner is case-insensitive, so they should be capitalized for readability.
 

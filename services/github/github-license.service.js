@@ -12,6 +12,12 @@ const {
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class GithubLicense extends LegacyService {
   static get category() {
     return 'license'
@@ -20,6 +26,7 @@ module.exports = class GithubLicense extends LegacyService {
   static get route() {
     return {
       base: 'github/license',
+      pattern: ':user/:repo',
     }
   }
 
@@ -27,7 +34,12 @@ module.exports = class GithubLicense extends LegacyService {
     return [
       {
         title: 'GitHub',
-        previewUrl: 'mashape/apistatus',
+        namedParams: { user: 'mashape', repo: 'apistatus' },
+        staticExample: {
+          label: 'license',
+          message: 'MIT',
+          color: 'green',
+        },
         keywords: ['GitHub', 'license'],
         documentation,
       },

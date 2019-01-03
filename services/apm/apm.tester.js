@@ -2,10 +2,13 @@
 
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
-const t = new ServiceTester({ id: 'apm', title: 'Atom Package Manager' })
 const { invalidJSON } = require('../response-fixtures')
 const { isMetric, isVPlusTripleDottedVersion } = require('../test-validators')
-module.exports = t
+
+const t = (module.exports = new ServiceTester({
+  id: 'apm',
+  title: 'Atom Package Manager',
+}))
 
 t.create('Downloads')
   .get('/dm/vim-mode.json')

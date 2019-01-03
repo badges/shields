@@ -3,13 +3,12 @@
 const { expect } = require('chai')
 const Camp = require('camp')
 const got = require('got')
+const portfinder = require('portfinder')
 const queryString = require('query-string')
 const nock = require('nock')
-const config = require('../../../lib/test-config')
 const serverSecrets = require('../../../lib/server-secrets')
 const acceptor = require('./acceptor')
 
-const baseUri = `http://127.0.0.1:${config.port}`
 const fakeClientId = 'githubdabomb'
 
 describe('Github token acceptor', function() {
@@ -25,15 +24,21 @@ describe('Github token acceptor', function() {
     delete serverSecrets.shieldsIps
   })
 
-  let camp
-  beforeEach(function(done) {
-    camp = Camp.start({ port: config.port, hostname: '::' })
-    camp.on('listening', () => done())
+  let port, baseUrl
+  beforeEach(async function() {
+    port = await portfinder.getPortPromise()
+    baseUrl = `http://127.0.0.1:${port}`
   })
-  afterEach(function(done) {
+
+  let camp
+  beforeEach(async function() {
+    camp = Camp.start({ port, hostname: '::' })
+    await new Promise(resolve => camp.on('listening', () => resolve()))
+  })
+  afterEach(async function() {
     if (camp) {
-      camp.close(() => done())
-      camp = null
+      await new Promise(resolve => camp.close(resolve))
+      camp = undefined
     }
   })
 
@@ -42,7 +47,7 @@ describe('Github token acceptor', function() {
   })
 
   it('should start the OAuth process', async function() {
-    const res = await got(`${baseUri}/github-auth`, { followRedirect: false })
+    const res = await got(`${baseUrl}/github-auth`, { followRedirect: false })
 
     expect(res.statusCode).to.equal(302)
 
@@ -57,7 +62,7 @@ describe('Github token acceptor', function() {
   describe('Finishing the OAuth process', function() {
     context('no code is provided', function() {
       it('should return an error', async function() {
-        const res = await got(`${baseUri}/github-auth/done`)
+        const res = await got(`${baseUrl}/github-auth/done`)
         expect(res.body).to.equal(
           'GitHub OAuth authentication failed to provide a code.'
         )
@@ -93,7 +98,7 @@ describe('Github token acceptor', function() {
       })
 
       it('should finish the OAuth process', async function() {
-        const res = await got(`${baseUri}/github-auth/done`, {
+        const res = await got(`${baseUrl}/github-auth/done`, {
           form: true,
           body: { code: fakeCode },
         })

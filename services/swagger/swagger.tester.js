@@ -1,13 +1,13 @@
 'use strict'
 
-const createServiceTester = require('../create-service-tester')
 const { colorScheme } = require('../test-helpers')
-const t = createServiceTester()
 
 const getURL = '/https/example.com/example.json.json?style=_shields_test'
 const apiURL = 'http://online.swagger.io'
 const apiGetURL = '/validator/debug'
 const apiGetQueryParams = { url: 'https://example.com/example.json' }
+
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('Valid (mocked)')
   .get(getURL)

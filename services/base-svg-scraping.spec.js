@@ -1,14 +1,11 @@
 'use strict'
 
-const chai = require('chai')
 const { expect } = require('chai')
 const sinon = require('sinon')
 const Joi = require('joi')
 const { makeBadgeData } = require('../lib/badge-data')
 const makeBadge = require('../gh-badges/lib/make-badge')
 const BaseSvgScrapingService = require('./base-svg-scraping')
-
-chai.use(require('chai-as-promised'))
 
 function makeExampleSvg({ label, message }) {
   const badgeData = makeBadgeData('this is the label', {})
@@ -56,7 +53,7 @@ describe('BaseSvgScrapingService', function() {
   })
 
   describe('Making requests', function() {
-    let sendAndCacheRequest, serviceInstance
+    let sendAndCacheRequest
     beforeEach(function() {
       sendAndCacheRequest = sinon.stub().returns(
         Promise.resolve({
@@ -64,25 +61,22 @@ describe('BaseSvgScrapingService', function() {
           res: { statusCode: 200 },
         })
       )
-      serviceInstance = new DummySvgScrapingService(
-        { sendAndCacheRequest },
-        { handleInternalErrors: false }
-      )
     })
 
     it('invokes _sendAndCacheRequest with the expected header', async function() {
-      await serviceInstance.invokeHandler({}, {})
+      await DummySvgScrapingService.invoke(
+        { sendAndCacheRequest },
+        { handleInternalErrors: false }
+      )
 
       expect(sendAndCacheRequest).to.have.been.calledOnceWith(
         'http://example.com/foo.svg',
-        {
-          headers: { Accept: 'image/svg+xml' },
-        }
+        { headers: { Accept: 'image/svg+xml' } }
       )
     })
 
     it('forwards options to _sendAndCacheRequest', async function() {
-      Object.assign(serviceInstance, {
+      class WithCustomOptions extends DummySvgScrapingService {
         async handle() {
           const { value } = await this._requestSvg({
             schema,
@@ -93,10 +87,13 @@ describe('BaseSvgScrapingService', function() {
             },
           })
           return { message: value }
-        },
-      })
+        }
+      }
 
-      await serviceInstance.invokeHandler({}, {})
+      await WithCustomOptions.invoke(
+        { sendAndCacheRequest },
+        { handleInternalErrors: false }
+      )
 
       expect(sendAndCacheRequest).to.have.been.calledOnceWith(
         'http://example.com/foo.svg',
@@ -115,36 +112,36 @@ describe('BaseSvgScrapingService', function() {
         buffer: exampleSvg,
         res: { statusCode: 200 },
       })
-      const serviceInstance = new DummySvgScrapingService(
-        { sendAndCacheRequest },
-        { handleInternalErrors: false }
-      )
-      const serviceData = await serviceInstance.invokeHandler({}, {})
-      expect(serviceData).to.deep.equal({
+      expect(
+        await DummySvgScrapingService.invoke(
+          { sendAndCacheRequest },
+          { handleInternalErrors: false }
+        )
+      ).to.deep.equal({
         message: exampleMessage,
       })
     })
 
     it('allows overriding the valueMatcher', async function() {
-      const sendAndCacheRequest = async () => ({
-        buffer: '<desc>a different message</desc>',
-        res: { statusCode: 200 },
-      })
-      const serviceInstance = new DummySvgScrapingService(
-        { sendAndCacheRequest },
-        { handleInternalErrors: false }
-      )
-      Object.assign(serviceInstance, {
+      class WithValueMatcher extends BaseSvgScrapingService {
         async handle() {
           return this._requestSvg({
             schema,
             valueMatcher: />([^<>]+)<\/desc>/,
             url: 'http://example.com/foo.svg',
           })
-        },
+        }
+      }
+      const sendAndCacheRequest = async () => ({
+        buffer: '<desc>a different message</desc>',
+        res: { statusCode: 200 },
       })
-      const serviceData = await serviceInstance.invokeHandler({}, {})
-      expect(serviceData).to.deep.equal({
+      expect(
+        await WithValueMatcher.invoke(
+          { sendAndCacheRequest },
+          { handleInternalErrors: false }
+        )
+      ).to.deep.equal({
         message: 'a different message',
       })
     })
@@ -154,12 +151,12 @@ describe('BaseSvgScrapingService', function() {
         buffer: 'not svg yo',
         res: { statusCode: 200 },
       })
-      const serviceInstance = new DummySvgScrapingService(
-        { sendAndCacheRequest },
-        { handleInternalErrors: false }
-      )
-      const serviceData = await serviceInstance.invokeHandler({}, {})
-      expect(serviceData).to.deep.equal({
+      expect(
+        await DummySvgScrapingService.invoke(
+          { sendAndCacheRequest },
+          { handleInternalErrors: false }
+        )
+      ).to.deep.equal({
         color: 'lightgray',
         message: 'unparseable svg response',
       })

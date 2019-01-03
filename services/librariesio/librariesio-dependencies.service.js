@@ -4,6 +4,12 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { checkErrorResponse } = require('../../lib/error-helper')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class LibrariesioDependencies extends LegacyService {
   static get category() {
     return 'dependencies'
@@ -30,7 +36,7 @@ module.exports = class LibrariesioDependencies extends LegacyService {
 
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
-      /^\/librariesio\/(github|release)\/([\w\-_]+\/[\w\-_]+)\/?([\w\-_.]+)?\.(svg|png|gif|jpg|json)$/,
+      /^\/librariesio\/(github|release)\/([\w\-_]+\/[\w\-_.]+)\/?([\w\-_.]+)?\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
         const resource = match[1]
         const project = match[2]

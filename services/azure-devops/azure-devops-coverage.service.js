@@ -1,9 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
-const { NotFound } = require('../errors')
-const { getHeaders } = require('./azure-devops-helpers')
+const AzureDevOpsBase = require('./azure-devops-base')
+const { keywords, getHeaders } = require('./azure-devops-helpers')
 
 const documentation = `
 <p>
@@ -29,17 +28,6 @@ const {
   coveragePercentage: coveragePercentageColor,
 } = require('../../lib/color-formatters')
 
-const latestBuildSchema = Joi.object({
-  count: Joi.number().required(),
-  value: Joi.array()
-    .items(
-      Joi.object({
-        id: Joi.number().required(),
-      })
-    )
-    .required(),
-}).required()
-
 const buildCodeCoverageSchema = Joi.object({
   coverageData: Joi.array()
     .items(
@@ -59,7 +47,7 @@ const buildCodeCoverageSchema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class AzureDevOpsCoverage extends BaseJsonService {
+module.exports = class AzureDevOpsCoverage extends AzureDevOpsBase {
   static render({ coverage }) {
     return {
       message: `${coverage.toFixed(0)}%`,
@@ -72,7 +60,7 @@ module.exports = class AzureDevOpsCoverage extends BaseJsonService {
   }
 
   static get category() {
-    return 'build'
+    return 'quality'
   }
 
   static get examples() {
@@ -80,17 +68,26 @@ module.exports = class AzureDevOpsCoverage extends BaseJsonService {
       {
         title: 'Azure DevOps coverage',
         pattern: ':organization/:project/:definitionId',
+        namedParams: {
+          organization: 'swellaby',
+          project: 'opensource',
+          definitionId: '25',
+        },
         staticExample: this.render({ coverage: 100 }),
-        exampleUrl: 'swellaby/opensource/25',
-        keywords: ['vso', 'vsts', 'azure-devops'],
+        keywords,
         documentation,
       },
       {
         title: 'Azure DevOps coverage (branch)',
         pattern: ':organization/:project/:definitionId/:branch',
+        namedParams: {
+          organization: 'swellaby',
+          project: 'opensource',
+          definitionId: '25',
+          branch: 'master',
+        },
         staticExample: this.render({ coverage: 100 }),
-        exampleUrl: 'swellaby/opensource/25/master',
-        keywords: ['vso', 'vsts', 'azure-devops'],
+        keywords,
         documentation,
       },
     ]
@@ -104,52 +101,18 @@ module.exports = class AzureDevOpsCoverage extends BaseJsonService {
     }
   }
 
-  async fetch({ url, options, schema }) {
-    return this._requestJson({
-      schema,
-      url,
-      options,
-      errorMessages: {
-        404: 'build pipeline or coverage not found',
-      },
-    })
-  }
-
-  async getLatestBuildId(organization, project, definitionId, branch, headers) {
-    // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/azure/devops/build/builds/list?view=azure-devops-rest-5.0
-    const url = `https://dev.azure.com/${organization}/${project}/_apis/build/builds`
-    const options = {
-      qs: {
-        definitions: definitionId,
-        $top: 1,
-        'api-version': '5.0-preview.4',
-      },
-      headers,
-    }
-    if (branch) {
-      options.qs.branch = branch
-    }
-    const json = await this.fetch({
-      url,
-      options,
-      schema: latestBuildSchema,
-    })
-
-    if (json.count !== 1) {
-      throw new NotFound({ prettyMessage: 'build pipeline not found' })
-    }
-
-    return json.value[0].id
-  }
-
   async handle({ organization, project, definitionId, branch }) {
     const headers = getHeaders()
-    const buildId = await this.getLatestBuildId(
+    const errorMessages = {
+      404: 'build pipeline or coverage not found',
+    }
+    const buildId = await this.getLatestCompletedBuildId(
       organization,
       project,
       definitionId,
       branch,
-      headers
+      headers,
+      errorMessages
     )
     // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/azure/devops/test/code%20coverage/get%20build%20code%20coverage?view=azure-devops-rest-5.0
     const url = `https://dev.azure.com/${organization}/${project}/_apis/test/codecoverage`
@@ -164,6 +127,7 @@ module.exports = class AzureDevOpsCoverage extends BaseJsonService {
       url,
       options,
       schema: buildCodeCoverageSchema,
+      errorMessages,
     })
 
     let covered = 0

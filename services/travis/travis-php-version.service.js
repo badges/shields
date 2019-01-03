@@ -9,14 +9,27 @@ const {
   getPhpReleases,
 } = require('../../lib/php-version')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class TravisPhpVersion extends LegacyService {
   static get category() {
-    return 'version'
+    return 'platform-support'
   }
 
   static get route() {
     return {
       base: 'travis/php-v',
+      pattern: ':user/:repo',
+    }
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'php',
     }
   }
 
@@ -24,7 +37,8 @@ module.exports = class TravisPhpVersion extends LegacyService {
     return [
       {
         title: 'PHP from Travis config',
-        previewUrl: 'symfony/symfony',
+        namedParams: { user: 'symfony', repo: 'symfony' },
+        staticPreview: { message: '^7.1.3', color: 'blue' },
       },
     ]
   }

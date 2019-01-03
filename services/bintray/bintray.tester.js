@@ -1,20 +1,19 @@
 'use strict'
 
 const Joi = require('joi')
-const createServiceTester = require('../create-service-tester')
 const { colorScheme } = require('../test-helpers')
-const { isVPlusDottedVersionNClauses } = require('../test-validators')
+const {
+  isVPlusDottedVersionNClausesWithOptionalSuffix,
+} = require('../test-validators')
 
-const t = createServiceTester()
-
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('version')
   .get('/asciidoctor/maven/asciidoctorj.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'bintray',
-      value: isVPlusDottedVersionNClauses,
+      value: isVPlusDottedVersionNClausesWithOptionalSuffix,
     })
   )
 
