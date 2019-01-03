@@ -180,7 +180,7 @@
     "prettier-check": "^2.0.0",
     "pretty": "^2.0.0",
     "prop-types": "^15.6.0",
-    "react": "^16.6.3",
+    "react": "^16.7.0",
     "react-dom": "^16.6.3",
     "react-modal": "^3.8.1",
     "react-router-dom": "^4.3.1",
