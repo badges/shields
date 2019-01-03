@@ -3,6 +3,7 @@
 const Joi = require('joi')
 const BaseXmlService = require('../base-xml')
 const serverSecrets = require('../../lib/server-secrets')
+const { Inaccessible } = require('../errors')
 
 const violationSchema = Joi.object({
   severity: Joi.equal('info', 'minor', 'major', 'critical').required(),
@@ -189,11 +190,15 @@ module.exports = class SymfonyInsight extends BaseXmlService {
       },
     }
 
-    if (serverSecrets && serverSecrets.sl_insight_userUuid) {
-      options.auth = {
-        user: serverSecrets.sl_insight_userUuid,
-        pass: serverSecrets.sl_insight_apiToken,
-      }
+    if (!serverSecrets.sl_insight_userUuid) {
+      throw new Inaccessible({
+        prettyMessage: 'required API tokens not found in config',
+      })
+    }
+
+    options.auth = {
+      user: serverSecrets.sl_insight_userUuid,
+      pass: serverSecrets.sl_insight_apiToken,
     }
 
     return this._requestXml({

@@ -16,8 +16,8 @@ const {
   mockSymfonyToken,
   mockSymfonyInsightCreds,
   restore,
-  tokenExists,
-  logTokenWarning,
+  realTokenExists,
+  prepLiveTest,
   criticalViolation,
   majorViolation,
   minorViolation,
@@ -27,11 +27,19 @@ const {
 
 const sampleProjectUuid = '45afb680-d4e6-4e66-93ea-bcfa79eb8a87'
 
+beforeEach(function() {
+  mockSymfonyInsightCreds()
+})
+
+afterEach(function() {
+  restore()
+})
+
 t.create('live: valid project grade')
-  .before(logTokenWarning)
+  .before(prepLiveTest)
   .get(`/symfony/i/grade/${sampleProjectUuid}.json`)
-  .timeout(10000)
-  .interceptIf(!tokenExists, nock =>
+  .timeout(15000)
+  .interceptIf(!realTokenExists, nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
       .reply(200, platinumMockResponse)
@@ -50,10 +58,10 @@ t.create('live: valid project grade')
   )
 
 t.create('live: valid project violations')
-  .before(logTokenWarning)
+  .before(prepLiveTest)
   .get(`/symfony/i/violations/${sampleProjectUuid}.json`)
-  .timeout(10000)
-  .interceptIf(!tokenExists, nock =>
+  .timeout(15000)
+  .interceptIf(!realTokenExists, nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
       .reply(200, multipleViolations)
@@ -68,9 +76,9 @@ t.create('live: valid project violations')
   )
 
 t.create('live: nonexistent project')
-  .before(logTokenWarning)
+  .before(prepLiveTest)
   .get('/symfony/i/grade/45afb680-d4e6-4e66-93ea-bcfa79eb8a88.json')
-  .interceptIf(!tokenExists, nock =>
+  .interceptIf(!realTokenExists, nock =>
     nock('https://insight.symfony.com/api/projects')
       .get('/45afb680-d4e6-4e66-93ea-bcfa79eb8a88')
       .reply(404)
@@ -226,6 +234,10 @@ t.create('minor violations')
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
+      .basicAuth({
+        user: mockSymfonyUser,
+        pass: mockSymfonyToken,
+      })
       .reply(200, minorViolation)
   )
   .expectJSON({
@@ -239,6 +251,10 @@ t.create('info violations')
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
+      .basicAuth({
+        user: mockSymfonyUser,
+        pass: mockSymfonyToken,
+      })
       .reply(200, infoViolation)
   )
   .expectJSON({
@@ -252,6 +268,10 @@ t.create('multiple violations grade')
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
+      .basicAuth({
+        user: mockSymfonyUser,
+        pass: mockSymfonyToken,
+      })
       .reply(200, multipleViolations)
   )
   .expectJSON({
@@ -260,26 +280,13 @@ t.create('multiple violations grade')
     colorB: colorScheme.red,
   })
 
-t.create('auth')
-  .before(mockSymfonyInsightCreds)
-  .get(`/symfony/i/grade/${sampleProjectUuid}.json?style=_shields_test`)
-  .intercept(nock =>
-    nock('https://insight.symfony.com/api/projects')
-      .get(`/${sampleProjectUuid}`)
-      // This ensures that the expected credentials from serverSecrets are actually being sent with the HTTP request.
-      // Without this the request wouldn't match and the test would fail.
-      .basicAuth({
-        user: mockSymfonyUser,
-        pass: mockSymfonyToken,
-      })
-      .reply(200, bronzeMockResponse)
-  )
+t.create('auth missing')
+  .before(restore)
+  .get(`/symfony/i/grade/${sampleProjectUuid}.json`)
   .expectJSON({
-    name: 'grade',
-    value: 'bronze',
-    colorB: '#C88F6A',
+    name: 'symfony insight',
+    value: 'required API tokens not found in config',
   })
-  .finally(restore)
 
 // These tests ensure that the legacy badge path (/sensiolabs/i/projectUuid) still works
 t.create('legacy path: pending project grade')

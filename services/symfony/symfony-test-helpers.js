@@ -86,12 +86,21 @@ function mockSymfonyInsightCreds() {
   sinon.stub(serverSecrets, 'sl_insight_apiToken').value(mockSymfonyToken)
 }
 
-const tokenExists = serverSecrets.sl_insight_userUuid
-function logTokenWarning() {
-  if (!tokenExists) {
+const originalUuid = serverSecrets.sl_insight_userUuid
+const originalApiToken = serverSecrets.sl_insight_apiToken
+
+function prepLiveTest() {
+  // Since the service implementation will throw an error if the creds
+  // are missing, there is a beforeEach hook that ensures there's mock creds
+  // used for each test. This will use the "real" creds if the exist, otherwise
+  // it will use the same stubbed creds as all the mocked tests.
+  if (!originalUuid) {
     console.warn(
       'No token provided, this test will mock Symfony Insight API responses.'
     )
+  } else {
+    serverSecrets.sl_insight_userUuid = originalUuid
+    serverSecrets.sl_insight_apiToken = originalApiToken
   }
 }
 
@@ -106,8 +115,8 @@ module.exports = {
   mockSymfonyToken,
   mockSymfonyInsightCreds,
   restore: sinon.restore,
-  tokenExists,
-  logTokenWarning,
+  realTokenExists: originalUuid,
+  prepLiveTest,
   criticalViolation,
   majorViolation,
   minorViolation,
