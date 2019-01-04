@@ -1,7 +1,6 @@
 'use strict'
 
 const path = require('path')
-const { EventEmitter } = require('events')
 const serverSecrets = require('../../lib/server-secrets')
 const log = require('../../lib/log')
 const RedisTokenPersistence = require('../../lib/redis-token-persistence')
@@ -16,8 +15,6 @@ class GithubConstellation {
   constructor(config) {
     this._debugEnabled = config.service.debug.enabled
     this._debugIntervalSeconds = config.service.debug.intervalSeconds
-
-    this._emitter = new EventEmitter()
 
     const { redisUrl, dir: persistenceDir } = config.persistence
     if (config.persistence.redisUrl) {
@@ -69,12 +66,6 @@ class GithubConstellation {
     tokens.forEach(tokenString => {
       this.apiProvider.addToken(tokenString)
     })
-
-    // Register for this event after `initialize()` finishes, so we don't
-    // catch `token-added` events for the initial tokens, which would be
-    // inefficient, though it wouldn't break anything.
-    this._emitter.on('token-added', this.persistence.noteTokenAdded)
-    this._emitter.on('token-removed', this.persistence.noteTokenRemoved)
 
     setAdminRoutes(this.apiProvider, server)
 
