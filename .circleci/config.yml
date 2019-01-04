@@ -120,6 +120,12 @@ jobs:
           command: npm run test:js:server
 
       - run:
+          name: Prepare integration tests
+          command: |
+            mkdir private
+            echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
+
+      - run:
           name: Integration tests
           when: always
           environment:
