@@ -1,139 +1,102 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
-import resolveBadgeUrl from '../lib/badge-url'
+import styled from 'styled-components'
+import { badgeUrlFromPath, staticBadgeUrl } from '../../lib/make-badge-url'
+import { Badge } from './common'
+import { StyledCode } from './snippet'
 
-const Badge = ({
-  title,
-  previewUri,
-  exampleUri,
-  documentation,
-  baseUri,
-  longCache,
-  shouldDisplay = () => true,
-  onClick,
-}) => {
-  const handleClick = onClick
-    ? () => onClick({ title, previewUri, exampleUri, documentation })
-    : undefined
+const ExampleTable = styled.table`
+  min-width: 50%;
+  margin: auto;
 
-  const previewImage = previewUri ? (
-    <img
-      className={classNames('badge-img', { clickable: onClick })}
-      onClick={handleClick}
-      src={resolveBadgeUrl(previewUri, baseUri, { longCache })}
-      alt=""
-    />
-  ) : (
-    '\u00a0'
-  ) // non-breaking space
-  const resolvedExampleUri = resolveBadgeUrl(
-    exampleUri || previewUri,
-    baseUri,
-    { longCache: false }
-  )
+  th,
+  td {
+    text-align: left;
+  }
+`
 
-  if (shouldDisplay()) {
+const ClickableTh = styled.th`
+  cursor: pointer;
+`
+
+const ClickableCode = styled(StyledCode)`
+  cursor: pointer;
+`
+
+export default class BadgeExamples extends React.Component {
+  static propTypes = {
+    definitions: PropTypes.array.isRequired,
+    baseUrl: PropTypes.string,
+    longCache: PropTypes.bool.isRequired,
+    onClick: PropTypes.func.isRequired,
+  }
+
+  renderExample(exampleData) {
+    const { baseUrl, longCache, onClick } = this.props
+    const { title, example, preview } = exampleData
+
+    let previewUrl
+    // There are two alternatives for `preview`. Refer to the schema in
+    // `services/service-definitions.js`.
+    if (preview.label !== undefined) {
+      const { label, message, color } = preview
+      previewUrl = staticBadgeUrl({ baseUrl, label, message, color })
+    } else {
+      const { path, queryParams } = preview
+      previewUrl = badgeUrlFromPath({ baseUrl, path, queryParams, longCache })
+    }
+
+    // There are two alternatives for `example`. Refer to the schema in
+    // `services/service-definitions.js`.
+    let exampleUrl
+    if (example.pattern !== undefined) {
+      const { pattern, namedParams, queryParams } = example
+      exampleUrl = badgeUrlFromPath({
+        baseUrl,
+        path: pattern,
+        namedParams,
+        queryParams,
+      })
+    } else {
+      const { path, queryParams } = example
+      exampleUrl = badgeUrlFromPath({ baseUrl, path, queryParams })
+    }
+
+    const key = `${title} ${previewUrl} ${exampleUrl}`
+
+    const handleClick = () => onClick(exampleData)
+
     return (
-      <tr>
-        <th
-          className={classNames({ clickable: onClick })}
-          onClick={handleClick}
-        >
-          {title}:
-        </th>
-        <td>{previewImage}</td>
+      <tr key={key}>
+        <ClickableTh onClick={handleClick}>{title}:</ClickableTh>
         <td>
-          <code
-            className={classNames({ clickable: onClick })}
-            onClick={handleClick}
-          >
-            {resolvedExampleUri}
-          </code>
+          <Badge clickable onClick={handleClick} src={previewUrl} />
+        </td>
+        <td>
+          <ClickableCode onClick={handleClick}>{exampleUrl}</ClickableCode>
         </td>
       </tr>
     )
   }
-  return null
-}
-Badge.propTypes = {
-  title: PropTypes.string.isRequired,
-  previewUri: PropTypes.string,
-  exampleUri: PropTypes.string,
-  documentation: PropTypes.string,
-  baseUri: PropTypes.string,
-  longCache: PropTypes.bool.isRequired,
-  shouldDisplay: PropTypes.func,
-  onClick: PropTypes.func.isRequired,
-}
 
-const Category = ({ category, examples, baseUri, longCache, onClick }) => {
-  if (examples.filter(example => example.shouldDisplay()).length === 0) {
-    return null
-  }
-  return (
-    <div>
-      <Link to={'/examples/' + category.id}>
-        <h3 id={category.id}>{category.name}</h3>
-      </Link>
-      <table className="badge">
+  render() {
+    const { definitions } = this.props
+
+    if (!definitions) {
+      return null
+    }
+
+    const flattened = definitions.reduce((accum, current) => {
+      const { examples } = current
+      return accum.concat(examples)
+    }, [])
+
+    return (
+      <ExampleTable>
         <tbody>
-          {examples.map(badgeData => (
-            <Badge
-              key={badgeData.key}
-              {...badgeData}
-              baseUri={baseUri}
-              longCache={longCache}
-              onClick={onClick}
-            />
-          ))}
+          {flattened.map(exampleData => this.renderExample(exampleData))}
         </tbody>
-      </table>
-    </div>
-  )
+      </ExampleTable>
+    )
+  }
 }
-Category.propTypes = {
-  category: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-  }).isRequired,
-  examples: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      previewUri: PropTypes.string,
-      exampleUri: PropTypes.string,
-      documentation: PropTypes.string,
-    })
-  ).isRequired,
-  baseUri: PropTypes.string,
-  longCache: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired,
-}
-
-const BadgeExamples = ({ categories, baseUri, longCache, onClick }) => (
-  <div>
-    {categories.map((categoryData, i) => (
-      <Category
-        key={i}
-        {...categoryData}
-        baseUri={baseUri}
-        longCache={longCache}
-        onClick={onClick}
-      />
-    ))}
-  </div>
-)
-BadgeExamples.propTypes = {
-  categories: PropTypes.arrayOf(
-    PropTypes.shape({
-      category: Category.propTypes.category,
-      examples: Category.propTypes.examples,
-    })
-  ),
-  baseUri: PropTypes.string,
-  longCache: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired,
-}
-
-export { Badge, BadgeExamples }

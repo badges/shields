@@ -1,8 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { addv } = require('../../lib/text-formatters')
-const { version: versionColor } = require('../../lib/color-formatters')
+const { renderVersionBadge } = require('../../lib/version')
 const { NotFound } = require('../errors')
 const NpmBase = require('./npm-base')
 
@@ -16,8 +15,8 @@ module.exports = class NpmVersion extends NpmBase {
     return 'version'
   }
 
-  static get url() {
-    return this.buildUrl('npm/v', { withTag: true })
+  static get route() {
+    return this.buildRoute('npm/v', { withTag: true })
   }
 
   static get defaultBadgeData() {
@@ -27,39 +26,51 @@ module.exports = class NpmVersion extends NpmBase {
   static get examples() {
     return [
       {
-        previewUrl: 'npm',
+        title: 'npm',
+        exampleUrl: 'npm',
+        pattern: ':package',
+        staticExample: this.render({ version: '6.3.0' }),
         keywords: ['node'],
       },
       {
         title: 'npm (scoped)',
-        previewUrl: '@cycle/core',
+        exampleUrl: '@cycle/core',
+        pattern: ':scope/:package',
+        staticExample: this.render({ version: '7.0.0' }),
         keywords: ['node'],
       },
       {
         title: 'npm (tag)',
-        previewUrl: 'npm/next',
+        exampleUrl: 'npm/next',
+        pattern: ':package/:tag',
+        staticExample: this.render({ tag: 'latest', version: '6.3.0' }),
         keywords: ['node'],
       },
       {
         title: 'npm (custom registry)',
-        previewUrl: 'npm/next',
-        query: { registry_uri: 'https://registry.npmjs.com' },
+        exampleUrl: 'npm/next',
+        pattern: ':package/:tag',
+        staticExample: this.render({ tag: 'latest', version: '7.0.0' }),
+        queryParams: { registry_uri: 'https://registry.npmjs.com' },
         keywords: ['node'],
       },
       {
         title: 'npm (scoped with tag)',
-        previewUrl: '@cycle/core/canary',
+        exampleUrl: '@cycle/core/canary',
+        staticExample: this.render({ tag: 'latest', version: '6.3.0' }),
+        pattern: ':scope/:package/:tag',
         keywords: ['node'],
       },
     ]
   }
 
   static render({ tag, version }) {
-    return {
-      label: tag ? `npm@${tag}` : undefined,
-      message: addv(version),
-      color: versionColor(version),
-    }
+    const { label: defaultLabel } = this.defaultBadgeData
+    return renderVersionBadge({
+      tag,
+      version,
+      defaultLabel,
+    })
   }
 
   async handle(namedParams, queryParams) {
@@ -78,7 +89,7 @@ module.exports = class NpmVersion extends NpmBase {
     const packageData = await this._requestJson({
       schema,
       url: `${registryUrl}/-/package/${slug}/dist-tags`,
-      notFoundMessage: 'package not found',
+      errorMessages: { 404: 'package not found' },
     })
 
     if (tag && !(tag in packageData)) {

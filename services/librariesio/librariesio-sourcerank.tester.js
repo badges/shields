@@ -1,15 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
 const { anyInteger } = require('../validators')
 
-const t = new ServiceTester({
-  id: 'librariesio-sourcerank',
-  title: 'Libraries.io SourceRank',
-  pathPrefix: '/librariesio/sourcerank',
-})
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('sourcerank')
   .get('/npm/got.json')

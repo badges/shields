@@ -10,8 +10,7 @@ const isDependencyStatus = Joi.string().valid(
   'stale'
 )
 
-const t = new ServiceTester({ id: 'depfu', title: 'Depfu' })
-module.exports = t
+const t = (module.exports = new ServiceTester({ id: 'depfu', title: 'Depfu' }))
 
 t.create('depfu dependencies (valid)')
   .get('/depfu/example-ruby.json')
@@ -24,9 +23,4 @@ t.create('depfu dependencies (valid)')
 
 t.create('depfu dependencies (repo not found)')
   .get('/pyvesb/emptyrepo.json')
-  .expectJSON({ name: 'dependencies', value: 'invalid' })
-
-t.create('depfu dependencies (connection error)')
-  .get('/depfu/example-ruby.json')
-  .networkOff()
-  .expectJSON({ name: 'dependencies', value: 'inaccessible' })
+  .expectJSON({ name: 'dependencies', value: 'not found' })

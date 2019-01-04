@@ -1,14 +1,29 @@
 'use strict'
 
 const Joi = require('joi')
+const serverSecrets = require('../../lib/server-secrets')
 const BaseJsonService = require('../base-json')
 const { InvalidResponse, NotFound } = require('../errors')
+const { semverRange } = require('../validators')
 
 const deprecatedLicenseObjectSchema = Joi.object({
   type: Joi.string().required(),
 })
+const dependencyMap = Joi.object()
+  .pattern(
+    /./,
+    Joi.alternatives().try(
+      semverRange,
+      Joi.string()
+        .uri()
+        .required()
+    )
+  )
+  .default({})
 const schema = Joi.object({
-  devDependencies: Joi.object().pattern(/./, Joi.string()),
+  dependencies: dependencyMap,
+  devDependencies: dependencyMap,
+  peerDependencies: dependencyMap,
   engines: Joi.object().pattern(/./, Joi.string()),
   license: Joi.alternatives().try(
     Joi.string(),
@@ -17,24 +32,32 @@ const schema = Joi.object({
       Joi.alternatives(Joi.string(), deprecatedLicenseObjectSchema)
     )
   ),
+  maintainers: Joi.array()
+    // We don't need the keys here, just the length.
+    .items(Joi.object({}))
+    .required(),
+  types: Joi.string(),
+  files: Joi.array()
+    .items(Joi.string())
+    .default([]),
 }).required()
 
 // Abstract class for NPM badges which display data about the latest version
 // of a package.
 module.exports = class NpmBase extends BaseJsonService {
-  static buildUrl(base, { withTag } = {}) {
+  static buildRoute(base, { withTag } = {}) {
     if (withTag) {
       return {
         base,
-        format: '(?:@([^/]+))?/?([^/]*)/?([^/]*)',
+        // The trailing optional means this has to be a regex.
+        format: '(?:(@[^/]+)/)?([^/]*)/?([^/]*)',
         capture: ['scope', 'packageName', 'tag'],
         queryParams: ['registry_uri'],
       }
     } else {
       return {
         base,
-        format: '(?:@([^/]+)/)?([^/]+)',
-        capture: ['scope', 'packageName'],
+        pattern: ':scope(@[^/]+)?/:packageName',
         queryParams: ['registry_uri'],
       }
     }
@@ -53,9 +76,23 @@ module.exports = class NpmBase extends BaseJsonService {
   }
 
   static encodeScopedPackage({ scope, packageName }) {
+    const scopeWithoutAt = scope.replace(/^@/, '')
     // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
-    const encoded = encodeURIComponent(`${scope}/${packageName}`)
+    const encoded = encodeURIComponent(`${scopeWithoutAt}/${packageName}`)
     return `@${encoded}`
+  }
+
+  async _requestJson(data) {
+    // Use a custom Accept header because of this bug:
+    // <https://github.com/npm/npmjs.org/issues/163>
+    const headers = { Accept: '*/*' }
+    if (serverSecrets.npm_token) {
+      headers.Authorization = `Bearer ${serverSecrets.npm_token}`
+    }
+    return super._requestJson({
+      ...data,
+      options: { headers },
+    })
   }
 
   async fetchPackageData({ registryUrl, scope, packageName, tag }) {
@@ -79,10 +116,7 @@ module.exports = class NpmBase extends BaseJsonService {
       // We don't validate here because we need to pluck the desired subkey first.
       schema: Joi.any(),
       url,
-      // Use a custom Accept header because of this bug:
-      // <https://github.com/npm/npmjs.org/issues/163>
-      options: { Accept: '*/*' },
-      notFoundMessage: 'package not found',
+      errorMessages: { 404: 'package not found' },
     })
 
     let packageData

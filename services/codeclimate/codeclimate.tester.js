@@ -4,7 +4,10 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isIntegerPercentage } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'codeclimate', title: 'Code Climate' })
+const t = (module.exports = new ServiceTester({
+  id: 'codeclimate',
+  title: 'Code Climate',
+}))
 
 // Tests based on Code Climate's test reports endpoint.
 t.create('test coverage percentage')
@@ -136,5 +139,3 @@ t.create('malformed response for inner specific repo query')
     name: 'maintainability',
     value: 'invalid',
   })
-
-module.exports = t

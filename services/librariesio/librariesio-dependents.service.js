@@ -15,15 +15,17 @@ class LibrariesIoDependents extends LibrariesIoBase {
     }
   }
 
-  static get url() {
-    return this.buildUrl('librariesio/dependents')
+  static get route() {
+    return this.buildRoute('librariesio/dependents')
   }
 
   static get examples() {
     return [
       {
         title: 'Dependents (via libraries.io)',
-        previewUrl: 'npm/got',
+        exampleUrl: 'npm/got',
+        pattern: ':platform/:library',
+        staticExample: this.render({ dependentCount: 2000 }),
       },
     ]
   }

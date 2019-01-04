@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
 const { metric } = require('../../lib/text-formatters')
-const { nonNegativeInteger } = require('../validators.js')
+const { nonNegativeInteger } = require('../validators')
 
 // https://github.com/npm/registry/blob/master/docs/download-counts.md#output
 const pointResponseSchema = Joi.object({
@@ -50,7 +50,7 @@ function DownloadsForInterval(interval) {
       return 'downloads'
     }
 
-    static get url() {
+    static get route() {
       return {
         base,
         format: '(.*)',
@@ -62,7 +62,9 @@ function DownloadsForInterval(interval) {
       return [
         {
           title: 'npm',
-          previewUrl: 'localeval',
+          exampleUrl: 'localeval',
+          pattern: ':package',
+          staticExample: this.render({ downloads: 30000 }),
           keywords: ['node'],
         },
       ]
@@ -79,7 +81,7 @@ function DownloadsForInterval(interval) {
       let { downloads } = await this._requestJson({
         schema,
         url: `https://api.npmjs.org/downloads/${query}/${packageName}`,
-        notFoundMessage: 'package not found or too new',
+        errorMessages: { 404: 'package not found or too new' },
       })
       if (isRange) {
         downloads = downloads

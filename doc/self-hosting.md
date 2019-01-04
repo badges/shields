@@ -60,7 +60,6 @@ Once you have installed the [Heroku Toolbelt][]:
 heroku login
 heroku create your-app-name
 heroku config:set BUILDPACK_URL=https://github.com/mojodna/heroku-buildpack-multi.git#build-env
-cp /path/to/Verdana.ttf .
 make deploy
 heroku open
 ```
@@ -116,34 +115,17 @@ npm run build  # Not sure why, but this needs to be run before deploying.
 now
 ```
 
+## Persistence
+
+To enable Redis-backed GitHub token persistence, point `REDIS_URL` to your
+Redis installation.
 
 Server secrets
 --------------
 
 You can add your own server secrets in `private/secret.json`.
 
-Because of Github rate limits, you will need to provide a token, or else badges
-will stop working once you hit 60 requests per hour, the
-[unauthenticated rate limit][github rate limit].
-
-You can [create a personal access token][personal access tokens] through the
-Github website. When you create the token, you can choose to give read access
-to your repositories. If you do that, your self-hosted Shields installation
-will have access to your private repositories.
-
-```
-{
-  "gh_token": "..."
-}
-```
-
-When a `gh_token` is specified, it is used in place of the Shields token
-rotation logic.
-
-
-[github rate limit]: https://developer.github.com/v3/#rate-limiting
-[personal access tokens]: https://github.com/settings/tokens
-
+These are documented in [server-secrets.md](./server-secrets.md)
 
 Separate frontend hosting
 -------------------------
@@ -185,17 +167,25 @@ In order to enable integration with [Sentry](https://sentry.io), you need your o
 ### How to obtain the Sentry DSN
 
 1. [Sign up](https://sentry.io/pricing/) for Sentry
-1. Log in to Sentry
-1. Create a new project for Node.js
-1. You should see [Sentry DSN](https://docs.sentry.io/quickstart/#configure-the-dsn) for your project. Sentry DSN can be found by navigating to \[Project Name] -> Project Settings -> Client Keys (DSN) as well.
+2. Log in to Sentry
+3. Create a new project for Node.js
+4. You should see [Sentry DSN](https://docs.sentry.io/quickstart/#configure-the-dsn) for your project. Sentry DSN can be found by navigating to \[Project Name] -> Project Settings -> Client Keys (DSN) as well.
 
 Start the server using the Sentry DSN. You can set it:
 - by `SENTRY_DSN` environment variable
 ```
-SENTRY_DSN=https://xxx:yyy@sentry.io/zzz sudo node server
+sudo SENTRY_DSN=https://xxx:yyy@sentry.io/zzz node server
 ```
 
 - or by `sentry_dsn` secret property defined in `private/secret.json`
 ```
 sudo node server
 ```
+
+### Prometheus
+Shields uses [prom-client](https://github.com/siimon/prom-client) to provide [default metrics](https://prometheus.io/docs/instrumenting/writing_clientlibs/#standard-and-runtime-collectors). These metrics are disabled by default.
+You can enable them by `METRICS_PROMETHEUS_ENABLED` environment variable. Moreover access to metrics resource is blocked for requests from any IP address by default. You can provide a regular expression with allowed IP addresses by `METRICS_PROMETHEUS_ALLOWED_IPS` environment variable.
+```bash
+METRICS_PROMETHEUS_ENABLED=true METRICS_PROMETHEUS_ALLOWED_IPS="^127\.0\.0\.1$" npm start
+```
+Metrics are available at `/metrics` resource.

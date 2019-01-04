@@ -1,39 +1,24 @@
 import { test, given } from 'sazerac'
-import {
-  default as resolveBadgeUrl,
-  encodeField,
-  staticBadgeUrl,
-  dynamicBadgeUrl,
-} from './badge-url'
+import resolveBadgeUrl, { staticBadgeUrl, dynamicBadgeUrl } from './badge-url'
 
 const resolveBadgeUrlWithLongCache = (url, baseUrl) =>
   resolveBadgeUrl(url, baseUrl, { longCache: true })
 
 describe('Badge URL functions', function() {
   test(resolveBadgeUrl, () => {
-    given('/badge/foo-bar-blue.svg', undefined).expect(
-      '/badge/foo-bar-blue.svg'
-    )
-    given('/badge/foo-bar-blue.svg', 'http://example.com').expect(
+    given('/badge/foo-bar-blue', undefined).expect('/badge/foo-bar-blue.svg')
+    given('/badge/foo-bar-blue', 'http://example.com').expect(
       'http://example.com/badge/foo-bar-blue.svg'
     )
   })
 
   test(resolveBadgeUrlWithLongCache, () => {
-    given('/badge/foo-bar-blue.svg', undefined).expect(
+    given('/badge/foo-bar-blue', undefined).expect(
       '/badge/foo-bar-blue.svg?maxAge=2592000'
     )
-    given('/badge/foo-bar-blue.svg', 'http://example.com').expect(
+    given('/badge/foo-bar-blue', 'http://example.com').expect(
       'http://example.com/badge/foo-bar-blue.svg?maxAge=2592000'
     )
-  })
-
-  test(encodeField, () => {
-    given('foo').expect('foo')
-    given('').expect('')
-    given('happy go lucky').expect('happy%20go%20lucky')
-    given('do-right').expect('do--right')
-    given('it_is_a_snake').expect('it__is__a__snake')
   })
 
   test(staticBadgeUrl, () => {
@@ -57,6 +42,24 @@ describe('Badge URL functions', function() {
         `&url=${encodeURIComponent(dataUrl)}`,
         `&query=${encodeURIComponent(query)}`,
         `&prefix=${encodeURIComponent(prefix)}`,
+        '&style=plastic',
+      ].join('')
+    )
+
+    const suffix = '<- value'
+    const color = 'blue'
+    given('http://img.example.com', 'json', 'foo', dataUrl, query, {
+      suffix,
+      color,
+      style: 'plastic',
+    }).expect(
+      [
+        'http://img.example.com/badge/dynamic/json.svg',
+        '?label=foo',
+        `&url=${encodeURIComponent(dataUrl)}`,
+        `&query=${encodeURIComponent(query)}`,
+        '&colorB=blue',
+        `&suffix=${encodeURIComponent(suffix)}`,
         '&style=plastic',
       ].join('')
     )

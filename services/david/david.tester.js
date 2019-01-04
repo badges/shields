@@ -3,14 +3,14 @@
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { invalidJSON } = require('../response-fixtures')
+
 const isDependencyStatus = Joi.string().valid(
   'insecure',
   'up to date',
   'out of date'
 )
 
-const t = new ServiceTester({ id: 'david', title: 'David' })
-module.exports = t
+const t = (module.exports = new ServiceTester({ id: 'david', title: 'David' }))
 
 t.create('david dependencies (valid)')
   .get('/expressjs/express.json')
@@ -25,7 +25,7 @@ t.create('david dev dependencies (valid)')
   .get('/dev/expressjs/express.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'devDependencies',
+      name: 'dev dependencies',
       value: isDependencyStatus,
     })
   )
@@ -34,7 +34,7 @@ t.create('david optional dependencies (valid)')
   .get('/optional/elnounch/byebye.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'optionalDependencies',
+      name: 'optional dependencies',
       value: isDependencyStatus,
     })
   )
@@ -43,7 +43,7 @@ t.create('david peer dependencies (valid)')
   .get('/peer/webcomponents/generator-element.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'peerDependencies',
+      name: 'peer dependencies',
       value: isDependencyStatus,
     })
   )
@@ -59,7 +59,7 @@ t.create('david dependencies with path (valid)')
 
 t.create('david dependencies (none)')
   .get('/peer/expressjs/express.json') // express does not specify peer dependencies
-  .expectJSON({ name: 'peerDependencies', value: 'none' })
+  .expectJSON({ name: 'peer dependencies', value: 'none' })
 
 t.create('david dependencies (repo not found)')
   .get('/pyvesb/emptyrepo.json')

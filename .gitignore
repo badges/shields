@@ -7,6 +7,7 @@
 /private
 /index.html
 /shields.env
+gh-badges/package-lock.json
 
 # Folder view configuration files
 .DS_Store
@@ -15,6 +16,9 @@ Desktop.ini
 # Thumbnail cache files
 ._*
 Thumbs.db
+
+# Visual Studio Code User Settings
+.vscode/settings.json
 
 # eclipse
 .project
@@ -91,3 +95,4 @@ typings/
 .next
 badge-examples.json
 supported-features.json
+service-definitions.yml

@@ -1,15 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
 const { isMetric } = require('../test-validators')
 
-const t = new ServiceTester({
-  id: 'librariesio-dependent-repos',
-  title: 'Libraries.io dependent repos',
-  pathPrefix: '/librariesio/dependent-repos',
-})
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('dependent repo count')
   .get('/npm/got.json')

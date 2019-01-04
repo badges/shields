@@ -1,0 +1,45 @@
+{
+  "name": "gh-badges",
+  "version": "2.1.0",
+  "description": "Shields.io badge library",
+  "keywords": [
+    "GitHub",
+    "badge",
+    "SVG",
+    "image",
+    "shields.io"
+  ],
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/badges/shields.git"
+  },
+  "author": "Thaddée Tyl <thaddee.tyl@gmail.com>",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/badges/shields/issues"
+  },
+  "homepage": "http://shields.io",
+  "bin": {
+    "badge": "lib/badge-cli.js"
+  },
+  "engines": {
+    "node": ">= 8",
+    "npm": ">= 5"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/shields",
+    "logo": "https://opencollective.com/opencollective/logo.txt"
+  },
+  "dependencies": {
+    "anafanafo": "^0.1.0",
+    "dot": "~1.1.2",
+    "gm": "^1.23.0",
+    "is-css-color": "^1.0.0",
+    "svgo": "~1.1.1"
+  },
+  "scripts": {
+    "test": "echo 'Run tests from parent dir'; false"
+  }
+}

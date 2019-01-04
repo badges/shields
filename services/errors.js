@@ -77,8 +77,24 @@ class InvalidParameter extends ShieldsRuntimeError {
     return 'invalid parameter'
   }
 
+  constructor(props = {}) {
+    const message = props.underlyingError
+      ? `Invalid Parameter: ${props.underlyingError.message}`
+      : 'Invalid Parameter'
+    super(props, message)
+  }
+}
+
+class Deprecated extends ShieldsRuntimeError {
+  get name() {
+    return 'Deprecated'
+  }
+  get defaultPrettyMessage() {
+    return 'no longer available'
+  }
+
   constructor(props) {
-    const message = 'Invalid Parameter'
+    const message = 'Deprecated'
     super(props, message)
   }
 }
@@ -88,4 +104,5 @@ module.exports = {
   InvalidResponse,
   Inaccessible,
   InvalidParameter,
+  Deprecated,
 }

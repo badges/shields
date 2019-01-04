@@ -16,9 +16,9 @@ t.create('no longer maintained 2017 (no)')
   .expectJSON({ name: 'maintained', value: 'no! (as of 2017)' })
 
 t.create('yes this year (yes)')
-  .get('/yes/' + currentYear + '.json')
+  .get(`/yes/${currentYear}.json`)
   .expectJSON({ name: 'maintained', value: 'yes' })
 
-t.create('until end of ' + currentYear + ' (yes)')
-  .get('/until end of ' + currentYear + '/' + currentYear + '.json')
-  .expectJSON({ name: 'maintained', value: 'until end of ' + currentYear })
+t.create(`until end of ${currentYear} (yes)`)
+  .get(`/until end of ${currentYear}/${currentYear}.json`)
+  .expectJSON({ name: 'maintained', value: `until end of ${currentYear}` })

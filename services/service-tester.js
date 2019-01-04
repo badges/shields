@@ -1,7 +1,10 @@
 'use strict'
 
-const frisby = require('icedfrisby-nock')(require('icedfrisby'))
-const config = require('../lib/test-config')
+const emojic = require('emojic')
+const frisby = require('./icedfrisby-no-nock')(
+  require('icedfrisby-nock')(require('icedfrisby'))
+)
+const trace = require('./trace')
 
 /**
  * Encapsulate a suite of tests. Create new tests using create() and register
@@ -27,6 +30,18 @@ class ServiceTester {
     })
   }
 
+  static forServiceClass(ServiceClass) {
+    const id = ServiceClass.name
+    const pathPrefix = ServiceClass.route.base
+      ? `/${ServiceClass.route.base}`
+      : ''
+    return new this({
+      id,
+      title: id,
+      pathPrefix,
+    })
+  }
+
   /**
    * Invoked before each test. This is a stub which can be overridden on
    * instances.
@@ -44,9 +59,19 @@ class ServiceTester {
   create(msg) {
     const spec = frisby
       .create(msg)
-      .baseUri(`http://localhost:${config.port}${this.pathPrefix}`)
       .before(() => {
         this.beforeEach()
+      })
+      // eslint-disable-next-line mocha/prefer-arrow-callback
+      .finally(function() {
+        // `this` is the IcedFrisby instance.
+        let responseBody
+        try {
+          responseBody = JSON.parse(this._response.body)
+        } catch (e) {
+          responseBody = this._response.body
+        }
+        trace.logTrace('outbound', emojic.shield, 'Response', responseBody)
       })
 
     this.specs.push(spec)
@@ -65,14 +90,18 @@ class ServiceTester {
   /**
    * Register the tests with Mocha.
    */
-  toss() {
-    const specs = this.specs
+  toss({ baseUrl, skipIntercepted }) {
+    const { specs, pathPrefix } = this
+    const testerBaseUrl = `${baseUrl}${pathPrefix}`
 
     const fn = this._only ? describe.only : describe
     // eslint-disable-next-line mocha/prefer-arrow-callback
     fn(this.title, function() {
       specs.forEach(spec => {
-        spec.toss()
+        if (!skipIntercepted || !spec.intercepted) {
+          spec.baseUri(testerBaseUrl)
+          spec.toss()
+        }
       })
     })
   }

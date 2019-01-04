@@ -1,13 +1,16 @@
 'use strict'
 
 const Joi = require('joi')
+const { renderLicenseBadge } = require('../../lib/licenses')
+const { renderVersionBadge } = require('../../lib/version')
+const { metric } = require('../../lib/text-formatters')
 const BaseJsonService = require('../base-json')
 const { InvalidResponse } = require('../errors')
-const { version: versionColor } = require('../../lib/color-formatters')
-const { metric, addv } = require('../../lib/text-formatters')
-const { nonNegativeInteger } = require('../validators.js')
+const { nonNegativeInteger } = require('../validators')
 
-const apmSchema = Joi.object({
+const keywords = ['atom']
+
+const schema = Joi.object({
   downloads: nonNegativeInteger,
   releases: Joi.object({
     latest: Joi.string().required(),
@@ -18,25 +21,16 @@ const apmSchema = Joi.object({
 })
 
 class BaseAPMService extends BaseJsonService {
-  async fetch({ repo }) {
+  async fetch({ packageName }) {
     return this._requestJson({
-      schema: apmSchema,
-      url: `https://atom.io/api/packages/${repo}`,
-      notFoundMessage: 'package not found',
+      schema,
+      url: `https://atom.io/api/packages/${packageName}`,
+      errorMessages: { 404: 'package not found' },
     })
   }
 
   static get defaultBadgeData() {
     return { label: 'apm' }
-  }
-
-  static get examples() {
-    return [
-      {
-        previewUrl: 'vim-mode',
-        keywords: ['atom'],
-      },
-    ]
   }
 }
 
@@ -45,8 +39,8 @@ class APMDownloads extends BaseAPMService {
     return { message: metric(downloads), color: 'green' }
   }
 
-  async handle({ repo }) {
-    const json = await this.fetch({ repo })
+  async handle({ packageName }) {
+    const json = await this.fetch({ packageName })
     return this.constructor.render({ downloads: json.downloads })
   }
 
@@ -58,22 +52,32 @@ class APMDownloads extends BaseAPMService {
     return { label: 'downloads' }
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'apm/dm',
-      format: '(.+)',
-      capture: ['repo'],
+      pattern: ':packageName',
     }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'APM',
+        namedParams: { packageName: 'vim-mode' },
+        staticExample: this.render({ downloads: '60043' }),
+        keywords,
+      },
+    ]
   }
 }
 
 class APMVersion extends BaseAPMService {
   static render({ version }) {
-    return { message: addv(version), color: versionColor(version) }
+    return renderVersionBadge({ version })
   }
 
-  async handle({ repo }) {
-    const json = await this.fetch({ repo })
+  async handle({ packageName }) {
+    const json = await this.fetch({ packageName })
 
     const version = json.releases.latest
     if (!version)
@@ -87,22 +91,32 @@ class APMVersion extends BaseAPMService {
     return 'version'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'apm/v',
-      format: '(.+)',
-      capture: ['repo'],
+      pattern: ':packageName',
     }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'APM',
+        namedParams: { packageName: 'vim-mode' },
+        staticExample: this.render({ version: '0.6.0' }),
+        keywords,
+      },
+    ]
   }
 }
 
 class APMLicense extends BaseAPMService {
   static render({ license }) {
-    return { message: license, color: 'blue' }
+    return renderLicenseBadge({ license })
   }
 
-  async handle({ repo }) {
-    const json = await this.fetch({ repo })
+  async handle({ packageName }) {
+    const json = await this.fetch({ packageName })
 
     const license = json.metadata.license
     if (!license)
@@ -120,12 +134,22 @@ class APMLicense extends BaseAPMService {
     return 'license'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'apm/l',
-      format: '(.+)',
-      capture: ['repo'],
+      pattern: ':packageName',
     }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'APM',
+        namedParams: { packageName: 'vim-mode' },
+        staticExample: this.render({ license: 'MIT' }),
+        keywords,
+      },
+    ]
   }
 }
 

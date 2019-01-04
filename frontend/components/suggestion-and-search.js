@@ -2,14 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import fetchPonyfill from 'fetch-ponyfill'
 import debounce from 'lodash.debounce'
-import { Badge } from './badge-examples'
 import resolveUrl from '../lib/resolve-url'
+import BadgeExamples from './badge-examples'
+import { BlockInput } from './common'
 
 export default class SuggestionAndSearch extends React.Component {
   static propTypes = {
     queryChanged: PropTypes.func.isRequired,
     onBadgeClick: PropTypes.func.isRequired,
-    baseUri: PropTypes.string.isRequired,
+    baseUrl: PropTypes.string.isRequired,
     longCache: PropTypes.bool.isRequired,
   }
 
@@ -28,64 +29,64 @@ export default class SuggestionAndSearch extends React.Component {
   }
 
   queryChanged(query) {
-    const isUri = query.startsWith('https://') || query.startsWith('http://')
+    const isUrl = query.startsWith('https://') || query.startsWith('http://')
     this.setState({
-      isUri,
-      projectUri: isUri ? query : null,
+      isUrl,
+      projectUrl: isUrl ? query : null,
     })
 
     this.queryChangedDebounced(query)
   }
 
   getSuggestions() {
-    this.setState({ inProgress: true }, () => {
-      const { baseUri } = this.props
-      const { projectUri } = this.state
+    this.setState({ inProgress: true }, async () => {
+      const { baseUrl } = this.props
+      const { projectUrl } = this.state
 
-      const url = resolveUrl('/$suggest/v1', baseUri, { url: projectUri })
+      const url = resolveUrl('/$suggest/v1', baseUrl, { url: projectUrl })
 
       const fetch = window.fetch || fetchPonyfill
-      fetch(url)
-        .then(res => res.json())
-        .then(json => {
-          this.setState({ inProgress: false, suggestions: json.badges })
-        })
-        .catch(() => {
-          this.setState({ inProgress: false, suggestions: [] })
-        })
+      const res = await fetch(url)
+      let suggestions
+      try {
+        const json = await res.json()
+        // This doesn't validate the response. The default value here prevents
+        // a crash if the server returns {"err":"Disallowed"}.
+        suggestions = json.suggestions || []
+      } catch (e) {
+        suggestions = []
+      }
+
+      this.setState({ inProgress: false, suggestions })
     })
   }
 
   renderSuggestions() {
-    const { baseUri, longCache } = this.props
+    const { baseUrl, longCache } = this.props
     const { suggestions } = this.state
 
     if (suggestions.length === 0) {
       return null
     }
 
+    const transformed = [
+      {
+        examples: suggestions.map(({ title, path, link, queryParams }) => ({
+          title,
+          preview: { path, queryParams },
+          example: { path, queryParams },
+          link,
+        })),
+      },
+    ]
+
     return (
-      <table className="badge">
-        <tbody>
-          {suggestions.map(({ name, link, badge }, i) => (
-            // TODO We need to deal with `link`.
-            <Badge
-              key={i}
-              title={name}
-              previewUri={badge}
-              onClick={() =>
-                this.props.onBadgeClick({
-                  title: name,
-                  previewUri: badge,
-                  link,
-                })
-              }
-              baseUri={baseUri}
-              longCache={longCache}
-            />
-          ))}
-        </tbody>
-      </table>
+      <BadgeExamples
+        definitions={transformed}
+        baseUrl={baseUrl}
+        longCache={longCache}
+        onClick={this.props.onBadgeClick}
+      />
     )
   }
 
@@ -93,7 +94,7 @@ export default class SuggestionAndSearch extends React.Component {
     return (
       <section>
         <form action="javascript:void 0" autoComplete="off">
-          <input
+          <BlockInput
             onChange={event => this.queryChanged(event.target.value)}
             autofill="off"
             autoFocus
@@ -103,7 +104,7 @@ export default class SuggestionAndSearch extends React.Component {
           <button
             onClick={event => this.getSuggestions(event.target.value)}
             disabled={this.state.inProgress}
-            hidden={!this.state.isUri}
+            hidden={!this.state.isUrl}
           >
             Suggest badges
           </button>

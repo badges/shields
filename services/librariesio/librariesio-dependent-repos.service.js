@@ -15,15 +15,17 @@ class LibrariesIoDependentRepos extends LibrariesIoBase {
     }
   }
 
-  static get url() {
-    return this.buildUrl('librariesio/dependent-repos')
+  static get route() {
+    return this.buildRoute('librariesio/dependent-repos')
   }
 
   static get examples() {
     return [
       {
         title: 'Dependent repos (via libraries.io)',
-        previewUrl: 'npm/got',
+        exampleUrl: 'npm/got',
+        pattern: ':platform/:library',
+        staticExample: this.render({ dependentReposCount: 84000 }),
       },
     ]
   }

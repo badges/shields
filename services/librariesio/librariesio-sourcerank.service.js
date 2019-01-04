@@ -16,15 +16,17 @@ class LibrariesIoSourcerank extends LibrariesIoBase {
     }
   }
 
-  static get url() {
-    return this.buildUrl('librariesio/sourcerank')
+  static get route() {
+    return this.buildRoute('librariesio/sourcerank')
   }
 
   static get examples() {
     return [
       {
         title: 'Libraries.io SourceRank',
-        previewUrl: 'npm/got',
+        exampleUrl: 'npm/got',
+        pattern: ':platform/:library',
+        staticExample: this.render({ rank: 25 }),
       },
     ]
   }

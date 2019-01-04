@@ -22,7 +22,7 @@ const repoSchema = Joi.object({
 const packageOrRepoSchema = Joi.alternatives(repoSchema, packageSchema)
 
 class LibrariesIoBase extends BaseJsonService {
-  static buildUrl(base) {
+  static buildRoute(base) {
     return {
       base,
       format: '(\\w+)/(.+)',
@@ -34,7 +34,7 @@ class LibrariesIoBase extends BaseJsonService {
     const json = await this._requestJson({
       schema: packageOrRepoSchema,
       url: `https://libraries.io/api/${platform}/${packageName}`,
-      notFoundMessage: 'package not found',
+      errorMessages: { 404: 'package not found' },
     })
     const isPackage = Boolean(json.platform)
     if (isPackage && !allowPackages) {

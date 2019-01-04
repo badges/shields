@@ -10,7 +10,7 @@ const {
 } = require('../../lib/color-formatters')
 const { metric } = require('../../lib/text-formatters')
 const { latest: latestVersion } = require('../../lib/version')
-const { nonNegativeInteger } = require('../validators.js')
+const { nonNegativeInteger } = require('../validators')
 
 const gemsSchema = Joi.object({
   downloads: nonNegativeInteger,
@@ -41,15 +41,15 @@ module.exports = class GemDownloads extends BaseJsonService {
 
   static render({ label, downloads }) {
     return {
-      label: label,
+      label,
       message: metric(downloads),
       color: downloadCountColor(downloads),
     }
   }
 
-  _getLabel(version, info) {
+  static _getLabel(version, info) {
     if (version) {
-      return 'downloads@' + version
+      return `downloads@${version}`
     } else {
       if (info === 'dtv') {
         return 'downloads@latest'
@@ -65,7 +65,7 @@ module.exports = class GemDownloads extends BaseJsonService {
     let version =
       splitRubygem.length > 1 ? splitRubygem[splitRubygem.length - 1] : null
     version = version === 'stable' ? version : semver.valid(version)
-    const label = this._getLabel(version, info)
+    const label = this.constructor._getLabel(version, info)
     const json = await this.fetch({ repo, info })
 
     let downloads
@@ -110,7 +110,7 @@ module.exports = class GemDownloads extends BaseJsonService {
     return 'downloads'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'gem',
       format: '(dt|dtv|dv)/(.+)',
@@ -122,22 +122,42 @@ module.exports = class GemDownloads extends BaseJsonService {
     return [
       {
         title: 'Gem',
-        previewUrl: 'dv/rails/stable',
+        exampleUrl: 'dv/rails/stable',
+        pattern: 'dv/:package/stable',
+        staticExample: this.render({
+          label: this._getLabel('stable', 'dv'),
+          downloads: 70000,
+        }),
         keywords: ['ruby'],
       },
       {
         title: 'Gem',
-        previewUrl: 'dv/rails/4.1.0',
+        exampleUrl: 'dv/rails/4.1.0',
+        pattern: 'dv/:package/:version',
+        staticExample: this.render({
+          label: this._getLabel('4.1.0', 'dv'),
+          downloads: 50000,
+        }),
         keywords: ['ruby'],
       },
       {
         title: 'Gem',
-        previewUrl: 'dtv/rails',
+        exampleUrl: 'dtv/rails',
+        pattern: 'dtv/:package',
+        staticExample: this.render({
+          label: this._getLabel(undefined, 'dtv'),
+          downloads: 70000,
+        }),
         keywords: ['ruby'],
       },
       {
         title: 'Gem',
-        previewUrl: 'dt/rails',
+        exampleUrl: 'dt/rails',
+        pattern: 'dt/:package',
+        staticExample: this.render({
+          label: this._getLabel(undefined, 'dt'),
+          downloads: 900000,
+        }),
         keywords: ['ruby'],
       },
     ]

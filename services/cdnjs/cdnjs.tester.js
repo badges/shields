@@ -1,14 +1,12 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
 const { isVPlusTripleDottedVersion } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'cdnjs', title: 'CDNJs' })
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('cdnjs (valid)')
-  .get('/v/jquery.json')
+  .get('/jquery.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'cdnjs',
@@ -17,5 +15,5 @@ t.create('cdnjs (valid)')
   )
 
 t.create('cdnjs (not found)')
-  .get('/v/not-a-library.json')
+  .get('/not-a-library.json')
   .expectJSON({ name: 'cdnjs', value: 'not found' })
