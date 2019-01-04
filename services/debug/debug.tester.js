@@ -1,11 +1,9 @@
 'use strict'
 
-const ServiceTester = require('../service-tester')
-const { serverStartTime } = require('../../lib/server-config')
+const Joi = require('joi')
 
-const t = new ServiceTester({ id: 'debug', title: 'Server Debug Badges' })
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('start time')
   .get('/starttime.json')
-  .expectJSON({ name: 'start time', value: serverStartTime.toUTCString() })
+  .expectJSONTypes({ name: 'start time', value: Joi.date().required() })
