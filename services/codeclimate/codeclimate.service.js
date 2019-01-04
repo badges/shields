@@ -177,7 +177,7 @@ module.exports = class Codeclimate extends LegacyService {
       },
       {
         title: 'Code Climate coverage',
-        exampleUrl: 'coverage/jekyll/jekyll',
+        pattern: 'coverage/:userRepo',
         namedParams: { userRepo: 'jekyll/jekyll' },
         staticExample: {
           label: 'coverage',
@@ -197,7 +197,7 @@ module.exports = class Codeclimate extends LegacyService {
       },
       {
         title: 'Code Climate technical debt',
-        exampleUrl: 'tech-debt/jekyll/jekyll',
+        pattern: 'tech-debt/:userRepo',
         namedParams: { userRepo: 'jekyll/jekyll' },
         staticExample: {
           label: 'technical debt',

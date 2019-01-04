@@ -83,8 +83,7 @@ class CtanVersion extends BaseCtanService {
   static get route() {
     return {
       base: 'ctan/v',
-      format: '(.+)',
-      capture: ['library'],
+      pattern: ':library',
     }
   }
 

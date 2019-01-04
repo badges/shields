@@ -34,6 +34,7 @@ module.exports = class Codecov extends LegacyService {
           user: 'codecov',
           repo: 'example-python',
         },
+        staticPreview: { label: 'coverage', message: '90%', color: 'green' },
       },
       {
         title: 'Codecov branch',
@@ -44,6 +45,7 @@ module.exports = class Codecov extends LegacyService {
           repo: 'example-python',
           branch: 'master',
         },
+        staticPreview: { label: 'coverage', message: '90%', color: 'green' },
       },
       {
         title: 'Codecov private',
@@ -54,6 +56,7 @@ module.exports = class Codecov extends LegacyService {
           user: 'codecov',
           repo: 'example-python',
         },
+        staticPreview: { label: 'coverage', message: '90%', color: 'green' },
       },
     ]
   }
