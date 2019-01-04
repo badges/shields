@@ -9,10 +9,17 @@ class GithubApiProvider {
   constructor({
     baseUrl,
     withPooling = true,
+    onTokenInvalidated = tokenString => {},
     globalToken,
     reserveFraction = 0.25,
   }) {
-    Object.assign(this, { baseUrl, withPooling, globalToken, reserveFraction })
+    Object.assign(this, {
+      baseUrl,
+      withPooling,
+      onTokenInvalidated,
+      globalToken,
+      reserveFraction,
+    })
 
     if (this.withPooling) {
       this.standardTokens = new TokenPool({ batchSize: 25 })
@@ -52,7 +59,7 @@ class GithubApiProvider {
 
   invalidateToken(token) {
     token.invalidate()
-    // Also invalidate the corresponding token in the other pool!
+    this.onTokenInvalidated(token.id)
   }
 
   tokenForUrl(url) {
@@ -61,7 +68,7 @@ class GithubApiProvider {
       // When a global gh_token is configured, use that in place of our token
       // pool. This produces more predictable behavior, and more predictable
       // failures when that token is exhausted.
-      return globalToken
+      return { id: globalToken }
     } else if (url.startsWith('/search')) {
       return this.searchTokens.next()
     } else {

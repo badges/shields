@@ -37,7 +37,11 @@ class GithubConstellation {
 
     const globalToken = serverSecrets.gh_token
     const baseUrl = process.env.GITHUB_URL || 'https://api.github.com'
-    this.apiProvider = new GithubApiProvider({ baseUrl, globalToken })
+    this.apiProvider = new GithubApiProvider({
+      baseUrl,
+      globalToken,
+      onTokenInvalidated: tokenString => this.onTokenInvalidated(tokenString),
+    })
   }
 
   scheduleDebugLogging() {
@@ -79,17 +83,32 @@ class GithubConstellation {
     }
   }
 
+  onTokenAdded(tokenString) {
+    this.apiProvider.addToken(tokenString)
+    process.nextTick(async () => {
+      try {
+        await this.persistence.noteTokenAdded(tokenString)
+      } catch (e) {
+        log.error(e)
+      }
+    })
+  }
+
+  onTokenInvalidated(tokenString) {
+    process.nextTick(async () => {
+      try {
+        await this.persistence.noteTokenRemoved(tokenString)
+      } catch (e) {
+        log.error(e)
+      }
+    })
+  }
+
   async stop() {
     if (this.debugInterval) {
       clearInterval(this.debugInterval)
       this.debugInterval = undefined
     }
-
-    this._emitter.removeListener('token-added', this.persistence.noteTokenAdded)
-    this._emitter.removeListener(
-      'token-removed',
-      this.persistence.noteTokenRemoved
-    )
 
     try {
       await this.persistence.stop()
