@@ -36,7 +36,7 @@ class GithubApiProvider {
       this.standardTokens.add(tokenString)
       this.searchTokens.add(tokenString)
     } else {
-      throw Error('When using token pooling, do not provide static tokens')
+      throw Error('When not using a token pool, do not provide tokens')
     }
   }
 

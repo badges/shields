@@ -49,20 +49,22 @@ class GithubConstellation {
   }
 
   async initialize(server) {
+    if (!this.apiProvider.withPooling) {
+      return
+    }
+
     this.scheduleDebugLogging()
 
+    let tokens = []
     try {
-      await this.persistence.initialize()
+      tokens = await this.persistence.initialize()
     } catch (e) {
       log.error(e)
     }
 
-    if (this.apiProvider.withPooling) {
-      // Is something like this needed?
-      // this.coreTokenProvider
-      //   .toNative()
-      //   .forEach(t => this.searchTokenProvider.addToken(t))
-    }
+    tokens.forEach(tokenString => {
+      this.apiProvider.addToken(tokenString)
+    })
 
     // Register for this event after `initialize()` finishes, so we don't
     // catch `token-added` events for the initial tokens, which would be
