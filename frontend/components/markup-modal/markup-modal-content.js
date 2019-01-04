@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Select, { components } from 'react-select'
 import clipboardCopy from 'clipboard-copy'
 import { staticBadgeUrl } from '../../lib/badge-url'
 import { generateMarkup } from '../../lib/generate-image-markup'
@@ -90,8 +89,6 @@ export default class MarkupModalContent extends React.Component {
       title,
       markupFormat,
     })
-
-    console.log(`Markup: ${markup}`)
 
     try {
       await clipboardCopy(markup)

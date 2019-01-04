@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Select, { components } from 'react-select'
-import { generateMarkup } from '../../lib/generate-image-markup'
 
 const ClickableControl = props => (
   <components.Control
@@ -12,6 +11,9 @@ const ClickableControl = props => (
     }}
   />
 )
+ClickableControl.propTypes = {
+  selectProps: PropTypes.object.isRequired,
+}
 
 const MarkupFormatSelect = styled(Select)`
   width: 200px;
