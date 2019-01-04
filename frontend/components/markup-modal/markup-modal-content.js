@@ -11,13 +11,6 @@ import QueryStringBuilder from './query-string-builder'
 import RequestMarkupButtom from './request-markup-button'
 import CopiedContentIndicator from './copied-content-indicator'
 
-const WeeSnippet = ({ snippet }) => (
-  <Snippet2 truncate fontSize="10pt" snippet={snippet} />
-)
-WeeSnippet.propTypes = {
-  snippet: PropTypes.string.isRequired,
-}
-
 const Documentation = styled.div`
   max-width: 800px;
   margin: 35px auto 20px;
