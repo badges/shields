@@ -27,7 +27,7 @@
     "check-node-version": "^3.1.0",
     "chrome-web-store-item-property": "~1.1.2",
     "cross-env": "^5.2.0",
-    "emojic": "^1.1.14",
+    "emojic": "^1.1.15",
     "escape-string-regexp": "^1.0.5",
     "fast-xml-parser": "^3.12.11",
     "fsos": "^1.1.3",
