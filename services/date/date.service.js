@@ -3,7 +3,7 @@
 const BaseService = require('../base')
 const { formatRelativeDate } = require('../../lib/text-formatters')
 
-const docs = `
+const documentation = `
 <p>
   Supply a unix timestamp in seconds to display the relative time from/to now
 </p>
@@ -45,10 +45,10 @@ module.exports = class Date extends BaseService {
       {
         title: 'Relative date',
         pattern: ':timestamp',
-        exampleUrl: '1540814400',
+        namedParams: { timestamp: '1540814400' },
         staticExample: this.render({ relativeDateString: '2 days ago' }),
         keywords: ['date', 'time', 'countdown', 'countup', 'moment'],
-        documentation: docs,
+        documentation,
       },
     ]
   }
