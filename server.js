@@ -1,12 +1,13 @@
 'use strict'
 
+require('dotenv').config()
+
+// Set up Sentry reporting as early in the process as possible.
 const Raven = require('raven')
 const serverSecrets = require('./lib/server-secrets')
 
 Raven.config(process.env.SENTRY_DSN || serverSecrets.sentry_dsn).install()
 Raven.disableConsoleAlerts()
-
-require('dotenv').config()
 
 const config = require('config').util.toObject()
 if (+process.argv[2]) {
