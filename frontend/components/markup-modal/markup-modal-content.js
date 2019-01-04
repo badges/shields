@@ -49,7 +49,7 @@ export default class MarkupModalContent extends React.Component {
       // Default to the current hostname for when there is no `BASE_URL` set
       // at build time (as in most PaaS deploys).
       const { protocol, hostname } = window.location
-      return `${protocol}://${hostname}`
+      return `${protocol}//${hostname}`
     }
   }
 
