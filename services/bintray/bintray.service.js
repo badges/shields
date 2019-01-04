@@ -45,7 +45,7 @@ module.exports = class Bintray extends LegacyService {
           },
         }
 
-        if (serverSecrets && serverSecrets.bintray_user) {
+        if (serverSecrets.bintray_user) {
           options.auth = {
             user: serverSecrets.bintray_user,
             pass: serverSecrets.bintray_apikey,
