@@ -36,6 +36,7 @@ export default class MarkupModalContent extends React.Component {
     path: '',
     link: '',
     markupFormat: 'link',
+    message: undefined,
   }
 
   generateBuiltBadgeUrl() {
@@ -87,11 +88,19 @@ export default class MarkupModalContent extends React.Component {
       markupFormat,
     })
 
-    await clipboardCopy(markup)
+    console.log(`Markup: ${markup}`)
+
+    try {
+      await clipboardCopy(markup)
+    } catch (e) {
+      this.setState({
+        message: `Copy failed. Markup: ${markup}`,
+      })
+    }
   }
 
   renderMarkupAndLivePreview() {
-    const { pathIsComplete } = this.state
+    const { message, pathIsComplete } = this.state
     return (
       <div>
         {this.renderLivePreview()}
@@ -99,6 +108,7 @@ export default class MarkupModalContent extends React.Component {
           isDisabled={!pathIsComplete}
           onMarkupRequested={this.copyMarkup}
         />
+        {message && <p>{message}</p>}
       </div>
     )
   }

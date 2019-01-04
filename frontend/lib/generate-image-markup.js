@@ -1,10 +1,10 @@
 export function bareLink(badgeUrl, link, title = '') {
-  // To be more robust, this should escape the title.
-  return `<img alt="${title}" src="${badgeUrl}">`
+  return badgeUrl
 }
 
 export function html(badgeUrl, link, title) {
-  const img = bareLink(badgeUrl, link, title)
+  // To be more robust, this should escape the title.
+  const img = `<img alt="${title}" src="${badgeUrl}">`
   if (link) {
     return `<a href=${link}>${img}</a>`
   } else {

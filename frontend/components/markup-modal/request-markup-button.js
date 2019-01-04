@@ -4,11 +4,11 @@ import styled from 'styled-components'
 import Select, { components } from 'react-select'
 import { generateMarkup } from '../../lib/generate-image-markup'
 
-const ClickablePlaceholder = props => (
-  <components.Placeholder
+const ClickableControl = props => (
+  <components.Control
     {...props}
     innerProps={{
-      onClick: props.selectProps.onPlaceholderClick,
+      onMouseDown: props.selectProps.onControlMouseDown,
     }}
   />
 )
@@ -19,23 +19,39 @@ const MarkupFormatSelect = styled(Select)`
   margin-left: auto;
   margin-right: auto;
 
-  font-weight: 700;
+  font-family: 'Lato', sans-serif;
+  font-size: 12px;
 
   .markup-format__control {
-    /* background-color: #2684ff; */
+    background-image: linear-gradient(-180deg, #00aeff 0%, #0076ff 100%);
+    border: 1px solid rgba(238, 239, 241, 0.8);
     border-width: 0;
     box-shadow: unset;
-  }
-
-  .markup-format__value-container {
     cursor: copy;
   }
 
-  /*
-  .markup-format__placeholder {
-    color: hsl(120, 0%, 95%);
+  .markup-format__control--is-disabled {
+    background: rgba(0, 118, 255, 0.3);
+    cursor: none;
   }
-  */
+
+  .markup-format__placeholder {
+    color: #eeeff1;
+  }
+
+  .markup-format__indicator {
+    color: rgba(238, 239, 241, 0.81);
+    cursor: pointer;
+  }
+
+  .markup-format__indicator:hover {
+    color: #eeeff1;
+  }
+
+  .markup-format__control--is-focused .markup-format__indicator,
+  .markup-format__control--is-focused .markup-format__indicator:hover {
+    color: #ffffff;
+  }
 
   .markup-format__option {
     text-align: left;
@@ -53,34 +69,20 @@ const markupOptions = [
 class GetMarkupButton extends React.PureComponent {
   selectRef = React.createRef()
 
-  onPlaceholderClick = () => {
+  onControlMouseDown = async event => {
     const { selectRef } = this
     const { onMarkupRequested } = this.props
+
     if (onMarkupRequested) {
-      onMarkupRequested('link')
+      await onMarkupRequested('link')
     }
     selectRef.current.blur()
   }
 
-  onOptionClick = ({ value: markupFormat }) => {
+  onOptionClick = async ({ value: markupFormat }) => {
     const { onMarkupRequested } = this.props
     if (onMarkupRequested) {
-      onMarkupRequested(markupFormat)
-    }
-  }
-
-  static theme({ borderRadius, colors, spacing }) {
-    return {
-      borderRadius,
-      colors: {
-        ...colors,
-        //   neutral5: 'hsl(214, 100%, 100%)',
-        //   neutral0: 'hsl(214, 100%, 57%)',
-        //   neutral50: 'hsl(214, 100%, 50%)',
-        //   // neutral50: 'hsl(120, 0%, 98%)',
-        //   // neutral50: 'hsl(0, 0%, 50%)',
-      },
-      spacing,
+      await onMarkupRequested(markupFormat)
     }
   }
 
@@ -91,21 +93,18 @@ class GetMarkupButton extends React.PureComponent {
       <MarkupFormatSelect
         ref={this.selectRef}
         options={markupOptions}
-        theme={this.constructor.theme}
         placeholder="Copy Badge URL"
         value=""
         isDisabled={isDisabled}
         closeMenuOnScroll
-        openMenuOnFocus={false}
-        openMenuOnClick={false}
         blurInputOnSelect
         menuPlacement="auto"
         isSearchable={false}
-        onPlaceholderClick={this.onPlaceholderClick}
+        onControlMouseDown={this.onControlMouseDown}
         onChange={this.onOptionClick}
         classNamePrefix="markup-format"
         components={{
-          Placeholder: ClickablePlaceholder,
+          Control: ClickableControl,
         }}
       />
     )
