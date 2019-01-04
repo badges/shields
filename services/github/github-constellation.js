@@ -17,7 +17,7 @@ class GithubConstellation {
     this._debugEnabled = config.service.debug.enabled
     this._debugIntervalSeconds = config.service.debug.intervalSeconds
 
-    this.emitter = new EventEmitter()
+    this._emitter = new EventEmitter()
 
     const { redisUrl, dir: persistenceDir } = config.persistence
     if (config.persistence.redisUrl) {
@@ -75,8 +75,8 @@ class GithubConstellation {
     // Register for this event after `initialize()` finishes, so we don't
     // catch `token-added` events for the initial tokens, which would be
     // inefficient, though it wouldn't break anything.
-    this.emitter.on('token-added', this.persistence.noteTokenAdded)
-    this.emitter.on('token-removed', this.persistence.noteTokenRemoved)
+    this._emitter.on('token-added', this.persistence.noteTokenAdded)
+    this._emitter.on('token-removed', this.persistence.noteTokenRemoved)
 
     setAdminRoutes(this.apiProvider, server)
 
@@ -91,8 +91,8 @@ class GithubConstellation {
       this.debugInterval = undefined
     }
 
-    this.emitter.removeListener('token-added', this.persistence.noteTokenAdded)
-    this.emitter.removeListener(
+    this._emitter.removeListener('token-added', this.persistence.noteTokenAdded)
+    this._emitter.removeListener(
       'token-removed',
       this.persistence.noteTokenRemoved
     )
