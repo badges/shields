@@ -35,7 +35,7 @@ class GithubConstellation {
       this.persistence = new FsTokenPersistence({ path: userTokensPath })
     }
 
-    const globalToken = (serverSecrets || {}).gh_token
+    const globalToken = serverSecrets.gh_token
     const baseUrl = process.env.GITHUB_URL || 'https://api.github.com'
     this.apiProvider = new GithubApiProvider({ baseUrl, globalToken })
   }
