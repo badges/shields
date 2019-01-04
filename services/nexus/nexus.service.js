@@ -205,7 +205,7 @@ module.exports = class Nexus extends BaseJsonService {
 
     const options = { qs }
 
-    if (serverSecrets && serverSecrets.nexus_user) {
+    if (serverSecrets.nexus_user) {
       options.auth = {
         user: serverSecrets.nexus_user,
         pass: serverSecrets.nexus_pass,
