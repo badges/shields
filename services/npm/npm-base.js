@@ -1,17 +1,29 @@
 'use strict'
 
 const Joi = require('joi')
+const serverSecrets = require('../../lib/server-secrets')
 const BaseJsonService = require('../base-json')
 const { InvalidResponse, NotFound } = require('../errors')
-const serverSecrets = require('../../lib/server-secrets')
+const { semverRange } = require('../validators')
 
 const deprecatedLicenseObjectSchema = Joi.object({
   type: Joi.string().required(),
 })
+const dependencyMap = Joi.object()
+  .pattern(
+    /./,
+    Joi.alternatives().try(
+      semverRange,
+      Joi.string()
+        .uri()
+        .required()
+    )
+  )
+  .default({})
 const schema = Joi.object({
-  devDependencies: Joi.object()
-    .pattern(/./, Joi.string())
-    .default({}),
+  dependencies: dependencyMap,
+  devDependencies: dependencyMap,
+  peerDependencies: dependencyMap,
   engines: Joi.object().pattern(/./, Joi.string()),
   license: Joi.alternatives().try(
     Joi.string(),
@@ -20,6 +32,10 @@ const schema = Joi.object({
       Joi.alternatives(Joi.string(), deprecatedLicenseObjectSchema)
     )
   ),
+  maintainers: Joi.array()
+    // We don't need the keys here, just the length.
+    .items(Joi.object({}))
+    .required(),
   types: Joi.string(),
   files: Joi.array()
     .items(Joi.string())
@@ -33,15 +49,15 @@ module.exports = class NpmBase extends BaseJsonService {
     if (withTag) {
       return {
         base,
-        format: '(?:@([^/]+))?/?([^/]*)/?([^/]*)',
+        // The trailing optional means this has to be a regex.
+        format: '(?:(@[^/]+)/)?([^/]*)/?([^/]*)',
         capture: ['scope', 'packageName', 'tag'],
         queryParams: ['registry_uri'],
       }
     } else {
       return {
         base,
-        format: '(?:@([^/]+)/)?([^/]+)',
-        capture: ['scope', 'packageName'],
+        pattern: ':scope(@[^/]+)?/:packageName',
         queryParams: ['registry_uri'],
       }
     }
@@ -60,8 +76,9 @@ module.exports = class NpmBase extends BaseJsonService {
   }
 
   static encodeScopedPackage({ scope, packageName }) {
+    const scopeWithoutAt = scope.replace(/^@/, '')
     // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
-    const encoded = encodeURIComponent(`${scope}/${packageName}`)
+    const encoded = encodeURIComponent(`${scopeWithoutAt}/${packageName}`)
     return `@${encoded}`
   }
 

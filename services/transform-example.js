@@ -35,9 +35,7 @@ const schema = Joi.object({
     .default([]),
   documentation: Joi.string(), // Valid HTML.
 })
-  .rename('query', 'queryParams', { ignoreUndefined: true })
   .rename('staticExample', 'staticPreview', { ignoreUndefined: true })
-  .rename('urlPattern', 'pattern', { ignoreUndefined: true })
   .required()
 
 function validateExample(example, index, ServiceClass) {
@@ -106,7 +104,7 @@ function transformExample(inExample, index, ServiceClass) {
   let example
   if (namedParams) {
     example = {
-      pattern: ServiceClass._makeFullUrl(pattern),
+      pattern: ServiceClass._makeFullUrl(pattern || ServiceClass.route.pattern),
       namedParams,
       queryParams,
     }

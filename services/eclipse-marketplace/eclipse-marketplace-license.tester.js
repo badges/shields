@@ -2,12 +2,11 @@
 
 const ServiceTester = require('../service-tester')
 
-const t = new ServiceTester({
+const t = (module.exports = new ServiceTester({
   id: 'eclipse-marketplace-license',
   title: 'EclipseMarketplaceLicense',
   pathPrefix: '/eclipse-marketplace',
-})
-module.exports = t
+}))
 
 t.create('license')
   .get('/l/notepad4e.json')

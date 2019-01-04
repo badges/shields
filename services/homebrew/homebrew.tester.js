@@ -5,8 +5,10 @@ const ServiceTester = require('../service-tester')
 const { isVPlusTripleDottedVersion } = require('../test-validators')
 const { invalidJSON } = require('../response-fixtures')
 
-const t = new ServiceTester({ id: 'homebrew', title: 'homebrew' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'homebrew',
+  title: 'homebrew',
+}))
 
 t.create('homebrew (valid)')
   .get('/v/cake.json')

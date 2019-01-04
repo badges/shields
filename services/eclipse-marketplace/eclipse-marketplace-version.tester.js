@@ -2,15 +2,13 @@
 
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
-
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
-const t = new ServiceTester({
+const t = (module.exports = new ServiceTester({
   id: 'eclipse-marketplace-version',
   title: 'EclipseMarketplaceVersion',
   pathPrefix: '/eclipse-marketplace',
-})
-module.exports = t
+}))
 
 t.create('marketplace version')
   .get('/v/notepad4e.json')

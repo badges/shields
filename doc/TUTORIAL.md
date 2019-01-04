@@ -17,22 +17,36 @@ to see how other people implemented their badges.
 (2) Setup
 ---------
 
+### Pre-requisites
+
+#### Git
+
 You should have [git](https://git-scm.com/) installed.
 If you do not, [install git](https://www.linode.com/docs/development/version-control/how-to-install-git-on-linux-mac-and-windows/)
 and learn about the [Github workflow](http://try.github.io/).
+
+#### Node, NPM
+
+Node 8 or later is required. If you don't already have them,
+install node and npm: https://nodejs.org/en/download/
+
+### Setup a dev install
 
 1. [Fork](https://github.com/badges/shields/fork) this repository.
 2. Clone the fork
    `git clone git@github.com:YOURGITHUBUSERNAME/shields.git`
 3. `cd shields`
-4. Install npm and other required packages (Ubuntu 16.10)
-   `sudo apt-get install npm nodejs-legacy curl imagemagick`
-5. Install all packages
+4. Install project dependencies
    `npm install`
-6. Run the server
+5. Run the server
    `npm start`
-7. Visit the website to check the front-end is loaded:
+6. Visit the website to check the front-end is loaded:
    [http://127.0.0.1:3000/](http://127.0.0.1:3000/)
+
+You may also want to install
+[ImageMagick](https://www.imagemagick.org/script/download.php).
+This is an optional dependency needed for generating badges in raster format,
+but you can get a dev copy running without it.
 
 (3) Open an Issue
 -----------------
@@ -279,6 +293,9 @@ module.exports = class GemVersion extends BaseJsonService {
 
 Save, run `npm start`, and you can see it [locally](http://127.0.0.1:3000/).
 
+If you update `examples`, you don't have to restart the server. Run `npm run
+defs` in another terminal window and the frontend will update.
+
 ### (4.5) Write Tests <!-- Change the link below when you change the heading -->
 [write tests]: #45-write-tests 
 
@@ -297,6 +314,12 @@ should be included. They serve several purposes:
 
 There is a dedicated [tutorial for tests in the service-tests folder](service-tests.md).
 Please follow it to include tests on your pull-request.
+
+### (4.6) Update the Docs
+
+If your submission require an API token or authentication credentials, please
+update [server-secrets.md](./server-secrets.md). You should explain what the
+token or credentials are for and how to obtain them.
 
 ## (5) Create a Pull Request
 

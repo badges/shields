@@ -11,6 +11,12 @@ const {
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class GithubDownloads extends LegacyService {
   static get category() {
     return 'downloads'
@@ -26,38 +32,93 @@ module.exports = class GithubDownloads extends LegacyService {
     return [
       {
         title: 'GitHub All Releases',
-        previewUrl: 'downloads/atom/atom/total',
-        keywords: ['github'],
+        pattern: 'downloads/:user/:repo/total',
+        namedParams: {
+          user: 'atom',
+          repo: 'atom',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '857k total',
+          color: 'brightgreen',
+        },
         documentation,
       },
       {
         title: 'GitHub Releases',
-        previewUrl: 'downloads/atom/atom/latest/total',
-        keywords: ['github'],
+        pattern: 'downloads/:user/:repo/:tag/total',
+        namedParams: {
+          user: 'atom',
+          repo: 'atom',
+          tag: 'latest',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '27k',
+          color: 'brightgreen',
+        },
         documentation,
       },
       {
         title: 'GitHub Pre-Releases',
-        previewUrl: 'downloads-pre/atom/atom/latest/total',
-        keywords: ['github'],
+        pattern: 'downloads-pre/:user/:repo/:tag/total',
+        namedParams: {
+          user: 'atom',
+          repo: 'atom',
+          tag: 'latest',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '2k',
+          color: 'brightgreen',
+        },
         documentation,
       },
       {
         title: 'GitHub Releases (by Release)',
-        previewUrl: 'downloads/atom/atom/v0.190.0/total',
-        keywords: ['github'],
+        pattern: 'downloads/:user/:repo/:tag/total',
+        namedParams: {
+          user: 'atom',
+          repo: 'atom',
+          tag: 'v0.190.0',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '490k v0.190.0',
+          color: 'brightgreen',
+        },
         documentation,
       },
       {
         title: 'GitHub Releases (by Asset)',
-        previewUrl: 'downloads/atom/atom/latest/atom-amd64.deb',
-        keywords: ['github'],
+        pattern: 'downloads/:user/:repo/:tag/:path*',
+        namedParams: {
+          user: 'atom',
+          repo: 'atom',
+          tag: 'latest',
+          path: 'atom-amd64.deb',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '3k [atom-amd64.deb]',
+          color: 'brightgreen',
+        },
         documentation,
       },
       {
         title: 'GitHub Pre-Releases (by Asset)',
-        previewUrl: 'downloads-pre/atom/atom/latest/atom-amd64.deb',
-        keywords: ['github'],
+        pattern: 'downloads-pre/:user/:repo/:tag/:path*',
+        namedParams: {
+          user: 'atom',
+          repo: 'atom',
+          tag: 'latest',
+          path: 'atom-amd64.deb',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '237 [atom-amd64.deb]',
+          color: 'brightgreen',
+        },
         documentation,
       },
     ]

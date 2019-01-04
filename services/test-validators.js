@@ -48,7 +48,7 @@ const isComposerVersion = withRegex(
 // 5.4, 5.6, 7.2
 // 5.4 - 7.1, HHVM
 const isPhpVersionReduction = withRegex(
-  /^((>= \d+(\.\d+)?)|(\d+\.\d+(, \d+\.\d+)*)|(\d+\.\d+ \\- \d+\.\d+))(, HHVM)?$/
+  /^((>= \d+(\.\d+)?)|(\d+\.\d+(, \d+\.\d+)*)|(\d+\.\d+ - \d+\.\d+))(, HHVM)?$/
 )
 
 const isStarRating = withRegex(
@@ -78,6 +78,12 @@ const isFormattedDate = Joi.alternatives().try(
   Joi.string().regex(/^last (sun|mon|tues|wednes|thurs|fri|satur)day$/),
   Joi.string().regex(
     /^(january|february|march|april|may|june|july|august|september|october|november|december)( \d{4})?$/
+  )
+)
+
+const isRelativeFormattedDate = Joi.alternatives().try(
+  Joi.string().regex(
+    /^(in |)([0-9]+|a few|a|an|)(| )(second|minute|hour|day|month|year)(s|)( ago|)$/
   )
 )
 
@@ -127,6 +133,7 @@ module.exports = {
   isDecimalPercentage,
   isFileSize,
   isFormattedDate,
+  isRelativeFormattedDate,
   isDependencyState,
   isBuildStatus,
   withRegex,

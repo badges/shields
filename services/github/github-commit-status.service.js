@@ -7,9 +7,15 @@ const {
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class GithubCommitStatus extends LegacyService {
   static get category() {
-    return 'other'
+    return 'issue-tracking'
   }
 
   static get route() {
@@ -22,8 +28,18 @@ module.exports = class GithubCommitStatus extends LegacyService {
     return [
       {
         title: 'GitHub commit merge status',
-        previewUrl:
-          'badges/shields/master/5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c',
+        pattern: ':user/:repo/:branch/:commit',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+          branch: 'master',
+          commit: '5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c',
+        },
+        staticPreview: {
+          label: 'commits since 3.4.7',
+          message: '4225',
+          color: 'blue',
+        },
         keywords: ['GitHub', 'commit', 'branch', 'merge'],
         documentation,
       },

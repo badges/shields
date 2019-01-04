@@ -4,8 +4,10 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isBuildStatus } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'codeship', title: 'codeship' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'codeship',
+  title: 'codeship',
+}))
 
 t.create('codeship (valid, no branch)')
   .get('/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1.json')

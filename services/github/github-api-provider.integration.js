@@ -36,7 +36,7 @@ describe('Github provider with token pool', function() {
   }
 
   before('should be able to run 10 requests', async function() {
-    this.timeout(10000)
+    this.timeout('20s')
     for (let i = 0; i < 10; ++i) {
       await performOneRequest()
     }

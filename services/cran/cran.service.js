@@ -1,14 +1,26 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const {
-  makeBadgeData: getBadgeData,
-  makeLabel: getLabel,
-} = require('../../lib/badge-data')
-const { addv: versionText } = require('../../lib/text-formatters')
-const { version: versionColor } = require('../../lib/color-formatters')
+const Joi = require('joi')
+const BaseJsonService = require('../base-json')
+const { renderVersionBadge } = require('../../lib/version')
 
-class CranLicense extends LegacyService {
+const schema = Joi.object({
+  License: Joi.string().required(),
+  Version: Joi.string().required(),
+}).required()
+
+class BaseCranService extends BaseJsonService {
+  async fetch({ packageName }) {
+    const url = `http://crandb.r-pkg.org/${packageName}`
+    return this._requestJson({ schema, url })
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'cran' }
+  }
+}
+
+class CranLicense extends BaseCranService {
   static get category() {
     return 'license'
   }
@@ -16,6 +28,7 @@ class CranLicense extends LegacyService {
   static get route() {
     return {
       base: 'cran/l',
+      pattern: ':packageName',
     }
   }
 
@@ -23,16 +36,28 @@ class CranLicense extends LegacyService {
     return [
       {
         title: 'CRAN/METACRAN',
-        previewUrl: 'devtools',
+        namedParams: { packageName: 'devtools' },
+        staticPreview: this.render({ license: 'GPL (>= 2)' }),
         keywords: ['R'],
       },
     ]
   }
 
-  static registerLegacyRouteHandler() {}
+  static render({ license }) {
+    return {
+      label: 'license',
+      message: license,
+      color: 'blue',
+    }
+  }
+
+  async handle({ packageName }) {
+    const data = await this.fetch({ packageName })
+    return this.constructor.render({ license: data['License'] })
+  }
 }
 
-class CranVersion extends LegacyService {
+class CranVersion extends BaseCranService {
   static get category() {
     return 'version'
   }
@@ -40,6 +65,7 @@ class CranVersion extends LegacyService {
   static get route() {
     return {
       base: 'cran/v',
+      pattern: ':packageName',
     }
   }
 
@@ -47,69 +73,21 @@ class CranVersion extends LegacyService {
     return [
       {
         title: 'CRAN/METACRAN',
-        previewUrl: 'devtools',
+        namedParams: { packageName: 'devtools' },
+        staticPreview: this.render({ version: '2.0.1' }),
         keywords: ['R'],
       },
     ]
   }
 
-  static registerLegacyRouteHandler() {}
-}
+  static render({ version }) {
+    return renderVersionBadge({ version })
+  }
 
-class Cran extends LegacyService {
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/cran\/([vl])\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-      cache((queryParams, match, sendBadge, request) => {
-        const info = match[1] // either `v` or `l`
-        const pkg = match[2] // eg, devtools
-        const format = match[3]
-        const url = `http://crandb.r-pkg.org/${pkg}`
-        const badgeData = getBadgeData('cran', queryParams)
-        request(url, (err, res, buffer) => {
-          if (err != null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-          if (res.statusCode === 404) {
-            badgeData.text[1] = 'not found'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const data = JSON.parse(buffer)
-
-            if (info === 'v') {
-              const version = data.Version
-              badgeData.text[1] = versionText(version)
-              badgeData.colorscheme = versionColor(version)
-              sendBadge(format, badgeData)
-            } else if (info === 'l') {
-              badgeData.text[0] = getLabel('license', queryParams)
-              const license = data.License
-              if (license) {
-                badgeData.text[1] = license
-                badgeData.colorscheme = 'blue'
-              } else {
-                badgeData.text[1] = 'unknown'
-              }
-              sendBadge(format, badgeData)
-            } else {
-              throw Error('Unreachable due to regex')
-            }
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  async handle({ packageName }) {
+    const data = await this.fetch({ packageName })
+    return this.constructor.render({ version: data['Version'] })
   }
 }
 
-module.exports = {
-  CranLicense,
-  CranVersion,
-  Cran,
-}
+module.exports = { CranLicense, CranVersion }
