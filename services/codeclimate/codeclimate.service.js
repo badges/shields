@@ -155,20 +155,20 @@ module.exports = class Codeclimate extends LegacyService {
     return [
       {
         title: 'Code Climate issues',
-        exampleUrl: 'issues/twbs/bootstrap',
         pattern: 'issues/:userRepo',
+        namedParams: { userRepo: 'twbs/bootstrap' },
         staticExample: { label: 'issues', message: '89', color: 'red' },
       },
       {
         title: 'Code Climate maintainability',
-        exampleUrl: 'maintainability/angular/angular.js',
         pattern: 'maintainability/:userRepo',
+        namedParams: { userRepo: 'angular/angular.js' },
         staticExample: { label: 'maintainability', message: 'F', color: 'red' },
       },
       {
         title: 'Code Climate maintainability (percentage)',
-        exampleUrl: 'maintainability-percentage/angular/angular.js',
         pattern: 'maintainability-percentage/:userRepo',
+        namedParams: { userRepo: 'angular/angular.js' },
         staticExample: {
           label: 'maintainability',
           message: '4.6%',
@@ -178,7 +178,7 @@ module.exports = class Codeclimate extends LegacyService {
       {
         title: 'Code Climate coverage',
         exampleUrl: 'coverage/jekyll/jekyll',
-        pattern: 'coverage/:userRepo',
+        namedParams: { userRepo: 'jekyll/jekyll' },
         staticExample: {
           label: 'coverage',
           message: '95%',
@@ -187,8 +187,8 @@ module.exports = class Codeclimate extends LegacyService {
       },
       {
         title: 'Code Climate coverage (letter)',
-        exampleUrl: 'coverage-letter/jekyll/jekyll',
         pattern: 'coverage-letter/:userRepo',
+        namedParams: { userRepo: 'jekyll/jekyll' },
         staticExample: {
           label: 'coverage',
           message: 'A',
@@ -198,7 +198,7 @@ module.exports = class Codeclimate extends LegacyService {
       {
         title: 'Code Climate technical debt',
         exampleUrl: 'tech-debt/jekyll/jekyll',
-        pattern: 'tech-debt/:userRepo',
+        namedParams: { userRepo: 'jekyll/jekyll' },
         staticExample: {
           label: 'technical debt',
           message: '3%',

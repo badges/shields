@@ -50,8 +50,7 @@ class CtanLicense extends BaseCtanService {
   static get route() {
     return {
       base: 'ctan/l',
-      format: '(.+)',
-      capture: ['library'],
+      pattern: ':library',
     }
   }
 
@@ -59,8 +58,7 @@ class CtanLicense extends BaseCtanService {
     return [
       {
         title: 'CTAN',
-        exampleUrl: 'novel',
-        pattern: ':library',
+        namedParams: { library: 'novel' },
         staticExample: this.render({ licenses: ['ppl1.3c', 'ofl'] }),
         keywords: ['tex'],
       },
@@ -94,8 +92,7 @@ class CtanVersion extends BaseCtanService {
     return [
       {
         title: 'CTAN',
-        exampleUrl: 'tex',
-        pattern: ':library',
+        namedParams: { library: 'tex' },
         staticExample: this.render({ version: '3.14159265' }),
         keywords: ['tex'],
       },

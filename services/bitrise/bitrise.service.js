@@ -24,9 +24,9 @@ module.exports = class Bitrise extends LegacyService {
     return [
       {
         title: 'Bitrise',
-        previewUrl: 'cde737473028420d/master?token=GCIdEzacE4GW32jLVrZb7A',
-        pattern: ':app-id/:branch?token=:app-status-badge-token',
-        exampleUrl: 'cde737473028420d/master?token=GCIdEzacE4GW32jLVrZb7A',
+        pattern: ':appId/:branch',
+        namedParams: { appId: 'cde737473028420d', branch: 'master' },
+        queryParams: { token: 'GCIdEzacE4GW32jLVrZb7A' },
       },
     ]
   }
