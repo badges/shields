@@ -1,11 +1,30 @@
 'use strict'
 
-const BaseService = require('../base')
-const { serverStartTime } = require('../../lib/server-config')
+const NonMemoryCachingBaseService = require('../base-non-memory-caching')
 
-module.exports = class Debug extends BaseService {
-  async handle({ detail }) {
-    switch (detail) {
+const serverStartTime = new Date(new Date().toGMTString())
+
+module.exports = class Debug extends NonMemoryCachingBaseService {
+  static get category() {
+    return 'debug'
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'debug',
+      color: 'blue',
+    }
+  }
+
+  static get route() {
+    return {
+      base: 'debug',
+      pattern: ':which(time|starttime)',
+    }
+  }
+
+  async handle({ which }) {
+    switch (which) {
       case 'time':
         return {
           label: 'time',
@@ -16,26 +35,6 @@ module.exports = class Debug extends BaseService {
           label: 'start time',
           message: new Date(serverStartTime).toUTCString(),
         }
-    }
-  }
-
-  // Metadata
-  static get defaultBadgeData() {
-    return {
-      label: 'debug',
-      color: 'blue',
-    }
-  }
-
-  static get category() {
-    return 'debug'
-  }
-
-  static get url() {
-    return {
-      base: 'debug',
-      format: '(time|starttime)',
-      capture: ['detail'],
     }
   }
 }
