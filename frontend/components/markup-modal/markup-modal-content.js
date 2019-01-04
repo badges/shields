@@ -41,8 +41,20 @@ export default class MarkupModalContent extends React.Component {
     message: undefined,
   }
 
-  generateBuiltBadgeUrl() {
+  get baseUrl() {
     const { baseUrl } = this.props
+    if (baseUrl) {
+      return baseUrl
+    } else {
+      // Default to the current hostname for when there is no `BASE_URL` set
+      // at build time (as in most PaaS deploys).
+      const { protocol, hostname } = window.location
+      return `${protocol}://${hostname}`
+    }
+  }
+
+  generateBuiltBadgeUrl() {
+    const { baseUrl } = this
     const { path, queryString } = this.state
 
     const suffix = queryString ? `?${queryString}` : ''
