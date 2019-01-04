@@ -70,7 +70,10 @@ class GithubConstellation {
     setAdminRoutes(this.apiProvider, server)
 
     if (serverSecrets.gh_client_id && serverSecrets.gh_client_secret) {
-      setAcceptorRoutes(this.apiProvider, server)
+      setAcceptorRoutes({
+        server,
+        onTokenAccepted: tokenString => this.onTokenAdded(tokenString),
+      })
     }
   }
 

@@ -7,7 +7,6 @@ const portfinder = require('portfinder')
 const queryString = require('query-string')
 const nock = require('nock')
 const serverSecrets = require('../../../lib/server-secrets')
-const GithubApiProvider = require('../github-api-provider')
 const acceptor = require('./acceptor')
 
 const fakeClientId = 'githubdabomb'
@@ -44,8 +43,10 @@ describe('Github token acceptor', function() {
   })
 
   beforeEach(function() {
-    const apiProvider = new GithubApiProvider({ withPooling: true })
-    acceptor.setRoutes(apiProvider, camp)
+    acceptor.setRoutes({
+      server: camp,
+      onTokenAccepted: () => {},
+    })
   })
 
   it('should start the OAuth process', async function() {
