@@ -41,6 +41,7 @@ public:
   rateLimit: 'RATE_LIMIT'
 
 private:
+  azure_devops_token: 'AZURE_DEVOPS_TOKEN'
   bintray_user: 'BINTRAY_USER'
   bintray_apikey: 'BINTRAY_API_KEY'
   gh_client_id: 'GH_CLIENT_ID'
