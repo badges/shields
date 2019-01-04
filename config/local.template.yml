@@ -1,0 +1,5 @@
+# Copy this file to `config/local.yml` and fill it in! It will be gitignored.
+
+private:
+  gh_token: '...'
+  wheelmap_token: '...'

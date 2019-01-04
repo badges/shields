@@ -123,7 +123,7 @@ Redis installation.
 Server secrets
 --------------
 
-You can add your own server secrets in `private/secret.json`.
+You can add your own server secrets in environment variables or `config/local.yml`.
 
 These are documented in [server-secrets.md](./server-secrets.md)
 

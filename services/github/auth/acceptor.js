@@ -8,7 +8,7 @@ const serverSecrets = require('../../../lib/server-secrets')
 const secretIsValid = require('../../../lib/sys/secret-is-valid')
 
 function sendTokenToAllServers(token) {
-  const { shieldsIps, shieldsSecret } = serverSecrets
+  const { shieldsIps, shields_secret } = serverSecrets
   return Promise.all(
     shieldsIps.map(
       ip =>
@@ -17,7 +17,7 @@ function sendTokenToAllServers(token) {
             url: `https://${ip}/github-auth/add-token`,
             method: 'POST',
             form: {
-              shieldsSecret,
+              shieldsSecret: shields_secret,
               token,
             },
             // We target servers by IP, and we use HTTPS. Assuming that
