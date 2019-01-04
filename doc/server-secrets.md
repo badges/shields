@@ -18,6 +18,21 @@ See the [node-config documentation][] for more information.
 
 [node-config documentation]: https://github.com/lorenwest/node-config/wiki/Configuration-Files
 
+## Azure DevOps
+
+* `AZURE_DEVOPS_TOKEN` (yml: `azure_devops_token`)
+
+An Azure DevOps Token (PAT) is required for accessing [private Azure DevOps projects][ado project visibility].
+
+[Create a PAT][ado personal access tokens] using an account that has access to your target Azure DevOps projects. Your PAT only needs the following [scopes:][ado token scopes]
+
+* `Build (read)`
+* `Release (read)`
+* `Test Management (read)`
+
+[ado project visibility]: https://docs.microsoft.com/en-us/azure/devops/organizations/public/about-public-projects?view=vsts
+[ado personal access tokens]: https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=vsts#create-personal-access-tokens-to-authenticate-access
+[ado token scopes]: https://docs.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/oauth?view=vsts#scopes
 
 ## Bintray
 
