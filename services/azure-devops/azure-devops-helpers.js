@@ -48,7 +48,7 @@ function render({ status }) {
 
 function getHeaders() {
   const headers = {}
-  if (serverSecrets && serverSecrets.azure_devops_token) {
+  if (serverSecrets.azure_devops_token) {
     const pat = serverSecrets.azure_devops_token
     const auth = Buffer.from(`:${pat}`).toString('base64')
     headers.Authorization = `basic ${auth}`
