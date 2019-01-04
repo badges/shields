@@ -2,7 +2,7 @@
 
 const { TokenPool } = require('../../lib/token-pool')
 
-// Provide an interface to the Github API. Manages the base URL.
+// Provides an interface to the Github API. Manages the base URL.
 class GithubApiProvider {
   // reserveFraction: The amount of much of a token's quota we avoid using, to
   //   reserve it for the user.

@@ -4,7 +4,7 @@ const { expect } = require('chai')
 const serverSecrets = require('../../lib/server-secrets')
 const GithubApiProvider = require('./github-api-provider')
 
-describe('Github provider with token pool', function() {
+describe('Github API provider with token pool', function() {
   const baseUrl = process.env.GITHUB_URL || 'https://api.github.com'
   const reserveFraction = 0.333
 
