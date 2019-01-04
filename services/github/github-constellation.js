@@ -43,15 +43,7 @@ class GithubConstellation {
   scheduleDebugLogging() {
     if (this._debugEnabled) {
       this.debugInterval = setInterval(() => {
-        if (this.coreTokenProvider) {
-          log('coreTokenProvider', this.coreTokenProvider.getTokenDebugInfo())
-        }
-        if (this.searchTokenProvider) {
-          log(
-            'searchTokenProvider',
-            this.searchTokenProvider.getTokenDebugInfo()
-          )
-        }
+        log(this.apiProvider.getTokenDebugInfo())
       }, 1000 * this._debugIntervalSeconds)
     }
   }
@@ -66,7 +58,7 @@ class GithubConstellation {
     }
 
     if (this.apiProvider.withPooling) {
-      // Is this needed?
+      // Is something like this needed?
       // this.coreTokenProvider
       //   .toNative()
       //   .forEach(t => this.searchTokenProvider.addToken(t))
