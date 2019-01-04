@@ -3,11 +3,17 @@
 const BaseService = require('../base')
 const { formatRelativeDate } = require('../../lib/text-formatters')
 
+const docs = `
+<p>
+  Supply a unix timestamp in seconds to display the relative time from/to now
+</p>
+`
+
 module.exports = class Date extends BaseService {
   static render({ relativeDateString }) {
     return {
       message: relativeDateString,
-      color: relativeDateString === 'invalid date' ? 'red' : 'blue',
+      color: relativeDateString === 'invalid date' ? 'grey' : 'blue',
     }
   }
 
@@ -26,7 +32,7 @@ module.exports = class Date extends BaseService {
     return 'other'
   }
 
-  static get url() {
+  static get route() {
     return {
       base: 'date',
       format: '([0-9]+)',
@@ -38,10 +44,11 @@ module.exports = class Date extends BaseService {
     return [
       {
         title: 'Relative date',
-        urlPattern: ':timestamp',
+        pattern: ':timestamp',
+        exampleUrl: '1540814400',
         staticExample: this.render({ relativeDateString: '2 days ago' }),
-        exampleUrl: '1540814400000',
         keywords: ['date', 'time', 'countdown', 'countup', 'moment'],
+        documentation: docs,
       },
     ]
   }

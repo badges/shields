@@ -8,11 +8,11 @@ const t = new ServiceTester({ id: 'date', title: 'Relative Date Tests' })
 module.exports = t
 
 t.create('Relative date')
-  .get('/1540814400000.json')
+  .get('/1540814400.json')
   .expectJSONTypes(
     Joi.object().keys({ name: 'date', value: isRelativeFormattedDate })
   )
 
 t.create('Relative date - Invalid')
-  .get('/9223372036854775807.json')
+  .get('/9999999999999.json')
   .expectJSONTypes(Joi.object().keys({ name: 'date', value: 'invalid date' }))
