@@ -3,36 +3,25 @@ import PropTypes from 'prop-types'
 import posed from 'react-pose'
 import styled, { css } from 'styled-components'
 
-const Container = styled.span`
+const ContentAnchor = styled.span`
   position: relative;
   display: inline-block;
 `
 
-const Bogus = styled.span`
-  position: 'absolute';
-  top: '-10px';
-  pointer-events: none;
+// 100vw allows providing styled content which is wider than its container.
+const ContentContainer = styled.span`
+  width: 100vw;
+
+  position: absolute;
   left: 50%;
   transform: translateX(-50%);
+
+  pointer-events: none;
 `
 
-const CopiedContent = posed(Bogus)({
-  init: {
-    position: 'absolute',
-    top: '-10px',
-    width: '100vw',
-
-    pointerEvents: 'none',
-  },
-  copied: {
-    position: 'absolute',
-    top: '-75px',
-    width: '100vw',
-
-    opacity: 0.5,
-
-    pointerEvents: 'none',
-  },
+const PosedContentContainer = posed(ContentContainer)({
+  init: { top: '-10px' },
+  copied: { top: '-75px', opacity: 0.5 },
 })
 
 // When `trigger()` is called, render copied content that floats up, then
@@ -47,23 +36,23 @@ export default class CopiedContentIndicator extends React.Component {
   }
 
   handlePoseComplete = () => {
-    // this.setState({ isActive: false })
+    this.setState({ isActive: false })
   }
 
   render() {
     return (
-      <Container>
+      <ContentAnchor>
         {this.state.isActive && (
-          <CopiedContent
+          <PosedContentContainer
             initialPose="init"
             pose="copied"
             onPoseComplete={this.handlePoseComplete}
           >
             {this.props.copiedContent}
-          </CopiedContent>
+          </PosedContentContainer>
         )}
         {this.props.children}
-      </Container>
+      </ContentAnchor>
     )
   }
 }
