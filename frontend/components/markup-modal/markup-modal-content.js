@@ -10,6 +10,7 @@ import { H3, Badge } from '../common'
 import PathBuilder from './path-builder'
 import QueryStringBuilder from './query-string-builder'
 import RequestMarkupButtom from './request-markup-button'
+import CopiedContentIndicator from './copied-content-indicator'
 
 const WeeSnippet = ({ snippet }) => (
   <Snippet2 truncate fontSize="10pt" snippet={snippet} />
@@ -31,6 +32,8 @@ export default class MarkupModalContent extends React.Component {
     example: PropTypes.object,
     baseUrl: PropTypes.string.isRequired,
   }
+
+  indicatorRef = React.createRef()
 
   state = {
     path: '',
@@ -94,21 +97,38 @@ export default class MarkupModalContent extends React.Component {
       await clipboardCopy(markup)
     } catch (e) {
       this.setState({
-        message: `Copy failed. Markup: ${markup}`,
+        message: 'Copy failed',
+        markup,
       })
+      return
     }
+
+    this.setState({ markup })
+    this.indicatorRef.current.trigger()
   }
 
   renderMarkupAndLivePreview() {
-    const { message, pathIsComplete } = this.state
+    const { indicatorRef } = this
+    const { markup, message, pathIsComplete } = this.state
+
     return (
       <div>
         {this.renderLivePreview()}
-        <RequestMarkupButtom
-          isDisabled={!pathIsComplete}
-          onMarkupRequested={this.copyMarkup}
-        />
-        {message && <p>{message}</p>}
+        <CopiedContentIndicator
+          ref={indicatorRef}
+          copiedContent={<span style={{ width: '100px' }}>{markup}</span>}
+        >
+          <RequestMarkupButtom
+            isDisabled={!pathIsComplete}
+            onMarkupRequested={this.copyMarkup}
+          />
+        </CopiedContentIndicator>
+        {message && (
+          <div>
+            <p>{message}</p>
+            <p>Markup: {markup}</p>
+          </div>
+        )}
       </div>
     )
   }
