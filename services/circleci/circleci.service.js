@@ -81,21 +81,35 @@ module.exports = class CircleCi extends BaseJsonService {
     return [
       {
         title: 'CircleCI (all branches)',
-        exampleUrl: 'project/github/RedSparr0w/node-csgo-parser',
         pattern: 'project/:vcsType/:owner/:repo',
+        namedParams: {
+          vcsType: 'github',
+          owner: 'RedSparr0w',
+          repo: 'node-csgo-parser',
+        },
         staticExample: this.render({ status: 'success' }),
       },
       {
         title: 'CircleCI branch',
-        exampleUrl: 'project/github/RedSparr0w/node-csgo-parser/master',
         pattern: 'project/:vcsType/:owner/:repo/:branch',
+        namedParams: {
+          vcsType: 'github',
+          owner: 'RedSparr0w',
+          repo: 'node-csgo-parser',
+          branch: 'master',
+        },
         staticExample: this.render({ status: 'success' }),
       },
       {
         title: 'CircleCI token',
         pattern: 'token/:token/project/:vcsType/:owner/:repo/:branch',
-        exampleUrl:
-          'token/b90b5c49e59a4c67ba3a92f7992587ac7a0408c2/project/github/RedSparr0w/node-csgo-parser/master',
+        namedParams: {
+          token: 'b90b5c49e59a4c67ba3a92f7992587ac7a0408c2',
+          vcsType: 'github',
+          owner: 'RedSparr0w',
+          repo: 'node-csgo-parser',
+          branch: 'master',
+        },
         staticExample: this.render({ status: 'success' }),
         documentation,
       },

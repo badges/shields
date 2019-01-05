@@ -9,8 +9,8 @@ const depfuSchema = Joi.object({
 }).required()
 
 module.exports = class Depfu extends BaseJsonService {
-  async fetch({ userRepo }) {
-    const url = `https://depfu.com/github/shields/${userRepo}`
+  async fetch({ user, repo }) {
+    const url = `https://depfu.com/github/shields/${user}/${repo}`
     return this._requestJson({ url, schema: depfuSchema })
   }
 
@@ -21,8 +21,8 @@ module.exports = class Depfu extends BaseJsonService {
     }
   }
 
-  async handle({ userRepo }) {
-    const { text, colorscheme } = await this.fetch({ userRepo })
+  async handle({ user, repo }) {
+    const { text, colorscheme } = await this.fetch({ user, repo })
     return this.constructor.render({ text, colorscheme })
   }
 
@@ -37,8 +37,7 @@ module.exports = class Depfu extends BaseJsonService {
   static get route() {
     return {
       base: 'depfu',
-      format: '(.+)',
-      capture: ['userRepo'],
+      pattern: ':user/:repo',
     }
   }
 
@@ -46,8 +45,7 @@ module.exports = class Depfu extends BaseJsonService {
     return [
       {
         title: 'Depfu',
-        exampleUrl: 'depfu/example-ruby',
-        pattern: ':user/:repo',
+        namedParams: { user: 'depfu', repo: 'example-ruby' },
         staticExample: this.render({
           text: 'recent',
           colorscheme: 'brightgreen',

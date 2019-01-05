@@ -28,17 +28,35 @@ module.exports = class Codecov extends LegacyService {
     return [
       {
         title: 'Codecov',
-        previewUrl: 'github/codecov/example-python',
+        pattern: ':vcsName/:user/:repo',
+        namedParams: {
+          vcsName: 'github',
+          user: 'codecov',
+          repo: 'example-python',
+        },
+        staticPreview: { label: 'coverage', message: '90%', color: 'green' },
       },
       {
         title: 'Codecov branch',
-        previewUrl: 'github/codecov/example-python/master',
+        pattern: ':vcsName/:user/:repo/:branch',
+        namedParams: {
+          vcsName: 'github',
+          user: 'codecov',
+          repo: 'example-python',
+          branch: 'master',
+        },
+        staticPreview: { label: 'coverage', message: '90%', color: 'green' },
       },
       {
         title: 'Codecov private',
-        previewUrl: 'github/codecov/example-python',
-        pattern: 'token/:token/github/codecov/example-python',
-        exampleUrl: 'token/My0A8VL917/github/codecov/example-python',
+        pattern: 'token/:token/:vcsName/:user/:repo',
+        namedParams: {
+          token: 'My0A8VL917',
+          vcsName: 'github',
+          user: 'codecov',
+          repo: 'example-python',
+        },
+        staticPreview: { label: 'coverage', message: '90%', color: 'green' },
       },
     ]
   }

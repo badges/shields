@@ -57,9 +57,8 @@ class AnsibleGalaxyRoleDownloads extends AnsibleGalaxyRole {
   static get examples() {
     return [
       {
-        title: `Ansible Role`,
-        pattern: ':roleId',
-        exampleUrl: '3078',
+        title: 'Ansible Role',
+        namedParams: { roleId: '3078' },
         staticExample: this.render({ downloads: 76 }),
       },
     ]
@@ -88,17 +87,15 @@ class AnsibleGalaxyRoleName extends AnsibleGalaxyRole {
   static get route() {
     return {
       base: 'ansible/role',
-      format: '(.+)',
-      capture: ['roleId'],
+      pattern: ':roleId',
     }
   }
 
   static get examples() {
     return [
       {
-        title: `Ansible Role`,
-        pattern: ':roleId',
-        exampleUrl: '3078',
+        title: 'Ansible Role',
+        namedParams: { roleId: '3078' },
         staticExample: this.render({
           name: 'ansible-roles.sublimetext3_packagecontrol',
         }),
