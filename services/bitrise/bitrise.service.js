@@ -3,6 +3,12 @@
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class Bitrise extends LegacyService {
   static get category() {
     return 'build'
@@ -18,9 +24,14 @@ module.exports = class Bitrise extends LegacyService {
     return [
       {
         title: 'Bitrise',
-        previewUrl: 'cde737473028420d/master?token=GCIdEzacE4GW32jLVrZb7A',
-        pattern: ':app-id/:branch?token=:app-status-badge-token',
-        exampleUrl: 'cde737473028420d/master?token=GCIdEzacE4GW32jLVrZb7A',
+        pattern: ':appId/:branch',
+        namedParams: { appId: 'cde737473028420d', branch: 'master' },
+        queryParams: { token: 'GCIdEzacE4GW32jLVrZb7A' },
+        staticExample: {
+          label: 'bitrise',
+          message: 'success',
+          color: 'brightgreen',
+        },
       },
     ]
   }

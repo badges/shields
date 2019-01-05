@@ -3,6 +3,8 @@
 const Joi = require('joi')
 const serverSecrets = require('../../lib/server-secrets')
 
+const keywords = ['vso', 'vsts', 'azure-devops']
+
 const schema = Joi.object({
   message: Joi.equal(
     'succeeded',
@@ -46,7 +48,7 @@ function render({ status }) {
 
 function getHeaders() {
   const headers = {}
-  if (serverSecrets && serverSecrets.azure_devops_token) {
+  if (serverSecrets.azure_devops_token) {
     const pat = serverSecrets.azure_devops_token
     const auth = Buffer.from(`:${pat}`).toString('base64')
     headers.Authorization = `basic ${auth}`
@@ -55,4 +57,4 @@ function getHeaders() {
   return headers
 }
 
-module.exports = { fetch, render, getHeaders }
+module.exports = { keywords, fetch, render, getHeaders }

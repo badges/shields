@@ -117,8 +117,8 @@ function makeBadge({
   logoWidth,
   links = ['', ''],
 }) {
-  // String coercion.
-  text = text.map(value => `${value}`)
+  // String coercion and whitespace removal.
+  text = text.map(value => `${value}`.trim())
 
   if (format !== 'json') {
     format = 'svg'

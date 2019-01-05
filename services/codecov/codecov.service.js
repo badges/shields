@@ -7,9 +7,15 @@ const {
   coveragePercentage: coveragePercentageColor,
 } = require('../../lib/color-formatters')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class Codecov extends LegacyService {
   static get category() {
-    return 'build'
+    return 'quality'
   }
 
   static get route() {
@@ -22,17 +28,35 @@ module.exports = class Codecov extends LegacyService {
     return [
       {
         title: 'Codecov',
-        previewUrl: 'github/codecov/example-python',
+        pattern: ':vcsName/:user/:repo',
+        namedParams: {
+          vcsName: 'github',
+          user: 'codecov',
+          repo: 'example-python',
+        },
+        staticPreview: { label: 'coverage', message: '90%', color: 'green' },
       },
       {
         title: 'Codecov branch',
-        previewUrl: 'github/codecov/example-python/master',
+        pattern: ':vcsName/:user/:repo/:branch',
+        namedParams: {
+          vcsName: 'github',
+          user: 'codecov',
+          repo: 'example-python',
+          branch: 'master',
+        },
+        staticPreview: { label: 'coverage', message: '90%', color: 'green' },
       },
       {
         title: 'Codecov private',
-        previewUrl: 'github/codecov/example-python',
-        pattern: 'token/:token/github/codecov/example-python',
-        exampleUrl: 'token/My0A8VL917/github/codecov/example-python',
+        pattern: 'token/:token/:vcsName/:user/:repo',
+        namedParams: {
+          token: 'My0A8VL917',
+          vcsName: 'github',
+          user: 'codecov',
+          repo: 'example-python',
+        },
+        staticPreview: { label: 'coverage', message: '90%', color: 'green' },
       },
     ]
   }

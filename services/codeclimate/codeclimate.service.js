@@ -8,6 +8,12 @@ const {
   colorScale,
 } = require('../../lib/color-formatters')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class Codeclimate extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
@@ -142,27 +148,27 @@ module.exports = class Codeclimate extends LegacyService {
   }
 
   static get category() {
-    return 'build'
+    return 'quality'
   }
 
   static get examples() {
     return [
       {
         title: 'Code Climate issues',
-        exampleUrl: 'issues/twbs/bootstrap',
         pattern: 'issues/:userRepo',
+        namedParams: { userRepo: 'twbs/bootstrap' },
         staticExample: { label: 'issues', message: '89', color: 'red' },
       },
       {
         title: 'Code Climate maintainability',
-        exampleUrl: 'maintainability/angular/angular.js',
         pattern: 'maintainability/:userRepo',
+        namedParams: { userRepo: 'angular/angular.js' },
         staticExample: { label: 'maintainability', message: 'F', color: 'red' },
       },
       {
         title: 'Code Climate maintainability (percentage)',
-        exampleUrl: 'maintainability-percentage/angular/angular.js',
         pattern: 'maintainability-percentage/:userRepo',
+        namedParams: { userRepo: 'angular/angular.js' },
         staticExample: {
           label: 'maintainability',
           message: '4.6%',
@@ -171,8 +177,8 @@ module.exports = class Codeclimate extends LegacyService {
       },
       {
         title: 'Code Climate coverage',
-        exampleUrl: 'coverage/jekyll/jekyll',
         pattern: 'coverage/:userRepo',
+        namedParams: { userRepo: 'jekyll/jekyll' },
         staticExample: {
           label: 'coverage',
           message: '95%',
@@ -181,8 +187,8 @@ module.exports = class Codeclimate extends LegacyService {
       },
       {
         title: 'Code Climate coverage (letter)',
-        exampleUrl: 'coverage-letter/jekyll/jekyll',
         pattern: 'coverage-letter/:userRepo',
+        namedParams: { userRepo: 'jekyll/jekyll' },
         staticExample: {
           label: 'coverage',
           message: 'A',
@@ -191,8 +197,8 @@ module.exports = class Codeclimate extends LegacyService {
       },
       {
         title: 'Code Climate technical debt',
-        exampleUrl: 'tech-debt/jekyll/jekyll',
         pattern: 'tech-debt/:userRepo',
+        namedParams: { userRepo: 'jekyll/jekyll' },
         staticExample: {
           label: 'technical debt',
           message: '3%',

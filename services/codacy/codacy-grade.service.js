@@ -8,7 +8,7 @@ const schema = Joi.object({ message: codacyGrade }).required()
 
 module.exports = class CodacyGrade extends BaseSvgScrapingService {
   static get category() {
-    return 'build'
+    return 'quality'
   }
 
   static get route() {
@@ -24,14 +24,17 @@ module.exports = class CodacyGrade extends BaseSvgScrapingService {
       {
         title: 'Codacy grade',
         pattern: ':projectId',
+        namedParams: { projectId: 'e27821fb6289410b8f58338c7e0bc686' },
         staticExample: this.render({ grade: 'A' }),
-        exampleUrl: 'e27821fb6289410b8f58338c7e0bc686',
       },
       {
         title: 'Codacy branch grade',
         pattern: ':projectId/:branch',
+        namedParams: {
+          projectId: 'e27821fb6289410b8f58338c7e0bc686',
+          branch: 'master',
+        },
         staticExample: this.render({ grade: 'A' }),
-        exampleUrl: 'e27821fb6289410b8f58338c7e0bc686/master',
       },
     ]
   }

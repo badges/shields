@@ -7,7 +7,7 @@ const NpmBase = require('./npm-base')
 // package.json.
 module.exports = class NpmTypeDefinitions extends NpmBase {
   static get category() {
-    return 'other'
+    return 'platform-support'
   }
 
   static get defaultBadgeData() {
@@ -22,7 +22,11 @@ module.exports = class NpmTypeDefinitions extends NpmBase {
     return [
       {
         title: 'npm type definitions',
-        previewUrl: 'chalk',
+        pattern: ':packageName',
+        namedParams: { packageName: 'chalk' },
+        staticPreview: this.render({
+          supportedLanguages: ['TypeScript', 'Flow'],
+        }),
         keywords: ['node', 'typescript', 'flow'],
       },
     ]

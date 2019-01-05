@@ -10,6 +10,12 @@ const {
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class GithubFollowers extends LegacyService {
   static get category() {
     return 'social'
@@ -25,8 +31,18 @@ module.exports = class GithubFollowers extends LegacyService {
     return [
       {
         title: 'GitHub followers',
+        pattern: ':user',
         previewUrl: 'espadrine',
-        query: { style: 'social', label: 'Follow' },
+        // https://github.com/badges/shields/issues/2479
+        // namedParams: {
+        //   user: 'espadrine',
+        // },
+        // staticPreview: {
+        //   label: 'Follow',
+        //   message: '150',
+        //   style: 'social',
+        // },
+        queryParams: { style: 'social', label: 'Follow' },
         documentation,
       },
     ]

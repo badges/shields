@@ -4,6 +4,12 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { getLatestVersion } = require('./packagist-helpers')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class PackagistLicense extends LegacyService {
   static get category() {
     return 'license'
@@ -12,6 +18,7 @@ module.exports = class PackagistLicense extends LegacyService {
   static get route() {
     return {
       base: 'packagist/l',
+      pattern: ':user/:repo',
     }
   }
 
@@ -19,7 +26,12 @@ module.exports = class PackagistLicense extends LegacyService {
     return [
       {
         title: 'Packagist',
-        previewUrl: 'doctrine/orm',
+        namedParams: { user: 'doctrine', repo: 'orm' },
+        staticPreview: {
+          label: 'license',
+          message: 'MIT',
+          color: 'blue',
+        },
         keywords: ['PHP'],
       },
     ]

@@ -8,9 +8,15 @@ const {
   coveragePercentage: coveragePercentageColor,
 } = require('../../lib/color-formatters')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class Sonarqube extends LegacyService {
   static get category() {
-    return 'build'
+    return 'quality'
   }
 
   static get route() {
@@ -77,7 +83,7 @@ module.exports = class Sonarqube extends LegacyService {
             Accept: 'application/json',
           },
         }
-        if (serverSecrets && serverSecrets.sonarqube_token) {
+        if (serverSecrets.sonarqube_token) {
           options.auth = {
             user: serverSecrets.sonarqube_token,
           }

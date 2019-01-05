@@ -4,6 +4,12 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const serverSecrets = require('../../lib/server-secrets')
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class JenkinsBuild extends LegacyService {
   static get category() {
     return 'build'
@@ -41,7 +47,7 @@ module.exports = class JenkinsBuild extends LegacyService {
           options.uri = `${scheme}://${host}/${job}/api/json?tree=color`
         }
 
-        if (serverSecrets && serverSecrets.jenkins_user) {
+        if (serverSecrets.jenkins_user) {
           options.auth = {
             user: serverSecrets.jenkins_user,
             pass: serverSecrets.jenkins_pass,

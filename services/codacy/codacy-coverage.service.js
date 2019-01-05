@@ -15,7 +15,7 @@ const schema = Joi.object({
 
 module.exports = class CodacyCoverage extends BaseSvgScrapingService {
   static get category() {
-    return 'build'
+    return 'quality'
   }
 
   static get route() {
@@ -31,14 +31,17 @@ module.exports = class CodacyCoverage extends BaseSvgScrapingService {
       {
         title: 'Codacy coverage',
         pattern: ':projectId',
+        namedParams: { projectId: '59d607d0e311408885e418004068ea58' },
         staticExample: this.render({ percentage: 90 }),
-        exampleUrl: '59d607d0e311408885e418004068ea58',
       },
       {
         title: 'Codacy branch coverage',
         pattern: ':projectId/:branch',
+        namedParams: {
+          projectId: '59d607d0e311408885e418004068ea58',
+          branch: 'master',
+        },
         staticExample: this.render({ percentage: 90 }),
-        exampleUrl: '59d607d0e311408885e418004068ea58/master',
       },
     ]
   }

@@ -7,7 +7,7 @@ const { metric, formatDate } = require('../../lib/text-formatters')
 const { age: ageColor, downloadCount } = require('../../lib/color-formatters')
 const prettyBytes = require('pretty-bytes')
 
-const docs = `
+const documentation = `
 <p>
   Using a web browser, you can find the ID in the url here:
 </p>
@@ -179,11 +179,9 @@ class SteamCollectionSize extends BaseSteamAPI {
     return [
       {
         title: 'Steam Collection Files',
-        exampleUrl: '180077636',
-        pattern: ':id',
+        namedParams: { collectionId: '180077636' },
         staticExample: this.render({ size: 32 }),
-        keywords: ['steam'],
-        documentation: docs,
+        documentation,
       },
     ]
   }
@@ -223,14 +221,6 @@ class SteamFileService extends BaseSteamAPI {
   async onRequest({ response }) {
     throw new Error(`onRequest() wasn't implemented for ${this.name}`)
   }
-
-  static get defaultBadgeData() {
-    return { label: 'steam' }
-  }
-
-  static get category() {
-    return 'other'
-  }
 }
 
 class SteamFileSize extends SteamFileService {
@@ -261,11 +251,9 @@ class SteamFileSize extends SteamFileService {
     return [
       {
         title: 'Steam File Size',
-        exampleUrl: '100',
-        pattern: ':id',
+        namedParams: { fileId: '100' },
         staticExample: this.render({ fileSize: 20000 }),
-        keywords: ['steam'],
-        documentation: docs,
+        documentation,
       },
     ]
   }
@@ -296,15 +284,17 @@ class SteamFileReleaseDate extends SteamFileService {
     return [
       {
         title: 'Steam Release Date',
-        exampleUrl: '100',
-        pattern: ':id',
+        namedParams: { fileId: '100' },
         staticExample: this.render({
           releaseDate: new Date(0).setUTCSeconds(1538288239),
         }),
-        keywords: ['steam'],
-        documentation: docs,
+        documentation,
       },
     ]
+  }
+
+  static get category() {
+    return 'activity'
   }
 }
 
@@ -336,11 +326,9 @@ class SteamFileSubscriptions extends SteamFileService {
     return [
       {
         title: 'Steam Subscriptions',
-        exampleUrl: '100',
-        pattern: ':id',
+        namedParams: { fileId: '100' },
         staticExample: this.render({ subscriptions: 20124 }),
-        keywords: ['steam'],
-        documentation: docs,
+        documentation,
       },
     ]
   }
@@ -374,11 +362,9 @@ class SteamFileFavorites extends SteamFileService {
     return [
       {
         title: 'Steam Favorites',
-        exampleUrl: '100',
-        pattern: ':id',
+        namedParams: { fileId: '100' },
         staticExample: this.render({ favorites: 20000 }),
-        keywords: ['steam'],
-        documentation: docs,
+        documentation,
       },
     ]
   }
@@ -414,11 +400,9 @@ class SteamFileDownloads extends SteamFileService {
     return [
       {
         title: 'Steam Downloads',
-        exampleUrl: '100',
-        pattern: ':id',
+        namedParams: { fileId: '100' },
         staticExample: this.render({ downloads: 20124 }),
-        keywords: ['steam'],
-        documentation: docs,
+        documentation,
       },
     ]
   }
@@ -448,13 +432,15 @@ class SteamFileViews extends SteamFileService {
     return [
       {
         title: 'Steam Views',
-        exampleUrl: '100',
-        pattern: ':id',
+        namedParams: { fileId: '100' },
         staticExample: this.render({ views: 20000 }),
-        keywords: ['steam'],
-        documentation: docs,
+        documentation,
       },
     ]
+  }
+
+  static get category() {
+    return 'other'
   }
 }
 

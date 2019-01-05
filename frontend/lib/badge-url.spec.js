@@ -6,19 +6,17 @@ const resolveBadgeUrlWithLongCache = (url, baseUrl) =>
 
 describe('Badge URL functions', function() {
   test(resolveBadgeUrl, () => {
-    given('/badge/foo-bar-blue.svg', undefined).expect(
-      '/badge/foo-bar-blue.svg'
-    )
-    given('/badge/foo-bar-blue.svg', 'http://example.com').expect(
+    given('/badge/foo-bar-blue', undefined).expect('/badge/foo-bar-blue.svg')
+    given('/badge/foo-bar-blue', 'http://example.com').expect(
       'http://example.com/badge/foo-bar-blue.svg'
     )
   })
 
   test(resolveBadgeUrlWithLongCache, () => {
-    given('/badge/foo-bar-blue.svg', undefined).expect(
+    given('/badge/foo-bar-blue', undefined).expect(
       '/badge/foo-bar-blue.svg?maxAge=2592000'
     )
-    given('/badge/foo-bar-blue.svg', 'http://example.com').expect(
+    given('/badge/foo-bar-blue', 'http://example.com').expect(
       'http://example.com/badge/foo-bar-blue.svg?maxAge=2592000'
     )
   })
@@ -44,6 +42,24 @@ describe('Badge URL functions', function() {
         `&url=${encodeURIComponent(dataUrl)}`,
         `&query=${encodeURIComponent(query)}`,
         `&prefix=${encodeURIComponent(prefix)}`,
+        '&style=plastic',
+      ].join('')
+    )
+
+    const suffix = '<- value'
+    const color = 'blue'
+    given('http://img.example.com', 'json', 'foo', dataUrl, query, {
+      suffix,
+      color,
+      style: 'plastic',
+    }).expect(
+      [
+        'http://img.example.com/badge/dynamic/json.svg',
+        '?label=foo',
+        `&url=${encodeURIComponent(dataUrl)}`,
+        `&query=${encodeURIComponent(query)}`,
+        '&colorB=blue',
+        `&suffix=${encodeURIComponent(suffix)}`,
         '&style=plastic',
       ].join('')
     )

@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const countBy = require('lodash.countby')
-const GithubAuthService = require('./github-auth-service')
+const { GithubAuthService } = require('./github-auth-service')
 const { fetchIssue } = require('./github-common-fetch')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 
@@ -19,7 +19,7 @@ const schema = Joi.object({
 
 module.exports = class GithubPullRequestCheckState extends GithubAuthService {
   static get category() {
-    return 'other'
+    return 'build'
   }
 
   static get route() {

@@ -2,19 +2,19 @@
 
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
-const { invalidJSON } = require('../response-fixtures')
+const { isMetric } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'bountysource', title: 'Bountysource' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'bountysource',
+  title: 'Bountysource',
+}))
 
 t.create('bounties (valid)')
   .get('/team/mozilla-core/activity.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'bounties',
-      value: Joi.number()
-        .integer()
-        .positive(),
+      value: isMetric,
     })
   )
 
@@ -23,30 +23,4 @@ t.create('bounties (invalid team)')
   .expectJSON({
     name: 'bounties',
     value: 'not found',
-  })
-
-t.create('bounties (connection error)')
-  .get('/team/mozilla-core/activity.json')
-  .networkOff()
-  .expectJSON({ name: 'bounties', value: 'inaccessible' })
-
-t.create('bounties (unexpected response)')
-  .get('/team/mozilla-core/activity.json')
-  .intercept(nock =>
-    nock('https://api.bountysource.com')
-      .get('/teams/mozilla-core')
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'bounties', value: 'invalid' })
-
-t.create('bounties (error response)')
-  .get('/team/mozilla-core/activity.json')
-  .intercept(nock =>
-    nock('https://api.bountysource.com')
-      .get('/teams/mozilla-core')
-      .reply(500, '{"error":"oh noes!!"}')
-  )
-  .expectJSON({
-    name: 'bounties',
-    value: 'invalid',
   })

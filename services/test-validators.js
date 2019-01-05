@@ -1,5 +1,8 @@
 'use strict'
 
+const Joi = require('joi')
+const { semver: isSemver } = require('./validators')
+
 /*
   Note:
   Validators defined in this file are used by more than one service.
@@ -7,11 +10,7 @@
   should be declared in that service's test file.
 */
 
-const Joi = require('joi').extend(require('joi-extension-semver'))
-
 const withRegex = re => Joi.string().regex(re)
-
-const isSemver = Joi.semver().valid()
 
 const isVPlusTripleDottedVersion = withRegex(/^v[0-9]+.[0-9]+.[0-9]+$/)
 
@@ -49,7 +48,7 @@ const isComposerVersion = withRegex(
 // 5.4, 5.6, 7.2
 // 5.4 - 7.1, HHVM
 const isPhpVersionReduction = withRegex(
-  /^((>= \d+(\.\d+)?)|(\d+\.\d+(, \d+\.\d+)*)|(\d+\.\d+ \\- \d+\.\d+))(, HHVM)?$/
+  /^((>= \d+(\.\d+)?)|(\d+\.\d+(, \d+\.\d+)*)|(\d+\.\d+ - \d+\.\d+))(, HHVM)?$/
 )
 
 const isStarRating = withRegex(
@@ -79,6 +78,12 @@ const isFormattedDate = Joi.alternatives().try(
   Joi.string().regex(/^last (sun|mon|tues|wednes|thurs|fri|satur)day$/),
   Joi.string().regex(
     /^(january|february|march|april|may|june|july|august|september|october|november|december)( \d{4})?$/
+  )
+)
+
+const isRelativeFormattedDate = Joi.alternatives().try(
+  Joi.string().regex(
+    /^(in |)([0-9]+|a few|a|an|)(| )(second|minute|hour|day|month|year)(s|)( ago|)$/
   )
 )
 
@@ -128,6 +133,7 @@ module.exports = {
   isDecimalPercentage,
   isFileSize,
   isFormattedDate,
+  isRelativeFormattedDate,
   isDependencyState,
   isBuildStatus,
   withRegex,

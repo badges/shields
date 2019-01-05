@@ -1,5 +1,12 @@
 'use strict'
 
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
+
 const LegacyService = require('../legacy-service')
 const {
   makeBadgeData: getBadgeData,
@@ -12,6 +19,8 @@ const {
 } = require('../../lib/color-formatters')
 const { addv: versionText } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
+
+const keywords = ['vscode-marketplace']
 
 //To generate API request Options for VS Code marketplace
 function getVscodeApiReqOptions(packageName) {
@@ -56,6 +65,7 @@ class VscodeMarketplaceDownloads extends LegacyService {
   static get route() {
     return {
       base: 'vscode-marketplace/d',
+      pattern: ':repo',
     }
   }
 
@@ -63,8 +73,9 @@ class VscodeMarketplaceDownloads extends LegacyService {
     return [
       {
         title: 'Visual Studio Marketplace',
-        previewUrl: 'ritwickdey.LiveServer',
-        keywords: ['vscode-marketplace'],
+        namedParams: { repo: 'ritwickdey.LiveServer' },
+        staticPreview: { message: '1M', color: 'brightgreen' },
+        keywords,
       },
     ]
   }
@@ -87,13 +98,17 @@ class VscodeMarketplaceRating extends LegacyService {
     return [
       {
         title: 'Visual Studio Marketplace',
-        previewUrl: 'r/ritwickdey.LiveServer',
-        keywords: ['vscode-marketplace'],
+        pattern: 'r/:repo',
+        namedParams: { repo: 'ritwickdey.LiveServer' },
+        staticPreview: { message: '4.79/5 (145)', color: 'brightgreen' },
+        keywords,
       },
       {
         title: 'Visual Studio Marketplace',
-        previewUrl: 'stars/ritwickdey.LiveServer',
-        keywords: ['vscode-marketplace'],
+        pattern: 'stars/:repo',
+        namedParams: { repo: 'ritwickdey.LiveServer' },
+        staticPreview: { message: starRating(4.75), color: 'brightgreen' },
+        keywords,
       },
     ]
   }
@@ -109,6 +124,13 @@ class VscodeMarketplaceVersion extends LegacyService {
   static get route() {
     return {
       base: 'vscode-marketplace/v',
+      pattern: ':repo',
+    }
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'visual studio marketplace',
     }
   }
 
@@ -116,8 +138,9 @@ class VscodeMarketplaceVersion extends LegacyService {
     return [
       {
         title: 'Visual Studio Marketplace',
-        previewUrl: 'ritwickdey.LiveServer',
-        keywords: ['vscode-marketplace'],
+        namedParams: { repo: 'ritwickdey.LiveServer' },
+        staticPreview: { message: 'v5.2.0', color: 'blue' },
+        keywords,
       },
     ]
   }

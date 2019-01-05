@@ -6,6 +6,13 @@ const { checkErrorResponse } = require('../../lib/error-helper')
 const log = require('../../lib/log')
 
 // Handle .org and .com.
+//
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
 module.exports = class TravisBuild extends LegacyService {
   static get category() {
     return 'build'
@@ -18,32 +25,41 @@ module.exports = class TravisBuild extends LegacyService {
   }
 
   static get examples() {
+    const { staticExample } = this
     return [
       {
         title: 'Travis (.org)',
-        previewUrl: 'rust-lang/rust',
         pattern: ':user/:repo',
-        exampleUrl: 'rust-lang/rust',
+        namedParams: { user: 'rust-lang', repo: 'rust' },
+        staticExample,
       },
       {
         title: 'Travis (.org) branch',
-        previewUrl: 'rust-lang/rust/master',
         pattern: ':user/:repo/:branch',
-        exampleUrl: 'rust-lang/rust/master',
+        namedParams: { user: 'rust-lang', repo: 'rust', branch: 'master' },
+        staticExample,
       },
       {
         title: 'Travis (.com)',
-        previewUrl: 'com/ivandelabeldad/rackian-gateway',
         pattern: 'com/:user/:repo',
-        exampleUrl: 'com/ivandelabeldad/rackian-gateway',
+        namedParams: { user: 'ivandelabeldad', repo: 'rackian-gateway' },
+        staticExample,
       },
       {
         title: 'Travis (.com) branch',
-        previewUrl: 'com/ivandelabeldad/rackian-gateway/master',
         pattern: 'com/:user/:repo/:branch',
-        exampleUrl: 'com/ivandelabeldad/rackian-gateway/master',
+        namedParams: {
+          user: 'ivandelabeldad',
+          repo: 'rackian-gateway',
+          branch: 'master',
+        },
+        staticExample,
       },
     ]
+  }
+
+  static get staticExample() {
+    return { message: 'passing', color: 'brightgreen' }
   }
 
   static registerLegacyRouteHandler({ camp, cache }) {

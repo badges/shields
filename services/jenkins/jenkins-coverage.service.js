@@ -22,13 +22,14 @@ const coberturaCoverageSchema = Joi.object({
     elements: Joi.array()
       .items(
         Joi.object({
-          name: 'Lines',
+          name: Joi.string().required(),
           ratio: Joi.number()
             .min(0)
             .max(100)
             .required(),
         })
       )
+      .has(Joi.object({ name: 'Lines' }))
       .min(1)
       .required(),
   }).required(),
@@ -58,7 +59,7 @@ class BaseJenkinsCoverage extends BaseJsonService {
   }
 
   static get category() {
-    return 'build'
+    return 'quality'
   }
 
   static buildUrl(scheme, host, job, plugin) {
@@ -71,7 +72,7 @@ class BaseJenkinsCoverage extends BaseJsonService {
         tree: treeParam,
       },
     }
-    if (serverSecrets && serverSecrets.jenkins_user) {
+    if (serverSecrets.jenkins_user) {
       options.auth = {
         user: serverSecrets.jenkins_user,
         pass: serverSecrets.jenkins_pass,
@@ -130,8 +131,11 @@ class CoberturaJenkinsCoverage extends BaseJenkinsCoverage {
       options,
       schema: coberturaCoverageSchema,
     })
+    const lineCoverage = json.results.elements.filter(
+      element => element.name === 'Lines'
+    )[0]
     return this.constructor.render({
-      coverage: json.results.elements[0].ratio,
+      coverage: lineCoverage.ratio,
     })
   }
 
