@@ -45,6 +45,8 @@ describe('Github API provider with token pool', function() {
   it('should decrement the limit remaining with each request', function() {
     const remaining = headers.map(h => +h['x-ratelimit-remaining'])
     const expected = Array.from({ length: 10 }, (e, i) => remaining[0] - i)
+    console.log('remaining', remaining)
+    console.log('expected', expected)
     expect(remaining).to.deep.equal(expected)
   })
 
