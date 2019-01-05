@@ -38,12 +38,6 @@ class DummyService extends BaseService {
       { previewUrl: 'World', queryParams: { queryParamA: '!!!' } },
       {
         pattern: ':world',
-        exampleUrl: 'World',
-        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
-        keywords: ['hello'],
-      },
-      {
-        pattern: ':world',
         namedParams: { world: 'World' },
         staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
         keywords: ['hello'],
@@ -523,7 +517,7 @@ describe('BaseService', function() {
         },
       })
 
-      const [first, second, third, fourth, fifth, sixth] = examples
+      const [first, second, fourth, fifth, sixth] = examples
       expect(first).to.deep.equal({
         title: 'DummyService',
         example: {
@@ -550,21 +544,6 @@ describe('BaseService', function() {
         keywords: [],
         documentation: undefined,
       })
-      const expectedDefinition = {
-        title: 'DummyService',
-        example: {
-          path: '/foo/World',
-          queryParams: {},
-        },
-        preview: {
-          label: 'cat',
-          message: 'Hello namedParamA: foo with queryParamA: bar',
-          color: 'lightgrey',
-        },
-        keywords: ['hello'],
-        documentation: undefined,
-      }
-      expect(third).to.deep.equal(expectedDefinition)
       expect(fourth).to.deep.equal({
         title: 'DummyService',
         example: {
