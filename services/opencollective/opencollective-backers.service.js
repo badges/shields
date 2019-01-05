@@ -23,6 +23,7 @@ module.exports = class OpencollectiveBackers extends BaseJsonService {
         title: 'open collective backers',
         namedParams: { collective: 'shields' },
         staticExample: this.render('shields', 25),
+        keywords: ['opencollective'],
       },
     ]
   }

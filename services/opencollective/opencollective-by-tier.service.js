@@ -23,6 +23,7 @@ module.exports = class OpencollectiveByTier extends BaseJsonService {
         title: 'open collective members by tier',
         namedParams: { collective: 'shields', tierSlug: 'monthly-backer' },
         staticExample: this.render('shields', 'monthly-backer', 8),
+        keywords: ['opencollective'],
       },
     ]
   }
