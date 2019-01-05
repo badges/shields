@@ -12,6 +12,8 @@ const { metric } = require('../../lib/text-formatters')
 const { latest: latestVersion } = require('../../lib/version')
 const { nonNegativeInteger } = require('../validators')
 
+const keywords = ['ruby']
+
 const gemsSchema = Joi.object({
   downloads: nonNegativeInteger,
   version_downloads: nonNegativeInteger,
@@ -122,49 +124,49 @@ module.exports = class GemDownloads extends BaseJsonService {
     return [
       {
         title: 'Gem',
-        pattern: 'dv/:packageName/:version',
+        pattern: 'dv/:gem/:version',
         namedParams: {
-          packageName: 'rails',
+          gem: 'rails',
           version: 'stable',
         },
         staticExample: this.render({
           label: this._getLabel('stable', 'dv'),
           downloads: 70000,
         }),
-        keywords: ['ruby'],
+        keywords,
       },
       {
         title: 'Gem',
-        pattern: 'dv/:package/:version',
+        pattern: 'dv/:gem/:version',
         namedParams: {
-          packageName: 'rails',
+          gem: 'rails',
           version: '4.1.0',
         },
         staticExample: this.render({
           label: this._getLabel('4.1.0', 'dv'),
           downloads: 50000,
         }),
-        keywords: ['ruby'],
+        keywords,
       },
       {
         title: 'Gem',
-        pattern: 'dtv/:packageName',
-        namedParams: { packageName: 'rails' },
+        pattern: 'dtv/:gem',
+        namedParams: { gem: 'rails' },
         staticExample: this.render({
           label: this._getLabel(undefined, 'dtv'),
           downloads: 70000,
         }),
-        keywords: ['ruby'],
+        keywords,
       },
       {
         title: 'Gem',
-        pattern: 'dt/:packageName',
-        namedParams: { packageName: 'rails' },
+        pattern: 'dt/:gem',
+        namedParams: { gem: 'rails' },
         staticExample: this.render({
           label: this._getLabel(undefined, 'dt'),
           downloads: 900000,
         }),
-        keywords: ['ruby'],
+        keywords,
       },
     ]
   }
