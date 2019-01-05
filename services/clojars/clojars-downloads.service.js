@@ -44,14 +44,13 @@ module.exports = class Clojars extends BaseJsonService {
   static get route() {
     return {
       base: 'clojars/dt',
-      pattern: ':clojar',
+      pattern: ':clojar+',
     }
   }
 
   static get examples() {
     return [
       {
-        pattern: ':clojar',
         namedParams: { clojar: 'prismic' },
         staticExample: this.render({ downloads: 117 }),
       },

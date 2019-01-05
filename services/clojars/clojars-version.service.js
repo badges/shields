@@ -50,7 +50,7 @@ module.exports = class Clojars extends BaseJsonService {
   static get route() {
     return {
       base: 'clojars/v',
-      pattern: ':clojar',
+      pattern: ':clojar+',
     }
   }
 
