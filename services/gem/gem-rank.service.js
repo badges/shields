@@ -25,13 +25,18 @@ const dailySchema = Joi.array()
   .required()
 
 module.exports = class GemRank extends BaseJsonService {
-  async fetch({ period, repo }) {
-    const totalRank = period === 'rt'
-    const endpoint = totalRank ? '/total_ranking.json' : '/daily_ranking.json'
-    const url = `http://bestgems.org/api/v1/gems/${repo}${endpoint}`
-    const schema = totalRank ? totalSchema : dailySchema
+  async fetch({ period, packageName }) {
+    let endpoint, schema
+    if (period === 'rt') {
+      endpoint = 'total_ranking.json'
+      schema = totalSchema
+    } else {
+      endpoint = 'daily_ranking.json'
+      schema = dailySchema
+    }
+
     return this._requestJson({
-      url,
+      url: `http://bestgems.org/api/v1/gems/${packageName}/${endpoint}`,
       schema,
     })
   }
@@ -46,8 +51,8 @@ module.exports = class GemRank extends BaseJsonService {
     }
   }
 
-  async handle({ period, repo }) {
-    const json = await this.fetch({ period, repo })
+  async handle({ period, packageName }) {
+    const json = await this.fetch({ period, packageName })
     const rank = period === 'rt' ? json[0].total_ranking : json[0].daily_ranking
     return this.constructor.render({ period, rank })
   }
@@ -64,8 +69,7 @@ module.exports = class GemRank extends BaseJsonService {
   static get route() {
     return {
       base: 'gem',
-      format: '(rt|rd)/(.+)',
-      capture: ['period', 'repo'],
+      pattern: ':period(rt|rd)/:packageName',
     }
   }
 
@@ -73,15 +77,19 @@ module.exports = class GemRank extends BaseJsonService {
     return [
       {
         title: 'Gem download rank',
-        exampleUrl: 'rt/puppet',
-        pattern: 'rt/:package',
+        pattern: 'rt/:packageName',
+        namedParams: {
+          packageName: 'puppet',
+        },
         staticExample: this.render({ period: 'rt', rank: 332 }),
         keywords: ['ruby'],
       },
       {
         title: 'Gem download rank (daily)',
-        exampleUrl: 'rd/facter',
-        pattern: 'rd/:package',
+        pattern: 'rd/:packageName',
+        namedParams: {
+          packageName: 'facter',
+        },
         staticExample: this.render({ period: 'rd', rank: 656 }),
         keywords: ['ruby'],
       },

@@ -110,8 +110,12 @@ class JacocoJenkinsCoverage extends BaseJenkinsCoverage {
     return [
       {
         title: 'Jenkins JaCoCo coverage',
-        exampleUrl: 'https/ci.eclipse.org/ecp/job/gerrit',
         pattern: ':scheme/:host/:job',
+        namedParams: {
+          scheme: 'https',
+          host: 'ci.eclipse.org',
+          job: 'ecp/job/gerrit',
+        },
         staticExample: this.render({
           coverage: 96,
         }),

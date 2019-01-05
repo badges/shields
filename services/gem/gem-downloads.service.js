@@ -122,8 +122,11 @@ module.exports = class GemDownloads extends BaseJsonService {
     return [
       {
         title: 'Gem',
-        exampleUrl: 'dv/rails/stable',
-        pattern: 'dv/:package/stable',
+        pattern: 'dv/:packageName/:version',
+        namedParams: {
+          packageName: 'rails',
+          version: 'stable',
+        },
         staticExample: this.render({
           label: this._getLabel('stable', 'dv'),
           downloads: 70000,
@@ -132,8 +135,11 @@ module.exports = class GemDownloads extends BaseJsonService {
       },
       {
         title: 'Gem',
-        exampleUrl: 'dv/rails/4.1.0',
         pattern: 'dv/:package/:version',
+        namedParams: {
+          packageName: 'rails',
+          version: '4.1.0',
+        },
         staticExample: this.render({
           label: this._getLabel('4.1.0', 'dv'),
           downloads: 50000,
@@ -142,8 +148,8 @@ module.exports = class GemDownloads extends BaseJsonService {
       },
       {
         title: 'Gem',
-        exampleUrl: 'dtv/rails',
-        pattern: 'dtv/:package',
+        pattern: 'dtv/:packageName',
+        namedParams: { packageName: 'rails' },
         staticExample: this.render({
           label: this._getLabel(undefined, 'dtv'),
           downloads: 70000,
@@ -152,8 +158,8 @@ module.exports = class GemDownloads extends BaseJsonService {
       },
       {
         title: 'Gem',
-        exampleUrl: 'dt/rails',
-        pattern: 'dt/:package',
+        pattern: 'dt/:packageName',
+        namedParams: { packageName: 'rails' },
         staticExample: this.render({
           label: this._getLabel(undefined, 'dt'),
           downloads: 900000,

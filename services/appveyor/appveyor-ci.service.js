@@ -11,14 +11,14 @@ module.exports = class AppVeyorCi extends AppVeyorBase {
     return [
       {
         title: 'AppVeyor',
-        exampleUrl: 'gruntjs/grunt',
         pattern: ':user/:repo',
+        namedParams: { user: 'gruntjs', repo: 'grunt' },
         staticExample: this.render({ status: 'success' }),
       },
       {
         title: 'AppVeyor branch',
-        exampleUrl: 'gruntjs/grunt/master',
         pattern: ':user/:repo/:branch',
+        namedParams: { user: 'gruntjs', repo: 'grunt', branch: 'master' },
         staticExample: this.render({ status: 'success' }),
       },
     ]

@@ -56,9 +56,10 @@ module.exports = class DockerBuild extends BaseJsonService {
     return [
       {
         title: 'Docker Build Status',
-        exampleUrl: 'jrottenberg/ffmpeg',
-        pattern: ':user/:repo',
-        keywords: ['docker', 'build', 'status'],
+        namedParams: {
+          user: 'jrottenberg',
+          repo: 'ffmpeg',
+        },
         staticExample: this.render({ status: 10 }),
       },
     ]
