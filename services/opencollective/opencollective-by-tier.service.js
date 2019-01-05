@@ -21,7 +21,7 @@ module.exports = class OpencollectiveByTier extends BaseJsonService {
     return [
       {
         title: 'open collective members by tier',
-        namedParams: { collective: 'shields', tier: 'backer' },
+        namedParams: { collective: 'shields', tierSlug: 'monthly-backer' },
         staticExample: this.render('shields', 'monthly-backer', 8),
         keywords: ['opencollective'],
       },
@@ -35,9 +35,9 @@ module.exports = class OpencollectiveByTier extends BaseJsonService {
     }
   }
 
-  static render(collective, tier, membersCount) {
+  static render(collective, tierSlug, membersCount) {
     return {
-      label: tier.endsWith('s') ? tier : `${tier}s`,
+      label: tierSlug.endsWith('s') ? tierSlug : `${tierSlug}s`,
       message: membersCount,
       color: membersCount > 0 ? 'brightgreen' : 'lightgrey',
       //links: [`https://opencollective.com/${collective}`]
