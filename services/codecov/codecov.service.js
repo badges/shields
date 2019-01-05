@@ -49,7 +49,7 @@ module.exports = class Codecov extends LegacyService {
       },
       {
         title: 'Codecov private',
-        pattern: 'token/:token/:vcsName/:user/:repo/:branch',
+        pattern: 'token/:token/:vcsName/:user/:repo',
         namedParams: {
           token: 'My0A8VL917',
           vcsName: 'github',
