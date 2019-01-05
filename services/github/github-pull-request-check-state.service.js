@@ -17,6 +17,8 @@ const schema = Joi.object({
     .default([]),
 }).required()
 
+const keywords = ['pullrequest', 'detail']
+
 module.exports = class GithubPullRequestCheckState extends GithubAuthService {
   static get category() {
     return 'build'
@@ -34,21 +36,29 @@ module.exports = class GithubPullRequestCheckState extends GithubAuthService {
       {
         title: 'GitHub pull request check state',
         pattern: 's/pulls/:user/:repo/:number',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+          number: '1110',
+        },
         staticExample: this.render({ which: 's', state: 'pending' }),
-        exampleUrl: 's/pulls/badges/shields/1110',
-        keywords: ['GitHub', 'pullrequest', 'detail', 'check'],
+        keywords,
         documentation,
       },
       {
         title: 'GitHub pull request check contexts',
         pattern: 'contexts/pulls/:user/:repo/:number',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+          number: '1110',
+        },
         staticExample: this.render({
           which: 'contexts',
           state: 'pending',
           stateCounts: { passed: 5, pending: 1 },
         }),
-        exampleUrl: 'contexts/pulls/badges/shields/1110',
-        keywords: ['GitHub', 'pullrequest', 'detail', 'check'],
+        keywords,
         documentation,
       },
     ]

@@ -155,8 +155,12 @@ class CoberturaJenkinsCoverage extends BaseJenkinsCoverage {
     return [
       {
         title: 'Jenkins Cobertura coverage',
-        exampleUrl: 'https/builds.apache.org/job/olingo-odata4-cobertura',
         pattern: ':scheme/:host/:job',
+        namedParams: {
+          scheme: 'https',
+          host: 'build.apache.org',
+          job: 'job/olingo-odata4-cobertura',
+        },
         staticExample: this.render({
           coverage: 94,
         }),
