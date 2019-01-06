@@ -139,7 +139,7 @@ module.exports = class AzureDevOpsCoverage extends AzureDevOpsBase {
         }
       })
     })
-    const coverage = covered ? covered / total * 100 : 0
+    const coverage = covered ? (covered / total) * 100 : 0
     return this.constructor.render({ coverage })
   }
 }
