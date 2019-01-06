@@ -1,59 +1,34 @@
 'use strict'
 
-const Joi = require('joi')
-const BaseJsonService = require('../base-json')
+const OpencollectiveBase = require('./opencollective-base')
 
-// https://developer.opencollective.com/#/api/collectives?id=get-members-per-tier
-const membersArraySchema = Joi.array().items(
-  Joi.object().keys({
-    MemberId: Joi.number().required(),
-    tier: Joi.string().required(),
-    role: Joi.string().required(),
-  })
-)
+const documentation = `<h3>How to get the tierId</h3>
+<p>According to <a target="_blank" href="https://developer.opencollective.com/#/api/collectives?id=get-members-per-tier">open collectives documentation</a>, you can find the tierId by looking at the URL after clicking on a Tier Card on the collective page. (e.g. tierId for https://opencollective.com/shields/order/2988 is 2988)</p>`
 
-module.exports = class OpencollectiveByTier extends BaseJsonService {
-  static get category() {
-    return 'funding'
-  }
-
+module.exports = class OpencollectiveByTier extends OpencollectiveBase {
   static get examples() {
     return [
       {
         title: 'open collective members by tier',
-        namedParams: { collective: 'shields', tierSlug: 'monthly-backer' },
-        staticExample: this.render('shields', 'monthly-backer', 8),
+        namedParams: { collective: 'shields', tierId: '2988' },
+        staticExample: this.render(8, 'monthly backers'),
         keywords: ['opencollective'],
+        documentation,
       },
     ]
   }
 
   static get route() {
-    return {
-      base: 'opencollective/tier',
-      pattern: ':collective/:tierSlug',
-    }
+    return this.buildRoute('tier', true)
   }
 
-  static render(collective, tierSlug, membersCount) {
-    return {
-      label: tierSlug.endsWith('s') ? tierSlug : `${tierSlug}s`,
-      message: membersCount,
-      color: membersCount > 0 ? 'brightgreen' : 'lightgrey',
-      //links: [`https://opencollective.com/${collective}`]
-    }
-  }
-
-  async handle({ collective, tierSlug }) {
-    const sponsorsCount = await this.fetch(collective, tierSlug)
-    return this.constructor.render(collective, tierSlug, sponsorsCount)
-  }
-
-  async fetch(collective, tierSlug) {
-    const members = await this._requestJson({
-      schema: membersArraySchema,
-      url: `https://opencollective.com/${collective}/tiers/${tierSlug}/all.json`,
+  async handle({ collective, tierId }) {
+    const result = await this.fetchCollectiveBackersCount(collective, {
+      tierId,
     })
-    return members.length
+    if (result.tier) {
+      if (!result.tier.endsWith('s')) result.tier += 's'
+    } else result.tier = 'new tier'
+    return this.constructor.render(result.backersCount, result.tier)
   }
 }
