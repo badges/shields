@@ -89,8 +89,7 @@ function InstallsForExtensionType(extensionType) {
     static get route() {
       return {
         base: `wordpress/${extensionType}/installs`,
-        format: '(.+)',
-        capture: ['slug'],
+        pattern: ':slug',
       }
     }
 
@@ -98,7 +97,6 @@ function InstallsForExtensionType(extensionType) {
       return [
         {
           title: `Wordpress ${capt} Active Installs`,
-          pattern: ':slug',
           namedParams: { slug: exampleSlug },
           staticExample: this.render({ response: { active_installs: 300000 } }),
         },
@@ -143,8 +141,7 @@ function DownloadsForInterval(interval) {
     static get route() {
       return {
         base,
-        format: '(.*)',
-        capture: ['slug'],
+        pattern: ':slug',
       }
     }
 
@@ -152,7 +149,6 @@ function DownloadsForInterval(interval) {
       return [
         {
           title: 'WordPress Plugin Downloads',
-          pattern: ':slug',
           namedParams: { slug: 'bbpress' },
           staticExample: this.render({ downloads: 30000 }),
         },

@@ -35,8 +35,7 @@ module.exports = class Date extends BaseService {
   static get route() {
     return {
       base: 'date',
-      format: '([0-9]+)',
-      capture: ['timestamp'],
+      pattern: ':timestamp([0-9]+)',
     }
   }
 

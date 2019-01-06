@@ -98,8 +98,7 @@ class JenkinsPluginInstalls extends BaseJsonService {
   static get route() {
     return {
       base: 'jenkins/plugin/i',
-      format: '([^/]+)/?([^/]+)?',
-      capture: ['plugin', 'version'],
+      pattern: ':plugin/:version?',
     }
   }
 

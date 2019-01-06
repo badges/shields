@@ -23,8 +23,7 @@ class GithubPackageJsonVersion extends ConditionalGithubAuthService {
   static get route() {
     return {
       base: 'github/package-json/v',
-      format: '([^/]+)/([^/]+)/?([^/]+)?',
-      capture: ['user', 'repo', 'branch'],
+      pattern: ':user/:repo/:branch?',
     }
   }
 

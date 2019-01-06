@@ -114,8 +114,7 @@ class WordpressPluginTestedVersion extends BaseWordpressPlatform {
   static get route() {
     return {
       base: `wordpress/plugin/tested`,
-      format: '(.+)',
-      capture: ['slug'],
+      pattern: ':slug',
     }
   }
 
@@ -136,8 +135,7 @@ class WordpressPluginTestedVersionAlias extends WordpressPluginTestedVersion {
   static get route() {
     return {
       base: `wordpress/v`,
-      format: '(.+)',
-      capture: ['slug'],
+      pattern: ':slug',
     }
   }
 
