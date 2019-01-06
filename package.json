@@ -83,7 +83,7 @@
     "test:entrypoint": "mocha --opts mocha.opts entrypoint.spec.js",
     "test:integration": "mocha --opts mocha.opts \"lib/**/*.integration.js\" \"services/**/*.integration.js\"",
     "test:services": "cross-env HANDLE_INTERNAL_ERRORS=false mocha --opts mocha.opts --delay lib/service-test-runner/cli.js",
-    "test:services:trace": "cross-env TRACE_SERVICES=true run-s --silent test:services -- $*",
+    "test:services:trace": "cross-env TRACE_SERVICES=true npm run test:services -- $*",
     "test:services:pr:prepare": "node lib/service-test-runner/pull-request-services-cli.js > pull-request-services.log",
     "test:services:pr:run": "cross-env HANDLE_INTERNAL_ERRORS=false mocha --opts mocha.opts --delay lib/service-test-runner/cli.js --stdin < pull-request-services.log",
     "test:services:pr": "run-s --silent test:services:pr:prepare test:services:pr:run",

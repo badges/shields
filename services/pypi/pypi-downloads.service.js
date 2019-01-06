@@ -6,6 +6,8 @@ const { downloadCount } = require('../../lib/color-formatters')
 const { metric } = require('../../lib/text-formatters')
 const { nonNegativeInteger } = require('../validators')
 
+const keywords = ['python']
+
 const pypiStatsSchema = Joi.object({
   data: Joi.object({
     last_day: nonNegativeInteger,
@@ -75,24 +77,30 @@ module.exports = class PypiDownloads extends BaseJsonService {
     return [
       {
         title: 'PyPI - Downloads',
-        exampleUrl: 'dd/Django',
-        pattern: 'dd/:package',
+        pattern: 'dd/:packageName',
+        namedParams: {
+          packageName: 'Django',
+        },
         staticExample: this.render({ period: 'dd', downloads: 14000 }),
-        keywords: ['python'],
+        keywords,
       },
       {
         title: 'PyPI - Downloads',
-        exampleUrl: 'dw/Django',
-        pattern: 'dw/:package',
+        pattern: 'dw/:packageName',
+        namedParams: {
+          packageName: 'Django',
+        },
         staticExample: this.render({ period: 'dw', downloads: 250000 }),
-        keywords: ['python'],
+        keywords,
       },
       {
         title: 'PyPI - Downloads',
-        exampleUrl: 'dm/Django',
-        pattern: 'dm/:package',
+        pattern: 'dm/:packageName',
+        namedParams: {
+          packageName: 'Django',
+        },
         staticExample: this.render({ period: 'dm', downloads: 1070100 }),
-        keywords: ['python'],
+        keywords,
       },
     ]
   }
