@@ -1,0 +1,62 @@
+public:
+  bind:
+    address: 'BIND_ADDRESS'
+    port: 'PORT'
+
+  metrics:
+    prometheus:
+      enabled: 'METRICS_PROMETHEUS_ENABLED'
+      allowedIps: 'METRICS_PROMETHEUS_ALLOWED_IPS'
+
+  ssl:
+    isSecure: 'HTTPS'
+    key: 'HTTPS_KEY'
+    cert: 'HTTPS_CRT'
+
+  redirectUri: 'REDIRECT_URI'
+
+  cors:
+    allowedOrigin:
+      __name: 'ALLOWED_ORIGIN'
+      __format: 'json'
+
+  persistence:
+    dir: 'PERSISTENCE_DIR'
+    redisUrl: 'REDIS_URL'
+
+  services:
+    github:
+      baseUri: 'GITHUB_URL'
+      debug:
+        enabled: 'GITHUB_DEBUG_ENABLED'
+        intervalSeconds: 'GITHUB_DEBUG_INTERVAL_SECONDS'
+    trace: 'TRACE_SERVICES'
+
+  profiling:
+    makeBadge: 'PROFILE_MAKE_BADGE'
+
+  cacheHeaders:
+    defaultCacheLengthSeconds: 'BADGE_MAX_AGE_SECONDS'
+
+  rateLimit: 'RATE_LIMIT'
+
+private:
+  azure_devops_token: 'AZURE_DEVOPS_TOKEN'
+  bintray_user: 'BINTRAY_USER'
+  bintray_apikey: 'BINTRAY_API_KEY'
+  gh_client_id: 'GH_CLIENT_ID'
+  gh_client_secret: 'GH_CLIENT_SECRET'
+  gh_token: 'GH_TOKEN'
+  jenkins_user: 'JENKINS_USER'
+  jenkins_pass: 'JENKINS_PASS'
+  jira_user: 'JIRA_USER'
+  jira_pass: 'JIRA_PASS'
+  nexus_user: 'NEXUS_USER'
+  nexus_pass: 'NEXUS_PASS'
+  npm_token: 'NPM_TOKEN'
+  sentry_dsn: 'SENTRY_DSN'
+  shields_secret: 'SHIELDS_SECRET'
+  sl_insight_userUuid: 'SL_INSIGHT_USER_UUID'
+  sl_insight_apiToken: 'SL_INSIGHT_API_TOKEN'
+  sonarqube_token: 'SONARQUBE_TOKEN'
+  wheelmap_token: 'WHEELMAP_TOKEN'

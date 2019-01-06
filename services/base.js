@@ -108,8 +108,6 @@ class BaseService {
    * staticExample: Deprecated. An alias for `staticPreview`.
    * previewUrl: Deprecated. An explicit example which is rendered as part of
    *   the badge listing.
-   * exampleUrl: Deprecated. An explicit example which will _not_ be rendered.
-   *   Only the URL itself is shown to the user.
    * keywords: Additional keywords, other than words in the title. This helps
    *   users locate relevant badges.
    * documentation: An HTML string that is included in the badge popup.
