@@ -36,7 +36,7 @@ t.create('code coverage')
   )
 
 t.create('code coverage (branch)')
-  .get('/coverage/g/doctrine/doctrine2/master.json')
+  .get('/coverage/g/PHPMailer/PHPMailer/master.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'coverage',
