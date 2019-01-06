@@ -4,13 +4,7 @@ const Joi = require('joi')
 const t = (module.exports = require('../create-service-tester')())
 const { isIntegerPercentage } = require('../test-validators')
 const { colorScheme } = require('../test-helpers')
-const {
-  mockJiraCreds,
-  mockLegacyJiraCreds,
-  restore,
-  user,
-  pass,
-} = require('./jira-test-helpers')
+const { mockJiraCreds, restore, user, pass } = require('./jira-test-helpers')
 
 const sprintId = 8
 const queryString = {
