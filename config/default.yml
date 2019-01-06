@@ -1,4 +1,7 @@
 public:
+  bind:
+    address: '::'
+
   metrics:
     prometheus:
       enabled: false
