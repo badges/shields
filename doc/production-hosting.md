@@ -1,5 +1,4 @@
-Production hosting
-==================
+# Production hosting
 
 In production, a deploy commit checks in two config files:
 
@@ -26,9 +25,7 @@ These settings are currently set in `config/local-shields-io-production.yml`:
 - sl_insight_userUuid
 - wheelmap_token
 
-
-Main Server Sysadmin
---------------------
+## Main Server Sysadmin
 
 - Servers in DNS round-robin:
   - s0.shields-server.com: 192.99.59.72 (vps71670.vps.ovh.ca)
