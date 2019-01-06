@@ -9,11 +9,6 @@ describe('validateExample function', function() {
       {
         staticExample: { message: '123' },
         pattern: 'dt/:package',
-        exampleUrl: 'dt/mypackage',
-      },
-      {
-        staticExample: { message: '123' },
-        pattern: 'dt/:package',
         namedParams: { package: 'mypackage' },
       },
       { previewUrl: 'dt/mypackage' },
@@ -41,6 +36,11 @@ describe('validateExample function', function() {
         staticExample: { message: '123' },
         pattern: 'dt/:package',
         previewUrl: 'dt/mypackage',
+      },
+      {
+        staticExample: { message: '123' },
+        pattern: 'dt/:package',
+        exampleUrl: 'dt/mypackage',
       },
     ]
 

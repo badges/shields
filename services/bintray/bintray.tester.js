@@ -17,6 +17,15 @@ t.create('version')
     })
   )
 
+t.create('version (not found)')
+  .get('/asciidoctor/maven/not-a-real-package.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'bintray',
+      value: 'not found',
+    })
+  )
+
 t.create('version (mocked)')
   .get('/asciidoctor/maven/asciidoctorj.json?style=_shields_test')
   .intercept(nock =>
