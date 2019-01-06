@@ -6,8 +6,7 @@ module.exports = class EclipseMarketplaceBase extends BaseXmlService {
   static buildRoute(base) {
     return {
       base,
-      format: '(.+)',
-      capture: ['name'],
+      pattern: ':name',
     }
   }
 

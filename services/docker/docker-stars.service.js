@@ -49,9 +49,10 @@ module.exports = class DockerStars extends BaseService {
     return [
       {
         title: 'Docker Stars',
-        exampleUrl: '_/ubuntu',
-        pattern: ':user/:repo',
-        keywords: ['docker', 'stars'],
+        namedParams: {
+          user: '_',
+          repo: 'ubuntu',
+        },
         staticExample: this.render({ stars: 9000 }),
       },
     ]
