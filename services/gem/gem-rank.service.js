@@ -5,14 +5,17 @@ const Joi = require('joi')
 const BaseJsonService = require('../base-json')
 const { floorCount: floorCountColor } = require('../../lib/color-formatters')
 const { ordinalNumber } = require('../../lib/text-formatters')
-const { nonNegativeInteger } = require('../validators')
+const { InvalidResponse } = require('../errors')
 
 const keywords = ['ruby']
 
 const totalSchema = Joi.array()
   .items(
     Joi.object({
-      total_ranking: nonNegativeInteger,
+      total_ranking: Joi.number()
+        .integer()
+        .min(0)
+        .allow(null),
     })
   )
   .min(1)
@@ -20,7 +23,10 @@ const totalSchema = Joi.array()
 const dailySchema = Joi.array()
   .items(
     Joi.object({
-      daily_ranking: nonNegativeInteger,
+      daily_ranking: Joi.number()
+        .integer()
+        .min(0)
+        .allow(null),
     })
   )
   .min(1)
@@ -56,6 +62,9 @@ module.exports = class GemRank extends BaseJsonService {
   async handle({ period, gem }) {
     const json = await this.fetch({ period, gem })
     const rank = period === 'rt' ? json[0].total_ranking : json[0].daily_ranking
+    if (rank == null) {
+      throw new InvalidResponse({ prettyMessage: 'invalid rank' })
+    }
     return this.constructor.render({ period, rank })
   }
 
