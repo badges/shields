@@ -39,19 +39,19 @@ class DummyService extends BaseService {
       {
         pattern: ':world',
         namedParams: { world: 'World' },
-        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+        staticPreview: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
         keywords: ['hello'],
       },
       {
         namedParams: { namedParamA: 'World' },
-        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+        staticPreview: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
         keywords: ['hello'],
       },
       {
         pattern: ':world',
         namedParams: { world: 'World' },
         queryParams: { queryParamA: '!!!' },
-        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+        staticPreview: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
         keywords: ['hello'],
       },
     ]

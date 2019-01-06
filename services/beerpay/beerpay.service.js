@@ -26,7 +26,7 @@ module.exports = class Beerpay extends BaseJsonService {
       {
         title: 'Beerpay',
         namedParams: { user: 'hashdog', project: 'scrapfy-chrome-extension' },
-        staticExample: this.render({ totalAmount: 10 }),
+        staticPreview: this.render({ totalAmount: 10 }),
       },
     ]
   }

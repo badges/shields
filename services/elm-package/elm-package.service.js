@@ -24,7 +24,7 @@ module.exports = class ElmPackage extends BaseJsonService {
       {
         title: 'Elm package',
         namedParams: { user: 'elm', packageName: 'core' },
-        staticExample: this.render({ version: '1.0.2' }),
+        staticPreview: this.render({ version: '1.0.2' }),
       },
     ]
   }

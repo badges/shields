@@ -27,7 +27,7 @@ module.exports = class Bitrise extends LegacyService {
         pattern: ':appId/:branch',
         namedParams: { appId: 'cde737473028420d', branch: 'master' },
         queryParams: { token: 'GCIdEzacE4GW32jLVrZb7A' },
-        staticExample: {
+        staticPreview: {
           label: 'bitrise',
           message: 'success',
           color: 'brightgreen',
