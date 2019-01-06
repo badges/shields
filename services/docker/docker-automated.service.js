@@ -56,7 +56,7 @@ module.exports = class DockerAutomatedBuild extends BaseJsonService {
           user: 'jrottenberg',
           repo: 'ffmpeg',
         },
-        staticExample: this.render({ isAutomated: true }),
+        staticPreview: this.render({ isAutomated: true }),
       },
     ]
   }

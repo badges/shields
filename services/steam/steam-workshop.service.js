@@ -180,7 +180,7 @@ class SteamCollectionSize extends BaseSteamAPI {
       {
         title: 'Steam Collection Files',
         namedParams: { collectionId: '180077636' },
-        staticExample: this.render({ size: 32 }),
+        staticPreview: this.render({ size: 32 }),
         documentation,
       },
     ]
@@ -252,7 +252,7 @@ class SteamFileSize extends SteamFileService {
       {
         title: 'Steam File Size',
         namedParams: { fileId: '100' },
-        staticExample: this.render({ fileSize: 20000 }),
+        staticPreview: this.render({ fileSize: 20000 }),
         documentation,
       },
     ]
@@ -285,7 +285,7 @@ class SteamFileReleaseDate extends SteamFileService {
       {
         title: 'Steam Release Date',
         namedParams: { fileId: '100' },
-        staticExample: this.render({
+        staticPreview: this.render({
           releaseDate: new Date(0).setUTCSeconds(1538288239),
         }),
         documentation,
@@ -327,7 +327,7 @@ class SteamFileSubscriptions extends SteamFileService {
       {
         title: 'Steam Subscriptions',
         namedParams: { fileId: '100' },
-        staticExample: this.render({ subscriptions: 20124 }),
+        staticPreview: this.render({ subscriptions: 20124 }),
         documentation,
       },
     ]
@@ -363,7 +363,7 @@ class SteamFileFavorites extends SteamFileService {
       {
         title: 'Steam Favorites',
         namedParams: { fileId: '100' },
-        staticExample: this.render({ favorites: 20000 }),
+        staticPreview: this.render({ favorites: 20000 }),
         documentation,
       },
     ]
@@ -401,7 +401,7 @@ class SteamFileDownloads extends SteamFileService {
       {
         title: 'Steam Downloads',
         namedParams: { fileId: '100' },
-        staticExample: this.render({ downloads: 20124 }),
+        staticPreview: this.render({ downloads: 20124 }),
         documentation,
       },
     ]
@@ -433,7 +433,7 @@ class SteamFileViews extends SteamFileService {
       {
         title: 'Steam Views',
         namedParams: { fileId: '100' },
-        staticExample: this.render({ views: 20000 }),
+        staticPreview: this.render({ views: 20000 }),
         documentation,
       },
     ]

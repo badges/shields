@@ -87,7 +87,7 @@ module.exports = class CircleCi extends BaseJsonService {
           owner: 'RedSparr0w',
           repo: 'node-csgo-parser',
         },
-        staticExample: this.render({ status: 'success' }),
+        staticPreview: this.render({ status: 'success' }),
       },
       {
         title: 'CircleCI branch',
@@ -98,7 +98,7 @@ module.exports = class CircleCi extends BaseJsonService {
           repo: 'node-csgo-parser',
           branch: 'master',
         },
-        staticExample: this.render({ status: 'success' }),
+        staticPreview: this.render({ status: 'success' }),
       },
       {
         title: 'CircleCI token',
@@ -110,7 +110,7 @@ module.exports = class CircleCi extends BaseJsonService {
           repo: 'node-csgo-parser',
           branch: 'master',
         },
-        staticExample: this.render({ status: 'success' }),
+        staticPreview: this.render({ status: 'success' }),
         documentation,
       },
     ]

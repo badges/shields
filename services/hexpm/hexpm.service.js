@@ -87,7 +87,7 @@ class HexPmLicense extends BaseHexPmService {
       {
         title: 'Hex.pm',
         namedParams: { packageName: 'plug' },
-        staticExample: this.render({ licenses: ['Apache 2'] }),
+        staticPreview: this.render({ licenses: ['Apache 2'] }),
       },
     ]
   }
@@ -119,7 +119,7 @@ class HexPmVersion extends BaseHexPmService {
       {
         title: 'Hex.pm',
         namedParams: { packageName: 'plug' },
-        staticExample: this.render({ version: '1.6.4' }),
+        staticPreview: this.render({ version: '1.6.4' }),
       },
     ]
   }
@@ -174,7 +174,7 @@ function DownloadsForInterval(interval) {
         {
           title: 'Hex.pm',
           namedParams: { packageName: 'plug' },
-          staticExample: this.render({ downloads: 85000 }),
+          staticPreview: this.render({ downloads: 85000 }),
         },
       ]
     }
