@@ -89,7 +89,7 @@ class BaseService {
    *
    * The preferred way to specify an example is with `namedParams` which are
    * substitued into the service's compiled route pattern. The rendered badge
-   * is specified with `staticExample`.
+   * is specified with `staticPreview`.
    *
    * For services which use a route `format`, the `pattern` can be specified as
    * part of the example.
