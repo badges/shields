@@ -107,8 +107,10 @@ class JenkinsPluginInstalls extends BaseJsonService {
     return [
       {
         title: 'Jenkins Plugin installs',
-        exampleUrl: 'view-job-filters',
         pattern: ':plugin',
+        namedParams: {
+          plugin: 'view-job-filters',
+        },
         staticExample: this.render({
           label: this._getLabel(),
           installs: 10247,
@@ -116,8 +118,11 @@ class JenkinsPluginInstalls extends BaseJsonService {
       },
       {
         title: 'Jenkins Plugin installs',
-        exampleUrl: 'view-job-filters/1.26',
         pattern: ':plugin/:version',
+        namedParams: {
+          plugin: 'view-job-filters',
+          version: '1.26',
+        },
         staticExample: this.render({
           label: this._getLabel('1.26'),
           installs: 955,

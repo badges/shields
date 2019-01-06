@@ -53,8 +53,7 @@ function DownloadsForInterval(interval) {
     static get route() {
       return {
         base,
-        format: '(.*)',
-        capture: ['packageName'],
+        pattern: ':scope(@.+)?/:packageName',
       }
     }
 
@@ -62,8 +61,8 @@ function DownloadsForInterval(interval) {
       return [
         {
           title: 'npm',
-          exampleUrl: 'localeval',
-          pattern: ':package',
+          pattern: ':packageName',
+          namedParams: { packageName: 'localeval' },
           staticExample: this.render({ downloads: 30000 }),
           keywords: ['node'],
         },
@@ -77,10 +76,11 @@ function DownloadsForInterval(interval) {
       }
     }
 
-    async handle({ packageName }) {
+    async handle({ scope, packageName }) {
+      const slug = scope ? `${scope}/${packageName}` : packageName
       let { downloads } = await this._requestJson({
         schema,
-        url: `https://api.npmjs.org/downloads/${query}/${packageName}`,
+        url: `https://api.npmjs.org/downloads/${query}/${slug}`,
         errorMessages: { 404: 'package not found or too new' },
       })
       if (isRange) {
