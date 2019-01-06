@@ -8,7 +8,7 @@ const serverSecrets = require('../../../lib/server-secrets')
 const secretIsValid = require('../../../lib/sys/secret-is-valid')
 
 function sendTokenToAllServers(token) {
-  const { shieldsIps, shieldsSecret } = serverSecrets
+  const { shieldsIps, shields_secret: shieldsSecret } = serverSecrets
   return Promise.all(
     shieldsIps.map(
       ip =>

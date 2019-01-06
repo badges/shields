@@ -1,0 +1,10 @@
+public:
+  bind:
+    address: 'localhost'
+    port: 1111
+
+  rateLimit: false
+
+  redirectUrl: 'http://badge-server.example.com'
+
+  handleInternalErrors: false

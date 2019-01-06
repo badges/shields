@@ -28,9 +28,8 @@ prepare-server-deploy: website
 	cp -r build ${SERVER_TMP}
 	git -C ${SERVER_TMP} add -f build/
 	git -C ${SERVER_TMP} commit --no-verify -m '[DEPLOY] Add frontend for debugging'
-	mkdir -p ${SERVER_TMP}/private
-	cp private/secret-production.json ${SERVER_TMP}/private/secret.json
-	git -C ${SERVER_TMP} add -f private/secret.json
+	echo 'NODE_CONFIG_ENV=shields-io-production' > ${SERVER_TMP}/.env
+	git -C ${SERVER_TMP} add -f .env config/local-shields-io-production.yml
 	git -C ${SERVER_TMP} commit --no-verify -m '[DEPLOY] MUST NOT BE ON GITHUB'
 
 clean-server-deploy:
@@ -67,16 +66,6 @@ deploy-gh-pages:
 deploy-gh-pages-clean:
 	rm -rf ${FRONTEND_TMP}
 	git worktree prune
-
-deploy-heroku:
-	git add -f private/secret.json build/
-	git commit --no-verify -m'MUST NOT BE ON GITHUB'
-	git push -f heroku HEAD:master
-	git reset HEAD~1
-	(git checkout -B gh-pages && \
-	git merge master && \
-	git push -f origin gh-pages:gh-pages) || git checkout master
-	git checkout master
 
 test:
 	npm test
