@@ -24,13 +24,13 @@ module.exports = class Coveralls extends LegacyService {
   }
 
   static get examples() {
-    const { staticExample } = this
+    const { staticPreview } = this
     return [
       {
         title: 'Coveralls github',
         pattern: ':vcsType/:user/:repo',
         namedParams: { vcsType: 'github', user: 'jekyll', repo: 'jekyll' },
-        staticExample,
+        staticPreview,
       },
       {
         title: 'Coveralls github branch',
@@ -41,13 +41,13 @@ module.exports = class Coveralls extends LegacyService {
           repo: 'jekyll',
           branch: 'master',
         },
-        staticExample,
+        staticPreview,
       },
       {
         title: 'Coveralls bitbucket',
         pattern: ':vcsType/:user/:repo',
         namedParams: { vcsType: 'bitbucket', user: 'pyKLIP', repo: 'pyklip' },
-        staticExample,
+        staticPreview,
       },
       {
         title: 'Coveralls bitbucket branch',
@@ -58,12 +58,12 @@ module.exports = class Coveralls extends LegacyService {
           repo: 'pyklip',
           branch: 'master',
         },
-        staticExample,
+        staticPreview,
       },
     ]
   }
 
-  static get staticExample() {
+  static get staticPreview() {
     return { message: '83%', color: 'yellowgreen' }
   }
 
