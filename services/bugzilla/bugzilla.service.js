@@ -31,8 +31,13 @@ module.exports = class Bugzilla extends LegacyService {
     return [
       {
         title: 'Bugzilla bug status',
-        previewUrl: '996038',
-        keywords: ['Bugzilla', 'bug'],
+        pattern: ':bugNumber',
+        namedParams: { bugNumber: '996038' },
+        staticPreview: {
+          label: 'bug 996038',
+          message: 'fixed',
+          color: 'brightgreen',
+        },
         documentation,
       },
     ]
