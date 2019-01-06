@@ -28,9 +28,8 @@ prepare-server-deploy: website
 	cp -r build ${SERVER_TMP}
 	git -C ${SERVER_TMP} add -f build/
 	git -C ${SERVER_TMP} commit --no-verify -m '[DEPLOY] Add frontend for debugging'
-	echo 'NODE_CONFIG_ENV=shields-io-production' > ${SERVER_TMP}/.env
 	cp config/local-shields-io-production.yml ${SERVER_TMP}/config/
-	git -C ${SERVER_TMP} add -f .env config/local-shields-io-production.yml
+	git -C ${SERVER_TMP} add -f config/local-shields-io-production.yml
 	git -C ${SERVER_TMP} commit --no-verify -m '[DEPLOY] MUST NOT BE ON GITHUB'
 
 clean-server-deploy:
