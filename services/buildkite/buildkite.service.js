@@ -40,7 +40,7 @@ module.exports = class Buildkite extends LegacyService {
         pattern: ':identifier/:branch',
         namedParams: {
           identifier: '3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489',
-          branch: 'mater',
+          branch: 'master',
         },
         staticPreview: {
           label: 'build',
