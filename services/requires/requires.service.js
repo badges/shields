@@ -11,7 +11,7 @@ module.exports = class RequiresIo extends BaseJsonService {
   static get route() {
     return {
       base: 'requires',
-      pattern: ':service/:user:/:repo/:branch?',
+      pattern: ':service/:user/:repo/:branch?',
     }
   }
 
