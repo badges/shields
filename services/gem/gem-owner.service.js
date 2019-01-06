@@ -40,8 +40,7 @@ module.exports = class GemOwner extends BaseJsonService {
   static get route() {
     return {
       base: 'gem/u',
-      format: '(.+)',
-      capture: ['user'],
+      pattern: ':user',
     }
   }
 
@@ -49,8 +48,7 @@ module.exports = class GemOwner extends BaseJsonService {
     return [
       {
         title: 'Gems',
-        exampleUrl: 'raphink',
-        pattern: ':user',
+        namedParams: { user: 'raphink' },
         staticExample: this.render({ count: 34 }),
         keywords: ['ruby'],
       },

@@ -52,9 +52,10 @@ module.exports = class DockerAutomatedBuild extends BaseJsonService {
     return [
       {
         title: 'Docker Automated build',
-        exampleUrl: 'jrottenberg/ffmpeg',
-        pattern: ':user/:repo',
-        keywords: ['docker', 'automated', 'build'],
+        namedParams: {
+          user: 'jrottenberg',
+          repo: 'ffmpeg',
+        },
         staticExample: this.render({ isAutomated: true }),
       },
     ]

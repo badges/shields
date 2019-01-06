@@ -59,8 +59,11 @@ function issueClassGenerator(raw) {
       return [
         {
           title: 'Bitbucket open issues',
-          exampleUrl: 'atlassian/python-bitbucket',
           pattern: ':user/:repo',
+          namedParams: {
+            user: 'atlassian',
+            repo: 'python-bitbucket',
+          },
           staticExample: this.render({ issues: 33 }),
         },
       ]

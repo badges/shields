@@ -25,8 +25,7 @@ module.exports = class EclipseMarketplaceFavorites extends EclipseMarketplaceBas
     return [
       {
         title: 'Eclipse Marketplace',
-        exampleUrl: 'notepad4e',
-        pattern: ':name',
+        namedParams: { name: 'notepad4e' },
         staticExample: this.render({ favorited: 55 }),
       },
     ]
