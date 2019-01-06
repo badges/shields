@@ -26,9 +26,15 @@ module.exports = class Itunes extends LegacyService {
     return [
       {
         title: 'iTunes App Store',
-        previewUrl: '803453959',
-        pattern: ':bundle-id',
-        exampleUrl: '803453959',
+        pattern: ':bundleId',
+        namedParams: {
+          bundleId: '803453959',
+        },
+        staticPreview: {
+          label: 'itunes app store',
+          message: 'v3.3.3',
+          color: 'blue',
+        },
       },
     ]
   }
