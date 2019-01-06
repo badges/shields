@@ -273,7 +273,7 @@ module.exports = class GemVersion extends BaseJsonService {
       {                                                         // (3)
         title: 'Gem',
         namedParams: { gem: 'formatador' },
-        staticExample: this.render({ version: '2.1.0' }),
+        staticPreview: this.render({ version: '2.1.0' }),
         keywords: ['ruby'],
       },
     ]
@@ -288,7 +288,7 @@ module.exports = class GemVersion extends BaseJsonService {
     * `title`: Descriptive text that will be shown next to the badge
     * `namedParams`: Provide a valid example of params we can substitute into
       the pattern. In this case we need a valid ruby gem, so we've picked [formatador](https://rubygems.org/gems/formatador).
-    * `staticExample`: On the index page we want to show an example badge, but for performance reasons we want that example to be generated without making an API call. `staticExample` should be populated by calling our `render()` method with some valid data.
+    * `staticPreview`: On the index page we want to show an example badge, but for performance reasons we want that example to be generated without making an API call. `staticPreview` should be populated by calling our `render()` method with some valid data.
     * `keywords`: If we want to provide additional keywords other than the title, we can add them here. This helps users to search for relevant badges.
 
 Save, run `npm start`, and you can see it [locally](http://127.0.0.1:3000/).

@@ -29,7 +29,7 @@ class LibrariesIoSourcerank extends LibrariesIoBase {
           platform: 'npm',
           library: 'got',
         },
-        staticExample: this.render({ rank: 25 }),
+        staticPreview: this.render({ rank: 25 }),
       },
     ]
   }

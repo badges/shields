@@ -28,7 +28,7 @@ module.exports = class Bintray extends BaseJsonService {
     return [
       {
         title: 'Bintray',
-        staticExample: renderVersionBadge({ version: '1.6.0' }),
+        staticPreview: renderVersionBadge({ version: '1.6.0' }),
         namedParams: {
           subject: 'asciidoctor',
           repo: 'maven',

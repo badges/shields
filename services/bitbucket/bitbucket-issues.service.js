@@ -64,7 +64,7 @@ function issueClassGenerator(raw) {
             user: 'atlassian',
             repo: 'python-bitbucket',
           },
-          staticExample: this.render({ issues: 33 }),
+          staticPreview: this.render({ issues: 33 }),
         },
       ]
     }
