@@ -76,7 +76,7 @@ module.exports = class TravisBuild extends BaseSvgScrapingService {
     }
     return {
       message: state,
-      color: color,
+      color,
     }
   }
 
