@@ -18,7 +18,7 @@ const extensionData = {
 class WordpressRatingBase extends BaseWordpress {
   static render({ response }) {
     const total = response.num_ratings
-    const rating = (response.rating / 100 * 5).toFixed(1)
+    const rating = ((response.rating / 100) * 5).toFixed(1)
     return {
       message: `${rating}/5 (${metric(total)})`,
       color: floorCount(rating, 2, 3, 4),
@@ -71,7 +71,7 @@ function StarsForExtensionType(extensionType) {
 
   return class WordpressStars extends WordpressRatingBase {
     static render({ response }) {
-      const rating = response.rating / 100 * 5
+      const rating = (response.rating / 100) * 5
       return { message: starRating(rating), color: floorCount(rating, 2, 3, 4) }
     }
 
