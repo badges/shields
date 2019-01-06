@@ -14,21 +14,22 @@ There are two ways of setting secrets:
 private:
   gh_token: '...'
 ```
+
 See the [node-config documentation][] for more information.
 
 [node-config documentation]: https://github.com/lorenwest/node-config/wiki/Configuration-Files
 
 ## Azure DevOps
 
-* `AZURE_DEVOPS_TOKEN` (yml: `azure_devops_token`)
+- `AZURE_DEVOPS_TOKEN` (yml: `azure_devops_token`)
 
 An Azure DevOps Token (PAT) is required for accessing [private Azure DevOps projects][ado project visibility].
 
 [Create a PAT][ado personal access tokens] using an account that has access to your target Azure DevOps projects. Your PAT only needs the following [scopes:][ado token scopes]
 
-* `Build (read)`
-* `Release (read)`
-* `Test Management (read)`
+- `Build (read)`
+- `Release (read)`
+- `Test Management (read)`
 
 [ado project visibility]: https://docs.microsoft.com/en-us/azure/devops/organizations/public/about-public-projects?view=vsts
 [ado personal access tokens]: https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=vsts#create-personal-access-tokens-to-authenticate-access
@@ -36,16 +37,15 @@ An Azure DevOps Token (PAT) is required for accessing [private Azure DevOps proj
 
 ## Bintray
 
-* `BINTRAY_USER` (yml: `bintray_user`)
-* `BINTRAY_API_KEY` (yml: `bintray_apikey`)
+- `BINTRAY_USER` (yml: `bintray_user`)
+- `BINTRAY_API_KEY` (yml: `bintray_apikey`)
 
 The bintray API [requires authentication](https://bintray.com/docs/api/#_authentication)
 Create an account and obtain a token from the user profile page.
 
-
 ## GitHub
 
-* `GH_TOKEN` (yml: `gh_token`)
+- `GH_TOKEN` (yml: `gh_token`)
 
 Because of Github rate limits, you will need to provide a token, or else badges
 will stop working once you hit 60 requests per hour, the
@@ -62,8 +62,8 @@ rotation logic.
 [github rate limit]: https://developer.github.com/v3/#rate-limiting
 [personal access tokens]: https://github.com/settings/tokens
 
-* `GH_CLIENT_ID` (yml: `gh_client_id`)
-* `GH_CLIENT_SECRET` (yml: `gh_client_secret`)
+- `GH_CLIENT_ID` (yml: `gh_client_id`)
+- `GH_CLIENT_SECRET` (yml: `gh_client_secret`)
 
 These settings are used by shields.io for GitHub OAuth app authorization
 but will not be necessary for most self-hosted installations. See
@@ -71,31 +71,31 @@ but will not be necessary for most self-hosted installations. See
 
 ## Jenkins CI
 
-* `JENKINS_USER` (yml: `jenkins_user`)
-* `JENKINS_PASS` (yml: `jenkins_pass`)
+- `JENKINS_USER` (yml: `jenkins_user`)
+- `JENKINS_PASS` (yml: `jenkins_pass`)
 
 Provide a username and password to give your self-hosted Shields installation
 access to a private Jenkins CI instance.
 
 ## JIRA
 
-* `JIRA_USER` (yml: `jira_user`)
-* `JIRA_PASS` (yml: `jira_pass`)
+- `JIRA_USER` (yml: `jira_user`)
+- `JIRA_PASS` (yml: `jira_pass`)
 
 Provide a username and password to give your self-hosted Shields installation
 access to a private JIRA instance.
 
 ## Nexus
 
-* `NEXUS_USER` (yml: `nexus_user`)
-* `NEXUS_PASS` (yml: `nexus_pass`)
+- `NEXUS_USER` (yml: `nexus_user`)
+- `NEXUS_PASS` (yml: `nexus_pass`)
 
 Provide a username and password to give your self-hosted Shields installation
 access to your private nexus repositories.
 
 ## NPM
 
-* `NPM_TOKEN` (yml: `npm_token`)
+- `NPM_TOKEN` (yml: `npm_token`)
 
 [Generate an npm token][npm token] to give your self-hosted Shields
 installation access to private npm packages
@@ -104,7 +104,7 @@ installation access to private npm packages
 
 ## Sentry
 
-* `SENTRY_DSN` (yml: `sentry_dsn`)
+- `SENTRY_DSN` (yml: `sentry_dsn`)
 
 A [Sentry DSN](https://docs.sentry.io/error-reporting/quickstart/?platform=javascript#configure-the-dsn)
 may be used to send error reports from your installation to
@@ -113,8 +113,8 @@ may be used to send error reports from your installation to
 
 ## SymfonyInsight (formerly Sensiolabs)
 
-* `SL_INSIGHT_USER_UUID` (yml: `sl_insight_userUuid`)
-* `SL_INSIGHT_API_TOKEN` (yml: `sl_insight_apiToken`)
+- `SL_INSIGHT_USER_UUID` (yml: `sl_insight_userUuid`)
+- `SL_INSIGHT_API_TOKEN` (yml: `sl_insight_apiToken`)
 
 The SymfonyInsight API requires authentication. To obtain a token,
 Create an account, sign in and obtain a uuid and token from your
@@ -122,7 +122,7 @@ Create an account, sign in and obtain a uuid and token from your
 
 ## SonarQube
 
-* `SONARQUBE_TOKEN` (yml: `sonarqube_token`)
+- `SONARQUBE_TOKEN` (yml: `sonarqube_token`)
 
 [Generate a token](https://docs.sonarqube.org/latest/user-guide/user-token/)
 to give your self-hosted Shields installation access to a
@@ -130,7 +130,7 @@ private SonarQube instance or private project on a public instance.
 
 ## Wheelmap
 
-* `WHEELMAP_TOKEN` (yml: `wheelmap_token`)
+- `WHEELMAP_TOKEN` (yml: `wheelmap_token`)
 
 The wheelmap API requires authentication. To obtain a token,
 Create an account, [sign in][wheelmap token] and use the _Authentication Token_

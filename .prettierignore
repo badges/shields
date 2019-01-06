@@ -4,5 +4,7 @@ package-lock.json
 /.next
 /build
 /coverage
-**/*.md
 private/*.json
+/.nyc_output
+analytics.json
+gh-badges/templates/_shields_test-template.json
