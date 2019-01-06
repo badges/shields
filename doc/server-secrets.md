@@ -85,9 +85,6 @@ access to a private Jenkins CI instance.
 Provide a username and password to give your self-hosted Shields installation
 access to a private JIRA instance.
 
-For legacy reasons `jira_username` and `jira_password` are also supported
-but may be removed in future.
-
 ## Nexus
 
 * `NEXUS_USER` (yml: `nexus_user`)
