@@ -12,6 +12,8 @@ const { metric } = require('../../lib/text-formatters')
 const { latest: latestVersion } = require('../../lib/version')
 const { nonNegativeInteger } = require('../validators')
 
+const keywords = ['ruby']
+
 const gemsSchema = Joi.object({
   downloads: nonNegativeInteger,
   version_downloads: nonNegativeInteger,
@@ -122,43 +124,49 @@ module.exports = class GemDownloads extends BaseJsonService {
     return [
       {
         title: 'Gem',
-        exampleUrl: 'dv/rails/stable',
-        pattern: 'dv/:package/stable',
-        staticExample: this.render({
+        pattern: 'dv/:gem/:version',
+        namedParams: {
+          gem: 'rails',
+          version: 'stable',
+        },
+        staticPreview: this.render({
           label: this._getLabel('stable', 'dv'),
           downloads: 70000,
         }),
-        keywords: ['ruby'],
+        keywords,
       },
       {
         title: 'Gem',
-        exampleUrl: 'dv/rails/4.1.0',
-        pattern: 'dv/:package/:version',
-        staticExample: this.render({
+        pattern: 'dv/:gem/:version',
+        namedParams: {
+          gem: 'rails',
+          version: '4.1.0',
+        },
+        staticPreview: this.render({
           label: this._getLabel('4.1.0', 'dv'),
           downloads: 50000,
         }),
-        keywords: ['ruby'],
+        keywords,
       },
       {
         title: 'Gem',
-        exampleUrl: 'dtv/rails',
-        pattern: 'dtv/:package',
-        staticExample: this.render({
+        pattern: 'dtv/:gem',
+        namedParams: { gem: 'rails' },
+        staticPreview: this.render({
           label: this._getLabel(undefined, 'dtv'),
           downloads: 70000,
         }),
-        keywords: ['ruby'],
+        keywords,
       },
       {
         title: 'Gem',
-        exampleUrl: 'dt/rails',
-        pattern: 'dt/:package',
-        staticExample: this.render({
+        pattern: 'dt/:gem',
+        namedParams: { gem: 'rails' },
+        staticPreview: this.render({
           label: this._getLabel(undefined, 'dt'),
           downloads: 900000,
         }),
-        keywords: ['ruby'],
+        keywords,
       },
     ]
   }

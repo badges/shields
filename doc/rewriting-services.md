@@ -264,7 +264,13 @@ In either case, the service should throw e.g
 
 ## Convert the examples
 
-1. Convert all the examples to `pattern`, `namedParams`, and `staticExample`. In some cases you can use the `pattern` inherited from `route`, though in other cases you may need to specify a pattern in the example. For example, when showing download badges for several periods, you may want to render the example with an explicit `dt` instead of `:which`. You will also need to specify a pattern for badges that use a `format` regex in the route.
+1. Convert all the examples to `pattern`, `namedParams`, and
+   `staticPreview`. In some cases you can use the `pattern` inherited
+   from `route`, though in other cases you may need to specify a pattern
+   in the example. For example, when showing download badges for several
+   periods, you may want to render the example with an explicit `dt`
+   instead of `:which`. You will also need to specify a pattern for badges
+   that use a `format` regex in the route.
 
 2. Open the frontend and check that the static preview badges look good.
 Remember, none of them are live.

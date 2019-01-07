@@ -20,7 +20,7 @@ module.exports = class TeamCityBase extends BaseJsonService {
     const url = `${protocol}://${hostAndPath}/${apiPath}`
     const options = { qs }
     // JetBrains API Auth Docs: https://confluence.jetbrains.com/display/TCD18/REST+API#RESTAPI-RESTAuthentication
-    if (serverSecrets && serverSecrets.teamcity_user) {
+    if (serverSecrets.teamcity_user) {
       options.auth = {
         user: serverSecrets.teamcity_user,
         pass: serverSecrets.teamcity_pass,

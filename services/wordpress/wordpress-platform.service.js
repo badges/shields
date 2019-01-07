@@ -56,7 +56,7 @@ class WordpressPluginRequiresVersion extends BaseWordpressPlatform {
       {
         title: 'Wordpress Plugin: Required WP Version',
         namedParams: { slug: 'bbpress' },
-        staticExample: this.render({ response: { requires: '4.8' } }),
+        staticPreview: this.render({ response: { requires: '4.8' } }),
       },
     ]
   }
@@ -125,7 +125,7 @@ class WordpressPluginTestedVersion extends BaseWordpressPlatform {
         title: 'Wordpress Plugin: Tested WP Version',
         pattern: ':slug',
         namedParams: { slug: 'bbpress' },
-        staticExample: this.render({ version: '4.9.8', color: 'brightgreen' }),
+        staticPreview: this.render({ version: '4.9.8', color: 'brightgreen' }),
         documentation: `<p>There is an alias for this badge. <code>wordpress/v/:slug.svg</code></p>`,
       },
     ]

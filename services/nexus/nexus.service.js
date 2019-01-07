@@ -69,7 +69,7 @@ module.exports = class Nexus extends BaseJsonService {
           groupId: 'com.google.guava',
           artifactId: 'guava',
         },
-        staticExample: this.render({
+        staticPreview: this.render({
           version: 'v27.0.1-jre',
         }),
       },
@@ -82,7 +82,7 @@ module.exports = class Nexus extends BaseJsonService {
           groupId: 'com.google.guava',
           artifactId: 'guava',
         },
-        staticExample: this.render({
+        staticPreview: this.render({
           version: 'v24.0-SNAPSHOT',
         }),
       },
@@ -96,7 +96,7 @@ module.exports = class Nexus extends BaseJsonService {
           groupId: 'ai.h2o',
           artifactId: 'h2o-automl',
         },
-        staticExample: this.render({
+        staticPreview: this.render({
           version: '3.22.0.2',
         }),
       },
@@ -111,7 +111,7 @@ module.exports = class Nexus extends BaseJsonService {
           artifactId: 'fusehq',
           queryOpt: ':c=agent-apple-osx:p=tar.gz',
         },
-        staticExample: this.render({
+        staticPreview: this.render({
           version: '7.0.1-SNAPSHOT',
         }),
         documentation: `
@@ -205,7 +205,7 @@ module.exports = class Nexus extends BaseJsonService {
 
     const options = { qs }
 
-    if (serverSecrets && serverSecrets.nexus_user) {
+    if (serverSecrets.nexus_user) {
       options.auth = {
         user: serverSecrets.nexus_user,
         pass: serverSecrets.nexus_pass,
