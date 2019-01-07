@@ -32,5 +32,5 @@ t.create('quality score (valid)')
   .expectJSONTypes(Joi.object().keys({ name: 'quality', value: Joi.number() }))
 
 t.create('quality score (not found)')
-  .get('/score/quality/0.json')
+  .get('/score/quality/432.json')
   .expectJSON({ name: 'quality', value: 'not found' })
