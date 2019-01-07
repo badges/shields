@@ -120,8 +120,8 @@ The frontend is served by [GitHub Pages][] via the [gh-pages branch][gh-pages]. 
 `shields.io` resolves to the GitHub Pages hosts. It is not proxied through
 Cloudflare.
 
-Any maintainer can push to `gh-pages` though in practice this needs to be kept
-in sync with the production deploy.
+Technically any maintainer can push to `gh-pages`, but in practice the frontend must be deployed
+with the badge server via the deployment process described below.
 
 [github pages]: https://pages.github.com/
 [gh-pages]: https://github.com/badges/shields/tree/gh-pages
