@@ -185,7 +185,8 @@ Logs are available on the individual servers via SSH. @espadrine has access.
 
 [Error reporting][sentry] is one of the most useful tools we have for monitoring
 the server. It's generously donated by [Sentry][sentry home]. We bundle
-[`raven`][] into the application, and the Sentry DSN is configured via `local- shields-io-production.yml` (see [documentation][sentry configuration]).
+[`raven`][raven] into the application, and the Sentry DSN is configured via
+`local-shields-io-production.yml` (see [documentation][sentry configuration]).
 
 @paulmelnikow and @espadrine have access to the error reports.
 
