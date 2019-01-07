@@ -1,5 +1,4 @@
-Service tests
-=============
+# Service tests
 
 When creating a badge for a new service or changing a badge's behavior,
 automated tests should be included. They serve three purposes:
@@ -20,9 +19,7 @@ Test should cover:
 3. Any customized error handling
 4. If a non-trivial validator is defined, include tests for malformed responses
 
-
-Tutorial
---------
+## Tutorial
 
 Before getting started, set up a development environment by following the
 [setup instructions](https://github.com/badges/shields/blob/master/doc/TUTORIAL.md#2-setup)
@@ -38,9 +35,9 @@ We'll start by adding some boilerplate to our file:
 ```js
 'use strict'
 
-const Joi = require('joi')                                           // 1
+const Joi = require('joi')
 
-const t = (module.exports = require('../create-service-tester')())   // 2
+const t = (module.exports = require('../create-service-tester')())
 ```
 
 1. Import [Joi][] We'll use this to make assertions. This is the same library we use to define schema for validation in the main badge class.
@@ -53,28 +50,28 @@ First we'll add a test for the typical case:
 ```js
 const { isBuildStatus } = require('../test-validators')
 
-t.create('Build status')                     // 1
-  .get('/build/wercker/go-wercker-api.json') // 2
-  .expectJSONTypes(                          // 3
-    Joi.object().keys({                      // 4
-      name: 'build',                         // 5
-      value: isBuildStatus,                  // 6
+t.create('Build status')
+  .get('/build/wercker/go-wercker-api.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'build',
+      value: isBuildStatus,
     })
   )
 ```
 
 1. The `create()` method adds a new test to the tester object.
-The chained-on calls come from the API testing framework [IcedFrisby][].
-Here's a [longer example][] and the complete [API guide][IcedFrisby API].
+   The chained-on calls come from the API testing framework [IcedFrisby][].
+   Here's a [longer example][] and the complete [API guide][icedfrisby api].
 2. We use the `get()` method to request a badge. There are several points to consider here:
-    * We need a real project to test against. In this case we have used [wercker/go-wercker-api](https://app.wercker.com/wercker/go-wercker-api/runs) but we could have chosen any stable project.
-    * Note that when we call our badge, we are allowing it to communicate with an external service without mocking the reponse. We write tests which interact with external services, which is unusual practice in unit testing. We do this because one of the purposes of service tests is to notify us if a badge has broken due to an upstream API change. For this reason it is important for at least one test to call the live API without mocking the interaction.
-    * All badges on shields can be requested in a number of formats. As well as calling https://img.shields.io/wercker/build/wercker/go-wercker-api.svg to generate ![](https://img.shields.io/wercker/build/wercker/go-wercker-api.svg) we can also call https://img.shields.io/wercker/build/wercker/go-wercker-api.json to request the same content as JSON. When writing service tests, we request the badge in JSON format so it is easier to make assertions about the content.
-    * We don't need to explicitly call `/wercker/build/wercker/go-wercker-api.json` here, only `/build/wercker/go-wercker-api.json`. When we create a tester object with `createServiceTester()` the URL base defined in our service class (in this case `/wercker`) is used as the base URL for any requests made by the tester object.
+   - We need a real project to test against. In this case we have used [wercker/go-wercker-api](https://app.wercker.com/wercker/go-wercker-api/runs) but we could have chosen any stable project.
+   - Note that when we call our badge, we are allowing it to communicate with an external service without mocking the reponse. We write tests which interact with external services, which is unusual practice in unit testing. We do this because one of the purposes of service tests is to notify us if a badge has broken due to an upstream API change. For this reason it is important for at least one test to call the live API without mocking the interaction.
+   - All badges on shields can be requested in a number of formats. As well as calling https://img.shields.io/wercker/build/wercker/go-wercker-api.svg to generate ![](https://img.shields.io/wercker/build/wercker/go-wercker-api.svg) we can also call https://img.shields.io/wercker/build/wercker/go-wercker-api.json to request the same content as JSON. When writing service tests, we request the badge in JSON format so it is easier to make assertions about the content.
+   - We don't need to explicitly call `/wercker/build/wercker/go-wercker-api.json` here, only `/build/wercker/go-wercker-api.json`. When we create a tester object with `createServiceTester()` the URL base defined in our service class (in this case `/wercker`) is used as the base URL for any requests made by the tester object.
 3. `expectJSONTypes()` is an IcedFrisby method which accepts a [Joi][] schema.
-Joi is a validation library that is build into IcedFrisby which you can use to
-match based on a set of allowed strings, regexes, or specific values. You can
-refer to their [API reference][Joi API].
+   Joi is a validation library that is build into IcedFrisby which you can use to
+   match based on a set of allowed strings, regexes, or specific values. You can
+   refer to their [API reference][joi api].
 4. `Joi.object().keys()` defines a Joi object schema containing some defined keys
 5. We expect `name` to be a string literal `"build"`
 6. Because this test depends on a live service, we don't want our test to depend on our API call returning a particular build status. Instead we should perform a "picture check" to assert that the badge data conforms to an expected pattern. Our test should not depend on the status of the example project's build, but should fail if trying to generate the badge throws an error, or if there is a breaking change to the upstream API. In this case we will use a pre-defined regular expression to check that the badge value looks like a build status. [services/test-validators.js](https://github.com/badges/shields/blob/master/services/test-validators.js) defines a number of useful validators we can use. Many of the common badge types (version, downloads, rank, etc.) already have validators defined here.
@@ -83,11 +80,11 @@ When defining an IcedFrisby test, typically you would invoke the `toss()`
 method, to register the test. This is not necessary, because the Shields test
 harness will call it for you.
 
-[IcedFrisby]: https://github.com/MarkHerhold/IcedFrisby
+[icedfrisby]: https://github.com/MarkHerhold/IcedFrisby
 [longer example]: https://github.com/MarkHerhold/IcedFrisby/#show-me-some-code
-[IcedFrisby API]: https://github.com/MarkHerhold/IcedFrisby/blob/master/API.md
-[Joi]: https://github.com/hapijs/joi
-[Joi API]: https://github.com/hapijs/joi/blob/master/API.md
+[icedfrisby api]: https://github.com/MarkHerhold/IcedFrisby/blob/master/API.md
+[joi]: https://github.com/hapijs/joi
+[joi api]: https://github.com/hapijs/joi/blob/master/API.md
 
 ### (3) Running the Tests
 
@@ -193,9 +190,10 @@ If we didn't have a stable example of a private project, another approach would 
 ```js
 t.create('Build status (private application)')
   .get('/build/wercker/go-wercker-api.json')
-  .intercept(nock => nock('https://app.wercker.com/api/v3/applications/')
-    .get('/wercker/go-wercker-api/builds?limit=1')
-    .reply(401)
+  .intercept(nock =>
+    nock('https://app.wercker.com/api/v3/applications/')
+      .get('/wercker/go-wercker-api/builds?limit=1')
+      .reply(401)
   )
   .expectJSON({ name: 'build', value: 'private application not supported' })
 ```
@@ -211,7 +209,7 @@ take effect, including the HTTP method (in this case GET), scheme (https), host,
 and path.
 
 [icedfrisby-nock]: https://github.com/paulmelnikow/icedfrisby-nock#usage
-[Nock]: https://github.com/node-nock/nock
+[nock]: https://github.com/node-nock/nock
 
 Our test suite should also include service tests which receive a known value from the API. For example, in the `render()` method of our service, there is some logic which sets the badge color based on the build status:
 
@@ -240,7 +238,11 @@ t.create('Build passed (mocked)')
       .get('/wercker/go-wercker-api/builds?limit=1')
       .reply(200, [{ status: 'finished', result: 'passed' }])
   )
-  .expectJSON({ name: 'build', value: 'passing', colorB: colorScheme.brightgreen })
+  .expectJSON({
+    name: 'build',
+    value: 'passing',
+    colorB: colorScheme.brightgreen,
+  })
 
 t.create('Build failed (mocked)')
   .get('/build/wercker/go-wercker-api.json?style=_shields_test')
@@ -264,8 +266,7 @@ instead of
 .expectJSON({ name: 'build', value: 'passing', colorB: '#e05d44' })
 ```
 
-Code coverage
--------------
+## Code coverage
 
 By checking code coverage, we can make sure we've covered all our bases.
 
@@ -276,8 +277,7 @@ npm run coverage:test:services -- --only=wercker
 npm run coverage:report:open
 ```
 
-Pull requests
--------------
+## Pull requests
 
 The affected service ids should be included in square brackets in the pull request
 title. That way, Circle CI will run those service tests. When a pull request
@@ -290,17 +290,13 @@ For example:
 - [Travis Sonar] Support user token authentication
 - Add tests for [CRAN] and [CPAN]
 
-
-Getting help
-------------
+## Getting help
 
 If you have questions about how to write your tests, please open an issue. If
 there's already an issue open for the badge you're working on, you can post a
 comment there instead.
 
-
-Further reading
----------------
+## Further reading
 
 - [IcedFrisby API][]
 - [Joi API][]
