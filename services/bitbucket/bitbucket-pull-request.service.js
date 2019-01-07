@@ -121,7 +121,7 @@ function pullRequestClassGenerator(raw) {
           },
           queryParams: { server: 'https://bitbucket.mydomain.net' },
           pattern: ':user/:repo',
-          staticExample: this.render({ prs: 42 }),
+          staticPreview: this.render({ prs: 42 }),
         },
       ]
     }
