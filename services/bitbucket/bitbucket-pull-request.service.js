@@ -33,8 +33,8 @@ function pullRequestClassGenerator(raw) {
     }
 
     // https://docs.atlassian.com/bitbucket-server/rest/5.16.0/bitbucket-rest.html#idm46229602363312
-    async fetchServer({ args, proto, hostAndPath, user, repo }) {
-      args.url = `${proto}://${hostAndPath}/rest/api/1.0/projects/${user}/repos/${repo}/pull-requests`
+    async fetchServer({ args, server, user, repo }) {
+      args.url = `${server}/rest/api/1.0/projects/${user}/repos/${repo}/pull-requests`
       args.options = {
         qs: {
           state: 'OPEN',
@@ -45,19 +45,19 @@ function pullRequestClassGenerator(raw) {
       }
 
       if (
-        serverSecrets.bitbucket_server_user &&
-        serverSecrets.bitbucket_server_pass
+        serverSecrets.bitbucket_server_username &&
+        serverSecrets.bitbucket_server_password
       ) {
         args.options.auth = {
-          user: serverSecrets.bitbucket_server_user,
-          pass: serverSecrets.bitbucket_server_pass,
+          user: serverSecrets.bitbucket_server_username,
+          pass: serverSecrets.bitbucket_server_password,
         }
       }
 
       return this._requestJson(args)
     }
 
-    async fetch({ proto, hostAndPath, user, repo }) {
+    async fetch({ server, user, repo }) {
       const args = {
         schema: bitbucketPullRequestsSchema,
         errorMessages: {
@@ -67,8 +67,8 @@ function pullRequestClassGenerator(raw) {
         },
       }
 
-      if (hostAndPath !== undefined) {
-        return this.fetchServer({ args, proto, hostAndPath, user, repo })
+      if (server !== undefined) {
+        return this.fetchServer({ args, server, user, repo })
       } else {
         return this.fetchCloud({ args, user, repo })
       }
@@ -81,8 +81,8 @@ function pullRequestClassGenerator(raw) {
       }
     }
 
-    async handle({ proto, hostAndPath, user, repo }) {
-      const data = await this.fetch({ proto, hostAndPath, user, repo })
+    async handle({ user, repo }, { server }) {
+      const data = await this.fetch({ server, user, repo })
       return this.constructor.render({ prs: data.size })
     }
 
@@ -97,8 +97,8 @@ function pullRequestClassGenerator(raw) {
     static get route() {
       return {
         base: `bitbucket/${routePrefix}`,
-        format: `(?:(http|https)/(.+)/)?([^/]+)/([^/]+)`,
-        capture: ['proto', 'hostAndPath', 'user', 'repo'],
+        pattern: `:user/:repo`,
+        queryParams: ['server'],
       }
     }
 
@@ -116,12 +116,11 @@ function pullRequestClassGenerator(raw) {
         {
           title: 'Bitbucket Server open pull requests',
           namedParams: {
-            proto: 'https',
-            hostAndPath: 'bitbucket.mydomain.net',
             user: 'foo',
             repo: 'bar',
           },
-          pattern: ':proto/:hostAndPath/:user/:repo',
+          queryParams: { server: 'https://bitbucket.mydomain.net' },
+          pattern: ':user/:repo',
           staticExample: this.render({ prs: 42 }),
         },
       ]

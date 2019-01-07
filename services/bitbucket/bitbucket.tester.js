@@ -93,7 +93,7 @@ t.create('pr (private repo)')
   .expectJSON({ name: 'pull requests', value: 'private repo' })
 
 t.create('pr (server)')
-  .get('/pr/https/bitbucket.mydomain.net/project/repo.json')
+  .get('/pr/project/repo.json?server=https://bitbucket.mydomain.net')
   .intercept(nock =>
     nock('https://bitbucket.mydomain.net/rest/api/1.0/projects')
       .get('/project/repos/repo/pull-requests')
@@ -113,7 +113,7 @@ t.create('pr (server)')
   )
 
 t.create('pr (server, invalid credentials)')
-  .get('/pr/https/bitbucket.mydomain.net/project/repo.json')
+  .get('/pr/project/repo.json?server=https://bitbucket.mydomain.net')
   .intercept(nock =>
     nock('https://bitbucket.mydomain.net/rest/api/1.0/projects')
       .get('/project/repos/repo/pull-requests')
@@ -133,7 +133,7 @@ t.create('pr (server, invalid credentials)')
   )
 
 t.create('pr (server, private repo)')
-  .get('/pr/https/bitbucket.mydomain.net/project/repo.json')
+  .get('/pr/project/repo.json?server=https://bitbucket.mydomain.net')
   .intercept(nock =>
     nock('https://bitbucket.mydomain.net/rest/api/1.0/projects')
       .get('/project/repos/repo/pull-requests')
@@ -153,7 +153,7 @@ t.create('pr (server, private repo)')
   )
 
 t.create('pr (server, not found)')
-  .get('/pr/https/bitbucket.mydomain.net/project/repo.json')
+  .get('/pr/project/repo.json?server=https://bitbucket.mydomain.net')
   .intercept(nock =>
     nock('https://bitbucket.mydomain.net/rest/api/1.0/projects')
       .get('/project/repos/repo/pull-requests')
@@ -191,7 +191,7 @@ t.create('pr (auth)')
 
 t.create('pr (server, auth)')
   .before(mockBitbucketServerCreds)
-  .get('/pr/https/bitbucket.mydomain.net/project/repo.json')
+  .get('/pr/project/repo.json?server=https://bitbucket.mydomain.net')
   .intercept(nock =>
     nock('https://bitbucket.mydomain.net/rest/api/1.0/projects')
       .get(/.*/)
