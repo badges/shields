@@ -163,7 +163,7 @@ t.create('blue-gray status color')
     colorB: colorScheme.blue,
   })
 
-t.create('with auth')
+t.create('with mock credentials')
   .before(mockJiraCreds)
   .get('/https/myprivatejira.com/secure-234.json')
   .intercept(nock =>

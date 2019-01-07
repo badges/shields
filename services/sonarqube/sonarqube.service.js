@@ -83,7 +83,7 @@ module.exports = class Sonarqube extends LegacyService {
             Accept: 'application/json',
           },
         }
-        if (serverSecrets && serverSecrets.sonarqube_token) {
+        if (serverSecrets.sonarqube_token) {
           options.auth = {
             user: serverSecrets.sonarqube_token,
           }

@@ -29,14 +29,11 @@ const schema = Joi.object({
   pattern: Joi.string(),
   staticPreview: optionalServiceData,
   previewUrl: Joi.string(),
-  exampleUrl: Joi.string(),
   keywords: Joi.array()
     .items(Joi.string())
     .default([]),
   documentation: Joi.string(), // Valid HTML.
-})
-  .rename('staticExample', 'staticPreview', { ignoreUndefined: true })
-  .required()
+}).required()
 
 function validateExample(example, index, ServiceClass) {
   const result = Joi.attempt(
@@ -45,7 +42,7 @@ function validateExample(example, index, ServiceClass) {
     `Example for ${ServiceClass.name} at index ${index}`
   )
 
-  const { namedParams, pattern, staticPreview, previewUrl, exampleUrl } = result
+  const { namedParams, pattern, staticPreview, previewUrl } = result
 
   if (staticPreview) {
     if (!pattern && !ServiceClass.route.pattern) {
@@ -54,18 +51,11 @@ function validateExample(example, index, ServiceClass) {
           ServiceClass.name
         } at index ${index} does not declare a pattern`
       )
-    }
-    if (namedParams && exampleUrl) {
+    } else if (!namedParams) {
       throw new Error(
         `Static preview for ${
           ServiceClass.name
-        } at index ${index} declares both namedParams and exampleUrl`
-      )
-    } else if (!namedParams && !exampleUrl) {
-      throw new Error(
-        `Static preview for ${
-          ServiceClass.name
-        } at index ${index} does not declare namedParams nor exampleUrl`
+        } at index ${index} does not declare namedParams`
       )
     }
     if (previewUrl) {
@@ -96,7 +86,6 @@ function transformExample(inExample, index, ServiceClass) {
     pattern,
     staticPreview,
     previewUrl,
-    exampleUrl,
     keywords,
     documentation,
   } = validateExample(inExample, index, ServiceClass)
@@ -110,7 +99,7 @@ function transformExample(inExample, index, ServiceClass) {
     }
   } else {
     example = {
-      path: ServiceClass._makeFullUrl(exampleUrl || previewUrl),
+      path: ServiceClass._makeFullUrl(previewUrl),
       queryParams,
     }
   }

@@ -64,7 +64,7 @@ class APMDownloads extends BaseAPMService {
       {
         title: 'APM',
         namedParams: { packageName: 'vim-mode' },
-        staticExample: this.render({ downloads: '60043' }),
+        staticPreview: this.render({ downloads: '60043' }),
         keywords,
       },
     ]
@@ -103,7 +103,7 @@ class APMVersion extends BaseAPMService {
       {
         title: 'APM',
         namedParams: { packageName: 'vim-mode' },
-        staticExample: this.render({ version: '0.6.0' }),
+        staticPreview: this.render({ version: '0.6.0' }),
         keywords,
       },
     ]
@@ -146,7 +146,7 @@ class APMLicense extends BaseAPMService {
       {
         title: 'APM',
         namedParams: { packageName: 'vim-mode' },
-        staticExample: this.render({ license: 'MIT' }),
+        staticPreview: this.render({ license: 'MIT' }),
         keywords,
       },
     ]

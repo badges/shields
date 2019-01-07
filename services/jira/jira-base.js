@@ -11,7 +11,7 @@ module.exports = class JiraBase extends BaseJsonService {
   async fetch({ url, qs, schema, errorMessages }) {
     const options = { qs }
 
-    if (serverSecrets && serverSecrets.jira_user) {
+    if (serverSecrets.jira_user) {
       options.auth = {
         user: serverSecrets.jira_user,
         pass: serverSecrets.jira_pass,

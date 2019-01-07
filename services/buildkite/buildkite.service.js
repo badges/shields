@@ -25,7 +25,28 @@ module.exports = class Buildkite extends LegacyService {
     return [
       {
         title: 'Buildkite',
-        previewUrl: '3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489/master',
+        pattern: ':identifier',
+        namedParams: {
+          identifier: '3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489',
+        },
+        staticPreview: {
+          label: 'build',
+          message: 'passing',
+          color: 'brightgreen',
+        },
+      },
+      {
+        title: 'Buildkite (branch)',
+        pattern: ':identifier/:branch',
+        namedParams: {
+          identifier: '3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489',
+          branch: 'master',
+        },
+        staticPreview: {
+          label: 'build',
+          message: 'passing',
+          color: 'brightgreen',
+        },
       },
     ]
   }
@@ -52,7 +73,7 @@ module.exports = class Buildkite extends LegacyService {
             const status = data.status
             if (status === 'passing') {
               badgeData.text[1] = 'passing'
-              badgeData.colorscheme = 'green'
+              badgeData.colorscheme = 'brightgreen'
             } else if (status === 'failing') {
               badgeData.text[1] = 'failing'
               badgeData.colorscheme = 'red'

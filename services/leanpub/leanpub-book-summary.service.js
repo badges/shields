@@ -36,7 +36,7 @@ module.exports = class LeanpubBookSummaryService extends BaseJsonService {
           book: 'juice-shop',
         },
         pattern: 'pages/:book',
-        staticExample: this.render({ label: 'pages', message: 226 }),
+        staticPreview: this.render({ label: 'pages', message: 226 }),
         keywords,
       },
       {
@@ -46,7 +46,7 @@ module.exports = class LeanpubBookSummaryService extends BaseJsonService {
           book: 'juice-shop',
         },
         pattern: 'sold/:book',
-        staticExample: this.render({ label: 'sold', message: 2691 }),
+        staticPreview: this.render({ label: 'sold', message: 2691 }),
         keywords,
       },
     ]

@@ -130,7 +130,7 @@ t.create('issue with null resolution value')
     colorB: colorScheme.orange,
   })
 
-t.create('with auth')
+t.create('with mock credentials')
   .before(mockJiraCreds)
   .get(`/https/myprivatejira/jira/${sprintId}.json`)
   .intercept(nock =>

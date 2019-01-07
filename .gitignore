@@ -97,3 +97,9 @@ typings/
 badge-examples.json
 supported-features.json
 service-definitions.yml
+
+# Local runtime configuration.
+/config/local*.yml
+
+# Template for the local runtime configuration.
+!/config/local.template.yml

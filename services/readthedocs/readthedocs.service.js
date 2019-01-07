@@ -29,14 +29,14 @@ module.exports = class ReadTheDocs extends BaseSvgScrapingService {
         title: 'Read the Docs',
         pattern: ':packageName',
         namedParams: { packageName: 'pip' },
-        staticExample: this.render({ status: 'passing' }),
+        staticPreview: this.render({ status: 'passing' }),
         keywords,
       },
       {
         title: 'Read the Docs (version)',
         pattern: ':packageName/:version',
         namedParams: { packageName: 'pip', version: 'stable' },
-        staticExample: this.render({ status: 'passing' }),
+        staticPreview: this.render({ status: 'passing' }),
         keywords,
       },
     ]

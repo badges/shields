@@ -81,6 +81,12 @@ const isFormattedDate = Joi.alternatives().try(
   )
 )
 
+const isRelativeFormattedDate = Joi.alternatives().try(
+  Joi.string().regex(
+    /^(in |)([0-9]+|a few|a|an|)(| )(second|minute|hour|day|month|year)(s|)( ago|)$/
+  )
+)
+
 const isDependencyState = withRegex(
   /^(\d+ out of date|\d+ deprecated|up to date)$/
 )
@@ -127,6 +133,7 @@ module.exports = {
   isDecimalPercentage,
   isFileSize,
   isFormattedDate,
+  isRelativeFormattedDate,
   isDependencyState,
   isBuildStatus,
   withRegex,
