@@ -35,9 +35,9 @@ We'll start by adding some boilerplate to our file:
 ```js
 'use strict'
 
-const Joi = require('joi') // 1
+const Joi = require('joi')
 
-const t = (module.exports = require('../create-service-tester')()) // 2
+const t = (module.exports = require('../create-service-tester')())
 ```
 
 1. Import [Joi][] We'll use this to make assertions. This is the same library we use to define schema for validation in the main badge class.
@@ -50,14 +50,12 @@ First we'll add a test for the typical case:
 ```js
 const { isBuildStatus } = require('../test-validators')
 
-t.create('Build status') // 1
-  .get('/build/wercker/go-wercker-api.json') // 2
+t.create('Build status')
+  .get('/build/wercker/go-wercker-api.json')
   .expectJSONTypes(
-    // 3
     Joi.object().keys({
-      // 4
-      name: 'build', // 5
-      value: isBuildStatus, // 6
+      name: 'build',
+      value: isBuildStatus,
     })
   )
 ```
