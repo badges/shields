@@ -23,7 +23,7 @@ module.exports = class Gitter extends BaseStaticService {
           user: 'nwjs',
           repo: 'nw.js',
         },
-        staticExample: this.render(),
+        staticPreview: this.render(),
       },
     ]
   }

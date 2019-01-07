@@ -63,7 +63,7 @@ function DownloadsForInterval(interval) {
           title: 'npm',
           pattern: ':packageName',
           namedParams: { packageName: 'localeval' },
-          staticExample: this.render({ downloads: 30000 }),
+          staticPreview: this.render({ downloads: 30000 }),
           keywords: ['node'],
         },
       ]

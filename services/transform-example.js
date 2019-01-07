@@ -33,9 +33,7 @@ const schema = Joi.object({
     .items(Joi.string())
     .default([]),
   documentation: Joi.string(), // Valid HTML.
-})
-  .rename('staticExample', 'staticPreview', { ignoreUndefined: true })
-  .required()
+}).required()
 
 function validateExample(example, index, ServiceClass) {
   const result = Joi.attempt(

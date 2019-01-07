@@ -54,7 +54,7 @@ module.exports = class DependabotSemverCompatibility extends BaseJsonService {
       {
         title: 'Dependabot SemVer Compatibility',
         namedParams: { packageManager: 'bundler', dependencyName: 'puma' },
-        staticExample: {
+        staticPreview: {
           color: 'green',
           message: '98%',
         },

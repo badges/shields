@@ -53,7 +53,7 @@ module.exports = class DockerStars extends BaseService {
           user: '_',
           repo: 'ubuntu',
         },
-        staticExample: this.render({ stars: 9000 }),
+        staticPreview: this.render({ stars: 9000 }),
       },
     ]
   }

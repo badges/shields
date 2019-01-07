@@ -22,13 +22,13 @@ module.exports = class BowerVersion extends BaseBowerService {
         title: 'Bower',
         namedParams: { vtype: 'v', packageName: 'bootstrap' },
         pattern: 'v/:packageName',
-        staticExample: renderVersionBadge({ version: '4.2.1' }),
+        staticPreview: renderVersionBadge({ version: '4.2.1' }),
       },
       {
         title: 'Bower Pre Release',
         namedParams: { vtype: 'vpre', packageName: 'bootstrap' },
         pattern: 'vpre/:packageName',
-        staticExample: renderVersionBadge({ version: '4.2.1' }),
+        staticPreview: renderVersionBadge({ version: '4.2.1' }),
       },
     ]
   }
