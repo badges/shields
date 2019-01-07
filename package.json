@@ -37,7 +37,7 @@
     "glob": "^7.1.1",
     "is-css-color": "^1.0.0",
     "joi": "14.3.1",
-    "js-yaml": "^3.11.0",
+    "js-yaml": "^3.12.1",
     "jsonpath": "~1.0.0",
     "lodash.countby": "^4.6.0",
     "lodash.mapkeys": "^4.6.0",
