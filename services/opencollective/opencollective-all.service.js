@@ -8,7 +8,7 @@ module.exports = class OpencollectiveAll extends OpencollectiveBase {
       {
         title: 'open collective backers and sponsors',
         namedParams: { collective: 'shields' },
-        staticExample: this.render(35),
+        staticPreview: this.render(35),
         keywords: ['opencollective'],
       },
     ]

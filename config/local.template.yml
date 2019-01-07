@@ -1,0 +1,8 @@
+# Copy this file to `config/local.yml` and fill it in! It will be gitignored.
+
+private:
+  # The possible values are documented in `doc/server-secrets.md`. Note that
+  # you can also set these values through environment variables, which may be
+  # preferable for self hosting.
+  gh_token: '...'
+  wheelmap_token: '...'

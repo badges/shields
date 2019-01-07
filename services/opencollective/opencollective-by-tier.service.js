@@ -11,7 +11,7 @@ module.exports = class OpencollectiveByTier extends OpencollectiveBase {
       {
         title: 'open collective members by tier',
         namedParams: { collective: 'shields', tierId: '2988' },
-        staticExample: this.render(8, 'monthly backers'),
+        staticPreview: this.render(8, 'monthly backers'),
         keywords: ['opencollective'],
         documentation,
       },

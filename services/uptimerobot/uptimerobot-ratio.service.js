@@ -27,7 +27,7 @@ module.exports = class UptimeRobotRatio extends UptimeRobotBase {
         namedParams: {
           monitorSpecificKey: 'm778918918-3e92c097147760ee39d02d36',
         },
-        staticExample: this.render({ ratio: 100 }),
+        staticPreview: this.render({ ratio: 100 }),
       },
       {
         title: 'Uptime Robot ratio (7 days)',
@@ -35,7 +35,7 @@ module.exports = class UptimeRobotRatio extends UptimeRobotBase {
         namedParams: {
           monitorSpecificKey: 'm778918918-3e92c097147760ee39d02d36',
         },
-        staticExample: this.render({ ratio: 100 }),
+        staticPreview: this.render({ ratio: 100 }),
       },
     ]
   }
