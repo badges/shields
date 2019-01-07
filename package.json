@@ -130,7 +130,7 @@
     "chainsmoker": "^0.1.0",
     "child-process-promise": "^2.2.1",
     "concurrently": "^4.1.0",
-    "danger": "^7.0.1",
+    "danger": "^7.0.2",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
