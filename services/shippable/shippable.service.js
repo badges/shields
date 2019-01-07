@@ -46,7 +46,7 @@ module.exports = class Shippable extends BaseJsonService {
   static get route() {
     return {
       base: 'shippable',
-      pattern: ':projectId/:branch?',
+      pattern: ':projectId/:branch*',
     }
   }
 

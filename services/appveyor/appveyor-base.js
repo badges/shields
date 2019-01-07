@@ -37,7 +37,7 @@ module.exports = class AppVeyorBase extends BaseJsonService {
   static buildRoute(base) {
     return {
       base,
-      pattern: ':user/:repo/:branch?',
+      pattern: ':user/:repo/:branch*',
     }
   }
 }

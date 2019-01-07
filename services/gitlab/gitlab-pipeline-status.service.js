@@ -24,7 +24,7 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
   static get route() {
     return {
       base: 'gitlab/pipeline',
-      pattern: ':user/:repo/:branch?',
+      pattern: ':user/:repo/:branch*',
       queryParams: ['gitlab_url'],
     }
   }
@@ -39,7 +39,7 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
       },
       {
         title: 'Gitlab pipeline status (branch)',
-        pattern: ':user/:repo/:branch',
+        pattern: ':user/:repo/:branch*',
         namedParams: {
           user: 'gitlab-org',
           repo: 'gitlab-ce',
