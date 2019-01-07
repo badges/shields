@@ -47,7 +47,7 @@ function DownloadsForInterval(interval) {
         {
           title: 'Eclipse Marketplace',
           namedParams: { name: 'notepad4e' },
-          staticExample: this.render({ downloads: 30000 }),
+          staticPreview: this.render({ downloads: 30000 }),
         },
       ]
     }

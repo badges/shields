@@ -19,7 +19,7 @@ module.exports = class NpmLicense extends NpmBase {
         title: 'NPM',
         pattern: ':packageName',
         namedParams: { packageName: 'express' },
-        staticExample: this.render({ licenses: ['MIT'] }),
+        staticPreview: this.render({ licenses: ['MIT'] }),
         keywords: ['node'],
       },
       {
@@ -27,7 +27,7 @@ module.exports = class NpmLicense extends NpmBase {
         pattern: ':packageName',
         namedParams: { packageName: 'express' },
         queryParams: { registry_uri: 'https://registry.npmjs.com' },
-        staticExample: this.render({ licenses: ['MIT'] }),
+        staticPreview: this.render({ licenses: ['MIT'] }),
         keywords: ['node'],
       },
     ]

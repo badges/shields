@@ -39,7 +39,7 @@ module.exports = class CIIBestPracticesService extends BaseJsonService {
           projectId: '1',
         },
         pattern: 'level/:projectId',
-        staticExample: this.render({
+        staticPreview: this.render({
           message: 'gold',
           color: '#E9C504',
         }),
@@ -52,7 +52,7 @@ module.exports = class CIIBestPracticesService extends BaseJsonService {
           projectId: '29',
         },
         pattern: 'percentage/:projectId',
-        staticExample: this.render({
+        staticPreview: this.render({
           message: '107%',
           color: 'brightgreen',
         }),
@@ -65,7 +65,7 @@ module.exports = class CIIBestPracticesService extends BaseJsonService {
           projectId: '33',
         },
         pattern: 'summary/:projectId',
-        staticExample: this.render({
+        staticPreview: this.render({
           message: 'in progress 94%',
           color: '#C4C21D',
         }),

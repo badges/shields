@@ -73,13 +73,13 @@ class PowershellGalleryVersion extends BaseXmlService {
         title: 'PowerShell Gallery',
         pattern: 'v/:packageName',
         namedParams: { which: 'v', packageName: 'Azure.Storage' },
-        staticExample: this.render({ version: '4.4.0' }),
+        staticPreview: this.render({ version: '4.4.0' }),
       },
       {
         title: 'PowerShell Gallery (with prereleases)',
         pattern: 'vpre/:packageName',
         namedParams: { which: 'vpre', packageName: 'Azure.Storage' },
-        staticExample: this.render({ version: '4.4.1-preview' }),
+        staticPreview: this.render({ version: '4.4.1-preview' }),
       },
     ]
   }
@@ -122,7 +122,7 @@ class PowershellGalleryDownloads extends BaseXmlService {
       {
         title: 'PowerShell Gallery',
         namedParams: { packageName: 'Azure.Storage' },
-        staticExample: this.render({ downloads: 1.2e7 }),
+        staticPreview: this.render({ downloads: 1.2e7 }),
       },
     ]
   }
@@ -163,7 +163,7 @@ class PowershellGalleryPlatformSupport extends BaseXmlService {
       {
         title: 'PowerShell Gallery',
         namedParams: { packageName: 'Az.Storage' },
-        staticExample: this.render({
+        staticPreview: this.render({
           platforms: ['windows', 'macos', 'linux'],
         }),
       },

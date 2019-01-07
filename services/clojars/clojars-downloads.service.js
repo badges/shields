@@ -52,7 +52,7 @@ module.exports = class Clojars extends BaseJsonService {
     return [
       {
         namedParams: { clojar: 'prismic' },
-        staticExample: this.render({ downloads: 117 }),
+        staticPreview: this.render({ downloads: 117 }),
       },
     ]
   }

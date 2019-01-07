@@ -157,19 +157,19 @@ module.exports = class Codeclimate extends LegacyService {
         title: 'Code Climate issues',
         pattern: 'issues/:userRepo',
         namedParams: { userRepo: 'twbs/bootstrap' },
-        staticExample: { label: 'issues', message: '89', color: 'red' },
+        staticPreview: { label: 'issues', message: '89', color: 'red' },
       },
       {
         title: 'Code Climate maintainability',
         pattern: 'maintainability/:userRepo',
         namedParams: { userRepo: 'angular/angular.js' },
-        staticExample: { label: 'maintainability', message: 'F', color: 'red' },
+        staticPreview: { label: 'maintainability', message: 'F', color: 'red' },
       },
       {
         title: 'Code Climate maintainability (percentage)',
         pattern: 'maintainability-percentage/:userRepo',
         namedParams: { userRepo: 'angular/angular.js' },
-        staticExample: {
+        staticPreview: {
           label: 'maintainability',
           message: '4.6%',
           color: 'red',
@@ -179,7 +179,7 @@ module.exports = class Codeclimate extends LegacyService {
         title: 'Code Climate coverage',
         pattern: 'coverage/:userRepo',
         namedParams: { userRepo: 'jekyll/jekyll' },
-        staticExample: {
+        staticPreview: {
           label: 'coverage',
           message: '95%',
           color: 'green',
@@ -189,7 +189,7 @@ module.exports = class Codeclimate extends LegacyService {
         title: 'Code Climate coverage (letter)',
         pattern: 'coverage-letter/:userRepo',
         namedParams: { userRepo: 'jekyll/jekyll' },
-        staticExample: {
+        staticPreview: {
           label: 'coverage',
           message: 'A',
           color: 'brightgreen',
@@ -199,7 +199,7 @@ module.exports = class Codeclimate extends LegacyService {
         title: 'Code Climate technical debt',
         pattern: 'tech-debt/:userRepo',
         namedParams: { userRepo: 'jekyll/jekyll' },
-        staticExample: {
+        staticPreview: {
           label: 'technical debt',
           message: '3%',
           color: 'brightgreen',

@@ -13,13 +13,13 @@ module.exports = class AppVeyorCi extends AppVeyorBase {
         title: 'AppVeyor',
         pattern: ':user/:repo',
         namedParams: { user: 'gruntjs', repo: 'grunt' },
-        staticExample: this.render({ status: 'success' }),
+        staticPreview: this.render({ status: 'success' }),
       },
       {
         title: 'AppVeyor branch',
         pattern: ':user/:repo/:branch',
         namedParams: { user: 'gruntjs', repo: 'grunt', branch: 'master' },
-        staticExample: this.render({ status: 'success' }),
+        staticPreview: this.render({ status: 'success' }),
       },
     ]
   }

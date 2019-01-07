@@ -37,7 +37,7 @@ module.exports = class JetbrainsDownloads extends JetbrainsBase {
         namedParams: {
           pluginId: '9630-a8translate',
         },
-        staticExample: this.render({ version: 'v1.7' }),
+        staticPreview: this.render({ version: 'v1.7' }),
       },
     ]
   }

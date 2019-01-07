@@ -55,7 +55,7 @@ module.exports = class Cdnjs extends BaseJsonService {
     return [
       {
         namedParams: { library: 'jquery' },
-        staticExample: this.render({ version: '1.5.2' }),
+        staticPreview: this.render({ version: '1.5.2' }),
       },
     ]
   }
