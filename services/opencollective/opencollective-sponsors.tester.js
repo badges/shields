@@ -2,6 +2,7 @@
 
 const Joi = require('joi')
 const { colorScheme } = require('../test-helpers')
+const { nonNegativeInteger } = require('../validators')
 const t = (module.exports = require('../create-service-tester')())
 
 t.create('renders correctly')
@@ -71,3 +72,24 @@ t.create('renders correctly')
       colorB: colorScheme.brightgreen,
     })
   )
+t.create('gets amount of sponsors')
+  .get('/shields.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'sponsors',
+      value: nonNegativeInteger,
+    })
+  )
+
+// Test case does not work due to the upstream API
+// https://github.com/opencollective/opencollective/issues/1609
+//
+/*t.create('handles not found correctly')
+  .get('/nonexistent-collective.json?style=_shields_test')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'backers',
+      value: 'collective not found',
+      colorB: 'red',
+    })
+  )*/

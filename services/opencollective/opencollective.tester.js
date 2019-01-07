@@ -36,17 +36,28 @@ t.create('gets amount of backers and sponsors')
       value: nonNegativeInteger,
     })
   )
+
 t.create('renders not found correctly')
-  .get('/non-existent.json?style=_shield_test')
+  .get('/nonexistent-collective.json?style=_shield_test')
   .intercept(nock =>
     nock('https://opencollective.com/')
-      .get('/non-existent.json')
+      .get('/nonexistent-collective.json')
       .reply(404, 'Not found')
   )
   .expectJSONTypes(
     Joi.object().keys({
       name: 'backers and sponsors',
       value: 'collective not found',
-      color: colorScheme.orange,
+      color: colorScheme.red,
+    })
+  )
+
+t.create('handles not found correctly')
+  .get('/nonexistent-collective.json?style=_shield_test')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'backers and sponsors',
+      value: 'collective not found',
+      color: colorScheme.red,
     })
   )
