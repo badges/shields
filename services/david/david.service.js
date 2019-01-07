@@ -26,19 +26,19 @@ module.exports = class David extends LegacyService {
         title: 'David',
         pattern: ':user/:repo',
         namedParams: { user: 'expressjs', repo: 'express' },
-        staticExample: this.renderStaticExample(),
+        staticPreview: this.renderStaticExample(),
       },
       {
         title: 'David',
         pattern: 'dev/:user/:repo',
         namedParams: { user: 'expressjs', repo: 'express' },
-        staticExample: this.renderStaticExample({ label: 'dev dependencies' }),
+        staticPreview: this.renderStaticExample({ label: 'dev dependencies' }),
       },
       {
         title: 'David',
         pattern: 'optional/:user/:repo',
         namedParams: { user: 'elnounch', repo: 'byebye' },
-        staticExample: this.renderStaticExample({
+        staticPreview: this.renderStaticExample({
           label: 'optional dependencies',
         }),
       },
@@ -46,14 +46,14 @@ module.exports = class David extends LegacyService {
         title: 'David',
         pattern: 'peer/:user/:repo',
         namedParams: { user: 'webcomponents', repo: 'generator-element' },
-        staticExample: this.renderStaticExample({ label: 'peer dependencies' }),
+        staticPreview: this.renderStaticExample({ label: 'peer dependencies' }),
       },
       {
         title: 'David (path)',
         pattern: ':user/:repo',
         namedParams: { user: 'babel', repo: 'babel' },
         queryParams: { path: 'packages/babel-core' },
-        staticExample: this.renderStaticExample(),
+        staticPreview: this.renderStaticExample(),
       },
     ]
   }

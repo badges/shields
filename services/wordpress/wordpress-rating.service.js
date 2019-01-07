@@ -54,7 +54,7 @@ function RatingForExtensionType(extensionType) {
         {
           title: `Wordpress ${capt} Rating`,
           namedParams: { slug: exampleSlug },
-          staticExample: this.render({
+          staticPreview: this.render({
             response: {
               rating: 80,
               num_ratings: 100,
@@ -93,7 +93,7 @@ function StarsForExtensionType(extensionType) {
           title: `Wordpress ${capt} Rating`,
           pattern: 'stars/:slug',
           namedParams: { slug: exampleSlug },
-          staticExample: this.render({
+          staticPreview: this.render({
             response: {
               rating: 80,
               num_ratings: 100,

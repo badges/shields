@@ -22,7 +22,7 @@ module.exports = class CondaDownloads extends BaseCondaService {
         title: 'Conda',
         namedParams: { channel: 'conda-forge', package: 'python' },
         pattern: 'v/:channel/:package',
-        staticExample: this.render({
+        staticPreview: this.render({
           which: 'v',
           channel: 'conda-forge',
           version: '3.7.1',
@@ -32,7 +32,7 @@ module.exports = class CondaDownloads extends BaseCondaService {
         title: 'Conda (channel only)',
         namedParams: { channel: 'conda-forge', package: 'python' },
         pattern: 'vn/:channel/:package',
-        staticExample: this.render({
+        staticPreview: this.render({
           which: 'vn',
           channel: 'conda-forge',
           version: '3.7.1',

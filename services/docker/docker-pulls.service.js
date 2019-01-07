@@ -53,10 +53,11 @@ module.exports = class DockerPulls extends BaseJsonService {
     return [
       {
         title: 'Docker Pulls',
-        exampleUrl: '_/ubuntu',
-        keywords: ['docker', 'pulls'],
-        pattern: ':user/:repo',
-        staticExample: this.render({ count: 765400000 }),
+        namedParams: {
+          user: '_',
+          repo: 'ubuntu',
+        },
+        staticPreview: this.render({ count: 765400000 }),
       },
     ]
   }

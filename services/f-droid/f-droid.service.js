@@ -103,8 +103,7 @@ module.exports = class FDroid extends BaseYamlService {
   static get route() {
     return {
       base: 'f-droid/v',
-      format: '(.+)',
-      capture: ['appId'],
+      pattern: ':appId',
       queryParams: ['metadata_format'],
     }
   }
@@ -113,17 +112,15 @@ module.exports = class FDroid extends BaseYamlService {
     return [
       {
         title: 'F-Droid',
-        exampleUrl: 'org.thosp.yourlocalweather',
-        pattern: ':appId',
-        staticExample: this.render({ version: '1.0' }),
+        namedParams: { appId: 'org.thosp.yourlocalweather' },
+        staticPreview: this.render({ version: '1.0' }),
         keywords: ['fdroid', 'android', 'app'],
       },
       {
         title: 'F-Droid (explicit metadata format)',
-        exampleUrl: 'org.dystopia.email',
-        pattern: ':appId',
+        namedParams: { appId: 'org.dystopia.email' },
         queryParams: { metadata_format: 'yml' },
-        staticExample: this.render({ version: '1.2.1' }),
+        staticPreview: this.render({ version: '1.2.1' }),
         keywords: ['fdroid', 'android', 'app'],
       },
     ]

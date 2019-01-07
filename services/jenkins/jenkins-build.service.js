@@ -47,7 +47,7 @@ module.exports = class JenkinsBuild extends LegacyService {
           options.uri = `${scheme}://${host}/${job}/api/json?tree=color`
         }
 
-        if (serverSecrets && serverSecrets.jenkins_user) {
+        if (serverSecrets.jenkins_user) {
           options.auth = {
             user: serverSecrets.jenkins_user,
             pass: serverSecrets.jenkins_pass,

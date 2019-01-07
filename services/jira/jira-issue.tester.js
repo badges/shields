@@ -2,13 +2,7 @@
 
 const t = (module.exports = require('../create-service-tester')())
 const { colorScheme } = require('../test-helpers')
-const {
-  mockJiraCreds,
-  mockLegacyJiraCreds,
-  restore,
-  user,
-  pass,
-} = require('./jira-test-helpers')
+const { mockJiraCreds, restore, user, pass } = require('./jira-test-helpers')
 
 t.create('live: unknown issue')
   .get('/https/issues.apache.org/jira/notArealIssue-000.json')
@@ -168,27 +162,26 @@ t.create('blue-gray status color')
     value: 'cloudy',
     colorB: colorScheme.blue,
   })
-;[mockJiraCreds, mockLegacyJiraCreds].map(mockCreds => {
-  t.create(`with auth (${mockCreds.name})`)
-    .before(mockCreds)
-    .get('/https/myprivatejira.com/secure-234.json')
-    .intercept(nock =>
-      nock('https://myprivatejira.com/rest/api/2/issue')
-        .get(`/${encodeURIComponent('secure-234')}`)
-        // This ensures that the expected credentials from serverSecrets are actually being sent with the HTTP request.
-        // Without this the request wouldn't match and the test would fail.
-        .basicAuth({
-          user,
-          pass,
-        })
-        .reply(200, {
-          fields: {
-            status: {
-              name: 'in progress',
-            },
+
+t.create('with mock credentials')
+  .before(mockJiraCreds)
+  .get('/https/myprivatejira.com/secure-234.json')
+  .intercept(nock =>
+    nock('https://myprivatejira.com/rest/api/2/issue')
+      .get(`/${encodeURIComponent('secure-234')}`)
+      // This ensures that the expected credentials from serverSecrets are actually being sent with the HTTP request.
+      // Without this the request wouldn't match and the test would fail.
+      .basicAuth({
+        user,
+        pass,
+      })
+      .reply(200, {
+        fields: {
+          status: {
+            name: 'in progress',
           },
-        })
-    )
-    .finally(restore)
-    .expectJSON({ name: 'secure-234', value: 'in progress' })
-})
+        },
+      })
+  )
+  .finally(restore)
+  .expectJSON({ name: 'secure-234', value: 'in progress' })
