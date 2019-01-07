@@ -19,11 +19,7 @@ function pullRequestClassGenerator(raw) {
       args.url = `https://bitbucket.org/api/2.0/repositories/${user}/${repo}/pullrequests/`
       args.options = { qs: { state: 'OPEN', limit: 0 } }
 
-      if (
-        serverSecrets &&
-        serverSecrets.bitbucket_user &&
-        serverSecrets.bitbucket_pass
-      ) {
+      if (serverSecrets.bitbucket_user && serverSecrets.bitbucket_pass) {
         args.options.auth = {
           user: serverSecrets.bitbucket_user,
           pass: serverSecrets.bitbucket_pass,
@@ -46,7 +42,6 @@ function pullRequestClassGenerator(raw) {
       }
 
       if (
-        serverSecrets &&
         serverSecrets.bitbucket_server_user &&
         serverSecrets.bitbucket_server_pass
       ) {
