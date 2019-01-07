@@ -26,7 +26,9 @@ module.exports = class Cookbook extends LegacyService {
     return [
       {
         title: 'Chef cookbook',
-        previewUrl: 'chef-sugar',
+        pattern: ':cookbook',
+        namedParams: { cookbook: 'chef-sugar' },
+        staticPreview: { label: 'cookbook', message: 'v5.0.0', color: 'blue' },
       },
     ]
   }

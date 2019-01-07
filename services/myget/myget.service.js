@@ -18,13 +18,13 @@ class MyGetVersionService extends Version {
         title: 'MyGet',
         pattern: 'myget/:feed/v/:packageName',
         namedParams: { feed: 'mongodb', packageName: 'MongoDB.Driver.Core' },
-        staticExample: this.render({ version: '2.6.1' }),
+        staticPreview: this.render({ version: '2.6.1' }),
       },
       {
         title: 'MyGet (with prereleases)',
         pattern: 'myget/:feed/vpre/:packageName',
         namedParams: { feed: 'mongodb', packageName: 'MongoDB.Driver.Core' },
-        staticExample: this.render({ version: '2.7.0-beta0001' }),
+        staticPreview: this.render({ version: '2.7.0-beta0001' }),
       },
       {
         title: 'MyGet tenant',
@@ -34,7 +34,7 @@ class MyGetVersionService extends Version {
           feed: 'dotnet-coreclr',
           packageName: 'Microsoft.DotNet.CoreCLR',
         },
-        staticExample: this.render({ version: '1.0.2-prerelease' }),
+        staticPreview: this.render({ version: '1.0.2-prerelease' }),
       },
     ]
   }
@@ -47,7 +47,7 @@ class MyGetDownloadService extends Downloads {
         title: 'MyGet',
         pattern: 'myget/:feed/dt/:packageName',
         namedParams: { feed: 'mongodb', packageName: 'MongoDB.Driver.Core' },
-        staticExample: this.render({ downloads: 419 }),
+        staticPreview: this.render({ downloads: 419 }),
       },
       {
         title: 'MyGet tenant',
@@ -57,7 +57,7 @@ class MyGetDownloadService extends Downloads {
           feed: 'dotnet-coreclr',
           packageName: 'Microsoft.DotNet.CoreCLR',
         },
-        staticExample: this.render({ downloads: 9748 }),
+        staticPreview: this.render({ downloads: 9748 }),
       },
     ]
   }

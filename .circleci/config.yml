@@ -207,12 +207,6 @@ jobs:
     steps:
       - checkout
 
-      - run:
-          name: Prepare service tests
-          command: |
-            mkdir private
-            echo "{\"gh_token\":\"$GITHUB_TOKEN\", \"wheelmap_token\":\"$WHEELMAP_TOKEN\"}" > private/secret.json
-
       - restore_cache:
           keys:
             - v2-dependencies-{{ checksum "package.json" }}
@@ -247,12 +241,6 @@ jobs:
       - image: circleci/node:latest
     steps:
       - checkout
-
-      - run:
-          name: Prepare service tests
-          command: |
-            mkdir private
-            echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
 
       - restore_cache:
           keys:

@@ -35,7 +35,7 @@ module.exports = class GithubLicense extends LegacyService {
       {
         title: 'GitHub',
         namedParams: { user: 'mashape', repo: 'apistatus' },
-        staticExample: {
+        staticPreview: {
           label: 'license',
           message: 'MIT',
           color: 'green',

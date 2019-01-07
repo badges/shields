@@ -31,7 +31,7 @@ module.exports = class StackExchangeQuestions extends BaseJsonService {
       {
         title: 'Stack Exchange questions',
         namedParams: { stackexchangesite: 'stackoverflow', query: 'gson' },
-        staticExample: this.render({
+        staticPreview: this.render({
           stackexchangesite: 'stackoverflow',
           query: 'gson',
           numValue: 10,
