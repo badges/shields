@@ -3,10 +3,14 @@
 const Joi = require('joi')
 
 const BaseSvgScrapingService = require('../base-svg-scraping')
+const {
+  isBuildStatus,
+  renderBuildStatusBadge,
+} = require('../../lib/build-status')
 
 const schema = Joi.object({
-  message: Joi.string()
-    .regex(/^[a-z]+$/)
+  message: Joi.alternatives()
+    .try(isBuildStatus, Joi.equal('unknown'))
     .required(),
 }).required()
 
@@ -67,28 +71,19 @@ module.exports = class TravisBuild extends BaseSvgScrapingService {
     }
   }
 
-  static render({ state }) {
-    let color
-    if (state === 'passing') {
-      color = 'brightgreen'
-    } else if (state === 'failing' || state === 'error') {
-      color = 'red'
-    }
-    return {
-      message: state,
-      color,
-    }
+  static render({ status }) {
+    return renderBuildStatusBadge({ status })
   }
 
   async handle({ comDomain, userRepo, branch }) {
     const domain = comDomain || 'org'
-    const { message: state } = await this._requestSvg({
+    const { message: status } = await this._requestSvg({
       schema,
       url: `https://api.travis-ci.${domain}/${userRepo}.svg`,
       options: { qs: { branch } },
       valueMatcher: />([^<>]+)<\/text><\/g>/,
     })
 
-    return this.constructor.render({ state })
+    return this.constructor.render({ status })
   }
 }
