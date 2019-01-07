@@ -143,7 +143,7 @@ To deploy:
     - [Visit the server][s0]. Don't forget that most of the preview badges
       are static!
     - Look for errors in [Sentry][].
-    - Keep an eye on the [status page][].
+    - Keep an eye on the [status page][status].
 6.  After a little while (usually 10–60 minutes), finish the deploy:
     `make push-s1 push-s2 deploy-gh-pages`.
 
