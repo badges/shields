@@ -146,7 +146,7 @@
     "eslint-plugin-no-extension-in-require": "^0.2.0",
     "eslint-plugin-node": "^8.0.0",
     "eslint-plugin-promise": "^4.0.0",
-    "eslint-plugin-react": "^7.12.2",
+    "eslint-plugin-react": "^7.12.3",
     "eslint-plugin-standard": "^4.0.0",
     "fetch-ponyfill": "^6.0.0",
     "fs-readfile-promise": "^3.0.1",
