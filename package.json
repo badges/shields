@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "camp": "~17.2.2",
-    "chalk": "^2.4.1",
+    "chalk": "^2.4.2",
     "check-node-version": "^3.1.0",
     "chrome-web-store-item-property": "~1.1.2",
     "config": "^3.0.1",
