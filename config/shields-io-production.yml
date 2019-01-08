@@ -1,0 +1,16 @@
+public:
+  metrics:
+    prometheus:
+      enabled: true
+
+  ssl:
+    isSecure: true
+
+  cors:
+    allowedOrigin: ['http://shields.io', 'https://shields.io']
+
+  redirectUrl: 'https://shields.io/'
+
+private:
+  # These are not really private; they should be moved to `public`.
+  shields_ips: ['192.99.59.72', '51.254.114.150', '149.56.96.133']

@@ -39,7 +39,7 @@ module.exports = class Sourcegraph extends BaseJsonService {
         namedParams: {
           repo: 'github.com/gorilla/mux',
         },
-        staticExample: this.render({ projectsCount: '9.9k projects' }),
+        staticPreview: this.render({ projectsCount: '9.9k projects' }),
       },
     ]
   }

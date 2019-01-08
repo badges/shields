@@ -23,7 +23,7 @@ module.exports = class UptimeRobotStatus extends UptimeRobotBase {
         namedParams: {
           monitorSpecificKey: 'm778918918-3e92c097147760ee39d02d36',
         },
-        staticExample: this.render({ status: 2 }),
+        staticPreview: this.render({ status: 2 }),
       },
     ]
   }

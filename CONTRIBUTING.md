@@ -1,12 +1,9 @@
-Contributing to Shields
-=======================
+# Contributing to Shields
 
 Shields is a community project. We invite your participation through
 financial contributions, issues, and pull requests!
 
-
-Ways you can help
------------------
+## Ways you can help
 
 ### Financial contributions
 
@@ -38,7 +35,7 @@ wonderful side effect of making the code more readable and therefore more
 approachable. It's also a great way to teach and learn. Feel free to jump in!
 Be welcoming, appreciative, and helpful. You can perform first reviews of
 simple changes, like badge additions. These are usually tagged with
-[service badge][service badge PR tag].
+[service badge][service badge pr tag].
 
 Please review [these impeccable guidelines][code review guidelines].
 
@@ -48,7 +45,7 @@ have questions about contributing to Shields, or using it for their projects.
 Feel free to reach out to one of the [maintainers][]
 if you need help getting started.
 
-[service badge PR tag]: https://github.com/badges/shields/pulls?q=is%3Apr+is%3Aopen+label%3Aservice-badge
+[service badge pr tag]: https://github.com/badges/shields/pulls?q=is%3Apr+is%3Aopen+label%3Aservice-badge
 [code review guidelines]: http://amyciavolino.com/assets/MindfulCommunicationInCodeReviews.pdf
 [issues]: https://github.com/badges/shields/issues
 [chat room]: https://discordapp.com/invite/HjJCwm5
@@ -72,10 +69,9 @@ don't see it, feel free to [open a new issue][open an issue].
 
 Feel free to star the repository. This will help increase the visibility of the project, therefore attracting more users and contributors to Shields!
 
-We're also asking for [one-time $10 donations](https://opencollective.com/shields) from developers who use and love Shields, please spread the word!
+We're also asking for [one-time \$10 donations](https://opencollective.com/shields) from developers who use and love Shields, please spread the word!
 
-Getting help
-------------
+## Getting help
 
 There are three places to get help:
 
@@ -87,21 +83,17 @@ There are three places to get help:
 
 [tutorial]: doc/TUTORIAL.md
 
-
-Badge guidelines
-----------------
+## Badge guidelines
 
 - Shields.io hosts integrations for services which are primarily
   used by developers or which are widely used by developers
-- The left-hand side of a badge should not advertise. It should be a lowercase *noun*
+- The left-hand side of a badge should not advertise. It should be a lowercase _noun_
   succinctly describing the meaning of the right-hand side.
-- Query parameters must be *declared by the service*. See `request-handler.js`.
-- Except for badges using the `social` style, logos should be *turned off by
-  default*.
+- Query parameters must be _declared by the service_. See `request-handler.js`.
+- Except for badges using the `social` style, logos should be _turned off by
+  default_.
 
-
-Badge URLs
-----------
+## Badge URLs
 
 - The format of new badges should be of the form
   `/SERVICE/NOUN/PARAMETERS/QUALIFIERS.format`. For instance,
@@ -111,9 +103,7 @@ Badge URLs
   `/SERVICE/SCHEME/HOST/NOUN/PARAMETERS/QUALIFIERS.format`. For instance,
   `/discourse/https/discourse.example.com/topics.svg`.
 
-
-Coding guidelines
------------------
+## Coding guidelines
 
 ### Prettier
 
@@ -147,9 +137,7 @@ start the server automatically.
 
 Function declarations are placed in `lib/`, not directly in `server.js`.
 
-
-Logos
------
+## Logos
 
 We support a wide range of logos via [SimpleIcons][] and encourage you to [contribute logos to that project][simple-icons github].
 
@@ -161,5 +149,5 @@ If you want to use a logo that does not meet our guidelines, a custom logo can b
 
 [simpleicons]: https://simpleicons.org/
 [simple-icons github]: https://github.com/simple-icons/simple-icons
-[SVGO]: https://github.com/svg/svgo
+[svgo]: https://github.com/svg/svgo
 [svgomg]: https://jakearchibald.github.io/svgomg/

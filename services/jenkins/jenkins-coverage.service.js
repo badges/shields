@@ -110,9 +110,13 @@ class JacocoJenkinsCoverage extends BaseJenkinsCoverage {
     return [
       {
         title: 'Jenkins JaCoCo coverage',
-        exampleUrl: 'https/ci.eclipse.org/ecp/job/gerrit',
-        pattern: ':scheme/:host/:job',
-        staticExample: this.render({
+        pattern: ':scheme/:host/:job+',
+        namedParams: {
+          scheme: 'https',
+          host: 'ci.eclipse.org',
+          job: 'ecp/job/gerrit',
+        },
+        staticPreview: this.render({
           coverage: 96,
         }),
       },
@@ -151,9 +155,13 @@ class CoberturaJenkinsCoverage extends BaseJenkinsCoverage {
     return [
       {
         title: 'Jenkins Cobertura coverage',
-        exampleUrl: 'https/builds.apache.org/job/olingo-odata4-cobertura',
-        pattern: ':scheme/:host/:job',
-        staticExample: this.render({
+        pattern: ':scheme/:host/:job+',
+        namedParams: {
+          scheme: 'https',
+          host: 'builds.apache.org',
+          job: 'job/olingo-odata4-cobertura',
+        },
+        staticPreview: this.render({
           coverage: 94,
         }),
       },

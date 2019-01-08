@@ -25,28 +25,28 @@ module.exports = class CratesDownloads extends BaseCratesService {
         title: 'Crates.io',
         pattern: 'd/:crate',
         namedParams: { crate: 'rustc-serialize' },
-        staticExample: this.render({ downloads: 5000000 }),
+        staticPreview: this.render({ downloads: 5000000 }),
         keywords,
       },
       {
         title: 'Crates.io',
         pattern: 'd/:crate/:version',
         namedParams: { crate: 'rustc-serialize', version: '0.3.24' },
-        staticExample: this.render({ downloads: 2000000, version: '0.3.24' }),
+        staticPreview: this.render({ downloads: 2000000, version: '0.3.24' }),
         keywords,
       },
       {
         title: 'Crates.io',
         pattern: 'dv/:crate',
         namedParams: { crate: 'rustc-serialize' },
-        staticExample: this.render({ which: 'dv', downloads: 2000000 }),
+        staticPreview: this.render({ which: 'dv', downloads: 2000000 }),
         keywords,
       },
       {
         title: 'Crates.io',
         pattern: 'dv/:crate/:version',
         namedParams: { crate: 'rustc-serialize', version: '0.3.24' },
-        staticExample: this.render({
+        staticPreview: this.render({
           which: 'dv',
           downloads: 2000000,
           version: '0.3.24',

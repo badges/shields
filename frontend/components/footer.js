@@ -22,13 +22,21 @@ const Footer = ({ baseUrl }) => (
         alt="Follow @shields_io"
       />{' '}
       {}
-      <a href="https://opencollective.com/shields" alt="Donate to us!">
-        <img src="https://opencollective.com/shields/backers/badge.svg?style=social" />
-      </a>{' '}
+      <object
+        data={resolveUrl(
+          '/opencollective/backers/shields.svg?style=social&link=https://opencollective.com/shields',
+          baseUrl
+        )}
+        alt="Donate to us!"
+      />{' '}
       {}
-      <a href="https://opencollective.com/shields" alt="Donate to us!">
-        <img src="https://opencollective.com/shields/sponsors/badge.svg?style=social" />
-      </a>{' '}
+      <object
+        data={resolveUrl(
+          '/opencollective/sponsors/shields.svg?style=social&link=https://opencollective.com/shields',
+          baseUrl
+        )}
+        alt="Donate to us!"
+      />{' '}
       {}
       <object
         data={resolveUrl(

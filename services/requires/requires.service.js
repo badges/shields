@@ -58,7 +58,7 @@ module.exports = class RequiresIo extends BaseJsonService {
         title: 'Requires.io',
         pattern: ':service/:user/:repo',
         namedParams: { service: 'github', user: 'celery', repo: 'celery' },
-        staticExample: this.render({ status: 'up-to-date' }),
+        staticPreview: this.render({ status: 'up-to-date' }),
         keywords: ['requires'],
       },
       {
@@ -70,7 +70,7 @@ module.exports = class RequiresIo extends BaseJsonService {
           repo: 'celery',
           branch: 'master',
         },
-        staticExample: this.render({ status: 'up-to-date' }),
+        staticPreview: this.render({ status: 'up-to-date' }),
         keywords: ['requires'],
       },
     ]
