@@ -14,10 +14,6 @@ import MarkupModalContent from './markup-modal-content'
 
 const ContentContainer = styled(BaseFont)`
   text-align: center;
-
-  * {
-    box-sizing: border-box;
-  }
 `
 
 const WeeSnippet = ({ snippet, truncate = false }) => (
