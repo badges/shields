@@ -1,6 +1,6 @@
 'use strict'
 
-const { InvalidParameter } = require('../errors')
+const { getDependencyVersion } = require('../package-json-helpers')
 const NpmBase = require('./npm-base')
 
 const keywords = ['node']
@@ -78,30 +78,6 @@ module.exports = class NpmDependencyVersion extends NpmBase {
     }
   }
 
-  transform({
-    kind,
-    wantedDependency,
-    dependencies,
-    devDependencies,
-    peerDependencies,
-  }) {
-    let dependenciesOfKind
-    if (kind === 'peer') {
-      dependenciesOfKind = peerDependencies
-    } else if (kind === 'dev') {
-      dependenciesOfKind = devDependencies
-    } else {
-      dependenciesOfKind = dependencies
-    }
-
-    const range = dependenciesOfKind[wantedDependency]
-    if (range === undefined) {
-      throw new InvalidParameter({ prettyMessage: 'not found' })
-    }
-
-    return { range }
-  }
-
   async handle(namedParams, queryParams) {
     const { scope, packageName, registryUrl } = this.constructor.unpackParams(
       namedParams,
@@ -119,7 +95,7 @@ module.exports = class NpmDependencyVersion extends NpmBase {
       registryUrl,
     })
 
-    const { range } = this.transform({
+    const { range } = getDependencyVersion({
       kind,
       wantedDependency,
       dependencies,

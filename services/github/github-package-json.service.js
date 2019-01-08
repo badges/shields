@@ -6,6 +6,10 @@ const {
   transformAndValidate,
   renderDynamicBadge,
 } = require('../dynamic-common')
+const {
+  isPackageJsonWithDependencies,
+  getDependencyVersion,
+} = require('../package-json-helpers')
 const { semver } = require('../validators')
 const { ConditionalGithubAuthService } = require('./github-auth-service')
 const { fetchJsonFromRepo } = require('./github-common-fetch')
@@ -68,6 +72,97 @@ class GithubPackageJsonVersion extends ConditionalGithubAuthService {
       filename: 'package.json',
     })
     return this.constructor.render({ version, branch })
+  }
+}
+
+class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthService {
+  static get category() {
+    return 'platform-support'
+  }
+
+  static get route() {
+    return {
+      base: 'github/package-json/dependency-version',
+      pattern:
+        ':user/:repo/:kind(dev|peer)?/:scope(@[^/]+)?/:packageName/:branch*',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub package.json npm dependency version',
+        pattern: ':user/:repo/:packageName',
+        namedParams: {
+          user: 'developit',
+          repo: 'microbundle',
+          packageName: 'rollup',
+        },
+        staticPreview: this.render({
+          dependency: 'rollup',
+          range: '^0.67.3',
+        }),
+        documentation,
+      },
+      {
+        title: 'GitHub package.json npm dependency version (dev dep on branch)',
+        pattern: ':user/:repo/dev/:scope?/:packageName/:branch*',
+        namedParams: {
+          user: 'zeit',
+          repo: 'next.js',
+          branch: 'canary',
+          scope: '@babel',
+          packageName: 'preset-react',
+        },
+        staticPreview: this.render({
+          dependency: '@babel/preset-react',
+          range: '7.0.0',
+        }),
+        documentation,
+      },
+    ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'dependency',
+    }
+  }
+
+  static render({ dependency, range }) {
+    return {
+      label: dependency,
+      message: range,
+      color: 'blue',
+    }
+  }
+
+  async handle({ user, repo, kind, branch = 'master', scope, packageName }) {
+    const {
+      dependencies,
+      devDependencies,
+      peerDependencies,
+    } = await fetchJsonFromRepo(this, {
+      schema: isPackageJsonWithDependencies,
+      user,
+      repo,
+      branch,
+      filename: 'package.json',
+    })
+
+    const wantedDependency = scope ? `${scope}/${packageName}` : packageName
+    const { range } = getDependencyVersion({
+      kind,
+      wantedDependency,
+      dependencies,
+      devDependencies,
+      peerDependencies,
+    })
+
+    return this.constructor.render({
+      dependency: wantedDependency,
+      range,
+    })
   }
 }
 
@@ -152,5 +247,6 @@ class DynamicGithubPackageJson extends ConditionalGithubAuthService {
 
 module.exports = {
   GithubPackageJsonVersion,
+  GithubPackageJsonDependencyVersion,
   DynamicGithubPackageJson,
 }
