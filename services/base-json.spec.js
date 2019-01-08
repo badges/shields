@@ -109,6 +109,7 @@ describe('BaseJsonService', function() {
           { handleInternalErrors: false }
         )
       ).to.deep.equal({
+        isError: true,
         color: 'lightgray',
         message: 'invalid response data',
       })
@@ -125,6 +126,7 @@ describe('BaseJsonService', function() {
           { handleInternalErrors: false }
         )
       ).to.deep.equal({
+        isError: true,
         color: 'lightgray',
         message: 'unparseable json response',
       })

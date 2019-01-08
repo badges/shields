@@ -80,29 +80,26 @@ t.create('YAML from url | invalid url')
     colorB: colorsB.red,
   })
 
-// bug: https://github.com/badges/shields/issues/1446
-// t.create('YAML from url | user color overrides default')
-//   .get(
-//     '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&query=$.name&colorB=10ADED&style=_shields_test'
-//   )
-//   .expectJSON({ name: 'custom badge', value: 'coredns', colorB: '#10ADED' })
+t.create('YAML from url | user color overrides default')
+  .get(
+    '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&query=$.name&colorB=10ADED&style=_shields_test'
+  )
+  .expectJSON({ name: 'custom badge', value: 'coredns', colorB: '#10ADED' })
 
-// bug: https://github.com/badges/shields/issues/1446
-// t.create('YAML from url | error color overrides default')
-//   .get(
-//     '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/notafile.yaml&query=$.version&style=_shields_test'
-//   )
-//   .expectJSON({
-//     name: 'custom badge',
-//     value: 'resource not found',
-//     colorB: colorsB.lightgrey,
-//   })
+t.create('YAML from url | error color overrides default')
+  .get(
+    '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/notafile.yaml&query=$.version&style=_shields_test'
+  )
+  .expectJSON({
+    name: 'custom badge',
+    value: 'resource not found',
+    colorB: colorsB.lightgrey,
+  })
 
-// bug: https://github.com/badges/shields/issues/1446
-// t.create('YAML from url | error color overrides user specified')
-//   .get('.json?query=$.version&colorB=10ADED&style=_shields_test')
-//   .expectJSON({
-//     name: 'custom badge',
-//     value: 'invalid query parameter: url',
-//     colorB: colorsB.red,
-//   })
+t.create('YAML from url | error color overrides user specified')
+  .get('.json?query=$.version&colorB=10ADED&style=_shields_test')
+  .expectJSON({
+    name: 'custom badge',
+    value: 'invalid query parameter: url',
+    colorB: colorsB.red,
+  })

@@ -129,14 +129,13 @@ t.create('JSON from url | error color overrides default')
     colorB: colorsB.red,
   })
 
-// FIXME This is a regression which should be fixed in BaseService.
-// t.create('JSON from url | error color overrides user specified')
-//   .get('.json?query=$.version&colorB=10ADED&style=_shields_test')
-//   .expectJSON({
-//     name: 'custom badge',
-//     value: 'invalid query parameter: url',
-//     colorB: colorsB.red,
-//   })
+t.create('JSON from url | error color overrides user specified')
+  .get('.json?query=$.version&colorB=10ADED&style=_shields_test')
+  .expectJSON({
+    name: 'custom badge',
+    value: 'invalid query parameter: url',
+    colorB: colorsB.red,
+  })
 
 let headers
 t.create('JSON from url | request should set Accept header')

@@ -131,25 +131,23 @@ t.create('XML from url | user color overrides default')
     colorB: '#10ADED',
   })
 
-// bug: https://github.com/badges/shields/issues/1446
-// t.create('XML from url | error color overrides default')
-//   .get(
-//     '.json?url=https://github.com/badges/shields/raw/master/notafile.xml&query=//version&style=_shields_test'
-//   )
-//   .expectJSON({
-//     name: 'custom badge',
-//     value: 'resource not found',
-//     colorB: colorsB.lightgrey,
-//   })
+t.create('XML from url | error color overrides default')
+  .get(
+    '.json?url=https://github.com/badges/shields/raw/master/notafile.xml&query=//version&style=_shields_test'
+  )
+  .expectJSON({
+    name: 'custom badge',
+    value: 'resource not found',
+    colorB: colorsB.lightgrey,
+  })
 
-// bug: https://github.com/badges/shields/issues/1446
-// t.create('XML from url | error color overrides user specified')
-//   .get('.json?query=//version&colorB=10ADED&style=_shields_test')
-//   .expectJSON({
-//     name: 'custom badge',
-//     value: 'invalid query parameter: url',
-//     colorB: colorsB.red,
-//   })
+t.create('XML from url | error color overrides user specified')
+  .get('.json?query=//version&colorB=10ADED&style=_shields_test')
+  .expectJSON({
+    name: 'custom badge',
+    value: 'invalid query parameter: url',
+    colorB: colorsB.red,
+  })
 
 let headers
 t.create('XML from url | request should set Accept header')
