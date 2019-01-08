@@ -131,7 +131,6 @@ export default class PathBuilder extends React.Component {
   renderLiteral(literal, tokenIndex) {
     return (
       <PathBuilderColumn key={`${tokenIndex}-${literal}`}>
-        ? '3px' : undefined{' '}
         <PathLiteral isFirstToken={tokenIndex === 0}>{literal}</PathLiteral>
       </PathBuilderColumn>
     )
