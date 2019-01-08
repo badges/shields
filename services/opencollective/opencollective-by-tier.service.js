@@ -20,7 +20,7 @@ module.exports = class OpencollectiveByTier extends OpencollectiveBase {
 
   static get defaultBadgeData() {
     return {
-      label: 'unknown tier',
+      label: 'open collective',
     }
   }
 
