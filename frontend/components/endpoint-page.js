@@ -106,8 +106,8 @@ const EndpointPage = () => (
       <dt>isError</dt>
       <dd>
         Default: <code>false</code>. <code>true</code> to treat this as an error
-        badge. In the future this will inhibit the query string from overriding
-        the color and may affect cache behavior.
+        badge. This prevents the user from overriding the color. In the future
+        it may affect cache behavior.
       </dd>
       <dt>link</dt>
       <dd>

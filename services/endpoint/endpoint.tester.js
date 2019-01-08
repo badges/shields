@@ -26,6 +26,35 @@ t.create('Invalid schema (mocked)')
   )
   .expectJSON({ name: 'custom badge', value: 'invalid response data' })
 
+t.create('User color overrides success color')
+  .get('.json?url=https://example.com/badge&colorB=101010&style=_shields_test')
+  .intercept(nock =>
+    nock('https://example.com/')
+      .get('/badge')
+      .reply(200, {
+        schemaVersion: 1,
+        label: '',
+        message: 'yo',
+        color: 'blue',
+      })
+  )
+  .expectJSON({ name: '', value: 'yo', colorB: '#101010' })
+
+t.create('User color does not override error color')
+  .get('.json?url=https://example.com/badge&colorB=101010&style=_shields_test')
+  .intercept(nock =>
+    nock('https://example.com/')
+      .get('/badge')
+      .reply(200, {
+        schemaVersion: 1,
+        isError: true,
+        label: 'something is',
+        message: 'not right',
+        color: 'red',
+      })
+  )
+  .expectJSON({ name: 'something is', value: 'not right', colorB: 'red' })
+
 t.create('Bad scheme')
   .get('.json?url=http://example.com/badge')
   .expectJSON({ name: 'custom badge', value: 'please use https' })

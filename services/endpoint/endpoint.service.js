@@ -85,6 +85,7 @@ module.exports = class Endpoint extends BaseJsonService {
     cacheSeconds,
   }) {
     return {
+      isError,
       label,
       message,
       color,
