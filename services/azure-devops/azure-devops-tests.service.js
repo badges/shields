@@ -108,7 +108,7 @@ module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
       },
       {
         title: 'Azure DevOps tests (branch)',
-        pattern: ':organization/:project/:definitionId/:branch',
+        pattern: ':organization/:project/:definitionId/:branch*',
         namedParams: {
           organization: 'azuredevops-powershell',
           project: 'azuredevops-powershell',
@@ -176,8 +176,7 @@ module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
   static get route() {
     return {
       base: 'azure-devops/tests',
-      format: '([^/]+)/([^/]+)/([^/]+)(?:/(.+))?',
-      capture: ['organization', 'project', 'definitionId', 'branch'],
+      pattern: ':organization/:project/:definitionId/:branch*',
       queryParams: [
         'compact_message',
         'passed_label',

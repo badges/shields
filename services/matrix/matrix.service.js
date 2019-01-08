@@ -191,8 +191,7 @@ module.exports = class Matrix extends BaseJsonService {
   static get route() {
     return {
       base: 'matrix',
-      format: '([^/]+)',
-      capture: ['roomAlias'],
+      pattern: ':roomAlias',
       queryParams: ['server_fqdn'],
     }
   }
