@@ -85,9 +85,7 @@ export default class PathBuilder extends React.Component {
     }
   }
 
-  getPath(namedParams) {
-    const { tokens } = this.state
-
+  static constructPath({ tokens, namedParams }) {
     let isComplete = true
     const path = tokens
       .map(token => {
@@ -105,6 +103,11 @@ export default class PathBuilder extends React.Component {
       })
       .join('')
     return { path, isComplete }
+  }
+
+  getPath(namedParams) {
+    const { tokens } = this.state
+    return this.constructor.constructPath({ tokens, namedParams })
   }
 
   handleTokenChange = event => {
