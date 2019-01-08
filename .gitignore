@@ -101,4 +101,4 @@ service-definitions.yml
 /config/local*.yml
 
 # Template for the local runtime configuration.
-!/config/local.template.yml
+!/config/local*.template.yml
