@@ -81,15 +81,12 @@ t.create('gets amount of sponsors')
     })
   )
 
-// Test case does not work due to the upstream API
-// https://github.com/opencollective/opencollective/issues/1609
-//
-/*t.create('handles not found correctly')
-  .get('/nonexistent-collective.json?style=_shields_test')
+t.create('handles not found correctly')
+  .get('/nonexistent-collective.json?style=_shield_test')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'backers',
+      name: 'sponsors',
       value: 'collective not found',
-      colorB: 'red',
+      colorB: colorScheme.red,
     })
-  )*/
+  )
