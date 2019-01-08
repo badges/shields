@@ -63,15 +63,15 @@ t.create('custom label for pre version') // e.g. pre version|v0.2.5-alpha-rc-pre
     })
   )
 
-t.create('Version for Invaild Package')
+t.create('Version for Invalid Package')
   .get('/v/it-is-a-invalid-package-should-error.json')
   .expectJSON({ name: 'bower', value: 'not found' })
 
-t.create('Pre Version for Invaild Package')
+t.create('Pre Version for Invalid Package')
   .get('/vpre/it-is-a-invalid-package-should-error.json')
   .expectJSON({ name: 'bower', value: 'not found' })
 
-t.create('licence for Invaild Package')
+t.create('licence for Invalid Package')
   .get('/l/it-is-a-invalid-package-should-error.json')
   .expectJSON({ name: 'license', value: 'not found' })
 
