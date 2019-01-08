@@ -129,7 +129,7 @@ class BaseService {
   static validateDefinition() {
     assertValidCategory(this.category, `Category for ${this.name}`)
 
-    const result = Joi.assert(
+    Joi.assert(
       this.defaultBadgeData,
       defaultBadgeDataSchema,
       `Default badge data for ${this.name}`
