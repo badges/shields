@@ -29,18 +29,20 @@ BuilderContainer.propTypes = {
   ]),
 }
 
-const BuilderLabel = styled.label`
+const labelFont = `
   font-family: system-ui;
   font-size: 11px;
   text-transform: lowercase;
 `
 
-const BuilderCaption = styled.span`
-  color: #999;
+const BuilderLabel = styled.label`
+  ${labelFont}
+`
 
-  font-family: system-ui;
-  font-size: 11px;
-  text-transform: lowercase;
+const BuilderCaption = styled.span`
+  ${labelFont}
+
+  color: #999;
 `
 
 export { BuilderContainer, BuilderLabel, BuilderCaption }
