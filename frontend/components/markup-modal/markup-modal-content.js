@@ -115,10 +115,7 @@ export default class MarkupModalContent extends React.Component {
     return (
       <div>
         {this.renderLivePreview()}
-        <CopiedContentIndicator
-          ref={indicatorRef}
-          copiedContent={<span style={{ width: '100px' }}>{markup}</span>}
-        >
+        <CopiedContentIndicator ref={indicatorRef} copiedContent="Copied">
           <RequestMarkupButtom
             isDisabled={!pathIsComplete}
             onMarkupRequested={this.copyMarkup}
