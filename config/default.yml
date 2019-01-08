@@ -1,0 +1,37 @@
+public:
+  bind:
+    address: '::'
+
+  metrics:
+    prometheus:
+      enabled: false
+      allowedIps: []
+
+  ssl:
+    isSecure: false
+
+  cors:
+    allowedOrigin: []
+
+  persistence:
+    dir: './private'
+
+  services:
+    github:
+      baseUri: 'https://api.github.com/'
+      debug:
+        enabled: false
+        intervalSeconds: 200
+    trace: false
+
+  profiling:
+    makeBadge: false
+
+  cacheHeaders:
+    defaultCacheLengthSeconds: 120
+
+  rateLimit: true
+
+  handleInternalErrors: true
+
+private: {}

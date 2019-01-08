@@ -9,41 +9,41 @@ env:
 parserOptions:
   # Override eslint-config-standard, which incorrectly sets this to "module",
   # though that setting is only for ES6 modules, not CommonJS modules.
-  sourceType: "script"
+  sourceType: 'script'
 
 plugins:
   - mocha
   - no-extension-in-require
-  - "chai-friendly"
+  - 'chai-friendly'
 
 rules:
   # Disable some rules from eslint:recommended.
-  no-console: "off"
-  no-empty: ["error", { "allowEmptyCatch": true }]
+  no-console: 'off'
+  no-empty: ['error', { 'allowEmptyCatch': true }]
   # Allow unused parameters. In callbacks, removing them seems to obscure
   # what the functions are doing.
-  no-unused-vars: ["error", {"args": "none"}]
+  no-unused-vars: ['error', { 'args': 'none' }]
 
   # These should be disabled by eslint-config-prettier, but are not.
-  spaced-comment: "off"
-  standard/object-curly-even-spacing: "off"
-  one-var: "off"
+  spaced-comment: 'off'
+  standard/object-curly-even-spacing: 'off'
+  one-var: 'off'
 
   # Shields additions.
-  no-var: "error"
-  prefer-const: "error"
-  strict: "error"
-  arrow-body-style: ["error", "as-needed"]
-  no-extension-in-require/main: "error"
-  object-shorthand: ["error", "properties"]
-  prefer-template: "error"
-  promise/prefer-await-to-then: "error"
+  no-var: 'error'
+  prefer-const: 'error'
+  strict: 'error'
+  arrow-body-style: ['error', 'as-needed']
+  no-extension-in-require/main: 'error'
+  object-shorthand: ['error', 'properties']
+  prefer-template: 'error'
+  promise/prefer-await-to-then: 'error'
 
   # Mocha-related.
-  mocha/no-exclusive-tests: "error"
-  mocha/no-mocha-arrows: "error"
-  mocha/prefer-arrow-callback: "error"
+  mocha/no-exclusive-tests: 'error'
+  mocha/no-mocha-arrows: 'error'
+  mocha/prefer-arrow-callback: 'error'
 
   # Chai friendly.
-  no-unused-expressions: "off"
-  chai-friendly/no-unused-expressions: "error"
+  no-unused-expressions: 'off'
+  chai-friendly/no-unused-expressions: 'error'

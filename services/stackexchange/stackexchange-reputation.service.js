@@ -39,7 +39,7 @@ module.exports = class StackExchangeReputation extends BaseJsonService {
       {
         title: 'Stack Exchange reputation',
         namedParams: { stackexchangesite: 'stackoverflow', query: '123' },
-        staticExample: this.render({
+        staticPreview: this.render({
           stackexchangesite: 'stackoverflow',
           numValue: 10,
         }),

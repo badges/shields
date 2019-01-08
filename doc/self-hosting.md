@@ -1,8 +1,6 @@
-Hosting your own Shields server
-===============================
+# Hosting your own Shields server
 
-Installation
-------------
+## Installation
 
 You will need Node 8 or later, which you can install using a
 [package manager][].
@@ -21,17 +19,13 @@ npm install  # You may need sudo for this.
 
 [package manager]: https://nodejs.org/en/download/package-manager/
 
-
-Build the frontend
-------------------
+## Build the frontend
 
 ```sh
 LONG_CACHE=true npm run build
 ```
 
-
-Start the server
-----------------
+## Start the server
 
 ```sh
 sudo node server
@@ -50,9 +44,7 @@ The root gets redirected to https://shields.io.
 
 For testing purposes, you can go to `http://localhost/`.
 
-
-Heroku
-------
+## Heroku
 
 Once you have installed the [Heroku Toolbelt][]:
 
@@ -64,11 +56,9 @@ make deploy
 heroku open
 ```
 
-[Heroku Toolbelt]: https://toolbelt.heroku.com/
+[heroku toolbelt]: https://toolbelt.heroku.com/
 
-
-Docker
-------
+## Docker
 
 You can build and run the server locally using Docker. First build an image:
 
@@ -80,7 +70,7 @@ Successfully built 4471b442c220
 ```
 
 Optionally, create a file called `shields.env` that contains the needed
-configuration. See [shields.example.env][shields.example.env] for an example.
+configuration. See [server-secrets.md](server-secrets.md) and [../config/custom-environment-variables.yml](config/custom-environment-variables.yml) for examples.
 
 Then run the container:
 
@@ -104,9 +94,7 @@ machine.
 
 [shields.example.env]: ../shields.example.env
 
-
-Zeit Now
---------
+## Zeit Now
 
 To deploy using Zeit Now:
 
@@ -120,15 +108,13 @@ now
 To enable Redis-backed GitHub token persistence, point `REDIS_URL` to your
 Redis installation.
 
-Server secrets
---------------
+## Server secrets
 
-You can add your own server secrets in `private/secret.json`.
+You can add your own server secrets in environment variables or `config/local.yml`.
 
 These are documented in [server-secrets.md](./server-secrets.md)
 
-Separate frontend hosting
--------------------------
+## Separate frontend hosting
 
 If you want to host the frontend on a separate server, such as cloud storage
 or a CDN, you can do that.
@@ -159,33 +145,38 @@ Set the `REDIRECT_URI` environment variable:
 REDIRECT_URI=http://my-custom-shields.s3.amazonaws.com/
 ```
 
-Sentry
-------
+## Sentry
 
 In order to enable integration with [Sentry](https://sentry.io), you need your own [Sentry DSN](https://docs.sentry.io/quickstart/#configure-the-dsn). It’s an URL in format `https://{PUBLIC_KEY}:{SECRET_KEY}@sentry.io/{PROJECT_ID}`.
 
 ### How to obtain the Sentry DSN
 
-1. [Sign up](https://sentry.io/pricing/) for Sentry
-2. Log in to Sentry
-3. Create a new project for Node.js
-4. You should see [Sentry DSN](https://docs.sentry.io/quickstart/#configure-the-dsn) for your project. Sentry DSN can be found by navigating to \[Project Name] -> Project Settings -> Client Keys (DSN) as well.
+1.  [Sign up](https://sentry.io/pricing/) for Sentry
+2.  Log in to Sentry
+3.  Create a new project for Node.js
+4.  You should see [Sentry DSN](https://docs.sentry.io/quickstart/#configure-the-dsn) for your project. Sentry DSN can be found by navigating to \[Project Name] -> Project Settings -> Client Keys (DSN) as well.
 
 Start the server using the Sentry DSN. You can set it:
+
 - by `SENTRY_DSN` environment variable
+
 ```
 sudo SENTRY_DSN=https://xxx:yyy@sentry.io/zzz node server
 ```
 
 - or by `sentry_dsn` secret property defined in `private/secret.json`
+
 ```
 sudo node server
 ```
 
 ### Prometheus
+
 Shields uses [prom-client](https://github.com/siimon/prom-client) to provide [default metrics](https://prometheus.io/docs/instrumenting/writing_clientlibs/#standard-and-runtime-collectors). These metrics are disabled by default.
 You can enable them by `METRICS_PROMETHEUS_ENABLED` environment variable. Moreover access to metrics resource is blocked for requests from any IP address by default. You can provide a regular expression with allowed IP addresses by `METRICS_PROMETHEUS_ALLOWED_IPS` environment variable.
+
 ```bash
 METRICS_PROMETHEUS_ENABLED=true METRICS_PROMETHEUS_ALLOWED_IPS="^127\.0\.0\.1$" npm start
 ```
+
 Metrics are available at `/metrics` resource.

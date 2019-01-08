@@ -20,7 +20,7 @@ module.exports = class CratesVersion extends BaseCratesService {
       {
         title: 'Crates.io',
         namedParams: { crate: 'rustc-serialize' },
-        staticExample: this.render({ version: '0.3.24' }),
+        staticPreview: this.render({ version: '0.3.24' }),
         keywords,
       },
     ]

@@ -51,8 +51,7 @@ module.exports = class Discord extends BaseJsonService {
   static get route() {
     return {
       base: 'discord',
-      format: '([^/]+)',
-      capture: ['serverId'],
+      pattern: ':serverId',
     }
   }
 
@@ -60,9 +59,8 @@ module.exports = class Discord extends BaseJsonService {
     return [
       {
         title: 'Discord',
-        exampleUrl: '102860784329052160',
-        pattern: ':serverId',
-        staticExample: this.render({ members: 23 }),
+        namedParams: { serverId: '102860784329052160' },
+        staticPreview: this.render({ members: 23 }),
       },
     ]
   }
