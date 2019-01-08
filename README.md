@@ -3,13 +3,16 @@
         height="130">
 </p>
 <p align="center">
+    <a href="https://github.com/badges/shields/graphs/contributors" alt="Contributors">
+        <img src="https://img.shields.io/github/contributors/badges/shields.svg" /></a>
     <a href="#backers" alt="Backers on Open Collective">
         <img src="https://opencollective.com/shields/backers/badge.svg" /></a>
     <a href="#sponsors" alt="Sponsors on Open Collective">
         <img src="https://opencollective.com/shields/sponsors/badge.svg" /></a>
+    <a href="https://github.com/badges/shields/pulse" alt="Activity">
+        <img src="https://img.shields.io/github/commit-activity/4w/badges/shields.svg" /></a>
     <a href="https://circleci.com/gh/badges/shields/tree/master">
-        <img src="https://img.shields.io/circleci/project/github/badges/shields/master.svg"
-            alt="build status"></a>
+        <img src="https://img.shields.io/circleci/project/github/badges/shields/master.svg" alt="build status"></a>
     <a href="https://circleci.com/gh/badges/daily-tests">
         <img src="https://img.shields.io/circleci/project/github/badges/daily-tests.svg?label=service%20tests"
             alt="service-test status"></a>
