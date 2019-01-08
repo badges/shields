@@ -2,8 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ClickToSelect from '@mapbox/react-click-to-select'
 import styled, { css } from 'styled-components'
-import posed from 'react-pose'
-import coalesce from '../../lib/coalesce'
 
 const CodeContainer = styled.span`
   position: relative;
@@ -47,19 +45,5 @@ Snippet.propTypes = {
   truncate: PropTypes.bool,
   fontSize: PropTypes.string,
 }
-
-const CopiedLink = posed.span({
-  init: {
-    pointerEvents: 'none',
-    position: 'absolute',
-    top: '-10px',
-  },
-  copied: {
-    pointerEvents: 'none',
-    position: 'absolute',
-    top: '-75px',
-    opacity: 0,
-  },
-})
 
 export { Snippet, StyledCode }
