@@ -4,9 +4,9 @@
 </p>
 <p align="center">
     <a href="#backers" alt="Backers on Open Collective">
-        <img src="https://opencollective.com/shields/backers/badge.svg" /></a>
+        <img src="https://img.shields.io/opencollective/backers/shields.svg" /></a>
     <a href="#sponsors" alt="Sponsors on Open Collective">
-        <img src="https://opencollective.com/shields/sponsors/badge.svg" /></a>
+        <img src="https://img.shields.io/opencollective/sponsors/shields.svg" /></a>
     <a href="https://circleci.com/gh/badges/shields/tree/master">
         <img src="https://img.shields.io/circleci/project/github/badges/shields/master.svg"
             alt="build status"></a>
