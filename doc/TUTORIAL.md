@@ -2,7 +2,7 @@ Tutorial on how to add a badge for a service
 ============================================
 
 This tutorial should help you add a service to shields.io in form of a badge.
-You will need to learn to use JavaScript, git and Github.
+You will need to learn to use JavaScript, Git and GitHub.
 Please [improve the tutorial](https://github.com/badges/shields/edit/master/doc/TUTORIAL.md) while you read it.
 
 (1) Reading
