@@ -56,6 +56,12 @@ const NamedParamCaption = styled(BuilderCaption)`
 `
 
 export default class PathBuilder extends React.Component {
+  static propTypes = {
+    pattern: PropTypes.string.isRequired,
+    exampleParams: PropTypes.object.isRequired,
+    onChange: PropTypes.func,
+  }
+
   constructor(props) {
     super(props)
 
@@ -119,6 +125,7 @@ export default class PathBuilder extends React.Component {
   renderLiteral(literal, tokenIndex) {
     return (
       <PathBuilderColumn key={`${tokenIndex}-${literal}`}>
+        ? '3px' : undefined{' '}
         <PathLiteral isFirstToken={tokenIndex === 0}>{literal}</PathLiteral>
       </PathBuilderColumn>
     )
@@ -160,18 +167,12 @@ export default class PathBuilder extends React.Component {
     let namedParamIndex = 0
     return (
       <BuilderContainer>
-        {tokens.map(
-          (token, tokenIndex) =>
-            typeof token === 'string'
-              ? this.renderLiteral(token, tokenIndex)
-              : this.renderNamedParam(token, tokenIndex, namedParamIndex++)
+        {tokens.map((token, tokenIndex) =>
+          typeof token === 'string'
+            ? this.renderLiteral(token, tokenIndex)
+            : this.renderNamedParam(token, tokenIndex, namedParamIndex++)
         )}
       </BuilderContainer>
     )
   }
-}
-PathBuilder.propTypes = {
-  pattern: PropTypes.string.isRequired,
-  exampleParams: PropTypes.object.isRequired,
-  onChange: PropTypes.func,
 }
