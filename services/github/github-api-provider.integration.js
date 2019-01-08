@@ -32,6 +32,11 @@ describe('Github API provider', function() {
   it('should decrement the limit remaining with each request', function() {
     const remaining = headers.map(h => +h['x-ratelimit-remaining'])
     const expected = Array.from({ length: 10 }, (e, i) => remaining[0] - i)
+    // Added to help debug https://github.com/badges/shields/issues/2663
+    console.log({
+      remaining,
+      expected,
+    })
     expect(remaining).to.deep.equal(expected)
   })
 })

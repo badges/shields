@@ -17,11 +17,11 @@ describe('Github token acceptor', function() {
   // https://github.com/sinonjs/sinon/pull/1557
   before(function() {
     serverSecrets.gh_client_id = fakeClientId
-    serverSecrets.shieldsIps = []
+    serverSecrets.shields_ips = []
   })
   after(function() {
     delete serverSecrets.gh_client_id
-    delete serverSecrets.shieldsIps
+    delete serverSecrets.shields_ips
   })
 
   let port, baseUrl

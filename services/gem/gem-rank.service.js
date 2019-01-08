@@ -92,7 +92,7 @@ module.exports = class GemRank extends BaseJsonService {
         namedParams: {
           gem: 'puppet',
         },
-        staticExample: this.render({ period: 'rt', rank: 332 }),
+        staticPreview: this.render({ period: 'rt', rank: 332 }),
         keywords,
       },
       {
@@ -101,7 +101,7 @@ module.exports = class GemRank extends BaseJsonService {
         namedParams: {
           gem: 'facter',
         },
-        staticExample: this.render({ period: 'rd', rank: 656 }),
+        staticPreview: this.render({ period: 'rd', rank: 656 }),
         keywords,
       },
     ]

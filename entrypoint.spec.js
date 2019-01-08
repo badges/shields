@@ -3,15 +3,10 @@
 const { expect } = require('chai')
 const fetch = require('node-fetch')
 const isSvg = require('is-svg')
-const serverConfig = require('./lib/server-config')
 
 let server
 before(function() {
   this.timeout('5s')
-  serverConfig.bind = {
-    port: 1111,
-    address: 'localhost',
-  }
   server = require('./server')
 })
 

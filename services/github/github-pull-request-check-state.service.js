@@ -41,7 +41,7 @@ module.exports = class GithubPullRequestCheckState extends GithubAuthService {
           repo: 'shields',
           number: '1110',
         },
-        staticExample: this.render({ which: 's', state: 'pending' }),
+        staticPreview: this.render({ which: 's', state: 'pending' }),
         keywords,
         documentation,
       },
@@ -53,7 +53,7 @@ module.exports = class GithubPullRequestCheckState extends GithubAuthService {
           repo: 'shields',
           number: '1110',
         },
-        staticExample: this.render({
+        staticPreview: this.render({
           which: 'contexts',
           state: 'pending',
           stateCounts: { passed: 5, pending: 1 },

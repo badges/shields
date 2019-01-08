@@ -1,13 +1,17 @@
-Production hosting
-==================
+# Production hosting
 
-Server secrets
---------------
+In production, a deploy commit checks in two config files:
 
-Some services require the use of secret tokens or passwords. Those are stored
-in `private/secret.json` which is not checked into the repository.
+- `.env`
+- `config/local-shields-io-production.yml`
 
-These settings are currently set on the production server:
+The `.env` file sets `NODE_CONFIG_ENV` which bootstraps the configuration process. The rest of the configuration is loaded from three sources:
+
+- `config/local-shields-io-production.yml` (secrets)
+- [`config/shields-io-production.yml`](../config/shields-io-production.yml) (non-secrets)
+- [`config/default.yml`](../config/default.yml)
+
+These settings are currently set in `config/local-shields-io-production.yml`:
 
 - bintray_apikey
 - bintray_user
@@ -16,22 +20,12 @@ These settings are currently set on the production server:
 - gh_oauth_state
 - libraries_io_api_key
 - sentry_dsn
-- shieldsIps
-- shieldsSecret
+- shields_secret
 - sl_insight_apiToken
 - sl_insight_userUuid
 - wheelmap_token
 
-Gathered from
-```
-jq keys private/secret-production.json | grep -o '".*"' | sed 's/"//g' | sed 's/^/- /`
-```
-
-The `secret.tpl.json` is a template file used by the Docker container to set the secrets based on
-environment variables.
-
-Main Server Sysadmin
---------------------
+## Main Server Sysadmin
 
 - Servers in DNS round-robin:
   - s0.shields-server.com: 192.99.59.72 (vps71670.vps.ovh.ca)

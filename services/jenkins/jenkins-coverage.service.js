@@ -116,7 +116,7 @@ class JacocoJenkinsCoverage extends BaseJenkinsCoverage {
           host: 'ci.eclipse.org',
           job: 'ecp/job/gerrit',
         },
-        staticExample: this.render({
+        staticPreview: this.render({
           coverage: 96,
         }),
       },
@@ -161,7 +161,7 @@ class CoberturaJenkinsCoverage extends BaseJenkinsCoverage {
           host: 'builds.apache.org',
           job: 'job/olingo-odata4-cobertura',
         },
-        staticExample: this.render({
+        staticPreview: this.render({
           coverage: 94,
         }),
       },
