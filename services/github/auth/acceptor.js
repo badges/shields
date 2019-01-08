@@ -2,10 +2,12 @@
 
 const queryString = require('query-string')
 const request = require('request')
-const log = require('../../../lib/log')
-const githubAuth = require('../../../lib/github-auth')
-const serverSecrets = require('../../../lib/server-secrets')
-const secretIsValid = require('../../../lib/sys/secret-is-valid')
+const githubAuth = require('../../../core/legacy/github-auth')
+const serverSecrets = require('../../../core/legacy/server-secrets')
+const log = require('../../../core/server/log')
+const secretIsValid = require('../../../core/server/secret-is-valid')
+
+require('../../../core/register-chai-plugins.spec')
 
 function sendTokenToAllServers(token) {
   const {

@@ -5,7 +5,7 @@ const sinon = require('sinon')
 const Camp = require('camp')
 const fetch = require('node-fetch')
 const portfinder = require('portfinder')
-const serverSecrets = require('../../../lib/server-secrets')
+const serverSecrets = require('../../../core/legacy/server-secrets')
 const { setRoutes } = require('./admin')
 
 function createAuthHeader({ username, password }) {

@@ -1,10 +1,10 @@
 'use strict'
 
-const serverSecrets = require('../../lib/server-secrets')
-const { colorScale } = require('../../lib/color-formatters')
+const serverSecrets = require('../../core/legacy/server-secrets')
+const { colorScale } = require('../color-formatters')
 const {
   checkErrorResponse: standardCheckErrorResponse,
-} = require('../../lib/error-helper')
+} = require('../legacy-error-helper')
 
 const documentation = `
 <p>

@@ -1,11 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const { floorCount: floorCountColor } = require('../../lib/color-formatters')
-const { addv, metric } = require('../../lib/text-formatters')
-const BaseJsonService = require('../base-json')
-const { NotFound } = require('../errors')
+const { floorCount: floorCountColor } = require('../color-formatters')
+const { addv, metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService, NotFound } = require('..')
 
 const aurSchema = Joi.object({
   resultcount: nonNegativeInteger,

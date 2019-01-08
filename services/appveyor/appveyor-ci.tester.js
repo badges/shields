@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isBuildStatus } = require('../test-validators')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('CI status')
   .get('/gruntjs/grunt.json')

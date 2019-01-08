@@ -1,21 +1,17 @@
 'use strict'
 
 const xml2js = require('xml2js')
-const LegacyService = require('../legacy-service')
 const {
   makeBadgeData: getBadgeData,
   makeLabel: getLabel,
-} = require('../../lib/badge-data')
-const {
-  metric,
-  starRating,
-  addv: versionText,
-} = require('../../lib/text-formatters')
+} = require('../legacy-badge-data')
+const { metric, starRating, addv: versionText } = require('../text-formatters')
 const {
   version: versionColor,
   downloadCount: downloadCountColor,
   floorCount: floorCountColor,
-} = require('../../lib/color-formatters')
+} = require('../color-formatters')
+const { LegacyService } = require('..')
 
 const keywords = ['amo', 'firefox']
 

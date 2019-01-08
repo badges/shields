@@ -1,11 +1,11 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
   isMetric,
 } = require('../test-validators')
+const { ServiceTester } = require('..')
 
 const t = (module.exports = new ServiceTester({
   id: 'aur',

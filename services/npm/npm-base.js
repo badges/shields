@@ -1,10 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const serverSecrets = require('../../lib/server-secrets')
-const BaseJsonService = require('../base-json')
-const { InvalidResponse, NotFound } = require('../errors')
+const serverSecrets = require('../../core/legacy/server-secrets')
 const { semverRange } = require('../validators')
+const { BaseJsonService, InvalidResponse, NotFound } = require('..')
 
 const deprecatedLicenseObjectSchema = Joi.object({
   type: Joi.string().required(),

@@ -1,6 +1,6 @@
 'use strict'
 
-const githubAuth = require('../../lib/github-auth')
+const githubAuth = require('../../core/legacy/github-auth')
 
 // Provide an interface to the Github API. Manages the base URL.
 //

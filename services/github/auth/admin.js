@@ -1,7 +1,7 @@
 'use strict'
 
-const { serializeDebugInfo } = require('../../../lib/github-auth')
-const secretIsValid = require('../../../lib/sys/secret-is-valid')
+const { serializeDebugInfo } = require('../../../core/legacy/github-auth')
+const secretIsValid = require('../../../core/server/secret-is-valid')
 
 function setRoutes(server) {
   // Allow the admin to obtain the tokens for operational and debugging

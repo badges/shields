@@ -6,7 +6,7 @@ const got = require('got')
 const portfinder = require('portfinder')
 const queryString = require('query-string')
 const nock = require('nock')
-const serverSecrets = require('../../../lib/server-secrets')
+const serverSecrets = require('../../../core/legacy/server-secrets')
 const acceptor = require('./acceptor')
 
 const fakeClientId = 'githubdabomb'

@@ -1,9 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
 const { invalidJSON } = require('../response-fixtures')
 const { isMetric, isVPlusTripleDottedVersion } = require('../test-validators')
+const ServiceTester = require('..')
 
 const t = (module.exports = new ServiceTester({
   id: 'apm',
