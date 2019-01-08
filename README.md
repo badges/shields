@@ -101,9 +101,8 @@ You can read a [tutorial on how to add a badge][tutorial].
    Tests need to pass in Node 8 and 9.
 2. Clone this repository.
 3. Run `npm install` to install the dependencies.
-4. Run `npm run build` to build the frontend.
-5. Run `npm start` to start the server.
-6. Open `http://[::]:8080/` to view the home page.
+4. Run `npm start` to start the server.
+5. Open `http://localhost:3000/` to view the frontend.
 
 To generate the frontend using production cache settings &ndash; that is,
 badge preview URIs with `maxAge` &ndash; run `LONG_CACHE=true npm run build`.
