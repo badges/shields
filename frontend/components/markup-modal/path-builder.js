@@ -3,11 +3,10 @@ import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import pathToRegexp from 'path-to-regexp'
 import humanizeString from 'humanize-string'
-import { noAutocorrect } from '../common'
+import { noAutocorrect, StyledInput } from '../common'
 import {
   BuilderContainer,
   BuilderLabel,
-  BuilderInput,
   BuilderCaption,
 } from './builder-common'
 
@@ -44,7 +43,7 @@ const NamedParamLabel = styled(BuilderLabel)`
   text-align: center;
 `
 
-const NamedParamInput = styled(BuilderInput)`
+const NamedParamInput = styled(StyledInput)`
   width: 100%;
   text-align: center;
 
@@ -163,10 +162,11 @@ export default class PathBuilder extends React.Component {
     let namedParamIndex = 0
     return (
       <BuilderContainer>
-        {tokens.map((token, tokenIndex) =>
-          typeof token === 'string'
-            ? this.renderLiteral(token, tokenIndex)
-            : this.renderNamedParam(token, tokenIndex, namedParamIndex++)
+        {tokens.map(
+          (token, tokenIndex) =>
+            typeof token === 'string'
+              ? this.renderLiteral(token, tokenIndex)
+              : this.renderNamedParam(token, tokenIndex, namedParamIndex++)
         )}
       </BuilderContainer>
     )

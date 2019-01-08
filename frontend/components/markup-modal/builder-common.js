@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { StyledInput } from '../common'
 
 const BuilderOuterContainer = styled.div`
   margin-top: 10px;
@@ -36,8 +35,6 @@ const BuilderLabel = styled.label`
   text-transform: lowercase;
 `
 
-const BuilderInput = StyledInput
-
 const BuilderCaption = styled.span`
   color: #999;
 
@@ -46,4 +43,4 @@ const BuilderCaption = styled.span`
   text-transform: lowercase;
 `
 
-export { BuilderContainer, BuilderLabel, BuilderInput, BuilderCaption }
+export { BuilderContainer, BuilderLabel, BuilderCaption }

@@ -4,11 +4,10 @@ import styled from 'styled-components'
 import humanizeString from 'humanize-string'
 import { stringify as stringifyQueryString } from 'query-string'
 import { advertisedStyles } from '../../../supported-features.json'
-import { noAutocorrect } from '../common'
+import { noAutocorrect, StyledInput } from '../common'
 import {
   BuilderContainer,
   BuilderLabel,
-  BuilderInput,
   BuilderCaption,
 } from './builder-common'
 
@@ -16,7 +15,7 @@ const QueryParamLabel = styled(BuilderLabel)`
   margin: 5px;
 `
 
-const QueryParamInput = styled(BuilderInput)`
+const QueryParamInput = styled(StyledInput)`
   margin: 5px 10px;
 `
 
