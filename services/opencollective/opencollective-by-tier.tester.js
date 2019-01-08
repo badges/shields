@@ -98,7 +98,7 @@ t.create('handles not found correctly')
   .get('/nonexistent-collective/1234.json?style=_shields_test')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'unknown tier',
+      name: 'open collective',
       value: 'collective not found',
       colorB: colorScheme.red,
     })
