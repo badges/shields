@@ -184,7 +184,6 @@
     "pretty": "^2.0.0",
     "prop-types": "^15.6.0",
     "react": "^16.7.0",
-    "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.7.0",
     "react-modal": "^3.8.1",
     "react-pose": "^4.0.4",

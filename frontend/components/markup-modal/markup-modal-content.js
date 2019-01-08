@@ -144,22 +144,6 @@ export default class MarkupModalContent extends React.Component {
     ) : null
   }
 
-  // renderFullPattern() {
-  //   const {
-  //     baseUrl,
-  //     example: {
-  //       example: { pattern },
-  //     },
-  //   } = this.props
-  //   return (
-  //     <Snippet2
-  //       snippet={pattern}
-  //       snippetToCopy={`${baseUrl}${pattern}.svg`}
-  //       fontSize="9pt"
-  //     />
-  //   )
-  // }
-
   handlePathChange = ({ path, isComplete }) => {
     this.setState({ path, pathIsComplete: isComplete })
   }
