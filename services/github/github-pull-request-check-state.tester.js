@@ -11,7 +11,7 @@ t.create('github pull request check state (pull request not found)')
   .expectJSON({ name: 'checks', value: 'pull request or repo not found' })
 
 t.create(
-  "github pull request check state (ref returned by github doens't exist"
+  "github pull request check state (ref returned by github doesn't exist"
 )
   .get('/s/pulls/badges/shields/1110.json')
   .intercept(

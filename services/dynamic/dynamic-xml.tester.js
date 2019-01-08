@@ -35,7 +35,7 @@ t.create('XML from url')
     colorB: colorsB.blue,
   })
 
-t.create('XML from uri (support uri query paramater)')
+t.create('XML from uri (support uri query parameter)')
   .get(
     '.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/name&style=_shields_test'
   )
