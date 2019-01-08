@@ -36,7 +36,7 @@ class AmoDownloads extends LegacyService {
       {
         title: 'Mozilla Add-on',
         namedParams: { addonId: 'dustman' },
-        staticExample: { message: '12k', color: 'brightgreen' },
+        staticPreview: { message: '12k', color: 'brightgreen' },
         keywords,
       },
     ]
@@ -62,7 +62,7 @@ class AmoVersion extends LegacyService {
       {
         title: 'Mozilla Add-on',
         namedParams: { addonId: 'dustman' },
-        staticExample: { message: 'v2.1.0', color: 'blue' },
+        staticPreview: { message: 'v2.1.0', color: 'blue' },
         keywords,
       },
     ]
@@ -94,7 +94,7 @@ class AmoRating extends LegacyService {
         title: 'Mozilla Add-on',
         pattern: 'rating/:addonId',
         namedParams: { addonId: 'dustman' },
-        staticExample: {
+        staticPreview: {
           label: 'rating',
           message: '4/5',
           color: 'brightgreen',
@@ -105,7 +105,7 @@ class AmoRating extends LegacyService {
         title: 'Mozilla Add-on',
         pattern: 'stars/:addonId',
         namedParams: { addonId: 'dustman' },
-        staticExample: {
+        staticPreview: {
           label: 'rating',
           message: starRating(4),
           color: 'brightgreen',
@@ -135,7 +135,7 @@ class AmoUsers extends LegacyService {
       {
         title: 'Mozilla Add-on',
         namedParams: { addonId: 'dustman' },
-        staticExample: { message: '706', color: 'brightgreen' },
+        staticPreview: { message: '706', color: 'brightgreen' },
         keywords,
       },
     ]

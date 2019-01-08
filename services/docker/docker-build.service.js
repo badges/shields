@@ -60,7 +60,7 @@ module.exports = class DockerBuild extends BaseJsonService {
           user: 'jrottenberg',
           repo: 'ffmpeg',
         },
-        staticExample: this.render({ status: 10 }),
+        staticPreview: this.render({ status: 10 }),
       },
     ]
   }

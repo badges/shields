@@ -28,7 +28,7 @@ class LibrariesIoDependents extends LibrariesIoBase {
           platform: 'npm',
           library: 'got',
         },
-        staticExample: this.render({ dependentCount: 2000 }),
+        staticPreview: this.render({ dependentCount: 2000 }),
       },
     ]
   }

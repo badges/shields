@@ -13,7 +13,7 @@ const { setCacheHeaders } = require('./cache-headers')
 // triggers another call to the handler. When using badges for server
 // diagnostics, that's useful!
 //
-// In constrast, The `handle()` function of most other `BaseService`
+// In contrast, The `handle()` function of most other `BaseService`
 // subclasses is wrapped in onboard, in-memory caching. See `lib /request-
 // handler.js` and `BaseService.prototype.register()`.
 //

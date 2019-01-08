@@ -25,7 +25,7 @@ module.exports = class StackExchangeMonthlyQuestions extends BaseJsonService {
       {
         title: 'Stack Exchange monthly questions',
         namedParams: { stackexchangesite: 'stackoverflow', query: 'momentjs' },
-        staticExample: this.render({
+        staticPreview: this.render({
           stackexchangesite: 'stackoverflow',
           query: 'momentjs',
           numValue: 2000,

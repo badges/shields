@@ -28,25 +28,25 @@ module.exports = class TravisBuild extends BaseSvgScrapingService {
   }
 
   static get examples() {
-    const { staticExample } = this
+    const { staticPreview } = this
     return [
       {
         title: 'Travis (.org)',
         pattern: ':user/:repo',
         namedParams: { user: 'rust-lang', repo: 'rust' },
-        staticExample,
+        staticPreview,
       },
       {
         title: 'Travis (.org) branch',
         pattern: ':user/:repo/:branch',
         namedParams: { user: 'rust-lang', repo: 'rust', branch: 'master' },
-        staticExample,
+        staticPreview,
       },
       {
         title: 'Travis (.com)',
         pattern: 'com/:user/:repo',
         namedParams: { user: 'ivandelabeldad', repo: 'rackian-gateway' },
-        staticExample,
+        staticPreview,
       },
       {
         title: 'Travis (.com) branch',
@@ -56,12 +56,12 @@ module.exports = class TravisBuild extends BaseSvgScrapingService {
           repo: 'rackian-gateway',
           branch: 'master',
         },
-        staticExample,
+        staticPreview,
       },
     ]
   }
 
-  static get staticExample() {
+  static get staticPreview() {
     return { message: 'passing', color: 'brightgreen' }
   }
 

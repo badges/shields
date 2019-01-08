@@ -59,7 +59,7 @@ class AnsibleGalaxyRoleDownloads extends AnsibleGalaxyRole {
       {
         title: 'Ansible Role',
         namedParams: { roleId: '3078' },
-        staticExample: this.render({ downloads: 76 }),
+        staticPreview: this.render({ downloads: 76 }),
       },
     ]
   }
@@ -96,7 +96,7 @@ class AnsibleGalaxyRoleName extends AnsibleGalaxyRole {
       {
         title: 'Ansible Role',
         namedParams: { roleId: '3078' },
-        staticExample: this.render({
+        staticPreview: this.render({
           name: 'ansible-roles.sublimetext3_packagecontrol',
         }),
       },

@@ -29,7 +29,16 @@ module.exports = class Luarocks extends LegacyService {
     return [
       {
         title: 'LuaRocks',
-        previewUrl: 'mpeterv/luacheck',
+        pattern: ':user/:moduleName',
+        namedParams: {
+          user: 'mpeterv',
+          moduleName: 'luacheck',
+        },
+        staticPreview: {
+          label: 'luarocks',
+          message: 'v0.23.0-1',
+          color: 'brightgreen',
+        },
         keywords: ['lua'],
       },
     ]

@@ -71,7 +71,7 @@ module.exports = class Wheelmap extends BaseJsonService {
       {
         title: 'Wheelmap',
         namedParams: { nodeId: '26699541' },
-        staticExample: this.render({ accessibility: 'yes' }),
+        staticPreview: this.render({ accessibility: 'yes' }),
       },
     ]
   }

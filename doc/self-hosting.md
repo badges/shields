@@ -158,13 +158,13 @@ In order to enable integration with [Sentry](https://sentry.io), you need your o
 
 Start the server using the Sentry DSN. You can set it:
 
-*   by `SENTRY_DSN` environment variable
+- by `SENTRY_DSN` environment variable
 
 ```
 sudo SENTRY_DSN=https://xxx:yyy@sentry.io/zzz node server
 ```
 
-*   or by `sentry_dsn` secret property defined in `private/secret.json`
+- or by `sentry_dsn` secret property defined in `private/secret.json`
 
 ```
 sudo node server

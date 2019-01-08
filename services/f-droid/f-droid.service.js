@@ -113,14 +113,14 @@ module.exports = class FDroid extends BaseYamlService {
       {
         title: 'F-Droid',
         namedParams: { appId: 'org.thosp.yourlocalweather' },
-        staticExample: this.render({ version: '1.0' }),
+        staticPreview: this.render({ version: '1.0' }),
         keywords: ['fdroid', 'android', 'app'],
       },
       {
         title: 'F-Droid (explicit metadata format)',
         namedParams: { appId: 'org.dystopia.email' },
         queryParams: { metadata_format: 'yml' },
-        staticExample: this.render({ version: '1.2.1' }),
+        staticPreview: this.render({ version: '1.2.1' }),
         keywords: ['fdroid', 'android', 'app'],
       },
     ]
