@@ -138,7 +138,7 @@ t.create('XML from url | error color overrides default')
   .expectJSON({
     name: 'custom badge',
     value: 'resource not found',
-    colorB: colorsB.lightgrey,
+    colorB: colorsB.red,
   })
 
 t.create('XML from url | error color overrides user specified')

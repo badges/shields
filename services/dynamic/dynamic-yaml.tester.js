@@ -93,7 +93,7 @@ t.create('YAML from url | error color overrides default')
   .expectJSON({
     name: 'custom badge',
     value: 'resource not found',
-    colorB: colorsB.lightgrey,
+    colorB: colorsB.red,
   })
 
 t.create('YAML from url | error color overrides user specified')
