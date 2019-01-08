@@ -29,10 +29,10 @@ const PathBuilderColumn = styled.span`
 
 const PathLiteral = styled.div`
   margin-top: 20px;
-  ${({ marginLeft }) =>
-    marginLeft &&
+  ${({ isFirstToken }) =>
+    isFirstToken &&
     css`
-      margin-left: ${marginLeft};
+      margin-left: 3px;
     `};
 `
 
@@ -119,9 +119,7 @@ export default class PathBuilder extends React.Component {
   renderLiteral(literal, tokenIndex) {
     return (
       <PathBuilderColumn key={`${tokenIndex}-${literal}`}>
-        <PathLiteral marginLeft={tokenIndex === 0 ? '3px' : undefined}>
-          {literal}
-        </PathLiteral>
+        <PathLiteral isFirstToken={tokenIndex === 0}>{literal}</PathLiteral>
       </PathBuilderColumn>
     )
   }
