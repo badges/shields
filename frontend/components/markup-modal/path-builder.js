@@ -110,8 +110,8 @@ export default class PathBuilder extends React.Component {
     return this.constructor.constructPath({ tokens, namedParams })
   }
 
-  handleTokenChange = event => {
-    const { name, value } = event.target
+  handleTokenChange = evt => {
+    const { name, value } = evt.target
     const { namedParams: oldNamedParams } = this.state
 
     const namedParams = {
