@@ -18,6 +18,12 @@ module.exports = class OpencollectiveByTier extends OpencollectiveBase {
     ]
   }
 
+  static get defaultBadgeData() {
+    return {
+      label: 'unknown tier',
+    }
+  }
+
   static get route() {
     return this.buildRoute('tier', true)
   }

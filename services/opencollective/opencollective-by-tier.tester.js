@@ -94,15 +94,12 @@ t.create('gets amount of backers in specified tier')
     })
   )
 
-// Test case does not work due to the upstream API
-// https://github.com/opencollective/opencollective/issues/1609
-//
-/*t.create('handles not found correctly')
-  .get('/nonexistent-collective.json?style=_shields_test')
+t.create('handles not found correctly')
+  .get('/nonexistent-collective/1234.json?style=_shields_test')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'backers',
+      name: 'unknown tier',
       value: 'collective not found',
-      colorB: 'red',
+      colorB: colorScheme.red,
     })
-  )*/
+  )
