@@ -48,6 +48,8 @@ There are three public badge servers on OVH VPS’s.
 - The server uses systemd to automatically restart the server when it crashes.
 - Provisioning additional servers is a manual process which is yet to been
   documented.
+- The public servers _do not_ use docker. The `Dockerfile` is included for
+  self-hosting (including on a Docker-capable PaaS).
 
 [s0]: https://s0.shields-server.com/index.html
 [s1]: https://s1.shields-server.com/index.html
