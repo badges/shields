@@ -15,6 +15,8 @@ const { ConditionalGithubAuthService } = require('./github-auth-service')
 const { fetchJsonFromRepo } = require('./github-common-fetch')
 const { documentation } = require('./github-helpers')
 
+const keywords = ['npm', 'node']
+
 const versionSchema = Joi.object({
   version: semver,
 }).required()
@@ -40,6 +42,7 @@ class GithubPackageJsonVersion extends ConditionalGithubAuthService {
         namedParams: { user: 'IcedFrisby', repo: 'IcedFrisby' },
         staticPreview: this.render({ version: '2.0.0-alpha.2' }),
         documentation,
+        keywords,
       },
       {
         title: 'GitHub package.json version',
@@ -51,6 +54,7 @@ class GithubPackageJsonVersion extends ConditionalGithubAuthService {
         },
         staticPreview: this.render({ version: '2.0.0-alpha.2' }),
         documentation,
+        keywords,
       },
     ]
   }
@@ -91,7 +95,7 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthService {
   static get examples() {
     return [
       {
-        title: 'GitHub package.json npm dependency version',
+        title: 'GitHub package.json dependency version',
         pattern: ':user/:repo/:packageName',
         namedParams: {
           user: 'developit',
@@ -103,9 +107,10 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthService {
           range: '^0.67.3',
         }),
         documentation,
+        keywords,
       },
       {
-        title: 'GitHub package.json npm dependency version (dev dep on branch)',
+        title: 'GitHub package.json dependency version (dev dep on branch)',
         pattern: ':user/:repo/dev/:scope?/:packageName/:branch*',
         namedParams: {
           user: 'zeit',
@@ -119,6 +124,7 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthService {
           range: '7.0.0',
         }),
         documentation,
+        keywords,
       },
     ]
   }
@@ -194,6 +200,7 @@ class DynamicGithubPackageJson extends ConditionalGithubAuthService {
           value: ['bundle', 'rollup', 'micro library'],
         }),
         documentation,
+        keywords,
       },
       {
         title: 'GitHub package.json dynamic',
@@ -210,6 +217,7 @@ class DynamicGithubPackageJson extends ConditionalGithubAuthService {
           branch: 'master',
         }),
         documentation,
+        keywords,
       },
     ]
   }
