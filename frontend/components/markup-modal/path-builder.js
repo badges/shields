@@ -69,10 +69,13 @@ export default class PathBuilder extends React.Component {
     const tokens = pathToRegexp.parse(pattern)
 
     const namedParams = {}
+
+    // `pathToRegexp.parse()` returns a mixed array of strings for literals
+    // and  objects for parameters. Filter out the literals and work with the
+    // objects.
     tokens
       .filter(t => typeof t !== 'string')
-      .map(t => t.name)
-      .forEach(name => {
+      .forEach(({ name }) => {
         namedParams[name] = ''
       })
 
