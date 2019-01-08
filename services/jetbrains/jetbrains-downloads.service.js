@@ -37,7 +37,7 @@ module.exports = class JetbrainsDownloads extends JetbrainsBase {
         namedParams: {
           pluginId: '1347-scala',
         },
-        staticExample: this.render({ downloads: 10200000 }),
+        staticPreview: this.render({ downloads: 10200000 }),
       },
     ]
   }

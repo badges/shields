@@ -61,7 +61,7 @@ function pullRequestClassGenerator(raw) {
             user: 'atlassian',
             repo: 'python-bitbucket',
           },
-          staticExample: this.render({ prs: 22 }),
+          staticPreview: this.render({ prs: 22 }),
         },
       ]
     }

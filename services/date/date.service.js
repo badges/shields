@@ -45,7 +45,7 @@ module.exports = class Date extends BaseService {
         title: 'Relative date',
         pattern: ':timestamp',
         namedParams: { timestamp: '1540814400' },
-        staticExample: this.render({ relativeDateString: '2 days ago' }),
+        staticPreview: this.render({ relativeDateString: '2 days ago' }),
         keywords: ['date', 'time', 'countdown', 'countup', 'moment'],
         documentation,
       },

@@ -1,18 +1,21 @@
 # Deprecating Badges
+
 When a service that Shields integrates with shuts down, those badges will no longer work and need to be deprecated within Shields.
 
 Deprecating a badge involves 3 steps:
- 1. Adding an entry for the service to the deprecated service list in `deprecated-services.js`
- 2. Updating the service code to use the `DeprecatedService` class
- 3. Updating the service tests to reflect the new behavior of the deprecated service
+
+1.  Adding an entry for the service to the deprecated service list in `deprecated-services.js`
+2.  Updating the service code to use the `DeprecatedService` class
+3.  Updating the service tests to reflect the new behavior of the deprecated service
 
 ## Update Deprecated Service List
+
 All deprecated services are enumerated in the `deprecated-services.js` [file](https://github.com/badges/shields/blob/master/lib/deprecated-services.js) which can be found in the `lib` directory (`./lib/deprecated-services.js`).
 
-Add a key for the service with the corresponding date for deprecation, for example: `nsp: new Date('2018-12-13')`,  to the `deprecatedServices` object.
-
+Add a key for the service with the corresponding date for deprecation, for example: `nsp: new Date('2018-12-13')`, to the `deprecatedServices` object.
 
 ## Update Service Implementation
+
 Locate the source file(s) for the service, which can be found in `*.service.js` files located within the directory for the service (`./services/:service-name/`) such as `./services/imagelayers/imagelayers.service.js`.
 
 Replace the existing service class implementation with the `DeprecatedService` class from `./services/deprecated-service.js` using the respective `category`, `url`, and `label` values for that service. For example:
@@ -31,10 +34,10 @@ module.exports = deprecatedService({
   },
   label: 'imagelayers',
 })
-
 ```
 
 ## Update Service Tests
+
 Locate the test file(s) for the service, which can be found in `*.tester.js` files located in the service directory (`./services/:service-name/`), such as `./services/imagelayers/imagelayers.tester.js`.
 
 With `DeprecatedService` classes we cannot use the utility functions from `create-service-tester.js` so you will need to create the `ServiceTester` class directly. For example:
@@ -85,13 +88,13 @@ t.create('no longer available (previously number of layers)')
     name: 'imagelayers',
     value: 'no longer available',
   })
-
 ```
 
 ## Additional Information
+
 Some other information that may be useful:
 
-* [Contributing Docs](../CONTRIBUTING.md)
-* [Badge Tutorial](./TUTORIAL.md)
-* [Service Tests Tutorial](./service-tests.md)
-* Previous Pull Requests that deprecated badges like [#2352](https://github.com/badges/shields/pull/2352) and [#2410](https://github.com/badges/shields/pull/2410)
+- [Contributing Docs](../CONTRIBUTING.md)
+- [Badge Tutorial](./TUTORIAL.md)
+- [Service Tests Tutorial](./service-tests.md)
+- Previous Pull Requests that deprecated badges like [#2352](https://github.com/badges/shields/pull/2352) and [#2410](https://github.com/badges/shields/pull/2410)

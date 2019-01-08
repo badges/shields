@@ -39,7 +39,7 @@ module.exports = class Bountysource extends BaseJsonService {
       {
         title: 'Bountysource',
         namedParams: { team: 'mozilla-core' },
-        staticExample: this.render({ total: 53000 }),
+        staticPreview: this.render({ total: 53000 }),
       },
     ]
   }

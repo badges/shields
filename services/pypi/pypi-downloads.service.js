@@ -81,7 +81,7 @@ module.exports = class PypiDownloads extends BaseJsonService {
         namedParams: {
           packageName: 'Django',
         },
-        staticExample: this.render({ period: 'dd', downloads: 14000 }),
+        staticPreview: this.render({ period: 'dd', downloads: 14000 }),
         keywords,
       },
       {
@@ -90,7 +90,7 @@ module.exports = class PypiDownloads extends BaseJsonService {
         namedParams: {
           packageName: 'Django',
         },
-        staticExample: this.render({ period: 'dw', downloads: 250000 }),
+        staticPreview: this.render({ period: 'dw', downloads: 250000 }),
         keywords,
       },
       {
@@ -99,7 +99,7 @@ module.exports = class PypiDownloads extends BaseJsonService {
         namedParams: {
           packageName: 'Django',
         },
-        staticExample: this.render({ period: 'dm', downloads: 1070100 }),
+        staticPreview: this.render({ period: 'dm', downloads: 1070100 }),
         keywords,
       },
     ]

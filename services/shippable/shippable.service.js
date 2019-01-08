@@ -56,7 +56,7 @@ module.exports = class Shippable extends BaseJsonService {
         title: 'Shippable',
         pattern: ':projectId',
         namedParams: { projectId: '5444c5ecb904a4b21567b0ff' },
-        staticExample: this.render({ code: 30 }),
+        staticPreview: this.render({ code: 30 }),
       },
       {
         title: 'Shippable branch',
@@ -65,7 +65,7 @@ module.exports = class Shippable extends BaseJsonService {
           projectId: '5444c5ecb904a4b21567b0ff',
           branch: 'master',
         },
-        staticExample: this.render({ code: 30 }),
+        staticPreview: this.render({ code: 30 }),
       },
     ]
   }

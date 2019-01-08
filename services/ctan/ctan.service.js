@@ -59,7 +59,7 @@ class CtanLicense extends BaseCtanService {
       {
         title: 'CTAN',
         namedParams: { library: 'novel' },
-        staticExample: this.render({ licenses: ['ppl1.3c', 'ofl'] }),
+        staticPreview: this.render({ licenses: ['ppl1.3c', 'ofl'] }),
         keywords: ['tex'],
       },
     ]
@@ -92,7 +92,7 @@ class CtanVersion extends BaseCtanService {
       {
         title: 'CTAN',
         namedParams: { library: 'tex' },
-        staticExample: this.render({ version: '3.14159265' }),
+        staticPreview: this.render({ version: '3.14159265' }),
         keywords: ['tex'],
       },
     ]

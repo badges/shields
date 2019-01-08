@@ -110,7 +110,7 @@ class JenkinsPluginInstalls extends BaseJsonService {
         namedParams: {
           plugin: 'view-job-filters',
         },
-        staticExample: this.render({
+        staticPreview: this.render({
           label: this._getLabel(),
           installs: 10247,
         }),
@@ -122,7 +122,7 @@ class JenkinsPluginInstalls extends BaseJsonService {
           plugin: 'view-job-filters',
           version: '1.26',
         },
-        staticExample: this.render({
+        staticPreview: this.render({
           label: this._getLabel('1.26'),
           installs: 955,
         }),

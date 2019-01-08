@@ -46,7 +46,7 @@ module.exports = class Depfu extends BaseJsonService {
       {
         title: 'Depfu',
         namedParams: { user: 'depfu', repo: 'example-ruby' },
-        staticExample: this.render({
+        staticPreview: this.render({
           text: 'recent',
           colorscheme: 'brightgreen',
         }),

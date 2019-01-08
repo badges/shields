@@ -20,7 +20,7 @@ module.exports = class CondaPlatform extends BaseCondaService {
         title: 'Conda',
         namedParams: { channel: 'conda-forge', package: 'python' },
         pattern: 'pn/:channel/:package',
-        staticExample: this.render({
+        staticPreview: this.render({
           which: 'pn',
           platforms: ['linux-64', 'win-32', 'osx-64', 'win-64'],
         }),
