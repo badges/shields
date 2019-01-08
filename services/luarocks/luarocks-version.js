@@ -5,7 +5,7 @@
  */
 'use strict'
 
-// Compare two arrays containing splitted and transformed to
+// Compare two arrays containing split and transformed to
 // positive/negative numbers parts of version strings,
 // respecting negative/missing values:
 // [1, 2, 1] > [1, 2], but [1, 2, -1] < [1, 2] ([1, 2] is aligned to [1, 2, 0])
