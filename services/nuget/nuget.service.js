@@ -20,13 +20,13 @@ class NugetVersionService extends Version {
         title: 'Nuget',
         pattern: 'v/:packageName',
         namedParams: { packageName: 'Microsoft.AspNet.Mvc' },
-        staticExample: this.render({ version: '5.2.4' }),
+        staticPreview: this.render({ version: '5.2.4' }),
       },
       {
         title: 'Nuget (with prereleases)',
         pattern: 'vpre/:packageName',
         namedParams: { packageName: 'Microsoft.AspNet.Mvc' },
-        staticExample: this.render({ version: '5.2.5-preview1' }),
+        staticPreview: this.render({ version: '5.2.5-preview1' }),
       },
     ]
   }
@@ -39,7 +39,7 @@ class NugetDownloadService extends Downloads {
         title: 'Nuget',
         pattern: 'dt/:packageName',
         namedParams: { packageName: 'Microsoft.AspNet.Mvc' },
-        staticExample: this.render({ downloads: 49e6 }),
+        staticPreview: this.render({ downloads: 49e6 }),
       },
     ]
   }

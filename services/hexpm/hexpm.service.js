@@ -34,10 +34,10 @@ const hexSchema = Joi.object({
 }).required()
 
 class BaseHexPmService extends BaseJsonService {
-  async fetch({ pkg }) {
+  async fetch({ packageName }) {
     return this._requestJson({
       schema: hexSchema,
-      url: `https://hex.pm/api/packages/${pkg}`,
+      url: `https://hex.pm/api/packages/${packageName}`,
     })
   }
 
@@ -62,8 +62,8 @@ class HexPmLicense extends BaseHexPmService {
     }
   }
 
-  async handle({ pkg }) {
-    const json = await this.fetch({ pkg })
+  async handle({ packageName }) {
+    const json = await this.fetch({ packageName })
     return this.constructor.render({ licenses: json.meta.licenses })
   }
 
@@ -78,8 +78,7 @@ class HexPmLicense extends BaseHexPmService {
   static get route() {
     return {
       base: 'hexpm/l',
-      format: '(.+)',
-      capture: ['pkg'],
+      pattern: ':packageName',
     }
   }
 
@@ -87,9 +86,8 @@ class HexPmLicense extends BaseHexPmService {
     return [
       {
         title: 'Hex.pm',
-        pattern: ':package',
-        exampleUrl: 'plug',
-        staticExample: this.render({ licenses: ['Apache 2'] }),
+        namedParams: { packageName: 'plug' },
+        staticPreview: this.render({ licenses: ['Apache 2'] }),
       },
     ]
   }
@@ -100,8 +98,8 @@ class HexPmVersion extends BaseHexPmService {
     return { message: versionText(version), color: versionColor(version) }
   }
 
-  async handle({ pkg }) {
-    const json = await this.fetch({ pkg })
+  async handle({ packageName }) {
+    const json = await this.fetch({ packageName })
     return this.constructor.render({ version: json.releases[0].version })
   }
 
@@ -112,8 +110,7 @@ class HexPmVersion extends BaseHexPmService {
   static get route() {
     return {
       base: 'hexpm/v',
-      format: '(.+)',
-      capture: ['pkg'],
+      pattern: ':packageName',
     }
   }
 
@@ -121,9 +118,8 @@ class HexPmVersion extends BaseHexPmService {
     return [
       {
         title: 'Hex.pm',
-        pattern: ':package',
-        exampleUrl: 'plug',
-        staticExample: this.render({ version: '1.6.4' }),
+        namedParams: { packageName: 'plug' },
+        staticPreview: this.render({ version: '1.6.4' }),
       },
     ]
   }
@@ -153,8 +149,8 @@ function DownloadsForInterval(interval) {
       }
     }
 
-    async handle({ pkg }) {
-      const json = await this.fetch({ pkg })
+    async handle({ packageName }) {
+      const json = await this.fetch({ packageName })
       return this.constructor.render({ downloads: json.downloads[interval] })
     }
 
@@ -169,8 +165,7 @@ function DownloadsForInterval(interval) {
     static get route() {
       return {
         base,
-        format: '(.+)',
-        capture: ['pkg'],
+        pattern: ':packageName',
       }
     }
 
@@ -178,9 +173,8 @@ function DownloadsForInterval(interval) {
       return [
         {
           title: 'Hex.pm',
-          pattern: ':package',
-          exampleUrl: 'plug',
-          staticExample: this.render({ downloads: 85000 }),
+          namedParams: { packageName: 'plug' },
+          staticPreview: this.render({ downloads: 85000 }),
         },
       ]
     }

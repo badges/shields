@@ -1,10 +1,10 @@
 ---
 name: 💡 Badge Request
 about: Ideas for new badges
-
 ---
 
 :clipboard: **Description**
+
 <!--
 A clear and concise description of the new badge.
 
@@ -15,6 +15,7 @@ A clear and concise description of the new badge.
 -->
 
 :link: **Data**
+
 <!--
 Where can we get the data from?
 
@@ -22,7 +23,6 @@ Where can we get the data from?
 - Does the API requires an API key?
 - Link to the API documentation.
 -->
-
 
 <!-- Love Shields? Please consider donating $10 to sustain our activities:
 👉  https://opencollective.com/shields -->

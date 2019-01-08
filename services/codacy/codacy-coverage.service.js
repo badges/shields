@@ -31,14 +31,17 @@ module.exports = class CodacyCoverage extends BaseSvgScrapingService {
       {
         title: 'Codacy coverage',
         pattern: ':projectId',
-        staticExample: this.render({ percentage: 90 }),
-        exampleUrl: '59d607d0e311408885e418004068ea58',
+        namedParams: { projectId: '59d607d0e311408885e418004068ea58' },
+        staticPreview: this.render({ percentage: 90 }),
       },
       {
         title: 'Codacy branch coverage',
         pattern: ':projectId/:branch',
-        staticExample: this.render({ percentage: 90 }),
-        exampleUrl: '59d607d0e311408885e418004068ea58/master',
+        namedParams: {
+          projectId: '59d607d0e311408885e418004068ea58',
+          branch: 'master',
+        },
+        staticPreview: this.render({ percentage: 90 }),
       },
     ]
   }

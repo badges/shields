@@ -1,75 +1,66 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { addv: versionText } = require('../../lib/text-formatters')
-const { version: versionColor } = require('../../lib/color-formatters')
+const Joi = require('joi')
+
+const { renderVersionBadge } = require('../../lib/version')
+const BaseJsonService = require('../base-json')
 const serverSecrets = require('../../lib/server-secrets')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class Bintray extends LegacyService {
+const schema = Joi.object()
+  .keys({
+    name: Joi.string().required(),
+  })
+  .required()
+
+module.exports = class Bintray extends BaseJsonService {
   static get category() {
     return 'version'
   }
 
   static get route() {
-    return { base: 'bintray/v' }
+    return {
+      base: 'bintray/v',
+      pattern: ':subject/:repo/:packageName',
+    }
   }
 
   static get examples() {
     return [
       {
         title: 'Bintray',
-        previewUrl: 'asciidoctor/maven/asciidoctorj',
+        staticPreview: renderVersionBadge({ version: '1.6.0' }),
+        namedParams: {
+          subject: 'asciidoctor',
+          repo: 'maven',
+          packageName: 'asciidoctorj',
+        },
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/bintray\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const path = match[1] // :subject/:repo/:package (e.g. asciidoctor/maven/asciidoctorj)
-        const format = match[2]
+  static get defaultBadgeData() {
+    return { label: 'bintray' }
+  }
 
-        const options = {
-          method: 'GET',
-          uri: `https://bintray.com/api/v1/packages/${path}/versions/_latest`,
-          headers: {
-            Accept: 'application/json',
-          },
-        }
+  async fetch({ subject, repo, packageName }) {
+    const options = {}
+    if (serverSecrets.bintray_user) {
+      options.auth = {
+        user: serverSecrets.bintray_user,
+        pass: serverSecrets.bintray_apikey,
+      }
+    }
 
-        if (serverSecrets.bintray_user) {
-          options.auth = {
-            user: serverSecrets.bintray_user,
-            pass: serverSecrets.bintray_apikey,
-          }
-        }
+    // https://bintray.com/docs/api/#_get_version
+    return this._requestJson({
+      schema,
+      url: `https://bintray.com/api/v1/packages/${subject}/${repo}/${packageName}/versions/_latest`,
+      options,
+    })
+  }
 
-        const badgeData = getBadgeData('bintray', data)
-        request(options, (err, res, buffer) => {
-          if (err !== null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const data = JSON.parse(buffer)
-            badgeData.text[1] = versionText(data.name)
-            badgeData.colorscheme = versionColor(data.name)
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  async handle({ subject, repo, packageName }) {
+    const data = await this.fetch({ subject, repo, packageName })
+    return renderVersionBadge({ version: data.name })
   }
 }

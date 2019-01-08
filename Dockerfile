@@ -15,7 +15,7 @@ RUN npm run build
 RUN npm prune --production
 RUN npm cache clean --force
 
-CMD envsubst < secret.tpl.json > ./private/secret.json \
- && node server
+# Do we need to list the environment variables here?
+node server
 
 EXPOSE 80
