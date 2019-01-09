@@ -11,6 +11,7 @@ const serverSecrets = require('../../../lib/server-secrets')
 const acceptor = require('./acceptor')
 
 const fakeClientId = 'githubdabomb'
+const fakeShieldsSecret = 'letmeinplz'
 
 describe('Github token acceptor', function() {
   before(function() {
@@ -18,8 +19,10 @@ describe('Github token acceptor', function() {
     // https://github.com/sinonjs/sinon/pull/1557
     serverSecrets.gh_client_id = undefined
     serverSecrets.shields_ips = undefined
+    serverSecrets.shields_secret = undefined
     sinon.stub(serverSecrets, 'gh_client_id').value(fakeClientId)
     sinon.stub(serverSecrets, 'shields_ips').value([])
+    sinon.stub(serverSecrets, 'shields_secret').value(fakeShieldsSecret)
   })
   after(function() {
     sinon.restore()
@@ -43,10 +46,12 @@ describe('Github token acceptor', function() {
     }
   })
 
+  let onTokenAccepted
   beforeEach(function() {
+    onTokenAccepted = sinon.stub()
     acceptor.setRoutes({
       server: camp,
-      onTokenAccepted: () => {},
+      onTokenAccepted,
     })
   })
 
@@ -111,5 +116,17 @@ describe('Github token acceptor', function() {
         )
       })
     })
+  })
+
+  it('should add a received token', async function() {
+    const fakeAccessToken = 'its-my-token'
+
+    const { body } = await got(`${baseUrl}/github-auth/add-token`, {
+      form: true,
+      body: { shieldsSecret: fakeShieldsSecret, token: fakeAccessToken },
+    })
+
+    expect(onTokenAccepted).to.have.been.calledWith(fakeAccessToken)
+    expect(body).to.equal('Thanks!')
   })
 })
