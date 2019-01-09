@@ -7,12 +7,7 @@ describe('validateExample function', function() {
   it('passes valid examples', function() {
     const validExamples = [
       {
-        staticExample: { message: '123' },
-        pattern: 'dt/:package',
-        exampleUrl: 'dt/mypackage',
-      },
-      {
-        staticExample: { message: '123' },
+        staticPreview: { message: '123' },
         pattern: 'dt/:package',
         namedParams: { package: 'mypackage' },
       },
@@ -29,18 +24,23 @@ describe('validateExample function', function() {
   it('rejects invalid examples', function() {
     const invalidExamples = [
       {},
-      { staticExample: { message: '123' } },
+      { staticPreview: { message: '123' } },
       {
-        staticExample: { message: '123' },
+        staticPreview: { message: '123' },
         pattern: 'dt/:package',
         namedParams: { package: 'mypackage' },
         exampleUrl: 'dt/mypackage',
       },
-      { staticExample: { message: '123' }, pattern: 'dt/:package' },
+      { staticPreview: { message: '123' }, pattern: 'dt/:package' },
       {
-        staticExample: { message: '123' },
+        staticPreview: { message: '123' },
         pattern: 'dt/:package',
         previewUrl: 'dt/mypackage',
+      },
+      {
+        staticPreview: { message: '123' },
+        pattern: 'dt/:package',
+        exampleUrl: 'dt/mypackage',
       },
     ]
 

@@ -7,6 +7,9 @@
 // `./node_modules/.bin/danger pr pr-url`
 // Note that the line numbers in the runtime errors are incorrect.
 
+// To test changes locally:
+// DANGER_GITHUB_API_TOKEN=your-github-api-token npm run danger -- pr https://github.com/badges/shields/pull/2665
+
 const { danger, fail, message, warn } = require('danger')
 const chainsmoker = require('chainsmoker')
 const { default: noTestShortcuts } = require('danger-plugin-no-test-shortcuts')

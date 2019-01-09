@@ -11,8 +11,7 @@ module.exports = class RequiresIo extends BaseJsonService {
   static get route() {
     return {
       base: 'requires',
-      format: '([^/]+)/([^/]+/[^/]+)(?:/(.+))?',
-      capture: ['service', 'repo', 'branch'],
+      pattern: ':service/:user/:repo/:branch*',
     }
   }
 
@@ -20,13 +19,13 @@ module.exports = class RequiresIo extends BaseJsonService {
     return { label: 'requirements' }
   }
 
-  async handle({ service, repo, branch }) {
-    const { status } = await this.fetch({ service, repo, branch })
+  async handle({ service, user, repo, branch }) {
+    const { status } = await this.fetch({ service, user, repo, branch })
     return this.constructor.render({ status })
   }
 
-  async fetch({ service, repo, branch }) {
-    const url = `https://requires.io/api/v1/status/${service}/${repo}`
+  async fetch({ service, user, repo, branch }) {
+    const url = `https://requires.io/api/v1/status/${service}/${user}/${repo}`
     return this._requestJson({
       url,
       schema: statusSchema,
@@ -58,7 +57,7 @@ module.exports = class RequiresIo extends BaseJsonService {
         title: 'Requires.io',
         pattern: ':service/:user/:repo',
         namedParams: { service: 'github', user: 'celery', repo: 'celery' },
-        staticExample: this.render({ status: 'up-to-date' }),
+        staticPreview: this.render({ status: 'up-to-date' }),
         keywords: ['requires'],
       },
       {
@@ -70,7 +69,7 @@ module.exports = class RequiresIo extends BaseJsonService {
           repo: 'celery',
           branch: 'master',
         },
-        staticExample: this.render({ status: 'up-to-date' }),
+        staticPreview: this.render({ status: 'up-to-date' }),
         keywords: ['requires'],
       },
     ]

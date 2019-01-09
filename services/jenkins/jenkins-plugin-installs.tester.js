@@ -63,7 +63,7 @@ t.create('version installs | valid: numeric version')
     })
   )
 
-t.create('version installs | valid: alpha-numeric version')
+t.create('version installs | valid: alphanumeric version')
   .get('/view-job-filters/1.27-DRE1.00.json')
   .expectJSONTypes(
     Joi.object().keys({

@@ -33,9 +33,11 @@ module.exports = class JetbrainsDownloads extends JetbrainsBase {
     return [
       {
         title: 'JetBrains IntelliJ plugins',
-        exampleUrl: '1347-scala',
         pattern: ':pluginId',
-        staticExample: this.render({ downloads: 10200000 }),
+        namedParams: {
+          pluginId: '1347-scala',
+        },
+        staticPreview: this.render({ downloads: 10200000 }),
       },
     ]
   }

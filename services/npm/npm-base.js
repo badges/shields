@@ -49,9 +49,7 @@ module.exports = class NpmBase extends BaseJsonService {
     if (withTag) {
       return {
         base,
-        // The trailing optional means this has to be a regex.
-        format: '(?:(@[^/]+)/)?([^/]*)/?([^/]*)',
-        capture: ['scope', 'packageName', 'tag'],
+        pattern: ':scope(@[^/]+)?/:packageName/:tag?',
         queryParams: ['registry_uri'],
       }
     } else {
