@@ -53,17 +53,20 @@ jobs:
           command: npm run test:js:server
 
       - run:
-          name: Tests for gh-badges package
-          when: always
-          command: npm run test:js:package
-
-      - run:
           name: Integration tests
+          when: always
           environment:
             mocha_reporter: mocha-junit-reporter
             MOCHA_FILE: junit/server/integration.xml
-          when: always
           command: npm run test:integration
+
+      - run:
+          name: Tests for gh-badges package
+          when: always
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/server/gh-badges.xml
+          command: npm run test:js:package
 
       - store_test_results:
           path: junit
