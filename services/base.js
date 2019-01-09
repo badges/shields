@@ -244,6 +244,7 @@ class BaseService {
     if (error instanceof NotFound || error instanceof InvalidParameter) {
       trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
       return {
+        isError: true,
         message: error.prettyMessage,
         color: 'red',
       }
@@ -254,6 +255,7 @@ class BaseService {
     ) {
       trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
       return {
+        isError: true,
         message: error.prettyMessage,
         color: 'lightgray',
       }
@@ -271,6 +273,7 @@ class BaseService {
         console.log(error)
       }
       return {
+        isError: true,
         label: 'shields',
         message: 'internal error',
         color: 'lightgray',
@@ -318,11 +321,12 @@ class BaseService {
       logoColor: overrideLogoColor,
       logoWidth: overrideLogoWidth,
       link: overrideLink,
-      colorA: overrideColorA,
-      colorB: overrideColorB,
+      colorA: overrideLabelColor,
+      colorB: overrideColor,
     } = overrides
 
     const {
+      isError,
       label: serviceLabel,
       message: serviceMessage,
       color: serviceColor,
@@ -349,9 +353,16 @@ class BaseService {
       }),
       logoWidth: +overrideLogoWidth,
       links: toArray(overrideLink || serviceLink),
-      colorA: makeColor(overrideColorA),
+      colorA: makeColor(overrideLabelColor),
     }
-    const color = overrideColorB || serviceColor || defaultColor || 'lightgrey'
+
+    let color
+    if (isError) {
+      // Disregard the override color.
+      color = coalesce(serviceColor, defaultColor, 'lightgrey')
+    } else {
+      color = coalesce(overrideColor, serviceColor, defaultColor, 'lightgrey')
+    }
     setBadgeColor(badgeData, color)
 
     return badgeData
