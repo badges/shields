@@ -24,11 +24,7 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
   static get route() {
     return {
       base: 'gitlab/pipeline',
-      format: '([^/]+)/([^/]+)(?:/([^/]+))?',
-      capture: ['user', 'repo', 'branch'],
-      // Trailing optional parameters don't work. The issue relates to the `.`
-      // separator before the extension.
-      // pattern: ':user/:repo/:branch?',
+      pattern: ':user/:repo/:branch*',
       queryParams: ['gitlab_url'],
     }
   }
@@ -43,7 +39,7 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
       },
       {
         title: 'Gitlab pipeline status (branch)',
-        pattern: ':user/:repo/:branch',
+        pattern: ':user/:repo/:branch*',
         namedParams: {
           user: 'gitlab-org',
           repo: 'gitlab-ce',
