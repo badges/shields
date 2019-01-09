@@ -1,30 +1,23 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const {
-  makeBadgeData: getBadgeData,
-  makeLogo: getLogo,
-} = require('../../lib/badge-data')
-const { metric } = require('../../lib/text-formatters')
-const {
-  documentation,
-  checkErrorResponse: githubCheckErrorResponse,
-} = require('./github-helpers')
+const Joi = require('joi')
+const parseLinkHeader = require('parse-link-header')
+const { GithubAuthService } = require('./github-auth-service')
+const { renderContributorBadge } = require('../../lib/contributor-count')
+const { documentation, errorMessagesFor } = require('./github-helpers')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class GithubContributors extends LegacyService {
+// All we do is check its length.
+const schema = Joi.array().items(Joi.object())
+
+module.exports = class GithubContributors extends GithubAuthService {
   static get category() {
     return 'activity'
   }
 
   static get route() {
     return {
-      base: 'github/contributors',
+      base: 'github',
+      pattern: ':which(contributors|contributors-anon)/:user/:repo',
     }
   }
 
@@ -32,61 +25,43 @@ module.exports = class GithubContributors extends LegacyService {
     return [
       {
         title: 'GitHub contributors',
-        pattern: ':user/:repo',
         namedParams: {
           user: 'cdnjs',
           repo: 'cdnjs',
         },
-        staticPreview: {
-          label: 'contributors',
-          message: '397',
-          color: 'blue',
-        },
+        staticPreview: this.render({ contributorCount: 397 }),
         documentation,
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
-    camp.route(
-      /^\/github\/contributors(-anon)?\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const isAnon = match[1]
-        const user = match[2]
-        const repo = match[3]
-        const format = match[4]
-        const apiUrl = `/repos/${user}/${repo}/contributors?page=1&per_page=1&anon=${!!isAnon}`
-        const badgeData = getBadgeData('contributors', data)
-        if (badgeData.template === 'social') {
-          badgeData.logo = getLogo('github', data)
-        }
-        githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-          if (githubCheckErrorResponse(badgeData, err, res)) {
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            let contributors
+  static get defaultBadgeData() {
+    return { label: 'contributors' }
+  }
 
-            if (
-              res.headers['link'] &&
-              res.headers['link'].indexOf('rel="last"') !== -1
-            ) {
-              contributors = res.headers['link'].match(
-                /[?&]page=(\d+)[^>]+>; rel="last"/
-              )[1]
-            } else {
-              contributors = JSON.parse(buffer).length
-            }
+  static render({ contributorCount }) {
+    return renderContributorBadge({ contributorCount })
+  }
 
-            badgeData.text[1] = metric(+contributors)
-            badgeData.colorscheme = 'blue'
-          } catch (e) {
-            badgeData.text[1] = 'inaccessible'
-          }
-          sendBadge(format, badgeData)
-        })
-      })
-    )
+  async handle({ which, user, repo }) {
+    const isAnon = which === 'contributors-anon'
+
+    const { res, buffer } = await this._request({
+      url: `/repos/${user}/${repo}/contributors`,
+      options: { qs: { page: '1', per_page: '1', anon: isAnon } },
+      errorMessages: errorMessagesFor('repo not found'),
+    })
+
+    const parsed = parseLinkHeader(res.headers['link'])
+    let contributorCount
+    if (parsed === null) {
+      const json = this._parseJson(buffer)
+      const contributorInfo = this.constructor._validate(json, schema)
+      contributorCount = contributorInfo.length
+    } else {
+      contributorCount = +parsed.last.page
+    }
+
+    return this.constructor.render({ contributorCount })
   }
 }

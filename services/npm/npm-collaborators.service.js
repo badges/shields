@@ -1,6 +1,7 @@
 'use strict'
 
 const NpmBase = require('./npm-base')
+const { renderContributorBadge } = require('../../lib/contributor-count')
 
 const keywords = ['node']
 
@@ -40,19 +41,7 @@ module.exports = class NpmCollaborators extends NpmBase {
   }
 
   static render({ collaborators }) {
-    let color
-    if (collaborators > 2) {
-      color = 'blue'
-    } else if (collaborators === 2) {
-      color = 'yellow'
-    } else {
-      color = 'red'
-    }
-
-    return {
-      message: collaborators,
-      color,
-    }
+    renderContributorBadge({ contributorCount: collaborators })
   }
 
   async handle(namedParams, queryParams) {
