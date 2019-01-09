@@ -41,7 +41,7 @@ module.exports = class NpmCollaborators extends NpmBase {
   }
 
   static render({ collaborators }) {
-    renderContributorBadge({ contributorCount: collaborators })
+    return renderContributorBadge({ contributorCount: collaborators })
   }
 
   async handle(namedParams, queryParams) {
