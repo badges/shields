@@ -58,12 +58,6 @@ jobs:
           command: npm run test:js:package
 
       - run:
-          name: Prepare integration tests
-          command: |
-            mkdir private
-            echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
-
-      - run:
           name: Integration tests
           environment:
             mocha_reporter: mocha-junit-reporter
@@ -108,12 +102,6 @@ jobs:
             mocha_reporter: mocha-junit-reporter
             MOCHA_FILE: junit/server/results.xml
           command: npm run test:js:server
-
-      - run:
-          name: Prepare integration tests
-          command: |
-            mkdir private
-            echo "{\"gh_token\":\"$GITHUB_TOKEN\"}" > private/secret.json
 
       - run:
           name: Integration tests
