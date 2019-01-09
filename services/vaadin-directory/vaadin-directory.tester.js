@@ -50,7 +50,7 @@ t.create('publish status of the component')
     })
   )
 
-t.create('rating of the compoennt (eg: 4.2/5)')
+t.create('rating of the component (eg: 4.2/5)')
   .get('/rating/vaadinvaadin-grid.json')
   .expectJSONTypes(
     Joi.object().keys({

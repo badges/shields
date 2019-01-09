@@ -32,7 +32,7 @@ t.create('YAML from url')
     colorB: colorsB.blue,
   })
 
-t.create('YAML from uri (support uri query paramater)')
+t.create('YAML from uri (support uri query parameter)')
   .get(
     '.json?uri=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&query=$.name&style=_shields_test'
   )

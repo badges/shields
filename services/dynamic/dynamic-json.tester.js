@@ -55,7 +55,7 @@ t.create('JSON from url')
     colorB: colorsB.blue,
   })
 
-t.create('JSON from uri (support uri query paramater)')
+t.create('JSON from uri (support uri query parameter)')
   .get(
     '.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.name&style=_shields_test'
   )

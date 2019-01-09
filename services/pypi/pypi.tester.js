@@ -57,7 +57,7 @@ t.create('monthly downloads (not found)')
   - 0.1.30b10
   are perfectly legal.
 
-  We'll run this test againt a project that follows SemVer...
+  We'll run this test against a project that follows SemVer...
 */
 t.create('version (semver)')
   .get('/v/requests.json')
