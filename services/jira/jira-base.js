@@ -11,19 +11,10 @@ module.exports = class JiraBase extends BaseJsonService {
   async fetch({ url, qs, schema, errorMessages }) {
     const options = { qs }
 
-    if (
-      serverSecrets &&
-      (serverSecrets.jira_user || serverSecrets.jira_username)
-    ) {
-      /*
-      for legacy reasons we still allow
-      jira_username, jira_password
-      but prefer
-      jira_user, jira_pass
-      */
+    if (serverSecrets.jira_user) {
       options.auth = {
-        user: serverSecrets.jira_user || serverSecrets.jira_username,
-        pass: serverSecrets.jira_pass || serverSecrets.jira_password,
+        user: serverSecrets.jira_user,
+        pass: serverSecrets.jira_pass,
       }
     }
 

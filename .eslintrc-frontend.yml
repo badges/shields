@@ -4,21 +4,21 @@ env:
 plugins:
   - import
 
-parser: "babel-eslint"
+parser: 'babel-eslint'
 
 parserOptions:
-  sourceType: "module"
+  sourceType: 'module'
 
 extends:
-  - "standard-jsx"
-  - "standard-react"
-  - "./.eslintrc.yml"
+  - 'standard-jsx'
+  - 'standard-react'
+  - './.eslintrc.yml'
 
 settings:
   react:
-    version: "16.4"
+    version: '16.4'
 
 rules:
-  no-console: "error"
+  no-console: 'error'
 
-  import/extensions: ["error", "never", { "json": "always", "yml": "always" }]
+  import/extensions: ['error', 'never', { 'json': 'always', 'yml': 'always' }]

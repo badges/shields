@@ -14,7 +14,10 @@ const bf = new BadgeFactory()
 For backwards compatibility you can still construct an instance of `BadgeFactory` with a call like
 
 ```js
-const bf = new BadgeFactory({ fontPath: '/path/to/Verdana.ttf', precomputeWidths: true })
+const bf = new BadgeFactory({
+  fontPath: '/path/to/Verdana.ttf',
+  precomputeWidths: true,
+})
 ```
 
 However, the function will issue a warning.
@@ -63,8 +66,8 @@ const svg = bf.create(format)
 
 ### Other changes in this release:
 
-* Remove unnecessary dependencies
-* Documentation improvements
+- Remove unnecessary dependencies
+- Documentation improvements
 
 ## 2.0.0 - 2018-11-09
 
@@ -109,7 +112,6 @@ You can generate badges without a copy of Verdana, however font width computatio
 const bf = new BadgeFactory({ fallbackFontPath: 'Helvetica' })
 ```
 
-
 ## 1.3.0 - 2016-09-07
 
 Add support for optionally specifying the path to `Verdana.ttf`. In earlier versions, the file needed to be in the directory containing Shields.
@@ -119,10 +121,9 @@ Without font path:
 ```js
 const badge = require('gh-badges')
 
-badge({ text: [ 'build', 'passed' ], colorscheme: 'green' },
-  (svg, err) => {
-    // svg is a string containing your badge
-  })
+badge({ text: ['build', 'passed'], colorscheme: 'green' }, (svg, err) => {
+  // svg is a string containing your badge
+})
 ```
 
 With font path:
@@ -132,9 +133,11 @@ const badge = require('gh-badges')
 
 // Optional step, to have accurate text width computation.
 badge.loadFont('/path/to/Verdana.ttf', err => {
-  badge({ text: ['build', 'passed'], colorscheme: 'green', template: 'flat' },
+  badge(
+    { text: ['build', 'passed'], colorscheme: 'green', template: 'flat' },
     (svg, err) => {
       // svg is a string containing your badge
-    })
+    }
+  )
 })
 ```

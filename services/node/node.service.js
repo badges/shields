@@ -24,7 +24,7 @@ module.exports = class NodeVersion extends NPMBase {
         title: 'node',
         pattern: ':packageName',
         namedParams: { packageName: 'passport' },
-        staticExample: this.renderStaticExample({
+        staticPreview: this.renderStaticExample({
           nodeVersionRange: '>= 6.0.0',
         }),
         keywords,
@@ -33,7 +33,7 @@ module.exports = class NodeVersion extends NPMBase {
         title: 'node (scoped)',
         pattern: '@:scope/:packageName',
         namedParams: { scope: 'stdlib', packageName: 'stdlib' },
-        staticExample: this.renderStaticExample({
+        staticPreview: this.renderStaticExample({
           nodeVersionRange: '>= 6.0.0',
         }),
         keywords,
@@ -42,7 +42,7 @@ module.exports = class NodeVersion extends NPMBase {
         title: 'node (tag)',
         pattern: ':packageName/:tag',
         namedParams: { packageName: 'passport', tag: 'latest' },
-        staticExample: this.renderStaticExample({
+        staticPreview: this.renderStaticExample({
           nodeVersionRange: '>= 6.0.0',
           tag: 'latest',
         }),
@@ -52,7 +52,7 @@ module.exports = class NodeVersion extends NPMBase {
         title: 'node (scoped with tag)',
         pattern: '@:scope/:packageName/:tag',
         namedParams: { scope: 'stdlib', packageName: 'stdlib', tag: 'latest' },
-        staticExample: this.renderStaticExample({
+        staticPreview: this.renderStaticExample({
           nodeVersionRange: '>= 6.0.0',
           tag: 'latest',
         }),
@@ -63,7 +63,7 @@ module.exports = class NodeVersion extends NPMBase {
         pattern: '@:scope/:packageName/:tag',
         namedParams: { scope: 'stdlib', packageName: 'stdlib', tag: 'latest' },
         queryParams: { registry_uri: 'https://registry.npmjs.com' },
-        staticExample: this.renderStaticExample({
+        staticPreview: this.renderStaticExample({
           nodeVersionRange: '>= 6.0.0',
           tag: 'latest',
         }),

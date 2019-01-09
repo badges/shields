@@ -27,19 +27,43 @@ module.exports = class Liberapay extends LegacyService {
     return [
       {
         title: 'Liberapay receiving',
-        previewUrl: 'receives/Changaco',
+        pattern: 'receives/:entity',
+        namedParams: { entity: 'Changaco' },
+        staticPreview: {
+          label: 'receives',
+          message: '98.32 EUR/week',
+          color: 'green',
+        },
       },
       {
         title: 'Liberapay giving',
-        previewUrl: 'gives/Changaco',
+        pattern: 'gives/:entity',
+        namedParams: { entity: 'Changaco' },
+        staticPreview: {
+          label: 'gives',
+          message: '2.58 EUR/week',
+          color: 'yellow',
+        },
       },
       {
         title: 'Liberapay patrons',
-        previewUrl: 'patrons/Changaco',
+        pattern: 'patrons/:entity',
+        namedParams: { entity: 'Changaco' },
+        staticPreview: {
+          label: 'patrons',
+          message: '10',
+          color: 'green',
+        },
       },
       {
         title: 'Liberapay goal progress',
-        previewUrl: 'goal/Changaco',
+        pattern: 'goal/:entity',
+        namedParams: { entity: 'Changaco' },
+        staticPreview: {
+          label: 'goal progress',
+          message: '33%',
+          color: 'green',
+        },
       },
     ]
   }

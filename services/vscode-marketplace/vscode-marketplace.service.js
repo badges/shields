@@ -44,7 +44,7 @@ function getVscodeApiReqOptions(packageName) {
   }
 }
 
-//To extract Statistics (Install/Rating/RatingCount) from respose object for vscode marketplace
+//To extract Statistics (Install/Rating/RatingCount) from response object for vscode marketplace
 function getVscodeStatistic(data, statisticName) {
   const statistics = data.results[0].extensions[0].statistics
   try {

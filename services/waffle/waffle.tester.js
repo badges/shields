@@ -44,7 +44,7 @@ t.create(
     colorB: '#fbca04',
   })
 
-t.create('label should be `Mybug` & value should be formated.  e.g: Mybug|25')
+t.create('label should be `Mybug` & value should be formatted.  e.g: Mybug|25')
   .get('/ritwickdey/vscode-live-server/bug.json?label=Mybug')
   .expectJSONTypes(
     Joi.object().keys({

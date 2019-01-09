@@ -73,20 +73,20 @@ module.exports = class AzureDevOpsCoverage extends AzureDevOpsBase {
           project: 'opensource',
           definitionId: '25',
         },
-        staticExample: this.render({ coverage: 100 }),
+        staticPreview: this.render({ coverage: 100 }),
         keywords,
         documentation,
       },
       {
         title: 'Azure DevOps coverage (branch)',
-        pattern: ':organization/:project/:definitionId/:branch',
+        pattern: ':organization/:project/:definitionId/:branch*',
         namedParams: {
           organization: 'swellaby',
           project: 'opensource',
           definitionId: '25',
           branch: 'master',
         },
-        staticExample: this.render({ coverage: 100 }),
+        staticPreview: this.render({ coverage: 100 }),
         keywords,
         documentation,
       },
@@ -96,8 +96,7 @@ module.exports = class AzureDevOpsCoverage extends AzureDevOpsBase {
   static get route() {
     return {
       base: 'azure-devops/coverage',
-      format: '([^/]+)/([^/]+)/([^/]+)(?:/(.+))?',
-      capture: ['organization', 'project', 'definitionId', 'branch'],
+      pattern: ':organization/:project/:definitionId/:branch*',
     }
   }
 

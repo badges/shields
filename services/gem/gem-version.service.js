@@ -49,7 +49,7 @@ module.exports = class GemVersion extends BaseJsonService {
       {
         title: 'Gem',
         namedParams: { gem: 'formatador' },
-        staticExample: this.render({ version: '2.1.0' }),
+        staticPreview: this.render({ version: '2.1.0' }),
         keywords: ['ruby'],
       },
     ]

@@ -46,7 +46,7 @@ module.exports = class Codetally extends BaseJsonService {
           owner: 'triggerman722',
           repo: 'colorstrap',
         },
-        staticExample: this.render({
+        staticPreview: this.render({
           currency: '$',
           amount: 4.68,
           multiplier: 'K',

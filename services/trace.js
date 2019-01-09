@@ -9,7 +9,7 @@ const chalk = require('chalk')
 // thereby gaining access to the injected config.
 const {
   services: { trace: enableTraceLogging },
-} = require('../lib/server-config')
+} = require('config').util.toObject().public
 
 function _formatLabelForStage(stage, label) {
   const colorFn = {

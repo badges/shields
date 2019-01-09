@@ -4,13 +4,7 @@ const Joi = require('joi')
 const t = (module.exports = require('../create-service-tester')())
 const { isIntegerPercentage } = require('../test-validators')
 const { colorScheme } = require('../test-helpers')
-const {
-  mockJiraCreds,
-  mockLegacyJiraCreds,
-  restore,
-  user,
-  pass,
-} = require('./jira-test-helpers')
+const { mockJiraCreds, restore, user, pass } = require('./jira-test-helpers')
 
 const sprintId = 8
 const queryString = {
@@ -135,40 +129,39 @@ t.create('issue with null resolution value')
     value: '50%',
     colorB: colorScheme.orange,
   })
-;[mockJiraCreds, mockLegacyJiraCreds].map(mockCreds => {
-  t.create(`with auth (${mockCreds.name})`)
-    .before(mockCreds)
-    .get(`/https/myprivatejira/jira/${sprintId}.json`)
-    .intercept(nock =>
-      nock('https://myprivatejira/jira/rest/api/2')
-        .get('/search')
-        .query(queryString)
-        // This ensures that the expected credentials from serverSecrets are actually being sent with the HTTP request.
-        // Without this the request wouldn't match and the test would fail.
-        .basicAuth({
-          user,
-          pass,
-        })
-        .reply(200, {
-          total: 2,
-          issues: [
-            {
-              fields: {
-                resolution: {
-                  name: 'done',
-                },
+
+t.create('with mock credentials')
+  .before(mockJiraCreds)
+  .get(`/https/myprivatejira/jira/${sprintId}.json`)
+  .intercept(nock =>
+    nock('https://myprivatejira/jira/rest/api/2')
+      .get('/search')
+      .query(queryString)
+      // This ensures that the expected credentials from serverSecrets are actually being sent with the HTTP request.
+      // Without this the request wouldn't match and the test would fail.
+      .basicAuth({
+        user,
+        pass,
+      })
+      .reply(200, {
+        total: 2,
+        issues: [
+          {
+            fields: {
+              resolution: {
+                name: 'done',
               },
             },
-            {
-              fields: {
-                resolution: {
-                  name: 'Unresolved',
-                },
+          },
+          {
+            fields: {
+              resolution: {
+                name: 'Unresolved',
               },
             },
-          ],
-        })
-    )
-    .finally(restore)
-    .expectJSON({ name: 'completion', value: '50%' })
-})
+          },
+        ],
+      })
+  )
+  .finally(restore)
+  .expectJSON({ name: 'completion', value: '50%' })
