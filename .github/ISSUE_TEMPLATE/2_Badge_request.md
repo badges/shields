@@ -24,5 +24,13 @@ Where can we get the data from?
 - Link to the API documentation.
 -->
 
+:microphone: **Motivation**
+
+<!--
+Please explain why this feature should be implemented and how it would be used.
+
+- What is the specific use case?
+-->
+
 <!-- Love Shields? Please consider donating $10 to sustain our activities:
 👉  https://opencollective.com/shields -->
