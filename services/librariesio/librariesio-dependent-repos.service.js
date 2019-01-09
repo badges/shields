@@ -23,9 +23,12 @@ class LibrariesIoDependentRepos extends LibrariesIoBase {
     return [
       {
         title: 'Dependent repos (via libraries.io)',
-        exampleUrl: 'npm/got',
         pattern: ':platform/:library',
-        staticExample: this.render({ dependentReposCount: 84000 }),
+        namedParams: {
+          platform: 'npm',
+          library: 'got',
+        },
+        staticPreview: this.render({ dependentReposCount: 84000 }),
       },
     ]
   }

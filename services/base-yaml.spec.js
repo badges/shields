@@ -132,6 +132,7 @@ describe('BaseYamlService', function() {
           { handleInternalErrors: false }
         )
       ).to.deep.equal({
+        isError: true,
         color: 'lightgray',
         message: 'invalid response data',
       })
@@ -148,6 +149,7 @@ describe('BaseYamlService', function() {
           { handleInternalErrors: false }
         )
       ).to.deep.equal({
+        isError: true,
         color: 'lightgray',
         message: 'unparseable yaml response',
       })

@@ -7,6 +7,9 @@
 // `./node_modules/.bin/danger pr pr-url`
 // Note that the line numbers in the runtime errors are incorrect.
 
+// To test changes locally:
+// DANGER_GITHUB_API_TOKEN=your-github-api-token npm run danger -- pr https://github.com/badges/shields/pull/2665
+
 const { danger, fail, message, warn } = require('danger')
 const chainsmoker = require('chainsmoker')
 const { default: noTestShortcuts } = require('danger-plugin-no-test-shortcuts')
@@ -34,6 +37,7 @@ const logos = fileMatch('logo/*.svg')
 const helperTests = fileMatch('lib/**/*.spec.js')
 const packageJson = fileMatch('package.json')
 const packageLock = fileMatch('package-lock.json')
+const secretsDocs = fileMatch('doc/server-secrets.md')
 const capitals = fileMatch('**/*[A-Z]*.js')
 // _document.js is used by convention by Next.
 const underscores = fileMatch('**/*_*.js', '!pages/_document.js')
@@ -123,6 +127,21 @@ allFiles.forEach(file => {
           `Found 'assert' statement added in \`${file}\`. <br>`,
           'Please ensure tests are written using Chai ',
           '[expect syntax](http://chaijs.com/guide/styles/#expect)',
+        ].join('')
+      )
+    }
+  })
+})
+
+allFiles.forEach(file => {
+  // eslint-disable-next-line promise/prefer-await-to-then
+  danger.git.diffForFile(file).then(diff => {
+    if (/serverSecrets/.test(diff.diff) && !secretsDocs.modified) {
+      warn(
+        [
+          `:books: Remember to ensure any changes to \`serverSecrets\` `,
+          `in \`${file}\` are reflected in the [server secrets documentation]`,
+          '(https://github.com/badges/shields/blob/master/doc/server-secrets.md)',
         ].join('')
       )
     }

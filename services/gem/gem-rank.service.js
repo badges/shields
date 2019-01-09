@@ -5,12 +5,17 @@ const Joi = require('joi')
 const BaseJsonService = require('../base-json')
 const { floorCount: floorCountColor } = require('../../lib/color-formatters')
 const { ordinalNumber } = require('../../lib/text-formatters')
-const { nonNegativeInteger } = require('../validators')
+const { InvalidResponse } = require('../errors')
+
+const keywords = ['ruby']
 
 const totalSchema = Joi.array()
   .items(
     Joi.object({
-      total_ranking: nonNegativeInteger,
+      total_ranking: Joi.number()
+        .integer()
+        .min(0)
+        .allow(null),
     })
   )
   .min(1)
@@ -18,20 +23,28 @@ const totalSchema = Joi.array()
 const dailySchema = Joi.array()
   .items(
     Joi.object({
-      daily_ranking: nonNegativeInteger,
+      daily_ranking: Joi.number()
+        .integer()
+        .min(0)
+        .allow(null),
     })
   )
   .min(1)
   .required()
 
 module.exports = class GemRank extends BaseJsonService {
-  async fetch({ period, repo }) {
-    const totalRank = period === 'rt'
-    const endpoint = totalRank ? '/total_ranking.json' : '/daily_ranking.json'
-    const url = `http://bestgems.org/api/v1/gems/${repo}${endpoint}`
-    const schema = totalRank ? totalSchema : dailySchema
+  async fetch({ period, gem }) {
+    let endpoint, schema
+    if (period === 'rt') {
+      endpoint = 'total_ranking.json'
+      schema = totalSchema
+    } else {
+      endpoint = 'daily_ranking.json'
+      schema = dailySchema
+    }
+
     return this._requestJson({
-      url,
+      url: `http://bestgems.org/api/v1/gems/${gem}/${endpoint}`,
       schema,
     })
   }
@@ -46,9 +59,12 @@ module.exports = class GemRank extends BaseJsonService {
     }
   }
 
-  async handle({ period, repo }) {
-    const json = await this.fetch({ period, repo })
+  async handle({ period, gem }) {
+    const json = await this.fetch({ period, gem })
     const rank = period === 'rt' ? json[0].total_ranking : json[0].daily_ranking
+    if (rank == null) {
+      throw new InvalidResponse({ prettyMessage: 'invalid rank' })
+    }
     return this.constructor.render({ period, rank })
   }
 
@@ -64,8 +80,7 @@ module.exports = class GemRank extends BaseJsonService {
   static get route() {
     return {
       base: 'gem',
-      format: '(rt|rd)/(.+)',
-      capture: ['period', 'repo'],
+      pattern: ':period(rt|rd)/:gem',
     }
   }
 
@@ -73,17 +88,21 @@ module.exports = class GemRank extends BaseJsonService {
     return [
       {
         title: 'Gem download rank',
-        exampleUrl: 'rt/puppet',
-        pattern: 'rt/:package',
-        staticExample: this.render({ period: 'rt', rank: 332 }),
-        keywords: ['ruby'],
+        pattern: 'rt/:gem',
+        namedParams: {
+          gem: 'puppet',
+        },
+        staticPreview: this.render({ period: 'rt', rank: 332 }),
+        keywords,
       },
       {
         title: 'Gem download rank (daily)',
-        exampleUrl: 'rd/facter',
-        pattern: 'rd/:package',
-        staticExample: this.render({ period: 'rd', rank: 656 }),
-        keywords: ['ruby'],
+        pattern: 'rd/:gem',
+        namedParams: {
+          gem: 'facter',
+        },
+        staticPreview: this.render({ period: 'rd', rank: 656 }),
+        keywords,
       },
     ]
   }

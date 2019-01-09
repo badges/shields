@@ -24,10 +24,10 @@ describe('GitHub admin route', function() {
   let sandbox
   beforeEach(function() {
     sandbox = sinon.createSandbox()
-    // Make this work when there is no `shieldsSecret` defined.
-    serverSecrets.shieldsSecret = undefined
+    // Make this work when there is no `shields_secret` defined.
+    serverSecrets.shields_secret = undefined
     sandbox
-      .stub(serverSecrets, 'shieldsSecret')
+      .stub(serverSecrets, 'shields_secret')
       .value(validCredentials.password)
   })
   afterEach(function() {

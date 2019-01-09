@@ -26,7 +26,7 @@
 - https://github.com/kennethreitz/requests
 - https://github.com/kubernetes/kubernetes
 - https://github.com/laravel/laravel
-- https://github.com/less/less.js 
+- https://github.com/less/less.js
 - https://github.com/Microsoft/TypeScript
 - https://github.com/Microsoft/vscode
 - https://github.com/mitchellh/vagrant

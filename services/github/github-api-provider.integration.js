@@ -23,15 +23,19 @@ describe('Github API provider', function() {
   }
 
   before('should be able to run 10 requests', async function() {
-    this.timeout(10000)
+    this.timeout('20s')
     for (let i = 0; i < 10; ++i) {
       await performOneRequest()
     }
   })
 
   it('should decrement the limit remaining with each request', function() {
-    const remaining = headers.map(h => +h['x-ratelimit-remaining'])
-    const expected = Array.from({ length: 10 }, (e, i) => remaining[0] - i)
-    expect(remaining).to.deep.equal(expected)
+    for (let i = 1; i < headers.length; ++i) {
+      const current = headers[i]
+      const previous = headers[i - 1]
+      expect(+current['x-ratelimit-remaining']).to.be.lessThan(
+        +previous['x-ratelimit-remaining']
+      )
+    }
   })
 })

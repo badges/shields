@@ -29,7 +29,11 @@ class DummyService extends BaseService {
   }
 
   static get category() {
-    return 'cat'
+    return 'other'
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'cat' }
   }
 
   static get examples() {
@@ -38,26 +42,20 @@ class DummyService extends BaseService {
       { previewUrl: 'World', queryParams: { queryParamA: '!!!' } },
       {
         pattern: ':world',
-        exampleUrl: 'World',
-        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
-        keywords: ['hello'],
-      },
-      {
-        pattern: ':world',
         namedParams: { world: 'World' },
-        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+        staticPreview: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
         keywords: ['hello'],
       },
       {
         namedParams: { namedParamA: 'World' },
-        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+        staticPreview: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
         keywords: ['hello'],
       },
       {
         pattern: ':world',
         namedParams: { world: 'World' },
         queryParams: { queryParamA: '!!!' },
-        staticExample: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
+        staticPreview: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
         keywords: ['hello'],
       },
     ]
@@ -262,6 +260,7 @@ describe('BaseService', function() {
           { namedParamA: 'bar.bar.bar' }
         )
       ).to.deep.equal({
+        isError: true,
         color: 'lightgray',
         label: 'shields',
         message: 'internal error',
@@ -278,6 +277,7 @@ describe('BaseService', function() {
         expect(
           await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
+          isError: true,
           color: 'red',
           message: 'not found',
         })
@@ -292,6 +292,7 @@ describe('BaseService', function() {
         expect(
           await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
+          isError: true,
           color: 'lightgray',
           message: 'inaccessible',
         })
@@ -306,6 +307,7 @@ describe('BaseService', function() {
         expect(
           await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
+          isError: true,
           color: 'lightgray',
           message: 'invalid',
         })
@@ -320,6 +322,7 @@ describe('BaseService', function() {
         expect(
           await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
+          isError: true,
           color: 'lightgray',
           message: 'no longer available',
         })
@@ -334,6 +337,7 @@ describe('BaseService', function() {
         expect(
           await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
+          isError: true,
           color: 'red',
           message: 'invalid parameter',
         })
@@ -359,12 +363,21 @@ describe('BaseService', function() {
         expect(badgeData.colorA).to.equal('#42f483')
       })
 
-      it('overrides the colorB', function() {
+      it('overrides the color', function() {
         const badgeData = DummyService._makeBadgeData(
           { colorB: '10ADED' },
           { color: 'red' }
         )
         expect(badgeData.colorB).to.equal('#10ADED')
+      })
+
+      it('does not override the color in case of an error', function() {
+        const badgeData = DummyService._makeBadgeData(
+          { colorB: '10ADED' },
+          { isError: true, color: 'lightgray' }
+        )
+        expect(badgeData.colorB).to.be.undefined
+        expect(badgeData.colorscheme).to.equal('lightgray')
       })
 
       it('overrides the logo', function() {
@@ -514,7 +527,7 @@ describe('BaseService', function() {
         isDeprecated,
         route,
       }).to.deep.equal({
-        category: 'cat',
+        category: 'other',
         name: 'DummyService',
         isDeprecated: false,
         route: {
@@ -523,7 +536,7 @@ describe('BaseService', function() {
         },
       })
 
-      const [first, second, third, fourth, fifth, sixth] = examples
+      const [first, second, third, fourth, fifth] = examples
       expect(first).to.deep.equal({
         title: 'DummyService',
         example: {
@@ -550,22 +563,7 @@ describe('BaseService', function() {
         keywords: [],
         documentation: undefined,
       })
-      const expectedDefinition = {
-        title: 'DummyService',
-        example: {
-          path: '/foo/World',
-          queryParams: {},
-        },
-        preview: {
-          label: 'cat',
-          message: 'Hello namedParamA: foo with queryParamA: bar',
-          color: 'lightgrey',
-        },
-        keywords: ['hello'],
-        documentation: undefined,
-      }
-      expect(third).to.deep.equal(expectedDefinition)
-      expect(fourth).to.deep.equal({
+      expect(third).to.deep.equal({
         title: 'DummyService',
         example: {
           pattern: '/foo/:world',
@@ -580,7 +578,7 @@ describe('BaseService', function() {
         keywords: ['hello'],
         documentation: undefined,
       })
-      expect(fifth).to.deep.equal({
+      expect(fourth).to.deep.equal({
         title: 'DummyService',
         example: {
           pattern: '/foo/:namedParamA',
@@ -595,7 +593,7 @@ describe('BaseService', function() {
         keywords: ['hello'],
         documentation: undefined,
       })
-      expect(sixth).to.deep.equal({
+      expect(fifth).to.deep.equal({
         title: 'DummyService',
         example: {
           pattern: '/foo/:world',

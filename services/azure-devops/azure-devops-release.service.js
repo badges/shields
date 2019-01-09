@@ -46,7 +46,7 @@ module.exports = class AzureDevOpsRelease extends BaseSvgService {
           definitionId: '1',
           environmentId: '1',
         },
-        staticExample: render({ status: 'succeeded' }),
+        staticPreview: render({ status: 'succeeded' }),
         keywords,
         documentation,
       },

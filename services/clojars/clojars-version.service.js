@@ -50,17 +50,15 @@ module.exports = class Clojars extends BaseJsonService {
   static get route() {
     return {
       base: 'clojars/v',
-      format: '(.+)',
-      capture: ['clojar'],
+      pattern: ':clojar+',
     }
   }
 
   static get examples() {
     return [
       {
-        exampleUrl: 'prismic',
-        pattern: ':package',
-        staticExample: this.render({ clojar: 'clojar', version: '1.2' }),
+        namedParams: { clojar: 'prismic' },
+        staticPreview: this.render({ clojar: 'clojar', version: '1.2' }),
       },
     ]
   }

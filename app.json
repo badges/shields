@@ -1,12 +1,7 @@
 {
   "name": "Shields",
   "description": "Concise, consistent, and legible badges in SVG and raster format.",
-  "keywords": [
-    "badge",
-    "github",
-    "svg",
-    "status"
-  ],
+  "keywords": ["badge", "github", "svg", "status"],
   "website": "https://shields.io/",
   "repository": "https://github.com/badges/shields",
   "logo": "http://shields.io/favicon.png",
@@ -17,6 +12,10 @@
     },
     "WHEELMAP_TOKEN": {
       "description": "Configure the token to be used for the Wheelmap service.",
+      "required": false
+    },
+    "GH_TOKEN": {
+      "description": "Configure the token to be used for the GitHub services.",
       "required": false
     }
   },
