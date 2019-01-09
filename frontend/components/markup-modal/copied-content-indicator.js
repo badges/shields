@@ -16,6 +16,8 @@ const ContentContainer = styled.span`
   left: 50%;
   transform: translateX(-50%);
 
+  will-change: opacity, top;
+
   pointer-events: none;
 `
 
