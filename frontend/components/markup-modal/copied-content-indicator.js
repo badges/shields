@@ -20,37 +20,41 @@ const ContentContainer = styled.span`
 `
 
 const PosedContentContainer = posed(ContentContainer)({
-  init: { top: '-10px' },
-  copied: { top: '-75px', opacity: 0.5 },
+  hidden: { opacity: 0, transition: { duration: 100 } },
+  effectStart: { top: '-10px', opacity: 1.0, transition: { duration: 0 } },
+  effectEnd: { top: '-75px', opacity: 0.5 },
 })
 
 // When `trigger()` is called, render copied content that floats up, then
 // disappears.
 export default class CopiedContentIndicator extends React.Component {
   state = {
-    isActive: false,
+    pose: 'hidden',
   }
 
   trigger() {
-    this.setState({ isActive: true })
+    this.setState({ pose: 'effectStart' })
   }
 
   handlePoseComplete = () => {
-    this.setState({ isActive: false })
+    const { pose } = this.state
+    if (pose === 'effectStart') {
+      this.setState({ pose: 'effectEnd' })
+    } else {
+      this.setState({ pose: 'hidden' })
+    }
   }
 
   render() {
+    const { pose } = this.state
     return (
       <ContentAnchor>
-        {this.state.isActive && (
-          <PosedContentContainer
-            initialPose="init"
-            pose="copied"
-            onPoseComplete={this.handlePoseComplete}
-          >
-            {this.props.copiedContent}
-          </PosedContentContainer>
-        )}
+        <PosedContentContainer
+          pose={pose}
+          onPoseComplete={this.handlePoseComplete}
+        >
+          {this.props.copiedContent}
+        </PosedContentContainer>
         {this.props.children}
       </ContentAnchor>
     )
