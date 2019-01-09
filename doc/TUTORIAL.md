@@ -2,7 +2,7 @@ Tutorial on how to add a badge for a service
 ============================================
 
 This tutorial should help you add a service to shields.io in form of a badge.
-You will need to learn to use JavaScript, git and Github.
+You will need to learn to use JavaScript, Git and GitHub.
 Please [improve the tutorial](https://github.com/badges/shields/edit/master/doc/TUTORIAL.md) while you read it.
 
 (1) Reading
@@ -71,11 +71,11 @@ Each service has a directory for its files:
   Sometimes, code for a service can be re-used.
   This might be the case when you add a badge for an API which is already used
   by other badges.
-  
+
   Imagine a service that lives at https://img.shields.io/example/some-param-here.svg.
 
   * For services with a single badge, the badge code will generally be stored in
-    `/services/example/example.service.js`.  
+    `/services/example/example.service.js`.
     If you add a badge for a new API, create a new directory.
 
     Example: [wercker](https://github.com/badges/shields/tree/master/services/wercker)
@@ -218,11 +218,11 @@ Description of the code:
     * [licenses.js](https://github.com/badges/shields/blob/master/lib/licenses.js)
     * [text-formatters.js](https://github.com/badges/shields/blob/master/lib/text-formatters.js)
     * [version.js](https://github.com/badges/shields/blob/master/lib/version.js)
-4. We perform input validation by defining a schema which we expect the JSON we receive to conform to. This is done using [Joi](https://github.com/hapijs/joi). Defining a schema means we can ensure the JSON we receive meets our expectations and throw an error if we receive unexpected input without having to explicitly code validation checks. The schema also acts as a filter on the JSON object. Any properties we're going to reference need to be validated, otherwise they will be filtered out. In this case our schema declares that we expect to recieve an object which must have a property called 'status', which is a string.
+4. We perform input validation by defining a schema which we expect the JSON we receive to conform to. This is done using [Joi](https://github.com/hapijs/joi). Defining a schema means we can ensure the JSON we receive meets our expectations and throw an error if we receive unexpected input without having to explicitly code validation checks. The schema also acts as a filter on the JSON object. Any properties we're going to reference need to be validated, otherwise they will be filtered out. In this case our schema declares that we expect to receive an object which must have a property called 'status', which is a string.
 5. Our module exports a class which extends `BaseJsonService`
 6. As with our previous badge, we need to declare a route. This time we will capture a variable called `gem`.
 7. We can use `defaultBadgeData()` to set a default `color`, `logo` and/or `label`. If `handle()` doesn't return any of these keys, we'll use the default. Instead of explicitly setting the label text when we return a badge object, we'll use `defaultBadgeData()` here to define it declaratively.
-8. Our bage must implement the `async handle()` function. Because our URL pattern captures a variable called `gem`, our function signature is `async handle({ gem })`. We usually separate the process of generating a badge into 2 stages or concerns: fetch and render. The `fetch()` function is responsible for calling an API endpoint to get data. The `render()` function formats the data for display. In a case where there is a lot of calculation or intermediate steps, this pattern may be thought of as fetch, transform, render and it might be necessary to define some helper functions to assist with the 'transform' step.
+8. Our badge must implement the `async handle()` function. Because our URL pattern captures a variable called `gem`, our function signature is `async handle({ gem })`. We usually separate the process of generating a badge into 2 stages or concerns: fetch and render. The `fetch()` function is responsible for calling an API endpoint to get data. The `render()` function formats the data for display. In a case where there is a lot of calculation or intermediate steps, this pattern may be thought of as fetch, transform, render and it might be necessary to define some helper functions to assist with the 'transform' step.
 9. The `async fetch()` method is responsible for calling an API endpoint to get data. Extending `BaseJsonService` gives us the helper function `_requestJson()`. Note here that we pass the schema we defined in step 4 as an argument. `_requestJson()` will deal with validating the response against the schema and throwing an error if necessary.
     * `_requestJson()` automatically adds an Accept header, checks the status code, parses the response as JSON, and returns the parsed response.
     * `_requestJson()` uses [request](https://github.com/request/request) to perform the HTTP request. Options can be passed to request, including method, query string, and headers. If headers are provided they will override the ones automatically set by `_requestJson()`. There is no need to specify json, as the JSON parsing is handled by `_requestJson()`. See the `request` docs for [supported options](https://github.com/request/request#requestoptions-callback).
@@ -297,7 +297,7 @@ If you update `examples`, you don't have to restart the server. Run `npm run
 defs` in another terminal window and the frontend will update.
 
 ### (4.5) Write Tests <!-- Change the link below when you change the heading -->
-[write tests]: #45-write-tests 
+[write tests]: #45-write-tests
 
 When creating a badge for a new service or changing a badge's behavior, tests
 should be included. They serve several purposes:

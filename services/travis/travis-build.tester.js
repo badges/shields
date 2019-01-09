@@ -2,15 +2,15 @@
 
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
-const { isBuildStatus, isPhpVersionReduction } = require('../test-validators')
+const { isBuildStatus } = require('../test-validators')
 
-const t = new ServiceTester({
-  id: 'travis',
-  title: 'Travis CI/PHP version from .travis.yml',
-})
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'travis-build',
+  title: 'Travis CI',
+  pathPrefix: '/travis',
+}))
 
-// Travis CI
+// Travis (.org) CI
 
 t.create('build status on default branch')
   .get('/rust-lang/rust.json')
@@ -34,19 +34,14 @@ t.create('unknown repo')
   .get('/this-repo/does-not-exist.json')
   .expectJSON({ name: 'build', value: 'unknown' })
 
-t.create('missing content-disposition header')
+t.create('invalid svg response')
   .get('/foo/bar.json')
   .intercept(nock =>
     nock('https://api.travis-ci.org')
-      .head('/foo/bar.svg')
+      .get('/foo/bar.svg')
       .reply(200)
   )
-  .expectJSON({ name: 'build', value: 'invalid' })
-
-t.create('connection error')
-  .get('/foo/bar.json')
-  .networkOff()
-  .expectJSON({ name: 'build', value: 'inaccessible' })
+  .expectJSON({ name: 'build', value: 'unparseable svg response' })
 
 // Travis (.com) CI
 
@@ -72,40 +67,11 @@ t.create('unknown repo')
   .get('/com/this-repo/does-not-exist.json')
   .expectJSON({ name: 'build', value: 'unknown' })
 
-t.create('missing content-disposition header')
+t.create('invalid svg response')
   .get('/com/foo/bar.json')
   .intercept(nock =>
     nock('https://api.travis-ci.com')
-      .head('/foo/bar.svg')
+      .get('/foo/bar.svg')
       .reply(200)
   )
-  .expectJSON({ name: 'build', value: 'invalid' })
-
-t.create('connection error')
-  .get('/com/foo/bar.json')
-  .networkOff()
-  .expectJSON({ name: 'build', value: 'inaccessible' })
-
-// php version from .travis.yml
-
-t.create('gets the package version of symfony')
-  .get('/php-v/symfony/symfony.json')
-  .expectJSONTypes(
-    Joi.object().keys({ name: 'php', value: isPhpVersionReduction })
-  )
-
-t.create('gets the package version of symfony 2.8')
-  .get('/php-v/symfony/symfony/2.8.json')
-  .expectJSONTypes(
-    Joi.object().keys({ name: 'php', value: isPhpVersionReduction })
-  )
-
-t.create('gets the package version of yii')
-  .get('/php-v/yiisoft/yii.json')
-  .expectJSONTypes(
-    Joi.object().keys({ name: 'php', value: isPhpVersionReduction })
-  )
-
-t.create('invalid package name')
-  .get('/php-v/frodo/is-not-a-package.json')
-  .expectJSON({ name: 'php', value: 'invalid' })
+  .expectJSON({ name: 'build', value: 'unparseable svg response' })

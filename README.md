@@ -4,9 +4,9 @@
 </p>
 <p align="center">
     <a href="#backers" alt="Backers on Open Collective">
-        <img src="https://opencollective.com/shields/backers/badge.svg" /></a>
+        <img src="https://img.shields.io/opencollective/backers/shields.svg" /></a>
     <a href="#sponsors" alt="Sponsors on Open Collective">
-        <img src="https://opencollective.com/shields/sponsors/badge.svg" /></a>
+        <img src="https://img.shields.io/opencollective/sponsors/shields.svg" /></a>
     <a href="https://circleci.com/gh/badges/shields/tree/master">
         <img src="https://img.shields.io/circleci/project/github/badges/shields/master.svg"
             alt="build status"></a>
@@ -101,9 +101,8 @@ You can read a [tutorial on how to add a badge][tutorial].
    Tests need to pass in Node 8 and 9.
 2. Clone this repository.
 3. Run `npm install` to install the dependencies.
-4. Run `npm run build` to build the frontend.
-5. Run `npm start` to start the server.
-6. Open `http://[::]:8080/` to view the home page.
+4. Run `npm start` to start the server.
+5. Open `http://localhost:3000/` to view the frontend.
 
 To generate the frontend using production cache settings &ndash; that is,
 badge preview URIs with `maxAge` &ndash; run `LONG_CACHE=true npm run build`.
@@ -165,7 +164,7 @@ You can read more about [the project's inception][thread],
 
 Maintainers:
 
-- [calebcartwright](https://github.com/calebcartwright)
+- [calebcartwright](https://github.com/calebcartwright) (core team)
 - [chris48s](https://github.com/chris48s) (core team)
 - [Daniel15](https://github.com/Daniel15) (core team)
 - [espadrine](https://github.com/espadrine) (core team)
