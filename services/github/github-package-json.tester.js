@@ -99,5 +99,5 @@ t.create('Unknown dependency')
   .get('/dependency-version/paulmelnikow/react-boxplot/dev/i-made-this-up.json')
   .expectJSON({
     name: 'dependency',
-    value: 'dependency not found',
+    value: 'dev dependency not found',
   })
