@@ -25,8 +25,7 @@ class GithubManifestVersion extends ConditionalGithubAuthService {
   static get route() {
     return {
       base: 'github/manifest-json/v',
-      format: '([^/]+)/([^/]+)/?([^/]+)?',
-      capture: ['user', 'repo', 'branch'],
+      pattern: ':user/:repo/:branch*',
     }
   }
 
@@ -44,7 +43,7 @@ class GithubManifestVersion extends ConditionalGithubAuthService {
       },
       {
         title: 'GitHub manifest version',
-        pattern: ':user/:repo/:branch',
+        pattern: ':user/:repo/:branch*',
         namedParams: {
           user: 'RedSparr0w',
           repo: 'IndieGala-Helper',

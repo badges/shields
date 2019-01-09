@@ -17,7 +17,7 @@ import DonateBox from './donate'
 import MarkupModal from './markup-modal'
 import Usage from './usage'
 import Footer from './footer'
-import { CategoryHeading, CategoryHeadings } from './category-headings'
+import { CategoryHeadings, CategoryNav } from './category-headings'
 import BadgeExamples from './badge-examples'
 import { BaseFont } from './common'
 
@@ -105,7 +105,7 @@ export default class Main extends React.Component {
 
     return (
       <div key={id}>
-        <CategoryHeading category={category} />
+        <CategoryNav categories={categories} />
         <BadgeExamples
           definitions={definitions}
           onClick={this.handleExampleSelected}

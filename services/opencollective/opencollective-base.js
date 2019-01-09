@@ -70,7 +70,7 @@ module.exports = class OpencollectiveBase extends BaseJsonService {
       url: `https://opencollective.com/${collective}/members/${userType ||
         'all'}.json${tierId ? `?TierId=${tierId}` : ''}`,
       errorMessages: {
-        503: 'collective not found',
+        404: 'collective not found',
       },
     })
 
