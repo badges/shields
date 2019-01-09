@@ -22,8 +22,8 @@ module.exports = class AppVeyorBase extends BaseJsonService {
     return 'build'
   }
 
-  async fetch({ repo, branch }) {
-    let url = `https://ci.appveyor.com/api/projects/${repo}`
+  async fetch({ user, repo, branch }) {
+    let url = `https://ci.appveyor.com/api/projects/${user}/${repo}`
     if (branch != null) {
       url += `/branch/${branch}`
     }
@@ -37,8 +37,7 @@ module.exports = class AppVeyorBase extends BaseJsonService {
   static buildRoute(base) {
     return {
       base,
-      format: '([^/]+/[^/]+)(?:/(.+))?',
-      capture: ['repo', 'branch'],
+      pattern: ':user/:repo/:branch*',
     }
   }
 }
