@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import styled from 'styled-components'
+import { Link, NavLink } from 'react-router-dom'
 import { H3 } from './common'
 
 const CategoryHeading = ({ category }) => {
@@ -30,4 +31,52 @@ CategoryHeadings.propTypes = {
   categories: PropTypes.arrayOf(CategoryHeading.propTypes.category).isRequired,
 }
 
-export { CategoryHeading, CategoryHeadings }
+const StyledNav = styled.nav`
+  ul {
+    display: flex;
+
+    min-width: 50%;
+    max-width: 500px;
+
+    margin: 0 auto 20px;
+    padding-inline-start: 0;
+
+    flex-wrap: wrap;
+    justify-content: center;
+
+    list-style-type: none;
+  }
+
+  @media screen and (max-width: 768px) {
+    ul {
+      display: none;
+    }
+  }
+
+  li {
+    margin: 4px 10px;
+  }
+
+  .active {
+    font-weight: 900;
+  }
+`
+
+const CategoryNav = ({ categories }) => (
+  <StyledNav>
+    <ul>
+      {categories.map(({ id, name }) => (
+        <li key={id}>
+          <NavLink to={`/examples/${id}`} activeClassName="active">
+            {name}
+          </NavLink>
+        </li>
+      ))}
+    </ul>
+  </StyledNav>
+)
+CategoryNav.propTypes = {
+  categories: PropTypes.arrayOf(CategoryHeading.propTypes.category).isRequired,
+}
+
+export { CategoryHeading, CategoryHeadings, CategoryNav }
