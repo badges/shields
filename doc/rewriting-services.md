@@ -89,10 +89,7 @@ tests are passing, though.
    the route using a `pattern`. A `pattern` (e.g. `pattern: ':param1/:param2'`) is
    the simplest way to declare the route, also the most readable, and will be
    useful for displaying a badge builder with fields in the front end and
-   generating badge URLs programmatically. One limitation to keep in mind is that,
-   at present, the trailing parameter of a pattern can't be optional. If the last
-   part of a route is optional, like a branch, you will need to use a `format`
-   regex string (e.g. `format: '([^/]+/[^/]+)'`).
+   generating badge URLs programmatically.
 
 3. When creating the initial route, you can stub out the service. A minimal
    service extends BaseJsonService (or BaseService, or one of the others), and
@@ -264,13 +261,7 @@ In either case, the service should throw e.g
 
 ## Convert the examples
 
-1. Convert all the examples to `pattern`, `namedParams`, and
-   `staticPreview`. In some cases you can use the `pattern` inherited
-   from `route`, though in other cases you may need to specify a pattern
-   in the example. For example, when showing download badges for several
-   periods, you may want to render the example with an explicit `dt`
-   instead of `:which`. You will also need to specify a pattern for badges
-   that use a `format` regex in the route.
+1. Convert all the examples to `pattern`, `namedParams`, and `staticExample`. In some cases you can use the `pattern` inherited from `route`, though in other cases you may need to specify a pattern in the example. For example, when showing download badges for several periods, you may want to render the example with an explicit `dt` instead of `:which`. You will also need to specify a pattern for badges that use a `format` regex in the route.
 
 2. Open the frontend and check that the static preview badges look good.
    Remember, none of them are live.
