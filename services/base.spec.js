@@ -29,7 +29,11 @@ class DummyService extends BaseService {
   }
 
   static get category() {
-    return 'cat'
+    return 'other'
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'cat' }
   }
 
   static get examples() {
@@ -523,7 +527,7 @@ describe('BaseService', function() {
         isDeprecated,
         route,
       }).to.deep.equal({
-        category: 'cat',
+        category: 'other',
         name: 'DummyService',
         isDeprecated: false,
         route: {
