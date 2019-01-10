@@ -24,6 +24,7 @@ const trace = require('./trace')
 const { validateExample, transformExample } = require('./transform-example')
 const { assertValidCategory } = require('./categories')
 const { assertValidServiceDefinition } = require('./service-definitions')
+const config = require('config').util.toObject()
 
 const defaultBadgeDataSchema = Joi.object({
   label: Joi.string(),
@@ -395,6 +396,7 @@ class BaseService {
           sendBadge(format, badgeData)
         },
         cacheLength: this._cacheLength,
+        maxResponseSizeBytes: config.public.maxResponseSizeBytes,
       })
     )
   }
