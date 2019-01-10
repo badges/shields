@@ -200,7 +200,7 @@ export default class QueryStringBuilder extends React.Component {
       defaultValue: hasDefaultValue,
     } = getBadgeOption(name)
     return (
-      <tr>
+      <tr key={name}>
         <td>
           <QueryParamLabel htmlFor={name}>{label}</QueryParamLabel>
         </td>
