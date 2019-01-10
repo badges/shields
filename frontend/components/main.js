@@ -17,7 +17,11 @@ import DonateBox from './donate'
 import MarkupModal from './markup-modal'
 import Usage from './usage'
 import Footer from './footer'
-import { CategoryHeadings, CategoryNav } from './category-headings'
+import {
+  CategoryHeading,
+  CategoryHeadings,
+  CategoryNav,
+} from './category-headings'
 import BadgeExamples from './badge-examples'
 import { BaseFont } from './common'
 
@@ -99,7 +103,7 @@ export default class Main extends React.Component {
 
     return (
       <div key={id}>
-        <CategoryNav categories={categories} />
+        <CategoryHeading category={category} />
         <BadgeExamples
           definitions={definitions}
           onClick={this.handleExampleSelected}
@@ -121,8 +125,13 @@ export default class Main extends React.Component {
     } else if (isQueryTooShort) {
       return <div>Search term must have 2 or more characters</div>
     } else if (searchResults) {
-      return Object.entries(searchResults).map(([categoryId, definitions]) =>
-        this.renderCategory(findCategory(categoryId), definitions)
+      return (
+        <div>
+          <CategoryNav categories={categories} />
+          {Object.entries(searchResults).map(([categoryId, definitions]) =>
+            this.renderCategory(findCategory(categoryId), definitions)
+          )}
+        </div>
       )
     } else if (category) {
       const definitions = ServiceDefinitionSetHelper.create(
@@ -130,7 +139,12 @@ export default class Main extends React.Component {
       )
         .notDeprecated()
         .toArray()
-      return this.renderCategory(category, definitions)
+      return (
+        <div>
+          <CategoryNav categories={categories} />
+          {this.renderCategory(category, definitions)}
+        </div>
+      )
     } else if (categoryId) {
       return (
         <div>
