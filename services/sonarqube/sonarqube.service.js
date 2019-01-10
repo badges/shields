@@ -8,15 +8,9 @@ const {
   coveragePercentage: coveragePercentageColor,
 } = require('../../lib/color-formatters')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class Sonarqube extends LegacyService {
+class SonarqubeCoverage extends LegacyService {
   static get category() {
-    return 'quality'
+    return 'coverate'
   }
 
   static get route() {
@@ -33,14 +27,39 @@ module.exports = class Sonarqube extends LegacyService {
           'http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/coverage',
       },
       {
-        title: 'SonarQube Tech Debt',
-        previewUrl:
-          'http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/tech_debt',
-      },
-      {
         title: 'SonarQube Coverage (legacy API)',
         previewUrl:
           '4.2/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/coverage',
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
+// This legacy service should be rewritten to use e.g. BaseJsonService.
+//
+// Tips for rewriting:
+// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
+//
+// Do not base new services on this code.
+class Sonarqube extends LegacyService {
+  static get category() {
+    return 'analysis'
+  }
+
+  static get route() {
+    return {
+      base: 'sonar',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'SonarQube Tech Debt',
+        previewUrl:
+          'http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/tech_debt',
       },
       {
         title: 'SonarQube Tech Debt (legacy API)',
@@ -192,4 +211,9 @@ module.exports = class Sonarqube extends LegacyService {
       })
     )
   }
+}
+
+module.exports = {
+  SonarqubeCoverage,
+  Sonarqube,
 }
