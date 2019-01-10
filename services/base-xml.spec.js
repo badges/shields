@@ -136,6 +136,7 @@ describe('BaseXmlService', function() {
           { handleInternalErrors: false }
         )
       ).to.deep.equal({
+        isError: true,
         color: 'lightgray',
         message: 'invalid response data',
       })
@@ -152,6 +153,7 @@ describe('BaseXmlService', function() {
           { handleInternalErrors: false }
         )
       ).to.deep.equal({
+        isError: true,
         color: 'lightgray',
         message: 'unparseable xml response',
       })
