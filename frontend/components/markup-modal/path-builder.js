@@ -19,11 +19,10 @@ const PathBuilderColumn = styled.span`
 
   margin: 5px 0;
 
-  ${({ horizPadding }) =>
-    horizPadding &&
+  ${({ withHorizPadding }) =>
+    withHorizPadding &&
     css`
-      padding-left: ${horizPadding};
-      padding-right: ${horizPadding};
+      padding: 0 8px;
     `};
 `
 
@@ -148,7 +147,7 @@ export default class PathBuilder extends React.Component {
     return (
       <React.Fragment key={token.name}>
         {this.renderLiteral(delimiter, tokenIndex)}
-        <PathBuilderColumn horizPadding="8px">
+        <PathBuilderColumn withHorizPadding>
           <NamedParamLabel htmlFor={name}>
             {humanizeString(name)}
           </NamedParamLabel>
