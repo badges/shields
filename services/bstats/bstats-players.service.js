@@ -3,9 +3,9 @@
 const BaseJsonService = require('../base-json')
 
 const Joi = require('joi')
-const schema = Joi.object({
-  players: Joi.number().required(),
-}).required()
+const schema = Joi.array()
+  .items(Joi.array().items([Joi.number().required(), Joi.number().required()]))
+  .required()
 
 module.exports = class BStatsPlayers extends BaseJsonService {
   static get route() {
@@ -23,14 +23,27 @@ module.exports = class BStatsPlayers extends BaseJsonService {
   }
 
   async handle({ pluginid }) {
-    const { players } = await this.fetch({ pluginid })
+    const json = await this.fetch({ pluginid })
+    const { players } = this.transform({ json })
     return this.constructor.render({ players })
   }
 
+  transform({ json }) {
+    const players = json[0][1]
+    return { players }
+  }
+
   async fetch({ pluginid }) {
+    const url = `https://bstats.org/api/v1/plugins/${pluginid}/charts/players/data`
+
     return this._requestJson({
       schema,
-      url: `https://bstats-api-format.glitch.me/players/${pluginid}`,
+      options: {
+        qs: {
+          maxElements: 1,
+        },
+      },
+      url,
     })
   }
 
