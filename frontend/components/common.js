@@ -2,12 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 
-const noAutocorrect = {
+const noAutocorrect = Object.freeze({
   autoComplete: 'off',
   autoCorrect: 'off',
   autoCapitalize: 'off',
   spellCheck: 'false',
-}
+})
 
 const nonBreakingSpace = '\u00a0'
 
