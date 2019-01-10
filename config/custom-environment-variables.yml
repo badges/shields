@@ -40,6 +40,8 @@ public:
 
   rateLimit: 'RATE_LIMIT'
 
+  maxResponseSizeBytes: 'MAX_RESPONSE_SIZE_BYTES'
+
 private:
   azure_devops_token: 'AZURE_DEVOPS_TOKEN'
   bintray_user: 'BINTRAY_USER'

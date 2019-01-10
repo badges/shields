@@ -34,4 +34,7 @@ public:
 
   handleInternalErrors: true
 
+  # 1,048,576 bytes = 1MB
+  maxResponseSizeBytes: 1048576
+
 private: {}
