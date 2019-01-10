@@ -1,5 +1,7 @@
 'use strict'
 
+const { colorScheme: colorsB } = require('../test-helpers')
+
 const t = (module.exports = require('../create-service-tester')())
 
 t.create('Valid schema (mocked)')
@@ -53,7 +55,7 @@ t.create('User color does not override error color')
         color: 'red',
       })
   )
-  .expectJSON({ name: 'something is', value: 'not right', colorB: 'red' })
+  .expectJSON({ name: 'something is', value: 'not right', colorB: colorsB.red })
 
 t.create('Bad scheme')
   .get('.json?url=http://example.com/badge')
