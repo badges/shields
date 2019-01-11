@@ -12,7 +12,7 @@ const { checkErrorResponse } = require('../../lib/error-helper')
 // Do not base new services on this code.
 module.exports = class LgtmGrade extends LegacyService {
   static get category() {
-    return 'quality'
+    return 'analysis'
   }
 
   static get route() {

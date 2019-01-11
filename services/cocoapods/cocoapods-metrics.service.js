@@ -15,12 +15,11 @@ const {
 // Do not base new services on this code.
 module.exports = class CocoapodsMetrics extends LegacyService {
   static get category() {
-    return 'quality'
+    return 'analysis'
   }
 
   static get route() {
     return {
-      title: 'Cocoapods doc percentage',
       base: 'cocoapods/metrics/doc-percent',
     }
   }
@@ -28,7 +27,10 @@ module.exports = class CocoapodsMetrics extends LegacyService {
   static get examples() {
     return [
       {
-        previewUrl: 'AFNetworking',
+        title: 'Cocoapods doc percentage',
+        pattern: ':spec',
+        namedParams: { spec: 'AFNetworking' },
+        staticPreview: { label: 'docs', message: '94%', color: 'green' },
       },
     ]
   }

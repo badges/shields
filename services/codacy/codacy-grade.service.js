@@ -8,7 +8,7 @@ const schema = Joi.object({ message: codacyGrade }).required()
 
 module.exports = class CodacyGrade extends BaseSvgScrapingService {
   static get category() {
-    return 'quality'
+    return 'analysis'
   }
 
   static get route() {

@@ -4,6 +4,8 @@ import ClickToSelect from '@mapbox/react-click-to-select'
 import styled, { css } from 'styled-components'
 
 const CodeContainer = styled.span`
+  position: relative;
+
   vertical-align: middle;
   display: inline-block;
 
@@ -21,9 +23,11 @@ const StyledCode = styled.code`
   padding: 0.1em 0.3em;
 
   border-radius: 4px;
-  background: #eef;
-
-  font-family: Lekton;
+  ${({ withBackground }) =>
+    withBackground !== false &&
+    css`
+      background: #eef;
+    `} font-family: Lekton;
   font-size: ${({ fontSize }) => fontSize};
 
   white-space: nowrap;
