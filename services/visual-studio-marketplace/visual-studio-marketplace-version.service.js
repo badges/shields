@@ -1,9 +1,9 @@
 'use strict'
 
-const VsMarketplaceBase = require('./vs-marketplace-base')
+const VisualStudioMarketplaceBase = require('./visual-studio-marketplace-base')
 const { renderVersionBadge } = require('../../lib/version')
 
-module.exports = class VsMarketplaceVersion extends VsMarketplaceBase {
+module.exports = class VisualStudioMarketplaceVersion extends VisualStudioMarketplaceBase {
   static get category() {
     return 'version'
   }
@@ -11,7 +11,7 @@ module.exports = class VsMarketplaceVersion extends VsMarketplaceBase {
   static get route() {
     return {
       base: '',
-      pattern: '(vscode-marketplace|vs-marketplace)/v/:extensionId',
+      pattern: '(visual-studio-marketplace|vscode-marketplace)/v/:extensionId',
     }
   }
 
@@ -29,7 +29,7 @@ module.exports = class VsMarketplaceVersion extends VsMarketplaceBase {
     return [
       {
         title: 'Visual Studio Marketplace Version',
-        pattern: 'vs-marketplace/v/:extensionId',
+        pattern: 'visual-studio-marketplace/v/:extensionId',
         namedParams: { extensionId: 'swellaby.rust-pack' },
         staticPreview: this.render({ version: '0.2.7' }),
         keywords: this.keywords,
