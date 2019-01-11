@@ -45,7 +45,9 @@ t.create('version')
   })
 
 t.create('pre-release version')
-  .get('/vs-marketplace/v/swellaby.vscode-rust-test-adapter.json?style=_shields_test')
+  .get(
+    '/vs-marketplace/v/swellaby.vscode-rust-test-adapter.json?style=_shields_test'
+  )
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post(`/extensionquery/`)
