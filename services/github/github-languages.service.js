@@ -45,7 +45,7 @@ class GithubCodeSize extends LegacyService {
 
 class GithubLanguages extends LegacyService {
   static get category() {
-    return 'other'
+    return 'analysis'
   }
 
   static get route() {

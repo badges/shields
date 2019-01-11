@@ -16,7 +16,7 @@ const {
 // Do not base new services on this code.
 module.exports = class GithubSearch extends LegacyService {
   static get category() {
-    return 'other'
+    return 'analysis'
   }
 
   static get route() {
