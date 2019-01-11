@@ -1,87 +1,133 @@
 import React from 'react'
+import styled from 'styled-components'
+import { baseUrl } from '../constants'
 import Meta from './meta'
 import Header from './header'
 import Footer from './footer'
-import { baseUrl } from '../constants'
+import { H3 } from './common'
+import { Snippet } from './snippet'
 
-const example = JSON.stringify(
-  {
-    schemaVersion: 1,
-    label: 'hello',
-    message: 'sweet world',
-    color: 'orange',
-  },
-  undefined,
-  2
+const Explanation = styled.div`
+  max-width: 800px;
+  display: block;
+`
+
+const JsonExampleBlock = styled.code`
+  display: inline-block;
+
+  text-align: left;
+  line-height: 1.2em;
+  padding: 16px 18px;
+
+  border-radius: 4px;
+  background: #eef;
+
+  font-family: Lekton;
+  font-size: ${({ fontSize }) => fontSize};
+
+  white-space: pre;
+`
+
+const JsonExample = ({ data }) => (
+  <JsonExampleBlock>{JSON.stringify(data, undefined, 2)}</JsonExampleBlock>
 )
+
+const Schema = styled.dl`
+  display: inline-block;
+  max-width: 800px;
+
+  margin: 0;
+  padding: 10px;
+  text-align: left;
+
+  background: #efefef;
+
+  clear: both;
+  overflow: hidden;
+
+  dt,
+  dd {
+    padding: 0 1%;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    float: left;
+  }
+
+  dt {
+    width: 100px;
+    clear: both;
+  }
+
+  dd {
+    margin-left: 20px;
+    width: 75%;
+  }
+
+  @media (max-width: 600px) {
+    .data_table {
+      text-align: center;
+    }
+  }
+`
 
 const EndpointPage = () => (
   <div>
     <Meta />
     <Header />
-
-    <h3 id="static-badge">Endpoint</h3>
-
-    <p>
-      <code>
-        {baseUrl}
-        /badge/endpoint.svg?url=&lt;URL&gt;&amp;style=&lt;STYLE&gt;
-      </code>
-    </p>
-
-    <p style={{ textAlign: 'left' }}>
-      Using the endpoint badge, you can create badges from your own JSON
-      endpoint.
-    </p>
-
-    <p>The endpoint must return an object like this:</p>
-
-    <code
-      style={{
-        display: 'block',
-        width: '250px',
-        margin: '0 auto',
-        padding: '10px 30px',
-        textAlign: 'left',
-      }}
-    >
-      {example}
-    </code>
-
+    <H3 id="static-badge">Endpoint</H3>
+    <Explanation>
+      <p>
+        Developers appreciate Shields for consistency and powerful customization
+        options. The endpoint badge gives your users the full power of Shields
+        customization using the content you generate.
+      </p>
+      <p>
+        Using the endpoint badge, you can provide content for a badge through
+        your own JSON endpoint. The content can be prerendered and static, or
+        generated on the fly. You can configure the cache behavior to balance
+        freshness with responsiveness and server bandwidth, subject to the
+        Shields default max age.
+      </p>
+      <p>
+        This is a better alternative than redirecting to the static badge
+        enpoint or using our NPM package on your server:
+      </p>
+      <ol>
+        <li>
+          You don't have to track updates to the badge templates or styling
+          options. Your badge formatting is always 100% up to date.
+        </li>
+        <li>
+          <a href="https://en.wikipedia.org/wiki/Separation_of_content_and_presentation">
+            Content and presentation are separate.
+          </a>{' '}
+          Your service authors the badge, and Shields takes input from the user
+          to format it. You don't have to concern yourself with styling options,
+          not even passing them through to Shields.
+        </li>
+        <li>
+          Compared with an HTTP redirect, a JSON response is easier to implement
+          in any framework, and more compatible with hosting environments such
+          as <a href="https://runkit.com/docs/endpoint">RunKit endpoints</a>.
+        </li>
+        <li>
+          You can rely on the Shields CDN and trivially customize our cache
+          behavior without studying HTTP headers.
+        </li>
+      </ol>
+      <Snippet snippet={`${baseUrl}/badge/endpoint.svg?url=...&style=...`} />
+      <p>The endpoint should return an object like this:</p>
+      <JsonExample
+        data={{
+          schemaVersion: 1,
+          label: 'hello',
+          message: 'sweet world',
+          color: 'orange',
+        }}
+      />
+    </Explanation>
     <h4>Schema</h4>
-
-    <style jsx>{`
-      .schema {
-        display: inline-block;
-        overflow: hidden;
-        text-align: left;
-        background: #efefef;
-        padding: 10px;
-        max-width: 800px;
-      }
-      .schema dt,
-      .schema dd {
-        padding: 0 1%;
-        margin-top: 8px;
-        margin-bottom: 8px;
-        float: left;
-      }
-      .schema dt {
-        width: 100px;
-        clear: both;
-      }
-      .schema dd {
-        margin-left: 20px;
-        width: 75%;
-      }
-      @media (max-width: 600px) {
-        .data_table {
-          text-align: center;
-        }
-      }
-    `}</style>
-
-    <dl className="schema">
+    <Schema>
       <dt>schemaVersion</dt>
       <dd>
         Required. Always the number <code>1</code>.
@@ -149,9 +195,8 @@ const EndpointPage = () => (
         tune performance and traffic vs. responsiveness. Can be overridden by
         the query string, but only to a larger value.
       </dd>
-    </dl>
-    <br style={{ clear: 'both' }} />
-    <Footer />
+    </Schema>
+    <Footer baseUrl={baseUrl} />
   </div>
 )
 export default EndpointPage
