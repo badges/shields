@@ -17,13 +17,18 @@ module.exports = class VsMarketplaceRating extends VsMarketplaceBase {
     }
   }
 
+  static get defaultBadgeData() {
+    return {
+      label: 'rating',
+    }
+  }
+
   static render({ format, averageRating, ratingCount }) {
     const message =
       format === 'r'
         ? `${averageRating}/5 (${ratingCount})`
         : starRating(averageRating)
     return {
-      label: 'rating',
       message,
       color: floorCount(averageRating, 2, 3, 4),
     }
@@ -58,7 +63,7 @@ module.exports = class VsMarketplaceRating extends VsMarketplaceBase {
   async handle({ format, extensionId }) {
     const json = await this.fetch({ extensionId })
     const { statistics } = this.transformStatistics({ json })
-    const { value: averageRating } = this.transformStatisticValue({
+    const { value: averageRating } = this.getStatistic({
       statistics,
       statisticName: 'averagerating',
     })
@@ -67,7 +72,7 @@ module.exports = class VsMarketplaceRating extends VsMarketplaceBase {
       return this.constructor.render({ format, averageRating })
     }
 
-    const { value: ratingCount } = this.transformStatisticValue({
+    const { value: ratingCount } = this.getStatistic({
       statistics,
       statisticName: 'ratingcount',
     })

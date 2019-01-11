@@ -48,7 +48,7 @@ module.exports = class VsMarketplaceDownloads extends VsMarketplaceBase {
   async handle({ measure, extensionId }) {
     const json = await this.fetch({ extensionId })
     const { statistics } = this.transformStatistics({ json })
-    const { value: installs } = this.transformStatisticValue({
+    const { value: installs } = this.getStatistic({
       statistics,
       statisticName: 'install',
     })
@@ -57,7 +57,7 @@ module.exports = class VsMarketplaceDownloads extends VsMarketplaceBase {
       return this.constructor.render({ measure, count: installs })
     }
 
-    const { value: updates } = this.transformStatisticValue({
+    const { value: updates } = this.getStatistic({
       statistics,
       statisticName: 'updateCount',
     })

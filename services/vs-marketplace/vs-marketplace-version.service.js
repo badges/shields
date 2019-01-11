@@ -1,8 +1,7 @@
 'use strict'
 
 const VsMarketplaceBase = require('./vs-marketplace-base')
-const { addv } = require('../../lib/text-formatters')
-const { version: versionColor } = require('../../lib/color-formatters')
+const { renderVersionBadge } = require('../../lib/version')
 
 module.exports = class VsMarketplaceVersion extends VsMarketplaceBase {
   static get category() {
@@ -16,12 +15,14 @@ module.exports = class VsMarketplaceVersion extends VsMarketplaceBase {
     }
   }
 
-  static render({ version }) {
+  static get defaultBadgeData() {
     return {
       label: 'version',
-      message: addv(version),
-      color: versionColor(version),
     }
+  }
+
+  static render({ version }) {
+    return renderVersionBadge({ version })
   }
 
   static get examples() {

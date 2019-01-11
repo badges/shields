@@ -96,7 +96,7 @@ module.exports = class VsMarketplaceBase extends BaseJsonService {
     return { statistics: extension.statistics }
   }
 
-  transformStatisticValue({ statistics, statisticName }) {
+  getStatistic({ statistics, statisticName }) {
     for (const statistic of statistics) {
       if (statistic.statisticName === statisticName) {
         return { value: statistic.value }
