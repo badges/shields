@@ -5,6 +5,7 @@ const { expect } = require('chai')
 const { test, given, forCases } = require('sazerac')
 const sinon = require('sinon')
 const trace = require('./trace')
+const { colorScheme: colorsB } = require('./test-helpers')
 
 const {
   NotFound,
@@ -380,7 +381,7 @@ describe('BaseService', function() {
         expect(badgeData.text).to.deep.equal(['purr count', 'n/a'])
       })
 
-      it('overrides the colorA', function() {
+      it('overrides the label color', function() {
         const badgeData = DummyService._makeBadgeData(
           { colorA: '42f483' },
           { color: 'green' }
@@ -474,6 +475,11 @@ describe('BaseService', function() {
         const badgeData = DummyService._makeBadgeData({}, { color: 'red' })
         expect(badgeData.colorscheme).to.equal('red')
       })
+
+      it('applies the service label color', function() {
+        const badgeData = DummyService._makeBadgeData({}, { labelColor: 'red' })
+        expect(badgeData.colorA).to.equal(colorsB.red)
+      })
     })
 
     describe('Defaults', function() {
@@ -485,6 +491,11 @@ describe('BaseService', function() {
       it('uses the default color', function() {
         const badgeData = DummyService._makeBadgeData({}, {})
         expect(badgeData.colorscheme).to.equal('lightgrey')
+      })
+
+      it('provides no default colorA', function() {
+        const badgeData = DummyService._makeBadgeData({}, {})
+        expect(badgeData.colorA).to.be.undefined
       })
     })
   })

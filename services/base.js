@@ -28,6 +28,7 @@ const { assertValidServiceDefinition } = require('./service-definitions')
 const defaultBadgeDataSchema = Joi.object({
   label: Joi.string(),
   color: Joi.string(),
+  labelColor: Joi.string(),
   logo: Joi.string(),
 }).required()
 
@@ -38,6 +39,9 @@ const serviceDataSchema = Joi.object({
     .min(1)
     .required(),
   color: Joi.string(),
+  // Generally services should not use these options, which are provided to
+  // support the Endpoint badge.
+  labelColor: Joi.string(),
 }).required()
 
 class BaseService {
@@ -340,6 +344,7 @@ class BaseService {
       label: serviceLabel,
       message: serviceMessage,
       color: serviceColor,
+      labelColor: serviceLabelColor,
       link: serviceLink,
     } = serviceData
 
@@ -347,7 +352,22 @@ class BaseService {
       color: defaultColor,
       logo: defaultLogo,
       label: defaultLabel,
+      labelColor: defaultLabelColor,
     } = this.defaultBadgeData
+
+    let color, labelColor
+    if (isError) {
+      // Disregard the override color.
+      color = coalesce(serviceColor, defaultColor, 'lightgrey')
+      labelColor = coalesce(serviceLabelColor, defaultLabelColor)
+    } else {
+      color = coalesce(overrideColor, serviceColor, defaultColor, 'lightgrey')
+      labelColor = coalesce(
+        overrideLabelColor,
+        serviceLabelColor,
+        defaultLabelColor
+      )
+    }
 
     const badgeData = {
       text: [
@@ -363,16 +383,9 @@ class BaseService {
       }),
       logoWidth: +overrideLogoWidth,
       links: toArray(overrideLink || serviceLink),
-      colorA: makeColor(overrideLabelColor),
+      colorA: makeColor(labelColor),
     }
 
-    let color
-    if (isError) {
-      // Disregard the override color.
-      color = coalesce(serviceColor, defaultColor, 'lightgrey')
-    } else {
-      color = coalesce(overrideColor, serviceColor, defaultColor, 'lightgrey')
-    }
     setBadgeColor(badgeData, color)
 
     return badgeData
