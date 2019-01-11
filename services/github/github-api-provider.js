@@ -1,6 +1,16 @@
 'use strict'
 
+const Joi = require('joi')
 const { TokenPool } = require('../../lib/token-pool')
+const { nonNegativeInteger } = require('../validators')
+
+const headerSchema = Joi.object({
+  'x-ratelimit-limit': nonNegativeInteger,
+  'x-ratelimit-remaining': nonNegativeInteger,
+  'x-ratelimit-reset': nonNegativeInteger,
+})
+  .required()
+  .unknown(true)
 
 // Provides an interface to the Github API. Manages the base URL.
 class GithubApiProvider {
@@ -48,11 +58,31 @@ class GithubApiProvider {
   }
 
   updateToken(token, headers) {
-    const rateLimit = +headers['x-ratelimit-limit']
-    const reserve = this.reserveFraction * rateLimit
-    const usesRemaining = +headers['x-ratelimit-remaining'] - reserve
+    let rateLimit, totalUsesRemaining, nextReset
+    try {
+      ;({
+        'x-ratelimit-limit': rateLimit,
+        'x-ratelimit-remaining': totalUsesRemaining,
+        'x-ratelimit-reset': nextReset,
+      } = Joi.attempt(headers, headerSchema))
+    } catch (e) {
+      const logHeaders = {
+        'x-ratelimit-limit': headers['x-ratelimit-limit'],
+        'x-ratelimit-remaining': headers['x-ratelimit-remaining'],
+        'x-ratelimit-reset': headers['x-ratelimit-reset'],
+      }
+      console.log(
+        `Invalid GitHub rate limit headers ${JSON.stringify(
+          logHeaders,
+          undefined,
+          2
+        )}`
+      )
+      return
+    }
 
-    const nextReset = +headers['x-ratelimit-reset']
+    const reserve = this.reserveFraction * rateLimit
+    const usesRemaining = totalUsesRemaining - reserve
 
     token.update(usesRemaining, nextReset)
   }
@@ -63,13 +93,7 @@ class GithubApiProvider {
   }
 
   tokenForUrl(url) {
-    const { globalToken } = this
-    if (globalToken) {
-      // When a global gh_token is configured, use that in place of our token
-      // pool. This produces more predictable behavior, and more predictable
-      // failures when that token is exhausted.
-      return { id: globalToken }
-    } else if (url.startsWith('/search')) {
+    if (url.startsWith('/search')) {
       return this.searchTokens.next()
     } else {
       return this.standardTokens.next()
@@ -83,11 +107,17 @@ class GithubApiProvider {
     const { baseUrl } = this
 
     let token
-    try {
-      token = this.tokenForUrl(url)
-    } catch (e) {
-      callback(e)
-      return
+    let tokenString
+    if (this.withPooling) {
+      try {
+        token = this.tokenForUrl(url)
+      } catch (e) {
+        callback(e)
+        return
+      }
+      tokenString = token.id
+    } else {
+      tokenString = this.globalToken
     }
 
     const options = {
@@ -97,16 +127,18 @@ class GithubApiProvider {
       headers: {
         'User-Agent': 'Shields.io',
         Accept: 'application/vnd.github.v3+json',
-        Authorization: `token ${token.id}`,
+        Authorization: `token ${tokenString}`,
       },
     }
 
     request(options, (err, res, buffer) => {
       if (err === null) {
-        if (res.statusCode === 401) {
-          this.invalidateToken(token)
-        } else if (res.statusCode < 500) {
-          this.updateToken(token, res.headers)
+        if (this.withPooling) {
+          if (res.statusCode === 401) {
+            this.invalidateToken(token)
+          } else if (res.statusCode < 500) {
+            this.updateToken(token, res.headers)
+          }
         }
       }
       callback(err, res, buffer)
