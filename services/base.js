@@ -39,6 +39,7 @@ const serviceDataSchema = Joi.object({
     .min(1)
     .required(),
   color: Joi.string(),
+  link: Joi.string().uri(),
   // Generally services should not use these options, which are provided to
   // support the Endpoint badge.
   labelColor: Joi.string(),
