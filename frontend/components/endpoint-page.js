@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { staticBadgeUrl } from '../lib/badge-url'
 import { baseUrl } from '../constants'
@@ -32,6 +33,9 @@ const JsonExampleBlock = styled.code`
 const JsonExample = ({ data }) => (
   <JsonExampleBlock>{JSON.stringify(data, undefined, 2)}</JsonExampleBlock>
 )
+JsonExample.propTypes = {
+  data: PropTypes.string.isRequired,
+}
 
 const Schema = styled.dl`
   display: inline-block;
@@ -101,10 +105,10 @@ const EndpointPage = () => (
         Using the endpoint badge, you can provide content for a badge through a
         JSON endpoint. The URL of the endpoint is embedded into the badge URL,
         and the content is fetched and formatted by Shields. The content can be
-        prerendered and static, or generated on the fly. Cache behavior is
-        configurable, to strike a balance between freshness and
-        responsiveness/bandwidth utilitization – subject to the Shields default
-        max age.
+        prerendered, or generated on the fly. To strike a balance between
+        responsiveness and bandwith utilization on one hand, and freshness on
+        the other, cache behavior is configurable, subject to the Shields
+        minimum.
       </p>
       <p>
         The endpoint badge is a better alternative than redirecting to the
