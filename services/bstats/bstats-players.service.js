@@ -1,6 +1,7 @@
 'use strict'
 
 const BaseJsonService = require('../base-json')
+const { metric } = require('../../lib/text-formatters')
 
 const Joi = require('joi')
 const schema = Joi.array()
@@ -49,7 +50,7 @@ module.exports = class BStatsPlayers extends BaseJsonService {
 
   static render({ players }) {
     return {
-      message: players,
+      message: metric(players),
     }
   }
 
