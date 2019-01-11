@@ -10,7 +10,7 @@ const {
 
 class SonarqubeCoverage extends LegacyService {
   static get category() {
-    return 'coverate'
+    return 'coverage'
   }
 
   static get route() {
