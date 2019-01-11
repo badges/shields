@@ -28,9 +28,49 @@ const { assertValidServiceDefinition } = require('./service-definitions')
 const defaultBadgeDataSchema = Joi.object({
   label: Joi.string(),
   color: Joi.string(),
+<<<<<<< Updated upstream
   logo: Joi.string(),
 }).required()
 
+=======
+  labelColor: Joi.string(),
+  namedLogo: Joi.string(),
+}).required()
+
+const serviceDataSchema = Joi.object({
+  isError: Joi.boolean(),
+  label: Joi.string(),
+  message: Joi.string()
+    .min(1)
+    .required(),
+  color: Joi.string(),
+  link: Joi.string().uri(),
+  // Generally services should not use these options, which are provided to
+  // support the Endpoint badge.
+  labelColor: Joi.string(),
+  namedLogo: Joi.string(),
+  logoSvg: Joi.string(),
+  logoColor: Joi.forbidden(),
+  logoWidth: Joi.forbidden(),
+  logoPosition: Joi.forbidden(),
+})
+  .oxor('namedLogo', 'logoSvg')
+  .when(
+    Joi.alternatives().try(
+      Joi.object({ namedLogo: Joi.string().required() }).unknown(),
+      Joi.object({ logoSvg: Joi.string().required() }).unknown()
+    ),
+    {
+      then: Joi.object({
+        logoColor: Joi.string(),
+        logoWidth: Joi.number(),
+        logoPosition: Joi.number(),
+      }),
+    }
+  )
+  .required()
+
+>>>>>>> Stashed changes
 class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
     this._requestFetcher = sendAndCacheRequest
@@ -313,6 +353,8 @@ class BaseService {
     return serviceData
   }
 
+  // Translate modern badge data to the legacy schema understood by the badge
+  // maker.
   static _makeBadgeData(overrides, serviceData) {
     const {
       style,
@@ -330,15 +372,46 @@ class BaseService {
       label: serviceLabel,
       message: serviceMessage,
       color: serviceColor,
+<<<<<<< Updated upstream
+=======
+      labelColor: serviceLabelColor,
+      namedLogo: serviceNamedLogo,
+>>>>>>> Stashed changes
       link: serviceLink,
     } = serviceData
 
     const {
       color: defaultColor,
-      logo: defaultLogo,
+      namedLogo: defaultNamedLogo,
       label: defaultLabel,
     } = this.defaultBadgeData
 
+<<<<<<< Updated upstream
+=======
+    let color, labelColor
+    if (isError) {
+      // In case of an error, disregard any colors overridden by the user.
+      color = coalesce(serviceColor, defaultColor, 'lightgrey')
+      labelColor = coalesce(serviceLabelColor, defaultLabelColor)
+    } else {
+      color = coalesce(overrideColor, serviceColor, defaultColor, 'lightgrey')
+      labelColor = coalesce(
+        overrideLabelColor,
+        serviceLabelColor,
+        defaultLabelColor
+      )
+    }
+
+    const namedLogo = coalesce(
+      serviceNamedLogo,
+      style === 'social' ? defaultNamedLogo : undefined
+    )
+    const logo = makeLogo(namedLogo, {
+      logo: overrideLogo,
+      logoColor: overrideLogoColor,
+    })
+
+>>>>>>> Stashed changes
     const badgeData = {
       text: [
         // Use `coalesce()` to support empty labels and messages, as in the
@@ -347,7 +420,7 @@ class BaseService {
         coalesce(serviceMessage, 'n/a'),
       ],
       template: style,
-      logo: makeLogo(style === 'social' ? defaultLogo : undefined, {
+      logo: makeLogo(namedLogo, {
         logo: overrideLogo,
         logoColor: overrideLogoColor,
       }),
