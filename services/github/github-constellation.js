@@ -37,6 +37,7 @@ class GithubConstellation {
     this.apiProvider = new GithubApiProvider({
       baseUrl,
       globalToken,
+      withPooling: !globalToken,
       onTokenInvalidated: tokenString => this.onTokenInvalidated(tokenString),
     })
   }
