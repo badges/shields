@@ -1,10 +1,10 @@
 'use strict'
 
-const VsMarketplaceBase = require('./vs-marketplace-base')
+const VisualStudioMarketplaceBase = require('./visual-studio-marketplace-base')
 const { metric } = require('../../lib/text-formatters')
 const { downloadCount } = require('../../lib/color-formatters')
 
-module.exports = class VsMarketplaceDownloads extends VsMarketplaceBase {
+module.exports = class VisualStudioMarketplaceDownloads extends VisualStudioMarketplaceBase {
   static get category() {
     return 'downloads'
   }
@@ -12,7 +12,8 @@ module.exports = class VsMarketplaceDownloads extends VsMarketplaceBase {
   static get route() {
     return {
       base: '',
-      pattern: '(vscode-marketplace|vs-marketplace)/:measure(d|i)/:extensionId',
+      pattern:
+        '(visual-studio-marketplace|vscode-marketplace)/:measure(d|i)/:extensionId',
     }
   }
 
@@ -30,14 +31,14 @@ module.exports = class VsMarketplaceDownloads extends VsMarketplaceBase {
     return [
       {
         title: 'Visual Studio Marketplace Installs',
-        pattern: 'vs-marketplace/i/:extensionId',
+        pattern: 'visual-studio-marketplace/i/:extensionId',
         namedParams: { extensionId: 'ritwickdey.LiveServer' },
         staticPreview: this.render({ measure: 'i', count: 843 }),
         keywords: this.keywords,
       },
       {
         title: 'Visual Studio Marketplace Downloads',
-        pattern: 'vs-marketplace/d/:extensionId',
+        pattern: 'visual-studio-marketplace/d/:extensionId',
         namedParams: { extensionId: 'ritwickdey.LiveServer' },
         staticPreview: this.render({ measure: 'd', count: 1239 }),
         keywords: this.keywords,

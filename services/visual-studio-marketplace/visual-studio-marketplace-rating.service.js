@@ -1,10 +1,10 @@
 'use strict'
 
-const VsMarketplaceBase = require('./vs-marketplace-base')
+const VisualStudioMarketplaceBase = require('./visual-studio-marketplace-base')
 const { starRating } = require('../../lib/text-formatters')
 const { floorCount } = require('../../lib/color-formatters')
 
-module.exports = class VsMarketplaceRating extends VsMarketplaceBase {
+module.exports = class VisualStudioMarketplaceRating extends VisualStudioMarketplaceBase {
   static get category() {
     return 'rating'
   }
@@ -13,7 +13,7 @@ module.exports = class VsMarketplaceRating extends VsMarketplaceBase {
     return {
       base: '',
       pattern:
-        '(vscode-marketplace|vs-marketplace)/:format(r|stars)/:extensionId',
+        '(visual-studio-marketplace|vscode-marketplace)/:format(r|stars)/:extensionId',
     }
   }
 
@@ -38,7 +38,7 @@ module.exports = class VsMarketplaceRating extends VsMarketplaceBase {
     return [
       {
         title: 'Visual Studio Marketplace Rating',
-        pattern: 'vs-marketplace/r/:extensionId',
+        pattern: 'visual-studio-marketplace/r/:extensionId',
         namedParams: { extensionId: 'ritwickdey.LiveServer' },
         staticPreview: this.render({
           format: 'r',
@@ -49,7 +49,7 @@ module.exports = class VsMarketplaceRating extends VsMarketplaceBase {
       },
       {
         title: 'Visual Studio Marketplace Rating (Stars)',
-        pattern: 'vs-marketplace/stars/:extensionId',
+        pattern: 'visual-studio-marketplace/stars/:extensionId',
         namedParams: { extensionId: 'ritwickdey.LiveServer' },
         staticPreview: this.render({
           format: 'stars',
