@@ -94,7 +94,7 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthService {
   static get examples() {
     return [
       {
-        title: 'GitHub package.json dependency version',
+        title: 'GitHub package.json dependency version (prod)',
         pattern: ':user/:repo/:packageName',
         namedParams: {
           user: 'developit',
