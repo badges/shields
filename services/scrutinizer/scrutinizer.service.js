@@ -30,6 +30,33 @@ class ScrutinizerBuild extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {}
 }
 
+class ScrutinizerCoverage extends LegacyService {
+  static get category() {
+    return 'coverage'
+  }
+
+  static get route() {
+    return {
+      base: 'scrutinizer',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Scrutinizer Coverage',
+        previewUrl: 'coverage/g/filp/whoops',
+      },
+      {
+        title: 'Scrutinizer branch',
+        previewUrl: 'coverage/g/doctrine/doctrine2/master',
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler({ camp, cache }) {}
+}
+
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //
 // Tips for rewriting:
@@ -38,7 +65,7 @@ class ScrutinizerBuild extends LegacyService {
 // Do not base new services on this code.
 class Scrutinizer extends LegacyService {
   static get category() {
-    return 'quality'
+    return 'analysis'
   }
 
   static get route() {
@@ -52,14 +79,6 @@ class Scrutinizer extends LegacyService {
       {
         title: 'Scrutinizer',
         previewUrl: 'g/filp/whoops',
-      },
-      {
-        title: 'Scrutinizer Coverage',
-        previewUrl: 'coverage/g/filp/whoops',
-      },
-      {
-        title: 'Scrutinizer branch',
-        previewUrl: 'coverage/g/doctrine/doctrine2/master',
       },
     ]
   }
@@ -142,5 +161,6 @@ class Scrutinizer extends LegacyService {
 
 module.exports = {
   ScrutinizerBuild,
+  ScrutinizerCoverage,
   Scrutinizer,
 }

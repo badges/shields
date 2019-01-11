@@ -140,7 +140,7 @@ module.exports = class SymfonyInsight extends BaseXmlService {
   }
 
   static get category() {
-    return 'quality'
+    return 'analysis'
   }
 
   static get route() {

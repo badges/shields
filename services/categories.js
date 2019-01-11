@@ -4,7 +4,8 @@ const Joi = require('joi')
 
 const categories = [
   { id: 'build', name: 'Build' },
-  { id: 'quality', name: 'Quality' },
+  { id: 'coverage', name: 'Code Coverage' },
+  { id: 'analysis', name: 'Analysis' },
   { id: 'chat', name: 'Chat' },
   { id: 'dependencies', name: 'Dependencies' },
   { id: 'size', name: 'Size' },

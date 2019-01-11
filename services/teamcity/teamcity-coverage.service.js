@@ -31,7 +31,7 @@ module.exports = class TeamCityCoverage extends TeamCityBase {
   }
 
   static get category() {
-    return 'quality'
+    return 'coverage'
   }
 
   static get route() {

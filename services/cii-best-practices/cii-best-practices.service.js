@@ -27,7 +27,7 @@ module.exports = class CIIBestPracticesService extends BaseJsonService {
   }
 
   static get category() {
-    return 'quality'
+    return 'analysis'
   }
 
   static get examples() {
