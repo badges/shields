@@ -31,6 +31,15 @@ const defaultBadgeDataSchema = Joi.object({
   logo: Joi.string(),
 }).required()
 
+const serviceDataSchema = Joi.object({
+  isError: Joi.boolean(),
+  label: Joi.string(),
+  message: Joi.string()
+    .min(1)
+    .required(),
+  color: Joi.string(),
+}).required()
+
 class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
     this._requestFetcher = sendAndCacheRequest
@@ -304,6 +313,7 @@ class BaseService {
     let serviceData
     try {
       serviceData = await serviceInstance.handle(namedParams, queryParams)
+      Joi.assert(serviceData, serviceDataSchema)
     } catch (error) {
       serviceData = serviceInstance._handleError(error)
     }

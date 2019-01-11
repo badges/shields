@@ -267,6 +267,31 @@ describe('BaseService', function() {
       })
     })
 
+    context('handle() returns invalid data', function() {
+      it('Throws a validation error', async function() {
+        class ThrowingService extends DummyService {
+          async handle() {
+            return {
+              some: 'nonsense',
+            }
+          }
+        }
+        try {
+          await ThrowingService.invoke(
+            {},
+            { handleInternalErrors: false },
+            { namedParamA: 'bar.bar.bar' }
+          )
+          expect.fail('Expected to throw')
+        } catch (e) {
+          expect(e.name).to.equal('ValidationError')
+          expect(e.details.map(({ message }) => message)).to.deep.equal([
+            '"message" is required',
+          ])
+        }
+      })
+    })
+
     describe('Handles known subtypes of ShieldsInternalError', function() {
       it('handles NotFound errors', async function() {
         class ThrowingService extends DummyService {
