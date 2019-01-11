@@ -2,6 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 
+const noAutocorrect = Object.freeze({
+  autoComplete: 'off',
+  autoCorrect: 'off',
+  autoCapitalize: 'off',
+  spellCheck: 'false',
+})
+
 const nonBreakingSpace = '\u00a0'
 
 const BaseFont = styled.div`
@@ -94,11 +101,13 @@ const VerticalSpace = styled.hr`
 `
 
 export {
+  noAutocorrect,
   nonBreakingSpace,
   BaseFont,
   H2,
   H3,
   Badge,
+  StyledInput,
   InlineInput,
   BlockInput,
   VerticalSpace,

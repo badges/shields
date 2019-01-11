@@ -13,7 +13,7 @@ const { metric } = require('../../lib/text-formatters')
 // Do not base new services on this code.
 module.exports = class LgtmAlerts extends LegacyService {
   static get category() {
-    return 'quality'
+    return 'analysis'
   }
 
   static get route() {
