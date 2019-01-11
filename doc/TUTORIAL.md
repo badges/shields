@@ -41,7 +41,7 @@ install node and npm: https://nodejs.org/en/download/
 5. Run the server
    `npm start`
 6. Visit the website to check the front-end is loaded:
-   [http://127.0.0.1:3000/](http://127.0.0.1:3000/)
+   [http://localhost:3000/](http://localhost:3000/)
 
 You may also want to install
 [ImageMagick](https://www.imagemagick.org/script/download.php).
@@ -155,7 +155,7 @@ To try out this example badge:
 2. Quit the running server with `Control+C`.
 3. Start the server again.
    `npm start`
-4. Visit the badge at <http://[::]:8080/example/foo.svg>.
+4. Visit the badge at <http://localhost:8080/example/foo.svg>.
    It should look like this: ![](https://img.shields.io/badge/example-foo-blue.svg)
 
 [path-to-regexp]: https://github.com/pillarjs/path-to-regexp#parameters

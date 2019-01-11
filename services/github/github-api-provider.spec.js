@@ -77,11 +77,12 @@ describe('Github API provider', function() {
     it('should update the token with the expected values', function(done) {
       provider.request(mockRequest, '/foo', {}, (err, res, buffer) => {
         expect(err).to.equal(null)
-        const expectedUsesRemaining = remaining - reserveFraction * rateLimit
-        expect(
-          mockStandardToken.update.withArgs(expectedUsesRemaining, nextReset)
-            .calledOnce
-        ).to.be.true
+        const expectedUsesRemaining =
+          remaining - Math.ceil(reserveFraction * rateLimit)
+        expect(mockStandardToken.update).to.have.been.calledWith(
+          expectedUsesRemaining,
+          nextReset
+        )
         expect(mockStandardToken.invalidate).not.to.have.been.called
         done()
       })
