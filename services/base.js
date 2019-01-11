@@ -1,7 +1,6 @@
 'use strict'
 
 // See available emoji at http://emoji.muan.co/
-const bytes = require('bytes')
 const emojic = require('emojic')
 const pathToRegexp = require('path-to-regexp')
 const Joi = require('joi')
@@ -25,7 +24,6 @@ const trace = require('./trace')
 const { validateExample, transformExample } = require('./transform-example')
 const { assertValidCategory } = require('./categories')
 const { assertValidServiceDefinition } = require('./service-definitions')
-const config = require('config').util.toObject()
 
 const defaultBadgeDataSchema = Joi.object({
   label: Joi.string(),
@@ -373,7 +371,7 @@ class BaseService {
   static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
     this.validateDefinition()
 
-    const { cacheHeaders: cacheHeaderConfig } = serviceConfig
+    const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
     camp.route(
       this._regex,
       handleRequest(cacheHeaderConfig, {
@@ -397,7 +395,7 @@ class BaseService {
           sendBadge(format, badgeData)
         },
         cacheLength: this._cacheLength,
-        fetchLimitBytes: bytes(config.public.fetchLimit),
+        fetchLimitBytes,
       })
     )
   }
