@@ -125,13 +125,8 @@ export default class Main extends React.Component {
     } else if (isQueryTooShort) {
       return <div>Search term must have 2 or more characters</div>
     } else if (searchResults) {
-      return (
-        <div>
-          <CategoryNav categories={categories} />
-          {Object.entries(searchResults).map(([categoryId, definitions]) =>
-            this.renderCategory(findCategory(categoryId), definitions)
-          )}
-        </div>
+      return Object.entries(searchResults).map(([categoryId, definitions]) =>
+        this.renderCategory(findCategory(categoryId), definitions)
       )
     } else if (category) {
       const definitions = ServiceDefinitionSetHelper.create(
