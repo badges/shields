@@ -29,7 +29,11 @@ class DummyService extends BaseService {
   }
 
   static get category() {
-    return 'cat'
+    return 'other'
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'cat' }
   }
 
   static get examples() {
@@ -256,6 +260,7 @@ describe('BaseService', function() {
           { namedParamA: 'bar.bar.bar' }
         )
       ).to.deep.equal({
+        isError: true,
         color: 'lightgray',
         label: 'shields',
         message: 'internal error',
@@ -272,6 +277,7 @@ describe('BaseService', function() {
         expect(
           await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
+          isError: true,
           color: 'red',
           message: 'not found',
         })
@@ -286,6 +292,7 @@ describe('BaseService', function() {
         expect(
           await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
+          isError: true,
           color: 'lightgray',
           message: 'inaccessible',
         })
@@ -300,6 +307,7 @@ describe('BaseService', function() {
         expect(
           await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
+          isError: true,
           color: 'lightgray',
           message: 'invalid',
         })
@@ -314,6 +322,7 @@ describe('BaseService', function() {
         expect(
           await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
+          isError: true,
           color: 'lightgray',
           message: 'no longer available',
         })
@@ -328,6 +337,7 @@ describe('BaseService', function() {
         expect(
           await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
+          isError: true,
           color: 'red',
           message: 'invalid parameter',
         })
@@ -353,12 +363,21 @@ describe('BaseService', function() {
         expect(badgeData.colorA).to.equal('#42f483')
       })
 
-      it('overrides the colorB', function() {
+      it('overrides the color', function() {
         const badgeData = DummyService._makeBadgeData(
           { colorB: '10ADED' },
           { color: 'red' }
         )
         expect(badgeData.colorB).to.equal('#10ADED')
+      })
+
+      it('does not override the color in case of an error', function() {
+        const badgeData = DummyService._makeBadgeData(
+          { colorB: '10ADED' },
+          { isError: true, color: 'lightgray' }
+        )
+        expect(badgeData.colorB).to.be.undefined
+        expect(badgeData.colorscheme).to.equal('lightgray')
       })
 
       it('overrides the logo', function() {
@@ -508,7 +527,7 @@ describe('BaseService', function() {
         isDeprecated,
         route,
       }).to.deep.equal({
-        category: 'cat',
+        category: 'other',
         name: 'DummyService',
         isDeprecated: false,
         route: {

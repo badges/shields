@@ -3,6 +3,7 @@
 const { expect } = require('chai')
 const Camp = require('camp')
 const got = require('got')
+const sinon = require('sinon')
 const portfinder = require('portfinder')
 const queryString = require('query-string')
 const nock = require('nock')
@@ -10,18 +11,21 @@ const serverSecrets = require('../../../lib/server-secrets')
 const acceptor = require('./acceptor')
 
 const fakeClientId = 'githubdabomb'
+const fakeShieldsSecret = 'letmeinplz'
 
 describe('Github token acceptor', function() {
-  // Frustratingly, potentially undefined properties can't reliably be stubbed
-  // with Sinon.
-  // https://github.com/sinonjs/sinon/pull/1557
   before(function() {
-    serverSecrets.gh_client_id = fakeClientId
-    serverSecrets.shields_ips = []
+    // Make sure properties exist.
+    // https://github.com/sinonjs/sinon/pull/1557
+    serverSecrets.gh_client_id = undefined
+    serverSecrets.shields_ips = undefined
+    serverSecrets.shields_secret = undefined
+    sinon.stub(serverSecrets, 'gh_client_id').value(fakeClientId)
+    sinon.stub(serverSecrets, 'shields_ips').value([])
+    sinon.stub(serverSecrets, 'shields_secret').value(fakeShieldsSecret)
   })
   after(function() {
-    delete serverSecrets.gh_client_id
-    delete serverSecrets.shields_ips
+    sinon.restore()
   })
 
   let port, baseUrl
@@ -42,8 +46,13 @@ describe('Github token acceptor', function() {
     }
   })
 
+  let onTokenAccepted
   beforeEach(function() {
-    acceptor.setRoutes(camp)
+    onTokenAccepted = sinon.stub()
+    acceptor.setRoutes({
+      server: camp,
+      onTokenAccepted,
+    })
   })
 
   it('should start the OAuth process', async function() {
@@ -107,5 +116,17 @@ describe('Github token acceptor', function() {
         )
       })
     })
+  })
+
+  it('should add a received token', async function() {
+    const fakeAccessToken = 'its-my-token'
+
+    const { body } = await got(`${baseUrl}/github-auth/add-token`, {
+      form: true,
+      body: { shieldsSecret: fakeShieldsSecret, token: fakeAccessToken },
+    })
+
+    expect(onTokenAccepted).to.have.been.calledWith(fakeAccessToken)
+    expect(body).to.equal('Thanks!')
   })
 })
