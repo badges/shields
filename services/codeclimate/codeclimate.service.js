@@ -8,13 +8,99 @@ const {
   colorScale,
 } = require('../../lib/color-formatters')
 
+class CodeclimateCoverage extends LegacyService {
+  static get route() {
+    return {
+      base: 'codeclimate',
+    }
+  }
+
+  static get category() {
+    return 'coverage'
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Code Climate coverage',
+        pattern: 'coverage/:userRepo',
+        namedParams: { userRepo: 'jekyll/jekyll' },
+        staticPreview: {
+          label: 'coverage',
+          message: '95%',
+          color: 'green',
+        },
+      },
+      {
+        title: 'Code Climate coverage (letter)',
+        pattern: 'coverage-letter/:userRepo',
+        namedParams: { userRepo: 'jekyll/jekyll' },
+        staticPreview: {
+          label: 'coverage',
+          message: 'A',
+          color: 'brightgreen',
+        },
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //
 // Tips for rewriting:
 // https://github.com/badges/shields/blob/master/doc/rewriting-services.md
 //
 // Do not base new services on this code.
-module.exports = class Codeclimate extends LegacyService {
+class Codeclimate extends LegacyService {
+  static get route() {
+    return {
+      base: 'codeclimate',
+    }
+  }
+
+  static get category() {
+    return 'analysis'
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Code Climate issues',
+        pattern: 'issues/:userRepo',
+        namedParams: { userRepo: 'twbs/bootstrap' },
+        staticPreview: { label: 'issues', message: '89', color: 'red' },
+      },
+      {
+        title: 'Code Climate maintainability',
+        pattern: 'maintainability/:userRepo',
+        namedParams: { userRepo: 'angular/angular.js' },
+        staticPreview: { label: 'maintainability', message: 'F', color: 'red' },
+      },
+      {
+        title: 'Code Climate maintainability (percentage)',
+        pattern: 'maintainability-percentage/:userRepo',
+        namedParams: { userRepo: 'angular/angular.js' },
+        staticPreview: {
+          label: 'maintainability',
+          message: '4.6%',
+          color: 'red',
+        },
+      },
+      {
+        title: 'Code Climate technical debt',
+        pattern: 'tech-debt/:userRepo',
+        namedParams: { userRepo: 'jekyll/jekyll' },
+        staticPreview: {
+          label: 'technical debt',
+          message: '3%',
+          color: 'brightgreen',
+        },
+      },
+    ]
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/codeclimate(\/(c|coverage|maintainability|issues|tech-debt)(-letter|-percentage)?)?\/(.+)\.(svg|png|gif|jpg|json)$/,
@@ -140,71 +226,9 @@ module.exports = class Codeclimate extends LegacyService {
       })
     )
   }
+}
 
-  static get route() {
-    return {
-      base: 'codeclimate',
-    }
-  }
-
-  static get category() {
-    return 'quality'
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Code Climate issues',
-        pattern: 'issues/:userRepo',
-        namedParams: { userRepo: 'twbs/bootstrap' },
-        staticPreview: { label: 'issues', message: '89', color: 'red' },
-      },
-      {
-        title: 'Code Climate maintainability',
-        pattern: 'maintainability/:userRepo',
-        namedParams: { userRepo: 'angular/angular.js' },
-        staticPreview: { label: 'maintainability', message: 'F', color: 'red' },
-      },
-      {
-        title: 'Code Climate maintainability (percentage)',
-        pattern: 'maintainability-percentage/:userRepo',
-        namedParams: { userRepo: 'angular/angular.js' },
-        staticPreview: {
-          label: 'maintainability',
-          message: '4.6%',
-          color: 'red',
-        },
-      },
-      {
-        title: 'Code Climate coverage',
-        pattern: 'coverage/:userRepo',
-        namedParams: { userRepo: 'jekyll/jekyll' },
-        staticPreview: {
-          label: 'coverage',
-          message: '95%',
-          color: 'green',
-        },
-      },
-      {
-        title: 'Code Climate coverage (letter)',
-        pattern: 'coverage-letter/:userRepo',
-        namedParams: { userRepo: 'jekyll/jekyll' },
-        staticPreview: {
-          label: 'coverage',
-          message: 'A',
-          color: 'brightgreen',
-        },
-      },
-      {
-        title: 'Code Climate technical debt',
-        pattern: 'tech-debt/:userRepo',
-        namedParams: { userRepo: 'jekyll/jekyll' },
-        staticPreview: {
-          label: 'technical debt',
-          message: '3%',
-          color: 'brightgreen',
-        },
-      },
-    ]
-  }
+module.exports = {
+  CodeclimateCoverage,
+  Codeclimate,
 }
