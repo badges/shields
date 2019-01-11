@@ -1,3 +1,17 @@
+export function bareLink(badgeUrl, link, title = '') {
+  return badgeUrl
+}
+
+export function html(badgeUrl, link, title) {
+  // To be more robust, this should escape the title.
+  const img = `<img alt="${title}" src="${badgeUrl}">`
+  if (link) {
+    return `<a href=${link}>${img}</a>`
+  } else {
+    return img
+  }
+}
+
 export function markdown(badgeUrl, link, title) {
   const withoutLink = `![${title || ''}](${badgeUrl})`
   if (link) {
@@ -72,4 +86,15 @@ export default function generateAllMarkup(badgeUrl, link, title) {
   return mapValues({ markdown, reStructuredText, asciiDoc }, fn =>
     fn(badgeUrl, link, title)
   )
+}
+
+export function generateMarkup({ badgeUrl, link, title, markupFormat }) {
+  const generatorFn = {
+    markdown,
+    rst: reStructuredText,
+    asciidoc: asciiDoc,
+    link: bareLink,
+    html,
+  }[markupFormat]
+  return generatorFn(badgeUrl, link, title)
 }
