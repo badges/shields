@@ -2,17 +2,14 @@
 
 const Joi = require('joi')
 const { InvalidParameter } = require('./errors')
-const { semverRange } = require('./validators')
 
 const isDependencyMap = Joi.object()
   .pattern(
     /./,
-    Joi.alternatives().try(
-      semverRange,
-      Joi.string()
-        .uri()
-        .required()
-    )
+    // This accepts a semver range, a URL, and many other possible values.
+    Joi.string()
+      .min(1)
+      .required()
   )
   .default({})
 

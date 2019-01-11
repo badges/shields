@@ -78,10 +78,10 @@ t.create('Prod prod dependency version')
   )
 
 t.create('Scoped dependency')
-  .get('/dependency-version/zeit/next.js/dev/babel-eslint.json')
+  .get('/dependency-version/badges/shields/dev/@babel/core.json')
   .expectJSONTypes(
     Joi.object({
-      name: 'babel-eslint',
+      name: '@babel/core',
       value: semverRange,
     })
   )
