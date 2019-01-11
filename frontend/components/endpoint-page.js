@@ -1,10 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
+import { staticBadgeUrl } from '../lib/badge-url'
 import { baseUrl } from '../constants'
 import Meta from './meta'
 import Header from './header'
 import Footer from './footer'
-import { H3 } from './common'
+import { H3, Badge } from './common'
 import { Snippet } from './snippet'
 
 const Explanation = styled.div`
@@ -75,56 +76,66 @@ const EndpointPage = () => (
     <Meta />
     <Header />
     <H3 id="static-badge">Endpoint</H3>
+    <Snippet snippet={`${baseUrl}/badge/endpoint.svg?url=...&style=...`} />
+    <p>Sample response:</p>
+    <JsonExample
+      data={{
+        schemaVersion: 1,
+        label: 'hello',
+        message: 'sweet world',
+        color: 'orange',
+      }}
+    />
+    <p>Output:</p>
+    <Badge
+      src={staticBadgeUrl(baseUrl, 'hello', 'sweet world', 'orange')}
+      alt="hello | sweet world"
+    />
     <Explanation>
       <p>
-        Developers appreciate Shields for consistency and powerful customization
-        options. The endpoint badge gives your users the full power of Shields
-        customization using the content you generate.
+        Developers rely on Shields for visual consistency and powerful
+        customization options. The endpoint badge gives service providers the
+        full power of that customization using badge content they provide.
       </p>
       <p>
-        Using the endpoint badge, you can provide content for a badge through
-        your own JSON endpoint. The content can be prerendered and static, or
-        generated on the fly. You can configure the cache behavior to balance
-        freshness with responsiveness and server bandwidth, subject to the
-        Shields default max age.
+        Using the endpoint badge, you can provide content for a badge through a
+        JSON endpoint. The URL of the endpoint is embedded into the badge URL,
+        and the content is fetched and formatted by Shields. The content can be
+        prerendered and static, or generated on the fly. Cache behavior is
+        configurable, to strike a balance between freshness and
+        responsiveness/bandwidth utilitization – subject to the Shields default
+        max age.
       </p>
       <p>
-        This is a better alternative than redirecting to the static badge
-        enpoint or using our NPM package on your server:
+        The endpoint badge is a better alternative than redirecting to the
+        static badge enpoint or using our NPM package on your server:
       </p>
       <ol>
-        <li>
-          You don't have to track updates to the badge templates or styling
-          options. Your badge formatting is always 100% up to date.
-        </li>
         <li>
           <a href="https://en.wikipedia.org/wiki/Separation_of_content_and_presentation">
             Content and presentation are separate.
           </a>{' '}
-          Your service authors the badge, and Shields takes input from the user
-          to format it. You don't have to concern yourself with styling options,
-          not even passing them through to Shields.
+          The service provider authors the badge, and Shields takes input from
+          the user to format it. The service provider doesn't have to concern
+          itself with styling, not even to pass those options through to
+          Shields.
         </li>
         <li>
-          Compared with an HTTP redirect, a JSON response is easier to implement
-          in any framework, and more compatible with hosting environments such
-          as <a href="https://runkit.com/docs/endpoint">RunKit endpoints</a>.
+          There's no need to track updates to the npm package, badge templates,
+          or options. Badge formatting is always 100% up to date.
         </li>
         <li>
-          You can rely on the Shields CDN and trivially customize our cache
-          behavior without studying HTTP headers.
+          Compared with an HTTP redirect, a JSON response is easier to
+          implement. It is trivial in almost any framework, and is more
+          compatible with hosting environments such as{' '}
+          <a href="https://runkit.com/docs/endpoint">RunKit endpoints</a>.
+        </li>
+        <li>
+          Service providers can rely on the Shields CDN. Adjusting cache
+          behavior is as simple as setting a property in the JSON response.
+          There's no need to study the HTTP headers.
         </li>
       </ol>
-      <Snippet snippet={`${baseUrl}/badge/endpoint.svg?url=...&style=...`} />
-      <p>The endpoint should return an object like this:</p>
-      <JsonExample
-        data={{
-          schemaVersion: 1,
-          label: 'hello',
-          message: 'sweet world',
-          color: 'orange',
-        }}
-      />
     </Explanation>
     <h4>Schema</h4>
     <Schema>
@@ -193,7 +204,7 @@ const EndpointPage = () => (
         Default: <code>300</code>. Set the HTTP cache lifetime in seconds, which
         should respected by the Shields' CDN and downstream users. This lets you
         tune performance and traffic vs. responsiveness. Can be overridden by
-        the query string, but only to a larger value.
+        the user via the query string, but only to a longer value.
       </dd>
     </Schema>
     <Footer baseUrl={baseUrl} />
