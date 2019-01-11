@@ -1,6 +1,7 @@
 'use strict'
 
 // See available emoji at http://emoji.muan.co/
+const bytes = require('bytes')
 const emojic = require('emojic')
 const pathToRegexp = require('path-to-regexp')
 const Joi = require('joi')
@@ -396,7 +397,7 @@ class BaseService {
           sendBadge(format, badgeData)
         },
         cacheLength: this._cacheLength,
-        maxResponseSizeBytes: config.public.maxResponseSizeBytes,
+        fetchLimitBytes: bytes(config.public.fetchLimit),
       })
     )
   }
