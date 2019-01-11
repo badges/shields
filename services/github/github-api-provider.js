@@ -1,15 +1,79 @@
 'use strict'
 
-const githubAuth = require('../../lib/github-auth')
+const { TokenPool } = require('../../lib/token-pool')
 
-// Provide an interface to the Github API. Manages the base URL.
-//
-// Eventually this class will be responsible for managing headers,
-// authentication, and actually making the request. Currently it's delegating
-// to legacy code.
+// Provides an interface to the Github API. Manages the base URL.
 class GithubApiProvider {
-  constructor({ baseUrl }) {
-    this.baseUrl = baseUrl
+  // reserveFraction: The amount of much of a token's quota we avoid using, to
+  //   reserve it for the user.
+  constructor({
+    baseUrl,
+    withPooling = true,
+    onTokenInvalidated = tokenString => {},
+    globalToken,
+    reserveFraction = 0.25,
+  }) {
+    Object.assign(this, {
+      baseUrl,
+      withPooling,
+      onTokenInvalidated,
+      globalToken,
+      reserveFraction,
+    })
+
+    if (this.withPooling) {
+      this.standardTokens = new TokenPool({ batchSize: 25 })
+      this.searchTokens = new TokenPool({ batchSize: 5 })
+    }
+  }
+
+  serializeDebugInfo({ sanitize = true } = {}) {
+    if (this.withPooling) {
+      return {
+        standardTokens: this.standardTokens.serializeDebugInfo({ sanitize }),
+        searchTokens: this.searchTokens.serializeDebugInfo({ sanitize }),
+      }
+    } else {
+      return {}
+    }
+  }
+
+  addToken(tokenString) {
+    if (this.withPooling) {
+      this.standardTokens.add(tokenString)
+      this.searchTokens.add(tokenString)
+    } else {
+      throw Error('When not using a token pool, do not provide tokens')
+    }
+  }
+
+  updateToken(token, headers) {
+    const rateLimit = +headers['x-ratelimit-limit']
+    const reserve = this.reserveFraction * rateLimit
+    const usesRemaining = +headers['x-ratelimit-remaining'] - reserve
+
+    const nextReset = +headers['x-ratelimit-reset']
+
+    token.update(usesRemaining, nextReset)
+  }
+
+  invalidateToken(token) {
+    token.invalidate()
+    this.onTokenInvalidated(token.id)
+  }
+
+  tokenForUrl(url) {
+    const { globalToken } = this
+    if (globalToken) {
+      // When a global gh_token is configured, use that in place of our token
+      // pool. This produces more predictable behavior, and more predictable
+      // failures when that token is exhausted.
+      return { id: globalToken }
+    } else if (url.startsWith('/search')) {
+      return this.searchTokens.next()
+    } else {
+      return this.standardTokens.next()
+    }
   }
 
   // Act like request(), but tweak headers and query to avoid hitting a rate
@@ -18,14 +82,35 @@ class GithubApiProvider {
   request(request, url, query, callback) {
     const { baseUrl } = this
 
-    githubAuth.request(
-      request,
-      `${baseUrl}${url}`,
-      query,
-      (err, res, buffer) => {
-        callback(err, res, buffer)
+    let token
+    try {
+      token = this.tokenForUrl(url)
+    } catch (e) {
+      callback(e)
+      return
+    }
+
+    const options = {
+      url,
+      baseUrl,
+      qs: query,
+      headers: {
+        'User-Agent': 'Shields.io',
+        Accept: 'application/vnd.github.v3+json',
+        Authorization: `token ${token.id}`,
+      },
+    }
+
+    request(options, (err, res, buffer) => {
+      if (err === null) {
+        if (res.statusCode === 401) {
+          this.invalidateToken(token)
+        } else if (res.statusCode < 500) {
+          this.updateToken(token, res.headers)
+        }
       }
-    )
+      callback(err, res, buffer)
+    })
   }
 
   requestAsPromise(request, url, query) {
