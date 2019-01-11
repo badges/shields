@@ -13,7 +13,7 @@ export default () => (
     <meta name="description" content={description} />
     <link rel="icon" type="image/png" href="favicon.png" />
     <link
-      href="https://fonts.googleapis.com/css?family=Lekton"
+      href="https://fonts.googleapis.com/css?family=Lato|Lekton"
       rel="stylesheet"
     />
   </Head>
