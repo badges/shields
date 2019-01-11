@@ -35,6 +35,34 @@ class PuppetforgeModuleVersion extends LegacyService {
   static registerLegacyRouteHandler() {}
 }
 
+class PuppetforgeModulePdkVersion extends LegacyService {
+  static get category() {
+    return 'platform-support'
+  }
+
+  static get route() {
+    return {
+      base: 'puppetforge/pdk-version',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Puppet Forge – PDK version',
+        // We need an example that uses the PDK.
+        pattern: ':user/:moduleName',
+        namedParams: {
+          user: 'vStone',
+          module: 'percona',
+        },
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
 class PuppetforgeModuleDownloads extends LegacyService {
   static get category() {
     return 'downloads'
@@ -170,7 +198,7 @@ class PuppetforgeModules extends LegacyService {
                 badgeData.text[1] = 'unknown'
                 badgeData.colorscheme = 'lightgrey'
               }
-            } else if (info === 'p') {
+            } else if (info === 'pdk-version') {
               badgeData.text[0] = 'pdk version'
               if (json.current_release.pdk) {
                 const pdkVersion = json.current_release.metadata['pdk-version']
@@ -194,6 +222,7 @@ class PuppetforgeModules extends LegacyService {
 
 module.exports = {
   PuppetforgeModuleVersion,
+  PuppetforgeModulePdkVersion,
   PuppetforgeModuleDownloads,
   PuppetforgeModuleFeedback,
   PuppetforgeModuleEndorsement,
