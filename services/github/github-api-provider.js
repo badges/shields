@@ -81,7 +81,7 @@ class GithubApiProvider {
       return
     }
 
-    const reserve = this.reserveFraction * rateLimit
+    const reserve = Math.ceil(this.reserveFraction * rateLimit)
     const usesRemaining = totalUsesRemaining - reserve
 
     token.update(usesRemaining, nextReset)
