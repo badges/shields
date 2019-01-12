@@ -6,7 +6,7 @@ const serverSecrets = require('../../lib/server-secrets')
 const { metric } = require('../../lib/text-formatters')
 const { nonNegativeInteger } = require('../validators')
 
-const bitbucketPullRequestsSchema = Joi.object({
+const bitbucketPullRequestSchema = Joi.object({
   size: nonNegativeInteger,
 }).required()
 
@@ -14,7 +14,7 @@ function pullRequestClassGenerator(raw) {
   const routePrefix = raw ? 'pr-raw' : 'pr'
   const badgeSuffix = raw ? '' : ' open'
 
-  return class BitbucketPullRequests extends BaseJsonService {
+  return class BitbucketPullRequest extends BaseJsonService {
     async fetchCloud({ args, user, repo }) {
       args.url = `https://bitbucket.org/api/2.0/repositories/${user}/${repo}/pullrequests/`
       args.options = { qs: { state: 'OPEN', limit: 0 } }
@@ -59,7 +59,7 @@ function pullRequestClassGenerator(raw) {
 
     async fetch({ server, user, repo }) {
       const args = {
-        schema: bitbucketPullRequestsSchema,
+        schema: bitbucketPullRequestSchema,
         errorMessages: {
           401: 'invalid credentials',
           403: 'private repo',
