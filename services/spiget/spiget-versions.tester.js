@@ -6,7 +6,7 @@ const t = (module.exports = require('../create-service-tester')())
 
 const { withRegex } = require('../test-validators')
 
-const multipleVersions = withRegex(/^([+]?\d*\.\d+)(\-)([+]?\d*\.\d+)$/)
+const multipleVersions = withRegex(/^([+]?\d*\.\d+)(-)([+]?\d*\.\d+)$/)
 
 t.create('EssentialsX - multiple versions supported - (id 9089)')
   .get('/9089.json')
