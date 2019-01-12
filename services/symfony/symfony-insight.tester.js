@@ -149,7 +149,7 @@ create('gold grade')
   .expectJSON({
     name: 'grade',
     value: 'gold',
-    colorB: '#EBC760',
+    color: '#ebc760',
   })
 
 create('silver grade')
@@ -162,7 +162,7 @@ create('silver grade')
   .expectJSON({
     name: 'grade',
     value: 'silver',
-    colorB: '#C0C0C0',
+    color: '#c0c0c0',
   })
 
 create('bronze grade')
@@ -175,7 +175,7 @@ create('bronze grade')
   .expectJSON({
     name: 'grade',
     value: 'bronze',
-    colorB: '#C88F6A',
+    color: '#c88f6a',
   })
 
 create('no medal grade')
@@ -313,5 +313,5 @@ create('legacy path: platinum grade')
   .expectJSON({
     name: 'grade',
     value: 'platinum',
-    colorB: '#e5e4e2',
+    color: '#e5e4e2',
   })

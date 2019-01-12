@@ -14,7 +14,7 @@ t.create('Public domain license')
   .expectJSON({
     name: 'license',
     value: 'CC0-1.0',
-    color: publicDomainLicenseColor,
+    color: `#${publicDomainLicenseColor}`,
   })
 
 t.create('Copyleft license')

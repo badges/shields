@@ -56,7 +56,7 @@ t.create('total downloads when network is off')
   .expectJSON({
     name: 'downloads',
     value: 'inaccessible',
-    color: 'lightgrey',
+    color: 'lightgray',
   })
 
 t.create('total downloads of unknown package')

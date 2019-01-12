@@ -18,7 +18,7 @@ t.create('Valid (mocked)')
   .expectJSON({
     name: 'swagger',
     value: 'valid',
-    colorB: 'brightgreen',
+    color: 'brightgreen',
   })
 
 t.create('Invalid (mocked)')
@@ -39,5 +39,5 @@ t.create('Invalid (mocked)')
   .expectJSON({
     name: 'swagger',
     value: 'invalid',
-    colorB: 'red',
+    color: 'red',
   })

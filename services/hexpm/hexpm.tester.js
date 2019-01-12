@@ -90,7 +90,7 @@ t.create('license (no license)')
   .expectJSON({
     name: 'license',
     value: 'Unknown',
-    colorB: 'lightgrey',
+    color: 'lightgrey',
   })
 
 t.create('license (not found)')

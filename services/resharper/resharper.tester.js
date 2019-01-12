@@ -69,7 +69,7 @@ t.create('version (mocked, orange badge)')
   .expectJSON({
     name: 'resharper',
     value: 'v0.35',
-    color: 'yellow',
+    color: 'orange',
   })
 
 t.create('version (mocked, blue badge)')

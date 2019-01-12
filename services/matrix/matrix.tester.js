@@ -160,7 +160,7 @@ t.create('bad server or connection')
   .expectJSON({
     name: 'chat',
     value: 'inaccessible',
-    color: 'lightgrey',
+    color: 'lightgray',
   })
 
 t.create('non-world readable room')
@@ -197,7 +197,7 @@ t.create('non-world readable room')
   .expectJSON({
     name: 'chat',
     value: 'room not world readable or is invalid',
-    color: 'lightgrey',
+    color: 'lightgray',
   })
 
 t.create('invalid token')
@@ -225,7 +225,7 @@ t.create('invalid token')
   .expectJSON({
     name: 'chat',
     value: 'bad auth token',
-    color: 'lightgrey',
+    color: 'lightgray',
   })
 
 t.create('unknown request')
@@ -262,7 +262,7 @@ t.create('unknown request')
   .expectJSON({
     name: 'chat',
     value: 'unknown request',
-    color: 'lightgrey',
+    color: 'lightgray',
   })
 
 t.create('unknown alias')

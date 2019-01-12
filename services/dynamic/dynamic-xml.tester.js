@@ -97,7 +97,7 @@ t.create('XML from url | query doesnt exist')
   .expectJSON({
     name: 'custom badge',
     value: 'no result',
-    color: 'lightgrey',
+    color: 'lightgray',
   })
 
 t.create('XML from url | query doesnt exist (attribute)')
@@ -107,7 +107,7 @@ t.create('XML from url | query doesnt exist (attribute)')
   .expectJSON({
     name: 'custom badge',
     value: 'no result',
-    color: 'lightgrey',
+    color: 'lightgray',
   })
 
 t.create('XML from url | invalid url')
@@ -127,7 +127,7 @@ t.create('XML from url | user color overrides default')
   .expectJSON({
     name: 'custom badge',
     value: 'IndieGala Helper',
-    colorB: '#10ADED',
+    color: '#10aded',
   })
 
 t.create('XML from url | error color overrides default')

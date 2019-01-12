@@ -65,7 +65,7 @@ t.create('YAML from url | object doesnt exist')
   .expectJSON({
     name: 'custom badge',
     value: 'no result',
-    color: 'lightgrey',
+    color: 'lightgray',
   })
 
 t.create('YAML from url | invalid url')
@@ -82,7 +82,7 @@ t.create('YAML from url | user color overrides default')
   .get(
     '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&query=$.name&colorB=10ADED&style=_shields_test'
   )
-  .expectJSON({ name: 'custom badge', value: 'coredns', colorB: '#10aded' })
+  .expectJSON({ name: 'custom badge', value: 'coredns', color: '#10aded' })
 
 t.create('YAML from url | error color overrides default')
   .get(

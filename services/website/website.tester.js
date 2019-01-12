@@ -3,25 +3,25 @@
 const t = (module.exports = require('../create-service-tester')())
 
 t.create('status of http://shields.io')
-  .get('/http/shields.io.json?style=_shields_test')
+  .get('/website/http/shields.io.json?style=_shields_test')
   .expectJSON({ name: 'website', value: 'online', color: 'brightgreen' })
 
 t.create('status of https://shields.io')
-  .get('/https/shields.io.json?style=_shields_test')
+  .get('/website/https/shields.io.json?style=_shields_test')
   .expectJSON({ name: 'website', value: 'online', color: 'brightgreen' })
 
 t.create('status of nonexistent domain')
-  .get('/https/shields-io.io.json?style=_shields_test')
+  .get('/website/https/shields-io.io.json?style=_shields_test')
   .expectJSON({ name: 'website', value: 'offline', color: 'red' })
 
 t.create('status when network is off')
-  .get('/http/shields.io.json?style=_shields_test')
+  .get('/website/http/shields.io.json?style=_shields_test')
   .networkOff()
   .expectJSON({ name: 'website', value: 'offline', color: 'red' })
 
 t.create('custom online label, online message and online color')
   .get(
-    '-up-down-green-grey/http/online.com.json?style=_shields_test&label=homepage'
+    '/website-up-down-green-grey/http/online.com.json?style=_shields_test&label=homepage'
   )
   .intercept(nock =>
     nock('http://online.com')
@@ -31,7 +31,7 @@ t.create('custom online label, online message and online color')
   .expectJSON({ name: 'homepage', value: 'up', color: 'green' })
 
 t.create('custom offline message and offline color')
-  .get('-up-down-green-grey/http/offline.com.json?style=_shields_test')
+  .get('/website-up-down-green-grey/http/offline.com.json?style=_shields_test')
   .intercept(nock =>
     nock('http://offline.com')
       .head('/')

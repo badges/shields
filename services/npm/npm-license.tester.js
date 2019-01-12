@@ -64,7 +64,7 @@ t.create('license for package with a license object')
         maintainers: [],
       })
   )
-  .expectJSON({ name: 'license', value: 'MIT', colorB: 'green' })
+  .expectJSON({ name: 'license', value: 'MIT', color: 'green' })
 
 t.create('license for package with a license array')
   .get('/package-license-array.json?style=_shields_test')
