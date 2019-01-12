@@ -2,7 +2,6 @@
 
 const LegacyService = require('../legacy-service')
 const {
-  makeColorB,
   makeLabel: getLabel,
   makeBadgeData: getBadgeData,
   makeLogo: getLogo,
