@@ -8,7 +8,7 @@ const { colorScheme } = require('../test-helpers')
 const isMarketplaceVersion = withRegex(/^v(\d+\.\d+\.\d+)(\.\d+)?$/)
 
 t.create('live: rating')
-  .get('/vs-marketplace/v/ritwickdey.LiveServer.json')
+  .get('/visual-studio-marketplace/v/ritwickdey.LiveServer.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'version',
@@ -17,7 +17,9 @@ t.create('live: rating')
   )
 
 t.create('version')
-  .get('/vs-marketplace/v/ritwickdey.LiveServer.json?style=_shields_test')
+  .get(
+    '/visual-studio-marketplace/v/ritwickdey.LiveServer.json?style=_shields_test'
+  )
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post(`/extensionquery/`)
@@ -46,7 +48,7 @@ t.create('version')
 
 t.create('pre-release version')
   .get(
-    '/vs-marketplace/v/swellaby.vscode-rust-test-adapter.json?style=_shields_test'
+    '/visual-studio-marketplace/v/swellaby.vscode-rust-test-adapter.json?style=_shields_test'
   )
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')

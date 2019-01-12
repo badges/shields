@@ -34,4 +34,6 @@ public:
 
   handleInternalErrors: true
 
+  fetchLimit: '10MB'
+
 private: {}
