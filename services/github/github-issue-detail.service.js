@@ -117,10 +117,7 @@ module.exports = class GithubIssueDetail extends LegacyService {
               case 's': {
                 const state = (badgeData.text[1] = parsedData.state)
                 badgeData.colorscheme = undefined
-                badgeData.colorB = makeColorB(
-                  githubStateColor(state),
-                  queryParams
-                )
+                badgeData.colorB = queryParams.colorB || githubStateColor(state)
                 break
               }
               case 'title':
@@ -137,20 +134,16 @@ module.exports = class GithubIssueDetail extends LegacyService {
                   .join(' | ')
                 if (parsedData.labels.length === 1) {
                   badgeData.colorscheme = undefined
-                  badgeData.colorB = makeColorB(
-                    parsedData.labels[0].color,
-                    queryParams
-                  )
+                  badgeData.colorB =
+                    queryParams.colorB || parsedData.labels[0].color
                 }
                 break
               case 'comments': {
                 badgeData.text[0] = getLabel('comments', queryParams)
                 const comments = (badgeData.text[1] = parsedData.comments)
                 badgeData.colorscheme = undefined
-                badgeData.colorB = makeColorB(
-                  githubCommentsColor(comments),
-                  queryParams
-                )
+                badgeData.colorB =
+                  queryParams.coloB || githubCommentsColor(comments)
                 break
               }
               case 'age':
