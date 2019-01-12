@@ -18,8 +18,7 @@ module.exports = class ReadTheDocs extends BaseSvgScrapingService {
   static get route() {
     return {
       base: 'readthedocs',
-      format: '([^/]+)(?:/(.+))?',
-      capture: ['project', 'version'],
+      pattern: ':project/:version?',
     }
   }
 

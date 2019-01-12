@@ -4,7 +4,8 @@ const Joi = require('joi')
 
 const categories = [
   { id: 'build', name: 'Build' },
-  { id: 'quality', name: 'Quality' },
+  { id: 'coverage', name: 'Code Coverage' },
+  { id: 'analysis', name: 'Analysis' },
   { id: 'chat', name: 'Chat' },
   { id: 'dependencies', name: 'Dependencies' },
   { id: 'size', name: 'Size' },
@@ -21,7 +22,11 @@ const categories = [
   { id: 'other', name: 'Other' },
 ]
 
-const isValidCategory = Joi.equal(categories.map(({ id }) => id)).required()
+const isRealCategory = Joi.equal(categories.map(({ id }) => id)).required()
+
+const isValidCategory = Joi.alternatives()
+  .try(isRealCategory, Joi.equal('debug', 'dynamic').required())
+  .required()
 
 function assertValidCategory(category, message = undefined) {
   Joi.assert(category, isValidCategory, message)
@@ -29,6 +34,5 @@ function assertValidCategory(category, message = undefined) {
 
 module.exports = {
   categories,
-  isValidCategory,
   assertValidCategory,
 }

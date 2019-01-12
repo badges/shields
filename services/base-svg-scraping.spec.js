@@ -157,6 +157,7 @@ describe('BaseSvgScrapingService', function() {
           { handleInternalErrors: false }
         )
       ).to.deep.equal({
+        isError: true,
         color: 'lightgray',
         message: 'unparseable svg response',
       })

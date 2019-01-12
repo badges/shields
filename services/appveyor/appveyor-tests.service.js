@@ -92,7 +92,7 @@ module.exports = class AppVeyorTests extends AppVeyorBase {
   }
 
   async handle(
-    { repo, branch },
+    { user, repo, branch },
     {
       compact_message: compactMessage,
       passed_label: passedLabel,
@@ -101,7 +101,7 @@ module.exports = class AppVeyorTests extends AppVeyorBase {
     }
   ) {
     const isCompact = compactMessage !== undefined
-    const data = await this.fetch({ repo, branch })
+    const data = await this.fetch({ user, repo, branch })
 
     if (!data.hasOwnProperty('build')) {
       return { message: 'no builds found' }

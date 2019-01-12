@@ -9,5 +9,5 @@ module.exports = deprecatedService({
     format: '(?:.+)',
   },
   label: 'coverity',
-  category: 'quality',
+  category: 'analysis',
 })

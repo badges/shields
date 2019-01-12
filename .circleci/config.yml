@@ -45,11 +45,6 @@ jobs:
           command: npm run lint
 
       - run:
-          name: Prepare test summary
-          when: always
-          command: mkdir junit
-
-      - run:
           name: Server unit tests
           when: always
           environment:
@@ -102,11 +97,6 @@ jobs:
           name: Linter
           when: always
           command: npm run lint
-
-      - run:
-          name: Prepare test summary
-          when: always
-          command: mkdir junit
 
       - run:
           name: Server unit tests
@@ -182,11 +172,6 @@ jobs:
           command: npm run defs && npm run features
 
       - run:
-          name: Prepare test summary
-          when: always
-          command: mkdir junit
-
-      - run:
           name: Frontend unit tests
           environment:
             mocha_reporter: mocha-junit-reporter
@@ -222,11 +207,6 @@ jobs:
           command: npm run test:services:pr:prepare
 
       - run:
-          name: Prepare test summary
-          when: always
-          command: mkdir junit
-
-      - run:
           name: Run tests for tagged services
           environment:
             mocha_reporter: mocha-junit-reporter
@@ -255,11 +235,6 @@ jobs:
       - run:
           name: Identify services tagged in the PR title
           command: npm run test:services:pr:prepare
-
-      - run:
-          name: Prepare test summary
-          when: always
-          command: mkdir junit
 
       - run:
           name: Run tests for tagged services

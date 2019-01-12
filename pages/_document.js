@@ -17,10 +17,7 @@ export default class MyDocument extends Document {
   render() {
     return (
       <html>
-        <Head>
-          <title>My page</title>
-          {this.props.styleTags}
-        </Head>
+        <Head>{this.props.styleTags}</Head>
         <body>
           <Main />
           <NextScript />

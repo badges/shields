@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
 import groupBy from 'lodash.groupby'
 import {
   categories,
@@ -17,9 +17,19 @@ import DonateBox from './donate'
 import MarkupModal from './markup-modal'
 import Usage from './usage'
 import Footer from './footer'
-import { CategoryHeading, CategoryHeadings } from './category-headings'
+import {
+  CategoryHeading,
+  CategoryHeadings,
+  CategoryNav,
+} from './category-headings'
 import BadgeExamples from './badge-examples'
 import { BaseFont } from './common'
+
+const GlobalStyle = createGlobalStyle`
+  * {
+    box-sizing: border-box;
+  }
+`
 
 const AppContainer = styled(BaseFont)`
   text-align: center;
@@ -130,7 +140,12 @@ export default class Main extends React.Component {
       )
         .notDeprecated()
         .toArray()
-      return this.renderCategory(category, definitions)
+      return (
+        <div>
+          <CategoryNav categories={categories} />
+          {this.renderCategory(category, definitions)}
+        </div>
+      )
     } else if (categoryId) {
       return (
         <div>
@@ -147,13 +162,13 @@ export default class Main extends React.Component {
 
     return (
       <AppContainer id="app">
+        <GlobalStyle />
         <Meta />
         <Header />
         <MarkupModal
           example={selectedExample}
           onRequestClose={this.dismissMarkupModal}
           baseUrl={baseUrl}
-          key={selectedExample}
         />
         <section>
           <SuggestionAndSearch
