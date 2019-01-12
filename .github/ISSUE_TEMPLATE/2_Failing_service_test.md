@@ -7,19 +7,25 @@ about: Note failing service tests
 
 <!-- Indicate when the problem started -->
 
-:camera: **Is the live badge working?**
+:camera: **Live badge**
 
-<!-- Provide a link to the live badge and check if it's working. -->
+<!-- Provide a link to the live badge in plain text and markdown.  -->
+
+![]( url goes here )
+
+:wrench: **Is the live badge working?**
+
+<!-- Indicate whether or not the live badge is working. -->
+
+:link: **CircleCI link**
+
+<!-- Provide a link to the failing test in CircleCI. -->
 
 :beetle: **Stack trace**
 
 ```
 <!-- Provide the complete stack trace from the CircleCI test summary. -->
 ```
-
-:link: **Link**
-
-<!-- Provide a link to the failing test in CircleCI. -->
 
 :bulb: **Possible solution**
 
