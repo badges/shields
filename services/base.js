@@ -371,7 +371,7 @@ class BaseService {
   static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
     this.validateDefinition()
 
-    const { cacheHeaders: cacheHeaderConfig } = serviceConfig
+    const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
     camp.route(
       this._regex,
       handleRequest(cacheHeaderConfig, {
@@ -395,6 +395,7 @@ class BaseService {
           sendBadge(format, badgeData)
         },
         cacheLength: this._cacheLength,
+        fetchLimitBytes,
       })
     )
   }
