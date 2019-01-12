@@ -49,6 +49,7 @@ module.exports = class VisualStudioMarketplaceDownloads extends VisualStudioMark
         namedParams: { extensionId: 'swellaby.mirror-git-repository' },
         staticPreview: this.render({ measure: 'd', count: 628 }),
         keywords: this.keywords,
+        documentation: `This includes total downloads for both on-prem Azure DevOps Server and Azure DevOps Services`,
       },
     ]
   }
