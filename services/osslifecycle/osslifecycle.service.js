@@ -1,18 +1,9 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const log = require('../../lib/log')
+const BaseService = require('../base')
+const { InvalidResponse } = require('../errors')
 
-// For NetflixOSS metadata: https://github.com/Netflix/osstracker
-//
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class OssTracker extends LegacyService {
+module.exports = class OssTracker extends BaseService {
   static get category() {
     return 'other'
   }
@@ -20,64 +11,57 @@ module.exports = class OssTracker extends LegacyService {
   static get route() {
     return {
       base: 'osslifecycle',
+      pattern: ':user/:repo/:branch*',
     }
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'oss lifecycle' }
   }
 
   static get examples() {
     return [
       {
         title: 'NetflixOSS Lifecycle',
-        previewUrl: 'Netflix/osstracker',
+        pattern: ':user/:repo',
+        namedParams: { user: 'Netflix', repo: 'osstracker' },
+        staticPreview: this.render({ status: 'active' }),
+      },
+      {
+        title: 'NetflixOSS Lifecycle (branch)',
+        pattern: ':user/:repo/:branch',
+        namedParams: { user: 'Netflix', repo: 'osstracker', branch: 'master' },
+        staticPreview: this.render({ status: 'active' }),
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/osslifecycle?\/([^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const orgOrUserAndRepo = match[1]
-        const branch = match[2]
-        const format = match[3]
-        let url = `https://raw.githubusercontent.com/${orgOrUserAndRepo}`
-        if (branch != null) {
-          url += `/${branch}/OSSMETADATA`
-        } else {
-          url += '/master/OSSMETADATA'
-        }
-        const options = {
-          method: 'GET',
-          uri: url,
-        }
-        const badgeData = getBadgeData('oss lifecycle', data)
-        request(options, (err, res, body) => {
-          if (err != null) {
-            log.error(`NetflixOSS error: ${err.stack}`)
-            if (res) {
-              log.error(`${res}`)
-            }
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const matchStatus = body.match(/osslifecycle=([a-z]+)/im)
-            if (matchStatus === null) {
-              badgeData.text[1] = 'inaccessible'
-              sendBadge(format, badgeData)
-              return
-            } else {
-              badgeData.text[1] = matchStatus[1]
-              sendBadge(format, badgeData)
-              return
-            }
-          } catch (e) {
-            log(e)
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-          }
-        })
+  async fetch({ user, repo, branch }) {
+    return this._request({
+      url: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/OSSMETADATA`,
+    })
+  }
+
+  static render({ status }) {
+    return {
+      message: status,
+      color: 'lightgrey',
+    }
+  }
+
+  async handle({ user, repo, branch }) {
+    const { buffer } = await this.fetch({
+      user,
+      repo,
+      branch: branch || 'master',
+    })
+    try {
+      const status = buffer.match(/osslifecycle=([a-z]+)/im)[1]
+      return this.constructor.render({ status })
+    } catch (e) {
+      throw new InvalidResponse({
+        prettyMessage: 'metadata in unexpected format',
       })
-    )
+    }
   }
 }
