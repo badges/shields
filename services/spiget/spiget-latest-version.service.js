@@ -1,17 +1,8 @@
 'use strict'
 
-const BaseJsonService = require('../base-json')
+const { BaseSpigetService, documentation } = require('./spiget-base')
 
-const Joi = require('joi')
-
-const latestVersionSchema = Joi.object({
-  downloads: Joi.number().required(),
-  name: Joi.string().required(),
-}).required()
-
-//const schema = Joi.any()
-
-module.exports = class SpigetLatestVersion extends BaseJsonService {
+module.exports = class SpigetLatestVersion extends BaseSpigetService {
   static get route() {
     return {
       base: 'spiget/version',
@@ -27,20 +18,8 @@ module.exports = class SpigetLatestVersion extends BaseJsonService {
   }
 
   async handle({ resourceid }) {
-    const { name } = await this.fetch({ resourceid })
+    const { name } = await this.fetchLatestVersion({ resourceid })
     return this.constructor.render({ version: name })
-  }
-
-  async fetch({ resourceid }) {
-    const url = `https://api.spiget.org/v2/resources/${resourceid}/versions/latest`
-
-    return this._requestJson({
-      schema: latestVersionSchema,
-      url,
-      errorMessages: {
-        404: 'null',
-      },
-    })
   }
 
   static render({ version }) {
@@ -60,6 +39,7 @@ module.exports = class SpigetLatestVersion extends BaseJsonService {
           resourceid: '9089',
         },
         staticPreview: this.render({ version: 2.1 }),
+        documentation,
       },
     ]
   }

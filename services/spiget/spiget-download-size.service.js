@@ -1,19 +1,8 @@
 'use strict'
 
-const BaseJsonService = require('../base-json')
+const { BaseSpigetService, documentation } = require('./spiget-base')
 
-const Joi = require('joi')
-
-const schema = Joi.object({
-  file: Joi.object({
-    size: Joi.number().required(),
-    sizeUnit: Joi.string().required(),
-  }).required(),
-}).required()
-
-//const schema = Joi.any()
-
-module.exports = class SpigetDownloadSize extends BaseJsonService {
+module.exports = class SpigetDownloadSize extends BaseSpigetService {
   static get route() {
     return {
       base: 'spiget/download-size',
@@ -33,15 +22,6 @@ module.exports = class SpigetDownloadSize extends BaseJsonService {
     return this.constructor.render({ size: file.size, unit: file.sizeUnit })
   }
 
-  async fetch({ resourceid }) {
-    const url = `https://api.spiget.org/v2/resources/${resourceid}`
-
-    return this._requestJson({
-      schema,
-      url,
-    })
-  }
-
   static render({ size, unit }) {
     return {
       message: `${size} ${unit}`,
@@ -59,6 +39,7 @@ module.exports = class SpigetDownloadSize extends BaseJsonService {
           resourceid: '9089',
         },
         staticPreview: this.render({ size: 2.5, unit: 'MB' }),
+        documentation,
       },
     ]
   }
