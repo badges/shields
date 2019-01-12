@@ -49,6 +49,15 @@ t.create('live: downloads')
     })
   )
 
+t.create('live: downloads (Azure DevOps Extension)')
+  .get('/visual-studio-marketplace/d/swellaby.mirror-git-repository.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'downloads',
+      value: isMetric,
+    })
+  )
+
 t.create('live: invalid extension id')
   .get('/visual-studio-marketplace/d/badges-shields.json')
   .expectJSONTypes(
@@ -125,6 +134,45 @@ t.create('downloads')
     name: 'downloads',
     value: '10',
     colorB: colorScheme.yellowgreen,
+  })
+
+t.create('downloads (Azure DevOps Extension)')
+  .get(
+    '/visual-studio-marketplace/ado/d/swellaby.mirror-git-repository.json?style=_shields_test'
+  )
+  .intercept(nock =>
+    nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
+      .post(`/extensionquery/`)
+      .reply(200, {
+        results: [
+          {
+            extensions: [
+              {
+                statistics: [
+                  {
+                    statisticName: 'install',
+                    value: 480,
+                  },
+                  {
+                    statisticName: 'onpremDownloads',
+                    value: 148,
+                  },
+                ],
+                versions: [
+                  {
+                    version: '1.0.0',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      })
+  )
+  .expectJSON({
+    name: 'downloads',
+    value: '628',
+    colorB: colorScheme.green,
   })
 
 t.create('live: installs (legacy)')
