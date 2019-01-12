@@ -1,9 +1,9 @@
 {
-{{?it.colorA}}
-  "colorA": {{=JSON.stringify(it.colorA)}},
+{{?it.color}}
+  "color": {{=JSON.stringify(it.color)}},
 {{?}}
-{{?it.colorB}}
-  "colorB": {{=JSON.stringify(it.colorB)}},
+{{?it.labelColor}}
+  "labelColor": {{=JSON.stringify(it.labelColor)}}
 {{?}}
   "name": {{=JSON.stringify(it.text[0])}},
   "value": {{=JSON.stringify(it.text[1])}}

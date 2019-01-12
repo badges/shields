@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-const { colorScheme } = require('../test-helpers')
 
 const t = (module.exports = require('../create-service-tester')())
 
@@ -73,7 +72,7 @@ t.create('get room state as guest')
   .expectJSON({
     name: 'chat',
     value: '2 users',
-    colorB: colorScheme.brightgreen,
+    color: 'brightgreen',
   })
 
 t.create('get room state as member (backup method)')
@@ -152,7 +151,7 @@ t.create('get room state as member (backup method)')
   .expectJSON({
     name: 'chat',
     value: '2 users',
-    colorB: colorScheme.brightgreen,
+    color: 'brightgreen',
   })
 
 t.create('bad server or connection')
@@ -161,7 +160,7 @@ t.create('bad server or connection')
   .expectJSON({
     name: 'chat',
     value: 'inaccessible',
-    colorB: colorScheme.lightgray,
+    color: 'lightgrey',
   })
 
 t.create('non-world readable room')
@@ -198,7 +197,7 @@ t.create('non-world readable room')
   .expectJSON({
     name: 'chat',
     value: 'room not world readable or is invalid',
-    colorB: colorScheme.lightgray,
+    color: 'lightgrey',
   })
 
 t.create('invalid token')
@@ -226,7 +225,7 @@ t.create('invalid token')
   .expectJSON({
     name: 'chat',
     value: 'bad auth token',
-    colorB: colorScheme.lightgray,
+    color: 'lightgrey',
   })
 
 t.create('unknown request')
@@ -263,7 +262,7 @@ t.create('unknown request')
   .expectJSON({
     name: 'chat',
     value: 'unknown request',
-    colorB: colorScheme.lightgray,
+    color: 'lightgrey',
   })
 
 t.create('unknown alias')
@@ -291,7 +290,7 @@ t.create('unknown alias')
   .expectJSON({
     name: 'chat',
     value: 'room not found',
-    colorB: colorScheme.red,
+    color: 'red',
   })
 
 t.create('invalid alias')
@@ -299,7 +298,7 @@ t.create('invalid alias')
   .expectJSON({
     name: 'chat',
     value: 'invalid alias',
-    colorB: colorScheme.red,
+    color: 'red',
   })
 
 t.create('server uses a custom port')
@@ -370,7 +369,7 @@ t.create('server uses a custom port')
   .expectJSON({
     name: 'chat',
     value: '2 users',
-    colorB: colorScheme.brightgreen,
+    color: 'brightgreen',
   })
 
 t.create('specify the homeserver fqdn')
@@ -443,7 +442,7 @@ t.create('specify the homeserver fqdn')
   .expectJSON({
     name: 'chat',
     value: '2 users',
-    colorB: colorScheme.brightgreen,
+    color: 'brightgreen',
   })
 
 t.create('test on real matrix room for API compliance')
@@ -453,6 +452,6 @@ t.create('test on real matrix room for API compliance')
     Joi.object().keys({
       name: 'chat',
       value: Joi.string().regex(/^[0-9]+ users$/),
-      colorB: colorScheme.brightgreen,
+      color: 'brightgreen',
     })
   )

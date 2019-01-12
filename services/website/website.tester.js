@@ -1,27 +1,23 @@
 'use strict'
 
-const ServiceTester = require('../service-tester')
-const { colorScheme: colorsB } = require('../test-helpers')
-
-const t = new ServiceTester({ id: 'website', title: 'website' })
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('status of http://shields.io')
   .get('/http/shields.io.json?style=_shields_test')
-  .expectJSON({ name: 'website', value: 'online', colorB: colorsB.brightgreen })
+  .expectJSON({ name: 'website', value: 'online', color: 'brightgreen' })
 
 t.create('status of https://shields.io')
   .get('/https/shields.io.json?style=_shields_test')
-  .expectJSON({ name: 'website', value: 'online', colorB: colorsB.brightgreen })
+  .expectJSON({ name: 'website', value: 'online', color: 'brightgreen' })
 
 t.create('status of nonexistent domain')
   .get('/https/shields-io.io.json?style=_shields_test')
-  .expectJSON({ name: 'website', value: 'offline', colorB: colorsB.red })
+  .expectJSON({ name: 'website', value: 'offline', color: 'red' })
 
 t.create('status when network is off')
   .get('/http/shields.io.json?style=_shields_test')
   .networkOff()
-  .expectJSON({ name: 'website', value: 'offline', colorB: colorsB.red })
+  .expectJSON({ name: 'website', value: 'offline', color: 'red' })
 
 t.create('custom online label, online message and online color')
   .get(
@@ -32,7 +28,7 @@ t.create('custom online label, online message and online color')
       .head('/')
       .reply(200)
   )
-  .expectJSON({ name: 'homepage', value: 'up', colorB: colorsB.green })
+  .expectJSON({ name: 'homepage', value: 'up', color: 'green' })
 
 t.create('custom offline message and offline color')
   .get('-up-down-green-grey/http/offline.com.json?style=_shields_test')
@@ -41,4 +37,4 @@ t.create('custom offline message and offline color')
       .head('/')
       .reply(500)
   )
-  .expectJSON({ name: 'website', value: 'down', colorB: colorsB.grey })
+  .expectJSON({ name: 'website', value: 'down', color: 'grey' })

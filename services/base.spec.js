@@ -355,12 +355,12 @@ describe('BaseService', function() {
         expect(badgeData.text).to.deep.equal(['purr count', 'n/a'])
       })
 
-      it('overrides the colorA', function() {
+      it('overrides the label color', function() {
         const badgeData = DummyService._makeBadgeData(
           { colorA: '42f483' },
           { color: 'green' }
         )
-        expect(badgeData.colorA).to.equal('#42f483')
+        expect(badgeData.labelColor).to.equal('42f483')
       })
 
       it('overrides the color', function() {
@@ -368,7 +368,7 @@ describe('BaseService', function() {
           { colorB: '10ADED' },
           { color: 'red' }
         )
-        expect(badgeData.colorB).to.equal('#10ADED')
+        expect(badgeData.color).to.equal('10ADED')
       })
 
       it('does not override the color in case of an error', function() {
@@ -376,8 +376,7 @@ describe('BaseService', function() {
           { colorB: '10ADED' },
           { isError: true, color: 'lightgray' }
         )
-        expect(badgeData.colorB).to.be.undefined
-        expect(badgeData.colorscheme).to.equal('lightgray')
+        expect(badgeData.color).to.equal('lightgray')
       })
 
       it('overrides the logo', function() {
@@ -447,7 +446,7 @@ describe('BaseService', function() {
 
       it('applies the service color', function() {
         const badgeData = DummyService._makeBadgeData({}, { color: 'red' })
-        expect(badgeData.colorscheme).to.equal('red')
+        expect(badgeData.color).to.equal('red')
       })
     })
 
@@ -459,7 +458,7 @@ describe('BaseService', function() {
 
       it('uses the default color', function() {
         const badgeData = DummyService._makeBadgeData({}, {})
-        expect(badgeData.colorscheme).to.equal('lightgrey')
+        expect(badgeData.color).to.equal('lightgrey')
       })
     })
   })
@@ -502,12 +501,12 @@ describe('BaseService', function() {
       expect(mockSendBadge).to.have.been.calledOnce
       expect(mockSendBadge).to.have.been.calledWith(expectedFormat, {
         text: ['cat', 'Hello namedParamA: bar with queryParamA: ?'],
-        colorscheme: 'lightgrey',
+        color: 'lightgrey',
         template: undefined,
         logo: undefined,
         logoWidth: NaN,
         links: [],
-        colorA: undefined,
+        labelColor: undefined,
       })
     })
   })

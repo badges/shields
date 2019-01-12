@@ -14,12 +14,7 @@ const {
 const coalesce = require('../lib/coalesce')
 const validate = require('../lib/validate')
 const { checkErrorResponse } = require('../lib/error-helper')
-const {
-  makeLogo,
-  toArray,
-  makeColor,
-  setBadgeColor,
-} = require('../lib/badge-data')
+const { makeLogo, toArray } = require('../lib/badge-data')
 const trace = require('./trace')
 const { validateExample, transformExample } = require('./transform-example')
 const { assertValidCategory } = require('./categories')
@@ -339,6 +334,14 @@ class BaseService {
       label: defaultLabel,
     } = this.defaultBadgeData
 
+    let color
+    if (isError) {
+      // Disregard the override color.
+      color = coalesce(serviceColor, defaultColor, 'lightgrey')
+    } else {
+      color = coalesce(overrideColor, serviceColor, defaultColor, 'lightgrey')
+    }
+
     const badgeData = {
       text: [
         // Use `coalesce()` to support empty labels and messages, as in the
@@ -353,17 +356,9 @@ class BaseService {
       }),
       logoWidth: +overrideLogoWidth,
       links: toArray(overrideLink || serviceLink),
-      colorA: makeColor(overrideLabelColor),
+      color,
+      labelColor: overrideLabelColor,
     }
-
-    let color
-    if (isError) {
-      // Disregard the override color.
-      color = coalesce(serviceColor, defaultColor, 'lightgrey')
-    } else {
-      color = coalesce(overrideColor, serviceColor, defaultColor, 'lightgrey')
-    }
-    setBadgeColor(badgeData, color)
 
     return badgeData
   }

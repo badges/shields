@@ -2,8 +2,6 @@
 
 const Joi = require('joi')
 const sinon = require('sinon')
-
-const { colorScheme } = require('../test-helpers')
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix: isVersion,
 } = require('../test-validators')
@@ -56,7 +54,7 @@ t.create('live: search snapshot version of an inexistent artifact')
   .expectJSON({
     name: 'nexus',
     value: 'artifact or version not found',
-    colorB: colorScheme.red,
+    color: 'red',
   })
 
 t.create('live: repository version')
@@ -106,7 +104,7 @@ t.create('search snapshot version not in latestSnapshot')
   .expectJSON({
     name: 'nexus',
     value: 'v7.0.1-SNAPSHOT',
-    colorB: colorScheme.orange,
+    color: 'orange',
   })
 
 t.create('search snapshot no snapshot versions')
@@ -122,7 +120,7 @@ t.create('search snapshot no snapshot versions')
   .expectJSON({
     name: 'nexus',
     value: 'no snapshot versions found',
-    colorB: colorScheme.lightgrey,
+    color: 'lightgrey',
   })
 
 t.create('search release version')
@@ -138,7 +136,7 @@ t.create('search release version')
   .expectJSON({
     name: 'nexus',
     value: 'v1.0.0',
-    colorB: colorScheme.blue,
+    colorB: 'blue',
   })
 
 t.create('repository release version')
@@ -164,7 +162,7 @@ t.create('repository release version')
   .expectJSON({
     name: 'nexus',
     value: 'v1.2.3',
-    colorB: colorScheme.blue,
+    color: 'blue',
   })
 
 t.create('repository release version')
@@ -189,7 +187,7 @@ t.create('repository release version')
   .expectJSON({
     name: 'nexus',
     value: 'v1.0.0',
-    colorB: colorScheme.blue,
+    color: 'blue',
   })
 
 t.create('user query params')
@@ -216,7 +214,7 @@ t.create('user query params')
   .expectJSON({
     name: 'nexus',
     value: 'v3.2.1',
-    colorB: colorScheme.blue,
+    color: 'blue',
   })
 
 t.create('auth')
@@ -240,5 +238,5 @@ t.create('auth')
   .expectJSON({
     name: 'nexus',
     value: 'v2.3.4',
-    colorB: colorScheme.blue,
+    color: 'blue',
   })

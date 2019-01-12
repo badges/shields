@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-const { colorScheme } = require('../test-helpers')
 const t = (module.exports = require('../create-service-tester')())
 const { withRegex } = require('../test-validators')
 
@@ -124,7 +123,7 @@ create('pending project grade')
   .expectJSON({
     name: 'grade',
     value: 'pending',
-    colorB: colorScheme.lightgrey,
+    color: 'lightgrey',
   })
 
 create('platinum grade')
@@ -137,7 +136,7 @@ create('platinum grade')
   .expectJSON({
     name: 'grade',
     value: 'platinum',
-    colorB: '#E5E4E2',
+    color: '#e5e4e2',
   })
 
 create('gold grade')
@@ -189,7 +188,7 @@ create('no medal grade')
   .expectJSON({
     name: 'grade',
     value: 'no medal',
-    colorB: colorScheme.red,
+    color: 'red',
   })
 
 create('zero violations')
@@ -202,7 +201,7 @@ create('zero violations')
   .expectJSON({
     name: 'violations',
     value: '0',
-    colorB: colorScheme.brightgreen,
+    color: 'brightgreen',
   })
 
 create('critical violations')
@@ -215,7 +214,7 @@ create('critical violations')
   .expectJSON({
     name: 'violations',
     value: '1 critical',
-    colorB: colorScheme.red,
+    color: 'red',
   })
 
 create('major violations')
@@ -228,7 +227,7 @@ create('major violations')
   .expectJSON({
     name: 'violations',
     value: '1 major',
-    colorB: colorScheme.orange,
+    color: 'orange',
   })
 
 create('minor violations')
@@ -245,7 +244,7 @@ create('minor violations')
   .expectJSON({
     name: 'violations',
     value: '1 minor',
-    colorB: colorScheme.yellow,
+    color: 'yellow',
   })
 
 create('info violations')
@@ -262,7 +261,7 @@ create('info violations')
   .expectJSON({
     name: 'violations',
     value: '1 info',
-    colorB: colorScheme.yellowgreen,
+    color: 'yellowgreen',
   })
 
 create('multiple violations grade')
@@ -279,7 +278,7 @@ create('multiple violations grade')
   .expectJSON({
     name: 'violations',
     value: '1 critical, 1 info',
-    colorB: colorScheme.red,
+    color: 'red',
   })
 
 create('auth missing', { withMockCreds: false })
@@ -301,7 +300,7 @@ create('legacy path: pending project grade')
   .expectJSON({
     name: 'grade',
     value: 'pending',
-    colorB: colorScheme.lightgrey,
+    color: 'lightgrey',
   })
 
 create('legacy path: platinum grade')
@@ -314,5 +313,5 @@ create('legacy path: platinum grade')
   .expectJSON({
     name: 'grade',
     value: 'platinum',
-    colorB: '#E5E4E2',
+    colorB: '#e5e4e2',
   })

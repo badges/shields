@@ -1,7 +1,5 @@
 'use strict'
 
-const { colorScheme } = require('../test-helpers')
-
 const getURL = '/https/example.com/example.json.json?style=_shields_test'
 const apiURL = 'http://online.swagger.io'
 const apiGetURL = '/validator/debug'
@@ -20,7 +18,7 @@ t.create('Valid (mocked)')
   .expectJSON({
     name: 'swagger',
     value: 'valid',
-    colorB: colorScheme.brightgreen,
+    colorB: 'brightgreen',
   })
 
 t.create('Invalid (mocked)')
@@ -41,7 +39,5 @@ t.create('Invalid (mocked)')
   .expectJSON({
     name: 'swagger',
     value: 'invalid',
-    colorB: colorScheme.red,
+    colorB: 'red',
   })
-
-module.exports = t

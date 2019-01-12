@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-const { colorScheme: colorsB } = require('../test-helpers')
 const { dockerBlue } = require('./docker-helpers')
 const { isBuildStatus } = require('../test-validators')
 
@@ -30,7 +29,7 @@ t.create('docker build status (passing)')
   .expectJSON({
     name: 'docker build',
     value: 'passing',
-    colorB: colorsB.brightgreen,
+    color: 'brightgreen',
   })
 
 t.create('docker build status (failing)')
@@ -40,7 +39,7 @@ t.create('docker build status (failing)')
       .get('/v2/repositories/library/ubuntu/buildhistory')
       .reply(200, { results: [{ status: -1 }] })
   )
-  .expectJSON({ name: 'docker build', value: 'failing', colorB: colorsB.red })
+  .expectJSON({ name: 'docker build', value: 'failing', color: 'red' })
 
 t.create('docker build status (building)')
   .get('/_/ubuntu.json?style=_shields_test')

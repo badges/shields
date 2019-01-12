@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-const { colorScheme } = require('../test-helpers')
 const t = (module.exports = require('../create-service-tester')())
 
 t.create('live: known project id')
@@ -39,7 +38,7 @@ t.create('passed')
   .expectJSON({
     name: 'coverity',
     value: 'passing',
-    colorB: colorScheme.brightgreen,
+    color: 'brightgreen',
   })
 
 t.create('passed with defects')
@@ -54,7 +53,7 @@ t.create('passed with defects')
   .expectJSON({
     name: 'coverity',
     value: 'passed 51 new defects',
-    colorB: colorScheme.yellow,
+    color: 'yellow',
   })
 
 t.create('pending')
@@ -69,7 +68,7 @@ t.create('pending')
   .expectJSON({
     name: 'coverity',
     value: 'pending',
-    colorB: colorScheme.orange,
+    color: 'orange',
   })
 
 t.create('failed')
@@ -84,5 +83,5 @@ t.create('failed')
   .expectJSON({
     name: 'coverity',
     value: 'failed',
-    colorB: colorScheme.red,
+    color: 'red',
   })

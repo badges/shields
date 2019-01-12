@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const { expect } = require('chai')
-const { colorScheme: colorsB } = require('../test-helpers')
 
 const t = (module.exports = require('../create-service-tester')())
 
@@ -14,7 +13,7 @@ t.create('Connection error')
   .expectJSON({
     name: 'Package Name',
     value: 'inaccessible',
-    colorB: colorsB.lightgrey,
+    color: 'lightgrey',
   })
 
 t.create('No URL specified')
@@ -22,7 +21,7 @@ t.create('No URL specified')
   .expectJSON({
     name: 'Package Name',
     value: 'invalid query parameter: url',
-    colorB: colorsB.red,
+    color: 'red',
   })
 
 t.create('No query specified')
@@ -32,7 +31,7 @@ t.create('No query specified')
   .expectJSON({
     name: 'Package Name',
     value: 'invalid query parameter: query',
-    colorB: colorsB.red,
+    color: 'red',
   })
 
 t.create('Malformed url')
@@ -42,7 +41,7 @@ t.create('Malformed url')
   .expectJSON({
     name: 'Package Name',
     value: 'invalid',
-    colorB: colorsB.lightgrey,
+    color: 'lightgrey',
   })
 
 t.create('JSON from url')
@@ -52,7 +51,7 @@ t.create('JSON from url')
   .expectJSON({
     name: 'custom badge',
     value: 'shields.io',
-    colorB: colorsB.blue,
+    color: 'blue',
   })
 
 t.create('JSON from uri (support uri query parameter)')
@@ -62,7 +61,7 @@ t.create('JSON from uri (support uri query parameter)')
   .expectJSON({
     name: 'custom badge',
     value: 'shields.io',
-    colorB: colorsB.blue,
+    color: 'blue',
   })
 
 t.create('JSON from url | multiple results')
@@ -100,7 +99,7 @@ t.create('JSON from url | object doesnt exist')
   .expectJSON({
     name: 'custom badge',
     value: 'no result',
-    colorB: colorsB.lightgrey,
+    color: 'lightgrey',
   })
 
 t.create('JSON from url | invalid url')
@@ -110,14 +109,14 @@ t.create('JSON from url | invalid url')
   .expectJSON({
     name: 'custom badge',
     value: 'resource not found',
-    colorB: colorsB.red,
+    color: 'red',
   })
 
 t.create('JSON from url | user color overrides default')
   .get(
     '.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.name&colorB=10ADED&style=_shields_test'
   )
-  .expectJSON({ name: 'custom badge', value: 'shields.io', colorB: '#10ADED' })
+  .expectJSON({ name: 'custom badge', value: 'shields.io', color: '#10aded' })
 
 t.create('JSON from url | error color overrides default')
   .get(
@@ -126,7 +125,7 @@ t.create('JSON from url | error color overrides default')
   .expectJSON({
     name: 'custom badge',
     value: 'resource not found',
-    colorB: colorsB.red,
+    color: 'red',
   })
 
 t.create('JSON from url | error color overrides user specified')
@@ -134,7 +133,7 @@ t.create('JSON from url | error color overrides user specified')
   .expectJSON({
     name: 'custom badge',
     value: 'invalid query parameter: url',
-    colorB: colorsB.red,
+    color: 'red',
   })
 
 let headers

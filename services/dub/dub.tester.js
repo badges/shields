@@ -3,7 +3,6 @@
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { invalidJSON } = require('../response-fixtures')
-const { colorScheme } = require('../test-helpers')
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
   isMetric,
@@ -11,11 +10,11 @@ const {
 } = require('../test-validators')
 
 const isVersionColor = Joi.equal(
-  colorScheme.red,
-  colorScheme.yellow,
-  colorScheme.yellowgreen,
-  colorScheme.green,
-  colorScheme.brightgreen
+  'red',
+  'yellow',
+  'yellowgreen',
+  'green',
+  'brightgreen'
 )
 
 const t = (module.exports = new ServiceTester({ id: 'dub', title: 'Dub' }))
@@ -28,7 +27,7 @@ t.create('total downloads (valid)')
     Joi.object().keys({
       name: 'downloads',
       value: isMetric,
-      colorB: isVersionColor,
+      color: isVersionColor,
     })
   )
 
@@ -38,7 +37,7 @@ t.create('total downloads, specific version (valid)')
     Joi.object().keys({
       name: 'downloads',
       value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? v0.8.4$/),
-      colorB: isVersionColor,
+      color: isVersionColor,
     })
   )
   .timeout(15000)
@@ -49,7 +48,7 @@ t.create('total downloads, latest version (valid)')
     Joi.object().keys({
       name: 'downloads',
       value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]? latest$/),
-      colorB: isVersionColor,
+      color: isVersionColor,
     })
   )
 
@@ -59,7 +58,7 @@ t.create('daily downloads (valid)')
     Joi.object().keys({
       name: 'downloads',
       value: isMetricOverTimePeriod,
-      colorB: isVersionColor,
+      color: isVersionColor,
     })
   )
 
@@ -69,7 +68,7 @@ t.create('weekly downloads (valid)')
     Joi.object().keys({
       name: 'downloads',
       value: isMetricOverTimePeriod,
-      colorB: isVersionColor,
+      color: isVersionColor,
     })
   )
 
@@ -79,7 +78,7 @@ t.create('monthly downloads (valid)')
     Joi.object().keys({
       name: 'downloads',
       value: isMetricOverTimePeriod,
-      colorB: isVersionColor,
+      color: isVersionColor,
     })
   )
 
@@ -109,7 +108,7 @@ t.create('version (valid)')
     Joi.object().keys({
       name: 'dub',
       value: isVPlusDottedVersionNClausesWithOptionalSuffix,
-      colorB: Joi.equal(colorScheme.blue, colorScheme.orange),
+      color: Joi.equal('blue', 'orange'),
     })
   )
 
@@ -138,7 +137,7 @@ t.create('license (valid)')
   .expectJSON({
     name: 'license',
     value: 'MIT',
-    colorB: colorScheme.blue,
+    color: 'blue',
   })
 
 t.create('license (not found)')

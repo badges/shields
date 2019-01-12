@@ -4,7 +4,7 @@
 
 const makeBadge = require('./make-badge')
 const svg2img = require('./svg-to-img')
-const colorscheme = require('./colorscheme.json')
+const { namedColors } = require('./color')
 
 if (process.argv.length < 4) {
   console.log('Usage: badge subject status [:colorscheme] [.output] [@style]')
@@ -12,7 +12,7 @@ if (process.argv.length < 4) {
     'Or:    badge subject status right-color [left-color] [.output] [@style]'
   )
   console.log()
-  console.log(`  colorscheme: one of ${Object.keys(colorscheme).join(', ')}.`)
+  console.log(`  colorscheme: one of ${Object.keys(namedColors).join(', ')}.`)
   console.log('  left-color, right-color:')
   console.log('    #xxx (three hex digits)')
   console.log('    #xxxxxx (six hex digits)')
@@ -53,7 +53,7 @@ if (style) {
 
 if (color[0] === ':') {
   color = color.slice(1)
-  if (colorscheme[color] == null) {
+  if (namedColors[color] == null) {
     // Colorscheme not found.
     console.error('Invalid color scheme.')
     process.exit(1)
