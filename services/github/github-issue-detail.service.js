@@ -116,7 +116,7 @@ module.exports = class GithubIssueDetail extends LegacyService {
             switch (which) {
               case 's': {
                 const state = (badgeData.text[1] = parsedData.state)
-                badgeData.colorscheme = null
+                badgeData.colorscheme = undefined
                 badgeData.colorB = makeColorB(
                   githubStateColor(state),
                   queryParams
@@ -136,7 +136,7 @@ module.exports = class GithubIssueDetail extends LegacyService {
                   .map(i => i.name)
                   .join(' | ')
                 if (parsedData.labels.length === 1) {
-                  badgeData.colorscheme = null
+                  badgeData.colorscheme = undefined
                   badgeData.colorB = makeColorB(
                     parsedData.labels[0].color,
                     queryParams
@@ -146,7 +146,7 @@ module.exports = class GithubIssueDetail extends LegacyService {
               case 'comments': {
                 badgeData.text[0] = getLabel('comments', queryParams)
                 const comments = (badgeData.text[1] = parsedData.comments)
-                badgeData.colorscheme = null
+                badgeData.colorscheme = undefined
                 badgeData.colorB = makeColorB(
                   githubCommentsColor(comments),
                   queryParams
