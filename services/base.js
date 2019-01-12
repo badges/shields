@@ -34,10 +34,10 @@ const defaultBadgeDataSchema = Joi.object({
 
 const serviceDataSchema = Joi.object({
   isError: Joi.boolean(),
-  label: Joi.string(),
+  label: Joi.string().allow(''),
   // While a number of badges pass a number here, in the long run we may want
   // `render()` to always return a string.
-  message: Joi.alternatives(Joi.string().min(1), Joi.number()).required(),
+  message: Joi.alternatives(Joi.string().allow(''), Joi.number()).required(),
   color: Joi.string(),
   link: Joi.string().uri(),
   // Generally services should not use these options, which are provided to
