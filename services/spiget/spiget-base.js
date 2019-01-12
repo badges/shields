@@ -10,6 +10,11 @@ const schema = Joi.object({
     size: Joi.number().required(),
     sizeUnit: Joi.string().required(),
   }).required(),
+
+  rating: Joi.object({
+    count: Joi.number().required(),
+    average: Joi.number().required(),
+  }).required(),
 }).required()
 
 const versionSchema = Joi.object({
