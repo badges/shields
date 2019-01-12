@@ -3,9 +3,13 @@ name: :green_heart: Failing service test
 about: Note failing service tests
 ---
 
-:calendar: **When did the problem start?**
+:clock11: **When did the problem start?**
 
 <!-- Indicate when the problem started -->
+
+:camera: **Is the live badge working?**
+
+<!-- Provide a link to the live badge and check if it's working. -->
 
 :beetle: **Stack trace**
 
