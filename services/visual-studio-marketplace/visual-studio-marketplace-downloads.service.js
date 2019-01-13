@@ -13,7 +13,7 @@ module.exports = class VisualStudioMarketplaceDownloads extends VisualStudioMark
     return {
       base: '',
       pattern:
-        '(visual-studio-marketplace|vscode-marketplace)/:platform(ado)?/:measure(d|i)/:extensionId',
+        '(visual-studio-marketplace|vscode-marketplace)/:measure(d|i)/:extensionId',
     }
   }
 
@@ -42,20 +42,12 @@ module.exports = class VisualStudioMarketplaceDownloads extends VisualStudioMark
         namedParams: { extensionId: 'ritwickdey.LiveServer' },
         staticPreview: this.render({ measure: 'd', count: 1239 }),
         keywords: this.keywords,
-      },
-      {
-        title: 'Visual Studio Marketplace Downloads (Azure DevOps Extension)',
-        pattern: 'visual-studio-marketplace/ado/d/:extensionId',
-        namedParams: { extensionId: 'swellaby.mirror-git-repository' },
-        staticPreview: this.render({ measure: 'd', count: 628 }),
-        keywords: this.keywords,
-        documentation: `This includes total downloads for both on-prem Azure DevOps Server and Azure DevOps Services`,
+        documentation: `For Azure DevOps extensions, this includes total downloads for both on-prem Azure DevOps Server and Azure DevOps Services`,
       },
     ]
   }
 
-  async handle({ measure, extensionId, platform }) {
-    const json = await this.fetch({ extensionId })
+  transform({ measure, json }) {
     const { statistics } = this.transformStatistics({ json })
     const { value: installs } = this.getStatistic({
       statistics,
@@ -63,16 +55,40 @@ module.exports = class VisualStudioMarketplaceDownloads extends VisualStudioMark
     })
 
     if (measure === 'i') {
-      return this.constructor.render({ measure, count: installs })
+      return { count: installs }
     }
 
-    const statisticName = platform === 'ado' ? 'onpremDownloads' : 'updateCount'
-
-    const { value: updates } = this.getStatistic({
+    let updates
+    const { value: updateCount } = this.getStatistic({
       statistics,
-      statisticName,
+      statisticName: 'updateCount',
     })
+
+    // updateCount will only be greater than 0 if the extension is for VS or VS Code.
+    // If the value of updateCount is zero then the extension is either:
+    // (A) For VS or VS Code, but has no published updates that have been downloaded
+    // (B) For Azure DevOps
+    // It is not possible to definitively know whether A or B is true, but in either case we should
+    // check the value of the onpremDownloads statistic tracked for Azure DevOps extensions.
+    // If the extension is for VS or VS Code then onpremDownloads will be 0 so we'll still
+    // get the correct number of downloads in all cases.
+    if (updateCount > 0) {
+      updates = updateCount
+    } else {
+      const { value: onpremDownloads } = this.getStatistic({
+        statistics,
+        statisticName: 'onpremDownloads',
+      })
+      updates = onpremDownloads
+    }
+
     const downloads = +installs + +updates
-    return this.constructor.render({ measure, count: downloads })
+    return { count: downloads }
+  }
+
+  async handle({ measure, extensionId }) {
+    const json = await this.fetch({ extensionId })
+    const { count } = this.transform({ measure, json })
+    return this.constructor.render({ measure, count })
   }
 }

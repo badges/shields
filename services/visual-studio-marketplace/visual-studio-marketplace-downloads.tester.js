@@ -138,7 +138,7 @@ t.create('downloads')
 
 t.create('downloads (Azure DevOps Extension)')
   .get(
-    '/visual-studio-marketplace/ado/d/swellaby.mirror-git-repository.json?style=_shields_test'
+    '/visual-studio-marketplace/d/swellaby.mirror-git-repository.json?style=_shields_test'
   )
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
