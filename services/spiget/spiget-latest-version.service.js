@@ -4,6 +4,12 @@ const { BaseSpigetService, documentation } = require('./spiget-base')
 
 const { renderVersionBadge } = require('../../lib/version')
 
+const Joi = require('joi')
+const versionSchema = Joi.object({
+  downloads: Joi.number().required(),
+  name: Joi.string().required(),
+}).required()
+
 module.exports = class SpigetLatestVersion extends BaseSpigetService {
   static get route() {
     return {
@@ -20,7 +26,11 @@ module.exports = class SpigetLatestVersion extends BaseSpigetService {
   }
 
   async handle({ resourceid }) {
-    const { name } = await this.fetchLatestVersion({ resourceid })
+    const { name } = await this.fetch({
+      resourceid,
+      schema: versionSchema,
+      url: `https://api.spiget.org/v2/resources/${resourceid}/versions/latest`,
+    })
     return renderVersionBadge({ version: name })
   }
 

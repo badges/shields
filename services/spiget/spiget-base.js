@@ -3,25 +3,17 @@
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
 
-const schema = Joi.object({
+const resourceSchema = Joi.object({
   downloads: Joi.number().required(),
-
   file: Joi.object({
     size: Joi.number().required(),
     sizeUnit: Joi.string().required(),
   }).required(),
-
   testedVersions: Joi.array(),
-
   rating: Joi.object({
     count: Joi.number().required(),
     average: Joi.number().required(),
   }).required(),
-}).required()
-
-const versionSchema = Joi.object({
-  downloads: Joi.number().required(),
-  name: Joi.string().required(),
 }).required()
 
 const documentation = `
@@ -29,20 +21,13 @@ const documentation = `
 <p>Example: <code>https://www.spigotmc.org/resources/essentialsx.9089/</code> - Here the Resource ID is 9089.</p>`
 
 class BaseSpigetService extends BaseJsonService {
-  async fetch({ resourceid }) {
-    const url = `https://api.spiget.org/v2/resources/${resourceid}`
-
+  async fetch({
+    resourceid,
+    schema = resourceSchema,
+    url = `https://api.spiget.org/v2/resources/${resourceid}`,
+  }) {
     return this._requestJson({
       schema,
-      url,
-    })
-  }
-
-  async fetchLatestVersion({ resourceid }) {
-    const url = `https://api.spiget.org/v2/resources/${resourceid}/versions/latest`
-
-    return this._requestJson({
-      schema: versionSchema,
       url,
     })
   }

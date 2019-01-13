@@ -13,7 +13,7 @@ module.exports = class SpigetDownloadSize extends BaseSpigetService {
   static get defaultBadgeData() {
     return {
       label: 'size',
-      color: 'brightgreen',
+      color: 'blue',
     }
   }
 

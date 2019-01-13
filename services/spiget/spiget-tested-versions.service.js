@@ -5,7 +5,7 @@ const { BaseSpigetService, documentation } = require('./spiget-base')
 module.exports = class SpigetTestedVersions extends BaseSpigetService {
   static get route() {
     return {
-      base: 'spiget/versions',
+      base: 'spiget/tested-versions',
       pattern: ':resourceid',
     }
   }
@@ -44,7 +44,7 @@ module.exports = class SpigetTestedVersions extends BaseSpigetService {
   static get examples() {
     return [
       {
-        title: 'Spiget Downloads',
+        title: 'Spiget Tested Versions',
         namedParams: {
           resourceid: '9089',
         },
