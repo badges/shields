@@ -21,7 +21,7 @@ t.create('alerts: missing project')
   .get('/alerts/g/some-org/this-project-doesnt-exist.json')
   .expectJSON({
     name: 'lgtm',
-    value: 'project not found',
+    value: 'not found',
   })
 
 t.create('alerts: no alerts')
@@ -58,7 +58,7 @@ t.create('alerts: json missing alerts')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(200, {})
   )
-  .expectJSON({ name: 'lgtm', value: 'invalid' })
+  .expectJSON({ name: 'lgtm', value: 'invalid response data' })
 
 t.create('alerts: invalid json')
   .get('/alerts/g/apache/cloudstack.json')
@@ -67,7 +67,7 @@ t.create('alerts: invalid json')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'lgtm', value: 'invalid' })
+  .expectJSON({ name: 'lgtm', value: 'unparseable json response' })
 
 t.create('alerts: lgtm inaccessible')
   .get('/alerts/g/apache/cloudstack.json')
@@ -79,14 +79,14 @@ t.create('alerts: lgtm inaccessible')
 t.create('grade: missing project')
   .get('/grade/java/g/some-org/this-project-doesnt-exist.json')
   .expectJSON({
-    name: 'code quality: java',
-    value: 'project not found',
+    name: 'lgtm',
+    value: 'not found',
   })
 
 t.create('grade: lgtm inaccessible')
   .get('/grade/java/g/apache/cloudstack.json')
   .networkOff()
-  .expectJSON({ name: 'code quality: java', value: 'inaccessible' })
+  .expectJSON({ name: 'lgtm', value: 'inaccessible' })
 
 t.create('grade: invalid json')
   .get('/grade/java/g/apache/cloudstack.json')
@@ -95,7 +95,10 @@ t.create('grade: invalid json')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'code quality: java', value: 'invalid' })
+  .expectJSON({
+    name: 'lgtm',
+    value: 'unparseable json response',
+  })
 
 t.create('grade: json missing languages')
   .get('/grade/java/g/apache/cloudstack.json')
@@ -104,7 +107,7 @@ t.create('grade: json missing languages')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(200, {})
   )
-  .expectJSON({ name: 'code quality: java', value: 'invalid' })
+  .expectJSON({ name: 'lgtm', value: 'invalid response data' })
 
 t.create('grade: grade for a project (java)')
   .get('/grade/java/g/apache/cloudstack.json')
@@ -119,7 +122,7 @@ t.create('grade: grade for missing language')
   .get('/grade/foo/g/apache/cloudstack.json')
   .expectJSON({
     name: 'code quality: foo',
-    value: 'no data for language',
+    value: 'no language data',
   })
 
 // Test display of languages
@@ -197,4 +200,4 @@ t.create('grade: foo (no grade for valid language)')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(200, data)
   )
-  .expectJSON({ name: 'code quality: foo', value: 'no data for language' })
+  .expectJSON({ name: 'code quality: foo', value: 'no language data' })
