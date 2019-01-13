@@ -10,14 +10,14 @@ const t = (module.exports = new ServiceTester({
   pathPrefix: '/puppetforge',
 }))
 
-// t.create('PDK version')
-//   .get('/pdk-version/camptocamp/openssl.json')
-//   .expectJSONTypes(
-//     Joi.object().keys({
-//       name: 'pdk version',
-//       value: isSemver,
-//     })
-//   )
+t.create('PDK version')
+  .get('/pdk-version/tragiccode/azure_key_vault.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'pdk version',
+      value: isSemver,
+    })
+  )
 
 t.create("PDK version of a library that doesn't use the PDK")
   .get('/pdk-version/camptocamp/openssl.json')
