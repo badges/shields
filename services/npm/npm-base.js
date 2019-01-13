@@ -4,26 +4,15 @@ const Joi = require('joi')
 const serverSecrets = require('../../lib/server-secrets')
 const BaseJsonService = require('../base-json')
 const { InvalidResponse, NotFound } = require('../errors')
-const { semverRange } = require('../validators')
+const { isDependencyMap } = require('../package-json-helpers')
 
 const deprecatedLicenseObjectSchema = Joi.object({
   type: Joi.string().required(),
 })
-const dependencyMap = Joi.object()
-  .pattern(
-    /./,
-    Joi.alternatives().try(
-      semverRange,
-      Joi.string()
-        .uri()
-        .required()
-    )
-  )
-  .default({})
-const schema = Joi.object({
-  dependencies: dependencyMap,
-  devDependencies: dependencyMap,
-  peerDependencies: dependencyMap,
+const packageDataSchema = Joi.object({
+  dependencies: isDependencyMap,
+  devDependencies: isDependencyMap,
+  peerDependencies: isDependencyMap,
   engines: Joi.object().pattern(/./, Joi.string()),
   license: Joi.alternatives().try(
     Joi.string(),
@@ -135,6 +124,6 @@ module.exports = class NpmBase extends BaseJsonService {
       }
     }
 
-    return this.constructor._validate(packageData, schema)
+    return this.constructor._validate(packageData, packageDataSchema)
   }
 }
