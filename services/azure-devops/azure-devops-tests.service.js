@@ -108,7 +108,7 @@ module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
       },
       {
         title: 'Azure DevOps tests (branch)',
-        pattern: ':organization/:project/:definitionId/:branch*',
+        pattern: ':organization/:project/:definitionId/:branch',
         namedParams: {
           organization: 'azuredevops-powershell',
           project: 'azuredevops-powershell',
