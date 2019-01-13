@@ -5,6 +5,7 @@ const { expect } = require('chai')
 const { test, given, forCases } = require('sazerac')
 const sinon = require('sinon')
 const trace = require('./trace')
+const { colorScheme: colorsB } = require('./test-helpers')
 
 const {
   NotFound,
@@ -267,6 +268,31 @@ describe('BaseService', function() {
       })
     })
 
+    context('handle() returns invalid data', function() {
+      it('Throws a validation error', async function() {
+        class ThrowingService extends DummyService {
+          async handle() {
+            return {
+              some: 'nonsense',
+            }
+          }
+        }
+        try {
+          await ThrowingService.invoke(
+            {},
+            { handleInternalErrors: false },
+            { namedParamA: 'bar.bar.bar' }
+          )
+          expect.fail('Expected to throw')
+        } catch (e) {
+          expect(e.name).to.equal('ValidationError')
+          expect(e.details.map(({ message }) => message)).to.deep.equal([
+            '"message" is required',
+          ])
+        }
+      })
+    })
+
     describe('Handles known subtypes of ShieldsInternalError', function() {
       it('handles NotFound errors', async function() {
         class ThrowingService extends DummyService {
@@ -448,6 +474,11 @@ describe('BaseService', function() {
         const badgeData = DummyService._makeBadgeData({}, { color: 'red' })
         expect(badgeData.color).to.equal('red')
       })
+
+      it('applies the service label color', function() {
+        const badgeData = DummyService._makeBadgeData({}, { labelColor: 'red' })
+        expect(badgeData.colorA).to.equal(colorsB.red)
+      })
     })
 
     describe('Defaults', function() {
@@ -459,6 +490,11 @@ describe('BaseService', function() {
       it('uses the default color', function() {
         const badgeData = DummyService._makeBadgeData({}, {})
         expect(badgeData.color).to.equal('lightgrey')
+      })
+
+      it('provides no default colorA', function() {
+        const badgeData = DummyService._makeBadgeData({}, {})
+        expect(badgeData.colorA).to.be.undefined
       })
     })
   })

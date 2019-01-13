@@ -57,12 +57,12 @@ describe('BaseXmlService', function() {
     it('forwards options to _sendAndCacheRequest', async function() {
       class WithCustomOptions extends BaseXmlService {
         async handle() {
-          const { value } = await this._requestXml({
+          const { requiredString } = await this._requestXml({
             schema: dummySchema,
             url: 'http://example.com/foo.xml',
             options: { method: 'POST', qs: { queryParam: 123 } },
           })
-          return { message: value }
+          return { message: requiredString }
         }
       }
 
