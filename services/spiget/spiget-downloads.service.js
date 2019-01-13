@@ -2,6 +2,7 @@
 
 const { BaseSpigetService, documentation } = require('./spiget-base')
 const { metric } = require('../../lib/text-formatters')
+const { downloadCount } = require('../../lib/color-formatters')
 
 module.exports = class SpigetDownloads extends BaseSpigetService {
   static get route() {
@@ -14,7 +15,6 @@ module.exports = class SpigetDownloads extends BaseSpigetService {
   static get defaultBadgeData() {
     return {
       label: 'downloads',
-      color: 'brightgreen',
     }
   }
 
@@ -26,6 +26,7 @@ module.exports = class SpigetDownloads extends BaseSpigetService {
   static render({ downloads }) {
     return {
       message: metric(downloads),
+      color: downloadCount(downloads),
     }
   }
 
