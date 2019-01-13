@@ -17,8 +17,7 @@ const t = (module.exports = new ServiceTester({
   title: 'DubDownloads',
 }))
 
-t
-  .create('total downloads (valid)')
+t.create('total downloads (valid)')
   .get('/dt/vibe-d.json?style=_shields_test')
   .expectJSONTypes(
     Joi.object().keys({
@@ -28,8 +27,7 @@ t
     })
   )
 
-t
-  .create('total downloads, specific version (valid)')
+t.create('total downloads, specific version (valid)')
   .get('/dt/vibe-d/0.8.4.json?style=_shields_test')
   .expectJSONTypes(
     Joi.object().keys({
@@ -40,8 +38,7 @@ t
   )
   .timeout(15000)
 
-t
-  .create('total downloads, latest version (valid)')
+t.create('total downloads, latest version (valid)')
   .get('/dt/vibe-d/latest.json?style=_shields_test')
   .expectJSONTypes(
     Joi.object().keys({
@@ -51,8 +48,7 @@ t
     })
   )
 
-t
-  .create('daily downloads (valid)')
+t.create('daily downloads (valid)')
   .get('/dd/vibe-d.json?style=_shields_test')
   .expectJSONTypes(
     Joi.object().keys({
@@ -62,8 +58,7 @@ t
     })
   )
 
-t
-  .create('weekly downloads (valid)')
+t.create('weekly downloads (valid)')
   .get('/dw/vibe-d.json?style=_shields_test')
   .expectJSONTypes(
     Joi.object().keys({
@@ -73,8 +68,7 @@ t
     })
   )
 
-t
-  .create('monthly downloads (valid)')
+t.create('monthly downloads (valid)')
   .get('/dm/vibe-d.json?style=_shields_test')
   .expectJSONTypes(
     Joi.object().keys({
@@ -84,7 +78,6 @@ t
     })
   )
 
-t
-  .create('total downloads (not found)')
+t.create('total downloads (not found)')
   .get('/dt/not-a-package.json')
   .expectJSON({ name: 'downloads', value: 'not found' })
