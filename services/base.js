@@ -3,6 +3,7 @@
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const pathToRegexp = require('path-to-regexp')
+const Joi = require('joi')
 const {
   NotFound,
   InvalidResponse,
@@ -23,6 +24,26 @@ const trace = require('./trace')
 const { validateExample, transformExample } = require('./transform-example')
 const { assertValidCategory } = require('./categories')
 const { assertValidServiceDefinition } = require('./service-definitions')
+
+const defaultBadgeDataSchema = Joi.object({
+  label: Joi.string(),
+  color: Joi.string(),
+  labelColor: Joi.string(),
+  logo: Joi.string(),
+}).required()
+
+const serviceDataSchema = Joi.object({
+  isError: Joi.boolean(),
+  label: Joi.string().allow(''),
+  // While a number of badges pass a number here, in the long run we may want
+  // `render()` to always return a string.
+  message: Joi.alternatives(Joi.string().allow(''), Joi.number()).required(),
+  color: Joi.string(),
+  link: Joi.string().uri(),
+  // Generally services should not use these options, which are provided to
+  // support the Endpoint badge.
+  labelColor: Joi.string(),
+}).required()
 
 class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
@@ -74,9 +95,9 @@ class BaseService {
   }
 
   /**
-   * Default data for the badge. Can include things such as default logo, color,
-   * etc. These defaults will be used if the value is not explicitly overridden
-   * by either the handler or by the user via query parameters.
+   * Default data for the badge. Can include label, logo, and color. These
+   * defaults are used if the value is neither included in the service data
+   * from the handler nor overridden by the user via query parameters.
    */
   static get defaultBadgeData() {
     return {}
@@ -121,6 +142,12 @@ class BaseService {
 
   static validateDefinition() {
     assertValidCategory(this.category, `Category for ${this.name}`)
+
+    Joi.assert(
+      this.defaultBadgeData,
+      defaultBadgeDataSchema,
+      `Default badge data for ${this.name}`
+    )
 
     this.examples.forEach((example, index) =>
       validateExample(example, index, this)
@@ -231,6 +258,7 @@ class BaseService {
     if (error instanceof NotFound || error instanceof InvalidParameter) {
       trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
       return {
+        isError: true,
         message: error.prettyMessage,
         color: 'red',
       }
@@ -241,6 +269,7 @@ class BaseService {
     ) {
       trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
       return {
+        isError: true,
         message: error.prettyMessage,
         color: 'lightgray',
       }
@@ -258,6 +287,7 @@ class BaseService {
         console.log(error)
       }
       return {
+        isError: true,
         label: 'shields',
         message: 'internal error',
         color: 'lightgray',
@@ -288,6 +318,7 @@ class BaseService {
     let serviceData
     try {
       serviceData = await serviceInstance.handle(namedParams, queryParams)
+      Joi.assert(serviceData, serviceDataSchema)
     } catch (error) {
       serviceData = serviceInstance._handleError(error)
     }
@@ -305,14 +336,16 @@ class BaseService {
       logoColor: overrideLogoColor,
       logoWidth: overrideLogoWidth,
       link: overrideLink,
-      colorA: overrideColorA,
-      colorB: overrideColorB,
+      colorA: overrideLabelColor,
+      colorB: overrideColor,
     } = overrides
 
     const {
+      isError,
       label: serviceLabel,
       message: serviceMessage,
       color: serviceColor,
+      labelColor: serviceLabelColor,
       link: serviceLink,
     } = serviceData
 
@@ -320,7 +353,22 @@ class BaseService {
       color: defaultColor,
       logo: defaultLogo,
       label: defaultLabel,
+      labelColor: defaultLabelColor,
     } = this.defaultBadgeData
+
+    let color, labelColor
+    if (isError) {
+      // Disregard the override color.
+      color = coalesce(serviceColor, defaultColor, 'lightgrey')
+      labelColor = coalesce(serviceLabelColor, defaultLabelColor)
+    } else {
+      color = coalesce(overrideColor, serviceColor, defaultColor, 'lightgrey')
+      labelColor = coalesce(
+        overrideLabelColor,
+        serviceLabelColor,
+        defaultLabelColor
+      )
+    }
 
     const badgeData = {
       text: [
@@ -336,16 +384,18 @@ class BaseService {
       }),
       logoWidth: +overrideLogoWidth,
       links: toArray(overrideLink || serviceLink),
-      colorA: makeColor(overrideColorA),
+      colorA: makeColor(labelColor),
     }
-    const color = overrideColorB || serviceColor || defaultColor || 'lightgrey'
+
     setBadgeColor(badgeData, color)
 
     return badgeData
   }
 
   static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
-    const { cacheHeaders: cacheHeaderConfig } = serviceConfig
+    this.validateDefinition()
+
+    const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
     camp.route(
       this._regex,
       handleRequest(cacheHeaderConfig, {
@@ -369,6 +419,7 @@ class BaseService {
           sendBadge(format, badgeData)
         },
         cacheLength: this._cacheLength,
+        fetchLimitBytes,
       })
     )
   }

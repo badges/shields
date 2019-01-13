@@ -35,6 +35,38 @@ class PuppetforgeModuleVersion extends LegacyService {
   static registerLegacyRouteHandler() {}
 }
 
+class PuppetforgeModulePdkVersion extends LegacyService {
+  static get category() {
+    return 'platform-support'
+  }
+
+  static get route() {
+    return {
+      base: 'puppetforge/pdk-version',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Puppet Forge – PDK version',
+        pattern: ':user/:moduleName',
+        namedParams: {
+          user: 'tragiccode',
+          moduleName: 'azure_key_vault',
+        },
+        staticPreview: {
+          label: 'pdk version',
+          message: 'v1.7.1',
+          color: 'blue',
+        },
+      },
+    ]
+  }
+
+  static registerLegacyRouteHandler() {}
+}
+
 class PuppetforgeModuleDownloads extends LegacyService {
   static get category() {
     return 'downloads'
@@ -115,7 +147,7 @@ class PuppetforgeModules extends LegacyService {
     camp.route(
       /^\/puppetforge\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
-        const info = match[1] // either `v`, `dt`, `e` or `f`
+        const info = match[1] // either `v`, `dt`, `e`, `f`, or `p`
         const user = match[2]
         const module = match[3]
         const format = match[4]
@@ -170,6 +202,16 @@ class PuppetforgeModules extends LegacyService {
                 badgeData.text[1] = 'unknown'
                 badgeData.colorscheme = 'lightgrey'
               }
+            } else if (info === 'pdk-version') {
+              badgeData.text[0] = 'pdk version'
+              if (json.current_release.pdk) {
+                const pdkVersion = json.current_release.metadata['pdk-version']
+                badgeData.text[1] = versionText(pdkVersion)
+                badgeData.colorscheme = versionColor(pdkVersion)
+              } else {
+                badgeData.text[1] = 'none'
+                badgeData.colorscheme = 'lightgrey'
+              }
             }
             sendBadge(format, badgeData)
           } catch (e) {
@@ -184,6 +226,7 @@ class PuppetforgeModules extends LegacyService {
 
 module.exports = {
   PuppetforgeModuleVersion,
+  PuppetforgeModulePdkVersion,
   PuppetforgeModuleDownloads,
   PuppetforgeModuleFeedback,
   PuppetforgeModuleEndorsement,

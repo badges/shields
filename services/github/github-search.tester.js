@@ -6,11 +6,11 @@ const { isMetric } = require('../test-validators')
 const t = (module.exports = require('../create-service-tester')())
 
 t.create('hit counter')
-  .get('/torvalds/linux/goto.json')
-  .timeout(10000)
-  .expectJSONTypes(Joi.object().keys({ name: 'goto counter', value: isMetric }))
+  .get('/badges/shields/async%20handle.json')
+  .expectJSONTypes(
+    Joi.object().keys({ name: 'async handle counter', value: isMetric })
+  )
 
 t.create('hit counter for nonexistent repo')
-  .get('/torvalds/not-linux/goto.json')
-  .timeout(10000)
-  .expectJSON({ name: 'goto counter', value: 'repo not found' })
+  .get('/badges/puppets/async%20handle.json')
+  .expectJSON({ name: 'async handle counter', value: 'repo not found' })

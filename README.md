@@ -167,7 +167,7 @@ You can read more about [the project's inception][thread],
 
 Maintainers:
 
-- [calebcartwright](https://github.com/calebcartwright)
+- [calebcartwright](https://github.com/calebcartwright) (core team)
 - [chris48s](https://github.com/chris48s) (core team)
 - [Daniel15](https://github.com/Daniel15) (core team)
 - [espadrine](https://github.com/espadrine) (core team)

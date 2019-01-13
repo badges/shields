@@ -25,8 +25,7 @@ class GithubManifestVersion extends ConditionalGithubAuthService {
   static get route() {
     return {
       base: 'github/manifest-json/v',
-      format: '([^/]+)/([^/]+)/?([^/]+)?',
-      capture: ['user', 'repo', 'branch'],
+      pattern: ':user/:repo/:branch*',
     }
   }
 

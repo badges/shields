@@ -78,7 +78,7 @@ describe('BaseSvgScrapingService', function() {
     it('forwards options to _sendAndCacheRequest', async function() {
       class WithCustomOptions extends DummySvgScrapingService {
         async handle() {
-          const { value } = await this._requestSvg({
+          const { message } = await this._requestSvg({
             schema,
             url: 'http://example.com/foo.svg',
             options: {
@@ -86,7 +86,7 @@ describe('BaseSvgScrapingService', function() {
               qs: { queryParam: 123 },
             },
           })
-          return { message: value }
+          return { message }
         }
       }
 
@@ -157,6 +157,7 @@ describe('BaseSvgScrapingService', function() {
           { handleInternalErrors: false }
         )
       ).to.deep.equal({
+        isError: true,
         color: 'lightgray',
         message: 'unparseable svg response',
       })

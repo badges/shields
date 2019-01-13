@@ -77,12 +77,12 @@ describe('BaseYamlService', function() {
     it('forwards options to _sendAndCacheRequest', async function() {
       class WithOptions extends DummyYamlService {
         async handle() {
-          const { value } = await this._requestYaml({
+          const { requiredString } = await this._requestYaml({
             schema: dummySchema,
             url: 'http://example.com/foo.yaml',
             options: { method: 'POST', qs: { queryParam: 123 } },
           })
-          return { message: value }
+          return { message: requiredString }
         }
       }
 
@@ -132,6 +132,7 @@ describe('BaseYamlService', function() {
           { handleInternalErrors: false }
         )
       ).to.deep.equal({
+        isError: true,
         color: 'lightgray',
         message: 'invalid response data',
       })
@@ -148,6 +149,7 @@ describe('BaseYamlService', function() {
           { handleInternalErrors: false }
         )
       ).to.deep.equal({
+        isError: true,
         color: 'lightgray',
         message: 'unparseable yaml response',
       })

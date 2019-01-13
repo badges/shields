@@ -5,6 +5,7 @@ const { expect } = require('chai')
 const { test, given, forCases } = require('sazerac')
 const sinon = require('sinon')
 const trace = require('./trace')
+const { colorScheme: colorsB } = require('./test-helpers')
 
 const {
   NotFound,
@@ -29,7 +30,11 @@ class DummyService extends BaseService {
   }
 
   static get category() {
-    return 'cat'
+    return 'other'
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'cat' }
   }
 
   static get examples() {
@@ -256,9 +261,35 @@ describe('BaseService', function() {
           { namedParamA: 'bar.bar.bar' }
         )
       ).to.deep.equal({
+        isError: true,
         color: 'lightgray',
         label: 'shields',
         message: 'internal error',
+      })
+    })
+
+    context('handle() returns invalid data', function() {
+      it('Throws a validation error', async function() {
+        class ThrowingService extends DummyService {
+          async handle() {
+            return {
+              some: 'nonsense',
+            }
+          }
+        }
+        try {
+          await ThrowingService.invoke(
+            {},
+            { handleInternalErrors: false },
+            { namedParamA: 'bar.bar.bar' }
+          )
+          expect.fail('Expected to throw')
+        } catch (e) {
+          expect(e.name).to.equal('ValidationError')
+          expect(e.details.map(({ message }) => message)).to.deep.equal([
+            '"message" is required',
+          ])
+        }
       })
     })
 
@@ -272,6 +303,7 @@ describe('BaseService', function() {
         expect(
           await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
+          isError: true,
           color: 'red',
           message: 'not found',
         })
@@ -286,6 +318,7 @@ describe('BaseService', function() {
         expect(
           await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
+          isError: true,
           color: 'lightgray',
           message: 'inaccessible',
         })
@@ -300,6 +333,7 @@ describe('BaseService', function() {
         expect(
           await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
+          isError: true,
           color: 'lightgray',
           message: 'invalid',
         })
@@ -314,6 +348,7 @@ describe('BaseService', function() {
         expect(
           await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
+          isError: true,
           color: 'lightgray',
           message: 'no longer available',
         })
@@ -328,6 +363,7 @@ describe('BaseService', function() {
         expect(
           await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' })
         ).to.deep.equal({
+          isError: true,
           color: 'red',
           message: 'invalid parameter',
         })
@@ -345,7 +381,7 @@ describe('BaseService', function() {
         expect(badgeData.text).to.deep.equal(['purr count', 'n/a'])
       })
 
-      it('overrides the colorA', function() {
+      it('overrides the label color', function() {
         const badgeData = DummyService._makeBadgeData(
           { colorA: '42f483' },
           { color: 'green' }
@@ -353,12 +389,21 @@ describe('BaseService', function() {
         expect(badgeData.colorA).to.equal('#42f483')
       })
 
-      it('overrides the colorB', function() {
+      it('overrides the color', function() {
         const badgeData = DummyService._makeBadgeData(
           { colorB: '10ADED' },
           { color: 'red' }
         )
         expect(badgeData.colorB).to.equal('#10ADED')
+      })
+
+      it('does not override the color in case of an error', function() {
+        const badgeData = DummyService._makeBadgeData(
+          { colorB: '10ADED' },
+          { isError: true, color: 'lightgray' }
+        )
+        expect(badgeData.colorB).to.be.undefined
+        expect(badgeData.colorscheme).to.equal('lightgray')
       })
 
       it('overrides the logo', function() {
@@ -430,6 +475,11 @@ describe('BaseService', function() {
         const badgeData = DummyService._makeBadgeData({}, { color: 'red' })
         expect(badgeData.colorscheme).to.equal('red')
       })
+
+      it('applies the service label color', function() {
+        const badgeData = DummyService._makeBadgeData({}, { labelColor: 'red' })
+        expect(badgeData.colorA).to.equal(colorsB.red)
+      })
     })
 
     describe('Defaults', function() {
@@ -441,6 +491,11 @@ describe('BaseService', function() {
       it('uses the default color', function() {
         const badgeData = DummyService._makeBadgeData({}, {})
         expect(badgeData.colorscheme).to.equal('lightgrey')
+      })
+
+      it('provides no default colorA', function() {
+        const badgeData = DummyService._makeBadgeData({}, {})
+        expect(badgeData.colorA).to.be.undefined
       })
     })
   })
@@ -508,7 +563,7 @@ describe('BaseService', function() {
         isDeprecated,
         route,
       }).to.deep.equal({
-        category: 'cat',
+        category: 'other',
         name: 'DummyService',
         isDeprecated: false,
         route: {

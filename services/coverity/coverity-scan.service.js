@@ -31,7 +31,7 @@ module.exports = class CoverityScan extends BaseJsonService {
   }
 
   static get category() {
-    return 'quality'
+    return 'analysis'
   }
 
   static get defaultBadgeData() {
