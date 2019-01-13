@@ -5,7 +5,6 @@ const { expect } = require('chai')
 const { test, given, forCases } = require('sazerac')
 const sinon = require('sinon')
 const trace = require('./trace')
-const { colorScheme: colorsB } = require('./test-helpers')
 
 const {
   NotFound,
@@ -477,7 +476,7 @@ describe('BaseService', function() {
 
       it('applies the service label color', function() {
         const badgeData = DummyService._makeBadgeData({}, { labelColor: 'red' })
-        expect(badgeData.colorA).to.equal(colorsB.red)
+        expect(badgeData.labelColor).to.equal('red')
       })
     })
 
@@ -492,9 +491,9 @@ describe('BaseService', function() {
         expect(badgeData.color).to.equal('lightgrey')
       })
 
-      it('provides no default colorA', function() {
+      it('provides no default label color', function() {
         const badgeData = DummyService._makeBadgeData({}, {})
-        expect(badgeData.colorA).to.be.undefined
+        expect(badgeData.labelColor).to.be.undefined
       })
     })
   })
