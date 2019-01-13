@@ -20,7 +20,9 @@ module.exports = class PypiVersion extends PypiBase {
     return [
       {
         title: 'PyPI',
-        previewUrl: 'nine',
+        pattern: ':packageName',
+        namedParams: { packageName: 'nine' },
+        staticPreview: this.render({ version: '1.0.0' }),
         keywords: ['python'],
       },
     ]
