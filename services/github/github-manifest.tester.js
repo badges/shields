@@ -40,5 +40,5 @@ t.create('Manifest invalid json response')
   .get('/v/RedSparr0w/not-a-real-project.json')
   .expectJSON({
     name: 'version',
-    value: 'manifest.json missing or repo not found',
+    value: 'repo not found, branch not found, or manifest.json missing',
   })
