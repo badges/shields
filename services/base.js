@@ -43,6 +43,9 @@ const serviceDataSchema = Joi.object({
   // Generally services should not use these options, which are provided to
   // support the Endpoint badge.
   labelColor: Joi.string(),
+  cacheLengthSeconds: Joi.number()
+    .integer()
+    .min(0),
 }).required()
 
 class BaseService {
@@ -347,6 +350,7 @@ class BaseService {
       color: serviceColor,
       labelColor: serviceLabelColor,
       link: serviceLink,
+      cacheLengthSeconds: serviceCacheLengthSeconds,
     } = serviceData
 
     const {
@@ -355,6 +359,7 @@ class BaseService {
       label: defaultLabel,
       labelColor: defaultLabelColor,
     } = this.defaultBadgeData
+    const defaultCacheLengthSeconds = this._cacheLength
 
     let color, labelColor
     if (isError) {
@@ -385,6 +390,10 @@ class BaseService {
       logoWidth: +overrideLogoWidth,
       links: toArray(overrideLink || serviceLink),
       colorA: makeColor(labelColor),
+      cacheLengthSeconds: coalesce(
+        serviceCacheLengthSeconds,
+        defaultCacheLengthSeconds
+      ),
     }
 
     setBadgeColor(badgeData, color)

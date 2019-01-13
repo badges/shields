@@ -14,33 +14,43 @@ const queryParamSchema = Joi.object({
     .min(0),
 }).required()
 
-function coalesceCacheLength(
+function overrideCacheLengthFromQueryParams(queryParams) {
+  try {
+    const { maxAge: overrideCacheLength } = Joi.attempt(
+      queryParams,
+      queryParamSchema,
+      { allowUnknown: true }
+    )
+    return overrideCacheLength
+  } catch (e) {
+    return undefined
+  }
+}
+
+function coalesceCacheLength({
   cacheHeaderConfig,
-  serviceCacheLengthSeconds,
-  queryParams
-) {
+  serviceDefaultCacheLengthSeconds,
+  serviceOverrideCacheLengthSeconds,
+  queryParams,
+}) {
   const { defaultCacheLengthSeconds } = cacheHeaderConfig
-  // The config returns a number so this would only fail if we break the
-  // wiring. Better to fail obviously than silently.
+  // The config returns a number so this should never happen. But this logic
+  // would be completely broken if it did.
   assert(defaultCacheLengthSeconds !== undefined)
 
-  const ourCacheLength = coalesce(
-    serviceCacheLengthSeconds,
+  const cacheLength = coalesce(
+    serviceDefaultCacheLengthSeconds,
     defaultCacheLengthSeconds
   )
 
-  const { value: { maxAge: overrideCacheLength } = {}, error } = Joi.validate(
-    queryParams,
-    queryParamSchema,
-    { allowUnknown: true }
-  )
+  // Overrides can apply _more_ caching, but not less. Query param overriding
+  // can request more overriding than service override, but not less.
+  const candidateOverrides = [
+    serviceOverrideCacheLengthSeconds,
+    overrideCacheLengthFromQueryParams(queryParams),
+  ].filter(x => x !== undefined)
 
-  if (!error && overrideCacheLength !== undefined) {
-    // The user can request _more_ caching, but not less.
-    return Math.max(overrideCacheLength, ourCacheLength)
-  } else {
-    return ourCacheLength
-  }
+  return Math.max(cacheLength, ...candidateOverrides)
 }
 
 function setHeadersForCacheLength(res, cacheLengthSeconds) {
@@ -66,15 +76,17 @@ function setHeadersForCacheLength(res, cacheLengthSeconds) {
 
 function setCacheHeaders({
   cacheHeaderConfig,
-  serviceCacheLengthSeconds,
+  serviceDefaultCacheLengthSeconds,
+  serviceOverrideCacheLengthSeconds,
   queryParams,
   res,
 }) {
-  const cacheLengthSeconds = coalesceCacheLength(
+  const cacheLengthSeconds = coalesceCacheLength({
     cacheHeaderConfig,
-    serviceCacheLengthSeconds,
-    queryParams
-  )
+    serviceDefaultCacheLengthSeconds,
+    serviceOverrideCacheLengthSeconds,
+    queryParams,
+  })
   setHeadersForCacheLength(res, cacheLengthSeconds)
 }
 
