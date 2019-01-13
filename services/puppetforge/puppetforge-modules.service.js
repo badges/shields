@@ -50,11 +50,10 @@ class PuppetforgeModulePdkVersion extends LegacyService {
     return [
       {
         title: 'Puppet Forge – PDK version',
-        // We need an example that uses the PDK.
         pattern: ':user/:moduleName',
         namedParams: {
-          user: 'vStone',
-          module: 'percona',
+          user: 'tragiccode',
+          moduleName: 'azure_key_vault',
         },
       },
     ]
