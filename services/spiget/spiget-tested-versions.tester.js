@@ -19,9 +19,7 @@ t.create('EssentialsX - multiple versions supported - (id 9089)')
 
 t.create('Invalid Resource (id 1)')
   .get('/1.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'tested versions',
-      value: 'not found',
-    })
-  )
+  .expectJSON({
+    name: 'tested versions',
+    value: 'not found',
+  })
