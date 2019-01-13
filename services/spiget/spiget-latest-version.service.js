@@ -2,6 +2,8 @@
 
 const { BaseSpigetService, documentation } = require('./spiget-base')
 
+const { renderVersionBadge } = require('../../lib/version')
+
 module.exports = class SpigetLatestVersion extends BaseSpigetService {
   static get route() {
     return {
@@ -19,13 +21,7 @@ module.exports = class SpigetLatestVersion extends BaseSpigetService {
 
   async handle({ resourceid }) {
     const { name } = await this.fetchLatestVersion({ resourceid })
-    return this.constructor.render({ version: name })
-  }
-
-  static render({ version }) {
-    return {
-      message: `v${version}`,
-    }
+    return renderVersionBadge({ version: name })
   }
 
   static get category() {
@@ -38,7 +34,7 @@ module.exports = class SpigetLatestVersion extends BaseSpigetService {
         namedParams: {
           resourceid: '9089',
         },
-        staticPreview: this.render({ version: 2.1 }),
+        staticPreview: renderVersionBadge({ version: 2.1 }),
         documentation,
       },
     ]
