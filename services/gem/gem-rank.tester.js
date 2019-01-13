@@ -4,7 +4,7 @@ const Joi = require('joi')
 
 const isOrdinalNumber = Joi.string().regex(/^[1-9][0-9]+(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ)$/)
 const isOrdinalNumberDaily = Joi.string().regex(
-  /^[1-9][0-9]+(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ) daily$/
+  /^[1-9][0-9]*(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ) daily$/
 )
 
 const t = (module.exports = require('../create-service-tester')())

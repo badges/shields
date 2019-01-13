@@ -20,7 +20,9 @@ module.exports = class PypiFormat extends PypiBase {
     return [
       {
         title: 'PyPI - Format',
-        previewUrl: 'Django',
+        pattern: ':packageName',
+        namedParams: { packageName: 'Django' },
+        staticPreview: this.render({ hasWheel: true }),
         keywords: ['python'],
       },
     ]
