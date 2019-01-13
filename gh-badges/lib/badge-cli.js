@@ -7,13 +7,13 @@ const svg2img = require('./svg-to-img')
 const { namedColors } = require('./color')
 
 if (process.argv.length < 4) {
-  console.log('Usage: badge subject status [:colorscheme] [.output] [@style]')
+  console.log('Usage: badge subject status [:color] [.output] [@style]')
   console.log(
-    'Or:    badge subject status right-color [left-color] [.output] [@style]'
+    'Or:    badge subject status color [labelColor] [.output] [@style]'
   )
   console.log()
-  console.log(`  colorscheme: one of ${Object.keys(namedColors).join(', ')}.`)
-  console.log('  left-color, right-color:')
+  console.log('  color, labelColor:')
+  console.log(`    one of ${Object.keys(namedColors).join(', ')}.`)
   console.log('    #xxx (three hex digits)')
   console.log('    #xxxxxx (six hex digits)')
   console.log('    color (CSS color)')
