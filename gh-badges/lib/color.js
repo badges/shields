@@ -17,6 +17,8 @@ const namedColors = {
   lightgray: '#9f9f9f',
 }
 
+// This function returns false for `#ccc`. However `isCSSColor('#ccc')` is
+// true.
 const hexColorRegex = /^([\da-f]{3}){1,2}$/i
 function isHexColor(s = '') {
   return hexColorRegex.test(s.toLowerCase())
