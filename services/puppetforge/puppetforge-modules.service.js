@@ -55,6 +55,7 @@ class PuppetforgeModulePdkVersion extends LegacyService {
           user: 'tragiccode',
           moduleName: 'azure_key_vault',
         },
+        staticPreview: { label: 'pdk version', message: 'v1.7.1', color: 'blue' },
       },
     ]
   }
