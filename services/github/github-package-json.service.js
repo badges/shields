@@ -45,7 +45,7 @@ class GithubPackageJsonVersion extends ConditionalGithubAuthService {
       },
       {
         title: 'GitHub package.json version (branch)',
-        pattern: ':user/:repo/:branch*',
+        pattern: ':user/:repo/:branch',
         namedParams: {
           user: 'IcedFrisby',
           repo: 'IcedFrisby',
@@ -203,7 +203,7 @@ class DynamicGithubPackageJson extends ConditionalGithubAuthService {
       },
       {
         title: 'GitHub package.json dynamic',
-        pattern: ':key/:user/:repo/:branch*',
+        pattern: ':key/:user/:repo/:branch',
         namedParams: {
           key: 'keywords',
           user: 'developit',
