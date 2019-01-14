@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { isBuildStatus } = require('../test-validators')
+const { isBuildStatus } = require('../../lib/build-status')
 
 const t = (module.exports = require('../create-service-tester')())
 

@@ -2,7 +2,8 @@
 
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
-const { isBuildStatus, isIntegerPercentage } = require('../test-validators')
+const { isIntegerPercentage } = require('../test-validators')
+const { isBuildStatus } = require('../../lib/build-status')
 
 const t = new ServiceTester({ id: 'scrutinizer', title: 'Scrutinizer' })
 module.exports = t
