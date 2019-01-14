@@ -9,11 +9,8 @@ const {
   user,
   pass,
 } = require('./bitbucket-test-helpers')
-const {
-  isBuildStatus,
-  isMetric,
-  isMetricOpenIssues,
-} = require('../test-validators')
+const { isMetric, isMetricOpenIssues } = require('../test-validators')
+const { isBuildStatus } = require('../../lib/build-status')
 
 const t = (module.exports = new ServiceTester({
   id: 'bitbucket',
