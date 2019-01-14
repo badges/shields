@@ -2,12 +2,15 @@
 
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
+const {
+  isBuildStatus,
+  renderBuildStatusBadge,
+} = require('../../lib/build-status')
 
 const werckerSchema = Joi.array()
   .items(
     Joi.object({
-      status: Joi.string().required(),
-      result: Joi.string().required(),
+      result: isBuildStatus,
     })
   )
   .min(0)
@@ -40,15 +43,8 @@ module.exports = class Wercker extends BaseJsonService {
     })
   }
 
-  static render({ status, result }) {
-    if (status === 'finished') {
-      if (result === 'passed') {
-        return { message: 'passing', color: 'brightgreen' }
-      } else {
-        return { message: result, color: 'red' }
-      }
-    }
-    return { message: status }
+  static render({ result }) {
+    return renderBuildStatusBadge({ status: result })
   }
 
   async handle({ projectId, applicationName, branch }) {
@@ -65,8 +61,8 @@ module.exports = class Wercker extends BaseJsonService {
         result: 'no builds',
       })
     }
-    const { status, result } = json[0]
-    return this.constructor.render({ status, result })
+    const { result } = json[0]
+    return this.constructor.render({ result })
   }
 
   // Metadata
