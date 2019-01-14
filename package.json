@@ -46,7 +46,7 @@
     "lodash.times": "^4.3.2",
     "moment": "^2.23.0",
     "node-env-flag": "^0.1.0",
-    "path-to-regexp": "pillarjs/path-to-regexp#a33e7b7a5225ff7d301961a89439e9874674cbfa",
+    "path-to-regexp": "^3.0.0",
     "pretty-bytes": "^5.0.0",
     "priorityqueuejs": "^1.0.0",
     "prom-client": "^11.2.1",
