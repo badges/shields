@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { colorScheme: colorsB } = require('../test-helpers')
 const { dockerBlue } = require('./docker-helpers')
-const { isBuildStatus } = require('../test-validators')
+const { isBuildStatus } = require('../../lib/build-status')
 
 const t = (module.exports = require('../create-service-tester')())
 
