@@ -89,6 +89,7 @@ module.exports = class Endpoint extends BaseJsonService {
       label,
       message,
       color,
+      labelColor,
     }
   }
 

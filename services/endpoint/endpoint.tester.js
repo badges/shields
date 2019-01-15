@@ -17,6 +17,26 @@ t.create('Valid schema (mocked)')
   )
   .expectJSON({ name: '', value: 'yo' })
 
+t.create('color and labelColor')
+  .get('.json?url=https://example.com/badge&style=_shields_test')
+  .intercept(nock =>
+    nock('https://example.com/')
+      .get('/badge')
+      .reply(200, {
+        schemaVersion: 1,
+        label: 'hey',
+        message: 'yo',
+        color: '#f0dcc3',
+        labelColor: '#e6e6fa',
+      })
+  )
+  .expectJSON({
+    name: 'hey',
+    value: 'yo',
+    colorB: '#f0dcc3',
+    colorA: '#e6e6fa',
+  })
+
 t.create('Invalid schema (mocked)')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>
