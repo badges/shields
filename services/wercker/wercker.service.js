@@ -57,7 +57,6 @@ module.exports = class Wercker extends BaseJsonService {
     })
     if (json.length === 0) {
       return this.constructor.render({
-        status: 'finished',
         result: 'no builds',
       })
     }
@@ -85,7 +84,7 @@ module.exports = class Wercker extends BaseJsonService {
         title: `Wercker CI Run`,
         pattern: 'ci/:applicationId',
         namedParams: { applicationId: '559e33c8e982fc615500b357' },
-        staticPreview: this.render({ status: 'finished', result: 'passed' }),
+        staticPreview: this.render({ result: 'passed' }),
       },
       {
         title: `Wercker CI Run`,
@@ -94,7 +93,7 @@ module.exports = class Wercker extends BaseJsonService {
           applicationId: '559e33c8e982fc615500b357',
           branch: 'master',
         },
-        staticPreview: this.render({ status: 'finished', result: 'passed' }),
+        staticPreview: this.render({ result: 'passed' }),
       },
       {
         title: `Wercker Build`,
@@ -103,7 +102,7 @@ module.exports = class Wercker extends BaseJsonService {
           userName: 'wercker',
           applicationName: 'go-wercker-api',
         },
-        staticPreview: this.render({ status: 'finished', result: 'passed' }),
+        staticPreview: this.render({ result: 'passed' }),
       },
       {
         title: `Wercker Build branch`,
@@ -113,7 +112,7 @@ module.exports = class Wercker extends BaseJsonService {
           applicationName: 'go-wercker-api',
           branch: 'master',
         },
-        staticPreview: this.render({ status: 'finished', result: 'passed' }),
+        staticPreview: this.render({ result: 'passed' }),
       },
     ]
   }
