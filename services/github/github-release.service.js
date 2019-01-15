@@ -25,6 +25,7 @@ module.exports = class GithubRelease extends LegacyService {
   static get route() {
     return {
       base: 'github',
+      pattern: ':which(release|release-pre)/:user/:repo',
     }
   }
 
@@ -32,12 +33,31 @@ module.exports = class GithubRelease extends LegacyService {
     return [
       {
         title: 'GitHub release',
+        pattern: 'release/:user/:repo',
         previewUrl: 'release/qubyte/rubidium',
+        namedParams: {
+          user: 'qubyte',
+          repo: 'rubidium',
+        },
+        staticPreview: {
+          label: 'release',
+          message: 'v2.0.2',
+          color: 'blue',
+        },
         documentation,
       },
       {
         title: 'GitHub (pre-)release',
-        previewUrl: 'release-pre/qubyte/rubidium',
+        pattern: 'release-pre/:user/:repo',
+        namedParams: {
+          user: 'qubyte',
+          repo: 'rubidium',
+        },
+        staticPreview: {
+          label: 'release',
+          message: 'v2.0.2',
+          color: 'blue',
+        },
         documentation,
       },
     ]
