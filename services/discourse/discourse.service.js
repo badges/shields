@@ -18,6 +18,8 @@ module.exports = class Discourse extends LegacyService {
   static get route() {
     return {
       base: 'discourse',
+      pattern:
+        ':scheme(http|https)/:host/:which(topics|posts|users|likes|status)',
     }
   }
 
@@ -25,23 +27,68 @@ module.exports = class Discourse extends LegacyService {
     return [
       {
         title: 'Discourse topics',
-        previewUrl: 'https/meta.discourse.org/topics',
+        pattern: ':scheme(http|https)/:host/topics',
+        namedParams: {
+          scheme: 'https',
+          host: 'meta.discourse.org',
+        },
+        staticPreview: {
+          label: 'discourse',
+          message: '27k topics',
+          color: 'brightgreen',
+        },
       },
       {
         title: 'Discourse posts',
-        previewUrl: 'https/meta.discourse.org/posts',
+        pattern: ':scheme(http|https)/:host/posts',
+        namedParams: {
+          scheme: 'https',
+          host: 'meta.discourse.org',
+        },
+        staticPreview: {
+          label: 'discourse',
+          message: '490k posts',
+          color: 'brightgreen',
+        },
       },
       {
         title: 'Discourse users',
-        previewUrl: 'https/meta.discourse.org/users',
+        pattern: ':scheme(http|https)/:host/users',
+        namedParams: {
+          scheme: 'https',
+          host: 'meta.discourse.org',
+        },
+        staticPreview: {
+          label: 'discourse',
+          message: '42k users',
+          color: 'brightgreen',
+        },
       },
       {
         title: 'Discourse likes',
-        previewUrl: 'https/meta.discourse.org/likes',
+        pattern: ':scheme(http|https)/:host/likes',
+        namedParams: {
+          scheme: 'https',
+          host: 'meta.discourse.org',
+        },
+        staticPreview: {
+          label: 'discourse',
+          message: '499k likes',
+          color: 'brightgreen',
+        },
       },
       {
         title: 'Discourse status',
-        previewUrl: 'https/meta.discourse.org/status',
+        pattern: ':scheme(http|https)/:host/status',
+        namedParams: {
+          scheme: 'https',
+          host: 'meta.discourse.org',
+        },
+        staticPreview: {
+          label: 'discourse',
+          message: 'online',
+          color: 'brightgreen',
+        },
       },
     ]
   }
