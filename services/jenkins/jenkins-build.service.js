@@ -18,6 +18,7 @@ module.exports = class JenkinsBuild extends LegacyService {
   static get route() {
     return {
       base: 'jenkins/s',
+      pattern: ':scheme(http|https)?/:host/:job*',
     }
   }
 
@@ -25,8 +26,18 @@ module.exports = class JenkinsBuild extends LegacyService {
     return [
       {
         title: 'Jenkins',
-        previewUrl:
-          'https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default',
+        pattern: ':scheme/:host/:job',
+        namedParams: {
+          scheme: 'https',
+          host: 'jenkins.qa.ubuntu.com',
+          job:
+            'view/Precise/view/All%20Precise/job/precise-desktop-amd64_default',
+        },
+        staticPreview: {
+          label: 'build',
+          message: 'passing',
+          color: 'brightgreen',
+        },
       },
     ]
   }
