@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-const { colorScheme: colorsB } = require('../test-helpers')
 
 const t = (module.exports = require('../create-service-tester')())
 
@@ -30,7 +29,7 @@ t.create('Tag (mocked response, no pre-releases, semver ordering)')
       .get('/repos/foo/bar/tags')
       .reply(200, tagsFixture)
   )
-  .expectJSON({ name: 'tag', value: 'v1.2', colorB: colorsB.blue })
+  .expectJSON({ name: 'tag', value: 'v1.2', color: 'blue' })
 
 t.create('Tag (mocked response, include pre-releases, semver ordering)')
   .get('/tag-pre/foo/bar.json?style=_shields_test')
@@ -39,7 +38,7 @@ t.create('Tag (mocked response, include pre-releases, semver ordering)')
       .get('/repos/foo/bar/tags')
       .reply(200, tagsFixture)
   )
-  .expectJSON({ name: 'tag', value: 'v1.3-beta3', colorB: colorsB.orange })
+  .expectJSON({ name: 'tag', value: 'v1.3-beta3', color: 'orange' })
 
 t.create('Tag (mocked response, date ordering)')
   .get('/tag-date/foo/bar.json?style=_shields_test')
@@ -48,4 +47,4 @@ t.create('Tag (mocked response, date ordering)')
       .get('/repos/foo/bar/tags')
       .reply(200, tagsFixture)
   )
-  .expectJSON({ name: 'tag', value: 'cheese', colorB: colorsB.blue })
+  .expectJSON({ name: 'tag', value: 'cheese', color: 'blue' })

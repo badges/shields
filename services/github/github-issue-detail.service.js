@@ -2,7 +2,6 @@
 
 const LegacyService = require('../legacy-service')
 const {
-  makeColorB,
   makeLabel: getLabel,
   makeBadgeData: getBadgeData,
   makeLogo: getLogo,
@@ -116,11 +115,8 @@ module.exports = class GithubIssueDetail extends LegacyService {
             switch (which) {
               case 's': {
                 const state = (badgeData.text[1] = parsedData.state)
-                badgeData.colorscheme = null
-                badgeData.colorB = makeColorB(
-                  githubStateColor(state),
-                  queryParams
-                )
+                badgeData.colorscheme = undefined
+                badgeData.colorB = queryParams.colorB || githubStateColor(state)
                 break
               }
               case 'title':
@@ -136,21 +132,17 @@ module.exports = class GithubIssueDetail extends LegacyService {
                   .map(i => i.name)
                   .join(' | ')
                 if (parsedData.labels.length === 1) {
-                  badgeData.colorscheme = null
-                  badgeData.colorB = makeColorB(
-                    parsedData.labels[0].color,
-                    queryParams
-                  )
+                  badgeData.colorscheme = undefined
+                  badgeData.colorB =
+                    queryParams.colorB || parsedData.labels[0].color
                 }
                 break
               case 'comments': {
                 badgeData.text[0] = getLabel('comments', queryParams)
                 const comments = (badgeData.text[1] = parsedData.comments)
-                badgeData.colorscheme = null
-                badgeData.colorB = makeColorB(
-                  githubCommentsColor(comments),
-                  queryParams
-                )
+                badgeData.colorscheme = undefined
+                badgeData.colorB =
+                  queryParams.coloB || githubCommentsColor(comments)
                 break
               }
               case 'age':

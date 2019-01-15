@@ -6,46 +6,52 @@ const snapshot = require('snap-shot-it')
 const eol = require('eol')
 const isSvg = require('is-svg')
 const makeBadge = require('./make-badge')
-const colorschemes = require('./colorscheme.json')
 
-function testColor(color = '') {
+function testColor(color = '', colorAttr = 'colorB') {
   return JSON.parse(
     makeBadge({
       text: ['name', 'Bob'],
-      colorB: color,
+      [colorAttr]: color,
       format: 'json',
       template: '_shields_test',
     })
-  ).colorB
+  ).color
 }
 
 describe('The badge generator', function() {
   describe('color test', function() {
     test(testColor, () => {
       // valid hex
-      given('#4c1').expect('#4c1')
-      given('#4C1').expect('#4C1')
-      given('#abc123').expect('#abc123')
-      given('#ABC123').expect('#ABC123')
+      forCases([
+        given('#4c1'),
+        given('#4C1'),
+        given('4C1'),
+        given('4c1'),
+      ]).expect('#4c1')
+      forCases([
+        given('#abc123'),
+        given('#ABC123'),
+        given('abc123'),
+        given('ABC123'),
+      ]).expect('#abc123')
       // valid rgb(a)
       given('rgb(0,128,255)').expect('rgb(0,128,255)')
       given('rgba(0,128,255,0)').expect('rgba(0,128,255,0)')
       // valid hsl(a)
       given('hsl(100, 56%, 10%)').expect('hsl(100, 56%, 10%)')
       given('hsla(25,20%,0%,0.1)').expect('hsla(25,20%,0%,0.1)')
-      // either a css named color or colorscheme
+      // CSS named color.
       given('papayawhip').expect('papayawhip')
-      given('red').expect(colorschemes['red'].colorB)
-      given('green').expect(colorschemes['green'].colorB)
-      given('blue').expect(colorschemes['blue'].colorB)
-      given('yellow').expect(colorschemes['yellow'].colorB)
+      // Shields named color.
+      given('red').expect('red')
+      given('green').expect('green')
+      given('blue').expect('blue')
+      given('yellow').expect('yellow')
 
       forCases(
         // invalid hex
         given('#123red'), // contains letter above F
         given('#red'), // contains letter above F
-        given('123456'), // contains no # symbol
-        given('123'), // contains no # symbol
         // invalid rgb(a)
         given('rgb(220,128,255,0.5)'), // has alpha
         given('rgba(0,0,255)'), // no alpha
@@ -59,6 +65,16 @@ describe('The badge generator', function() {
         given('brightmaroon'),
         given('cactus')
       ).expect(undefined)
+    })
+  })
+
+  describe('color aliases', function() {
+    test(testColor, () => {
+      forCases([
+        given('#4c1', 'color'),
+        given('#4c1', 'colorB'),
+        given('#4c1', 'colorscheme'),
+      ]).expect('#4c1')
     })
   })
 

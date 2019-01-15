@@ -106,12 +106,11 @@ function transformExample(inExample, index, ServiceClass) {
 
   let preview
   if (staticPreview) {
-    const badgeData = ServiceClass._makeBadgeData({}, staticPreview)
-    preview = {
-      label: badgeData.text[0],
-      message: `${badgeData.text[1]}`,
-      color: badgeData.colorscheme || badgeData.colorB,
-    }
+    const {
+      text: [label, message],
+      color,
+    } = ServiceClass._makeBadgeData({}, staticPreview)
+    preview = { label, message: `${message}`, color }
   } else {
     preview = {
       path: ServiceClass._makeFullUrl(previewUrl),

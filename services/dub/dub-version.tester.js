@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-const { colorScheme } = require('../test-helpers')
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
 } = require('../test-validators')
@@ -14,7 +13,7 @@ t.create('version (valid)')
     Joi.object().keys({
       name: 'dub',
       value: isVPlusDottedVersionNClausesWithOptionalSuffix,
-      colorB: Joi.equal(colorScheme.blue, colorScheme.orange),
+      color: Joi.equal('blue', 'orange'),
     })
   )
 

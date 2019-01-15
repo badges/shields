@@ -7,7 +7,6 @@ const {
   isVPlusDottedVersionNClauses,
   isVPlusDottedVersionNClausesWithOptionalSuffix,
 } = require('../test-validators')
-const { colorScheme } = require('../test-helpers')
 const {
   nuGetV2VersionJsonWithDash,
   nuGetV2VersionJsonFirstCharZero,
@@ -74,7 +73,7 @@ t.create('version (mocked, yellow badge)')
   .expectJSON({
     name: 'chocolatey',
     value: 'v1.2-beta',
-    colorB: colorScheme.yellow,
+    color: 'yellow',
   })
 
 t.create('version (mocked, orange badge)')
@@ -89,7 +88,7 @@ t.create('version (mocked, orange badge)')
   .expectJSON({
     name: 'chocolatey',
     value: 'v0.35',
-    colorB: colorScheme.orange,
+    color: 'orange',
   })
 
 t.create('version (mocked, blue badge)')
@@ -104,7 +103,7 @@ t.create('version (mocked, blue badge)')
   .expectJSON({
     name: 'chocolatey',
     value: 'v1.2.7',
-    colorB: colorScheme.blue,
+    color: 'blue',
   })
 
 t.create('version (not found)')
@@ -150,7 +149,7 @@ t.create('version (pre) (mocked, yellow badge)')
   .expectJSON({
     name: 'chocolatey',
     value: 'v1.2-beta',
-    colorB: colorScheme.yellow,
+    color: 'yellow',
   })
 
 t.create('version (pre) (mocked, orange badge)')
@@ -165,7 +164,7 @@ t.create('version (pre) (mocked, orange badge)')
   .expectJSON({
     name: 'chocolatey',
     value: 'v0.35',
-    colorB: colorScheme.orange,
+    color: 'orange',
   })
 
 t.create('version (pre) (mocked, blue badge)')
@@ -180,7 +179,7 @@ t.create('version (pre) (mocked, blue badge)')
   .expectJSON({
     name: 'chocolatey',
     value: 'v1.2.7',
-    colorB: colorScheme.blue,
+    color: 'blue',
   })
 
 t.create('version (pre) (not found)')

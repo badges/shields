@@ -14,12 +14,7 @@ const {
 const coalesce = require('../lib/coalesce')
 const validate = require('../lib/validate')
 const { checkErrorResponse } = require('../lib/error-helper')
-const {
-  makeLogo,
-  toArray,
-  makeColor,
-  setBadgeColor,
-} = require('../lib/badge-data')
+const { makeLogo, toArray } = require('../lib/badge-data')
 const trace = require('./trace')
 const { validateExample, transformExample } = require('./transform-example')
 const { assertValidCategory } = require('./categories')
@@ -389,14 +384,13 @@ class BaseService {
       }),
       logoWidth: +overrideLogoWidth,
       links: toArray(overrideLink || serviceLink),
-      colorA: makeColor(labelColor),
+      color,
+      labelColor,
       cacheLengthSeconds: coalesce(
         serviceCacheLengthSeconds,
         defaultCacheLengthSeconds
       ),
     }
-
-    setBadgeColor(badgeData, color)
 
     return badgeData
   }

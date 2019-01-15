@@ -3,7 +3,6 @@
 const Joi = require('joi')
 const t = (module.exports = require('../create-service-tester')())
 const { withRegex, isStarRating } = require('../test-validators')
-const { colorScheme } = require('../test-helpers')
 
 const isVscodeRating = withRegex(/[0-5].[0-9]{2}\/5?\s*\([0-9]*\)$/)
 
@@ -61,7 +60,7 @@ t.create('rating')
   .expectJSON({
     name: 'rating',
     value: '2.5/5 (10)',
-    colorB: colorScheme.yellowgreen,
+    color: 'yellowgreen',
   })
 
 t.create('zero rating')
@@ -91,7 +90,7 @@ t.create('zero rating')
   .expectJSON({
     name: 'rating',
     value: '0/5 (0)',
-    colorB: colorScheme.red,
+    color: 'red',
   })
 
 t.create('stars')
@@ -130,7 +129,7 @@ t.create('stars')
   .expectJSON({
     name: 'rating',
     value: '★★★★¾',
-    colorB: colorScheme.brightgreen,
+    color: 'brightgreen',
   })
 
 t.create('live: rating (legacy)')
