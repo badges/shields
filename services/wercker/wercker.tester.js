@@ -41,7 +41,7 @@ t.create('Build failed (mocked)')
       .get('/wercker/go-wercker-api/builds?limit=1')
       .reply(200, [{ status: 'finished', result: 'failed' }])
   )
-  .expectJSON({ name: 'build', value: 'failed', color: 'red' })
+  .expectJSON({ name: 'build', value: 'failing', color: 'red' })
 
 t.create('CI status by ID')
   .get('/ci/559e33c8e982fc615500b357.json')

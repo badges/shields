@@ -2,17 +2,14 @@
 
 const Joi = require('joi')
 const serverSecrets = require('../../lib/server-secrets')
+const { isBuildStatus } = require('../../lib/build-status')
 
 const keywords = ['vso', 'vsts', 'azure-devops']
 
 const schema = Joi.object({
-  message: Joi.equal(
-    'succeeded',
-    'partially suceeded',
-    'failed',
-    'unknown',
-    'set up now'
-  ).required(),
+  message: Joi.alternatives()
+    .try(isBuildStatus, Joi.equal('unknown'), Joi.equal('set up now'))
+    .required(),
 }).required()
 
 async function fetch(serviceInstance, { url, qs = {}, errorMessages }) {
@@ -26,26 +23,6 @@ async function fetch(serviceInstance, { url, qs = {}, errorMessages }) {
   return { status }
 }
 
-function render({ status }) {
-  switch (status) {
-    case 'succeeded':
-      return {
-        message: 'passing',
-        color: 'brightgreen',
-      }
-    case 'partially succeeded':
-      return {
-        message: 'passing',
-        color: 'orange',
-      }
-    case 'failed':
-      return {
-        message: 'failing',
-        color: 'red',
-      }
-  }
-}
-
 function getHeaders() {
   const headers = {}
   if (serverSecrets.azure_devops_token) {
@@ -57,4 +34,4 @@ function getHeaders() {
   return headers
 }
 
-module.exports = { keywords, fetch, render, getHeaders }
+module.exports = { keywords, fetch, getHeaders }

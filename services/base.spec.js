@@ -446,6 +446,14 @@ describe('BaseService', function() {
         const badgeData = DummyService._makeBadgeData({ style: 'pill' }, {})
         expect(badgeData.template).to.equal('pill')
       })
+
+      it('overrides the cache length', function() {
+        const badgeData = DummyService._makeBadgeData(
+          { style: 'pill' },
+          { cacheLengthSeconds: 123 }
+        )
+        expect(badgeData.cacheLengthSeconds).to.equal(123)
+      })
     })
 
     describe('Service data', function() {
@@ -542,6 +550,7 @@ describe('BaseService', function() {
         logoWidth: NaN,
         links: [],
         labelColor: undefined,
+        cacheLengthSeconds: undefined,
       })
     })
   })

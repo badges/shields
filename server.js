@@ -13,8 +13,8 @@ const config = require('config').util.toObject()
 if (+process.argv[2]) {
   config.public.bind.port = +process.argv[2]
 }
-if (+process.argv[3]) {
-  config.public.bind.address = +process.argv[3]
+if (process.argv[3]) {
+  config.public.bind.address = process.argv[3]
 }
 
 console.log('Configuration:')
