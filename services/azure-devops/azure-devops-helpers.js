@@ -8,7 +8,7 @@ const keywords = ['vso', 'vsts', 'azure-devops']
 const schema = Joi.object({
   message: Joi.equal(
     'succeeded',
-    'partially suceeded',
+    'partially succeeded',
     'failed',
     'unknown',
     'set up now'
