@@ -3,7 +3,7 @@
 const Joi = require('joi')
 
 const isAppveyorTestTotals = Joi.string().regex(
-  /^[0-9]+ passed(, [0-9]+ failed)?( [0-9]+ skipped)?$/
+  /^[0-9]+ passed(, [0-9]+ failed)?(, [0-9]+ skipped)?$/
 )
 
 const isCompactAppveyorTestTotals = Joi.string().regex(
