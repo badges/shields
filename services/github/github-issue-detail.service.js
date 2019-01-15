@@ -16,6 +16,11 @@ const {
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
 
+const commonExampleAttrs = {
+  keywords: ['issue', 'pullrequest', 'detail'],
+  documentation,
+}
+
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //
 // Tips for rewriting:
@@ -30,6 +35,8 @@ module.exports = class GithubIssueDetail extends LegacyService {
   static get route() {
     return {
       base: 'github/issues/detail',
+      pattern:
+        ':which(s|title|u|label|comments|age|last-update)/:user/:repo/:number(0-9+)',
     }
   }
 
@@ -37,45 +44,108 @@ module.exports = class GithubIssueDetail extends LegacyService {
     return [
       {
         title: 'GitHub issue/pull request state',
-        previewUrl: 's/badges/shields/979',
-        keywords: ['GitHub', 'issue', 'pullrequest', 'detail'],
-        documentation,
+        pattern: 's/:user/:repo/:number',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+          number: '979',
+        },
+        staticPreview: {
+          label: 'issue 979',
+          message: 'closed',
+          color: 'red',
+        },
+        ...commonExampleAttrs,
       },
       {
         title: 'GitHub issue/pull request title',
-        previewUrl: 'title/badges/shields/1290',
-        keywords: ['GitHub', 'issue', 'pullrequest', 'detail'],
-        documentation,
+        pattern: 'title/:user/:repo/:number',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+          number: '1290',
+        },
+        staticPreview: {
+          label: 'issue 1290',
+          message: 'Node 9 support',
+          color: 'lightgrey',
+        },
+        ...commonExampleAttrs,
       },
       {
         title: 'GitHub issue/pull request author',
-        previewUrl: 'u/badges/shields/979',
-        keywords: ['GitHub', 'issue', 'pullrequest', 'detail'],
-        documentation,
+        pattern: 'u/:user/:repo/:number',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+          number: '979',
+        },
+        staticPreview: {
+          label: 'author',
+          message: 'paulmelnikow',
+          color: 'lightgrey',
+        },
+        ...commonExampleAttrs,
       },
       {
         title: 'GitHub issue/pull request label',
-        previewUrl: 'label/badges/shields/979',
-        keywords: ['GitHub', 'issue', 'pullrqeuest', 'detail'],
-        documentation,
+        pattern: 'label/:user/:repo/:number',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+          number: '979',
+        },
+        staticPreview: {
+          label: 'label',
+          message: 'bug | developer-experience',
+          color: 'lightgrey',
+        },
+        ...commonExampleAttrs,
       },
       {
         title: 'GitHub issue/pull request comments',
-        previewUrl: 'comments/badges/shields/979',
-        keywords: ['GitHub', 'issue', 'pullrequest', 'detail'],
-        documentation,
+        pattern: 'comments/:user/:repo/:number',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+          number: '979',
+        },
+        staticPreview: {
+          label: 'comments',
+          message: '24',
+          color: 'yellow',
+        },
+        ...commonExampleAttrs,
       },
       {
         title: 'GitHub issue/pull request age',
-        previewUrl: 'age/badges/shields/979',
-        keywords: ['GitHub', 'issue', 'pullrequest', 'detail'],
-        documentation,
+        pattern: 'age/:user/:repo/:number',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+          number: '979',
+        },
+        staticPreview: {
+          label: 'created',
+          message: 'april 2017',
+          color: 'orange',
+        },
+        ...commonExampleAttrs,
       },
       {
         title: 'GitHub issue/pull request last update',
-        previewUrl: 'last-update/badges/shields/979',
-        keywords: ['GitHub', 'issue', 'pullrequest', 'detail'],
-        documentation,
+        pattern: 'last-update/:user/:repo/:number',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+          number: '979',
+        },
+        staticPreview: {
+          label: 'updated',
+          message: 'december 2017',
+          color: 'orange',
+        },
+        ...commonExampleAttrs,
       },
     ]
   }

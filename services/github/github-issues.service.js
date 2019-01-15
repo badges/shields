@@ -25,6 +25,8 @@ module.exports = class GithubIssues extends LegacyService {
   static get route() {
     return {
       base: 'github',
+      pattern:
+        ':which(issues|issues-closed|issues-pr|issues-pr-closed)-:raw(raw)?/:user/:repo/:label?',
     }
   }
 
@@ -32,74 +34,185 @@ module.exports = class GithubIssues extends LegacyService {
     return [
       {
         title: 'GitHub issues',
-        previewUrl: 'issues/badges/shields',
-        keywords: ['GitHub', 'issue'],
+        pattern: 'issues/:user/:repo',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+        },
+        staticPreview: {
+          label: 'issues',
+          message: '167 open',
+          color: 'yellow',
+        },
+        keywords: ['issue'],
         documentation,
       },
       {
         title: 'GitHub issues',
-        previewUrl: 'issues-raw/badges/shields',
-        keywords: ['GitHub', 'issue'],
-        documentation,
-      },
-      {
-        title: 'GitHub pull requests',
-        previewUrl: 'issues-pr/cdnjs/cdnjs',
-        keywords: ['GitHub', 'pullrequest', 'pr'],
-        documentation,
-      },
-      {
-        title: 'GitHub pull requests',
-        previewUrl: 'issues-pr-raw/cdnjs/cdnjs',
-        keywords: ['GitHub', 'pullrequest', 'pr'],
-        documentation,
-      },
-      {
-        title: 'GitHub closed issues',
-        previewUrl: 'issues-closed/badges/shields',
-        keywords: ['GitHub', 'issue'],
-        documentation,
-      },
-      {
-        title: 'GitHub closed issues',
-        previewUrl: 'issues-closed-raw/badges/shields',
-        keywords: ['GitHub', 'issue'],
-        documentation,
-      },
-      {
-        title: 'GitHub closed pull requests',
-        previewUrl: 'issues-pr-closed/cdnjs/cdnjs',
-        keywords: ['GitHub', 'pullrequest', 'pr'],
-        documentation,
-      },
-      {
-        title: 'GitHub closed pull requests',
-        previewUrl: 'issues-pr-closed-raw/cdnjs/cdnjs',
-        keywords: ['GitHub', 'pullrequest', 'pr'],
+        pattern: 'issues-raw/:user/:repo',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+        },
+        staticPreview: {
+          label: 'open issues',
+          message: '167',
+          color: 'yellow',
+        },
+        keywords: ['issue'],
         documentation,
       },
       {
         title: 'GitHub issues by-label',
-        previewUrl: 'issues/badges/shields/service-badge',
-        keywords: ['GitHub', 'issue', 'label'],
+        pattern: 'issues-raw/:user/:repo/:label',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+          label: 'service-badge',
+        },
+        staticPreview: {
+          label: 'service-badge issues',
+          message: '110 open',
+          color: 'yellow',
+        },
+        keywords: ['issue', 'label'],
         documentation,
       },
       {
         title: 'GitHub issues by-label',
-        previewUrl: 'issues-raw/badges/shields/service-badge',
-        keywords: ['GitHub', 'issue', 'label'],
+        pattern: 'issues-raw/:user/:repo/:label',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+          label: 'service-badge',
+        },
+        staticPreview: {
+          label: 'open service-badge issues',
+          message: '110',
+          color: 'yellow',
+        },
+        keywords: ['issue', 'label'],
+        documentation,
+      },
+      {
+        title: 'GitHub closed issues',
+        pattern: 'issues-closed/:user/:repo',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+        },
+        staticPreview: {
+          label: 'issues',
+          message: '899 closed',
+          color: 'yellow',
+        },
+        keywords: ['issue'],
+        documentation,
+      },
+      {
+        title: 'GitHub closed issues',
+        pattern: 'issues-closed-raw/:user/:repo',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+        },
+        staticPreview: {
+          label: 'closed issues',
+          message: '899',
+          color: 'yellow',
+        },
+        keywords: ['issue'],
+        documentation,
+      },
+      {
+        title: 'GitHub pull requests',
+        pattern: 'issues-pr/:user/:repo',
+        namedParams: {
+          user: 'cdnjs',
+          repo: 'cdnjs',
+        },
+        staticPreview: {
+          label: 'pull requests',
+          message: '136 open',
+          color: 'yellow',
+        },
+        keywords: ['pullrequest', 'pr'],
+        documentation,
+      },
+      {
+        title: 'GitHub pull requests',
+        pattern: 'issues-pr-raw/:user/:repo',
+        namedParams: {
+          user: 'cdnjs',
+          repo: 'cdnjs',
+        },
+        staticPreview: {
+          label: 'open pull requests',
+          message: '136',
+          color: 'yellow',
+        },
+        keywords: ['pullrequest', 'pr'],
+        documentation,
+      },
+      {
+        title: 'GitHub closed pull requests',
+        pattern: 'issues-pr-closed/:user/:repo',
+        namedParams: {
+          user: 'cdnjs',
+          repo: 'cdnjs',
+        },
+        staticPreview: {
+          label: 'pull requests',
+          message: '7k closed',
+          color: 'yellow',
+        },
+        keywords: ['pullrequest', 'pr'],
+        documentation,
+      },
+      {
+        title: 'GitHub closed pull requests',
+        namedParams: {
+          user: 'cdnjs',
+          repo: 'cdnjs',
+        },
+        staticPreview: {
+          label: 'closed pull requests',
+          message: '7k',
+          color: 'yellow',
+        },
+        keywords: ['pullrequest', 'pr'],
         documentation,
       },
       {
         title: 'GitHub pull requests by-label',
-        previewUrl: 'issues-pr/badges/shields/service-badge',
-        keywords: ['GitHub', 'pullrequests', 'label'],
+        pattern: 'issues-pr/:user/:repo/:label',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+          label: 'service-badge',
+        },
+        staticPreview: {
+          label: 'service-badge pull requests',
+          message: '8 open',
+          color: 'yellow',
+        },
+        keywords: ['pullrequests', 'pr', 'label'],
         documentation,
       },
       {
         title: 'GitHub pull requests by-label',
-        previewUrl: 'issues-pr-raw/badges/shields/service-badge',
-        keywords: ['GitHub', 'pullrequests', 'label'],
+        pattern: 'issues-pr-raw/:user/:repo/:label',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+          label: 'service-badge',
+        },
+        staticPreview: {
+          label: 'open service-badge pull requests',
+          message: '8',
+          color: 'yellow',
+        },
+        keywords: ['pullrequests', 'pr', 'label'],
         documentation,
       },
     ]
