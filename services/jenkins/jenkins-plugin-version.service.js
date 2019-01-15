@@ -27,7 +27,15 @@ module.exports = class JenkinsPlugin extends LegacyService {
     return [
       {
         title: 'Jenkins Plugins',
-        previewUrl: 'blueocean',
+        pattern: ':plugin',
+        namedParams: {
+          plugin: 'blueocean',
+        },
+        staticPreview: {
+          label: 'plugin',
+          message: 'v1.10.1',
+          color: 'blue',
+        },
       },
     ]
   }
