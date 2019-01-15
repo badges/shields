@@ -3,10 +3,14 @@
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const {
-  isBuildStatus,
-  isMetric,
-  isMetricOpenIssues,
-} = require('../test-validators')
+  mockBitbucketCreds,
+  mockBitbucketServerCreds,
+  restore,
+  user,
+  pass,
+} = require('./bitbucket-test-helpers')
+const { isMetric, isMetricOpenIssues } = require('../test-validators')
+const { isBuildStatus } = require('../../lib/build-status')
 
 const t = (module.exports = new ServiceTester({
   id: 'bitbucket',
@@ -85,6 +89,119 @@ t.create('pr (private repo)')
   .get('/pr/chris48s/example-private-repo.json')
   .expectJSON({ name: 'pull requests', value: 'private repo' })
 
+t.create('pr (server)')
+  .get('/pr/project/repo.json?server=https://bitbucket.mydomain.net')
+  .intercept(nock =>
+    nock('https://bitbucket.mydomain.net/rest/api/1.0/projects')
+      .get('/project/repos/repo/pull-requests')
+      .query({
+        state: 'OPEN',
+        limit: 100,
+        withProperties: false,
+        withAttributes: false,
+      })
+      .reply(200, { size: 42 })
+  )
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'pull requests',
+      value: isMetricOpenIssues,
+    })
+  )
+
+t.create('pr (server, invalid credentials)')
+  .get('/pr/project/repo.json?server=https://bitbucket.mydomain.net')
+  .intercept(nock =>
+    nock('https://bitbucket.mydomain.net/rest/api/1.0/projects')
+      .get('/project/repos/repo/pull-requests')
+      .query({
+        state: 'OPEN',
+        limit: 100,
+        withProperties: false,
+        withAttributes: false,
+      })
+      .reply(401)
+  )
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'pull requests',
+      value: 'invalid credentials',
+    })
+  )
+
+t.create('pr (server, private repo)')
+  .get('/pr/project/repo.json?server=https://bitbucket.mydomain.net')
+  .intercept(nock =>
+    nock('https://bitbucket.mydomain.net/rest/api/1.0/projects')
+      .get('/project/repos/repo/pull-requests')
+      .query({
+        state: 'OPEN',
+        limit: 100,
+        withProperties: false,
+        withAttributes: false,
+      })
+      .reply(403)
+  )
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'pull requests',
+      value: 'private repo',
+    })
+  )
+
+t.create('pr (server, not found)')
+  .get('/pr/project/repo.json?server=https://bitbucket.mydomain.net')
+  .intercept(nock =>
+    nock('https://bitbucket.mydomain.net/rest/api/1.0/projects')
+      .get('/project/repos/repo/pull-requests')
+      .query({
+        state: 'OPEN',
+        limit: 100,
+        withProperties: false,
+        withAttributes: false,
+      })
+      .reply(404)
+  )
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'pull requests',
+      value: 'not found',
+    })
+  )
+
+t.create('pr (auth)')
+  .before(mockBitbucketCreds)
+  .get('/pr/atlassian/python-bitbucket.json')
+  .intercept(nock =>
+    nock('https://bitbucket.org/api/2.0/repositories/')
+      .get(/.*/)
+      .basicAuth({ user, pass })
+      .reply(200, { size: 42 })
+  )
+  .finally(restore)
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'pull requests',
+      value: isMetricOpenIssues,
+    })
+  )
+
+t.create('pr (server, auth)')
+  .before(mockBitbucketServerCreds)
+  .get('/pr/project/repo.json?server=https://bitbucket.mydomain.net')
+  .intercept(nock =>
+    nock('https://bitbucket.mydomain.net/rest/api/1.0/projects')
+      .get(/.*/)
+      .basicAuth({ user, pass })
+      .reply(200, { size: 42 })
+  )
+  .finally(restore)
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'pull requests',
+      value: isMetricOpenIssues,
+    })
+  )
 // tests for Bitbucket Pipelines
 
 function bitbucketApiResponse(status) {

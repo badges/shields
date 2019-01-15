@@ -6,10 +6,16 @@ const {
   transformAndValidate,
   renderDynamicBadge,
 } = require('../dynamic-common')
+const {
+  isPackageJsonWithDependencies,
+  getDependencyVersion,
+} = require('../package-json-helpers')
 const { semver } = require('../validators')
 const { ConditionalGithubAuthService } = require('./github-auth-service')
 const { fetchJsonFromRepo } = require('./github-common-fetch')
 const { documentation } = require('./github-helpers')
+
+const keywords = ['npm', 'node']
 
 const versionSchema = Joi.object({
   version: semver,
@@ -35,10 +41,11 @@ class GithubPackageJsonVersion extends ConditionalGithubAuthService {
         namedParams: { user: 'IcedFrisby', repo: 'IcedFrisby' },
         staticPreview: this.render({ version: '2.0.0-alpha.2' }),
         documentation,
+        keywords,
       },
       {
         title: 'GitHub package.json version (branch)',
-        pattern: ':user/:repo/:branch*',
+        pattern: ':user/:repo/:branch',
         namedParams: {
           user: 'IcedFrisby',
           repo: 'IcedFrisby',
@@ -46,6 +53,7 @@ class GithubPackageJsonVersion extends ConditionalGithubAuthService {
         },
         staticPreview: this.render({ version: '2.0.0-alpha.2' }),
         documentation,
+        keywords,
       },
     ]
   }
@@ -67,6 +75,99 @@ class GithubPackageJsonVersion extends ConditionalGithubAuthService {
       filename: 'package.json',
     })
     return this.constructor.render({ version, branch })
+  }
+}
+
+class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthService {
+  static get category() {
+    return 'platform-support'
+  }
+
+  static get route() {
+    return {
+      base: 'github/package-json/dependency-version',
+      pattern:
+        ':user/:repo/:kind(dev|peer)?/:scope(@[^/]+)?/:packageName/:branch*',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'GitHub package.json dependency version (prod)',
+        pattern: ':user/:repo/:packageName',
+        namedParams: {
+          user: 'developit',
+          repo: 'microbundle',
+          packageName: 'rollup',
+        },
+        staticPreview: this.render({
+          dependency: 'rollup',
+          range: '^0.67.3',
+        }),
+        documentation,
+        keywords,
+      },
+      {
+        title: 'GitHub package.json dependency version (dev dep on branch)',
+        pattern: ':user/:repo/dev/:scope?/:packageName/:branch*',
+        namedParams: {
+          user: 'zeit',
+          repo: 'next.js',
+          branch: 'canary',
+          scope: '@babel',
+          packageName: 'preset-react',
+        },
+        staticPreview: this.render({
+          dependency: '@babel/preset-react',
+          range: '7.0.0',
+        }),
+        documentation,
+        keywords,
+      },
+    ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'dependency',
+    }
+  }
+
+  static render({ dependency, range }) {
+    return {
+      label: dependency,
+      message: range,
+      color: 'blue',
+    }
+  }
+
+  async handle({ user, repo, kind, branch = 'master', scope, packageName }) {
+    const {
+      dependencies,
+      devDependencies,
+      peerDependencies,
+    } = await fetchJsonFromRepo(this, {
+      schema: isPackageJsonWithDependencies,
+      user,
+      repo,
+      branch,
+      filename: 'package.json',
+    })
+
+    const wantedDependency = scope ? `${scope}/${packageName}` : packageName
+    const { range } = getDependencyVersion({
+      kind,
+      wantedDependency,
+      dependencies,
+      devDependencies,
+      peerDependencies,
+    })
+
+    return this.constructor.render({
+      dependency: wantedDependency,
+      range,
+    })
   }
 }
 
@@ -98,10 +199,11 @@ class DynamicGithubPackageJson extends ConditionalGithubAuthService {
           value: ['bundle', 'rollup', 'micro library'],
         }),
         documentation,
+        keywords,
       },
       {
         title: 'GitHub package.json dynamic',
-        pattern: ':key/:user/:repo/:branch*',
+        pattern: ':key/:user/:repo/:branch',
         namedParams: {
           key: 'keywords',
           user: 'developit',
@@ -114,6 +216,7 @@ class DynamicGithubPackageJson extends ConditionalGithubAuthService {
           branch: 'master',
         }),
         documentation,
+        keywords,
       },
     ]
   }
@@ -151,5 +254,6 @@ class DynamicGithubPackageJson extends ConditionalGithubAuthService {
 
 module.exports = {
   GithubPackageJsonVersion,
+  GithubPackageJsonDependencyVersion,
   DynamicGithubPackageJson,
 }

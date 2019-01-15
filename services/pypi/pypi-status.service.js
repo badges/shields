@@ -20,7 +20,9 @@ module.exports = class PypiStatus extends PypiBase {
     return [
       {
         title: 'PyPI - Status',
-        previewUrl: 'Django',
+        pattern: ':packageName',
+        namedParams: { packageName: 'Django' },
+        staticPreview: this.render({ status: 'stable' }),
         keywords: ['python'],
       },
     ]

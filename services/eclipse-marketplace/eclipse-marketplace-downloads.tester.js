@@ -5,7 +5,7 @@ const ServiceTester = require('../service-tester')
 const { isMetric, isMetricOverTimePeriod } = require('../test-validators')
 
 const t = (module.exports = new ServiceTester({
-  id: 'eclipse-marketplace-downloads',
+  id: 'EclipseMarketplaceDownloads',
   title: 'EclipseMarketplaceDownloads',
   pathPrefix: '/eclipse-marketplace',
 }))

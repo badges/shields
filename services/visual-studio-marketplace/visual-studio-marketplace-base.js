@@ -35,12 +35,15 @@ const extensionQuerySchema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class VsMarketplaceBase extends BaseJsonService {
+module.exports = class VisualStudioMarketplaceBase extends BaseJsonService {
   static get keywords() {
     return [
       'vscode',
       'visual studio',
       'azure devops',
+      'tfs',
+      'vsts',
+      'visual-studio-marketplace',
       'vs-marketplace',
       'vscode-marketplace',
     ]
