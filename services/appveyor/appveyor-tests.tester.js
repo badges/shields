@@ -3,19 +3,19 @@
 const Joi = require('joi')
 
 const isAppveyorTestTotals = Joi.string().regex(
-  /^(?:[0-9]+ (?:passed|skipped|failed)(?:, )?)+$/
+  /^[0-9]+ passed(, [0-9]+ failed)?( [0-9]+ skipped)?$/
 )
 
 const isCompactAppveyorTestTotals = Joi.string().regex(
-  /^(?:[0-9]* ?(?:✔|✘|➟) ?[0-9]*(?:, | \| )?)+$/
+  /^✔ [0-9]+( \| ✘ [0-9]+)?( \| ➟ [0-9]+)?$/
 )
 
 const isCustomAppveyorTestTotals = Joi.string().regex(
-  /^(?:[0-9]+ (?:good|bad|n\/a)(?:, )?)+$/
+  /^[0-9]+ good(, [0-9]+ bad)?(, [0-9]+ n\/a)?$/
 )
 
 const isCompactCustomAppveyorTestTotals = Joi.string().regex(
-  /^(?:[0-9]* ?(?:💃|🤦‍♀️|🤷) ?[0-9]*(?:, | \| )?)+$/
+  /^💃 [0-9]+( \| 🤦‍♀️ [0-9]+)?( \| 🤷 [0-9]+)?$/
 )
 
 const t = (module.exports = require('../create-service-tester')())
