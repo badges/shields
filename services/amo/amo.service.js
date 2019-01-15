@@ -157,6 +157,10 @@ class AmoUsers extends LegacyService {
 //
 // Do not base new services on this code.
 class Amo extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/amo\/(v|d|rating|stars|users)\/(.*)\.(svg|png|gif|jpg|json)$/,

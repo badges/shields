@@ -13,6 +13,10 @@ const { version: versionColor } = require('../../lib/color-formatters')
 //
 // Do not base new services on this code.
 module.exports = class CocoapodsVersionPlatformLicense extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/cocoapods\/(v|p|l)\/(.*)\.(svg|png|gif|jpg|json)$/,
