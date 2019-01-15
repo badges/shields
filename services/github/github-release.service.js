@@ -34,7 +34,6 @@ module.exports = class GithubRelease extends LegacyService {
       {
         title: 'GitHub release',
         pattern: 'release/:user/:repo',
-        previewUrl: 'release/qubyte/rubidium',
         namedParams: {
           user: 'qubyte',
           repo: 'rubidium',
