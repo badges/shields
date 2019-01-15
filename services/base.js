@@ -74,7 +74,7 @@ class BaseService {
    * the badges on the main shields.io website.
    */
   static get category() {
-    return 'unknown'
+    throw new Error(`Category not set for ${this.name}`)
   }
 
   /**
@@ -402,8 +402,6 @@ class BaseService {
   }
 
   static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
-    this.validateDefinition()
-
     const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
     camp.route(
       this._regex,

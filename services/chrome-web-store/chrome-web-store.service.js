@@ -144,6 +144,10 @@ class ChromeWebStoreRating extends LegacyService {
 //
 // Do not base new services on this code.
 class ChromeWebStore extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/chrome-web-store\/(v|d|users|price|rating|stars|rating-count)\/(.*)\.(svg|png|gif|jpg|json)$/,
