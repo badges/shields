@@ -43,6 +43,7 @@ const serviceDataSchema = Joi.object({
   // Generally services should not use these options, which are provided to
   // support the Endpoint badge.
   labelColor: Joi.string(),
+  style: Joi.string(),
 }).required()
 
 class BaseService {
@@ -330,7 +331,7 @@ class BaseService {
 
   static _makeBadgeData(overrides, serviceData) {
     const {
-      style,
+      style: overrideStyle,
       label: overrideLabel,
       logo: overrideLogo,
       logoColor: overrideLogoColor,
@@ -347,6 +348,7 @@ class BaseService {
       color: serviceColor,
       labelColor: serviceLabelColor,
       link: serviceLink,
+      style: serviceStyle,
     } = serviceData
 
     const {
@@ -369,6 +371,8 @@ class BaseService {
         defaultLabelColor
       )
     }
+
+    const style = coalesce(overrideStyle, serviceStyle)
 
     const badgeData = {
       text: [

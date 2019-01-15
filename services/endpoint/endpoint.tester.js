@@ -37,6 +37,27 @@ t.create('color and labelColor')
     colorA: '#e6e6fa',
   })
 
+t.create('style')
+  .get('.json?url=https://example.com/badge')
+  .only()
+  .intercept(nock =>
+    nock('https://example.com/')
+      .get('/badge')
+      .reply(200, {
+        schemaVersion: 1,
+        label: 'hey',
+        message: 'yo',
+        color: '#99c',
+        style: '_shields_test',
+      })
+  )
+  .expectJSON({
+    name: 'hey',
+    value: 'yo',
+    // colorB is only in _shields_test which is being specified by the service.
+    colorB: '#99c',
+  })
+
 t.create('Invalid schema (mocked)')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>
