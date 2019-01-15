@@ -2,6 +2,7 @@
 
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
+const { renderBuildStatusBadge } = require('../../lib/build-status')
 
 const bitbucketPipelinesSchema = Joi.object({
   values: Joi.array()
@@ -10,7 +11,13 @@ const bitbucketPipelinesSchema = Joi.object({
         state: Joi.object({
           name: Joi.string().required(),
           result: Joi.object({
-            name: Joi.string().required(),
+            name: Joi.equal(
+              'SUCCESSFUL',
+              'FAILED',
+              'ERROR',
+              'STOPPED',
+              'EXPIRED'
+            ),
           }).required(),
         }).required(),
       })
@@ -39,18 +46,7 @@ module.exports = class BitbucketPipelines extends BaseJsonService {
   }
 
   static render({ status }) {
-    const responses = {
-      SUCCESSFUL: { message: 'passing', color: 'brightgreen' },
-      FAILED: { message: 'failing', color: 'red' },
-      ERROR: { message: 'error', color: 'red' },
-      STOPPED: { message: 'stopped', color: 'yellow' },
-      EXPIRED: { message: 'expired', color: 'yellow' },
-      'never built': { message: 'never built', color: 'lightgrey' },
-    }
-    if (Object.keys(responses).includes(status)) {
-      return responses[status]
-    }
-    return { message: 'unknown', color: 'lightgrey' }
+    return renderBuildStatusBadge({ status: status.toLowerCase() })
   }
 
   static transform(data) {

@@ -3,11 +3,17 @@
 const Joi = require('joi')
 const BaseSvgScrapingService = require('../base-svg-scraping')
 const { NotFound } = require('../errors')
+const {
+  isBuildStatus,
+  renderBuildStatusBadge,
+} = require('../../lib/build-status')
 
 const keywords = ['documentation']
 
 const schema = Joi.object({
-  message: Joi.string().required(),
+  message: Joi.alternatives()
+    .try(isBuildStatus, Joi.equal('unknown'))
+    .required(),
 }).required()
 
 module.exports = class ReadTheDocs extends BaseSvgScrapingService {
@@ -48,20 +54,7 @@ module.exports = class ReadTheDocs extends BaseSvgScrapingService {
   }
 
   static render({ status }) {
-    let color
-    if (status === 'passing') {
-      color = 'brightgreen'
-    } else if (status === 'failing') {
-      color = 'red'
-    } else if (status === 'unknown') {
-      color = 'yellow'
-    } else {
-      color = 'red'
-    }
-    return {
-      message: status,
-      color,
-    }
+    return renderBuildStatusBadge({ status })
   }
 
   async handle({ project, version }) {
