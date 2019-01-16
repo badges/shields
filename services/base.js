@@ -334,9 +334,15 @@ class BaseService {
       logoColor: overrideLogoColor,
       logoWidth: overrideLogoWidth,
       link: overrideLink,
-      colorA: overrideLabelColor,
-      colorB: overrideColor,
     } = overrides
+    // Scoutcamp converts numeric query params to numbers. Convert them back.
+    let { colorB: overrideColor, colorA: overrideLabelColor } = overrides
+    if (typeof overrideColor === 'number') {
+      overrideColor = `${overrideColor}`
+    }
+    if (typeof overrideLabelColor === 'number') {
+      overrideLabelColor = `${overrideLabelColor}`
+    }
 
     const {
       isError,

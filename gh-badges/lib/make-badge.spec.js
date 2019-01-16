@@ -64,7 +64,7 @@ describe('The badge generator', function() {
         given('almostred'),
         given('brightmaroon'),
         given('cactus')
-      ).expect(undefined)
+      ).expect(null)
     })
   })
 

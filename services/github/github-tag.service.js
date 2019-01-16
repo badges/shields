@@ -27,6 +27,7 @@ module.exports = class GithubTag extends LegacyService {
   static get route() {
     return {
       base: 'github',
+      pattern: ':which(tag|tag-pre|tag-date)/:user/:repo',
     }
   }
 
@@ -34,17 +35,44 @@ module.exports = class GithubTag extends LegacyService {
     return [
       {
         title: 'GitHub tag (latest SemVer)',
-        previewUrl: 'tag/expressjs/express',
+        pattern: 'tag/:user/:repo',
+        namedParams: {
+          user: 'expressjs',
+          repo: 'express',
+        },
+        staticPreview: {
+          label: 'tag',
+          message: 'v4.16.4',
+          color: 'blue',
+        },
         documentation,
       },
       {
         title: 'GitHub tag (latest SemVer pre-release)',
-        previewUrl: 'tag-pre/expressjs/express',
+        pattern: 'tag-pre/:user/:repo',
+        namedParams: {
+          user: 'expressjs',
+          repo: 'express',
+        },
+        staticPreview: {
+          label: 'tag',
+          message: 'v5.0.0-alpha.7',
+          color: 'orange',
+        },
         documentation,
       },
       {
         title: 'GitHub tag (latest by date)',
-        previewUrl: 'tag-date/expressjs/express',
+        pattern: 'tag-date/:user/:repo',
+        namedParams: {
+          user: 'expressjs',
+          repo: 'express',
+        },
+        staticPreview: {
+          label: 'tag',
+          message: 'v5.0.0-alpha.7',
+          color: 'blue',
+        },
         documentation,
       },
     ]
