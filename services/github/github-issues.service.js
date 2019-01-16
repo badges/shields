@@ -64,7 +64,7 @@ module.exports = class GithubIssues extends LegacyService {
       },
       {
         title: 'GitHub issues by-label',
-        pattern: 'issues-raw/:user/:repo/:label',
+        pattern: 'issues/:user/:repo/:label',
         namedParams: {
           user: 'badges',
           repo: 'shields',
@@ -171,6 +171,7 @@ module.exports = class GithubIssues extends LegacyService {
       },
       {
         title: 'GitHub closed pull requests',
+        pattern: 'issues-pr-closed-raw/:user/:repo',
         namedParams: {
           user: 'cdnjs',
           repo: 'cdnjs',

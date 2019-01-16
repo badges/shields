@@ -26,6 +26,7 @@ class GithubCodeSize extends LegacyService {
   static get route() {
     return {
       base: 'github/languages/code-size',
+      pattern: ':user/:repo',
     }
   }
 
@@ -33,7 +34,6 @@ class GithubCodeSize extends LegacyService {
     return [
       {
         title: 'GitHub code size in bytes',
-        pattern: ':user/:repo',
         namedParams: {
           user: 'badges',
           repo: 'shields',
