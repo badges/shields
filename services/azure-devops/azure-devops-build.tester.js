@@ -43,3 +43,14 @@ t.create('unknown project')
 t.create('unknown user')
   .get('/azure-devops/build/notarealuser/foo/515.json')
   .expectJSON({ name: 'build', value: 'user or project not found' })
+
+t.create('partially succeeded build')
+  .get(
+    '/azure-devops/build/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/4.json'
+  )
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'build',
+      value: isBuildStatus,
+    })
+  )
