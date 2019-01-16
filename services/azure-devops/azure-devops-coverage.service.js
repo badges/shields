@@ -20,7 +20,7 @@ const documentation = `
   <code>https://img.shields.io/azure-devops/coverage/ORGANIZATION/PROJECT/DEFINITION_ID.svg</code>.
 </p>
 <p>
-  Optionally, you can specify a branch using the full branch path (refs/heads/master):
+  Optionally, you can specify a named branch:
   <code>https://img.shields.io/azure-devops/coverage/ORGANIZATION/PROJECT/DEFINITION_ID/NAMED_BRANCH.svg</code>.
 </p>
 `
