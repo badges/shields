@@ -9,7 +9,7 @@ const isSvg = require('is-svg')
 const path = require('path')
 const sinon = require('sinon')
 const portfinder = require('portfinder')
-const svg2img = require('../gh-badges/lib/svg-to-img')
+const svg2img = require('../../gh-badges/lib/svg-to-img')
 const { createTestServer } = require('./in-process-server-test-helpers')
 
 describe('The server', function() {
