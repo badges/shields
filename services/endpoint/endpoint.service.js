@@ -29,7 +29,9 @@ const endpointSchema = Joi.object({
   logoWidth: Joi.forbidden(),
   logoPosition: Joi.forbidden(),
   style: Joi.string(),
-  cacheSeconds: Joi.number(),
+  cacheSeconds: Joi.number()
+    .integer()
+    .min(0),
 })
   .oxor('namedLogo', 'logoSvg')
   .when(
@@ -91,6 +93,7 @@ module.exports = class Endpoint extends BaseJsonService {
       color,
       labelColor,
       style,
+      cacheSeconds,
     }
   }
 

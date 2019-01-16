@@ -51,7 +51,9 @@ t.create('style')
   .expectJSON({
     name: 'hey',
     value: 'yo',
-    // color is only in _shields_test which is being specified by the service.
+    // `color` is only in _shields_test which is being specified by the
+    // service, not the request. If the color key is here we know this has
+    // worked.
     color: '#99c',
   })
 
@@ -94,6 +96,62 @@ t.create('User color does not override error color')
       })
   )
   .expectJSON({ name: 'something is', value: 'not right', color: 'red' })
+
+t.create('cacheSeconds')
+  .get('.json?url=https://example.com/badge')
+  .intercept(nock =>
+    nock('https://example.com/')
+      .get('/badge')
+      .reply(200, {
+        schemaVersion: 1,
+        label: '',
+        message: 'yo',
+        cacheSeconds: 500,
+      })
+  )
+  .expectHeader('cache-control', 'max-age=500')
+
+t.create('user can override service cacheSeconds')
+  .get('.json?url=https://example.com/badge&maxAge=1000')
+  .intercept(nock =>
+    nock('https://example.com/')
+      .get('/badge')
+      .reply(200, {
+        schemaVersion: 1,
+        label: '',
+        message: 'yo',
+        cacheSeconds: 500,
+      })
+  )
+  .expectHeader('cache-control', 'max-age=1000')
+
+t.create('user does not override longer service cacheSeconds')
+  .get('.json?url=https://example.com/badge&maxAge=450')
+  .intercept(nock =>
+    nock('https://example.com/')
+      .get('/badge')
+      .reply(200, {
+        schemaVersion: 1,
+        label: '',
+        message: 'yo',
+        cacheSeconds: 500,
+      })
+  )
+  .expectHeader('cache-control', 'max-age=500')
+
+t.create('cacheSeconds does not override longer Shields default')
+  .get('.json?url=https://example.com/badge')
+  .intercept(nock =>
+    nock('https://example.com/')
+      .get('/badge')
+      .reply(200, {
+        schemaVersion: 1,
+        label: '',
+        message: 'yo',
+        cacheSeconds: 10,
+      })
+  )
+  .expectHeader('cache-control', 'max-age=300')
 
 t.create('Bad scheme')
   .get('.json?url=http://example.com/badge')

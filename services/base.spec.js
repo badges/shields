@@ -459,7 +459,7 @@ describe('BaseService', function() {
       it('overrides the cache length', function() {
         const badgeData = DummyService._makeBadgeData(
           { style: 'pill' },
-          { cacheLengthSeconds: 123 }
+          { cacheSeconds: 123 }
         )
         expect(badgeData.cacheLengthSeconds).to.equal(123)
       })

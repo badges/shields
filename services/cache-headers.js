@@ -12,7 +12,9 @@ const queryParamSchema = Joi.object({
   maxAge: Joi.number()
     .integer()
     .min(0),
-}).required()
+})
+  .unknown(true)
+  .required()
 
 function overrideCacheLengthFromQueryParams(queryParams) {
   try {
@@ -81,12 +83,14 @@ function setCacheHeaders({
   queryParams,
   res,
 }) {
+  console.log('queryParams', queryParams)
   const cacheLengthSeconds = coalesceCacheLength({
     cacheHeaderConfig,
     serviceDefaultCacheLengthSeconds,
     serviceOverrideCacheLengthSeconds,
     queryParams,
   })
+  console.log('cache len', cacheLengthSeconds)
   setHeadersForCacheLength(res, cacheLengthSeconds)
 }
 

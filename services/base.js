@@ -38,7 +38,7 @@ const serviceDataSchema = Joi.object({
   // Generally services should not use these options, which are provided to
   // support the Endpoint badge.
   labelColor: Joi.string(),
-  cacheLengthSeconds: Joi.number()
+  cacheSeconds: Joi.number()
     .integer()
     .min(0),
   style: Joi.string(),
@@ -352,7 +352,7 @@ class BaseService {
       color: serviceColor,
       labelColor: serviceLabelColor,
       link: serviceLink,
-      cacheLengthSeconds: serviceCacheLengthSeconds,
+      cacheSeconds: serviceCacheLengthSeconds,
       style: serviceStyle,
     } = serviceData
 
