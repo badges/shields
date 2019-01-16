@@ -106,7 +106,6 @@ function pullRequestClassGenerator(raw) {
       return [
         {
           title: 'Bitbucket open pull requests',
-          pattern: ':user/:repo',
           namedParams: {
             user: 'atlassian',
             repo: 'python-bitbucket',
@@ -120,7 +119,6 @@ function pullRequestClassGenerator(raw) {
             repo: 'bar',
           },
           queryParams: { server: 'https://bitbucket.mydomain.net' },
-          pattern: ':user/:repo',
           staticPreview: this.render({ prs: 42 }),
         },
       ]

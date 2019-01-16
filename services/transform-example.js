@@ -65,6 +65,13 @@ function validateExample(example, index, ServiceClass) {
         } at index ${index} also declares a dynamic previewUrl, which is not allowed`
       )
     }
+    if (pattern === ServiceClass.route.pattern) {
+      throw new Error(
+        `Example for ${
+          ServiceClass.name
+        } at index ${index} declares a redundant pattern which should be removed`
+      )
+    }
   } else if (!previewUrl) {
     throw Error(
       `Example for ${
