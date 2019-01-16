@@ -65,7 +65,7 @@ t.create('default branch coverage')
   )
 
 t.create('named branch')
-  .get(`${uriPrefix}/${windowsDefinitionId}/docs.json`)
+  .get(`${uriPrefix}/${windowsDefinitionId}/refs/heads/init.json`)
   .expectJSONTypes(
     Joi.object().keys({
       name: 'coverage',
