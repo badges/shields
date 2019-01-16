@@ -25,15 +25,26 @@ module.exports = class GithubSize extends LegacyService {
   static get route() {
     return {
       base: 'github/size',
+      pattern: ':user/:repo/:path*',
     }
   }
 
   static get examples() {
     return [
       {
-        title: 'GitHub repo size in bytes',
-        previewUrl: 'webcaetano/craft/build/phaser-craft.min.js',
-        keywords: ['GitHub', 'file', 'size'],
+        title: 'GitHub file size in bytes',
+        pattern: ':user/:repo/:path',
+        namedParams: {
+          user: 'webcaetano',
+          repo: 'craft',
+          path: 'build/phaser-craft.min.js',
+        },
+        staticPreview: {
+          label: 'size',
+          message: '9.17 kB',
+          color: 'green',
+        },
+        keywords: ['repo'],
         documentation,
       },
     ]

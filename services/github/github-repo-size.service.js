@@ -25,6 +25,7 @@ module.exports = class GithubRepoSize extends LegacyService {
   static get route() {
     return {
       base: 'github/repo-size',
+      pattern: ':user/:repo',
     }
   }
 
@@ -32,8 +33,15 @@ module.exports = class GithubRepoSize extends LegacyService {
     return [
       {
         title: 'GitHub repo size in bytes',
-        previewUrl: 'badges/shields',
-        keywords: ['GitHub', 'repo', 'size'],
+        namedParams: {
+          user: 'atom',
+          repo: 'atom',
+        },
+        staticPreview: {
+          label: 'repo size',
+          message: '312 MB',
+          color: 'blue',
+        },
         documentation,
       },
     ]

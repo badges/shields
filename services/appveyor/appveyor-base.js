@@ -3,10 +3,11 @@
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
 const { nonNegativeInteger } = require('../validators')
+const { isBuildStatus } = require('../../lib/build-status')
 
 const schema = Joi.object({
   build: Joi.object({
-    status: Joi.string().required(),
+    status: isBuildStatus,
     jobs: Joi.array()
       .items({
         testsCount: nonNegativeInteger,

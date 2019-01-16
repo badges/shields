@@ -229,8 +229,6 @@ static render({ status, result }) {
 We can also use nock to intercept API calls to return a known response body.
 
 ```js
-const { colorScheme } = require('../test-helpers')
-
 t.create('Build passed (mocked)')
   .get('/build/wercker/go-wercker-api.json?style=_shields_test')
   .intercept(nock =>
@@ -241,7 +239,7 @@ t.create('Build passed (mocked)')
   .expectJSON({
     name: 'build',
     value: 'passing',
-    colorB: colorScheme.brightgreen,
+    color: 'brightgreen',
   })
 
 t.create('Build failed (mocked)')

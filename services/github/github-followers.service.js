@@ -66,7 +66,7 @@ module.exports = class GithubFollowers extends LegacyService {
           }
           try {
             badgeData.text[1] = JSON.parse(buffer).followers
-            badgeData.colorscheme = null
+            badgeData.colorscheme = undefined
             badgeData.colorB = '#4183C4'
             sendBadge(format, badgeData)
           } catch (e) {

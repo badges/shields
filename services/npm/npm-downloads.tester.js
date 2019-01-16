@@ -3,7 +3,6 @@
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isMetric } = require('../test-validators')
-const { colorScheme: colorsB } = require('../test-helpers')
 
 const t = new ServiceTester({
   id: 'NpmDownloads',
@@ -18,7 +17,7 @@ t.create('total downloads of left-pad')
     Joi.object().keys({
       name: 'downloads',
       value: isMetric,
-      colorB: colorsB.brightgreen,
+      color: 'brightgreen',
     })
   )
 
@@ -35,7 +34,7 @@ t.create('total downloads of package with zero downloads')
         downloads: [{ downloads: 0, day: '2018-01-01' }],
       })
   )
-  .expectJSON({ name: 'downloads', value: '0', colorB: colorsB.red })
+  .expectJSON({ name: 'downloads', value: '0', color: 'red' })
 
 t.create('exact total downloads value')
   .get('/dt/exact-value.json')
@@ -57,7 +56,7 @@ t.create('total downloads when network is off')
   .expectJSON({
     name: 'downloads',
     value: 'inaccessible',
-    colorB: colorsB.lightgray,
+    color: 'lightgray',
   })
 
 t.create('total downloads of unknown package')
@@ -65,5 +64,5 @@ t.create('total downloads of unknown package')
   .expectJSON({
     name: 'downloads',
     value: 'package not found or too new',
-    colorB: colorsB.red,
+    color: 'red',
   })

@@ -53,7 +53,7 @@ class TwitterUrl extends LegacyService {
           ]
         }
         badgeData.text[1] = ''
-        badgeData.colorscheme = null
+        badgeData.colorscheme = undefined
         badgeData.colorB = data.colorB || '#55ACEE'
         sendBadge(format, badgeData)
       })
@@ -99,7 +99,7 @@ class TwitterFollow extends LegacyService {
         }
         const badgeData = getBadgeData(`follow @${user}`, data)
 
-        badgeData.colorscheme = null
+        badgeData.colorscheme = undefined
         badgeData.colorB = '#55ACEE'
         if (badgeData.template === 'social') {
           badgeData.logo = getLogo('twitter', data)

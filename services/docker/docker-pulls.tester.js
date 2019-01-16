@@ -12,17 +12,7 @@ t.create('docker pulls (valid, library)')
     Joi.object().keys({
       name: 'docker pulls',
       value: isMetric,
-      colorB: `#${dockerBlue}`,
-    })
-  )
-
-t.create('docker pulls (override colorB)')
-  .get('/_/ubuntu.json?colorB=fedcba&style=_shields_test')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'docker pulls',
-      value: isMetric,
-      colorB: '#fedcba',
+      color: `#${dockerBlue}`,
     })
   )
 

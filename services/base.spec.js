@@ -5,7 +5,6 @@ const { expect } = require('chai')
 const { test, given, forCases } = require('sazerac')
 const sinon = require('sinon')
 const trace = require('./trace')
-const { colorScheme: colorsB } = require('./test-helpers')
 
 const {
   NotFound,
@@ -386,7 +385,7 @@ describe('BaseService', function() {
           { colorA: '42f483' },
           { color: 'green' }
         )
-        expect(badgeData.colorA).to.equal('#42f483')
+        expect(badgeData.labelColor).to.equal('42f483')
       })
 
       it('overrides the color', function() {
@@ -394,7 +393,16 @@ describe('BaseService', function() {
           { colorB: '10ADED' },
           { color: 'red' }
         )
-        expect(badgeData.colorB).to.equal('#10ADED')
+        expect(badgeData.color).to.equal('10ADED')
+      })
+
+      it('converts a query-string numeric color to a string', function() {
+        const badgeData = DummyService._makeBadgeData(
+          // Scoutcamp converts numeric query params to numbers.
+          { colorB: 123 },
+          { color: 'green' }
+        )
+        expect(badgeData.color).to.equal('123')
       })
 
       it('does not override the color in case of an error', function() {
@@ -402,8 +410,7 @@ describe('BaseService', function() {
           { colorB: '10ADED' },
           { isError: true, color: 'lightgray' }
         )
-        expect(badgeData.colorB).to.be.undefined
-        expect(badgeData.colorscheme).to.equal('lightgray')
+        expect(badgeData.color).to.equal('lightgray')
       })
 
       it('overrides the logo', function() {
@@ -448,6 +455,14 @@ describe('BaseService', function() {
         const badgeData = DummyService._makeBadgeData({ style: 'pill' }, {})
         expect(badgeData.template).to.equal('pill')
       })
+
+      it('overrides the cache length', function() {
+        const badgeData = DummyService._makeBadgeData(
+          { style: 'pill' },
+          { cacheLengthSeconds: 123 }
+        )
+        expect(badgeData.cacheLengthSeconds).to.equal(123)
+      })
     })
 
     describe('Service data', function() {
@@ -473,12 +488,12 @@ describe('BaseService', function() {
 
       it('applies the service color', function() {
         const badgeData = DummyService._makeBadgeData({}, { color: 'red' })
-        expect(badgeData.colorscheme).to.equal('red')
+        expect(badgeData.color).to.equal('red')
       })
 
       it('applies the service label color', function() {
         const badgeData = DummyService._makeBadgeData({}, { labelColor: 'red' })
-        expect(badgeData.colorA).to.equal(colorsB.red)
+        expect(badgeData.labelColor).to.equal('red')
       })
     })
 
@@ -490,12 +505,12 @@ describe('BaseService', function() {
 
       it('uses the default color', function() {
         const badgeData = DummyService._makeBadgeData({}, {})
-        expect(badgeData.colorscheme).to.equal('lightgrey')
+        expect(badgeData.color).to.equal('lightgrey')
       })
 
-      it('provides no default colorA', function() {
+      it('provides no default label color', function() {
         const badgeData = DummyService._makeBadgeData({}, {})
-        expect(badgeData.colorA).to.be.undefined
+        expect(badgeData.labelColor).to.be.undefined
       })
     })
   })
@@ -538,12 +553,13 @@ describe('BaseService', function() {
       expect(mockSendBadge).to.have.been.calledOnce
       expect(mockSendBadge).to.have.been.calledWith(expectedFormat, {
         text: ['cat', 'Hello namedParamA: bar with queryParamA: ?'],
-        colorscheme: 'lightgrey',
+        color: 'lightgrey',
         template: undefined,
         logo: undefined,
         logoWidth: NaN,
         links: [],
-        colorA: undefined,
+        labelColor: undefined,
+        cacheLengthSeconds: undefined,
       })
     })
   })

@@ -19,6 +19,16 @@ t.create('top language')
     })
   )
 
+t.create('top language')
+  .get('/top/badges/shields.json?colorB=123&format=_shields_test')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'javascript',
+      value: Joi.string().regex(/^([1-9]?[0-9]\.[0-9]|100\.0)%$/),
+      color: '#123',
+    })
+  )
+
 t.create('top language with empty repository')
   .get('/top/pyvesb/emptyrepo.json')
   .expectJSON({ name: 'language', value: 'none' })

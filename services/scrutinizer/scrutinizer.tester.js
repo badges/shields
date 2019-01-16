@@ -4,7 +4,6 @@ const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isIntegerPercentage } = require('../test-validators')
 const { isBuildStatus } = require('../../lib/build-status')
-const { colorScheme } = require('../test-helpers')
 
 const t = new ServiceTester({ id: 'scrutinizer', title: 'Scrutinizer' })
 module.exports = t
@@ -108,5 +107,5 @@ t.create('build - unknown')
   .expectJSON({
     name: 'build',
     value: 'unknown',
-    colorB: colorScheme.lightgrey,
+    color: 'lightgrey',
   })
