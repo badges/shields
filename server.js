@@ -20,7 +20,7 @@ if (process.argv[3]) {
 console.log('Configuration:')
 console.dir(config.public, { depth: null })
 
-const Server = require('./lib/server')
+const Server = require('./core/server/server')
 const server = (module.exports = new Server(config))
 
 ;(async () => {
