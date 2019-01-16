@@ -1,7 +1,5 @@
 'use strict'
 
-const { colorScheme: colorsB } = require('../test-helpers')
-
 const t = (module.exports = require('../create-service-tester')())
 
 t.create('Valid schema (mocked)')
@@ -33,8 +31,8 @@ t.create('color and labelColor')
   .expectJSON({
     name: 'hey',
     value: 'yo',
-    colorB: '#f0dcc3',
-    colorA: '#e6e6fa',
+    color: '#f0dcc3',
+    labelColor: '#e6e6fa',
   })
 
 t.create('style')
@@ -53,8 +51,8 @@ t.create('style')
   .expectJSON({
     name: 'hey',
     value: 'yo',
-    // colorB is only in _shields_test which is being specified by the service.
-    colorB: '#99c',
+    // color is only in _shields_test which is being specified by the service.
+    color: '#99c',
   })
 
 t.create('Invalid schema (mocked)')
@@ -80,7 +78,7 @@ t.create('User color overrides success color')
         color: 'blue',
       })
   )
-  .expectJSON({ name: '', value: 'yo', colorB: '#101010' })
+  .expectJSON({ name: '', value: 'yo', color: '#101010' })
 
 t.create('User color does not override error color')
   .get('.json?url=https://example.com/badge&colorB=101010&style=_shields_test')
@@ -95,7 +93,7 @@ t.create('User color does not override error color')
         color: 'red',
       })
   )
-  .expectJSON({ name: 'something is', value: 'not right', colorB: colorsB.red })
+  .expectJSON({ name: 'something is', value: 'not right', color: 'red' })
 
 t.create('Bad scheme')
   .get('.json?url=http://example.com/badge')
