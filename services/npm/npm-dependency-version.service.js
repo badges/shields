@@ -39,7 +39,6 @@ module.exports = class NpmDependencyVersion extends NpmBase {
         pattern: ':packageName/dev/:dependency',
         namedParams: {
           packageName: 'react-boxplot',
-          kind: 'dev',
           dependency: 'eslint-config-standard',
         },
         staticPreview: this.render({

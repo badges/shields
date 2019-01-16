@@ -94,13 +94,13 @@ function createServiceFamily({
         {
           title,
           pattern: 'v/:packageName',
-          namedParams: { which: 'v', packageName: examplePackageName },
+          namedParams: { packageName: examplePackageName },
           staticPreview: this.render({ version: exampleVersion }),
         },
         {
           title: `${title} (with prereleases)`,
           pattern: 'vpre/:packageName',
-          namedParams: { which: 'vpre', packageName: examplePackageName },
+          namedParams: { packageName: examplePackageName },
           staticPreview: this.render({ version: examplePrereleaseVersion }),
         },
       ]
