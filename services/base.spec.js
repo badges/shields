@@ -396,6 +396,15 @@ describe('BaseService', function() {
         expect(badgeData.color).to.equal('10ADED')
       })
 
+      it('converts a query-string numeric color to a string', function() {
+        const badgeData = DummyService._makeBadgeData(
+          // Scoutcamp converts numeric query params to numbers.
+          { colorB: 123 },
+          { color: 'green' }
+        )
+        expect(badgeData.color).to.equal('123')
+      })
+
       it('does not override the color in case of an error', function() {
         const badgeData = DummyService._makeBadgeData(
           { colorB: '10ADED' },
