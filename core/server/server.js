@@ -8,12 +8,15 @@ const Camp = require('camp')
 const makeBadge = require('../../gh-badges/lib/make-badge')
 const GithubConstellation = require('../../services/github/github-constellation')
 const { loadServiceClasses } = require('../../services')
-const { makeBadgeData } = require('../lib/badge-data')
-const { staticBadgeUrl } = require('../lib/make-badge-url')
-const suggest = require('../lib/suggest')
-const { makeSend } = require('../lib/result-sender')
-const { handleRequest, clearRequestCache } = require('../lib/request-handler')
-const { clearRegularUpdateCache } = require('../lib/regular-update')
+const { makeBadgeData } = require('../../lib/badge-data')
+const { staticBadgeUrl } = require('../../lib/make-badge-url')
+const suggest = require('../../lib/suggest')
+const { makeSend } = require('../../lib/result-sender')
+const {
+  handleRequest,
+  clearRequestCache,
+} = require('../../lib/request-handler')
+const { clearRegularUpdateCache } = require('../../lib/regular-update')
 const analytics = require('./analytics')
 const log = require('./log')
 const sysMonitor = require('./monitor')
@@ -235,7 +238,7 @@ module.exports = class Server {
     log(`Server is starting up: ${this.baseUrl}`)
 
     const camp = (this.camp = Camp.start({
-      documentRoot: path.join(__dirname, '..', 'public'),
+      documentRoot: path.join(__dirname, '..', '..', 'public'),
       port,
       hostname,
       secure,
