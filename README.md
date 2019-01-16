@@ -107,6 +107,10 @@ You can read a [tutorial on how to add a badge][tutorial].
 4. Run `npm start` to start the server.
 5. Open `http://localhost:3000/` to view the frontend.
 
+Alternatively, you can start a readily configured online workspace using Gitpod:
+
+[![GitHub issues by-label](https://img.shields.io/badge/Gitpod-code%20now-blue.svg?logo=gitpod)](https://gitpod.io/#https://github.com/badges/shields)
+
 To generate the frontend using production cache settings &ndash; that is,
 badge preview URIs with `maxAge` &ndash; run `LONG_CACHE=true npm run build`.
 
