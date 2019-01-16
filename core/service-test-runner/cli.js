@@ -55,7 +55,7 @@ const minimist = require('minimist')
 const envFlag = require('node-env-flag')
 const readAllStdinSync = require('read-all-stdin-sync')
 const Runner = require('./runner')
-const { createTestServer } = require('./in-process-server-test-helpers')
+const { createTestServer } = require('../server/in-process-server-test-helpers')
 
 require('../../lib/unhandled-rejection.spec')
 
