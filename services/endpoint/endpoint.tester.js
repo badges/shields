@@ -39,7 +39,6 @@ t.create('color and labelColor')
 
 t.create('style')
   .get('.json?url=https://example.com/badge')
-  .only()
   .intercept(nock =>
     nock('https://example.com/')
       .get('/badge')
