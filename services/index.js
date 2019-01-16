@@ -48,6 +48,8 @@ function loadServiceClasses(servicePaths) {
     }
   })
 
+  serviceClasses.forEach(ServiceClass => ServiceClass.validateDefinition())
+
   return serviceClasses
 }
 

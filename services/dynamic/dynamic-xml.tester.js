@@ -3,7 +3,6 @@
 const Joi = require('joi')
 const { expect } = require('chai')
 const { isSemver } = require('../test-validators')
-const { colorScheme: colorsB } = require('../test-helpers')
 
 const t = (module.exports = require('../create-service-tester')())
 
@@ -12,7 +11,7 @@ t.create('No URL specified')
   .expectJSON({
     name: 'Package Name',
     value: 'invalid query parameter: url',
-    colorB: colorsB.red,
+    color: 'red',
   })
 
 t.create('No query specified')
@@ -22,7 +21,7 @@ t.create('No query specified')
   .expectJSON({
     name: 'Package Name',
     value: 'invalid query parameter: query',
-    colorB: colorsB.red,
+    color: 'red',
   })
 
 t.create('XML from url')
@@ -32,7 +31,7 @@ t.create('XML from url')
   .expectJSON({
     name: 'custom badge',
     value: 'IndieGala Helper',
-    colorB: colorsB.blue,
+    color: 'blue',
   })
 
 t.create('XML from uri (support uri query parameter)')
@@ -42,7 +41,7 @@ t.create('XML from uri (support uri query parameter)')
   .expectJSON({
     name: 'custom badge',
     value: 'IndieGala Helper',
-    colorB: colorsB.blue,
+    color: 'blue',
   })
 
 t.create('XML from url (attribute)')
@@ -98,7 +97,7 @@ t.create('XML from url | query doesnt exist')
   .expectJSON({
     name: 'custom badge',
     value: 'no result',
-    colorB: colorsB.lightgrey,
+    color: 'lightgray',
   })
 
 t.create('XML from url | query doesnt exist (attribute)')
@@ -108,7 +107,7 @@ t.create('XML from url | query doesnt exist (attribute)')
   .expectJSON({
     name: 'custom badge',
     value: 'no result',
-    colorB: colorsB.lightgrey,
+    color: 'lightgray',
   })
 
 t.create('XML from url | invalid url')
@@ -118,7 +117,7 @@ t.create('XML from url | invalid url')
   .expectJSON({
     name: 'custom badge',
     value: 'resource not found',
-    colorB: colorsB.red,
+    color: 'red',
   })
 
 t.create('XML from url | user color overrides default')
@@ -128,7 +127,7 @@ t.create('XML from url | user color overrides default')
   .expectJSON({
     name: 'custom badge',
     value: 'IndieGala Helper',
-    colorB: '#10ADED',
+    color: '#10aded',
   })
 
 t.create('XML from url | error color overrides default')
@@ -138,7 +137,7 @@ t.create('XML from url | error color overrides default')
   .expectJSON({
     name: 'custom badge',
     value: 'resource not found',
-    colorB: colorsB.red,
+    color: 'red',
   })
 
 t.create('XML from url | error color overrides user specified')
@@ -146,7 +145,7 @@ t.create('XML from url | error color overrides user specified')
   .expectJSON({
     name: 'custom badge',
     value: 'invalid query parameter: url',
-    colorB: colorsB.red,
+    color: 'red',
   })
 
 let headers

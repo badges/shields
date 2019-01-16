@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-const { colorScheme: colorsB } = require('../test-helpers')
 
 const t = (module.exports = require('../create-service-tester')())
 
@@ -27,7 +26,7 @@ t.create('Stars (named color override)')
     Joi.object().keys({
       name: 'stars',
       value: Joi.string().regex(/^\w+$/),
-      colorB: Joi.equal(colorsB.yellow).required(),
+      color: 'yellow',
     })
   )
 
@@ -37,6 +36,6 @@ t.create('Stars (hex color override)')
     Joi.object().keys({
       name: 'stars',
       value: Joi.string().regex(/^\w+$/),
-      colorB: Joi.equal('#abcdef').required(),
+      color: '#abcdef',
     })
   )

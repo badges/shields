@@ -14,12 +14,7 @@ const {
 const coalesce = require('../lib/coalesce')
 const validate = require('../lib/validate')
 const { checkErrorResponse } = require('../lib/error-helper')
-const {
-  makeLogo,
-  toArray,
-  makeColor,
-  setBadgeColor,
-} = require('../lib/badge-data')
+const { makeLogo, toArray } = require('../lib/badge-data')
 const trace = require('./trace')
 const { validateExample, transformExample } = require('./transform-example')
 const { assertValidCategory } = require('./categories')
@@ -43,6 +38,9 @@ const serviceDataSchema = Joi.object({
   // Generally services should not use these options, which are provided to
   // support the Endpoint badge.
   labelColor: Joi.string(),
+  cacheLengthSeconds: Joi.number()
+    .integer()
+    .min(0),
 }).required()
 
 class BaseService {
@@ -71,7 +69,7 @@ class BaseService {
    * the badges on the main shields.io website.
    */
   static get category() {
-    return 'unknown'
+    throw new Error(`Category not set for ${this.name}`)
   }
 
   /**
@@ -347,6 +345,7 @@ class BaseService {
       color: serviceColor,
       labelColor: serviceLabelColor,
       link: serviceLink,
+      cacheLengthSeconds: serviceCacheLengthSeconds,
     } = serviceData
 
     const {
@@ -355,6 +354,7 @@ class BaseService {
       label: defaultLabel,
       labelColor: defaultLabelColor,
     } = this.defaultBadgeData
+    const defaultCacheLengthSeconds = this._cacheLength
 
     let color, labelColor
     if (isError) {
@@ -384,17 +384,18 @@ class BaseService {
       }),
       logoWidth: +overrideLogoWidth,
       links: toArray(overrideLink || serviceLink),
-      colorA: makeColor(labelColor),
+      color,
+      labelColor,
+      cacheLengthSeconds: coalesce(
+        serviceCacheLengthSeconds,
+        defaultCacheLengthSeconds
+      ),
     }
-
-    setBadgeColor(badgeData, color)
 
     return badgeData
   }
 
   static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
-    this.validateDefinition()
-
     const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
     camp.route(
       this._regex,

@@ -3,7 +3,6 @@
 const Joi = require('joi')
 const t = (module.exports = require('../create-service-tester')())
 const { withRegex } = require('../test-validators')
-const { colorScheme } = require('../test-helpers')
 
 const isMarketplaceVersion = withRegex(/^v(\d+\.\d+\.\d+)(\.\d+)?$/)
 
@@ -43,7 +42,7 @@ t.create('version')
   .expectJSON({
     name: 'version',
     value: 'v1.0.0',
-    colorB: colorScheme.blue,
+    color: 'blue',
   })
 
 t.create('pre-release version')
@@ -73,7 +72,7 @@ t.create('pre-release version')
   .expectJSON({
     name: 'version',
     value: 'v0.3.8',
-    colorB: colorScheme.orange,
+    color: 'orange',
   })
 
 t.create('live: version (legacy)')

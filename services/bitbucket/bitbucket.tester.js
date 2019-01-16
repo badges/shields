@@ -298,11 +298,11 @@ t.create('build result (expired)')
   )
   .expectJSON({ name: 'build', value: 'expired' })
 
-t.create('build result (unknown)')
+t.create('build result (unexpected status)')
   .get('/pipelines/atlassian/adf-builder-javascript.json')
   .intercept(nock =>
     nock('https://api.bitbucket.org')
       .get(/^\/2.0\/.*/)
       .reply(200, bitbucketApiResponse('NEW_AND_UNEXPECTED'))
   )
-  .expectJSON({ name: 'build', value: 'unknown' })
+  .expectJSON({ name: 'build', value: 'invalid response data' })

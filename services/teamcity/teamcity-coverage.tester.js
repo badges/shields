@@ -1,8 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-
-const { colorScheme } = require('../test-helpers')
 const { isIntegerPercentage } = require('../test-validators')
 const {
   mockTeamCityCreds,
@@ -10,6 +8,7 @@ const {
   user,
   restore,
 } = require('./teamcity-test-helpers')
+
 const t = (module.exports = require('../create-service-tester')())
 
 t.create('live: valid buildId')
@@ -80,7 +79,7 @@ t.create('zero lines covered')
   .expectJSON({
     name: 'coverage',
     value: '0%',
-    colorB: colorScheme.red,
+    color: 'red',
   })
 
 t.create('with auth, lines covered')
@@ -113,5 +112,5 @@ t.create('with auth, lines covered')
   .expectJSON({
     name: 'coverage',
     value: '82%',
-    colorB: colorScheme.yellowgreen,
+    color: 'yellowgreen',
   })
