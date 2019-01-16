@@ -102,7 +102,7 @@ if (stdinOption && onlyOption) {
   onlyServices = onlyOption.split(',')
 }
 
-if (typeof onlyServices === 'undefined' || onlyServices.includes('*')) {
+if (typeof onlyServices === 'undefined' || onlyServices.includes('*****')) {
   console.info('Running all service tests.')
 } else if (onlyServices.length === 0) {
   console.info('No service tests to run. Exiting.')
