@@ -1,7 +1,7 @@
 'use strict'
 
 const BaseStaticService = require('../base-static')
-const { escapeFormat } = require('../../lib/path-helpers')
+const { escapeFormat } = require('../../core/badge-urls/path-helpers')
 
 module.exports = class StaticBadge extends BaseStaticService {
   static get category() {
