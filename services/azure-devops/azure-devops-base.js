@@ -46,9 +46,7 @@ module.exports = class AzureDevOpsBase extends BaseJsonService {
     }
 
     if (branch) {
-      options.qs.branchName = branch.startsWith('refs/heads/')
-        ? branch
-        : `refs/heads/${branch}`
+      options.qs.branchName = `refs/heads/${branch}`
     }
 
     const json = await this.fetch({
