@@ -107,9 +107,9 @@ You can read a [tutorial on how to add a badge][tutorial].
 4. Run `npm start` to start the server.
 5. Open `http://localhost:3000/` to view the frontend.
 
-Shields has experimental support for Gitpod, a pre-configured development environment that
-runs in your browser. To use Gitpod, click the button below and sign in with GitHub.
-Gitpod also offers a browser add-on, though it is not required.
+Shields has experimental support for [Gitpod Beta][gitpod], a pre-configured development
+environment that runs in your browser. To use Gitpod, click the button below and
+sign in with GitHub. Gitpod also offers a browser add-on, though it is not required.
 
 [![Edit with Gitpod](https://img.shields.io/badge/Gitpod-code%20now-blue.svg?logo=gitpod)](https://gitpod.io/#https://github.com/badges/shields)
 
@@ -129,6 +129,7 @@ The server can be configured to use [Sentry][] ([configuration][sentry configura
 Daily tests, including a full run of the service tests and overall code coverage, are run via [badges/daily-tests][daily-tests].
 
 [package manager]: https://nodejs.org/en/download/package-manager/
+[gitpod]: https://www.gitpod.io/
 [snapshot tests]: https://glebbahmutov.com/blog/snapshot-testing/
 [prometheus]: https://prometheus.io/
 [prometheus configuration]: doc/self-hosting.md#prometheus
