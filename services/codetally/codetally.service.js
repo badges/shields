@@ -41,7 +41,6 @@ module.exports = class Codetally extends BaseJsonService {
     return [
       {
         title: 'Codetally',
-        pattern: ':owner/:repo',
         namedParams: {
           owner: 'triggerman722',
           repo: 'colorstrap',
