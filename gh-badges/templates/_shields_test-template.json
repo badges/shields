@@ -1,7 +1,5 @@
 {
-{{?it.color}}
-  "color": {{=JSON.stringify(it.color)}},
-{{?}}
+  "color": {{=JSON.stringify(it.color || null)}},
 {{?it.labelColor}}
   "labelColor": {{=JSON.stringify(it.labelColor)}},
 {{?}}

@@ -34,11 +34,10 @@ module.exports = class CIIBestPracticesService extends BaseJsonService {
     return [
       {
         title: 'CII Best Practices Level',
+        pattern: 'level/:projectId',
         namedParams: {
-          metric: 'level',
           projectId: '1',
         },
-        pattern: 'level/:projectId',
         staticPreview: this.render({
           message: 'gold',
           color: '#E9C504',
@@ -47,11 +46,10 @@ module.exports = class CIIBestPracticesService extends BaseJsonService {
       },
       {
         title: 'CII Best Practices Tiered Percentage',
+        pattern: 'percentage/:projectId',
         namedParams: {
-          metric: 'percentage',
           projectId: '29',
         },
-        pattern: 'percentage/:projectId',
         staticPreview: this.render({
           message: '107%',
           color: 'brightgreen',
@@ -60,11 +58,10 @@ module.exports = class CIIBestPracticesService extends BaseJsonService {
       },
       {
         title: 'CII Best Practices Summary',
+        pattern: 'summary/:projectId',
         namedParams: {
-          metric: 'summary',
           projectId: '33',
         },
-        pattern: 'summary/:projectId',
         staticPreview: this.render({
           message: 'in progress 94%',
           color: '#C4C21D',

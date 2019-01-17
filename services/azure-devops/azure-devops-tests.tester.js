@@ -13,7 +13,7 @@ const mockBadgeUriPath = `${uriPrefix}/${definitionId}`
 const mockBadgeUri = `${mockBadgeUriPath}.json`
 const mockBranchBadgeUri = `${mockBadgeUriPath}/master.json`
 const mockLatestBuildApiUriPath = `/build/builds?definitions=${definitionId}&%24top=1&statusFilter=completed&api-version=5.0-preview.4`
-const mockLatestBranchBuildApiUriPath = `/build/builds?definitions=${definitionId}&%24top=1&statusFilter=completed&api-version=5.0-preview.4&branch=master`
+const mockLatestBranchBuildApiUriPath = `/build/builds?definitions=${definitionId}&%24top=1&statusFilter=completed&api-version=5.0-preview.4&branchName=refs%2Fheads%2Fmaster`
 const mockNonExistentBuildApiUriPath = `/build/builds?definitions=${nonExistentDefinitionId}&%24top=1&statusFilter=completed&api-version=5.0-preview.4`
 const mockTestResultSummaryApiUriPath = `/test/ResultSummaryByBuild?buildId=${buildId}`
 const latestBuildResponse = {
