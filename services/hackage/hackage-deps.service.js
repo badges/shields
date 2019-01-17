@@ -18,6 +18,7 @@ module.exports = class HackageDeps extends LegacyService {
   static get route() {
     return {
       base: 'hackage-deps/v',
+      pattern: ':packageName',
     }
   }
 
@@ -25,7 +26,12 @@ module.exports = class HackageDeps extends LegacyService {
     return [
       {
         title: 'Hackage-Deps',
-        previewUrl: 'lens',
+        namedParams: { packageName: 'lens' },
+        staticPreview: {
+          label: 'dependencies',
+          message: 'up to date',
+          color: 'brightgreen',
+        },
       },
     ]
   }
