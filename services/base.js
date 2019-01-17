@@ -398,7 +398,13 @@ class BaseService {
         serviceNamedLogo,
         style === 'social' ? defaultNamedLogo : undefined
       ),
-      color: coalesce(overrideLogoColor, serviceLogoColor),
+      color: coalesce(
+        overrideLogoColor,
+        // Ignore `serviceLogoColor` when logo is overridden on querystring.
+        // If the logo has been changed it does not make sense to inherit the
+        // color.
+        overrideNamedLogo ? undefined : serviceLogoColor
+      ),
     })
 
     const badgeData = {
@@ -422,7 +428,7 @@ class BaseService {
         defaultLabelColor
       ),
       template: style,
-      logo: overrideLogoSvg ? overrideLogoSvg : namedLogoSvg,
+      logo: overrideLogoSvg || namedLogoSvg,
       logoWidth: +overrideLogoWidth,
       links: toArray(overrideLink || serviceLink),
       cacheLengthSeconds: coalesce(

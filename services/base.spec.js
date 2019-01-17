@@ -416,7 +416,7 @@ describe('BaseService', function() {
 
       it('overrides the logo', function() {
         const badgeData = DummyService._makeBadgeData(
-          { logo: 'github', style: 'social' },
+          { logo: 'github' },
           { namedLogo: 'appveyor' }
         )
         // .not.be.empty for confidence that nothing has changed with `getShieldsIcon()`.
@@ -433,10 +433,19 @@ describe('BaseService', function() {
           .not.be.empty
       })
 
+      it("when the logo is overridden, it ignores the service's logo color", function() {
+        const badgeData = DummyService._makeBadgeData(
+          { logo: 'github' },
+          { namedLogo: 'appveyor', logoColor: 'red' }
+        )
+        expect(badgeData.logo).to.equal(getShieldsIcon('github')).and.not.be
+          .empty
+      })
+
       it("overrides the service logo's color", function() {
         const badgeData = DummyService._makeBadgeData(
           { logoColor: 'blue' },
-          { namedLogo: 'github' }
+          { namedLogo: 'github', logoColor: 'red' }
         )
         expect(badgeData.logo).to.equal(getShieldsIcon('github', 'blue')).and
           .not.be.empty
