@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import {
   badgeUrlFromPath,
   badgeUrlFromPattern,
-} from '../../../lib/make-badge-url'
+} from '../../../core/badge-urls/make-badge-url'
 import { advertisedStyles } from '../../../supported-features.json'
 import generateAllMarkup from '../../lib/generate-image-markup'
 import { Snippet } from '../snippet'
