@@ -170,7 +170,7 @@ export default class MarkupModal extends React.Component {
     return documentation ? (
       <div>
         <h4>Documentation</h4>
-        <div dangerouslySetInnerHTML={{ __html: documentation }} />
+        <div dangerouslySetInnerHTML={documentation} />
       </div>
     ) : null
   }
