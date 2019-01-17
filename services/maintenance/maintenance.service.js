@@ -18,6 +18,7 @@ module.exports = class Maintenance extends LegacyService {
   static get route() {
     return {
       base: 'maintenance',
+      pattern: ':maintained(yes|no)/:year(\\d{4})',
     }
   }
 
@@ -25,7 +26,17 @@ module.exports = class Maintenance extends LegacyService {
     return [
       {
         title: 'Maintenance',
-        previewUrl: 'yes/2017',
+        pattern: ':maintained/:year',
+        namedParams: {
+          maintained: 'yes',
+          year: '2019',
+        },
+        staticPreview: {
+          label: 'yes',
+          message: '2019',
+          color: 'brightgreen',
+        },
+        keywords: ['maintained'],
       },
     ]
   }
