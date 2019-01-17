@@ -4,7 +4,7 @@ const Joi = require('joi')
 const { expect } = require('chai')
 const { test, given, forCases } = require('sazerac')
 const sinon = require('sinon')
-const { getShieldsIcon } = require('../lib/badge-data')
+const { getShieldsIcon } = require('../lib/logos')
 const trace = require('./trace')
 
 const {
@@ -34,7 +34,7 @@ class DummyService extends BaseService {
   }
 
   static get defaultBadgeData() {
-    return { label: 'cat' }
+    return { label: 'cat', namedLogo: 'appveyor' }
   }
 
   static get examples() {
@@ -415,23 +415,49 @@ describe('BaseService', function() {
       })
 
       it('overrides the logo', function() {
-        const expLogo =
-          'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMTIgMTIgNDAgNDAiPgo8cGF0aCBmaWxsPSIjMzMzMzMzIiBkPSJNMzIsMTMuNGMtMTAuNSwwLTE5LDguNS0xOSwxOWMwLDguNCw1LjUsMTUuNSwxMywxOGMxLDAuMiwxLjMtMC40LDEuMy0wLjljMC0wLjUsMC0xLjcsMC0zLjIgYy01LjMsMS4xLTYuNC0yLjYtNi40LTIuNkMyMCw0MS42LDE4LjgsNDEsMTguOCw0MWMtMS43LTEuMiwwLjEtMS4xLDAuMS0xLjFjMS45LDAuMSwyLjksMiwyLjksMmMxLjcsMi45LDQuNSwyLjEsNS41LDEuNiBjMC4yLTEuMiwwLjctMi4xLDEuMi0yLjZjLTQuMi0wLjUtOC43LTIuMS04LjctOS40YzAtMi4xLDAuNy0zLjcsMi01LjFjLTAuMi0wLjUtMC44LTIuNCwwLjItNWMwLDAsMS42LTAuNSw1LjIsMiBjMS41LTAuNCwzLjEtMC43LDQuOC0wLjdjMS42LDAsMy4zLDAuMiw0LjcsMC43YzMuNi0yLjQsNS4yLTIsNS4yLTJjMSwyLjYsMC40LDQuNiwwLjIsNWMxLjIsMS4zLDIsMywyLDUuMWMwLDcuMy00LjUsOC45LTguNyw5LjQgYzAuNywwLjYsMS4zLDEuNywxLjMsMy41YzAsMi42LDAsNC42LDAsNS4yYzAsMC41LDAuNCwxLjEsMS4zLDAuOWM3LjUtMi42LDEzLTkuNywxMy0xOC4xQzUxLDIxLjksNDIuNSwxMy40LDMyLDEzLjR6Ii8+Cjwvc3ZnPgo='
         const badgeData = DummyService._makeBadgeData(
           { logo: 'github', style: 'social' },
-          {}
+          { namedLogo: 'appveyor' }
         )
-        expect(badgeData.logo).to.equal(expLogo)
+        // .not.be.empty for confidence that nothing has changed with `getShieldsIcon()`.
+        expect(badgeData.logo).to.equal(getShieldsIcon('github')).and.not.be
+          .empty
       })
 
-      it('overrides the logo with color', function() {
-        const expLogo =
-          'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMTIgMTIgNDAgNDAiPgo8cGF0aCBmaWxsPSIjMDA3ZWM2IiBkPSJNMzIsMTMuNGMtMTAuNSwwLTE5LDguNS0xOSwxOWMwLDguNCw1LjUsMTUuNSwxMywxOGMxLDAuMiwxLjMtMC40LDEuMy0wLjljMC0wLjUsMC0xLjcsMC0zLjIgYy01LjMsMS4xLTYuNC0yLjYtNi40LTIuNkMyMCw0MS42LDE4LjgsNDEsMTguOCw0MWMtMS43LTEuMiwwLjEtMS4xLDAuMS0xLjFjMS45LDAuMSwyLjksMiwyLjksMmMxLjcsMi45LDQuNSwyLjEsNS41LDEuNiBjMC4yLTEuMiwwLjctMi4xLDEuMi0yLjZjLTQuMi0wLjUtOC43LTIuMS04LjctOS40YzAtMi4xLDAuNy0zLjcsMi01LjFjLTAuMi0wLjUtMC44LTIuNCwwLjItNWMwLDAsMS42LTAuNSw1LjIsMiBjMS41LTAuNCwzLjEtMC43LDQuOC0wLjdjMS42LDAsMy4zLDAuMiw0LjcsMC43YzMuNi0yLjQsNS4yLTIsNS4yLTJjMSwyLjYsMC40LDQuNiwwLjIsNWMxLjIsMS4zLDIsMywyLDUuMWMwLDcuMy00LjUsOC45LTguNyw5LjQgYzAuNywwLjYsMS4zLDEuNywxLjMsMy41YzAsMi42LDAsNC42LDAsNS4yYzAsMC41LDAuNCwxLjEsMS4zLDAuOWM3LjUtMi42LDEzLTkuNywxMy0xOC4xQzUxLDIxLjksNDIuNSwxMy40LDMyLDEzLjR6Ii8+Cjwvc3ZnPgo='
+      it('overrides the logo with a color', function() {
         const badgeData = DummyService._makeBadgeData(
           { logo: 'github', logoColor: 'blue' },
-          {}
+          { namedLogo: 'appveyor' }
         )
-        expect(badgeData.logo).to.equal(expLogo)
+        expect(badgeData.logo).to.equal(getShieldsIcon('github', 'blue')).and
+          .not.be.empty
+      })
+
+      it("overrides the service logo's color", function() {
+        const badgeData = DummyService._makeBadgeData(
+          { logoColor: 'blue' },
+          { namedLogo: 'github' }
+        )
+        expect(badgeData.logo).to.equal(getShieldsIcon('github', 'blue')).and
+          .not.be.empty
+      })
+
+      it('overrides the logo with custom svg', function() {
+        const logoSvg = 'data:image/svg+xml;base64,PHN2ZyB4bWxu'
+        const badgeData = DummyService._makeBadgeData(
+          { logo: logoSvg },
+          { namedLogo: 'appveyor' }
+        )
+        expect(badgeData.logo).to.equal(logoSvg)
+      })
+
+      it('ignores the color when custom svg is provided', function() {
+        const logoSvg = 'data:image/svg+xml;base64,PHN2ZyB4bWxu'
+        const badgeData = DummyService._makeBadgeData(
+          { logo: logoSvg, logoColor: 'brightgreen' },
+          { namedLogo: 'appveyor' }
+        )
+        expect(badgeData.logo).to.equal(logoSvg)
       })
 
       it('overrides the logoWidth', function() {
@@ -492,12 +518,23 @@ describe('BaseService', function() {
         expect(badgeData.color).to.equal('red')
       })
 
-      it('applies a named logo from the service', function() {
+      it('applies the named logo', function() {
         const badgeData = DummyService._makeBadgeData(
           {},
-          { namedLogo: 'github', style: 'social' }
+          { namedLogo: 'github' }
         )
-        expect(badgeData.logo).to.equal(getShieldsIcon('github'))
+        // .not.be.empty for confidence that nothing has changed with `getShieldsIcon()`.
+        expect(badgeData.logo).to.equal(getShieldsIcon('github')).and.not.to.be
+          .empty
+      })
+
+      it('applies the named logo with color', function() {
+        const badgeData = DummyService._makeBadgeData(
+          {},
+          { namedLogo: 'github', logoColor: 'blue' }
+        )
+        expect(badgeData.logo).to.equal(getShieldsIcon('github', 'blue')).and
+          .not.to.be.empty
       })
 
       it('applies the service label color', function() {
@@ -520,6 +557,17 @@ describe('BaseService', function() {
       it('provides no default label color', function() {
         const badgeData = DummyService._makeBadgeData({}, {})
         expect(badgeData.labelColor).to.be.undefined
+      })
+
+      it('when not a social badge, ignores the default named logo', function() {
+        const badgeData = DummyService._makeBadgeData({}, {})
+        expect(badgeData.logo).to.be.undefined
+      })
+
+      it('when a social badge, uses the default named logo', function() {
+        const badgeData = DummyService._makeBadgeData({ style: 'social' }, {})
+        expect(badgeData.logo).to.equal(getShieldsIcon('appveyor')).and.not.be
+          .empty
       })
     })
   })

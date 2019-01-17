@@ -14,7 +14,11 @@ const {
 const coalesce = require('../lib/coalesce')
 const validate = require('../lib/validate')
 const { checkErrorResponse } = require('../lib/error-helper')
-const { makeLogo, toArray } = require('../lib/badge-data')
+const { toArray } = require('../lib/badge-data')
+const {
+  decodeDataUrlFromQueryParam,
+  prepareNamedLogo,
+} = require('../lib/logos')
 const trace = require('./trace')
 const { validateExample, transformExample } = require('./transform-example')
 const { assertValidCategory } = require('./categories')
@@ -352,7 +356,6 @@ class BaseService {
     const {
       style,
       label: overrideLabel,
-      logo: overrideLogo,
       logoColor: overrideLogoColor,
       logoWidth: overrideLogoWidth,
       link: overrideLink,
@@ -365,6 +368,9 @@ class BaseService {
     if (typeof overrideLabelColor === 'number') {
       overrideLabelColor = `${overrideLabelColor}`
     }
+    // `?logo=` could be a named logo or encoded svg. Split up these cases.
+    const overrideLogoSvg = decodeDataUrlFromQueryParam(overrides.logo)
+    const overrideNamedLogo = overrideLogoSvg ? undefined : overrides.logo
 
     const {
       isError,
@@ -373,6 +379,7 @@ class BaseService {
       color: serviceColor,
       labelColor: serviceLabelColor,
       namedLogo: serviceNamedLogo,
+      logoColor: serviceLogoColor,
       link: serviceLink,
       cacheLengthSeconds: serviceCacheLengthSeconds,
     } = serviceData
@@ -385,13 +392,13 @@ class BaseService {
     } = this.defaultBadgeData
     const defaultCacheLengthSeconds = this._cacheLength
 
-    const namedLogo = coalesce(
-      serviceNamedLogo,
-      style === 'social' ? defaultNamedLogo : undefined
-    )
-    const logo = makeLogo(namedLogo, {
-      logo: overrideLogo,
-      logoColor: overrideLogoColor,
+    const namedLogoSvg = prepareNamedLogo({
+      name: coalesce(
+        overrideNamedLogo,
+        serviceNamedLogo,
+        style === 'social' ? defaultNamedLogo : undefined
+      ),
+      color: coalesce(overrideLogoColor, serviceLogoColor),
     })
 
     const badgeData = {
@@ -415,7 +422,7 @@ class BaseService {
         defaultLabelColor
       ),
       template: style,
-      logo,
+      logo: overrideLogoSvg ? overrideLogoSvg : namedLogoSvg,
       logoWidth: +overrideLogoWidth,
       links: toArray(overrideLink || serviceLink),
       cacheLengthSeconds: coalesce(
