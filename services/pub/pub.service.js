@@ -22,6 +22,7 @@ module.exports = class Pub extends LegacyService {
   static get route() {
     return {
       base: 'pub',
+      pattern: ':which(v|vpre)/:packageName',
     }
   }
 
@@ -29,7 +30,16 @@ module.exports = class Pub extends LegacyService {
     return [
       {
         title: 'Pub',
-        previewUrl: 'v/box2d',
+        pattern: 'v/:packageName',
+        namedParams: {
+          packageName: 'box2d',
+        },
+        staticPreview: {
+          label: 'pub',
+          message: 'v0.4.0',
+          color: 'orange',
+        },
+        keywords: ['dart', 'dartlang'],
       },
     ]
   }
