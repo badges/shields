@@ -413,8 +413,8 @@ class BaseService {
       ),
       color: coalesce(
         overrideLogoColor,
-        // If the logo has been changed it does not make sense to inherit the
-        // color.
+        // If the logo has been overridden it does not make sense to inherit
+        // the color.
         overrideNamedLogo ? undefined : serviceLogoColor
       ),
     })
@@ -447,6 +447,8 @@ class BaseService {
       ),
       logoWidth: coalesce(
         overrideLogoWidth,
+        // If the logo has been overridden it does not make sense to inherit
+        // the width or position.
         overrideNamedLogo ? undefined : serviceLogoWidth
       ),
       logoPosition: coalesce(
