@@ -420,8 +420,8 @@ describe('BaseService', function() {
           { namedLogo: 'appveyor' }
         )
         // .not.be.empty for confidence that nothing has changed with `getShieldsIcon()`.
-        expect(badgeData.logo).to.equal(getShieldsIcon('github')).and.not.be
-          .empty
+        expect(badgeData.logo).to.equal(getShieldsIcon({ name: 'github' })).and
+          .not.be.empty
       })
 
       it('overrides the logo with a color', function() {
@@ -429,8 +429,9 @@ describe('BaseService', function() {
           { logo: 'github', logoColor: 'blue' },
           { namedLogo: 'appveyor' }
         )
-        expect(badgeData.logo).to.equal(getShieldsIcon('github', 'blue')).and
-          .not.be.empty
+        expect(badgeData.logo).to.equal(
+          getShieldsIcon({ name: 'github', color: 'blue' })
+        ).and.not.be.empty
       })
 
       it("when the logo is overridden, it ignores the service's logo color", function() {
@@ -438,8 +439,8 @@ describe('BaseService', function() {
           { logo: 'github' },
           { namedLogo: 'appveyor', logoColor: 'red' }
         )
-        expect(badgeData.logo).to.equal(getShieldsIcon('github')).and.not.be
-          .empty
+        expect(badgeData.logo).to.equal(getShieldsIcon({ name: 'github' })).and
+          .not.be.empty
       })
 
       it("overrides the service logo's color", function() {
@@ -447,8 +448,9 @@ describe('BaseService', function() {
           { logoColor: 'blue' },
           { namedLogo: 'github', logoColor: 'red' }
         )
-        expect(badgeData.logo).to.equal(getShieldsIcon('github', 'blue')).and
-          .not.be.empty
+        expect(badgeData.logo).to.equal(
+          getShieldsIcon({ name: 'github', color: 'blue' })
+        ).and.not.be.empty
       })
 
       it('overrides the logo with custom svg', function() {
@@ -533,8 +535,8 @@ describe('BaseService', function() {
           { namedLogo: 'github' }
         )
         // .not.be.empty for confidence that nothing has changed with `getShieldsIcon()`.
-        expect(badgeData.logo).to.equal(getShieldsIcon('github')).and.not.to.be
-          .empty
+        expect(badgeData.logo).to.equal(getShieldsIcon({ name: 'github' })).and
+          .not.to.be.empty
       })
 
       it('applies the named logo with color', function() {
@@ -542,8 +544,9 @@ describe('BaseService', function() {
           {},
           { namedLogo: 'github', logoColor: 'blue' }
         )
-        expect(badgeData.logo).to.equal(getShieldsIcon('github', 'blue')).and
-          .not.to.be.empty
+        expect(badgeData.logo).to.equal(
+          getShieldsIcon({ name: 'github', color: 'blue' })
+        ).and.not.to.be.empty
       })
 
       it('applies the service label color', function() {
@@ -575,8 +578,8 @@ describe('BaseService', function() {
 
       it('when a social badge, uses the default named logo', function() {
         const badgeData = DummyService._makeBadgeData({ style: 'social' }, {})
-        expect(badgeData.logo).to.equal(getShieldsIcon('appveyor')).and.not.be
-          .empty
+        expect(badgeData.logo).to.equal(getShieldsIcon({ name: 'appveyor' }))
+          .and.not.be.empty
       })
     })
   })
