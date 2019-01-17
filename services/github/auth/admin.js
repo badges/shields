@@ -1,6 +1,6 @@
 'use strict'
 
-const secretIsValid = require('../../../lib/sys/secret-is-valid')
+const secretIsValid = require('../../../core/server/secret-is-valid')
 
 function setRoutes(apiProvider, server) {
   // Allow the admin to obtain the tokens for operational and debugging

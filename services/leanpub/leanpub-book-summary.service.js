@@ -31,21 +31,19 @@ module.exports = class LeanpubBookSummaryService extends BaseJsonService {
     return [
       {
         title: 'Leanpub Book Page Count',
+        pattern: 'pages/:book',
         namedParams: {
-          metric: 'pages',
           book: 'juice-shop',
         },
-        pattern: 'pages/:book',
         staticPreview: this.render({ label: 'pages', message: 226 }),
         keywords,
       },
       {
         title: 'Leanpub Book Total Copies Sold',
+        pattern: 'sold/:book',
         namedParams: {
-          metric: 'sold',
           book: 'juice-shop',
         },
-        pattern: 'sold/:book',
         staticPreview: this.render({ label: 'sold', message: 2691 }),
         keywords,
       },

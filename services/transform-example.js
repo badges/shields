@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
+const pathToRegexp = require('path-to-regexp')
 
 const optionalObjectOfKeyValues = Joi.object().pattern(
   /./,
@@ -70,6 +71,31 @@ function validateExample(example, index, ServiceClass) {
         `Example for ${
           ServiceClass.name
         } at index ${index} declares a redundant pattern which should be removed`
+      )
+    }
+
+    // Make sure we can build the full URL using these patterns.
+    try {
+      pathToRegexp.compile(pattern || ServiceClass.route.pattern)(namedParams)
+    } catch (e) {
+      throw Error(
+        `In example for ${
+          ServiceClass.name
+        } at index ${index}, ${e.message.toLowerCase()}`
+      )
+    }
+    // Make sure there are no extra keys.
+    let keys = []
+    pathToRegexp(pattern || ServiceClass.route.pattern, keys)
+    keys = keys.map(({ name }) => name)
+    const extraKeys = Object.keys(namedParams).filter(k => !keys.includes(k))
+    if (extraKeys.length) {
+      throw Error(
+        `In example for ${
+          ServiceClass.name
+        } at index ${index}, namedParams contains unknown keys: ${extraKeys.join(
+          ', '
+        )}`
       )
     }
   } else if (!previewUrl) {

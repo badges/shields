@@ -289,7 +289,7 @@ For example:
 - Add tests for [CRAN] and [CPAN]
 
 In the rare case when it's necessary to see the output of a full service-test
-run in a PR, include `[*]` in the title. Unless all the tests pass, the build
+run in a PR, include `[*****]` in the title. Unless all the tests pass, the build
 will fail, so likely it will be necessary to remove it and re-run the tests
 before merging.
 
