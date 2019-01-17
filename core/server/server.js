@@ -9,7 +9,6 @@ const makeBadge = require('../../gh-badges/lib/make-badge')
 const GithubConstellation = require('../../services/github/github-constellation')
 const { loadServiceClasses } = require('../../services')
 const { makeBadgeData } = require('../../lib/badge-data')
-const { staticBadgeUrl } = require('../../lib/make-badge-url')
 const suggest = require('../../lib/suggest')
 const { makeSend } = require('../../lib/result-sender')
 const {
@@ -17,6 +16,7 @@ const {
   clearRequestCache,
 } = require('../../lib/request-handler')
 const { clearRegularUpdateCache } = require('../../lib/regular-update')
+const { staticBadgeUrl } = require('../badge-urls/make-badge-url')
 const analytics = require('./analytics')
 const log = require('./log')
 const sysMonitor = require('./monitor')
