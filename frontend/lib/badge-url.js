@@ -1,5 +1,5 @@
 import resolveUrl from './resolve-url'
-import { staticBadgeUrl as makeStaticBadgeUrl } from '../../lib/make-badge-url'
+import { staticBadgeUrl as makeStaticBadgeUrl } from '../../core/badge-urls/make-badge-url'
 
 export default function resolveBadgeUrl(
   url,
