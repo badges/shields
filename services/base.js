@@ -364,7 +364,6 @@ class BaseService {
     } = this.defaultBadgeData
     const defaultCacheLengthSeconds = this._cacheLength
 
-
     const badgeData = {
       text: [
         // Use `coalesce()` to support empty labels and messages, as in the
