@@ -34,6 +34,11 @@ module.exports = class Pub extends LegacyService {
         namedParams: {
           packageName: 'box2d',
         },
+        staticPreview: {
+          label: 'pub',
+          message: 'v0.4.0',
+          color: 'orange',
+        },
         keywords: ['dart', 'dartlang'],
       },
     ]
