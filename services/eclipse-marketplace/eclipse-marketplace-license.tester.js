@@ -1,22 +1,16 @@
 'use strict'
 
-const ServiceTester = require('../service-tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'eclipse-marketplace-license',
-  title: 'EclipseMarketplaceLicense',
-  pathPrefix: '/eclipse-marketplace',
-}))
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('license')
-  .get('/l/notepad4e.json')
+  .get('/notepad4e.json')
   .expectJSON({
     name: 'license',
     value: 'GPL',
   })
 
 t.create('unspecified license')
-  .get('/l/notepad4e.json')
+  .get('/notepad4e.json')
   .intercept(nock =>
     nock('https://marketplace.eclipse.org')
       .get('/content/notepad4e/api/p')
@@ -35,7 +29,7 @@ t.create('unspecified license')
   })
 
 t.create('license for unknown solution')
-  .get('/l/this-does-not-exist.json')
+  .get('/this-does-not-exist.json')
   .expectJSON({
     name: 'license',
     value: 'solution not found',

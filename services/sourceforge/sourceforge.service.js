@@ -25,6 +25,7 @@ module.exports = class Sourceforge extends LegacyService {
   static get route() {
     return {
       base: 'sourceforge',
+      pattern: ':interval(dt|dm|dw|dd)/:project/:folder?',
     }
   }
 
@@ -32,23 +33,64 @@ module.exports = class Sourceforge extends LegacyService {
     return [
       {
         title: 'SourceForge',
-        previewUrl: 'dm/sevenzip',
+        pattern: 'dm/:project',
+        namedParams: {
+          project: 'sevenzip',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '216k/month',
+          color: 'brightgreen',
+        },
       },
       {
         title: 'SourceForge',
-        previewUrl: 'dw/sevenzip',
+        pattern: 'dw/:project',
+        namedParams: {
+          project: 'sevenzip',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '52k/week',
+          color: 'brightgreen',
+        },
       },
       {
         title: 'SourceForge',
-        previewUrl: 'dd/sevenzip',
+        pattern: 'dd/:project',
+        namedParams: {
+          project: 'sevenzip',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '6k/day',
+          color: 'brightgreen',
+        },
       },
       {
         title: 'SourceForge',
-        previewUrl: 'dt/sevenzip',
+        pattern: 'dt/:project',
+        namedParams: {
+          project: 'sevenzip',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '416M',
+          color: 'brightgreen',
+        },
       },
       {
         title: 'SourceForge',
-        previewUrl: 'dt/arianne/stendhal',
+        pattern: 'dt/:project/:folder',
+        namedParams: {
+          project: 'arianne',
+          folder: 'stendhal',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '177k',
+          color: 'brightgreen',
+        },
       },
     ]
   }

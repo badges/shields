@@ -3,7 +3,6 @@
 const Joi = require('joi')
 const t = (module.exports = require('../create-service-tester')())
 const { isIntegerPercentage } = require('../test-validators')
-const { colorScheme } = require('../test-helpers')
 const { mockJiraCreds, restore, user, pass } = require('./jira-test-helpers')
 
 const sprintId = 8
@@ -55,7 +54,7 @@ t.create('100% completion')
   .expectJSON({
     name: 'completion',
     value: '100%',
-    colorB: colorScheme.brightgreen,
+    color: 'brightgreen',
   })
 
 t.create('0% completion')
@@ -80,7 +79,7 @@ t.create('0% completion')
   .expectJSON({
     name: 'completion',
     value: '0%',
-    colorB: colorScheme.red,
+    color: 'red',
   })
 
 t.create('no issues in sprint')
@@ -97,7 +96,7 @@ t.create('no issues in sprint')
   .expectJSON({
     name: 'completion',
     value: '0%',
-    colorB: colorScheme.red,
+    color: 'red',
   })
 
 t.create('issue with null resolution value')
@@ -127,7 +126,7 @@ t.create('issue with null resolution value')
   .expectJSON({
     name: 'completion',
     value: '50%',
-    colorB: colorScheme.orange,
+    color: 'orange',
   })
 
 t.create('with mock credentials')

@@ -100,6 +100,7 @@ class Deprecated extends ShieldsRuntimeError {
 }
 
 module.exports = {
+  ShieldsRuntimeError,
   NotFound,
   InvalidResponse,
   Inaccessible,

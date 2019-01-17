@@ -14,12 +14,7 @@ const {
 const coalesce = require('../lib/coalesce')
 const validate = require('../lib/validate')
 const { checkErrorResponse } = require('../lib/error-helper')
-const {
-  makeLogo,
-  toArray,
-  makeColor,
-  setBadgeColor,
-} = require('../lib/badge-data')
+const { makeLogo, toArray } = require('../lib/badge-data')
 const trace = require('./trace')
 const { validateExample, transformExample } = require('./transform-example')
 const { assertValidCategory } = require('./categories')
@@ -28,21 +23,16 @@ const { assertValidServiceDefinition } = require('./service-definitions')
 const defaultBadgeDataSchema = Joi.object({
   label: Joi.string(),
   color: Joi.string(),
-<<<<<<< Updated upstream
-  logo: Joi.string(),
-}).required()
-
-=======
   labelColor: Joi.string(),
   namedLogo: Joi.string(),
 }).required()
 
 const serviceDataSchema = Joi.object({
   isError: Joi.boolean(),
-  label: Joi.string(),
-  message: Joi.string()
-    .min(1)
-    .required(),
+  label: Joi.string().allow(''),
+  // While a number of badges pass a number here, in the long run we may want
+  // `render()` to always return a string.
+  message: Joi.alternatives(Joi.string().allow(''), Joi.number()).required(),
   color: Joi.string(),
   link: Joi.string().uri(),
   // Generally services should not use these options, which are provided to
@@ -53,6 +43,9 @@ const serviceDataSchema = Joi.object({
   logoColor: Joi.forbidden(),
   logoWidth: Joi.forbidden(),
   logoPosition: Joi.forbidden(),
+  cacheLengthSeconds: Joi.number()
+    .integer()
+    .min(0),
 })
   .oxor('namedLogo', 'logoSvg')
   .when(
@@ -70,7 +63,6 @@ const serviceDataSchema = Joi.object({
   )
   .required()
 
->>>>>>> Stashed changes
 class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
     this._requestFetcher = sendAndCacheRequest
@@ -97,7 +89,7 @@ class BaseService {
    * the badges on the main shields.io website.
    */
   static get category() {
-    return 'unknown'
+    throw new Error(`Category not set for ${this.name}`)
   }
 
   /**
@@ -344,6 +336,7 @@ class BaseService {
     let serviceData
     try {
       serviceData = await serviceInstance.handle(namedParams, queryParams)
+      Joi.assert(serviceData, serviceDataSchema)
     } catch (error) {
       serviceData = serviceInstance._handleError(error)
     }
@@ -363,31 +356,35 @@ class BaseService {
       logoColor: overrideLogoColor,
       logoWidth: overrideLogoWidth,
       link: overrideLink,
-      colorA: overrideLabelColor,
-      colorB: overrideColor,
     } = overrides
+    // Scoutcamp converts numeric query params to numbers. Convert them back.
+    let { colorB: overrideColor, colorA: overrideLabelColor } = overrides
+    if (typeof overrideColor === 'number') {
+      overrideColor = `${overrideColor}`
+    }
+    if (typeof overrideLabelColor === 'number') {
+      overrideLabelColor = `${overrideLabelColor}`
+    }
 
     const {
       isError,
       label: serviceLabel,
       message: serviceMessage,
       color: serviceColor,
-<<<<<<< Updated upstream
-=======
       labelColor: serviceLabelColor,
       namedLogo: serviceNamedLogo,
->>>>>>> Stashed changes
       link: serviceLink,
+      cacheLengthSeconds: serviceCacheLengthSeconds,
     } = serviceData
 
     const {
       color: defaultColor,
       namedLogo: defaultNamedLogo,
       label: defaultLabel,
+      labelColor: defaultLabelColor,
     } = this.defaultBadgeData
+    const defaultCacheLengthSeconds = this._cacheLength
 
-<<<<<<< Updated upstream
-=======
     let color, labelColor
     if (isError) {
       // In case of an error, disregard any colors overridden by the user.
@@ -411,7 +408,6 @@ class BaseService {
       logoColor: overrideLogoColor,
     })
 
->>>>>>> Stashed changes
     const badgeData = {
       text: [
         // Use `coalesce()` to support empty labels and messages, as in the
@@ -420,31 +416,22 @@ class BaseService {
         coalesce(serviceMessage, 'n/a'),
       ],
       template: style,
-      logo: makeLogo(namedLogo, {
-        logo: overrideLogo,
-        logoColor: overrideLogoColor,
-      }),
+      logo,
       logoWidth: +overrideLogoWidth,
       links: toArray(overrideLink || serviceLink),
-      colorA: makeColor(overrideLabelColor),
+      color,
+      labelColor,
+      cacheLengthSeconds: coalesce(
+        serviceCacheLengthSeconds,
+        defaultCacheLengthSeconds
+      ),
     }
-
-    let color
-    if (isError) {
-      // Disregard the override color.
-      color = coalesce(serviceColor, defaultColor, 'lightgrey')
-    } else {
-      color = coalesce(overrideColor, serviceColor, defaultColor, 'lightgrey')
-    }
-    setBadgeColor(badgeData, color)
 
     return badgeData
   }
 
   static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
-    this.validateDefinition()
-
-    const { cacheHeaders: cacheHeaderConfig } = serviceConfig
+    const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
     camp.route(
       this._regex,
       handleRequest(cacheHeaderConfig, {
@@ -468,6 +455,7 @@ class BaseService {
           sendBadge(format, badgeData)
         },
         cacheLength: this._cacheLength,
+        fetchLimitBytes,
       })
     )
   }

@@ -26,6 +26,7 @@ module.exports = class GithubContributors extends GithubAuthService {
       {
         title: 'GitHub contributors',
         namedParams: {
+          which: 'contributors',
           user: 'cdnjs',
           repo: 'cdnjs',
         },

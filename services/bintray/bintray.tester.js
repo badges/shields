@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-const { colorScheme } = require('../test-helpers')
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
 } = require('../test-validators')
@@ -38,5 +37,5 @@ t.create('version (mocked)')
   .expectJSON({
     name: 'bintray',
     value: 'v1.5.7',
-    colorB: colorScheme.blue,
+    color: 'blue',
   })

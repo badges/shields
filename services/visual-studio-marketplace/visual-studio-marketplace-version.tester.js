@@ -3,12 +3,11 @@
 const Joi = require('joi')
 const t = (module.exports = require('../create-service-tester')())
 const { withRegex } = require('../test-validators')
-const { colorScheme } = require('../test-helpers')
 
 const isMarketplaceVersion = withRegex(/^v(\d+\.\d+\.\d+)(\.\d+)?$/)
 
 t.create('live: rating')
-  .get('/vs-marketplace/v/ritwickdey.LiveServer.json')
+  .get('/visual-studio-marketplace/v/ritwickdey.LiveServer.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'version',
@@ -17,7 +16,9 @@ t.create('live: rating')
   )
 
 t.create('version')
-  .get('/vs-marketplace/v/ritwickdey.LiveServer.json?style=_shields_test')
+  .get(
+    '/visual-studio-marketplace/v/ritwickdey.LiveServer.json?style=_shields_test'
+  )
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post(`/extensionquery/`)
@@ -41,12 +42,12 @@ t.create('version')
   .expectJSON({
     name: 'version',
     value: 'v1.0.0',
-    colorB: colorScheme.blue,
+    color: 'blue',
   })
 
 t.create('pre-release version')
   .get(
-    '/vs-marketplace/v/swellaby.vscode-rust-test-adapter.json?style=_shields_test'
+    '/visual-studio-marketplace/v/swellaby.vscode-rust-test-adapter.json?style=_shields_test'
   )
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
@@ -71,7 +72,7 @@ t.create('pre-release version')
   .expectJSON({
     name: 'version',
     value: 'v0.3.8',
-    colorB: colorScheme.orange,
+    color: 'orange',
   })
 
 t.create('live: version (legacy)')

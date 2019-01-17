@@ -3,7 +3,6 @@
 const Joi = require('joi')
 const t = (module.exports = require('../create-service-tester')())
 const { isMetric } = require('../test-validators')
-const { colorScheme } = require('../test-helpers')
 
 const mockResponse = {
   results: [
@@ -32,7 +31,7 @@ const mockResponse = {
 }
 
 t.create('live: installs')
-  .get('/vs-marketplace/i/ritwickdey.LiveServer.json')
+  .get('/visual-studio-marketplace/i/ritwickdey.LiveServer.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'installs',
@@ -41,7 +40,7 @@ t.create('live: installs')
   )
 
 t.create('live: downloads')
-  .get('/vs-marketplace/d/ritwickdey.LiveServer.json')
+  .get('/visual-studio-marketplace/d/ritwickdey.LiveServer.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'downloads',
@@ -50,7 +49,7 @@ t.create('live: downloads')
   )
 
 t.create('live: invalid extension id')
-  .get('/vs-marketplace/d/badges-shields.json')
+  .get('/visual-studio-marketplace/d/badges-shields.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'vs marketplace',
@@ -59,7 +58,7 @@ t.create('live: invalid extension id')
   )
 
 t.create('live: non existent extension')
-  .get('/vs-marketplace/d/badges.shields-io-fake.json')
+  .get('/visual-studio-marketplace/d/badges.shields-io-fake.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'vs marketplace',
@@ -68,7 +67,9 @@ t.create('live: non existent extension')
   )
 
 t.create('installs')
-  .get('/vs-marketplace/i/swellaby.rust-pack.json?style=_shields_test')
+  .get(
+    '/visual-studio-marketplace/i/swellaby.rust-pack.json?style=_shields_test'
+  )
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post(`/extensionquery/`)
@@ -77,11 +78,13 @@ t.create('installs')
   .expectJSON({
     name: 'installs',
     value: '3',
-    colorB: colorScheme.yellow,
+    color: 'yellow',
   })
 
 t.create('zero installs')
-  .get('/vs-marketplace/i/swellaby.rust-pack.json?style=_shields_test')
+  .get(
+    '/visual-studio-marketplace/i/swellaby.rust-pack.json?style=_shields_test'
+  )
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post(`/extensionquery/`)
@@ -105,11 +108,13 @@ t.create('zero installs')
   .expectJSON({
     name: 'installs',
     value: '0',
-    colorB: colorScheme.red,
+    color: 'red',
   })
 
 t.create('downloads')
-  .get('/vs-marketplace/d/swellaby.rust-pack.json?style=_shields_test')
+  .get(
+    '/visual-studio-marketplace/d/swellaby.rust-pack.json?style=_shields_test'
+  )
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post(`/extensionquery/`)
@@ -118,7 +123,7 @@ t.create('downloads')
   .expectJSON({
     name: 'downloads',
     value: '10',
-    colorB: colorScheme.yellowgreen,
+    color: 'yellowgreen',
   })
 
 t.create('live: installs (legacy)')

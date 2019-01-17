@@ -55,7 +55,7 @@ const minimist = require('minimist')
 const envFlag = require('node-env-flag')
 const readAllStdinSync = require('read-all-stdin-sync')
 const Runner = require('./runner')
-const { createTestServer } = require('../../lib/in-process-server-test-helpers')
+const { createTestServer } = require('../server/in-process-server-test-helpers')
 
 require('../../lib/unhandled-rejection.spec')
 
@@ -102,7 +102,7 @@ if (stdinOption && onlyOption) {
   onlyServices = onlyOption.split(',')
 }
 
-if (typeof onlyServices === 'undefined') {
+if (typeof onlyServices === 'undefined' || onlyServices.includes('*****')) {
   console.info('Running all service tests.')
 } else if (onlyServices.length === 0) {
   console.info('No service tests to run. Exiting.')

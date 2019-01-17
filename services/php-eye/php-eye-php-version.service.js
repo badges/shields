@@ -6,7 +6,7 @@ const {
   versionReduction: phpVersionReduction,
   getPhpReleases,
 } = require('../../lib/php-version')
-const log = require('../../lib/log')
+const log = require('../../core/server/log')
 
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //

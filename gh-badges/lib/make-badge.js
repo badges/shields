@@ -5,7 +5,7 @@ const path = require('path')
 const SVGO = require('svgo')
 const dot = require('dot')
 const anafanafo = require('anafanafo')
-const isCSSColor = require('is-css-color')
+const { normalizeColor, toSvgColor } = require('./color')
 
 // cache templates.
 const templates = {}
@@ -92,26 +92,15 @@ function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-// check if colorA/B is a colorscheme else check if it's a valid css3 color else return undefined and let the badge assign the default color
-function assignColor(color = '', colorschemeType = 'colorB') {
-  if (definedColorschemes[color] !== undefined) {
-    return definedColorschemes[color][colorschemeType] || undefined
-  } else if (isCSSColor(color)) {
-    return color
-  } else {
-    return undefined
-  }
-}
-
-const definedColorschemes = require(path.join(__dirname, 'colorscheme.json'))
-
 function makeBadge({
   format,
   template,
   text,
   colorscheme,
+  color,
   colorA,
   colorB,
+  labelColor,
   logo,
   logoPosition,
   logoWidth,
@@ -142,12 +131,6 @@ function makeBadge({
     text = text.map(value => value.toUpperCase())
   }
 
-  // colorA/B have a higher priority than colorscheme
-  colorA = colorA || colorscheme || undefined
-  colorB = colorB || colorscheme || undefined
-  colorA = assignColor(colorA, 'colorA')
-  colorB = assignColor(colorB, 'colorB')
-
   const [left, right] = text
   let leftWidth = (anafanafo(left) / 10) | 0
   // Increase chances of pixel grid alignment.
@@ -169,6 +152,9 @@ function makeBadge({
     logoPadding = logo ? 3 : 0
   }
 
+  color = color || colorB || colorscheme
+  labelColor = labelColor || colorA
+
   const context = {
     text: [left, right],
     escapedText: text.map(escapeXml),
@@ -178,8 +164,11 @@ function makeBadge({
     logoPosition,
     logoWidth,
     logoPadding,
-    colorA,
-    colorB,
+    // `color` and `labelColor` are included for the `_shields_test` template.
+    color: normalizeColor(color),
+    labelColor: normalizeColor(labelColor),
+    colorA: toSvgColor(labelColor),
+    colorB: toSvgColor(color),
     escapeXml,
   }
 

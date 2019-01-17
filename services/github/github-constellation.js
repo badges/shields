@@ -2,7 +2,7 @@
 
 const path = require('path')
 const serverSecrets = require('../../lib/server-secrets')
-const log = require('../../lib/log')
+const log = require('../../core/server/log')
 const RedisTokenPersistence = require('../../lib/redis-token-persistence')
 const FsTokenPersistence = require('../../lib/fs-token-persistence')
 const GithubApiProvider = require('./github-api-provider')
