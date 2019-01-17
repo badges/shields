@@ -326,6 +326,8 @@ class BaseService {
     return serviceData
   }
 
+  // Translate modern badge data to the legacy schema understood by the badge
+  // maker.
   static _makeBadgeData(overrides, serviceData) {
     const {
       style,
@@ -362,19 +364,6 @@ class BaseService {
     } = this.defaultBadgeData
     const defaultCacheLengthSeconds = this._cacheLength
 
-    let color, labelColor
-    if (isError) {
-      // Disregard the override color.
-      color = coalesce(serviceColor, defaultColor, 'lightgrey')
-      labelColor = coalesce(serviceLabelColor, defaultLabelColor)
-    } else {
-      color = coalesce(overrideColor, serviceColor, defaultColor, 'lightgrey')
-      labelColor = coalesce(
-        overrideLabelColor,
-        serviceLabelColor,
-        defaultLabelColor
-      )
-    }
 
     const badgeData = {
       text: [
@@ -383,6 +372,19 @@ class BaseService {
         coalesce(overrideLabel, serviceLabel, defaultLabel, this.category),
         coalesce(serviceMessage, 'n/a'),
       ],
+      color: coalesce(
+        // In case of an error, disregard user's color override.
+        isError ? undefined : overrideColor,
+        serviceColor,
+        defaultColor,
+        'lightgrey'
+      ),
+      labelColor: coalesce(
+        // In case of an error, disregard user's color override.
+        isError ? undefined : overrideLabelColor,
+        serviceLabelColor,
+        defaultLabelColor
+      ),
       template: style,
       logo: makeLogo(style === 'social' ? defaultLogo : undefined, {
         logo: overrideLogo,
@@ -390,8 +392,6 @@ class BaseService {
       }),
       logoWidth: +overrideLogoWidth,
       links: toArray(overrideLink || serviceLink),
-      color,
-      labelColor,
       cacheLengthSeconds: coalesce(
         serviceCacheLengthSeconds,
         defaultCacheLengthSeconds
