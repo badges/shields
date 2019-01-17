@@ -58,7 +58,9 @@ const serviceDefinition = Joi.object({
           )
           .required(),
         keywords: arrayOfStrings,
-        documentation: Joi.string(), // Valid HTML.
+        documentation: Joi.object({
+          __html: Joi.string().required(), // Valid HTML.
+        }),
       })
     )
     .default([]),
