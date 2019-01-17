@@ -1,9 +1,9 @@
 'use strict'
 
+const serverSecrets = require('../../lib/server-secrets')
 const secretIsValid = require('./secret-is-valid')
-const serverSecrets = require('../server-secrets')
 const RateLimit = require('./rate-limit')
-const log = require('../log')
+const log = require('./log')
 
 function secretInvalid(req, res) {
   if (!secretIsValid(req.password)) {

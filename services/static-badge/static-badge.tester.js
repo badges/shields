@@ -42,6 +42,10 @@ t.create('Override colorB')
   .get('/badge/label-message-blue.json?style=_shields_test&colorB=yellow')
   .expectJSON({ name: 'label', value: 'message', color: 'yellow' })
 
+t.create('Override colorB with a number')
+  .get('/badge/label-message-blue.json?style=_shields_test&colorB=123')
+  .expectJSON({ name: 'label', value: 'message', color: '#123' })
+
 t.create('Override label')
   .get('/badge/label-message-blue.json?style=_shields_test&label=mylabel')
   .expectJSON({ name: 'mylabel', value: 'message', color: 'blue' })

@@ -5,19 +5,22 @@ const path = require('path')
 const url = require('url')
 const Joi = require('joi')
 const Camp = require('camp')
-const makeBadge = require('../gh-badges/lib/make-badge')
-const GithubConstellation = require('../services/github/github-constellation')
-const { loadServiceClasses } = require('../services')
+const makeBadge = require('../../gh-badges/lib/make-badge')
+const GithubConstellation = require('../../services/github/github-constellation')
+const { loadServiceClasses } = require('../../services')
+const { makeBadgeData } = require('../../lib/badge-data')
+const { staticBadgeUrl } = require('../../lib/make-badge-url')
+const suggest = require('../../lib/suggest')
+const { makeSend } = require('../../lib/result-sender')
+const {
+  handleRequest,
+  clearRequestCache,
+} = require('../../lib/request-handler')
+const { clearRegularUpdateCache } = require('../../lib/regular-update')
 const analytics = require('./analytics')
-const { makeBadgeData } = require('./badge-data')
 const log = require('./log')
-const { staticBadgeUrl } = require('./make-badge-url')
-const suggest = require('./suggest')
-const sysMonitor = require('./sys/monitor')
-const PrometheusMetrics = require('./sys/prometheus-metrics')
-const { makeSend } = require('./result-sender')
-const { handleRequest, clearRequestCache } = require('./request-handler')
-const { clearRegularUpdateCache } = require('./regular-update')
+const sysMonitor = require('./monitor')
+const PrometheusMetrics = require('./prometheus-metrics')
 
 const optionalUrl = Joi.string().uri({ scheme: ['http', 'https'] })
 const requiredUrl = optionalUrl.required()
@@ -235,7 +238,7 @@ module.exports = class Server {
     log(`Server is starting up: ${this.baseUrl}`)
 
     const camp = (this.camp = Camp.start({
-      documentRoot: path.join(__dirname, '..', 'public'),
+      documentRoot: path.join(__dirname, '..', '..', 'public'),
       port,
       hostname,
       secure,
