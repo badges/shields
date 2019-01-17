@@ -66,7 +66,11 @@ module.exports = class PackageControl extends LegacyService {
         title: 'Package Control',
         pattern: 'dt/:packageName',
         namedParams: { packageName: 'GitGutter' },
-        staticPreview: { label: 'downloads', message: '679k', color: 'green' },
+        staticPreview: {
+          label: 'downloads',
+          message: '679k',
+          color: 'brightgreen',
+        },
         keywords,
       },
     ]
