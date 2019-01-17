@@ -4,6 +4,7 @@ const Joi = require('joi')
 const { expect } = require('chai')
 const { test, given, forCases } = require('sazerac')
 const sinon = require('sinon')
+const { getShieldsIcon } = require('../lib/badge-data')
 const trace = require('./trace')
 
 const {
@@ -489,6 +490,14 @@ describe('BaseService', function() {
       it('applies the service color', function() {
         const badgeData = DummyService._makeBadgeData({}, { color: 'red' })
         expect(badgeData.color).to.equal('red')
+      })
+
+      it('applies a named logo from the service', function() {
+        const badgeData = DummyService._makeBadgeData(
+          {},
+          { namedLogo: 'github', style: 'social' }
+        )
+        expect(badgeData.logo).to.equal(getShieldsIcon('github'))
       })
 
       it('applies the service label color', function() {
