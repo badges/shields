@@ -15,6 +15,7 @@ const coalesce = require('../lib/coalesce')
 const validate = require('../lib/validate')
 const { checkErrorResponse } = require('../lib/error-helper')
 const { toArray } = require('../lib/badge-data')
+const { svg2base64 } = require('../lib/svg-helpers')
 const {
   decodeDataUrlFromQueryParam,
   prepareNamedLogo,
@@ -369,8 +370,8 @@ class BaseService {
       overrideLabelColor = `${overrideLabelColor}`
     }
     // `?logo=` could be a named logo or encoded svg. Split up these cases.
-    const overrideLogoSvg = decodeDataUrlFromQueryParam(overrides.logo)
-    const overrideNamedLogo = overrideLogoSvg ? undefined : overrides.logo
+    const overrideLogoSvgBase64 = decodeDataUrlFromQueryParam(overrides.logo)
+    const overrideNamedLogo = overrideLogoSvgBase64 ? undefined : overrides.logo
 
     const {
       isError,
@@ -378,11 +379,15 @@ class BaseService {
       message: serviceMessage,
       color: serviceColor,
       labelColor: serviceLabelColor,
+      logoSvg: serviceLogoSvg,
       namedLogo: serviceNamedLogo,
       logoColor: serviceLogoColor,
       link: serviceLink,
       cacheLengthSeconds: serviceCacheLengthSeconds,
     } = serviceData
+    const serviceLogoSvgBase64 = serviceLogoSvg
+      ? svg2base64(serviceLogoSvg)
+      : undefined
 
     const {
       color: defaultColor,
@@ -392,7 +397,7 @@ class BaseService {
     } = this.defaultBadgeData
     const defaultCacheLengthSeconds = this._cacheLength
 
-    const namedLogoSvg = prepareNamedLogo({
+    const namedLogoSvgBase64 = prepareNamedLogo({
       name: coalesce(
         overrideNamedLogo,
         serviceNamedLogo,
@@ -428,7 +433,11 @@ class BaseService {
         defaultLabelColor
       ),
       template: style,
-      logo: overrideLogoSvg || namedLogoSvg,
+      logo: coalesce(
+        overrideLogoSvgBase64,
+        serviceLogoSvgBase64,
+        namedLogoSvgBase64
+      ),
       logoWidth: +overrideLogoWidth,
       links: toArray(overrideLink || serviceLink),
       cacheLengthSeconds: coalesce(
