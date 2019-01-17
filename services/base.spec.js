@@ -434,10 +434,15 @@ describe('BaseService', function() {
         ).and.not.be.empty
       })
 
-      it("when the logo is overridden, it ignores the service's logo color", function() {
+      it("when the logo is overridden, it ignores the service's logo color, position, and width", function() {
         const badgeData = DummyService._makeBadgeData(
           { logo: 'github' },
-          { namedLogo: 'appveyor', logoColor: 'red' }
+          {
+            namedLogo: 'appveyor',
+            logoColor: 'red',
+            logoPosition: -3,
+            logoWidth: 100,
+          }
         )
         expect(badgeData.logo).to.equal(getShieldsIcon({ name: 'github' })).and
           .not.be.empty

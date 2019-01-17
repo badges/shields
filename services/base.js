@@ -413,7 +413,6 @@ class BaseService {
       ),
       color: coalesce(
         overrideLogoColor,
-        // Ignore `serviceLogoColor` when logo is overridden on querystring.
         // If the logo has been changed it does not make sense to inherit the
         // color.
         overrideNamedLogo ? undefined : serviceLogoColor
@@ -446,8 +445,14 @@ class BaseService {
         serviceLogoSvgBase64,
         namedLogoSvgBase64
       ),
-      logoWidth: coalesce(overrideLogoWidth, serviceLogoWidth),
-      logoPosition: coalesce(overrideLogoPosition, serviceLogoPosition),
+      logoWidth: coalesce(
+        overrideLogoWidth,
+        overrideNamedLogo ? undefined : serviceLogoWidth
+      ),
+      logoPosition: coalesce(
+        overrideLogoPosition,
+        overrideNamedLogo ? undefined : serviceLogoPosition
+      ),
       links: toArray(overrideLink || serviceLink),
       cacheLengthSeconds: coalesce(
         serviceCacheLengthSeconds,
