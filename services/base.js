@@ -358,17 +358,23 @@ class BaseService {
       style,
       label: overrideLabel,
       logoColor: overrideLogoColor,
-      logoWidth: overrideLogoWidth,
       link: overrideLink,
     } = overrides
     // Scoutcamp converts numeric query params to numbers. Convert them back.
-    let { colorB: overrideColor, colorA: overrideLabelColor } = overrides
+    let {
+      colorB: overrideColor,
+      colorA: overrideLabelColor,
+      logoWidth: overrideLogoWidth,
+      logoPosition: overrideLogoPosition,
+    } = overrides
     if (typeof overrideColor === 'number') {
       overrideColor = `${overrideColor}`
     }
     if (typeof overrideLabelColor === 'number') {
       overrideLabelColor = `${overrideLabelColor}`
     }
+    overrideLogoWidth = +overrideLogoWidth || undefined
+    overrideLogoPosition = +overrideLogoPosition || undefined
     // `?logo=` could be a named logo or encoded svg. Split up these cases.
     const overrideLogoSvgBase64 = decodeDataUrlFromQueryParam(overrides.logo)
     const overrideNamedLogo = overrideLogoSvgBase64 ? undefined : overrides.logo
@@ -382,6 +388,8 @@ class BaseService {
       logoSvg: serviceLogoSvg,
       namedLogo: serviceNamedLogo,
       logoColor: serviceLogoColor,
+      logoWidth: serviceLogoWidth,
+      logoPosition: serviceLogoPosition,
       link: serviceLink,
       cacheLengthSeconds: serviceCacheLengthSeconds,
     } = serviceData
@@ -412,7 +420,7 @@ class BaseService {
       ),
     })
 
-    const badgeData = {
+    return {
       text: [
         // Use `coalesce()` to support empty labels and messages, as in the
         // static badge.
@@ -438,15 +446,14 @@ class BaseService {
         serviceLogoSvgBase64,
         namedLogoSvgBase64
       ),
-      logoWidth: +overrideLogoWidth,
+      logoWidth: coalesce(overrideLogoWidth, serviceLogoWidth),
+      logoPosition: coalesce(overrideLogoPosition, serviceLogoPosition),
       links: toArray(overrideLink || serviceLink),
       cacheLengthSeconds: coalesce(
         serviceCacheLengthSeconds,
         defaultCacheLengthSeconds
       ),
     }
-
-    return badgeData
   }
 
   static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {

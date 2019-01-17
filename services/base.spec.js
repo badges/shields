@@ -476,6 +476,11 @@ describe('BaseService', function() {
         expect(badgeData.logoWidth).to.equal(20)
       })
 
+      it('overrides the logoPosition', function() {
+        const badgeData = DummyService._makeBadgeData({ logoPosition: -10 }, {})
+        expect(badgeData.logoPosition).to.equal(-10)
+      })
+
       it('overrides the links', function() {
         const badgeData = DummyService._makeBadgeData(
           { link: 'https://circleci.com/gh/badges/daily-tests' },
@@ -547,6 +552,22 @@ describe('BaseService', function() {
         expect(badgeData.logo).to.equal(
           getShieldsIcon({ name: 'github', color: 'blue' })
         ).and.not.to.be.empty
+      })
+
+      it('applies the logo width', function() {
+        const badgeData = DummyService._makeBadgeData(
+          {},
+          { namedLogo: 'github', logoWidth: 275 }
+        )
+        expect(badgeData.logoWidth).to.equal(275)
+      })
+
+      it('applies the logo position', function() {
+        const badgeData = DummyService._makeBadgeData(
+          {},
+          { namedLogo: 'github', logoPosition: -10 }
+        )
+        expect(badgeData.logoPosition).to.equal(-10)
       })
 
       it('applies the service label color', function() {
@@ -625,7 +646,8 @@ describe('BaseService', function() {
         color: 'lightgrey',
         template: undefined,
         logo: undefined,
-        logoWidth: NaN,
+        logoWidth: undefined,
+        logoPosition: undefined,
         links: [],
         labelColor: undefined,
         cacheLengthSeconds: undefined,
