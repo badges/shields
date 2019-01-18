@@ -3,9 +3,7 @@
 const Joi = require('joi')
 const BaseJsonService = require('../base-json')
 const { metric } = require('../../lib/text-formatters')
-const {
-  downloadCount: downloadCountColor,
-} = require('../../lib/color-formatters')
+const { downloadCount } = require('../../lib/color-formatters')
 const { nonNegativeInteger } = require('../validators')
 
 const keywords = ['sublime', 'sublimetext', 'packagecontrol']
@@ -85,7 +83,7 @@ function DownloadsForInterval(interval) {
     static render({ downloads }) {
       return {
         message: `${metric(downloads)}${messageSuffix}`,
-        color: downloadCountColor(downloads),
+        color: downloadCount(downloads),
       }
     }
 
