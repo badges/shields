@@ -1,7 +1,6 @@
 'use strict'
 
 const t = (module.exports = require('../create-service-tester')())
-const { colorScheme } = require('../test-helpers')
 const { mockJiraCreds, restore, user, pass } = require('./jira-test-helpers')
 
 t.create('live: unknown issue')
@@ -28,7 +27,7 @@ t.create('no status color')
   .expectJSON({
     name: 'foo-123',
     value: 'pending',
-    colorB: colorScheme.lightgrey,
+    color: 'lightgrey',
   })
 
 t.create('green status color')
@@ -50,7 +49,7 @@ t.create('green status color')
   .expectJSON({
     name: 'bar-345',
     value: 'done',
-    colorB: colorScheme.green,
+    color: 'green',
   })
 
 t.create('medium-gray status color')
@@ -72,7 +71,7 @@ t.create('medium-gray status color')
   .expectJSON({
     name: 'abc-123',
     value: 'under review',
-    colorB: colorScheme.lightgrey,
+    color: 'lightgrey',
   })
 
 t.create('yellow status color')
@@ -94,7 +93,7 @@ t.create('yellow status color')
   .expectJSON({
     name: 'test-001',
     value: 'in progress',
-    colorB: colorScheme.yellow,
+    color: 'yellow',
   })
 
 t.create('brown status color')
@@ -116,7 +115,7 @@ t.create('brown status color')
   .expectJSON({
     name: 'zzz-789',
     value: 'muddy',
-    colorB: colorScheme.orange,
+    color: 'orange',
   })
 
 t.create('warm-red status color')
@@ -138,7 +137,7 @@ t.create('warm-red status color')
   .expectJSON({
     name: 'fire-321',
     value: 'heating up',
-    colorB: colorScheme.red,
+    color: 'red',
   })
 
 t.create('blue-gray status color')
@@ -160,7 +159,7 @@ t.create('blue-gray status color')
   .expectJSON({
     name: 'sky-775',
     value: 'cloudy',
-    colorB: colorScheme.blue,
+    color: 'blue',
   })
 
 t.create('with mock credentials')

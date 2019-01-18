@@ -7,6 +7,8 @@ const {
   downloadCount: downloadCountColor,
 } = require('../../lib/color-formatters')
 
+const keywords = ['sublime', 'sublimetext', 'packagecontrol']
+
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //
 // Tips for rewriting:
@@ -21,6 +23,7 @@ module.exports = class PackageControl extends LegacyService {
   static get route() {
     return {
       base: 'packagecontrol',
+      pattern: ':interval(dm|dw|dd|dt)/:packageName',
     }
   }
 
@@ -28,23 +31,47 @@ module.exports = class PackageControl extends LegacyService {
     return [
       {
         title: 'Package Control',
-        previewUrl: 'dm/GitGutter',
-        keywords: ['sublime'],
+        pattern: 'dm/:packageName',
+        namedParams: { packageName: 'GitGutter' },
+        staticPreview: {
+          label: 'downloads',
+          message: '10k/month',
+          color: 'brightgreen',
+        },
+        keywords,
       },
       {
         title: 'Package Control',
-        previewUrl: 'dw/GitGutter',
-        keywords: ['sublime'],
+        pattern: 'dw/:packageName',
+        namedParams: { packageName: 'GitGutter' },
+        staticPreview: {
+          label: 'downloads',
+          message: '2k/week',
+          color: 'brightgreen',
+        },
+        keywords,
       },
       {
         title: 'Package Control',
-        previewUrl: 'dd/GitGutter',
-        keywords: ['sublime'],
+        pattern: 'dd/:packageName',
+        namedParams: { packageName: 'GitGutter' },
+        staticPreview: {
+          label: 'downloads',
+          message: '260/day',
+          color: 'green',
+        },
+        keywords,
       },
       {
         title: 'Package Control',
-        previewUrl: 'dt/GitGutter',
-        keywords: ['sublime'],
+        pattern: 'dt/:packageName',
+        namedParams: { packageName: 'GitGutter' },
+        staticPreview: {
+          label: 'downloads',
+          message: '679k',
+          color: 'brightgreen',
+        },
+        keywords,
       },
     ]
   }

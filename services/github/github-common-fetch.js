@@ -40,7 +40,9 @@ async function fetchJsonFromRepo(
     schema: contentSchema,
     url,
     options,
-    errorMessages: errorMessagesFor(`${filename} missing or repo not found`),
+    errorMessages: errorMessagesFor(
+      `repo not found, branch not found, or ${filename} missing`
+    ),
   })
 
   let decoded

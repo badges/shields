@@ -3,7 +3,6 @@
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
 const { isIntegerPercentage } = require('../test-validators')
-const { colorScheme: colorsB } = require('../test-helpers')
 
 const t = (module.exports = new ServiceTester({
   id: 'dependabot',
@@ -26,7 +25,7 @@ t.create('semver stability (invalid error)')
   .expectJSON({
     name: 'semver stability',
     value: 'invalid',
-    colorB: colorsB.lightgrey,
+    color: 'lightgray',
   })
 
 t.create('semver stability (missing dependency)')

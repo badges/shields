@@ -229,8 +229,6 @@ static render({ status, result }) {
 We can also use nock to intercept API calls to return a known response body.
 
 ```js
-const { colorScheme } = require('../test-helpers')
-
 t.create('Build passed (mocked)')
   .get('/build/wercker/go-wercker-api.json?style=_shields_test')
   .intercept(nock =>
@@ -241,7 +239,7 @@ t.create('Build passed (mocked)')
   .expectJSON({
     name: 'build',
     value: 'passing',
-    colorB: colorScheme.brightgreen,
+    color: 'brightgreen',
   })
 
 t.create('Build failed (mocked)')
@@ -291,7 +289,7 @@ For example:
 - Add tests for [CRAN] and [CPAN]
 
 In the rare case when it's necessary to see the output of a full service-test
-run in a PR, include `[*]` in the title. Unless all the tests pass, the build
+run in a PR, include `[*****]` in the title. Unless all the tests pass, the build
 will fail, so likely it will be necessary to remove it and re-run the tests
 before merging.
 

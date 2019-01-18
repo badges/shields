@@ -1,11 +1,16 @@
 'use strict'
 
 const LegacyService = require('../legacy-service')
-const {
-  makeBadgeData: getBadgeData,
-  setBadgeColor,
-} = require('../../lib/badge-data')
-const { escapeFormatSlashes } = require('../../lib/path-helpers')
+const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const { escapeFormat } = require('../../core/badge-urls/path-helpers')
+
+function escapeFormatSlashes(t) {
+  return (
+    escapeFormat(t)
+      // Double slash
+      .replace(/\/\//g, '/')
+  )
+}
 
 const documentation = `
 <p>
@@ -127,11 +132,11 @@ module.exports = class Website extends LegacyService {
           // We consider all HTTP status codes below 310 as success.
           if (err != null || res.statusCode >= 310) {
             badgeData.text[1] = offlineMessage
-            setBadgeColor(badgeData, offlineColor)
+            badgeData.colorB = offlineColor
             sendBadge(format, badgeData)
           } else {
             badgeData.text[1] = onlineMessage
-            setBadgeColor(badgeData, onlineColor)
+            badgeData.colorB = onlineColor
             sendBadge(format, badgeData)
           }
         })

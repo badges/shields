@@ -132,7 +132,7 @@ module.exports = class MicroBadger extends LegacyService {
             } else if (type === 'layers') {
               badgeData.text[1] = image.LayerCount
             }
-            badgeData.colorscheme = null
+            badgeData.colorscheme = undefined
             badgeData.colorB = 'blue'
             sendBadge(format, badgeData)
           } catch (e) {

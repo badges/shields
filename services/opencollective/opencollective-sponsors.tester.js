@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-const { colorScheme } = require('../test-helpers')
 const { nonNegativeInteger } = require('../validators')
 const t = (module.exports = require('../create-service-tester')())
 
@@ -69,7 +68,7 @@ t.create('renders correctly')
     Joi.object().keys({
       name: 'sponsors',
       value: '10',
-      colorB: colorScheme.brightgreen,
+      color: 'brightgreen',
     })
   )
 t.create('gets amount of sponsors')
@@ -87,6 +86,6 @@ t.create('handles not found correctly')
     Joi.object().keys({
       name: 'sponsors',
       value: 'collective not found',
-      colorB: colorScheme.red,
+      color: 'red',
     })
   )

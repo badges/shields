@@ -1,6 +1,5 @@
 'use strict'
 
-const { colorScheme } = require('../test-helpers')
 const serverSecrets = require('../../lib/server-secrets')
 
 const t = (module.exports = require('../create-service-tester')())
@@ -33,7 +32,7 @@ t.create('node with accessibility')
   .expectJSON({
     name: 'accessibility',
     value: 'yes',
-    colorB: colorScheme.brightgreen,
+    color: 'brightgreen',
   })
 
 t.create('node with limited accessibility')
@@ -55,7 +54,7 @@ t.create('node with limited accessibility')
   .expectJSON({
     name: 'accessibility',
     value: 'limited',
-    colorB: colorScheme.yellow,
+    color: 'yellow',
   })
 
 t.create('node without accessibility')
@@ -77,7 +76,7 @@ t.create('node without accessibility')
   .expectJSON({
     name: 'accessibility',
     value: 'no',
-    colorB: colorScheme.red,
+    color: 'red',
   })
 
 t.create('node not found')

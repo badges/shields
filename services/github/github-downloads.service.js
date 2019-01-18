@@ -91,7 +91,7 @@ module.exports = class GithubDownloads extends LegacyService {
       },
       {
         title: 'GitHub Releases (by Asset)',
-        pattern: 'downloads/:user/:repo/:tag/:path*',
+        pattern: 'downloads/:user/:repo/:tag/:path',
         namedParams: {
           user: 'atom',
           repo: 'atom',
@@ -107,7 +107,7 @@ module.exports = class GithubDownloads extends LegacyService {
       },
       {
         title: 'GitHub Pre-Releases (by Asset)',
-        pattern: 'downloads-pre/:user/:repo/:tag/:path*',
+        pattern: 'downloads-pre/:user/:repo/:tag/:path',
         namedParams: {
           user: 'atom',
           repo: 'atom',

@@ -4,7 +4,6 @@ const LegacyService = require('../legacy-service')
 const {
   makeBadgeData: getBadgeData,
   makeLogo: getLogo,
-  setBadgeColor,
 } = require('../../lib/badge-data')
 const { licenseToColor } = require('../../lib/licenses')
 const {
@@ -76,7 +75,7 @@ module.exports = class GithubLicense extends LegacyService {
               } else {
                 badgeData.text[1] = license.spdx_id
               }
-              setBadgeColor(badgeData, licenseToColor(license.spdx_id))
+              badgeData.colorB = licenseToColor(license.spdx_id)
               sendBadge(format, badgeData)
             } else {
               badgeData.text[1] = 'missing'

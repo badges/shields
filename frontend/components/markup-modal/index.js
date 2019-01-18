@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import {
   badgeUrlFromPath,
   badgeUrlFromPattern,
-} from '../../../lib/make-badge-url'
+} from '../../../core/badge-urls/make-badge-url'
 import { advertisedStyles } from '../../../supported-features.json'
 import generateAllMarkup from '../../lib/generate-image-markup'
 import { Snippet } from '../snippet'
@@ -170,7 +170,7 @@ export default class MarkupModal extends React.Component {
     return documentation ? (
       <div>
         <h4>Documentation</h4>
-        <div dangerouslySetInnerHTML={{ __html: documentation }} />
+        <div dangerouslySetInnerHTML={documentation} />
       </div>
     ) : null
   }

@@ -1,6 +1,6 @@
 'use strict'
 
-const log = require('./log')
+const log = require('../server/log')
 
 // This is currently bound to the legacy github auth code. That will be
 // replaced with a dependency-injected token provider.

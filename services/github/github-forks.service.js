@@ -63,7 +63,7 @@ module.exports = class GithubForks extends LegacyService {
             const data = JSON.parse(buffer)
             const forks = data.forks_count
             badgeData.text[1] = forks
-            badgeData.colorscheme = null
+            badgeData.colorscheme = undefined
             badgeData.colorB = '#4183C4'
             sendBadge(format, badgeData)
           } catch (e) {

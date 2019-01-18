@@ -22,15 +22,65 @@ describe('Cache header functions', function() {
   })
 
   describe('coalesceCacheLength', function() {
-    const exampleCacheConfig = { defaultCacheLengthSeconds: 777 }
+    const cacheHeaderConfig = { defaultCacheLengthSeconds: 777 }
     test(coalesceCacheLength, () => {
-      given(exampleCacheConfig, undefined, {}).expect(777)
-      given(exampleCacheConfig, 900, {}).expect(900)
-      given(exampleCacheConfig, 900, { maxAge: 1000 }).expect(1000)
-      given(exampleCacheConfig, 900, { maxAge: 400 }).expect(900)
-      given(exampleCacheConfig, 900, { maxAge: '-1000' }).expect(900)
-      given(exampleCacheConfig, 900, { maxAge: '' }).expect(900)
-      given(exampleCacheConfig, 900, { maxAge: 'not a number' }).expect(900)
+      given({ cacheHeaderConfig, queryParams: {} }).expect(777)
+      given({
+        cacheHeaderConfig,
+        serviceDefaultCacheLengthSeconds: 900,
+        queryParams: {},
+      }).expect(900)
+      given({
+        cacheHeaderConfig,
+        serviceDefaultCacheLengthSeconds: 900,
+        queryParams: { maxAge: 1000 },
+      }).expect(1000)
+      given({
+        cacheHeaderConfig,
+        serviceDefaultCacheLengthSeconds: 900,
+        queryParams: { maxAge: 400 },
+      }).expect(900)
+      given({
+        cacheHeaderConfig,
+        serviceDefaultCacheLengthSeconds: 900,
+        queryParams: { maxAge: '-1000' },
+      }).expect(900)
+      given({
+        cacheHeaderConfig,
+        serviceDefaultCacheLengthSeconds: 900,
+        queryParams: { maxAge: '' },
+      }).expect(900)
+      given({
+        cacheHeaderConfig,
+        serviceDefaultCacheLengthSeconds: 900,
+        queryParams: { maxAge: 'not a number' },
+      }).expect(900)
+      given({
+        cacheHeaderConfig,
+        serviceDefaultCacheLengthSeconds: 900,
+        serviceOverrideCacheLengthSeconds: 400,
+        queryParams: {},
+      }).expect(900)
+      given({
+        cacheHeaderConfig,
+        serviceOverrideCacheLengthSeconds: 400,
+        queryParams: {},
+      }).expect(777)
+      given({
+        cacheHeaderConfig,
+        serviceOverrideCacheLengthSeconds: 900,
+        queryParams: {},
+      }).expect(900)
+      given({
+        cacheHeaderConfig,
+        serviceOverrideCacheLengthSeconds: 800,
+        queryParams: { maxAge: 500 },
+      }).expect(800)
+      given({
+        cacheHeaderConfig,
+        serviceOverrideCacheLengthSeconds: 900,
+        queryParams: { maxAge: 800 },
+      }).expect(900)
     })
   })
 
@@ -98,7 +148,7 @@ describe('Cache header functions', function() {
 
       setCacheHeaders({
         cacheHeaderConfig: { defaultCacheLengthSeconds: 1234 },
-        serviceCacheLengthSeconds: 567,
+        serviceDefaultCacheLengthSeconds: 567,
         queryParams: { maxAge: 999999 },
         res,
       })

@@ -31,12 +31,12 @@ t.create('oss metadata in unexpected format')
   )
   .expectJSON({
     name: 'oss lifecycle',
-    value: 'inaccessible',
+    value: 'metadata in unexpected format',
   })
 
 t.create('oss metadata not found')
   .get('/PyvesB/empty-repo.json')
   .expectJSON({
     name: 'oss lifecycle',
-    value: 'inaccessible',
+    value: 'not found',
   })

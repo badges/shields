@@ -1,6 +1,6 @@
 'use strict'
 
-const serverSecrets = require('../server-secrets')
+const serverSecrets = require('../../lib/server-secrets')
 
 function secretIsValid(secret = '') {
   return (

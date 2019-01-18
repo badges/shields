@@ -3,7 +3,6 @@
 const Joi = require('joi')
 const t = (module.exports = require('../create-service-tester')())
 const { isMetric } = require('../test-validators')
-const { colorScheme } = require('../test-helpers')
 
 const mockResponse = {
   results: [
@@ -79,7 +78,7 @@ t.create('installs')
   .expectJSON({
     name: 'installs',
     value: '3',
-    colorB: colorScheme.yellow,
+    color: 'yellow',
   })
 
 t.create('zero installs')
@@ -109,7 +108,7 @@ t.create('zero installs')
   .expectJSON({
     name: 'installs',
     value: '0',
-    colorB: colorScheme.red,
+    color: 'red',
   })
 
 t.create('downloads')
@@ -124,7 +123,7 @@ t.create('downloads')
   .expectJSON({
     name: 'downloads',
     value: '10',
-    colorB: colorScheme.yellowgreen,
+    color: 'yellowgreen',
   })
 
 t.create('live: installs (legacy)')
