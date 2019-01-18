@@ -1,17 +1,19 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { addv: versionText } = require('../../lib/text-formatters')
-const { version: versionColor } = require('../../lib/color-formatters')
+const Joi = require('joi')
+const BaseJsonService = require('../base-json')
+const { renderVersionBadge } = require('../../lib/version')
+const { NotFound } = require('../errors')
+const { nonNegativeInteger } = require('../validators')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class Itunes extends LegacyService {
+const schema = Joi.object({
+  resultCount: nonNegativeInteger,
+  results: Joi.array()
+    .items(Joi.object({ version: Joi.string().required() }))
+    .min(0),
+}).required()
+
+module.exports = class Itunes extends BaseJsonService {
   static get category() {
     return 'version'
   }
@@ -19,61 +21,41 @@ module.exports = class Itunes extends LegacyService {
   static get route() {
     return {
       base: 'itunes/v',
+      pattern: ':bundleId',
     }
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'itunes app store' }
   }
 
   static get examples() {
     return [
       {
         title: 'iTunes App Store',
-        pattern: ':bundleId',
-        namedParams: {
-          bundleId: '803453959',
-        },
-        staticPreview: {
-          label: 'itunes app store',
-          message: 'v3.3.3',
-          color: 'blue',
-        },
+        namedParams: { bundleId: '803453959' },
+        staticPreview: renderVersionBadge({ version: 'v3.3.3' }),
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/itunes\/v\/(.+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const bundleId = match[1] // eg, `324684580`
-        const format = match[2]
-        const apiUrl = `https://itunes.apple.com/lookup?id=${bundleId}`
-        const badgeData = getBadgeData('itunes app store', data)
-        request(apiUrl, (err, res, buffer) => {
-          if (err !== null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const data = JSON.parse(buffer)
-            if (data.resultCount === 0) {
-              /* Note the 'not found' response from iTunes is:
-           status code = 200,
-           body = { "resultCount":0, "results": [] }
-        */
-              badgeData.text[1] = 'not found'
-              sendBadge(format, badgeData)
-              return
-            }
-            const version = data.results[0].version
-            badgeData.text[1] = versionText(version)
-            badgeData.colorscheme = versionColor(version)
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  async fetch({ bundleId }) {
+    return this._requestJson({
+      schema,
+      url: `https://itunes.apple.com/lookup?id=${bundleId}`,
+    })
+  }
+
+  async handle({ bundleId }) {
+    const data = await this.fetch({ bundleId })
+
+    if (data.resultCount === 0) {
+      // Note the 'not found' response from iTunes is:
+      // status code = 200,
+      // body = { "resultCount":0, "results": [] }
+      throw new NotFound()
+    }
+
+    return renderVersionBadge({ version: data.results[0].version })
   }
 }

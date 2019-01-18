@@ -2,7 +2,15 @@
 
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { escapeFormatSlashes } = require('../../lib/path-helpers')
+const { escapeFormat } = require('../../core/badge-urls/path-helpers')
+
+function escapeFormatSlashes(t) {
+  return (
+    escapeFormat(t)
+      // Double slash
+      .replace(/\/\//g, '/')
+  )
+}
 
 const documentation = `
 <p>

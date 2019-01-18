@@ -151,7 +151,13 @@ function transformExample(inExample, index, ServiceClass) {
     }
   }
 
-  return { title, example, preview, keywords, documentation }
+  return {
+    title,
+    example,
+    preview,
+    keywords,
+    documentation: documentation ? { __html: documentation } : undefined,
+  }
 }
 
 module.exports = {
