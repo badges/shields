@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
-const t = (module.exports = require('../create-service-tester'))
+const t = (module.exports = require('../create-service-tester')())
 
 t.create('iTunes version (valid)')
   .get('/v/324684580.json')
