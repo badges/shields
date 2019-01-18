@@ -1,12 +1,11 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseSvgScrapingService = require('../base-svg-scraping')
-const { NotFound } = require('../errors')
 const {
   isBuildStatus,
   renderBuildStatusBadge,
 } = require('../../lib/build-status')
+const { BaseSvgScrapingService, NotFound } = require('..')
 
 const keywords = ['documentation']
 

@@ -1,10 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
 const serverSecrets = require('../../lib/server-secrets')
 const { metric } = require('../../lib/text-formatters')
 const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService } = require('..')
 
 const bitbucketPullRequestSchema = Joi.object({
   size: nonNegativeInteger,

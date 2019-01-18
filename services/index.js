@@ -1,9 +1,13 @@
 'use strict'
 
 const glob = require('glob')
-const BaseService = require('./base')
+const base = require('../core/base-service')
+const createServiceTester = require('./create-service-tester')
+const ServiceTester = require('./service-tester')
 const { categories } = require('./categories')
 const { assertValidServiceDefinitionExport } = require('./service-definitions')
+
+const { BaseService } = base
 
 class InvalidService extends Error {
   constructor(message) {
@@ -71,6 +75,9 @@ function loadTesters() {
 }
 
 module.exports = {
+  ...base,
+  createServiceTester,
+  ServiceTester,
   InvalidService,
   loadServiceClasses,
   loadTesters,

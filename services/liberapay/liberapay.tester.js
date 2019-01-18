@@ -1,13 +1,18 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
+const { isMetric } = require('../test-validators')
+
+// Values must be greater than zero.
 const isLiberapayTestValues = Joi.string().regex(
   /^([0-9]*[1-9][0-9]*(\.[0-9]+)?|[0]+\.[0-9]*[1-9][0-9]*)[ A-Za-z]{4}\/week/
-) //values must be greater than zero
-const { isMetric } = require('../test-validators')
-const t = new ServiceTester({ id: 'liberapay', title: 'Liberapay' })
-module.exports = t
+)
+
+const t = (module.exports = new ServiceTester({
+  id: 'liberapay',
+  title: 'Liberapay',
+}))
 
 t.create('Receiving')
   .get('/receives/Liberapay.json')

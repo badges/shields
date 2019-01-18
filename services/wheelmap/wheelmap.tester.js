@@ -2,7 +2,7 @@
 
 const serverSecrets = require('../../lib/server-secrets')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 const noToken = !serverSecrets.wheelmap_token
 function logTokenWarning() {

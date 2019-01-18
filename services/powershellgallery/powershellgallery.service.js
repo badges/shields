@@ -1,15 +1,13 @@
 'use strict'
 
 const Joi = require('joi')
-
-const BaseXmlService = require('../base-xml')
-const { NotFound } = require('../errors')
-const { nonNegativeInteger } = require('../validators')
 const { createFilter } = require('../nuget/nuget-v2-service-family')
 const {
   renderVersionBadge,
   renderDownloadBadge,
 } = require('../nuget/nuget-helpers')
+const { BaseXmlService, NotFound } = require('..')
+const { nonNegativeInteger } = require('../validators')
 
 const WINDOWS_TAG_NAME = 'windows'
 const MACOS_TAG_NAME = 'macos'

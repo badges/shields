@@ -1,9 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
 const { renderVersionBadge } = require('../../lib/version')
-const { NotFound } = require('../errors')
+const { BaseJsonService, NotFound } = require('..')
 const { nonNegativeInteger } = require('../validators')
 
 const schema = Joi.object({

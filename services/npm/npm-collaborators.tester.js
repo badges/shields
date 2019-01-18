@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { nonNegativeInteger } = require('../validators')
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('gets the contributor count')
   .get('/prettier.json')

@@ -1,6 +1,6 @@
 'use strict'
 
-const deprecatedService = require('../deprecated-service')
+const { deprecatedService } = require('..')
 
 // coverity scan integration -
 // **temporarily deprecated as of January 2019 due to extended outage**

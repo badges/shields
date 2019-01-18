@@ -7,7 +7,7 @@ const isOrdinalNumberDaily = Joi.string().regex(
   /^[1-9][0-9]*(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ) daily$/
 )
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('total rank (valid)')
   .get('/rt/rspec-puppet-facts.json')

@@ -1,9 +1,9 @@
 'use strict'
 
-const BaseJsonService = require('../base-json')
+const Joi = require('joi')
 const { metric } = require('../../lib/text-formatters')
 const { floorCount: floorCountColor } = require('../../lib/color-formatters')
-const Joi = require('joi')
+const { BaseJsonService } = require('..')
 
 const reputationSchema = Joi.object({
   items: Joi.array()

@@ -3,7 +3,7 @@
 const { DOMParser } = require('xmldom')
 const xpath = require('xpath')
 const BaseService = require('../base')
-const { InvalidResponse } = require('../errors')
+const { InvalidResponse } = require('..')
 const { renderDynamicBadge } = require('../dynamic-common')
 const {
   createRoute,

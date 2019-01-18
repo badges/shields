@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isSemver } = require('../test-validators')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('gets the package version of left-pad')
   .get('/left-pad.json')

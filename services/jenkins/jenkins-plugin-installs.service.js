@@ -2,12 +2,11 @@
 
 const Joi = require('joi')
 
-const BaseJsonService = require('../base-json')
-const { NotFound } = require('../errors')
 const {
   downloadCount: downloadCountColor,
 } = require('../../lib/color-formatters')
 const { metric } = require('../../lib/text-formatters')
+const { BaseJsonService, NotFound } = require('..')
 const { nonNegativeInteger } = require('../validators')
 
 const schemaInstallations = Joi.object()

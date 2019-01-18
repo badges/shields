@@ -1,7 +1,7 @@
 'use strict'
 
 const BaseSvgService = require('../base-svg-scraping')
-const { NotFound } = require('../errors')
+const { NotFound } = require('..')
 const { keywords, fetch } = require('./azure-devops-helpers')
 const { renderBuildStatusBadge } = require('../../lib/build-status')
 

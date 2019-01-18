@@ -4,7 +4,7 @@ const Joi = require('joi')
 const { dockerBlue } = require('./docker-helpers')
 const { isMetric } = require('../test-validators')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('docker pulls (valid, library)')
   .get('/_/ubuntu.json?style=_shields_test')

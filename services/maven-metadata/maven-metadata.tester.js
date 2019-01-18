@@ -1,14 +1,13 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
-const t = new ServiceTester({
+const t = (module.exports = new ServiceTester({
   id: 'maven-metadata',
   title: 'maven-metadata badge',
-})
-module.exports = t
+}))
 
 t.create('valid maven-metadata.xml uri')
   .get(

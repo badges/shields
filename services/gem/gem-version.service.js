@@ -1,9 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-
 const { renderVersionBadge } = require('../../lib/version')
-const BaseJsonService = require('../base-json')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   // In most cases `version` will be a SemVer but the registry doesn't

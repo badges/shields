@@ -1,10 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 const { invalidJSON } = require('../response-fixtures')
-const t = new ServiceTester({ id: 'lgtm', title: 'LGTM' })
-module.exports = t
+
+const t = (module.exports = new ServiceTester({ id: 'lgtm', title: 'LGTM' }))
 
 // Alerts Badge
 
