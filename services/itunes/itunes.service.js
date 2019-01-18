@@ -13,7 +13,7 @@ const schema = Joi.object({
     .min(0),
 }).required()
 
-module.exports = class DubVersion extends BaseJsonService {
+module.exports = class Itunes extends BaseJsonService {
   static get category() {
     return 'version'
   }
