@@ -1,12 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
-
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'itunes', title: 'iTunes' })
-module.exports = t
+const t = (module.exports = require('../create-service-tester'))
 
 t.create('iTunes version (valid)')
   .get('/v/324684580.json')
