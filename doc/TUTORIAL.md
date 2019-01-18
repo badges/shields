@@ -110,7 +110,7 @@ As a first step we will look at the code for an example which generates a badge 
 ```js
 'use strict'                                         // (1)
 
-const BaseService = require('../base')               // (2)
+const BaseService = require('..')                    // (2)
 
 module.exports = class Example extends BaseService { // (3)
 
@@ -134,7 +134,7 @@ module.exports = class Example extends BaseService { // (3)
 Description of the code:
 
 1. We declare strict mode at the start of each file. This prevents certain classes of error such as undeclared variables.
-2. Our service badge class will extend `BaseService` so we need to require it. We declare variables with `const` and `let` in preference to `var`.
+2. Our service badge class will extend `BaseService` so we need to require it. Variables are declared with `const` and `let` in preference to `var`.
 3. Our module must export a class which extends `BaseService`.
 4. `route()` declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
     * `base` defines the first part of the URL that doesn't change, e.g. `/example/`.
@@ -170,8 +170,8 @@ This example is based on the [Ruby Gems version](https://github.com/badges/shiel
 ```js
 'use strict'                                                    // (1)
 
-const BaseJsonService = require('../base-json')                 // (2)
-const { renderVersionBadge } = require('../../lib/version')     // (3)
+const { renderVersionBadge } = require('../../lib/version')     // (2)
+const BaseJsonService = require('..')                           // (3)
 
 const Joi = require('joi')                                      // (4)
 const schema = Joi.object({                                     // (4)
@@ -212,13 +212,13 @@ module.exports = class GemVersion extends BaseJsonService {     // (5)
 
 Description of the code:
 1. As with the first example, we declare strict mode at the start of each file.
-2. Our badge will query a JSON API so we will extend `BaseJsonService` instead of `BaseService`. This contains some helpers to reduce the need for boilerplate when calling a JSON API.
-3. In this case we are making a version badge, which is a common pattern. Instead of directly returning an object in this badge we will use a helper function to format our data consistently. There are a variety of helper functions to help with common tasks in `/lib`. Some useful generic helpers can be found in:
+2. In this case we are making a version badge, which is a common pattern. Instead of directly returning an object in this badge we will use a helper function to format our data consistently. There are a variety of helper functions to help with common tasks in `/lib`. Some useful generic helpers can be found in:
     * [build-status.js](https://github.com/badges/shields/blob/master/lib/build-status.js)
     * [color-formatters.js](https://github.com/badges/shields/blob/master/lib/color-formatters.js)
     * [licenses.js](https://github.com/badges/shields/blob/master/lib/licenses.js)
     * [text-formatters.js](https://github.com/badges/shields/blob/master/lib/text-formatters.js)
     * [version.js](https://github.com/badges/shields/blob/master/lib/version.js)
+3. Our badge will query a JSON API so we will extend `BaseJsonService` instead of `BaseService`. This contains some helpers to reduce the need for boilerplate when calling a JSON API.
 4. We perform input validation by defining a schema which we expect the JSON we receive to conform to. This is done using [Joi](https://github.com/hapijs/joi). Defining a schema means we can ensure the JSON we receive meets our expectations and throw an error if we receive unexpected input without having to explicitly code validation checks. The schema also acts as a filter on the JSON object. Any properties we're going to reference need to be validated, otherwise they will be filtered out. In this case our schema declares that we expect to receive an object which must have a property called 'status', which is a string.
 5. Our module exports a class which extends `BaseJsonService`
 6. As with our previous badge, we need to declare a route. This time we will capture a variable called `gem`.
@@ -253,7 +253,16 @@ Specifically `BaseJsonService` will handle the following errors for us:
 * API returns a response which can't be parsed as JSON
 * API returns a response which doesn't validate against our schema
 
-Sometimes it may be necessary to manually throw an exception to deal with a non-standard error condition. If so, standard exceptions can be imported from [errors.js](https://github.com/badges/shields/blob/master/services/errors.js) and thrown.
+Sometimes it may be necessary to manually throw an exception to deal with a
+non-standard error condition. If so, standard exceptions can be imported from
+[errors.js](https://github.com/badges/shields/blob/master/services/errors.js)
+and thrown:
+
+```js
+const { NotFound } = require('..')
+
+throw new NotFound({ prettyMessage: 'package not found' })
+```
 
 ### (4.4) Adding an Example to the Front Page
 
