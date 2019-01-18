@@ -1,6 +1,6 @@
 'use strict'
 
-const { BaseSpigetService, documentation } = require('./spiget-base')
+const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 
 const { starRating, metric } = require('../../lib/text-formatters')
 const { floorCount } = require('../../lib/color-formatters')
@@ -64,6 +64,7 @@ module.exports = class SpigetRatings extends BaseSpigetService {
         },
         staticPreview: this.render({ total: 325, average: 4.5 }),
         documentation,
+        keywords,
       },
     ]
   }

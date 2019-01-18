@@ -1,6 +1,6 @@
 'use strict'
 
-const { BaseSpigetService, documentation } = require('./spiget-base')
+const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 
 const { renderVersionBadge } = require('../../lib/version')
 
@@ -46,6 +46,7 @@ module.exports = class SpigetLatestVersion extends BaseSpigetService {
         },
         staticPreview: renderVersionBadge({ version: 2.1 }),
         documentation,
+        keywords,
       },
     ]
   }

@@ -1,6 +1,6 @@
 'use strict'
 
-const { BaseSpigetService, documentation } = require('./spiget-base')
+const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 
 module.exports = class SpigetTestedVersions extends BaseSpigetService {
   static get route() {
@@ -50,6 +50,7 @@ module.exports = class SpigetTestedVersions extends BaseSpigetService {
         },
         staticPreview: this.render({ versions: '1.7-1.13' }),
         documentation,
+        keywords,
       },
     ]
   }

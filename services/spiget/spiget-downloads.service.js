@@ -1,6 +1,6 @@
 'use strict'
 
-const { BaseSpigetService, documentation } = require('./spiget-base')
+const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 const { metric } = require('../../lib/text-formatters')
 const { downloadCount } = require('../../lib/color-formatters')
 
@@ -39,6 +39,7 @@ module.exports = class SpigetDownloads extends BaseSpigetService {
         },
         staticPreview: this.render({ downloads: 560891 }),
         documentation,
+        keywords,
       },
     ]
   }

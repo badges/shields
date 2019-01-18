@@ -1,6 +1,6 @@
 'use strict'
 
-const { BaseSpigetService, documentation } = require('./spiget-base')
+const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 
 module.exports = class SpigetDownloadSize extends BaseSpigetService {
   static get route() {
@@ -40,6 +40,7 @@ module.exports = class SpigetDownloadSize extends BaseSpigetService {
         },
         staticPreview: this.render({ size: 2.5, unit: 'MB' }),
         documentation,
+        keywords,
       },
     ]
   }
