@@ -1,17 +1,12 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
 
-const { isStarRating } = require('../test-validators')
+const { isStarRating, withRegex } = require('../test-validators')
 
-const t = new ServiceTester({
-  id: 'spiget',
-  title: 'SpigetStars',
-})
-module.exports = t
+const t = (module.exports = require('../create-service-tester')())
 
-t.create('EssentialsX (id 9089)')
+t.create('Stars - EssentialsX (id 9089)')
   .get('/stars/9089.json')
   .expectJSONTypes(
     Joi.object().keys({
@@ -20,9 +15,27 @@ t.create('EssentialsX (id 9089)')
     })
   )
 
-t.create('Invalid Resource (id 1)')
+t.create('Stars - Invalid Resource (id 1)')
   .get('/stars/1.json')
   .expectJSON({
     name: 'rating',
     value: 'not found',
   })
+
+t.create('Rating - EssentialsX (id 9089)')
+  .get('/rating/9089.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'rating',
+      value: withRegex(/^(\d*\.\d+)(\/5 \()(\d+)(\))$/),
+    })
+  )
+
+t.create('Rating - Invalid Resource (id 1)')
+  .get('/rating/1.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'rating',
+      value: 'not found',
+    })
+  )
