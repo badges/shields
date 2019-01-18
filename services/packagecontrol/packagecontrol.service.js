@@ -28,11 +28,11 @@ const schema = Joi.object({
 })
 
 function DownloadsForInterval(interval) {
-  const { base, messageSuffix, counter } = {
+  const { base, messageSuffix, transform } = {
     day: {
       base: 'packagecontrol/dd',
       messageSuffix: '/day',
-      counter: function(resp) {
+      transform: resp => {
         const platforms = resp.installs.daily.data
         let downloads = 0
         platforms.forEach(platform => {
@@ -45,7 +45,7 @@ function DownloadsForInterval(interval) {
     week: {
       base: 'packagecontrol/dw',
       messageSuffix: '/week',
-      counter: function(resp) {
+      transform: resp => {
         const platforms = resp.installs.daily.data
         let downloads = 0
         platforms.forEach(platform => {
@@ -60,7 +60,7 @@ function DownloadsForInterval(interval) {
     month: {
       base: 'packagecontrol/dm',
       messageSuffix: '/month',
-      counter: function(resp) {
+      transform: resp => {
         const platforms = resp.installs.daily.data
         let downloads = 0
         platforms.forEach(platform => {
@@ -75,9 +75,7 @@ function DownloadsForInterval(interval) {
     total: {
       base: 'packagecontrol/dt',
       messageSuffix: '',
-      counter: function(resp) {
-        return resp.installs.total
-      },
+      transform: resp => resp.installs.total,
     },
   }[interval]
 
@@ -96,7 +94,7 @@ function DownloadsForInterval(interval) {
 
     async handle({ packageName }) {
       const data = await this.fetch({ packageName })
-      return this.constructor.render({ downloads: counter(data) })
+      return this.constructor.render({ downloads: transform(data) })
     }
 
     static get defaultBadgeData() {
