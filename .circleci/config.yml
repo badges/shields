@@ -251,34 +251,68 @@ workflows:
 
   on-commit:
     jobs:
-      - npm-install:
+      - main:
           filters:
             branches:
               ignore: gh-pages
-      - main:
-          requires:
-            - npm-install
       - main@node-latest:
-          requires:
-            - npm-install
+          filters:
+            branches:
+              ignore: gh-pages
       - frontend:
-          requires:
-            - npm-install
+          filters:
+            branches:
+              ignore: gh-pages
       - services:
-          requires:
-            - npm-install
           filters:
             branches:
-              ignore: master
+              ignore:
+                - master
+                - gh-pages
       - services@node-latest:
-          requires:
-            - npm-install
           filters:
             branches:
-              ignore: master
+              ignore:
+                - master
+                - gh-pages
       - danger:
-          requires:
-            - npm-install
           filters:
             branches:
-              ignore: /dependabot\/.*/
+              ignore:
+                - master
+                - gh-pages
+                - /dependabot\/.*/
+
+  # on-commit-with-cache:
+  #   jobs:
+  #     - npm-install:
+  #         filters:
+  #           branches:
+  #             ignore: gh-pages
+  #     - main:
+  #         requires:
+  #           - npm-install
+  #     - main@node-latest:
+  #         requires:
+  #           - npm-install
+  #     - frontend:
+  #         requires:
+  #           - npm-install
+  #     - services:
+  #         requires:
+  #           - npm-install
+  #         filters:
+  #           branches:
+  #             ignore: master
+  #     - services@node-latest:
+  #         requires:
+  #           - npm-install
+  #         filters:
+  #           branches:
+  #             ignore: master
+  #     - danger:
+  #         requires:
+  #           - npm-install
+  #         filters:
+  #           branches:
+  #             ignore: /dependabot\/.*/
