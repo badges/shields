@@ -23,3 +23,49 @@ t.create('Invalid Resource (id 1)')
     name: 'tested versions',
     value: 'not found',
   })
+
+t.create('Nock - single version supported')
+  .get('/1.json')
+  .intercept(nock =>
+    nock('https://api.spiget.org/v2/resources/')
+      .get('/1')
+      .reply(200, {
+        downloads: 1,
+        file: {
+          size: 1,
+          sizeUnit: '1',
+        },
+        testedVersions: ['1.13'],
+        rating: {
+          count: 1,
+          average: 1,
+        },
+      })
+  )
+  .expectJSON({
+    name: 'tested versions',
+    value: '1.13',
+  })
+
+t.create('Nock - multiple versions supported')
+  .get('/1.json')
+  .intercept(nock =>
+    nock('https://api.spiget.org/v2/resources/')
+      .get('/1')
+      .reply(200, {
+        downloads: 1,
+        file: {
+          size: 1,
+          sizeUnit: '1',
+        },
+        testedVersions: ['1.10', '1.11', '1.12', '1.13'],
+        rating: {
+          count: 1,
+          average: 1,
+        },
+      })
+  )
+  .expectJSON({
+    name: 'tested versions',
+    value: '1.10-1.13',
+  })
