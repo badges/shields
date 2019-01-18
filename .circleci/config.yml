@@ -282,7 +282,6 @@ workflows:
                 - master
                 - gh-pages
                 - /dependabot\/.*/
-
   # on-commit-with-cache:
   #   jobs:
   #     - npm-install:
