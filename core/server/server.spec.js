@@ -137,6 +137,7 @@ describe('The server', function() {
             .required()
         )
         .length(36)
+        .required()
       const analyticsSchema = Joi.object({
         vendorMonthly: countSchema,
         rawMonthly: countSchema,
@@ -144,7 +145,7 @@ describe('The server', function() {
         rawFlatMonthly: countSchema,
         vendorFlatSquareMonthly: countSchema,
         rawFlatSquareMonthly: countSchema,
-      })
+      }).required()
 
       const res = await fetch(`${baseUrl}$analytics/v1`)
       expect(res.ok).to.be.true
