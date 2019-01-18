@@ -6,7 +6,7 @@ const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 const t = (module.exports = require('../create-service-tester')())
 
 t.create('iTunes version (valid)')
-  .get('/v/324684580.json')
+  .get('/324684580.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'itunes app store',
@@ -15,9 +15,9 @@ t.create('iTunes version (valid)')
   )
 
 t.create('iTunes version (not found)')
-  .get('/v/9.json')
+  .get('/9.json')
   .expectJSON({ name: 'itunes app store', value: 'not found' })
 
 t.create('iTunes version (invalid)')
-  .get('/v/x.json')
+  .get('/x.json')
   .expectJSON({ name: 'itunes app store', value: 'invalid' })
