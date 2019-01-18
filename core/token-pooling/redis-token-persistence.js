@@ -2,7 +2,7 @@
 
 const redis = require('redis')
 const { promisify } = require('util')
-const log = require('../core/server/log')
+const log = require('../server/log')
 const TokenPersistence = require('./token-persistence')
 
 class RedisTokenPersistence extends TokenPersistence {
