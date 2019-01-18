@@ -2,7 +2,7 @@
 
 const BaseService = require('../../services/base')
 const BaseJsonService = require('../../services/base-json')
-const BaseNonMemoryCaching = require('../../services/base-non-memory-caching')
+const NonMemoryCachingBaseService = require('../../services/base-non-memory-caching')
 const BaseStaticService = require('../../services/base-static')
 const BaseSvgScrapingService = require('../../services/base-svg-scraping')
 const BaseXmlService = require('../../services/base-xml')
@@ -21,7 +21,7 @@ const {
 module.exports = {
   BaseService,
   BaseJsonService,
-  BaseNonMemoryCaching,
+  NonMemoryCachingBaseService,
   BaseStaticService,
   BaseSvgScrapingService,
   BaseXmlService,
