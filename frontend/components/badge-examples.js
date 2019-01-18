@@ -1,7 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { badgeUrlFromPath, staticBadgeUrl } from '../../lib/make-badge-url'
+import {
+  badgeUrlFromPath,
+  staticBadgeUrl,
+} from '../../core/badge-urls/make-badge-url'
 import { Badge } from './common'
 import { StyledCode } from './snippet'
 

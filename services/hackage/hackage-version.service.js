@@ -20,6 +20,7 @@ module.exports = class HackageVersion extends LegacyService {
   static get route() {
     return {
       base: 'hackage/v',
+      pattern: ':packageName',
     }
   }
 
@@ -27,7 +28,12 @@ module.exports = class HackageVersion extends LegacyService {
     return [
       {
         title: 'Hackage',
-        previewUrl: 'lens',
+        namedParams: { packageName: 'lens' },
+        staticPreview: {
+          label: 'hackage',
+          message: 'v4.1.7',
+          color: 'blue',
+        },
       },
     ]
   }

@@ -16,15 +16,6 @@ function escapeFormat(t) {
   )
 }
 
-function escapeFormatSlashes(t) {
-  return (
-    escapeFormat(t)
-      // Double slash
-      .replace(/\/\//g, '/')
-  )
-}
-
 module.exports = {
   escapeFormat,
-  escapeFormatSlashes,
 }
