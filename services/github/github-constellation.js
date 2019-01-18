@@ -1,10 +1,10 @@
 'use strict'
 
 const path = require('path')
+const RedisTokenPersistence = require('../../core/token-pooling/redis-token-persistence')
+const FsTokenPersistence = require('../../core/token-pooling/fs-token-persistence')
 const serverSecrets = require('../../lib/server-secrets')
 const log = require('../../core/server/log')
-const RedisTokenPersistence = require('../../lib/redis-token-persistence')
-const FsTokenPersistence = require('../../lib/fs-token-persistence')
 const GithubApiProvider = require('./github-api-provider')
 const { setRoutes: setAdminRoutes } = require('./auth/admin')
 const { setRoutes: setAcceptorRoutes } = require('./auth/acceptor')
