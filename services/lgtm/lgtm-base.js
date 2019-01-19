@@ -17,10 +17,7 @@ module.exports = class LgtmBaseService extends BaseJsonService {
   async fetch({ user, repo }) {
     const url = `https://lgtm.com/api/v0.1/project/g/${user}/${repo}/details`
 
-    return this._requestJson({
-      schema,
-      url,
-    })
+    return this._requestJson({ schema, url })
   }
 
   static get category() {
