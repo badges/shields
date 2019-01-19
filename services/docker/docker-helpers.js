@@ -2,14 +2,14 @@
 
 const dockerBlue = '066da5' // see https://github.com/badges/shields/pull/1690
 
-const buildDockerUrl = function(badgeName) {
+function buildDockerUrl(badgeName) {
   return {
     base: `docker/${badgeName}`,
     pattern: ':user/:repo',
   }
 }
 
-const getDockerHubUser = function(user) {
+function getDockerHubUser(user) {
   return user === '_' ? 'library' : user
 }
 
