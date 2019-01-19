@@ -33,9 +33,7 @@ t.create('Rating - EssentialsX (id 9089)')
 
 t.create('Rating - Invalid Resource (id 1)')
   .get('/rating/1.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'rating',
-      value: 'not found',
-    })
-  )
+  .expectJSON({
+    name: 'rating',
+    value: 'not found',
+  })

@@ -30,6 +30,9 @@ module.exports = class SpigetDownloads extends BaseSpigetService {
     }
   }
 
+  static get category() {
+    return 'downloads'
+  }
   static get examples() {
     return [
       {
