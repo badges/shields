@@ -2,10 +2,8 @@
 
 const moment = require('moment')
 const LegacyService = require('../legacy-service')
-const {
-  makeBadgeData: getBadgeData,
-  makeLogo: getLogo,
-} = require('../../lib/badge-data')
+const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const { makeLogo: getLogo } = require('../../lib/logos')
 const { formatDate } = require('../../lib/text-formatters')
 const { age } = require('../../lib/color-formatters')
 const { documentation } = require('./github-helpers')

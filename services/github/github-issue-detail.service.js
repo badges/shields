@@ -4,8 +4,8 @@ const LegacyService = require('../legacy-service')
 const {
   makeLabel: getLabel,
   makeBadgeData: getBadgeData,
-  makeLogo: getLogo,
 } = require('../../lib/badge-data')
+const { makeLogo: getLogo } = require('../../lib/logos')
 const { formatDate } = require('../../lib/text-formatters')
 const { age: ageColor } = require('../../lib/color-formatters')
 const {
