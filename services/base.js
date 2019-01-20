@@ -352,7 +352,31 @@ class BaseService {
   }
 
   // Translate modern badge data to the legacy schema understood by the badge
-  // maker.
+  // maker. Allow the user to override the label, color, logo, etc. through
+  // the query string. Provide support for most badge options via
+  // `serviceData` so the Endpoint badge can specify logos and colors, though
+  // allow that the user's logo or color to take precedence. A notable
+  // exception is the case of errors. When the service specifies that an error
+  // has occurred, the user's requested color does not override the error color.
+  //
+  // Logos are resolved in this manner:
+  //
+  // 1. When `?logo=` contains the name of one of the Shields logos, or contains
+  //    base64-encoded SVG, that logo is used. In the case of a named logo, when
+  //    a `&logoColor=` is specified, that color is used. Otherwise the default
+  //    color is used. `logoColor` will not be applied to a custom
+  //    (base64-encoded) logo; if a custom color is desired the logo should be
+  //    recolored prior to making the request. The appearance of the logo can be
+  //    customized using `logoWidth`, and in the case of the popout badge,
+  //    `logoPosition`. When `?logo=` is specified, any logo-related parameters
+  //    specified dynamically by the service, or by default in the service, are
+  //    ignored.
+  // 2. The second precedence is the dynamic logo returned by a service. This is
+  //    used only by the Endpoint badge. The `logoColor` can be overridden by the
+  //    query string.
+  // 3. In the case of the `social` style only, the last precedence is the
+  //    service's default logo. The `logoColor` can be overridden by the query
+  //    string.
   static _makeBadgeData(overrides, serviceData) {
     const {
       style,
