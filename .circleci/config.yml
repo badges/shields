@@ -45,19 +45,19 @@ jobs:
           command: npm run lint
 
       - run:
-          name: Server unit tests
+          name: Core tests
           when: always
           environment:
             mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/server/results.xml
-          command: npm run test:js:server
+            MOCHA_FILE: junit/core/results.xml
+          command: npm run test:core
 
       - run:
           name: Integration tests
           when: always
           environment:
             mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/server/integration.xml
+            MOCHA_FILE: junit/integration/results.xml
           command: npm run test:integration
 
       - run:
@@ -65,8 +65,8 @@ jobs:
           when: always
           environment:
             mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/server/gh-badges.xml
-          command: npm run test:js:package
+            MOCHA_FILE: junit/gh-badges/results.xml
+          command: npm run test:package
 
       - store_test_results:
           path: junit
@@ -99,12 +99,12 @@ jobs:
           command: npm run lint
 
       - run:
-          name: Server unit tests
+          name: Core tests
           when: always
           environment:
             mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/server/results.xml
-          command: npm run test:js:server
+            MOCHA_FILE: junit/core/results.xml
+          command: npm run test:core
 
       - run:
           name: Integration tests
@@ -120,7 +120,7 @@ jobs:
           environment:
             mocha_reporter: mocha-junit-reporter
             MOCHA_FILE: junit/gh-badges/results.xml
-          command: npm run test:js:package
+          command: npm run test:package
 
       - store_test_results:
           path: junit
@@ -176,7 +176,7 @@ jobs:
           environment:
             mocha_reporter: mocha-junit-reporter
             MOCHA_FILE: junit/frontend/results.xml
-          command: npm run test:js:frontend
+          command: npm run test:frontend
 
       - store_test_results:
           path: junit

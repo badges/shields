@@ -136,7 +136,7 @@ export default class MarkupModalContent extends React.Component {
     } = this.props
 
     return documentation ? (
-      <Documentation dangerouslySetInnerHTML={{ __html: documentation }} />
+      <Documentation dangerouslySetInnerHTML={documentation} />
     ) : null
   }
 

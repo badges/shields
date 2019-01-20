@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { TokenPool } = require('../../lib/token-pool')
+const { TokenPool } = require('../../core/token-pooling/token-pool')
 const { nonNegativeInteger } = require('../validators')
 
 const headerSchema = Joi.object({

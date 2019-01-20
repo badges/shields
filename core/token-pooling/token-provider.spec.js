@@ -2,7 +2,7 @@
 
 const assert = require('assert')
 const { PoolingTokenProvider } = require('./token-provider')
-const isValidGithubToken = require('../services/github/auth/is-valid-token')
+const isValidGithubToken = require('../../services/github/auth/is-valid-token')
 
 describe('The token provider', function() {
   describe('toNative', function() {
