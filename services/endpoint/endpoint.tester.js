@@ -1,5 +1,8 @@
 'use strict'
 
+const { expect } = require('chai')
+const { getShieldsIcon } = require('../../lib/logos')
+
 const t = (module.exports = require('../create-service-tester')())
 
 t.create('Valid schema (mocked)')
@@ -57,6 +60,22 @@ t.create('style')
     color: '#99c',
   })
 
+t.create('logo')
+  .get('.svg?url=https://example.com/badge')
+  .intercept(nock =>
+    nock('https://example.com/')
+      .get('/badge')
+      .reply(200, {
+        schemaVersion: 1,
+        label: 'hey',
+        message: 'yo',
+        namedLogo: 'github',
+      })
+  )
+  .after((err, res, body) => {
+    expect(body).to.include(getShieldsIcon({ name: 'github' }))
+  })
+
 t.create('Invalid schema (mocked)')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>
@@ -64,6 +83,21 @@ t.create('Invalid schema (mocked)')
       .get('/badge')
       .reply(200, {
         schemaVersion: -1,
+      })
+  )
+  .expectJSON({ name: 'custom badge', value: 'invalid response data' })
+
+t.create('Invalid schema (mocked)')
+  .get('.json?url=https://example.com/badge')
+  .intercept(nock =>
+    nock('https://example.com/')
+      .get('/badge')
+      .reply(200, {
+        schemaVersion: 1,
+        label: 'hey',
+        message: 'yo',
+        extra: 'keys',
+        bogus: true,
       })
   )
   .expectJSON({ name: 'custom badge', value: 'invalid response data' })

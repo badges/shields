@@ -13,6 +13,8 @@ const queryParamSchema = Joi.object({
   url: optionalUrl.required(),
 }).required()
 
+const anySchema = Joi.any()
+
 const endpointSchema = Joi.object({
   schemaVersion: 1,
   label: Joi.string()
@@ -92,6 +94,11 @@ module.exports = class Endpoint extends BaseJsonService {
       message,
       color,
       labelColor,
+      namedLogo,
+      logoSvg,
+      logoColor,
+      logoWidth,
+      logoPosition,
       style,
       cacheSeconds,
     }
@@ -111,12 +118,16 @@ module.exports = class Endpoint extends BaseJsonService {
       throw new InvalidParameter({ prettyMessage: 'domain is blocked' })
     }
 
-    const data = await this._requestJson({
-      schema: endpointSchema,
+    const json = await this._requestJson({
+      schema: anySchema,
       url,
       errorMessages,
     })
+    // Override the validation options because we want to reject unknown keys.
+    const validated = this.constructor._validate(json, endpointSchema, {
+      allowAndStripUnknownKeys: false,
+    })
 
-    return this.constructor.render(data)
+    return this.constructor.render(validated)
   }
 }

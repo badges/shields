@@ -518,13 +518,14 @@ class BaseService {
     )
   }
 
-  static _validate(data, schema) {
+  static _validate(data, schema, { allowAndStripUnknownKeys = true } = {}) {
     return validate(
       {
         ErrorClass: InvalidResponse,
         prettyErrorMessage: 'invalid response data',
         traceErrorMessage: 'Response did not match schema',
         traceSuccessMessage: 'Response after validation',
+        allowAndStripUnknownKeys,
       },
       data,
       schema
