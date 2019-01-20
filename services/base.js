@@ -416,7 +416,7 @@ class BaseService {
       logoWidth: serviceLogoWidth,
       logoPosition: serviceLogoPosition,
       link: serviceLink,
-      cacheSeconds: serviceCacheLengthSeconds,
+      cacheSeconds: serviceCacheSeconds,
       style: serviceStyle,
     } = serviceData
     const serviceLogoSvgBase64 = serviceLogoSvg
@@ -429,7 +429,7 @@ class BaseService {
       label: defaultLabel,
       labelColor: defaultLabelColor,
     } = this.defaultBadgeData
-    const defaultCacheLengthSeconds = this._cacheLength
+    const defaultCacheSeconds = this._cacheLength
 
     const style = coalesce(overrideStyle, serviceStyle)
 
@@ -484,10 +484,7 @@ class BaseService {
         overrideNamedLogo ? undefined : serviceLogoPosition
       ),
       links: toArray(overrideLink || serviceLink),
-      cacheLengthSeconds: coalesce(
-        serviceCacheLengthSeconds,
-        defaultCacheLengthSeconds
-      ),
+      cacheLengthSeconds: coalesce(serviceCacheSeconds, defaultCacheSeconds),
     }
   }
 

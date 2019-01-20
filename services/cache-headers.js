@@ -83,14 +83,12 @@ function setCacheHeaders({
   queryParams,
   res,
 }) {
-  console.log('queryParams', queryParams)
   const cacheLengthSeconds = coalesceCacheLength({
     cacheHeaderConfig,
     serviceDefaultCacheLengthSeconds,
     serviceOverrideCacheLengthSeconds,
     queryParams,
   })
-  console.log('cache len', cacheLengthSeconds)
   setHeadersForCacheLength(res, cacheLengthSeconds)
 }
 
