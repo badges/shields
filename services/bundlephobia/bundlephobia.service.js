@@ -1,8 +1,8 @@
 'use strict'
 
 const prettyBytes = require('pretty-bytes')
-const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const LegacyService = require('../legacy-service')
 
 const keywords = ['node']
 

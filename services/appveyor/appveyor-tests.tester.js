@@ -18,7 +18,7 @@ const isCompactCustomAppveyorTestTotals = Joi.string().regex(
   /^💃 [0-9]+( \| 🤦‍♀️ [0-9]+)?( \| 🤷 [0-9]+)?$/
 )
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('Test status')
   .get('/NZSmartie/coap-net-iu0to.json')

@@ -1,6 +1,6 @@
 'use strict'
 
-const BaseJsonService = require('../base-json')
+const { BaseJsonService } = require('..')
 const { staticAuthConfigured } = require('./github-helpers')
 
 function createRequestFetcher(context, config) {

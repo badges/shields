@@ -1,14 +1,13 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 const { isPhpVersionReduction } = require('../test-validators')
 
-const t = new ServiceTester({
+const t = (module.exports = new ServiceTester({
   id: 'php-eye',
   title: 'PHP version from PHP-Eye',
-})
-module.exports = t
+}))
 
 t.create('gets the package version of symfony')
   .get('/symfony/symfony.json')

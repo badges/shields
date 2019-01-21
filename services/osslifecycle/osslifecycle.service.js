@@ -1,7 +1,6 @@
 'use strict'
 
-const BaseService = require('../base')
-const { InvalidResponse } = require('../errors')
+const { BaseService, InvalidResponse } = require('..')
 
 module.exports = class OssTracker extends BaseService {
   static get category() {

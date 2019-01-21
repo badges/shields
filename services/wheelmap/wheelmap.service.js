@@ -1,9 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
-
 const serverSecrets = require('../../lib/server-secrets')
+const { BaseJsonService } = require('..')
 
 const wheelmapSchema = Joi.object({
   node: Joi.object({

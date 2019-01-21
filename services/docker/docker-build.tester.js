@@ -4,7 +4,7 @@ const Joi = require('joi')
 const { dockerBlue } = require('./docker-helpers')
 const { isBuildStatus } = require('../../lib/build-status')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('docker build status (valid, user)')
   .get('/jrottenberg/ffmpeg.json')

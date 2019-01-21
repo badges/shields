@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isMetric } = require('../test-validators')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('EssentialsX (id 9089)')
   .get('/9089.json')

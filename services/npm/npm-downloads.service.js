@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
 const { metric } = require('../../lib/text-formatters')
+const { BaseJsonService } = require('..')
 const { nonNegativeInteger } = require('../validators')
 
 // https://github.com/npm/registry/blob/master/docs/download-counts.md#output

@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isIntegerPercentage } = require('../test-validators')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('Coverage')
   .get('/59d607d0e311408885e418004068ea58.json')

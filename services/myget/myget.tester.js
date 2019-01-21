@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 const {
   isMetric,
   isVPlusDottedVersionNClausesWithOptionalSuffix,
@@ -14,8 +14,11 @@ const {
 } = require('../nuget-fixtures')
 const { invalidJSON } = require('../response-fixtures')
 
-const t = new ServiceTester({ id: 'myget', title: 'MyGet', pathPrefix: '' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'myget',
+  title: 'MyGet',
+  pathPrefix: '',
+}))
 
 // downloads
 
@@ -62,22 +65,6 @@ t.create('total downloads (unexpected first response)')
     name: 'downloads',
     value: 'unparseable intermediate json response',
   })
-
-t.create('total downloads (unexpected second response)')
-  .get('/myget/mongodb/dt/MongoDB.Driver.Core.json')
-  .intercept(nock =>
-    nock('https://www.myget.org')
-      .get('/F/mongodb/api/v3/index.json')
-      .reply(200, queryIndex)
-  )
-  .intercept(nock =>
-    nock('https://api-v2v3search-0.nuget.org')
-      .get(
-        '/query?q=packageid%3Amongodb.driver.core&prerelease=true&semVerLevel=2'
-      )
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'downloads', value: 'unparseable json response' })
 
 // version
 
@@ -163,22 +150,6 @@ t.create('version (not found)')
   .get('/myget/foo/v/not-a-real-package.json')
   .expectJSON({ name: 'myget', value: 'package not found' })
 
-t.create('version (unexpected second response)')
-  .get('/myget/mongodb/v/MongoDB.Driver.Core.json')
-  .intercept(nock =>
-    nock('https://www.myget.org')
-      .get('/F/mongodb/api/v3/index.json')
-      .reply(200, queryIndex)
-  )
-  .intercept(nock =>
-    nock('https://api-v2v3search-0.nuget.org')
-      .get(
-        '/query?q=packageid%3Amongodb.driver.core&prerelease=true&semVerLevel=2'
-      )
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'myget', value: 'unparseable json response' })
-
 // version (pre)
 
 t.create('version (pre) (valid)')
@@ -253,19 +224,3 @@ t.create('version (pre) (mocked, blue badge)')
 t.create('version (pre) (not found)')
   .get('/myget/foo/vpre/not-a-real-package.json')
   .expectJSON({ name: 'myget', value: 'package not found' })
-
-t.create('version (pre) (unexpected second response)')
-  .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json')
-  .intercept(nock =>
-    nock('https://www.myget.org')
-      .get('/F/mongodb/api/v3/index.json')
-      .reply(200, queryIndex)
-  )
-  .intercept(nock =>
-    nock('https://api-v2v3search-0.nuget.org')
-      .get(
-        '/query?q=packageid%3Amongodb.driver.core&prerelease=true&semVerLevel=2'
-      )
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'myget', value: 'unparseable json response' })

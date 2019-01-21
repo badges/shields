@@ -1,6 +1,6 @@
 'use strict'
 
-const deprecatedService = require('../deprecated-service')
+const { deprecatedService } = require('..')
 
 // VersionEye integration - deprecated as of August 2018.
 module.exports = deprecatedService({

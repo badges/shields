@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 const { isIntegerPercentage } = require('../test-validators')
 
 const t = (module.exports = new ServiceTester({

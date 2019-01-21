@@ -1,10 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseYamlService = require('../base-yaml')
-const { addv: versionText } = require('../../lib/text-formatters')
+const { addv } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
-const { InvalidResponse } = require('../errors')
+const { BaseYamlService, InvalidResponse } = require('..')
 
 const schema = Joi.object({
   CurrentVersion: Joi.alternatives()
@@ -15,7 +14,7 @@ const schema = Joi.object({
 module.exports = class FDroid extends BaseYamlService {
   static render({ version }) {
     return {
-      message: versionText(version),
+      message: addv(version),
       color: versionColor(version),
     }
   }

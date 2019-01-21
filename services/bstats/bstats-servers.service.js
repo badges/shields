@@ -1,9 +1,9 @@
 'use strict'
 
-const BaseJsonService = require('../base-json')
-const { metric } = require('../../lib/text-formatters')
-
 const Joi = require('joi')
+const { metric } = require('../../lib/text-formatters')
+const { BaseJsonService } = require('..')
+
 const schema = Joi.array()
   .items(Joi.array().items([Joi.number().required(), Joi.number().required()]))
   .required()

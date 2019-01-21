@@ -1,20 +1,17 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
-
-// Get validate function from validator.js lib
 const {
   isSemver,
   isStarRating,
   isFormattedDate,
 } = require('../test-validators')
+const { ServiceTester } = require('..')
 
-const t = new ServiceTester({
+const t = (module.exports = new ServiceTester({
   id: 'vaadin-directory',
   title: 'vaadin directory',
-})
-module.exports = t
+}))
 
 t.create('stars of component displayed in star icons')
   .get('/star/vaadinvaadin-grid.json')

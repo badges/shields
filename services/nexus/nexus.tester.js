@@ -5,7 +5,7 @@ const sinon = require('sinon')
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix: isVersion,
 } = require('../test-validators')
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 const serverSecrets = require('../../lib/server-secrets')
 
 const user = 'admin'

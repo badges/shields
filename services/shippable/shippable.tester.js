@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isBuildStatus } = require('../../lib/build-status')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('build status (valid, without branch)')
   .get('/5444c5ecb904a4b21567b0ff.json')
