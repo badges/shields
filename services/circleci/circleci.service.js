@@ -1,10 +1,14 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
+const {
+  isBuildStatus,
+  renderBuildStatusBadge,
+} = require('../../lib/build-status')
+const { BaseJsonService } = require('..')
 
 const circleSchema = Joi.array()
-  .items(Joi.object({ status: Joi.string().required() }))
+  .items(Joi.object({ status: isBuildStatus }))
   .min(1)
   .max(1)
   .required()
@@ -38,15 +42,7 @@ module.exports = class CircleCi extends BaseJsonService {
   }
 
   static render({ status }) {
-    if (['success', 'fixed'].includes(status)) {
-      return { message: 'passing', color: 'brightgreen' }
-    } else if (status === 'failed') {
-      return { message: 'failed', color: 'red' }
-    } else if (['no_tests', 'scheduled', 'not_run'].includes(status)) {
-      return { message: status.replace('_', ' '), color: 'yellow' }
-    } else {
-      return { message: status.replace('_', ' '), color: 'lightgrey' }
-    }
+    return renderBuildStatusBadge({ status: status.replace('_', ' ') })
   }
 
   async handle({ token, vcsType, userRepo, branch }) {

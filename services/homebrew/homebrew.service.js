@@ -20,6 +20,7 @@ module.exports = class Homebrew extends LegacyService {
   static get route() {
     return {
       base: 'homebrew/v',
+      pattern: ':formula',
     }
   }
 
@@ -27,7 +28,12 @@ module.exports = class Homebrew extends LegacyService {
     return [
       {
         title: 'homebrew',
-        previewUrl: 'cake',
+        namedParams: { formula: 'cake' },
+        staticPreview: {
+          label: 'homebrew',
+          message: 'v0.32.0',
+          color: 'orange',
+        },
       },
     ]
   }

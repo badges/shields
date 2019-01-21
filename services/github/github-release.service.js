@@ -1,10 +1,8 @@
 'use strict'
 
 const LegacyService = require('../legacy-service')
-const {
-  makeBadgeData: getBadgeData,
-  makeLogo: getLogo,
-} = require('../../lib/badge-data')
+const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const { makeLogo: getLogo } = require('../../lib/logos')
 const { addv: versionText } = require('../../lib/text-formatters')
 const {
   documentation,
@@ -25,6 +23,7 @@ module.exports = class GithubRelease extends LegacyService {
   static get route() {
     return {
       base: 'github',
+      pattern: ':which(release|release-pre)/:user/:repo',
     }
   }
 
@@ -32,12 +31,30 @@ module.exports = class GithubRelease extends LegacyService {
     return [
       {
         title: 'GitHub release',
-        previewUrl: 'release/qubyte/rubidium',
+        pattern: 'release/:user/:repo',
+        namedParams: {
+          user: 'qubyte',
+          repo: 'rubidium',
+        },
+        staticPreview: {
+          label: 'release',
+          message: 'v2.0.2',
+          color: 'blue',
+        },
         documentation,
       },
       {
         title: 'GitHub (pre-)release',
-        previewUrl: 'release-pre/qubyte/rubidium',
+        pattern: 'release-pre/:user/:repo',
+        namedParams: {
+          user: 'qubyte',
+          repo: 'rubidium',
+        },
+        staticPreview: {
+          label: 'release',
+          message: 'v2.0.2',
+          color: 'blue',
+        },
         documentation,
       },
     ]

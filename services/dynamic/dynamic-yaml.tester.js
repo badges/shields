@@ -1,15 +1,13 @@
 'use strict'
 
-const { colorScheme: colorsB } = require('../test-helpers')
-
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('No URL specified')
   .get('.json?query=$.name&label=Package Name&style=_shields_test')
   .expectJSON({
     name: 'Package Name',
     value: 'invalid query parameter: url',
-    colorB: colorsB.red,
+    color: 'red',
   })
 
 t.create('No query specified')
@@ -19,7 +17,7 @@ t.create('No query specified')
   .expectJSON({
     name: 'Package Name',
     value: 'invalid query parameter: query',
-    colorB: colorsB.red,
+    color: 'red',
   })
 
 t.create('YAML from url')
@@ -29,7 +27,7 @@ t.create('YAML from url')
   .expectJSON({
     name: 'custom badge',
     value: 'coredns',
-    colorB: colorsB.blue,
+    color: 'blue',
   })
 
 t.create('YAML from uri (support uri query parameter)')
@@ -39,7 +37,7 @@ t.create('YAML from uri (support uri query parameter)')
   .expectJSON({
     name: 'custom badge',
     value: 'coredns',
-    colorB: colorsB.blue,
+    color: 'blue',
   })
 
 t.create('YAML from url | multiple results')
@@ -67,7 +65,7 @@ t.create('YAML from url | object doesnt exist')
   .expectJSON({
     name: 'custom badge',
     value: 'no result',
-    colorB: colorsB.lightgrey,
+    color: 'lightgray',
   })
 
 t.create('YAML from url | invalid url')
@@ -77,14 +75,14 @@ t.create('YAML from url | invalid url')
   .expectJSON({
     name: 'custom badge',
     value: 'resource not found',
-    colorB: colorsB.red,
+    color: 'red',
   })
 
 t.create('YAML from url | user color overrides default')
   .get(
     '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&query=$.name&colorB=10ADED&style=_shields_test'
   )
-  .expectJSON({ name: 'custom badge', value: 'coredns', colorB: '#10ADED' })
+  .expectJSON({ name: 'custom badge', value: 'coredns', color: '#10aded' })
 
 t.create('YAML from url | error color overrides default')
   .get(
@@ -93,7 +91,7 @@ t.create('YAML from url | error color overrides default')
   .expectJSON({
     name: 'custom badge',
     value: 'resource not found',
-    colorB: colorsB.red,
+    color: 'red',
   })
 
 t.create('YAML from url | error color overrides user specified')
@@ -101,5 +99,5 @@ t.create('YAML from url | error color overrides user specified')
   .expectJSON({
     name: 'custom badge',
     value: 'invalid query parameter: url',
-    colorB: colorsB.red,
+    color: 'red',
   })

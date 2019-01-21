@@ -9,7 +9,8 @@ const isSvg = require('is-svg')
 const path = require('path')
 const sinon = require('sinon')
 const portfinder = require('portfinder')
-const svg2img = require('../gh-badges/lib/svg-to-img')
+const Joi = require('joi')
+const svg2img = require('../../gh-badges/lib/svg-to-img')
 const { createTestServer } = require('./in-process-server-test-helpers')
 
 describe('The server', function() {
@@ -105,7 +106,7 @@ describe('The server', function() {
 
   context('with svg2img error', function() {
     const expectedError = fs.readFileSync(
-      path.resolve(__dirname, '..', 'public', '500.html')
+      path.resolve(__dirname, '..', '..', 'public', '500.html')
     )
 
     let toBufferStub
@@ -128,24 +129,30 @@ describe('The server', function() {
 
   describe('analytics endpoint', function() {
     it('should return analytics in the expected format', async function() {
+      const countSchema = Joi.array()
+        .items(
+          Joi.number()
+            .integer()
+            .min(0)
+            .required()
+        )
+        .length(36)
+        .required()
+      const analyticsSchema = Joi.object({
+        vendorMonthly: countSchema,
+        rawMonthly: countSchema,
+        vendorFlatMonthly: countSchema,
+        rawFlatMonthly: countSchema,
+        vendorFlatSquareMonthly: countSchema,
+        rawFlatSquareMonthly: countSchema,
+      }).required()
+
       const res = await fetch(`${baseUrl}$analytics/v1`)
       expect(res.ok).to.be.true
-      const json = await res.json()
-      const expectedKeys = [
-        'vendorMonthly',
-        'rawMonthly',
-        'vendorFlatMonthly',
-        'rawFlatMonthly',
-        'vendorFlatSquareMonthly',
-        'rawFlatSquareMonthly',
-      ]
-      expect(json).to.have.all.keys(...expectedKeys)
 
-      Object.values(json).forEach(stats => {
-        expect(stats)
-          .to.be.an('array')
-          .with.length(36)
-      })
+      const json = await res.json()
+
+      Joi.assert(json, analyticsSchema)
     })
   })
 })

@@ -1,14 +1,16 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseSvgScrapingService = require('../base-svg-scraping')
+const {
+  isBuildStatus,
+  renderBuildStatusBadge,
+} = require('../../lib/build-status')
+const { BaseSvgScrapingService, NotFound } = require('..')
 const { optionalUrl } = require('../validators')
-const { NotFound } = require('../errors')
-const { isPipelineStatus } = require('./gitlab-helpers')
 
 const badgeSchema = Joi.object({
   message: Joi.alternatives()
-    .try([isPipelineStatus, Joi.equal('unknown')])
+    .try(isBuildStatus, Joi.equal('unknown'))
     .required(),
 }).required()
 
@@ -58,19 +60,7 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
   }
 
   static render({ status }) {
-    const color = {
-      pending: 'yellow',
-      running: 'yellow',
-      passed: 'brightgreen',
-      failed: 'red',
-      skipped: 'lightgray',
-      canceled: 'lightgray',
-    }[status]
-
-    return {
-      message: status,
-      color,
-    }
+    return renderBuildStatusBadge({ status })
   }
 
   async handle({ user, repo, branch = 'master' }, queryParams) {

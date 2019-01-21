@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 const {
   isComposerVersion,
   isMetric,
@@ -17,11 +17,10 @@ const {
 */
 const isPackagistVersion = Joi.string().regex(/^v?[0-9]+.[0-9]+.[0-9]+[\S]*$/)
 
-const t = new ServiceTester({
+const t = (module.exports = new ServiceTester({
   id: 'packagist',
   title: 'PHP version from Packagist',
-})
-module.exports = t
+}))
 
 // tests for php version support endpoint
 

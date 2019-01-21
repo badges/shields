@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   currency_sign: Joi.string().required(),
@@ -41,7 +41,6 @@ module.exports = class Codetally extends BaseJsonService {
     return [
       {
         title: 'Codetally',
-        pattern: ':owner/:repo',
         namedParams: {
           owner: 'triggerman722',
           repo: 'colorstrap',

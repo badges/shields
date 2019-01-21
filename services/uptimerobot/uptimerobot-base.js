@@ -1,8 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
-const { InvalidParameter, InvalidResponse } = require('../errors')
+const { BaseJsonService, InvalidParameter, InvalidResponse } = require('..')
 
 // https://uptimerobot.com/api
 // POST getMonitors

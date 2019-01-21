@@ -1,11 +1,13 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 const { isMetric, isMetricOverTimePeriod } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'packagecontrol', title: 'Package Control' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'packagecontrol',
+  title: 'Package Control',
+}))
 
 t.create('monthly downloads')
   .get('/dm/GitGutter.json')
@@ -47,5 +49,5 @@ t.create('package not found')
   .get('/dt/does-not-exist.json')
   .expectJSON({
     name: 'downloads',
-    value: 'invalid',
+    value: 'not found',
   })

@@ -53,7 +53,7 @@ const secondLinesCovStat = {
 const expCoverageSingleReport = '83%'
 const expCoverageMultipleReports = '77%'
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('default branch coverage')
   .get(`${uriPrefix}/${linuxDefinitionId}.json`)
@@ -64,8 +64,8 @@ t.create('default branch coverage')
     })
   )
 
-t.create('named branch')
-  .get(`${uriPrefix}/${windowsDefinitionId}/docs.json`)
+t.create('named branch without ref')
+  .get(`${uriPrefix}/${windowsDefinitionId}/init.json`)
   .expectJSONTypes(
     Joi.object().keys({
       name: 'coverage',

@@ -1,6 +1,6 @@
 'use strict'
 
-const deprecatedService = require('../deprecated-service')
+const { deprecatedService } = require('..')
 
 // image layers integration - deprecated as of November 2018.
 module.exports = deprecatedService({

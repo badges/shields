@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { invalidJSON } = require('../response-fixtures')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 const fakeData = [
   {
@@ -41,7 +41,7 @@ t.create(
   .expectJSON({
     name: 'bug',
     value: '5',
-    colorB: '#fbca04',
+    color: '#fbca04',
   })
 
 t.create('label should be `Mybug` & value should be formatted.  e.g: Mybug|25')
@@ -69,7 +69,7 @@ t.create('label (label not found)')
   .expectJSON({
     name: 'not-a-real-label',
     value: '0',
-    colorB: '#78bdf2',
+    color: '#78bdf2',
   })
 
 t.create('label (empty response)')

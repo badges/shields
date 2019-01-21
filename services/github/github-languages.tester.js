@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 const { isFileSize } = require('../test-validators')
 
 const t = (module.exports = new ServiceTester({
@@ -16,6 +16,16 @@ t.create('top language')
     Joi.object().keys({
       name: 'javascript',
       value: Joi.string().regex(/^([1-9]?[0-9]\.[0-9]|100\.0)%$/),
+    })
+  )
+
+t.create('top language')
+  .get('/top/badges/shields.json?colorB=123&format=_shields_test')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'javascript',
+      value: Joi.string().regex(/^([1-9]?[0-9]\.[0-9]|100\.0)%$/),
+      color: '#123',
     })
   )
 

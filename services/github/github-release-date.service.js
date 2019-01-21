@@ -2,10 +2,8 @@
 
 const moment = require('moment')
 const LegacyService = require('../legacy-service')
-const {
-  makeBadgeData: getBadgeData,
-  makeLogo: getLogo,
-} = require('../../lib/badge-data')
+const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const { makeLogo: getLogo } = require('../../lib/logos')
 const { formatDate } = require('../../lib/text-formatters')
 const { age } = require('../../lib/color-formatters')
 const { documentation } = require('./github-helpers')
@@ -24,6 +22,7 @@ module.exports = class GithubReleaseDate extends LegacyService {
   static get route() {
     return {
       base: 'github',
+      pattern: ':which(release-date|release-date-pre)/:user/:repo',
     }
   }
 
@@ -31,14 +30,30 @@ module.exports = class GithubReleaseDate extends LegacyService {
     return [
       {
         title: 'GitHub Release Date',
-        previewUrl: 'release-date/SubtitleEdit/subtitleedit',
-        keywords: ['GitHub', 'release', 'date'],
+        pattern: 'release-date/:user/:repo',
+        namedParams: {
+          user: 'SubtitleEdit',
+          repo: 'subtitleedit',
+        },
+        staticPreview: {
+          label: 'release date',
+          message: 'december 2018',
+          color: 'green',
+        },
         documentation,
       },
       {
         title: 'GitHub (Pre-)Release Date',
-        previewUrl: 'release-date-pre/Cockatrice/Cockatrice',
-        keywords: ['GitHub', 'release', 'date'],
+        pattern: 'release-date-pre/:user/:repo',
+        namedParams: {
+          user: 'Cockatrice',
+          repo: 'Cockatrice',
+        },
+        staticPreview: {
+          label: 'release date',
+          message: 'december 2018',
+          color: 'green',
+        },
         documentation,
       },
     ]

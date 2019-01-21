@@ -4,8 +4,7 @@ const Joi = require('joi')
 const { renderLicenseBadge } = require('../../lib/licenses')
 const { renderVersionBadge } = require('../../lib/version')
 const { metric } = require('../../lib/text-formatters')
-const BaseJsonService = require('../base-json')
-const { InvalidResponse } = require('../errors')
+const { BaseJsonService, InvalidResponse } = require('..')
 const { nonNegativeInteger } = require('../validators')
 
 const keywords = ['atom']

@@ -1,16 +1,16 @@
 'use strict'
 
 const Joi = require('joi')
-const { isPipelineStatus } = require('./gitlab-helpers')
+const { isBuildStatus } = require('../../lib/build-status')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('Pipeline status')
   .get('/gitlab-org/gitlab-ce.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'build',
-      value: isPipelineStatus,
+      value: isBuildStatus,
     })
   )
 
@@ -19,7 +19,7 @@ t.create('Pipeline status (branch)')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'build',
-      value: isPipelineStatus,
+      value: isBuildStatus,
     })
   )
 
@@ -42,6 +42,6 @@ t.create('Pipeline status (custom gitlab URL)')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'build',
-      value: isPipelineStatus,
+      value: isBuildStatus,
     })
   )

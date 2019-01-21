@@ -2,8 +2,7 @@
 
 const Joi = require('joi')
 const { renderVersionBadge } = require('../../lib/version')
-const BaseJsonService = require('../base-json')
-const { NotFound } = require('../errors')
+const { BaseJsonService, NotFound } = require('..')
 
 const cdnjsSchema = Joi.object({
   // optional due to non-standard 'not found' condition

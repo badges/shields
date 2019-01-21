@@ -3,8 +3,7 @@
 const Joi = require('joi')
 const { floorCount: floorCountColor } = require('../../lib/color-formatters')
 const { addv, metric } = require('../../lib/text-formatters')
-const BaseJsonService = require('../base-json')
-const { NotFound } = require('../errors')
+const { BaseJsonService, NotFound } = require('..')
 const { nonNegativeInteger } = require('../validators')
 
 const aurSchema = Joi.object({

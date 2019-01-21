@@ -1,16 +1,13 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
-
+const { ServiceTester } = require('..')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
-const { colorScheme } = require('../test-helpers')
 
-const t = new ServiceTester({
+const t = (module.exports = new ServiceTester({
   id: 'wordpress',
   title: 'Wordpress Platform Tests',
-})
-module.exports = t
+}))
 
 t.create('Plugin Required WP Version')
   .get('/plugin/wp-version/akismet.json')
@@ -78,7 +75,7 @@ t.create('Plugin Tested WP Version - current (mocked)')
   .expectJSON({
     name: 'wordpress',
     value: 'v4.9.8 tested',
-    colorB: colorScheme.brightgreen,
+    color: 'brightgreen',
   })
 
 t.create('Plugin Tested WP Version - old (mocked)')
@@ -102,7 +99,7 @@ t.create('Plugin Tested WP Version - old (mocked)')
   .expectJSON({
     name: 'wordpress',
     value: 'v4.9.6 tested',
-    colorB: colorScheme.orange,
+    color: 'orange',
   })
 
 t.create('Plugin Tested WP Version - non-exsistant or unsupported (mocked)')
@@ -126,7 +123,7 @@ t.create('Plugin Tested WP Version - non-exsistant or unsupported (mocked)')
   .expectJSON({
     name: 'wordpress',
     value: 'v4.0.0 tested',
-    colorB: colorScheme.yellow,
+    color: 'yellow',
   })
 
 t.create('Plugin Required WP Version | Not Found')

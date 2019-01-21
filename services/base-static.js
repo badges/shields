@@ -2,7 +2,7 @@
 
 const makeBadge = require('../gh-badges/lib/make-badge')
 const { makeSend } = require('../lib/result-sender')
-const analytics = require('../lib/analytics')
+const analytics = require('../core/server/analytics')
 const BaseService = require('./base')
 const {
   serverHasBeenUpSinceResourceCached,

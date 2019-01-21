@@ -1,10 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
 const serverSecrets = require('../../lib/server-secrets')
 const { metric } = require('../../lib/text-formatters')
 const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService } = require('..')
 
 const bitbucketPullRequestSchema = Joi.object({
   size: nonNegativeInteger,
@@ -106,7 +106,6 @@ function pullRequestClassGenerator(raw) {
       return [
         {
           title: 'Bitbucket open pull requests',
-          pattern: ':user/:repo',
           namedParams: {
             user: 'atlassian',
             repo: 'python-bitbucket',
@@ -120,7 +119,6 @@ function pullRequestClassGenerator(raw) {
             repo: 'bar',
           },
           queryParams: { server: 'https://bitbucket.mydomain.net' },
-          pattern: ':user/:repo',
           staticPreview: this.render({ prs: 42 }),
         },
       ]

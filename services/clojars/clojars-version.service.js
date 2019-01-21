@@ -1,9 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
-const { NotFound } = require('../errors')
 const { version: versionColor } = require('../../lib/color-formatters')
+const { BaseJsonService, NotFound } = require('..')
 
 const clojarsSchema = Joi.object({
   // optional due to non-standard 'not found' condition

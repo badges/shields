@@ -1,9 +1,8 @@
 'use strict'
 
-const { colorScheme: colorsB } = require('../test-helpers')
 const { invalidJSON } = require('../response-fixtures')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('commit status - commit in branch')
   .get(
@@ -12,7 +11,7 @@ t.create('commit status - commit in branch')
   .expectJSON({
     name: 'commit status',
     value: 'in master',
-    colorB: colorsB.brightgreen,
+    color: 'brightgreen',
   })
 
 t.create(
@@ -31,7 +30,7 @@ t.create(
   .expectJSON({
     name: 'commit status',
     value: 'in master',
-    colorB: colorsB.brightgreen,
+    color: 'brightgreen',
   })
 
 t.create('commit status - commit not in branch')
@@ -41,7 +40,7 @@ t.create('commit status - commit not in branch')
   .expectJSON({
     name: 'commit status',
     value: 'commit or branch not found',
-    colorB: colorsB.lightgrey,
+    color: 'lightgrey',
   })
 
 t.create('commit status - unknown commit id')
@@ -51,7 +50,7 @@ t.create('commit status - unknown commit id')
   .expectJSON({
     name: 'commit status',
     value: 'not in v1.27.1',
-    colorB: colorsB.yellow,
+    color: 'yellow',
   })
 
 t.create('commit status - unknown branch')
@@ -61,7 +60,7 @@ t.create('commit status - unknown branch')
   .expectJSON({
     name: 'commit status',
     value: 'commit or branch not found',
-    colorB: colorsB.lightgrey,
+    color: 'lightgrey',
   })
 
 t.create('commit status - no common ancestor between commit and branch')
@@ -71,7 +70,7 @@ t.create('commit status - no common ancestor between commit and branch')
   .expectJSON({
     name: 'commit status',
     value: 'no common ancestor',
-    colorB: colorsB.lightgrey,
+    color: 'lightgrey',
   })
 
 t.create('commit status - invalid JSON')
@@ -88,7 +87,7 @@ t.create('commit status - invalid JSON')
   .expectJSON({
     name: 'commit status',
     value: 'invalid',
-    colorB: colorsB.lightgrey,
+    color: 'lightgrey',
   })
 
 t.create('commit status - network error')
@@ -99,7 +98,7 @@ t.create('commit status - network error')
   .expectJSON({
     name: 'commit status',
     value: 'inaccessible',
-    colorB: colorsB.red,
+    color: 'red',
   })
 
 t.create('commit status - github server error')
@@ -116,7 +115,7 @@ t.create('commit status - github server error')
   .expectJSON({
     name: 'commit status',
     value: 'invalid',
-    colorB: colorsB.lightgrey,
+    color: 'lightgrey',
   })
 
 t.create('commit status - 404 with empty JSON form github')
@@ -133,7 +132,7 @@ t.create('commit status - 404 with empty JSON form github')
   .expectJSON({
     name: 'commit status',
     value: 'invalid',
-    colorB: colorsB.lightgrey,
+    color: 'lightgrey',
   })
 
 t.create('commit status - 404 with invalid JSON form github')
@@ -150,5 +149,5 @@ t.create('commit status - 404 with invalid JSON form github')
   .expectJSON({
     name: 'commit status',
     value: 'invalid',
-    colorB: colorsB.lightgrey,
+    color: 'lightgrey',
   })

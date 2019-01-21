@@ -18,7 +18,6 @@ module.exports = class Gitter extends BaseStaticService {
     return [
       {
         title: 'Gitter',
-        pattern: ':user/:repo',
         namedParams: {
           user: 'nwjs',
           repo: 'nw.js',

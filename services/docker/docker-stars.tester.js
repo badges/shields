@@ -1,10 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const { dockerBlue } = require('./docker-helpers')
 const { isMetric } = require('../test-validators')
+const { dockerBlue } = require('./docker-helpers')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('docker stars (valid, library)')
   .get('/_/ubuntu.json?style=_shields_test')
@@ -12,17 +12,7 @@ t.create('docker stars (valid, library)')
     Joi.object().keys({
       name: 'docker stars',
       value: isMetric,
-      colorB: `#${dockerBlue}`,
-    })
-  )
-
-t.create('docker stars (override colorB)')
-  .get('/_/ubuntu.json?colorB=fedcba&style=_shields_test')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'docker stars',
-      value: isMetric,
-      colorB: '#fedcba',
+      color: `#${dockerBlue}`,
     })
   )
 

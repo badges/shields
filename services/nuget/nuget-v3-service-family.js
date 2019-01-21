@@ -4,8 +4,7 @@ const { promisify } = require('util')
 const Joi = require('joi')
 const { regularUpdate } = require('../../lib/regular-update')
 const RouteBuilder = require('../route-builder')
-const BaseJsonService = require('../base-json')
-const { NotFound } = require('../errors')
+const { BaseJsonService, NotFound } = require('..')
 const { renderVersionBadge, renderDownloadBadge } = require('./nuget-helpers')
 
 /*

@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isMetric } = require('../test-validators')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('hit counter')
   .get('/badges/shields/async%20handle.json')

@@ -1,12 +1,12 @@
 'use strict'
 
 const Joi = require('joi')
-const { isBuildStatus } = require('../test-validators')
+const { isBuildStatus } = require('../../lib/build-status')
 
 // https://dev.azure.com/totodem/Shields.io is a public Azure DevOps project
 // solely created for Shields.io testing.
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('default branch')
   .get(
@@ -43,3 +43,10 @@ t.create('unknown project')
 t.create('unknown user')
   .get('/azure-devops/build/notarealuser/foo/515.json')
   .expectJSON({ name: 'build', value: 'user or project not found' })
+
+// The following build definition has always a partially succeeded status
+t.create('partially succeeded build')
+  .get(
+    '/azure-devops/build/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/4.json?style=_shields_test'
+  )
+  .expectJSON({ name: 'build', value: 'passing', color: 'orange' })

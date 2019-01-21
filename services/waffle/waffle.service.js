@@ -4,7 +4,6 @@ const LegacyService = require('../legacy-service')
 const {
   makeBadgeData: getBadgeData,
   makeLabel: getLabel,
-  makeColorB,
 } = require('../../lib/badge-data')
 const { checkErrorResponse } = require('../../lib/error-helper')
 
@@ -80,8 +79,8 @@ module.exports = class Waffle extends LegacyService {
             }
             badgeData.text[0] = getLabel(ghLabel, data)
             badgeData.text[1] = `${count}`
-            badgeData.colorscheme = null
-            badgeData.colorB = makeColorB(color, data)
+            badgeData.colorscheme = undefined
+            badgeData.colorB = data.colorB || color
             sendBadge(format, badgeData)
           } catch (e) {
             badgeData.text[1] = 'invalid'

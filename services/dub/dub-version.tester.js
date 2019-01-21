@@ -1,12 +1,11 @@
 'use strict'
 
 const Joi = require('joi')
-const { colorScheme } = require('../test-helpers')
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
 } = require('../test-validators')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('version (valid)')
   .get('/vibe-d.json?style=_shields_test')
@@ -14,7 +13,7 @@ t.create('version (valid)')
     Joi.object().keys({
       name: 'dub',
       value: isVPlusDottedVersionNClausesWithOptionalSuffix,
-      colorB: Joi.equal(colorScheme.blue, colorScheme.orange),
+      color: Joi.equal('blue', 'orange'),
     })
   )
 

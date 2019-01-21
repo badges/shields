@@ -9,7 +9,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "package.json" }}
+            - v2-dependencies-{{ checksum "package-lock.json" }}
             # fallback to using the latest cache if no exact match is found
             - v2-dependencies-
 
@@ -20,7 +20,7 @@ jobs:
       - save_cache:
           paths:
             - node_modules
-          key: v2-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package-lock.json" }}
 
   main:
     docker:
@@ -31,7 +31,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "package.json" }}
+            - v2-dependencies-{{ checksum "package-lock.json" }}
             # https://github.com/badges/shields/issues/1937
             - v2-dependencies-
 
@@ -39,34 +39,31 @@ jobs:
           name: Install dependencies
           command: npm install
 
+      - save_cache:
+          paths:
+            - node_modules
+          key: v2-dependencies-{{ checksum "package-lock.json" }}
+
       - run:
           name: Linter
           when: always
           command: npm run lint
 
       - run:
-          name: Server unit tests
+          name: Core tests
           when: always
           environment:
             mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/server/results.xml
-          command: npm run test:js:server
-
-      - run:
-          name: Integration tests
-          when: always
-          environment:
-            mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/server/integration.xml
-          command: npm run test:integration
+            MOCHA_FILE: junit/core/results.xml
+          command: npm run test:core
 
       - run:
           name: Tests for gh-badges package
           when: always
           environment:
             mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/server/gh-badges.xml
-          command: npm run test:js:package
+            MOCHA_FILE: junit/gh-badges/results.xml
+          command: npm run test:package
 
       - store_test_results:
           path: junit
@@ -85,7 +82,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "package.json" }}
+            - v2-dependencies-{{ checksum "package-lock.json" }}
             # https://github.com/badges/shields/issues/1937
             - v2-dependencies-
 
@@ -99,20 +96,12 @@ jobs:
           command: npm run lint
 
       - run:
-          name: Server unit tests
+          name: Core tests
           when: always
           environment:
             mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/server/results.xml
-          command: npm run test:js:server
-
-      - run:
-          name: Integration tests
-          when: always
-          environment:
-            mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/integration/results.xml
-          command: npm run test:integration
+            MOCHA_FILE: junit/core/results.xml
+          command: npm run test:core
 
       - run:
           name: Tests for gh-badges package
@@ -120,7 +109,7 @@ jobs:
           environment:
             mocha_reporter: mocha-junit-reporter
             MOCHA_FILE: junit/gh-badges/results.xml
-          command: npm run test:js:package
+          command: npm run test:package
 
       - store_test_results:
           path: junit
@@ -130,6 +119,62 @@ jobs:
           when: always
           command: npm run prettier-check
 
+  integration:
+    docker:
+      - image: circleci/node:8
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v2-dependencies-{{ checksum "package-lock.json" }}
+            # https://github.com/badges/shields/issues/1937
+            - v2-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm install
+
+      - run:
+          name: Integration tests
+          when: always
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/integration/results.xml
+          command: npm run test:integration
+
+      - store_test_results:
+          path: junit
+
+  integration@node-latest:
+    docker:
+      - image: circleci/node:10
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v2-dependencies-{{ checksum "package-lock.json" }}
+            # https://github.com/badges/shields/issues/1937
+            - v2-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm install
+
+      - run:
+          name: Integration tests
+          when: always
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/integration/results.xml
+          command: npm run test:integration
+
+      - store_test_results:
+          path: junit
+
   danger:
     docker:
       - image: circleci/node:8
@@ -138,7 +183,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "package.json" }}
+            - v2-dependencies-{{ checksum "package-lock.json" }}
             # https://github.com/badges/shields/issues/1937
             - v2-dependencies-
 
@@ -159,7 +204,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "package.json" }}
+            - v2-dependencies-{{ checksum "package-lock.json" }}
             # https://github.com/badges/shields/issues/1937
             - v2-dependencies-
 
@@ -176,7 +221,7 @@ jobs:
           environment:
             mocha_reporter: mocha-junit-reporter
             MOCHA_FILE: junit/frontend/results.xml
-          command: npm run test:js:frontend
+          command: npm run test:frontend
 
       - store_test_results:
           path: junit
@@ -194,7 +239,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "package.json" }}
+            - v2-dependencies-{{ checksum "package-lock.json" }}
             # https://github.com/badges/shields/issues/1937
             - v2-dependencies-
 
@@ -224,7 +269,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "package.json" }}
+            - v2-dependencies-{{ checksum "package-lock.json" }}
             # https://github.com/badges/shields/issues/1937
             - v2-dependencies-
 
@@ -251,34 +296,71 @@ workflows:
 
   on-commit:
     jobs:
-      - npm-install:
+      - main:
           filters:
             branches:
               ignore: gh-pages
-      - main:
-          requires:
-            - npm-install
       - main@node-latest:
-          requires:
-            - npm-install
+          filters:
+            branches:
+              ignore: gh-pages
+      - integration@node-latest:
+          filters:
+            branches:
+              ignore: gh-pages
       - frontend:
-          requires:
-            - npm-install
+          filters:
+            branches:
+              ignore: gh-pages
       - services:
-          requires:
-            - npm-install
           filters:
             branches:
-              ignore: master
+              ignore:
+                - master
+                - gh-pages
       - services@node-latest:
-          requires:
-            - npm-install
           filters:
             branches:
-              ignore: master
+              ignore:
+                - master
+                - gh-pages
       - danger:
-          requires:
-            - npm-install
           filters:
             branches:
-              ignore: /dependabot\/.*/
+              ignore:
+                - master
+                - gh-pages
+                - /dependabot\/.*/
+  # on-commit-with-cache:
+  #   jobs:
+  #     - npm-install:
+  #         filters:
+  #           branches:
+  #             ignore: gh-pages
+  #     - main:
+  #         requires:
+  #           - npm-install
+  #     - main@node-latest:
+  #         requires:
+  #           - npm-install
+  #     - frontend:
+  #         requires:
+  #           - npm-install
+  #     - services:
+  #         requires:
+  #           - npm-install
+  #         filters:
+  #           branches:
+  #             ignore: master
+  #     - services@node-latest:
+  #         requires:
+  #           - npm-install
+  #         filters:
+  #           branches:
+  #             ignore: master
+  #     - danger:
+  #         requires:
+  #           - npm-install
+  #         filters:
+  #           branches:
+  #             ignore: /dependabot\/.*/
