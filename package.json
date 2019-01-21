@@ -140,7 +140,7 @@
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
     "eol": "^0.9.1",
-    "eslint": "^5.12.0",
+    "eslint": "^5.12.1",
     "eslint-config-prettier": "^3.5.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-config-standard-jsx": "^6.0.2",
