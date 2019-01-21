@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 const { isIntegerPercentage } = require('../test-validators')
 
 const t = new ServiceTester({ id: 'sonar', title: 'SonarQube' })

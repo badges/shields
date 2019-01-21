@@ -1,9 +1,9 @@
 'use strict'
 
-const BaseJsonService = require('../base-json')
-const renderQuestionsBadge = require('./stackexchange-helpers')
 const moment = require('moment')
 const Joi = require('joi')
+const { BaseJsonService } = require('..')
+const renderQuestionsBadge = require('./stackexchange-helpers')
 
 const tagSchema = Joi.object({
   total: Joi.number()

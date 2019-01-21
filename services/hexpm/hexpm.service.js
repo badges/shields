@@ -1,16 +1,12 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
+const { metric, addv, maybePluralize } = require('../../lib/text-formatters')
 const {
-  metric,
-  addv: versionText,
-  maybePluralize,
-} = require('../../lib/text-formatters')
-const {
-  downloadCount: downloadCountColor,
+  downloadCount,
   version: versionColor,
 } = require('../../lib/color-formatters')
+const { BaseJsonService } = require('..')
 
 const hexSchema = Joi.object({
   downloads: Joi.object({
@@ -95,7 +91,7 @@ class HexPmLicense extends BaseHexPmService {
 
 class HexPmVersion extends BaseHexPmService {
   static render({ version }) {
-    return { message: versionText(version), color: versionColor(version) }
+    return { message: addv(version), color: versionColor(version) }
   }
 
   async handle({ packageName }) {
@@ -145,7 +141,7 @@ function DownloadsForInterval(interval) {
     static render({ downloads }) {
       return {
         message: `${metric(downloads)}${messageSuffix}`,
-        color: downloadCountColor(downloads),
+        color: downloadCount(downloads),
       }
     }
 

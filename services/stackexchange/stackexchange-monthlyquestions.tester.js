@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isMetricOverTimePeriod } = require('../test-validators')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('Monthly Questions for StackOverflow Momentjs')
   .get('/stackoverflow/qm/momentjs.json')

@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('gets status for Reactiflux')
   .get('/102860784329052160.json?style=_shields_test')

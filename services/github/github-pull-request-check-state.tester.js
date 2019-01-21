@@ -1,6 +1,6 @@
 'use strict'
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('github pull request check state')
   .get('/s/pulls/badges/shields/1110.json')

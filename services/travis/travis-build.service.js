@@ -1,12 +1,11 @@
 'use strict'
 
 const Joi = require('joi')
-
-const BaseSvgScrapingService = require('../base-svg-scraping')
 const {
   isBuildStatus,
   renderBuildStatusBadge,
 } = require('../../lib/build-status')
+const { BaseSvgScrapingService } = require('..')
 
 const schema = Joi.object({
   message: Joi.alternatives()

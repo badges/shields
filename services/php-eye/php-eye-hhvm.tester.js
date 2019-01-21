@@ -1,16 +1,17 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 const { invalidJSON } = require('../response-fixtures')
-
-const t = new ServiceTester({ id: 'hhvm', title: 'hhvm status' })
 
 const isAllowedStatus = Joi.string().regex(
   /^(tested|partially tested|not tested|maybe untested)$/
 )
 
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'hhvm',
+  title: 'hhvm status',
+}))
 
 t.create('get default branch')
   .get('/symfony/symfony.json')

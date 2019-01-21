@@ -40,10 +40,10 @@ module.exports = deprecatedService({
 
 Locate the test file(s) for the service, which can be found in `*.tester.js` files located in the service directory (`./services/:service-name/`), such as `./services/imagelayers/imagelayers.tester.js`.
 
-With `DeprecatedService` classes we cannot use the utility functions from `create-service-tester.js` so you will need to create the `ServiceTester` class directly. For example:
+With `DeprecatedService` classes we cannot use `createServiceTester()` so you will need to create the `ServiceTester` class directly. For example:
 
 ```js
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 
 const t = (module.exports = new ServiceTester({
   id: 'imagelayers',
@@ -69,7 +69,8 @@ Here is an example of what the final result would look like for a test file:
 ```js
 'use strict'
 
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
+
 const t = (module.exports = new ServiceTester({
   id: 'imagelayers',
   title: 'ImageLayers',

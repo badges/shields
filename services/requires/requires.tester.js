@@ -6,7 +6,7 @@ const isRequireStatus = Joi.string().regex(
   /^(up to date|outdated|insecure|unknown)$/
 )
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('requirements (valid, without branch)')
   .get('/github/celery/celery.json')

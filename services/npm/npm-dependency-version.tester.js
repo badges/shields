@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { semverRange } = require('../validators')
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('gets the peer dependency version')
   .get('/react-boxplot/peer/react.json')

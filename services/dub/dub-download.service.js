@@ -1,11 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
 const { metric } = require('../../lib/text-formatters')
-const {
-  downloadCount: downloadCountColor,
-} = require('../../lib/color-formatters')
+const { downloadCount } = require('../../lib/color-formatters')
+const { BaseJsonService } = require('..')
 const { nonNegativeInteger } = require('../validators')
 
 const schema = Joi.object({
@@ -43,7 +41,7 @@ function DownloadsForInterval(interval) {
       return {
         label,
         message: `${metric(downloads)}${messageSuffix}`,
-        color: downloadCountColor(downloads),
+        color: downloadCount(downloads),
       }
     }
 

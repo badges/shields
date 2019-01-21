@@ -1,6 +1,6 @@
 'use strict'
 
-const deprecatedService = require('../deprecated-service')
+const { deprecatedService } = require('..')
 
 // bitHound integration - deprecated as of July 2018
 module.exports = deprecatedService({

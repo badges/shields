@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { nonNegativeInteger } = require('../validators')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('quality score (valid)')
   .get('/432.json')

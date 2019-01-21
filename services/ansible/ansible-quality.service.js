@@ -1,9 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
 const { floorCount } = require('../../lib/color-formatters')
-const { InvalidResponse } = require('../errors')
+const { BaseJsonService, InvalidResponse } = require('..')
 
 const ansibleContentSchema = Joi.object({
   quality_score: Joi.number()

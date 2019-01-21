@@ -1,6 +1,6 @@
 'use strict'
 
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 
 const t = new ServiceTester({ id: 'maintenance', title: 'Maintenance' })
 module.exports = t

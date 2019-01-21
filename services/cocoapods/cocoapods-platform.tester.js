@@ -7,7 +7,7 @@ const isPlatform = Joi.string().regex(
   /^(osx|ios|tvos|watchos)( \| (osx|ios|tvos|watchos))*$/
 )
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('platform (valid)')
   .get('/AFNetworking.json')

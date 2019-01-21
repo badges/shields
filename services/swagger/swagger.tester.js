@@ -5,7 +5,7 @@ const apiURL = 'http://online.swagger.io'
 const apiGetURL = '/validator/debug'
 const apiGetQueryParams = { url: 'https://example.com/example.json' }
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('Valid (mocked)')
   .get(getURL)

@@ -1,7 +1,6 @@
 'use strict'
 
-const BaseXmlService = require('../base-xml')
-const { NotFound } = require('../errors')
+const { BaseXmlService, NotFound } = require('..')
 
 module.exports = class JetbrainsBase extends BaseXmlService {
   static buildUrl(base) {

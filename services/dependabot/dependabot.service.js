@@ -1,8 +1,8 @@
 'use strict'
 
-const BaseJsonService = require('../base-json')
 const Joi = require('joi')
 const url = require('url')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   status: Joi.string().required(),

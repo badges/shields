@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isFileSize } = require('../test-validators')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('File size')
   .get('/webcaetano/craft/build/phaser-craft.min.js.json')

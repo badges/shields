@@ -2,8 +2,7 @@
 
 const Joi = require('joi')
 const jp = require('jsonpath')
-const BaseJsonService = require('../base-json')
-const { InvalidResponse } = require('../errors')
+const { BaseJsonService, InvalidResponse } = require('..')
 const { renderDynamicBadge } = require('../dynamic-common')
 const {
   createRoute,

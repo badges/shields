@@ -4,7 +4,7 @@ const Joi = require('joi')
 const { dockerBlue } = require('./docker-helpers')
 const isAutomatedBuildStatus = Joi.string().valid('automated', 'manual')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('docker automated build (valid, library)')
   .get('/_/ubuntu.json')

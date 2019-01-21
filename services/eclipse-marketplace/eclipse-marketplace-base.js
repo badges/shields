@@ -1,6 +1,6 @@
 'use strict'
 
-const BaseXmlService = require('../base-xml')
+const { BaseXmlService } = require('..')
 
 module.exports = class EclipseMarketplaceBase extends BaseXmlService {
   static buildRoute(base) {
