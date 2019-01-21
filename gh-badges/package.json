@@ -12,7 +12,8 @@
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/badges/shields.git"
+    "url": "git+https://github.com/badges/shields.git",
+    "directory": "gh-badges"
   },
   "author": "Thaddée Tyl <thaddee.tyl@gmail.com>",
   "license": "CC0-1.0",
