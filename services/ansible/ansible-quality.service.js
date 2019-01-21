@@ -46,7 +46,7 @@ module.exports = class AnsibleGalaxyContentQualityScore extends AnsibleGalaxyCon
   }
 
   static get category() {
-    return 'quality'
+    return 'analysis'
   }
 
   static get route() {
@@ -60,9 +60,8 @@ module.exports = class AnsibleGalaxyContentQualityScore extends AnsibleGalaxyCon
     return [
       {
         title: 'Ansible Quality Score',
-        pattern: ':projectId',
         namedParams: {
-          projectIs: '432',
+          projectId: '432',
         },
         staticPreview: this.render({ qualityScore: 4.125 }),
       },
