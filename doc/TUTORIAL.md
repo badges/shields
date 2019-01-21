@@ -254,9 +254,9 @@ Specifically `BaseJsonService` will handle the following errors for us:
 * API returns a response which doesn't validate against our schema
 
 Sometimes it may be necessary to manually throw an exception to deal with a
-non-standard error condition. If so, standard exceptions can be imported from
+non-standard error condition. If so, there are several standard exceptions that can be used. These exceptions are defined in
 [errors.js](https://github.com/badges/shields/blob/master/services/errors.js)
-and thrown:
+and can be imported via the import shortcut and then thrown:
 
 ```js
 const { NotFound } = require('..')
