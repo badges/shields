@@ -9,7 +9,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "package.json" }}
+            - v2-dependencies-{{ checksum "package-lock.json" }}
             # fallback to using the latest cache if no exact match is found
             - v2-dependencies-
 
@@ -20,7 +20,7 @@ jobs:
       - save_cache:
           paths:
             - node_modules
-          key: v2-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package-lock.json" }}
 
   main:
     docker:
@@ -31,13 +31,18 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "package.json" }}
+            - v2-dependencies-{{ checksum "package-lock.json" }}
             # https://github.com/badges/shields/issues/1937
             - v2-dependencies-
 
       - run:
           name: Install dependencies
           command: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v2-dependencies-{{ checksum "package-lock.json" }}
 
       - run:
           name: Linter
@@ -85,7 +90,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "package.json" }}
+            - v2-dependencies-{{ checksum "package-lock.json" }}
             # https://github.com/badges/shields/issues/1937
             - v2-dependencies-
 
@@ -138,7 +143,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "package.json" }}
+            - v2-dependencies-{{ checksum "package-lock.json" }}
             # https://github.com/badges/shields/issues/1937
             - v2-dependencies-
 
@@ -159,7 +164,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "package.json" }}
+            - v2-dependencies-{{ checksum "package-lock.json" }}
             # https://github.com/badges/shields/issues/1937
             - v2-dependencies-
 
@@ -194,7 +199,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "package.json" }}
+            - v2-dependencies-{{ checksum "package-lock.json" }}
             # https://github.com/badges/shields/issues/1937
             - v2-dependencies-
 
@@ -224,7 +229,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "package.json" }}
+            - v2-dependencies-{{ checksum "package-lock.json" }}
             # https://github.com/badges/shields/issues/1937
             - v2-dependencies-
 
@@ -251,34 +256,67 @@ workflows:
 
   on-commit:
     jobs:
-      - npm-install:
+      - main:
           filters:
             branches:
               ignore: gh-pages
-      - main:
-          requires:
-            - npm-install
       - main@node-latest:
-          requires:
-            - npm-install
+          filters:
+            branches:
+              ignore: gh-pages
       - frontend:
-          requires:
-            - npm-install
+          filters:
+            branches:
+              ignore: gh-pages
       - services:
-          requires:
-            - npm-install
           filters:
             branches:
-              ignore: master
+              ignore:
+                - master
+                - gh-pages
       - services@node-latest:
-          requires:
-            - npm-install
           filters:
             branches:
-              ignore: master
+              ignore:
+                - master
+                - gh-pages
       - danger:
-          requires:
-            - npm-install
           filters:
             branches:
-              ignore: /dependabot\/.*/
+              ignore:
+                - master
+                - gh-pages
+                - /dependabot\/.*/
+  # on-commit-with-cache:
+  #   jobs:
+  #     - npm-install:
+  #         filters:
+  #           branches:
+  #             ignore: gh-pages
+  #     - main:
+  #         requires:
+  #           - npm-install
+  #     - main@node-latest:
+  #         requires:
+  #           - npm-install
+  #     - frontend:
+  #         requires:
+  #           - npm-install
+  #     - services:
+  #         requires:
+  #           - npm-install
+  #         filters:
+  #           branches:
+  #             ignore: master
+  #     - services@node-latest:
+  #         requires:
+  #           - npm-install
+  #         filters:
+  #           branches:
+  #             ignore: master
+  #     - danger:
+  #         requires:
+  #           - npm-install
+  #         filters:
+  #           branches:
+  #             ignore: /dependabot\/.*/
