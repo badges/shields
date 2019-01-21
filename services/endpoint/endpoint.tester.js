@@ -77,6 +77,24 @@ t.create('named logo')
     expect(body).to.include(getShieldsIcon({ name: 'github' }))
   })
 
+t.create('named logo with color')
+  .get('.svg?url=https://example.com/badge')
+  .intercept(nock =>
+    nock('https://example.com/')
+      .get('/badge')
+      .reply(200, {
+        schemaVersion: 1,
+        label: 'hey',
+        message: 'yo',
+        namedLogo: 'github',
+        logoColor: 'blue',
+      })
+  )
+  .after((err, res, body) => {
+    expect(err).not.to.be.ok
+    expect(body).to.include(getShieldsIcon({ name: 'github', color: 'blue' }))
+  })
+
 const logoSvg = Buffer.from(
   getShieldsIcon({ name: 'github' }).replace('data:image/svg+xml;base64,', ''),
   'base64'
@@ -101,7 +119,6 @@ t.create('custom svg logo')
 
 t.create('logoWidth')
   .get('.json?url=https://example.com/badge&style=_shields_test')
-  .only()
   .intercept(nock =>
     nock('https://example.com/')
       .get('/badge')
@@ -116,6 +133,7 @@ t.create('logoWidth')
   .expectJSON({
     name: 'hey',
     value: 'yo',
+    color: 'lightgrey',
     logoWidth: 30,
   })
 

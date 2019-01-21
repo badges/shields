@@ -15,6 +15,15 @@ const queryParamSchema = Joi.object({
 
 const anySchema = Joi.any()
 
+const optionalStringWhenNamedLogoPrsent = Joi.alternatives().when('namedLogo', {
+  is: Joi.string().required(),
+  then: Joi.string(),
+})
+
+const optionalNumberWhenAnyLogoPresent = Joi.alternatives()
+  .when('namedLogo', { is: Joi.string().required(), then: Joi.number() })
+  .when('logoSvg', { is: Joi.string().required(), then: Joi.number() })
+
 const endpointSchema = Joi.object({
   schemaVersion: 1,
   label: Joi.string()
@@ -26,28 +35,16 @@ const endpointSchema = Joi.object({
   isError: Joi.boolean().default(false),
   namedLogo: Joi.string(),
   logoSvg: Joi.string(),
-  logoColor: Joi.forbidden(),
-  logoWidth: Joi.forbidden(),
-  logoPosition: Joi.forbidden(),
+  logoColor: optionalStringWhenNamedLogoPrsent,
+  logoWidth: optionalNumberWhenAnyLogoPresent,
+  logoPosition: optionalNumberWhenAnyLogoPresent,
   style: Joi.string(),
   cacheSeconds: Joi.number()
     .integer()
     .min(0),
 })
+  // `namedLogo` or `logoSvg`; not both.
   .oxor('namedLogo', 'logoSvg')
-  .when(
-    Joi.alternatives().try(
-      Joi.object({ namedLogo: Joi.string().required() }).unknown(),
-      Joi.object({ logoSvg: Joi.string().required() }).unknown()
-    ),
-    {
-      then: Joi.object({
-        logoColor: Joi.string(),
-        logoWidth: Joi.number(),
-        logoPosition: Joi.number(),
-      }),
-    }
-  )
   .required()
 
 module.exports = class Endpoint extends BaseJsonService {

@@ -32,6 +32,15 @@ const defaultBadgeDataSchema = Joi.object({
   namedLogo: Joi.string(),
 }).required()
 
+const optionalStringWhenNamedLogoPrsent = Joi.alternatives().when('namedLogo', {
+  is: Joi.string().required(),
+  then: Joi.string(),
+})
+
+const optionalNumberWhenAnyLogoPresent = Joi.alternatives()
+  .when('namedLogo', { is: Joi.string().required(), then: Joi.number() })
+  .when('logoSvg', { is: Joi.string().required(), then: Joi.number() })
+
 const serviceDataSchema = Joi.object({
   isError: Joi.boolean(),
   label: Joi.string().allow(''),
@@ -45,28 +54,15 @@ const serviceDataSchema = Joi.object({
   labelColor: Joi.string(),
   namedLogo: Joi.string(),
   logoSvg: Joi.string(),
-  logoColor: Joi.forbidden(),
-  logoWidth: Joi.forbidden(),
-  logoPosition: Joi.forbidden(),
+  logoColor: optionalStringWhenNamedLogoPrsent,
+  logoWidth: optionalNumberWhenAnyLogoPresent,
+  logoPosition: optionalNumberWhenAnyLogoPresent,
   cacheSeconds: Joi.number()
     .integer()
     .min(0),
   style: Joi.string(),
 })
   .oxor('namedLogo', 'logoSvg')
-  .when(
-    Joi.alternatives().try(
-      Joi.object({ namedLogo: Joi.string().required() }).unknown(),
-      Joi.object({ logoSvg: Joi.string().required() }).unknown()
-    ),
-    {
-      then: Joi.object({
-        logoColor: Joi.string(),
-        logoWidth: Joi.number(),
-        logoPosition: Joi.number(),
-      }),
-    }
-  )
   .required()
 
 class BaseService {
