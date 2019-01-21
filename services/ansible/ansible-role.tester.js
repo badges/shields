@@ -6,7 +6,7 @@ const { isMetric } = require('../test-validators')
 
 const t = (module.exports = new ServiceTester({
   id: 'AnsibleRole',
-  title: 'AnsibleRols',
+  title: 'AnsibleRole',
   pathPrefix: '/ansible/role',
 }))
 
