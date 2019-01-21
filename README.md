@@ -113,6 +113,9 @@ sign in with GitHub. Gitpod also offers a browser add-on, though it is not requi
 
 [![Edit with Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/badges/shields)
 
+Please report any Gitpod bugs, questions, or suggestions in issue
+[#2772](https://github.com/badges/shields/issues/2772).
+
 To generate the frontend using production cache settings &ndash; that is,
 badge preview URIs with `maxAge` &ndash; run `LONG_CACHE=true npm run build`.
 
