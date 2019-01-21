@@ -38,6 +38,7 @@ rules:
   object-shorthand: ['error', 'properties']
   prefer-template: 'error'
   promise/prefer-await-to-then: 'error'
+  func-style: ['error', 'declaration', { 'allowArrowFunctions': true }]
 
   # Mocha-related.
   mocha/no-exclusive-tests: 'error'
