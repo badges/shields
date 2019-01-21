@@ -118,35 +118,34 @@ if (capitals.created || underscores.created) {
 
 const allFiles = danger.git.created_files.concat(danger.git.modified_files)
 
-allFiles.forEach(file => {
-  // eslint-disable-next-line promise/prefer-await-to-then
-  danger.git.diffForFile(file).then(diff => {
-    if (/\+.*assert[(.]/.test(diff.diff)) {
-      warn(
-        [
-          `Found 'assert' statement added in \`${file}\`. <br>`,
-          'Please ensure tests are written using Chai ',
-          '[expect syntax](http://chaijs.com/guide/styles/#expect)',
-        ].join('')
-      )
-    }
-  })
-})
+if (allFiles.length > 100) {
+  warn("Lots 'o changes. Skipping diff-based checks.")
+} else {
+  allFiles.forEach(file => {
+    // eslint-disable-next-line promise/prefer-await-to-then
+    danger.git.diffForFile(file).then(({ diff }) => {
+      if (/serverSecrets/.test(diff) && !secretsDocs.modified) {
+        warn(
+          [
+            `:books: Remember to ensure any changes to \`serverSecrets\` `,
+            `in \`${file}\` are reflected in the [server secrets documentation]`,
+            '(https://github.com/badges/shields/blob/master/doc/server-secrets.md)',
+          ].join('')
+        )
+      }
 
-allFiles.forEach(file => {
-  // eslint-disable-next-line promise/prefer-await-to-then
-  danger.git.diffForFile(file).then(diff => {
-    if (/serverSecrets/.test(diff.diff) && !secretsDocs.modified) {
-      warn(
-        [
-          `:books: Remember to ensure any changes to \`serverSecrets\` `,
-          `in \`${file}\` are reflected in the [server secrets documentation]`,
-          '(https://github.com/badges/shields/blob/master/doc/server-secrets.md)',
-        ].join('')
-      )
-    }
+      if (/\+.*assert[(.]/.test(diff)) {
+        warn(
+          [
+            `Found 'assert' statement added in \`${file}\`. <br>`,
+            'Please ensure tests are written using Chai ',
+            '[expect syntax](http://chaijs.com/guide/styles/#expect)',
+          ].join('')
+        )
+      }
+    })
   })
-})
+}
 
 function onlyUnique(value, index, self) {
   return self.indexOf(value) === index
