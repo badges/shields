@@ -4,8 +4,8 @@ const LegacyService = require('../legacy-service')
 const {
   makeBadgeData: getBadgeData,
   makeLabel: getLabel,
-  makeLogo: getLogo,
 } = require('../../lib/badge-data')
+const { makeLogo: getLogo } = require('../../lib/logos')
 const { documentation } = require('./github-helpers')
 
 const keywords = ['GitHub', 'commit']
