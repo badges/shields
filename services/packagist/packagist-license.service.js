@@ -59,15 +59,13 @@ module.exports = class PackagistLicense extends LegacyService {
             // Note: if you change the latest version detection algorithm here,
             // change it above (for the actual version badge).
             let version
-            const unstable = function(ver) {
-              return /dev/.test(ver)
-            }
+            const isUnstable = ({ version }) => version.includes('dev')
             // Grab the latest stable version, or an unstable
             for (const versionName in data.package.versions) {
               const current = data.package.versions[versionName]
 
               if (version !== undefined) {
-                if (unstable(version.version) && !unstable(current.version)) {
+                if (isUnstable(version) && !isUnstable(current)) {
                   version = current
                 } else if (
                   version.version_normalized < current.version_normalized
