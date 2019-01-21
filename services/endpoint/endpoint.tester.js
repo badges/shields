@@ -73,6 +73,7 @@ t.create('logo')
       })
   )
   .after((err, res, body) => {
+    expect(err).not.to.be.ok
     expect(body).to.include(getShieldsIcon({ name: 'github' }))
   })
 
