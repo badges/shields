@@ -110,11 +110,10 @@ You can read a [tutorial on how to add a badge][tutorial].
 Shields has experimental support for [Gitpod Beta][gitpod], a pre-configured development
 environment that runs in your browser. To use Gitpod, click the button below and
 sign in with GitHub. Gitpod also offers a browser add-on, though it is not required.
-
-[![Edit with Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/badges/shields)
-
 Please report any Gitpod bugs, questions, or suggestions in issue
 [#2772](https://github.com/badges/shields/issues/2772).
+
+[![Edit with Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/badges/shields)
 
 To generate the frontend using production cache settings &ndash; that is,
 badge preview URIs with `maxAge` &ndash; run `LONG_CACHE=true npm run build`.
