@@ -197,14 +197,14 @@ export default class Usage extends React.PureComponent {
         <H3 id="endpoint">Endpoint</H3>
 
         <p>
-          Create badges from{' '}
-          <Link to={'/endpoint'}>your own JSON endpoint</Link>
-        </p>
-
-        <p>
           <Snippet
             snippet={`${baseUrl}/badge/endpoint.svg?url=<URL>&style<STYLE>`}
           />
+        </p>
+
+        <p>
+          Create badges from{' '}
+          <Link to={'/endpoint'}>your own JSON endpoint</Link>.
         </p>
 
         <H3 id="dynamic-badge">Dynamic</H3>
