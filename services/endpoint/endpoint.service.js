@@ -24,7 +24,6 @@ const endpointSchema = Joi.object({
   color: Joi.string(),
   labelColor: Joi.string(),
   isError: Joi.boolean().default(false),
-  link: Joi.string(),
   namedLogo: Joi.string(),
   logoSvg: Joi.string(),
   logoColor: Joi.forbidden(),

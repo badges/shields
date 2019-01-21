@@ -170,11 +170,6 @@ const EndpointPage = () => (
         badge. This prevents the user from overriding the color. In the future
         it may affect cache behavior.
       </dd>
-      <dt>link</dt>
-      <dd>
-        Default: none. Specify what clicking on the left/right of a badge should
-        do.
-      </dd>
       <dt>namedLogo</dt>
       <dd>
         Default: none. One of the named logos supported by Shields or {}
