@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const validate = require('../lib/validate')
+const validate = require('../core/base-service/validate')
 const { toArray } = require('../lib/badge-data')
 const { InvalidResponse } = require('./errors')
 
