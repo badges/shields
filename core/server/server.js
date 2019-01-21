@@ -10,11 +10,11 @@ const GithubConstellation = require('../../services/github/github-constellation'
 const { loadServiceClasses } = require('../../services')
 const { makeBadgeData } = require('../../lib/badge-data')
 const suggest = require('../../lib/suggest')
-const { makeSend } = require('../../lib/result-sender')
+const { makeSend } = require('../base-service/legacy-result-sender')
 const {
   handleRequest,
   clearRequestCache,
-} = require('../../lib/request-handler')
+} = require('../base-service/legacy-request-handler')
 const { clearRegularUpdateCache } = require('../../lib/regular-update')
 const { staticBadgeUrl } = require('../badge-urls/make-badge-url')
 const analytics = require('./analytics')

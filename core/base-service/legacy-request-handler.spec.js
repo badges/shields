@@ -5,13 +5,13 @@ const fetch = require('node-fetch')
 const nock = require('nock')
 const portfinder = require('portfinder')
 const Camp = require('camp')
-const analytics = require('../core/server/analytics')
-const { makeBadgeData: getBadgeData } = require('./badge-data')
+const analytics = require('../server/analytics')
+const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const {
   handleRequest,
   clearRequestCache,
   _requestCache,
-} = require('./request-handler')
+} = require('./legacy-request-handler')
 
 async function performTwoRequests(baseUrl, first, second) {
   expect((await fetch(`${baseUrl}${first}`)).ok).to.be.true
