@@ -110,7 +110,7 @@ As a first step we will look at the code for an example which generates a badge 
 ```js
 'use strict'                                         // (1)
 
-const BaseService = require('..')                    // (2)
+const { BaseService } = require('..')                // (2)
 
 module.exports = class Example extends BaseService { // (3)
 

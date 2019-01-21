@@ -8,7 +8,7 @@ Meanwhile, the legacy services extend from an abstract
 adapter called [LegacyService][] which provides a place to put the
 `camp.route()` invocation. The wrapper extends from [BaseService][], so it
 supports badge examples via `category`, `examples`, and `route`. Setting `route`
-also enables `create-service-tester.js` to infer a service's base path, reducing
+also enables `createServiceTester()` to infer a service's base path, reducing
 boilerplate for [creating the tester][creating a tester].
 
 Legacy services look like:
@@ -278,7 +278,7 @@ https://github.com/hapijs/joi/blob/master/API.md
 Switch to `createServiceTester`:
 
 ```js
-const t = require('../create-service-tester')()
+const t = (module.exports = require('..').createServiceTester())
 ```
 
 This may require updating the URLs, which will be relative to the service's base

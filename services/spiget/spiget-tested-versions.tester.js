@@ -1,12 +1,11 @@
 'use strict'
 
 const Joi = require('joi')
-
-const t = (module.exports = require('../create-service-tester')())
-
 const { withRegex } = require('../test-validators')
 
 const multipleVersions = withRegex(/^([+]?\d*\.\d+)(-)([+]?\d*\.\d+)$/)
+
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('EssentialsX - multiple versions supported - (id 9089)')
   .get('/9089.json')

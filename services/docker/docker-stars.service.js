@@ -1,13 +1,13 @@
 'use strict'
 
-const BaseService = require('../base')
 const { metric } = require('../../lib/text-formatters')
+const { BaseService } = require('..')
+const { nonNegativeInteger } = require('../validators')
 const {
   dockerBlue,
   buildDockerUrl,
   getDockerHubUser,
 } = require('./docker-helpers')
-const { nonNegativeInteger } = require('../validators')
 
 module.exports = class DockerStars extends BaseService {
   async fetch({ user, repo }) {

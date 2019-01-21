@@ -1,8 +1,8 @@
 'use strict'
 
-const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 const { metric } = require('../../lib/text-formatters')
 const { downloadCount } = require('../../lib/color-formatters')
+const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 
 module.exports = class SpigetDownloads extends BaseSpigetService {
   static get route() {
