@@ -11,7 +11,7 @@ const {
   InvalidParameter,
   Deprecated,
 } = require('./errors')
-const coalesce = require('../lib/coalesce')
+const coalesce = require('../core/base-service/coalesce')
 const validate = require('../lib/validate')
 const { checkErrorResponse } = require('../lib/error-helper')
 const { toArray } = require('../lib/badge-data')
