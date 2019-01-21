@@ -14,12 +14,12 @@ const {
 const coalesce = require('../lib/coalesce')
 const validate = require('../lib/validate')
 const { checkErrorResponse } = require('../lib/error-helper')
+const { toArray } = require('../lib/badge-data')
+const { svg2base64 } = require('../lib/svg-helpers')
 const {
-  makeLogo,
-  toArray,
-  makeColor,
-  setBadgeColor,
-} = require('../lib/badge-data')
+  decodeDataUrlFromQueryParam,
+  prepareNamedLogo,
+} = require('../lib/logos')
 const trace = require('./trace')
 const { validateExample, transformExample } = require('./transform-example')
 const { assertValidCategory } = require('./categories')
@@ -28,8 +28,45 @@ const { assertValidServiceDefinition } = require('./service-definitions')
 const defaultBadgeDataSchema = Joi.object({
   label: Joi.string(),
   color: Joi.string(),
-  logo: Joi.string(),
+  labelColor: Joi.string(),
+  namedLogo: Joi.string(),
 }).required()
+
+const serviceDataSchema = Joi.object({
+  isError: Joi.boolean(),
+  label: Joi.string().allow(''),
+  // While a number of badges pass a number here, in the long run we may want
+  // `render()` to always return a string.
+  message: Joi.alternatives(Joi.string().allow(''), Joi.number()).required(),
+  color: Joi.string(),
+  link: Joi.string().uri(),
+  // Generally services should not use these options, which are provided to
+  // support the Endpoint badge.
+  labelColor: Joi.string(),
+  namedLogo: Joi.string(),
+  logoSvg: Joi.string(),
+  logoColor: Joi.forbidden(),
+  logoWidth: Joi.forbidden(),
+  logoPosition: Joi.forbidden(),
+  cacheLengthSeconds: Joi.number()
+    .integer()
+    .min(0),
+})
+  .oxor('namedLogo', 'logoSvg')
+  .when(
+    Joi.alternatives().try(
+      Joi.object({ namedLogo: Joi.string().required() }).unknown(),
+      Joi.object({ logoSvg: Joi.string().required() }).unknown()
+    ),
+    {
+      then: Joi.object({
+        logoColor: Joi.string(),
+        logoWidth: Joi.number(),
+        logoPosition: Joi.number(),
+      }),
+    }
+  )
+  .required()
 
 class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
@@ -57,7 +94,7 @@ class BaseService {
    * the badges on the main shields.io website.
    */
   static get category() {
-    return 'unknown'
+    throw new Error(`Category not set for ${this.name}`)
   }
 
   /**
@@ -304,6 +341,7 @@ class BaseService {
     let serviceData
     try {
       serviceData = await serviceInstance.handle(namedParams, queryParams)
+      Joi.assert(serviceData, serviceDataSchema)
     } catch (error) {
       serviceData = serviceInstance._handleError(error)
     }
@@ -313,65 +351,144 @@ class BaseService {
     return serviceData
   }
 
+  // Translate modern badge data to the legacy schema understood by the badge
+  // maker. Allow the user to override the label, color, logo, etc. through
+  // the query string. Provide support for most badge options via
+  // `serviceData` so the Endpoint badge can specify logos and colors, though
+  // allow that the user's logo or color to take precedence. A notable
+  // exception is the case of errors. When the service specifies that an error
+  // has occurred, the user's requested color does not override the error color.
+  //
+  // Logos are resolved in this manner:
+  //
+  // 1. When `?logo=` contains the name of one of the Shields logos, or contains
+  //    base64-encoded SVG, that logo is used. In the case of a named logo, when
+  //    a `&logoColor=` is specified, that color is used. Otherwise the default
+  //    color is used. `logoColor` will not be applied to a custom
+  //    (base64-encoded) logo; if a custom color is desired the logo should be
+  //    recolored prior to making the request. The appearance of the logo can be
+  //    customized using `logoWidth`, and in the case of the popout badge,
+  //    `logoPosition`. When `?logo=` is specified, any logo-related parameters
+  //    specified dynamically by the service, or by default in the service, are
+  //    ignored.
+  // 2. The second precedence is the dynamic logo returned by a service. This is
+  //    used only by the Endpoint badge. The `logoColor` can be overridden by the
+  //    query string.
+  // 3. In the case of the `social` style only, the last precedence is the
+  //    service's default logo. The `logoColor` can be overridden by the query
+  //    string.
   static _makeBadgeData(overrides, serviceData) {
     const {
       style,
       label: overrideLabel,
-      logo: overrideLogo,
       logoColor: overrideLogoColor,
-      logoWidth: overrideLogoWidth,
       link: overrideLink,
-      colorA: overrideLabelColor,
-      colorB: overrideColor,
     } = overrides
+    // Scoutcamp converts numeric query params to numbers. Convert them back.
+    let {
+      colorB: overrideColor,
+      colorA: overrideLabelColor,
+      logoWidth: overrideLogoWidth,
+      logoPosition: overrideLogoPosition,
+    } = overrides
+    if (typeof overrideColor === 'number') {
+      overrideColor = `${overrideColor}`
+    }
+    if (typeof overrideLabelColor === 'number') {
+      overrideLabelColor = `${overrideLabelColor}`
+    }
+    overrideLogoWidth = +overrideLogoWidth || undefined
+    overrideLogoPosition = +overrideLogoPosition || undefined
+    // `?logo=` could be a named logo or encoded svg. Split up these cases.
+    const overrideLogoSvgBase64 = decodeDataUrlFromQueryParam(overrides.logo)
+    const overrideNamedLogo = overrideLogoSvgBase64 ? undefined : overrides.logo
 
     const {
       isError,
       label: serviceLabel,
       message: serviceMessage,
       color: serviceColor,
+      labelColor: serviceLabelColor,
+      logoSvg: serviceLogoSvg,
+      namedLogo: serviceNamedLogo,
+      logoColor: serviceLogoColor,
+      logoWidth: serviceLogoWidth,
+      logoPosition: serviceLogoPosition,
       link: serviceLink,
+      cacheLengthSeconds: serviceCacheLengthSeconds,
     } = serviceData
+    const serviceLogoSvgBase64 = serviceLogoSvg
+      ? svg2base64(serviceLogoSvg)
+      : undefined
 
     const {
       color: defaultColor,
-      logo: defaultLogo,
+      namedLogo: defaultNamedLogo,
       label: defaultLabel,
+      labelColor: defaultLabelColor,
     } = this.defaultBadgeData
+    const defaultCacheLengthSeconds = this._cacheLength
 
-    const badgeData = {
+    const namedLogoSvgBase64 = prepareNamedLogo({
+      name: coalesce(
+        overrideNamedLogo,
+        serviceNamedLogo,
+        style === 'social' ? defaultNamedLogo : undefined
+      ),
+      color: coalesce(
+        overrideLogoColor,
+        // If the logo has been overridden it does not make sense to inherit
+        // the color.
+        overrideNamedLogo ? undefined : serviceLogoColor
+      ),
+    })
+
+    return {
       text: [
         // Use `coalesce()` to support empty labels and messages, as in the
         // static badge.
         coalesce(overrideLabel, serviceLabel, defaultLabel, this.category),
         coalesce(serviceMessage, 'n/a'),
       ],
+      color: coalesce(
+        // In case of an error, disregard user's color override.
+        isError ? undefined : overrideColor,
+        serviceColor,
+        defaultColor,
+        'lightgrey'
+      ),
+      labelColor: coalesce(
+        // In case of an error, disregard user's color override.
+        isError ? undefined : overrideLabelColor,
+        serviceLabelColor,
+        defaultLabelColor
+      ),
       template: style,
-      logo: makeLogo(style === 'social' ? defaultLogo : undefined, {
-        logo: overrideLogo,
-        logoColor: overrideLogoColor,
-      }),
-      logoWidth: +overrideLogoWidth,
+      logo: coalesce(
+        overrideLogoSvgBase64,
+        serviceLogoSvgBase64,
+        namedLogoSvgBase64
+      ),
+      logoWidth: coalesce(
+        overrideLogoWidth,
+        // If the logo has been overridden it does not make sense to inherit
+        // the width or position.
+        overrideNamedLogo ? undefined : serviceLogoWidth
+      ),
+      logoPosition: coalesce(
+        overrideLogoPosition,
+        overrideNamedLogo ? undefined : serviceLogoPosition
+      ),
       links: toArray(overrideLink || serviceLink),
-      colorA: makeColor(overrideLabelColor),
+      cacheLengthSeconds: coalesce(
+        serviceCacheLengthSeconds,
+        defaultCacheLengthSeconds
+      ),
     }
-
-    let color
-    if (isError) {
-      // Disregard the override color.
-      color = coalesce(serviceColor, defaultColor, 'lightgrey')
-    } else {
-      color = coalesce(overrideColor, serviceColor, defaultColor, 'lightgrey')
-    }
-    setBadgeColor(badgeData, color)
-
-    return badgeData
   }
 
   static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
-    this.validateDefinition()
-
-    const { cacheHeaders: cacheHeaderConfig } = serviceConfig
+    const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
     camp.route(
       this._regex,
       handleRequest(cacheHeaderConfig, {
@@ -395,6 +512,7 @@ class BaseService {
           sendBadge(format, badgeData)
         },
         cacheLength: this._cacheLength,
+        fetchLimitBytes,
       })
     )
   }

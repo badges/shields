@@ -3,19 +3,20 @@
 const BaseJsonService = require('../base-json')
 const Joi = require('joi')
 const { NotFound } = require('../errors')
+const { renderBuildStatusBadge } = require('../../lib/build-status')
 
 // source: https://github.com/badges/shields/pull/1362#discussion_r161693830
 const statusCodes = {
-  0: { color: '#5183A0', label: 'waiting' },
-  10: { color: '#5183A0', label: 'queued' },
-  20: { color: '#5183A0', label: 'processing' },
-  30: { color: '#44CC11', label: 'success' },
-  40: { color: '#F8A97D', label: 'skipped' },
-  50: { color: '#CEA61B', label: 'unstable' },
-  60: { color: '#555555', label: 'timeout' },
-  70: { color: '#6BAFBD', label: 'cancelled' },
-  80: { color: '#DC5F59', label: 'failed' },
-  90: { color: '#555555', label: 'stopped' },
+  0: 'waiting',
+  10: 'queued',
+  20: 'processing',
+  30: 'success',
+  40: 'skipped',
+  50: 'unstable',
+  60: 'timeout',
+  70: 'cancelled',
+  80: 'failed',
+  90: 'stopped',
 }
 
 const schema = Joi.array()
@@ -71,11 +72,7 @@ module.exports = class Shippable extends BaseJsonService {
   }
 
   static render({ code }) {
-    return {
-      label: 'build',
-      message: statusCodes[code].label,
-      color: statusCodes[code].color,
-    }
+    return renderBuildStatusBadge({ label: 'build', status: statusCodes[code] })
   }
 
   async handle({ projectId, branch = 'master' }) {

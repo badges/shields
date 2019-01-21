@@ -44,5 +44,5 @@ t.create('unknown dependency')
   .get('/react-boxplot/dev/i-made-this-up.json')
   .expectJSON({
     name: 'dependency',
-    value: 'not found',
+    value: 'dev dependency not found',
   })

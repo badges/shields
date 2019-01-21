@@ -2,10 +2,9 @@
 
 const queryString = require('query-string')
 const request = require('request')
-const log = require('../../../lib/log')
-const githubAuth = require('../../../lib/github-auth')
+const log = require('../../../core/server/log')
+const secretIsValid = require('../../../core/server/secret-is-valid')
 const serverSecrets = require('../../../lib/server-secrets')
-const secretIsValid = require('../../../lib/sys/secret-is-valid')
 
 function sendTokenToAllServers(token) {
   const {
@@ -45,7 +44,7 @@ function sendTokenToAllServers(token) {
   )
 }
 
-function setRoutes(server) {
+function setRoutes({ server, onTokenAccepted }) {
   const baseUrl = process.env.BASE_URL || 'https://img.shields.io'
 
   server.route(/^\/github-auth$/, (data, match, end, ask) => {
@@ -125,12 +124,11 @@ function setRoutes(server) {
       return
     }
 
-    githubAuth.addGithubToken(data.token)
+    onTokenAccepted(data.token)
     end('Thanks!')
   })
 }
 
 module.exports = {
-  sendTokenToAllServers,
   setRoutes,
 }

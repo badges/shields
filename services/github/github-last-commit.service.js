@@ -1,16 +1,19 @@
 'use strict'
 
 const LegacyService = require('../legacy-service')
-const {
-  makeBadgeData: getBadgeData,
-  makeLogo: getLogo,
-} = require('../../lib/badge-data')
+const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const { makeLogo: getLogo } = require('../../lib/logos')
 const { formatDate } = require('../../lib/text-formatters')
 const { age: ageColor } = require('../../lib/color-formatters')
 const {
   documentation,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
+
+const commonExampleAttrs = {
+  keywords: ['activity', 'latest'],
+  documentation,
+}
 
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //
@@ -26,6 +29,7 @@ module.exports = class GithubLastCommit extends LegacyService {
   static get route() {
     return {
       base: 'github/last-commit',
+      pattern: ':user/:repo/:branch*',
     }
   }
 
@@ -33,15 +37,32 @@ module.exports = class GithubLastCommit extends LegacyService {
     return [
       {
         title: 'GitHub last commit',
-        previewUrl: 'google/skia',
-        keywords: ['GitHub', 'last', 'latest', 'commit'],
-        documentation,
+        pattern: ':user/:repo',
+        namedParams: {
+          user: 'google',
+          repo: 'skia',
+        },
+        staticPreview: {
+          label: 'last commit',
+          message: 'today',
+          color: 'brightgreen',
+        },
+        ...commonExampleAttrs,
       },
       {
         title: 'GitHub last commit (branch)',
-        previewUrl: 'google/skia/infra/config',
-        keywords: ['GitHub', 'last', 'latest', 'commit'],
-        documentation,
+        pattern: ':user/:repo/:branch',
+        namedParams: {
+          user: 'google',
+          repo: 'skia',
+          branch: 'infra/config',
+        },
+        staticPreview: {
+          label: 'last commit',
+          message: 'april 2018',
+          color: 'yellow',
+        },
+        ...commonExampleAttrs,
       },
     ]
   }

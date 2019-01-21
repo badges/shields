@@ -14,7 +14,7 @@ const {
 // Do not base new services on this code.
 module.exports = class Coveralls extends LegacyService {
   static get category() {
-    return 'quality'
+    return 'coverage'
   }
 
   static get route() {

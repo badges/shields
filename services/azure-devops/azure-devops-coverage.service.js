@@ -60,7 +60,7 @@ module.exports = class AzureDevOpsCoverage extends AzureDevOpsBase {
   }
 
   static get category() {
-    return 'quality'
+    return 'coverage'
   }
 
   static get examples() {
@@ -79,7 +79,7 @@ module.exports = class AzureDevOpsCoverage extends AzureDevOpsBase {
       },
       {
         title: 'Azure DevOps coverage (branch)',
-        pattern: ':organization/:project/:definitionId/:branch*',
+        pattern: ':organization/:project/:definitionId/:branch',
         namedParams: {
           organization: 'swellaby',
           project: 'opensource',

@@ -1,10 +1,8 @@
 'use strict'
 
 const LegacyService = require('../legacy-service')
-const {
-  makeBadgeData: getBadgeData,
-  makeLogo: getLogo,
-} = require('../../lib/badge-data')
+const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const { makeLogo: getLogo } = require('../../lib/logos')
 const { metric } = require('../../lib/text-formatters')
 
 // This legacy service should be rewritten to use e.g. BaseJsonService.
@@ -53,7 +51,7 @@ class TwitterUrl extends LegacyService {
           ]
         }
         badgeData.text[1] = ''
-        badgeData.colorscheme = null
+        badgeData.colorscheme = undefined
         badgeData.colorB = data.colorB || '#55ACEE'
         sendBadge(format, badgeData)
       })
@@ -99,7 +97,7 @@ class TwitterFollow extends LegacyService {
         }
         const badgeData = getBadgeData(`follow @${user}`, data)
 
-        badgeData.colorscheme = null
+        badgeData.colorscheme = undefined
         badgeData.colorB = '#55ACEE'
         if (badgeData.template === 'social') {
           badgeData.logo = getLogo('twitter', data)

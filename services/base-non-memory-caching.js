@@ -24,7 +24,7 @@ const { setCacheHeaders } = require('./cache-headers')
 module.exports = class NonMemoryCachingBaseService extends BaseService {
   static register({ camp }, serviceConfig) {
     const { cacheHeaders: cacheHeaderConfig } = serviceConfig
-    const { _cacheLength: serviceCacheLengthSeconds } = this
+    const { _cacheLength: serviceDefaultCacheLengthSeconds } = this
 
     camp.route(this._regex, async (queryParams, match, end, ask) => {
       const namedParams = this._namedParamsForMatch(match)
@@ -44,7 +44,7 @@ module.exports = class NonMemoryCachingBaseService extends BaseService {
 
       setCacheHeaders({
         cacheHeaderConfig,
-        serviceCacheLengthSeconds,
+        serviceDefaultCacheLengthSeconds,
         queryParams,
         res: ask.res,
       })

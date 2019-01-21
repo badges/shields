@@ -47,5 +47,5 @@ t.create('package not found')
   .get('/dt/does-not-exist.json')
   .expectJSON({
     name: 'downloads',
-    value: 'invalid',
+    value: 'not found',
   })

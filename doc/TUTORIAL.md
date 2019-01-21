@@ -41,7 +41,7 @@ install node and npm: https://nodejs.org/en/download/
 5. Run the server
    `npm start`
 6. Visit the website to check the front-end is loaded:
-   [http://127.0.0.1:3000/](http://127.0.0.1:3000/)
+   [http://localhost:3000/](http://localhost:3000/)
 
 You may also want to install
 [ImageMagick](https://www.imagemagick.org/script/download.php).
@@ -155,7 +155,7 @@ To try out this example badge:
 2. Quit the running server with `Control+C`.
 3. Start the server again.
    `npm start`
-4. Visit the badge at <http://[::]:8080/example/foo.svg>.
+4. Visit the badge at <http://localhost:8080/example/foo.svg>.
    It should look like this: ![](https://img.shields.io/badge/example-foo-blue.svg)
 
 [path-to-regexp]: https://github.com/pillarjs/path-to-regexp#parameters
@@ -214,6 +214,7 @@ Description of the code:
 1. As with the first example, we declare strict mode at the start of each file.
 2. Our badge will query a JSON API so we will extend `BaseJsonService` instead of `BaseService`. This contains some helpers to reduce the need for boilerplate when calling a JSON API.
 3. In this case we are making a version badge, which is a common pattern. Instead of directly returning an object in this badge we will use a helper function to format our data consistently. There are a variety of helper functions to help with common tasks in `/lib`. Some useful generic helpers can be found in:
+    * [build-status.js](https://github.com/badges/shields/blob/master/lib/build-status.js)
     * [color-formatters.js](https://github.com/badges/shields/blob/master/lib/color-formatters.js)
     * [licenses.js](https://github.com/badges/shields/blob/master/lib/licenses.js)
     * [text-formatters.js](https://github.com/badges/shields/blob/master/lib/text-formatters.js)

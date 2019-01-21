@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-const { colorScheme } = require('../test-helpers')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
 const t = (module.exports = require('../create-service-tester')())
@@ -27,5 +26,5 @@ t.create('version (mocked)')
   .expectJSON({
     name: 'cookbook',
     value: 'v4.1.0',
-    colorB: colorScheme.blue,
+    color: 'blue',
   })

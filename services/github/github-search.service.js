@@ -16,12 +16,13 @@ const {
 // Do not base new services on this code.
 module.exports = class GithubSearch extends LegacyService {
   static get category() {
-    return 'other'
+    return 'analysis'
   }
 
   static get route() {
     return {
       base: 'github/search',
+      pattern: ':user/:repo/:query*',
     }
   }
 
@@ -29,8 +30,17 @@ module.exports = class GithubSearch extends LegacyService {
     return [
       {
         title: 'GitHub search hit counter',
-        previewUrl: 'torvalds/linux/goto',
-        keywords: ['GitHub', 'search', 'hit', 'counter'],
+        pattern: ':user/:repo/:query',
+        namedParams: {
+          user: 'torvalds',
+          repo: 'linux',
+          query: 'goto',
+        },
+        staticPreview: {
+          label: 'goto counter',
+          message: '14k',
+          color: 'blue',
+        },
         documentation,
       },
     ]

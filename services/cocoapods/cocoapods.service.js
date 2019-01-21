@@ -13,6 +13,10 @@ const { version: versionColor } = require('../../lib/color-formatters')
 //
 // Do not base new services on this code.
 module.exports = class CocoapodsVersionPlatformLicense extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/cocoapods\/(v|p|l)\/(.*)\.(svg|png|gif|jpg|json)$/,
@@ -23,7 +27,7 @@ module.exports = class CocoapodsVersionPlatformLicense extends LegacyService {
         const apiUrl = `https://trunk.cocoapods.org/api/v1/pods/${spec}/specs/latest`
         const typeToLabel = { v: 'pod', p: 'platform', l: 'license' }
         const badgeData = getBadgeData(typeToLabel[type], data)
-        badgeData.colorscheme = null
+        badgeData.colorscheme = undefined
         request(apiUrl, (err, res, buffer) => {
           if (checkErrorResponse(badgeData, err, res)) {
             sendBadge(format, badgeData)

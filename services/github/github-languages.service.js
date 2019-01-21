@@ -4,9 +4,9 @@ const prettyBytes = require('pretty-bytes')
 const LegacyService = require('../legacy-service')
 const {
   makeBadgeData: getBadgeData,
-  makeLogo: getLogo,
   makeLabel: getLabel,
 } = require('../../lib/badge-data')
+const { makeLogo: getLogo } = require('../../lib/logos')
 const {
   documentation,
   checkErrorResponse: githubCheckErrorResponse,
@@ -26,6 +26,7 @@ class GithubCodeSize extends LegacyService {
   static get route() {
     return {
       base: 'github/languages/code-size',
+      pattern: ':user/:repo',
     }
   }
 
@@ -33,8 +34,15 @@ class GithubCodeSize extends LegacyService {
     return [
       {
         title: 'GitHub code size in bytes',
-        previewUrl: 'badges/shields',
-        keywords: ['GitHub', 'byte', 'code', 'size'],
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+        },
+        staticPreview: {
+          label: 'code size',
+          message: '1.3 MB',
+          color: 'blue',
+        },
         documentation,
       },
     ]
@@ -45,12 +53,13 @@ class GithubCodeSize extends LegacyService {
 
 class GithubLanguages extends LegacyService {
   static get category() {
-    return 'other'
+    return 'analysis'
   }
 
   static get route() {
     return {
       base: 'github/languages',
+      pattern: ':which(top|count)/:user/:repo',
     }
   }
 
@@ -58,14 +67,30 @@ class GithubLanguages extends LegacyService {
     return [
       {
         title: 'GitHub top language',
-        previewUrl: 'top/badges/shields',
-        keywords: ['GitHub', 'top', 'language'],
+        pattern: 'top/:user/:repo',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+        },
+        staticPreview: {
+          label: 'javascript',
+          message: '99.5%',
+          color: 'lightgrey',
+        },
         documentation,
       },
       {
         title: 'GitHub language count',
-        previewUrl: 'count/badges/shields',
-        keywords: ['GitHub', 'language', 'count'],
+        pattern: 'count/:user/:repo',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+        },
+        staticPreview: {
+          label: 'languages',
+          message: '5',
+          color: 'blue',
+        },
         documentation,
       },
     ]

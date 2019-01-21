@@ -2,6 +2,8 @@
 
 const AppVeyorBase = require('./appveyor-base')
 
+const { renderBuildStatusBadge } = require('../../lib/build-status')
+
 module.exports = class AppVeyorCi extends AppVeyorBase {
   static get route() {
     return this.buildRoute('appveyor/ci')
@@ -25,17 +27,7 @@ module.exports = class AppVeyorCi extends AppVeyorBase {
   }
 
   static render({ status }) {
-    if (status === 'success') {
-      return { message: 'passing', color: 'brightgreen' }
-    } else if (
-      status !== 'running' &&
-      status !== 'queued' &&
-      status !== 'no builds found'
-    ) {
-      return { message: 'failing', color: 'red' }
-    } else {
-      return { message: status }
-    }
+    return renderBuildStatusBadge({ status })
   }
 
   async handle({ user, repo, branch }) {

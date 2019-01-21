@@ -1,10 +1,8 @@
 'use strict'
 
 const LegacyService = require('../legacy-service')
-const {
-  makeBadgeData: getBadgeData,
-  makeLogo: getLogo,
-} = require('../../lib/badge-data')
+const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const { makeLogo: getLogo } = require('../../lib/logos')
 const {
   documentation,
   checkErrorResponse: githubCheckErrorResponse,
@@ -66,7 +64,7 @@ module.exports = class GithubFollowers extends LegacyService {
           }
           try {
             badgeData.text[1] = JSON.parse(buffer).followers
-            badgeData.colorscheme = null
+            badgeData.colorscheme = undefined
             badgeData.colorB = '#4183C4'
             sendBadge(format, badgeData)
           } catch (e) {

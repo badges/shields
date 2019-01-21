@@ -6,6 +6,7 @@ const Camp = require('camp')
 const fetch = require('node-fetch')
 const portfinder = require('portfinder')
 const serverSecrets = require('../../../lib/server-secrets')
+const GithubApiProvider = require('../github-api-provider')
 const { setRoutes } = require('./admin')
 
 function createAuthHeader({ username, password }) {
@@ -53,7 +54,8 @@ describe('GitHub admin route', function() {
   })
 
   before(function() {
-    setRoutes(camp)
+    const apiProvider = new GithubApiProvider({ withPooling: true })
+    setRoutes(apiProvider, camp)
   })
 
   context('the password is correct', function() {
