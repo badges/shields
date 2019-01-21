@@ -81,7 +81,7 @@ const EndpointPage = () => (
     <Header />
     <H3 id="static-badge">Endpoint</H3>
     <Snippet snippet={`${baseUrl}/badge/endpoint.svg?url=...&style=...`} />
-    <p>Sample response:</p>
+    <p>Endpoint response:</p>
     <JsonExample
       data={{
         schemaVersion: 1,
@@ -90,7 +90,7 @@ const EndpointPage = () => (
         color: 'orange',
       }}
     />
-    <p>Output:</p>
+    <p>Shields response:</p>
     <Badge
       src={staticBadgeUrl(baseUrl, 'hello', 'sweet world', 'orange')}
       alt="hello | sweet world"
@@ -98,9 +98,9 @@ const EndpointPage = () => (
     <Explanation>
       <p>
         Developers rely on Shields for visual consistency and powerful
-        customization options. As a service provider, you can use the endpoint
-        badge to provide content while giving users the full power of Shields'
-        badge customization.
+        customization options. As a service provider or data provider, you can
+        use the endpoint badge to provide content while giving users the full
+        power of Shields' badge customization.
       </p>
       <p>
         Using the endpoint badge, you can provide content for a badge through a
