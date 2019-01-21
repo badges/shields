@@ -150,7 +150,7 @@ jobs:
 
   integration@node-latest:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:latest
       - image: redis
 
     steps:
