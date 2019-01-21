@@ -110,7 +110,7 @@ As a first step we will look at the code for an example which generates a badge 
 ```js
 'use strict'                                         // (1)
 
-const BaseService = require('..')                    // (2)
+const { BaseService } = require('..')                // (2)
 
 module.exports = class Example extends BaseService { // (3)
 
@@ -171,7 +171,7 @@ This example is based on the [Ruby Gems version](https://github.com/badges/shiel
 'use strict'                                                    // (1)
 
 const { renderVersionBadge } = require('../../lib/version')     // (2)
-const BaseJsonService = require('..')                           // (3)
+const { BaseJsonService } = require('..')                       // (3)
 
 const Joi = require('joi')                                      // (4)
 const schema = Joi.object({                                     // (4)
