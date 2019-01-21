@@ -21,7 +21,7 @@ class AnsibleGalaxyContent extends BaseJsonService {
   }
 }
 
-class AnsibleGalaxyContentQualityScore extends AnsibleGalaxyContent {
+module.exports = class AnsibleGalaxyContentQualityScore extends AnsibleGalaxyContent {
   static render({ qualityScore }) {
     return {
       message: qualityScore,
@@ -30,18 +30,15 @@ class AnsibleGalaxyContentQualityScore extends AnsibleGalaxyContent {
   }
 
   async handle({ projectId }) {
-    const json = await this.fetch({ projectId })
+    const { quality_score: qualityScore } = await this.fetch({ projectId })
 
-    const score = json.quality_score
-    console.log(score)
-    if (!score)
+    if (qualityScore === null) {
       throw new InvalidResponse({
-        underlyingError: {
-          message: 'No Score Available',
-        },
+        prettyMessage: 'no score available',
       })
+    }
 
-    return this.constructor.render({ qualityScore: json.quality_score })
+    return this.constructor.render({ qualityScore })
   }
 
   static get defaultBadgeData() {
@@ -54,7 +51,7 @@ class AnsibleGalaxyContentQualityScore extends AnsibleGalaxyContent {
 
   static get route() {
     return {
-      base: 'ansible/score/quality',
+      base: 'ansible/quality',
       pattern: ':projectId',
     }
   }
@@ -62,15 +59,13 @@ class AnsibleGalaxyContentQualityScore extends AnsibleGalaxyContent {
   static get examples() {
     return [
       {
-        title: `Ansible Quality Score`,
+        title: 'Ansible Quality Score',
         pattern: ':projectId',
-        exampleUrl: '432',
-        staticExample: this.render({ qualityScore: 4.125 }),
+        namedParams: {
+          projectIs: '432',
+        },
+        staticPreview: this.render({ qualityScore: 4.125 }),
       },
     ]
   }
-}
-
-module.exports = {
-  AnsibleGalaxyContentQualityScore,
 }
