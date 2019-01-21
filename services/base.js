@@ -12,7 +12,7 @@ const {
   Deprecated,
 } = require('./errors')
 const coalesce = require('../core/base-service/coalesce')
-const validate = require('../lib/validate')
+const validate = require('../core/base-service/validate')
 const { checkErrorResponse } = require('../lib/error-helper')
 const { toArray } = require('../lib/badge-data')
 const { svg2base64 } = require('../lib/svg-helpers')
