@@ -2,7 +2,7 @@
 
 const emojic = require('emojic')
 const Joi = require('joi')
-const trace = require('../../services/trace')
+const trace = require('./trace')
 
 function validate(
   {

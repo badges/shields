@@ -2,7 +2,7 @@
 
 const assert = require('assert')
 const Joi = require('joi')
-const coalesce = require('../core/base-service/coalesce')
+const coalesce = require('./coalesce')
 
 const serverStartTimeGMTString = new Date().toGMTString()
 const serverStartTimestamp = Date.now()

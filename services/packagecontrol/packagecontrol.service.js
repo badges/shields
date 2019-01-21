@@ -1,9 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
 const { metric } = require('../../lib/text-formatters')
 const { downloadCount } = require('../../lib/color-formatters')
+const { BaseJsonService } = require('..')
 const { nonNegativeInteger } = require('../validators')
 
 const keywords = ['sublime', 'sublimetext', 'packagecontrol']

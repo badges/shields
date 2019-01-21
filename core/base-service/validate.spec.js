@@ -3,8 +3,8 @@
 const Joi = require('joi')
 const { expect } = require('chai')
 const sinon = require('sinon')
-const trace = require('../../services/trace')
-const { InvalidParameter } = require('../../services/errors')
+const trace = require('./trace')
+const { InvalidParameter } = require('./errors')
 const validate = require('./validate')
 
 describe('validate', function() {
