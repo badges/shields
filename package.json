@@ -182,7 +182,7 @@
     "nyc": "^13.0.1",
     "opn-cli": "^4.0.0",
     "portfinder": "^1.0.20",
-    "prettier": "1.15.3",
+    "prettier": "1.16.0",
     "prettier-check": "^2.0.0",
     "pretty": "^2.0.0",
     "prop-types": "^15.6.0",
