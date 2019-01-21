@@ -202,10 +202,9 @@ export default class Usage extends React.PureComponent {
         </p>
 
         <p>
-          <code>
-            {baseUrl}
-            /badge/endpoint.svg?url=&lt;URL&gt;&amp;style=&lt;STYLE&gt;
-          </code>
+          <Snippet
+            snippet={`${baseUrl}/badge/endpoint.svg?url=<URL>&style<STYLE>`}
+          />
         </p>
 
         <H3 id="dynamic-badge">Dynamic</H3>

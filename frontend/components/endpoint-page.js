@@ -98,21 +98,21 @@ const EndpointPage = () => (
     <Explanation>
       <p>
         Developers rely on Shields for visual consistency and powerful
-        customization options. The endpoint badge gives service providers the
-        full power of that customization using badge content they provide.
+        customization options. As a service provider, you can use the endpoint
+        badge to provide content while giving users the full power of Shields'
+        badge customization.
       </p>
       <p>
         Using the endpoint badge, you can provide content for a badge through a
-        JSON endpoint. The URL of the endpoint is embedded into the badge URL,
-        and the content is fetched and formatted by Shields. The content can be
-        prerendered, or generated on the fly. To strike a balance between
-        responsiveness and bandwith utilization on one hand, and freshness on
-        the other, cache behavior is configurable, subject to the Shields
-        minimum.
+        JSON endpoint. The content can be prerendered, or generated on the fly.
+        To strike a balance between responsiveness and bandwith utilization on
+        one hand, and freshness on the other, cache behavior is configurable,
+        subject to the Shields minimum. The endpoint URL is provided to Shields
+        through the query string. Shields fetches it and formats the badge.
       </p>
       <p>
         The endpoint badge is a better alternative than redirecting to the
-        static badge enpoint or using our NPM package on your server:
+        static badge enpoint or generating SVG on your server:
       </p>
       <ol>
         <li>
@@ -120,24 +120,24 @@ const EndpointPage = () => (
             Content and presentation are separate.
           </a>{' '}
           The service provider authors the badge, and Shields takes input from
-          the user to format it. The service provider doesn't have to concern
-          itself with styling, not even to pass those options through to
-          Shields.
+          the user to format it. As a service provider you author the badge but
+          don't have to concern yourself with styling. You don't even have to
+          pass the formatting options through to Shields.
         </li>
         <li>
-          There's no need to track updates to the npm package, badge templates,
-          or options. Badge formatting is always 100% up to date.
+          Badge formatting is always 100% up to date. There's no need to track
+          updates to the npm package, badge templates, or options.
         </li>
         <li>
-          Compared with an HTTP redirect, a JSON response is easier to
-          implement. It is trivial in almost any framework, and is more
-          compatible with hosting environments such as{' '}
+          A JSON response is easy to implement; easier than an HTTP redirect. It
+          is trivial in almost any framework, and is more compatible with
+          hosting environments such as{' '}
           <a href="https://runkit.com/docs/endpoint">RunKit endpoints</a>.
         </li>
         <li>
-          Service providers can rely on the Shields CDN. Adjusting cache
-          behavior is as simple as setting a property in the JSON response.
-          There's no need to study the HTTP headers.
+          As a service provider you can rely on the Shields CDN. There's no need
+          to study the HTTP headers. Adjusting cache behavior is as simple as
+          setting a property in the JSON response.
         </li>
       </ol>
     </Explanation>
