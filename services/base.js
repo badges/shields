@@ -441,6 +441,7 @@ class BaseService {
         // the color.
         overrideNamedLogo ? undefined : serviceLogoColor
       ),
+      style,
     })
 
     return {
