@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { floorCount } = require('../../lib/color-formatters')
-const { BaseJsonService, InvalidResponse } = require('../base-json')
+const { BaseJsonService, InvalidResponse } = require('..')
 
 const ansibleContentSchema = Joi.object({
   quality_score: Joi.number()
