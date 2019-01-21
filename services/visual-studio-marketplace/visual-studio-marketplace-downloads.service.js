@@ -42,7 +42,6 @@ module.exports = class VisualStudioMarketplaceDownloads extends VisualStudioMark
         namedParams: { extensionId: 'ritwickdey.LiveServer' },
         staticPreview: this.render({ measure: 'd', count: 1239 }),
         keywords: this.keywords,
-        documentation: `For Azure DevOps extensions, this includes total downloads for both on-prem Azure DevOps Server and Azure DevOps Services`,
       },
     ]
   }
@@ -54,36 +53,18 @@ module.exports = class VisualStudioMarketplaceDownloads extends VisualStudioMark
       statisticName: 'install',
     })
 
+    // We already have the only data point for this badge type
+    // so no need to query for the value of the other data point.
     if (measure === 'i') {
       return { count: installs }
     }
 
-    let updates
     const { value: updateCount } = this.getStatistic({
       statistics,
       statisticName: 'updateCount',
     })
 
-    // updateCount will only be greater than 0 if the extension is for VS or VS Code.
-    // If the value of updateCount is zero then the extension is either:
-    // (A) For VS or VS Code, but has no published updates that have been downloaded
-    // (B) For Azure DevOps
-    // It is not possible to definitively know whether A or B is true, but in either case we should
-    // check the value of the onpremDownloads statistic tracked for Azure DevOps extensions.
-    // If the extension is for VS or VS Code then onpremDownloads will be 0 so we'll still
-    // get the correct number of downloads in all cases.
-    if (updateCount > 0) {
-      updates = updateCount
-    } else {
-      const { value: onpremDownloads } = this.getStatistic({
-        statistics,
-        statisticName: 'onpremDownloads',
-      })
-      updates = onpremDownloads
-    }
-
-    const downloads = +installs + +updates
-    return { count: downloads }
+    return { count: updateCount + installs }
   }
 
   async handle({ measure, extensionId }) {

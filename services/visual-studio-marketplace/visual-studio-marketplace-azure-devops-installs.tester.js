@@ -12,10 +12,10 @@ const mockResponse = {
           statistics: [
             {
               statisticName: 'install',
-              value: 3,
+              value: 21,
             },
             {
-              statisticName: 'updateCount',
+              statisticName: 'onpremDownloads',
               value: 7,
             },
           ],
@@ -30,8 +30,8 @@ const mockResponse = {
   ],
 }
 
-t.create('live: installs')
-  .get('/visual-studio-marketplace/i/ritwickdey.LiveServer.json')
+t.create('live: Azure DevOps Extension total installs')
+  .get('/total/swellaby.mirror-git-repository.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'installs',
@@ -39,37 +39,35 @@ t.create('live: installs')
     })
   )
 
-t.create('live: downloads')
-  .get('/visual-studio-marketplace/d/ritwickdey.LiveServer.json')
+t.create('live: Azure DevOps Extension services installs')
+  .get('/services/swellaby.mirror-git-repository.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'downloads',
+      name: 'installs',
       value: isMetric,
     })
   )
 
 t.create('live: invalid extension id')
-  .get('/visual-studio-marketplace/d/badges-shields.json')
+  .get('/services/badges-shields.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'vs marketplace',
+      name: 'installs',
       value: 'invalid extension id',
     })
   )
 
 t.create('live: non existent extension')
-  .get('/visual-studio-marketplace/d/badges.shields-io-fake.json')
+  .get('/total/badges.shields-io-fake.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'vs marketplace',
+      name: 'installs',
       value: 'extension not found',
     })
   )
 
-t.create('installs')
-  .get(
-    '/visual-studio-marketplace/i/swellaby.rust-pack.json?style=_shields_test'
-  )
+t.create('total installs')
+  .get('/total/swellaby.cobertura-transform.json?style=_shields_test')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post(`/extensionquery/`)
@@ -77,14 +75,38 @@ t.create('installs')
   )
   .expectJSON({
     name: 'installs',
-    value: '3',
+    value: '28',
+    color: 'yellowgreen',
+  })
+
+t.create('services installs')
+  .get('/services/swellaby.cobertura-transform.json?style=_shields_test')
+  .intercept(nock =>
+    nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
+      .post(`/extensionquery/`)
+      .reply(200, mockResponse)
+  )
+  .expectJSON({
+    name: 'installs',
+    value: '21',
+    color: 'yellowgreen',
+  })
+
+t.create('onprem installs')
+  .get('/onprem/swellaby.cobertura-transform.json?style=_shields_test')
+  .intercept(nock =>
+    nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
+      .post(`/extensionquery/`)
+      .reply(200, mockResponse)
+  )
+  .expectJSON({
+    name: 'installs',
+    value: '7',
     color: 'yellow',
   })
 
 t.create('zero installs')
-  .get(
-    '/visual-studio-marketplace/i/swellaby.rust-pack.json?style=_shields_test'
-  )
+  .get('/total/swellaby.cobertura-transform.json?style=_shields_test')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post(`/extensionquery/`)
@@ -110,36 +132,3 @@ t.create('zero installs')
     value: '0',
     color: 'red',
   })
-
-t.create('downloads')
-  .get(
-    '/visual-studio-marketplace/d/swellaby.rust-pack.json?style=_shields_test'
-  )
-  .intercept(nock =>
-    nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
-      .post(`/extensionquery/`)
-      .reply(200, mockResponse)
-  )
-  .expectJSON({
-    name: 'downloads',
-    value: '10',
-    color: 'yellowgreen',
-  })
-
-t.create('live: installs (legacy)')
-  .get('/vscode-marketplace/i/ritwickdey.LiveServer.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'installs',
-      value: isMetric,
-    })
-  )
-
-t.create('live: downloads (legacy)')
-  .get('/vscode-marketplace/d/ritwickdey.LiveServer.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'downloads',
-      value: isMetric,
-    })
-  )
