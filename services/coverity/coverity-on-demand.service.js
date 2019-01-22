@@ -1,6 +1,6 @@
 'use strict'
 
-const deprecatedService = require('../deprecated-service')
+const { deprecatedService } = require('..')
 
 // coverity on demand integration - deprecated as of December 2018.
 module.exports = deprecatedService({

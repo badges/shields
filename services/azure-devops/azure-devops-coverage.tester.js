@@ -53,7 +53,7 @@ const secondLinesCovStat = {
 const expCoverageSingleReport = '83%'
 const expCoverageMultipleReports = '77%'
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('default branch coverage')
   .get(`${uriPrefix}/${linuxDefinitionId}.json`)

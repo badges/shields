@@ -1,10 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
 const { metric } = require('../../lib/text-formatters')
-const { nonNegativeInteger } = require('../validators')
 const { downloadCount: downloadsColor } = require('../../lib/color-formatters')
+const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService } = require('..')
 
 const clojarsSchema = Joi.object({
   downloads: nonNegativeInteger,

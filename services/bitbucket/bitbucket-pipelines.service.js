@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
 const { renderBuildStatusBadge } = require('../../lib/build-status')
+const { BaseJsonService } = require('..')
 
 const bitbucketPipelinesSchema = Joi.object({
   values: Joi.array()

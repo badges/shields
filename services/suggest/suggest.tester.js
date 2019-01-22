@@ -3,15 +3,14 @@
 // These tests are for the badge-suggestion endpoint in lib/suggest.js. This
 // endpoint is called from frontend/components/suggestion-and-search.js.
 
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 const { invalidJSON } = require('../response-fixtures')
 
-const t = new ServiceTester({
+const t = (module.exports = new ServiceTester({
   id: 'suggest',
   title: 'suggest',
   pathPrefix: '/$suggest',
-})
-module.exports = t
+}))
 
 t.create('issues, forks, stars and twitter')
   .get(`/v1?url=${encodeURIComponent('https://github.com/atom/atom')}`)

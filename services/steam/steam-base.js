@@ -1,6 +1,6 @@
 'use strict'
 
-const BaseJsonService = require('../base-json')
+const { BaseJsonService } = require('..')
 
 /**
  * The steam api is based like /{interface}/{method}/v{version}/

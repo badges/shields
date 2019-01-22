@@ -1,11 +1,11 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
 const {
   colorScale,
   coveragePercentage: coveragePercentageColor,
 } = require('../../lib/color-formatters')
+const { BaseJsonService } = require('..')
 
 const ciiBestPracticesSchema = Joi.object({
   badge_level: Joi.string().required(),

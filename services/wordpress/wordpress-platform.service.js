@@ -1,11 +1,11 @@
 'use strict'
 
-const BaseWordpress = require('./wordpress-base')
 const semver = require('semver')
 const Joi = require('joi')
 const { addv } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
-const { NotFound } = require('../errors')
+const { NotFound } = require('..')
+const BaseWordpress = require('./wordpress-base')
 
 const coreSchema = Joi.object()
   .keys({

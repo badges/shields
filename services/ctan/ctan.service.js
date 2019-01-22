@@ -1,9 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
 const { renderLicenseBadge } = require('../../lib/licenses')
 const { renderVersionBadge } = require('../../lib/version')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   license: Joi.array()

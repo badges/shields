@@ -2,14 +2,10 @@
 
 const semver = require('semver')
 const Joi = require('joi')
-
-const BaseJsonService = require('../base-json')
-const { InvalidResponse } = require('../errors')
-const {
-  downloadCount: downloadCountColor,
-} = require('../../lib/color-formatters')
+const { downloadCount } = require('../../lib/color-formatters')
 const { metric } = require('../../lib/text-formatters')
 const { latest: latestVersion } = require('../../lib/version')
+const { BaseJsonService, InvalidResponse } = require('..')
 const { nonNegativeInteger } = require('../validators')
 
 const keywords = ['ruby']
@@ -45,7 +41,7 @@ module.exports = class GemDownloads extends BaseJsonService {
     return {
       label,
       message: metric(downloads),
-      color: downloadCountColor(downloads),
+      color: downloadCount(downloads),
     }
   }
 

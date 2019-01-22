@@ -1,11 +1,11 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
 const {
   isBuildStatus,
   renderBuildStatusBadge,
 } = require('../../lib/build-status')
+const { BaseJsonService } = require('..')
 
 const circleSchema = Joi.array()
   .items(Joi.object({ status: isBuildStatus }))

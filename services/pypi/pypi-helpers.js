@@ -8,7 +8,7 @@
   our own functions to parse and sort django versions
 */
 
-const parseDjangoVersionString = function(str) {
+function parseDjangoVersionString(str) {
   if (typeof str !== 'string') {
     return false
   }
@@ -21,8 +21,8 @@ const parseDjangoVersionString = function(str) {
   }
 }
 
-// sort an array of django versions low to high
-const sortDjangoVersions = function(versions) {
+// Sort an array of django versions low to high.
+function sortDjangoVersions(versions) {
   return versions.sort((a, b) => {
     if (
       parseDjangoVersionString(a).major === parseDjangoVersionString(b).major
@@ -38,8 +38,8 @@ const sortDjangoVersions = function(versions) {
   })
 }
 
-// extract classifiers from a pypi json response based on a regex
-const parseClassifiers = function(parsedData, pattern) {
+// Extract classifiers from a pypi json response based on a regex.
+function parseClassifiers(parsedData, pattern) {
   const results = []
   for (let i = 0; i < parsedData.info.classifiers.length; i++) {
     const matched = pattern.exec(parsedData.info.classifiers[i])

@@ -1,11 +1,11 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
 const {
   isBuildStatus,
   renderBuildStatusBadge,
 } = require('../../lib/build-status')
+const { BaseJsonService } = require('..')
 
 const werckerSchema = Joi.array()
   .items(

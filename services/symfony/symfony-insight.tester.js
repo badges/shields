@@ -1,8 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const t = (module.exports = require('../create-service-tester')())
 const { withRegex } = require('../test-validators')
+
+const t = (module.exports = require('..').createServiceTester())
 
 const {
   runningMockResponse,

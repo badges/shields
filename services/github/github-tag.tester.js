@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('Tag')
   .get('/tag/photonstorm/phaser.json')

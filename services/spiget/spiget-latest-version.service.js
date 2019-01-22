@@ -1,10 +1,9 @@
 'use strict'
 
+const Joi = require('joi')
+const { renderVersionBadge } = require('../../lib/version')
 const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 
-const { renderVersionBadge } = require('../../lib/version')
-
-const Joi = require('joi')
 const versionSchema = Joi.object({
   downloads: Joi.number().required(),
   name: Joi.string().required(),

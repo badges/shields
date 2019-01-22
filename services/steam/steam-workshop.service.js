@@ -1,11 +1,11 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseSteamAPI = require('./steam-base')
-const { NotFound } = require('../errors')
+const prettyBytes = require('pretty-bytes')
 const { metric, formatDate } = require('../../lib/text-formatters')
 const { age: ageColor, downloadCount } = require('../../lib/color-formatters')
-const prettyBytes = require('pretty-bytes')
+const { NotFound } = require('..')
+const BaseSteamAPI = require('./steam-base')
 
 const documentation = `
 <p>

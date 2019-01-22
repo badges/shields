@@ -2,8 +2,7 @@
 
 const Joi = require('joi')
 const serverSecrets = require('../../lib/server-secrets')
-const BaseJsonService = require('../base-json')
-const { InvalidResponse, NotFound } = require('../errors')
+const { BaseJsonService, InvalidResponse, NotFound } = require('..')
 const { isDependencyMap } = require('../package-json-helpers')
 
 const deprecatedLicenseObjectSchema = Joi.object({

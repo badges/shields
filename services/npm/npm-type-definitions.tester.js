@@ -6,7 +6,7 @@ const isTypeDefinition = Joi.string().regex(
   /^((Flow|TypeScript)|(Flow \| TypeScript))$/
 )
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('types (from dev dependencies + files)')
   .get('/chalk.json')

@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { renderVersionBadge } = require('../../lib/version')
-const BaseJsonService = require('../base-json')
+const { BaseJsonService } = require('..')
 const { semver } = require('../validators')
 
 const schema = Joi.object({ version: semver }).required()

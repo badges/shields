@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isBuildStatus } = require('../../lib/build-status')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('Build status')
   .get('/build/wercker/go-wercker-api.json')

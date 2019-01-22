@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('version (valid)')
   .get('/formatador.json')

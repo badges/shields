@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { expect } = require('chai')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('Connection error')
   .get(
