@@ -25,7 +25,7 @@ jobs:
   main:
     docker:
       - image: circleci/node:8
-      - image: redis
+
     steps:
       - checkout
 
@@ -76,7 +76,7 @@ jobs:
   main@node-latest:
     docker:
       - image: circleci/node:latest
-      - image: redis
+
     steps:
       - checkout
 
@@ -122,6 +122,7 @@ jobs:
   integration:
     docker:
       - image: circleci/node:8
+      - image: redis
 
     steps:
       - checkout
@@ -149,7 +150,8 @@ jobs:
 
   integration@node-latest:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:latest
+      - image: redis
 
     steps:
       - checkout
