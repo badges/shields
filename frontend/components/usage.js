@@ -194,7 +194,7 @@ export default class Usage extends React.PureComponent {
         {this.constructor.renderStaticBadgeEscapingRules()}
         {this.renderColorExamples()}
 
-        <H3 id="endpoint">Endpoint</H3>
+        <H3 id="endpoint">Endpoint (Beta)</H3>
 
         <p>
           <Snippet
