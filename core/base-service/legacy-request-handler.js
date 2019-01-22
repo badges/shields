@@ -4,18 +4,18 @@
 const domain = require('domain')
 const request = require('request')
 const queryString = require('query-string')
-const log = require('../core/server/log')
-const analytics = require('../core/server/analytics')
-const LruCache = require('../gh-badges/lib/lru-cache')
-const makeBadge = require('../gh-badges/lib/make-badge')
+const log = require('../server/log')
+const analytics = require('../server/analytics')
+const LruCache = require('../../gh-badges/lib/lru-cache')
+const makeBadge = require('../../gh-badges/lib/make-badge')
 const {
   Inaccessible,
   InvalidResponse,
   ShieldsRuntimeError,
-} = require('../services/errors')
-const { setCacheHeaders } = require('../services/cache-headers')
-const { makeBadgeData: getBadgeData } = require('./badge-data')
-const { makeSend } = require('./result-sender')
+} = require('../../services')
+const { setCacheHeaders } = require('../../services/cache-headers')
+const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const { makeSend } = require('./legacy-result-sender')
 
 // We avoid calling the vendor's server for computation of the information in a
 // number of badges.
