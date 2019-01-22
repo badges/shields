@@ -15,7 +15,7 @@ const queryParamSchema = Joi.object({
 
 const anySchema = Joi.any()
 
-const optionalStringWhenNamedLogoPrsent = Joi.alternatives().when('namedLogo', {
+const optionalStringWhenNamedLogoPresent = Joi.alternatives().when('namedLogo', {
   is: Joi.string().required(),
   then: Joi.string(),
 })
@@ -35,7 +35,7 @@ const endpointSchema = Joi.object({
   isError: Joi.boolean().default(false),
   namedLogo: Joi.string(),
   logoSvg: Joi.string(),
-  logoColor: optionalStringWhenNamedLogoPrsent,
+  logoColor: optionalStringWhenNamedLogoPresent,
   logoWidth: optionalNumberWhenAnyLogoPresent,
   logoPosition: optionalNumberWhenAnyLogoPresent,
   style: Joi.string(),
