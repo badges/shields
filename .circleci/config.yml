@@ -25,7 +25,7 @@ jobs:
   main:
     docker:
       - image: circleci/node:8
-      - image: redis
+
     steps:
       - checkout
 
@@ -58,14 +58,6 @@ jobs:
           command: npm run test:core
 
       - run:
-          name: Integration tests
-          when: always
-          environment:
-            mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/integration/results.xml
-          command: npm run test:integration
-
-      - run:
           name: Tests for gh-badges package
           when: always
           environment:
@@ -84,7 +76,7 @@ jobs:
   main@node-latest:
     docker:
       - image: circleci/node:latest
-      - image: redis
+
     steps:
       - checkout
 
@@ -112,14 +104,6 @@ jobs:
           command: npm run test:core
 
       - run:
-          name: Integration tests
-          when: always
-          environment:
-            mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/integration/results.xml
-          command: npm run test:integration
-
-      - run:
           name: Tests for gh-badges package
           when: always
           environment:
@@ -134,6 +118,64 @@ jobs:
           name: 'Prettier check (quick fix: `npm run prettier`)'
           when: always
           command: npm run prettier-check
+
+  integration:
+    docker:
+      - image: circleci/node:8
+      - image: redis
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v2-dependencies-{{ checksum "package-lock.json" }}
+            # https://github.com/badges/shields/issues/1937
+            - v2-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm install
+
+      - run:
+          name: Integration tests
+          when: always
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/integration/results.xml
+          command: npm run test:integration
+
+      - store_test_results:
+          path: junit
+
+  integration@node-latest:
+    docker:
+      - image: circleci/node:latest
+      - image: redis
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v2-dependencies-{{ checksum "package-lock.json" }}
+            # https://github.com/badges/shields/issues/1937
+            - v2-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm install
+
+      - run:
+          name: Integration tests
+          when: always
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/integration/results.xml
+          command: npm run test:integration
+
+      - store_test_results:
+          path: junit
 
   danger:
     docker:
@@ -261,6 +303,10 @@ workflows:
             branches:
               ignore: gh-pages
       - main@node-latest:
+          filters:
+            branches:
+              ignore: gh-pages
+      - integration@node-latest:
           filters:
             branches:
               ignore: gh-pages
