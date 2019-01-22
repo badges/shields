@@ -62,32 +62,18 @@ module.exports = class VisualStudioMarketplaceAzureDevOpsInstalls extends Visual
     ]
   }
 
-  transform({ measure, json }) {
-    const { statistics } = this.transformStatistics({ json })
-    const { value: serviceInstalls } = this.getStatistic({
-      statistics,
-      statisticName: 'install',
-    })
-
-    // We already have the only data point for this badge type
-    // so no need to query for the value of the other data point.
-    if (measure === 'services') {
-      return { count: serviceInstalls }
-    }
-
-    const { value: onPremInstalls } = this.getStatistic({
-      statistics,
-      statisticName: 'onpremDownloads',
-    })
-
-    const count =
-      measure === 'total' ? serviceInstalls + onPremInstalls : onPremInstalls
-    return { count }
-  }
-
   async handle({ measure, extensionId }) {
     const json = await this.fetch({ extensionId })
-    const { count } = this.transform({ measure, json })
-    return this.constructor.render({ measure, count })
+    const { statistics } = this.transformStatistics({ json })
+
+    if (measure === 'total') {
+      return this.constructor.render({
+        count: statistics.onpremDownloads + statistics.install,
+      })
+    } else if (measure === 'services') {
+      return this.constructor.render({ count: statistics.install })
+    } else {
+      return this.constructor.render({ count: statistics.onpremDownloads })
+    }
   }
 }

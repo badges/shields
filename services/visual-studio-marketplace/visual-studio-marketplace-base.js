@@ -95,16 +95,32 @@ module.exports = class VisualStudioMarketplaceBase extends BaseJsonService {
 
   transformStatistics({ json }) {
     const { extension } = this.transformExtension({ json })
-    return { statistics: extension.statistics }
+    const statistics = {}
+
+    extension.statistics.forEach(({ statisticName, value }) => {
+      statistics[statisticName] = value
+    })
+
+    statistics.install = statistics.install ? statistics.install : 0
+    statistics.updateCount = statistics.updateCount ? statistics.updateCount : 0
+    statistics.onpremDownloads = statistics.onpremDownloads
+      ? statistics.onpremDownloads
+      : 0
+    statistics.averagerating = statistics.averagerating
+      ? statistics.averagerating
+      : 0
+    statistics.ratingcount = statistics.ratingcount ? statistics.ratingcount : 0
+
+    return { statistics }
   }
 
-  getStatistic({ statistics, statisticName }) {
-    for (const statistic of statistics) {
-      if (statistic.statisticName === statisticName) {
-        return { value: statistic.value }
-      }
-    }
+  // getStatistic({ statistics, statisticName }) {
+  //   for (const statistic of statistics) {
+  //     if (statistic.statisticName === statisticName) {
+  //       return { value: statistic.value }
+  //     }
+  //   }
 
-    return { value: 0 }
-  }
+  //   return { value: 0 }
+  // }
 }

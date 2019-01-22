@@ -46,30 +46,13 @@ module.exports = class VisualStudioMarketplaceDownloads extends VisualStudioMark
     ]
   }
 
-  transform({ measure, json }) {
-    const { statistics } = this.transformStatistics({ json })
-    const { value: installs } = this.getStatistic({
-      statistics,
-      statisticName: 'install',
-    })
-
-    // We already have the only data point for this badge type
-    // so no need to query for the value of the other data point.
-    if (measure === 'i') {
-      return { count: installs }
-    }
-
-    const { value: updateCount } = this.getStatistic({
-      statistics,
-      statisticName: 'updateCount',
-    })
-
-    return { count: updateCount + installs }
-  }
-
   async handle({ measure, extensionId }) {
     const json = await this.fetch({ extensionId })
-    const { count } = this.transform({ measure, json })
+    const { statistics } = this.transformStatistics({ json })
+    const count =
+      measure === 'i'
+        ? statistics.install
+        : statistics.install + statistics.updateCount
     return this.constructor.render({ measure, count })
   }
 }

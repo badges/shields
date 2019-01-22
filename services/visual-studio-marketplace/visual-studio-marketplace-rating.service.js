@@ -63,20 +63,10 @@ module.exports = class VisualStudioMarketplaceRating extends VisualStudioMarketp
   async handle({ format, extensionId }) {
     const json = await this.fetch({ extensionId })
     const { statistics } = this.transformStatistics({ json })
-    const { value: averageRating } = this.getStatistic({
-      statistics,
-      statisticName: 'averagerating',
+    return this.constructor.render({
+      format,
+      averageRating: statistics.averagerating,
+      ratingCount: statistics.ratingcount,
     })
-
-    if (format === 'stars') {
-      return this.constructor.render({ format, averageRating })
-    }
-
-    const { value: ratingCount } = this.getStatistic({
-      statistics,
-      statisticName: 'ratingcount',
-    })
-
-    return this.constructor.render({ format, averageRating, ratingCount })
   }
 }
