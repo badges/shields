@@ -12,7 +12,7 @@ const {
   Inaccessible,
   InvalidResponse,
   ShieldsRuntimeError,
-} = require('../../services/errors')
+} = require('../../services')
 const { setCacheHeaders } = require('../../services/cache-headers')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { makeSend } = require('./legacy-result-sender')
