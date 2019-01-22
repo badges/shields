@@ -34,6 +34,14 @@ const extensionQuerySchema = Joi.object({
     .required(),
 }).required()
 
+const statisticSchema = Joi.object().keys({
+  install: Joi.number().default(0),
+  updateCount: Joi.number().default(0),
+  onpremDownloads: Joi.number().default(0),
+  averagerating: Joi.number().default(0),
+  ratingcount: Joi.number().default(0),
+})
+
 module.exports = class VisualStudioMarketplaceBase extends BaseJsonService {
   static get keywords() {
     return [
@@ -101,26 +109,9 @@ module.exports = class VisualStudioMarketplaceBase extends BaseJsonService {
       statistics[statisticName] = value
     })
 
-    statistics.install = statistics.install ? statistics.install : 0
-    statistics.updateCount = statistics.updateCount ? statistics.updateCount : 0
-    statistics.onpremDownloads = statistics.onpremDownloads
-      ? statistics.onpremDownloads
-      : 0
-    statistics.averagerating = statistics.averagerating
-      ? statistics.averagerating
-      : 0
-    statistics.ratingcount = statistics.ratingcount ? statistics.ratingcount : 0
-
-    return { statistics }
+    const { value } = Joi.validate(statistics, statisticSchema, {
+      allowUnknown: true,
+    })
+    return { statistics: value }
   }
-
-  // getStatistic({ statistics, statisticName }) {
-  //   for (const statistic of statistics) {
-  //     if (statistic.statisticName === statisticName) {
-  //       return { value: statistic.value }
-  //     }
-  //   }
-
-  //   return { value: 0 }
-  // }
 }

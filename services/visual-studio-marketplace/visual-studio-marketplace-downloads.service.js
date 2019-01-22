@@ -4,6 +4,15 @@ const VisualStudioMarketplaceBase = require('./visual-studio-marketplace-base')
 const { metric } = require('../../lib/text-formatters')
 const { downloadCount } = require('../../lib/color-formatters')
 
+const documentation = `
+<p>
+  This is for Visual Studio and Visual Studio Code Extensions.
+</p>
+<p>
+  Use the Azure DevOps Installs Badge for Azure DevOps Extensions.
+</p>
+`
+
 module.exports = class VisualStudioMarketplaceDownloads extends VisualStudioMarketplaceBase {
   static get category() {
     return 'downloads'
@@ -35,6 +44,7 @@ module.exports = class VisualStudioMarketplaceDownloads extends VisualStudioMark
         namedParams: { extensionId: 'ritwickdey.LiveServer' },
         staticPreview: this.render({ measure: 'i', count: 843 }),
         keywords: this.keywords,
+        documentation,
       },
       {
         title: 'Visual Studio Marketplace Downloads',
@@ -42,6 +52,7 @@ module.exports = class VisualStudioMarketplaceDownloads extends VisualStudioMark
         namedParams: { extensionId: 'ritwickdey.LiveServer' },
         staticPreview: this.render({ measure: 'd', count: 1239 }),
         keywords: this.keywords,
+        documentation,
       },
     ]
   }
