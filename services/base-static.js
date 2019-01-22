@@ -1,7 +1,7 @@
 'use strict'
 
 const makeBadge = require('../gh-badges/lib/make-badge')
-const { makeSend } = require('../lib/result-sender')
+const { makeSend } = require('../core/base-service/legacy-result-sender')
 const analytics = require('../core/server/analytics')
 const BaseService = require('./base')
 const {

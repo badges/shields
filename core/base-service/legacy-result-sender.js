@@ -1,8 +1,8 @@
 'use strict'
 
 const stream = require('stream')
-const log = require('../core/server/log')
-const svg2img = require('../gh-badges/lib/svg-to-img')
+const svg2img = require('../../gh-badges/lib/svg-to-img')
+const log = require('../server/log')
 
 function streamFromString(str) {
   const newStream = new stream.Readable()
