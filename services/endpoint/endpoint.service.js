@@ -15,10 +15,13 @@ const queryParamSchema = Joi.object({
 
 const anySchema = Joi.any()
 
-const optionalStringWhenNamedLogoPresent = Joi.alternatives().when('namedLogo', {
-  is: Joi.string().required(),
-  then: Joi.string(),
-})
+const optionalStringWhenNamedLogoPresent = Joi.alternatives().when(
+  'namedLogo',
+  {
+    is: Joi.string().required(),
+    then: Joi.string(),
+  }
+)
 
 const optionalNumberWhenAnyLogoPresent = Joi.alternatives()
   .when('namedLogo', { is: Joi.string().required(), then: Joi.number() })
