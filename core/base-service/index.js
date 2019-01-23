@@ -1,14 +1,14 @@
 'use strict'
 
-const BaseService = require('../../services/base')
-const BaseJsonService = require('../../services/base-json')
-const NonMemoryCachingBaseService = require('../../services/base-non-memory-caching')
-const BaseStaticService = require('../../services/base-static')
-const BaseSvgScrapingService = require('../../services/base-svg-scraping')
-const BaseXmlService = require('../../services/base-xml')
-const BaseYamlService = require('../../services/base-yaml')
+const BaseService = require('./base')
+const BaseJsonService = require('./base-json')
+const NonMemoryCachingBaseService = require('./base-non-memory-caching')
+const BaseStaticService = require('./base-static')
+const BaseSvgScrapingService = require('./base-svg-scraping')
+const BaseXmlService = require('./base-xml')
+const BaseYamlService = require('./base-yaml')
 
-const deprecatedService = require('../../services/deprecated-service')
+const deprecatedService = require('./deprecated-service')
 
 const {
   NotFound,
@@ -16,7 +16,7 @@ const {
   Inaccessible,
   InvalidParameter,
   Deprecated,
-} = require('../../services/errors')
+} = require('./errors')
 
 module.exports = {
   BaseService,

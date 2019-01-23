@@ -1,8 +1,8 @@
 'use strict'
 
 const caller = require('caller')
+const BaseService = require('../base-service/base')
 const ServiceTester = require('./service-tester')
-const BaseService = require('./base')
 
 // Automatically create a ServiceTester.
 //

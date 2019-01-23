@@ -4,6 +4,15 @@
 const emojic = require('emojic')
 const pathToRegexp = require('path-to-regexp')
 const Joi = require('joi')
+const { checkErrorResponse } = require('../../lib/error-helper')
+const { toArray } = require('../../lib/badge-data')
+const { svg2base64 } = require('../../lib/svg-helpers')
+const {
+  decodeDataUrlFromQueryParam,
+  prepareNamedLogo,
+} = require('../../lib/logos')
+const { assertValidCategory } = require('../../services/categories')
+const coalesce = require('./coalesce')
 const {
   NotFound,
   InvalidResponse,
@@ -11,19 +20,10 @@ const {
   InvalidParameter,
   Deprecated,
 } = require('./errors')
-const coalesce = require('../core/base-service/coalesce')
-const validate = require('../core/base-service/validate')
-const { checkErrorResponse } = require('../lib/error-helper')
-const { toArray } = require('../lib/badge-data')
-const { svg2base64 } = require('../lib/svg-helpers')
-const {
-  decodeDataUrlFromQueryParam,
-  prepareNamedLogo,
-} = require('../lib/logos')
+const { assertValidServiceDefinition } = require('./service-definitions')
 const trace = require('./trace')
 const { validateExample, transformExample } = require('./transform-example')
-const { assertValidCategory } = require('./categories')
-const { assertValidServiceDefinition } = require('./service-definitions')
+const validate = require('./validate')
 
 const defaultBadgeDataSchema = Joi.object({
   label: Joi.string(),
