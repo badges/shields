@@ -112,9 +112,14 @@ module.exports = class VisualStudioMarketplaceBase extends BaseJsonService {
     // The Visual Studio Marketplace API response will only include statistic key/value pairs
     // for statistics with values greater than 0. This ensures that the key statistics used by
     // badges will all exist with a numerical value defaulted to 0.
-    const { value } = Joi.validate(statistics, statisticSchema, {
-      allowUnknown: true,
+    const { value, error } = Joi.validate(statistics, statisticSchema, {
+      stripUnknown: true,
     })
+
+    if (error) {
+      throw error
+    }
+
     return { statistics: value }
   }
 }
