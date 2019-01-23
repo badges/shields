@@ -4,17 +4,17 @@
 const domain = require('domain')
 const request = require('request')
 const queryString = require('query-string')
-const log = require('../server/log')
-const analytics = require('../server/analytics')
 const LruCache = require('../../gh-badges/lib/lru-cache')
 const makeBadge = require('../../gh-badges/lib/make-badge')
+const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const analytics = require('../server/analytics')
+const log = require('../server/log')
+const { setCacheHeaders } = require('./cache-headers')
 const {
   Inaccessible,
   InvalidResponse,
   ShieldsRuntimeError,
-} = require('../../services/errors')
-const { setCacheHeaders } = require('../../services/cache-headers')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+} = require('./errors')
 const { makeSend } = require('./legacy-result-sender')
 
 // We avoid calling the vendor's server for computation of the information in a

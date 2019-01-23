@@ -1,9 +1,9 @@
 'use strict'
 
-const makeBadge = require('../gh-badges/lib/make-badge')
-const { makeSend } = require('../core/base-service/legacy-result-sender')
+const makeBadge = require('../../gh-badges/lib/make-badge')
 const BaseService = require('./base')
 const { setCacheHeaders } = require('./cache-headers')
+const { makeSend } = require('./legacy-result-sender')
 
 // Badges are subject to two independent types of caching: in-memory and
 // downstream.
