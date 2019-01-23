@@ -116,7 +116,7 @@ module.exports = class VisualStudioMarketplaceBase extends BaseJsonService {
       stripUnknown: true,
     })
 
-    // TODO: Write a unit test to cover this case
+    // TODO: Write a unit test to cover this case or refactor it away.
     if (error) {
       throw error
     }
