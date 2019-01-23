@@ -1,11 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 const { isVPlusTripleDottedVersion } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'pub', title: 'Pub' })
-module.exports = t
+const t = (module.exports = new ServiceTester({ id: 'pub', title: 'Pub' }))
 
 t.create('package version')
   .get('/v/box2d.json')

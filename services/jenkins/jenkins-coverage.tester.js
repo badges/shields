@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
+const { ServiceTester } = require('..')
 const { isIntegerPercentage } = require('../test-validators')
-const ServiceTester = require('../service-tester')
 
 const t = new ServiceTester({
   id: 'jenkins-coverage',

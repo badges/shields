@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 const { withRegex, isStarRating } = require('../test-validators')
 
 const isVscodeRating = withRegex(/[0-5].[0-9]{2}\/5?\s*\([0-9]*\)$/)

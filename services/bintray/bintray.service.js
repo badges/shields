@@ -3,8 +3,8 @@
 const Joi = require('joi')
 
 const { renderVersionBadge } = require('../../lib/version')
-const BaseJsonService = require('../base-json')
 const serverSecrets = require('../../lib/server-secrets')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.object()
   .keys({

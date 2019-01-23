@@ -2,7 +2,7 @@
 
 const assert = require('assert')
 const Joi = require('joi')
-const coalesce = require('../lib/coalesce')
+const coalesce = require('./coalesce')
 
 const serverStartTimeGMTString = new Date().toGMTString()
 const serverStartTimestamp = Date.now()
@@ -12,7 +12,9 @@ const queryParamSchema = Joi.object({
   maxAge: Joi.number()
     .integer()
     .min(0),
-}).required()
+})
+  .unknown(true)
+  .required()
 
 function overrideCacheLengthFromQueryParams(queryParams) {
   try {

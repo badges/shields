@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseSvgScrapingService = require('../base-svg-scraping')
+const { BaseSvgScrapingService } = require('..')
 const { codacyGrade } = require('./codacy-helpers')
 
 const schema = Joi.object({ message: codacyGrade }).required()

@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { renderVersionBadge } = require('../../lib/version')
-const { NotFound } = require('../errors')
+const { NotFound } = require('..')
 const NpmBase = require('./npm-base')
 
 const keywords = ['node']

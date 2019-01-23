@@ -1,8 +1,11 @@
 'use strict'
 
-const ServiceTester = require('../service-tester')
-const t = new ServiceTester({ id: 'osslifecycle', title: 'OSS Lifecycle' })
-module.exports = t
+const { ServiceTester } = require('..')
+
+const t = (module.exports = new ServiceTester({
+  id: 'osslifecycle',
+  title: 'OSS Lifecycle',
+}))
 
 t.create('osslifecycle status')
   .get('/Netflix/osstracker.json')

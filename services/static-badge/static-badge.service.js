@@ -1,6 +1,6 @@
 'use strict'
 
-const BaseStaticService = require('../base-static')
+const { BaseStaticService } = require('..')
 const { escapeFormat } = require('../../core/badge-urls/path-helpers')
 
 module.exports = class StaticBadge extends BaseStaticService {

@@ -4,7 +4,7 @@ const { starRating } = require('../../lib/text-formatters')
 const { floorCount: floorCountColor } = require('../../lib/color-formatters')
 
 const Joi = require('joi')
-const BaseXmlService = require('../base-xml')
+const { BaseXmlService } = require('..')
 
 const schema = Joi.object({
   'redmine-plugin': Joi.object({

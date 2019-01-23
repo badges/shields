@@ -1,7 +1,7 @@
 'use strict'
 
-const BaseService = require('../base')
 const { formatRelativeDate } = require('../../lib/text-formatters')
+const { BaseService } = require('..')
 
 const documentation = `
 <p>

@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { staticBadgeUrl } from '../lib/badge-url'
@@ -192,6 +193,19 @@ export default class Usage extends React.PureComponent {
         </p>
         {this.constructor.renderStaticBadgeEscapingRules()}
         {this.renderColorExamples()}
+
+        <H3 id="endpoint">Endpoint (Beta)</H3>
+
+        <p>
+          <Snippet
+            snippet={`${baseUrl}/badge/endpoint.svg?url=<URL>&style<STYLE>`}
+          />
+        </p>
+
+        <p>
+          Create badges from{' '}
+          <Link to={'/endpoint'}>your own JSON endpoint</Link>.
+        </p>
 
         <H3 id="dynamic-badge">Dynamic</H3>
 

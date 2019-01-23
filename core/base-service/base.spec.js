@@ -4,7 +4,7 @@ const Joi = require('joi')
 const { expect } = require('chai')
 const { test, given, forCases } = require('sazerac')
 const sinon = require('sinon')
-const { getShieldsIcon } = require('../lib/logos')
+const { getShieldsIcon } = require('../../lib/logos')
 const trace = require('./trace')
 
 const {
@@ -16,7 +16,7 @@ const {
 } = require('./errors')
 const BaseService = require('./base')
 
-require('../lib/register-chai-plugins.spec')
+require('../register-chai-plugins.spec')
 
 class DummyService extends BaseService {
   static render({ namedParamA, queryParamA }) {
@@ -507,7 +507,7 @@ describe('BaseService', function() {
       it('overrides the cache length', function() {
         const badgeData = DummyService._makeBadgeData(
           { style: 'pill' },
-          { cacheLengthSeconds: 123 }
+          { cacheSeconds: 123 }
         )
         expect(badgeData.cacheLengthSeconds).to.equal(123)
       })

@@ -11,7 +11,7 @@ const isUptimeStatus = Joi.string().valid(
   'down'
 )
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('Uptime Robot: Status (valid)')
   .get('/m778918918-3e92c097147760ee39d02d36.json')

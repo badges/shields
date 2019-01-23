@@ -2,7 +2,7 @@
 
 const BaseBowerService = require('./bower-base')
 const { renderVersionBadge } = require('../../lib/version')
-const { InvalidResponse } = require('../errors')
+const { InvalidResponse } = require('..')
 
 module.exports = class BowerVersion extends BaseBowerService {
   static get category() {

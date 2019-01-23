@@ -1,9 +1,8 @@
 'use strict'
 
-const BaseYamlService = require('../base-yaml')
-const { InvalidResponse } = require('../errors')
 const Joi = require('joi')
 const jp = require('jsonpath')
+const { BaseYamlService, InvalidResponse } = require('..')
 const { renderDynamicBadge } = require('../dynamic-common')
 const {
   createRoute,

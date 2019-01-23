@@ -1,13 +1,13 @@
 'use strict'
 
-const makeBadge = require('../gh-badges/lib/make-badge')
-const { makeSend } = require('../lib/result-sender')
-const analytics = require('../core/server/analytics')
+const makeBadge = require('../../gh-badges/lib/make-badge')
+const analytics = require('../server/analytics')
 const BaseService = require('./base')
 const {
   serverHasBeenUpSinceResourceCached,
   setCacheHeadersForStaticResource,
 } = require('./cache-headers')
+const { makeSend } = require('./legacy-result-sender')
 
 module.exports = class BaseStaticService extends BaseService {
   static register({ camp }, serviceConfig) {

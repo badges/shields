@@ -1,6 +1,6 @@
 'use strict'
 
-const BaseJsonService = require('../base-json')
+const { BaseJsonService } = require('..')
 const Joi = require('joi')
 const { nonNegativeInteger } = require('../validators')
 const { metric } = require('../../lib/text-formatters')

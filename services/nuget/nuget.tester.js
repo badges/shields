@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 const {
   isMetric,
   isVPlusDottedVersionNClauses,
@@ -15,8 +15,7 @@ const {
 } = require('../nuget-fixtures')
 const { invalidJSON } = require('../response-fixtures')
 
-const t = new ServiceTester({ id: 'nuget', title: 'NuGet' })
-module.exports = t
+const t = (module.exports = new ServiceTester({ id: 'nuget', title: 'NuGet' }))
 
 // downloads
 

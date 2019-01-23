@@ -1,9 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-
-const BaseJsonService = require('../base-json')
-const { NotFound } = require('../errors')
+const { BaseJsonService, NotFound } = require('..')
 const { nonNegativeInteger } = require('../validators')
 const { renderVersionBadge, renderDownloadBadge } = require('./nuget-helpers')
 

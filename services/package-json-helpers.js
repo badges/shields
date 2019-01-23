@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { InvalidParameter } = require('./errors')
+const { InvalidParameter } = require('.')
 
 const isDependencyMap = Joi.object()
   .pattern(

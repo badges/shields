@@ -2,15 +2,14 @@
 
 const Joi = require('joi')
 
-const BaseJsonService = require('../base-json')
-const { InvalidResponse, NotFound } = require('../errors')
-const { isSnapshotVersion } = require('./nexus-version')
 const { version: versionColor } = require('../../lib/color-formatters')
 const { addv } = require('../../lib/text-formatters')
 const serverSecrets = require('../../lib/server-secrets')
+const { BaseJsonService, InvalidResponse, NotFound } = require('..')
 const {
   optionalDottedVersionNClausesWithOptionalSuffix,
 } = require('../validators')
+const { isSnapshotVersion } = require('./nexus-version')
 
 const searchApiSchema = Joi.object({
   data: Joi.array()

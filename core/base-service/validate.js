@@ -2,7 +2,7 @@
 
 const emojic = require('emojic')
 const Joi = require('joi')
-const trace = require('../services/trace')
+const trace = require('./trace')
 
 function validate(
   {
@@ -11,6 +11,7 @@ function validate(
     includeKeys = false,
     traceErrorMessage = 'Data did not match schema',
     traceSuccessMessage = 'Data after validation',
+    allowAndStripUnknownKeys = true,
   },
   data,
   schema
@@ -18,10 +19,13 @@ function validate(
   if (!schema || !schema.isJoi) {
     throw Error('A Joi schema is required')
   }
-  const { error, value } = Joi.validate(data, schema, {
-    allowUnknown: true,
-    stripUnknown: true,
-  })
+  const options = allowAndStripUnknownKeys
+    ? {
+        allowUnknown: true,
+        stripUnknown: true,
+      }
+    : undefined
+  const { error, value } = Joi.validate(data, schema, options)
   if (error) {
     trace.logTrace(
       'validate',

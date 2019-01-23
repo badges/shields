@@ -18,12 +18,12 @@ Add a key for the service with the corresponding date for deprecation, for examp
 
 Locate the source file(s) for the service, which can be found in `*.service.js` files located within the directory for the service (`./services/:service-name/`) such as `./services/imagelayers/imagelayers.service.js`.
 
-Replace the existing service class implementation with the `DeprecatedService` class from `./services/deprecated-service.js` using the respective `category`, `url`, and `label` values for that service. For example:
+Replace the existing service class implementation with the `DeprecatedService` class from `./core/base-service/deprecated-service.js` using the respective `category`, `url`, and `label` values for that service. For example:
 
 ```js
 'use strict'
 
-const deprecatedService = require('../deprecated-service')
+const { deprecatedService } = require('..')
 
 // image layers integration - deprecated as of November 2018.
 module.exports = deprecatedService({
@@ -40,10 +40,10 @@ module.exports = deprecatedService({
 
 Locate the test file(s) for the service, which can be found in `*.tester.js` files located in the service directory (`./services/:service-name/`), such as `./services/imagelayers/imagelayers.tester.js`.
 
-With `DeprecatedService` classes we cannot use the utility functions from `create-service-tester.js` so you will need to create the `ServiceTester` class directly. For example:
+With `DeprecatedService` classes we cannot use `createServiceTester()` so you will need to create the `ServiceTester` class directly. For example:
 
 ```js
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 
 const t = (module.exports = new ServiceTester({
   id: 'imagelayers',
@@ -69,7 +69,8 @@ Here is an example of what the final result would look like for a test file:
 ```js
 'use strict'
 
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
+
 const t = (module.exports = new ServiceTester({
   id: 'imagelayers',
   title: 'ImageLayers',

@@ -89,7 +89,6 @@ There are three places to get help:
   used by developers or which are widely used by developers
 - The left-hand side of a badge should not advertise. It should be a lowercase _noun_
   succinctly describing the meaning of the right-hand side.
-- Query parameters must be _declared by the service_. See `request-handler.js`.
 - Except for badges using the `social` style, logos should be _turned off by
   default_.
 

@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 const { withRegex } = require('../test-validators')
 
 const isMarketplaceVersion = withRegex(/^v(\d+\.\d+\.\d+)(\.\d+)?$/)

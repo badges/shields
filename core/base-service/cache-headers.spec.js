@@ -38,6 +38,11 @@ describe('Cache header functions', function() {
       given({
         cacheHeaderConfig,
         serviceDefaultCacheLengthSeconds: 900,
+        queryParams: { maxAge: 1000, other: 'here', maybe: 'bogus' },
+      }).expect(1000)
+      given({
+        cacheHeaderConfig,
+        serviceDefaultCacheLengthSeconds: 900,
         queryParams: { maxAge: 400 },
       }).expect(900)
       given({

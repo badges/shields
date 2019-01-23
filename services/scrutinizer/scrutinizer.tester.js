@@ -1,12 +1,14 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
-const { isIntegerPercentage } = require('../test-validators')
 const { isBuildStatus } = require('../../lib/build-status')
+const { ServiceTester } = require('..')
+const { isIntegerPercentage } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'scrutinizer', title: 'Scrutinizer' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'scrutinizer',
+  title: 'Scrutinizer',
+}))
 
 t.create('code quality')
   .get('/g/filp/whoops.json')

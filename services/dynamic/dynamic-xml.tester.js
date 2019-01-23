@@ -4,7 +4,7 @@ const Joi = require('joi')
 const { expect } = require('chai')
 const { isSemver } = require('../test-validators')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('No URL specified')
   .get('.json?query=//name&label=Package Name&style=_shields_test')

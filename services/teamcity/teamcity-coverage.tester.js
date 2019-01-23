@@ -9,7 +9,7 @@ const {
   restore,
 } = require('./teamcity-test-helpers')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('live: valid buildId')
   .get('/bt428.json')

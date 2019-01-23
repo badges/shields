@@ -1,8 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
-const errors = require('../errors')
+const { BaseJsonService, InvalidParameter } = require('..')
 
 const queryParamSchema = Joi.object({
   server_fqdn: Joi.string().hostname(),
@@ -127,7 +126,7 @@ module.exports = class Matrix extends BaseJsonService {
           host = `${splitAlias[1]}:${splitAlias[2]}`
           break
         default:
-          throw new errors.InvalidParameter({ prettyMessage: 'invalid alias' })
+          throw new InvalidParameter({ prettyMessage: 'invalid alias' })
       }
     } else {
       host = serverFQDN

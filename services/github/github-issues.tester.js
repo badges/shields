@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isMetric, isMetricOpenIssues } = require('../test-validators')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('GitHub closed pull requests')
   .get('/issues-pr-closed/badges/shields.json')

@@ -4,6 +4,15 @@
 const emojic = require('emojic')
 const pathToRegexp = require('path-to-regexp')
 const Joi = require('joi')
+const { checkErrorResponse } = require('../../lib/error-helper')
+const { toArray } = require('../../lib/badge-data')
+const { svg2base64 } = require('../../lib/svg-helpers')
+const {
+  decodeDataUrlFromQueryParam,
+  prepareNamedLogo,
+} = require('../../lib/logos')
+const { assertValidCategory } = require('../../services/categories')
+const coalesce = require('./coalesce')
 const {
   NotFound,
   InvalidResponse,
@@ -11,19 +20,10 @@ const {
   InvalidParameter,
   Deprecated,
 } = require('./errors')
-const coalesce = require('../lib/coalesce')
-const validate = require('../lib/validate')
-const { checkErrorResponse } = require('../lib/error-helper')
-const { toArray } = require('../lib/badge-data')
-const { svg2base64 } = require('../lib/svg-helpers')
-const {
-  decodeDataUrlFromQueryParam,
-  prepareNamedLogo,
-} = require('../lib/logos')
+const { assertValidServiceDefinition } = require('./service-definitions')
 const trace = require('./trace')
 const { validateExample, transformExample } = require('./transform-example')
-const { assertValidCategory } = require('./categories')
-const { assertValidServiceDefinition } = require('./service-definitions')
+const validate = require('./validate')
 
 const defaultBadgeDataSchema = Joi.object({
   label: Joi.string(),
@@ -31,6 +31,15 @@ const defaultBadgeDataSchema = Joi.object({
   labelColor: Joi.string(),
   namedLogo: Joi.string(),
 }).required()
+
+const optionalStringWhenNamedLogoPrsent = Joi.alternatives().when('namedLogo', {
+  is: Joi.string().required(),
+  then: Joi.string(),
+})
+
+const optionalNumberWhenAnyLogoPresent = Joi.alternatives()
+  .when('namedLogo', { is: Joi.string().required(), then: Joi.number() })
+  .when('logoSvg', { is: Joi.string().required(), then: Joi.number() })
 
 const serviceDataSchema = Joi.object({
   isError: Joi.boolean(),
@@ -45,27 +54,15 @@ const serviceDataSchema = Joi.object({
   labelColor: Joi.string(),
   namedLogo: Joi.string(),
   logoSvg: Joi.string(),
-  logoColor: Joi.forbidden(),
-  logoWidth: Joi.forbidden(),
-  logoPosition: Joi.forbidden(),
-  cacheLengthSeconds: Joi.number()
+  logoColor: optionalStringWhenNamedLogoPrsent,
+  logoWidth: optionalNumberWhenAnyLogoPresent,
+  logoPosition: optionalNumberWhenAnyLogoPresent,
+  cacheSeconds: Joi.number()
     .integer()
     .min(0),
+  style: Joi.string(),
 })
   .oxor('namedLogo', 'logoSvg')
-  .when(
-    Joi.alternatives().try(
-      Joi.object({ namedLogo: Joi.string().required() }).unknown(),
-      Joi.object({ logoSvg: Joi.string().required() }).unknown()
-    ),
-    {
-      then: Joi.object({
-        logoColor: Joi.string(),
-        logoWidth: Joi.number(),
-        logoPosition: Joi.number(),
-      }),
-    }
-  )
   .required()
 
 class BaseService {
@@ -379,7 +376,7 @@ class BaseService {
   //    string.
   static _makeBadgeData(overrides, serviceData) {
     const {
-      style,
+      style: overrideStyle,
       label: overrideLabel,
       logoColor: overrideLogoColor,
       link: overrideLink,
@@ -415,7 +412,8 @@ class BaseService {
       logoWidth: serviceLogoWidth,
       logoPosition: serviceLogoPosition,
       link: serviceLink,
-      cacheLengthSeconds: serviceCacheLengthSeconds,
+      cacheSeconds: serviceCacheSeconds,
+      style: serviceStyle,
     } = serviceData
     const serviceLogoSvgBase64 = serviceLogoSvg
       ? svg2base64(serviceLogoSvg)
@@ -427,7 +425,9 @@ class BaseService {
       label: defaultLabel,
       labelColor: defaultLabelColor,
     } = this.defaultBadgeData
-    const defaultCacheLengthSeconds = this._cacheLength
+    const defaultCacheSeconds = this._cacheLength
+
+    const style = coalesce(overrideStyle, serviceStyle)
 
     const namedLogoSvgBase64 = prepareNamedLogo({
       name: coalesce(
@@ -481,10 +481,7 @@ class BaseService {
         overrideNamedLogo ? undefined : serviceLogoPosition
       ),
       links: toArray(overrideLink || serviceLink),
-      cacheLengthSeconds: coalesce(
-        serviceCacheLengthSeconds,
-        defaultCacheLengthSeconds
-      ),
+      cacheLengthSeconds: coalesce(serviceCacheSeconds, defaultCacheSeconds),
     }
   }
 
@@ -518,13 +515,14 @@ class BaseService {
     )
   }
 
-  static _validate(data, schema) {
+  static _validate(data, schema, { allowAndStripUnknownKeys = true } = {}) {
     return validate(
       {
         ErrorClass: InvalidResponse,
         prettyErrorMessage: 'invalid response data',
         traceErrorMessage: 'Response did not match schema',
         traceSuccessMessage: 'Response after validation',
+        allowAndStripUnknownKeys,
       },
       data,
       schema

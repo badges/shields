@@ -1,9 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseXmlService = require('../base-xml')
 const serverSecrets = require('../../lib/server-secrets')
-const { Inaccessible } = require('../errors')
+const { BaseXmlService, Inaccessible } = require('..')
 
 const violationSchema = Joi.object({
   severity: Joi.equal('info', 'minor', 'major', 'critical').required(),

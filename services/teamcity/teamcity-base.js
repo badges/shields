@@ -1,7 +1,7 @@
 'use strict'
 
-const BaseJsonService = require('../base-json')
 const serverSecrets = require('../../lib/server-secrets')
+const { BaseJsonService } = require('..')
 
 module.exports = class TeamCityBase extends BaseJsonService {
   async fetch({
