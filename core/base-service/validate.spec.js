@@ -89,7 +89,10 @@ describe('validate', function() {
         try {
           validate(
             { ...options, includeKeys: true },
-            { requiredString: ['this', "shouldn't", 'work'] },
+            {
+              requiredString: ['this', "shouldn't", 'work'],
+              requiredNumber: 'neither this',
+            },
             schema
           )
           expect.fail('Expected to throw')
@@ -107,12 +110,19 @@ describe('validate', function() {
   })
 
   it('allowAndStripUnknownKeys', function() {
-    expect(() =>
+    try {
       validate(
-        { ...options, allowAndStripUnknownKeys: false },
-        { requiredString: 'bar', extra: 'nonsense' },
+        { ...options, allowAndStripUnknownKeys: false, includeKeys: true },
+        { requiredString: 'bar', extra: 'nonsense', more: 'bogus' },
         schema
       )
-    ).to.throw(InvalidParameter, '"extra" is not allowed')
+      expect.fail('Expected to throw')
+    } catch (e) {
+      expect(e).to.be.an.instanceof(InvalidParameter)
+      expect(e.message).to.equal(
+        'Invalid Parameter: "extra" is not allowed. "more" is not allowed'
+      )
+      expect(e.prettyMessage).to.equal(`${prettyErrorMessage}: extra, more`)
+    }
   })
 })
