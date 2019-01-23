@@ -9,7 +9,7 @@ const documentation = `
   This is for Visual Studio and Visual Studio Code Extensions.
 </p>
 <p>
-  Use the Azure DevOps Installs Badge for Azure DevOps Extensions.
+  For correct results on Azure DevOps Extensions, use the Azure DevOps Installs badge instead.
 </p>
 `
 
