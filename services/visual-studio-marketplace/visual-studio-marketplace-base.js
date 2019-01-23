@@ -2,6 +2,7 @@
 
 const Joi = require('joi')
 const { BaseJsonService, NotFound } = require('..')
+const validate = require('../../core/base-service/validate')
 
 const extensionQuerySchema = Joi.object({
   results: Joi.array()
@@ -38,7 +39,9 @@ const statisticSchema = Joi.object().keys({
   install: Joi.number().default(0),
   updateCount: Joi.number().default(0),
   onpremDownloads: Joi.number().default(0),
-  averagerating: Joi.number().default(0),
+  averagerating: Joi.number()
+    .default(0)
+    .precision(2),
   ratingcount: Joi.number().default(0),
 })
 
@@ -109,17 +112,7 @@ module.exports = class VisualStudioMarketplaceBase extends BaseJsonService {
       statistics[statisticName] = value
     })
 
-    // The Visual Studio Marketplace API response will only include statistic key/value pairs
-    // for statistics with values greater than 0. This ensures that the key statistics used by
-    // badges will all exist with a numerical value defaulted to 0.
-    const { value, error } = Joi.validate(statistics, statisticSchema, {
-      stripUnknown: true,
-    })
-
-    // TODO: Write a unit test to cover this case
-    if (error) {
-      throw error
-    }
+    const value = validate({ ErrorClass: Error }, statistics, statisticSchema)
 
     return { statistics: value }
   }
