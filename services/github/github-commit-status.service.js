@@ -36,11 +36,11 @@ module.exports = class GithubCommitStatus extends LegacyService {
           commit: '5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c',
         },
         staticPreview: {
-          label: 'commits since 3.4.7',
-          message: '4225',
-          color: 'blue',
+          label: 'commit status',
+          message: 'in master',
+          color: 'brightgreen',
         },
-        keywords: ['GitHub', 'commit', 'branch', 'merge'],
+        keywords: ['branch', 'merge'],
         documentation,
       },
     ]
