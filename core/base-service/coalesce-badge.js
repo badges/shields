@@ -37,6 +37,7 @@ const coalesce = require('./coalesce')
 module.exports = function coalesceBadge(
   overrides,
   serviceData,
+  // These two parameters were kept separate to make tests clearer.
   defaultBadgeData,
   { category, _cacheLength: defaultCacheSeconds } = {}
 ) {
