@@ -3,8 +3,7 @@
 const { URL } = require('url')
 const Joi = require('joi')
 const { errorMessages } = require('../dynamic/dynamic-helpers')
-const BaseJsonService = require('../base-json')
-const { InvalidParameter } = require('../errors')
+const { BaseJsonService, InvalidParameter } = require('..')
 const { optionalUrl } = require('../validators')
 
 const blockedDomains = ['github.com', 'shields.io']
