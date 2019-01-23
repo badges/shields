@@ -91,7 +91,6 @@ describe('validate', function() {
             { ...options, includeKeys: true },
             {
               requiredString: ['this', "shouldn't", 'work'],
-              requiredNumber: 'neither this',
             },
             schema
           )
