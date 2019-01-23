@@ -205,10 +205,11 @@ const EndpointPage = () => (
       </dd>
       <dt>cacheSeconds</dt>
       <dd>
-        Default: <code>300</code>. Set the HTTP cache lifetime in seconds, which
-        should respected by the Shields' CDN and downstream users. This lets you
-        tune performance and traffic vs. responsiveness. Can be overridden by
-        the user via the query string, but only to a longer value.
+        Default: <code>300</code>, min <code>300</code>. Set the HTTP cache
+        lifetime in seconds, which should respected by the Shields' CDN and
+        downstream users. Values below 300 will be ignored. This lets you tune
+        performance and traffic vs. responsiveness. Can be overridden by the
+        user via the query string, but only to a longer value.
       </dd>
     </Schema>
     <Footer baseUrl={baseUrl} />
