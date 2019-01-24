@@ -15,7 +15,10 @@ module.exports = class ContinuousPhp extends LegacyService {
   }
 
   static get route() {
-    return { base: 'continuousphp', pattern: '' }
+    return {
+      base: 'continuousphp',
+      pattern: '',
+    }
   }
 
   static get examples() {
