@@ -22,6 +22,7 @@ module.exports = class Luarocks extends LegacyService {
   static get route() {
     return {
       base: 'luarocks/v',
+      pattern: ':user/:moduleName',
     }
   }
 
@@ -29,7 +30,6 @@ module.exports = class Luarocks extends LegacyService {
     return [
       {
         title: 'LuaRocks',
-        pattern: ':user/:moduleName',
         namedParams: {
           user: 'mpeterv',
           moduleName: 'luacheck',

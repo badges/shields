@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const { expect } = require('chai')
-const { test, given, forCases } = require('sazerac')
 const sinon = require('sinon')
 const { getShieldsIcon } = require('../../lib/logos')
 const trace = require('./trace')
@@ -61,6 +60,7 @@ class DummyService extends BaseService {
       },
     ]
   }
+
   static get route() {
     return {
       base: 'foo',
@@ -72,128 +72,6 @@ class DummyService extends BaseService {
 
 describe('BaseService', function() {
   const defaultConfig = { handleInternalErrors: false }
-
-  describe('URL pattern matching', function() {
-    context('A `pattern` with a named param is declared', function() {
-      const regexExec = str => DummyService._regex.exec(str)
-      const getNamedParamA = str => {
-        const [, namedParamA] = regexExec(str)
-        return namedParamA
-      }
-      const namedParams = str => {
-        const match = regexExec(str)
-        return DummyService._namedParamsForMatch(match)
-      }
-
-      test(regexExec, () => {
-        forCases([
-          given('/foo/bar.bar.bar.zip'),
-          given('/foo/bar/bar.svg'),
-          // This is a valid example with the wrong extension separator, to
-          // test that we only accept a `.`.
-          given('/foo/bar.bar.bar_svg'),
-        ]).expect(null)
-      })
-
-      test(getNamedParamA, () => {
-        forCases([
-          given('/foo/bar.bar.bar.svg'),
-          given('/foo/bar.bar.bar.png'),
-          given('/foo/bar.bar.bar.gif'),
-          given('/foo/bar.bar.bar.jpg'),
-          given('/foo/bar.bar.bar.json'),
-        ]).expect('bar.bar.bar')
-      })
-
-      test(namedParams, () => {
-        forCases([
-          given('/foo/bar.bar.bar.svg'),
-          given('/foo/bar.bar.bar.png'),
-          given('/foo/bar.bar.bar.gif'),
-          given('/foo/bar.bar.bar.jpg'),
-          given('/foo/bar.bar.bar.json'),
-        ]).expect({ namedParamA: 'bar.bar.bar' })
-      })
-    })
-
-    context('A `format` with a named param is declared', function() {
-      class ServiceWithFormat extends BaseService {
-        static get route() {
-          return {
-            base: 'foo',
-            format: '([^/]+)',
-            capture: ['namedParamA'],
-          }
-        }
-      }
-
-      const regexExec = str => ServiceWithFormat._regex.exec(str)
-      const getNamedParamA = str => {
-        const [, namedParamA] = regexExec(str)
-        return namedParamA
-      }
-      const namedParams = str => {
-        const match = regexExec(str)
-        return ServiceWithFormat._namedParamsForMatch(match)
-      }
-
-      test(regexExec, () => {
-        forCases([
-          given('/foo/bar.bar.bar.zip'),
-          given('/foo/bar/bar.svg'),
-          // This is a valid example with the wrong extension separator, to
-          // test that we only accept a `.`.
-          given('/foo/bar.bar.bar_svg'),
-        ]).expect(null)
-      })
-
-      test(getNamedParamA, () => {
-        forCases([
-          given('/foo/bar.bar.bar.svg'),
-          given('/foo/bar.bar.bar.png'),
-          given('/foo/bar.bar.bar.gif'),
-          given('/foo/bar.bar.bar.jpg'),
-          given('/foo/bar.bar.bar.json'),
-        ]).expect('bar.bar.bar')
-      })
-
-      test(namedParams, () => {
-        forCases([
-          given('/foo/bar.bar.bar.svg'),
-          given('/foo/bar.bar.bar.png'),
-          given('/foo/bar.bar.bar.gif'),
-          given('/foo/bar.bar.bar.jpg'),
-          given('/foo/bar.bar.bar.json'),
-        ]).expect({ namedParamA: 'bar.bar.bar' })
-      })
-    })
-
-    context('No named params are declared', function() {
-      class ServiceWithZeroNamedParams extends BaseService {
-        static get route() {
-          return {
-            base: 'foo',
-            format: '(?:[^/]+)',
-          }
-        }
-      }
-
-      const namedParams = str => {
-        const match = ServiceWithZeroNamedParams._regex.exec(str)
-        return ServiceWithZeroNamedParams._namedParamsForMatch(match)
-      }
-
-      test(namedParams, () => {
-        forCases([
-          given('/foo/bar.bar.bar.svg'),
-          given('/foo/bar.bar.bar.png'),
-          given('/foo/bar.bar.bar.gif'),
-          given('/foo/bar.bar.bar.jpg'),
-          given('/foo/bar.bar.bar.json'),
-        ]).expect({})
-      })
-    })
-  })
 
   it('Invokes the handler as expected', async function() {
     expect(

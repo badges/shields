@@ -20,6 +20,7 @@ module.exports = class Liberapay extends LegacyService {
   static get route() {
     return {
       base: 'liberapay',
+      pattern: '',
     }
   }
 

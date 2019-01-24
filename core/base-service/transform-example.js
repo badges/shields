@@ -2,6 +2,7 @@
 
 const Joi = require('joi')
 const pathToRegexp = require('path-to-regexp')
+const { makeFullUrl } = require('./route-helpers')
 
 const optionalObjectOfKeyValues = Joi.object().pattern(
   /./,
@@ -126,13 +127,16 @@ function transformExample(inExample, index, ServiceClass) {
   let example
   if (namedParams) {
     example = {
-      pattern: ServiceClass._makeFullUrl(pattern || ServiceClass.route.pattern),
+      pattern: makeFullUrl(
+        ServiceClass.route.base,
+        pattern || ServiceClass.route.pattern
+      ),
       namedParams,
       queryParams,
     }
   } else {
     example = {
-      path: ServiceClass._makeFullUrl(previewUrl),
+      path: makeFullUrl(ServiceClass.route.base, previewUrl),
       queryParams,
     }
   }
@@ -146,7 +150,7 @@ function transformExample(inExample, index, ServiceClass) {
     preview = { label, message: `${message}`, color }
   } else {
     preview = {
-      path: ServiceClass._makeFullUrl(previewUrl),
+      path: makeFullUrl(ServiceClass.route.base, previewUrl),
       queryParams,
     }
   }

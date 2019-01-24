@@ -17,6 +17,7 @@ module.exports = class Bitrise extends LegacyService {
   static get route() {
     return {
       base: 'bitrise',
+      pattern: ':appId/:branch',
     }
   }
 
@@ -24,7 +25,6 @@ module.exports = class Bitrise extends LegacyService {
     return [
       {
         title: 'Bitrise',
-        pattern: ':appId/:branch',
         namedParams: { appId: 'cde737473028420d', branch: 'master' },
         queryParams: { token: 'GCIdEzacE4GW32jLVrZb7A' },
         staticPreview: {

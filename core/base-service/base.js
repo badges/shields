@@ -2,7 +2,6 @@
 
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
-const pathToRegexp = require('path-to-regexp')
 const Joi = require('joi')
 const { checkErrorResponse } = require('../../lib/error-helper')
 const { toArray } = require('../../lib/badge-data')
@@ -20,6 +19,12 @@ const {
   InvalidParameter,
   Deprecated,
 } = require('./errors')
+const {
+  makeFullUrl,
+  assertValidRoute,
+  prepareRoute,
+  namedParamsForMatch,
+} = require('./route-helpers')
 const { assertValidServiceDefinition } = require('./service-definitions')
 const trace = require('./trace')
 const { validateExample, transformExample } = require('./transform-example')
@@ -156,12 +161,10 @@ class BaseService {
     return []
   }
 
-  static _makeFullUrl(partialUrl) {
-    return `/${[this.route.base, partialUrl].filter(Boolean).join('/')}`
-  }
-
   static validateDefinition() {
     assertValidCategory(this.category, `Category for ${this.name}`)
+
+    assertValidRoute(this.route, `Route for ${this.name}`)
 
     Joi.assert(
       this.defaultBadgeData,
@@ -177,9 +180,9 @@ class BaseService {
   static getDefinition() {
     const { category, name, isDeprecated } = this
 
-    let format, pattern, queryParams
+    let base, format, pattern, queryParams
     try {
-      ;({ format, pattern, query: queryParams = [] } = this.route)
+      ;({ base, format, pattern, query: queryParams = [] } = this.route)
     } catch (e) {
       // Legacy services do not have a route.
     }
@@ -190,7 +193,7 @@ class BaseService {
 
     let route
     if (pattern) {
-      route = { pattern: this._makeFullUrl(pattern), queryParams }
+      route = { pattern: makeFullUrl(base, pattern), queryParams }
     } else if (format) {
       route = { format, queryParams }
     } else {
@@ -204,44 +207,6 @@ class BaseService {
     return result
   }
 
-  static get _regexFromPath() {
-    const { pattern } = this.route
-    const fullPattern = `${this._makeFullUrl(
-      pattern
-    )}.:ext(svg|png|gif|jpg|json)`
-
-    const keys = []
-    const regex = pathToRegexp(fullPattern, keys, {
-      strict: true,
-      sensitive: true,
-    })
-    const capture = keys.map(item => item.name).slice(0, -1)
-
-    return { regex, capture }
-  }
-
-  static get _regex() {
-    const { pattern, format, capture } = this.route
-    if (
-      pattern !== undefined &&
-      (format !== undefined || capture !== undefined)
-    ) {
-      throw Error(
-        `Since the route for ${
-          this.name
-        } includes a pattern, it should not include a format or capture`
-      )
-    } else if (pattern !== undefined) {
-      return this._regexFromPath.regex
-    } else if (format !== undefined) {
-      return new RegExp(
-        `^${this._makeFullUrl(this.route.format)}\\.(svg|png|gif|jpg|json)$`
-      )
-    } else {
-      throw Error(`The route for ${this.name} has neither pattern nor format`)
-    }
-  }
-
   static get _cacheLength() {
     const cacheLengths = {
       build: 30,
@@ -250,28 +215,6 @@ class BaseService {
       debug: 60,
     }
     return cacheLengths[this.category]
-  }
-
-  static _namedParamsForMatch(match) {
-    const { pattern, capture } = this.route
-    const names = pattern ? this._regexFromPath.capture : capture || []
-
-    // Assume the last match is the format, and drop match[0], which is the
-    // entire match.
-    const captures = match.slice(1, -1)
-
-    if (names.length !== captures.length) {
-      throw new Error(
-        `Service ${this.name} declares incorrect number of capture groups ` +
-          `(expected ${names.length}, got ${captures.length})`
-      )
-    }
-
-    const result = {}
-    names.forEach((name, index) => {
-      result[name] = captures[index]
-    })
-    return result
   }
 
   _handleError(error) {
@@ -487,12 +430,14 @@ class BaseService {
 
   static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
     const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
+    const { regex, captureNames } = prepareRoute(this.route)
+
     camp.route(
-      this._regex,
+      regex,
       handleRequest(cacheHeaderConfig, {
         queryParams: this.route.queryParams,
         handler: async (queryParams, match, sendBadge, request) => {
-          const namedParams = this._namedParamsForMatch(match)
+          const namedParams = namedParamsForMatch(captureNames, match, this)
           const serviceData = await this.invoke(
             {
               sendAndCacheRequest: request.asPromise,

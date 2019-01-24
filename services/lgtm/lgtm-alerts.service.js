@@ -19,6 +19,7 @@ module.exports = class LgtmAlerts extends LegacyService {
   static get route() {
     return {
       base: 'lgtm/alerts',
+      pattern: '',
     }
   }
 

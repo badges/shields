@@ -18,6 +18,7 @@ module.exports = class PackagistPhpVersion extends LegacyService {
   static get route() {
     return {
       base: 'packagist/php-v',
+      pattern: '',
     }
   }
 

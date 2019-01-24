@@ -4,6 +4,7 @@ const makeBadge = require('../../gh-badges/lib/make-badge')
 const BaseService = require('./base')
 const { setCacheHeaders } = require('./cache-headers')
 const { makeSend } = require('./legacy-result-sender')
+const { prepareRoute, namedParamsForMatch } = require('./route-helpers')
 
 // Badges are subject to two independent types of caching: in-memory and
 // downstream.
@@ -25,9 +26,10 @@ module.exports = class NonMemoryCachingBaseService extends BaseService {
   static register({ camp }, serviceConfig) {
     const { cacheHeaders: cacheHeaderConfig } = serviceConfig
     const { _cacheLength: serviceDefaultCacheLengthSeconds } = this
+    const { regex, captureNames } = prepareRoute(this.route)
 
-    camp.route(this._regex, async (queryParams, match, end, ask) => {
-      const namedParams = this._namedParamsForMatch(match)
+    camp.route(regex, async (queryParams, match, end, ask) => {
+      const namedParams = namedParamsForMatch(captureNames, match)
       const serviceData = await this.invoke(
         {},
         serviceConfig,
