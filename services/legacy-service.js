@@ -1,6 +1,6 @@
 'use strict'
 
-const BaseService = require('./base')
+const { BaseService } = require('.')
 
 // This adapter allows running legacy badges in the new file layout and
 // service architecture.
