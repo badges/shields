@@ -29,7 +29,7 @@ module.exports = class NonMemoryCachingBaseService extends BaseService {
     const { regex, captureNames } = prepareRoute(this.route)
 
     camp.route(regex, async (queryParams, match, end, ask) => {
-      const namedParams = namedParamsForMatch(captureNames, match)
+      const namedParams = namedParamsForMatch(captureNames, match, this)
       const serviceData = await this.invoke(
         {},
         serviceConfig,

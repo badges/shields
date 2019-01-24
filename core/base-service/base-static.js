@@ -27,7 +27,7 @@ module.exports = class BaseStaticService extends BaseService {
         return
       }
 
-      const namedParams = namedParamsForMatch(captureNames, match)
+      const namedParams = namedParamsForMatch(captureNames, match, this)
       const serviceData = await this.invoke(
         {},
         serviceConfig,
