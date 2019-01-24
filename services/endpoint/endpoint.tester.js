@@ -146,7 +146,10 @@ t.create('Invalid schema (mocked)')
         schemaVersion: -1,
       })
   )
-  .expectJSON({ name: 'custom badge', value: 'invalid response data' })
+  .expectJSON({
+    name: 'custom badge',
+    value: 'invalid properties: schemaVersion',
+  })
 
 t.create('Invalid schema (mocked)')
   .get('.json?url=https://example.com/badge')
@@ -161,7 +164,10 @@ t.create('Invalid schema (mocked)')
         bogus: true,
       })
   )
-  .expectJSON({ name: 'custom badge', value: 'invalid response data' })
+  .expectJSON({
+    name: 'custom badge',
+    value: 'invalid properties: extra, bogus',
+  })
 
 t.create('User color overrides success color')
   .get('.json?url=https://example.com/badge&colorB=101010&style=_shields_test')
