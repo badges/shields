@@ -1,6 +1,5 @@
 'use strict'
 
-const { expect } = require('chai')
 const { collectDefinitions } = require('../core/base-service/loader')
 
 it('Can collect the service definitions', function() {
