@@ -38,7 +38,7 @@ function validate(
     if (includeKeys) {
       const keys = error.details.map(({ path }) => path)
       if (keys) {
-        prettyMessage = `${prettyErrorMessage}: ${keys.join(',')}`
+        prettyMessage = `${prettyErrorMessage}: ${keys.join(', ')}`
       }
     }
 
