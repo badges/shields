@@ -17,7 +17,6 @@ class InvalidService extends Error {
 
 function loadServiceClasses(servicePaths) {
   if (!servicePaths) {
-    console.log(path.join(serviceDir, '**', '*.service.js'))
     servicePaths = glob.sync(path.join(serviceDir, '**', '*.service.js'))
   }
 
