@@ -22,7 +22,7 @@
     "url": "https://github.com/badges/shields"
   },
   "dependencies": {
-    "bytes": "^3.0.0",
+    "bytes": "^3.1.0",
     "camp": "~17.2.2",
     "chalk": "^2.4.2",
     "check-node-version": "^3.1.0",
