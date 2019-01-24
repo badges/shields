@@ -3,8 +3,7 @@
 const { URL } = require('url')
 const Joi = require('joi')
 const { errorMessages } = require('../dynamic/dynamic-helpers')
-const BaseJsonService = require('../base-json')
-const { InvalidParameter } = require('../errors')
+const { BaseJsonService, InvalidParameter } = require('..')
 const { optionalUrl } = require('../validators')
 
 const blockedDomains = ['github.com', 'shields.io']
@@ -124,6 +123,8 @@ module.exports = class Endpoint extends BaseJsonService {
     })
     // Override the validation options because we want to reject unknown keys.
     const validated = this.constructor._validate(json, endpointSchema, {
+      prettyErrorMessage: 'invalid properties',
+      includeKeys: true,
       allowAndStripUnknownKeys: false,
     })
 

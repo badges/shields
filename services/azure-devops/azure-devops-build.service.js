@@ -1,9 +1,8 @@
 'use strict'
 
-const BaseSvgService = require('../base-svg-scraping')
-const { NotFound } = require('..')
-const { keywords, fetch } = require('./azure-devops-helpers')
 const { renderBuildStatusBadge } = require('../../lib/build-status')
+const { BaseSvgScrapingService, NotFound } = require('..')
+const { keywords, fetch } = require('./azure-devops-helpers')
 
 const documentation = `
 <p>
@@ -28,7 +27,7 @@ const documentation = `
   alt="PROJECT_ID is in the id property of the API response." />
 `
 
-module.exports = class AzureDevOpsBuild extends BaseSvgService {
+module.exports = class AzureDevOpsBuild extends BaseSvgScrapingService {
   static get category() {
     return 'build'
   }
