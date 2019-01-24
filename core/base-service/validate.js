@@ -2,7 +2,7 @@
 
 const emojic = require('emojic')
 const Joi = require('joi')
-const trace = require('../../services/trace')
+const trace = require('./trace')
 
 function validate(
   {
@@ -38,7 +38,7 @@ function validate(
     if (includeKeys) {
       const keys = error.details.map(({ path }) => path)
       if (keys) {
-        prettyMessage = `${prettyErrorMessage}: ${keys.join(',')}`
+        prettyMessage = `${prettyErrorMessage}: ${keys.join(', ')}`
       }
     }
 

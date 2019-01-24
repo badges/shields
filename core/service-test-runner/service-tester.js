@@ -4,7 +4,7 @@ const emojic = require('emojic')
 const frisby = require('./icedfrisby-no-nock')(
   require('icedfrisby-nock')(require('icedfrisby'))
 )
-const trace = require('./trace')
+const trace = require('../base-service/trace')
 
 /**
  * Encapsulate a suite of tests. Create new tests using create() and register

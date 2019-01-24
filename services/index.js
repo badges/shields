@@ -2,10 +2,12 @@
 
 const glob = require('glob')
 const base = require('../core/base-service')
-const createServiceTester = require('./create-service-tester')
-const ServiceTester = require('./service-tester')
+const createServiceTester = require('../core/service-test-runner/create-service-tester')
+const ServiceTester = require('../core/service-test-runner/service-tester')
+const {
+  assertValidServiceDefinitionExport,
+} = require('../core/base-service/service-definitions')
 const { categories } = require('./categories')
-const { assertValidServiceDefinitionExport } = require('./service-definitions')
 
 const { BaseService } = base
 
