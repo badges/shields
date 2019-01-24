@@ -26,7 +26,7 @@ module.exports = class VisualStudioMarketplaceRating extends VisualStudioMarketp
   static render({ format, averageRating, ratingCount }) {
     const message =
       format === 'r'
-        ? `${averageRating}/5 (${ratingCount})`
+        ? `${averageRating.toFixed(1)}/5 (${ratingCount})`
         : starRating(averageRating)
     return {
       message,

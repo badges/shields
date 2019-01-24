@@ -39,9 +39,7 @@ const statisticSchema = Joi.object().keys({
   install: Joi.number().default(0),
   updateCount: Joi.number().default(0),
   onpremDownloads: Joi.number().default(0),
-  averagerating: Joi.number()
-    .default(0)
-    .precision(2),
+  averagerating: Joi.number().default(0),
   ratingcount: Joi.number().default(0),
 })
 
