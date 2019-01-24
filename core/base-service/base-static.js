@@ -8,7 +8,7 @@ const {
   setCacheHeadersForStaticResource,
 } = require('./cache-headers')
 const { makeSend } = require('./legacy-result-sender')
-const { prepareRoute, namedParamsForMatch } = require('./route-helpers')
+const { prepareRoute, namedParamsForMatch } = require('./route')
 
 module.exports = class BaseStaticService extends BaseService {
   static register({ camp }, serviceConfig) {

@@ -1,7 +1,7 @@
 'use strict'
 
 const { test, given, forCases } = require('sazerac')
-const { prepareRoute, namedParamsForMatch } = require('./route-helpers')
+const { prepareRoute, namedParamsForMatch } = require('./route')
 
 describe('Route helpers', function() {
   context('A `pattern` with a named param is declared', function() {

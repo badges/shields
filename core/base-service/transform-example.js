@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const pathToRegexp = require('path-to-regexp')
-const { makeFullUrl } = require('./route-helpers')
+const { makeFullUrl } = require('./route')
 
 const optionalObjectOfKeyValues = Joi.object().pattern(
   /./,

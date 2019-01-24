@@ -24,7 +24,7 @@ const {
   assertValidRoute,
   prepareRoute,
   namedParamsForMatch,
-} = require('./route-helpers')
+} = require('./route')
 const { assertValidServiceDefinition } = require('./service-definitions')
 const trace = require('./trace')
 const { validateExample, transformExample } = require('./transform-example')

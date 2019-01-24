@@ -4,7 +4,7 @@ const makeBadge = require('../../gh-badges/lib/make-badge')
 const BaseService = require('./base')
 const { setCacheHeaders } = require('./cache-headers')
 const { makeSend } = require('./legacy-result-sender')
-const { prepareRoute, namedParamsForMatch } = require('./route-helpers')
+const { prepareRoute, namedParamsForMatch } = require('./route')
 
 // Badges are subject to two independent types of caching: in-memory and
 // downstream.
