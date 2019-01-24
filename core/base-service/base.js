@@ -441,6 +441,7 @@ class BaseService {
         // the color.
         overrideNamedLogo ? undefined : serviceLogoColor
       ),
+      style,
     })
 
     return {
@@ -514,11 +515,20 @@ class BaseService {
     )
   }
 
-  static _validate(data, schema, { allowAndStripUnknownKeys = true } = {}) {
+  static _validate(
+    data,
+    schema,
+    {
+      prettyErrorMessage = 'invalid response data',
+      includeKeys = false,
+      allowAndStripUnknownKeys = true,
+    } = {}
+  ) {
     return validate(
       {
         ErrorClass: InvalidResponse,
-        prettyErrorMessage: 'invalid response data',
+        prettyErrorMessage,
+        includeKeys,
         traceErrorMessage: 'Response did not match schema',
         traceSuccessMessage: 'Response after validation',
         allowAndStripUnknownKeys,
