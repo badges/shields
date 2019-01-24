@@ -1,6 +1,6 @@
 'use strict'
 
-const { loadTesters } = require('../../services')
+const { loadTesters } = require('../base-service/loader')
 
 /**
  * Load a collection of ServiceTester objects and register them with Mocha.
