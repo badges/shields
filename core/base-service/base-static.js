@@ -39,7 +39,9 @@ module.exports = class BaseStaticService extends BaseService {
         serviceData,
         this.defaultBadgeData,
         this
-      ) // The final capture group is the extension.
+      )
+ 
+      // The final capture group is the extension.
       const format = match.slice(-1)[0]
       badgeData.format = format
 
