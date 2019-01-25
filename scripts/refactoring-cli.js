@@ -4,7 +4,7 @@ const chalk = require('chalk')
 
 const { namedColors } = require('../gh-badges/lib/color')
 const { floorCount } = require('../lib/color-formatters')
-const { loadServiceClasses } = require('../services')
+const { loadServiceClasses } = require('../core/base-service/loader')
 
 const serviceClasses = loadServiceClasses()
 const legacyServices = serviceClasses
