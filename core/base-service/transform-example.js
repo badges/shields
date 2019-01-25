@@ -2,6 +2,7 @@
 
 const Joi = require('joi')
 const pathToRegexp = require('path-to-regexp')
+const coalesceBadge = require('./coalesce-badge')
 const { makeFullUrl } = require('./route')
 
 const optionalObjectOfKeyValues = Joi.object().pattern(
@@ -146,7 +147,12 @@ function transformExample(inExample, index, ServiceClass) {
     const {
       text: [label, message],
       color,
-    } = ServiceClass._makeBadgeData({}, staticPreview)
+    } = coalesceBadge(
+      {},
+      staticPreview,
+      ServiceClass.defaultBadgeData,
+      ServiceClass
+    )
     preview = { label, message: `${message}`, color }
   } else {
     preview = {

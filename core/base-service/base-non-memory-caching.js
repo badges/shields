@@ -4,6 +4,7 @@ const makeBadge = require('../../gh-badges/lib/make-badge')
 const BaseService = require('./base')
 const { setCacheHeaders } = require('./cache-headers')
 const { makeSend } = require('./legacy-result-sender')
+const coalesceBadge = require('./coalesce-badge')
 const { prepareRoute, namedParamsForMatch } = require('./route')
 
 // Badges are subject to two independent types of caching: in-memory and
@@ -37,7 +38,13 @@ module.exports = class NonMemoryCachingBaseService extends BaseService {
         queryParams
       )
 
-      const badgeData = this._makeBadgeData(queryParams, serviceData)
+      const badgeData = coalesceBadge(
+        queryParams,
+        serviceData,
+        this.defaultBadgeData,
+        this
+      )
+
       // The final capture group is the extension.
       const format = match.slice(-1)[0]
       badgeData.format = format

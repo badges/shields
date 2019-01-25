@@ -8,6 +8,7 @@ const {
   setCacheHeadersForStaticResource,
 } = require('./cache-headers')
 const { makeSend } = require('./legacy-result-sender')
+const coalesceBadge = require('./coalesce-badge')
 const { prepareRoute, namedParamsForMatch } = require('./route')
 
 module.exports = class BaseStaticService extends BaseService {
@@ -35,7 +36,13 @@ module.exports = class BaseStaticService extends BaseService {
         queryParams
       )
 
-      const badgeData = this._makeBadgeData(queryParams, serviceData)
+      const badgeData = coalesceBadge(
+        queryParams,
+        serviceData,
+        this.defaultBadgeData,
+        this
+      )
+
       // The final capture group is the extension.
       const format = match.slice(-1)[0]
       badgeData.format = format
