@@ -102,6 +102,7 @@ export default class QueryStringBuilder extends React.Component {
   }
 
   componentDidMount() {
+    // Ensure the default style is applied right away.
     const { queryParams, badgeOptions } = this.state
     this.noteQueryStringChanged({ queryParams, badgeOptions })
   }
