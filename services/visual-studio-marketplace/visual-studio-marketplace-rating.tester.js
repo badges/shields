@@ -4,7 +4,7 @@ const Joi = require('joi')
 const t = (module.exports = require('..').createServiceTester())
 const { withRegex, isStarRating } = require('../test-validators')
 
-const isVscodeRating = withRegex(/[0-5].[0-9]{2}\/5?\s*\([0-9]*\)$/)
+const isVscodeRating = withRegex(/[0-5]\.[0-9]{1}\/5?\s*\([0-9]*\)$/)
 
 t.create('live: rating')
   .get('/visual-studio-marketplace/r/ritwickdey.LiveServer.json')
@@ -89,7 +89,7 @@ t.create('zero rating')
   )
   .expectJSON({
     name: 'rating',
-    value: '0/5 (0)',
+    value: '0.0/5 (0)',
     color: 'red',
   })
 

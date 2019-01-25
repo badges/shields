@@ -123,6 +123,8 @@ module.exports = class Endpoint extends BaseJsonService {
     })
     // Override the validation options because we want to reject unknown keys.
     const validated = this.constructor._validate(json, endpointSchema, {
+      prettyErrorMessage: 'invalid properties',
+      includeKeys: true,
       allowAndStripUnknownKeys: false,
     })
 
