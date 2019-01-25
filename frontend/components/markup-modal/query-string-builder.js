@@ -24,7 +24,7 @@ const QueryParamCaption = styled(BuilderCaption)`
 `
 
 const supportedBadgeOptions = [
-  { name: 'style', defaultValue: 'flat' },
+  { name: 'style' },
   { name: 'label', label: 'override label' },
   { name: 'colorB', label: 'override color' },
   { name: 'logo', label: 'named logo' },
@@ -39,7 +39,7 @@ export default class QueryStringBuilder extends React.Component {
   constructor(props) {
     super(props)
 
-    const { exampleParams } = props
+    const { exampleParams, defaultStyle } = props
 
     const queryParams = {}
     Object.entries(exampleParams).forEach(([name, value]) => {
@@ -48,8 +48,9 @@ export default class QueryStringBuilder extends React.Component {
     })
 
     const badgeOptions = {}
-    supportedBadgeOptions.forEach(({ name, defaultValue = '' }) => {
-      badgeOptions[name] = defaultValue
+    const defaults = { style: defaultStyle }
+    supportedBadgeOptions.forEach(({ name }) => {
+      badgeOptions[name] = defaults[name] || ''
     })
 
     this.state = { queryParams, badgeOptions }
@@ -98,6 +99,11 @@ export default class QueryStringBuilder extends React.Component {
       })
       onChange({ queryString, isComplete })
     }
+  }
+
+  componentDidMount() {
+    const { queryParams, badgeOptions } = this.state
+    this.noteQueryStringChanged({ queryParams, badgeOptions })
   }
 
   handleServiceQueryParamChange = event => {
@@ -252,5 +258,9 @@ export default class QueryStringBuilder extends React.Component {
 }
 QueryStringBuilder.propTypes = {
   exampleParams: PropTypes.object.isRequired,
+  defaultStyle: PropTypes.string,
   onChange: PropTypes.func,
+}
+QueryStringBuilder.defaultProps = {
+  defaultStyle: 'flat',
 }

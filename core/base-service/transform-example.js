@@ -20,6 +20,7 @@ const optionalServiceData = Joi.object({
     )
     .required(),
   color: Joi.string(),
+  style: Joi.string(),
 })
 
 const schema = Joi.object({
@@ -143,13 +144,21 @@ function transformExample(inExample, index, ServiceClass) {
     const {
       text: [label, message],
       color,
+      template: style,
+      namedLogo,
     } = coalesceBadge(
       {},
       staticPreview,
       ServiceClass.defaultBadgeData,
       ServiceClass
     )
-    preview = { label, message: `${message}`, color }
+    preview = {
+      label,
+      message: `${message}`,
+      color,
+      style: style === 'flat' ? undefined : style,
+      namedLogo,
+    }
   } else {
     preview = {
       path: ServiceClass._makeFullUrl(previewUrl),
