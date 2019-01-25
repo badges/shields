@@ -68,15 +68,21 @@ There are three ways to specify `color` and `labelColor`:
 
 1. One of the [Shields named colors](./lib/color.js):
 
-- ![][brightgreen] ![][success]
+- ![][brightgreen]
 - ![][green]
 - ![][yellow]
 - ![][yellowgreen]
-- ![][orange] ![][important]
-- ![][red] ![][critical]
-- ![][blue] ![][informational]
+- ![][orange]
+- ![][red]
+- ![][blue]
 - ![][grey] ![][gray] – the default `labelColor`
-- ![][lightgrey] ![][lightgray] ![][inactive] – the default `color`
+- ![][lightgrey] ![][lightgray] – the default `color`
+
+- ![][success]
+- ![][important]
+- ![][critical]
+- ![][informational]
+- ![][inactive] – the default `color`
 
 2. A three- or six-character hex color, optionally prefixed with `#`:
 
