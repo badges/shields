@@ -63,21 +63,25 @@ EscapingConversion.propTypes = {
   rhs: PropTypes.element.isRequired,
 }
 
-export default class Usage extends React.PureComponent {
-  static propTypes = {
-    baseUrl: PropTypes.string.isRequired,
-  }
-
-  renderColorExamples(colors) {
-    const { baseUrl } = this.props
-
-    return colors.map((color, i) => (
+const ColorExamples = ({ baseUrl, colors }) => (
+  <span>
+    {colors.map((color, i) => (
       <Badge
         key={color}
         src={staticBadgeUrl(baseUrl, '', color, color)}
         alt={color}
       />
-    ))
+    ))}
+  </span>
+)
+ColorExamples.propTypes = {
+  baseUrl: PropTypes.string.isRequired,
+  colors: PropTypes.array.isRequired,
+}
+
+export default class Usage extends React.PureComponent {
+  static propTypes = {
+    baseUrl: PropTypes.string.isRequired,
   }
 
   renderStyleExamples() {
@@ -165,50 +169,69 @@ export default class Usage extends React.PureComponent {
     return (
       <section>
         <H2 id="your-badge">Your Badge</H2>
+
         <H3 id="static-badge">Static</H3>
         <StaticBadgeMaker baseUrl={baseUrl} />
+
         <VerticalSpace />
+
         <p>
           <Snippet
             snippet={`${baseUrl}/badge/<SUBJECT>-<STATUS>-<COLOR>.svg`}
           />
         </p>
         {this.constructor.renderStaticBadgeEscapingRules()}
+
         <H3 id="colors">Colors</H3>
         <p>
-          {this.renderColorExamples([
-            'brightgreen',
-            'green',
-            'yellowgreen',
-            'yellow',
-            'orange',
-            'red',
-            'blue',
-            'lightgrey',
-          ])}
+          <ColorExamples
+            baseUrl={baseUrl}
+            colors={[
+              'brightgreen',
+              'green',
+              'yellowgreen',
+              'yellow',
+              'orange',
+              'red',
+              'blue',
+              'lightgrey',
+            ]}
+          />
           <br />
-          {this.renderColorExamples([
-            'success',
-            'important',
-            'critical',
-            'informational',
-            'inactive',
-          ])}
+          <ColorExamples
+            baseUrl={baseUrl}
+            colors={[
+              'success',
+              'important',
+              'critical',
+              'informational',
+              'inactive',
+            ]}
+          />
           <br />
-          {this.renderColorExamples(['blueviolet', 'ff69b4', '9cf'])}
+          <ColorExamples
+            baseUrl={baseUrl}
+            colors={['blueviolet', 'ff69b4', '9cf']}
+          />
         </p>
+
         <H3 id="endpoint">Endpoint (Beta)</H3>
+
         <p>
           <Snippet
             snippet={`${baseUrl}/badge/endpoint.svg?url=<URL>&style<STYLE>`}
           />
         </p>
+
         <p>
           Create badges from{' '}
           <Link to={'/endpoint'}>your own JSON endpoint</Link>.
         </p>
+
         <H3 id="dynamic-badge">Dynamic</H3>
+
         <DynamicBadgeMaker baseUrl={baseUrl} />
+
         <p>
           <StyledCode>
             {baseUrl}
@@ -251,13 +274,17 @@ export default class Usage extends React.PureComponent {
             &gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
           </StyledCode>
         </p>
+
         <VerticalSpace />
+
         <H2 id="styles">Styles</H2>
+
         <p>
           The following styles are available. Flat is the default. Examples are
           shown with an optional logo:
         </p>
         {this.renderStyleExamples()}
+
         <p>
           Here are a few other parameters you can use: (connecting several with
           "&" is possible)
@@ -357,6 +384,7 @@ export default class Usage extends React.PureComponent {
             />
           </tbody>
         </QueryParamTable>
+
         <p>
           We support <code>.svg</code>, <code>.json</code>, <code>.png</code>{' '}
           and a few others, but use them responsibly.
