@@ -86,7 +86,7 @@ There are three ways to specify `color` and `labelColor`:
 
 2. A three- or six-character hex color, optionally prefixed with `#`:
 
-- ![][4c1]
+- ![][9cf]
 - ![][#007fff]
 - etc.
 
@@ -112,7 +112,7 @@ There are three ways to specify `color` and `labelColor`:
 [lightgrey]: https://img.shields.io/badge/lightgrey-lightgrey.svg
 [lightgray]: https://img.shields.io/badge/lightgray-lightgray.svg
 [inactive]: https://img.shields.io/badge/inactive-inactive.svg
-[4c1]: https://img.shields.io/badge/4c1-4c1.svg
+[9cf]: https://img.shields.io/badge/9cf-9cf.svg
 [#007fff]: https://img.shields.io/badge/%23007fff-007fff.svg
 [aqua]: https://img.shields.io/badge/aqua-aqua.svg
 [fuchsia]: https://img.shields.io/badge/fuchsia-fuchsia.svg

@@ -61,8 +61,8 @@ function staticBadgeUrl({
   style,
   format = 'svg',
 }) {
-  if (!label || !message) {
-    throw Error('label and message are required')
+  if (!message) {
+    throw Error('message is required')
   }
   const path = [label, message, color].map(encodeField).join('-')
   const outQueryString = queryString.stringify({
