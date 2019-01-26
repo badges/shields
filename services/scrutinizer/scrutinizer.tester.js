@@ -1,12 +1,14 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
-const { isBuildStatus, isIntegerPercentage } = require('../test-validators')
-const { colorScheme } = require('../test-helpers')
+const { isBuildStatus } = require('../../lib/build-status')
+const { ServiceTester } = require('..')
+const { isIntegerPercentage } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'scrutinizer', title: 'Scrutinizer' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'scrutinizer',
+  title: 'Scrutinizer',
+}))
 
 t.create('code quality')
   .get('/g/filp/whoops.json')
@@ -107,5 +109,5 @@ t.create('build - unknown')
   .expectJSON({
     name: 'build',
     value: 'unknown',
-    colorB: colorScheme.lightgrey,
+    color: 'lightgrey',
   })

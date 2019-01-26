@@ -1,8 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
-const { colorScheme } = require('../test-helpers')
+const { ServiceTester } = require('..')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
 const t = (module.exports = new ServiceTester({
@@ -73,5 +72,5 @@ t.create('version (mocked)')
   .expectJSON({
     name: 'ctan',
     value: 'v1.11',
-    colorB: colorScheme.blue,
+    color: 'blue',
   })

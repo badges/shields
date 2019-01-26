@@ -20,6 +20,7 @@ module.exports = class Coveralls extends LegacyService {
   static get route() {
     return {
       base: 'coveralls',
+      pattern: '',
     }
   }
 

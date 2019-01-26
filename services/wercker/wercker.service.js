@@ -1,13 +1,16 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
+const {
+  isBuildStatus,
+  renderBuildStatusBadge,
+} = require('../../lib/build-status')
+const { BaseJsonService } = require('..')
 
 const werckerSchema = Joi.array()
   .items(
     Joi.object({
-      status: Joi.string().required(),
-      result: Joi.string().required(),
+      result: isBuildStatus,
     })
   )
   .min(0)
@@ -40,15 +43,8 @@ module.exports = class Wercker extends BaseJsonService {
     })
   }
 
-  static render({ status, result }) {
-    if (status === 'finished') {
-      if (result === 'passed') {
-        return { message: 'passing', color: 'brightgreen' }
-      } else {
-        return { message: result, color: 'red' }
-      }
-    }
-    return { message: status }
+  static render({ result }) {
+    return renderBuildStatusBadge({ status: result })
   }
 
   async handle({ projectId, applicationName, branch }) {
@@ -61,12 +57,11 @@ module.exports = class Wercker extends BaseJsonService {
     })
     if (json.length === 0) {
       return this.constructor.render({
-        status: 'finished',
         result: 'no builds',
       })
     }
-    const { status, result } = json[0]
-    return this.constructor.render({ status, result })
+    const { result } = json[0]
+    return this.constructor.render({ result })
   }
 
   // Metadata
@@ -89,7 +84,7 @@ module.exports = class Wercker extends BaseJsonService {
         title: `Wercker CI Run`,
         pattern: 'ci/:applicationId',
         namedParams: { applicationId: '559e33c8e982fc615500b357' },
-        staticPreview: this.render({ status: 'finished', result: 'passed' }),
+        staticPreview: this.render({ result: 'passed' }),
       },
       {
         title: `Wercker CI Run`,
@@ -98,7 +93,7 @@ module.exports = class Wercker extends BaseJsonService {
           applicationId: '559e33c8e982fc615500b357',
           branch: 'master',
         },
-        staticPreview: this.render({ status: 'finished', result: 'passed' }),
+        staticPreview: this.render({ result: 'passed' }),
       },
       {
         title: `Wercker Build`,
@@ -107,7 +102,7 @@ module.exports = class Wercker extends BaseJsonService {
           userName: 'wercker',
           applicationName: 'go-wercker-api',
         },
-        staticPreview: this.render({ status: 'finished', result: 'passed' }),
+        staticPreview: this.render({ result: 'passed' }),
       },
       {
         title: `Wercker Build branch`,
@@ -117,7 +112,7 @@ module.exports = class Wercker extends BaseJsonService {
           applicationName: 'go-wercker-api',
           branch: 'master',
         },
-        staticPreview: this.render({ status: 'finished', result: 'passed' }),
+        staticPreview: this.render({ result: 'passed' }),
       },
     ]
   }

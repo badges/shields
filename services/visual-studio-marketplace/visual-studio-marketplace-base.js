@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
-const { NotFound } = require('../errors')
+const { BaseJsonService, NotFound } = require('..')
+const validate = require('../../core/base-service/validate')
 
 const extensionQuerySchema = Joi.object({
   results: Joi.array()
@@ -34,6 +34,14 @@ const extensionQuerySchema = Joi.object({
     )
     .required(),
 }).required()
+
+const statisticSchema = Joi.object().keys({
+  install: Joi.number().default(0),
+  updateCount: Joi.number().default(0),
+  onpremDownloads: Joi.number().default(0),
+  averagerating: Joi.number().default(0),
+  ratingcount: Joi.number().default(0),
+})
 
 module.exports = class VisualStudioMarketplaceBase extends BaseJsonService {
   static get keywords() {
@@ -96,16 +104,14 @@ module.exports = class VisualStudioMarketplaceBase extends BaseJsonService {
 
   transformStatistics({ json }) {
     const { extension } = this.transformExtension({ json })
-    return { statistics: extension.statistics }
-  }
+    const statistics = {}
 
-  getStatistic({ statistics, statisticName }) {
-    for (const statistic of statistics) {
-      if (statistic.statisticName === statisticName) {
-        return { value: statistic.value }
-      }
-    }
+    extension.statistics.forEach(({ statisticName, value }) => {
+      statistics[statisticName] = value
+    })
 
-    return { value: 0 }
+    const value = validate({ ErrorClass: Error }, statistics, statisticSchema)
+
+    return { statistics: value }
   }
 }

@@ -37,11 +37,19 @@ We'll start by adding some boilerplate to our file:
 
 const Joi = require('joi')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 ```
 
-1. Import [Joi][] We'll use this to make assertions. This is the same library we use to define schema for validation in the main badge class.
-2. If our `.service.js` module exports a single class, we can `require('../create-service-tester')` and use convention to create a `ServiceTester` object. Calling this inside `services/wercker/wercker.tester.js` will create a `ServiceTester` object configured for the service exported in `services/wercker/wercker.service.js`. We will add our tests to this `ServiceTester` object `t`, which is exported from the module.
+1. Import [Joi][] We'll use this to make assertions. This is the same library
+   we use to define schema for validation in the main badge class.
+
+2. If our `.service.js` module exports a single class, we can
+   `require('..').createServiceTester()`, which uses convention to create a
+   `ServiceTester` object. Calling this inside
+   `services/wercker/wercker.tester.js` will create a `ServiceTester` object
+   configured for the service exported in `services/wercker/wercker.service.js`.
+   We will add our tests to this `ServiceTester` object `t`, which is exported
+   from the module.
 
 ### (2) Our First Test Case
 
@@ -229,8 +237,6 @@ static render({ status, result }) {
 We can also use nock to intercept API calls to return a known response body.
 
 ```js
-const { colorScheme } = require('../test-helpers')
-
 t.create('Build passed (mocked)')
   .get('/build/wercker/go-wercker-api.json?style=_shields_test')
   .intercept(nock =>
@@ -241,7 +247,7 @@ t.create('Build passed (mocked)')
   .expectJSON({
     name: 'build',
     value: 'passing',
-    colorB: colorScheme.brightgreen,
+    color: 'brightgreen',
   })
 
 t.create('Build failed (mocked)')
@@ -291,7 +297,7 @@ For example:
 - Add tests for [CRAN] and [CPAN]
 
 In the rare case when it's necessary to see the output of a full service-test
-run in a PR, include `[*]` in the title. Unless all the tests pass, the build
+run in a PR, include `[*****]` in the title. Unless all the tests pass, the build
 will fail, so likely it will be necessary to remove it and re-run the tests
 before merging.
 

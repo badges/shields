@@ -1,6 +1,6 @@
 'use strict'
 
-const BaseJsonService = require('../base-json')
+const { BaseJsonService } = require('..')
 const Joi = require('joi')
 
 const statusSchema = Joi.object({

@@ -1,7 +1,8 @@
 'use strict'
 
-const BaseSvgService = require('../base-svg-scraping')
-const { keywords, fetch, render } = require('./azure-devops-helpers')
+const { renderBuildStatusBadge } = require('../../lib/build-status')
+const { BaseSvgScrapingService } = require('..')
+const { keywords, fetch } = require('./azure-devops-helpers')
 
 const documentation = `
 <p>
@@ -21,7 +22,7 @@ const documentation = `
 </p>
 `
 
-module.exports = class AzureDevOpsRelease extends BaseSvgService {
+module.exports = class AzureDevOpsRelease extends BaseSvgScrapingService {
   static get category() {
     return 'build'
   }
@@ -46,7 +47,7 @@ module.exports = class AzureDevOpsRelease extends BaseSvgService {
           definitionId: '1',
           environmentId: '1',
         },
-        staticPreview: render({ status: 'succeeded' }),
+        staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
         keywords,
         documentation,
       },
@@ -69,6 +70,6 @@ module.exports = class AzureDevOpsRelease extends BaseSvgService {
         500: 'inaccessible or definition not found',
       },
     })
-    return render(props)
+    return renderBuildStatusBadge(props)
   }
 }

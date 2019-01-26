@@ -1,11 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const { colorScheme: colorsB } = require('../test-helpers')
 const { dockerBlue } = require('./docker-helpers')
 const isAutomatedBuildStatus = Joi.string().valid('automated', 'manual')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('docker automated build (valid, library)')
   .get('/_/ubuntu.json')
@@ -39,7 +38,7 @@ t.create('docker automated build - automated')
   .expectJSON({
     name: 'docker build',
     value: 'automated',
-    colorB: `#${dockerBlue}`,
+    color: `#${dockerBlue}`,
   })
 
 t.create('docker automated build - manual')
@@ -49,7 +48,7 @@ t.create('docker automated build - manual')
       .get('/v2/repositories/library/ubuntu')
       .reply(200, { is_automated: false })
   )
-  .expectJSON({ name: 'docker build', value: 'manual', colorB: colorsB.yellow })
+  .expectJSON({ name: 'docker build', value: 'manual', color: 'yellow' })
 
 t.create('docker automated build - colorB override in manual')
   .get('/_/ubuntu.json?colorB=fedcba&style=_shields_test')
@@ -62,7 +61,7 @@ t.create('docker automated build - colorB override in manual')
     Joi.object().keys({
       name: 'docker build',
       value: isAutomatedBuildStatus,
-      colorB: '#fedcba',
+      color: '#fedcba',
     })
   )
 
@@ -77,6 +76,6 @@ t.create('docker automated build - colorB override in automated')
     Joi.object().keys({
       name: 'docker build',
       value: isAutomatedBuildStatus,
-      colorB: '#fedcba',
+      color: '#fedcba',
     })
   )

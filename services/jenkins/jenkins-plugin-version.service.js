@@ -12,7 +12,7 @@ const { version: versionColor } = require('../../lib/color-formatters')
 // https://github.com/badges/shields/blob/master/doc/rewriting-services.md
 //
 // Do not base new services on this code.
-module.exports = class JenkinsPlugin extends LegacyService {
+module.exports = class JenkinsPluginVersion extends LegacyService {
   static get category() {
     return 'version'
   }
@@ -20,6 +20,7 @@ module.exports = class JenkinsPlugin extends LegacyService {
   static get route() {
     return {
       base: 'jenkins/plugin/v',
+      pattern: ':plugin',
     }
   }
 
@@ -27,7 +28,14 @@ module.exports = class JenkinsPlugin extends LegacyService {
     return [
       {
         title: 'Jenkins Plugins',
-        previewUrl: 'blueocean',
+        namedParams: {
+          plugin: 'blueocean',
+        },
+        staticPreview: {
+          label: 'plugin',
+          message: 'v1.10.1',
+          color: 'blue',
+        },
       },
     ]
   }

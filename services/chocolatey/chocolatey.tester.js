@@ -1,19 +1,17 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
 const {
   isMetric,
   isVPlusDottedVersionNClauses,
   isVPlusDottedVersionNClausesWithOptionalSuffix,
 } = require('../test-validators')
-const { colorScheme } = require('../test-helpers')
 const {
   nuGetV2VersionJsonWithDash,
   nuGetV2VersionJsonFirstCharZero,
   nuGetV2VersionJsonFirstCharNotZero,
 } = require('../nuget-fixtures')
-const { invalidJSON } = require('../response-fixtures')
+const { ServiceTester } = require('..')
 
 const t = (module.exports = new ServiceTester({
   id: 'chocolatey',
@@ -34,22 +32,6 @@ t.create('total downloads (valid)')
 t.create('total downloads (not found)')
   .get('/dt/not-a-real-package.json')
   .expectJSON({ name: 'downloads', value: 'not found' })
-
-t.create('total downloads (connection error)')
-  .get('/dt/scriptcs.json')
-  .networkOff()
-  .expectJSON({ name: 'downloads', value: 'inaccessible' })
-
-t.create('total downloads (unexpected response)')
-  .get('/dt/scriptcs.json')
-  .intercept(nock =>
-    nock('https://www.chocolatey.org')
-      .get(
-        '/api/v2/Packages()?%24filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true'
-      )
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'downloads', value: 'unparseable json response' })
 
 // version
 
@@ -74,7 +56,7 @@ t.create('version (mocked, yellow badge)')
   .expectJSON({
     name: 'chocolatey',
     value: 'v1.2-beta',
-    colorB: colorScheme.yellow,
+    color: 'yellow',
   })
 
 t.create('version (mocked, orange badge)')
@@ -89,7 +71,7 @@ t.create('version (mocked, orange badge)')
   .expectJSON({
     name: 'chocolatey',
     value: 'v0.35',
-    colorB: colorScheme.orange,
+    color: 'orange',
   })
 
 t.create('version (mocked, blue badge)')
@@ -104,28 +86,12 @@ t.create('version (mocked, blue badge)')
   .expectJSON({
     name: 'chocolatey',
     value: 'v1.2.7',
-    colorB: colorScheme.blue,
+    color: 'blue',
   })
 
 t.create('version (not found)')
   .get('/v/not-a-real-package.json')
   .expectJSON({ name: 'chocolatey', value: 'not found' })
-
-t.create('version (connection error)')
-  .get('/v/scriptcs.json')
-  .networkOff()
-  .expectJSON({ name: 'chocolatey', value: 'inaccessible' })
-
-t.create('version (unexpected response)')
-  .get('/v/scriptcs.json')
-  .intercept(nock =>
-    nock('https://www.chocolatey.org')
-      .get(
-        '/api/v2/Packages()?%24filter=Id%20eq%20%27scriptcs%27%20and%20IsLatestVersion%20eq%20true'
-      )
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'chocolatey', value: 'unparseable json response' })
 
 // version (pre)
 
@@ -150,7 +116,7 @@ t.create('version (pre) (mocked, yellow badge)')
   .expectJSON({
     name: 'chocolatey',
     value: 'v1.2-beta',
-    colorB: colorScheme.yellow,
+    color: 'yellow',
   })
 
 t.create('version (pre) (mocked, orange badge)')
@@ -165,7 +131,7 @@ t.create('version (pre) (mocked, orange badge)')
   .expectJSON({
     name: 'chocolatey',
     value: 'v0.35',
-    colorB: colorScheme.orange,
+    color: 'orange',
   })
 
 t.create('version (pre) (mocked, blue badge)')
@@ -180,25 +146,9 @@ t.create('version (pre) (mocked, blue badge)')
   .expectJSON({
     name: 'chocolatey',
     value: 'v1.2.7',
-    colorB: colorScheme.blue,
+    color: 'blue',
   })
 
 t.create('version (pre) (not found)')
   .get('/vpre/not-a-real-package.json')
   .expectJSON({ name: 'chocolatey', value: 'not found' })
-
-t.create('version (pre) (connection error)')
-  .get('/vpre/scriptcs.json')
-  .networkOff()
-  .expectJSON({ name: 'chocolatey', value: 'inaccessible' })
-
-t.create('version (pre) (unexpected response)')
-  .get('/vpre/scriptcs.json')
-  .intercept(nock =>
-    nock('https://www.chocolatey.org')
-      .get(
-        '/api/v2/Packages()?%24filter=Id%20eq%20%27scriptcs%27%20and%20IsAbsoluteLatestVersion%20eq%20true'
-      )
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'chocolatey', value: 'unparseable json response' })

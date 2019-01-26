@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
+const { BaseJsonService } = require('..')
 const serverSecrets = require('../../lib/server-secrets')
 
 const {

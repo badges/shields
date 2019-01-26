@@ -1,11 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-
-const BaseJsonService = require('../base-json')
-const { floorCount: floorCountColor } = require('../../lib/color-formatters')
+const { floorCount } = require('../../lib/color-formatters')
 const { ordinalNumber } = require('../../lib/text-formatters')
-const { InvalidResponse } = require('../errors')
+const { BaseJsonService, InvalidResponse } = require('..')
 
 const keywords = ['ruby']
 
@@ -55,7 +53,7 @@ module.exports = class GemRank extends BaseJsonService {
     message += period === 'rt' ? '' : ' daily'
     return {
       message,
-      color: floorCountColor(count, 10, 50, 100),
+      color: floorCount(count, 10, 50, 100),
     }
   }
 

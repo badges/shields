@@ -1,9 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const { InvalidResponse } = require('../errors')
-const TeamCityBase = require('./teamcity-base')
 const { coveragePercentage } = require('../../lib/color-formatters')
+const { InvalidResponse } = require('..')
+const TeamCityBase = require('./teamcity-base')
 
 const buildStatisticsSchema = Joi.object({
   property: Joi.array()

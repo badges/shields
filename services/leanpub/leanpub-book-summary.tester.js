@@ -4,7 +4,7 @@ const Joi = require('joi')
 
 const knownValidBook = 'juice-shop'
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('known book pages')
   .get(`/pages/${knownValidBook}.json`)

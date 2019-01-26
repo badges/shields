@@ -29,7 +29,6 @@ export default class MarkupModalContent extends React.Component {
   state = {
     path: '',
     link: '',
-    markupFormat: 'link',
     message: undefined,
   }
 
@@ -137,7 +136,7 @@ export default class MarkupModalContent extends React.Component {
     } = this.props
 
     return documentation ? (
-      <Documentation dangerouslySetInnerHTML={{ __html: documentation }} />
+      <Documentation dangerouslySetInnerHTML={documentation} />
     ) : null
   }
 
@@ -146,7 +145,7 @@ export default class MarkupModalContent extends React.Component {
   }
 
   handleQueryStringChange = ({ queryString, isComplete }) => {
-    this.setState({ queryString, queryStringIsComplete: isComplete })
+    this.setState({ queryString })
   }
 
   render() {

@@ -1,8 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-
-const { colorScheme } = require('../test-helpers')
 const { withRegex } = require('../test-validators')
 const {
   mockTeamCityCreds,
@@ -10,10 +8,11 @@ const {
   user,
   restore,
 } = require('./teamcity-test-helpers')
-const t = (module.exports = require('../create-service-tester')())
 
 const buildStatusValues = Joi.equal('passing', 'failure', 'error').required()
 const buildStatusTextRegex = /^success|failure|error|tests( failed: \d+( \(\d+ new\))?)?(,)?( passed: \d+)?(,)?( ignored: \d+)?(,)?( muted: \d+)?$/
+
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('live: codebetter unknown build')
   .get('/codebetter/btabc.json')
@@ -60,7 +59,7 @@ t.create('codebetter success build')
   .expectJSON({
     name: 'build',
     value: 'passing',
-    colorB: colorScheme.brightgreen,
+    color: 'brightgreen',
   })
 
 t.create('codebetter failure build')
@@ -77,7 +76,7 @@ t.create('codebetter failure build')
   .expectJSON({
     name: 'build',
     value: 'failure',
-    colorB: colorScheme.red,
+    color: 'red',
   })
 
 t.create('simple build status with passed build')
@@ -94,7 +93,7 @@ t.create('simple build status with passed build')
   .expectJSON({
     name: 'build',
     value: 'passing',
-    colorB: colorScheme.brightgreen,
+    color: 'brightgreen',
   })
 
 t.create('simple build status with failed build')
@@ -111,7 +110,7 @@ t.create('simple build status with failed build')
   .expectJSON({
     name: 'build',
     value: 'failure',
-    colorB: colorScheme.red,
+    color: 'red',
   })
 
 t.create('full build status with passed build')
@@ -128,7 +127,7 @@ t.create('full build status with passed build')
   .expectJSON({
     name: 'build',
     value: 'passing',
-    colorB: colorScheme.brightgreen,
+    color: 'brightgreen',
   })
 
 t.create('full build status with failed build')
@@ -147,7 +146,7 @@ t.create('full build status with failed build')
   .expectJSON({
     name: 'build',
     value: 'tests failed: 10 (2 new), passed: 99',
-    colorB: colorScheme.red,
+    color: 'red',
   })
 
 t.create('with auth')
@@ -173,5 +172,5 @@ t.create('with auth')
   .expectJSON({
     name: 'build',
     value: 'tests failed: 1 (1 new), passed: 50246, ignored: 1, muted: 12',
-    colorB: colorScheme.red,
+    color: 'red',
   })

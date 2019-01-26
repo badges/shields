@@ -1,12 +1,11 @@
 'use strict'
 
 const Joi = require('joi')
-const { colorScheme } = require('../test-helpers')
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
 } = require('../test-validators')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('version')
   .get('/asciidoctor/maven/asciidoctorj.json')
@@ -38,5 +37,5 @@ t.create('version (mocked)')
   .expectJSON({
     name: 'bintray',
     value: 'v1.5.7',
-    colorB: colorScheme.blue,
+    color: 'blue',
   })

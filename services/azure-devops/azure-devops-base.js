@@ -1,8 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const BaseJsonService = require('../base-json')
-const { NotFound } = require('../errors')
+const { BaseJsonService, NotFound } = require('..')
 
 const latestBuildSchema = Joi.object({
   count: Joi.number().required(),
@@ -46,7 +45,7 @@ module.exports = class AzureDevOpsBase extends BaseJsonService {
     }
 
     if (branch) {
-      options.qs.branch = branch
+      options.qs.branchName = `refs/heads/${branch}`
     }
 
     const json = await this.fetch({

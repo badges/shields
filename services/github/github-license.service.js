@@ -1,11 +1,8 @@
 'use strict'
 
 const LegacyService = require('../legacy-service')
-const {
-  makeBadgeData: getBadgeData,
-  makeLogo: getLogo,
-  setBadgeColor,
-} = require('../../lib/badge-data')
+const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const { makeLogo: getLogo } = require('../../lib/logos')
 const { licenseToColor } = require('../../lib/licenses')
 const {
   documentation,
@@ -76,7 +73,7 @@ module.exports = class GithubLicense extends LegacyService {
               } else {
                 badgeData.text[1] = license.spdx_id
               }
-              setBadgeColor(badgeData, licenseToColor(license.spdx_id))
+              badgeData.colorB = licenseToColor(license.spdx_id)
               sendBadge(format, badgeData)
             } else {
               badgeData.text[1] = 'missing'

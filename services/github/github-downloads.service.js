@@ -1,10 +1,8 @@
 'use strict'
 
 const LegacyService = require('../legacy-service')
-const {
-  makeBadgeData: getBadgeData,
-  makeLogo: getLogo,
-} = require('../../lib/badge-data')
+const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const { makeLogo: getLogo } = require('../../lib/logos')
 const { metric } = require('../../lib/text-formatters')
 const {
   documentation,
@@ -25,6 +23,7 @@ module.exports = class GithubDownloads extends LegacyService {
   static get route() {
     return {
       base: 'github',
+      pattern: '',
     }
   }
 
@@ -91,7 +90,7 @@ module.exports = class GithubDownloads extends LegacyService {
       },
       {
         title: 'GitHub Releases (by Asset)',
-        pattern: 'downloads/:user/:repo/:tag/:path*',
+        pattern: 'downloads/:user/:repo/:tag/:path',
         namedParams: {
           user: 'atom',
           repo: 'atom',
@@ -107,7 +106,7 @@ module.exports = class GithubDownloads extends LegacyService {
       },
       {
         title: 'GitHub Pre-Releases (by Asset)',
-        pattern: 'downloads-pre/:user/:repo/:tag/:path*',
+        pattern: 'downloads-pre/:user/:repo/:tag/:path',
         namedParams: {
           user: 'atom',
           repo: 'atom',

@@ -1,9 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const { isBuildStatus } = require('../test-validators')
+const { isBuildStatus } = require('../../lib/build-status')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('CI status')
   .get('/gruntjs/grunt.json')
@@ -24,4 +24,4 @@ t.create('CI status on project that does exist but has no builds yet')
       .get('/gruntjs/grunt')
       .reply(200, {})
   )
-  .expectJSON({ name: 'build', value: 'no builds found', colorB: '#9f9f9f' })
+  .expectJSON({ name: 'build', value: 'no builds found', color: 'lightgrey' })

@@ -1,9 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const t = require('../create-service-tester')()
 const { withRegex } = require('../test-validators')
-module.exports = t
+
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('live: level known project')
   .get(`/level/1.json`)

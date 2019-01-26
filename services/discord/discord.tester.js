@@ -1,12 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
 
-const t = (module.exports = new ServiceTester({
-  id: 'discord',
-  title: 'Discord',
-}))
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('gets status for Reactiflux')
   .get('/102860784329052160.json?style=_shields_test')
@@ -14,7 +10,7 @@ t.create('gets status for Reactiflux')
     Joi.object().keys({
       name: 'chat',
       value: Joi.string().regex(/^[0-9]+ online$/),
-      colorB: '#4c1',
+      color: 'brightgreen',
     })
   )
 
@@ -41,9 +37,4 @@ t.create('server error')
       .get('/api/guilds/12345/widget.json')
       .reply(500, 'Something broke')
   )
-  .expectJSON({ name: 'chat', value: 'inaccessible' })
-
-t.create('connection error')
-  .get('/102860784329052160.json')
-  .networkOff()
   .expectJSON({ name: 'chat', value: 'inaccessible' })

@@ -4,7 +4,7 @@ const Joi = require('joi')
 const { isPercentage } = require('../test-validators')
 const { invalidJSON } = require('../response-fixtures')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('Uptime Robot: Percentage (valid)')
   .get('/m778918918-3e92c097147760ee39d02d36.json')

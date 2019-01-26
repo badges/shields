@@ -2,9 +2,9 @@
 
 const queryString = require('query-string')
 const request = require('request')
-const log = require('../../../lib/log')
+const log = require('../../../core/server/log')
+const secretIsValid = require('../../../core/server/secret-is-valid')
 const serverSecrets = require('../../../lib/server-secrets')
-const secretIsValid = require('../../../lib/sys/secret-is-valid')
 
 function sendTokenToAllServers(token) {
   const {

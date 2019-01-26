@@ -1,121 +1,123 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const Joi = require('joi')
 const { metric } = require('../../lib/text-formatters')
-const {
-  downloadCount: downloadCountColor,
-} = require('../../lib/color-formatters')
+const { downloadCount } = require('../../lib/color-formatters')
+const { BaseJsonService } = require('..')
+const { nonNegativeInteger } = require('../validators')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class PackageControl extends LegacyService {
-  static get category() {
-    return 'downloads'
-  }
+const keywords = ['sublime', 'sublimetext', 'packagecontrol']
 
-  static get route() {
-    return {
-      base: 'packagecontrol',
-    }
-  }
+const schema = Joi.object({
+  installs: Joi.object({
+    total: nonNegativeInteger,
+    daily: Joi.object({
+      data: Joi.array()
+        .items(
+          Joi.object({
+            totals: Joi.array()
+              .items(nonNegativeInteger)
+              .required(),
+          }).required()
+        )
+        .required(),
+    }).required(),
+  }).required(),
+})
 
-  static get examples() {
-    return [
-      {
-        title: 'Package Control',
-        previewUrl: 'dm/GitGutter',
-        keywords: ['sublime'],
+function DownloadsForInterval(interval) {
+  const { base, messageSuffix, transform } = {
+    day: {
+      base: 'packagecontrol/dd',
+      messageSuffix: '/day',
+      transform: resp => {
+        const platforms = resp.installs.daily.data
+        let downloads = 0
+        platforms.forEach(platform => {
+          // use the downloads from yesterday
+          downloads += platform.totals[1]
+        })
+        return downloads
       },
-      {
-        title: 'Package Control',
-        previewUrl: 'dw/GitGutter',
-        keywords: ['sublime'],
-      },
-      {
-        title: 'Package Control',
-        previewUrl: 'dd/GitGutter',
-        keywords: ['sublime'],
-      },
-      {
-        title: 'Package Control',
-        previewUrl: 'dt/GitGutter',
-        keywords: ['sublime'],
-      },
-    ]
-  }
-
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/packagecontrol\/(dm|dw|dd|dt)\/(.*)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const info = match[1] // either `dm`, `dw`, `dd` or dt`.
-        const userRepo = match[2] // eg, `Package%20Control`.
-        const format = match[3]
-        const apiUrl = `https://packagecontrol.io/packages/${userRepo}.json`
-        const badgeData = getBadgeData('downloads', data)
-        request(apiUrl, (err, res, buffer) => {
-          if (err != null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const data = JSON.parse(buffer)
-            let downloads = 0
-            let platforms
-            switch (info.charAt(1)) {
-              case 'm':
-                // daily downloads are separated by Operating System
-                platforms = data.installs.daily.data
-                platforms.forEach(platform => {
-                  // loop through the first 30 days or 1 month
-                  for (let i = 0; i < 30; i++) {
-                    // add the downloads for that day for that platform
-                    downloads += platform.totals[i]
-                  }
-                })
-                badgeData.text[1] = `${metric(downloads)}/month`
-                break
-              case 'w':
-                // daily downloads are separated by Operating System
-                platforms = data.installs.daily.data
-                platforms.forEach(platform => {
-                  // loop through the first 7 days or 1 week
-                  for (let i = 0; i < 7; i++) {
-                    // add the downloads for that day for that platform
-                    downloads += platform.totals[i]
-                  }
-                })
-                badgeData.text[1] = `${metric(downloads)}/week`
-                break
-              case 'd':
-                // daily downloads are separated by Operating System
-                platforms = data.installs.daily.data
-                platforms.forEach(platform => {
-                  // use the downloads from yesterday
-                  downloads += platform.totals[1]
-                })
-                badgeData.text[1] = `${metric(downloads)}/day`
-                break
-              case 't':
-                // all-time downloads are already compiled
-                downloads = data.installs.total
-                badgeData.text[1] = metric(downloads)
-                break
-            }
-            badgeData.colorscheme = downloadCountColor(downloads)
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
+    },
+    week: {
+      base: 'packagecontrol/dw',
+      messageSuffix: '/week',
+      transform: resp => {
+        const platforms = resp.installs.daily.data
+        let downloads = 0
+        platforms.forEach(platform => {
+          // total for the first 7 days
+          for (let i = 0; i < 7; i++) {
+            downloads += platform.totals[i]
           }
         })
-      })
-    )
+        return downloads
+      },
+    },
+    month: {
+      base: 'packagecontrol/dm',
+      messageSuffix: '/month',
+      transform: resp => {
+        const platforms = resp.installs.daily.data
+        let downloads = 0
+        platforms.forEach(platform => {
+          // total for the first 30 days
+          for (let i = 0; i < 30; i++) {
+            downloads += platform.totals[i]
+          }
+        })
+        return downloads
+      },
+    },
+    total: {
+      base: 'packagecontrol/dt',
+      messageSuffix: '',
+      transform: resp => resp.installs.total,
+    },
+  }[interval]
+
+  return class PackageControlDownloads extends BaseJsonService {
+    static render({ downloads }) {
+      return {
+        message: `${metric(downloads)}${messageSuffix}`,
+        color: downloadCount(downloads),
+      }
+    }
+
+    async fetch({ packageName }) {
+      const url = `https://packagecontrol.io/packages/${packageName}.json`
+      return this._requestJson({ schema, url })
+    }
+
+    async handle({ packageName }) {
+      const data = await this.fetch({ packageName })
+      return this.constructor.render({ downloads: transform(data) })
+    }
+
+    static get defaultBadgeData() {
+      return { label: 'downloads' }
+    }
+
+    static get category() {
+      return 'downloads'
+    }
+
+    static get route() {
+      return { base, pattern: ':packageName' }
+    }
+
+    static get examples() {
+      return [
+        {
+          title: 'Package Control',
+          namedParams: { packageName: 'GitGutter' },
+          staticPreview: this.render({ downloads: 12000 }),
+          keywords,
+        },
+      ]
+    }
   }
 }
+
+module.exports = ['day', 'week', 'month', 'total'].map(DownloadsForInterval)

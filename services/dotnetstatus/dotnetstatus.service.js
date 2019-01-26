@@ -1,6 +1,6 @@
 'use strict'
 
-const deprecatedService = require('../deprecated-service')
+const { deprecatedService } = require('..')
 
 // dotnet-status integration - deprecated as of April 2018.
 module.exports = deprecatedService({

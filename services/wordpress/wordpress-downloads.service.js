@@ -1,11 +1,10 @@
 'use strict'
 
-const BaseJsonService = require('../base-json')
-const BaseWordpress = require('./wordpress-base')
+const Joi = require('joi')
 const { metric } = require('../../lib/text-formatters')
 const { downloadCount } = require('../../lib/color-formatters')
-const { NotFound } = require('../errors')
-const Joi = require('joi')
+const { BaseJsonService, NotFound } = require('..')
+const BaseWordpress = require('./wordpress-base')
 
 const dateSchema = Joi.object()
   .pattern(Joi.date().iso(), Joi.number().integer())

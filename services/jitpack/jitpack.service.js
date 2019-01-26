@@ -19,6 +19,7 @@ module.exports = class Jitpack extends LegacyService {
   static get route() {
     return {
       base: 'jitpack/v',
+      pattern: ':groupId/:artifactId',
     }
   }
 
@@ -26,8 +27,16 @@ module.exports = class Jitpack extends LegacyService {
     return [
       {
         title: 'JitPack',
-        previewUrl: 'jitpack/maven-simple',
-        keywords: ['jitpack', 'java', 'maven'],
+        namedParams: {
+          groupId: 'jitpack',
+          artifactId: 'maven-simple',
+        },
+        staticPreview: {
+          label: 'jitpack',
+          message: 'v1.1',
+          color: 'blue',
+        },
+        keywords: ['java', 'maven'],
       },
     ]
   }

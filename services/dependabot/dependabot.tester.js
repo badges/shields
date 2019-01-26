@@ -1,17 +1,12 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
 const { isIntegerPercentage } = require('../test-validators')
-const { colorScheme: colorsB } = require('../test-helpers')
 
-const t = (module.exports = new ServiceTester({
-  id: 'dependabot',
-  title: 'Dependabot',
-}))
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('semver stability (valid)')
-  .get('/semver/bundler/puma.json')
+  .get('/bundler/puma.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'semver stability',
@@ -22,15 +17,15 @@ t.create('semver stability (valid)')
   )
 
 t.create('semver stability (invalid error)')
-  .get('/semver/invalid-manager/puma.json?style=_shields_test')
+  .get('/invalid-manager/puma.json?style=_shields_test')
   .expectJSON({
     name: 'semver stability',
     value: 'invalid',
-    colorB: colorsB.lightgrey,
+    color: 'lightgray',
   })
 
 t.create('semver stability (missing dependency)')
-  .get('/semver/bundler/some-random-missing-dependency.json')
+  .get('/bundler/some-random-missing-dependency.json')
   .expectJSON({
     name: 'semver stability',
     value: 'unknown',

@@ -1,11 +1,13 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 const { isStarRating } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'redmine', title: 'Redmine' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'redmine',
+  title: 'Redmine',
+}))
 
 t.create('plugin rating')
   .get('/plugin/rating/redmine_xlsx_format_issue_exporter.json')

@@ -4,6 +4,15 @@ const VisualStudioMarketplaceBase = require('./visual-studio-marketplace-base')
 const { metric } = require('../../lib/text-formatters')
 const { downloadCount } = require('../../lib/color-formatters')
 
+const documentation = `
+<p>
+  This is for Visual Studio and Visual Studio Code Extensions.
+</p>
+<p>
+  For correct results on Azure DevOps Extensions, use the Azure DevOps Installs badge instead.
+</p>
+`
+
 module.exports = class VisualStudioMarketplaceDownloads extends VisualStudioMarketplaceBase {
   static get category() {
     return 'downloads'
@@ -35,6 +44,7 @@ module.exports = class VisualStudioMarketplaceDownloads extends VisualStudioMark
         namedParams: { extensionId: 'ritwickdey.LiveServer' },
         staticPreview: this.render({ measure: 'i', count: 843 }),
         keywords: this.keywords,
+        documentation,
       },
       {
         title: 'Visual Studio Marketplace Downloads',
@@ -42,6 +52,7 @@ module.exports = class VisualStudioMarketplaceDownloads extends VisualStudioMark
         namedParams: { extensionId: 'ritwickdey.LiveServer' },
         staticPreview: this.render({ measure: 'd', count: 1239 }),
         keywords: this.keywords,
+        documentation,
       },
     ]
   }
@@ -49,20 +60,10 @@ module.exports = class VisualStudioMarketplaceDownloads extends VisualStudioMark
   async handle({ measure, extensionId }) {
     const json = await this.fetch({ extensionId })
     const { statistics } = this.transformStatistics({ json })
-    const { value: installs } = this.getStatistic({
-      statistics,
-      statisticName: 'install',
-    })
-
-    if (measure === 'i') {
-      return this.constructor.render({ measure, count: installs })
-    }
-
-    const { value: updates } = this.getStatistic({
-      statistics,
-      statisticName: 'updateCount',
-    })
-    const downloads = +installs + +updates
-    return this.constructor.render({ measure, count: downloads })
+    const count =
+      measure === 'i'
+        ? statistics.install
+        : statistics.install + statistics.updateCount
+    return this.constructor.render({ measure, count })
   }
 }

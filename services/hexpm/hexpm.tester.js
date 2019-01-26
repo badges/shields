@@ -1,9 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 const { isMetric, isMetricOverTimePeriod } = require('../test-validators')
-const { colorScheme } = require('../test-helpers')
 
 const isHexpmVersion = Joi.string().regex(/^v\d+.\d+.?\d?$/)
 
@@ -56,7 +55,7 @@ t.create('license')
     Joi.object().keys({
       name: 'license',
       value: Joi.string().required(),
-      colorB: colorScheme.blue,
+      color: 'blue',
     })
   )
 
@@ -74,7 +73,7 @@ t.create('license (multiple licenses)')
   .expectJSON({
     name: 'licenses',
     value: 'GPLv2, MIT',
-    colorB: colorScheme.blue,
+    color: 'blue',
   })
 
 t.create('license (no license)')
@@ -91,7 +90,7 @@ t.create('license (no license)')
   .expectJSON({
     name: 'license',
     value: 'Unknown',
-    colorB: colorScheme.lightgrey,
+    color: 'lightgrey',
   })
 
 t.create('license (not found)')

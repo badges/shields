@@ -21,6 +21,7 @@ module.exports = class PackagistDownloads extends LegacyService {
   static get route() {
     return {
       base: 'packagist',
+      pattern: ':interval(dm|dd|dt)/:user/:repo',
     }
   }
 

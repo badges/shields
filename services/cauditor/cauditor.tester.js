@@ -1,6 +1,6 @@
 'use strict'
 
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 
 const t = (module.exports = new ServiceTester({
   id: 'cauditor',
@@ -8,9 +8,8 @@ const t = (module.exports = new ServiceTester({
 }))
 
 t.create('no longer available')
-  .get('/mi/matthiasmullie/scrapbook/master.json?style=_shields_test')
+  .get('/mi/matthiasmullie/scrapbook/master.json')
   .expectJSON({
     name: 'cauditor',
     value: 'no longer available',
-    colorB: '#9f9f9f',
   })

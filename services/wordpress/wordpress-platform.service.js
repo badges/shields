@@ -1,11 +1,11 @@
 'use strict'
 
-const BaseWordpress = require('./wordpress-base')
 const semver = require('semver')
 const Joi = require('joi')
 const { addv } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
-const { NotFound } = require('../errors')
+const { NotFound } = require('..')
+const BaseWordpress = require('./wordpress-base')
 
 const coreSchema = Joi.object()
   .keys({
@@ -122,7 +122,6 @@ class WordpressPluginTestedVersion extends BaseWordpressPlatform {
     return [
       {
         title: 'Wordpress Plugin: Tested WP Version',
-        pattern: ':slug',
         namedParams: { slug: 'bbpress' },
         staticPreview: this.render({ version: '4.9.8', color: 'brightgreen' }),
         documentation: `<p>There is an alias for this badge. <code>wordpress/v/:slug.svg</code></p>`,

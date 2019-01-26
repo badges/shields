@@ -20,6 +20,7 @@ class PuppetforgeModuleVersion extends LegacyService {
   static get route() {
     return {
       base: 'puppetforge/v',
+      pattern: ':user/:moduleName',
     }
   }
 
@@ -43,6 +44,7 @@ class PuppetforgeModulePdkVersion extends LegacyService {
   static get route() {
     return {
       base: 'puppetforge/pdk-version',
+      pattern: ':user/:moduleName',
     }
   }
 
@@ -50,7 +52,6 @@ class PuppetforgeModulePdkVersion extends LegacyService {
     return [
       {
         title: 'Puppet Forge – PDK version',
-        pattern: ':user/:moduleName',
         namedParams: {
           user: 'tragiccode',
           moduleName: 'azure_key_vault',
@@ -75,6 +76,7 @@ class PuppetforgeModuleDownloads extends LegacyService {
   static get route() {
     return {
       base: 'puppetforge/dt',
+      pattern: ':user/:moduleName',
     }
   }
 
@@ -98,6 +100,7 @@ class PuppetforgeModuleEndorsement extends LegacyService {
   static get route() {
     return {
       base: 'puppetforge/e',
+      pattern: ':user/:moduleName',
     }
   }
 
@@ -121,6 +124,7 @@ class PuppetforgeModuleFeedback extends LegacyService {
   static get route() {
     return {
       base: 'puppetforge/f',
+      pattern: ':user/:moduleName',
     }
   }
 
@@ -143,6 +147,10 @@ class PuppetforgeModuleFeedback extends LegacyService {
 //
 // Do not base new services on this code.
 class PuppetforgeModules extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/puppetforge\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,

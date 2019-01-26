@@ -16,6 +16,7 @@ class PuppetforgeUserReleases extends LegacyService {
   static get route() {
     return {
       base: 'puppetforge/rc',
+      pattern: ':user',
     }
   }
 
@@ -39,6 +40,7 @@ class PuppetforgeUserModules extends LegacyService {
   static get route() {
     return {
       base: 'puppetforge/mc',
+      pattern: ':user',
     }
   }
 
@@ -61,6 +63,10 @@ class PuppetforgeUserModules extends LegacyService {
 //
 // Do not base new services on this code.
 class PuppetforgeUsers extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/puppetforge\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,

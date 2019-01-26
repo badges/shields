@@ -1,10 +1,8 @@
 'use strict'
 
 const LegacyService = require('../legacy-service')
-const {
-  makeBadgeData: getBadgeData,
-  makeLogo: getLogo,
-} = require('../../lib/badge-data')
+const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const { makeLogo: getLogo } = require('../../lib/logos')
 const {
   documentation,
   checkErrorResponse: githubCheckErrorResponse,
@@ -24,6 +22,7 @@ module.exports = class GithubWatchers extends LegacyService {
   static get route() {
     return {
       base: 'github/watchers',
+      pattern: ':user/:repo',
     }
   }
 

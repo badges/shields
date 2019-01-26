@@ -1,10 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const { isBuildStatus } = require('../test-validators')
-const { colorScheme } = require('../test-helpers')
+const { isBuildStatus } = require('../../lib/build-status')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('Build status')
   .get('/build/wercker/go-wercker-api.json')
@@ -32,7 +31,7 @@ t.create('Build passed (mocked)')
   .expectJSON({
     name: 'build',
     value: 'passing',
-    colorB: colorScheme.brightgreen,
+    color: 'brightgreen',
   })
 
 t.create('Build failed (mocked)')
@@ -42,7 +41,7 @@ t.create('Build failed (mocked)')
       .get('/wercker/go-wercker-api/builds?limit=1')
       .reply(200, [{ status: 'finished', result: 'failed' }])
   )
-  .expectJSON({ name: 'build', value: 'failed', colorB: colorScheme.red })
+  .expectJSON({ name: 'build', value: 'failing', color: 'red' })
 
 t.create('CI status by ID')
   .get('/ci/559e33c8e982fc615500b357.json')

@@ -4,8 +4,8 @@ const Joi = require('joi')
 const {
   coveragePercentage: coveragePercentageColor,
 } = require('../../lib/color-formatters')
-const BaseSvgScrapingService = require('../base-svg-scraping')
-const { NotFound } = require('../errors')
+const { BaseSvgScrapingService } = require('..')
+const { NotFound } = require('..')
 
 const schema = Joi.object({
   message: Joi.alternatives()

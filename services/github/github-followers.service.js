@@ -1,10 +1,8 @@
 'use strict'
 
 const LegacyService = require('../legacy-service')
-const {
-  makeBadgeData: getBadgeData,
-  makeLogo: getLogo,
-} = require('../../lib/badge-data')
+const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const { makeLogo: getLogo } = require('../../lib/logos')
 const {
   documentation,
   checkErrorResponse: githubCheckErrorResponse,
@@ -24,6 +22,7 @@ module.exports = class GithubFollowers extends LegacyService {
   static get route() {
     return {
       base: 'github/followers',
+      pattern: ':user',
     }
   }
 
@@ -31,7 +30,6 @@ module.exports = class GithubFollowers extends LegacyService {
     return [
       {
         title: 'GitHub followers',
-        pattern: ':user',
         previewUrl: 'espadrine',
         // https://github.com/badges/shields/issues/2479
         // namedParams: {
@@ -66,7 +64,7 @@ module.exports = class GithubFollowers extends LegacyService {
           }
           try {
             badgeData.text[1] = JSON.parse(buffer).followers
-            badgeData.colorscheme = null
+            badgeData.colorscheme = undefined
             badgeData.colorB = '#4183C4'
             sendBadge(format, badgeData)
           } catch (e) {

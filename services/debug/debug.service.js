@@ -1,6 +1,6 @@
 'use strict'
 
-const NonMemoryCachingBaseService = require('../base-non-memory-caching')
+const { NonMemoryCachingBaseService } = require('..')
 
 const serverStartTime = new Date(new Date().toGMTString())
 

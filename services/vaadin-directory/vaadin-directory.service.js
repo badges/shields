@@ -20,6 +20,7 @@ class VaadinDirectoryRating extends LegacyService {
   static get route() {
     return {
       base: 'vaadin-directory',
+      pattern: ':which(rating|stars|rating-count)/:packageName',
     }
   }
 
@@ -176,6 +177,10 @@ class VaadinDirectoryReleaseDate extends LegacyService {
 //
 // Do not base new services on this code.
 class VaadinDirectory extends LegacyService {
+  static get category() {
+    return 'other'
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/vaadin-directory\/(star|stars|status|rating|rc|rating-count|v|version|rd|release-date)\/(.*).(svg|png|gif|jpg|json)$/,

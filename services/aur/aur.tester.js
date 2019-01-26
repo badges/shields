@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
   isMetric,
@@ -20,7 +20,7 @@ t.create('version (valid)')
     Joi.object().keys({
       name: 'aur',
       value: isVPlusDottedVersionNClausesWithOptionalSuffix,
-      colorB: '#007ec6',
+      color: 'blue',
     })
   )
 
@@ -30,7 +30,7 @@ t.create('version (valid, out of date)')
     Joi.object().keys({
       name: 'aur',
       value: isVPlusDottedVersionNClausesWithOptionalSuffix,
-      colorB: '#fe7d37',
+      color: 'orange',
     })
   )
 

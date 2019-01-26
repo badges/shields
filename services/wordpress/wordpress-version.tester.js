@@ -1,15 +1,13 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
-
+const { ServiceTester } = require('..')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
-const t = new ServiceTester({
+const t = (module.exports = new ServiceTester({
   id: 'wordpress',
   title: 'Wordpress Version Tests',
-})
-module.exports = t
+}))
 
 t.create('Plugin Version')
   .get('/plugin/v/akismet.json')

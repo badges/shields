@@ -1,11 +1,13 @@
 'use strict'
 
 const Joi = require('joi')
-const ServiceTester = require('../service-tester')
+const { ServiceTester } = require('..')
 const { isRelativeFormattedDate } = require('../test-validators')
 
-const t = new ServiceTester({ id: 'date', title: 'Relative Date Tests' })
-module.exports = t
+const t = (module.exports = new ServiceTester({
+  id: 'date',
+  title: 'Relative Date Tests',
+}))
 
 t.create('Relative date')
   .get('/1540814400.json')

@@ -1,22 +1,20 @@
 'use strict'
 
-const { makeColor } = require('../../lib/badge-data')
 const { licenseToColor } = require('../../lib/licenses')
-const { colorScheme: colorsB } = require('../test-helpers')
 
-const publicDomainLicenseColor = makeColor(licenseToColor('CC0-1.0'))
-const permissiveLicenseColor = colorsB[licenseToColor('MIT')]
-const copyleftLicenseColor = colorsB[licenseToColor('GPL-3.0')]
-const unknownLicenseColor = colorsB[licenseToColor()]
+const publicDomainLicenseColor = licenseToColor('CC0-1.0')
+const permissiveLicenseColor = licenseToColor('MIT')
+const copyleftLicenseColor = licenseToColor('GPL-3.0')
+const unknownLicenseColor = licenseToColor()
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('Public domain license')
   .get('/github/gitignore.json?style=_shields_test')
   .expectJSON({
     name: 'license',
     value: 'CC0-1.0',
-    colorB: publicDomainLicenseColor,
+    color: `#${publicDomainLicenseColor}`,
   })
 
 t.create('Copyleft license')
@@ -24,23 +22,23 @@ t.create('Copyleft license')
   .expectJSON({
     name: 'license',
     value: 'GPL-3.0',
-    colorB: copyleftLicenseColor,
+    color: copyleftLicenseColor,
   })
 
 t.create('Permissive license')
   .get('/atom/atom.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'MIT', colorB: permissiveLicenseColor })
+  .expectJSON({ name: 'license', value: 'MIT', color: permissiveLicenseColor })
 
 t.create('License for repo without a license')
   .get('/badges/badger.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'missing', colorB: colorsB.red })
+  .expectJSON({ name: 'license', value: 'missing', color: 'red' })
 
 t.create('License for repo with an unrecognized license')
   .get('/philokev/sopel-noblerealms.json?style=_shields_test')
   .expectJSON({
     name: 'license',
     value: 'unknown',
-    colorB: unknownLicenseColor,
+    color: unknownLicenseColor,
   })
 
 t.create('License with SPDX id not appearing in configuration')
@@ -63,7 +61,7 @@ t.create('License with SPDX id not appearing in configuration')
   .expectJSON({
     name: 'license',
     value: 'EFL-1.0',
-    colorB: unknownLicenseColor,
+    color: unknownLicenseColor,
   })
 
 t.create('License for unknown repo')
@@ -71,7 +69,7 @@ t.create('License for unknown repo')
   .expectJSON({
     name: 'license',
     value: 'repo not found',
-    colorB: colorsB.lightgrey,
+    color: 'lightgrey',
   })
 
 t.create('License - API rate limit exceeded')
@@ -89,5 +87,5 @@ t.create('License - API rate limit exceeded')
   .expectJSON({
     name: 'license',
     value: 'access denied',
-    colorB: colorsB.lightgrey,
+    color: 'lightgrey',
   })

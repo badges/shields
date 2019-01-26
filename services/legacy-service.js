@@ -1,6 +1,6 @@
 'use strict'
 
-const BaseService = require('./base')
+const { BaseService } = require('.')
 
 // This adapter allows running legacy badges in the new file layout and
 // service architecture.
@@ -12,6 +12,11 @@ const BaseService = require('./base')
 // BaseJsonService. Refer to the tutorial:
 // https://github.com/badges/shields/blob/master/doc/TUTORIAL.md
 class LegacyService extends BaseService {
+  // Provide a placeholder for services which do not define a route.
+  static get route() {
+    return { pattern: '' }
+  }
+
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     throw Error(`registerLegacyRouteHandler() not implemented for ${this.name}`)
   }

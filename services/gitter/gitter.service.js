@@ -1,6 +1,6 @@
 'use strict'
 
-const BaseStaticService = require('../base-static')
+const { BaseStaticService } = require('..')
 
 module.exports = class Gitter extends BaseStaticService {
   static get category() {
@@ -18,7 +18,6 @@ module.exports = class Gitter extends BaseStaticService {
     return [
       {
         title: 'Gitter',
-        pattern: ':user/:repo',
         namedParams: {
           user: 'nwjs',
           repo: 'nw.js',

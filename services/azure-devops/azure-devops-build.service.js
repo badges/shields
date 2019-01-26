@@ -1,8 +1,8 @@
 'use strict'
 
-const BaseSvgService = require('../base-svg-scraping')
-const { NotFound } = require('../errors')
-const { keywords, fetch, render } = require('./azure-devops-helpers')
+const { renderBuildStatusBadge } = require('../../lib/build-status')
+const { BaseSvgScrapingService, NotFound } = require('..')
+const { keywords, fetch } = require('./azure-devops-helpers')
 
 const documentation = `
 <p>
@@ -27,7 +27,7 @@ const documentation = `
   alt="PROJECT_ID is in the id property of the API response." />
 `
 
-module.exports = class AzureDevOpsBuild extends BaseSvgService {
+module.exports = class AzureDevOpsBuild extends BaseSvgScrapingService {
   static get category() {
     return 'build'
   }
@@ -50,7 +50,7 @@ module.exports = class AzureDevOpsBuild extends BaseSvgService {
           projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
           definitionId: '2',
         },
-        staticPreview: render({ status: 'succeeded' }),
+        staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
         keywords,
         documentation,
       },
@@ -64,7 +64,7 @@ module.exports = class AzureDevOpsBuild extends BaseSvgService {
           definitionId: '2',
           branch: 'master',
         },
-        staticPreview: render({ status: 'succeeded' }),
+        staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
         keywords,
         documentation,
       },
@@ -86,6 +86,6 @@ module.exports = class AzureDevOpsBuild extends BaseSvgService {
     if (status === 'unknown') {
       throw new NotFound({ prettyMessage: 'project not found' })
     }
-    return render({ status })
+    return renderBuildStatusBadge({ status })
   }
 }

@@ -1,9 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const validate = require('../lib/validate')
+const validate = require('../core/base-service/validate')
 const { toArray } = require('../lib/badge-data')
-const { InvalidResponse } = require('./errors')
+const { InvalidResponse } = require('.')
 
 const individualValueSchema = Joi.alternatives()
   .try(Joi.string(), Joi.number())

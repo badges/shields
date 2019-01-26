@@ -1,9 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const { colorScheme: colorsB } = require('../test-helpers')
 
-const t = (module.exports = require('../create-service-tester')())
+const t = (module.exports = require('..').createServiceTester())
 
 t.create('gets the license of express')
   .get('/express.json')
@@ -15,19 +14,19 @@ t.create('gets the license of express from a custom registry')
 
 t.create('public domain license')
   .get('/redux-auth.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'WTFPL', colorB: '#7cd958' })
+  .expectJSON({ name: 'license', value: 'WTFPL', color: '#7cd958' })
 
 t.create('copyleft license')
   .get('/trianglify.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'GPL-3.0', colorB: colorsB.orange })
+  .expectJSON({ name: 'license', value: 'GPL-3.0', color: 'orange' })
 
 t.create('permissive license')
   .get('/express.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'MIT', colorB: colorsB.green })
+  .expectJSON({ name: 'license', value: 'MIT', color: 'green' })
 
 t.create('permissive license for scoped package')
   .get('/@cycle%2Fcore.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'MIT', colorB: colorsB.green })
+  .expectJSON({ name: 'license', value: 'MIT', color: 'green' })
 
 t.create(
   'permissive and copyleft licenses (SPDX license expression syntax version 2.0)'
@@ -36,7 +35,7 @@ t.create(
   .expectJSON({
     name: 'license',
     value: '(MPL-2.0 OR MIT)',
-    colorB: colorsB.lightgrey,
+    color: 'lightgrey',
   })
 
 t.create('license for package without a license property')
@@ -49,7 +48,7 @@ t.create('license for package without a license property')
         maintainers: [],
       })
   )
-  .expectJSON({ name: 'license', value: 'missing', colorB: colorsB.red })
+  .expectJSON({ name: 'license', value: 'missing', color: 'red' })
 
 t.create('license for package with a license object')
   .get('/package-license-object.json?style=_shields_test')
@@ -65,7 +64,7 @@ t.create('license for package with a license object')
         maintainers: [],
       })
   )
-  .expectJSON({ name: 'license', value: 'MIT', colorB: colorsB.green })
+  .expectJSON({ name: 'license', value: 'MIT', color: 'green' })
 
 t.create('license for package with a license array')
   .get('/package-license-array.json?style=_shields_test')
@@ -81,7 +80,7 @@ t.create('license for package with a license array')
   .expectJSON({
     name: 'license',
     value: 'MPL-2.0, MIT',
-    colorB: colorsB.green,
+    color: 'green',
   })
 
 t.create('license for unknown package')
@@ -89,16 +88,7 @@ t.create('license for unknown package')
   .expectJSON({
     name: 'license',
     value: 'package not found',
-    colorB: colorsB.red,
-  })
-
-t.create('license when network is off')
-  .get('/pakage-network-off.json?style=_shields_test')
-  .networkOff()
-  .expectJSON({
-    name: 'license',
-    value: 'inaccessible',
-    colorB: colorsB.lightgrey,
+    color: 'red',
   })
 
 // This tests error-handling functionality in NpmBase.

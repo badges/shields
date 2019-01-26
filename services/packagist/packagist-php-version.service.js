@@ -2,7 +2,7 @@
 
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const log = require('../../lib/log')
+const log = require('../../core/server/log')
 
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //
@@ -18,6 +18,7 @@ module.exports = class PackagistPhpVersion extends LegacyService {
   static get route() {
     return {
       base: 'packagist/php-v',
+      pattern: '',
     }
   }
 
