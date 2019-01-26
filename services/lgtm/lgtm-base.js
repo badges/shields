@@ -4,9 +4,11 @@ const Joi = require('joi')
 const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
-  alerts: Joi.number(),
+  alerts: Joi.number().required(),
 
-  languages: Joi.array(),
+  languages: Joi.array()
+    .min(1)
+    .required(),
 }).required()
 
 module.exports = class LgtmBaseService extends BaseJsonService {

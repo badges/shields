@@ -13,13 +13,6 @@ module.exports = class LgtmGrade extends LgtmBaseService {
   async handle({ language, user, repo }) {
     const data = await this.fetch({ user, repo })
 
-    if (!('languages' in data)) {
-      return this.constructor.render({
-        grade: 'invalid response data',
-        color: 'red',
-      })
-    }
-
     const languageLabel = (() => {
       switch (language) {
         case 'cpp':

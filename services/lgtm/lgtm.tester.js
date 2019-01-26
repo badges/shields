@@ -28,7 +28,7 @@ t.create('alerts: no alerts')
   .intercept(nock =>
     nock('https://lgtm.com')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
-      .reply(200, { alerts: 0 })
+      .reply(200, { alerts: 0, languages: data.languages })
   )
   .expectJSON({ name: 'lgtm', value: '0 alerts' })
 
@@ -37,7 +37,7 @@ t.create('alerts: single alert')
   .intercept(nock =>
     nock('https://lgtm.com')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
-      .reply(200, { alerts: 1 })
+      .reply(200, { alerts: 1, languages: data.languages })
   )
   .expectJSON({ name: 'lgtm', value: '1 alert' })
 
@@ -46,7 +46,7 @@ t.create('alerts: multiple alerts')
   .intercept(nock =>
     nock('https://lgtm.com')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
-      .reply(200, { alerts: 123 })
+      .reply(200, { alerts: 123, languages: data.languages })
   )
   .expectJSON({ name: 'lgtm', value: '123 alerts' })
 
@@ -96,6 +96,7 @@ t.create('grade: grade for missing language')
 // Test display of languages
 
 const data = {
+  alerts: 0,
   languages: [
     { lang: 'cpp', grade: 'A+' },
     { lang: 'javascript', grade: 'A' },
