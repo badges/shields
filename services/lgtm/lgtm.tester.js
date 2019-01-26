@@ -20,7 +20,7 @@ t.create('alerts: missing project')
   .get('/alerts/g/some-org/this-project-doesnt-exist.json')
   .expectJSON({
     name: 'lgtm',
-    value: 'not found',
+    value: 'project not found',
   })
 
 t.create('alerts: no alerts')
@@ -65,7 +65,7 @@ t.create('grade: missing project')
   .get('/grade/java/g/some-org/this-project-doesnt-exist.json')
   .expectJSON({
     name: 'lgtm',
-    value: 'not found',
+    value: 'project not found',
   })
 
 t.create('grade: json missing languages')
