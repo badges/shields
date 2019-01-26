@@ -22,6 +22,7 @@ module.exports = class GithubForks extends LegacyService {
   static get route() {
     return {
       base: 'github/forks',
+      pattern: ':user/:repo',
     }
   }
 

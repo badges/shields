@@ -85,6 +85,7 @@ class AmoRating extends LegacyService {
   static get route() {
     return {
       base: 'amo',
+      pattern: '',
     }
   }
 

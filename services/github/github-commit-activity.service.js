@@ -23,6 +23,7 @@ module.exports = class GithubCommitActivity extends LegacyService {
   static get route() {
     return {
       base: 'github/commit-activity',
+      pattern: ':interval(y|4w|w)/:user/:repo',
     }
   }
 

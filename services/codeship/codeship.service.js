@@ -17,6 +17,7 @@ module.exports = class Codeship extends LegacyService {
   static get route() {
     return {
       base: 'codeship',
+      pattern: '',
     }
   }
 
