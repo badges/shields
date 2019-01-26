@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const ServiceTester = require('../service-tester')
-const { invalidJSON } = require('../response-fixtures')
 const t = new ServiceTester({ id: 'lgtm', title: 'LGTM' })
 module.exports = t
 
@@ -60,20 +59,6 @@ t.create('alerts: json missing alerts')
   )
   .expectJSON({ name: 'lgtm', value: 'invalid response data' })
 
-t.create('alerts: invalid json')
-  .get('/alerts/g/apache/cloudstack.json')
-  .intercept(nock =>
-    nock('https://lgtm.com')
-      .get('/api/v0.1/project/g/apache/cloudstack/details')
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'lgtm', value: 'unparseable json response' })
-
-t.create('alerts: lgtm inaccessible')
-  .get('/alerts/g/apache/cloudstack.json')
-  .networkOff()
-  .expectJSON({ name: 'lgtm', value: 'inaccessible' })
-
 // Grade Badge
 
 t.create('grade: missing project')
@@ -81,23 +66,6 @@ t.create('grade: missing project')
   .expectJSON({
     name: 'lgtm',
     value: 'not found',
-  })
-
-t.create('grade: lgtm inaccessible')
-  .get('/grade/java/g/apache/cloudstack.json')
-  .networkOff()
-  .expectJSON({ name: 'lgtm', value: 'inaccessible' })
-
-t.create('grade: invalid json')
-  .get('/grade/java/g/apache/cloudstack.json')
-  .intercept(nock =>
-    nock('https://lgtm.com')
-      .get('/api/v0.1/project/g/apache/cloudstack/details')
-      .reply(invalidJSON)
-  )
-  .expectJSON({
-    name: 'lgtm',
-    value: 'unparseable json response',
   })
 
 t.create('grade: json missing languages')
