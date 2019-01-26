@@ -9,14 +9,16 @@ const {
 } = require('./cache-headers')
 const { makeSend } = require('./legacy-result-sender')
 const coalesceBadge = require('./coalesce-badge')
+const { prepareRoute, namedParamsForMatch } = require('./route')
 
 module.exports = class BaseStaticService extends BaseService {
   static register({ camp }, serviceConfig) {
     const {
       profiling: { makeBadge: shouldProfileMakeBadge },
     } = serviceConfig
+    const { regex, captureNames } = prepareRoute(this.route)
 
-    camp.route(this._regex, async (queryParams, match, end, ask) => {
+    camp.route(regex, async (queryParams, match, end, ask) => {
       analytics.noteRequest(queryParams, match)
 
       if (serverHasBeenUpSinceResourceCached(ask.req)) {
@@ -26,7 +28,7 @@ module.exports = class BaseStaticService extends BaseService {
         return
       }
 
-      const namedParams = this._namedParamsForMatch(match)
+      const namedParams = namedParamsForMatch(captureNames, match, this)
       const serviceData = await this.invoke(
         {},
         serviceConfig,

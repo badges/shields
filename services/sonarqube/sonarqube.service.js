@@ -16,6 +16,7 @@ class SonarqubeCoverage extends LegacyService {
   static get route() {
     return {
       base: 'sonar',
+      pattern: '',
     }
   }
 
@@ -51,6 +52,7 @@ class Sonarqube extends LegacyService {
   static get route() {
     return {
       base: 'sonar',
+      pattern: '',
     }
   }
 

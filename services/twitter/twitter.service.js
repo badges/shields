@@ -19,6 +19,7 @@ class TwitterUrl extends LegacyService {
   static get route() {
     return {
       base: 'twitter/url',
+      pattern: '',
     }
   }
 
@@ -73,6 +74,7 @@ class TwitterFollow extends LegacyService {
   static get route() {
     return {
       base: 'twitter/follow',
+      pattern: ':user',
     }
   }
 

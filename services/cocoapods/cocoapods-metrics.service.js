@@ -21,6 +21,7 @@ module.exports = class CocoapodsMetrics extends LegacyService {
   static get route() {
     return {
       base: 'cocoapods/metrics/doc-percent',
+      pattern: ':spec',
     }
   }
 
@@ -28,7 +29,6 @@ module.exports = class CocoapodsMetrics extends LegacyService {
     return [
       {
         title: 'Cocoapods doc percentage',
-        pattern: ':spec',
         namedParams: { spec: 'AFNetworking' },
         staticPreview: { label: 'docs', message: '94%', color: 'green' },
       },
