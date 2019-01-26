@@ -13,7 +13,6 @@ module.exports = class LgtmAlerts extends LgtmBaseService {
 
   async handle({ user, repo }) {
     const { alerts } = await this.fetch({ user, repo })
-
     return this.constructor.render({ alerts })
   }
 
