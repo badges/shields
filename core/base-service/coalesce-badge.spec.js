@@ -1,7 +1,7 @@
 'use strict'
 
 const { expect } = require('chai')
-const { getShieldsIcon } = require('../../lib/logos')
+const { getShieldsIcon, getSimpleIcon } = require('../../lib/logos')
 const coalesceBadge = require('./coalesce-badge')
 
 describe('coalesceBadge', function() {
@@ -118,43 +118,43 @@ describe('coalesceBadge', function() {
       // .not.be.empty for confidence that nothing has changed with `getShieldsIcon()`.
       expect(
         coalesceBadge({ style: 'social' }, {}, { namedLogo: 'appveyor' }).logo
-      ).to.equal(getShieldsIcon({ name: 'appveyor' })).and.not.be.empty
+      ).to.equal(getSimpleIcon({ name: 'appveyor' })).and.not.be.empty
     })
 
     it('applies the named logo', function() {
-      expect(coalesceBadge({}, { namedLogo: 'github' }, {}).logo).to.equal(
-        getShieldsIcon({ name: 'github' })
+      expect(coalesceBadge({}, { namedLogo: 'npm' }, {}).logo).to.equal(
+        getShieldsIcon({ name: 'npm' })
       ).and.not.to.be.empty
     })
 
     it('applies the named logo with color', function() {
       expect(
-        coalesceBadge({}, { namedLogo: 'github', logoColor: 'blue' }, {}).logo
-      ).to.equal(getShieldsIcon({ name: 'github', color: 'blue' })).and.not.to
-        .be.empty
+        coalesceBadge({}, { namedLogo: 'npm', logoColor: 'blue' }, {}).logo
+      ).to.equal(getShieldsIcon({ name: 'npm', color: 'blue' })).and.not.to.be
+        .empty
     })
 
     it('overrides the logo', function() {
       expect(
-        coalesceBadge({ logo: 'github' }, { namedLogo: 'appveyor' }, {}).logo
-      ).to.equal(getShieldsIcon({ name: 'github' })).and.not.be.empty
+        coalesceBadge({ logo: 'npm' }, { namedLogo: 'appveyor' }, {}).logo
+      ).to.equal(getShieldsIcon({ name: 'npm' })).and.not.be.empty
     })
 
     it('overrides the logo with a color', function() {
       expect(
         coalesceBadge(
-          { logo: 'github', logoColor: 'blue' },
+          { logo: 'npm', logoColor: 'blue' },
           { namedLogo: 'appveyor' },
           {}
         ).logo
-      ).to.equal(getShieldsIcon({ name: 'github', color: 'blue' })).and.not.be
+      ).to.equal(getShieldsIcon({ name: 'npm', color: 'blue' })).and.not.be
         .empty
     })
 
     it("when the logo is overridden, it ignores the service's logo color, position, and width", function() {
       expect(
         coalesceBadge(
-          { logo: 'github' },
+          { logo: 'npm' },
           {
             namedLogo: 'appveyor',
             logoColor: 'red',
@@ -163,17 +163,17 @@ describe('coalesceBadge', function() {
           },
           {}
         ).logo
-      ).to.equal(getShieldsIcon({ name: 'github' })).and.not.be.empty
+      ).to.equal(getShieldsIcon({ name: 'npm' })).and.not.be.empty
     })
 
     it("overrides the service logo's color", function() {
       expect(
         coalesceBadge(
           { logoColor: 'blue' },
-          { namedLogo: 'github', logoColor: 'red' },
+          { namedLogo: 'npm', logoColor: 'red' },
           {}
         ).logo
-      ).to.equal(getShieldsIcon({ name: 'github', color: 'blue' })).and.not.be
+      ).to.equal(getShieldsIcon({ name: 'npm', color: 'blue' })).and.not.be
         .empty
     })
   })
@@ -205,7 +205,7 @@ describe('coalesceBadge', function() {
 
     it('applies the logo width', function() {
       expect(
-        coalesceBadge({}, { namedLogo: 'github', logoWidth: 275 }, {}).logoWidth
+        coalesceBadge({}, { namedLogo: 'npm', logoWidth: 275 }, {}).logoWidth
       ).to.equal(275)
     })
   })
@@ -219,7 +219,7 @@ describe('coalesceBadge', function() {
 
     it('applies the logo position', function() {
       expect(
-        coalesceBadge({}, { namedLogo: 'github', logoPosition: -10 }, {})
+        coalesceBadge({}, { namedLogo: 'npm', logoPosition: -10 }, {})
           .logoPosition
       ).to.equal(-10)
     })

@@ -69,12 +69,12 @@ t.create('named logo')
         schemaVersion: 1,
         label: 'hey',
         message: 'yo',
-        namedLogo: 'github',
+        namedLogo: 'npm',
       })
   )
   .after((err, res, body) => {
     expect(err).not.to.be.ok
-    expect(body).to.include(getShieldsIcon({ name: 'github' }))
+    expect(body).to.include(getShieldsIcon({ name: 'npm' }))
   })
 
 t.create('named logo with color')
@@ -86,17 +86,17 @@ t.create('named logo with color')
         schemaVersion: 1,
         label: 'hey',
         message: 'yo',
-        namedLogo: 'github',
+        namedLogo: 'npm',
         logoColor: 'blue',
       })
   )
   .after((err, res, body) => {
     expect(err).not.to.be.ok
-    expect(body).to.include(getShieldsIcon({ name: 'github', color: 'blue' }))
+    expect(body).to.include(getShieldsIcon({ name: 'npm', color: 'blue' }))
   })
 
 const logoSvg = Buffer.from(
-  getShieldsIcon({ name: 'github' }).replace('data:image/svg+xml;base64,', ''),
+  getShieldsIcon({ name: 'npm' }).replace('data:image/svg+xml;base64,', ''),
   'base64'
 ).toString('ascii')
 
@@ -114,7 +114,7 @@ t.create('custom svg logo')
   )
   .after((err, res, body) => {
     expect(err).not.to.be.ok
-    expect(body).to.include(getShieldsIcon({ name: 'github' }))
+    expect(body).to.include(getShieldsIcon({ name: 'npm' }))
   })
 
 t.create('logoWidth')
