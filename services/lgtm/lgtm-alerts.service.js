@@ -22,10 +22,7 @@ module.exports = class LgtmAlerts extends LgtmBaseService {
 
   static render({ alerts, color }) {
     return {
-      message:
-        alerts === undefined
-          ? 'invalid response data'
-          : metric(alerts) + (alerts === 1 ? ' alert' : ' alerts'),
+      message: metric(alerts) + (alerts === 1 ? ' alert' : ' alerts'),
       color,
     }
   }

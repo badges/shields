@@ -54,8 +54,7 @@ module.exports = class LgtmGrade extends LgtmBaseService {
 
   static render({ languageLabel, grade, color }) {
     return {
-      label:
-        languageLabel === undefined ? 'lgtm' : `code quality: ${languageLabel}`,
+      label: `code quality: ${languageLabel}`,
       message: grade,
       color,
     }
