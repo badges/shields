@@ -12,7 +12,20 @@ module.exports = class LgtmGrade extends LgtmBaseService {
 
   async handle({ language, user, repo }) {
     const data = await this.fetch({ user, repo })
+    return this.constructor.render({ language, data })
+  }
 
+  static render({ language, data }) {
+    const { grade, color } = this.getGradeAndColor({ language, data })
+
+    return {
+      label: `code quality: ${this.getLabel({ language })}`,
+      message: grade,
+      color,
+    }
+  }
+
+  static getLabel({ language }) {
     const languageLabel = (() => {
       switch (language) {
         case 'cpp':
@@ -26,7 +39,10 @@ module.exports = class LgtmGrade extends LgtmBaseService {
           return language
       }
     })()
+    return languageLabel
+  }
 
+  static getGradeAndColor({ language, data }) {
     let grade = 'no language data'
     let color = 'red'
 
@@ -48,16 +64,7 @@ module.exports = class LgtmGrade extends LgtmBaseService {
         }
       }
     }
-
-    return this.constructor.render({ languageLabel, grade, color })
-  }
-
-  static render({ languageLabel, grade, color }) {
-    return {
-      label: `code quality: ${languageLabel}`,
-      message: grade,
-      color,
-    }
+    return { grade, color }
   }
 
   static get examples() {
@@ -70,9 +77,15 @@ module.exports = class LgtmGrade extends LgtmBaseService {
           repo: 'cloudstack',
         },
         staticPreview: this.render({
-          languageLabel: 'java',
-          grade: 'D',
-          color: 'orange',
+          language: 'java',
+          data: {
+            languages: [
+              {
+                lang: 'java',
+                grade: 'C',
+              },
+            ],
+          },
         }),
       },
     ]

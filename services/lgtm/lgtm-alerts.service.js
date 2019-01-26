@@ -13,18 +13,23 @@ module.exports = class LgtmAlerts extends LgtmBaseService {
 
   async handle({ user, repo }) {
     const { alerts } = await this.fetch({ user, repo })
+
+    return this.constructor.render({ alerts })
+  }
+
+  static render({ alerts }) {
+    return {
+      message: metric(alerts) + (alerts === 1 ? ' alert' : ' alerts'),
+      color: this.getColor({ alerts }),
+    }
+  }
+
+  static getColor({ alerts }) {
     let color = 'yellow'
     if (alerts === 0) {
       color = 'brightgreen'
     }
-    return this.constructor.render({ alerts, color })
-  }
-
-  static render({ alerts, color }) {
-    return {
-      message: metric(alerts) + (alerts === 1 ? ' alert' : ' alerts'),
-      color,
-    }
+    return color
   }
 
   static get examples() {
@@ -35,7 +40,7 @@ module.exports = class LgtmAlerts extends LgtmBaseService {
           user: 'apache',
           repo: 'cloudstack',
         },
-        staticPreview: this.render({ alerts: 2488, color: 'yellow' }),
+        staticPreview: this.render({ alerts: 2488 }),
       },
     ]
   }
