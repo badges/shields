@@ -76,8 +76,8 @@ test this kind of logic through unit tests (e.g. of `render()` and
 
 ## Server initialization
 
-1.  The server entrypoint is `server.js` which sets up error reporting,
-    loads config, and creates an instance of the Server.
+1.  The server entrypoint is [`server.js`][entrypoint] which sets up error
+    reporting, loads config, and creates an instance of the server.
 
 2.  The Server, which is defined in
     [`core/server/server.js`][core/server/server], is based on the web
@@ -94,12 +94,13 @@ test this kind of logic through unit tests (e.g. of `render()` and
     purpose of initialization, suffice it to say that `camp.route` invokes a
     callback with the four parameters `( queryParams, match, end, ask )` which
     is created in a legacy helper function in
-    [`legacy-request-handler.js`][legacy-request-handler], which will delegate
-    back to the callback in `BaseService.register` with four
-    different parameters `( queryParams, match, sendBadge, request )` which
-    then runs `BaseService.invoke`, which instantiates the service and runs
-    `BaseService#handle`.
+    [`legacy-request-handler.js`][legacy-request-handler]. This callback
+    delegates to a callback in `BaseService.register` with four different
+    parameters `( queryParams, match, sendBadge, request )`, which
+    then runs `BaseService.invoke`. `BaseService.invoke` instantiates the
+    service and runs `BaseService#handle`.
 
+[entrypoint]: https://github.com/badges/shields/blob/master/server.js
 [core/server/server]: https://github.com/badges/shields/blob/master/core/server/server.js
 [scoutcamp]: https://github.com/espadrine/sc
 [legacy-request-handler]: https://github.com/badges/shields/blob/master/core/base-service/legacy-request-handler.js
