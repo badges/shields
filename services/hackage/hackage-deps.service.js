@@ -1,16 +1,8 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { checkErrorResponse } = require('../../lib/error-helper')
+const { BaseService } = require('..')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class HackageDeps extends LegacyService {
+module.exports = class HackageDeps extends BaseService {
   static get category() {
     return 'dependencies'
   }
@@ -22,62 +14,48 @@ module.exports = class HackageDeps extends LegacyService {
     }
   }
 
+  static get defaultBadgeData() {
+    return { label: 'dependencies' }
+  }
+
   static get examples() {
     return [
       {
         title: 'Hackage-Deps',
         namedParams: { packageName: 'lens' },
-        staticPreview: {
-          label: 'dependencies',
-          message: 'up to date',
-          color: 'brightgreen',
-        },
+        staticPreview: this.render({ message: 'up to date' }),
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/hackage-deps\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const repo = match[1] // eg, `lens`.
-        const format = match[2]
-        const reverseUrl = `http://packdeps.haskellers.com/licenses/${repo}`
-        const feedUrl = `http://packdeps.haskellers.com/feed/${repo}`
-        const badgeData = getBadgeData('dependencies', data)
+  static render({ message }) {
+    if (message === 'up to date') {
+      return { message, color: 'brightgreen' }
+    } else {
+      return { message, color: 'orange' }
+    }
+  }
 
-        // first call /reverse to check if the package exists
-        // this will throw a 404 if it doesn't
-        request(reverseUrl, (err, res, buffer) => {
-          if (checkErrorResponse(badgeData, err, res)) {
-            sendBadge(format, badgeData)
-            return
-          }
+  async fetch({ url }) {
+    return this._request({ url })
+  }
 
-          // if the package exists, then query /feed to check the dependencies
-          request(feedUrl, (err, res, buffer) => {
-            if (err != null) {
-              badgeData.text[1] = 'inaccessible'
-              sendBadge(format, badgeData)
-              return
-            }
+  async handle({ packageName }) {
+    const reverseUrl = `http://packdeps.haskellers.com/licenses/${packageName}`
+    const feedUrl = `http://packdeps.haskellers.com/feed/${packageName}`
 
-            try {
-              const outdatedStr = `Outdated dependencies for ${repo} `
-              if (buffer.indexOf(outdatedStr) >= 0) {
-                badgeData.text[1] = 'outdated'
-                badgeData.colorscheme = 'orange'
-              } else {
-                badgeData.text[1] = 'up to date'
-                badgeData.colorscheme = 'brightgreen'
-              }
-            } catch (e) {
-              badgeData.text[1] = 'invalid'
-            }
-            sendBadge(format, badgeData)
-          })
-        })
-      })
-    )
+    // first call /reverse to check if the package exists
+    // this will throw a 404 if it doesn't
+    await this.fetch({ url: reverseUrl })
+
+    // if the package exists, then query /feed to check the dependencies
+    const { buffer } = await this.fetch({ url: feedUrl })
+
+    const outdatedStr = `Outdated dependencies for ${packageName} `
+    if (buffer.indexOf(outdatedStr) >= 0) {
+      return this.constructor.render({ message: 'outdated' })
+    } else {
+      return this.constructor.render({ message: 'up to date' })
+    }
   }
 }
