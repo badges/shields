@@ -12,7 +12,7 @@ The Shields codebase is divided into several parts:
     code in the codebase)
     1.  [`core/base-service`][base-service]
 4.  The server code and a few related odds and ends
-    1.  `core/server`
+    1.  [`core/server`][server]
 5.  Helper code for token pooling and persistence (used to avoid GitHub rate limiting)
     1.  `core/token-pooling`
 6.  Service common helper functions (about 7% of the code, and fairly important
