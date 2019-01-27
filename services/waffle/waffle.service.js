@@ -21,6 +21,7 @@ module.exports = class Waffle extends LegacyService {
   static get route() {
     return {
       base: 'waffle/label',
+      pattern: ':user/:repo/:query',
     }
   }
 
@@ -28,7 +29,6 @@ module.exports = class Waffle extends LegacyService {
     return [
       {
         title: 'Waffle.io',
-        pattern: ':user/:repo/:query',
         namedParams: {
           user: 'evancohen',
           repo: 'smart-mirror',

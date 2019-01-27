@@ -22,6 +22,7 @@ module.exports = class GithubWatchers extends LegacyService {
   static get route() {
     return {
       base: 'github/watchers',
+      pattern: ':user/:repo',
     }
   }
 

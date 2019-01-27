@@ -23,6 +23,7 @@ module.exports = class GithubStars extends LegacyService {
   static get route() {
     return {
       base: 'github/stars',
+      pattern: ':user/:repo',
     }
   }
 

@@ -24,6 +24,7 @@ module.exports = class PackagistVersion extends LegacyService {
   static get route() {
     return {
       base: 'packagist',
+      pattern: ':which(v|vpre)/:user/:repo',
     }
   }
 
