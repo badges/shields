@@ -157,7 +157,7 @@ test this kind of logic through unit tests (e.g. of `render()` and
         color, and optional label.
 7.  When an error is thrown, BaseService steps in and converts the error
     object to renderable properties: `{ isError, message, color }`.
-8.  The service invokes [`coalesceBadgeData`][coalesceBadge] whose job is to
+8.  The service invokes [`coalesceBadge`][coalescebadge] whose job is to
     coalesce query string overrides with values from the service and the
     service’s defaults to produce an object that fully describes the badge to
     be rendered.
@@ -166,4 +166,4 @@ test this kind of logic through unit tests (e.g. of `render()` and
     and pushes out the result over the HTTPS connection.
 
 [error reporting]: https://github.com/badges/shields/blob/master/doc/production-hosting.md#error-reporting
-[coalesceBadge]: https://github.com/badges/shields/blob/master/core/base-service/coalesce-badge.js
+[coalescebadge]: https://github.com/badges/shields/blob/master/core/base-service/coalesce-badge.js
