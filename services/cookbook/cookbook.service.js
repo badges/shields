@@ -19,14 +19,16 @@ module.exports = class Cookbook extends LegacyService {
   }
 
   static get route() {
-    return { base: 'cookbook/v' }
+    return {
+      base: 'cookbook/v',
+      pattern: ':cookbook',
+    }
   }
 
   static get examples() {
     return [
       {
         title: 'Chef cookbook',
-        pattern: ':cookbook',
         namedParams: { cookbook: 'chef-sugar' },
         staticPreview: { label: 'cookbook', message: 'v5.0.0', color: 'blue' },
       },

@@ -17,6 +17,7 @@ module.exports = class David extends LegacyService {
   static get route() {
     return {
       base: 'david',
+      pattern: '',
     }
   }
 

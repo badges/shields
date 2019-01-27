@@ -15,6 +15,7 @@ class ScrutinizerBuild extends LegacyService {
   static get route() {
     return {
       base: 'scrutinizer',
+      pattern: '',
     }
   }
 
@@ -38,6 +39,7 @@ class ScrutinizerCoverage extends LegacyService {
   static get route() {
     return {
       base: 'scrutinizer',
+      pattern: '',
     }
   }
 
@@ -71,6 +73,7 @@ class Scrutinizer extends LegacyService {
   static get route() {
     return {
       base: 'scrutinizer',
+      pattern: '',
     }
   }
 

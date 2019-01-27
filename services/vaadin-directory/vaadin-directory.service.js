@@ -20,6 +20,7 @@ class VaadinDirectoryRating extends LegacyService {
   static get route() {
     return {
       base: 'vaadin-directory',
+      pattern: ':which(rating|stars|rating-count)/:packageName',
     }
   }
 

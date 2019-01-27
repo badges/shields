@@ -18,6 +18,7 @@ module.exports = class LibrariesioDependencies extends LegacyService {
   static get route() {
     return {
       base: 'librariesio',
+      pattern: '',
     }
   }
 

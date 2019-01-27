@@ -18,7 +18,6 @@ const {
 
 const commonExample = {
   title: 'Chrome Web Store',
-  pattern: ':storeId',
   namedParams: { storeId: 'ogffaloegjglncjfehdfplabnoondfjo' },
 }
 
@@ -30,6 +29,7 @@ class ChromeWebStoreDownloads extends LegacyService {
   static get route() {
     return {
       base: 'chrome-web-store/users',
+      pattern: ':storeId',
     }
   }
 
@@ -53,6 +53,7 @@ class ChromeWebStoreVersion extends LegacyService {
   static get route() {
     return {
       base: 'chrome-web-store/v',
+      pattern: ':storeId',
     }
   }
 
@@ -80,6 +81,7 @@ class ChromeWebStorePrice extends LegacyService {
   static get route() {
     return {
       base: 'chrome-web-store/price',
+      pattern: ':storeId',
     }
   }
 
@@ -103,6 +105,7 @@ class ChromeWebStoreRating extends LegacyService {
   static get route() {
     return {
       base: 'chrome-web-store',
+      pattern: ':storeId',
     }
   }
 

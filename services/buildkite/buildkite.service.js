@@ -18,6 +18,7 @@ module.exports = class Buildkite extends LegacyService {
   static get route() {
     return {
       base: 'buildkite',
+      pattern: '',
     }
   }
 

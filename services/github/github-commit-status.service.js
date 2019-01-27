@@ -21,6 +21,7 @@ module.exports = class GithubCommitStatus extends LegacyService {
   static get route() {
     return {
       base: 'github/commit-status',
+      pattern: ':user/:repo/:branch/:commit',
     }
   }
 
@@ -28,7 +29,6 @@ module.exports = class GithubCommitStatus extends LegacyService {
     return [
       {
         title: 'GitHub commit merge status',
-        pattern: ':user/:repo/:branch/:commit',
         namedParams: {
           user: 'badges',
           repo: 'shields',
