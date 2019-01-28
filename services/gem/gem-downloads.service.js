@@ -5,17 +5,17 @@ const Joi = require('joi')
 const { downloadCount } = require('../../lib/color-formatters')
 const { metric } = require('../../lib/text-formatters')
 const { latest: latestVersion } = require('../../lib/version')
-const { BaseJsonService, InvalidResponse } = require('..')
+const { BaseJsonService, InvalidParameter, InvalidResponse } = require('..')
 const { nonNegativeInteger } = require('../validators')
 
 const keywords = ['ruby']
 
-const gemsSchema = Joi.object({
+const gemSchema = Joi.object({
   downloads: nonNegativeInteger,
   version_downloads: nonNegativeInteger,
 }).required()
 
-const versionsSchema = Joi.array()
+const versionSchema = Joi.array()
   .items(
     Joi.object({
       prerelease: Joi.boolean().required(),
@@ -27,17 +27,56 @@ const versionsSchema = Joi.array()
   .required()
 
 module.exports = class GemDownloads extends BaseJsonService {
-  async fetch({ repo, info }) {
-    const endpoint = info === 'dv' ? 'versions/' : 'gems/'
-    const schema = info === 'dv' ? versionsSchema : gemsSchema
-    const url = `https://rubygems.org/api/v1/${endpoint}${repo}.json`
-    return this._requestJson({
-      url,
-      schema,
+  async fetchDownloadCountForVersion({ gem, version }) {
+    const json = await this._requestJson({
+      url: `https://rubygems.org/api/v1/versions/${gem}.json`,
+      schema: versionSchema,
+      errorMessages: {
+        404: 'gem not found',
+      },
     })
+
+    let wantedVersion
+    if (version === 'stable') {
+      wantedVersion = latestVersion(
+        json.filter(({ prerelease }) => !prerelease).map(({ number }) => number)
+      )
+    } else {
+      wantedVersion = version
+    }
+
+    const versionData = json.find(({ number }) => number === wantedVersion)
+    if (versionData) {
+      return versionData.downloads_count
+    } else {
+      throw new InvalidResponse({
+        prettyMessage: 'version not found',
+      })
+    }
   }
 
-  static render({ label, downloads }) {
+  async fetchDownloadCountForGem({ gem }) {
+    const {
+      downloads: totalDownloads,
+      version_downloads: versionDownloads,
+    } = await this._requestJson({
+      url: `https://rubygems.org/api/v1/gems/${gem}.json`,
+      schema: gemSchema,
+      errorMessages: {
+        404: 'gem not found',
+      },
+    })
+    return { totalDownloads, versionDownloads }
+  }
+
+  static render({ which, version, downloads }) {
+    let label
+    if (version) {
+      label = `downloads@${version}`
+    } else if (which === 'dtv') {
+      label = 'downloads@latest'
+    }
+
     return {
       label,
       message: metric(downloads),
@@ -45,58 +84,28 @@ module.exports = class GemDownloads extends BaseJsonService {
     }
   }
 
-  static _getLabel(version, info) {
-    if (version) {
-      return `downloads@${version}`
-    } else {
-      if (info === 'dtv') {
-        return 'downloads@latest'
-      } else {
-        return 'downloads'
-      }
-    }
-  }
-
-  async handle({ info, rubygem }) {
-    const splitRubygem = rubygem.split('/')
-    const repo = splitRubygem[0]
-    let version =
-      splitRubygem.length > 1 ? splitRubygem[splitRubygem.length - 1] : null
-    version = version === 'stable' ? version : semver.valid(version)
-    const label = this.constructor._getLabel(version, info)
-    const json = await this.fetch({ repo, info })
-
+  async handle({ which, gem, version }) {
     let downloads
-    if (info === 'dt') {
-      downloads = json.downloads
-    } else if (info === 'dtv') {
-      downloads = json.version_downloads
-    } else if (info === 'dv') {
-      let versionData
-      if (version !== null && version === 'stable') {
-        const versions = json
-          .filter(ver => ver.prerelease === false)
-          .map(ver => ver.number)
-        // Found latest stable version.
-        const stableVersion = latestVersion(versions)
-        versionData = json.filter(ver => ver.number === stableVersion)[0]
-        downloads = versionData.downloads_count
-      } else if (version !== null) {
-        versionData = json.filter(ver => ver.number === version)[0]
-
-        downloads = versionData.downloads_count
-      } else {
-        throw new InvalidResponse({
-          underlyingError: new Error('version is null'),
+    if (which === 'dv') {
+      if (!version) {
+        throw new InvalidParameter({
+          prettyMessage: 'version downloads requires a version',
         })
       }
+      if (version !== 'stable' && !semver.valid(version)) {
+        throw new InvalidParameter({
+          prettyMessage: 'version should be "stable" or valid semver',
+        })
+      }
+      downloads = await this.fetchDownloadCountForVersion({ gem, version })
     } else {
-      throw new InvalidResponse({
-        underlyingError: new Error('info is invalid'),
-      })
+      const {
+        totalDownloads,
+        versionDownloads,
+      } = await this.fetchDownloadCountForGem({ gem, which })
+      downloads = which === 'dtv' ? versionDownloads : totalDownloads
     }
-
-    return this.constructor.render({ label, downloads })
+    return this.constructor.render({ which, version, downloads })
   }
 
   // Metadata
@@ -111,8 +120,7 @@ module.exports = class GemDownloads extends BaseJsonService {
   static get route() {
     return {
       base: 'gem',
-      format: '(dt|dtv|dv)/(.+)',
-      capture: ['info', 'rubygem'],
+      pattern: ':which(dt|dtv|dv)/:gem/:version?',
     }
   }
 
@@ -126,7 +134,8 @@ module.exports = class GemDownloads extends BaseJsonService {
           version: 'stable',
         },
         staticPreview: this.render({
-          label: this._getLabel('stable', 'dv'),
+          which: 'dv',
+          version: 'stable',
           downloads: 70000,
         }),
         keywords,
@@ -139,7 +148,8 @@ module.exports = class GemDownloads extends BaseJsonService {
           version: '4.1.0',
         },
         staticPreview: this.render({
-          label: this._getLabel('4.1.0', 'dv'),
+          which: 'dv',
+          version: '4.1.0',
           downloads: 50000,
         }),
         keywords,
@@ -149,7 +159,7 @@ module.exports = class GemDownloads extends BaseJsonService {
         pattern: 'dtv/:gem',
         namedParams: { gem: 'rails' },
         staticPreview: this.render({
-          label: this._getLabel(undefined, 'dtv'),
+          which: 'dtv',
           downloads: 70000,
         }),
         keywords,
@@ -159,7 +169,7 @@ module.exports = class GemDownloads extends BaseJsonService {
         pattern: 'dt/:gem',
         namedParams: { gem: 'rails' },
         staticPreview: this.render({
-          label: this._getLabel(undefined, 'dt'),
+          which: 'dt',
           downloads: 900000,
         }),
         keywords,
