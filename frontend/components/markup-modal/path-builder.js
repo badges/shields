@@ -28,7 +28,7 @@ const PathBuilderColumn = styled.span`
 `
 
 const PathLiteral = styled.div`
-  margin-top: 32px;
+  margin-top: 39px;
   ${({ isFirstToken }) =>
     isFirstToken &&
     css`
@@ -39,7 +39,7 @@ const PathLiteral = styled.div`
 const NamedParamLabelContainer = styled.span`
   display: flex;
   flex-direction: column;
-  height: 32px;
+  height: 37px;
   width: 100%;
   justify-content: center;
 `
@@ -47,18 +47,19 @@ const NamedParamLabelContainer = styled.span`
 const inputStyling = `
   width: 100%;
   text-align: center;
+`
 
+// 2px to align with input boxes alongside.
+const NamedParamInput = styled(StyledInput)`
+  ${inputStyling}
+  margin-top: 2px;
   margin-bottom: 10px;
 `
 
-const NamedParamInput = styled(StyledInput)`
-  ${inputStyling}
-`
-
-// -1px to align with input boxes alongside.
 const NamedParamSelect = styled.select`
   ${inputStyling}
-  margin-top: -2px;
+  margin-bottom: 9px;
+  font-size: 10px;
 `
 
 const NamedParamCaption = styled(BuilderCaption)`
@@ -104,7 +105,7 @@ export default class PathBuilder extends React.Component {
           return token
         } else {
           const { delimiter, name, optional } = token
-          let value = namedParams[name]
+          const value = namedParams[name]
           if (value) {
             return `${delimiter}${value}`
           } else if (optional) {
