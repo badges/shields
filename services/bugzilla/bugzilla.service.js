@@ -24,6 +24,7 @@ module.exports = class Bugzilla extends LegacyService {
   static get route() {
     return {
       base: 'bugzilla',
+      pattern: ':bugNumber',
     }
   }
 
@@ -31,7 +32,6 @@ module.exports = class Bugzilla extends LegacyService {
     return [
       {
         title: 'Bugzilla bug status',
-        pattern: ':bugNumber',
         namedParams: { bugNumber: '996038' },
         staticPreview: {
           label: 'bug 996038',

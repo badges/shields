@@ -21,6 +21,7 @@ module.exports = class MicroBadger extends LegacyService {
   static get route() {
     return {
       base: 'microbadger',
+      pattern: '',
     }
   }
 

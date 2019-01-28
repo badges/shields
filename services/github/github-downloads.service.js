@@ -23,6 +23,7 @@ module.exports = class GithubDownloads extends LegacyService {
   static get route() {
     return {
       base: 'github',
+      pattern: '',
     }
   }
 

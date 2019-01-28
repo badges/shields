@@ -20,6 +20,7 @@ module.exports = class MavenMetadata extends LegacyService {
   static get route() {
     return {
       base: 'maven-metadata/v',
+      pattern: '',
     }
   }
 

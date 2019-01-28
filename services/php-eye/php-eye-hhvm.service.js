@@ -21,6 +21,7 @@ module.exports = class PhpeyeHhvm extends LegacyService {
   static get route() {
     return {
       base: 'hhvm',
+      pattern: '',
     }
   }
 
