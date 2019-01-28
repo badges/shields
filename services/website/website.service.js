@@ -95,9 +95,17 @@ module.exports = class Website extends LegacyService {
   static get examples() {
     return [
       {
-        previewUrl: 'website-up-down-green-red/https/shields.io',
-        queryParams: { label: 'my-website' },
-        keywords: ['website'],
+        title: 'Website',
+        pattern: 'website-up-down-green-red/:protocol/:hostAndPath',
+        namedParams: {
+          protocol: 'https',
+          hostAndPath: 'shields.io',
+        },
+        staticPreview: {
+          label: 'website',
+          message: 'up',
+          color: 'green',
+        },
         documentation,
       },
     ]
