@@ -27,30 +27,32 @@ const NamedLogoTable = ({ logoNames }) => (
         <td>Social</td>
       </tr>
     </thead>
-    {logoNames.map(name => (
-      <tr>
-        <td>
-          <Badge
-            src={staticBadgeUrl(baseUrl, 'named logo', name, 'blue', {
-              logo: name,
-            })}
-            alt={`logo: ${name}`}
-          />
-        </td>
-        <td>
-          <Badge
-            src={staticBadgeUrl(baseUrl, 'Named Logo', name, 'blue', {
-              logo: name,
-              style: 'social',
-            })}
-            alt={`logo: ${name}`}
-          />
-        </td>
-      </tr>
-    ))}
+    <tbody>
+      {logoNames.map(name => (
+        <tr key={name}>
+          <td>
+            <Badge
+              src={staticBadgeUrl(baseUrl, 'named logo', name, 'blue', {
+                logo: name,
+              })}
+              alt={`logo: ${name}`}
+            />
+          </td>
+          <td>
+            <Badge
+              src={staticBadgeUrl(baseUrl, 'Named Logo', name, 'blue', {
+                logo: name,
+                style: 'social',
+              })}
+              alt={`logo: ${name}`}
+            />
+          </td>
+        </tr>
+      ))}
+    </tbody>
   </StyledTable>
 )
-StyledTable.propTypes = {
+NamedLogoTable.propTypes = {
   logoNames: PropTypes.arrayOf(PropTypes.string).isRequired,
 }
 
