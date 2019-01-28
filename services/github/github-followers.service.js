@@ -30,7 +30,6 @@ module.exports = class GithubFollowers extends LegacyService {
     return [
       {
         title: 'GitHub followers',
-        pattern: ':user',
         namedParams: {
           user: 'espadrine',
         },
