@@ -77,29 +77,12 @@ module.exports = class PypiDownloads extends BaseJsonService {
     return [
       {
         title: 'PyPI - Downloads',
-        pattern: 'dd/:packageName',
+        pattern: ':period(dd|dw|dm)/:packageName',
         namedParams: {
+          period: 'dd',
           packageName: 'Django',
         },
         staticPreview: this.render({ period: 'dd', downloads: 14000 }),
-        keywords,
-      },
-      {
-        title: 'PyPI - Downloads',
-        pattern: 'dw/:packageName',
-        namedParams: {
-          packageName: 'Django',
-        },
-        staticPreview: this.render({ period: 'dw', downloads: 250000 }),
-        keywords,
-      },
-      {
-        title: 'PyPI - Downloads',
-        pattern: 'dm/:packageName',
-        namedParams: {
-          packageName: 'Django',
-        },
-        staticPreview: this.render({ period: 'dm', downloads: 1070100 }),
         keywords,
       },
     ]

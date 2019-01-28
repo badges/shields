@@ -25,29 +25,9 @@ module.exports = class David extends LegacyService {
     return [
       {
         title: 'David',
-        pattern: ':user/:repo',
+        pattern: ':kind(dev|optional|peer)?:user/:repo',
         namedParams: { user: 'expressjs', repo: 'express' },
         staticPreview: this.renderStaticExample(),
-      },
-      {
-        title: 'David',
-        pattern: 'dev/:user/:repo',
-        namedParams: { user: 'expressjs', repo: 'express' },
-        staticPreview: this.renderStaticExample({ label: 'dev dependencies' }),
-      },
-      {
-        title: 'David',
-        pattern: 'optional/:user/:repo',
-        namedParams: { user: 'elnounch', repo: 'byebye' },
-        staticPreview: this.renderStaticExample({
-          label: 'optional dependencies',
-        }),
-      },
-      {
-        title: 'David',
-        pattern: 'peer/:user/:repo',
-        namedParams: { user: 'webcomponents', repo: 'generator-element' },
-        staticPreview: this.renderStaticExample({ label: 'peer dependencies' }),
       },
       {
         title: 'David (path)',
