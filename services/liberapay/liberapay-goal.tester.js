@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
+const { isIntegerPercentage } = require('../test-validators')
 const t = (module.exports = require('..').createServiceTester())
 
 t.create('Goal Progress (valid)')
@@ -8,7 +9,7 @@ t.create('Goal Progress (valid)')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'goal progress',
-      value: Joi.string().regex(/^[0-9]+%/),
+      value: isIntegerPercentage,
     })
   )
 
