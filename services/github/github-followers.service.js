@@ -22,6 +22,7 @@ module.exports = class GithubFollowers extends LegacyService {
   static get route() {
     return {
       base: 'github/followers',
+      pattern: ':user',
     }
   }
 

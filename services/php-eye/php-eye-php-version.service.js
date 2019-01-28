@@ -22,6 +22,7 @@ module.exports = class PhpEyePhpVersion extends LegacyService {
   static get route() {
     return {
       base: 'php-eye',
+      pattern: ':user/:repo',
     }
   }
 

@@ -18,6 +18,7 @@ module.exports = class LgtmGrade extends LegacyService {
   static get route() {
     return {
       base: 'lgtm/grade',
+      pattern: '',
     }
   }
 

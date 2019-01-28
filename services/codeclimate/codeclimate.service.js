@@ -12,6 +12,7 @@ class CodeclimateCoverage extends LegacyService {
   static get route() {
     return {
       base: 'codeclimate',
+      pattern: ':which(coverage|coverage-letter)/:userRepo*',
     }
   }
 
@@ -57,6 +58,8 @@ class Codeclimate extends LegacyService {
   static get route() {
     return {
       base: 'codeclimate',
+      pattern:
+        ':which(issues|maintainability|maintainability-percentage|tech-debt)/:userRepo*',
     }
   }
 

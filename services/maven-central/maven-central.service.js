@@ -20,6 +20,7 @@ module.exports = class MavenCentral extends LegacyService {
   static get route() {
     return {
       base: 'maven-central/v',
+      pattern: '',
     }
   }
 

@@ -88,6 +88,7 @@ module.exports = class Website extends LegacyService {
   static get route() {
     return {
       base: '',
+      pattern: '',
     }
   }
 

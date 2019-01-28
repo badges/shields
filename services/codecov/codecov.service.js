@@ -21,6 +21,7 @@ module.exports = class Codecov extends LegacyService {
   static get route() {
     return {
       base: 'codecov/c',
+      pattern: '',
     }
   }
 
