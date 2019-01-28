@@ -10,6 +10,7 @@ module.exports = class CocoapodsVersion extends LegacyService {
   static get route() {
     return {
       base: 'cocoapods/v',
+      pattern: ':spec',
     }
   }
 
