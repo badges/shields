@@ -156,5 +156,7 @@ function setRoutes(allowedOrigin, githubApiProvider, server) {
 }
 
 module.exports = {
+  findSuggestions,
+  githubLicense,
   setRoutes,
 }
