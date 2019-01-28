@@ -8,7 +8,7 @@ const Camp = require('camp')
 const makeBadge = require('../../gh-badges/lib/make-badge')
 const GithubConstellation = require('../../services/github/github-constellation')
 const { makeBadgeData } = require('../../lib/badge-data')
-const suggest = require('../../lib/suggest')
+const suggest = require('../../services/suggest/suggest')
 const { loadServiceClasses } = require('../base-service/loader')
 const { makeSend } = require('../base-service/legacy-result-sender')
 const {

@@ -1,7 +1,6 @@
 'use strict'
 
-// These tests are for the badge-suggestion endpoint in lib/suggest.js. This
-// endpoint is called from frontend/components/suggestion-and-search.js.
+// This endpoint is called from frontend/components/suggestion-and-search.js.
 
 const { ServiceTester } = require('..')
 const { invalidJSON } = require('../response-fixtures')

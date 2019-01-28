@@ -2,8 +2,7 @@
 //
 // eg. /$suggest/v1?url=https://github.com/badges/shields
 //
-// Tests for this endpoint are in services/suggest/suggest.spec.js. The
-// endpoint is called from frontend/components/suggestion-and-search.js.
+// This endpoint is called from frontend/components/suggestion-and-search.js.
 
 'use strict'
 
