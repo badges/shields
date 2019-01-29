@@ -19,9 +19,6 @@
     <a href="https://docs.google.com/spreadsheets/d/1cHIUSVaiKrIFw3KIu0yt-EMNlMkIfU5alE7YKZ4PeOE/edit#gid=0">
         <img src="https://img.shields.io/github/search/badges/shields/extends%20LegacyService.svg?label=legacy%20services%20needing%20refactor"
             alt="legacy services needing refactor"></a>
-    <a href="https://github.com/search?utf8=%E2%9C%93&q=previewUrl+repo%3Abadges%2Fshields+path%3A%2Fservices&type=Code&ref=advsearch&l=&l=">
-        <img src="https://img.shields.io/github/search/badges/shields/previewUrl.svg?label=`previewUrl`s%20needing%20refactor"
-            alt="`previewUrl`s needing refactor"></a>
     <a href="https://coveralls.io/github/badges/shields">
         <img src="https://img.shields.io/coveralls/github/badges/shields.svg"
             alt="coverage"></a>
@@ -114,9 +111,6 @@ Please report any Gitpod bugs, questions, or suggestions in issue
 [#2772](https://github.com/badges/shields/issues/2772).
 
 [![Edit with Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/badges/shields)
-
-To generate the frontend using production cache settings &ndash; that is,
-badge preview URIs with `maxAge` &ndash; run `LONG_CACHE=true npm run build`.
 
 To analyze the frontend bundle, run `npm install webpack-bundle-analyzer` and
 then `ANALYZE=true npm start`.

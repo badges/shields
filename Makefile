@@ -11,7 +11,7 @@ WORKING_BRANCH=server-deploy-working-branch
 all: website test
 
 website:
-	LONG_CACHE=false npm run build
+	npm run build
 
 deploy: deploy-s0 deploy-s1 deploy-s2 clean-server-deploy deploy-gh-pages deploy-gh-pages-clean
 
@@ -48,8 +48,7 @@ push-s2:
 deploy-gh-pages:
 	rm -rf ${FRONTEND_TMP}
 	git worktree prune
-	LONG_CACHE=true \
-		BASE_URL=https://img.shields.io \
+	BASE_URL=https://img.shields.io \
 		NEXT_ASSET_PREFIX=https://shields.io \
 		npm run build
 	git worktree add -B gh-pages ${FRONTEND_TMP}
