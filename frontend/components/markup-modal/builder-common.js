@@ -32,11 +32,12 @@ BuilderContainer.propTypes = {
 const labelFont = `
   font-family: system-ui;
   font-size: 11px;
-  text-transform: lowercase;
 `
 
 const BuilderLabel = styled.label`
   ${labelFont}
+
+  text-transform: lowercase;
 `
 
 const BuilderCaption = styled.span`
