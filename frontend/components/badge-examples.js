@@ -42,8 +42,15 @@ export default class BadgeExamples extends React.Component {
     // There are two alternatives for `preview`. Refer to the schema in
     // `services/service-definitions.js`.
     if (preview.label !== undefined) {
-      const { label, message, color } = preview
-      previewUrl = staticBadgeUrl({ baseUrl, label, message, color })
+      const { label, message, color, style, namedLogo } = preview
+      previewUrl = staticBadgeUrl({
+        baseUrl,
+        label,
+        message,
+        color,
+        style,
+        namedLogo,
+      })
     } else {
       const { path, queryParams } = preview
       previewUrl = badgeUrlFromPath({ baseUrl, path, queryParams, longCache })

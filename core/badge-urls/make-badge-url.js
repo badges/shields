@@ -59,6 +59,7 @@ function staticBadgeUrl({
   message,
   color = 'lightgray',
   style,
+  namedLogo,
   format = 'svg',
 }) {
   if (!label || !message) {
@@ -67,6 +68,7 @@ function staticBadgeUrl({
   const path = [label, message, color].map(encodeField).join('-')
   const outQueryString = queryString.stringify({
     style,
+    logo: namedLogo,
   })
   const suffix = outQueryString ? `?${outQueryString}` : ''
   return `${baseUrl}/badge/${path}.${format}${suffix}`

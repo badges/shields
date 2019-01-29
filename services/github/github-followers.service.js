@@ -30,20 +30,24 @@ module.exports = class GithubFollowers extends LegacyService {
     return [
       {
         title: 'GitHub followers',
-        previewUrl: 'espadrine',
-        // https://github.com/badges/shields/issues/2479
-        // namedParams: {
-        //   user: 'espadrine',
-        // },
-        // staticPreview: {
-        //   label: 'Follow',
-        //   message: '150',
-        //   style: 'social',
-        // },
-        queryParams: { style: 'social', label: 'Follow' },
+        namedParams: {
+          user: 'espadrine',
+        },
+        staticPreview: {
+          label: 'Follow',
+          message: '150',
+          style: 'social',
+        },
+        queryParams: { label: 'Follow' },
         documentation,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      namedLogo: 'github',
+    }
   }
 
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
