@@ -15,6 +15,8 @@ const staticBadgeContent = Joi.object({
   label: Joi.string(),
   message: Joi.string().required(),
   color: Joi.string().required(),
+  style: Joi.string(),
+  namedLogo: Joi.string(),
 })
 
 const serviceDefinition = Joi.object({
