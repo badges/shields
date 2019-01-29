@@ -27,9 +27,9 @@ Our preferred way to consume icons is via the SimpleIcons logo. As a first port 
 In some cases we may also accept logo submissions directly. In general, we do this only when:
 
 - We have a corresponding badge on the homepage, (e.g. the Eclipse logo because we support service badges for the Eclipse Marketplace). We may also approve logos for other tools widely used by developers.
-- The logo provided in SimpleIcons is unclear when displayed at small size on a badge or
-- There is substantial benefit in using a multi-colored icon over a monochrome icon
-- The logo doesn't meet the requirements to be includes in the SimpleIcons set
+- The logo provided in SimpleIcons is unclear when displayed at small size on a badge.
+- There is substantial benefit in using a multi-colored icon over a monochrome icon.
+- The logo doesn't meet the requirements to be included in the SimpleIcons set.
 
 If you are submitting a pull request for a custom logo, please:
 
