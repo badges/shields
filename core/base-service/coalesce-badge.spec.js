@@ -122,6 +122,9 @@ describe('coalesceBadge', function() {
     })
 
     it('applies the named logo', function() {
+      expect(coalesceBadge({}, { namedLogo: 'npm' }, {}).namedLogo).to.equal(
+        'npm'
+      )
       expect(coalesceBadge({}, { namedLogo: 'npm' }, {}).logo).to.equal(
         getShieldsIcon({ name: 'npm' })
       ).and.not.to.be.empty

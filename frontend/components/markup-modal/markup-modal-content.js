@@ -153,6 +153,7 @@ export default class MarkupModalContent extends React.Component {
       example: {
         title,
         example: { pattern, namedParams, queryParams },
+        preview: { style: defaultStyle },
       },
     } = this.props
 
@@ -167,6 +168,7 @@ export default class MarkupModalContent extends React.Component {
         />
         <QueryStringBuilder
           exampleParams={queryParams}
+          defaultStyle={defaultStyle}
           onChange={this.handleQueryStringChange}
         />
         <div>{this.renderMarkupAndLivePreview()}</div>

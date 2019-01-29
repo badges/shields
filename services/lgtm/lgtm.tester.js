@@ -2,9 +2,8 @@
 
 const Joi = require('joi')
 const { ServiceTester } = require('..')
-const { invalidJSON } = require('../response-fixtures')
-
-const t = (module.exports = new ServiceTester({ id: 'lgtm', title: 'LGTM' }))
+const t = new ServiceTester({ id: 'lgtm', title: 'LGTM' })
+module.exports = t
 
 // Alerts Badge
 
@@ -29,7 +28,7 @@ t.create('alerts: no alerts')
   .intercept(nock =>
     nock('https://lgtm.com')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
-      .reply(200, { alerts: 0 })
+      .reply(200, { alerts: 0, languages: data.languages })
   )
   .expectJSON({ name: 'lgtm', value: '0 alerts' })
 
@@ -38,7 +37,7 @@ t.create('alerts: single alert')
   .intercept(nock =>
     nock('https://lgtm.com')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
-      .reply(200, { alerts: 1 })
+      .reply(200, { alerts: 1, languages: data.languages })
   )
   .expectJSON({ name: 'lgtm', value: '1 alert' })
 
@@ -47,7 +46,7 @@ t.create('alerts: multiple alerts')
   .intercept(nock =>
     nock('https://lgtm.com')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
-      .reply(200, { alerts: 123 })
+      .reply(200, { alerts: 123, languages: data.languages })
   )
   .expectJSON({ name: 'lgtm', value: '123 alerts' })
 
@@ -58,44 +57,16 @@ t.create('alerts: json missing alerts')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(200, {})
   )
-  .expectJSON({ name: 'lgtm', value: 'invalid' })
-
-t.create('alerts: invalid json')
-  .get('/alerts/g/apache/cloudstack.json')
-  .intercept(nock =>
-    nock('https://lgtm.com')
-      .get('/api/v0.1/project/g/apache/cloudstack/details')
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'lgtm', value: 'invalid' })
-
-t.create('alerts: lgtm inaccessible')
-  .get('/alerts/g/apache/cloudstack.json')
-  .networkOff()
-  .expectJSON({ name: 'lgtm', value: 'inaccessible' })
+  .expectJSON({ name: 'lgtm', value: 'invalid response data' })
 
 // Grade Badge
 
 t.create('grade: missing project')
   .get('/grade/java/g/some-org/this-project-doesnt-exist.json')
   .expectJSON({
-    name: 'code quality: java',
+    name: 'lgtm',
     value: 'project not found',
   })
-
-t.create('grade: lgtm inaccessible')
-  .get('/grade/java/g/apache/cloudstack.json')
-  .networkOff()
-  .expectJSON({ name: 'code quality: java', value: 'inaccessible' })
-
-t.create('grade: invalid json')
-  .get('/grade/java/g/apache/cloudstack.json')
-  .intercept(nock =>
-    nock('https://lgtm.com')
-      .get('/api/v0.1/project/g/apache/cloudstack/details')
-      .reply(invalidJSON)
-  )
-  .expectJSON({ name: 'code quality: java', value: 'invalid' })
 
 t.create('grade: json missing languages')
   .get('/grade/java/g/apache/cloudstack.json')
@@ -104,7 +75,7 @@ t.create('grade: json missing languages')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(200, {})
   )
-  .expectJSON({ name: 'code quality: java', value: 'invalid' })
+  .expectJSON({ name: 'lgtm', value: 'invalid response data' })
 
 t.create('grade: grade for a project (java)')
   .get('/grade/java/g/apache/cloudstack.json')
@@ -119,12 +90,13 @@ t.create('grade: grade for missing language')
   .get('/grade/foo/g/apache/cloudstack.json')
   .expectJSON({
     name: 'code quality: foo',
-    value: 'no data for language',
+    value: 'no language data',
   })
 
 // Test display of languages
 
 const data = {
+  alerts: 0,
   languages: [
     { lang: 'cpp', grade: 'A+' },
     { lang: 'javascript', grade: 'A' },
@@ -197,4 +169,4 @@ t.create('grade: foo (no grade for valid language)')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(200, data)
   )
-  .expectJSON({ name: 'code quality: foo', value: 'no data for language' })
+  .expectJSON({ name: 'code quality: foo', value: 'no language data' })
