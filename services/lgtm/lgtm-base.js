@@ -7,7 +7,12 @@ const schema = Joi.object({
   alerts: Joi.number().required(),
 
   languages: Joi.array()
-    .min(1)
+    .items(
+      Joi.object({
+        lang: Joi.string().required(),
+        grade: Joi.string(),
+      })
+    )
     .required(),
 }).required()
 
