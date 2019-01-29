@@ -8,7 +8,7 @@ const { nonNegativeInteger } = require('../validators')
 
 const keywords = ['python']
 
-const pypiStatsSchema = Joi.object({
+const schema = Joi.object({
   data: Joi.object({
     last_day: nonNegativeInteger,
     last_week: nonNegativeInteger,
@@ -34,11 +34,10 @@ const periodMap = {
 // this badge uses PyPI Stats instead of the PyPI API
 // so it doesn't extend PypiBase
 module.exports = class PypiDownloads extends BaseJsonService {
-  async fetch({ pkg }) {
-    const url = `https://pypistats.org/api/packages/${pkg.toLowerCase()}/recent`
+  async fetch({ packageName }) {
     return this._requestJson({
-      url,
-      schema: pypiStatsSchema,
+      url: `https://pypistats.org/api/packages/${packageName.toLowerCase()}/recent`,
+      schema,
       errorMessages: { 404: 'package not found' },
     })
   }
@@ -50,8 +49,8 @@ module.exports = class PypiDownloads extends BaseJsonService {
     }
   }
 
-  async handle({ period, pkg }) {
-    const json = await this.fetch({ pkg })
+  async handle({ period, packageName }) {
+    const json = await this.fetch({ packageName })
     return this.constructor.render({
       period,
       downloads: json.data[periodMap[period].api_field],
@@ -69,7 +68,7 @@ module.exports = class PypiDownloads extends BaseJsonService {
   static get route() {
     return {
       base: 'pypi',
-      pattern: ':period(dd|dw|dm)/:pkg',
+      pattern: ':period(dd|dw|dm)/:packageName',
     }
   }
 
@@ -77,7 +76,6 @@ module.exports = class PypiDownloads extends BaseJsonService {
     return [
       {
         title: 'PyPI - Downloads',
-        pattern: ':period(dd|dw|dm)/:packageName',
         namedParams: {
           period: 'dd',
           packageName: 'Django',
