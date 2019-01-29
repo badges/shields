@@ -34,7 +34,6 @@ module.exports = class GithubWatchers extends LegacyService {
           user: 'badges',
           repo: 'shields',
         },
-        queryParams: { style: 'social', label: 'Watch' },
         staticPreview: {
           label: 'Watch',
           message: '96',

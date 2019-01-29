@@ -34,7 +34,6 @@ module.exports = class GithubForks extends LegacyService {
           user: 'badges',
           repo: 'shields',
         },
-        queryParams: { style: 'social', label: 'Fork' },
         staticPreview: {
           label: 'Fork',
           message: '1639',
