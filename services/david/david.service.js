@@ -17,7 +17,7 @@ module.exports = class David extends LegacyService {
   static get route() {
     return {
       base: 'david',
-      pattern: '',
+      pattern: ':kind(dev|optional|peer)?/:user/:repo',
     }
   }
 
@@ -25,13 +25,11 @@ module.exports = class David extends LegacyService {
     return [
       {
         title: 'David',
-        pattern: ':kind(dev|optional|peer)?:user/:repo',
         namedParams: { user: 'expressjs', repo: 'express' },
         staticPreview: this.renderStaticExample(),
       },
       {
         title: 'David (path)',
-        pattern: ':user/:repo',
         namedParams: { user: 'babel', repo: 'babel' },
         queryParams: { path: 'packages/babel-core' },
         staticPreview: this.renderStaticExample(),
