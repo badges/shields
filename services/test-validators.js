@@ -91,6 +91,10 @@ const isDependencyState = withRegex(
   /^(\d+ out of date|\d+ deprecated|up to date)$/
 )
 
+const isTestsSummary = withRegex(
+  /^[0-9]+ passed(, [0-9]+ failed)?(, [0-9]+ skipped)?$/
+)
+
 module.exports = {
   isSemver,
   isVPlusTripleDottedVersion,
@@ -110,5 +114,6 @@ module.exports = {
   isFormattedDate,
   isRelativeFormattedDate,
   isDependencyState,
+  isTestsSummary,
   withRegex,
 }

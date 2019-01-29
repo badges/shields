@@ -1,0 +1,118 @@
+'use strict'
+
+const Joi = require('joi')
+const {
+  isBuildStatus,
+  renderBuildStatusBadge,
+} = require('../../lib/build-status')
+const { BaseJsonService } = require('..')
+
+const circleSchema = Joi.array()
+  .items(Joi.object({ status: isBuildStatus }))
+  .min(1)
+  .max(1)
+  .required()
+
+const documentation = `
+  <p>
+    Please note that <code>status</code> tokens will not work. Instead, you should generate an <code>all</code> scoped token.
+    <br />
+    For the sake of security, please use <b>Project Tokens</b> and never <b>Personal Tokens</b> as they grant full read write permissions to your projects.
+    <br />
+    For more information about managing Circle CI tokens, please read this <a target="_blank" href="https://circleci.com/docs/2.0/managing-api-tokens">article</a>.
+  </p>
+  `
+
+module.exports = class CircleCiTests extends BaseJsonService {
+  async fetchLastBuild({ vcsType, user, repo, branch }) {
+    // https://circleci.com/api/v1.1/project/:vcs-type/:username/:project
+    let url = `https://circleci.com/api/v1.1/project/${vcsType}/${user}/${repo}`
+    if (branch != null) {
+      url += `/tree/${branch}`
+    }
+    const query = { filter: 'completed', limit: 1 }
+    if (token) {
+      query['circle-token'] = token
+    }
+    return this._requestJson({
+      url,
+      schema: circleSchema,
+      options: { qs: query },
+      errorMessages: { 404: 'project not found' },
+    })
+  }
+
+  static render({ status }) {
+    return {
+      message: 'hello',
+      color: 'red',
+    }
+  }
+
+  async handle({ vcsType, user, repo, branch = 'master' }) {
+    const json = await this.fetch({
+      token,
+      vcsType: vcsType || 'github',
+      userRepo,
+      branch,
+    })
+    // https://circleci.com/api/v1.1/project/:vcs-type/:username/:project/:build_num
+    // https://circleci.com/api/v1.1/project/github/badges/shields/38075/tests
+    return this.constructor.render({ status: json[0].status })
+  }
+
+  // Metadata
+  static get defaultBadgeData() {
+    return { label: 'tests' }
+  }
+
+  static get category() {
+    return 'build'
+  }
+
+  static get route() {
+    return {
+      base: 'circleci/tests',
+      pattern: ':vcsType/:user/:repo/:branch*',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'CircleCI (all branches)',
+        pattern: 'project/:vcsType/:owner/:repo',
+        namedParams: {
+          vcsType: 'github',
+          owner: 'RedSparr0w',
+          repo: 'node-csgo-parser',
+        },
+        staticPreview: this.render({ status: 'success' }),
+      },
+      {
+        title: 'CircleCI branch',
+        pattern: 'project/:vcsType/:owner/:repo/:branch',
+        namedParams: {
+          vcsType: 'github',
+          owner: 'RedSparr0w',
+          repo: 'node-csgo-parser',
+          branch: 'master',
+        },
+        staticPreview: this.render({ status: 'success' }),
+      },
+      {
+        title: 'CircleCI token',
+        pattern: 'token/:token/project/:vcsType/:owner/:repo/:branch',
+        namedParams: {
+          token: 'b90b5c49e59a4c67ba3a92f7992587ac7a0408c2',
+          vcsType: 'github',
+          owner: 'RedSparr0w',
+          repo: 'node-csgo-parser',
+          branch: 'master',
+        },
+        staticPreview: this.render({ status: 'success' }),
+        documentation,
+      },
+    ]
+  }
+}

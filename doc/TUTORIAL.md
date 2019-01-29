@@ -307,7 +307,7 @@ If you update `examples`, you don't have to restart the server. Run `npm run
 defs` in another terminal window and the frontend will update.
 
 ### (4.5) Write Tests <!-- Change the link below when you change the heading -->
-[write tests]: #45-write-tests
+[write tests]: #45-write-tests-
 
 When creating a badge for a new service or changing a badge's behavior, tests
 should be included. They serve several purposes:
