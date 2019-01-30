@@ -96,7 +96,7 @@ module.exports = class Website extends LegacyService {
     return [
       {
         title: 'Website',
-        pattern: 'website-up-down-green-red/:protocol/:hostAndPath',
+        pattern: 'website-up-down-green-red/:protocol(https|http)/:hostAndPath',
         namedParams: {
           protocol: 'https',
           hostAndPath: 'shields.io',
