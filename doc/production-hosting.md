@@ -192,7 +192,9 @@ Be careful not to push the deploy commits to GitHub.
 
 ## DNS
 
-I'm not sure where the DNS is registered.
+DNS is registered with [DNSimple][].
+
+[DNSimple]: https://dnsimple.com/
 
 ## Logs
 
