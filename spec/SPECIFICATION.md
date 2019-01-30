@@ -5,8 +5,8 @@ This document specifies the visual design of Shields badges.
 ## Guidelines
 
 - **legible**: it should be as easy to read the metadata provided by a badge as it is to read body copy inside of a README file regardless of display resolution
-- **semantic**: the purpose information provided by a badge should be self-evident
-- **non-promotional**: badges should not advertise but instead provide value through information
+- **semantic**: the purpose of the information provided by a badge should be self-evident
+- **non-promotional**: badges should refrain from advertising a service but instead provide value through the badge's information instead
 - **concise**: one descriptive word on the left (the key), one piece of data on the right (the value)
 - **hyperlinked**: badges can link to a third-party website providing more information, either related to the metadata provided by the badge or about the project the badge was used for (e.g. an open source library)
 
