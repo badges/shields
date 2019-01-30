@@ -5,7 +5,6 @@ const { isMetric } = require('../test-validators')
 
 const t = (module.exports = require('..').createServiceTester())
 
-// total downloads
 t.create('total downloads (valid)')
   .get('/dt/rails.json')
   .expectJSONTypes(
@@ -17,9 +16,8 @@ t.create('total downloads (valid)')
 
 t.create('total downloads (not found)')
   .get('/dt/not-a-package.json')
-  .expectJSON({ name: 'downloads', value: 'not found' })
+  .expectJSON({ name: 'downloads', value: 'gem not found' })
 
-// version downloads
 t.create('version downloads (valid, stable version)')
   .get('/dv/rails/stable.json')
   .expectJSONTypes(
@@ -40,17 +38,29 @@ t.create('version downloads (valid, specific version)')
 
 t.create('version downloads (package not found)')
   .get('/dv/not-a-package/4.1.0.json')
-  .expectJSON({ name: 'downloads', value: 'not found' })
+  .expectJSON({ name: 'downloads', value: 'gem not found' })
 
 t.create('version downloads (valid package, invalid version)')
   .get('/dv/rails/not-a-version.json')
-  .expectJSON({ name: 'downloads', value: 'invalid' })
+  .expectJSON({
+    name: 'downloads',
+    value: 'version should be "stable" or valid semver',
+  })
+
+t.create('version downloads (valid package, version not found)')
+  .get('/dv/rails/8.8.8.json')
+  .expectJSON({
+    name: 'downloads',
+    value: 'version not found',
+  })
 
 t.create('version downloads (valid package, version not specified)')
   .get('/dv/rails.json')
-  .expectJSON({ name: 'downloads', value: 'invalid' })
+  .expectJSON({
+    name: 'downloads',
+    value: 'version downloads requires a version',
+  })
 
-// latest version downloads
 t.create('latest version downloads (valid)')
   .get('/dtv/rails.json')
   .expectJSONTypes(
@@ -62,4 +72,4 @@ t.create('latest version downloads (valid)')
 
 t.create('latest version downloads (not found)')
   .get('/dtv/not-a-package.json')
-  .expectJSON({ name: 'downloads', value: 'not found' })
+  .expectJSON({ name: 'downloads', value: 'gem not found' })

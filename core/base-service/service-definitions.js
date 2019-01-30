@@ -13,8 +13,12 @@ const objectOfKeyValues = Joi.object()
 
 const staticBadgeContent = Joi.object({
   label: Joi.string(),
-  message: Joi.string().required(),
+  message: Joi.string()
+    .allow('')
+    .required(),
   color: Joi.string().required(),
+  style: Joi.string(),
+  namedLogo: Joi.string(),
 })
 
 const serviceDefinition = Joi.object({
