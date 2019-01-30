@@ -17,7 +17,7 @@
 | Cloudflare     | Admin access    | @espadrine, @paulmelnikow                                                                  |
 | GitHub         | OAuth app       | @espadrine ([could be transferred to the badges org][oauth transfer])                      |
 | DNS            | Account owner   | @olivierlacan                                                                              |
-| DNS            | Account access  | @espadrine, @paulmelnikow, @chris48s                                                       |
+| DNS            | Read-only account access  | @espadrine, @paulmelnikow, @chris48s                                                       |
 | Sentry         | Error reports   | @espadrine, @paulmelnikow                                                                  |
 | Frontend       | Deployment      | Technically anyone with push access but in practice must be deployed with the badge server |
 | Metrics server | Owner           | @platan                                                                                    |
@@ -194,7 +194,7 @@ Be careful not to push the deploy commits to GitHub.
 
 DNS is registered with [DNSimple][].
 
-[DNSimple]: https://dnsimple.com/
+[dnsimple]: https://dnsimple.com/
 
 ## Logs
 
