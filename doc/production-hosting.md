@@ -7,22 +7,22 @@
 [operations issues]: https://github.com/badges/shields/issues?q=is%3Aissue+is%3Aopen+label%3Aoperations
 [ops discord]: https://discordapp.com/channels/308323056592486420/480747695879749633
 
-| Component      | Subcomponent    | People with access                                                                         |
-| -------------- | --------------- | ------------------------------------------------------------------------------------------ |
-| Badge servers  | Account owner   | @espadrine                                                                                 |
-| Badge servers  | ssh, logs       | @espadrine                                                                                 |
-| Badge servers  | Deployment      | @espadrine, @paulmelnikow                                                                  |
-| Badge servers  | Admin endpoints | @espadrine, @paulmelnikow                                                                  |
-| Cloudflare     | Account owner   | @espadrine                                                                                 |
-| Cloudflare     | Admin access    | @espadrine, @paulmelnikow                                                                  |
-| GitHub         | OAuth app       | @espadrine ([could be transferred to the badges org][oauth transfer])                      |
-| DNS            | Account owner   | @olivierlacan                                                                              |
-| DNS            | Read-only account access  | @espadrine, @paulmelnikow, @chris48s                                                       |
-| Sentry         | Error reports   | @espadrine, @paulmelnikow                                                                  |
-| Frontend       | Deployment      | Technically anyone with push access but in practice must be deployed with the badge server |
-| Metrics server | Owner           | @platan                                                                                    |
-| UptimeRobot    | Account owner   | @paulmelnikow                                                                              |
-| More metrics   | Owner           | @RedSparr0w                                                                                |
+| Component      | Subcomponent             | People with access                                                                         |
+| -------------- | ------------------------ | ------------------------------------------------------------------------------------------ |
+| Badge servers  | Account owner            | @espadrine                                                                                 |
+| Badge servers  | ssh, logs                | @espadrine                                                                                 |
+| Badge servers  | Deployment               | @espadrine, @paulmelnikow                                                                  |
+| Badge servers  | Admin endpoints          | @espadrine, @paulmelnikow                                                                  |
+| Cloudflare     | Account owner            | @espadrine                                                                                 |
+| Cloudflare     | Admin access             | @espadrine, @paulmelnikow                                                                  |
+| GitHub         | OAuth app                | @espadrine ([could be transferred to the badges org][oauth transfer])                      |
+| DNS            | Account owner            | @olivierlacan                                                                              |
+| DNS            | Read-only account access | @espadrine, @paulmelnikow, @chris48s                                                       |
+| Sentry         | Error reports            | @espadrine, @paulmelnikow                                                                  |
+| Frontend       | Deployment               | Technically anyone with push access but in practice must be deployed with the badge server |
+| Metrics server | Owner                    | @platan                                                                                    |
+| UptimeRobot    | Account owner            | @paulmelnikow                                                                              |
+| More metrics   | Owner                    | @RedSparr0w                                                                                |
 
 There are [too many bottlenecks][issue 2577]!
 
