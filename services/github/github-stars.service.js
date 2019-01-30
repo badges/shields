@@ -31,11 +31,25 @@ module.exports = class GithubStars extends LegacyService {
     return [
       {
         title: 'GitHub stars',
-        previewUrl: 'badges/shields',
-        queryParams: { style: 'social', label: 'Stars' },
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+        },
+        queryParams: { style: 'social' },
+        staticPreview: {
+          label: 'Stars',
+          message: '7k',
+          style: 'social',
+        },
         documentation,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      namedLogo: 'github',
+    }
   }
 
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {

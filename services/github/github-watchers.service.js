@@ -30,11 +30,25 @@ module.exports = class GithubWatchers extends LegacyService {
     return [
       {
         title: 'GitHub watchers',
-        previewUrl: 'badges/shields',
-        queryParams: { style: 'social', label: 'Watch' },
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+        },
+        staticPreview: {
+          label: 'Watch',
+          message: '96',
+          style: 'social',
+        },
+        queryParams: { label: 'Watch' },
         documentation,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      namedLogo: 'github',
+    }
   }
 
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {

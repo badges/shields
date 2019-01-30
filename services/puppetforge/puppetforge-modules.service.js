@@ -27,8 +27,16 @@ class PuppetforgeModuleVersion extends LegacyService {
   static get examples() {
     return [
       {
-        title: 'Puppet Forge',
-        previewUrl: 'vStone/percona',
+        title: 'Puppet Forge version',
+        namedParams: {
+          user: 'vStone',
+          moduleName: 'percona',
+        },
+        staticPreview: {
+          label: 'puppetforge',
+          message: 'v1.3.3',
+          color: 'blue',
+        },
       },
     ]
   }
@@ -83,8 +91,16 @@ class PuppetforgeModuleDownloads extends LegacyService {
   static get examples() {
     return [
       {
-        title: 'Puppet Forge',
-        previewUrl: 'camptocamp/openldap',
+        title: 'Puppet Forge downloads',
+        namedParams: {
+          user: 'camptocamp',
+          moduleName: 'openldap',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '720k',
+          color: 'brightgreen',
+        },
       },
     ]
   }
@@ -107,8 +123,16 @@ class PuppetforgeModuleEndorsement extends LegacyService {
   static get examples() {
     return [
       {
-        title: 'Puppet Forge',
-        previewUrl: 'camptocamp/openssl',
+        title: 'Puppet Forge endorsement',
+        namedParams: {
+          user: 'camptocamp',
+          moduleName: 'openssl',
+        },
+        staticPreview: {
+          label: 'endorsement',
+          message: 'approved',
+          color: 'green',
+        },
       },
     ]
   }
@@ -131,8 +155,16 @@ class PuppetforgeModuleFeedback extends LegacyService {
   static get examples() {
     return [
       {
-        title: 'Puppet Forge',
-        previewUrl: 'camptocamp/openssl',
+        title: 'Puppet Forge feedback score',
+        namedParams: {
+          user: 'camptocamp',
+          moduleName: 'openssl',
+        },
+        staticPreview: {
+          label: 'score',
+          message: '61%',
+          color: 'yellow',
+        },
       },
     ]
   }
