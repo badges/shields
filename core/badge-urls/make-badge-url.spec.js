@@ -67,5 +67,16 @@ describe('Badge URL generation functions', function() {
       message: 'abc-abc',
       color: 'blue',
     }).expect('/badge/123--123-abc--abc-blue.svg')
+    given({
+      label: '123-123',
+      message: '',
+      color: 'blue',
+      style: 'social',
+    }).expect('/badge/123--123--blue.svg?style=social')
+    given({
+      label: '',
+      message: 'blue',
+      color: 'blue',
+    }).expect('/badge/-blue-blue.svg')
   })
 })

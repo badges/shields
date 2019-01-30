@@ -14,16 +14,25 @@ class ScrutinizerBuild extends LegacyService {
 
   static get route() {
     return {
-      base: 'scrutinizer',
-      pattern: '',
+      base: 'scrutinizer/build',
+      pattern: ':vcsType/:user/:repo',
     }
   }
 
   static get examples() {
     return [
       {
-        title: 'Scrutinizer Build',
-        previewUrl: 'build/g/filp/whoops',
+        title: 'Scrutinizer build',
+        namedParams: {
+          vcsType: 'g',
+          user: 'filp',
+          repo: 'whoops',
+        },
+        staticPreview: {
+          label: 'build',
+          message: 'passing',
+          color: 'brightgreen',
+        },
       },
     ]
   }
@@ -38,20 +47,41 @@ class ScrutinizerCoverage extends LegacyService {
 
   static get route() {
     return {
-      base: 'scrutinizer',
-      pattern: '',
+      base: 'scrutinizer/coverage',
+      pattern: ':vcsType/:user/:repo/:branch*',
     }
   }
 
   static get examples() {
     return [
       {
-        title: 'Scrutinizer Coverage',
-        previewUrl: 'coverage/g/filp/whoops',
+        title: 'Scrutinizer coverage',
+        pattern: ':vcsType/:user/:repo',
+        namedParams: {
+          vcsType: 'g',
+          user: 'filp',
+          repo: 'whoops',
+        },
+        staticPreview: {
+          label: 'coverage',
+          message: '56%',
+          color: 'yellow',
+        },
       },
       {
-        title: 'Scrutinizer branch',
-        previewUrl: 'coverage/g/doctrine/doctrine2/master',
+        title: 'Scrutinizer coverage (branch)',
+        pattern: ':vcsType/:user/:repo/:branch',
+        namedParams: {
+          vcsType: 'g',
+          user: 'doctrine',
+          repo: 'orm',
+          branch: 'master',
+        },
+        staticPreview: {
+          label: 'coverage',
+          message: '73%',
+          color: 'yellow',
+        },
       },
     ]
   }
@@ -73,15 +103,24 @@ class Scrutinizer extends LegacyService {
   static get route() {
     return {
       base: 'scrutinizer',
-      pattern: '',
+      pattern: ':vcsType/:user/:repo',
     }
   }
 
   static get examples() {
     return [
       {
-        title: 'Scrutinizer',
-        previewUrl: 'g/filp/whoops',
+        title: 'Scrutinizer code quality',
+        namedParams: {
+          vcsType: 'g',
+          user: 'filp',
+          repo: 'whoops',
+        },
+        staticPreview: {
+          label: 'code quality',
+          message: '8.26',
+          color: 'green',
+        },
       },
     ]
   }
