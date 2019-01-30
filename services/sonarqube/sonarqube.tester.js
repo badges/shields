@@ -52,6 +52,7 @@ t.create('Coverage (legacy API supported)')
   )
 
 t.create('Tech Debt (legacy API unsupported)')
+  .timeout(15000)
   .get(
     '/4.2/https/sonarqube.com/com.github.dannil:scb-java-client/tech_debt.json'
   )
