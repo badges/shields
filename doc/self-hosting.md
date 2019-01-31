@@ -22,7 +22,7 @@ npm install  # You may need sudo for this.
 ## Build the frontend
 
 ```sh
-LONG_CACHE=true npm run build
+npm run build
 ```
 
 ## Start the server
@@ -122,7 +122,7 @@ or a CDN, you can do that.
 First, build the frontend, pointing `BASE_URL` to your server.
 
 ```sh
-LONG_CACHE=true BASE_URL=https://your-server.example.com npm run build
+BASE_URL=https://your-server.example.com npm run build
 ```
 
 Then copy the contents of the `build/` folder to your static hosting / CDN.

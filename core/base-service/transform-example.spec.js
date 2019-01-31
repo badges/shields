@@ -11,7 +11,6 @@ describe('validateExample function', function() {
         pattern: 'dt/:package',
         namedParams: { package: 'mypackage' },
       },
-      { previewUrl: 'dt/mypackage' },
     ]
 
     validExamples.forEach(example => {
@@ -42,6 +41,7 @@ describe('validateExample function', function() {
         pattern: 'dt/:package',
         exampleUrl: 'dt/mypackage',
       },
+      { previewUrl: 'dt/mypackage' },
     ]
 
     invalidExamples.forEach(example => {
