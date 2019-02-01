@@ -30,11 +30,25 @@ module.exports = class GithubForks extends LegacyService {
     return [
       {
         title: 'GitHub forks',
-        previewUrl: 'badges/shields',
-        queryParams: { style: 'social', label: 'Fork' },
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+        },
+        staticPreview: {
+          label: 'Fork',
+          message: '1639',
+          style: 'social',
+        },
+        queryParams: { label: 'Fork' },
         documentation,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      namedLogo: 'github',
+    }
   }
 
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {

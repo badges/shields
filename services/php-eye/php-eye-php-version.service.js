@@ -30,7 +30,15 @@ module.exports = class PhpEyePhpVersion extends LegacyService {
     return [
       {
         title: 'PHP version from PHP-Eye',
-        previewUrl: 'symfony/symfony',
+        namedParams: {
+          user: 'symfony',
+          repo: 'symfony',
+        },
+        staticPreview: {
+          label: 'php tested',
+          message: '7.1',
+          color: 'brightgreen',
+        },
       },
     ]
   }

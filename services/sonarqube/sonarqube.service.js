@@ -23,14 +23,35 @@ class SonarqubeCoverage extends LegacyService {
   static get examples() {
     return [
       {
-        title: 'SonarQube Coverage',
-        previewUrl:
-          'http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/coverage',
+        title: 'SonarQube coverage',
+        pattern: ':scheme(http|https)/:host/:buildType/:metricName',
+        namedParams: {
+          scheme: 'http',
+          host: 'sonar.petalslink.com',
+          buildType: 'org.ow2.petals:petals-se-ase',
+          metricName: 'coverage',
+        },
+        staticPreview: {
+          label: 'coverage',
+          message: '63%',
+          color: 'yellow',
+        },
       },
       {
-        title: 'SonarQube Coverage (legacy API)',
-        previewUrl:
-          '4.2/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/coverage',
+        title: 'SonarQube coverage (legacy API)',
+        pattern: ':apiVersion/:scheme(http|https)/:host/:buildType/:metricName',
+        namedParams: {
+          apiVersion: '4.2',
+          scheme: 'http',
+          host: 'sonar.petalslink.com',
+          buildType: 'org.ow2.petals:petals-se-ase',
+          metricName: 'coverage',
+        },
+        staticPreview: {
+          label: 'coverage',
+          message: '63%',
+          color: 'yellow',
+        },
       },
     ]
   }
@@ -59,14 +80,35 @@ class Sonarqube extends LegacyService {
   static get examples() {
     return [
       {
-        title: 'SonarQube Tech Debt',
-        previewUrl:
-          'http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/tech_debt',
+        title: 'SonarQube tech debt',
+        pattern: ':scheme(http|https)/:host/:buildType/:metricName',
+        namedParams: {
+          scheme: 'http',
+          host: 'sonar.petalslink.com',
+          buildType: 'org.ow2.petals:petals-se-ase',
+          metricName: 'tech_debt',
+        },
+        staticPreview: {
+          label: 'tech debt',
+          message: '2%',
+          color: 'brightgreen',
+        },
       },
       {
-        title: 'SonarQube Tech Debt (legacy API)',
-        previewUrl:
-          '4.2/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/tech_debt',
+        title: 'SonarQube tech debt (legacy API)',
+        pattern: ':apiVersion/:scheme(http|https)/:host/:buildType/:metricName',
+        namedParams: {
+          apiVersion: '4.2',
+          scheme: 'http',
+          host: 'sonar.petalslink.com',
+          buildType: 'org.ow2.petals:petals-se-ase',
+          metricName: 'tech_debt',
+        },
+        staticPreview: {
+          label: 'tech debt',
+          message: '2%',
+          color: 'brightgreen',
+        },
       },
     ]
   }

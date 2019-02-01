@@ -17,7 +17,7 @@ module.exports = class ContinuousPhp extends LegacyService {
   static get route() {
     return {
       base: 'continuousphp',
-      pattern: '',
+      pattern: ':provider/:user/:repo/:branch*',
     }
   }
 
@@ -25,7 +25,18 @@ module.exports = class ContinuousPhp extends LegacyService {
     return [
       {
         title: 'continuousphp',
-        previewUrl: 'git-hub/doctrine/dbal/master',
+        pattern: ':provider/:user/:repo/:branch',
+        namedParams: {
+          provider: 'git-hub',
+          user: 'doctrine',
+          repo: 'dbal',
+          branch: 'master',
+        },
+        staticPreview: {
+          label: 'build',
+          message: 'passing',
+          color: 'brightgreen',
+        },
       },
     ]
   }

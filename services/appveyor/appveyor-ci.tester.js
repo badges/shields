@@ -6,14 +6,17 @@ const { isBuildStatus } = require('../../lib/build-status')
 const t = (module.exports = require('..').createServiceTester())
 
 t.create('CI status')
+  .timeout(10000)
   .get('/gruntjs/grunt.json')
   .expectJSONTypes(Joi.object().keys({ name: 'build', value: isBuildStatus }))
 
 t.create('CI status on branch')
+  .timeout(10000)
   .get('/gruntjs/grunt/master.json')
   .expectJSONTypes(Joi.object().keys({ name: 'build', value: isBuildStatus }))
 
 t.create('CI status on nonexistent project')
+  .timeout(10000)
   .get('/somerandomproject/thatdoesntexist.json')
   .expectJSON({ name: 'build', value: 'project not found or access denied' })
 

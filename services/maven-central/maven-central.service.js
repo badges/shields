@@ -28,11 +28,30 @@ module.exports = class MavenCentral extends LegacyService {
     return [
       {
         title: 'Maven Central',
-        previewUrl: 'org.apache.maven/apache-maven',
+        pattern: ':groupId/:artifactId',
+        namedParams: {
+          groupId: 'org.apache.maven',
+          artifactId: 'apache-maven',
+        },
+        staticPreview: {
+          label: 'maven-central',
+          message: 'v3.6.0',
+          color: 'blue',
+        },
       },
       {
         title: 'Maven Central with version prefix filter',
-        previewUrl: 'org.apache.maven/apache-maven/2',
+        pattern: ':groupId/:artifactId/:versionPrefix',
+        namedParams: {
+          groupId: 'org.apache.maven',
+          artifactId: 'apache-maven',
+          versionPrefix: '2',
+        },
+        staticPreview: {
+          label: 'maven-central',
+          message: 'v2.2.1',
+          color: 'blue',
+        },
       },
     ]
   }
