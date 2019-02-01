@@ -11,14 +11,6 @@ const objectOfKeyValues = Joi.object()
   .pattern(/./, Joi.string().allow(null))
   .required()
 
-const staticBadgeContent = Joi.object({
-  label: Joi.string(),
-  message: Joi.string().required(),
-  color: Joi.string().required(),
-  style: Joi.string(),
-  namedLogo: Joi.string(),
-})
-
 const serviceDefinition = Joi.object({
   category: Joi.string().required(),
   name: Joi.string().required(),
@@ -37,28 +29,20 @@ const serviceDefinition = Joi.object({
     .items(
       Joi.object({
         title: Joi.string().required(),
-        example: Joi.alternatives()
-          .try(
-            Joi.object({
-              pattern: Joi.string(),
-              namedParams: objectOfKeyValues,
-              queryParams: objectOfKeyValues,
-            }),
-            Joi.object({
-              path: Joi.string().required(), // URL convertible.
-              queryParams: objectOfKeyValues,
-            })
-          )
-          .required(),
-        preview: Joi.alternatives()
-          .try(
-            staticBadgeContent,
-            Joi.object({
-              path: Joi.string().required(), // URL convertible.
-              queryParams: objectOfKeyValues,
-            })
-          )
-          .required(),
+        example: Joi.object({
+          pattern: Joi.string(),
+          namedParams: objectOfKeyValues,
+          queryParams: objectOfKeyValues,
+        }).required(),
+        preview: Joi.object({
+          label: Joi.string(),
+          message: Joi.string()
+            .allow('')
+            .required(),
+          color: Joi.string().required(),
+          style: Joi.string(),
+          namedLogo: Joi.string(),
+        }).required(),
         keywords: arrayOfStrings,
         documentation: Joi.object({
           __html: Joi.string().required(), // Valid HTML.

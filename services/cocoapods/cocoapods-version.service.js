@@ -18,7 +18,14 @@ module.exports = class CocoapodsVersion extends LegacyService {
     return [
       {
         title: 'Cocoapods',
-        previewUrl: 'AFNetworking',
+        namedParams: {
+          spec: 'AFNetworking',
+        },
+        staticPreview: {
+          label: 'pod',
+          message: 'v3.2.1',
+          color: 'blue',
+        },
       },
     ]
   }

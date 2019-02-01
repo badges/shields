@@ -37,8 +37,6 @@ class DummyService extends BaseService {
 
   static get examples() {
     return [
-      { previewUrl: 'World' },
-      { previewUrl: 'World', queryParams: { queryParamA: '!!!' } },
       {
         pattern: ':world',
         namedParams: { world: 'World' },
@@ -323,34 +321,8 @@ describe('BaseService', function() {
         },
       })
 
-      const [first, second, third, fourth, fifth] = examples
+      const [first, second, third] = examples
       expect(first).to.deep.equal({
-        title: 'DummyService',
-        example: {
-          path: '/foo/World',
-          queryParams: {},
-        },
-        preview: {
-          path: '/foo/World',
-          queryParams: {},
-        },
-        keywords: [],
-        documentation: undefined,
-      })
-      expect(second).to.deep.equal({
-        title: 'DummyService',
-        example: {
-          path: '/foo/World',
-          queryParams: { queryParamA: '!!!' },
-        },
-        preview: {
-          path: '/foo/World',
-          queryParams: { queryParamA: '!!!' },
-        },
-        keywords: [],
-        documentation: undefined,
-      })
-      expect(third).to.deep.equal({
         title: 'DummyService',
         example: {
           pattern: '/foo/:world',
@@ -367,7 +339,7 @@ describe('BaseService', function() {
         keywords: ['hello'],
         documentation: undefined,
       })
-      expect(fourth).to.deep.equal({
+      expect(second).to.deep.equal({
         title: 'DummyService',
         example: {
           pattern: '/foo/:namedParamA',
@@ -384,7 +356,7 @@ describe('BaseService', function() {
         keywords: ['hello'],
         documentation: undefined,
       })
-      expect(fifth).to.deep.equal({
+      expect(third).to.deep.equal({
         title: 'DummyService',
         example: {
           pattern: '/foo/:world',
