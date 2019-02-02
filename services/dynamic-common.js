@@ -5,6 +5,10 @@ const validate = require('../core/base-service/validate')
 const { toArray } = require('../lib/badge-data')
 const { InvalidResponse } = require('.')
 
+const errorMessages = {
+  404: 'resource not found',
+}
+
 const individualValueSchema = Joi.alternatives()
   .try(Joi.string(), Joi.number())
   .required()
@@ -47,6 +51,7 @@ function renderDynamicBadge({
 }
 
 module.exports = {
+  errorMessages,
   individualValueSchema,
   transformAndValidate,
   renderDynamicBadge,

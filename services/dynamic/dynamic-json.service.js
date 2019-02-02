@@ -3,12 +3,8 @@
 const Joi = require('joi')
 const jp = require('jsonpath')
 const { BaseJsonService, InvalidResponse } = require('..')
-const { renderDynamicBadge } = require('../dynamic-common')
-const {
-  createRoute,
-  queryParamSchema,
-  errorMessages,
-} = require('./dynamic-helpers')
+const { renderDynamicBadge, errorMessages } = require('../dynamic-common')
+const { createRoute, queryParamSchema } = require('./dynamic-helpers')
 
 module.exports = class DynamicJson extends BaseJsonService {
   static get category() {
