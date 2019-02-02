@@ -109,7 +109,7 @@ module.exports = class Endpoint extends BaseJsonService {
     )
 
     const { protocol, hostname } = new URL(url)
-    if (protocol !== 'https:') {
+    if (protocol !== 'https:' && hostname !== 'localhost') {
       throw new InvalidParameter({ prettyMessage: 'please use https' })
     }
     if (blockedDomains.some(domain => hostname.endsWith(domain))) {

@@ -258,6 +258,25 @@ t.create('Bad scheme')
   .get('.json?url=http://example.com/badge')
   .expectJSON({ name: 'custom badge', value: 'please use https' })
 
+t.create('Bad scheme localhost')
+  .get('.json?url=http://localhost.example.com/badge')
+  .expectJSON({ name: 'custom badge', value: 'please use https' })
+
+;['', ':80', ':8080'].forEach(port => {
+  t.create(`localhost allows http at port "${port}"`)
+    .get(`.json?url=http://localhost${port}/badge123`)
+    .intercept(nock =>
+      nock(`http://localhost${port}/`)
+        .get('/badge123')
+        .reply(200, {
+          schemaVersion: 1,
+          label: 'http',
+          message: 'http works',
+        })
+    )
+    .expectJSON({ name: 'http', value: 'http works' })
+})
+
 t.create('Blocked domain')
   .get('.json?url=https://img.shields.io/badge/foo-bar-blue.json')
   .expectJSON({ name: 'custom badge', value: 'domain is blocked' })
