@@ -84,6 +84,7 @@ const Schema = styled.dl`
 
 const EndpointPage = () => (
   <MainContainer>
+    <GlobalStyle />
     <Meta />
     <Header />
     <H3 id="static-badge">Endpoint (Beta)</H3>
