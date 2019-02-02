@@ -112,9 +112,6 @@ Please report any Gitpod bugs, questions, or suggestions in issue
 
 [![Edit with Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/badges/shields)
 
-To analyze the frontend bundle, run `npm install webpack-bundle-analyzer` and
-then `ANALYZE=true npm start`.
-
 [Snapshot tests][] ensure we don't inadvertently make changes that affect the
 SVG or JSON output. When deliberately changing the output, run
 `SNAPSHOT_DRY=1 npm run test:js:server` to preview changes to the saved

@@ -25,13 +25,5 @@ module.exports = {
         path: `${__dirname}/frontend/static`,
       },
     },
-    {
-      resolve: 'gatsby-plugin-react-svg',
-      options: {
-        rule: {
-          include: /static\/.*\.svg$/,
-        },
-      },
-    },
   ],
 }
