@@ -106,7 +106,7 @@ describe('The server', function() {
 
   context('with svg2img error', function() {
     const expectedError = fs.readFileSync(
-      path.resolve(__dirname, 'public', '500.html')
+      path.resolve(__dirname, 'error-pages', '500.html')
     )
 
     let toBufferStub
