@@ -134,7 +134,6 @@ export default class Customizer extends React.Component {
 
   render() {
     const {
-      baseUrl,
       pattern,
       exampleNamedParams,
       exampleQueryParams,

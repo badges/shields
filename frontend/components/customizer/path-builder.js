@@ -104,10 +104,6 @@ export default class PathBuilder extends React.Component {
     return { path, isComplete }
   }
 
-  getPath(namedParams) {
-    const { tokens } = this.state
-  }
-
   notePathChanged({ tokens, namedParams }) {
     const { onChange } = this.props
     if (onChange) {
