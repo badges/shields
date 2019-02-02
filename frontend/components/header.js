@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'gatsby'
 import React from 'react'
 import styled from 'styled-components'
 import { VerticalSpace } from './common'
+import Logo from '../static/logo.svg'
 
 const Highlights = styled.p`
   font-style: italic;
@@ -10,7 +11,7 @@ const Highlights = styled.p`
 export default () => (
   <section>
     <Link to="/">
-      <img alt="Shields.io" src="/static/logo.svg" />
+      <Logo />
     </Link>
 
     <VerticalSpace />

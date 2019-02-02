@@ -1,10 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { createGlobalStyle } from 'styled-components'
+import styled from 'styled-components'
 import groupBy from 'lodash.groupby'
 import {
   categories,
-  findCategory,
   services,
   getDefinitionsForCategory,
 } from '../lib/service-definitions'
@@ -23,13 +22,7 @@ import {
   CategoryNav,
 } from './category-headings'
 import BadgeExamples from './badge-examples'
-import { BaseFont } from './common'
-
-const GlobalStyle = createGlobalStyle`
-  * {
-    box-sizing: border-box;
-  }
-`
+import { BaseFont, GlobalStyle } from './common'
 
 const AppContainer = styled(BaseFont)`
   text-align: center;
@@ -54,11 +47,12 @@ export default class Main extends React.Component {
   }
 
   static propTypes = {
-    match: PropTypes.object.isRequired,
-  }
-
-  get category() {
-    return this.props.match.params.category
+    pageContext: {
+      category: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+      }),
+    }.isRequired,
   }
 
   performSearch(query) {
@@ -120,10 +114,10 @@ export default class Main extends React.Component {
   }
 
   renderMain() {
-    const { category: categoryId } = this
+    const {
+      pageContext: { category },
+    } = this.props
     const { isSearchInProgress, isQueryTooShort, searchResults } = this.state
-
-    const category = findCategory(categoryId)
 
     if (isSearchInProgress) {
       return <div>searching...</div>
@@ -131,11 +125,11 @@ export default class Main extends React.Component {
       return <div>Search term must have 2 or more characters</div>
     } else if (searchResults) {
       return Object.entries(searchResults).map(([categoryId, definitions]) =>
-        this.renderCategory(findCategory(categoryId), definitions)
+        this.renderCategory(category, definitions)
       )
     } else if (category) {
       const definitions = ServiceDefinitionSetHelper.create(
-        getDefinitionsForCategory(categoryId)
+        getDefinitionsForCategory(category.id)
       )
         .notDeprecated()
         .toArray()
@@ -143,12 +137,6 @@ export default class Main extends React.Component {
         <div>
           <CategoryNav categories={categories} />
           {this.renderCategory(category, definitions)}
-        </div>
-      )
-    } else if (categoryId) {
-      return (
-        <div>
-          Unknown category <b>{categoryId}</b>
         </div>
       )
     } else {
