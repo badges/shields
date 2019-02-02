@@ -82,7 +82,7 @@
     "test:js:server": "echo \"Deprecated; run `npm run test:core` instead.\" && npm run test:core",
     "test:js:frontend": "echo \"Deprecated; run `npm run test:frontend` instead.\" && npm run test:frontend",
     "test:js:package": "echo \"Deprecated; run `npm run test:package` instead.\" && npm run test:package",
-    "test:frontend": "cross-env BABEL_ENV=test mocha --opts mocha.opts --require @babel/polyfill --require @babel/register --require mocha-yaml-loader \"frontend/**/*.spec.js\"",
+    "test:frontend": "cross-env NODE_ENV=test mocha --opts mocha.opts --require @babel/polyfill --require @babel/register --require mocha-yaml-loader \"frontend/**/*.spec.js\"",
     "test:core": "cross-env NODE_CONFIG_ENV=test mocha --opts mocha.opts \"core/**/*.spec.js\" \"lib/**/*.spec.js\" \"services/**/*.spec.js\"",
     "test:package": "mocha --opts mocha.opts \"gh-badges/**/*.spec.js\"",
     "test:entrypoint": "cross-env NODE_CONFIG_ENV=test mocha --opts mocha.opts entrypoint.spec.js",
