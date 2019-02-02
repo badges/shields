@@ -261,7 +261,6 @@ t.create('Bad scheme')
 t.create('Bad scheme localhost')
   .get('.json?url=http://localhost.example.com/badge')
   .expectJSON({ name: 'custom badge', value: 'please use https' })
-
 ;['', ':80', ':8080'].forEach(port => {
   t.create(`localhost allows http at port "${port}"`)
     .get(`.json?url=http://localhost${port}/badge123`)
