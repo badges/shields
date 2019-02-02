@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
+import styled, { css, createGlobalStyle } from 'styled-components'
 
 const noAutocorrect = Object.freeze({
   autoComplete: 'off',
@@ -10,6 +10,12 @@ const noAutocorrect = Object.freeze({
 })
 
 const nonBreakingSpace = '\u00a0'
+
+const GlobalStyle = createGlobalStyle`
+  * {
+    box-sizing: border-box;
+  }
+`
 
 const BaseFont = styled.div`
   font-family: Lekton, sans-serif;
@@ -103,6 +109,7 @@ const VerticalSpace = styled.hr`
 export {
   noAutocorrect,
   nonBreakingSpace,
+  GlobalStyle,
   BaseFont,
   H2,
   H3,

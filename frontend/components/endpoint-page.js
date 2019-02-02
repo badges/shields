@@ -6,12 +6,18 @@ import { baseUrl } from '../constants'
 import Meta from './meta'
 import Header from './header'
 import Footer from './footer'
-import { H3, Badge } from './common'
+import { BaseFont, GlobalStyle, H3, Badge } from './common'
 import { Snippet } from './snippet'
 
+const MainContainer = styled(BaseFont)`
+  text-align: center;
+`
+
 const Explanation = styled.div`
-  max-width: 800px;
   display: block;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: left;
 `
 
 const JsonExampleBlock = styled.code`
@@ -34,7 +40,7 @@ const JsonExample = ({ data }) => (
   <JsonExampleBlock>{JSON.stringify(data, undefined, 2)}</JsonExampleBlock>
 )
 JsonExample.propTypes = {
-  data: PropTypes.string.isRequired,
+  data: PropTypes.object.isRequired,
 }
 
 const Schema = styled.dl`
@@ -76,7 +82,7 @@ const Schema = styled.dl`
 `
 
 const EndpointPage = () => (
-  <div>
+  <MainContainer>
     <Meta />
     <Header />
     <H3 id="static-badge">Endpoint (Beta)</H3>
@@ -142,11 +148,13 @@ const EndpointPage = () => (
       </ol>
     </Explanation>
     <h4>Schema</h4>
-    <p>
-      The schema may change during the beta period. Any changes will be posted
-      here. After launch, breaking changes will trigger an increment to the
-      `schemaVersion`.
-    </p>
+    <Explanation>
+      <p>
+        The schema may change during the beta period. Any changes will be posted
+        here. After launch, breaking changes will trigger an increment to the
+        `schemaVersion`.
+      </p>
+    </Explanation>
     <Schema>
       <dt>schemaVersion</dt>
       <dd>
@@ -213,6 +221,6 @@ const EndpointPage = () => (
       </dd>
     </Schema>
     <Footer baseUrl={baseUrl} />
-  </div>
+  </MainContainer>
 )
 export default EndpointPage
