@@ -8,6 +8,7 @@ import Header from './header'
 import Footer from './footer'
 import { BaseFont, GlobalStyle, H3, Badge } from './common'
 import { Snippet } from './snippet'
+import Customizer from './customizer/customizer'
 
 const MainContainer = styled(BaseFont)`
   text-align: center;
@@ -220,6 +221,14 @@ const EndpointPage = () => (
         overridden by the user via the query string, but only to a longer value.
       </dd>
     </Schema>
+    <h4>Customize and test</h4>
+    <Customizer
+      baseUrl={baseUrl}
+      title="Custom badge"
+      pattern="/badge/endpoint"
+      exampleNamedParams={{}}
+      exampleQueryParams={{ url: 'https://shields.redsparr0w.com/2473/monday' }}
+    />
     <Footer baseUrl={baseUrl} />
   </MainContainer>
 )
