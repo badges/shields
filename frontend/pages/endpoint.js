@@ -6,7 +6,7 @@ import { baseUrl } from '../constants'
 import Meta from '../components/meta'
 import Header from '../components/header'
 import Footer from '../components/footer'
-import { BaseFont, H3, Badge, GlobalStyle } from '../components/common'
+import { BaseFont, GlobalStyle, H3, Badge } from '../components/common'
 import { Snippet } from '../components/snippet'
 
 const MainContainer = styled(BaseFont)`
