@@ -1,3 +1,5 @@
+'use strict'
+
 /**
  * Implement Gatsby's Node APIs in this file.
  *
@@ -7,7 +9,7 @@
 const fs = require('fs')
 const yaml = require('js-yaml')
 
-const { services, categories } = yaml.safeLoad(
+const { categories } = yaml.safeLoad(
   fs.readFileSync('./service-definitions.yml', 'utf8')
 )
 

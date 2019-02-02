@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = {
   siteMetadata: {
     title: 'Shields.io: Quality metadata badges for open source projects',
