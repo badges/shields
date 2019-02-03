@@ -7,6 +7,8 @@ const {
   downloadCount: downloadCountColor,
 } = require('../../lib/color-formatters')
 
+const keywords = ['PHP']
+
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //
 // Tips for rewriting:
@@ -29,18 +31,45 @@ module.exports = class PackagistDownloads extends LegacyService {
     return [
       {
         title: 'Packagist',
-        previewUrl: 'dm/doctrine/orm',
-        keywords: ['PHP'],
+        pattern: 'dm/:user/:repo',
+        namedParams: {
+          user: 'doctrine',
+          repo: 'orm',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '1M/month',
+          color: 'brightgreen',
+        },
+        keywords,
       },
       {
         title: 'Packagist',
-        previewUrl: 'dd/doctrine/orm',
-        keywords: ['PHP'],
+        pattern: 'dd/:user/:repo',
+        namedParams: {
+          user: 'doctrine',
+          repo: 'orm',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '49k/day',
+          color: 'brightgreen',
+        },
+        keywords,
       },
       {
         title: 'Packagist',
-        previewUrl: 'dt/doctrine/orm',
-        keywords: ['PHP'],
+        pattern: 'dt/:user/:repo',
+        namedParams: {
+          user: 'doctrine',
+          repo: 'orm',
+        },
+        staticPreview: {
+          label: 'downloads',
+          message: '45M',
+          color: 'brightgreen',
+        },
+        keywords,
       },
     ]
   }

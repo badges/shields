@@ -53,7 +53,8 @@ describe('Badge URL generation functions', function() {
       color: 'blue',
       style: 'flat-square',
       format: 'png',
-    }).expect('/badge/foo-bar-blue.png?style=flat-square')
+      namedLogo: 'github',
+    }).expect('/badge/foo-bar-blue.png?logo=github&style=flat-square')
     given({
       label: 'Hello World',
       message: 'Привет Мир',
@@ -66,5 +67,16 @@ describe('Badge URL generation functions', function() {
       message: 'abc-abc',
       color: 'blue',
     }).expect('/badge/123--123-abc--abc-blue.svg')
+    given({
+      label: '123-123',
+      message: '',
+      color: 'blue',
+      style: 'social',
+    }).expect('/badge/123--123--blue.svg?style=social')
+    given({
+      label: '',
+      message: 'blue',
+      color: 'blue',
+    }).expect('/badge/-blue-blue.svg')
   })
 })

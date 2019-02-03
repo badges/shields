@@ -101,7 +101,7 @@ if (logos.created) {
     [
       ':art: Thanks for submitting a logo. <br>',
       'Please ensure your contribution follows our ',
-      '[guidance](https://github.com/badges/shields/blob/master/CONTRIBUTING.md#logos) ',
+      '[guidance](https://github.com/badges/shields/blob/master/doc/logos.md#contributing-logos) ',
       'for logo submissions.',
     ].join('')
   )

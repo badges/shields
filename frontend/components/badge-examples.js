@@ -30,40 +30,30 @@ export default class BadgeExamples extends React.Component {
   static propTypes = {
     definitions: PropTypes.array.isRequired,
     baseUrl: PropTypes.string,
-    longCache: PropTypes.bool.isRequired,
     onClick: PropTypes.func.isRequired,
   }
 
   renderExample(exampleData) {
-    const { baseUrl, longCache, onClick } = this.props
+    const { baseUrl, onClick } = this.props
     const { title, example, preview } = exampleData
 
-    let previewUrl
-    // There are two alternatives for `preview`. Refer to the schema in
-    // `services/service-definitions.js`.
-    if (preview.label !== undefined) {
-      const { label, message, color } = preview
-      previewUrl = staticBadgeUrl({ baseUrl, label, message, color })
-    } else {
-      const { path, queryParams } = preview
-      previewUrl = badgeUrlFromPath({ baseUrl, path, queryParams, longCache })
-    }
+    const { label, message, color, style, namedLogo } = preview
+    const previewUrl = staticBadgeUrl({
+      baseUrl,
+      label,
+      message,
+      color,
+      style,
+      namedLogo,
+    })
 
-    // There are two alternatives for `example`. Refer to the schema in
-    // `services/service-definitions.js`.
-    let exampleUrl
-    if (example.pattern !== undefined) {
-      const { pattern, namedParams, queryParams } = example
-      exampleUrl = badgeUrlFromPath({
-        baseUrl,
-        path: pattern,
-        namedParams,
-        queryParams,
-      })
-    } else {
-      const { path, queryParams } = example
-      exampleUrl = badgeUrlFromPath({ baseUrl, path, queryParams })
-    }
+    const { pattern, namedParams, queryParams } = example
+    const exampleUrl = badgeUrlFromPath({
+      baseUrl,
+      path: pattern,
+      namedParams,
+      queryParams,
+    })
 
     const key = `${title} ${previewUrl} ${exampleUrl}`
 

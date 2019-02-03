@@ -12,13 +12,13 @@ const log = require('../../core/server/log')
 // Do not base new services on this code.
 module.exports = class PackagistPhpVersion extends LegacyService {
   static get category() {
-    return 'version'
+    return 'platform-support'
   }
 
   static get route() {
     return {
       base: 'packagist/php-v',
-      pattern: '',
+      pattern: ':user/:repo',
     }
   }
 
@@ -26,7 +26,15 @@ module.exports = class PackagistPhpVersion extends LegacyService {
     return [
       {
         title: 'PHP from Packagist',
-        previewUrl: 'symfony/symfony',
+        namedParams: {
+          user: 'symfony',
+          repo: 'symfony',
+        },
+        staticPreview: {
+          label: 'php',
+          message: '^7.1.3',
+          color: 'blue',
+        },
       },
     ]
   }
