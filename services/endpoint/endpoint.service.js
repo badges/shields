@@ -5,7 +5,7 @@ const Joi = require('joi')
 const { BaseJsonService, InvalidParameter } = require('..')
 const { errorMessages } = require('../dynamic-common')
 const { optionalUrl } = require('../validators')
-const { fetchEndpointData, renderEndpointBadge } = require('../endpoint-common')
+const { fetchEndpointData } = require('../endpoint-common')
 
 const blockedDomains = ['github.com', 'shields.io']
 
@@ -36,8 +36,34 @@ module.exports = class Endpoint extends BaseJsonService {
     }
   }
 
-  static render(props) {
-    return renderEndpointBadge(props, { allowLogo: true })
+  static render({
+    isError,
+    label,
+    message,
+    color,
+    labelColor,
+    namedLogo,
+    logoSvg,
+    logoColor,
+    logoWidth,
+    logoPosition,
+    style,
+    cacheSeconds,
+  }) {
+    return {
+      isError,
+      label,
+      message,
+      color,
+      labelColor,
+      namedLogo,
+      logoSvg,
+      logoColor,
+      logoWidth,
+      logoPosition,
+      style,
+      cacheSeconds,
+    }
   }
 
   async handle(namedParams, queryParams) {

@@ -77,44 +77,7 @@ async function fetchEndpointData(
   })
 }
 
-function renderEndpointBadge(
-  {
-    isError,
-    label,
-    message,
-    color,
-    labelColor,
-    namedLogo,
-    logoSvg,
-    logoColor,
-    logoWidth,
-    logoPosition,
-    style,
-    cacheSeconds,
-  },
-  { allowLogo = false } = {}
-) {
-  const logoProps = {
-    namedLogo,
-    logoSvg,
-    logoColor,
-    logoWidth,
-    logoPosition,
-  }
-  return {
-    isError,
-    label,
-    message,
-    color,
-    labelColor,
-    ...(allowLogo ? logoProps : undefined),
-    style,
-    cacheSeconds,
-  }
-}
-
 module.exports = {
   validateEndpointData,
   fetchEndpointData,
-  renderEndpointBadge,
 }
