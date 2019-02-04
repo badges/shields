@@ -20,3 +20,11 @@ config/local*.yml
 .github
 .vscode
 __snapshots__
+.buildpacks
+.eslint*
+.editorconfig
+.nycrc*
+.gitpod*
+.prettier*
+CONTRIBUTING.md
+Dockerfile
