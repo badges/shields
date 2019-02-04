@@ -1,9 +1,10 @@
 {
   "reporter": ["lcov"],
-  "all": true,
+  "all": false,
   "silent": true,
   "clean": false,
   "sourceMap": false,
   "instrument": false,
+  "include": ["frontend/**/*.js"],
   "exclude": ["**/*.spec.js"]
 }
