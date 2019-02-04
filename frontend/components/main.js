@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { createGlobalStyle } from 'styled-components'
+import styled from 'styled-components'
 import groupBy from 'lodash.groupby'
 import {
   categories,
@@ -23,13 +23,7 @@ import {
   CategoryNav,
 } from './category-headings'
 import BadgeExamples from './badge-examples'
-import { BaseFont } from './common'
-
-const GlobalStyle = createGlobalStyle`
-  * {
-    box-sizing: border-box;
-  }
-`
+import { BaseFont, GlobalStyle } from './common'
 
 const AppContainer = styled(BaseFont)`
   text-align: center;
