@@ -1,21 +1,6 @@
 {
+  "version": 1,
   "name": "shields",
-  "files": [
-    "server.js",
-    "favicon.png",
-    "next.config.js",
-    "package-lock.json",
-    "frontend/",
-    "gh-badges/",
-    "lib/",
-    "core/",
-    "logo/",
-    "pages/",
-    "public/",
-    "static/",
-    "templates/",
-    "services/"
-  ],
   "env": {
     "PERSISTENCE_DIR": "/tmp/persistence",
     "SHIELDS_ANALYTICS_FILE": "/tmp/analytics.json"
