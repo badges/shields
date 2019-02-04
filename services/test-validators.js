@@ -61,7 +61,7 @@ const isMetric = withRegex(/^[1-9][0-9]*[kMGTPEZY]?$/)
 const isMetricOpenIssues = withRegex(/^[1-9][0-9]*[kMGTPEZY]? open$/)
 
 const isMetricOverTimePeriod = withRegex(
-  /^[1-9][0-9]*[kMGTPEZY]?\/(year|month|4 weeks|week|day)$/
+  /^[1-9][0-9]*[kMGTPEZY]?\/(year|month|four weeks|week|day)$/
 )
 
 const isIntegerPercentage = withRegex(/^[1-9][0-9]?%|^100%|^0%$/)
