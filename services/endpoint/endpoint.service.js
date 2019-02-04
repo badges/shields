@@ -2,52 +2,16 @@
 
 const { URL } = require('url')
 const Joi = require('joi')
-const { errorMessages } = require('../dynamic/dynamic-helpers')
 const { BaseJsonService, InvalidParameter } = require('..')
+const { errorMessages } = require('../dynamic-common')
 const { optionalUrl } = require('../validators')
+const { fetchEndpointData } = require('../endpoint-common')
 
 const blockedDomains = ['github.com', 'shields.io']
 
 const queryParamSchema = Joi.object({
   url: optionalUrl.required(),
 }).required()
-
-const anySchema = Joi.any()
-
-const optionalStringWhenNamedLogoPresent = Joi.alternatives().when(
-  'namedLogo',
-  {
-    is: Joi.string().required(),
-    then: Joi.string(),
-  }
-)
-
-const optionalNumberWhenAnyLogoPresent = Joi.alternatives()
-  .when('namedLogo', { is: Joi.string().required(), then: Joi.number() })
-  .when('logoSvg', { is: Joi.string().required(), then: Joi.number() })
-
-const endpointSchema = Joi.object({
-  schemaVersion: 1,
-  label: Joi.string()
-    .allow('')
-    .required(),
-  message: Joi.string().required(),
-  color: Joi.string(),
-  labelColor: Joi.string(),
-  isError: Joi.boolean().default(false),
-  namedLogo: Joi.string(),
-  logoSvg: Joi.string(),
-  logoColor: optionalStringWhenNamedLogoPresent,
-  logoWidth: optionalNumberWhenAnyLogoPresent,
-  logoPosition: optionalNumberWhenAnyLogoPresent,
-  style: Joi.string(),
-  cacheSeconds: Joi.number()
-    .integer()
-    .min(0),
-})
-  // `namedLogo` or `logoSvg`; not both.
-  .oxor('namedLogo', 'logoSvg')
-  .required()
 
 module.exports = class Endpoint extends BaseJsonService {
   static get category() {
@@ -73,6 +37,7 @@ module.exports = class Endpoint extends BaseJsonService {
   }
 
   static render({
+    isError,
     label,
     message,
     color,
@@ -83,7 +48,6 @@ module.exports = class Endpoint extends BaseJsonService {
     logoWidth,
     logoPosition,
     style,
-    isError,
     cacheSeconds,
   }) {
     return {
@@ -116,16 +80,11 @@ module.exports = class Endpoint extends BaseJsonService {
       throw new InvalidParameter({ prettyMessage: 'domain is blocked' })
     }
 
-    const json = await this._requestJson({
-      schema: anySchema,
+    const validated = await fetchEndpointData(this, {
       url,
       errorMessages,
-    })
-    // Override the validation options because we want to reject unknown keys.
-    const validated = this.constructor._validate(json, endpointSchema, {
-      prettyErrorMessage: 'invalid properties',
+      validationPrettyErrorMessage: 'invalid properties',
       includeKeys: true,
-      allowAndStripUnknownKeys: false,
     })
 
     return this.constructor.render(validated)
