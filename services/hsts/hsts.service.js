@@ -17,7 +17,7 @@ module.exports = class HSTS extends BaseJsonService {
   static get route() {
     return {
       base: 'hsts',
-      pattern: ':uri',
+      pattern: ':domain',
     }
   }
 
@@ -25,22 +25,22 @@ module.exports = class HSTS extends BaseJsonService {
     return [
       {
         title: 'HSTS',
-        namedParams: { uri: 'github.com' },
+        namedParams: { domain: 'github.com' },
         staticPreview: this.render({ status: 'preloaded' }),
         keywords: ['hsts'],
       },
     ]
   }
 
-  async fetch({ uri }) {
+  async fetch({ domain }) {
     return this._requestJson({
       schema,
-      url: `https://hstspreload.org/api/v2/status?domain=${uri}`,
+      url: `https://hstspreload.org/api/v2/status?domain=${domain}`,
     })
   }
 
-  async handle({ uri }) {
-    const { status } = await this.fetch({ uri })
+  async handle({ domain }) {
+    const { status } = await this.fetch({ domain })
     return this.constructor.render({ status })
   }
 
