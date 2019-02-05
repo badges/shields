@@ -1,14 +1,20 @@
 'use strict'
 
+const label = 'hsts'
 const { BaseJsonService } = require('..')
 
 const Joi = require('joi')
 const schema = Joi.object({
   name: Joi.string().required(),
   status: Joi.string().required(),
+  bulk: Joi.boolean().required(),
 }).required()
 
 module.exports = class HSTS extends BaseJsonService {
+  static get category() {
+    return 'monitoring'
+  }
+
   static get route() {
     return {
       base: 'hsts',
@@ -16,13 +22,15 @@ module.exports = class HSTS extends BaseJsonService {
     }
   }
 
-  static get category() {
-    return 'monitoring'
-  }
-
-  async handle({ uri }) {
-    const { status } = await this.fetch({ uri })
-    return this.constructor.render({ status })
+  static get examples() {
+    return [
+      {
+        title: 'HSTS',
+        namedParams: { uri: 'github.com' },
+        staticPreview: this.render({ status: 'preloaded' }),
+        keywords: ['hsts'],
+      },
+    ]
   }
 
   async fetch({ uri }) {
@@ -32,8 +40,12 @@ module.exports = class HSTS extends BaseJsonService {
     })
   }
 
-  static async render({ status }) {
-    const label = 'hsts'
+  async handle({ uri }) {
+    const { status } = await this.fetch({ uri })
+    return this.constructor.render({ status })
+  }
+
+  static render({ status }) {
     let color = 'red'
 
     if (status === 'preloaded') {
@@ -42,25 +54,6 @@ module.exports = class HSTS extends BaseJsonService {
       color = 'green'
     }
 
-    return {
-      label,
-      message: status,
-      color,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'HSTS',
-        namedParams: { uri: 'github.com' },
-        staticPreview: {
-          label: 'hsts',
-          message: 'preloaded',
-          color: 'brightgreen',
-        },
-        keywords: ['hsts'],
-      },
-    ]
+    return { message: status, label, color }
   }
 }
