@@ -5,7 +5,6 @@ const { BaseJsonService } = require('..')
 
 const Joi = require('joi')
 const schema = Joi.object({
-  name: Joi.string().required(),
   status: Joi.string().required(),
 }).required()
 

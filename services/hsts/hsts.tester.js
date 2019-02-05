@@ -34,7 +34,7 @@ t.create('gets the hsts status of github (mock)')
   .intercept(nock =>
     nock('https://hstspreload.org')
       .get('/api/v2/status?domain=github.com')
-      .reply(200, { name: 'github.com', status: 'preloaded', bulk: false })
+      .reply(200, { status: 'preloaded' })
   )
   .expectJSON({
     name: label,
@@ -46,7 +46,7 @@ t.create('gets the hsts status of httpforever (mock)')
   .intercept(nock =>
     nock('https://hstspreload.org')
       .get('/api/v2/status?domain=httpforever.com')
-      .reply(200, { name: 'httpforever.com', status: 'unknown', bulk: false })
+      .reply(200, { status: 'unknown' })
   )
   .expectJSON({
     name: label,
@@ -58,7 +58,7 @@ t.create('gets the hsts status of a pending site (mock)')
   .intercept(nock =>
     nock('https://hstspreload.org')
       .get('/api/v2/status?domain=pending.mock')
-      .reply(200, { name: 'pending.mock', status: 'pending', bulk: false })
+      .reply(200, { status: 'pending' })
   )
   .expectJSON({
     name: label,
@@ -70,7 +70,7 @@ t.create('gets the status of an invalid uri (mock)')
   .intercept(nock =>
     nock('https://hstspreload.org')
       .get('/api/v2/status?domain=does-not-exist')
-      .reply(200, { name: 'does-not-exist', status: 'unknown', bulk: false })
+      .reply(200, { status: 'unknown' })
   )
   .expectJSON({
     name: label,
