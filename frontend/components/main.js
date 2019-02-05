@@ -48,6 +48,8 @@ export default class Main extends React.Component {
   }
 
   static propTypes = {
+    // `pageContext` is the `context` passed to `createPage()` in
+    // `gatsby-node.js`. In the case of the index page, `pageContext` is empty.
     pageContext: {
       category: PropTypes.shape({
         id: PropTypes.string.isRequired,
