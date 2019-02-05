@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import groupBy from 'lodash.groupby'
 import {
   categories,
+  findCategory,
   services,
   getDefinitionsForCategory,
 } from '../lib/service-definitions'
@@ -125,7 +126,7 @@ export default class Main extends React.Component {
       return <div>Search term must have 2 or more characters</div>
     } else if (searchResults) {
       return Object.entries(searchResults).map(([categoryId, definitions]) =>
-        this.renderCategory(category, definitions)
+        this.renderCategory(findCategory(categoryId), definitions)
       )
     } else if (category) {
       const definitions = ServiceDefinitionSetHelper.create(
