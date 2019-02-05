@@ -50,15 +50,6 @@ t.create('exact total downloads value')
   )
   .expectJSON({ name: 'downloads', value: '5' })
 
-t.create('total downloads when network is off')
-  .get('/dt/@cycle/core.json?style=_shields_test')
-  .networkOff()
-  .expectJSON({
-    name: 'downloads',
-    value: 'inaccessible',
-    color: 'lightgray',
-  })
-
 t.create('total downloads of unknown package')
   .get('/dt/npm-api-does-not-have-this-package.json?style=_shields_test')
   .expectJSON({
