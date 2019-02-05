@@ -137,7 +137,7 @@
     "danger": "^7.0.7",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
     "enzyme": "^3.8.0",
-    "enzyme-adapter-react-16": "^1.8.0",
+    "enzyme-adapter-react-16": "^1.9.0",
     "eol": "^0.9.1",
     "eslint": "^5.13.0",
     "eslint-config-prettier": "^4.0.0",
