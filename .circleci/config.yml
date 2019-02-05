@@ -196,6 +196,9 @@ jobs:
       - run:
           name: Danger
           when: always
+          environment:
+            # https://github.com/gatsbyjs/gatsby/pull/11555
+            NODE_ENV: test
           command: npm run danger ci
 
   frontend:
