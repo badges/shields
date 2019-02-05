@@ -10,7 +10,7 @@
     <a href="#sponsors" alt="Sponsors on Open Collective">
         <img src="https://img.shields.io/opencollective/sponsors/shields.svg" /></a>
     <a href="https://github.com/badges/shields/pulse" alt="Activity">
-        <img src="https://img.shields.io/github/commit-activity/4w/badges/shields.svg" /></a>
+        <img src="https://img.shields.io/github/commit-activity/m/badges/shields.svg" /></a>
     <a href="https://circleci.com/gh/badges/shields/tree/master">
         <img src="https://img.shields.io/circleci/project/github/badges/shields/master.svg" alt="build status"></a>
     <a href="https://circleci.com/gh/badges/daily-tests">
