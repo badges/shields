@@ -8,7 +8,10 @@ const {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
 } = require('../test-validators')
 
-const t = module.exports = new ServiceTester({ id: 'resharper', title: 'ReSharper' })
+const t = (module.exports = new ServiceTester({
+  id: 'resharper',
+  title: 'ReSharper',
+}))
 
 // downloads
 

@@ -3,7 +3,11 @@
 const Joi = require('joi')
 const { BaseJsonService, BaseXmlService, NotFound } = require('..')
 const { nonNegativeInteger } = require('../validators')
-const { renderVersionBadge, renderDownloadBadge, odataToObject } = require('./nuget-helpers')
+const {
+  renderVersionBadge,
+  renderDownloadBadge,
+  odataToObject,
+} = require('./nuget-helpers')
 
 function createFilter({ packageName, includePrereleases }) {
   const releaseTypeFilter = includePrereleases
@@ -65,7 +69,7 @@ async function fetch(
         qs,
       },
     })
-    packageData = data.d.results[0];
+    packageData = data.d.results[0]
   } else {
     throw Error(`Unsupported Atom OData format: ${odataFormat}`)
   }

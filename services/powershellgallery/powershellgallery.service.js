@@ -1,6 +1,9 @@
 'use strict'
 
-const { fetch, createServiceFamily } = require('../nuget/nuget-v2-service-family')
+const {
+  fetch,
+  createServiceFamily,
+} = require('../nuget/nuget-v2-service-family')
 const { BaseXmlService } = require('..')
 
 const WINDOWS_TAG_NAME = 'windows'
@@ -9,7 +12,10 @@ const LINUX_TAG_NAME = 'linux'
 
 const apiBaseUrl = 'https://www.powershellgallery.com/api/v2'
 
-const { NugetVersionService: PowershellGalleryVersion, NugetDownloadService: PowershellGalleryDownloads } = createServiceFamily({
+const {
+  NugetVersionService: PowershellGalleryVersion,
+  NugetDownloadService: PowershellGalleryDownloads,
+} = createServiceFamily({
   defaultLabel: 'powershell gallery',
   serviceBaseUrl: 'powershellgallery',
   apiBaseUrl,
