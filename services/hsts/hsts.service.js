@@ -51,7 +51,7 @@ module.exports = class HSTS extends BaseJsonService {
     if (status === 'preloaded') {
       color = 'brightgreen'
     } else if (status === 'pending') {
-      color = 'green'
+      color = 'yellow'
     }
 
     return { message: status, label, color }
