@@ -12,7 +12,7 @@ const schema = Joi.object({
 
 module.exports = class HSTS extends BaseJsonService {
   static get category() {
-    return 'monitoring'
+    return 'analysis'
   }
 
   static get route() {
