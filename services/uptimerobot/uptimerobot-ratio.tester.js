@@ -41,11 +41,6 @@ t.create('Uptime Robot: Percentage (unspecified error)')
   )
   .expectJSON({ name: 'uptime', value: 'service error' })
 
-t.create('Uptime Robot: Percentage (connection error)')
-  .get('/m778918918-3e92c097147760ee39d02d36.json')
-  .networkOff()
-  .expectJSON({ name: 'uptime', value: 'inaccessible' })
-
 t.create('Uptime Robot: Percentage (service unavailable)')
   .get('/m778918918-3e92c097147760ee39d02d36.json')
   .intercept(nock =>
