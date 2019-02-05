@@ -7,7 +7,6 @@ const Joi = require('joi')
 const schema = Joi.object({
   name: Joi.string().required(),
   status: Joi.string().required(),
-  bulk: Joi.boolean().required(),
 }).required()
 
 module.exports = class HSTS extends BaseJsonService {
