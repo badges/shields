@@ -19,8 +19,8 @@ t.create('gets the hsts status of apviz')
 
 t.create('gets the hsts status of baidu')
   .get('/baidu.com.json')
-  .expectJSON({ name: label, value: 'not preloaded' })
+  .expectJSON({ name: label, value: 'unknown' })
 
 t.create('invalid uri')
   .get('/does-not-exist.json')
-  .expectJSON({ name: label, value: 'not preloaded' })
+  .expectJSON({ name: label, value: 'unknown' })

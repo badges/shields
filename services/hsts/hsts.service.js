@@ -34,12 +34,9 @@ module.exports = class HSTS extends BaseJsonService {
 
   static async render({ status }) {
     const label = 'hsts'
-    let color = 'lightgrey'
+    let color = 'red'
 
-    if (status === 'unknown') {
-      status = 'not preloaded'
-      color = 'red'
-    } else if (status === 'preloaded') {
+    if (status === 'preloaded') {
       color = 'brightgreen'
     } else if (status === 'pending') {
       color = 'green'
