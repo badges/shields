@@ -5,17 +5,6 @@ const { expect } = require('chai')
 
 const t = (module.exports = require('..').createServiceTester())
 
-t.create('Connection error')
-  .get(
-    '.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.name&label=Package Name&style=_shields_test'
-  )
-  .networkOff()
-  .expectJSON({
-    name: 'Package Name',
-    value: 'inaccessible',
-    color: 'lightgray',
-  })
-
 t.create('No URL specified')
   .get('.json?query=$.name&label=Package Name&style=_shields_test')
   .expectJSON({

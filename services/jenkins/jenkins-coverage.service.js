@@ -113,8 +113,8 @@ class JacocoJenkinsCoverage extends BaseJenkinsCoverage {
         pattern: ':scheme/:host/:job+',
         namedParams: {
           scheme: 'https',
-          host: 'ci.eclipse.org',
-          job: 'ecp/job/gerrit',
+          host: 'builds.apache.org',
+          job: 'job/Derby-JaCoCo',
         },
         staticPreview: this.render({
           coverage: 96,
