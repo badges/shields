@@ -86,11 +86,6 @@ t.create('live: repository version of an inexistent artifact')
     value: 'artifact not found',
   })
 
-t.create('connection error')
-  .get('/r/https/repository.jboss.org/nexus/jboss/jboss-client.json')
-  .networkOff()
-  .expectJSON({ name: 'nexus', value: 'inaccessible' })
-
 t.create('search snapshot version not in latestSnapshot')
   .get(
     '/s/https/repository.jboss.org/nexus/com.progress.fuse/fusehq.json?style=_shields_test'
