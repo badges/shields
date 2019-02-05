@@ -62,12 +62,6 @@ const StyledNav = styled.nav`
   }
 `
 
-/*
-          <NavLink to={`/examples/${id}`} activeClassName="active">
-            {name}
-          </NavLink>
-          */
-
 const CategoryNav = ({ categories }) => (
   <StyledNav>
     <ul>
