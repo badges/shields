@@ -18,12 +18,13 @@ module.exports = {
     'gatsby-plugin-catch-links',
     'gatsby-plugin-styled-components',
     'gatsby-plugin-remove-trailing-slashes',
-    {
-      resolve: 'gatsby-source-filesystem',
-      options: {
-        name: 'static',
-        path: `${__dirname}/frontend/static`,
-      },
-    },
+    // THis currently is not being used.
+    // {
+    //   resolve: 'gatsby-source-filesystem',
+    //   options: {
+    //     name: 'static',
+    //     path: `${__dirname}/frontend/static`,
+    //   },
+    // },
   ],
 }

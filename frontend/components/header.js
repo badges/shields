@@ -2,7 +2,7 @@ import { Link } from 'gatsby'
 import React from 'react'
 import styled from 'styled-components'
 import { VerticalSpace } from './common'
-import Logo from '../static/logo.svg'
+import Logo from '../images/logo.svg'
 
 const Highlights = styled.p`
   font-style: italic;
