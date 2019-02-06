@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { isCurrencyOverTime } = require('./liberapay-base')
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Receiving (valid)')
   .get('/Changaco.json')

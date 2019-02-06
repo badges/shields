@@ -1,6 +1,6 @@
 'use strict'
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('No URL specified')
   .get('.json?query=$.name&label=Package Name&style=_shields_test')

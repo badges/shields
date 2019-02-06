@@ -1,6 +1,6 @@
 'use strict'
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Shields colorscheme color')
   .get('/badge/label-message-blue.json?style=_shields_test')

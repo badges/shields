@@ -1,6 +1,6 @@
 'use strict'
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('status of http://shields.io')
   .get('/website/http/shields.io.json?style=_shields_test')

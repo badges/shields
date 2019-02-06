@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 const { isIntegerPercentage } = require('../test-validators')
 const { mockJiraCreds, restore, user, pass } = require('./jira-test-helpers')
 
