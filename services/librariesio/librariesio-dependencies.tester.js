@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isDependencyState } = require('../test-validators')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('dependencies for releases')
   .get('/release/hex/phoenix/1.0.3.json')

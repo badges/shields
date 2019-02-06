@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { ServiceTester } = require('..')
+const { ServiceTester } = require('../tester')
 const { isVPlusTripleDottedVersion } = require('../test-validators')
 const { invalidJSON } = require('../response-fixtures')
 

@@ -5,7 +5,7 @@ const {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
 } = require('../test-validators')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('version')
   .get('/asciidoctor/maven/asciidoctorj.json')

@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { ServiceTester } = require('..')
+const { ServiceTester } = require('../tester')
 const { isMetricOverTimePeriod, isSemver } = require('../test-validators')
 
 const isPsycopg2Version = Joi.string().regex(/^v([0-9][.]?)+$/)
