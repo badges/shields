@@ -104,6 +104,10 @@ You can read a [tutorial on how to add a badge][tutorial].
 4. Run `npm start` to start the server.
 5. Open `http://localhost:3000/` to view the frontend.
 
+To debug a badge from the command line, run `npm run badge -- /npm/v/nock.svg`.
+It also works with full URLs like
+`npm run badge -- https://img.shields.io/npm/v/nock.svg`.
+
 Shields has experimental support for [Gitpod Beta][gitpod], a pre-configured development
 environment that runs in your browser. To use Gitpod, click the button below and
 sign in with GitHub. Gitpod also offers a browser add-on, though it is not required.
