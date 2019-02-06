@@ -2,7 +2,7 @@
 
 const { invalidJSON } = require('../response-fixtures')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('commit status - commit in branch')
   .get(

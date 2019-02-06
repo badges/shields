@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { isBuildStatus } = require('../../lib/build-status')
-const { ServiceTester } = require('..')
+const { ServiceTester } = require('../tester')
 
 const t = (module.exports = new ServiceTester({
   id: 'circleci',
@@ -51,11 +51,6 @@ t.create('circle ci (not found)')
   .get('/project/github/PyvesB/EmptyRepo.json')
   .expectJSON({ name: 'build', value: 'project not found' })
 
-t.create('circle ci (connection error)')
-  .get('/project/github/RedSparr0w/node-csgo-parser.json')
-  .networkOff()
-  .expectJSON({ name: 'build', value: 'inaccessible' })
-
 t.create('circle ci (no response data)')
   .get('/project/github/RedSparr0w/node-csgo-parser.json')
   .intercept(nock =>
@@ -80,5 +75,5 @@ t.create('circle ci (invalid json)')
   .expectJSON({
     name: 'build',
     value: 'invalid response data',
-    color: 'lightgray',
+    color: 'lightgrey',
   })

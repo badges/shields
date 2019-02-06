@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { ServiceTester } = require('..')
+const { ServiceTester } = require('../tester')
 
 const t = new ServiceTester({ id: 'maven-central', title: 'Maven Central' })
 module.exports = t

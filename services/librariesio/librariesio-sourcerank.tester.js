@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { anyInteger } = require('../validators')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('sourcerank')
   .get('/npm/got.json')

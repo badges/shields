@@ -9,7 +9,7 @@ const {
   restore,
 } = require('./teamcity-test-helpers')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('live: valid buildId')
   .get('/ReactJSNet_PullRequests.json')

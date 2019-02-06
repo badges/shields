@@ -30,7 +30,7 @@ module.exports = class GithubCommitActivity extends LegacyService {
   static get examples() {
     return [
       {
-        title: 'GitHub commit activity the past week, 4 weeks, year',
+        title: 'GitHub commit activity the past year',
         pattern: 'y/:user/:repo',
         namedParams: { user: 'eslint', repo: 'eslint' },
         staticPreview: {
@@ -41,12 +41,36 @@ module.exports = class GithubCommitActivity extends LegacyService {
         keywords: ['GitHub', 'commit', 'commits', 'activity'],
         documentation,
       },
+      {
+        title: 'GitHub commit activity the past month',
+        pattern: 'm/:user/:repo',
+        namedParams: { user: 'eslint', repo: 'eslint' },
+        staticPreview: {
+          label: 'commit activity',
+          message: '38/month',
+          color: 'blue',
+        },
+        keywords: ['GitHub', 'commit', 'commits', 'activity'],
+        documentation,
+      },
+      {
+        title: 'GitHub commit activity the past week',
+        pattern: 'w/:user/:repo',
+        namedParams: { user: 'eslint', repo: 'eslint' },
+        staticPreview: {
+          label: 'commit activity',
+          message: '9/week',
+          color: 'blue',
+        },
+        keywords: ['GitHub', 'commit', 'commits', 'activity'],
+        documentation,
+      },
     ]
   }
 
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
     camp.route(
-      /^\/github\/commit-activity\/(y|4w|w)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
+      /^\/github\/commit-activity\/(y|m|4w|w)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
         const interval = match[1]
         const user = match[2]
@@ -75,11 +99,24 @@ module.exports = class GithubCommitActivity extends LegacyService {
                 )
                 intervalLabel = '/year'
                 break
+              case 'm':
+                // To approximate the value for the past month, get the sum for the last
+                // four weeks and add a weighted value for the fifth week.
+                const fourWeeksValue = parsedData
+                  .slice(-4)
+                  .reduce((sum, weekInfo) => sum + weekInfo.total, 0)
+                const fifthWeekValue = parsedData.slice(-5)[0].total
+                const averageWeeksPerMonth = 365 / 12 / 7
+                value =
+                  fourWeeksValue +
+                  Math.round((averageWeeksPerMonth - 4) * fifthWeekValue)
+                intervalLabel = '/month'
+                break
               case '4w':
                 value = parsedData
                   .slice(-4)
                   .reduce((sum, weekInfo) => sum + weekInfo.total, 0)
-                intervalLabel = '/4 weeks'
+                intervalLabel = '/four weeks'
                 break
               case 'w':
                 value = parsedData.slice(-2)[0].total

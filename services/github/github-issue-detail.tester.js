@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isFormattedDate } = require('../test-validators')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('github issue state')
   .get('/s/badges/shields/979.json')

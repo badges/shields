@@ -4,7 +4,7 @@ const { deprecatedService } = require('..')
 
 module.exports = deprecatedService({
   category: 'funding',
-  url: {
+  route: {
     format: '(?:gittip|gratipay(?:/user|/team|/project)?)/(?:.*)',
   },
   label: 'gratipay',

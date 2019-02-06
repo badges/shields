@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('marketplace version')
   .get('/notepad4e.json')

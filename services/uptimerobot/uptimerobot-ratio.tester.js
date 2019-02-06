@@ -4,7 +4,7 @@ const Joi = require('joi')
 const { isPercentage } = require('../test-validators')
 const { invalidJSON } = require('../response-fixtures')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Uptime Robot: Percentage (valid)')
   .get('/m778918918-3e92c097147760ee39d02d36.json')
@@ -40,11 +40,6 @@ t.create('Uptime Robot: Percentage (unspecified error)')
       .reply(200, '{"stat": "fail"}')
   )
   .expectJSON({ name: 'uptime', value: 'service error' })
-
-t.create('Uptime Robot: Percentage (connection error)')
-  .get('/m778918918-3e92c097147760ee39d02d36.json')
-  .networkOff()
-  .expectJSON({ name: 'uptime', value: 'inaccessible' })
 
 t.create('Uptime Robot: Percentage (service unavailable)')
   .get('/m778918918-3e92c097147760ee39d02d36.json')
