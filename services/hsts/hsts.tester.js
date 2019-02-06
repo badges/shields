@@ -4,28 +4,31 @@ const t = (module.exports = require('..').createServiceTester())
 const label = 'hsts'
 
 t.create('gets the hsts status of github')
-  .get('/github.com.json')
+  .get('/github.com.json?style=_shields_test')
   .expectJSON({
     name: label,
     value: 'preloaded',
+    color: 'brightgreen',
   })
 
 t.create('gets the hsts status of httpforever')
-  .get('/httpforever.com.json')
+  .get('/httpforever.com.json?style=_shields_test')
   .expectJSON({
     name: label,
     value: 'unknown',
+    color: 'red',
   })
 
 t.create('gets the status of an invalid uri')
-  .get('/does-not-exist.json')
+  .get('/does-not-exist.json?style=_shields_test')
   .expectJSON({
     name: label,
     value: 'unknown',
+    color: 'red',
   })
 
 t.create('gets the hsts status of github (mock)')
-  .get('/github.com.json')
+  .get('/github.com.json?style=_shields_test')
   .intercept(nock =>
     nock('https://hstspreload.org')
       .get('/api/v2/status?domain=github.com')
@@ -34,10 +37,11 @@ t.create('gets the hsts status of github (mock)')
   .expectJSON({
     name: label,
     value: 'preloaded',
+    color: 'brightgreen',
   })
 
 t.create('gets the hsts status of httpforever (mock)')
-  .get('/httpforever.com.json')
+  .get('/httpforever.com.json?style=_shields_test')
   .intercept(nock =>
     nock('https://hstspreload.org')
       .get('/api/v2/status?domain=httpforever.com')
@@ -46,10 +50,11 @@ t.create('gets the hsts status of httpforever (mock)')
   .expectJSON({
     name: label,
     value: 'unknown',
+    color: 'red',
   })
 
 t.create('gets the hsts status of a pending site (mock)')
-  .get('/pending.mock.json')
+  .get('/pending.mock.json?style=_shields_test')
   .intercept(nock =>
     nock('https://hstspreload.org')
       .get('/api/v2/status?domain=pending.mock')
@@ -58,10 +63,11 @@ t.create('gets the hsts status of a pending site (mock)')
   .expectJSON({
     name: label,
     value: 'pending',
+    color: 'yellow',
   })
 
 t.create('gets the status of an invalid uri (mock)')
-  .get('/does-not-exist.json')
+  .get('/does-not-exist.json?style=_shields_test')
   .intercept(nock =>
     nock('https://hstspreload.org')
       .get('/api/v2/status?domain=does-not-exist')
@@ -70,4 +76,5 @@ t.create('gets the status of an invalid uri (mock)')
   .expectJSON({
     name: label,
     value: 'unknown',
+    color: 'red',
   })
