@@ -4,7 +4,7 @@ const { deprecatedService } = require('..')
 
 module.exports = deprecatedService({
   category: 'dependencies',
-  url: {
+  route: {
     base: 'gemnasium',
     format: '(?:.+)',
   },
