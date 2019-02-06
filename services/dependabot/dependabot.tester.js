@@ -21,7 +21,7 @@ t.create('semver stability (invalid error)')
   .expectJSON({
     name: 'semver stability',
     value: 'invalid',
-    color: 'lightgray',
+    color: 'lightgrey',
   })
 
 t.create('semver stability (missing dependency)')

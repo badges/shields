@@ -99,13 +99,14 @@ t.create('GitHub open issues by label (raw)')
     })
   )
 
-// See #1870
-t.create('GitHub open issues by label including slash charactr (raw)')
+// https://github.com/badges/shields/issues/1870
+t.create('GitHub open issues by label including slash character (raw)')
   .get('/issues-raw/IgorNovozhilov/ndk/@ndk/cfg.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'open @ndk/cfg issues',
-      value: isMetric,
+      // Not always > 0.
+      value: Joi.alternatives(isMetric, Joi.equal('0')),
     })
   )
 
