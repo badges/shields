@@ -6,5 +6,5 @@
   "sourceMap": false,
   "instrument": false,
   "include": ["frontend/**/*.js"],
-  "exclude": ["**/*.spec.js"]
+  "exclude": ["**/*.spec.js", "**/mocha-*.js"]
 }
