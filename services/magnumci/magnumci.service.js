@@ -5,7 +5,7 @@ const { deprecatedService } = require('..')
 // Magnum CI integration - deprecated as of July 2018
 module.exports = deprecatedService({
   category: 'build',
-  url: {
+  route: {
     base: 'magnumci/ci',
     format: '(?:[^/]+)(?:/(?:.+))?',
   },

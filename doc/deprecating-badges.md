@@ -18,7 +18,7 @@ Add a key for the service with the corresponding date for deprecation, for examp
 
 Locate the source file(s) for the service, which can be found in `*.service.js` files located within the directory for the service (`./services/:service-name/`) such as `./services/imagelayers/imagelayers.service.js`.
 
-Replace the existing service class implementation with the `DeprecatedService` class from `./core/base-service/deprecated-service.js` using the respective `category`, `url`, and `label` values for that service. For example:
+Replace the existing service class implementation with the `DeprecatedService` class from `./core/base-service/deprecated-service.js` using the respective `category`, `route`, and `label` values for that service. For example:
 
 ```js
 'use strict'
@@ -28,7 +28,7 @@ const { deprecatedService } = require('..')
 // image layers integration - deprecated as of November 2018.
 module.exports = deprecatedService({
   category: 'size',
-  url: {
+  route: {
     base: 'imagelayers',
     format: '(?:.+)',
   },
