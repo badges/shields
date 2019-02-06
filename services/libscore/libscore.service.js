@@ -4,7 +4,7 @@ const { deprecatedService } = require('..')
 
 module.exports = deprecatedService({
   category: 'rating',
-  url: {
+  route: {
     base: 'libscore',
     format: 's/(?:.+)',
   },

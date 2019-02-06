@@ -4,7 +4,7 @@ const { deprecatedService } = require('..')
 
 module.exports = deprecatedService({
   category: 'issue-tracking',
-  url: {
+  route: {
     base: 'issuestats',
     format: '(?:[^/]+)(?:/long)?/(?:[^/]+)/(?:.+)',
   },
