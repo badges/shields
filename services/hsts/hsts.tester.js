@@ -1,12 +1,7 @@
 'use strict'
 
-const { ServiceTester } = require('..')
+const t = (module.exports = require('..').createServiceTester())
 const label = 'hsts'
-
-const t = (module.exports = new ServiceTester({
-  id: 'hsts',
-  title: 'HSTS Preload',
-}))
 
 t.create('gets the hsts status of github')
   .get('/github.com.json')
