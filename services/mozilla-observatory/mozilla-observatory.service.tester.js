@@ -8,7 +8,7 @@ const t = (module.exports = new ServiceTester({
 }))
 
 t.create('request on httpforever')
-  .get('/httpforever.com.json')
+  .get('/httpforever.com.json?style=_shields_test')
   .expectJSON({
     name: 'observatory',
     value: 'C+ (60/100)',
@@ -16,7 +16,7 @@ t.create('request on httpforever')
   })
 
 t.create('grade A (mock)')
-  .get('/foo.bar.json')
+  .get('/foo.bar.json?style=_shields_test')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .get('/api/v1/analyze?host=foo.bar')
@@ -29,7 +29,7 @@ t.create('grade A (mock)')
   })
 
 t.create('grade A+ (mock)')
-  .get('/foo.bar.json')
+  .get('/foo.bar.json?style=_shields_test')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .get('/api/v1/analyze?host=foo.bar')
@@ -42,7 +42,7 @@ t.create('grade A+ (mock)')
   })
 
 t.create('grade A- (mock)')
-  .get('/foo.bar.json')
+  .get('/foo.bar.json?style=_shields_test')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .get('/api/v1/analyze?host=foo.bar')
@@ -55,7 +55,7 @@ t.create('grade A- (mock)')
   })
 
 t.create('grade B (mock)')
-  .get('/foo.bar.json')
+  .get('/foo.bar.json?style=_shields_test')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .get('/api/v1/analyze?host=foo.bar')
@@ -68,7 +68,7 @@ t.create('grade B (mock)')
   })
 
 t.create('grade B+ (mock)')
-  .get('/foo.bar.json')
+  .get('/foo.bar.json?style=_shields_test')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .get('/api/v1/analyze?host=foo.bar')
@@ -81,7 +81,7 @@ t.create('grade B+ (mock)')
   })
 
 t.create('grade B- (mock)')
-  .get('/foo.bar.json')
+  .get('/foo.bar.json?style=_shields_test')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .get('/api/v1/analyze?host=foo.bar')
@@ -94,7 +94,7 @@ t.create('grade B- (mock)')
   })
 
 t.create('grade C (mock)')
-  .get('/foo.bar.json')
+  .get('/foo.bar.json?style=_shields_test')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .get('/api/v1/analyze?host=foo.bar')
@@ -107,7 +107,7 @@ t.create('grade C (mock)')
   })
 
 t.create('grade C+ (mock)')
-  .get('/foo.bar.json')
+  .get('/foo.bar.json?style=_shields_test')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .get('/api/v1/analyze?host=foo.bar')
@@ -120,7 +120,7 @@ t.create('grade C+ (mock)')
   })
 
 t.create('grade C- (mock)')
-  .get('/foo.bar.json')
+  .get('/foo.bar.json?style=_shields_test')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .get('/api/v1/analyze?host=foo.bar')
@@ -133,7 +133,7 @@ t.create('grade C- (mock)')
   })
 
 t.create('grade F (mock)')
-  .get('/foo.bar.json')
+  .get('/foo.bar.json?style=_shields_test')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .get('/api/v1/analyze?host=foo.bar')
