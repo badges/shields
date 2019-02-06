@@ -26,7 +26,7 @@ module.exports = class HSTS extends BaseJsonService {
         title: 'HSTS',
         namedParams: { domain: 'github.com' },
         staticPreview: this.render({ status: 'preloaded' }),
-        keywords: ['hsts'],
+        keywords: ['security'],
       },
     ]
   }
