@@ -7,7 +7,7 @@ const { deprecatedService } = require('..')
 // https://community.synopsys.com/s/article/Coverity-Scan-Update
 // https://github.com/badges/shields/issues/2722
 module.exports = deprecatedService({
-  url: {
+  route: {
     base: 'coverity/scan',
     format: '(?:.+)',
   },

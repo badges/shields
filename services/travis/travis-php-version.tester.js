@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { isPhpVersionReduction } = require('../test-validators')
-const { ServiceTester } = require('..')
+const { ServiceTester } = require('../tester')
 
 const t = (module.exports = new ServiceTester({
   id: 'travis-php-version',

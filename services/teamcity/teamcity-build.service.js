@@ -55,7 +55,7 @@ module.exports = class TeamCityBuild extends TeamCityBase {
         title: 'TeamCity Build Status (CodeBetter)',
         pattern: 'codebetter/:buildId',
         namedParams: {
-          buildId: 'bt428',
+          buildId: 'IntelliJIdeaCe_JavaDecompilerEngineTests',
         },
         staticPreview: this.render({
           status: 'SUCCESS',
@@ -67,7 +67,7 @@ module.exports = class TeamCityBuild extends TeamCityBase {
         namedParams: {
           protocol: 'https',
           hostAndPath: 'https/teamcity.jetbrains.com',
-          buildId: 'bt428',
+          buildId: 'IntelliJIdeaCe_JavaDecompilerEngineTests',
         },
         staticPreview: this.render({
           status: 'SUCCESS',

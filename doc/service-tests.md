@@ -37,14 +37,14 @@ We'll start by adding some boilerplate to our file:
 
 const Joi = require('joi')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 ```
 
 1. Import [Joi][] We'll use this to make assertions. This is the same library
    we use to define schema for validation in the main badge class.
 
 2. If our `.service.js` module exports a single class, we can
-   `require('..').createServiceTester()`, which uses convention to create a
+   `require('../tester').createServiceTester()`, which uses convention to create a
    `ServiceTester` object. Calling this inside
    `services/wercker/wercker.tester.js` will create a `ServiceTester` object
    configured for the service exported in `services/wercker/wercker.service.js`.

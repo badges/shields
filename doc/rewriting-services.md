@@ -278,7 +278,7 @@ https://github.com/hapijs/joi/blob/master/API.md
 Switch to `createServiceTester`:
 
 ```js
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 ```
 
 This may require updating the URLs, which will be relative to the service's base

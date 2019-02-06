@@ -5,7 +5,7 @@ const { deprecatedService } = require('..')
 // dotnet-status integration - deprecated as of April 2018.
 module.exports = deprecatedService({
   category: 'dependencies',
-  url: {
+  route: {
     base: 'dotnetstatus',
     format: '(?:.+)',
   },

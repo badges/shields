@@ -48,7 +48,7 @@ module.exports = class TeamCityCoverage extends TeamCityBase {
         title: 'TeamCity Coverage (CodeBetter)',
         pattern: ':buildId',
         namedParams: {
-          buildId: 'bt428',
+          buildId: 'ReactJSNet_PullRequests',
         },
         staticPreview: this.render({
           coverage: 82,
@@ -60,7 +60,7 @@ module.exports = class TeamCityCoverage extends TeamCityBase {
         namedParams: {
           protocol: 'https',
           hostAndPath: 'https/teamcity.jetbrains.com',
-          buildId: 'bt428',
+          buildId: 'ReactJSNet_PullRequests',
         },
         staticPreview: this.render({
           coverage: 95,
