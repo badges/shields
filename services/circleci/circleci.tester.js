@@ -75,5 +75,5 @@ t.create('circle ci (invalid json)')
   .expectJSON({
     name: 'build',
     value: 'invalid response data',
-    color: 'lightgray',
+    color: 'lightgrey',
   })
