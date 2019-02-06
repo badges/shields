@@ -4,7 +4,7 @@ const { deprecatedService } = require('..')
 
 // coverity on demand integration - deprecated as of December 2018.
 module.exports = deprecatedService({
-  url: {
+  route: {
     base: 'coverity/ondemand',
     format: '(?:.+)',
   },

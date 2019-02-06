@@ -39,11 +39,6 @@ t.create('Uptime Robot: Status (unspecified error)')
   )
   .expectJSON({ name: 'status', value: 'service error' })
 
-t.create('Uptime Robot: Status (connection error)')
-  .get('/m778918918-3e92c097147760ee39d02d36.json')
-  .networkOff()
-  .expectJSON({ name: 'status', value: 'inaccessible' })
-
 t.create('Uptime Robot: Status (service unavailable)')
   .get('/m778918918-3e92c097147760ee39d02d36.json')
   .intercept(nock =>
