@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { isIntegerPercentage } = require('../test-validators')
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Goal Progress (valid)')
   .get('/Liberapay.json')

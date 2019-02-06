@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { withRegex } = require('../test-validators')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('live: level known project')
   .get(`/level/1.json`)

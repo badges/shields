@@ -4,7 +4,7 @@ const Joi = require('joi')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 const { invalidJSON } = require('../response-fixtures')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('version (valid)')
   .get('/AFNetworking.json')

@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isIntegerPercentage } = require('../test-validators')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('semver stability (valid)')
   .get('/bundler/puma.json')

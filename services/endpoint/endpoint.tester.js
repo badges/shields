@@ -3,7 +3,7 @@
 const { expect } = require('chai')
 const { getShieldsIcon } = require('../../lib/logos')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Valid schema (mocked)')
   .get('.json?url=https://example.com/badge')

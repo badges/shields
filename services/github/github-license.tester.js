@@ -7,7 +7,7 @@ const permissiveLicenseColor = licenseToColor('MIT')
 const copyleftLicenseColor = licenseToColor('GPL-3.0')
 const unknownLicenseColor = licenseToColor()
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Public domain license')
   .get('/github/gitignore.json?style=_shields_test')

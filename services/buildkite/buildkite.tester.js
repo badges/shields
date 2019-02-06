@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isBuildStatus } = require('../../lib/build-status')
 const { invalidJSON } = require('../response-fixtures')
-const { ServiceTester } = require('..')
+const { ServiceTester } = require('../tester')
 
 const t = (module.exports = new ServiceTester({
   id: 'buildkite',
