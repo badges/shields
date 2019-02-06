@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { ServiceTester } = require('..')
+const { ServiceTester } = require('../tester')
 
 const t = new ServiceTester({ id: 'luarocks', title: 'LuaRocks' })
 module.exports = t

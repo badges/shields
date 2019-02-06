@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { withRegex } = require('../test-validators')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 // Matches API responses such as "0 projects", "1 projects", "182 projects", "14.0k projects".
 // There may be other cases not covered by this regex, but hopefully the tested projects won't vary much.

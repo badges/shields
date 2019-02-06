@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { isBuildStatus } = require('../../lib/build-status')
-const { ServiceTester } = require('..')
+const { ServiceTester } = require('../tester')
 
 const t = (module.exports = new ServiceTester({
   id: 'circleci',
@@ -75,5 +75,5 @@ t.create('circle ci (invalid json)')
   .expectJSON({
     name: 'build',
     value: 'invalid response data',
-    color: 'lightgray',
+    color: 'lightgrey',
   })
