@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { isBuildStatus } = require('../../lib/build-status')
-const { ServiceTester } = require('..')
+const { ServiceTester } = require('../tester')
 
 const t = (module.exports = new ServiceTester({
   id: 'circleci',

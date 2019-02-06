@@ -6,7 +6,7 @@ const { isBuildStatus } = require('../../lib/build-status')
 // https://dev.azure.com/totodem/Shields.io is a public Azure DevOps project
 // solely created for Shields.io testing.
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('default branch')
   .get(

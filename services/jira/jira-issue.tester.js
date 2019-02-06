@@ -1,6 +1,6 @@
 'use strict'
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 const { mockJiraCreds, restore, user, pass } = require('./jira-test-helpers')
 
 t.create('live: unknown issue')

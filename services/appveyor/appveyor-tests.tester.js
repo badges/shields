@@ -18,7 +18,7 @@ const isCompactCustomAppveyorTestTotals = Joi.string().regex(
   /^💃 [0-9]+( \| 🤦‍♀️ [0-9]+)?( \| 🤷 [0-9]+)?$/
 )
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Test status')
   .timeout(10000)

@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isMetric } = require('../test-validators')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('total downloads (valid)')
   .get('/dt/rails.json')

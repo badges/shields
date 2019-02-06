@@ -113,7 +113,7 @@ const isCompactCustomAzureDevOpsTestTotals = isAzureDevOpsTestTotals(
   true
 )
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('unknown build definition')
   .get(`${uriPrefix}/${nonExistentDefinitionId}.json`)
