@@ -1,3 +1,3 @@
-const baseUrl = process.env.BASE_URL || ''
+const baseUrl = process.env.GATSBY_BASE_URL || ''
 
 export { baseUrl }

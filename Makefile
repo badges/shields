@@ -48,7 +48,7 @@ push-s2:
 deploy-gh-pages:
 	rm -rf ${FRONTEND_TMP}
 	git worktree prune
-	BASE_URL=https://img.shields.io \
+	GATSBY_BASE_URL=https://img.shields.io \
 		NEXT_ASSET_PREFIX=https://shields.io \
 		npm run build
 	git worktree add -B gh-pages ${FRONTEND_TMP}

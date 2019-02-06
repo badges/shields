@@ -48,11 +48,14 @@ export default class Main extends React.Component {
   }
 
   static propTypes = {
-    match: PropTypes.object.isRequired,
-  }
-
-  get category() {
-    return this.props.match.params.category
+    // `pageContext` is the `context` passed to `createPage()` in
+    // `gatsby-node.js`. In the case of the index page, `pageContext` is empty.
+    pageContext: {
+      category: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+      }),
+    }.isRequired,
   }
 
   performSearch(query) {
@@ -114,10 +117,10 @@ export default class Main extends React.Component {
   }
 
   renderMain() {
-    const { category: categoryId } = this
+    const {
+      pageContext: { category },
+    } = this.props
     const { isSearchInProgress, isQueryTooShort, searchResults } = this.state
-
-    const category = findCategory(categoryId)
 
     if (isSearchInProgress) {
       return <div>searching...</div>
@@ -129,7 +132,7 @@ export default class Main extends React.Component {
       )
     } else if (category) {
       const definitions = ServiceDefinitionSetHelper.create(
-        getDefinitionsForCategory(categoryId)
+        getDefinitionsForCategory(category.id)
       )
         .notDeprecated()
         .toArray()
@@ -137,12 +140,6 @@ export default class Main extends React.Component {
         <div>
           <CategoryNav categories={categories} />
           {this.renderCategory(category, definitions)}
-        </div>
-      )
-    } else if (categoryId) {
-      return (
-        <div>
-          Unknown category <b>{categoryId}</b>
         </div>
       )
     } else {
