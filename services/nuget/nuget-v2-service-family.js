@@ -1,7 +1,12 @@
 'use strict'
 
 const Joi = require('joi')
-const { BaseJsonService, BaseXmlService, NotFound } = require('..')
+const {
+  BaseJsonService,
+  BaseXmlService,
+  NotFound,
+  Inaccessible,
+} = require('..')
 const { nonNegativeInteger } = require('../validators')
 const {
   renderVersionBadge,
@@ -37,7 +42,8 @@ const xmlSchema = Joi.object({
       'm:properties': Joi.object({
         'd:Version': Joi.string(),
         'd:NormalizedVersion': Joi.string(),
-        // 'd:DownloadCount': nonNegativeInteger,
+        // Resharper download counts are returning -1.
+        // https://github.com/badges/shields/issues/2921
         'd:DownloadCount': Joi.number().required(),
         'd:Tags': Joi.string(),
       }),
@@ -204,6 +210,9 @@ function createServiceFamily({
         packageName,
       })
       const { DownloadCount: downloads } = packageData
+      if (downloads === -1) {
+        throw new Inaccessible({ prettyMessage: 'temporarily unavailable' })
+      }
       return this.constructor.render({ downloads })
     }
   }

@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { ServiceTester } = require('../tester')
 const {
-  isMetric,
+  // isMetric,
   isVPlusDottedVersionNClauses,
   isVPlusDottedVersionNClausesWithOptionalSuffix,
 } = require('../test-validators')
@@ -17,12 +17,13 @@ const t = (module.exports = new ServiceTester({
 
 t.create('total downloads (valid)')
   .get('/dt/ReSharper.Nuke.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'downloads',
-      value: isMetric,
-    })
-  )
+  // .expectJSONTypes(
+  //   Joi.object().keys({
+  //     name: 'downloads',
+  //     value: isMetric,
+  //   })
+  // )
+  .expectJSON({ name: 'downloads', value: 'temporarily unavailable' })
 
 t.create('total downloads (not found)')
   .get('/dt/not-a-real-package.json')
