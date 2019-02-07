@@ -7,8 +7,7 @@ module.exports = [
     category: 'build',
     route: {
       base: 'vso/build',
-      format: '([^/]+)/([^/]+)/([^/]+)(?:/(.+))?',
-      capture: ['organization', 'projectId', 'definitionId', 'branch'],
+      pattern: ':organization/:projectId/:definitionId/:branch*',
     },
     target: ({ organization, projectId, definitionId, branch }) => {
       let path = `/azure-devops/build/${organization}/${projectId}/${definitionId}`
