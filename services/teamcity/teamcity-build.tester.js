@@ -19,7 +19,7 @@ t.create('live: codebetter unknown build')
   .expectJSON({ name: 'build', value: 'build not found' })
 
 t.create('live: codebetter known build')
-  .get('/codebetter/bt428.json')
+  .get('/codebetter/IntelliJIdeaCe_JavaDecompilerEngineTests.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'build',

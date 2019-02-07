@@ -1,5 +1,6 @@
 'use strict'
 
+const fs = require('fs')
 const bytes = require('bytes')
 const path = require('path')
 const url = require('url')
@@ -24,6 +25,11 @@ const PrometheusMetrics = require('./prometheus-metrics')
 
 const optionalUrl = Joi.string().uri({ scheme: ['http', 'https'] })
 const requiredUrl = optionalUrl.required()
+
+const notFound = fs.readFileSync(
+  path.resolve(__dirname, 'error-pages', '404.html'),
+  'utf-8'
+)
 
 const publicConfigSchema = Joi.object({
   bind: {
@@ -172,7 +178,7 @@ module.exports = class Server {
     })
 
     camp.notfound(/.*/, (query, match, end, request) => {
-      end(null, { template: '404.html' })
+      end(notFound)
     })
   }
 
@@ -238,7 +244,7 @@ module.exports = class Server {
     log(`Server is starting up: ${this.baseUrl}`)
 
     const camp = (this.camp = Camp.start({
-      documentRoot: path.join(__dirname, '..', '..', 'public'),
+      documentRoot: path.resolve(__dirname, '..', '..', 'public'),
       port,
       hostname,
       secure,

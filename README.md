@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://rawgit.com/badges/shields/master/static/logo.svg"
+    <img src="https://rawgit.com/badges/shields/master/frontend/images/logo.svg"
         height="130">
 </p>
 <p align="center">
@@ -115,9 +115,6 @@ Please report any Gitpod bugs, questions, or suggestions in issue
 [#2772](https://github.com/badges/shields/issues/2772).
 
 [![Edit with Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/badges/shields)
-
-To analyze the frontend bundle, run `npm install webpack-bundle-analyzer` and
-then `ANALYZE=true npm start`.
 
 [Snapshot tests][] ensure we don't inadvertently make changes that affect the
 SVG or JSON output. When deliberately changing the output, run
