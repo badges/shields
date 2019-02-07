@@ -15,7 +15,7 @@ t.create('gets the hsts status of httpforever')
   .get('/httpforever.com.json?style=_shields_test')
   .expectJSON({
     name: label,
-    value: 'unknown',
+    value: 'no',
     color: 'red',
   })
 
@@ -23,7 +23,7 @@ t.create('gets the status of an invalid uri')
   .get('/does-not-exist.json?style=_shields_test')
   .expectJSON({
     name: label,
-    value: 'unknown',
+    value: 'no',
     color: 'red',
   })
 
@@ -49,7 +49,7 @@ t.create('gets the hsts status of httpforever (mock)')
   )
   .expectJSON({
     name: label,
-    value: 'unknown',
+    value: 'no',
     color: 'red',
   })
 
@@ -75,6 +75,6 @@ t.create('gets the status of an invalid uri (mock)')
   )
   .expectJSON({
     name: label,
-    value: 'unknown',
+    value: 'no',
     color: 'red',
   })
