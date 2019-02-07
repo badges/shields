@@ -1,13 +1,13 @@
 'use strict'
 
 const t = (module.exports = require('..').createServiceTester())
-const label = 'hsts'
+const label = 'hsts preloaded'
 
 t.create('gets the hsts status of github')
   .get('/github.com.json?style=_shields_test')
   .expectJSON({
     name: label,
-    value: 'preloaded',
+    value: 'yes',
     color: 'brightgreen',
   })
 
@@ -36,7 +36,7 @@ t.create('gets the hsts status of github (mock)')
   )
   .expectJSON({
     name: label,
-    value: 'preloaded',
+    value: 'yes',
     color: 'brightgreen',
   })
 

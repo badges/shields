@@ -1,6 +1,6 @@
 'use strict'
 
-const label = 'hsts'
+const label = 'hsts preloaded'
 const { BaseJsonService } = require('..')
 
 const Joi = require('joi')
@@ -49,6 +49,7 @@ module.exports = class HSTS extends BaseJsonService {
     if (status === 'unknown') {
       status = 'no'
     } else if (status === 'preloaded') {
+      status = 'yes'
       color = 'brightgreen'
     } else if (status === 'pending') {
       color = 'yellow'
