@@ -23,7 +23,7 @@ module.exports = class PypiDjangoVersions extends PypiBase {
         pattern: ':packageName',
         namedParams: { packageName: 'djangorestframework' },
         staticPreview: this.render({ versions: ['1.11', '2.0', '2.1'] }),
-        keywords: ['python', 'django'],
+        keywords: ['python'],
       },
     ]
   }

@@ -53,7 +53,6 @@ class RedminePluginRating extends BaseRedminePluginRating {
         title: 'Plugin on redmine.org',
         namedParams: { plugin: 'redmine_xlsx_format_issue_exporter' },
         staticPreview: this.render({ rating: 5 }),
-        keywords: ['redmine', 'plugin'],
       },
     ]
   }
@@ -81,7 +80,6 @@ class RedminePluginStars extends BaseRedminePluginRating {
         title: 'Plugin on redmine.org',
         namedParams: { plugin: 'redmine_xlsx_format_issue_exporter' },
         staticPreview: this.render({ rating: 5 }),
-        keywords: ['redmine', 'plugin'],
       },
     ]
   }

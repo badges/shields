@@ -42,8 +42,7 @@ module.exports = class GithubIssues extends LegacyService {
           message: '167 open',
           color: 'yellow',
         },
-        keywords: ['issue'],
-        documentation,
+        documentation: documentation,
       },
       {
         title: 'GitHub issues',
@@ -57,8 +56,7 @@ module.exports = class GithubIssues extends LegacyService {
           message: '167',
           color: 'yellow',
         },
-        keywords: ['issue'],
-        documentation,
+        documentation: documentation,
       },
       {
         title: 'GitHub issues by-label',
@@ -73,8 +71,7 @@ module.exports = class GithubIssues extends LegacyService {
           message: '110 open',
           color: 'yellow',
         },
-        keywords: ['issue', 'label'],
-        documentation,
+        documentation: documentation,
       },
       {
         title: 'GitHub issues by-label',
@@ -89,8 +86,7 @@ module.exports = class GithubIssues extends LegacyService {
           message: '110',
           color: 'yellow',
         },
-        keywords: ['issue', 'label'],
-        documentation,
+        documentation: documentation,
       },
       {
         title: 'GitHub closed issues',
@@ -104,8 +100,7 @@ module.exports = class GithubIssues extends LegacyService {
           message: '899 closed',
           color: 'yellow',
         },
-        keywords: ['issue'],
-        documentation,
+        documentation: documentation,
       },
       {
         title: 'GitHub closed issues',
@@ -119,8 +114,7 @@ module.exports = class GithubIssues extends LegacyService {
           message: '899',
           color: 'yellow',
         },
-        keywords: ['issue'],
-        documentation,
+        documentation: documentation,
       },
       {
         title: 'GitHub pull requests',
@@ -195,7 +189,7 @@ module.exports = class GithubIssues extends LegacyService {
           message: '8 open',
           color: 'yellow',
         },
-        keywords: ['pullrequests', 'pr', 'label'],
+        keywords: ['pullrequests', 'pr'],
         documentation,
       },
       {
@@ -211,7 +205,7 @@ module.exports = class GithubIssues extends LegacyService {
           message: '8',
           color: 'yellow',
         },
-        keywords: ['pullrequests', 'pr', 'label'],
+        keywords: ['pullrequests', 'pr'],
         documentation,
       },
     ]

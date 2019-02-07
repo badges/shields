@@ -37,7 +37,7 @@ module.exports = class GithubLicense extends LegacyService {
           message: 'MIT',
           color: 'green',
         },
-        keywords: ['GitHub', 'license'],
+        keywords: ['license'],
         documentation,
       },
     ]
