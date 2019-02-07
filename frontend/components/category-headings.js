@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Link, NavLink } from 'react-router-dom'
+import { Link } from 'gatsby'
 import { H3 } from './common'
 
 const CategoryHeading = ({ category }) => {
   const { id, name } = category
 
   return (
-    <Link to={`/examples/${id}`}>
+    <Link to={`/category/${id}`}>
       <H3 id={id}>{name}</H3>
     </Link>
   )
@@ -67,9 +67,7 @@ const CategoryNav = ({ categories }) => (
     <ul>
       {categories.map(({ id, name }) => (
         <li key={id}>
-          <NavLink to={`/examples/${id}`} activeClassName="active">
-            {name}
-          </NavLink>
+          <Link to={`/category/${id}`}>{name}</Link>
         </li>
       ))}
     </ul>
