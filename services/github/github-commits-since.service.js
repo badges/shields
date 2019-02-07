@@ -40,7 +40,7 @@ module.exports = class GithubCommitsSince extends LegacyService {
           message: '4225',
           color: 'blue',
         },
-        documentation: documentation,
+        documentation,
       },
       {
         title: 'GitHub commits (since latest release)',
@@ -54,7 +54,7 @@ module.exports = class GithubCommitsSince extends LegacyService {
           message: '157',
           color: 'blue',
         },
-        documentation: documentation,
+        documentation,
       },
     ]
   }

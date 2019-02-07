@@ -42,7 +42,7 @@ module.exports = class GithubIssues extends LegacyService {
           message: '167 open',
           color: 'yellow',
         },
-        documentation: documentation,
+        documentation,
       },
       {
         title: 'GitHub issues',
@@ -56,7 +56,7 @@ module.exports = class GithubIssues extends LegacyService {
           message: '167',
           color: 'yellow',
         },
-        documentation: documentation,
+        documentation,
       },
       {
         title: 'GitHub issues by-label',
@@ -71,7 +71,7 @@ module.exports = class GithubIssues extends LegacyService {
           message: '110 open',
           color: 'yellow',
         },
-        documentation: documentation,
+        documentation,
       },
       {
         title: 'GitHub issues by-label',
@@ -86,7 +86,7 @@ module.exports = class GithubIssues extends LegacyService {
           message: '110',
           color: 'yellow',
         },
-        documentation: documentation,
+        documentation,
       },
       {
         title: 'GitHub closed issues',
@@ -100,7 +100,7 @@ module.exports = class GithubIssues extends LegacyService {
           message: '899 closed',
           color: 'yellow',
         },
-        documentation: documentation,
+        documentation,
       },
       {
         title: 'GitHub closed issues',
@@ -114,7 +114,7 @@ module.exports = class GithubIssues extends LegacyService {
           message: '899',
           color: 'yellow',
         },
-        documentation: documentation,
+        documentation,
       },
       {
         title: 'GitHub pull requests',
