@@ -23,7 +23,7 @@ module.exports = class HSTS extends BaseJsonService {
   static get examples() {
     return [
       {
-        title: 'HSTS',
+        title: 'Chromium HSTS preload',
         namedParams: { domain: 'github.com' },
         staticPreview: this.render({ status: 'preloaded' }),
         keywords: ['security'],
