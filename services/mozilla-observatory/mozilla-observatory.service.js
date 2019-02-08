@@ -6,7 +6,7 @@ const { BaseJsonService } = require('..')
 const Joi = require('joi')
 const schema = Joi.object({
   grade: Joi.string()
-    .regex(/^[abcdef]$/i)
+    .regex(/^[abcdef]/i)
     .required(),
   score: Joi.number().required(),
 }).required()
