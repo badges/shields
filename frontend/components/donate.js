@@ -1,20 +1,16 @@
 import React from 'react'
+import styled from 'styled-components'
 
-export default class DonateBox extends React.Component {
-  render() {
-    return (
-      <div>
-        <div id="donate">
-          Love Shields? Please consider{' '}
-          <a href="https://opencollective.com/shields">donating</a> to sustain
-          our activities
-        </div>
-        <style jsx>{`
-          #donate {
-            padding: 25px 50px;
-          }
-        `}</style>
-      </div>
-    )
-  }
-}
+const Donate = styled.div`
+  padding: 25px 50px;
+`
+
+const DonateBox = () => (
+  <Donate>
+    Love Shields? Please consider{' '}
+    <a href="https://opencollective.com/shields">donating</a> to sustain our
+    activities
+  </Donate>
+)
+
+export default DonateBox
