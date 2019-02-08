@@ -1,33 +1,16 @@
 'use strict'
 
 const Joi = require('joi')
-const { ServiceTester } = require('../tester')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
 const isBowerPrereleaseVersion = Joi.string().regex(
   /^v\d+(\.\d+)?(\.\d+)?(-?[.\w\d])+?$/
 )
 
-const t = (module.exports = new ServiceTester({ id: 'bower', title: 'Bower' }))
-
-t.create('licence')
-  .get('/l/bootstrap.json')
-  .expectJSON({ name: 'license', value: 'MIT' })
-
-t.create('custom label for licence')
-  .get('/l/bootstrap.json?label=my licence')
-  .expectJSON({ name: 'my licence', value: 'MIT' })
-
-t.create('license not declared')
-  .get('/l/bootstrap.json')
-  .intercept(nock =>
-    nock('https://libraries.io')
-      .get('/api/bower/bootstrap')
-      .reply(200, { normalized_licenses: [] })
-  )
-  .expectJSON({ name: 'license', value: 'missing' })
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('version')
+  .timeout(10000)
   .get('/v/bootstrap.json')
   .expectJSONTypes(
     Joi.object().keys({
@@ -36,16 +19,8 @@ t.create('version')
     })
   )
 
-t.create('custom label for version')
-  .get('/v/bootstrap.json?label=my version')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'my version',
-      value: isVPlusDottedVersionAtLeastOne,
-    })
-  )
-
 t.create('pre version') // e.g. bower|v0.2.5-alpha-rc-pre
+  .timeout(10000)
   .get('/vpre/bootstrap.json')
   .expectJSONTypes(
     Joi.object().keys({
@@ -54,26 +29,15 @@ t.create('pre version') // e.g. bower|v0.2.5-alpha-rc-pre
     })
   )
 
-t.create('custom label for pre version') // e.g. pre version|v0.2.5-alpha-rc-pre
-  .get('/vpre/bootstrap.json?label=pre version')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'pre version',
-      value: isBowerPrereleaseVersion,
-    })
-  )
-
 t.create('Version for Invalid Package')
+  .timeout(10000)
   .get('/v/it-is-a-invalid-package-should-error.json')
-  .expectJSON({ name: 'bower', value: 'not found' })
+  .expectJSON({ name: 'bower', value: 'package not found' })
 
 t.create('Pre Version for Invalid Package')
+  .timeout(10000)
   .get('/vpre/it-is-a-invalid-package-should-error.json')
-  .expectJSON({ name: 'bower', value: 'not found' })
-
-t.create('licence for Invalid Package')
-  .get('/l/it-is-a-invalid-package-should-error.json')
-  .expectJSON({ name: 'license', value: 'not found' })
+  .expectJSON({ name: 'bower', value: 'package not found' })
 
 t.create('Version label should be `no releases` if no stable version')
   .get('/v/bootstrap.json')
