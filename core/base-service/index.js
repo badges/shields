@@ -9,6 +9,7 @@ const BaseXmlService = require('./base-xml')
 const BaseYamlService = require('./base-yaml')
 
 const deprecatedService = require('./deprecated-service')
+const redirector = require('./redirector')
 
 const {
   NotFound,
@@ -27,6 +28,7 @@ module.exports = {
   BaseXmlService,
   BaseYamlService,
   deprecatedService,
+  redirector,
   NotFound,
   InvalidResponse,
   Inaccessible,

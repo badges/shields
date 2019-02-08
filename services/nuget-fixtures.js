@@ -9,24 +9,6 @@ const queryIndex = JSON.stringify({
   ],
 })
 
-const nuGetV2VersionJsonWithDash = JSON.stringify({
-  d: {
-    results: [
-      { NormalizedVersion: '1.2-beta', Version: 'xxx', DownloadCount: 0 },
-    ],
-  },
-})
-const nuGetV2VersionJsonFirstCharZero = JSON.stringify({
-  d: {
-    results: [{ NormalizedVersion: '0.35', Version: 'xxx', DownloadCount: 0 }],
-  },
-})
-const nuGetV2VersionJsonFirstCharNotZero = JSON.stringify({
-  d: {
-    results: [{ NormalizedVersion: '1.2.7', Version: 'xxx', DownloadCount: 0 }],
-  },
-})
-
 const nuGetV3VersionJsonWithDash = JSON.stringify({
   data: [
     {
@@ -54,9 +36,6 @@ const nuGetV3VersionJsonFirstCharNotZero = JSON.stringify({
 
 module.exports = {
   queryIndex,
-  nuGetV2VersionJsonWithDash,
-  nuGetV2VersionJsonFirstCharZero,
-  nuGetV2VersionJsonFirstCharNotZero,
   nuGetV3VersionJsonWithDash,
   nuGetV3VersionJsonFirstCharZero,
   nuGetV3VersionJsonFirstCharNotZero,

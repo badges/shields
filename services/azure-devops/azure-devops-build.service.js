@@ -34,9 +34,8 @@ module.exports = class AzureDevOpsBuild extends BaseSvgScrapingService {
 
   static get route() {
     return {
-      base: '',
-      format: '(?:azure-devops|vso)/build/([^/]+)/([^/]+)/([^/]+)(?:/(.+))?',
-      capture: ['organization', 'projectId', 'definitionId', 'branch'],
+      base: 'azure-devops/build',
+      pattern: ':organization/:projectId/:definitionId/:branch*',
     }
   }
 
@@ -44,7 +43,7 @@ module.exports = class AzureDevOpsBuild extends BaseSvgScrapingService {
     return [
       {
         title: 'Azure DevOps builds',
-        pattern: 'azure-devops/build/:organization/:projectId/:definitionId',
+        pattern: ':organization/:projectId/:definitionId',
         namedParams: {
           organization: 'totodem',
           projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
@@ -56,8 +55,7 @@ module.exports = class AzureDevOpsBuild extends BaseSvgScrapingService {
       },
       {
         title: 'Azure DevOps builds (branch)',
-        pattern:
-          'azure-devops/build/:organization/:projectId/:definitionId/:branch',
+        pattern: ':organization/:projectId/:definitionId/:branch',
         namedParams: {
           organization: 'totodem',
           projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',

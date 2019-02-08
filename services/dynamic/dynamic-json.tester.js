@@ -30,7 +30,7 @@ t.create('Malformed url')
   .expectJSON({
     name: 'Package Name',
     value: 'invalid',
-    color: 'lightgray',
+    color: 'lightgrey',
   })
 
 t.create('JSON from url')
@@ -88,7 +88,7 @@ t.create('JSON from url | object doesnt exist')
   .expectJSON({
     name: 'custom badge',
     value: 'no result',
-    color: 'lightgray',
+    color: 'lightgrey',
   })
 
 t.create('JSON from url | invalid url')
