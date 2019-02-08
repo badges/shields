@@ -1,13 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const { ServiceTester } = require('..')
-const validColors = ['brightgreen', 'green', 'yellow', 'orange', 'red']
+const t = (module.exports = require('..').createServiceTester())
 
-const t = (module.exports = new ServiceTester({
-  id: 'mozilla-observatory',
-  title: 'Mozilla Observatory Scanner',
-}))
+const validColors = ['brightgreen', 'green', 'yellow', 'orange', 'red']
 
 t.create('request on observatory.mozilla.org')
   .get('/observatory.mozilla.org.json?style=_shields_test')
