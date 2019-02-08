@@ -1,19 +1,25 @@
 'use strict'
 
+const Joi = require('joi')
 const { ServiceTester } = require('..')
+const validColors = ['brightgreen', 'green', 'yellow', 'orange', 'red']
 
 const t = (module.exports = new ServiceTester({
   id: 'mozilla-observatory',
   title: 'Mozilla Observatory Scanner',
 }))
 
-t.create('request on httpforever')
-  .get('/httpforever.com.json?style=_shields_test')
-  .expectJSON({
-    name: 'observatory',
-    value: 'C+ (60/100)',
-    color: 'yellow',
-  })
+t.create('request on observatory.mozilla.org')
+  .get('/observatory.mozilla.org.json?style=_shields_test')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'observatory',
+      value: Joi.string().regex(/^[ABCDEF][+-]? \([0-9]{1,3}\/100\)$/),
+      color: Joi.string()
+        .valid(validColors)
+        .required(),
+    })
+  )
 
 t.create('grade A (mock)')
   .get('/foo.bar.json?style=_shields_test')
