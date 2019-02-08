@@ -39,7 +39,10 @@ module.exports = class MozillaObservatory extends BaseJsonService {
   async fetch({ host }) {
     return this._requestJson({
       schema,
-      url: `https://http-observatory.security.mozilla.org/api/v1/analyze?host=${host}`,
+      url: `https://http-observatory.security.mozilla.org/api/v1/analyze`,
+      options: {
+        qs: { host },
+      },
     })
   }
 
