@@ -3,7 +3,7 @@
 const t = (module.exports = require('../tester').createServiceTester())
 const { isPercentage } = require('../test-validators')
 
-t.create('NodePing uptime - 0.000% (live)')
+t.create('NodePing uptime - live')
   .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')
   .expectJSONTypes({
     name: 'Uptime',

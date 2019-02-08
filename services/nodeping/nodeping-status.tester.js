@@ -1,13 +1,16 @@
 'use strict'
 
+const Joi = require('joi')
+
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('NodePing status - up (live)')
-  .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')
-  .expectJSON({
-    name: 'Status',
-    value: 'up',
-  })
+t.create('NodePing status - live').get(
+  '/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json'
+)
+Joi.object().keys({
+  name: 'Status',
+  value: Joi.equal('up', 'down').required(),
+})
 
 t.create('NodePing status - up (mock)')
   .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')
@@ -21,13 +24,6 @@ t.create('NodePing status - up (mock)')
   .expectJSON({
     name: 'Status',
     value: 'up',
-  })
-
-t.create('NodePing status - down (live)')
-  .get('/wf47q49c-zdmk-4ngx-88g4-wa7mzgluhhaf.json')
-  .expectJSON({
-    name: 'Status',
-    value: 'down',
   })
 
 t.create('NodePing status - down (mock)')
