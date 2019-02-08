@@ -30,16 +30,14 @@ t.create('pre version') // e.g. bower|v0.2.5-alpha-rc-pre
   )
 
 t.create('Version for Invalid Package')
+  .timeout(10000)
   .get('/v/it-is-a-invalid-package-should-error.json')
   .expectJSON({ name: 'bower', value: 'package not found' })
 
 t.create('Pre Version for Invalid Package')
+  .timeout(10000)
   .get('/vpre/it-is-a-invalid-package-should-error.json')
   .expectJSON({ name: 'bower', value: 'package not found' })
-
-t.create('licence for Invalid Package')
-  .get('/l/it-is-a-invalid-package-should-error.json')
-  .expectJSON({ name: 'license', value: 'package not found' })
 
 t.create('Version label should be `no releases` if no stable version')
   .get('/v/bootstrap.json')

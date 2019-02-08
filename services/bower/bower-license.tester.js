@@ -8,7 +8,6 @@ t.create('licence')
   .expectJSON({ name: 'license', value: 'MIT' })
 
 t.create('license not declared')
-  .timeout(10000)
   .get('/bootstrap.json')
   .intercept(nock =>
     nock('https://libraries.io')
@@ -16,3 +15,8 @@ t.create('license not declared')
       .reply(200, { normalized_licenses: [] })
   )
   .expectJSON({ name: 'license', value: 'missing' })
+
+t.create('licence for Invalid Package')
+  .timeout(10000)
+  .get('/it-is-a-invalid-package-should-error.json')
+  .expectJSON({ name: 'license', value: 'package not found' })
