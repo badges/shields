@@ -45,7 +45,7 @@ function sendTokenToAllServers(token) {
 }
 
 function setRoutes({ server, onTokenAccepted }) {
-  const baseUrl = process.env.BASE_URL || 'https://img.shields.io'
+  const baseUrl = process.env.GATSBY_BASE_URL || 'https://img.shields.io'
 
   server.route(/^\/github-auth$/, (data, match, end, ask) => {
     ask.res.statusCode = 302 // Found.

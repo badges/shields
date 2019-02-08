@@ -4,7 +4,7 @@ const Joi = require('joi')
 const { expect } = require('chai')
 const { isSemver } = require('../test-validators')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('No URL specified')
   .get('.json?query=//name&label=Package Name&style=_shields_test')
@@ -97,7 +97,7 @@ t.create('XML from url | query doesnt exist')
   .expectJSON({
     name: 'custom badge',
     value: 'no result',
-    color: 'lightgray',
+    color: 'lightgrey',
   })
 
 t.create('XML from url | query doesnt exist (attribute)')
@@ -107,7 +107,7 @@ t.create('XML from url | query doesnt exist (attribute)')
   .expectJSON({
     name: 'custom badge',
     value: 'no result',
-    color: 'lightgray',
+    color: 'lightgrey',
   })
 
 t.create('XML from url | invalid url')

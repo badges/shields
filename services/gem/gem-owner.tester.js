@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('users (valid)')
   .get('/raphink.json')

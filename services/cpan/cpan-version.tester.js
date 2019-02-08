@@ -1,7 +1,7 @@
 'use strict'
 
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('version (valid)')
   .get('/Config-Augeas.json')

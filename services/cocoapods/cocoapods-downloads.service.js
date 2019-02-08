@@ -4,7 +4,7 @@ const { deprecatedService } = require('..')
 
 module.exports = deprecatedService({
   category: 'downloads',
-  url: {
+  route: {
     base: 'cocoapods',
     pattern: ':interval(dm|dw|dt)/:spec',
   },

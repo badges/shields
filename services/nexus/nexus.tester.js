@@ -5,7 +5,7 @@ const sinon = require('sinon')
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix: isVersion,
 } = require('../test-validators')
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 const serverSecrets = require('../../lib/server-secrets')
 
 const user = 'admin'
@@ -115,7 +115,7 @@ t.create('search snapshot no snapshot versions')
   .expectJSON({
     name: 'nexus',
     value: 'no snapshot versions found',
-    color: 'lightgray',
+    color: 'lightgrey',
   })
 
 t.create('search release version')

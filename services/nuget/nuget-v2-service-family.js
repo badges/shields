@@ -1,9 +1,13 @@
 'use strict'
 
 const Joi = require('joi')
-const { BaseJsonService, NotFound } = require('..')
+const { BaseJsonService, BaseXmlService, NotFound } = require('..')
 const { nonNegativeInteger } = require('../validators')
-const { renderVersionBadge, renderDownloadBadge } = require('./nuget-helpers')
+const {
+  renderVersionBadge,
+  renderDownloadBadge,
+  odataToObject,
+} = require('./nuget-helpers')
 
 function createFilter({ packageName, includePrereleases }) {
   const releaseTypeFilter = includePrereleases
@@ -12,7 +16,7 @@ function createFilter({ packageName, includePrereleases }) {
   return `Id eq '${packageName}' and ${releaseTypeFilter}`
 }
 
-const schema = Joi.object({
+const jsonSchema = Joi.object({
   d: Joi.object({
     results: Joi.array()
       .items(
@@ -27,25 +31,53 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
+const xmlSchema = Joi.object({
+  feed: Joi.object({
+    entry: Joi.object({
+      'm:properties': Joi.object({
+        'd:Version': Joi.string(),
+        'd:NormalizedVersion': Joi.string(),
+        'd:DownloadCount': nonNegativeInteger,
+        'd:Tags': Joi.string(),
+      }),
+    }),
+  }).required(),
+}).required()
+
 async function fetch(
   serviceInstance,
-  { baseUrl, packageName, includePrereleases = false }
+  { odataFormat, baseUrl, packageName, includePrereleases = false }
 ) {
-  const data = await serviceInstance._requestJson({
-    schema,
-    url: `${baseUrl}/Packages()`,
-    options: {
-      headers: { Accept: 'application/atom+json,application/json' },
-      qs: { $filter: createFilter({ packageName, includePrereleases }) },
-    },
-  })
+  const url = `${baseUrl}/Packages()`
+  const qs = { $filter: createFilter({ packageName, includePrereleases }) }
 
-  const packageData = data.d.results[0]
+  let packageData
+  if (odataFormat === 'xml') {
+    const data = await serviceInstance._requestXml({
+      schema: xmlSchema,
+      url,
+      options: { qs },
+    })
+    packageData = odataToObject(data.feed.entry)
+  } else if (odataFormat === 'json') {
+    const data = await serviceInstance._requestJson({
+      schema: jsonSchema,
+      url,
+      options: {
+        headers: { Accept: 'application/atom+json,application/json' },
+        qs,
+      },
+    })
+    packageData = data.d.results[0]
+  } else {
+    throw Error(`Unsupported Atom OData format: ${odataFormat}`)
+  }
 
   if (packageData) {
     return packageData
   } else if (!includePrereleases) {
     return fetch(serviceInstance, {
+      odataFormat,
       baseUrl,
       packageName,
       includePrereleases: true,
@@ -67,13 +99,23 @@ function createServiceFamily({
   defaultLabel,
   serviceBaseUrl,
   apiBaseUrl,
+  odataFormat,
   title,
   examplePackageName,
   exampleVersion,
   examplePrereleaseVersion,
   exampleDownloadCount,
 }) {
-  class NugetVersionService extends BaseJsonService {
+  let Base
+  if (odataFormat === 'xml') {
+    Base = BaseXmlService
+  } else if (odataFormat === 'json') {
+    Base = BaseJsonService
+  } else {
+    throw Error(`Unsupported Atom OData format: ${odataFormat}`)
+  }
+
+  class NugetVersionService extends Base {
     static get category() {
       return 'version'
     }
@@ -116,6 +158,7 @@ function createServiceFamily({
 
     async handle({ which, packageName }) {
       const packageData = await fetch(this, {
+        odataFormat,
         baseUrl: apiBaseUrl,
         packageName,
         includePrereleases: which === 'vpre',
@@ -125,7 +168,7 @@ function createServiceFamily({
     }
   }
 
-  class NugetDownloadService extends BaseJsonService {
+  class NugetDownloadService extends Base {
     static get category() {
       return 'downloads'
     }
@@ -155,6 +198,7 @@ function createServiceFamily({
 
     async handle({ packageName }) {
       const packageData = await fetch(this, {
+        odataFormat,
         baseUrl: apiBaseUrl,
         packageName,
       })
@@ -168,5 +212,6 @@ function createServiceFamily({
 
 module.exports = {
   createFilter,
+  fetch,
   createServiceFamily,
 }

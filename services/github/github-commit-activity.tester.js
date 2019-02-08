@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isMetricOverTimePeriod } = require('../test-validators')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('commit activity (1 year)')
   .get('/y/eslint/eslint.json')

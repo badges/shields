@@ -8,10 +8,7 @@ FRONTEND_TMP=${TMPDIR}shields-frontend-deploy
 # pushing secrets to GitHub, this branch is configured to reject pushes.
 WORKING_BRANCH=server-deploy-working-branch
 
-all: website test
-
-website:
-	npm run build
+all: test
 
 deploy: deploy-s0 deploy-s1 deploy-s2 clean-server-deploy deploy-gh-pages deploy-gh-pages-clean
 
@@ -19,14 +16,16 @@ deploy-s0: prepare-server-deploy push-s0
 deploy-s1: prepare-server-deploy push-s1
 deploy-s2: prepare-server-deploy push-s2
 
-prepare-server-deploy: website
+prepare-server-deploy:
 	# Ship a copy of the front end to each server for debugging.
 	# https://github.com/badges/shields/issues/1220
+	INCLUDE_DEV_PAGES=false \
+		npm run build
 	rm -rf ${SERVER_TMP}
 	git worktree prune
 	git worktree add -B ${WORKING_BRANCH} ${SERVER_TMP}
-	cp -r build ${SERVER_TMP}
-	git -C ${SERVER_TMP} add -f build/
+	cp -r public ${SERVER_TMP}
+	git -C ${SERVER_TMP} add -f public/
 	git -C ${SERVER_TMP} commit --no-verify -m '[DEPLOY] Add frontend for debugging'
 	cp config/local-shields-io-production.yml ${SERVER_TMP}/config/
 	git -C ${SERVER_TMP} add -f config/local-shields-io-production.yml
@@ -48,14 +47,13 @@ push-s2:
 deploy-gh-pages:
 	rm -rf ${FRONTEND_TMP}
 	git worktree prune
-	BASE_URL=https://img.shields.io \
-		NEXT_ASSET_PREFIX=https://shields.io \
+	GATSBY_BASE_URL=https://img.shields.io \
+		INCLUDE_DEV_PAGES=false \
 		npm run build
 	git worktree add -B gh-pages ${FRONTEND_TMP}
 	git -C ${FRONTEND_TMP} ls-files | xargs git -C ${FRONTEND_TMP} rm
 	git -C ${FRONTEND_TMP} commit --no-verify -m '[DEPLOY] Completely clean the index'
-	cp -r build/* ${FRONTEND_TMP}
-	cp favicon.png ${FRONTEND_TMP}
+	cp -r public/* ${FRONTEND_TMP}
 	echo shields.io > ${FRONTEND_TMP}/CNAME
 	touch ${FRONTEND_TMP}/.nojekyll
 	git -C ${FRONTEND_TMP} add .
@@ -69,4 +67,4 @@ deploy-gh-pages-clean:
 test:
 	npm test
 
-.PHONY: all website deploy prepare-server-deploy clean-server-deploy deploy-s0 deploy-s1 deploy-s2 push-s0 push-s1 push-s2 deploy-gh-pages deploy-gh-pages-clean deploy-heroku setup redis test
+.PHONY: all deploy prepare-server-deploy clean-server-deploy deploy-s0 deploy-s1 deploy-s2 push-s0 push-s1 push-s2 deploy-gh-pages deploy-gh-pages-clean deploy-heroku setup redis test

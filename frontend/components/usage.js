@@ -1,9 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'gatsby'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { staticBadgeUrl } from '../lib/badge-url'
-import { advertisedStyles, logos } from '../../supported-features.json'
+import { advertisedStyles, shieldsLogos } from '../../supported-features.json'
 import StaticBadgeMaker from './static-badge-maker'
 import DynamicBadgeMaker from './dynamic-badge-maker'
 import { H2, H3, Badge, VerticalSpace } from './common'
@@ -110,7 +110,7 @@ export default class Usage extends React.PureComponent {
 
   static renderNamedLogos() {
     const renderLogo = logo => <LogoName key={logo}>{logo}</LogoName>
-    const [first, ...rest] = logos
+    const [first, ...rest] = shieldsLogos
     return [renderLogo(first)].concat(
       rest.reduce((result, logo) => result.concat([', ', renderLogo(logo)]), [])
     )

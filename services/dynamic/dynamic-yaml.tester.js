@@ -1,6 +1,6 @@
 'use strict'
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('No URL specified')
   .get('.json?query=$.name&label=Package Name&style=_shields_test')
@@ -65,7 +65,7 @@ t.create('YAML from url | object doesnt exist')
   .expectJSON({
     name: 'custom badge',
     value: 'no result',
-    color: 'lightgray',
+    color: 'lightgrey',
   })
 
 t.create('YAML from url | invalid url')
