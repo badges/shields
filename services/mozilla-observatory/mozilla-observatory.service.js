@@ -50,14 +50,13 @@ module.exports = class MozillaObservatory extends BaseJsonService {
 
   static render({ grade, score }) {
     const letter = grade[0].toLowerCase()
-    // https://github.com/mozilla/http-observatory-website/blob/master/css/httpobs.css
     const colorMap = {
-      a: '2d882d',
-      b: 'aaaa39',
-      c: 'aa7039',
-      d: '652770',
-      e: '652770', // Handles legacy grade
-      f: 'aa3939',
+      a: 'brightgreen',
+      b: 'green',
+      c: 'yellow',
+      d: 'orange',
+      e: 'orange', // Handles legacy grade
+      f: 'red',
     }
     return {
       message: `${grade} (${score}/100)`,

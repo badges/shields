@@ -12,7 +12,7 @@ t.create('request on httpforever')
   .expectJSON({
     name: 'observatory',
     value: 'C+ (60/100)',
-    color: 'aa7039',
+    color: 'yellow',
   })
 
 t.create('grade A (mock)')
@@ -25,7 +25,7 @@ t.create('grade A (mock)')
   .expectJSON({
     name: 'observatory',
     value: 'A (115/100)',
-    color: '2d882d',
+    color: 'brightgreen',
   })
 
 t.create('grade A+ (mock)')
@@ -38,7 +38,7 @@ t.create('grade A+ (mock)')
   .expectJSON({
     name: 'observatory',
     value: 'A+ (115/100)',
-    color: '2d882d',
+    color: 'brightgreen',
   })
 
 t.create('grade A- (mock)')
@@ -51,7 +51,7 @@ t.create('grade A- (mock)')
   .expectJSON({
     name: 'observatory',
     value: 'A- (115/100)',
-    color: '2d882d',
+    color: 'brightgreen',
   })
 
 t.create('grade B (mock)')
@@ -64,7 +64,7 @@ t.create('grade B (mock)')
   .expectJSON({
     name: 'observatory',
     value: 'B (115/100)',
-    color: 'aaaa39',
+    color: 'green',
   })
 
 t.create('grade B+ (mock)')
@@ -77,7 +77,7 @@ t.create('grade B+ (mock)')
   .expectJSON({
     name: 'observatory',
     value: 'B+ (115/100)',
-    color: 'aaaa39',
+    color: 'green',
   })
 
 t.create('grade B- (mock)')
@@ -90,7 +90,7 @@ t.create('grade B- (mock)')
   .expectJSON({
     name: 'observatory',
     value: 'B- (115/100)',
-    color: 'aaaa39',
+    color: 'green',
   })
 
 t.create('grade C (mock)')
@@ -103,7 +103,7 @@ t.create('grade C (mock)')
   .expectJSON({
     name: 'observatory',
     value: 'C (80/100)',
-    color: 'aaaa39',
+    color: 'yellow',
   })
 
 t.create('grade C+ (mock)')
@@ -116,7 +116,7 @@ t.create('grade C+ (mock)')
   .expectJSON({
     name: 'observatory',
     value: 'C+ (80/100)',
-    color: 'aaaa39',
+    color: 'yellow',
   })
 
 t.create('grade C- (mock)')
@@ -129,7 +129,7 @@ t.create('grade C- (mock)')
   .expectJSON({
     name: 'observatory',
     value: 'C- (80/100)',
-    color: 'aaaa39',
+    color: 'yellow',
   })
 
 t.create('grade D (mock)')
@@ -142,7 +142,7 @@ t.create('grade D (mock)')
   .expectJSON({
     name: 'observatory',
     value: 'D (15/100)',
-    color: '652770',
+    color: 'orange',
   })
 
 t.create('grade D+ (mock)')
@@ -155,7 +155,7 @@ t.create('grade D+ (mock)')
   .expectJSON({
     name: 'observatory',
     value: 'D+ (15/100)',
-    color: '652770',
+    color: 'orange',
   })
 
 t.create('grade D- (mock)')
@@ -168,7 +168,7 @@ t.create('grade D- (mock)')
   .expectJSON({
     name: 'observatory',
     value: 'D- (15/100)',
-    color: '652770',
+    color: 'orange',
   })
 
 t.create('grade E (mock)')
@@ -181,7 +181,7 @@ t.create('grade E (mock)')
   .expectJSON({
     name: 'observatory',
     value: 'E (15/100)',
-    color: '652770',
+    color: 'orange',
   })
 
 t.create('grade E+ (mock)')
@@ -194,7 +194,7 @@ t.create('grade E+ (mock)')
   .expectJSON({
     name: 'observatory',
     value: 'E+ (15/100)',
-    color: '652770',
+    color: 'orange',
   })
 
 t.create('grade E- (mock)')
@@ -207,7 +207,7 @@ t.create('grade E- (mock)')
   .expectJSON({
     name: 'observatory',
     value: 'E- (15/100)',
-    color: '652770',
+    color: 'orange',
   })
 
 t.create('grade F (mock)')
@@ -220,5 +220,5 @@ t.create('grade F (mock)')
   .expectJSON({
     name: 'observatory',
     value: 'F (0/100)',
-    color: 'aa3939',
+    color: 'red',
   })
