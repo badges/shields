@@ -16,6 +16,7 @@ module.exports = [
       }
       return path
     },
+    dateAdded: new Date('2019-02-08'),
   }),
   redirector({
     category: 'build',
@@ -25,5 +26,6 @@ module.exports = [
     },
     target: ({ organization, projectId, definitionId, environmentId }) =>
       `/azure-devops/release/${organization}/${projectId}/${definitionId}/${environmentId}`,
+    dateAdded: new Date('2019-02-08'),
   }),
 ]

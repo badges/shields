@@ -1,6 +1,7 @@
 'use strict'
 
 const emojic = require('emojic')
+const Joi = require('joi')
 const BaseService = require('./base')
 const {
   serverHasBeenUpSinceResourceCached,
@@ -9,7 +10,7 @@ const {
 const { prepareRoute, namedParamsForMatch } = require('./route')
 const trace = require('./trace')
 
-module.exports = function redirector({ category, route, target }) {
+module.exports = function redirector({ category, route, target, dateAdded }) {
   return class Redirector extends BaseService {
     static get category() {
       return category
@@ -21,6 +22,17 @@ module.exports = function redirector({ category, route, target }) {
 
     static get isDeprecated() {
       return true
+    }
+
+    static validateDefinition() {
+      super.validateDefinition()
+      Joi.assert(
+        { dateAdded },
+        Joi.object({
+          dateAdded: Joi.date().required(),
+        }),
+        `Redirector for ${route.base}`
+      )
     }
 
     static register({ camp }) {

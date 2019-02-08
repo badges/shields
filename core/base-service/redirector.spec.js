@@ -11,21 +11,31 @@ describe('Redirector', function() {
     base: 'very/old/service',
     pattern: ':namedParamA',
   }
+  const category = 'analysis'
+  const target = () => {}
+  const attrs = {
+    category,
+    route,
+    target,
+    dateAdded: new Date(),
+  }
 
   it('returns true on isDeprecated', function() {
-    const ServiceClass = redirector({ route })
-    expect(ServiceClass.isDeprecated).to.be.true
+    expect(redirector(attrs).isDeprecated).to.be.true
   })
 
   it('sets specified route', function() {
-    const ServiceClass = redirector({ route })
-    expect(ServiceClass.route).to.deep.equal(route)
+    expect(redirector(attrs).route).to.deep.equal(route)
   })
 
   it('sets specified category', function() {
-    const category = 'analysis'
-    const ServiceClass = redirector({ route, category })
-    expect(ServiceClass.category).to.equal(category)
+    expect(redirector(attrs).category).to.equal(category)
+  })
+
+  it('throws the expected error when dateAdded is missing', function() {
+    expect(() =>
+      redirector({ route, category, target }).validateDefinition()
+    ).to.throw('"dateAdded" is required')
   })
 
   describe('ScoutCamp integration', function() {
