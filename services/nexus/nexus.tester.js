@@ -115,7 +115,7 @@ t.create('search snapshot no snapshot versions')
   .expectJSON({
     name: 'nexus',
     value: 'no snapshot versions found',
-    color: 'lightgray',
+    color: 'lightgrey',
   })
 
 t.create('search release version')
