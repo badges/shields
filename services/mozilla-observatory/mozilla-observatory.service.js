@@ -1,6 +1,5 @@
 'use strict'
 
-const label = 'observatory'
 const { BaseJsonService } = require('..')
 
 const Joi = require('joi')
@@ -36,6 +35,12 @@ module.exports = class MozillaObservatory extends BaseJsonService {
     ]
   }
 
+  static get defaultBadgeData() {
+    return {
+      label: 'observatory',
+    }
+  }
+
   async fetch({ host }) {
     return this._requestJson({
       schema,
@@ -63,7 +68,6 @@ module.exports = class MozillaObservatory extends BaseJsonService {
     }
     return {
       message: `${grade} (${score}/100)`,
-      label,
       color: colorMap[letter],
     }
   }
