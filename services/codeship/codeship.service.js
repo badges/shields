@@ -17,7 +17,7 @@ module.exports = class Codeship extends LegacyService {
   static get route() {
     return {
       base: 'codeship',
-      pattern: '',
+      pattern: ':projectId/:branch*',
     }
   }
 
@@ -25,11 +25,28 @@ module.exports = class Codeship extends LegacyService {
     return [
       {
         title: 'Codeship',
-        previewUrl: 'd6c1ddd0-16a3-0132-5f85-2e35c05e22b1',
+        pattern: ':projectId',
+        namedParams: {
+          projectId: 'd6c1ddd0-16a3-0132-5f85-2e35c05e22b1',
+        },
+        staticPreview: {
+          label: 'build',
+          message: 'passing',
+          color: 'brightgreen',
+        },
       },
       {
-        title: 'Codeship',
-        previewUrl: 'd6c1ddd0-16a3-0132-5f85-2e35c05e22b1/master',
+        title: 'Codeship (branch)',
+        pattern: ':projectId/:branch',
+        namedParams: {
+          projectId: 'd6c1ddd0-16a3-0132-5f85-2e35c05e22b1',
+          branch: 'master',
+        },
+        staticPreview: {
+          label: 'build',
+          message: 'passing',
+          color: 'brightgreen',
+        },
       },
     ]
   }

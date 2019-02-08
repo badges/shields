@@ -5,7 +5,7 @@ const sinon = require('sinon')
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix: isVersion,
 } = require('../test-validators')
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 const serverSecrets = require('../../lib/server-secrets')
 
 const user = 'admin'
@@ -85,11 +85,6 @@ t.create('live: repository version of an inexistent artifact')
     name: 'nexus',
     value: 'artifact not found',
   })
-
-t.create('connection error')
-  .get('/r/https/repository.jboss.org/nexus/jboss/jboss-client.json')
-  .networkOff()
-  .expectJSON({ name: 'nexus', value: 'inaccessible' })
 
 t.create('search snapshot version not in latestSnapshot')
   .get(

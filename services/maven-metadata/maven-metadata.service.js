@@ -20,7 +20,7 @@ module.exports = class MavenMetadata extends LegacyService {
   static get route() {
     return {
       base: 'maven-metadata/v',
-      pattern: '',
+      pattern: ':protocol(http|https)/:hostAndPath',
     }
   }
 
@@ -28,8 +28,16 @@ module.exports = class MavenMetadata extends LegacyService {
     return [
       {
         title: 'Maven metadata URL',
-        previewUrl:
-          'http/central.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml',
+        namedParams: {
+          protocol: 'http',
+          hostAndPath:
+            'central.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml',
+        },
+        staticPreview: {
+          label: 'maven',
+          message: 'v2.8.5',
+          color: 'blue',
+        },
       },
     ]
   }

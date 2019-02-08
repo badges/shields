@@ -5,7 +5,7 @@ const { deprecatedService } = require('..')
 // image layers integration - deprecated as of November 2018.
 module.exports = deprecatedService({
   category: 'size',
-  url: {
+  route: {
     base: 'imagelayers',
     format: '(?:.+)',
   },

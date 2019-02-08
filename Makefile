@@ -11,7 +11,7 @@ WORKING_BRANCH=server-deploy-working-branch
 all: website test
 
 website:
-	LONG_CACHE=false npm run build
+	npm run build
 
 deploy: deploy-s0 deploy-s1 deploy-s2 clean-server-deploy deploy-gh-pages deploy-gh-pages-clean
 
@@ -25,8 +25,8 @@ prepare-server-deploy: website
 	rm -rf ${SERVER_TMP}
 	git worktree prune
 	git worktree add -B ${WORKING_BRANCH} ${SERVER_TMP}
-	cp -r build ${SERVER_TMP}
-	git -C ${SERVER_TMP} add -f build/
+	cp -r public ${SERVER_TMP}
+	git -C ${SERVER_TMP} add -f public/
 	git -C ${SERVER_TMP} commit --no-verify -m '[DEPLOY] Add frontend for debugging'
 	cp config/local-shields-io-production.yml ${SERVER_TMP}/config/
 	git -C ${SERVER_TMP} add -f config/local-shields-io-production.yml
@@ -48,15 +48,12 @@ push-s2:
 deploy-gh-pages:
 	rm -rf ${FRONTEND_TMP}
 	git worktree prune
-	LONG_CACHE=true \
-		BASE_URL=https://img.shields.io \
-		NEXT_ASSET_PREFIX=https://shields.io \
+	GATSBY_BASE_URL=https://img.shields.io \
 		npm run build
 	git worktree add -B gh-pages ${FRONTEND_TMP}
 	git -C ${FRONTEND_TMP} ls-files | xargs git -C ${FRONTEND_TMP} rm
 	git -C ${FRONTEND_TMP} commit --no-verify -m '[DEPLOY] Completely clean the index'
-	cp -r build/* ${FRONTEND_TMP}
-	cp favicon.png ${FRONTEND_TMP}
+	cp -r public/* ${FRONTEND_TMP}
 	echo shields.io > ${FRONTEND_TMP}/CNAME
 	touch ${FRONTEND_TMP}/.nojekyll
 	git -C ${FRONTEND_TMP} add .

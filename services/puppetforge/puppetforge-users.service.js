@@ -23,8 +23,15 @@ class PuppetforgeUserReleases extends LegacyService {
   static get examples() {
     return [
       {
-        title: 'Puppet Forge',
-        previewUrl: 'camptocamp',
+        title: 'Puppet Forge releases by user',
+        namedParams: {
+          user: 'camptocamp',
+        },
+        staticPreview: {
+          label: 'releases',
+          message: '1k',
+          color: 'brightgreen',
+        },
       },
     ]
   }
@@ -47,8 +54,15 @@ class PuppetforgeUserModules extends LegacyService {
   static get examples() {
     return [
       {
-        title: 'Puppet Forge',
-        previewUrl: 'camptocamp',
+        title: 'Puppet Forge modules by user',
+        namedParams: {
+          user: 'camptocamp',
+        },
+        staticPreview: {
+          label: 'modules',
+          message: '60',
+          color: 'brightgreen',
+        },
       },
     ]
   }

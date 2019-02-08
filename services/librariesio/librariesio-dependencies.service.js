@@ -25,12 +25,44 @@ module.exports = class LibrariesioDependencies extends LegacyService {
   static get examples() {
     return [
       {
-        title: 'Libraries.io for releases',
-        previewUrl: 'release/hex/phoenix/1.0.3',
+        title: 'Libraries.io dependency status for latest release',
+        pattern: 'release/:user/:repo',
+        namedParams: {
+          user: 'hex',
+          repo: 'phoenix',
+        },
+        staticPreview: {
+          label: 'dependencies',
+          message: '1 out of date',
+          color: 'orange',
+        },
       },
       {
-        title: 'Libraries.io for GitHub',
-        previewUrl: 'github/phoenixframework/phoenix',
+        title: 'Libraries.io dependency status for specific release',
+        pattern: 'release/:user/:repo/:version',
+        namedParams: {
+          user: 'hex',
+          repo: 'phoenix',
+          version: '1.0.3',
+        },
+        staticPreview: {
+          label: 'dependencies',
+          message: '3 out of date',
+          color: 'orange',
+        },
+      },
+      {
+        title: 'Libraries.io dependency status for GitHub repo',
+        pattern: 'github/:user/:repo',
+        namedParams: {
+          user: 'phoenixframework',
+          repo: 'phoenix',
+        },
+        staticPreview: {
+          label: 'dependencies',
+          message: '325 out of date',
+          color: 'orange',
+        },
       },
     ]
   }

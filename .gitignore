@@ -102,3 +102,7 @@ service-definitions.yml
 
 # Template for the local runtime configuration.
 !/config/local*.template.yml
+
+# Gatsby
+/.cache
+/public

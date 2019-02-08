@@ -94,12 +94,13 @@ module.exports = function coalesceBadge(
 
   const style = coalesce(overrideStyle, serviceStyle)
 
+  const namedLogo = coalesce(
+    overrideNamedLogo,
+    serviceNamedLogo,
+    style === 'social' ? defaultNamedLogo : undefined
+  )
   const namedLogoSvgBase64 = prepareNamedLogo({
-    name: coalesce(
-      overrideNamedLogo,
-      serviceNamedLogo,
-      style === 'social' ? defaultNamedLogo : undefined
-    ),
+    name: namedLogo,
     color: coalesce(
       overrideLogoColor,
       // If the logo has been overridden it does not make sense to inherit
@@ -130,6 +131,7 @@ module.exports = function coalesceBadge(
       defaultLabelColor
     ),
     template: style,
+    namedLogo,
     logo: coalesce(
       overrideLogoSvgBase64,
       serviceLogoSvgBase64,

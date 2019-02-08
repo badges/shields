@@ -9,7 +9,7 @@
     "**/test-helpers.js",
     "**/*-test-helpers.js",
     "dangerfile.js",
-    "next.config.js",
+    "gatsby-*.js",
     "services/**/*.tester.js",
     "services/service-tester.js",
     "services/create-service-tester.js",

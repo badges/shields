@@ -11,7 +11,7 @@ const {
   nuGetV2VersionJsonFirstCharZero,
   nuGetV2VersionJsonFirstCharNotZero,
 } = require('../nuget-fixtures')
-const { ServiceTester } = require('..')
+const { ServiceTester } = require('../tester')
 
 const t = (module.exports = new ServiceTester({
   id: 'chocolatey',

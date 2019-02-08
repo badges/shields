@@ -11,7 +11,6 @@ export default class SuggestionAndSearch extends React.Component {
     queryChanged: PropTypes.func.isRequired,
     onBadgeClick: PropTypes.func.isRequired,
     baseUrl: PropTypes.string.isRequired,
-    longCache: PropTypes.bool.isRequired,
   }
 
   constructor(props) {
@@ -62,7 +61,7 @@ export default class SuggestionAndSearch extends React.Component {
   }
 
   renderSuggestions() {
-    const { baseUrl, longCache } = this.props
+    const { baseUrl } = this.props
     const { suggestions } = this.state
 
     if (suggestions.length === 0) {
@@ -84,7 +83,6 @@ export default class SuggestionAndSearch extends React.Component {
       <BadgeExamples
         definitions={transformed}
         baseUrl={baseUrl}
-        longCache={longCache}
         onClick={this.props.onBadgeClick}
       />
     )

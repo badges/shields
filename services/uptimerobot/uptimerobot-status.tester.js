@@ -11,7 +11,7 @@ const isUptimeStatus = Joi.string().valid(
   'down'
 )
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Uptime Robot: Status (valid)')
   .get('/m778918918-3e92c097147760ee39d02d36.json')
@@ -38,11 +38,6 @@ t.create('Uptime Robot: Status (unspecified error)')
       .reply(200, '{"stat": "fail"}')
   )
   .expectJSON({ name: 'status', value: 'service error' })
-
-t.create('Uptime Robot: Status (connection error)')
-  .get('/m778918918-3e92c097147760ee39d02d36.json')
-  .networkOff()
-  .expectJSON({ name: 'status', value: 'inaccessible' })
 
 t.create('Uptime Robot: Status (service unavailable)')
   .get('/m778918918-3e92c097147760ee39d02d36.json')

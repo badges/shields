@@ -9,10 +9,10 @@ const {
   restore,
 } = require('./teamcity-test-helpers')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('live: valid buildId')
-  .get('/bt428.json')
+  .get('/ReactJSNet_PullRequests.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'coverage',
@@ -21,7 +21,7 @@ t.create('live: valid buildId')
   )
 
 t.create('live: specified instance valid buildId')
-  .get('/https/teamcity.jetbrains.com/bt428.json')
+  .get('/https/teamcity.jetbrains.com/ReactJSNet_PullRequests.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'coverage',

@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { ServiceTester } = require('..')
+const { ServiceTester } = require('../tester')
 const { isMetric, isFileSize, isFormattedDate } = require('../test-validators')
 
 const t = new ServiceTester({ id: 'steam', title: 'Steam Workshop Tests' })
@@ -66,8 +66,3 @@ t.create('Downloads | File Not Found')
 t.create('Views | File Not Found')
   .get('/views/1.json')
   .expectJSON({ name: 'views', value: 'file not found' })
-
-t.create('Connection Error')
-  .get('/views/100.json')
-  .networkOff()
-  .expectJSON({ name: 'views', value: 'inaccessible' })
