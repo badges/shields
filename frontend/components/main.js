@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { createGlobalStyle } from 'styled-components'
+import styled from 'styled-components'
 import groupBy from 'lodash.groupby'
 import {
   categories,
@@ -9,7 +9,7 @@ import {
   getDefinitionsForCategory,
 } from '../lib/service-definitions'
 import ServiceDefinitionSetHelper from '../lib/service-definitions/service-definition-set-helper'
-import { baseUrl, longCache } from '../constants'
+import { baseUrl } from '../constants'
 import Meta from './meta'
 import Header from './header'
 import SuggestionAndSearch from './suggestion-and-search'
@@ -23,13 +23,7 @@ import {
   CategoryNav,
 } from './category-headings'
 import BadgeExamples from './badge-examples'
-import { BaseFont } from './common'
-
-const GlobalStyle = createGlobalStyle`
-  * {
-    box-sizing: border-box;
-  }
-`
+import { BaseFont, GlobalStyle } from './common'
 
 const AppContainer = styled(BaseFont)`
   text-align: center;
@@ -54,11 +48,14 @@ export default class Main extends React.Component {
   }
 
   static propTypes = {
-    match: PropTypes.object.isRequired,
-  }
-
-  get category() {
-    return this.props.match.params.category
+    // `pageContext` is the `context` passed to `createPage()` in
+    // `gatsby-node.js`. In the case of the index page, `pageContext` is empty.
+    pageContext: {
+      category: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+      }),
+    }.isRequired,
   }
 
   performSearch(query) {
@@ -114,17 +111,16 @@ export default class Main extends React.Component {
           definitions={definitions}
           onClick={this.handleExampleSelected}
           baseUrl={baseUrl}
-          longCache={longCache}
         />
       </div>
     )
   }
 
   renderMain() {
-    const { category: categoryId } = this
+    const {
+      pageContext: { category },
+    } = this.props
     const { isSearchInProgress, isQueryTooShort, searchResults } = this.state
-
-    const category = findCategory(categoryId)
 
     if (isSearchInProgress) {
       return <div>searching...</div>
@@ -136,7 +132,7 @@ export default class Main extends React.Component {
       )
     } else if (category) {
       const definitions = ServiceDefinitionSetHelper.create(
-        getDefinitionsForCategory(categoryId)
+        getDefinitionsForCategory(category.id)
       )
         .notDeprecated()
         .toArray()
@@ -144,12 +140,6 @@ export default class Main extends React.Component {
         <div>
           <CategoryNav categories={categories} />
           {this.renderCategory(category, definitions)}
-        </div>
-      )
-    } else if (categoryId) {
-      return (
-        <div>
-          Unknown category <b>{categoryId}</b>
         </div>
       )
     } else {
@@ -175,12 +165,11 @@ export default class Main extends React.Component {
             queryChanged={this.searchQueryChanged}
             onBadgeClick={this.handleExampleSelected}
             baseUrl={baseUrl}
-            longCache={longCache}
           />
           <DonateBox />
         </section>
         {this.renderMain()}
-        <Usage baseUrl={baseUrl} longCache={longCache} />
+        <Usage baseUrl={baseUrl} />
         <Footer baseUrl={baseUrl} />
       </AppContainer>
     )

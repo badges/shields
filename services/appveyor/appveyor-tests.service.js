@@ -42,27 +42,64 @@ module.exports = class AppVeyorTests extends AppVeyorBase {
     return [
       {
         title: 'AppVeyor tests',
-        previewUrl: 'NZSmartie/coap-net-iu0to',
+        pattern: ':user/:repo',
+        namedParams: {
+          user: 'NZSmartie',
+          repo: 'coap-net-iu0to',
+        },
+        staticPreview: {
+          label: 'tests',
+          message: '477 passed, 2 failed',
+          color: 'red',
+        },
         documentation,
       },
       {
         title: 'AppVeyor tests branch',
-        previewUrl: 'NZSmartie/coap-net-iu0to/master',
+        pattern: ':user/:repo/:branch',
+        namedParams: {
+          user: 'NZSmartie',
+          repo: 'coap-net-iu0to',
+          branch: 'master',
+        },
+        staticPreview: {
+          label: 'tests',
+          message: '477 passed, 2 failed',
+          color: 'red',
+        },
         documentation,
       },
       {
         title: 'AppVeyor tests (compact)',
-        previewUrl: 'NZSmartie/coap-net-iu0to',
+        pattern: ':user/:repo',
+        namedParams: {
+          user: 'NZSmartie',
+          repo: 'coap-net-iu0to',
+        },
         queryParams: { compact_message: null },
+        staticPreview: {
+          label: 'tests',
+          message: '✔ 477 | ✘ 2',
+          color: 'red',
+        },
         documentation,
       },
       {
         title: 'AppVeyor tests with custom labels',
-        previewUrl: 'NZSmartie/coap-net-iu0to',
+        pattern: ':user/:repo',
+        namedParams: {
+          user: 'NZSmartie',
+          repo: 'coap-net-iu0to',
+        },
         queryParams: {
           passed_label: 'good',
           failed_label: 'bad',
           skipped_label: 'n/a',
+        },
+        staticPreview: {
+          label: 'tests',
+          message: '477 good, 2 bad',
+          color: 'red',
         },
         documentation,
       },

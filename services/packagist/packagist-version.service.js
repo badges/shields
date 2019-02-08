@@ -10,6 +10,8 @@ const {
   isStable: phpStableVersion,
 } = require('../../lib/php-version')
 
+const keywords = ['PHP']
+
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //
 // Tips for rewriting:
@@ -32,13 +34,31 @@ module.exports = class PackagistVersion extends LegacyService {
     return [
       {
         title: 'Packagist',
-        previewUrl: 'v/symfony/symfony',
-        keywords: ['PHP'],
+        pattern: 'v/:user/:repo',
+        namedParams: {
+          user: 'symfony',
+          repo: 'symfony',
+        },
+        staticPreview: {
+          label: 'packagist',
+          message: 'v4.2.2',
+          color: 'blue',
+        },
+        keywords,
       },
       {
         title: 'Packagist Pre Release',
-        previewUrl: 'vpre/symfony/symfony',
-        keywords: ['PHP'],
+        pattern: 'vpre/:user/:repo',
+        namedParams: {
+          user: 'symfony',
+          repo: 'symfony',
+        },
+        staticPreview: {
+          label: 'packagist',
+          message: 'v4.3-dev',
+          color: 'orange',
+        },
+        keywords,
       },
     ]
   }

@@ -1,6 +1,6 @@
 'use strict'
 
-const { ServiceTester } = require('..')
+const { ServiceTester } = require('../tester')
 const { isMetric } = require('../test-validators')
 
 const t = (module.exports = new ServiceTester({

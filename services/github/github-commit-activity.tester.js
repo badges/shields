@@ -3,10 +3,19 @@
 const Joi = require('joi')
 const { isMetricOverTimePeriod } = require('../test-validators')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('commit activity (1 year)')
   .get('/y/eslint/eslint.json')
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'commit activity',
+      value: isMetricOverTimePeriod,
+    })
+  )
+
+t.create('commit activity (1 month)')
+  .get('/m/eslint/eslint.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'commit activity',

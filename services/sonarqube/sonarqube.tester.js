@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { ServiceTester } = require('..')
+const { ServiceTester } = require('../tester')
 const { isIntegerPercentage } = require('../test-validators')
 
 const t = new ServiceTester({ id: 'sonar', title: 'SonarQube' })
@@ -52,6 +52,7 @@ t.create('Coverage (legacy API supported)')
   )
 
 t.create('Tech Debt (legacy API unsupported)')
+  .timeout(15000)
   .get(
     '/4.2/https/sonarqube.com/com.github.dannil:scb-java-client/tech_debt.json'
   )

@@ -78,9 +78,15 @@ There are three ways to specify `color` and `labelColor`:
 - ![][grey] ![][gray] – the default `labelColor`
 - ![][lightgrey] ![][lightgray] – the default `color`
 
+- ![][success]
+- ![][important]
+- ![][critical]
+- ![][informational]
+- ![][inactive] – the default `color`
+
 2. A three- or six-character hex color, optionally prefixed with `#`:
 
-- ![][4c1]
+- ![][9cf]
 - ![][#007fff]
 - etc.
 
@@ -91,17 +97,22 @@ There are three ways to specify `color` and `labelColor`:
 - ![][aqua] ![][fuchsia] ![][lightslategray] etc.
 
 [brightgreen]: https://img.shields.io/badge/brightgreen-brightgreen.svg
+[success]: https://img.shields.io/badge/success-success.svg
 [green]: https://img.shields.io/badge/green-green.svg
 [yellow]: https://img.shields.io/badge/yellow-yellow.svg
 [yellowgreen]: https://img.shields.io/badge/yellowgreen-yellowgreen.svg
 [orange]: https://img.shields.io/badge/orange-orange.svg
+[important]: https://img.shields.io/badge/important-important.svg
 [red]: https://img.shields.io/badge/red-red.svg
+[critical]: https://img.shields.io/badge/critical-critical.svg
 [blue]: https://img.shields.io/badge/blue-blue.svg
+[informational]: https://img.shields.io/badge/informational-informational.svg
 [grey]: https://img.shields.io/badge/grey-grey.svg
 [gray]: https://img.shields.io/badge/gray-gray.svg
 [lightgrey]: https://img.shields.io/badge/lightgrey-lightgrey.svg
 [lightgray]: https://img.shields.io/badge/lightgray-lightgray.svg
-[4c1]: https://img.shields.io/badge/4c1-4c1.svg
+[inactive]: https://img.shields.io/badge/inactive-inactive.svg
+[9cf]: https://img.shields.io/badge/9cf-9cf.svg
 [#007fff]: https://img.shields.io/badge/%23007fff-007fff.svg
 [aqua]: https://img.shields.io/badge/aqua-aqua.svg
 [fuchsia]: https://img.shields.io/badge/fuchsia-fuchsia.svg

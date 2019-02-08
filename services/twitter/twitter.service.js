@@ -19,7 +19,7 @@ class TwitterUrl extends LegacyService {
   static get route() {
     return {
       base: 'twitter/url',
-      pattern: '',
+      pattern: ':protocol(https|http)/:hostAndPath+',
     }
   }
 
@@ -27,10 +27,25 @@ class TwitterUrl extends LegacyService {
     return [
       {
         title: 'Twitter URL',
-        previewUrl: 'http/shields.io',
+        pattern: ':protocol(https|http)/:hostAndPath',
+        namedParams: {
+          protocol: 'http',
+          hostAndPath: 'shields.io',
+        },
         queryParams: { style: 'social' },
+        staticPreview: {
+          label: 'Tweet',
+          message: '',
+          style: 'social',
+        },
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      namedLogo: 'twitter',
+    }
   }
 
   static registerLegacyRouteHandler({ camp, cache }) {
@@ -82,10 +97,23 @@ class TwitterFollow extends LegacyService {
     return [
       {
         title: 'Twitter Follow',
-        previewUrl: 'espadrine',
-        queryParams: { style: 'social', label: 'Follow' },
+        namedParams: {
+          user: 'espadrine',
+        },
+        queryParams: { label: 'Follow' },
+        staticPreview: {
+          label: 'Follow',
+          message: '393',
+          style: 'social',
+        },
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      namedLogo: 'twitter',
+    }
   }
 
   static registerLegacyRouteHandler({ camp, cache }) {

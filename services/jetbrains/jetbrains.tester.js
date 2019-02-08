@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { ServiceTester } = require('..')
+const { ServiceTester } = require('../tester')
 const { isMetric, isVPlusDottedVersionNClauses } = require('../test-validators')
 
 const t = new ServiceTester({ id: 'jetbrains', title: 'JetBrains' })

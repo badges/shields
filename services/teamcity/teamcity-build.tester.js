@@ -12,14 +12,14 @@ const {
 const buildStatusValues = Joi.equal('passing', 'failure', 'error').required()
 const buildStatusTextRegex = /^success|failure|error|tests( failed: \d+( \(\d+ new\))?)?(,)?( passed: \d+)?(,)?( ignored: \d+)?(,)?( muted: \d+)?$/
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('live: codebetter unknown build')
   .get('/codebetter/btabc.json')
   .expectJSON({ name: 'build', value: 'build not found' })
 
 t.create('live: codebetter known build')
-  .get('/codebetter/bt428.json')
+  .get('/codebetter/IntelliJIdeaCe_JavaDecompilerEngineTests.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'build',
