@@ -57,7 +57,7 @@ module.exports = class Wercker extends BaseJsonService {
     })
     if (json.length === 0) {
       return this.constructor.render({
-        result: 'no builds',
+        result: 'not built',
       })
     }
     const { result } = json[0]
