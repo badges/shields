@@ -5,9 +5,13 @@ const { BaseJsonService } = require('..')
 const Joi = require('joi')
 const schema = Joi.object({
   grade: Joi.string()
-    .regex(/^[abcdef]/i)
+    .regex(/^[ABCDEF][+-]?$/)
     .required(),
-  score: Joi.number().required(),
+  score: Joi.number()
+    .integer()
+    .min(0)
+    .max(200) // At the time this was written max was 135, but may increase
+    .required(),
 }).required()
 
 module.exports = class MozillaObservatory extends BaseJsonService {
