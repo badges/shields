@@ -15,7 +15,7 @@ module.exports = class HSTS extends BaseJsonService {
 
   static get route() {
     return {
-      base: 'hsts',
+      base: 'hsts/preload',
       pattern: ':domain',
     }
   }
