@@ -20,12 +20,7 @@ const queryParamSchema = Joi.object({
   .rename('uri', 'url', { ignoreUndefined: true, override: true })
   .required()
 
-const errorMessages = {
-  404: 'resource not found',
-}
-
 module.exports = {
   createRoute,
   queryParamSchema,
-  errorMessages,
 }

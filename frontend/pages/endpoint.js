@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { staticBadgeUrl } from '../lib/badge-url'
 import { baseUrl } from '../constants'
-import Meta from './meta'
-import Header from './header'
-import Footer from './footer'
-import { BaseFont, GlobalStyle, H3, Badge } from './common'
-import { Snippet } from './snippet'
-import Customizer from './customizer/customizer'
+import Meta from '../components/meta'
+import Header from '../components/header'
+import Footer from '../components/footer'
+import { BaseFont, GlobalStyle, H3, Badge } from '../components/common'
+import { Snippet } from '../components/snippet'
+import Customizer from '../components/customizer/customizer'
 
 const MainContainer = styled(BaseFont)`
   text-align: center;

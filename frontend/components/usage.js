@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react'
+import { Link } from 'gatsby'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { staticBadgeUrl } from '../lib/badge-url'
@@ -63,36 +63,25 @@ EscapingConversion.propTypes = {
   rhs: PropTypes.element.isRequired,
 }
 
+const ColorExamples = ({ baseUrl, colors }) => (
+  <span>
+    {colors.map((color, i) => (
+      <Badge
+        key={color}
+        src={staticBadgeUrl(baseUrl, '', color, color)}
+        alt={color}
+      />
+    ))}
+  </span>
+)
+ColorExamples.propTypes = {
+  baseUrl: PropTypes.string.isRequired,
+  colors: PropTypes.array.isRequired,
+}
+
 export default class Usage extends React.PureComponent {
   static propTypes = {
     baseUrl: PropTypes.string.isRequired,
-  }
-
-  renderColorExamples() {
-    const { baseUrl } = this.props
-    const colors = [
-      'brightgreen',
-      'green',
-      'yellowgreen',
-      'yellow',
-      'orange',
-      'red',
-      'lightgrey',
-      'blue',
-      'ff69b4',
-    ]
-    return (
-      <p>
-        {colors.map((color, i) => (
-          <Fragment key={i}>
-            <Badge
-              src={staticBadgeUrl(baseUrl, 'color', color, color)}
-              alt={color}
-            />
-          </Fragment>
-        ))}
-      </p>
-    )
   }
 
   renderStyleExamples() {
@@ -192,7 +181,39 @@ export default class Usage extends React.PureComponent {
           />
         </p>
         {this.constructor.renderStaticBadgeEscapingRules()}
-        {this.renderColorExamples()}
+
+        <H3 id="colors">Colors</H3>
+        <p>
+          <ColorExamples
+            baseUrl={baseUrl}
+            colors={[
+              'brightgreen',
+              'green',
+              'yellowgreen',
+              'yellow',
+              'orange',
+              'red',
+              'blue',
+              'lightgrey',
+            ]}
+          />
+          <br />
+          <ColorExamples
+            baseUrl={baseUrl}
+            colors={[
+              'success',
+              'important',
+              'critical',
+              'informational',
+              'inactive',
+            ]}
+          />
+          <br />
+          <ColorExamples
+            baseUrl={baseUrl}
+            colors={['blueviolet', 'ff69b4', '9cf']}
+          />
+        </p>
 
         <H3 id="endpoint">Endpoint (Beta)</H3>
 

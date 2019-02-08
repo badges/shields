@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('hackage deps (valid)')
   .get('/lens.json')

@@ -4,7 +4,7 @@ const { deprecatedService } = require('..')
 
 module.exports = deprecatedService({
   category: 'build',
-  url: {
+  route: {
     format: 'snap(?:-ci?)/(?:[^/]+/[^/]+)(?:/(?:.+))',
   },
   label: 'snap ci',

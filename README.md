@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://rawgit.com/badges/shields/master/static/logo.svg"
+    <img src="./frontend/images/logo.svg"
         height="130">
 </p>
 <p align="center">
@@ -10,7 +10,7 @@
     <a href="#sponsors" alt="Sponsors on Open Collective">
         <img src="https://img.shields.io/opencollective/sponsors/shields.svg" /></a>
     <a href="https://github.com/badges/shields/pulse" alt="Activity">
-        <img src="https://img.shields.io/github/commit-activity/4w/badges/shields.svg" /></a>
+        <img src="https://img.shields.io/github/commit-activity/m/badges/shields.svg" /></a>
     <a href="https://circleci.com/gh/badges/shields/tree/master">
         <img src="https://img.shields.io/circleci/project/github/badges/shields/master.svg" alt="build status"></a>
     <a href="https://circleci.com/gh/badges/daily-tests">
@@ -104,6 +104,10 @@ You can read a [tutorial on how to add a badge][tutorial].
 4. Run `npm start` to start the server.
 5. Open `http://localhost:3000/` to view the frontend.
 
+To debug a badge from the command line, run `npm run badge -- /npm/v/nock.svg`.
+It also works with full URLs like
+`npm run badge -- https://img.shields.io/npm/v/nock.svg`.
+
 Shields has experimental support for [Gitpod Beta][gitpod], a pre-configured development
 environment that runs in your browser. To use Gitpod, click the button below and
 sign in with GitHub. Gitpod also offers a browser add-on, though it is not required.
@@ -111,9 +115,6 @@ Please report any Gitpod bugs, questions, or suggestions in issue
 [#2772](https://github.com/badges/shields/issues/2772).
 
 [![Edit with Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/badges/shields)
-
-To analyze the frontend bundle, run `npm install webpack-bundle-analyzer` and
-then `ANALYZE=true npm start`.
 
 [Snapshot tests][] ensure we don't inadvertently make changes that affect the
 SVG or JSON output. When deliberately changing the output, run

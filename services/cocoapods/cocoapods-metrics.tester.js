@@ -4,7 +4,7 @@ const Joi = require('joi')
 const { invalidJSON } = require('../response-fixtures')
 const { isIntegerPercentage } = require('../test-validators')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('doc percent (valid)')
   .get('/AFNetworking.json')
