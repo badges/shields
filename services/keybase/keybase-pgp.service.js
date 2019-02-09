@@ -33,9 +33,16 @@ module.exports = class KeybasePGP extends BaseJsonService {
 
   async handle({ username }) {
     const data = await this.fetch({ username })
-    const fingerprint = data.them[0].public_keys.primary.key_fingerprint
 
-    return this.constructor.render(fingerprint)
+    try {
+      const fingerprint = data.them[0].public_keys.primary.key_fingerprint
+      return this.constructor.render(fingerprint)
+    } catch (err) {
+      return {
+        message: 'not found',
+        color: 'inactive',
+      }
+    }
   }
 
   async fetch({ username }) {
