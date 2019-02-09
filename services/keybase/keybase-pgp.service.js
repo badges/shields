@@ -1,9 +1,9 @@
 'use strict'
 
 const { BaseJsonService } = require('..')
-
 const Joi = require('joi')
-const schema = Joi.object({
+
+const profileFoundSchema = Joi.object({
   them: Joi.array()
     .items(
       Joi.object({
@@ -19,6 +19,15 @@ const schema = Joi.object({
     .min(0)
     .max(1),
 }).required()
+
+const profileNotFoundSchema = Joi.object({
+  them: Joi.array().empty(),
+}).required()
+
+const collectionFoundOrNotFound = Joi.alternatives(
+  profileFoundSchema,
+  profileNotFoundSchema
+)
 
 module.exports = class KeybasePGP extends BaseJsonService {
   static get category() {
@@ -52,7 +61,7 @@ module.exports = class KeybasePGP extends BaseJsonService {
 
   async fetch({ username }) {
     return this._requestJson({
-      schema,
+      schema: collectionFoundOrNotFound,
       url: `https://keybase.io/_/api/1.0/user/lookup.json?usernames=${username}`,
     })
   }
