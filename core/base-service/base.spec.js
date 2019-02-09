@@ -83,6 +83,29 @@ describe('BaseService', function() {
     })
   })
 
+  describe('Required overrides', function() {
+    it('Should throw if render() is not overridden', function() {
+      expect(() => BaseService.render()).to.throw(
+        'render() function not implemented for BaseService'
+      )
+    })
+
+    it('Should throw if handle() is not overridden', async function() {
+      try {
+        await BaseService.invoke({}, {}, {})
+        expect.fail('Expected to throw')
+      } catch (e) {
+        expect(e.message).to.equal('Handler not implemented for BaseService')
+      }
+    })
+
+    it('Should throw if category is not overridden', function() {
+      expect(() => BaseService.category).to.throw(
+        'Category not set for BaseService'
+      )
+    })
+  })
+
   describe('Logging', function() {
     let sandbox
     beforeEach(function() {
