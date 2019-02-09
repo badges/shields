@@ -11,6 +11,7 @@
     "dangerfile.js",
     "gatsby-*.js",
     "core/service-test-runner",
+    "services/test-validators.js",
     "services/**/*.tester.js",
     "test-fixtures",
     "scripts",
