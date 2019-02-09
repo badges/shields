@@ -13,6 +13,7 @@
     "core/service-test-runner",
     "services/**/*.tester.js",
     "services/test-validators.js",
+    "services/tester.js",
     "test-fixtures",
     "scripts",
     "coverage",
