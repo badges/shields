@@ -56,8 +56,10 @@ module.exports = class KeybasePGP extends BaseJsonService {
   }
 
   static render(fingerprint) {
+    const fingerprint64 = fingerprint.slice(-16).toUpperCase()
+
     return {
-      message: `${fingerprint}`,
+      message: fingerprint64,
       color: 'informational',
     }
   }
