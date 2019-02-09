@@ -50,7 +50,9 @@ module.exports = class MozillaObservatory extends BaseJsonService {
       schema,
       url: `https://http-observatory.security.mozilla.org/api/v1/analyze`,
       options: {
+        method: 'POST',
         qs: { host },
+        form: { hidden: true },
       },
     })
   }
