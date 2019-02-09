@@ -4,13 +4,25 @@ const { BaseJsonService } = require('..')
 
 const Joi = require('joi')
 const schema = Joi.object({
-  grade: Joi.string()
-    .regex(/^[ABCDEF][+-]?$/)
+  state: Joi.string()
+    .valid('ABORTED', 'FAILED', 'FINISHED', 'PENDING', 'STARTING', 'RUNNING')
     .required(),
-  score: Joi.number()
-    .integer()
-    .min(0)
-    .max(200) // At the time this was written max was 135, but may increase
+  grade: Joi.alternatives()
+    .when('state', {
+      is: 'FINISHED',
+      then: Joi.string().regex(/^[ABCDEF][+-]?$/),
+      otherwise: Joi.only(null),
+    })
+    .required(),
+  score: Joi.alternatives()
+    .when('state', {
+      is: 'FINISHED',
+      then: Joi.number()
+        .integer()
+        .min(0)
+        .max(200),
+      otherwise: Joi.only(null),
+    })
     .required(),
 }).required()
 
@@ -33,7 +45,11 @@ module.exports = class MozillaObservatory extends BaseJsonService {
       {
         title: 'Mozilla HTTP Observatory Scanner',
         namedParams: { host: 'github.com' },
-        staticPreview: this.render({ grade: 'A+', score: 115 }),
+        staticPreview: this.render({
+          state: 'FINISHED',
+          grade: 'A+',
+          score: 115,
+        }),
         keywords: ['mozilla', 'observatory', 'scanner', 'security'],
       },
     ]
@@ -58,11 +74,17 @@ module.exports = class MozillaObservatory extends BaseJsonService {
   }
 
   async handle({ host }) {
-    const { grade, score } = await this.fetch({ host })
-    return this.constructor.render({ grade, score })
+    const { state, grade, score } = await this.fetch({ host })
+    return this.constructor.render({ state, grade, score })
   }
 
-  static render({ grade, score }) {
+  static render({ state, grade, score }) {
+    if (state !== 'FINISHED') {
+      return {
+        message: state.toLowerCase(),
+        color: 'lightgrey',
+      }
+    }
     const letter = grade[0].toLowerCase()
     const colorMap = {
       a: 'brightgreen',

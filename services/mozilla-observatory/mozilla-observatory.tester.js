@@ -22,7 +22,7 @@ t.create('grade A (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { grade: 'A', score: 115 })
+      .reply(200, { state: 'FINISHED', grade: 'A', score: 115 })
   )
   .expectJSON({
     name: 'observatory',
@@ -35,7 +35,7 @@ t.create('grade A+ (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { grade: 'A+', score: 115 })
+      .reply(200, { state: 'FINISHED', grade: 'A+', score: 115 })
   )
   .expectJSON({
     name: 'observatory',
@@ -48,7 +48,7 @@ t.create('grade A- (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { grade: 'A-', score: 115 })
+      .reply(200, { state: 'FINISHED', grade: 'A-', score: 115 })
   )
   .expectJSON({
     name: 'observatory',
@@ -61,7 +61,7 @@ t.create('grade B (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { grade: 'B', score: 115 })
+      .reply(200, { state: 'FINISHED', grade: 'B', score: 115 })
   )
   .expectJSON({
     name: 'observatory',
@@ -74,7 +74,7 @@ t.create('grade B+ (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { grade: 'B+', score: 115 })
+      .reply(200, { state: 'FINISHED', grade: 'B+', score: 115 })
   )
   .expectJSON({
     name: 'observatory',
@@ -87,7 +87,7 @@ t.create('grade B- (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { grade: 'B-', score: 115 })
+      .reply(200, { state: 'FINISHED', grade: 'B-', score: 115 })
   )
   .expectJSON({
     name: 'observatory',
@@ -100,7 +100,7 @@ t.create('grade C (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { grade: 'C', score: 80 })
+      .reply(200, { state: 'FINISHED', grade: 'C', score: 80 })
   )
   .expectJSON({
     name: 'observatory',
@@ -113,7 +113,7 @@ t.create('grade C+ (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { grade: 'C+', score: 80 })
+      .reply(200, { state: 'FINISHED', grade: 'C+', score: 80 })
   )
   .expectJSON({
     name: 'observatory',
@@ -126,7 +126,7 @@ t.create('grade C- (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { grade: 'C-', score: 80 })
+      .reply(200, { state: 'FINISHED', grade: 'C-', score: 80 })
   )
   .expectJSON({
     name: 'observatory',
@@ -139,7 +139,7 @@ t.create('grade D (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { grade: 'D', score: 15 })
+      .reply(200, { state: 'FINISHED', grade: 'D', score: 15 })
   )
   .expectJSON({
     name: 'observatory',
@@ -152,7 +152,7 @@ t.create('grade D+ (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { grade: 'D+', score: 15 })
+      .reply(200, { state: 'FINISHED', grade: 'D+', score: 15 })
   )
   .expectJSON({
     name: 'observatory',
@@ -165,7 +165,7 @@ t.create('grade D- (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { grade: 'D-', score: 15 })
+      .reply(200, { state: 'FINISHED', grade: 'D-', score: 15 })
   )
   .expectJSON({
     name: 'observatory',
@@ -178,7 +178,7 @@ t.create('grade E (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { grade: 'E', score: 15 })
+      .reply(200, { state: 'FINISHED', grade: 'E', score: 15 })
   )
   .expectJSON({
     name: 'observatory',
@@ -191,7 +191,7 @@ t.create('grade E+ (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { grade: 'E+', score: 15 })
+      .reply(200, { state: 'FINISHED', grade: 'E+', score: 15 })
   )
   .expectJSON({
     name: 'observatory',
@@ -204,7 +204,7 @@ t.create('grade E- (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { grade: 'E-', score: 15 })
+      .reply(200, { state: 'FINISHED', grade: 'E-', score: 15 })
   )
   .expectJSON({
     name: 'observatory',
@@ -217,10 +217,88 @@ t.create('grade F (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { grade: 'F', score: 0 })
+      .reply(200, { state: 'FINISHED', grade: 'F', score: 0 })
   )
   .expectJSON({
     name: 'observatory',
     value: 'F (0/100)',
     color: 'red',
+  })
+
+t.create('aborted (mock)')
+  .get('/foo.bar.json?style=_shields_test')
+  .intercept(nock =>
+    nock('https://http-observatory.security.mozilla.org')
+      .post('/api/v1/analyze?host=foo.bar')
+      .reply(200, { state: 'ABORTED', grade: null, score: null })
+  )
+  .expectJSON({
+    name: 'observatory',
+    value: 'aborted',
+    color: 'lightgrey',
+  })
+
+t.create('failed (mock)')
+  .get('/foo.bar.json?style=_shields_test')
+  .intercept(nock =>
+    nock('https://http-observatory.security.mozilla.org')
+      .post('/api/v1/analyze?host=foo.bar')
+      .reply(200, { state: 'FAILED', grade: null, score: null })
+  )
+  .expectJSON({
+    name: 'observatory',
+    value: 'failed',
+    color: 'lightgrey',
+  })
+
+t.create('pending (mock)')
+  .get('/foo.bar.json?style=_shields_test')
+  .intercept(nock =>
+    nock('https://http-observatory.security.mozilla.org')
+      .post('/api/v1/analyze?host=foo.bar')
+      .reply(200, { state: 'PENDING', grade: null, score: null })
+  )
+  .expectJSON({
+    name: 'observatory',
+    value: 'pending',
+    color: 'lightgrey',
+  })
+
+t.create('starting (mock)')
+  .get('/foo.bar.json?style=_shields_test')
+  .intercept(nock =>
+    nock('https://http-observatory.security.mozilla.org')
+      .post('/api/v1/analyze?host=foo.bar')
+      .reply(200, { state: 'STARTING', grade: null, score: null })
+  )
+  .expectJSON({
+    name: 'observatory',
+    value: 'starting',
+    color: 'lightgrey',
+  })
+
+t.create('running (mock)')
+  .get('/foo.bar.json?style=_shields_test')
+  .intercept(nock =>
+    nock('https://http-observatory.security.mozilla.org')
+      .post('/api/v1/analyze?host=foo.bar')
+      .reply(200, { state: 'RUNNING', grade: null, score: null })
+  )
+  .expectJSON({
+    name: 'observatory',
+    value: 'running',
+    color: 'lightgrey',
+  })
+
+t.create('invalid response with grade and score but not finished (mock)')
+  .get('/foo.bar.json?style=_shields_test')
+  .intercept(nock =>
+    nock('https://http-observatory.security.mozilla.org')
+      .post('/api/v1/analyze?host=foo.bar')
+      .reply(200, { state: 'RUNNING', grade: 'A+', score: 135 })
+  )
+  .expectJSON({
+    name: 'observatory',
+    value: 'invalid response data',
+    color: 'lightgrey',
   })
