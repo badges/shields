@@ -4,15 +4,18 @@ const { BaseJsonService } = require('..')
 
 const Joi = require('joi')
 const schema = Joi.object({
-  them: Joi.array().items(
-    Joi.object({
-      public_keys: {
-        primary: {
-          key_fingerprint: Joi.string().required(),
+  them: Joi.array()
+    .items(
+      Joi.object({
+        public_keys: {
+          primary: {
+            key_fingerprint: Joi.string().required(),
+          },
         },
-      },
-    })
-  ),
+      }).required()
+    )
+    .min(0)
+    .max(1),
 }).required()
 
 module.exports = class KeybasePGP extends BaseJsonService {
