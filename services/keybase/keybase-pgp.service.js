@@ -55,7 +55,7 @@ module.exports = class KeybasePGP extends BaseJsonService {
   static render(fingerprint) {
     return {
       message: `${fingerprint}`,
-      color: 'brightgreen',
+      color: 'informational',
     }
   }
 }
