@@ -63,4 +63,15 @@ module.exports = class KeybasePGP extends BaseJsonService {
       color: 'informational',
     }
   }
+
+  static get examples() {
+    return [
+      {
+        title: 'Keybase PGP',
+        namedParams: { username: 'Keybase username' },
+        staticPreview: this.render('1863145FD39EE07E'),
+        keywords: ['keybase', 'pgp'],
+      },
+    ]
+  }
 }
