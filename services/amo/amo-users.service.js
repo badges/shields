@@ -35,7 +35,7 @@ module.exports = class AmoUsers extends BaseAmoService {
   static render({ users }) {
     return {
       message: metric(users),
-      color: 'brightgreen',
+      color: 'blue',
     }
   }
 
