@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
+const { withRegex } = require('../test-validators')
 
 const t = (module.exports = require('../tester').createServiceTester())
 
@@ -9,7 +10,7 @@ t.create('existing stellar address')
   .expectJSONTypes(
     Joi.object({
       name: 'xlm',
-      value: Joi.string(),
+      value: withRegex(/^(?!not found$)/),
     })
   )
 
