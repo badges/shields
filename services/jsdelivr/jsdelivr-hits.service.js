@@ -1,41 +1,18 @@
 'use strict'
 
-const Joi = require('joi')
-const { downloadCount } = require('../../lib/color-formatters')
-const { metric } = require('../../lib/text-formatters')
-const { BaseJsonService } = require('..')
+const {
+  schema,
+  keywords,
+  periodMap,
+  BaseJsDelivrService,
+} = require('./jsdelivr-base')
 
-const schema = Joi.object({
-  total: Joi.number().required(),
-}).required()
-
-const keywords = ['jsDelivr', 'hits', 'npm']
-
-const periodMap = {
-  dd: 'day',
-  dw: 'week',
-  dm: 'month',
-  dy: 'year',
-}
-
-module.exports = class jsDelivrNPMHits extends BaseJsonService {
+module.exports = class jsDelivrNPMHits extends BaseJsDelivrService {
   static get route() {
     return {
-      base: 'jsdelivr/npm/hits',
+      base: 'jsdelivr/hits/npm',
       pattern: ':period(dd|dw|dm|dy)/:pkg',
     }
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'jsDelivr',
-      color: 'orange',
-    }
-  }
-
-  async handle({ period, pkg }) {
-    const { total } = await this.fetch({ period, pkg })
-    return this.constructor.render({ period, hits: total })
   }
 
   async fetch({ period, pkg }) {
@@ -47,18 +24,6 @@ module.exports = class jsDelivrNPMHits extends BaseJsonService {
       schema,
       url,
     })
-  }
-
-  static render({ period, hits }) {
-    //jsDelivrNPMHits.log(`render-period: ${period}, hits: ${hits}`)
-    return {
-      message: `${metric(hits)} hits/${periodMap[period]}`,
-      //color: downloadCount(hits),
-    }
-  }
-
-  static get category() {
-    return 'other'
   }
 
   static get examples() {
