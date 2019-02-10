@@ -87,7 +87,7 @@ module.exports = class KeybaseXLM extends KeybaseProfile {
         staticPreview: this.render({
           address: 'GCGH37DYONEBPGAZGCHJEZZF3J2Q3EFYZBQBE6UJL5QKTULCMEA6MXLA',
         }),
-        keywords: ['keybase', 'xlm', 'stellar'],
+        keywords: ['stellar'],
       },
     ]
   }

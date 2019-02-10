@@ -91,7 +91,7 @@ module.exports = class KeybaseBTC extends KeybaseProfile {
         staticPreview: this.render({
           address: '12ufRLmbEmgjsdGzhUUFY4pcfiQZyRPV9J',
         }),
-        keywords: ['keybase', 'btc', 'bitcoin'],
+        keywords: ['bitcoin'],
       },
     ]
   }

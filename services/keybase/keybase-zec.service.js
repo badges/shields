@@ -91,7 +91,7 @@ module.exports = class KeybaseZEC extends KeybaseProfile {
         staticPreview: this.render({
           address: 't1RJDxpBcsgqAotqhepkhLFMv2XpMfvnf1y',
         }),
-        keywords: ['keybase', 'zec', 'zcash'],
+        keywords: ['zcash'],
       },
     ]
   }
