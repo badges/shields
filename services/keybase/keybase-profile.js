@@ -9,6 +9,7 @@ module.exports = class KeybaseProfile extends BaseJsonService {
 
   async fetch({ schema, options }) {
     const apiVersion = this.constructor.apiVersion
+    // See https://keybase.io/docs/api/1.0/call/user/lookup.
     const url = `https://keybase.io/_/api/${apiVersion}/user/lookup.json`
 
     return this._requestJson({
