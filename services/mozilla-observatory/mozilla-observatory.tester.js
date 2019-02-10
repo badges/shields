@@ -17,6 +17,20 @@ t.create('request on observatory.mozilla.org')
     })
   )
 
+t.create('request on observatory.mozilla.org with inclusion in public results')
+  .get(
+    '/grade-score/observatory.mozilla.org.json?publish=true&style=_shields_test'
+  )
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'observatory',
+      value: Joi.string().regex(/^[ABCDEF][+-]? \([0-9]{1,3}\/100\)$/),
+      color: Joi.string()
+        .valid(validColors)
+        .required(),
+    })
+  )
+
 t.create('grade without score (mock)')
   .get('/grade/foo.bar.json?style=_shields_test')
   .intercept(nock =>

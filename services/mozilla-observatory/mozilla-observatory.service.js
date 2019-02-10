@@ -37,6 +37,7 @@ module.exports = class MozillaObservatory extends BaseJsonService {
     return {
       base: 'mozilla-observatory',
       pattern: ':which(grade|grade-score)/:host',
+      queryParams: ['publish'],
     }
   }
 
@@ -71,20 +72,20 @@ module.exports = class MozillaObservatory extends BaseJsonService {
     }
   }
 
-  async fetch({ host }) {
+  async fetch({ host, publish }) {
     return this._requestJson({
       schema,
       url: `https://http-observatory.security.mozilla.org/api/v1/analyze`,
       options: {
         method: 'POST',
         qs: { host },
-        form: { hidden: true },
+        form: { hidden: !publish },
       },
     })
   }
 
-  async handle({ which, host }) {
-    const { state, grade, score } = await this.fetch({ host })
+  async handle({ which, host }, { publish }) {
+    const { state, grade, score } = await this.fetch({ host, publish })
     return this.constructor.render({ which, state, grade, score })
   }
 
