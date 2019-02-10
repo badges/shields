@@ -44,7 +44,10 @@ module.exports = class KeybaseXLM extends KeybaseProfile {
   }
 
   static get defaultBadgeData() {
-    return { label: 'xlm' }
+    return {
+      label: 'xlm',
+      color: 'informational',
+    }
   }
 
   async handle({ username }) {
@@ -75,7 +78,6 @@ module.exports = class KeybaseXLM extends KeybaseProfile {
   static render({ address }) {
     return {
       message: address,
-      color: 'informational',
     }
   }
 

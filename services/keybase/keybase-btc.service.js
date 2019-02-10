@@ -48,7 +48,10 @@ module.exports = class KeybaseBTC extends KeybaseProfile {
   }
 
   static get defaultBadgeData() {
-    return { label: 'btc' }
+    return {
+      label: 'btc',
+      color: 'informational',
+    }
   }
 
   async handle({ username }) {
@@ -79,7 +82,6 @@ module.exports = class KeybaseBTC extends KeybaseProfile {
   static render({ address }) {
     return {
       message: address,
-      color: 'informational',
     }
   }
 

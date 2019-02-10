@@ -46,7 +46,10 @@ module.exports = class KeybasePGP extends KeybaseProfile {
   }
 
   static get defaultBadgeData() {
-    return { label: 'pgp' }
+    return {
+      label: 'pgp',
+      color: 'informational',
+    }
   }
 
   async handle({ username }) {
@@ -77,7 +80,6 @@ module.exports = class KeybasePGP extends KeybaseProfile {
   static render({ fingerprint }) {
     return {
       message: fingerprint.slice(-16).toUpperCase(),
-      color: 'informational',
     }
   }
 
