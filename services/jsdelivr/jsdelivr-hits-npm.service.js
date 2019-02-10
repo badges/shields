@@ -7,12 +7,17 @@ const {
   BaseJsDelivrService,
 } = require('./jsdelivr-base')
 
-module.exports = class jsDelivrNPMHits extends BaseJsDelivrService {
+module.exports = class jsDelivrHitsNPM extends BaseJsDelivrService {
   static get route() {
     return {
-      base: 'jsdelivr/hits/npm',
-      pattern: ':period(dd|dw|dm|dy)/:pkg',
+      base: 'jsdelivr/npm',
+      pattern: ':period(hd|hw|hm|hy)/:pkg',
     }
+  }
+
+  async handle({ period, pkg }) {
+    const { total } = await this.fetch({ period, pkg })
+    return this.constructor.render({ period, hits: total })
   }
 
   async fetch({ period, pkg }) {
@@ -30,38 +35,38 @@ module.exports = class jsDelivrNPMHits extends BaseJsDelivrService {
     return [
       {
         title: 'jsDelivr Hits (npm)',
-        pattern: 'dd/:packageName',
+        pattern: 'hd/:packageName',
         namedParams: {
           packageName: 'jquery',
         },
-        staticPreview: this.render({ period: 'dd', hits: 31471644 }),
+        staticPreview: this.render({ period: 'hd', hits: 31471644 }),
         keywords,
       },
       {
         title: 'jsDelivr Hits (npm)',
-        pattern: 'dw/:packageName',
+        pattern: 'hw/:packageName',
         namedParams: {
           packageName: 'jquery',
         },
-        staticPreview: this.render({ period: 'dw', hits: 209922436 }),
+        staticPreview: this.render({ period: 'hw', hits: 209922436 }),
         keywords,
       },
       {
         title: 'jsDelivr Hits (npm)',
-        pattern: 'dm/:packageName',
+        pattern: 'hm/:packageName',
         namedParams: {
           packageName: 'jquery',
         },
-        staticPreview: this.render({ period: 'dm', hits: 920101789 }),
+        staticPreview: this.render({ period: 'hm', hits: 920101789 }),
         keywords,
       },
       {
         title: 'jsDelivr Hits (npm)',
-        pattern: 'dy/:packageName',
+        pattern: 'hy/:packageName',
         namedParams: {
           packageName: 'jquery',
         },
-        staticPreview: this.render({ period: 'dy', hits: 10576760414 }),
+        staticPreview: this.render({ period: 'hy', hits: 10576760414 }),
         keywords,
       },
     ]

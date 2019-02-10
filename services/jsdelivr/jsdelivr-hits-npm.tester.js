@@ -6,7 +6,7 @@ const { withRegex } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('(live) jquery hits/day')
-  .get('/dd/jquery.json')
+  .get('/hd/jquery.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'jsDelivr',
@@ -15,7 +15,7 @@ t.create('(live) jquery hits/day')
   )
 
 t.create('(live) jquery hits/week')
-  .get('/dw/jquery.json')
+  .get('/hw/jquery.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'jsDelivr',
@@ -24,7 +24,7 @@ t.create('(live) jquery hits/week')
   )
 
 t.create('(live) jquery hits/month')
-  .get('/dm/jquery.json')
+  .get('/hm/jquery.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'jsDelivr',
@@ -33,7 +33,7 @@ t.create('(live) jquery hits/month')
   )
 
 t.create('(live) jquery hits/year')
-  .get('/dy/jquery.json')
+  .get('/hy/jquery.json')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'jsDelivr',
@@ -42,7 +42,7 @@ t.create('(live) jquery hits/year')
   )
 
 t.create('(live) fake package')
-  .get('/dd/somefakepackage.json')
+  .get('/hd/somefakepackage.json')
   .expectJSON({
     name: 'jsDelivr',
     // Will return 0 hits/day as the endpoint can't send 404s at present.

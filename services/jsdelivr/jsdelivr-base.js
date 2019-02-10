@@ -8,21 +8,16 @@ const schema = Joi.object({
   total: Joi.number().required(),
 }).required()
 
-const keywords = ['jsDelivr', 'hits', 'npm']
+const keywords = ['jsDelivr', 'hits']
 
 const periodMap = {
-  dd: 'day',
-  dw: 'week',
-  dm: 'month',
-  dy: 'year',
+  hd: 'day',
+  hw: 'week',
+  hm: 'month',
+  hy: 'year',
 }
 
 class BaseJsDelivrService extends BaseJsonService {
-  async handle({ period, pkg }) {
-    const { total } = await this.fetch({ period, pkg })
-    return this.constructor.render({ period, hits: total })
-  }
-
   static render({ period, hits }) {
     return {
       message: `${metric(hits)} hits/${periodMap[period]}`,
