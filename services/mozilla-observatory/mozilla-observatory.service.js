@@ -26,6 +26,24 @@ const schema = Joi.object({
     .required(),
 }).required()
 
+const documentation = `
+<p>
+  The <a href="https://observatory.mozilla.org">Mozilla HTTP Observatory</a>
+  is a set of tools to analyze your website
+  and inform you if you are utilizing the many available methods to secure it.
+</p>
+</p>
+  By default the scan result is hidden from the public result list.
+  You can activate the publication of the scan result
+  by setting <code>publish</code> parameter to <code>true</code>
+<p>
+<p>
+  The badge return a cached site result if the site has been scanned anytime in the previous 24 hours.
+  If you need to force invalidating the cache,
+  you can to do it manually through the <a href="https://observatory.mozilla.org">Mozilla Observatory Website</a>
+</p>
+`
+
 module.exports = class MozillaObservatory extends BaseJsonService {
   static get category() {
     // TODO: Once created, change to a more appropriate category,
@@ -52,6 +70,7 @@ module.exports = class MozillaObservatory extends BaseJsonService {
           score: 115,
         }),
         keywords: ['mozilla', 'observatory', 'scanner', 'security'],
+        documentation,
       },
       {
         title: 'Mozilla HTTP Observatory Grade (with score)',
@@ -62,6 +81,7 @@ module.exports = class MozillaObservatory extends BaseJsonService {
           score: 115,
         }),
         keywords: ['mozilla', 'observatory', 'scanner', 'security'],
+        documentation,
       },
     ]
   }
