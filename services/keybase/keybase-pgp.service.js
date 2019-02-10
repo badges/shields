@@ -1,9 +1,9 @@
 'use strict'
 
-const { BaseJsonService } = require('..')
+const KeybaseProfile = require('./keybase-profile')
 const Joi = require('joi')
 
-const profileFoundSchema = Joi.object({
+const keyFingerprintFoundSchema = Joi.object({
   them: Joi.array()
     .items(
       Joi.object({
@@ -24,12 +24,16 @@ const profileNotFoundSchema = Joi.object({
   them: Joi.array().empty(),
 }).required()
 
-const collectionFoundOrNotFound = Joi.alternatives(
-  profileFoundSchema,
+const keyFingerprintFoundOrNotFound = Joi.alternatives(
+  keyFingerprintFoundSchema,
   profileNotFoundSchema
 )
 
-module.exports = class KeybasePGP extends BaseJsonService {
+module.exports = class KeybasePGP extends KeybaseProfile {
+  static get apiVersion() {
+    return '1.0'
+  }
+
   static get category() {
     return 'social'
   }
@@ -46,11 +50,22 @@ module.exports = class KeybasePGP extends BaseJsonService {
   }
 
   async handle({ username }) {
-    const data = await this.fetch({ username })
+    const options = {
+      method: 'GET',
+      form: {
+        usernames: username,
+        fields: 'public_keys',
+      },
+    }
+
+    const data = await this.fetch({
+      schema: keyFingerprintFoundOrNotFound,
+      options,
+    })
 
     try {
       const fingerprint = data.them[0].public_keys.primary.key_fingerprint
-      return this.constructor.render(fingerprint)
+      return this.constructor.render({ fingerprint })
     } catch (err) {
       return {
         message: 'not found',
@@ -59,18 +74,9 @@ module.exports = class KeybasePGP extends BaseJsonService {
     }
   }
 
-  async fetch({ username }) {
-    return this._requestJson({
-      schema: collectionFoundOrNotFound,
-      url: `https://keybase.io/_/api/1.0/user/lookup.json?usernames=${username}`,
-    })
-  }
-
-  static render(fingerprint) {
-    const fingerprint64 = fingerprint.slice(-16).toUpperCase()
-
+  static render({ fingerprint }) {
     return {
-      message: fingerprint64,
+      message: fingerprint.slice(-16).toUpperCase(),
       color: 'informational',
     }
   }
@@ -80,7 +86,7 @@ module.exports = class KeybasePGP extends BaseJsonService {
       {
         title: 'Keybase PGP',
         namedParams: { username: 'Keybase username' },
-        staticPreview: this.render('1863145FD39EE07E'),
+        staticPreview: this.render({ fingerprint: '1863145FD39EE07E' }),
         keywords: ['keybase', 'pgp'],
       },
     ]
