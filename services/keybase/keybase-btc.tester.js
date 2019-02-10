@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
+const { withRegex } = require('../test-validators')
 
 const t = (module.exports = require('../tester').createServiceTester())
 
@@ -9,7 +10,7 @@ t.create('existing bitcoin address')
   .expectJSONTypes(
     Joi.object({
       name: 'btc',
-      value: Joi.string(),
+      value: withRegex(/^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$/),
     })
   )
 
