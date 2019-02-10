@@ -36,15 +36,25 @@ module.exports = class MozillaObservatory extends BaseJsonService {
   static get route() {
     return {
       base: 'mozilla-observatory',
-      pattern: ':host',
+      pattern: ':which(grade|grade-score)/:host',
     }
   }
 
   static get examples() {
     return [
       {
-        title: 'Mozilla HTTP Observatory Scanner',
-        namedParams: { host: 'github.com' },
+        title: 'Mozilla HTTP Observatory Grade',
+        namedParams: { which: 'grade', host: 'github.com' },
+        staticPreview: this.render({
+          state: 'FINISHED',
+          grade: 'A+',
+          score: 115,
+        }),
+        keywords: ['mozilla', 'observatory', 'scanner', 'security'],
+      },
+      {
+        title: 'Mozilla HTTP Observatory Grade (with score)',
+        namedParams: { which: 'grade-score', host: 'github.com' },
         staticPreview: this.render({
           state: 'FINISHED',
           grade: 'A+',
@@ -73,12 +83,12 @@ module.exports = class MozillaObservatory extends BaseJsonService {
     })
   }
 
-  async handle({ host }) {
+  async handle({ which, host }) {
     const { state, grade, score } = await this.fetch({ host })
-    return this.constructor.render({ state, grade, score })
+    return this.constructor.render({ which, state, grade, score })
   }
 
-  static render({ state, grade, score }) {
+  static render({ which, state, grade, score }) {
     if (state !== 'FINISHED') {
       return {
         message: state.toLowerCase(),
@@ -95,7 +105,7 @@ module.exports = class MozillaObservatory extends BaseJsonService {
       f: 'red',
     }
     return {
-      message: `${grade} (${score}/100)`,
+      message: which === 'grade' ? grade : `${grade} (${score}/100)`,
       color: colorMap[letter],
     }
   }
