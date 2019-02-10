@@ -7,6 +7,14 @@ const {
   gradeColors,
 } = require('./symfony-insight-base')
 
+const gradeStars = {
+  none: 0,
+  bronze: 1,
+  silver: 2,
+  gold: 3,
+  platinum: 4,
+}
+
 module.exports = class SymfonyInsightStars extends SymfonyInsightBase {
   static render({ status, grade }) {
     const label = 'stars'
@@ -17,7 +25,7 @@ module.exports = class SymfonyInsightStars extends SymfonyInsightBase {
         color: 'lightgrey',
       }
     }
-    const numStars = Object.keys(gradeColors).findIndex(g => g === grade)
+    const numStars = gradeStars[grade]
     return {
       label,
       message: starRating(numStars, 4),
