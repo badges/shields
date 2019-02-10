@@ -64,7 +64,7 @@ const serviceDataSchema = Joi.object({
   .oxor('namedLogo', 'logoSvg')
   .required()
 
-class BaseService {
+module.exports = class BaseService {
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
     this._requestFetcher = sendAndCacheRequest
     this._handleInternalErrors = handleInternalErrors
@@ -365,5 +365,3 @@ class BaseService {
     return checkErrorResponse.asPromise(errorMessages)({ buffer, res })
   }
 }
-
-module.exports = BaseService
