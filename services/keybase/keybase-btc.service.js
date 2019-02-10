@@ -56,7 +56,6 @@ module.exports = class KeybaseBTC extends KeybaseProfile {
 
   async handle({ username }) {
     const options = {
-      method: 'GET',
       form: {
         usernames: username,
         fields: 'cryptocurrency_addresses',

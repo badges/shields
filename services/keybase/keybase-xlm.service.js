@@ -52,7 +52,6 @@ module.exports = class KeybaseXLM extends KeybaseProfile {
 
   async handle({ username }) {
     const options = {
-      method: 'GET',
       form: {
         usernames: username,
         fields: 'stellar',
