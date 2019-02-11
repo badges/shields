@@ -7,7 +7,7 @@ const bitcoinAddressFoundSchema = Joi.object({
   them: Joi.array()
     .items(
       Joi.object({
-        cryptocurrency_addresses: {
+        cryptocurrency_addresses: Joi.object({
           bitcoin: Joi.array()
             .items(
               Joi.object({
@@ -15,7 +15,7 @@ const bitcoinAddressFoundSchema = Joi.object({
               }).required()
             )
             .required(),
-        },
+        }).required(),
       }).required()
     )
     .min(0)
