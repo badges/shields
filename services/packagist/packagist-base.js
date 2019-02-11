@@ -26,11 +26,9 @@ const latestVersionSchema = Joi.object({
   }).required(),
 }).required()
 
-class BasePackagistService extends BaseJsonService {
-  static log(message) {
-    console.log(message)
-  }
+const keywords = ['PHP']
 
+class BasePackagistService extends BaseJsonService {
   async fetch({ user, repo, schema = latestVersionSchema }) {
     const url = `https://packagist.org/packages/${user}/${repo}.json`
 
@@ -45,4 +43,4 @@ class BasePackagistService extends BaseJsonService {
   }
 }
 
-module.exports = { latestVersionSchema, BasePackagistService }
+module.exports = { keywords, BasePackagistService }

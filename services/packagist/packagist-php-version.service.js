@@ -27,7 +27,6 @@ module.exports = class PackagistPhpVersion extends BasePackagistService {
         },
       },
     } = await this.fetch({ user, repo })
-    PackagistPhpVersion.log(`php: ${php}`)
     return this.constructor.render({ php })
   }
 

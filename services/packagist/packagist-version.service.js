@@ -2,10 +2,7 @@
 
 const Joi = require('joi')
 const { renderVersionBadge } = require('../../lib/version')
-const {
-  latestVersionSchema,
-  BasePackagistService,
-} = require('./packagist-base')
+const { keywords, BasePackagistService } = require('./packagist-base')
 
 const {
   latest: phpLatestVersion,
@@ -35,37 +32,34 @@ module.exports = class PackagistVersion extends BasePackagistService {
   }
 
   async handle({ type, user, repo }) {
-    if (type === 'vpre') {
-      // vpre
-      const {
-        package: {
-          versions: {
-            'dev-master': {
-              extra: {
-                'branch-alias': { 'dev-master': version },
+    switch (type) {
+      case 'vpre':
+        const {
+          package: {
+            versions: {
+              'dev-master': {
+                extra: {
+                  'branch-alias': { 'dev-master': version },
+                },
               },
             },
           },
-        },
-      } = await this.fetch({ user, repo, schema: latestVersionSchema })
-      PackagistVersion.log(`latest-pre: ${version}`)
-      return renderVersionBadge({ version })
-    } else if (type === 'v') {
-      // v
-      const allData = await this.fetch({
-        user,
-        repo,
-        schema: allVersionsSchema,
-      })
-      const versionsData = allData.package.versions
-      const versions = Object.keys(versionsData)
-      const stableVersions = versions.filter(phpStableVersion)
-      let stableVersion = phpLatestVersion(stableVersions)
-      if (!stableVersion) {
-        stableVersion = phpLatestVersion(versions)
-      }
-      BasePackagistService.log(`latest: ${stableVersions[0]}`)
-      return renderVersionBadge({ version: stableVersions[0] })
+        } = await this.fetch({ user, repo })
+        return renderVersionBadge({ version })
+      case 'v':
+        const allData = await this.fetch({
+          user,
+          repo,
+          schema: allVersionsSchema,
+        })
+        const versionsData = allData.package.versions
+        const versions = Object.keys(versionsData)
+        const stableVersions = versions.filter(phpStableVersion)
+        let stableVersion = phpLatestVersion(stableVersions)
+        if (!stableVersion) {
+          stableVersion = phpLatestVersion(versions)
+        }
+        return renderVersionBadge({ version: stableVersions[0] })
     }
   }
 
@@ -82,6 +76,7 @@ module.exports = class PackagistVersion extends BasePackagistService {
           repo: 'symfony',
         },
         staticPreview: renderVersionBadge({ version: '4.2.2' }),
+        keywords,
       },
       {
         title: 'Packagist Pre Release',
@@ -91,6 +86,7 @@ module.exports = class PackagistVersion extends BasePackagistService {
           repo: 'symfony',
         },
         staticPreview: renderVersionBadge({ version: '4.3-dev' }),
+        keywords,
       },
     ]
   }

@@ -2,9 +2,7 @@
 
 const { metric } = require('../../lib/text-formatters')
 const { downloadCount } = require('../../lib/color-formatters')
-const { BasePackagistService } = require('./packagist-base')
-
-const keywords = ['PHP']
+const { keywords, BasePackagistService } = require('./packagist-base')
 
 module.exports = class PackagistDownloads extends BasePackagistService {
   static get route() {

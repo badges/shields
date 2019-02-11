@@ -1,7 +1,7 @@
 'use strict'
 
 const { renderLicenseBadge } = require('../../lib/licenses')
-const { BasePackagistService } = require('./packagist-base')
+const { keywords, BasePackagistService } = require('./packagist-base')
 
 module.exports = class PackagistLicense extends BasePackagistService {
   static get route() {
@@ -25,7 +25,6 @@ module.exports = class PackagistLicense extends BasePackagistService {
         },
       },
     } = await this.fetch({ user, repo })
-    PackagistLicense.log(`license: ${license}`)
     return renderLicenseBadge({ license })
   }
 
@@ -38,7 +37,7 @@ module.exports = class PackagistLicense extends BasePackagistService {
         title: 'Packagist',
         namedParams: { user: 'doctrine', repo: 'orm' },
         staticPreview: renderLicenseBadge({ license: 'MIT' }),
-        keywords: ['PHP'],
+        keywords,
       },
     ]
   }
