@@ -15,6 +15,11 @@ const latestVersionSchema = Joi.object({
         license: Joi.array().required(),
       }).required(),
     }).required(),
+    downloads: Joi.object({
+      total: Joi.number().required(),
+      monthly: Joi.number().required(),
+      daily: Joi.number().required(),
+    }).required(),
   }).required(),
 }).required()
 
