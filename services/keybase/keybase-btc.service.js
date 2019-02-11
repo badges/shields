@@ -67,15 +67,23 @@ module.exports = class KeybaseBTC extends KeybaseProfile {
       options,
     })
 
-    try {
-      const address = data.them[0].cryptocurrency_addresses.bitcoin[0].address
-      return this.constructor.render({ address })
-    } catch (err) {
+    if (data.them.length === 0) {
       return {
-        message: 'not found',
+        message: 'profile not found',
+        color: 'critical',
+      }
+    }
+
+    const bitcoinAddresses = data.them[0].cryptocurrency_addresses.bitcoin
+
+    if (bitcoinAddresses.length === 0) {
+      return {
+        message: 'no bitcoin addresses found',
         color: 'inactive',
       }
     }
+
+    return this.constructor.render({ address: bitcoinAddresses[0].address })
   }
 
   static render({ address }) {
