@@ -7,12 +7,15 @@ const latestVersionSchema = Joi.object({
   package: Joi.object({
     versions: Joi.object({
       'dev-master': Joi.object({
+        license: Joi.array().required(),
         extra: Joi.object({
           'branch-alias': Joi.object({
             'dev-master': Joi.string().required(),
           }).required(),
         }).required(),
-        license: Joi.array().required(),
+        require: Joi.object({
+          php: Joi.string().required(),
+        }).required(),
       }).required(),
     }).required(),
     downloads: Joi.object({

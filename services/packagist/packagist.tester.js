@@ -34,7 +34,7 @@ t.create('gets the package version of symfony 2.8')
 
 t.create('invalid package name')
   .get('/php-v/frodo/is-not-a-package.json')
-  .expectJSON({ name: 'php', value: 'invalid' })
+  .expectJSON({ name: 'php', value: 'not found' })
 
 // tests for download stats endpoints
 
