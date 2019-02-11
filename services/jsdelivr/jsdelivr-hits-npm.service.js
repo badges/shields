@@ -28,6 +28,9 @@ module.exports = class jsDelivrHitsNPM extends BaseJsDelivrService {
     return this._requestJson({
       schema,
       url,
+      headers: {
+        'User-Agent': 'Shields.io',
+      },
     })
   }
 
