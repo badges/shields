@@ -19,6 +19,6 @@ t.create('unknown username')
   .expectJSONTypes(
     Joi.object({
       name: 'btc',
-      value: 'not found',
+      value: 'profile not found',
     })
   )
