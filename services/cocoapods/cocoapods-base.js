@@ -22,8 +22,4 @@ module.exports = class BaseCocoaPodsService extends BaseJsonService {
       url: `https://trunk.cocoapods.org/api/v1/pods/${spec}/specs/latest`,
     })
   }
-
-  static get defaultBadgeData() {
-    return { label: 'cocoapods' }
-  }
 }
