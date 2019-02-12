@@ -21,13 +21,12 @@ class BaseJsDelivrService extends BaseJsonService {
   static render({ period, hits }) {
     return {
       message: `${metric(hits)} hits/${periodMap[period]}`,
-      //color: downloadCount(hits),
     }
   }
 
   static get defaultBadgeData() {
     return {
-      label: 'jsDelivr',
+      label: 'jsdelivr',
       color: 'orange',
     }
   }
