@@ -19,6 +19,24 @@ t.create('unknown username')
   .expectJSONTypes(
     Joi.object({
       name: 'zec',
-      value: 'not found',
+      value: 'profile not found',
+    })
+  )
+
+t.create('invalid username')
+  .get('/s.json')
+  .expectJSONTypes(
+    Joi.object({
+      name: 'zec',
+      value: 'invalid response data',
+    })
+  )
+
+t.create('missing zcash address')
+  .get('/test.json')
+  .expectJSONTypes(
+    Joi.object({
+      name: 'zec',
+      value: 'no zcash addresses found',
     })
   )

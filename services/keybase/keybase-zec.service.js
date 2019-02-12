@@ -3,33 +3,27 @@
 const KeybaseProfile = require('./keybase-profile')
 const Joi = require('joi')
 
-const zcachAddressFoundSchema = Joi.object({
+const zcachAddressSchema = Joi.object({
   them: Joi.array()
     .items(
       Joi.object({
-        cryptocurrency_addresses: {
-          zcash: Joi.array()
-            .items(
-              Joi.object({
-                address: Joi.string().required(),
-              }).required()
-            )
-            .required(),
-        },
-      }).required()
+        cryptocurrency_addresses: Joi.object({
+          zcash: Joi.array().items(
+            Joi.object({
+              address: Joi.string().required(),
+            }).required()
+          ),
+        })
+          .required()
+          .allow(null),
+      })
+        .required()
+        .allow(null)
     )
     .min(0)
-    .max(1),
+    .max(1)
+    .required(),
 }).required()
-
-const profileNotFoundSchema = Joi.object({
-  them: Joi.array().empty(),
-}).required()
-
-const zcashAddressFoundOrNotFound = Joi.alternatives(
-  zcachAddressFoundSchema,
-  profileNotFoundSchema
-)
 
 module.exports = class KeybaseZEC extends KeybaseProfile {
   static get apiVersion() {
@@ -63,19 +57,27 @@ module.exports = class KeybaseZEC extends KeybaseProfile {
     }
 
     const data = await this.fetch({
-      schema: zcashAddressFoundOrNotFound,
+      schema: zcachAddressSchema,
       options,
     })
 
-    try {
-      const address = data.them[0].cryptocurrency_addresses.zcash[0].address
-      return this.constructor.render({ address })
-    } catch (err) {
+    if (data.them.length === 0 || !data.them[0]) {
       return {
-        message: 'not found',
+        message: 'profile not found',
+        color: 'critical',
+      }
+    }
+
+    const zcashAddresses = data.them[0].cryptocurrency_addresses.zcash
+
+    if (zcashAddresses == null || zcashAddresses.length === 0) {
+      return {
+        message: 'no zcash addresses found',
         color: 'inactive',
       }
     }
+
+    return this.constructor.render({ address: zcashAddresses[0].address })
   }
 
   static render({ address }) {
