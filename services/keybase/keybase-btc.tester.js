@@ -22,3 +22,21 @@ t.create('unknown username')
       value: 'profile not found',
     })
   )
+
+t.create('invalid username')
+  .get('/s.json')
+  .expectJSONTypes(
+    Joi.object({
+      name: 'btc',
+      value: 'invalid response data',
+    })
+  )
+
+t.create('missing bitcoin address')
+  .get('/test.json')
+  .expectJSONTypes(
+    Joi.object({
+      name: 'btc',
+      value: 'no bitcoin addresses found',
+    })
+  )
