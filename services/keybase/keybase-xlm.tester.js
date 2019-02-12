@@ -19,6 +19,24 @@ t.create('unknown username')
   .expectJSONTypes(
     Joi.object({
       name: 'xlm',
-      value: 'not found',
+      value: 'profile not found',
+    })
+  )
+
+t.create('invalid username')
+  .get('/s.json')
+  .expectJSONTypes(
+    Joi.object({
+      name: 'xlm',
+      value: 'invalid response data',
+    })
+  )
+
+t.create('missing stellar address')
+  .get('/test.json')
+  .expectJSONTypes(
+    Joi.object({
+      name: 'xlm',
+      value: 'no stellar address found',
     })
   )

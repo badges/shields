@@ -3,29 +3,25 @@
 const KeybaseProfile = require('./keybase-profile')
 const Joi = require('joi')
 
-const stellarAddressFoundSchema = Joi.object({
+const stellarAddressSchema = Joi.object({
   them: Joi.array()
     .items(
       Joi.object({
-        stellar: {
-          primary: {
-            account_id: Joi.string().required(),
-          },
-        },
-      }).required()
+        stellar: Joi.object({
+          primary: Joi.object({
+            account_id: Joi.string(),
+          })
+            .required()
+            .allow(null),
+        }).required(),
+      })
+        .required()
+        .allow(null)
     )
     .min(0)
-    .max(1),
+    .max(1)
+    .required(),
 }).required()
-
-const profileNotFoundSchema = Joi.object({
-  them: Joi.array().empty(),
-}).required()
-
-const stellarAddressFoundOrNotFound = Joi.alternatives(
-  stellarAddressFoundSchema,
-  profileNotFoundSchema
-)
 
 module.exports = class KeybaseXLM extends KeybaseProfile {
   static get apiVersion() {
@@ -59,19 +55,27 @@ module.exports = class KeybaseXLM extends KeybaseProfile {
     }
 
     const data = await this.fetch({
-      schema: stellarAddressFoundOrNotFound,
+      schema: stellarAddressSchema,
       options,
     })
 
-    try {
-      const address = data.them[0].stellar.primary.account_id
-      return this.constructor.render({ address })
-    } catch (err) {
+    if (data.them.length === 0 || !data.them[0]) {
       return {
-        message: 'not found',
+        message: 'profile not found',
+        color: 'critical',
+      }
+    }
+
+    const accountId = data.them[0].stellar.primary.account_id
+
+    if (accountId == null) {
+      return {
+        message: 'no stellar address found',
         color: 'inactive',
       }
     }
+
+    return this.constructor.render({ address: accountId })
   }
 
   static render({ address }) {
