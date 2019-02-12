@@ -88,7 +88,7 @@ module.exports = class KeybasePGP extends KeybaseProfile {
     return [
       {
         title: 'Keybase PGP',
-        namedParams: { username: 'Keybase username' },
+        namedParams: { username: 'skyplabs' },
         staticPreview: this.render({ fingerprint: '1863145FD39EE07E' }),
       },
     ]

@@ -88,7 +88,7 @@ module.exports = class KeybaseXLM extends KeybaseProfile {
     return [
       {
         title: 'Keybase XLM',
-        namedParams: { username: 'Keybase username' },
+        namedParams: { username: 'skyplabs' },
         staticPreview: this.render({
           address: 'GCGH37DYONEBPGAZGCHJEZZF3J2Q3EFYZBQBE6UJL5QKTULCMEA6MXLA',
         }),

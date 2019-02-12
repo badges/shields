@@ -90,7 +90,7 @@ module.exports = class KeybaseBTC extends KeybaseProfile {
     return [
       {
         title: 'Keybase BTC',
-        namedParams: { username: 'Keybase username' },
+        namedParams: { username: 'skyplabs' },
         staticPreview: this.render({
           address: '12ufRLmbEmgjsdGzhUUFY4pcfiQZyRPV9J',
         }),

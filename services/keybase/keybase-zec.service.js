@@ -90,7 +90,7 @@ module.exports = class KeybaseZEC extends KeybaseProfile {
     return [
       {
         title: 'Keybase ZEC',
-        namedParams: { username: 'Keybase username' },
+        namedParams: { username: 'skyplabs' },
         staticPreview: this.render({
           address: 't1RJDxpBcsgqAotqhepkhLFMv2XpMfvnf1y',
         }),
