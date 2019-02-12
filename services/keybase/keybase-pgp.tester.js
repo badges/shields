@@ -4,7 +4,7 @@ const Joi = require('joi')
 
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('existing fingerprint')
+t.create('existing key fingerprint')
   .get('/skyplabs.json')
   .expectJSONTypes(
     Joi.object({
@@ -20,6 +20,24 @@ t.create('unknown username')
   .expectJSONTypes(
     Joi.object({
       name: 'pgp',
-      value: 'not found',
+      value: 'profile not found',
+    })
+  )
+
+t.create('invalid username')
+  .get('/s.json')
+  .expectJSONTypes(
+    Joi.object({
+      name: 'pgp',
+      value: 'invalid response data',
+    })
+  )
+
+t.create('missing key fingerprint')
+  .get('/skyp.json')
+  .expectJSONTypes(
+    Joi.object({
+      name: 'pgp',
+      value: 'no key fingerprint found',
     })
   )

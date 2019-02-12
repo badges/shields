@@ -3,7 +3,7 @@
 const KeybaseProfile = require('./keybase-profile')
 const Joi = require('joi')
 
-const keyFingerprintFoundSchema = Joi.object({
+const keyFingerprintSchema = Joi.object({
   them: Joi.array()
     .items(
       Joi.object({
@@ -14,20 +14,14 @@ const keyFingerprintFoundSchema = Joi.object({
               .required(),
           },
         },
-      }).required()
+      })
+        .required()
+        .allow(null)
     )
     .min(0)
-    .max(1),
+    .max(1)
+    .required(),
 }).required()
-
-const profileNotFoundSchema = Joi.object({
-  them: Joi.array().empty(),
-}).required()
-
-const keyFingerprintFoundOrNotFound = Joi.alternatives(
-  keyFingerprintFoundSchema,
-  profileNotFoundSchema
-)
 
 module.exports = class KeybasePGP extends KeybaseProfile {
   static get apiVersion() {
@@ -61,19 +55,27 @@ module.exports = class KeybasePGP extends KeybaseProfile {
     }
 
     const data = await this.fetch({
-      schema: keyFingerprintFoundOrNotFound,
+      schema: keyFingerprintSchema,
       options,
     })
 
-    try {
-      const fingerprint = data.them[0].public_keys.primary.key_fingerprint
-      return this.constructor.render({ fingerprint })
-    } catch (err) {
+    if (data.them.length === 0 || !data.them[0]) {
       return {
-        message: 'not found',
+        message: 'profile not found',
+        color: 'critical',
+      }
+    }
+
+    const primaryKey = data.them[0].public_keys.primary
+
+    if (primaryKey == null) {
+      return {
+        message: 'no key fingerprint found',
         color: 'inactive',
       }
     }
+
+    return this.constructor.render({ fingerprint: primaryKey.key_fingerprint })
   }
 
   static render({ fingerprint }) {
