@@ -19,23 +19,24 @@ module.exports = class CocoapodsPlatform extends BaseCocoaPodsService {
       {
         title: 'Cocoapods platforms',
         namedParams: { spec: 'AFNetworking' },
-        staticPreview: this.render({ platforms: 'ios | osx | watchos | tvos' }),
+        staticPreview: this.render({
+          platforms: ['ios', 'osx', 'watchos', 'tvos'],
+        }),
       },
     ]
   }
 
   static render({ platforms }) {
     return {
-      message: platforms,
+      message: platforms.join(' | '),
       // https://github.com/badges/shields/pull/184
       color: '#989898',
     }
   }
 
   async handle({ spec }) {
-    const data = await this.fetch({ spec })
-    const platforms = Object.keys(data.platforms).join(' | ')
-    return this.constructor.render({ platforms })
+    const { platforms } = await this.fetch({ spec })
+    return this.constructor.render({ platforms: Object.keys(platforms) })
   }
 
   static get defaultBadgeData() {
