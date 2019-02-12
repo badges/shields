@@ -3,33 +3,27 @@
 const KeybaseProfile = require('./keybase-profile')
 const Joi = require('joi')
 
-const bitcoinAddressFoundSchema = Joi.object({
+const bitcoinAddressSchema = Joi.object({
   them: Joi.array()
     .items(
       Joi.object({
         cryptocurrency_addresses: Joi.object({
-          bitcoin: Joi.array()
-            .items(
-              Joi.object({
-                address: Joi.string().required(),
-              }).required()
-            )
-            .required(),
-        }).required(),
-      }).required()
+          bitcoin: Joi.array().items(
+            Joi.object({
+              address: Joi.string().required(),
+            }).required()
+          ),
+        })
+          .required()
+          .allow(null),
+      })
+        .required()
+        .allow(null)
     )
     .min(0)
-    .max(1),
+    .max(1)
+    .required(),
 }).required()
-
-const profileNotFoundSchema = Joi.object({
-  them: Joi.array().empty(),
-}).required()
-
-const bitcoinAddressFoundOrNotFound = Joi.alternatives(
-  bitcoinAddressFoundSchema,
-  profileNotFoundSchema
-)
 
 module.exports = class KeybaseBTC extends KeybaseProfile {
   static get apiVersion() {
@@ -63,11 +57,11 @@ module.exports = class KeybaseBTC extends KeybaseProfile {
     }
 
     const data = await this.fetch({
-      schema: bitcoinAddressFoundOrNotFound,
+      schema: bitcoinAddressSchema,
       options,
     })
 
-    if (data.them.length === 0) {
+    if (data.them.length === 0 || !data.them[0]) {
       return {
         message: 'profile not found',
         color: 'critical',
@@ -76,7 +70,7 @@ module.exports = class KeybaseBTC extends KeybaseProfile {
 
     const bitcoinAddresses = data.them[0].cryptocurrency_addresses.bitcoin
 
-    if (bitcoinAddresses.length === 0) {
+    if (bitcoinAddresses == null || bitcoinAddresses.length === 0) {
       return {
         message: 'no bitcoin addresses found',
         color: 'inactive',
