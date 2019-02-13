@@ -2,8 +2,12 @@
 
 const KeybaseProfile = require('./keybase-profile')
 const Joi = require('joi')
+const { nonNegativeInteger } = require('../validators')
 
 const stellarAddressSchema = Joi.object({
+  status: Joi.object({
+    code: nonNegativeInteger.required(),
+  }).required(),
   them: Joi.array()
     .items(
       Joi.object({
@@ -19,8 +23,7 @@ const stellarAddressSchema = Joi.object({
         .allow(null)
     )
     .min(0)
-    .max(1)
-    .required(),
+    .max(1),
 }).required()
 
 module.exports = class KeybaseXLM extends KeybaseProfile {
@@ -58,6 +61,13 @@ module.exports = class KeybaseXLM extends KeybaseProfile {
       schema: stellarAddressSchema,
       options,
     })
+
+    if (data.status.code !== 0) {
+      return {
+        message: 'invalid username',
+        color: 'critical',
+      }
+    }
 
     if (data.them.length === 0 || !data.them[0]) {
       return {

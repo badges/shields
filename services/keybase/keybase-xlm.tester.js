@@ -28,7 +28,7 @@ t.create('invalid username')
   .expectJSONTypes(
     Joi.object({
       name: 'xlm',
-      value: 'invalid response data',
+      value: 'invalid username',
     })
   )
 

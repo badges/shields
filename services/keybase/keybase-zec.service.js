@@ -2,8 +2,12 @@
 
 const KeybaseProfile = require('./keybase-profile')
 const Joi = require('joi')
+const { nonNegativeInteger } = require('../validators')
 
 const zcachAddressSchema = Joi.object({
+  status: Joi.object({
+    code: nonNegativeInteger.required(),
+  }).required(),
   them: Joi.array()
     .items(
       Joi.object({
@@ -21,8 +25,7 @@ const zcachAddressSchema = Joi.object({
         .allow(null)
     )
     .min(0)
-    .max(1)
-    .required(),
+    .max(1),
 }).required()
 
 module.exports = class KeybaseZEC extends KeybaseProfile {
@@ -60,6 +63,13 @@ module.exports = class KeybaseZEC extends KeybaseProfile {
       schema: zcachAddressSchema,
       options,
     })
+
+    if (data.status.code !== 0) {
+      return {
+        message: 'invalid username',
+        color: 'critical',
+      }
+    }
 
     if (data.them.length === 0 || !data.them[0]) {
       return {

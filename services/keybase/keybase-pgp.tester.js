@@ -29,7 +29,7 @@ t.create('invalid username')
   .expectJSONTypes(
     Joi.object({
       name: 'pgp',
-      value: 'invalid response data',
+      value: 'invalid username',
     })
   )
 
