@@ -8,8 +8,6 @@ const schema = Joi.object({
   total: Joi.number().required(),
 }).required()
 
-const keywords = ['jsDelivr', 'hits']
-
 const periodMap = {
   hd: 'day',
   hw: 'week',
@@ -36,4 +34,4 @@ class BaseJsDelivrService extends BaseJsonService {
   }
 }
 
-module.exports = { schema, keywords, periodMap, BaseJsDelivrService }
+module.exports = { schema, periodMap, BaseJsDelivrService }

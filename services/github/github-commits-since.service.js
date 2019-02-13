@@ -8,8 +8,6 @@ const {
 const { makeLogo: getLogo } = require('../../lib/logos')
 const { documentation } = require('./github-helpers')
 
-const keywords = ['GitHub', 'commit']
-
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //
 // Tips for rewriting:
@@ -42,7 +40,6 @@ module.exports = class GithubCommitsSince extends LegacyService {
           message: '4225',
           color: 'blue',
         },
-        keywords,
         documentation,
       },
       {
@@ -57,7 +54,6 @@ module.exports = class GithubCommitsSince extends LegacyService {
           message: '157',
           color: 'blue',
         },
-        keywords,
         documentation,
       },
     ]

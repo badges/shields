@@ -7,9 +7,11 @@ describe('validateExample function', function() {
   it('passes valid examples', function() {
     const validExamples = [
       {
+        title: 'Package manager versioning badge',
         staticPreview: { message: '123' },
         pattern: 'dt/:package',
         namedParams: { package: 'mypackage' },
+        keywords: ['semver', 'management'],
       },
     ]
 
@@ -42,6 +44,25 @@ describe('validateExample function', function() {
         exampleUrl: 'dt/mypackage',
       },
       { previewUrl: 'dt/mypackage' },
+      {
+        staticPreview: { message: '123' },
+        pattern: 'dt/:package',
+        namedParams: { package: 'mypackage' },
+        keywords: ['a'], // Keyword too short.
+      },
+      {
+        staticPreview: { message: '123' },
+        pattern: 'dt/:package',
+        namedParams: { package: 'mypackage' },
+        keywords: ['mockService'], // No title and keyword matching the class name.
+      },
+      {
+        title: 'Package manager versioning badge',
+        staticPreview: { message: '123' },
+        pattern: 'dt/:package',
+        namedParams: { package: 'mypackage' },
+        keywords: ['version'], // Keyword included in title.
+      },
     ]
 
     invalidExamples.forEach(example => {
