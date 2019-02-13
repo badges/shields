@@ -9,8 +9,6 @@ const bookSummarySchema = Joi.object({
   total_copies_sold: Joi.number().required(),
 }).required()
 
-const keywords = ['leanpub']
-
 module.exports = class LeanpubBookSummaryService extends BaseJsonService {
   static render({ label, message }) {
     return {
@@ -36,7 +34,6 @@ module.exports = class LeanpubBookSummaryService extends BaseJsonService {
           book: 'juice-shop',
         },
         staticPreview: this.render({ label: 'pages', message: 226 }),
-        keywords,
       },
       {
         title: 'Leanpub Book Total Copies Sold',
@@ -45,7 +42,6 @@ module.exports = class LeanpubBookSummaryService extends BaseJsonService {
           book: 'juice-shop',
         },
         staticPreview: this.render({ label: 'sold', message: 2691 }),
-        keywords,
       },
     ]
   }

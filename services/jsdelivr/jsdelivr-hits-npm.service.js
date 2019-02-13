@@ -1,11 +1,6 @@
 'use strict'
 
-const {
-  schema,
-  keywords,
-  periodMap,
-  BaseJsDelivrService,
-} = require('./jsdelivr-base')
+const { schema, periodMap, BaseJsDelivrService } = require('./jsdelivr-base')
 
 module.exports = class jsDelivrHitsNPM extends BaseJsDelivrService {
   static get route() {
@@ -21,16 +16,11 @@ module.exports = class jsDelivrHitsNPM extends BaseJsDelivrService {
   }
 
   async fetch({ period, pkg }) {
-    const url = `https://data.jsdelivr.com/v1/package/npm/${pkg}/stats/date/${
-      periodMap[period]
-    }`
-
     return this._requestJson({
       schema,
-      url,
-      headers: {
-        'User-Agent': 'Shields.io',
-      },
+      url: `https://data.jsdelivr.com/v1/package/npm/${pkg}/stats/date/${
+        periodMap[period]
+      }`,
     })
   }
 
@@ -43,7 +33,6 @@ module.exports = class jsDelivrHitsNPM extends BaseJsDelivrService {
           packageName: 'jquery',
         },
         staticPreview: this.render({ period: 'hd', hits: 31471644 }),
-        keywords,
       },
       {
         title: 'jsDelivr Hits (npm)',
@@ -52,7 +41,6 @@ module.exports = class jsDelivrHitsNPM extends BaseJsDelivrService {
           packageName: 'jquery',
         },
         staticPreview: this.render({ period: 'hw', hits: 209922436 }),
-        keywords,
       },
       {
         title: 'jsDelivr Hits (npm)',
@@ -61,7 +49,6 @@ module.exports = class jsDelivrHitsNPM extends BaseJsDelivrService {
           packageName: 'jquery',
         },
         staticPreview: this.render({ period: 'hm', hits: 920101789 }),
-        keywords,
       },
       {
         title: 'jsDelivr Hits (npm)',
@@ -70,7 +57,6 @@ module.exports = class jsDelivrHitsNPM extends BaseJsDelivrService {
           packageName: 'jquery',
         },
         staticPreview: this.render({ period: 'hy', hits: 10576760414 }),
-        keywords,
       },
     ]
   }

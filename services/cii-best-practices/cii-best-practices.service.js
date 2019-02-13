@@ -12,7 +12,7 @@ const ciiBestPracticesSchema = Joi.object({
   tiered_percentage: Joi.number().required(),
 }).required()
 
-const keywords = ['cii', 'cii best practices', 'core infrastructure initiative']
+const keywords = ['core infrastructure initiative']
 
 module.exports = class CIIBestPracticesService extends BaseJsonService {
   static render({ message, color }) {
