@@ -8,7 +8,7 @@ module.exports = class SpigetDownloads extends BaseSpigetService {
   static get route() {
     return {
       base: 'spiget/downloads',
-      pattern: ':resourceid',
+      pattern: ':resourceId',
     }
   }
 
@@ -18,8 +18,8 @@ module.exports = class SpigetDownloads extends BaseSpigetService {
     }
   }
 
-  async handle({ resourceid }) {
-    const { downloads } = await this.fetch({ resourceid })
+  async handle({ resourceId }) {
+    const { downloads } = await this.fetch({ resourceId })
     return this.constructor.render({ downloads })
   }
 
@@ -39,7 +39,7 @@ module.exports = class SpigetDownloads extends BaseSpigetService {
       {
         title: 'Spiget Downloads',
         namedParams: {
-          resourceid: '9089',
+          resourceId: '9089',
         },
         staticPreview: this.render({ downloads: 560891 }),
         documentation,
