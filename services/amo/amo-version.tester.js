@@ -2,18 +2,17 @@
 
 const Joi = require('joi')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('version (valid)')
-  .get('/AFNetworking.json')
+t.create('Version')
+  .get('/IndieGala-Helper.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'pod',
+      name: 'mozilla add-on',
       value: isVPlusDottedVersionAtLeastOne,
     })
   )
 
-t.create('version (not found)')
-  .get('/not-a-package.json')
-  .expectJSON({ name: 'pod', value: 'not found' })
+t.create('Version (not found)')
+  .get('/not-a-real-plugin.json')
+  .expectJSON({ name: 'mozilla add-on', value: 'not found' })

@@ -1,8 +1,8 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
+const BaseCocoaPodsService = require('./cocoapods-base')
 
-module.exports = class CocoapodsPlatform extends LegacyService {
+module.exports = class CocoapodsPlatform extends BaseCocoaPodsService {
   static get category() {
     return 'platform-support'
   }
@@ -19,15 +19,27 @@ module.exports = class CocoapodsPlatform extends LegacyService {
       {
         title: 'Cocoapods platforms',
         namedParams: { spec: 'AFNetworking' },
-        staticPreview: {
-          label: 'platform',
-          message: 'ios | osx | watchos | tvos',
-          color: 'lightgrey',
-        },
+        staticPreview: this.render({
+          platforms: ['ios', 'osx', 'watchos', 'tvos'],
+        }),
       },
     ]
   }
 
-  // Legacy route handler is defined in cocoapods.service.js.
-  static registerLegacyRouteHandler() {}
+  static render({ platforms }) {
+    return {
+      message: platforms.join(' | '),
+      // https://github.com/badges/shields/pull/184
+      color: '#989898',
+    }
+  }
+
+  async handle({ spec }) {
+    const { platforms } = await this.fetch({ spec })
+    return this.constructor.render({ platforms: Object.keys(platforms) })
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'platform' }
+  }
 }

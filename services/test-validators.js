@@ -21,9 +21,9 @@ const isVPlusDottedVersionNClauses = withRegex(/^v\d+(\.\d+)*$/)
 
 // matches a version number with N 'clauses'
 // and an optional text suffix
-// e.g: -beta, -preview1, -release-candidate etc
+// e.g: -beta, -preview1, -release-candidate, +beta etc
 const isVPlusDottedVersionNClausesWithOptionalSuffix = withRegex(
-  /^v\d+(\.\d+)*(-.*)?$/
+  /^v\d+(\.\d+)*([-+].*)?$/
 )
 
 // Simple regex for test Composer versions rule

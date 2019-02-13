@@ -70,7 +70,7 @@ module.exports = class JiraSprint extends JiraBase {
           numTotalIssues: 28,
         }),
         documentation,
-        keywords: ['jira', 'sprint', 'issues'],
+        keywords: ['issues'],
       },
     ]
   }
