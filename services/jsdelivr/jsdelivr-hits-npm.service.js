@@ -21,16 +21,11 @@ module.exports = class jsDelivrHitsNPM extends BaseJsDelivrService {
   }
 
   async fetch({ period, pkg }) {
-    const url = `https://data.jsdelivr.com/v1/package/npm/${pkg}/stats/date/${
-      periodMap[period]
-    }`
-
     return this._requestJson({
       schema,
-      url,
-      headers: {
-        'User-Agent': 'Shields.io',
-      },
+      url: `https://data.jsdelivr.com/v1/package/npm/${pkg}/stats/date/${
+        periodMap[period]
+      }`,
     })
   }
 
