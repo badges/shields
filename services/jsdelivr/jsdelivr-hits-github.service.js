@@ -1,11 +1,6 @@
 'use strict'
 
-const {
-  schema,
-  keywords,
-  periodMap,
-  BaseJsDelivrService,
-} = require('./jsdelivr-base')
+const { schema, periodMap, BaseJsDelivrService } = require('./jsdelivr-base')
 
 module.exports = class jsDelivrHitsGitHub extends BaseJsDelivrService {
   static get route() {
@@ -39,7 +34,6 @@ module.exports = class jsDelivrHitsGitHub extends BaseJsDelivrService {
           repo: 'jquery',
         },
         staticPreview: this.render({ period: 'hd', hits: 272042 }),
-        keywords,
       },
       {
         title: 'jsDelivr Hits (GitHub)',
@@ -49,7 +43,6 @@ module.exports = class jsDelivrHitsGitHub extends BaseJsDelivrService {
           repo: 'jquery',
         },
         staticPreview: this.render({ period: 'hw', hits: 2156336 }),
-        keywords,
       },
       {
         title: 'jsDelivr Hits (GitHub)',
@@ -59,7 +52,6 @@ module.exports = class jsDelivrHitsGitHub extends BaseJsDelivrService {
           repo: 'jquery',
         },
         staticPreview: this.render({ period: 'hm', hits: 9809876 }),
-        keywords,
       },
       {
         title: 'jsDelivr Hits (GitHub)',
@@ -69,7 +61,6 @@ module.exports = class jsDelivrHitsGitHub extends BaseJsDelivrService {
           repo: 'jquery',
         },
         staticPreview: this.render({ period: 'hy', hits: 95317723 }),
-        keywords,
       },
     ]
   }
