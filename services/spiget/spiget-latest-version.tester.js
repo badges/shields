@@ -11,7 +11,7 @@ t.create('EssentialsX (id 9089)')
   .get('/9089.json')
   .expectJSONTypes(
     Joi.object().keys({
-      name: 'version',
+      name: 'spiget',
       value: withRegex(/^(?!not found$)/),
     })
   )
@@ -19,6 +19,6 @@ t.create('EssentialsX (id 9089)')
 t.create('Invalid Resource (id 1)')
   .get('/1.json')
   .expectJSON({
-    name: 'version',
+    name: 'spiget',
     value: 'not found',
   })
