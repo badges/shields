@@ -16,16 +16,11 @@ module.exports = class jsDelivrHitsGitHub extends BaseJsDelivrService {
   }
 
   async fetch({ period, user, repo }) {
-    const url = `https://data.jsdelivr.com/v1/package/gh/${user}/${repo}/stats/date/${
-      periodMap[period]
-    }`
-
     return this._requestJson({
       schema,
-      url,
-      headers: {
-        'User-Agent': 'Shields.io',
-      },
+      url: `https://data.jsdelivr.com/v1/package/gh/${user}/${repo}/stats/date/${
+        periodMap[period]
+      }`,
     })
   }
 
