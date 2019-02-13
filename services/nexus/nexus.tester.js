@@ -94,7 +94,7 @@ t.create('search snapshot version with + in version')
     nock('https://repository.jboss.org/nexus')
       .get('/service/local/lucene/search')
       .query({ g: 'com.progress.fuse', a: 'fusehq' })
-      .reply(200, { data: [{ version: '7.0.1+METADATA-SNAPSHOT' }] })
+      .reply(200, { data: [{ version: '7.0.1+METADATA-abcdef-SNAPSHOT' }] })
   )
   .expectJSON({
     name: 'nexus',
