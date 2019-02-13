@@ -39,7 +39,6 @@ module.exports = class Luarocks extends LegacyService {
           message: 'v0.23.0-1',
           color: 'brightgreen',
         },
-        keywords: ['lua'],
       },
     ]
   }

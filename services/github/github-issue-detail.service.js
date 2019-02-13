@@ -16,7 +16,7 @@ const {
 } = require('./github-helpers')
 
 const commonExampleAttrs = {
-  keywords: ['issue', 'pullrequest', 'detail'],
+  keywords: ['pullrequest', 'detail'],
   documentation,
 }
 

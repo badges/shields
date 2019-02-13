@@ -62,7 +62,6 @@ module.exports = class JiraIssue extends JiraBase {
           statusName: 'Resolved',
           statusColor: 'green',
         }),
-        keywords: ['jira', 'issue'],
       },
     ]
   }

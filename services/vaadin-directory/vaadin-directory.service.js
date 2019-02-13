@@ -35,7 +35,7 @@ class VaadinDirectoryRating extends LegacyService {
           message: '5.0/5',
           color: 'brightgreen',
         },
-        keywords: ['vaadin-directory', 'vaadin directory', 'rating'],
+        keywords: ['vaadin-directory', 'rating'],
       },
       {
         title: 'Vaadin Directory',
@@ -46,7 +46,7 @@ class VaadinDirectoryRating extends LegacyService {
           message: starRating(4.75),
           color: 'brightgreen',
         },
-        keywords: ['vaadin-directory', 'vaadin directory', 'star', 'stars'],
+        keywords: ['vaadin-directory', 'star', 'stars'],
       },
       {
         title: 'Vaadin Directory',
@@ -57,12 +57,7 @@ class VaadinDirectoryRating extends LegacyService {
           message: '6 total',
           color: 'yellow',
         },
-        keywords: [
-          'vaadin-directory',
-          'vaadin directory',
-          'rating-count',
-          'rating count',
-        ],
+        keywords: ['vaadin-directory', 'rating-count', 'rating count'],
       },
     ]
   }
@@ -92,12 +87,7 @@ class VaadinDirectoryVersion extends LegacyService {
           message: 'v5.3.0-alpha4',
           color: '00b4f0',
         },
-        keywords: [
-          'vaadin-directory',
-          'vaadin directory',
-          'version',
-          'latest version',
-        ],
+        keywords: ['vaadin-directory', 'version', 'latest version'],
       },
     ]
   }
@@ -127,7 +117,7 @@ class VaadinDirectoryStatus extends LegacyService {
           message: 'published',
           color: '00b4f0',
         },
-        keywords: ['vaadin-directory', 'vaadin directory', 'status'],
+        keywords: ['vaadin-directory', 'status'],
       },
     ]
   }
@@ -157,12 +147,7 @@ class VaadinDirectoryReleaseDate extends LegacyService {
           message: 'last wednesday',
           color: 'brightgreen',
         },
-        keywords: [
-          'vaadin-directory',
-          'vaadin directory',
-          'date',
-          'latest release date',
-        ],
+        keywords: ['vaadin-directory', 'date', 'latest release date'],
       },
     ]
   }
