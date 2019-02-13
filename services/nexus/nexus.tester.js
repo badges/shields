@@ -86,6 +86,21 @@ t.create('live: repository version of an inexistent artifact')
     value: 'artifact not found',
   })
 
+t.create('search snapshot version with + in version')
+  .get(
+    '/s/https/repository.jboss.org/nexus/com.progress.fuse/fusehq.json?style=_shields_test'
+  )
+  .intercept(nock =>
+    nock('https://repository.jboss.org/nexus')
+      .get('/service/local/lucene/search')
+      .query({ g: 'com.progress.fuse', a: 'fusehq' })
+      .reply(200, { data: [{ version: '7.0.1+METADATA-SNAPSHOT' }] })
+  )
+  .expectJSON({
+    name: 'nexus',
+    color: isVersion,
+  })
+
 t.create('search snapshot version not in latestSnapshot')
   .get(
     '/s/https/repository.jboss.org/nexus/com.progress.fuse/fusehq.json?style=_shields_test'
