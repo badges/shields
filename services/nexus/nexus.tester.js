@@ -86,6 +86,24 @@ t.create('live: repository version of an inexistent artifact')
     value: 'artifact not found',
   })
 
+t.create('snapshot version with + in version')
+  .get(
+    '/s/https/repository.jboss.org/nexus/com.progress.fuse/fusehq.json?style=_shields_test'
+  )
+  .intercept(nock =>
+    nock('https://repository.jboss.org/nexus')
+      .get('/service/local/lucene/search')
+      .query({ g: 'com.progress.fuse', a: 'fusehq' })
+      .reply(200, { data: [{ version: '7.0.1+19-8844c122-SNAPSHOT' }] })
+  )
+  .expectJSONTypes(
+    Joi.object().keys({
+      name: 'nexus',
+      color: 'orange',
+      value: isVersion,
+    })
+  )
+
 t.create('search snapshot version not in latestSnapshot')
   .get(
     '/s/https/repository.jboss.org/nexus/com.progress.fuse/fusehq.json?style=_shields_test'
@@ -115,7 +133,7 @@ t.create('search snapshot no snapshot versions')
   .expectJSON({
     name: 'nexus',
     value: 'no snapshot versions found',
-    color: 'lightgray',
+    color: 'lightgrey',
   })
 
 t.create('search release version')

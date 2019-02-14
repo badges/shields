@@ -1,12 +1,17 @@
 'use strict'
 
-const path = require('path')
-const glob = require('glob')
+const logos = require('../lib/load-logos')()
+const simpleIcons = require('../lib/load-simple-icons')()
+
+const shieldsLogos = Object.keys(logos)
+
+const simpleIconSet = new Set(Object.keys(simpleIcons))
+shieldsLogos.forEach(logo => simpleIconSet.delete(logo))
+const simpleIconNames = Array.from(simpleIconSet)
 
 const supportedFeatures = {
-  logos: glob
-    .sync(`${__dirname}/../logo/*.svg`)
-    .map(filename => path.basename(filename, '.svg')),
+  shieldsLogos,
+  simpleIcons: simpleIconNames,
   advertisedStyles: [
     'plastic',
     'flat',
