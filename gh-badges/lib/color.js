@@ -38,7 +38,7 @@ function isHexColor(s = '') {
 }
 
 function normalizeColor(color) {
-  if (color === 'undefined') {
+  if (color === undefined) {
     return undefined
   } else if (color in namedColors) {
     return color
