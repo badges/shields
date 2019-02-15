@@ -65,7 +65,7 @@ t.create('YAML from url | object doesnt exist')
   .expectJSON({
     name: 'custom badge',
     value: 'no result',
-    color: 'lightgray',
+    color: 'lightgrey',
   })
 
 t.create('YAML from url | invalid url')

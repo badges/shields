@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-const { invalidJSON } = require('../response-fixtures')
 
 const isPlatform = Joi.string().regex(
   /^(osx|ios|tvos|watchos)( \| (osx|ios|tvos|watchos))*$/
@@ -22,16 +21,11 @@ t.create('platform (not found)')
   .get('/not-a-package.json')
   .expectJSON({ name: 'platform', value: 'not found' })
 
-t.create('platform (connection error)')
-  .get('/AFNetworking.json')
-  .networkOff()
-  .expectJSON({ name: 'platform', value: 'inaccessible' })
-
-t.create('platform (unexpected response)')
+t.create('platform (missing platforms key)')
   .get('/AFNetworking.json')
   .intercept(nock =>
     nock('https://trunk.cocoapods.org')
       .get('/api/v1/pods/AFNetworking/specs/latest')
-      .reply(invalidJSON)
+      .reply(200, { version: 'v1.0', license: 'MIT' })
   )
-  .expectJSON({ name: 'platform', value: 'invalid' })
+  .expectJSON({ name: 'platform', value: 'ios | osx' })
