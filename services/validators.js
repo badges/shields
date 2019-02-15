@@ -21,7 +21,7 @@ module.exports = {
     .required(),
 
   optionalDottedVersionNClausesWithOptionalSuffix: Joi.string().regex(
-    /^\d+(\.\d+)*(-.*)?$/
+    /^\d+(\.\d+)*([-+].*)?$/
   ),
 
   // TODO This accepts URLs with query strings and fragments, which for some

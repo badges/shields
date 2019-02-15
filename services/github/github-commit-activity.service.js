@@ -38,7 +38,7 @@ module.exports = class GithubCommitActivity extends LegacyService {
           message: '457/year',
           color: 'blue',
         },
-        keywords: ['GitHub', 'commit', 'commits', 'activity'],
+        keywords: ['commits'],
         documentation,
       },
       {
@@ -50,7 +50,7 @@ module.exports = class GithubCommitActivity extends LegacyService {
           message: '38/month',
           color: 'blue',
         },
-        keywords: ['GitHub', 'commit', 'commits', 'activity'],
+        keywords: ['commits'],
         documentation,
       },
       {
@@ -62,7 +62,7 @@ module.exports = class GithubCommitActivity extends LegacyService {
           message: '9/week',
           color: 'blue',
         },
-        keywords: ['GitHub', 'commit', 'commits', 'activity'],
+        keywords: ['commits'],
         documentation,
       },
     ]

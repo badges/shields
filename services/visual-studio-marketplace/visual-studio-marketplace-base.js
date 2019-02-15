@@ -47,8 +47,6 @@ module.exports = class VisualStudioMarketplaceBase extends BaseJsonService {
   static get keywords() {
     return [
       'vscode',
-      'visual studio',
-      'azure devops',
       'tfs',
       'vsts',
       'visual-studio-marketplace',

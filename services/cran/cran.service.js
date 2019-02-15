@@ -38,7 +38,6 @@ class CranLicense extends BaseCranService {
         title: 'CRAN/METACRAN',
         namedParams: { packageName: 'devtools' },
         staticPreview: this.render({ license: 'GPL (>= 2)' }),
-        keywords: ['R'],
       },
     ]
   }
@@ -75,7 +74,6 @@ class CranVersion extends BaseCranService {
         title: 'CRAN/METACRAN',
         namedParams: { packageName: 'devtools' },
         staticPreview: this.render({ version: '2.0.1' }),
-        keywords: ['R'],
       },
     ]
   }
