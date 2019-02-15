@@ -60,21 +60,8 @@ module.exports = class KeybaseZEC extends KeybaseProfile {
       options,
     })
 
-    if (data.status.code !== 0) {
-      return {
-        message: 'invalid username',
-        color: 'critical',
-      }
-    }
-
-    if (data.them.length === 0 || !data.them[0]) {
-      return {
-        message: 'profile not found',
-        color: 'critical',
-      }
-    }
-
-    const zcashAddresses = data.them[0].cryptocurrency_addresses.zcash
+    const { user } = this.transform({ data })
+    const zcashAddresses = user.cryptocurrency_addresses.zcash
 
     if (zcashAddresses == null || zcashAddresses.length === 0) {
       return {

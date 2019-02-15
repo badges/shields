@@ -1,6 +1,7 @@
 'use strict'
 
 const { BaseJsonService } = require('..')
+const { NotFound } = require('..')
 
 module.exports = class KeybaseProfile extends BaseJsonService {
   static get apiVersion() {
@@ -21,5 +22,17 @@ module.exports = class KeybaseProfile extends BaseJsonService {
       schema,
       options,
     })
+  }
+
+  transform({ data }) {
+    if (data.status.code !== 0) {
+      throw new NotFound({ prettyMessage: 'invalid username' })
+    }
+
+    if (data.them.length === 0 || !data.them[0]) {
+      throw new NotFound({ prettyMessage: 'profile not found' })
+    }
+
+    return { user: data.them[0] }
   }
 }

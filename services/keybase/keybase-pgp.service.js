@@ -58,21 +58,8 @@ module.exports = class KeybasePGP extends KeybaseProfile {
       options,
     })
 
-    if (data.status.code !== 0) {
-      return {
-        message: 'invalid username',
-        color: 'critical',
-      }
-    }
-
-    if (data.them.length === 0 || !data.them[0]) {
-      return {
-        message: 'profile not found',
-        color: 'critical',
-      }
-    }
-
-    const primaryKey = data.them[0].public_keys.primary
+    const { user } = this.transform({ data })
+    const primaryKey = user.public_keys.primary
 
     if (primaryKey == null) {
       return {

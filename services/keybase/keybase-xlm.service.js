@@ -58,21 +58,8 @@ module.exports = class KeybaseXLM extends KeybaseProfile {
       options,
     })
 
-    if (data.status.code !== 0) {
-      return {
-        message: 'invalid username',
-        color: 'critical',
-      }
-    }
-
-    if (data.them.length === 0 || !data.them[0]) {
-      return {
-        message: 'profile not found',
-        color: 'critical',
-      }
-    }
-
-    const accountId = data.them[0].stellar.primary.account_id
+    const { user } = this.transform({ data })
+    const accountId = user.stellar.primary.account_id
 
     if (accountId == null) {
       return {

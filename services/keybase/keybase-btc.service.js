@@ -60,21 +60,8 @@ module.exports = class KeybaseBTC extends KeybaseProfile {
       options,
     })
 
-    if (data.status.code !== 0) {
-      return {
-        message: 'invalid username',
-        color: 'critical',
-      }
-    }
-
-    if (data.them.length === 0 || !data.them[0]) {
-      return {
-        message: 'profile not found',
-        color: 'critical',
-      }
-    }
-
-    const bitcoinAddresses = data.them[0].cryptocurrency_addresses.bitcoin
+    const { user } = this.transform({ data })
+    const bitcoinAddresses = user.cryptocurrency_addresses.bitcoin
 
     if (bitcoinAddresses == null || bitcoinAddresses.length === 0) {
       return {
