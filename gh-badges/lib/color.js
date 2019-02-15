@@ -34,11 +34,11 @@ Object.entries(aliases).forEach(([alias, original]) => {
 // true.
 const hexColorRegex = /^([\da-f]{3}){1,2}$/i
 function isHexColor(s = '') {
-  return hexColorRegex.test(s.toLowerCase())
+  return hexColorRegex.test(s)
 }
 
 function normalizeColor(color) {
-  if (color === undefined) {
+  if (color === 'undefined') {
     return undefined
   } else if (color in namedColors) {
     return color
