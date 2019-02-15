@@ -9,19 +9,19 @@ const {
 module.exports = class SymfonyInsightGrade extends SymfonyInsightBase {
   static render({ status, grade }) {
     const label = 'grade'
-    if (status !== 'finished') {
+    if (status === 'finished' || status === '') {
+      const message = grade === 'none' ? 'no medal' : grade
       return {
         label,
-        message: 'pending',
-        color: 'lightgrey',
+        message,
+        color: gradeColors[grade],
       }
     }
 
-    const message = grade === 'none' ? 'no medal' : grade
     return {
       label,
-      message,
-      color: gradeColors[grade],
+      message: 'pending',
+      color: 'lightgrey',
     }
   }
 
