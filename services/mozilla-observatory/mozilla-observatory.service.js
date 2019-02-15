@@ -38,7 +38,7 @@ const documentation = `
   by setting <code>publish</code> parameter to <code>true</code>
 <p>
 <p>
-  The badge return a cached site result if the site has been scanned anytime in the previous 24 hours.
+  The badge returns a cached site result if the site has been scanned anytime in the previous 24 hours.
   If you need to force invalidating the cache,
   you can to do it manually through the <a href="https://observatory.mozilla.org">Mozilla Observatory Website</a>
 </p>
