@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { invalidJSON } = require('../response-fixtures')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 const fakeData = [
   {

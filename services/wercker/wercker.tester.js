@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { isBuildStatus } = require('../../lib/build-status')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Build status')
   .get('/build/wercker/go-wercker-api.json')
@@ -58,4 +58,4 @@ t.create('CI status by ID (no runs yet)')
       .get('/runs?applicationId=559e33c8e982fc615500b357&limit=1')
       .reply(200, [])
   )
-  .expectJSON({ name: 'build', value: 'no builds' })
+  .expectJSON({ name: 'build', value: 'not built' })

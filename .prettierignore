@@ -3,6 +3,7 @@ package-lock.json
 /__snapshots__
 /.next
 /build
+/public
 /coverage
 private/*.json
 /.nyc_output

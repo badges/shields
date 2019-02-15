@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('get room state as guest')
   .get('/ALIAS:DUMMY.dumb.json?style=_shields_test')
@@ -160,7 +160,7 @@ t.create('bad server or connection')
   .expectJSON({
     name: 'chat',
     value: 'inaccessible',
-    color: 'lightgray',
+    color: 'lightgrey',
   })
 
 t.create('non-world readable room')
@@ -197,7 +197,7 @@ t.create('non-world readable room')
   .expectJSON({
     name: 'chat',
     value: 'room not world readable or is invalid',
-    color: 'lightgray',
+    color: 'lightgrey',
   })
 
 t.create('invalid token')
@@ -225,7 +225,7 @@ t.create('invalid token')
   .expectJSON({
     name: 'chat',
     value: 'bad auth token',
-    color: 'lightgray',
+    color: 'lightgrey',
   })
 
 t.create('unknown request')
@@ -262,7 +262,7 @@ t.create('unknown request')
   .expectJSON({
     name: 'chat',
     value: 'unknown request',
-    color: 'lightgray',
+    color: 'lightgrey',
   })
 
 t.create('unknown alias')

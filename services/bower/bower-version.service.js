@@ -33,6 +33,10 @@ module.exports = class BowerVersion extends BaseBowerService {
     ]
   }
 
+  static get defaultBadgeData() {
+    return { label: 'bower' }
+  }
+
   async handle({ vtype, packageName }) {
     const data = await this.fetch({ packageName })
 

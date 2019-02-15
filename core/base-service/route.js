@@ -55,8 +55,8 @@ function namedParamsForMatch(captureNames = [], match, ServiceClass) {
     throw new Error(
       `Service ${
         ServiceClass.name
-      } declares incorrect number of capture groups ` +
-        `(expected ${captureNames.length}, got ${captures.length})`
+      } declares incorrect number of named params ` +
+        `(expected ${captures.length}, got ${captureNames.length})`
     )
   }
 

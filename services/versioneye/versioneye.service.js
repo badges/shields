@@ -5,7 +5,7 @@ const { deprecatedService } = require('..')
 // VersionEye integration - deprecated as of August 2018.
 module.exports = deprecatedService({
   category: 'downloads',
-  url: {
+  route: {
     base: 'versioneye',
     format: 'd/(?:.+)',
   },

@@ -42,7 +42,6 @@ module.exports = class GithubIssues extends LegacyService {
           message: '167 open',
           color: 'yellow',
         },
-        keywords: ['issue'],
         documentation,
       },
       {
@@ -57,7 +56,6 @@ module.exports = class GithubIssues extends LegacyService {
           message: '167',
           color: 'yellow',
         },
-        keywords: ['issue'],
         documentation,
       },
       {
@@ -73,7 +71,6 @@ module.exports = class GithubIssues extends LegacyService {
           message: '110 open',
           color: 'yellow',
         },
-        keywords: ['issue', 'label'],
         documentation,
       },
       {
@@ -89,7 +86,6 @@ module.exports = class GithubIssues extends LegacyService {
           message: '110',
           color: 'yellow',
         },
-        keywords: ['issue', 'label'],
         documentation,
       },
       {
@@ -104,7 +100,6 @@ module.exports = class GithubIssues extends LegacyService {
           message: '899 closed',
           color: 'yellow',
         },
-        keywords: ['issue'],
         documentation,
       },
       {
@@ -119,7 +114,6 @@ module.exports = class GithubIssues extends LegacyService {
           message: '899',
           color: 'yellow',
         },
-        keywords: ['issue'],
         documentation,
       },
       {
@@ -195,7 +189,7 @@ module.exports = class GithubIssues extends LegacyService {
           message: '8 open',
           color: 'yellow',
         },
-        keywords: ['pullrequests', 'pr', 'label'],
+        keywords: ['pullrequests', 'pr'],
         documentation,
       },
       {
@@ -211,7 +205,7 @@ module.exports = class GithubIssues extends LegacyService {
           message: '8',
           color: 'yellow',
         },
-        keywords: ['pullrequests', 'pr', 'label'],
+        keywords: ['pullrequests', 'pr'],
         documentation,
       },
     ]

@@ -6,7 +6,7 @@ const {
   isStarRating,
   isMetric,
 } = require('../test-validators')
-const { ServiceTester } = require('..')
+const { ServiceTester } = require('../tester')
 
 const t = (module.exports = new ServiceTester({
   id: 'chrome-web-store',

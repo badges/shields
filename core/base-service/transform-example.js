@@ -85,6 +85,34 @@ function validateExample(example, index, ServiceClass) {
     )
   }
 
+  if (example.keywords) {
+    // Make sure the keywords are at least two characters long.
+    const tinyKeywords = example.keywords.filter(k => k.length < 2)
+    if (tinyKeywords.length) {
+      throw Error(
+        `In example for ${
+          ServiceClass.name
+        } at index ${index}, keywords contains words that are less than two characters long: ${tinyKeywords.join(
+          ', '
+        )}`
+      )
+    }
+    // Make sure none of the keywords are already included in the title.
+    const title = (example.title || ServiceClass.name).toLowerCase()
+    const redundantKeywords = example.keywords.filter(k =>
+      title.includes(k.toLowerCase())
+    )
+    if (redundantKeywords.length) {
+      throw Error(
+        `In example for ${
+          ServiceClass.name
+        } at index ${index}, keywords contains words that are already in the title: ${redundantKeywords.join(
+          ', '
+        )}`
+      )
+    }
+  }
+
   return result
 }
 
