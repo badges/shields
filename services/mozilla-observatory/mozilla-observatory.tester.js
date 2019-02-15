@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const t = (module.exports = require('..').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 const validColors = ['brightgreen', 'green', 'yellow', 'orange', 'red']
 
