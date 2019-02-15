@@ -31,10 +31,6 @@ module.exports = class KeybasePGP extends KeybaseProfile {
     return '1.0'
   }
 
-  static get category() {
-    return 'social'
-  }
-
   static get route() {
     return {
       base: 'keybase/pgp',
