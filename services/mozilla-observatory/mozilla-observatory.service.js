@@ -69,7 +69,7 @@ module.exports = class MozillaObservatory extends BaseJsonService {
           grade: 'A+',
           score: 115,
         }),
-        keywords: ['mozilla', 'observatory', 'scanner', 'security'],
+        keywords: ['scanner', 'security'],
         documentation,
       },
       {
@@ -80,7 +80,7 @@ module.exports = class MozillaObservatory extends BaseJsonService {
           grade: 'A+',
           score: 115,
         }),
-        keywords: ['mozilla', 'observatory', 'scanner', 'security'],
+        keywords: ['scanner', 'security'],
         documentation,
       },
     ]
