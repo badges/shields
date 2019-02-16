@@ -2,20 +2,17 @@
 
 const Joi = require('joi')
 const { renderVersionBadge } = require('../../lib/version')
-const { keywords, BasePackagistService } = require('./packagist-base')
+
+const {
+  allVersionsSchema,
+  keywords,
+  BasePackagistService,
+} = require('./packagist-base')
 
 const {
   latest: phpLatestVersion,
   isStable: phpStableVersion,
 } = require('../../lib/php-version')
-
-const allVersionsSchema = Joi.object({
-  package: Joi.object({
-    versions: Joi.object()
-      .pattern(/^/, Joi.object({ version: Joi.string() }))
-      .required(),
-  }).required(),
-}).required()
 
 module.exports = class PackagistVersion extends BasePackagistService {
   static get route() {

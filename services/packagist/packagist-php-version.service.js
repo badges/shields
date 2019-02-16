@@ -1,12 +1,14 @@
 'use strict'
 
-const { BasePackagistService } = require('./packagist-base')
+const { allVersionsSchema, BasePackagistService } = require('./packagist-base')
+
+const { NotFound } = require('..')
 
 module.exports = class PackagistPhpVersion extends BasePackagistService {
   static get route() {
     return {
       base: 'packagist/php-v',
-      pattern: ':user/:repo',
+      pattern: ':user/:repo/:version?',
     }
   }
 
@@ -17,17 +19,19 @@ module.exports = class PackagistPhpVersion extends BasePackagistService {
     }
   }
 
-  async handle({ user, repo }) {
-    const {
-      package: {
-        versions: {
-          'dev-master': {
-            require: { php },
-          },
-        },
-      },
-    } = await this.fetch({ user, repo })
-    return this.constructor.render({ php })
+  async handle({ user, repo, version = 'dev-master' }) {
+    const allData = await this.fetch({
+      user,
+      repo,
+      schema: allVersionsSchema,
+    })
+    try {
+      return this.constructor.render({
+        php: allData.package.versions[version].require.php,
+      })
+    } catch (e) {
+      throw new NotFound({ prettyMessage: 'invalid version' })
+    }
   }
 
   static render({ php }) {
@@ -43,11 +47,22 @@ module.exports = class PackagistPhpVersion extends BasePackagistService {
     return [
       {
         title: 'PHP from Packagist',
+        pattern: ':user/:repo',
         namedParams: {
           user: 'symfony',
           repo: 'symfony',
         },
         staticPreview: this.render({ php: '^7.1.3' }),
+      },
+      {
+        title: 'PHP from Packagist (specify version)',
+        pattern: ':user/:repo/:version',
+        namedParams: {
+          user: 'symfony',
+          repo: 'symfony',
+          version: 'v2.8.0',
+        },
+        staticPreview: this.render({ php: '>=5.3.9' }),
       },
     ]
   }

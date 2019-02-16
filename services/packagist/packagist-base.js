@@ -26,6 +26,22 @@ const latestVersionSchema = Joi.object({
   }).required(),
 }).required()
 
+const allVersionsSchema = Joi.object({
+  package: Joi.object({
+    versions: Joi.object()
+      .pattern(
+        /^/,
+        Joi.object({
+          version: Joi.string(),
+          require: Joi.object({
+            php: Joi.string(),
+          }),
+        })
+      )
+      .required(),
+  }).required(),
+}).required()
+
 const keywords = ['PHP']
 
 class BasePackagistService extends BaseJsonService {
@@ -43,4 +59,4 @@ class BasePackagistService extends BaseJsonService {
   }
 }
 
-module.exports = { keywords, BasePackagistService }
+module.exports = { allVersionsSchema, keywords, BasePackagistService }
