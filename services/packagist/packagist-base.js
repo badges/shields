@@ -13,9 +13,6 @@ const latestVersionSchema = Joi.object({
             'dev-master': Joi.string().required(),
           }).required(),
         }).required(),
-        require: Joi.object({
-          php: Joi.string().required(),
-        }).required(),
       }).required(),
     }).required(),
     downloads: Joi.object({
