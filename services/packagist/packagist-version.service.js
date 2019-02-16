@@ -1,6 +1,5 @@
 'use strict'
 
-const Joi = require('joi')
 const { renderVersionBadge } = require('../../lib/version')
 
 const {
