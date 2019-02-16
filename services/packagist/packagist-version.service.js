@@ -1,17 +1,13 @@
 'use strict'
 
 const { renderVersionBadge } = require('../../lib/version')
+const { isStable: phpStableVersion } = require('../../lib/php-version')
 
 const {
   allVersionsSchema,
   keywords,
   BasePackagistService,
 } = require('./packagist-base')
-
-const {
-  latest: phpLatestVersion,
-  isStable: phpStableVersion,
-} = require('../../lib/php-version')
 
 module.exports = class PackagistVersion extends BasePackagistService {
   static get route() {
@@ -51,10 +47,6 @@ module.exports = class PackagistVersion extends BasePackagistService {
         const versionsData = allData.package.versions
         const versions = Object.keys(versionsData)
         const stableVersions = versions.filter(phpStableVersion)
-        let stableVersion = phpLatestVersion(stableVersions)
-        if (!stableVersion) {
-          stableVersion = phpLatestVersion(versions)
-        }
         return renderVersionBadge({ version: stableVersions[0] })
     }
   }
