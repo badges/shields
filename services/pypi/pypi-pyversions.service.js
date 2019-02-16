@@ -23,7 +23,6 @@ module.exports = class PypiPythonVersions extends PypiBase {
         pattern: ':packageName',
         namedParams: { packageName: 'Django' },
         staticPreview: this.render({ versions: ['3.5', '3.6', '3.7'] }),
-        keywords: ['python'],
       },
     ]
   }

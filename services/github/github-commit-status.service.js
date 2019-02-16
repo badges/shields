@@ -40,7 +40,7 @@ module.exports = class GithubCommitStatus extends LegacyService {
           message: 'in master',
           color: 'brightgreen',
         },
-        keywords: ['branch', 'merge'],
+        keywords: ['branch'],
         documentation,
       },
     ]
