@@ -96,6 +96,8 @@ class DiscourseStatus extends DiscourseBase {
 
   async handle({ scheme, host }) {
     await this.fetch({ scheme, host })
+    // if fetch() worked, the server is up
+    // if it failed, we'll show an error e.g: 'inaccessible'
     return this.constructor.render()
   }
 }
