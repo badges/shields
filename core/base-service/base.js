@@ -128,7 +128,7 @@ module.exports = class BaseService {
    * this service.
    *
    * The preferred way to specify an example is with `namedParams` which are
-   * substitued into the service's compiled route pattern. The rendered badge
+   * substituted into the service's compiled route pattern. The rendered badge
    * is specified with `staticPreview`.
    *
    * For services which use a route `format`, the `pattern` can be specified as
