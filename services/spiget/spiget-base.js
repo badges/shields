@@ -24,22 +24,14 @@ const keywords = ['spigot', 'spigotmc']
 
 class BaseSpigetService extends BaseJsonService {
   async fetch({
-    resourceid,
+    resourceId,
     schema = resourceSchema,
-    url = `https://api.spiget.org/v2/resources/${resourceid}`,
+    url = `https://api.spiget.org/v2/resources/${resourceId}`,
   }) {
     return this._requestJson({
       schema,
       url,
     })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'spiget' }
-  }
-
-  static get category() {
-    return 'other'
   }
 }
 
