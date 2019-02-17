@@ -206,7 +206,7 @@
     "sazerac": "^0.4.2",
     "sinon": "^7.2.3",
     "sinon-chai": "^3.3.0",
-    "snap-shot-it": "^6.2.9",
+    "snap-shot-it": "^6.2.10",
     "styled-components": "^4.1.3",
     "tmp": "0.0.33",
     "url": "^0.11.0",
