@@ -53,10 +53,10 @@ export default class QueryStringBuilder extends React.Component {
       badgeOptions[name] = defaults[name] || ''
     })
 
-    this.state = { queryParams, badgeOptions }
+    this.state = { queryParams, badgeOptions, defaultStyle }
   }
 
-  static getQueryString({ queryParams, badgeOptions }) {
+  static getQueryString({ queryParams, badgeOptions, defaultStyle }) {
     const outQuery = {}
     let isComplete = true
 
@@ -85,17 +85,22 @@ export default class QueryStringBuilder extends React.Component {
       }
     })
 
+    if (outQuery.style === defaultStyle) {
+      delete outQuery.style
+    }
+
     const queryString = stringifyQueryString(outQuery)
 
     return { queryString, isComplete }
   }
 
-  noteQueryStringChanged({ queryParams, badgeOptions }) {
+  noteQueryStringChanged({ queryParams, badgeOptions, defaultStyle }) {
     const { onChange } = this.props
     if (onChange) {
       const { queryString, isComplete } = this.constructor.getQueryString({
         queryParams,
         badgeOptions,
+        defaultStyle,
       })
       onChange({ queryString, isComplete })
     }
@@ -103,15 +108,19 @@ export default class QueryStringBuilder extends React.Component {
 
   componentDidMount() {
     // Ensure the default style is applied right away.
-    const { queryParams, badgeOptions } = this.state
-    this.noteQueryStringChanged({ queryParams, badgeOptions })
+    const { queryParams, badgeOptions, defaultStyle } = this.state
+    this.noteQueryStringChanged({ queryParams, badgeOptions, defaultStyle })
   }
 
   handleServiceQueryParamChange = event => {
     const { name, type } = event.target
     const value =
       type === 'checkbox' ? event.target.checked : event.target.value
-    const { queryParams: oldQueryParams, badgeOptions } = this.state
+    const {
+      queryParams: oldQueryParams,
+      badgeOptions,
+      defaultStyle,
+    } = this.state
 
     const queryParams = {
       ...oldQueryParams,
@@ -119,12 +128,16 @@ export default class QueryStringBuilder extends React.Component {
     }
 
     this.setState({ queryParams })
-    this.noteQueryStringChanged({ queryParams, badgeOptions })
+    this.noteQueryStringChanged({ queryParams, badgeOptions, defaultStyle })
   }
 
   handleBadgeOptionChange = event => {
     const { name, value } = event.target
-    const { badgeOptions: oldBadgeOptions, queryParams } = this.state
+    const {
+      badgeOptions: oldBadgeOptions,
+      queryParams,
+      defaultStyle,
+    } = this.state
 
     const badgeOptions = {
       ...oldBadgeOptions,
@@ -132,7 +145,7 @@ export default class QueryStringBuilder extends React.Component {
     }
 
     this.setState({ badgeOptions })
-    this.noteQueryStringChanged({ queryParams, badgeOptions })
+    this.noteQueryStringChanged({ queryParams, badgeOptions, defaultStyle })
   }
 
   renderServiceQueryParam({ name, value, isStringParam, stringParamCount }) {
