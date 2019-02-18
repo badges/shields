@@ -69,7 +69,7 @@ export function renderAsciiDocAttributes(positional, named) {
   if (items.length) {
     return `[${items.join(',')}]`
   } else {
-    return ''
+    return '[]'
   }
 }
 
