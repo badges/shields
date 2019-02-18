@@ -41,10 +41,10 @@ module.exports = function coalesceBadge(
   defaultBadgeData,
   { category, _cacheLength: defaultCacheSeconds } = {}
 ) {
-  // The "overrideX" naming is based on the endpoint badge, where these are
-  // indeed overrides for values supplied by an endpoint. In the case of the
-  // static-from-querystring badge this is the only way that most properties
-  // are parsed.
+  // The "overrideX" naming is based on services that provide badge
+  // parameters themselves, which can be overridden by a query string
+  // parameter. For some services however, the query string is the intended
+  // and indeed the only way to configure a badge parameter.
   const {
     style: overrideStyle,
     label: overrideLabel,
