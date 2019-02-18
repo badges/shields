@@ -18,19 +18,19 @@ const periodMap = {
 class BaseJsDelivrService extends BaseJsonService {
   static render({ period, hits }) {
     return {
-      message: `${metric(hits)} hits/${periodMap[period]}`,
+      message: `${metric(hits)}/${periodMap[period]}`,
     }
   }
 
   static get defaultBadgeData() {
     return {
       label: 'jsdelivr',
-      color: 'orange',
+      color: 'brightgreen',
     }
   }
 
   static get category() {
-    return 'other'
+    return 'downloads'
   }
 }
 
