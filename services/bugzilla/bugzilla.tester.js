@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { ServiceTester } = require('../tester')
+const t = (module.exports = require('../tester').createServiceTester())
 
 const bzBugStatus = Joi.equal(
   'unconfirmed',
@@ -15,11 +15,6 @@ const bzBugStatus = Joi.equal(
   'incomplete'
 )
 
-const t = (module.exports = new ServiceTester({
-  id: 'bugzilla',
-  title: 'Bugzilla',
-}))
-
 t.create('Bugzilla valid bug status')
   .get('/996038.json')
   .expectJSONTypes(
@@ -31,9 +26,4 @@ t.create('Bugzilla valid bug status')
 
 t.create('Bugzilla invalid bug status')
   .get('/83548978974387943879.json')
-  .expectJSON({ name: 'bug 83548978974387943879', value: 'not found' })
-
-t.create('Bugzilla failed request bug status')
-  .get('/996038.json')
-  .networkOff()
-  .expectJSON({ name: 'bug 996038', value: 'inaccessible' })
+  .expectJSON({ name: 'bugzilla', value: 'not found' })
