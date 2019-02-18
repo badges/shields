@@ -23,11 +23,8 @@ const StyledCode = styled.code`
   padding: 0.1em 0.3em;
 
   border-radius: 4px;
-  ${({ withBackground }) =>
-    withBackground !== false &&
-    css`
-      background: #eef;
-    `} font-family: Lekton;
+  background: #eef;
+  font-family: Lekton;
   font-size: ${({ fontSize }) => fontSize};
 
   white-space: nowrap;
