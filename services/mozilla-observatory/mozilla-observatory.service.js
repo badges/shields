@@ -66,6 +66,7 @@ module.exports = class MozillaObservatory extends BaseJsonService {
         pattern: 'grade/:host',
         namedParams: { host: 'github.com' },
         staticPreview: this.render({
+          which: 'grade',
           state: 'FINISHED',
           grade: 'A+',
           score: 115,
@@ -78,6 +79,7 @@ module.exports = class MozillaObservatory extends BaseJsonService {
         pattern: 'grade-score/:host',
         namedParams: { host: 'github.com' },
         staticPreview: this.render({
+          which: 'grade-score',
           state: 'FINISHED',
           grade: 'A+',
           score: 115,
