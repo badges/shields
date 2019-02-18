@@ -1,9 +1,6 @@
 'use strict'
 
-const { ServiceTester } = require('../tester')
-
-const t = new ServiceTester({ id: 'maintenance', title: 'Maintenance' })
-module.exports = t
+const t = (module.exports = require('../tester').createServiceTester())
 
 const currentYear = new Date().getUTCFullYear()
 
@@ -22,3 +19,7 @@ t.create('yes this year (yes)')
 t.create(`until end of ${currentYear} (yes)`)
   .get(`/until end of ${currentYear}/${currentYear}.json`)
   .expectJSON({ name: 'maintained', value: `until end of ${currentYear}` })
+
+t.create(`stale last maintained ${currentYear - 1} (yes)`)
+  .get(`/yes/${currentYear - 1}.json`)
+  .expectJSON({ name: 'maintained', value: `stale (as of ${currentYear})` })
