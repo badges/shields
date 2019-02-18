@@ -6,6 +6,7 @@ const {
   badgeUrlFromPattern,
   encodeField,
   staticBadgeUrl,
+  queryStringStaticBadgeUrl,
 } = require('./make-badge-url')
 
 describe('Badge URL generation functions', function() {
@@ -78,5 +79,34 @@ describe('Badge URL generation functions', function() {
       message: 'blue',
       color: 'blue',
     }).expect('/badge/-blue-blue.svg')
+  })
+
+  test(queryStringStaticBadgeUrl, () => {
+    // the query-string library sorts parameters by name
+    given({
+      label: 'foo',
+      message: 'bar',
+      color: 'blue',
+      style: 'flat-square',
+    }).expect(
+      '/static/v1.svg?color=blue&label=foo&message=bar&style=flat-square'
+    )
+    given({
+      label: 'foo Bar',
+      message: 'bar Baz',
+      color: 'blue',
+      style: 'flat-square',
+      format: 'png',
+      namedLogo: 'github',
+    }).expect(
+      '/static/v1.png?color=blue&label=foo%20Bar&logo=github&message=bar%20Baz&style=flat-square'
+    )
+    given({
+      label: 'Hello World',
+      message: 'Привет Мир',
+      color: '#aabbcc',
+    }).expect(
+      '/static/v1.svg?color=%23aabbcc&label=Hello%20World&message=%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82%20%D0%9C%D0%B8%D1%80'
+    )
   })
 })

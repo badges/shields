@@ -71,9 +71,38 @@ function staticBadgeUrl({
   return `${baseUrl}/badge/${path}.${format}${suffix}`
 }
 
+function queryStringStaticBadgeUrl({
+  baseUrl = '',
+  label,
+  message,
+  color = 'lightgray',
+  labelColor,
+  style,
+  namedLogo,
+  logoColor,
+  logoWidth,
+  logoPosition,
+  format = 'svg',
+  schemaVersion = '1',
+}) {
+  const suffix = `?${queryString.stringify({
+    label,
+    message,
+    color,
+    labelColor,
+    style,
+    logo: namedLogo,
+    logoColor,
+    logoWidth,
+    logoPosition,
+  })}`
+  return `${baseUrl}/static/v${schemaVersion}.${format}${suffix}`
+}
+
 module.exports = {
   badgeUrlFromPath,
   badgeUrlFromPattern,
   encodeField,
   staticBadgeUrl,
+  queryStringStaticBadgeUrl,
 }
