@@ -32,6 +32,9 @@ test(reStructuredText, () => {
 })
 
 test(asciiDoc, () => {
+  given('https://img.shields.io/badge.svg', undefined, undefined).expect(
+    'image:https://img.shields.io/badge.svg[]'
+  )
   given('https://img.shields.io/badge.svg', undefined, 'Example').expect(
     'image:https://img.shields.io/badge.svg[Example]'
   )

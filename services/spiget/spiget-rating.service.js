@@ -8,12 +8,12 @@ module.exports = class SpigetRatings extends BaseSpigetService {
   static get route() {
     return {
       base: 'spiget',
-      pattern: ':format(rating|stars)/:resourceid',
+      pattern: ':format(rating|stars)/:resourceId',
     }
   }
 
-  async handle({ format, resourceid }) {
-    const { rating } = await this.fetch({ resourceid })
+  async handle({ format, resourceId }) {
+    const { rating } = await this.fetch({ resourceId })
     return this.constructor.render({
       format,
       total: rating.count,
@@ -44,9 +44,9 @@ module.exports = class SpigetRatings extends BaseSpigetService {
     return [
       {
         title: 'Spiget Stars',
-        pattern: 'stars/:resourceid',
+        pattern: 'stars/:resourceId',
         namedParams: {
-          resourceid: '9089',
+          resourceId: '9089',
         },
         staticPreview: this.render({
           format: 'stars',
@@ -57,9 +57,9 @@ module.exports = class SpigetRatings extends BaseSpigetService {
       },
       {
         title: 'Spiget Rating',
-        pattern: 'rating/:resourceid',
+        pattern: 'rating/:resourceId',
         namedParams: {
-          resourceid: '9089',
+          resourceId: '9089',
         },
         staticPreview: this.render({ total: 325, average: 4.5 }),
         documentation,

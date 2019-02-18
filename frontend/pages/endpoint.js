@@ -8,6 +8,7 @@ import Header from '../components/header'
 import Footer from '../components/footer'
 import { BaseFont, GlobalStyle, H3, Badge } from '../components/common'
 import { Snippet } from '../components/snippet'
+import Customizer from '../components/customizer/customizer'
 
 const MainContainer = styled(BaseFont)`
   text-align: center;
@@ -112,7 +113,7 @@ const EndpointPage = () => (
       <p>
         Using the endpoint badge, you can provide content for a badge through a
         JSON endpoint. The content can be prerendered, or generated on the fly.
-        To strike a balance between responsiveness and bandwith utilization on
+        To strike a balance between responsiveness and bandwidth utilization on
         one hand, and freshness on the other, cache behavior is configurable,
         subject to the Shields minimum. The endpoint URL is provided to Shields
         through the query string. Shields fetches it and formats the badge.
@@ -221,6 +222,14 @@ const EndpointPage = () => (
         overridden by the user via the query string, but only to a longer value.
       </dd>
     </Schema>
+    <h4>Customize and test</h4>
+    <Customizer
+      baseUrl={baseUrl}
+      title="Custom badge"
+      pattern="/badge/endpoint"
+      exampleNamedParams={{}}
+      exampleQueryParams={{ url: 'https://shields.redsparr0w.com/2473/monday' }}
+    />
     <Footer baseUrl={baseUrl} />
   </MainContainer>
 )

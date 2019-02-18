@@ -120,14 +120,26 @@ export default class PathBuilder extends React.Component {
     return { path, isComplete }
   }
 
-  getPath(namedParams) {
-    const { tokens } = this.state
-    return this.constructor.constructPath({ tokens, namedParams })
+  notePathChanged({ tokens, namedParams }) {
+    const { onChange } = this.props
+    if (onChange) {
+      const { path, isComplete } = this.constructor.constructPath({
+        tokens,
+        namedParams,
+      })
+      onChange({ path, isComplete })
+    }
+  }
+
+  componentDidMount() {
+    // Ensure the default style is applied right away.
+    const { tokens, namedParams } = this.state
+    this.notePathChanged({ tokens, namedParams })
   }
 
   handleTokenChange = evt => {
     const { name, value } = evt.target
-    const { namedParams: oldNamedParams } = this.state
+    const { tokens, namedParams: oldNamedParams } = this.state
 
     const namedParams = {
       ...oldNamedParams,
@@ -135,12 +147,7 @@ export default class PathBuilder extends React.Component {
     }
 
     this.setState({ namedParams })
-
-    const { onChange } = this.props
-    if (onChange) {
-      const { path, isComplete } = this.getPath(namedParams)
-      onChange({ path, isComplete })
-    }
+    this.notePathChanged({ tokens, namedParams })
   }
 
   renderLiteral(literal, tokenIndex) {

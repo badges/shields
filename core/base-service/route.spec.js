@@ -1,5 +1,6 @@
 'use strict'
 
+const { expect } = require('chai')
 const { test, given, forCases } = require('sazerac')
 const { prepareRoute, namedParamsForMatch } = require('./route')
 
@@ -83,5 +84,21 @@ describe('Route helpers', function() {
         given('/foo/bar.bar.bar.json'),
       ]).expect({})
     })
+  })
+
+  context('The wrong number of params are declared', function() {
+    const { regex, captureNames } = prepareRoute({
+      base: 'foo',
+      format: '([^/]+)/([^/]+)',
+      capture: ['namedParamA'],
+    })
+
+    expect(() =>
+      namedParamsForMatch(captureNames, regex.exec('/foo/bar/baz.svg'), {
+        name: 'MyService',
+      })
+    ).to.throw(
+      'Service MyService declares incorrect number of named params (expected 2, got 1)'
+    )
   })
 })

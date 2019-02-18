@@ -3,10 +3,14 @@
 const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 
 module.exports = class SpigetTestedVersions extends BaseSpigetService {
+  static get category() {
+    return 'platform-support'
+  }
+
   static get route() {
     return {
       base: 'spiget/tested-versions',
-      pattern: ':resourceid',
+      pattern: ':resourceId',
     }
   }
 
@@ -17,8 +21,8 @@ module.exports = class SpigetTestedVersions extends BaseSpigetService {
     }
   }
 
-  async handle({ resourceid }) {
-    const { testedVersions } = await this.fetch({ resourceid })
+  async handle({ resourceId }) {
+    const { testedVersions } = await this.fetch({ resourceId })
     const { versions } = this.transform({ testedVersions })
     return this.constructor.render({ versions })
   }
@@ -44,9 +48,9 @@ module.exports = class SpigetTestedVersions extends BaseSpigetService {
   static get examples() {
     return [
       {
-        title: 'Spiget Tested Versions',
+        title: 'Spiget tested server versions',
         namedParams: {
-          resourceid: '9089',
+          resourceId: '9089',
         },
         staticPreview: this.render({ versions: '1.7-1.13' }),
         documentation,
