@@ -71,9 +71,41 @@ function staticBadgeUrl({
   return `${baseUrl}/badge/${path}.${format}${suffix}`
 }
 
+function dynamicBadgeUrl({
+  baseUrl,
+  datatype,
+  label,
+  dataUrl,
+  query,
+  prefix,
+  suffix,
+  color,
+  format = 'svg',
+}) {
+  const queryParams = {
+    label,
+    url: dataUrl,
+    query,
+  }
+
+  if (color) {
+    queryParams.colorB = color
+  }
+  if (prefix) {
+    queryParams.prefix = prefix
+  }
+  if (suffix) {
+    queryParams.suffix = suffix
+  }
+
+  const outQueryString = queryString.stringify(queryParams)
+  return `${baseUrl}/badge/dynamic/${datatype}.${format}?${outQueryString}`
+}
+
 module.exports = {
   badgeUrlFromPath,
   badgeUrlFromPattern,
   encodeField,
   staticBadgeUrl,
+  dynamicBadgeUrl,
 }

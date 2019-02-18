@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { staticBadgeUrl } from '../lib/badge-url'
+import { staticBadgeUrl } from '../../core/badge-urls/make-badge-url'
 import { baseUrl } from '../constants'
 import Meta from '../components/meta'
 import Header from '../components/header'
@@ -100,7 +100,12 @@ const EndpointPage = () => (
     />
     <p>Shields response:</p>
     <Badge
-      src={staticBadgeUrl(baseUrl, 'hello', 'sweet world', 'orange')}
+      src={staticBadgeUrl({
+        baseUrl,
+        label: 'hello',
+        message: 'sweet world',
+        color: 'orange',
+      })}
       alt="hello | sweet world"
     />
     <Explanation>

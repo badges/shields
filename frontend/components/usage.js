@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'gatsby'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { staticBadgeUrl } from '../lib/badge-url'
+import { staticBadgeUrl } from '../../core/badge-urls/make-badge-url'
 import { advertisedStyles, shieldsLogos } from '../../supported-features.json'
 import StaticBadgeMaker from './static-badge-maker'
 import DynamicBadgeMaker from './dynamic-badge-maker'
@@ -68,7 +68,7 @@ const ColorExamples = ({ baseUrl, colors }) => (
     {colors.map((color, i) => (
       <Badge
         key={color}
-        src={staticBadgeUrl(baseUrl, '', color, color)}
+        src={staticBadgeUrl({ baseUrl, label: '', message: color, color })}
         alt={color}
       />
     ))}
@@ -91,8 +91,12 @@ export default class Usage extends React.PureComponent {
         <tbody>
           {advertisedStyles.map(style => {
             const snippet = `?style=${style}&logo=appveyor`
-            const badgeUrl = staticBadgeUrl(baseUrl, 'style', style, 'green', {
-              logo: 'appveyor',
+            const badgeUrl = staticBadgeUrl({
+              baseUrl,
+              label: 'style',
+              message: style,
+              color: 'green',
+              namedLogo: 'appveyor',
               style,
             })
             return (

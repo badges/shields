@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { dynamicBadgeUrl } from '../lib/badge-url'
+import { dynamicBadgeUrl } from '../../core/badge-urls/make-badge-url'
 import { InlineInput } from './common'
 
 export default class DynamicBadgeMaker extends React.Component {
@@ -11,7 +11,7 @@ export default class DynamicBadgeMaker extends React.Component {
   state = {
     datatype: '',
     label: '',
-    url: '',
+    dataUrl: '',
     query: '',
     color: '',
     prefix: '',
@@ -19,9 +19,22 @@ export default class DynamicBadgeMaker extends React.Component {
   }
 
   makeBadgeUrl() {
-    const { datatype, label, url, query, color, prefix, suffix } = this.state
+    const {
+      datatype,
+      label,
+      dataUrl,
+      query,
+      color,
+      prefix,
+      suffix,
+    } = this.state
     const { baseUrl: baseUrl = document.location.href } = this.props
-    return dynamicBadgeUrl(baseUrl, datatype, label, url, query, {
+    return dynamicBadgeUrl({
+      baseUrl: baseUrl || window.location.href,
+      datatype,
+      label,
+      dataUrl,
+      query,
       color,
       prefix,
       suffix,
@@ -34,8 +47,8 @@ export default class DynamicBadgeMaker extends React.Component {
   }
 
   get isValid() {
-    const { datatype, label, url, query } = this.state
-    return datatype && label && url && query
+    const { datatype, label, dataUrl, query } = this.state
+    return datatype && label && dataUrl && query
   }
 
   render() {
@@ -61,9 +74,9 @@ export default class DynamicBadgeMaker extends React.Component {
         />
         <InlineInput
           className="short"
-          value={this.state.url}
-          onChange={event => this.setState({ url: event.target.value })}
-          placeholder="url"
+          value={this.state.dataUrl}
+          onChange={event => this.setState({ dataUrl: event.target.value })}
+          placeholder="data url"
         />
         <InlineInput
           className="short"
