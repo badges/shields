@@ -25,11 +25,9 @@ module.exports = deprecatedService({
     format: '(?:.+)',
   },
   label: 'imagelayers',
-  dateAdded: new Date('2018-12-13'),
+  dateAdded: new Date('2019-xx-xx'), // Be sure to update this with today's date!
 })
 ```
-
-Be sure to use today's date!
 
 ## Update Service Tests
 
