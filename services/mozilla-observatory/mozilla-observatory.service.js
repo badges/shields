@@ -63,7 +63,7 @@ module.exports = class MozillaObservatory extends BaseJsonService {
     return [
       {
         title: 'Mozilla HTTP Observatory Grade',
-        pattern: 'mozilla-observatory/grade/:host',
+        pattern: 'grade/:host',
         namedParams: { host: 'github.com' },
         staticPreview: this.render({
           state: 'FINISHED',
@@ -75,7 +75,7 @@ module.exports = class MozillaObservatory extends BaseJsonService {
       },
       {
         title: 'Mozilla HTTP Observatory Grade (with score)',
-        pattern: 'mozilla-observatory/grade-score/:host',
+        pattern: 'grade-score/:host',
         namedParams: { host: 'github.com' },
         staticPreview: this.render({
           state: 'FINISHED',
