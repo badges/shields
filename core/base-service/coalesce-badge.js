@@ -43,8 +43,10 @@ module.exports = function coalesceBadge(
 ) {
   // The "overrideX" naming is based on services that provide badge
   // parameters themselves, which can be overridden by a query string
-  // parameter. For some services however, the query string is the intended
-  // and indeed the only way to configure a badge parameter.
+  // parameter. (For a couple services, the dynamic badge and the
+  // query-string-based static badge, the service never sets a value
+  // so the query string overrides are the _only_ way to configure
+  // these badge parameters.
   const {
     style: overrideStyle,
     label: overrideLabel,
