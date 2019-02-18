@@ -52,6 +52,8 @@ const globalQueryParams = new Set([
   'link',
   'colorA',
   'colorB',
+  'color',
+  'labelColor',
 ])
 
 function flattenQueryParams(queryParams) {
