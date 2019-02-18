@@ -113,7 +113,7 @@ const EndpointPage = () => (
       <p>
         Using the endpoint badge, you can provide content for a badge through a
         JSON endpoint. The content can be prerendered, or generated on the fly.
-        To strike a balance between responsiveness and bandwith utilization on
+        To strike a balance between responsiveness and bandwidth utilization on
         one hand, and freshness on the other, cache behavior is configurable,
         subject to the Shields minimum. The endpoint URL is provided to Shields
         through the query string. Shields fetches it and formats the badge.
