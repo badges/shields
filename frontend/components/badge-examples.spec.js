@@ -1,6 +1,5 @@
 import React from 'react'
-import { shallow, render } from 'enzyme'
-import { expect } from 'chai'
+import { shallow } from 'enzyme'
 import BadgeExamples from './badge-examples'
 
 import '../enzyme-conf.spec'

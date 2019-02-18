@@ -1,6 +1,5 @@
 import React from 'react'
 import { render } from 'enzyme'
-import { expect } from 'chai'
 import { Snippet } from './snippet'
 
 import '../enzyme-conf.spec'
