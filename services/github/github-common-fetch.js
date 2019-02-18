@@ -51,7 +51,7 @@ async function fetchJsonFromRepo(
     return serviceInstance.constructor._validate(json, schema)
   } else {
     const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${filename}`
-    return await serviceInstance._requestJson({
+    return serviceInstance._requestJson({
       schema,
       url,
       errorMessages,
