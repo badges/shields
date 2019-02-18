@@ -4,7 +4,7 @@ import { expect } from 'chai'
 import { CategoryHeading, CategoryHeadings } from './category-headings'
 import { H3 } from './common'
 
-import './enzyme-conf.spec'
+import '../enzyme-conf.spec'
 
 const exampleCategories = [{ id: 'cat', name: 'Example category' }]
 

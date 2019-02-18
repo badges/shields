@@ -3,7 +3,7 @@ import { render } from 'enzyme'
 import { expect } from 'chai'
 import { Snippet } from './snippet'
 
-import './enzyme-conf.spec'
+import '../enzyme-conf.spec'
 
 describe('<Snippet />', function() {
   it('renders', function() {

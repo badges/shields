@@ -3,7 +3,7 @@ import { shallow, render } from 'enzyme'
 import { expect } from 'chai'
 import * as common from './common'
 
-import './enzyme-conf.spec'
+import '../enzyme-conf.spec'
 
 describe('Common modules', function() {
   describe('<GlobalStyle />', function() {

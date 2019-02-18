@@ -3,7 +3,7 @@ import { shallow, render } from 'enzyme'
 import { expect } from 'chai'
 import BadgeExamples from './badge-examples'
 
-import './enzyme-conf.spec'
+import '../enzyme-conf.spec'
 
 const exampleServiceDefinitions = [
   {
