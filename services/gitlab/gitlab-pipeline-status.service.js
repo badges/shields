@@ -27,7 +27,7 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
     return {
       base: 'gitlab/pipeline',
       pattern: ':user/:repo/:branch*',
-      queryParams: ['gitlab_url'],
+      queryParamSchema,
     }
   }
 
@@ -63,10 +63,10 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
     return renderBuildStatusBadge({ status })
   }
 
-  async handle({ user, repo, branch = 'master' }, queryParams) {
-    const {
-      gitlab_url: baseUrl = 'https://gitlab.com',
-    } = this.constructor._validateQueryParams(queryParams, queryParamSchema)
+  async handle(
+    { user, repo, branch = 'master' },
+    { gitlab_url: baseUrl = 'https://gitlab.com' }
+  ) {
     const { message: status } = await this._requestSvg({
       schema: badgeSchema,
       url: `${baseUrl}/${user}/${repo}/badges/${branch}/pipeline.svg`,
