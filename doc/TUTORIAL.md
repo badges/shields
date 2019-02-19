@@ -37,7 +37,7 @@ install node and npm: https://nodejs.org/en/download/
    `git clone git@github.com:YOURGITHUBUSERNAME/shields.git`
 3. `cd shields`
 4. Install project dependencies
-   `npm install`
+   `npm ci`
 5. Run the server
    `npm start`
 6. Visit the website to check the front-end is loaded:

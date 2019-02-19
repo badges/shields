@@ -100,7 +100,7 @@ You can read a [tutorial on how to add a badge][tutorial].
 1. Install Node 8 or later. You can use the [package manager][] of your choice.
    Tests need to pass in Node 8 and 9.
 2. Clone this repository.
-3. Run `npm install` to install the dependencies.
+3. Run `npm ci` to install the dependencies.
 4. Run `npm start` to start the server.
 5. Open `http://localhost:3000/` to view the frontend.
 
