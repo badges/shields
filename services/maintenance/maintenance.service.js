@@ -1,8 +1,8 @@
 'use strict'
 
-const { BaseService } = require('..')
+const { NonMemoryCachingBaseService } = require('..')
 
-module.exports = class Maintenance extends BaseService {
+module.exports = class Maintenance extends NonMemoryCachingBaseService {
   static get route() {
     return {
       base: 'maintenance',
@@ -51,11 +51,12 @@ module.exports = class Maintenance extends BaseService {
   static get category() {
     return 'other'
   }
+
   static get examples() {
     return [
       {
         title: 'Maintenance',
-        pattern: ':maintained/:year',
+        pattern: ':maintained(yes|no)/:year',
         namedParams: {
           maintained: 'yes',
           year: '2019',
