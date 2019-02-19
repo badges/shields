@@ -1,7 +1,8 @@
 'use strict'
 
 const { expect } = require('chai')
-const { validateExample } = require('./transform-example')
+const { test, given } = require('sazerac')
+const { validateExample, transformExample } = require('./transform-example')
 
 describe('validateExample function', function() {
   it('passes valid examples', function() {
@@ -70,5 +71,98 @@ describe('validateExample function', function() {
         validateExample(example, 0, { route: {}, name: 'mockService' })
       ).to.throw(Error)
     })
+  })
+})
+
+test(transformExample, function() {
+  const ExampleService = {
+    name: 'ExampleService',
+    route: {
+      base: 'some-service',
+      pattern: ':interval/:packageName',
+    },
+    defaultBadgeData: {
+      label: 'downloads',
+    },
+  }
+
+  given(
+    {
+      pattern: 'dt/:packageName',
+      namedParams: { packageName: 'express' },
+      staticPreview: { message: '50k' },
+      keywords: ['hello'],
+    },
+    0,
+    ExampleService
+  ).expect({
+    title: 'ExampleService',
+    example: {
+      pattern: '/some-service/dt/:packageName',
+      namedParams: { packageName: 'express' },
+      queryParams: {},
+    },
+    preview: {
+      label: 'downloads',
+      message: '50k',
+      color: 'lightgrey',
+      namedLogo: undefined,
+      style: undefined,
+    },
+    keywords: ['hello'],
+    documentation: undefined,
+  })
+
+  given(
+    {
+      namedParams: { interval: 'dt', packageName: 'express' },
+      staticPreview: { message: '50k' },
+      keywords: ['hello'],
+    },
+    0,
+    ExampleService
+  ).expect({
+    title: 'ExampleService',
+    example: {
+      pattern: '/some-service/:interval/:packageName',
+      namedParams: { interval: 'dt', packageName: 'express' },
+      queryParams: {},
+    },
+    preview: {
+      label: 'downloads',
+      message: '50k',
+      color: 'lightgrey',
+      namedLogo: undefined,
+      style: undefined,
+    },
+    keywords: ['hello'],
+    documentation: undefined,
+  })
+
+  given(
+    {
+      namedParams: { interval: 'dt', packageName: 'express' },
+      queryParams: { registry_url: 'http://example.com/' },
+      staticPreview: { message: '50k' },
+      keywords: ['hello'],
+    },
+    0,
+    ExampleService
+  ).expect({
+    title: 'ExampleService',
+    example: {
+      pattern: '/some-service/:interval/:packageName',
+      namedParams: { interval: 'dt', packageName: 'express' },
+      queryParams: { registry_url: 'http://example.com/' },
+    },
+    preview: {
+      label: 'downloads',
+      message: '50k',
+      color: 'lightgrey',
+      namedLogo: undefined,
+      style: undefined,
+    },
+    keywords: ['hello'],
+    documentation: undefined,
   })
 })
