@@ -75,7 +75,7 @@ function queryStringStaticBadgeUrl({
   baseUrl = '',
   label,
   message,
-  color = 'lightgray',
+  color,
   labelColor,
   style,
   namedLogo,
