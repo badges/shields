@@ -20,7 +20,7 @@ module.exports = class Endpoint extends BaseJsonService {
 
   static get route() {
     return {
-      base: 'badge/endpoint',
+      base: 'endpoint',
       pattern: '',
       queryParams: ['url'],
     }

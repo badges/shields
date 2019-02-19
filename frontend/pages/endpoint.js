@@ -88,7 +88,7 @@ const EndpointPage = () => (
     <Meta />
     <Header />
     <H3 id="static-badge">Endpoint (Beta)</H3>
-    <Snippet snippet={`${baseUrl}/badge/endpoint.svg?url=...&style=...`} />
+    <Snippet snippet={`${baseUrl}/endpoint.svg?url=...&style=...`} />
     <p>Endpoint response:</p>
     <JsonExample
       data={{
@@ -226,7 +226,7 @@ const EndpointPage = () => (
     <Customizer
       baseUrl={baseUrl}
       title="Custom badge"
-      pattern="/badge/endpoint"
+      pattern="/endpoint"
       exampleNamedParams={{}}
       exampleQueryParams={{ url: 'https://shields.redsparr0w.com/2473/monday' }}
     />
