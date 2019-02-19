@@ -179,6 +179,14 @@ describe('coalesceBadge', function() {
       ).to.equal(getShieldsIcon({ name: 'npm', color: 'blue' })).and.not.be
         .empty
     })
+
+    // https://github.com/badges/shields/issues/2998
+    it('overrides logoSvg', function() {
+      const logoSvg = 'data:image/svg+xml;base64,PHN2ZyB4bWxu'
+      expect(coalesceBadge({ logo: 'npm' }, { logoSvg }, {}).logo).to.equal(
+        getShieldsIcon({ name: 'npm' })
+      ).and.not.be.empty
+    })
   })
 
   describe('Custom logos', function() {

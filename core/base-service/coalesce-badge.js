@@ -44,6 +44,7 @@ module.exports = function coalesceBadge(
   const {
     style: overrideStyle,
     label: overrideLabel,
+    logo: overrideLogo,
     logoColor: overrideLogoColor,
     link: overrideLink,
   } = overrides
@@ -62,9 +63,6 @@ module.exports = function coalesceBadge(
   }
   overrideLogoWidth = +overrideLogoWidth || undefined
   overrideLogoPosition = +overrideLogoPosition || undefined
-  // `?logo=` could be a named logo or encoded svg. Split up these cases.
-  const overrideLogoSvgBase64 = decodeDataUrlFromQueryParam(overrides.logo)
-  const overrideNamedLogo = overrideLogoSvgBase64 ? undefined : overrides.logo
 
   const {
     isError,
@@ -81,9 +79,6 @@ module.exports = function coalesceBadge(
     cacheSeconds: serviceCacheSeconds,
     style: serviceStyle,
   } = serviceData
-  const serviceLogoSvgBase64 = serviceLogoSvg
-    ? svg2base64(serviceLogoSvg)
-    : undefined
 
   const {
     color: defaultColor,
@@ -94,21 +89,40 @@ module.exports = function coalesceBadge(
 
   const style = coalesce(overrideStyle, serviceStyle)
 
-  const namedLogo = coalesce(
-    overrideNamedLogo,
-    serviceNamedLogo,
-    style === 'social' ? defaultNamedLogo : undefined
-  )
-  const namedLogoSvgBase64 = prepareNamedLogo({
-    name: namedLogo,
-    color: coalesce(
-      overrideLogoColor,
-      // If the logo has been overridden it does not make sense to inherit
-      // the color.
-      overrideNamedLogo ? undefined : serviceLogoColor
-    ),
-    style,
-  })
+  let namedLogo, namedLogoColor, logoWidth, logoPosition, logoSvgBase64
+  if (overrideLogo) {
+    // `?logo=` could be a named logo or encoded svg.
+    const overrideLogoSvgBase64 = decodeDataUrlFromQueryParam(overrideLogo)
+    if (overrideLogoSvgBase64) {
+      logoSvgBase64 = overrideLogoSvgBase64
+    } else {
+      namedLogo = overrideLogo
+      // If the logo has been overridden it does not make sense to inherit the
+      // original color, width, or position.
+      namedLogoColor = overrideLogoColor
+      logoWidth = overrideLogoWidth
+      logoPosition = overrideLogoPosition
+    }
+  } else {
+    if (serviceLogoSvg) {
+      logoSvgBase64 = svg2base64(serviceLogoSvg)
+    } else {
+      namedLogo = coalesce(
+        serviceNamedLogo,
+        style === 'social' ? defaultNamedLogo : undefined
+      )
+      namedLogoColor = coalesce(overrideLogoColor, serviceLogoColor)
+      logoWidth = coalesce(overrideLogoWidth, serviceLogoWidth)
+      logoPosition = coalesce(overrideLogoPosition, serviceLogoPosition)
+    }
+  }
+  if (namedLogo) {
+    logoSvgBase64 = prepareNamedLogo({
+      name: namedLogo,
+      color: namedLogoColor,
+      style,
+    })
+  }
 
   return {
     text: [
@@ -132,21 +146,9 @@ module.exports = function coalesceBadge(
     ),
     template: style,
     namedLogo,
-    logo: coalesce(
-      overrideLogoSvgBase64,
-      serviceLogoSvgBase64,
-      namedLogoSvgBase64
-    ),
-    logoWidth: coalesce(
-      overrideLogoWidth,
-      // If the logo has been overridden it does not make sense to inherit
-      // the width or position.
-      overrideNamedLogo ? undefined : serviceLogoWidth
-    ),
-    logoPosition: coalesce(
-      overrideLogoPosition,
-      overrideNamedLogo ? undefined : serviceLogoPosition
-    ),
+    logo: logoSvgBase64,
+    logoWidth,
+    logoPosition,
     links: toArray(overrideLink || serviceLink),
     cacheLengthSeconds: coalesce(serviceCacheSeconds, defaultCacheSeconds),
   }
