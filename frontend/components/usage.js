@@ -314,10 +314,9 @@ export default class Usage extends React.PureComponent {
                   <a href="https://simpleicons.org/" target="_BLANK">
                     simple-icons
                   </a>
-                  . Simple-icons are referenced by name as they appear on
-                  simple-icons site. Spaces may be URL Encoded (e.g:{' '}
-                  <StyledCode>?logo=visual%20studio%20code</StyledCode>) or you
-                  can use dashes (e.g:{' '}
+                  . Simple-icons are referenced using names as they appear on
+                  the simple-icons site. If the name includes spaces, replace
+                  them with dashes (e.g:{' '}
                   <StyledCode>?logo=visual-studio-code</StyledCode>)
                 </span>
               }
