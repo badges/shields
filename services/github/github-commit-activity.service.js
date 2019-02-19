@@ -36,7 +36,7 @@ module.exports = class GithubCommitActivity extends LegacyService {
         namedParams: { interval: 'm', user: 'eslint', repo: 'eslint' },
         staticPreview: {
           label: 'commit activity',
-          message: '457/year',
+          message: '457/month',
           color: 'blue',
         },
         keywords: ['commits'],
