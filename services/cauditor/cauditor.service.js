@@ -9,4 +9,5 @@ module.exports = deprecatedService({
     format: '(?:mi|ccn|npath|hi|i|ca|ce|dit)/(?:[^/]+)/(?:[^/]+)/(?:.+)',
   },
   label: 'cauditor',
+  dateAdded: new Date('2018-02-15'),
 })

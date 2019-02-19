@@ -4,9 +4,10 @@ export function bareLink(badgeUrl, link, title = '') {
 
 export function html(badgeUrl, link, title) {
   // To be more robust, this should escape the title.
-  const img = `<img alt="${title}" src="${badgeUrl}">`
+  const alt = title ? ` alt="${title}"` : ''
+  const img = `<img${alt} src="${badgeUrl}">`
   if (link) {
-    return `<a href=${link}>${img}</a>`
+    return `<a href="${link}">${img}</a>`
   } else {
     return img
   }
@@ -33,13 +34,11 @@ export function reStructuredText(badgeUrl, link, title) {
 }
 
 function quoteAsciiDocAttribute(attr) {
-  if (typeof attr === 'string') {
-    const withQuotesEscaped = attr.replace(/"/g, '\\"')
-    return `"${withQuotesEscaped}"`
-  } else if (attr == null) {
+  if (attr == null) {
     return 'None'
   } else {
-    return attr
+    const withQuotesEscaped = attr.replace(/"/g, '\\"')
+    return `"${withQuotesEscaped}"`
   }
 }
 
@@ -55,7 +54,8 @@ function mapValues(obj, iteratee) {
 export function renderAsciiDocAttributes(positional, named) {
   // http://asciidoc.org/userguide.html#X21
   const needsQuoting =
-    positional.some(attr => attr.includes(',')) || Object.keys(named).length > 0
+    positional.some(attr => attr && attr.includes(',')) ||
+    Object.keys(named).length > 0
 
   if (needsQuoting) {
     positional = positional.map(attr => quoteAsciiDocAttribute(attr))
@@ -69,7 +69,7 @@ export function renderAsciiDocAttributes(positional, named) {
   if (items.length) {
     return `[${items.join(',')}]`
   } else {
-    return ''
+    return '[]'
   }
 }
 
@@ -78,14 +78,6 @@ export function asciiDoc(badgeUrl, link, title) {
   const named = link ? { link } : {}
   const attrs = renderAsciiDocAttributes(positional, named)
   return `image:${badgeUrl}${attrs}`
-}
-
-export default function generateAllMarkup(badgeUrl, link, title) {
-  // This is a wee bit "clever". It runs each of the three functions on the
-  // parameters provided, and returns the result in an object.
-  return mapValues({ markdown, reStructuredText, asciiDoc }, fn =>
-    fn(badgeUrl, link, title)
-  )
 }
 
 export function generateMarkup({ badgeUrl, link, title, markupFormat }) {

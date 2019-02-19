@@ -79,6 +79,11 @@ t.create('Status with http (not https)')
   )
   .expectJSON({ name: 'discourse', value: 'online' })
 
+t.create('Status (offline)')
+  .get('/https/meta.discourse.org/status.json')
+  .networkOff()
+  .expectJSON({ name: 'discourse', value: 'inaccessible' })
+
 t.create('Invalid Host')
   .get('/https/some.host/status.json')
   .intercept(nock =>
@@ -86,21 +91,7 @@ t.create('Invalid Host')
       .get('/site/statistics.json')
       .reply(404, '<h1>Not Found</h1>')
   )
-  .expectJSON({ name: 'discourse', value: 'inaccessible' })
-
-t.create('Invalid Stat')
-  .get('/https/meta.discourse.org/unknown.json')
-  .intercept(nock =>
-    nock('https://meta.discourse.org')
-      .get('/site/statistics.json')
-      .reply(200, data)
-  )
-  .expectJSON({ name: 'discourse', value: 'invalid' })
-
-t.create('Connection Error')
-  .get('/https/meta.discourse.org/status.json')
-  .networkOff()
-  .expectJSON({ name: 'discourse', value: 'inaccessible' })
+  .expectJSON({ name: 'discourse', value: 'not found' })
 
 t.create('Topics (live)')
   .get('/https/meta.discourse.org/topics.json')

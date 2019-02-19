@@ -19,7 +19,7 @@ export default class Customizer extends React.Component {
     pattern: PropTypes.string.isRequired,
     exampleNamedParams: PropTypes.object.isRequired,
     exampleQueryParams: PropTypes.object.isRequired,
-    defaultStyle: PropTypes.string,
+    initialStyle: PropTypes.string,
   }
 
   indicatorRef = React.createRef()
@@ -137,7 +137,7 @@ export default class Customizer extends React.Component {
       pattern,
       exampleNamedParams,
       exampleQueryParams,
-      defaultStyle,
+      initialStyle,
     } = this.props
 
     return (
@@ -149,7 +149,7 @@ export default class Customizer extends React.Component {
         />
         <QueryStringBuilder
           exampleParams={exampleQueryParams}
-          defaultStyle={defaultStyle}
+          initialStyle={initialStyle}
           onChange={this.handleQueryStringChange}
         />
         <div>{this.renderMarkupAndLivePreview()}</div>
