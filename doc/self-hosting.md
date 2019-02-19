@@ -14,7 +14,7 @@ curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -; sudo apt-get ins
 ```sh
 git clone https://github.com/badges/shields.git
 cd shields
-npm install  # You may need sudo for this.
+npm ci  # You may need sudo for this.
 ```
 
 [package manager]: https://nodejs.org/en/download/package-manager/
