@@ -1,6 +1,11 @@
 'use strict'
 
+const Joi = require('joi')
 const { BaseStaticService, InvalidParameter } = require('..')
+
+const queryParamSchema = Joi.object({
+  message: Joi.string().required(),
+}).required()
 
 module.exports = class QueryStringStaticBadge extends BaseStaticService {
   static get category() {
@@ -20,6 +25,13 @@ module.exports = class QueryStringStaticBadge extends BaseStaticService {
   handle(namedParams, queryParams) {
     if (namedParams.schemaVersion !== '1') {
       throw new InvalidParameter({ prettyMessage: 'Invalid schemaVersion' })
+    }
+    const result = Joi.validate(
+      { message: queryParams.message },
+      queryParamSchema
+    )
+    if (result.error) {
+      throw new InvalidParameter({ prettyMessage: 'Missing message' })
     }
 
     return { message: queryParams.message }
