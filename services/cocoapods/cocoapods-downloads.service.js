@@ -9,4 +9,5 @@ module.exports = deprecatedService({
     pattern: ':interval(dm|dw|dt)/:spec',
   },
   label: 'downloads',
+  dateAdded: new Date('2018-01-06'),
 })

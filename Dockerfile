@@ -1,4 +1,4 @@
-FROM node:8.9.4-alpine
+FROM node:8-alpine
 
 RUN apk add --no-cache gettext imagemagick librsvg git
 
@@ -10,9 +10,9 @@ ARG NODE_ENV
 ENV NODE_ENV $NODE_ENV
 
 COPY package.json package-lock.json /usr/src/app/
-# Without the gh-badges package.json and CLI script in place, `npm install` will fail.
+# Without the gh-badges package.json and CLI script in place, `npm ci` will fail.
 COPY gh-badges /usr/src/app/gh-badges/
-RUN npm install
+RUN npm ci
 
 COPY . /usr/src/app
 RUN npm run build
