@@ -331,6 +331,7 @@ describe('BaseService', function() {
           queryParams: [],
         },
       })
+      // The in-depth tests for examples reside in transform-example.spec.js
       expect(examples).to.have.lengthOf(1)
     })
   })
