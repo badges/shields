@@ -17,7 +17,9 @@ const schema = Joi.object({
         'measured',
         'analyzed',
         'finished'
-      ).allow('').required(),
+      )
+        .allow('')
+        .required(),
       grade: Joi.equal('platinum', 'gold', 'silver', 'bronze', 'none'),
       violations: Joi.object({
         // RE: https://github.com/NaturalIntelligence/fast-xml-parser/issues/68

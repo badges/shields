@@ -47,30 +47,6 @@ createTest(t, 'live (stars): nonexistent project', { withMockCreds: false })
     value: 'project not found',
   })
 
-createTest(t, '404 project not found stars')
-  .get(`/${sampleProjectUuid}.json`)
-  .intercept(nock =>
-    nock('https://insight.symfony.com/api/projects')
-      .get(`/${sampleProjectUuid}`)
-      .reply(404)
-  )
-  .expectJSON({
-    name: 'symfony insight',
-    value: 'project not found',
-  })
-
-createTest(t, '401 not authorized stars')
-  .get(`/${sampleProjectUuid}.json`)
-  .intercept(nock =>
-    nock('https://insight.symfony.com/api/projects')
-      .get(`/${sampleProjectUuid}`)
-      .reply(401)
-  )
-  .expectJSON({
-    name: 'symfony insight',
-    value: 'not authorized to access project',
-  })
-
 createTest(t, 'pending project stars')
   .get(`/${sampleProjectUuid}.json?style=_shields_test`)
   .intercept(nock =>

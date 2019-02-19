@@ -12,7 +12,7 @@ module.exports = class SymfonyInsightViolations extends SymfonyInsightBase {
     numInfoViolations,
   }) {
     const label = 'violations'
-    if (status !== 'finished') {
+    if (status !== 'finished' && status !== '') {
       return {
         label,
         message: 'pending',

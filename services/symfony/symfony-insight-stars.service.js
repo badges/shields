@@ -18,7 +18,7 @@ const gradeStars = {
 module.exports = class SymfonyInsightStars extends SymfonyInsightBase {
   static render({ status, grade }) {
     const label = 'stars'
-    if (status !== 'finished') {
+    if (status !== 'finished' && status !== '') {
       return {
         label,
         message: 'pending',
