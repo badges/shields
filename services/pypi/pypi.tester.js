@@ -215,6 +215,14 @@ t.create('python versions (valid, no package version specified)')
     })
   )
 
+t.create('python versions ("Only" and others)')
+  .get('/pyversions/uvloop/0.12.1.json')
+  .expectJSON({ name: 'python', value: '3.5 | 3.6 | 3.7' })
+
+t.create('python versions ("Only" only)')
+  .get('/pyversions/hashpipe/0.9.1.json')
+  .expectJSON({ name: 'python', value: '3' })
+
 t.create('python versions (no versions specified)')
   .get('/pyversions/pyshp/1.2.12.json')
   .expectJSON({ name: 'python', value: 'missing' })
