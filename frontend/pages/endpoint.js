@@ -87,7 +87,7 @@ const EndpointPage = () => (
     <GlobalStyle />
     <Meta />
     <Header />
-    <H3 id="static-badge">Endpoint (Beta)</H3>
+    <H3>Endpoint (Beta)</H3>
     <Snippet snippet={`${baseUrl}/badge/endpoint.svg?url=...&style=...`} />
     <p>Endpoint response:</p>
     <JsonExample
@@ -100,8 +100,8 @@ const EndpointPage = () => (
     />
     <p>Shields response:</p>
     <Badge
-      src={staticBadgeUrl(baseUrl, 'hello', 'sweet world', 'orange')}
       alt="hello | sweet world"
+      src={staticBadgeUrl(baseUrl, 'hello', 'sweet world', 'orange')}
     />
     <Explanation>
       <p>
@@ -226,10 +226,10 @@ const EndpointPage = () => (
     <h4>Customize and test</h4>
     <Customizer
       baseUrl={baseUrl}
-      title="Custom badge"
-      pattern="/badge/endpoint"
       exampleNamedParams={{}}
       exampleQueryParams={{ url: 'https://shields.redsparr0w.com/2473/monday' }}
+      pattern="/badge/endpoint"
+      title="Custom badge"
     />
     <Footer baseUrl={baseUrl} />
   </MainContainer>

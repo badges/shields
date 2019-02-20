@@ -6,7 +6,6 @@ public:
   metrics:
     prometheus:
       enabled: 'METRICS_PROMETHEUS_ENABLED'
-      allowedIps: 'METRICS_PROMETHEUS_ALLOWED_IPS'
 
   ssl:
     isSecure: 'HTTPS'

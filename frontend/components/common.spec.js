@@ -37,7 +37,9 @@ describe('Common modules', function() {
 
     it('contains a link to the image', function() {
       const wrapper = render(<common.Badge src="/badge/foo-bar-blue.svg" />)
-      expect(wrapper.html()).to.contain('<img src="/badge/foo-bar-blue.svg"')
+      expect(wrapper.html()).to.contain(
+        '<img alt="" src="/badge/foo-bar-blue.svg">'
+      )
     })
   })
 
