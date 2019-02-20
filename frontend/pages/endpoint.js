@@ -173,11 +173,12 @@ const EndpointPage = () => (
       <dd>
         Default: <code>lightgrey</code>. The right color. Supports the eight
         named colors above, as well as hex, rgb, rgba, hsl, hsla and css named
-        colors.
+        colors. This can be overridden by the query string.
       </dd>
       <dt>labelColor</dt>
       <dd>
-        Default: <code>grey</code>. The left color.
+        Default: <code>grey</code>. The left color. This can be overridden by
+        the query string.
       </dd>
       <dt>isError</dt>
       <dd>
