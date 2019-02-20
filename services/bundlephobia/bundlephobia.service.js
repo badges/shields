@@ -4,8 +4,6 @@ const prettyBytes = require('pretty-bytes')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const LegacyService = require('../legacy-service')
 
-const keywords = ['node']
-
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //
 // Tips for rewriting:
@@ -27,26 +25,15 @@ module.exports = class Bundlephobia extends LegacyService {
   static get examples() {
     return [
       {
-        title: 'npm bundle size (minified)',
-        pattern: 'min/:packageName',
-        namedParams: { packageName: 'react' },
+        title: 'npm bundle size',
+        pattern: ':format(min|minzip)/:packageName',
+        namedParams: { format: 'minzip', packageName: 'react' },
         staticPreview: {
           label: 'minified size',
-          message: '6.06 kB',
-          color: 'blue',
-        },
-        keywords,
-      },
-      {
-        title: 'npm bundle size (minified + gzip)',
-        pattern: 'minzip/:packageName',
-        namedParams: { packageName: 'react' },
-        staticPreview: {
-          label: 'minzipped size',
           message: '2.57 kB',
           color: 'blue',
         },
-        keywords,
+        keywords: ['node'],
       },
     ]
   }
