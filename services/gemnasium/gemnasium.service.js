@@ -9,4 +9,5 @@ module.exports = deprecatedService({
     format: '(?:.+)',
   },
   label: 'gemnasium',
+  dateAdded: new Date('2018-05-15'),
 })

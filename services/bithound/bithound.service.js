@@ -2,7 +2,6 @@
 
 const { deprecatedService } = require('..')
 
-// bitHound integration - deprecated as of July 2018
 module.exports = deprecatedService({
   category: 'dependencies',
   route: {
@@ -10,4 +9,5 @@ module.exports = deprecatedService({
     format: '(?:code/|dependencies/|devDependencies/)?(?:.+?)',
   },
   label: 'bithound',
+  dateAdded: new Date('2018-07-08'),
 })
