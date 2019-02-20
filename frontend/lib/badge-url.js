@@ -38,7 +38,7 @@ export function dynamicBadgeUrl(
   })
 
   if (color) {
-    queryParams.colorB = color
+    queryParams.color = color
   }
   if (prefix) {
     queryParams.prefix = prefix
