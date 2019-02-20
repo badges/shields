@@ -1,7 +1,7 @@
 'use strict'
 
-const redis = require('redis')
 const { promisify } = require('util')
+const redis = require('redis')
 const log = require('../server/log')
 const TokenPersistence = require('./token-persistence')
 

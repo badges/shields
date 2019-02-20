@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const { expect } = require('chai')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('No URL specified')

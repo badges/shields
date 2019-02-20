@@ -1,9 +1,9 @@
 'use strict'
 
 const fs = require('fs')
-const bytes = require('bytes')
 const path = require('path')
 const url = require('url')
+const bytes = require('bytes')
 const Joi = require('joi')
 const Camp = require('camp')
 const makeBadge = require('../../gh-badges/lib/make-badge')

@@ -3,7 +3,6 @@
 const Joi = require('joi')
 const { expect } = require('chai')
 const sinon = require('sinon')
-
 const BaseXmlService = require('./base-xml')
 
 const dummySchema = Joi.object({

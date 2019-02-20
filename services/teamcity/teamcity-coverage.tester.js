@@ -2,14 +2,13 @@
 
 const Joi = require('joi')
 const { isIntegerPercentage } = require('../test-validators')
+const t = (module.exports = require('../tester').createServiceTester())
 const {
   mockTeamCityCreds,
   pass,
   user,
   restore,
 } = require('./teamcity-test-helpers')
-
-const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('live: valid buildId')
   .get('/ReactJSNet_PullRequests.json')

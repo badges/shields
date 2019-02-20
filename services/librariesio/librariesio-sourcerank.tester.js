@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const { anyInteger } = require('../validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('sourcerank')

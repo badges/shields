@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const EclipseMarketplaceBase = require('./eclipse-marketplace-base')
 const { nonNegativeInteger } = require('../validators')
+const EclipseMarketplaceBase = require('./eclipse-marketplace-base')
 
 const favoritesResponseSchema = Joi.object({
   marketplace: Joi.object({

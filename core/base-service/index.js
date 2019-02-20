@@ -7,10 +7,8 @@ const BaseStaticService = require('./base-static')
 const BaseSvgScrapingService = require('./base-svg-scraping')
 const BaseXmlService = require('./base-xml')
 const BaseYamlService = require('./base-yaml')
-
 const deprecatedService = require('./deprecated-service')
 const redirector = require('./redirector')
-
 const {
   NotFound,
   InvalidResponse,

@@ -4,7 +4,6 @@ const Joi = require('joi')
 const { expect } = require('chai')
 const sinon = require('sinon')
 const trace = require('./trace')
-
 const {
   NotFound,
   Inaccessible,
