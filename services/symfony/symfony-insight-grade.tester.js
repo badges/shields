@@ -52,18 +52,6 @@ createTest(t, 'live: nonexistent project', { withMockCreds: false })
     value: 'project not found',
   })
 
-createTest(t, '404 project not found grade')
-  .get(`/${sampleProjectUuid}.json`)
-  .intercept(nock =>
-    nock('https://insight.symfony.com/api/projects')
-      .get(`/${sampleProjectUuid}`)
-      .reply(404)
-  )
-  .expectJSON({
-    name: 'symfony insight',
-    value: 'project not found',
-  })
-
 createTest(t, '401 not authorized grade')
   .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
