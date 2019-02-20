@@ -33,7 +33,7 @@ module.exports = class jsDelivrHitsGitHub extends BaseJsDelivrService {
           user: 'jquery',
           repo: 'jquery',
         },
-        staticPreview: this.render({ period: 'hd', hits: 9809876 }),
+        staticPreview: this.render({ period: 'hm', hits: 9809876 }),
       },
     ]
   }
