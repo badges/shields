@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
+const { downloadCount } = require('../../lib/color-formatters')
 const { metric } = require('../../lib/text-formatters')
 const { BaseJsonService } = require('..')
 
@@ -19,13 +20,13 @@ class BaseJsDelivrService extends BaseJsonService {
   static render({ period, hits }) {
     return {
       message: `${metric(hits)}/${periodMap[period]}`,
+      color: downloadCount(hits),
     }
   }
 
   static get defaultBadgeData() {
     return {
       label: 'jsdelivr',
-      color: 'brightgreen',
     }
   }
 
