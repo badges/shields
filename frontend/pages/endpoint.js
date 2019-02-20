@@ -87,7 +87,7 @@ const EndpointPage = () => (
     <GlobalStyle />
     <Meta />
     <Header />
-    <H3 id="static-badge">Endpoint (Beta)</H3>
+    <H3>Endpoint (Beta)</H3>
     <Snippet snippet={`${baseUrl}/badge/endpoint.svg?url=...&style=...`} />
     <p>Endpoint response:</p>
     <JsonExample
