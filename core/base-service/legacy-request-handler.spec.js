@@ -297,17 +297,17 @@ describe('The request handler', function() {
         beforeEach(function() {
           register({ cacheHeaderConfig: standardCacheHeaders })
         })
-        const expectedCacheKey = '/testing/123.json?colorB=123&label=foo'
+        const expectedCacheKey = '/testing/123.json?color=123&label=foo'
         it('should match expected and use canonical order - 1', async function() {
           const res = await fetch(
-            `${baseUrl}/testing/123.json?colorB=123&label=foo`
+            `${baseUrl}/testing/123.json?color=123&label=foo`
           )
           expect(res.ok).to.be.true
           expect(_requestCache.cache).to.have.keys(expectedCacheKey)
         })
         it('should match expected and use canonical order - 2', async function() {
           const res = await fetch(
-            `${baseUrl}/testing/123.json?label=foo&colorB=123`
+            `${baseUrl}/testing/123.json?label=foo&color=123`
           )
           expect(res.ok).to.be.true
           expect(_requestCache.cache).to.have.keys(expectedCacheKey)

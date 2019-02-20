@@ -15,7 +15,7 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: npm install
+          command: npm ci
 
       - save_cache:
           paths:
@@ -37,7 +37,7 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: npm install
+          command: npm ci
 
       - save_cache:
           paths:
@@ -88,7 +88,7 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: npm install
+          command: npm ci
 
       - run:
           name: Linter
@@ -135,7 +135,7 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: npm install
+          command: npm ci
 
       - run:
           name: Integration tests
@@ -164,7 +164,7 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: npm install
+          command: npm ci
 
       - run:
           name: Integration tests
@@ -191,7 +191,7 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: npm install
+          command: npm ci
 
       - run:
           name: Danger
@@ -215,7 +215,7 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: npm install
+          command: npm ci
 
       - run:
           name: Prepare frontend tests
@@ -250,7 +250,7 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: npm install
+          command: npm ci
 
       - run:
           name: Identify services tagged in the PR title
@@ -280,7 +280,7 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: npm install
+          command: npm ci
 
       - run:
           name: Identify services tagged in the PR title

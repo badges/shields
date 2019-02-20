@@ -9,4 +9,5 @@ module.exports = deprecatedService({
     format: 's/(?:.+)',
   },
   label: 'libscore',
+  dateAdded: new Date('2018-09-22'),
 })

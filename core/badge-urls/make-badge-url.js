@@ -80,16 +80,18 @@ function dynamicBadgeUrl({
   prefix,
   suffix,
   color,
+  style,
   format = 'svg',
 }) {
   const queryParams = {
     label,
     url: dataUrl,
     query,
+    style,
   }
 
   if (color) {
-    queryParams.colorB = color
+    queryParams.color = color
   }
   if (prefix) {
     queryParams.prefix = prefix

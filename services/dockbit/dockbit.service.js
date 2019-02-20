@@ -1,7 +1,7 @@
 'use strict'
 
 const { deprecatedService } = require('..')
-// dockbit integration - deprecated as of December 2017.
+
 module.exports = deprecatedService({
   category: 'build',
   route: {
@@ -9,4 +9,5 @@ module.exports = deprecatedService({
     format: '(?:.+)',
   },
   label: 'dockbit',
+  dateAdded: new Date('2017-12-31'),
 })
