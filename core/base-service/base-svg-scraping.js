@@ -12,7 +12,7 @@ const leadingWhitespace = /(?:\r\n\s*|\r\s*|\n\s*)/g
 class BaseSvgScrapingService extends BaseService {
   static valueFromSvgBadge(svg, valueMatcher = defaultValueMatcher) {
     if (typeof svg !== 'string') {
-      throw TypeError('Parameter should be a string')
+      throw new TypeError('Parameter should be a string')
     }
     const stripped = svg.replace(leadingWhitespace, '')
     const match = valueMatcher.exec(stripped)
