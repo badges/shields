@@ -168,9 +168,10 @@ export default class Usage extends React.PureComponent {
     const { baseUrl } = this.props
     return (
       <section>
-        <H2 id="your-badge">Your Badge</H2>
+        <a name="your-badge" />
+        <H2>Your Badge</H2>
 
-        <H3 id="static-badge">Static</H3>
+        <H3>Static</H3>
         <StaticBadgeMaker baseUrl={baseUrl} />
 
         <VerticalSpace />
@@ -215,7 +216,7 @@ export default class Usage extends React.PureComponent {
           />
         </p>
 
-        <H3 id="endpoint">Endpoint (Beta)</H3>
+        <H3>Endpoint (Beta)</H3>
 
         <p>
           <Snippet
