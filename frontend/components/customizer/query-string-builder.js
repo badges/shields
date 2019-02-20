@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import humanizeString from 'humanize-string'
 import { stringify as stringifyQueryString } from 'query-string'
 import { advertisedStyles } from '../../../supported-features.json'
+import { objectOfKeyValuesPropType } from '../../lib/service-definitions/service-definition-prop-types'
 import { noAutocorrect, StyledInput } from '../common'
 import {
   BuilderContainer,
@@ -280,7 +281,7 @@ export default class QueryStringBuilder extends React.Component {
   }
 }
 QueryStringBuilder.propTypes = {
-  exampleParams: PropTypes.object.isRequired,
+  exampleParams: objectOfKeyValuesPropType,
   initialStyle: PropTypes.string,
   onChange: PropTypes.func,
 }
