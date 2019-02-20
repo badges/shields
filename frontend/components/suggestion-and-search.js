@@ -81,8 +81,8 @@ export default class SuggestionAndSearch extends React.Component {
 
     return (
       <BadgeExamples
-        definitions={transformed}
         baseUrl={baseUrl}
+        definitions={transformed}
         onClick={this.props.onBadgeClick}
       />
     )
@@ -93,16 +93,16 @@ export default class SuggestionAndSearch extends React.Component {
       <section>
         <form action="javascript:void 0" autoComplete="off">
           <BlockInput
-            onChange={event => this.queryChanged(event.target.value)}
-            autofill="off"
             autoFocus
+            autofill="off"
+            onChange={event => this.queryChanged(event.target.value)}
             placeholder="search / project URL"
           />
           <br />
           <button
-            onClick={event => this.getSuggestions(event.target.value)}
             disabled={this.state.inProgress}
             hidden={!this.state.isUrl}
+            onClick={event => this.getSuggestions(event.target.value)}
           >
             Suggest badges
           </button>
