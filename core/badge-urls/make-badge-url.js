@@ -86,7 +86,7 @@ function queryStringStaticBadgeUrl({
 }) {
   // schemaVersion could be a parameter if we iterate on it,
   // for now it's hardcoded to the only supported version.
-  const schemaVersion = '1';
+  const schemaVersion = '1'
   const suffix = `?${queryString.stringify({
     label,
     message,
