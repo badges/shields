@@ -2,6 +2,7 @@ package.json
 package-lock.json
 /__snapshots__
 /.next
+/.cache
 /build
 /public
 /coverage

@@ -33,8 +33,9 @@ module.exports = class Sourceforge extends LegacyService {
     return [
       {
         title: 'SourceForge',
-        pattern: 'dm/:project',
+        pattern: ':interval(dt|dm|dw|dd)/:project',
         namedParams: {
+          interval: 'dm',
           project: 'sevenzip',
         },
         staticPreview: {
@@ -45,50 +46,15 @@ module.exports = class Sourceforge extends LegacyService {
       },
       {
         title: 'SourceForge',
-        pattern: 'dw/:project',
+        pattern: ':interval(dt|dm|dw|dd)/:project/:folder',
         namedParams: {
-          project: 'sevenzip',
-        },
-        staticPreview: {
-          label: 'downloads',
-          message: '52k/week',
-          color: 'brightgreen',
-        },
-      },
-      {
-        title: 'SourceForge',
-        pattern: 'dd/:project',
-        namedParams: {
-          project: 'sevenzip',
-        },
-        staticPreview: {
-          label: 'downloads',
-          message: '6k/day',
-          color: 'brightgreen',
-        },
-      },
-      {
-        title: 'SourceForge',
-        pattern: 'dt/:project',
-        namedParams: {
-          project: 'sevenzip',
-        },
-        staticPreview: {
-          label: 'downloads',
-          message: '416M',
-          color: 'brightgreen',
-        },
-      },
-      {
-        title: 'SourceForge',
-        pattern: 'dt/:project/:folder',
-        namedParams: {
+          interval: 'dm',
           project: 'arianne',
           folder: 'stendhal',
         },
         staticPreview: {
           label: 'downloads',
-          message: '177k',
+          message: '550/month',
           color: 'brightgreen',
         },
       },
