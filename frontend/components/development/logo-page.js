@@ -32,19 +32,19 @@ const NamedLogoTable = ({ logoNames }) => (
         <tr key={name}>
           <td>
             <Badge
+              alt={`logo: ${name}`}
               src={staticBadgeUrl(baseUrl, 'named logo', name, 'blue', {
                 logo: name,
               })}
-              alt={`logo: ${name}`}
             />
           </td>
           <td>
             <Badge
+              alt={`logo: ${name}`}
               src={staticBadgeUrl(baseUrl, 'Named Logo', name, 'blue', {
                 logo: name,
                 style: 'social',
               })}
-              alt={`logo: ${name}`}
             />
           </td>
         </tr>
