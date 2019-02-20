@@ -23,43 +23,20 @@ module.exports = class GithubCommitActivity extends LegacyService {
   static get route() {
     return {
       base: 'github/commit-activity',
-      pattern: ':interval(y|4w|w)/:user/:repo',
+      pattern: ':interval(y|m|4w|w)/:user/:repo',
     }
   }
 
   static get examples() {
     return [
       {
-        title: 'GitHub commit activity the past year',
-        pattern: 'y/:user/:repo',
-        namedParams: { user: 'eslint', repo: 'eslint' },
+        title: 'GitHub commit activity',
+        // Override the pattern to omit the deprecated interval "4w".
+        pattern: ':interval(y|m|w)/:user/:repo',
+        namedParams: { interval: 'm', user: 'eslint', repo: 'eslint' },
         staticPreview: {
           label: 'commit activity',
-          message: '457/year',
-          color: 'blue',
-        },
-        keywords: ['commits'],
-        documentation,
-      },
-      {
-        title: 'GitHub commit activity the past month',
-        pattern: 'm/:user/:repo',
-        namedParams: { user: 'eslint', repo: 'eslint' },
-        staticPreview: {
-          label: 'commit activity',
-          message: '38/month',
-          color: 'blue',
-        },
-        keywords: ['commits'],
-        documentation,
-      },
-      {
-        title: 'GitHub commit activity the past week',
-        pattern: 'w/:user/:repo',
-        namedParams: { user: 'eslint', repo: 'eslint' },
-        staticPreview: {
-          label: 'commit activity',
-          message: '9/week',
+          message: '457/month',
           color: 'blue',
         },
         keywords: ['commits'],

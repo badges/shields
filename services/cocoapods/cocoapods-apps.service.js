@@ -9,4 +9,5 @@ module.exports = deprecatedService({
     pattern: ':interval(aw|at)/:spec',
   },
   label: 'apps',
+  dateAdded: new Date('2018-01-06'),
 })

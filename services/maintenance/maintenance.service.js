@@ -1,77 +1,69 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const log = require('../../core/server/log')
+const { NonMemoryCachingBaseService } = require('..')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class Maintenance extends LegacyService {
-  static get category() {
-    return 'other'
-  }
-
+module.exports = class Maintenance extends NonMemoryCachingBaseService {
   static get route() {
     return {
       base: 'maintenance',
-      pattern: ':maintained(yes|no)/:year(\\d{4})',
+      pattern: ':maintained/:year(\\d{4})',
     }
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'maintained',
+    }
+  }
+
+  async handle({ maintained, year }) {
+    const now = new Date()
+    const cy = now.getUTCFullYear() // current year.
+    const m = now.getUTCMonth() // month.
+
+    if (maintained === 'no') {
+      return this.constructor.render({ message: `no! (as of ${year})` })
+    } else if (cy <= year) {
+      return this.constructor.render({ message: maintained })
+    } else if (parseInt(cy) === parseInt(year) + 1 && parseInt(m) < 3) {
+      return this.constructor.render({ message: `stale (as of ${cy})` })
+    } else {
+      return this.constructor.render({ message: `no! (as of ${year})` })
+    }
+  }
+
+  static render({ message }) {
+    if (message.startsWith('yes')) {
+      return {
+        message,
+        color: 'brightgreen',
+      }
+    } else if (message.startsWith('no')) {
+      return {
+        message,
+        color: 'red',
+      }
+    } else {
+      return { message }
+    }
+  }
+
+  static get category() {
+    return 'other'
   }
 
   static get examples() {
     return [
       {
         title: 'Maintenance',
-        pattern: ':maintained/:year',
+        pattern: ':maintained(yes|no)/:year',
         namedParams: {
           maintained: 'yes',
           year: '2019',
         },
-        staticPreview: {
-          label: 'yes',
-          message: '2019',
-          color: 'brightgreen',
-        },
+        staticPreview: this.render({ message: 'yes' }),
         keywords: ['maintained'],
       },
     ]
-  }
-
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/maintenance\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const status = match[1] // eg, yes
-        const year = +match[2] // eg, 2016
-        const format = match[3]
-        const badgeData = getBadgeData('maintained', data)
-        try {
-          const now = new Date()
-          const cy = now.getUTCFullYear() // current year.
-          const m = now.getUTCMonth() // month.
-          if (status === 'no') {
-            badgeData.text[1] = `no! (as of ${year})`
-            badgeData.colorscheme = 'red'
-          } else if (cy <= year) {
-            badgeData.text[1] = status
-            badgeData.colorscheme = 'brightgreen'
-          } else if (cy === year + 1 && m < 3) {
-            badgeData.text[1] = `stale (as of ${cy})`
-          } else {
-            badgeData.text[1] = `no! (as of ${year})`
-            badgeData.colorscheme = 'red'
-          }
-          sendBadge(format, badgeData)
-        } catch (e) {
-          log.error(e.stack)
-          badgeData.text[1] = 'invalid'
-          sendBadge(format, badgeData)
-        }
-      })
-    )
   }
 }

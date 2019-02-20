@@ -43,18 +43,6 @@ class DummyService extends BaseService {
         staticPreview: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
         keywords: ['hello'],
       },
-      {
-        namedParams: { namedParamA: 'World' },
-        staticPreview: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
-        keywords: ['hello'],
-      },
-      {
-        pattern: ':world',
-        namedParams: { world: 'World' },
-        queryParams: { queryParamA: '!!!' },
-        staticPreview: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
-        keywords: ['hello'],
-      },
     ]
   }
 
@@ -343,59 +331,8 @@ describe('BaseService', function() {
           queryParams: [],
         },
       })
-
-      const [first, second, third] = examples
-      expect(first).to.deep.equal({
-        title: 'DummyService',
-        example: {
-          pattern: '/foo/:world',
-          namedParams: { world: 'World' },
-          queryParams: {},
-        },
-        preview: {
-          label: 'cat',
-          message: 'Hello namedParamA: foo with queryParamA: bar',
-          color: 'lightgrey',
-          namedLogo: undefined,
-          style: undefined,
-        },
-        keywords: ['hello'],
-        documentation: undefined,
-      })
-      expect(second).to.deep.equal({
-        title: 'DummyService',
-        example: {
-          pattern: '/foo/:namedParamA',
-          namedParams: { namedParamA: 'World' },
-          queryParams: {},
-        },
-        preview: {
-          label: 'cat',
-          message: 'Hello namedParamA: foo with queryParamA: bar',
-          color: 'lightgrey',
-          namedLogo: undefined,
-          style: undefined,
-        },
-        keywords: ['hello'],
-        documentation: undefined,
-      })
-      expect(third).to.deep.equal({
-        title: 'DummyService',
-        example: {
-          pattern: '/foo/:world',
-          namedParams: { world: 'World' },
-          queryParams: { queryParamA: '!!!' },
-        },
-        preview: {
-          color: 'lightgrey',
-          label: 'cat',
-          message: 'Hello namedParamA: foo with queryParamA: bar',
-          namedLogo: undefined,
-          style: undefined,
-        },
-        keywords: ['hello'],
-        documentation: undefined,
-      })
+      // The in-depth tests for examples reside in transform-example.spec.js
+      expect(examples).to.have.lengthOf(1)
     })
   })
 

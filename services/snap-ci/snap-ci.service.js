@@ -8,4 +8,5 @@ module.exports = deprecatedService({
     format: 'snap(?:-ci?)/(?:[^/]+/[^/]+)(?:/(?:.+))',
   },
   label: 'snap ci',
+  dateAdded: new Date('2018-01-23'),
 })

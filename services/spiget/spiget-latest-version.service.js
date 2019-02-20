@@ -13,22 +13,22 @@ module.exports = class SpigetLatestVersion extends BaseSpigetService {
   static get route() {
     return {
       base: 'spiget/version',
-      pattern: ':resourceid',
+      pattern: ':resourceId',
     }
   }
 
   static get defaultBadgeData() {
     return {
-      label: 'version',
+      label: 'spiget',
       color: 'blue',
     }
   }
 
-  async handle({ resourceid }) {
+  async handle({ resourceId }) {
     const { name } = await this.fetch({
-      resourceid,
+      resourceId,
       schema: versionSchema,
-      url: `https://api.spiget.org/v2/resources/${resourceid}/versions/latest`,
+      url: `https://api.spiget.org/v2/resources/${resourceId}/versions/latest`,
     })
     return renderVersionBadge({ version: name })
   }
@@ -36,12 +36,13 @@ module.exports = class SpigetLatestVersion extends BaseSpigetService {
   static get category() {
     return 'version'
   }
+
   static get examples() {
     return [
       {
         title: 'Spiget Version',
         namedParams: {
-          resourceid: '9089',
+          resourceId: '9089',
         },
         staticPreview: renderVersionBadge({ version: 2.1 }),
         documentation,
