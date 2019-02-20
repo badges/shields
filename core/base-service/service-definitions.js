@@ -3,7 +3,7 @@
 const Joi = require('joi')
 
 // This should be kept in sync with the schema in
-// `frontend/libe/service-definitions/service-definition-prop-types.js`.
+// `frontend/lib/service-definitions/service-definition-prop-types.js`.
 
 const arrayOfStrings = Joi.array()
   .items(Joi.string())

@@ -30,8 +30,9 @@ const examplePropType = PropTypes.exact({
 
 const serviceDefinitionPropType = PropTypes.exact({
   category: PropTypes.string.isRequired,
-  named: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   isDeprecated: PropTypes.bool.isRequired,
+  // Route is missing for e.g. Buildkite.
   route: PropTypes.oneOfType([
     PropTypes.exact({
       pattern: PropTypes.string.isRequired,
@@ -41,7 +42,7 @@ const serviceDefinitionPropType = PropTypes.exact({
       format: PropTypes.string.isRequired,
       queryParams: arrayOfStringsPropType,
     }),
-  ]).isRequired,
+  ]),
   examples: PropTypes.arrayOf(examplePropType).isRequired,
 }).isRequired
 
