@@ -2,19 +2,11 @@
 
 const prometheus = require('prom-client')
 
-class PrometheusMetrics {
+module.exports = class PrometheusMetrics {
   constructor(config = {}) {
     this.enabled = config.enabled || false
-    const matchNothing = /(?!)/
-    this.allowedIps = config.allowedIps
-      ? new RegExp(config.allowedIps)
-      : matchNothing
     if (this.enabled) {
-      console.log(
-        `Metrics are enabled. Access to /metrics resource is limited to IP addresses matching: ${
-          this.allowedIps
-        }`
-      )
+      console.log('Metrics are enabled.')
     }
   }
 
@@ -28,16 +20,8 @@ class PrometheusMetrics {
 
   setRoutes(server, register) {
     server.route(/^\/metrics$/, (data, match, end, ask) => {
-      const ip = ask.req.socket.remoteAddress
-      if (this.allowedIps.test(ip)) {
-        ask.res.setHeader('Content-Type', register.contentType)
-        ask.res.end(register.metrics())
-      } else {
-        ask.res.statusCode = 403
-        ask.res.end()
-      }
+      ask.res.setHeader('Content-Type', register.contentType)
+      ask.res.end(register.metrics())
     })
   }
 }
-
-module.exports = PrometheusMetrics
