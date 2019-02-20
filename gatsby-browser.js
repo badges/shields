@@ -11,6 +11,6 @@ function scrollToElementId(id) {
 
 export function onRouteUpdate({ location: { hash } }) {
   if (hash) {
-    window.setTimeout(() => scrollToElementId(hash), 25)
+    window.setTimeout(() => scrollToElementId(hash), 10)
   }
 }
