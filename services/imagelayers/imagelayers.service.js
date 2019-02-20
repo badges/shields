@@ -2,7 +2,6 @@
 
 const { deprecatedService } = require('..')
 
-// image layers integration - deprecated as of November 2018.
 module.exports = deprecatedService({
   category: 'size',
   route: {
@@ -10,4 +9,5 @@ module.exports = deprecatedService({
     format: '(?:.+)',
   },
   label: 'imagelayers',
+  dateAdded: new Date('2018-11-18'),
 })
