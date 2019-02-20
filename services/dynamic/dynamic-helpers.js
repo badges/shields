@@ -22,5 +22,4 @@ function createRoute(which) {
 
 module.exports = {
   createRoute,
-  queryParamSchema,
 }
