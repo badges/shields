@@ -26,7 +26,7 @@ const QueryParamCaption = styled(BuilderCaption)`
 const supportedBadgeOptions = [
   { name: 'style', shieldsDefaultValue: 'flat' },
   { name: 'label', label: 'override label' },
-  { name: 'colorB', label: 'override color' },
+  { name: 'color', label: 'override color' },
   { name: 'logo', label: 'named logo' },
   { name: 'logoColor', label: 'override logo color' },
 ]

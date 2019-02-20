@@ -243,7 +243,7 @@ export default class Usage extends React.PureComponent {
             >
               $.DATA.SUBDATA
             </a>
-            &gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
+            &gt;&amp;color=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
           </StyledCode>
         </p>
         <p>
@@ -257,7 +257,7 @@ export default class Usage extends React.PureComponent {
             >
               //data/subdata
             </a>
-            &gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
+            &gt;&amp;color=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
           </StyledCode>
         </p>
         <p>
@@ -271,7 +271,7 @@ export default class Usage extends React.PureComponent {
             >
               $.DATA.SUBDATA
             </a>
-            &gt;&amp;colorB=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
+            &gt;&amp;color=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
           </StyledCode>
         </p>
 
@@ -314,6 +314,10 @@ export default class Usage extends React.PureComponent {
                   <a href="https://simpleicons.org/" target="_BLANK">
                     simple-icons
                   </a>
+                  . Simple-icons are referenced using names as they appear on
+                  the simple-icons site. If the name includes spaces, replace
+                  them with dashes (e.g:{' '}
+                  <StyledCode>?logo=visual-studio-code</StyledCode>)
                 </span>
               }
             />
@@ -352,22 +356,24 @@ export default class Usage extends React.PureComponent {
               }
             />
             <QueryParam
-              key="colorA"
-              snippet="?colorA=abcdef"
+              key="labelColor"
+              snippet="?labelColor=abcdef"
               documentation={
                 <span>
                   Set background of the left part (hex, rgb, rgba, hsl, hsla and
-                  css named colors supported)
+                  css named colors supported). The legacy name "colorA" is also
+                  supported.
                 </span>
               }
             />
             <QueryParam
-              key="colorB"
-              snippet="?colorB=fedcba"
+              key="color"
+              snippet="?color=fedcba"
               documentation={
                 <span>
                   Set background of the right part (hex, rgb, rgba, hsl, hsla
-                  and css named colors supported)
+                  and css named colors supported). The legacy name "colorB" is
+                  also supported.
                 </span>
               }
             />
