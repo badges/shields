@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { staticBadgeUrl } from '../lib/badge-url'
+import { staticBadgeUrl } from '../../core/badge-urls/make-badge-url'
 import { InlineInput } from './common'
 
 export default class StaticBadgeMaker extends React.Component {
@@ -19,12 +19,12 @@ export default class StaticBadgeMaker extends React.Component {
 
     const { baseUrl } = this.props
     const { label, message, color } = this.state
-    const badgeUrl = staticBadgeUrl(
-      baseUrl || window.location.href,
+    const badgeUrl = staticBadgeUrl({
+      baseUrl: baseUrl || window.location.href,
       label,
       message,
-      color
-    )
+      color,
+    })
 
     document.location = badgeUrl
   }
