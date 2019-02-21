@@ -58,7 +58,7 @@ describe('Badge URL functions', function() {
         '?label=foo',
         `&url=${encodeURIComponent(dataUrl)}`,
         `&query=${encodeURIComponent(query)}`,
-        '&colorB=blue',
+        '&color=blue',
         `&suffix=${encodeURIComponent(suffix)}`,
         '&style=plastic',
       ].join('')

@@ -45,7 +45,7 @@ async function fetchJsonFromRepo(
     try {
       decoded = Buffer.from(content, 'base64').toString('utf-8')
     } catch (e) {
-      throw InvalidResponse({ prettyMessage: 'undecodable content' })
+      throw new InvalidResponse({ prettyMessage: 'undecodable content' })
     }
     const json = serviceInstance._parseJson(decoded)
     return serviceInstance.constructor._validate(json, schema)

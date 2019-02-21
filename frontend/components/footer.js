@@ -15,43 +15,43 @@ const Footer = ({ baseUrl }) => (
 
     <p>
       <object
+        alt="Follow @shields_io"
         data={resolveUrl(
           '/twitter/follow/shields_io.svg?style=social&label=Follow',
           baseUrl
         )}
-        alt="Follow @shields_io"
       />{' '}
       {}
       <object
+        alt="Donate to us!"
         data={resolveUrl(
           '/opencollective/backers/shields.svg?style=social&link=https://opencollective.com/shields',
           baseUrl
         )}
-        alt="Donate to us!"
       />{' '}
       {}
       <object
+        alt="Donate to us!"
         data={resolveUrl(
           '/opencollective/sponsors/shields.svg?style=social&link=https://opencollective.com/shields',
           baseUrl
         )}
-        alt="Donate to us!"
       />{' '}
       {}
       <object
+        alt="Fork on GitHub"
         data={resolveUrl(
           '/github/forks/badges/shields.svg?style=social&label=Fork',
           baseUrl
         )}
-        alt="Fork on GitHub"
       />{' '}
       {}
       <object
+        alt="chat on Discord"
         data={resolveUrl(
           '/discord/308323056592486420.svg?style=social&label=Chat&link=https://discord.gg/HjJCwm5',
           baseUrl
         )}
-        alt="chat on Discord"
       />
     </p>
 
