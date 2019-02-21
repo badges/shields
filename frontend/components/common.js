@@ -62,8 +62,8 @@ const Badge = ({
   clickable = false,
   ...rest
 }) => (
-  <BadgeWrapper height={height} clickable={clickable} display={display}>
-    {src ? <img src={src} alt={alt} {...rest} /> : nonBreakingSpace}
+  <BadgeWrapper clickable={clickable} display={display} height={height}>
+    {src ? <img alt={alt} src={src} {...rest} /> : nonBreakingSpace}
   </BadgeWrapper>
 )
 Badge.propTypes = {
