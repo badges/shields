@@ -56,10 +56,10 @@ export default class DynamicBadgeMaker extends React.Component {
       <form onSubmit={e => this.handleSubmit(e)}>
         <select
           className="short"
-          value={this.state.datatype}
           onChange={event => this.setState({ datatype: event.target.value })}
+          value={this.state.datatype}
         >
-          <option value="" disabled>
+          <option disabled value="">
             data type
           </option>
           <option value="json">json</option>
@@ -68,39 +68,39 @@ export default class DynamicBadgeMaker extends React.Component {
         </select>{' '}
         <InlineInput
           className="short"
-          value={this.state.label}
           onChange={event => this.setState({ label: event.target.value })}
           placeholder="label"
+          value={this.state.label}
         />
         <InlineInput
           className="short"
-          value={this.state.dataUrl}
           onChange={event => this.setState({ dataUrl: event.target.value })}
           placeholder="data url"
+          value={this.state.dataUrl}
         />
         <InlineInput
           className="short"
-          value={this.state.query}
           onChange={event => this.setState({ query: event.target.value })}
           placeholder="query"
+          value={this.state.query}
         />
         <InlineInput
           className="short"
-          value={this.state.color}
           onChange={event => this.setState({ color: event.target.value })}
           placeholder="color"
+          value={this.state.color}
         />
         <InlineInput
           className="short"
-          value={this.state.prefix}
           onChange={event => this.setState({ prefix: event.target.value })}
           placeholder="prefix"
+          value={this.state.prefix}
         />
         <InlineInput
           className="short"
-          value={this.state.suffix}
           onChange={event => this.setState({ suffix: event.target.value })}
           placeholder="suffix"
+          value={this.state.suffix}
         />
         <button disabled={!this.isValid}>Make Badge</button>
       </form>

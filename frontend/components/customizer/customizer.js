@@ -107,7 +107,7 @@ export default class Customizer extends React.Component {
     return (
       <div>
         {this.renderLivePreview()}
-        <CopiedContentIndicator ref={indicatorRef} copiedContent="Copied">
+        <CopiedContentIndicator copiedContent="Copied" ref={indicatorRef}>
           <RequestMarkupButtom
             isDisabled={!pathIsComplete}
             onMarkupRequested={this.copyMarkup}
@@ -142,9 +142,9 @@ export default class Customizer extends React.Component {
     return (
       <form action="">
         <PathBuilder
-          pattern={pattern}
           exampleParams={exampleNamedParams}
           onChange={this.handlePathChange}
+          pattern={pattern}
         />
         <QueryStringBuilder
           exampleParams={exampleQueryParams}

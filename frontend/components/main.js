@@ -108,9 +108,9 @@ export default class Main extends React.Component {
       <div key={id}>
         <CategoryHeading category={category} />
         <BadgeExamples
+          baseUrl={baseUrl}
           definitions={definitions}
           onClick={this.handleExampleSelected}
-          baseUrl={baseUrl}
         />
       </div>
     )
@@ -156,15 +156,15 @@ export default class Main extends React.Component {
         <Meta />
         <Header />
         <MarkupModal
+          baseUrl={baseUrl}
           example={selectedExample}
           onRequestClose={this.dismissMarkupModal}
-          baseUrl={baseUrl}
         />
         <section>
           <SuggestionAndSearch
-            queryChanged={this.searchQueryChanged}
-            onBadgeClick={this.handleExampleSelected}
             baseUrl={baseUrl}
+            onBadgeClick={this.handleExampleSelected}
+            queryChanged={this.searchQueryChanged}
           />
           <DonateBox />
         </section>

@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { withRegex } = require('../test-validators')
+const { isMetricOverTimePeriod } = require('../test-validators')
 
 const t = (module.exports = require('../tester').createServiceTester())
 
@@ -10,7 +10,7 @@ t.create('(live) jquery hits/day')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'jsdelivr',
-      value: withRegex(/^(\d)+([kMG])*( hits\/)+(day)$/),
+      value: isMetricOverTimePeriod,
     })
   )
 
@@ -19,7 +19,7 @@ t.create('(live) jquery hits/week')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'jsdelivr',
-      value: withRegex(/^(\d)+([kMG])*( hits\/)+(week)$/),
+      value: isMetricOverTimePeriod,
     })
   )
 
@@ -28,7 +28,7 @@ t.create('(live) jquery hits/month')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'jsdelivr',
-      value: withRegex(/^(\d)+([kMG])*( hits\/)+(month)$/),
+      value: isMetricOverTimePeriod,
     })
   )
 
@@ -37,7 +37,7 @@ t.create('(live) jquery hits/year')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'jsdelivr',
-      value: withRegex(/^(\d)+([kMG])*( hits\/)+(year)$/),
+      value: isMetricOverTimePeriod,
     })
   )
 
@@ -46,5 +46,5 @@ t.create('(live) fake package')
   .expectJSON({
     name: 'jsdelivr',
     // Will return 0 hits/day as the endpoint can't send 404s at present.
-    value: '0 hits/day',
+    value: '0/day',
   })
