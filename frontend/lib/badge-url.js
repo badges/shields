@@ -1,5 +1,4 @@
 import resolveUrl from './resolve-url'
-import { staticBadgeUrl as makeStaticBadgeUrl } from '../../core/badge-urls/make-badge-url'
 
 export default function resolveBadgeUrl(
   url,
@@ -18,8 +17,12 @@ export default function resolveBadgeUrl(
 }
 
 export function staticBadgeUrl(baseUrl, label, message, color, options) {
-  const path = makeStaticBadgeUrl({ label, message, color })
-  return resolveUrl(path, baseUrl, options)
+  const queryPrams = { label, message, color }
+  for (const name in options) {
+    queryPrams[name] = options[name]
+  }
+
+  return resolveUrl('/static/v1.svg', baseUrl, queryPrams)
 }
 
 // Options can include: { prefix, suffix, color, longCache, style, queryParams }

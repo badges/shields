@@ -24,7 +24,9 @@ describe('Badge URL functions', function() {
   test(staticBadgeUrl, () => {
     given('http://img.example.com', 'foo', 'bar', 'blue', {
       style: 'plastic',
-    }).expect('http://img.example.com/badge/foo-bar-blue.svg?style=plastic')
+    }).expect(
+      'http://img.example.com/static/v1.svg?label=foo&message=bar&color=blue&style=plastic'
+    )
   })
 
   test(dynamicBadgeUrl, () => {
