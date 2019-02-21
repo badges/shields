@@ -170,11 +170,7 @@ module.exports = class Matrix extends BaseJsonService {
     }
   }
 
-  async handle({ roomAlias }, queryParams) {
-    const { server_fqdn: serverFQDN } = this.constructor._validateQueryParams(
-      queryParams,
-      queryParamSchema
-    )
+  async handle({ roomAlias }, { server_fqdn: serverFQDN }) {
     const members = await this.fetch({ roomAlias, serverFQDN })
     return this.constructor.render({ members })
   }
@@ -191,7 +187,7 @@ module.exports = class Matrix extends BaseJsonService {
     return {
       base: 'matrix',
       pattern: ':roomAlias',
-      queryParams: ['server_fqdn'],
+      queryParamSchema,
     }
   }
 
