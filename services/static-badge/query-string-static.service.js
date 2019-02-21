@@ -18,20 +18,13 @@ module.exports = class QueryStringStaticBadge extends BaseStaticService {
       capture: ['schemaVersion'],
       // All but one of the parameters are parsed via coalesceBadge. This
       // reuses what is the override behaviour for other badges.
-      queryParams: ['message'],
+      queryParamSchema,
     }
   }
 
   handle(namedParams, queryParams) {
     if (namedParams.schemaVersion !== '1') {
       throw new InvalidParameter({ prettyMessage: 'Invalid schemaVersion' })
-    }
-    const result = Joi.validate(
-      { message: queryParams.message },
-      queryParamSchema
-    )
-    if (result.error) {
-      throw new InvalidParameter({ prettyMessage: 'Missing message' })
     }
 
     return { message: queryParams.message }
