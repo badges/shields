@@ -4,7 +4,11 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Missing message')
   .get('/static/v1.json?label=label&message=&color=blue&style=_shields_test')
-  .expectJSON({ name: 'label', value: 'Missing message', color: 'red' })
+  .expectJSON({
+    name: 'label',
+    value: 'invalid query parameter: message',
+    color: 'red',
+  })
 
 t.create('Missing label')
   .get('/static/v1.json?label=&message=message&color=blue&style=_shields_test')
