@@ -67,9 +67,9 @@ const ColorExamples = ({ baseUrl, colors }) => (
   <span>
     {colors.map((color, i) => (
       <Badge
+        alt={color}
         key={color}
         src={staticBadgeUrl(baseUrl, '', color, color)}
-        alt={color}
       />
     ))}
   </span>
@@ -97,9 +97,9 @@ export default class Usage extends React.PureComponent {
             })
             return (
               <QueryParam
+                documentation={<Badge alt={style} src={badgeUrl} />}
                 key={style}
                 snippet={snippet}
-                documentation={<Badge src={badgeUrl} alt={style} />}
               />
             )
           })}
@@ -170,7 +170,7 @@ export default class Usage extends React.PureComponent {
       <section>
         <H2 id="your-badge">Your Badge</H2>
 
-        <H3 id="static-badge">Static</H3>
+        <H3>Static</H3>
         <StaticBadgeMaker baseUrl={baseUrl} />
 
         <VerticalSpace />
@@ -220,7 +220,7 @@ export default class Usage extends React.PureComponent {
           />
         </p>
 
-        <H3 id="endpoint">Endpoint (Beta)</H3>
+        <H3>Endpoint (Beta)</H3>
 
         <p>
           <Snippet
@@ -297,8 +297,6 @@ export default class Usage extends React.PureComponent {
         <QueryParamTable>
           <tbody>
             <QueryParam
-              key="label"
-              snippet="?label=healthinesses"
               documentation={
                 <span>
                   Override the default left-hand-side text (
@@ -308,10 +306,10 @@ export default class Usage extends React.PureComponent {
                   {} needed for spaces or special characters!)
                 </span>
               }
+              key="label"
+              snippet="?label=healthinesses"
             />
             <QueryParam
-              key="logo"
-              snippet="?logo=appveyor"
               documentation={
                 <span>
                   Insert one of the named logos from (
@@ -325,44 +323,44 @@ export default class Usage extends React.PureComponent {
                   <StyledCode>?logo=visual-studio-code</StyledCode>)
                 </span>
               }
+              key="logo"
+              snippet="?logo=appveyor"
             />
             <QueryParam
-              key="logoSvg"
-              snippet="?logo=data:image/png;base64,…"
               documentation={
                 <span>Insert custom logo image (≥ 14px high)</span>
               }
+              key="logoSvg"
+              snippet="?logo=data:image/png;base64,…"
             />
             <QueryParam
-              key="logoColor"
-              snippet="?logoColor=violet"
               documentation={
                 <span>
                   Set the color of the logo (hex, rgb, rgba, hsl, hsla and css
                   named colors supported)
                 </span>
               }
+              key="logoColor"
+              snippet="?logoColor=violet"
             />
             <QueryParam
-              key="logoWidth"
-              snippet="?logoWidth=40"
               documentation={
                 <span>Set the horizontal space to give to the logo</span>
               }
+              key="logoWidth"
+              snippet="?logoWidth=40"
             />
             <QueryParam
-              key="link"
-              snippet="?link=http://left&amp;link=http://right"
               documentation={
                 <span>
                   Specify what clicking on the left/right of a badge should do
                   (esp. for social badge style)
                 </span>
               }
+              key="link"
+              snippet="?link=http://left&amp;link=http://right"
             />
             <QueryParam
-              key="labelColor"
-              snippet="?labelColor=abcdef"
               documentation={
                 <span>
                   Set background of the left part (hex, rgb, rgba, hsl, hsla and
@@ -370,10 +368,10 @@ export default class Usage extends React.PureComponent {
                   supported.
                 </span>
               }
+              key="labelColor"
+              snippet="?labelColor=abcdef"
             />
             <QueryParam
-              key="color"
-              snippet="?color=fedcba"
               documentation={
                 <span>
                   Set background of the right part (hex, rgb, rgba, hsl, hsla
@@ -381,10 +379,10 @@ export default class Usage extends React.PureComponent {
                   also supported.
                 </span>
               }
+              key="color"
+              snippet="?color=fedcba"
             />
             <QueryParam
-              key="maxAge"
-              snippet="?maxAge=3600"
               documentation={
                 <span>
                   Set the HTTP cache lifetime in secs (rules are applied to
@@ -392,6 +390,8 @@ export default class Usage extends React.PureComponent {
                   specified below the default will be ignored)
                 </span>
               }
+              key="maxAge"
+              snippet="?maxAge=3600"
             />
           </tbody>
         </QueryParamTable>

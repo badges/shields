@@ -33,20 +33,20 @@ export default class StaticBadgeMaker extends React.Component {
     return (
       <form onSubmit={e => this.handleSubmit(e)}>
         <InlineInput
-          value={this.state.label}
           onChange={event => this.setState({ label: event.target.value })}
           placeholder="label"
+          value={this.state.label}
         />
         <InlineInput
-          value={this.state.message}
           onChange={event => this.setState({ message: event.target.value })}
           placeholder="message"
+          value={this.state.message}
         />
         <InlineInput
-          value={this.state.color}
-          onChange={event => this.setState({ color: event.target.value })}
           list="default-colors"
+          onChange={event => this.setState({ color: event.target.value })}
           placeholder="color"
+          value={this.state.color}
         />
         <datalist id="default-colors">
           <option value="brightgreen" />

@@ -18,6 +18,7 @@ const {
   assertValidRoute,
   prepareRoute,
   namedParamsForMatch,
+  getQueryParamNames,
 } = require('./route')
 const { assertValidServiceDefinition } = require('./service-definitions')
 const trace = require('./trace')
@@ -174,7 +175,8 @@ module.exports = class BaseService {
 
     let base, format, pattern, queryParams
     try {
-      ;({ base, format, pattern, query: queryParams = [] } = this.route)
+      ;({ base, format, pattern } = this.route)
+      queryParams = getQueryParamNames(this.route)
     } catch (e) {
       // Legacy services do not have a route.
     }
@@ -270,12 +272,44 @@ module.exports = class BaseService {
 
     const serviceInstance = new this(context, config)
 
+    let serviceError
+    const { queryParamSchema } = this.route
+    if (queryParamSchema) {
+      try {
+        queryParams = validate(
+          {
+            ErrorClass: InvalidParameter,
+            prettyErrorMessage: 'invalid query parameter',
+            includeKeys: true,
+            traceErrorMessage: 'Query params did not match schema',
+            traceSuccessMessage: 'Query params after validation',
+          },
+          queryParams,
+          queryParamSchema
+        )
+        trace.logTrace(
+          'inbound',
+          emojic.crayon,
+          'Query params after validation',
+          queryParams
+        )
+      } catch (error) {
+        serviceError = error
+      }
+    }
+
     let serviceData
-    try {
-      serviceData = await serviceInstance.handle(namedParams, queryParams)
-      Joi.assert(serviceData, serviceDataSchema)
-    } catch (error) {
-      serviceData = serviceInstance._handleError(error)
+    if (!serviceError) {
+      try {
+        serviceData = await serviceInstance.handle(namedParams, queryParams)
+        Joi.assert(serviceData, serviceDataSchema)
+      } catch (error) {
+        serviceError = error
+      }
+    }
+
+    if (serviceError) {
+      serviceData = serviceInstance._handleError(serviceError)
     }
 
     trace.logTrace('outbound', emojic.shield, 'Service data', serviceData)
@@ -286,11 +320,12 @@ module.exports = class BaseService {
   static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
     const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
+    const queryParams = getQueryParamNames(this.route)
 
     camp.route(
       regex,
       handleRequest(cacheHeaderConfig, {
-        queryParams: this.route.queryParams,
+        queryParams,
         handler: async (queryParams, match, sendBadge, request) => {
           const namedParams = namedParamsForMatch(captureNames, match, this)
           const serviceData = await this.invoke(
@@ -340,20 +375,6 @@ module.exports = class BaseService {
       },
       data,
       schema
-    )
-  }
-
-  static _validateQueryParams(queryParams, queryParamSchema) {
-    return validate(
-      {
-        ErrorClass: InvalidParameter,
-        prettyErrorMessage: 'invalid query parameter',
-        includeKeys: true,
-        traceErrorMessage: 'Query params did not match schema',
-        traceSuccessMessage: 'Query params after validation',
-      },
-      queryParams,
-      queryParamSchema
     )
   }
 

@@ -21,7 +21,7 @@ t.create('Stars (repo not found)')
   })
 
 t.create('Stars (named color override)')
-  .get('/badges/shields.json?colorB=yellow&style=_shields_test')
+  .get('/badges/shields.json?color=yellow&style=_shields_test')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'stars',
@@ -31,7 +31,7 @@ t.create('Stars (named color override)')
   )
 
 t.create('Stars (hex color override)')
-  .get('/badges/shields.json?colorB=abcdef&style=_shields_test')
+  .get('/badges/shields.json?color=abcdef&style=_shields_test')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'stars',

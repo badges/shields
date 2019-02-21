@@ -3,11 +3,15 @@
 const Joi = require('joi')
 const serverSecrets = require('../../lib/server-secrets')
 const { metric } = require('../../lib/text-formatters')
-const { nonNegativeInteger } = require('../validators')
+const { nonNegativeInteger, optionalUrl } = require('../validators')
 const { BaseJsonService } = require('..')
 
 const bitbucketPullRequestSchema = Joi.object({
   size: nonNegativeInteger,
+}).required()
+
+const queryParamSchema = Joi.object({
+  server: optionalUrl,
 }).required()
 
 function pullRequestClassGenerator(raw) {
@@ -98,7 +102,7 @@ function pullRequestClassGenerator(raw) {
       return {
         base: `bitbucket/${routePrefix}`,
         pattern: `:user/:repo`,
-        queryParams: ['server'],
+        queryParamSchema,
       }
     }
 
