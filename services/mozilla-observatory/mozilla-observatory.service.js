@@ -1,8 +1,8 @@
 'use strict'
 
+const Joi = require('joi')
 const { BaseJsonService } = require('..')
 
-const Joi = require('joi')
 const schema = Joi.object({
   state: Joi.string()
     .valid('ABORTED', 'FAILED', 'FINISHED', 'PENDING', 'STARTING', 'RUNNING')
@@ -26,6 +26,10 @@ const schema = Joi.object({
     .required(),
 }).required()
 
+const queryParamSchema = Joi.object({
+  publish: Joi.equal(''),
+}).required()
+
 const documentation = `
 <p>
   The <a href="https://observatory.mozilla.org">Mozilla HTTP Observatory</a>
@@ -35,7 +39,7 @@ const documentation = `
 </p>
   By default the scan result is hidden from the public result list.
   You can activate the publication of the scan result
-  by setting <code>publish</code> parameter to <code>true</code>
+  by setting the <code>publish</code> parameter.
 <p>
 <p>
   The badge returns a cached site result if the site has been scanned anytime in the previous 24 hours.
@@ -55,7 +59,7 @@ module.exports = class MozillaObservatory extends BaseJsonService {
     return {
       base: 'mozilla-observatory',
       pattern: ':which(grade|grade-score)/:host',
-      queryParams: ['publish'],
+      queryParamSchema,
     }
   }
 

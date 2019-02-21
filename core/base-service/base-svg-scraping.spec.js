@@ -124,6 +124,10 @@ describe('BaseSvgScrapingService', function() {
 
     it('allows overriding the valueMatcher', async function() {
       class WithValueMatcher extends BaseSvgScrapingService {
+        static get route() {
+          return {}
+        }
+
         async handle() {
           return this._requestSvg({
             schema,

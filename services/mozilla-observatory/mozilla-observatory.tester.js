@@ -18,9 +18,7 @@ t.create('request on observatory.mozilla.org')
   )
 
 t.create('request on observatory.mozilla.org with inclusion in public results')
-  .get(
-    '/grade-score/observatory.mozilla.org.json?publish=true&style=_shields_test'
-  )
+  .get('/grade-score/observatory.mozilla.org.json?publish&style=_shields_test')
   .expectJSONTypes(
     Joi.object().keys({
       name: 'observatory',

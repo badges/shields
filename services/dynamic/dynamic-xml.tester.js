@@ -122,7 +122,7 @@ t.create('XML from url | invalid url')
 
 t.create('XML from url | user color overrides default')
   .get(
-    '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/name&colorB=10ADED&style=_shields_test'
+    '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/name&color=10ADED&style=_shields_test'
   )
   .expectJSON({
     name: 'custom badge',
@@ -141,7 +141,7 @@ t.create('XML from url | error color overrides default')
   })
 
 t.create('XML from url | error color overrides user specified')
-  .get('.json?query=//version&colorB=10ADED&style=_shields_test')
+  .get('.json?query=//version&color=10ADED&style=_shields_test')
   .expectJSON({
     name: 'custom badge',
     value: 'invalid query parameter: url',
