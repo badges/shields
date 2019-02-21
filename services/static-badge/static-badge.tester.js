@@ -38,12 +38,16 @@ t.create('"Shields-encoded" dash')
   .get('/badge/best--license-Apache--2.0-blue.json?style=_shields_test')
   .expectJSON({ name: 'best-license', value: 'Apache-2.0', color: 'blue' })
 
-t.create('Override colorB')
+t.create('Override color')
+  .get('/badge/label-message-blue.json?style=_shields_test&color=yellow')
+  .expectJSON({ name: 'label', value: 'message', color: 'yellow' })
+
+t.create('Override color (legacy)')
   .get('/badge/label-message-blue.json?style=_shields_test&colorB=yellow')
   .expectJSON({ name: 'label', value: 'message', color: 'yellow' })
 
-t.create('Override colorB with a number')
-  .get('/badge/label-message-blue.json?style=_shields_test&colorB=123')
+t.create('Override color with a number')
+  .get('/badge/label-message-blue.json?style=_shields_test&color=123')
   .expectJSON({ name: 'label', value: 'message', color: '#123' })
 
 t.create('Override label')
