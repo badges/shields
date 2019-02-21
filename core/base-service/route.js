@@ -15,9 +15,11 @@ const routeSchema = Joi.object({
     is: Joi.string().required(),
     then: Joi.array().items(Joi.string().required()),
   }),
+  queryParamSchema: Joi.object().schema(),
   queryParams: Joi.array().items(Joi.string().required()),
 })
   .xor('pattern', 'format')
+  .oxor('queryParamSchema', 'queryParams')
   .required()
 
 function assertValidRoute(route, message = undefined) {
@@ -67,9 +69,19 @@ function namedParamsForMatch(captureNames = [], match, ServiceClass) {
   return result
 }
 
+function getQueryParamNames({ queryParams = [], queryParamSchema }) {
+  if (queryParamSchema) {
+    const { children, renames = [] } = Joi.describe(queryParamSchema)
+    return Object.keys(children).concat(renames.map(({ from }) => from))
+  } else {
+    return queryParams
+  }
+}
+
 module.exports = {
   makeFullUrl,
   assertValidRoute,
   prepareRoute,
   namedParamsForMatch,
+  getQueryParamNames,
 }
