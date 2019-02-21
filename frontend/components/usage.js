@@ -175,17 +175,17 @@ export default class Usage extends React.PureComponent {
 
         <VerticalSpace />
 
-        <p>Using query string parameters (beta)</p>
-        <p>
-          <Snippet
-            snippet={`${baseUrl}/static/v1.svg?label=<LABEL>&message=<MESSAGE>&color=<COLOR>`}
-          />
-        </p>
         <p>Using dash "-" separator</p>
         <p>
           <Snippet snippet={`${baseUrl}/badge/<LABEL>-<MESSAGE>-<COLOR>.svg`} />
         </p>
         {this.constructor.renderStaticBadgeEscapingRules()}
+        <p>Using query string parameters</p>
+        <p>
+          <Snippet
+            snippet={`${baseUrl}/static/v1.svg?label=<LABEL>&message=<MESSAGE>&color=<COLOR>`}
+          />
+        </p>
 
         <H3 id="colors">Colors</H3>
         <p>
