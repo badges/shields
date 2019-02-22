@@ -71,6 +71,36 @@ function staticBadgeUrl({
   return `${baseUrl}/badge/${path}.${format}${suffix}`
 }
 
+function queryStringStaticBadgeUrl({
+  baseUrl = '',
+  label,
+  message,
+  color,
+  labelColor,
+  style,
+  namedLogo,
+  logoColor,
+  logoWidth,
+  logoPosition,
+  format = 'svg',
+}) {
+  // schemaVersion could be a parameter if we iterate on it,
+  // for now it's hardcoded to the only supported version.
+  const schemaVersion = '1'
+  const suffix = `?${queryString.stringify({
+    label,
+    message,
+    color,
+    labelColor,
+    style,
+    logo: namedLogo,
+    logoColor,
+    logoWidth,
+    logoPosition,
+  })}`
+  return `${baseUrl}/static/v${schemaVersion}.${format}${suffix}`
+}
+
 function dynamicBadgeUrl({
   baseUrl,
   datatype,
@@ -109,5 +139,6 @@ module.exports = {
   badgeUrlFromPattern,
   encodeField,
   staticBadgeUrl,
+  queryStringStaticBadgeUrl,
   dynamicBadgeUrl,
 }
