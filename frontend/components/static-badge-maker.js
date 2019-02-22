@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { staticBadgeUrl } from '../lib/badge-url'
+import { staticBadgeUrl } from '../../core/badge-urls/make-badge-url'
 import { InlineInput } from './common'
 
 export default class StaticBadgeMaker extends React.Component {
@@ -9,8 +9,8 @@ export default class StaticBadgeMaker extends React.Component {
   }
 
   state = {
-    subject: '',
-    status: '',
+    label: '',
+    message: '',
     color: '',
   }
 
@@ -18,13 +18,13 @@ export default class StaticBadgeMaker extends React.Component {
     e.preventDefault()
 
     const { baseUrl } = this.props
-    const { subject, status, color } = this.state
-    const badgeUrl = staticBadgeUrl(
-      baseUrl || window.location.href,
-      subject,
-      status,
-      color
-    )
+    const { label, message, color } = this.state
+    const badgeUrl = staticBadgeUrl({
+      baseUrl: baseUrl || window.location.href,
+      label,
+      message,
+      color,
+    })
 
     document.location = badgeUrl
   }
@@ -33,14 +33,14 @@ export default class StaticBadgeMaker extends React.Component {
     return (
       <form onSubmit={e => this.handleSubmit(e)}>
         <InlineInput
-          onChange={event => this.setState({ subject: event.target.value })}
-          placeholder="subject"
-          value={this.state.subject}
+          onChange={event => this.setState({ label: event.target.value })}
+          placeholder="label"
+          value={this.state.label}
         />
         <InlineInput
-          onChange={event => this.setState({ status: event.target.value })}
-          placeholder="status"
-          value={this.state.status}
+          onChange={event => this.setState({ message: event.target.value })}
+          placeholder="message"
+          value={this.state.message}
         />
         <InlineInput
           list="default-colors"

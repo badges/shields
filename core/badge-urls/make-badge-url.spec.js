@@ -6,6 +6,7 @@ const {
   badgeUrlFromPattern,
   encodeField,
   staticBadgeUrl,
+  dynamicBadgeUrl,
 } = require('./make-badge-url')
 
 describe('Badge URL generation functions', function() {
@@ -78,5 +79,51 @@ describe('Badge URL generation functions', function() {
       message: 'blue',
       color: 'blue',
     }).expect('/badge/-blue-blue.svg')
+  })
+
+  test(dynamicBadgeUrl, () => {
+    const dataUrl = 'http://example.com/foo.json'
+    const query = '$.bar'
+    const prefix = 'value: '
+    given({
+      baseUrl: 'http://img.example.com',
+      datatype: 'json',
+      label: 'foo',
+      dataUrl,
+      query,
+      prefix,
+      style: 'plastic',
+    }).expect(
+      [
+        'http://img.example.com/badge/dynamic/json.svg',
+        '?label=foo',
+        `&prefix=${encodeURIComponent(prefix)}`,
+        `&query=${encodeURIComponent(query)}`,
+        '&style=plastic',
+        `&url=${encodeURIComponent(dataUrl)}`,
+      ].join('')
+    )
+    const suffix = '<- value'
+    const color = 'blue'
+    given({
+      baseUrl: 'http://img.example.com',
+      datatype: 'json',
+      label: 'foo',
+      dataUrl,
+      query,
+      suffix,
+      color,
+      style: 'plastic',
+    }).expect(
+      [
+        'http://img.example.com/badge/dynamic/json.svg',
+        '?color=blue',
+        '&label=foo',
+        `&query=${encodeURIComponent(query)}`,
+        '&style=plastic',
+        `&suffix=${encodeURIComponent(suffix)}`,
+        `&url=${encodeURIComponent(dataUrl)}`,
+      ].join('')
+    )
   })
 })
