@@ -227,9 +227,7 @@ export default class Usage extends React.PureComponent {
         <H3>Endpoint (Beta)</H3>
 
         <p>
-          <Snippet
-            snippet={`${baseUrl}/badge/endpoint.svg?url=<URL>&style<STYLE>`}
-          />
+          <Snippet snippet={`${baseUrl}/endpoint.svg?url=<URL>&style<STYLE>`} />
         </p>
 
         <p>
