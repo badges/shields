@@ -25,4 +25,3 @@ t.create('gets coverage status for branch')
 t.create('handles unknown project')
   .get('/github/codecov2/example-python.json')
   .expectJSON({ name: 'coverage', value: 'repository not found' })
-
