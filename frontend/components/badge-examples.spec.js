@@ -107,8 +107,8 @@ describe('<BadgeExamples />', function() {
   it('renders with no examples', function() {
     shallow(
       <BadgeExamples
-        definitions={[]}
         baseUrl="https://example.shields.io"
+        definitions={[]}
         onClick={() => {}}
       />
     )
@@ -117,8 +117,8 @@ describe('<BadgeExamples />', function() {
   it('renders an array of examples', function() {
     shallow(
       <BadgeExamples
-        definitions={exampleServiceDefinitions}
         baseUrl="https://example.shields.io"
+        definitions={exampleServiceDefinitions}
         onClick={() => {}}
       />
     )

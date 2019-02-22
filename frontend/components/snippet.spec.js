@@ -12,9 +12,9 @@ describe('<Snippet />', function() {
   it('renders with truncate and fontSize', function() {
     render(
       <Snippet
+        fontSize="14pt"
         snippet="http://example.com/badge.svg"
         truncate
-        fontSize="14pt"
       />
     )
   })
