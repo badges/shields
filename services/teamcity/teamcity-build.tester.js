@@ -2,6 +2,7 @@
 
 const Joi = require('joi')
 const { withRegex } = require('../test-validators')
+const t = (module.exports = require('../tester').createServiceTester())
 const {
   mockTeamCityCreds,
   pass,
@@ -11,8 +12,6 @@ const {
 
 const buildStatusValues = Joi.equal('passing', 'failure', 'error').required()
 const buildStatusTextRegex = /^success|failure|error|tests( failed: \d+( \(\d+ new\))?)?(,)?( passed: \d+)?(,)?( ignored: \d+)?(,)?( muted: \d+)?$/
-
-const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('live: codebetter unknown build')
   .get('/codebetter/btabc.json')

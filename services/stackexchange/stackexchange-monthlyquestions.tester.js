@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const { isMetricOverTimePeriod } = require('../test-validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Monthly Questions for StackOverflow Momentjs')

@@ -1,10 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const { dockerBlue } = require('./docker-helpers')
-const isAutomatedBuildStatus = Joi.string().valid('automated', 'manual')
-
 const t = (module.exports = require('../tester').createServiceTester())
+const { dockerBlue } = require('./docker-helpers')
+
+const isAutomatedBuildStatus = Joi.string().valid('automated', 'manual')
 
 t.create('docker automated build (valid, library)')
   .get('/_/ubuntu.json')

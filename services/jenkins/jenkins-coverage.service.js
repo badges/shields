@@ -3,7 +3,6 @@
 const Joi = require('joi')
 const { BaseJsonService } = require('..')
 const serverSecrets = require('../../lib/server-secrets')
-
 const {
   coveragePercentage: coveragePercentageColor,
 } = require('../../lib/color-formatters')

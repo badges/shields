@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const { isVPlusTripleDottedVersion } = require('../test-validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('cdnjs (valid)')
