@@ -75,10 +75,6 @@ export default class BadgeExamples extends React.Component {
   render() {
     const { definitions } = this.props
 
-    if (!definitions) {
-      return null
-    }
-
     const flattened = definitions.reduce((accum, current) => {
       const { examples } = current
       return accum.concat(examples)
