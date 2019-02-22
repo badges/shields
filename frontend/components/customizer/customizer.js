@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import clipboardCopy from 'clipboard-copy'
-import { staticBadgeUrl } from '../../lib/badge-url'
+import { staticBadgeUrl } from '../../../core/badge-urls/make-badge-url'
 import { generateMarkup } from '../../lib/generate-image-markup'
 import { Badge } from '../common'
 import PathBuilder from './path-builder'
@@ -61,12 +61,11 @@ export default class Customizer extends React.Component {
     if (pathIsComplete) {
       src = this.generateBuiltBadgeUrl()
     } else {
-      src = staticBadgeUrl(
+      src = staticBadgeUrl({
         baseUrl,
-        'preview',
-        'some parameters missing',
-        'lightgray'
-      )
+        label: 'preview',
+        message: 'some parameters missing',
+      })
     }
     return (
       <p>
@@ -108,7 +107,7 @@ export default class Customizer extends React.Component {
     return (
       <div>
         {this.renderLivePreview()}
-        <CopiedContentIndicator ref={indicatorRef} copiedContent="Copied">
+        <CopiedContentIndicator copiedContent="Copied" ref={indicatorRef}>
           <RequestMarkupButtom
             isDisabled={!pathIsComplete}
             onMarkupRequested={this.copyMarkup}
@@ -143,9 +142,9 @@ export default class Customizer extends React.Component {
     return (
       <form action="">
         <PathBuilder
-          pattern={pattern}
           exampleParams={exampleNamedParams}
           onChange={this.handlePathChange}
+          pattern={pattern}
         />
         <QueryStringBuilder
           exampleParams={exampleQueryParams}

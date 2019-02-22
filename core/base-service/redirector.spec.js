@@ -90,7 +90,7 @@ describe('Redirector', function() {
 
     it('should forward the query params', async function() {
       const { statusCode, headers } = await got(
-        `${baseUrl}/very/old/service/hello-world.svg?colorB=123&style=flat-square`,
+        `${baseUrl}/very/old/service/hello-world.svg?color=123&style=flat-square`,
         {
           followRedirect: false,
         }
@@ -98,7 +98,7 @@ describe('Redirector', function() {
 
       expect(statusCode).to.equal(301)
       expect(headers.location).to.equal(
-        '/new/service/hello-world.svg?colorB=123&style=flat-square'
+        '/new/service/hello-world.svg?color=123&style=flat-square'
       )
     })
   })

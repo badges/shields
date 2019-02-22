@@ -1,5 +1,6 @@
 'use strict'
 
+const queryString = require('querystring')
 const Joi = require('joi')
 const t = (module.exports = require('../tester').createServiceTester())
 
@@ -55,14 +56,14 @@ t.create('Test status with custom labels')
 
 t.create('Test status with compact message and custom labels')
   .timeout(10000)
-  .get('/NZSmartie/coap-net-iu0to.json', {
-    qs: {
+  .get(
+    `/NZSmartie/coap-net-iu0to.json?${queryString.stringify({
       compact_message: null,
       passed_label: '💃',
       failed_label: '🤦‍♀️',
       skipped_label: '🤷',
-    },
-  })
+    })}`
+  )
   .expectJSONTypes(
     Joi.object().keys({
       name: 'tests',

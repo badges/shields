@@ -62,7 +62,7 @@ module.exports = function coalesceBadge(
     labelColor: overrideLabelColor,
   } = overrides
 
-  // Only use the legacy properties of the new ones are not provided
+  // Only use the legacy properties if the new ones are not provided
   if (typeof overrideColor === 'undefined') {
     overrideColor = legacyOverrideColor
   }

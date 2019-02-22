@@ -102,7 +102,7 @@ t.create('JSON from url | invalid url')
 
 t.create('JSON from url | user color overrides default')
   .get(
-    '.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.name&colorB=10ADED&style=_shields_test'
+    '.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.name&color=10ADED&style=_shields_test'
   )
   .expectJSON({ name: 'custom badge', value: 'shields.io', color: '#10aded' })
 
@@ -117,7 +117,7 @@ t.create('JSON from url | error color overrides default')
   })
 
 t.create('JSON from url | error color overrides user specified')
-  .get('.json?query=$.version&colorB=10ADED&style=_shields_test')
+  .get('.json?query=$.version&color=10ADED&style=_shields_test')
   .expectJSON({
     name: 'custom badge',
     value: 'invalid query parameter: url',
