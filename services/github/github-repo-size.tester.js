@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const { isFileSize } = require('../test-validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('repository size')

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { dynamicBadgeUrl } from '../lib/badge-url'
+import { dynamicBadgeUrl } from '../../core/badge-urls/make-badge-url'
 import { InlineInput } from './common'
 
 export default class DynamicBadgeMaker extends React.Component {
@@ -11,7 +11,7 @@ export default class DynamicBadgeMaker extends React.Component {
   state = {
     datatype: '',
     label: '',
-    url: '',
+    dataUrl: '',
     query: '',
     color: '',
     prefix: '',
@@ -19,9 +19,22 @@ export default class DynamicBadgeMaker extends React.Component {
   }
 
   makeBadgeUrl() {
-    const { datatype, label, url, query, color, prefix, suffix } = this.state
+    const {
+      datatype,
+      label,
+      dataUrl,
+      query,
+      color,
+      prefix,
+      suffix,
+    } = this.state
     const { baseUrl: baseUrl = document.location.href } = this.props
-    return dynamicBadgeUrl(baseUrl, datatype, label, url, query, {
+    return dynamicBadgeUrl({
+      baseUrl: baseUrl || window.location.href,
+      datatype,
+      label,
+      dataUrl,
+      query,
       color,
       prefix,
       suffix,
@@ -34,8 +47,8 @@ export default class DynamicBadgeMaker extends React.Component {
   }
 
   get isValid() {
-    const { datatype, label, url, query } = this.state
-    return datatype && label && url && query
+    const { datatype, label, dataUrl, query } = this.state
+    return datatype && label && dataUrl && query
   }
 
   render() {
@@ -43,10 +56,10 @@ export default class DynamicBadgeMaker extends React.Component {
       <form onSubmit={e => this.handleSubmit(e)}>
         <select
           className="short"
-          value={this.state.datatype}
           onChange={event => this.setState({ datatype: event.target.value })}
+          value={this.state.datatype}
         >
-          <option value="" disabled>
+          <option disabled value="">
             data type
           </option>
           <option value="json">json</option>
@@ -55,39 +68,39 @@ export default class DynamicBadgeMaker extends React.Component {
         </select>{' '}
         <InlineInput
           className="short"
-          value={this.state.label}
           onChange={event => this.setState({ label: event.target.value })}
           placeholder="label"
+          value={this.state.label}
         />
         <InlineInput
           className="short"
-          value={this.state.url}
-          onChange={event => this.setState({ url: event.target.value })}
-          placeholder="url"
+          onChange={event => this.setState({ dataUrl: event.target.value })}
+          placeholder="data url"
+          value={this.state.dataUrl}
         />
         <InlineInput
           className="short"
-          value={this.state.query}
           onChange={event => this.setState({ query: event.target.value })}
           placeholder="query"
+          value={this.state.query}
         />
         <InlineInput
           className="short"
-          value={this.state.color}
           onChange={event => this.setState({ color: event.target.value })}
           placeholder="color"
+          value={this.state.color}
         />
         <InlineInput
           className="short"
-          value={this.state.prefix}
           onChange={event => this.setState({ prefix: event.target.value })}
           placeholder="prefix"
+          value={this.state.prefix}
         />
         <InlineInput
           className="short"
-          value={this.state.suffix}
           onChange={event => this.setState({ suffix: event.target.value })}
           placeholder="suffix"
+          value={this.state.suffix}
         />
         <button disabled={!this.isValid}>Make Badge</button>
       </form>

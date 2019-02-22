@@ -3,18 +3,23 @@
 const { BaseJsonService } = require('..')
 const Joi = require('joi')
 
-const rowSchema = Joi.object().keys({ su: Joi.boolean() })
-
 const schema = Joi.array()
-  .items(rowSchema)
+  .items(Joi.object().keys({ su: Joi.boolean() }))
   .min(1)
+
+const queryParamSchema = Joi.object({
+  up_message: Joi.string(),
+  down_message: Joi.string(),
+  up_color: Joi.alternatives(Joi.string(), Joi.number()),
+  down_color: Joi.alternatives(Joi.string(), Joi.number()),
+}).required()
 
 /*
  * this is the checkUuid for the NodePing.com (as used on the [example page](https://nodeping.com/reporting.html#results))
  */
-const sampleCheckUuid = 'jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei'
+const exampleCheckUuid = 'jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei'
 
-class NodePingStatus extends BaseJsonService {
+module.exports = class NodePingStatus extends BaseJsonService {
   static get category() {
     return 'monitoring'
   }
@@ -29,7 +34,7 @@ class NodePingStatus extends BaseJsonService {
     return {
       base: 'nodeping/status',
       pattern: ':checkUuid',
-      queryParams: ['up_message', 'down_message', 'up_color', 'down_color'],
+      queryParamSchema,
     }
   }
 
@@ -38,24 +43,24 @@ class NodePingStatus extends BaseJsonService {
       {
         title: 'NodePing status',
         namedParams: {
-          checkUuid: sampleCheckUuid,
+          checkUuid: exampleCheckUuid,
         },
         staticPreview: this.render({ status: true }),
       },
       {
         title: 'NodePing status (customized)',
         namedParams: {
-          checkUuid: sampleCheckUuid,
+          checkUuid: exampleCheckUuid,
         },
         queryParams: {
-          up_message: 'Online',
+          up_message: 'online',
           up_color: 'blue',
-          down_message: 'Offline',
+          down_message: 'offline',
           down_color: 'lightgrey',
         },
         staticPreview: this.render({
           status: true,
-          upMessage: 'Online',
+          upMessage: 'online',
           upColor: 'blue',
         }),
       },
@@ -101,5 +106,3 @@ class NodePingStatus extends BaseJsonService {
       : { message: downMessage || 'down', color: downColor || 'red' }
   }
 }
-
-module.exports = NodePingStatus

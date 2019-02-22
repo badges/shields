@@ -26,7 +26,7 @@ const QueryParamCaption = styled(BuilderCaption)`
 const supportedBadgeOptions = [
   { name: 'style', shieldsDefaultValue: 'flat' },
   { name: 'label', label: 'override label' },
-  { name: 'colorB', label: 'override color' },
+  { name: 'color', label: 'override color' },
   { name: 'logo', label: 'named logo' },
   { name: 'logoColor', label: 'override logo color' },
 ]
@@ -174,18 +174,18 @@ export default class QueryStringBuilder extends React.Component {
         <td>
           {isStringParam ? (
             <QueryParamInput
-              type="text"
-              name={name}
               checked={value}
+              name={name}
               onChange={this.handleServiceQueryParamChange}
+              type="text"
               {...noAutocorrect}
             />
           ) : (
             <input
-              type="checkbox"
-              name={name}
               checked={value}
+              name={name}
               onChange={this.handleServiceQueryParamChange}
+              type="checkbox"
             />
           )}
         </td>
@@ -198,8 +198,8 @@ export default class QueryStringBuilder extends React.Component {
       return (
         <select
           name="style"
-          value={value}
           onChange={this.handleBadgeOptionChange}
+          value={value}
         >
           {advertisedStyles.map(style => (
             <option key={style} value={style}>
@@ -211,10 +211,10 @@ export default class QueryStringBuilder extends React.Component {
     } else {
       return (
         <QueryParamInput
-          type="text"
-          name={name}
           checked={value}
+          name={name}
           onChange={this.handleBadgeOptionChange}
+          type="text"
           {...noAutocorrect}
         />
       )

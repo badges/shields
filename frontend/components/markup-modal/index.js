@@ -29,14 +29,14 @@ export default class MarkupModal extends React.Component {
 
     return (
       <Modal
+        ariaHideApp={false}
+        contentLabel="Example Modal"
         isOpen={isOpen}
         onRequestClose={onRequestClose}
-        contentLabel="Example Modal"
-        ariaHideApp={false}
       >
         {isOpen && (
           <ContentContainer>
-            <MarkupModalContent example={example} baseUrl={baseUrl} />
+            <MarkupModalContent baseUrl={baseUrl} example={example} />
           </ContentContainer>
         )}
       </Modal>

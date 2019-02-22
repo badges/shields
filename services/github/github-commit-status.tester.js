@@ -1,7 +1,6 @@
 'use strict'
 
 const { invalidJSON } = require('../response-fixtures')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('commit status - commit in branch')

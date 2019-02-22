@@ -2,10 +2,9 @@
 
 const Joi = require('joi')
 const { withRegex } = require('../test-validators')
+const t = (module.exports = require('../tester').createServiceTester())
 
 const amountOfMoney = withRegex(/^\$[0-9]+(\.[0-9]+)?/)
-
-const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('funding')
   .get('/hashdog/scrapfy-chrome-extension.json')

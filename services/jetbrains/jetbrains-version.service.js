@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const JetbrainsBase = require('./jetbrains-base')
 const { renderVersionBadge } = require('../../lib/version')
+const JetbrainsBase = require('./jetbrains-base')
 
 const schema = Joi.object({
   'plugin-repository': Joi.object({

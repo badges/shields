@@ -1,12 +1,12 @@
 'use strict'
 
 const Joi = require('joi')
-const EclipseMarketplaceBase = require('./eclipse-marketplace-base')
 const { metric } = require('../../lib/text-formatters')
 const {
   downloadCount: downloadCountColor,
 } = require('../../lib/color-formatters')
 const { nonNegativeInteger } = require('../validators')
+const EclipseMarketplaceBase = require('./eclipse-marketplace-base')
 
 const monthlyResponseSchema = Joi.object({
   marketplace: Joi.object({

@@ -1,12 +1,11 @@
 'use strict'
 
 const Joi = require('joi')
+const t = (module.exports = require('../tester').createServiceTester())
 
 const isPlatform = Joi.string().regex(
   /^(osx|ios|tvos|watchos)( \| (osx|ios|tvos|watchos))*$/
 )
-
-const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('platform (valid)')
   .get('/AFNetworking.json')

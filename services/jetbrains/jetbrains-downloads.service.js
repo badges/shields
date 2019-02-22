@@ -1,12 +1,12 @@
 'use strict'
 
 const Joi = require('joi')
-const JetbrainsBase = require('./jetbrains-base')
 const { metric } = require('../../lib/text-formatters')
 const {
   downloadCount: downloadCountColor,
 } = require('../../lib/color-formatters')
 const { nonNegativeInteger } = require('../validators')
+const JetbrainsBase = require('./jetbrains-base')
 
 const schema = Joi.object({
   'plugin-repository': Joi.object({

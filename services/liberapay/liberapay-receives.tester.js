@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const { isCurrencyOverTime } = require('./liberapay-base')
 const t = (module.exports = require('../tester').createServiceTester())
+const { isCurrencyOverTime } = require('./liberapay-base')
 
 t.create('Receiving (valid)')
   .get('/Changaco.json')
