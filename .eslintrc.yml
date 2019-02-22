@@ -46,6 +46,7 @@ rules:
   promise/prefer-await-to-then: 'error'
   func-style: ['error', 'declaration', { 'allowArrowFunctions': true }]
   new-cap: ['error', { 'capIsNew': true }]
+  import/order: ['error', { 'newlines-between': 'never' }]
 
   # Mocha-related.
   mocha/no-exclusive-tests: 'error'

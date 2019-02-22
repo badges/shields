@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const { nonNegativeInteger } = require('../validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('quality score (valid)')

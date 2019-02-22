@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const { ServiceTester } = require('../tester')
-
 const { isStarRating } = require('../test-validators')
 
 const t = new ServiceTester({

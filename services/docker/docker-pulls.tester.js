@@ -1,10 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const { dockerBlue } = require('./docker-helpers')
 const { isMetric } = require('../test-validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
+const { dockerBlue } = require('./docker-helpers')
 
 t.create('docker pulls (valid, library)')
   .get('/_/ubuntu.json?style=_shields_test')

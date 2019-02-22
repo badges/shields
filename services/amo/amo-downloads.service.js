@@ -2,7 +2,6 @@
 
 const { metric } = require('../../lib/text-formatters')
 const { downloadCount } = require('../../lib/color-formatters')
-
 const { BaseAmoService, keywords } = require('./amo-base')
 
 module.exports = class AmoDownloads extends BaseAmoService {

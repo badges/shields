@@ -3,7 +3,7 @@ import { shallow, render } from 'enzyme'
 import { expect } from 'chai'
 import Donate from './donate'
 
-import './enzyme-conf.spec'
+import '../enzyme-conf.spec'
 
 describe('<Donate />', function() {
   it('renders', function() {

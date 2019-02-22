@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { staticBadgeUrl } from '../lib/badge-url'
+import { staticBadgeUrl } from '../../core/badge-urls/make-badge-url'
 import { baseUrl } from '../constants'
 import Meta from '../components/meta'
 import Header from '../components/header'
@@ -88,7 +88,7 @@ const EndpointPage = () => (
     <Meta />
     <Header />
     <H3>Endpoint (Beta)</H3>
-    <Snippet snippet={`${baseUrl}/badge/endpoint.svg?url=...&style=...`} />
+    <Snippet snippet={`${baseUrl}/endpoint.svg?url=...&style=...`} />
     <p>Endpoint response:</p>
     <JsonExample
       data={{
@@ -101,7 +101,12 @@ const EndpointPage = () => (
     <p>Shields response:</p>
     <Badge
       alt="hello | sweet world"
-      src={staticBadgeUrl(baseUrl, 'hello', 'sweet world', 'orange')}
+      src={staticBadgeUrl({
+        baseUrl,
+        label: 'hello',
+        message: 'sweet world',
+        color: 'orange',
+      })}
     />
     <Explanation>
       <p>
@@ -228,7 +233,7 @@ const EndpointPage = () => (
       baseUrl={baseUrl}
       exampleNamedParams={{}}
       exampleQueryParams={{ url: 'https://shields.redsparr0w.com/2473/monday' }}
-      pattern="/badge/endpoint"
+      pattern="/endpoint"
       title="Custom badge"
     />
     <Footer baseUrl={baseUrl} />

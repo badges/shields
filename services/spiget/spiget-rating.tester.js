@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const { isStarRating, withRegex } = require('../test-validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Stars - EssentialsX (id 9089)')

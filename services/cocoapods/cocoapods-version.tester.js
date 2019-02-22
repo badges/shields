@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('version (valid)')

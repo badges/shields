@@ -1,7 +1,7 @@
 'use strict'
 
-const LgtmBaseService = require('./lgtm-base')
 const { metric } = require('../../lib/text-formatters')
+const LgtmBaseService = require('./lgtm-base')
 
 module.exports = class LgtmAlerts extends LgtmBaseService {
   static get route() {

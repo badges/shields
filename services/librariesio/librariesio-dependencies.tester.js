@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const { isDependencyState } = require('../test-validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('dependencies for releases')
