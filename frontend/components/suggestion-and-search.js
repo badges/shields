@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import fetchPonyfill from 'fetch-ponyfill'
 import debounce from 'lodash.debounce'
-import resolveUrl from '../lib/resolve-url'
 import BadgeExamples from './badge-examples'
 import { BlockInput } from './common'
 
@@ -42,7 +41,7 @@ export default class SuggestionAndSearch extends React.Component {
       const { baseUrl } = this.props
       const { projectUrl } = this.state
 
-      const url = resolveUrl('/$suggest/v1', baseUrl, { url: projectUrl })
+      const url = `${baseUrl}/$suggest/v1?url=${encodeURIComponent(projectUrl)}`
 
       const fetch = window.fetch || fetchPonyfill
       const res = await fetch(url)
