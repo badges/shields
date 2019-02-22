@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-
 const {
   downloadCount: downloadCountColor,
 } = require('../../lib/color-formatters')

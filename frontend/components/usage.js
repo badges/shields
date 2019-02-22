@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'gatsby'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { staticBadgeUrl } from '../lib/badge-url'
+import { staticBadgeUrl } from '../../core/badge-urls/make-badge-url'
 import { advertisedStyles, shieldsLogos } from '../../supported-features.json'
 import StaticBadgeMaker from './static-badge-maker'
 import DynamicBadgeMaker from './dynamic-badge-maker'
@@ -69,7 +69,7 @@ const ColorExamples = ({ baseUrl, colors }) => (
       <Badge
         alt={color}
         key={color}
-        src={staticBadgeUrl(baseUrl, '', color, color)}
+        src={staticBadgeUrl({ baseUrl, label: '', message: color, color })}
       />
     ))}
   </span>
@@ -91,8 +91,12 @@ export default class Usage extends React.PureComponent {
         <tbody>
           {advertisedStyles.map(style => {
             const snippet = `?style=${style}&logo=appveyor`
-            const badgeUrl = staticBadgeUrl(baseUrl, 'style', style, 'green', {
-              logo: 'appveyor',
+            const badgeUrl = staticBadgeUrl({
+              baseUrl,
+              label: 'style',
+              message: style,
+              color: 'green',
+              namedLogo: 'appveyor',
               style,
             })
             return (
@@ -175,12 +179,17 @@ export default class Usage extends React.PureComponent {
 
         <VerticalSpace />
 
+        <p>Using dash "-" separator</p>
         <p>
-          <Snippet
-            snippet={`${baseUrl}/badge/<SUBJECT>-<STATUS>-<COLOR>.svg`}
-          />
+          <Snippet snippet={`${baseUrl}/badge/<LABEL>-<MESSAGE>-<COLOR>.svg`} />
         </p>
         {this.constructor.renderStaticBadgeEscapingRules()}
+        <p>Using query string parameters</p>
+        <p>
+          <Snippet
+            snippet={`${baseUrl}/static/v1.svg?label=<LABEL>&message=<MESSAGE>&color=<COLOR>`}
+          />
+        </p>
 
         <H3 id="colors">Colors</H3>
         <p>

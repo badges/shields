@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const { isMetric } = require('../test-validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('dependent count')

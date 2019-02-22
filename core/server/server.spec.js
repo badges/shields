@@ -1,12 +1,12 @@
 'use strict'
 
+const fs = require('fs')
+const path = require('path')
 const { expect } = require('chai')
 const fetch = require('node-fetch')
 const got = require('got')
-const fs = require('fs')
 const isPng = require('is-png')
 const isSvg = require('is-svg')
-const path = require('path')
 const sinon = require('sinon')
 const portfinder = require('portfinder')
 const Joi = require('joi')

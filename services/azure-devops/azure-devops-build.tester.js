@@ -2,11 +2,10 @@
 
 const Joi = require('joi')
 const { isBuildStatus } = require('../../lib/build-status')
+const t = (module.exports = require('../tester').createServiceTester())
 
 // https://dev.azure.com/totodem/Shields.io is a public Azure DevOps project
 // solely created for Shields.io testing.
-
-const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('default branch')
   .get('/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2.json')

@@ -2,8 +2,8 @@
 
 const Joi = require('joi')
 const parseLinkHeader = require('parse-link-header')
-const { GithubAuthService } = require('./github-auth-service')
 const { renderContributorBadge } = require('../../lib/contributor-count')
+const { GithubAuthService } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 
 // All we do is check its length.
