@@ -1,27 +1,47 @@
 'use strict'
 
-const queryString = require('query-string')
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const {
-  coveragePercentage: coveragePercentageColor,
-} = require('../../lib/color-formatters')
+const Joi = require('joi')
+const { NotFound } = require('../../core/base-service')
+const { coveragePercentage } = require('../../lib/color-formatters')
+const { BaseJsonService } = require('..')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class Codecov extends LegacyService {
+// https://docs.codecov.io/reference#totals
+// A new repository that's been added but never had any coverage reports
+// uploaded will not have a `commit` object in the response and some times
+// the `totals` object will be missing.
+// Keeping these as optional in the schema and handling it in the transform
+// function to maintain consistent badge behavior with the legacy service implementation.
+const schema = Joi.object({
+  commit: Joi.object({
+    totals: Joi.object({
+      c: Joi.number().required(),
+    }),
+  }),
+}).required()
+
+module.exports = class Codecov extends BaseJsonService {
   static get category() {
     return 'coverage'
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'coverage' }
+  }
+
+  static render({ coverage }) {
+    return {
+      message: `${coverage.toFixed(0)}%`,
+      color: coveragePercentage(coverage),
+    }
   }
 
   static get route() {
     return {
       base: 'codecov/c',
-      pattern: '',
+      // https://docs.codecov.io/docs#section-common-questions
+      // Github, BitBucket, and GitLab are the only supported options (long or short form)
+      pattern:
+        ':vcsName(github|gh|bitbucket|bb|gl|gitlab)/:user/:repo/:branch*',
     }
   }
 
@@ -35,7 +55,7 @@ module.exports = class Codecov extends LegacyService {
           user: 'codecov',
           repo: 'example-python',
         },
-        staticPreview: { label: 'coverage', message: '90%', color: 'green' },
+        staticPreview: this.render({ coverage: 90 }),
       },
       {
         title: 'Codecov branch',
@@ -46,63 +66,37 @@ module.exports = class Codecov extends LegacyService {
           repo: 'example-python',
           branch: 'master',
         },
-        staticPreview: { label: 'coverage', message: '90%', color: 'green' },
-      },
-      {
-        title: 'Codecov private',
-        pattern: 'token/:token/:vcsName/:user/:repo',
-        namedParams: {
-          token: 'My0A8VL917',
-          vcsName: 'github',
-          user: 'codecov',
-          repo: 'example-python',
-        },
-        staticPreview: { label: 'coverage', message: '90%', color: 'green' },
+        staticPreview: this.render({ coverage: 90 }),
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/codecov\/c\/(?:token\/(\w+))?[+/]?([^/]+\/[^/]+\/[^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const token = match[1]
-        const userRepo = match[2] // eg, `github/codecov/example-python`.
-        const branch = match[3]
-        const format = match[4]
-        let apiUrl
-        if (branch) {
-          apiUrl = `https://codecov.io/${userRepo}/branch/${branch}/graphs/badge.txt`
-        } else {
-          apiUrl = `https://codecov.io/${userRepo}/graphs/badge.txt`
-        }
-        if (token) {
-          apiUrl += `?${queryString.stringify({ token })}`
-        }
-        const badgeData = getBadgeData('coverage', data)
-        request(apiUrl, (err, res, body) => {
-          if (err != null) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            // Body: range(0, 100) or "unknown"
-            const coverage = body.trim()
-            if (Number.isNaN(+coverage)) {
-              badgeData.text[1] = 'unknown'
-              sendBadge(format, badgeData)
-              return
-            }
-            badgeData.text[1] = `${coverage}%`
-            badgeData.colorscheme = coveragePercentageColor(coverage)
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'malformed'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  async fetch({ vcsName, user, repo, branch }) {
+    // Codecov Docs: https://docs.codecov.io/reference#section-get-a-single-repository
+    let url = `https://codecov.io/api/${vcsName}/${user}/${repo}`
+    if (branch) {
+      url += `/branches/${branch}`
+    }
+    return this._requestJson({
+      schema,
+      url,
+      errorMessages: {
+        404: 'repository not found',
+      },
+    })
+  }
+
+  transform({ json }) {
+    if (!json.commit || !json.commit.totals) {
+      throw new NotFound({ prettyMessage: 'unknown' })
+    }
+
+    return { coverage: +json.commit.totals.c }
+  }
+
+  async handle({ vcsName, user, repo, branch }) {
+    const json = await this.fetch({ vcsName, user, repo, branch })
+    const { coverage } = this.transform({ json })
+    return this.constructor.render({ coverage })
   }
 }
