@@ -1,7 +1,8 @@
 'use strict'
 
-const Joi = require('joi')
 const queryString = require('querystring')
+const Joi = require('joi')
+const t = (module.exports = require('../tester').createServiceTester())
 
 const isAppveyorTestTotals = Joi.string().regex(
   /^[0-9]+ passed(, [0-9]+ failed)?(, [0-9]+ skipped)?$/
@@ -18,8 +19,6 @@ const isCustomAppveyorTestTotals = Joi.string().regex(
 const isCompactCustomAppveyorTestTotals = Joi.string().regex(
   /^💃 [0-9]+( \| 🤦‍♀️ [0-9]+)?( \| 🤷 [0-9]+)?$/
 )
-
-const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Test status')
   .timeout(10000)

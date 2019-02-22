@@ -2,7 +2,6 @@
 
 const { expect } = require('chai')
 const { getShieldsIcon } = require('../../lib/logos')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Valid schema (mocked)')

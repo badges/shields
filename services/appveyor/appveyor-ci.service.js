@@ -1,8 +1,7 @@
 'use strict'
 
-const AppVeyorBase = require('./appveyor-base')
-
 const { renderBuildStatusBadge } = require('../../lib/build-status')
+const AppVeyorBase = require('./appveyor-base')
 
 module.exports = class AppVeyorCi extends AppVeyorBase {
   static get route() {

@@ -36,7 +36,6 @@ We'll start by adding some boilerplate to our file:
 'use strict'
 
 const Joi = require('joi')
-
 const t = (module.exports = require('../tester').createServiceTester())
 ```
 
