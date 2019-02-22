@@ -9,4 +9,5 @@ module.exports = deprecatedService({
     format: '(?:[^/]+)(?:/long)?/(?:[^/]+)/(?:.+)',
   },
   label: 'issue stats',
+  dateAdded: new Date('2018-09-01'),
 })
