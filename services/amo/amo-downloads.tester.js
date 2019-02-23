@@ -1,13 +1,20 @@
 'use strict'
 
 const Joi = require('joi')
-const { isMetric } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+const { ServiceTester } = require('../tester')
+const { isMetricOverTimePeriod } = require('../test-validators')
+const t = (module.exports = new ServiceTester({ id: 'amo', title: 'AMO' }))
 
-t.create('Downloads')
-  .get('/IndieGala-Helper.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }))
+t.create('Weekly Downloads')
+  .get('/dw/IndieGala-Helper.json')
+  .expectJSONTypes(
+    Joi.object().keys({ name: 'downloads', value: isMetricOverTimePeriod })
+  )
 
-t.create('Downloads (not found)')
-  .get('/not-a-real-plugin.json')
+t.create('Weekly Downloads (not found)')
+  .get('/dw/not-a-real-plugin.json')
   .expectJSON({ name: 'downloads', value: 'not found' })
+
+t.create('Total Downloads (no longer available)')
+  .get('/d/IndieGala-Helper.json')
+  .expectJSON({ name: 'downloads', value: 'no longer available' })
