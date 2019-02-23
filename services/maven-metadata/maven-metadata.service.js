@@ -26,7 +26,7 @@ module.exports = class MavenMetadata extends BaseXmlService {
   static get route() {
     return {
       base: 'maven-metadata/v',
-      pattern: ':protocol(http|https)/:hostAndPath*',
+      pattern: ':protocol(http|https)/:hostAndPath+',
     }
   }
 
