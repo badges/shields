@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import { expect } from 'chai'
 import Header from './header'
 
-import './enzyme-conf.spec'
+import '../enzyme-conf.spec'
 
 describe('<Header />', function() {
   it('renders', function() {

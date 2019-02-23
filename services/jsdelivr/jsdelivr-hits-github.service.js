@@ -27,40 +27,13 @@ module.exports = class jsDelivrHitsGitHub extends BaseJsDelivrService {
   static get examples() {
     return [
       {
-        title: 'jsDelivr Hits (GitHub)',
-        pattern: 'hd/:user/:repo',
+        title: 'jsDelivr hits (GitHub)',
         namedParams: {
-          user: 'jquery',
-          repo: 'jquery',
-        },
-        staticPreview: this.render({ period: 'hd', hits: 272042 }),
-      },
-      {
-        title: 'jsDelivr Hits (GitHub)',
-        pattern: 'hw/:user/:repo',
-        namedParams: {
-          user: 'jquery',
-          repo: 'jquery',
-        },
-        staticPreview: this.render({ period: 'hw', hits: 2156336 }),
-      },
-      {
-        title: 'jsDelivr Hits (GitHub)',
-        pattern: 'hm/:user/:repo',
-        namedParams: {
+          period: 'hm',
           user: 'jquery',
           repo: 'jquery',
         },
         staticPreview: this.render({ period: 'hm', hits: 9809876 }),
-      },
-      {
-        title: 'jsDelivr Hits (GitHub)',
-        pattern: 'hy/:user/:repo',
-        namedParams: {
-          user: 'jquery',
-          repo: 'jquery',
-        },
-        staticPreview: this.render({ period: 'hy', hits: 95317723 }),
       },
     ]
   }

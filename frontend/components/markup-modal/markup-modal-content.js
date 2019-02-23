@@ -43,11 +43,11 @@ export default class MarkupModalContent extends React.Component {
         {this.renderDocumentation()}
         <Customizer
           baseUrl={baseUrl}
-          title={title}
-          pattern={pattern}
           exampleNamedParams={namedParams}
           exampleQueryParams={queryParams}
           initialStyle={initialStyle}
+          pattern={pattern}
+          title={title}
         />
       </>
     )

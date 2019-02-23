@@ -1,8 +1,8 @@
 'use strict'
 
 const { expect } = require('chai')
-const { BadgeFactory } = require('./index')
 const isSvg = require('is-svg')
+const { BadgeFactory } = require('.')
 
 const bf = new BadgeFactory()
 

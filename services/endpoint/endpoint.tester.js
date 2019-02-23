@@ -2,7 +2,6 @@
 
 const { expect } = require('chai')
 const { getShieldsIcon } = require('../../lib/logos')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Valid schema (mocked)')
@@ -170,6 +169,20 @@ t.create('Invalid schema (mocked)')
   })
 
 t.create('User color overrides success color')
+  .get('.json?url=https://example.com/badge&color=101010&style=_shields_test')
+  .intercept(nock =>
+    nock('https://example.com/')
+      .get('/badge')
+      .reply(200, {
+        schemaVersion: 1,
+        label: '',
+        message: 'yo',
+        color: 'blue',
+      })
+  )
+  .expectJSON({ name: '', value: 'yo', color: '#101010' })
+
+t.create('User legacy color overrides success color')
   .get('.json?url=https://example.com/badge&colorB=101010&style=_shields_test')
   .intercept(nock =>
     nock('https://example.com/')
@@ -184,6 +197,21 @@ t.create('User color overrides success color')
   .expectJSON({ name: '', value: 'yo', color: '#101010' })
 
 t.create('User color does not override error color')
+  .get('.json?url=https://example.com/badge&color=101010&style=_shields_test')
+  .intercept(nock =>
+    nock('https://example.com/')
+      .get('/badge')
+      .reply(200, {
+        schemaVersion: 1,
+        isError: true,
+        label: 'something is',
+        message: 'not right',
+        color: 'red',
+      })
+  )
+  .expectJSON({ name: 'something is', value: 'not right', color: 'red' })
+
+t.create('User legacy color does not override error color')
   .get('.json?url=https://example.com/badge&colorB=101010&style=_shields_test')
   .intercept(nock =>
     nock('https://example.com/')

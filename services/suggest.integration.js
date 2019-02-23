@@ -4,9 +4,9 @@ const { expect } = require('chai')
 const got = require('got')
 const Camp = require('camp')
 const portfinder = require('portfinder')
+const serverSecrets = require('../lib/server-secrets')
 const { setRoutes } = require('./suggest')
 const GithubApiProvider = require('./github/github-api-provider')
-const serverSecrets = require('../lib/server-secrets')
 
 describe('GitHub badge suggestions', function() {
   const githubApiBaseUrl = process.env.GITHUB_URL || 'https://api.github.com'

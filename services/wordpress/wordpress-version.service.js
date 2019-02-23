@@ -1,8 +1,8 @@
 'use strict'
 
-const BaseWordpress = require('./wordpress-base')
 const { addv } = require('../../lib/text-formatters')
 const { version: versionColor } = require('../../lib/color-formatters')
+const BaseWordpress = require('./wordpress-base')
 
 function VersionForExtensionType(extensionType) {
   const { capt, exampleSlug } = {

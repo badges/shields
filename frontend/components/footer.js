@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import resolveUrl from '../lib/resolve-url'
+import { badgeUrlFromPath } from '../../core/badge-urls/make-badge-url'
 import { H2 } from './common'
 
 const SpacedA = styled.a`
@@ -15,43 +15,56 @@ const Footer = ({ baseUrl }) => (
 
     <p>
       <object
-        data={resolveUrl(
-          '/twitter/follow/shields_io.svg?style=social&label=Follow',
-          baseUrl
-        )}
         alt="Follow @shields_io"
+        data={badgeUrlFromPath({
+          baseUrl,
+          path: '/twitter/follow/shields_io',
+          queryParams: { label: 'Follow' },
+          style: 'social',
+        })}
       />{' '}
       {}
       <object
-        data={resolveUrl(
-          '/opencollective/backers/shields.svg?style=social&link=https://opencollective.com/shields',
-          baseUrl
-        )}
         alt="Donate to us!"
+        data={badgeUrlFromPath({
+          baseUrl,
+          path: '/opencollective/backers/shields',
+          queryParams: { link: 'https://opencollective.com/shields' },
+          style: 'social',
+        })}
       />{' '}
       {}
       <object
-        data={resolveUrl(
-          '/opencollective/sponsors/shields.svg?style=social&link=https://opencollective.com/shields',
-          baseUrl
-        )}
         alt="Donate to us!"
+        data={badgeUrlFromPath({
+          baseUrl,
+          path: '/opencollective/sponsors/shields',
+          queryParams: { link: 'https://opencollective.com/shields' },
+          style: 'social',
+        })}
       />{' '}
       {}
       <object
-        data={resolveUrl(
-          '/github/forks/badges/shields.svg?style=social&label=Fork',
-          baseUrl
-        )}
         alt="Fork on GitHub"
+        data={badgeUrlFromPath({
+          baseUrl,
+          path: '/github/forks/badges/shields',
+          queryParams: { label: 'Fork' },
+          style: 'social',
+        })}
       />{' '}
       {}
       <object
-        data={resolveUrl(
-          '/discord/308323056592486420.svg?style=social&label=Chat&link=https://discord.gg/HjJCwm5',
-          baseUrl
-        )}
         alt="chat on Discord"
+        data={badgeUrlFromPath({
+          baseUrl,
+          path: '/discord/308323056592486420',
+          queryParams: {
+            label: 'Chat',
+            link: 'link=https://discord.gg/HjJCwm5',
+          },
+          style: 'social',
+        })}
       />
     </p>
 

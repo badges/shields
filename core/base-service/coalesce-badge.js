@@ -41,20 +41,37 @@ module.exports = function coalesceBadge(
   defaultBadgeData,
   { category, _cacheLength: defaultCacheSeconds } = {}
 ) {
+  // The "overrideX" naming is based on services that provide badge
+  // parameters themselves, which can be overridden by a query string
+  // parameter. (For a couple services, the dynamic badge and the
+  // query-string-based static badge, the service never sets a value
+  // so the query string overrides are the _only_ way to configure
+  // these badge parameters.
   const {
     style: overrideStyle,
     label: overrideLabel,
     logo: overrideLogo,
     logoColor: overrideLogoColor,
     link: overrideLink,
+    colorB: legacyOverrideColor,
+    colorA: legacyOverrideLabelColor,
   } = overrides
-  // Scoutcamp converts numeric query params to numbers. Convert them back.
   let {
-    colorB: overrideColor,
-    colorA: overrideLabelColor,
     logoWidth: overrideLogoWidth,
     logoPosition: overrideLogoPosition,
+    color: overrideColor,
+    labelColor: overrideLabelColor,
   } = overrides
+
+  // Only use the legacy properties if the new ones are not provided
+  if (typeof overrideColor === 'undefined') {
+    overrideColor = legacyOverrideColor
+  }
+  if (typeof overrideLabelColor === 'undefined') {
+    overrideLabelColor = legacyOverrideLabelColor
+  }
+
+  // Scoutcamp converts numeric query params to numbers. Convert them back.
   if (typeof overrideColor === 'number') {
     overrideColor = `${overrideColor}`
   }

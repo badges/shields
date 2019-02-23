@@ -4,7 +4,6 @@ const path = require('path')
 const isPng = require('is-png')
 const isSvg = require('is-svg')
 const { spawn } = require('child-process-promise')
-
 const { expect, use } = require('chai')
 use(require('chai-string'))
 use(require('sinon-chai'))

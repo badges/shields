@@ -80,7 +80,7 @@ t.create('YAML from url | invalid url')
 
 t.create('YAML from url | user color overrides default')
   .get(
-    '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&query=$.name&colorB=10ADED&style=_shields_test'
+    '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&query=$.name&color=10ADED&style=_shields_test'
   )
   .expectJSON({ name: 'custom badge', value: 'coredns', color: '#10aded' })
 
@@ -95,7 +95,7 @@ t.create('YAML from url | error color overrides default')
   })
 
 t.create('YAML from url | error color overrides user specified')
-  .get('.json?query=$.version&colorB=10ADED&style=_shields_test')
+  .get('.json?query=$.version&color=10ADED&style=_shields_test')
   .expectJSON({
     name: 'custom badge',
     value: 'invalid query parameter: url',

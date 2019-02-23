@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const { isMetric, isMetricOpenIssues } = require('../test-validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('GitHub closed pull requests')

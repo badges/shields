@@ -1,7 +1,6 @@
 'use strict'
 
 const serverSecrets = require('../../lib/server-secrets')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 const noToken = !serverSecrets.wheelmap_token
