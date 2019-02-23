@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { examplePropType } from '../../lib/service-definitions/service-definition-prop-types'
 import { H3 } from '../common'
 import Customizer from '../customizer/customizer'
 
@@ -11,10 +12,7 @@ const Documentation = styled.div`
 
 export default class MarkupModalContent extends React.Component {
   static propTypes = {
-    // This is an item from the `examples` array within the
-    // `serviceDefinition` schema.
-    // https://github.com/badges/shields/blob/master/services/service-definitions.js
-    example: PropTypes.object,
+    example: examplePropType,
     baseUrl: PropTypes.string.isRequired,
   }
 
