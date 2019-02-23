@@ -23,7 +23,7 @@ module.exports = class Cookbook extends BaseJsonService {
       {
         title: 'Chef cookbook',
         namedParams: { cookbook: 'chef-sugar' },
-        staticPreview: renderVersionBadge({ version: 'v5.0.0' }),
+        staticPreview: renderVersionBadge({ version: '5.0.0' }),
       },
     ]
   }
