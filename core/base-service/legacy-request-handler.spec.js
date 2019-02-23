@@ -264,9 +264,9 @@ describe('The request handler', function() {
         expect(res.headers.get('cache-control')).to.equal('max-age=300')
       })
 
-      it('should set the expires header to current time + maxAge', async function() {
+      it('should set the expires header to current time + cacheSeconds', async function() {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 0 } })
-        const res = await fetch(`${baseUrl}/testing/123.json?maxAge=3600`)
+        const res = await fetch(`${baseUrl}/testing/123.json?cacheSeconds=3600`)
         const expectedExpiry = new Date(
           +new Date(res.headers.get('date')) + 3600000
         ).toGMTString()
@@ -274,9 +274,9 @@ describe('The request handler', function() {
         expect(res.headers.get('cache-control')).to.equal('max-age=3600')
       })
 
-      it('should ignore maxAge if maxAge < defaultCacheLengthSeconds', async function() {
+      it('should ignore cacheSeconds when shorter than defaultCacheLengthSeconds', async function() {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 600 } })
-        const res = await fetch(`${baseUrl}/testing/123.json?maxAge=300`)
+        const res = await fetch(`${baseUrl}/testing/123.json?cacheSeconds=300`)
         const expectedExpiry = new Date(
           +new Date(res.headers.get('date')) + 600000
         ).toGMTString()
@@ -284,7 +284,7 @@ describe('The request handler', function() {
         expect(res.headers.get('cache-control')).to.equal('max-age=600')
       })
 
-      it('should set Cache-Control: no-cache, no-store, must-revalidate if maxAge=0', async function() {
+      it('should set Cache-Control: no-cache, no-store, must-revalidate if cache seconds is 0', async function() {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 0 } })
         const res = await fetch(`${baseUrl}/testing/123.json`)
         expect(res.headers.get('expires')).to.equal(res.headers.get('date'))
