@@ -5,6 +5,14 @@ const { downloadCount } = require('../../lib/color-formatters')
 const { redirector } = require('..')
 const { BaseAmoService, keywords } = require('./amo-base')
 
+const documentation = `
+<p>
+  Previously <code>amo/d</code> provided a &ldquo;total downloads&rdquo; badge. However,
+  <a href="https://github.com/badges/shields/issues/3079">updates to the v3 API</a> only
+  give us weekly downloads. The route <code>amo/d</code> redirects to <code>amo/dw</code>.
+</p>
+`
+
 class AmoWeeklyDownloads extends BaseAmoService {
   static get category() {
     return 'downloads'
@@ -24,6 +32,7 @@ class AmoWeeklyDownloads extends BaseAmoService {
         namedParams: { addonId: 'dustman' },
         staticPreview: this.render({ downloads: 120 }),
         keywords,
+        documentation,
       },
     ]
   }
@@ -48,9 +57,6 @@ class AmoWeeklyDownloads extends BaseAmoService {
 }
 
 const AmoLegacyRedirect = redirector({
-  // /d used to be a 'total downloads' badge
-  // but the v3 api only gives us weekly downloads now
-  // redirect /d to /dw
   category: 'downloads',
   route: {
     base: 'amo/d',
