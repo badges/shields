@@ -2,6 +2,8 @@
 
 const Joi = require('joi')
 const { ServiceTester } = require('../tester')
+const { isMetric, isMetricOpenIssues } = require('../test-validators')
+const { isBuildStatus } = require('../../lib/build-status')
 const {
   mockBitbucketCreds,
   mockBitbucketServerCreds,
@@ -9,8 +11,6 @@ const {
   user,
   pass,
 } = require('./bitbucket-test-helpers')
-const { isMetric, isMetricOpenIssues } = require('../test-validators')
-const { isBuildStatus } = require('../../lib/build-status')
 
 const t = (module.exports = new ServiceTester({
   id: 'bitbucket',

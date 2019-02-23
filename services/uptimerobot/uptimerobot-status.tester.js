@@ -2,6 +2,7 @@
 
 const Joi = require('joi')
 const { invalidJSON } = require('../response-fixtures')
+const t = (module.exports = require('../tester').createServiceTester())
 
 const isUptimeStatus = Joi.string().valid(
   'paused',
@@ -10,8 +11,6 @@ const isUptimeStatus = Joi.string().valid(
   'seems down',
   'down'
 )
-
-const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Uptime Robot: Status (valid)')
   .get('/m778918918-3e92c097147760ee39d02d36.json')

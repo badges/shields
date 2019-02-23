@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const { isBuildStatus } = require('../../lib/build-status')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('build status on default branch')

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { staticBadgeUrl } from '../lib/badge-url'
+import { staticBadgeUrl } from '../../core/badge-urls/make-badge-url'
 import { baseUrl } from '../constants'
 import Meta from '../components/meta'
 import Header from '../components/header'
@@ -87,8 +87,8 @@ const EndpointPage = () => (
     <GlobalStyle />
     <Meta />
     <Header />
-    <H3 id="static-badge">Endpoint (Beta)</H3>
-    <Snippet snippet={`${baseUrl}/badge/endpoint.svg?url=...&style=...`} />
+    <H3>Endpoint (Beta)</H3>
+    <Snippet snippet={`${baseUrl}/endpoint.svg?url=...&style=...`} />
     <p>Endpoint response:</p>
     <JsonExample
       data={{
@@ -100,8 +100,13 @@ const EndpointPage = () => (
     />
     <p>Shields response:</p>
     <Badge
-      src={staticBadgeUrl(baseUrl, 'hello', 'sweet world', 'orange')}
       alt="hello | sweet world"
+      src={staticBadgeUrl({
+        baseUrl,
+        label: 'hello',
+        message: 'sweet world',
+        color: 'orange',
+      })}
     />
     <Explanation>
       <p>
@@ -226,10 +231,10 @@ const EndpointPage = () => (
     <h4>Customize and test</h4>
     <Customizer
       baseUrl={baseUrl}
-      title="Custom badge"
-      pattern="/badge/endpoint"
       exampleNamedParams={{}}
       exampleQueryParams={{ url: 'https://shields.redsparr0w.com/2473/monday' }}
+      pattern="/endpoint"
+      title="Custom badge"
     />
     <Footer baseUrl={baseUrl} />
   </MainContainer>

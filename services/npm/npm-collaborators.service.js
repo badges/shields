@@ -1,7 +1,7 @@
 'use strict'
 
-const NpmBase = require('./npm-base')
 const { renderContributorBadge } = require('../../lib/contributor-count')
+const NpmBase = require('./npm-base')
 
 const keywords = ['node']
 

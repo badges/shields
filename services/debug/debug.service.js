@@ -3,6 +3,7 @@
 const { NonMemoryCachingBaseService } = require('..')
 
 const serverStartTime = new Date(new Date().toGMTString())
+let bitFlip = false
 
 module.exports = class Debug extends NonMemoryCachingBaseService {
   static get category() {
@@ -19,7 +20,7 @@ module.exports = class Debug extends NonMemoryCachingBaseService {
   static get route() {
     return {
       base: 'debug',
-      pattern: ':which(time|starttime)',
+      pattern: ':which(time|starttime|flip)',
     }
   }
 
@@ -34,6 +35,22 @@ module.exports = class Debug extends NonMemoryCachingBaseService {
         return {
           label: 'start time',
           message: new Date(serverStartTime).toUTCString(),
+        }
+      // For production cache debugging.
+      case 'flip':
+        bitFlip = !bitFlip
+        if (bitFlip) {
+          return {
+            label: 'flip',
+            message: 'on',
+            color: 'brightgreen',
+          }
+        } else {
+          return {
+            label: 'flip',
+            message: 'off',
+            color: 'red',
+          }
         }
     }
   }

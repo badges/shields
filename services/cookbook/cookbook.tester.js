@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('version')
@@ -28,3 +27,7 @@ t.create('version (mocked)')
     value: 'v4.1.0',
     color: 'blue',
   })
+
+t.create('version (not found)')
+  .get('/not-a-cookbook.json')
+  .expectJSON({ name: 'cookbook', value: 'not found' })

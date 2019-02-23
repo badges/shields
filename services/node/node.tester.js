@@ -3,7 +3,6 @@
 const { expect } = require('chai')
 const Joi = require('joi')
 const { Range } = require('semver')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 function expectSemverRange(value) {

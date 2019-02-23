@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-
 const { version: versionColor } = require('../../lib/color-formatters')
 const { addv } = require('../../lib/text-formatters')
 const serverSecrets = require('../../lib/server-secrets')

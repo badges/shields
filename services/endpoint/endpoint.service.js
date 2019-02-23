@@ -20,9 +20,9 @@ module.exports = class Endpoint extends BaseJsonService {
 
   static get route() {
     return {
-      base: 'badge/endpoint',
+      base: 'endpoint',
       pattern: '',
-      queryParams: ['url'],
+      queryParamSchema,
     }
   }
 
@@ -66,12 +66,7 @@ module.exports = class Endpoint extends BaseJsonService {
     }
   }
 
-  async handle(namedParams, queryParams) {
-    const { url } = this.constructor._validateQueryParams(
-      queryParams,
-      queryParamSchema
-    )
-
+  async handle(namedParams, { url }) {
     const { protocol, hostname } = new URL(url)
     if (protocol !== 'https:') {
       throw new InvalidParameter({ prettyMessage: 'please use https' })

@@ -1,8 +1,8 @@
 'use strict'
 
-const BaseWordpress = require('./wordpress-base')
 const { starRating, metric } = require('../../lib/text-formatters')
 const { floorCount } = require('../../lib/color-formatters')
+const BaseWordpress = require('./wordpress-base')
 
 const extensionData = {
   plugin: {

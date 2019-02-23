@@ -1,10 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const { dockerBlue } = require('./docker-helpers')
 const { isBuildStatus } = require('../../lib/build-status')
-
 const t = (module.exports = require('../tester').createServiceTester())
+const { dockerBlue } = require('./docker-helpers')
 
 t.create('docker build status (valid, user)')
   .get('/jrottenberg/ffmpeg.json')

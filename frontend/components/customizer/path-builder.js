@@ -170,8 +170,8 @@ export default class PathBuilder extends React.Component {
       return (
         <NamedParamSelect
           name={name}
-          value={value}
           onChange={this.handleTokenChange}
+          value={value}
         >
           <option key="empty" value="">
             {' '}
@@ -186,10 +186,10 @@ export default class PathBuilder extends React.Component {
     } else {
       return (
         <NamedParamInput
-          type="text"
           name={name}
-          value={value}
           onChange={this.handleTokenChange}
+          type="text"
+          value={value}
           {...noAutocorrect}
         />
       )
