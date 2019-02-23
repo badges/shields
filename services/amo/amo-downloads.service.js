@@ -2,7 +2,7 @@
 
 const { metric } = require('../../lib/text-formatters')
 const { downloadCount } = require('../../lib/color-formatters')
-const { deprecatedService } = require('..')
+const { redirector } = require('..')
 const { BaseAmoService, keywords } = require('./amo-base')
 
 class AmoWeeklyDownloads extends BaseAmoService {
@@ -47,17 +47,20 @@ class AmoWeeklyDownloads extends BaseAmoService {
   }
 }
 
-const AmoTotalDownloads = deprecatedService({
+const AmoLegacyRedirect = redirector({
+  // /d used to be a 'total downloads' badge
+  // but the v3 api only gives us weekly downloads now
+  // redirect /d to /dw
   category: 'downloads',
   route: {
     base: 'amo/d',
     pattern: ':addonId',
   },
-  label: 'downloads',
+  target: ({ addonId }) => `/amo/dw/${addonId}`,
   dateAdded: new Date('2019-02-23'),
 })
 
 module.exports = {
   AmoWeeklyDownloads,
-  AmoTotalDownloads,
+  AmoLegacyRedirect,
 }

@@ -15,6 +15,8 @@ t.create('Weekly Downloads (not found)')
   .get('/dw/not-a-real-plugin.json')
   .expectJSON({ name: 'downloads', value: 'not found' })
 
-t.create('Total Downloads (no longer available)')
+t.create('/d URL should redirect to /dw')
   .get('/d/IndieGala-Helper.json')
-  .expectJSON({ name: 'downloads', value: 'no longer available' })
+  .expectJSONTypes(
+    Joi.object().keys({ name: 'downloads', value: isMetricOverTimePeriod })
+  )
