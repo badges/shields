@@ -299,6 +299,10 @@ module.exports = class Server {
       this.githubConstellation = undefined
     }
 
+    if (this.metrics) {
+      this.metrics.stop()
+    }
+
     analytics.cancelAutosaving()
   }
 }

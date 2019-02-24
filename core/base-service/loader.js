@@ -85,12 +85,6 @@ function checkNames() {
   assertNamesUnique(services.map(({ name }) => name), {
     message: 'Duplicate service names found',
   })
-  assertNamesUnique(
-    services.map(({ _prometheusMetricName }) => _prometheusMetricName),
-    {
-      message: 'Duplicate Prometheus metric names found',
-    }
-  )
 }
 
 function collectDefinitions() {
