@@ -33,32 +33,44 @@ describe('Cache header functions', function() {
       given({
         cacheHeaderConfig,
         serviceDefaultCacheLengthSeconds: 900,
+        queryParams: { cacheSeconds: 1000 },
+      }).expect(1000)
+      given({
+        cacheHeaderConfig,
+        serviceDefaultCacheLengthSeconds: 900,
+        queryParams: { cacheSeconds: 1000, other: 'here', maybe: 'bogus' },
+      }).expect(1000)
+      given({
+        cacheHeaderConfig,
+        serviceDefaultCacheLengthSeconds: 900,
+        queryParams: { cacheSeconds: 400 },
+      }).expect(900)
+      given({
+        cacheHeaderConfig,
+        serviceDefaultCacheLengthSeconds: 900,
+        queryParams: { cacheSeconds: '-1000' },
+      }).expect(900)
+      given({
+        cacheHeaderConfig,
+        serviceDefaultCacheLengthSeconds: 900,
+        queryParams: { cacheSeconds: '' },
+      }).expect(900)
+      given({
+        cacheHeaderConfig,
+        serviceDefaultCacheLengthSeconds: 900,
+        queryParams: { cacheSeconds: 'not a number' },
+      }).expect(900)
+      given({
+        cacheHeaderConfig,
+        serviceDefaultCacheLengthSeconds: 900,
+        // Legacy name.
         queryParams: { maxAge: 1000 },
       }).expect(1000)
       given({
         cacheHeaderConfig,
         serviceDefaultCacheLengthSeconds: 900,
-        queryParams: { maxAge: 1000, other: 'here', maybe: 'bogus' },
-      }).expect(1000)
-      given({
-        cacheHeaderConfig,
-        serviceDefaultCacheLengthSeconds: 900,
-        queryParams: { maxAge: 400 },
-      }).expect(900)
-      given({
-        cacheHeaderConfig,
-        serviceDefaultCacheLengthSeconds: 900,
-        queryParams: { maxAge: '-1000' },
-      }).expect(900)
-      given({
-        cacheHeaderConfig,
-        serviceDefaultCacheLengthSeconds: 900,
-        queryParams: { maxAge: '' },
-      }).expect(900)
-      given({
-        cacheHeaderConfig,
-        serviceDefaultCacheLengthSeconds: 900,
-        queryParams: { maxAge: 'not a number' },
+        // Both legacy and new name provided -> both ignored.
+        queryParams: { maxAge: 1000, cacheSeconds: 1000 },
       }).expect(900)
       given({
         cacheHeaderConfig,
@@ -79,12 +91,12 @@ describe('Cache header functions', function() {
       given({
         cacheHeaderConfig,
         serviceOverrideCacheLengthSeconds: 800,
-        queryParams: { maxAge: 500 },
+        queryParams: { cacheSeconds: 500 },
       }).expect(800)
       given({
         cacheHeaderConfig,
         serviceOverrideCacheLengthSeconds: 900,
-        queryParams: { maxAge: 800 },
+        queryParams: { cacheSeconds: 800 },
       }).expect(900)
     })
   })
@@ -154,7 +166,7 @@ describe('Cache header functions', function() {
       setCacheHeaders({
         cacheHeaderConfig: { defaultCacheLengthSeconds: 1234 },
         serviceDefaultCacheLengthSeconds: 567,
-        queryParams: { maxAge: 999999 },
+        queryParams: { cacheSeconds: 999999 },
         res,
       })
 
