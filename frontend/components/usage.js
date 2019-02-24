@@ -227,9 +227,7 @@ export default class Usage extends React.PureComponent {
         <H3>Endpoint (Beta)</H3>
 
         <p>
-          <Snippet
-            snippet={`${baseUrl}/badge/endpoint.svg?url=<URL>&style<STYLE>`}
-          />
+          <Snippet snippet={`${baseUrl}/endpoint.svg?url=<URL>&style<STYLE>`} />
         </p>
 
         <p>
@@ -389,13 +387,14 @@ export default class Usage extends React.PureComponent {
             <QueryParam
               documentation={
                 <span>
-                  Set the HTTP cache lifetime in secs (rules are applied to
-                  infer a default value on a per-badge basis, any values
-                  specified below the default will be ignored)
+                  Set the HTTP cache lifetime (rules are applied to infer a
+                  default value on a per-badge basis, any values specified below
+                  the default will be ignored). The legacy name "maxAge" is also
+                  supported.
                 </span>
               }
-              key="maxAge"
-              snippet="?maxAge=3600"
+              key="cacheSeconds"
+              snippet="?cacheSeconds=3600"
             />
           </tbody>
         </QueryParamTable>

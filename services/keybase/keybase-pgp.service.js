@@ -1,8 +1,8 @@
 'use strict'
 
-const KeybaseProfile = require('./keybase-profile')
 const Joi = require('joi')
 const { nonNegativeInteger } = require('../validators')
+const KeybaseProfile = require('./keybase-profile')
 
 const keyFingerprintSchema = Joi.object({
   status: Joi.object({

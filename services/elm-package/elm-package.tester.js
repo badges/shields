@@ -2,7 +2,6 @@
 
 const Joi = require('joi')
 const { isSemver } = require('../test-validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('gets the package version of elm/core')

@@ -18,7 +18,7 @@ describe('Badge URL generation functions', function() {
       style: 'flat-square',
       longCache: true,
     }).expect(
-      'http://example.com/npm/v/gh-badges.svg?maxAge=2592000&style=flat-square'
+      'http://example.com/npm/v/gh-badges.svg?cacheSeconds=2592000&style=flat-square'
     )
   })
 
@@ -30,7 +30,7 @@ describe('Badge URL generation functions', function() {
       style: 'flat-square',
       longCache: true,
     }).expect(
-      'http://example.com/npm/v/gh-badges.svg?maxAge=2592000&style=flat-square'
+      'http://example.com/npm/v/gh-badges.svg?cacheSeconds=2592000&style=flat-square'
     )
   })
 

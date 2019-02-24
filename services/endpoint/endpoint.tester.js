@@ -2,7 +2,6 @@
 
 const { expect } = require('chai')
 const { getShieldsIcon } = require('../../lib/logos')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Valid schema (mocked)')
@@ -242,7 +241,7 @@ t.create('cacheSeconds')
   .expectHeader('cache-control', 'max-age=500')
 
 t.create('user can override service cacheSeconds')
-  .get('.json?url=https://example.com/badge&maxAge=1000')
+  .get('.json?url=https://example.com/badge&cacheSeconds=1000')
   .intercept(nock =>
     nock('https://example.com/')
       .get('/badge')
@@ -256,7 +255,7 @@ t.create('user can override service cacheSeconds')
   .expectHeader('cache-control', 'max-age=1000')
 
 t.create('user does not override longer service cacheSeconds')
-  .get('.json?url=https://example.com/badge&maxAge=450')
+  .get('.json?url=https://example.com/badge&cacheSeconds=450')
   .intercept(nock =>
     nock('https://example.com/')
       .get('/badge')

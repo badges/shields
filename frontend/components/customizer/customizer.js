@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import clipboardCopy from 'clipboard-copy'
 import { staticBadgeUrl } from '../../../core/badge-urls/make-badge-url'
 import { generateMarkup } from '../../lib/generate-image-markup'
+import { objectOfKeyValuesPropType } from '../../lib/service-definitions/service-definition-prop-types'
 import { Badge } from '../common'
 import PathBuilder from './path-builder'
 import QueryStringBuilder from './query-string-builder'
@@ -11,14 +12,11 @@ import CopiedContentIndicator from './copied-content-indicator'
 
 export default class Customizer extends React.Component {
   static propTypes = {
-    // This is an item from the `examples` array within the
-    // `serviceDefinition` schema.
-    // https://github.com/badges/shields/blob/master/services/service-definitions.js
     baseUrl: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     pattern: PropTypes.string.isRequired,
-    exampleNamedParams: PropTypes.object.isRequired,
-    exampleQueryParams: PropTypes.object.isRequired,
+    exampleNamedParams: objectOfKeyValuesPropType,
+    exampleQueryParams: objectOfKeyValuesPropType,
     initialStyle: PropTypes.string,
   }
 

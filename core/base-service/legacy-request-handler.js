@@ -103,8 +103,8 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
     // by-badge basis). Then in turn that can be overridden by
     // `serviceOverrideCacheLengthSeconds` (which we expect to be used only in
     // the dynamic badge) but only if `serviceOverrideCacheLengthSeconds` is
-    // longer than `serviceDefaultCacheLengthSeconds` and then the `maxAge`
-    // query param can also override both of those but again only if `maxAge`
+    // longer than `serviceDefaultCacheLengthSeconds` and then the `cacheSeconds`
+    // query param can also override both of those but again only if `cacheSeconds`
     // is longer.
     //
     // When the legacy services have been rewritten, all the code in here

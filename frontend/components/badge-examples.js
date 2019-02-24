@@ -5,6 +5,7 @@ import {
   badgeUrlFromPath,
   staticBadgeUrl,
 } from '../../core/badge-urls/make-badge-url'
+import { serviceDefinitionPropType } from '../lib/service-definitions/service-definition-prop-types'
 import { Badge } from './common'
 import { StyledCode } from './snippet'
 
@@ -28,7 +29,7 @@ const ClickableCode = styled(StyledCode)`
 
 export default class BadgeExamples extends React.Component {
   static propTypes = {
-    definitions: PropTypes.array.isRequired,
+    definitions: PropTypes.arrayOf(serviceDefinitionPropType).isRequired,
     baseUrl: PropTypes.string,
     onClick: PropTypes.func.isRequired,
   }
@@ -74,10 +75,6 @@ export default class BadgeExamples extends React.Component {
 
   render() {
     const { definitions } = this.props
-
-    if (!definitions) {
-      return null
-    }
 
     const flattened = definitions.reduce((accum, current) => {
       const { examples } = current
