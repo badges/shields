@@ -1,7 +1,11 @@
 'use strict'
 
 const { test, given, forCases } = require('sazerac')
-const { parseVersion, compareVersionLists } = require('./luarocks-version')
+const {
+  parseVersion,
+  compareVersionLists,
+  latestVersion,
+} = require('./luarocks-version-helpers')
 
 describe('LuaRocks-specific helpers', function() {
   test(compareVersionLists, () => {
@@ -49,5 +53,10 @@ describe('LuaRocks-specific helpers', function() {
     given('2.0-alpha').expect([2, 0, -3100])
     given('2.0-beta').expect([2, 0, -3000])
     given('2.0-beta5').expect([2, 0, -2995])
+  })
+
+  test(latestVersion, () => {
+    given(['1.2.4-3', '1.2.4-4', '1.2.6-1']).expect('1.2.6-1')
+    given(['1.2.4-3']).expect('1.2.4-3')
   })
 })
