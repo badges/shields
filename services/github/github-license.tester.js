@@ -4,31 +4,15 @@ const { licenseToColor } = require('../../lib/licenses')
 const t = (module.exports = require('../tester').createServiceTester())
 
 const publicDomainLicenseColor = licenseToColor('CC0-1.0')
-const permissiveLicenseColor = licenseToColor('MIT')
-const copyleftLicenseColor = licenseToColor('GPL-3.0')
 const unknownLicenseColor = licenseToColor()
 
-// TODO: Probably these license color tests should be converted to unit tests.
-
-t.create('Public domain license')
+t.create('License')
   .get('/github/gitignore.json?style=_shields_test')
   .expectJSON({
     name: 'license',
     value: 'CC0-1.0',
     color: `#${publicDomainLicenseColor}`,
   })
-
-t.create('Copyleft license')
-  .get('/ansible/ansible.json?style=_shields_test')
-  .expectJSON({
-    name: 'license',
-    value: 'GPL-3.0',
-    color: copyleftLicenseColor,
-  })
-
-t.create('Permissive license')
-  .get('/atom/atom.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'MIT', color: permissiveLicenseColor })
 
 t.create('License for repo without a license')
   .get('/badges/badger.json?style=_shields_test')
