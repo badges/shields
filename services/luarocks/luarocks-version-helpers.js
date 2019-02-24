@@ -5,6 +5,8 @@
  */
 'use strict'
 
+const { omitv } = require('../../lib/text-formatters')
+
 // Compare two arrays containing split and transformed to
 // positive/negative numbers parts of version strings,
 // respecting negative/missing values:
@@ -23,7 +25,6 @@ function compareVersionLists(v1, v2) {
   }
   return 0
 }
-exports.compareVersionLists = compareVersionLists
 
 // Parse a dotted version string to an array of numbers
 // 'rc', 'pre', 'beta', 'alpha' are converted to negative numbers
@@ -56,4 +57,24 @@ function parseVersion(versionString) {
   })
   return versionList
 }
-exports.parseVersion = parseVersion
+
+function latestVersion(versions) {
+  let latestVersionString, latestVersionList
+  versions.map(omitv).forEach(versionString => {
+    const versionList = parseVersion(versionString)
+    if (
+      !latestVersionList || // first iteration
+      compareVersionLists(versionList, latestVersionList) > 0
+    ) {
+      latestVersionString = versionString
+      latestVersionList = versionList
+    }
+  })
+  return latestVersionString
+}
+
+module.exports = {
+  parseVersion,
+  compareVersionLists,
+  latestVersion,
+}
