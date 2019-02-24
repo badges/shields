@@ -1,12 +1,9 @@
 'use strict'
 
-// See available emoji at http://emoji.muan.co/
 const decamelize = require('decamelize')
+// See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const Joi = require('joi')
-// Ideally `validateMetricName()` would be in the public interface.
-// https://github.com/siimon/prom-client/pull/246
-const { validateMetricName } = require('prom-client/lib/validation')
 const { checkErrorResponse } = require('../../lib/error-helper')
 const { assertValidCategory } = require('../../services/categories')
 const coalesceBadge = require('./coalesce-badge')
@@ -159,14 +156,6 @@ module.exports = class BaseService {
   }
 
   static validateDefinition() {
-    if (!validateMetricName(this._prometheusMetricName)) {
-      throw Error(
-        `Invalid Prometheus metric name for ${this.name}: ${
-          this._prometheusMetricName
-        }`
-      )
-    }
-
     assertValidCategory(this.category, `Category for ${this.name}`)
 
     assertValidRoute(this.route, `Route for ${this.name}`)
