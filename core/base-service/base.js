@@ -1,8 +1,13 @@
 'use strict'
 
 // See available emoji at http://emoji.muan.co/
+const decamelize = require('decamelize')
 const emojic = require('emojic')
 const Joi = require('joi')
+const prometheus = require('prom-client')
+// Ideally `validateMetricName()` would be in the public interface.
+// https://github.com/siimon/prom-client/pull/246
+const { validateMetricName } = require('prom-client/lib/validation')
 const { checkErrorResponse } = require('../../lib/error-helper')
 const { assertValidCategory } = require('../../services/categories')
 const coalesceBadge = require('./coalesce-badge')
@@ -155,6 +160,14 @@ module.exports = class BaseService {
   }
 
   static validateDefinition() {
+    if (!validateMetricName(this._prometheusMetricName)) {
+      throw Error(
+        `Invalid Prometheus metric name for ${this.name}: ${
+          this._prometheusMetricName
+        }`
+      )
+    }
+
     assertValidCategory(this.category, `Category for ${this.name}`)
 
     assertValidRoute(this.route, `Route for ${this.name}`)
@@ -317,10 +330,33 @@ module.exports = class BaseService {
     return serviceData
   }
 
+  static get _description() {
+    return `${this.name} service`
+  }
+
+  static get _prometheusMetricName() {
+    return `service_${decamelize(this.name)}_requests_total`
+  }
+
+  static _createPrometheusCounter() {
+    return new prometheus.Counter({
+      name: this._prometheusMetricName,
+      help: `Total requests for ${this._description}`,
+    })
+  }
+
   static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
-    const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
+    const {
+      cacheHeaders: cacheHeaderConfig,
+      fetchLimitBytes,
+      prometheusMetricsEnabled,
+    } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
     const queryParams = getQueryParamNames(this.route)
+
+    const prometheusCounter = prometheusMetricsEnabled
+      ? this._createPrometheusCounter()
+      : undefined
 
     camp.route(
       regex,
@@ -348,6 +384,10 @@ module.exports = class BaseService {
           // The final capture group is the extension.
           const format = match.slice(-1)[0]
           sendBadge(format, badgeData)
+
+          if (prometheusCounter) {
+            prometheusCounter.inc()
+          }
         },
         cacheLength: this._cacheLength,
         fetchLimitBytes,

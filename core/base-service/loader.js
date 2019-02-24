@@ -2,6 +2,7 @@
 
 const path = require('path')
 const glob = require('glob')
+const countBy = require('lodash.countby')
 const { categories } = require('../../services/categories')
 const BaseService = require('./base')
 const { assertValidServiceDefinitionExport } = require('./service-definitions')
@@ -56,6 +57,31 @@ function loadServiceClasses(servicePaths) {
   return serviceClasses
 }
 
+function assertNamesUnique(names, { message }) {
+  const duplicates = {}
+  Object.entries(countBy(names))
+    .filter(([name, count]) => count > 1)
+    .forEach(([name, count]) => {
+      duplicates[name] = count
+    })
+  if (Object.keys(duplicates).length) {
+    throw new Error(`${message}: ${JSON.stringify(duplicates, undefined, 2)}`)
+  }
+}
+
+function checkNames() {
+  const services = loadServiceClasses()
+  assertNamesUnique(services.map(({ name }) => name), {
+    message: 'Duplicate service names found',
+  })
+  assertNamesUnique(
+    services.map(({ _prometheusMetricName }) => _prometheusMetricName),
+    {
+      message: 'Duplicate Prometheus metric names found',
+    }
+  )
+}
+
 function collectDefinitions() {
   const services = loadServiceClasses()
     // flatMap.
@@ -78,6 +104,7 @@ function loadTesters() {
 module.exports = {
   InvalidService,
   loadServiceClasses,
+  checkNames,
   collectDefinitions,
   loadTesters,
 }

@@ -1,5 +1,6 @@
 'use strict'
 
+const camelcase = require('camelcase')
 const Joi = require('joi')
 const { BaseJsonService } = require('..')
 const { metric } = require('../../lib/text-formatters')
@@ -38,6 +39,10 @@ class DiscourseBase extends BaseJsonService {
 
 function DiscourseMetricIntegrationFactory({ metricName, property }) {
   return class DiscourseMetric extends DiscourseBase {
+    static get name() {
+      return camelcase(`Discourse ${metricName}`, { pascalCase: true })
+    }
+
     static get route() {
       return this.buildRoute(metricName)
     }

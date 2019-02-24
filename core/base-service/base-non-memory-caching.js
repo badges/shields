@@ -25,9 +25,16 @@ const { prepareRoute, namedParamsForMatch } = require('./route')
 // cache length.
 module.exports = class NonMemoryCachingBaseService extends BaseService {
   static register({ camp }, serviceConfig) {
-    const { cacheHeaders: cacheHeaderConfig } = serviceConfig
+    const {
+      cacheHeaders: cacheHeaderConfig,
+      prometheusMetricsEnabled,
+    } = serviceConfig
     const { _cacheLength: serviceDefaultCacheLengthSeconds } = this
     const { regex, captureNames } = prepareRoute(this.route)
+
+    const prometheusCounter = prometheusMetricsEnabled
+      ? this._createPrometheusCounter()
+      : undefined
 
     camp.route(regex, async (queryParams, match, end, ask) => {
       const namedParams = namedParamsForMatch(captureNames, match, this)
@@ -59,6 +66,10 @@ module.exports = class NonMemoryCachingBaseService extends BaseService {
       })
 
       makeSend(format, ask.res, end)(svg)
+
+      if (prometheusCounter) {
+        prometheusCounter.inc()
+      }
     })
   }
 }

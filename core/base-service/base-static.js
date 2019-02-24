@@ -15,8 +15,13 @@ module.exports = class BaseStaticService extends BaseService {
   static register({ camp }, serviceConfig) {
     const {
       profiling: { makeBadge: shouldProfileMakeBadge },
+      prometheusMetricsEnabled,
     } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
+
+    const prometheusCounter = prometheusMetricsEnabled
+      ? this._createPrometheusCounter()
+      : undefined
 
     camp.route(regex, async (queryParams, match, end, ask) => {
       analytics.noteRequest(queryParams, match)
@@ -58,6 +63,10 @@ module.exports = class BaseStaticService extends BaseService {
       setCacheHeadersForStaticResource(ask.res)
 
       makeSend(format, ask.res, end)(svg)
+
+      if (prometheusCounter) {
+        prometheusCounter.inc()
+      }
     })
   }
 }

@@ -9,7 +9,7 @@ const clojarsSchema = Joi.object({
   version: Joi.string(),
 }).required()
 
-module.exports = class Clojars extends BaseJsonService {
+module.exports = class ClojarsVersion extends BaseJsonService {
   async fetch({ clojar }) {
     const url = `https://clojars.org/${clojar}/latest-version.json`
     return this._requestJson({

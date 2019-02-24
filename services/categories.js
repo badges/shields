@@ -34,5 +34,6 @@ function assertValidCategory(category, message = undefined) {
 
 module.exports = {
   categories,
+  isValidCategory,
   assertValidCategory,
 }

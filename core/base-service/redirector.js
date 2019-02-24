@@ -1,16 +1,37 @@
 'use strict'
 
+const camelcase = require('camelcase')
 const emojic = require('emojic')
 const Joi = require('joi')
+const { isValidCategory } = require('../../services/categories')
 const BaseService = require('./base')
 const {
   serverHasBeenUpSinceResourceCached,
   setCacheHeadersForStaticResource,
 } = require('./cache-headers')
-const { prepareRoute, namedParamsForMatch } = require('./route')
+const { isValidRoute, prepareRoute, namedParamsForMatch } = require('./route')
 const trace = require('./trace')
 
-module.exports = function redirector({ category, route, target, dateAdded }) {
+const attrSchema = Joi.object({
+  category: isValidCategory,
+  route: isValidRoute,
+  target: Joi.func()
+    .maxArity(1)
+    .required()
+    .error(
+      () =>
+        '"target" must be a function that transforms named params to a new path'
+    ),
+  dateAdded: Joi.date().required(),
+}).required()
+
+module.exports = function redirector(attrs) {
+  const { category, route, target } = Joi.attempt(
+    attrs,
+    attrSchema,
+    `Redirector for ${attrs.route.base}`
+  )
+
   return class Redirector extends BaseService {
     static get category() {
       return category
@@ -24,19 +45,24 @@ module.exports = function redirector({ category, route, target, dateAdded }) {
       return true
     }
 
-    static validateDefinition() {
-      super.validateDefinition()
-      Joi.assert(
-        { dateAdded },
-        Joi.object({
-          dateAdded: Joi.date().required(),
-        }),
-        `Redirector for ${route.base}`
-      )
+    static get name() {
+      return `${camelcase(route.base, { pascalCase: true })}Redirector`
     }
 
-    static register({ camp }) {
+    static get _description() {
+      return `${route.base} redirector`
+    }
+
+    static get _prometheusMetricName() {
+      return `service_redirect_${route.base.replace(/\//g, '_')}_requests_total`
+    }
+
+    static register({ camp }, { prometheusMetricsEnabled }) {
       const { regex, captureNames } = prepareRoute(this.route)
+
+      const prometheusCounter = prometheusMetricsEnabled
+        ? this._createPrometheusCounter()
+        : undefined
 
       camp.route(regex, async (queryParams, match, end, ask) => {
         if (serverHasBeenUpSinceResourceCached(ask.req)) {
@@ -72,6 +98,10 @@ module.exports = function redirector({ category, route, target, dateAdded }) {
         setCacheHeadersForStaticResource(ask.res)
 
         ask.res.end()
+
+        if (prometheusCounter) {
+          prometheusCounter.inc()
+        }
       })
     }
   }

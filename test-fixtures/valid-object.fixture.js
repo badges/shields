@@ -9,7 +9,10 @@ class GoodServiceOne extends BaseJsonService {
   }
 
   static get route() {
-    return { pattern: 'good/one' }
+    return {
+      base: 'good',
+      pattern: 'one',
+    }
   }
 }
 class GoodServiceTwo extends LegacyService {
@@ -18,7 +21,10 @@ class GoodServiceTwo extends LegacyService {
   }
 
   static get route() {
-    return { pattern: 'good/two' }
+    return {
+      base: 'good',
+      pattern: 'two',
+    }
   }
 }
 

@@ -14,6 +14,7 @@ module.exports = class QueryStringStaticBadge extends BaseStaticService {
 
   static get route() {
     return {
+      base: '',
       format: 'static/v([0-9])',
       capture: ['schemaVersion'],
       // All but one of the parameters are parsed via coalesceBadge. This

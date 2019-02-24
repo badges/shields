@@ -25,6 +25,10 @@ function DownloadsForExtensionType(extensionType) {
   const { capt, exampleSlug } = extensionData[extensionType]
 
   return class WordpressDownloads extends BaseWordpress {
+    static get name() {
+      return `Wordpress${capt}Downloads`
+    }
+
     static render({ response }) {
       return {
         message: metric(response.downloaded),
@@ -66,6 +70,10 @@ function InstallsForExtensionType(extensionType) {
   const { capt, exampleSlug } = extensionData[extensionType]
 
   return class WordpressInstalls extends BaseWordpress {
+    static get name() {
+      return `Wordpress${capt}Installs`
+    }
+
     static get extensionType() {
       return extensionType
     }
@@ -105,30 +113,38 @@ function InstallsForExtensionType(extensionType) {
 }
 
 function DownloadsForInterval(interval) {
-  const { base, messageSuffix = '', query } = {
+  const { base, messageSuffix = '', query, name } = {
     day: {
       base: 'wordpress/plugin/dd',
       messageSuffix: '/day',
       query: 1,
+      name: 'WordpressDownloadsDay',
     },
     week: {
       base: 'wordpress/plugin/dw',
       messageSuffix: '/week',
       query: 7,
+      name: 'WordpressDownloadsWeek',
     },
     month: {
       base: 'wordpress/plugin/dm',
       messageSuffix: '/month',
       query: 30,
+      name: 'WordpressDownloadsMonth',
     },
     year: {
       base: 'wordpress/plugin/dy',
       messageSuffix: '/year',
       query: 365,
+      name: 'WordpressDownloadsYear',
     },
   }[interval]
 
   return class WordpressDownloads extends BaseJsonService {
+    static get name() {
+      return name
+    }
+
     static get category() {
       return 'downloads'
     }

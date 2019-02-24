@@ -81,6 +81,13 @@ class PuppetforgeUsers extends LegacyService {
     return 'other'
   }
 
+  static get route() {
+    return {
+      base: 'puppetforge',
+      pattern: '([^/]+)/([^/]+)/([^/]+)',
+    }
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/puppetforge\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
