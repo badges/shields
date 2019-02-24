@@ -49,20 +49,12 @@ module.exports = function redirector(attrs) {
       return `${camelcase(route.base, { pascalCase: true })}Redirector`
     }
 
-    static get _description() {
-      return `${route.base} redirector`
-    }
-
-    static get _prometheusMetricName() {
-      return `service_redirect_${route.base.replace(/\//g, '_')}_requests_total`
-    }
-
-    static register({ camp }, { prometheusMetricsEnabled }) {
+    static register({ camp, requestCounter }) {
       const { regex, captureNames } = prepareRoute(this.route)
 
-      const prometheusCounter = prometheusMetricsEnabled
-        ? this._createPrometheusCounter()
-        : undefined
+      const serviceRequestCounter = this._createServiceRequestCounter({
+        requestCounter,
+      })
 
       camp.route(regex, async (queryParams, match, end, ask) => {
         if (serverHasBeenUpSinceResourceCached(ask.req)) {
@@ -99,9 +91,7 @@ module.exports = function redirector(attrs) {
 
         ask.res.end()
 
-        if (prometheusCounter) {
-          prometheusCounter.inc()
-        }
+        serviceRequestCounter.inc()
       })
     }
   }

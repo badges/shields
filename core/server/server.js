@@ -135,7 +135,9 @@ module.exports = class Server {
       persistence: publicConfig.persistence,
       service: publicConfig.services.github,
     })
-    this.metrics = new PrometheusMetrics(publicConfig.metrics.prometheus)
+    if (publicConfig.metrics.prometheus.enabled) {
+      this.metrics = new PrometheusMetrics()
+    }
   }
 
   get port() {
@@ -182,16 +184,16 @@ module.exports = class Server {
   registerServices() {
     const { config, camp } = this
     const { apiProvider: githubApiProvider } = this.githubConstellation
+    const { requestCounter } = this.metrics || {}
 
     loadServiceClasses().forEach(serviceClass =>
       serviceClass.register(
-        { camp, handleRequest, githubApiProvider },
+        { camp, handleRequest, githubApiProvider, requestCounter },
         {
           handleInternalErrors: config.public.handleInternalErrors,
           cacheHeaders: config.public.cacheHeaders,
           profiling: config.public.profiling,
           fetchLimitBytes: bytes(config.public.fetchLimit),
-          prometheusMetricsEnabled: config.public.metrics.prometheus.enabled,
         }
       )
     )

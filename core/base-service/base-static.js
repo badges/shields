@@ -12,16 +12,15 @@ const coalesceBadge = require('./coalesce-badge')
 const { prepareRoute, namedParamsForMatch } = require('./route')
 
 module.exports = class BaseStaticService extends BaseService {
-  static register({ camp }, serviceConfig) {
+  static register({ camp, requestCounter }, serviceConfig) {
     const {
       profiling: { makeBadge: shouldProfileMakeBadge },
-      prometheusMetricsEnabled,
     } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
 
-    const prometheusCounter = prometheusMetricsEnabled
-      ? this._createPrometheusCounter()
-      : undefined
+    const serviceRequestCounter = this._createServiceRequestCounter({
+      requestCounter,
+    })
 
     camp.route(regex, async (queryParams, match, end, ask) => {
       analytics.noteRequest(queryParams, match)
@@ -64,9 +63,7 @@ module.exports = class BaseStaticService extends BaseService {
 
       makeSend(format, ask.res, end)(svg)
 
-      if (prometheusCounter) {
-        prometheusCounter.inc()
-      }
+      serviceRequestCounter.inc()
     })
   }
 }

@@ -2,20 +2,20 @@
 
 const prometheus = require('prom-client')
 
+const { register } = prometheus
+
 module.exports = class PrometheusMetrics {
-  constructor(config = {}) {
-    this.enabled = config.enabled || false
-    if (this.enabled) {
-      console.log('Metrics are enabled.')
-    }
+  constructor() {
+    this.requestCounter = new prometheus.Counter({
+      name: 'service_requests_total',
+      help: 'Total service requests',
+      labelNames: ['category', 'family', 'service'],
+    })
   }
 
   async initialize(server) {
-    if (this.enabled) {
-      const register = prometheus.register
-      prometheus.collectDefaultMetrics()
-      this.setRoutes(server, register)
-    }
+    prometheus.collectDefaultMetrics()
+    this.setRoutes(server, register)
   }
 
   setRoutes(server, register) {

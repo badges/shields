@@ -4,7 +4,6 @@
 const decamelize = require('decamelize')
 const emojic = require('emojic')
 const Joi = require('joi')
-const prometheus = require('prom-client')
 // Ideally `validateMetricName()` would be in the public interface.
 // https://github.com/siimon/prom-client/pull/246
 const { validateMetricName } = require('prom-client/lib/validation')
@@ -330,33 +329,28 @@ module.exports = class BaseService {
     return serviceData
   }
 
-  static get _description() {
-    return `${this.name} service`
+  static _createServiceRequestCounter({ requestCounter }) {
+    if (requestCounter) {
+      const { category, serviceFamily, name } = this
+      const service = decamelize(name)
+      return requestCounter.labels(category, serviceFamily, service)
+    } else {
+      // When metrics are disabled, return a mock counter.
+      return { inc: () => {} }
+    }
   }
 
-  static get _prometheusMetricName() {
-    return `service_${decamelize(this.name)}_requests_total`
-  }
-
-  static _createPrometheusCounter() {
-    return new prometheus.Counter({
-      name: this._prometheusMetricName,
-      help: `Total requests for ${this._description}`,
-    })
-  }
-
-  static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
-    const {
-      cacheHeaders: cacheHeaderConfig,
-      fetchLimitBytes,
-      prometheusMetricsEnabled,
-    } = serviceConfig
+  static register(
+    { camp, handleRequest, githubApiProvider, requestCounter },
+    serviceConfig
+  ) {
+    const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
     const queryParams = getQueryParamNames(this.route)
 
-    const prometheusCounter = prometheusMetricsEnabled
-      ? this._createPrometheusCounter()
-      : undefined
+    const serviceRequestCounter = this._createServiceRequestCounter({
+      requestCounter,
+    })
 
     camp.route(
       regex,
@@ -385,9 +379,7 @@ module.exports = class BaseService {
           const format = match.slice(-1)[0]
           sendBadge(format, badgeData)
 
-          if (prometheusCounter) {
-            prometheusCounter.inc()
-          }
+          serviceRequestCounter.inc()
         },
         cacheLength: this._cacheLength,
         fetchLimitBytes,
