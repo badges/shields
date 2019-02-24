@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import pathToRegexp from 'path-to-regexp'
 import humanizeString from 'humanize-string'
+import { objectOfKeyValuesPropType } from '../../lib/service-definitions/service-definition-prop-types'
 import { patternToOptions } from '../../lib/pattern-helpers'
 import { noAutocorrect, StyledInput } from '../common'
 import {
@@ -70,7 +71,7 @@ const NamedParamCaption = styled(BuilderCaption)`
 export default class PathBuilder extends React.Component {
   static propTypes = {
     pattern: PropTypes.string.isRequired,
-    exampleParams: PropTypes.object.isRequired,
+    exampleParams: objectOfKeyValuesPropType,
     onChange: PropTypes.func,
   }
 

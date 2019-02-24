@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Modal from 'react-modal'
 import styled from 'styled-components'
+import { examplePropType } from '../../lib/service-definitions/service-definition-prop-types'
 import { BaseFont } from '../common'
 import MarkupModalContent from './markup-modal-content'
 
@@ -11,10 +12,7 @@ const ContentContainer = styled(BaseFont)`
 
 export default class MarkupModal extends React.Component {
   static propTypes = {
-    // This is an item from the `examples` array within the
-    // `serviceDefinition` schema.
-    // https://github.com/badges/shields/blob/master/services/service-definitions.js
-    example: PropTypes.object,
+    example: examplePropType,
     baseUrl: PropTypes.string.isRequired,
     onRequestClose: PropTypes.func.isRequired,
   }
