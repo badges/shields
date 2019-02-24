@@ -59,18 +59,10 @@ function parseVersion(versionString) {
 }
 
 function latestVersion(versions) {
-  let latestVersionString, latestVersionList
-  versions.map(omitv).forEach(versionString => {
-    const versionList = parseVersion(versionString)
-    if (
-      !latestVersionList || // first iteration
-      compareVersionLists(versionList, latestVersionList) > 0
-    ) {
-      latestVersionString = versionString
-      latestVersionList = versionList
-    }
-  })
-  return latestVersionString
+  return versions
+    .map(omitv)
+    .sort((a, b) => compareVersionLists(parseVersion(a), parseVersion(b)))
+    .pop()
 }
 
 module.exports = {
