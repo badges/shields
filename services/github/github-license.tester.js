@@ -8,6 +8,8 @@ const permissiveLicenseColor = licenseToColor('MIT')
 const copyleftLicenseColor = licenseToColor('GPL-3.0')
 const unknownLicenseColor = licenseToColor()
 
+// TODO: Probably these license color tests should be converted to unit tests.
+
 t.create('Public domain license')
   .get('/github/gitignore.json?style=_shields_test')
   .expectJSON({
@@ -30,13 +32,13 @@ t.create('Permissive license')
 
 t.create('License for repo without a license')
   .get('/badges/badger.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'missing', color: 'red' })
+  .expectJSON({ name: 'license', value: 'not specified', color: 'lightgrey' })
 
 t.create('License for repo with an unrecognized license')
   .get('/philokev/sopel-noblerealms.json?style=_shields_test')
   .expectJSON({
     name: 'license',
-    value: 'unknown',
+    value: 'not identifiable by github',
     color: unknownLicenseColor,
   })
 
@@ -68,23 +70,5 @@ t.create('License for unknown repo')
   .expectJSON({
     name: 'license',
     value: 'repo not found',
-    color: 'lightgrey',
-  })
-
-t.create('License - API rate limit exceeded')
-  .get('/user1/repo1.json?style=_shields_test')
-  .intercept(nock =>
-    nock('https://api.github.com')
-      .get('/repos/user1/repo1')
-      .query(true)
-      .reply(403, {
-        message:
-          "API rate limit exceeded for 123.123.123.123. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)",
-        documentation_url: 'https://developer.github.com/v3/#rate-limiting',
-      })
-  )
-  .expectJSON({
-    name: 'license',
-    value: 'access denied',
-    color: 'lightgrey',
+    color: 'red',
   })
