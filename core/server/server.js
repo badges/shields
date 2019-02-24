@@ -260,7 +260,9 @@ module.exports = class Server {
 
     const { githubConstellation, metrics } = this
     githubConstellation.initialize(camp)
-    metrics.initialize(camp)
+    if (metrics) {
+      metrics.initialize(camp)
+    }
 
     const { apiProvider: githubApiProvider } = this.githubConstellation
     suggest.setRoutes(allowedOrigin, githubApiProvider, camp)
