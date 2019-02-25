@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const serverSecrets = require('../../lib/server-secrets')
-const { metric } = require('../../lib/text-formatters')
+const { metric } = require('../text-formatters')
 const { nonNegativeInteger, optionalUrl } = require('../validators')
 const { BaseJsonService } = require('..')
 

@@ -2,7 +2,7 @@
 
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { metric } = require('../../lib/text-formatters')
+const { metric } = require('../text-formatters')
 const {
   documentation,
   checkErrorResponse: githubCheckErrorResponse,

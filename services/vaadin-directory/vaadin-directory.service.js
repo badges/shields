@@ -6,11 +6,11 @@ const {
   makeLabel: getLabel,
 } = require('../../lib/badge-data')
 const { checkErrorResponse } = require('../../lib/error-helper')
-const { metric, starRating, formatDate } = require('../../lib/text-formatters')
+const { metric, starRating, formatDate } = require('../text-formatters')
 const {
   floorCount: floorCountColor,
   age: ageColor,
-} = require('../../lib/color-formatters')
+} = require('../color-formatters')
 
 class VaadinDirectoryRating extends LegacyService {
   static get category() {

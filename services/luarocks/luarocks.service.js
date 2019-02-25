@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { BaseJsonService, NotFound } = require('..')
-const { addv } = require('../../lib/text-formatters')
+const { addv } = require('../text-formatters')
 const { latestVersion } = require('./luarocks-version-helpers')
 
 const schema = Joi.object({

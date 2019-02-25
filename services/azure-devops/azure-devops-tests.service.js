@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { renderTestResultBadge } = require('../../lib/text-formatters')
+const { renderTestResultBadge } = require('../text-formatters')
 const AzureDevOpsBase = require('./azure-devops-base')
 const { getHeaders } = require('./azure-devops-helpers')
 

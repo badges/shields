@@ -1,9 +1,7 @@
 'use strict'
 
-const {
-  downloadCount: downloadCountColor,
-} = require('../../lib/color-formatters')
-const { metric } = require('../../lib/text-formatters')
+const { downloadCount: downloadCountColor } = require('../color-formatters')
+const { metric } = require('../text-formatters')
 const { BaseCratesService, keywords } = require('./crates-base')
 
 module.exports = class CratesDownloads extends BaseCratesService {

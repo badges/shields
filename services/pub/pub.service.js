@@ -2,8 +2,8 @@
 
 const Joi = require('joi')
 const { BaseJsonService } = require('..')
-const { renderVersionBadge } = require('../../lib/version')
-const { latest: latestVersion } = require('../../lib/version')
+const { renderVersionBadge } = require('../version')
+const { latest: latestVersion } = require('../version')
 
 const schema = Joi.object({
   versions: Joi.array()
