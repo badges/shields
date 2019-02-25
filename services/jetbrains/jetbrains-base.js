@@ -6,7 +6,7 @@ module.exports = class JetbrainsBase extends BaseXmlService {
   static buildUrl(base) {
     return {
       base,
-      format: ':pluginId',
+      pattern: ':pluginId',
     }
   }
 
