@@ -3,12 +3,12 @@
 const camelcase = require('camelcase')
 const emojic = require('emojic')
 const Joi = require('joi')
-const { isValidCategory } = require('../../services/categories')
 const BaseService = require('./base')
 const {
   serverHasBeenUpSinceResourceCached,
   setCacheHeadersForStaticResource,
 } = require('./cache-headers')
+const { isValidCategory } = require('./categories')
 const { isValidRoute, prepareRoute, namedParamsForMatch } = require('./route')
 const trace = require('./trace')
 
