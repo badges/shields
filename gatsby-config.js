@@ -18,7 +18,7 @@ module.exports = {
     'gatsby-plugin-catch-links',
     'gatsby-plugin-styled-components',
     'gatsby-plugin-remove-trailing-slashes',
-    // THis currently is not being used.
+    // This currently is not being used.
     // {
     //   resolve: 'gatsby-source-filesystem',
     //   options: {
