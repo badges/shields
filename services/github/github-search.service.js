@@ -30,11 +30,7 @@ module.exports = class GithubSearch extends GithubAuthService {
           repo: 'linux',
           query: 'goto',
         },
-        staticPreview: {
-          label: 'goto counter',
-          message: '14k',
-          color: 'blue',
-        },
+        staticPreview: this.render({ query: 'goto', totalCount: 14000 }),
         documentation,
       },
     ]
