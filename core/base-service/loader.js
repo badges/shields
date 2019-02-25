@@ -3,7 +3,7 @@
 const path = require('path')
 const glob = require('glob')
 const countBy = require('lodash.countby')
-const { categories } = require('../../services/categories')
+const categories = require('../../services/categories')
 const BaseService = require('./base')
 const { assertValidServiceDefinitionExport } = require('./service-definitions')
 

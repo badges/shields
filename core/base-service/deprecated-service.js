@@ -2,8 +2,8 @@
 
 const Joi = require('joi')
 const camelcase = require('camelcase')
-const { isValidCategory } = require('../../services/categories')
 const BaseService = require('./base')
+const { isValidCategory } = require('./categories')
 const { Deprecated } = require('./errors')
 const { isValidRoute } = require('./route')
 

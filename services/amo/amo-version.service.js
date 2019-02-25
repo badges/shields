@@ -28,6 +28,6 @@ module.exports = class AmoVersion extends BaseAmoService {
 
   async handle({ addonId }) {
     const data = await this.fetch({ addonId })
-    return renderVersionBadge({ version: data.addon.version })
+    return renderVersionBadge({ version: data.current_version.version })
   }
 }
