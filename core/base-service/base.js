@@ -4,7 +4,7 @@
 const emojic = require('emojic')
 const Joi = require('joi')
 const { checkErrorResponse } = require('../../lib/error-helper')
-const { assertValidCategory } = require('../../services/categories')
+const { assertValidCategory } = require('./categories')
 const coalesceBadge = require('./coalesce-badge')
 const {
   NotFound,
