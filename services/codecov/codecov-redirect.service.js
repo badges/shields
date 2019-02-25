@@ -10,8 +10,10 @@ module.exports = [
       pattern:
         'token/:token/:vcsName(github|gh|bitbucket|bb|gl|gitlab)/:user/:repo/:branch*',
     },
+    // transformPath: ({ vcsName, user, repo, branch }) =>
     target: ({ vcsName, user, repo, branch }) =>
       `/codecov/c/${vcsName}/${user}/${repo}${branch ? `/${branch}` : ''}`,
+    transformQueryParams: ({ token }) => ({ token }),
     dateAdded: new Date('2019-02-23'),
   }),
 ]
