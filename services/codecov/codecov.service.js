@@ -111,7 +111,7 @@ module.exports = class Codecov extends BaseJsonService {
       options,
       url,
       errorMessages: {
-        401: 'token required to access private repository',
+        401: 'not authorized to access repository',
         404: 'repository not found',
       },
     })

@@ -10,10 +10,8 @@ module.exports = [
       pattern:
         'token/:token/:vcsName(github|gh|bitbucket|bb|gl|gitlab)/:user/:repo/:branch*',
     },
-    target: ({ token, vcsName, user, repo, branch }) =>
-      `/codecov/c/${vcsName}/${user}/${repo}${
-        branch ? `/${branch}` : ''
-      }?token=${token}`,
+    target: ({ vcsName, user, repo, branch }) =>
+      `/codecov/c/${vcsName}/${user}/${repo}${branch ? `/${branch}` : ''}`,
     dateAdded: new Date('2019-02-23'),
   }),
 ]

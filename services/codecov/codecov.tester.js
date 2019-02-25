@@ -26,7 +26,7 @@ t.create('handles unknown repository')
   .get('/github/codecov2/fake-not-even-a-little-bit-real-python.json')
   .expectJSON({ name: 'coverage', value: 'repository not found' })
 
-t.create('has correct error when token not supplied for private repository')
+t.create('has correct message on unauthorized error')
   .get('/gh/codecov/private-example-python.json')
   .intercept(nock =>
     nock('https://codecov.io/api')
@@ -35,13 +35,17 @@ t.create('has correct error when token not supplied for private repository')
   )
   .expectJSON({
     name: 'coverage',
-    value: 'token required to access private repository',
+    value: 'not authorized to access repository',
   })
 
 t.create('gets coverage for private repository')
   .get('/gh/codecov/private-example-python.json?token=abc123def456')
   .intercept(nock =>
-    nock('https://codecov.io/api')
+    nock('https://codecov.io/api', {
+      reqheaders: {
+        authorization: 'token abc123def456',
+      },
+    })
       .get('/gh/codecov/private-example-python')
       .reply(200, {
         commit: {

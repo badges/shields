@@ -1,27 +1,18 @@
 'use strict'
 
-const { expect } = require('chai')
+const { test, given } = require('sazerac')
 const Codecov = require('./codecov.service')
 
 const unknownCoverage = { coverage: 'unknown' }
 
-describe('codecov transform function', function() {
-  it('returns unknown coverage when there are no reports', function() {
-    expect(Codecov.prototype.transform({ json: {} })).to.deep.equal(
-      unknownCoverage
-    )
+describe('Codecov', function() {
+  test(Codecov.prototype.transform, () => {
+    given({ json: {} }).expect(unknownCoverage)
+    given({ json: { commit: {} } }).expect(unknownCoverage)
   })
 
-  it('returns unknown coverage when latest result has no coverage', function() {
-    expect(Codecov.prototype.transform({ json: { commit: {} } })).to.deep.equal(
-      unknownCoverage
-    )
-  })
-})
-
-describe('codecov render function', function() {
-  it('renders correctly on unknown coverage', function() {
-    expect(Codecov.render(unknownCoverage)).to.deep.equal({
+  test(Codecov.render, () => {
+    given(unknownCoverage).expect({
       message: 'unknown',
       color: 'lightgrey',
     })
