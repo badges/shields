@@ -49,6 +49,11 @@ If you are submitting a pull request for a custom logo, please:
 - Ensure the logo is vertically and horizontally centered.
 - Ensure the logo is minified to a single line with no formatting.
 - Ensure the SVG does not contain extraneous attributes.
+- Ensure your submission conforms to any relevant brand or logo guidelines.
+
+### Problems
+
+We try to ensure our logos are compliant with brand guidelines. If one of our custom logos does not conform to the necessary brand guidelines, please open an issue on the [shields.io tracker](https://github.com/badges/shields/issues) and we'll work with you to resolve it. If a logo from the simple-icons set does not conform to the relevant brand guidelines, please open an issue on the [simple-icons tracker](https://github.com/simple-icons/simple-icons/issues) first.
 
 [simpleicons]: https://simpleicons.org/
 [simple-icons github]: https://github.com/simple-icons/simple-icons
