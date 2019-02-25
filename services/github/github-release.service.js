@@ -41,18 +41,21 @@ module.exports = class GithubRelease extends GithubAuthService {
   }
 
   async fetch({ user, repo, includePre }) {
+    const commonAttrs = {
+      errorMessages: errorMessagesFor('no releases or repo not found'),
+    }
     if (includePre) {
       const [releaseInfo] = await this._requestJson({
         schema: releaseInfoArraySchema,
         url: `/repos/${user}/${repo}/releases`,
-        errorMessages: errorMessagesFor(),
+        ...commonAttrs,
       })
       return releaseInfo
     } else {
       const releaseInfo = await this._requestJson({
         schema: releaseInfoSchema,
         url: `/repos/${user}/${repo}/releases/latest`,
-        errorMessages: errorMessagesFor('no releases or repo not found'),
+        ...commonAttrs,
       })
       return releaseInfo
     }
@@ -76,6 +79,7 @@ module.exports = class GithubRelease extends GithubAuthService {
     const { tag_name: version, prerelease: isPrerelease } = await this.fetch({
       user,
       repo,
+      includePre: which === 'release-pre',
     })
     return this.constructor.render({ version, isPrerelease })
   }

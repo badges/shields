@@ -20,6 +20,10 @@ t.create('Prerelease')
     Joi.object().keys({ name: 'release', value: isVPlusTripleDottedVersion })
   )
 
+t.create('Prerelease (repo not found)')
+  .get('/release-pre/badges/helmets.json')
+  .expectJSON({ name: 'release', value: 'no releases or repo not found' })
+
 t.create('No releases')
   .get('/release/badges/daily-tests.json')
   .expectJSON({
