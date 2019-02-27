@@ -40,6 +40,8 @@ class DiscourseBase extends BaseJsonService {
 function DiscourseMetricIntegrationFactory({ metricName, property }) {
   return class DiscourseMetric extends DiscourseBase {
     static get name() {
+      // The space is needed se we get 'DiscourseTopics' rather than
+      // 'Discoursetopics'. `camelcase()` removes it.
       return camelcase(`Discourse ${metricName}`, { pascalCase: true })
     }
 
