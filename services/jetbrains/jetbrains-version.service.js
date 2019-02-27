@@ -33,7 +33,6 @@ module.exports = class JetbrainsDownloads extends JetbrainsBase {
     return [
       {
         title: 'JetBrains IntelliJ Plugins',
-        pattern: ':pluginId',
         namedParams: {
           pluginId: '9630-a8translate',
         },
@@ -43,7 +42,10 @@ module.exports = class JetbrainsDownloads extends JetbrainsBase {
   }
 
   static get route() {
-    return this.buildUrl('jetbrains/plugin/v')
+    return {
+      base: 'jetbrains/plugin/v',
+      pattern: ':pluginId',
+    }
   }
 
   static render({ version }) {
