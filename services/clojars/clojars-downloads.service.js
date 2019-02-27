@@ -10,7 +10,7 @@ const clojarsSchema = Joi.object({
   downloads: nonNegativeInteger,
 }).required()
 
-module.exports = class Clojars extends BaseJsonService {
+module.exports = class ClojarsDownloads extends BaseJsonService {
   async fetch({ clojar }) {
     const url = `https://clojars.org/api/artifacts/${clojar}`
     return this._requestJson({

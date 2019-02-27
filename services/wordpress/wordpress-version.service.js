@@ -16,7 +16,11 @@ function VersionForExtensionType(extensionType) {
     },
   }[extensionType]
 
-  return class WordpressPluginVersion extends BaseWordpress {
+  return class WordpressVersion extends BaseWordpress {
+    static get name() {
+      return `Wordpress${capt}Version`
+    }
+
     static get extensionType() {
       return extensionType
     }

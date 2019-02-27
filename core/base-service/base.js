@@ -1,5 +1,6 @@
 'use strict'
 
+const decamelize = require('decamelize')
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const Joi = require('joi')
@@ -317,10 +318,28 @@ module.exports = class BaseService {
     return serviceData
   }
 
-  static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
+  static _createServiceRequestCounter({ requestCounter }) {
+    if (requestCounter) {
+      const { category, serviceFamily, name } = this
+      const service = decamelize(name)
+      return requestCounter.labels(category, serviceFamily, service)
+    } else {
+      // When metrics are disabled, return a mock counter.
+      return { inc: () => {} }
+    }
+  }
+
+  static register(
+    { camp, handleRequest, githubApiProvider, requestCounter },
+    serviceConfig
+  ) {
     const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
     const queryParams = getQueryParamNames(this.route)
+
+    const serviceRequestCounter = this._createServiceRequestCounter({
+      requestCounter,
+    })
 
     camp.route(
       regex,
@@ -348,6 +367,8 @@ module.exports = class BaseService {
           // The final capture group is the extension.
           const format = match.slice(-1)[0]
           sendBadge(format, badgeData)
+
+          serviceRequestCounter.inc()
         },
         cacheLength: this._cacheLength,
         fetchLimitBytes,

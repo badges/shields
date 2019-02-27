@@ -1,5 +1,6 @@
 'use strict'
 
+const camelcase = require('camelcase')
 const emojic = require('emojic')
 const Joi = require('joi')
 const BaseService = require('./base')
@@ -7,10 +8,30 @@ const {
   serverHasBeenUpSinceResourceCached,
   setCacheHeadersForStaticResource,
 } = require('./cache-headers')
-const { prepareRoute, namedParamsForMatch } = require('./route')
+const { isValidCategory } = require('./categories')
+const { isValidRoute, prepareRoute, namedParamsForMatch } = require('./route')
 const trace = require('./trace')
 
-module.exports = function redirector({ category, route, target, dateAdded }) {
+const attrSchema = Joi.object({
+  category: isValidCategory,
+  route: isValidRoute,
+  target: Joi.func()
+    .maxArity(1)
+    .required()
+    .error(
+      () =>
+        '"target" must be a function that transforms named params to a new path'
+    ),
+  dateAdded: Joi.date().required(),
+}).required()
+
+module.exports = function redirector(attrs) {
+  const { category, route, target } = Joi.attempt(
+    attrs,
+    attrSchema,
+    `Redirector for ${attrs.route.base}`
+  )
+
   return class Redirector extends BaseService {
     static get category() {
       return category
@@ -24,19 +45,18 @@ module.exports = function redirector({ category, route, target, dateAdded }) {
       return true
     }
 
-    static validateDefinition() {
-      super.validateDefinition()
-      Joi.assert(
-        { dateAdded },
-        Joi.object({
-          dateAdded: Joi.date().required(),
-        }),
-        `Redirector for ${route.base}`
-      )
+    static get name() {
+      return `${camelcase(route.base.replace(/\//g, '_'), {
+        pascalCase: true,
+      })}Redirect`
     }
 
-    static register({ camp }) {
+    static register({ camp, requestCounter }) {
       const { regex, captureNames } = prepareRoute(this.route)
+
+      const serviceRequestCounter = this._createServiceRequestCounter({
+        requestCounter,
+      })
 
       camp.route(regex, async (queryParams, match, end, ask) => {
         if (serverHasBeenUpSinceResourceCached(ask.req)) {
@@ -72,6 +92,8 @@ module.exports = function redirector({ category, route, target, dateAdded }) {
         setCacheHeadersForStaticResource(ask.res)
 
         ask.res.end()
+
+        serviceRequestCounter.inc()
       })
     }
   }
