@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { BaseStaticService, InvalidParameter } = require('..')
+const { BaseStaticService } = require('..')
 
 const queryParamSchema = Joi.object({
   message: Joi.string().required(),
@@ -15,8 +15,7 @@ module.exports = class QueryStringStaticBadge extends BaseStaticService {
   static get route() {
     return {
       base: '',
-      format: 'static/v([0-9])',
-      capture: ['schemaVersion'],
+      pattern: 'static/:schemaVersion(v1)',
       // All but one of the parameters are parsed via coalesceBadge. This
       // reuses what is the override behaviour for other badges.
       queryParamSchema,
@@ -24,10 +23,6 @@ module.exports = class QueryStringStaticBadge extends BaseStaticService {
   }
 
   handle(namedParams, queryParams) {
-    if (namedParams.schemaVersion !== '1') {
-      throw new InvalidParameter({ prettyMessage: 'Invalid schemaVersion' })
-    }
-
     return { message: queryParams.message }
   }
 }

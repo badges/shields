@@ -24,8 +24,7 @@ class LibrariesIoBase extends BaseJsonService {
   static buildRoute(base) {
     return {
       base,
-      format: '(\\w+)/(.+)',
-      capture: ['platform', 'packageName'],
+      pattern: ':platform/:packageName',
     }
   }
 
