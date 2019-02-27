@@ -16,26 +16,34 @@ const schema = Joi.object({
 })
 
 function DownloadsForInterval(interval) {
-  const { base, messageSuffix } = {
+  const { base, messageSuffix, name } = {
     daily: {
       base: 'dub/dd',
       messageSuffix: '/day',
+      name: 'DubDownloadsDay',
     },
     weekly: {
       base: 'dub/dw',
       messageSuffix: '/week',
+      name: 'DubDownloadsWeek',
     },
     monthly: {
       base: 'dub/dm',
       messageSuffix: '/month',
+      name: 'DubDownloadsMonth',
     },
     total: {
       base: 'dub/dt',
       messageSuffix: '',
+      name: 'DubDownloadsTotal',
     },
   }[interval]
 
   return class DubDownloads extends BaseJsonService {
+    static get name() {
+      return name
+    }
+
     static render({ downloads, version }) {
       const label = version ? `downloads@${version}` : 'downloads'
       return {

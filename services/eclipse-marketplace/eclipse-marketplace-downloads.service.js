@@ -23,19 +23,25 @@ const totalResponseSchema = Joi.object({
 }).required()
 
 function DownloadsForInterval(interval) {
-  const { base, schema, messageSuffix = '' } = {
+  const { base, schema, messageSuffix = '', name } = {
     month: {
       base: 'eclipse-marketplace/dm',
       messageSuffix: '/month',
       schema: monthlyResponseSchema,
+      name: 'EclipseMarketplaceDownloadsMonth',
     },
     total: {
       base: 'eclipse-marketplace/dt',
       schema: totalResponseSchema,
+      name: 'EclipseMarketplaceDownloadsTotal',
     },
   }[interval]
 
   return class EclipseMarketplaceDownloads extends EclipseMarketplaceBase {
+    static get name() {
+      return name
+    }
+
     static get category() {
       return 'downloads'
     }

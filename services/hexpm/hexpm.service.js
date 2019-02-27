@@ -119,22 +119,29 @@ class HexPmVersion extends BaseHexPmService {
 }
 
 function DownloadsForInterval(interval) {
-  const { base, messageSuffix } = {
+  const { base, messageSuffix, name } = {
     day: {
       base: 'hexpm/dd',
       messageSuffix: '/day',
+      name: 'HexPmDownloadsDay',
     },
     week: {
       base: 'hexpm/dw',
       messageSuffix: '/week',
+      name: 'HexPmDownloadsWeek',
     },
     all: {
       base: 'hexpm/dt',
       messageSuffix: '',
+      name: 'HexPmDownloadsTotal',
     },
   }[interval]
 
   return class HexPmDownloads extends BaseHexPmService {
+    static get name() {
+      return name
+    }
+
     static render({ downloads }) {
       return {
         message: `${metric(downloads)}${messageSuffix}`,

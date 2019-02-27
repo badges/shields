@@ -10,6 +10,7 @@ module.exports = class StaticBadge extends BaseStaticService {
 
   static get route() {
     return {
+      base: '',
       format: '(?::|badge/)((?:[^-]|--)*?)-?((?:[^-]|--)*)-((?:[^-]|--)+)',
       capture: ['label', 'message', 'color'],
     }

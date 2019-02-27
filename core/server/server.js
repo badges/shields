@@ -135,7 +135,9 @@ module.exports = class Server {
       persistence: publicConfig.persistence,
       service: publicConfig.services.github,
     })
-    this.metrics = new PrometheusMetrics(publicConfig.metrics.prometheus)
+    if (publicConfig.metrics.prometheus.enabled) {
+      this.metrics = new PrometheusMetrics()
+    }
   }
 
   get port() {
@@ -182,10 +184,11 @@ module.exports = class Server {
   registerServices() {
     const { config, camp } = this
     const { apiProvider: githubApiProvider } = this.githubConstellation
+    const { requestCounter } = this.metrics || {}
 
     loadServiceClasses().forEach(serviceClass =>
       serviceClass.register(
-        { camp, handleRequest, githubApiProvider },
+        { camp, handleRequest, githubApiProvider, requestCounter },
         {
           handleInternalErrors: config.public.handleInternalErrors,
           cacheHeaders: config.public.cacheHeaders,
@@ -257,7 +260,9 @@ module.exports = class Server {
 
     const { githubConstellation, metrics } = this
     githubConstellation.initialize(camp)
-    metrics.initialize(camp)
+    if (metrics) {
+      metrics.initialize(camp)
+    }
 
     const { apiProvider: githubApiProvider } = this.githubConstellation
     suggest.setRoutes(allowedOrigin, githubApiProvider, camp)
@@ -294,6 +299,10 @@ module.exports = class Server {
     if (this.githubConstellation) {
       await this.githubConstellation.stop()
       this.githubConstellation = undefined
+    }
+
+    if (this.metrics) {
+      this.metrics.stop()
     }
 
     analytics.cancelAutosaving()

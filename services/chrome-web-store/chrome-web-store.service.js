@@ -148,6 +148,13 @@ class ChromeWebStore extends LegacyService {
     return 'other'
   }
 
+  static get route() {
+    return {
+      base: 'chrome-web-store',
+      pattern: ':which(v|d|users|price|rating|stars|rating-count)/:storeId',
+    }
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/chrome-web-store\/(v|d|users|price|rating|stars|rating-count)\/(.*)\.(svg|png|gif|jpg|json)$/,

@@ -14,6 +14,7 @@ module.exports = class QueryStringStaticBadge extends BaseStaticService {
 
   static get route() {
     return {
+      base: '',
       pattern: 'static/:schemaVersion(v1)',
       // All but one of the parameters are parsed via coalesceBadge. This
       // reuses what is the override behaviour for other badges.

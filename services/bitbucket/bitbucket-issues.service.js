@@ -14,6 +14,10 @@ function issueClassGenerator(raw) {
   const badgeSuffix = raw ? '' : ' open'
 
   return class BitbucketIssues extends BaseJsonService {
+    static get name() {
+      return `BitbucketIssues${raw ? 'Raw' : ''}`
+    }
+
     async fetch({ user, repo }) {
       const url = `https://bitbucket.org/api/1.0/repositories/${user}/${repo}/issues/`
       return this._requestJson({
