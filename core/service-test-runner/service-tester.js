@@ -2,7 +2,7 @@
 
 const emojic = require('emojic')
 const trace = require('../base-service/trace')
-const frisby = require('./icedfrisby-no-nock')(
+const frisby = require('./icedfrisby-shields')(
   // eslint-disable-next-line import/order
   require('icedfrisby-nock')(require('icedfrisby'))
 )

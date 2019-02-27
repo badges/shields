@@ -36,6 +36,7 @@ module.exports = class AmoRating extends BaseAmoService {
   }
 
   static render({ format, rating }) {
+    rating = Math.round(rating)
     return {
       label: format,
       message: format === 'stars' ? starRating(rating) : `${rating}/5`,
@@ -45,6 +46,6 @@ module.exports = class AmoRating extends BaseAmoService {
 
   async handle({ format, addonId }) {
     const data = await this.fetch({ addonId })
-    return this.constructor.render({ format, rating: data.addon.rating })
+    return this.constructor.render({ format, rating: data.ratings.average })
   }
 }
