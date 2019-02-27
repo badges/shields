@@ -5,7 +5,7 @@ const { deprecatedService } = require('..')
 module.exports = deprecatedService({
   route: {
     base: 'coverity/ondemand',
-    format: '(?:.+)',
+    pattern: ':various+',
   },
   label: 'coverity',
   category: 'analysis',
