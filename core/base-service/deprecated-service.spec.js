@@ -17,6 +17,11 @@ describe('DeprecatedService', function() {
     expect(service.isDeprecated).to.be.true
   })
 
+  it('has the expected name', function() {
+    const service = deprecatedService({ ...commonAttrs })
+    expect(service.name).to.equal('DeprecatedServiceThatNoLongerExists')
+  })
+
   it('sets specified route', function() {
     const service = deprecatedService({ ...commonAttrs })
     expect(service.route).to.deep.equal(route)

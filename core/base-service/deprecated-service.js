@@ -29,7 +29,7 @@ function deprecatedService(attrs) {
     static get name() {
       return (
         name ||
-        `Deprecated${camelcase(route.base.replace(/\//, '_'), {
+        `Deprecated${camelcase(route.base.replace(/\//g, '_'), {
           pascalCase: true,
         })}`
       )
