@@ -46,7 +46,9 @@ module.exports = function redirector(attrs) {
     }
 
     static get name() {
-      return `${camelcase(route.base, { pascalCase: true })}Redirector`
+      return `${camelcase(route.base.replace(/\//g, '_'), {
+        pascalCase: true,
+      })}Redirect`
     }
 
     static register({ camp, requestCounter }) {

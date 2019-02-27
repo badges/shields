@@ -20,6 +20,10 @@ describe('Redirector', function() {
     expect(redirector(attrs).isDeprecated).to.be.true
   })
 
+  it('has the expected name', function() {
+    expect(redirector(attrs).name).to.equal('VeryOldServiceRedirect')
+  })
+
   it('sets specified route', function() {
     expect(redirector(attrs).route).to.deep.equal(route)
   })
