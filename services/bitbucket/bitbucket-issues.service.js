@@ -50,8 +50,7 @@ function issueClassGenerator(raw) {
     static get route() {
       return {
         base: `bitbucket/${routePrefix}`,
-        format: '([^/]+)/([^/]+)',
-        capture: ['user', 'repo'],
+        pattern: ':user/:repo',
       }
     }
 
@@ -59,7 +58,6 @@ function issueClassGenerator(raw) {
       return [
         {
           title: 'Bitbucket open issues',
-          pattern: ':user/:repo',
           namedParams: {
             user: 'atlassian',
             repo: 'python-bitbucket',
