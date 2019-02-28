@@ -1,39 +1,32 @@
 'use strict'
 
-const Joi = require('joi')
 const { withRegex } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('live: level known project')
   .get(`/level/1.json`)
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'cii',
-      value: withRegex(/in progress|passing|silver|gold/),
-    })
-  )
+  .expectBadge({
+    label: 'cii',
+    message: withRegex(/in progress|passing|silver|gold/),
+  })
 
 t.create('live: percentage known project')
   .get(`/percentage/29.json`)
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'cii',
-      value: withRegex(/([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-9][0-9]|300)%/),
-    })
-  )
+  .expectBadge({
+    label: 'cii',
+    message: withRegex(/([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-9][0-9]|300)%/),
+  })
 
 t.create('live: summary known project')
   .get(`/summary/33.json`)
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'cii',
-      value: withRegex(/(in progress [0-9]|[1-9][0-9]%)|passing|silver|gold/),
-    })
-  )
+  .expectBadge({
+    label: 'cii',
+    message: withRegex(/(in progress [0-9]|[1-9][0-9]%)|passing|silver|gold/),
+  })
 
 t.create('live: unknown project')
   .get(`/level/abc.json`)
-  .expectJSON({ name: 'cii', value: 'project not found' })
+  .expectBadge({ label: 'cii', message: 'project not found' })
 
 t.create('level: gold project')
   .get(`/level/1.json`)
@@ -45,9 +38,9 @@ t.create('level: gold project')
         tiered_percentage: 300,
       })
   )
-  .expectJSON({
-    name: 'cii',
-    value: 'gold',
+  .expectBadge({
+    label: 'cii',
+    message: 'gold',
   })
 
 t.create('level: silver project')
@@ -60,9 +53,9 @@ t.create('level: silver project')
         tiered_percentage: 297,
       })
   )
-  .expectJSON({
-    name: 'cii',
-    value: 'silver',
+  .expectBadge({
+    label: 'cii',
+    message: 'silver',
   })
 
 t.create('level: passing project')
@@ -75,9 +68,9 @@ t.create('level: passing project')
         tiered_percentage: 107,
       })
   )
-  .expectJSON({
-    name: 'cii',
-    value: 'passing',
+  .expectBadge({
+    label: 'cii',
+    message: 'passing',
   })
 
 t.create('level: in progress project')
@@ -90,9 +83,9 @@ t.create('level: in progress project')
         tiered_percentage: 94,
       })
   )
-  .expectJSON({
-    name: 'cii',
-    value: 'in progress',
+  .expectBadge({
+    label: 'cii',
+    message: 'in progress',
   })
 
 t.create('percentage: gold project')
@@ -105,9 +98,9 @@ t.create('percentage: gold project')
         tiered_percentage: 300,
       })
   )
-  .expectJSON({
-    name: 'cii',
-    value: '300%',
+  .expectBadge({
+    label: 'cii',
+    message: '300%',
   })
 
 t.create('percentage: silver project')
@@ -120,9 +113,9 @@ t.create('percentage: silver project')
         tiered_percentage: 297,
       })
   )
-  .expectJSON({
-    name: 'cii',
-    value: '297%',
+  .expectBadge({
+    label: 'cii',
+    message: '297%',
   })
 
 t.create('percentage: passing project')
@@ -135,9 +128,9 @@ t.create('percentage: passing project')
         tiered_percentage: 107,
       })
   )
-  .expectJSON({
-    name: 'cii',
-    value: '107%',
+  .expectBadge({
+    label: 'cii',
+    message: '107%',
   })
 
 t.create('percentage: in progress project')
@@ -150,9 +143,9 @@ t.create('percentage: in progress project')
         tiered_percentage: 94,
       })
   )
-  .expectJSON({
-    name: 'cii',
-    value: '94%',
+  .expectBadge({
+    label: 'cii',
+    message: '94%',
   })
 
 t.create('summary: gold project')
@@ -165,9 +158,9 @@ t.create('summary: gold project')
         tiered_percentage: 300,
       })
   )
-  .expectJSON({
-    name: 'cii',
-    value: 'gold',
+  .expectBadge({
+    label: 'cii',
+    message: 'gold',
   })
 
 t.create('summary: silver project')
@@ -180,9 +173,9 @@ t.create('summary: silver project')
         tiered_percentage: 297,
       })
   )
-  .expectJSON({
-    name: 'cii',
-    value: 'silver',
+  .expectBadge({
+    label: 'cii',
+    message: 'silver',
   })
 
 t.create('summary: passing project')
@@ -195,9 +188,9 @@ t.create('summary: passing project')
         tiered_percentage: 107,
       })
   )
-  .expectJSON({
-    name: 'cii',
-    value: 'passing',
+  .expectBadge({
+    label: 'cii',
+    message: 'passing',
   })
 
 t.create('summary: in progress project')
@@ -210,7 +203,7 @@ t.create('summary: in progress project')
         tiered_percentage: 94,
       })
   )
-  .expectJSON({
-    name: 'cii',
-    value: 'in progress 94%',
+  .expectBadge({
+    label: 'cii',
+    message: 'in progress 94%',
   })

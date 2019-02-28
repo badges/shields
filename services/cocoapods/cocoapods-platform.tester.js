@@ -9,16 +9,14 @@ const isPlatform = Joi.string().regex(
 
 t.create('platform (valid)')
   .get('/AFNetworking.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'platform',
-      value: isPlatform,
-    })
-  )
+  .expectBadge({
+    label: 'platform',
+    message: isPlatform,
+  })
 
 t.create('platform (not found)')
   .get('/not-a-package.json')
-  .expectJSON({ name: 'platform', value: 'not found' })
+  .expectBadge({ label: 'platform', message: 'not found' })
 
 t.create('platform (missing platforms key)')
   .get('/AFNetworking.json')
@@ -27,4 +25,4 @@ t.create('platform (missing platforms key)')
       .get('/api/v1/pods/AFNetworking/specs/latest')
       .reply(200, { version: 'v1.0', license: 'MIT' })
   )
-  .expectJSON({ name: 'platform', value: 'ios | osx' })
+  .expectBadge({ label: 'platform', message: 'ios | osx' })

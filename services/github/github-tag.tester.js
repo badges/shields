@@ -5,15 +5,15 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Tag')
   .get('/tag/photonstorm/phaser.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'tag', value: Joi.string() }))
+  .expectBadge({ label: 'tag', message: Joi.string() })
 
 t.create('Tag (inc pre-release)')
   .get('/tag-pre/photonstorm/phaser.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'tag', value: Joi.string() }))
+  .expectBadge({ label: 'tag', message: Joi.string() })
 
 t.create('Tag (repo not found)')
   .get('/tag/badges/helmets.json')
-  .expectJSON({ name: 'tag', value: 'repo not found' })
+  .expectBadge({ label: 'tag', message: 'repo not found' })
 
 const tagsFixture = [
   { name: 'cheese' }, // any old string
@@ -28,7 +28,7 @@ t.create('Tag (mocked response, no pre-releases, semver ordering)')
       .get('/repos/foo/bar/tags')
       .reply(200, tagsFixture)
   )
-  .expectJSON({ name: 'tag', value: 'v1.2', color: 'blue' })
+  .expectBadge({ label: 'tag', message: 'v1.2', color: 'blue' })
 
 t.create('Tag (mocked response, include pre-releases, semver ordering)')
   .get('/tag-pre/foo/bar.json?style=_shields_test')
@@ -37,7 +37,7 @@ t.create('Tag (mocked response, include pre-releases, semver ordering)')
       .get('/repos/foo/bar/tags')
       .reply(200, tagsFixture)
   )
-  .expectJSON({ name: 'tag', value: 'v1.3-beta3', color: 'orange' })
+  .expectBadge({ label: 'tag', message: 'v1.3-beta3', color: 'orange' })
 
 t.create('Tag (mocked response, date ordering)')
   .get('/tag-date/foo/bar.json?style=_shields_test')
@@ -46,4 +46,4 @@ t.create('Tag (mocked response, date ordering)')
       .get('/repos/foo/bar/tags')
       .reply(200, tagsFixture)
   )
-  .expectJSON({ name: 'tag', value: 'cheese', color: 'blue' })
+  .expectBadge({ label: 'tag', message: 'cheese', color: 'blue' })

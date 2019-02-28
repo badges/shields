@@ -1,6 +1,5 @@
 'use strict'
 
-const Joi = require('joi')
 const { ServiceTester } = require('../tester')
 const { isMetric, isMetricOverTimePeriod } = require('../test-validators')
 
@@ -12,25 +11,21 @@ const t = (module.exports = new ServiceTester({
 
 t.create('total marketplace downloads')
   .get('/dt/notepad4e.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'downloads',
-      value: isMetric,
-    })
-  )
+  .expectBadge({
+    label: 'downloads',
+    message: isMetric,
+  })
 
 t.create('monthly marketplace downloads')
   .get('/dm/notepad4e.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'downloads',
-      value: isMetricOverTimePeriod,
-    })
-  )
+  .expectBadge({
+    label: 'downloads',
+    message: isMetricOverTimePeriod,
+  })
 
 t.create('downloads for unknown solution')
   .get('/dt/this-does-not-exist.json')
-  .expectJSON({
-    name: 'downloads',
-    value: 'solution not found',
+  .expectBadge({
+    label: 'downloads',
+    message: 'solution not found',
   })

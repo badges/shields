@@ -10,47 +10,39 @@ module.exports = t
 
 t.create('image size without a specified tag')
   .get('/image-size/fedora/apache.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'image size',
-      value: isFileSize,
-    })
-  )
+  .expectBadge({
+    label: 'image size',
+    message: isFileSize,
+  })
 
 t.create('image size with a specified tag')
   .get('/image-size/fedora/apache/latest.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'image size',
-      value: isFileSize,
-    })
-  )
+  .expectBadge({
+    label: 'image size',
+    message: isFileSize,
+  })
 
 t.create('layers without a specified tag')
   .get('/layers/_/alpine.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'layers',
-      value: Joi.number()
-        .integer()
-        .positive(),
-    })
-  )
+  .expectBadge({
+    label: 'layers',
+    message: Joi.number()
+      .integer()
+      .positive(),
+  })
 
 t.create('layers with a specified tag')
   .get('/layers/_/alpine/2.7.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'layers',
-      value: Joi.number()
-        .integer()
-        .positive(),
-    })
-  )
+  .expectBadge({
+    label: 'layers',
+    message: Joi.number()
+      .integer()
+      .positive(),
+  })
 
 t.create('specified tag when repository has only one')
   .get('/layers/_/alpine/wrong-tag.json')
-  .expectJSON({ name: 'layers', value: 'not found' })
+  .expectBadge({ label: 'layers', message: 'not found' })
 
 t.create('nonexistent repository')
   .get('/layers/_/unknown.json')
@@ -59,7 +51,7 @@ t.create('nonexistent repository')
       .get('/v1/images/library/unknown')
       .reply(404)
   )
-  .expectJSON({ name: 'layers', value: 'not found' })
+  .expectBadge({ label: 'layers', message: 'not found' })
 
 t.create('nonexistent tag')
   .get('/layers/_/unknown/wrong-tag.json')
@@ -68,7 +60,7 @@ t.create('nonexistent tag')
       .get('/v1/images/library/unknown')
       .reply(200, { Versions: [] })
   )
-  .expectJSON({ name: 'layers', value: 'not found' })
+  .expectBadge({ label: 'layers', message: 'not found' })
 
 t.create('server error')
   .get('/image-size/_/hello-world.json')
@@ -77,12 +69,12 @@ t.create('server error')
       .get('/v1/images/library/hello-world')
       .reply(500, 'Something went wrong')
   )
-  .expectJSON({ name: 'image size', value: 'inaccessible' })
+  .expectBadge({ label: 'image size', message: 'inaccessible' })
 
 t.create('connection error')
   .get('/image-size/_/hello-world.json')
   .networkOff()
-  .expectJSON({ name: 'image size', value: 'inaccessible' })
+  .expectBadge({ label: 'image size', message: 'inaccessible' })
 
 t.create('unexpected response')
   .get('/image-size/_/hello-world.json')
@@ -91,7 +83,7 @@ t.create('unexpected response')
       .get('/v1/images/library/hello-world')
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'image size', value: 'error' })
+  .expectBadge({ label: 'image size', message: 'error' })
 
 t.create('missing download size')
   .get('/image-size/puppet/puppetserver.json')
@@ -100,4 +92,4 @@ t.create('missing download size')
       .get('/v1/images/puppet/puppetserver')
       .reply(200, {})
   )
-  .expectJSON({ name: 'image size', value: 'unknown' })
+  .expectBadge({ label: 'image size', message: 'unknown' })
