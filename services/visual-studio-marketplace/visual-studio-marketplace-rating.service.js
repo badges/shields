@@ -1,7 +1,7 @@
 'use strict'
 
-const { starRating } = require('../../lib/text-formatters')
-const { floorCount } = require('../../lib/color-formatters')
+const { starRating } = require('../text-formatters')
+const { floorCount } = require('../color-formatters')
 const VisualStudioMarketplaceBase = require('./visual-studio-marketplace-base')
 
 module.exports = class VisualStudioMarketplaceRating extends VisualStudioMarketplaceBase {

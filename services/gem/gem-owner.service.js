@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { BaseJsonService } = require('..')
-const { floorCount: floorCountColor } = require('../../lib/color-formatters')
+const { floorCount: floorCountColor } = require('../color-formatters')
 
 const ownerSchema = Joi.array().required()
 

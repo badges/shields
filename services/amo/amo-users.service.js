@@ -1,6 +1,6 @@
 'use strict'
 
-const { metric } = require('../../lib/text-formatters')
+const { metric } = require('../text-formatters')
 const { BaseAmoService, keywords } = require('./amo-base')
 
 module.exports = class AmoUsers extends BaseAmoService {

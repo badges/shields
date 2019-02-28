@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { ServiceTester } = require('../tester')
 const { isMetric, isMetricOpenIssues } = require('../test-validators')
-const { isBuildStatus } = require('../../lib/build-status')
+const { isBuildStatus } = require('../build-status')
 const {
   mockBitbucketCreds,
   mockBitbucketServerCreds,

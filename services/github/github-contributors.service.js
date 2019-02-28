@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const parseLinkHeader = require('parse-link-header')
-const { renderContributorBadge } = require('../../lib/contributor-count')
+const { renderContributorBadge } = require('../contributor-count')
 const { GithubAuthService } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 

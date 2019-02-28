@@ -5,7 +5,7 @@ const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const {
   coveragePercentage: coveragePercentageColor,
-} = require('../../lib/color-formatters')
+} = require('../color-formatters')
 
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //

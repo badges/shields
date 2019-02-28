@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { isBuildStatus } = require('../../lib/build-status')
+const { isBuildStatus } = require('../build-status')
 const t = (module.exports = require('../tester').createServiceTester())
 
 // https://dev.azure.com/totodem/Shields.io is a public Azure DevOps project

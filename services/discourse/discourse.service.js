@@ -3,7 +3,7 @@
 const camelcase = require('camelcase')
 const Joi = require('joi')
 const { BaseJsonService } = require('..')
-const { metric } = require('../../lib/text-formatters')
+const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
 
 const schema = Joi.object({

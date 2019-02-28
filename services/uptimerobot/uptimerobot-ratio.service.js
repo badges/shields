@@ -1,6 +1,6 @@
 'use strict'
 
-const { colorScale } = require('../../lib/color-formatters')
+const { colorScale } = require('../color-formatters')
 const UptimeRobotBase = require('./uptimerobot-base')
 
 const ratioColor = colorScale([10, 30, 50, 70])
