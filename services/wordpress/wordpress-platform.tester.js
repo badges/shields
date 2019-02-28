@@ -11,30 +11,24 @@ const t = (module.exports = new ServiceTester({
 
 t.create('Plugin Required WP Version')
   .get('/plugin/wp-version/akismet.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'wordpress',
-      value: isVPlusDottedVersionAtLeastOne,
-    })
-  )
+  .expectBadge({
+    label: 'wordpress',
+    message: isVPlusDottedVersionAtLeastOne,
+  })
 
 t.create('Plugin Tested WP Version')
   .get('/plugin/tested/akismet.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'wordpress',
-      value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)? tested$/),
-    })
-  )
+  .expectBadge({
+    label: 'wordpress',
+    message: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)? tested$/),
+  })
 
 t.create('Plugin Tested WP Version (Alias)')
   .get('/v/akismet.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'wordpress',
-      value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)? tested$/),
-    })
-  )
+  .expectBadge({
+    label: 'wordpress',
+    message: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)? tested$/),
+  })
 
 const mockedQuerySelector = {
   action: 'plugin_information',
@@ -72,9 +66,9 @@ t.create('Plugin Tested WP Version - current (mocked)')
       .get('/core/version-check/1.7/')
       .reply(200, mockedCoreResponseData)
   )
-  .expectJSON({
-    name: 'wordpress',
-    value: 'v4.9.8 tested',
+  .expectBadge({
+    label: 'wordpress',
+    message: 'v4.9.8 tested',
     color: 'brightgreen',
   })
 
@@ -96,9 +90,9 @@ t.create('Plugin Tested WP Version - old (mocked)')
       .get('/core/version-check/1.7/')
       .reply(200, mockedCoreResponseData)
   )
-  .expectJSON({
-    name: 'wordpress',
-    value: 'v4.9.6 tested',
+  .expectBadge({
+    label: 'wordpress',
+    message: 'v4.9.6 tested',
     color: 'orange',
   })
 
@@ -120,29 +114,29 @@ t.create('Plugin Tested WP Version - non-exsistant or unsupported (mocked)')
       .get('/core/version-check/1.7/')
       .reply(200, mockedCoreResponseData)
   )
-  .expectJSON({
-    name: 'wordpress',
-    value: 'v4.0.0 tested',
+  .expectBadge({
+    label: 'wordpress',
+    message: 'v4.0.0 tested',
     color: 'yellow',
   })
 
 t.create('Plugin Required WP Version | Not Found')
   .get('/plugin/wp-version/100.json')
-  .expectJSON({
-    name: 'wordpress',
-    value: 'not found',
+  .expectBadge({
+    label: 'wordpress',
+    message: 'not found',
   })
 
 t.create('Plugin Tested WP Version | Not Found')
   .get('/plugin/tested/100.json')
-  .expectJSON({
-    name: 'wordpress',
-    value: 'not found',
+  .expectBadge({
+    label: 'wordpress',
+    message: 'not found',
   })
 
 t.create('Plugin Tested WP Version (Alias) | Not Found')
   .get('/v/100.json')
-  .expectJSON({
-    name: 'wordpress',
-    value: 'not found',
+  .expectBadge({
+    label: 'wordpress',
+    message: 'not found',
   })

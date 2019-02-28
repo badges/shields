@@ -15,9 +15,9 @@ t.create('Valid (mocked)')
       .query(apiGetQueryParams)
       .reply(200, {})
   )
-  .expectJSON({
-    name: 'swagger',
-    value: 'valid',
+  .expectBadge({
+    label: 'swagger',
+    message: 'valid',
     color: 'brightgreen',
   })
 
@@ -36,8 +36,8 @@ t.create('Invalid (mocked)')
         ],
       })
   )
-  .expectJSON({
-    name: 'swagger',
-    value: 'invalid',
+  .expectBadge({
+    label: 'swagger',
+    message: 'invalid',
     color: 'red',
   })

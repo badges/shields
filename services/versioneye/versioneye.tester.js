@@ -7,7 +7,7 @@ module.exports = t
 
 t.create('no longer available (previously dependencies status)')
   .get('/d/ruby/rails.json')
-  .expectJSON({
-    name: 'versioneye',
-    value: 'no longer available',
+  .expectBadge({
+    label: 'versioneye',
+    message: 'no longer available',
   })

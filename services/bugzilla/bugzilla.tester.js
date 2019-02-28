@@ -17,13 +17,11 @@ const bzBugStatus = Joi.equal(
 
 t.create('Bugzilla valid bug status')
   .get('/996038.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'bug 996038',
-      value: bzBugStatus,
-    })
-  )
+  .expectBadge({
+    label: 'bug 996038',
+    message: bzBugStatus,
+  })
 
 t.create('Bugzilla invalid bug status')
   .get('/83548978974387943879.json')
-  .expectJSON({ name: 'bugzilla', value: 'not found' })
+  .expectBadge({ label: 'bugzilla', message: 'not found' })

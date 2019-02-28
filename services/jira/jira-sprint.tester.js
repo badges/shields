@@ -1,6 +1,5 @@
 'use strict'
 
-const Joi = require('joi')
 const t = (module.exports = require('../tester').createServiceTester())
 const { isIntegerPercentage } = require('../test-validators')
 const { mockJiraCreds, restore, user, pass } = require('./jira-test-helpers')
@@ -14,16 +13,14 @@ const queryString = {
 
 t.create('live: unknown sprint')
   .get('/https/jira.spring.io/abc.json')
-  .expectJSON({ name: 'jira', value: 'sprint not found' })
+  .expectBadge({ label: 'jira', message: 'sprint not found' })
 
 t.create('live: known sprint')
   .get('/https/jira.spring.io/94.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'completion',
-      value: isIntegerPercentage,
-    })
-  )
+  .expectBadge({
+    label: 'completion',
+    message: isIntegerPercentage,
+  })
 
 t.create('100% completion')
   .get(`/http/issues.apache.org/jira/${sprintId}.json?style=_shields_test`)
@@ -51,9 +48,9 @@ t.create('100% completion')
         ],
       })
   )
-  .expectJSON({
-    name: 'completion',
-    value: '100%',
+  .expectBadge({
+    label: 'completion',
+    message: '100%',
     color: 'brightgreen',
   })
 
@@ -76,9 +73,9 @@ t.create('0% completion')
         ],
       })
   )
-  .expectJSON({
-    name: 'completion',
-    value: '0%',
+  .expectBadge({
+    label: 'completion',
+    message: '0%',
     color: 'red',
   })
 
@@ -93,9 +90,9 @@ t.create('no issues in sprint')
         issues: [],
       })
   )
-  .expectJSON({
-    name: 'completion',
-    value: '0%',
+  .expectBadge({
+    label: 'completion',
+    message: '0%',
     color: 'red',
   })
 
@@ -123,9 +120,9 @@ t.create('issue with null resolution value')
         ],
       })
   )
-  .expectJSON({
-    name: 'completion',
-    value: '50%',
+  .expectBadge({
+    label: 'completion',
+    message: '50%',
     color: 'orange',
   })
 
@@ -163,4 +160,4 @@ t.create('with mock credentials')
       })
   )
   .finally(restore)
-  .expectJSON({ name: 'completion', value: '50%' })
+  .expectBadge({ label: 'completion', message: '50%' })

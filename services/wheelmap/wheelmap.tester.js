@@ -28,9 +28,9 @@ t.create('node with accessibility')
         })
       )
   )
-  .expectJSON({
-    name: 'accessibility',
-    value: 'yes',
+  .expectBadge({
+    label: 'accessibility',
+    message: 'yes',
     color: 'brightgreen',
   })
 
@@ -50,9 +50,9 @@ t.create('node with limited accessibility')
         })
       )
   )
-  .expectJSON({
-    name: 'accessibility',
-    value: 'limited',
+  .expectBadge({
+    label: 'accessibility',
+    message: 'limited',
     color: 'yellow',
   })
 
@@ -72,9 +72,9 @@ t.create('node without accessibility')
         })
       )
   )
-  .expectJSON({
-    name: 'accessibility',
-    value: 'no',
+  .expectBadge({
+    label: 'accessibility',
+    message: 'no',
     color: 'red',
   })
 
@@ -87,7 +87,7 @@ t.create('node not found')
       .get('/api/nodes/0')
       .reply(404)
   )
-  .expectJSON({
-    name: 'accessibility',
-    value: 'node not found',
+  .expectBadge({
+    label: 'accessibility',
+    message: 'node not found',
   })
