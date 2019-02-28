@@ -1,9 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const { metric } = require('../../lib/text-formatters')
+const { metric } = require('../text-formatters')
 const { BaseJsonService } = require('..')
-const { colorScale } = require('../../lib/color-formatters')
+const { colorScale } = require('../color-formatters')
 const { nonNegativeInteger } = require('../validators')
 
 const schema = Joi.object({

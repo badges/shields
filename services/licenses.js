@@ -1,6 +1,6 @@
 'use strict'
 
-const { toArray } = require('./badge-data')
+const { toArray } = require('../lib/badge-data')
 
 const licenseTypes = {
   // permissive licenses - not public domain and not copyleft

@@ -1,6 +1,6 @@
 'use strict'
 
-const { renderVersionBadge } = require('../../lib/version')
+const { renderVersionBadge } = require('../version')
 const { BaseAmoService, keywords } = require('./amo-base')
 
 module.exports = class AmoVersion extends BaseAmoService {

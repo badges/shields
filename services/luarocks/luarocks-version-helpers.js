@@ -5,7 +5,7 @@
  */
 'use strict'
 
-const { omitv } = require('../../lib/text-formatters')
+const { omitv } = require('../text-formatters')
 
 // Compare two arrays containing split and transformed to
 // positive/negative numbers parts of version strings,
