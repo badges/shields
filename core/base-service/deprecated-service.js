@@ -28,7 +28,7 @@ function deprecatedService(attrs) {
   return class DeprecatedService extends BaseService {
     static get name() {
       return (
-        name ||
+        `Deprecated${name}` ||
         `Deprecated${camelcase(route.base.replace(/\//g, '_'), {
           pascalCase: true,
         })}`
