@@ -166,6 +166,14 @@ class VaadinDirectory extends LegacyService {
     return 'other'
   }
 
+  static get route() {
+    return {
+      base: 'vaadin-directory',
+      pattern:
+        ':which(star|stars|status|rating|rc|rating-count|v|version|rd|release-date)/:urlIdentifier',
+    }
+  }
+
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/vaadin-directory\/(star|stars|status|rating|rc|rating-count|v|version|rd|release-date)\/(.*).(svg|png|gif|jpg|json)$/,

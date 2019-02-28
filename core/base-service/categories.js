@@ -14,5 +14,6 @@ function assertValidCategory(category, message = undefined) {
 }
 
 module.exports = {
+  isValidCategory,
   assertValidCategory,
 }

@@ -25,25 +25,7 @@ describe('Prometheus metrics route', function() {
     }
   })
 
-  it('returns 404 when metrics are disabled', async function() {
-    new Metrics({ enabled: false }).initialize(camp)
-
-    const res = await fetch(`${baseUrl}/metrics`)
-
-    expect(res.status).to.be.equal(404)
-    expect(await res.text()).to.not.contains('nodejs_version_info')
-  })
-
-  it('returns 404 when there is no configuration', async function() {
-    new Metrics().initialize(camp)
-
-    const res = await fetch(`${baseUrl}/metrics`)
-
-    expect(res.status).to.be.equal(404)
-    expect(await res.text()).to.not.contains('nodejs_version_info')
-  })
-
-  it('returns metrics when enabled', async function() {
+  it('returns metrics', async function() {
     new Metrics({ enabled: true }).initialize(camp)
 
     const res = await fetch(`${baseUrl}/metrics`)
