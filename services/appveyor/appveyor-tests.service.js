@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { renderTestResultBadge } = require('../../lib/text-formatters')
+const { renderTestResultBadge } = require('../text-formatters')
 const AppVeyorBase = require('./appveyor-base')
 
 const documentation = `

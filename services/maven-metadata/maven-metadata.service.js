@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { BaseXmlService } = require('..')
-const { renderVersionBadge } = require('../../lib/version')
+const { renderVersionBadge } = require('../version')
 
 const schema = Joi.object({
   metadata: Joi.object({

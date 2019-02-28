@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { version: versionColor } = require('../../lib/color-formatters')
+const { version: versionColor } = require('../color-formatters')
 const { BaseJsonService, NotFound } = require('..')
 
 const clojarsSchema = Joi.object({

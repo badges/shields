@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { coveragePercentage } = require('../../lib/color-formatters')
+const { coveragePercentage } = require('../color-formatters')
 const { InvalidResponse } = require('..')
 const TeamCityBase = require('./teamcity-base')
 

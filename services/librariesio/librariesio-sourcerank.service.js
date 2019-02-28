@@ -1,6 +1,6 @@
 'use strict'
 
-const { colorScale } = require('../../lib/color-formatters')
+const { colorScale } = require('../color-formatters')
 const LibrariesIoBase = require('./librariesio-base')
 
 const sourceRankColor = colorScale([10, 15, 20, 25, 30])

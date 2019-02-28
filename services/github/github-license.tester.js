@@ -1,6 +1,6 @@
 'use strict'
 
-const { licenseToColor } = require('../../lib/licenses')
+const { licenseToColor } = require('../licenses')
 const t = (module.exports = require('../tester').createServiceTester())
 
 const publicDomainLicenseColor = licenseToColor('CC0-1.0')

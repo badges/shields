@@ -1,6 +1,6 @@
 'use strict'
 
-const { renderLicenseBadge } = require('../../lib/licenses')
+const { renderLicenseBadge } = require('../licenses')
 const { toArray } = require('../../lib/badge-data')
 const NpmBase = require('./npm-base')
 

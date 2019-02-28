@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const { formatDate } = require('../../lib/text-formatters')
-const { age: ageColor } = require('../../lib/color-formatters')
+const { formatDate } = require('../text-formatters')
+const { age: ageColor } = require('../color-formatters')
 const { nonNegativeInteger } = require('../validators')
 const EclipseMarketplaceBase = require('./eclipse-marketplace-base')
 

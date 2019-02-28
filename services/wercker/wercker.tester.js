@@ -1,6 +1,6 @@
 'use strict'
 
-const { isBuildStatus } = require('../../lib/build-status')
+const { isBuildStatus } = require('../build-status')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Build status')

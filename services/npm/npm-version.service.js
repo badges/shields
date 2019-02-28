@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { renderVersionBadge } = require('../../lib/version')
+const { renderVersionBadge } = require('../version')
 const { NotFound } = require('..')
 const NpmBase = require('./npm-base')
 
