@@ -61,7 +61,7 @@ const Footer = ({ baseUrl }) => (
           path: '/discord/308323056592486420',
           queryParams: {
             label: 'Chat',
-            link: 'link=https://discord.gg/HjJCwm5',
+            link: 'https://discord.gg/HjJCwm5',
           },
           style: 'social',
         })}
@@ -79,7 +79,7 @@ const Footer = ({ baseUrl }) => (
 
     <p>
       <SpacedA href="https://status.shields.io/">Status</SpacedA>
-      <SpacedA href="https://github.com/badges/shields/">GitHub</SpacedA>
+      <SpacedA href="https://github.com/badges/shields">GitHub</SpacedA>
     </p>
   </section>
 )
