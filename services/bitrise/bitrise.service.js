@@ -9,7 +9,7 @@ const schema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
-  token: Joi.string(),
+  token: Joi.string().required(),
 }).required()
 
 module.exports = class Bitrise extends BaseJsonService {
