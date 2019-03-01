@@ -9,6 +9,11 @@ module.exports = class BaseChromeWebStoreService extends BaseService {
     try {
       return await chromeWebStore(storeId)
     } catch (e) {
+      /*
+      chrome-web-store-item-property's `HTTPError` object has a
+      `statusCode` property so we can pass `e` to `checkErrorResponse`
+      to throw the correct `ShieldsRuntimeError` for us.
+      */
       return checkErrorResponse.asPromise({})({ buffer: '', res: e })
     }
   }
