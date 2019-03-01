@@ -6,10 +6,8 @@ const {
   makeBadgeData: getBadgeData,
   makeLabel: getLabel,
 } = require('../../lib/badge-data')
-const { metric } = require('../../lib/text-formatters')
-const {
-  downloadCount: downloadCountColor,
-} = require('../../lib/color-formatters')
+const { metric } = require('../text-formatters')
+const { downloadCount: downloadCountColor } = require('../color-formatters')
 
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //

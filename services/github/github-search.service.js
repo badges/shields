@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { metric } = require('../../lib/text-formatters')
+const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
 const { GithubAuthService } = require('./github-auth-service')
 const { errorMessagesFor, documentation } = require('./github-helpers')

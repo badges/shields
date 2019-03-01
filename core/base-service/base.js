@@ -49,7 +49,10 @@ const serviceDataSchema = Joi.object({
   // `render()` to always return a string.
   message: Joi.alternatives(Joi.string().allow(''), Joi.number()).required(),
   color: Joi.string(),
-  link: Joi.string().uri(),
+  link: Joi.array()
+    .items(Joi.string().uri())
+    .single()
+    .max(2),
   // Generally services should not use these options, which are provided to
   // support the Endpoint badge.
   labelColor: Joi.string(),

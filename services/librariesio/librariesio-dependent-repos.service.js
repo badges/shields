@@ -1,6 +1,6 @@
 'use strict'
 
-const { metric } = require('../../lib/text-formatters')
+const { metric } = require('../text-formatters')
 const LibrariesIoBase = require('./librariesio-base')
 
 // https://libraries.io/api#project-dependent-repositories

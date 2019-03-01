@@ -57,7 +57,7 @@ const readAllStdinSync = require('read-all-stdin-sync')
 const { createTestServer } = require('../server/in-process-server-test-helpers')
 const Runner = require('./runner')
 
-require('../../lib/unhandled-rejection.spec')
+require('../unhandled-rejection.spec')
 
 let baseUrl, server
 if (process.env.TESTED_SERVER_URL) {

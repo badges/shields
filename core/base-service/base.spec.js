@@ -170,6 +170,52 @@ describe('BaseService', function() {
     })
   })
 
+  describe('Service data validation', function() {
+    it('Allows a link array', async function() {
+      const message = 'hello'
+      const link = ['https://example.com/', 'https://other.example.com/']
+      class LinkService extends DummyService {
+        async handle() {
+          return { message, link }
+        }
+      }
+
+      const serviceData = await LinkService.invoke(
+        {},
+        { handleInternalErrors: false },
+        { namedParamA: 'bar.bar.bar' }
+      )
+
+      expect(serviceData).to.deep.equal({
+        message,
+        link,
+      })
+    })
+
+    it('Throws a validation error on invalid data', async function() {
+      class ThrowingService extends DummyService {
+        async handle() {
+          return {
+            some: 'nonsense',
+          }
+        }
+      }
+      try {
+        await ThrowingService.invoke(
+          {},
+          { handleInternalErrors: false },
+          { namedParamA: 'bar.bar.bar' }
+        )
+        expect.fail('Expected to throw')
+      } catch (e) {
+        expect(e.name).to.equal('ValidationError')
+        expect(e.details.map(({ message }) => message)).to.deep.equal([
+          '"message" is required',
+        ])
+      }
+    })
+  })
+
   describe('Error handling', function() {
     it('Handles internal errors', async function() {
       class ThrowingService extends DummyService {
@@ -188,31 +234,6 @@ describe('BaseService', function() {
         color: 'lightgray',
         label: 'shields',
         message: 'internal error',
-      })
-    })
-
-    context('handle() returns invalid data', function() {
-      it('Throws a validation error', async function() {
-        class ThrowingService extends DummyService {
-          async handle() {
-            return {
-              some: 'nonsense',
-            }
-          }
-        }
-        try {
-          await ThrowingService.invoke(
-            {},
-            { handleInternalErrors: false },
-            { namedParamA: 'bar.bar.bar' }
-          )
-          expect.fail('Expected to throw')
-        } catch (e) {
-          expect(e.name).to.equal('ValidationError')
-          expect(e.details.map(({ message }) => message)).to.deep.equal([
-            '"message" is required',
-          ])
-        }
       })
     })
 

@@ -1,7 +1,7 @@
 'use strict'
 
-const { metric } = require('../../lib/text-formatters')
-const { downloadCount } = require('../../lib/color-formatters')
+const { metric } = require('../text-formatters')
+const { downloadCount } = require('../color-formatters')
 const { redirector } = require('..')
 const { BaseAmoService, keywords } = require('./amo-base')
 

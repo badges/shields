@@ -37,37 +37,35 @@ t.create(
       .get('/userName/repoName/columns?with=count')
       .reply(200, fakeData)
   )
-  .expectJSON({
-    name: 'bug',
-    value: '5',
+  .expectBadge({
+    label: 'bug',
+    message: '5',
     color: '#fbca04',
   })
 
 t.create('label should be `Mybug` & value should be formatted.  e.g: Mybug|25')
   .get('/ritwickdey/vscode-live-server/bug.json?label=Mybug')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'Mybug',
-      value: Joi.number()
-        .integer()
-        .positive(),
-    })
-  )
+  .expectBadge({
+    label: 'Mybug',
+    message: Joi.number()
+      .integer()
+      .positive(),
+  })
 
 t.create('label (repo not found)')
   .get('/not-a-user/not-a-repo/bug.json')
-  .expectJSON({
-    name: 'waffle',
-    value: 'not found',
+  .expectBadge({
+    label: 'waffle',
+    message: 'not found',
   })
 
 t.create('label (label not found)')
   .get(
     '/ritwickdey/vscode-live-server/not-a-real-label.json?style=_shields_test'
   )
-  .expectJSON({
-    name: 'not-a-real-label',
-    value: '0',
+  .expectBadge({
+    label: 'not-a-real-label',
+    message: '0',
     color: '#78bdf2',
   })
 
@@ -78,15 +76,15 @@ t.create('label (empty response)')
       .get('/userName/repoName/columns?with=count')
       .reply(200, [])
   )
-  .expectJSON({
-    name: 'waffle',
-    value: 'absent',
+  .expectBadge({
+    label: 'waffle',
+    message: 'absent',
   })
 
 t.create('label (connection error)')
   .get('/ritwickdey/vscode-live-server/bug.json')
   .networkOff()
-  .expectJSON({ name: 'waffle', value: 'inaccessible' })
+  .expectBadge({ label: 'waffle', message: 'inaccessible' })
 
 t.create('label (unexpected response)')
   .get('/userName/repoName/bug.json')
@@ -95,4 +93,4 @@ t.create('label (unexpected response)')
       .get('/userName/repoName/columns?with=count')
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'waffle', value: 'invalid' })
+  .expectBadge({ label: 'waffle', message: 'invalid' })

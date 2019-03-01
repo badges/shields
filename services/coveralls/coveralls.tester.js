@@ -1,6 +1,5 @@
 'use strict'
 
-const Joi = require('joi')
 const { isIntegerPercentage } = require('../test-validators')
 const { ServiceTester } = require('../tester')
 
@@ -16,7 +15,7 @@ t.create('error status code - location header is missing')
       .head('/repos/github/not/existed/badge.svg')
       .reply(404)
   )
-  .expectJSON({ name: 'coverage', value: 'invalid' })
+  .expectBadge({ label: 'coverage', message: 'invalid' })
 
 t.create('malformed location')
   .get('/github/user/repository.json')
@@ -32,7 +31,7 @@ t.create('malformed location')
         }
       )
   )
-  .expectJSON({ name: 'coverage', value: 'malformed' })
+  .expectBadge({ label: 'coverage', message: 'malformed' })
 
 t.create('NaN percentage in location')
   .get('/github/user/repository.json')
@@ -48,12 +47,12 @@ t.create('NaN percentage in location')
         }
       )
   )
-  .expectJSON({ name: 'coverage', value: 'unknown' })
+  .expectBadge({ label: 'coverage', message: 'unknown' })
 
 t.create('connection error')
   .get('/github/user/repository.json')
   .networkOff()
-  .expectJSON({ name: 'coverage', value: 'invalid' })
+  .expectBadge({ label: 'coverage', message: 'invalid' })
 
 t.create('show coverage')
   .get('/github/user/repository.json')
@@ -69,7 +68,7 @@ t.create('show coverage')
         }
       )
   )
-  .expectJSON({ name: 'coverage', value: '50%' })
+  .expectBadge({ label: 'coverage', message: '50%' })
 
 t.create('show coverage for legacy github link')
   .get('/user/repository.json')
@@ -85,7 +84,7 @@ t.create('show coverage for legacy github link')
         }
       )
   )
-  .expectJSON({ name: 'coverage', value: '50%' })
+  .expectBadge({ label: 'coverage', message: '50%' })
 
 t.create('show coverage for branch')
   .get('/github/user/repository/branch.json')
@@ -101,7 +100,7 @@ t.create('show coverage for branch')
         }
       )
   )
-  .expectJSON({ name: 'coverage', value: '50%' })
+  .expectBadge({ label: 'coverage', message: '50%' })
 
 t.create('show coverage for bitbucket')
   .get('/bitbucket/user/repository.json')
@@ -117,7 +116,7 @@ t.create('show coverage for bitbucket')
         }
       )
   )
-  .expectJSON({ name: 'coverage', value: '50%' })
+  .expectBadge({ label: 'coverage', message: '50%' })
 
 t.create('show coverage for bitbucket with branch')
   .get('/bitbucket/user/repository/branch.json')
@@ -133,22 +132,16 @@ t.create('show coverage for bitbucket with branch')
         }
       )
   )
-  .expectJSON({ name: 'coverage', value: '50%' })
+  .expectBadge({ label: 'coverage', message: '50%' })
 
 t.create('github coverage')
   .get('/github/jekyll/jekyll.json')
-  .expectJSONTypes(
-    Joi.object().keys({ name: 'coverage', value: isIntegerPercentage })
-  )
+  .expectBadge({ label: 'coverage', message: isIntegerPercentage })
 
 t.create('github coverage for legacy link')
   .get('/jekyll/jekyll.json')
-  .expectJSONTypes(
-    Joi.object().keys({ name: 'coverage', value: isIntegerPercentage })
-  )
+  .expectBadge({ label: 'coverage', message: isIntegerPercentage })
 
 t.create('bitbucket coverage')
   .get('/bitbucket/pyKLIP/pyklip.json')
-  .expectJSONTypes(
-    Joi.object().keys({ name: 'coverage', value: isIntegerPercentage })
-  )
+  .expectBadge({ label: 'coverage', message: isIntegerPercentage })

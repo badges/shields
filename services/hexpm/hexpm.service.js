@@ -1,11 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const { metric, addv, maybePluralize } = require('../../lib/text-formatters')
-const {
-  downloadCount,
-  version: versionColor,
-} = require('../../lib/color-formatters')
+const { metric, addv, maybePluralize } = require('../text-formatters')
+const { downloadCount, version: versionColor } = require('../color-formatters')
 const { BaseJsonService } = require('..')
 
 const hexSchema = Joi.object({

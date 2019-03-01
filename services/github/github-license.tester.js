@@ -1,6 +1,6 @@
 'use strict'
 
-const { licenseToColor } = require('../../lib/licenses')
+const { licenseToColor } = require('../licenses')
 const t = (module.exports = require('../tester').createServiceTester())
 
 const publicDomainLicenseColor = licenseToColor('CC0-1.0')
@@ -8,21 +8,25 @@ const unknownLicenseColor = licenseToColor()
 
 t.create('License')
   .get('/github/gitignore.json?style=_shields_test')
-  .expectJSON({
-    name: 'license',
-    value: 'CC0-1.0',
+  .expectBadge({
+    label: 'license',
+    message: 'CC0-1.0',
     color: `#${publicDomainLicenseColor}`,
   })
 
 t.create('License for repo without a license')
   .get('/badges/badger.json?style=_shields_test')
-  .expectJSON({ name: 'license', value: 'not specified', color: 'lightgrey' })
+  .expectBadge({
+    label: 'license',
+    message: 'not specified',
+    color: 'lightgrey',
+  })
 
 t.create('License for repo with an unrecognized license')
   .get('/philokev/sopel-noblerealms.json?style=_shields_test')
-  .expectJSON({
-    name: 'license',
-    value: 'not identifiable by github',
+  .expectBadge({
+    label: 'license',
+    message: 'not identifiable by github',
     color: unknownLicenseColor,
   })
 
@@ -43,16 +47,16 @@ t.create('License with SPDX id not appearing in configuration')
         },
       })
   )
-  .expectJSON({
-    name: 'license',
-    value: 'EFL-1.0',
+  .expectBadge({
+    label: 'license',
+    message: 'EFL-1.0',
     color: unknownLicenseColor,
   })
 
 t.create('License for unknown repo')
   .get('/user1/github-does-not-have-this-repo.json?style=_shields_test')
-  .expectJSON({
-    name: 'license',
-    value: 'repo not found',
+  .expectBadge({
+    label: 'license',
+    message: 'repo not found',
     color: 'red',
   })

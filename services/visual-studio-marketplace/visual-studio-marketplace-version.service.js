@@ -1,6 +1,6 @@
 'use strict'
 
-const { renderVersionBadge } = require('../../lib/version')
+const { renderVersionBadge } = require('../version')
 const VisualStudioMarketplaceBase = require('./visual-studio-marketplace-base')
 
 module.exports = class VisualStudioMarketplaceVersion extends VisualStudioMarketplaceBase {

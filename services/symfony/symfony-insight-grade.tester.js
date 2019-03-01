@@ -26,18 +26,16 @@ createTest(t, 'live: valid project grade', { withMockCreds: false })
       .get(`/${sampleProjectUuid}`)
       .reply(200, platinumMockResponse)
   )
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'grade',
-      value: Joi.equal(
-        'platinum',
-        'gold',
-        'silver',
-        'bronze',
-        'no medal'
-      ).required(),
-    })
-  )
+  .expectBadge({
+    label: 'grade',
+    message: Joi.equal(
+      'platinum',
+      'gold',
+      'silver',
+      'bronze',
+      'no medal'
+    ).required(),
+  })
 
 createTest(t, 'live: nonexistent project', { withMockCreds: false })
   .before(prepLiveTest)
@@ -47,9 +45,9 @@ createTest(t, 'live: nonexistent project', { withMockCreds: false })
       .get('/45afb680-d4e6-4e66-93ea-bcfa79eb8a88')
       .reply(404)
   )
-  .expectJSON({
-    name: 'symfony insight',
-    value: 'project not found',
+  .expectBadge({
+    label: 'symfony insight',
+    message: 'project not found',
   })
 
 createTest(t, '401 not authorized grade')
@@ -59,9 +57,9 @@ createTest(t, '401 not authorized grade')
       .get(`/${sampleProjectUuid}`)
       .reply(401)
   )
-  .expectJSON({
-    name: 'symfony insight',
-    value: 'not authorized to access project',
+  .expectBadge({
+    label: 'symfony insight',
+    message: 'not authorized to access project',
   })
 
 createTest(t, 'pending project grade')
@@ -71,9 +69,9 @@ createTest(t, 'pending project grade')
       .get(`/${sampleProjectUuid}`)
       .reply(200, runningMockResponse)
   )
-  .expectJSON({
-    name: 'grade',
-    value: 'pending',
+  .expectBadge({
+    label: 'grade',
+    message: 'pending',
     color: 'lightgrey',
   })
 
@@ -84,9 +82,9 @@ createTest(t, 'platinum grade')
       .get(`/${sampleProjectUuid}`)
       .reply(200, platinumMockResponse)
   )
-  .expectJSON({
-    name: 'grade',
-    value: 'platinum',
+  .expectBadge({
+    label: 'grade',
+    message: 'platinum',
     color: '#e5e4e2',
   })
 
@@ -97,9 +95,9 @@ createTest(t, 'gold grade')
       .get(`/${sampleProjectUuid}`)
       .reply(200, goldMockResponse)
   )
-  .expectJSON({
-    name: 'grade',
-    value: 'gold',
+  .expectBadge({
+    label: 'grade',
+    message: 'gold',
     color: '#ebc760',
   })
 
@@ -110,9 +108,9 @@ createTest(t, 'silver grade')
       .get(`/${sampleProjectUuid}`)
       .reply(200, silverMockResponse)
   )
-  .expectJSON({
-    name: 'grade',
-    value: 'silver',
+  .expectBadge({
+    label: 'grade',
+    message: 'silver',
     color: '#c0c0c0',
   })
 
@@ -123,9 +121,9 @@ createTest(t, 'bronze grade')
       .get(`/${sampleProjectUuid}`)
       .reply(200, bronzeMockResponse)
   )
-  .expectJSON({
-    name: 'grade',
-    value: 'bronze',
+  .expectBadge({
+    label: 'grade',
+    message: 'bronze',
     color: '#c88f6a',
   })
 
@@ -136,17 +134,17 @@ createTest(t, 'no medal grade')
       .get(`/${sampleProjectUuid}`)
       .reply(200, noMedalMockResponse)
   )
-  .expectJSON({
-    name: 'grade',
-    value: 'no medal',
+  .expectBadge({
+    label: 'grade',
+    message: 'no medal',
     color: 'red',
   })
 
 createTest(t, 'auth missing', { withMockCreds: false })
   .before(setSymfonyInsightCredsToFalsy)
   .get(`/${sampleProjectUuid}.json`)
-  .expectJSON({
-    name: 'symfony insight',
-    value: 'required API tokens not found in config',
+  .expectBadge({
+    label: 'symfony insight',
+    message: 'required API tokens not found in config',
   })
   .after(restore)

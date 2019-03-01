@@ -7,9 +7,9 @@
 
 const { promisify } = require('util')
 const request = require('request')
+const { regularUpdate } = require('../lib/regular-update')
 const { listCompare } = require('./version')
 const { omitv } = require('./text-formatters')
-const { regularUpdate } = require('./regular-update')
 
 // Return a negative value if v1 < v2,
 // zero if v1 = v2, a positive value otherwise.

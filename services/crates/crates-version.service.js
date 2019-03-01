@@ -1,6 +1,6 @@
 'use strict'
 
-const { renderVersionBadge } = require('../../lib/version')
+const { renderVersionBadge } = require('../version')
 const { BaseCratesService, keywords } = require('./crates-base')
 
 module.exports = class CratesVersion extends BaseCratesService {

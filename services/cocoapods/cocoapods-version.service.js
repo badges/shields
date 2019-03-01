@@ -1,6 +1,6 @@
 'use strict'
 
-const { renderVersionBadge } = require('../../lib/version')
+const { renderVersionBadge } = require('../version')
 const BaseCocoaPodsService = require('./cocoapods-base')
 
 module.exports = class CocoapodsVersion extends BaseCocoaPodsService {

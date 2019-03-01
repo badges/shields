@@ -1,6 +1,5 @@
 'use strict'
 
-const Joi = require('joi')
 const t = (module.exports = require('../tester').createServiceTester())
 const { withRegex } = require('../test-validators')
 const {
@@ -25,14 +24,12 @@ createTest(t, 'live: valid project stars', { withMockCreds: false })
       .get(`/${sampleProjectUuid}`)
       .reply(200, platinumMockResponse)
   )
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'stars',
-      value: withRegex(
-        /^(?=.{4}$)(\u2605{0,4}[\u00BC\u00BD\u00BE]?\u2606{0,4})$/
-      ),
-    })
-  )
+  .expectBadge({
+    label: 'stars',
+    message: withRegex(
+      /^(?=.{4}$)(\u2605{0,4}[\u00BC\u00BD\u00BE]?\u2606{0,4})$/
+    ),
+  })
 
 createTest(t, 'live (stars): nonexistent project', { withMockCreds: false })
   .before(prepLiveTest)
@@ -42,9 +39,9 @@ createTest(t, 'live (stars): nonexistent project', { withMockCreds: false })
       .get('/abc')
       .reply(404)
   )
-  .expectJSON({
-    name: 'symfony insight',
-    value: 'project not found',
+  .expectBadge({
+    label: 'symfony insight',
+    message: 'project not found',
   })
 
 createTest(t, 'pending project stars')
@@ -54,9 +51,9 @@ createTest(t, 'pending project stars')
       .get(`/${sampleProjectUuid}`)
       .reply(200, runningMockResponse)
   )
-  .expectJSON({
-    name: 'stars',
-    value: 'pending',
+  .expectBadge({
+    label: 'stars',
+    message: 'pending',
     color: 'lightgrey',
   })
 
@@ -67,9 +64,9 @@ createTest(t, 'platinum stars')
       .get(`/${sampleProjectUuid}`)
       .reply(200, platinumMockResponse)
   )
-  .expectJSON({
-    name: 'stars',
-    value: '★★★★',
+  .expectBadge({
+    label: 'stars',
+    message: '★★★★',
     color: '#e5e4e2',
   })
 
@@ -80,9 +77,9 @@ createTest(t, 'gold stars')
       .get(`/${sampleProjectUuid}`)
       .reply(200, goldMockResponse)
   )
-  .expectJSON({
-    name: 'stars',
-    value: '★★★☆',
+  .expectBadge({
+    label: 'stars',
+    message: '★★★☆',
     color: '#ebc760',
   })
 
@@ -93,9 +90,9 @@ createTest(t, 'silver stars')
       .get(`/${sampleProjectUuid}`)
       .reply(200, silverMockResponse)
   )
-  .expectJSON({
-    name: 'stars',
-    value: '★★☆☆',
+  .expectBadge({
+    label: 'stars',
+    message: '★★☆☆',
     color: '#c0c0c0',
   })
 
@@ -106,9 +103,9 @@ createTest(t, 'bronze stars')
       .get(`/${sampleProjectUuid}`)
       .reply(200, bronzeMockResponse)
   )
-  .expectJSON({
-    name: 'stars',
-    value: '★☆☆☆',
+  .expectBadge({
+    label: 'stars',
+    message: '★☆☆☆',
     color: '#c88f6a',
   })
 
@@ -119,8 +116,8 @@ createTest(t, 'no medal stars')
       .get(`/${sampleProjectUuid}`)
       .reply(200, noMedalMockResponse)
   )
-  .expectJSON({
-    name: 'stars',
-    value: '☆☆☆☆',
+  .expectBadge({
+    label: 'stars',
+    message: '☆☆☆☆',
     color: 'red',
   })

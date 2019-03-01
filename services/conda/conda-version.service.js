@@ -1,7 +1,7 @@
 'use strict'
 
-const { addv: versionText } = require('../../lib/text-formatters')
-const { version: versionColor } = require('../../lib/color-formatters')
+const { addv: versionText } = require('../text-formatters')
+const { version: versionColor } = require('../color-formatters')
 const BaseCondaService = require('./conda-base')
 
 module.exports = class CondaVersion extends BaseCondaService {

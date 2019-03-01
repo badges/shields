@@ -1,6 +1,6 @@
 'use strict'
 
-const { formatRelativeDate } = require('../../lib/text-formatters')
+const { formatRelativeDate } = require('../text-formatters')
 const { BaseService } = require('..')
 
 const documentation = `

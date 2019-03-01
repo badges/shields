@@ -1,7 +1,7 @@
 'use strict'
 
-const { starRating } = require('../../lib/text-formatters')
-const { floorCount: floorCountColor } = require('../../lib/color-formatters')
+const { starRating } = require('../text-formatters')
+const { floorCount: floorCountColor } = require('../color-formatters')
 const { BaseAmoService, keywords } = require('./amo-base')
 
 module.exports = class AmoRating extends BaseAmoService {

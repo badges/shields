@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { BaseJsonService } = require('..')
 const { nonNegativeInteger } = require('../validators')
-const { isBuildStatus } = require('../../lib/build-status')
+const { isBuildStatus } = require('../build-status')
 
 const schema = Joi.object({
   build: Joi.object({

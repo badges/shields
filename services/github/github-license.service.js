@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { renderLicenseBadge } = require('../../lib/licenses')
+const { renderLicenseBadge } = require('../licenses')
 const { GithubAuthService } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 
