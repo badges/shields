@@ -4,8 +4,9 @@ const Joi = require('joi')
 const { BaseJsonService } = require('..')
 const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
 
+// unknown is a valid 'other' status for Buildkite
 const schema = Joi.object({
-  status: isBuildStatus,
+  status: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
 }).required()
 
 module.exports = class Buildkite extends BaseJsonService {

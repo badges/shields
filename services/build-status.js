@@ -31,7 +31,6 @@ const otherStatuses = [
   'skipped',
   'starting',
   'stopped',
-  'unknown',
   'waiting',
 ]
 
