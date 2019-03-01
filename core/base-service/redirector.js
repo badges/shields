@@ -3,6 +3,7 @@
 const camelcase = require('camelcase')
 const emojic = require('emojic')
 const Joi = require('joi')
+const queryString = require('query-string')
 const BaseService = require('./base')
 const {
   serverHasBeenUpSinceResourceCached,
@@ -15,18 +16,19 @@ const trace = require('./trace')
 const attrSchema = Joi.object({
   category: isValidCategory,
   route: isValidRoute,
-  target: Joi.func()
+  transformUrl: Joi.func()
     .maxArity(1)
     .required()
     .error(
       () =>
-        '"target" must be a function that transforms named params to a new path'
+        '"transformUrl" must be a function that transforms named params to a new path'
     ),
+  transformQueryParams: Joi.func().arity(1),
   dateAdded: Joi.date().required(),
 }).required()
 
 module.exports = function redirector(attrs) {
-  const { category, route, target } = Joi.attempt(
+  const { category, route, transformUrl, transformQueryParams } = Joi.attempt(
     attrs,
     attrSchema,
     `Redirector for ${attrs.route.base}`
@@ -76,12 +78,21 @@ module.exports = function redirector(attrs) {
         trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
         trace.logTrace('inbound', emojic.crayon, 'Query params', queryParams)
 
-        const targetUrl = target(namedParams)
+        const targetUrl = transformUrl(namedParams)
         trace.logTrace('validate', emojic.dart, 'Target', targetUrl)
+
+        let urlSuffix = ask.uri.search || ''
+
+        if (transformQueryParams) {
+          const transformedParams = transformQueryParams(namedParams)
+          const outQueryString = queryString.stringify(transformedParams)
+          const separator = urlSuffix ? '&' : '?'
+          urlSuffix = `${urlSuffix}${separator}${outQueryString}`
+        }
 
         // The final capture group is the extension.
         const format = match.slice(-1)[0]
-        const redirectUrl = `${targetUrl}.${format}${ask.uri.search || ''}`
+        const redirectUrl = `${targetUrl}.${format}${urlSuffix}`
         trace.logTrace('outbound', emojic.shield, 'Redirect URL', redirectUrl)
 
         ask.res.statusCode = 301
