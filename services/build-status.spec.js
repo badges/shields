@@ -78,6 +78,7 @@ test(renderBuildStatusBadge, () => {
     given({ status: 'skipped' }),
     given({ status: 'starting' }),
     given({ status: 'stopped' }),
+    given({ status: 'unknown' }),
     given({ status: 'waiting' }),
   ]).assert('should have undefined color', b =>
     expect(b).to.include({ color: undefined })
