@@ -5,18 +5,16 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Forks')
   .get('/badges/shields.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'forks',
-      value: Joi.number()
-        .integer()
-        .positive(),
-    })
-  )
+  .expectBadge({
+    label: 'forks',
+    message: Joi.number()
+      .integer()
+      .positive(),
+  })
 
 t.create('Forks (repo not found)')
   .get('/badges/helmets.json')
-  .expectJSON({
-    name: 'forks',
-    value: 'repo not found',
+  .expectBadge({
+    label: 'forks',
+    message: 'repo not found',
   })

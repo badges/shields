@@ -1,6 +1,5 @@
 'use strict'
 
-const Joi = require('joi')
 const { ServiceTester } = require('../tester')
 const { isVPlusTripleDottedVersion } = require('../test-validators')
 
@@ -11,21 +10,19 @@ const t = (module.exports = new ServiceTester({
 
 t.create('version (valid)')
   .get('/v/devtools.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'cran',
-      value: isVPlusTripleDottedVersion,
-    })
-  )
+  .expectBadge({
+    label: 'cran',
+    message: isVPlusTripleDottedVersion,
+  })
 
 t.create('version (not found)')
   .get('/v/some-bogus-package.json')
-  .expectJSON({ name: 'cran', value: 'not found' })
+  .expectBadge({ label: 'cran', message: 'not found' })
 
 t.create('license (valid)')
   .get('/l/devtools.json')
-  .expectJSON({ name: 'license', value: 'GPL (>= 2)' })
+  .expectBadge({ label: 'license', message: 'GPL (>= 2)' })
 
 t.create('license (not found)')
   .get('/l/some-bogus-package.json')
-  .expectJSON({ name: 'cran', value: 'not found' })
+  .expectBadge({ label: 'cran', message: 'not found' })

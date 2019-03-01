@@ -1,11 +1,10 @@
 'use strict'
 
-const Joi = require('joi')
 const { nonNegativeInteger } = require('../validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('renders correctly')
-  .get('/shields/2988.json')
+  .get('/shields/2988.json?style=_shields_test')
   .intercept(nock =>
     nock('https://opencollective.com/')
       .get('/shields/members/all.json?TierId=2988')
@@ -60,45 +59,37 @@ t.create('renders correctly')
         },
       ])
   )
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'monthly backers',
-      value: '8',
-      color: 'brightgreen',
-    })
-  )
+  .expectBadge({
+    label: 'monthly backers',
+    message: '8',
+    color: 'brightgreen',
+  })
 
 // Not ideal, but open collective only returns an empty array
 t.create('shows 0 when given a non existent tier')
-  .get('/shields/1234567890.json')
+  .get('/shields/1234567890.json?style=_shields_test')
   .intercept(nock =>
     nock('https://opencollective.com/')
       .get('/shields/members/all.json?TierId=1234567890')
       .reply(200, [])
   )
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'new tier',
-      value: '0',
-      color: 'lightgrey',
-    })
-  )
+  .expectBadge({
+    label: 'new tier',
+    message: '0',
+    color: 'lightgrey',
+  })
 
 t.create('gets amount of backers in specified tier')
   .get('/shields/2988.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'monthly backers',
-      value: nonNegativeInteger,
-    })
-  )
+  .expectBadge({
+    label: 'monthly backers',
+    message: nonNegativeInteger,
+  })
 
 t.create('handles not found correctly')
   .get('/nonexistent-collective/1234.json?style=_shields_test')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'open collective',
-      value: 'collective not found',
-      color: 'red',
-    })
-  )
+  .expectBadge({
+    label: 'open collective',
+    message: 'collective not found',
+    color: 'red',
+  })

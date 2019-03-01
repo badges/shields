@@ -11,32 +11,28 @@ const isBowerPrereleaseVersion = Joi.string().regex(
 t.create('version')
   .timeout(10000)
   .get('/v/bootstrap.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'bower',
-      value: isVPlusDottedVersionAtLeastOne,
-    })
-  )
+  .expectBadge({
+    label: 'bower',
+    message: isVPlusDottedVersionAtLeastOne,
+  })
 
 t.create('pre version') // e.g. bower|v0.2.5-alpha-rc-pre
   .timeout(10000)
   .get('/vpre/bootstrap.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'bower',
-      value: isBowerPrereleaseVersion,
-    })
-  )
+  .expectBadge({
+    label: 'bower',
+    message: isBowerPrereleaseVersion,
+  })
 
 t.create('Version for Invalid Package')
   .timeout(10000)
   .get('/v/it-is-a-invalid-package-should-error.json')
-  .expectJSON({ name: 'bower', value: 'package not found' })
+  .expectBadge({ label: 'bower', message: 'package not found' })
 
 t.create('Pre Version for Invalid Package')
   .timeout(10000)
   .get('/vpre/it-is-a-invalid-package-should-error.json')
-  .expectJSON({ name: 'bower', value: 'package not found' })
+  .expectBadge({ label: 'bower', message: 'package not found' })
 
 t.create('Version label should be `no releases` if no stable version')
   .get('/v/bootstrap.json')
@@ -45,7 +41,7 @@ t.create('Version label should be `no releases` if no stable version')
       .get('/api/bower/bootstrap')
       .reply(200, { normalized_licenses: [], latest_stable_release: null })
   )
-  .expectJSON({ name: 'bower', value: 'no releases' })
+  .expectBadge({ label: 'bower', message: 'no releases' })
 
 t.create('Version label should be `no releases` if no pre-release')
   .get('/vpre/bootstrap.json')
@@ -54,4 +50,4 @@ t.create('Version label should be `no releases` if no pre-release')
       .get('/api/bower/bootstrap')
       .reply(200, { normalized_licenses: [], latest_release_number: null })
   )
-  .expectJSON({ name: 'bower', value: 'no releases' })
+  .expectBadge({ label: 'bower', message: 'no releases' })

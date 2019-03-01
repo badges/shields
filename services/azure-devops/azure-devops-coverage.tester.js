@@ -1,6 +1,5 @@
 'use strict'
 
-const Joi = require('joi')
 const { isIntegerPercentage } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
@@ -56,25 +55,21 @@ const expCoverageMultipleReports = '77%'
 
 t.create('default branch coverage')
   .get(`${uriPrefix}/${linuxDefinitionId}.json`)
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'coverage',
-      value: isIntegerPercentage,
-    })
-  )
+  .expectBadge({
+    label: 'coverage',
+    message: isIntegerPercentage,
+  })
 
 t.create('named branch without ref')
   .get(`${uriPrefix}/${windowsDefinitionId}/init.json`)
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'coverage',
-      value: isIntegerPercentage,
-    })
-  )
+  .expectBadge({
+    label: 'coverage',
+    message: isIntegerPercentage,
+  })
 
 t.create('unknown build definition')
   .get(`${uriPrefix}/${nonExistentDefinitionId}.json`)
-  .expectJSON({ name: 'coverage', value: 'build pipeline not found' })
+  .expectBadge({ label: 'coverage', message: 'build pipeline not found' })
 
 t.create('404 latest build error response')
   .get(mockBadgeUriPath)
@@ -83,9 +78,9 @@ t.create('404 latest build error response')
       .get(mockLatestBuildApiUriPath)
       .reply(404)
   )
-  .expectJSON({
-    name: 'coverage',
-    value: 'build pipeline or coverage not found',
+  .expectBadge({
+    label: 'coverage',
+    message: 'build pipeline or coverage not found',
   })
 
 t.create('no build response')
@@ -100,7 +95,7 @@ t.create('no build response')
         value: [],
       })
   )
-  .expectJSON({ name: 'coverage', value: 'build pipeline not found' })
+  .expectBadge({ label: 'coverage', message: 'build pipeline not found' })
 
 t.create('404 code coverage error response')
   .get(mockBadgeUriPath)
@@ -111,9 +106,9 @@ t.create('404 code coverage error response')
       .get(mockCodeCoverageApiUriPath)
       .reply(404)
   )
-  .expectJSON({
-    name: 'coverage',
-    value: 'build pipeline or coverage not found',
+  .expectBadge({
+    label: 'coverage',
+    message: 'build pipeline or coverage not found',
   })
 
 t.create('invalid code coverage response')
@@ -125,7 +120,7 @@ t.create('invalid code coverage response')
       .get(mockCodeCoverageApiUriPath)
       .reply(200, {})
   )
-  .expectJSON({ name: 'coverage', value: 'invalid response data' })
+  .expectBadge({ label: 'coverage', message: 'invalid response data' })
 
 t.create('no code coverage reports')
   .get(mockBadgeUriPath)
@@ -136,7 +131,7 @@ t.create('no code coverage reports')
       .get(mockCodeCoverageApiUriPath)
       .reply(200, { coverageData: [] })
   )
-  .expectJSON({ name: 'coverage', value: '0%' })
+  .expectBadge({ label: 'coverage', message: '0%' })
 
 t.create('no code coverage reports')
   .get(mockBadgeUriPath)
@@ -147,7 +142,7 @@ t.create('no code coverage reports')
       .get(mockCodeCoverageApiUriPath)
       .reply(200, { coverageData: [] })
   )
-  .expectJSON({ name: 'coverage', value: '0%' })
+  .expectBadge({ label: 'coverage', message: '0%' })
 
 t.create('no line coverage stats')
   .get(mockBadgeUriPath)
@@ -164,7 +159,7 @@ t.create('no line coverage stats')
         ],
       })
   )
-  .expectJSON({ name: 'coverage', value: '0%' })
+  .expectBadge({ label: 'coverage', message: '0%' })
 
 t.create('single line coverage stats')
   .get(mockBadgeUriPath)
@@ -181,7 +176,7 @@ t.create('single line coverage stats')
         ],
       })
   )
-  .expectJSON({ name: 'coverage', value: expCoverageSingleReport })
+  .expectBadge({ label: 'coverage', message: expCoverageSingleReport })
 
 t.create('mixed line and branch coverage stats')
   .get(mockBadgeUriPath)
@@ -198,7 +193,7 @@ t.create('mixed line and branch coverage stats')
         ],
       })
   )
-  .expectJSON({ name: 'coverage', value: expCoverageSingleReport })
+  .expectBadge({ label: 'coverage', message: expCoverageSingleReport })
 
 t.create('multiple line coverage stat reports')
   .get(mockBadgeUriPath)
@@ -235,7 +230,7 @@ t.create('single JaCoCo style line coverage stats')
         ],
       })
   )
-  .expectJSON({ name: 'coverage', value: expCoverageSingleReport })
+  .expectBadge({ label: 'coverage', message: expCoverageSingleReport })
 
 t.create('mixed JaCoCo style line and branch coverage stats')
   .get(mockBadgeUriPath)
@@ -252,7 +247,7 @@ t.create('mixed JaCoCo style line and branch coverage stats')
         ],
       })
   )
-  .expectJSON({ name: 'coverage', value: expCoverageSingleReport })
+  .expectBadge({ label: 'coverage', message: expCoverageSingleReport })
 
 t.create('multiple JaCoCo style line coverage stat reports')
   .get(mockBadgeUriPath)
@@ -269,4 +264,4 @@ t.create('multiple JaCoCo style line coverage stat reports')
         ],
       })
   )
-  .expectJSON({ name: 'coverage', value: expCoverageMultipleReports })
+  .expectBadge({ label: 'coverage', message: expCoverageMultipleReports })
