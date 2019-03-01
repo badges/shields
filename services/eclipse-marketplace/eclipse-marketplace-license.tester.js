@@ -4,9 +4,9 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('license')
   .get('/notepad4e.json')
-  .expectJSON({
-    name: 'license',
-    value: 'GPL',
+  .expectBadge({
+    label: 'license',
+    message: 'GPL',
   })
 
 t.create('unspecified license')
@@ -23,14 +23,14 @@ t.create('unspecified license')
          </marketplace>`
       )
   )
-  .expectJSON({
-    name: 'license',
-    value: 'not specified',
+  .expectBadge({
+    label: 'license',
+    message: 'not specified',
   })
 
 t.create('license for unknown solution')
   .get('/this-does-not-exist.json')
-  .expectJSON({
-    name: 'license',
-    value: 'solution not found',
+  .expectBadge({
+    label: 'license',
+    message: 'solution not found',
   })

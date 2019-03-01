@@ -8,8 +8,8 @@ const isAnyV = Joi.string().regex(/^v.+$/)
 
 t.create('version')
   .get('/jitpack/maven-simple.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'jitpack', value: isAnyV }))
+  .expectBadge({ label: 'jitpack', message: isAnyV })
 
 t.create('unknown package')
   .get('/some-bogus-user/project.json')
-  .expectJSON({ name: 'jitpack', value: 'project not found or private' })
+  .expectBadge({ label: 'jitpack', message: 'project not found or private' })

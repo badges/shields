@@ -12,36 +12,32 @@ const t = (module.exports = new ServiceTester({
 
 t.create('buildkite invalid pipeline')
   .get('/unknown-identifier/unknown-branch.json')
-  .expectJSON({ name: 'build', value: 'not found' })
+  .expectBadge({ label: 'build', message: 'not found' })
 
 t.create('buildkite valid pipeline')
   .get('/3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489/master.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'build',
-      value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
-    })
-  )
+  .expectBadge({
+    label: 'build',
+    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
+  })
 
 t.create('buildkite valid pipeline skipping branch')
   .get('/3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'build',
-      value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
-    })
-  )
+  .expectBadge({
+    label: 'build',
+    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
+  })
 
 t.create('buildkite unknown branch')
   .get(
     '/3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489/unknown-branch.json'
   )
-  .expectJSON({ name: 'build', value: 'unknown' })
+  .expectBadge({ label: 'build', message: 'unknown' })
 
 t.create('buildkite connection error')
   .get('/_.json')
   .networkOff()
-  .expectJSON({ name: 'build', value: 'inaccessible' })
+  .expectBadge({ label: 'build', message: 'inaccessible' })
 
 t.create('buildkite unexpected response')
   .get('/3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489.json')
@@ -52,4 +48,4 @@ t.create('buildkite unexpected response')
       )
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'build', value: 'invalid' })
+  .expectBadge({ label: 'build', message: 'invalid' })
