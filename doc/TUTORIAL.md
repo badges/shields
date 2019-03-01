@@ -93,35 +93,35 @@ Each service has a directory for its files:
 All service badge classes inherit from [BaseService] or another class which extends it.
 Other classes implement useful behavior on top of [BaseService].
 
-- [BaseJsonService](https://github.com/badges/shields/blob/master/services/base-json.js)
+- [BaseJsonService](https://github.com/badges/shields/blob/master/core/base-service/base-json.js)
   implements methods for performing requests to a JSON API and schema validation.
-- [BaseXmlService](https://github.com/badges/shields/blob/master/services/base-xml.js)
+- [BaseXmlService](https://github.com/badges/shields/blob/master/core/base-service/base-xml.js)
   implements methods for performing requests to an XML API and schema validation.
 - If you are contributing to a _service family_, you may define a common super
   class for the badges or one may already exist.
 
-[baseservice]: https://github.com/badges/shields/blob/master/services/base.js
+[baseservice]: https://github.com/badges/shields/blob/master/core/base-service/base.js
 
 As a first step we will look at the code for an example which generates a badge without contacting an API.
 
 ```js
-'use strict' // (1)
+// (1)
+'use strict'
+// (2)
+const { BaseService } = require('..')
 
-const { BaseService } = require('..') // (2)
-
+// (3)
 module.exports = class Example extends BaseService {
-  // (3)
-
+  // (4)
   static get route() {
-    // (4)
     return {
       base: 'example',
       pattern: ':text',
     }
   }
 
+  // (5)
   async handle({ text }) {
-    // (5)
     return {
       label: 'example',
       message: text,
@@ -168,49 +168,51 @@ The example above was completely static. In order to make a useful service badge
 This example is based on the [Ruby Gems version](https://github.com/badges/shields/blob/master/services/gem/gem-version.service.js) badge:
 
 ```js
-'use strict' // (1)
+// (1)
+'use strict'
 
-const { renderVersionBadge } = require('..//version') // (2)
-const { BaseJsonService } = require('..') // (3)
+// (2)
+const { renderVersionBadge } = require('..//version')
+// (3)
+const { BaseJsonService } = require('..')
 
-const Joi = require('joi') // (4)
+// (4)
+const Joi = require('joi')
 const schema = Joi.object({
-  // (4)
-  version: Joi.string().required(), // (4)
-}).required() // (4)
+  version: Joi.string().required(),
+}).required()
 
+// (5)
 module.exports = class GemVersion extends BaseJsonService {
-  // (5)
-
+  // (6)
   static get route() {
-    // (6)
     return {
       base: 'gem/v',
       pattern: ':gem',
     }
   }
 
+  // (6)
   static get defaultBadgeData() {
-    // (7)
     return { label: 'gem' }
   }
 
+  // (8)
   async handle({ gem }) {
-    // (8)
     const { version } = await this.fetch({ gem })
     return this.constructor.render({ version })
   }
 
+  // (9)
   async fetch({ gem }) {
-    // (9)
     return this._requestJson({
       schema,
       url: `https://rubygems.org/api/v1/gems/${gem}.json`,
     })
   }
 
+  // (10)
   static render({ version }) {
-    // (10)
     return renderVersionBadge({ version })
   }
 }
