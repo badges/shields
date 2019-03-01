@@ -8,6 +8,6 @@ module.exports = redirector({
     base: 'badge/endpoint',
     pattern: '',
   },
-  transformUrl: () => '/endpoint',
+  transformPath: () => '/endpoint',
   dateAdded: new Date('2019-02-19'),
 })

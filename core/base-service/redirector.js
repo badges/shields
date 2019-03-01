@@ -16,19 +16,19 @@ const trace = require('./trace')
 const attrSchema = Joi.object({
   category: isValidCategory,
   route: isValidRoute,
-  transformUrl: Joi.func()
+  transformPath: Joi.func()
     .maxArity(1)
     .required()
     .error(
       () =>
-        '"transformUrl" must be a function that transforms named params to a new path'
+        '"transformPath" must be a function that transforms named params to a new path'
     ),
   transformQueryParams: Joi.func().arity(1),
   dateAdded: Joi.date().required(),
 }).required()
 
 module.exports = function redirector(attrs) {
-  const { category, route, transformUrl, transformQueryParams } = Joi.attempt(
+  const { category, route, transformPath, transformQueryParams } = Joi.attempt(
     attrs,
     attrSchema,
     `Redirector for ${attrs.route.base}`
@@ -78,7 +78,7 @@ module.exports = function redirector(attrs) {
         trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
         trace.logTrace('inbound', emojic.crayon, 'Query params', queryParams)
 
-        const targetUrl = transformUrl(namedParams)
+        const targetUrl = transformPath(namedParams)
         trace.logTrace('validate', emojic.dart, 'Target', targetUrl)
 
         let urlSuffix = ask.uri.search || ''

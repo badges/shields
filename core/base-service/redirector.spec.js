@@ -12,9 +12,9 @@ describe('Redirector', function() {
     pattern: ':namedParamA',
   }
   const category = 'analysis'
-  const transformUrl = () => {}
+  const transformPath = () => {}
   const dateAdded = new Date()
-  const attrs = { category, route, transformUrl, dateAdded }
+  const attrs = { category, route, transformPath, dateAdded }
 
   it('returns true on isDeprecated', function() {
     expect(redirector(attrs).isDeprecated).to.be.true
@@ -34,7 +34,7 @@ describe('Redirector', function() {
 
   it('throws the expected error when dateAdded is missing', function() {
     expect(() =>
-      redirector({ route, category, transformUrl }).validateDefinition()
+      redirector({ route, category, transformPath }).validateDefinition()
     ).to.throw('"dateAdded" is required')
   })
 
@@ -57,13 +57,13 @@ describe('Redirector', function() {
       }
     })
 
-    const transformUrl = ({ namedParamA }) => `/new/service/${namedParamA}`
+    const transformPath = ({ namedParamA }) => `/new/service/${namedParamA}`
 
     beforeEach(function() {
       const ServiceClass = redirector({
         category,
         route,
-        transformUrl,
+        transformPath,
         dateAdded,
       })
       ServiceClass.register({ camp }, {})
@@ -118,7 +118,7 @@ describe('Redirector', function() {
         const ServiceClass = redirector({
           category,
           route,
-          transformUrl,
+          transformPath,
           transformQueryParams,
           dateAdded,
         })
