@@ -78,8 +78,8 @@ module.exports = function redirector(attrs) {
         trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
         trace.logTrace('inbound', emojic.crayon, 'Query params', queryParams)
 
-        const targetUrl = transformPath(namedParams)
-        trace.logTrace('validate', emojic.dart, 'Target', targetUrl)
+        const targetPath = transformPath(namedParams)
+        trace.logTrace('validate', emojic.dart, 'Target', targetPath)
 
         let urlSuffix = ask.uri.search || ''
 
@@ -92,7 +92,7 @@ module.exports = function redirector(attrs) {
 
         // The final capture group is the extension.
         const format = match.slice(-1)[0]
-        const redirectUrl = `${targetUrl}.${format}${urlSuffix}`
+        const redirectUrl = `${targetPath}.${format}${urlSuffix}`
         trace.logTrace('outbound', emojic.shield, 'Redirect URL', redirectUrl)
 
         ask.res.statusCode = 301
