@@ -1,6 +1,6 @@
 'use strict'
 
-const { renderVersionBadge } = require('../../lib/version')
+const { renderVersionBadge } = require('../version')
 const BaseChromeWebStoreService = require('./chrome-web-store-base')
 
 module.exports = class ChromeWebStoreVersion extends BaseChromeWebStoreService {

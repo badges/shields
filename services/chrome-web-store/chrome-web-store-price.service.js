@@ -1,6 +1,6 @@
 'use strict'
 
-const { currencyFromCode } = require('../../lib/text-formatters')
+const { currencyFromCode } = require('../text-formatters')
 const BaseChromeWebStoreService = require('./chrome-web-store-base')
 
 module.exports = class ChromeWebStorePrice extends BaseChromeWebStoreService {

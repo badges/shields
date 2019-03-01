@@ -1,7 +1,7 @@
 'use strict'
 
-const { floorCount: floorCountColor } = require('../../lib/color-formatters')
-const { metric, starRating } = require('../../lib/text-formatters')
+const { floorCount: floorCountColor } = require('../color-formatters')
+const { metric, starRating } = require('../text-formatters')
 const BaseChromeWebStoreService = require('./chrome-web-store-base')
 
 class BaseChromeWebStoreRating extends BaseChromeWebStoreService {
