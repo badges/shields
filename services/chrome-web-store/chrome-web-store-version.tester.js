@@ -1,6 +1,5 @@
 'use strict'
 
-const Joi = require('joi')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 const { ServiceTester } = require('../tester')
 
@@ -11,13 +10,11 @@ const t = (module.exports = new ServiceTester({
 
 t.create('Version')
   .get('/alhjnofcnnpeaphgeakdhkebafjcpeae.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'chrome web store',
-      value: isVPlusDottedVersionAtLeastOne,
-    })
-  )
+  .expectBadge({
+    label: 'chrome web store',
+    message: isVPlusDottedVersionAtLeastOne,
+  })
 
 t.create('Version (not found)')
   .get('/invalid-name-of-addon.json')
-  .expectJSON({ name: 'chrome web store', value: 'not found' })
+  .expectBadge({ label: 'chrome web store', message: 'not found' })

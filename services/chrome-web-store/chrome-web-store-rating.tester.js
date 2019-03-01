@@ -11,34 +11,30 @@ const t = (module.exports = new ServiceTester({
 
 t.create('Rating')
   .get('/rating/alhjnofcnnpeaphgeakdhkebafjcpeae.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'rating',
-      value: Joi.string().regex(/^\d\.?\d+?\/5$/),
-    })
-  )
+  .expectBadge({
+    label: 'rating',
+    message: Joi.string().regex(/^\d\.?\d+?\/5$/),
+  })
 
 t.create('Rating (not found)')
   .get('/rating/invalid-name-of-addon.json')
-  .expectJSON({ name: 'rating', value: 'not found' })
+  .expectBadge({ label: 'rating', message: 'not found' })
 
 t.create('Rating Count')
   .get('/rating-count/alhjnofcnnpeaphgeakdhkebafjcpeae.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'rating',
-      value: Joi.string().regex(/^\d+?\stotal$/),
-    })
-  )
+  .expectBadge({
+    label: 'rating',
+    message: Joi.string().regex(/^\d+?\stotal$/),
+  })
 
 t.create('Rating Count (not found)')
   .get('/rating-count/invalid-name-of-addon.json')
-  .expectJSON({ name: 'rating', value: 'not found' })
+  .expectBadge({ label: 'rating', message: 'not found' })
 
 t.create('Stars')
   .get('/stars/alhjnofcnnpeaphgeakdhkebafjcpeae.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'rating', value: isStarRating }))
+  .expectBadge({ label: 'rating', message: isStarRating })
 
 t.create('Stars (not found)')
   .get('/stars/invalid-name-of-addon.json')
-  .expectJSON({ name: 'rating', value: 'not found' })
+  .expectBadge({ label: 'rating', message: 'not found' })

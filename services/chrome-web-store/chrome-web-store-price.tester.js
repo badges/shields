@@ -10,13 +10,11 @@ const t = (module.exports = new ServiceTester({
 
 t.create('Price')
   .get('/alhjnofcnnpeaphgeakdhkebafjcpeae.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'price',
-      value: Joi.string().regex(/^\$\d+(.\d{1,2})?$/),
-    })
-  )
+  .expectBadge({
+    label: 'price',
+    message: Joi.string().regex(/^\$\d+(.\d{1,2})?$/),
+  })
 
 t.create('Price (not found)')
   .get('/invalid-name-of-addon.json')
-  .expectJSON({ name: 'price', value: 'not found' })
+  .expectBadge({ label: 'price', message: 'not found' })
