@@ -14,5 +14,10 @@ describe('Codeship', function() {
     given({ status: 'stopped' }).expect(notBuilt)
     given({ status: 'ignored' }).expect(notBuilt)
     given({ status: 'blocked' }).expect(notBuilt)
+    given({ status: 'infrastructure_failure' }).expect({
+      message: 'failing',
+      color: 'red',
+      label: undefined,
+    })
   })
 })

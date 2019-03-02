@@ -23,6 +23,7 @@ const statusMap = {
   stopped: notBuiltStatus,
   ignored: notBuiltStatus,
   blocked: notBuiltStatus,
+  infrastructure_failure: 'failed',
 }
 
 module.exports = class Codeship extends BaseSvgScrapingService {
