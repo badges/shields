@@ -79,11 +79,11 @@ module.exports = class Coveralls extends BaseJsonService {
       'github'}/${user}/${repo}.json`
     const options = {
       qs: {
-        // The API returns the latest result (for any branch), whereas the
-        // Coveralls coverage badge (and the Shields.io badges for Coveralls) show
-        // the coverage for the default branch. If the user doesn't specify their desired
-        // badge, then we can get the Coverage for the latest branch from the API by specifying
-        // an invalid branch name to ensure we show the same percentage value.
+        // The API returns the latest result (across any branch) if no branch is explicitly specified,
+        // whereas the Coveralls native badge (and the Shields.io badges for Coveralls) show
+        // the coverage for the default branch if no branch is explicitly specified. If the user
+        // doesn't specify their desired badge, then we can get the Coverage for the latest branch
+        // from the API by specifying an invalid branch name to ensure we show the same percentage value.
         branch: branch || '@',
       },
     }
