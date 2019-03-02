@@ -68,10 +68,11 @@ module.exports = class WaffleLabel extends BaseJsonService {
   }
 
   async fetch({ user, repo }) {
-    const url = `https://api.waffle.io/${user}/${repo}/columns?with=count`
+    const url = `https://api.waffle.io/${user}/${repo}/columns`
     return this._requestJson({
       schema,
       url,
+      options: { qs: { with: 'count' } },
       errorMessages: {
         404: 'project not found',
       },
