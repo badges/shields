@@ -56,6 +56,7 @@ module.exports = class GithubWatchers extends GithubAuthService {
 
   static get defaultBadgeData() {
     return {
+      label: 'watchers',
       namedLogo: 'github',
     }
   }
