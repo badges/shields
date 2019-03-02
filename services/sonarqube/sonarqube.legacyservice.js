@@ -140,6 +140,10 @@ class Sonarqube extends LegacyService {
               sonarMetricName
             )}`
 
+        if (sonarMetricName === 'coverage') {
+          console.log(`url: ${uri}`)
+        }
+
         const options = {
           uri,
           headers: {
