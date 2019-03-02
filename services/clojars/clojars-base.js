@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
+const { version: versionColor } = require('../color-formatters')
 const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService, InvalidResponse } = require('..')
 
