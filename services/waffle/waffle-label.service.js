@@ -3,8 +3,19 @@
 const Joi = require('joi')
 const { BaseJsonService } = require('..')
 const { metric } = require('../text-formatters')
+const { nonNegativeInteger } = require('../validators')
 
-const schema = Joi.any()
+const schema = Joi.array()
+  .items(
+    Joi.object({
+      label: Joi.object({
+        name: Joi.string().required(),
+        color: Joi.string().required(),
+      }),
+      count: nonNegativeInteger,
+    })
+  )
+  .required()
 
 module.exports = class WaffleLabel extends BaseJsonService {
   static get category() {
