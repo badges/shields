@@ -91,6 +91,12 @@ module.exports = class David extends BaseJsonService {
       url,
       options: { qs: { path } },
       errorMessages: {
+        /* note:
+        david returns a 500 response for 'not found'
+        e.g: https://david-dm.org/foo/barbaz/info.json
+        not a 404 so we can't handle 'not found' cleanly
+        because this might also be some other error.
+        */
         500: 'repo or path not found or david internal error',
       },
     })
