@@ -1,31 +1,7 @@
 'use strict'
 
-const Joi = require('joi')
 const t = (module.exports = require('../tester').createServiceTester())
-
-const fakeData = [
-  {
-    label: null,
-    count: 20,
-  },
-  {
-    count: 10,
-  },
-  {
-    label: {
-      color: 'c5def5',
-      name: 'feature',
-    },
-    count: 3,
-  },
-  {
-    label: {
-      name: 'bug',
-      color: 'fbca04',
-    },
-    count: 5,
-  },
-]
+const { nonNegativeInteger } = require('../validators')
 
 t.create('label (repo not found)')
   .get('/not-a-user/not-a-repo/bug.json')
@@ -44,14 +20,16 @@ t.create('label (label not found)')
     color: '#78bdf2',
   })
 
-t.create('label (empty response)')
-  .get('/userName/repoName/bug.json')
-  .intercept(nock =>
-    nock('https://api.waffle.io/')
-      .get('/userName/repoName/columns?with=count')
-      .reply(200, [])
-  )
+t.create('label (label found)')
+  .get('/ritwickdey/vscode-live-server/bug.json')
   .expectBadge({
-    label: 'waffle',
-    message: 'absent',
+    label: 'bug',
+    message: nonNegativeInteger,
+  })
+
+t.create('label (default)')
+  .get('/ritwickdey/vscode-live-server.json')
+  .expectBadge({
+    label: 'ready',
+    message: nonNegativeInteger,
   })

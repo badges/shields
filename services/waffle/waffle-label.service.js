@@ -10,7 +10,9 @@ const schema = Joi.array()
     Joi.object({
       label: Joi.object({
         name: Joi.string().required(),
-        color: Joi.string().required(),
+        color: Joi.string()
+          .hex()
+          .required(),
       }),
       count: nonNegativeInteger,
     })
@@ -52,15 +54,15 @@ module.exports = class WaffleLabel extends BaseJsonService {
       {
         title: 'Waffle.io Label',
         namedParams: {
-          user: 'evancohen',
-          repo: 'smart-mirror',
-          label: 'status: in progress',
+          user: 'ritwickdey',
+          repo: 'vscode-live-server',
+          label: 'closed',
         },
-        staticPreview: {
-          label: 'status: in progress',
-          message: '2',
-          color: '000',
-        },
+        staticPreview: this.render({
+          label: 'closed',
+          count: 2145,
+          color: 'A3D3F8',
+        }),
       },
     ]
   }
