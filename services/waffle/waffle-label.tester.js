@@ -3,14 +3,14 @@
 const t = (module.exports = require('../tester').createServiceTester())
 const { nonNegativeInteger } = require('../validators')
 
-t.create('label (repo not found)')
+t.create('project not found)')
   .get('/not-a-user/not-a-repo/bug.json')
   .expectBadge({
     label: 'waffle',
     message: 'project not found',
   })
 
-t.create('label (label not found)')
+t.create('label not found')
   .get(
     '/ritwickdey/vscode-live-server/not-a-real-label.json?style=_shields_test'
   )
@@ -20,14 +20,14 @@ t.create('label (label not found)')
     color: '#78bdf2',
   })
 
-t.create('label (label found)')
+t.create('specified label found')
   .get('/ritwickdey/vscode-live-server/bug.json')
   .expectBadge({
     label: 'bug',
     message: nonNegativeInteger,
   })
 
-t.create('label (default)')
+t.create('default label')
   .get('/ritwickdey/vscode-live-server.json')
   .expectBadge({
     label: 'ready',
