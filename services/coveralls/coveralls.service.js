@@ -74,6 +74,7 @@ module.exports = class Coveralls extends BaseJsonService {
   }
 
   async fetch({ vcsType, user, repo, branch }) {
+    // https://docs.coveralls.io/api-introduction#getting-data-from-coveralls
     const url = `https://coveralls.io/${vcsType ||
       'github'}/${user}/${repo}.json`
     const options = {
