@@ -17,9 +17,6 @@ class BaseClojarsService extends BaseJsonService {
     return this._requestJson({
       url,
       schema: clojarsSchema,
-      errorMessages: {
-        404: 'not found',
-      },
     })
   }
 }
