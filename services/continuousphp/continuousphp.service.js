@@ -42,6 +42,17 @@ module.exports = class ContinuousPhp extends BaseJsonService {
     return [
       {
         title: 'continuousphp',
+        pattern: ':provider/:user/:repo',
+        namedParams: {
+          provider: 'git-hub',
+          user: 'doctrine',
+          repo: 'dbal',
+        },
+        staticPreview: renderBuildStatusBadge({ status: 'passing' }),
+      },
+      {
+        title: 'continuousphp',
+        pattern: ':provider/:user/:repo/:branch',
         namedParams: {
           provider: 'git-hub',
           user: 'doctrine',
