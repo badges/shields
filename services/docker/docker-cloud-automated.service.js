@@ -39,7 +39,7 @@ module.exports = class DockerCloudAutomatedBuild extends BaseJsonService {
   }
 
   static get route() {
-    return buildDockerUrl('cloud-automated')
+    return buildDockerUrl('cloud/automated')
   }
 
   static get defaultBadgeData() {
