@@ -49,7 +49,7 @@ module.exports = class DockerCloudAutomatedBuild extends BaseJsonService {
   static get examples() {
     return [
       {
-        title: 'Docker (Cloud) Automated build',
+        title: 'Docker Automated build (new hub)',
         namedParams: {
           user: 'jrottenberg',
           repo: 'ffmpeg',

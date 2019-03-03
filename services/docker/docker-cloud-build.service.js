@@ -49,7 +49,7 @@ module.exports = class DockerCloudBuild extends BaseJsonService {
   static get examples() {
     return [
       {
-        title: 'Docker (Cloud) Build Status',
+        title: 'Docker Build Status (new hub)',
         namedParams: {
           user: 'jrottenberg',
           repo: 'ffmpeg',
