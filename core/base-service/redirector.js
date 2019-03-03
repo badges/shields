@@ -25,14 +25,17 @@ const attrSchema = Joi.object({
     ),
   transformQueryParams: Joi.func().arity(1),
   dateAdded: Joi.date().required(),
+  overrideTransformedQueryParams: Joi.bool().optional(),
 }).required()
 
 module.exports = function redirector(attrs) {
-  const { category, route, transformPath, transformQueryParams } = Joi.attempt(
-    attrs,
-    attrSchema,
-    `Redirector for ${attrs.route.base}`
-  )
+  const {
+    category,
+    route,
+    transformPath,
+    transformQueryParams,
+    overrideTransformedQueryParams,
+  } = Joi.attempt(attrs, attrSchema, `Redirector for ${attrs.route.base}`)
 
   return class Redirector extends BaseService {
     static get category() {
@@ -84,10 +87,13 @@ module.exports = function redirector(attrs) {
         let urlSuffix = ask.uri.search || ''
 
         if (transformQueryParams) {
+          const specifiedParams = queryString.parse(urlSuffix)
           const transformedParams = transformQueryParams(namedParams)
-          const outQueryString = queryString.stringify(transformedParams)
-          const separator = urlSuffix ? '&' : '?'
-          urlSuffix = `${urlSuffix}${separator}${outQueryString}`
+          const redirectParams = overrideTransformedQueryParams
+            ? Object.assign(transformedParams, specifiedParams)
+            : Object.assign(specifiedParams, transformedParams)
+          const outQueryString = queryString.stringify(redirectParams)
+          urlSuffix = `?${outQueryString}`
         }
 
         // The final capture group is the extension.

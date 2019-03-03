@@ -152,6 +152,47 @@ describe('Redirector', function() {
           '/new/service/hello-world.svg?color=123&style=flat-square&token=abc123'
         )
       })
+
+      it('should use transformed query params on param conflicts by default', async function() {
+        const { statusCode, headers } = await got(
+          `${baseUrl}/another/old/service/token/abc123/hello-world.svg?color=123&style=flat-square&token=def456`,
+          {
+            followRedirect: false,
+          }
+        )
+
+        expect(statusCode).to.equal(301)
+        expect(headers.location).to.equal(
+          '/new/service/hello-world.svg?color=123&style=flat-square&token=abc123'
+        )
+      })
+
+      it('should use specified query params on param conflicts when configured', async function() {
+        const route = {
+          base: 'override/service',
+          pattern: 'token/:token/:namedParamA',
+        }
+        const ServiceClass = redirector({
+          category,
+          route,
+          transformPath,
+          transformQueryParams,
+          overrideTransformedQueryParams: true,
+          dateAdded,
+        })
+        ServiceClass.register({ camp }, {})
+        const { statusCode, headers } = await got(
+          `${baseUrl}/override/service/token/abc123/hello-world.svg?style=flat-square&token=def456`,
+          {
+            followRedirect: false,
+          }
+        )
+
+        expect(statusCode).to.equal(301)
+        expect(headers.location).to.equal(
+          '/new/service/hello-world.svg?style=flat-square&token=def456'
+        )
+      })
     })
   })
 })
