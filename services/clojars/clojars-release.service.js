@@ -11,7 +11,7 @@ module.exports = class ClojarsRelease extends BaseClojarsVersionService {
 
   static get route() {
     return {
-      base: 'clojars/r',
+      base: 'clojars/v',
       pattern: ':clojar+',
     }
   }
