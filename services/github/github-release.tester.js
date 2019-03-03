@@ -19,9 +19,14 @@ t.create('Prerelease (repo not found)')
   .get('/release-pre/badges/helmets.json')
   .expectBadge({ label: 'release', message: 'no releases or repo not found' })
 
+t.create('Latest Release')
+  .get('/release-latest/photonstorm/phaser.json')
+  .expectBadge({ label: 'release', message: isVPlusTripleDottedVersion })
+
+t.create('Latest Release (repo not found)')
+  .get('/release-latest/badges/helmets.json')
+  .expectBadge({ label: 'release', message: 'no releases or repo not found' })
+
 t.create('No releases')
   .get('/release/badges/daily-tests.json')
-  .expectBadge({
-    label: 'release',
-    message: 'no releases or repo not found',
-  })
+  .expectBadge({ label: 'release', message: 'no releases or repo not found' })

@@ -2,6 +2,8 @@
 
 const Joi = require('joi')
 const { addv } = require('../text-formatters')
+const { latest: latestVersion } = require('../version')
+const { version: versionColor } = require('../color-formatters')
 const { GithubAuthService } = require('./github-auth-service')
 const { errorMessagesFor, documentation } = require('./github-helpers')
 
@@ -21,7 +23,7 @@ module.exports = class GithubRelease extends GithubAuthService {
   static get route() {
     return {
       base: 'github',
-      pattern: ':which(release|release-pre)/:user/:repo',
+      pattern: ':which(release|release-pre|release-latest)/:user/:repo',
     }
   }
 
@@ -34,27 +36,29 @@ module.exports = class GithubRelease extends GithubAuthService {
           user: 'qubyte',
           repo: 'rubidium',
         },
-        staticPreview: this.render({ version: '2.0.2', isPrerelease: false }),
+        staticPreview: this.render('2.0.2'),
         documentation,
       },
     ]
   }
 
-  async fetch({ user, repo, includePre }) {
+  async fetch({ user, repo, which }) {
     const commonAttrs = {
       errorMessages: errorMessagesFor('no releases or repo not found'),
     }
-    if (includePre) {
-      const [releaseInfo] = await this._requestJson({
-        schema: releaseInfoArraySchema,
-        url: `/repos/${user}/${repo}/releases`,
-        ...commonAttrs,
-      })
+    if (which.endsWith('latest')) {
+      const releaseInfo = [
+        await this._requestJson({
+          schema: releaseInfoSchema,
+          url: `/repos/${user}/${repo}/releases/latest`,
+          ...commonAttrs,
+        }),
+      ]
       return releaseInfo
     } else {
       const releaseInfo = await this._requestJson({
-        schema: releaseInfoSchema,
-        url: `/repos/${user}/${repo}/releases/latest`,
+        schema: releaseInfoArraySchema,
+        url: `/repos/${user}/${repo}/releases`,
         ...commonAttrs,
       })
       return releaseInfo
@@ -68,19 +72,24 @@ module.exports = class GithubRelease extends GithubAuthService {
     }
   }
 
-  static render({ version, isPrerelease }) {
+  static render(version) {
     return {
       message: addv(version),
-      color: isPrerelease ? 'orange' : 'blue',
+      color: versionColor(version),
     }
   }
 
   async handle({ which, user, repo }) {
-    const { tag_name: version, prerelease: isPrerelease } = await this.fetch({
+    const releaseInfo = await this.fetch({
       user,
       repo,
-      includePre: which === 'release-pre',
+      which,
     })
-    return this.constructor.render({ version, isPrerelease })
+
+    const versions = releaseInfo.map(e => e.tag_name)
+    const version = latestVersion(versions, { pre: which.endsWith('pre') })
+
+    console.log('version:', version)
+    return this.constructor.render(version)
   }
 }
