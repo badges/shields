@@ -2,7 +2,7 @@
 
 const { BaseClojarsVersionService } = require('./clojars-base')
 
-module.exports = class ClojarsVersion extends BaseClojarsVersionService {
+module.exports = class ClojarsVersionSnapshot extends BaseClojarsVersionService {
   async handle({ clojar }) {
     const json = await this.fetch({ clojar })
     const { version } = this.constructor.transform(json, 'version')
