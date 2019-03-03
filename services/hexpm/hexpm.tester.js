@@ -10,15 +10,11 @@ const t = (module.exports = new ServiceTester({ id: 'hexpm', title: 'Hex.pm' }))
 
 t.create('downloads per week')
   .get('/dw/cowboy.json')
-  .expectJSONTypes(
-    Joi.object().keys({ name: 'downloads', value: isMetricOverTimePeriod })
-  )
+  .expectBadge({ label: 'downloads', message: isMetricOverTimePeriod })
 
 t.create('downloads per day')
   .get('/dd/cowboy.json')
-  .expectJSONTypes(
-    Joi.object().keys({ name: 'downloads', value: isMetricOverTimePeriod })
-  )
+  .expectBadge({ label: 'downloads', message: isMetricOverTimePeriod })
 
 t.create('downloads (zero for period)')
   .get('/dd/cowboy.json')
@@ -31,33 +27,31 @@ t.create('downloads (zero for period)')
         meta: { licenses: ['MIT'] },
       })
   )
-  .expectJSON({ name: 'downloads', value: '0/day' })
+  .expectBadge({ label: 'downloads', message: '0/day' })
 
 t.create('downloads in total')
   .get('/dt/cowboy.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }))
+  .expectBadge({ label: 'downloads', message: isMetric })
 
 t.create('downloads (not found)')
   .get('/dt/this-package-does-not-exist.json')
-  .expectJSON({ name: 'downloads', value: 'not found' })
+  .expectBadge({ label: 'downloads', message: 'not found' })
 
 t.create('version')
   .get('/v/cowboy.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'hex', value: isHexpmVersion }))
+  .expectBadge({ label: 'hex', message: isHexpmVersion })
 
 t.create('version (not found)')
   .get('/v/this-package-does-not-exist.json')
-  .expectJSON({ name: 'hex', value: 'not found' })
+  .expectBadge({ label: 'hex', message: 'not found' })
 
 t.create('license')
   .get('/l/cowboy.json?style=_shields_test')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'license',
-      value: Joi.string().required(),
-      color: 'blue',
-    })
-  )
+  .expectBadge({
+    label: 'license',
+    message: Joi.string().required(),
+    color: 'blue',
+  })
 
 t.create('license (multiple licenses)')
   .get('/l/cowboy.json?style=_shields_test')
@@ -70,9 +64,9 @@ t.create('license (multiple licenses)')
         meta: { licenses: ['GPLv2', 'MIT'] },
       })
   )
-  .expectJSON({
-    name: 'licenses',
-    value: 'GPLv2, MIT',
+  .expectBadge({
+    label: 'licenses',
+    message: 'GPLv2, MIT',
     color: 'blue',
   })
 
@@ -87,12 +81,12 @@ t.create('license (no license)')
         meta: { licenses: [] },
       })
   )
-  .expectJSON({
-    name: 'license',
-    value: 'Unknown',
+  .expectBadge({
+    label: 'license',
+    message: 'Unknown',
     color: 'lightgrey',
   })
 
 t.create('license (not found)')
   .get('/l/this-package-does-not-exist.json')
-  .expectJSON({ name: 'license', value: 'not found' })
+  .expectBadge({ label: 'license', message: 'not found' })

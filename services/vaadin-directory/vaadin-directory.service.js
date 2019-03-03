@@ -6,11 +6,11 @@ const {
   makeLabel: getLabel,
 } = require('../../lib/badge-data')
 const { checkErrorResponse } = require('../../lib/error-helper')
-const { metric, starRating, formatDate } = require('../../lib/text-formatters')
+const { metric, starRating, formatDate } = require('../text-formatters')
 const {
   floorCount: floorCountColor,
   age: ageColor,
-} = require('../../lib/color-formatters')
+} = require('../color-formatters')
 
 class VaadinDirectoryRating extends LegacyService {
   static get category() {
@@ -164,6 +164,14 @@ class VaadinDirectoryReleaseDate extends LegacyService {
 class VaadinDirectory extends LegacyService {
   static get category() {
     return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'vaadin-directory',
+      pattern:
+        ':which(star|stars|status|rating|rc|rating-count|v|version|rd|release-date)/:urlIdentifier',
+    }
   }
 
   static registerLegacyRouteHandler({ camp, cache }) {

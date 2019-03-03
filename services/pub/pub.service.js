@@ -2,8 +2,7 @@
 
 const Joi = require('joi')
 const { BaseJsonService } = require('..')
-const { renderVersionBadge } = require('../../lib/version')
-const { latest: latestVersion } = require('../../lib/version')
+const { latest, renderVersionBadge } = require('../version')
 
 const schema = Joi.object({
   versions: Joi.array()
@@ -57,7 +56,7 @@ module.exports = class PubVersion extends BaseJsonService {
     const data = await this.fetch({ packageName })
     const includePre = which === 'vpre'
     const versions = data.versions
-    const version = latestVersion(versions, { pre: includePre })
+    const version = latest(versions, { pre: includePre })
     return renderVersionBadge({ version })
   }
 }

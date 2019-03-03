@@ -1,15 +1,18 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const Joi = require('joi')
+const { BaseJsonService } = require('..')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class Bitrise extends LegacyService {
+// https://devcenter.bitrise.io/api/app-status-badge/
+const schema = Joi.object({
+  status: Joi.equal('success', 'error', 'unknown'),
+}).required()
+
+const queryParamSchema = Joi.object({
+  token: Joi.string().required(),
+}).required()
+
+module.exports = class Bitrise extends BaseJsonService {
   static get category() {
     return 'build'
   }
@@ -17,7 +20,8 @@ module.exports = class Bitrise extends LegacyService {
   static get route() {
     return {
       base: 'bitrise',
-      pattern: ':appId/:branch',
+      pattern: ':appId/:branch?',
+      queryParamSchema,
     }
   }
 
@@ -27,56 +31,51 @@ module.exports = class Bitrise extends LegacyService {
         title: 'Bitrise',
         namedParams: { appId: 'cde737473028420d', branch: 'master' },
         queryParams: { token: 'GCIdEzacE4GW32jLVrZb7A' },
-        staticPreview: {
-          label: 'bitrise',
-          message: 'success',
-          color: 'brightgreen',
-        },
+        staticPreview: this.render({ status: 'success' }),
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/bitrise\/([^/]+)(?:\/(.+))?\.(svg|png|gif|jpg|json)$/,
-      cache({
-        queryParams: ['token'],
-        handler: (data, match, sendBadge, request) => {
-          const appId = match[1]
-          const branch = match[2]
-          const format = match[3]
-          const token = data.token
-          const badgeData = getBadgeData('bitrise', data)
-          let apiUrl = `https://app.bitrise.io/app/${appId}/status.json?token=${token}`
-          if (typeof branch !== 'undefined') {
-            apiUrl += `&branch=${branch}`
-          }
+  static get defaultBadgeData() {
+    return {
+      label: 'bitrise',
+    }
+  }
 
-          const statusColorScheme = {
-            success: 'brightgreen',
-            error: 'red',
-            unknown: 'lightgrey',
-          }
+  async fetch({ appId, branch, token }) {
+    return this._requestJson({
+      url: `https://app.bitrise.io/app/${encodeURIComponent(
+        appId
+      )}/status.json`,
+      options: { qs: { token, branch } },
+      schema,
+      errorMessages: {
+        403: 'app not found or invalid token',
+      },
+    })
+  }
 
-          request(apiUrl, { json: true }, (err, res, data) => {
-            try {
-              if (!res || err !== null || res.statusCode !== 200) {
-                badgeData.text[1] = 'inaccessible'
-                sendBadge(format, badgeData)
-                return
-              }
+  static render({ status }) {
+    const color = {
+      success: 'brightgreen',
+      error: 'red',
+      unknown: 'lightgrey',
+    }[status]
 
-              badgeData.text[1] = data.status
-              badgeData.colorscheme = statusColorScheme[data.status]
+    let message
+    if (status === 'unknown') {
+      // This is the only case mentioned in the API docs. If we get feedback
+      // it's often wrong we can update this.
+      message = 'branch not found'
+    } else {
+      message = status
+    }
 
-              sendBadge(format, badgeData)
-            } catch (e) {
-              badgeData.text[1] = 'invalid'
-              sendBadge(format, badgeData)
-            }
-          })
-        },
-      })
-    )
+    return { message, color }
+  }
+
+  async handle({ appId, branch }, { token }) {
+    const { status } = await this.fetch({ appId, branch, token })
+    return this.constructor.render({ status })
   }
 }

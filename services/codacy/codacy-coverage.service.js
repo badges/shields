@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const {
   coveragePercentage: coveragePercentageColor,
-} = require('../../lib/color-formatters')
+} = require('../color-formatters')
 const { BaseSvgScrapingService } = require('..')
 const { NotFound } = require('..')
 

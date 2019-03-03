@@ -1,6 +1,5 @@
 'use strict'
 
-const Joi = require('joi')
 const { ServiceTester } = require('../tester')
 const {
   isMetric,
@@ -21,16 +20,14 @@ const t = (module.exports = new ServiceTester({ id: 'nuget', title: 'NuGet' }))
 
 t.create('total downloads (valid)')
   .get('/dt/Microsoft.AspNetCore.Mvc.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'downloads',
-      value: isMetric,
-    })
-  )
+  .expectBadge({
+    label: 'downloads',
+    message: isMetric,
+  })
 
 t.create('total downloads (not found)')
   .get('/dt/not-a-real-package.json')
-  .expectJSON({ name: 'downloads', value: 'package not found' })
+  .expectBadge({ label: 'downloads', message: 'package not found' })
 
 t.create('total downloads (unexpected second response)')
   .get('/dt/Microsoft.AspNetCore.Mvc.json')
@@ -46,18 +43,16 @@ t.create('total downloads (unexpected second response)')
       )
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'downloads', value: 'unparseable json response' })
+  .expectBadge({ label: 'downloads', message: 'unparseable json response' })
 
 // version
 
 t.create('version (valid)')
   .get('/v/Microsoft.AspNetCore.Mvc.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'nuget',
-      value: isVPlusDottedVersionNClauses,
-    })
-  )
+  .expectBadge({
+    label: 'nuget',
+    message: isVPlusDottedVersionNClauses,
+  })
 
 t.create('version (mocked, yellow badge)')
   .get('/v/Microsoft.AspNetCore.Mvc.json?style=_shields_test')
@@ -73,9 +68,9 @@ t.create('version (mocked, yellow badge)')
       )
       .reply(200, nuGetV3VersionJsonWithDash)
   )
-  .expectJSON({
-    name: 'nuget',
-    value: 'v1.2-beta',
+  .expectBadge({
+    label: 'nuget',
+    message: 'v1.2-beta',
     color: 'yellow',
   })
 
@@ -93,9 +88,9 @@ t.create('version (mocked, orange badge)')
       )
       .reply(200, nuGetV3VersionJsonFirstCharZero)
   )
-  .expectJSON({
-    name: 'nuget',
-    value: 'v0.35',
+  .expectBadge({
+    label: 'nuget',
+    message: 'v0.35',
     color: 'orange',
   })
 
@@ -113,15 +108,15 @@ t.create('version (mocked, blue badge)')
       )
       .reply(200, nuGetV3VersionJsonFirstCharNotZero)
   )
-  .expectJSON({
-    name: 'nuget',
-    value: 'v1.2.7',
+  .expectBadge({
+    label: 'nuget',
+    message: 'v1.2.7',
     color: 'blue',
   })
 
 t.create('version (not found)')
   .get('/v/not-a-real-package.json')
-  .expectJSON({ name: 'nuget', value: 'package not found' })
+  .expectBadge({ label: 'nuget', message: 'package not found' })
 
 t.create('version (unexpected second response)')
   .get('/v/Microsoft.AspNetCore.Mvc.json')
@@ -137,18 +132,16 @@ t.create('version (unexpected second response)')
       )
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'nuget', value: 'unparseable json response' })
+  .expectBadge({ label: 'nuget', message: 'unparseable json response' })
 
 // version (pre)
 
 t.create('version (pre) (valid)')
   .get('/vpre/Microsoft.AspNetCore.Mvc.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'nuget',
-      value: isVPlusDottedVersionNClausesWithOptionalSuffix,
-    })
-  )
+  .expectBadge({
+    label: 'nuget',
+    message: isVPlusDottedVersionNClausesWithOptionalSuffix,
+  })
 
 t.create('version (pre) (mocked, yellow badge)')
   .get('/vpre/Microsoft.AspNetCore.Mvc.json?style=_shields_test')
@@ -164,9 +157,9 @@ t.create('version (pre) (mocked, yellow badge)')
       )
       .reply(200, nuGetV3VersionJsonWithDash)
   )
-  .expectJSON({
-    name: 'nuget',
-    value: 'v1.2-beta',
+  .expectBadge({
+    label: 'nuget',
+    message: 'v1.2-beta',
     color: 'yellow',
   })
 
@@ -184,9 +177,9 @@ t.create('version (pre) (mocked, orange badge)')
       )
       .reply(200, nuGetV3VersionJsonFirstCharZero)
   )
-  .expectJSON({
-    name: 'nuget',
-    value: 'v0.35',
+  .expectBadge({
+    label: 'nuget',
+    message: 'v0.35',
     color: 'orange',
   })
 
@@ -204,15 +197,15 @@ t.create('version (pre) (mocked, blue badge)')
       )
       .reply(200, nuGetV3VersionJsonFirstCharNotZero)
   )
-  .expectJSON({
-    name: 'nuget',
-    value: 'v1.2.7',
+  .expectBadge({
+    label: 'nuget',
+    message: 'v1.2.7',
     color: 'blue',
   })
 
 t.create('version (pre) (not found)')
   .get('/vpre/not-a-real-package.json')
-  .expectJSON({ name: 'nuget', value: 'package not found' })
+  .expectBadge({ label: 'nuget', message: 'package not found' })
 
 t.create('version (pre) (unexpected second response)')
   .get('/vpre/Microsoft.AspNetCore.Mvc.json')
@@ -228,4 +221,4 @@ t.create('version (pre) (unexpected second response)')
       )
       .reply(invalidJSON)
   )
-  .expectJSON({ name: 'nuget', value: 'unparseable json response' })
+  .expectBadge({ label: 'nuget', message: 'unparseable json response' })

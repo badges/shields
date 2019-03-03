@@ -1,6 +1,5 @@
 'use strict'
 
-const Joi = require('joi')
 const { ServiceTester } = require('../tester')
 const { isIntegerPercentage } = require('../test-validators')
 
@@ -24,7 +23,7 @@ t.create('jacoco: valid coverage')
         },
       })
   )
-  .expectJSON({ name: 'coverage', value: '81%' })
+  .expectBadge({ label: 'coverage', message: '81%' })
 
 t.create(
   'jacoco: valid coverage (badge URL without leading /job after Jenkins host)'
@@ -41,7 +40,7 @@ t.create(
         },
       })
   )
-  .expectJSON({ name: 'coverage', value: '81%' })
+  .expectBadge({ label: 'coverage', message: '81%' })
 
 t.create('jacoco: invalid data response (no instructionCoverage object)')
   .get('/j/https/updates.jenkins-ci.org/job/hello-project/job/master.json')
@@ -56,7 +55,7 @@ t.create('jacoco: invalid data response (no instructionCoverage object)')
         },
       })
   )
-  .expectJSON({ name: 'coverage', value: 'invalid response data' })
+  .expectBadge({ label: 'coverage', message: 'invalid response data' })
 
 t.create('jacoco: invalid data response (non numeric coverage)')
   .get('/j/https/updates.jenkins-ci.org/job/hello-project/job/master.json')
@@ -71,11 +70,11 @@ t.create('jacoco: invalid data response (non numeric coverage)')
         },
       })
   )
-  .expectJSON({ name: 'coverage', value: 'invalid response data' })
+  .expectBadge({ label: 'coverage', message: 'invalid response data' })
 
 t.create('jacoco: job not found')
   .get('/j/https/updates.jenkins-ci.org/job/does-not-exist.json')
-  .expectJSON({ name: 'coverage', value: 'job or coverage not found' })
+  .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
 
 t.create('cobertura: valid coverage')
   .get('/c/https/updates.jenkins-ci.org/job/hello-project/job/master.json')
@@ -99,7 +98,7 @@ t.create('cobertura: valid coverage')
         },
       })
   )
-  .expectJSON({ name: 'coverage', value: '64%' })
+  .expectBadge({ label: 'coverage', message: '64%' })
 
 t.create(
   'cobertura: valid coverage (badge URL without leading /job after Jenkins host)'
@@ -125,7 +124,7 @@ t.create(
         },
       })
   )
-  .expectJSON({ name: 'coverage', value: '64%' })
+  .expectBadge({ label: 'coverage', message: '64%' })
 
 t.create('cobertura: invalid data response (non-numeric coverage)')
   .get('/c/https/updates.jenkins-ci.org/job/hello-project/job/master.json')
@@ -145,7 +144,7 @@ t.create('cobertura: invalid data response (non-numeric coverage)')
         },
       })
   )
-  .expectJSON({ name: 'coverage', value: 'invalid response data' })
+  .expectBadge({ label: 'coverage', message: 'invalid response data' })
 
 t.create('cobertura: invalid data response (missing line coverage)')
   .get('/c/https/updates.jenkins-ci.org/job/hello-project/job/master.json')
@@ -165,15 +164,13 @@ t.create('cobertura: invalid data response (missing line coverage)')
         },
       })
   )
-  .expectJSON({ name: 'coverage', value: 'invalid response data' })
+  .expectBadge({ label: 'coverage', message: 'invalid response data' })
 
 t.create('cobertura: job not found')
   .get('/c/https/updates.jenkins-ci.org/job/does-not-exist.json')
-  .expectJSON({ name: 'coverage', value: 'job or coverage not found' })
+  .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
 
 t.create('cobertura: job found')
   .get('/c/https/builds.apache.org/job/olingo-odata4-cobertura.json')
   .timeout(10000)
-  .expectJSONTypes(
-    Joi.object().keys({ name: 'coverage', value: isIntegerPercentage })
-  )
+  .expectBadge({ label: 'coverage', message: isIntegerPercentage })

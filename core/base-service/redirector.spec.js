@@ -13,15 +13,15 @@ describe('Redirector', function() {
   }
   const category = 'analysis'
   const target = () => {}
-  const attrs = {
-    category,
-    route,
-    target,
-    dateAdded: new Date(),
-  }
+  const dateAdded = new Date()
+  const attrs = { category, route, target, dateAdded }
 
   it('returns true on isDeprecated', function() {
     expect(redirector(attrs).isDeprecated).to.be.true
+  })
+
+  it('has the expected name', function() {
+    expect(redirector(attrs).name).to.equal('VeryOldServiceRedirect')
   })
 
   it('sets specified route', function() {
@@ -60,8 +60,8 @@ describe('Redirector', function() {
     const target = ({ namedParamA }) => `/new/service/${namedParamA}`
 
     beforeEach(function() {
-      const ServiceClass = redirector({ route, target })
-      ServiceClass.register({ camp })
+      const ServiceClass = redirector({ category, route, target, dateAdded })
+      ServiceClass.register({ camp }, {})
     })
 
     it('should redirect as configured', async function() {

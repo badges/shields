@@ -1,9 +1,7 @@
 'use strict'
 
-const {
-  downloadCount: downloadCountColor,
-} = require('../../lib/color-formatters')
-const { metric } = require('../../lib/text-formatters')
+const { downloadCount: downloadCountColor } = require('../color-formatters')
+const { metric } = require('../text-formatters')
 const { BaseCratesService, keywords } = require('./crates-base')
 
 module.exports = class CratesDownloads extends BaseCratesService {
@@ -14,8 +12,7 @@ module.exports = class CratesDownloads extends BaseCratesService {
   static get route() {
     return {
       base: 'crates',
-      format: '(d|dv)/([A-Za-z0-9_-]+)(?:/([0-9.]+))?',
-      capture: ['which', 'crate', 'version'],
+      pattern: ':which(d|dv)/:crate/:version?',
     }
   }
 
@@ -23,34 +20,20 @@ module.exports = class CratesDownloads extends BaseCratesService {
     return [
       {
         title: 'Crates.io',
-        pattern: 'd/:crate',
-        namedParams: { crate: 'rustc-serialize' },
+        pattern: ':which(d|dv)/:crate',
+        namedParams: { which: 'd', crate: 'rustc-serialize' },
         staticPreview: this.render({ downloads: 5000000 }),
         keywords,
       },
       {
         title: 'Crates.io',
-        pattern: 'd/:crate/:version',
-        namedParams: { crate: 'rustc-serialize', version: '0.3.24' },
-        staticPreview: this.render({ downloads: 2000000, version: '0.3.24' }),
-        keywords,
-      },
-      {
-        title: 'Crates.io',
-        pattern: 'dv/:crate',
-        namedParams: { crate: 'rustc-serialize' },
-        staticPreview: this.render({ which: 'dv', downloads: 2000000 }),
-        keywords,
-      },
-      {
-        title: 'Crates.io',
-        pattern: 'dv/:crate/:version',
-        namedParams: { crate: 'rustc-serialize', version: '0.3.24' },
-        staticPreview: this.render({
-          which: 'dv',
-          downloads: 2000000,
+        pattern: ':which(d|dv)/:crate/:version',
+        namedParams: {
+          which: 'd',
+          crate: 'rustc-serialize',
           version: '0.3.24',
-        }),
+        },
+        staticPreview: this.render({ downloads: 2000000, version: '0.3.24' }),
         keywords,
       },
     ]

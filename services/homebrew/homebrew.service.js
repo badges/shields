@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { renderVersionBadge } = require('../../lib/version')
+const { renderVersionBadge } = require('../version')
 const { BaseJsonService } = require('..')
 
 const schema = Joi.object({

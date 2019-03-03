@@ -3,8 +3,8 @@
 const xml2js = require('xml2js')
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { addv: versionText } = require('../../lib/text-formatters')
-const { version: versionColor } = require('../../lib/color-formatters')
+const { addv: versionText } = require('../text-formatters')
+const { version: versionColor } = require('../color-formatters')
 
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //

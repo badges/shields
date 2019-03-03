@@ -1,6 +1,6 @@
 'use strict'
 
-const { starRating } = require('../../lib/text-formatters')
+const { starRating } = require('../text-formatters')
 const {
   SymfonyInsightBase,
   keywords,

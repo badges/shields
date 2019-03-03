@@ -1,6 +1,5 @@
 'use strict'
 
-const Joi = require('joi')
 const { ServiceTester } = require('../tester')
 const {
   isMetric,
@@ -17,43 +16,37 @@ const t = (module.exports = new ServiceTester({
 
 t.create('total downloads (valid)')
   .get('/dt/ReSharper.Nuke.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'downloads',
-      value: isMetric,
-    })
-  )
+  .expectBadge({
+    label: 'downloads',
+    message: isMetric,
+  })
 
 t.create('total downloads (not found)')
   .get('/dt/not-a-real-package.json')
-  .expectJSON({ name: 'downloads', value: 'not found' })
+  .expectBadge({ label: 'downloads', message: 'not found' })
 
 // version
 
 t.create('version (valid)')
   .get('/v/ReSharper.Nuke.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'resharper',
-      value: isVPlusDottedVersionNClauses,
-    })
-  )
+  .expectBadge({
+    label: 'resharper',
+    message: isVPlusDottedVersionNClauses,
+  })
 
 t.create('version (not found)')
   .get('/v/not-a-real-package.json')
-  .expectJSON({ name: 'resharper', value: 'not found' })
+  .expectBadge({ label: 'resharper', message: 'not found' })
 
 // version (pre)
 
 t.create('version (pre) (valid)')
   .get('/vpre/ReSharper.Nuke.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'resharper',
-      value: isVPlusDottedVersionNClausesWithOptionalSuffix,
-    })
-  )
+  .expectBadge({
+    label: 'resharper',
+    message: isVPlusDottedVersionNClausesWithOptionalSuffix,
+  })
 
 t.create('version (pre) (not found)')
   .get('/vpre/not-a-real-package.json')
-  .expectJSON({ name: 'resharper', value: 'not found' })
+  .expectBadge({ label: 'resharper', message: 'not found' })
