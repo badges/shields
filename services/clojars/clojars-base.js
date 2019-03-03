@@ -13,6 +13,7 @@ const clojarsSchema = Joi.object({
 
 class BaseClojarsService extends BaseJsonService {
   async fetch({ clojar }) {
+    // Clojars API Doc: https://github.com/clojars/clojars-web/wiki/Data
     const url = `https://clojars.org/api/artifacts/${clojar}`
     return this._requestJson({
       url,
@@ -21,7 +22,7 @@ class BaseClojarsService extends BaseJsonService {
   }
 }
 
-class ClojarsVersionService extends BaseClojarsService {
+class BaseClojarsVersionService extends BaseClojarsService {
   static render({ clojar, version }) {
     return {
       message: `[${clojar} "${version}"]`,
@@ -59,4 +60,4 @@ class ClojarsVersionService extends BaseClojarsService {
   }
 }
 
-module.exports = { BaseClojarsService, ClojarsVersionService }
+module.exports = { BaseClojarsService, BaseClojarsVersionService }

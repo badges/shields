@@ -1,8 +1,8 @@
 'use strict'
 
-const { ClojarsVersionService } = require('./clojars-base')
+const { BaseClojarsVersionService } = require('./clojars-base')
 
-module.exports = class ClojarsRelease extends ClojarsVersionService {
+module.exports = class ClojarsRelease extends BaseClojarsVersionService {
   async handle({ clojar }) {
     const json = await this.fetch({ clojar })
     const { version } = this.constructor.transform(json, 'release')
