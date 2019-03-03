@@ -10,6 +10,8 @@ const schema = Joi.object({
   gzip: nonNegativeInteger,
 }).required()
 
+const keywords = ['node', 'bundlephobia']
+
 module.exports = class Bundlephobia extends BaseJsonService {
   static get category() {
     return 'size'
@@ -42,9 +44,46 @@ module.exports = class Bundlephobia extends BaseJsonService {
       {
         title: 'npm bundle size',
         pattern: ':format(min|minzip)/:packageName',
-        namedParams: { format: 'min', packageName: 'react' },
+        namedParams: {
+          format: 'min',
+          packageName: 'react',
+        },
         staticPreview: this.render({ format: 'min', size: 6652 }),
-        keywords: ['node', 'bundlephobia'],
+        keywords,
+      },
+      {
+        title: 'npm bundle size (scoped)',
+        pattern: ':format(min|minzip)/:scope/:packageName',
+        namedParams: {
+          format: 'min',
+          scope: '@cycle',
+          packageName: 'core',
+        },
+        staticPreview: this.render({ format: 'min', size: 3562 }),
+        keywords,
+      },
+      {
+        title: 'npm bundle size (version)',
+        pattern: ':format(min|minzip)/:packageName/:version',
+        namedParams: {
+          format: 'min',
+          packageName: 'react',
+          version: '15.0.0',
+        },
+        staticPreview: this.render({ format: 'min', size: 20535 }),
+        keywords,
+      },
+      {
+        title: 'npm bundle size (scoped version)',
+        pattern: ':format(min|minzip)/:scope/:packageName/:version',
+        namedParams: {
+          format: 'min',
+          scope: '@cycle',
+          packageName: 'core',
+          version: '7.0.0',
+        },
+        staticPreview: this.render({ format: 'min', size: 3562 }),
+        keywords,
       },
     ]
   }
