@@ -11,7 +11,7 @@ const schema = Joi.array()
       label: Joi.object({
         name: Joi.string().required(),
         color: Joi.string().hex(),
-      }),
+      }).allow(null),
       count: nonNegativeInteger,
     })
   )
