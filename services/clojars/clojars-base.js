@@ -36,7 +36,7 @@ class ClojarsVersionService extends BaseClojarsService {
       return { version: json.latest_version }
     } else {
       throw new InvalidResponse({
-        prettyMessage: new Error('version is invalid or null'),
+        prettyMessage: 'version is invalid or null',
       })
     }
   }
