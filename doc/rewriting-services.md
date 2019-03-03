@@ -124,11 +124,9 @@ class ExampleDownloads extends BaseJsonService {
 t.create('build status')
   .get('/pip.json')
   .only() // Prevent this ServiceTester from running its other tests.
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'docs',
-      value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
-    })
+  .expectBadge(
+    label: 'docs',
+    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
   )
 ```
 
