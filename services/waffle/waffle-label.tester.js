@@ -27,9 +27,9 @@ t.create('specified label found')
     message: nonNegativeInteger,
   })
 
-t.create('default label')
-  .get('/ritwickdey/vscode-live-server.json')
-  .expectBadge({
-    label: 'ready',
-    message: nonNegativeInteger,
-  })
+// t.create('default label')
+//   .get('/ritwickdey/vscode-live-server.json')
+//   .expectBadge({
+//     label: 'ready',
+//     message: nonNegativeInteger,
+//   })

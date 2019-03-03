@@ -10,9 +10,7 @@ const schema = Joi.array()
     Joi.object({
       label: Joi.object({
         name: Joi.string().required(),
-        color: Joi.string()
-          .hex()
-          .required(),
+        color: Joi.string().hex(),
       }),
       count: nonNegativeInteger,
     })
@@ -27,7 +25,7 @@ module.exports = class WaffleLabel extends BaseJsonService {
   static get route() {
     return {
       base: 'waffle/label',
-      pattern: ':user/:repo/:label?',
+      pattern: ':user/:repo/:label',
     }
   }
 
@@ -39,7 +37,7 @@ module.exports = class WaffleLabel extends BaseJsonService {
     if (count === 'absent') {
       return { message: count }
     }
-    if (count === 0) {
+    if (count === 0 || !color) {
       color = '78bdf2'
     }
     return {
@@ -96,7 +94,7 @@ module.exports = class WaffleLabel extends BaseJsonService {
     return { count: 0 }
   }
 
-  async handle({ user, repo, label = 'ready' }) {
+  async handle({ user, repo, label }) {
     const json = await this.fetch({ user, repo })
     const { count, color } = this.transform({ json, label })
     return this.constructor.render({ label, color, count })

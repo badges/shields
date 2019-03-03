@@ -41,6 +41,11 @@ describe('WaffleLabel', function() {
       color: 'fbca04',
       label: 'bug',
     })
+    given({ count: 123, label: 'task' }).expect({
+      message: metric(123),
+      color: '78bdf2',
+      label: 'task',
+    })
   })
 
   test(WaffleLabel.prototype.transform, () => {
