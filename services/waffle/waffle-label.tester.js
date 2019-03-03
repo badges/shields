@@ -26,10 +26,3 @@ t.create('specified label found')
     label: 'bug',
     message: nonNegativeInteger,
   })
-
-// t.create('default label')
-//   .get('/ritwickdey/vscode-live-server.json')
-//   .expectBadge({
-//     label: 'ready',
-//     message: nonNegativeInteger,
-//   })
