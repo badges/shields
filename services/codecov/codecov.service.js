@@ -22,6 +22,16 @@ const queryParamSchema = Joi.object({
   token: Joi.string(),
 }).required()
 
+const documentation = `
+  <p>
+    You may specify a Codecov token to get coverage for a private repository.
+  </p>
+  <p>
+    See the <a href="https://docs.codecov.io/reference#authorization">Codecov Docs</a>
+    for more information about creating a token.
+  </p>
+`
+
 module.exports = class Codecov extends BaseJsonService {
   static get category() {
     return 'coverage'
@@ -69,6 +79,7 @@ module.exports = class Codecov extends BaseJsonService {
           token: 'abc123def456',
         },
         staticPreview: this.render({ coverage: 90 }),
+        documentation,
       },
       {
         title: 'Codecov branch',
@@ -83,6 +94,7 @@ module.exports = class Codecov extends BaseJsonService {
           token: 'abc123def456',
         },
         staticPreview: this.render({ coverage: 90 }),
+        documentation,
       },
     ]
   }
