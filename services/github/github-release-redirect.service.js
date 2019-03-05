@@ -8,6 +8,6 @@ module.exports = redirector({
     base: 'github/release',
     pattern: ':user/:repo/all',
   },
-  target: ({ user, repo }) => `/github/release-pre/${user}/${repo}`,
+  transformPath: ({ user, repo }) => `/github/release-pre/${user}/${repo}`,
   dateAdded: new Date('2019-02-24'),
 })
