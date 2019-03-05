@@ -2,10 +2,14 @@
 
 const { ServiceTester } = require('../tester')
 const { isMetricOverTimePeriod } = require('../test-validators')
-const t = (module.exports = new ServiceTester({ id: 'amo', title: 'AMO' }))
+const t = (module.exports = new ServiceTester({
+  id: 'AmoDownloads',
+  title: 'AmoDownloads',
+  pathPrefix: '/amo',
+}))
 
 t.create('Weekly Downloads')
-  .get('/dw/IndieGala-Helper.json')
+  .get('/dw/dustman.json')
   .expectBadge({ label: 'downloads', message: isMetricOverTimePeriod })
 
 t.create('Weekly Downloads (not found)')
@@ -13,5 +17,5 @@ t.create('Weekly Downloads (not found)')
   .expectBadge({ label: 'downloads', message: 'not found' })
 
 t.create('/d URL should redirect to /dw')
-  .get('/d/IndieGala-Helper.json')
+  .get('/d/dustman.json')
   .expectBadge({ label: 'downloads', message: isMetricOverTimePeriod })

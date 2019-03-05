@@ -58,6 +58,7 @@ test(renderBuildStatusBadge, () => {
     given({ status: 'error' }),
     given({ status: 'failed' }),
     given({ status: 'failing' }),
+    given({ status: 'infrastructure_failure' }),
   ]).assert('should be red', b => expect(b).to.include({ color: 'red' }))
 })
 
@@ -67,6 +68,7 @@ test(renderBuildStatusBadge, () => {
     given({ status: 'canceled' }),
     given({ status: 'cancelled' }),
     given({ status: 'expired' }),
+    given({ status: 'initiated' }),
     given({ status: 'no tests' }),
     given({ status: 'not built' }),
     given({ status: 'not run' }),
@@ -78,6 +80,7 @@ test(renderBuildStatusBadge, () => {
     given({ status: 'skipped' }),
     given({ status: 'starting' }),
     given({ status: 'stopped' }),
+    given({ status: 'testing' }),
     given({ status: 'waiting' }),
   ]).assert('should have undefined color', b =>
     expect(b).to.include({ color: undefined })
