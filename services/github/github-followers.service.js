@@ -36,6 +36,7 @@ module.exports = class GithubFollowers extends GithubAuthService {
         namedParams: { user: 'espadrine' },
         staticPreview: Object.assign(this.render({ followers: 150 }), {
           label: 'Follow',
+          style: 'social',
         }),
         queryParams: { label: 'Follow' },
         documentation,
