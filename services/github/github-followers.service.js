@@ -54,7 +54,7 @@ module.exports = class GithubFollowers extends GithubAuthService {
     const { followers } = await this._requestJson({
       url: `/users/${user}`,
       schema,
-      errorMessages: errorMessagesFor(),
+      errorMessages: errorMessagesFor('user not found'),
     })
     return this.constructor.render({ followers })
   }
