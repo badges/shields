@@ -4,8 +4,9 @@ const { isMetric } = require('../test-validators')
 const { ServiceTester } = require('../tester')
 
 const t = (module.exports = new ServiceTester({
-  id: 'chrome-web-store',
+  id: 'ChromeWebStoreUsers',
   title: 'Chrome Web Store Users',
+  pathPrefix: '/chrome-web-store',
 }))
 
 t.create('Downloads (redirect)')

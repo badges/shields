@@ -5,8 +5,9 @@ const { isStarRating } = require('../test-validators')
 const { ServiceTester } = require('../tester')
 
 const t = (module.exports = new ServiceTester({
-  id: 'chrome-web-store',
+  id: 'ChromeWebStoreRating',
   title: 'Chrome Web Store Rating',
+  pathPrefix: '/chrome-web-store',
 }))
 
 t.create('Rating')

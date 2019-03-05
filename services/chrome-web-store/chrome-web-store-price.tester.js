@@ -1,12 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'chrome-web-store/price',
-  title: 'Chrome Web Store Price',
-}))
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Price')
   .get('/alhjnofcnnpeaphgeakdhkebafjcpeae.json')
