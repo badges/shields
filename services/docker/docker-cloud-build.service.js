@@ -1,24 +1,10 @@
 'use strict'
 
-const Joi = require('joi')
 const { BaseJsonService } = require('..')
 const { dockerBlue, buildDockerUrl } = require('./docker-helpers')
-
-const cloudBuildSchema = Joi.object({
-  objects: Joi.array()
-    .items(Joi.object({ state: Joi.string() }).required())
-    .required(),
-}).required()
+const { fetchBuild } = require('./docker-cloud-common-fetch')
 
 module.exports = class DockerCloudBuild extends BaseJsonService {
-  async fetch({ user, repo }) {
-    return this._requestJson({
-      schema: cloudBuildSchema,
-      url: `https://cloud.docker.com/api/build/v1/source/?image=${user}/${repo}`,
-      errorMessages: { 404: 'repo not found' },
-    })
-  }
-
   static render({ state }) {
     if (state === 'Success') {
       return { message: 'passing', color: 'brightgreen' }
@@ -30,7 +16,7 @@ module.exports = class DockerCloudBuild extends BaseJsonService {
   }
 
   async handle({ user, repo }) {
-    const data = await this.fetch({ user, repo })
+    const data = await fetchBuild(this, { user, repo })
     return this.constructor.render({ state: data.objects[0].state })
   }
 
@@ -49,7 +35,9 @@ module.exports = class DockerCloudBuild extends BaseJsonService {
   static get examples() {
     return [
       {
-        title: 'Docker Build Status (new hub)',
+        title: 'Docker Cloud Build Status',
+        documentation:
+          '<p>For the new Docker Hub (https://cloud.docker.com)</p>',
         namedParams: {
           user: 'jrottenberg',
           repo: 'ffmpeg',
