@@ -22,9 +22,12 @@ t.create('missing download size')
   .intercept(nock =>
     nock('https://api.microbadger.com')
       .get('/v1/images/puppet/puppetserver')
-      .reply(200, {})
+      .reply(200, {
+        LayerCount: 1,
+        Versions: [],
+      })
   )
-  .expectBadge({ label: 'image size', message: 'invalid response data' })
+  .expectBadge({ label: 'image size', message: 'unknown' })
 
 t.create('specified tag when repository has only one')
   .get('/_/alpine/wrong-tag.json')

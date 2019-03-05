@@ -2,6 +2,7 @@
 
 const prettyBytes = require('pretty-bytes')
 const BaseMicrobadgerService = require('./microbadger-base')
+const { NotFound } = require('..')
 
 module.exports = class MicrobadgerSize extends BaseMicrobadgerService {
   static get route() {
@@ -44,6 +45,9 @@ module.exports = class MicrobadgerSize extends BaseMicrobadgerService {
   async handle({ user, repo, tag }) {
     const data = await this.fetch({ user, repo })
     const image = this.constructor.getImage(data, tag)
+    if (image.DownloadSize === undefined) {
+      throw new NotFound({ prettyMessage: 'unknown' })
+    }
     return this.constructor.render({ size: image.DownloadSize })
   }
 }

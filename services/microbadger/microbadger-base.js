@@ -6,7 +6,10 @@ const { nonNegativeInteger } = require('../validators')
 
 const schema = Joi.object({
   LayerCount: nonNegativeInteger,
-  DownloadSize: nonNegativeInteger,
+  // DownloadSize may be missing in some cases
+  DownloadSize: Joi.number()
+    .integer()
+    .min(0),
   Versions: Joi.array()
     .items(
       Joi.object({
@@ -18,7 +21,9 @@ const schema = Joi.object({
           )
           .required(),
         LayerCount: nonNegativeInteger,
-        DownloadSize: nonNegativeInteger,
+        DownloadSize: Joi.number()
+          .integer()
+          .min(0),
       })
     )
     .required(),
