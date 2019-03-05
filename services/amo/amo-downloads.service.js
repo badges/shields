@@ -62,7 +62,7 @@ const AmoLegacyRedirect = redirector({
     base: 'amo/d',
     pattern: ':addonId',
   },
-  target: ({ addonId }) => `/amo/dw/${addonId}`,
+  transformPath: ({ addonId }) => `/amo/dw/${addonId}`,
   dateAdded: new Date('2019-02-23'),
 })
 
