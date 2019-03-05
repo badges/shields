@@ -30,18 +30,6 @@ class BaseClojarsVersionService extends BaseClojarsService {
     }
   }
 
-  static transform(json, version) {
-    if (version === 'release') {
-      return { version: json.latest_release }
-    } else if (version === 'version') {
-      return { version: json.latest_version }
-    } else {
-      throw new InvalidResponse({
-        prettyMessage: 'version is invalid or null',
-      })
-    }
-  }
-
   static get defaultBadgeData() {
     return { label: 'clojars' }
   }
