@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { coveragePercentage } = require('../../lib/color-formatters')
+const { coveragePercentage } = require('../color-formatters')
 const { BaseJsonService } = require('..')
 
 // https://docs.codecov.io/reference#totals
@@ -65,6 +65,9 @@ module.exports = class Codecov extends BaseJsonService {
           user: 'codecov',
           repo: 'example-python',
         },
+        queryParams: {
+          token: 'abc123def456',
+        },
         staticPreview: this.render({ coverage: 90 }),
       },
       {
@@ -76,20 +79,10 @@ module.exports = class Codecov extends BaseJsonService {
           repo: 'example-python',
           branch: 'master',
         },
-        staticPreview: this.render({ coverage: 90 }),
-      },
-      {
-        title: 'Codecov private repository',
-        pattern: ':vcsName/:user/:repo',
-        namedParams: {
-          vcsName: 'github',
-          user: 'codecov',
-          repo: 'private-example-python',
-        },
         queryParams: {
           token: 'abc123def456',
         },
-        staticPreview: this.render({ coverage: 95 }),
+        staticPreview: this.render({ coverage: 90 }),
       },
     ]
   }

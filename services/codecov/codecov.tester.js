@@ -1,41 +1,39 @@
 'use strict'
 
-const Joi = require('joi')
 const { isIntegerPercentage } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('gets coverage status')
   .get('/github/codecov/example-python.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'coverage',
-      value: isIntegerPercentage,
-    })
-  )
+  .expectBadge({
+    label: 'coverage',
+    message: isIntegerPercentage,
+  })
 
 t.create('gets coverage status for branch')
   .get('/github/codecov/example-python/master.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'coverage',
-      value: isIntegerPercentage,
-    })
-  )
+  .expectBadge({
+    label: 'coverage',
+    message: isIntegerPercentage,
+  })
 
 t.create('handles unknown repository')
   .get('/github/codecov2/fake-not-even-a-little-bit-real-python.json')
-  .expectJSON({ name: 'coverage', value: 'repository not found' })
+  .expectBadge({
+    label: 'coverage',
+    message: 'repository not found',
+  })
 
-t.create('has correct message on unauthorized error')
+t.create('handles unauthorized error')
   .get('/gh/codecov/private-example-python.json')
   .intercept(nock =>
     nock('https://codecov.io/api')
       .get('/gh/codecov/private-example-python')
       .reply(401)
   )
-  .expectJSON({
-    name: 'coverage',
-    value: 'not authorized to access repository',
+  .expectBadge({
+    label: 'coverage',
+    message: 'not authorized to access repository',
   })
 
 t.create('gets coverage for private repository')
@@ -55,4 +53,7 @@ t.create('gets coverage for private repository')
         },
       })
   )
-  .expectJSON({ name: 'coverage', value: '95%' })
+  .expectBadge({
+    label: 'coverage',
+    message: '95%',
+  })
