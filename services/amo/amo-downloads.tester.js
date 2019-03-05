@@ -2,7 +2,11 @@
 
 const { ServiceTester } = require('../tester')
 const { isMetricOverTimePeriod } = require('../test-validators')
-const t = (module.exports = new ServiceTester({ id: 'amo', title: 'AMO' }))
+const t = (module.exports = new ServiceTester({
+  id: 'AmoDownloads',
+  title: 'AmoDownloads',
+  pathPrefix: '/amo',
+}))
 
 t.create('Weekly Downloads')
   .get('/dw/IndieGala-Helper.json')
