@@ -20,9 +20,4 @@ t.create('build status on named branch')
 
 t.create('unknown repo')
   .get('/git-hub/this-repo/does-not-exist.json')
-  .expectBadge({ label: 'build', message: 'invalid' })
-
-t.create('connection error')
-  .get('/git-hub/doctrine/dbal.json')
-  .networkOff()
-  .expectBadge({ label: 'build', message: 'invalid' })
+  .expectBadge({ label: 'continuousphp', message: 'project not found' })

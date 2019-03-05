@@ -1,16 +1,13 @@
 'use strict'
 
 const Joi = require('joi')
-const { ServiceTester } = require('../tester')
-const { invalidJSON } = require('../response-fixtures')
+const t = (module.exports = require('../tester').createServiceTester())
 
 const isDependencyStatus = Joi.string().valid(
   'insecure',
   'up to date',
   'out of date'
 )
-
-const t = (module.exports = new ServiceTester({ id: 'david', title: 'David' }))
 
 t.create('david dependencies (valid)')
   .get('/expressjs/express.json')
@@ -53,22 +50,14 @@ t.create('david dependencies (none)')
 
 t.create('david dependencies (repo not found)')
   .get('/pyvesb/emptyrepo.json')
-  .expectBadge({ label: 'dependencies', message: 'invalid' })
+  .expectBadge({
+    label: 'dependencies',
+    message: 'repo or path not found or david internal error',
+  })
 
 t.create('david dependencies (path not found')
   .get('/babel/babel.json?path=invalid/path')
-  .expectBadge({ label: 'dependencies', message: 'invalid' })
-
-t.create('david dependencies (connection error)')
-  .get('/expressjs/express.json')
-  .networkOff()
-  .expectBadge({ label: 'dependencies', message: 'inaccessible' })
-
-t.create('david dependencies (unexpected response)')
-  .get('/expressjs/express.json')
-  .intercept(nock =>
-    nock('https://david-dm.org')
-      .get('/expressjs/express/info.json')
-      .reply(invalidJSON)
-  )
-  .expectBadge({ label: 'dependencies', message: 'invalid' })
+  .expectBadge({
+    label: 'dependencies',
+    message: 'repo or path not found or david internal error',
+  })
