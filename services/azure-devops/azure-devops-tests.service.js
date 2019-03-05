@@ -1,7 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const { renderTestResultBadge } = require('../text-formatters')
+const {
+  testResultQueryParamSchema,
+  renderTestResultBadge,
+} = require('../test-results')
 const AzureDevOpsBase = require('./azure-devops-base')
 const { getHeaders } = require('./azure-devops-helpers')
 
@@ -177,12 +180,7 @@ module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
     return {
       base: 'azure-devops/tests',
       pattern: ':organization/:project/:definitionId/:branch*',
-      queryParams: [
-        'compact_message',
-        'passed_label',
-        'failed_label',
-        'skipped_label',
-      ],
+      queryParamSchema: testResultQueryParamSchema,
     }
   }
 
