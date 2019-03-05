@@ -17,10 +17,3 @@ t.create('dependent count (nonexistent package)')
     label: 'dependents',
     message: 'package not found',
   })
-
-t.create('dependent count (repo)')
-  .get('/github/sindresorhus/got.json')
-  .expectBadge({
-    label: 'dependents',
-    message: 'not supported for repos',
-  })
