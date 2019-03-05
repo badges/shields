@@ -69,7 +69,7 @@ module.exports = class Codecov extends BaseJsonService {
     return [
       {
         title: 'Codecov',
-        pattern: ':vcsName/:user/:repo',
+        pattern: ':vcsName(github|gh|bitbucket|bb|gl|gitlab)/:user/:repo',
         namedParams: {
           vcsName: 'github',
           user: 'codecov',
@@ -83,7 +83,8 @@ module.exports = class Codecov extends BaseJsonService {
       },
       {
         title: 'Codecov branch',
-        pattern: ':vcsName/:user/:repo/:branch',
+        pattern:
+          ':vcsName(github|gh|bitbucket|bb|gl|gitlab)/:user/:repo/:branch',
         namedParams: {
           vcsName: 'github',
           user: 'codecov',
