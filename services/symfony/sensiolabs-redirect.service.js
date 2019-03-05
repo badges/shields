@@ -11,7 +11,7 @@ module.exports = [
       base: 'sensiolabs/i',
       pattern: ':projectUuid',
     },
-    target: ({ projectUuid }) => `/symfony/i/grade/${projectUuid}`,
+    transformPath: ({ projectUuid }) => `/symfony/i/grade/${projectUuid}`,
     dateAdded: new Date('2019-02-08'),
   }),
 ]
