@@ -13,6 +13,6 @@ module.exports = [
     transformPath: ({ vcsName, user, repo, branch }) =>
       `/codecov/c/${vcsName}/${user}/${repo}${branch ? `/${branch}` : ''}`,
     transformQueryParams: ({ token }) => ({ token }),
-    dateAdded: new Date('2019-02-23'),
+    dateAdded: new Date('2019-03-04'),
   }),
 ]
