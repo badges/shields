@@ -1,6 +1,6 @@
 'use strict'
 
-const { Inaccessible, InvalidResponse } = require('../core/base-service/errors')
+const { Inaccessible, InvalidResponse } = require('../base-service/errors')
 
 // Map from URL to { timestamp: last fetch time, data: data }.
 let regularUpdateCache = Object.create(null)
@@ -12,7 +12,7 @@ let regularUpdateCache = Object.create(null)
 // To use this from a service:
 //
 // const { promisify } = require('util')
-// const { regularUpdate } = require('../../lib/regular-update')
+// const { regularUpdate } = require('../../core/legacy/regular-update')
 //
 // function getThing() {
 //   return promisify(regularUpdate)({
