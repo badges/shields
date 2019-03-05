@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { version: versionColor } = require('../color-formatters')
 const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService, InvalidResponse } = require('..')
+const { BaseJsonService } = require('..')
 
 const clojarsSchema = Joi.object({
   downloads: nonNegativeInteger,
