@@ -25,10 +25,10 @@ t.create('handles unknown repository')
   })
 
 t.create('handles unauthorized error')
-  .get('/gh/codecov/private-example-python.json')
+  .get('/github/codecov/private-example-python.json')
   .intercept(nock =>
     nock('https://codecov.io/api')
-      .get('/gh/codecov/private-example-python')
+      .get('/github/codecov/private-example-python')
       .reply(401)
   )
   .expectBadge({
@@ -37,14 +37,14 @@ t.create('handles unauthorized error')
   })
 
 t.create('gets coverage for private repository')
-  .get('/gh/codecov/private-example-python.json?token=abc123def456')
+  .get('/github/codecov/private-example-python.json?token=abc123def456')
   .intercept(nock =>
     nock('https://codecov.io/api', {
       reqheaders: {
         authorization: 'token abc123def456',
       },
     })
-      .get('/gh/codecov/private-example-python')
+      .get('/github/codecov/private-example-python')
       .reply(200, {
         commit: {
           totals: {

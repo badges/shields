@@ -6,10 +6,10 @@ const { BaseJsonService } = require('..')
 
 // https://docs.codecov.io/reference#totals
 // A new repository that's been added but never had any coverage reports
-// uploaded will not have a `commit` object in the response and some times
+// uploaded will not have a `commit` object in the response and sometimes
 // the `totals` object can also be missing for the latest commit.
-// Keeping these as optional in the schema and handling it in the transform
-// function to maintain consistent badge behavior with the legacy service implementation.
+// Accordingly the schema is a bit relaxed to support those scenarios
+// and then they are handled in the transform and render functions.
 const schema = Joi.object({
   commit: Joi.object({
     totals: Joi.object({
