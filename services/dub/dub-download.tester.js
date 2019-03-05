@@ -19,65 +19,53 @@ const t = (module.exports = new ServiceTester({
 
 t.create('total downloads (valid)')
   .get('/dt/vibe-d.json?style=_shields_test')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'downloads',
-      value: isMetric,
-      color: isDownloadsColor,
-    })
-  )
+  .expectBadge({
+    label: 'downloads',
+    message: isMetric,
+    color: isDownloadsColor,
+  })
 
 t.create('total downloads, specific version (valid)')
   .get('/dt/vibe-d/0.8.4.json?style=_shields_test')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'downloads@0.8.4',
-      value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]?$/),
-      color: isDownloadsColor,
-    })
-  )
+  .expectBadge({
+    label: 'downloads@0.8.4',
+    message: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]?$/),
+    color: isDownloadsColor,
+  })
   .timeout(15000)
 
 t.create('total downloads, latest version (valid)')
   .get('/dt/vibe-d/latest.json?style=_shields_test')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'downloads@latest',
-      value: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]?$/),
-      color: isDownloadsColor,
-    })
-  )
+  .expectBadge({
+    label: 'downloads@latest',
+    message: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]?$/),
+    color: isDownloadsColor,
+  })
 
 t.create('daily downloads (valid)')
   .get('/dd/vibe-d.json?style=_shields_test')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'downloads',
-      value: isMetricOverTimePeriod,
-      color: isDownloadsColor,
-    })
-  )
+  .expectBadge({
+    label: 'downloads',
+    message: isMetricOverTimePeriod,
+    color: isDownloadsColor,
+  })
 
 t.create('weekly downloads (valid)')
   .get('/dw/vibe-d.json?style=_shields_test')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'downloads',
-      value: isMetricOverTimePeriod,
-      color: isDownloadsColor,
-    })
-  )
+  .expectBadge({
+    label: 'downloads',
+    message: isMetricOverTimePeriod,
+    color: isDownloadsColor,
+  })
 
 t.create('monthly downloads (valid)')
   .get('/dm/vibe-d.json?style=_shields_test')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'downloads',
-      value: isMetricOverTimePeriod,
-      color: isDownloadsColor,
-    })
-  )
+  .expectBadge({
+    label: 'downloads',
+    message: isMetricOverTimePeriod,
+    color: isDownloadsColor,
+  })
 
 t.create('total downloads (not found)')
   .get('/dt/not-a-package.json')
-  .expectJSON({ name: 'downloads', value: 'not found' })
+  .expectBadge({ label: 'downloads', message: 'not found' })

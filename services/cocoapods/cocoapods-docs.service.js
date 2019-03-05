@@ -2,7 +2,7 @@
 
 const {
   coveragePercentage: coveragePercentageColor,
-} = require('../../lib/color-formatters')
+} = require('../color-formatters')
 const Joi = require('joi')
 const { BaseJsonService } = require('..')
 

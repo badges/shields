@@ -3,6 +3,7 @@
 const { deprecatedService } = require('..')
 
 module.exports = deprecatedService({
+  name: 'CocoapodsApps',
   category: 'other',
   route: {
     base: 'cocoapods',

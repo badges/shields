@@ -96,11 +96,12 @@ async function fetch(
  * apiBaseUrl: The complete base URL of the API, e.g. https://api.example.com/api/v2
  */
 function createServiceFamily({
+  title,
+  name = title,
   defaultLabel,
   serviceBaseUrl,
   apiBaseUrl,
   odataFormat,
-  title,
   examplePackageName,
   exampleVersion,
   examplePrereleaseVersion,
@@ -116,6 +117,10 @@ function createServiceFamily({
   }
 
   class NugetVersionService extends Base {
+    static get name() {
+      return `${name}Version`
+    }
+
     static get category() {
       return 'version'
     }
@@ -169,6 +174,10 @@ function createServiceFamily({
   }
 
   class NugetDownloadService extends Base {
+    static get name() {
+      return `${name}Downloads`
+    }
+
     static get category() {
       return 'downloads'
     }

@@ -1,7 +1,7 @@
 'use strict'
 
 const serverSecrets = require('../../lib/server-secrets')
-const { colorScale } = require('../../lib/color-formatters')
+const { colorScale } = require('../color-formatters')
 const {
   checkErrorResponse: standardCheckErrorResponse,
 } = require('../../lib/error-helper')

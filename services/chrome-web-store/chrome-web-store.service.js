@@ -5,16 +5,13 @@ const {
   makeBadgeData: getBadgeData,
   makeLabel: getLabel,
 } = require('../../lib/badge-data')
-const { metric, starRating } = require('../../lib/text-formatters')
+const { metric, starRating } = require('../text-formatters')
 const {
   downloadCount: downloadCountColor,
   floorCount: floorCountColor,
   version: versionColor,
-} = require('../../lib/color-formatters')
-const {
-  addv: versionText,
-  currencyFromCode,
-} = require('../../lib/text-formatters')
+} = require('../color-formatters')
+const { addv: versionText, currencyFromCode } = require('../text-formatters')
 
 const commonExample = {
   title: 'Chrome Web Store',
@@ -149,6 +146,13 @@ class ChromeWebStoreRating extends LegacyService {
 class ChromeWebStore extends LegacyService {
   static get category() {
     return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'chrome-web-store',
+      pattern: ':which(v|d|users|price|rating|stars|rating-count)/:storeId',
+    }
   }
 
   static registerLegacyRouteHandler({ camp, cache }) {

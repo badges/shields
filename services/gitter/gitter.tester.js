@@ -4,7 +4,7 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('on gitter')
   .get('/nwjs/nw.js.json')
-  .expectJSON({
-    name: 'chat',
-    value: 'on gitter',
+  .expectBadge({
+    label: 'chat',
+    message: 'on gitter',
   })

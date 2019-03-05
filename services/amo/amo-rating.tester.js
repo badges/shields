@@ -6,17 +6,15 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Rating')
   .get('/rating/IndieGala-Helper.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'rating',
-      value: Joi.string().regex(/^\d\/\d$/),
-    })
-  )
+  .expectBadge({
+    label: 'rating',
+    message: Joi.string().regex(/^\d\/\d$/),
+  })
 
 t.create('Stars')
   .get('/stars/IndieGala-Helper.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'stars', value: isStarRating }))
+  .expectBadge({ label: 'stars', message: isStarRating })
 
 t.create('Rating (not found)')
   .get('/rating/not-a-real-plugin.json')
-  .expectJSON({ name: 'mozilla add-on', value: 'not found' })
+  .expectBadge({ label: 'mozilla add-on', message: 'not found' })

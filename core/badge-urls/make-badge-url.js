@@ -14,7 +14,7 @@ function badgeUrlFromPath({
   const outExt = format.length ? `.${format}` : ''
 
   const outQueryString = queryString.stringify({
-    maxAge: longCache ? '2592000' : undefined,
+    cacheSeconds: longCache ? '2592000' : undefined,
     style,
     ...queryParams,
   })

@@ -1,6 +1,6 @@
 'use strict'
 
-const { renderVersionBadge } = require('../../lib/version')
+const { renderVersionBadge } = require('../version')
 const { BaseAmoService, keywords } = require('./amo-base')
 
 module.exports = class AmoVersion extends BaseAmoService {
@@ -28,6 +28,6 @@ module.exports = class AmoVersion extends BaseAmoService {
 
   async handle({ addonId }) {
     const data = await this.fetch({ addonId })
-    return renderVersionBadge({ version: data.addon.version })
+    return renderVersionBadge({ version: data.current_version.version })
   }
 }

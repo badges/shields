@@ -3,8 +3,8 @@
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { makeLogo: getLogo } = require('../../lib/logos')
-const { formatDate } = require('../../lib/text-formatters')
-const { age: ageColor } = require('../../lib/color-formatters')
+const { formatDate } = require('../text-formatters')
+const { age: ageColor } = require('../color-formatters')
 const {
   documentation,
   checkErrorResponse: githubCheckErrorResponse,

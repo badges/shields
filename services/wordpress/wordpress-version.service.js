@@ -1,7 +1,7 @@
 'use strict'
 
-const { addv } = require('../../lib/text-formatters')
-const { version: versionColor } = require('../../lib/color-formatters')
+const { addv } = require('../text-formatters')
+const { version: versionColor } = require('../color-formatters')
 const BaseWordpress = require('./wordpress-base')
 
 function VersionForExtensionType(extensionType) {
@@ -16,7 +16,11 @@ function VersionForExtensionType(extensionType) {
     },
   }[extensionType]
 
-  return class WordpressPluginVersion extends BaseWordpress {
+  return class WordpressVersion extends BaseWordpress {
+    static get name() {
+      return `Wordpress${capt}Version`
+    }
+
     static get extensionType() {
       return extensionType
     }

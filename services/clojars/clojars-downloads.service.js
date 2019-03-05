@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const { metric } = require('../../lib/text-formatters')
-const { downloadCount: downloadsColor } = require('../../lib/color-formatters')
+const { metric } = require('../text-formatters')
+const { downloadCount: downloadsColor } = require('../color-formatters')
 const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService } = require('..')
 
@@ -10,7 +10,7 @@ const clojarsSchema = Joi.object({
   downloads: nonNegativeInteger,
 }).required()
 
-module.exports = class Clojars extends BaseJsonService {
+module.exports = class ClojarsDownloads extends BaseJsonService {
   async fetch({ clojar }) {
     const url = `https://clojars.org/api/artifacts/${clojar}`
     return this._requestJson({

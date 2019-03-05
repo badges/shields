@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const { addv } = require('../../lib/text-formatters')
-const { version: versionColor } = require('../../lib/color-formatters')
+const { addv } = require('../text-formatters')
+const { version: versionColor } = require('../color-formatters')
 const { BaseYamlService, InvalidResponse } = require('..')
 
 const schema = Joi.object({

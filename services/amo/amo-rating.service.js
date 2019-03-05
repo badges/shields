@@ -1,7 +1,7 @@
 'use strict'
 
-const { starRating } = require('../../lib/text-formatters')
-const { floorCount: floorCountColor } = require('../../lib/color-formatters')
+const { starRating } = require('../text-formatters')
+const { floorCount: floorCountColor } = require('../color-formatters')
 const { BaseAmoService, keywords } = require('./amo-base')
 
 module.exports = class AmoRating extends BaseAmoService {
@@ -36,6 +36,7 @@ module.exports = class AmoRating extends BaseAmoService {
   }
 
   static render({ format, rating }) {
+    rating = Math.round(rating)
     return {
       label: format,
       message: format === 'stars' ? starRating(rating) : `${rating}/5`,
@@ -45,6 +46,6 @@ module.exports = class AmoRating extends BaseAmoService {
 
   async handle({ format, addonId }) {
     const data = await this.fetch({ addonId })
-    return this.constructor.render({ format, rating: data.addon.rating })
+    return this.constructor.render({ format, rating: data.ratings.average })
   }
 }

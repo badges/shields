@@ -1,7 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
-const { isBuildStatus } = require('../../lib/build-status')
+const { isBuildStatus } = require('../build-status')
 const { ServiceTester } = require('../tester')
 
 const t = (module.exports = new ServiceTester({
@@ -11,45 +10,37 @@ const t = (module.exports = new ServiceTester({
 
 t.create('circle ci (valid, without branch)')
   .get('/project/github/RedSparr0w/node-csgo-parser.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'build',
-      value: isBuildStatus,
-    })
-  )
+  .expectBadge({
+    label: 'build',
+    message: isBuildStatus,
+  })
 
 t.create('circle ci (valid, with branch)')
   .get('/project/github/RedSparr0w/node-csgo-parser/master.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'build',
-      value: isBuildStatus,
-    })
-  )
+  .expectBadge({
+    label: 'build',
+    message: isBuildStatus,
+  })
 
 t.create('build status with "github" as a default VCS')
   .get('/project/RedSparr0w/node-csgo-parser/master.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'build',
-      value: isBuildStatus,
-    })
-  )
+  .expectBadge({
+    label: 'build',
+    message: isBuildStatus,
+  })
 
 t.create('circle ci (valid, with token)')
   .get(
     '/token/b90b5c49e59a4c67ba3a92f7992587ac7a0408c2/project/github/RedSparr0w/node-csgo-parser/master.json'
   )
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'build',
-      value: isBuildStatus,
-    })
-  )
+  .expectBadge({
+    label: 'build',
+    message: isBuildStatus,
+  })
 
 t.create('circle ci (not found)')
   .get('/project/github/PyvesB/EmptyRepo.json')
-  .expectJSON({ name: 'build', value: 'project not found' })
+  .expectBadge({ label: 'build', message: 'project not found' })
 
 t.create('circle ci (no response data)')
   .get('/project/github/RedSparr0w/node-csgo-parser.json')
@@ -60,7 +51,7 @@ t.create('circle ci (no response data)')
       )
       .reply(200)
   )
-  .expectJSON({ name: 'build', value: 'unparseable json response' })
+  .expectBadge({ label: 'build', message: 'unparseable json response' })
 
 // we're passing &limit=1 so we expect exactly one array element
 t.create('circle ci (invalid json)')
@@ -72,8 +63,8 @@ t.create('circle ci (invalid json)')
       )
       .reply(200, [{ status: 'success' }, { status: 'fixed' }])
   )
-  .expectJSON({
-    name: 'build',
-    value: 'invalid response data',
+  .expectBadge({
+    label: 'build',
+    message: 'invalid response data',
     color: 'lightgrey',
   })

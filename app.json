@@ -6,10 +6,6 @@
   "repository": "https://github.com/badges/shields",
   "logo": "http://shields.io/favicon.png",
   "env": {
-    "NPM_CONFIG_PRODUCTION": {
-      "description": "Configure whether devDependencies are installed (they are needed for the build).",
-      "value": "false"
-    },
     "WHEELMAP_TOKEN": {
       "description": "Configure the token to be used for the Wheelmap service.",
       "required": false

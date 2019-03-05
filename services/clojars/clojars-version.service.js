@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { version: versionColor } = require('../../lib/color-formatters')
+const { version: versionColor } = require('../color-formatters')
 const { BaseJsonService, NotFound } = require('..')
 
 const clojarsSchema = Joi.object({
@@ -9,7 +9,7 @@ const clojarsSchema = Joi.object({
   version: Joi.string(),
 }).required()
 
-module.exports = class Clojars extends BaseJsonService {
+module.exports = class ClojarsVersion extends BaseJsonService {
   async fetch({ clojar }) {
     const url = `https://clojars.org/${clojar}/latest-version.json`
     return this._requestJson({

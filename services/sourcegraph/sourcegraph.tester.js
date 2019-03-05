@@ -1,6 +1,5 @@
 'use strict'
 
-const Joi = require('joi')
 const { withRegex } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
@@ -10,16 +9,14 @@ const projectsCount = withRegex(/^[0-9]*(\.[0-9]k)?\sprojects$/)
 
 t.create('project usage count')
   .get('/github.com/theupdateframework/notary.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'used by',
-      value: projectsCount,
-    })
-  )
+  .expectBadge({
+    label: 'used by',
+    message: projectsCount,
+  })
 
 t.create('project without any available information')
   .get('/github.com/PyvesB/EmptyRepo.json')
-  .expectJSON({
-    name: 'used by',
-    value: '0 projects',
+  .expectBadge({
+    label: 'used by',
+    message: '0 projects',
   })

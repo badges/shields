@@ -1,6 +1,5 @@
 'use strict'
 
-const Joi = require('joi')
 const t = (module.exports = require('../tester').createServiceTester())
 const { withRegex } = require('../test-validators')
 const {
@@ -28,14 +27,12 @@ createTest(t, 'live: valid project violations', { withMockCreds: false })
       .get(`/${sampleProjectUuid}`)
       .reply(200, multipleViolations)
   )
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'violations',
-      value: withRegex(
-        /\d* critical|\d* critical, \d* major|\d* critical, \d* major, \d* minor|\d* critical, \d* major, \d* minor, \d* info|\d* critical, \d* minor|\d* critical, \d* info|\d* major|\d* major, \d* minor|\d* major, \d* minor, \d* info|\d* major, \d* info|\d* minor|\d* minor, \d* info/
-      ),
-    })
-  )
+  .expectBadge({
+    label: 'violations',
+    message: withRegex(
+      /\d* critical|\d* critical, \d* major|\d* critical, \d* major, \d* minor|\d* critical, \d* major, \d* minor, \d* info|\d* critical, \d* minor|\d* critical, \d* info|\d* major|\d* major, \d* minor|\d* major, \d* minor, \d* info|\d* major, \d* info|\d* minor|\d* minor, \d* info/
+    ),
+  })
 
 createTest(t, 'pending project grade')
   .get(`/${sampleProjectUuid}.json?style=_shields_test`)
@@ -44,9 +41,9 @@ createTest(t, 'pending project grade')
       .get(`/${sampleProjectUuid}`)
       .reply(200, runningMockResponse)
   )
-  .expectJSON({
-    name: 'violations',
-    value: 'pending',
+  .expectBadge({
+    label: 'violations',
+    message: 'pending',
     color: 'lightgrey',
   })
 
@@ -57,9 +54,9 @@ createTest(t, 'zero violations')
       .get(`/${sampleProjectUuid}`)
       .reply(200, goldMockResponse)
   )
-  .expectJSON({
-    name: 'violations',
-    value: '0',
+  .expectBadge({
+    label: 'violations',
+    message: '0',
     color: 'brightgreen',
   })
 
@@ -70,9 +67,9 @@ createTest(t, 'critical violations')
       .get(`/${sampleProjectUuid}`)
       .reply(200, criticalViolation)
   )
-  .expectJSON({
-    name: 'violations',
-    value: '1 critical',
+  .expectBadge({
+    label: 'violations',
+    message: '1 critical',
     color: 'red',
   })
 
@@ -83,9 +80,9 @@ createTest(t, 'major violations')
       .get(`/${sampleProjectUuid}`)
       .reply(200, majorViolation)
   )
-  .expectJSON({
-    name: 'violations',
-    value: '1 major',
+  .expectBadge({
+    label: 'violations',
+    message: '1 major',
     color: 'orange',
   })
 
@@ -100,9 +97,9 @@ createTest(t, 'minor violations')
       })
       .reply(200, minorViolation)
   )
-  .expectJSON({
-    name: 'violations',
-    value: '1 minor',
+  .expectBadge({
+    label: 'violations',
+    message: '1 minor',
     color: 'yellow',
   })
 
@@ -117,9 +114,9 @@ createTest(t, 'info violations')
       })
       .reply(200, infoViolation)
   )
-  .expectJSON({
-    name: 'violations',
-    value: '1 info',
+  .expectBadge({
+    label: 'violations',
+    message: '1 info',
     color: 'yellowgreen',
   })
 
@@ -134,8 +131,8 @@ createTest(t, 'multiple violations grade')
       })
       .reply(200, multipleViolations)
   )
-  .expectJSON({
-    name: 'violations',
-    value: '1 critical, 1 info',
+  .expectBadge({
+    label: 'violations',
+    message: '1 critical, 1 info',
     color: 'red',
   })

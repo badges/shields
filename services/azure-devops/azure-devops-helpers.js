@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const serverSecrets = require('../../lib/server-secrets')
-const { isBuildStatus } = require('../../lib/build-status')
+const { isBuildStatus } = require('../build-status')
 
 const keywords = ['vso', 'vsts', 'azure-devops']
 

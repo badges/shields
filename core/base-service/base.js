@@ -1,10 +1,11 @@
 'use strict'
 
+const decamelize = require('decamelize')
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const Joi = require('joi')
 const { checkErrorResponse } = require('../../lib/error-helper')
-const { assertValidCategory } = require('../../services/categories')
+const { assertValidCategory } = require('./categories')
 const coalesceBadge = require('./coalesce-badge')
 const {
   NotFound,
@@ -48,7 +49,10 @@ const serviceDataSchema = Joi.object({
   // `render()` to always return a string.
   message: Joi.alternatives(Joi.string().allow(''), Joi.number()).required(),
   color: Joi.string(),
-  link: Joi.string().uri(),
+  link: Joi.array()
+    .items(Joi.string().uri())
+    .single()
+    .max(2),
   // Generally services should not use these options, which are provided to
   // support the Endpoint badge.
   labelColor: Joi.string(),
@@ -317,10 +321,28 @@ module.exports = class BaseService {
     return serviceData
   }
 
-  static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
+  static _createServiceRequestCounter({ requestCounter }) {
+    if (requestCounter) {
+      const { category, serviceFamily, name } = this
+      const service = decamelize(name)
+      return requestCounter.labels(category, serviceFamily, service)
+    } else {
+      // When metrics are disabled, return a mock counter.
+      return { inc: () => {} }
+    }
+  }
+
+  static register(
+    { camp, handleRequest, githubApiProvider, requestCounter },
+    serviceConfig
+  ) {
     const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
     const queryParams = getQueryParamNames(this.route)
+
+    const serviceRequestCounter = this._createServiceRequestCounter({
+      requestCounter,
+    })
 
     camp.route(
       regex,
@@ -348,6 +370,8 @@ module.exports = class BaseService {
           // The final capture group is the extension.
           const format = match.slice(-1)[0]
           sendBadge(format, badgeData)
+
+          serviceRequestCounter.inc()
         },
         cacheLength: this._cacheLength,
         fetchLimitBytes,

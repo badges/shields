@@ -1,41 +1,34 @@
 'use strict'
 
-const Joi = require('joi')
 const { isDependencyState } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('dependencies for releases')
   .get('/release/hex/phoenix/1.0.3.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'dependencies',
-      value: isDependencyState,
-    })
-  )
+  .expectBadge({
+    label: 'dependencies',
+    message: isDependencyState,
+  })
 
 t.create('dependencies for releases (project name contains dot)')
   .get('/release/nuget/Newtonsoft.Json.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'dependencies',
-      value: isDependencyState,
-    })
-  )
+  .expectBadge({
+    label: 'dependencies',
+    message: isDependencyState,
+  })
 
 t.create('dependencies for github')
   .get('/github/pyvesb/notepad4e.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'dependencies',
-      value: isDependencyState,
-    })
-  )
+  .expectBadge({
+    label: 'dependencies',
+    message: isDependencyState,
+  })
 
 t.create('release not found')
   .get('/release/hex/invalid/4.0.4.json')
-  .expectJSON({
-    name: 'dependencies',
-    value: 'not available',
+  .expectBadge({
+    label: 'dependencies',
+    message: 'not available',
   })
 
 t.create('no response data')
@@ -45,7 +38,7 @@ t.create('no response data')
       .get('/api/github/phoenixframework/phoenix/dependencies')
       .reply(200)
   )
-  .expectJSON({
-    name: 'dependencies',
-    value: 'invalid',
+  .expectBadge({
+    label: 'dependencies',
+    message: 'invalid',
   })

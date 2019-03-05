@@ -1,6 +1,5 @@
 'use strict'
 
-const Joi = require('joi')
 const t = (module.exports = require('../tester').createServiceTester())
 const { withRegex } = require('../test-validators')
 
@@ -8,12 +7,10 @@ const isMarketplaceVersion = withRegex(/^v(\d+\.\d+\.\d+)(\.\d+)?$/)
 
 t.create('live: rating')
   .get('/visual-studio-marketplace/v/ritwickdey.LiveServer.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'version',
-      value: isMarketplaceVersion,
-    })
-  )
+  .expectBadge({
+    label: 'version',
+    message: isMarketplaceVersion,
+  })
 
 t.create('version')
   .get(
@@ -39,9 +36,9 @@ t.create('version')
         ],
       })
   )
-  .expectJSON({
-    name: 'version',
-    value: 'v1.0.0',
+  .expectBadge({
+    label: 'version',
+    message: 'v1.0.0',
     color: 'blue',
   })
 
@@ -69,17 +66,15 @@ t.create('pre-release version')
         ],
       })
   )
-  .expectJSON({
-    name: 'version',
-    value: 'v0.3.8',
+  .expectBadge({
+    label: 'version',
+    message: 'v0.3.8',
     color: 'orange',
   })
 
 t.create('live: version (legacy)')
   .get('/vscode-marketplace/v/ritwickdey.LiveServer.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'version',
-      value: isMarketplaceVersion,
-    })
-  )
+  .expectBadge({
+    label: 'version',
+    message: isMarketplaceVersion,
+  })

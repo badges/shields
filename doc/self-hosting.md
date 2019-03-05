@@ -46,17 +46,16 @@ For testing purposes, you can go to `http://localhost/`.
 
 ## Heroku
 
-Once you have installed the [Heroku Toolbelt][]:
+Once you have installed the [Heroku CLI][]
 
 ```bash
 heroku login
 heroku create your-app-name
-heroku config:set BUILDPACK_URL=https://github.com/mojodna/heroku-buildpack-multi.git#build-env
-make deploy
+git push heroku master
 heroku open
 ```
 
-[heroku toolbelt]: https://toolbelt.heroku.com/
+[heroku cli]: https://devcenter.heroku.com/articles/heroku-cli
 
 ## Docker
 
