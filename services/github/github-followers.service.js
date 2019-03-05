@@ -26,7 +26,6 @@ module.exports = class GithubFollowers extends GithubAuthService {
     return {
       message: metric(followers),
       color: '4183C4',
-      style: 'social',
     }
   }
 
@@ -34,12 +33,11 @@ module.exports = class GithubFollowers extends GithubAuthService {
     return [
       {
         title: 'GitHub followers',
-        namedParams: {
-          user: 'espadrine',
-        },
+        namedParams: { user: 'espadrine' },
         staticPreview: Object.assign(this.render({ followers: 150 }), {
           label: 'Follow',
         }),
+        queryParams: { label: 'Follow' },
         documentation,
       },
     ]
