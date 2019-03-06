@@ -15,7 +15,7 @@ module.exports = [
       base: 'waffle/label',
       pattern: ':user/:repo',
     },
-    target: ({ user, repo }) => `/waffle/label/${user}/${repo}/ready`,
-    dateAdded: new Date('2019-03-03'),
+    transformPath: ({ user, repo }) => `/waffle/label/${user}/${repo}/ready`,
+    dateAdded: new Date('2019-03-05'),
   }),
 ]
