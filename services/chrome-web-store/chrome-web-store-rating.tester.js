@@ -39,3 +39,8 @@ t.create('Stars')
 t.create('Stars (not found)')
   .get('/stars/invalid-name-of-addon.json')
   .expectBadge({ label: 'rating', message: 'not found' })
+
+t.create('Rating (inaccessible)')
+  .get('/rating/alhjnofcnnpeaphgeakdhkebafjcpeae.json')
+  .networkOff()
+  .expectBadge({ label: 'rating', message: 'inaccessible' })

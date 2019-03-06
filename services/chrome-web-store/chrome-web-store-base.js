@@ -1,6 +1,6 @@
 'use strict'
 
-const { BaseService } = require('..')
+const { BaseService, Inaccessible } = require('..')
 const chromeWebStore = require('chrome-web-store-item-property')
 const { checkErrorResponse } = require('../../lib/error-helper')
 
@@ -9,6 +9,9 @@ module.exports = class BaseChromeWebStoreService extends BaseService {
     try {
       return await chromeWebStore(storeId)
     } catch (e) {
+      if (e.statusCode === undefined) {
+        throw new Inaccessible({ underlyingError: e })
+      }
       /*
       chrome-web-store-item-property's `HTTPError` object has a
       `statusCode` property so we can pass `e` to `checkErrorResponse`

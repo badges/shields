@@ -20,3 +20,8 @@ t.create('Users')
 t.create('Users (not found)')
   .get('/users/invalid-name-of-addon.json')
   .expectBadge({ label: 'users', message: 'not found' })
+
+t.create('Users (inaccessible)')
+  .get('/users/alhjnofcnnpeaphgeakdhkebafjcpeae.json')
+  .networkOff()
+  .expectBadge({ label: 'users', message: 'inaccessible' })
