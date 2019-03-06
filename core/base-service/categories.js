@@ -6,7 +6,7 @@ const categories = require('../../services/categories')
 const isRealCategory = Joi.equal(categories.map(({ id }) => id)).required()
 
 const isValidCategory = Joi.alternatives()
-  .try(isRealCategory, Joi.equal('debug', 'dynamic').required())
+  .try(isRealCategory, Joi.equal('debug', 'dynamic', 'static').required())
   .required()
 
 function assertValidCategory(category, message = undefined) {
