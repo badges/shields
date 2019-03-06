@@ -131,3 +131,5 @@ module.exports = class NpmBase extends BaseJsonService {
     return this.constructor._validate(packageData, packageDataSchema)
   }
 }
+
+module.exports.queryParamSchema = queryParamSchema

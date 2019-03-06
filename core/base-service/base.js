@@ -106,9 +106,7 @@ module.exports = class BaseService {
    *  - capture: Array of names for the capture groups in the regular
    *             expression. The handler will be passed an object containing
    *             the matches.
-   *  - queryParams: Array of names for query parameters which will the service
-   *                 uses. For cache safety, only the whitelisted query
-   *                 parameters will be passed to the handler.
+   *  - queryParamSchema: Joi schema for valid query params.
    */
   static get route() {
     throw new Error(`Route not defined for ${this.name}`)

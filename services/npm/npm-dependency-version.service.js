@@ -3,6 +3,7 @@
 const { getDependencyVersion } = require('../package-json-helpers')
 const NpmBase = require('./npm-base')
 
+const { queryParamSchema } = NpmBase
 const keywords = ['node']
 
 module.exports = class NpmDependencyVersion extends NpmBase {
@@ -11,11 +12,10 @@ module.exports = class NpmDependencyVersion extends NpmBase {
   }
 
   static get route() {
-    const { queryParams } = this.buildRoute('')
     return {
       base: 'npm/dependency-version',
       pattern: ':scope(@[^/]+)?/:packageName/:kind(dev|peer)?/:dependency',
-      queryParams,
+      queryParamSchema,
     }
   }
 

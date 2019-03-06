@@ -1,7 +1,9 @@
 'use strict'
 
-const Joi = require('joi')
-const { renderTestResultBadge } = require('../text-formatters')
+const {
+  testResultQueryParamSchema,
+  renderTestResultBadge,
+} = require('../test-results')
 const AppVeyorBase = require('./appveyor-base')
 
 const documentation = `
@@ -20,18 +22,11 @@ const documentation = `
 </p>
 `
 
-const queryParamSchema = Joi.object({
-  compact_message: Joi.equal(''),
-  passed_label: Joi.string(),
-  failed_label: Joi.string(),
-  skipped_label: Joi.string(),
-}).required()
-
 module.exports = class AppVeyorTests extends AppVeyorBase {
   static get route() {
     return {
       ...this.buildRoute('appveyor/tests'),
-      queryParamSchema,
+      queryParamSchema: testResultQueryParamSchema,
     }
   }
 
