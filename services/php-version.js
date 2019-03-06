@@ -7,7 +7,7 @@
 
 const { promisify } = require('util')
 const request = require('request')
-const { regularUpdate } = require('../lib/regular-update')
+const { regularUpdate } = require('../core/legacy/regular-update')
 const { listCompare } = require('./version')
 const { omitv } = require('./text-formatters')
 

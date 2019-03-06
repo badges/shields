@@ -1,24 +1,10 @@
 'use strict'
 
-const Joi = require('joi')
 const { metric } = require('../text-formatters')
 const { downloadCount: downloadsColor } = require('../color-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService } = require('..')
+const { BaseClojarsService } = require('./clojars-base')
 
-const clojarsSchema = Joi.object({
-  downloads: nonNegativeInteger,
-}).required()
-
-module.exports = class ClojarsDownloads extends BaseJsonService {
-  async fetch({ clojar }) {
-    const url = `https://clojars.org/api/artifacts/${clojar}`
-    return this._requestJson({
-      url,
-      schema: clojarsSchema,
-    })
-  }
-
+module.exports = class ClojarsDownloads extends BaseClojarsService {
   static render({ downloads }) {
     return {
       label: 'downloads',
@@ -32,7 +18,6 @@ module.exports = class ClojarsDownloads extends BaseJsonService {
     return this.constructor.render({ downloads: json.downloads })
   }
 
-  // Metadata
   static get defaultBadgeData() {
     return { label: 'downloads' }
   }
