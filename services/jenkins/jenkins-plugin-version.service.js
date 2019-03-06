@@ -2,7 +2,7 @@
 
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { regularUpdate } = require('../../lib/regular-update')
+const { regularUpdate } = require('../../core/legacy/regular-update')
 const { addv: versionText } = require('../text-formatters')
 const { version: versionColor } = require('../color-formatters')
 
