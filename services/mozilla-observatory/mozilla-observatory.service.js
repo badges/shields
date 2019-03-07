@@ -74,6 +74,7 @@ module.exports = class MozillaObservatory extends BaseJsonService {
           grade: 'A+',
           score: 115,
         }),
+        queryParams: { publish: null },
         keywords: ['scanner', 'security'],
         documentation,
       },
