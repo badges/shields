@@ -21,8 +21,6 @@ RUN npm cache clean --force
 # Run the server using production configs.
 ENV NODE_ENV production
 
-# Do we need to list the environment variables here?
-
 CMD node server
 
 EXPOSE 80
