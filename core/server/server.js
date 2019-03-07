@@ -18,7 +18,6 @@ const {
 } = require('../base-service/legacy-request-handler')
 const { clearRegularUpdateCache } = require('../legacy/regular-update')
 const { staticBadgeUrl } = require('../badge-urls/make-badge-url')
-const analytics = require('./analytics')
 const log = require('./log')
 const sysMonitor = require('./monitor')
 const PrometheusMetrics = require('./prometheus-metrics')
@@ -252,10 +251,6 @@ module.exports = class Server {
       key,
     }))
 
-    analytics.load()
-    analytics.scheduleAutosaving()
-    analytics.setRoutes(camp)
-
     this.cleanupMonitor = sysMonitor.setRoutes({ rateLimit }, camp)
 
     const { githubConstellation, metrics } = this
@@ -304,7 +299,5 @@ module.exports = class Server {
     if (this.metrics) {
       this.metrics.stop()
     }
-
-    analytics.cancelAutosaving()
   }
 }

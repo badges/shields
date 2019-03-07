@@ -1,7 +1,6 @@
 'use strict'
 
 const makeBadge = require('../../gh-badges/lib/make-badge')
-const analytics = require('../server/analytics')
 const BaseService = require('./base')
 const {
   serverHasBeenUpSinceResourceCached,
@@ -23,8 +22,6 @@ module.exports = class BaseStaticService extends BaseService {
     })
 
     camp.route(regex, async (queryParams, match, end, ask) => {
-      analytics.noteRequest(queryParams, match)
-
       if (serverHasBeenUpSinceResourceCached(ask.req)) {
         // Send Not Modified.
         ask.res.statusCode = 304
