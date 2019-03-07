@@ -397,7 +397,7 @@ describe('BaseService', function() {
           queryParams: ['queryParamA', 'legacyQueryParamA'],
         },
       })
-      // The in-depth tests for examples reside in transform-example.spec.js
+      // The in-depth tests for examples reside in examples.spec.js
       expect(examples).to.have.lengthOf(1)
     })
   })
