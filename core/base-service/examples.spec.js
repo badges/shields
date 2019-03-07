@@ -2,7 +2,7 @@
 
 const { expect } = require('chai')
 const { test, given } = require('sazerac')
-const { validateExample, transformExample } = require('./transform-example')
+const { validateExample, transformExample } = require('./examples')
 
 describe('validateExample function', function() {
   it('passes valid examples', function() {
