@@ -8,7 +8,14 @@ const {
 } = require('./librariesio-dependencies-helpers')
 
 const schema = Joi.object({
-  dependencies: Joi.array().default([]),
+  dependencies: Joi.array()
+    .items(
+      Joi.object({
+        deprecated: Joi.boolean().required(),
+        outdated: Joi.boolean().required(),
+      })
+    )
+    .default([]),
 }).required()
 
 class LibrariesIoProjectDependencies extends BaseJsonService {
