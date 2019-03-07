@@ -14,6 +14,7 @@ t.create('Version (not found)')
   .get('/invalid-name-of-addon.json')
   .expectBadge({ label: 'chrome web store', message: 'not found' })
 
+// Keeping inaccessible test, since this service does not use BaseService#_request.
 t.create('Version (inaccessible)')
   .get('/alhjnofcnnpeaphgeakdhkebafjcpeae.json')
   .networkOff()
