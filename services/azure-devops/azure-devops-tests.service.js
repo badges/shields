@@ -8,7 +8,9 @@ const {
 const AzureDevOpsBase = require('./azure-devops-base')
 const { getHeaders } = require('./azure-devops-helpers')
 
-const documentation = `
+const commonAttrs = {
+  keywords: ['vso', 'vsts', 'azure-devops'],
+  documentation: `
 <p>
   To obtain your own badge, you need to get 3 pieces of information:
   <code>ORGANIZATION</code>, <code>PROJECT</code> and <code>DEFINITION_ID</code>.
@@ -40,7 +42,8 @@ const documentation = `
   <br>
   <code>/azure-devops/tests/ORGANIZATION/PROJECT/DEFINITION_ID.svg?compact_message&passed_label=%F0%9F%8E%89&failed_label=%F0%9F%92%A2&skipped_label=%F0%9F%A4%B7</code>
 </p>
-`
+`,
+}
 
 const buildTestResultSummarySchema = Joi.object({
   aggregatedResultsAnalysis: Joi.object({
@@ -106,8 +109,7 @@ module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
           skipped: 1,
           total: 22,
         }),
-        keywords: ['vso', 'vsts', 'azure-devops'],
-        documentation,
+        ...commonAttrs,
       },
       {
         title: 'Azure DevOps tests (branch)',
@@ -124,8 +126,7 @@ module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
           skipped: 1,
           total: 22,
         }),
-        keywords: ['vso', 'vsts', 'azure-devops'],
-        documentation,
+        ...commonAttrs,
       },
       {
         title: 'Azure DevOps tests (compact)',
@@ -138,7 +139,6 @@ module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
         queryParams: {
           compact_message: null,
         },
-        keywords: ['vso', 'vsts', 'azure-devops'],
         staticPreview: this.render({
           passed: 20,
           failed: 1,
@@ -146,7 +146,7 @@ module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
           total: 22,
           isCompact: true,
         }),
-        documentation,
+        ...commonAttrs,
       },
       {
         title: 'Azure DevOps tests with custom labels',
@@ -156,7 +156,6 @@ module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
           project: 'azuredevops-powershell',
           definitionId: '1',
         },
-        keywords: ['vso', 'vsts', 'azure-devops'],
         queryParams: {
           passed_label: 'good',
           failed_label: 'bad',
@@ -171,7 +170,7 @@ module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
           failedLabel: 'bad',
           skippedLabel: 'n/a',
         }),
-        documentation,
+        ...commonAttrs,
       },
     ]
   }

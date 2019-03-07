@@ -292,9 +292,10 @@ module.exports = class BaseService {
 
     let serviceError
     const { queryParamSchema } = this.route
+    let transformedQueryParams
     if (queryParamSchema) {
       try {
-        queryParams = validate(
+        transformedQueryParams = validate(
           {
             ErrorClass: InvalidParameter,
             prettyErrorMessage: 'invalid query parameter',
@@ -314,12 +315,17 @@ module.exports = class BaseService {
       } catch (error) {
         serviceError = error
       }
+    } else {
+      transformedQueryParams = {}
     }
 
     let serviceData
     if (!serviceError) {
       try {
-        serviceData = await serviceInstance.handle(namedParams, queryParams)
+        serviceData = await serviceInstance.handle(
+          namedParams,
+          transformedQueryParams
+        )
         Joi.assert(serviceData, serviceDataSchema)
       } catch (error) {
         serviceError = error
