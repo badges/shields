@@ -21,6 +21,7 @@ t.create('Users (not found)')
   .get('/users/invalid-name-of-addon.json')
   .expectBadge({ label: 'users', message: 'not found' })
 
+// Keep this "inaccessible" test, since this service does not use BaseService#_request.
 t.create('Users (inaccessible)')
   .get('/users/alhjnofcnnpeaphgeakdhkebafjcpeae.json')
   .networkOff()
