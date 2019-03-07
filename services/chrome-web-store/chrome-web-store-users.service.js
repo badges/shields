@@ -52,7 +52,7 @@ const ChromeWebStoreDownloads = redirector({
     base: 'chrome-web-store/d',
     pattern: ':storeId',
   },
-  target: ({ storeId }) => `/chrome-web-store/users/${storeId}`,
+  transformPath: ({ storeId }) => `/chrome-web-store/users/${storeId}`,
   dateAdded: new Date('2019-02-27'),
 })
 
