@@ -35,7 +35,7 @@ const xmlSchema = Joi.object({
   feed: Joi.object({
     entry: Joi.object({
       'm:properties': Joi.object({
-        'd:Version': Joi.string(),
+        'd:Version': Joi.alternatives(Joi.string(), Joi.number()),
         'd:NormalizedVersion': Joi.string(),
         'd:DownloadCount': nonNegativeInteger,
         'd:Tags': Joi.string(),
