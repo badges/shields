@@ -40,6 +40,7 @@ t.create('Stars (not found)')
   .get('/stars/invalid-name-of-addon.json')
   .expectBadge({ label: 'rating', message: 'not found' })
 
+// Keep this "inaccessible" test, since this service does not use BaseService#_request.
 t.create('Rating (inaccessible)')
   .get('/rating/alhjnofcnnpeaphgeakdhkebafjcpeae.json')
   .networkOff()
