@@ -1,12 +1,7 @@
 'use strict'
 
 const { isFileSize } = require('../test-validators')
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'bundlephobia',
-  title: 'NPM package bundle size',
-}))
+const t = (module.exports = require('../tester').createServiceTester())
 
 const formats = {
   A: '/bundlephobia/:type/:package.:format',
@@ -59,12 +54,12 @@ const data = [
   {
     format: formats.A,
     get: '/min/some-no-exist.json',
-    expect: { label: 'minified size', message: 'package not found error' },
+    expect: { label: 'bundlephobia', message: 'package or version not found' },
   },
   {
     format: formats.C,
     get: '/min/@some-no-exist/some-no-exist.json',
-    expect: { label: 'minified size', message: 'package not found error' },
+    expect: { label: 'bundlephobia', message: 'package or version not found' },
   },
 ]
 

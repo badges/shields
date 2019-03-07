@@ -1,23 +1,51 @@
 'use strict'
 
+const Joi = require('joi')
 const moment = require('moment')
-const LegacyService = require('../legacy-service')
-const {
-  makeBadgeData: getBadgeData,
-  makeLabel: getLabel,
-} = require('../../lib/badge-data')
+const { BaseJsonService } = require('..')
 const { metric } = require('../text-formatters')
-const { downloadCount: downloadCountColor } = require('../color-formatters')
+const { downloadCount } = require('../color-formatters')
+const { nonNegativeInteger } = require('../validators')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class Sourceforge extends LegacyService {
+const schema = Joi.object({
+  total: nonNegativeInteger,
+}).required()
+
+const intervalMap = {
+  dd: {
+    startDate: endDate => endDate,
+    suffix: '/day',
+  },
+  dw: {
+    // 6 days, since date range is inclusive,
+    startDate: endDate => moment(endDate).subtract(6, 'days'),
+    suffix: '/week',
+  },
+  dm: {
+    startDate: endDate => moment(endDate).subtract(30, 'days'),
+    suffix: '/month',
+  },
+  dt: {
+    startDate: () => moment(0),
+    suffix: '',
+  },
+}
+
+module.exports = class Sourceforge extends BaseJsonService {
+  static render({ downloads, interval }) {
+    return {
+      label: 'downloads',
+      message: `${metric(downloads)}${intervalMap[interval].suffix}`,
+      color: downloadCount(downloads),
+    }
+  }
+
   static get category() {
     return 'downloads'
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'sourceforge' }
   }
 
   static get route() {
@@ -36,11 +64,10 @@ module.exports = class Sourceforge extends LegacyService {
           interval: 'dm',
           project: 'sevenzip',
         },
-        staticPreview: {
-          label: 'downloads',
-          message: '216k/month',
-          color: 'brightgreen',
-        },
+        staticPreview: this.render({
+          downloads: 215990,
+          interval: 'dm',
+        }),
       },
       {
         title: 'SourceForge',
@@ -50,68 +77,40 @@ module.exports = class Sourceforge extends LegacyService {
           project: 'arianne',
           folder: 'stendhal',
         },
-        staticPreview: {
-          label: 'downloads',
-          message: '550/month',
-          color: 'brightgreen',
-        },
+        staticPreview: this.render({
+          downloads: 550,
+          interval: 'dm',
+        }),
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/sourceforge\/(dt|dm|dw|dd)\/([^/]*)\/?(.*).(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const info = match[1] // eg, 'dm'
-        const project = match[2] // eg, 'sevenzip`.
-        const folder = match[3]
-        const format = match[4]
-        let apiUrl = `http://sourceforge.net/projects/${project}/files/${folder}/stats/json`
-        const badgeData = getBadgeData('sourceforge', data)
-        let timePeriod, startDate
-        badgeData.text[0] = getLabel('downloads', data)
-        // get yesterday since today is incomplete
-        const endDate = moment().subtract(24, 'hours')
-        switch (info.charAt(1)) {
-          case 'm':
-            startDate = moment(endDate).subtract(30, 'days')
-            timePeriod = '/month'
-            break
-          case 'w':
-            startDate = moment(endDate).subtract(6, 'days') // 6, since date range is inclusive
-            timePeriod = '/week'
-            break
-          case 'd':
-            startDate = endDate
-            timePeriod = '/day'
-            break
-          case 't':
-            startDate = moment(0)
-            timePeriod = ''
-            break
-        }
-        apiUrl += `?start_date=${startDate.format(
-          'YYYY-MM-DD'
-        )}&end_date=${endDate.format('YYYY-MM-DD')}`
-        request(apiUrl, (err, res, buffer) => {
-          if (err != null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const data = JSON.parse(buffer)
-            const downloads = data.total
-            badgeData.text[1] = metric(downloads) + timePeriod
-            badgeData.colorscheme = downloadCountColor(downloads)
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  async fetch({ interval, project, folder }) {
+    const url = `http://sourceforge.net/projects/${project}/files/${
+      folder ? `${folder}/` : ''
+    }stats/json`
+    // get yesterday since today is incomplete
+    const endDate = moment().subtract(24, 'hours')
+    const startDate = intervalMap[interval].startDate(endDate)
+    const options = {
+      qs: {
+        start_date: startDate.format('YYYY-MM-DD'),
+        end_date: endDate.format('YYYY-MM-DD'),
+      },
+    }
+
+    return this._requestJson({
+      schema,
+      url,
+      options,
+      errorMessages: {
+        404: 'project not found',
+      },
+    })
+  }
+
+  async handle({ interval, project, folder }) {
+    const json = await this.fetch({ interval, project, folder })
+    return this.constructor.render({ interval, downloads: json.total })
   }
 }

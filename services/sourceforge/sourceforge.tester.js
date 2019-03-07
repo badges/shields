@@ -1,10 +1,7 @@
 'use strict'
 
-const { ServiceTester } = require('../tester')
 const { isMetric, isMetricOverTimePeriod } = require('../test-validators')
-
-const t = new ServiceTester({ id: 'sourceforge', title: 'SourceForge' })
-module.exports = t
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('total downloads')
   .get('/dt/sevenzip.json')
@@ -34,17 +31,16 @@ t.create('daily downloads')
     message: isMetricOverTimePeriod,
   })
 
+t.create('downloads folder')
+  .get('/dm/arianne/stendhal.json')
+  .expectBadge({
+    label: 'downloads',
+    message: isMetricOverTimePeriod,
+  })
+
 t.create('invalid project')
   .get('/dd/invalid.json')
   .expectBadge({
-    label: 'downloads',
-    message: 'invalid',
-  })
-
-t.create('total downloads (connection error)')
-  .get('/dt/sevenzip.json')
-  .networkOff()
-  .expectBadge({
-    label: 'downloads',
-    message: 'inaccessible',
+    label: 'sourceforge',
+    message: 'project not found',
   })

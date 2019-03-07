@@ -11,6 +11,5 @@ private/*.json
 analytics.json
 gh-badges/templates/_shields_test-template.json
 gh-badges/templates/default-template.json
-doc/TUTORIAL.md
 supported-features.json
 service-definitions.yml

@@ -3,7 +3,17 @@
 const Joi = require('joi')
 const { BaseJsonService } = require('..')
 
-const schema = Joi.any()
+const schema = Joi.object({
+  bugs: Joi.array()
+    .items(
+      Joi.object({
+        status: Joi.string().required(),
+        resolution: Joi.string().required(),
+      }).required()
+    )
+    .min(1)
+    .required(),
+}).required()
 
 const documentation = `
 <p>

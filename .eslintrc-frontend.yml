@@ -3,6 +3,7 @@ env:
 
 plugins:
   - import
+  - react-hooks
 
 parser: 'babel-eslint'
 
@@ -23,3 +24,5 @@ rules:
 
   import/extensions: ['error', 'never', { 'json': 'always', 'yml': 'always' }]
   react/jsx-sort-props: 'error'
+  react-hooks/rules-of-hooks: 'error'
+  react-hooks/exhaustive-deps: 'error'

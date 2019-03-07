@@ -33,10 +33,10 @@ const factory = superclass =>
 
     expectBadge({ label, message, color }) {
       let expectedBadge
-      if (color) {
-        expectedBadge = { name: label, value: message, color }
-      } else {
+      if (typeof color === 'undefined') {
         expectedBadge = { name: label, value: message }
+      } else {
+        expectedBadge = { name: label, value: message, color }
       }
 
       if (typeof message === 'string') {

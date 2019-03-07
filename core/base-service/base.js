@@ -106,9 +106,7 @@ module.exports = class BaseService {
    *  - capture: Array of names for the capture groups in the regular
    *             expression. The handler will be passed an object containing
    *             the matches.
-   *  - queryParams: Array of names for query parameters which will the service
-   *                 uses. For cache safety, only the whitelisted query
-   *                 parameters will be passed to the handler.
+   *  - queryParamSchema: Joi schema for valid query params.
    */
   static get route() {
     throw new Error(`Route not defined for ${this.name}`)
@@ -278,9 +276,10 @@ module.exports = class BaseService {
 
     let serviceError
     const { queryParamSchema } = this.route
+    let transformedQueryParams
     if (queryParamSchema) {
       try {
-        queryParams = validate(
+        transformedQueryParams = validate(
           {
             ErrorClass: InvalidParameter,
             prettyErrorMessage: 'invalid query parameter',
@@ -300,12 +299,17 @@ module.exports = class BaseService {
       } catch (error) {
         serviceError = error
       }
+    } else {
+      transformedQueryParams = {}
     }
 
     let serviceData
     if (!serviceError) {
       try {
-        serviceData = await serviceInstance.handle(namedParams, queryParams)
+        serviceData = await serviceInstance.handle(
+          namedParams,
+          transformedQueryParams
+        )
         Joi.assert(serviceData, serviceDataSchema)
       } catch (error) {
         serviceError = error
