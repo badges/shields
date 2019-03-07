@@ -14,6 +14,7 @@ t.create('Price (not found)')
   .get('/invalid-name-of-addon.json')
   .expectBadge({ label: 'price', message: 'not found' })
 
+// Keep this "inaccessible" test, since this service does not use BaseService#_request.
 t.create('Price (inaccessible)')
   .get('/alhjnofcnnpeaphgeakdhkebafjcpeae.json')
   .networkOff()
