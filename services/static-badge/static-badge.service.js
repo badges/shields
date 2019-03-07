@@ -5,7 +5,7 @@ const { escapeFormat } = require('../../core/badge-urls/path-helpers')
 
 module.exports = class StaticBadge extends BaseStaticService {
   static get category() {
-    return 'other'
+    return 'static'
   }
 
   static get route() {

@@ -16,7 +16,7 @@ const {
   handleRequest,
   clearRequestCache,
 } = require('../base-service/legacy-request-handler')
-const { clearRegularUpdateCache } = require('../../lib/regular-update')
+const { clearRegularUpdateCache } = require('../legacy/regular-update')
 const { staticBadgeUrl } = require('../badge-urls/make-badge-url')
 const analytics = require('./analytics')
 const log = require('./log')

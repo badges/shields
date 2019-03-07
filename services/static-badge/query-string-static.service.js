@@ -9,7 +9,7 @@ const queryParamSchema = Joi.object({
 
 module.exports = class QueryStringStaticBadge extends BaseStaticService {
   static get category() {
-    return 'other'
+    return 'static'
   }
 
   static get route() {

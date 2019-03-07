@@ -14,7 +14,7 @@ describe('Route helpers', function() {
     const { regex, captureNames } = prepareRoute({
       base: 'foo',
       pattern: ':namedParamA',
-      queryParams: ['queryParamA'],
+      queryParamSchema: Joi.object({ queryParamA: Joi.string() }).required(),
     })
 
     const regexExec = str => regex.exec(str)
@@ -108,7 +108,6 @@ describe('Route helpers', function() {
   })
 
   it('getQueryParamNames', function() {
-    expect(getQueryParamNames({ queryParams: ['foo'] })).to.deep.equal(['foo'])
     expect(
       getQueryParamNames({
         queryParamSchema: Joi.object({ foo: Joi.string() }).required(),
