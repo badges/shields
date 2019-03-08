@@ -6,20 +6,21 @@ RUN mkdir -p /usr/src/app
 RUN mkdir /usr/src/app/private
 WORKDIR /usr/src/app
 
-ARG NODE_ENV
-ENV NODE_ENV $NODE_ENV
-
 COPY package.json package-lock.json /usr/src/app/
 # Without the gh-badges package.json and CLI script in place, `npm ci` will fail.
 COPY gh-badges /usr/src/app/gh-badges/
-RUN npm ci
+
+# We need dev deps to build the front end.
+RUN NODE_ENV=development npm ci
 
 COPY . /usr/src/app
 RUN npm run build
 RUN npm prune --production
 RUN npm cache clean --force
 
-# Do we need to list the environment variables here?
+# Run the server using production configs.
+ENV NODE_ENV production
+
 CMD node server
 
 EXPOSE 80

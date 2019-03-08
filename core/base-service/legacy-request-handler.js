@@ -7,7 +7,6 @@ const queryString = require('query-string')
 const LruCache = require('../../gh-badges/lib/lru-cache')
 const makeBadge = require('../../gh-badges/lib/make-badge')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const analytics = require('../server/analytics')
 const log = require('../server/log')
 const { setCacheHeaders } = require('./cache-headers')
 const {
@@ -120,8 +119,6 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
         res,
       })
     }
-
-    analytics.noteRequest(queryParams, match)
 
     const filteredQueryParams = {}
     allowedKeys.forEach(key => {

@@ -2,7 +2,7 @@
 
 const { promisify } = require('util')
 const semver = require('semver')
-const { regularUpdate } = require('../../lib/regular-update')
+const { regularUpdate } = require('../../core/legacy/regular-update')
 
 function getLatestVersion() {
   return promisify(regularUpdate)({

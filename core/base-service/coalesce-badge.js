@@ -4,9 +4,9 @@ const {
   decodeDataUrlFromQueryParam,
   prepareNamedLogo,
 } = require('../../lib/logos')
-const { toArray } = require('../../lib/badge-data')
 const { svg2base64 } = require('../../lib/svg-helpers')
 const coalesce = require('./coalesce')
+const toArray = require('./to-array')
 
 // Translate modern badge data to the legacy schema understood by the badge
 // maker. Allow the user to override the label, color, logo, etc. through the

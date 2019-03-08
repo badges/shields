@@ -5,7 +5,6 @@ const fetch = require('node-fetch')
 const nock = require('nock')
 const portfinder = require('portfinder')
 const Camp = require('camp')
-const analytics = require('../server/analytics')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const {
   handleRequest,
@@ -50,8 +49,6 @@ function fakeHandlerWithNetworkIo(queryParams, match, sendBadge, request) {
 }
 
 describe('The request handler', function() {
-  before(analytics.load)
-
   let port, baseUrl
   beforeEach(async function() {
     port = await portfinder.getPortPromise()
