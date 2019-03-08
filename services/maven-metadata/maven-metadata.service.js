@@ -12,6 +12,7 @@ const schema = Joi.object({
           .items(
             Joi.alternatives(Joi.string().required(), Joi.number().required())
           )
+          .single()
           .required(),
       }).required(),
     }).required(),
