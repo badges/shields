@@ -24,6 +24,8 @@ t.create('handles unknown repository')
     message: 'repository not found',
   })
 
+// Using a mocked response here because we did not have a known
+// private repository hooked up with Codecov that we could use.
 t.create('handles unauthorized error')
   .get('/github/codecov/private-example-python.json')
   .intercept(nock =>
