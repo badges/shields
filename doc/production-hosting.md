@@ -65,8 +65,7 @@ Shields has mercifully little persistent state:
 
 1.  The GitHub tokens we collect are saved on each server in JSON files on disk.
     They can be fetched from the [GitHub auth admin endpoint][] for debugging.
-2.  The analytics data is also saved on each server in JSON files on disk.
-3.  The server keeps a few caches in memory. These are neither persisted nor
+2.  The server keeps a few caches in memory. These are neither persisted nor
     inspectable.
     - The [request cache][]
     - The [regular-update cache][]
@@ -214,6 +213,9 @@ the server. It's generously donated by [Sentry][sentry home]. We bundle
 
 ## Monitoring
 
+Overall server performance and requests by service are monitored using
+[Prometheus and Grafana][metrics].
+
 Request performance is monitored in two places:
 
 - [Status][] (using [UptimeRobot][])
@@ -221,24 +223,13 @@ Request performance is monitored in two places:
 - [@RedSparr0w's monitor][monitor] which posts [notifications][] to a private
   [#monitor chat room][monitor discord]
 
-Overall server performance is monitored using Prometheus and Grafana.
-Coming soon! ([#2068][issue 2068])
-
+[metrics]: https://metrics.shields.io/
 [status]: https://status.shields.io/
 [server metrics]: https://metrics.shields.io/
 [uptimerobot]: https://uptimerobot.com/
 [monitor]: https://shields.redsparr0w.com/1568/
 [notifications]: http://shields.redsparr0w.com/discord_notification
 [monitor discord]: https://discordapp.com/channels/308323056592486420/470700909182320646
-[issue 2068]: https://github.com/badges/shields/issues/2068
-
-## Analytics
-
-The server analytics data is public and can be fetched from the
-[analytics endpoint][] or using the [analytics script][].
-
-[analytics endpoint]: https://github.com/badges/shields/blob/master/lib/analytics.js
-[analytics script]: https://github.com/badges/ServerScript/blob/master/stats.js
 
 ## Known limitations
 
