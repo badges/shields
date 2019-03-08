@@ -11,5 +11,5 @@ t.create('netlify (valid)')
   })
 
 t.create('netlify (app not found)')
-  .get('/not-an-app')
+  .get('/does-not-exist.json')
   .expectBadge({ label: 'netlify', message: 'app not found' })
