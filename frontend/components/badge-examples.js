@@ -5,7 +5,10 @@ import {
   badgeUrlFromPath,
   staticBadgeUrl,
 } from '../../core/badge-urls/make-badge-url'
-import { serviceDefinitionPropType } from '../lib/service-definitions/service-definition-prop-types'
+import {
+  serviceDefinitionPropType,
+  examplePropType,
+} from '../lib/service-definitions/service-definition-prop-types'
 import { Badge } from './common'
 import { StyledCode } from './snippet'
 
@@ -27,66 +30,70 @@ const ClickableCode = styled(StyledCode)`
   cursor: pointer;
 `
 
-export default class BadgeExamples extends React.Component {
-  static propTypes = {
-    definitions: PropTypes.arrayOf(serviceDefinitionPropType).isRequired,
-    baseUrl: PropTypes.string,
-    onClick: PropTypes.func.isRequired,
-  }
+function Example({ baseUrl, onClick, exampleData }) {
+  const { title, example, preview } = exampleData
 
-  renderExample(exampleData) {
-    const { baseUrl, onClick } = this.props
-    const { title, example, preview } = exampleData
+  const { label, message, color, style, namedLogo } = preview
+  const previewUrl = staticBadgeUrl({
+    baseUrl,
+    label,
+    message,
+    color,
+    style,
+    namedLogo,
+  })
 
-    const { label, message, color, style, namedLogo } = preview
-    const previewUrl = staticBadgeUrl({
-      baseUrl,
-      label,
-      message,
-      color,
-      style,
-      namedLogo,
-    })
+  const { pattern, namedParams, queryParams } = example
+  const exampleUrl = badgeUrlFromPath({
+    baseUrl,
+    path: pattern,
+    namedParams,
+    queryParams,
+  })
 
-    const { pattern, namedParams, queryParams } = example
-    const exampleUrl = badgeUrlFromPath({
-      baseUrl,
-      path: pattern,
-      namedParams,
-      queryParams,
-    })
+  const handleClick = () => onClick(exampleData)
 
-    const key = `${title} ${previewUrl} ${exampleUrl}`
+  return (
+    <tr>
+      <ClickableTh onClick={handleClick}>{title}:</ClickableTh>
+      <td>
+        <Badge clickable onClick={handleClick} src={previewUrl} />
+      </td>
+      <td>
+        <ClickableCode onClick={handleClick}>{exampleUrl}</ClickableCode>
+      </td>
+    </tr>
+  )
+}
+Example.propTypes = {
+  exampleData: examplePropType.isRequired,
+  baseUrl: PropTypes.string,
+  onClick: PropTypes.func.isRequired,
+}
 
-    const handleClick = () => onClick(exampleData)
+export default function BadgeExamples({ definitions, baseUrl, onClick }) {
+  const flattened = definitions.reduce((accum, current) => {
+    const { examples } = current
+    return accum.concat(examples)
+  }, [])
 
-    return (
-      <tr key={key}>
-        <ClickableTh onClick={handleClick}>{title}:</ClickableTh>
-        <td>
-          <Badge clickable onClick={handleClick} src={previewUrl} />
-        </td>
-        <td>
-          <ClickableCode onClick={handleClick}>{exampleUrl}</ClickableCode>
-        </td>
-      </tr>
-    )
-  }
-
-  render() {
-    const { definitions } = this.props
-
-    const flattened = definitions.reduce((accum, current) => {
-      const { examples } = current
-      return accum.concat(examples)
-    }, [])
-
-    return (
-      <ExampleTable>
-        <tbody>
-          {flattened.map(exampleData => this.renderExample(exampleData))}
-        </tbody>
-      </ExampleTable>
-    )
-  }
+  return (
+    <ExampleTable>
+      <tbody>
+        {flattened.map(exampleData => (
+          <Example
+            baseUrl={baseUrl}
+            exampleData={exampleData}
+            key={`${exampleData.title} ${exampleData.example.pattern}`}
+            onClick={onClick}
+          />
+        ))}
+      </tbody>
+    </ExampleTable>
+  )
+}
+BadgeExamples.propTypes = {
+  definitions: PropTypes.arrayOf(serviceDefinitionPropType).isRequired,
+  baseUrl: PropTypes.string,
+  onClick: PropTypes.func.isRequired,
 }

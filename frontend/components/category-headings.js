@@ -4,9 +4,7 @@ import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { H3 } from './common'
 
-const CategoryHeading = ({ category }) => {
-  const { id, name } = category
-
+export function CategoryHeading({ category: { id, name } }) {
   return (
     <Link to={`/category/${id}`}>
       <H3 id={id}>{name}</H3>
@@ -20,13 +18,15 @@ CategoryHeading.propTypes = {
   }).isRequired,
 }
 
-const CategoryHeadings = ({ categories }) => (
-  <div>
-    {categories.map(category => (
-      <CategoryHeading category={category} key={category.id} />
-    ))}
-  </div>
-)
+export function CategoryHeadings({ categories }) {
+  return (
+    <div>
+      {categories.map(category => (
+        <CategoryHeading category={category} key={category.id} />
+      ))}
+    </div>
+  )
+}
 CategoryHeadings.propTypes = {
   categories: PropTypes.arrayOf(CategoryHeading.propTypes.category).isRequired,
 }
@@ -62,19 +62,19 @@ const StyledNav = styled.nav`
   }
 `
 
-const CategoryNav = ({ categories }) => (
-  <StyledNav>
-    <ul>
-      {categories.map(({ id, name }) => (
-        <li key={id}>
-          <Link to={`/category/${id}`}>{name}</Link>
-        </li>
-      ))}
-    </ul>
-  </StyledNav>
-)
+export function CategoryNav({ categories }) {
+  return (
+    <StyledNav>
+      <ul>
+        {categories.map(({ id, name }) => (
+          <li key={id}>
+            <Link to={`/category/${id}`}>{name}</Link>
+          </li>
+        ))}
+      </ul>
+    </StyledNav>
+  )
+}
 CategoryNav.propTypes = {
   categories: PropTypes.arrayOf(CategoryHeading.propTypes.category).isRequired,
 }
-
-export { CategoryHeading, CategoryHeadings, CategoryNav }

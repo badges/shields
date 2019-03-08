@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { staticBadgeUrl } from '../../core/badge-urls/make-badge-url'
 import { InlineInput } from './common'
 
-function StaticBadgeMaker({ baseUrl = document.location.href }) {
+export default function StaticBadgeMaker({ baseUrl = document.location.href }) {
   const [values, setValues] = useState({
     label: '',
     message: '',
@@ -61,7 +61,6 @@ function StaticBadgeMaker({ baseUrl = document.location.href }) {
     </form>
   )
 }
-export default StaticBadgeMaker
 StaticBadgeMaker.propTypes = {
   baseUrl: PropTypes.string,
 }

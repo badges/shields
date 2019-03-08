@@ -2,27 +2,27 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css, createGlobalStyle } from 'styled-components'
 
-const noAutocorrect = Object.freeze({
+export const noAutocorrect = Object.freeze({
   autoComplete: 'off',
   autoCorrect: 'off',
   autoCapitalize: 'off',
   spellCheck: 'false',
 })
 
-const nonBreakingSpace = '\u00a0'
+export const nonBreakingSpace = '\u00a0'
 
-const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
   }
 `
 
-const BaseFont = styled.div`
+export const BaseFont = styled.div`
   font-family: Lekton, sans-serif;
   color: #534;
 `
 
-const H2 = styled.h2`
+export const H2 = styled.h2`
   font-style: italic;
 
   margin-top: 12mm;
@@ -37,7 +37,7 @@ const H2 = styled.h2`
   }
 `
 
-const H3 = styled.h3`
+export const H3 = styled.h3`
   font-style: italic;
 `
 
@@ -54,18 +54,20 @@ const BadgeWrapper = styled.span`
     `};
 `
 
-const Badge = ({
+export function Badge({
   src,
   alt = '',
   display = 'inline',
   height = '20px',
   clickable = false,
   ...rest
-}) => (
-  <BadgeWrapper clickable={clickable} display={display} height={height}>
-    {src ? <img alt={alt} src={src} {...rest} /> : nonBreakingSpace}
-  </BadgeWrapper>
-)
+}) {
+  return (
+    <BadgeWrapper clickable={clickable} display={display} height={height}>
+      {src ? <img alt={alt} src={src} {...rest} /> : nonBreakingSpace}
+    </BadgeWrapper>
+  )
+}
 Badge.propTypes = {
   src: PropTypes.string.isRequired,
   alt: PropTypes.string,
@@ -74,7 +76,7 @@ Badge.propTypes = {
   clickable: PropTypes.bool,
 }
 
-const StyledInput = styled.input`
+export const StyledInput = styled.input`
   height: 15px;
   border: solid #b9a;
   border-width: 0 0 1px 0;
@@ -89,33 +91,19 @@ const StyledInput = styled.input`
   }
 `
 
-const InlineInput = styled(StyledInput)`
+export const InlineInput = styled(StyledInput)`
   width: 70px;
   margin-left: 5px;
   margin-right: 5px;
 `
 
-const BlockInput = styled(StyledInput)`
+export const BlockInput = styled(StyledInput)`
   width: 40%;
   background-color: transparent;
 `
 
-const VerticalSpace = styled.hr`
+export const VerticalSpace = styled.hr`
   border: 0;
   display: block;
   height: 3mm;
 `
-
-export {
-  noAutocorrect,
-  nonBreakingSpace,
-  GlobalStyle,
-  BaseFont,
-  H2,
-  H3,
-  Badge,
-  StyledInput,
-  InlineInput,
-  BlockInput,
-  VerticalSpace,
-}

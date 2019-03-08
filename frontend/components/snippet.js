@@ -18,7 +18,7 @@ const CodeContainer = styled.span`
     `};
 `
 
-const StyledCode = styled.code`
+export const StyledCode = styled.code`
   line-height: 1.2em;
   padding: 0.1em 0.3em;
 
@@ -30,17 +30,17 @@ const StyledCode = styled.code`
   white-space: nowrap;
 `
 
-const Snippet = ({ snippet, truncate = false, fontSize }) => (
-  <CodeContainer truncate={truncate}>
-    <ClickToSelect>
-      <StyledCode fontSize={fontSize}>{snippet}</StyledCode>
-    </ClickToSelect>
-  </CodeContainer>
-)
+export function Snippet({ snippet, truncate = false, fontSize }) {
+  return (
+    <CodeContainer truncate={truncate}>
+      <ClickToSelect>
+        <StyledCode fontSize={fontSize}>{snippet}</StyledCode>
+      </ClickToSelect>
+    </CodeContainer>
+  )
+}
 Snippet.propTypes = {
   snippet: PropTypes.string.isRequired,
   truncate: PropTypes.bool,
   fontSize: PropTypes.string,
 }
-
-export { Snippet, StyledCode }
