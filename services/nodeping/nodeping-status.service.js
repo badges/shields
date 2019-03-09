@@ -2,17 +2,15 @@
 
 const { BaseJsonService } = require('..')
 const Joi = require('joi')
+const {
+  queryParamSchema,
+  exampleQueryParams,
+  renderWebsiteStatus,
+} = require('../website-status')
 
 const schema = Joi.array()
   .items(Joi.object().keys({ su: Joi.boolean() }))
   .min(1)
-
-const queryParamSchema = Joi.object({
-  up_message: Joi.string(),
-  down_message: Joi.string(),
-  up_color: Joi.alternatives(Joi.string(), Joi.number()),
-  down_color: Joi.alternatives(Joi.string(), Joi.number()),
-}).required()
 
 /*
  * this is the checkUuid for the NodePing.com (as used on the [example page](https://nodeping.com/reporting.html#results))
@@ -45,24 +43,8 @@ module.exports = class NodePingStatus extends BaseJsonService {
         namedParams: {
           checkUuid: exampleCheckUuid,
         },
-        staticPreview: this.render({ status: true }),
-      },
-      {
-        title: 'NodePing status (customized)',
-        namedParams: {
-          checkUuid: exampleCheckUuid,
-        },
-        queryParams: {
-          up_message: 'online',
-          up_color: 'blue',
-          down_message: 'offline',
-          down_color: 'lightgrey',
-        },
-        staticPreview: this.render({
-          status: true,
-          upMessage: 'online',
-          upColor: 'blue',
-        }),
+        queryParams: exampleQueryParams,
+        staticPreview: renderWebsiteStatus({ isUp: true }),
       },
     ]
   }
@@ -78,7 +60,7 @@ module.exports = class NodePingStatus extends BaseJsonService {
         },
       },
     })
-    return { status: rows[0].su }
+    return { isUp: rows[0].su }
   }
 
   async handle(
@@ -90,19 +72,13 @@ module.exports = class NodePingStatus extends BaseJsonService {
       down_color: downColor,
     }
   ) {
-    const { status } = await this.fetch({ checkUuid })
-    return this.constructor.render({
-      status,
+    const { isUp } = await this.fetch({ checkUuid })
+    return renderWebsiteStatus({
+      isUp,
       upMessage,
       downMessage,
       upColor,
       downColor,
     })
-  }
-
-  static render({ status, upMessage, downMessage, upColor, downColor }) {
-    return status
-      ? { message: upMessage || 'up', color: upColor || 'brightgreen' }
-      : { message: downMessage || 'down', color: downColor || 'red' }
   }
 }
