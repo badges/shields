@@ -1,19 +1,10 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const {
-  documentation,
-  checkErrorResponse: githubCheckErrorResponse,
-} = require('./github-helpers')
+const Joi = require('joi')
+const { GithubAuthService } = require('./github-auth-service')
+const { documentation, errorMessagesFor } = require('./github-helpers')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class GithubCommitStatus extends LegacyService {
+module.exports = class GithubCommitStatus extends GithubAuthService {
   static get category() {
     return 'issue-tracking'
   }
@@ -35,15 +26,47 @@ module.exports = class GithubCommitStatus extends LegacyService {
           branch: 'master',
           commit: '5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c',
         },
-        staticPreview: {
-          label: 'commit status',
-          message: 'in master',
-          color: 'brightgreen',
-        },
+        staticPreview: this.render({
+          isInBranch: true,
+          branch: 'master',
+        }),
         keywords: ['branch'],
         documentation,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'commit status',
+    }
+  }
+
+  static render({ isInBranch, branch }) {
+    if (isInBranch) {
+      return {
+        message: `in ${branch}`,
+        color: 'brightgreen',
+      }
+    } else {
+      // status: ahead or diverged
+      return {
+        message: `not in ${branch}`,
+        color: 'yellow',
+      }
+    }
+  }
+
+  async handle({ user, repo, branch, commit }) {
+    const { message, status } = await this._requestJson({
+      url: `/repos/${user}/${repo}/compare/${branch}...${commit}`,
+      errorMessages: errorMessagesFor('commit or branch not found'),
+      schema: Joi.object().required(),
+    })
+
+    const isInBranch = status === 'identical' || status === 'behind'
+
+    return this.constructor.render({ isInBranch, branch })
   }
 
   static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {

@@ -39,7 +39,7 @@ t.create('commit status - commit not in branch')
   .expectBadge({
     label: 'commit status',
     message: 'commit or branch not found',
-    color: 'lightgrey',
+    color: 'red',
   })
 
 t.create('commit status - unknown commit id')
@@ -59,7 +59,7 @@ t.create('commit status - unknown branch')
   .expectBadge({
     label: 'commit status',
     message: 'commit or branch not found',
-    color: 'lightgrey',
+    color: 'red',
   })
 
 t.create('commit status - no common ancestor between commit and branch')
@@ -69,84 +69,5 @@ t.create('commit status - no common ancestor between commit and branch')
   .expectBadge({
     label: 'commit status',
     message: 'no common ancestor',
-    color: 'lightgrey',
-  })
-
-t.create('commit status - invalid JSON')
-  .get(
-    '/badges/shields/master/5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c.json?style=_shields_test'
-  )
-  .intercept(nock =>
-    nock('https://api.github.com')
-      .get(
-        '/repos/badges/shields/compare/master...5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c'
-      )
-      .reply(invalidJSON)
-  )
-  .expectBadge({
-    label: 'commit status',
-    message: 'invalid',
-    color: 'lightgrey',
-  })
-
-t.create('commit status - network error')
-  .get(
-    '/badges/shields/master/5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c.json?style=_shields_test'
-  )
-  .networkOff()
-  .expectBadge({
-    label: 'commit status',
-    message: 'inaccessible',
-    color: 'red',
-  })
-
-t.create('commit status - github server error')
-  .get(
-    '/badges/shields/master/5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c.json?style=_shields_test'
-  )
-  .intercept(nock =>
-    nock('https://api.github.com')
-      .get(
-        '/repos/badges/shields/compare/master...5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c'
-      )
-      .reply(500)
-  )
-  .expectBadge({
-    label: 'commit status',
-    message: 'invalid',
-    color: 'lightgrey',
-  })
-
-t.create('commit status - 404 with empty JSON form github')
-  .get(
-    '/badges/shields/master/5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c.json?style=_shields_test'
-  )
-  .intercept(nock =>
-    nock('https://api.github.com')
-      .get(
-        '/repos/badges/shields/compare/master...5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c'
-      )
-      .reply(404, {})
-  )
-  .expectBadge({
-    label: 'commit status',
-    message: 'invalid',
-    color: 'lightgrey',
-  })
-
-t.create('commit status - 404 with invalid JSON form github')
-  .get(
-    '/badges/shields/master/5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c.json?style=_shields_test'
-  )
-  .intercept(nock =>
-    nock('https://api.github.com')
-      .get(
-        '/repos/badges/shields/compare/master...5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c'
-      )
-      .reply(404, invalidJSON)
-  )
-  .expectBadge({
-    label: 'commit status',
-    message: 'invalid',
     color: 'lightgrey',
   })
