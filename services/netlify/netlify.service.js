@@ -42,7 +42,9 @@ module.exports = class Netlify extends BaseSvgScrapingService {
     const url = `https://api.netlify.com/api/v1/badges/${appId}/deploy-status`
     return this._requestSvg({
       schema,
-      url,
+      errorMessages: {
+        404: 'app not found',
+      },
       valueMatcher: /(?<=fill-rule="nonzero" stroke=").([^"]+)/,
     })
   }
