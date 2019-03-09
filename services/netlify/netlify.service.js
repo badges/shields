@@ -45,6 +45,7 @@ module.exports = class Netlify extends BaseSvgScrapingService {
       errorMessages: {
         404: 'app not found',
       },
+      url,
       valueMatcher: /(?<=fill-rule="nonzero" stroke=").([^"]+)/,
     })
   }
