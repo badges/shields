@@ -1,6 +1,5 @@
 'use strict'
 
-const { invalidJSON } = require('../response-fixtures')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('commit status - commit in branch')
@@ -69,5 +68,5 @@ t.create('commit status - no common ancestor between commit and branch')
   .expectBadge({
     label: 'commit status',
     message: 'no common ancestor',
-    color: 'lightgrey',
+    color: 'red',
   })

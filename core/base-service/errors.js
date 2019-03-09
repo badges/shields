@@ -34,6 +34,7 @@ class NotFound extends ShieldsRuntimeError {
         ? 'Not Found'
         : `Not Found: ${prettyMessage}`
     super(props, message)
+    this.response = props.response
   }
 }
 
@@ -50,6 +51,7 @@ class InvalidResponse extends ShieldsRuntimeError {
       ? `Invalid Response: ${props.underlyingError.message}`
       : 'Invalid Response'
     super(props, message)
+    this.response = props.response
   }
 }
 
@@ -66,6 +68,7 @@ class Inaccessible extends ShieldsRuntimeError {
       ? `Inaccessible: ${props.underlyingError.message}`
       : 'Inaccessible'
     super(props, message)
+    this.response = props.response
   }
 }
 
@@ -82,6 +85,7 @@ class InvalidParameter extends ShieldsRuntimeError {
       ? `Invalid Parameter: ${props.underlyingError.message}`
       : 'Invalid Parameter'
     super(props, message)
+    this.response = props.response
   }
 }
 
