@@ -1,5 +1,6 @@
 'use strict'
 
+const { invalidJSON } = require('../response-fixtures')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('commit status - commit in branch')
@@ -69,4 +70,23 @@ t.create('commit status - no common ancestor between commit and branch')
     label: 'commit status',
     message: 'no common ancestor',
     color: 'red',
+  })
+
+// Since the service is responsible for parsing its error response, this tests
+// the service, not BaseJsonService.
+t.create('commit status - 404 with invalid JSON form github')
+  .get(
+    '/badges/shields/master/5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c.json?style=_shields_test'
+  )
+  .intercept(nock =>
+    nock('https://api.github.com')
+      .get(
+        '/repos/badges/shields/compare/master...5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c'
+      )
+      .reply(404, invalidJSON)
+  )
+  .expectBadge({
+    label: 'commit status',
+    message: 'unparseable json response',
+    color: 'lightgrey',
   })
