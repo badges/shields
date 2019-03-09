@@ -23,13 +23,6 @@ const documentation = `
   <code>https://img.shields.io/website/http/www.website.com/path/to/page.html.svg</code>.
 </p>
 <p>
-  The URLREST should be URLEncoded:
-  <br>
-  <input type="text" id="websiteDocUrlField" placeholder="Paste your URL (without the protocol) here" /><br>
-  <button onclick="(function(el) { el.value = encodeURIComponent(el.value); })(document.getElementById('websiteDocUrlField'))">Encode</button>
-  <button onclick="(function(el) { el.value = decodeURIComponent(el.value); })(document.getElementById('websiteDocUrlField'))">Decode</button>
-</p>
-<p>
   The messages and colors for the up and down states can also be customized.
 </p>
 `
