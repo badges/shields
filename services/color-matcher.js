@@ -8,7 +8,12 @@ const matchColors = {
 }
 const nearestColor = require('nearest-color').from(matchColors)
 
-const isColorMatcher = Joi.equal(['passing', 'building', 'failing', 'app not found'])
+const isColorMatcher = Joi.equal([
+  'passing',
+  'building',
+  'failing',
+  'app not found',
+])
 
 function renderColorStatusBadge({ label, status }) {
   status = status.includes('#') ? status : `#${status}`
