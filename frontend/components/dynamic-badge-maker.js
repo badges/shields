@@ -3,7 +3,9 @@ import PropTypes from 'prop-types'
 import { dynamicBadgeUrl } from '../../core/badge-urls/make-badge-url'
 import { InlineInput } from './common'
 
-function DynamicBadgeMaker({ baseUrl = document.location.href }) {
+export default function DynamicBadgeMaker({
+  baseUrl = document.location.href,
+}) {
   const [values, setValues] = useState({
     datatype: '',
     label: '',
@@ -62,6 +64,7 @@ function DynamicBadgeMaker({ baseUrl = document.location.href }) {
       </select>{' '}
       {inputs.map(({ name, placeholder = name }) => (
         <InlineInput
+          key={name}
           name={name}
           onChange={onChange}
           placeholder={placeholder}
@@ -72,7 +75,6 @@ function DynamicBadgeMaker({ baseUrl = document.location.href }) {
     </form>
   )
 }
-export default DynamicBadgeMaker
 DynamicBadgeMaker.propTypes = {
   baseUrl: PropTypes.string,
 }
