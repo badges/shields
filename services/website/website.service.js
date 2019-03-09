@@ -35,7 +35,7 @@ module.exports = class Website extends BaseService {
   static get route() {
     return {
       base: 'website',
-      pattern: ':protocol(https|http)/:hostAndPath',
+      pattern: ':protocol(https|http)/:hostAndPath+',
       queryParamSchema,
     }
   }
