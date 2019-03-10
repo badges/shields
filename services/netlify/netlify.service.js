@@ -67,7 +67,7 @@ module.exports = class Netlify extends BaseSvgScrapingService {
   async handle({ appId }) {
     const { message: color } = await this.fetch({ appId })
     return this.constructor.render({
-      status: this.mapBuildStatusToColor(color),
+      status: this.constructor.mapBuildStatusToColor(color),
     })
   }
 }
