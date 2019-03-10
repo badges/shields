@@ -40,7 +40,6 @@ module.exports = class Netlify extends BaseSvgScrapingService {
     return [
       {
         title: 'Netlify',
-        pattern: ':appId',
         namedParams: {
           appId: '0028c6a7-b7ae-49f6-b847-917b40b5b13f',
         },
