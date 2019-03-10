@@ -5,6 +5,11 @@ const { NotFound, InvalidParameter } = require('..')
 const { GithubAuthService } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 
+const schema = Joi.object({
+  // https://stackoverflow.com/a/23969867/893113
+  status: Joi.equal('identical', 'ahead', 'behind', 'diverged'),
+}).required()
+
 module.exports = class GithubCommitStatus extends GithubAuthService {
   static get category() {
     return 'issue-tracking'
@@ -64,7 +69,7 @@ module.exports = class GithubCommitStatus extends GithubAuthService {
       ;({ status } = await this._requestJson({
         url: `/repos/${user}/${repo}/compare/${branch}...${commit}`,
         errorMessages: errorMessagesFor('commit or branch not found'),
-        schema: Joi.object().required(),
+        schema,
       }))
     } catch (e) {
       if (e instanceof NotFound) {
