@@ -11,7 +11,12 @@ const greenStatuses = [
   'successful',
 ]
 
-const orangeStatuses = ['partially succeeded', 'unstable', 'timeout']
+const orangeStatuses = [
+  'partially succeeded',
+  'unstable',
+  'timeout',
+  'netlify-building',
+]
 
 const redStatuses = ['error', 'failed', 'failing', 'infrastructure_failure']
 
@@ -50,7 +55,12 @@ function renderBuildStatusBadge({ label, status }) {
     message = 'passing'
     color = 'brightgreen'
   } else if (orangeStatuses.includes(status)) {
-    message = status === 'partially succeeded' ? 'passing' : status
+    message =
+      status === 'partially succeeded'
+        ? 'passing'
+        : status === 'netlify-building'
+        ? 'building'
+        : status
     color = 'orange'
   } else if (redStatuses.includes(status)) {
     message = status === 'failed' ? 'failing' : status

@@ -9,8 +9,8 @@ const failing = { message: 'failing', label: undefined, color: 'red' }
 
 describe('Netlify', function() {
   test(Netlify.render, () => {
-    given({ status: '#2ecc71' }).expect(passing)
-    given({ status: '#f1c40f' }).expect(building)
-    given({ status: '#c0392b' }).expect(failing)
+    given({ status: 'passing' }).expect(passing)
+    given({ status: 'netlify-building' }).expect(building)
+    given({ status: 'failing' }).expect(failing)
   })
 })
