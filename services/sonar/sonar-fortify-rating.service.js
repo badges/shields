@@ -11,7 +11,7 @@ const colorMap = {
   5: 'brightgreen',
 }
 
-module.exports = class SonarTechDebt extends SonarBase {
+module.exports = class SonarFortifyRating extends SonarBase {
   static get category() {
     return 'analysis'
   }
