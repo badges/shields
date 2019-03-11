@@ -1,20 +1,11 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { makeLogo: getLogo } = require('../../lib/logos')
-const {
-  documentation,
-  checkErrorResponse: githubCheckErrorResponse,
-} = require('./github-helpers')
+const { GithubAuthService } = require('./github-auth-service')
+const { documentation, errorMessagesFor } = require('./github-helpers')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class GithubForks extends LegacyService {
+const schema = Joi.object({}).required()
+
+module.exports = class GithubForks extends GithubAuthService {
   static get category() {
     return 'social'
   }
@@ -34,11 +25,10 @@ module.exports = class GithubForks extends LegacyService {
           user: 'badges',
           repo: 'shields',
         },
-        staticPreview: {
-          label: 'Fork',
-          message: '1639',
+        staticPreview: Object.assign(this.render({ followers: 150 }), {
+          label: 'fork',
           style: 'social',
-        },
+        }),
         queryParams: { label: 'Fork' },
         documentation,
       },
