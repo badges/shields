@@ -7,9 +7,11 @@ const { BaseJsonService } = require('..')
 
 const clojarsSchema = Joi.object({
   downloads: nonNegativeInteger,
-  latest_version: Joi.string().required(),
-  latest_release: Joi.string().required(),
-}).required()
+  latest_version: Joi.string(),
+  latest_release: Joi.string(),
+})
+  .required()
+  .oxor('latest_release', 'latest_version')
 
 class BaseClojarsService extends BaseJsonService {
   async fetch({ clojar }) {
