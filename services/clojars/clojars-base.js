@@ -11,7 +11,7 @@ const clojarsSchema = Joi.object({
   latest_release: Joi.string(),
 })
   .required()
-  .oxor('latest_release', 'latest_version')
+  .xor('latest_release', 'latest_version')
 
 class BaseClojarsService extends BaseJsonService {
   async fetch({ clojar }) {
