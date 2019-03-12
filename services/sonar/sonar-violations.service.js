@@ -84,7 +84,7 @@ module.exports = class SonarViolations extends SonarBase {
     return {
       label: getLabel({ metric: metricName }),
       message: `${metric(violations)}`,
-      color: violationCategoryColorMap[metricName] || 'brightgreen',
+      color: violationCategoryColorMap[metricName],
     }
   }
 
