@@ -3,6 +3,7 @@
 const Joi = require('joi')
 const serverSecrets = require('../../lib/server-secrets')
 const { BaseJsonService } = require('..')
+const { isLegacyVersion } = require('./sonar-helpers')
 
 const schema = Joi.object({
   component: Joi.object({
@@ -13,9 +14,8 @@ const schema = Joi.object({
           value: Joi.number()
             .min(0)
             .required(),
-        })
+        }).required()
       )
-      .min(0)
       .required(),
   }).required(),
 }).required()
@@ -26,39 +26,20 @@ const legacyApiSchema = Joi.array()
       msr: Joi.array()
         .items(
           Joi.object({
-            metric: Joi.string(),
+            key: Joi.string(),
             val: Joi.number()
               .min(0)
               .required(),
-          })
+          }).required()
         )
-        .min(0)
         .required(),
-    })
+    }).required()
   )
-  .min(0)
   .required()
 
-const queryParamSchema = Joi.object({
-  version: Joi.string()
-    .regex(/[0-9.]+/)
-    .optional(),
-}).required()
-
-const patternBase = ':protocol(http|https)/:host(.+)/:buildType(.+)'
-
-class SonarBase extends BaseJsonService {
-  useLegacyApi({ version }) {
-    version = parseFloat(version)
-    return !!version && version < 5.4
-  }
-
-  static getLabel({ metric }) {
-    return metric ? metric.replace(/_/g, ' ') : undefined
-  }
-
+module.exports = class SonarBase extends BaseJsonService {
   transform({ json, version }) {
-    const useLegacyApi = this.useLegacyApi({ version })
+    const useLegacyApi = isLegacyVersion({ version })
     const value = parseInt(
       useLegacyApi ? json[0].msr[0].val : json.component.measures[0].value
     )
@@ -66,13 +47,14 @@ class SonarBase extends BaseJsonService {
     return { metricValue: value }
   }
 
-  async fetch({ version, protocol, host, buildType, metricName }) {
+  async fetch({ version, protocol, host, component, metricName }) {
     let qs, url
-    const useLegacyApi = this.useLegacyApi({ version })
+    const useLegacyApi = isLegacyVersion({ version })
+
     if (useLegacyApi) {
       url = `${protocol}://${host}/api/resources`
       qs = {
-        resource: buildType,
+        resource: component,
         depth: 0,
         metrics: metricName,
         includeTrends: true,
@@ -80,7 +62,7 @@ class SonarBase extends BaseJsonService {
     } else {
       url = `${protocol}://${host}/api/measures/component`
       qs = {
-        componentKey: buildType,
+        componentKey: component,
         metricKeys: metricName,
       }
     }
@@ -102,10 +84,4 @@ class SonarBase extends BaseJsonService {
       },
     })
   }
-}
-
-module.exports = {
-  patternBase,
-  SonarBase,
-  queryParamSchema,
 }

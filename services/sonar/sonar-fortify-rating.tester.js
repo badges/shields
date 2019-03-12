@@ -1,18 +1,19 @@
 'use strict'
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'SonarFortifyRating',
-  title: 'SonarFortifyRating',
-  pathPrefix: '/sonar',
-}))
+const sinon = require('sinon')
+const t = (module.exports = require('../tester').createServiceTester())
+const serverSecrets = require('../../lib/server-secrets')
+const sonarToken = 'abc123def456'
 
 // The below tests are using a mocked API response because
 // neither SonarCloud.io nor any known public SonarQube deployments
 // have the Fortify plugin installed and in use, so there are no
 // available live endpoints to hit.
 t.create('Fortify Security Rating')
+  .before(() => {
+    serverSecrets['sonarqube_token'] = undefined
+    sinon.stub(serverSecrets, 'sonarqube_token').value(sonarToken)
+  })
   .get(
     '/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/fortify-security-rating.json'
   )
@@ -23,6 +24,7 @@ t.create('Fortify Security Rating')
         componentKey: 'org.ow2.petals:petals-se-ase',
         metricKeys: 'fortify-security-rating',
       })
+      .basicAuth({ user: sonarToken })
       .reply(200, {
         component: {
           measures: [
@@ -34,6 +36,7 @@ t.create('Fortify Security Rating')
         },
       })
   )
+  .finally(sinon.restore)
   .expectBadge({
     label: 'fortify-security-rating',
     message: '4/5',

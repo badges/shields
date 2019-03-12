@@ -1,6 +1,7 @@
 'use strict'
 
-const { patternBase, queryParamSchema, SonarBase } = require('./sonar-base')
+const SonarBase = require('./sonar-base')
+const { patternBase, queryParamSchema } = require('./sonar-helpers')
 
 const colorMap = {
   0: 'red',
@@ -35,12 +36,12 @@ module.exports = class SonarFortifyRating extends SonarBase {
     }
   }
 
-  async handle({ protocol, host, buildType }, { version }) {
+  async handle({ protocol, host, component }, { version }) {
     const json = await this.fetch({
       version,
       protocol,
       host,
-      buildType,
+      component,
       metricName: 'fortify-security-rating',
     })
 

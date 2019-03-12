@@ -1,13 +1,7 @@
 'use strict'
 
-const { ServiceTester } = require('../tester')
+const t = (module.exports = require('../tester').createServiceTester())
 const { isIntegerPercentage } = require('../test-validators')
-
-const t = (module.exports = new ServiceTester({
-  id: 'SonarCoverage',
-  title: 'SonarCoverage',
-  pathPrefix: '/sonar',
-}))
 
 t.create('Coverage')
   .get(

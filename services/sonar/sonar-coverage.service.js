@@ -1,7 +1,8 @@
 'use strict'
 
 const { coveragePercentage } = require('../color-formatters')
-const { patternBase, queryParamSchema, SonarBase } = require('./sonar-base')
+const SonarBase = require('./sonar-base')
+const { patternBase, queryParamSchema } = require('./sonar-helpers')
 
 module.exports = class SonarCoverage extends SonarBase {
   static get category() {
@@ -27,12 +28,12 @@ module.exports = class SonarCoverage extends SonarBase {
     }
   }
 
-  async handle({ protocol, host, buildType }, { version }) {
+  async handle({ protocol, host, component }, { version }) {
     const json = await this.fetch({
       version,
       protocol,
       host,
-      buildType,
+      component,
       metricName: 'coverage',
     })
     const { metricValue: coverage } = this.transform({ json, version })

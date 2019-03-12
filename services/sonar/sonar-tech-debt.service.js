@@ -1,13 +1,12 @@
 'use strict'
 
-const { colorScale } = require('../color-formatters')
-const { patternBase, queryParamSchema, SonarBase } = require('./sonar-base')
-
-// Tech Debt is bad, so lower value is better.
-const ratingColorScale = colorScale(
-  [10, 20, 50, 100],
-  ['brightgreen', 'yellowgreen', 'yellow', 'orange', 'red']
-)
+const SonarBase = require('./sonar-base')
+const {
+  patternBase,
+  queryParamSchema,
+  getLabel,
+  badMetricColorScale,
+} = require('./sonar-helpers')
 
 module.exports = class SonarTechDebt extends SonarBase {
   static get category() {
@@ -20,9 +19,9 @@ module.exports = class SonarTechDebt extends SonarBase {
 
   static render({ debt, metric }) {
     return {
-      label: SonarBase.getLabel({ metric }),
+      label: getLabel({ metric }),
       message: `${debt}%`,
-      color: ratingColorScale(debt),
+      color: badMetricColorScale(debt),
     }
   }
 
@@ -34,12 +33,12 @@ module.exports = class SonarTechDebt extends SonarBase {
     }
   }
 
-  async handle({ protocol, host, buildType, metric }, { version }) {
+  async handle({ protocol, host, component, metric }, { version }) {
     const json = await this.fetch({
       version,
       protocol,
       host,
-      buildType,
+      component,
       //special condition for backwards compatibility
       metricName: 'sqale_debt_ratio',
     })
