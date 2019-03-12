@@ -74,13 +74,9 @@ module.exports = class GithubLastCommit extends GithubAuthService {
   }
 
   async fetch({ user, repo, branch }) {
-    const options = { qs: {} }
-    if (branch) {
-      options.qs.sha = branch
-    }
     return this._requestJson({
       url: `/repos/${user}/${repo}/commits`,
-      options,
+      options: { qs: { sha: branch } },
       schema,
       errorMessages: errorMessagesFor(),
     })
