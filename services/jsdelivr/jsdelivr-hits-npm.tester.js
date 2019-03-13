@@ -3,35 +3,40 @@
 const { isMetricOverTimePeriod } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('(live) jquery hits/day')
+t.create('jquery hits/day')
+  .timeout(5000)
   .get('/hd/jquery.json')
   .expectBadge({
     label: 'jsdelivr',
     message: isMetricOverTimePeriod,
   })
 
-t.create('(live) jquery hits/week')
+t.create('jquery hits/week')
+  .timeout(5000)
   .get('/hw/jquery.json')
   .expectBadge({
     label: 'jsdelivr',
     message: isMetricOverTimePeriod,
   })
 
-t.create('(live) jquery hits/month')
+t.create('jquery hits/month')
+  .timeout(5000)
   .get('/hm/jquery.json')
   .expectBadge({
     label: 'jsdelivr',
     message: isMetricOverTimePeriod,
   })
 
-t.create('(live) jquery hits/year')
+t.create('jquery hits/year')
+  .timeout(5000)
   .get('/hy/jquery.json')
   .expectBadge({
     label: 'jsdelivr',
     message: isMetricOverTimePeriod,
   })
 
-t.create('(live) fake package')
+t.create('fake package')
+  .timeout(5000)
   .get('/hd/somefakepackage.json')
   .expectBadge({
     label: 'jsdelivr',
