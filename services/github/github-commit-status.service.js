@@ -1,19 +1,16 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const {
-  documentation,
-  checkErrorResponse: githubCheckErrorResponse,
-} = require('./github-helpers')
+const Joi = require('joi')
+const { NotFound, InvalidParameter } = require('..')
+const { GithubAuthService } = require('./github-auth-service')
+const { documentation, errorMessagesFor } = require('./github-helpers')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class GithubCommitStatus extends LegacyService {
+const schema = Joi.object({
+  // https://stackoverflow.com/a/23969867/893113
+  status: Joi.equal('identical', 'ahead', 'behind', 'diverged'),
+}).required()
+
+module.exports = class GithubCommitStatus extends GithubAuthService {
   static get category() {
     return 'issue-tracking'
   }
@@ -35,71 +32,56 @@ module.exports = class GithubCommitStatus extends LegacyService {
           branch: 'master',
           commit: '5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c',
         },
-        staticPreview: {
-          label: 'commit status',
-          message: 'in master',
-          color: 'brightgreen',
-        },
+        staticPreview: this.render({
+          isInBranch: true,
+          branch: 'master',
+        }),
         keywords: ['branch'],
         documentation,
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
-    camp.route(
-      /^\/github\/commit-status\/([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const [, user, repo, branch, commit, format] = match
-        const apiUrl = `/repos/${user}/${repo}/compare/${branch}...${commit}`
-        const badgeData = getBadgeData('commit status', data)
-        githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-          if (
-            githubCheckErrorResponse(
-              badgeData,
-              err,
-              res,
-              'commit or branch not found'
-            )
-          ) {
-            if (res && res.statusCode === 404) {
-              try {
-                if (
-                  JSON.parse(buffer).message.startsWith(
-                    'No common ancestor between'
-                  )
-                ) {
-                  badgeData.text[1] = 'no common ancestor'
-                  badgeData.colorscheme = 'lightgrey'
-                }
-              } catch (e) {
-                badgeData.text[1] = 'invalid'
-                badgeData.colorscheme = 'lightgrey'
-              }
-            }
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const parsedData = JSON.parse(buffer)
-            const isInBranch =
-              parsedData.status === 'identical' ||
-              parsedData.status === 'behind'
-            if (isInBranch) {
-              badgeData.text[1] = `in ${branch}`
-              badgeData.colorscheme = 'brightgreen'
-            } else {
-              // status: ahead or diverged
-              badgeData.text[1] = `not in ${branch}`
-              badgeData.colorscheme = 'yellow'
-            }
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  static get defaultBadgeData() {
+    return {
+      label: 'commit status',
+    }
+  }
+
+  static render({ isInBranch, branch }) {
+    if (isInBranch) {
+      return {
+        message: `in ${branch}`,
+        color: 'brightgreen',
+      }
+    } else {
+      // status: ahead or diverged
+      return {
+        message: `not in ${branch}`,
+        color: 'yellow',
+      }
+    }
+  }
+
+  async handle({ user, repo, branch, commit }) {
+    let status
+    try {
+      ;({ status } = await this._requestJson({
+        url: `/repos/${user}/${repo}/compare/${branch}...${commit}`,
+        errorMessages: errorMessagesFor('commit or branch not found'),
+        schema,
+      }))
+    } catch (e) {
+      if (e instanceof NotFound) {
+        const { message } = this._parseJson(e.buffer)
+        if (message.startsWith('No common ancestor between')) {
+          throw new InvalidParameter({ prettyMessage: 'no common ancestor' })
+        }
+      }
+      throw e
+    }
+
+    const isInBranch = status === 'identical' || status === 'behind'
+    return this.constructor.render({ isInBranch, branch })
   }
 }
