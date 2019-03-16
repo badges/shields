@@ -1,21 +1,16 @@
 'use strict'
 
+const Joi = require('joi')
 const prettyBytes = require('pretty-bytes')
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { makeLogo: getLogo } = require('../../lib/logos')
-const {
-  documentation,
-  checkErrorResponse: githubCheckErrorResponse,
-} = require('./github-helpers')
+const { nonNegativeInteger } = require('../validators')
+const { GithubAuthService } = require('./github-auth-service')
+const { documentation, errorMessagesFor } = require('./github-helpers')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class GithubRepoSize extends LegacyService {
+const schema = Joi.object({
+  size: nonNegativeInteger,
+}).required()
+
+module.exports = class GithubRepoSize extends GithubAuthService {
   static get category() {
     return 'size'
   }
@@ -30,49 +25,41 @@ module.exports = class GithubRepoSize extends LegacyService {
   static get examples() {
     return [
       {
-        title: 'GitHub repo size in bytes',
+        title: 'GitHub repo size',
         namedParams: {
           user: 'atom',
           repo: 'atom',
         },
-        staticPreview: {
-          label: 'repo size',
-          message: '312 MB',
-          color: 'blue',
-        },
+        staticPreview: this.render({ size: 319488 }),
         documentation,
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
-    camp.route(
-      /^\/github\/repo-size\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const user = match[1]
-        const repo = match[2]
-        const format = match[3]
-        const apiUrl = `/repos/${user}/${repo}`
-        const badgeData = getBadgeData('repo size', data)
-        if (badgeData.template === 'social') {
-          badgeData.logo = getLogo('github', data)
-        }
-        githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-          if (githubCheckErrorResponse(badgeData, err, res)) {
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const parsedData = JSON.parse(buffer)
-            badgeData.text[1] = prettyBytes(parseInt(parsedData.size) * 1024)
-            badgeData.colorscheme = 'blue'
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  static get defaultBadgeData() {
+    return {
+      label: 'repo size',
+    }
+  }
+
+  static render({ size }) {
+    return {
+      // note the GH API returns size in Kb
+      message: prettyBytes(size * 1024),
+      color: 'blue',
+    }
+  }
+
+  async fetch({ user, repo }) {
+    return this._requestJson({
+      url: `/repos/${user}/${repo}`,
+      schema,
+      errorMessages: errorMessagesFor(),
+    })
+  }
+
+  async handle({ user, repo }) {
+    const { size } = await this.fetch({ user, repo })
+    return this.constructor.render({ size })
   }
 }
